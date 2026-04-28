@@ -79,7 +79,7 @@ export function createPptxMcpServer(
         document: z
           .record(z.any())
           .describe(
-            "OPF document as a JSON object. Must include $schema, version, meta, design, and slides.",
+            "OPF document as a JSON object. Must include $schema, meta, design, and slides.",
           ),
         format: z
           .enum(GENERATE_FORMATS)

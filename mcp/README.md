@@ -109,7 +109,6 @@ The agent will call `generate_presentation` with an OPF document such as:
 ```json
 {
   "$schema": "https://pptx.dev/schema/opf/v1",
-  "version": "1.0",
   "meta": { "title": "Q1 Review" },
   "design": { "theme": "corporate-minimal" },
   "slides": [

@@ -57,7 +57,6 @@ paths:
                 summary: Minimal OPF
                 value:
                   $schema: "https://pptx.dev/schema/opf/v1"
-                  version: "1.0"
                   meta:
                     title: Example
                   design:
@@ -486,8 +485,6 @@ components:
         $schema:
           type: string
           const: "https://pptx.dev/schema/opf/v1"
-        version:
-          type: string
         meta:
           type: object
           additionalProperties: true

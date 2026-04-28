@@ -3712,7 +3712,6 @@ function fmtCommand() {
 }
 var TOP_LEVEL_ORDER = [
   "$schema",
-  "version",
   "meta",
   "design",
   "slides",
@@ -3758,7 +3757,6 @@ ${Object.keys(SNIPPETS).sort().map((k) => `  - ${k}`).join("\n")}
 var SNIPPETS = {
   deck: {
     $schema: "https://pptx.dev/schema/opf/v1",
-    version: "1.0",
     meta: {
       title: "Untitled deck",
       author: "you@example.com",

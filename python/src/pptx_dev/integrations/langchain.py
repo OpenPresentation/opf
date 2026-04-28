@@ -37,8 +37,8 @@ class _ValidateInput(BaseModel):
 
     document_json: str = Field(
         description=(
-            "A JSON-encoded OPF document. Must include `$schema`, `version`, "
-            "`meta`, `design`, and `slides`."
+            "A JSON-encoded OPF document. Must include `$schema`, `meta`, "
+            "`design`, and `slides`."
         )
     )
 

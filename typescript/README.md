@@ -29,7 +29,6 @@ const pptx = new PptxClient({ apiKey: process.env.PPTX_API_KEY });
 
 const result = await pptx.opf.validate({
   $schema: "https://pptx.dev/schema/opf/v1",
-  version: "1.0",
   meta: { title: "Hello" },
   design: { theme: "corporate-minimal" },
   slides: [
@@ -55,7 +54,6 @@ const pptx = new PptxClient();
 
 const doc: OPFDocument = {
   $schema: "https://pptx.dev/schema/opf/v1",
-  version: "1.0",
   meta: { title: "Q1 Review" },
   design: { theme: "corporate-minimal" },
   slides: [

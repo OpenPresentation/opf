@@ -4,15 +4,11 @@
   "title": "OPF — Open Presentation Format",
   "description": "Open-source JSON format for describing PowerPoint presentations. Agents describe narratives, content, audience, and design — the engine handles OOXML complexity.",
   "type": "object",
-  "required": ["$schema", "version", "meta", "design", "slides"],
+  "required": ["$schema", "meta", "design", "slides"],
   "properties": {
     "$schema": {
       "type": "string",
       "const": "https://pptx.dev/schema/opf/v1"
-    },
-    "version": {
-      "type": "string",
-      "const": "1.0"
     },
     "meta": { "$ref": "#/$defs/Meta" },
     "design": { "$ref": "#/$defs/Design" },

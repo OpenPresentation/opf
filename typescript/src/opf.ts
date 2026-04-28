@@ -11,9 +11,8 @@
 // ─── Top-Level Document ──────────────────────────────────────────────
 
 export interface OPFDocument {
-  /** Format version — always "1.0" for this release */
+  /** Identifies the OPF schema version for validators and editors */
   $schema: "https://pptx.dev/schema/opf/v1";
-  version: "1.0";
 
   /** High-level presentation metadata */
   meta: OPFMeta;

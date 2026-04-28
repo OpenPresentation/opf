@@ -10,7 +10,6 @@ Quick start::
     pptx = Pptx()  # reads PPTX_API_KEY from env
     result = pptx.opf.validate({
         "$schema": "https://pptx.dev/schema/opf/v1",
-        "version": "1.0",
         "meta": {"title": "Hello"},
         "design": {"theme": "corporate-minimal"},
         "slides": [

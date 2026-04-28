@@ -43,7 +43,6 @@ export function addCommand(): Command {
 const SNIPPETS: Record<string, unknown> = {
   deck: {
     $schema: "https://pptx.dev/schema/opf/v1",
-    version: "1.0",
     meta: {
       title: "Untitled deck",
       author: "you@example.com",

@@ -33,7 +33,6 @@ def test_opf_document_roundtrip_camel_case() -> None:
     doc = OPFDocument.model_validate(
         {
             "$schema": "https://pptx.dev/schema/opf/v1",
-            "version": "1.0",
             "meta": {"title": "Hello", "createdAt": "2026-01-01"},
             "design": {"theme": "corporate-minimal"},
             "slides": [
@@ -78,7 +77,6 @@ def test_validate_happy_path() -> None:
     result = pptx.opf.validate(
         {
             "$schema": "https://pptx.dev/schema/opf/v1",
-            "version": "1.0",
             "meta": {"title": "T"},
             "design": {},
             "slides": [],

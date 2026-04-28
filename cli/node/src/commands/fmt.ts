@@ -58,7 +58,6 @@ export function fmtCommand(): Command {
 
 const TOP_LEVEL_ORDER = [
   "$schema",
-  "version",
   "meta",
   "design",
   "slides",

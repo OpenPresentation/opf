@@ -38,7 +38,7 @@ func TestClient_Validate(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	opf := json.RawMessage(`{"$schema":"https://pptx.dev/schema/opf/v1","version":"1.0","meta":{"title":"T"},"design":{"theme":"corporate-minimal"},"slides":[]}`)
+	opf := json.RawMessage(`{"$schema":"https://pptx.dev/schema/opf/v1","meta":{"title":"T"},"design":{"theme":"corporate-minimal"},"slides":[]}`)
 	res, err := cl.Validate(context.Background(), opf)
 	if err != nil {
 		t.Fatal(err)

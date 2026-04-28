@@ -391,7 +391,6 @@ class OPFDocument(_OPFBase):
         default="https://pptx.dev/schema/opf/v1",
         alias="$schema",
     )
-    version: Literal["1.0"] = "1.0"
     meta: OPFMeta
     design: OPFDesign
     slides: list[OPFSlide]
