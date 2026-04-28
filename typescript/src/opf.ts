@@ -302,17 +302,76 @@ export interface OPFBackground {
 /**
  * Visual brand assets surfaced across slides. Organization identity
  * (name, primary logo) lives in `meta.organizations`; this object only
- * carries visual overrides and decorative marks.
+ * carries visual overrides and decorative marks. All logo / icon /
+ * wordmark fields are bare source strings — placement and sizing are
+ * determined by slide layouts, not by this object.
+ *
+ * The schema offers three asset types (logo, icon, wordmark) plus a
+ * decorative watermark, and for each, two themed variants (Light, Dark).
+ * The logo additionally supports a `Stacked` aspect (icon-over-wordmark,
+ * suited to vertical / square slots). Naming follows brand-asset-library
+ * convention:
+ *
+ * - `*Light` = light-colored variant (e.g., white SVG), intended for
+ *   rendering on dark backgrounds.
+ * - `*Dark` = dark-colored variant (e.g., black SVG), intended for
+ *   rendering on light backgrounds.
+ * - `Stacked` = vertical lockup (icon above wordmark); the unsuffixed
+ *   forms are assumed to be horizontal lockups.
+ * - The unsuffixed field (`logo` / `icon` / `wordmark` / `watermark`)
+ *   is the default fallback when no themed variant is needed.
+ *
+ * Engine resolution: on a dark slide background, prefer the `*Light`
+ * variant; on a light slide background, prefer the `*Dark` variant; for
+ * vertical / square brand-mark slots, prefer the `logoStacked*` family
+ * over the horizontal logo; otherwise fall back to the unsuffixed asset
+ * and (for the logo) ultimately to `meta.organizations[primary].logo`.
  */
 export interface OPFBrand {
   /**
-   * Optional logo override. When set, this takes precedence over the
-   * primary organization's logo for slide-level rendering. When omitted,
-   * the engine falls back to `meta.organizations[primary].logo` and uses
-   * default placement and sizing.
+   * Default full-lockup logo. Optional override of
+   * `meta.organizations[primary].logo`.
    */
-  logo?: { src: string; position?: OPFPosition; widthInches?: number };
-  watermark?: { src: string; opacity?: number };
+  logo?: string;
+  /** Light-colored logo variant for dark backgrounds. */
+  logoLight?: string;
+  /** Dark-colored logo variant for light backgrounds. */
+  logoDark?: string;
+  /**
+   * Stacked (vertical) lockup with the icon above the wordmark.
+   * Suited to portrait / square brand-mark slots; falls back to `logo`
+   * when not set.
+   */
+  logoStacked?: string;
+  /** Light-colored stacked logo variant for dark backgrounds. */
+  logoStackedLight?: string;
+  /** Dark-colored stacked logo variant for light backgrounds. */
+  logoStackedDark?: string;
+  /** Default icon / mark / symbol (no wordmark). */
+  icon?: string;
+  /** Light-colored icon variant for dark backgrounds. */
+  iconLight?: string;
+  /** Dark-colored icon variant for light backgrounds. */
+  iconDark?: string;
+  /** Default wordmark — company name in branded typography, no icon. */
+  wordmark?: string;
+  /** Light-colored wordmark variant for dark backgrounds. */
+  wordmarkLight?: string;
+  /** Dark-colored wordmark variant for light backgrounds. */
+  wordmarkDark?: string;
+  /** Default decorative watermark applied across slides. */
+  watermark?: OPFBrandWatermark;
+  /** Light-colored watermark variant for dark backgrounds. */
+  watermarkLight?: OPFBrandWatermark;
+  /** Dark-colored watermark variant for light backgrounds. */
+  watermarkDark?: OPFBrandWatermark;
+}
+
+/** Decorative watermark image and its rendering opacity. */
+export interface OPFBrandWatermark {
+  src: string;
+  /** Opacity from 0 (fully transparent) to 1 (fully opaque). */
+  opacity?: number;
 }
 
 export interface OPFLayoutPreferences {

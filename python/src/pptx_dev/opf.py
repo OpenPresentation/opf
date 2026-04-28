@@ -229,14 +229,6 @@ class OPFPosition(_OPFBase):
     anchor: str | None = None
 
 
-class OPFBrandLogo(_OPFBase):
-    src: str
-    """Source for the logo image. Accepts an HTTPS URL, data URI,
-    relative path, or asset reference."""
-    position: OPFPosition | None = None
-    width_inches: float | None = Field(default=None, alias="widthInches")
-
-
 class OPFBrandWatermark(_OPFBase):
     src: str
     """Source for the watermark image. Accepts an HTTPS URL, data URI,
@@ -249,14 +241,69 @@ class OPFBrand(_OPFBase):
 
     Organization identity (name, primary logo) lives in
     ``meta.organizations``; this object only carries visual overrides and
-    decorative marks.
+    decorative marks. All logo / icon / wordmark fields are bare source
+    strings — placement and sizing are determined by slide layouts, not
+    by this object.
+
+    The schema offers three asset types (logo, icon, wordmark) plus a
+    decorative watermark, and for each, two themed variants (Light,
+    Dark). The logo additionally supports a ``Stacked`` aspect
+    (icon-over-wordmark, suited to vertical / square slots). Naming
+    follows brand-asset-library convention:
+
+    * ``*Light`` = light-colored variant (e.g., white SVG), intended for
+      rendering on dark backgrounds.
+    * ``*Dark`` = dark-colored variant (e.g., black SVG), intended for
+      rendering on light backgrounds.
+    * ``Stacked`` = vertical lockup (icon above wordmark); the unsuffixed
+      forms are assumed to be horizontal lockups.
+    * The unsuffixed field (``logo`` / ``icon`` / ``wordmark`` /
+      ``watermark``) is the default fallback when no themed variant is
+      needed.
+
+    Engine resolution: on a dark slide background, prefer the ``*Light``
+    variant; on a light slide background, prefer the ``*Dark`` variant;
+    for vertical / square brand-mark slots, prefer the ``logoStacked*``
+    family over the horizontal logo; otherwise fall back to the
+    unsuffixed asset and (for the logo) ultimately to
+    ``meta.organizations[primary].logo``.
     """
 
-    logo: OPFBrandLogo | None = None
-    """Optional logo override. When set, this takes precedence over the
-    primary organization's logo for slide-level rendering. When omitted,
-    the engine falls back to ``meta.organizations[primary].logo``."""
+    logo: str | None = None
+    """Default full-lockup logo. Optional override of
+    ``meta.organizations[primary].logo``."""
+    logo_light: str | None = Field(default=None, alias="logoLight")
+    """Light-colored logo variant for dark backgrounds."""
+    logo_dark: str | None = Field(default=None, alias="logoDark")
+    """Dark-colored logo variant for light backgrounds."""
+    logo_stacked: str | None = Field(default=None, alias="logoStacked")
+    """Stacked (vertical) lockup with the icon above the wordmark."""
+    logo_stacked_light: str | None = Field(default=None, alias="logoStackedLight")
+    """Light-colored stacked logo variant for dark backgrounds."""
+    logo_stacked_dark: str | None = Field(default=None, alias="logoStackedDark")
+    """Dark-colored stacked logo variant for light backgrounds."""
+    icon: str | None = None
+    """Default icon / mark / symbol (no wordmark)."""
+    icon_light: str | None = Field(default=None, alias="iconLight")
+    """Light-colored icon variant for dark backgrounds."""
+    icon_dark: str | None = Field(default=None, alias="iconDark")
+    """Dark-colored icon variant for light backgrounds."""
+    wordmark: str | None = None
+    """Default wordmark — company name in branded typography, no icon."""
+    wordmark_light: str | None = Field(default=None, alias="wordmarkLight")
+    """Light-colored wordmark variant for dark backgrounds."""
+    wordmark_dark: str | None = Field(default=None, alias="wordmarkDark")
+    """Dark-colored wordmark variant for light backgrounds."""
     watermark: OPFBrandWatermark | None = None
+    """Default decorative watermark applied across slides."""
+    watermark_light: OPFBrandWatermark | None = Field(
+        default=None, alias="watermarkLight"
+    )
+    """Light-colored watermark variant for dark backgrounds."""
+    watermark_dark: OPFBrandWatermark | None = Field(
+        default=None, alias="watermarkDark"
+    )
+    """Dark-colored watermark variant for light backgrounds."""
 
 
 class OPFLayoutPreferences(_OPFBase):
@@ -544,7 +591,6 @@ __all__ = [
     "OPFBackground",
     "OPFBackgroundImage",
     "OPFBrand",
-    "OPFBrandLogo",
     "OPFBrandWatermark",
     "OPFChartAxis",
     "OPFChartData",

@@ -38,19 +38,23 @@
       "properties": {
         "title": {
           "type": "string",
-          "description": "Display title of the presentation."
+          "description": "Display title of the presentation.",
+          "examples": ["Q4 2026 Business Review", "Series B Pitch — Acme", "The Future of Agentic Workflows"]
         },
         "description": {
           "type": "string",
-          "description": "Free-form prose describing what this presentation is about. Used by agents and humans as a deck-level summary; complements meta.purpose (the goal) and meta.narrative (the structured storyline)."
+          "description": "Free-form prose describing what this presentation is about. Used by agents and humans as a deck-level summary; complements meta.purpose (the goal) and meta.narrative (the structured storyline).",
+          "examples": ["Quarterly business review covering revenue, product, and hiring milestones for the executive team."]
         },
         "filename": {
           "type": "string",
-          "description": "Optional base filename for exports (without extension). Engine strips a trailing .pptx, .pdf, .png, or .svg (case-insensitive) and appends the target format's extension. When omitted, the engine slugifies meta.title. See /docs/opf for full validation rules."
+          "description": "Optional base filename for exports (without extension). Engine strips a trailing .pptx, .pdf, .png, or .svg (case-insensitive) and appends the target format's extension. When omitted, the engine slugifies meta.title. See /docs/opf for full validation rules.",
+          "examples": ["q4-2026-business-review", "acme-series-b-pitch"]
         },
         "subtitle": {
           "type": "string",
-          "description": "Optional subtitle shown alongside the title, typically on cover slides."
+          "description": "Optional subtitle shown alongside the title, typically on cover slides.",
+          "examples": ["Prepared for the Board of Directors", "October 2026"]
         },
         "organizations": {
           "type": "array",
@@ -65,15 +69,18 @@
         "authors": {
           "type": "array",
           "items": { "type": "string" },
-          "description": "Optional credit list for people who authored or contributed to the deck, distinct from speakers. Use when the writer and presenter differ (e.g., analyst-written, exec-presented)."
+          "description": "Optional credit list for people who authored or contributed to the deck, distinct from speakers. Use when the writer and presenter differ (e.g., analyst-written, exec-presented).",
+          "examples": [["Bob Lee", "Carla Diaz"]]
         },
         "audience": {
           "type": "string",
-          "description": "Intended audience for the presentation (e.g., 'executives', 'engineering team'). Used by AI to tune tone and depth."
+          "description": "Intended audience for the presentation. Used by AI to tune tone and depth.",
+          "examples": ["executives", "engineering team", "Series B investors", "board of directors"]
         },
         "purpose": {
           "type": "string",
-          "description": "Primary goal of the presentation (e.g., 'pitch for Series B funding'). Complements meta.description and meta.narrative."
+          "description": "Primary goal of the presentation. Complements meta.description and meta.narrative.",
+          "examples": ["Raise a Series B round of $30M", "Align the engineering org on Q4 priorities", "Educate customers on the new pricing model"]
         },
         "narrative": {
           "$ref": "#/$defs/Narrative",
@@ -81,12 +88,14 @@
         },
         "language": {
           "type": "string",
-          "description": "BCP 47 language tag for the presentation content (e.g., 'en-US')."
+          "description": "BCP 47 language tag for the presentation content.",
+          "examples": ["en-US", "en-GB", "es-MX", "ja-JP", "fr"]
         },
         "tags": {
           "type": "array",
           "items": { "type": "string" },
-          "description": "Free-form labels used for categorization, search, and filtering. Lowercase kebab-case is recommended for consistency across a deck library."
+          "description": "Free-form labels used for categorization, search, and filtering. Lowercase kebab-case is recommended for consistency across a deck library.",
+          "examples": [["qbr", "internal", "fy26-q4"], ["pitch", "fundraising", "confidential"]]
         }
       }
     },
@@ -98,36 +107,49 @@
         "id": {
           "type": "string",
           "pattern": "^[a-zA-Z0-9_-]+$",
-          "description": "Stable identifier for the organization, used to reference it from Speaker.organizationId. Must be unique within the deck."
+          "description": "Stable identifier for the organization, used to reference it from Speaker.organizationId. Must be unique within the deck.",
+          "examples": ["acme", "acme-corp", "devconf-2026"]
         },
         "name": {
           "type": "string",
-          "description": "Display name shown on slides (e.g., 'Acme Corp')."
+          "description": "Display name shown on slides.",
+          "examples": ["Acme Corp", "DevConf 2026", "Beta Industries"]
         },
         "legalName": {
           "type": "string",
-          "description": "Optional legal entity name when it differs from the display name (e.g., 'Acme Corporation, Inc.')."
+          "description": "Optional legal entity name when it differs from the display name.",
+          "examples": ["Acme Corporation, Inc.", "Beta Industries, LLC"]
         },
         "logo": {
           "type": "string",
-          "description": "Source for the organization's logo image. Accepts an HTTPS URL, data URI, relative path (resolved against the OPF file location), or asset reference. The primary organization's logo is used by default for cover-slide and footer branding; design.brand.logo overrides both source and rendering."
+          "description": "Source for the organization's logo image. Accepts an HTTPS URL, data URI, relative path (resolved against the OPF file location), or asset reference. Common formats are SVG (preferred for vector logos), PNG (with transparency), or JPG. The primary organization's logo is used by default for cover-slide and footer branding; design.brand.logo overrides the source.",
+          "examples": [
+            "https://cdn.acme.com/logo.svg",
+            "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9V3iWggAAAAASUVORK5CYII=",
+            "./assets/logo.jpg",
+            "asset_acme_logo"
+          ]
         },
         "domain": {
           "type": "string",
-          "description": "Bare internet domain for the organization (e.g., 'acme.com'). Used for footers, contact slides, and engine-driven asset lookups (e.g., favicon-based brand defaults)."
+          "description": "Bare internet domain for the organization. Used for footers, contact slides, and engine-driven asset lookups (e.g., favicon-based brand defaults).",
+          "examples": ["acme.com", "beta-industries.io", "devconf.org"]
         },
         "email": {
           "type": "string",
           "format": "email",
-          "description": "General contact email for the organization (e.g., 'hello@acme.com'). Used on contact slides and footer attribution."
+          "description": "General contact email for the organization. Used on contact slides and footer attribution.",
+          "examples": ["hello@acme.com", "sales@acme.com", "info@beta-industries.io"]
         },
         "phone": {
           "type": "string",
-          "description": "Main contact phone number for the organization. E.164 format is recommended (e.g., '+14155551234')."
+          "description": "Main contact phone number for the organization. E.164 format is recommended.",
+          "examples": ["+14155551234", "+442071838750"]
         },
         "tagline": {
           "type": "string",
-          "description": "Short tagline rendered alongside the organization name on cover slides."
+          "description": "Short tagline rendered alongside the organization name on cover slides.",
+          "examples": ["Build the future of work", "Infrastructure for AI agents", "Where teams ship faster"]
         },
         "role": {
           "type": "string",
@@ -148,36 +170,51 @@
         "id": {
           "type": "string",
           "pattern": "^[a-zA-Z0-9_-]+$",
-          "description": "Stable identifier for the speaker, used for cross-references within the deck. Must be unique within the deck."
+          "description": "Stable identifier for the speaker, used for cross-references within the deck. Must be unique within the deck.",
+          "examples": ["alice", "alice-chen", "speaker-1"]
         },
         "name": {
           "type": "string",
-          "description": "Display name (e.g., 'Alice Chen')."
+          "description": "Display name.",
+          "examples": ["Alice Chen", "Bob Lee", "Dr. Carla Diaz"]
         },
         "title": {
           "type": "string",
-          "description": "Role or title (e.g., 'VP of Engineering', 'Founder & CEO'). Often paired with the speaker's organization on cover slides."
+          "description": "Role or title. Often paired with the speaker's organization on cover slides.",
+          "examples": ["VP of Engineering", "Founder & CEO", "Chief Product Officer", "Senior Staff Engineer"]
         },
         "photo": {
           "type": "string",
-          "description": "URL or asset reference for the speaker's headshot, used on cover and bio slides."
+          "description": "Source for the speaker's headshot image. Accepts an HTTPS URL, data URI, relative path (resolved against the OPF file location), or asset reference. Common formats are JPG or PNG; SVG is not appropriate for photographic content. Used on cover and bio slides.",
+          "examples": [
+            "https://cdn.acme.com/headshots/alice.jpg",
+            "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAr/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFAEBAAAAAAAAAAAAAAAAAAAAAP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AJ//2Q==",
+            "./assets/photos/alice.png",
+            "asset_photo_alice"
+          ]
         },
         "email": {
           "type": "string",
           "format": "email",
-          "description": "Contact email, used on contact slides or footer attribution when appropriate."
+          "description": "Contact email, used on contact slides or footer attribution when appropriate.",
+          "examples": ["alice@acme.com", "alice.chen@acme.com"]
         },
         "phone": {
           "type": "string",
-          "description": "Contact phone number for the speaker. E.164 format is recommended (e.g., '+14155551234')."
+          "description": "Contact phone number for the speaker. E.164 format is recommended.",
+          "examples": ["+14155551234", "+442071838750"]
         },
         "bio": {
           "type": "string",
-          "description": "Short biographical paragraph for bio or 'about the speaker' slides."
+          "description": "Short biographical paragraph for bio or 'about the speaker' slides.",
+          "examples": [
+            "Alice leads engineering at Acme, where she's spent the last six years scaling distributed systems from prototype to billions of requests per day. Previously, she was a staff engineer at Google."
+          ]
         },
         "organizationId": {
           "type": "string",
-          "description": "Reference to an Organization.id in meta.organizations. Lets a speaker be attributed to their org in panel or multi-org decks without repeating organization details."
+          "description": "Reference to an Organization.id in meta.organizations. Lets a speaker be attributed to their org in panel or multi-org decks without repeating organization details.",
+          "examples": ["acme", "beta", "devconf-2026"]
         },
         "socials": {
           "$ref": "#/$defs/Socials",
@@ -247,16 +284,25 @@
       "properties": {
         "template": {
           "type": "string",
-          "description": "Reference to a named narrative template from the pptx.dev library, e.g. 'problem-solution', 'scqa', 'pitch-deck', 'qbr'. The library lives at /spec/narratives. Unknown template IDs produce a validation warning, not an error."
+          "description": "Reference to a named narrative template from the pptx.dev library. The library lives at /spec/narratives. Unknown template IDs produce a validation warning, not an error.",
+          "examples": ["problem-solution", "scqa", "pitch-deck", "qbr", "weekly-progress", "classic-story"]
         },
         "description": {
           "type": "string",
-          "description": "Free-form narrative description used for AI-driven generation."
+          "description": "Free-form narrative description used for AI-driven generation.",
+          "examples": [
+            "Open with the cost of slow agentic workflows, contrast with what becomes possible at sub-second latency, then walk through our architecture and benchmark results, ending with a concrete adoption ask."
+          ]
         },
         "keyMessages": {
           "type": "array",
           "items": { "type": "string" },
-          "description": "Key messages the presentation should convey."
+          "description": "Key messages the presentation should convey.",
+          "examples": [[
+            "Agent latency is the new bottleneck for AI products.",
+            "Our runtime is 8x faster than the next-best option.",
+            "Customers see ROI within the first quarter."
+          ]]
         },
         "tone": {
           "type": "string",
@@ -283,15 +329,20 @@
         "id": {
           "type": "string",
           "pattern": "^[a-z][a-z0-9-]*$",
-          "description": "Stable slug used by Slide.beat to reference this beat. Lowercase kebab-case."
+          "description": "Stable slug used by Slide.beat to reference this beat. Lowercase kebab-case.",
+          "examples": ["hook", "problem", "evidence", "ask", "next-steps"]
         },
         "name": {
           "type": "string",
-          "description": "Human-readable beat name, e.g. 'The Problem'."
+          "description": "Human-readable beat name.",
+          "examples": ["The Hook", "The Problem", "Why Now", "The Ask"]
         },
         "description": {
           "type": "string",
-          "description": "What this beat should accomplish. Used as a prompt for AI-driven generation of slides assigned to this beat."
+          "description": "What this beat should accomplish. Used as a prompt for AI-driven generation of slides assigned to this beat.",
+          "examples": [
+            "Quantify the pain customers feel today, with one striking stat the audience can repeat afterward."
+          ]
         },
         "slideCount": {
           "type": "integer",
@@ -300,7 +351,8 @@
         },
         "layoutHint": {
           "type": "string",
-          "description": "Suggested layout for the opening slide of this beat, e.g. 'section-divider', 'title-slide'."
+          "description": "Suggested layout for the opening slide of this beat.",
+          "examples": ["section-divider", "title-slide", "stat-hero", "two-column"]
         }
       }
     },
@@ -310,7 +362,8 @@
       "properties": {
         "theme": {
           "type": "string",
-          "description": "Reference a named theme from pptx.gallery, or define the design inline via the other fields."
+          "description": "Reference a named theme from pptx.gallery, or define the design inline via the other fields.",
+          "examples": ["corporate-minimal", "ocean-depth", "warm-editorial", "tech-mono"]
         },
         "colors": {
           "$ref": "#/$defs/ColorScheme",
@@ -344,40 +397,49 @@
       "properties": {
         "scheme": {
           "type": "string",
-          "description": "Named color scheme from the gallery, e.g. 'ocean-depth' or 'corporate-blue'."
+          "description": "Named color scheme from the gallery.",
+          "examples": ["ocean-depth", "corporate-blue", "warm-editorial", "high-contrast"]
         },
         "primary": {
           "type": "string",
-          "description": "Primary brand color as a hex string (e.g., '#1E40AF')."
+          "description": "Primary brand color as a hex string.",
+          "examples": ["#1E40AF", "#0F172A"]
         },
         "secondary": {
           "type": "string",
-          "description": "Secondary brand color as a hex string."
+          "description": "Secondary brand color as a hex string.",
+          "examples": ["#3B82F6", "#64748B"]
         },
         "accent": {
           "type": "string",
-          "description": "Accent color used for highlights and emphasis."
+          "description": "Accent color used for highlights and emphasis.",
+          "examples": ["#F59E0B", "#22D3EE"]
         },
         "background": {
           "type": "string",
-          "description": "Default slide background color as a hex string."
+          "description": "Default slide background color as a hex string.",
+          "examples": ["#FFFFFF", "#0B1220"]
         },
         "surface": {
           "type": "string",
-          "description": "Color for elevated surfaces such as cards and panels."
+          "description": "Color for elevated surfaces such as cards and panels.",
+          "examples": ["#F8FAFC", "#1E293B"]
         },
         "text": {
           "type": "string",
-          "description": "Primary body text color."
+          "description": "Primary body text color.",
+          "examples": ["#0F172A", "#F8FAFC"]
         },
         "textSecondary": {
           "type": "string",
-          "description": "Secondary or muted text color used for captions and supporting copy."
+          "description": "Secondary or muted text color used for captions and supporting copy.",
+          "examples": ["#475569", "#94A3B8"]
         },
         "custom": {
           "type": "object",
           "additionalProperties": { "type": "string" },
-          "description": "Map of custom named colors for advanced or theme-specific use."
+          "description": "Map of custom named colors for advanced or theme-specific use.",
+          "examples": [{ "success": "#10B981", "warning": "#F59E0B", "danger": "#EF4444" }]
         }
       }
     },
@@ -387,7 +449,8 @@
       "properties": {
         "scheme": {
           "type": "string",
-          "description": "Named font scheme from the gallery, e.g. 'modern-sans' or 'classic-serif'."
+          "description": "Named font scheme from the gallery.",
+          "examples": ["modern-sans", "classic-serif", "tech-mono", "editorial"]
         },
         "heading": {
           "$ref": "#/$defs/Font",
@@ -414,7 +477,8 @@
       "properties": {
         "family": {
           "type": "string",
-          "description": "Font family name (e.g., 'Inter', 'Roboto')."
+          "description": "Font family name.",
+          "examples": ["Inter", "Roboto", "Source Serif Pro", "JetBrains Mono"]
         },
         "weight": {
           "type": "number",
@@ -464,7 +528,8 @@
         },
         "color": {
           "type": "string",
-          "description": "Solid fill color as a hex string (used when type is 'solid')."
+          "description": "Solid fill color as a hex string (used when type is 'solid').",
+          "examples": ["#FFFFFF", "#0F172A", "#F8FAFC"]
         },
         "gradient": {
           "type": "object",
@@ -484,7 +549,8 @@
                 "properties": {
                   "color": {
                     "type": "string",
-                    "description": "Stop color as a hex string."
+                    "description": "Stop color as a hex string.",
+                    "examples": ["#1E40AF", "#22D3EE"]
                   },
                   "position": {
                     "type": "number",
@@ -504,7 +570,13 @@
           "properties": {
             "src": {
               "type": "string",
-              "description": "Source for the background image. Accepts an HTTPS URL, data URI, relative path (resolved against the OPF file location), or asset reference."
+              "description": "Source for the background image. Accepts an HTTPS URL, data URI, relative path (resolved against the OPF file location), or asset reference.",
+              "examples": [
+                "https://cdn.acme.com/backgrounds/cover.jpg",
+                "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA...",
+                "./backgrounds/cover.jpg",
+                "asset_bg_cover"
+              ]
             },
             "fit": {
               "type": "string",
@@ -523,41 +595,150 @@
     },
     "Brand": {
       "type": "object",
-      "description": "Visual brand assets surfaced across slides. Organization identity (name, primary logo) lives in meta.organizations; this object only carries visual overrides and decorative marks.",
+      "description": "Visual brand assets surfaced across slides. Organization identity (name, primary logo) lives in meta.organizations; this object only carries visual overrides and decorative marks. All logo / icon / wordmark fields are bare source strings — placement and sizing are determined by slide layouts, not by this object.\n\nThe schema offers three asset types (logo, icon, wordmark) plus a decorative watermark, and for each, two themed variants (Light, Dark). The logo additionally supports a 'Stacked' aspect (icon-over-wordmark, suited to vertical / square slots). Naming follows brand-asset-library convention:\n\n- 'Light' = light-colored variant (e.g., white SVG), intended for rendering on dark backgrounds.\n- 'Dark' = dark-colored variant (e.g., black SVG), intended for rendering on light backgrounds.\n- 'Stacked' = vertical lockup with the icon stacked above the wordmark; the unsuffixed forms are assumed to be horizontal lockups.\n- The unsuffixed field (logo / icon / wordmark / watermark) is the default fallback when no themed variant is needed.\n\nEngine resolution: on a dark slide background, prefer the '*Light' variant; on a light slide background, prefer the '*Dark' variant; for vertical / square brand-mark slots, prefer the 'logoStacked*' family over the horizontal logo; otherwise fall back to the unsuffixed asset and (for the logo) ultimately to meta.organizations[primary].logo.",
       "properties": {
         "logo": {
-          "type": "object",
-          "description": "Optional logo override. When set, this takes precedence over the primary organization's logo for slide-level rendering. When omitted, the engine falls back to meta.organizations[primary].logo and uses default placement and sizing.",
-          "properties": {
-            "src": {
-              "type": "string",
-              "description": "Source for the logo image. Accepts an HTTPS URL, data URI, relative path (resolved against the OPF file location), or asset reference."
-            },
-            "position": {
-              "$ref": "#/$defs/Position",
-              "description": "Where the logo is placed on the slide."
-            },
-            "widthInches": {
-              "type": "number",
-              "description": "Rendered logo width in inches."
-            }
-          }
+          "type": "string",
+          "description": "Default full-lockup logo. Optional override of meta.organizations[primary].logo. Used as the fallback when a themed (Light/Dark) variant isn't set. Accepts an HTTPS URL, data URI, relative path, or asset reference.",
+          "examples": [
+            "https://cdn.acme.com/logo.svg",
+            "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9V3iWggAAAAASUVORK5CYII=",
+            "./assets/logo.png",
+            "asset_brand_logo"
+          ]
+        },
+        "logoLight": {
+          "type": "string",
+          "description": "Light-colored full-lockup logo (e.g., white SVG) intended for rendering on dark backgrounds. Accepts an HTTPS URL, data URI, relative path, or asset reference.",
+          "examples": [
+            "https://cdn.acme.com/logo-white.svg",
+            "./assets/logo-white.png",
+            "asset_brand_logo_light"
+          ]
+        },
+        "logoDark": {
+          "type": "string",
+          "description": "Dark-colored full-lockup logo (e.g., black SVG) intended for rendering on light backgrounds. Accepts an HTTPS URL, data URI, relative path, or asset reference.",
+          "examples": [
+            "https://cdn.acme.com/logo-black.svg",
+            "./assets/logo-black.png",
+            "asset_brand_logo_dark"
+          ]
+        },
+        "logoStacked": {
+          "type": "string",
+          "description": "Stacked (vertical) lockup of the logo, with the icon above the wordmark. Suited to portrait / square brand-mark slots such as some cover layouts and section dividers. Falls back to 'logo' when not set. Accepts an HTTPS URL, data URI, relative path, or asset reference.",
+          "examples": [
+            "https://cdn.acme.com/logo-stacked.svg",
+            "./assets/logo-stacked.png",
+            "asset_brand_logo_stacked"
+          ]
+        },
+        "logoStackedLight": {
+          "type": "string",
+          "description": "Light-colored stacked logo variant (e.g., white SVG) intended for rendering on dark backgrounds.",
+          "examples": [
+            "https://cdn.acme.com/logo-stacked-white.svg",
+            "./assets/logo-stacked-white.png",
+            "asset_brand_logo_stacked_light"
+          ]
+        },
+        "logoStackedDark": {
+          "type": "string",
+          "description": "Dark-colored stacked logo variant (e.g., black SVG) intended for rendering on light backgrounds.",
+          "examples": [
+            "https://cdn.acme.com/logo-stacked-black.svg",
+            "./assets/logo-stacked-black.png",
+            "asset_brand_logo_stacked_dark"
+          ]
+        },
+        "icon": {
+          "type": "string",
+          "description": "Default icon / mark / symbol (no wordmark). Useful for tight spaces such as footers, badges, and slide-corner marks. Accepts an HTTPS URL, data URI, relative path, or asset reference.",
+          "examples": [
+            "https://cdn.acme.com/icon.svg",
+            "./assets/icon.png",
+            "asset_brand_icon"
+          ]
+        },
+        "iconLight": {
+          "type": "string",
+          "description": "Light-colored icon variant (e.g., white SVG) intended for rendering on dark backgrounds.",
+          "examples": [
+            "https://cdn.acme.com/icon-white.svg",
+            "./assets/icon-white.png",
+            "asset_brand_icon_light"
+          ]
+        },
+        "iconDark": {
+          "type": "string",
+          "description": "Dark-colored icon variant (e.g., black SVG) intended for rendering on light backgrounds.",
+          "examples": [
+            "https://cdn.acme.com/icon-black.svg",
+            "./assets/icon-black.png",
+            "asset_brand_icon_dark"
+          ]
+        },
+        "wordmark": {
+          "type": "string",
+          "description": "Default wordmark — the company name set in its branded typography, with no icon. Often used on cover and section-divider slides. Accepts an HTTPS URL, data URI, relative path, or asset reference.",
+          "examples": [
+            "https://cdn.acme.com/wordmark.svg",
+            "./assets/wordmark.png",
+            "asset_brand_wordmark"
+          ]
+        },
+        "wordmarkLight": {
+          "type": "string",
+          "description": "Light-colored wordmark variant (e.g., white SVG) intended for rendering on dark backgrounds.",
+          "examples": [
+            "https://cdn.acme.com/wordmark-white.svg",
+            "./assets/wordmark-white.png",
+            "asset_brand_wordmark_light"
+          ]
+        },
+        "wordmarkDark": {
+          "type": "string",
+          "description": "Dark-colored wordmark variant (e.g., black SVG) intended for rendering on light backgrounds.",
+          "examples": [
+            "https://cdn.acme.com/wordmark-black.svg",
+            "./assets/wordmark-black.png",
+            "asset_brand_wordmark_dark"
+          ]
         },
         "watermark": {
-          "type": "object",
-          "description": "Watermark image displayed across slides.",
-          "properties": {
-            "src": {
-              "type": "string",
-              "description": "Source for the watermark image. Accepts an HTTPS URL, data URI, relative path (resolved against the OPF file location), or asset reference."
-            },
-            "opacity": {
-              "type": "number",
-              "minimum": 0,
-              "maximum": 1,
-              "description": "Watermark opacity from 0 (fully transparent) to 1 (fully opaque)."
-            }
-          }
+          "$ref": "#/$defs/BrandWatermark",
+          "description": "Default decorative watermark applied across slides. Used as the fallback when a themed (Light/Dark) variant isn't set."
+        },
+        "watermarkLight": {
+          "$ref": "#/$defs/BrandWatermark",
+          "description": "Light-colored watermark variant intended for rendering on dark backgrounds."
+        },
+        "watermarkDark": {
+          "$ref": "#/$defs/BrandWatermark",
+          "description": "Dark-colored watermark variant intended for rendering on light backgrounds."
+        }
+      }
+    },
+    "BrandWatermark": {
+      "type": "object",
+      "description": "Decorative watermark image and its rendering opacity. Reused by Brand.watermark, Brand.watermarkLight, and Brand.watermarkDark.",
+      "properties": {
+        "src": {
+          "type": "string",
+          "description": "Source for the watermark image. Accepts an HTTPS URL, data URI, relative path (resolved against the OPF file location), or asset reference.",
+          "examples": [
+            "https://cdn.acme.com/watermark.png",
+            "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9V3iWggAAAAASUVORK5CYII=",
+            "./assets/watermark.png",
+            "asset_brand_watermark"
+          ]
+        },
+        "opacity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Watermark opacity from 0 (fully transparent) to 1 (fully opaque)."
         }
       }
     },
@@ -592,11 +773,13 @@
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the slide within the document."
+          "description": "Unique identifier for the slide within the document.",
+          "examples": ["s1", "cover", "problem-1", "ask"]
         },
         "layout": {
           "type": "string",
-          "description": "Layout type — references a pptx.gallery layout or a custom layout name."
+          "description": "Layout type — references a pptx.gallery layout or a custom layout name.",
+          "examples": ["title-slide", "section-divider", "two-column", "image-right", "stat-hero", "blank"]
         },
         "designOverrides": {
           "$ref": "#/$defs/Design",
@@ -609,7 +792,8 @@
         },
         "notes": {
           "type": "string",
-          "description": "Speaker notes shown in presenter view."
+          "description": "Speaker notes shown in presenter view.",
+          "examples": ["Open with the customer story; pause for questions before moving to the architecture slide."]
         },
         "transition": {
           "$ref": "#/$defs/Transition",
@@ -621,7 +805,8 @@
         },
         "section": {
           "type": "string",
-          "description": "Section marker used to group slides in presenter view and outlines."
+          "description": "Section marker used to group slides in presenter view and outlines.",
+          "examples": ["Intro", "Problem", "Solution", "Ask", "Appendix"]
         },
         "beat": {
           "oneOf": [
@@ -670,7 +855,8 @@
         },
         "anchor": {
           "type": "string",
-          "description": "Anchor to layout grid, e.g. 'top-left', 'center', or 'bottom-right'."
+          "description": "Anchor to layout grid.",
+          "examples": ["top-left", "top-right", "center", "bottom-left", "bottom-right"]
         }
       }
     },
@@ -700,7 +886,8 @@
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the element within its slide."
+          "description": "Unique identifier for the element within its slide.",
+          "examples": ["title", "subtitle", "h1", "body-1", "logo", "chart"]
         },
         "type": {
           "type": "string",
@@ -717,7 +904,8 @@
         },
         "slot": {
           "type": "string",
-          "description": "Named slot from the layout template, e.g. 'title', 'body', or 'image-right'."
+          "description": "Named slot from the layout template.",
+          "examples": ["title", "subtitle", "body", "image-right", "footer"]
         },
         "animation": {
           "$ref": "#/$defs/Animation",
@@ -747,11 +935,18 @@
             "properties": {
               "src": {
                 "type": "string",
-                "description": "Source URL or asset reference for the image."
+                "description": "Source for the image. Accepts an HTTPS URL, data URI, relative path (resolved against the OPF file location), or asset reference.",
+                "examples": [
+                  "https://cdn.acme.com/images/diagram.png",
+                  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9V3iWggAAAAASUVORK5CYII=",
+                  "./images/diagram.png",
+                  "asset_img_diagram"
+                ]
               },
               "alt": {
                 "type": "string",
-                "description": "Accessible alt text describing the image."
+                "description": "Accessible alt text describing the image.",
+                "examples": ["Architecture diagram showing the agent runtime", "Headshot of Alice Chen"]
               },
               "fit": {
                 "type": "string",
@@ -768,7 +963,8 @@
               },
               "caption": {
                 "type": "string",
-                "description": "Caption rendered beneath the image."
+                "description": "Caption rendered beneath the image.",
+                "examples": ["Source: Q3 2026 internal benchmarks"]
               }
             }
           }
@@ -802,12 +998,14 @@
               "headers": {
                 "type": "array",
                 "items": { "type": "string" },
-                "description": "Header row labels rendered above the data rows."
+                "description": "Header row labels rendered above the data rows.",
+                "examples": [["Region", "Q3 Revenue", "Q4 Revenue", "YoY %"]]
               },
               "rows": {
                 "type": "array",
                 "items": { "type": "array" },
-                "description": "Two-dimensional array of row data; each row aligns by index with the headers/columns."
+                "description": "Two-dimensional array of row data; each row aligns by index with the headers/columns.",
+                "examples": [[["North America", 12.4, 18.1, 46], ["EMEA", 8.2, 11.5, 40]]]
               },
               "style": {
                 "$ref": "#/$defs/TableStyle",
@@ -823,11 +1021,13 @@
             "properties": {
               "shape": {
                 "type": "string",
-                "description": "Shape type, e.g. 'rectangle', 'circle', 'ellipse', 'triangle', 'arrow', 'line', 'star', 'callout', or 'custom'."
+                "description": "Shape type.",
+                "examples": ["rectangle", "circle", "ellipse", "triangle", "arrow", "line", "star", "callout", "custom"]
               },
               "fill": {
                 "type": "string",
-                "description": "Fill color as a hex string."
+                "description": "Fill color as a hex string.",
+                "examples": ["#1E40AF", "#F8FAFC", "#22D3EE"]
               },
               "stroke": {
                 "type": "object",
@@ -835,7 +1035,8 @@
                 "properties": {
                   "color": {
                     "type": "string",
-                    "description": "Stroke color as a hex string."
+                    "description": "Stroke color as a hex string.",
+                    "examples": ["#0F172A", "#FFFFFF"]
                   },
                   "width": {
                     "type": "number",
@@ -853,7 +1054,8 @@
               },
               "path": {
                 "type": "string",
-                "description": "SVG path data used when shape is 'custom'."
+                "description": "SVG path data used when shape is 'custom'.",
+                "examples": ["M10 10 L90 10 L50 90 Z"]
               }
             }
           }
@@ -865,11 +1067,13 @@
             "properties": {
               "code": {
                 "type": "string",
-                "description": "Source code to display."
+                "description": "Source code to display.",
+                "examples": ["def greet(name: str) -> str:\n    return f\"Hello, {name}!\""]
               },
               "language": {
                 "type": "string",
-                "description": "Language identifier used for syntax highlighting (e.g., 'python', 'ts')."
+                "description": "Language identifier used for syntax highlighting.",
+                "examples": ["python", "ts", "tsx", "rust", "go", "bash", "json", "yaml"]
               },
               "theme": {
                 "type": "string",
@@ -903,7 +1107,11 @@
             "properties": {
               "prompt": {
                 "type": "string",
-                "description": "AI instruction describing what content should be generated for this slot."
+                "description": "AI instruction describing what content should be generated for this slot.",
+                "examples": [
+                  "Three bullet points summarizing why our latency advantage matters to enterprise buyers.",
+                  "A two-column comparison of our product vs. the leading competitor."
+                ]
               },
               "expectedType": {
                 "type": "string",
@@ -945,7 +1153,8 @@
       "properties": {
         "text": {
           "type": "string",
-          "description": "Simple text string for basic use; ignored when 'runs' or 'markdown' is provided."
+          "description": "Simple text string for basic use; ignored when 'runs' or 'markdown' is provided.",
+          "examples": ["Hello, world", "The Future of Agentic Workflows"]
         },
         "runs": {
           "type": "array",
@@ -954,15 +1163,18 @@
         },
         "markdown": {
           "type": "string",
-          "description": "Markdown source converted to runs by the engine."
+          "description": "Markdown source converted to runs by the engine.",
+          "examples": ["**Bold** opening followed by _emphasis_ and a [link](https://acme.com)."]
         },
         "bullets": {
           "type": "array",
-          "description": "Bulleted list items; each item is either a string or a nested TextContent."
+          "description": "Bulleted list items; each item is either a string or a nested TextContent.",
+          "examples": [["Sub-second agent latency", "Drop-in compatible with OpenAI tool-calling", "SOC 2 Type II"]]
         },
         "numbered": {
           "type": "array",
-          "description": "Numbered list items; each item is either a string or a nested TextContent."
+          "description": "Numbered list items; each item is either a string or a nested TextContent.",
+          "examples": [["Identify the bottleneck", "Profile end-to-end", "Ship the fix"]]
         }
       }
     },
@@ -973,7 +1185,8 @@
       "properties": {
         "text": {
           "type": "string",
-          "description": "Text for this run."
+          "description": "Text for this run.",
+          "examples": ["Hello, ", "world"]
         },
         "bold": {
           "type": "boolean",
@@ -993,7 +1206,8 @@
         },
         "color": {
           "type": "string",
-          "description": "Run text color as a hex string."
+          "description": "Run text color as a hex string.",
+          "examples": ["#0F172A", "#1E40AF"]
         },
         "fontSize": {
           "type": "number",
@@ -1001,11 +1215,13 @@
         },
         "fontFamily": {
           "type": "string",
-          "description": "Run font family override."
+          "description": "Run font family override.",
+          "examples": ["Inter", "Source Serif Pro", "JetBrains Mono"]
         },
         "link": {
           "type": "string",
-          "description": "URL to link the run text to."
+          "description": "URL to link the run text to.",
+          "examples": ["https://acme.com", "https://acme.com/case-studies/beta"]
         },
         "superscript": {
           "type": "boolean",
@@ -1027,11 +1243,13 @@
         },
         "fontFamily": {
           "type": "string",
-          "description": "Font family override."
+          "description": "Font family override.",
+          "examples": ["Inter", "Source Serif Pro", "JetBrains Mono"]
         },
         "color": {
           "type": "string",
-          "description": "Text color as a hex string."
+          "description": "Text color as a hex string.",
+          "examples": ["#0F172A", "#F8FAFC"]
         },
         "alignment": {
           "type": "string",
@@ -1066,7 +1284,8 @@
         "labels": {
           "type": "array",
           "items": { "type": "string" },
-          "description": "Category labels shared across datasets (e.g., x-axis tick labels)."
+          "description": "Category labels shared across datasets (e.g., x-axis tick labels).",
+          "examples": [["Q1", "Q2", "Q3", "Q4"], ["Jan", "Feb", "Mar", "Apr", "May", "Jun"]]
         },
         "datasets": {
           "type": "array",
@@ -1078,20 +1297,24 @@
             "properties": {
               "label": {
                 "type": "string",
-                "description": "Dataset name shown in the legend."
+                "description": "Dataset name shown in the legend.",
+                "examples": ["Revenue ($M)", "MAU", "Latency (ms)"]
               },
               "values": {
                 "type": "array",
                 "items": { "type": "number" },
-                "description": "Numeric values for the dataset; aligns by index with the chart's labels."
+                "description": "Numeric values for the dataset; aligns by index with the chart's labels.",
+                "examples": [[12.4, 14.1, 16.8, 18.1]]
               },
               "color": {
                 "type": "string",
-                "description": "Override color for this dataset as a hex string."
+                "description": "Override color for this dataset as a hex string.",
+                "examples": ["#1E40AF", "#22D3EE"]
               },
               "type": {
                 "type": "string",
-                "description": "Per-dataset chart type override (used by combo charts, e.g., 'line' or 'column')."
+                "description": "Per-dataset chart type override (used by combo charts).",
+                "examples": ["line", "column", "area"]
               }
             }
           }
@@ -1104,7 +1327,8 @@
       "properties": {
         "title": {
           "type": "string",
-          "description": "Chart title shown above the plot."
+          "description": "Chart title shown above the plot.",
+          "examples": ["Quarterly Revenue", "Monthly Active Users (MAU)"]
         },
         "legend": {
           "description": "Legend configuration: pass a boolean to toggle the legend, or an object such as { position: 'top' | 'bottom' | 'left' | 'right' } to customize placement."
@@ -1127,7 +1351,8 @@
           "properties": {
             "label": {
               "type": "string",
-              "description": "Y-axis title."
+              "description": "Y-axis title.",
+              "examples": ["Revenue ($M)", "Latency (ms)", "Users"]
             },
             "min": {
               "type": "number",
@@ -1139,7 +1364,8 @@
             },
             "format": {
               "type": "string",
-              "description": "Tick label format string (e.g., '$#,##0' or '0.0%')."
+              "description": "Tick label format string.",
+              "examples": ["$#,##0", "0.0%", "#,##0", "0.0\"ms\""]
             }
           }
         },
@@ -1149,11 +1375,13 @@
           "properties": {
             "label": {
               "type": "string",
-              "description": "X-axis title."
+              "description": "X-axis title.",
+              "examples": ["Quarter", "Month", "Region"]
             },
             "format": {
               "type": "string",
-              "description": "Tick label format string."
+              "description": "Tick label format string.",
+              "examples": ["mmm yyyy", "0"]
             }
           }
         }
@@ -1165,11 +1393,13 @@
       "properties": {
         "headerBackground": {
           "type": "string",
-          "description": "Header row background color as a hex string."
+          "description": "Header row background color as a hex string.",
+          "examples": ["#0F172A", "#1E40AF"]
         },
         "headerColor": {
           "type": "string",
-          "description": "Header row text color as a hex string."
+          "description": "Header row text color as a hex string.",
+          "examples": ["#FFFFFF", "#F8FAFC"]
         },
         "stripedRows": {
           "type": "boolean",
@@ -1177,7 +1407,8 @@
         },
         "borderColor": {
           "type": "string",
-          "description": "Color of cell borders as a hex string."
+          "description": "Color of cell borders as a hex string.",
+          "examples": ["#E2E8F0", "#475569"]
         },
         "compact": {
           "type": "boolean",
