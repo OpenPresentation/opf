@@ -1,0 +1,47 @@
+{
+  "$schema": "https://pptx.dev/schema/opf-narrative/v1",
+  "id": "classic-story",
+  "name": "Classic Story",
+  "summary": "Movie-style narrative arc applied to any topic: open the scene, introduce the villain, raise the stakes, send in the hero, deliver the plan, and close with hope. A versatile go-to when you need to make information feel like a story.",
+  "audienceFit": ["general-audience", "customers", "internal-teams"],
+  "durationRange": { "minMinutes": 5, "maxMinutes": 30 },
+  "tags": ["storytelling", "general", "engagement"],
+  "beats": [
+    {
+      "id": "opening",
+      "name": "Opening",
+      "description": "Capture attention with a vivid moment, image, or question that sets the world of the story. The audience should immediately know what kind of room they're in. Avoid agendas — the opening is the first scene, not a preamble."
+    },
+    {
+      "id": "context",
+      "name": "Context",
+      "description": "Establish what's normal in this world before anything goes wrong. Just enough background for the audience to feel the stakes when the villain shows up. Keep it tight; backstory is fuel, not the engine."
+    },
+    {
+      "id": "villain",
+      "name": "Villain",
+      "description": "Introduce the antagonist — a problem, a competitor, a market force, an inertia. Give it a face and a name where you can. The clearer the villain, the more the audience cares about how the story turns out."
+    },
+    {
+      "id": "despair",
+      "name": "Despair",
+      "description": "Show what's at risk if the villain wins. Emphasize the human or business cost of inaction. Don't rush past this beat — the discomfort here is what makes the resolution land."
+    },
+    {
+      "id": "hero",
+      "name": "Hero",
+      "description": "Reveal the hero of the story. Often this is the audience themselves, your team, or your product. Frame the hero by what they uniquely bring to the fight, not by their résumé."
+    },
+    {
+      "id": "plan",
+      "name": "Plan",
+      "description": "Walk through how the hero defeats the villain. Concrete, sequential, credible. Generic plans signal weak heroes; specific plans earn belief that the ending you're promising is reachable."
+    },
+    {
+      "id": "closing",
+      "name": "Closing",
+      "description": "End with the resolution and the lesson. Show what the world looks like after the villain loses, and leave the audience with the feeling — and the line — they'll repeat afterwards.",
+      "layoutHint": "title-slide"
+    }
+  ]
+}

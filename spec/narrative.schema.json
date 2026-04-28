@@ -67,15 +67,10 @@
           "type": "string",
           "description": "What this beat should accomplish. Used as a prompt for AI-driven generation of slides assigned to this beat."
         },
-        "weight": {
-          "type": "number",
-          "exclusiveMinimum": 0,
-          "description": "Relative share of the deck this beat occupies. Engine normalizes weights across all beats; values do not need to sum to 1."
-        },
         "slideCount": {
           "type": "integer",
           "minimum": 1,
-          "description": "Optional explicit slide count for this beat."
+          "description": "Optional explicit slide count for this beat. Defaults to 1 when omitted; values >1 are reserved for beats that intentionally span multiple slides. Prefer decomposing a heavy beat into multiple beats over setting a high slideCount."
         },
         "layoutHint": {
           "type": "string",

@@ -1,0 +1,57 @@
+{
+  "$schema": "https://pptx.dev/schema/opf-narrative/v1",
+  "id": "educate",
+  "name": "Educate",
+  "summary": "Engaging-explainer arc inspired by Mary Roach: surprise the audience with a fact, walk them through evidence and anecdote, scrutinize the assumptions, then close on a memorable insight. For technical, scientific, or analytical talks that need to feel more like discovery than instruction.",
+  "audienceFit": ["general-audience", "students", "practitioners"],
+  "durationRange": { "minMinutes": 15, "maxMinutes": 45 },
+  "tags": ["keynote", "education", "explainer", "science"],
+  "beats": [
+    {
+      "id": "introduction",
+      "name": "Introduction",
+      "description": "Introduce the topic in a way that respects the audience's time and curiosity. Frame why this question is worth asking, and signal the shape of the journey ahead without giving away the destination."
+    },
+    {
+      "id": "surprising-fact",
+      "name": "Surprising Fact",
+      "description": "Lead with a single curious fact that recasts how the audience thinks about the topic. The fact should be small, specific, and unforgettable — the cognitive door the rest of the talk walks through."
+    },
+    {
+      "id": "experiment",
+      "name": "Experiment",
+      "description": "Walk through a method, study, or thought experiment that probes the surprising fact. Show how knowledge here gets made — the audience should feel like they're shoulder-to-shoulder with the investigator."
+    },
+    {
+      "id": "amusing-anecdote",
+      "name": "Amusing Anecdote",
+      "description": "Drop in a story or moment from the field that brings the topic to human scale. Personality and humor here keep the audience leaning forward; technical depth without warmth loses the room."
+    },
+    {
+      "id": "intriguing-information",
+      "name": "Intriguing Information",
+      "description": "Layer in the more complex data or detail. By this point the audience is invested enough to do real work alongside you. Visualize generously — make the numbers tangible."
+    },
+    {
+      "id": "skeptical-scrutiny",
+      "name": "Skeptical Scrutiny",
+      "description": "Question the easy interpretations. Challenge the audience's defaults and your own. Showing where the evidence is contested is what separates a teacher from a publicist."
+    },
+    {
+      "id": "extraordinary-explanation",
+      "name": "Extraordinary Explanation",
+      "description": "Present the most counterintuitive or beautiful explanation the topic offers. Take your time here — this is the payoff slide the audience came for."
+    },
+    {
+      "id": "unconventional-use",
+      "name": "Unconventional Use",
+      "description": "Show an unexpected application or implication of the idea. Surprise reinforces the lesson and gives the audience a story to retell tomorrow."
+    },
+    {
+      "id": "captivating-conclusion",
+      "name": "Captivating Conclusion",
+      "description": "Close with a thoughtful, slightly poetic wrap-up. Echo the surprising fact, name the lesson, and leave the audience with a new question instead of a tidy answer.",
+      "layoutHint": "title-slide"
+    }
+  ]
+}

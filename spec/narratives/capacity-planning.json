@@ -1,0 +1,53 @@
+{
+  "$schema": "https://pptx.dev/schema/opf-narrative/v1",
+  "id": "capacity-planning",
+  "name": "Capacity Planning",
+  "summary": "Workforce and operational capacity-planning arc: kickoff, urgency, current state, projection, tactics, implementation, revision, conclusion. For decks where leadership must decide whether the organization has enough resources to meet upcoming demand.",
+  "audienceFit": ["leadership", "operations", "hr-partners", "finance"],
+  "durationRange": { "minMinutes": 20, "maxMinutes": 45 },
+  "tags": ["workforce", "operations", "planning", "resource-management"],
+  "beats": [
+    {
+      "id": "kickoff",
+      "name": "Kickoff",
+      "description": "Introduce what the planning exercise covers and the decision you need from the audience. Frame the time horizon and the resources in scope so the rest of the deck stays bounded.",
+      "layoutHint": "section-divider"
+    },
+    {
+      "id": "urgency",
+      "name": "Urgency",
+      "description": "Show why this is the right moment to plan capacity. Pipeline shifts, hiring freezes, operational stress signals. Urgency turns capacity from an annual ritual into a decision the audience leans into."
+    },
+    {
+      "id": "situation",
+      "name": "Situation",
+      "description": "Highlight the current resource picture: people, tools, infrastructure, vendor capacity. Show utilization, not just headcount. The audience should know where slack and stress live today."
+    },
+    {
+      "id": "projection",
+      "name": "Projection",
+      "description": "Predict future demand under your base case and a sensitivity case. Tie demand to specific drivers — pipeline, launches, seasonality — so the audience can challenge the assumptions, not just the totals."
+    },
+    {
+      "id": "tactics",
+      "name": "Tactics",
+      "description": "Suggest the strategies for closing any gap: hiring, automation, outsourcing, prioritization. Each tactic should map to a specific demand driver and a defensible cost."
+    },
+    {
+      "id": "implementation",
+      "name": "Implementation",
+      "description": "Discuss how the plan gets deployed. Sequencing, owners, dependencies, lead times. Capacity decisions slip the most when the rollout isn't planned with the same rigor as the sizing."
+    },
+    {
+      "id": "revision",
+      "name": "Revision",
+      "description": "Define the leading indicators that would trigger a re-plan, and the cadence of review. Capacity plans age fast; show the audience how the plan stays alive."
+    },
+    {
+      "id": "conclusion",
+      "name": "Conclusion",
+      "description": "Wrap up with the specific recommendations and the decisions you need today. End with the next checkpoint and what evidence will be on the table at it.",
+      "layoutHint": "title-slide"
+    }
+  ]
+}

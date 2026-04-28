@@ -1,0 +1,62 @@
+{
+  "$schema": "https://pptx.dev/schema/opf-narrative/v1",
+  "id": "survival-story",
+  "name": "Survival Story",
+  "summary": "Narrative arc of overcoming adversity through determination: catastrophe, backstory, plan, danger, effort, struggle, pivot, breakthrough, legacy, takeaway. For brand stories, founder histories, and leadership talks where the lesson lives in the comeback.",
+  "audienceFit": ["general-audience", "internal-teams", "press"],
+  "durationRange": { "minMinutes": 10, "maxMinutes": 30 },
+  "tags": ["storytelling", "inspirational", "founder", "comeback"],
+  "beats": [
+    {
+      "id": "catastrophe",
+      "name": "Catastrophe",
+      "description": "Open in the middle of the disaster. Specific moment, specific stakes, specific damage. Drop the audience into the worst point of the story before walking them back."
+    },
+    {
+      "id": "backstory",
+      "name": "Backstory",
+      "description": "Detail the events that led up to the catastrophe. Just enough for the audience to understand how the disaster could have happened. Avoid moralizing — the story does the work."
+    },
+    {
+      "id": "blueprint",
+      "name": "Blueprint",
+      "description": "Illustrate the recovery plan. Specific moves, specific bets, specific people. The audience should see the strategy as more than 'try hard.'"
+    },
+    {
+      "id": "danger",
+      "name": "Danger",
+      "description": "Highlight the emerging threats to the recovery plan. New risks, returning ones. Tension here makes the eventual triumph credible."
+    },
+    {
+      "id": "endeavor",
+      "name": "Endeavor",
+      "description": "Show the determined effort underway. The hours, the trade-offs, the discipline. The audience must feel the work, not just hear about it."
+    },
+    {
+      "id": "struggles",
+      "name": "Struggles",
+      "description": "Showcase challenging moments along the way: the setbacks, the false starts, the hard calls. Honest setbacks make eventual success feel earned."
+    },
+    {
+      "id": "pivot",
+      "name": "Pivot",
+      "description": "Highlight the strategic shift that changed the trajectory. What got reconsidered, what got dropped, what got doubled down on. The pivot is the moment the protagonist became something new."
+    },
+    {
+      "id": "breakthrough",
+      "name": "Breakthrough",
+      "description": "Emphasize the moment adversity finally broke. Concrete result, concrete date. Let the slide land — the audience came for this turn."
+    },
+    {
+      "id": "legacy",
+      "name": "Legacy",
+      "description": "Discuss the enduring impact. What survival made possible afterward, who benefited, what was built on top. Survival stories are most powerful when they create more than they restore."
+    },
+    {
+      "id": "takeaway",
+      "name": "Takeaway",
+      "description": "Share the lesson the audience can carry away. One transferable insight, framed for their own challenges — not a general moral.",
+      "layoutHint": "title-slide"
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "$schema": "https://pptx.dev/schema/opf-narrative/v1",
+  "id": "persuasive-sales",
+  "name": "Persuasive Sales",
+  "summary": "Top-of-funnel sales arc that creates awareness and alignment with a prospective customer. Anchored in a market change, leading to your unique capabilities, supported by proof, ending with a clear call to action.",
+  "audienceFit": ["prospects", "customers", "buyers"],
+  "durationRange": { "minMinutes": 15, "maxMinutes": 45 },
+  "tags": ["sales", "go-to-market", "outbound", "discovery"],
+  "beats": [
+    {
+      "id": "intro",
+      "name": "Introduction",
+      "description": "Open with a brief framing of who you are and why this conversation is worth the prospect's next thirty minutes. Keep credentials short; the audience cares about their problem, not your résumé."
+    },
+    {
+      "id": "big-change",
+      "name": "Big Change",
+      "description": "Name the market shift the prospect's industry is living through. Make it concrete, recent, and undeniable. The change — not the product — is the reason they should care."
+    },
+    {
+      "id": "response-to-change",
+      "name": "Winners and Losers",
+      "description": "Show how the change is creating winners and losers in the prospect's space. Use named examples where you can. The goal is for the prospect to wonder which side they'll end up on."
+    },
+    {
+      "id": "benefits",
+      "name": "Benefits",
+      "description": "Paint the outcome a winner experiences: a vivid picture of the prospect's life on the other side of the change. Lead with what changes for them, not with what your product does."
+    },
+    {
+      "id": "capabilities",
+      "name": "Capabilities",
+      "description": "Reveal the unique capabilities that make those outcomes possible. Frame them as the 'magic gifts' the prospect needs to win the new game. Highlight what's structurally different from the alternatives."
+    },
+    {
+      "id": "evidence",
+      "name": "Evidence",
+      "description": "Share customer testimonials, case studies, and measurable outcomes from organizations like the prospect's. Pick evidence that maps to the benefits you promised, not generic logos."
+    },
+    {
+      "id": "call-to-action",
+      "name": "Call to Action",
+      "description": "Ask for the next step in the sales process. Be specific: a pilot, a workshop, a follow-on conversation with a named stakeholder. Make the smallest credible commitment that keeps momentum.",
+      "layoutHint": "title-slide"
+    },
+    {
+      "id": "close",
+      "name": "Close",
+      "description": "Close with a final image and contact path. Leave the prospect with one line about why they're better off acting now than later, and clear instructions for how to engage.",
+      "layoutHint": "title-slide"
+    }
+  ]
+}

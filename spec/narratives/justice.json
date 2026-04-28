@@ -1,0 +1,67 @@
+{
+  "$schema": "https://pptx.dev/schema/opf-narrative/v1",
+  "id": "justice",
+  "name": "Justice",
+  "summary": "Advocacy arc inspired by the rhetorical structure of Martin Luther King Jr.'s 'I Have a Dream' speech: name the inequality, share the dream, build urgency, layer further visions, emphasize unity, call to action, and close on hope. For movement-building keynotes and mission-driven speeches.",
+  "audienceFit": ["general-audience", "advocates", "policymakers", "community"],
+  "durationRange": { "minMinutes": 10, "maxMinutes": 30 },
+  "tags": ["inspirational", "advocacy", "movement", "keynote"],
+  "beats": [
+    {
+      "id": "introduction",
+      "name": "Introduction",
+      "description": "Set the stage with a moment that earns the audience's full attention. Speak in the moral register the rest of the talk will require. Avoid throat-clearing — open as if the speech were already underway."
+    },
+    {
+      "id": "give-context",
+      "name": "Give Context",
+      "description": "Place the issue in its historical and current context. What promises were made, what has and hasn't been kept. Context turns the speech from opinion into accountability."
+    },
+    {
+      "id": "highlight-inequality",
+      "name": "Highlight Inequality",
+      "description": "Show specific, undeniable examples of the inequality at issue. Concrete moments and people, not abstractions. The audience should feel the gap between what is and what was promised."
+    },
+    {
+      "id": "share-dream",
+      "name": "Share the Dream",
+      "description": "Describe the future you envision in vivid, specific detail. The dream must be both ambitious and recognizable — a world the audience can picture themselves living in."
+    },
+    {
+      "id": "create-urgency",
+      "name": "Create Urgency",
+      "description": "Explain why the time for change is now. The cost of waiting, the moment that won't return. Urgency converts shared vision into shared movement."
+    },
+    {
+      "id": "another-dream",
+      "name": "Continue the Vision",
+      "description": "Layer additional visions of the future in parallel structure. Repetition and rhythm build momentum the way a single image cannot."
+    },
+    {
+      "id": "emphasize-unity",
+      "name": "Emphasize Unity",
+      "description": "Speak to the collective power of the audience together. Name common ground that crosses lines the issue normally divides. Unity is the engine that turns dream into march."
+    },
+    {
+      "id": "last-dream",
+      "name": "Final Vision",
+      "description": "Deliver one more, fully realized vision of the world you're calling for. Specific enough to be remembered, expansive enough to inspire."
+    },
+    {
+      "id": "call-to-action",
+      "name": "Call to Action",
+      "description": "Ask the audience to participate in the change. Be specific about what 'doing something' looks like — show, march, give, vote, organize. Vague CTAs produce vague action."
+    },
+    {
+      "id": "show-determination",
+      "name": "Show Determination",
+      "description": "Encourage persistence in the face of resistance. Acknowledge what will be hard. Determination, named honestly, is more durable than easy optimism."
+    },
+    {
+      "id": "create-hope",
+      "name": "Create Hope",
+      "description": "Close on hope grounded in evidence: progress already made, victories already won, ground already moved. Hope as a conclusion lands strongest when it sounds like it has been earned.",
+      "layoutHint": "title-slide"
+    }
+  ]
+}

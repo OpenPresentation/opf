@@ -38,8 +38,11 @@ class OPFNarrativeBeat(_OPFBase):
     id: str
     name: str
     description: str | None = None
-    weight: float | None = None
     slide_count: int | None = Field(default=None, alias="slideCount")
+    """Optional explicit slide count for this beat. Defaults to 1 when
+    omitted; values >1 are reserved for beats that intentionally span
+    multiple slides. Prefer decomposing a heavy beat into multiple beats
+    over setting a high ``slideCount``."""
     layout_hint: str | None = Field(default=None, alias="layoutHint")
 
 
@@ -408,7 +411,13 @@ class OPFSlide(_OPFBase):
     transition: OPFTransition | None = None
     hidden: bool | None = None
     section: str | None = None
-    beat: str | None = None
+    beat: str | list[str] | None = None
+    """Optional reference to one or more narrative beats (each value matches
+    an ``id`` from ``meta.narrative.beats`` or the resolved template). A
+    single string declares the slide's primary beat; a list declares that
+    one slide covers multiple beats — useful when shorter decks fold beats
+    together (e.g. ``["problem", "why-now"]``). Slides without a beat are
+    valid; multiple slides may share a beat."""
 
 
 class OPFDocument(_OPFBase):

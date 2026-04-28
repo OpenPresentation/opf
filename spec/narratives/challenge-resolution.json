@@ -1,0 +1,47 @@
+{
+  "$schema": "https://pptx.dev/schema/opf-narrative/v1",
+  "id": "challenge-resolution",
+  "name": "Challenge → Resolution",
+  "summary": "Identify a current business challenge, trace its origins, and recommend an actionable resolution. Useful for management consulting, internal strategy memos, and any deck where the audience needs a clear path from problem to plan.",
+  "audienceFit": ["executives", "managers", "stakeholders", "internal-teams"],
+  "durationRange": { "minMinutes": 10, "maxMinutes": 30 },
+  "tags": ["management", "strategy", "consulting", "advisory"],
+  "beats": [
+    {
+      "id": "hook",
+      "name": "Hook",
+      "description": "Open with a specific, visible signal of the challenge — a metric heading the wrong way, a customer story, a competitive event. The hook should make the audience nod that yes, this matters."
+    },
+    {
+      "id": "dilemma",
+      "name": "Dilemma",
+      "description": "State the challenge plainly. What is failing, who is feeling it, and why has it now risen to a level that demands a decision? The dilemma must feel real, not academic."
+    },
+    {
+      "id": "backdrop",
+      "name": "Backdrop",
+      "description": "Provide the context behind the dilemma: how it formed, what's been tried, what constraints exist. Just enough history that the audience trusts your diagnosis without drowning in detail."
+    },
+    {
+      "id": "remedy",
+      "name": "Remedy",
+      "description": "Propose the resolution. Lead with the recommendation, then sketch the approach. Be opinionated — vague remedies invite vague responses."
+    },
+    {
+      "id": "evidence",
+      "name": "Evidence",
+      "description": "Demonstrate why the remedy will work. Comparable cases, supporting data, or pilot results. Choose evidence that addresses the audience's most likely objection, not the one easiest to answer."
+    },
+    {
+      "id": "motivate",
+      "name": "Motivate",
+      "description": "Make the case for acting now. Quantify the cost of delay and the upside of decisive action. Help the audience picture the room a quarter from now if they say yes."
+    },
+    {
+      "id": "conclusion",
+      "name": "Conclusion",
+      "description": "Recap the challenge, the remedy, and the specific decision you need from the audience. End with a clear ask, not a summary slide.",
+      "layoutHint": "title-slide"
+    }
+  ]
+}

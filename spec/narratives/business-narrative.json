@@ -1,0 +1,52 @@
+{
+  "$schema": "https://pptx.dev/schema/opf-narrative/v1",
+  "id": "business-narrative",
+  "name": "Business Narrative",
+  "summary": "Tell a business strategy or solution as a story: setting, challenge, tension, hero, plan, outcome. Useful for internal alignment decks, town halls, and any audience that responds better to story shape than to bullet lists.",
+  "audienceFit": ["internal-teams", "leadership", "cross-functional-partners"],
+  "durationRange": { "minMinutes": 10, "maxMinutes": 30 },
+  "tags": ["management", "storytelling", "internal", "strategy"],
+  "beats": [
+    {
+      "id": "introduction",
+      "name": "Introduction",
+      "description": "Engage the audience and set expectations for the next twenty minutes. Tell them you're going to tell them a story — and then start telling it. Avoid a separate agenda slide; the introduction is the first scene."
+    },
+    {
+      "id": "setting",
+      "name": "Setting",
+      "description": "Establish the world the story takes place in: the team, the market, the moment. Just enough context that the challenge will feel meaningful when it arrives."
+    },
+    {
+      "id": "challenge",
+      "name": "Challenge",
+      "description": "Identify the issue at hand. Concrete, specific, attributable. The challenge is the inciting incident — the thing that pulled the rest of the story into motion."
+    },
+    {
+      "id": "tension",
+      "name": "Tension",
+      "description": "Raise the stakes. What happens if the challenge isn't met? Quantify the cost, name the people affected, surface the trade-offs that make the choice hard. Tension is what makes the audience lean in."
+    },
+    {
+      "id": "solution",
+      "name": "Solution",
+      "description": "Reveal the strategy or hero of the story. Lead with what changes for the audience or customer when the solution is in place. This is the turn from problem to promise."
+    },
+    {
+      "id": "implementation",
+      "name": "Implementation",
+      "description": "Describe the path to success. Phases, owners, milestones, key bets. Show the audience that the solution has weight behind it — not just intent."
+    },
+    {
+      "id": "recap",
+      "name": "Recap",
+      "description": "Bring the audience back to the surface with a clear summary of what was said and decided. Echo the language from the opening so the story feels closed."
+    },
+    {
+      "id": "conclusion",
+      "name": "Conclusion",
+      "description": "Reinforce the key message and the call to action. End on the line you most want repeated in tomorrow's hallway conversations.",
+      "layoutHint": "title-slide"
+    }
+  ]
+}

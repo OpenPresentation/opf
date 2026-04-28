@@ -1,12 +1,12 @@
 {
   "$schema": "https://pptx.dev/schema/opf-narrative-index/v1",
   "version": "1",
-  "description": "Catalog of narrative templates available in the pptx.dev library. Each entry is a lightweight summary; full beat definitions live in the per-template JSON files alongside this index.",
+  "description": "Catalog of narrative templates available in the pptx.dev library. Each entry is a lightweight summary; full beat definitions live in the per-template JSON files alongside this index. Entries are grouped by usage: foundational arcs first, then pitches, sales and GTM, strategy and consulting, storytelling, keynotes and inspiration, rhythm-of-business reviews, data-driven analyses, and workforce reviews.",
   "templates": [
     {
       "id": "problem-solution",
       "name": "Problem → Solution",
-      "summary": "Classic business arc: name the pain, raise the stakes, present your fix, prove it, ask.",
+      "summary": "Classic business arc: name the pain, raise the stakes, present your fix, show how it works, prove it, ask.",
       "audienceFit": ["customers", "stakeholders", "executives", "internal-teams"],
       "durationRange": { "minMinutes": 5, "maxMinutes": 30 },
       "tags": ["business", "sales", "general", "proposal"],
@@ -15,29 +15,335 @@
     {
       "id": "scqa",
       "name": "SCQA (Situation–Complication–Question–Answer)",
-      "summary": "Minto's pyramid-principle opener; ideal for executive memos and strategic recommendations.",
+      "summary": "Minto's pyramid principle: surface the recommendation up front, then layer key arguments and supporting evidence beneath it.",
       "audienceFit": ["executives", "boards", "leadership-teams"],
       "durationRange": { "minMinutes": 5, "maxMinutes": 20 },
-      "tags": ["executive", "strategy", "consulting", "minto"],
+      "tags": ["executive", "strategy", "consulting", "minto", "pyramid"],
       "file": "scqa.json"
+    },
+    {
+      "id": "strategic-narrative",
+      "name": "Strategic Narrative",
+      "summary": "Change-driven sales/founder arc: a tectonic shift creates winners and losers, and your product is the way to land in the winners' camp.",
+      "audienceFit": ["customers", "prospects", "board", "investors", "executives"],
+      "durationRange": { "minMinutes": 10, "maxMinutes": 30 },
+      "tags": ["strategic", "sales", "positioning", "category"],
+      "file": "strategic-narrative.json"
+    },
+    {
+      "id": "golden-circle",
+      "name": "Golden Circle (Why / How / What)",
+      "summary": "Sinek's keynote arc: lead with belief, follow with method, finish with proof.",
+      "audienceFit": ["customers", "employees", "general-audience", "press"],
+      "durationRange": { "minMinutes": 10, "maxMinutes": 30 },
+      "tags": ["keynote", "brand", "mission", "sinek"],
+      "file": "golden-circle.json"
+    },
+    {
+      "id": "conference-talk",
+      "name": "Conference Talk",
+      "summary": "Stage-talk arc for industry events: hook, promise, evidence, mechanism, application, recap.",
+      "audienceFit": ["practitioners", "general-audience", "industry-peers"],
+      "durationRange": { "minMinutes": 15, "maxMinutes": 45 },
+      "tags": ["talk", "conference", "keynote", "education"],
+      "file": "conference-talk.json"
+    },
+    {
+      "id": "transformation-arc",
+      "name": "Transformation Arc (Before / After / Bridge)",
+      "summary": "Marketing-copy arc adapted for slides: paint the painful before, contrast the vivid after, deliver the bridge between them.",
+      "audienceFit": ["customers", "prospects", "marketing-teams", "general-audience"],
+      "durationRange": { "minMinutes": 3, "maxMinutes": 15 },
+      "tags": ["marketing", "copywriting", "pitch", "persuasive"],
+      "file": "transformation-arc.json"
     },
     {
       "id": "pitch-deck",
       "name": "Startup Pitch Deck",
-      "summary": "Canonical investor-pitch arc drawn from Sequoia and YC templates; optimized for 10–15 minute meetings.",
+      "summary": "Canonical investor-pitch arc drawn from Sequoia and YC templates; optimized for 10–20 minute meetings.",
       "audienceFit": ["investors", "venture-capitalists", "angels", "advisors"],
       "durationRange": { "minMinutes": 10, "maxMinutes": 20 },
       "tags": ["startup", "fundraising", "pitch", "investor"],
       "file": "pitch-deck.json"
     },
     {
+      "id": "early-startup-pitch",
+      "name": "Early-Stage Startup Pitch",
+      "summary": "Seed and pre-seed pitch arc tuned for vision-heavy stories where revenue and traction are still thin.",
+      "audienceFit": ["seed-investors", "angels", "advisors"],
+      "durationRange": { "minMinutes": 10, "maxMinutes": 20 },
+      "tags": ["startup", "fundraising", "seed", "pitch"],
+      "file": "early-startup-pitch.json"
+    },
+    {
+      "id": "persuasive-sales",
+      "name": "Persuasive Sales",
+      "summary": "Top-of-funnel sales arc anchored in market change, leading to your unique capabilities, supported by proof, ending with a clear ask.",
+      "audienceFit": ["prospects", "customers", "buyers"],
+      "durationRange": { "minMinutes": 15, "maxMinutes": 45 },
+      "tags": ["sales", "go-to-market", "outbound", "discovery"],
+      "file": "persuasive-sales.json"
+    },
+    {
+      "id": "company-intro",
+      "name": "Company Intro",
+      "summary": "Standard company-overview deck: who you are, what's distinctive, who you serve, why they win.",
+      "audienceFit": ["prospects", "partners", "press", "candidates"],
+      "durationRange": { "minMinutes": 10, "maxMinutes": 30 },
+      "tags": ["overview", "go-to-market", "marketing", "intro"],
+      "file": "company-intro.json"
+    },
+    {
+      "id": "marketing-strategy",
+      "name": "Marketing Strategy",
+      "summary": "Comprehensive go-to-market strategy arc structured around the 4Ps; for category launches and annual plans.",
+      "audienceFit": ["marketing-leaders", "executives", "cross-functional-partners"],
+      "durationRange": { "minMinutes": 30, "maxMinutes": 60 },
+      "tags": ["go-to-market", "marketing", "strategy", "planning"],
+      "file": "marketing-strategy.json"
+    },
+    {
+      "id": "product-launch",
+      "name": "Product Launch",
+      "summary": "Persuasive launch arc: brand, promise, conflict, stakes, reveal, raised stakes, sell, call to action.",
+      "audienceFit": ["customers", "press", "general-audience", "partners"],
+      "durationRange": { "minMinutes": 15, "maxMinutes": 45 },
+      "tags": ["startup", "launch", "marketing", "keynote"],
+      "file": "product-launch.json"
+    },
+    {
+      "id": "strategic-advisory",
+      "name": "Strategic Advisory",
+      "summary": "Consulting-style advisory deck applying Minto's pyramid: title, SCQ, answer, three argued points, summary.",
+      "audienceFit": ["executives", "boards", "leadership-teams", "clients"],
+      "durationRange": { "minMinutes": 15, "maxMinutes": 45 },
+      "tags": ["consulting", "advisory", "strategy", "minto"],
+      "file": "strategic-advisory.json"
+    },
+    {
+      "id": "challenge-resolution",
+      "name": "Challenge → Resolution",
+      "summary": "Identify a current business challenge, trace its origins, and recommend an actionable resolution.",
+      "audienceFit": ["executives", "managers", "stakeholders", "internal-teams"],
+      "durationRange": { "minMinutes": 10, "maxMinutes": 30 },
+      "tags": ["management", "strategy", "consulting", "advisory"],
+      "file": "challenge-resolution.json"
+    },
+    {
+      "id": "project-proposal",
+      "name": "Project Proposal",
+      "summary": "Internal proposal arc for greenlighting a project: hook, problem, idea, benefits, justification, plan, timeline, risks, outlook, ask.",
+      "audienceFit": ["executives", "sponsors", "managers", "internal-teams"],
+      "durationRange": { "minMinutes": 15, "maxMinutes": 45 },
+      "tags": ["management", "proposal", "internal", "planning"],
+      "file": "project-proposal.json"
+    },
+    {
+      "id": "failure-analysis",
+      "name": "Failure Analysis",
+      "summary": "Walk through what went wrong, why, and what changes — a structured post-mortem for stakeholder reviews.",
+      "audienceFit": ["leadership", "customers", "stakeholders", "partners"],
+      "durationRange": { "minMinutes": 15, "maxMinutes": 45 },
+      "tags": ["postmortem", "incident", "review", "accountability"],
+      "file": "failure-analysis.json"
+    },
+    {
+      "id": "classic-story",
+      "name": "Classic Story",
+      "summary": "Movie-style narrative arc applied to any topic: open the scene, introduce the villain, raise the stakes, send in the hero, deliver the plan, close with hope.",
+      "audienceFit": ["general-audience", "customers", "internal-teams"],
+      "durationRange": { "minMinutes": 5, "maxMinutes": 30 },
+      "tags": ["storytelling", "general", "engagement"],
+      "file": "classic-story.json"
+    },
+    {
+      "id": "business-narrative",
+      "name": "Business Narrative",
+      "summary": "Tell a business strategy or solution as a story: setting, challenge, tension, hero, plan, outcome.",
+      "audienceFit": ["internal-teams", "leadership", "cross-functional-partners"],
+      "durationRange": { "minMinutes": 10, "maxMinutes": 30 },
+      "tags": ["management", "storytelling", "internal", "strategy"],
+      "file": "business-narrative.json"
+    },
+    {
+      "id": "rags-to-riches",
+      "name": "Rags to Riches",
+      "summary": "Underdog journey from initial failure to eventual success — for founder stories and brand stories where the lesson is grit.",
+      "audienceFit": ["general-audience", "customers", "press", "candidates"],
+      "durationRange": { "minMinutes": 5, "maxMinutes": 20 },
+      "tags": ["storytelling", "founder", "brand", "inspirational"],
+      "file": "rags-to-riches.json"
+    },
+    {
+      "id": "underdog-victory",
+      "name": "Underdog Victory",
+      "summary": "Story arc of someone or something overlooked who triumphs in the end — for founder narratives and team-building decks.",
+      "audienceFit": ["general-audience", "internal-teams", "candidates"],
+      "durationRange": { "minMinutes": 5, "maxMinutes": 20 },
+      "tags": ["storytelling", "inspirational", "founder", "team"],
+      "file": "underdog-victory.json"
+    },
+    {
+      "id": "survival-story",
+      "name": "Survival Story",
+      "summary": "Narrative arc of overcoming adversity through determination — for brand stories and leadership talks where the lesson lives in the comeback.",
+      "audienceFit": ["general-audience", "internal-teams", "press"],
+      "durationRange": { "minMinutes": 10, "maxMinutes": 30 },
+      "tags": ["storytelling", "inspirational", "founder", "comeback"],
+      "file": "survival-story.json"
+    },
+    {
+      "id": "educate",
+      "name": "Educate",
+      "summary": "Engaging-explainer arc inspired by Mary Roach: surprise, evidence, anecdote, scrutiny, memorable insight.",
+      "audienceFit": ["general-audience", "students", "practitioners"],
+      "durationRange": { "minMinutes": 15, "maxMinutes": 45 },
+      "tags": ["keynote", "education", "explainer", "science"],
+      "file": "educate.json"
+    },
+    {
+      "id": "persuade",
+      "name": "Persuade",
+      "summary": "Argument-driven keynote arc inspired by Ken Robinson: grip, challenge, story, statistic, revelation, proposal, question.",
+      "audienceFit": ["general-audience", "policymakers", "industry-peers"],
+      "durationRange": { "minMinutes": 15, "maxMinutes": 30 },
+      "tags": ["keynote", "persuasive", "advocacy", "talk"],
+      "file": "persuade.json"
+    },
+    {
+      "id": "reveal",
+      "name": "Reveal",
+      "summary": "Insight-driven keynote arc inspired by Amy Cuddy: connect through story, ground in research, advise, demonstrate authenticity.",
+      "audienceFit": ["general-audience", "academics", "professionals"],
+      "durationRange": { "minMinutes": 15, "maxMinutes": 25 },
+      "tags": ["keynote", "research", "talk", "inspirational"],
+      "file": "reveal.json"
+    },
+    {
+      "id": "justice",
+      "name": "Justice",
+      "summary": "Advocacy arc inspired by 'I Have a Dream': inequality, dream, urgency, unity, call to action, hope.",
+      "audienceFit": ["general-audience", "advocates", "policymakers", "community"],
+      "durationRange": { "minMinutes": 10, "maxMinutes": 30 },
+      "tags": ["inspirational", "advocacy", "movement", "keynote"],
+      "file": "justice.json"
+    },
+    {
+      "id": "innovation",
+      "name": "Innovation",
+      "summary": "Keynote-style product reveal inspired by Steve Jobs's 2007 iPhone launch: stage, reveal, demonstrate, wow, differentiate, recategorize.",
+      "audienceFit": ["customers", "press", "developers", "general-audience"],
+      "durationRange": { "minMinutes": 20, "maxMinutes": 60 },
+      "tags": ["inspirational", "keynote", "launch", "product"],
+      "file": "innovation.json"
+    },
+    {
+      "id": "focus",
+      "name": "Focus",
+      "summary": "Long-term, principle-driven business arc inspired by Bezos's 1997 shareholder letter: focus, performance, framework, discipline.",
+      "audienceFit": ["shareholders", "leadership", "all-hands", "board"],
+      "durationRange": { "minMinutes": 20, "maxMinutes": 45 },
+      "tags": ["inspirational", "leadership", "principles", "all-hands"],
+      "file": "focus.json"
+    },
+    {
       "id": "qbr",
       "name": "Quarterly Business Review",
-      "summary": "Standard internal review arc: recap, performance, insights, plan, risks, asks.",
+      "summary": "Standard internal QBR arc: recap, performance, wins, challenges, insights, plan, risks, asks.",
       "audienceFit": ["leadership", "executives", "cross-functional-partners"],
       "durationRange": { "minMinutes": 30, "maxMinutes": 90 },
       "tags": ["internal", "review", "operations", "reporting"],
       "file": "qbr.json"
+    },
+    {
+      "id": "business-review",
+      "name": "Business Review",
+      "summary": "Full-loop review of recent activities — closer to a customer-facing or partner-facing relationship review than a status update.",
+      "audienceFit": ["customers", "partners", "stakeholders", "leadership"],
+      "durationRange": { "minMinutes": 30, "maxMinutes": 90 },
+      "tags": ["customer-relationship", "review", "operations"],
+      "file": "business-review.json"
+    },
+    {
+      "id": "board-meeting",
+      "name": "Board Meeting",
+      "summary": "Comprehensive board update covering CEO commentary, key metrics, financials, functional updates, and forward-looking topics.",
+      "audienceFit": ["board", "directors", "executives", "investors"],
+      "durationRange": { "minMinutes": 60, "maxMinutes": 180 },
+      "tags": ["rhythm-of-business", "board", "governance", "executive"],
+      "file": "board-meeting.json"
+    },
+    {
+      "id": "weekly-progress",
+      "name": "Weekly Progress",
+      "summary": "Tight rhythm-of-business arc for weekly progress reports — designed for fifteen-to-thirty-minute team check-ins.",
+      "audienceFit": ["managers", "teams", "cross-functional-partners"],
+      "durationRange": { "minMinutes": 15, "maxMinutes": 30 },
+      "tags": ["rhythm-of-business", "weekly", "internal", "operations"],
+      "file": "weekly-progress.json"
+    },
+    {
+      "id": "status-update",
+      "name": "Status Update",
+      "summary": "Concise progress-report arc for keeping a stakeholder informed: headline, brief, progress, results, plan, feedback.",
+      "audienceFit": ["stakeholders", "managers", "customers", "executives"],
+      "durationRange": { "minMinutes": 5, "maxMinutes": 15 },
+      "tags": ["reporting", "operations", "customer-relationship", "weekly"],
+      "file": "status-update.json"
+    },
+    {
+      "id": "performance-review",
+      "name": "Performance Review",
+      "summary": "Analytical review of individual, team, or company performance grounded in metrics and adjustments for the next period.",
+      "audienceFit": ["leadership", "managers", "teams"],
+      "durationRange": { "minMinutes": 20, "maxMinutes": 60 },
+      "tags": ["data-driven", "review", "operations", "metrics"],
+      "file": "performance-review.json"
+    },
+    {
+      "id": "survey-analysis",
+      "name": "Survey Analysis",
+      "summary": "Structured walk-through of survey results: topic, executive summary, methodology, findings, analysis, implications, recommendations.",
+      "audienceFit": ["executives", "researchers", "stakeholders", "marketing-teams"],
+      "durationRange": { "minMinutes": 20, "maxMinutes": 60 },
+      "tags": ["data-driven", "research", "insights", "voice-of-customer"],
+      "file": "survey-analysis.json"
+    },
+    {
+      "id": "trend-analysis",
+      "name": "Trend Analysis",
+      "summary": "Identify and discuss data-driven patterns to understand performance and forecast what's next.",
+      "audienceFit": ["executives", "analysts", "leadership"],
+      "durationRange": { "minMinutes": 15, "maxMinutes": 45 },
+      "tags": ["data-driven", "forecasting", "strategy", "analysis"],
+      "file": "trend-analysis.json"
+    },
+    {
+      "id": "employee-review",
+      "name": "Employee Review",
+      "summary": "Constructive performance-review arc that recognizes work, gives candid feedback, and sets growth goals together.",
+      "audienceFit": ["employee", "manager", "hr-partner"],
+      "durationRange": { "minMinutes": 30, "maxMinutes": 60 },
+      "tags": ["workforce", "hr", "review", "manager"],
+      "file": "employee-review.json"
+    },
+    {
+      "id": "performance-improvement-plan",
+      "name": "Performance Improvement Plan",
+      "summary": "Structured PIP arc that helps a struggling employee see expectations, understand the gap, and walk a credible improvement path.",
+      "audienceFit": ["employee", "manager", "hr-partner"],
+      "durationRange": { "minMinutes": 30, "maxMinutes": 60 },
+      "tags": ["workforce", "hr", "performance", "manager"],
+      "file": "performance-improvement-plan.json"
+    },
+    {
+      "id": "capacity-planning",
+      "name": "Capacity Planning",
+      "summary": "Workforce and operational capacity-planning arc: kickoff, urgency, current state, projection, tactics, implementation, revision.",
+      "audienceFit": ["leadership", "operations", "hr-partners", "finance"],
+      "durationRange": { "minMinutes": 20, "maxMinutes": 45 },
+      "tags": ["workforce", "operations", "planning", "resource-management"],
+      "file": "capacity-planning.json"
     }
   ]
 }

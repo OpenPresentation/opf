@@ -1,0 +1,37 @@
+{
+  "$schema": "https://pptx.dev/schema/opf-narrative/v1",
+  "id": "transformation-arc",
+  "name": "Transformation Arc (Before / After / Bridge)",
+  "summary": "Marketing-copy arc adapted for slides: paint the painful 'before,' contrast it with a vivid 'after,' then deliver the bridge that gets the audience from one to the other. Tight, persuasive, and ideal for short pitches, landing-page-style decks, and product-marketing teasers.",
+  "audienceFit": ["customers", "prospects", "marketing-teams", "general-audience"],
+  "durationRange": { "minMinutes": 3, "maxMinutes": 15 },
+  "tags": ["marketing", "copywriting", "pitch", "persuasive"],
+  "beats": [
+    {
+      "id": "before",
+      "name": "Before",
+      "description": "Describe the audience's current world in the first person they recognize. Specific frustrations, specific costs, specific moments of friction. The clearer the 'before' lands, the more the rest of the deck has to push against."
+    },
+    {
+      "id": "after",
+      "name": "After",
+      "description": "Paint the world the audience could be in instead. Concrete outcomes, not feature lists — what a day looks like, what a quarter feels like, what becomes effortless that used to hurt. Make it desirable and credible at the same time."
+    },
+    {
+      "id": "bridge",
+      "name": "Bridge",
+      "description": "Show the path from before to after: the product, service, or change that closes the gap. Lead with the simplest user-visible thing they do; the architecture can wait. The bridge must feel proportionate to the transformation it promises."
+    },
+    {
+      "id": "evidence",
+      "name": "Evidence",
+      "description": "Prove the bridge has carried others across. One or two strong customer stories, before/after metrics, or named logos with concrete outcomes. Choose proof that maps directly to the 'after' you painted, not generic credibility markers."
+    },
+    {
+      "id": "ask",
+      "name": "Ask",
+      "description": "Close with the single low-friction action that starts the audience across the bridge. Make it small enough to act on now and meaningful enough to count as commitment.",
+      "layoutHint": "title-slide"
+    }
+  ]
+}

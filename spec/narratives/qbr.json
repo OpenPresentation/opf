@@ -2,46 +2,66 @@
   "$schema": "https://pptx.dev/schema/opf-narrative/v1",
   "id": "qbr",
   "name": "Quarterly Business Review",
-  "summary": "Standard QBR / business-review arc for internal leadership reviews. Recap the period, show what the numbers say, extract insights, lay out the plan, surface risks, and request the asks the team needs to execute.",
+  "summary": "Standard QBR / business-review arc for internal leadership reviews. Recap commitments, show what the numbers say, separate wins from challenges, lay out the plan, surface risks, and request the asks the team needs to execute.",
   "audienceFit": ["leadership", "executives", "cross-functional-partners"],
   "durationRange": { "minMinutes": 30, "maxMinutes": 90 },
   "tags": ["internal", "review", "operations", "reporting"],
   "beats": [
     {
-      "id": "recap",
-      "name": "Recap",
-      "description": "Briefly remind the audience what the team committed to last quarter and the high-level results against those commitments. Keeps the review grounded in prior context rather than starting from scratch.",
-      "weight": 0.10
+      "id": "objectives",
+      "name": "Objectives",
+      "description": "Open with what this review is for and what decisions you want out of it. Frame the scope and the hour ahead, so the audience knows what they're being asked to weigh in on.",
+      "layoutHint": "section-divider"
     },
     {
-      "id": "performance",
-      "name": "Performance",
-      "description": "Present the numbers — KPIs, OKRs, targets vs actuals. Use clear charts with the headline metric and direction-of-travel obvious at a glance. Call out both wins and misses honestly.",
-      "weight": 0.25
+      "id": "recap",
+      "name": "Recap",
+      "description": "Briefly remind the audience what the team committed to last quarter and the high-level results against those commitments. Keep it terse — this grounds the review in prior context, but the meat is ahead."
+    },
+    {
+      "id": "performance-headline",
+      "name": "Performance Headline",
+      "description": "Show the top three to five KPIs with target vs actual and direction-of-travel. One slide that lets a busy executive grasp the quarter's outcome at a glance. Lead with the number, not the methodology."
+    },
+    {
+      "id": "performance-detail",
+      "name": "Performance Detail",
+      "description": "Drill into the supporting metrics by area or function. One chart per metric; clear y-axis, clear unit, clear comparison period. Call out anomalies before someone else does."
+    },
+    {
+      "id": "wins",
+      "name": "Wins",
+      "description": "Highlight the quarter's biggest wins and who drove them. Be specific — name the deal, the launch, the customer, the team. Recognition belongs in the deck, not just in the meeting."
+    },
+    {
+      "id": "challenges",
+      "name": "Challenges",
+      "description": "Name the misses and headwinds honestly. What didn't work, what's still hard, what got harder. Pretending things are fine costs more credibility than acknowledging they aren't."
     },
     {
       "id": "insights",
       "name": "Insights",
-      "description": "Translate the numbers into 'so what.' What does the data tell you about customers, the market, your operations, your bets? Insights should be opinions backed by evidence, not restatements of the metrics.",
-      "weight": 0.20
+      "description": "Translate the numbers into 'so what.' What did the data tell you about customers, the market, your operations, your bets? Insights should be opinions backed by evidence, not restatements of the metrics."
     },
     {
-      "id": "plan",
-      "name": "Plan",
-      "description": "Lay out the next quarter's plan: top priorities, target outcomes, sequencing. Each priority should trace clearly back to an insight or commitment. Avoid laundry lists — focus on what changes because of what you just learned.",
-      "weight": 0.25
+      "id": "priorities",
+      "name": "Next-Quarter Priorities",
+      "description": "Lay out the next quarter's top priorities. Each should trace clearly back to an insight or commitment. Three to five priorities, max — laundry lists are a tell that the team hasn't decided what matters most."
+    },
+    {
+      "id": "sequencing",
+      "name": "Sequencing",
+      "description": "Show the order in which priorities ship and how they fit together. Dependencies, milestones, target dates. The audience should leave able to predict what comes when, not just what."
     },
     {
       "id": "risks",
       "name": "Risks",
-      "description": "Name the risks to the plan honestly. Dependencies, assumptions, capacity gaps, market factors. For each risk, state the mitigation or the open question the audience can help resolve.",
-      "weight": 0.10
+      "description": "Name the risks to the plan honestly. Dependencies, assumptions, capacity gaps, market factors. For each risk, state the mitigation or the open question the audience can help resolve."
     },
     {
       "id": "asks",
       "name": "Asks",
       "description": "Specific, named requests of the audience. Decisions needed, resources required, escalations to unblock. End with clarity on what happens next and who owns it.",
-      "weight": 0.10,
       "layoutHint": "title-slide"
     }
   ]

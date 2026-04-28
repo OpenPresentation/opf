@@ -1,0 +1,62 @@
+{
+  "$schema": "https://pptx.dev/schema/opf-narrative/v1",
+  "id": "persuade",
+  "name": "Persuade",
+  "summary": "Argument-driven keynote arc inspired by Ken Robinson: grip the audience, challenge the status quo, define the problem, anchor it in story and statistic, deliver a major revelation, propose change, and end on a question that stays with them.",
+  "audienceFit": ["general-audience", "policymakers", "industry-peers"],
+  "durationRange": { "minMinutes": 15, "maxMinutes": 30 },
+  "tags": ["keynote", "persuasive", "advocacy", "talk"],
+  "beats": [
+    {
+      "id": "gripping-introduction",
+      "name": "Gripping Introduction",
+      "description": "Open with a moment, image, or claim the audience can't easily look away from. The first sixty seconds buy you the next twenty minutes — spend them on something specific and emotionally charged, not on housekeeping."
+    },
+    {
+      "id": "challenge-status-quo",
+      "name": "Challenge the Status Quo",
+      "description": "Call out the system, norm, or assumption that needs examination. Be precise about what you're disagreeing with so the rest of the talk can be specific in response. Avoid strawmen — name the strongest version of the view you're contesting."
+    },
+    {
+      "id": "present-problem",
+      "name": "Present the Problem",
+      "description": "Define the issue the audience needs to care about. Concrete, scoped, attributable. The clearer the problem, the more credible the eventual solution."
+    },
+    {
+      "id": "personal-story",
+      "name": "Personal Story",
+      "description": "Anchor the issue in a specific person, place, or moment. Story is what gets the argument past the audience's defenses. Pick a story that personalizes the data without overstating it."
+    },
+    {
+      "id": "statistic-shock",
+      "name": "Statistic Shock",
+      "description": "Drop in a single statistic that recasts the scale of the problem. One number, presented well, lands harder than a dashboard. Cite the source so the audience can repeat it with confidence."
+    },
+    {
+      "id": "historical-context",
+      "name": "Historical Context",
+      "description": "Show how the issue evolved. Why it has the shape it does today, what was tried, what was missed. Historical context turns 'this is broken' into 'this stayed broken for these reasons.'"
+    },
+    {
+      "id": "weave-narrative",
+      "name": "Weave a Narrative",
+      "description": "Connect the threads — story, statistic, history — into a single argument. The audience should feel the case clicking together. This is the slide where rhetoric becomes architecture."
+    },
+    {
+      "id": "major-revelation",
+      "name": "Major Revelation",
+      "description": "Deliver the surprising or significant turn. The fact, finding, or reframing the rest of the talk has been earning. The revelation should redirect, not merely confirm."
+    },
+    {
+      "id": "propose-solution",
+      "name": "Propose Solution",
+      "description": "Advocate for the change you want. Concrete enough to be acted on, broad enough to inspire. Pair the solution with the smallest credible first step."
+    },
+    {
+      "id": "final-question",
+      "name": "Final Question",
+      "description": "Close on a question rather than a summary. The right closing question follows the audience out of the room and into their conversations afterward.",
+      "layoutHint": "title-slide"
+    }
+  ]
+}

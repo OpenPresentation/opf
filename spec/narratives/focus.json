@@ -1,0 +1,72 @@
+{
+  "$schema": "https://pptx.dev/schema/opf-narrative/v1",
+  "id": "focus",
+  "name": "Focus",
+  "summary": "Long-term, principle-driven business arc inspired by Jeff Bezos's 1997 letter to shareholders: name the focus, account for performance, articulate the framework, and commit to the discipline that will keep the company on track. For founder letters, all-hands narratives, and any deck where the audience needs to feel the through-line.",
+  "audienceFit": ["shareholders", "leadership", "all-hands", "board"],
+  "durationRange": { "minMinutes": 20, "maxMinutes": 45 },
+  "tags": ["inspirational", "leadership", "principles", "all-hands"],
+  "beats": [
+    {
+      "id": "welcome",
+      "name": "Welcome",
+      "description": "Open with a brief framing of what this update is for and what you intend to leave the audience with. Set the tone — long-term, candid, principle-driven."
+    },
+    {
+      "id": "accomplishments",
+      "name": "Accomplishments",
+      "description": "Showcase the period's most material wins, briefly. The audience came for what's next; wins earn permission for the harder slides ahead, but they aren't the headline."
+    },
+    {
+      "id": "potential",
+      "name": "Potential",
+      "description": "Detail the market and customer opportunities ahead. Size them honestly and connect them to the work already underway. Potential without specifics reads as wishful."
+    },
+    {
+      "id": "competitive-edge",
+      "name": "Competitive Edge",
+      "description": "Reveal the strategic positioning that gives the business its advantage. Frame it as a structural moat, not a list of features. The audience should be able to repeat the moat in their own words."
+    },
+    {
+      "id": "long-term-vision",
+      "name": "Long-Term Vision",
+      "description": "Emphasize the long-term view that anchors decisions. Quarters serve years; years serve decades. Anchor the audience in the time horizon you actually run the business on."
+    },
+    {
+      "id": "performance-metrics",
+      "name": "Performance Metrics",
+      "description": "Illuminate the indicators that show the long-term thesis is working. Choose metrics that compound — retention, NPS, unit economics — over those that flatter."
+    },
+    {
+      "id": "growth-achievement",
+      "name": "Growth Achievement",
+      "description": "Certify the tangible progress against the long-term plan. Year-over-year, cohort behavior, expanded reach. Growth, in this beat, is evidence that the strategy is real."
+    },
+    {
+      "id": "strategic-framework",
+      "name": "Strategic Framework",
+      "description": "Explain the principles that guide decisions. Customer obsession, long-term thinking, frugality, ownership — whatever the actual operating discipline is. Principles are the connective tissue between strategy and behavior."
+    },
+    {
+      "id": "expansion",
+      "name": "Expansion",
+      "description": "Detail the next areas of growth: products, segments, geographies. Tie each to the principles above so the audience sees expansion as continuity rather than scatter."
+    },
+    {
+      "id": "future-objectives",
+      "name": "Future Objectives",
+      "description": "Forecast the targets and commitments for the period ahead. Be specific enough to be held accountable. Vague objectives are how strategies erode."
+    },
+    {
+      "id": "acknowledgment",
+      "name": "Acknowledgment",
+      "description": "Recognize the contributions of teams, customers, and partners that made the period possible. Specific names land harder than blanket thanks."
+    },
+    {
+      "id": "closing-remarks",
+      "name": "Closing Remarks",
+      "description": "Recap the focus, thank the audience, and inspire the work ahead. End with the line you most want quoted in tomorrow's newsletter.",
+      "layoutHint": "title-slide"
+    }
+  ]
+}

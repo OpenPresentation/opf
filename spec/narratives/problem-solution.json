@@ -2,7 +2,7 @@
   "$schema": "https://pptx.dev/schema/opf-narrative/v1",
   "id": "problem-solution",
   "name": "Problem → Solution",
-  "summary": "Classic business arc: name the pain, raise the stakes, present your fix, prove it, ask. The default for sales decks, internal proposals, and most general business presentations.",
+  "summary": "Classic business arc: name the pain, raise the stakes, present your fix, show how it works, prove it, ask. The default for sales decks, internal proposals, and most general business presentations.",
   "audienceFit": ["customers", "stakeholders", "executives", "internal-teams"],
   "durationRange": { "minMinutes": 5, "maxMinutes": 30 },
   "tags": ["business", "sales", "general", "proposal"],
@@ -11,38 +11,37 @@
       "id": "hook",
       "name": "Hook",
       "description": "Open with a striking question, statistic, customer quote, or moment that earns the audience's attention. The goal is to make them want to hear what comes next, not to convey information.",
-      "weight": 0.05,
       "layoutHint": "section-divider"
     },
     {
       "id": "problem",
       "name": "The Problem",
-      "description": "Name the pain in concrete terms. Make it visceral and specific — describe who hurts, how, and what they're trying to do today that isn't working. Avoid abstractions; use real examples or scenarios the audience recognizes.",
-      "weight": 0.20
+      "description": "Name the pain in concrete terms. Make it visceral and specific — describe who hurts, how, and what they're trying to do today that isn't working. Avoid abstractions; use real examples or scenarios the audience recognizes."
     },
     {
       "id": "stakes",
       "name": "Why It Matters",
-      "description": "Quantify the cost of inaction or the upside of action. Use numbers, trends, customer impact, competitive pressure — whatever makes the audience feel the size of the problem and care about solving it now rather than later.",
-      "weight": 0.15
+      "description": "Quantify the cost of inaction or the upside of action. Use numbers, trends, customer impact, competitive pressure — whatever makes the audience feel the size of the problem and care about solving it now rather than later."
     },
     {
       "id": "solution",
       "name": "The Solution",
-      "description": "Reveal your approach and how it works. Lead with the outcome the solution produces, then show the mechanism. Keep it concrete: what does the audience get, and what changes for them?",
-      "weight": 0.30
+      "description": "Reveal your approach and what it produces for the customer. Lead with the outcome, not the architecture. Keep it concrete: what does the audience get, and what changes for them?"
+    },
+    {
+      "id": "mechanism",
+      "name": "How It Works",
+      "description": "Show the moving parts that make the solution credible. Walk through the key mechanism, workflow, or technical insight that explains why this approach succeeds where others have failed. Enough detail to earn trust; not so much that you lose the room."
     },
     {
       "id": "evidence",
       "name": "Proof",
-      "description": "Demonstrate the solution works. Use customer logos, before/after metrics, demos, case studies, third-party validation — whatever de-risks the claim. One strong piece of proof beats three weak ones.",
-      "weight": 0.20
+      "description": "Demonstrate the solution works. Use customer logos, before/after metrics, demos, case studies, third-party validation — whatever de-risks the claim. One strong piece of proof beats three weak ones."
     },
     {
       "id": "ask",
       "name": "The Ask",
       "description": "State a clear, specific call to action. What do you want the audience to do, decide, or commit to next? Make the smallest credible ask that moves things forward, and make it unambiguous.",
-      "weight": 0.10,
       "layoutHint": "title-slide"
     }
   ]

@@ -1,0 +1,47 @@
+{
+  "$schema": "https://pptx.dev/schema/opf-narrative/v1",
+  "id": "strategic-narrative",
+  "name": "Strategic Narrative",
+  "summary": "The change-driven founder/sales arc: a tectonic shift creates winners and losers, the audience must respond, and your product is the only credible way to land in the winners' camp. Used for top-of-funnel sales pitches, board re-positioning, and high-stakes founder talks.",
+  "audienceFit": ["customers", "prospects", "board", "investors", "executives"],
+  "durationRange": { "minMinutes": 10, "maxMinutes": 30 },
+  "tags": ["strategic", "sales", "positioning", "category"],
+  "beats": [
+    {
+      "id": "shift",
+      "name": "The Shift",
+      "description": "Open by naming a large, undeniable change in the world that the audience already half-believes. Technology, regulation, customer behavior, economics — pick the shift that recasts the audience's reality. The shift, not your product, is the protagonist of the first half of the deck."
+    },
+    {
+      "id": "stakes",
+      "name": "Winners and Losers",
+      "description": "Make the consequences of the shift concrete. Who wins, who loses, by how much, on what timeframe. Use specific examples — companies, products, segments — that have already moved or are about to. The audience should feel that standing still is the riskiest choice."
+    },
+    {
+      "id": "promised-land",
+      "name": "Promised Land",
+      "description": "Paint a vivid picture of the future state your audience could occupy if they navigate the shift well. Describe outcomes, not features. The promised land must feel desirable, achievable, and meaningfully different from where they are today."
+    },
+    {
+      "id": "obstacles",
+      "name": "Old Game",
+      "description": "Show why the existing playbook can't get the audience to the promised land. Name the legacy approach honestly and credit what it once did, then explain why the shift has rendered it insufficient. Avoid strawmen — the more fairly you state the old game, the more credible your new game becomes."
+    },
+    {
+      "id": "mechanism",
+      "name": "New Game",
+      "description": "Introduce your category-defining approach as the way to play the new game. Show the principles or capabilities that make it possible only now. Emphasize what's structurally different from the old game, not what's marginally better."
+    },
+    {
+      "id": "evidence",
+      "name": "Evidence",
+      "description": "Prove the new game works. Customer outcomes, named logos, before/after data, third-party validation. Choose evidence that maps directly to the shift you opened with — proof that other audiences in the same boat made it to the promised land."
+    },
+    {
+      "id": "ask",
+      "name": "Call to Action",
+      "description": "Close with the single decision you want the audience to make. Frame it as the obvious next move given the shift, the stakes, and the new game. Make it small enough to say yes to today and large enough to start a real engagement.",
+      "layoutHint": "title-slide"
+    }
+  ]
+}

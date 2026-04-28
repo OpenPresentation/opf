@@ -1,0 +1,37 @@
+{
+  "$schema": "https://pptx.dev/schema/opf-narrative/v1",
+  "id": "golden-circle",
+  "name": "Golden Circle (Why / How / What)",
+  "summary": "Simon Sinek's keynote arc: lead with belief, follow with method, finish with proof. Best for brand stories, mission-driven keynotes, and any deck where the audience needs to feel why before they can evaluate what.",
+  "audienceFit": ["customers", "employees", "general-audience", "press"],
+  "durationRange": { "minMinutes": 10, "maxMinutes": 30 },
+  "tags": ["keynote", "brand", "mission", "sinek"],
+  "beats": [
+    {
+      "id": "why",
+      "name": "Why",
+      "description": "Open with the belief or purpose that animates the work. Why does this exist, and why should anyone care beyond commerce? State it plainly and emotionally — the why is meant to be felt before it is understood."
+    },
+    {
+      "id": "how",
+      "name": "How",
+      "description": "Translate the belief into the principles that guide how you operate. The values, decisions, and trade-offs that make your approach distinctive. The 'how' is what people who share your why recognize as familiar."
+    },
+    {
+      "id": "what",
+      "name": "What",
+      "description": "Show the products, services, or outputs that the why and how produce. Concrete examples, not abstractions. The what is the artifact of the belief — proof that the why is more than rhetoric."
+    },
+    {
+      "id": "proof",
+      "name": "Proof",
+      "description": "Demonstrate the impact in lives, customers, or outcomes. Stories beat statistics here; specific people and moments earn the audience's belief better than aggregate numbers. End with proof that what you do works because of why you do it."
+    },
+    {
+      "id": "invitation",
+      "name": "Invitation",
+      "description": "Close by inviting the audience to share the belief — to buy, build, join, or evangelize. The strongest invitations don't argue; they assume alignment and offer a way in.",
+      "layoutHint": "title-slide"
+    }
+  ]
+}

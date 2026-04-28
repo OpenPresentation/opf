@@ -1,0 +1,68 @@
+{
+  "$schema": "https://pptx.dev/schema/opf-narrative/v1",
+  "id": "performance-review",
+  "name": "Performance Review",
+  "summary": "Analytical review of individual, team, or company performance grounded in metrics. Walks through results, key drivers, wins, challenges, and the adjustments that will shape the next period.",
+  "audienceFit": ["leadership", "managers", "teams"],
+  "durationRange": { "minMinutes": 20, "maxMinutes": 60 },
+  "tags": ["data-driven", "review", "operations", "metrics"],
+  "beats": [
+    {
+      "id": "briefing",
+      "name": "Briefing",
+      "description": "Frame what this review covers: the period, the unit, the standard you're measuring against. One slide that lets the audience know exactly what they're being asked to evaluate.",
+      "layoutHint": "section-divider"
+    },
+    {
+      "id": "results",
+      "name": "Results",
+      "description": "Lead with the headline result. On track, ahead, or behind, and by how much. Resist softening — clear numbers up front earn credibility for the analysis that follows."
+    },
+    {
+      "id": "key-metrics",
+      "name": "Key Metrics",
+      "description": "Walk through the pivotal indicators. One chart per metric, clear comparison period, target or benchmark visible on the same frame. Help the audience see the data the way you do."
+    },
+    {
+      "id": "team-performance",
+      "name": "Team Performance",
+      "description": "Examine collective achievements and how the team contributed. Avoid generic praise; cite specific moves and the people behind them where the audience would expect it."
+    },
+    {
+      "id": "highlight",
+      "name": "Highlight",
+      "description": "Spotlight one standout contribution that defined the period. A landmark deal, a launch, a fix, a hire. One vivid example sticks longer than a list of accomplishments."
+    },
+    {
+      "id": "analysis",
+      "name": "Analysis",
+      "description": "Dig under the metrics. What drove the numbers, what held them back, what's signal versus noise. Analysis is where the audience learns whether you actually understand the system you're reporting on."
+    },
+    {
+      "id": "success",
+      "name": "Success",
+      "description": "Reinforce the past triumphs that show the system works. Briefly — the audience came for what's next, not a victory lap. Wins earn permission for the harder slides ahead."
+    },
+    {
+      "id": "challenges",
+      "name": "Challenges",
+      "description": "Name the obstacles encountered honestly. What didn't move, what regressed, what the team is still wrestling with. Understated challenges read as missed signal, not modesty."
+    },
+    {
+      "id": "adjustments",
+      "name": "Adjustments",
+      "description": "Identify the changes you're making in response. New tactics, reallocations, sunsets. Each adjustment should map to a challenge above — adjustments without diagnosis feel arbitrary."
+    },
+    {
+      "id": "strategy-evolution",
+      "name": "Strategy Evolution",
+      "description": "Show how the strategy itself evolves heading into the next period. Refinements, sharpened bets, dropped initiatives. The audience should see continuity as well as change."
+    },
+    {
+      "id": "discussion",
+      "name": "Discussion",
+      "description": "Open the floor with two or three specific prompts. End the review actively — questions you want answered, decisions you want made — so the meeting yields more than the deck.",
+      "layoutHint": "title-slide"
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "$schema": "https://pptx.dev/schema/opf-narrative/v1",
+  "id": "employee-review",
+  "name": "Employee Review",
+  "summary": "Constructive performance-review arc that recognizes work, gives candid feedback, and sets growth goals together. For one-on-one performance conversations and formal year-end reviews.",
+  "audienceFit": ["employee", "manager", "hr-partner"],
+  "durationRange": { "minMinutes": 30, "maxMinutes": 60 },
+  "tags": ["workforce", "hr", "review", "manager"],
+  "beats": [
+    {
+      "id": "introduction",
+      "name": "Introduction",
+      "description": "Open with the period covered and the spirit of the conversation: collaborative, honest, growth-focused. Frame the meeting so both sides know what to expect.",
+      "layoutHint": "title-slide"
+    },
+    {
+      "id": "performance",
+      "name": "Performance",
+      "description": "Review job execution against the role's expectations. Specific examples, dated. Avoid characterizing the person; describe the work and its impact."
+    },
+    {
+      "id": "achievements",
+      "name": "Achievements",
+      "description": "Acknowledge what went well. Name the projects, the moves, the moments where the employee made a difference. Specific recognition lands harder than generic praise."
+    },
+    {
+      "id": "feedback",
+      "name": "Feedback",
+      "description": "Provide constructive feedback grounded in observation. Distinguish patterns from one-offs. Tell the employee something they can act on, not something they can only feel."
+    },
+    {
+      "id": "constructive-criticism",
+      "name": "Constructive Criticism",
+      "description": "Suggest improvements in language that respects the employee's intelligence. Pair each piece of criticism with a concrete example and a specific behavior change you'd like to see."
+    },
+    {
+      "id": "development-opportunities",
+      "name": "Development Opportunities",
+      "description": "Highlight growth areas and the experiences that could stretch the employee. Frame development as an investment, not a fix."
+    },
+    {
+      "id": "goals",
+      "name": "Goals",
+      "description": "Outline next-period goals together. Specific, measurable, with explicit support. The strongest goals are co-authored, not handed down."
+    },
+    {
+      "id": "mentoring",
+      "name": "Mentoring",
+      "description": "Encourage continued learning through mentorship, training, peer pairings. Close the review with the message that growth is a shared responsibility, not a one-way evaluation.",
+      "layoutHint": "title-slide"
+    }
+  ]
+}

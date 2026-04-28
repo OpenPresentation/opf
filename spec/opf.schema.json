@@ -140,15 +140,10 @@
           "type": "string",
           "description": "What this beat should accomplish. Used as a prompt for AI-driven generation of slides assigned to this beat."
         },
-        "weight": {
-          "type": "number",
-          "exclusiveMinimum": 0,
-          "description": "Relative share of the deck this beat occupies. The engine normalizes weights across all beats; values do not need to sum to 1."
-        },
         "slideCount": {
           "type": "integer",
           "minimum": 1,
-          "description": "Optional explicit slide count for this beat. If actual count differs significantly, the validator emits a warning."
+          "description": "Optional explicit slide count for this beat. Defaults to 1 when omitted; values >1 are reserved for beats that intentionally span multiple slides. Prefer decomposing a heavy beat into multiple beats over setting a high slideCount. The validator emits a warning if the deck's actual count differs significantly."
         },
         "layoutHint": {
           "type": "string",
@@ -480,8 +475,14 @@
           "description": "Section marker used to group slides in presenter view and outlines."
         },
         "beat": {
-          "type": "string",
-          "description": "Optional reference to a narrative beat (matches an id from meta.narrative.beats or the resolved template). Declares the slide's role in the story arc; does not constrain ordering or structure. Slides without a beat are valid; multiple slides may share a beat."
+          "oneOf": [
+            { "type": "string" },
+            {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          ],
+          "description": "Optional reference to one or more narrative beats (each value matches an id from meta.narrative.beats or the resolved template). A single string declares the slide's primary beat; an array declares that one slide covers multiple beats — useful when shorter decks fold beats together (e.g. ['problem', 'why-now']). Declares the slide's role in the story arc; does not constrain ordering or structure. Slides without a beat are valid; multiple slides may share a beat."
         }
       }
     },

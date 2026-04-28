@@ -1,0 +1,62 @@
+{
+  "$schema": "https://pptx.dev/schema/opf-narrative/v1",
+  "id": "project-proposal",
+  "name": "Project Proposal",
+  "summary": "Internal proposal arc for greenlighting a project: hook, problem, idea, benefits, justification, plan, timeline, risks, outlook, ask. Designed to take a sponsor from 'never heard of this' to 'approved' inside a single meeting.",
+  "audienceFit": ["executives", "sponsors", "managers", "internal-teams"],
+  "durationRange": { "minMinutes": 15, "maxMinutes": 45 },
+  "tags": ["management", "proposal", "internal", "planning"],
+  "beats": [
+    {
+      "id": "elevator-pitch",
+      "name": "Elevator Pitch",
+      "description": "Open with the proposal in one slide: the project name, the audience, the goal, and the headline benefit. If a sponsor reads only this slide, they should still know what they're being asked to approve."
+    },
+    {
+      "id": "problem-statement",
+      "name": "Problem Statement",
+      "description": "Articulate the problem this project solves and why it deserves resources now. Tie it to a known business goal or pain. Vague problems produce vague approvals."
+    },
+    {
+      "id": "core-concept",
+      "name": "Core Concept",
+      "description": "Describe the central idea of the project in plain language. The 'what' before the 'how.' A reader should be able to repeat the concept in one sentence after this slide."
+    },
+    {
+      "id": "benefits",
+      "name": "Benefits",
+      "description": "Quantify the impact: revenue, cost, risk, customer, capability. Use numbers where possible and clear comparisons where not. Each benefit should map to a metric the sponsor cares about."
+    },
+    {
+      "id": "justification",
+      "name": "Justification",
+      "description": "Connect the project to broader strategy, OKRs, or constraints the audience already cares about. Show why this project is more important than the alternatives competing for the same resources."
+    },
+    {
+      "id": "approach",
+      "name": "Approach",
+      "description": "Lay out how the project will be executed: the solution, the team shape, the budget envelope. Enough detail to feel credible, not so much that it pre-commits to choices that will mature in flight."
+    },
+    {
+      "id": "timeline",
+      "name": "Timeline",
+      "description": "Show the project phases on a timeline, with major milestones and decision points marked. Sponsors are buying a sequence of bets, not a single launch — make those bets visible."
+    },
+    {
+      "id": "risks",
+      "name": "Risks",
+      "description": "Name the top risks honestly and pair each with a mitigation or open question. Listing risks without mitigations signals you haven't thought it through; hiding risks signals worse."
+    },
+    {
+      "id": "outlook",
+      "name": "Outlook",
+      "description": "Paint the picture of what the organization looks like a quarter or year after the project ships. Stretch beyond the immediate deliverable to the second-order benefits."
+    },
+    {
+      "id": "wrap-up",
+      "name": "Wrap Up",
+      "description": "Recap the proposal and state the specific decision you're asking for: approval, budget, headcount, sponsorship. Make it easy to say yes today.",
+      "layoutHint": "title-slide"
+    }
+  ]
+}

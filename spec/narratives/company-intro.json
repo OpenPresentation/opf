@@ -1,0 +1,58 @@
+{
+  "$schema": "https://pptx.dev/schema/opf-narrative/v1",
+  "id": "company-intro",
+  "name": "Company Intro",
+  "summary": "Standard company-overview deck: who you are, what's distinctive about you, who you serve, and why they win. Built for first-touch sales meetings, partner intros, and 'about us' decks attached to outbound emails.",
+  "audienceFit": ["prospects", "partners", "press", "candidates"],
+  "durationRange": { "minMinutes": 10, "maxMinutes": 30 },
+  "tags": ["overview", "go-to-market", "marketing", "intro"],
+  "beats": [
+    {
+      "id": "logo",
+      "name": "Logo",
+      "description": "Cover slide with the logo, tagline, and a single line of positioning. Set the visual tone — confident, branded, uncluttered.",
+      "layoutHint": "title-slide"
+    },
+    {
+      "id": "about",
+      "name": "About",
+      "description": "Capture the company in three or four lines: what you do, who you do it for, and how long you've been at it. Avoid jargon; an outsider should grok the business in fifteen seconds."
+    },
+    {
+      "id": "competitive-advantage",
+      "name": "Competitive Advantage",
+      "description": "State the one or two things you do that the alternatives can't. Frame it as a structural advantage, not a feature list. The audience should leave able to repeat the differentiator in their own words."
+    },
+    {
+      "id": "company-story",
+      "name": "Company Story",
+      "description": "Share the founding insight or origin moment — why this company exists, told as a short story. Specific people, specific problems, a specific 'aha.' Story beats biography."
+    },
+    {
+      "id": "offerings",
+      "name": "Offerings",
+      "description": "Map the products and services into a coherent picture. Show how they fit together rather than listing them flat. The shape of the portfolio is itself a message."
+    },
+    {
+      "id": "ideal-customer",
+      "name": "Ideal Customer",
+      "description": "Define who you serve best. Industry, size, role, situation. Specificity here helps the audience self-select and signals you understand the customer well enough to be choosy."
+    },
+    {
+      "id": "key-benefits",
+      "name": "Key Benefits",
+      "description": "Translate offerings into three to five customer outcomes. Lead with the result, not the mechanism. Each benefit should answer 'what becomes easier or better for me?'"
+    },
+    {
+      "id": "success-story",
+      "name": "Success Story",
+      "description": "Tell one named customer's story with concrete before/after metrics. A single specific story is more persuasive than a logo grid; pick one that mirrors the audience you're presenting to."
+    },
+    {
+      "id": "closing-cta",
+      "name": "Closing & CTA",
+      "description": "Close with one line of why now and one specific next step — a discovery call, a pilot, a partner program. End with contact info that's easy to act on without searching.",
+      "layoutHint": "title-slide"
+    }
+  ]
+}

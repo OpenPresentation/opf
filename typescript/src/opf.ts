@@ -107,13 +107,11 @@ export interface OPFNarrativeBeat {
    */
   description?: string;
   /**
-   * Relative share of the deck this beat occupies. The engine normalizes
-   * weights across all beats; values do not need to sum to 1.
-   */
-  weight?: number;
-  /**
-   * Optional explicit slide count for this beat. If actual count differs
-   * significantly, the validator emits a warning.
+   * Optional explicit slide count for this beat. Defaults to 1 when omitted;
+   * values >1 are reserved for beats that intentionally span multiple slides.
+   * Prefer decomposing a heavy beat into multiple beats over setting a high
+   * slideCount. The validator emits a warning if the deck's actual count
+   * differs significantly.
    */
   slideCount?: number;
   /** Suggested layout for the opening slide of this beat */
@@ -239,12 +237,15 @@ export interface OPFSlide {
   section?: string;
 
   /**
-   * Optional reference to a narrative beat (matches an `id` from
-   * `meta.narrative.beats` or the resolved template). Declares the slide's
-   * role in the story arc; does not constrain ordering or structure.
-   * Slides without a beat are valid; multiple slides may share a beat.
+   * Optional reference to one or more narrative beats (each value matches
+   * an `id` from `meta.narrative.beats` or the resolved template). A single
+   * string declares the slide's primary beat; an array declares that one
+   * slide covers multiple beats — useful when shorter decks fold beats
+   * together (e.g. `["problem", "why-now"]`). Declares the slide's role in
+   * the story arc; does not constrain ordering or structure. Slides without
+   * a beat are valid; multiple slides may share a beat.
    */
-  beat?: string;
+  beat?: string | string[];
 }
 
 export interface OPFTransition {

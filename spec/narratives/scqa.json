@@ -2,34 +2,41 @@
   "$schema": "https://pptx.dev/schema/opf-narrative/v1",
   "id": "scqa",
   "name": "SCQA (Situation–Complication–Question–Answer)",
-  "summary": "Barbara Minto's pyramid-principle opener, distilled into four beats. Excellent for executive memos, strategic recommendations, and any deck where the audience needs to grasp the recommendation quickly. Surfaces the answer up front and uses the rest of the deck to support it.",
+  "summary": "Barbara Minto's pyramid-principle arc: surface the recommendation up front, then layer key arguments and supporting evidence beneath it. The default for executive memos, strategic recommendations, and consulting decks where the audience needs the answer fast.",
   "audienceFit": ["executives", "boards", "leadership-teams"],
   "durationRange": { "minMinutes": 5, "maxMinutes": 20 },
-  "tags": ["executive", "strategy", "consulting", "minto"],
+  "tags": ["executive", "strategy", "consulting", "minto", "pyramid"],
   "beats": [
     {
       "id": "situation",
       "name": "Situation",
-      "description": "Establish the shared context: what is true today that the audience already agrees on. State only facts the audience accepts without argument. The goal is alignment, not persuasion — you are setting the stage.",
-      "weight": 0.15
+      "description": "Establish the shared context: what is true today that the audience already agrees on. State only facts the audience accepts without argument. The goal is alignment, not persuasion — you are setting the stage."
     },
     {
       "id": "complication",
       "name": "Complication",
-      "description": "Introduce the disturbance to the situation: what changed, what is at risk, what is no longer working. This is the tension that makes the audience lean in. Be specific and quantify the change where possible.",
-      "weight": 0.20
+      "description": "Introduce the disturbance to the situation: what changed, what is at risk, what is no longer working. This is the tension that makes the audience lean in. Be specific and quantify the change where possible."
     },
     {
       "id": "question",
       "name": "Key Question",
-      "description": "Surface the question the complication forces the audience to answer. Frame it explicitly — 'Should we…?', 'How do we…?', 'What changes if…?'. The question should feel inevitable given the complication.",
-      "weight": 0.10
+      "description": "Surface the question the complication forces the audience to answer. Frame it explicitly — 'Should we…?', 'How do we…?', 'What changes if…?'. The question should feel inevitable given the complication."
     },
     {
       "id": "answer",
       "name": "Answer",
-      "description": "Deliver the recommendation up front, then use the remainder of the deck to support it. Pyramid-principle style: state the conclusion, then layer key arguments and supporting evidence beneath it.",
-      "weight": 0.55
+      "description": "Deliver the recommendation in a single sentence, up front. No arguments yet, no caveats — just the conclusion the rest of the deck will defend. This is the apex of the Minto pyramid; everything that follows supports it.",
+      "layoutHint": "title-slide"
+    },
+    {
+      "id": "key-arguments",
+      "name": "Key Arguments",
+      "description": "Lay out the two or three top-level reasons the answer is correct. One slide per argument, or one summary slide naming all of them. Each argument should stand alone as a compelling reason; together they should be exhaustive of the case."
+    },
+    {
+      "id": "supporting-evidence",
+      "name": "Supporting Evidence",
+      "description": "Present the data, examples, and case studies that ground each argument. Pyramid-principle style: every claim above is backed by something verifiable here. Cite sources; show the numbers; let the evidence carry the weight."
     }
   ]
 }

@@ -1,0 +1,73 @@
+{
+  "$schema": "https://pptx.dev/schema/opf-narrative/v1",
+  "id": "business-review",
+  "name": "Business Review",
+  "summary": "Full-loop review of recent activities to identify achievements, address challenges, and plan improvements. Goes deeper than a status update — closer to a customer-facing or partner-facing relationship review.",
+  "audienceFit": ["customers", "partners", "stakeholders", "leadership"],
+  "durationRange": { "minMinutes": 30, "maxMinutes": 90 },
+  "tags": ["customer-relationship", "review", "operations"],
+  "beats": [
+    {
+      "id": "logo",
+      "name": "Logo",
+      "description": "Cover slide with logos and the review period. Establishes brand identity and signals the level of formality the rest of the deck will hold to.",
+      "layoutHint": "title-slide"
+    },
+    {
+      "id": "opening",
+      "name": "Opening",
+      "description": "Frame the meeting context and the goals for the next hour. What you'll cover, what decisions you want, what you don't intend to relitigate."
+    },
+    {
+      "id": "review",
+      "name": "Review",
+      "description": "Outline the recent activities in scope: launches, projects, programs. Just enough scope-setting that the rest of the deck has shared vocabulary."
+    },
+    {
+      "id": "successes",
+      "name": "Successes",
+      "description": "Recognize the achievements in the review window. Lead with outcomes the audience cares about, not effort. Specific moves earn more credibility than aggregate progress."
+    },
+    {
+      "id": "challenges",
+      "name": "Challenges",
+      "description": "Address the problems faced honestly. What didn't work, what's still hard. Naming challenges in front of the audience earns more trust than letting them ask."
+    },
+    {
+      "id": "solutions",
+      "name": "Solutions",
+      "description": "Discuss the fixes already implemented. Pair each with the result it produced, or, if it's still in flight, with the leading indicator you're watching."
+    },
+    {
+      "id": "outcome",
+      "name": "Outcome",
+      "description": "Display the results achieved across the review window. Let the data carry the slide; supporting commentary should explain context, not inflate the numbers."
+    },
+    {
+      "id": "insights",
+      "name": "Insights",
+      "description": "Highlight the key learnings. What was confirmed, what surprised you, what the audience should take away. Insights are the slides people quote in follow-on meetings."
+    },
+    {
+      "id": "future-strategy",
+      "name": "Future Strategy",
+      "description": "Define the next steps and the strategic direction that follows from the review. Specific enough to sequence; flexible enough to adapt."
+    },
+    {
+      "id": "feedback",
+      "name": "Feedback",
+      "description": "Capture audience thoughts. Two or three explicit prompts where you want input or alignment. The strength of a relationship review is in the conversation it provokes."
+    },
+    {
+      "id": "next-review",
+      "name": "Next Review",
+      "description": "Plan for follow-up: when the next review happens, what evidence you'll bring, what decisions are deferred until then. Continuity is the point of the cadence."
+    },
+    {
+      "id": "closing",
+      "name": "Closing",
+      "description": "Recap and express optimism about the path forward. Close with the next concrete step and the people responsible for it.",
+      "layoutHint": "title-slide"
+    }
+  ]
+}

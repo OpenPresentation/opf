@@ -1,0 +1,52 @@
+{
+  "$schema": "https://pptx.dev/schema/opf-narrative/v1",
+  "id": "reveal",
+  "name": "Reveal",
+  "summary": "Insight-driven keynote arc inspired by Amy Cuddy's 2012 talk on body language: connect through personal story, ground in research, illustrate with anecdote, summarize, break stereotypes, advise, demonstrate authenticity, close with impact. For talks that aim to change how the audience sees something they thought they understood.",
+  "audienceFit": ["general-audience", "academics", "professionals"],
+  "durationRange": { "minMinutes": 15, "maxMinutes": 25 },
+  "tags": ["keynote", "research", "talk", "inspirational"],
+  "beats": [
+    {
+      "id": "personal-story",
+      "name": "Personal Story",
+      "description": "Open with a personal experience that establishes why the topic matters to you. Specificity earns intimacy; intimacy earns the audience's permission to be moved."
+    },
+    {
+      "id": "research-exposition",
+      "name": "Research Exposition",
+      "description": "Lay out the scientific or empirical data that backs the premise. Be rigorous but not academic — the audience needs to understand the evidence well enough to defend it later."
+    },
+    {
+      "id": "real-life-anecdote",
+      "name": "Real-Life Anecdote",
+      "description": "Illustrate the research with a story from the field. Make the abstract finding feel like something that happens to people the audience could imagine being."
+    },
+    {
+      "id": "critical-insights",
+      "name": "Critical Insights",
+      "description": "Summarize the two or three findings the audience must walk away with. Distill them into language a non-specialist could repeat without distortion."
+    },
+    {
+      "id": "break-stereotypes",
+      "name": "Break Stereotypes",
+      "description": "Question redundant norms or beliefs the research undermines. Be specific about what's being challenged so the audience knows what to update."
+    },
+    {
+      "id": "empowering-advice",
+      "name": "Empowering Advice",
+      "description": "Translate the insights into a small, actionable practice. The advice should be doable today, not only next quarter — the goal is movement, not aspiration."
+    },
+    {
+      "id": "authenticity",
+      "name": "Authenticity",
+      "description": "Speak honestly about your own struggle with the topic. Vulnerability, used with restraint, is what turns research into a felt truth."
+    },
+    {
+      "id": "close-with-impact",
+      "name": "Close With Impact",
+      "description": "End on a motivational high — the line, image, or invitation you want to follow the audience out of the room. Close the talk where it began, transformed.",
+      "layoutHint": "title-slide"
+    }
+  ]
+}

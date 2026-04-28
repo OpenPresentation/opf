@@ -1,0 +1,63 @@
+{
+  "$schema": "https://pptx.dev/schema/opf-narrative/v1",
+  "id": "product-launch",
+  "name": "Product Launch",
+  "summary": "Persuasive launch arc: open with brand, hook with a promise, set the conflict, raise the stakes, reveal the product, raise stakes again, sell, and call to action. Tuned for keynote-style launches and major announcement decks.",
+  "audienceFit": ["customers", "press", "general-audience", "partners"],
+  "durationRange": { "minMinutes": 15, "maxMinutes": 45 },
+  "tags": ["startup", "launch", "marketing", "keynote"],
+  "beats": [
+    {
+      "id": "opening",
+      "name": "Opening",
+      "description": "Open with the company brand and a confident visual. Set the tone — this is a moment, not a meeting. One slide that signals the audience is somewhere worth being.",
+      "layoutHint": "title-slide"
+    },
+    {
+      "id": "promise",
+      "name": "Promise",
+      "description": "Hook the audience with the promise of the talk. Tell them, in one sentence, what they're about to see and why it matters to them. Specific promises buy patient audiences."
+    },
+    {
+      "id": "context",
+      "name": "Context",
+      "description": "Set the stage with the world the product enters. The customer reality, the market state, the unmet expectation. Context turns the launch from a product release into a moment in a larger story."
+    },
+    {
+      "id": "conflict",
+      "name": "Conflict",
+      "description": "Introduce the villain — the problem, friction, or status quo the product opposes. Make the conflict concrete enough that the audience can name a moment they've felt it themselves."
+    },
+    {
+      "id": "stakes",
+      "name": "Stakes",
+      "description": "Emphasize what's at risk if the conflict isn't resolved. Quantify, personalize, dramatize. Stakes are what convert a curious audience into an invested one."
+    },
+    {
+      "id": "reveal",
+      "name": "Reveal",
+      "description": "Showcase the product. One striking visual, one defining capability, one sentence that captures what's new. Earn the applause line; don't bury it under a bullet list."
+    },
+    {
+      "id": "raise-stakes",
+      "name": "Raise the Stakes",
+      "description": "Highlight where the alternatives fall short and what they cost the customer. Re-energize the room midway by sharpening the contrast with the reveal."
+    },
+    {
+      "id": "raise-stakes-again",
+      "name": "Reinforce the Need",
+      "description": "Reinforce why change is non-negotiable now. A second beat of stakes, framed differently — perhaps a customer voice or a future cost. Cement the reason to act."
+    },
+    {
+      "id": "sell",
+      "name": "Sell",
+      "description": "Make the audience want the product. Lead with the outcome it produces in their lives. Pricing, packaging, availability go here, but only after the desire is built."
+    },
+    {
+      "id": "cta",
+      "name": "Call to Action",
+      "description": "Close with the single action you want from the audience. Pre-order, sign up, attend, share. Make it simple, specific, and immediate.",
+      "layoutHint": "title-slide"
+    }
+  ]
+}

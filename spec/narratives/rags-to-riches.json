@@ -1,0 +1,47 @@
+{
+  "$schema": "https://pptx.dev/schema/opf-narrative/v1",
+  "id": "rags-to-riches",
+  "name": "Rags to Riches",
+  "summary": "Underdog journey from initial failure to eventual success. Pulls on resilience, grit, and perseverance — useful for founder stories, brand stories, and any deck where the audience needs to feel the cost behind the win.",
+  "audienceFit": ["general-audience", "customers", "press", "candidates"],
+  "durationRange": { "minMinutes": 5, "maxMinutes": 20 },
+  "tags": ["storytelling", "founder", "brand", "inspirational"],
+  "beats": [
+    {
+      "id": "origin",
+      "name": "Origin",
+      "description": "Start at the bottom. Describe the humble beginning, the constraint, the moment before anything had been built. Concrete details — a place, a year, a feeling — earn the audience's investment in what follows."
+    },
+    {
+      "id": "inspiration",
+      "name": "Inspiration",
+      "description": "Show the moment the protagonist found their calling. A conversation, a customer, a problem they couldn't unsee. The inspiration is the engine that pushes the rest of the story uphill."
+    },
+    {
+      "id": "opportunity",
+      "name": "Opportunity",
+      "description": "Reveal the chance the protagonist took. Why this and not something safer? Make the choice visible — opportunities only count when there was something else they passed up to grab them."
+    },
+    {
+      "id": "adversity",
+      "name": "Adversity",
+      "description": "Walk through the hardest stretch. Concrete failures, near-misses, moments of doubt. Resist the temptation to skip past the pain — the audience trusts the win more when the loss was real."
+    },
+    {
+      "id": "overcoming",
+      "name": "Overcoming",
+      "description": "Show how the obstacles got beaten. What changed, what was learned, what hard call was made. The transition from 'rags' to 'riches' should feel earned, not granted."
+    },
+    {
+      "id": "impactful-change",
+      "name": "Impactful Change",
+      "description": "Describe the moment the world tipped. The customer who said yes, the product that broke through, the metric that turned. One concrete transformation lands harder than a montage."
+    },
+    {
+      "id": "lasting-legacy",
+      "name": "Lasting Legacy",
+      "description": "Close on what the journey means for those who come next. The lesson, the people changed, the work that endures. Leave the audience with a takeaway that outlives the story.",
+      "layoutHint": "title-slide"
+    }
+  ]
+}

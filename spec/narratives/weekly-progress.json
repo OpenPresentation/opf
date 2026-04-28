@@ -1,0 +1,63 @@
+{
+  "$schema": "https://pptx.dev/schema/opf-narrative/v1",
+  "id": "weekly-progress",
+  "name": "Weekly Progress",
+  "summary": "Tight rhythm-of-business arc for weekly progress reports: objectives, achievements, progress, challenges, opportunities, recognition, plan, discussion, conclusion. Designed for fifteen-to-thirty-minute team check-ins, not deep dives.",
+  "audienceFit": ["managers", "teams", "cross-functional-partners"],
+  "durationRange": { "minMinutes": 15, "maxMinutes": 30 },
+  "tags": ["rhythm-of-business", "weekly", "internal", "operations"],
+  "beats": [
+    {
+      "id": "opening",
+      "name": "Opening",
+      "description": "Open with the initiative name, the date, and the one-line headline for the week. Frame the meeting in fifteen seconds so the rest of the time is content.",
+      "layoutHint": "title-slide"
+    },
+    {
+      "id": "objectives",
+      "name": "Objectives",
+      "description": "State what the team set out to do this week. Specific, measurable. The audience should be able to read this slide alone and know what 'on track' would mean."
+    },
+    {
+      "id": "achievements",
+      "name": "Achievements",
+      "description": "Celebrate the week's wins. Concrete, attributable, dated. Brevity here — the meeting is for what's next, not a victory lap."
+    },
+    {
+      "id": "overall-progress",
+      "name": "Overall Progress",
+      "description": "Evaluate performance against the objectives. Use a simple status indicator (green/yellow/red) plus the leading metric. Help the audience scan the state in seconds."
+    },
+    {
+      "id": "challenges",
+      "name": "Challenges",
+      "description": "Address what's hard right now: blockers, slipping items, surfaced risks. Tie each challenge to either an owner working it or a discussion you want this week."
+    },
+    {
+      "id": "opportunities-for-improvement",
+      "name": "Opportunities for Improvement",
+      "description": "Surface where the team can level up. Process tweaks, tooling needs, ways of working. Improvement opportunities should feel like seeds, not corrections."
+    },
+    {
+      "id": "highlights-recognition",
+      "name": "Highlights & Recognition",
+      "description": "Recognize specific contributions by name. Recognition belongs in the deck, not just in the meeting — written acknowledgment travels further than verbal."
+    },
+    {
+      "id": "goals-next-week",
+      "name": "Goals Next Week",
+      "description": "Plan the week ahead with three to five specific goals. Each should be small enough to finish, large enough to matter, and clearly owned."
+    },
+    {
+      "id": "discussion-feedback",
+      "name": "Discussion & Feedback",
+      "description": "Open the floor with two or three prompts — decisions you need, opinions you want, blockers you'd like cleared. End the recap actively."
+    },
+    {
+      "id": "conclusion",
+      "name": "Conclusion",
+      "description": "Close with one line that motivates the team into the next week. Echo the headline so the meeting feels closed.",
+      "layoutHint": "title-slide"
+    }
+  ]
+}

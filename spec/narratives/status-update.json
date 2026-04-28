@@ -1,0 +1,43 @@
+{
+  "$schema": "https://pptx.dev/schema/opf-narrative/v1",
+  "id": "status-update",
+  "name": "Status Update",
+  "summary": "Concise progress-report arc for keeping a stakeholder informed: headline, brief, progress, results, plan, feedback. Optimized for short, repeated updates rather than one-time deep dives.",
+  "audienceFit": ["stakeholders", "managers", "customers", "executives"],
+  "durationRange": { "minMinutes": 5, "maxMinutes": 15 },
+  "tags": ["reporting", "operations", "customer-relationship", "weekly"],
+  "beats": [
+    {
+      "id": "headline",
+      "name": "Headline",
+      "description": "Open with the single most important sentence the audience needs to know — on track, off track, or shifted. The headline replaces 'how's it going' with a clear answer.",
+      "layoutHint": "title-slide"
+    },
+    {
+      "id": "brief",
+      "name": "Brief",
+      "description": "State the objective for the period and what was promised. One slide, three lines. Frames the rest of the update so progress is read against a clear bar."
+    },
+    {
+      "id": "progress",
+      "name": "Progress",
+      "description": "Walk through the actions taken since the last update. Specific, attributable, dated. Avoid effort theater — list outcomes and material moves, not activity for its own sake."
+    },
+    {
+      "id": "results",
+      "name": "Results",
+      "description": "Show the outcomes those actions produced. Metrics, customer signals, decisions made. Keep the comparison crisp — versus plan, versus last period, versus benchmark."
+    },
+    {
+      "id": "action-plan",
+      "name": "Action Plan",
+      "description": "Outline the next steps and who owns them. Be specific about the next decision point and what would have to happen to slip the schedule."
+    },
+    {
+      "id": "feedback",
+      "name": "Feedback",
+      "description": "Invite the audience to weigh in: where you'd like input, where you need a decision, where help would unblock you. End the update with an open hand, not a closed file.",
+      "layoutHint": "title-slide"
+    }
+  ]
+}

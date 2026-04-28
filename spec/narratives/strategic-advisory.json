@@ -1,0 +1,53 @@
+{
+  "$schema": "https://pptx.dev/schema/opf-narrative/v1",
+  "id": "strategic-advisory",
+  "name": "Strategic Advisory",
+  "summary": "Consulting-style advisory deck applying Minto's pyramid: title, situation/complication/question, the answer in one sentence, and three argued points with a process. Use when the audience expects a recommendation and the case for it, in that order.",
+  "audienceFit": ["executives", "boards", "leadership-teams", "clients"],
+  "durationRange": { "minMinutes": 15, "maxMinutes": 45 },
+  "tags": ["consulting", "advisory", "strategy", "minto"],
+  "beats": [
+    {
+      "id": "title",
+      "name": "Title",
+      "description": "Open with a one-line summary statement that captures the recommendation, not the topic. The title slide is the headline of the entire engagement — make it specific enough that someone reading only this slide already understands the position.",
+      "layoutHint": "title-slide"
+    },
+    {
+      "id": "scq",
+      "name": "Situation, Complication, Question",
+      "description": "Frame the engagement on a single slide: the relevant status quo, what needs to change, and the question that needs to be resolved. This is the SCQ shorthand — context, tension, prompt. Don't yet answer."
+    },
+    {
+      "id": "answer",
+      "name": "Answer",
+      "description": "Deliver the recommendation in a single sentence. No arguments yet, no caveats. The answer is the apex of the pyramid; the rest of the deck supports it."
+    },
+    {
+      "id": "arguments",
+      "name": "Arguments",
+      "description": "Preview the three top-level arguments that defend the answer. One slide naming all three so the audience knows where the deck is going. Each argument should be a complete claim, not a topic."
+    },
+    {
+      "id": "argument-1",
+      "name": "Argument 1",
+      "description": "Develop the first argument with supporting data, examples, and reasoning. Lead with the claim, then the evidence — Minto-style. The slide should stand alone if pulled out."
+    },
+    {
+      "id": "argument-2",
+      "name": "Argument 2",
+      "description": "Develop the second argument the same way. Vary the type of evidence — quantitative, qualitative, comparative — so the audience hears the case from multiple angles."
+    },
+    {
+      "id": "argument-3",
+      "name": "Argument 3",
+      "description": "Develop the third argument and walk through the supporting process or methodology. This is often where the 'how' lives — the implementation insight that makes the recommendation feel actionable."
+    },
+    {
+      "id": "summary",
+      "name": "Summary",
+      "description": "Recap the answer and arguments in a single slide and point to additional resources. Close with the explicit next step you want the audience to take.",
+      "layoutHint": "title-slide"
+    }
+  ]
+}
