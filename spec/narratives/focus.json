@@ -26,18 +26,7 @@
       "description": "Open with a brief framing of what this update is for and what you intend to leave the audience with. Set the tone — long-term, candid, principle-driven.",
       "instructions": "Overview and objectives",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "accomplishments",
@@ -45,18 +34,7 @@
       "description": "Showcase the period's most material wins, briefly. The audience came for what's next; wins earn permission for the harder slides ahead, but they aren't the headline.",
       "instructions": "Showcase recent achievements",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "potential",
@@ -64,18 +42,7 @@
       "description": "Detail the market and customer opportunities ahead. Size them honestly and connect them to the work already underway. Potential without specifics reads as wishful.",
       "instructions": "Detail market opportunities",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "competitive-edge",
@@ -83,18 +50,7 @@
       "description": "Reveal the strategic positioning that gives the business its advantage. Frame it as a structural moat, not a list of features. The audience should be able to repeat the moat in their own words.",
       "instructions": "Reveal strategic positioning",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "long-term-vision",
@@ -102,18 +58,7 @@
       "description": "Emphasize the long-term view that anchors decisions. Quarters serve years; years serve decades. Anchor the audience in the time horizon you actually run the business on.",
       "instructions": "Emphasize focused future orientation",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "performance-metrics",
@@ -121,18 +66,7 @@
       "description": "Illuminate the indicators that show the long-term thesis is working. Choose metrics that compound — retention, NPS, unit economics — over those that flatter.",
       "instructions": "Illuminate growth indicators",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "growth-achievement",
@@ -140,18 +74,7 @@
       "description": "Certify the tangible progress against the long-term plan. Year-over-year, cohort behavior, expanded reach. Growth, in this beat, is evidence that the strategy is real.",
       "instructions": "Certify tangible progress",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "strategic-framework",
@@ -159,18 +82,7 @@
       "description": "Explain the principles that guide decisions. Customer obsession, long-term thinking, frugality, ownership — whatever the actual operating discipline is. Principles are the connective tissue between strategy and behavior.",
       "instructions": "Explain decision principles",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "expansion",
@@ -178,18 +90,7 @@
       "description": "Detail the next areas of growth: products, segments, geographies. Tie each to the principles above so the audience sees expansion as continuity rather than scatter.",
       "instructions": "Detail growth potential",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "future-objectives",
@@ -197,18 +98,7 @@
       "description": "Forecast the targets and commitments for the period ahead. Be specific enough to be held accountable. Vague objectives are how strategies erode.",
       "instructions": "Forecast upcoming targets",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "acknowledgment",
@@ -216,18 +106,7 @@
       "description": "Recognize the contributions of teams, customers, and partners that made the period possible. Specific names land harder than blanket thanks.",
       "instructions": "Recognize contributions and successes",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "closing-remarks",
@@ -235,18 +114,7 @@
       "description": "Recap the focus, thank the audience, and inspire the work ahead. End with the line you most want quoted in tomorrow's newsletter.",
       "layoutHint": "title-left",
       "instructions": "Recap, thank, inspire",
-      "slideType": "text",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "slideType": "text"
     }
   ]
 }

@@ -26,18 +26,7 @@
       "description": "Open with a specific, visible signal of the challenge — a metric heading the wrong way, a customer story, a competitive event. The hook should make the audience nod that yes, this matters.",
       "instructions": "Capture audience attention",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "dilemma",
@@ -45,18 +34,7 @@
       "description": "State the challenge plainly. What is failing, who is feeling it, and why has it now risen to a level that demands a decision? The dilemma must feel real, not academic.",
       "instructions": "Present the problem",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "backdrop",
@@ -64,18 +42,7 @@
       "description": "Provide the context behind the dilemma: how it formed, what's been tried, what constraints exist. Just enough history that the audience trusts your diagnosis without drowning in detail.",
       "instructions": "Provide context",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "remedy",
@@ -83,18 +50,7 @@
       "description": "Propose the resolution. Lead with the recommendation, then sketch the approach. Be opinionated — vague remedies invite vague responses.",
       "instructions": "Propose a solution",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "evidence",
@@ -102,18 +58,7 @@
       "description": "Demonstrate why the remedy will work. Comparable cases, supporting data, or pilot results. Choose evidence that addresses the audience's most likely objection, not the one easiest to answer.",
       "instructions": "Demonstrate success",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "motivate",
@@ -121,18 +66,7 @@
       "description": "Make the case for acting now. Quantify the cost of delay and the upside of decisive action. Help the audience picture the room a quarter from now if they say yes.",
       "instructions": "Encourage action",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "conclusion",
@@ -140,18 +74,7 @@
       "description": "Recap the challenge, the remedy, and the specific decision you need from the audience. End with a clear ask, not a summary slide.",
       "layoutHint": "title-left",
       "instructions": "Recap and end powerfully",
-      "slideType": "text",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "slideType": "text"
     }
   ]
 }

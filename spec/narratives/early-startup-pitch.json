@@ -25,18 +25,7 @@
       "description": "Cover slide with the company name, logo, and one-line positioning. Simple, branded, confident.",
       "layoutHint": "title-left",
       "instructions": "Establish presence",
-      "slideType": "text",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "slideType": "text"
     },
     {
       "id": "monumental-change",
@@ -44,18 +33,7 @@
       "description": "Open by naming a large, undeniable shift in the world. Tech, regulatory, behavioral. The shift is the reason this company exists — investors should feel its weight before they hear about the product.",
       "instructions": "Highlight market transformation",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "past-struggle",
@@ -63,18 +41,7 @@
       "description": "Show what the world tried to do about the problem before the shift, and why those approaches fell short. Honest credit to predecessors makes the new game more credible.",
       "instructions": "Emphasize previous challenges",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "innovative-breakthrough",
@@ -82,18 +49,7 @@
       "description": "Present the founding insight or breakthrough that makes a new approach possible. This is the 'secret' the company is built on — name it plainly.",
       "instructions": "Present innovative solution",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "unique-offering",
@@ -101,18 +57,7 @@
       "description": "Detail the product or service. Lead with the customer-visible thing they touch; the architecture can wait. Show why this offering is structurally different from the past struggle.",
       "instructions": "Detail product or service",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "costly-issues",
@@ -120,18 +65,7 @@
       "description": "Quantify the pain customers experience without your offering. Time, dollars, opportunity cost. Specific numbers convert sympathy into urgency.",
       "instructions": "Quantify problems faced",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "effective-solutions",
@@ -139,18 +73,7 @@
       "description": "Demonstrate the customer outcome your offering produces. Before/after numbers from early users, even small N. Early-stage pitches are won by leading indicators, not by trailing ones.",
       "instructions": "Demonstrate benefits",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "unit-economics",
@@ -158,18 +81,7 @@
       "description": "Explain the financial model. Cost to acquire, gross margin, payback. Investors don't expect maturity — they expect that you've thought about it.",
       "instructions": "Explain financial model",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "talented-team",
@@ -177,18 +89,7 @@
       "description": "Introduce the founders and key early hires. Show why this team uniquely sees and can execute on this opportunity. Insight beats résumé at the seed stage.",
       "instructions": "Introduce key players",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "traction",
@@ -196,18 +97,7 @@
       "description": "Showcase the early signal: pilots, design partners, waitlist, retention data, anything credible. Frame it honestly — investors at this stage discount inflation aggressively.",
       "instructions": "Showcase accomplishments",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "investment-opportunity",
@@ -215,18 +105,7 @@
       "description": "Detail the round size, structure, and use of funds. Tie the raise to specific milestones it takes the company to. Specificity here signals operational maturity.",
       "instructions": "Detail funding needs",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "closing-logo",
@@ -234,18 +113,7 @@
       "description": "Close on the brand and contact info. Leave the room with the line you most want repeated when the partner pitches you to the rest of the firm.",
       "layoutHint": "title-left",
       "instructions": "Leave a lasting impression",
-      "slideType": "text",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "slideType": "text"
     }
   ]
 }

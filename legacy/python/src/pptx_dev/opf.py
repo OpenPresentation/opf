@@ -29,25 +29,6 @@ class _OPFBase(BaseModel):
 # ─── Narrative / Meta ────────────────────────────────────────────────
 
 
-class OPFNarrativeBeatPlaceholders(_OPFBase):
-    """Boolean flags indicating which standard slide placeholders the beat
-    expects to fill. Mirrors BeatPlaceholders in narrative.schema.json."""
-
-    tag: bool | None = None
-    title: bool | None = None
-    subtitle: bool | None = None
-    slide_image: bool | None = Field(default=None, alias="slideImage")
-
-
-class OPFNarrativeBeatOptions(_OPFBase):
-    """Engine-facing options that fine-tune how a beat's resolved layout is
-    populated. Mirrors BeatOptions in narrative.schema.json."""
-
-    multiple: Literal["1x", "2x", "3x", "4x", "5x", "6x"] | None = None
-    show_label: bool | None = Field(default=None, alias="showLabel")
-    show_description: bool | None = Field(default=None, alias="showDescription")
-
-
 class OPFNarrativeBeat(_OPFBase):
     """A single narrative beat — a labeled segment of the story arc.
 
@@ -71,8 +52,6 @@ class OPFNarrativeBeat(_OPFBase):
         default=None, alias="slideType"
     )
     layout_hint: str | None = Field(default=None, alias="layoutHint")
-    placeholders: OPFNarrativeBeatPlaceholders | None = None
-    options: OPFNarrativeBeatOptions | None = None
     thought_cues: list[str] | None = Field(default=None, alias="thoughtCues")
 
 
@@ -727,8 +706,6 @@ __all__ = [
     "OPFMeta",
     "OPFNarrative",
     "OPFNarrativeBeat",
-    "OPFNarrativeBeatOptions",
-    "OPFNarrativeBeatPlaceholders",
     "OPFNarrativeDurationRange",
     "OPFNarrativePreview",
     "OPFOrganization",

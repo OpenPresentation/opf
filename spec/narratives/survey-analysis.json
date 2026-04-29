@@ -26,18 +26,7 @@
       "description": "Open by naming the question the survey was meant to answer. Why this, why now, who commissioned it. Anchor the audience in the decision the survey is designed to inform.",
       "instructions": "Present survey topic",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "executive-summary",
@@ -45,18 +34,7 @@
       "description": "State the top three findings in plain language on a single slide. A reader who only sees this slide should still be able to make the right call. Avoid hedging — synthesis is the point.",
       "instructions": "Summarize key findings",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "context",
@@ -64,18 +42,7 @@
       "description": "Detail the situation behind the survey: prior knowledge, related research, the gap this work fills. Just enough to position the findings as new information rather than restated common sense.",
       "instructions": "Detail survey background",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "data-methodology",
@@ -83,18 +50,7 @@
       "description": "Describe how the data was collected and from whom. Sample size, recruitment, instrument, timing. Be honest about limitations; methodological transparency is what gives the findings their weight.",
       "instructions": "Discuss sourcing and collection",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "data-summary",
@@ -102,18 +58,7 @@
       "description": "Give the audience an overview of the dataset before drilling in. Demographics, response rates, distribution of key variables. Help them calibrate what 'most' and 'few' mean in this study.",
       "instructions": "Provide data overview",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "findings",
@@ -121,18 +66,7 @@
       "description": "Present the key insights one at a time. Lead each finding with the claim, then the chart. Avoid burying the point under the visualization — captions should restate the insight in words.",
       "instructions": "Highlight key insights",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "data-analysis",
@@ -140,18 +74,7 @@
       "description": "Break down the data behind each finding: cross-tabs, segment splits, statistical confidence. This is the slide skeptics will scrutinize — make it scrutinizable.",
       "instructions": "Break down data",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "implications",
@@ -159,18 +82,7 @@
       "description": "Translate findings into 'so what.' What changes for product, marketing, ops, the customer? Implications without consequences are interesting trivia, not research.",
       "instructions": "Discuss survey implications",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "recommendations",
@@ -178,18 +90,7 @@
       "description": "Provide the actions that follow from the implications. Prioritize, attach owners, mark which require decisions. This is where research becomes useful.",
       "instructions": "Provide action plans",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "conclusion",
@@ -197,18 +98,7 @@
       "description": "Recap the headline finding and the most important recommendation. End with the next step — a follow-on study, a workshop, a decision — so the work doesn't sit on a shelf.",
       "layoutHint": "title-left",
       "instructions": "Recap and finalize",
-      "slideType": "text",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "slideType": "text"
     }
   ]
 }

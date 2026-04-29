@@ -26,18 +26,7 @@
       "description": "Cover slide with the logo, tagline, and a single line of positioning. Set the visual tone — confident, branded, uncluttered.",
       "layoutHint": "title-left",
       "instructions": "Establish brand identity",
-      "slideType": "text",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "slideType": "text"
     },
     {
       "id": "about",
@@ -45,18 +34,7 @@
       "description": "Capture the company in three or four lines: what you do, who you do it for, and how long you've been at it. Avoid jargon; an outsider should grok the business in fifteen seconds.",
       "instructions": "Capture attention",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "competitive-advantage",
@@ -64,18 +42,7 @@
       "description": "State the one or two things you do that the alternatives can't. Frame it as a structural advantage, not a feature list. The audience should leave able to repeat the differentiator in their own words.",
       "instructions": "Stand out",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "company-story",
@@ -83,18 +50,7 @@
       "description": "Share the founding insight or origin moment — why this company exists, told as a short story. Specific people, specific problems, a specific 'aha.' Story beats biography.",
       "instructions": "Share origin",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "offerings",
@@ -102,18 +58,7 @@
       "description": "Map the products and services into a coherent picture. Show how they fit together rather than listing them flat. The shape of the portfolio is itself a message.",
       "instructions": "Highlight products/services",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "ideal-customer",
@@ -121,18 +66,7 @@
       "description": "Define who you serve best. Industry, size, role, situation. Specificity here helps the audience self-select and signals you understand the customer well enough to be choosy.",
       "instructions": "Define target market",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "key-benefits",
@@ -140,18 +74,7 @@
       "description": "Translate offerings into three to five customer outcomes. Lead with the result, not the mechanism. Each benefit should answer 'what becomes easier or better for me?'",
       "instructions": "Emphasize value",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "success-story",
@@ -159,18 +82,7 @@
       "description": "Tell one named customer's story with concrete before/after metrics. A single specific story is more persuasive than a logo grid; pick one that mirrors the audience you're presenting to.",
       "instructions": "Showcase satisfied customer",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "closing-cta",
@@ -178,18 +90,7 @@
       "description": "Close with one line of why now and one specific next step — a discovery call, a pilot, a partner program. End with contact info that's easy to act on without searching.",
       "layoutHint": "title-left",
       "instructions": "Encourage action",
-      "slideType": "text",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "slideType": "text"
     }
   ]
 }

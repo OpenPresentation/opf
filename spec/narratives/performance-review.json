@@ -25,18 +25,7 @@
       "description": "Frame what this review covers: the period, the unit, the standard you're measuring against. One slide that lets the audience know exactly what they're being asked to evaluate.",
       "layoutHint": "title-center",
       "instructions": "Outline presentation objective",
-      "slideType": "text",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "slideType": "text"
     },
     {
       "id": "results",
@@ -44,18 +33,7 @@
       "description": "Lead with the headline result. On track, ahead, or behind, and by how much. Resist softening — clear numbers up front earn credibility for the analysis that follows.",
       "instructions": "Summarize performance findings",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "key-metrics",
@@ -63,18 +41,7 @@
       "description": "Walk through the pivotal indicators. One chart per metric, clear comparison period, target or benchmark visible on the same frame. Help the audience see the data the way you do.",
       "instructions": "Review pivotal indicators",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "team-performance",
@@ -82,18 +49,7 @@
       "description": "Examine collective achievements and how the team contributed. Avoid generic praise; cite specific moves and the people behind them where the audience would expect it.",
       "instructions": "Examine collective achievements",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "highlight",
@@ -101,18 +57,7 @@
       "description": "Spotlight one standout contribution that defined the period. A landmark deal, a launch, a fix, a hire. One vivid example sticks longer than a list of accomplishments.",
       "instructions": "Show key contribution",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "analysis",
@@ -120,18 +65,7 @@
       "description": "Dig under the metrics. What drove the numbers, what held them back, what's signal versus noise. Analysis is where the audience learns whether you actually understand the system you're reporting on.",
       "instructions": "Uncover data insights",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "success",
@@ -139,18 +73,7 @@
       "description": "Reinforce the past triumphs that show the system works. Briefly — the audience came for what's next, not a victory lap. Wins earn permission for the harder slides ahead.",
       "instructions": "Reinforce past triumphs",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "challenges",
@@ -158,18 +81,7 @@
       "description": "Name the obstacles encountered honestly. What didn't move, what regressed, what the team is still wrestling with. Understated challenges read as missed signal, not modesty.",
       "instructions": "Highlight encountered obstacles",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "adjustments",
@@ -177,18 +89,7 @@
       "description": "Identify the changes you're making in response. New tactics, reallocations, sunsets. Each adjustment should map to a challenge above — adjustments without diagnosis feel arbitrary.",
       "instructions": "Identify necessary changes",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "strategy-evolution",
@@ -196,18 +97,7 @@
       "description": "Show how the strategy itself evolves heading into the next period. Refinements, sharpened bets, dropped initiatives. The audience should see continuity as well as change.",
       "instructions": "Plan for improvement",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "discussion",
@@ -215,18 +105,7 @@
       "description": "Open the floor with two or three specific prompts. End the review actively — questions you want answered, decisions you want made — so the meeting yields more than the deck.",
       "layoutHint": "title-left",
       "instructions": "Promote active discourse",
-      "slideType": "text",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "slideType": "text"
     }
   ]
 }

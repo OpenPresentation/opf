@@ -25,18 +25,7 @@
       "description": "Open with the period covered and the spirit of the conversation: collaborative, honest, growth-focused. Frame the meeting so both sides know what to expect.",
       "layoutHint": "title-left",
       "instructions": "Name & date",
-      "slideType": "text",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "slideType": "text"
     },
     {
       "id": "performance",
@@ -44,18 +33,7 @@
       "description": "Review job execution against the role's expectations. Specific examples, dated. Avoid characterizing the person; describe the work and its impact.",
       "instructions": "Review job execution",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "achievements",
@@ -63,18 +41,7 @@
       "description": "Acknowledge what went well. Name the projects, the moves, the moments where the employee made a difference. Specific recognition lands harder than generic praise.",
       "instructions": "Acknowledge success",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "feedback",
@@ -82,18 +49,7 @@
       "description": "Provide constructive feedback grounded in observation. Distinguish patterns from one-offs. Tell the employee something they can act on, not something they can only feel.",
       "instructions": "Provide positive remarks",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "constructive-criticism",
@@ -101,18 +57,7 @@
       "description": "Suggest improvements in language that respects the employee's intelligence. Pair each piece of criticism with a concrete example and a specific behavior change you'd like to see.",
       "instructions": "Suggest improvements",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "development-opportunities",
@@ -120,18 +65,7 @@
       "description": "Highlight growth areas and the experiences that could stretch the employee. Frame development as an investment, not a fix.",
       "instructions": "Highlight growth areas",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "goals",
@@ -139,18 +73,7 @@
       "description": "Outline next-period goals together. Specific, measurable, with explicit support. The strongest goals are co-authored, not handed down.",
       "instructions": "Outline next steps",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "mentoring",
@@ -158,18 +81,7 @@
       "description": "Encourage continued learning through mentorship, training, peer pairings. Close the review with the message that growth is a shared responsibility, not a one-way evaluation.",
       "layoutHint": "title-left",
       "instructions": "Encourage continuous learning",
-      "slideType": "text",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "slideType": "text"
     }
   ]
 }

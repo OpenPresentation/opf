@@ -25,18 +25,7 @@
       "description": "Establish the opening scene: who the underdog is and the world that overlooked them. Specific details make the rest of the journey feel real.",
       "instructions": "Establish opening scene",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "struggles",
@@ -44,18 +33,7 @@
       "description": "Highlight the early setbacks. What didn't work, who said no, where the path closed up. The audience needs to feel the doubt before they can feel the win.",
       "instructions": "Highlight initial setbacks",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "determination",
@@ -63,18 +41,7 @@
       "description": "Showcase the enduring passion that kept the underdog going. What they refused to give up on, and why. Determination, in this beat, is the only resource the underdog has.",
       "instructions": "Showcase enduring passion",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "crisis",
@@ -82,18 +49,7 @@
       "description": "Identify the lowest point of the journey. The moment the dream nearly ended. Don't soften — the contrast with the triumph ahead depends on the depth of this slide.",
       "instructions": "Identify lowest point",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "resolve",
@@ -101,18 +57,7 @@
       "description": "Articulate the choice the underdog made to keep going. The strong will, the small bet, the borrowed faith. Resolve is where the protagonist becomes someone the audience roots for.",
       "instructions": "Articulate strong will",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "breakthrough",
@@ -120,18 +65,7 @@
       "description": "Show the reward of perseverance: the customer who said yes, the door that opened, the fortune that turned. The breakthrough should feel earned, not granted.",
       "instructions": "Reward of perseverance",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "triumph",
@@ -139,18 +73,7 @@
       "description": "Reveal the ultimate success. Concrete outcomes, named milestones. The triumph is the audience's emotional payoff — let it land.",
       "instructions": "Reveal ultimate success",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "legacy",
@@ -158,18 +81,7 @@
       "description": "Share the lasting impact. What the underdog's victory makes possible for those who come after. The legacy beat is what turns a story into a lesson.",
       "layoutHint": "title-left",
       "instructions": "Share long-lasting impact",
-      "slideType": "text",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "slideType": "text"
     }
   ]
 }

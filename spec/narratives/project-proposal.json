@@ -26,18 +26,7 @@
       "description": "Open with the proposal in one slide: the project name, the audience, the goal, and the headline benefit. If a sponsor reads only this slide, they should still know what they're being asked to approve.",
       "instructions": "Audience hook & objectives",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "problem-statement",
@@ -45,18 +34,7 @@
       "description": "Articulate the problem this project solves and why it deserves resources now. Tie it to a known business goal or pain. Vague problems produce vague approvals.",
       "instructions": "Highlight struggles & project necessity",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "core-concept",
@@ -64,18 +42,7 @@
       "description": "Describe the central idea of the project in plain language. The 'what' before the 'how.' A reader should be able to repeat the concept in one sentence after this slide.",
       "instructions": "Share actionable idea",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "benefits",
@@ -83,18 +50,7 @@
       "description": "Quantify the impact: revenue, cost, risk, customer, capability. Use numbers where possible and clear comparisons where not. Each benefit should map to a metric the sponsor cares about.",
       "instructions": "Spotlight key metrics",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "justification",
@@ -102,18 +58,7 @@
       "description": "Connect the project to broader strategy, OKRs, or constraints the audience already cares about. Show why this project is more important than the alternatives competing for the same resources.",
       "instructions": "Strategic alignment & significance",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "approach",
@@ -121,18 +66,7 @@
       "description": "Lay out how the project will be executed: the solution, the team shape, the budget envelope. Enough detail to feel credible, not so much that it pre-commits to choices that will mature in flight.",
       "instructions": "Solution, resources, & budget",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "timeline",
@@ -140,18 +74,7 @@
       "description": "Show the project phases on a timeline, with major milestones and decision points marked. Sponsors are buying a sequence of bets, not a single launch — make those bets visible.",
       "instructions": "Outline project phases",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "risks",
@@ -159,18 +82,7 @@
       "description": "Name the top risks honestly and pair each with a mitigation or open question. Listing risks without mitigations signals you haven't thought it through; hiding risks signals worse.",
       "instructions": "Consider potential challenges",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "outlook",
@@ -178,18 +90,7 @@
       "description": "Paint the picture of what the organization looks like a quarter or year after the project ships. Stretch beyond the immediate deliverable to the second-order benefits.",
       "instructions": "Envision project impact",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "wrap-up",
@@ -197,18 +98,7 @@
       "description": "Recap the proposal and state the specific decision you're asking for: approval, budget, headcount, sponsorship. Make it easy to say yes today.",
       "layoutHint": "title-left",
       "instructions": "Summarize & persuade",
-      "slideType": "text",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "slideType": "text"
     }
   ]
 }

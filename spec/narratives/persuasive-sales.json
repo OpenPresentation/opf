@@ -25,18 +25,7 @@
       "description": "Open with a brief framing of who you are and why this conversation is worth the prospect's next thirty minutes. Keep credentials short; the audience cares about their problem, not your résumé.",
       "instructions": "Name & logo",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "big-change",
@@ -44,18 +33,7 @@
       "description": "Name the market shift the prospect's industry is living through. Make it concrete, recent, and undeniable. The change — not the product — is the reason they should care.",
       "instructions": "Highlight market shift",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "response-to-change",
@@ -63,18 +41,7 @@
       "description": "Show how the change is creating winners and losers in the prospect's space. Use named examples where you can. The goal is for the prospect to wonder which side they'll end up on.",
       "instructions": "Show winners & losers",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "benefits",
@@ -82,18 +49,7 @@
       "description": "Paint the outcome a winner experiences: a vivid picture of the prospect's life on the other side of the change. Lead with what changes for them, not with what your product does.",
       "instructions": "Describe benefits, paint a vivid picture",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "capabilities",
@@ -101,18 +57,7 @@
       "description": "Reveal the unique capabilities that make those outcomes possible. Frame them as the 'magic gifts' the prospect needs to win the new game. Highlight what's structurally different from the alternatives.",
       "instructions": "Present unique features as 'magic gifts' to the customer",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "evidence",
@@ -120,18 +65,7 @@
       "description": "Share customer testimonials, case studies, and measurable outcomes from organizations like the prospect's. Pick evidence that maps to the benefits you promised, not generic logos.",
       "instructions": "Share testimonials",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "call-to-action",
@@ -139,18 +73,7 @@
       "description": "Ask for the next step in the sales process. Be specific: a pilot, a workshop, a follow-on conversation with a named stakeholder. Make the smallest credible commitment that keeps momentum.",
       "layoutHint": "title-left",
       "instructions": "Encourage decision-making",
-      "slideType": "text",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "slideType": "text"
     },
     {
       "id": "close",
@@ -158,18 +81,7 @@
       "description": "Close with a final image and contact path. Leave the prospect with one line about why they're better off acting now than later, and clear instructions for how to engage.",
       "layoutHint": "title-left",
       "instructions": "Logo & contact info",
-      "slideType": "text",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "slideType": "text"
     }
   ]
 }

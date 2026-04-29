@@ -25,18 +25,7 @@
       "description": "Introduce the topic in a way that respects the audience's time and curiosity. Frame why this question is worth asking, and signal the shape of the journey ahead without giving away the destination.",
       "instructions": "Introduce the topic",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "surprising-fact",
@@ -44,18 +33,7 @@
       "description": "Lead with a single curious fact that recasts how the audience thinks about the topic. The fact should be small, specific, and unforgettable — the cognitive door the rest of the talk walks through.",
       "instructions": "Share a curious fact",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "experiment",
@@ -63,18 +41,7 @@
       "description": "Walk through a method, study, or thought experiment that probes the surprising fact. Show how knowledge here gets made — the audience should feel like they're shoulder-to-shoulder with the investigator.",
       "instructions": "Explain a tried method",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "amusing-anecdote",
@@ -82,18 +49,7 @@
       "description": "Drop in a story or moment from the field that brings the topic to human scale. Personality and humor here keep the audience leaning forward; technical depth without warmth loses the room.",
       "instructions": "Relay an interesting story",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "intriguing-information",
@@ -101,18 +57,7 @@
       "description": "Layer in the more complex data or detail. By this point the audience is invested enough to do real work alongside you. Visualize generously — make the numbers tangible.",
       "instructions": "Share complex data",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "skeptical-scrutiny",
@@ -120,18 +65,7 @@
       "description": "Question the easy interpretations. Challenge the audience's defaults and your own. Showing where the evidence is contested is what separates a teacher from a publicist.",
       "instructions": "Encourage questioning of accepted truths",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "extraordinary-explanation",
@@ -139,18 +73,7 @@
       "description": "Present the most counterintuitive or beautiful explanation the topic offers. Take your time here — this is the payoff slide the audience came for.",
       "instructions": "Break down unusual research findings",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "unconventional-use",
@@ -158,18 +81,7 @@
       "description": "Show an unexpected application or implication of the idea. Surprise reinforces the lesson and gives the audience a story to retell tomorrow.",
       "instructions": "Expand on unique aspects",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "captivating-conclusion",
@@ -177,18 +89,7 @@
       "description": "Close with a thoughtful, slightly poetic wrap-up. Echo the surprising fact, name the lesson, and leave the audience with a new question instead of a tidy answer.",
       "layoutHint": "title-left",
       "instructions": "Provide a thoughtful wrap-up",
-      "slideType": "text",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "slideType": "text"
     }
   ]
 }

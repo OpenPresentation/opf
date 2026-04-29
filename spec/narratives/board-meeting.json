@@ -26,18 +26,7 @@
       "description": "Set the tone for the meeting and walk through the agenda in one slide. Signal which sections are for discussion versus information so directors know where their time is most valuable.",
       "layoutHint": "title-left",
       "instructions": "Set the tone",
-      "slideType": "text",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "slideType": "text"
     },
     {
       "id": "ceo-update",
@@ -45,18 +34,7 @@
       "description": "Deliver the CEO's view of the period: what changed, what mattered, where the company stands. Two or three sentences in the speaker's voice — board members read this slide first.",
       "instructions": "Deliver company insights",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "highlights",
@@ -64,18 +42,7 @@
       "description": "Share major successes across the business. Customer wins, launches, hires, milestones. Specific and brief; this is the slide that sets the tone, not the slide that proves the case.",
       "instructions": "Share major successes",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "challenges",
@@ -83,18 +50,7 @@
       "description": "Address the obstacles facing the business honestly. Boards earn their value when surfaced to real problems; under-disclosure here erodes trust faster than the problems themselves.",
       "instructions": "Address potential obstacles",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "company-needs",
@@ -102,18 +58,7 @@
       "description": "Identify where the business needs the board's help: introductions, decisions, advice. Specific asks turn the meeting from a report into a working session.",
       "instructions": "Identify support requirements",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "funnel-metrics",
@@ -121,18 +66,7 @@
       "description": "Discuss the sales pipeline: leads, conversion, velocity, win rate. Use the metrics that match the company's current motion; resist the temptation to show the same chart you showed last quarter for continuity's sake.",
       "instructions": "Discuss sales progress",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "engagement-metrics",
@@ -140,18 +74,7 @@
       "description": "Analyze customer interaction: usage, retention, NPS, expansion. Show whether the product is being loved or only being bought.",
       "instructions": "Analyze customer interaction",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "financial-metrics",
@@ -159,18 +82,7 @@
       "description": "Review fiscal health: revenue, gross margin, burn, runway, cash. One slide directors can scan in twenty seconds and trust the numbers on.",
       "instructions": "Review fiscal health",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "performance-vs-plan",
@@ -178,18 +90,7 @@
       "description": "Compare actuals to plan across the metrics that matter most. Variance is the slide directors will probe; show your work, name the drivers, propose adjustments.",
       "instructions": "Compare objectives and actuals",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "org-chart",
@@ -197,18 +98,7 @@
       "description": "Present the team structure and any key changes since the last meeting. Directors track org evolution as a leading indicator; help them see hires, departures, and reshapes clearly.",
       "instructions": "Present team structure",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "product-roadmap",
@@ -216,18 +106,7 @@
       "description": "Highlight the product plan and what ships when. Pair each major bet with the customer or business outcome it serves.",
       "instructions": "Highlight future plans",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "quality",
@@ -235,18 +114,7 @@
       "description": "Showcase the product quality bar: reliability, defect rates, support outcomes. Directors take quality as a proxy for engineering culture; let the data speak.",
       "instructions": "Showcase product's standards",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "engineering-update",
@@ -254,18 +122,7 @@
       "description": "Communicate technical progress, key bets, and platform investments. Translate engineering work into business consequences directors can evaluate.",
       "instructions": "Communicate technical progress",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "marketing-update",
@@ -273,18 +130,7 @@
       "description": "Update on demand-gen, brand, and category-shaping efforts. Connect spend to pipeline and pipeline to revenue; avoid 'campaigns we ran' lists.",
       "instructions": "Update on promotional efforts",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "business-development-update",
@@ -292,18 +138,7 @@
       "description": "Speak to growth initiatives: partnerships, channels, alliances. Each entry should have a stage, an owner, and a credible upside.",
       "instructions": "Speak on growth initiatives",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "operations-update",
@@ -311,18 +146,7 @@
       "description": "Discuss day-to-day operations: people ops, finance, legal, IT. Brief but explicit — directors notice when ops is missing.",
       "instructions": "Discuss day-to-day activities",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "special-topic-1",
@@ -330,18 +154,7 @@
       "description": "Discuss the period's first deep-dive topic. This is where the board does its highest-leverage work; pose the question, show the analysis, ask for their view.",
       "instructions": "Discuss selected subject",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "special-topic-2",
@@ -349,18 +162,7 @@
       "description": "Cover the second deep-dive topic, framed the same way. Two specials per meeting; more, and the meeting becomes a recital.",
       "instructions": "Touch on additional topic",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "feedback",
@@ -368,18 +170,7 @@
       "description": "Elicit the board's perspective with concrete prompts. The strength of board governance is in its candor — invite it explicitly.",
       "instructions": "Elicit board's thoughts",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "formalities",
@@ -387,18 +178,7 @@
       "description": "Conclude with the necessary governance items: votes, approvals, committee reports, document acknowledgments. Run them efficiently and document the outcomes.",
       "instructions": "Conclude with necessary formalities",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "closing-remarks",
@@ -406,18 +186,7 @@
       "description": "Close with concluding observations and the agenda for the next meeting. End on a forward-looking note; directors should leave knowing what to watch.",
       "layoutHint": "title-left",
       "instructions": "Concluding observations",
-      "slideType": "text",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "slideType": "text"
     }
   ]
 }

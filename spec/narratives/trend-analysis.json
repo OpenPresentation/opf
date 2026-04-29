@@ -25,18 +25,7 @@
       "description": "Open by establishing why this trend matters now. Tie it to a decision on the table or a forecast that's about to be made. Trends without consequences are filler.",
       "instructions": "Ignite interest, establish significance",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "historical-comparison",
@@ -44,18 +33,7 @@
       "description": "Contrast current data with the relevant past. Pick the comparison window that makes the trend visible without cherry-picking. Be honest about base effects.",
       "instructions": "Contrast current and past data",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "pattern-identification",
@@ -63,18 +41,7 @@
       "description": "Name the recurring outcome you've spotted. Use one or two strong charts that show the pattern unambiguously. Avoid overclaiming significance from a small N.",
       "instructions": "Point out recurring outcomes",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "future-prediction",
@@ -82,18 +49,7 @@
       "description": "Project where the trend leads if it continues. Show the forecast and the confidence interval. State the assumptions that would have to break for the prediction to fail.",
       "instructions": "Predict using established patterns",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "action-plan",
@@ -101,18 +57,7 @@
       "description": "Translate the prediction into the strategy it implies. Specific actions, sequenced. Each action should map to a particular reading of the trend, not a generic best practice.",
       "instructions": "Strategies based on prediction",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "implementation",
@@ -120,18 +65,7 @@
       "description": "Walk through how the actions get executed: owners, milestones, monitoring. The audience should leave understanding what to do tomorrow, not just what to think about.",
       "instructions": "Discuss strategy execution",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "conclusion",
@@ -139,18 +73,7 @@
       "description": "Recap the trend, the forecast, and the recommended action. End with the leading indicator you'll watch to know if the call is right.",
       "layoutHint": "title-left",
       "instructions": "Summarize key points",
-      "slideType": "text",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "slideType": "text"
     }
   ]
 }

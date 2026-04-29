@@ -263,19 +263,6 @@ export interface OPFNarrativeBeat {
   slideType?: "text" | "image" | "chart" | "table" | "code";
   /** Suggested layout for the opening slide of this beat */
   layoutHint?: string;
-  /** Boolean flags indicating which standard slide placeholders the beat expects to fill. */
-  placeholders?: {
-    tag?: boolean;
-    title?: boolean;
-    subtitle?: boolean;
-    slideImage?: boolean;
-  };
-  /** Engine-facing options that fine-tune how the resolved layout is populated. */
-  options?: {
-    multiple?: "1x" | "2x" | "3x" | "4x" | "5x" | "6x";
-    showLabel?: boolean;
-    showDescription?: boolean;
-  };
   /** Optional speaker prompts or thinking cues attached to the beat. */
   thoughtCues?: string[];
 }

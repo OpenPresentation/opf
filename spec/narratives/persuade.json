@@ -25,18 +25,7 @@
       "description": "Open with a moment, image, or claim the audience can't easily look away from. The first sixty seconds buy you the next twenty minutes — spend them on something specific and emotionally charged, not on housekeeping.",
       "instructions": "Draw in the audience with a compelling opener",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "challenge-status-quo",
@@ -54,18 +43,7 @@
       "description": "Anchor the issue in a specific person, place, or moment. Story is what gets the argument past the audience's defenses. Pick a story that personalizes the data without overstating it.",
       "instructions": "Share significant stories to illuminate the issue",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "statistic-shock",
@@ -73,18 +51,7 @@
       "description": "Drop in a single statistic that recasts the scale of the problem. One number, presented well, lands harder than a dashboard. Cite the source so the audience can repeat it with confidence.",
       "instructions": "Use impactful stats to highlight the gravity of the issue",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "historical-context",
@@ -92,18 +59,7 @@
       "description": "Show how the issue evolved. Why it has the shape it does today, what was tried, what was missed. Historical context turns 'this is broken' into 'this stayed broken for these reasons.'",
       "instructions": "Show the evolution or history of the issue",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "weave-narrative",
@@ -116,18 +72,7 @@
       "description": "Deliver the surprising or significant turn. The fact, finding, or reframing the rest of the talk has been earning. The revelation should redirect, not merely confirm.",
       "instructions": "Deliver a surprising or significant discovery",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "propose-solution",
@@ -135,18 +80,7 @@
       "description": "Advocate for the change you want. Concrete enough to be acted on, broad enough to inspire. Pair the solution with the smallest credible first step.",
       "instructions": "Advocate for change or propose an actionable solution",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "final-question",
@@ -154,18 +88,7 @@
       "description": "Close on a question rather than a summary. The right closing question follows the audience out of the room and into their conversations afterward.",
       "layoutHint": "title-left",
       "instructions": "Finish with a thought-provoking question to stimulate audience thinking",
-      "slideType": "text",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "slideType": "text"
     }
   ]
 }

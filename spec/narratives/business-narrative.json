@@ -25,18 +25,7 @@
       "description": "Engage the audience and set expectations for the next twenty minutes. Tell them you're going to tell them a story — and then start telling it. Avoid a separate agenda slide; the introduction is the first scene.",
       "instructions": "Engage and set expectations",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "setting",
@@ -44,18 +33,7 @@
       "description": "Establish the world the story takes place in: the team, the market, the moment. Just enough context that the challenge will feel meaningful when it arrives.",
       "instructions": "Establish the environment",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "challenge",
@@ -63,18 +41,7 @@
       "description": "Identify the issue at hand. Concrete, specific, attributable. The challenge is the inciting incident — the thing that pulled the rest of the story into motion.",
       "instructions": "Identify the issue at hand",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "tension",
@@ -82,18 +49,7 @@
       "description": "Raise the stakes. What happens if the challenge isn't met? Quantify the cost, name the people affected, surface the trade-offs that make the choice hard. Tension is what makes the audience lean in.",
       "instructions": "Emphasize the stakes",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "solution",
@@ -101,18 +57,7 @@
       "description": "Reveal the strategy or hero of the story. Lead with what changes for the audience or customer when the solution is in place. This is the turn from problem to promise.",
       "instructions": "Present the hero/strategy",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "implementation",
@@ -120,18 +65,7 @@
       "description": "Describe the path to success. Phases, owners, milestones, key bets. Show the audience that the solution has weight behind it — not just intent.",
       "instructions": "Describe the path to success",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "recap",
@@ -139,18 +73,7 @@
       "description": "Bring the audience back to the surface with a clear summary of what was said and decided. Echo the language from the opening so the story feels closed.",
       "instructions": "Review key points and insights",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "conclusion",
@@ -158,18 +81,7 @@
       "description": "Reinforce the key message and the call to action. End on the line you most want repeated in tomorrow's hallway conversations.",
       "layoutHint": "title-left",
       "instructions": "Reinforce key messages and call to action",
-      "slideType": "text",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "slideType": "text"
     }
   ]
 }

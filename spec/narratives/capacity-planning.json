@@ -26,18 +26,7 @@
       "description": "Introduce what the planning exercise covers and the decision you need from the audience. Frame the time horizon and the resources in scope so the rest of the deck stays bounded.",
       "layoutHint": "title-center",
       "instructions": "Introduce the topic",
-      "slideType": "text",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "slideType": "text"
     },
     {
       "id": "urgency",
@@ -45,18 +34,7 @@
       "description": "Show why this is the right moment to plan capacity. Pipeline shifts, hiring freezes, operational stress signals. Urgency turns capacity from an annual ritual into a decision the audience leans into.",
       "instructions": "Show needs",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "situation",
@@ -64,18 +42,7 @@
       "description": "Highlight the current resource picture: people, tools, infrastructure, vendor capacity. Show utilization, not just headcount. The audience should know where slack and stress live today.",
       "instructions": "Highlight current resources",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "projection",
@@ -83,18 +50,7 @@
       "description": "Predict future demand under your base case and a sensitivity case. Tie demand to specific drivers — pipeline, launches, seasonality — so the audience can challenge the assumptions, not just the totals.",
       "instructions": "Predict future demands",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "tactics",
@@ -102,18 +58,7 @@
       "description": "Suggest the strategies for closing any gap: hiring, automation, outsourcing, prioritization. Each tactic should map to a specific demand driver and a defensible cost.",
       "instructions": "Suggest coping strategies",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "implementation",
@@ -121,18 +66,7 @@
       "description": "Discuss how the plan gets deployed. Sequencing, owners, dependencies, lead times. Capacity decisions slip the most when the rollout isn't planned with the same rigor as the sizing.",
       "instructions": "Discuss deployment plans",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "revision",
@@ -140,18 +74,7 @@
       "description": "Define the leading indicators that would trigger a re-plan, and the cadence of review. Capacity plans age fast; show the audience how the plan stays alive.",
       "instructions": "Evaluate and adjust",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "conclusion",
@@ -159,18 +82,7 @@
       "description": "Wrap up with the specific recommendations and the decisions you need today. End with the next checkpoint and what evidence will be on the table at it.",
       "layoutHint": "title-left",
       "instructions": "Wrap-up & recommendations",
-      "slideType": "text",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "slideType": "text"
     }
   ]
 }

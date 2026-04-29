@@ -25,18 +25,7 @@
       "description": "Cover slide with logos and the review period. Establishes brand identity and signals the level of formality the rest of the deck will hold to.",
       "layoutHint": "title-left",
       "instructions": "Identity & representation",
-      "slideType": "text",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "slideType": "text"
     },
     {
       "id": "opening",
@@ -44,18 +33,7 @@
       "description": "Frame the meeting context and the goals for the next hour. What you'll cover, what decisions you want, what you don't intend to relitigate.",
       "instructions": "Meeting context & goals",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "review",
@@ -63,18 +41,7 @@
       "description": "Outline the recent activities in scope: launches, projects, programs. Just enough scope-setting that the rest of the deck has shared vocabulary.",
       "instructions": "Outline recent activities",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "successes",
@@ -82,18 +49,7 @@
       "description": "Recognize the achievements in the review window. Lead with outcomes the audience cares about, not effort. Specific moves earn more credibility than aggregate progress.",
       "instructions": "Recognize achievements",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "challenges",
@@ -101,18 +57,7 @@
       "description": "Address the problems faced honestly. What didn't work, what's still hard. Naming challenges in front of the audience earns more trust than letting them ask.",
       "instructions": "Address problems faced",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "solutions",
@@ -120,18 +65,7 @@
       "description": "Discuss the fixes already implemented. Pair each with the result it produced, or, if it's still in flight, with the leading indicator you're watching.",
       "instructions": "Discuss implemented fixes",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "outcome",
@@ -139,18 +73,7 @@
       "description": "Display the results achieved across the review window. Let the data carry the slide; supporting commentary should explain context, not inflate the numbers.",
       "instructions": "Display results achieved",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "insights",
@@ -158,18 +81,7 @@
       "description": "Highlight the key learnings. What was confirmed, what surprised you, what the audience should take away. Insights are the slides people quote in follow-on meetings.",
       "instructions": "Highlight key learnings",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "future-strategy",
@@ -177,18 +89,7 @@
       "description": "Define the next steps and the strategic direction that follows from the review. Specific enough to sequence; flexible enough to adapt.",
       "instructions": "Define next steps",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "feedback",
@@ -196,18 +97,7 @@
       "description": "Capture audience thoughts. Two or three explicit prompts where you want input or alignment. The strength of a relationship review is in the conversation it provokes.",
       "instructions": "Capture audience thoughts",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "next-review",
@@ -215,18 +105,7 @@
       "description": "Plan for follow-up: when the next review happens, what evidence you'll bring, what decisions are deferred until then. Continuity is the point of the cadence.",
       "instructions": "Plan for follow-up",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "closing",
@@ -234,18 +113,7 @@
       "description": "Recap and express optimism about the path forward. Close with the next concrete step and the people responsible for it.",
       "layoutHint": "title-left",
       "instructions": "Recap and express optimism",
-      "slideType": "text",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "slideType": "text"
     }
   ]
 }

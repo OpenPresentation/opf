@@ -25,18 +25,7 @@
       "description": "Begin respectfully and set a constructive tone. Be clear about what this conversation is and isn't. The opening shouldn't catastrophize or sugarcoat — clarity is kinder than either.",
       "instructions": "Begin respectfully and positively",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "set-expectations",
@@ -44,18 +33,7 @@
       "description": "Detail the level of performance expected in the role. Specific behaviors, deliverables, and standards. Expectations the employee can't quote back are expectations they can't meet.",
       "instructions": "Detail desired performance",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "identify-problems",
@@ -63,18 +41,7 @@
       "description": "Name the gap between expected and observed performance. Use specific examples and dates rather than impressions. Avoid characterizing the person; focus on the work product and the impact.",
       "instructions": "Highlight struggles and weaknesses",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "possible-solutions",
@@ -82,18 +49,7 @@
       "description": "Suggest improvement strategies tailored to the gaps named above. Behavior changes, structural changes, support structures. Frame them as paths the employee can choose, not orders to follow.",
       "instructions": "Suggest improvement strategies",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "offer-resources",
@@ -101,18 +57,7 @@
       "description": "Make explicit what tools, coaching, training, or peer support is available. Resources demonstrate that the organization is investing in the outcome, not setting the employee up to fail.",
       "instructions": "Propose help and tools",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "motivate-change",
@@ -120,18 +65,7 @@
       "description": "Connect improvement to what the employee values: their growth, their team, their career. Inspire action without minimizing the seriousness of the situation.",
       "instructions": "Inspire improvement action",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "follow-up",
@@ -139,18 +73,7 @@
       "description": "Schedule the check-ins. Frequency, format, criteria for progress. Predictable follow-up turns a PIP from a threat into a plan.",
       "instructions": "Schedule progress check-ins",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "conclusion",
@@ -158,18 +81,7 @@
       "description": "Close with confidence in the path forward and a clear restatement of what success looks like. End the meeting having both raised the bar and reaffirmed the relationship.",
       "layoutHint": "title-left",
       "instructions": "Encourage and remind success",
-      "slideType": "text",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "slideType": "text"
     }
   ]
 }

@@ -173,12 +173,28 @@
         true
       ]
     },
+    "slideTag": {
+      "type": "boolean",
+      "description": "Whether the layout includes a small slide-level tag / label region above or near the title.",
+      "examples": [
+        false,
+        true
+      ]
+    },
     "slideTitle": {
       "type": "boolean",
       "description": "Whether the layout includes a slide title region.",
       "examples": [
         true,
         false
+      ]
+    },
+    "slideSubtitle": {
+      "type": "boolean",
+      "description": "Whether the layout includes a slide-level subtitle or supporting-description region.",
+      "examples": [
+        false,
+        true
       ]
     },
     "slideTitleAlignment": {

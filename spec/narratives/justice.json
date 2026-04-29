@@ -26,18 +26,7 @@
       "description": "Set the stage with a moment that earns the audience's full attention. Speak in the moral register the rest of the talk will require. Avoid throat-clearing — open as if the speech were already underway.",
       "instructions": "Set the stage",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "give-context",
@@ -45,18 +34,7 @@
       "description": "Place the issue in its historical and current context. What promises were made, what has and hasn't been kept. Context turns the speech from opinion into accountability.",
       "instructions": "Put in historical and current context",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "highlight-inequality",
@@ -64,18 +42,7 @@
       "description": "Show specific, undeniable examples of the inequality at issue. Concrete moments and people, not abstractions. The audience should feel the gap between what is and what was promised.",
       "instructions": "Show examples of inequality",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "share-dream",
@@ -83,18 +50,7 @@
       "description": "Describe the future you envision in vivid, specific detail. The dream must be both ambitious and recognizable — a world the audience can picture themselves living in.",
       "instructions": "Describe your vision",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "create-urgency",
@@ -102,18 +58,7 @@
       "description": "Explain why the time for change is now. The cost of waiting, the moment that won't return. Urgency converts shared vision into shared movement.",
       "instructions": "Explain the need for immediate change",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "another-dream",
@@ -121,18 +66,7 @@
       "description": "Layer additional visions of the future in parallel structure. Repetition and rhythm build momentum the way a single image cannot.",
       "instructions": "Continue to elaborate on your vision",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "emphasize-unity",
@@ -140,18 +74,7 @@
       "description": "Speak to the collective power of the audience together. Name common ground that crosses lines the issue normally divides. Unity is the engine that turns dream into march.",
       "instructions": "Talk about collective power",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "last-dream",
@@ -159,18 +82,7 @@
       "description": "Deliver one more, fully realized vision of the world you're calling for. Specific enough to be remembered, expansive enough to inspire.",
       "instructions": "Further share dreams of ideal in-depth",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "call-to-action",
@@ -178,18 +90,7 @@
       "description": "Ask the audience to participate in the change. Be specific about what 'doing something' looks like — show, march, give, vote, organize. Vague CTAs produce vague action.",
       "instructions": "Ask audience to participate in change",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "show-determination",
@@ -197,18 +98,7 @@
       "description": "Encourage persistence in the face of resistance. Acknowledge what will be hard. Determination, named honestly, is more durable than easy optimism.",
       "instructions": "Encourage persistence",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "create-hope",
@@ -216,18 +106,7 @@
       "description": "Close on hope grounded in evidence: progress already made, victories already won, ground already moved. Hope as a conclusion lands strongest when it sounds like it has been earned.",
       "layoutHint": "title-left",
       "instructions": "Inspire hope for future",
-      "slideType": "text",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "slideType": "text"
     }
   ]
 }

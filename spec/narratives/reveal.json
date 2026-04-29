@@ -25,18 +25,7 @@
       "description": "Open with a personal experience that establishes why the topic matters to you. Specificity earns intimacy; intimacy earns the audience's permission to be moved.",
       "instructions": "Share personal experiences to connect with the audience",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "research-exposition",
@@ -44,18 +33,7 @@
       "description": "Lay out the scientific or empirical data that backs the premise. Be rigorous but not academic — the audience needs to understand the evidence well enough to defend it later.",
       "instructions": "Unravel scientific data backing the premise",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "real-life-anecdote",
@@ -63,18 +41,7 @@
       "description": "Illustrate the research with a story from the field. Make the abstract finding feel like something that happens to people the audience could imagine being.",
       "instructions": "Illustrate with stories to make the point relatable",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "critical-insights",
@@ -82,18 +49,7 @@
       "description": "Summarize the two or three findings the audience must walk away with. Distill them into language a non-specialist could repeat without distortion.",
       "instructions": "Summarize key points",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "break-stereotypes",
@@ -101,18 +57,7 @@
       "description": "Question redundant norms or beliefs the research undermines. Be specific about what's being challenged so the audience knows what to update.",
       "instructions": "Question redundant norms and belief systems",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "empowering-advice",
@@ -120,18 +65,7 @@
       "description": "Translate the insights into a small, actionable practice. The advice should be doable today, not only next quarter — the goal is movement, not aspiration.",
       "instructions": "Motivational message to act upon",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "authenticity",
@@ -139,18 +73,7 @@
       "description": "Speak honestly about your own struggle with the topic. Vulnerability, used with restraint, is what turns research into a felt truth.",
       "instructions": "Honest and real communication to demonstrate authenticity",
       "slideType": "text",
-      "layoutHint": "text-1x-left",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "layoutHint": "text-1x-left"
     },
     {
       "id": "close-with-impact",
@@ -158,18 +81,7 @@
       "description": "End on a motivational high — the line, image, or invitation you want to follow the audience out of the room. Close the talk where it began, transformed.",
       "layoutHint": "title-left",
       "instructions": "End on a motivational high",
-      "slideType": "text",
-      "options": {
-        "multiple": "2x",
-        "showLabel": true,
-        "showDescription": true
-      },
-      "placeholders": {
-        "tag": false,
-        "title": true,
-        "subtitle": false,
-        "slideImage": false
-      }
+      "slideType": "text"
     }
   ]
 }
