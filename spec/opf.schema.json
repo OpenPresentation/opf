@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://pptx.dev/schema/opf/v1",
   "title": "OPF — Open Presentation Format",
-  "description": "Open-source JSON format for describing PowerPoint presentations. Agents describe narratives, content, audience, and design — the engine handles OOXML complexity.\n\nFields that reference catalog records (meta.narrative, meta.language, meta.tone, meta.audience, design.theme / design.theme.id, design.colorScheme / design.colorScheme.id, design.fontScheme / design.fontScheme.id, Slide.layout, chart.chartPreset, Organization.socials / Speaker.socials) resolve through the catalog system: inline 'catalogs.<kind>.records[]' on the document → 'catalogs.<kind>.source' on the document → engine defaults → the default catalog at https://www.pptx.gallery/<kind>. Every reference resolves to the catalog record's 'id' field. When an OPF document omits a reference entirely, the engine falls back to its 'defaults.json' (see /spec/defaults.json for a reference example). The defaults file is engine configuration; it is not part of the OPF document contract and has no JSON Schema.\n\nMost catalog references accept the bare 'id' as a string for the common case (e.g. meta.narrative = 'classic-story', design.colorScheme = 'cool-horizon'). Design object forms use 'id' as a base catalog reference plus inline overrides.",
+  "description": "Open-source JSON format for describing PowerPoint presentations. Agents describe narratives, content, audience, reusable assets, and design — the engine handles OOXML complexity.\n\nFields that reference catalog records (meta.narrative, meta.language, meta.tone, meta.audience, design.theme / design.theme.id, design.colorScheme / design.colorScheme.id, design.fontScheme / design.fontScheme.id, Slide.layout, chart.chartPreset, Organization.socials / Speaker.socials) resolve through the catalog system: inline 'catalogs.<kind>.records[]' on the document → 'catalogs.<kind>.source' on the document → engine defaults → the default catalog at https://www.pptx.gallery/<kind>. Every reference resolves to the catalog record's 'id' field. When an OPF document omits a reference entirely, the engine falls back to its 'defaults.json' (see /spec/defaults.json for a reference example). The defaults file is engine configuration; it is not part of the OPF document contract and has no JSON Schema.\n\nMost catalog references accept the bare 'id' as a string for the common case (e.g. meta.narrative = 'classic-story', design.colorScheme = 'cool-horizon'). Design object forms use 'id' as a base catalog reference plus inline overrides. Asset references use 'asset:<id>' strings that point into the top-level assets registry.",
   "type": "object",
   "required": ["$schema", "meta", "design", "slides"],
   "properties": {
@@ -17,7 +17,11 @@
     },
     "design": {
       "$ref": "#/$defs/Design",
-      "description": "Design system covering theme, color scheme, font scheme, dimensions, background, brand, and layout preferences applied to the deck."
+      "description": "Design system covering theme, color scheme, font scheme, dimensions, background, logo, watermark, header, and footer applied to the deck."
+    },
+    "assets": {
+      "$ref": "#/$defs/Assets",
+      "description": "Optional reusable asset registry for images, data files, videos, documents, fonts, and other resources referenced elsewhere in the deck via 'asset:<id>' strings."
     },
     "slides": {
       "type": "array",
@@ -135,9 +139,64 @@
         }
       }
     },
+    "Assets": {
+      "type": "object",
+      "description": "Reusable asset registry for resources used by slides, charts, metadata, and design. Keys are stable asset ids referenced elsewhere as 'asset:<id>'. Asset src values accept URLs, data URIs, relative paths resolved against the OPF file location, or local filesystem paths.",
+      "propertyNames": {
+        "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$"
+      },
+      "additionalProperties": { "$ref": "#/$defs/Asset" },
+      "examples": [
+        {
+          "acme-logo": { "type": "image", "src": "./assets/acme-logo.svg" },
+          "watermark": { "type": "image", "src": "./assets/watermark.png" },
+          "revenue": { "type": "data", "src": "./data/revenue.csv", "format": "csv" }
+        }
+      ]
+    },
+    "Asset": {
+      "type": "object",
+      "description": "Reusable external or embedded resource. Use 'mediaType' when the content type cannot be inferred from the src extension or data URI; use 'format' for authoring-level parsing hints such as csv, xlsx, svg, or png.",
+      "required": ["type", "src"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["image", "data", "video", "audio", "document", "font", "other"],
+          "description": "Broad kind of resource."
+        },
+        "src": {
+          "type": "string",
+          "description": "Resource source. Accepts an HTTPS URL, data URI, relative path resolved against the OPF file location, or local filesystem path.",
+          "examples": ["./assets/logo.svg", "https://cdn.acme.com/logo.png", "data:image/svg+xml;base64,...", "/Users/alice/decks/data/revenue.csv"]
+        },
+        "mediaType": {
+          "type": "string",
+          "description": "Optional MIME media type when it cannot be inferred from src.",
+          "examples": ["image/svg+xml", "image/png", "text/csv", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"]
+        },
+        "format": {
+          "type": "string",
+          "description": "Optional authoring/parsing format hint. Useful for data and image assets where format is more convenient than a full MIME media type.",
+          "examples": ["csv", "tsv", "json", "xlsx", "svg", "png", "jpg", "webp"]
+        },
+        "title": {
+          "type": "string",
+          "description": "Human-readable asset title for editors and asset pickers."
+        },
+        "description": {
+          "type": "string",
+          "description": "Optional notes about the asset's contents, provenance, or intended use."
+        }
+      }
+    },
+    "AssetSource": {
+      "type": "string",
+      "description": "Source string for a renderable or data resource. Accepts an HTTPS URL, data URI, relative path resolved against the OPF file location, local filesystem path, or 'asset:<id>' reference to the top-level assets registry.",
+      "examples": ["asset:acme-logo", "https://cdn.acme.com/image.png", "./assets/image.png", "data:image/png;base64,..."]
+    },
     "Organization": {
       "type": "object",
-      "description": "An organization associated with the presentation — typically the presenting company, but also hosts, partners, clients, or sponsors. Surfaced on cover slides, footers, and brand bars; the primary organization's logo is the default for design.brand.logo unless overridden.",
+      "description": "An organization associated with the presentation — typically the presenting company, but also hosts, partners, clients, or sponsors. Surfaced on cover slides, footers, and brand bars; the primary organization's logo is the default deck logo unless overridden by design.logo.",
       "required": ["id", "name"],
       "properties": {
         "id": {
@@ -157,13 +216,13 @@
           "examples": ["Acme Corporation, Inc.", "Beta Industries, LLC"]
         },
         "logo": {
-          "type": "string",
-          "description": "Source for the organization's logo image. Accepts an HTTPS URL, data URI, relative path (resolved against the OPF file location), or asset reference. Common formats are SVG (preferred for vector logos), PNG (with transparency), or JPG. The primary organization's logo is used by default for cover-slide and footer branding; design.brand.logo overrides the source.",
+          "$ref": "#/$defs/AssetSource",
+          "description": "Source for the organization's logo image. Accepts an HTTPS URL, data URI, relative path (resolved against the OPF file location), local path, or 'asset:<id>' reference. Common formats are SVG (preferred for vector logos), PNG (with transparency), or JPG. The primary organization's logo is used by default for cover-slide and footer branding; design.logo overrides the source.",
           "examples": [
             "https://cdn.acme.com/logo.svg",
             "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9V3iWggAAAAASUVORK5CYII=",
             "./assets/logo.jpg",
-            "asset_acme_logo"
+            "asset:acme-logo"
           ]
         },
         "domain": {
@@ -220,13 +279,13 @@
           "examples": ["VP of Engineering", "Founder & CEO", "Chief Product Officer", "Senior Staff Engineer"]
         },
         "photo": {
-          "type": "string",
-          "description": "Source for the speaker's headshot image. Accepts an HTTPS URL, data URI, relative path (resolved against the OPF file location), or asset reference. Common formats are JPG or PNG; SVG is not appropriate for photographic content. Used on cover and bio slides.",
+          "$ref": "#/$defs/AssetSource",
+          "description": "Source for the speaker's headshot image. Accepts an HTTPS URL, data URI, relative path (resolved against the OPF file location), local path, or 'asset:<id>' reference. Common formats are JPG or PNG; SVG is not appropriate for photographic content. Used on cover and bio slides.",
           "examples": [
             "https://cdn.acme.com/headshots/alice.jpg",
             "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAr/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFAEBAAAAAAAAAAAAAAAAAAAAAP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AJ//2Q==",
             "./assets/photos/alice.png",
-            "asset_photo_alice"
+            "asset:photo-alice"
           ]
         },
         "email": {
@@ -476,13 +535,44 @@
           "description": "Default slide background applied across the deck unless overridden on a slide. String shorthand accepts theme slots ('light1', 'light2', 'dark1', 'dark2') or hex colors; object forms support theme, solid, gradient, image, or pattern fills.",
           "examples": ["dark1", "#ffff00", { "type": "theme", "slot": "light1" }]
         },
-        "brand": {
-          "$ref": "#/$defs/Brand",
-          "description": "Visual brand assets applied to slides (watermark, and an optional logo override). Organization identity (name, primary logo) lives in meta.organizations; design.brand only overrides visual rendering."
+        "logo": {
+          "oneOf": [
+            { "$ref": "#/$defs/AssetSource" },
+            { "$ref": "#/$defs/LogoSet" }
+          ],
+          "description": "Deck logo assets used by layouts, covers, section dividers, headers, and footers. A string is the default logo source; object form provides light/dark, stacked, icon, and wordmark variants. When omitted, the renderer falls back to meta.organizations[primary].logo.",
+          "examples": [
+            "asset:acme-logo",
+            { "default": "asset:acme-logo", "light": "asset:acme-logo-white", "icon": "asset:acme-icon" }
+          ]
         },
-        "layoutPreferences": {
-          "$ref": "#/$defs/LayoutPreferences",
-          "description": "Hints that influence layout decisions across slides."
+        "watermark": {
+          "oneOf": [
+            { "type": "boolean", "const": false },
+            { "$ref": "#/$defs/AssetSource" },
+            { "$ref": "#/$defs/Watermark" }
+          ],
+          "description": "Optional decorative watermark applied across slides. Use false to suppress an inherited watermark in slide-level designOverrides; a string is equivalent to { src: value }.",
+          "examples": [false, "asset:watermark", { "src": "asset:watermark", "opacity": 0.08 }]
+        },
+        "header": {
+          "oneOf": [
+            { "type": "boolean", "const": false },
+            { "$ref": "#/$defs/HeaderFooter" }
+          ],
+          "description": "Repeated header furniture rendered outside the main slide content. Use false to suppress an inherited header.",
+          "examples": [false, { "left": { "section": true }, "right": { "image": "asset:acme-logo" } }]
+        },
+        "footer": {
+          "oneOf": [
+            { "type": "boolean", "const": false },
+            { "$ref": "#/$defs/HeaderFooter" }
+          ],
+          "description": "Repeated footer furniture rendered outside the main slide content. Use false to suppress an inherited footer.",
+          "examples": [
+            false,
+            { "left": { "image": "asset:acme-logo" }, "center": { "text": "Confidential" }, "right": { "slideNumber": true } }
+          ]
         }
       }
     },
@@ -893,13 +983,13 @@
           "required": ["src"],
           "properties": {
             "src": {
-              "type": "string",
-              "description": "Source for the background image. Accepts an HTTPS URL, data URI, relative path (resolved against the OPF file location), or asset reference.",
+              "$ref": "#/$defs/AssetSource",
+              "description": "Source for the background image.",
               "examples": [
                 "https://cdn.acme.com/backgrounds/cover.jpg",
                 "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA...",
                 "./backgrounds/cover.jpg",
-                "asset_bg_cover"
+                "asset:bg-cover"
               ]
             },
             "fit": {
@@ -957,146 +1047,67 @@
         }
       }
     },
-    "Brand": {
+    "LogoSet": {
       "type": "object",
-      "description": "Visual brand assets surfaced across slides. Organization identity (name, primary logo) lives in meta.organizations; this object only carries visual overrides and decorative marks. All logo / icon / wordmark fields are bare source strings — placement and sizing are determined by slide layouts, not by this object.\n\nThe schema offers three asset types (logo, icon, wordmark) plus a decorative watermark, and for each, two themed variants (Light, Dark). The logo additionally supports a 'Stacked' aspect (icon-over-wordmark, suited to vertical / square slots). Naming follows brand-asset-library convention:\n\n- 'Light' = light-colored variant (e.g., white SVG), intended for rendering on dark backgrounds.\n- 'Dark' = dark-colored variant (e.g., black SVG), intended for rendering on light backgrounds.\n- 'Stacked' = vertical lockup with the icon stacked above the wordmark; the unsuffixed forms are assumed to be horizontal lockups.\n- The unsuffixed field (logo / icon / wordmark / watermark) is the default fallback when no themed variant is needed.\n\nEngine resolution: on a dark slide background, prefer the '*Light' variant; on a light slide background, prefer the '*Dark' variant; for vertical / square brand-mark slots, prefer the 'logoStacked*' family over the horizontal logo; otherwise fall back to the unsuffixed asset and (for the logo) ultimately to meta.organizations[primary].logo.",
+      "description": "Deck logo variants surfaced by layouts, covers, section dividers, headers, and footers. Organization identity lives in meta.organizations; this object only controls visual rendering assets. Renderer convention: on dark backgrounds prefer the 'light' variant, on light backgrounds prefer the 'dark' variant, and in square/vertical slots prefer the stacked family when present.",
       "properties": {
-        "logo": {
-          "type": "string",
-          "description": "Default full-lockup logo. Optional override of meta.organizations[primary].logo. Used as the fallback when a themed (Light/Dark) variant isn't set. Accepts an HTTPS URL, data URI, relative path, or asset reference.",
-          "examples": [
-            "https://cdn.acme.com/logo.svg",
-            "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9V3iWggAAAAASUVORK5CYII=",
-            "./assets/logo.png",
-            "asset_brand_logo"
-          ]
+        "default": {
+          "$ref": "#/$defs/AssetSource",
+          "description": "Default full-lockup logo. Used as fallback when no more specific variant is set."
         },
-        "logoLight": {
-          "type": "string",
-          "description": "Light-colored full-lockup logo (e.g., white SVG) intended for rendering on dark backgrounds. Accepts an HTTPS URL, data URI, relative path, or asset reference.",
-          "examples": [
-            "https://cdn.acme.com/logo-white.svg",
-            "./assets/logo-white.png",
-            "asset_brand_logo_light"
-          ]
+        "light": {
+          "$ref": "#/$defs/AssetSource",
+          "description": "Light-colored full-lockup logo intended for rendering on dark backgrounds."
         },
-        "logoDark": {
-          "type": "string",
-          "description": "Dark-colored full-lockup logo (e.g., black SVG) intended for rendering on light backgrounds. Accepts an HTTPS URL, data URI, relative path, or asset reference.",
-          "examples": [
-            "https://cdn.acme.com/logo-black.svg",
-            "./assets/logo-black.png",
-            "asset_brand_logo_dark"
-          ]
+        "dark": {
+          "$ref": "#/$defs/AssetSource",
+          "description": "Dark-colored full-lockup logo intended for rendering on light backgrounds."
         },
-        "logoStacked": {
-          "type": "string",
-          "description": "Stacked (vertical) lockup of the logo, with the icon above the wordmark. Suited to portrait / square brand-mark slots such as some cover layouts and section dividers. Falls back to 'logo' when not set. Accepts an HTTPS URL, data URI, relative path, or asset reference.",
-          "examples": [
-            "https://cdn.acme.com/logo-stacked.svg",
-            "./assets/logo-stacked.png",
-            "asset_brand_logo_stacked"
-          ]
+        "stacked": {
+          "$ref": "#/$defs/AssetSource",
+          "description": "Stacked vertical logo lockup, suited to portrait or square brand-mark slots."
         },
-        "logoStackedLight": {
-          "type": "string",
-          "description": "Light-colored stacked logo variant (e.g., white SVG) intended for rendering on dark backgrounds.",
-          "examples": [
-            "https://cdn.acme.com/logo-stacked-white.svg",
-            "./assets/logo-stacked-white.png",
-            "asset_brand_logo_stacked_light"
-          ]
+        "stackedLight": {
+          "$ref": "#/$defs/AssetSource",
+          "description": "Light-colored stacked logo variant intended for rendering on dark backgrounds."
         },
-        "logoStackedDark": {
-          "type": "string",
-          "description": "Dark-colored stacked logo variant (e.g., black SVG) intended for rendering on light backgrounds.",
-          "examples": [
-            "https://cdn.acme.com/logo-stacked-black.svg",
-            "./assets/logo-stacked-black.png",
-            "asset_brand_logo_stacked_dark"
-          ]
+        "stackedDark": {
+          "$ref": "#/$defs/AssetSource",
+          "description": "Dark-colored stacked logo variant intended for rendering on light backgrounds."
         },
         "icon": {
-          "type": "string",
-          "description": "Default icon / mark / symbol (no wordmark). Useful for tight spaces such as footers, badges, and slide-corner marks. Accepts an HTTPS URL, data URI, relative path, or asset reference.",
-          "examples": [
-            "https://cdn.acme.com/icon.svg",
-            "./assets/icon.png",
-            "asset_brand_icon"
-          ]
+          "$ref": "#/$defs/AssetSource",
+          "description": "Default icon, mark, or symbol without wordmark. Useful for tight spaces such as footers, badges, and slide-corner marks."
         },
         "iconLight": {
-          "type": "string",
-          "description": "Light-colored icon variant (e.g., white SVG) intended for rendering on dark backgrounds.",
-          "examples": [
-            "https://cdn.acme.com/icon-white.svg",
-            "./assets/icon-white.png",
-            "asset_brand_icon_light"
-          ]
+          "$ref": "#/$defs/AssetSource",
+          "description": "Light-colored icon variant intended for rendering on dark backgrounds."
         },
         "iconDark": {
-          "type": "string",
-          "description": "Dark-colored icon variant (e.g., black SVG) intended for rendering on light backgrounds.",
-          "examples": [
-            "https://cdn.acme.com/icon-black.svg",
-            "./assets/icon-black.png",
-            "asset_brand_icon_dark"
-          ]
+          "$ref": "#/$defs/AssetSource",
+          "description": "Dark-colored icon variant intended for rendering on light backgrounds."
         },
         "wordmark": {
-          "type": "string",
-          "description": "Default wordmark — the company name set in its branded typography, with no icon. Often used on cover and section-divider slides. Accepts an HTTPS URL, data URI, relative path, or asset reference.",
-          "examples": [
-            "https://cdn.acme.com/wordmark.svg",
-            "./assets/wordmark.png",
-            "asset_brand_wordmark"
-          ]
+          "$ref": "#/$defs/AssetSource",
+          "description": "Default wordmark: the organization name set in branded typography, without icon."
         },
         "wordmarkLight": {
-          "type": "string",
-          "description": "Light-colored wordmark variant (e.g., white SVG) intended for rendering on dark backgrounds.",
-          "examples": [
-            "https://cdn.acme.com/wordmark-white.svg",
-            "./assets/wordmark-white.png",
-            "asset_brand_wordmark_light"
-          ]
+          "$ref": "#/$defs/AssetSource",
+          "description": "Light-colored wordmark variant intended for rendering on dark backgrounds."
         },
         "wordmarkDark": {
-          "type": "string",
-          "description": "Dark-colored wordmark variant (e.g., black SVG) intended for rendering on light backgrounds.",
-          "examples": [
-            "https://cdn.acme.com/wordmark-black.svg",
-            "./assets/wordmark-black.png",
-            "asset_brand_wordmark_dark"
-          ]
-        },
-        "watermark": {
-          "$ref": "#/$defs/BrandWatermark",
-          "description": "Default decorative watermark applied across slides. Used as the fallback when a themed (Light/Dark) variant isn't set."
-        },
-        "watermarkLight": {
-          "$ref": "#/$defs/BrandWatermark",
-          "description": "Light-colored watermark variant intended for rendering on dark backgrounds."
-        },
-        "watermarkDark": {
-          "$ref": "#/$defs/BrandWatermark",
-          "description": "Dark-colored watermark variant intended for rendering on light backgrounds."
+          "$ref": "#/$defs/AssetSource",
+          "description": "Dark-colored wordmark variant intended for rendering on light backgrounds."
         }
       }
     },
-    "BrandWatermark": {
+    "Watermark": {
       "type": "object",
-      "description": "Decorative watermark image and its rendering opacity. Reused by Brand.watermark, Brand.watermarkLight, and Brand.watermarkDark.",
+      "description": "Decorative watermark image and rendering options. Use design.watermark = false to disable an inherited watermark.",
       "properties": {
         "src": {
-          "type": "string",
-          "description": "Source for the watermark image. Accepts an HTTPS URL, data URI, relative path (resolved against the OPF file location), or asset reference.",
-          "examples": [
-            "https://cdn.acme.com/watermark.png",
-            "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9V3iWggAAAAASUVORK5CYII=",
-            "./assets/watermark.png",
-            "asset_brand_watermark"
-          ]
+          "$ref": "#/$defs/AssetSource",
+          "description": "Source for the watermark image."
         },
         "opacity": {
           "type": "number",
@@ -1106,27 +1117,56 @@
         }
       }
     },
-    "LayoutPreferences": {
+    "HeaderFooter": {
       "type": "object",
-      "description": "Hints that influence default layout decisions across slides.",
+      "description": "Repeated header or footer content split into left, center, and right zones. Header/footer content is slide furniture, separate from the main slide elements.",
       "properties": {
-        "density": {
+        "left": {
+          "$ref": "#/$defs/HeaderFooterItem",
+          "description": "Left-aligned header/footer content."
+        },
+        "center": {
+          "$ref": "#/$defs/HeaderFooterItem",
+          "description": "Centered header/footer content."
+        },
+        "right": {
+          "$ref": "#/$defs/HeaderFooterItem",
+          "description": "Right-aligned header/footer content."
+        }
+      }
+    },
+    "HeaderFooterItem": {
+      "type": "object",
+      "description": "One header/footer zone. Fields may be combined when the renderer supports it; otherwise renderers should prefer image, then text-like generated content.",
+      "properties": {
+        "text": {
           "type": "string",
-          "enum": ["minimal", "balanced", "dense"],
-          "description": "Default content density across slides."
+          "description": "Literal text rendered in this zone.",
+          "examples": ["Confidential", "Q4 Business Review"]
         },
-        "alignment": {
-          "type": "string",
-          "enum": ["left", "center", "right"],
-          "description": "Default horizontal alignment for slide content."
+        "image": {
+          "$ref": "#/$defs/AssetSource",
+          "description": "Generic image rendered in this zone, such as a logo, partner mark, certification badge, or icon.",
+          "examples": ["asset:acme-logo", "./assets/footer-badge.svg"]
         },
-        "animations": {
+        "slideNumber": {
           "type": "boolean",
-          "description": "Whether to enable element animations by default."
+          "description": "Whether to render the current slide number in this zone."
         },
-        "slideNumbers": {
+        "date": {
+          "oneOf": [
+            { "type": "boolean" },
+            { "type": "string" }
+          ],
+          "description": "Whether to render the presentation date, or a literal date string to render."
+        },
+        "organization": {
           "type": "boolean",
-          "description": "Whether to render slide numbers."
+          "description": "Whether to render the primary organization name from meta.organizations."
+        },
+        "section": {
+          "type": "boolean",
+          "description": "Whether to render the current slide section label."
         }
       }
     },
@@ -1298,13 +1338,13 @@
             "required": ["src"],
             "properties": {
               "src": {
-                "type": "string",
-                "description": "Source for the image. Accepts an HTTPS URL, data URI, relative path (resolved against the OPF file location), or asset reference.",
+                "$ref": "#/$defs/AssetSource",
+                "description": "Source for the image.",
                 "examples": [
                   "https://cdn.acme.com/images/diagram.png",
                   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9V3iWggAAAAASUVORK5CYII=",
                   "./images/diagram.png",
-                  "asset_img_diagram"
+                  "asset:img-diagram"
                 ]
               },
               "alt": {
@@ -1357,8 +1397,11 @@
                 "examples": ["column", "clustered-column", "stacked-column", "doughnut", "bullet-column", "box-and-whisker", "https://acme.com/decks/charts/branded-column.json", "pkg:@acme/decks/charts/branded-column"]
               },
               "data": {
-                "$ref": "#/$defs/ChartData",
-                "description": "Chart data, including labels and datasets."
+                "oneOf": [
+                  { "$ref": "#/$defs/ChartData" },
+                  { "$ref": "#/$defs/ChartDataAsset" }
+                ],
+                "description": "Chart data, either inline labels/datasets or a reference to a top-level data asset with column mapping."
               },
               "options": {
                 "$ref": "#/$defs/ChartOptions",
@@ -1691,6 +1734,73 @@
               "type": {
                 "type": "string",
                 "description": "Per-dataset chart type override (used by combo charts).",
+                "examples": ["line", "column", "area"]
+              }
+            }
+          }
+        }
+      }
+    },
+    "ChartDataAsset": {
+      "type": "object",
+      "description": "Chart data sourced from a top-level data asset such as CSV, TSV, JSON, or XLSX. The mapping describes how columns or fields become chart labels and datasets.",
+      "required": ["asset"],
+      "properties": {
+        "asset": {
+          "type": "string",
+          "description": "Asset id from the top-level assets registry. The referenced asset should have type 'data'.",
+          "examples": ["revenue", "pipeline-csv"]
+        },
+        "sheet": {
+          "type": "string",
+          "description": "Optional sheet name or table name for spreadsheet-like assets.",
+          "examples": ["Sheet1", "Revenue"]
+        },
+        "range": {
+          "type": "string",
+          "description": "Optional A1-style range or engine-defined range selector for spreadsheet-like assets.",
+          "examples": ["A1:D8", "Revenue!A1:D8"]
+        },
+        "mapping": {
+          "$ref": "#/$defs/ChartDataMapping",
+          "description": "Column or field mapping used to populate the chart from the asset."
+        }
+      }
+    },
+    "ChartDataMapping": {
+      "type": "object",
+      "description": "Mapping from tabular data columns or object fields to chart labels and datasets.",
+      "properties": {
+        "labels": {
+          "type": "string",
+          "description": "Column or field name containing category labels.",
+          "examples": ["Quarter", "Month", "Region"]
+        },
+        "datasets": {
+          "type": "array",
+          "description": "Dataset mappings from columns or fields.",
+          "items": {
+            "type": "object",
+            "required": ["values"],
+            "properties": {
+              "label": {
+                "type": "string",
+                "description": "Legend label for this dataset. When omitted, renderers may use the values column name.",
+                "examples": ["Revenue", "Pipeline"]
+              },
+              "values": {
+                "type": "string",
+                "description": "Column or field name containing numeric values for this dataset.",
+                "examples": ["Revenue", "ARR", "Value"]
+              },
+              "color": {
+                "type": "string",
+                "description": "Override color for this dataset as a hex string.",
+                "examples": ["#1E40AF", "#22D3EE"]
+              },
+              "type": {
+                "type": "string",
+                "description": "Per-dataset chart type override for combo charts.",
                 "examples": ["line", "column", "area"]
               }
             }

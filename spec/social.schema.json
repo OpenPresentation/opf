@@ -125,7 +125,7 @@
       "examples": [
         "https://www.pptx.gallery/socials/linkedin.svg",
         "./assets/socials/linkedin.svg",
-        "asset_social_linkedin"
+        "asset:social-linkedin"
       ]
     },
     "iconLight": {
