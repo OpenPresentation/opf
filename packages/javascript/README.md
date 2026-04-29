@@ -72,7 +72,7 @@ for (const record of audiences) {
 Raw canonical JSON is published under `spec/`:
 
 ```ts
-import presentationSchema from "@dataadvantage/opf/spec/opf.schema.json" with {
+import presentationSchema from "@dataadvantage/opf/spec/presentation.schema.json" with {
   type: "json",
 };
 ```

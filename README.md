@@ -82,7 +82,7 @@ import type { Presentation } from "@dataadvantage/opf/types";
 Use raw JSON when an engine or resolver needs package-addressable files:
 
 ```ts
-import presentationSchema from "@dataadvantage/opf/spec/opf.schema.json" with {
+import presentationSchema from "@dataadvantage/opf/spec/presentation.schema.json" with {
   type: "json",
 };
 ```
@@ -100,7 +100,7 @@ node packages/cli/dist/index.js validate path/to/deck.opf.json
 
 | Path | Contents |
 |---|---|
-| [`spec/opf.schema.json`](./spec/opf.schema.json) | Canonical JSON Schema for top-level OPF `Presentation` documents. |
+| [`spec/presentation.schema.json`](./spec/presentation.schema.json) | Canonical JSON Schema for top-level OPF `Presentation` documents. |
 | [`spec/*.schema.json`](./spec) | Companion schemas for catalog records and sub-objects. |
 | [`spec/<catalog-kind>/`](./spec) | Canonical bundled catalog records. |
 | [`packages/javascript/`](./packages/javascript) | Private pre-release source for `@dataadvantage/opf`. |

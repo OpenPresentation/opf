@@ -105,7 +105,7 @@
   "$defs": {
     "Beat": {
       "type": "object",
-      "description": "A single narrative beat — a labeled segment of the story arc with a specific dramatic purpose. Mirrors the NarrativeBeat definition in opf.schema.json so library entries and inline OPF beats are interchangeable.",
+      "description": "A single narrative beat — a labeled segment of the story arc with a specific dramatic purpose. Mirrors the NarrativeBeat definition in presentation.schema.json so library entries and inline OPF beats are interchangeable.",
       "required": [
         "id",
         "name"

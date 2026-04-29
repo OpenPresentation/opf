@@ -38,5 +38,5 @@ for (const entry of catalogEntries) {
 }
 
 const require = createRequire(import.meta.url);
-const rawPresentation = require("../dist/spec/opf.schema.json");
+const rawPresentation = require("../dist/spec/presentation.schema.json");
 assert.equal(rawPresentation.$id, presentation.$id);

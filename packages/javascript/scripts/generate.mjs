@@ -11,7 +11,7 @@ const generatedRoot = path.join(packageRoot, "src", "generated");
 const generatedTypesRoot = path.join(generatedRoot, "types");
 
 const schemaDefinitions = [
-  { name: "presentation", typeName: "Presentation", file: "opf.schema.json" },
+  { name: "presentation", typeName: "Presentation", file: "presentation.schema.json" },
   { name: "audience", typeName: "Audience", file: "audience.schema.json" },
   { name: "tone", typeName: "Tone", file: "tone.schema.json" },
   { name: "theme", typeName: "Theme", file: "theme.schema.json" },
