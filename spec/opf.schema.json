@@ -453,7 +453,7 @@
         },
         "background": {
           "$ref": "#/$defs/Background",
-          "description": "Default slide background applied across the deck unless overridden on a slide."
+          "description": "Default slide background applied across the deck unless overridden on a slide. Theme backgrounds use PowerPoint's four color-scheme background slots; fixed backgrounds use explicit solid, gradient, image, or pattern fills."
         },
         "brand": {
           "$ref": "#/$defs/Brand",
@@ -675,24 +675,72 @@
         }
       }
     },
+    "ThemeBackgroundSlot": {
+      "type": "string",
+      "description": "PowerPoint theme-controlled slide background slot from the active color scheme. These are slots, not assumptions about actual colors: light1 is usually white and dark1 is usually black by convention, but the color scheme controls the real values.",
+      "enum": ["light1", "light2", "dark1", "dark2"]
+    },
     "Background": {
+      "description": "Background fill applied to slides. Theme backgrounds preserve PowerPoint's color-scheme background choice; other variants represent fixed background fills.",
+      "oneOf": [
+        { "$ref": "#/$defs/ThemeBackground" },
+        { "$ref": "#/$defs/SolidBackground" },
+        { "$ref": "#/$defs/GradientBackground" },
+        { "$ref": "#/$defs/ImageBackground" },
+        { "$ref": "#/$defs/PatternBackground" }
+      ]
+    },
+    "ThemeBackground": {
       "type": "object",
-      "description": "Background fill applied to slides.",
-      "required": ["type"],
+      "description": "Theme-controlled PowerPoint slide background. The slot is resolved through the active color scheme and remains theme-aware.",
+      "required": ["type", "slot"],
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["solid", "gradient", "image", "pattern"],
-          "description": "Background fill type."
+          "const": "theme",
+          "description": "Theme-controlled background fill."
+        },
+        "slot": {
+          "$ref": "#/$defs/ThemeBackgroundSlot"
+        }
+      }
+    },
+    "SolidBackground": {
+      "type": "object",
+      "description": "Fixed solid slide background fill.",
+      "required": ["type", "color"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "solid",
+          "description": "Fixed solid background fill."
         },
         "color": {
           "type": "string",
-          "description": "Solid fill color (used when type is 'solid'). Accepts either a hex string ('#0F172A') or a theme-color token resolved against the active color scheme: 'light1', 'light2', 'dark1', 'dark2', 'accent1'–'accent6', 'hyperlink', or 'followedHyperlink'. Tokens are resolved at render time and pick up theme overrides automatically.",
-          "examples": ["#FFFFFF", "#0F172A", "#F8FAFC", "light1", "dark2", "accent1"]
+          "description": "Fixed solid fill color, usually a hex string. Use { type: 'theme', slot: ... } for PowerPoint's four theme-controlled background choices.",
+          "examples": ["#FFFFFF", "#0F172A", "#F8FAFC"]
+        },
+        "opacity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Background opacity from 0 (fully transparent) to 1 (fully opaque)."
+        }
+      }
+    },
+    "GradientBackground": {
+      "type": "object",
+      "description": "Fixed gradient slide background fill.",
+      "required": ["type", "gradient"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "gradient",
+          "description": "Fixed gradient background fill."
         },
         "gradient": {
           "type": "object",
-          "description": "Gradient fill definition (used when type is 'gradient').",
+          "description": "Gradient fill definition.",
           "properties": {
             "angle": {
               "type": "number",
@@ -722,9 +770,27 @@
             }
           }
         },
+        "opacity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Background opacity from 0 (fully transparent) to 1 (fully opaque)."
+        }
+      }
+    },
+    "ImageBackground": {
+      "type": "object",
+      "description": "Fixed image slide background fill.",
+      "required": ["type", "image"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "image",
+          "description": "Fixed image background fill."
+        },
         "image": {
           "type": "object",
-          "description": "Image fill definition (used when type is 'image').",
+          "description": "Image fill definition.",
           "required": ["src"],
           "properties": {
             "src": {
@@ -741,6 +807,46 @@
               "type": "string",
               "enum": ["cover", "contain", "tile"],
               "description": "How the image fills the slide background."
+            }
+          }
+        },
+        "opacity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Background opacity from 0 (fully transparent) to 1 (fully opaque)."
+        }
+      }
+    },
+    "PatternBackground": {
+      "type": "object",
+      "description": "Fixed pattern slide background fill.",
+      "required": ["type", "pattern"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "pattern",
+          "description": "Fixed pattern background fill."
+        },
+        "pattern": {
+          "type": "object",
+          "description": "Pattern fill definition.",
+          "required": ["preset"],
+          "properties": {
+            "preset": {
+              "type": "string",
+              "description": "Pattern preset or engine-defined pattern id.",
+              "examples": ["pct5", "ltHorz", "diagStripe"]
+            },
+            "foregroundColor": {
+              "type": "string",
+              "description": "Foreground color for the pattern, usually a hex string.",
+              "examples": ["#0F172A"]
+            },
+            "backgroundColor": {
+              "type": "string",
+              "description": "Background color behind the pattern, usually a hex string.",
+              "examples": ["#FFFFFF"]
             }
           }
         },

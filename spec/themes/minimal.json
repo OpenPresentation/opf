@@ -2,7 +2,10 @@
   "$schema": "https://pptx.dev/schema/opf-theme/v1",
   "id": "minimal",
   "name": "Minimal",
-  "background": "dark2",
+  "background": {
+    "type": "theme",
+    "slot": "dark2"
+  },
   "colorScheme": "cool-horizon",
   "description": "A clean, minimalistic theme with a focus on simplicity and readability. Ideal for professional, straightforward presentations.",
   "fontScheme": "aptos",

@@ -2,7 +2,10 @@
   "$schema": "https://pptx.dev/schema/opf-theme/v1",
   "id": "classic",
   "name": "Classic",
-  "background": "light1",
+  "background": {
+    "type": "theme",
+    "slot": "light1"
+  },
   "colorScheme": "cool-horizon",
   "description": "A timeless, clean, and versatile theme with balanced color contrasts and classic typography. Ideal for professional, readable presentations.",
   "fontScheme": "tenorite",

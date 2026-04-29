@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://pptx.dev/schema/opf-theme/v1",
   "title": "OPF Theme",
-  "description": "Schema for theme records in the pptx.gallery library. Each theme is a small, named bundle that pairs a color scheme, a font scheme, a default background slot, and a slide size. Themes are referenced from OPF documents via design.theme; the engine resolves the reference against catalogs.themes (inline) → catalogs.themes.source → the default catalog at https://www.pptx.gallery/themes. Inline overrides on design.colors / design.fonts / design.background / design.dimensions take precedence over a resolved theme.",
+  "description": "Schema for theme records in the pptx.gallery library. Each theme is a small, named bundle that pairs a color scheme, a font scheme, a default theme-controlled background, and a slide size. Themes are referenced from OPF documents via design.theme; the engine resolves the reference against catalogs.themes (inline) → catalogs.themes.source → the default catalog at https://www.pptx.gallery/themes. Inline overrides on design.colors / design.fonts / design.background / design.dimensions take precedence over a resolved theme.",
   "type": "object",
   "required": [
     "$schema",
@@ -71,14 +71,7 @@
       ]
     },
     "background": {
-      "type": "string",
-      "description": "Default background slot from the active color scheme. The engine resolves this against the theme's color scheme to a hex value.",
-      "enum": [
-        "light1",
-        "light2",
-        "dark1",
-        "dark2"
-      ]
+      "$ref": "#/$defs/ThemeBackground"
     },
     "dimensions": {
       "type": "string",
@@ -137,6 +130,36 @@
           "examples": [
             "https://www.pptx.gallery/themes/minimal.svg"
           ]
+        }
+      }
+    }
+  },
+  "$defs": {
+    "ThemeBackgroundSlot": {
+      "type": "string",
+      "description": "PowerPoint theme-controlled slide background slot from the active color scheme. These are slots, not assumptions about actual colors: light1 is usually white and dark1 is usually black by convention, but the color scheme controls the real values.",
+      "enum": [
+        "light1",
+        "light2",
+        "dark1",
+        "dark2"
+      ]
+    },
+    "ThemeBackground": {
+      "type": "object",
+      "description": "Theme-controlled PowerPoint slide background. The slot is resolved through the active color scheme and remains theme-aware.",
+      "required": [
+        "type",
+        "slot"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "theme",
+          "description": "Theme-controlled background fill."
+        },
+        "slot": {
+          "$ref": "#/$defs/ThemeBackgroundSlot"
         }
       }
     }

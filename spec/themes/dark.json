@@ -2,7 +2,10 @@
   "$schema": "https://pptx.dev/schema/opf-theme/v1",
   "id": "dark",
   "name": "Dark",
-  "background": "dark1",
+  "background": {
+    "type": "theme",
+    "slot": "dark1"
+  },
   "colorScheme": "boost",
   "description": "A rich dark-mode theme with bold contrast and modern style. Great for moody, high-impact presentations.",
   "fontScheme": "seaford",

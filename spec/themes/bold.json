@@ -2,7 +2,10 @@
   "$schema": "https://pptx.dev/schema/opf-theme/v1",
   "id": "bold",
   "name": "Bold",
-  "background": "light1",
+  "background": {
+    "type": "theme",
+    "slot": "light1"
+  },
   "colorScheme": "burnt-orange",
   "description": "A vibrant, high-energy theme with bold colors and a dynamic, attention-grabbing style. Great for presentations that need to stand out.",
   "fontScheme": "impact",
