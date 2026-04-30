@@ -1,23 +1,25 @@
 {
   "$schema": "https://pptx.dev/schema/opf-layout/v1",
   "id": "list-5x",
-  "name": "List_5x",
-  "label": "List 5x",
-  "contentAlignment": "Center",
-  "contentBox": false,
-  "contentMultiple": "5x",
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "None",
-  "contentTypeListBullet": "Character",
-  "contentTypeListHeading": false,
-  "contentType": "List",
-  "groupDefault": false,
-  "groupHash": "8bc9f162421acef05a8fa95614b25b4fc1d4ba946af4d72b2d7a2ae2b1d556e1",
-  "master": "Dark",
-  "masterSlideIndex": 300,
-  "slideImage": false,
-  "slideImageAlignment": "None",
-  "slideLayoutDirection": "Horizontal",
-  "slideTitle": false,
-  "slideTitleAlignment": "None"
+  "name": "List 5x",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "content"
+    },
+    {
+      "type": "content"
+    },
+    {
+      "type": "content"
+    },
+    {
+      "type": "content"
+    },
+    {
+      "type": "content"
+    }
+  ]
 }

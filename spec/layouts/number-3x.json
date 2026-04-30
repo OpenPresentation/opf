@@ -1,23 +1,19 @@
 {
   "$schema": "https://pptx.dev/schema/opf-layout/v1",
   "id": "number-3x",
-  "name": "Number_3x",
-  "label": "Number 3x",
-  "contentAlignment": "Center",
-  "contentBox": false,
-  "contentMultiple": "3x",
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "None",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "contentType": "Number",
-  "groupDefault": false,
-  "groupHash": "61b200acd116ec2826e1f461dad02de259ea3bdd0eeb7647f5ded479d65400f0",
-  "master": "Dark",
-  "masterSlideIndex": 81,
-  "slideImage": false,
-  "slideImageAlignment": "None",
-  "slideLayoutDirection": "Horizontal",
-  "slideTitle": false,
-  "slideTitleAlignment": "None"
+  "name": "Number 3x",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "content"
+    },
+    {
+      "type": "content"
+    },
+    {
+      "type": "content"
+    }
+  ]
 }

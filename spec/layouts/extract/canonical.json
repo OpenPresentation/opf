@@ -1,0 +1,142 @@
+[
+  {
+    "id": "title",
+    "name": "Title",
+    "placeholders": [{ "type": "title" }]
+  },
+  {
+    "id": "title-subtitle",
+    "name": "Title Subtitle",
+    "placeholders": [{ "type": "title" }, { "type": "subtitle" }]
+  },
+  {
+    "id": "text-1x",
+    "name": "Text 1x",
+    "placeholders": [{ "type": "title" }, { "type": "content" }]
+  },
+  {
+    "id": "text-2x",
+    "name": "Text 2x",
+    "placeholders": [{ "type": "title" }, { "type": "content" }, { "type": "content" }]
+  },
+  {
+    "id": "text-3x",
+    "name": "Text 3x",
+    "placeholders": [{ "type": "title" }, { "type": "content" }, { "type": "content" }, { "type": "content" }]
+  },
+  {
+    "id": "list-1x",
+    "name": "List 1x",
+    "placeholders": [{ "type": "title" }, { "type": "content" }]
+  },
+  {
+    "id": "list-2x",
+    "name": "List 2x",
+    "placeholders": [{ "type": "title" }, { "type": "content" }, { "type": "content" }]
+  },
+  {
+    "id": "list-3x",
+    "name": "List 3x",
+    "placeholders": [{ "type": "title" }, { "type": "content" }, { "type": "content" }, { "type": "content" }]
+  },
+  {
+    "id": "list-4x",
+    "name": "List 4x",
+    "placeholders": [{ "type": "title" }, { "type": "content" }, { "type": "content" }, { "type": "content" }, { "type": "content" }]
+  },
+  {
+    "id": "list-5x",
+    "name": "List 5x",
+    "placeholders": [{ "type": "title" }, { "type": "content" }, { "type": "content" }, { "type": "content" }, { "type": "content" }, { "type": "content" }]
+  },
+  {
+    "id": "list-6x",
+    "name": "List 6x",
+    "placeholders": [{ "type": "title" }, { "type": "content" }, { "type": "content" }, { "type": "content" }, { "type": "content" }, { "type": "content" }, { "type": "content" }]
+  },
+  {
+    "id": "number-1x",
+    "name": "Number 1x",
+    "placeholders": [{ "type": "title" }, { "type": "content" }]
+  },
+  {
+    "id": "number-2x",
+    "name": "Number 2x",
+    "placeholders": [{ "type": "title" }, { "type": "content" }, { "type": "content" }]
+  },
+  {
+    "id": "number-3x",
+    "name": "Number 3x",
+    "placeholders": [{ "type": "title" }, { "type": "content" }, { "type": "content" }, { "type": "content" }]
+  },
+  {
+    "id": "number-4x",
+    "name": "Number 4x",
+    "placeholders": [{ "type": "title" }, { "type": "content" }, { "type": "content" }, { "type": "content" }, { "type": "content" }]
+  },
+  {
+    "id": "number-5x",
+    "name": "Number 5x",
+    "placeholders": [{ "type": "title" }, { "type": "content" }, { "type": "content" }, { "type": "content" }, { "type": "content" }, { "type": "content" }]
+  },
+  {
+    "id": "number-6x",
+    "name": "Number 6x",
+    "placeholders": [{ "type": "title" }, { "type": "content" }, { "type": "content" }, { "type": "content" }, { "type": "content" }, { "type": "content" }, { "type": "content" }]
+  },
+  {
+    "id": "chart-1x",
+    "name": "Chart 1x",
+    "placeholders": [{ "type": "title" }, { "type": "chart" }, { "type": "content" }]
+  },
+  {
+    "id": "chart-2x",
+    "name": "Chart 2x",
+    "placeholders": [{ "type": "title" }, { "type": "chart" }, { "type": "content" }, { "type": "chart" }, { "type": "content" }]
+  },
+  {
+    "id": "chart-3x",
+    "name": "Chart 3x",
+    "placeholders": [{ "type": "title" }, { "type": "chart" }, { "type": "content" }, { "type": "chart" }, { "type": "content" }, { "type": "chart" }, { "type": "content" }]
+  },
+  {
+    "id": "image-1x",
+    "name": "Image 1x",
+    "placeholders": [{ "type": "title" }, { "type": "picture" }, { "type": "content" }]
+  },
+  {
+    "id": "image-2x",
+    "name": "Image 2x",
+    "placeholders": [{ "type": "title" }, { "type": "picture" }, { "type": "content" }, { "type": "picture" }, { "type": "content" }]
+  },
+  {
+    "id": "image-3x",
+    "name": "Image 3x",
+    "placeholders": [{ "type": "title" }, { "type": "picture" }, { "type": "content" }, { "type": "picture" }, { "type": "content" }, { "type": "picture" }, { "type": "content" }]
+  },
+  {
+    "id": "table-1x",
+    "name": "Table 1x",
+    "placeholders": [{ "type": "title" }, { "type": "table" }, { "type": "content" }]
+  },
+  {
+    "id": "code-1x",
+    "name": "Code 1x",
+    "placeholders": [{ "type": "title" }, { "type": "code" }, { "type": "content" }]
+  },
+  {
+    "id": "media-1x",
+    "name": "Media 1x",
+    "placeholders": [{ "type": "title" }, { "type": "media" }, { "type": "content" }]
+  },
+  {
+    "id": "image-bleed",
+    "name": "Image Bleed",
+    "placeholders": [{ "type": "picture" }]
+  },
+  {
+    "id": "blank",
+    "name": "Blank",
+    "placeholders": []
+  }
+]

@@ -1,23 +1,16 @@
 {
   "$schema": "https://pptx.dev/schema/opf-layout/v1",
   "id": "number-2x",
-  "name": "Number_2x",
-  "label": "Number 2x",
-  "contentAlignment": "Center",
-  "contentBox": false,
-  "contentMultiple": "2x",
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "None",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "contentType": "Number",
-  "groupDefault": false,
-  "groupHash": "770f7f43c00f34d5461ffa828690ca75ef33312016f1d39f14c72a1ee2d68a53",
-  "master": "Dark",
-  "masterSlideIndex": 75,
-  "slideImage": false,
-  "slideImageAlignment": "None",
-  "slideLayoutDirection": "Horizontal",
-  "slideTitle": false,
-  "slideTitleAlignment": "None"
+  "name": "Number 2x",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "content"
+    },
+    {
+      "type": "content"
+    }
+  ]
 }

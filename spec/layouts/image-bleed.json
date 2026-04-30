@@ -1,0 +1,10 @@
+{
+  "$schema": "https://pptx.dev/schema/opf-layout/v1",
+  "id": "image-bleed",
+  "name": "Image Bleed",
+  "placeholders": [
+    {
+      "type": "picture"
+    }
+  ]
+}

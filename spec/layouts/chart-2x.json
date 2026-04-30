@@ -1,23 +1,22 @@
 {
   "$schema": "https://pptx.dev/schema/opf-layout/v1",
   "id": "chart-2x",
-  "name": "Chart_2x",
-  "label": "Chart 2x",
-  "contentAlignment": "Center",
-  "contentBox": false,
-  "contentMultiple": "2x",
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "None",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "contentType": "Chart",
-  "groupDefault": true,
-  "groupHash": "528ac94bff11766820dff4e817924a32badd1ff9df3a149d67138eb82fe64b60",
-  "master": "Dark",
-  "masterSlideIndex": 152,
-  "slideImage": false,
-  "slideImageAlignment": "None",
-  "slideLayoutDirection": "Horizontal",
-  "slideTitle": false,
-  "slideTitleAlignment": "None"
+  "name": "Chart 2x",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "chart"
+    },
+    {
+      "type": "content"
+    },
+    {
+      "type": "chart"
+    },
+    {
+      "type": "content"
+    }
+  ]
 }

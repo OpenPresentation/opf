@@ -1,23 +1,28 @@
 {
   "$schema": "https://pptx.dev/schema/opf-layout/v1",
   "id": "number-6x",
-  "name": "Number_6x",
-  "label": "Number 6x",
-  "contentAlignment": "Center",
-  "contentBox": false,
-  "contentMultiple": "6x",
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "None",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "contentType": "Number",
-  "groupDefault": false,
-  "groupHash": "013ed89cd82c8cb7fb51dde8de2aef8e455b2831abe2de1da48b79a92f32f4cd",
-  "master": "Dark",
-  "masterSlideIndex": 99,
-  "slideImage": false,
-  "slideImageAlignment": "None",
-  "slideLayoutDirection": "Horizontal",
-  "slideTitle": false,
-  "slideTitleAlignment": "None"
+  "name": "Number 6x",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "content"
+    },
+    {
+      "type": "content"
+    },
+    {
+      "type": "content"
+    },
+    {
+      "type": "content"
+    },
+    {
+      "type": "content"
+    },
+    {
+      "type": "content"
+    }
+  ]
 }

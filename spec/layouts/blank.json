@@ -1,0 +1,6 @@
+{
+  "$schema": "https://pptx.dev/schema/opf-layout/v1",
+  "id": "blank",
+  "name": "Blank",
+  "placeholders": []
+}

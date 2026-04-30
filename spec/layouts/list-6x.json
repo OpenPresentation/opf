@@ -1,23 +1,28 @@
 {
   "$schema": "https://pptx.dev/schema/opf-layout/v1",
   "id": "list-6x",
-  "name": "List_6x",
-  "label": "List 6x",
-  "contentAlignment": "Center",
-  "contentBox": false,
-  "contentMultiple": "6x",
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "None",
-  "contentTypeListBullet": "Character",
-  "contentTypeListHeading": false,
-  "contentType": "List",
-  "groupDefault": false,
-  "groupHash": "10963a0a74774b9784b4668cc86d1acc9c75ca9633a13a440d88cbc041ce03de",
-  "master": "Dark",
-  "masterSlideIndex": 331,
-  "slideImage": false,
-  "slideImageAlignment": "None",
-  "slideLayoutDirection": "Horizontal",
-  "slideTitle": false,
-  "slideTitleAlignment": "None"
+  "name": "List 6x",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "content"
+    },
+    {
+      "type": "content"
+    },
+    {
+      "type": "content"
+    },
+    {
+      "type": "content"
+    },
+    {
+      "type": "content"
+    },
+    {
+      "type": "content"
+    }
+  ]
 }

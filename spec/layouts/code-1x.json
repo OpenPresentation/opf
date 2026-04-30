@@ -1,10 +1,13 @@
 {
   "$schema": "https://pptx.dev/schema/opf-layout/v1",
-  "id": "number-1x",
-  "name": "Number 1x",
+  "id": "code-1x",
+  "name": "Code 1x",
   "placeholders": [
     {
       "type": "title"
+    },
+    {
+      "type": "code"
     },
     {
       "type": "content"

@@ -1,23 +1,16 @@
 {
   "$schema": "https://pptx.dev/schema/opf-layout/v1",
   "id": "list-2x",
-  "name": "List_2x",
-  "label": "List 2x",
-  "contentAlignment": "Center",
-  "contentBox": false,
-  "contentMultiple": "2x",
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "None",
-  "contentTypeListBullet": "Character",
-  "contentTypeListHeading": false,
-  "contentType": "List",
-  "groupDefault": false,
-  "groupHash": "8cd656753ccf9d83ec65b1b57f51226214e369189e32e4b721f4cd22361cd656",
-  "master": "Dark",
-  "masterSlideIndex": 210,
-  "slideImage": false,
-  "slideImageAlignment": "None",
-  "slideLayoutDirection": "Horizontal",
-  "slideTitle": false,
-  "slideTitleAlignment": "None"
+  "name": "List 2x",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "content"
+    },
+    {
+      "type": "content"
+    }
+  ]
 }

@@ -51,7 +51,7 @@
         },
         "description": {
           "type": "string",
-          "description": "Free-form prose describing what this presentation is about. Used by agents and humans as a deck-level summary; complements meta.purpose (the goal) and meta.narrative (the structured storyline).",
+          "description": "Free-form prose describing what this presentation is about. Used by agents and humans as a deck-level summary; complements meta.purpose (the goal) and meta.narrative (the structured storyline). Round-trips to OOXML 'docProps/core.xml' as '<dc:description>' (PowerPoint surfaces this as the 'Comments' field in File → Properties).",
           "examples": ["Quarterly business review covering revenue, product, and hiring milestones for the executive team."]
         },
         "filename": {
@@ -77,7 +77,7 @@
         "authors": {
           "type": "array",
           "items": { "type": "string" },
-          "description": "Optional credit list for people who authored or contributed to the deck, distinct from speakers. Use when the writer and presenter differ (e.g., analyst-written, exec-presented).",
+          "description": "Optional credit list for people who authored or contributed to the deck, distinct from speakers. Use when the writer and presenter differ (e.g., analyst-written, exec-presented). Round-trips to OOXML 'docProps/core.xml' as '<dc:creator>' (semicolon-joined when multiple) and seeds '<cp:lastModifiedBy>' on first write; subsequent edits in PowerPoint overwrite '<cp:lastModifiedBy>' with the editing user.",
           "examples": [["Bob Lee", "Carla Diaz"]]
         },
         "audience": {
@@ -573,6 +573,60 @@
             false,
             { "left": { "image": "asset:acme-logo" }, "center": { "text": "Confidential" }, "right": { "slideNumber": true } }
           ]
+        },
+        "titleAlignment": {
+          "type": "string",
+          "enum": ["left", "center", "right"],
+          "description": "Default horizontal alignment for title placeholders in resolved layouts."
+        },
+        "contentAlignment": {
+          "type": "string",
+          "enum": ["left", "center", "right"],
+          "description": "Default horizontal alignment for content placeholders in resolved layouts."
+        },
+        "contentBox": {
+          "type": "boolean",
+          "description": "Whether content placeholders are rendered inside a visible card or surface."
+        },
+        "slideImage": {
+          "oneOf": [
+            { "$ref": "#/$defs/AssetSource" },
+            {
+              "type": "object",
+              "properties": {
+                "src": {
+                  "$ref": "#/$defs/AssetSource",
+                  "description": "Source for the slide-level image. When omitted in a design override, the object only configures how a slide-level image should be placed when one is supplied by an element, asset, or renderer convention."
+                },
+                "position": {
+                  "type": "string",
+                  "enum": ["background", "top", "bottom", "left", "right"],
+                  "description": "Where the slide-level image sits relative to the content. 'background' is a full-bleed image behind the content."
+                }
+              }
+            }
+          ],
+          "description": "Optional slide-level image treatment used by layouts that support a decorative or editorial image separate from content images."
+        },
+        "contentDirection": {
+          "type": "string",
+          "enum": ["horizontal", "vertical"],
+          "description": "Axis along which parallel content placeholders are arranged."
+        },
+        "chartPrimary": {
+          "type": "string",
+          "enum": ["none", "top", "bottom", "left", "right"],
+          "description": "For chart layouts, where the primary chart sits relative to supporting content. 'none' means chart regions have equal weight."
+        },
+        "imageFill": {
+          "type": "string",
+          "enum": ["crop", "fit"],
+          "description": "How picture placeholders fill their allocated region."
+        },
+        "listBullet": {
+          "type": "string",
+          "enum": ["character", "image"],
+          "description": "Default bullet rendering style for list layouts."
         }
       }
     },
@@ -1182,8 +1236,8 @@
         },
         "layout": {
           "type": "string",
-          "description": "Slide layout reference. Resolves to the 'id' of a 'layouts' catalog record. Accepts a bare id (lowercase kebab-case, e.g. 'title-left'), an HTTPS URL pointing at a record file, or a 'pkg:' reference. Free-form custom layout names that don't resolve through any catalog fall through to engine-defined layouts.\n\nResolution order: inline catalogs.layouts.records[] → catalogs.layouts.source → default catalog at https://www.pptx.gallery/layouts.",
-          "examples": ["title-slide", "title-left", "section-divider", "two-column", "image-right", "stat-hero", "blank", "https://acme.com/decks/layouts/cover.json", "pkg:@acme/decks/layouts/cover"]
+          "description": "Slide layout reference. Resolves to the 'id' of a 'layouts' catalog record. Accepts a bare id (lowercase kebab-case, e.g. 'title-subtitle'), an HTTPS URL pointing at a record file, or a 'pkg:' reference. Free-form custom layout names that don't resolve through any catalog fall through to engine-defined layouts.\n\nResolution order: inline catalogs.layouts.records[] → catalogs.layouts.source → default catalog at https://www.pptx.gallery/layouts.",
+          "examples": ["title", "title-subtitle", "text-2x", "chart-3x", "image-bleed", "blank", "https://acme.com/decks/layouts/cover.json", "pkg:@acme/decks/layouts/cover"]
         },
         "designOverrides": {
           "$ref": "#/$defs/Design",
@@ -1283,8 +1337,8 @@
         },
         "slot": {
           "type": "string",
-          "description": "Named slot from the layout template.",
-          "examples": ["title", "subtitle", "body", "image-right", "footer"]
+          "description": "Placeholder type from the resolved layout's placeholders array. Multiple elements with the same slot value fill placeholders of that type in array order. Well-known values are defined by the layout schema's Placeholder.type vocabulary.",
+          "examples": ["title", "subtitle", "tag", "body", "content", "chart", "picture"]
         }
       },
       "allOf": [

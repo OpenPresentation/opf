@@ -1,23 +1,22 @@
 {
   "$schema": "https://pptx.dev/schema/opf-layout/v1",
   "id": "number-4x",
-  "name": "Number_4x",
-  "label": "Number 4x",
-  "contentAlignment": "Center",
-  "contentBox": false,
-  "contentMultiple": "4x",
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "None",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "contentType": "Number",
-  "groupDefault": false,
-  "groupHash": "42bcd1783b941758ee13acc24292ed4acac11693d84fff5e9a64b3f416e3a66f",
-  "master": "Dark",
-  "masterSlideIndex": 87,
-  "slideImage": false,
-  "slideImageAlignment": "None",
-  "slideLayoutDirection": "Horizontal",
-  "slideTitle": false,
-  "slideTitleAlignment": "None"
+  "name": "Number 4x",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "content"
+    },
+    {
+      "type": "content"
+    },
+    {
+      "type": "content"
+    },
+    {
+      "type": "content"
+    }
+  ]
 }

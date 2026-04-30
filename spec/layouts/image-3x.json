@@ -1,25 +1,25 @@
 {
   "$schema": "https://pptx.dev/schema/opf-layout/v1",
-  "id": "chart-3x",
-  "name": "Chart 3x",
+  "id": "image-3x",
+  "name": "Image 3x",
   "placeholders": [
     {
       "type": "title"
     },
     {
-      "type": "chart"
+      "type": "picture"
     },
     {
       "type": "content"
     },
     {
-      "type": "chart"
+      "type": "picture"
     },
     {
       "type": "content"
     },
     {
-      "type": "chart"
+      "type": "picture"
     },
     {
       "type": "content"

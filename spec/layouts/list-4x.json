@@ -1,23 +1,22 @@
 {
   "$schema": "https://pptx.dev/schema/opf-layout/v1",
   "id": "list-4x",
-  "name": "List_4x",
-  "label": "List 4x",
-  "contentAlignment": "Center",
-  "contentBox": false,
-  "contentMultiple": "4x",
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "None",
-  "contentTypeListBullet": "Character",
-  "contentTypeListHeading": false,
-  "contentType": "List",
-  "groupDefault": false,
-  "groupHash": "ce75c79bef8f54817cdb4bbed1eef18efc6c227230647f397dca0b8d81f12624",
-  "master": "Dark",
-  "masterSlideIndex": 270,
-  "slideImage": false,
-  "slideImageAlignment": "None",
-  "slideLayoutDirection": "Horizontal",
-  "slideTitle": false,
-  "slideTitleAlignment": "None"
+  "name": "List 4x",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "content"
+    },
+    {
+      "type": "content"
+    },
+    {
+      "type": "content"
+    },
+    {
+      "type": "content"
+    }
+  ]
 }

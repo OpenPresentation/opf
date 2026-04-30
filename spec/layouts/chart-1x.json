@@ -1,23 +1,16 @@
 {
   "$schema": "https://pptx.dev/schema/opf-layout/v1",
   "id": "chart-1x",
-  "name": "Chart_1x",
-  "label": "Chart 1x",
-  "contentAlignment": "Center",
-  "contentBox": false,
-  "contentMultiple": "1x",
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "None",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "contentType": "Chart",
-  "groupDefault": true,
-  "groupHash": "524c9723743e64c8a3d7feef6a47c8604ffa0d11e15808237327af43b3249934",
-  "master": "Dark",
-  "masterSlideIndex": 146,
-  "slideImage": false,
-  "slideImageAlignment": "None",
-  "slideLayoutDirection": "Horizontal",
-  "slideTitle": false,
-  "slideTitleAlignment": "None"
+  "name": "Chart 1x",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "chart"
+    },
+    {
+      "type": "content"
+    }
+  ]
 }

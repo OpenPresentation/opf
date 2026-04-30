@@ -1,7 +1,7 @@
 {
   "$schema": "https://pptx.dev/schema/opf-layout/v1",
-  "id": "number-1x",
-  "name": "Number 1x",
+  "id": "text-1x",
+  "name": "Text 1x",
   "placeholders": [
     {
       "type": "title"

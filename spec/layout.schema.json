@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://pptx.dev/schema/opf-layout/v1",
   "title": "OPF Slide Layout",
-  "description": "Schema for slide-layout records in the pptx.gallery library. Each record describes a single named slide layout — what kind of content it holds, how that content is arranged on the slide, and which slide-master it pairs with. Layouts are referenced from OPF documents via Slide.layout; the engine resolves the reference against catalogs.layouts (inline) → catalogs.layouts.source → the default catalog at https://www.pptx.gallery/layouts. Free-form custom layout names that don't resolve through any catalog fall through to engine-defined layouts.",
+  "description": "Schema for slide-layout records in the pptx.gallery library. Each record describes a semantic slide layout — what content slots it exposes and how authors bind slide elements to those slots. Layouts are referenced from OPF documents via Slide.layout; the engine resolves the reference against catalogs.layouts (inline) → catalogs.layouts.source → the default catalog at https://www.pptx.gallery/layouts. Free-form custom layout names that don't resolve through any catalog fall through to engine-defined layouts.",
   "type": "object",
   "required": [
     "$schema",
@@ -20,28 +20,20 @@
       "pattern": "^[a-z][a-z0-9-]*$",
       "description": "Stable slug used by OPF documents to reference this layout via Slide.layout. Lowercase kebab-case.",
       "examples": [
-        "title-left",
-        "chart-1x-title-left",
-        "two-column",
-        "image-right"
+        "title",
+        "title-subtitle",
+        "chart-1x",
+        "image-bleed"
       ]
     },
     "name": {
       "type": "string",
-      "description": "Internal layout name (often Title_Case_With_Underscores matching the engine's master deck).",
+      "description": "Human-readable layout name shown in layout pickers.",
       "examples": [
-        "Title_Left",
-        "Chart_1x_Title_Left",
-        "Two_Column"
-      ]
-    },
-    "label": {
-      "type": "string",
-      "description": "Human-readable label shown in layout pickers.",
-      "examples": [
-        "Title Left",
-        "Chart 1x Title Left",
-        "Two Column"
+        "Title",
+        "Title Subtitle",
+        "Chart 1x",
+        "Image Bleed"
       ]
     },
     "summary": {
@@ -57,41 +49,6 @@
       "description": "Longer prose describing the layout structure and ideal use cases.",
       "examples": [
         "Two equal-width columns under a left-aligned slide title. Use when comparing two ideas, before/after pairs, or paired text + image content."
-      ]
-    },
-    "master": {
-      "type": "string",
-      "description": "Name of the slide-master deck this layout belongs to.",
-      "examples": [
-        "Dark",
-        "Light",
-        "Classic"
-      ]
-    },
-    "masterSlideIndex": {
-      "type": "integer",
-      "minimum": 0,
-      "description": "Zero-based index of this layout within its master deck.",
-      "examples": [
-        0,
-        1,
-        150,
-        399
-      ]
-    },
-    "groupHash": {
-      "type": "string",
-      "description": "Stable content-addressed hash that groups visually similar layouts. Layouts with the same groupHash share a content footprint and can be hot-swapped.",
-      "examples": [
-        "73095b38af6f6277a95810ad67f0c7c71b02fe1bb217769065ffbb8c68e01717"
-      ]
-    },
-    "groupDefault": {
-      "type": "boolean",
-      "description": "Whether this layout is the default within its groupHash bucket.",
-      "examples": [
-        true,
-        false
       ]
     },
     "contentType": {
@@ -191,7 +148,7 @@
     },
     "slideSubtitle": {
       "type": "boolean",
-      "description": "Whether the layout includes a slide-level subtitle or supporting-description region.",
+      "description": "Whether the layout includes a slide-level subtitle or supporting-description region. When placeholders is present, this is true exactly when the layout exposes a placeholder with type 'subtitle'.",
       "examples": [
         false,
         true
@@ -234,6 +191,11 @@
         "Vertical"
       ],
       "description": "Axis along which the layout's primary regions are arranged."
+    },
+    "placeholders": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Placeholder" },
+      "description": "Ordered content slots the layout exposes. Slide elements bind to a placeholder by setting Element.slot to the placeholder type; multiple elements with the same slot value fill placeholders of that type in array order. The engine fills any unbound 'title' / 'subtitle' placeholder from meta.title / meta.subtitle. Chrome — slide number, footer, date — is not included here; it is owned by Design.header / Design.footer."
     },
     "tags": {
       "type": "array",
@@ -283,6 +245,34 @@
           "examples": [
             "https://www.pptx.gallery/layouts/title-left.svg"
           ]
+        }
+      }
+    }
+  },
+  "$defs": {
+    "Placeholder": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "description": "A single content slot inside a slide layout. Slide elements bind to it by setting Element.slot to the placeholder's type; the array order in the surrounding 'placeholders' field disambiguates multiple placeholders of the same type.",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "title",
+            "subtitle",
+            "tag",
+            "body",
+            "content",
+            "chart",
+            "picture",
+            "table",
+            "media",
+            "diagram",
+            "code"
+          ],
+          "description": "OPF placeholder kind. 'content' is the generic flexible slot, capable of hosting any element type. The named kinds describe a specific content role used by pickers, AI generation, and engine defaulting."
         }
       }
     }

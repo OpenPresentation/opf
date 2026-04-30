@@ -1,13 +1,13 @@
 {
   "$schema": "https://pptx.dev/schema/opf-layout/v1",
-  "id": "number-1x",
-  "name": "Number 1x",
+  "id": "title-subtitle",
+  "name": "Title Subtitle",
   "placeholders": [
     {
       "type": "title"
     },
     {
-      "type": "content"
+      "type": "subtitle"
     }
   ]
 }
