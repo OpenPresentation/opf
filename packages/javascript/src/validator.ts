@@ -108,10 +108,21 @@ const rootPayloadFields = [
   "shape",
   "code",
   "language",
+  "value",
+  "label",
+  "unit",
+  "delta",
+  "trend",
+  "quote",
+  "attribution",
+  "source",
+  "events",
   "children",
   "prompt",
   "expectedType",
 ] as const;
+
+const contentMetaFields = ["children", "prompt", "expectedType"] as const;
 
 type ContentKind =
   | "text"
@@ -122,8 +133,9 @@ type ContentKind =
   | "table"
   | "video"
   | "code"
-  | "group"
-  | "placeholder";
+  | "metric"
+  | "quote"
+  | "timeline";
 
 interface ContentKindSpec {
   fields: readonly string[];
@@ -165,13 +177,17 @@ const contentKindSpecs: Record<ContentKind, ContentKindSpec> = {
     fields: ["code", "language"],
     required: ["code"],
   },
-  group: {
-    fields: ["children"],
-    required: ["children"],
+  metric: {
+    fields: ["value", "label", "unit", "delta", "trend"],
+    required: ["value"],
   },
-  placeholder: {
-    fields: ["prompt", "expectedType"],
-    required: ["prompt"],
+  quote: {
+    fields: ["quote", "attribution", "source"],
+    required: ["quote"],
+  },
+  timeline: {
+    fields: ["events"],
+    required: ["events"],
   },
 };
 
@@ -305,8 +321,9 @@ function inferredKinds(value: Record<string, unknown>): ContentKind[] {
   if (presentFields(value, contentKindSpecs.table.fields).length > 0) kinds.push("table");
   if (hasOwn(value, "shape")) kinds.push("shape");
   if (hasOwn(value, "code")) kinds.push("code");
-  if (hasOwn(value, "children")) kinds.push("group");
-  if (hasOwn(value, "prompt")) kinds.push("placeholder");
+  if (presentFields(value, contentKindSpecs.metric.fields).length > 0) kinds.push("metric");
+  if (presentFields(value, contentKindSpecs.quote.fields).length > 0) kinds.push("quote");
+  if (hasOwn(value, "events")) kinds.push("timeline");
 
   return kinds;
 }
@@ -315,6 +332,9 @@ function validateContentPayload(value: Record<string, unknown>, path: string): V
   const issues: ValidationIssue[] = [];
   const explicitType = value.type;
   const payloadFields = presentFields(value, rootPayloadFields);
+  const hasChildren = hasOwn(value, "children");
+  const hasPrompt = hasOwn(value, "prompt");
+  const hasExpectedType = hasOwn(value, "expectedType");
 
   if (explicitType !== undefined && !isContentKind(explicitType)) {
     return issues;
@@ -324,10 +344,22 @@ function validateContentPayload(value: Record<string, unknown>, path: string): V
   const inferred = kind ? [kind] : inferredKinds(value);
 
   if (!kind && inferred.length === 0) {
-    if (payloadFields.length > 0 || path !== "/") {
-      issues.push(semanticIssue(path, "content payload must include enough fields to infer a content type", {
+    if (hasExpectedType && !hasPrompt) {
+      issues.push(semanticIssue(path, "content payload expectedType requires prompt when no concrete content fields are present", {
         fields: payloadFields,
       }));
+    }
+    if (!hasChildren && !hasPrompt && !hasExpectedType && (payloadFields.length > 0 || path !== "/")) {
+      issues.push(semanticIssue(path, "content payload must include concrete content fields, children, or prompt", {
+        fields: payloadFields,
+      }));
+    }
+    if (Array.isArray(value.children)) {
+      value.children.forEach((child, index) => {
+        if (isRecord(child)) {
+          issues.push(...validateContentPayload(child, `${pathFor(path, "children")}/${index}`));
+        }
+      });
     }
     return issues;
   }
@@ -344,7 +376,7 @@ function validateContentPayload(value: Record<string, unknown>, path: string): V
     return issues;
   }
   const spec = contentKindSpecs[resolvedKind];
-  const allowedFields = new Set<string>(["type", ...spec.fields]);
+  const allowedFields = new Set<string>(["type", ...spec.fields, ...contentMetaFields]);
 
   for (const required of spec.required) {
     if (!hasOwn(value, required)) {
@@ -469,30 +501,6 @@ function validatePresentationSemantics(value: unknown): ValidationIssue[] {
 
   const issues: ValidationIssue[] = [];
 
-  if (hasOwn(value, "title")) {
-    issues.push(semanticIssue("/title", "Presentation.title has been renamed to Presentation.name", {
-      replacement: "name",
-    }));
-  }
-
-  if (hasOwn(value, "subtitle")) {
-    issues.push(semanticIssue("/subtitle", "Presentation.subtitle has been removed; use slides[].subtitle for presented slide subtitles", {
-      replacement: "slides[].subtitle",
-    }));
-  }
-
-  if (hasOwn(value, "durationMinutes")) {
-    issues.push(semanticIssue("/durationMinutes", "Presentation.durationMinutes has been renamed to Presentation.duration", {
-      replacement: "duration",
-    }));
-  }
-
-  if (hasOwn(value, "keyMessages")) {
-    issues.push(semanticIssue("/keyMessages", "Presentation.keyMessages has been renamed to Presentation.takeaways", {
-      replacement: "takeaways",
-    }));
-  }
-
   if (isEnUkTag(value.language)) {
     issues.push(semanticIssue("/language", "Use 'en-GB' for UK English; 'en-UK' is not a valid BCP-47 region tag", {
       replacement: "en-GB",
@@ -505,11 +513,6 @@ function validatePresentationSemantics(value: unknown): ValidationIssue[] {
 
   value.slides.forEach((slide, index) => {
     if (isRecord(slide)) {
-      if (hasOwn(slide, "group")) {
-        issues.push(semanticIssue(`/slides/${index}/group`, "slides[].group has been removed; use slides[].section or slides[].beat", {
-          replacements: ["section", "beat"],
-        }));
-      }
       issues.push(...validateSlideRegions(slide, `/slides/${index}`));
     }
   });

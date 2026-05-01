@@ -1,0 +1,41 @@
+{
+  "name": "Metrics Quotes Timeline Example",
+  "slides": [
+    {
+      "title": "Operating Metric",
+      "type": "metric",
+      "value": "42%",
+      "label": "Review cycle reduction",
+      "delta": "+11 pts",
+      "trend": "up"
+    },
+    {
+      "title": "Customer Proof",
+      "type": "quote",
+      "quote": "The new workflow made exceptions visible before they became escalations.",
+      "attribution": "VP Operations, Acme Corp",
+      "source": "Customer interview"
+    },
+    {
+      "title": "Rollout Plan",
+      "type": "timeline",
+      "events": [
+        {
+          "date": "Q1",
+          "title": "Pilot",
+          "text": "Launch with one operations team."
+        },
+        {
+          "date": "Q2",
+          "title": "Rollout",
+          "text": "Expand to all regions."
+        },
+        {
+          "date": "Q3",
+          "title": "Scale",
+          "text": "Automate exception reporting."
+        }
+      ]
+    }
+  ]
+}

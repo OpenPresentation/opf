@@ -5,6 +5,7 @@
   "description": "Open-source JSON format for describing PowerPoint presentations. Agents describe narratives, content, audience, reusable assets, and design — the engine handles OOXML complexity.\n\nFields that reference catalog records (narrative, language, tone, audience, purpose, design.theme / design.theme.id, design.colorScheme / design.colorScheme.id, design.fontScheme / design.fontScheme.id, Slide.layout, Organization.socials / Speaker.socials) resolve through the catalog system: inline 'catalogs.<kind>.records[]' on the document → 'catalogs.<kind>.source' on the document → engine defaults → the default catalog at https://www.pptx.gallery/<kind>. Every reference resolves to the catalog record's 'id' field. When an OPF document omits a reference entirely, the engine falls back to its 'defaults.json' (see /spec/defaults.json for a reference example). The defaults file is engine configuration; it is not part of the OPF document contract and has no JSON Schema.\n\nMost catalog references accept the bare 'id' as a string for the common case (e.g. narrative = 'classic-story', design.colorScheme = 'cool-horizon'). Audience, purpose, tone, design, and language object forms use 'id' as a base catalog reference plus inline overrides. Asset references use 'asset:<id>' strings that point into the top-level assets registry.",
   "type": "object",
   "required": ["slides"],
+  "additionalProperties": false,
   "properties": {
     "$schema": {
       "type": "string",
@@ -26,37 +27,58 @@
       "description": "Optional base filename for exports (without extension). Engine strips a trailing .pptx, .pdf, .png, or .svg (case-insensitive) and appends the target format's extension. When omitted, the engine slugifies name when present. See /docs/opf for full validation rules.",
       "examples": ["q4-2026-business-review", "acme-series-b-pitch"]
     },
-    "organizations": {
-      "type": "array",
-      "items": { "$ref": "#/$defs/Organization" },
-      "description": "Organizations associated with the presentation (e.g., the presenting company, host conference, partners, clients, sponsors). The 'primary' organization (declared via Organization.role or, if no role is set, the first item) drives default branding such as cover-slide logo. Optional — simple decks may omit this."
+    "organization": {
+      "oneOf": [
+        { "$ref": "#/$defs/Organization" },
+        {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Organization" },
+          "minItems": 1
+        }
+      ],
+      "description": "Organization associated with the presentation, usually the presenting company. Array form supports hosts, partners, clients, and sponsors. The primary organization (declared via Organization.role or, if no role is set, the first item) drives default branding such as cover-slide logo."
     },
-    "speakers": {
-      "type": "array",
-      "items": { "$ref": "#/$defs/Speaker" },
-      "description": "People presenting the deck. Used for cover slides, bio slides, footers, and panel attribution. Optional — simple decks may omit this."
+    "speaker": {
+      "oneOf": [
+        { "$ref": "#/$defs/Speaker" },
+        {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Speaker" },
+          "minItems": 1
+        }
+      ],
+      "description": "Person presenting the deck. Array form supports panels and multi-speaker decks. Used for cover slides, bio slides, footers, and panel attribution."
     },
-    "authors": {
-      "type": "array",
-      "items": { "type": "string" },
-      "description": "Optional credit list for people who authored or contributed to the deck, distinct from speakers. Use when the writer and presenter differ (e.g., analyst-written, exec-presented). Round-trips to OOXML 'docProps/core.xml' as '<dc:creator>' (semicolon-joined when multiple) and seeds '<cp:lastModifiedBy>' on first write; subsequent edits in PowerPoint overwrite '<cp:lastModifiedBy>' with the editing user.",
-      "examples": [["Bob Lee", "Carla Diaz"]]
-    },
-    "audience": {
+    "author": {
       "oneOf": [
         { "type": "string" },
-        { "$ref": "#/$defs/Audience" }
+        {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        }
       ],
-      "description": "Intended audience for the presentation. Accepts either:\n- A string shorthand: free-form description ('Series B investors'), an audiences catalog id ('executives'), an HTTPS URL, or a 'pkg:' reference.\n- An inline Audience object for custom audience metadata or catalog-backed overrides. Object form mirrors https://pptx.dev/schema/opf-audience/v1 without '$schema'.\n\nResolution order for catalog ids and references: inline catalogs.audiences.records[] → catalogs.audiences.source → default catalog at https://www.pptx.gallery/audiences.",
+      "description": "Optional credit for the person who authored or contributed to the deck, distinct from speaker. Array form supports multiple contributors. Round-trips to OOXML 'docProps/core.xml' as '<dc:creator>' (semicolon-joined when multiple) and seeds '<cp:lastModifiedBy>' on first write; subsequent edits in PowerPoint overwrite '<cp:lastModifiedBy>' with the editing user.",
+      "examples": ["Bob Lee", ["Bob Lee", "Carla Diaz"]]
+    },
+    "audience": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          { "type": "string" },
+          { "$ref": "#/$defs/Audience" }
+        ]
+      },
+      "minItems": 1,
+      "description": "Intended audiences for the presentation. Each item accepts either:\n- A string shorthand: free-form description ('Series B investors'), an audiences catalog id ('executives'), an HTTPS URL, or a 'pkg:' reference.\n- An inline Audience object for custom audience metadata or catalog-backed overrides. Object form mirrors https://pptx.dev/schema/opf-audience/v1 without '$schema'.\n\nResolution order for catalog ids and references: inline catalogs.audiences.records[] → catalogs.audiences.source → default catalog at https://www.pptx.gallery/audiences.",
       "examples": [
-        "executives",
-        "board",
-        "engineering-team",
-        "Series B investors",
-        "https://acme.com/decks/audiences/acme-board.json",
-        "pkg:@acme/decks/audiences/acme-board",
-        { "id": "executives", "attentionBudgetMinutes": 20 },
-        { "name": "Regional Sales Leaders", "seniority": "director", "technicalFluency": "medium", "decisionPower": "advisory" }
+        ["executives"],
+        ["board", "c-suite"],
+        ["Series B investors", "https://acme.com/decks/audiences/acme-board.json"],
+        [
+          { "id": "executives", "attentionBudgetMinutes": 20 },
+          { "name": "Regional Sales Leaders", "seniority": "director", "technicalFluency": "medium", "decisionPower": "advisory" }
+        ]
       ]
     },
     "purpose": {
@@ -113,15 +135,24 @@
         { "name": "Founder direct", "voiceCues": ["Use first person sparingly.", "Make the ask concrete."] }
       ]
     },
-    "takeaways": {
-      "type": "array",
-      "items": { "type": "string" },
-      "description": "Audience-facing takeaways the presentation should leave behind. Deck-level intent used by AI to seed and pressure-test slide content.",
-      "examples": [[
+    "takeaway": {
+      "oneOf": [
+        { "type": "string" },
+        {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        }
+      ],
+      "description": "Audience-facing takeaway the presentation should leave behind. Array form supports multiple takeaways. Deck-level intent used by AI to seed and pressure-test slide content.",
+      "examples": [
         "Agent latency is the new bottleneck for AI products.",
-        "Our runtime is 8x faster than the next-best option.",
-        "Customers see ROI within the first quarter."
-      ]]
+        [
+          "Agent latency is the new bottleneck for AI products.",
+          "Our runtime is 8x faster than the next-best option.",
+          "Customers see ROI within the first quarter."
+        ]
+      ]
     },
     "duration": {
       "type": "integer",
@@ -143,7 +174,7 @@
         { "type": "string" },
         { "$ref": "#/$defs/Narrative" }
       ],
-      "description": "Structured storyline describing the deck's arc and beats. Resolves to the 'id' of a 'narratives' catalog record.\n\nAccepts two forms:\n- String shorthand for the common case: 'narrative = \"classic-story\"'. Accepts a bare id (lowercase kebab-case), an HTTPS URL pointing at a record file, or a 'pkg:' reference to a locally-installed package.\n- Object form for inline overrides or fully custom narratives: 'narrative = { id: \"classic-story\", beats: [...] }'. The object shape mirrors https://pptx.dev/schema/opf-narrative/v1 (sans '$schema'), so a library record and an inline narrative are interchangeable.\n\nResolution order: inline catalogs.narratives.records[] → catalogs.narratives.source → default catalog at https://www.pptx.gallery/narratives. Unknown ids produce a validation warning, not an error.\n\nDeck-level concerns that aren't part of the storyline (audience, tone, takeaways, duration) live as siblings on the presentation root rather than inside the narrative object.",
+      "description": "Structured storyline describing the deck's arc and beats. Resolves to the 'id' of a 'narratives' catalog record.\n\nAccepts two forms:\n- String shorthand for the common case: 'narrative = \"classic-story\"'. Accepts a bare id (lowercase kebab-case), an HTTPS URL pointing at a record file, or a 'pkg:' reference to a locally-installed package.\n- Object form for inline overrides or fully custom narratives: 'narrative = { id: \"classic-story\", beats: [...] }'. The object shape mirrors https://pptx.dev/schema/opf-narrative/v1 (sans '$schema'), so a library record and an inline narrative are interchangeable.\n\nResolution order: inline catalogs.narratives.records[] → catalogs.narratives.source → default catalog at https://www.pptx.gallery/narratives. Unknown ids produce a validation warning, not an error.\n\nDeck-level concerns that aren't part of the storyline (audience, tone, takeaway, duration) live as siblings on the presentation root rather than inside the narrative object.",
       "examples": [
         "classic-story",
         "problem-solution",
@@ -514,7 +545,7 @@
         "role": {
           "type": "string",
           "enum": ["primary", "partner", "client", "sponsor", "host"],
-          "description": "Role of the organization relative to the presentation. When omitted, the first organization in the array is treated as primary."
+          "description": "Role of the organization relative to the presentation. When omitted, the single organization or first organization in array form is treated as primary."
         },
         "socials": {
           "$ref": "#/$defs/Socials",
@@ -573,7 +604,7 @@
         },
         "organizationId": {
           "type": "string",
-          "description": "Reference to an Organization.id in organizations. Lets a speaker be attributed to their org in panel or multi-org decks without repeating organization details.",
+          "description": "Reference to an Organization.id in organization. Lets a speaker be attributed to their org in panel or multi-org decks without repeating organization details.",
           "examples": ["acme", "beta", "devconf-2026"]
         },
         "socials": {
@@ -584,7 +615,7 @@
     },
     "Socials": {
       "type": "object",
-      "description": "Social media handles or URLs, keyed by platform id from the 'socials' catalog. Each value is a string — either a full URL or a platform handle (e.g., '@acme'). The catalog record for each platform carries the URL pattern, handle prefix, brand color, and themed icons used by renderers.\n\nKeys resolve to the 'id' of a 'socials' catalog record. Resolution order: inline catalogs.socials.records[] → catalogs.socials.source → default catalog at https://www.pptx.gallery/socials. Unknown platform keys render with engine fallbacks (the raw value as text). Used both for organizations and individual speakers.",
+      "description": "Social media handles or URLs, keyed by platform id from the 'socials' catalog. Each value is a string — either a full URL or a platform handle (e.g., '@acme'). The catalog record for each platform carries the URL pattern, handle prefix, brand color, and themed icons used by renderers.\n\nKeys resolve to the 'id' of a 'socials' catalog record. Resolution order: inline catalogs.socials.records[] → catalogs.socials.source → default catalog at https://www.pptx.gallery/socials. Unknown platform keys render with engine fallbacks (the raw value as text). Used both for organization and speaker records.",
       "additionalProperties": {
         "type": "string",
         "description": "Handle or URL for the platform identified by the property key."
@@ -608,7 +639,7 @@
     },
     "Narrative": {
       "type": "object",
-      "description": "Structured storyline used by AI to shape generated content. Mirrors the OPF Narrative Template record at https://pptx.dev/schema/opf-narrative/v1 (sans '$schema'), so a library record and an inline narrative are interchangeable.\n\nNarrative declares the deck's intended story arc; slides may opt into beats via Slide.beat. The narrative does not constrain slide structure — validators warn on drift (orphan slides, unused beats) but never error. Slides are the source of truth; narrative is intent that travels with the deck.\n\nWhen 'id' matches a record in the resolved 'narratives' catalog, the inline fields override matching fields on the catalog record (beats merge by beat 'id'). When 'id' doesn't match, this object defines a fully custom inline narrative.\n\nDeck-level concerns that aren't part of the storyline (audience, tone, takeaways, duration) live as siblings on the presentation root rather than inside this object.",
+      "description": "Structured storyline used by AI to shape generated content. Mirrors the OPF Narrative Template record at https://pptx.dev/schema/opf-narrative/v1 (sans '$schema'), so a library record and an inline narrative are interchangeable.\n\nNarrative declares the deck's intended story arc; slides may opt into beats via Slide.beat. The narrative does not constrain slide structure — validators warn on drift (orphan slides, unused beats) but never error. Slides are the source of truth; narrative is intent that travels with the deck.\n\nWhen 'id' matches a record in the resolved 'narratives' catalog, the inline fields override matching fields on the catalog record (beats merge by beat 'id'). When 'id' doesn't match, this object defines a fully custom inline narrative.\n\nDeck-level concerns that aren't part of the storyline (audience, tone, takeaway, duration) live as siblings on the presentation root rather than inside this object.",
       "properties": {
         "id": {
           "type": "string",
@@ -721,7 +752,7 @@
         },
         "slideType": {
           "type": "string",
-          "enum": ["text", "image", "chart", "table", "code"],
+          "enum": ["text", "list", "image", "shape", "chart", "table", "video", "code", "metric", "quote", "timeline"],
           "description": "Default content kind for the beat's slide. Mirrors ContentPayload.type and helps engines choose a sensible layout when only the beat is specified."
         },
         "layoutHint": {
@@ -805,7 +836,7 @@
             { "$ref": "#/$defs/AssetSource" },
             { "$ref": "#/$defs/LogoSet" }
           ],
-          "description": "Deck logo assets used by layouts, covers, section dividers, headers, and footers. A string is the default logo source; object form provides light/dark, stacked, icon, and wordmark variants. When omitted, the renderer falls back to organizations[primary].logo.",
+          "description": "Deck logo assets used by layouts, covers, section dividers, headers, and footers. A string is the default logo source; object form provides light/dark, stacked, icon, and wordmark variants. When omitted, the renderer falls back to the primary organization logo.",
           "examples": [
             "asset:acme-logo",
             { "default": "asset:acme-logo", "light": "asset:acme-logo-white", "icon": "asset:acme-icon" }
@@ -1368,7 +1399,7 @@
     },
     "LogoSet": {
       "type": "object",
-      "description": "Deck logo variants surfaced by layouts, covers, section dividers, headers, and footers. Organization identity lives in organizations; this object only controls visual rendering assets. Renderer convention: on dark backgrounds prefer the 'light' variant, on light backgrounds prefer the 'dark' variant, and in square/vertical slots prefer the stacked family when present.",
+      "description": "Deck logo variants surfaced by layouts, covers, section dividers, headers, and footers. Organization identity lives in organization; this object only controls visual rendering assets. Renderer convention: on dark backgrounds prefer the 'light' variant, on light backgrounds prefer the 'dark' variant, and in square/vertical slots prefer the stacked family when present.",
       "properties": {
         "default": {
           "$ref": "#/$defs/AssetSource",
@@ -1481,7 +1512,7 @@
         },
         "organization": {
           "type": "boolean",
-          "description": "Whether to render the primary organization name from organizations."
+          "description": "Whether to render the primary organization name from organization."
         },
         "section": {
           "type": "boolean",
@@ -1525,7 +1556,7 @@
         },
         "type": {
           "type": "string",
-          "enum": ["text", "list", "image", "shape", "chart", "table", "video", "code", "group", "placeholder"],
+          "enum": ["text", "list", "image", "shape", "chart", "table", "video", "code", "metric", "quote", "timeline"],
           "description": "Optional full-slide content kind. When omitted, engines infer the kind from root payload fields."
         },
         "text": {
@@ -1584,10 +1615,55 @@
           "type": "string",
           "description": "Language identifier used for syntax highlighting with code payloads."
         },
+        "value": {
+          "oneOf": [
+            { "type": "string" },
+            { "type": "number" }
+          ],
+          "description": "Full-slide metric value. Presence of this field infers type 'metric'."
+        },
+        "label": {
+          "type": "string",
+          "description": "Full-slide metric label."
+        },
+        "unit": {
+          "type": "string",
+          "description": "Full-slide metric unit, suffix, or currency marker."
+        },
+        "delta": {
+          "oneOf": [
+            { "type": "string" },
+            { "type": "number" }
+          ],
+          "description": "Full-slide metric change value."
+        },
+        "trend": {
+          "type": "string",
+          "enum": ["up", "down", "flat"],
+          "description": "Full-slide metric trend direction."
+        },
+        "quote": {
+          "type": "string",
+          "description": "Full-slide quote text. Presence of this field infers type 'quote'."
+        },
+        "attribution": {
+          "type": "string",
+          "description": "Person or organization credited for the quote."
+        },
+        "source": {
+          "type": "string",
+          "description": "Optional quote source, citation, or URL."
+        },
+        "events": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/TimelineEvent" },
+          "minItems": 1,
+          "description": "Full-slide timeline events. Presence of this field infers type 'timeline'."
+        },
         "children": {
           "type": "array",
           "items": { "$ref": "#/$defs/ContentPayload" },
-          "description": "Child content payloads rendered as a logical group."
+          "description": "Child content payloads rendered together as a composed payload."
         },
         "prompt": {
           "type": "string",
@@ -1595,8 +1671,8 @@
         },
         "expectedType": {
           "type": "string",
-          "enum": ["text", "list", "image", "chart", "table"],
-          "description": "Expected content type the engine or agent should produce for a placeholder payload."
+          "enum": ["text", "list", "image", "chart", "table", "metric", "quote", "timeline"],
+          "description": "Expected content type the engine or agent should produce for a generated payload."
         },
         "left": {
           "$ref": "#/$defs/ContentPayload"
@@ -1770,12 +1846,12 @@
     },
     "ContentPayload": {
       "type": "object",
-      "description": "A single content payload. The optional 'type' discriminator can make intent explicit, but validators and engines infer it from fields such as text, runs, bullets, items, src, chartType, rows, code, shape, children, or prompt.",
+      "description": "A single content payload. The optional 'type' discriminator can make intent explicit, but validators and engines infer it from fields such as text, runs, bullets, items, src, chartType, rows, code, shape, value, quote, or events. Children, prompt, and expectedType are structural/generation metadata, not content kinds.",
       "additionalProperties": false,
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["text", "list", "image", "shape", "chart", "table", "video", "code", "group", "placeholder"],
+          "enum": ["text", "list", "image", "shape", "chart", "table", "video", "code", "metric", "quote", "timeline"],
           "description": "Optional content kind. When omitted, engines infer the kind from the fields present."
         },
         "text": {
@@ -1852,10 +1928,66 @@
           "description": "Language identifier used for syntax highlighting.",
           "examples": ["python", "ts", "tsx", "rust", "go", "bash", "json", "yaml"]
         },
+        "value": {
+          "oneOf": [
+            { "type": "string" },
+            { "type": "number" }
+          ],
+          "description": "Primary metric value.",
+          "examples": [42, "$12.4M", "98%"]
+        },
+        "label": {
+          "type": "string",
+          "description": "Metric label.",
+          "examples": ["Revenue", "Retention", "Latency"]
+        },
+        "unit": {
+          "type": "string",
+          "description": "Metric unit, suffix, or currency marker.",
+          "examples": ["%", "ms", "$M"]
+        },
+        "delta": {
+          "oneOf": [
+            { "type": "string" },
+            { "type": "number" }
+          ],
+          "description": "Metric change value.",
+          "examples": ["+12%", -4.2]
+        },
+        "trend": {
+          "type": "string",
+          "enum": ["up", "down", "flat"],
+          "description": "Metric trend direction."
+        },
+        "quote": {
+          "type": "string",
+          "description": "Quote text.",
+          "examples": ["This changed how our team handles reviews."]
+        },
+        "attribution": {
+          "type": "string",
+          "description": "Person or organization credited for the quote.",
+          "examples": ["VP Operations, Acme Corp"]
+        },
+        "source": {
+          "type": "string",
+          "description": "Optional quote source, citation, or URL.",
+          "examples": ["Customer interview, March 2026", "https://acme.com/case-study"]
+        },
+        "events": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/TimelineEvent" },
+          "minItems": 1,
+          "description": "Timeline events ordered by narrative or chronology.",
+          "examples": [[
+            { "date": "2026-01", "title": "Pilot", "text": "Launch with the first operations team." },
+            { "date": "2026-04", "title": "Rollout", "text": "Expand to all regions." }
+          ]]
+        },
         "children": {
           "type": "array",
           "items": { "$ref": "#/$defs/ContentPayload" },
-          "description": "Child content payloads rendered as a logical group."
+          "description": "Child content payloads rendered together as a composed payload."
         },
         "prompt": {
           "type": "string",
@@ -1867,7 +1999,7 @@
         },
         "expectedType": {
           "type": "string",
-          "enum": ["text", "list", "image", "chart", "table"],
+          "enum": ["text", "list", "image", "chart", "table", "metric", "quote", "timeline"],
           "description": "Expected content type the engine or agent should produce."
         }
       },
@@ -1938,22 +2070,54 @@
         {
           "if": {
             "required": ["type"],
-            "properties": { "type": { "const": "group" } }
+            "properties": { "type": { "const": "metric" } }
           },
           "then": {
-            "required": ["children"]
+            "required": ["value"]
           }
         },
         {
           "if": {
             "required": ["type"],
-            "properties": { "type": { "const": "placeholder" } }
+            "properties": { "type": { "const": "quote" } }
           },
           "then": {
-            "required": ["prompt"]
+            "required": ["quote"]
+          }
+        },
+        {
+          "if": {
+            "required": ["type"],
+            "properties": { "type": { "const": "timeline" } }
+          },
+          "then": {
+            "required": ["events"]
           }
         }
       ]
+    },
+    "TimelineEvent": {
+      "type": "object",
+      "description": "A single event inside a timeline content payload.",
+      "required": ["title"],
+      "additionalProperties": false,
+      "properties": {
+        "date": {
+          "type": "string",
+          "description": "Event date or date label. Use ISO-like values when possible, but human labels are allowed for eras and relative milestones.",
+          "examples": ["2026-01", "Q2 2026", "Launch week"]
+        },
+        "title": {
+          "type": "string",
+          "description": "Short event title.",
+          "examples": ["Pilot", "Rollout", "Scale"]
+        },
+        "text": {
+          "type": "string",
+          "description": "Optional event detail.",
+          "examples": ["Launch with the first operations team."]
+        }
+      }
     },
     "TextListItem": {
       "description": "A flat item inside a list. Strings cover the common case; object form adds inline runs and nesting depth without creating nested slide content payloads.",

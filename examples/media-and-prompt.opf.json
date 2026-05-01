@@ -1,5 +1,5 @@
 {
-  "name": "Media And Placeholder Example",
+  "name": "Media And Prompt Example",
   "slides": [
     {
       "title": "Product Snapshot",
@@ -13,7 +13,6 @@
     {
       "title": "Generate Follow-Up",
       "left+center+right": {
-        "type": "placeholder",
         "prompt": "Create three concise next steps for an operations audience.",
         "expectedType": "list"
       }

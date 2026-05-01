@@ -26,8 +26,12 @@ assert.ok(languages.some((record) => record.id === "english-gb" && record.bcp47 
 
 const doc = {
   name: "Smoke Test",
+  organization: { id: "acme", name: "Acme Corp" },
+  speaker: { id: "alice", name: "Alice Chen" },
+  author: "Test Author",
+  audience: ["executives"],
   language: "en-US",
-  takeaways: ["Remember this result"],
+  takeaway: "Remember this result",
   duration: 10,
   slides: [{ title: "Smoke Test", items: ["First", "Second"] }],
 };
@@ -59,6 +63,21 @@ assertPresentationValid({
 });
 
 assertPresentationValid({
+  name: "Array Metadata",
+  organization: [
+    { id: "acme", name: "Acme Corp", role: "primary" },
+    { id: "partner", name: "Partner Co", role: "partner" },
+  ],
+  speaker: [
+    { id: "alice", name: "Alice Chen", organizationId: "acme" },
+    { id: "bob", name: "Bob Lee", organizationId: "partner" },
+  ],
+  author: ["Alice Chen", "Bob Lee"],
+  takeaway: ["First point", "Second point"],
+  slides: [{ title: "Metadata", text: "Array forms are supported." }],
+});
+
+assertPresentationValid({
   name: "Inline Language",
   language: {
     bcp47: "ar-SA",
@@ -71,10 +90,13 @@ assertPresentationValid({
 
 assertPresentationValid({
   name: "Inline Audience Purpose Tone",
-  audience: {
-    id: "executives",
-    attentionBudgetMinutes: 20,
-  },
+  audience: [
+    "board",
+    {
+      id: "executives",
+      attentionBudgetMinutes: 20,
+    },
+  ],
   purpose: {
     id: "decide",
     outcome: "Approve the Q4 hiring plan",
@@ -121,6 +143,33 @@ assertPresentationValid({
   }],
 });
 
+assertPresentationValid({
+  name: "Metric Quote Timeline",
+  slides: [
+    { title: "Metric", type: "metric", value: "42%", label: "Cycle reduction", trend: "up" },
+    { title: "Quote", type: "quote", quote: "This changed our workflow.", attribution: "VP Operations" },
+    {
+      title: "Timeline",
+      type: "timeline",
+      events: [
+        { date: "Q1", title: "Pilot" },
+        { date: "Q2", title: "Rollout" },
+      ],
+    },
+  ],
+});
+
+assertPresentationValid({
+  name: "Prompt Without Placeholder Type",
+  slides: [{
+    title: "Generate Follow-Up",
+    "left+center+right": {
+      prompt: "Create three concise next steps.",
+      expectedType: "list",
+    },
+  }],
+});
+
 assertPresentationInvalid({
   name: "Overlap",
   slides: [{ left: { text: "A" }, "left+center": { text: "B" } }],
@@ -132,6 +181,16 @@ assertPresentationInvalid({
 }, "must NOT have additional properties");
 
 assertPresentationInvalid({
+  title: "Root Title",
+  slides: [{ title: "Slide Title" }],
+}, "must NOT have additional properties");
+
+assertPresentationInvalid({
+  name: "Unknown Slide Field",
+  slides: [{ title: "Slide Title", group: "Old group" }],
+}, "must NOT have additional properties");
+
+assertPresentationInvalid({
   name: "Mixed Root And Regions",
   slides: [{ items: ["Root"], left: { text: "Region" } }],
 }, "cannot be mixed");
@@ -140,6 +199,31 @@ assertPresentationInvalid({
   name: "Missing List Items",
   slides: [{ type: "list" }],
 }, "requires 'items'");
+
+assertPresentationInvalid({
+  name: "Missing Metric Value",
+  slides: [{ type: "metric", label: "Revenue" }],
+}, "requires 'value'");
+
+assertPresentationInvalid({
+  name: "Missing Quote Text",
+  slides: [{ type: "quote", attribution: "Customer" }],
+}, "requires 'quote'");
+
+assertPresentationInvalid({
+  name: "Missing Timeline Events",
+  slides: [{ type: "timeline" }],
+}, "requires 'events'");
+
+assertPresentationInvalid({
+  name: "Removed Placeholder Type",
+  slides: [{ type: "placeholder", prompt: "Create a list.", expectedType: "list" }],
+}, "must be equal to one of the allowed values");
+
+assertPresentationInvalid({
+  name: "Removed Group Type",
+  slides: [{ type: "group", children: [{ text: "Child" }] }],
+}, "must be equal to one of the allowed values");
 
 assertPresentationInvalid({
   name: "Mixed Payload Kinds",
@@ -154,9 +238,15 @@ assertPresentationInvalid({
 
 assertPresentationInvalid({
   name: "Incomplete Audience",
-  audience: { technicalFluency: "high" },
+  audience: [{ technicalFluency: "high" }],
   slides: [{ title: "Slide Title" }],
 }, "must match a schema in anyOf");
+
+assertPresentationInvalid({
+  name: "Old Singular Audience",
+  audience: "executives",
+  slides: [{ title: "Slide Title" }],
+}, "must be array");
 
 assertPresentationInvalid({
   name: "Incomplete Purpose",
@@ -177,38 +267,10 @@ assertPresentationInvalid({
 }, "Use 'en-GB' for UK English");
 
 assertPresentationInvalid({
-  title: "Old Root Title",
-  slides: [{ title: "Slide Title" }],
-}, "Presentation.title has been renamed to Presentation.name");
-
-assertPresentationInvalid({
-  name: "Old Root Subtitle",
-  subtitle: "Old root subtitle",
-  slides: [{ title: "Slide Title" }],
-}, "Presentation.subtitle has been removed");
-
-assertPresentationInvalid({
-  name: "Old Duration",
-  durationMinutes: 10,
-  slides: [{ title: "Slide Title" }],
-}, "Presentation.durationMinutes has been renamed to Presentation.duration");
-
-assertPresentationInvalid({
-  name: "Old Key Messages",
-  keyMessages: ["Old message"],
-  slides: [{ title: "Slide Title" }],
-}, "Presentation.keyMessages has been renamed to Presentation.takeaways");
-
-assertPresentationInvalid({
   name: "Fractional Duration",
   duration: 10.5,
   slides: [{ title: "Slide Title" }],
 }, "must be integer");
-
-assertPresentationInvalid({
-  name: "Old Slide Group",
-  slides: [{ group: "Old group", title: "Slide Title" }],
-}, "slides[].group has been removed");
 
 for (const entry of catalogEntries) {
   assert.ok(entry.records.length > 0, `${entry.kind} should have records`);

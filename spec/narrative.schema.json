@@ -164,10 +164,16 @@
           "type": "string",
           "enum": [
             "text",
+            "list",
             "image",
+            "shape",
             "chart",
             "table",
-            "code"
+            "video",
+            "code",
+            "metric",
+            "quote",
+            "timeline"
           ],
           "description": "Default content kind for the beat's slide. Mirrors ContentPayload.type and helps engines choose a sensible layout when only the beat is specified."
         },
