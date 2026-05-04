@@ -13,9 +13,9 @@ The optional payload `type` can make intent explicit, but OPF should usually inf
 | `video` | `video` | Single asset source string. |
 | `chart` | `chart` | Chart object with `type` and tabular `data`. |
 | `table` | `table` | Table object with optional `headers` and required `rows`. |
-| `code` | `code` | String shorthand or `CodeBlock` object with `source`, `language`, and `filename`. |
+| `code` | `code` | String shorthand or `Code` object with `source`, `language`, and `filename`. |
 | `metric` | `metric` | String/number shorthand or `Metric` object with `value`, `label`, `description`, `unit`, `delta`, and `trend`. |
-| `quote` | `quote` | Quote text; `attribution` and `source` are optional. |
+| `quote` | `quote` | String shorthand or `Quote` object with `text`, `attribution`, and `source`. |
 | `events` | `timeline` | Timeline event list. |
 
 ## Chart
@@ -100,6 +100,21 @@ Metric-specific fields are grouped under `metric`. A string or number value is s
     "description": "Median reduction across customer review workflows.",
     "delta": "+11 pts",
     "trend": "up"
+  }
+}
+```
+
+## Quote
+
+Quote-specific fields are grouped under `quote`. A string value is shorthand for `quote.text`; use object form when attribution or citation matters.
+
+```json
+{
+  "title": "Customer Proof",
+  "quote": {
+    "text": "The new workflow made exceptions visible before they became escalations.",
+    "attribution": "VP Operations, Acme Corp",
+    "source": "Customer interview"
   }
 }
 ```

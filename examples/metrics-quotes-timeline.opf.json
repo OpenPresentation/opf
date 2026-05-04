@@ -15,9 +15,11 @@
     {
       "title": "Customer Proof",
       "type": "quote",
-      "quote": "The new workflow made exceptions visible before they became escalations.",
-      "attribution": "VP Operations, Acme Corp",
-      "source": "Customer interview"
+      "quote": {
+        "text": "The new workflow made exceptions visible before they became escalations.",
+        "attribution": "VP Operations, Acme Corp",
+        "source": "Customer interview"
+      }
     },
     {
       "title": "Rollout Plan",

@@ -1,4 +1,4 @@
-# Possible Content Payload Design Overrides
+# Possible Content Payload Design
 
 This is a parking-lot note for design controls intentionally removed from slide content payloads while the v1 content model stabilizes.
 
@@ -11,7 +11,7 @@ Current principle: root slide payload fields and promoted region payloads should
   "title": "Revenue",
   "left": {
     "text": "Revenue grew 28%",
-    "designOverrides": {
+    "design": {
       "text": {
         "alignment": "center"
       }
@@ -20,7 +20,7 @@ Current principle: root slide payload fields and promoted region payloads should
 }
 ```
 
-Open question: whether overrides belong inline on each content payload, in `slides[].designOverrides`, or in a reusable style catalog keyed by region key or payload `type`.
+Open question: whether overrides belong inline on each content payload, in `slides[].design`, or in a reusable style catalog keyed by region key or payload `type`.
 
 ## Deferred Fields
 

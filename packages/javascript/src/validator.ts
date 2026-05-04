@@ -106,8 +106,6 @@ const rootPayloadFields = [
   "code",
   "metric",
   "quote",
-  "attribution",
-  "source",
   "events",
   "children",
   "prompt",
@@ -169,7 +167,7 @@ const contentKindSpecs: Record<ContentKind, ContentKindSpec> = {
     required: ["metric"],
   },
   quote: {
-    fields: ["quote", "attribution", "source"],
+    fields: ["quote"],
     required: ["quote"],
   },
   timeline: {
@@ -309,7 +307,7 @@ function inferredKinds(value: Record<string, unknown>): ContentKind[] {
   if (hasOwn(value, "table")) kinds.push("table");
   if (hasOwn(value, "code")) kinds.push("code");
   if (hasOwn(value, "metric")) kinds.push("metric");
-  if (presentFields(value, contentKindSpecs.quote.fields).length > 0) kinds.push("quote");
+  if (hasOwn(value, "quote")) kinds.push("quote");
   if (hasOwn(value, "events")) kinds.push("timeline");
 
   return kinds;

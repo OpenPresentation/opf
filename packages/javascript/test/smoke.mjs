@@ -90,6 +90,19 @@ assertPresentationValid({
 });
 
 assertPresentationValid({
+  name: "Slide Design",
+  slides: [{
+    id: "s1",
+    type: "text",
+    title: "Designed Slide",
+    design: {
+      background: "#111827",
+    },
+    text: "Slide-level design overrides deck design.",
+  }],
+});
+
+assertPresentationValid({
   name: "Inline Language",
   language: {
     bcp47: "ar-SA",
@@ -261,7 +274,16 @@ assertPresentationValid({
       },
     },
     { title: "Metric Shorthand", metric: 98.7 },
-    { title: "Quote", type: "quote", quote: "This changed our workflow.", attribution: "VP Operations" },
+    {
+      title: "Quote",
+      type: "quote",
+      quote: {
+        text: "This changed our workflow.",
+        attribution: "VP Operations",
+        source: "Customer interview",
+      },
+    },
+    { title: "Quote Shorthand", quote: "Simple proof point." },
     {
       title: "Timeline",
       type: "timeline",
@@ -404,6 +426,11 @@ assertPresentationInvalid({
 }, "must NOT have additional properties");
 
 assertPresentationInvalid({
+  name: "Renamed Design Overrides",
+  slides: [{ title: "Old Design", designOverrides: { background: "#111827" } }],
+}, "must NOT have additional properties");
+
+assertPresentationInvalid({
   name: "Removed Loose Code Language Field",
   slides: [{ title: "Old Code", code: "print('hello')", language: "python" }],
 }, "must NOT have additional properties");
@@ -429,9 +456,19 @@ assertPresentationInvalid({
 }, "must NOT have additional properties");
 
 assertPresentationInvalid({
-  name: "Missing Quote Text",
-  slides: [{ type: "quote", attribution: "Customer" }],
+  name: "Missing Quote Payload",
+  slides: [{ type: "quote" }],
 }, "requires 'quote'");
+
+assertPresentationInvalid({
+  name: "Missing Quote Text",
+  slides: [{ quote: { attribution: "Customer" } }],
+}, "must have required property 'text'");
+
+assertPresentationInvalid({
+  name: "Removed Loose Quote Fields",
+  slides: [{ quote: "Proof point.", attribution: "Customer", source: "Interview" }],
+}, "must NOT have additional properties");
 
 assertPresentationInvalid({
   name: "Missing Timeline Events",
