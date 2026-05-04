@@ -24,23 +24,27 @@
     {
       "title": "Rollout Plan",
       "type": "timeline",
-      "events": [
-        {
-          "date": "Q1",
-          "title": "Pilot",
-          "text": "Launch with one operations team."
-        },
-        {
-          "date": "Q2",
-          "title": "Rollout",
-          "text": "Expand to all regions."
-        },
-        {
-          "date": "Q3",
-          "title": "Scale",
-          "text": "Automate exception reporting."
-        }
-      ]
+      "timeline": {
+        "name": "Regional Rollout",
+        "description": "Major milestones for the rollout.",
+        "events": [
+          {
+            "when": "Q1",
+            "what": "Pilot",
+            "description": "Launch with one operations team."
+          },
+          {
+            "when": "Q2",
+            "what": "Rollout",
+            "description": "Expand to all regions."
+          },
+          {
+            "when": "Q3",
+            "what": "Scale",
+            "description": "Automate exception reporting."
+          }
+        ]
+      }
     }
   ]
 }

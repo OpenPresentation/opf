@@ -228,17 +228,32 @@ assertPresentationValid({
 
 assertPresentationValid({
   name: "Media Source String Forms",
+  assets: {
+    "product-shot": "./assets/product-shot.png",
+    "demo-video": {
+      src: "./media/demo.mp4",
+      mediaType: "video/mp4",
+      title: "Product demo",
+    },
+  },
+  design: {
+    logo: { src: "asset:product-shot", alt: "Product screenshot" },
+    watermark: { src: "asset:product-shot", opacity: 0.08 },
+    slideImage: { src: "asset:product-shot", position: "background" },
+  },
   slides: [
     { title: "Image Asset Ref", type: "image", image: "asset:product-shot" },
     { title: "Image HTTPS URL", image: "https://www.someurl.com/my-image.png" },
     { title: "Image Relative Path", image: "./assets/product-shot.png" },
     { title: "Image Local Absolute Path", image: "/Users/example/assets/product-shot.png" },
     { title: "Image Data URI", image: "data:image/png;base64,iVBORw0KGgo=" },
+    { title: "Image Object", image: { src: "asset:product-shot", alt: "Product screenshot" } },
     { title: "Video Asset Ref", type: "video", video: "asset:demo-video" },
     { title: "Video HTTPS URL", video: "https://cdn.example.com/media/demo.mp4" },
     { title: "Video Relative Path", video: "./media/demo.mp4" },
     { title: "Video Local Absolute Path", video: "/Users/example/media/demo.mp4" },
     { title: "Video Data URI", video: "data:video/mp4;base64,AAAA" },
+    { title: "Video Object", video: { src: "asset:demo-video", title: "Demo clip" } },
   ],
 });
 
@@ -287,10 +302,21 @@ assertPresentationValid({
     {
       title: "Timeline",
       type: "timeline",
-      events: [
-        { date: "Q1", title: "Pilot" },
-        { date: "Q2", title: "Rollout" },
+      timeline: [
+        { when: "Q1", what: "Pilot" },
+        { when: "Q2", what: "Rollout" },
       ],
+    },
+    {
+      title: "Timeline Object",
+      timeline: {
+        name: "Regional Rollout",
+        description: "Major milestones for the rollout.",
+        events: [
+          { when: "Q1", what: "Pilot", description: "Launch with one operations team." },
+          { when: "Q2", what: "Rollout", description: "Expand to all regions." },
+        ],
+      },
     },
   ],
 });
@@ -406,6 +432,19 @@ assertPresentationInvalid({
 }, "must be string");
 
 assertPresentationInvalid({
+  name: "Missing Asset Src",
+  slides: [{ type: "image", image: { alt: "Missing source" } }],
+}, "must have required property 'src'");
+
+assertPresentationInvalid({
+  name: "Removed Asset Type Field",
+  assets: {
+    "product-shot": { type: "image", src: "./assets/product-shot.png" },
+  },
+  slides: [{ type: "image", image: "asset:product-shot" }],
+}, "must NOT have additional properties");
+
+assertPresentationInvalid({
   name: "Missing List Item Text",
   slides: [{ items: [{ description: "Missing text" }] }],
 }, "must have required property 'text'");
@@ -471,9 +510,19 @@ assertPresentationInvalid({
 }, "must NOT have additional properties");
 
 assertPresentationInvalid({
-  name: "Missing Timeline Events",
+  name: "Missing Timeline Payload",
   slides: [{ type: "timeline" }],
-}, "requires 'events'");
+}, "requires 'timeline'");
+
+assertPresentationInvalid({
+  name: "Missing Timeline Event What",
+  slides: [{ timeline: [{ when: "Q1", description: "Missing event label" }] }],
+}, "must have required property 'what'");
+
+assertPresentationInvalid({
+  name: "Removed Loose Events Field",
+  slides: [{ events: [{ when: "Q1", what: "Pilot" }] }],
+}, "must NOT have additional properties");
 
 assertPresentationInvalid({
   name: "Removed Placeholder Type",

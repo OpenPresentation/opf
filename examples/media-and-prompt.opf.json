@@ -19,9 +19,6 @@
     }
   ],
   "assets": {
-    "product-shot": {
-      "type": "image",
-      "src": "./assets/product-shot.png"
-    }
+    "product-shot": "./assets/product-shot.png"
   }
 }

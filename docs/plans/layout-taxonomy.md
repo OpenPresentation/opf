@@ -105,7 +105,7 @@ Add eight properties to `Design` (and by inheritance to `Theme` and `Slide.desig
 | `titleAlignment` | `"left"` \| `"center"` \| `"right"` | engine | `-left` / `-center` (title) | Horizontal alignment of the title placeholder. |
 | `contentAlignment` | `"left"` \| `"center"` \| `"right"` | engine | `-left` / `-center` (content) | Horizontal alignment of body/content regions. |
 | `contentBox` | `boolean` | `false` | `-box` | Render content inside a visible card / surface. |
-| `slideImage` | `AssetSource` \| `{ src, position }` | none | `-slideimage[-...]` | Full-bleed or positioned slide-level image overlay. `position` ∈ `"background"` (default) / `"top"` / `"bottom"` / `"left"` / `"right"`. |
+| `slideImage` | `Asset` \| `{ src, position }` | none | `-slideimage[-...]` | Full-bleed or positioned slide-level image overlay. `position` ∈ `"background"` (default) / `"top"` / `"bottom"` / `"left"` / `"right"`. |
 | `contentDirection` | `"horizontal"` \| `"vertical"` | `"horizontal"` | `-vertical` | Axis along which parallel content blocks are arranged. |
 | `chartPrimary` | `"none"` \| `"top"` \| `"bottom"` \| `"left"` \| `"right"` | `"none"` | chart `-left` / `-right` / `-top` / `-bottom` | Position of the primary chart on chart layouts; `"none"` = equal weight. |
 | `imageFill` | `"crop"` \| `"fit"` | `"crop"` | image `-crop` / `-fit` | How `picture` placeholders fill their box. A future content-item design override may expose this per item. |

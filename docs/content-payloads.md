@@ -9,14 +9,14 @@ The optional payload `type` can make intent explicit, but OPF should usually inf
 | `text` | `text` | Plain string or `TextRun[]`. |
 | `bullets` | `text` | Simple text bullets, usually `string[]`. |
 | `items` | `list` | Generic list payload, usually `string[]` or `ListItem[]`. |
-| `image` | `image` | Single asset source string. |
-| `video` | `video` | Single asset source string. |
+| `image` | `image` | Asset string shorthand or `Asset` object with `src` and optional metadata. |
+| `video` | `video` | Asset string shorthand or `Asset` object with `src` and optional metadata. |
 | `chart` | `chart` | Chart object with `type` and tabular `data`. |
 | `table` | `table` | Table object with optional `headers` and required `rows`. |
 | `code` | `code` | String shorthand or `Code` object with `source`, `language`, and `filename`. |
 | `metric` | `metric` | String/number shorthand or `Metric` object with `value`, `label`, `description`, `unit`, `delta`, and `trend`. |
 | `quote` | `quote` | String shorthand or `Quote` object with `text`, `attribution`, and `source`. |
-| `events` | `timeline` | Timeline event list. |
+| `timeline` | `timeline` | Array shorthand or `Timeline` object with `name`, `description`, and `events`. |
 
 ## Chart
 
@@ -115,6 +115,32 @@ Quote-specific fields are grouped under `quote`. A string value is shorthand for
     "text": "The new workflow made exceptions visible before they became escalations.",
     "attribution": "VP Operations, Acme Corp",
     "source": "Customer interview"
+  }
+}
+```
+
+## Timeline
+
+Timeline-specific fields are grouped under `timeline`. An array value is shorthand for `timeline.events`; use object form when the timeline needs a name or description. Timeline events use `when`, `what`, and `description`.
+
+```json
+{
+  "title": "Rollout Plan",
+  "timeline": {
+    "name": "Regional Rollout",
+    "description": "Major milestones for the rollout.",
+    "events": [
+      {
+        "when": "Q1",
+        "what": "Pilot",
+        "description": "Launch with one operations team."
+      },
+      {
+        "when": "Q2",
+        "what": "Rollout",
+        "description": "Expand to all regions."
+      }
+    ]
   }
 }
 ```

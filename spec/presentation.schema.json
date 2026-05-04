@@ -207,58 +207,61 @@
   "$defs": {
     "Assets": {
       "type": "object",
-      "description": "Reusable asset registry for resources used by slides, charts, metadata, and design. Keys are stable asset ids referenced elsewhere as 'asset:<id>'. Asset src values accept URLs, data URIs, relative paths resolved against the OPF file location, or local filesystem paths.",
+      "description": "Reusable asset registry for resources used by slides, charts, metadata, and design. Keys are stable asset ids referenced elsewhere as 'asset:<id>'. Each asset can be a source string or an object with src plus optional metadata.",
       "propertyNames": {
         "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$"
       },
       "additionalProperties": { "$ref": "#/$defs/Asset" },
       "examples": [
         {
-          "acme-logo": { "type": "image", "src": "./assets/acme-logo.svg" },
-          "watermark": { "type": "image", "src": "./assets/watermark.png" },
-          "revenue": { "type": "data", "src": "./data/revenue.csv", "format": "csv" }
+          "acme-logo": "./assets/acme-logo.svg",
+          "watermark": { "src": "./assets/watermark.png", "alt": "Acme watermark" },
+          "revenue": { "src": "./data/revenue.csv", "format": "csv" }
         }
       ]
     },
     "Asset": {
-      "type": "object",
-      "description": "Reusable external or embedded resource. Use 'mediaType' when the content type cannot be inferred from the src extension or data URI; use 'format' for authoring-level parsing hints such as csv, xlsx, svg, or png.",
-      "required": ["type", "src"],
-      "properties": {
-        "type": {
+      "description": "Reusable or inline resource. A string is shorthand for { \"src\": value }. Source strings accept 'asset:<id>' references, HTTPS URLs, data URIs, relative paths resolved against the OPF file location, or local filesystem paths. Use object form when metadata such as alt text, title, mediaType, or format matters.",
+      "oneOf": [
+        {
           "type": "string",
-          "enum": ["image", "data", "video", "audio", "document", "font", "other"],
-          "description": "Broad kind of resource."
+          "examples": ["asset:acme-logo", "https://cdn.acme.com/image.png", "./assets/image.png", "data:image/png;base64,..."]
         },
-        "src": {
-          "type": "string",
-          "description": "Resource source. Accepts an HTTPS URL, data URI, relative path resolved against the OPF file location, or local filesystem path.",
-          "examples": ["./assets/logo.svg", "https://cdn.acme.com/logo.png", "data:image/svg+xml;base64,...", "/Users/alice/decks/data/revenue.csv"]
-        },
-        "mediaType": {
-          "type": "string",
-          "description": "Optional MIME media type when it cannot be inferred from src.",
-          "examples": ["image/svg+xml", "image/png", "text/csv", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"]
-        },
-        "format": {
-          "type": "string",
-          "description": "Optional authoring/parsing format hint. Useful for data and image assets where format is more convenient than a full MIME media type.",
-          "examples": ["csv", "tsv", "json", "xlsx", "svg", "png", "jpg", "webp"]
-        },
-        "title": {
-          "type": "string",
-          "description": "Human-readable asset title for editors and asset pickers."
-        },
-        "description": {
-          "type": "string",
-          "description": "Optional notes about the asset's contents, provenance, or intended use."
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["src"],
+          "properties": {
+            "src": {
+              "type": "string",
+              "description": "Resource source. Accepts an 'asset:<id>' reference, HTTPS URL, data URI, relative path resolved against the OPF file location, or local filesystem path.",
+              "examples": ["asset:acme-logo", "./assets/logo.svg", "https://cdn.acme.com/logo.png", "data:image/svg+xml;base64,...", "/Users/alice/decks/data/revenue.csv"]
+            },
+            "alt": {
+              "type": "string",
+              "description": "Alternative text for images and other visual assets."
+            },
+            "title": {
+              "type": "string",
+              "description": "Human-readable asset title for editors and asset pickers."
+            },
+            "description": {
+              "type": "string",
+              "description": "Optional notes about the asset's contents, provenance, or intended use."
+            },
+            "mediaType": {
+              "type": "string",
+              "description": "Optional MIME media type when it cannot be inferred from src.",
+              "examples": ["image/svg+xml", "image/png", "text/csv", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"]
+            },
+            "format": {
+              "type": "string",
+              "description": "Optional authoring/parsing format hint. Useful when format is more convenient than a full MIME media type.",
+              "examples": ["csv", "tsv", "json", "xlsx", "svg", "png", "jpg", "webp"]
+            }
+          }
         }
-      }
-    },
-    "AssetSource": {
-      "type": "string",
-      "description": "Source string for a renderable or data resource. Accepts an HTTPS URL, data URI, relative path resolved against the OPF file location, local filesystem path, or 'asset:<id>' reference to the top-level assets registry.",
-      "examples": ["asset:acme-logo", "https://cdn.acme.com/image.png", "./assets/image.png", "data:image/png;base64,..."]
+      ]
     },
     "Audience": {
       "type": "object",
@@ -512,7 +515,7 @@
           "examples": ["Acme Corporation, Inc.", "Beta Industries, LLC"]
         },
         "logo": {
-          "$ref": "#/$defs/AssetSource",
+          "$ref": "#/$defs/Asset",
           "description": "Source for the organization's logo image. Accepts an HTTPS URL, data URI, relative path (resolved against the OPF file location), local path, or 'asset:<id>' reference. Common formats are SVG (preferred for vector logos), PNG (with transparency), or JPG. The primary organization's logo is used by default for cover-slide and footer branding; design.logo overrides the source.",
           "examples": [
             "https://cdn.acme.com/logo.svg",
@@ -575,7 +578,7 @@
           "examples": ["VP of Engineering", "Founder & CEO", "Chief Product Officer", "Senior Staff Engineer"]
         },
         "photo": {
-          "$ref": "#/$defs/AssetSource",
+          "$ref": "#/$defs/Asset",
           "description": "Source for the speaker's headshot image. Accepts an HTTPS URL, data URI, relative path (resolved against the OPF file location), local path, or 'asset:<id>' reference. Common formats are JPG or PNG; SVG is not appropriate for photographic content. Used on cover and bio slides.",
           "examples": [
             "https://cdn.acme.com/headshots/alice.jpg",
@@ -833,7 +836,7 @@
         },
         "logo": {
           "oneOf": [
-            { "$ref": "#/$defs/AssetSource" },
+            { "$ref": "#/$defs/Asset" },
             { "$ref": "#/$defs/LogoSet" }
           ],
           "description": "Deck logo assets used by layouts, covers, section dividers, headers, and footers. A string is the default logo source; object form provides light/dark, stacked, icon, and wordmark variants. When omitted, the renderer falls back to the primary organization logo.",
@@ -845,7 +848,7 @@
         "watermark": {
           "oneOf": [
             { "type": "boolean", "const": false },
-            { "$ref": "#/$defs/AssetSource" },
+            { "$ref": "#/$defs/Asset" },
             { "$ref": "#/$defs/Watermark" }
           ],
           "description": "Optional decorative watermark applied across slides. Use false to suppress an inherited watermark in slide-level design; a string is equivalent to { src: value }.",
@@ -886,12 +889,14 @@
         },
         "slideImage": {
           "oneOf": [
-            { "$ref": "#/$defs/AssetSource" },
+            { "$ref": "#/$defs/Asset" },
             {
               "type": "object",
+              "additionalProperties": false,
+              "required": ["position"],
               "properties": {
                 "src": {
-                  "$ref": "#/$defs/AssetSource",
+                  "type": "string",
                   "description": "Source for the slide-level image. When omitted in a design override, the object only configures how a slide-level image should be placed when one is supplied by a content payload, asset, or renderer convention."
                 },
                 "position": {
@@ -1333,7 +1338,7 @@
           "required": ["src"],
           "properties": {
             "src": {
-              "$ref": "#/$defs/AssetSource",
+              "type": "string",
               "description": "Source for the background image.",
               "examples": [
                 "https://cdn.acme.com/backgrounds/cover.jpg",
@@ -1400,53 +1405,54 @@
     "LogoSet": {
       "type": "object",
       "description": "Deck logo variants surfaced by layouts, covers, section dividers, headers, and footers. Organization identity lives in organization; this object only controls visual rendering assets. Renderer convention: on dark backgrounds prefer the 'light' variant, on light backgrounds prefer the 'dark' variant, and in square/vertical slots prefer the stacked family when present.",
+      "additionalProperties": false,
       "properties": {
         "default": {
-          "$ref": "#/$defs/AssetSource",
+          "$ref": "#/$defs/Asset",
           "description": "Default full-lockup logo. Used as fallback when no more specific variant is set."
         },
         "light": {
-          "$ref": "#/$defs/AssetSource",
+          "$ref": "#/$defs/Asset",
           "description": "Light-colored full-lockup logo intended for rendering on dark backgrounds."
         },
         "dark": {
-          "$ref": "#/$defs/AssetSource",
+          "$ref": "#/$defs/Asset",
           "description": "Dark-colored full-lockup logo intended for rendering on light backgrounds."
         },
         "stacked": {
-          "$ref": "#/$defs/AssetSource",
+          "$ref": "#/$defs/Asset",
           "description": "Stacked vertical logo lockup, suited to portrait or square brand-mark slots."
         },
         "stackedLight": {
-          "$ref": "#/$defs/AssetSource",
+          "$ref": "#/$defs/Asset",
           "description": "Light-colored stacked logo variant intended for rendering on dark backgrounds."
         },
         "stackedDark": {
-          "$ref": "#/$defs/AssetSource",
+          "$ref": "#/$defs/Asset",
           "description": "Dark-colored stacked logo variant intended for rendering on light backgrounds."
         },
         "icon": {
-          "$ref": "#/$defs/AssetSource",
+          "$ref": "#/$defs/Asset",
           "description": "Default icon, mark, or symbol without wordmark. Useful for tight spaces such as footers, badges, and slide-corner marks."
         },
         "iconLight": {
-          "$ref": "#/$defs/AssetSource",
+          "$ref": "#/$defs/Asset",
           "description": "Light-colored icon variant intended for rendering on dark backgrounds."
         },
         "iconDark": {
-          "$ref": "#/$defs/AssetSource",
+          "$ref": "#/$defs/Asset",
           "description": "Dark-colored icon variant intended for rendering on light backgrounds."
         },
         "wordmark": {
-          "$ref": "#/$defs/AssetSource",
+          "$ref": "#/$defs/Asset",
           "description": "Default wordmark: the organization name set in branded typography, without icon."
         },
         "wordmarkLight": {
-          "$ref": "#/$defs/AssetSource",
+          "$ref": "#/$defs/Asset",
           "description": "Light-colored wordmark variant intended for rendering on dark backgrounds."
         },
         "wordmarkDark": {
-          "$ref": "#/$defs/AssetSource",
+          "$ref": "#/$defs/Asset",
           "description": "Dark-colored wordmark variant intended for rendering on light backgrounds."
         }
       }
@@ -1454,9 +1460,11 @@
     "Watermark": {
       "type": "object",
       "description": "Decorative watermark image and rendering options. Use design.watermark = false to disable an inherited watermark.",
+      "additionalProperties": false,
+      "required": ["opacity"],
       "properties": {
         "src": {
-          "$ref": "#/$defs/AssetSource",
+          "type": "string",
           "description": "Source for the watermark image."
         },
         "opacity": {
@@ -1495,7 +1503,7 @@
           "examples": ["Confidential", "Q4 Business Review"]
         },
         "image": {
-          "$ref": "#/$defs/AssetSource",
+          "$ref": "#/$defs/Asset",
           "description": "Generic image rendered in this zone, such as a logo, partner mark, certification badge, or icon.",
           "examples": ["asset:acme-logo", "./assets/footer-badge.svg"]
         },
@@ -1586,11 +1594,11 @@
           "description": "Full-slide text-style bullet payload. Presence of this field infers type 'text'."
         },
         "image": {
-          "$ref": "#/$defs/AssetSource",
+          "$ref": "#/$defs/Asset",
           "description": "Full-slide image source. Presence of this field infers type 'image'."
         },
         "video": {
-          "$ref": "#/$defs/AssetSource",
+          "$ref": "#/$defs/Asset",
           "description": "Full-slide video source. Presence of this field infers type 'video'."
         },
         "chart": {
@@ -1623,11 +1631,9 @@
           ],
           "description": "Full-slide quote payload. A string is shorthand for { \"text\": value }; object form carries optional attribution and source metadata. Presence of this field infers type 'quote'."
         },
-        "events": {
-          "type": "array",
-          "items": { "$ref": "#/$defs/TimelineEvent" },
-          "minItems": 1,
-          "description": "Full-slide timeline events. Presence of this field infers type 'timeline'."
+        "timeline": {
+          "$ref": "#/$defs/Timeline",
+          "description": "Full-slide timeline payload. An array is shorthand for { \"events\": value }; object form carries optional name and description metadata. Presence of this field infers type 'timeline'."
         },
         "children": {
           "type": "array",
@@ -1809,7 +1815,7 @@
     },
     "ContentPayload": {
       "type": "object",
-      "description": "A single content payload. The optional 'type' discriminator can make intent explicit, but validators and engines infer it from fields such as text, bullets, items, image, video, chart, table, code, metric, quote, or events. Children, prompt, and expectedType are structural/generation metadata, not content kinds.",
+      "description": "A single content payload. The optional 'type' discriminator can make intent explicit, but validators and engines infer it from fields such as text, bullets, items, image, video, chart, table, code, metric, quote, or timeline. Children, prompt, and expectedType are structural/generation metadata, not content kinds.",
       "additionalProperties": false,
       "properties": {
         "type": {
@@ -1855,7 +1861,7 @@
           "examples": [["Sub-second agent latency", "Drop-in compatible with OpenAI tool-calling", "SOC 2 Type II"]]
         },
         "image": {
-          "$ref": "#/$defs/AssetSource",
+          "$ref": "#/$defs/Asset",
           "description": "Source for an image item.",
           "examples": [
             "https://cdn.acme.com/images/diagram.png",
@@ -1865,7 +1871,7 @@
           ]
         },
         "video": {
-          "$ref": "#/$defs/AssetSource",
+          "$ref": "#/$defs/Asset",
           "description": "Source for a video item.",
           "examples": [
             "asset:demo-video",
@@ -1929,15 +1935,23 @@
             }
           ]
         },
-        "events": {
-          "type": "array",
-          "items": { "$ref": "#/$defs/TimelineEvent" },
-          "minItems": 1,
-          "description": "Timeline events ordered by narrative or chronology.",
-          "examples": [[
-            { "date": "2026-01", "title": "Pilot", "text": "Launch with the first operations team." },
-            { "date": "2026-04", "title": "Rollout", "text": "Expand to all regions." }
-          ]]
+        "timeline": {
+          "$ref": "#/$defs/Timeline",
+          "description": "Timeline payload ordered by narrative or chronology.",
+          "examples": [
+            [
+              { "when": "2026-01", "what": "Pilot", "description": "Launch with the first operations team." },
+              { "when": "2026-04", "what": "Rollout", "description": "Expand to all regions." }
+            ],
+            {
+              "name": "Rollout Plan",
+              "description": "Major milestones for the regional rollout.",
+              "events": [
+                { "when": "Q1", "what": "Pilot" },
+                { "when": "Q2", "what": "Rollout" }
+              ]
+            }
+          ]
         },
         "children": {
           "type": "array",
@@ -2037,7 +2051,7 @@
             "properties": { "type": { "const": "timeline" } }
           },
           "then": {
-            "required": ["events"]
+            "required": ["timeline"]
           }
         }
       ]
@@ -2132,23 +2146,56 @@
         }
       }
     },
+    "Timeline": {
+      "description": "Timeline content. An array is shorthand for { \"events\": value }; object form carries optional name and description metadata.",
+      "oneOf": [
+        {
+          "type": "array",
+          "items": { "$ref": "#/$defs/TimelineEvent" },
+          "minItems": 1
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["events"],
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Short timeline label.",
+              "examples": ["Rollout Plan", "Migration Path"]
+            },
+            "description": {
+              "type": "string",
+              "description": "Optional timeline-level context.",
+              "examples": ["Major milestones for the regional rollout."]
+            },
+            "events": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/TimelineEvent" },
+              "minItems": 1,
+              "description": "Timeline events ordered by narrative, sequence, or chronology."
+            }
+          }
+        }
+      ]
+    },
     "TimelineEvent": {
       "type": "object",
       "description": "A single event inside a timeline content payload.",
-      "required": ["title"],
+      "required": ["what"],
       "additionalProperties": false,
       "properties": {
-        "date": {
+        "when": {
           "type": "string",
-          "description": "Event date or date label. Use ISO-like values when possible, but human labels are allowed for eras and relative milestones.",
+          "description": "Event time, date, or sequence label. Use ISO-like values when possible, but human labels are allowed for quarters, eras, and relative milestones.",
           "examples": ["2026-01", "Q2 2026", "Launch week"]
         },
-        "title": {
+        "what": {
           "type": "string",
-          "description": "Short event title.",
+          "description": "Short event label.",
           "examples": ["Pilot", "Rollout", "Scale"]
         },
-        "text": {
+        "description": {
           "type": "string",
           "description": "Optional event detail.",
           "examples": ["Launch with the first operations team."]
