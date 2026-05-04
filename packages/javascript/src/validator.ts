@@ -103,14 +103,8 @@ const rootPayloadFields = [
   "video",
   "chart",
   "table",
-  "shape",
   "code",
-  "language",
-  "value",
-  "label",
-  "unit",
-  "delta",
-  "trend",
+  "metric",
   "quote",
   "attribution",
   "source",
@@ -126,7 +120,6 @@ type ContentKind =
   | "text"
   | "list"
   | "image"
-  | "shape"
   | "chart"
   | "table"
   | "video"
@@ -155,10 +148,6 @@ const contentKindSpecs: Record<ContentKind, ContentKindSpec> = {
     fields: ["image"],
     required: ["image"],
   },
-  shape: {
-    fields: ["shape"],
-    required: ["shape"],
-  },
   chart: {
     fields: ["chart"],
     required: ["chart"],
@@ -172,12 +161,12 @@ const contentKindSpecs: Record<ContentKind, ContentKindSpec> = {
     required: ["video"],
   },
   code: {
-    fields: ["code", "language"],
+    fields: ["code"],
     required: ["code"],
   },
   metric: {
-    fields: ["value", "label", "unit", "delta", "trend"],
-    required: ["value"],
+    fields: ["metric"],
+    required: ["metric"],
   },
   quote: {
     fields: ["quote", "attribution", "source"],
@@ -318,9 +307,8 @@ function inferredKinds(value: Record<string, unknown>): ContentKind[] {
   if (hasOwn(value, "video")) kinds.push("video");
   if (hasOwn(value, "chart")) kinds.push("chart");
   if (hasOwn(value, "table")) kinds.push("table");
-  if (hasOwn(value, "shape")) kinds.push("shape");
   if (hasOwn(value, "code")) kinds.push("code");
-  if (presentFields(value, contentKindSpecs.metric.fields).length > 0) kinds.push("metric");
+  if (hasOwn(value, "metric")) kinds.push("metric");
   if (presentFields(value, contentKindSpecs.quote.fields).length > 0) kinds.push("quote");
   if (hasOwn(value, "events")) kinds.push("timeline");
 

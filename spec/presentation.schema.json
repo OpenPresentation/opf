@@ -752,7 +752,7 @@
         },
         "slideType": {
           "type": "string",
-          "enum": ["text", "list", "image", "shape", "chart", "table", "video", "code", "metric", "quote", "timeline"],
+          "enum": ["text", "list", "image", "chart", "table", "video", "code", "metric", "quote", "timeline"],
           "description": "Default content kind for the beat's slide. Mirrors ContentPayload.type and helps engines choose a sensible layout when only the beat is specified."
         },
         "layoutHint": {
@@ -1556,7 +1556,7 @@
         },
         "type": {
           "type": "string",
-          "enum": ["text", "list", "image", "shape", "chart", "table", "video", "code", "metric", "quote", "timeline"],
+          "enum": ["text", "list", "image", "chart", "table", "video", "code", "metric", "quote", "timeline"],
           "description": "Optional full-slide content kind. When omitted, engines infer the kind from root payload fields."
         },
         "text": {
@@ -1595,44 +1595,20 @@
           "$ref": "#/$defs/TablePayload",
           "description": "Full-slide table payload. Presence of this field infers type 'table'."
         },
-        "shape": {
-          "type": "string",
-          "description": "Full-slide shape type."
-        },
         "code": {
-          "type": "string",
-          "description": "Full-slide source code to display."
-        },
-        "language": {
-          "type": "string",
-          "description": "Language identifier used for syntax highlighting with code payloads."
-        },
-        "value": {
           "oneOf": [
             { "type": "string" },
-            { "type": "number" }
+            { "$ref": "#/$defs/CodeBlock" }
           ],
-          "description": "Full-slide metric value. Presence of this field infers type 'metric'."
+          "description": "Full-slide code payload. A string is shorthand for { \"source\": value }; object form carries optional syntax language and filename metadata."
         },
-        "label": {
-          "type": "string",
-          "description": "Full-slide metric label."
-        },
-        "unit": {
-          "type": "string",
-          "description": "Full-slide metric unit, suffix, or currency marker."
-        },
-        "delta": {
+        "metric": {
           "oneOf": [
             { "type": "string" },
-            { "type": "number" }
+            { "type": "number" },
+            { "$ref": "#/$defs/Metric" }
           ],
-          "description": "Full-slide metric change value."
-        },
-        "trend": {
-          "type": "string",
-          "enum": ["up", "down", "flat"],
-          "description": "Full-slide metric trend direction."
+          "description": "Full-slide metric payload. A string or number is shorthand for { \"value\": value }; object form carries optional label, description, unit, delta, and trend metadata. Numeric values remain numbers; renderers format them for display. Presence of this field infers type 'metric'."
         },
         "quote": {
           "type": "string",
@@ -1663,7 +1639,7 @@
         },
         "expectedType": {
           "type": "string",
-          "enum": ["text", "list", "image", "chart", "table", "metric", "quote", "timeline"],
+          "enum": ["text", "list", "image", "chart", "table", "code", "metric", "quote", "timeline"],
           "description": "Expected content type the engine or agent should produce for a generated payload."
         },
         "left": {
@@ -1838,12 +1814,12 @@
     },
     "ContentPayload": {
       "type": "object",
-      "description": "A single content payload. The optional 'type' discriminator can make intent explicit, but validators and engines infer it from fields such as text, bullets, items, image, video, chart, table, code, shape, value, quote, or events. Children, prompt, and expectedType are structural/generation metadata, not content kinds.",
+      "description": "A single content payload. The optional 'type' discriminator can make intent explicit, but validators and engines infer it from fields such as text, bullets, items, image, video, chart, table, code, metric, quote, or events. Children, prompt, and expectedType are structural/generation metadata, not content kinds.",
       "additionalProperties": false,
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["text", "list", "image", "shape", "chart", "table", "video", "code", "metric", "quote", "timeline"],
+          "enum": ["text", "list", "image", "chart", "table", "video", "code", "metric", "quote", "timeline"],
           "description": "Optional content kind. When omitted, engines infer the kind from the fields present."
         },
         "text": {
@@ -1909,51 +1885,39 @@
           "$ref": "#/$defs/TablePayload",
           "description": "Table payload. Presence of this field infers type 'table'."
         },
-        "shape": {
-          "type": "string",
-          "description": "Shape type.",
-          "examples": ["rectangle", "circle", "ellipse", "triangle", "arrow", "line", "star", "callout", "custom"]
-        },
         "code": {
-          "type": "string",
-          "description": "Source code to display.",
-          "examples": ["def greet(name: str) -> str:\n    return f\"Hello, {name}!\""]
-        },
-        "language": {
-          "type": "string",
-          "description": "Language identifier used for syntax highlighting.",
-          "examples": ["python", "ts", "tsx", "rust", "go", "bash", "json", "yaml"]
-        },
-        "value": {
           "oneOf": [
             { "type": "string" },
-            { "type": "number" }
+            { "$ref": "#/$defs/CodeBlock" }
           ],
-          "description": "Primary metric value.",
-          "examples": [42, "$12.4M", "98%"]
+          "description": "Code payload. A string is shorthand for { \"source\": value }; object form carries optional syntax language and filename metadata.",
+          "examples": [
+            "def greet(name: str) -> str:\n    return f\"Hello, {name}!\"",
+            {
+              "source": "export function greet(name: string) {\n  return `Hello, ${name}`;\n}",
+              "language": "ts",
+              "filename": "greet.ts"
+            }
+          ]
         },
-        "label": {
-          "type": "string",
-          "description": "Metric label.",
-          "examples": ["Revenue", "Retention", "Latency"]
-        },
-        "unit": {
-          "type": "string",
-          "description": "Metric unit, suffix, or currency marker.",
-          "examples": ["%", "ms", "$M"]
-        },
-        "delta": {
+        "metric": {
           "oneOf": [
             { "type": "string" },
-            { "type": "number" }
+            { "type": "number" },
+            { "$ref": "#/$defs/Metric" }
           ],
-          "description": "Metric change value.",
-          "examples": ["+12%", -4.2]
-        },
-        "trend": {
-          "type": "string",
-          "enum": ["up", "down", "flat"],
-          "description": "Metric trend direction."
+          "description": "Metric payload. A string or number is shorthand for { \"value\": value }; object form carries optional label, description, unit, delta, and trend metadata. Numeric values remain numbers; renderers format them for display.",
+          "examples": [
+            "98%",
+            42,
+            {
+              "value": "$12.4M",
+              "label": "Revenue",
+              "description": "Recognized revenue for the quarter.",
+              "delta": "+12%",
+              "trend": "up"
+            }
+          ]
         },
         "quote": {
           "type": "string",
@@ -1995,7 +1959,7 @@
         },
         "expectedType": {
           "type": "string",
-          "enum": ["text", "list", "image", "chart", "table", "metric", "quote", "timeline"],
+          "enum": ["text", "list", "image", "chart", "table", "code", "metric", "quote", "timeline"],
           "description": "Expected content type the engine or agent should produce."
         }
       },
@@ -2039,15 +2003,6 @@
         {
           "if": {
             "required": ["type"],
-            "properties": { "type": { "const": "shape" } }
-          },
-          "then": {
-            "required": ["shape"]
-          }
-        },
-        {
-          "if": {
-            "required": ["type"],
             "properties": { "type": { "const": "video" } }
           },
           "then": {
@@ -2069,7 +2024,7 @@
             "properties": { "type": { "const": "metric" } }
           },
           "then": {
-            "required": ["value"]
+            "required": ["metric"]
           }
         },
         {
@@ -2091,6 +2046,73 @@
           }
         }
       ]
+    },
+    "CodeBlock": {
+      "type": "object",
+      "description": "Code content with optional rendering metadata. Use 'source' for the code text, 'language' for syntax highlighting, and 'filename' when the rendered block should show a file label. A string value in a code field is shorthand for { \"source\": value }.",
+      "additionalProperties": false,
+      "required": ["source"],
+      "properties": {
+        "source": {
+          "type": "string",
+          "description": "Source code text to display.",
+          "examples": ["def greet(name: str) -> str:\n    return f\"Hello, {name}!\""]
+        },
+        "language": {
+          "type": "string",
+          "description": "Language identifier used for syntax highlighting.",
+          "examples": ["python", "ts", "tsx", "rust", "go", "bash", "json", "yaml"]
+        },
+        "filename": {
+          "type": "string",
+          "description": "Optional file label shown with the code block.",
+          "examples": ["app.py", "components/Button.tsx", "terraform/main.tf"]
+        }
+      }
+    },
+    "Metric": {
+      "type": "object",
+      "description": "Metric content with optional display metadata. Use 'value' for the primary value, 'label' for the metric name, 'description' for supporting context, 'unit' for a suffix/currency marker, 'delta' for change, and 'trend' for direction. A string or number value in a metric field is shorthand for { \"value\": value }; numeric values remain numbers and are formatted by renderers.",
+      "additionalProperties": false,
+      "required": ["value"],
+      "properties": {
+        "value": {
+          "oneOf": [
+            { "type": "string" },
+            { "type": "number" }
+          ],
+          "description": "Primary metric value.",
+          "examples": [42, "$12.4M", "98%"]
+        },
+        "label": {
+          "type": "string",
+          "description": "Metric label.",
+          "examples": ["Revenue", "Retention", "Latency"]
+        },
+        "description": {
+          "type": "string",
+          "description": "Optional supporting context for the metric.",
+          "examples": ["Recognized revenue for the quarter.", "Median API latency across production traffic."]
+        },
+        "unit": {
+          "type": "string",
+          "description": "Metric unit, suffix, or currency marker.",
+          "examples": ["%", "ms", "$M"]
+        },
+        "delta": {
+          "oneOf": [
+            { "type": "string" },
+            { "type": "number" }
+          ],
+          "description": "Metric change value.",
+          "examples": ["+12%", -4.2]
+        },
+        "trend": {
+          "type": "string",
+          "enum": ["up", "down", "flat"],
+          "description": "Metric trend direction."
+        }
+      }
     },
     "TimelineEvent": {
       "type": "object",

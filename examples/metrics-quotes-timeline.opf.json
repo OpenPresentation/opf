@@ -4,10 +4,13 @@
     {
       "title": "Operating Metric",
       "type": "metric",
-      "value": "42%",
-      "label": "Review cycle reduction",
-      "delta": "+11 pts",
-      "trend": "up"
+      "metric": {
+        "value": "42%",
+        "label": "Review cycle reduction",
+        "description": "Median reduction across customer review workflows.",
+        "delta": "+11 pts",
+        "trend": "up"
+      }
     },
     {
       "title": "Customer Proof",

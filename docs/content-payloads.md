@@ -13,9 +13,8 @@ The optional payload `type` can make intent explicit, but OPF should usually inf
 | `video` | `video` | Single asset source string. |
 | `chart` | `chart` | Chart object with `type` and tabular `data`. |
 | `table` | `table` | Table object with optional `headers` and required `rows`. |
-| `code` | `code` | Source code text; `language` is optional. |
-| `shape` | `shape` | Shape identifier. |
-| `value` | `metric` | Metric value; `label`, `unit`, `delta`, and `trend` are optional. |
+| `code` | `code` | String shorthand or `CodeBlock` object with `source`, `language`, and `filename`. |
+| `metric` | `metric` | String/number shorthand or `Metric` object with `value`, `label`, `description`, `unit`, `delta`, and `trend`. |
 | `quote` | `quote` | Quote text; `attribution` and `source` are optional. |
 | `events` | `timeline` | Timeline event list. |
 
@@ -69,6 +68,38 @@ Table-specific fields are grouped under `table`. Do not put loose `headers` or `
       ["Qualified", 42, "$1.2M"],
       ["Proposal", 18, "$840K"]
     ]
+  }
+}
+```
+
+## Code
+
+Code-specific fields are grouped under `code`. A string value is shorthand for `code.source`; use object form when syntax highlighting or a file label matters. In object form, `source` is required.
+
+```json
+{
+  "title": "Decision Rule",
+  "code": {
+    "source": "if risk > threshold:\n    escalate(owner)\nelse:\n    approve(change)",
+    "language": "python",
+    "filename": "decision.py"
+  }
+}
+```
+
+## Metric
+
+Metric-specific fields are grouped under `metric`. A string or number value is shorthand for `metric.value`; numeric values stay numeric and are formatted by renderers at display time. Use object form when labels, descriptions, units, deltas, or trends matter.
+
+```json
+{
+  "title": "Operating Metric",
+  "metric": {
+    "value": "42%",
+    "label": "Review cycle reduction",
+    "description": "Median reduction across customer review workflows.",
+    "delta": "+11 pts",
+    "trend": "up"
   }
 }
 ```

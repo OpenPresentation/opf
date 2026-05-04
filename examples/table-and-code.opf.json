@@ -36,8 +36,11 @@
     {
       "title": "Decision Rule",
       "left": {
-        "code": "if risk > threshold:\n    escalate(owner)\nelse:\n    approve(change)",
-        "language": "python"
+        "code": {
+          "source": "if risk > threshold:\n    escalate(owner)\nelse:\n    approve(change)",
+          "language": "python",
+          "filename": "decision.py"
+        }
       },
       "center+right": {
         "items": [

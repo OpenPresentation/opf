@@ -230,9 +230,37 @@ assertPresentationValid({
 });
 
 assertPresentationValid({
+  name: "Code Block",
+  slides: [
+    {
+      title: "Decision Rule",
+      code: {
+        source: "if risk > threshold:\n    escalate(owner)\nelse:\n    approve(change)",
+        language: "python",
+        filename: "decision.py",
+      },
+    },
+    {
+      title: "String Shorthand",
+      code: "console.log('hello');",
+    },
+  ],
+});
+
+assertPresentationValid({
   name: "Metric Quote Timeline",
   slides: [
-    { title: "Metric", type: "metric", value: "42%", label: "Cycle reduction", trend: "up" },
+    {
+      title: "Metric",
+      type: "metric",
+      metric: {
+        value: "42%",
+        label: "Cycle reduction",
+        description: "Median reduction across customer review workflows.",
+        trend: "up",
+      },
+    },
+    { title: "Metric Shorthand", metric: 98.7 },
     { title: "Quote", type: "quote", quote: "This changed our workflow.", attribution: "VP Operations" },
     {
       title: "Timeline",
@@ -252,6 +280,17 @@ assertPresentationValid({
     "left+center+right": {
       prompt: "Create three concise next steps.",
       expectedType: "list",
+    },
+  }],
+});
+
+assertPresentationValid({
+  name: "Generated Code Prompt",
+  slides: [{
+    title: "Generate Parser",
+    left: {
+      prompt: "Create a small TypeScript parser example.",
+      expectedType: "code",
     },
   }],
 });
@@ -365,9 +404,29 @@ assertPresentationInvalid({
 }, "must NOT have additional properties");
 
 assertPresentationInvalid({
+  name: "Removed Loose Code Language Field",
+  slides: [{ title: "Old Code", code: "print('hello')", language: "python" }],
+}, "must NOT have additional properties");
+
+assertPresentationInvalid({
+  name: "Missing Code Source",
+  slides: [{ title: "Code", code: { language: "python", filename: "decision.py" } }],
+}, "must have required property 'source'");
+
+assertPresentationInvalid({
+  name: "Missing Metric Payload",
+  slides: [{ type: "metric" }],
+}, "requires 'metric'");
+
+assertPresentationInvalid({
   name: "Missing Metric Value",
-  slides: [{ type: "metric", label: "Revenue" }],
-}, "requires 'value'");
+  slides: [{ metric: { label: "Revenue" } }],
+}, "must have required property 'value'");
+
+assertPresentationInvalid({
+  name: "Removed Loose Metric Fields",
+  slides: [{ title: "Metric", value: "42%", label: "Cycle reduction", trend: "up" }],
+}, "must NOT have additional properties");
 
 assertPresentationInvalid({
   name: "Missing Quote Text",
@@ -388,6 +447,16 @@ assertPresentationInvalid({
   name: "Removed Group Type",
   slides: [{ type: "group", children: [{ text: "Child" }] }],
 }, "must be equal to one of the allowed values");
+
+assertPresentationInvalid({
+  name: "Removed Shape Type",
+  slides: [{ type: "shape", shape: "triangle" }],
+}, "must be equal to one of the allowed values");
+
+assertPresentationInvalid({
+  name: "Removed Shape Field",
+  slides: [{ shape: "triangle" }],
+}, "must NOT have additional properties");
 
 assertPresentationInvalid({
   name: "Mixed Payload Kinds",
