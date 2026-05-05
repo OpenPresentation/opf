@@ -26,9 +26,7 @@ And they don't start from a blank canvas. [pptx.gallery](https://pptx.gallery) i
 
 ## JavaScript and TypeScript
 
-The canonical JavaScript/TypeScript package is being developed at [`packages/javascript`](./packages/javascript) as `@openpresentation/opf`.
-
-It is currently marked `private: true` while the schema stabilizes. Its responsibility is local and format-level only:
+The canonical JavaScript/TypeScript package is published at [`packages/javascript`](./packages/javascript) as [`@openpresentation/opf`](https://www.npmjs.com/package/@openpresentation/opf). The schema is pre-stable (0.x — expect breaking changes between minor versions until 1.0). Its responsibility is local and format-level only:
 
 - export the canonical schemas from [`spec/`](./spec)
 - export bundled catalog records from [`spec/`](./spec)
@@ -39,7 +37,14 @@ It does not render `.pptx`, parse `.pptx`, generate content with AI, fetch remot
 
 ### Expected Usage
 
-Install dependencies and build the local package:
+Install from npm:
+
+```sh
+pnpm add @openpresentation/opf
+# or: npm install @openpresentation/opf
+```
+
+To work on the package itself, clone this repo and build the workspace:
 
 ```sh
 pnpm install

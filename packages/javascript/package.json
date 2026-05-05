@@ -1,7 +1,6 @@
 {
   "name": "@openpresentation/opf",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.1.0",
   "description": "Canonical Open Presentation Format schemas, catalogs, TypeScript types, and local validation.",
   "license": "MIT",
   "author": "Open Presentation",
