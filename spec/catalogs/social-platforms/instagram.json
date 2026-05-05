@@ -1,5 +1,5 @@
 {
-  "$schema": "https://openpresentation.org/schema/opf-social/v1",
+  "$schema": "https://openpresentation.org/schema/opf-social-platform/v1",
   "id": "instagram",
   "name": "Instagram",
   "summary": "Photo and short-form video network from Meta.",
@@ -10,3 +10,4 @@
   "brandColor": "#E4405F",
   "tags": ["photo", "video", "lifestyle"]
 }
+

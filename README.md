@@ -81,7 +81,7 @@ import type { Presentation } from "@openpresentation/opf/types";
 Use raw JSON when an engine or resolver needs package-addressable files:
 
 ```ts
-import presentationSchema from "@openpresentation/opf/spec/presentation.schema.json" with {
+import presentationSchema from "@openpresentation/opf/spec/schemas/opf.schema.json" with {
   type: "json",
 };
 ```
@@ -99,10 +99,10 @@ node packages/cli/dist/index.js validate path/to/deck.opf.json
 
 | Path | Contents |
 |---|---|
-| [`spec/presentation.schema.json`](./spec/presentation.schema.json) | Canonical JSON Schema for top-level OPF `Presentation` documents. |
+| [`spec/schemas/opf.schema.json`](./spec/schemas/opf.schema.json) | Canonical JSON Schema for top-level OPF `Presentation` documents. |
 | [`docs/content-payloads.md`](./docs/content-payloads.md) | Author-facing notes for slide and region content payloads, including chart and table object shapes. |
-| [`spec/*.schema.json`](./spec) | Companion schemas for catalog records and sub-objects. |
-| [`spec/<catalog-kind>/`](./spec) | Canonical bundled catalog records. |
+| [`spec/schemas/*.schema.json`](./spec/schemas) | Companion schemas for catalog records and sub-objects. |
+| [`spec/catalogs/<catalog-kind>/`](./spec/catalogs) | Canonical bundled catalog records. |
 | [`packages/javascript/`](./packages/javascript) | Private pre-release source for `@openpresentation/opf`. |
 | [`packages/cli/`](./packages/cli) | Private local-only OPF CLI source; native distribution is deferred. |
 | [`spec/openapi.yaml`](./spec/openapi.yaml) | Legacy PPTX.dev OpenAPI spec, pending migration to PPTX.dev ownership. |

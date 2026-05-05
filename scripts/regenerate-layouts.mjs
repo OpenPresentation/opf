@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, "..");
-const layoutsDir = path.join(repoRoot, "spec", "layouts");
+const layoutsDir = path.join(repoRoot, "spec", "catalogs", "layouts");
 const extractDir = path.join(layoutsDir, "extract");
 
 const schema = "https://openpresentation.org/schema/opf-layout/v1";
@@ -202,7 +202,7 @@ const placeholdersByLayout = groupByLayoutId(placeholders);
 const overrides = await readJsonIfExists(path.join(extractDir, "overrides.json"), {});
 
 if (mode === "legacy-placeholders" && (layouts.length === 0 || placeholders.length === 0)) {
-  throw new Error("--legacy-placeholders requires spec/layouts/extract/layout.json and placeholder.json");
+  throw new Error("--legacy-placeholders requires spec/catalogs/layouts/extract/layout.json and placeholder.json");
 }
 
 const records =

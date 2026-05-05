@@ -9,6 +9,8 @@ import {
   languages,
   presentation,
   purposes,
+  socialPlatform,
+  socialPlatforms,
   validateCatalogRecord,
   validatePresentation,
 } from "../dist/index.js";
@@ -17,11 +19,15 @@ import { validate, assertValid } from "../dist/validator.js";
 
 assert.equal(presentation.$id, "https://openpresentation.org/schema/opf/v1");
 assert.equal(audience.$id, "https://openpresentation.org/schema/opf-audience/v1");
+assert.equal(socialPlatform.$id, "https://openpresentation.org/schema/opf-social-platform/v1");
 assert.ok(audiences.length > 0);
 assert.ok(tones.length > 0);
+assert.ok(socialPlatforms.length > 0);
 assert.equal(catalogs.audiences.length, audiences.length);
+assert.equal(catalogs.socialPlatforms.length, socialPlatforms.length);
 assert.ok(catalogs.chartTypes.length > 0);
 assert.equal(catalogEntries.find((entry) => entry.kind === "chartTypes")?.schemaName, "chartType");
+assert.equal(catalogEntries.find((entry) => entry.kind === "socialPlatforms")?.schemaName, "socialPlatform");
 assert.ok(purposes.length > 0);
 assert.ok(languages.some((record) => record.id === "english-us" && record.bcp47 === "en-US"));
 assert.ok(languages.some((record) => record.id === "english-gb" && record.bcp47 === "en-GB"));
@@ -673,5 +679,5 @@ assert.ok(
 );
 
 const require = createRequire(import.meta.url);
-const rawPresentation = require("../dist/spec/presentation.schema.json");
+const rawPresentation = require("../dist/spec/schemas/opf.schema.json");
 assert.equal(rawPresentation.$id, presentation.$id);

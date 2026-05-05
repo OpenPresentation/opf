@@ -1,6 +1,6 @@
 # Folding layout placeholders into the OPF layout schema
 
-Plan for adding a `placeholders` field to [`spec/layout.schema.json`](../../spec/layout.schema.json), regenerating the 400 per-layout JSONs in [`spec/layouts/`](../../spec/layouts/) from the database extract at [`spec/layouts/extract/`](../../spec/layouts/extract/), and making the `title` / `subtitle` defaulting promise in [`presentation.schema.json:49,62`](../../spec/presentation.schema.json) achievable end-to-end.
+Plan for adding a `placeholders` field to [`spec/schemas/layout.schema.json`](../../spec/schemas/layout.schema.json), regenerating the 400 per-layout JSONs in [`spec/catalogs/layouts/`](../../spec/catalogs/layouts/) from the database extract at [`spec/catalogs/layouts/extract/`](../../spec/catalogs/layouts/extract/), and making the `title` / `subtitle` defaulting promise in [`opf.schema.json:49,62`](../../spec/schemas/opf.schema.json) achievable end-to-end.
 
 ## Executive summary — key decisions
 
@@ -8,11 +8,11 @@ Plan for adding a `placeholders` field to [`spec/layout.schema.json`](../../spec
 
 2. **Type vocabulary is OPF-semantic, ten values:** `title`, `subtitle`, `tag`, `body`, `chart`, `picture`, `table`, `media`, `diagram`, `code`. `body` is the workhorse — it maps to PowerPoint's generic `OBJECT` placeholder and ordinary `BODY` regions, and can host any content item kind. The named kinds describe specific content roles (small label/badge, chart, image, table, video/audio, smartart, source code) so pickers and AI generation can target them precisely. The current extract only carries rows for `OBJECT/BODY/CHART/PICTURE` plus chrome — `tag`, `table`, `media`, `diagram`, and `code` are forward-looking vocabulary the migration script does not synthesize today (`tag` is gated on the existing-but-unused `slideTag` schema boolean and synthesizes the moment data lands, same pattern as `title`/`subtitle`).
 
-3. **Chrome stays out of `placeholders`.** `slide-number` / `footer` / `date` are not main slide slots — they're deck-level header/footer furniture already owned by `Design.header` / `Design.footer` ([`presentation.schema.json:558-575`](../../spec/presentation.schema.json)). Don't mix the two.
+3. **Chrome stays out of `placeholders`.** `slide-number` / `footer` / `date` are not main slide slots — they're deck-level header/footer furniture already owned by `Design.header` / `Design.footer` ([`opf.schema.json:558-575`](../../spec/schemas/opf.schema.json)). Don't mix the two.
 
 4. **Do not add a chrome or bleed field.** Chrome stays in `Design.header` / `Design.footer`, and canvas behavior is represented by canonical layout ids such as `image-bleed` / `blank` plus their placeholder lists, not by a separate `bleed` property.
 
-5. **Binding rules:** `title`, `subtitle`, and `tag` placeholders bind to first-class slide fields (`Slide.title`, `Slide.subtitle`, `Slide.tag`). `content[].slot` is for the remaining placeholders (`"body"`, `"chart"`, `"picture"`, …). When multiple placeholders share a type, multiple content items with the same `slot` value bind to them in array order. `ContentItem.slot` description and examples in [`presentation.schema.json`](../../spec/presentation.schema.json) get a small companion update to match.
+5. **Binding rules:** `title`, `subtitle`, and `tag` placeholders bind to first-class slide fields (`Slide.title`, `Slide.subtitle`, `Slide.tag`). `content[].slot` is for the remaining placeholders (`"body"`, `"chart"`, `"picture"`, …). When multiple placeholders share a type, multiple content items with the same `slot` value bind to them in array order. `ContentItem.slot` description and examples in [`opf.schema.json`](../../spec/schemas/opf.schema.json) get a small companion update to match.
 
 6. **Title synthesis:** 242 layouts have `slide_title=true` but no `TITLE` placeholder in the extract. The migration script inserts `{ type: "title" }` at index 0 of `placeholders` for each.
 
@@ -20,7 +20,7 @@ Plan for adding a `placeholders` field to [`spec/layout.schema.json`](../../spec
 
 8. **OOXML round-trip is out of scope.** This pass is about getting the OPF semantic model right. `title` vs `ctrTitle`, how `body` maps to `<p:ph type="obj">` vs other variants, whether `picture` becomes `<p:ph type="pic">` or a fill — all renderer concerns, addressed when the .pptx render path lands.
 
-9. **Bulk regeneration is safe.** All 400 per-layout JSONs are 1:1 deterministic projections of the extract row (verified: 1 distinct key shape across all 400). A migration script can replace them en masse. The "drift" is a single file: [`spec/layouts/index.json`](../../spec/layouts/index.json) is the catalog index, not a layout record.
+9. **Bulk regeneration is safe.** All 400 per-layout JSONs are 1:1 deterministic projections of the extract row (verified: 1 distinct key shape across all 400). A migration script can replace them en masse. The "drift" is a single file: [`spec/catalogs/layouts/index.json`](../../spec/catalogs/layouts/index.json) is the catalog index, not a layout record.
 
 10. **Layout taxonomy refactor is a future pass.** The `-box`, alignment (`-left` / `-center`), and `-slideimage` modifiers are stylistic / design properties, not content-shape properties — they could collapse into design overrides rather than distinct layout records. Out of scope here; flagged as follow-on so the placeholder work doesn't get blocked on it.
 
@@ -30,11 +30,11 @@ Plan for adding a `placeholders` field to [`spec/layout.schema.json`](../../spec
 
 ### 1.1 Counts
 
-- 400 records in [`spec/layouts/extract/layout.json`](../../spec/layouts/extract/layout.json).
-- 5,664 records in [`spec/layouts/extract/placeholder.json`](../../spec/layouts/extract/placeholder.json).
-- 401 files in [`spec/layouts/`](../../spec/layouts/), all conforming to the layout schema except [`spec/layouts/index.json`](../../spec/layouts/index.json), which uses `https://openpresentation.org/schema/opf-layout-index/v1`. **Drift is 1 file (the index), not 2.**
+- 400 records in [`spec/catalogs/layouts/extract/layout.json`](../../spec/catalogs/layouts/extract/layout.json).
+- 5,664 records in [`spec/catalogs/layouts/extract/placeholder.json`](../../spec/catalogs/layouts/extract/placeholder.json).
+- 401 files in [`spec/catalogs/layouts/`](../../spec/catalogs/layouts/), all conforming to the layout schema except [`spec/catalogs/layouts/index.json`](../../spec/catalogs/layouts/index.json), which uses `https://openpresentation.org/schema/opf-layout-index/v1`. **Drift is 1 file (the index), not 2.**
 - All 400 per-layout files have the **exact same key shape** (1 distinct shape across 400 files), with no `description`, `summary`, `tags`, or `preview` content. **Zero hand-curated data** — bulk regeneration is safe.
-- `rg '"slideSubtitle"' spec/layouts` → 0 hits. The schema field at [`spec/layout.schema.json:192-198`](../../spec/layout.schema.json) is unused by every record.
+- `rg '"slideSubtitle"' spec/catalogs/layouts` → 0 hits. The schema field at [`spec/schemas/layout.schema.json:192-198`](../../spec/schemas/layout.schema.json) is unused by every record.
 
 ### 1.2 Placeholder type frequencies (extract vocabulary)
 
@@ -117,7 +117,7 @@ Whether step 3 is z-order, tab order, or insertion order is unknown without insp
 | ----------- | ------------------ | -------------- | ----- |
 | `title`     | *(synthesized)*    | `text`         | One per layout with `slide_title=true`. At most one per layout by convention. |
 | `subtitle`  | `BODY` (retyped)   | `text`         | Only on the 4 cover layouts in §1.6. At most one per layout by convention. |
-| `tag`       | *(synthesized when `slide_tag=true`; no records have it today)* | `text` | Small slide-level label/badge region above or near the title. The `slideTag` boolean already exists on the layout schema ([`spec/layout.schema.json:176-183`](../../spec/layout.schema.json)) but is unused by every record — same situation `slideSubtitle` was in. At most one per layout by convention. |
+| `tag`       | *(synthesized when `slide_tag=true`; no records have it today)* | `text` | Small slide-level label/badge region above or near the title. The `slideTag` boolean already exists on the layout schema ([`spec/schemas/layout.schema.json:176-183`](../../spec/schemas/layout.schema.json)) but is unused by every record — same situation `slideSubtitle` was in. At most one per layout by convention. |
 | `body`      | `BODY` / `OBJECT`  | (any)          | Generic body/content region; hosts text / chart / image / smartart / etc. |
 | `chart`     | `CHART`            | `chart`        | |
 | `picture`   | `PICTURE`          | `image`        | |
@@ -128,7 +128,7 @@ Whether step 3 is z-order, tab order, or insertion order is unknown without insp
 
 `title` and `subtitle` map to extract rows today (synthesized and BODY-retyped, respectively); `body`, `chart`, and `picture` map directly. The remaining five (`tag`, `table`, `media`, `diagram`, `code`) are vocabulary the schema declares but the migration script does not synthesize on the current extract. Authors can hand-curate them via `extract/overrides.json` (§3.1); `tag` will start synthesizing automatically once any layout record gets `slide_tag=true` (same gating pattern as `title` ↔ `slideTitle` and `subtitle` ↔ `slideSubtitle`).
 
-**Chrome (`SLIDE_NUMBER`, `DATE_AND_TIME`, `FOOTER`) is intentionally not a placeholder type.** Chrome is deck-level furniture, owned by `Design.header` / `Design.footer` ([`presentation.schema.json:558-575`](../../spec/presentation.schema.json)) and rendered by the engine independently of layout content.
+**Chrome (`SLIDE_NUMBER`, `DATE_AND_TIME`, `FOOTER`) is intentionally not a placeholder type.** Chrome is deck-level furniture, owned by `Design.header` / `Design.footer` ([`opf.schema.json:558-575`](../../spec/schemas/opf.schema.json)) and rendered by the engine independently of layout content.
 
 ### 2.2 Binding rules
 
@@ -147,11 +147,11 @@ Examples:
 - A chart item with `slot:"body"` on the same layout → fills the first available `body` placeholder; the placeholder is generic (`OBJECT` / PowerPoint Placeholder), so any content item kind is accepted.
 - Singletons (`title`, `subtitle`, `tag`): filled from `Slide.title`, `Slide.subtitle`, and `Slide.tag` because each appears at most once per layout.
 
-`ContentItem.slot` in [`presentation.schema.json`](../../spec/presentation.schema.json) gets a companion update in Phase 1: the description switches to say `Slide.title` / `Slide.subtitle` / `Slide.tag` own those common text placeholders, while `slides[].content` items bind the remaining placeholders. The `image-right` / `footer` examples (which don't fit the new vocabulary) get replaced with `body`, `chart`, `picture`, `table`, `media`, `diagram`, and `code`.
+`ContentItem.slot` in [`opf.schema.json`](../../spec/schemas/opf.schema.json) gets a companion update in Phase 1: the description switches to say `Slide.title` / `Slide.subtitle` / `Slide.tag` own those common text placeholders, while `slides[].content` items bind the remaining placeholders. The `image-right` / `footer` examples (which don't fit the new vocabulary) get replaced with `body`, `chart`, `picture`, `table`, `media`, `diagram`, and `code`.
 
 If a future use case needs to bind to a specific position within a same-typed group ("fill only the third body slot"), the cheapest extension is an optional `ContentItem.slotIndex: integer` (1-based). Deferred until that use case appears — the array-order rule covers everything we need today.
 
-### 2.3 Schema addition to `spec/layout.schema.json`
+### 2.3 Schema addition to `spec/schemas/layout.schema.json`
 
 ```jsonc
 {
@@ -178,7 +178,7 @@ If a future use case needs to bind to a specific position within a same-typed gr
 }
 ```
 
-Companion update to [`presentation.schema.json`](../../spec/presentation.schema.json) — `Slide.title`, `Slide.subtitle`, and `Slide.tag` become first-class slide fields, and `ContentItem.slot`'s description/examples align with the placeholder binding rule (§2.2). The unused `slideSubtitle` field also gets a real meaning: `true` exactly when `placeholders` contains a `subtitle` entry — i.e. the 4 cover layouts in §1.6.
+Companion update to [`opf.schema.json`](../../spec/schemas/opf.schema.json) — `Slide.title`, `Slide.subtitle`, and `Slide.tag` become first-class slide fields, and `ContentItem.slot`'s description/examples align with the placeholder binding rule (§2.2). The unused `slideSubtitle` field also gets a real meaning: `true` exactly when `placeholders` contains a `subtitle` entry — i.e. the 4 cover layouts in §1.6.
 
 ### 2.4 Subtitle synthesis decision
 
@@ -229,7 +229,7 @@ flowchart TD
     R -->|no| U[Leave tag placeholder empty]
 ```
 
-This makes the promise in [`presentation.schema.json:49`](../../spec/presentation.schema.json) ("on slides whose layout exposes a 'title' placeholder, the engine fills that placeholder with this value when the slide does not define its own title") mechanically checkable: the engine inspects `placeholders` directly.
+This makes the promise in [`opf.schema.json:49`](../../spec/schemas/opf.schema.json) ("on slides whose layout exposes a 'title' placeholder, the engine fills that placeholder with this value when the slide does not define its own title") mechanically checkable: the engine inspects `placeholders` directly.
 
 ---
 
@@ -239,12 +239,12 @@ This makes the promise in [`presentation.schema.json:49`](../../spec/presentatio
 
 - **Path:** `scripts/regenerate-layouts.mjs` (new). Node, ESM, no external deps.
 - **Inputs:**
-  - `spec/layouts/extract/layout.json` — 400 records.
-  - `spec/layouts/extract/placeholder.json` — 5,664 records.
-  - `spec/layouts/extract/overrides.json` *(new, optional, default `{}`)* — escape hatch keyed by layout id, deep-merged into the generated record. Empty for the initial regeneration; required only if a hand-curated field needs to survive in the future.
+  - `spec/catalogs/layouts/extract/layout.json` — 400 records.
+  - `spec/catalogs/layouts/extract/placeholder.json` — 5,664 records.
+  - `spec/catalogs/layouts/extract/overrides.json` *(new, optional, default `{}`)* — escape hatch keyed by layout id, deep-merged into the generated record. Empty for the initial regeneration; required only if a hand-curated field needs to survive in the future.
 - **Outputs:**
-  - 400 files in `spec/layouts/<id>.json`.
-  - `spec/layouts/index.json` regenerated from the same data so it stays in sync.
+  - 400 files in `spec/catalogs/layouts/<id>.json`.
+  - `spec/catalogs/layouts/index.json` regenerated from the same data so it stays in sync.
 
 ### 3.2 Algorithm (pseudocode)
 
@@ -307,7 +307,7 @@ for each L in layouts:
 
   record = deepMerge(record, overrides[id] ?? {})
 
-  write spec/layouts/{id}.json with record (sorted keys, 2-space indent,
+  write spec/catalogs/layouts/{id}.json with record (sorted keys, 2-space indent,
         trailing newline — match existing file style)
 
 # Regenerate index.json with the same wrapper used today
@@ -316,7 +316,7 @@ indexRecords = layouts
                name: titleCaseFromName(L.name),
                file: `${nameToId(L.name)}.json` }))
   .sort((a, b) => a.id.localeCompare(b.id))
-write spec/layouts/index.json
+write spec/catalogs/layouts/index.json
 ```
 
 ### 3.3 Automated vs human review
@@ -334,8 +334,8 @@ write spec/layouts/index.json
 ### 3.4 Validation
 
 1. `node packages/javascript/scripts/generate.mjs` to regenerate TS types from the new schema.
-2. Validate every `spec/layouts/*.json` against `spec/layout.schema.json`.
-3. Spot-check counts in the regenerated files: `rg '"type": "title"' spec/layouts | wc -l` and `rg '"type": "subtitle"' spec/layouts | wc -l` should match the expected generated catalog shape.
+2. Validate every `spec/catalogs/layouts/*.json` against `spec/schemas/layout.schema.json`.
+3. Spot-check counts in the regenerated files: `rg '"type": "title"' spec/catalogs/layouts | wc -l` and `rg '"type": "subtitle"' spec/catalogs/layouts | wc -l` should match the expected generated catalog shape.
 
 ---
 
@@ -364,11 +364,11 @@ Each phase leaves the repo in a valid state.
 
 ### Phase 1 — Schema additions (additive, low risk)
 
-- Add `Placeholder` `$def` and the `placeholders` property to [`spec/layout.schema.json`](../../spec/layout.schema.json) as an optional field.
+- Add `Placeholder` `$def` and the `placeholders` property to [`spec/schemas/layout.schema.json`](../../spec/schemas/layout.schema.json) as an optional field.
 - Update the `slideSubtitle` description to say "true exactly when `placeholders` contains a `subtitle` entry."
-- Add `Slide.title`, `Slide.subtitle`, and `Slide.tag` to [`spec/presentation.schema.json`](../../spec/presentation.schema.json), and update `ContentItem.slot` so its description/examples focus on the remaining placeholder vocabulary (`body`, `chart`, `picture`, `table`, `media`, `diagram`, `code`).
+- Add `Slide.title`, `Slide.subtitle`, and `Slide.tag` to [`spec/schemas/opf.schema.json`](../../spec/schemas/opf.schema.json), and update `ContentItem.slot` so its description/examples focus on the remaining placeholder vocabulary (`body`, `chart`, `picture`, `table`, `media`, `diagram`, `code`).
 - Run `node packages/javascript/scripts/generate.mjs` to regenerate TS types.
-- All 400 existing `spec/layouts/*.json` records still validate (the new fields are optional).
+- All 400 existing `spec/catalogs/layouts/*.json` records still validate (the new fields are optional).
 
 ### Phase 2 — Migration script + dry-run diff
 
@@ -378,7 +378,7 @@ Each phase leaves the repo in a valid state.
 
 ### Phase 3 — Bulk regeneration
 
-- Run the script for real, replacing all 400 `spec/layouts/*.json` files and `spec/layouts/index.json`.
+- Run the script for real, replacing all 400 `spec/catalogs/layouts/*.json` files and `spec/catalogs/layouts/index.json`.
 - Re-run TS-type generation.
 - Validation queries from §3.4.
 

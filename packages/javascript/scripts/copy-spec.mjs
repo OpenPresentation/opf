@@ -8,30 +8,6 @@ const repoRoot = path.resolve(packageRoot, "../..");
 
 const destination = path.join(packageRoot, "dist", "spec");
 const source = path.join(repoRoot, "spec");
-const catalogDirs = [
-  "audiences",
-  "purposes",
-  "tones",
-  "themes",
-  "layouts",
-  "chart-types",
-  "narratives",
-  "socials",
-  "languages",
-  "color-schemes",
-  "font-schemes",
-  "reference",
-];
 
 await fs.rm(destination, { recursive: true, force: true });
-await fs.mkdir(destination, { recursive: true });
-
-for (const file of await fs.readdir(source)) {
-  if (file.endsWith(".schema.json")) {
-    await fs.copyFile(path.join(source, file), path.join(destination, file));
-  }
-}
-
-for (const dir of catalogDirs) {
-  await fs.cp(path.join(source, dir), path.join(destination, dir), { recursive: true });
-}
+await fs.cp(source, destination, { recursive: true });

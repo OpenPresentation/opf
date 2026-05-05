@@ -6,7 +6,7 @@ export {
   layouts,
   chartTypes,
   narratives,
-  socials,
+  socialPlatforms,
   languages,
   colorSchemes,
   fontSchemes,

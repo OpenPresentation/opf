@@ -1,5 +1,5 @@
 {
-  "$schema": "https://openpresentation.org/schema/opf-social/v1",
+  "$schema": "https://openpresentation.org/schema/opf-social-platform/v1",
   "id": "youtube",
   "name": "YouTube",
   "summary": "Video-sharing platform with creator and brand channels.",
@@ -11,3 +11,4 @@
   "brandColor": "#FF0000",
   "tags": ["video", "creator", "brand"]
 }
+

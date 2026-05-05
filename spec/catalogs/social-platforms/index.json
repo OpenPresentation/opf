@@ -1,5 +1,5 @@
 {
-  "$schema": "https://openpresentation.org/schema/opf-social-index/v1",
+  "$schema": "https://openpresentation.org/schema/opf-social-platform-index/v1",
   "version": "1",
   "description": "Catalog of social-media platforms available in the openpresentation.org catalog. Each entry is a lightweight summary; full platform records live in the per-id JSON files alongside this index. The property keys of any Socials object on Organization or Speaker resolve to ids in this catalog.",
   "records": [
@@ -65,3 +65,4 @@
     }
   ]
 }
+

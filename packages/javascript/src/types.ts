@@ -6,7 +6,7 @@ export type { Theme } from "./generated/types/theme.js";
 export type { Layout } from "./generated/types/layout.js";
 export type { ChartType } from "./generated/types/chart-type.js";
 export type { Narrative } from "./generated/types/narrative.js";
-export type { Social } from "./generated/types/social.js";
+export type { SocialPlatform } from "./generated/types/social-platform.js";
 export type { Language } from "./generated/types/language.js";
 export type { ColorScheme } from "./generated/types/color-scheme.js";
 export type { FontScheme } from "./generated/types/font-scheme.js";

@@ -11,7 +11,7 @@
     "chartTypes":   { "source": "https://www.pptx.gallery/chart-types" },
     "tones":        { "source": "https://www.pptx.gallery/tones" },
     "audiences":    { "source": "https://www.pptx.gallery/audiences" },
-    "socials":      { "source": "https://www.pptx.gallery/socials" }
+    "socialPlatforms": { "source": "https://www.pptx.gallery/social-platforms" }
   },
 
   "theme": "minimal",
@@ -32,3 +32,4 @@
     "line-with-markers-3x"
   ]
 }
+

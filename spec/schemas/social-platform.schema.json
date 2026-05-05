@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openpresentation.org/schema/opf-social/v1",
+  "$id": "https://openpresentation.org/schema/opf-social-platform/v1",
   "title": "OPF Social Platform",
-  "description": "Schema for social-platform records in the pptx.gallery library. Each record describes a single social-media platform — its base URL, profile-URL pattern, handle prefix, brand color, and themed icons. Records are referenced from OPF documents indirectly: the property keys of any Socials object (Organization.socials, Speaker.socials) match record ids, and renderers use the catalog record to format URLs and pick icons. The engine resolves references against catalogs.socials (inline) → catalogs.socials.source → the default catalog at https://www.pptx.gallery/socials.",
+  "description": "Schema for social-platform records in the pptx.gallery library. Each record describes a single social-media platform â€” its base URL, profile-URL pattern, handle prefix, brand color, and themed icons. Records are referenced from OPF documents indirectly: the property keys of any Socials object (Organization.socials, Speaker.socials) match record ids, and renderers use the catalog record to format URLs and pick icons. The engine resolves references against catalogs.socialPlatforms (inline) â†’ catalogs.socialPlatforms.source â†’ the default catalog at https://www.pptx.gallery/social-platforms.",
   "type": "object",
   "required": [
     "$schema",
@@ -12,13 +12,13 @@
   "properties": {
     "$schema": {
       "type": "string",
-      "const": "https://openpresentation.org/schema/opf-social/v1",
+      "const": "https://openpresentation.org/schema/opf-social-platform/v1",
       "description": "Identifies this record as a social-platform entry in the openpresentation.org catalog."
     },
     "id": {
       "type": "string",
       "pattern": "^[a-z][a-z0-9-]*$",
-      "description": "Stable slug used by OPF documents to reference this platform — appears as a property key on Socials objects. Lowercase kebab-case.",
+      "description": "Stable slug used by OPF documents to reference this platform â€” appears as a property key on Socials objects. Lowercase kebab-case.",
       "examples": [
         "linkedin",
         "x",
@@ -50,7 +50,7 @@
     },
     "summary": {
       "type": "string",
-      "description": "One-sentence positioning of the platform — what it's used for and who's on it.",
+      "description": "One-sentence positioning of the platform â€” what it's used for and who's on it.",
       "examples": [
         "Professional social network for individuals and companies.",
         "Real-time microblog for news, opinions, and discussion."
@@ -66,7 +66,7 @@
     "baseUrl": {
       "type": "string",
       "format": "uri",
-      "description": "Canonical base URL of the platform — used as the prefix when normalizing handles to full URLs.",
+      "description": "Canonical base URL of the platform â€” used as the prefix when normalizing handles to full URLs.",
       "examples": [
         "https://linkedin.com",
         "https://x.com",
@@ -123,8 +123,8 @@
       "type": "string",
       "description": "Default icon source. Accepts an HTTPS URL, data URI, relative path, or asset reference. Used as the fallback when a themed (Light/Dark) variant isn't set.",
       "examples": [
-        "https://www.pptx.gallery/socials/linkedin.svg",
-        "./assets/socials/linkedin.svg",
+        "https://www.pptx.gallery/social-platforms/linkedin.svg",
+        "./assets/social-platforms/linkedin.svg",
         "asset:social-linkedin"
       ]
     },
@@ -132,16 +132,16 @@
       "type": "string",
       "description": "Light-colored icon variant intended for rendering on dark backgrounds.",
       "examples": [
-        "https://www.pptx.gallery/socials/linkedin-light.svg",
-        "./assets/socials/linkedin-light.svg"
+        "https://www.pptx.gallery/social-platforms/linkedin-light.svg",
+        "./assets/social-platforms/linkedin-light.svg"
       ]
     },
     "iconDark": {
       "type": "string",
       "description": "Dark-colored icon variant intended for rendering on light backgrounds.",
       "examples": [
-        "https://www.pptx.gallery/socials/linkedin-dark.svg",
-        "./assets/socials/linkedin-dark.svg"
+        "https://www.pptx.gallery/social-platforms/linkedin-dark.svg",
+        "./assets/social-platforms/linkedin-dark.svg"
       ]
     },
     "tags": {
@@ -181,3 +181,4 @@
     }
   }
 }
+

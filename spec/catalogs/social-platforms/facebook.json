@@ -1,5 +1,5 @@
 {
-  "$schema": "https://openpresentation.org/schema/opf-social/v1",
+  "$schema": "https://openpresentation.org/schema/opf-social-platform/v1",
   "id": "facebook",
   "name": "Facebook",
   "summary": "General-purpose social network from Meta.",
@@ -11,3 +11,4 @@
   "brandColor": "#1877F2",
   "tags": ["general", "brand"]
 }
+

@@ -1,5 +1,5 @@
 {
-  "$schema": "https://openpresentation.org/schema/opf-social/v1",
+  "$schema": "https://openpresentation.org/schema/opf-social-platform/v1",
   "id": "bluesky",
   "name": "Bluesky",
   "summary": "Decentralized microblog network built on the AT Protocol.",
@@ -11,3 +11,4 @@
   "brandColor": "#1185FE",
   "tags": ["microblog", "decentralized", "atproto"]
 }
+

@@ -1,5 +1,5 @@
 {
-  "$schema": "https://openpresentation.org/schema/opf-social/v1",
+  "$schema": "https://openpresentation.org/schema/opf-social-platform/v1",
   "id": "threads",
   "name": "Threads",
   "summary": "Text-first social network from Meta, integrated with Instagram identity.",
@@ -10,3 +10,4 @@
   "brandColor": "#000000",
   "tags": ["microblog", "text"]
 }
+

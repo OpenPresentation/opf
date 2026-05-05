@@ -1,6 +1,6 @@
 # Collapsing the OPF layout taxonomy
 
-Plan for collapsing the 400 layout records in [`spec/layouts/`](../../spec/layouts/) to roughly 23 canonical layouts and removing the old master-derived records from the public catalog. Visual variations (`-left`, `-box`, `-slideimage`, `-vertical`, etc.) become design overrides rather than separate layout records.
+Plan for collapsing the 400 layout records in [`spec/catalogs/layouts/`](../../spec/catalogs/layouts/) to roughly 23 canonical layouts and removing the old master-derived records from the public catalog. Visual variations (`-left`, `-box`, `-slideimage`, `-vertical`, etc.) become design overrides rather than separate layout records.
 
 This plan is the long-deferred follow-on to [`layout-placeholders.md`](layout-placeholders.md) (open question §4.4 / Phase 5 there). The placeholder plan should land first as scaffolding; this plan reuses its `placeholders` field and binding rules unchanged.
 
@@ -60,7 +60,7 @@ Pulling the current names apart, every record encodes some combination of the fo
 Cover layouts are intentionally minimal — designed for opening slides and section dividers. They are special only in that they expose **fewer** body/content regions than the content layouts.
 
 - **`title`** — `[title]`. Single heading.
-- **`title-subtitle`** — `[title, subtitle]`. Cover with supporting copy. Drives the presentation-level `title` / `subtitle` defaulting promise from [`presentation.schema.json:49,62`](../../spec/presentation.schema.json) directly.
+- **`title-subtitle`** — `[title, subtitle]`. Cover with supporting copy. Drives the presentation-level `title` / `subtitle` defaulting promise from [`opf.schema.json:49,62`](../../spec/schemas/opf.schema.json) directly.
 
 (If `slide_tag=true` is set on a record, both cover layouts also expose a `tag` placeholder above the title — same gating pattern from the placeholder plan §1.7.)
 
@@ -111,13 +111,13 @@ Add eight properties to `Design` (and by inheritance to `Theme` and `Slide.desig
 | `imageFill` | `"crop"` \| `"fit"` | `"crop"` | image `-crop` / `-fit` | How `picture` placeholders fill their box. A future content-item design override may expose this per item. |
 | `listBullet` | `"character"` \| `"image"` | `"character"` | `-itemimage` | Bullet rendering style on `list-Nx` layouts. |
 
-These compose through the existing cascade ([`presentation.schema.json:1188-1191`](../../spec/presentation.schema.json) — `Slide.designOverrides` is already a `Design` object).
+These compose through the existing cascade ([`opf.schema.json:1188-1191`](../../spec/schemas/opf.schema.json) — `Slide.designOverrides` is already a `Design` object).
 
 ---
 
 ## 4. Migration stance — remove old ids
 
-The 400 old master-derived records are removed from [`spec/layouts/`](../../spec/layouts/). The public catalog only exposes canonical ids. This deliberately breaks references to old ids such as `title-left-slideimage` because the schema/catalog is still draft and the cleaner vocabulary is more valuable than preserving early generated records.
+The 400 old master-derived records are removed from [`spec/catalogs/layouts/`](../../spec/catalogs/layouts/). The public catalog only exposes canonical ids. This deliberately breaks references to old ids such as `title-left-slideimage` because the schema/catalog is still draft and the cleaner vocabulary is more valuable than preserving early generated records.
 
 Migration rule for old documents:
 
@@ -168,10 +168,10 @@ Sits next to the placeholder plan's `scripts/regenerate-layouts.mjs` (or extends
 ### 6.1 Inputs / outputs
 
 - **Inputs:**
-  - `spec/layouts/extract/canonical.json` — declares the canonical layouts and their placeholder lists. Hand-curated and small.
+  - `spec/catalogs/layouts/extract/canonical.json` — declares the canonical layouts and their placeholder lists. Hand-curated and small.
 - **Outputs:**
-  - Canonical files in `spec/layouts/<canonical-id>.json`.
-  - `spec/layouts/index.json` regenerated.
+  - Canonical files in `spec/catalogs/layouts/<canonical-id>.json`.
+  - `spec/catalogs/layouts/index.json` regenerated.
   - No deprecated aliases.
 
 ### 6.2 Algorithm (pseudocode)
@@ -182,7 +182,7 @@ load layouts[]  from extract/layout.json
 
 # 1. Emit canonical records.
 for each C in canonical:
-  write spec/layouts/<C.id>.json with:
+  write spec/catalogs/layouts/<C.id>.json with:
     { $schema, id, name, placeholders }
 ```
 
@@ -223,9 +223,9 @@ The rollout is direct because the layout catalog is still draft.
 
 ### Phase 1 — Add canonical layouts
 
-- Hand-curate `spec/layouts/extract/canonical.json` with the 23 records from §2.
-- Add the eight new design properties from §3 to [`spec/presentation.schema.json`](../../spec/presentation.schema.json) `Design` `$def`. All optional; no existing document breaks.
-- Generate the canonical `spec/layouts/<id>.json` files and remove the 400 old records.
+- Hand-curate `spec/catalogs/layouts/extract/canonical.json` with the 23 records from §2.
+- Add the eight new design properties from §3 to [`spec/schemas/opf.schema.json`](../../spec/schemas/opf.schema.json) `Design` `$def`. All optional; no existing document breaks.
+- Generate the canonical `spec/catalogs/layouts/<id>.json` files and remove the 400 old records.
 - Engine: implement resolution of canonical layouts.
 - TS-type regen via `node packages/javascript/scripts/generate.mjs`.
 

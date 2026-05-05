@@ -70,7 +70,7 @@ for (const record of audiences) {
 Raw canonical JSON is published under `spec/`:
 
 ```ts
-import presentationSchema from "@openpresentation/opf/spec/presentation.schema.json" with {
+import presentationSchema from "@openpresentation/opf/spec/schemas/opf.schema.json" with {
   type: "json",
 };
 ```
@@ -81,7 +81,7 @@ Package-addressable catalog paths can be used by OPF catalog resolvers:
 {
   "catalogs": {
     "narratives": {
-      "source": "pkg:@openpresentation/opf/spec/narratives"
+      "source": "pkg:@openpresentation/opf/spec/catalogs/narratives"
     }
   }
 }

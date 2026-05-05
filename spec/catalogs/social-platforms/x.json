@@ -1,5 +1,5 @@
 {
-  "$schema": "https://openpresentation.org/schema/opf-social/v1",
+  "$schema": "https://openpresentation.org/schema/opf-social-platform/v1",
   "id": "x",
   "name": "X",
   "summary": "Real-time microblog for news, opinions, and discussion. Formerly Twitter.",
@@ -11,3 +11,4 @@
   "brandColor": "#000000",
   "tags": ["microblog", "news", "default"]
 }
+

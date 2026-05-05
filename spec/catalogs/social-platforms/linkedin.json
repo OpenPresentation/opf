@@ -1,5 +1,5 @@
 {
-  "$schema": "https://openpresentation.org/schema/opf-social/v1",
+  "$schema": "https://openpresentation.org/schema/opf-social-platform/v1",
   "id": "linkedin",
   "name": "LinkedIn",
   "summary": "Professional social network for individuals and companies.",
@@ -12,3 +12,4 @@
   "brandColor": "#0A66C2",
   "tags": ["professional", "default"]
 }
+

@@ -7,11 +7,13 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const packageRoot = path.resolve(__dirname, "..");
 const repoRoot = path.resolve(packageRoot, "../..");
 const specRoot = path.join(repoRoot, "spec");
+const schemaRoot = path.join(specRoot, "schemas");
+const catalogRoot = path.join(specRoot, "catalogs");
 const generatedRoot = path.join(packageRoot, "src", "generated");
 const generatedTypesRoot = path.join(generatedRoot, "types");
 
 const schemaDefinitions = [
-  { name: "presentation", typeName: "Presentation", file: "presentation.schema.json" },
+  { name: "presentation", typeName: "Presentation", file: "opf.schema.json" },
   { name: "audience", typeName: "Audience", file: "audience.schema.json" },
   { name: "purpose", typeName: "Purpose", file: "purpose.schema.json" },
   { name: "tone", typeName: "Tone", file: "tone.schema.json" },
@@ -19,7 +21,7 @@ const schemaDefinitions = [
   { name: "layout", typeName: "Layout", file: "layout.schema.json" },
   { name: "chartType", typeName: "ChartType", file: "chart-type.schema.json", typeFile: "chart-type" },
   { name: "narrative", typeName: "Narrative", file: "narrative.schema.json" },
-  { name: "social", typeName: "Social", file: "social.schema.json" },
+  { name: "socialPlatform", typeName: "SocialPlatform", file: "social-platform.schema.json", typeFile: "social-platform" },
   { name: "language", typeName: "Language", file: "language.schema.json" },
   { name: "colorScheme", typeName: "ColorScheme", file: "color-scheme.schema.json", typeFile: "color-scheme" },
   { name: "fontScheme", typeName: "FontScheme", file: "font-scheme.schema.json", typeFile: "font-scheme" },
@@ -33,7 +35,7 @@ const catalogDefinitions = [
   { kind: "layouts", schemaName: "layout", dir: "layouts" },
   { kind: "chartTypes", schemaName: "chartType", dir: "chart-types" },
   { kind: "narratives", schemaName: "narrative", dir: "narratives", indexRecordsKey: "templates" },
-  { kind: "socials", schemaName: "social", dir: "socials" },
+  { kind: "socialPlatforms", schemaName: "socialPlatform", dir: "social-platforms" },
   { kind: "languages", schemaName: "language", dir: "languages" },
   { kind: "colorSchemes", schemaName: "colorScheme", dir: "color-schemes" },
   { kind: "fontSchemes", schemaName: "fontScheme", dir: "font-schemes" },
@@ -54,10 +56,10 @@ function asTs(value) {
 async function generateSchemas() {
   const schemas = [];
   for (const definition of schemaDefinitions) {
-    schemas.push({ ...definition, schema: await readJson(path.join(specRoot, definition.file)) });
+    schemas.push({ ...definition, schema: await readJson(path.join(schemaRoot, definition.file)) });
   }
 
-  const lines = [generatedHeader("spec/*.schema.json"), 'import type { JsonSchema } from "../json.js";', ""];
+  const lines = [generatedHeader("spec/schemas/*.schema.json"), 'import type { JsonSchema } from "../json.js";', ""];
   for (const { name, schema } of schemas) {
     lines.push(`export const ${name} = ${asTs(schema)} as const satisfies JsonSchema;`, "");
   }
@@ -69,7 +71,7 @@ async function generateSchemas() {
   lines.push(`export const schemaNames = ${asTs(schemas.map(({ name }) => name))} as const;`, "");
   lines.push("export const schemaEntries = [");
   for (const { name, file } of schemas) {
-    lines.push(`  { name: ${JSON.stringify(name)}, file: ${JSON.stringify(file)}, schema: ${name} },`);
+    lines.push(`  { name: ${JSON.stringify(name)}, file: ${JSON.stringify(path.posix.join("schemas", file))}, schema: ${name} },`);
   }
   lines.push("] as const;", "");
   lines.push("export type SchemaName = keyof typeof schemas;", "");
@@ -92,7 +94,7 @@ async function orderedCatalogFiles(definition, catalogDir, index) {
 async function generateCatalogs() {
   const catalogs = [];
   for (const definition of catalogDefinitions) {
-    const catalogDir = path.join(specRoot, definition.dir);
+    const catalogDir = path.join(catalogRoot, definition.dir);
     const index = await readJson(path.join(catalogDir, "index.json"));
     const files = await orderedCatalogFiles(definition, catalogDir, index);
     const records = [];
@@ -102,7 +104,7 @@ async function generateCatalogs() {
     catalogs.push({ ...definition, index, records, files });
   }
 
-  const lines = [generatedHeader("spec/<catalog-kind>/*.json")];
+  const lines = [generatedHeader("spec/catalogs/<catalog-kind>/*.json")];
   for (const { kind, records } of catalogs) {
     lines.push(`export const ${kind} = ${asTs(records)} as const;`, "");
   }
@@ -124,8 +126,9 @@ async function generateCatalogs() {
   lines.push(`export const catalogKinds = ${asTs(catalogs.map(({ kind }) => kind))} as const;`, "");
   lines.push("export const catalogEntries = [");
   for (const { kind, schemaName, dir, files } of catalogs) {
+    const specDir = path.posix.join("catalogs", dir);
     lines.push(
-      `  { kind: ${JSON.stringify(kind)}, schemaName: ${JSON.stringify(schemaName)}, dir: ${JSON.stringify(dir)}, files: ${asTs(files)}, records: ${kind}, index: catalogIndexes.${kind} },`,
+      `  { kind: ${JSON.stringify(kind)}, schemaName: ${JSON.stringify(schemaName)}, dir: ${JSON.stringify(specDir)}, files: ${asTs(files)}, records: ${kind}, index: catalogIndexes.${kind} },`,
     );
   }
   lines.push("] as const;", "");
@@ -137,12 +140,12 @@ async function generateCatalogs() {
 async function generateTypes() {
   await fs.mkdir(generatedTypesRoot, { recursive: true });
   for (const definition of schemaDefinitions) {
-    const schema = await readJson(path.join(specRoot, definition.file));
+    const schema = await readJson(path.join(schemaRoot, definition.file));
     const schemaForTypes = JSON.parse(JSON.stringify(schema));
     schemaForTypes.title = definition.typeName;
     const typeFile = definition.typeFile ?? definition.name;
     const source = await compile(schemaForTypes, definition.typeName, {
-      bannerComment: generatedHeader(definition.file).trimEnd(),
+      bannerComment: generatedHeader(path.posix.join("schemas", definition.file)).trimEnd(),
       unreachableDefinitions: true,
       format: false,
       style: {

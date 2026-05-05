@@ -7,7 +7,7 @@ export {
   layout,
   chartType,
   narrative,
-  social,
+  socialPlatform,
   language,
   colorScheme,
   fontScheme,
