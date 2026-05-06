@@ -61,6 +61,8 @@ import { validate, assertValid } from "@openpresentation/opf/validator";
 import type { Presentation, Audience, Tone } from "@openpresentation/opf/types";
 ```
 
+The root entry exports every schema, catalog, and validation helper for convenience. Prefer the focused subpaths above when a package consumer only needs one surface, so the root bundle's full catalog/schema payload is not loaded unnecessarily.
+
 Validate catalog records locally:
 
 ```ts

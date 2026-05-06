@@ -42,3 +42,6 @@ jobs:
 
       - name: Verify npm package contents
         run: pnpm --filter @openpresentation/opf pack:dry-run
+
+      - name: Verify packed package install
+        run: node packages/javascript/test/packed-install-smoke.mjs

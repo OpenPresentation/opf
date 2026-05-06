@@ -68,6 +68,7 @@
     "build": "pnpm run generate && tsup && node scripts/copy-spec.mjs",
     "typecheck": "pnpm run generate && tsc --noEmit",
     "test": "pnpm run build && node test/smoke.mjs",
+    "test:packed": "node test/packed-install-smoke.mjs",
     "pack:dry-run": "pnpm run build && npm pack --dry-run --cache /tmp/opf-npm-cache"
   },
   "dependencies": {
