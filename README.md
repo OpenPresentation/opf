@@ -91,7 +91,7 @@ import presentationSchema from "@openpresentation/opf/spec/schemas/opf.schema.js
 };
 ```
 
-Use the private local CLI source during development:
+Use the local-only CLI source during development:
 
 ```sh
 pnpm --filter @openpresentation/cli build
@@ -113,8 +113,8 @@ node packages/cli/dist/index.js validate path/to/deck.opf.json
 | [`spec/catalogs/<catalog-kind>/`](./spec/catalogs) | Canonical bundled catalog records. |
 | [`examples/technical/`](./examples/technical) | Focused OPF fixtures for validator, renderer, catalog-resolution, design, content-payload, and region behavior. |
 | [`examples/gallery/`](./examples/gallery) | Broader OPF example decks organized by industry, function, education, government, presentation type, international, and design/media scenarios. |
-| [`packages/javascript/`](./packages/javascript) | Private pre-release source for `@openpresentation/opf`. |
-| [`packages/cli/`](./packages/cli) | Private local-only OPF CLI source; native distribution is deferred. |
+| [`packages/javascript/`](./packages/javascript) | Public pre-stable source for `@openpresentation/opf`. |
+| [`packages/cli/`](./packages/cli) | Local-only OPF CLI source; native distribution is deferred. |
 | [`spec/openapi.yaml`](./spec/openapi.yaml) | Legacy PPTX.dev OpenAPI spec retained temporarily for service reference. |
 | [`legacy/`](./legacy) | Tombstone for PPTX.dev clients, CLIs, SDKs, and MCP source migrated to PPTX.dev-owned repositories. |
 
@@ -123,6 +123,8 @@ node packages/cli/dist/index.js validate path/to/deck.opf.json
 OPF defines the format and bundled presets. PPTX.dev consumes OPF to provide hosted generation, rendering, parsing, storage, authentication, jobs, previews, and AI workflows.
 
 Future non-JavaScript OPF packages should follow the same local-only boundary: Python and Go packages should expose schemas, types/models, catalogs, and validation, not PPTX.dev rendering or generation.
+
+The published JavaScript package copies package-addressable OPF schemas, catalogs, and reference assets from `spec/`. It does not include the legacy PPTX.dev OpenAPI service spec.
 
 ## License
 

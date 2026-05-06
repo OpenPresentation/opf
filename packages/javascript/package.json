@@ -1,17 +1,20 @@
 {
   "name": "@openpresentation/opf",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Canonical Open Presentation Format schemas, catalogs, TypeScript types, and local validation.",
   "license": "MIT",
   "author": "Open Presentation",
   "homepage": "https://openpresentation.org",
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/openpresentation/opf.git",
+    "url": "https://github.com/OpenPresentation/opf.git",
     "directory": "packages/javascript"
   },
   "bugs": {
-    "url": "https://github.com/openpresentation/opf/issues"
+    "url": "https://github.com/OpenPresentation/opf/issues"
   },
   "keywords": [
     "opf",

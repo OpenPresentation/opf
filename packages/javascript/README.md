@@ -4,6 +4,8 @@ Canonical Open Presentation Format package for JavaScript and TypeScript.
 
 Publishes the OPF schemas, catalog presets, generated TypeScript types, and local validation helpers. The schema is pre-stable (0.x — expect breaking changes between minor versions until 1.0). This package does not render PowerPoint files, parse `.pptx`, fetch remote catalogs, or use AI.
 
+The packed npm artifact includes package-addressable OPF schemas and catalogs under `spec/`. Legacy PPTX.dev service contracts, including the OpenAPI spec retained in the repository for reference, are not part of this package.
+
 Repository: https://github.com/OpenPresentation/opf
 
 ## File naming

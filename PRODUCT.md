@@ -37,8 +37,8 @@ One format, every runtime:
 |---|---|---|
 | OPF JSON documents | `*.opf.json` | Portable, versionable deck files for humans, agents, and validators |
 | JSON Schema | `https://openpresentation.org/schema/opf/v1` | Any JSON Schema validator, editor, or agent |
-| JavaScript/TypeScript OPF package | `@openpresentation/opf` (npm, private until schema freeze) | Schemas, catalogs, types, local validation |
-| Local OPF CLI | `opf` (distribution deferred) | Validate, format, and inspect OPF locally |
+| JavaScript/TypeScript OPF package | `@openpresentation/opf` (public npm package, pre-stable 0.x) | Schemas, catalogs, types, local validation |
+| Local OPF CLI | `opf` (local workspace source; distribution deferred) | Validate, format, and inspect OPF locally |
 | Future Python OPF package | TBD | Local models, schemas, catalogs, validation |
 | Future Go OPF module | TBD | Local structs, embedded schemas/catalogs, validation |
 

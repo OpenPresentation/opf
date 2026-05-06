@@ -1,8 +1,8 @@
 # @openpresentation/cli
 
-Private local-only CLI source for OPF. This is not a PPTX.dev client and does not render, parse, generate, call remote APIs, fetch catalogs, or use AI.
+Local-only CLI source for OPF. This is not a published package in v0.2.0, and it is not a PPTX.dev client. It does not render, parse, generate, call remote APIs, fetch catalogs, or use AI.
 
-Native Mac/Linux/Windows distribution is intentionally deferred until the schema stabilizes.
+Native Mac/Linux/Windows distribution and npm CLI publishing are intentionally deferred until a separate CLI package is approved.
 
 ## Expected Usage
 
