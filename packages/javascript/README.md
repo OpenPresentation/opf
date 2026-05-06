@@ -67,6 +67,8 @@ import {
 import type { Presentation, Audience, Tone } from "@openpresentation/opf/types";
 ```
 
+The root entry exports every schema, catalog, and validation helper for convenience. Prefer the focused subpaths above when a package consumer only needs one surface, so the root bundle's full catalog/schema payload is not loaded unnecessarily.
+
 ### Layout previews
 
 `@openpresentation/opf/previews` ships pre-rendered HTML thumbnails for the
