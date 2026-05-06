@@ -53,6 +53,49 @@ function asTs(value) {
   return JSON.stringify(value, null, 2);
 }
 
+async function collectFiles(root, dir = root) {
+  const entries = await fs.readdir(dir, { withFileTypes: true });
+  const files = [];
+  for (const entry of entries) {
+    const absolutePath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      files.push(...await collectFiles(root, absolutePath));
+    } else if (entry.isFile()) {
+      files.push(path.relative(root, absolutePath).split(path.sep).join(path.posix.sep));
+    }
+  }
+  return files.sort();
+}
+
+function specFileKind(file) {
+  if (file === "openapi.yaml") {
+    return "openapi";
+  }
+  if (file.startsWith("schemas/")) {
+    return "schema";
+  }
+  if (file.startsWith("catalogs/") && file.endsWith("/index.json")) {
+    return "catalogIndex";
+  }
+  if (file.startsWith("catalogs/")) {
+    return "catalogRecord";
+  }
+  if (file.startsWith("reference/")) {
+    return "reference";
+  }
+  return "spec";
+}
+
+function mediaTypeForSpecFile(file) {
+  if (file.endsWith(".json")) {
+    return "application/json";
+  }
+  if (file.endsWith(".yaml") || file.endsWith(".yml")) {
+    return "application/yaml";
+  }
+  return "application/octet-stream";
+}
+
 async function generateSchemas() {
   const schemas = [];
   for (const definition of schemaDefinitions) {
@@ -137,6 +180,27 @@ async function generateCatalogs() {
   await fs.writeFile(path.join(generatedRoot, "catalogs.ts"), lines.join("\n"));
 }
 
+async function generateSpecFiles() {
+  const files = await collectFiles(specRoot);
+  const entries = files.map((file) => ({
+    path: file,
+    packagePath: `@openpresentation/opf/spec/${file}`,
+    kind: specFileKind(file),
+    mediaType: mediaTypeForSpecFile(file),
+  }));
+  const kinds = [...new Set(entries.map((entry) => entry.kind))];
+
+  const lines = [generatedHeader("spec/**/*")];
+  lines.push(`export const specFileEntries = ${asTs(entries)} as const;`, "");
+  lines.push(`export const specFilePaths = ${asTs(files)} as const;`, "");
+  lines.push(`export const specFileKinds = ${asTs(kinds)} as const;`, "");
+  lines.push("export type SpecFileEntry = typeof specFileEntries[number];", "");
+  lines.push("export type SpecFilePath = typeof specFilePaths[number];", "");
+  lines.push("export type SpecFileKind = typeof specFileKinds[number];", "");
+
+  await fs.writeFile(path.join(generatedRoot, "spec-files.ts"), lines.join("\n"));
+}
+
 async function generateTypes() {
   await fs.mkdir(generatedTypesRoot, { recursive: true });
   for (const definition of schemaDefinitions) {
@@ -163,4 +227,5 @@ await fs.rm(generatedRoot, { recursive: true, force: true });
 await fs.mkdir(generatedRoot, { recursive: true });
 await generateSchemas();
 await generateCatalogs();
+await generateSpecFiles();
 await generateTypes();

@@ -45,4 +45,15 @@ export {
   validatePresentation,
 } from "./validator.js";
 
+export {
+  specFileEntries,
+  specFilePaths,
+  specFileKinds,
+} from "./spec-files.js";
+
 export type * from "./types.js";
+export type {
+  SpecFileEntry,
+  SpecFilePath,
+  SpecFileKind,
+} from "./spec-files.js";

@@ -10,7 +10,4 @@ const destination = path.join(packageRoot, "dist", "spec");
 const source = path.join(repoRoot, "spec");
 
 await fs.rm(destination, { recursive: true, force: true });
-await fs.cp(source, destination, {
-  recursive: true,
-  filter: (sourcePath) => path.relative(source, sourcePath) !== "openapi.yaml",
-});
+await fs.cp(source, destination, { recursive: true });

@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { existsSync, readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 
 import {
@@ -9,11 +10,14 @@ import {
   languages,
   presentation,
   purposes,
+  specFileEntries,
+  specFilePaths,
   socialPlatform,
   socialPlatforms,
   validateCatalogRecord,
   validatePresentation,
 } from "../dist/index.js";
+import { specFileEntries as focusedSpecFileEntries } from "../dist/spec-files.js";
 import { tones } from "../dist/catalogs.js";
 import { validate, assertValid } from "../dist/validator.js";
 
@@ -36,6 +40,20 @@ assert.equal(catalogEntries.find((entry) => entry.kind === "socialPlatforms")?.s
 assert.ok(purposes.length > 0);
 assert.ok(languages.some((record) => record.id === "english-us" && record.bcp47 === "en-US"));
 assert.ok(languages.some((record) => record.id === "english-gb" && record.bcp47 === "en-GB"));
+assert.equal(focusedSpecFileEntries.length, specFileEntries.length);
+assert.ok(specFilePaths.includes("openapi.yaml"));
+assert.ok(specFilePaths.includes("schemas/opf.schema.json"));
+assert.ok(specFilePaths.includes("catalogs/layouts/index.json"));
+assert.equal(specFileEntries.find((entry) => entry.path === "openapi.yaml")?.kind, "openapi");
+assert.equal(specFileEntries.find((entry) => entry.path === "openapi.yaml")?.mediaType, "application/yaml");
+assert.equal(
+  specFileEntries.find((entry) => entry.path === "openapi.yaml")?.packagePath,
+  "@openpresentation/opf/spec/openapi.yaml",
+);
+assert.ok(existsSync(new URL("../dist/spec/openapi.yaml", import.meta.url)));
+assert.ok(existsSync(new URL("../dist/spec/schemas/opf.schema.json", import.meta.url)));
+assert.ok(existsSync(new URL("../dist/spec/catalogs/layouts/index.json", import.meta.url)));
+assert.match(readFileSync(new URL("../dist/spec/openapi.yaml", import.meta.url), "utf8"), /^openapi:/m);
 
 const doc = {
   name: "Smoke Test",

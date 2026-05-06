@@ -1,0 +1,61 @@
+name: Publish OPF npm package
+
+on:
+  push:
+    tags:
+      - "opf-v*"
+      - "@openpresentation/opf@v*"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    name: Publish @openpresentation/opf
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Verify tag matches package version
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          VERSION="$(node -p "require('./packages/javascript/package.json').version")"
+          case "${GITHUB_REF_NAME}" in
+            "opf-v${VERSION}"|"@openpresentation/opf@v${VERSION}") ;;
+            *)
+              echo "Tag ${GITHUB_REF_NAME} does not match @openpresentation/opf version ${VERSION}."
+              exit 1
+              ;;
+          esac
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Test
+        run: pnpm test
+
+      - name: Verify npm package contents
+        run: pnpm --filter @openpresentation/opf pack:dry-run
+
+      - name: Publish to npm with provenance
+        working-directory: packages/javascript
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --access public --provenance

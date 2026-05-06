@@ -2,9 +2,9 @@
 
 Canonical Open Presentation Format package for JavaScript and TypeScript.
 
-Publishes the OPF schemas, catalog presets, generated TypeScript types, and local validation helpers. The schema is pre-stable (0.x — expect breaking changes between minor versions until 1.0). This package does not render PowerPoint files, parse `.pptx`, fetch remote catalogs, or use AI.
+Publishes the OPF schemas, catalog presets, raw spec files, generated TypeScript types, and local validation helpers. The schema is pre-stable (0.x — expect breaking changes between minor versions until 1.0). This package does not render PowerPoint files, parse `.pptx`, fetch remote catalogs, or use AI.
 
-The packed npm artifact includes package-addressable OPF schemas and catalogs under `spec/`. Legacy PPTX.dev service contracts, including the OpenAPI spec retained in the repository for reference, are not part of this package.
+The canonical npm package remains `@openpresentation/opf`; a separate `@openpresentation/opf-spec` package is not used for v0.2.0 so existing downstream imports stay stable. The packed npm artifact includes package-addressable OPF schemas, catalogs, reference files, and `openapi.yaml` under `spec/`.
 
 Repository: https://github.com/OpenPresentation/opf
 
@@ -57,6 +57,7 @@ Use focused imports when you only need one surface:
 ```ts
 import { presentation, audience } from "@openpresentation/opf/schemas";
 import { audiences, tones } from "@openpresentation/opf/catalogs";
+import { specFileEntries } from "@openpresentation/opf/spec-files";
 import { validate, assertValid } from "@openpresentation/opf/validator";
 import type { Presentation, Audience, Tone } from "@openpresentation/opf/types";
 ```
@@ -80,6 +81,15 @@ Raw canonical JSON is published under `spec/`:
 import presentationSchema from "@openpresentation/opf/spec/schemas/opf.schema.json" with {
   type: "json",
 };
+```
+
+The raw spec manifest exposes typed package paths for files that should be resolved from npm instead of GitHub:
+
+```ts
+import { specFileEntries } from "@openpresentation/opf/spec-files";
+
+const openApi = specFileEntries.find((entry) => entry.path === "openapi.yaml");
+console.log(openApi?.packagePath);
 ```
 
 Package-addressable catalog paths can be used by OPF catalog resolvers:

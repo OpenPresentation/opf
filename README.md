@@ -30,6 +30,7 @@ The canonical JavaScript/TypeScript package is published at [`packages/javascrip
 
 - export the canonical schemas from [`spec/`](./spec)
 - export bundled catalog records from [`spec/`](./spec)
+- export a typed raw spec file manifest for package-addressable `spec/` content
 - generate TypeScript types, with `Presentation` as the top-level type
 - validate OPF JSON and catalog records locally
 
@@ -79,6 +80,7 @@ Use focused imports when you only need one surface:
 ```ts
 import { presentation } from "@openpresentation/opf/schemas";
 import { audiences, purposes } from "@openpresentation/opf/catalogs";
+import { specFileEntries } from "@openpresentation/opf/spec-files";
 import { validate } from "@openpresentation/opf/validator";
 import type { Presentation } from "@openpresentation/opf/types";
 ```
@@ -111,11 +113,11 @@ node packages/cli/dist/index.js validate path/to/deck.opf.json
 | [`docs/examples.md`](./docs/examples.md) | Guide to the expanded scenario-oriented examples under `examples/gallery/`. |
 | [`spec/schemas/*.schema.json`](./spec/schemas) | Companion schemas for catalog records and sub-objects. |
 | [`spec/catalogs/<catalog-kind>/`](./spec/catalogs) | Canonical bundled catalog records. |
+| [`spec/openapi.yaml`](./spec/openapi.yaml) | OpenAPI contract included as raw spec content in the npm package. |
 | [`examples/technical/`](./examples/technical) | Focused OPF fixtures for validator, renderer, catalog-resolution, design, content-payload, and region behavior. |
 | [`examples/gallery/`](./examples/gallery) | Broader OPF example decks organized by industry, function, education, government, presentation type, international, and design/media scenarios. |
 | [`packages/javascript/`](./packages/javascript) | Public pre-stable source for `@openpresentation/opf`. |
 | [`packages/cli/`](./packages/cli) | Local-only OPF CLI source; native distribution is deferred. |
-| [`spec/openapi.yaml`](./spec/openapi.yaml) | Legacy PPTX.dev OpenAPI spec retained temporarily for service reference. |
 | [`legacy/`](./legacy) | Tombstone for PPTX.dev clients, CLIs, SDKs, and MCP source migrated to PPTX.dev-owned repositories. |
 
 ## Package Boundary
@@ -124,7 +126,7 @@ OPF defines the format and bundled presets. PPTX.dev consumes OPF to provide hos
 
 Future non-JavaScript OPF packages should follow the same local-only boundary: Python and Go packages should expose schemas, types/models, catalogs, and validation, not PPTX.dev rendering or generation.
 
-The published JavaScript package copies package-addressable OPF schemas, catalogs, and reference assets from `spec/`. It does not include the legacy PPTX.dev OpenAPI service spec.
+The published JavaScript package copies package-addressable OPF schemas, catalogs, reference assets, and `spec/openapi.yaml` from `spec/`. It intentionally remains `@openpresentation/opf` instead of introducing a separate `@openpresentation/opf-spec` package so downstream imports can advance by semver-pinning one canonical package.
 
 ## License
 

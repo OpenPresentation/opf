@@ -7,6 +7,7 @@ export default defineConfig({
     catalogs: "src/catalogs.ts",
     validator: "src/validator.ts",
     types: "src/types.ts",
+    "spec-files": "src/spec-files.ts",
   },
   format: ["esm"],
   dts: true,
