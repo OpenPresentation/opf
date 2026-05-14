@@ -59,8 +59,39 @@ import { presentation, audience } from "@openpresentation/opf/schemas";
 import { audiences, tones } from "@openpresentation/opf/catalogs";
 import { specFileEntries } from "@openpresentation/opf/spec-files";
 import { validate, assertValid } from "@openpresentation/opf/validator";
+import {
+  layoutPreviews,
+  getLayoutPreview,
+  hasLayoutPreview,
+} from "@openpresentation/opf/previews";
 import type { Presentation, Audience, Tone } from "@openpresentation/opf/types";
 ```
+
+### Layout previews
+
+`@openpresentation/opf/previews` ships pre-rendered HTML thumbnails for the
+slide layouts catalogued at pptx.gallery. Each preview is a Tailwind-styled
+fragment sized to fill a 16:9 container and only depends on the standard
+`--background`, `--foreground`, `--card`, `--muted`, `--muted-foreground`,
+`--accent`, and `--border` CSS variables.
+
+```tsx
+import { getLayoutPreview } from "@openpresentation/opf/previews";
+
+export function LayoutThumbnail({ slug }: { slug: string }) {
+  const html = getLayoutPreview(slug);
+  if (!html) return null;
+  return (
+    <div
+      className="aspect-[16/9] overflow-hidden rounded-lg border border-border bg-card"
+      dangerouslySetInnerHTML={{ __html: html }}
+    />
+  );
+}
+```
+
+Raw HTML source-of-truth lives under `spec/previews/layouts/<slug>.html` and is
+also addressable via `@openpresentation/opf/spec/previews/layouts/<slug>.html`.
 
 Validate catalog records locally:
 

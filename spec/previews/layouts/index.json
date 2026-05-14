@@ -1,0 +1,357 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout-preview-index/v1",
+  "version": "1",
+  "description": "Catalog of static HTML previews for slide layouts. Each preview is a self-contained Tailwind-styled snippet sized to fill a 16:9 thumbnail. Consumers should provide the standard pptx.gallery CSS variables (--background, --foreground, --card, --muted, --muted-foreground, --accent, --border) on a parent element.",
+  "records": [
+    {
+      "id": "action-plan",
+      "file": "action-plan.html",
+      "bytes": 1940
+    },
+    {
+      "id": "agenda",
+      "file": "agenda.html",
+      "bytes": 1196
+    },
+    {
+      "id": "appendix-index",
+      "file": "appendix-index.html",
+      "bytes": 1678
+    },
+    {
+      "id": "architecture-stack",
+      "file": "architecture-stack.html",
+      "bytes": 1656
+    },
+    {
+      "id": "assumptions-dependencies",
+      "file": "assumptions-dependencies.html",
+      "bytes": 1977
+    },
+    {
+      "id": "before-after",
+      "file": "before-after.html",
+      "bytes": 475
+    },
+    {
+      "id": "benchmark-target-table",
+      "file": "benchmark-target-table.html",
+      "bytes": 1984
+    },
+    {
+      "id": "bullet-list",
+      "file": "bullet-list.html",
+      "bytes": 1028
+    },
+    {
+      "id": "business-model-canvas",
+      "file": "business-model-canvas.html",
+      "bytes": 2734
+    },
+    {
+      "id": "capability-map",
+      "file": "capability-map.html",
+      "bytes": 2343
+    },
+    {
+      "id": "case-study",
+      "file": "case-study.html",
+      "bytes": 1476
+    },
+    {
+      "id": "chapter-recap",
+      "file": "chapter-recap.html",
+      "bytes": 1682
+    },
+    {
+      "id": "circular-lifecycle",
+      "file": "circular-lifecycle.html",
+      "bytes": 1796
+    },
+    {
+      "id": "comparison",
+      "file": "comparison.html",
+      "bytes": 1304
+    },
+    {
+      "id": "competitive-landscape",
+      "file": "competitive-landscape.html",
+      "bytes": 1377
+    },
+    {
+      "id": "customer-journey",
+      "file": "customer-journey.html",
+      "bytes": 2024
+    },
+    {
+      "id": "customer-logos",
+      "file": "customer-logos.html",
+      "bytes": 2222
+    },
+    {
+      "id": "dashboard",
+      "file": "dashboard.html",
+      "bytes": 1582
+    },
+    {
+      "id": "data-visualization",
+      "file": "data-visualization.html",
+      "bytes": 506
+    },
+    {
+      "id": "decision-tree",
+      "file": "decision-tree.html",
+      "bytes": 1869
+    },
+    {
+      "id": "detailed-data-table",
+      "file": "detailed-data-table.html",
+      "bytes": 4158
+    },
+    {
+      "id": "ecosystem-map",
+      "file": "ecosystem-map.html",
+      "bytes": 2026
+    },
+    {
+      "id": "executive-decision",
+      "file": "executive-decision.html",
+      "bytes": 1229
+    },
+    {
+      "id": "executive-summary",
+      "file": "executive-summary.html",
+      "bytes": 1699
+    },
+    {
+      "id": "faq",
+      "file": "faq.html",
+      "bytes": 530
+    },
+    {
+      "id": "feature-comparison-matrix",
+      "file": "feature-comparison-matrix.html",
+      "bytes": 3035
+    },
+    {
+      "id": "forecast-scenario",
+      "file": "forecast-scenario.html",
+      "bytes": 997
+    },
+    {
+      "id": "funnel-pyramid",
+      "file": "funnel-pyramid.html",
+      "bytes": 462
+    },
+    {
+      "id": "gantt-project-plan",
+      "file": "gantt-project-plan.html",
+      "bytes": 1912
+    },
+    {
+      "id": "geographic-map",
+      "file": "geographic-map.html",
+      "bytes": 1388
+    },
+    {
+      "id": "heatmap-cohort",
+      "file": "heatmap-cohort.html",
+      "bytes": 2763
+    },
+    {
+      "id": "hub-and-spoke",
+      "file": "hub-and-spoke.html",
+      "bytes": 2331
+    },
+    {
+      "id": "icon-grid",
+      "file": "icon-grid.html",
+      "bytes": 1125
+    },
+    {
+      "id": "image-focus",
+      "file": "image-focus.html",
+      "bytes": 230
+    },
+    {
+      "id": "key-takeaway",
+      "file": "key-takeaway.html",
+      "bytes": 393
+    },
+    {
+      "id": "kpi-scorecard",
+      "file": "kpi-scorecard.html",
+      "bytes": 1633
+    },
+    {
+      "id": "logic-tree",
+      "file": "logic-tree.html",
+      "bytes": 1531
+    },
+    {
+      "id": "market-size",
+      "file": "market-size.html",
+      "bytes": 1100
+    },
+    {
+      "id": "matrix-quadrant",
+      "file": "matrix-quadrant.html",
+      "bytes": 644
+    },
+    {
+      "id": "network-dependency-map",
+      "file": "network-dependency-map.html",
+      "bytes": 1816
+    },
+    {
+      "id": "one-column-explainer",
+      "file": "one-column-explainer.html",
+      "bytes": 1263
+    },
+    {
+      "id": "org-chart",
+      "file": "org-chart.html",
+      "bytes": 2565
+    },
+    {
+      "id": "persona-grid",
+      "file": "persona-grid.html",
+      "bytes": 1770
+    },
+    {
+      "id": "photo-grid",
+      "file": "photo-grid.html",
+      "bytes": 254
+    },
+    {
+      "id": "pricing-table",
+      "file": "pricing-table.html",
+      "bytes": 2171
+    },
+    {
+      "id": "process-flow",
+      "file": "process-flow.html",
+      "bytes": 1057
+    },
+    {
+      "id": "product-feature",
+      "file": "product-feature.html",
+      "bytes": 405
+    },
+    {
+      "id": "pros-cons",
+      "file": "pros-cons.html",
+      "bytes": 1846
+    },
+    {
+      "id": "qa-discussion",
+      "file": "qa-discussion.html",
+      "bytes": 945
+    },
+    {
+      "id": "quote-highlight",
+      "file": "quote-highlight.html",
+      "bytes": 373
+    },
+    {
+      "id": "raci-matrix",
+      "file": "raci-matrix.html",
+      "bytes": 4854
+    },
+    {
+      "id": "risk-heatmap",
+      "file": "risk-heatmap.html",
+      "bytes": 1264
+    },
+    {
+      "id": "roadmap",
+      "file": "roadmap.html",
+      "bytes": 819
+    },
+    {
+      "id": "screenshot-walkthrough",
+      "file": "screenshot-walkthrough.html",
+      "bytes": 1808
+    },
+    {
+      "id": "section-divider",
+      "file": "section-divider.html",
+      "bytes": 255
+    },
+    {
+      "id": "single-message-statement",
+      "file": "single-message-statement.html",
+      "bytes": 419
+    },
+    {
+      "id": "stats-metrics",
+      "file": "stats-metrics.html",
+      "bytes": 570
+    },
+    {
+      "id": "status-rag",
+      "file": "status-rag.html",
+      "bytes": 1678
+    },
+    {
+      "id": "swimlane-process",
+      "file": "swimlane-process.html",
+      "bytes": 1815
+    },
+    {
+      "id": "swot-analysis",
+      "file": "swot-analysis.html",
+      "bytes": 1112
+    },
+    {
+      "id": "team-bio",
+      "file": "team-bio.html",
+      "bytes": 1527
+    },
+    {
+      "id": "testimonial-grid",
+      "file": "testimonial-grid.html",
+      "bytes": 1374
+    },
+    {
+      "id": "thank-you-cta",
+      "file": "thank-you-cta.html",
+      "bytes": 314
+    },
+    {
+      "id": "three-column",
+      "file": "three-column.html",
+      "bytes": 857
+    },
+    {
+      "id": "timeline",
+      "file": "timeline.html",
+      "bytes": 1189
+    },
+    {
+      "id": "title-slide",
+      "file": "title-slide.html",
+      "bytes": 279
+    },
+    {
+      "id": "two-column",
+      "file": "two-column.html",
+      "bytes": 600
+    },
+    {
+      "id": "venn-overlap",
+      "file": "venn-overlap.html",
+      "bytes": 943
+    },
+    {
+      "id": "waterfall-bridge",
+      "file": "waterfall-bridge.html",
+      "bytes": 1068
+    },
+    {
+      "id": "wheel-radial",
+      "file": "wheel-radial.html",
+      "bytes": 2159
+    }
+  ]
+}

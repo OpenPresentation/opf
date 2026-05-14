@@ -8,6 +8,7 @@ export default defineConfig({
     validator: "src/validator.ts",
     types: "src/types.ts",
     "spec-files": "src/spec-files.ts",
+    previews: "src/previews.ts",
   },
   format: ["esm"],
   dts: true,

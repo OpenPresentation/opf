@@ -51,6 +51,18 @@ export {
   specFileKinds,
 } from "./spec-files.js";
 
+export {
+  layoutPreviews,
+  layoutPreviewIndex,
+  layoutPreviewSlugs,
+  hasLayoutPreview,
+  getLayoutPreview,
+} from "./previews.js";
+export type {
+  LayoutPreviewRecord,
+  LayoutPreviewIndex,
+} from "./previews.js";
+
 export type * from "./types.js";
 export type {
   SpecFileEntry,
