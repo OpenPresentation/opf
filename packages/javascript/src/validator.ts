@@ -309,6 +309,18 @@ function inferredKinds(value: Record<string, unknown>): ContentKind[] {
   return kinds;
 }
 
+function isImplicitBlocksComposition(
+  value: Record<string, unknown>,
+  inferred: readonly ContentKind[],
+  options: { allowBlocks?: boolean },
+): boolean {
+  if (options.allowBlocks !== true || hasOwn(value, "blocks")) {
+    return false;
+  }
+
+  return inferred.length > 1;
+}
+
 function validateContentPayload(
   value: Record<string, unknown>,
   path: string,
@@ -343,6 +355,10 @@ function validateContentPayload(
   }
 
   if (!kind && inferred.length > 1) {
+    if (isImplicitBlocksComposition(value, inferred, options)) {
+      return issues;
+    }
+
     issues.push(semanticIssue(path, "content payload mixes fields from incompatible content types", {
       inferredTypes: inferred,
     }));

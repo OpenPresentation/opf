@@ -62,16 +62,23 @@
       "examples": ["Bob Lee", ["Bob Lee", "Carla Diaz"]]
     },
     "audience": {
-      "type": "array",
-      "items": {
-        "oneOf": [
-          { "type": "string" },
-          { "$ref": "#/$defs/Audience" }
-        ]
-      },
-      "minItems": 1,
-      "description": "Intended audiences for the presentation. Each item accepts either:\n- A string shorthand: free-form description ('Series B investors'), an audiences catalog id ('executives'), an HTTPS URL, or a 'pkg:' reference.\n- An inline Audience object for custom audience metadata or catalog-backed overrides. Object form mirrors https://openpresentation.org/schema/opf-audience/v1 without '$schema'.\n\nResolution order for catalog ids and references: inline catalogs.audiences.records[] → catalogs.audiences.source → default catalog at https://www.pptx.gallery/audiences.",
+      "oneOf": [
+        { "type": "string" },
+        {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              { "type": "string" },
+              { "$ref": "#/$defs/Audience" }
+            ]
+          },
+          "minItems": 1
+        }
+      ],
+      "description": "Intended audiences for the presentation. Accepts either:\n- A single string shorthand: free-form description ('Series B investors'), an audiences catalog id ('executives'), an HTTPS URL, or a 'pkg:' reference.\n- An array of string shorthands and/or inline Audience objects for custom audience metadata or catalog-backed overrides. Object form mirrors https://openpresentation.org/schema/opf-audience/v1 without '$schema'.\n\nResolution order for catalog ids and references: inline catalogs.audiences.records[] → catalogs.audiences.source → default catalog at https://www.pptx.gallery/audiences.",
       "examples": [
+        "executives",
+        "Biology Students and Wildlife Enthusiasts",
         ["executives"],
         ["board", "c-suite"],
         ["Series B investors", "https://acme.com/decks/audiences/acme-board.json"],
@@ -1586,7 +1593,7 @@
         "items": {
           "type": "array",
           "items": { "$ref": "#/$defs/ListItem" },
-          "description": "Full-slide generic list payload. Presence of this field infers type 'list'."
+          "description": "Full-slide generic list payload. Presence of this field infers type 'list'. At slide root, multiple content payload kinds with no explicit type, blocks, or regions are accepted as shorthand for layout-agnostic blocks."
         },
         "bullets": {
           "type": "array",
@@ -1638,7 +1645,7 @@
         "blocks": {
           "type": "array",
           "items": { "$ref": "#/$defs/ContentPayload" },
-          "description": "Layout-agnostic content blocks rendered together as a composed payload when exact placement is unspecified."
+          "description": "Layout-agnostic content blocks rendered together as a composed payload when exact placement is unspecified. At slide root, multiple content payload kinds with no explicit type, blocks, or regions are accepted as shorthand for equivalent blocks."
         },
         "design": {
           "$ref": "#/$defs/Design",

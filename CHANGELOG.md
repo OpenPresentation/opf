@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.2
+
+### Changed
+
+- Accepted mixed slide-root content payload shorthand as implicit layout-agnostic blocks when no explicit type, blocks, or regions are present.
+- Allowed a single string shorthand for `audience` in addition to the existing array form.
+- Documented the mixed slide-root payload shorthand in schema and content payload references.
+
 ## 0.2.0 - Pending npm publish approval
 
 ### Breaking Changes

@@ -19,7 +19,7 @@ This reference documents the author-facing shape of a complete `*.opf.json` pres
 | `organization` | no | `oneOf:ref:Organization / array<ref:Organization>` | Organization associated with the presentation, usually the presenting company. Array form supports hosts, partners, clients, and sponsors. The primary organization (declared via Organization.role or, if no role is set... |
 | `speaker` | no | `oneOf:ref:Speaker / array<ref:Speaker>` | Person presenting the deck. Array form supports panels and multi-speaker decks. Used for cover slides, bio slides, footers, and panel attribution. |
 | `author` | no | `oneOf:string / array<string>` | Optional credit for the person who authored or contributed to the deck, distinct from speaker. Array form supports multiple contributors. Round-trips to OOXML 'docProps/core.xml' as '<dc:creator>' (semicolon-joined wh... |
-| `audience` | no | `array<oneOf:string / ref:Audience>` | Intended audiences for the presentation. Each item accepts either: - A string shorthand: free-form description ('Series B investors'), an audiences catalog id ('executives'), an HTTPS URL, or a 'pkg:' reference. - An... |
+| `audience` | no | `oneOf:string / array<oneOf:string / ref:Audience>` | Intended audiences for the presentation. Accepts either: - A single string shorthand: free-form description ('Series B investors'), an audiences catalog id ('executives'), an HTTPS URL, or a 'pkg:' reference. - An arr... |
 | `purpose` | no | `oneOf:string / ref:Purpose` | Primary goal of the presentation. Accepts either: - A string shorthand: free-form goal ('Raise a Series B round of $30M'), a purposes catalog id ('decide', 'align'), an HTTPS URL, or a 'pkg:' reference. - An inline Pu... |
 | `language` | no | `oneOf:string / ref:Language` | Language for the presentation content. Accepts either: - A string shorthand: a BCP-47 language tag ('en-US', 'en-GB', 'ja-JP', 'fr'), a languages catalog id ('english', 'japanese'), an HTTPS URL, or a 'pkg:' reference... |
 | `tone` | no | `oneOf:string / ref:Tone` | Desired tone for the presentation. Accepts either: - A string shorthand: a tones catalog id ('formal'), an HTTPS URL, or a 'pkg:' reference. - An inline Tone object for custom tone metadata or catalog-backed overrides... |
@@ -534,7 +534,7 @@ _No named properties._
 | `subtitle` | no | `string` | Slide-level subtitle or supporting line. When the resolved layout exposes a 'subtitle' placeholder, the engine renders this value there. |
 | `tag` | no | `string` | Small slide-level label or badge. When the resolved layout exposes a 'tag' placeholder, the engine renders this value there. |
 | `text` | no | `oneOf:string / array<ref:TextRun>` | Full-slide text payload. Use a string for plain text or TextRun[] for inline rich text. TextRun items may be plain strings or formatted run objects. |
-| `items` | no | `array<ref:ListItem>` | Full-slide generic list payload. Presence of this field infers type 'list'. |
+| `items` | no | `array<ref:ListItem>` | Full-slide generic list payload. Presence of this field infers type 'list'. At slide root, multiple content payload kinds with no explicit type, blocks, or regions are accepted as shorthand for layout-agnostic blocks. |
 | `bullets` | no | `array<ref:BulletItem>` | Full-slide text-style bullet payload. Presence of this field infers type 'text'. |
 | `image` | no | `ref:Asset` | Full-slide image source. Presence of this field infers type 'image'. |
 | `video` | no | `ref:Asset` | Full-slide video source. Presence of this field infers type 'video'. |
@@ -544,7 +544,7 @@ _No named properties._
 | `metric` | no | `oneOf:string / number / ref:Metric` | Full-slide metric payload. A string or number is shorthand for { "value": value }; object form carries optional label, description, unit, delta, and trend metadata. Numeric values remain numbers; renderers format them... |
 | `quote` | no | `oneOf:string / ref:Quote` | Full-slide quote payload. A string is shorthand for { "text": value }; object form carries optional attribution and source metadata. Presence of this field infers type 'quote'. |
 | `timeline` | no | `ref:Timeline` | Full-slide timeline payload. An array is shorthand for { "events": value }; object form carries optional name and description metadata. Presence of this field infers type 'timeline'. |
-| `blocks` | no | `array<ref:ContentPayload>` | Layout-agnostic content blocks rendered together as a composed payload when exact placement is unspecified. |
+| `blocks` | no | `array<ref:ContentPayload>` | Layout-agnostic content blocks rendered together as a composed payload when exact placement is unspecified. At slide root, multiple content payload kinds with no explicit type, blocks, or regions are accepted as shorthand for equivalent blocks. |
 | `design` | no | `ref:Design` | Slide-level design applied on top of the deck-wide design. |
 | `left` | no | `ref:ContentPayload` |  |
 | `center` | no | `ref:ContentPayload` |  |

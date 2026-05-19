@@ -636,9 +636,40 @@ assertPresentationInvalid({
   slides: [{ shape: "triangle" }],
 }, "must NOT have additional properties");
 
-assertPresentationInvalid({
-  name: "Mixed Payload Kinds",
+assertPresentationValid({
+  name: "Implicit Text List Blocks",
   slides: [{ text: "A", items: ["B"] }],
+});
+
+assertPresentationValid({
+  name: "Implicit Text Bullets List Blocks",
+  slides: [{ text: "A", bullets: ["B"], items: ["C"] }],
+});
+
+assertPresentationValid({
+  name: "Implicit Mixed Content Blocks",
+  slides: [{
+    text: "A",
+    items: ["B"],
+    chart: {
+      type: "line",
+      data: {
+        columns: ["Quarter", "Revenue"],
+        rows: [["Q1", 12]],
+      },
+    },
+    quote: "C",
+  }],
+});
+
+assertPresentationInvalid({
+  name: "Explicit Type Mixed Payload Kinds",
+  slides: [{ type: "text", text: "A", quote: "B" }],
+}, "incompatible");
+
+assertPresentationInvalid({
+  name: "Region Mixed Payload Kinds",
+  slides: [{ left: { text: "A", items: ["B"] } }],
 }, "incompatible");
 
 assertPresentationInvalid({
@@ -653,11 +684,11 @@ assertPresentationInvalid({
   slides: [{ title: "Slide Title" }],
 }, "must match a schema in anyOf");
 
-assertPresentationInvalid({
-  name: "Old Singular Audience",
-  audience: "executives",
+assertPresentationValid({
+  name: "Singular Audience Text",
+  audience: "Biology Students and Wildlife Enthusiasts",
   slides: [{ title: "Slide Title" }],
-}, "must be array");
+});
 
 assertPresentationInvalid({
   name: "Incomplete Purpose",

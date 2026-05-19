@@ -46,6 +46,41 @@ Use slide-level `blocks` when a slide contains multiple content payloads, but ex
 }
 ```
 
+At slide root only, multiple content payload kinds are accepted as shorthand for the equivalent blocks form when there is no explicit `type`, no `blocks`, and no promoted region keys:
+
+```json
+{
+  "title": "Habitat & Territory",
+  "text": "Jaguars are strongly associated with presence of water and dense cover.",
+  "items": [
+    "Primary habitats include dense rainforests, swamps, and seasonally flooded wetlands.",
+    "Solitary animals that establish and defend large territories."
+  ]
+}
+```
+
+The same shorthand works for other content kinds:
+
+```json
+{
+  "title": "Evidence Snapshot",
+  "chart": {
+    "type": "line",
+    "data": {
+      "columns": ["Quarter", "Sightings"],
+      "rows": [
+        ["Q1", 12],
+        ["Q2", 18]
+      ]
+    }
+  },
+  "quote": {
+    "text": "Jaguar conservation depends on connected habitat.",
+    "attribution": "Field researcher"
+  }
+}
+```
+
 ## Chart
 
 Chart-specific fields are grouped under `chart`. Do not put loose chart data directly on a slide or region.
