@@ -1,5 +1,11 @@
 # Open Presentation Format (OPF)
 
+[![npm version](https://img.shields.io/npm/v/@openpresentation/opf?label=npm)](https://www.npmjs.com/package/@openpresentation/opf)
+[![npm downloads](https://img.shields.io/npm/dw/@openpresentation/opf)](https://www.npmjs.com/package/@openpresentation/opf)
+[![license](https://img.shields.io/npm/l/@openpresentation/opf)](./LICENSE)
+
+Public npm package: [`@openpresentation/opf`](https://www.npmjs.com/package/@openpresentation/opf) (`npm install @openpresentation/opf`).
+
 Open Presentation Format is the portable, human-readable JSON document format for slide decks.
 
 This repository is the canonical home for the OPF **spec**, **JSON Schemas**, **catalog presets**, generated developer types, and local validation tooling. Anything that renders PowerPoint files, fills presentations with AI, parses `.pptx`, or calls the hosted [pptx.dev](https://pptx.dev) API belongs to PPTX.dev-specific packages, not the core OPF package.
