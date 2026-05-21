@@ -58,6 +58,18 @@
       "types": "./dist/previews.d.ts",
       "import": "./dist/previews.js"
     },
+    "./examples": {
+      "types": "./dist/examples.d.ts",
+      "import": "./dist/examples.js"
+    },
+    "./docs": {
+      "types": "./dist/docs.d.ts",
+      "import": "./dist/docs.js"
+    },
+    "./repo-readme": {
+      "types": "./dist/repo-readme.d.ts",
+      "import": "./dist/repo-readme.js"
+    },
     "./spec/*": "./dist/spec/*",
     "./package.json": "./package.json"
   },
@@ -72,7 +84,7 @@
   },
   "scripts": {
     "clean": "rm -rf dist src/generated",
-    "generate": "node scripts/generate.mjs && node scripts/generate-previews.mjs",
+    "generate": "node scripts/generate.mjs && node scripts/generate-previews.mjs && node scripts/generate-content.mjs",
     "build": "pnpm run generate && tsup && node scripts/copy-spec.mjs",
     "typecheck": "pnpm run generate && tsc --noEmit",
     "test": "pnpm run build && node test/smoke.mjs",

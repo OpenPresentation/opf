@@ -93,6 +93,62 @@ export function LayoutThumbnail({ slug }: { slug: string }) {
 Raw HTML source-of-truth lives under `spec/previews/layouts/<slug>.html` and is
 also addressable via `@openpresentation/opf/spec/previews/layouts/<slug>.html`.
 
+### Example decks
+
+`@openpresentation/opf/examples` ships every `.opf.json` file from `examples/`
+in the upstream repo, already parsed and validated against the presentation
+schema at build time.
+
+```ts
+import {
+  examples,
+  galleries,
+  getExample,
+  getExamplesByGallery,
+} from "@openpresentation/opf/examples";
+
+const compliance = getExample("compliance-readiness-review");
+const businessDecks = getExamplesByGallery("business-functions");
+
+console.log(`${examples.length} example decks across ${galleries.length} galleries`);
+```
+
+Each `ExampleRecord` includes the parsed `Presentation` object plus its
+repo-relative path, top-level category (`gallery`, `technical`, …), and
+gallery slug when applicable.
+
+### Documentation pages
+
+`@openpresentation/opf/docs` ships the top-level `docs/*.md` reference pages
+(`schema-reference`, `catalog-schema-reference`, `content-payloads`,
+`content-item-design-overrides`, `examples`). Subdirectories like
+`docs/migrations` and `docs/plans` are intentionally excluded — those move too
+quickly to ship inside a pinned npm release.
+
+```ts
+import { docs, getDoc } from "@openpresentation/opf/docs";
+
+for (const doc of docs) {
+  console.log(`${doc.title} — ${doc.file}`);
+}
+
+const schemaRef = getDoc("schema-reference");
+console.log(schemaRef?.markdown.slice(0, 200));
+```
+
+### Upstream README
+
+`@openpresentation/opf/repo-readme` exposes the raw markdown of the upstream
+`OpenPresentation/opf` README.md at the version pinned by this release. Use it
+when you want to mirror the canonical README inside another site or app
+without doing a network fetch.
+
+```ts
+import { repoReadme } from "@openpresentation/opf/repo-readme";
+
+console.log(repoReadme.split("\n").slice(0, 3).join("\n"));
+```
+
 Validate catalog records locally:
 
 ```ts

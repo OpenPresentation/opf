@@ -20,6 +20,17 @@ import {
 import { specFileEntries as focusedSpecFileEntries } from "../dist/spec-files.js";
 import { tones } from "../dist/catalogs.js";
 import { validate, assertValid } from "../dist/validator.js";
+import {
+  examples,
+  galleries,
+  exampleCategories,
+  getExample,
+  getGallery,
+  getExamplesByGallery,
+  getExamplesByCategory,
+} from "../dist/examples.js";
+import { docs, getDoc } from "../dist/docs.js";
+import { repoReadme } from "../dist/repo-readme.js";
 
 assert.equal(presentation.$id, "https://openpresentation.org/schema/opf/v1");
 assert.equal(audience.$id, "https://openpresentation.org/schema/opf-audience/v1");
@@ -735,3 +746,49 @@ assert.ok(
 const require = createRequire(import.meta.url);
 const rawPresentation = require("../dist/spec/schemas/opf.schema.json");
 assert.equal(rawPresentation.$id, presentation.$id);
+
+assert.ok(examples.length > 0, "expected at least one example deck");
+assert.ok(galleries.length > 0, "expected at least one gallery");
+assert.ok(exampleCategories.includes("gallery"));
+for (const example of examples) {
+  assert.equal(typeof example.slug, "string");
+  assert.ok(example.file.startsWith("examples/"));
+  assert.equal(typeof example.category, "string");
+  assert.ok(example.deck && typeof example.deck === "object");
+  const result = validatePresentation(example.deck);
+  assert.equal(
+    result.valid,
+    true,
+    `Example ${example.slug} failed validation: ${JSON.stringify(result.errors, null, 2)}`,
+  );
+}
+for (const gallery of galleries) {
+  assert.ok(gallery.slug.length > 0);
+  assert.ok(gallery.dir.startsWith("examples/gallery/"));
+  assert.ok(gallery.examples.length > 0, `gallery ${gallery.slug} is empty`);
+}
+const firstGallery = galleries[0];
+const firstGalleryExamples = getExamplesByGallery(firstGallery.slug);
+assert.equal(firstGalleryExamples.length, firstGallery.examples.length);
+assert.ok(getGallery(firstGallery.slug));
+assert.equal(getGallery("definitely-does-not-exist"), undefined);
+const firstExample = examples[0];
+assert.equal(getExample(firstExample.slug)?.slug, firstExample.slug);
+assert.ok(getExamplesByCategory("gallery").length > 0);
+
+assert.ok(docs.length > 0, "expected at least one doc");
+for (const doc of docs) {
+  assert.equal(typeof doc.slug, "string");
+  assert.ok(doc.file.startsWith("docs/"));
+  assert.ok(doc.title.length > 0, `doc ${doc.slug} missing title`);
+  assert.ok(doc.markdown.length > 0, `doc ${doc.slug} missing markdown`);
+}
+const docSlugs = docs.map((doc) => doc.slug);
+assert.ok(docSlugs.includes("schema-reference"));
+assert.equal(getDoc("schema-reference")?.slug, "schema-reference");
+assert.equal(getDoc("missing-doc"), undefined);
+assert.ok(!docSlugs.includes("BACKLOG"));
+
+assert.equal(typeof repoReadme, "string");
+assert.ok(repoReadme.length > 100, "expected repo README to ship");
+assert.match(repoReadme, /open presentation format/i);
