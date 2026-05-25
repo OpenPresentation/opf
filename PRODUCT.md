@@ -5,14 +5,17 @@
 **Tier 1 — open-source primitive (MIT).** OPF is the foundation of the Open Presentation / PPTX.dev presentation stack.
 
 ```
-Top:    STORYD2 (+ DeckChat)        — commercial consumer wrappers (Tier 3)
-Middle: pptx.dev                    — hosted engine / metered pay-per-use API (Tier 2)
-Bottom: OPF + pptx.gallery + SDKs   — open-source primitives, MIT (Tier 1)  ← you are here
+Top:    STORYD2 (+ DeckChat)              — commercial consumer wrappers (Tier 3)
+Middle: pptx.dev                          — hosted engine / metered pay-per-use API (Tier 2)
+Bottom: OPF + pptx.gallery + SDKs         — open-source primitives, MIT (Tier 1)  ← you are here
+        + opf-render / opf-editor / opf-pptx
 ```
+
+The render, edit, and PPTX-conversion toolkit (`opf-render`, `opf-editor`, `opf-pptx`) are MIT Tier-1 primitives in their own repos, not part of this format-only repo. See [`docs/plans/opf-toolkit.md`](docs/plans/opf-toolkit.md). The hosted Tier-2 engine *wraps* these primitives at scale; it is not the only renderer.
 
 - **Role in Tier 1:** OPF is the interchange format. It defines the JSON contract between LLM intent and rendered presentations so every agent in the ecosystem — ours or a third party's — can produce interoperable deck documents.
 - **Siblings in Tier 1:** [pptx.gallery](https://www.pptx.gallery) provides the human-browsable shared vocabulary. The canonical package source for machine consumers lives in this repo under `spec/` and `@openpresentation/opf`.
-- **Relationship to Tier 2 (pptx.dev):** OPF documents flow into `https://api.pptx.dev/v1` for rendering, parsing, generation, and export. The hosted engine is the paid surface. Core OPF packages do not call that API.
+- **Relationship to Tier 2 (pptx.dev):** OPF documents flow into `https://api.pptx.dev/v1` for hosted rendering, parsing, generation, and export. The hosted engine is the paid surface — it monetizes scale, reliability, AI generation, storage, jobs, and previews, not the existence of a renderer. The open-source `opf-render` / `opf-pptx` primitives let anyone render and convert OPF locally; the hosted engine wraps them. Core OPF *format* packages do not call that API.
 - **Relationship to Tier 3 (STORYD2, DeckChat):** Commercial wrappers produce OPF and hand it to pptx.dev. Keeping OPF MIT makes STORYD2 and DeckChat *more* valuable, not less — the format is open so every AI tool standardizes on it, and the consumer products compete on UX and agent strategy.
 
 ## Vision
@@ -46,7 +49,7 @@ PPTX.dev-specific `@pptx/sdk`, `pptx-dev`, `pptx.dev/go`, `@pptx/cli`, and `pptx
 
 ## Monetization
 
-**None in Tier 1.** OPF, the JSON schema, the SDKs, the CLIs, and the MCP server are MIT-licensed public goods. Revenue flows to Tier 2 (metered pay-per-use on the hosted engine) and Tier 3 (subscriptions on STORYD2 and DeckChat). The more widely OPF is adopted, the more valuable the Tier-2 engine becomes as the default renderer.
+**None in Tier 1.** OPF, the JSON schema, the SDKs, the CLIs, the MCP server, **and the open-source render/edit/convert toolkit (`opf-render`, `opf-editor`, `opf-pptx`)** are MIT-licensed public goods. Revenue flows to Tier 2 (metered pay-per-use on the hosted engine) and Tier 3 (subscriptions on STORYD2 and DeckChat). The moat is ecosystem adoption and hosted scale/AI/UX — not owning the only OOXML emitter. The more widely OPF and the OSS toolkit are adopted, the more valuable the Tier-2 engine becomes as the default *hosted* renderer.
 
 ## Current Priorities
 
@@ -60,9 +63,9 @@ PPTX.dev-specific `@pptx/sdk`, `pptx-dev`, `pptx.dev/go`, `@pptx/cli`, and `pptx
 
 - **MIT license, always.** The format and client tools must stay open so every AI tool (including competitors) can produce OPF. Format lock-in is not the moat — ecosystem adoption is.
 - **Open Presentation Format is the public name.** `OPF` is shorthand, and `*.opf.json` is the recommended filename pattern for complete JSON deck documents.
-- **Spec + local format packages live together, service clients move separately.** This repo owns the OPF spec, schemas, catalogs, and local validation packages. Hosted PPTX.dev clients and MCP tooling should live with the PPTX.dev service.
+- **Spec + local format packages live together; toolkit and service clients move separately.** This repo owns the OPF spec, schemas, catalogs, and local validation packages only. The MIT render/edit/convert toolkit lives in its own repos (`opf-render`, `opf-editor`, `opf-pptx`) and depends on this format package. Hosted PPTX.dev clients and MCP tooling live with the PPTX.dev service.
 - **Vanity URLs are stable.** `pptx.dev/go`, `@pptx/*`, `pptx-dev` (PyPI), and `https://openpresentation.org/schema/opf/v1` do not move even as source repos move. Existing users do not need to update import paths.
-- **PPTX.dev consumes OPF.** The hosted engine generates, renders, parses, stores, and previews presentations. OPF packages define and validate the data contract locally.
+- **PPTX.dev consumes OPF and the OSS toolkit.** The hosted engine generates, renders, parses, stores, and previews presentations at scale — wrapping the open `opf-render` / `opf-pptx` primitives rather than a private renderer. OPF format packages define and validate the data contract locally.
 
 ## What OPF models
 
