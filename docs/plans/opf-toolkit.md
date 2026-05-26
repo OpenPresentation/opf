@@ -1,6 +1,6 @@
 # OPF Toolkit — open-source render, edit, and PPTX conversion
 
-Plan for the open-source toolkit that turns OPF documents into pixels and PowerPoint files, and PowerPoint files back into OPF. Everything here is free and MIT, runs in Node and the browser, and has **no commercial SDK in the critical path**. The hosted [pptx.dev](https://pptx.dev) engine (Tier 2) consumes these primitives at scale; it does not own the only renderer.
+Plan for the open-source toolkit that turns OPF documents into pixels and PowerPoint files, and PowerPoint files back into OPF. Everything here is free and MIT, runs in Node and the browser, and has **no hosted service in the critical path**. OpenPresentation ships code and documentation only; downstream applications can wrap these primitives in their own products, services, agents, and workflows.
 
 This repo ([`openpresentation/opf`](https://github.com/openpresentation/opf)) stays **format-only**: schemas, catalogs, examples, types, local validation. The toolkit lives in **separate MIT repos** that depend on [`@openpresentation/opf`](https://www.npmjs.com/package/@openpresentation/opf). This document is the cross-cutting plan; it lives here because the format and the toolkit move together conceptually, and because the build leans hard on the spec assets in [`spec/`](../../spec).
 
@@ -20,7 +20,7 @@ This repo ([`openpresentation/opf`](https://github.com/openpresentation/opf)) st
 
 7. **PPTX export starts on `pptxgenjs`, then graduates to a hand-written OOXML emitter.** Working `.pptx` fast, 1:1 fidelity later. Both live behind one stable `toPptx(opf)` API so the swap is invisible to callers.
 
-8. **Tier repositioning.** Making the renderer MIT is a deliberate strategy change: the moat is hosted scale, AI generation, and UX — not owning the only OOXML emitter. [`PRODUCT.md`](../../PRODUCT.md) is updated in the same change set to reflect render/convert as Tier-1 primitives.
+8. **OpenPresentation boundary.** Making the renderer MIT is a deliberate strategy change: OpenPresentation owns open specs, catalogs, local libraries, and integration seams — not hosted APIs, managed infrastructure, or product workflows. [`PRODUCT.md`](../../PRODUCT.md) is updated in the same change set to reflect render/convert as OpenPresentation OSS primitives.
 
 ---
 
@@ -32,7 +32,7 @@ Three repos under the `openpresentation` org, all MIT, all depending on `@openpr
 |---|---|---|---|
 | `openpresentation/opf-render` | 1 | `renderSvg(opf, opts)`, `svgToPng(svg)`, `svgToPdf(svgs)` | `@openpresentation/opf` |
 | `openpresentation/opf-editor` | 2 | React/Svelte components + headless `bindEditor(state)` | `opf-render`, `@openpresentation/opf` |
-| `openpresentation/opf-pptx` | 3 + 4 | `toPptx(opf)`, `fromPptx(buffer)` | `@openpresentation/opf` (+ `opf-render` for chart rasterization, [§4.4](#44-charts)) |
+| `openpresentation/opf-pptx` | 3 + 4 | `toPptx(opf)`, `fromPptx(buffer)` | `@openpresentation/opf` (+ `opf-render` for chart rasterization, [§3.4](#34-charts)) |
 
 **Why three, not one.** Each has a distinct dependency footprint and audience: `opf-render` is the universal core (everyone needs pixels); `opf-editor` pulls in a UI framework and is browser-only; `opf-pptx` carries OOXML/ZIP concerns and a heavyweight optional LibreOffice verification path. Splitting keeps install weight honest and lets a consumer take the renderer without the editor.
 
@@ -41,6 +41,18 @@ Three repos under the `openpresentation` org, all MIT, all depending on `@openpr
 **The convenience facade.** A thin optional `opf-toolkit` meta-package can re-export `render(opf, "svg"|"png"|"pdf"|"pptx")` and `import(pptx)` over the three repos for the "just give me one import" caller. It carries no logic — pure re-export — so it is not on the critical path of any phase.
 
 **Alternative considered — split Phase 3 from Phase 4 (`opf-pptx-out` / `opf-pptx-in`).** Rejected for v1: the shared OOXML surface is large and the two directions are co-developed. Revisit only if import grows an AI dependency that export shouldn't carry.
+
+---
+
+## 2. Integrator contract
+
+The toolkit is library-first. Downstream applications should be able to embed it in hosted services, agent workflows, custom editors, internal automation, and self-hosted systems without relying on OpenPresentation-hosted functions.
+
+- **Stable APIs.** Keep entry points small and predictable: `renderSvg`, `svgToPng`, `svgToPdf`, editor bindings/components, `toPptx`, and `fromPptx`. Use semver and document compatibility with `@openpresentation/opf`.
+- **Offline by default.** No required network calls, hosted callbacks, hidden telemetry, or remote asset fetches in the core runtime path. Catalog, font, image, and media resolution must be injectable so hosts can run offline or use private sources.
+- **Host-controlled product surface.** OpenPresentation does not provide auth, storage, collaboration, queues, jobs, previews, analytics, support, or workflow UX. Hosts compose those layers around the OSS primitives.
+- **Runtime portability.** Support Node and browser where the package promises it. Server-side APIs must be safe for batch jobs and concurrent requests, avoid global mutable config, and return structured errors.
+- **License and project hygiene.** Each repo ships MIT licensing, contribution guidance, security reporting, dependency license policy, font/media licensing notes, trademark/name usage guidance, and a compatibility policy.
 
 ---
 
@@ -89,23 +101,23 @@ TypeScript · AJV (via `@openpresentation/opf`) · `fontkit` or `opentype.js` fo
 
 ## Phase 2 — Make it human. WYSIWYG.
 
-**Repo:** `opf-editor` (depends on `opf-render`). **Goal:** a visual editor where editing the slide writes straight back to the OPF JSON, which stays the single source of truth.
+**Repo:** `opf-editor` (depends on `opf-render`). **Goal:** embeddable editor primitives where editing the slide writes straight back to the OPF JSON, which stays the single source of truth. This is not a hosted product shell; hosts own auth, storage, collaboration, branding, workflow, and UI chrome.
 
 ### 2.1 Traceable renderer
 
 - Already delivered by Phase 1's `data-opf-path` (decision 6). The editor renders with `opts.trace: true`. No second rendering engine.
 
-### 2.2 Click-to-edit
+### 2.2 Click-to-edit primitives
 
-- Click an element → read its `data-opf-path` → overlay an editable field on text → write the value back into the JSON at that path → re-render. Re-render is cheap because the renderer is pure.
+- Click an element → read its `data-opf-path` → expose the edit target to the host UI → write the value back into the JSON at that path → re-render. Re-render is cheap because the renderer is pure. Optional components can provide default overlays, but the headless binding is the core API.
 
 ### 2.3 Structured controls
 
-- Layout, theme, colorScheme, fontScheme, chart type (`Chart.type`), audience/purpose/tone are **menus that set catalog-id fields**, populated from `@openpresentation/opf/catalogs` — not freeform manipulation. This is where the catalog system pays off in the UI.
+- Layout, theme, colorScheme, fontScheme, chart type (`Chart.type`), audience/purpose/tone are **controls that set catalog-id fields**, populated from `@openpresentation/opf/catalogs` or host-supplied catalogs — not freeform manipulation. This is where the catalog system pays off in embedding contexts.
 
 ### 2.4 Side-by-side JSON
 
-- A CodeMirror/Monaco editor bound to the same state object; edits flow both ways. Re-validate with AJV on every change so output stays clean OPF.
+- Optional CodeMirror/Monaco components can bind to the same state object; edits flow both ways. Hosts may hide JSON entirely, replace the code editor, or use their own state layer. Re-validate with AJV on every change so output stays clean OPF.
 
 ### 2.5 Undo/redo as a JSON Patch log
 
@@ -113,13 +125,13 @@ TypeScript · AJV (via `@openpresentation/opf`) · `fontkit` or `opentype.js` fo
 
 ### 2.6 Key stack
 
-React or Svelte · CodeMirror or Monaco · `immer` (immutable updates + patch generation) · JSON Patch (RFC 6902) · AJV via `@openpresentation/opf`.
+Headless TypeScript core · optional React or Svelte components · optional CodeMirror or Monaco · `immer` (immutable updates + patch generation) · JSON Patch (RFC 6902) · AJV via `@openpresentation/opf`.
 
 ---
 
 ## Phase 3 — Make it usable. OPF → PPTX.
 
-**Repo:** `opf-pptx`. **Goal:** emit a real, editable `.pptx` PowerPoint opens without complaint. It only has to be *close* to the SVG — the SVG is canonical.
+**Repo:** `opf-pptx`. **Goal:** emit a real, editable `.pptx` PowerPoint opens without complaint through a pure local library API. It only has to be *close* to the SVG — the SVG is canonical.
 
 ### 3.1 The package shape
 
@@ -130,7 +142,8 @@ React or Svelte · CodeMirror or Monaco · `immer` (immutable updates + patch ge
 
 - **v1:** write an OPF→`pptxgenjs` mapping for working output fast.
 - **v2:** replace the internals with a hand-written OOXML emitter for a 1:1 mapping (owning the emitter removes the impedance mismatch with `pptxgenjs`'s API).
-- Both sit behind one stable `toPptx(opf)` so the swap is invisible.
+- Both sit behind one stable `toPptx(opf)` so the swap is invisible. The runtime path has no required network call, AI dependency, LibreOffice dependency, or hosted callback.
+- Server and batch callers get reproducible ZIP output, deterministic part ordering, fixed timestamps, bounded resource controls, and structured errors for validation, unsupported features, missing assets/fonts, and packaging failures.
 
 ### 3.3 Placeholder mapping caveat
 
@@ -164,7 +177,7 @@ TypeScript · `fflate` or `jszip` (packaging) · `pptxgenjs` initially · LibreO
 
 ### 4.3 Optional AI pass
 
-- A post-import classifier that re-maps slides into proper layouts and tidies text. **Optional and clearly isolated** — the mechanical importer must work fully without it, so the AI dependency never becomes load-bearing for the OSS core. (This is also the natural seam where the hosted pptx.dev adds value.)
+- A post-import classifier that re-maps slides into proper layouts and tidies text. **Optional and clearly isolated** — the mechanical importer must work fully without it, so the AI dependency never becomes load-bearing for the OSS core. Hosts can add their own classifier without changing the local importer contract.
 
 ### 4.4 Output discipline
 
@@ -208,12 +221,13 @@ Build order: **P1 → (P2 ∥ P3) → P4.** P2 and P3 are independent once P1 la
 
 ---
 
-## 9. Tier repositioning (PRODUCT.md change)
+## 9. OpenPresentation OSS boundary
 
-Making the renderer and converters MIT contradicts the current [`PRODUCT.md`](../../PRODUCT.md), which assigns rendering/parsing/export to the *commercial* Tier 2 and tombstones engine code out of this repo ([`legacy/README.md`](../../legacy/README.md)). The deliberate change:
+Making the renderer and converters MIT changes the boundary described in the current [`PRODUCT.md`](../../PRODUCT.md). The deliberate change:
 
-- **Render and convert become Tier-1 OSS primitives** (these three repos), siblings of the format and the gallery.
-- **pptx.dev (Tier 2) monetizes hosted scale, AI generation, storage, jobs, previews, and managed API** — not the existence of an OOXML emitter. A self-hoster can render and export with the OSS toolkit; the hosted engine wins on scale, reliability, AI, and UX.
-- The moat stays where `PRODUCT.md` already says it is: **ecosystem adoption**, not format or renderer lock-in.
+- **Render and convert become OpenPresentation OSS primitives** (these three repos), siblings of the format and the gallery.
+- **OpenPresentation provides code, not hosted functions.** The org does not ship hosted APIs, queues, storage, auth, jobs, previews, SLAs, telemetry, or managed infrastructure.
+- **Downstream applications own the product layer.** Hosted services, agent products, internal tools, and self-hosted systems can wrap the OSS libraries in their own environments.
+- **The adoption goal is interoperability.** The format, renderer, editor primitives, and converters should be useful to any integrator without forcing a specific product architecture.
 
-`PRODUCT.md` is updated in this change set: the tier diagram, the "hosted engine is the paid surface" line, and the monetization section reflect render/convert as open primitives the hosted engine wraps. The `legacy/README.md` tombstone (which points the old SDK/CLI/MCP clients at pptx.dev-owned repos) is unaffected — those were *hosted clients*, distinct from these new local primitives.
+`PRODUCT.md` is updated in this change set to reflect render/edit/convert as open primitives and to keep hosted-service concerns outside the OpenPresentation OSS repos. The `legacy/README.md` tombstone is unaffected — those were service-specific clients, distinct from these new local primitives.
