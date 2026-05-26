@@ -26,6 +26,9 @@ assert.equal(pkg.publishConfig?.access, "public");
 assert.ok(pkg.name.startsWith("@openpresentation/"));
 assert.ok(pkg.repository?.url?.includes("github.com/OpenPresentation/"));
 assert.ok(deps["@openpresentation/opf"], "Must declare compatibility with @openpresentation/opf");
+assert.ok(pkg.peerDependencies?.["@openpresentation/opf-render"], "Must declare renderer trace compatibility as a peer.");
+assert.ok(pkg.exports?.["./react"], "Must expose optional React bindings as a separate entry point.");
+assert.ok(pkg.exports?.["./svelte"], "Must expose optional Svelte bindings as a separate entry point.");
 
 for (const forbidden of forbiddenDependencyNames) {
   assert.ok(!deps[forbidden], `Forbidden critical-path dependency: ${forbidden}`);
