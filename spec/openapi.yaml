@@ -1,32 +1,32 @@
 openapi: 3.1.0
 info:
-  title: pptx.dev API
+  title: OPF Service API Reference
   version: "1.0.0"
   description: |
-    REST API for parsing, validating, converting, generating, and rendering presentations.
+    Reference REST API shape for downstream services that parse, validate, convert, generate, or render presentations with OPF.
     OPF (Open Presentation Format) is the JSON contract; schema URL: `https://openpresentation.org/schema/opf/v1`.
 
-    **Authentication:** Send `Authorization: Bearer <Clerk API key>` on every request, or use a signed-in browser session (Studio). `POST /v1/preview` is anonymous (IP rate-limited) for the OPF Playground.
+    OpenPresentation does not host this API. Implementers may use this contract as a starting point for their own hosted services, internal tools, or self-hosted deployments.
 
-    Human-readable docs: [pptx.dev/docs](https://www.pptx.dev/docs)
+    **Authentication:** Send `Authorization: Bearer <token>` on authenticated requests. `POST /v1/preview` is shown as an optional unauthenticated preview endpoint for services that choose to expose one.
   contact:
-    name: pptx.dev
-    url: https://www.pptx.dev
+    name: OpenPresentation
+    url: https://openpresentation.org
   license:
     name: MIT
     url: https://opensource.org/licenses/MIT
 
 servers:
-  - url: https://api.pptx.dev
-    description: Production API
+  - url: https://api.example.com
+    description: Downstream service endpoint
   - url: http://localhost:3000/api
-    description: Local Next.js App Router (`/api` prefix)
+    description: Example local development endpoint
 
 tags:
   - name: playground
-    description: Anonymous OPF playground helpers (IP rate limits)
+    description: Optional unauthenticated OPF preview helpers
   - name: validate
-    description: OPF schema validation (no billing for validation)
+    description: OPF schema validation
   - name: parse
     description: Upload and inspect .pptx files
   - name: convert
@@ -421,7 +421,7 @@ components:
     bearerAuth:
       type: http
       scheme: bearer
-      description: Clerk user or org API key (`ppx_…`), or session cookie from signed-in Studio user.
+      description: Service-defined bearer token.
 
   parameters:
     ParseId:
@@ -479,7 +479,7 @@ components:
 
     OpfDocument:
       type: object
-      description: OPF v1 document. See https://www.pptx.dev/docs/opf for field reference.
+      description: OPF v1 document. See https://openpresentation.org/schema/opf/v1 for the canonical schema.
       additionalProperties: true
       properties:
         $schema:

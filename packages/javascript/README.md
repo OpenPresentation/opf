@@ -2,9 +2,9 @@
 
 Canonical Open Presentation Format package for JavaScript and TypeScript.
 
-Publishes the OPF schemas, catalog presets, raw spec files, generated TypeScript types, and local validation helpers. The schema is pre-stable (0.x — expect breaking changes between minor versions until 1.0). This package does not render PowerPoint files, parse `.pptx`, fetch remote catalogs, or use AI.
+Publishes the OPF schemas, catalog presets, raw spec files, generated TypeScript types, examples, docs, and local validation helpers. The schema is pre-stable (0.x — expect breaking changes between minor versions until 1.0). This package does not render PowerPoint files, parse `.pptx`, fetch remote catalogs, call hosted APIs, provide telemetry, or use AI.
 
-The canonical npm package remains `@openpresentation/opf`; a separate `@openpresentation/opf-spec` package is not used for v0.2.0 so existing downstream imports stay stable. The packed npm artifact includes package-addressable OPF schemas, catalogs, reference files, and `openapi.yaml` under `spec/`.
+The canonical npm package remains `@openpresentation/opf`; a separate `@openpresentation/opf-spec` package is not used for v0.2.0 so existing downstream imports stay stable. The packed npm artifact includes package-addressable OPF schemas, catalogs, reference files, and an optional downstream-service reference `openapi.yaml` under `spec/`.
 
 Repository: https://github.com/OpenPresentation/opf
 
@@ -170,7 +170,7 @@ import presentationSchema from "@openpresentation/opf/spec/schemas/opf.schema.js
 };
 ```
 
-The raw spec manifest exposes typed package paths for files that should be resolved from npm instead of GitHub:
+The raw spec manifest exposes typed package paths for files that should be resolved from npm instead of GitHub. `openapi.yaml` is a reference contract for downstream services that choose to expose OPF over HTTP; OpenPresentation does not host that API.
 
 ```ts
 import { specFileEntries } from "@openpresentation/opf/spec-files";

@@ -6,7 +6,8 @@
 
 ```
 OpenPresentation OSS:
-  OPF spec, schemas, catalogs, examples, validation, and local CLI
+  Current: OPF spec, schemas, catalogs, examples, validation, and local CLI
+  Planned: local render/edit/convert libraries
   opf-render / opf-editor / opf-pptx
 
 Downstream applications:
@@ -51,15 +52,15 @@ One format, every runtime:
 | Future Python OPF package | TBD | Local models, schemas, catalogs, validation |
 | Future Go OPF module | TBD | Local structs, embedded schemas/catalogs, validation |
 
-Hosted-service clients, managed workflows, and product-specific SDKs should live outside the core OPF repo. They consume OPF and the toolkit as downstream integrators; they are not the canonical OpenPresentation package direction.
+Hosted-service clients, managed workflows, and product-specific client libraries should live outside the core OPF repo. They consume OPF and the toolkit as downstream integrators; they are not the canonical OpenPresentation package direction.
 
 ## Monetization
 
-**None in OpenPresentation OSS.** OPF, the JSON schema, the SDKs, the CLIs, the MCP server, and the open-source render/edit/convert toolkit (`opf-render`, `opf-editor`, `opf-pptx`) are MIT-licensed public goods. The project optimizes for adoption, interoperability, local execution, and embeddable primitives. Downstream vendors may build hosted or managed products separately; OpenPresentation does not ship those hosted layers.
+**None in OpenPresentation OSS.** OPF, the JSON schemas, local packages, CLI source, docs, examples, and planned render/edit/convert toolkit (`opf-render`, `opf-editor`, `opf-pptx`) are MIT-licensed public goods. The project optimizes for adoption, interoperability, local execution, and embeddable primitives. Downstream vendors may build hosted or managed products separately; OpenPresentation does not ship those hosted layers.
 
 ## Current Priorities
 
-1. **v1 spec freeze** — finalize the OPF JSON Schema, OpenAPI contract, and TS/Python/Go type surfaces so downstream packages can ship stable releases.
+1. **v1 spec freeze** — finalize the OPF JSON Schema, optional reference OpenAPI contract, and TS/Python/Go type surfaces so downstream packages can ship stable releases.
 2. **Canonical OPF packages** — JavaScript first, then Python and Go local-only packages for schemas, catalogs, types/models, and validation.
 3. **Local OPF CLI** — validate, format, and inspect OPF without calling a hosted service.
 4. **Render/edit/convert toolkit** — ship MIT local libraries for SVG/PNG/PDF rendering, embeddable editing, and PPTX import/export.

@@ -1,10 +1,12 @@
-# Legacy PPTX.dev Code
+# Legacy Service Code
 
-The copied PPTX.dev client, CLI, Go SDK, and MCP source trees were removed from
-this repository after migration to PPTX.dev-owned workspaces.
+The copied service-specific client, CLI, Go package, tool integration, and
+workflow source trees were removed from this repository after migration to
+service-owned workspaces.
 
 OPF now keeps format-owned assets only: schemas, catalogs, examples, docs,
-generated local types, and the local OPF CLI.
+generated local types, the local OPF CLI, and planning docs for local OSS
+render/edit/convert libraries.
 
 | Previous path | New location |
 |---|---|

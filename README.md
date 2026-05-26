@@ -8,7 +8,7 @@ Public npm package: [`@openpresentation/opf`](https://www.npmjs.com/package/@ope
 
 Open Presentation Format is the portable, human-readable JSON document format for slide decks.
 
-This repository is the canonical home for the OPF **spec**, **JSON Schemas**, **catalog presets**, generated developer types, and local validation tooling. Anything that renders PowerPoint files, fills presentations with AI, parses `.pptx`, or calls the hosted [pptx.dev](https://pptx.dev) API belongs to PPTX.dev-specific packages, not the core OPF package.
+This repository is the canonical home for the OPF **spec**, **JSON Schemas**, **catalog presets**, examples, generated developer types, local validation tooling, and planning docs for the future render/edit/convert toolkit. OpenPresentation publishes open-source code and documentation only; it does not provide hosted APIs, hosted rendering functions, queues, storage, authentication, jobs, previews, SLAs, telemetry, or managed infrastructure.
 
 ## File naming
 
@@ -18,7 +18,7 @@ Avoid using bare `*.opf` for OPF JSON. The `.opf` extension is already used by o
 
 ## Naming and reuse
 
-The format name is **Open Presentation Format**. The schemas, catalogs, packages, and local tooling in this repository are free and open source under the MIT license, so third-party tools may read, write, validate, and describe support for Open Presentation Format without using PPTX.dev branding.
+The format name is **Open Presentation Format**. The schemas, catalogs, packages, and local tooling in this repository are free and open source under the MIT license, so third-party tools may read, write, validate, render, convert, and describe support for Open Presentation Format without adopting any product-specific branding.
 
 ## Why OPF
 
@@ -40,7 +40,19 @@ The canonical JavaScript/TypeScript package is published at [`packages/javascrip
 - generate TypeScript types, with `Presentation` as the top-level type
 - validate OPF JSON and catalog records locally
 
-It does not render `.pptx`, parse `.pptx`, generate content with AI, fetch remote catalogs, or call PPTX.dev.
+It does not render `.pptx`, parse `.pptx`, generate content with AI, fetch remote catalogs, call hosted APIs, or provide managed services. Future render/edit/convert packages are planned as separate MIT repos that depend on `@openpresentation/opf`.
+
+## Toolkit roadmap
+
+The OPF format package is shipping first. The planned toolkit lives outside this format-only repo:
+
+| Planned repo | Role | Boundary |
+|---|---|---|
+| `opf-render` | OPF to SVG/PNG/PDF | Local and embeddable rendering library |
+| `opf-editor` | WYSIWYG bindings/components | Headless editor primitives plus optional UI components |
+| `opf-pptx` | OPF to PPTX and PPTX to OPF | Pure local import/export library for browser and server use where supported |
+
+These repos provide OSS primitives only. Downstream applications own hosting, auth, storage, collaboration, queues, previews, analytics, support, and workflow UX.
 
 ### Expected Usage
 
@@ -119,20 +131,20 @@ node packages/cli/dist/index.js validate path/to/deck.opf.json
 | [`docs/examples.md`](./docs/examples.md) | Guide to the expanded scenario-oriented examples under `examples/gallery/`. |
 | [`spec/schemas/*.schema.json`](./spec/schemas) | Companion schemas for catalog records and sub-objects. |
 | [`spec/catalogs/<catalog-kind>/`](./spec/catalogs) | Canonical bundled catalog records. |
-| [`spec/openapi.yaml`](./spec/openapi.yaml) | OpenAPI contract included as raw spec content in the npm package. |
+| [`spec/openapi.yaml`](./spec/openapi.yaml) | Optional reference OpenAPI contract for downstream services that choose to expose OPF over HTTP. OpenPresentation does not host this API. |
 | [`examples/technical/`](./examples/technical) | Focused OPF fixtures for validator, renderer, catalog-resolution, design, content-payload, and region behavior. |
 | [`examples/gallery/`](./examples/gallery) | Broader OPF example decks organized by industry, function, education, government, presentation type, international, and design/media scenarios. |
 | [`packages/javascript/`](./packages/javascript) | Public pre-stable source for `@openpresentation/opf`. |
 | [`packages/cli/`](./packages/cli) | Local-only OPF CLI source; native distribution is deferred. |
-| [`legacy/`](./legacy) | Tombstone for PPTX.dev clients, CLIs, SDKs, and MCP source migrated to PPTX.dev-owned repositories. |
+| [`legacy/`](./legacy) | Tombstone for service-specific clients, CLIs, tool integrations, and workflows removed from the OpenPresentation OSS repo. |
 
-## Package Boundary
+## OpenPresentation Boundary
 
-OPF defines the format and bundled presets. PPTX.dev consumes OPF to provide hosted generation, rendering, parsing, storage, authentication, jobs, previews, and AI workflows.
+OpenPresentation defines the format, bundled presets, local validation, examples, docs, and planned local render/edit/convert libraries. It does not provide hosted functions or managed product surfaces.
 
-Future non-JavaScript OPF packages should follow the same local-only boundary: Python and Go packages should expose schemas, types/models, catalogs, and validation, not PPTX.dev rendering or generation.
+Future non-JavaScript OPF packages should follow the same local-first boundary: Python and Go packages should expose schemas, types/models, catalogs, validation, and package-addressable assets. Future toolkit packages should expose embeddable library APIs with no required network calls, hosted callbacks, hidden telemetry, or managed infrastructure assumptions.
 
-The published JavaScript package copies package-addressable OPF schemas, catalogs, reference assets, and `spec/openapi.yaml` from `spec/`. It intentionally remains `@openpresentation/opf` instead of introducing a separate `@openpresentation/opf-spec` package so downstream imports can advance by semver-pinning one canonical package.
+The published JavaScript package copies package-addressable OPF schemas, catalogs, reference assets, and the optional reference `spec/openapi.yaml` from `spec/`. It intentionally remains `@openpresentation/opf` instead of introducing a separate `@openpresentation/opf-spec` package so downstream imports can advance by semver-pinning one canonical package.
 
 ## License
 
