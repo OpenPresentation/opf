@@ -1,0 +1,52 @@
+{
+  "name": "@openpresentation/opf-pptx",
+  "version": "0.0.0",
+  "description": "Pure local OPF to PPTX export and PPTX to OPF import tooling.",
+  "license": "MIT",
+  "type": "module",
+  "private": false,
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OpenPresentation/opf-pptx.git"
+  },
+  "bugs": {
+    "url": "https://github.com/OpenPresentation/opf-pptx/issues"
+  },
+  "homepage": "https://github.com/OpenPresentation/opf-pptx#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "validate": "node scripts/validate-package.mjs",
+    "prepack": "npm run build"
+  },
+  "dependencies": {
+    "@openpresentation/opf": "^0.2.2"
+  },
+  "peerDependencies": {
+    "@openpresentation/opf-render": ">=0.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@openpresentation/opf-render": {
+      "optional": true
+    }
+  }
+}
