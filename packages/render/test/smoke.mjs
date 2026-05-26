@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -13,7 +13,7 @@ import {
 } from "../dist/index.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const formatRepoExamples = path.resolve(root, "../opf/examples");
+const examplesCorpus = resolveExamplesCorpus();
 
 const minimalDeck = {
   name: "Minimal OPF Deck",
@@ -93,12 +93,17 @@ assert.throws(
 );
 
 let corpusCount = 0;
-if (existsSync(formatRepoExamples)) {
-  for (const file of listOpfExamples(formatRepoExamples)) {
+if (examplesCorpus) {
+  const files = listOpfExamples(examplesCorpus.dir);
+  if (examplesCorpus.required) {
+    assert.ok(files.length > 0, `OPF_EXAMPLES_DIR ${examplesCorpus.dir} must contain .opf.json examples`);
+  }
+
+  for (const file of files) {
     const deck = JSON.parse(readFileSync(file, "utf8"));
     const svgs = renderSvgDeck(deck, { trace: true });
     const repeat = renderSvgDeck(deck, { trace: true });
-    assert.deepEqual(svgs, repeat, `${path.relative(formatRepoExamples, file)} must render deterministically`);
+    assert.deepEqual(svgs, repeat, `${path.relative(examplesCorpus.dir, file)} must render deterministically`);
     assert.equal(svgs.length, deck.slides.length, `${file} must emit one SVG per slide`);
     for (const svg of svgs) {
       assert.match(svg, /^<svg /);
@@ -109,6 +114,21 @@ if (existsSync(formatRepoExamples)) {
 }
 
 console.log(`opf-render smoke passed (${corpusCount} OPF corpus deck(s) rendered).`);
+
+function resolveExamplesCorpus() {
+  const hasExplicitDir = Object.prototype.hasOwnProperty.call(process.env, "OPF_EXAMPLES_DIR");
+  if (hasExplicitDir) {
+    const configured = process.env.OPF_EXAMPLES_DIR?.trim();
+    assert.ok(configured, "OPF_EXAMPLES_DIR must not be empty when set");
+    const explicit = path.resolve(configured);
+    assert.ok(existsSync(explicit), `OPF_EXAMPLES_DIR does not exist: ${explicit}`);
+    assert.ok(statSync(explicit).isDirectory(), `OPF_EXAMPLES_DIR must be a directory: ${explicit}`);
+    return { dir: explicit, required: true };
+  }
+
+  const sibling = path.resolve(root, "../opf/examples");
+  return existsSync(sibling) ? { dir: sibling, required: false } : null;
+}
 
 function listOpfExamples(dir) {
   const files = [];
