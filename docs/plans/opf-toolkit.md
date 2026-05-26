@@ -12,7 +12,7 @@ This repo ([`openpresentation/opf`](https://github.com/openpresentation/opf)) st
 
 3. **Determinism is a hard requirement, not a nice-to-have.** Same OPF in → byte-stable SVG out. No browser, no network, no clock, no locale drift, no font fallback roulette in the render path. This is what makes caching, diffing, golden-file tests, and the WYSIWYG round-trip work at all. Treated as a cross-cutting discipline in [§6](#6-cross-cutting-determinism-and-golden-files).
 
-4. **The renderer resolves the catalog system itself.** Layout, theme, colorScheme, fontScheme, chart-type, audience/purpose/tone references resolve through the documented order (inline `catalogs.<kind>.records[]` → `catalogs.<kind>.source` → engine defaults → default catalog) exactly as [`opf.schema.json`](../../spec/schemas/opf.schema.json) describes. The toolkit bundles the canonical catalogs via `@openpresentation/opf` and ships an `engine-defaults.json` matching [`spec/reference/`](../../spec/reference).
+4. **The renderer resolves the catalog system itself.** Layout, theme, colorScheme, fontScheme, chart type (`Chart.type`), audience/purpose/tone references resolve through the documented order (inline `catalogs.<kind>.records[]` → `catalogs.<kind>.source` → engine defaults → default catalog) exactly as [`opf.schema.json`](../../spec/schemas/opf.schema.json) describes. The toolkit bundles the canonical catalogs via `@openpresentation/opf` and ships an `engine-defaults.json` matching [`spec/reference/`](../../spec/reference).
 
 5. **Layout binding follows the placeholder model.** Rendering keys off the `placeholders` array described in [`layout-placeholders.md`](layout-placeholders.md): `title`/`subtitle`/`tag` bind to slide fields, other content binds by `slot` in array order. The renderer is the first real consumer of that model, so building it will validate (or expose gaps in) the placeholder plan.
 
@@ -101,7 +101,7 @@ TypeScript · AJV (via `@openpresentation/opf`) · `fontkit` or `opentype.js` fo
 
 ### 2.3 Structured controls
 
-- Layout, theme, colorScheme, fontScheme, chart-type, audience/purpose/tone are **menus that set catalog-id fields**, populated from `@openpresentation/opf/catalogs` — not freeform manipulation. This is where the catalog system pays off in the UI.
+- Layout, theme, colorScheme, fontScheme, chart type (`Chart.type`), audience/purpose/tone are **menus that set catalog-id fields**, populated from `@openpresentation/opf/catalogs` — not freeform manipulation. This is where the catalog system pays off in the UI.
 
 ### 2.4 Side-by-side JSON
 
