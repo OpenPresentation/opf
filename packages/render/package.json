@@ -35,7 +35,9 @@
   "sideEffects": false,
   "scripts": {
     "build": "node scripts/build.mjs",
+    "typecheck": "node --check src/index.js && node --check scripts/build.mjs && node --check scripts/validate-package.mjs && node --check test/smoke.mjs",
     "validate": "node scripts/validate-package.mjs",
+    "test": "npm run build && node test/smoke.mjs",
     "prepack": "npm run build"
   },
   "dependencies": {

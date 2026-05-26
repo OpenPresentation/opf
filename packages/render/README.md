@@ -1,6 +1,6 @@
 # OPF Render
 
-Deterministic local renderer for Open Presentation Format documents. This repo is the Phase 1 toolkit lane for SVG, PNG, and PDF output.
+Deterministic local renderer for Open Presentation Format documents. This repo is the Phase 1 toolkit lane for SVG, PNG, and PDF output. The current package implements the validation, catalog resolution, placeholder binding, deterministic text layout, and SVG core that PNG/PDF conversion will build on.
 
 ## Scope
 
@@ -8,9 +8,18 @@ Deterministic local renderer for Open Presentation Format documents. This repo i
 - Repository: `OpenPresentation/opf-render`
 - License: MIT
 - Compatibility target: `@openpresentation/opf`
-- Planned public API: `renderSvg(opf, opts)`, `svgToPng(svg, opts)`, and `svgToPdf(svgs, opts)`
+- Public API: `renderSvg(opf, opts)`, `renderSvgDeck(opf, opts)`, and `resolvePresentation(opf, opts)`
+- Planned conversion API: `svgToPng(svg, opts)` and `svgToPdf(svgs, opts)`
 
-Feature implementation is intentionally not in this provisioning slice. The first implementation task owns validation, catalog resolution, placeholder binding, SVG emission, and deterministic golden tests.
+`renderSvg` renders a single slide selected by `opts.slideIndex` (default `0`). `renderSvgDeck` returns one SVG string per slide. Both validate OPF at the boundary via `@openpresentation/opf`, resolve inline and bundled catalogs locally, and emit byte-stable SVG for the same input.
+
+```js
+import { renderSvgDeck } from "@openpresentation/opf-render";
+
+const svgs = renderSvgDeck(opf, { trace: true });
+```
+
+Set `trace: true` to stamp rendered SVG elements with `data-opf-path` values such as `slides.0.title`; omit it for smaller production SVG.
 
 ## Runtime Policy
 
@@ -28,8 +37,12 @@ The package runtime must stay local and deterministic:
 ```sh
 npm ci
 npm run build
+npm run typecheck
 npm run validate
+npm test
 ```
+
+When this repo is checked out beside `openpresentation/opf`, `npm test` also renders every `examples/**/*.opf.json` deck twice and asserts byte-identical SVG output.
 
 ## Release Lane
 
