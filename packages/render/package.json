@@ -1,0 +1,44 @@
+{
+  "name": "@openpresentation/opf-render",
+  "version": "0.0.0",
+  "description": "Deterministic local OPF renderer for SVG, PNG, and PDF output.",
+  "license": "MIT",
+  "type": "module",
+  "private": false,
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OpenPresentation/opf-render.git"
+  },
+  "bugs": {
+    "url": "https://github.com/OpenPresentation/opf-render/issues"
+  },
+  "homepage": "https://github.com/OpenPresentation/opf-render#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "validate": "node scripts/validate-package.mjs",
+    "prepack": "npm run build"
+  },
+  "dependencies": {
+    "@openpresentation/opf": "^0.2.2"
+  }
+}
