@@ -10,7 +10,7 @@ Pure local PowerPoint conversion tooling for Open Presentation Format documents.
 - Compatibility target: `@openpresentation/opf`
 - Renderer relationship: may use `@openpresentation/opf-render` for chart rasterization and visual verification
 - Public export API: `toPptx(opf, opts)`
-- Planned import API: `fromPptx(buffer, opts)` in the PPTX import phase
+- Public import API: `fromPptx(buffer, opts)`
 
 The export path validates OPF with `@openpresentation/opf`, maps slide titles and common content payloads to editable PowerPoint objects through `pptxgenjs`, then normalizes the generated ZIP for stable entry ordering, fixed timestamps, and reproducible bytes.
 
@@ -33,6 +33,19 @@ await fs.promises.writeFile("quarterly-review.pptx", bytes);
 
 `toPptx` returns a `Uint8Array` containing a PowerPoint-openable `.pptx`. It does not fetch remote assets. Data URI images and local paths can be embedded directly; hosts that need private asset loading should pass `imageResolver(src, context)`. Set `strictAssets: true` to turn unresolved or remote image assets into structured `OPFPptxError` failures instead of editable placeholder boxes.
 
+`fromPptx` parses an existing `.pptx` buffer locally and returns an OPF document that validates with `@openpresentation/opf`:
+
+```js
+import { fromPptx, toPptx } from "@openpresentation/opf-pptx";
+
+const opf = await fromPptx(await fs.promises.readFile("source.pptx"));
+const roundTripBytes = await toPptx(opf);
+
+await fs.promises.writeFile("round-trip.pptx", roundTripBytes);
+```
+
+The importer reads core properties, slide order, text boxes, speaker notes, embedded images, tables, and basic cached chart data from the OOXML parts. Slides or objects that do not map cleanly fall back to editable `blocks[]` payloads; OOXML positions are used for deterministic ordering and title/subtitle detection while keeping the emitted OPF schema-valid.
+
 ## v1 Placeholder and OOXML Mapping
 
 The first exporter keeps the public API stable while using `pptxgenjs` internally:
@@ -45,6 +58,18 @@ The first exporter keeps the public API stable while using `pptxgenjs` internall
 
 This pass did not require an OPF schema change. The deferred full OOXML placeholder mapping from `docs/plans/layout-placeholders.md` remains a later hand-written OOXML emitter concern.
 
+## v1 Import Mapping
+
+The first importer is mechanical and schema-compatible:
+
+- Presentation core properties map to OPF `name`, `description`, and `author`.
+- Slide text placeholders and large top-of-slide text boxes map to `title` and `subtitle` when recognizable.
+- Remaining text boxes map to `blocks[]` as text or list payloads, sorted by OOXML position.
+- PowerPoint tables map to OPF table blocks, embedded images map to data URI image blocks, and cached chart series map to basic OPF chart blocks.
+- Unknown non-text shapes and unsupported graphic frames become editable text fallback blocks instead of failing the import.
+
+There is no AI classification pass in the OSS runtime. Hosts can run optional cleanup or semantic remapping after `fromPptx` returns.
+
 ## Runtime Policy
 
 The package runtime must stay local and deterministic:
@@ -54,6 +79,7 @@ The package runtime must stay local and deterministic:
 - No commercial SDK dependency in the critical path
 - No required network calls
 - No required AI dependency
+- No required AI cleanup or classification pass for PPTX import
 - No required LibreOffice dependency in the runtime path; LibreOffice is allowed only as an optional verification tool in CI
 - Host applications own auth, storage, queues, analytics, collaboration, branding, and product workflow
 

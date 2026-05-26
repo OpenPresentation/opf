@@ -42,6 +42,11 @@ export interface ToPptxOptions {
   zipDate?: string | number | Date;
 }
 
+export interface FromPptxOptions {
+  fallbackName?: string;
+  schema?: string;
+}
+
 export declare class OPFPptxError extends Error {
   readonly code: string;
   readonly details: Record<string, unknown>;
@@ -52,4 +57,4 @@ export declare class OPFPptxError extends Error {
 
 export declare function toPptx(input: unknown, options?: ToPptxOptions): Promise<Uint8Array>;
 
-export declare function fromPptx(): Promise<never>;
+export declare function fromPptx(input: Uint8Array | ArrayBuffer, options?: FromPptxOptions): Promise<Record<string, unknown>>;

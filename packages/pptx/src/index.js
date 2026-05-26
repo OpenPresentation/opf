@@ -1,5 +1,6 @@
 import PptxGenJS from "pptxgenjs";
 import { unzipSync, zipSync } from "fflate";
+import { XMLParser } from "fast-xml-parser";
 import {
   catalogs as bundledCatalogs,
   validatePresentation
@@ -38,6 +39,17 @@ export class OPFPptxError extends Error {
 const FIXED_TIMESTAMP = "1980-01-01T00:00:00Z";
 const FIXED_ZIP_DATE = new Date(FIXED_TIMESTAMP);
 const DEFAULT_SEED = 0x4f504658;
+const CANONICAL_SCHEMA = "https://openpresentation.org/schema/opf/v1";
+const EMUS_PER_INCH = 914400;
+
+const xmlParser = new XMLParser({
+  ignoreAttributes: false,
+  attributeNamePrefix: "",
+  textNodeName: "#text",
+  parseAttributeValue: false,
+  parseTagValue: false,
+  trimValues: false
+});
 
 const ROOT_PAYLOAD_FIELDS = [
   "text",
@@ -162,11 +174,576 @@ export async function toPptx(input, options = {}) {
   return normalizePptxZip(asUint8Array(raw), context);
 }
 
-export async function fromPptx() {
-  throw new OPFPptxError(
-    "unsupported-operation",
-    "fromPptx is intentionally out of scope for the OPF-to-PPTX export phase."
-  );
+export async function fromPptx(input, options = {}) {
+  const entries = readPptxZip(input);
+  const presentationDoc = parseRequiredXml(entries, "ppt/presentation.xml");
+  const presentationRoot = presentationDoc["p:presentation"];
+  if (!presentationRoot) {
+    throw new OPFPptxError("invalid-pptx", "PPTX is missing ppt/presentation.xml.");
+  }
+
+  const presentationRels = parseRelationships(entries, "ppt/presentation.xml");
+  const slidePaths = resolveSlidePaths(entries, presentationRoot, presentationRels);
+  if (slidePaths.length === 0) {
+    throw new OPFPptxError("invalid-pptx", "PPTX does not contain any slides.");
+  }
+
+  const core = readCoreProperties(entries);
+  const dimensions = dimensionsFromPresentation(presentationRoot);
+  const imported = {
+    $schema: options.schema ?? CANONICAL_SCHEMA,
+    name: core.title || options.fallbackName || "Imported PPTX",
+    slides: []
+  };
+
+  if (core.description) imported.description = core.description;
+  if (core.author) imported.author = core.author;
+  if (dimensions) imported.design = { dimensions };
+
+  for (let index = 0; index < slidePaths.length; index += 1) {
+    imported.slides.push(importSlide(entries, slidePaths[index], index, dimensions));
+  }
+
+  const result = validatePresentation(imported);
+  if (!result.valid) {
+    throw new OPFPptxError("invalid-import-opf", "Imported PPTX did not produce valid OPF.", {
+      issues: result.errors,
+      result
+    });
+  }
+
+  return imported;
+}
+
+function readPptxZip(input) {
+  let bytes;
+  if (input instanceof Uint8Array) {
+    bytes = input;
+  } else if (input instanceof ArrayBuffer) {
+    bytes = new Uint8Array(input);
+  } else {
+    throw new OPFPptxError("invalid-input", "PPTX input must be a Uint8Array or ArrayBuffer.");
+  }
+
+  try {
+    return unzipSync(bytes);
+  } catch (error) {
+    throw new OPFPptxError("invalid-pptx", "PPTX input is not a readable ZIP archive.", {
+      cause: errorMessage(error)
+    });
+  }
+}
+
+function parseRequiredXml(entries, path) {
+  const bytes = entries[path];
+  if (!bytes) {
+    throw new OPFPptxError("invalid-pptx", `PPTX is missing ${path}.`, { path });
+  }
+  try {
+    return xmlParser.parse(decodeText(bytes));
+  } catch (error) {
+    throw new OPFPptxError("invalid-pptx", `PPTX XML part could not be parsed: ${path}.`, {
+      path,
+      cause: errorMessage(error)
+    });
+  }
+}
+
+function parseOptionalXml(entries, path) {
+  if (!entries[path]) return null;
+  return parseRequiredXml(entries, path);
+}
+
+function parseRelationships(entries, sourcePartPath) {
+  const relsPath = relationshipsPathForPart(sourcePartPath);
+  const doc = parseOptionalXml(entries, relsPath);
+  const relationships = asArray(doc?.Relationships?.Relationship);
+  const map = new Map();
+  for (const relationship of relationships) {
+    if (!relationship?.Id) continue;
+    map.set(relationship.Id, {
+      id: relationship.Id,
+      type: relationship.Type ?? "",
+      target: relationship.Target ?? "",
+      path: resolveRelationshipTarget(sourcePartPath, relationship.Target ?? "")
+    });
+  }
+  return map;
+}
+
+function relationshipsPathForPart(partPath) {
+  const slash = partPath.lastIndexOf("/");
+  const dir = slash >= 0 ? partPath.slice(0, slash + 1) : "";
+  const file = slash >= 0 ? partPath.slice(slash + 1) : partPath;
+  return `${dir}_rels/${file}.rels`;
+}
+
+function resolveRelationshipTarget(sourcePartPath, target) {
+  if (!target || /^https?:\/\//i.test(target)) return target;
+  const raw = target.startsWith("/")
+    ? target.slice(1)
+    : `${sourcePartPath.slice(0, sourcePartPath.lastIndexOf("/") + 1)}${target}`;
+  const parts = [];
+  for (const part of raw.split("/")) {
+    if (!part || part === ".") continue;
+    if (part === "..") {
+      parts.pop();
+    } else {
+      parts.push(part);
+    }
+  }
+  return parts.join("/");
+}
+
+function resolveSlidePaths(entries, presentationRoot, relationships) {
+  const slideIds = asArray(presentationRoot["p:sldIdLst"]?.["p:sldId"]);
+  const paths = [];
+  for (const slideId of slideIds) {
+    const relId = slideId?.["r:id"];
+    const relationship = relationships.get(relId);
+    if (relationship?.type.endsWith("/slide") && entries[relationship.path]) {
+      paths.push(relationship.path);
+    }
+  }
+
+  if (paths.length > 0) return paths;
+  return Object.keys(entries)
+    .filter((path) => /^ppt\/slides\/slide\d+\.xml$/.test(path))
+    .sort(compareSlidePaths);
+}
+
+function compareSlidePaths(left, right) {
+  return slideNumber(left) - slideNumber(right) || left.localeCompare(right);
+}
+
+function slideNumber(path) {
+  return Number(path.match(/slide(\d+)\.xml$/)?.[1] ?? 0);
+}
+
+function readCoreProperties(entries) {
+  const doc = parseOptionalXml(entries, "docProps/core.xml");
+  const core = doc?.["cp:coreProperties"] ?? {};
+  return {
+    title: scalarText(core["dc:title"]).trim(),
+    description: scalarText(core["dc:description"] ?? core["dc:subject"]).trim(),
+    author: scalarText(core["dc:creator"]).trim()
+  };
+}
+
+function dimensionsFromPresentation(presentationRoot) {
+  const size = presentationRoot["p:sldSz"];
+  const width = emuToInches(size?.cx);
+  const height = emuToInches(size?.cy);
+  if (!width || !height) return null;
+  return {
+    widthInches: width,
+    heightInches: height
+  };
+}
+
+function importSlide(entries, slidePath, slideIndex, presentationDimensions) {
+  const doc = parseRequiredXml(entries, slidePath);
+  const slideRoot = doc["p:sld"];
+  if (!slideRoot) {
+    throw new OPFPptxError("invalid-pptx", `PPTX slide is not a PresentationML slide: ${slidePath}.`, {
+      path: slidePath
+    });
+  }
+
+  const relationships = parseRelationships(entries, slidePath);
+  const dimensions = presentationDimensions ?? DIMENSION_PRESETS.widescreen;
+  const slide = {};
+  if (slideRoot.show === "0") slide.hidden = true;
+
+  const background = slideBackground(slideRoot);
+  if (background) {
+    slide.design = {
+      background: {
+        type: "solid",
+        color: background
+      }
+    };
+  }
+
+  const items = collectSlideItems(entries, slideRoot, slidePath, relationships, dimensions)
+    .sort(comparePositionedItems);
+  const titleItem = takeTitleItem(items, dimensions);
+  if (titleItem) slide.title = firstLine(titleItem.text);
+  const subtitleItem = takeSubtitleItem(items, titleItem, dimensions);
+  if (subtitleItem) slide.subtitle = firstLine(subtitleItem.text);
+
+  const blocks = items
+    .map((item) => payloadFromSlideItem(item))
+    .filter(Boolean);
+  if (blocks.length > 0) slide.blocks = blocks;
+
+  const notes = readSlideNotes(entries, relationships);
+  if (notes) slide.notes = notes;
+
+  if (!slide.title && !slide.blocks && !slide.notes) {
+    slide.title = `Slide ${slideIndex + 1}`;
+  }
+
+  return slide;
+}
+
+function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensions) {
+  const tree = slideRoot["p:cSld"]?.["p:spTree"];
+  const items = [];
+
+  for (const shape of asArray(tree?.["p:sp"])) {
+    const item = importShape(shape, dimensions);
+    if (item) items.push(item);
+  }
+
+  for (const frame of asArray(tree?.["p:graphicFrame"])) {
+    const item = importGraphicFrame(entries, frame, slidePath, relationships);
+    if (item) items.push(item);
+  }
+
+  for (const picture of asArray(tree?.["p:pic"])) {
+    const item = importPicture(entries, picture, slidePath, relationships);
+    if (item) items.push(item);
+  }
+
+  return items;
+}
+
+function importShape(shape, dimensions) {
+  const paragraphs = readParagraphs(shape["p:txBody"]);
+  const text = paragraphs.map((paragraph) => paragraph.text).filter(Boolean).join("\n").trim();
+  const placeholder = shapePlaceholderType(shape);
+  const bounds = shapeBounds(shape["p:spPr"]?.["a:xfrm"]);
+  const name = scalarText(shape["p:nvSpPr"]?.["p:cNvPr"]?.name).trim();
+
+  if (text) {
+    return {
+      kind: "text",
+      text,
+      paragraphs,
+      bounds,
+      placeholder,
+      name,
+      maxFontSize: Math.max(0, ...paragraphs.map((paragraph) => paragraph.maxFontSize))
+    };
+  }
+
+  if (placeholder || !bounds || isFullSlide(bounds, dimensions)) return null;
+  return {
+    kind: "unknown",
+    bounds,
+    name,
+    text: `PowerPoint shape: ${name || "unsupported shape"}`
+  };
+}
+
+function importGraphicFrame(entries, frame, slidePath, relationships) {
+  const bounds = shapeBounds(frame["p:xfrm"]);
+  const name = scalarText(frame["p:nvGraphicFramePr"]?.["p:cNvPr"]?.name).trim();
+  const graphicData = frame["a:graphic"]?.["a:graphicData"];
+  const table = graphicData?.["a:tbl"];
+  if (table) {
+    return {
+      kind: "table",
+      bounds,
+      name,
+      payload: {
+        type: "table",
+        table: tableFromXml(table)
+      }
+    };
+  }
+
+  const chartRelId = graphicData?.["c:chart"]?.["r:id"];
+  if (chartRelId) {
+    const chart = chartFromRelationship(entries, slidePath, relationships, chartRelId);
+    return {
+      kind: "chart",
+      bounds,
+      name,
+      payload: chart
+        ? { type: "chart", chart }
+        : { type: "text", text: `PowerPoint chart: ${name || chartRelId}` }
+    };
+  }
+
+  return {
+    kind: "unknown",
+    bounds,
+    name,
+    text: `PowerPoint object: ${name || "unsupported object"}`
+  };
+}
+
+function importPicture(entries, picture, slidePath, relationships) {
+  const bounds = shapeBounds(picture["p:spPr"]?.["a:xfrm"]);
+  const name = scalarText(picture["p:nvPicPr"]?.["p:cNvPr"]?.name).trim();
+  const alt = scalarText(picture["p:nvPicPr"]?.["p:cNvPr"]?.descr).trim();
+  const relId = picture["p:blipFill"]?.["a:blip"]?.["r:embed"];
+  const relationship = relationships.get(relId);
+  const bytes = relationship?.path ? entries[relationship.path] : null;
+  if (!bytes) {
+    return {
+      kind: "unknown",
+      bounds,
+      name,
+      text: `PowerPoint image: ${alt || name || "unresolved image"}`
+    };
+  }
+
+  return {
+    kind: "image",
+    bounds,
+    name,
+    payload: {
+      type: "image",
+      image: {
+        src: `data:${mediaTypeForPath(relationship.path)};base64,${bytesToBase64(bytes)}`,
+        ...(alt ? { alt } : {})
+      }
+    }
+  };
+}
+
+function readParagraphs(txBody) {
+  return asArray(txBody?.["a:p"])
+    .map((paragraph) => {
+      const runs = [
+        ...asArray(paragraph?.["a:r"]),
+        ...asArray(paragraph?.["a:fld"])
+      ];
+      const texts = [];
+      const sizes = [];
+      for (const run of runs) {
+        const text = scalarText(run?.["a:t"]);
+        if (text) texts.push(text);
+        const size = Number(run?.["a:rPr"]?.sz);
+        if (Number.isFinite(size)) sizes.push(size / 100);
+      }
+      return {
+        text: texts.join("").trim(),
+        level: Number(paragraph?.["a:pPr"]?.lvl ?? 0),
+        maxFontSize: sizes.length > 0 ? Math.max(...sizes) : 0
+      };
+    })
+    .filter((paragraph) => paragraph.text);
+}
+
+function shapePlaceholderType(shape) {
+  return shape["p:nvSpPr"]?.["p:nvPr"]?.["p:ph"]?.type ?? null;
+}
+
+function shapeBounds(xfrm) {
+  if (!xfrm) return null;
+  const x = emuToInches(xfrm["a:off"]?.x);
+  const y = emuToInches(xfrm["a:off"]?.y);
+  const w = emuToInches(xfrm["a:ext"]?.cx);
+  const h = emuToInches(xfrm["a:ext"]?.cy);
+  if ([x, y, w, h].some((value) => value === null)) return null;
+  return { x, y, w, h };
+}
+
+function takeTitleItem(items, dimensions) {
+  const explicitIndex = items.findIndex((item) => ["title", "ctrTitle"].includes(item.placeholder));
+  if (explicitIndex >= 0) return items.splice(explicitIndex, 1)[0];
+
+  const titleLimit = dimensions.heightInches * 0.28;
+  const candidateIndex = items.findIndex((item) => {
+    if (item.kind !== "text" || !item.text) return false;
+    const y = item.bounds?.y ?? 0;
+    return y <= titleLimit && (item.maxFontSize >= 20 || /^title\b/i.test(item.name ?? ""));
+  });
+  if (candidateIndex >= 0) return items.splice(candidateIndex, 1)[0];
+  return null;
+}
+
+function takeSubtitleItem(items, titleItem, dimensions) {
+  const explicitIndex = items.findIndex((item) => item.placeholder === "subTitle");
+  if (explicitIndex >= 0) return items.splice(explicitIndex, 1)[0];
+  if (!titleItem) return null;
+
+  const titleBottom = (titleItem.bounds?.y ?? 0) + (titleItem.bounds?.h ?? 0);
+  const subtitleLimit = Math.min(dimensions.heightInches * 0.34, 1.45);
+  const candidateIndex = items.findIndex((item) => {
+    if (item.kind !== "text" || !item.text) return false;
+    const y = item.bounds?.y ?? 0;
+    const h = item.bounds?.h ?? 0;
+    return y >= titleBottom - 0.05
+      && y <= subtitleLimit
+      && h <= 0.75
+      && item.paragraphs.length === 1
+      && item.maxFontSize <= Math.max(22, titleItem.maxFontSize);
+  });
+  if (candidateIndex >= 0) return items.splice(candidateIndex, 1)[0];
+  return null;
+}
+
+function payloadFromSlideItem(item) {
+  if (item.payload) return item.payload;
+  if (item.kind === "text") {
+    if (item.paragraphs.length > 1) {
+      return {
+        type: "list",
+        items: item.paragraphs.map((paragraph) => (
+          paragraph.level > 0
+            ? { text: paragraph.text, level: paragraph.level }
+            : paragraph.text
+        ))
+      };
+    }
+    return { type: "text", text: item.text };
+  }
+  if (item.kind === "unknown" && item.text) return { type: "text", text: item.text };
+  return null;
+}
+
+function tableFromXml(table) {
+  const rows = asArray(table["a:tr"])
+    .map((row) => asArray(row?.["a:tc"]).map((cell) => textFromTextBody(cell?.["a:txBody"])))
+    .filter((row) => row.some(Boolean));
+  if (rows.length === 0) return { rows: [] };
+  return {
+    columns: rows[0],
+    rows: rows.slice(1)
+  };
+}
+
+function chartFromRelationship(entries, slidePath, relationships, relId) {
+  const relationship = relationships.get(relId);
+  if (!relationship?.path || !entries[relationship.path]) return null;
+  const doc = parseRequiredXml(entries, relationship.path);
+  const plotArea = doc["c:chartSpace"]?.["c:chart"]?.["c:plotArea"];
+  if (!plotArea) return null;
+
+  const chartNode = firstChartNode(plotArea);
+  if (!chartNode) return null;
+  const series = asArray(chartNode.node["c:ser"]);
+  if (series.length === 0) return null;
+
+  const labels = cachedValues(series[0]?.["c:cat"]);
+  const names = series.map((entry, index) => firstCachedValue(entry?.["c:tx"]) || `Series ${index + 1}`);
+  const values = series.map((entry) => cachedValues(entry?.["c:val"] ?? entry?.["c:yVal"]).map(numericValue));
+  const rowCount = Math.max(labels.length, ...values.map((row) => row.length));
+  if (rowCount === 0) return null;
+
+  const rows = [];
+  for (let index = 0; index < rowCount; index += 1) {
+    rows.push([
+      labels[index] ?? `Item ${index + 1}`,
+      ...values.map((row) => row[index] ?? 0)
+    ]);
+  }
+
+  return {
+    type: chartNode.type,
+    data: {
+      columns: ["Category", ...names],
+      rows
+    }
+  };
+}
+
+function firstChartNode(plotArea) {
+  const candidates = [
+    ["c:barChart", (node) => node?.["c:barDir"]?.val === "bar" ? "bar" : "column"],
+    ["c:lineChart", () => "line"],
+    ["c:pieChart", () => "pie"],
+    ["c:doughnutChart", () => "doughnut"],
+    ["c:areaChart", () => "area"],
+    ["c:scatterChart", () => "scatter"],
+    ["c:radarChart", () => "radar"]
+  ];
+  for (const [key, type] of candidates) {
+    const node = asArray(plotArea[key])[0];
+    if (node) return { node, type: type(node) };
+  }
+  return null;
+}
+
+function cachedValues(node) {
+  const cache = node?.["c:strRef"]?.["c:strCache"]
+    ?? node?.["c:numRef"]?.["c:numCache"]
+    ?? node?.["c:multiLvlStrRef"]?.["c:multiLvlStrCache"]?.["c:lvl"]
+    ?? node?.["c:numLit"]
+    ?? node?.["c:strLit"];
+  const points = asArray(cache?.["c:pt"]);
+  if (points.length > 0) return points.map((point) => scalarText(point?.["c:v"]));
+  const nestedPoints = asArray(cache)
+    .flatMap((level) => asArray(level?.["c:pt"]))
+    .map((point) => scalarText(point?.["c:v"]));
+  return nestedPoints;
+}
+
+function firstCachedValue(node) {
+  return cachedValues(node).find(Boolean) ?? "";
+}
+
+function readSlideNotes(entries, relationships) {
+  const notesRel = [...relationships.values()].find((relationship) => relationship.type.endsWith("/notesSlide"));
+  if (!notesRel?.path || !entries[notesRel.path]) return "";
+  const doc = parseRequiredXml(entries, notesRel.path);
+  const shapes = asArray(doc["p:notes"]?.["p:cSld"]?.["p:spTree"]?.["p:sp"]);
+  const bodyNotes = shapes
+    .filter((shape) => shapePlaceholderType(shape) === "body")
+    .map((shape) => textFromTextBody(shape["p:txBody"]))
+    .filter(Boolean);
+  return bodyNotes.join("\n").trim();
+}
+
+function slideBackground(slideRoot) {
+  const color = slideRoot["p:cSld"]?.["p:bg"]?.["p:bgPr"]?.["a:solidFill"]?.["a:srgbClr"]?.val;
+  return color ? `#${normalizeHex(color)}` : "";
+}
+
+function textFromTextBody(txBody) {
+  return readParagraphs(txBody).map((paragraph) => paragraph.text).filter(Boolean).join("\n").trim();
+}
+
+function comparePositionedItems(left, right) {
+  const leftY = left.bounds?.y ?? Number.MAX_SAFE_INTEGER;
+  const rightY = right.bounds?.y ?? Number.MAX_SAFE_INTEGER;
+  const leftX = left.bounds?.x ?? Number.MAX_SAFE_INTEGER;
+  const rightX = right.bounds?.x ?? Number.MAX_SAFE_INTEGER;
+  return leftY - rightY || leftX - rightX;
+}
+
+function firstLine(value) {
+  return String(value ?? "").split(/\r?\n/).find((line) => line.trim())?.trim() ?? "";
+}
+
+function mediaTypeForPath(path) {
+  const ext = path.toLowerCase().split(".").pop();
+  if (ext === "jpg" || ext === "jpeg") return "image/jpeg";
+  if (ext === "gif") return "image/gif";
+  if (ext === "webp") return "image/webp";
+  if (ext === "svg") return "image/svg+xml";
+  return "image/png";
+}
+
+function isFullSlide(bounds, dimensions) {
+  return bounds.x <= 0.02
+    && bounds.y <= 0.02
+    && bounds.w >= dimensions.widthInches - 0.04
+    && bounds.h >= dimensions.heightInches - 0.04;
+}
+
+function emuToInches(value) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return null;
+  return Math.round((number / EMUS_PER_INCH) * 1_000_000) / 1_000_000;
+}
+
+function asArray(value) {
+  if (value === undefined || value === null) return [];
+  return Array.isArray(value) ? value : [value];
+}
+
+function scalarText(value) {
+  if (value === null || value === undefined) return "";
+  if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") return String(value);
+  if (Array.isArray(value)) return value.map(scalarText).join("");
+  if (typeof value === "object" && value["#text"] !== undefined) return scalarText(value["#text"]);
+  return "";
 }
 
 function parseInput(input) {

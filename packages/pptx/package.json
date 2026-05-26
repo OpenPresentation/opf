@@ -42,6 +42,7 @@
   },
   "dependencies": {
     "@openpresentation/opf": "^0.2.2",
+    "fast-xml-parser": "^5.8.0",
     "fflate": "^0.8.3",
     "pptxgenjs": "^4.0.1"
   },
