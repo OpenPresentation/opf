@@ -35,11 +35,15 @@
   "sideEffects": false,
   "scripts": {
     "build": "node scripts/build.mjs",
+    "typecheck": "node --check src/index.js && node --check scripts/build.mjs && node --check scripts/validate-package.mjs && node --check test/smoke.mjs",
+    "test": "npm run build && node test/smoke.mjs",
     "validate": "node scripts/validate-package.mjs",
     "prepack": "npm run build"
   },
   "dependencies": {
-    "@openpresentation/opf": "^0.2.2"
+    "@openpresentation/opf": "^0.2.2",
+    "fflate": "^0.8.3",
+    "pptxgenjs": "^4.0.1"
   },
   "peerDependencies": {
     "@openpresentation/opf-render": ">=0.0.0"

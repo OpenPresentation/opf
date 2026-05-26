@@ -9,9 +9,41 @@ Pure local PowerPoint conversion tooling for Open Presentation Format documents.
 - License: MIT
 - Compatibility target: `@openpresentation/opf`
 - Renderer relationship: may use `@openpresentation/opf-render` for chart rasterization and visual verification
-- Planned public API: `toPptx(opf, opts)` and `fromPptx(buffer, opts)`
+- Public export API: `toPptx(opf, opts)`
+- Planned import API: `fromPptx(buffer, opts)` in the PPTX import phase
 
-Feature implementation is intentionally not in this provisioning slice. The first implementation task owns local OOXML packaging, deterministic ZIP output, and round-trip validation.
+The export path validates OPF with `@openpresentation/opf`, maps slide titles and common content payloads to editable PowerPoint objects through `pptxgenjs`, then normalizes the generated ZIP for stable entry ordering, fixed timestamps, and reproducible bytes.
+
+```js
+import { toPptx } from "@openpresentation/opf-pptx";
+
+const bytes = await toPptx({
+  $schema: "https://openpresentation.org/schema/opf/v1",
+  name: "Quarterly Review",
+  slides: [
+    {
+      title: "Revenue grew across all regions",
+      items: ["North America +18%", "EMEA +14%", "APAC +11%"]
+    }
+  ]
+});
+
+await fs.promises.writeFile("quarterly-review.pptx", bytes);
+```
+
+`toPptx` returns a `Uint8Array` containing a PowerPoint-openable `.pptx`. It does not fetch remote assets. Data URI images and local paths can be embedded directly; hosts that need private asset loading should pass `imageResolver(src, context)`. Set `strictAssets: true` to turn unresolved or remote image assets into structured `OPFPptxError` failures instead of editable placeholder boxes.
+
+## v1 Placeholder and OOXML Mapping
+
+The first exporter keeps the public API stable while using `pptxgenjs` internally:
+
+- `Slide.title`, `Slide.subtitle`, and `Slide.tag` become editable text boxes, not PowerPoint master placeholders.
+- Root payloads, `blocks[]`, and promoted region keys become editable slide objects in deterministic regions. Promoted keys use the OPF 3x3 region vocabulary (`top`, `middle`, `bottom`, `left`, `center`, `right`).
+- Text, lists, metrics, quotes, timelines, code, tables, and inline-data charts are emitted as editable PowerPoint text, table, and chart objects.
+- Image assets are embedded only when supplied as data URIs, local paths, or host-resolved bytes/paths. Remote asset URLs are never fetched by the runtime path.
+- ZIP entries, generated chart/workbook part names, core-property timestamps, and nested chart workbook timestamps are normalized for reproducible bytes.
+
+This pass did not require an OPF schema change. The deferred full OOXML placeholder mapping from `docs/plans/layout-placeholders.md` remains a later hand-written OOXML emitter concern.
 
 ## Runtime Policy
 
@@ -30,8 +62,12 @@ The package runtime must stay local and deterministic:
 ```sh
 npm ci
 npm run build
+npm run typecheck
+npm test
 npm run validate
 ```
+
+LibreOffice is not a runtime dependency. When it is installed in CI or a local verification environment, generated `.pptx` files can be smoke-opened there as an optional export check.
 
 ## Release Lane
 
