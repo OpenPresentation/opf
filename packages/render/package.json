@@ -35,12 +35,18 @@
   "sideEffects": false,
   "scripts": {
     "build": "node scripts/build.mjs",
-    "typecheck": "node --check src/index.js && node --check scripts/build.mjs && node --check scripts/validate-package.mjs && node --check test/smoke.mjs",
+    "typecheck": "node --check src/index.js && node --check scripts/build.mjs && node --check scripts/validate-package.mjs && node --check test/smoke.mjs && node --check test/golden.mjs",
     "validate": "node scripts/validate-package.mjs",
-    "test": "npm run build && node test/smoke.mjs",
+    "test": "npm run build && node test/smoke.mjs && node test/golden.mjs",
+    "test:golden": "npm run build && node test/golden.mjs",
+    "golden:update": "npm run build && node test/golden.mjs --update",
     "prepack": "npm run build"
   },
   "dependencies": {
-    "@openpresentation/opf": "^0.2.2"
+    "@expo-google-fonts/roboto": "^0.4.3",
+    "@expo-google-fonts/roboto-mono": "^0.4.2",
+    "@openpresentation/opf": "^0.2.2",
+    "@resvg/resvg-js": "^2.6.2",
+    "pdf-lib": "^1.17.1"
   }
 }

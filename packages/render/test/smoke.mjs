@@ -7,7 +7,9 @@ import {
   OPFRenderError,
   renderSvg,
   renderSvgDeck,
-  resolvePresentation
+  resolvePresentation,
+  svgToPdf,
+  svgToPng
 } from "../dist/index.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -36,6 +38,20 @@ assert.match(first, /data-opf-path="slides\.0"/);
 assert.match(first, /Minimal OPF Deck/);
 assert.equal(renderSvg(minimalDeck).includes("data-opf-path"), false, "trace output must be optional");
 assert.equal(renderSvgDeck(minimalDeck).length, 3);
+
+const png = await svgToPng(first, { scale: 0.5 });
+const repeatPng = await svgToPng(first, { scale: 0.5 });
+assert.deepEqual(png, repeatPng, "svgToPng must be byte-stable for the same input and scale");
+assert.equal(Buffer.from(png.subarray(0, 8)).toString("hex"), "89504e470d0a1a0a");
+
+const pdfSlides = renderSvgDeck(minimalDeck).slice(0, 2);
+const pdf = await svgToPdf(pdfSlides, { scale: 0.25 });
+const repeatPdf = await svgToPdf(pdfSlides, { scale: 0.25 });
+assert.deepEqual(pdf, repeatPdf, "svgToPdf must be byte-stable for the same input and scale");
+assert.equal(Buffer.from(pdf.subarray(0, 5)).toString("utf8"), "%PDF-");
+const { PDFDocument } = await import("pdf-lib");
+const loadedPdf = await PDFDocument.load(pdf);
+assert.equal(loadedPdf.getPageCount(), 2, "svgToPdf must emit one page per SVG");
 
 const resolved = resolvePresentation(minimalDeck);
 assert.equal(resolved.slides.length, 3);

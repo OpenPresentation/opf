@@ -30,6 +30,8 @@ assert.ok(deps["@openpresentation/opf"], "Must declare compatibility with @openp
 assert.equal(typeof api.renderSvg, "function");
 assert.equal(typeof api.renderSvgDeck, "function");
 assert.equal(typeof api.resolvePresentation, "function");
+assert.equal(typeof api.svgToPng, "function");
+assert.equal(typeof api.svgToPdf, "function");
 assert.equal(api.runtimePolicy.requiredNetworkCalls, false);
 assert.equal(api.runtimePolicy.deterministicLocalExecution, true);
 

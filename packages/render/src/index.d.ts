@@ -36,6 +36,21 @@ export interface RenderSvgOptions {
   catalogSources?: Record<string, { records?: unknown[] } | unknown[]>;
 }
 
+export interface SvgToPngOptions {
+  scale?: number;
+  background?: string;
+  dpi?: number;
+  useBundledFonts?: boolean;
+  loadSystemFonts?: boolean;
+  fontFiles?: string[];
+  fontDirs?: string[];
+  defaultFontFamily?: string;
+  sansSerifFamily?: string;
+  monospaceFamily?: string;
+}
+
+export interface SvgToPdfOptions extends SvgToPngOptions {}
+
 export interface ResolvedPresentation {
   presentation: unknown;
   engineDefaults: typeof engineDefaults;
@@ -85,3 +100,7 @@ export declare function resolvePresentation(input: unknown, options?: RenderSvgO
 export declare function renderSvg(input: unknown, options?: RenderSvgOptions): string;
 
 export declare function renderSvgDeck(input: unknown, options?: RenderSvgOptions): string[];
+
+export declare function svgToPng(svg: string | Uint8Array, options?: SvgToPngOptions): Promise<Uint8Array>;
+
+export declare function svgToPdf(svgs: string | Uint8Array | Array<string | Uint8Array>, options?: SvgToPdfOptions): Promise<Uint8Array>;
