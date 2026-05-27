@@ -71,12 +71,12 @@ OPF_EXAMPLES_DIR=/path/to/opf/examples npm run golden:update
 
 ## Release Lane
 
-Public npm package publication is handled by `.github/workflows/release.yml` with npm provenance.
+Public npm package publication is handled by `.github/workflows/npm-publish.yml` with npm provenance.
 
 Required first-publish setup:
 
 1. An npm owner for the `@openpresentation` scope must run the first publish or reserve/grant the `@openpresentation/opf-render` package.
-2. Configure npm Trusted Publishing for GitHub repository `OpenPresentation/opf-render` and workflow `.github/workflows/release.yml`.
-3. Publish by creating a GitHub Release or manually running the Release workflow after CI passes.
+2. Configure npm Trusted Publishing for GitHub repository `OpenPresentation/opf-render` and workflow `.github/workflows/npm-publish.yml`.
+3. Publish by pushing a git tag matching `opf-render-v<version>` or `@openpresentation/opf-render@v<version>` (the tag must match the `package.json` version), or by manually running the workflow after CI passes.
 
 This repo does not require an npm automation token when Trusted Publishing is configured.
