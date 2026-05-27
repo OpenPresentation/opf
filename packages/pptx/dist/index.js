@@ -37,7 +37,10 @@ export class OPFPptxError extends Error {
 }
 
 const FIXED_TIMESTAMP = "1980-01-01T00:00:00Z";
-const FIXED_ZIP_DATE = new Date(FIXED_TIMESTAMP);
+// fflate derives the DOS zip date from local-time fields, so build this from
+// local components: a UTC instant rolls back to 1979 west of UTC (below
+// fflate's 1980 floor) and would otherwise yield timezone-dependent bytes.
+const FIXED_ZIP_DATE = new Date(1980, 0, 1, 0, 0, 0);
 const DEFAULT_SEED = 0x4f504658;
 const CANONICAL_SCHEMA = "https://openpresentation.org/schema/opf/v1";
 const EMUS_PER_INCH = 914400;
