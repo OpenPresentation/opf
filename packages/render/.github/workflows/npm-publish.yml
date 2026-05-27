@@ -17,6 +17,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: OpenPresentation/opf
+          ref: 29713f534a917e327e5e8fdf9a5ba72b4ae6bdf0
+          path: opf-corpus
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -35,7 +40,11 @@ jobs:
               ;;
           esac
       - run: npm run build
+      - run: npm run typecheck
       - run: npm run validate
+      - run: npm test
+        env:
+          OPF_EXAMPLES_DIR: opf-corpus/examples
       - name: Verify npm package contents
         run: npm pack --dry-run
       - run: npm publish --access public --provenance
