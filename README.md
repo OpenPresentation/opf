@@ -89,7 +89,8 @@ const deck: Presentation = {
 };
 
 const result = validatePresentation(deck);
-console.log(result.valid);
+console.log(result.valid); // schema correctness
+console.log(result.warnings); // advisory issues, e.g. unknown catalog ids
 console.log(audiences.length, purposes.length, tones.length);
 ```
 

@@ -6,6 +6,21 @@ How an engine decides the effective design for any given slide. The schema sprea
 
 For every design field independently, the most specific source wins:
 
+```
+  wins   +--------------------------------------------------------+
+    ^    | 1. slide design     slides[i].design.*                 |
+    |    +--------------------------------------------------------+
+    |    | 2. deck design      design.* on the presentation root  |
+    |    +--------------------------------------------------------+
+    |    | 3. resolved theme   colorScheme, fontScheme,            |
+    |    |                     background, dimensions from the     |
+    |    |                     theme record                        |
+    |    +--------------------------------------------------------+
+  loses  | 4. engine defaults  e.g. spec/reference/                |
+    v    |                     engine-defaults.json                |
+         +--------------------------------------------------------+
+```
+
 1. **Slide design** — `slides[].design.*`
 2. **Deck design** — `design.*` on the presentation root
 3. **Resolved theme** — defaults carried by the theme record (`colorScheme`, `fontScheme`, `background`, `dimensions`)
@@ -16,6 +31,19 @@ Resolution is **per field**, not per object. A slide that sets only `design.cont
 Two field-level rules complete the picture:
 
 - **Base-plus-overrides within one object.** Wherever a reference object carries an `id` (`Theme`, `ColorScheme`, `FontScheme`), the `id` resolves a catalog record as the base and sibling fields override the resolved record per key. The string shorthand (`"colorScheme": "cool-horizon"`) is equivalent to setting only `id`.
+
+  ```
+  "colorScheme": { "id": "cool-horizon", "accent1": "#0F4C81" }
+
+     catalog record "cool-horizon"        sibling fields on the object
+     accent1: "#2874A6"   <-- replaced -- accent1: "#0F4C81"
+     accent2: "#1B4F72"   <-- kept
+     light1:  "#FFFFFF"   <-- kept
+                  |
+                  v
+     effective scheme: accent1 from the override, everything else
+     from the record
+  ```
 - **Explicit suppression.** `watermark`, `header`, and `footer` accept `false` to switch off an inherited value — distinct from omitting the field, which inherits.
 
 Catalog lookups inside this chain follow the standard resolution order (inline `catalogs.<kind>.records[]` → `catalogs.<kind>.source` → default catalog); see [`how-opf-works.md`](./how-opf-works.md).

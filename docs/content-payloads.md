@@ -210,6 +210,24 @@ Timeline-specific fields are grouped under `timeline`. An array value is shortha
 
 ## Regions
 
+Region keys address a 3×3 grid of rows (`top`, `middle`, `bottom`) and columns (`left`, `center`, `right`):
+
+```
+            left          center          right
+        +-------------+-------------+-------------+
+  top   | top:left    | top:center  | top:right   |
+        +-------------+-------------+-------------+
+ middle | middle:left | middle:cent.| middle:right|
+        +-------------+-------------+-------------+
+ bottom | bottom:left | bottom:cent.| bottom:right|
+        +-------------+-------------+-------------+
+```
+
+- A bare column key (`left`) spans all three rows; a bare row key (`top`) spans all three columns.
+- `+` spans adjacent rows or columns: `center+right`, `top+middle`.
+- `row:column` combines the two: `top:left`, `middle+bottom:center+right`.
+- Keys on one slide must not overlap, and regions cannot be mixed with root payload fields.
+
 The same payload objects work inside regions:
 
 ```json

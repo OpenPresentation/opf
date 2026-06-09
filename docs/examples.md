@@ -8,6 +8,8 @@ The `examples/` directory has three layers:
 
 ## Technical Fixtures
 
+Start with [`examples/technical/full-feature-tour.opf.json`](../examples/technical/full-feature-tour.opf.json), one deck that touches every major schema surface — useful as a copy-paste source and as a single fixture for renderer smoke tests.
+
 Use `examples/technical/` when you want a small file that exercises a specific schema surface:
 
 - content payloads, rich text, blocks, charts, tables, media, metrics, quotes, and timelines

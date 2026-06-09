@@ -881,6 +881,37 @@ for (const doc of docs) {
   assert.ok(doc.title.length > 0, `doc ${doc.slug} missing title`);
   assert.ok(doc.markdown.length > 0, `doc ${doc.slug} missing markdown`);
 }
+// Every presentation-shaped JSON example embedded in the shipped docs must
+// validate cleanly — docs that teach the format cannot drift from the schema.
+let validatedDocExamples = 0;
+for (const doc of docs) {
+  const fencedBlocks = [...doc.markdown.matchAll(/```json\n([\s\S]*?)```/g)];
+  for (const [, block] of fencedBlocks) {
+    let parsed;
+    try {
+      parsed = JSON.parse(block);
+    } catch {
+      continue;
+    }
+    if (!parsed || !Array.isArray(parsed.slides)) {
+      continue;
+    }
+    const result = validatePresentation(parsed);
+    assert.equal(
+      result.valid,
+      true,
+      `doc ${doc.slug} has an invalid presentation example: ${JSON.stringify(result.errors, null, 2)}`,
+    );
+    assert.equal(
+      result.warnings.length,
+      0,
+      `doc ${doc.slug} example references unknown catalog ids: ${JSON.stringify(result.warnings, null, 2)}`,
+    );
+    validatedDocExamples += 1;
+  }
+}
+assert.ok(validatedDocExamples >= 5, `expected at least 5 presentation examples across docs, found ${validatedDocExamples}`);
+
 const docSlugs = docs.map((doc) => doc.slug);
 assert.ok(docSlugs.includes("schema-reference"));
 assert.equal(getDoc("schema-reference")?.slug, "schema-reference");

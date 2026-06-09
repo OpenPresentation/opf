@@ -8,7 +8,24 @@ An OPF document is one JSON file that answers three questions about a presentati
 
 The document records intent; an engine (a renderer, exporter, or editor) turns that intent into pixels or `.pptx` output. OPF deliberately stops at the format boundary: it never embeds OOXML, layout geometry, or renderer-specific state.
 
-The smallest valid document is just slides:
+## Anatomy of a document
+
+```
+Presentation
+├── identity ...... name, description, organization, speaker, author
+├── intent ........ audience, purpose, tone, language, narrative, takeaway, duration
+├── content ....... slides[]
+│                     ├── title / subtitle / tag / notes / section / beat / layout
+│                     └── one content shape:
+│                           root payload   (a single content kind)
+│                           blocks[]       (ordered payloads, placement inferred)
+│                           region keys    (3x3 placement grid)
+├── design ........ theme, colorScheme, fontScheme, background, logo, header, footer
+├── assets ........ named media sources, referenced as "asset:<id>"
+└── catalogs ...... per-kind overrides: inline records and/or custom sources
+```
+
+Only `slides` is required. The smallest valid document:
 
 ```json
 {
@@ -26,9 +43,54 @@ Everything else in the format is optional and additive.
 
 A slide carries its content in one of three shapes. Pick the loosest shape that says what you mean — engines handle placement.
 
-1. **Root payload** — one content kind directly on the slide. The kind is inferred from the field present (`text`, `items`, `chart`, `table`, `image`, `video`, `code`, `metric`, `quote`, `timeline`); see [`content-payloads.md`](./content-payloads.md) for the full table. Multiple kinds at the slide root (with no explicit `type`, `blocks`, or regions) are shorthand for the equivalent `blocks`.
-2. **`blocks`** — an ordered list of payloads when a slide has several pieces of content but placement should stay renderer-inferred.
-3. **Promoted region keys** — a 3×3 placement grid when position matters. Columns are `left`, `center`, `right`; rows are `top`, `middle`, `bottom`. Keys can span (`center+right`, `top+middle`) and combine row with column (`top:left`, `middle+bottom:center+right`). Region keys on one slide must not overlap, and regions cannot be mixed with a root payload.
+**1. Root payload** — one content kind directly on the slide. The kind is inferred from the field present (`text`, `items`, `chart`, `table`, `image`, `video`, `code`, `metric`, `quote`, `timeline`); see [`content-payloads.md`](./content-payloads.md) for the full table.
+
+```json
+{
+  "title": "Operating Metric",
+  "metric": { "value": "42%", "label": "Review cycle reduction", "trend": "up" }
+}
+```
+
+Multiple kinds at the slide root (with no explicit `type`, `blocks`, or regions) are shorthand for the equivalent `blocks`:
+
+```json
+{
+  "title": "Habitat",
+  "text": "Jaguars are strongly associated with water and dense cover.",
+  "items": ["Rainforests and flooded wetlands", "Large defended territories"]
+}
+```
+
+**2. `blocks`** — an ordered list of payloads when a slide has several pieces of content but placement should stay renderer-inferred:
+
+```json
+{
+  "title": "Customer Feedback",
+  "blocks": [
+    { "table": { "columns": ["Theme", "Mentions"], "rows": [["Speed", 42], ["Ease of use", 31]] } },
+    { "quote": { "text": "The new workflow cut review time in half.", "attribution": "Operations Lead" } }
+  ]
+}
+```
+
+**3. Promoted region keys** — a 3×3 placement grid when position matters:
+
+```
+            left          center          right
+        +-------------+-------------+-------------+
+  top   | top:left    | top:center  | top:right   |
+        +-------------+-------------+-------------+
+ middle | middle:left | middle:...  | middle:right|
+        +-------------+-------------+-------------+
+ bottom | bottom:left | bottom:...  | bottom:right|
+        +-------------+-------------+-------------+
+
+  A bare column key ("left") spans all three rows.
+  A bare row key ("top") spans all three columns.
+  Keys span with "+":  "center+right", "top+middle",
+  and combine row with column:  "middle+bottom:center+right".
+```
 
 ```json
 {
@@ -38,7 +100,7 @@ A slide carries its content in one of three shapes. Pick the loosest shape that 
 }
 ```
 
-Slide-level strings `title`, `subtitle`, and `tag` sit alongside whichever content shape you use, and render into the matching placeholders of the resolved layout.
+Region keys on one slide must not overlap, and regions cannot be mixed with a root payload. Slide-level strings `title`, `subtitle`, and `tag` sit alongside whichever content shape you use, and render into the matching placeholders of the resolved layout.
 
 ## Layouts are hints, not contracts
 
@@ -54,9 +116,28 @@ The principle, used throughout OPF: **slides are the source of truth**. Layouts,
 
 `narrative` declares the deck's story arc. It resolves to a record in the `narratives` catalog (e.g. `"classic-story"`, `"pitch-deck"`), each of which defines ordered **beats** — labeled segments of the arc such as `hook`, `problem`, `evidence`, `ask` — with optional slide-blueprint hints (`slideType`, `layoutHint`, `instructions`, `thoughtCues`).
 
-- Slides opt into beats via `Slide.beat`. Nothing forces them to: validators warn on drift (orphan slides, unused beats) but never error.
-- Object form supports overrides: `{ "id": "classic-story", "beats": [...] }` merges inline beats into the catalog record by beat `id`. An object whose `id` matches no record is a fully custom inline narrative.
-- Deck-level concerns that aren't part of the storyline — `audience`, `tone`, `takeaway`, `duration` — live as siblings on the presentation root, not inside the narrative.
+Slides opt into beats via `Slide.beat`. Nothing forces them to: validators warn on drift (orphan slides, unused beats) but never error.
+
+```json
+{
+  "name": "Schema Pitch",
+  "narrative": {
+    "id": "technical-proof",
+    "name": "Technical Proof",
+    "beats": [
+      { "id": "contract", "name": "Contract", "slideType": "text", "instructions": "State what stays stable." },
+      { "id": "evidence", "name": "Evidence", "slideType": "chart" },
+      { "id": "adoption", "name": "Adoption", "slideType": "list" }
+    ]
+  },
+  "slides": [
+    { "beat": "contract", "title": "The Contract", "text": "Beats describe intent without constraining slides." },
+    { "beat": ["evidence", "adoption"], "title": "Proof And Ask", "items": ["One slide may cover several beats."] }
+  ]
+}
+```
+
+Object form supports overrides: `{ "id": "classic-story", "beats": [...] }` merges inline beats into the catalog record by beat `id`. An object whose `id` matches no record — like `technical-proof` above — is a fully custom inline narrative. Deck-level concerns that aren't part of the storyline (`audience`, `tone`, `takeaway`, `duration`) live as siblings on the presentation root, not inside the narrative.
 
 ## Catalog references and how they resolve
 
@@ -64,19 +145,45 @@ Most reusable values in OPF are references into **catalogs**: named collections 
 
 Every reference resolves through the same chain, first match wins:
 
-1. **Inline records** — `catalogs.<kind>.records[]` declared in the document itself.
-2. **Document source** — a custom `catalogs.<kind>.source` registry declared in the document.
-3. **Default catalog** — `https://www.pptx.gallery/<kind>` (the same records are bundled in `spec/catalogs/` and shipped inside `@openpresentation/opf`).
+```
+        "design": { "colorScheme": "cool-horizon" }
+                          |
+                          v
+   1. catalogs.colorSchemes.records[]    inline records in this document
+                          | miss
+                          v
+   2. catalogs.colorSchemes.source       custom registry declared in this document
+                          | miss
+                          v
+   3. default catalog                    https://www.pptx.gallery/color-schemes
+                          | miss         (bundled in spec/catalogs/ and in
+                          v               the @openpresentation/opf package)
+   validation warning — never an error — and an engine fallback
+```
 
 When a reference is omitted entirely, engines fall back to their own defaults (see [`spec/reference/engine-defaults.json`](../spec/reference/engine-defaults.json) for a reference example — that file is engine configuration, not part of the document contract).
 
 Three reference forms are accepted wherever a catalog reference is allowed:
 
-- **Bare id** for the common case: `"narrative": "classic-story"`, `"design": { "colorScheme": "cool-horizon" }`.
+- **Bare id** for the common case: `"narrative": "classic-story"`.
 - **Object form** for catalog-backed overrides: `{ "id": "cool-horizon", "accent1": "#0F4C81" }` resolves the record as a base, then inline fields win per key.
 - **URL or `pkg:` reference**, which skips the catalog lookup and resolves directly.
 
-Unknown ids produce a validation **warning**, never an error — engines fall back rather than fail.
+A document can carry its own records or point at a private registry, which also silences unknown-id warnings for that kind:
+
+```json
+{
+  "name": "Branded Deck",
+  "design": { "colorScheme": "acme-brand" },
+  "catalogs": {
+    "colorSchemes": {
+      "records": [{ "id": "acme-brand", "accent1": "#0F4C81", "light1": "#FFFFFF", "dark1": "#0B1B2B" }]
+    },
+    "narratives": { "source": "https://catalogs.example.com/narratives" }
+  },
+  "slides": [{ "title": "Branded Deck" }]
+}
+```
 
 ## Design in one paragraph
 
@@ -85,6 +192,76 @@ Unknown ids produce a validation **warning**, never an error — engines fall ba
 ## Assets
 
 Binary content lives in the top-level `assets` registry, keyed by id. Content payloads and design fields reference entries with `asset:<id>` strings; asset `src` values accept HTTPS URLs, data URIs, and paths resolved against the OPF file location.
+
+## A complete small deck
+
+Everything above, together — intent metadata, a catalog-backed narrative with beats, design, an organization and speaker, an asset-backed chart, regions, notes, and sections:
+
+```json
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Q3 Business Review",
+  "description": "Quarterly review for the executive team.",
+  "audience": "executives",
+  "purpose": "decide",
+  "tone": "formal",
+  "language": "en-US",
+  "narrative": "qbr",
+  "takeaway": "Approve the expanded rollout budget.",
+  "duration": 20,
+  "organization": {
+    "id": "acme",
+    "name": "Acme Corp",
+    "domain": "acme.com",
+    "socials": { "linkedin": "acme" }
+  },
+  "speaker": { "id": "alice", "name": "Alice Chen", "title": "VP Operations", "organizationId": "acme" },
+  "design": {
+    "theme": "classic",
+    "colorScheme": "forest-green",
+    "footer": { "left": { "organization": true }, "right": { "slideNumber": true } }
+  },
+  "assets": {
+    "adoption-csv": { "src": "./data/adoption.csv", "alt": "Monthly adoption data" }
+  },
+  "slides": [
+    {
+      "layout": "title",
+      "beat": "objectives",
+      "title": "Q3 Business Review",
+      "subtitle": "Operations — October 2025"
+    },
+    {
+      "beat": "performance-headline",
+      "title": "Adoption Doubled",
+      "left": { "metric": { "value": "2.1x", "label": "Quarter-over-quarter adoption", "trend": "up" } },
+      "center+right": {
+        "chart": { "type": "line", "data": { "src": "asset:adoption-csv", "columns": ["Month", "Active Teams"] } }
+      },
+      "notes": "Pause here; this is the slide the decision hangs on."
+    },
+    {
+      "beat": "risks",
+      "section": "Decision",
+      "title": "What Could Go Wrong",
+      "items": [
+        "Capacity: two regions are at 85% utilization.",
+        {
+          "text": "Churn risk in the legacy tier.",
+          "description": "Mitigation: migration incentives ship in November."
+        }
+      ]
+    },
+    {
+      "beat": "asks",
+      "title": "The Ask",
+      "text": "Approve $1.2M to expand the rollout to all regions in Q4."
+    }
+  ]
+}
+```
+
+The beat ids (`objectives`, `performance-headline`, `risks`, `asks`) come from the `qbr` narrative record; the theme, color scheme, chart type, and layout all resolve through the bundled catalogs. For a fixture that exercises the full surface in one file, see [`examples/technical/full-feature-tour.opf.json`](../examples/technical/full-feature-tour.opf.json).
 
 ## Validation philosophy
 
@@ -101,4 +278,4 @@ Two layers, with a deliberate split:
 - [`catalog-schema-reference.md`](./catalog-schema-reference.md) — every field of every catalog record schema.
 - [`content-payloads.md`](./content-payloads.md) — payload shapes and inference rules with examples.
 - [`design-resolution.md`](./design-resolution.md) — the design precedence algorithm.
-- [`examples.md`](./examples.md) — guide to the 124 example decks under `examples/`.
+- [`examples.md`](./examples.md) — guide to the example decks under `examples/`.
