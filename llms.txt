@@ -1,0 +1,25 @@
+# Open Presentation Format (OPF)
+
+> Portable, human-readable JSON document format for slide decks. Plain JSON instead of zipped OOXML, so humans can diff decks, git can track them, and LLMs can author them. MIT licensed. npm package: @openpresentation/opf.
+
+Authoring rule of thumb: a presentation is `{ "name": "...", "slides": [...] }` and only `slides` is required. Slides carry content as a root payload (text, items, chart, table, image, video, code, metric, quote, timeline), as `blocks`, or in 3x3 region keys (`left`, `center+right`, `top:left`, ...). Reusable values (narrative, theme, colorScheme, fontScheme, layout, chart type, audience, purpose, tone, language) are kebab-case ids resolved against catalogs. Unknown ids warn, never error. Validate with `validatePresentation` from @openpresentation/opf.
+
+## Docs
+
+- [How OPF works](https://github.com/OpenPresentation/opf/blob/main/docs/how-opf-works.md): start here — document model, content shapes, catalog resolution, validation philosophy
+- [Schema reference](https://github.com/OpenPresentation/opf/blob/main/docs/schema-reference.md): every field of every presentation object
+- [Content payloads](https://github.com/OpenPresentation/opf/blob/main/docs/content-payloads.md): payload shapes and inference rules
+- [Design resolution](https://github.com/OpenPresentation/opf/blob/main/docs/design-resolution.md): design precedence algorithm with worked examples
+- [Catalog schema reference](https://github.com/OpenPresentation/opf/blob/main/docs/catalog-schema-reference.md): every field of every catalog record schema
+- [Examples guide](https://github.com/OpenPresentation/opf/blob/main/docs/examples.md): map of the 125 example decks
+
+## Spec
+
+- [Presentation JSON Schema](https://github.com/OpenPresentation/opf/blob/main/spec/schemas/opf.schema.json): draft 2020-12, $id https://openpresentation.org/schema/opf/v1
+- [Catalog records](https://github.com/OpenPresentation/opf/tree/main/spec/catalogs): audiences, narratives, layouts, chart types, themes, color schemes, font schemes, tones, purposes, languages, social platforms
+- [Full-feature example deck](https://github.com/OpenPresentation/opf/blob/main/examples/technical/full-feature-tour.opf.json): one file exercising every major schema surface
+
+## Optional
+
+- [pptx.gallery](https://pptx.gallery): human-browsable catalog presets
+- [npm package](https://www.npmjs.com/package/@openpresentation/opf): schemas, catalogs, TypeScript types, and local validation; docs and examples are bundled in the package

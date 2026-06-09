@@ -228,7 +228,32 @@ Region keys address a 3×3 grid of rows (`top`, `middle`, `bottom`) and columns 
 - `row:column` combines the two: `top:left`, `middle+bottom:center+right`.
 - Keys on one slide must not overlap, and regions cannot be mixed with root payload fields.
 
-The same payload objects work inside regions:
+Spans compose into common slide shapes:
+
+```
+  "left" + "center+right"             "top" + "middle+bottom"
+  (sidebar + main)                    (headline band + body)
+  +----------+------------------+     +-------------------------------+
+  |          |                  |     |              top              |
+  |          |                  |     +-------------------------------+
+  |   left   |  center+right    |     |                               |
+  |          |                  |     |         middle+bottom         |
+  |          |                  |     |                               |
+  +----------+------------------+     +-------------------------------+
+
+  "top" + "middle+bottom:left" + "middle+bottom:center+right"
+  (headline band, then sidebar + main)
+  +---------------------------------------------+
+  |                     top                     |
+  +---------------+-----------------------------+
+  |               |                             |
+  | middle+bottom | middle+bottom:center+right  |
+  | :left         |                             |
+  |               |                             |
+  +---------------+-----------------------------+
+```
+
+The same payload objects work inside regions — here, the sidebar-plus-main shape:
 
 ```json
 {

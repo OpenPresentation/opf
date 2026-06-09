@@ -30,6 +30,14 @@ That's the shift that lets LLMs actually *author* decks. When the format stops f
 
 And they don't start from a blank canvas. [pptx.gallery](https://pptx.gallery) is the human-browsable reference for OPF catalog presets: layouts, themes, color schemes, font schemes, chart types, narratives, audiences, purposes, tones, languages, and social platforms.
 
+## Start in three steps
+
+1. **Install the format package.** `npm install @openpresentation/opf`.
+2. **Author and validate a deck.** Write a `*.opf.json` file — start from [`docs/how-opf-works.md`](./docs/how-opf-works.md) or copy [`examples/technical/full-feature-tour.opf.json`](./examples/technical/full-feature-tour.opf.json) — and run `validatePresentation` on it.
+3. **Build on it.** Browse presets at [pptx.gallery](https://pptx.gallery), pin the schemas in your pipeline, and track the [toolkit roadmap](#toolkit-roadmap) for the render and convert libraries.
+
+Your deck lives in git from the first commit. Nothing in these steps calls a hosted service, and nothing ever will — that boundary is the point.
+
 ## JavaScript and TypeScript
 
 The canonical JavaScript/TypeScript package is published at [`packages/javascript`](./packages/javascript) as [`@openpresentation/opf`](https://www.npmjs.com/package/@openpresentation/opf). The schema is pre-stable (0.x — expect breaking changes between minor versions until 1.0). Its responsibility is local and format-level only:
@@ -54,7 +62,7 @@ The OPF format package is shipping first. The planned toolkit lives outside this
 
 These repos provide OSS primitives only. Downstream applications own hosting, auth, storage, collaboration, queues, previews, analytics, support, and workflow UX.
 
-### Expected Usage
+## Usage
 
 Install from npm:
 

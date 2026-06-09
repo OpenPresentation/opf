@@ -6,7 +6,7 @@ An OPF document is one JSON file that answers three questions about a presentati
 - **Who is it for and why?** — `audience`, `purpose`, `tone`, `language`, and `narrative`.
 - **What should it look like?** — `design`, resolved through themes, color schemes, and font schemes.
 
-The document records intent; an engine (a renderer, exporter, or editor) turns that intent into pixels or `.pptx` output. OPF deliberately stops at the format boundary: it never embeds OOXML, layout geometry, or renderer-specific state.
+The document records intent; an engine (a renderer, exporter, or editor) turns that intent into pixels or `.pptx` output. OPF deliberately stops at the format boundary: it never embeds OOXML, layout geometry, or renderer-specific state. You — or your agent — own the story, the data, and the ask; the format's job is to keep all of that readable, diffable, and out of `<p:sp>` tags.
 
 ## Anatomy of a document
 
@@ -88,9 +88,48 @@ Multiple kinds at the slide root (with no explicit `type`, `blocks`, or regions)
 
   A bare column key ("left") spans all three rows.
   A bare row key ("top") spans all three columns.
-  Keys span with "+":  "center+right", "top+middle",
-  and combine row with column:  "middle+bottom:center+right".
+  Keys span neighbors with "+" and intersect rows with columns via ":".
 ```
+
+The spans compose into the slide shapes you actually want:
+
+```
+  "left" + "center+right"             "top" + "middle+bottom"
+  (sidebar + main)                    (headline band + body)
+  +----------+------------------+     +-------------------------------+
+  |          |                  |     |              top              |
+  |          |                  |     +-------------------------------+
+  |   left   |  center+right    |     |                               |
+  |          |                  |     |         middle+bottom         |
+  |          |                  |     |                               |
+  +----------+------------------+     +-------------------------------+
+
+  "top" + "middle+bottom:left" + "middle+bottom:center+right"
+  (headline band, then sidebar + main)
+  +---------------------------------------------+
+  |                     top                     |
+  +---------------+-----------------------------+
+  |               |                             |
+  | middle+bottom | middle+bottom:center+right  |
+  | :left         |                             |
+  |               |                             |
+  +---------------+-----------------------------+
+```
+
+That last shape in JSON:
+
+```json
+{
+  "title": "Adoption Doubled",
+  "top": { "text": "Adoption doubled while support load stayed flat." },
+  "middle+bottom:left": { "metric": { "value": "2.1x", "label": "Adoption" } },
+  "middle+bottom:center+right": {
+    "chart": { "type": "line", "data": { "columns": ["Month", "Teams"], "rows": [["Jan", 12], ["Feb", 18]] } }
+  }
+}
+```
+
+And the two-column shape from the grid above:
 
 ```json
 {
@@ -279,3 +318,5 @@ Two layers, with a deliberate split:
 - [`content-payloads.md`](./content-payloads.md) — payload shapes and inference rules with examples.
 - [`design-resolution.md`](./design-resolution.md) — the design precedence algorithm.
 - [`examples.md`](./examples.md) — guide to the example decks under `examples/`.
+
+Then write a deck, commit it, revise it, and read the diff. A two-line diff for a two-word change is the whole argument for the format.
