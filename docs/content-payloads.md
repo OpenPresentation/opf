@@ -213,14 +213,14 @@ Timeline-specific fields are grouped under `timeline`. An array value is shortha
 Region keys address a 3×3 grid of rows (`top`, `middle`, `bottom`) and columns (`left`, `center`, `right`):
 
 ```
-            left          center          right
-        +-------------+-------------+-------------+
-  top   | top:left    | top:center  | top:right   |
-        +-------------+-------------+-------------+
- middle | middle:left | middle:cent.| middle:right|
-        +-------------+-------------+-------------+
- bottom | bottom:left | bottom:cent.| bottom:right|
-        +-------------+-------------+-------------+
+                  left                 center                 right
+         +--------------------+--------------------+--------------------+
+   top   |  top:left          |  top:center        |  top:right         |
+         +--------------------+--------------------+--------------------+
+  middle |  middle:left       |  middle:center     |  middle:right      |
+         +--------------------+--------------------+--------------------+
+  bottom |  bottom:left       |  bottom:center     |  bottom:right      |
+         +--------------------+--------------------+--------------------+
 ```
 
 - A bare column key (`left`) spans all three rows; a bare row key (`top`) spans all three columns.

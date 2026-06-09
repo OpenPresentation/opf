@@ -77,14 +77,14 @@ Multiple kinds at the slide root (with no explicit `type`, `blocks`, or regions)
 **3. Promoted region keys** — a 3×3 placement grid when position matters:
 
 ```
-            left          center          right
-        +-------------+-------------+-------------+
-  top   | top:left    | top:center  | top:right   |
-        +-------------+-------------+-------------+
- middle | middle:left | middle:...  | middle:right|
-        +-------------+-------------+-------------+
- bottom | bottom:left | bottom:...  | bottom:right|
-        +-------------+-------------+-------------+
+                  left                 center                 right
+         +--------------------+--------------------+--------------------+
+   top   |  top:left          |  top:center        |  top:right         |
+         +--------------------+--------------------+--------------------+
+  middle |  middle:left       |  middle:center     |  middle:right      |
+         +--------------------+--------------------+--------------------+
+  bottom |  bottom:left       |  bottom:center     |  bottom:right      |
+         +--------------------+--------------------+--------------------+
 
   A bare column key ("left") spans all three rows.
   A bare row key ("top") spans all three columns.
