@@ -125,6 +125,8 @@ node packages/cli/dist/index.js validate path/to/deck.opf.json
 | Path | Contents |
 |---|---|
 | [`spec/schemas/opf.schema.json`](./spec/schemas/opf.schema.json) | Canonical JSON Schema for top-level OPF `Presentation` documents. |
+| [`docs/how-opf-works.md`](./docs/how-opf-works.md) | Conceptual introduction: the document model, content shapes, catalog resolution, and the validation philosophy. Start here. |
+| [`docs/design-resolution.md`](./docs/design-resolution.md) | The design precedence algorithm (slide design → deck design → resolved theme → engine defaults) with worked examples. |
 | [`docs/schema-reference.md`](./docs/schema-reference.md) | Author-facing reference for top-level OPF fields and every presentation schema `$defs` object/type. |
 | [`docs/catalog-schema-reference.md`](./docs/catalog-schema-reference.md) | Author-facing reference for every companion catalog schema. |
 | [`docs/content-payloads.md`](./docs/content-payloads.md) | Author-facing notes for slide and region content payloads, including chart and table object shapes. |

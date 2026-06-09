@@ -2,6 +2,7 @@ import Ajv2020, { type ErrorObject, type ValidateFunction } from "ajv/dist/2020.
 import addFormats from "ajv-formats";
 
 import { catalogSchemaNames, type CatalogKind } from "./catalogs.js";
+import { catalogIds } from "./generated/catalog-ids.js";
 import type { JsonSchema } from "./json.js";
 import { schemas, type SchemaName } from "./schemas.js";
 import type { Presentation } from "./types.js";
@@ -17,6 +18,8 @@ export interface ValidationIssue {
 export interface ValidationResult {
   valid: boolean;
   errors: ValidationIssue[];
+  /** Advisory issues such as unknown catalog ids. Warnings never affect `valid`. */
+  warnings: ValidationIssue[];
   schemaName?: SchemaName;
   catalogKind?: CatalogKind;
 }
@@ -522,6 +525,175 @@ function validatePresentationSemantics(value: unknown): ValidationIssue[] {
   return issues;
 }
 
+const bareIdPattern = /^[a-z0-9][a-z0-9-]*$/;
+
+interface CatalogReferenceContext {
+  document: Record<string, unknown>;
+}
+
+function inlineCatalogEntry(context: CatalogReferenceContext, kind: CatalogKind): Record<string, unknown> | undefined {
+  const catalogsField = context.document.catalogs;
+  if (!isRecord(catalogsField)) {
+    return undefined;
+  }
+  const entry = catalogsField[kind];
+  return isRecord(entry) ? entry : undefined;
+}
+
+function unknownIdWarning(
+  kind: CatalogKind,
+  value: unknown,
+  path: string,
+  context?: CatalogReferenceContext,
+): ValidationIssue | undefined {
+  if (typeof value !== "string" || !bareIdPattern.test(value)) {
+    return undefined;
+  }
+
+  if (context) {
+    const entry = inlineCatalogEntry(context, kind);
+    if (entry) {
+      if (Array.isArray(entry.records)
+        && entry.records.some((record) => isRecord(record) && record.id === value)) {
+        return undefined;
+      }
+      if (typeof entry.source === "string") {
+        // A custom catalog source may define ids the bundled catalogs don't know about.
+        return undefined;
+      }
+    }
+  }
+
+  if ((catalogIds[kind] as readonly string[]).includes(value)) {
+    return undefined;
+  }
+
+  return semanticIssue(path, `unknown ${kind} catalog id '${value}'`, { kind, id: value });
+}
+
+function referenceObjectWarning(
+  kind: CatalogKind,
+  value: unknown,
+  path: string,
+  context: CatalogReferenceContext,
+): ValidationIssue | undefined {
+  if (typeof value === "string") {
+    return unknownIdWarning(kind, value, path, context);
+  }
+  if (isRecord(value)) {
+    return unknownIdWarning(kind, value.id, pathFor(path, "id"), context);
+  }
+  return undefined;
+}
+
+function pushIfDefined(issues: ValidationIssue[], issue: ValidationIssue | undefined): void {
+  if (issue) {
+    issues.push(issue);
+  }
+}
+
+function designReferenceWarnings(
+  design: unknown,
+  path: string,
+  context: CatalogReferenceContext,
+): ValidationIssue[] {
+  if (!isRecord(design)) {
+    return [];
+  }
+
+  const issues: ValidationIssue[] = [];
+  pushIfDefined(issues, referenceObjectWarning("themes", design.theme, pathFor(path, "theme"), context));
+  pushIfDefined(issues, referenceObjectWarning("colorSchemes", design.colorScheme, pathFor(path, "colorScheme"), context));
+  pushIfDefined(issues, referenceObjectWarning("fontSchemes", design.fontScheme, pathFor(path, "fontScheme"), context));
+
+  if (isRecord(design.theme)) {
+    const themePath = pathFor(path, "theme");
+    pushIfDefined(issues, referenceObjectWarning("colorSchemes", design.theme.colorScheme, pathFor(themePath, "colorScheme"), context));
+    pushIfDefined(issues, referenceObjectWarning("fontSchemes", design.theme.fontScheme, pathFor(themePath, "fontScheme"), context));
+  }
+
+  return issues;
+}
+
+function chartTypeWarnings(
+  payload: unknown,
+  path: string,
+  context: CatalogReferenceContext,
+): ValidationIssue[] {
+  if (!isRecord(payload)) {
+    return [];
+  }
+
+  const issues: ValidationIssue[] = [];
+  if (isRecord(payload.chart)) {
+    pushIfDefined(issues, unknownIdWarning("chartTypes", payload.chart.type, `${pathFor(path, "chart")}/type`, context));
+  }
+  if (Array.isArray(payload.blocks)) {
+    payload.blocks.forEach((block, index) => {
+      issues.push(...chartTypeWarnings(block, `${pathFor(path, "blocks")}/${index}`, context));
+    });
+  }
+  return issues;
+}
+
+function presentationReferenceWarnings(value: unknown): ValidationIssue[] {
+  if (!isRecord(value) || !Array.isArray(value.slides)) {
+    return [];
+  }
+
+  const context: CatalogReferenceContext = { document: value };
+  const issues: ValidationIssue[] = [];
+
+  // String shorthand only: an inline narrative object with an unknown id is a
+  // legitimate fully-custom narrative, not a broken reference.
+  if (typeof value.narrative === "string") {
+    pushIfDefined(issues, unknownIdWarning("narratives", value.narrative, "/narrative", context));
+  }
+
+  issues.push(...designReferenceWarnings(value.design, "/design", context));
+
+  value.slides.forEach((slide, index) => {
+    if (!isRecord(slide)) {
+      return;
+    }
+    const slidePath = `/slides/${index}`;
+    issues.push(...designReferenceWarnings(slide.design, pathFor(slidePath, "design"), context));
+    issues.push(...chartTypeWarnings(slide, slidePath, context));
+    for (const key of Object.keys(slide)) {
+      if (promotedRegionKeySet.has(key)) {
+        issues.push(...chartTypeWarnings(slide[key], pathFor(slidePath, key), context));
+      }
+    }
+  });
+
+  return issues;
+}
+
+const catalogCrossLinkFields: Partial<Record<SchemaName, Record<string, CatalogKind>>> = {
+  audience: { recommendedNarratives: "narratives", recommendedTones: "tones" },
+  purpose: { recommendedNarratives: "narratives", recommendedTones: "tones" },
+  tone: { recommendedNarratives: "narratives" },
+};
+
+function catalogCrossLinkWarnings(schemaName: SchemaName, value: unknown): ValidationIssue[] {
+  const fields = catalogCrossLinkFields[schemaName];
+  if (!fields || !isRecord(value)) {
+    return [];
+  }
+
+  const issues: ValidationIssue[] = [];
+  for (const [field, kind] of Object.entries(fields)) {
+    const links = value[field];
+    if (!Array.isArray(links)) {
+      continue;
+    }
+    links.forEach((link, index) => {
+      pushIfDefined(issues, unknownIdWarning(kind, link, `${pathFor("/", field)}/${index}`));
+    });
+  }
+  return issues;
+}
+
 function validateLanguageSemantics(value: unknown): ValidationIssue[] {
   if (!isRecord(value)) {
     return [];
@@ -540,16 +712,23 @@ export function validate(value: unknown, schemaOrKind: SchemaOrKind = "presentat
   const resolved = resolveValidator(schemaOrKind);
   const valid = resolved.validate(value) === true;
   const errors = valid ? [] : (resolved.validate.errors ?? []).map(toIssue);
+  const warnings: ValidationIssue[] = [];
 
   if (resolved.schemaName === "presentation") {
     errors.push(...validatePresentationSemantics(value));
+    warnings.push(...presentationReferenceWarnings(value));
   } else if (resolved.schemaName === "language") {
     errors.push(...validateLanguageSemantics(value));
+  }
+
+  if (resolved.schemaName) {
+    warnings.push(...catalogCrossLinkWarnings(resolved.schemaName, value));
   }
 
   return {
     valid: errors.length === 0,
     errors,
+    warnings,
     schemaName: resolved.schemaName,
     catalogKind: resolved.catalogKind,
   };

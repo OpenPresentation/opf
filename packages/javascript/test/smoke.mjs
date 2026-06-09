@@ -731,6 +731,20 @@ for (const entry of catalogEntries) {
   assert.equal(result.valid, true, `${entry.kind}: ${JSON.stringify(result.errors, null, 2)}`);
 }
 
+// Cross-links inside the bundled catalogs must resolve: a bundled record that
+// recommends an unknown narrative or tone id is a broken link in the spec.
+for (const kind of ["audiences", "purposes", "tones"]) {
+  const entry = catalogEntries.find((candidate) => candidate.kind === kind);
+  for (const record of entry.records) {
+    const result = validateCatalogRecord(kind, record);
+    assert.equal(
+      result.warnings.length,
+      0,
+      `${kind}/${record.id} has broken cross-links: ${JSON.stringify(result.warnings, null, 2)}`,
+    );
+  }
+}
+
 const invalidLanguageResult = validateCatalogRecord("languages", {
   $schema: "https://openpresentation.org/schema/opf-language/v1",
   id: "english-uk",
@@ -742,6 +756,85 @@ assert.ok(
   invalidLanguageResult.errors.some((error) => error.message.includes("Use 'en-GB' for UK English")),
   JSON.stringify(invalidLanguageResult.errors, null, 2),
 );
+
+const unknownNarrativeDoc = {
+  name: "Unknown Narrative",
+  narrative: "definitely-not-a-narrative",
+  slides: [{ title: "Slide Title" }],
+};
+const unknownNarrativeResult = validatePresentation(unknownNarrativeDoc);
+assert.equal(unknownNarrativeResult.valid, true, "unknown catalog ids must warn, never error");
+assert.ok(
+  unknownNarrativeResult.warnings.some(
+    (warning) => warning.path === "/narrative" && warning.message.includes("unknown narratives catalog id"),
+  ),
+  JSON.stringify(unknownNarrativeResult.warnings, null, 2),
+);
+assert.doesNotThrow(() => assertValid(unknownNarrativeDoc), "warnings must not throw in assertValid");
+
+assert.equal(validatePresentation({
+  name: "Known Narrative",
+  narrative: "classic-story",
+  slides: [{ title: "Slide Title" }],
+}).warnings.length, 0);
+
+// Object form with an unknown id is a fully custom inline narrative, not a broken reference.
+assert.equal(validatePresentation({
+  name: "Custom Inline Narrative",
+  narrative: { id: "my-own-arc", beats: [{ id: "hook", name: "Hook" }] },
+  slides: [{ title: "Slide Title" }],
+}).warnings.length, 0);
+
+const unknownDesignResult = validatePresentation({
+  name: "Unknown Design References",
+  design: { theme: "no-such-theme", colorScheme: { id: "no-such-scheme", accent1: "#112233" } },
+  slides: [
+    { title: "Slide Title", design: { fontScheme: "no-such-fonts" } },
+  ],
+});
+assert.equal(unknownDesignResult.valid, true);
+assert.ok(unknownDesignResult.warnings.some((warning) => warning.path === "/design/theme"));
+assert.ok(unknownDesignResult.warnings.some((warning) => warning.path === "/design/colorScheme/id"));
+assert.ok(unknownDesignResult.warnings.some((warning) => warning.path === "/slides/0/design/fontScheme"));
+
+const unknownChartTypeResult = validatePresentation({
+  name: "Unknown Chart Type",
+  slides: [{
+    title: "Slide Title",
+    left: { chart: { type: "no-such-chart", data: { columns: ["A", "B"], rows: [["x", 1]] } } },
+  }],
+});
+assert.equal(unknownChartTypeResult.valid, true);
+assert.ok(
+  unknownChartTypeResult.warnings.some(
+    (warning) => warning.path === "/slides/0/left/chart/type" && warning.message.includes("unknown chartTypes catalog id"),
+  ),
+  JSON.stringify(unknownChartTypeResult.warnings, null, 2),
+);
+
+// Inline catalog records and custom sources legitimize ids the bundled catalogs don't know.
+assert.equal(validatePresentation({
+  name: "Inline Catalog Record",
+  design: { colorScheme: "my-brand" },
+  catalogs: { colorSchemes: { records: [{ id: "my-brand", accent1: "#0F4C81" }] } },
+  slides: [{ title: "Slide Title" }],
+}).warnings.length, 0);
+
+assert.equal(validatePresentation({
+  name: "Custom Catalog Source",
+  narrative: "internal-arc",
+  catalogs: { narratives: { source: "https://catalogs.example.com/narratives" } },
+  slides: [{ title: "Slide Title" }],
+}).warnings.length, 0);
+
+const audienceTemplate = audiences.find((record) => record.id === "executives");
+const brokenAudienceResult = validateCatalogRecord("audiences", {
+  ...audienceTemplate,
+  recommendedNarratives: ["no-such-narrative", "classic-story"],
+});
+assert.equal(brokenAudienceResult.valid, true, "broken cross-links must warn, never error");
+assert.equal(brokenAudienceResult.warnings.length, 1, JSON.stringify(brokenAudienceResult.warnings, null, 2));
+assert.equal(brokenAudienceResult.warnings[0].path, "/recommendedNarratives/0");
 
 const require = createRequire(import.meta.url);
 const rawPresentation = require("../dist/spec/schemas/opf.schema.json");
@@ -760,6 +853,11 @@ for (const example of examples) {
     result.valid,
     true,
     `Example ${example.slug} failed validation: ${JSON.stringify(result.errors, null, 2)}`,
+  );
+  assert.equal(
+    result.warnings.length,
+    0,
+    `Example ${example.slug} references unknown catalog ids: ${JSON.stringify(result.warnings, null, 2)}`,
   );
 }
 for (const gallery of galleries) {
