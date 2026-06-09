@@ -93,6 +93,9 @@ function mediaTypeForSpecFile(file) {
   if (file.endsWith(".yaml") || file.endsWith(".yml")) {
     return "application/yaml";
   }
+  if (file.endsWith(".md")) {
+    return "text/markdown";
+  }
   return "application/octet-stream";
 }
 
@@ -180,6 +183,29 @@ async function generateCatalogs() {
   await fs.writeFile(path.join(generatedRoot, "catalogs.ts"), lines.join("\n"));
 }
 
+async function generateCatalogIds() {
+  // Lightweight id-only view of the bundled catalogs so the validator can
+  // check references without pulling full catalog records into its bundle.
+  const lines = [generatedHeader("spec/catalogs/<catalog-kind>/*.json")];
+  lines.push("export const catalogIds = {");
+  for (const definition of catalogDefinitions) {
+    const catalogDir = path.join(catalogRoot, definition.dir);
+    const index = await readJson(path.join(catalogDir, "index.json"));
+    const files = await orderedCatalogFiles(definition, catalogDir, index);
+    const ids = [];
+    for (const file of files) {
+      const record = await readJson(path.join(catalogDir, file));
+      if (typeof record.id === "string") {
+        ids.push(record.id);
+      }
+    }
+    lines.push(`  ${definition.kind}: ${asTs(ids)},`);
+  }
+  lines.push("} as const;", "");
+
+  await fs.writeFile(path.join(generatedRoot, "catalog-ids.ts"), lines.join("\n"));
+}
+
 async function generateSpecFiles() {
   const files = await collectFiles(specRoot);
   const entries = files.map((file) => ({
@@ -227,5 +253,6 @@ await fs.rm(generatedRoot, { recursive: true, force: true });
 await fs.mkdir(generatedRoot, { recursive: true });
 await generateSchemas();
 await generateCatalogs();
+await generateCatalogIds();
 await generateSpecFiles();
 await generateTypes();

@@ -149,6 +149,19 @@ import { repoReadme } from "@openpresentation/opf/repo-readme";
 console.log(repoReadme.split("\n").slice(0, 3).join("\n"));
 ```
 
+Validation results carry `errors` (structural problems that make `valid`
+false) and `warnings` (advisory issues such as unknown catalog ids in
+`narrative`, `design`, or chart `type` references — these never affect
+`valid`). Documents that declare matching inline `catalogs.<kind>.records[]`
+or a custom `catalogs.<kind>.source` are exempt from unknown-id warnings for
+that kind.
+
+```ts
+const result = validatePresentation(deck);
+if (!result.valid) console.error(result.errors);
+for (const warning of result.warnings) console.warn(warning.path, warning.message);
+```
+
 Validate catalog records locally:
 
 ```ts

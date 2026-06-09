@@ -210,7 +210,50 @@ Timeline-specific fields are grouped under `timeline`. An array value is shortha
 
 ## Regions
 
-The same payload objects work inside regions:
+Region keys address a 3×3 grid of rows (`top`, `middle`, `bottom`) and columns (`left`, `center`, `right`):
+
+```
+                  left                 center                 right
+         +--------------------+--------------------+--------------------+
+   top   |  top:left          |  top:center        |  top:right         |
+         +--------------------+--------------------+--------------------+
+  middle |  middle:left       |  middle:center     |  middle:right      |
+         +--------------------+--------------------+--------------------+
+  bottom |  bottom:left       |  bottom:center     |  bottom:right      |
+         +--------------------+--------------------+--------------------+
+```
+
+- A bare column key (`left`) spans all three rows; a bare row key (`top`) spans all three columns.
+- `+` spans adjacent rows or columns: `center+right`, `top+middle`.
+- `row:column` combines the two: `top:left`, `middle+bottom:center+right`.
+- Keys on one slide must not overlap, and regions cannot be mixed with root payload fields.
+
+Spans compose into common slide shapes:
+
+```
+  "left" + "center+right"             "top" + "middle+bottom"
+  (sidebar + main)                    (headline band + body)
+  +----------+------------------+     +-------------------------------+
+  |          |                  |     |              top              |
+  |          |                  |     +-------------------------------+
+  |   left   |  center+right    |     |                               |
+  |          |                  |     |         middle+bottom         |
+  |          |                  |     |                               |
+  +----------+------------------+     +-------------------------------+
+
+  "top" + "middle+bottom:left" + "middle+bottom:center+right"
+  (headline band, then sidebar + main)
+  +---------------------------------------------+
+  |                     top                     |
+  +---------------+-----------------------------+
+  |               |                             |
+  | middle+bottom | middle+bottom:center+right  |
+  | :left         |                             |
+  |               |                             |
+  +---------------+-----------------------------+
+```
+
+The same payload objects work inside regions — here, the sidebar-plus-main shape:
 
 ```json
 {

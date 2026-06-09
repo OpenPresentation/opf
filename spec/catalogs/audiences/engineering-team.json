@@ -9,7 +9,7 @@
   "decisionPower": "advisory",
   "attentionBudgetMinutes": 45,
   "recommendedNarratives": [
-    "engineering-update",
+    "status-update",
     "challenge-resolution",
     "innovation",
     "weekly-progress"
