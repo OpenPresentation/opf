@@ -54,8 +54,6 @@ jobs:
       - name: Verify npm package contents
         run: pnpm --filter @openpresentation/opf pack:dry-run
 
-      - name: Publish to npm with provenance
+      - name: Publish to npm
         working-directory: packages/javascript
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish --access public --provenance
+        run: npm publish --access public
