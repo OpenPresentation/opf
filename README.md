@@ -140,6 +140,7 @@ node packages/cli/dist/index.js validate path/to/deck.opf.json
 | [`docs/catalog-schema-reference.md`](./docs/catalog-schema-reference.md) | Author-facing reference for every companion catalog schema. |
 | [`docs/content-payloads.md`](./docs/content-payloads.md) | Author-facing notes for slide and region content payloads, including chart and table object shapes. |
 | [`docs/examples.md`](./docs/examples.md) | Guide to the expanded scenario-oriented examples under `examples/gallery/`. |
+| [`docs/release-process.md`](./docs/release-process.md) | Maintainer runbook for tagging, trusted npm publishing, verification, and GitHub release notes. |
 | [`spec/schemas/*.schema.json`](./spec/schemas) | Companion schemas for catalog records and sub-objects. |
 | [`spec/catalogs/<catalog-kind>/`](./spec/catalogs) | Canonical bundled catalog records. |
 | [`spec/openapi.yaml`](./spec/openapi.yaml) | Optional reference OpenAPI contract for downstream services that choose to expose OPF over HTTP. OpenPresentation does not host this API. |
