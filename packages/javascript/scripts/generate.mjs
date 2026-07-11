@@ -34,7 +34,7 @@ const catalogDefinitions = [
   { kind: "themes", schemaName: "theme", dir: "themes" },
   { kind: "layouts", schemaName: "layout", dir: "layouts" },
   { kind: "chartTypes", schemaName: "chartType", dir: "chart-types" },
-  { kind: "narratives", schemaName: "narrative", dir: "narratives", indexRecordsKey: "templates" },
+  { kind: "narratives", schemaName: "narrative", dir: "narratives" },
   { kind: "socialPlatforms", schemaName: "socialPlatform", dir: "social-platforms" },
   { kind: "languages", schemaName: "language", dir: "languages" },
   { kind: "colorSchemes", schemaName: "colorScheme", dir: "color-schemes" },
