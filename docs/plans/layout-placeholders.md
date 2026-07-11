@@ -1,5 +1,7 @@
 # Folding layout placeholders into the OPF layout schema
 
+> **Status:** Partially shipped (April 2026, before the first npm release). The `placeholders` array and design-override properties shipped, but the shipped placeholder enum uses `text`/`list` (no `body` type), and the `content[]`/`slot` binding mechanism described below was NOT shipped — layout placeholders other than title/subtitle/tag are currently renderer/picker hints only. The binding design remains an open question.
+
 Plan for adding a `placeholders` field to [`spec/schemas/layout.schema.json`](../../spec/schemas/layout.schema.json), regenerating the 400 per-layout JSONs in [`spec/catalogs/layouts/`](../../spec/catalogs/layouts/) from the database extract at [`spec/catalogs/layouts/extract/`](../../spec/catalogs/layouts/extract/), and making the `title` / `subtitle` defaulting promise in [`opf.schema.json:49,62`](../../spec/schemas/opf.schema.json) achievable end-to-end.
 
 ## Executive summary — key decisions
