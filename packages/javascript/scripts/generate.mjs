@@ -278,6 +278,10 @@ async function generateCatalogIds() {
   await fs.writeFile(path.join(generatedRoot, "catalog-ids.ts"), lines.join("\n"));
 }
 
+function asUnion(values) {
+  return values.map((value) => `  | ${JSON.stringify(value)}`).join("\n");
+}
+
 async function generateSpecFiles() {
   const files = await collectFiles(specRoot);
   const entries = files.map((file) => ({
@@ -288,13 +292,26 @@ async function generateSpecFiles() {
   }));
   const kinds = [...new Set(entries.map((entry) => entry.kind))];
 
+  // `SpecFilePath` and `SpecFileKind` are public literal unions, so they are
+  // emitted directly as string-literal union types from the data. The entry
+  // array itself is typed structurally (`readonly SpecFileEntry[]`) instead
+  // of via `as const`: inferring a literal object type per spec file is what
+  // previously re-serialized every entry into dist/spec-files.d.ts (~130 KB).
   const lines = [generatedHeader("spec/**/*")];
-  lines.push(`export const specFileEntries = ${asTs(entries)} as const;`, "");
-  lines.push(`export const specFilePaths = ${asTs(files)} as const;`, "");
-  lines.push(`export const specFileKinds = ${asTs(kinds)} as const;`, "");
-  lines.push("export type SpecFileEntry = typeof specFileEntries[number];", "");
-  lines.push("export type SpecFilePath = typeof specFilePaths[number];", "");
-  lines.push("export type SpecFileKind = typeof specFileKinds[number];", "");
+  lines.push("/** Path of a file under `spec/`, relative to the spec root. */");
+  lines.push(`export type SpecFilePath =\n${asUnion(files)};`, "");
+  lines.push("/** Category of a bundled spec file. */");
+  lines.push(`export type SpecFileKind =\n${asUnion(kinds)};`, "");
+  lines.push("/** One entry per file shipped under `@openpresentation/opf/spec/`. */");
+  lines.push("export interface SpecFileEntry {");
+  lines.push("  readonly path: SpecFilePath;");
+  lines.push("  readonly packagePath: string;");
+  lines.push("  readonly kind: SpecFileKind;");
+  lines.push("  readonly mediaType: string;");
+  lines.push("}", "");
+  lines.push(`export const specFileEntries: readonly SpecFileEntry[] = ${asTs(entries)};`, "");
+  lines.push(`export const specFilePaths: readonly SpecFilePath[] = ${asTs(files)};`, "");
+  lines.push(`export const specFileKinds: readonly SpecFileKind[] = ${asTs(kinds)};`, "");
 
   await fs.writeFile(path.join(generatedRoot, "spec-files.ts"), lines.join("\n"));
 }
