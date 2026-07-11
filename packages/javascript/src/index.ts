@@ -15,6 +15,7 @@ export {
   schemaEntries,
   schemaNames,
 } from "./schemas.js";
+export type { SchemaEntry } from "./schemas.js";
 
 export {
   audiences,
@@ -33,6 +34,12 @@ export {
   catalogIndexes,
   catalogSchemaNames,
   catalogKinds,
+} from "./catalogs.js";
+export type {
+  CatalogEntry,
+  CatalogIndex,
+  CatalogIndexRecord,
+  CatalogRecord,
 } from "./catalogs.js";
 
 export {
