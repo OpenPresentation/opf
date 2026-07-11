@@ -8,7 +8,7 @@
     "typecheck": "pnpm --filter @openpresentation/opf typecheck && pnpm --filter @openpresentation/cli typecheck",
     "check:text": "node scripts/check-text-integrity.mjs",
     "check:spec": "node scripts/check-spec-integrity.mjs",
-    "test": "pnpm --filter @openpresentation/opf test && pnpm check:text && pnpm check:spec",
+    "test": "pnpm --filter @openpresentation/opf test && pnpm check:text && pnpm check:spec && pnpm --filter @openpresentation/cli test",
     "pack:dry-run": "pnpm --filter @openpresentation/opf pack:dry-run"
   },
   "engines": {

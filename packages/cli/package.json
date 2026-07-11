@@ -11,7 +11,8 @@
   "scripts": {
     "build": "tsup",
     "typecheck": "pnpm --filter @openpresentation/opf build && tsc --noEmit",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "test": "pnpm run build && node --test \"test/*.test.mjs\""
   },
   "dependencies": {
     "@openpresentation/opf": "workspace:*"
