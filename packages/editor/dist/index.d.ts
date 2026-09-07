@@ -1,3 +1,5 @@
+import type { PaginationOptions, PaginationResult } from "@openpresentation/opf/pagination";
+import type { Composition, ComposeSlideOptions, SlideComposition } from "@openpresentation/opf/composition";
 export declare const packageName = "@openpresentation/opf-editor";
 
 export declare const releaseLane: Readonly<{
@@ -18,7 +20,8 @@ export declare const runtimePolicy: Readonly<{
 export type JsonPatchOperation =
   | { op: "add"; path: string; value: unknown }
   | { op: "replace"; path: string; value: unknown }
-  | { op: "remove"; path: string };
+  | { op: "remove"; path: string }
+  | { op: "test"; path: string; value: unknown };
 
 export interface OPFValidationSummary {
   valid: boolean;
@@ -54,6 +57,9 @@ export interface EditorEvent {
 }
 
 export interface EditorSession {
+  paginateSlide(slideIndex: number, options?: PaginationOptions, meta?: Record<string, unknown>): { change: EditorChange | null; pagination: PaginationResult };
+  composeSlide(slideIndex: number, options?: ComposeSlideOptions): SlideComposition;
+  setComposition(slideIndex: number, composition: Composition, meta?: Record<string, unknown>): EditorChange;
   readonly document: unknown;
   readonly validation: OPFValidationSummary;
   readonly canUndo: boolean;
@@ -62,6 +68,7 @@ export interface EditorSession {
   subscribe(listener: (event: EditorEvent) => void): () => void;
   get(path: string | string[], fallback?: unknown): unknown;
   set(path: string | string[], value: unknown, meta?: Record<string, unknown>): EditorChange;
+  setGroupComposition(path: string, composition: Composition, meta?: Record<string, unknown>): EditorChange;
   setCatalog(path: string | string[], catalogKind: string, id: string, meta?: Record<string, unknown>): EditorChange;
   applyPatch(operations: JsonPatchOperation[], meta?: Record<string, unknown>): EditorChange;
   undo(meta?: Record<string, unknown>): EditorChange | null;

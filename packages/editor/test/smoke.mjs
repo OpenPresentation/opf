@@ -121,3 +121,40 @@ function fakeElement(attributes = {}) {
     }
   };
 }
+
+const dynamicEditor = createEditorSession({ slides: [{ blocks: [{ text: "A" }, { text: "B" }] }] });
+const originalComposition = dynamicEditor.composeSlide(0);
+dynamicEditor.setComposition(0, { mode: "column", weights: [2, 1] });
+assert.equal(dynamicEditor.composeSlide(0).composition.mode, "column");
+dynamicEditor.undo();
+assert.deepEqual(dynamicEditor.composeSlide(0), originalComposition);
+dynamicEditor.redo();
+assert.equal(dynamicEditor.composeSlide(0).composition.mode, "column");
+assert.throws(() => dynamicEditor.setComposition(0, { mode: "invalid" }));
+assert.throws(() => dynamicEditor.applyPatch([{ op: "replace", path: "/slides/01", value: {} }]));
+const specialKey = applyJsonPatch({}, [{ op: "add", path: "/__proto__", value: { safe: true } }]);
+assert.equal(Object.hasOwn(specialKey, "__proto__"), true);
+assert.equal(Object.getPrototypeOf(specialKey), Object.prototype);
+
+const nestedSession = createEditorSession({ slides: [{ blocks: [{ blocks: [{ text: "One" }, { text: "Two" }] }] }] });
+const nestedOriginal = nestedSession.document;
+nestedSession.setGroupComposition('slides.0.blocks.0', { mode: 'column' });
+assert.equal(nestedSession.composeSlide(0).groups[0].composition.mode, 'column');
+nestedSession.undo(); assert.deepEqual(nestedSession.document, nestedOriginal);
+nestedSession.redo(); assert.equal(nestedSession.get('slides.0.blocks.0.composition.mode'), 'column');
+assert.throws(() => nestedSession.setGroupComposition('slides.0.blocks.0.blocks.0', { mode: 'row' }));
+assert.throws(() => nestedSession.setGroupComposition('slides.0', { mode: 'row' }));
+assert.throws(() => nestedSession.setGroupComposition('slides.0.blocks.0', { mode: 'invalid' }));
+
+const longText = 'Keep these words on readable slides. '.repeat(150);
+const pageEditor = createEditorSession({slides:[{id:'draft',title:'Draft',text:longText},{id:'draft--2',text:'Later slide'}]});
+const pageBefore = pageEditor.document;
+const pageResult = pageEditor.paginateSlide(0);
+assert.ok(pageResult.pagination.slides.length>1);
+assert.equal(pageEditor.document.slides.slice(0,-1).map(slide=>slide.text).join(''),longText);
+pageEditor.undo(); assert.deepEqual(pageEditor.document,pageBefore);
+pageEditor.redo(); assert.equal(pageEditor.document.slides.length,pageResult.pagination.slides.length+1);
+pageEditor.undo();
+assert.throws(()=>pageEditor.paginateSlide(0,{maxSlides:1}));
+assert.deepEqual(pageEditor.document,pageBefore);
+assert.equal(pageEditor.paginateSlide(1).change,null);

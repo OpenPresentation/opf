@@ -1,8 +1,26 @@
+import { paginateSlide } from "@openpresentation/opf/pagination";
+import { composeSlide, resolveCanvasDimensions, resolveFontFamilies } from "@openpresentation/opf/composition";
 import {
   catalogKinds,
   catalogs as bundledCatalogs,
   validatePresentation
 } from "@openpresentation/opf";
+
+function resolveCompositionOptions(document, slideIndex, options = {}) {
+      const slide = document.slides?.[slideIndex];
+      if (!Number.isInteger(slideIndex) || !slide) throw new OPFEditorError("slide-index-out-of-range", "Slide index is out of range.");
+      const inline = document.catalogs?.layouts?.records ?? [];
+      const layout = options.layout ?? inline.find(record => record.id === slide.layout)
+        ?? bundledCatalogs.layouts.find(record => record.id === slide.layout);
+      const themeReference = slide.design?.theme ?? document.design?.theme ?? "minimal";
+      const themeId = typeof themeReference === "string" ? themeReference : themeReference.id;
+      const theme = document.catalogs?.themes?.records?.find(record => record.id === themeId)
+        ?? bundledCatalogs.themes.find(record => record.id === themeId);
+      const reference = slide.design?.fontScheme ?? document.design?.fontScheme ?? theme?.fontScheme ?? "roboto";
+      const id = typeof reference === "string" ? reference : reference.id;
+      const fontScheme = {...(document.catalogs?.fontSchemes?.records?.find(record=>record.id===id) ?? bundledCatalogs.fontSchemes.find(record=>record.id===id)),...(typeof reference === "object" ? reference : {})};
+      return { ...resolveCanvasDimensions(slide.design?.dimensions ?? document.design?.dimensions ?? theme?.dimensions), fonts:resolveFontFamilies(fontScheme), ...options, layout, slideIndex };
+}
 
 export const packageName = "@openpresentation/opf-editor";
 
@@ -135,8 +153,10 @@ export function createEditorSession(input, options = {}) {
   const redoStack = [];
   const listeners = new Set();
   const rejectInvalid = Boolean(options.rejectInvalid);
+  let snapshotCache;
 
   function emit(event) {
+    snapshotCache = undefined;
     const snapshot = editor.snapshot();
     for (const listener of listeners) listener({ ...event, snapshot });
   }
@@ -156,6 +176,9 @@ export function createEditorSession(input, options = {}) {
       });
     }
 
+    if (patches.every(patch => patch.op === "test")) return {
+      document: clone(document), patches: clonePatchOperations(patches), inversePatches: [], validation: nextValidation
+    };
     document = next;
     validation = nextValidation;
     undoStack.push({ patches: clonePatchOperations(patches), inversePatches, meta });
@@ -190,14 +213,14 @@ export function createEditorSession(input, options = {}) {
       return redoStack.length > 0;
     },
     snapshot() {
-      return {
+      return snapshotCache ??= freezeSnapshot({
         document: clone(document),
-        validation,
+        validation: clone(validation),
         canUndo: undoStack.length > 0,
         canRedo: redoStack.length > 0,
         undoDepth: undoStack.length,
         redoDepth: redoStack.length
-      };
+      });
     },
     subscribe(listener) {
       if (typeof listener !== "function") {
@@ -214,6 +237,28 @@ export function createEditorSession(input, options = {}) {
         ...meta,
         path: normalizePatchPath(path)
       });
+    },
+    composeSlide(slideIndex, options = {}) {
+      return composeSlide(document.slides?.[slideIndex], resolveCompositionOptions(document, slideIndex, options));
+    },
+    paginateSlide(slideIndex, options = {}, meta = {}) {
+      const resolved = resolveCompositionOptions(document, slideIndex, options);
+      const pagination = paginateSlide(document.slides[slideIndex], { ...resolved, reservedIds: document.slides.map(slide => slide.id).filter(Boolean) });
+      if (pagination.slides.length === 1) return { change: null, pagination };
+      const slides = [...document.slides];
+      slides.splice(slideIndex, 1, ...pagination.slides);
+      const change = editor.set('slides', slides, { ...meta, rejectInvalid: true, pagination: pagination.pages });
+      return { change, pagination };
+    },
+    setComposition(slideIndex, composition, meta = {}) {
+      if (!Number.isInteger(slideIndex) || !document.slides?.[slideIndex]) throw new OPFEditorError("slide-index-out-of-range", "Slide index is out of range.");
+      return editor.set(`slides.${slideIndex}.composition`, composition, { ...meta, rejectInvalid: true });
+    },
+    setGroupComposition(path, composition, meta = {}) {
+      const pointer = normalizePatchPath(path);
+      const group = editor.get(pointer);
+      if (!pointer.startsWith("/slides/") || !group || !Array.isArray(group.blocks) || /^\/slides\/[^/]+$/.test(pointer)) throw new OPFEditorError("not-a-content-group", "Select a content group containing blocks.");
+      return editor.set(`${pointer}/composition`, composition, { ...meta, rejectInvalid: true });
     },
     setCatalog(path, catalogKind, id, meta = {}) {
       return setCatalogId(editor, path, catalogKind, id, meta);
@@ -301,10 +346,11 @@ export function createSvgTraceBinding(root, editor, options = {}) {
     if (options.interactive !== false) {
       ensureInteractiveTraceElement(element);
 
-      const onClick = (event) => select(element, event);
+      const onClick = (event) => { event.stopPropagation?.(); select(element, event); };
       const onKeydown = (event) => {
         if (event.key === "Enter" || event.key === " ") {
           event.preventDefault?.();
+          event.stopPropagation?.();
           select(element, event);
         }
       };
@@ -520,11 +566,13 @@ function normalizeOperation(operation) {
   if (!operation || typeof operation !== "object") {
     throw new OPFEditorError("invalid-patch-operation", "JSON Patch operation must be an object.", { operation });
   }
-  if (!["add", "replace", "remove"].includes(operation.op)) {
+  if (!["add", "replace", "remove", "test"].includes(operation.op)) {
     throw new OPFEditorError("unsupported-patch-operation", `Unsupported JSON Patch operation: ${operation.op}.`, {
       operation
     });
   }
+  if (operation.op === "test" && !Object.prototype.hasOwnProperty.call(operation, "value"))
+    throw new OPFEditorError("invalid-patch-operation", "A test operation requires a value.");
   const normalized = {
     op: operation.op,
     path: normalizePatchPath(operation.path)
@@ -556,8 +604,20 @@ function readAtPath(document, segments) {
   return current;
 }
 
+function jsonEqual(a, b) {
+  if (a === b) return true;
+  if (a === null || b === null || typeof a !== "object" || typeof b !== "object" || Array.isArray(a) !== Array.isArray(b)) return false;
+  const keys = Object.keys(a);
+  return keys.length === Object.keys(b).length && keys.every(key => Object.prototype.hasOwnProperty.call(b, key) && jsonEqual(a[key], b[key]));
+}
 function applyJsonPatchOperation(document, operation) {
   const segments = parseJsonPointer(operation.path);
+  if (operation.op === "test") {
+    const current = readAtPath(document, segments);
+    if (current === MISSING || !jsonEqual(current, operation.value))
+      throw new OPFEditorError("patch-test-failed", `The value changed at ${operation.path || "/"}.`, {path: operation.path});
+    return clone(document);
+  }
   if (segments.length === 0) {
     if (operation.op === "remove") return undefined;
     return clone(operation.value);
@@ -596,6 +656,9 @@ function pathParentIsArray(document, path) {
 }
 
 function applyArrayOperation(parent, key, operation) {
+  if (!/^(0|[1-9][0-9]*)$/.test(key) && !(key === "-" && operation.op === "add")) {
+    throw new OPFEditorError("invalid-array-index", `Invalid array index in patch path ${operation.path}.`, { path: operation.path });
+  }
   const index = key === "-" ? parent.length : Number(key);
   if (!Number.isInteger(index) || index < 0 || index > parent.length) {
     throw new OPFEditorError("invalid-array-index", `Invalid array index in patch path ${operation.path}.`, {
@@ -622,7 +685,7 @@ function applyArrayOperation(parent, key, operation) {
 
 function applyObjectOperation(parent, key, operation) {
   if (operation.op === "add") {
-    parent[key] = clone(operation.value);
+    Object.defineProperty(parent, key, { value: clone(operation.value), writable: true, enumerable: true, configurable: true });
     return;
   }
 
@@ -706,4 +769,12 @@ function resolveDomDocument(documentRef) {
     throw new OPFEditorError("missing-document", "DOM components require a document-like object.");
   }
   return resolved;
+}
+
+function freezeSnapshot(value) {
+  if (value && typeof value === "object" && !Object.isFrozen(value)) {
+    Object.values(value).forEach(freezeSnapshot);
+    Object.freeze(value);
+  }
+  return value;
 }

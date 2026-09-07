@@ -1,0 +1,10 @@
+export type Schema = Record<string, any>;
+export declare const opfSchemas: Record<string, Schema>;
+export declare function resolveSchema(schema: Schema, root?: Schema): Schema;
+export declare function schemaVariants(schema: Schema, root?: Schema): Schema[];
+export declare function schemaType(schema: Schema, value?: unknown): string;
+export declare function activeSchema(schema: Schema, value: unknown, root?: Schema): Schema;
+export declare function schemaAtPath(document: unknown, path: string | string[], root?: Schema): Schema;
+export declare function schemaLabel(schema: Schema, index?: number): string;
+export declare function createSchemaValue(schema: Schema, root?: Schema): any;
+export declare function listSchemaFields(): Array<{schema:string;path:string;name:string;description:string;reference:string|null;type:string|null;values:unknown[]|null}>;
