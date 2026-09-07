@@ -1,3 +1,5 @@
+import type { EmbeddedFont } from "./fonts.js";
+import type { SlideComposition, LayoutDiagnostic, TextMeasurement } from "@openpresentation/opf/composition";
 export declare const packageName = "@openpresentation/opf-render";
 
 export declare const releaseLane: Readonly<{
@@ -30,6 +32,11 @@ export declare const engineDefaults: Readonly<{
 }>;
 
 export interface RenderSvgOptions {
+  textMeasurement?: TextMeasurement;
+  embeddedFonts?: EmbeddedFont[];
+  strictAssets?: boolean;
+  imageResolver?: (src: string | undefined, context: { asset: unknown; path: string }) => string | null | undefined;
+  onDiagnostic?: (diagnostic: LayoutDiagnostic) => void;
   slideIndex?: number;
   trace?: boolean;
   catalogs?: Record<string, { records?: unknown[] } | unknown[]>;
@@ -58,6 +65,7 @@ export interface ResolvedPresentation {
 }
 
 export interface ResolvedSlide {
+  geometry: SlideComposition;
   index: number;
   path: string;
   slide: unknown;

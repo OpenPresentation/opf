@@ -1,6 +1,6 @@
 # OPF Render
 
-Deterministic local renderer for Open Presentation Format documents. This repo is the Phase 1 toolkit lane for SVG, PNG, and PDF output. The current package implements the validation, catalog resolution, placeholder binding, deterministic text layout, and SVG core that PNG/PDF conversion will build on.
+Deterministic local renderer for Open Presentation Format documents. The shared SVG core implements validation, catalog resolution, placeholder binding and text layout. Node APIs additionally convert SVG to PNG and raster-backed PDF.
 
 ## Scope
 
@@ -31,6 +31,25 @@ const pdf = await svgToPdf(svgs, { scale: 1 });
 ```
 
 `svgToPng` returns PNG bytes for one SVG. `svgToPdf` accepts one SVG or an array of SVGs and returns PDF bytes with one slide per page. The SVG page `width`/`height` or `viewBox` determines the PDF page size; `scale` controls raster density only.
+
+## Browser preview and fonts (preview APIs)
+
+Use `@openpresentation/opf-render/svg` for browser rendering without Node dependencies. Browser-aware bundlers also select this shared SVG implementation for the root import; Node's root import retains PNG/PDF conversion.
+
+```js
+import { renderSvg } from '@openpresentation/opf-render/svg';
+import { loadBrowserFontRegistry } from '@openpresentation/opf-render/fonts-browser';
+
+const fonts = await loadBrowserFontRegistry(fontFileEntries);
+container.innerHTML = renderSvg(presentation, {
+  textMeasurement: fonts.textMeasurement,
+});
+// fonts.dispose() when its canvases are unmounted.
+```
+
+Each entry contains `url` or `data: Uint8Array`, with optional `family`, `weight`, `italic` and `license`. The loader registers browser FontFaces using the same bytes used for measurement. It fetches only URLs supplied by the host, supports an AbortSignal and custom fetch, and awaits font loading. Use pinned static faces and retain their licenses. For standalone SVG export also pass `embeddedFonts: fonts.embeddedFonts`; embedding is unnecessary for each live draft after browser fonts are loaded.
+
+The new entries require coordinated preview builds of OPF and the toolkit. The sibling OPF repository's `pnpm pack:ecosystem` prepares local npm tarballs; older registry releases do not include these APIs. See `opf/docs/live-editor.md` for installation and the fidelity contract. Identical SVG geometry does not guarantee identical raster pixels across browser engines or PowerPoint.
 
 ## Runtime Policy
 
@@ -80,3 +99,11 @@ Required first-publish setup:
 3. Publish by pushing a git tag matching `opf-render-v<version>` or `@openpresentation/opf-render@v<version>` (the tag must match the `package.json` version), or by manually running the workflow after CI passes.
 
 This repo does not require an npm automation token when Trusted Publishing is configured.
+
+## Shared dynamic composition (local development)
+
+The current checkout uses `@openpresentation/opf/composition` for portable geometry. Slides can select `auto`, `row`, `column`, or `grid`, set weighted tracks, and request path-specific overflow diagnostics. See the sibling OPF repo's `docs/dynamic-composition.md` for the complete contract.
+
+These new APIs are pending a coordinated OPF release. With all repos checked out beside each other, build OPF and run `node scripts/link-ecosystem.mjs` from that repo before building this package. Run `pnpm test:ecosystem` in OPF to check editing, rendering, editable PowerPoint geometry, and import together. The published OPF 0.3.0 package does not contain the new composition entry point; downstream publication must wait for the new core release and an updated minimum dependency version.
+
+For actual font measurement, load `loadBundledFontRegistry()` from `@openpresentation/opf-render/fonts-node`, then pass its `textMeasurement` to rendering and its `embeddedFonts` to SVG export. Pass its `fontFiles` to PNG/PDF conversion. The browser-safe `@openpresentation/opf-render/fonts` entry accepts local font bytes. Missing fonts/glyphs fail explicitly; aliases and fallback are opt-in and recorded in `registry.substitutions`. Bundled font license notices travel with embedded SVG fonts.

@@ -139,3 +139,26 @@ function listOpfExamples(dir) {
   }
   return files.sort();
 }
+
+// Dynamic composition must preserve content and expose actionable diagnostics.
+const dynamic = { slides: [{ title: "Visible title", layout: "text-2x", blocks: [
+  { text: "First" }, { text: "Second" }, { text: "Third" }, { text: "Fourth" }
+] }] };
+const geometry = resolvePresentation(dynamic).slides[0].geometry;
+assert.equal(geometry.items.length, 5);
+assert.match(renderSvg(dynamic), /Visible title/);
+assert.equal(resolvePresentation({ slides: [{ text: "Contrast" }], design: { background: "#000" } }).slides[0].design.colors.text, "#FFFFFF");
+assert.deepEqual(resolvePresentation({ slides: [{ text: "Portrait" }], design: { dimensions: { widthInches: 7.5, heightInches: 40 / 3 } } }).slides[0].design.dimensions, { width: 720, height: 1280 });
+const overflowMessages = [];
+const overflowing = renderSvg({ slides: [{ text: "Preserve this sentence. ".repeat(1000) }] }, { onDiagnostic: value => overflowMessages.push(value) });
+assert.match(overflowing, /data-opf-overflow="true"/);
+assert.equal(overflowMessages.filter(value => value.code === "text-overflow").length, 1);
+assert.throws(() => renderSvg({ slides: [{ image: "https://example.com/image.png" }] }, { strictAssets: true }));
+
+assert.match(renderSvg(minimalDeck), /font-family="[^"]*, sans-serif"/);
+
+const nestedDiagnostics = [];
+const nestedSvg = renderSvg({ slides: [{ blocks: [{ composition: {minFontSize: 24}, blocks: [{text: 'Nested overflow text. '.repeat(1000)}] }] }] }, { trace: true, onDiagnostic: issue => nestedDiagnostics.push(issue) });
+assert.match(nestedSvg, /slides.0.blocks.0.blocks.0.text/);
+assert.match(nestedSvg, /font-size="24"/);
+assert.ok(nestedDiagnostics.some(issue => issue.path === 'slides.0.blocks.0.blocks.0.text'));
