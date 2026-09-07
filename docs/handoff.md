@@ -2,14 +2,14 @@
 
 The coordinated working branch is `codex/opf-ecosystem-20260907` in these repositories:
 
-| Checkout | Origin |
+| Checkout | Draft PR |
 | --- | --- |
-| opf | https://github.com/OpenPresentation/opf |
-| opf-render | https://github.com/OpenPresentation/opf-render |
-| opf-editor | https://github.com/OpenPresentation/opf-editor |
-| opf-pptx | https://github.com/OpenPresentation/opf-pptx |
-| pptx-gallery | https://github.com/Data-Advantage/pptx-gallery |
-| openpresentation-site | https://github.com/Data-Advantage/openpresentation-site |
+| opf | https://github.com/OpenPresentation/opf/pull/9 |
+| opf-render | https://github.com/OpenPresentation/opf-render/pull/1 |
+| opf-editor | https://github.com/OpenPresentation/opf-editor/pull/1 |
+| opf-pptx | https://github.com/OpenPresentation/opf-pptx/pull/1 |
+| pptx-gallery | https://github.com/Data-Advantage/pptx-gallery/pull/9 |
+| openpresentation-site | https://github.com/Data-Advantage/openpresentation-site/pull/5 |
 
 Clone the six branches into sibling directories. Use Node.js 24 and pnpm 10.33.2. From the parent directory:
 
@@ -43,8 +43,18 @@ Start the editor with `python3 -m http.server 3102 --directory artifacts/editor`
 
 For public-site documentation built from a remote branch instead of the sibling checkout, use `OPF_REPO_REF=codex/opf-ecosystem-20260907 OPF_FORCE_SYNC=1 pnpm sync:opf`.
 
+Production builds use `OPF_LOCAL_WORKSPACE=1 pnpm build` in `pptx-gallery` after linking, and `OPF_LOCAL_SOURCE=../opf pnpm build` in `openpresentation-site`. The gallery workspace flag lets Turbopack resolve the sibling package. On hosted builds, set the site source ref explicitly until the coordinated OPF PR is merged.
+
+## Checkpoint verification
+
+All six branches are pushed to their origins. Newer upstream renderer, gallery and site changes have been merged into these checkpoint branches. The merged gallery passes its 106 unit tests, production build, nine served-document smoke checks, and validation/rendering of all 854 gallery documents. The merged public site passes its production build and verification of 581 raw file hashes, six downloadable portable skills, seven agent guide pages, and schema/text discovery endpoints. The browser checks confirmed that the gallery retains both dynamic composition and the newer related-layout design.
+
+OPF [PR #8](https://github.com/OpenPresentation/opf/pull/8) remains a separate health-pass branch, `claude/repo-branch-status-rl7pwd`. Fixes for Node 20 test discovery and the publish breaking-change gate are committed and pushed there at `8b7c45d`; both Node 20 and Node 24 CI jobs pass. That PR is not yet merged or incorporated into the six checkpoint branches. Its test migration, schema housekeeping and package slimming need reconciliation with this work before release.
+
 ## Current scope and remaining work
 
 The branch includes shared dynamic layout and pagination, loaded-font measurement and substitutes, rich text/lists, CSV/JSON import, an installable agent CLI, six portable skills, schema-driven properties, copy/import/galleries, canvas resizing/moving/creation/deletion, native PPTX improvements, and site/galleries integration. See [ecosystem quality](plans/ecosystem-quality.md) and [coverage](plans/spec-editor-coverage.md) for evidence and remaining fidelity gaps.
 
-The broader goal is still active. Continuous rich typing, advanced table/media/preset fidelity, native PowerPoint raster comparison, coordinated public npm releases and CI integration remain work. PR #8's health pass and newer upstream site/gallery work must be reconciled with this checkpoint before final review. Local preview tarballs are not evidence of registry publication.
+The broader goal is still active. Continuous rich typing, advanced table/media/preset fidelity, native PowerPoint raster comparison, coordinated public npm releases and CI integration remain work. Local preview tarballs are not evidence of registry publication.
+
+Standalone renderer CI currently fails because its installed stable `@openpresentation/opf` lacks the new `./composition` export. The gallery also needs the new composition/pagination APIs from the coordinated core; a normal registry-only install is not sufficient. Use the sibling build/link procedure above to continue locally. Before marking these PRs ready, integrate PR #8, establish a coordinated source CI or publish the new core first, update downstream dependency ranges and lockfiles, and verify clean npm installs and rendering baselines. The last observed core/editor/PPTX checkpoint CI checks passed; this does not establish full ecosystem release readiness. No new npm package versions have been published from this checkpoint.
