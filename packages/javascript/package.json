@@ -87,7 +87,7 @@
     "generate": "node scripts/generate.mjs && node scripts/generate-previews.mjs && node scripts/generate-content.mjs",
     "build": "pnpm run generate && tsup && node scripts/copy-spec.mjs",
     "typecheck": "pnpm run generate && tsc --noEmit",
-    "test": "pnpm run build && node --test \"test/*.test.mjs\"",
+    "test": "pnpm run build && node ../../scripts/run-node-tests.mjs",
     "test:packed": "node test/packed-install-smoke.mjs",
     "pack:dry-run": "pnpm run build && npm pack --dry-run --cache /tmp/opf-npm-cache"
   },

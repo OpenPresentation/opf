@@ -48,8 +48,10 @@ const catalogsSubpath = displayPath(catalogsRoot);
 const schemasSubpath = displayPath(schemasRoot);
 
 function latestOpfTag() {
-  const output = git(["tag", "-l", "opf-v*", "--sort=-v:refname"]);
-  const [first] = output.split("\n").map((line) => line.trim()).filter(Boolean);
+  // A publishing tag points at HEAD and must not become its own baseline.
+  const currentTags = new Set(git(["tag", "--points-at", "HEAD"]).split("\n"));
+  const output = git(["tag", "-l", "opf-v*", "--merged", "HEAD", "--sort=-v:refname"]);
+  const [first] = output.split("\n").map((line) => line.trim()).filter((tag) => tag && !currentTags.has(tag));
   return first ?? null;
 }
 
