@@ -1,0 +1,4 @@
+interface:
+  display_name: "OPF Authoring"
+  short_description: "Author valid presentation JSON from a brief"
+  default_prompt: "Use $opf-author to help with this OPF task using the current project schema and packages."

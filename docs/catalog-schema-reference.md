@@ -224,11 +224,28 @@ OPF documents usually reference these records with string ids such as `design.th
 | `slideImage` | no | `boolean` | Whether the layout includes a dedicated slide-level image region (separate from any content image). |
 | `slideImageAlignment` | no | `enum:None \| Top \| Bottom \| Left \| Right \| Background` | Where the slide-level image sits relative to the content. |
 | `slideLayoutDirection` | no | `enum:None \| Horizontal \| Vertical` | Axis along which the layout's primary regions are arranged. |
+| `composition` | no | `ref:Composition` |  |
 | `placeholders` | no | `array<ref:Placeholder>` | Ordered regions the layout exposes. The engine fills 'title', 'subtitle', and 'tag' placeholders from Slide.title, Slide.subtitle, and Slide.tag. Other placeholders are content-kind hints for renderers and pickers. Sl... |
 | `tags` | no | `array<string>` | Free-form labels for filtering and search. |
 | `preview` | no | `object` | Visual previews of the record, used by picker UIs and inline rendering. All sub-fields are optional; engines fall back gracefully when previews aren't available. |
 
 ### Nested Types
+
+#### Composition
+
+- Type: `object`
+- Required fields: none
+- Purpose: Portable dynamic composition. Slide fields override the resolved layout. Nested groups arrange their children independently, inheriting only minFontSize and overflow. Explicit promoted regions retain their positions.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `mode` | no | `enum:auto \| grid \| row \| column` | auto chooses a grid from available space and content; grid uses columns; row and column use one horizontal or vertical track. |
+| `columns` | no | `integer` | Column count for grid. In auto mode this caps the number of columns. |
+| `gap` | no | `number` | Space between cells as a fraction of the container short edge (canvas at slide root). Default 0.03333333333333333. |
+| `padding` | no | `number` | Inset as a fraction of the container short edge. Default 0.08 on a slide, 0 inside a group. |
+| `weights` | no | `array<number>` | Relative track sizes: columns for row/grid/auto, rows for column. Omitted tracks have weight 1; extra weights are ignored. |
+| `minFontSize` | no | `number` | Minimum readable text size in reference pixels at a 720-pixel canvas short edge. Default 16. Overflow is diagnosed when text cannot fit at this size. |
+| `overflow` | no | `enum:warn \| error` | warn returns diagnostics for content that does not fit; error rejects layout. Content is never silently removed. Default warn. |
 
 #### Placeholder
 

@@ -1,43 +1,117 @@
 # @openpresentation/cli
 
-Local-only CLI source for OPF. This is not a published package in v0.2.0, and it is not a hosted-service client. It does not render, parse, generate, call remote APIs, fetch catalogs, emit telemetry, or use AI.
+A local CLI for agents and people working with `.opf.json` presentations. Create documents, validate them, apply precise edits, paginate content, and inspect the bundled schemas and catalogs. Node 20+ on macOS, Linux, or Windows is required.
 
-Native Mac/Linux/Windows distribution and npm CLI publishing are intentionally deferred until a separate CLI package is approved.
+The CLI bundles its OPF schema, catalogs, and validator. It needs no separate core package, API key, or network connection at runtime. `opf --version` reports the CLI and bundled core versions. It does not render slides; successful validation is not visual verification.
 
-## Expected Usage
+## Install the current preview
 
-Build the CLI from the workspace:
+This version is an installable npm tarball, **not yet published to the npm registry**. From the OPF checkout, build and verify it:
 
 ```sh
 pnpm install
-pnpm --filter @openpresentation/cli build
+pnpm test:cli:packed
 ```
 
-Run the built CLI directly during development:
+That creates `artifacts/cli/openpresentation-cli-0.1.0-preview.1.tgz`. Install it globally using its absolute path:
 
 ```sh
-node packages/cli/dist/index.js schemas
-node packages/cli/dist/index.js catalogs
-node packages/cli/dist/index.js validate path/to/deck.opf.json
+npm install -g /absolute/path/to/opf/artifacts/cli/openpresentation-cli-0.1.0-preview.1.tgz
+opf --version
 ```
 
-Expected commands:
+Or install the tarball as a development dependency and use `npx --no-install opf`. For source development, run `pnpm --filter @openpresentation/cli build` and `node packages/cli/dist/index.js --help` from the checkout. Publishing is a separate release step; the package metadata and `opf` binary are ready for it.
 
-```text
+## Create and validate
+
+```sh
+opf create decision.opf.json --title "Launch decision"
+opf validate decision.opf.json
+opf create copy.opf.json --from decision.opf.json
+```
+
+Creation supplies a minimal deck with one stable slide ID, `slide-1`. `--title` sets both deck name and visible slide title. `--from` accepts a complete OPF document and preserves its fields; use it to supply arbitrary content, assets, and design options. `--title` and `--from` cannot be combined.
+
+Use `-` for stdin/stdout. Creation defaults to stdout if no destination is supplied:
+
+```sh
+opf create - --title "Launch decision" | opf validate -
+opf create imported.opf.json --from - < authored.opf.json
+```
+
+Validation prints the complete result, including errors, warnings, and the input's SHA-256 digest. `--strict` fails when there are warnings, even when `valid` is true. Reference warnings do not cover every possible unresolved reference: free-form layout IDs can pass without warnings.
+
+## Edit with JSON Patch
+
+Create `changes.json`:
+
+```json
+[
+  { "op": "test", "path": "/slides/0/id", "value": "slide-1" },
+  { "op": "replace", "path": "/slides/0/title", "value": "Approve the next milestone" },
+  { "op": "add", "path": "/slides/0/text", "value": "Describe the evidence and requested decision here." },
+  { "op": "add", "path": "/slides/-", "value": { "id": "next-steps", "title": "Next steps" } }
+]
+```
+
+Preview the result, save a separate file, or update the source:
+
+```sh
+opf edit decision.opf.json --patch changes.json --dry-run
+opf edit decision.opf.json --patch changes.json --output reviewed.opf.json
+opf edit decision.opf.json --patch changes.json --in-place
+```
+
+The editor implements [JSON Patch (RFC 6902)](https://www.rfc-editor.org/rfc/rfc6902): `add`, `remove`, `replace`, `move`, `copy`, and `test`. Paths are JSON Pointers: `~1` escapes `/`, `~0` escapes `~`, and the empty path addresses the whole document. `add` can insert into arrays or append with `-`; `replace` requires an existing target. It preserves unrelated fields and validates the complete result before writing. An invalid input document can be repaired as long as the final document validates. Failed operations or validation leave the file untouched.
+
+With no destination, editing writes the resulting document to stdout. Either the source or patch can come from stdin, but not both. `--dry-run` always writes the candidate document to stdout without saving, even with `--in-place` or `--output`.
+
+Use `test` to guard specific values. Resolve a slide ID to its current array index before constructing edits. For a whole-file guard, pass the digest from an earlier `opf validate` result:
+
+```sh
+opf edit decision.opf.json --patch changes.json --in-place --expect-sha256 "$EXPECTED_SHA256"
+```
+
+The digest compares the exact input bytes, including whitespace. The CLI also rechecks the input before replacing that same path. Writes use a temporary sibling file and atomic publication. Existing destinations require `--force`; `--in-place` explicitly authorizes replacing the input. Symlink and non-regular destinations are rejected. Coordinate concurrent writers externally: the hash check and rename are not a filesystem compare-and-swap or a collaboration lock. There is no persistent undo history; use version control or save a separate output when needed.
+
+## Import CSV and JSON data
+
+```sh
+opf import-data revenue.csv --as table --output table.opf.json
+opf import-data revenue.json --as chart --chart-type line --output chart.opf.json
+opf import-data revenue.csv --as chart --category Quarter --series '["Revenue","Costs"]' --into decision.opf.json --in-place
+```
+
+Data can come from a file or stdin (`-`). JSON accepts arrays of records, row matrices, or `{columns, rows}`. `--path /slides/0/table` replaces or adds a table field inside an existing parent; use `/chart` for charts. With `--into` and no path, a new slide is appended. Other options include `--format csv|tsv|json`, `--delimiter`, `--no-header`, `--columns` (a JSON array), and `--title`. Preview on stdout by omitting an output destination. All file writes validate the complete document. CSV table strings are preserved; chart measures must be numeric. Data is embedded, not linked to the source file.
+
+## Discover format options
+
+```sh
 opf schemas
+opf schema presentation '/$defs/Composition'
 opf catalogs
-opf validate <file>
+opf catalog layouts
+opf catalog fontSchemes roboto
 ```
 
-Current behavior:
+`schemas` and `catalogs` list available names/kinds. `schema` returns the whole schema or a branch addressed by a pointer into the schema. `catalog` returns all records in a kind, or one exact ID. These commands inspect the bundled version and do not fetch galleries.
 
-- `schemas` lists bundled OPF schema names, source files, and `$id` values.
-- `catalogs` lists bundled catalog kinds and record counts.
-- `validate <file>` validates a top-level OPF `Presentation` JSON file locally.
+```sh
+opf paginate decision.opf.json paginated.opf.json
+```
 
-Planned local-only responsibilities:
+Pagination emits ordinary OPF slides and a page mapping. Preview the result with the renderer to assess wrapping and visual fidelity.
 
-- validate OPF presentation JSON
-- list bundled catalog presets
-- inspect bundled schemas
-- format OPF JSON
+## Agent output contract
+
+- Reports and errors are JSON; only help text is plain text.
+- `validate` reports to stdout, including for invalid documents.
+- Commands emitting a document to stdout send validation diagnostics to stderr, so pipes remain valid JSON.
+- File-writing commands report the absolute output path, output SHA-256, and warnings to stdout.
+- Exit `0`: success, possibly with warnings. Exit `1`: invalid document, failed patch/test, strict warning failure, or file conflict. Exit `2`: usage, malformed JSON, or I/O failure.
+- File-writing commands accept `--strict`. Use `--` before positional filenames that start with `--`.
+- No telemetry, automatic uploads, or execution of instructions inside document text.
+
+## Development checks
+
+`pnpm test:cli` runs command-level regression checks. `pnpm test:cli:packed` builds and packs the CLI, installs the tarball offline into an isolated global prefix, exercises the actual executable, and reruns the same checks against the installation. It does not change your global installation. Package builds bundle their current core dependency; rebuild after schema/catalog changes.

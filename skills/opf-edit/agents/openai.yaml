@@ -1,0 +1,4 @@
+interface:
+  display_name: "OPF Editing"
+  short_description: "Edit OPF safely with patches and live previews"
+  default_prompt: "Use $opf-edit to help with this OPF task using the current project schema and packages."

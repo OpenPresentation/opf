@@ -1,0 +1,46 @@
+import assert from 'node:assert/strict';
+import {mkdir,writeFile} from 'node:fs/promises';
+import {createRequire} from 'node:module';
+import {loadBundledFontRegistry} from '../../opf-render/dist/fonts-node.js';
+import {renderSvgDeck,resolvePresentation,svgToPng} from '../../opf-render/dist/index.js';
+import {toPptx} from '../../opf-pptx/dist/index.js';
+import {createEditorSession} from '../../opf-editor/dist/index.js';
+import {paginatePresentation} from '../packages/javascript/dist/pagination.js';
+const require=createRequire(new URL('../../opf-pptx/package.json',import.meta.url));
+const {unzipSync}=require('fflate');const {XMLParser}=require('fast-xml-parser');
+const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false});
+const array=v=>Array.isArray(v)?v:v?[v]:[];
+const fonts=await loadBundledFontRegistry();
+const options={textMeasurement:fonts.textMeasurement};
+const text='Wide letters WWW and narrow letters iii occupy different amounts of space. Actual fonts keep the layout honest. '.repeat(24);
+const source={name:'Measured font verification',design:{fontScheme:'roboto',theme:'classic'},slides:[{id:'metrics',title:'Use the actual font to fit the words',composition:{mode:'row',weights:[2,1]},blocks:[{text:'AVATAR office affinity. WWW iii. '.repeat(22)},{text:'Every preview and export starts from the same measured boxes.'}]},{id:'draft',title:'Continue at a readable size',text}]};
+const {presentation}=paginatePresentation(source,options);
+assert.equal(presentation.slides.filter(slide=>slide.id.startsWith('draft')).map(slide=>slide.text).join(''),text);
+const editor=createEditorSession(presentation);
+const resolved=resolvePresentation(presentation,options);
+for(let i=0;i<presentation.slides.length;i++)assert.deepEqual(editor.composeSlide(i,options),resolved.slides[i].geometry);
+const diagnostics=[];
+const svgs=renderSvgDeck(presentation,{...options,embeddedFonts:fonts.embeddedFonts,onDiagnostic:d=>diagnostics.push(d)});
+assert.deepEqual(diagnostics,[]);
+const bytes=await toPptx(presentation,options);const zip=unzipSync(bytes);
+for(let i=0;i<presentation.slides.length;i++){
+ const xml=parser.parse(new TextDecoder().decode(zip[`ppt/slides/slide${i+1}.xml`]));
+ const shapes=array(xml['p:sld']['p:cSld']['p:spTree']['p:sp']);
+ const items=resolved.slides[i].geometry.items;
+ assert.equal(shapes.length,items.length);
+ shapes.forEach((shape,index)=>{
+  const transform=shape['p:spPr']['a:xfrm'],item=items[index];
+  for(const [actual,wanted] of [[transform['a:off'].x,item.box.x],[transform['a:off'].y,item.box.y],[transform['a:ext'].cx,item.box.width],[transform['a:ext'].cy,item.box.height]])assert.ok(Math.abs(Number(actual)/9525-wanted)<0.002);
+  const paragraphs=array(shape['p:txBody']['a:p']);
+  const exported=paragraphs.map(p=>array(p['a:r']).map(r=>String(r['a:t']??'')).join('')).join('\n');
+  assert.equal(exported,item.text.lines.join('\n'));
+  for(const paragraph of paragraphs)for(const run of array(paragraph['a:r']))assert.equal(run['a:rPr']['a:latin'].typeface,'Roboto');
+ });
+}
+await mkdir(new URL('../artifacts/fonts/',import.meta.url),{recursive:true});
+await writeFile(new URL('../artifacts/fonts/measured.opf.json',import.meta.url),JSON.stringify(presentation,null,2));
+await writeFile(new URL('../artifacts/fonts/measured.pptx',import.meta.url),bytes);
+await writeFile(new URL('../artifacts/fonts/slide-1.svg',import.meta.url),svgs[0]);
+await writeFile(new URL('../artifacts/fonts/slide-1.png',import.meta.url),await svgToPng(svgs[0],{fontFiles:fonts.fontFiles,useBundledFonts:false,loadSystemFonts:false}));
+console.log(`Font ecosystem passed: ${presentation.slides.length} pages with matching editor/SVG/PPTX geometry and exact measured PowerPoint line breaks.`);
+console.log('Browser width reference:',fonts.textMeasurement.measure('AVATAR iii WWW office affine',25,{fontFamily:'Roboto',fontWeight:400}));

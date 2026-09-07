@@ -24,5 +24,9 @@
     {
       "type": "text"
     }
-  ]
+  ],
+  "composition": {
+    "mode": "grid",
+    "columns": 3
+  }
 }

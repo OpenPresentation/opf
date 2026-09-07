@@ -45,7 +45,10 @@
       {
         "type": "text"
       }
-    ]
+    ],
+    "composition": {
+      "mode": "row"
+    }
   },
   {
     "id": "text-3x",
@@ -63,7 +66,10 @@
       {
         "type": "text"
       }
-    ]
+    ],
+    "composition": {
+      "mode": "row"
+    }
   },
   {
     "id": "list-1x",
@@ -90,7 +96,10 @@
       {
         "type": "list"
       }
-    ]
+    ],
+    "composition": {
+      "mode": "row"
+    }
   },
   {
     "id": "list-3x",
@@ -108,7 +117,10 @@
       {
         "type": "list"
       }
-    ]
+    ],
+    "composition": {
+      "mode": "row"
+    }
   },
   {
     "id": "list-4x",
@@ -129,7 +141,11 @@
       {
         "type": "list"
       }
-    ]
+    ],
+    "composition": {
+      "mode": "grid",
+      "columns": 2
+    }
   },
   {
     "id": "list-5x",
@@ -153,7 +169,11 @@
       {
         "type": "list"
       }
-    ]
+    ],
+    "composition": {
+      "mode": "grid",
+      "columns": 3
+    }
   },
   {
     "id": "list-6x",
@@ -180,7 +200,11 @@
       {
         "type": "list"
       }
-    ]
+    ],
+    "composition": {
+      "mode": "grid",
+      "columns": 3
+    }
   },
   {
     "id": "number-1x",
@@ -207,7 +231,10 @@
       {
         "type": "text"
       }
-    ]
+    ],
+    "composition": {
+      "mode": "row"
+    }
   },
   {
     "id": "number-3x",
@@ -225,7 +252,10 @@
       {
         "type": "text"
       }
-    ]
+    ],
+    "composition": {
+      "mode": "row"
+    }
   },
   {
     "id": "number-4x",
@@ -246,7 +276,11 @@
       {
         "type": "text"
       }
-    ]
+    ],
+    "composition": {
+      "mode": "grid",
+      "columns": 2
+    }
   },
   {
     "id": "number-5x",
@@ -270,7 +304,11 @@
       {
         "type": "text"
       }
-    ]
+    ],
+    "composition": {
+      "mode": "grid",
+      "columns": 3
+    }
   },
   {
     "id": "number-6x",
@@ -297,7 +335,11 @@
       {
         "type": "text"
       }
-    ]
+    ],
+    "composition": {
+      "mode": "grid",
+      "columns": 3
+    }
   },
   {
     "id": "chart-1x",
@@ -312,7 +354,10 @@
       {
         "type": "text"
       }
-    ]
+    ],
+    "composition": {
+      "mode": "row"
+    }
   },
   {
     "id": "chart-2x",
@@ -333,7 +378,11 @@
       {
         "type": "text"
       }
-    ]
+    ],
+    "composition": {
+      "mode": "grid",
+      "columns": 2
+    }
   },
   {
     "id": "chart-3x",
@@ -360,7 +409,11 @@
       {
         "type": "text"
       }
-    ]
+    ],
+    "composition": {
+      "mode": "grid",
+      "columns": 3
+    }
   },
   {
     "id": "image-1x",
@@ -375,7 +428,10 @@
       {
         "type": "text"
       }
-    ]
+    ],
+    "composition": {
+      "mode": "row"
+    }
   },
   {
     "id": "image-2x",
@@ -396,7 +452,11 @@
       {
         "type": "text"
       }
-    ]
+    ],
+    "composition": {
+      "mode": "grid",
+      "columns": 2
+    }
   },
   {
     "id": "image-3x",
@@ -423,7 +483,11 @@
       {
         "type": "text"
       }
-    ]
+    ],
+    "composition": {
+      "mode": "grid",
+      "columns": 3
+    }
   },
   {
     "id": "table-1x",
@@ -438,7 +502,10 @@
       {
         "type": "text"
       }
-    ]
+    ],
+    "composition": {
+      "mode": "row"
+    }
   },
   {
     "id": "code-1x",
@@ -453,7 +520,10 @@
       {
         "type": "text"
       }
-    ]
+    ],
+    "composition": {
+      "mode": "row"
+    }
   },
   {
     "id": "media-1x",
@@ -468,7 +538,10 @@
       {
         "type": "text"
       }
-    ]
+    ],
+    "composition": {
+      "mode": "row"
+    }
   },
   {
     "id": "image-bleed",

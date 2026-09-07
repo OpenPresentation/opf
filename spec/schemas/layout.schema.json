@@ -247,6 +247,9 @@
           ]
         }
       }
+    },
+    "composition": {
+      "$ref": "#/$defs/Composition"
     }
   },
   "$defs": {
@@ -273,6 +276,66 @@
             "code"
           ],
           "description": "OPF placeholder kind. 'text' and 'list' are flexible textual content regions. The named kinds describe a specific content role used by pickers, AI generation, and engine defaulting."
+        }
+      }
+    },
+    "Composition": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Portable dynamic composition. Slide fields override the resolved layout. Nested groups arrange their children independently, inheriting only minFontSize and overflow. Explicit promoted regions retain their positions.",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "grid",
+            "row",
+            "column"
+          ],
+          "description": "auto chooses a grid from available space and content; grid uses columns; row and column use one horizontal or vertical track."
+        },
+        "columns": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 12,
+          "description": "Column count for grid. In auto mode this caps the number of columns."
+        },
+        "gap": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 0.1,
+          "description": "Space between cells as a fraction of the container short edge (canvas at slide root). Default 0.03333333333333333."
+        },
+        "padding": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 0.2,
+          "description": "Inset as a fraction of the container short edge. Default 0.08 on a slide, 0 inside a group."
+        },
+        "weights": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 12,
+          "items": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "maximum": 100
+          },
+          "description": "Relative track sizes: columns for row/grid/auto, rows for column. Omitted tracks have weight 1; extra weights are ignored."
+        },
+        "minFontSize": {
+          "type": "number",
+          "minimum": 8,
+          "maximum": 32,
+          "description": "Minimum readable text size in reference pixels at a 720-pixel canvas short edge. Default 16. Overflow is diagnosed when text cannot fit at this size."
+        },
+        "overflow": {
+          "type": "string",
+          "enum": [
+            "warn",
+            "error"
+          ],
+          "description": "warn returns diagnostics for content that does not fit; error rejects layout. Content is never silently removed. Default warn."
         }
       }
     }

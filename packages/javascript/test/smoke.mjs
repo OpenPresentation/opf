@@ -625,17 +625,10 @@ assertPresentationInvalid({
   slides: [{ title: "Old composition", children: [{ text: "Child" }] }],
 }, "must NOT have additional properties");
 
-assertPresentationInvalid({
+assert.equal(validatePresentation({
   name: "Nested Blocks Field",
-  slides: [{
-    title: "Nested Blocks",
-    blocks: [
-      {
-        blocks: [{ text: "Nested child" }],
-      },
-    ],
-  }],
-}, "must NOT have additional properties");
+  slides: [{ title: "Nested Blocks", blocks: [{ blocks: [{ text: "Nested child" }] }] }],
+}).valid, true);
 
 assertPresentationInvalid({
   name: "Removed Shape Type",

@@ -1,0 +1,35 @@
+import assert from 'node:assert/strict';
+import {createRequire} from 'node:module';
+import {mkdir,writeFile} from 'node:fs/promises';
+import {createEditorSession} from '../../opf-editor/src/index.js';
+import {prepareTrackResize,prepareBlockMove,prepareBlockInsert,prepareBlockDuplicate,prepareBlockRemove} from '../../opf-editor/src/layout.js';
+import {resolvePresentation,renderSvg} from '../../opf-render/src/svg.js';
+import {loadOfficeFontRegistry} from '../../opf-render/src/fonts-node.js';
+import {toPptx} from '../../opf-pptx/src/index.js';
+const require=createRequire(new URL('../../opf-pptx/package.json',import.meta.url)),{unzipSync}=require('fflate'),{XMLParser}=require('fast-xml-parser');
+const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:''}),list=v=>Array.isArray(v)?v:v?[v]:[];
+const fonts=await loadOfficeFontRegistry(),options={textMeasurement:fonts.textMeasurement};
+const original={design:{fontScheme:'roboto'},slides:[{title:'Resize while keeping content',composition:{mode:'row',weights:[2,1]},blocks:[{composition:{mode:'column'},blocks:[{text:'Recommendation'},{text:'Supporting evidence remains editable.'}]},{text:'Context and next steps.'}]}]};
+const editor=createEditorSession(original,{rejectInvalid:true});
+let geometry=resolvePresentation(editor.document,options).slides[0].geometry;
+editor.applyPatch(prepareTrackResize(editor.document,geometry.flows[0],0,.58).patches);
+geometry=resolvePresentation(editor.document,options).slides[0].geometry;
+editor.applyPatch(prepareTrackResize(editor.document,geometry.flows[1],0,.65).patches);
+geometry=resolvePresentation(editor.document,options).slides[0].geometry;
+editor.applyPatch(prepareBlockMove(editor.document,'slides.0.blocks.0.blocks.1','slides.0',2).patches);
+editor.applyPatch(prepareBlockInsert(editor.document,'slides.0',{text:'Next action.'}).patches);
+editor.applyPatch(prepareBlockDuplicate(editor.document,'slides.0.blocks.3').patches);
+editor.applyPatch(prepareBlockRemove(editor.document,'slides.0.blocks.3').patches);
+geometry=resolvePresentation(editor.document,options).slides[0].geometry;
+const bytes=await toPptx(editor.document,options),files=unzipSync(bytes),xml=parser.parse(new TextDecoder().decode(files['ppt/slides/slide1.xml']));
+const shapes=list(xml['p:sld']['p:cSld']['p:spTree']['p:sp']);assert.equal(shapes.length,geometry.items.length);
+for(let i=0;i<shapes.length;i++){
+ const transform=shapes[i]['p:spPr']['a:xfrm'],box=geometry.items[i].box;
+ for(const [actual,expected] of [[transform['a:off'].x,box.x],[transform['a:off'].y,box.y],[transform['a:ext'].cx,box.width],[transform['a:ext'].cy,box.height]])assert.ok(Math.abs(Number(actual)/9525-expected)<.002,'Resized PPTX shape differs from the preview geometry');
+}
+await mkdir('artifacts/layout-resize',{recursive:true});
+await writeFile('artifacts/layout-resize/resized.opf.json',JSON.stringify(editor.document,null,2));
+await writeFile('artifacts/layout-resize/resized.svg',renderSvg(editor.document,{...options,embeddedFonts:fonts.embeddedFonts}));
+await writeFile('artifacts/layout-resize/resized.pptx',bytes);
+for(let i=0;i<6;i++)editor.undo();assert.deepEqual(editor.document,original);
+console.log('Track resize ecosystem passed: root and nested weights, block moves/creation/duplication/deletion, measured SVG/native PPTX geometry, editable shapes and undo.');

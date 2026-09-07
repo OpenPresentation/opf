@@ -2,6 +2,9 @@ import { defineConfig } from "tsup";
 
 export default defineConfig({
   entry: {
+    data: "src/data.ts",
+    pagination: "src/pagination.ts",
+    composition: "src/composition.ts",
     index: "src/index.ts",
     schemas: "src/schemas.ts",
     catalogs: "src/catalogs.ts",

@@ -35,6 +35,23 @@ This reference documents the author-facing shape of a complete `*.opf.json` pres
 
 ## Object And Type Reference
 
+### Composition
+
+- Type: `object`
+- Required fields: none
+- Purpose: Portable dynamic composition. Slide fields override the resolved layout. Nested groups arrange their children independently, inheriting only minFontSize and overflow. Explicit promoted regions retain their positions.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `mode` | no | `enum:auto \| grid \| row \| column` | auto chooses a grid from available space and content; grid uses columns; row and column use one horizontal or vertical track. |
+| `columns` | no | `integer` | Column count for grid. In auto mode this caps the number of columns. |
+| `gap` | no | `number` | Space between cells as a fraction of the container short edge (canvas at slide root). Default 0.03333333333333333. |
+| `padding` | no | `number` | Inset as a fraction of the container short edge. Default 0.08 on a slide, 0 inside a group. |
+| `weights` | no | `array<number>` | Relative track sizes: columns for row/grid/auto, rows for column. Omitted tracks have weight 1; extra weights are ignored. |
+| `minFontSize` | no | `number` | Minimum readable text size in reference pixels at a 720-pixel canvas short edge. Default 16. Overflow is diagnosed when text cannot fit at this size. |
+| `overflow` | no | `enum:warn \| error` | warn returns diagnostics for content that does not fit; error rejects layout. Content is never silently removed. Default warn. |
+
+
 ### Assets
 
 - Type: `object`
@@ -529,6 +546,7 @@ _No named properties._
 | `id` | no | `string` | Optional stable identifier for the slide within the document. Use when another system needs to reference a slide across edits, comments, generation state, exports, or narrative tooling. Slide order is defined by the s... |
 | `type` | no | `enum:text \| list \| image \| chart \| table \| video \| code \| metric \| quote \| timeline` | Optional full-slide content kind. When omitted, engines infer the kind from root payload fields. |
 | `beat` | no | `oneOf:string / array<string>` | Optional reference to one or more narrative beats (each value matches an id from narrative.beats or the resolved template). A single string declares the slide's primary beat; an array declares that one slide covers mu... |
+| `composition` | no | `ref:Composition` |  |
 | `layout` | no | `string` | Optional slide layout reference. Resolves to the 'id' of a 'layouts' catalog record. When omitted, engines infer a layout from the slide's root payload or promoted region keys. Accepts a bare id (lowercase kebab-case,... |
 | `title` | no | `string` | Slide-level title content. When the resolved layout exposes a 'title' placeholder, the engine renders this value there. |
 | `subtitle` | no | `string` | Slide-level subtitle or supporting line. When the resolved layout exposes a 'subtitle' placeholder, the engine renders this value there. |
@@ -544,7 +562,7 @@ _No named properties._
 | `metric` | no | `oneOf:string / number / ref:Metric` | Full-slide metric payload. A string or number is shorthand for { "value": value }; object form carries optional label, description, unit, delta, and trend metadata. Numeric values remain numbers; renderers format them... |
 | `quote` | no | `oneOf:string / ref:Quote` | Full-slide quote payload. A string is shorthand for { "text": value }; object form carries optional attribution and source metadata. Presence of this field infers type 'quote'. |
 | `timeline` | no | `ref:Timeline` | Full-slide timeline payload. An array is shorthand for { "events": value }; object form carries optional name and description metadata. Presence of this field infers type 'timeline'. |
-| `blocks` | no | `array<ref:ContentPayload>` | Layout-agnostic content blocks rendered together as a composed payload when exact placement is unspecified. At slide root, multiple content payload kinds with no explicit type, blocks, or regions are accepted as shorthand for equivalent blocks. |
+| `blocks` | no | `array<ref:ContentPayload>` | Layout-agnostic content blocks rendered together as a composed payload when exact placement is unspecified. At slide root, multiple content payload kinds with no explicit type, blocks, or regions are accepted as short... |
 | `design` | no | `ref:Design` | Slide-level design applied on top of the deck-wide design. |
 | `left` | no | `ref:ContentPayload` |  |
 | `center` | no | `ref:ContentPayload` |  |
@@ -601,13 +619,13 @@ _No named properties._
 
 ### ContentPayload
 
-- Type: `allOf:schema + schema + schema + schema + schema + schema + schema + schema + schema`
+- Type: `allOf:schema + schema + schema + schema + schema + schema + schema + schema + schema + schema + schema + schema`
 - Required fields: none
-- Purpose: A single content payload. The optional 'type' discriminator can make intent explicit, but validators and engines infer it from fields such as text, bullets, items, image, video, chart, table, code, metric, quote, or timeline.
+- Purpose: A content leaf or recursively composed group. A group contains blocks and optional composition; it cannot mix blocks with leaf payload fields. Groups may nest up to 32 levels.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `type` | no | `enum:text \| list \| image \| chart \| table \| video \| code \| metric \| quote \| timeline` | Optional content kind. When omitted, engines infer the kind from the fields present. |
+| `type` | no | `enum:text \| list \| image \| chart \| table \| video \| code \| metric \| quote \| timeline \| group` | Optional content kind. When omitted, engines infer the kind from the fields present. |
 | `text` | no | `oneOf:string / array<ref:TextRun>` | Text payload. Use a string for plain text or TextRun[] for inline rich text. TextRun items may be plain strings or formatted run objects. |
 | `items` | no | `array<ref:ListItem>` | Generic list payload. Each item is either a plain string, a TextRun[] rich text sequence, or a ListItem object. List nesting uses item.level rather than nested content payloads. |
 | `bullets` | no | `array<ref:BulletItem>` | Text-style bullet payload. Presence of this field infers type 'text'. |
@@ -619,6 +637,8 @@ _No named properties._
 | `metric` | no | `oneOf:string / number / ref:Metric` | Metric payload. A string or number is shorthand for { "value": value }; object form carries optional label, description, unit, delta, and trend metadata. Numeric values remain numbers; renderers format them for display. |
 | `quote` | no | `oneOf:string / ref:Quote` | Quote payload. A string is shorthand for { "text": value }; object form carries optional attribution and source metadata. |
 | `timeline` | no | `ref:Timeline` | Timeline payload ordered by narrative or chronology. |
+| `blocks` | no | `array<ref:ContentPayload>` | Ordered children of a group. Each child is a leaf or another group. |
+| `composition` | no | `ref:Composition` | Arrangement within this group. Only minFontSize and overflow inherit from the parent; strict overflow cannot be weakened. |
 
 
 ### Quote

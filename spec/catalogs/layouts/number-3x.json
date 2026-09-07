@@ -15,5 +15,8 @@
     {
       "type": "text"
     }
-  ]
+  ],
+  "composition": {
+    "mode": "row"
+  }
 }
