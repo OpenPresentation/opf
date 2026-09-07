@@ -1,3 +1,4 @@
+import type { LayoutDiagnostic, TextMeasurement } from "@openpresentation/opf/composition";
 export declare const packageName = "@openpresentation/opf-pptx";
 
 export declare const releaseLane: Readonly<{
@@ -33,6 +34,8 @@ export interface ImageResolverContext {
 }
 
 export interface ToPptxOptions {
+  textMeasurement?: TextMeasurement;
+  onDiagnostic?: (diagnostic: LayoutDiagnostic) => void;
   baseDir?: string;
   compressionLevel?: number;
   imageResolver?: (src: string, context: ImageResolverContext) => ImageResolverResult | Promise<ImageResolverResult | null | undefined> | null | undefined;
