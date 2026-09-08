@@ -16,7 +16,7 @@
     "prepack": "pnpm build"
   },
   "devDependencies": {
-    "@types/node": "^20.19.0",
+    "@types/node": "^26.4.1",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
     "@openpresentation/opf": "workspace:*"
