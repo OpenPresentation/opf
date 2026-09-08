@@ -111,8 +111,10 @@ This repo does not require an npm automation token when Trusted Publishing is co
 
 The current checkout uses `@openpresentation/opf/composition` for portable geometry. Slides can select `auto`, `row`, `column`, or `grid`, set weighted tracks, and request path-specific overflow diagnostics. See the sibling OPF repo's `docs/dynamic-composition.md` for the complete contract.
 
-These new APIs are pending a coordinated OPF release. With all repos checked out beside each other, build OPF and run `node scripts/link-ecosystem.mjs` from that repo before building this package. Run `pnpm test:ecosystem` in OPF to check editing, rendering, editable PowerPoint geometry, and import together. The published OPF 0.3.0 package does not contain the new composition entry point; downstream publication must wait for the new core release and an updated minimum dependency version.
+Version 0.1.0 requires published `@openpresentation/opf@^0.4.0`. The optional renderer peer requires `@openpresentation/opf-render@^0.1.0`. Clean registry installs support the new composition APIs without sibling checkouts. For coordinated source development, build OPF and run `node scripts/link-ecosystem.mjs` there; `pnpm test:ecosystem` verifies shared geometry and import/export behavior.
 
 For crowded drafts, run `paginatePresentation` from `@openpresentation/opf/pagination` first, then pass its returned presentation to both preview and `toPptx`. Native table row sizing now follows shared reference geometry; the exporter does not add hidden table continuation slides.
 
 Pass the same `textMeasurement` provider used by preview and pagination to `toPptx`. Plain text and headings retain the measured line breaks and resolved font family in editable PowerPoint shapes. Font binaries are not yet embedded in PPTX; native viewers still need the resolved font installed.
+
+PptxGenJS is pinned to 4.0.1. Its unused `image-size` dependency remains flagged by npm audit; tested OPF operations run with that parser blocked. See [dependency reachability and regression coverage](DEPENDENCY-NOTES.md).

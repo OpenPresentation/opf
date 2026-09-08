@@ -1,6 +1,6 @@
 {
   "name": "@openpresentation/opf-pptx",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Pure local OPF to PPTX export and PPTX to OPF import tooling.",
   "license": "MIT",
   "type": "module",
@@ -36,18 +36,18 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "typecheck": "node --check src/index.js && node --check scripts/build.mjs && node --check scripts/validate-package.mjs && node --check test/smoke.mjs",
-    "test": "npm run build && node test/smoke.mjs",
+    "test": "npm run build && node test/dependency-boundary.mjs",
     "validate": "node scripts/validate-package.mjs",
     "prepack": "npm run build"
   },
   "dependencies": {
-    "@openpresentation/opf": "^0.3.0",
+    "@openpresentation/opf": "^0.4.0",
     "fast-xml-parser": "^5.8.0",
     "fflate": "^0.8.3",
-    "pptxgenjs": "^4.0.1"
+    "pptxgenjs": "4.0.1"
   },
   "peerDependencies": {
-    "@openpresentation/opf-render": ">=0.0.0"
+    "@openpresentation/opf-render": "^0.1.0"
   },
   "peerDependenciesMeta": {
     "@openpresentation/opf-render": {
