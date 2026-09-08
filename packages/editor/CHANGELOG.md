@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Add coordinated styled-table regression coverage for `.value` typing/formatting, style/span preservation, empty cells, field discovery, rejected structural edits and atomic undo. The existing model supports these cells through the unpublished core schema. Browser pointer/keyboard verification and the coordinated dependency release remain pending.
+- Add coordinated styled-table regression coverage for `.value` typing/formatting, style/span preservation, empty cells, field discovery, rejected structural edits and atomic undo. The existing model supports these cells through the unpublished core schema. Browser verification with actual Roboto fonts passes merged rich typing, scalar promotion and formatting, partial selection, empty styled values, cancellation and undo. The coordinated dependency release remains pending.
 
 ## 0.3.0
 
