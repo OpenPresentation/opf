@@ -4,6 +4,8 @@
 
 ## 0.5.0
 
+- Normalize physical merged-cell perimeter borders and implicit neighboring edges. Native Windows PowerPoint testing exposed truncated dashes and restored zero-width segments that anchor-only XML checks missed.
+
 - Require core 0.7.0 and renderer 0.5.0 for canonical styled and spanning table cells.
 
 - Import conditional table borders with separate outer/interior edges, band/edge/corner precedence, archive-local theme line references, placeholder alpha and partial direct overrides. Invisible or complete direct borders mask unresolved references. Merged anchors use their full spans for frame edges; differing continuation border segments retain the anchor border and report a diagnostic.

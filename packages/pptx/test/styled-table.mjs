@@ -63,3 +63,33 @@ const full = await toPptx({slides:[{table:{rows:[[{value:'All',rowSpan:3,colSpan
 const fullRows = find(parser.parse(new TextDecoder().decode(unzipSync(full)['ppt/slides/slide1.xml'])),'a:tr');
 assert.deepEqual(fullRows.map(row => array(row['a:tc']).length),[2,2,2]);
 console.log('Styled native table export passed: merged grid, unique text, full covered rows, colors/alpha, border dashes, zero/fractional padding, alignment, scaled row geometry and determinism.');
+
+// Native PowerPoint reads physical continuation borders and shared neighbors.
+// Anchor-only XML passed earlier checks but visibly truncated a merged dash.
+for (const scale of [1,.5]) {
+  const right={color:'#22558880',width:3,dash:'dash'};
+  const top={color:'#556677',width:2,dash:'dot'};
+  const source={design:{dimensions:{widthInches:1280*scale/96,heightInches:720*scale/96}},slides:[{table:{rows:[
+    [{value:'Anchor',rowSpan:2,colSpan:2,style:{borders:{right,top,bottom:{color:'#000000',width:0}}}},null,'R1'],
+    [null,null,'R2'],['B1','B2','Corner']
+  ]}}]};
+  const before=structuredClone(source);
+  const bytes=await toPptx(source);
+  const native=find(parser.parse(new TextDecoder().decode(unzipSync(bytes)['ppt/slides/slide1.xml'])),'a:tbl')[0];
+  const cells=array(native['a:tr']).map(row=>array(row['a:tc']));
+  for(const [r,c,edge] of [[0,1,'R'],[1,1,'R'],[0,2,'L'],[1,2,'L']]) {
+    const line=cells[r][c]['a:tcPr']['a:ln'+edge];
+    assert.equal(Number(line.w),Math.round(3*scale*9525));
+    assert.equal(line['a:prstDash'].val,'dash');
+    assert.equal(line['a:solidFill']['a:srgbClr'].val,'225588');
+    assert.equal(Number(line['a:solidFill']['a:srgbClr']['a:alpha'].val),50196);
+  }
+  assert.equal(cells[0][1]['a:tcPr']['a:lnT']['a:prstDash'].val,'sysDot');
+  for(const [r,c,edge] of [[1,0,'B'],[1,1,'B'],[2,0,'T'],[2,1,'T']]) {
+    assert.equal(cells[r][c]['a:tcPr']['a:ln'+edge].w,'0');
+    assert.ok(Object.hasOwn(cells[r][c]['a:tcPr']['a:ln'+edge],'a:noFill'));
+  }
+  assert.deepEqual(find(cells[1][1],'a:t'),[],'Continuation border normalization never duplicates text');
+  assert.deepEqual(source,before,'Shared-edge normalization must not mutate the source');
+}
+console.log('Native merge perimeter regression passed: continuation and neighbor edges, transparent dashes, dotted top, hidden bottom and scaling.');

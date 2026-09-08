@@ -1165,7 +1165,7 @@ function addTablePayload(slide, table, region, context, options, path) {
   }));
   const objectName = `OPF table ${context.tableHeaders.size + 1}`;
   context.tableHeaders.set(objectName, hasHeaders);
-  if (layout.rows.some(row => row.cells.some(cell => Object.keys(cell.style ?? {}).length))) context.tableCells.set(objectName, {layout, scale});
+  if (layout.rows.some(row => row.cells.some(cell => Object.keys(cell.style ?? {}).length))) context.tableCells.set(objectName, {layout, scale, defaultBorder:{color:"#"+context.colors.border,width:1/scale}});
   slide.addTable(rows, {
     objectName,
     x: region.x,
@@ -1644,15 +1644,32 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
         frame = frame.replace('<a:tblPr/>', `<a:tblPr firstRow="${context.tableHeaders.get(name) ? 1 : 0}"/>`);
         const table = context.tableCells.get(name);
         if (!table) return frame;
+        const anchors = table.layout.rows.flatMap(row => row.cells);
+        const ownerAt = (row,column) => anchors.find(anchor => row >= anchor.row && row < anchor.row + anchor.rowSpan && column >= anchor.column && column < anchor.column + anchor.colSpan);
         let rowIndex = 0;
         return frame.replace(/<a:tr\b[^>]*>[\s\S]*?<\/a:tr>/g, rowXml => {
-          const cells = table.layout.rows[rowIndex++].cells;
+          const currentRow = rowIndex++;
+          const cells = table.layout.rows[currentRow].cells;
           let column = 0;
           return rowXml.replace(/<a:tc\b[^>]*>[\s\S]*?<\/a:tc>/g, cellXml => {
             const currentColumn = column++;
             const cell = cells.find(cell => cell.column === currentColumn);
-            if (!cell) return cellXml;
-            const style = cell.style ?? {};
+            const owner = cell ?? ownerAt(currentRow,currentColumn);
+            if (!owner) return cellXml;
+            // PowerPoint reads each physical continuation's perimeter border.
+            // Anchor-only styling truncates dashes and restores hidden segments.
+            const perimeter = {left:currentColumn === owner.column, right:currentColumn === owner.column + owner.colSpan - 1,
+              top:currentRow === owner.row, bottom:currentRow === owner.row + owner.rowSpan - 1};
+            const style = cell ? {...cell.style} : {borders:Object.fromEntries(Object.keys(perimeter).map(edge => [edge,perimeter[edge] ? owner.style?.borders?.[edge] ?? table.defaultBorder : {color:'#000000',width:0}]))};
+            style.borders = {...style.borders};
+            // Native shared-edge precedence can let an implicit neighbor cover
+            // an explicit merge border. Give both physical sides that border.
+            for (const [edge,opposite,dr,dc] of [['left','right',0,-1],['right','left',0,1],['top','bottom',-1,0],['bottom','top',1,0]]) {
+              if (!perimeter[edge] || style.borders[edge] || owner.rowSpan > 1 || owner.colSpan > 1) continue;
+              const neighbor = ownerAt(currentRow+dr,currentColumn+dc);
+              if (neighbor?.style?.borders?.[opposite]) style.borders[edge] = neighbor.style.borders[opposite];
+            }
+            cellXml = cellXml.replace(/<a:tcPr\b([^>]*)\/>/, '<a:tcPr$1></a:tcPr>');
             return cellXml.replace(/<a:tcPr\b([^>]*)>([\s\S]*?)<\/a:tcPr>/, (properties, attributes, contents) => {
               if (style.padding) {
                 const padding = {top:8, right:10, bottom:4, left:10, ...style.padding};
@@ -1667,7 +1684,8 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
                 const fill = border.width === 0 ? '<a:noFill/>' : nativeBackgroundFill({type:'solid',color:border.color},{width:1,height:1});
                 const dash = {solid:'solid',dash:'dash',dot:'sysDot'}[border.dash ?? 'solid'];
                 const line = `<a:${native} w="${Math.round(border.width * table.scale * 9525)}" cap="flat" cmpd="sng" algn="ctr">${fill}<a:prstDash val="${dash}"/></a:${native}>`;
-                contents = contents.replace(new RegExp(`<a:${native}\\b[^>]*>[\\s\\S]*?<\\/a:${native}>`), line);
+                const existing = new RegExp(`<a:${native}\\b[^>]*>[\\s\\S]*?<\\/a:${native}>`);
+                contents = existing.test(contents) ? contents.replace(existing, line) : contents + line;
               }
               return `<a:tcPr${attributes}>${contents}</a:tcPr>`;
             });
