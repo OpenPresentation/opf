@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Replace the truncated PNG in the asset-source-forms example with a complete project-authored image so the inline asset can render and export.
+
 ## 0.4.0
 
 Published to npm on 2026-09-08 (UTC): [`@openpresentation/opf@0.4.0`](https://www.npmjs.com/package/@openpresentation/opf/v/0.4.0). See the [tagged release](https://github.com/OpenPresentation/opf/releases/tag/opf-v0.4.0) for the exact source snapshot.
