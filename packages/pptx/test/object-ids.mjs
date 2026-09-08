@@ -40,7 +40,7 @@ assert.equal(imported.slides.length, 8);
 for (const slide of imported.slides) {
   const tables = slide.blocks.filter(block => block.table).map(block => block.table);
   assert.equal(tables.length, 2);
-  const text = cell => Array.isArray(cell) ? cell.map(run => typeof run === 'string' ? run : run.text).join('') : cell;
+  const text = input => {const cell=input?.value??input;return Array.isArray(cell) ? cell.map(run => typeof run === 'string' ? run : run.text).join('') : cell;};
   assert.deepEqual(tables.map(table => text(table.rows[0][0])).sort(), ['Alpha','Headerless'], 'Interleaved chart frames must not shift table text associations');
   assert.equal(slide.blocks.filter(block => block.image).length, 1);
   assert.equal(slide.blocks.filter(block => block.chart).length, 1);

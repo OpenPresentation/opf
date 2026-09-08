@@ -17,3 +17,5 @@ await copyFile(new URL('src/background-import.js', root), new URL('background-im
 await copyFile(new URL('src/image-import.js', root), new URL('image-import.js', dist));
 
 await copyFile(new URL('src/table-import.js', root), new URL('table-import.js', dist));
+await copyFile(new URL('src/table-cell-import.js', root), new URL('table-cell-import.js', dist));
+await copyFile(new URL('src/table-border-import.js', root), new URL('table-border-import.js', dist));

@@ -167,6 +167,7 @@ export async function toPptx(input, options = {}) {
   const context = resolvePresentationContext(presentation, {...options,textMeasurement:undefined});
   context.listMarkers = new Map();
   context.tableHeaders = new Map();
+  context.tableCells = new Map();
   context.imagePlacements = new Map();
   context.backgroundFills = new Map();
   context.imageFormat = options.imageFormat ?? "compatible";
@@ -410,7 +411,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   const tables = frames.some(frame => frame['a:graphic']?.['a:graphicData']?.['a:tbl'])
     ? importTableFrames(slidePath, {
       part: (path, parser) => parseRequiredXml(entries, path, parser), relationships: path => parseRelationships(entries, path), bytes: path => entries[path]
-    }, relationships, (frame, cell, code, message) => options.onDiagnostic?.({code, message, path: `slides.${slideIndex}.tables.${frame}${cell ? '.' + cell : ''}`})) : [];
+    }, relationships, (frame, cell, code, message) => options.onDiagnostic?.({code, message, path: `slides.${slideIndex}.tables.${frame}${cell ? '.' + cell : ''}`}), dimensions) : [];
   for (const [index, frame] of frames.entries()) {
     const item = importGraphicFrame(entries, frame, slidePath, relationships, tables[index]);
     if (item) items.push(item);
@@ -1111,13 +1112,17 @@ function addTablePayload(slide, table, region, context, options, path) {
   const columnCount = layout.columnCount;
   const rows = layout.rows.map(row => row.cells.map(cell => {
     const {header,rich,fit} = cell;
+    const cellStyle = cell.style ?? {};
+    const baseColor = (cellStyle.color ?? (header ? '#FFFFFF' : '#' + context.colors.text)).replace(/^#/, '');
+    const baseFill = (cellStyle.fill ?? (header ? '#' + context.colors.accent : '#' + context.colors.surface)).replace(/^#/, '');
+    const alpha = value => value.length === 8 ? (1 - parseInt(value.slice(6), 16) / 255) * 100 : 0;
     const text = stringifyText(cell.value), style = cell.textStyle;
     const fragments = rich ? fit.richLines.flatMap(line => line.fragments) : [];
     const runs = rich ? cell.value.flatMap((value, index) => {
       const run = typeof value === 'string' ? {text:value} : value;
       const fragment = fragments.find(item => item.runIndex === index);
       const runStyle = fragment?.style ?? resolveTextStyle({...style,fontFamily:run.fontFamily ?? style.fontFamily,fontWeight:run.bold === undefined ? style.fontWeight : run.bold ? 700 : 400,italic:run.italic ?? style.italic}, options.textMeasurement);
-      const rawColor = /^#(?:[0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(run.color ?? '') ? run.color.slice(1) : header ? 'FFFFFF' : context.colors.text;
+      const rawColor = /^#(?:[0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(run.color ?? '') ? run.color.slice(1) : baseColor;
       const color = normalizeHex(rawColor), transparency = rawColor.length === 8 ? (1 - parseInt(rawColor.slice(6), 16) / 255) * 100 : 0;
       const runOptions = {
         fontFace:runStyle.fontFamily,fontSize:fragment ? fragment.fontSize * .75 : fit.fontSize * .75,
@@ -1146,14 +1151,21 @@ function addTablePayload(slide, table, region, context, options, path) {
         italic: rich ? false : style.italic,
         lineSpacing: fit.lineHeight * 0.75,
         paraSpaceAfter: 0,
-        align: context.contentAlignment,
-        color: header ? "FFFFFF" : context.colors.text,
-        fill: { color: header ? context.colors.accent : context.colors.surface },
+        align: cellStyle.align ?? context.contentAlignment,
+        valign: cellStyle.verticalAlign ?? 'top',
+        ...(cell.colSpan > 1 ? {colspan:cell.colSpan} : {}),
+        ...(cell.rowSpan > 1 ? {rowspan:cell.rowSpan} : {}),
+        color: normalizeHex(baseColor),
+        // Rich runs carry resolved alpha. A translucent cell default would
+        // overwrite an explicit opaque run because PptxGenJS inherits falsy 0.
+        ...(cellStyle.color && !rich ? {transparency:alpha(baseColor)} : {}),
+        fill: { color: normalizeHex(baseFill), ...(cellStyle.fill ? {transparency:alpha(baseFill)} : {}) },
       },
     };
   }));
   const objectName = `OPF table ${context.tableHeaders.size + 1}`;
   context.tableHeaders.set(objectName, hasHeaders);
+  if (layout.rows.some(row => row.cells.some(cell => Object.keys(cell.style ?? {}).length))) context.tableCells.set(objectName, {layout, scale, defaultBorder:{color:"#"+context.colors.border,width:1/scale}});
   slide.addTable(rows, {
     objectName,
     x: region.x,
@@ -1629,7 +1641,56 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
       xml = xml.replace(/<p:graphicFrame>([\s\S]*?)<\/p:graphicFrame>/g, frame => {
         const name = frame.match(/name="(OPF table \d+)"/)?.[1];
         if (!context.tableHeaders.has(name)) return frame;
-        return frame.replace('<a:tblPr/>', `<a:tblPr firstRow="${context.tableHeaders.get(name) ? 1 : 0}"/>`);
+        frame = frame.replace('<a:tblPr/>', `<a:tblPr firstRow="${context.tableHeaders.get(name) ? 1 : 0}"/>`);
+        const table = context.tableCells.get(name);
+        if (!table) return frame;
+        const anchors = table.layout.rows.flatMap(row => row.cells);
+        const ownerAt = (row,column) => anchors.find(anchor => row >= anchor.row && row < anchor.row + anchor.rowSpan && column >= anchor.column && column < anchor.column + anchor.colSpan);
+        let rowIndex = 0;
+        return frame.replace(/<a:tr\b[^>]*>[\s\S]*?<\/a:tr>/g, rowXml => {
+          const currentRow = rowIndex++;
+          const cells = table.layout.rows[currentRow].cells;
+          let column = 0;
+          return rowXml.replace(/<a:tc\b[^>]*>[\s\S]*?<\/a:tc>/g, cellXml => {
+            const currentColumn = column++;
+            const cell = cells.find(cell => cell.column === currentColumn);
+            const owner = cell ?? ownerAt(currentRow,currentColumn);
+            if (!owner) return cellXml;
+            // PowerPoint reads each physical continuation's perimeter border.
+            // Anchor-only styling truncates dashes and restores hidden segments.
+            const perimeter = {left:currentColumn === owner.column, right:currentColumn === owner.column + owner.colSpan - 1,
+              top:currentRow === owner.row, bottom:currentRow === owner.row + owner.rowSpan - 1};
+            const style = cell ? {...cell.style} : {borders:Object.fromEntries(Object.keys(perimeter).map(edge => [edge,perimeter[edge] ? owner.style?.borders?.[edge] ?? table.defaultBorder : {color:'#000000',width:0}]))};
+            style.borders = {...style.borders};
+            // Native shared-edge precedence can let an implicit neighbor cover
+            // an explicit merge border. Give both physical sides that border.
+            for (const [edge,opposite,dr,dc] of [['left','right',0,-1],['right','left',0,1],['top','bottom',-1,0],['bottom','top',1,0]]) {
+              if (!perimeter[edge] || style.borders[edge] || owner.rowSpan > 1 || owner.colSpan > 1) continue;
+              const neighbor = ownerAt(currentRow+dr,currentColumn+dc);
+              if (neighbor?.style?.borders?.[opposite]) style.borders[edge] = neighbor.style.borders[opposite];
+            }
+            cellXml = cellXml.replace(/<a:tcPr\b([^>]*)\/>/, '<a:tcPr$1></a:tcPr>');
+            return cellXml.replace(/<a:tcPr\b([^>]*)>([\s\S]*?)<\/a:tcPr>/, (properties, attributes, contents) => {
+              if (style.padding) {
+                const padding = {top:8, right:10, bottom:4, left:10, ...style.padding};
+                for (const [edge, key] of [['top','marT'],['right','marR'],['bottom','marB'],['left','marL']]) {
+                  attributes = attributes.replace(new RegExp(` ${key}="[^"]*"`), '');
+                  attributes += ` ${key}="${Math.round(padding[edge] * table.scale * 9525)}"`;
+                }
+              }
+              for (const [edge, native] of [['left','lnL'],['right','lnR'],['top','lnT'],['bottom','lnB']]) {
+                const border = style.borders?.[edge];
+                if (!border) continue;
+                const fill = border.width === 0 ? '<a:noFill/>' : nativeBackgroundFill({type:'solid',color:border.color},{width:1,height:1});
+                const dash = {solid:'solid',dash:'dash',dot:'sysDot'}[border.dash ?? 'solid'];
+                const line = `<a:${native} w="${Math.round(border.width * table.scale * 9525)}" cap="flat" cmpd="sng" algn="ctr">${fill}<a:prstDash val="${dash}"/></a:${native}>`;
+                const existing = new RegExp(`<a:${native}\\b[^>]*>[\\s\\S]*?<\\/a:${native}>`);
+                contents = existing.test(contents) ? contents.replace(existing, line) : contents + line;
+              }
+              return `<a:tcPr${attributes}>${contents}</a:tcPr>`;
+            });
+          });
+        });
       });
       // Image data is already resolved and embedded by PptxGenJS. Read those
       // exact bytes instead of fetching or resolving the source a second time.

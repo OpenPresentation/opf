@@ -1,16 +1,17 @@
 import {fromPptx,toPptx} from '@openpresentation/opf-pptx';
 import {renderSvg} from '@openpresentation/opf-render';
 import {unzipSync,zipSync} from 'fflate';
+import {cellValue,tableValues} from './table-values.js';
 const out=document.querySelector('pre');
 let cases=0;
 const check=(condition,message)=>{if(!condition)throw new Error(message);cases++;};
-const text=cell=>Array.isArray(cell)?cell.map(run=>typeof run==='string'?run:run.text).join(''):cell;
+const text=input=>{const cell=cellValue(input);return Array.isArray(cell)?cell.map(run=>typeof run==='string'?run:run.text).join(''):cell;};
 try {
  const source={slides:[{table:{columns:[[{text:'Normal ',bold:false},{text:'bold',bold:true}],'Value'],rows:[
   [[{text:'Native rich text',bold:true,italic:true,color:'#2468AC',fontSize:18,fontFamily:'Georgia',link:'https://example.com'}],'Plain'],
   [['\nStart\n',{text:'\nEnd\n',bold:true}],[]]
  ]}}]};
- const bytes=await toPptx(source),deck=await fromPptx(bytes),table=deck.slides[0].blocks.find(block=>block.table).table;
+ const bytes=await toPptx(source),deck=await fromPptx(bytes),table=tableValues(deck.slides[0].blocks.find(block=>block.table).table);
  check(table.columns[0][0].bold===false,'Normal native header');
  check(table.columns[0][1].bold===true,'Bold native header');
  const run=table.rows[0][0][0];
@@ -28,8 +29,9 @@ try {
  document.querySelector('main').innerHTML=renderSvg(deck,{trace:true,onDiagnostic:d=>diagnostics.push(d)});
  check(!diagnostics.some(d=>d.code==='text-overflow'),'Multiline table uses available space');
  for(const group of document.querySelectorAll('g[data-opf-rich-text="true"]')) {
-  const rectangle=document.querySelector(`rect[data-opf-path="${group.getAttribute('data-opf-path')}"]`);
-  if(!rectangle)continue;
+  const path=group.getAttribute('data-opf-path').replace(/\.value$/,'');
+  const rectangle=document.querySelector(`rect[data-opf-path="${path}"]`);
+  check(!!rectangle,'Imported rich text has its source cell rectangle');
   const bounds=group.getBBox(),row=rectangle.getBBox();
   check(bounds.height===0||(bounds.y>=row.y-1&&bounds.y+bounds.height<=row.y+row.height+1),'Imported rich text stays inside its row');
  }

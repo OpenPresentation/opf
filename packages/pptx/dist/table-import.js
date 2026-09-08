@@ -1,5 +1,7 @@
 import {drawingObject, readSlideTheme} from './background-import.js';
 import {readBackgroundColor} from './background.js';
+import {nativeCellStyle, nativeTableGrid, nativeStyleFill} from './table-cell-import.js';
+import {nativeCellExtent,inheritNativeBorders,nativeBorderProperties,mergeCellBorderOverrides} from './table-border-import.js';
 
 const nodes = (tree, tag) => (tree ?? []).filter(node => Object.hasOwn(node, tag));
 const child = (tree, tag) => nodes(tree, tag)[0]?.[tag];
@@ -52,7 +54,7 @@ function runStyle(properties, context, relationships, report) {
 // overrides a bold paragraph default, and a new fill replaces the inherited fill.
 function mergeProperties(...levels) {
   const result = {};
-  const fills = ['a:solidFill','a:noFill','a:gradFill','a:blipFill','a:pattFill','a:grpFill'];
+  const fills = ['a:solidFill','a:noFill','a:gradFill','a:blipFill','a:pattFill','a:grpFill','_opfUnresolvedTableFill'];
   for (const level of levels) {
     if (!level) continue;
     if (fills.some(key => Object.hasOwn(level, key))) for (const key of fills) delete result[key];
@@ -126,8 +128,8 @@ function tableTextProperties(style, context) {
   return result;
 }
 
-function conditionalProperties(style, properties, row, column, rowCount, columnCount, context, report) {
-  if (!style) return undefined;
+function conditionalProperties(style, properties, row, column, rowCount, columnCount, context, report, geometry) {
+  if (!style) return {text:undefined,cell:{}};
   const enabled = key => boolean(properties[key]) === true;
   const firstRow = enabled('firstRow') && row === 0;
   const lastRow = enabled('lastRow') && row === rowCount - 1;
@@ -146,10 +148,16 @@ function conditionalProperties(style, properties, row, column, rowCount, columnC
   if (firstRow && lastCol) parts.push('neCell');
   if (firstRow && firstCol) parts.push('nwCell');
   const textStyle = {};
+  let cellStyle = {};
+  let borders = {};
+  const extent=nativeCellExtent(row,column,rowCount,columnCount,geometry);
   for (const name of parts) {
     const part = style['a:' + name];
     if (!part) continue;
-    if (Object.entries(part['a:tcStyle'] ?? {}).some(([key, value]) => key !== 'a:tcBdr' || Object.keys(value).length)) report('unsupported-table-cell-style', 'Native cell fills, borders and effects are not represented by OPF table cells; supported character styles are retained.');
+    const decoration=part['a:tcStyle'] ?? {};
+    cellStyle=mergeProperties(cellStyle,nativeStyleFill(decoration,context));
+    borders=inheritNativeBorders(borders,decoration,name,extent,context);
+    if (Object.keys(decoration).some(key=>!['a:fill','a:fillRef','a:tcBdr'].includes(key))) report('unsupported-table-cell-style','The conditional cell style includes effects that are not represented; supported fills, borders and character styles are retained.');
     const current = part['a:tcTxStyle'] ?? {};
     // Resolve choices after inheritance so a later phClr can use an inherited
     // fontRef, and an explicit font collection replaces a themed reference.
@@ -160,13 +168,14 @@ function conditionalProperties(style, properties, row, column, rowCount, columnC
       textStyle[key] = value;
     }
   }
-  return tableTextProperties(textStyle, context);
+  return {text:tableTextProperties(textStyle, context),cell:{...cellStyle,...nativeBorderProperties(borders,extent)}};
 }
 
 // Use the same direct graphic-frame ordering as the slide collector. The ordered
 // reader retains interleaved runs, fields, breaks, empty paragraphs and spaces.
-export function importTableFrames(slidePath, archive, relationships, report) {
+export function importTableFrames(slidePath, archive, relationships, report, dimensions) {
   const context = readSlideTheme(slidePath, archive);
+  const scale = Math.min(dimensions.widthInches,dimensions.heightInches) * 96 / 720;
   const root = child(context.parsedPart(slidePath)?.tree, 'p:sld');
   const tree = child(child(root, 'p:cSld'), 'p:spTree');
   return nodes(tree, 'p:graphicFrame').map((frame, frameIndex) => {
@@ -185,10 +194,19 @@ export function importTableFrames(slidePath, archive, relationships, report) {
       const reported = new Set();
       const emit = (code, message) => {if (!reported.has(code)) {reported.add(code);report(frameIndex, cellPath, code, message);}};
       const geometry = cell[':@'] ?? {};
-      if (['gridSpan','rowSpan'].some(key => Number(geometry[key] ?? 1) > 1) || ['hMerge','vMerge'].some(key => boolean(geometry[key]) === true)) emit('unsupported-table-merge', 'Merged-cell geometry is not represented; the native cell text is retained.');
-      const defaults = conditionalProperties(style, properties, rowIndex, columnIndex, nativeRows.length, columnCount, context, emit);
-      return cellText(child(cell['a:tc'], 'a:txBody'), context, relationships, emit, headers && rowIndex === 0, defaults);
+      const defaults = conditionalProperties(style, properties, rowIndex, columnIndex, nativeRows.length, columnCount, context, emit, geometry);
+      const body = child(cell['a:tc'],'a:txBody');
+      const cellProperties = {...attrs(cell['a:tc'],'a:tcPr'),...drawingObject(child(cell['a:tc'],'a:tcPr'))};
+      const inherited=mergeProperties(defaults.cell,cellProperties);
+      return {
+        geometry,
+        value:cellText(body, context, relationships, emit, headers && rowIndex === 0, defaults.text),
+        style:nativeCellStyle(mergeCellBorderOverrides(defaults.cell,cellProperties,inherited),body,context,scale,emit),
+        borderEdges:[['left','a:lnL'],['right','a:lnR'],['top','a:lnT'],['bottom','a:lnB']]
+          .filter(([,key])=>Object.hasOwn(inherited,key)).map(([edge])=>edge),
+      };
     }));
-    return headers && rows.length ? {columns:rows[0], rows:rows.slice(1)} : {rows};
+    const grid = nativeTableGrid(rows,columnCount,headers,(cell,code,message)=>report(frameIndex,cell,code,message));
+    return grid.headers && grid.rows.length ? {columns:grid.rows[0], rows:grid.rows.slice(1)} : {rows:grid.rows};
   });
 }

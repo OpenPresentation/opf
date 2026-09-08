@@ -33,6 +33,7 @@ await import("./table-import.mjs");
 await import("./rich-table.mjs");
 await import("./rich-table-import.mjs");
 await import("./table-styles.mjs");
+await import("./table-border-styles.mjs");
 await import("./object-ids.mjs");
 await import("./image-fit.mjs");
 await import("./image-orientation.mjs");

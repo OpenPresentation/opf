@@ -1,3 +1,4 @@
+import {fileURLToPath} from 'node:url';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { unzipSync } from 'fflate';
@@ -54,7 +55,7 @@ const hostFrame=find(hostXml,'p:pic')[0]['p:spPr']['a:xfrm']['a:ext'];
 assert.ok(Math.abs(Number(hostFrame['@_cx'])/Number(hostFrame['@_cy'])-.5)<.00001);
 // Local paths and host-returned paths use the same embedded bytes as data URIs.
 for (const source of ['local','host-path','host-data']) {
- const local=new URL('fixtures/images/tall.png',import.meta.url).pathname;
+ const local=fileURLToPath(new URL('fixtures/images/tall.png',import.meta.url));
  let calls=0;
  const result=await toPptx({slides:[{image:source==='local'?local:'https://example.invalid/image'}]},{imageFormat:"preserve",strictAssets:true,...(source==='local'?{}:{imageResolver:()=>{calls++;return source==='host-path'?{path:local}:{data:png,mediaType:'image/png'};}})});
  assert.equal(calls,source==='local'?0:1);
