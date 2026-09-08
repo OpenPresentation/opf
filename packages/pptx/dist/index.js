@@ -1,5 +1,6 @@
 import {importImageOrientation} from './image-import.js';
-import {nativeBackgroundFill, readNativeBackground} from './background.js';
+import {nativeBackgroundFill} from './background.js';
+import {importBackground} from './background-import.js';
 import { webpToPng } from '#image-fallback';
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
 import { composeSlide, fitText, textWidthMeasurer, resolveCanvasDimensions, resolveFontFamilies, resolveTextStyle } from "@openpresentation/opf/composition";
@@ -371,7 +372,9 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
   const slide = {};
   if (slideRoot.show === "0") slide.hidden = true;
 
-  const background = readNativeBackground(slideRoot["p:cSld"]?.["p:bg"]?.["p:bgPr"], resolveCanvasDimensions(dimensions), diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}.design.background`}));
+  const background = importBackground(slidePath, resolveCanvasDimensions(dimensions), {
+    part: path => parseOptionalXml(entries, path), relationships: path => parseRelationships(entries, path), bytes: path => entries[path]
+  }, diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}.design.background`}));
   if (background) slide.design = {background};
 
   const items = collectSlideItems(entries, slideRoot, slidePath, relationships, dimensions, options, slideIndex)
