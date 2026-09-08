@@ -32,7 +32,7 @@ await canvas.ready;
 
 Load the same font bytes into the browser using `loadBrowserFontRegistry` from `@openpresentation/opf-render/fonts-browser` before mounting. The host owns font URLs, storage and collaboration. `onDraft` provides live document drafts; the session only changes on commit. Escape cancels. Concurrent edits to the selected payload cancel a stale draft.
 
-These APIs require the coordinated local preview packages; the previous registry release lacks them. In the sibling OPF checkout, `pnpm pack:ecosystem` prepares installable tarballs and an exact install command in `artifacts/npm/README.md`. Public publishing is separate. See the sibling `opf/docs/live-editor.md` for full setup, support matrix and roadmap.
+These APIs are included in version 0.1.0 and require core 0.4.0 and renderer 0.1.0 for the canvas. See the OPF repository’s `docs/live-editor.md` for setup, the support matrix and roadmap. `pnpm pack:ecosystem` in that repository also prepares local preview tarballs for coordinated development.
 
 The canvas retains canonical SVG glyphs while a transparent native input supplies the caret. Complete rich-text formatting, freeform drag/resize, all chart/media treatments, and cross-engine pixel identity remain work in progress. The Source dialog in the playground now provides a live JSON preview; changes are validated before committing.
 
@@ -172,7 +172,7 @@ This repo does not require an npm automation token when Trusted Publishing is co
 
 The current checkout uses `@openpresentation/opf/composition` for portable geometry. Slides can select `auto`, `row`, `column`, or `grid`, set weighted tracks, and request path-specific overflow diagnostics. See the sibling OPF repo's `docs/dynamic-composition.md` for the complete contract.
 
-These new APIs are pending a coordinated OPF release. With all repos checked out beside each other, build OPF and run `node scripts/link-ecosystem.mjs` from that repo before building this package. Run `pnpm test:ecosystem` in OPF to check editing, rendering, editable PowerPoint geometry, and import together. The published OPF 0.3.0 package does not contain the new composition entry point; downstream publication must wait for the new core release and an updated minimum dependency version.
+Version 0.1.0 requires published `@openpresentation/opf@^0.4.0`. The optional renderer peer requires `@openpresentation/opf-render@^0.1.0`. Clean registry installs support the new composition APIs without sibling checkouts. For coordinated source development, build OPF and run `node scripts/link-ecosystem.mjs` there; `pnpm test:ecosystem` verifies shared geometry and import/export behavior.
 
 ## Local interactive demo
 
@@ -216,7 +216,7 @@ Headless applications and agents can import `formatRichTextRange`, `replaceRichT
 
 The canvas can show draggable, keyboard-accessible dividers for root and nested composition tracks. Pass `layoutEditing: true`, or call `canvas.setLayoutEditing(true)`. A pointer drag produces live preview drafts and commits one undo step. Escape cancels; strict overflow prevents invalid fit. Automatic layouts become explicit grids when resized. Promoted regions stay fixed, while their nested groups can be resized.
 
-`prepareTrackResize(document, flow, boundary, fraction)` from `@openpresentation/opf-editor/layout` returns a candidate document and guarded patches for headless agents. Obtain `flow` from the shared renderer's `geometry.flows`; preview the candidate before applying. The editor supports JSON Patch `test` guards alongside add/replace/remove; failed guards leave state and history unchanged. This export requires the coordinated local preview package until a compatible public release is published.
+`prepareTrackResize(document, flow, boundary, fraction)` from `@openpresentation/opf-editor/layout` returns a candidate document and guarded patches for headless agents. Obtain `flow` from the shared renderer's `geometry.flows`; preview the candidate before applying. The editor supports JSON Patch `test` guards alongside add/replace/remove; failed guards leave state and history unchanged. This export is included in version 0.1.0.
 
 
 ### Move complete blocks
