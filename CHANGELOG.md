@@ -1,9 +1,10 @@
 # Changelog
 
-## Unreleased
+## 0.5.0
 
 - Accept canonical `TextRun[]` values in table cells and column headers, alongside existing scalar cells and string headers. Measure rich cells with their actual font and run styles for overflow detection and pagination; preserve complete rows and repeated headers without mutating the document.
-- Rich table rendering, editor interactions and editable PPTX export require the coordinated development packages. Published OPF 0.4.1 does not yet accept this syntax; native PPTX import still flattens table text.
+- Rebuild the standalone CLI as 0.2.0 with bundled OPF 0.5.0. The generated table types now include rich arrays, so consumers that exhaustively handle scalar cells or string-only headers must handle the additional form.
+- Rich table rendering, editor interactions and editable PPTX export require the coordinated downstream development packages until their corresponding releases are published. Older core 0.4.1 does not accept this syntax; native PPTX import still flattens table text.
 
 ## 0.4.1
 

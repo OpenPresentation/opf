@@ -4,23 +4,18 @@ A local CLI for agents and people working with `.opf.json` presentations. Create
 
 The CLI bundles its OPF schema, catalogs, and validator. It needs no separate core package, API key, or network connection at runtime. `opf --version` reports the CLI and bundled core versions. It does not render slides; successful validation is not visual verification.
 
-## Install the current preview
+## Install
 
-This version is an installable npm tarball, **not yet published to the npm registry**. From the OPF checkout, build and verify it:
-
-```sh
-pnpm install
-pnpm test:cli:packed
-```
-
-That creates `artifacts/cli/openpresentation-cli-0.1.0.tgz`. Install it globally using its absolute path:
+The CLI is published on npm. Install the current release:
 
 ```sh
-npm install -g /absolute/path/to/opf/artifacts/cli/openpresentation-cli-0.1.0.tgz
+npm install -g @openpresentation/cli
 opf --version
 ```
 
-Or install the tarball as a development dependency and use `npx --no-install opf`. For source development, run `pnpm --filter @openpresentation/cli build` and `node packages/cli/dist/index.js --help` from the checkout. Publishing is a separate release step; the package metadata and `opf` binary are ready for it.
+Or install it as a development dependency and use `npx --no-install opf`. This checkout prepares CLI 0.2.0 with bundled OPF 0.5.0; that version supports rich table cells and headers during validation and pagination. Until 0.2.0 is published, the registry's latest release has the previous schema.
+
+To verify the standalone package from source, run `pnpm install` and `pnpm test:cli:packed`. This creates `artifacts/cli/openpresentation-cli-0.2.0.tgz`, which can be installed using its absolute path. For source development, run `pnpm --filter @openpresentation/cli build` and `node packages/cli/dist/index.js --help`.
 
 ## Create and validate
 
