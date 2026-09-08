@@ -74,6 +74,7 @@ jobs:
         run: |
           pnpm test:registry-ecosystem
           pnpm test:registry-fidelity
+          node packages/cli/test/packed.mjs --registry
       - name: Report the verification boundary
         if: always()
         run: |
