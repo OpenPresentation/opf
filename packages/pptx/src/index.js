@@ -251,13 +251,13 @@ function readPptxZip(input) {
   }
 }
 
-function parseRequiredXml(entries, path) {
+function parseRequiredXml(entries, path, parser = xmlParser) {
   const bytes = entries[path];
   if (!bytes) {
     throw new OPFPptxError("invalid-pptx", `PPTX is missing ${path}.`, { path });
   }
   try {
-    return xmlParser.parse(decodeText(bytes));
+    return parser.parse(decodeText(bytes));
   } catch (error) {
     throw new OPFPptxError("invalid-pptx", `PPTX XML part could not be parsed: ${path}.`, {
       path,
@@ -373,7 +373,7 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
   if (slideRoot.show === "0") slide.hidden = true;
 
   const background = importBackground(slidePath, resolveCanvasDimensions(dimensions), {
-    part: path => parseOptionalXml(entries, path), relationships: path => parseRelationships(entries, path), bytes: path => entries[path]
+    part: (path, parser) => parseRequiredXml(entries, path, parser), relationships: path => parseRelationships(entries, path), bytes: path => entries[path]
   }, diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}.design.background`}));
   if (background) slide.design = {background};
 

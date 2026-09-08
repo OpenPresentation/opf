@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Preserve ordered native luminance and opacity transforms in solid and linear-gradient backgrounds, including theme colors and style placeholders. Retain precision through the full color reference chain; diagnose unsupported transforms.
+
 - Import supported slide backgrounds inherited from layouts and masters, resolving theme colors, color-map overrides, theme overrides and background style references to explicit editable fills.
 - Preserve opacity when exporting OPF theme-slot backgrounds. Report unresolved or unsupported native background fills instead of silently ignoring them.
 - Add inheritance/style-reference regression coverage; native Keynote/PowerPoint compatibility remains separately qualified in the README.

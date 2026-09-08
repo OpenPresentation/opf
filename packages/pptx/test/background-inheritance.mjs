@@ -26,12 +26,13 @@ async function check(change, expected, diagnostic) {
   const imported=await fromPptx(bytes,{onDiagnostic:d=>reports.push(d)});
   assert.deepEqual(bytes,original,'Native source bytes stay intact');
   assert.equal(validatePresentation(imported).valid,true);
-  assert.deepEqual(imported.slides[0].design?.background,expected);
+  const comparable = background => background?.opacity === undefined ? background : {...background, opacity: Math.round(background.opacity * 1e12) / 1e12};
+  assert.deepEqual(comparable(imported.slides[0].design?.background),expected);
   if(diagnostic) {assert.equal(reports[0]?.code,diagnostic);assert.equal(reports[0]?.path,'slides.0.design.background');}
   else assert.deepEqual(reports,[]);
   if(expected) {
     const again=await fromPptx(await toPptx(imported));
-    assert.deepEqual(again.slides[0].design.background,expected,'Resolved colors remain editable through another native round-trip');
+    assert.deepEqual(comparable(again.slides[0].design.background),expected,'Resolved colors remain editable through another native round-trip');
   }
   cases++;
 }
@@ -99,6 +100,49 @@ for(const [change,code] of [
   [p=>bg(p,slide,'<p:bgRef idx="9999"><a:schemeClr val="accent1"/></p:bgRef>'),'unsupported-background-fill'],
   [p=>{setStyles(p);bg(p,slide,'<p:bgRef idx="1"><a:schemeClr val="missing"/></p:bgRef>');},'unsupported-background-fill'],
 ]) await check(change,undefined,code);
+
+// Expected RGB values were independently calculated with Python colorsys HLS,
+// rounding to the nearest eight-bit channel only after the complete sequence.
+const transformsXml = operations => operations.map(([name,value]) => `<a:${name} val="${value}"/>`).join('');
+for (const [operations,hex] of [
+  [[['lumMod',50000]], '#091A2B'],
+  [[['lumMod',50000],['lumOff',50000]], '#579ADC'],
+  [[['lumOff',50000],['lumMod',50000]], '#1F5A94'],
+  [[['lumMod',50000],['lumOff',20000],['lumMod',50000]], '#0D2740'],
+  [[['lum',75000]], '#96BFE9'],
+  [[['lumOff',200000],['lumMod',50000]], '#2C80D3'],
+  [[['lumOff',-200000]], '#000000'],
+  [[['lumMod',200000]], '#2468AC'],
+]) for (const owner of [slide,master]) await check(p=>bg(p,owner,scheme('accent1',transformsXml(operations))),{type:'solid',color:hex});
+for (const [operations,opacity] of [
+  [[['alpha',40000],['alphaMod',50000]], .2],
+  [[['alphaMod',50000],['alpha',40000]], .4],
+  [[['alpha',40000],['alphaOff',20000],['alphaMod',50000]], .3],
+  [[['alpha',40000],['alphaMod',50000],['alphaOff',20000]], .4],
+  [[['alpha',40000],['alphaOff',-50000]], 0],
+  [[['alphaMod',200000]], 1],
+  [[['alpha',40000],['alphaMod',50000],['alphaOff',20000],['alphaMod',50000]], .2],
+]) await check(p=>bg(p,slide,scheme('accent1',transformsXml(operations))),{type:'solid',color:'#123456',...(opacity===1?{}:{opacity})});
+for (const [hex,operations,expected] of [
+  ['000000',[['lumOff',50000]],'#808080'],
+  ['FFFFFF',[['lumMod',50000]],'#808080'],
+  ['808080',[['lumOff',25000]],'#C0C0C0'],
+  ['FF0000',[['lumMod',50000]],'#800000'],
+  ['00FF00',[['lumMod',50000],['lumOff',50000]],'#80FF80'],
+]) await check(p=>bg(p,slide,`<p:bgPr><a:solidFill><a:srgbClr val="${hex}">${transformsXml(operations)}</a:srgbClr></a:solidFill></p:bgPr>`),{type:'solid',color:expected});
+// Theme transforms precede reference transforms; placeholder transforms follow
+// the reference. Keep precision and order across all three layers.
+await check(p=>{
+  setStyles(p);
+  edit(p,theme,x=>x.replace('<a:accent1><a:srgbClr val="123456"/></a:accent1>','<a:accent1><a:srgbClr val="123456"><a:lumMod val="50000"/><a:alpha val="40000"/></a:srgbClr></a:accent1>').replaceAll('<a:schemeClr val="phClr"/>','<a:schemeClr val="phClr"><a:lumMod val="50000"/><a:alphaOff val="20000"/></a:schemeClr>'));
+  bg(p,layout,'<p:bgRef idx="1001"><a:schemeClr val="accent1"><a:lumOff val="20000"/><a:alphaMod val="50000"/></a:schemeClr></p:bgRef>');
+},{type:'solid',color:'#0D2740',opacity:.4});
+await check(p=>bg(p,slide,'<p:bgPr><a:solidFill><a:sysClr val="window" lastClr="123456"><a:lumMod val="200000"/></a:sysClr></a:solidFill></p:bgPr>'),{type:'solid',color:'#2468AC'});
+await check(p=>{
+  setStyles(p);edit(p,theme,x=>x.replaceAll('<a:schemeClr val="accent1"/>','<a:schemeClr val="accent1"><a:lumMod val="50000"/><a:alpha val="40000"/><a:alphaMod val="50000"/></a:schemeClr>'));
+  bg(p,slide,'<p:bgRef idx="1002"><a:schemeClr val="accent2"/></p:bgRef>');
+},{type:'gradient',gradient:{angle:90,stops:[{position:0,color:'#091A2B33'},{position:1,color:'#ABCDEF'}]}});
+for (const xml of ['<a:alphaMod val="-1"/>','<a:alphaOff val="100001"/>','<a:lum val="100001"/>','<a:lumMod/>','<a:lumMod val="no"/>','<a:lumMod val="50000"><a:unknown/></a:lumMod>','<a:lumMod val="50000"/><a:tint val="50000"/>']) await check(p=>bg(p,slide,scheme('accent1',xml)),undefined,'unsupported-background-fill');
 
 const themed={slides:[{design:{background:{type:'theme',slot:'dark1',opacity:.25}}}]};
 const restored=await fromPptx(await toPptx(themed));

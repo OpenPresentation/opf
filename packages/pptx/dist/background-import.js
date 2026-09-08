@@ -1,5 +1,5 @@
 import {XMLParser} from 'fast-xml-parser';
-import {readNativeBackground, readBackgroundColor} from './background.js';
+import {readNativeBackground, readBackgroundColor, colorTransforms} from './background.js';
 
 const orderedParser = new XMLParser({ignoreAttributes: false, attributeNamePrefix: '', preserveOrder: true, parseAttributeValue: false, parseTagValue: false});
 const defaultMapping = {bg1:'lt1',tx1:'dk1',bg2:'lt2',tx2:'dk2'};
@@ -9,19 +9,38 @@ function object(nodes) {
   for (const node of nodes ?? []) for (const [name, value] of Object.entries(node)) {
     if (name === ':@' || name === '#text') continue;
     const child = {...(node[':@'] ?? {}), ...object(value)};
+    if (['a:srgbClr', 'a:sysClr', 'a:schemeClr'].includes(name)) {
+      child[colorTransforms] = (value ?? []).flatMap(item => Object.keys(item)
+        .filter(key => key !== ':@' && key !== '#text')
+        .map(key => [key, {...(item[':@'] ?? {}), ...object(item[key])}]));
+    }
     if (Object.hasOwn(result, name)) result[name] = Array.isArray(result[name]) ? [...result[name], child] : [result[name], child];
     else result[name] = child;
   }
   return result;
 }
 
+// Cache by archive entry identity. Weak keys release parsed themes when the
+// input archive is collected and avoid reparsing a shared master for every slide.
+const parsedParts = new WeakMap();
+function parsed(bytes, parse) {
+  if (!bytes) return undefined;
+  if (!parsedParts.has(bytes)) {
+    const tree = parse();
+    parsedParts.set(bytes, {tree, value: object(tree)});
+  }
+  return parsedParts.get(bytes);
+}
+
 // Resolve only relationships inside the input archive; never fetch theme URLs.
 export function importBackground(slidePath, dimensions, {part, relationships, bytes}, report) {
+  const parsedPart = path => parsed(bytes(path), () => part(path, orderedParser));
+  const value = path => parsedPart(path)?.value;
   const related = (path, type) => [...relationships(path).values()].find(rel => rel.type.endsWith('/' + type) && bytes(rel.path))?.path;
   const layoutPath = related(slidePath, 'slideLayout');
   const masterPath = layoutPath && related(layoutPath, 'slideMaster');
   const chain = [[slidePath, 'p:sld'], [layoutPath, 'p:sldLayout'], [masterPath, 'p:sldMaster']]
-    .filter(([path]) => path).map(([path, root]) => ({path, root:part(path)?.[root]}));
+    .filter(([path]) => path).map(([path, root]) => ({path, root:value(path)?.[root]}));
   const master = chain.find(item => item.root?.['p:clrMap'])?.root;
   const masterMapping = {...defaultMapping, ...master?.['p:clrMap']};
   let mapping = masterMapping;
@@ -35,7 +54,7 @@ export function importBackground(slidePath, dimensions, {part, relationships, by
     for (const type of ['theme', 'themeOverride']) {
       const themePath = related(path, type);
       if (!themePath) continue;
-      const doc = part(themePath);
+      const doc = value(themePath);
       const elements = type === 'theme' ? doc?.['a:theme']?.['a:themeElements'] : doc?.['a:themeOverride'];
       if (elements?.['a:clrScheme']) colors = elements['a:clrScheme'];
       if (elements?.['a:fmtScheme']) {format = elements['a:fmtScheme'];formatPath = themePath;}
@@ -57,7 +76,7 @@ export function importBackground(slidePath, dimensions, {part, relationships, by
   if (!format || !formatPath) return unsupported();
   // Fill lists can interleave solid, gradient and image fills. Preserve XML
   // child order when indexing them; the normal object parser groups tag names.
-  const tree = orderedParser.parse(new TextDecoder().decode(bytes(formatPath)));
+  const tree = parsedPart(formatPath).tree;
   const theme = children(tree, 'a:theme');
   const elements = theme ? children(theme, 'a:themeElements') : children(tree, 'a:themeOverride');
   const fmt = children(elements, 'a:fmtScheme');
