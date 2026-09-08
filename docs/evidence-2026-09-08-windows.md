@@ -74,3 +74,15 @@ Official references inspected:
 - [Open skills CLI](https://github.com/vercel-labs/skills): npx installation, named skill/agent selection, project/global scope, copy mode and updates.
 
 The OPF installer still requires implementation and clean-project/update tests. It must preserve user changes and unrelated agent configuration, install all six self-contained folders, work on Windows without symlink privileges, and expose a real command in CLI help and repository/site documentation. No implemented or published installer is claimed by this research checkpoint.
+
+## Dependency-notification checkpoint
+
+Core Dependabot PR #14 (Biome 2.5.3 to 2.5.12) was reviewed, tested against the current checkout with the actual 2.5.12 executable, and merged as `001caa0b7b36692b0ac445ca8ac782ee1a93045d`. Its CI passes Node 20/24; the lockfile diff changes only Biome and its platform binaries. Existing lint warnings remain; no runtime package was upgraded by this PR. The six major-version PRs remain separate for compatibility review.
+
+Core configuration now groups minor/patch version updates and minor/patch security updates separately, schedules version updates for Monday 09:00 America/Los_Angeles, and caps routine open PRs. Unmatched majors remain individual updates. PR CI remains enabled; push CI runs only on main to remove duplicate push/PR jobs. CODEOWNERS remains intact. These changes take effect after the release-sync PR merges; other repositories still need equivalent configuration during their maintenance milestones.
+
+References: [GitHub security-update configuration](https://docs.github.com/en/code-security/how-tos/secure-your-supply-chain/secure-your-dependencies/configure-security-updates), [reviewer configuration migration to CODEOWNERS](https://github.blog/changelog/2025-08-08-dependabot-reviewers-configuration-option-is-replaced-by-code-owners/). Security alerts were not suppressed, dismissed or delayed by the routine version-update schedule.
+
+## Skills installer experiment
+
+The official MIT-licensed `skills@1.5.25` installs all six OPF skills from GitHub on Windows with `skills add OpenPresentation/opf --skill '*' --agent codex --copy --yes`. The isolated project retained its existing AGENTS.md. Telemetry was disabled for the experiment. A simulated stale installation with a local skill customization was then updated using `skills update opf-inspect --project --yes`; that customization was overwritten. Therefore that updater is not presented as preserving local edits. A bundled CLI installer with preflight hash checks and recoverable updates is being implemented on `codex/skills-installer-20260908`; it is not published yet.
