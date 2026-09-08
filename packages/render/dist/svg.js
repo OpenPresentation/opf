@@ -1182,7 +1182,15 @@ function renderRichLines(value,fit,box,bound,config) {
     if(run.link&&/^(https?:|mailto:)/i.test(run.link))return tag('a',{href:run.link,target:'_blank',rel:'noopener noreferrer'},rendered);
     return rendered;
   }));
-  return tag('g',{...traceAttrs(config.options,config.path),...(config.options.trace?{'data-opf-box-width':box.width,'data-opf-rich-text':config.rich===false?undefined:'true'}:{}),...(fit.overflow?{'data-opf-overflow':'true'}:{})},content.join('\n'));
+  let cursor=0;
+  const whole=value.map(run=>typeof run==='string'?run:run.text).join('');
+  const lineTrace=config.options.trace?fit.richLines.map((line,index)=>{
+    if(index){const newline=/^(\r\n|\r|\n)/.exec(whole.slice(cursor));if(newline)cursor+=newline[0].length;}
+    const start=cursor;cursor+=(fit.lines[index]??'').length;
+    const offset=alignment==='right'?box.width-line.width:alignment==='center'?(box.width-line.width)/2:0;
+    return {start,end:cursor,x:box.x+offset,y:box.y+line.y,height:line.height};
+  }):undefined;
+  return tag('g',{...traceAttrs(config.options,config.path),...(config.options.trace?{'data-opf-box-width':box.width,'data-opf-rich-text':config.rich===false?undefined:'true','data-opf-rich-lines':JSON.stringify(lineTrace)}:{}),...(fit.overflow?{'data-opf-overflow':'true'}:{})},content.join('\n'));
 }
 
 function renderTextBox(text, box, bound, config) {

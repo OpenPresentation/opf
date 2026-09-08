@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Include rich-text line offsets and measured boxes in opt-in SVG tracing, including empty and trailing lines, for editor caret placement. Normal SVG/PNG output is unchanged; all 805 raster checks pass.
+
 ## 0.1.0
 
 - Require OPF 0.4.0, enabling standalone installs of shared composition, nested layouts, pagination, measured rich text and lists.
