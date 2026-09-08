@@ -937,7 +937,8 @@ function renderTable(item, box, bound, options) {
         "stroke-width": 1,
         ...traceAttrs(options, cellPath)
       }));
-      children.push(renderTextBox(flattenText(cells[columnIndex] ?? ""), {
+      const rich = Array.isArray(cells[columnIndex]);
+      children.push((rich ? renderRichTextBox : renderTextBox)(rich ? cells[columnIndex] : flattenText(cells[columnIndex] ?? ""), {
         x: x + 10 * scale,
         y: y + 8 * scale,
         width: Math.max(scale, cellWidth - 20 * scale),

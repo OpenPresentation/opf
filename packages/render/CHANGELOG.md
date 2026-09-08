@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.0
+
+- Render canonical rich table cells and headers with shared run measurement, styles, links and editor trace geometry. Existing scalar-cell raster output remains unchanged. Requires core 0.5.0; core 0.4.1 does not accept this syntax.
+
 ## 0.2.0
 
 This minor release requires Node 20.9 or later and OPF 0.4.1. Browser entrypoints remain available without native Node dependencies.
