@@ -1,6 +1,6 @@
 {
   "name": "@openpresentation/opf-editor",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Embeddable local OPF editor primitives built on the deterministic renderer.",
   "license": "MIT",
   "type": "module",
@@ -81,10 +81,10 @@
     "prepack": "npm run build"
   },
   "dependencies": {
-    "@openpresentation/opf": "^0.5.0"
+    "@openpresentation/opf": "^0.6.0"
   },
   "peerDependencies": {
-    "@openpresentation/opf-render": "^0.3.0"
+    "@openpresentation/opf-render": "^0.4.0"
   },
   "peerDependenciesMeta": {
     "@openpresentation/opf-render": {
@@ -92,6 +92,6 @@
     }
   },
   "devDependencies": {
-    "@openpresentation/opf-render": "0.3.0"
+    "@openpresentation/opf-render": "0.4.0"
   }
 }

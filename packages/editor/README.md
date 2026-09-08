@@ -32,7 +32,7 @@ await canvas.ready;
 
 Load the same font bytes into the browser using `loadBrowserFontRegistry` from `@openpresentation/opf-render/fonts-browser` before mounting. The host owns font URLs, storage and collaboration. `onDraft` provides live document drafts; the session only changes on commit. Escape cancels. Concurrent edits to the selected payload cancel a stale draft.
 
-These APIs were introduced in 0.1.0. Version 0.2.0 requires core 0.5.0 and renderer 0.3.0 for the canvas, including rich table cells and headers. See the OPF repository’s `docs/live-editor.md` for setup, the support matrix and roadmap. `pnpm pack:ecosystem` in that repository also prepares local preview tarballs for coordinated development.
+These APIs were introduced in 0.1.0. Version 0.3.0 requires core 0.6.0 and renderer 0.4.0 for the canvas, including rich table cells, headers and content-aware row heights. See the OPF repository’s `docs/live-editor.md` for setup, the support matrix and roadmap. `pnpm pack:ecosystem` in that repository also prepares local preview tarballs for coordinated development.
 
 The canvas retains canonical SVG glyphs while a transparent native input supplies the caret. Advanced shaping, freeform object positioning, all chart/media treatments, and cross-engine pixel identity remain work in progress. The Source dialog in the playground now provides a live JSON preview; changes are validated before committing.
 
@@ -168,11 +168,11 @@ Required first-publish setup:
 
 This repo does not require an npm automation token when Trusted Publishing is configured.
 
-## Shared dynamic composition (local development)
+## Shared dynamic composition
 
 The current checkout uses `@openpresentation/opf/composition` for portable geometry. Slides can select `auto`, `row`, `column`, or `grid`, set weighted tracks, and request path-specific overflow diagnostics. See the sibling OPF repo's `docs/dynamic-composition.md` for the complete contract.
 
-Version 0.2.0 requires `@openpresentation/opf@^0.5.0`. The optional renderer peer requires `@openpresentation/opf-render@^0.3.0`. Clean registry installs support the new composition APIs without sibling checkouts. For coordinated source development, build OPF and run `node scripts/link-ecosystem.mjs` there; `pnpm test:ecosystem` verifies shared geometry and import/export behavior.
+Version 0.3.0 requires `@openpresentation/opf@^0.6.0`. The optional renderer peer requires `@openpresentation/opf-render@^0.4.0`. Clean registry installs support the new composition APIs without sibling checkouts. For coordinated source development, build OPF and run `node scripts/link-ecosystem.mjs` there; `pnpm test:ecosystem` verifies shared geometry and import/export behavior.
 
 ## Local interactive demo
 
