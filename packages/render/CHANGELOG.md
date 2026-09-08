@@ -2,8 +2,10 @@
 
 ## Unreleased
 
+## 0.5.0
+
 - Render the coordinated core's styled and spanning table cells with fills, text colors, alignment, reference-pixel padding and individual solid/dashed/dotted borders. Preserve anchor and `.value` traces for editing and keep the existing scalar raster corpus unchanged.
-- This work requires the unpublished coordinated core branch. Native import, editor interaction checks and the versioned package rollout remain in progress.
+- Require core 0.7.0. Coordinated native import and styled editor pointer/keyboard/formatting/undo checks pass with actual browser fonts; native PowerPoint raster equivalence remains unverified.
 
 ## 0.4.0
 
