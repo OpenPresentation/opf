@@ -5,7 +5,7 @@ const nodes = (tree, tag) => (tree ?? []).filter(node => Object.hasOwn(node, tag
 const child = (tree, tag) => nodes(tree, tag)[0]?.[tag];
 const attrs = (tree, tag) => nodes(tree, tag)[0]?.[':@'] ?? {};
 const text = tree => (tree ?? []).map(node => node['#text'] ?? '').join('');
-const boolean = value => value === '1' || value === 'true' ? true : value === '0' || value === 'false' ? false : undefined;
+const boolean = value => ['1','true','on'].includes(value) ? true : ['0','false','off'].includes(value) ? false : undefined;
 
 function runStyle(properties, context, relationships, report) {
   const result = {};
@@ -24,6 +24,7 @@ function runStyle(properties, context, relationships, report) {
     result.subscript = baseline < 0;
   }
   const font = properties['a:latin']?.typeface;
+  if (properties['a:latin'] && !font) report('unsupported-table-font', 'The native text font has no usable Latin face or theme reference.');
   if (font) {
     const match = font.match(/^\+(mj|mn)-(lt|ea|cs)$/);
     const family = match ? context.fonts?.[match[1] === 'mj' ? 'a:majorFont' : 'a:minorFont']?.[{lt:'a:latin',ea:'a:ea',cs:'a:cs'}[match[2]]]?.typeface : font;
@@ -60,7 +61,7 @@ function mergeProperties(...levels) {
   return result;
 }
 
-function cellText(body, context, relationships, report, header) {
+function cellText(body, context, relationships, report, header, tableDefaults) {
   const listStyle = drawingObject(child(body, 'a:lstStyle'));
   const paragraphs = nodes(body, 'a:p');
   const runs = [];
@@ -73,7 +74,7 @@ function cellText(body, context, relationships, report, header) {
     if (index) append('\n');
     const pPr = drawingObject(content)['a:pPr'] ?? {};
     const level = Number(pPr.lvl ?? 0) + 1;
-    const defaults = mergeProperties(header ? {b:'0'} : undefined, listStyle['a:defPPr']?.['a:defRPr'], listStyle[`a:lvl${level}pPr`]?.['a:defRPr'], pPr['a:defRPr']);
+    const defaults = mergeProperties(header ? {b:'0'} : undefined, tableDefaults, listStyle['a:defPPr']?.['a:defRPr'], listStyle[`a:lvl${level}pPr`]?.['a:defRPr'], pPr['a:defRPr']);
     for (const node of content) {
       const tag = ['a:r', 'a:fld', 'a:br'].find(tag => Object.hasOwn(node, tag));
       if (!tag) continue;
@@ -82,6 +83,84 @@ function cellText(body, context, relationships, report, header) {
     }
   });
   return runs.some(run => typeof run !== 'string') ? runs : runs.join('');
+}
+
+// Table styles are archive data, resolved through the presentation relationship.
+// The list's def attribute is an insertion default, not an implicit style for
+// existing unstyled tables. Built-in IDs without archive definitions stay explicit
+// diagnostics; do not substitute a guessed theme or download style definitions.
+function tableStyle(props, archive, context, report) {
+  const inline = child(props, 'a:tableStyle');
+  if (inline) return drawingObject(inline);
+  const id = text(child(props, 'a:tableStyleId')).trim().toLowerCase();
+  if (!id) return undefined;
+  const relationship = [...archive.relationships('ppt/presentation.xml').values()]
+    .find(rel => rel.type.endsWith('/tableStyles') && rel.targetMode !== 'External' && archive.bytes(rel.path));
+  const list = relationship && child(context.parsedPart(relationship.path)?.tree, 'a:tblStyleLst');
+  const selected = nodes(list, 'a:tblStyle').find(node => node[':@']?.styleId?.trim().toLowerCase() === id);
+  if (selected) return drawingObject(selected['a:tblStyle']);
+  report('unsupported-table-style', 'The referenced native table style has no definition in this archive; direct text formatting is retained.');
+  return undefined;
+}
+
+const colorKinds = ['a:srgbClr','a:sysClr','a:schemeClr','a:scrgbClr','a:hslClr','a:prstClr'];
+function tableTextProperties(style, context) {
+  const result = {};
+  for (const key of ['b','i']) {
+    const value = boolean(style[key]);
+    if (value !== undefined) result[key] = value ? '1' : '0';
+  }
+  if (style['a:font']) {
+    result['a:latin'] = style['a:font']['a:latin'] ?? {};
+  } else if (style['a:fontRef']) {
+    const index = style['a:fontRef'].idx;
+    result['a:latin'] = {typeface:index === 'major' ? '+mj-lt' : index === 'minor' ? '+mn-lt' : ''};
+  }
+  const color = Object.fromEntries(colorKinds.filter(key => Object.hasOwn(style, key)).map(key => [key, style[key]]));
+  if (Object.keys(color).length) {
+    const placeholder = readBackgroundColor(style['a:fontRef'], context);
+    const resolved = readBackgroundColor(color, {...context, placeholder});
+    // Normalize style placeholder colors before merging direct paragraph/run fills.
+    result['a:solidFill'] = resolved ? {'a:srgbClr':{val:resolved.hex.slice(1), 'a:alpha':{val:String(Math.round(resolved.alpha * 100000))}}} : color;
+  }
+  return result;
+}
+
+function conditionalProperties(style, properties, row, column, rowCount, columnCount, context, report) {
+  if (!style) return undefined;
+  const enabled = key => boolean(properties[key]) === true;
+  const firstRow = enabled('firstRow') && row === 0;
+  const lastRow = enabled('lastRow') && row === rowCount - 1;
+  const firstCol = enabled('firstCol') && column === 0;
+  const lastCol = enabled('lastCol') && column === columnCount - 1;
+  // DrawingML / MS-OI29500 2.1.1265 order (not WordprocessingML order).
+  const parts = ['wholeTbl'];
+  if (enabled('bandRow') && !firstRow && !lastRow) parts.push((row + Number(enabled('firstRow'))) % 2 ? 'band2H' : 'band1H');
+  if (enabled('bandCol') && !firstCol && !lastCol) parts.push((column + Number(enabled('firstCol'))) % 2 ? 'band2V' : 'band1V');
+  if (lastCol) parts.push('lastCol');
+  if (firstCol) parts.push('firstCol');
+  if (lastRow) parts.push('lastRow');
+  if (lastRow && lastCol) parts.push('seCell');
+  if (lastRow && firstCol) parts.push('swCell');
+  if (firstRow) parts.push('firstRow');
+  if (firstRow && lastCol) parts.push('neCell');
+  if (firstRow && firstCol) parts.push('nwCell');
+  const textStyle = {};
+  for (const name of parts) {
+    const part = style['a:' + name];
+    if (!part) continue;
+    if (Object.entries(part['a:tcStyle'] ?? {}).some(([key, value]) => key !== 'a:tcBdr' || Object.keys(value).length)) report('unsupported-table-cell-style', 'Native cell fills, borders and effects are not represented by OPF table cells; supported character styles are retained.');
+    const current = part['a:tcTxStyle'] ?? {};
+    // Resolve choices after inheritance so a later phClr can use an inherited
+    // fontRef, and an explicit font collection replaces a themed reference.
+    if (current['a:font'] || current['a:fontRef']) {delete textStyle['a:font'];delete textStyle['a:fontRef'];}
+    if (colorKinds.some(key => Object.hasOwn(current, key))) for (const key of colorKinds) delete textStyle[key];
+    for (const [key, value] of Object.entries(current)) {
+      if (['b','i'].includes(key) && value === 'def') continue;
+      textStyle[key] = value;
+    }
+  }
+  return tableTextProperties(textStyle, context);
 }
 
 // Use the same direct graphic-frame ordering as the slide collector. The ordered
@@ -94,14 +173,21 @@ export function importTableFrames(slidePath, archive, relationships, report) {
     const table = child(child(child(frame['p:graphicFrame'], 'a:graphic'), 'a:graphicData'), 'a:tbl');
     if (!table) return undefined;
     const props = child(table, 'a:tblPr');
-    if (child(props, 'a:tableStyleId') || child(props, 'a:tableStyle')) report(frameIndex, '', 'unsupported-table-style', 'Conditional native table styles are not applied; direct cell and paragraph text formatting is retained.');
-    const headers = boolean(attrs(table, 'a:tblPr').firstRow) === true;
-    const rows = nodes(table, 'a:tr').map((row, rowIndex) => nodes(row['a:tr'], 'a:tc').map((cell, columnIndex) => {
+    const style = tableStyle(props, archive, context, (code, message) => report(frameIndex, '', code, message));
+    if (style?.['a:tblBg']) report(frameIndex, '', 'unsupported-table-cell-style', 'The native table style background is not represented; supported character styles are retained.');
+    const properties = attrs(table, 'a:tblPr');
+    if (boolean(properties.rtl) === true) report(frameIndex, '', 'unsupported-table-direction', 'Right-to-left table geometry is not represented; cells retain native source order.');
+    const headers = boolean(properties.firstRow) === true;
+    const nativeRows = nodes(table, 'a:tr');
+    const columnCount = nodes(child(table, 'a:tblGrid'), 'a:gridCol').length;
+    const rows = nativeRows.map((row, rowIndex) => nodes(row['a:tr'], 'a:tc').map((cell, columnIndex) => {
       const cellPath = `rows.${rowIndex}.${columnIndex}`;
-      const emit = (code, message) => report(frameIndex, cellPath, code, message);
+      const reported = new Set();
+      const emit = (code, message) => {if (!reported.has(code)) {reported.add(code);report(frameIndex, cellPath, code, message);}};
       const geometry = cell[':@'] ?? {};
       if (['gridSpan','rowSpan'].some(key => Number(geometry[key] ?? 1) > 1) || ['hMerge','vMerge'].some(key => boolean(geometry[key]) === true)) emit('unsupported-table-merge', 'Merged-cell geometry is not represented; the native cell text is retained.');
-      return cellText(child(cell['a:tc'], 'a:txBody'), context, relationships, emit, headers && rowIndex === 0);
+      const defaults = conditionalProperties(style, properties, rowIndex, columnIndex, nativeRows.length, columnCount, context, emit);
+      return cellText(child(cell['a:tc'], 'a:txBody'), context, relationships, emit, headers && rowIndex === 0, defaults);
     }));
     return headers && rows.length ? {columns:rows[0], rows:rows.slice(1)} : {rows};
   });
