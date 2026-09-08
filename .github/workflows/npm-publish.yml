@@ -121,7 +121,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create "${GITHUB_REF_NAME}" \
-            --title "@openpresentation/opf ${RELEASE_VERSION}" \
-            --notes-file "${NOTES_FILE}" \
-            --verify-tag
+          if gh release view "${GITHUB_REF_NAME}" --json tagName >/dev/null 2>&1; then
+            echo "Release ${GITHUB_REF_NAME} already exists; preserving its notes."
+          else
+            gh release create "${GITHUB_REF_NAME}" \
+              --title "@openpresentation/opf ${RELEASE_VERSION}" \
+              --notes-file "${NOTES_FILE}" \
+              --verify-tag
+          fi

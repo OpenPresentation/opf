@@ -47,7 +47,7 @@ try{
  const portable=path.join(copied,'scripts/opf-inspect.mjs');assert.equal(run(['validate',source],{cwd:temp,script:portable,env:{OPF_ROOT:root}}).valid,true);
  // A consumer resolves its installed version rather than the skill's original repository.
  const consumer=path.join(temp,'consumer');await mkdir(path.join(consumer,'node_modules/@openpresentation'),{recursive:true});await writeFile(path.join(consumer,'package.json'),'{"private":true,"type":"module"}');
- await symlink(path.join(root,'packages/javascript'),path.join(consumer,'node_modules/@openpresentation/opf'),'dir');
+ await symlink(path.join(root,'packages/javascript'),path.join(consumer,'node_modules/@openpresentation/opf'),process.platform==='win32'?'junction':'dir');
  assert.equal(run(['version'],{cwd:consumer,script:portable}).entry,version.entry);
  // A partially broken explicit installation must not fall back to a different version.
  const brokenRoot=path.join(temp,'broken-root');await mkdir(path.join(brokenRoot,'node_modules/@openpresentation/opf'),{recursive:true});

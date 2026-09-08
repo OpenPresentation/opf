@@ -1,4 +1,5 @@
-import { mkdir, readFile, writeFile, rm } from "node:fs/promises";
+import { mkdir, readFile, writeFile, rm, realpath } from "node:fs/promises";
+import { existsSync } from "node:fs";
 import { createRequire } from "node:module";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
@@ -8,6 +9,13 @@ const root = fileURLToPath(new URL("../", import.meta.url)),
 const librariesOnly = process.argv.includes('--registry-libraries');
 const registry = process.argv.includes('--registry') || librariesOnly;
 const releasePlan = registry ? JSON.parse(await readFile(path.join(root, "release-plan.json"), "utf8")) : null;
+// layoutTable first shipped in core 0.6.0. Keep historical registry plans
+// testable, while requiring the API and its pinned regression suite thereafter.
+const coreVersion = releasePlan?.packages.find(item => item.name === '@openpresentation/opf')?.version.split('.').map(Number);
+const verifyTableLayout = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] >= 6;
+// Styled-cell rollout targets core 0.7; published 0.6 fixtures remain separate.
+const verifyStyledTables = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] >= 7;
+
 async function readHarness(repo, file) {
   const directory = repo === 'opf' ? root : path.resolve(root, '..', repo);
   if (!registry) return readFile(path.join(directory, file), 'utf8');
@@ -22,6 +30,11 @@ const manifest = registry
   ? { artifacts: releasePlan.packages }
   : JSON.parse(await readFile(path.join(out, "manifest.json"), "utf8"));
 if (librariesOnly) manifest.artifacts = manifest.artifacts.filter(item => item.name !== '@openpresentation/cli');
+await mkdir(out,{recursive:true});
+const actualRoot=await realpath(root), actualOut=await realpath(out);
+if (!actualOut.startsWith(actualRoot+path.sep)) throw new Error('Consumer artifacts must remain inside this checkout');
+const actualConsumer=await realpath(consumer).catch(error=>{if(error.code==='ENOENT')return path.resolve(consumer);throw error;});
+if (!actualConsumer.startsWith(actualOut+path.sep)) throw new Error('Refusing to remove a consumer outside the artifact directory');
 await rm(consumer, { recursive: true, force: true });
 await mkdir(consumer, { recursive: true });
 await writeFile(
@@ -40,7 +53,20 @@ await writeFile(
   ),
 );
 function run(command, args) {
+  // npm's Windows shim is a batch file. Invoke its JS entrypoint without a
+  // shell so paths with spaces and package arguments remain literal values.
+  if (command==='npm' && process.platform==='win32') {
+    // pnpm scripts set npm_execpath to pnpm.cjs, which must not be used as npm.
+    const npmEntry=process.env.npm_execpath?.endsWith('npm-cli.js')?process.env.npm_execpath:(process.env.PATH??'').split(path.delimiter).flatMap(directory=>[
+      path.join(directory,'node_modules/npm/bin/npm-cli.js'),
+      path.resolve(directory,'../npm/bin/npm-cli.js'),
+    ]).find(existsSync);
+    if(!npmEntry||!existsSync(npmEntry))throw new Error('Cannot locate the npm JavaScript entrypoint');
+    args=[npmEntry,...args];
+    command=process.execPath;
+  }
   const result = spawnSync(command, args, { cwd: consumer, stdio: "inherit" });
+  if (result.error) throw result.error;
   if (result.status !== 0)
     throw new Error(`${command} exited ${result.status}`);
 }
@@ -49,8 +75,9 @@ run("npm", [
   "--ignore-scripts",
   "--no-audit",
   "--no-fund",
+  "--offline=false",
   "--cache",
-  "/tmp/opf-npm-cache",
+  path.join(out,'cache'),
 ]);
 await writeFile(
   path.join(consumer, "check.mjs"),
@@ -92,6 +119,12 @@ assert.equal(editor.get('slides.0.blocks.2.text'),'Add your text');
 const svg=renderSvg(editor.document,{textMeasurement:fonts.textMeasurement});
 assert.match(svg,/Installed consumer/);
 assert.equal(typeof createCanvasEditor,'function');assert.equal(typeof loadBrowserFontRegistry,'function');
+const richEditor=createEditorSession({design:{fontScheme:'roboto'},slides:[{table:{columns:[['Rich ',{text:'header',bold:true}]],rows:[['Cell']]}}]});
+richEditor.set('slides.0.table.rows.0.0',formatRichTextRange('Cell',0,4,{bold:true,color:'#008800'}));
+assert.deepEqual(richEditor.get('slides.0.table.rows.0.0'),[{text:'Cell',bold:true,color:'#008800'}]);
+assert.match(renderSvg(richEditor.document,{trace:true,textMeasurement:fonts.textMeasurement}),/data-opf-rich-text="true"/);
+assert.ok((await toPptx(richEditor.document,{textMeasurement:fonts.textMeasurement})).length>1000);
+richEditor.undo();assert.equal(richEditor.get('slides.0.table.rows.0.0'),'Cell');
 const copied=parseOpfTransfer(serializeOpfTransfer(editor.document,{scope:'slide',format:'markdown'}));
 assert.equal(prepareOpfImport(editor.document,copied).document.slides.length,2);
 const gallery=await loadOpfGallery('https://gallery.example/registry.json',{fetch:async()=>new Response(JSON.stringify({items:[{name:'Example',opf:copied.document}]}))});
@@ -101,21 +134,43 @@ assert.ok(pptx.length>1000);
 console.log('Packed consumer: core, editor, SVG, measured fonts and PPTX passed.');\n`,
 );
 run(process.execPath, ["check.mjs"]);
+if (verifyStyledTables) {
+  for (const name of ['styled-table.mjs','styled-table-import.mjs','table-border-styles.mjs']) {
+    const source=(await readHarness('opf-pptx', `test/${name}`)).replaceAll("'../dist/index.js'", "'@openpresentation/opf-pptx'");
+    await writeFile(path.join(consumer,name),source);
+    run(process.execPath,[name]);
+  }
+  await writeFile(path.join(consumer,'styled-types.mts'),await readHarness('opf','packages/javascript/test/fixtures/styled-table-types.mts'));
+}
+
+if (verifyTableLayout) {
+  const tableHarness = (await readHarness('opf', 'packages/javascript/test/table-layout.test.mjs'))
+    .replaceAll("'../dist/composition.js'", "'@openpresentation/opf/composition'")
+    .replaceAll("'../dist/pagination.js'", "'@openpresentation/opf/pagination'");
+  await writeFile(path.join(consumer, 'table-layout.test.mjs'), tableHarness);
+  run(process.execPath, ['--test', 'table-layout.test.mjs']);
+}
+
 if (registry) {
   for (const item of manifest.artifacts) {
     const installed = JSON.parse(await readFile(path.join(consumer, 'node_modules', item.name, 'package.json'), 'utf8'));
     if (installed.version !== item.version) throw new Error(`Expected ${item.name}@${item.version}, installed ${installed.version}`);
   }
   if (!librariesOnly) {
-    run(path.join(consumer, 'node_modules/.bin/opf'), ['--version']);
-    run(path.join(consumer, 'node_modules/.bin/opf'), ['create', 'registry.opf.json', '--title', 'Registry consumer']);
-    run(path.join(consumer, 'node_modules/.bin/opf'), ['validate', 'registry.opf.json']);
+    const cliRoot=path.join(consumer,'node_modules/@openpresentation/cli');
+    const cli=JSON.parse(await readFile(path.join(cliRoot,'package.json'),'utf8'));
+    const entry=path.join(cliRoot,cli.bin.opf);
+    run(process.execPath, [entry,'--version']);
+    run(process.execPath, [entry,'create', 'registry.opf.json', '--title', 'Registry consumer']);
+    run(process.execPath, [entry,'validate', 'registry.opf.json']);
   }
 }
 
 await writeFile(
   path.join(consumer, "browser.ts"),
   `import {presentation} from '@openpresentation/opf/schemas';
+import type {Presentation} from '@openpresentation/opf/types';
+export const richTable:Presentation={slides:[{table:{columns:[['Rich ',{text:'header',bold:true}]],rows:[[[{text:'Cell',italic:true}]]]}}]};
 export const compositionSchema = presentation.$defs.Composition;
 export const contentSchema = presentation.$defs.ContentPayload;
 import {createCanvasEditor, type CanvasEditor} from '@openpresentation/opf-editor/canvas';
@@ -126,6 +181,7 @@ export {createSchemaInspector} from '@openpresentation/opf-editor/schema-inspect
 export {formatRichTextRange,replaceRichTextRange,richTextContent,type TextRunFormat} from '@openpresentation/opf-editor/rich-text';
 export {prepareTrackResize,prepareBlockMove,listBlockContainers,prepareBlockInsert,prepareBlockDuplicate,prepareBlockRemove,createContentBlock} from '@openpresentation/opf-editor/layout';
 export {fitList,type ListFit,type ListValue} from '@openpresentation/opf/composition';
+${verifyTableLayout ? "export {layoutTable,type TableLayout,type TableLayoutOptions,type TableCellLayout} from '@openpresentation/opf/composition';" : ''}
 export {schemaAtPath,listSchemaFields} from '@openpresentation/opf-editor/schema';
 export async function mount(container:HTMLElement):Promise<CanvasEditor> {
  const fonts=await loadBrowserFontRegistry([{url:'/fonts/Roboto.ttf'},{url:'/fonts/RobotoMono.ttf'}]);
@@ -148,6 +204,7 @@ run(process.execPath, [
   "--lib",
   "ES2022,DOM",
   "browser.ts",
+  ...(verifyStyledTables ? ["styled-types.mts"] : []),
 ]);
 const { build } = createRequire(require.resolve("tsup"))("esbuild");
 await build({
@@ -223,5 +280,16 @@ const creationHarness=(await readHarness('opf','scripts/test-create-browser.mjs'
 await writeFile(path.join(consumer,'create-tests.mjs'),creationHarness);
 await build({entryPoints:[path.join(consumer,'create-tests.mjs')],outfile:path.join(browserOut,'packed-create-tests.js'),bundle:true,platform:'browser',format:'esm'});
 await writeFile(path.join(browserOut,'packed-create-tests.html'),browserHtml('create'));
+
+if (verifyStyledTables) {
+  const styledHarness=(await readHarness('opf-editor','test/styled-table-browser.mjs'))
+    .replace('../src/canvas.js','@openpresentation/opf-editor/canvas')
+    .replace('../src/index.js','@openpresentation/opf-editor')
+    .replace('../src/rich-text.js','@openpresentation/opf-editor/rich-text');
+  await writeFile(path.join(consumer,'styled-table-tests.mjs'),styledHarness);
+  await build({entryPoints:[path.join(consumer,'styled-table-tests.mjs')],outfile:path.join(browserOut,'packed-styled-table-tests.js'),bundle:true,platform:'browser',format:'esm'});
+  await writeFile(path.join(browserOut,'packed-styled-table-tests.html'),browserHtml('styled-table'));
+  console.log('Installed styled-table browser harness built: artifacts/editor/packed-styled-table-tests.html. Open it to verify real pointer/keyboard interaction.');
+}
 
 console.log(librariesOnly ? 'Registry library consumer passed for four exact versions; CLI and complete release verification remain separate.' : registry ? 'Registry consumer passed for all five exact release-plan versions (no local package overrides).' : 'Local tarball consumer passed; this is not a registry verification.');

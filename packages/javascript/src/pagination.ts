@@ -1,3 +1,4 @@
+import {tableRowBoundaries} from './table.js';
 import { catalogs } from "./catalogs.js";
 import { resolveFontFamilies, resolveCanvasDimensions, composeSlide, type ComposeSlideOptions, type LayoutDiagnostic, type TextMeasurement } from './composition.js';
 import { assertValidPresentation } from './validator.js';
@@ -66,7 +67,7 @@ function leafFor(path: string, field: string, value: any): Leaf {
     const key = field === 'table' ? 'rows' : 'events';
     const values = Array.isArray(value) ? value : value[key];
     if (Array.isArray(values)) {
-      leaf.unit = 'items'; leaf.boundaries = Array.from({length:values.length+1},(_,i)=>i);
+      leaf.unit = 'items'; leaf.boundaries = field === 'table' ? tableRowBoundaries(value) : Array.from({length:values.length+1},(_,i)=>i);
       leaf.slice = (a,b) => Array.isArray(value) ? value.slice(a,b) : {...value,[key]:values.slice(a,b)};
     }
   }

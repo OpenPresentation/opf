@@ -2,7 +2,7 @@ name: Coordinated public packages
 on:
   pull_request:
   push:
-    branches: [main, codex/opf-ecosystem-20260907]
+    branches: [main]
   workflow_dispatch:
 permissions:
   contents: read
@@ -27,21 +27,21 @@ jobs:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           repository: OpenPresentation/opf-render
-          ref: 628d65ee32d04d08b4a1023c4b3bb7826a9114ae
+          ref: 9f34d70002307fcb3795de638e7e4bf0605a33f8
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           repository: OpenPresentation/opf-editor
-          ref: 927a31ba52e27a6e965f941f5897a74171e1fdb9
+          ref: e8bdedf7f80e2eab0ff7d869b9436cd2050e426d
           path: opf-editor
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           repository: OpenPresentation/opf-pptx
-          ref: ca23bbd93a3b4501bfcef83e0804a8c510bcac5d
+          ref: 6198def72d9b4d58e8d8a22dc7842d0d0760a5a6
           path: opf-pptx
           fetch-depth: 0
           persist-credentials: false
@@ -74,7 +74,8 @@ jobs:
         run: |
           pnpm test:registry-ecosystem
           pnpm test:registry-fidelity
+          node packages/cli/test/packed.mjs --registry
       - name: Report the verification boundary
         if: always()
         run: |
-          echo 'This job tests coordinated source and local tarball installs. It includes the reviewed renderer raster regression baseline, but does not establish complete visual correctness, npm publication, native PowerPoint fidelity, or browser interaction coverage. Private sites run separately.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'This job tests coordinated source, local tarballs, and exact published registry installs against pinned fixtures. It includes the renderer raster regression baseline and generated browser bundles; native PowerPoint fidelity and executed browser interactions require separate evidence. Private sites run separately.' >> "$GITHUB_STEP_SUMMARY"

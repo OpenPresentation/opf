@@ -135,7 +135,7 @@ Table-specific fields are grouped under `table`. Do not put loose `columns` or `
 }
 ```
 
-Table body cells accept strings, numbers, booleans, or `null`. In the development schema, a cell or column header also accepts the same `TextRun[]` used by rich text:
+Table body cells accept strings, numbers, booleans, or `null`. Since core 0.5.0, a cell or column header also accepts the same `TextRun[]` used by rich text:
 
 ```json
 {
@@ -148,7 +148,10 @@ Table body cells accept strings, numbers, booleans, or `null`. In the developmen
 }
 ```
 
-This form is unreleased and requires coordinated core, renderer and PPTX development packages. Core measures run styles when checking overflow and keeps each row intact when paginating. The renderer traces rich cells for the editor's existing formatting, typing and undo controls; the exporter emits editable native text runs. Native PPTX table import currently flattens runs to strings, and native PowerPoint visual parity is not yet verified. Per-cell fills, borders, alignment and merged cells are separate work.
+Use core 0.6.0, renderer 0.4.0, editor 0.3.0 and PPTX 0.4.0 together. Core measures run styles when checking overflow and keeps each row intact when paginating. The renderer traces rich cells for the editor's existing formatting, typing and undo controls; the exporter emits editable native text runs. PPTX 0.4.0 imports supported native character styles, paragraph defaults, theme fonts/colors, external links and significant whitespace as rich runs. Unstyled body cells remain strings, and cached display text cannot recover original scalar types or live fields. Conditional table styles, merged geometry and cell fills/borders/alignment remain limited; native PowerPoint visual parity is not yet verified.
+
+Core 0.6.0 adds `layoutTable` from `@openpresentation/opf/composition`. It measures scalar and rich cells, keeps short rows compact, and gives wrapped or multiline rows the height they need. When space is constrained it reduces spare row height before shrinking text, and reports overflow when the minimum fitting size cannot fit. Pass the same `scale`, font family, measurement provider and effective `minFontSize` to each consumer. The returned row boxes, cell text boxes and fits are shared by the coordinated SVG and PPTX implementations; rich table cells use uniform line advances to match native cell paragraph spacing. Native viewer fidelity remains a separate verification boundary.
+
 
 ## Code
 

@@ -1,0 +1,83 @@
+{
+  "packages": {
+    "opf": "0.7.0",
+    "opf-render": "0.5.0",
+    "opf-pptx": "0.5.0"
+  },
+  "native": {
+    "slides": 3,
+    "rasterWidth": 1280,
+    "tables": [
+      {
+        "slide": 2,
+        "rows": 3,
+        "columns": 3
+      },
+      {
+        "slide": 3,
+        "rows": 3,
+        "columns": 3
+      }
+    ],
+    "rasterHeight": 720,
+    "powerPointVersion": "16.0",
+    "tableCount": 2,
+    "editReopened": true
+  },
+  "nativeFeatures": [
+    {
+      "feature": "Lower merged-cell dash",
+      "coloredPixels": 36,
+      "minimum": 15
+    },
+    {
+      "feature": "Hidden lower merge border",
+      "unexpectedGreenPixels": 0,
+      "maximum": 0
+    }
+  ],
+  "comparisons": [
+    {
+      "slide": 1,
+      "meanAbsoluteChannelDifference": 3.2766655815972223,
+      "maxChannelDifference": 254,
+      "channelFractionOver10": 0.02250506365740741
+    },
+    {
+      "slide": 2,
+      "meanAbsoluteChannelDifference": 1.8506568287037037,
+      "maxChannelDifference": 254,
+      "channelFractionOver10": 0.012935112847222222
+    },
+    {
+      "slide": 3,
+      "meanAbsoluteChannelDifference": 2.594484230324074,
+      "maxChannelDifference": 254,
+      "channelFractionOver10": 0.016996889467592594
+    }
+  ],
+  "imports": [
+    {
+      "name": "source",
+      "valid": true,
+      "tables": 2,
+      "mergesPreserved": true,
+      "diagnostics": []
+    },
+    {
+      "name": "native-saved",
+      "valid": true,
+      "tables": 2,
+      "mergesPreserved": true,
+      "diagnostics": []
+    },
+    {
+      "name": "native-edited",
+      "valid": true,
+      "tables": 2,
+      "mergesPreserved": true,
+      "diagnostics": []
+    }
+  ],
+  "scope": "Measured native PowerPoint rendering, editable native tables and save/reopen/reimport. Two targeted border raster assertions pass; global pixel differences are observations, not a passing equivalence threshold."
+}

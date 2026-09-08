@@ -13,9 +13,23 @@ npm install -g @openpresentation/cli
 opf --version
 ```
 
-Or install it as a development dependency and use `npx --no-install opf`. This checkout prepares CLI 0.2.0 with bundled OPF 0.5.0; that version supports rich table cells and headers during validation and pagination. Until 0.2.0 is published, the registry's latest release has the previous schema.
+Or install it as a development dependency and use `npx --no-install opf`. CLI 0.5.0 bundles OPF 0.7.0, including styled and merged table cells, plus the six OPF agent skills.
 
-To verify the standalone package from source, run `pnpm install` and `pnpm test:cli:packed`. This creates `artifacts/cli/openpresentation-cli-0.2.0.tgz`, which can be installed using its absolute path. For source development, run `pnpm --filter @openpresentation/cli build` and `node packages/cli/dist/index.js --help`.
+To verify the standalone package from source, run `pnpm install` and `pnpm test:cli:packed`. This creates `artifacts/cli/openpresentation-cli-0.5.0.tgz`, which can be installed using its absolute path. For source development, run `pnpm --filter @openpresentation/cli build` and `node packages/cli/dist/index.js --help`.
+
+## Install agent skills
+
+```sh
+npx @openpresentation/cli@latest skills install
+npx @openpresentation/cli@latest skills status
+npx @openpresentation/cli@latest skills update
+```
+
+CLI 0.5.0 installs all six bundled skill folders into the current project's `.agents/skills`, including references, examples and inspection scripts. It requires no paid service, provider account or symlink privileges. Once the CLI is installed, these commands work offline. The command requires version 0.5.0; before that release is published, use the built CLI entrypoint for testing.
+
+Use `--agent codex --global` for personal Codex skills, `--agent claude-code` or `--agent cursor` for those project skill directories, or `--directory <path>` for another compatible agent. The default `universal` target uses `.agents/skills`; its global target is `~/.agents/skills`. See [agent skill installation](https://github.com/OpenPresentation/opf/blob/main/docs/agent-skills.md) for the complete target mapping and update behavior.
+
+The installer preserves AGENTS.md and unrelated configuration. It checks all existing skills before making changes and refuses to overwrite locally modified or unmanaged folders, including manual copies. Repeating an unchanged install does nothing. Successful updates return backup paths outside the active skill directory. `status` compares against the invoked CLI's bundled version without a network lookup. Use the same target options for install, update and status.
 
 ## Create and validate
 

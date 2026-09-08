@@ -11,7 +11,7 @@ pnpm test:gallery
 
 The link command replaces only the installed `@openpresentation/opf` package in sibling `node_modules` with a symlink to this checkout and builds the toolkit packages. It does not save machine-specific paths in package manifests or lockfiles. Reinstalling dependencies can replace the links; rerun the command afterwards.
 
-The new composition API is a local development change pending a coordinated package release. The published 0.3.0 package does not include it. Do not publish downstream packages or deploy the gallery from these changes until a new OPF version has been published and downstream minimum versions and lockfiles have been advanced to that release.
+The published compatible set is core 0.6.0, CLI 0.3.0, renderer 0.4.0, PPTX 0.4.0 and editor 0.3.0. Clean registry installs include shared composition and content-aware table rows without sibling links. `release-plan.json` records exact versions and immutable verification sources; `pnpm test:registry-ecosystem` and `pnpm test:registry-fidelity` exercise those installed packages. Source links are for coordinated development.
 
 To browse the gallery with the linked package:
 
