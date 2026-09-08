@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Honor JPEG EXIF orientations 2–8 in PNG/PDF output while keeping ordinary JPEG source attributes and bytes unchanged. Verify all eight orientations, fit/crop and actual PDF pixels against independent references.
+- Add reproducible browser orientation checks with an incorrect-orientation control and keep native raster dependencies out of the browser build.
+
 - Render embedded WebP images in PNG/PDF output instead of dropping them. Preserve alpha, EXIF orientation, fit/crop and the first animation frame without modifying source SVG.
 - Add lazy Node-only Sharp 0.35.4 decoding; raise the Node minimum to 20.9.0. Report malformed embedded images with their source path and enforce a 40-megapixel input limit.
 - Check decoded PNG pixels, actual PDF image streams/alpha masks, image URI encodings and all 805 unchanged raster baselines.

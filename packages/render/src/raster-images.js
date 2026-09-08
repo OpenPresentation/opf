@@ -1,9 +1,10 @@
 import {OPFRenderError} from './svg.js';
 
-// Resvg does not decode WebP. Replace only embedded image hrefs in the private
+// Resvg does not decode WebP or apply JPEG EXIF orientation. Replace only
+// affected embedded image hrefs in the private
 // rasterization copy; preserve SVG text, attributes, comments and source bytes.
 export async function prepareRasterImages(svg) {
-  if (!/webp|&#/i.test(svg)) return svg;
+  if (!/webp|jpeg|&#/i.test(svg)) return svg;
   const cache = new Map();
   let output = '', end = 0, imageIndex = 0;
   const tokens = /<!--[\s\S]*?-->|<!\[CDATA\[[\s\S]*?\]\]>|<(?:"[^"]*"|'[^']*'|[^'">])*>/g;
@@ -15,16 +16,17 @@ export async function prepareRasterImages(svg) {
       ?? /\sxlink:href\s*=\s*(["'])([\s\S]*?)\1/.exec(tag);
     if (!href) continue;
     const uri = xmlText(href[2]);
-    if (!/^data:image\/webp(?:;|,)/i.test(uri)) continue;
+    if (!/^data:image\/(?:webp|jpeg)(?:;|,)/i.test(uri)) continue;
     const trace = /\sdata-opf-path\s*=\s*(["'])([\s\S]*?)\1/.exec(tag);
     const path = trace ? xmlText(trace[2]) : `svg.images.${index}`;
     try {
-      if (!cache.has(uri)) cache.set(uri, convertWebp(uri));
+      if (!cache.has(uri)) cache.set(uri, prepareRasterImage(uri));
       const png = await cache.get(uri);
+      if (png === null) continue;
       const replacement = href[0].slice(0, href[0].indexOf(href[1]) + 1) + png + href[1];
       tag = tag.slice(0, href.index) + replacement + tag.slice(href.index + href[0].length);
     } catch (error) {
-      throw new OPFRenderError('image-conversion-failed', 'Embedded WebP could not be decoded for PNG/PDF output.', {path, cause:error instanceof Error ? error.message : String(error)});
+      throw new OPFRenderError('image-conversion-failed', 'Embedded raster image could not be prepared for PNG/PDF output.', {path, cause:error instanceof Error ? error.message : String(error)});
     }
     output += svg.slice(end, match.index) + tag;
     end = match.index + match[0].length;
@@ -32,7 +34,7 @@ export async function prepareRasterImages(svg) {
   return output + svg.slice(end);
 }
 
-async function convertWebp(uri) {
+async function prepareRasterImage(uri) {
   const comma = uri.indexOf(',');
   const header = uri.slice(0, comma), data = uri.slice(comma + 1);
   let bytes;
@@ -53,10 +55,21 @@ async function convertWebp(uri) {
     }
     bytes=Uint8Array.from(result);
   }
-  if (bytes.length < 12 || Buffer.from(bytes.subarray(0,4)).toString('ascii') !== 'RIFF' || Buffer.from(bytes.subarray(8,12)).toString('ascii') !== 'WEBP') throw new Error('Embedded data is not a WebP image.');
+  const webp=/^data:image\/webp(?:;|,)/i.test(uri);
+  if (webp) {
+    if (bytes.length < 12 || Buffer.from(bytes.subarray(0,4)).toString('ascii') !== 'RIFF' || Buffer.from(bytes.subarray(8,12)).toString('ascii') !== 'WEBP') throw new Error('Embedded data is not a WebP image.');
+  } else if (bytes.length < 4 || bytes[0] !== 0xff || bytes[1] !== 0xd8 || bytes[2] !== 0xff) {
+    throw new Error('Embedded data is not a JPEG image.');
+  }
   const {default:sharp}=await import('sharp');
-  const png=await sharp(bytes,{limitInputPixels:40_000_000,animated:false,failOn:'warning'})
-    .autoOrient().toColourspace('srgb').ensureAlpha()
+  const decoder=sharp(bytes,{limitInputPixels:40_000_000,animated:false,failOn:'warning'});
+  if (!webp) {
+    const {orientation}=await decoder.metadata();
+    // Keep unoriented JPEGs on the existing resvg path, including their
+    // original compressed bytes and established color/raster behavior.
+    if (!(orientation >= 2 && orientation <= 8)) return null;
+  }
+  const png=await decoder.autoOrient().toColourspace('srgb').ensureAlpha()
     .png({compressionLevel:9,adaptiveFiltering:false}).toBuffer();
   return 'data:image/png;base64,'+png.toString('base64');
 }
