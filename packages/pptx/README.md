@@ -128,3 +128,13 @@ The development exporter measures every cell with the same `textMeasurement` pro
 `npm test` compares exported OOXML against the published SVG renderer across 168 cells, including 24 cases that require shrinking, Roboto and Calibri-to-Carlito substitution, two canvas sizes, headers and all three alignments. PowerPoint still performs its own natural wrapping and needs the resolved fonts installed. These document-property checks do not establish native raster parity or lossless typed-cell import.
 
 A local macOS Quick Look check opened both Roboto and system-Arial specimens. Quick Look substituted a serif font for uninstalled Roboto; the Arial specimen used a sans-serif face but still differed in table wrapping and row proportions. This is evidence of remaining viewer differences, not a passing PowerPoint raster comparison.
+
+## Image geometry (unreleased)
+
+Native image exports now follow the browser's `design.imageFill`: `fit` (the default) centers an image without changing its aspect ratio, and `crop` fills the allocated box with a centered native crop. Slide settings override presentation settings. Geometry is calculated from the exact bytes embedded after asset resolution, so host resolvers are called once. PNG, JPEG, GIF and WebP dimension headers are supported; unsupported or unreadable dimensions produce a path-specific error rather than a distorted picture. Supply supported raster bytes through `imageResolver` for other formats.
+
+JPEG EXIF orientations 1–8 are represented by native picture rotation and mirroring. The embedded copy's orientation tag is normalized to 1 to avoid viewer-dependent double rotation. Compressed pixels and other metadata remain unchanged; input data is not mutated. EXIF orientation in other containers, animated playback, SVG/vector assets, effects and lossless crop/orientation import are not covered by this change.
+
+Tests compare SVG/native fit and crop geometry across nine synthetic raster fixtures and cover all eight JPEG orientations. Keynote 14.4 visually preserves proportions for wide/tall fit/crop and displays all eight orientations correctly. This does not establish Microsoft PowerPoint raster parity or WebP support in every Office version.
+
+The structural export/import corpus gate covers every installed core example (126 decks / 805 slides for core 0.4.0). It explicitly substitutes a bundled fallback font and synthetic images, then checks slide XML, unique native object IDs, finite geometry, table grids and imported slide counts. It does not establish original-asset, typography or viewer fidelity. The focused table and image tests separately exercise measured geometry and real fixture bytes.

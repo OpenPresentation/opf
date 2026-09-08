@@ -2,12 +2,18 @@
 
 ## Unreleased
 
+- Repair duplicate native object IDs on slides mixing tables with other objects, and sort normalized ZIP paths for stable multi-chart export bytes.
+
 - Preserve headerless table data and empty rows on import. Export native header-row flags and honor explicit XML boolean flags when importing, including edits from other applications.
 
 - Fit native table cell font sizes with the same loaded-font measurements and effective nested composition settings as the SVG preview.
 - Match table alignment, line spacing, margins and theme border colors; pad uneven rows so every column remains present.
 - Preserve original cell text and native editable tables. Natural wrapping still belongs to the PowerPoint viewer; native raster parity remains unverified.
 - Compare 168 cells across two slide sizes, Roboto and Calibri substitution, headers, uneven rows and all text alignments. Twenty-four cases require shrinking.
+
+- Preserve image proportions with centered native fit/crop matching presentation and slide imageFill settings.
+- Measure embedded PNG/JPEG/GIF/WebP bytes without a second resolver call or an image-size dependency. Unreadable/unsupported dimensions produce a path-specific error.
+- Translate all eight JPEG EXIF orientations into native rotation/mirroring while preserving compressed pixels and normalizing only the embedded orientation tag.
 
 ## 0.1.0
 
