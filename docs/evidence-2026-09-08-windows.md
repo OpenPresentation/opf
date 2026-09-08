@@ -1,5 +1,15 @@
 # Windows release and adoption evidence — 2026-09-08
 
+## Published CLI installer and deployed website checkpoint
+
+CLI 0.5.0 merged in PR #27 as `7a2845f45bd7c6f48312b07100851c0ee29a9d1c`, identical to reviewed `fcaa85fb50c06dd737f9e71419f3b9a40618184d`. Final linked-parent fix passes [macOS/Windows Node 20/24](https://github.com/OpenPresentation/opf/actions/runs/34260124438), [Linux package CI](https://github.com/OpenPresentation/opf/actions/runs/34260124472), [coordinated CI](https://github.com/OpenPresentation/opf/actions/runs/34260124563) and successful Bugbot review. The finding is resolved. [Trusted publication](https://github.com/OpenPresentation/opf/actions/runs/34261574915) succeeded for tag `cli-v0.5.0`.
+
+Registry gitHead equals that merge; SLSA provenance exists. CLI tarball integrity is `sha512-zStGUvtciPZcRz7U9bwV5vYaF0BpoXY8De2sCATHBWXNEtbozakBzi0JmT3hseyv08e4yYx4rlJqMRn6e1LzMw==`. `node packages/cli/test/packed.mjs --registry` passes on Windows Node 20/24: fresh cache, npm registry download, isolated offline global installation, npx-style named-package installation of all six skills, preserved AGENTS.md, idempotent install and 69 installed CLI checks. Windows file-symlink privilege remains explicitly skipped; macOS/Linux CI covers file links, and Windows junction tests pass. Updated release-plan ecosystem checks pass on Node 20/24 with CLI 0.5.0; existing renderer/PPTX/editor versions are unchanged.
+
+Main-site PR #11 merged as `c1cbbbb4e91911392612a157155441b523f187dc`, identical to reviewed `6db427276aab2a918e4edd7cdda59a4f33fcb28c`. [Website CI](https://github.com/Data-Advantage/openpresentation-site/actions/runs/34260733732), Bugbot and Vercel preview pass. Production deployment `dpl_ApPs9yCN43U6zVsGEkSmfQ6tFRTM` serves the merged commit. `OPF_SITE_URL=https://www.openpresentation.org pnpm test:e2e` passes all three checks: published history/links/anchors, mobile overflow containment, and OPF/SVG/PPTX browser downloads with exact registry-showcase hashes. This closes the separate deployed-changelog milestone; CLI 0.5.0 site documentation and broader application workflow coverage continue separately.
+
+The installer-site follow-up builds 603 pages from immutable source `7a2845f45bd7c6f48312b07100851c0ee29a9d1c`, exporting six skills and 598 raw resources. Four local Edge tests additionally verify actual clipboard command copying and the size/hash of every served skill file. Gallery dependency maintenance passes 106 existing unit tests, a 1,925-page build and a zero-advisory pnpm audit, without muting alerts. Updated gallery artifacts validate/render 854 canonical documents and expose 625 schema fields; their final UI and deployment verification remain pending.
+
 This supplements the portable handoff. GitHub branches remain the source of truth; local artifacts can be regenerated. The ecosystem goal remains active, including adoption by developers and agents.
 
 ## Host preflight
@@ -77,7 +87,7 @@ Official references inspected:
 - [Convex project configuration](https://docs.convex.dev/production/project-configuration): configurable target agents and install/staleness suggestions during development.
 - [Open skills CLI](https://github.com/vercel-labs/skills): npx installation, named skill/agent selection, project/global scope, copy mode and updates.
 
-The OPF installer still requires implementation and clean-project/update tests. It must preserve user changes and unrelated agent configuration, install all six self-contained folders, work on Windows without symlink privileges, and expose a real command in CLI help and repository/site documentation. No implemented or published installer is claimed by this research checkpoint.
+The initial requirements were to preserve user changes and unrelated agent configuration, install all six self-contained folders, work on Windows without symlink privileges, and expose a real command in CLI help and repository/site documentation. The later implementation checkpoint below supersedes this research-only stage; publication remains a separate gate.
 
 ## Dependency-notification checkpoint
 
@@ -90,3 +100,19 @@ References: [GitHub security-update configuration](https://docs.github.com/en/co
 ## Skills installer experiment
 
 The official MIT-licensed `skills@1.5.25` installs all six OPF skills from GitHub on Windows with `skills add OpenPresentation/opf --skill '*' --agent codex --copy --yes`. The isolated project retained its existing AGENTS.md. Telemetry was disabled for the experiment. A simulated stale installation with a local skill customization was then updated using `skills update opf-inspect --project --yes`; that customization was overwritten. Therefore that updater is not presented as preserving local edits. A bundled CLI installer with preflight hash checks and recoverable updates is being implemented on `codex/skills-installer-20260908`; it is not published yet.
+
+## Verified release-sync merge and installer candidate
+
+Core PR #26 merged as `533b53cd7db3cf58e9ebf5fbd987741323ea2699`, with the tree identical to reviewed head `3d1c2bbc7c68a3f74f68232d1ae320a4f41ccdfd`. Coordinated [CI 34257731176](https://github.com/OpenPresentation/opf/actions/runs/34257731176), package [CI 34257731372](https://github.com/OpenPresentation/opf/actions/runs/34257731372) and Bugbot review all pass. Registry canvas browser coverage passes 34 checks in addition to pointer/keyboard styled-table interactions. Native comparison now binds package sources and generated PPTX/PNG SHA-256 hashes to the PowerPoint run, preventing stale evidence from being relabeled as a new package test.
+
+CLI PR #27 prepares 0.5.0, without changing or republishing core 0.7.0. Full CLI and installer tests pass on Windows Node 20/24; isolated global installation and offline npx-style invocation install all six complete skills, preserve AGENTS.md, and need no symlink privileges. Tests cover idempotence, modified/unmanaged/additional files, unusual filenames, backup recovery, destination links, malformed markers, target selection and an existing installer lock. The original command suite passes 69 Windows checks; POSIX file modes are checked only on Unix and file-symlink rejection explicitly skips when this Windows account lacks that privilege. Junction checks still run. The six skills also pass three schema-valid examples and 17 inspection-helper executions.
+
+CI at `9b5bc0198613a508485b817d1907fbd8ace1055d` passes Linux package/coordinated checks and Windows Node 20/24 CLI source/packed checks. Bugbot then identified valid linked-parent paths rejected by the installer. The fix resolves existing ancestors once and uses canonical paths thereafter, while still refusing a linked destination or installed skill. New linked-project install/status/update regressions pass locally, and macOS Node 20/24 CI was added. Latest-head CI and renewed review remain release gates.
+
+## Website changelog/security candidate
+
+Site PR #11 starts at `83ccb57` on `codex/published-ecosystem-adoption-20260908`. Its changelog records all nine published core versions, excludes unpublished 0.2.0, and shows all five current packages with exact UTC dates checked against npm. The site uses registry core 0.7.0 and a matching immutable documentation snapshot; showcase manifests identify the complete new registry set and check every downloadable file hash.
+
+Targeted changes update Next.js/third-parties to 16.2.11, PostCSS, fast-uri, nanoid and the optional Sharp dependency. A fresh pnpm audit reports zero advisories and no muted entries; the default branch's 22 GitHub alerts are not yet closed because the PR remains unmerged. Weekly compatible groups and separate security groups preserve major-upgrade review and alert visibility.
+
+Local Node 24 production build generates 603 pages. Existing tests cover 598 unique sitemap URLs; exported agent resources contain six skills and 585 raw files. Three actual Edge tests verify release links/anchors, mobile overflow containment, and home-page OPF/SVG/PPTX downloads by exact hash with OPF validation. Linux CI repeats build, registry checks, audit and Chromium browser tests. These checks do not establish author/import/edit/undo/export/reimport coverage across all applications. Deployment and the separate gallery/pptx.dev milestones remain pending.
