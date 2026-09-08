@@ -1,4 +1,5 @@
 import { mkdir, readFile, writeFile, rm, realpath } from "node:fs/promises";
+import { existsSync } from "node:fs";
 import { createRequire } from "node:module";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
@@ -54,8 +55,14 @@ await writeFile(
 function run(command, args) {
   // npm's Windows shim is a batch file. Invoke its JS entrypoint without a
   // shell so paths with spaces and package arguments remain literal values.
-  if (command==='npm' && (process.env.npm_execpath || process.platform==='win32')) {
-    args=[process.env.npm_execpath ?? path.join(path.dirname(process.execPath),'node_modules/npm/bin/npm-cli.js'),...args];
+  if (command==='npm' && process.platform==='win32') {
+    // pnpm scripts set npm_execpath to pnpm.cjs, which must not be used as npm.
+    const npmEntry=process.env.npm_execpath?.endsWith('npm-cli.js')?process.env.npm_execpath:(process.env.PATH??'').split(path.delimiter).flatMap(directory=>[
+      path.join(directory,'node_modules/npm/bin/npm-cli.js'),
+      path.resolve(directory,'../npm/bin/npm-cli.js'),
+    ]).find(existsSync);
+    if(!npmEntry||!existsSync(npmEntry))throw new Error('Cannot locate the npm JavaScript entrypoint');
+    args=[npmEntry,...args];
     command=process.execPath;
   }
   const result = spawnSync(command, args, { cwd: consumer, stdio: "inherit" });
