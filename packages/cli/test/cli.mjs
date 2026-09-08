@@ -37,7 +37,8 @@ try {
   run(['edit','deck.opf.json','--patch','patch.json','--in-place','--expect-sha256','0'.repeat(64)],{status:1});
   await chmod(path.join(temp,'deck.opf.json'),0o600);
   run(['edit','deck.opf.json','--patch','patch.json','--in-place','--expect-sha256',validated.sha256]);
-  assert.equal((await stat(path.join(temp,'deck.opf.json'))).mode & 0o777,0o600);
+  // Windows exposes a read-only attribute rather than POSIX owner/group modes.
+  if(process.platform!=='win32')assert.equal((await stat(path.join(temp,'deck.opf.json'))).mode & 0o777,0o600);
   let saved=await readFile(path.join(temp,'deck.opf.json'),'utf8');assert.equal(JSON.parse(saved).slides[1].notes,'Source note');
   await patch([{op:'replace',path:'/slides/0/title',value:'Partial'},{op:'test',path:'/slides/1/id',value:'stale'}]);
   run(['edit','deck.opf.json','--patch','patch.json','--in-place'],{status:1});assert.equal(await readFile(path.join(temp,'deck.opf.json'),'utf8'),saved);
@@ -63,7 +64,12 @@ try {
   run(['edit','deck.opf.json','--patch','-'],{input:'[]'});
   run(['edit','-','--patch','-'],{status:2});run(['edit','-','--patch','patch.json','--in-place'],{status:2});
   run(['edit','deck.opf.json','--patch','patch.json','--in-place','--output','bad.json'],{status:2});
-  await symlink(path.join(temp,'deck.opf.json'),path.join(temp,'alias.json'));run(['edit','alias.json','--patch','patch.json','--in-place'],{status:1});
+  let fileSymlink=true;
+  try{await symlink(path.join(temp,'deck.opf.json'),path.join(temp,'alias.json'));}catch(error){
+    if(process.platform!=='win32'||error.code!=='EPERM')throw error;
+    fileSymlink=false;console.log('SKIP file symlink rejection: this Windows account lacks file-symlink privileges; Unix CI covers this case.');
+  }
+  if(fileSymlink)run(['edit','alias.json','--patch','patch.json','--in-place'],{status:1});
   assert.equal(run(['schema','presentation','/$defs/Composition']).json.properties.mode.enum.includes('grid'),true);
   assert.ok(run(['schemas']).json.length>1);assert.ok(run(['catalogs']).json.length>1);
   assert.equal(run(['catalog','fontSchemes','roboto']).json.id,'roboto');run(['catalog','unknown'],{status:2});run(['schema','unknown'],{status:2});

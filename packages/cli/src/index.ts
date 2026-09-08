@@ -3,9 +3,11 @@ import { createHash, randomUUID } from "node:crypto";
 import path from "node:path";
 import { createDataContent, OPFDataImportError, paginatePresentation, catalogEntries, schemaEntries, validatePresentation } from "@openpresentation/opf";
 import { applyPatch, lookup, tokens, PatchError } from "./patch.js";
+import {manageSkills, SkillsError, type SkillBundle} from './skills.js';
 
 declare const CLI_VERSION: string;
 declare const OPF_VERSION: string;
+declare const OPF_SKILLS: SkillBundle;
 const usage = `OPF — local presentation files for agents (Node 20+)
   opf create [output.opf.json|-] [--title <text>] [--from <file|->] [--force]
   opf validate <file|-> [--strict]
@@ -21,6 +23,8 @@ const usage = `OPF — local presentation files for agents (Node 20+)
   opf schema [name] [JSON-Pointer]
   opf catalogs
   opf catalog <kind> [id]
+  opf skills <install|update|status> [--agent <universal|codex|claude-code|cursor>]
+             [--global | --directory <skills-directory>]
   opf --version
 
 JSON reports; '-' reads stdin or writes a document to stdout. Diagnostics for
@@ -28,14 +32,19 @@ stdout documents go to stderr. Existing files require --force or --in-place.
 Edits apply JSON Patch (add/remove/replace/move/copy/test), validate the whole
 result, and save atomically. --dry-run emits the result without saving.
 Exit codes: 0 success, 1 invalid document/patch/conflict, 2 usage/JSON/I/O error.
-Validation checks structure and references, not visual fidelity.`;
+Validation checks structure and references, not visual fidelity.
+
+Install all six bundled OPF agent skills in this project:
+  npx @openpresentation/cli@latest skills install
+Skills copy locally without symlinks, paid services or telemetry. Updates refuse
+locally modified/unmanaged skill folders and keep previous managed versions.`;
 class CliError extends Error {
   constructor(message: string, readonly code = 2, readonly details?: unknown) { super(message); }
 }
 const json = (value: unknown) => JSON.stringify(value, null, 2) + "\n";
 const print = (value: unknown) => process.stdout.write(json(value));
 const hash = (text: string) => createHash("sha256").update(text).digest("hex");
-const valueOptions = new Set(["title", "from", "patch", "output", "expect-sha256", "as", "format", "into", "path", "category", "series", "columns", "chart-type", "delimiter"]);
+const valueOptions = new Set(["title", "from", "patch", "output", "expect-sha256", "as", "format", "into", "path", "category", "series", "columns", "chart-type", "delimiter", "agent", "directory"]);
 function parse(args: string[], allowed: string[]) {
   const positional: string[] = [], options: Record<string, string | boolean> = Object.create(null);
   let literal = false;
@@ -107,6 +116,10 @@ async function main(argv: string[]) {
   if (argv.length === 1 && argv[0] === "--version") { print({ cli: CLI_VERSION, opf: OPF_VERSION }); return; }
   const [command, ...args] = argv;
   if (args.length === 1 && args[0] === "--help") { console.log(usage); return; }
+  if (command === 'skills') {
+    const {positional,options}=parse(args,['agent','global','directory']);arity(positional,1);
+    print(await manageSkills(positional[0],OPF_SKILLS,CLI_VERSION,{agent:options.agent as string|undefined,global:!!options.global,directory:options.directory as string|undefined}));return;
+  }
   if (command === "create") {
     const { positional, options } = parse(args, ["title", "from", "force", "strict"]); arity(positional, 0, 1);
     if (options.from && options.title !== undefined) throw new CliError("Use --from or --title, not both.");
@@ -114,7 +127,7 @@ async function main(argv: string[]) {
       $schema: "https://openpresentation.org/schema/opf/v1", name: options.title ?? "Untitled presentation",
       slides: [{ id: "slide-1", title: options.title ?? "Untitled presentation" }],
     };
-    await emit(document, positional[0] ?? "-", options); return;
+    await emit(document, positional[0] ?? "-", options, undefined, {agentSkills:'npx @openpresentation/cli@latest skills install'}); return;
   }
   if (command === "validate") {
     const { positional, options } = parse(args, ["strict"]); arity(positional, 1);
@@ -191,7 +204,7 @@ async function main(argv: string[]) {
   throw new CliError(`Unknown command: ${command}. Run opf --help.`);
 }
 main(process.argv.slice(2)).catch((error: unknown) => {
-  const code = error instanceof PatchError || error instanceof OPFDataImportError ? 1 : error instanceof CliError ? error.code : 2;
+  const code = error instanceof PatchError || error instanceof OPFDataImportError ? 1 : error instanceof CliError || error instanceof SkillsError ? error.code : 2;
   process.stderr.write(json({ error: error instanceof Error ? error.message : String(error), ...(error instanceof CliError && error.details ? { validation: error.details } : {}) }));
   process.exitCode = code;
 });
