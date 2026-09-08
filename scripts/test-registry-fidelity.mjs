@@ -27,7 +27,7 @@ for(const [repo,tests] of [['opf-render',['webp.mjs','jpeg-orientation.mjs','ric
  execFileSync('git',['archive',ref,'test','--output',archive],{cwd:path.resolve(root,'..',repo)});
  execFileSync('tar',['-xf',archive,'-C',directory]);
  const installed=path.dirname(require.resolve('@openpresentation/'+repo+'/package.json'));
- await symlink(path.join(installed,'dist'),path.join(directory,'dist'),'dir').catch(e=>{if(e.code!=='EEXIST')throw e});
+ await symlink(path.join(installed,'dist'),path.join(directory,'dist'),process.platform==='win32'?'junction':'dir').catch(e=>{if(e.code!=='EEXIST')throw e});
  assert.equal(await realpath(path.join(directory,'dist')),await realpath(path.join(installed,'dist')),'Test must execute the installed dist files');
  for(const test of tests){
   const env={...process.env};

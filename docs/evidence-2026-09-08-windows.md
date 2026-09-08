@@ -11,7 +11,7 @@ This supplements the portable handoff. GitHub branches remain the source of trut
 - Microsoft PowerPoint 16.0 native automation created a one-slide PPTX, exported a 1280×720 PNG, reopened the deck, edited a native text box and saved. The test deck was then opened in the visible PowerPoint UI and inspected. This is host capability evidence, not OPF export fidelity evidence.
 - Edge automation reads the deployed site. File Explorer automation navigates to the generated evidence. User approved application access. OS sleep/hibernate settings were inspected, not changed.
 
-## Renderer 0.5.0 candidate
+## Renderer 0.5.0 published
 
 Exact reviewed source: `OpenPresentation/opf-render@b47bba101ab78dc226d9ff848bb8622e3a0109e1`.
 
@@ -21,7 +21,39 @@ Exact reviewed source: `OpenPresentation/opf-render@b47bba101ab78dc226d9ff848bb8
 - Tarball: 32,778 bytes; SHA-1 `3efdeb1903dd435b732a8e1ac2539240cea98812`; integrity `sha512-yOjy+5XR16I6GgGNCqU1ymX9z9CpNFCxSTYxPYNUG+eYfIOhQtExj5ZiHu8sfB7pXU0Qr+J5HqIoSJEnPnewlw==`. Packing a clean Git archive gives identical bytes.
 - Review assessment: core applies vertical alignment to `cell.textBox.y` before rendering; independent scalar/rich baseline assertions verify that behavior. The implicit-neighbor border finding was valid and is fixed by explicit segment ownership, including zero-width and partial merge boundaries. Both earlier GitHub review threads are resolved. Renewed Bugbot check `102140710854` completed successfully at 16:17:32 UTC with no issues. PR #6 merged as `9f34d70002307fcb3795de638e7e4bf0605a33f8`; the merged tree matches the tested head. Tag `opf-render-v0.5.0` was pushed to that merge.
 
-Publication, final registry integrity/provenance checks, downstream lockfiles and release-specific native PowerPoint tests remain pending at this checkpoint.
+Trusted publication [34250244090](https://github.com/OpenPresentation/opf-render/actions/runs/34250244090) succeeded. Registry 0.5.0 points to merge `9f34d70002307fcb3795de638e7e4bf0605a33f8`, with signatures and SLSA provenance. Published integrity is `sha512-VsUTeRaOS00cnQl9z02dvQRuxSP/8ylNNozD86QhwZFxrlOBhpLOWRlq17yAWF4qAYxS2V1Gl9n9SVouYfaOEw==` (32,663 bytes). The Windows candidate above differs solely by CRLF in distributed text. Normalizing all 16 distributed files to LF reproduces the published tarball exactly.
+
+Fresh registry renderer/core consumers pass styled-table and golden tests on Node 20/24 without source loaders. Edge passes all 16 JPEG orientation/fit/crop browser cases; the wrong-orientation control fails as expected. That browser bundle uses renderer source and registry core, not a final all-registry ecosystem bundle.
+
+## PPTX and editor release candidates
+
+Both lockfiles now resolve registry core 0.7.0 and renderer 0.5.0. Editor head `954118f79d937d0ab3a659efdf9f5bb159bbea1c` passes full local Node 20/24 suites, [CI 34250928417](https://github.com/OpenPresentation/opf-editor/actions/runs/34250928417), and renewed Bugbot review. A clean tarball consumer passes coordinated core/editor/SVG/PPTX checks, TypeScript declarations and browser bundling. Real Edge interaction with installed editor packages passes merged rich typing, style preservation, scalar promotion/bold formatting, empty styled-cell entry and complete undo. Editor 0.4.0 is not yet published.
+
+PPTX Windows tests exposed two URL.pathname fixture bugs; fileURLToPath fixes them. CI now covers Ubuntu and Windows on Node 20/24; all four jobs passed head `16efa451990d2cdd7f5766cb33c347bd1497e063`. Subsequent real PowerPoint testing found a native merged-border defect, fixed in `50a96e4be3f0500990a095c8d4fd0980e3f11f06`. Full local Node 20/24 suites, metadata/syntax checks and the 126-deck/805-slide corpus pass the fix. New assertions cover physical continuation borders, shared implicit neighbors, alpha/dashes, zero-width suppression and scaling. [CI 34252815618](https://github.com/OpenPresentation/opf-pptx/actions/runs/34252815618) passes all four OS/runtime jobs on the fix. Automated review is queued and remains a release gate.
+
+Edge executes the updated PPTX browser bundles successfully: 12 styled-table checks, 20 rich native import cases and 11 conditional-style checks. These bundles use the candidate PPTX source and registry core/renderer; final registry E2E remains separate.
+
+The fresh PPTX consumer still reports high advisories through PptxGenJS 4.0.1's image-size dependency (GHSA-w3rx-r6r6-pgpr, GHSA-5p2g-fcmc-qvqq). No patched compatible image-size version was advertised. The full suite passes with image-size loading blocked. This is reachability evidence, not removal of the dependency or dismissal of its security alerts.
+
+## Native Windows PowerPoint evidence
+
+Repeatable harness: [generation/comparison](../scripts/test-native-powerpoint.mjs) and [PowerPoint automation](../scripts/test-native-powerpoint.ps1). It uses local installed Calibri regular/bold/italic/bold-italic bytes for measurement and SVG rasterization, with substitution disabled. It neither embeds nor redistributes those font binaries. PowerPoint itself remains an optional external verifier, not an ecosystem runtime dependency.
+
+Three OPF fixtures export, open in PowerPoint 16.0, rasterize at 1280x720, retain two editable native tables, accept a cell edit and preserve it through save/reopen. Source export, native-saved and native-edited decks reimport as valid OPF with both table merges intact and no diagnostics. Native tests use registry core/renderer and the installed PPTX candidate.
+
+The first native comparison exposed a truncated dashed edge and a reappearing zero-width edge on merged cells. The corrected candidate explicitly styles physical continuation perimeters and matching implicit neighbor edges. Targeted native pixel assertions now observe 36 blue pixels in the lower dash region (minimum 15) and zero unwanted green pixels along the hidden border.
+
+Global mean absolute RGB-channel differences against the SVG raster are 3.2767, 1.8507 and 2.5945 (0–255); 2.2505%, 1.2935% and 1.6997% of channels differ by more than 10. Text baselines/line spacing and native border dash/segment rendering still differ visibly. These are measured observations, not a declaration of pixel equivalence. Broad native corpus equivalence remains incomplete.
+
+Reproduce from a consumer containing the desired exact package set:
+
+```powershell
+node scripts/test-native-powerpoint.mjs artifacts/native-powerpoint generate
+./scripts/test-native-powerpoint.ps1 -EvidenceDirectory artifacts/native-powerpoint/evidence
+node scripts/test-native-powerpoint.mjs artifacts/native-powerpoint compare
+```
+
+[Native comparison report and raster evidence](evidence/native-powerpoint-2026-09-08/README.md) preserve this candidate checkpoint. Final registry results must be recorded separately after publication.
 
 ## Dependency and application inventory
 

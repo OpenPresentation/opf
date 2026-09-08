@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile, rm } from "node:fs/promises";
+import { mkdir, readFile, writeFile, rm, realpath } from "node:fs/promises";
 import { createRequire } from "node:module";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
@@ -29,6 +29,11 @@ const manifest = registry
   ? { artifacts: releasePlan.packages }
   : JSON.parse(await readFile(path.join(out, "manifest.json"), "utf8"));
 if (librariesOnly) manifest.artifacts = manifest.artifacts.filter(item => item.name !== '@openpresentation/cli');
+await mkdir(out,{recursive:true});
+const actualRoot=await realpath(root), actualOut=await realpath(out);
+if (!actualOut.startsWith(actualRoot+path.sep)) throw new Error('Consumer artifacts must remain inside this checkout');
+const actualConsumer=await realpath(consumer).catch(error=>{if(error.code==='ENOENT')return path.resolve(consumer);throw error;});
+if (!actualConsumer.startsWith(actualOut+path.sep)) throw new Error('Refusing to remove a consumer outside the artifact directory');
 await rm(consumer, { recursive: true, force: true });
 await mkdir(consumer, { recursive: true });
 await writeFile(
@@ -47,7 +52,14 @@ await writeFile(
   ),
 );
 function run(command, args) {
+  // npm's Windows shim is a batch file. Invoke its JS entrypoint without a
+  // shell so paths with spaces and package arguments remain literal values.
+  if (command==='npm' && (process.env.npm_execpath || process.platform==='win32')) {
+    args=[process.env.npm_execpath ?? path.join(path.dirname(process.execPath),'node_modules/npm/bin/npm-cli.js'),...args];
+    command=process.execPath;
+  }
   const result = spawnSync(command, args, { cwd: consumer, stdio: "inherit" });
+  if (result.error) throw result.error;
   if (result.status !== 0)
     throw new Error(`${command} exited ${result.status}`);
 }
@@ -56,8 +68,9 @@ run("npm", [
   "--ignore-scripts",
   "--no-audit",
   "--no-fund",
+  "--offline=false",
   "--cache",
-  "/tmp/opf-npm-cache",
+  path.join(out,'cache'),
 ]);
 await writeFile(
   path.join(consumer, "check.mjs"),
@@ -137,9 +150,12 @@ if (registry) {
     if (installed.version !== item.version) throw new Error(`Expected ${item.name}@${item.version}, installed ${installed.version}`);
   }
   if (!librariesOnly) {
-    run(path.join(consumer, 'node_modules/.bin/opf'), ['--version']);
-    run(path.join(consumer, 'node_modules/.bin/opf'), ['create', 'registry.opf.json', '--title', 'Registry consumer']);
-    run(path.join(consumer, 'node_modules/.bin/opf'), ['validate', 'registry.opf.json']);
+    const cliRoot=path.join(consumer,'node_modules/@openpresentation/cli');
+    const cli=JSON.parse(await readFile(path.join(cliRoot,'package.json'),'utf8'));
+    const entry=path.join(cliRoot,cli.bin.opf);
+    run(process.execPath, [entry,'--version']);
+    run(process.execPath, [entry,'create', 'registry.opf.json', '--title', 'Registry consumer']);
+    run(process.execPath, [entry,'validate', 'registry.opf.json']);
   }
 }
 
