@@ -2,10 +2,14 @@
 
 ## Unreleased
 
+## 0.5.0
+
+- Require core 0.7.0 and renderer 0.5.0 for canonical styled and spanning table cells.
+
 - Import conditional table borders with separate outer/interior edges, band/edge/corner precedence, archive-local theme line references, placeholder alpha and partial direct overrides. Invisible or complete direct borders mask unresolved references. Merged anchors use their full spans for frame edges; differing continuation border segments retain the anchor border and report a diagnostic.
 
 - Import and export the coordinated core's styled and spanning table cells as native editable merged grids. Preserve direct fills/text alpha, alignment, padding and individual border widths/dashes. Normalize zero/fractional export padding and dotted/transparent borders that PptxGenJS does not expose consistently. Native cells now return canonical `{value, style}` objects; covered positions are `null`. Malformed merges retain all source cell text with diagnostics. First-row merges crossing into body rows retain explicit formatting as body content.
-- Import conditional solid cell fills with whole-table/band/edge/corner precedence and ordered theme fill references, including placeholder alpha and direct overrides. Unequal native column widths, unsupported effects and the coordinated versioned rollout remain in progress. This syntax requires the unpublished coordinated core branch.
+- Import conditional solid cell fills with whole-table/band/edge/corner precedence and ordered theme fill references, including placeholder alpha and direct overrides. Unequal native column widths and unsupported effects remain explicit fidelity limitations.
 
 - Import supported native table-style character formatting from embedded style parts or inline definitions. Apply whole-table, row/column bands, edge and corner precedence before direct paragraph/run overrides; preserve theme/explicit Latin fonts, bold/italic and supported colors/alpha. Diagnose missing definitions, unsupported effects and right-to-left table geometry.
 
