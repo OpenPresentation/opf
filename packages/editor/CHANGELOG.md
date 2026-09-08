@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.2
+
+- Accept renderer 0.2.x alongside 0.1.x through the optional peer dependency, allowing the new image-fidelity releases in a coordinated installation.
+- Require core 0.4.1 with the corrected embedded image example. Editor behavior and browser entrypoints are unchanged.
+
 ## 0.1.1
 
 - Require renderer 0.1.1 when using the canvas so empty-line caret geometry is available.
