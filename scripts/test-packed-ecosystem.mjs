@@ -258,4 +258,15 @@ await writeFile(path.join(consumer,'create-tests.mjs'),creationHarness);
 await build({entryPoints:[path.join(consumer,'create-tests.mjs')],outfile:path.join(browserOut,'packed-create-tests.js'),bundle:true,platform:'browser',format:'esm'});
 await writeFile(path.join(browserOut,'packed-create-tests.html'),browserHtml('create'));
 
+if (verifyStyledTables) {
+  const styledHarness=(await readHarness('opf-editor','test/styled-table-browser.mjs'))
+    .replace('../src/canvas.js','@openpresentation/opf-editor/canvas')
+    .replace('../src/index.js','@openpresentation/opf-editor')
+    .replace('../src/rich-text.js','@openpresentation/opf-editor/rich-text');
+  await writeFile(path.join(consumer,'styled-table-tests.mjs'),styledHarness);
+  await build({entryPoints:[path.join(consumer,'styled-table-tests.mjs')],outfile:path.join(browserOut,'packed-styled-table-tests.js'),bundle:true,platform:'browser',format:'esm'});
+  await writeFile(path.join(browserOut,'packed-styled-table-tests.html'),browserHtml('styled-table'));
+  console.log('Installed styled-table browser harness built: artifacts/editor/packed-styled-table-tests.html. Open it to verify real pointer/keyboard interaction.');
+}
+
 console.log(librariesOnly ? 'Registry library consumer passed for four exact versions; CLI and complete release verification remain separate.' : registry ? 'Registry consumer passed for all five exact release-plan versions (no local package overrides).' : 'Local tarball consumer passed; this is not a registry verification.');
