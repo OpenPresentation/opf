@@ -21,24 +21,25 @@ jobs:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           path: opf
+          fetch-depth: 0
           persist-credentials: false
       # These commits are the coordinated checkpoint, not mutable default branches.
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           repository: OpenPresentation/opf-render
-          ref: 87663fbdc7b7b467d55d26a72c47c32cafcd8ed7
+          ref: df7ce5c6915a084f101adf90e6329117c0094a23
           path: opf-render
           persist-credentials: false
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           repository: OpenPresentation/opf-editor
-          ref: dbbe1a17c865707c6d96a462a830fa0db9d46bab
+          ref: 5819a2ac12ec22f08a348c81bc3c66630682ecfb
           path: opf-editor
           persist-credentials: false
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           repository: OpenPresentation/opf-pptx
-          ref: 821c047306fc687f4f710aabb0e10920094f7100
+          ref: 1fef9dcfadeeb8310b3c3b668f7506b52717b695
           path: opf-pptx
           persist-credentials: false
       - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4.4.0
@@ -65,6 +66,11 @@ jobs:
         env:
           OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf/scripts/fixtures/opf-examples-png.sha256.json
         run: pnpm test:packages
+      - name: Verify exact published registry packages and fidelity fixtures
+        working-directory: opf
+        run: |
+          pnpm test:registry-ecosystem
+          pnpm test:registry-fidelity
       - name: Report the verification boundary
         if: always()
         run: |
