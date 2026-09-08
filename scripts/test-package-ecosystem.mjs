@@ -14,6 +14,7 @@ for (const name of ['opf-render', 'opf-editor', 'opf-pptx']) {
 }
 for (const task of ['test:skills', 'test:ecosystem', 'test:pagination', 'test:layout', 'test:lists', 'test:rich-text', 'test:data', 'test:fonts']) run('pnpm', [task]);
 run('pnpm', ['demo:editor']);
+run('node', ['scripts/build-rich-table-browser.mjs']);
 run('pnpm', ['pack:ecosystem']);
 run('pnpm', ['test:packed-ecosystem']);
 run('pnpm', ['test:cli:packed']);
