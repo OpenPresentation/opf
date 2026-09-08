@@ -18,12 +18,12 @@ try {
  check(target(rich).hasAttribute('data-opf-rich-text'),'rich list text has its own editable target');
  check(target(description).hasAttribute('data-opf-rich-text'),'rich description has its own editable target');
  check(!target('slides.0.blocks.0.items').hasAttribute('data-opf-rich-text'),'list container is not mistaken for text runs');
- canvas.beginEdit(rich);check(window.getSelection().toString().includes('bold recommendation'),'list text can be selected directly');
+ canvas.beginEdit(rich);check(host.querySelector('.opf-rich-input')?.value.includes('bold recommendation'),'list text can be typed directly');button('Format selection').click();
  button('Italic').click();check(editor.get(rich).every(r=>r.italic),'list text formats without flattening');
  check(editor.get(rich).some(r=>r.bold),'format preserves existing emphasis');
  check(editor.get(description)[1].link==='https://openpresentation.org','body formatting preserves description link');
  editor.undo();check(JSON.stringify(editor.document)===JSON.stringify(original),'one undo restores rich list content');
- canvas.beginEdit(description);button('Underline').click();
+ canvas.beginEdit(description);button('Format selection').click();button('Underline').click();
  check(editor.get(description).every(r=>r.underline),'description formats on the slide');
  check(editor.get(description)[1].link==='https://openpresentation.org','description formatting preserves its link');editor.undo();
  canvas.beginEdit(plain);const input=host.querySelector('textarea');
@@ -36,7 +36,7 @@ try {
  canvas.beginEdit('slides.0.blocks.0.items.1.description');button('Format text').click();button('Bold').click();
  check(editor.get('slides.0.blocks.0.items.1.description')[0].bold,'plain descriptions can become rich text');editor.undo();editor.undo();
  canvas.beginEdit('slides.0.blocks.0.items');check(!!host.querySelector('form[aria-label="Content properties"]'),'list container opens structural properties');canvas.cancel();
- canvas.beginEdit('slides.0.blocks.1.bullets.1.text');button('Italic').click();
+ canvas.beginEdit('slides.0.blocks.1.bullets.1.text');button('Format selection').click();button('Italic').click();
  check(editor.get('slides.0.blocks.1.bullets.1.text')[0].italic,'explicit text-type bullets support rich editing');editor.undo();
  check(JSON.stringify(editor.document)===JSON.stringify(original),'all list edits undo without losing structure');
  check(errors.length===0,'no unexpected canvas errors');

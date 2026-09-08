@@ -26,13 +26,13 @@ jobs:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           repository: OpenPresentation/opf-render
-          ref: 207c32e232d1a90e5abe50dd61a1c7901fa7f278
+          ref: 5472483f18e793a31137a257623cf61c1c310a1f
           path: opf-render
           persist-credentials: false
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           repository: OpenPresentation/opf-editor
-          ref: c8da0a91e531d8010c69275a25a5b8fdb520a5bf
+          ref: a4be429a0e3566d18ecfa806fb33c8feb3ddfcea
           path: opf-editor
           persist-credentials: false
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1

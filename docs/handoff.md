@@ -37,7 +37,7 @@ pnpm pack:ecosystem
 pnpm test:packed-ecosystem
 ```
 
-The link step builds the sibling libraries against the current core. Re-run it after reinstalling dependencies. Core 0.4.0 and renderer 0.1.0 are now published; editor/PPTX 0.1.0 publication is blocked by npm permissions. The source-link workflow remains useful for development. Generated review artifacts, installed dependencies and local server state are excluded from Git and rebuilt by these commands.
+The link step builds the sibling libraries against the current core. Re-run it after reinstalling dependencies. Core 0.4.0 and renderer/editor/PPTX/CLI 0.1.0 are now published. The source-link workflow remains useful for development. Generated review artifacts, installed dependencies and local server state are excluded from Git and rebuilt by these commands.
 
 Start the editor with `python3 -m http.server 3102 --directory artifacts/editor` from `opf`. In another terminal start the gallery with `OPF_LOCAL_WORKSPACE=1 pnpm dev --port 3101` from `pptx-gallery`. From `openpresentation-site`, run `OPF_LOCAL_SOURCE=../opf pnpm sync:opf`, then `pnpm dev --port 3103`.
 
@@ -47,19 +47,29 @@ Production builds use `OPF_LOCAL_WORKSPACE=1 pnpm build` in `pptx-gallery` after
 
 ## Current release checkpoint — September 8 UTC
 
-PR #8 is incorporated into the pushed PR #9 branch through merge 10ed11c. Both test suites, structural package slimming, named schema definitions, catalog/index fixes, governance and Node 20/24 release gates are retained. PR #8 and the six coordinated draft PRs remain open; no merges or site deployments have occurred.
+PR #8 is incorporated into the pushed PR #9 branch through merge 10ed11c. Both test suites, structural package slimming, named schema definitions, catalog/index fixes, governance and Node 20/24 release gates are retained. The PRs remain open; no merges or site deployments have occurred.
 
-The user authorized pushes, PR updates and npm publication. Core 0.4.0 published with provenance from tag `opf-v0.4.0` at 6180096 (workflow 34182120112). Its changelog is now also on main and its GitHub release notes are accurate. Renderer 0.1.0 published with provenance from 207c32e (workflow 34182599445). Registry reads confirm both versions.
+All five planned versions are now published and resolve through ordinary npm installation:
 
-Editor 0.1.0 at c8da0a9 and PPTX 0.1.0 at 7a385fc passed clean registry installation, full package tests, metadata checks and packing locally, then Node 20/24 GitHub CI (34182749722 and 34182754394). Their release tags have been pushed, but workflows 34182810412 and 34182814991 failed at npm publish with E404/permissions errors after every check passed. Registry still exposes 0.0.1. Configure publishing access, rerun these existing jobs and verify registry availability before reporting publication. All three libraries now require core ^0.4.0; editor/PPTX have an optional renderer ^0.1.0 peer. PptxGenJS is pinned to 4.0.1; its image-size advisory remains unresolved, with a release gate verifying model and image embedding operations while parser loading is blocked.
+| Package | Version | Source and publication |
+| --- | --- | --- |
+| @openpresentation/opf | 0.4.0 | Tag opf-v0.4.0 at 6180096; workflow 34182120112 with provenance |
+| @openpresentation/opf-render | 0.1.0 | Tag opf-render-v0.1.0 at 207c32e; workflow 34182599445 with provenance |
+| @openpresentation/opf-editor | 0.1.0 | Tag opf-editor-v0.1.0 at c8da0a9; retried workflow 34182810412 with provenance |
+| @openpresentation/opf-pptx | 0.1.0 | Tag opf-pptx-v0.1.0 at 7a385fc; retried workflow 34182814991 with provenance |
+| @openpresentation/cli | 0.1.0 | Reviewed standalone tarball from core 6180096, authenticated first publication; no provenance on this bootstrap release |
 
-The renderer raster gate now runs all 805 slides in 126 installed-core example decks. Missing or changed corpora fail. Candidate generation never replaces the baseline automatically. All 17 overview sheets were inspected, and a timeline endpoint clipping defect was fixed and checked at full-slide scale. The historical manifest is retained as history, not claimed to pass. This baseline does not establish complete visual correctness or native PowerPoint parity.
+The user completed npm login and browser 2FA. Trusted publishers now exist for editor/PPTX release.yml and core cli-publish.yml. Initial permissions failures were resolved, and exact tagged jobs reran successfully. The CLI public tarball SHA-1 is 0308493d1d85ce18518b69882085419ec3817d73, matching the reviewed artifact. npm metadata took several minutes to expose the new package; it now installs normally. Do not republish an existing version.
 
-Gallery 3a12c7c passes 106 tests and its production build against registry core 0.4.0. Site 91e1580 fixes optional theme/catalog fields and aligns raw documentation with the installed release; its normal build passes, stale-snapshot refresh/reuse is verified, and the served site passes 583 raw-file hashes, six downloaded skills and seven guides. Prior source/local-tarball browser creation checks passed 40 each; fresh complete registry browser checks still need to run.
+`pnpm test:registry-ecosystem` passed for all five exact versions with no local overrides: model operations, fonts, SVG, editable PPTX, TypeScript, browser bundle, CLI create/validate/version. All 60 CLI command checks also pass using the registry-installed executable. `release-plan.json` pins immutable core/editor harness refs for the published release set so unreleased source tests cannot silently change release verification. `test:registry-libraries` is an additional four-library check, not a replacement for the complete gate. All six registry-installed browser suites pass 161 checks (34 canvas, 19 lists, 31 rich text, 19 layout, 18 blocks, 40 creation). Browser evidence lives in `artifacts/npm/registry-browser-verification.json`.
 
-The coordinated public-package workflow pins the new library commits and runs source/package tests on Node 20/24. Its previous checkpoint passed; verify the updated workflow before closing release work. `release-plan.json` records core 0.4.0 and renderer/editor/PPTX/CLI 0.1.0. `pnpm test:registry-ecosystem` requires all five exact published versions and no local overrides; it remains incomplete until the CLI is published. Local preview tarballs are explicitly unpublished. `pnpm test:registry-libraries` independently checks the four exact library versions without CLI; it currently fails as expected on the missing editor/PPTX releases and cannot substitute for the complete five-package gate.
+Source work newer than these releases: renderer 5472483 adds trace-only rich-line geometry; editor a4be429 adds native continuous rich typing with glyph-aligned caret/pointer selection, mixed-style preservation, draft undo/redo, cancellation, conflict protection and composition lifecycle handling. Source browser suites pass 176 checks (34 canvas, 19 lists, 46 rich text, 19 layout, 18 blocks, 40 creation). Actual keystrokes and a measured pointer hit were verified. These changes are marked Unreleased and need a later version/dependency update, release CI and published-consumer verification. Real OS IME, bidi/complex-script and cross-browser behavior remain open. Normal renderer output is unchanged and all 805 raster checks pass.
 
-CLI 0.1.0 is bundled and passes its offline installed executable checks, but npm first publication needs local authentication. The user has been asked to run `npm login`; do not expose credentials or claim trusted-publisher configuration succeeded without evidence.
+The renderer baseline covers 805 slides in 126 installed-core example decks; missing/changed corpora fail and updates create review candidates without replacing the baseline. All 17 overview sheets were inspected and timeline endpoint clipping was fixed. PptxGenJS remains pinned to 4.0.1; its unused image-size advisory remains unresolved, with model/image embedding tested while parser loading is blocked. Neither baseline nor model checks establish native PowerPoint fidelity.
+
+Gallery 3a12c7c passes 106 tests and normal build against registry core 0.4.0. Site 91e1580 aligns optional catalog fields and raw documentation with the installed release; normal build, stale-snapshot refresh/reuse and 583 raw-file hashes, six skill downloads and seven guide pages pass. The homepage was visually checked. Gallery/site assets still need regeneration and review from the published toolchain.
+
+Coordinated CI for released checkpoints passed on Node 20/24 (34182821903); current CI pins the newer source feature commits and must be verified again. Main has the core changelog correction; complete ecosystem code remains on the PR branches. The user has authorized pushes, PR updates and npm publication. Preserve unrelated gallery pnpm-workspace.yaml.
 
 ## Current scope and remaining work
 
@@ -67,4 +77,4 @@ The branch includes shared dynamic layout and pagination, loaded-font measuremen
 
 The broader goal is still active. Continuous rich typing, advanced table/media/preset fidelity, native PowerPoint raster comparison, coordinated public npm releases and CI integration remain work. Local preview tarballs are not evidence of registry publication.
 
-Next: finish editor/PPTX publication, authenticate and publish the CLI, run the complete clean registry consumer and real-browser harnesses, regenerate reviewed gallery/site showcase bundles from the published set, update all existing PRs and advance the documented fidelity roadmap. Main currently has a changelog-only 0.4.0 correction; the complete ecosystem code remains on the coordinated PR branches.
+Next: finish the installed browser verification record, regenerate and review gallery/site assets from the published set, review/finish the existing PRs, release the new rich typing work after CI, and advance the remaining fidelity roadmap. Main currently has a changelog-only 0.4.0 correction; the complete ecosystem code remains on the coordinated PR branches.
