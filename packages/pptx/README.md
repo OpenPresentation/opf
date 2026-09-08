@@ -121,9 +121,9 @@ Pass the same `textMeasurement` provider used by preview and pagination to `toPp
 
 PptxGenJS is pinned to 4.0.1. Its unused `image-size` dependency remains flagged by npm audit; tested OPF operations run with that parser blocked. See [dependency reachability and regression coverage](DEPENDENCY-NOTES.md).
 
-### Native table fitting (unreleased)
+### Native table fitting
 
-The coordinated development schema accepts `TextRun[]` cells and headers. The development exporter preserves their resolved fonts, emphasis, color/alpha, hyperlinks, script positions and explicit line breaks as editable native runs. It measures rich content before export without inserting measured soft wraps. These changes are not in published 0.2.1; they require the development core and renderer. Native table import still flattens rich runs to strings, and native PowerPoint rendering remains unverified.
+Core 0.5.0 accepts `TextRun[]` cells and headers. The 0.3.0 exporter preserves their resolved fonts, emphasis, color/alpha, hyperlinks, script positions and explicit line breaks as editable native runs. It measures rich content before export without inserting measured soft wraps. These changes are not in 0.2.1; version 0.3.0 requires core 0.5.0 and renderer 0.3.0. Native table import still flattens rich runs to strings, and native PowerPoint rendering remains unverified.
 
 The development exporter measures every cell with the same `textMeasurement` provider, font roles and effective nested `minFontSize` used by the SVG preview. Native table cells retain the original strings and values as text, with matching fitted sizes, line spacing, alignment, margins and row/column geometry. Uneven rows receive empty cells for missing columns. Theme border colors now use the same slot as the preview.
 

@@ -1,8 +1,8 @@
 # Changelog
 
-## Unreleased
+## 0.3.0
 
-- Export canonical rich table cells and headers as editable native runs with measured font sizes, resolved families, emphasis, colors/alpha, links and script baselines. Preserve explicit line breaks and whitespace across styled run boundaries. This requires the coordinated development core schema; native PPTX table import still flattens text, and native PowerPoint rendering remains unverified.
+- Export canonical rich table cells and headers as editable native runs with measured font sizes, resolved families, emphasis, colors/alpha, links and script baselines. Preserve explicit line breaks and whitespace across styled run boundaries. Requires core 0.5.0 and renderer 0.3.0; native PPTX table import still flattens text, and native PowerPoint rendering remains unverified.
 
 ## 0.2.1
 
