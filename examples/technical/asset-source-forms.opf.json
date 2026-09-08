@@ -36,7 +36,7 @@
       "mediaType": "image/jpeg"
     },
     "remote-image": "https://cdn.example.com/image.png",
-    "data-uri-image": "data:image/png;base64,iVBORw0KGgo=",
+    "data-uri-image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAIAAAABc2X6AAABvElEQVR4nO3aPUoDURSG4W9esoWIC9CAYG8jdjauwMbKTlyPnZXgJlJYW9qKYK+1dQQD44X8YGbOuRP9fDpJ7h1fznUmSJrno1MN4ezwfpDrIjPIDDKDzCAzyAwyg8wgM8gMMoPMIDPIDDKDzCAzyAwyM6p5scnj9PuHx3H50t7l+98JnpSdK7zcjuuUj2qmzmazVe9smqYsz8seVUhd07n4nnl5XjaptbMvG60tl7TnfKuDJ0Vt503ymsmo7TDYRe0msc1k1AbuGd7MNtdmNFPtSdtfSDOKkzHe8J3Z5sOccbCRGX7FeAOHjMwgM/yW8xx1qpEZZAaZGR1f73dfXeUT5VJP5yfdFiIzyAwyg8zQZ/HO3VX5H9YK5tf6mB503gGZQWboub7mqe5/nvU/4e0dcsh4FTvhvObAnQnZZT7kbP3Hq8AJ5x3sqMMcf6QzmmNrFX6Xbpv7Z7ebBNYq47HU/j33aW7XxtYq6TlcNm+aXS4Jr5XUpN5g3y5uNv2OR15qjeCl2evlpdYL/kl5ducwwaXX3YdBrovMIDPIDDKDzCAzyAwyg8wgM8gMMoPMIDPIDDKDzDD0L1DbJyRKr/0Sls1KAAAAAElFTkSuQmCC",
     "demo-video": {
       "src": "./media/demo.mp4",
       "mediaType": "video/mp4",
