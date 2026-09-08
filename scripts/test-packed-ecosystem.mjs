@@ -5,11 +5,13 @@ import { fileURLToPath } from "node:url";
 import path from "node:path";
 const root = fileURLToPath(new URL("../", import.meta.url)),
   out = path.join(root, "artifacts/npm");
-const registry = process.argv.includes('--registry');
-const consumer = path.join(out, registry ? "registry-consumer" : "consumer");
+const librariesOnly = process.argv.includes('--registry-libraries');
+const registry = process.argv.includes('--registry') || librariesOnly;
+const consumer = path.join(out, librariesOnly ? "registry-libraries-consumer" : registry ? "registry-consumer" : "consumer");
 const manifest = registry
   ? { artifacts: JSON.parse(await readFile(path.join(root, "release-plan.json"), "utf8")).packages }
   : JSON.parse(await readFile(path.join(out, "manifest.json"), "utf8"));
+if (librariesOnly) manifest.artifacts = manifest.artifacts.filter(item => item.name !== '@openpresentation/cli');
 await rm(consumer, { recursive: true, force: true });
 await mkdir(consumer, { recursive: true });
 await writeFile(
@@ -94,9 +96,11 @@ if (registry) {
     const installed = JSON.parse(await readFile(path.join(consumer, 'node_modules', item.name, 'package.json'), 'utf8'));
     if (installed.version !== item.version) throw new Error(`Expected ${item.name}@${item.version}, installed ${installed.version}`);
   }
-  run(path.join(consumer, 'node_modules/.bin/opf'), ['--version']);
-  run(path.join(consumer, 'node_modules/.bin/opf'), ['create', 'registry.opf.json', '--title', 'Registry consumer']);
-  run(path.join(consumer, 'node_modules/.bin/opf'), ['validate', 'registry.opf.json']);
+  if (!librariesOnly) {
+    run(path.join(consumer, 'node_modules/.bin/opf'), ['--version']);
+    run(path.join(consumer, 'node_modules/.bin/opf'), ['create', 'registry.opf.json', '--title', 'Registry consumer']);
+    run(path.join(consumer, 'node_modules/.bin/opf'), ['validate', 'registry.opf.json']);
+  }
 }
 
 await writeFile(
@@ -199,4 +203,4 @@ await writeFile(path.join(consumer,'create-tests.mjs'),creationHarness);
 await build({entryPoints:[path.join(consumer,'create-tests.mjs')],outfile:path.join(browserOut,'packed-create-tests.js'),bundle:true,platform:'browser',format:'esm'});
 await writeFile(path.join(browserOut,'packed-create-tests.html'),(await readFile(path.join(browserOut,'create-tests.html'),'utf8')).replace('./create-tests.js','./packed-create-tests.js'));
 
-console.log(registry ? 'Registry consumer passed for exact release-plan versions (no local package overrides).' : 'Local tarball consumer passed; this is not a registry verification.');
+console.log(librariesOnly ? 'Registry library consumer passed for four exact versions; CLI and complete release verification remain separate.' : registry ? 'Registry consumer passed for all five exact release-plan versions (no local package overrides).' : 'Local tarball consumer passed; this is not a registry verification.');

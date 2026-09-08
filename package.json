@@ -32,7 +32,8 @@
     "check:examples": "node scripts/validate-examples.mjs",
     "check:breaking": "node scripts/test-breaking-gate.mjs && node scripts/check-breaking-changes.mjs",
     "test:packages": "node scripts/test-package-ecosystem.mjs",
-    "test:registry-ecosystem": "node scripts/test-packed-ecosystem.mjs --registry"
+    "test:registry-ecosystem": "node scripts/test-packed-ecosystem.mjs --registry",
+    "test:registry-libraries": "node scripts/test-packed-ecosystem.mjs --registry-libraries"
   },
   "engines": {
     "node": ">=20"
