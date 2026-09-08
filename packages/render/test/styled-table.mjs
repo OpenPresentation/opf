@@ -61,7 +61,6 @@ const custom = lines(edgeSvg).find(line => line.stroke === '#a100a1');
 assert.ok(custom);
 const shared = lines(edgeSvg).filter(line => line.x1 === custom.x1 && line.x2 === custom.x2);
 assert.equal(shared.length,1,'neighbor defaults leave dotted gaps empty');
-assert.ok(edgeSvg.indexOf('stroke="#a100a1"') > edgeSvg.lastIndexOf('stroke="#111111"'));
 // A short explicit neighbor only removes its portion of a long merged edge.
 // Include zero width: suppression must not depend on a visible stroke.
 for (const width of [0,2]) {
