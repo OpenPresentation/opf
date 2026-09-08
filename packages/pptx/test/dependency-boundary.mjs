@@ -29,6 +29,7 @@ await import("./table-import.mjs");
 await import("./object-ids.mjs");
 await import("./image-fit.mjs");
 await import("./image-orientation.mjs");
+await import("./image-media-type.mjs");
 await import("./export-corpus.mjs");
 const { toPptx } = await import("../dist/index.js");
 const { unzipSync } = await import("fflate");

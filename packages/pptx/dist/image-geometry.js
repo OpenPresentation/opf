@@ -10,12 +10,12 @@ export function rasterMetadata(bytes) {
   if (!(bytes instanceof Uint8Array)) return null;
   const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
   const text = (at, n) => String.fromCharCode(...bytes.subarray(at, at + n));
-  const size = (width, height) => Number.isInteger(width) && Number.isInteger(height) && width > 0 && height > 0 ? { width, height } : null;
+  const size = (width, height, mediaType) => Number.isInteger(width) && Number.isInteger(height) && width > 0 && height > 0 ? { width, height, mediaType } : null;
   if (bytes.length >= 33 && text(0, 8) === '\x89PNG\r\n\x1a\n' && view.getUint32(8) === 13 && text(12, 4) === 'IHDR') {
-    return size(view.getUint32(16), view.getUint32(20));
+    return size(view.getUint32(16), view.getUint32(20), "image/png");
   }
   if (bytes.length >= 13 && ['GIF87a', 'GIF89a'].includes(text(0, 6))) {
-    return size(view.getUint16(6, true), view.getUint16(8, true));
+    return size(view.getUint16(6, true), view.getUint16(8, true), "image/gif");
   }
   if (bytes.length >= 12 && text(0, 4) === 'RIFF' && text(8, 4) === 'WEBP') {
     const end = view.getUint32(4, true) + 8;
@@ -25,14 +25,14 @@ export function rasterMetadata(bytes) {
       if (start + length > end) return null;
       if (kind === 'VP8X' && length >= 10) {
         const u24 = offset => bytes[offset] + bytes[offset + 1] * 256 + bytes[offset + 2] * 65536;
-        return size(u24(start + 4) + 1, u24(start + 7) + 1);
+        return size(u24(start + 4) + 1, u24(start + 7) + 1, "image/webp");
       }
       if (kind === 'VP8L' && length >= 5 && bytes[start] === 0x2f) {
         const bits = view.getUint32(start + 1, true);
-        return size((bits & 0x3fff) + 1, ((bits >>> 14) & 0x3fff) + 1);
+        return size((bits & 0x3fff) + 1, ((bits >>> 14) & 0x3fff) + 1, "image/webp");
       }
       if (kind === 'VP8 ' && length >= 10 && text(start + 3, 3) === '\x9d\x01\x2a') {
-        return size(view.getUint16(start + 6, true) & 0x3fff, view.getUint16(start + 8, true) & 0x3fff);
+        return size(view.getUint16(start + 6, true) & 0x3fff, view.getUint16(start + 8, true) & 0x3fff, "image/webp");
       }
       at = start + length + (length & 1);
     }
@@ -53,7 +53,7 @@ export function rasterMetadata(bytes) {
       const length = view.getUint16(at);
       if (length < 2 || at + length > bytes.length) return null;
       if ([0xc0, 0xc1, 0xc2, 0xc3, 0xc5, 0xc6, 0xc7, 0xc9, 0xca, 0xcb, 0xcd, 0xce, 0xcf].includes(marker)) {
-        dimensions = length >= 8 ? size(view.getUint16(at + 5), view.getUint16(at + 3)) : null;
+        dimensions = length >= 8 ? size(view.getUint16(at + 5), view.getUint16(at + 3), "image/jpeg") : null;
       }
       if (marker === 0xe1 && text(at + 2, 6) === 'Exif\x00\x00') orientation ??= exifOrientation(bytes, at + 8, at + length);
       at += length;

@@ -506,7 +506,7 @@ function importPicture(entries, picture, slidePath, relationships) {
     payload: {
       type: "image",
       image: {
-        src: `data:${mediaTypeForPath(relationship.path)};base64,${bytesToBase64(bytes)}`,
+        src: `data:${rasterMetadata(bytes)?.mediaType ?? mediaTypeForPath(relationship.path)};base64,${bytesToBase64(bytes)}`,
         ...(alt ? { alt } : {})
       }
     }
@@ -1513,6 +1513,18 @@ function normalizePptxZip(raw, context) {
   }
   const output = {};
   const renameMaps = buildRenameMaps(Object.keys(entries));
+  // The host may transform assets or supply a filename/MIME hint that no
+  // longer matches its bytes. Native package metadata must describe the bytes.
+  renameMaps.media = new Map();
+  for (const [path, metadata] of imageMetadata) {
+    if (!metadata) continue;
+    const extension = metadata.mediaType.slice('image/'.length);
+    const currentExtension = path.split('.').at(-1).toLowerCase();
+    if (currentExtension === extension || (extension === 'jpeg' && currentExtension === 'jpg')) continue;
+    const target = path.replace(/\.[^/.]+$/, `.${extension}`);
+    if (target !== path && Object.hasOwn(entries, target)) throw new OPFPptxError('packaging-failed', 'Normalized image paths collide.', {path, target});
+    renameMaps.media.set(path, target);
+  }
   for (const path of Object.keys(entries).sort()) {
     const normalizedPath = normalizePartPath(path, renameMaps);
     const bytes = normalizePartBytes(path, entries[path], context, renameMaps, entries, imageMetadata);
@@ -1546,6 +1558,12 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
   }
   if (isXmlPart(path)) {
     let xml=decodeText(bytes);
+    if (path === '[Content_Types].xml') {
+      // Explicit per-part types also correct PptxGenJS's image/jpg default.
+      const overrides = [...imageMetadata].filter(([, metadata]) => metadata).map(([part, metadata]) =>
+        `<Override PartName="/${part}" ContentType="${metadata.mediaType}"/>`).join('');
+      xml = xml.replace('</Types>', `${overrides}</Types>`);
+    }
     if (/^ppt\/slides\/slide\d+\.xml$/.test(path)) {
       // PptxGenJS table IDs can collide with other objects on the same slide.
       // Preserve existing IDs and allocate unused IDs only for duplicates. This
@@ -1626,7 +1644,7 @@ function numberedFilenameMap(paths, pattern) {
 }
 
 function normalizePartPath(path, renameMaps) {
-  return normalizePartReferences(path, renameMaps);
+  return normalizePartReferences(renameMaps.media?.get(path) ?? path, renameMaps);
 }
 
 function normalizePartReferences(value, renameMaps) {
@@ -1640,6 +1658,14 @@ function normalizePartReferences(value, renameMaps) {
       `Microsoft_Excel_Worksheet${newId}.xlsx`
     );
   }
+  // Rewrite package references only, not user-visible text containing paths.
+  output = output.replace(/\b(Target|PartName)="([^"]+)"/g, (attribute, name, value) => {
+    const prefix = value.startsWith('../media/') ? '../' : value.startsWith('/ppt/media/') ? '/ppt/' : null;
+    if (!prefix) return attribute;
+    const part = 'ppt/' + value.slice(prefix.length);
+    const target = renameMaps.media?.get(part);
+    return target ? `${name}="${prefix}${target.slice('ppt/'.length)}"` : attribute;
+  });
   return output;
 }
 
