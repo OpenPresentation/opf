@@ -1,8 +1,8 @@
 # Continue the OPF ecosystem work
 
-The coordinated working branch is `codex/opf-ecosystem-20260907` in these repositories:
+The coordinated ecosystem PRs were merged on September 8, 2026 UTC. Continue from `main` in these repositories:
 
-| Checkout | Draft PR |
+| Checkout | Merged PR |
 | --- | --- |
 | opf | https://github.com/OpenPresentation/opf/pull/9 |
 | opf-render | https://github.com/OpenPresentation/opf-render/pull/1 |
@@ -11,15 +11,15 @@ The coordinated working branch is `codex/opf-ecosystem-20260907` in these reposi
 | pptx-gallery | https://github.com/Data-Advantage/pptx-gallery/pull/9 |
 | openpresentation-site | https://github.com/Data-Advantage/openpresentation-site/pull/5 |
 
-Clone the six branches into sibling directories. Use Node.js 24 and pnpm 10.33.2. From the parent directory:
+Clone the six repositories into sibling directories. Use Node.js 24 and pnpm 10.33.2. From the parent directory:
 
 ```sh
-gh repo clone OpenPresentation/opf -- --branch codex/opf-ecosystem-20260907
-gh repo clone OpenPresentation/opf-render -- --branch codex/opf-ecosystem-20260907
-gh repo clone OpenPresentation/opf-editor -- --branch codex/opf-ecosystem-20260907
-gh repo clone OpenPresentation/opf-pptx -- --branch codex/opf-ecosystem-20260907
-gh repo clone Data-Advantage/pptx-gallery -- --branch codex/opf-ecosystem-20260907
-gh repo clone Data-Advantage/openpresentation-site -- --branch codex/opf-ecosystem-20260907
+gh repo clone OpenPresentation/opf -- --branch main
+gh repo clone OpenPresentation/opf-render -- --branch main
+gh repo clone OpenPresentation/opf-editor -- --branch main
+gh repo clone OpenPresentation/opf-pptx -- --branch main
+gh repo clone Data-Advantage/pptx-gallery -- --branch main
+gh repo clone Data-Advantage/openpresentation-site -- --branch main
 ```
 
 Install dependencies with `pnpm install --frozen-lockfile` in `opf`, `pptx-gallery` and `openpresentation-site`; use `npm ci` in the three library repositories. Then, from `opf`:
@@ -47,7 +47,7 @@ Production builds use `OPF_LOCAL_WORKSPACE=1 pnpm build` in `pptx-gallery` after
 
 ## Current release checkpoint — September 8 UTC
 
-PR #8 is incorporated into the pushed PR #9 branch through merge 10ed11c. Both test suites, structural package slimming, named schema definitions, catalog/index fixes, governance and Node 20/24 release gates are retained. The PRs remain open; no merges or site deployments have occurred.
+PR #8 is incorporated into the pushed PR #9 branch through merge 10ed11c. Both test suites, structural package slimming, named schema definitions, catalog/index fixes, governance and Node 20/24 release gates are retained. All six PRs are merged with merge commits; GitHub also marked PR #8 merged through its preserved ancestry. Both sites deployed automatically from the merged main branches.
 
 All five planned versions are now published and resolve through ordinary npm installation:
 
@@ -67,7 +67,7 @@ Published in 0.1.1: renderer 5472483 adds trace-only rich-line geometry; editor 
 
 The renderer baseline covers 805 slides in 126 installed-core example decks; missing/changed corpora fail and updates create review candidates without replacing the baseline. All 17 overview sheets were inspected and timeline endpoint clipping was fixed. PptxGenJS remains pinned to 4.0.1; its unused image-size advisory remains unresolved, with model/image embedding tested while parser loading is blocked. Neither baseline nor model checks establish native PowerPoint fidelity.
 
-Gallery review fix ee01bc5 passes production build and header geometry checks at 320, 640, 1024, 1279, 1280 and 1440 pixels. Phone/laptop screenshots and mobile search were checked. Site review fix fe638e8 removes duplicate sitemap routes, preserves root-relative guide links, omits catalogs without indexes and repairs code-block colors. Its prebuild regression suite covers 592 unique sitemap URLs, link resolution and missing/empty/legacy catalogs. All five confirmed review threads are resolved; no merges or deployments have occurred.
+Gallery review fix ee01bc5 passes production build and header geometry checks at 320, 640, 1024, 1279, 1280 and 1440 pixels. Phone/laptop screenshots and mobile search were checked. Site review fix fe638e8 removes duplicate sitemap routes, preserves root-relative guide links, omits catalogs without indexes and repairs code-block colors. Its prebuild regression suite covers 592 unique sitemap URLs, link resolution and missing/empty/legacy catalogs. All five confirmed review threads were resolved before merging.
 
 The gallery editor and site showcase have now been regenerated from the exact npm set above. All 854 gallery documents validate and render using the installed packages; the schema reference exposes 604 fields. Checked-in manifests record package tarball URLs/integrities, example source refs and SHA-256 asset hashes. Normal production builds pass. Served checks pass for nine gallery documents, 583 site source hashes, six skills, seven guides and all refreshed editor/showcase asset hashes.
 
@@ -81,12 +81,32 @@ pnpm build:showcase:registry
 
 The gallery command updates its checked-in editor/reference files. Copy the four files in artifacts/site-showcase to openpresentation-site/public/showcase, then build both sites. Registry checks generate their own browser HTML and font files; prior source-demo artifacts are no longer required. Source preparation removes any old registry manifest so it cannot falsely label a development bundle as published.
 
-Coordinated CI passed for source feature checkpoint 603a08d (34184230383) and core CI passed (34184230371). Current workflow pins renderer/editor release commits and needs its next run verified. Main has the core changelog correction; complete ecosystem code remains on the PR branches. The user has authorized pushes, PR updates and npm publication. Preserve unrelated gallery pnpm-workspace.yaml.
+Final reviewed core ece9b90 passed core CI 34185231548 and coordinated CI 34185231533 on Node 20/24. The workflow pins renderer/editor release commits. Main now contains the complete ecosystem implementation and the 0.4.0 changelog correction. The user authorized pushes, PR updates, npm publication, and these six merges with their normal site deployment triggers. Preserve unrelated gallery pnpm-workspace.yaml.
 
 ## Current scope and remaining work
 
 The branch includes shared dynamic layout and pagination, loaded-font measurement and substitutes, rich text/lists, CSV/JSON import, an installable agent CLI, six portable skills, schema-driven properties, copy/import/galleries, canvas resizing/moving/creation/deletion, native PPTX improvements, and site/galleries integration. See [ecosystem quality](plans/ecosystem-quality.md) and [coverage](plans/spec-editor-coverage.md) for evidence and remaining fidelity gaps.
 
-The broader goal is still active. Real OS IME/cross-browser typing, advanced table/media/preset fidelity, native PowerPoint raster comparison and completion of the coordinated PRs remain work. Local preview tarballs are not evidence of registry publication.
+The broader goal is still active. Real OS IME/cross-browser typing, advanced table/media/preset fidelity, and native PowerPoint raster comparison remain work. Local preview tarballs are not evidence of registry publication.
 
-Next: verify the final coordinated CI, review/finish the existing PRs with concrete merge approval, and advance the remaining fidelity roadmap. Main currently has a changelog-only 0.4.0 correction; the complete ecosystem code remains on the coordinated PR branches.
+## Merged checkpoint and local follow-ups
+
+| Repository | Main merge commit |
+| --- | --- |
+| opf | c6323d9 |
+| opf-render | 371c6ce |
+| opf-editor | 33cfebc |
+| opf-pptx | e3afb70 |
+| pptx-gallery | 22f1748 |
+| openpresentation-site | b385495 |
+
+Both production deployments are ready at www.pptx.gallery and www.openpresentation.org, from the exact merge commits above. Releases were already published before merging; no versions were republished.
+
+Post-merge checks passed: core 34186567364, coordinated packages 34186567415, renderer 34186581381, editor 34186583983, PPTX 34186586280 and gallery 34186589351. Live verification passed for 583 source-file hashes, six downloadable skills, seven guides, schema/text endpoints and nine schema-valid gallery documents. All seven gallery manifest hashes and three showcase hashes match production. The manifest's opf-spec.json is served at /api/opf-spec.json; the other editor assets are under /opf-editor/. The live editor renders six starter slides and opens its complete property controls.
+
+Two separately tested local follow-ups remain outside this merged checkpoint:
+
+- PPTX table fidelity: c549049 on codex/table-export-fidelity-20260908 in /private/tmp/opf-table-export/opf-pptx. Native editable cells use shared loaded-font fitting, preserve nested minimum font sizes, fill uneven rows, and match the SVG border theme slot. Node 20/24 tests compare 168 cells, including 24 shrinking cases. Quick Look and Keynote can open the exports, but wrapping differs. Keynote's round-trip changes the specimen's 11.25/6.75-point text to 11/6 points; this is viewer-specific evidence, not PowerPoint verification.
+- Site snapshot source links: d5642af on codex/site-snapshot-links-20260908 in /private/tmp/opf-site-snapshot/openpresentation-site. View-source links serve the exact documentation snapshot bytes instead of GitHub main. Regression tests, production build, 583 raw-file hashes, six skill downloads, seven guides and representative source links pass locally.
+
+Next: review and integrate these follow-ups as separate changes, then continue native PowerPoint comparison, real OS typing, and the remaining table/media/preset roadmap. The local commits are not published releases.
