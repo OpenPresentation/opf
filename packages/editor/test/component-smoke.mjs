@@ -59,6 +59,7 @@ const React = {
     return { tag, props, children };
   },
   useSyncExternalStore(_subscribe, getSnapshot) {
+    assert.equal(getSnapshot(), getSnapshot(), "React external-store snapshots must be referentially stable between changes");
     return getSnapshot();
   }
 };
@@ -150,3 +151,9 @@ function fakeElement(tagName, ownerDocument) {
   };
   return element;
 }
+
+const beforeSnapshot = editor.snapshot();
+assert.equal(beforeSnapshot, editor.snapshot());
+editor.set("slides.0.title", "New snapshot");
+assert.notEqual(editor.snapshot(), beforeSnapshot);
+assert.equal(Object.isFrozen(editor.snapshot().document), true);
