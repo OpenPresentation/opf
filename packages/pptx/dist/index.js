@@ -1,3 +1,4 @@
+import {nativeBackgroundFill, readNativeBackground} from './background.js';
 import { webpToPng } from '#image-fallback';
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
 import { composeSlide, fitText, textWidthMeasurer, resolveCanvasDimensions, resolveFontFamilies, resolveTextStyle } from "@openpresentation/opf/composition";
@@ -164,6 +165,7 @@ export async function toPptx(input, options = {}) {
   context.listMarkers = new Map();
   context.tableHeaders = new Map();
   context.imagePlacements = new Map();
+  context.backgroundFills = new Map();
   context.imageFormat = options.imageFormat ?? "compatible";
   const pptx = new PptxGenJS();
   configurePresentation(pptx, presentation, {...context,fonts:resolveSlideContext(presentation,presentation.slides[0],context,options).fonts});
@@ -214,7 +216,7 @@ export async function fromPptx(input, options = {}) {
   if (dimensions) imported.design = { dimensions };
 
   for (let index = 0; index < slidePaths.length; index += 1) {
-    imported.slides.push(importSlide(entries, slidePaths[index], index, dimensions));
+    imported.slides.push(importSlide(entries, slidePaths[index], index, dimensions, options));
   }
 
   const result = validatePresentation(imported);
@@ -354,7 +356,7 @@ function dimensionsFromPresentation(presentationRoot) {
   };
 }
 
-function importSlide(entries, slidePath, slideIndex, presentationDimensions) {
+function importSlide(entries, slidePath, slideIndex, presentationDimensions, options) {
   const doc = parseRequiredXml(entries, slidePath);
   const slideRoot = doc["p:sld"];
   if (!slideRoot) {
@@ -368,15 +370,8 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions) {
   const slide = {};
   if (slideRoot.show === "0") slide.hidden = true;
 
-  const background = slideBackground(slideRoot);
-  if (background) {
-    slide.design = {
-      background: {
-        type: "solid",
-        color: background
-      }
-    };
-  }
+  const background = readNativeBackground(slideRoot["p:cSld"]?.["p:bg"]?.["p:bgPr"], resolveCanvasDimensions(dimensions), diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}.design.background`}));
+  if (background) slide.design = {background};
 
   const items = collectSlideItems(entries, slideRoot, slidePath, relationships, dimensions)
     .sort(comparePositionedItems);
@@ -724,10 +719,6 @@ function readSlideNotes(entries, relationships) {
   return bodyNotes.join("\n").trim();
 }
 
-function slideBackground(slideRoot) {
-  const color = slideRoot["p:cSld"]?.["p:bg"]?.["p:bgPr"]?.["a:solidFill"]?.["a:srgbClr"]?.val;
-  return color ? `#${normalizeHex(color)}` : "";
-}
 
 function textFromTextBody(txBody) {
   return readParagraphs(txBody).map((paragraph) => paragraph.text).filter(Boolean).join("\n").trim();
@@ -814,7 +805,7 @@ function assertValidBoundary(presentation) {
 
 function resolvePresentationContext(presentation, options) {
   const design = presentation.design ?? {};
-  const theme = resolveCatalogRecord(presentation, "themes", design.theme, DEFAULTS.theme);
+  const theme = resolveDesignRecord(presentation, "themes", design.theme, DEFAULTS.theme);
   const colorScheme = resolveDesignRecord(
     presentation,
     "colorSchemes",
@@ -842,6 +833,7 @@ function resolvePresentationContext(presentation, options) {
     layoutName: "OPF_CANVAS",
     dimensions,
     colorScheme,
+    backgroundDefinition: design.background ?? theme?.background,
     fonts,
     colors: {
       background,
@@ -876,6 +868,10 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
   const slide = pptx.addSlide();
   const slideContext = resolveSlideContext(presentation, opfSlide, context, options);
   slide.background = { color: slideContext.colors.background };
+  const backgroundFill = nativeBackgroundFill(slideContext.backgroundDefinition, {
+    width: slideContext.dimensions.widthInches, height: slideContext.dimensions.heightInches
+  }, slideContext.colors.background);
+  if (backgroundFill) context.backgroundFills.set(`ppt/slides/slide${slideIndex + 1}.xml`, backgroundFill);
   slide.color = slideContext.colors.text;
   if (opfSlide.hidden === true) slide.hidden = true;
 
@@ -920,7 +916,7 @@ function resolveSlideContext(presentation, slide, baseContext, options) {
     || Math.abs(resolved.dimensions.heightInches - baseContext.dimensions.heightInches) > 1e-6) {
     throw new OPFPptxError("mixed-slide-dimensions", "PowerPoint requires one canvas size per presentation. Set dimensions on the deck or export this slide separately.");
   }
-  return { ...baseContext, colorScheme: resolved.colorScheme, fonts: resolved.fonts, colors: resolved.colors, imageFill: effective.design.imageFill ?? "fit" };
+  return { ...baseContext, backgroundDefinition: resolved.backgroundDefinition, colorScheme: resolved.colorScheme, fonts: resolved.fonts, colors: resolved.colors, imageFill: effective.design.imageFill ?? "fit" };
 }
 
 function fieldToType(field) {
@@ -1593,6 +1589,8 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
       xml = xml.replace('</Types>', `${overrides}</Types>`);
     }
     if (/^ppt\/slides\/slide\d+\.xml$/.test(path)) {
+      const fill = context.backgroundFills.get(path);
+      if (fill) xml = xml.replace(/<p:bg>[\s\S]*?<\/p:bg>/, `<p:bg><p:bgPr>${fill}<a:effectLst/></p:bgPr></p:bg>`);
       // PptxGenJS table IDs can collide with other objects on the same slide.
       // Preserve existing IDs and allocate unused IDs only for duplicates. This
       // export path creates no connector attachments or animation ID references.

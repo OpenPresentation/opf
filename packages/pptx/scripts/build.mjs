@@ -11,3 +11,5 @@ await copyFile(new URL("src/image-geometry.js", root), new URL("image-geometry.j
 for (const name of ['image-fallback-node.js', 'image-fallback-browser.js']) {
   await copyFile(new URL(`src/${name}`, root), new URL(name, dist));
 }
+
+await copyFile(new URL('src/background.js', root), new URL('background.js', dist));

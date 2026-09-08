@@ -48,6 +48,8 @@ export interface ToPptxOptions {
 }
 
 export interface FromPptxOptions {
+  /** Reports native background fills that cannot be represented by the OPF gradient contract. */
+  onDiagnostic?: (diagnostic: {code: string; path: string; message: string}) => void;
   fallbackName?: string;
   schema?: string;
 }
