@@ -11,3 +11,7 @@ The original 29713f5 baseline is retained as `historical-opf-examples-png.sha256
 All 805 slides were reviewed at overview-sheet scale, with the timeline endpoint defect inspected at individual-slide scale. Timeline label boxes and markers now stay within their allocated content region; measured-font regressions cover one, two, four and eight events on wide and portrait slides. Each corpus image is a deterministic resvg raster using bundled fonts with system-font loading disabled.
 
 This baseline records the current implementation, not complete visual correctness. Thumbnail review cannot establish glyph-level or small-text fidelity. Known limitations include unresolved media placeholders, limited advanced chart families, low-contrast combinations in some source presets, sparse layout/density choices, language shaping and native PowerPoint parity. Those issues remain on the ecosystem roadmap and must not be described as fixed merely because the golden test passes.
+
+## September 8 core 0.4.1 review
+
+The release baseline now matches core 0.4.1. Only `technical/asset-source-forms.opf.json#1` changes: its broken eight-byte PNG signature is replaced with a complete project-authored PNG. The image was inspected individually; all other 804 raster hashes are unchanged. The preceding core 0.4.0 baseline is retained as `core-0.4.0-opf-examples-png.sha256.json`.
