@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+## 0.4.0
+
+- Require core 0.7.0 and renderer 0.5.0 for canonical styled and spanning table cells.
+
+- Add coordinated styled-table regression coverage for `.value` typing/formatting, style/span preservation, empty cells, field discovery, rejected structural edits and atomic undo. The existing model supports these cells through the core 0.7.0 schema. Browser verification with actual Roboto fonts passes merged rich typing, scalar promotion and formatting, partial selection, empty styled values, cancellation and undo.
+
 ## 0.3.0
 
 - Require core 0.6.0 and renderer 0.4.0 so the editor uses shared content-aware table rows. Multiline cells grow into available space while retaining formatting, typing, empty-cell editing and undo behavior.
