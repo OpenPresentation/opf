@@ -23,13 +23,13 @@ The gallery `/spec` and `/api/opf-spec.json` contain the same schema digest and 
 | Charts and external data | Chart/data schemas and catalog record forms | CSV/TSV/JSON snapshot import with mapping and undo; common chart families render all series and signed values. Live source refresh and advanced preset-specific charts remain |
 | Content blocks, promoted regions and composition | Nested forms, geometry controls and shared layout | Track divider resizing implemented for root/nested flows with undo and keyboard support; sibling block drag/reorder and menu-based moves between groups/slides implemented; palette insertion, duplication and deletion with empty-group pruning implemented; additional placement constraints and chartPrimary/contentDirection integration remain |
 | Theme, color and font schemes, dimensions | References and inline overrides editable | Theme-wide typography feature parity and coverage of all font families |
-| Backgrounds | Theme/hex/solid, angled gradients, opacity, image fits, three pattern presets rendered | Other engine-defined pattern IDs and pixel calibration against PowerPoint; unresolved images need a host resolver |
+| Backgrounds | Theme/hex/solid, angled gradients, opacity, image fits, three pattern presets rendered; PPTX 0.2.1 imports supported inherited/theme backgrounds and ordered luminance/opacity transforms as explicit colors | Native theme linkage, image/pattern background import, other color transforms, other engine-defined pattern IDs and pixel calibration against PowerPoint; unresolved images need a host resolver |
 | Headers and footers | All zones, text, images, slide numbers, organization and section rendered | Boolean date needs an explicit presentation date convention; use a literal date string for deterministic output |
 | Watermark, imageFill, contentBox, text alignment | Controls and SVG implementation | Full decoration/layout interactions and export parity |
 | Logo sets and slideImage treatments | All forms editable | Automatic logo variant selection and slideImage positioning |
 | Image/video/asset registries | Asset source/metadata controls and maps; embedded raster images supported | Video playback, external asset resolution, crop/effect manipulation, vector asset pipeline |
 | Catalog sources and inline records | Every record schema available | Guided source resolution, preset pickers in every applicable form, missing-reference UI |
-| Package and site parity | Reusable schema/inspector npm entries; shared site bundle | Public coordinated npm release and automated screenshot/PPTX parity in CI |
+| Package and site parity | Public coordinated npm packages, reusable schema/inspector entries, shared site bundle, installed-registry fidelity gates | Keep public site/gallery bundles synchronized with new releases; automated native PowerPoint parity remains incomplete |
 
 This table must not be reported as complete WYSIWYG support. The field inventory closes discovery and structured-authoring gaps. Outstanding visual and interaction items remain part of the user's broader ecosystem goal.
 
