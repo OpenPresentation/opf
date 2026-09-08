@@ -26,8 +26,14 @@ try {
  check(text(edited.slides[0].blocks[0].table.columns[0])===' A 7\n B \n','Native run/field/break order');
  const diagnostics=[];
  document.querySelector('main').innerHTML=renderSvg(deck,{trace:true,onDiagnostic:d=>diagnostics.push(d)});
- check(diagnostics.some(d=>d.code==='text-overflow'),'Multiline table overflow remains reported');
+ check(!diagnostics.some(d=>d.code==='text-overflow'),'Multiline table uses available space');
+ for(const group of document.querySelectorAll('g[data-opf-rich-text="true"]')) {
+  const rectangle=document.querySelector(`rect[data-opf-path="${group.getAttribute('data-opf-path')}"]`);
+  if(!rectangle)continue;
+  const bounds=group.getBBox(),row=rectangle.getBBox();
+  check(bounds.height===0||(bounds.y>=row.y-1&&bounds.y+bounds.height<=row.y+row.height+1),'Imported rich text stays inside its row');
+ }
  check(!!document.querySelector('a[href="https://example.com"]'),'Imported hyperlink preview');
- out.textContent=JSON.stringify({passed:true,cases,visualLimitation:'Fixed-height table rows overflow for preserved multiline content; layout diagnostic confirmed.',checks:'Native XML import, style/default preservation, links, blank lines, repeated conversion and SVG preview'},null,2);
+ out.textContent=JSON.stringify({passed:true,cases,checks:'Native XML import, style/default preservation, links, blank lines, repeated conversion and SVG preview'},null,2);
  document.title='PASS: native rich table import';
 } catch(error) {out.textContent=error.stack;document.title='FAIL: native rich table import';}

@@ -4,7 +4,7 @@ import {nativeBackgroundFill} from './background.js';
 import {importBackground} from './background-import.js';
 import { webpToPng } from '#image-fallback';
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
-import { composeSlide, fitText, fitRichText, textWidthMeasurer, resolveCanvasDimensions, resolveFontFamilies, resolveTextStyle } from "@openpresentation/opf/composition";
+import { layoutTable, composeSlide, fitText, fitRichText, textWidthMeasurer, resolveCanvasDimensions, resolveFontFamilies, resolveTextStyle } from "@openpresentation/opf/composition";
 import PptxGenJS from "pptxgenjs";
 import { unzipSync, zipSync } from "fflate";
 import { XMLParser } from "fast-xml-parser";
@@ -1105,24 +1105,15 @@ function addTablePayload(slide, table, region, context, options, path) {
     return;
   }
 
-  const columnCount = Math.max(1, ...sourceRows.map(row => row.length));
-  const rowHeight = Math.min(54 * scale / 96, region.h / sourceRows.length);
-  const cellBox = {
-    x: 0, y: 0,
-    width: Math.max(scale, region.w * 96 / columnCount - 20 * scale),
-    height: Math.max(scale, rowHeight * 96 - 12 * scale),
-  };
-  const rows = sourceRows.map((row, rowIndex) => Array.from({ length: columnCount }, (_, columnIndex) => {
-    const header = hasHeaders && rowIndex === 0;
-    const cellPath = header ? `${path}.columns.${columnIndex}` : `${path}.rows.${rowIndex - Number(hasHeaders)}.${columnIndex}`;
-    const text = stringifyText(row[columnIndex]);
-    const style = resolveTextStyle({ fontFamily: context.fonts.body, fontWeight: header ? 700 : 400, italic: false, path: cellPath }, options.textMeasurement);
-    const rich = Array.isArray(row[columnIndex]);
-    const fit = rich
-      ? fitRichText(row[columnIndex], cellBox, 15 * scale, (context.composition?.minFontSize ?? 16) * scale, {style,textMeasurement:options.textMeasurement})
-      : fitText(text, cellBox, 15 * scale, (context.composition?.minFontSize ?? 16) * scale, textWidthMeasurer(style, options.textMeasurement));
+  const layout = layoutTable(table, {x:region.x*96,y:region.y*96,width:region.w*96,height:region.h*96}, {
+    scale, minFontSize:context.composition?.minFontSize, fontFamily:context.fonts.body, textMeasurement:options.textMeasurement, path
+  });
+  const columnCount = layout.columnCount;
+  const rows = layout.rows.map(row => row.cells.map(cell => {
+    const {header,rich,fit} = cell;
+    const text = stringifyText(cell.value), style = cell.textStyle;
     const fragments = rich ? fit.richLines.flatMap(line => line.fragments) : [];
-    const runs = rich ? row[columnIndex].flatMap((value, index) => {
+    const runs = rich ? cell.value.flatMap((value, index) => {
       const run = typeof value === 'string' ? {text:value} : value;
       const fragment = fragments.find(item => item.runIndex === index);
       const runStyle = fragment?.style ?? resolveTextStyle({...style,fontFamily:run.fontFamily ?? style.fontFamily,fontWeight:run.bold === undefined ? style.fontWeight : run.bold ? 700 : 400,italic:run.italic ?? style.italic}, options.textMeasurement);
@@ -1168,8 +1159,8 @@ function addTablePayload(slide, table, region, context, options, path) {
     x: region.x,
     y: region.y,
     w: region.w,
-    h: rowHeight * rows.length,
-    rowH: rowHeight,
+    h: layout.height / 96,
+    rowH: layout.rows.map(row => row.box.height / 96),
     colW: Array(columnCount).fill(region.w / columnCount),
     autoPage: false,
     fontFace: context.fonts.body,

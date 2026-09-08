@@ -28,6 +28,7 @@ await import("./background.mjs");
 await import("./background-inheritance.mjs");
 await import("./native-background.mjs");
 await import("./table-layout.mjs");
+await import("./table-row-sizing.mjs");
 await import("./table-import.mjs");
 await import("./rich-table.mjs");
 await import("./rich-table-import.mjs");
