@@ -38,25 +38,64 @@ export function nativeBackgroundFill(background, {width, height}, fallback = 'FF
   return `<a:gradFill rotWithShape="0"><a:gsLst>${nativeStops}</a:gsLst><a:lin ang="${angle}" scaled="0"/></a:gradFill>`;
 }
 
+// Internal metadata supplied by the ordered XML reader. A Symbol cannot collide
+// with a document attribute, and repeated transforms keep their original order.
+export const colorTransforms = Symbol('DrawingML color transforms');
+const transformNames = new Set(['a:alpha', 'a:alphaMod', 'a:alphaOff', 'a:lum', 'a:lumMod', 'a:lumOff']);
+function luminanceColor(hex) {
+  const rgb = hex.match(/../g).map(value => parseInt(value, 16) / 255);
+  const max = Math.max(...rgb), min = Math.min(...rgb), l = (max + min) / 2, delta = max - min;
+  // Retain hue/saturation across consecutive luminance changes, even when an
+  // intermediate luminance clips to black or white.
+  return {l, saturation: delta === 0 ? 0 : delta / (1 - Math.abs(2 * l - 1)), direction: rgb.map(c => delta ? (c - l) / delta : 0)};
+}
+function luminanceHex({l, saturation, direction}) {
+  const chroma = (1 - Math.abs(2 * l - 1)) * saturation;
+  return '#' + direction.map(c => Math.round(clamp(l + c * chroma) * 255).toString(16).padStart(2, '0')).join('').toUpperCase();
+}
 export function readBackgroundColor(node, context = {}, seen = new Set()) {
   const kinds = ['a:srgbClr', 'a:sysClr', 'a:schemeClr'].filter(k => node?.[k]);
   if (kinds.length !== 1) return null;
   const kind = kinds[0], c = node[kind];
-  if (Array.isArray(c) || Object.keys(c).some(k => !['val', 'lastClr', 'a:alpha'].includes(k))) return null;
-  const alpha = Number(c['a:alpha']?.val ?? 100000) / 100000;
-  if (!Number.isFinite(alpha) || alpha < 0 || alpha > 1) return null;
-  if (Array.isArray(c['a:alpha'])) return null;
+  if (Array.isArray(c) || Object.keys(c).some(k => !['val', 'lastClr'].includes(k) && !transformNames.has(k))) return null;
+  const entries = Object.entries(c).filter(([key]) => key.startsWith('a:'));
+  // The legacy object shape is safe for one transform only. Never guess the
+  // order of repeated/interleaved operations after an unordered parser.
+  const transforms = c[colorTransforms] ?? (entries.length <= 1 && entries.every(([,value]) => !Array.isArray(value)) ? entries : null);
+  if (!transforms) return null;
+  let resolved;
   if (kind === 'a:schemeClr') {
-    // a:alpha sets opacity; multiplying would be a:alphaMod instead.
-    const withAlpha = resolved => resolved ? {...resolved, alpha: Object.hasOwn(c, 'a:alpha') ? alpha : resolved.alpha} : null;
-    if (c.val === 'phClr') return withAlpha(context.placeholder);
-    const slot = context.mapping?.[c.val] ?? c.val;
-    if (seen.has(slot)) return null;
-    const resolved = readBackgroundColor(context.colors?.['a:' + slot], context, new Set([...seen, slot]));
-    return withAlpha(resolved);
+    if (c.val === 'phClr') resolved = context.placeholder;
+    else {
+      const slot = context.mapping?.[c.val] ?? c.val;
+      if (seen.has(slot)) return null;
+      resolved = readBackgroundColor(context.colors?.['a:' + slot], context, new Set([...seen, slot]));
+    }
+  } else {
+    const hex = kind === 'a:sysClr' ? c.lastClr : c.val;
+    if (!/^[\da-f]{6}$/i.test(hex ?? '')) return null;
+    resolved = {hex: '#' + hex.toUpperCase(), alpha: 1, luminance: luminanceColor(hex)};
   }
-  const hex = kind === 'a:sysClr' ? c.lastClr : c.val;
-  return /^[\da-f]{6}$/i.test(hex ?? '') ? {hex: '#' + hex.toUpperCase(), alpha} : null;
+  if (!resolved) return null;
+  let alpha = resolved.alpha;
+  const luminance = {...(resolved.luminance ?? luminanceColor(resolved.hex.slice(1)))};
+  for (const [name, attributes] of transforms) {
+    if (!transformNames.has(name) || !attributes || Object.keys(attributes).some(key => key !== 'val')) return null;
+    const raw = attributes.val;
+    if (!/^[+-]?\d+$/.test(raw ?? '')) return null;
+    const value = Number(raw) / 100000;
+    if (!Number.isFinite(value)) return null;
+    if ((name === 'a:alpha' || name === 'a:lum') && (value < 0 || value > 1)) return null;
+    if (name === 'a:alphaMod' && value < 0) return null;
+    if (name === 'a:alphaOff' && Math.abs(value) > 1) return null;
+    if (name === 'a:alpha') alpha = value;
+    if (name === 'a:alphaMod') alpha = clamp(alpha * value);
+    if (name === 'a:alphaOff') alpha = clamp(alpha + value);
+    if (name === 'a:lum') luminance.l = value;
+    if (name === 'a:lumMod') luminance.l = clamp(luminance.l * value);
+    if (name === 'a:lumOff') luminance.l = clamp(luminance.l + value);
+  }
+  return {hex: luminanceHex(luminance), alpha, luminance};
 }
 
 export function readNativeBackground(properties, {width, height}, report = () => {}, context = {}) {
