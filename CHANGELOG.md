@@ -1,5 +1,33 @@
 # Changelog
 
+## Unreleased
+
+## 0.7.0
+
+- Add an object form for table cells: `value`, optional `style`, `colSpan` and `rowSpan`. Existing scalar and rich-array cells remain valid. Styles cover fills, text colors, alignment, padding and individual borders.
+- Validate covered positions explicitly as `null`, reject overlapping or out-of-bounds merges, and preserve vertical merge groups during pagination. Shared table geometry emits each anchor once and retains editable content paths through `.value`.
+- Exercise styled creation, validation, edits and merge-aware pagination through the standalone CLI, including atomic span/row edits and file preservation on invalid changes.
+- Rebuild CLI 0.4.0 with bundled core 0.7.0. The coordinated renderer/editor/PPTX rollout is required for styled previews, editing and conversion; the older core 0.6.0 package set does not accept this syntax. See `docs/plans/styled-table-cells.md` for verification and remaining native fidelity limits.
+
+## 0.6.0
+
+- Add shared `layoutTable` geometry and fitting to the composition API. Wrapped and multiline rows grow into available space; constrained tables reduce spare row height before readable text, preserve complete cells and report real overflow. Short rows keep their existing preferred height.
+- Add optional uniform rich-text line advances for native table spacing. The coordinated renderer and PPTX exporter consume the same row and text geometry. No schema change is required.
+- Rebuild CLI 0.3.0 with bundled core 0.6.0. Shared variable-row geometry is available in renderer/PPTX 0.4.0 and editor 0.3.0; PPTX 0.4.0 also imports supported native rich table text.
+
+## 0.5.0
+
+- Accept canonical `TextRun[]` values in table cells and column headers, alongside existing scalar cells and string headers. Measure rich cells with their actual font and run styles for overflow detection and pagination; preserve complete rows and repeated headers without mutating the document.
+- Rebuild the standalone CLI as 0.2.0 with bundled OPF 0.5.0. The generated table types now include rich arrays, so consumers that exhaustively handle scalar cells or string-only headers must handle the additional form.
+- Rich table rendering, editor interactions and editable PPTX export are available in renderer 0.3.0, editor 0.2.0 and PPTX 0.3.0. Older core 0.4.1 does not accept this syntax; native PPTX import still flattens table text.
+
+## 0.4.1
+
+- Replace the truncated PNG in the asset-source-forms example with a complete project-authored image so the inline asset can render and export.
+
+- Rebuild the standalone CLI as 0.1.1 with bundled OPF 0.4.1.
+- Verify the corrected example corpus against the reviewed renderer baseline and coordinated image/PPTX fidelity commits.
+
 ## 0.4.0
 
 Published to npm on 2026-09-08 (UTC): [`@openpresentation/opf@0.4.0`](https://www.npmjs.com/package/@openpresentation/opf/v/0.4.0). See the [tagged release](https://github.com/OpenPresentation/opf/releases/tag/opf-v0.4.0) for the exact source snapshot.

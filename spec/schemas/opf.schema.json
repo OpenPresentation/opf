@@ -2484,22 +2484,66 @@
       "type": "object",
       "description": "Table content. Columns are optional; rows are the only required field.",
       "additionalProperties": false,
-      "required": ["rows"],
+      "required": [
+        "rows"
+      ],
       "properties": {
         "columns": {
           "type": "array",
-          "items": { "type": "string" },
-          "description": "Optional column labels rendered above table rows.",
-          "examples": [["Region", "Q3 Revenue", "Q4 Revenue", "YoY %"]]
+          "items": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/TextRun"
+                }
+              },
+              {
+                "$ref": "#/$defs/StyledTableCell"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "description": "Optional column labels. Labels may be strings, rich runs or styled cell objects. Null is an empty label or a placeholder covered by a preceding column span.",
+          "examples": [
+            [
+              "Region",
+              "Q3 Revenue",
+              "Q4 Revenue",
+              "YoY %"
+            ]
+          ]
         },
         "rows": {
           "type": "array",
           "items": {
             "type": "array",
-            "items": { "$ref": "#/$defs/TableCell" }
+            "items": {
+              "$ref": "#/$defs/TableCell"
+            }
           },
           "description": "Two-dimensional table row data; each row aligns by index with columns when columns are supplied.",
-          "examples": [[["North America", 12.4, 18.1, "46%"], ["EMEA", 8.2, 11.5, "40%"]]]
+          "examples": [
+            [
+              [
+                "North America",
+                12.4,
+                18.1,
+                "46%"
+              ],
+              [
+                "EMEA",
+                8.2,
+                11.5,
+                "40%"
+              ]
+            ]
+          ]
         }
       }
     },
@@ -2568,12 +2612,179 @@
     },
     "TableCell": {
       "oneOf": [
-        { "type": "string" },
-        { "type": "number" },
-        { "type": "boolean" },
-        { "type": "null" }
+        {
+          "$ref": "#/$defs/TableCellValue"
+        },
+        {
+          "$ref": "#/$defs/StyledTableCell"
+        }
       ],
-      "description": "A cell in table content."
+      "description": "A scalar, rich-run array, or styled/spanning cell object. Existing scalar and rich forms remain valid."
+    },
+    "TableCellValue": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TextRun"
+          }
+        }
+      ],
+      "description": "A scalar table value or canonical rich text runs, without cell decoration or geometry."
+    },
+    "StyledTableCell": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "value"
+      ],
+      "properties": {
+        "value": {
+          "$ref": "#/$defs/TableCellValue",
+          "description": "Editable cell content; styling and spans do not change its scalar type or rich runs."
+        },
+        "style": {
+          "$ref": "#/$defs/TableCellStyle"
+        },
+        "colSpan": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Number of grid columns covered, starting at this cell. Covered positions must contain null. Default 1."
+        },
+        "rowSpan": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Number of grid rows covered, starting at this cell. Covered positions must contain null. Header cells cannot span into body rows. Default 1."
+        }
+      },
+      "description": "A cell with explicit visual style or merged geometry. Its position remains its array column index; use null placeholders for every covered grid position."
+    },
+    "TableCellStyle": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "fill": {
+          "type": "string",
+          "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$",
+          "description": "Explicit RGB or RGBA color. Eight-digit colors include alpha; #00000000 is transparent."
+        },
+        "color": {
+          "type": "string",
+          "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$",
+          "description": "Default text color, overridden by individual rich run colors."
+        },
+        "align": {
+          "type": "string",
+          "enum": [
+            "left",
+            "center",
+            "right"
+          ],
+          "description": "Horizontal text alignment inside the cell."
+        },
+        "verticalAlign": {
+          "type": "string",
+          "enum": [
+            "top",
+            "middle",
+            "bottom"
+          ],
+          "description": "Vertical alignment inside the padded cell box."
+        },
+        "padding": {
+          "$ref": "#/$defs/TableCellPadding"
+        },
+        "borders": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "top": {
+              "$ref": "#/$defs/TableCellBorder"
+            },
+            "right": {
+              "$ref": "#/$defs/TableCellBorder"
+            },
+            "bottom": {
+              "$ref": "#/$defs/TableCellBorder"
+            },
+            "left": {
+              "$ref": "#/$defs/TableCellBorder"
+            }
+          },
+          "description": "Independent cell edges. Omitted edges retain the table theme border; width 0 removes an edge."
+        }
+      },
+      "description": "Cell appearance. Sizes use reference pixels at a 720-pixel canvas short edge and scale with the slide."
+    },
+    "TableCellPadding": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "top": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 200
+        },
+        "right": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 200
+        },
+        "bottom": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 200
+        },
+        "left": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 200
+        }
+      },
+      "description": "Text insets in reference pixels. Defaults: top 8, right 10, bottom 4, left 10."
+    },
+    "TableCellBorder": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "color",
+        "width"
+      ],
+      "properties": {
+        "color": {
+          "type": "string",
+          "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$",
+          "description": "Explicit RGB or RGBA color. Eight-digit colors include alpha; #00000000 is transparent."
+        },
+        "width": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 32,
+          "description": "Border width in reference pixels; 0 removes this edge."
+        },
+        "dash": {
+          "type": "string",
+          "enum": [
+            "solid",
+            "dash",
+            "dot"
+          ],
+          "description": "Default solid."
+        }
+      },
+      "description": "One explicit cell border."
     },
     "Catalogs": {
       "type": "object",

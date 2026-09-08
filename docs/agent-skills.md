@@ -23,15 +23,33 @@ The root `AGENTS.md` points repository agents to these entrypoints. Skills read 
 
 ## Install in an agent environment
 
-Copy a whole skill folder, including its references and scripts, into the skill directory supported by the agent. Each folder is self-contained; no links to neighboring skill folders are required. For Codex personal skills, run from this repository and copy only folders you want to install:
+CLI 0.5.0 bundles all six complete skill folders. From your project directory, install them with Node 20+:
 
 ```sh
-mkdir -p "$HOME/.codex/skills"
-cp -R skills/opf-author "$HOME/.codex/skills/opf-author"
-cp -R skills/opf-inspect "$HOME/.codex/skills/opf-inspect"
+npx @openpresentation/cli@latest skills install
 ```
 
-If a destination already exists, review the installed version before replacing it. No skills are installed into your personal configuration by the repository build. A compatible client discovers installed skills and can invoke them by names such as `$opf-author` or `$opf-inspect`.
+The default installs copies into `.agents/skills` in the current project, suitable for agents including Codex. It does not change AGENTS.md or any agent configuration. No symlink privileges, paid service, API key or AI provider is required. npm downloads the CLI on first use; the installed CLI then installs its bundled skills without network access. Pin `@openpresentation/cli@0.5.0` for a repeatable version. This command requires the 0.5.0 release; when testing its release branch before publication, use `node packages/cli/dist/index.js skills install` after building.
+
+| Target | Project directory | Personal directory with `--global` |
+| --- | --- | --- |
+| Default / `--agent universal` | `.agents/skills` | `~/.agents/skills` |
+| `--agent codex` | `.agents/skills` | `~/.codex/skills` |
+| `--agent claude-code` | `.claude/skills` | `~/.claude/skills` |
+| `--agent cursor` | `.cursor/skills` | `~/.cursor/skills` |
+
+For example, `npx @openpresentation/cli@latest skills install --agent codex --global` installs personal Codex skills. For another compatible agent use `--directory <its-skills-directory>`; this option cannot be combined with `--agent` or `--global`. Restart or reload your agent if its skill discovery requires it. A compatible client can invoke the installed skills with names such as `$opf-author` or `$opf-inspect`.
+
+Inspect or update the same destination:
+
+```sh
+npx @openpresentation/cli@latest skills status
+npx @openpresentation/cli@latest skills update
+```
+
+Supply the same target options used for installation. `status` is read-only and compares against the invoked CLI's bundled version; it does not query npm for newer releases. Repeated installation is idempotent. Updates check every installed file before changing any skill. Modified, added, deleted or unmanaged files cause the command to stop and list the conflicting folders; keep your customizations, move those folders outside the active skills directory, then retry. There is no force-overwrite option. A successful update returns backup paths outside the active skills directory for recovering the previous managed versions. Keep those backups until you have reviewed the update. Do not run concurrent writers: the installer lock coordinates other installer runs, but cannot lock an external editor.
+
+No skills are installed by the repository build. Manual installation remains supported: copy whole folders from `skills/`, including references and scripts, to your agent's skill directory. Each folder is self-contained. The managed installer treats existing manual copies as unmanaged and preserves them.
 
 The inspection helper requires Node 20+ and `@openpresentation/opf` in the current project. In this checkout, build with `pnpm build` first. For an installed skill used outside the checkout, either run from an npm project that has the package or set `OPF_ROOT` to the built OPF checkout. It does not install dependencies, fetch catalogs, or modify input files.
 
@@ -52,4 +70,4 @@ The [installable CLI](../packages/cli/README.md) complements these skills with `
 
 `pnpm test:skills` checks skill links, schema-valid examples, and the inspection helper's actual behavior, including a copied standalone skill and a package installed in a consumer project. Run the skill-creator frontmatter validator when editing skill metadata. Behavioral tests are not evidence that every renderer option is visually complete.
 
-When schema/package APIs change, update only the affected skill/reference and its executable examples. Keep option lists in the canonical schema and catalogs. The format package and skill folders are separate distribution surfaces: these skills are versioned in this repository and are not yet included in the published npm package.
+When schema/package APIs change, update only the affected skill/reference and its executable examples. Keep option lists in the canonical schema and catalogs. The format package and skill folders are separate distribution surfaces: CLI 0.5.0 includes the six skills; the core `@openpresentation/opf` package does not install agent configuration.

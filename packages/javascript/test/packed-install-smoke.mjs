@@ -89,6 +89,7 @@ import { layoutPreviews, getLayoutPreview } from "@openpresentation/opf/previews
 import { examples, getExample } from "@openpresentation/opf/examples";
 import { docs, getDoc } from "@openpresentation/opf/docs";
 import { repoReadme } from "@openpresentation/opf/repo-readme";
+import { paginatePresentation } from "@openpresentation/opf/pagination";
 import rawPresentation from "@openpresentation/opf/spec/schemas/opf.schema.json" with { type: "json" };
 import rawBoardAudience from "@openpresentation/opf/spec/catalogs/audiences/board.json" with { type: "json" };
 
@@ -121,6 +122,13 @@ assert.equal(validatePresentation(validDeck).valid, true);
 assert.equal(validate(validDeck, "presentation").valid, true);
 assert.equal(focusedValidate(validDeck, "presentation").valid, true);
 assert.doesNotThrow(() => assertValid(validDeck));
+
+const richTable = {columns: [['Rich ', {text:'header',bold:true}]], rows: Array.from({length:45}, (_,i) => [[{text:'Row '+i,bold:true}]])};
+const richDeck = {slides:[{table:richTable}]};
+assert.equal(validatePresentation(richDeck).valid,true,'Installed schema accepts rich cells and headers');
+const pages = paginatePresentation(richDeck);
+assert.ok(pages.presentation.slides.length > 1,'Installed pagination splits rich tables');
+assert.deepEqual(pages.presentation.slides.flatMap(slide=>slide.table.rows),richTable.rows,'Installed pagination preserves rich runs');
 
 const invalidDeck = {
   name: "Invalid Packed Package Smoke",

@@ -1,6 +1,6 @@
 {
   "name": "@openpresentation/cli",
-  "version": "0.1.0",
+  "version": "0.5.0",
   "description": "Local OPF CLI for agents: create, validate, edit, paginate, and inspect presentation JSON.",
   "license": "MIT",
   "type": "module",

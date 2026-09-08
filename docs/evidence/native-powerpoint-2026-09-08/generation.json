@@ -1,0 +1,18 @@
+{
+  "packages": {
+    "opf": "0.7.0",
+    "opf-render": "0.5.0",
+    "opf-pptx": "0.5.0"
+  },
+  "slides": 3,
+  "fontFamily": "Calibri",
+  "fontFiles": [
+    "calibri.ttf",
+    "calibrib.ttf",
+    "calibrii.ttf",
+    "calibriz.ttf"
+  ],
+  "fontSubstitutions": [],
+  "diagnostics": [],
+  "scope": "Registry core/renderer plus installed PPTX package; consult consumer lockfile for candidate versus registry provenance."
+}
