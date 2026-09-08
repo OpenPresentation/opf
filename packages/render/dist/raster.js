@@ -1,3 +1,4 @@
+import {prepareRasterImages} from './raster-images.js';
 import {OPFRenderError,packageName} from './svg.js';
 const DEFAULT_DIMENSIONS = { width: 1280, height: 720 };
 const DEFAULT_RASTER_SCALE = 1;
@@ -39,7 +40,7 @@ export async function svgToPdf(svgs, options = {}) {
 
 async function rasterizeSvg(svgInput, options) {
   const { Resvg } = await loadResvg();
-  const svg = normalizeSvgInput(svgInput);
+  const svg = await prepareRasterImages(normalizeSvgInput(svgInput));
   const scale = positiveNumber(options.scale, "scale", DEFAULT_RASTER_SCALE);
   const fontFiles = [
     ...(options.useBundledFonts === false ? [] : await bundledFontFiles()),
