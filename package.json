@@ -33,7 +33,9 @@
     "check:breaking": "node scripts/test-breaking-gate.mjs && node scripts/check-breaking-changes.mjs",
     "test:packages": "node scripts/test-package-ecosystem.mjs",
     "test:registry-ecosystem": "node scripts/test-packed-ecosystem.mjs --registry",
-    "test:registry-libraries": "node scripts/test-packed-ecosystem.mjs --registry-libraries"
+    "test:registry-libraries": "node scripts/test-packed-ecosystem.mjs --registry-libraries",
+    "prepare:gallery:registry": "node scripts/prepare-gallery-editor.mjs --registry",
+    "build:showcase:registry": "node scripts/build-site-showcase.mjs --registry"
   },
   "engines": {
     "node": ">=20"

@@ -168,6 +168,17 @@ const harness = (await readHarness('opf-editor', 'test/browser-canvas.mjs'))
 await writeFile(path.join(consumer, 'canvas-tests.mjs'), harness);
 const browserOut=path.join(root,'artifacts/editor');
 await mkdir(browserOut,{recursive:true});
+// Build every required browser asset here; a clean registry check must not
+// borrow HTML or fonts left by a previous source playground build.
+await writeFile(path.join(consumer, 'browser-fonts.mjs'), `import {writeFile} from 'node:fs/promises';
+import {loadOfficeFontRegistry} from '@openpresentation/opf-render/fonts-node';
+await writeFile(process.argv[2],JSON.stringify((await loadOfficeFontRegistry()).embeddedFonts));
+`);
+run(process.execPath, ['browser-fonts.mjs', path.join(browserOut, 'fonts.json')]);
+function browserHtml(suite, controls = '') {
+ return `<!doctype html><meta charset="utf-8"><title>Packed ${suite} checks</title><style>body{font:14px system-ui;margin:20px}#canvas{width:1000px;max-width:100%}</style><h1>Packed ${suite} checks</h1><div id="canvas"></div>${controls}<pre id="results"></pre><script type="module" src="./packed-${suite}-tests.js"></script>`;
+}
+
 await build({entryPoints:[path.join(consumer,'canvas-tests.mjs')],outfile:path.join(browserOut,'packed-canvas-tests.js'),bundle:true,platform:'browser',format:'esm'});
 await writeFile(path.join(browserOut,'packed-canvas-tests.html'),'<!doctype html><title>Packed canvas checks</title><h1>Packed npm canvas checks</h1><pre id="results"></pre><div id="canvas" style="width:1280px"></div><script type="module" src="./packed-canvas-tests.js"></script>');
 console.log('Packed browser harness built: artifacts/editor/packed-canvas-tests.html (serve alongside demo fonts.json).');
@@ -187,7 +198,7 @@ const layoutHarness=(await readHarness('opf','scripts/test-layout-browser.mjs'))
  .replace('../../opf-render/src/svg.js','@openpresentation/opf-render/svg');
 await writeFile(path.join(consumer,'layout-tests.mjs'),layoutHarness);
 await build({entryPoints:[path.join(consumer,'layout-tests.mjs')],outfile:path.join(browserOut,'packed-layout-tests.js'),bundle:true,platform:'browser',format:'esm'});
-await writeFile(path.join(browserOut,'packed-layout-tests.html'),(await readFile(path.join(browserOut,'layout-tests.html'),'utf8')).replace('./layout-tests.js','./packed-layout-tests.js'));
+await writeFile(path.join(browserOut,'packed-layout-tests.html'),browserHtml('layout','<select id="pointer-mode"><option value="normal">Normal</option><option value="cancel">Cancel</option><option value="conflict">Conflict</option><option value="independent">Independent</option></select><button id="reset">Reset</button><button id="verify">Verify</button><button id="external">External change</button><button id="independent">Independent change</button><div id="pointer-state"></div>'));
 
 const blockHarness=(await readHarness('opf','scripts/test-block-browser.mjs'))
  .replace('../../opf-editor/src/canvas.js','@openpresentation/opf-editor/canvas')
@@ -195,7 +206,7 @@ const blockHarness=(await readHarness('opf','scripts/test-block-browser.mjs'))
  .replace('../../opf-render/src/svg.js','@openpresentation/opf-render/svg');
 await writeFile(path.join(consumer,'block-tests.mjs'),blockHarness);
 await build({entryPoints:[path.join(consumer,'block-tests.mjs')],outfile:path.join(browserOut,'packed-block-tests.js'),bundle:true,platform:'browser',format:'esm'});
-await writeFile(path.join(browserOut,'packed-block-tests.html'),(await readFile(path.join(browserOut,'block-tests.html'),'utf8')).replace('./block-tests.js','./packed-block-tests.js'));
+await writeFile(path.join(browserOut,'packed-block-tests.html'),browserHtml('block','<button id="verify">Verify</button><div id="drag-status"></div>'));
 
 const listHarness=(await readHarness('opf','scripts/test-list-browser.mjs'))
  .replace('../../opf-editor/src/canvas.js','@openpresentation/opf-editor/canvas')
@@ -203,7 +214,7 @@ const listHarness=(await readHarness('opf','scripts/test-list-browser.mjs'))
  .replace('../../opf-render/src/fonts-browser.js','@openpresentation/opf-render/fonts-browser');
 await writeFile(path.join(consumer,'list-tests.mjs'),listHarness);
 await build({entryPoints:[path.join(consumer,'list-tests.mjs')],outfile:path.join(browserOut,'packed-list-tests.js'),bundle:true,platform:'browser',format:'esm'});
-await writeFile(path.join(browserOut,'packed-list-tests.html'),(await readFile(path.join(browserOut,'list-tests.html'),'utf8')).replace('./list-tests.js','./packed-list-tests.js'));
+await writeFile(path.join(browserOut,'packed-list-tests.html'),browserHtml('list'));
 
 const creationHarness=(await readHarness('opf','scripts/test-create-browser.mjs'))
  .replace('../../opf-editor/src/canvas.js','@openpresentation/opf-editor/canvas')
@@ -211,6 +222,6 @@ const creationHarness=(await readHarness('opf','scripts/test-create-browser.mjs'
  .replace('../../opf-render/src/svg.js','@openpresentation/opf-render/svg');
 await writeFile(path.join(consumer,'create-tests.mjs'),creationHarness);
 await build({entryPoints:[path.join(consumer,'create-tests.mjs')],outfile:path.join(browserOut,'packed-create-tests.js'),bundle:true,platform:'browser',format:'esm'});
-await writeFile(path.join(browserOut,'packed-create-tests.html'),(await readFile(path.join(browserOut,'create-tests.html'),'utf8')).replace('./create-tests.js','./packed-create-tests.js'));
+await writeFile(path.join(browserOut,'packed-create-tests.html'),browserHtml('create'));
 
 console.log(librariesOnly ? 'Registry library consumer passed for four exact versions; CLI and complete release verification remain separate.' : registry ? 'Registry consumer passed for all five exact release-plan versions (no local package overrides).' : 'Local tarball consumer passed; this is not a registry verification.');

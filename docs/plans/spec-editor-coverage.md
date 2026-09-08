@@ -16,7 +16,7 @@ The gallery `/spec` and `/api/opf-spec.json` contain the same schema digest and 
 | Organizations, speakers, narrative beats and slide attribution | Structured controls, arrays and references | Automatic cover/bio/logo placement, narrative-aware UI and generated content are not implemented |
 | Slides, notes, section, hidden state | All fields available, slide array reorder/duplicate/remove | Dedicated presenter mode and hidden-slide playback behavior |
 | Title, subtitle, tag, plain text | Canvas editing and property controls; alignment rendered | Caret calibration across scripts and browser engines |
-| Rich text runs | Every run field editable as structured data | Shared mixed-run font/style/color/link/script measurement and SVG/native PPTX output implemented for text payloads; native SVG selection toolbar and range replacement implemented; continuous mixed-style typing is now implemented on the development branch with native input, glyph-aligned caret/selection, draft history and guarded commit; real OS IME, mixed-script shaping and cross-engine caret calibration remain |
+| Rich text runs | Every run field editable as structured data | Shared mixed-run font/style/color/link/script measurement and SVG/native PPTX output implemented for text payloads; native SVG selection toolbar and range replacement implemented; continuous mixed-style typing is now published in editor/renderer 0.1.1 with native input, glyph-aligned caret/selection, draft history and guarded commit; real OS IME, mixed-script shaping and cross-engine caret calibration remain |
 | Lists and bullets | Shared rich-run/description measurement, hanging indents, nesting, inline string editing, range formatting, structural controls and native PPTX bullets | Image bullets, real OS IME and cross-engine rich typing calibration, lossless rich-list PPTX import and native raster parity |
 | Tables | Cell and structure editing | Styled rich cells, advanced table interactions and full PPTX parity |
 | Metrics, quotes, code, timelines | Scalar/object/array forms and previews | Specialized typography, syntax highlighting, dense layout polish |
@@ -37,7 +37,7 @@ This table must not be reported as complete WYSIWYG support. The field inventory
 
 - `npm test` in opf-editor: model/schema/transfer/session checks.
 - `/schema-tests.html`: 14 browser regressions covering live valid drafts, Apply/undo, union forms, nested arrays, invalid values, reordering, conflicts, escaped keys, boolean types, cleanup.
-- `/canvas-tests.html`: includes right-aligned caret overlay regression. `/rich-text-tests.html` covers 46 selection/formatting/native-input/caret checks with loaded fonts on the development branch; the published 0.1.0 baseline covers 31.
+- `/canvas-tests.html`: includes right-aligned caret overlay regression. `/rich-text-tests.html` covers 46 selection/formatting/native-input/caret checks with loaded fonts from published 0.1.1 packages; the historical 0.1.0 baseline covers 31.
 - Renderer suite: 126 corpus decks plus new design-preview tests, fonts, Office substitutes, browser font loader. The mandatory reviewed raster baseline covers all 805 current example slides; the older manifest is retained as history.
 - Gallery build: 1,923 generated pages; TypeScript and reference endpoint checks.
 - Packed consumer: actual tarball installs, strict TypeScript declarations and browser bundle.
