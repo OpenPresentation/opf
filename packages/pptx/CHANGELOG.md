@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Import supported native table-style character formatting from embedded style parts or inline definitions. Apply whole-table, row/column bands, edge and corner precedence before direct paragraph/run overrides; preserve theme/explicit Latin fonts, bold/italic and supported colors/alpha. Diagnose missing definitions, unsupported cell decorations and right-to-left table geometry.
+
 ## 0.4.0
 
 - Use the shared core 0.6.0 table layout for native row heights and font fitting. Multiline cells consume available height and use uniform native paragraph spacing; short-row output remains unchanged. Requires published core 0.6.0 and renderer 0.4.0.
