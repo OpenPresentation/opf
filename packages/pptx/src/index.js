@@ -1,3 +1,4 @@
+import { composeSlide, resolveCanvasDimensions, resolveFontFamilies, resolveTextStyle } from "@openpresentation/opf/composition";
 import PptxGenJS from "pptxgenjs";
 import { unzipSync, zipSync } from "fflate";
 import { XMLParser } from "fast-xml-parser";
@@ -154,9 +155,10 @@ export async function toPptx(input, options = {}) {
   const presentation = parseInput(input);
   assertValidBoundary(presentation);
 
-  const context = resolvePresentationContext(presentation, options);
+  const context = resolvePresentationContext(presentation, {...options,textMeasurement:undefined});
+  context.listMarkers = new Map();
   const pptx = new PptxGenJS();
-  configurePresentation(pptx, presentation, context);
+  configurePresentation(pptx, presentation, {...context,fonts:resolveSlideContext(presentation,presentation.slides[0],context,options).fonts});
 
   for (let index = 0; index < presentation.slides.length; index += 1) {
     await addSlide(pptx, presentation, presentation.slides[index], index, context, options);
@@ -375,7 +377,7 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions) {
   const subtitleItem = takeSubtitleItem(items, titleItem, dimensions);
   if (subtitleItem) slide.subtitle = firstLine(subtitleItem.text);
 
-  const blocks = items
+  const blocks = mergeAdjacentBulletShapes(items)
     .map((item) => payloadFromSlideItem(item))
     .filter(Boolean);
   if (blocks.length > 0) slide.blocks = blocks;
@@ -525,7 +527,8 @@ function readParagraphs(txBody) {
       }
       return {
         text: texts.join("").trim(),
-        level: Number(paragraph?.["a:pPr"]?.lvl ?? 0),
+        bullet: asArray(paragraph?.["a:pPr"]).some(props => props?.["a:buChar"] !== undefined || props?.["a:buAutoNum"] !== undefined),
+        level: Number(asArray(paragraph?.["a:pPr"])[0]?.lvl ?? 0),
         maxFontSize: sizes.length > 0 ? Math.max(...sizes) : 0
       };
     })
@@ -552,7 +555,7 @@ function takeTitleItem(items, dimensions) {
 
   const titleLimit = dimensions.heightInches * 0.28;
   const candidateIndex = items.findIndex((item) => {
-    if (item.kind !== "text" || !item.text) return false;
+    if (item.kind !== "text" || !item.text || item.paragraphs.some(p=>p.bullet)) return false;
     const y = item.bounds?.y ?? 0;
     return y <= titleLimit && (item.maxFontSize >= 20 || /^title\b/i.test(item.name ?? ""));
   });
@@ -568,7 +571,7 @@ function takeSubtitleItem(items, titleItem, dimensions) {
   const titleBottom = (titleItem.bounds?.y ?? 0) + (titleItem.bounds?.h ?? 0);
   const subtitleLimit = Math.min(dimensions.heightInches * 0.34, 1.45);
   const candidateIndex = items.findIndex((item) => {
-    if (item.kind !== "text" || !item.text) return false;
+    if (item.kind !== "text" || !item.text || item.paragraphs.some(p=>p.bullet)) return false;
     const y = item.bounds?.y ?? 0;
     const h = item.bounds?.h ?? 0;
     return y >= titleBottom - 0.05
@@ -581,10 +584,29 @@ function takeSubtitleItem(items, titleItem, dimensions) {
   return null;
 }
 
+// Adjacent native bullet boxes on the same text column form one imported list.
+// This is a geometry heuristic, not a lossless reconstruction of arbitrary PPTX.
+function mergeAdjacentBulletShapes(items) {
+  const result=[];
+  for(const item of items){
+    const previous=result.at(-1);
+    const bullets=value=>value?.kind==='text'&&value.paragraphs.length&&value.paragraphs.every(p=>p.bullet);
+    if(bullets(previous)&&bullets(item)&&previous.bounds&&item.bounds
+      &&Math.abs(previous.bounds.x-item.bounds.x)<.05
+      &&item.bounds.y>=previous.bounds.y+previous.bounds.h-.02
+      &&item.bounds.y-(previous.bounds.y+previous.bounds.h)<.3){
+      previous.paragraphs.push(...item.paragraphs);
+      previous.text+='\n'+item.text;
+      previous.bounds.h=item.bounds.y+item.bounds.h-previous.bounds.y;
+    }else result.push({...item,paragraphs:item.paragraphs?[...item.paragraphs]:undefined,bounds:item.bounds?{...item.bounds}:undefined});
+  }
+  return result;
+}
+
 function payloadFromSlideItem(item) {
   if (item.payload) return item.payload;
   if (item.kind === "text") {
-    if (item.paragraphs.length > 1) {
+    if (item.paragraphs.length > 1 || item.paragraphs.some(p=>p.bullet)) {
       return {
         type: "list",
         items: item.paragraphs.map((paragraph) => (
@@ -799,7 +821,9 @@ function resolvePresentationContext(presentation, options) {
   const dimensions = resolveDimensions(design.dimensions ?? theme?.dimensions);
   const background = resolveBackground(design.background ?? theme?.background, colorScheme);
   const fonts = resolveFonts(fontScheme);
+  for (const role of ["heading","body","code"]) fonts[role] = resolveTextStyle({fontFamily:fonts[role],fontWeight:role === "heading" ? 700 : 400},options.textMeasurement).fontFamily;
   const textColor = readableTextColor(background, colorScheme);
+  const darkBackground = isDarkHex(background);
 
   return {
     seed: Number.isInteger(options.seed) ? options.seed : DEFAULT_SEED,
@@ -813,9 +837,9 @@ function resolvePresentationContext(presentation, options) {
     colors: {
       background,
       text: textColor,
-      mutedText: normalizeHex(colorScheme.textSecondary ?? colorScheme.dark2 ?? "#475569"),
+      mutedText: normalizeHex(colorScheme.textSecondary ?? (darkBackground ? colorScheme.light2 : colorScheme.dark2) ?? "#475569"),
       accent: normalizeHex(colorScheme.primary ?? colorScheme.accent1 ?? "#2874A6"),
-      surface: normalizeHex(colorScheme.surface ?? colorScheme.light2 ?? "#F8FAFC"),
+      surface: normalizeHex(colorScheme.surface ?? (darkBackground ? colorScheme.dark2 : colorScheme.light2) ?? "#F8FAFC"),
       border: normalizeHex(colorScheme.accent3 ?? "#CBD5E1")
     }
   };
@@ -841,151 +865,57 @@ function configurePresentation(pptx, presentation, context) {
 
 async function addSlide(pptx, presentation, opfSlide, slideIndex, context, options) {
   const slide = pptx.addSlide();
-  const slideContext = resolveSlideContext(presentation, opfSlide, context);
+  const slideContext = resolveSlideContext(presentation, opfSlide, context, options);
   slide.background = { color: slideContext.colors.background };
   slide.color = slideContext.colors.text;
   if (opfSlide.hidden === true) slide.hidden = true;
 
   const { widthInches, heightInches } = slideContext.dimensions;
-  const margin = 0.55;
-  let y = 0.34;
-
-  if (opfSlide.tag) {
-    slide.addText(String(opfSlide.tag), {
-      x: margin,
-      y,
-      w: widthInches - margin * 2,
-      h: 0.24,
-      margin: 0,
-      fontFace: slideContext.fonts.body,
-      fontSize: 9,
-      bold: true,
-      color: slideContext.colors.accent,
-      fit: "shrink"
-    });
-    y += 0.32;
-  }
-
-  const title = opfSlide.title ?? presentation.title ?? presentation.name;
-  if (title) {
-    slide.addText(String(title), {
-      x: margin,
-      y,
-      w: widthInches - margin * 2,
-      h: 0.58,
-      margin: 0,
-      fontFace: slideContext.fonts.heading,
-      fontSize: 28,
-      bold: true,
-      color: slideContext.colors.text,
-      fit: "shrink",
-      breakLine: false
-    });
-    y += 0.68;
-  }
-
-  const subtitle = opfSlide.subtitle ?? presentation.subtitle;
-  if (subtitle) {
-    slide.addText(String(subtitle), {
-      x: margin,
-      y,
-      w: widthInches - margin * 2,
-      h: 0.34,
-      margin: 0,
-      fontFace: slideContext.fonts.body,
-      fontSize: 14,
-      color: slideContext.colors.mutedText,
-      fit: "shrink"
-    });
-    y += 0.48;
-  }
-
-  const contentTop = Math.max(y + 0.08, title || subtitle || opfSlide.tag ? 1.25 : 0.55);
-  const contentArea = {
-    x: margin,
-    y: contentTop,
-    w: widthInches - margin * 2,
-    h: Math.max(0.7, heightInches - contentTop - 0.48)
-  };
-  const bindings = collectSlideBindings(opfSlide, slideIndex);
-
-  for (let index = 0; index < bindings.length; index += 1) {
-    const binding = bindings[index];
-    const region = binding.regionKey
-      ? regionFromPromotedKey(binding.regionKey, contentArea)
-      : regionFromIndex(index, bindings.length, contentArea);
-    await addPayload(slide, presentation, binding.payload, insetRegion(region, 0.08), binding.path, slideContext, options);
+  const layout = resolveCatalogRecord(presentation, "layouts", opfSlide.layout, "blank") ?? {};
+  if (opfSlide.layout && layout.id !== opfSlide.layout) throw new OPFPptxError("catalog-resolution-failed", `Layout '${opfSlide.layout}' needs an inline or bundled catalog record.`, { path: `slides.${slideIndex}.layout` });
+  const geometry = composeSlide(opfSlide, { width: widthInches * 96, height: heightInches * 96, layout, slideIndex, fonts: slideContext.fonts, textMeasurement: options.textMeasurement });
+  for (const diagnostic of geometry.diagnostics) options.onDiagnostic?.(diagnostic);
+  for (const item of geometry.items) {
+    const region = { x: item.box.x / 96, y: item.box.y / 96, w: item.box.width / 96, h: item.box.height / 96 };
+    if (["title", "subtitle", "tag"].includes(item.field)) {
+      slide.addText(item.text.lines.join("\n"), {
+        ...textBoxOptions(region, slideContext, item.text.fontSize * 0.75),
+        fontFace: item.textStyle.fontFamily,
+        bold: item.textStyle.fontWeight >= 600,
+        italic: item.textStyle.italic,
+        color: item.field === "tag" ? slideContext.colors.accent : slideContext.colors.text,
+        breakLine: false
+      });
+    } else if ((item.field === "items" || item.field === "bullets") && item.text?.listEntries) {
+      addMeasuredList(slide,item.text,slideContext);
+    } else if (item.field === "text" && item.text?.richLines) {
+      const alignment=opfSlide.design?.contentAlignment??presentation.design?.contentAlignment??'left';
+      for(const line of item.text.richLines){
+        const runs=line.fragments.map(fragment=>({text:fragment.text,options:{fontFace:fragment.style.fontFamily,fontSize:fragment.fontSize*.75,bold:fragment.style.fontWeight>=600,italic:fragment.style.italic,color:normalizeHex(fragment.run.color??slideContext.colors.text),underline:fragment.run.underline?{color:normalizeHex(fragment.run.color??slideContext.colors.text)}:undefined,strike:fragment.run.strikethrough?'sngStrike':undefined,baseline:fragment.baselineShift?-fragment.baselineShift/fragment.fontSize*2000:undefined,hyperlink:fragment.run.link&&/^(https?:|mailto:)/i.test(fragment.run.link)?{url:fragment.run.link}:undefined}}));
+        if(runs.length)slide.addText(runs,{...textBoxOptions({...region,y:region.y+line.y/96,h:line.height/96},slideContext,item.text.fontSize*.75),align:alignment,fit:'none',wrap:false,lineSpacingMultiple:1});
+      }
+    } else if (item.field === "text" && typeof item.value === "string") {
+      slide.addText(item.text.lines.join("\n"), {...textBoxOptions(region, slideContext, item.text.fontSize * 0.75),fontFace:item.textStyle.fontFamily,bold:item.textStyle.fontWeight>=600,italic:item.textStyle.italic});
+    } else {
+      await addPayload(slide, presentation, item.payload, region, item.path, slideContext, options);
+    }
   }
 
   if (opfSlide.notes) slide.addNotes(String(opfSlide.notes));
 }
 
-function resolveSlideContext(presentation, slide, baseContext) {
-  if (!slide.design) return baseContext;
-  const design = slide.design;
-  const colorScheme = resolveDesignRecord(
-    presentation,
-    "colorSchemes",
-    design.colorScheme,
-    baseContext.colorScheme.id ?? DEFAULTS.colorScheme
-  );
-  const fontScheme = resolveDesignRecord(
-    presentation,
-    "fontSchemes",
-    design.fontScheme,
-    baseContext.fonts.id ?? DEFAULTS.fontScheme
-  );
-  const background = design.background
-    ? resolveBackground(design.background, colorScheme)
-    : baseContext.colors.background;
-  const fonts = design.fontScheme ? resolveFonts(fontScheme) : baseContext.fonts;
-
-  return {
-    ...baseContext,
-    colorScheme,
-    fonts,
-    colors: {
-      ...baseContext.colors,
-      background,
-      text: readableTextColor(background, colorScheme),
-      mutedText: normalizeHex(colorScheme.textSecondary ?? colorScheme.dark2 ?? baseContext.colors.mutedText),
-      accent: normalizeHex(colorScheme.primary ?? colorScheme.accent1 ?? baseContext.colors.accent),
-      surface: normalizeHex(colorScheme.surface ?? colorScheme.light2 ?? baseContext.colors.surface),
-      border: normalizeHex(colorScheme.accent3 ?? baseContext.colors.border)
-    }
-  };
-}
-
-function collectSlideBindings(slide, slideIndex) {
-  const promoted = PROMOTED_REGION_KEYS
-    .filter((key) => slide[key] !== undefined)
-    .map((key) => ({
-      payload: slide[key],
-      regionKey: key,
-      path: `slides.${slideIndex}.${key}`
-    }));
-
-  if (promoted.length > 0) return promoted;
-
-  if (Array.isArray(slide.blocks) && slide.blocks.length > 0) {
-    return slide.blocks.map((payload, index) => ({
-      payload,
-      path: `slides.${slideIndex}.blocks.${index}`
-    }));
+function resolveSlideContext(presentation, slide, baseContext, options) {
+  const effective = { ...presentation, design: { ...presentation.design, ...slide.design } };
+  const resolved = resolvePresentationContext(effective, options);
+  if (Math.abs(resolved.dimensions.widthInches - baseContext.dimensions.widthInches) > 1e-6
+    || Math.abs(resolved.dimensions.heightInches - baseContext.dimensions.heightInches) > 1e-6) {
+    throw new OPFPptxError("mixed-slide-dimensions", "PowerPoint requires one canvas size per presentation. Set dimensions on the deck or export this slide separately.");
   }
-
-  return ROOT_PAYLOAD_FIELDS
-    .filter((field) => slide[field] !== undefined)
-    .map((field) => ({
-      payload: { type: fieldToType(field), [field]: slide[field] },
-      path: `slides.${slideIndex}.${field}`
-    }));
+  return { ...baseContext, colorScheme: resolved.colorScheme, fonts: resolved.fonts, colors: resolved.colors };
 }
 
 function fieldToType(field) {
-  if (field === "items") return "list";
-  if (field === "bullets") return "text";
-  return field;
+  return field === "items" || field === "bullets" ? "list" : field;
 }
 
 async function addPayload(slide, presentation, payload, region, path, context, options) {
@@ -1046,6 +976,31 @@ function addTextPayload(slide, value, region, context) {
     return;
   }
   slide.addText(stringifyText(value), textBoxOptions(region, context, 18));
+}
+
+function richLineRuns(line,color) {
+  return line.fragments.map(fragment=>({text:fragment.text,options:{fontFace:fragment.style.fontFamily,fontSize:fragment.fontSize*.75,bold:fragment.style.fontWeight>=600,italic:fragment.style.italic,color:normalizeHex(fragment.run.color??color),underline:fragment.run.underline?{color:normalizeHex(fragment.run.color??color)}:undefined,strike:fragment.run.strikethrough?'sngStrike':undefined,baseline:fragment.baselineShift?-fragment.baselineShift/fragment.fontSize*2000:undefined,hyperlink:fragment.run.link&&/^(https?:|mailto:)/i.test(fragment.run.link)?{url:fragment.run.link}:undefined}}));
+}
+function addMeasuredList(slide,fit,context) {
+  for(const entry of fit.listEntries){
+    const addLines=(text,box,color,withBullet)=>{
+      text.richLines.forEach((line,index)=>{
+        const first=withBullet&&index===0,level=Math.min(8,entry.level),inset=first?entry.marker.indent*(level+1):0;
+        const region={x:(box.x-inset)/96,y:(box.y+line.y)/96,w:(box.width+inset)/96,h:line.height/96};
+        const objectName=first?`OPF list paragraph ${context.listMarkers.size+1}`:undefined;
+        if(first)context.listMarkers.set(objectName,{fontFamily:entry.marker.style.fontFamily,fontSize:entry.marker.fontSize*.75,color:normalizeHex(context.colors.text)});
+        const paragraph=first?{bullet:{characterCode:entry.marker.text.codePointAt(0).toString(16).padStart(4,'0'),indent:entry.marker.indent*.75},indentLevel:level}:{bullet:false};
+        const runs=richLineRuns(line,color);
+        if(!runs.length)runs.push({text:'',options:{}});
+        // Keep paragraph intent identical across runs. ZIP normalization below
+        // removes the duplicate paragraph-property nodes emitted by PptxGenJS.
+        for(const run of runs)Object.assign(run.options,paragraph);
+        slide.addText(runs,{...textBoxOptions(region,context,text.fontSize*.75),fontFace:entry.marker.style.fontFamily,objectName,align:'left',fit:'none',wrap:false,lineSpacingMultiple:1,...paragraph});
+      });
+    };
+    addLines(entry.text,entry.textBox,context.colors.text,true);
+    if(entry.description)addLines(entry.description,entry.descriptionBox,context.colors.mutedText,false);
+  }
 }
 
 function addListPayload(slide, items, region, context) {
@@ -1130,14 +1085,15 @@ function addChartPayload(slide, chart, region, context) {
 }
 
 function addTablePayload(slide, table, region, context) {
+  const scale = Math.min(context.dimensions.widthInches * 96, context.dimensions.heightInches * 96) / 720;
   const rows = [];
   if (Array.isArray(table?.columns) && table.columns.length > 0) {
     rows.push(table.columns.map((value) => ({
       text: stringifyText(value),
       options: {
         bold: true,
-        color: context.colors.text,
-        fill: { color: context.colors.surface }
+        color: "FFFFFF",
+        fill: { color: context.colors.accent }
       }
     })));
   }
@@ -1145,7 +1101,7 @@ function addTablePayload(slide, table, region, context) {
     for (const row of table.rows) {
       rows.push((Array.isArray(row) ? row : [row]).map((value) => ({
         text: stringifyText(value),
-        options: { color: context.colors.text }
+        options: { color: context.colors.text, fill: {color:context.colors.surface} }
       })));
     }
   }
@@ -1155,18 +1111,22 @@ function addTablePayload(slide, table, region, context) {
     return;
   }
 
+  const columnCount = Math.max(1, ...rows.map(row => row.length));
+  const rowHeight = Math.min(54 * scale / 96, region.h / rows.length);
   slide.addTable(rows, {
     x: region.x,
     y: region.y,
     w: region.w,
-    h: region.h,
+    h: rowHeight * rows.length,
+    rowH: rowHeight,
+    colW: Array(columnCount).fill(region.w / columnCount),
+    autoPage: false,
     fontFace: context.fonts.body,
-    fontSize: 10,
+    fontSize: 15 * scale * 0.75,
     color: context.colors.text,
     border: { type: "solid", color: context.colors.border, pt: 0.75 },
-    margin: 0.05,
-    valign: "mid",
-    fit: "shrink"
+    margin: [6 * scale, 7.5 * scale, 3 * scale, 7.5 * scale],
+    valign: "top"
   });
 }
 
@@ -1263,13 +1223,15 @@ function textBoxOptions(region, context, fontSize) {
     y: region.y,
     w: region.w,
     h: region.h,
-    margin: 4,
+    margin: 0,
+    paraSpaceAfter: 0,
+    lineSpacingMultiple: 1.22,
     fontFace: context.fonts.body,
     fontSize,
     color: context.colors.text,
     breakLine: false,
     fit: "shrink",
-    valign: "mid"
+    valign: "top"
   };
 }
 
@@ -1296,7 +1258,9 @@ function textRuns(value, context, fallbackFontSize) {
         color: normalizeHex(run?.color ?? context.colors.text),
         fontFace: run?.fontFamily ?? context.fonts.body,
         fontSize: run?.fontSize ?? fallbackFontSize,
-        hyperlink: run?.link ? { url: run.link } : undefined
+        superscript: run?.superscript,
+        subscript: !run?.superscript && run?.subscript,
+        hyperlink: run?.link && /^(https?:|mailto:)/i.test(run.link) ? { url: run.link } : undefined
       }
     };
   });
@@ -1462,15 +1426,8 @@ function withoutSchema(value) {
 }
 
 function resolveDimensions(value) {
-  if (typeof value === "string") return DIMENSION_PRESETS[value] ?? DIMENSION_PRESETS.widescreen;
-  if (isPlainObject(value)) {
-    const preset = DIMENSION_PRESETS[value.preset] ?? DIMENSION_PRESETS.widescreen;
-    return {
-      widthInches: value.widthInches ?? preset.widthInches,
-      heightInches: value.heightInches ?? preset.heightInches
-    };
-  }
-  return DIMENSION_PRESETS.widescreen;
+  const { width, height } = resolveCanvasDimensions(value);
+  return { widthInches: width / 96, heightInches: height / 96 };
 }
 
 function resolveBackground(value, colorScheme) {
@@ -1489,21 +1446,9 @@ function resolveBackground(value, colorScheme) {
 }
 
 function resolveFonts(fontScheme) {
-  const heading = fontFamily(fontScheme.heading) ?? fontScheme.major ?? "Aptos Display";
-  const body = fontFamily(fontScheme.body) ?? fontScheme.minor ?? "Aptos";
-  return {
-    id: fontScheme.id,
-    heading,
-    body,
-    code: fontFamily(fontScheme.code) ?? "Consolas"
-  };
+  return {id:fontScheme.id,...resolveFontFamilies(fontScheme)};
 }
 
-function fontFamily(value) {
-  if (typeof value === "string") return value;
-  if (isPlainObject(value) && typeof value.family === "string") return value.family;
-  return null;
-}
 
 function readableTextColor(background, colorScheme) {
   return isDarkHex(background)
@@ -1530,60 +1475,6 @@ function isDarkHex(value) {
   const green = Number.parseInt(hex.slice(2, 4), 16);
   const blue = Number.parseInt(hex.slice(4, 6), 16);
   return (red * 299 + green * 587 + blue * 114) / 1000 < 128;
-}
-
-function regionFromPromotedKey(key, area) {
-  const [first, second] = key.includes(":") ? key.split(":") : [key, null];
-  const rowPart = second ? first : isRowPart(first) ? first : "top+middle+bottom";
-  const colPart = second ? second : isColumnPart(first) ? first : "left+center+right";
-  const rowSpan = span(rowPart, ["top", "middle", "bottom"]);
-  const colSpan = span(colPart, ["left", "center", "right"]);
-  const cellW = area.w / 3;
-  const cellH = area.h / 3;
-
-  return {
-    x: area.x + colSpan.start * cellW,
-    y: area.y + rowSpan.start * cellH,
-    w: (colSpan.end - colSpan.start + 1) * cellW,
-    h: (rowSpan.end - rowSpan.start + 1) * cellH
-  };
-}
-
-function isRowPart(value) {
-  return value.split("+").every((part) => ["top", "middle", "bottom"].includes(part));
-}
-
-function isColumnPart(value) {
-  return value.split("+").every((part) => ["left", "center", "right"].includes(part));
-}
-
-function span(value, order) {
-  const indexes = value.split("+").map((part) => order.indexOf(part)).filter((index) => index >= 0);
-  if (indexes.length === 0) return { start: 0, end: order.length - 1 };
-  return { start: Math.min(...indexes), end: Math.max(...indexes) };
-}
-
-function regionFromIndex(index, total, area) {
-  if (total <= 1) return area;
-  const columns = total === 2 ? 2 : Math.ceil(Math.sqrt(total));
-  const rows = Math.ceil(total / columns);
-  const row = Math.floor(index / columns);
-  const col = index % columns;
-  return {
-    x: area.x + (area.w / columns) * col,
-    y: area.y + (area.h / rows) * row,
-    w: area.w / columns,
-    h: area.h / rows
-  };
-}
-
-function insetRegion(region, amount) {
-  return {
-    x: region.x + amount,
-    y: region.y + amount,
-    w: Math.max(0.2, region.w - amount * 2),
-    h: Math.max(0.2, region.h - amount * 2)
-  };
 }
 
 function normalizePptxZip(raw, context) {
@@ -1627,7 +1518,25 @@ function normalizePartBytes(path, bytes, context, renameMaps) {
     return encodeText(normalizePartReferences(normalizeCoreProperties(decodeText(bytes), context.timestamp), renameMaps));
   }
   if (isXmlPart(path)) {
-    return encodeText(normalizePartReferences(decodeText(bytes), renameMaps));
+    let xml=decodeText(bytes);
+    if (/^ppt\/slides\/slide\d+\.xml$/.test(path)) {
+      // Native bullets otherwise inherit the first rich run's size, font and
+      // color, which can differ from the measured list marker.
+      xml=xml.replace(/<p:sp>([\s\S]*?)<\/p:sp>/g,(shape)=>{
+        const marker=context.listMarkers.get(shape.match(/name="(OPF list paragraph \d+)"/)?.[1]);
+        if(!marker)return shape;
+        const family=marker.fontFamily.replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&apos;'}[char]));
+        return shape.replace(/<a:buSzPct val="100000"\/>/g,`<a:buClr><a:srgbClr val="${marker.color}"/></a:buClr><a:buSzPts val="${Math.round(marker.fontSize*100)}"/><a:buFont typeface="${family}"/>`);
+      });
+      // PptxGenJS 4 emits pPr before each rich run. OOXML allows one pPr,
+      // before all runs. Paragraph options belong to the first run.
+      xml=xml.replace(/<a:p>([\s\S]*?)<\/a:p>/g,(_,body)=>{
+        let properties='';
+        const content=body.replace(/<a:pPr\b[^>]*(?:\/>|>[\s\S]*?<\/a:pPr>)/g,node=>{properties ||= node;return '';});
+        return `<a:p>${properties}${content}</a:p>`;
+      });
+    }
+    return encodeText(normalizePartReferences(xml, renameMaps));
   }
   return bytes;
 }

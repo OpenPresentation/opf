@@ -80,7 +80,7 @@ assert.equal(imported.slides[0].title, deck.slides[0].title);
 assert.equal(imported.slides[0].subtitle, deck.slides[0].subtitle);
 assert.deepEqual(imported.slides[0].blocks[0].items, [
   "Deterministic ZIP entries",
-  "Structured OPF validation errors",
+  {text: "Structured OPF validation errors", level: 1},
   "No network or LibreOffice runtime dependency"
 ]);
 assert.equal(imported.slides[0].notes, "Smoke notes");
@@ -149,3 +149,7 @@ function hash(bytes) {
 function text(bytes) {
   return new TextDecoder().decode(bytes);
 }
+
+await assert.rejects(() => toPptx({ slides: [{ text: "Crowded. ".repeat(4000), composition: { overflow: "error" } }] }));
+await assert.rejects(() => toPptx({ slides: [{ text: "Custom canvas", design: { dimensions: { widthInches: 4, heightInches: 9 } } }] }), error => error.code === "mixed-slide-dimensions");
+await assert.rejects(() => toPptx({ slides: [{ layout: "unknown-layout", text: "Needs a definition" }] }), error => error.code === "catalog-resolution-failed");
