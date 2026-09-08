@@ -277,7 +277,7 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 }
 
 function hasOwn(value: Record<string, unknown>, key: string): boolean {
-  return Object.prototype.hasOwnProperty.call(value, key);
+  return Object.hasOwn(value, key);
 }
 
 function isEnUkTag(value: unknown): boolean {
@@ -711,7 +711,7 @@ function contentDepthIssues(value: unknown): ValidationIssue[] {
   const stack: { value: unknown; path: string; depth: number; ancestors: unknown[] }[] = [];
   value.slides.forEach((slide, index) => {
     if (!isRecord(slide)) return;
-    if (Array.isArray(slide.blocks)) slide.blocks.forEach((block, i) => stack.push({ value: block, path: `/slides/${index}/blocks/${i}`, depth: 0, ancestors: [] }));
+    if (Array.isArray(slide.blocks)) slide.blocks.forEach((block, i) => { stack.push({ value: block, path: `/slides/${index}/blocks/${i}`, depth: 0, ancestors: [] }); });
     for (const key of promotedRegionKeys) if (hasOwn(slide, key)) stack.push({ value: slide[key], path: `/slides/${index}/${key}`, depth: 0, ancestors: [] });
   });
   while (stack.length) {
@@ -719,7 +719,7 @@ function contentDepthIssues(value: unknown): ValidationIssue[] {
     if (!isRecord(entry.value) || !Array.isArray(entry.value.blocks)) continue;
     if (entry.ancestors.includes(entry.value) || entry.depth >= MAX_COMPOSITION_DEPTH) return [semanticIssue(entry.path, `content groups must be acyclic and nest at most ${MAX_COMPOSITION_DEPTH} levels`)];
     const ancestors = [...entry.ancestors, entry.value];
-    entry.value.blocks.forEach((block, i) => stack.push({ value: block, path: `${entry.path}/blocks/${i}`, depth: entry.depth + 1, ancestors }));
+    entry.value.blocks.forEach((block, i) => { stack.push({ value: block, path: `${entry.path}/blocks/${i}`, depth: entry.depth + 1, ancestors }); });
   }
   return [];
 }

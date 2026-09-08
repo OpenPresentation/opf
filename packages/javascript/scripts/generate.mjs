@@ -34,7 +34,7 @@ const catalogDefinitions = [
   { kind: "themes", schemaName: "theme", dir: "themes" },
   { kind: "layouts", schemaName: "layout", dir: "layouts" },
   { kind: "chartTypes", schemaName: "chartType", dir: "chart-types" },
-  { kind: "narratives", schemaName: "narrative", dir: "narratives", indexRecordsKey: "templates" },
+  { kind: "narratives", schemaName: "narrative", dir: "narratives" },
   { kind: "socialPlatforms", schemaName: "socialPlatform", dir: "social-platforms" },
   { kind: "languages", schemaName: "language", dir: "languages" },
   { kind: "colorSchemes", schemaName: "colorScheme", dir: "color-schemes" },
@@ -105,9 +105,17 @@ async function generateSchemas() {
     schemas.push({ ...definition, schema: await readJson(path.join(schemaRoot, definition.file)) });
   }
 
-  const lines = [generatedHeader("spec/schemas/*.schema.json"), 'import type { JsonSchema } from "../json.js";', ""];
+  // Each schema constant is typed as `JsonSchemaDocument` (a loose structural
+  // type) rather than inferred via `as const`. `as const` would make every
+  // nested property of the schema document part of the exported type, which
+  // is what previously blew up dist/schemas.d.ts to ~750 KB: consumers only
+  // need metadata and named $defs typed precisely, with subschemas as data.
+  const lines = [generatedHeader("spec/schemas/*.schema.json"), 'import type { JsonObject, JsonSchemaDocument } from "../json.js";', ""];
   for (const { name, schema } of schemas) {
-    lines.push(`export const ${name} = ${asTs(schema)} as const satisfies JsonSchema;`, "");
+    const defsType = schema.$defs
+      ? ` & { readonly $defs: { ${Object.keys(schema.$defs).map(key => `readonly ${JSON.stringify(key)}: JsonObject`).join("; ")} } }`
+      : "";
+    lines.push(`export const ${name}: JsonSchemaDocument${defsType} = ${asTs(schema)};`, "");
   }
   lines.push("export const schemas = {");
   for (const { name } of schemas) {
@@ -115,12 +123,19 @@ async function generateSchemas() {
   }
   lines.push("} as const;", "");
   lines.push(`export const schemaNames = ${asTs(schemas.map(({ name }) => name))} as const;`, "");
-  lines.push("export const schemaEntries = [");
+  lines.push("export type SchemaName = keyof typeof schemas;", "");
+
+  lines.push("/** One entry per bundled schema: its name, spec-relative file path, and parsed document. */");
+  lines.push("export interface SchemaEntry {");
+  lines.push("  readonly name: SchemaName;");
+  lines.push("  readonly file: string;");
+  lines.push("  readonly schema: JsonSchemaDocument;");
+  lines.push("}", "");
+  lines.push("export const schemaEntries: readonly SchemaEntry[] = [");
   for (const { name, file } of schemas) {
     lines.push(`  { name: ${JSON.stringify(name)}, file: ${JSON.stringify(path.posix.join("schemas", file))}, schema: ${name} },`);
   }
-  lines.push("] as const;", "");
-  lines.push("export type SchemaName = keyof typeof schemas;", "");
+  lines.push("];", "");
 
   await fs.writeFile(path.join(generatedRoot, "schemas.ts"), lines.join("\n"));
 }
@@ -150,35 +165,95 @@ async function generateCatalogs() {
     catalogs.push({ ...definition, index, records, files });
   }
 
+  const schemaDefinitionByName = new Map(schemaDefinitions.map((definition) => [definition.name, definition]));
+  const typeInfoByKind = new Map(catalogs.map(({ kind, schemaName }) => {
+    const schemaDefinition = schemaDefinitionByName.get(schemaName);
+    return [kind, {
+      typeName: schemaDefinition.typeName,
+      typeFile: schemaDefinition.typeFile ?? schemaDefinition.name,
+    }];
+  }));
+
+  // Each catalog is typed as `readonly <Type>[]` (the same generated
+  // interface used for the schema's own type) instead of being inferred via
+  // `as const`. `as const` turned every record's every field into a literal
+  // type, and — because the records were referenced again from `catalogs`
+  // and `catalogEntries` below — that literal structure was duplicated three
+  // times over in dist/catalogs.d.ts (~1.5 MB). Typing the source of truth
+  // once, structurally, means every later reference reuses that same (tiny)
+  // declared type instead of re-inferring the literal shape.
   const lines = [generatedHeader("spec/catalogs/<catalog-kind>/*.json")];
+  for (const { kind } of catalogs) {
+    const { typeName, typeFile } = typeInfoByKind.get(kind);
+    lines.push(`import type { ${typeName} } from "./types/${typeFile}.js";`);
+  }
+  lines.push('import type { SchemaName } from "./schemas.js";', "");
+
+  // Deliberately no index signature: some catalog record interfaces (e.g.
+  // ChartType) come from schemas with `additionalProperties: false` and so
+  // have no index signature of their own. Requiring one here would make
+  // those types fail to structurally match `CatalogRecord`.
+  lines.push("/** Structural shape shared by every bundled catalog record. */");
+  lines.push("export interface CatalogRecord {");
+  lines.push("  readonly id: string;");
+  lines.push("}", "");
+
+  lines.push("/** A lightweight summary entry inside a catalog's `index.json`. */");
+  lines.push("export interface CatalogIndexRecord {");
+  lines.push("  readonly id: string;");
+  lines.push("  readonly name: string;");
+  lines.push("  readonly file: string;");
+  lines.push("  readonly [key: string]: unknown;");
+  lines.push("}", "");
+
+  lines.push("/** Parsed shape of a catalog's `index.json`. */");
+  lines.push("export interface CatalogIndex {");
+  lines.push("  readonly $schema: string;");
+  lines.push("  readonly version: string;");
+  lines.push("  readonly description: string;");
+  lines.push("  readonly records: readonly CatalogIndexRecord[];");
+  lines.push("  readonly [key: string]: unknown;");
+  lines.push("}", "");
+
   for (const { kind, records } of catalogs) {
-    lines.push(`export const ${kind} = ${asTs(records)} as const;`, "");
+    const { typeName } = typeInfoByKind.get(kind);
+    lines.push(`export const ${kind}: readonly ${typeName}[] = ${asTs(records)} as readonly ${typeName}[];`, "");
   }
   lines.push("export const catalogs = {");
   for (const { kind } of catalogs) {
     lines.push(`  ${kind},`);
   }
   lines.push("} as const;", "");
-  lines.push("export const catalogIndexes = {");
+  lines.push("export type CatalogKind = keyof typeof catalogs;", "");
+  lines.push("export const catalogIndexes: Record<CatalogKind, CatalogIndex> = {");
   for (const { kind, index } of catalogs) {
     lines.push(`  ${kind}: ${asTs(index)},`);
   }
-  lines.push("} as const;", "");
-  lines.push("export const catalogSchemaNames = {");
+  lines.push("};", "");
+  lines.push("export const catalogSchemaNames: Record<CatalogKind, SchemaName> = {");
   for (const { kind, schemaName } of catalogs) {
     lines.push(`  ${kind}: ${JSON.stringify(schemaName)},`);
   }
-  lines.push("} as const;", "");
+  lines.push("};", "");
   lines.push(`export const catalogKinds = ${asTs(catalogs.map(({ kind }) => kind))} as const;`, "");
-  lines.push("export const catalogEntries = [");
+
+  lines.push("/** One entry per bundled catalog kind, with its records and index resolved. */");
+  lines.push("export interface CatalogEntry {");
+  lines.push("  readonly kind: CatalogKind;");
+  lines.push("  readonly schemaName: SchemaName;");
+  lines.push("  readonly dir: string;");
+  lines.push("  readonly files: readonly string[];");
+  lines.push("  readonly records: readonly CatalogRecord[];");
+  lines.push("  readonly index: CatalogIndex;");
+  lines.push("}", "");
+  lines.push("export const catalogEntries: readonly CatalogEntry[] = [");
   for (const { kind, schemaName, dir, files } of catalogs) {
     const specDir = path.posix.join("catalogs", dir);
     lines.push(
       `  { kind: ${JSON.stringify(kind)}, schemaName: ${JSON.stringify(schemaName)}, dir: ${JSON.stringify(specDir)}, files: ${asTs(files)}, records: ${kind}, index: catalogIndexes.${kind} },`,
     );
   }
-  lines.push("] as const;", "");
-  lines.push("export type CatalogKind = keyof typeof catalogs;", "");
+  lines.push("];", "");
 
   await fs.writeFile(path.join(generatedRoot, "catalogs.ts"), lines.join("\n"));
 }
@@ -206,6 +281,10 @@ async function generateCatalogIds() {
   await fs.writeFile(path.join(generatedRoot, "catalog-ids.ts"), lines.join("\n"));
 }
 
+function asUnion(values) {
+  return values.map((value) => `  | ${JSON.stringify(value)}`).join("\n");
+}
+
 async function generateSpecFiles() {
   const files = await collectFiles(specRoot);
   const entries = files.map((file) => ({
@@ -216,13 +295,26 @@ async function generateSpecFiles() {
   }));
   const kinds = [...new Set(entries.map((entry) => entry.kind))];
 
+  // `SpecFilePath` and `SpecFileKind` are public literal unions, so they are
+  // emitted directly as string-literal union types from the data. The entry
+  // array itself is typed structurally (`readonly SpecFileEntry[]`) instead
+  // of via `as const`: inferring a literal object type per spec file is what
+  // previously re-serialized every entry into dist/spec-files.d.ts (~130 KB).
   const lines = [generatedHeader("spec/**/*")];
-  lines.push(`export const specFileEntries = ${asTs(entries)} as const;`, "");
-  lines.push(`export const specFilePaths = ${asTs(files)} as const;`, "");
-  lines.push(`export const specFileKinds = ${asTs(kinds)} as const;`, "");
-  lines.push("export type SpecFileEntry = typeof specFileEntries[number];", "");
-  lines.push("export type SpecFilePath = typeof specFilePaths[number];", "");
-  lines.push("export type SpecFileKind = typeof specFileKinds[number];", "");
+  lines.push("/** Path of a file under `spec/`, relative to the spec root. */");
+  lines.push(`export type SpecFilePath =\n${asUnion(files)};`, "");
+  lines.push("/** Category of a bundled spec file. */");
+  lines.push(`export type SpecFileKind =\n${asUnion(kinds)};`, "");
+  lines.push("/** One entry per file shipped under `@openpresentation/opf/spec/`. */");
+  lines.push("export interface SpecFileEntry {");
+  lines.push("  readonly path: SpecFilePath;");
+  lines.push("  readonly packagePath: string;");
+  lines.push("  readonly kind: SpecFileKind;");
+  lines.push("  readonly mediaType: string;");
+  lines.push("}", "");
+  lines.push(`export const specFileEntries: readonly SpecFileEntry[] = ${asTs(entries)};`, "");
+  lines.push(`export const specFilePaths: readonly SpecFilePath[] = ${asTs(files)};`, "");
+  lines.push(`export const specFileKinds: readonly SpecFileKind[] = ${asTs(kinds)};`, "");
 
   await fs.writeFile(path.join(generatedRoot, "spec-files.ts"), lines.join("\n"));
 }

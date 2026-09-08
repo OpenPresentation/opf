@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openpresentation.org/schema/opf-catalog-index/v1",
+  "title": "Catalog Index",
+  "description": "Generic shape shared by every `spec/catalogs/<kind>/index.json` file in the OPF repo. An index is a lightweight, ordered summary of the full-record JSON files that live alongside it: each entry names the record's stable id, a human-readable name, and the record's filename, plus whatever extra summary fields are useful for picker UIs (e.g. `summary`, `tags`, `bcp47`, `durationRange`). This schema describes the repo-internal catalog index files themselves, not OPF documents or individual catalog records — it is not part of the OPF document contract and is intentionally excluded from the package's published/typed schema surface.",
+  "type": "object",
+  "required": ["$schema", "version", "description", "records"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "const": "https://openpresentation.org/schema/opf-catalog-index/v1"
+    },
+    "version": {
+      "type": "string",
+      "description": "Index format version, as a string.",
+      "examples": ["1"]
+    },
+    "description": {
+      "type": "string",
+      "description": "Human-readable description of what this catalog kind holds and how entries are ordered."
+    },
+    "records": {
+      "type": "array",
+      "description": "Ordered list of lightweight record summaries. Order defines the catalog's canonical/display order; full record data lives in the sibling JSON file named by `file`.",
+      "items": { "$ref": "#/$defs/IndexRecord" }
+    }
+  },
+  "$defs": {
+    "IndexRecord": {
+      "type": "object",
+      "description": "Lightweight summary of one catalog record. Additional per-kind fields (e.g. `summary`, `tags`, `bcp47`, `durationRange`, `group`, `label`) are allowed and vary by catalog kind.",
+      "required": ["id", "name", "file"],
+      "additionalProperties": true,
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Stable identifier, matching the `id` field inside the record file named by `file`.",
+          "pattern": "^[a-z][a-z0-9-]*$"
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable name shown in pickers."
+        },
+        "file": {
+          "type": "string",
+          "description": "Filename of the full record, relative to this index file's directory.",
+          "pattern": "^[^/]+\\.json$"
+        }
+      }
+    }
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "$schema": "https://openpresentation.org/schema/opf-chart-type-index/v1",
+  "$schema": "https://openpresentation.org/schema/opf-catalog-index/v1",
   "version": "1",
   "description": "Catalog of chart types available in the pptx.gallery catalog. Each entry is a lightweight summary; full chart-type records live in the per-id JSON files alongside this index.",
   "records": [

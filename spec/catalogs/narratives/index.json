@@ -1,8 +1,8 @@
 {
-  "$schema": "https://openpresentation.org/schema/opf-narrative-index/v1",
+  "$schema": "https://openpresentation.org/schema/opf-catalog-index/v1",
   "version": "1",
   "description": "Catalog of narrative templates available in the openpresentation.org catalog. Each entry is a lightweight summary; full beat definitions live in the per-template JSON files alongside this index. Entries are grouped by usage: foundational arcs first, then pitches, sales and GTM, strategy and consulting, storytelling, keynotes and inspiration, rhythm-of-business reviews, data-driven analyses, and workforce reviews.",
-  "templates": [
+  "records": [
     {
       "id": "problem-solution",
       "name": "Problem → Solution",

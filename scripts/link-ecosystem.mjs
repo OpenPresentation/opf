@@ -6,7 +6,9 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const opfPackage = path.join(root, 'packages/javascript');
 if (!existsSync(path.join(opfPackage, 'dist/composition.js'))) throw new Error('Build OPF first: pnpm build');
-for (const name of ['opf-render', 'opf-pptx', 'opf-editor', 'pptx-gallery']) {
+const names = ['opf-render', 'opf-pptx', 'opf-editor'];
+if (!process.argv.includes('--packages-only')) names.push('pptx-gallery');
+for (const name of names) {
   const directory = path.resolve(root, '..', name);
   const target = path.join(directory, 'node_modules/@openpresentation/opf');
   if (!existsSync(path.join(directory, 'package.json'))) throw new Error(`Missing sibling checkout: ${directory}`);

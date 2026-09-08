@@ -147,7 +147,7 @@ async function main(argv: string[]) {
     if (options.into === '-' && positional[0] === '-') throw new CliError('stdin can supply only one input.');
     const list = (key: string): string[] | undefined => {
       if (options[key] === undefined) return undefined;
-      let value; try { value = JSON.parse(String(options[key])); } catch { throw new CliError(`--${key} requires a JSON array of column names.`); }
+      let value: unknown; try { value = JSON.parse(String(options[key])); } catch { throw new CliError(`--${key} requires a JSON array of column names.`); }
       if (!Array.isArray(value) || !value.every(item => typeof item === 'string')) throw new CliError(`--${key} requires a JSON array of column names.`);
       return value;
     };

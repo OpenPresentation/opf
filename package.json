@@ -7,7 +7,7 @@
     "build": "pnpm --filter @openpresentation/opf build && pnpm --filter @openpresentation/cli build",
     "typecheck": "pnpm --filter @openpresentation/opf typecheck && pnpm --filter @openpresentation/cli typecheck",
     "check:text": "node scripts/check-text-integrity.mjs",
-    "test": "pnpm --filter @openpresentation/opf test && pnpm test:cli && pnpm check:text",
+    "test": "pnpm --filter @openpresentation/opf test && pnpm test:cli && pnpm check:text && pnpm check:spec",
     "pack:dry-run": "pnpm --filter @openpresentation/opf pack:dry-run",
     "test:ecosystem": "node --import ./scripts/register-local-opf.mjs scripts/test-ecosystem.mjs",
     "test:gallery": "node --import ./scripts/register-local-opf.mjs scripts/test-gallery-snippets.mjs",
@@ -26,10 +26,19 @@
     "test:rich-text": "node --import ./scripts/register-local-opf.mjs scripts/test-rich-text-ecosystem.mjs",
     "test:agent-site": "node scripts/test-agent-site.mjs",
     "test:layout": "node --import ./scripts/register-local-opf.mjs scripts/test-layout-ecosystem.mjs",
-    "test:lists": "node --import ./scripts/register-local-opf.mjs scripts/test-list-ecosystem.mjs"
+    "test:lists": "node --import ./scripts/register-local-opf.mjs scripts/test-list-ecosystem.mjs",
+    "lint": "biome check .",
+    "check:spec": "node scripts/check-spec-integrity.mjs",
+    "check:examples": "node scripts/validate-examples.mjs",
+    "check:breaking": "node scripts/test-breaking-gate.mjs && node scripts/check-breaking-changes.mjs",
+    "test:packages": "node scripts/test-package-ecosystem.mjs",
+    "test:registry-ecosystem": "node scripts/test-packed-ecosystem.mjs --registry"
   },
   "engines": {
     "node": ">=20"
   },
-  "packageManager": "pnpm@10.33.2"
+  "packageManager": "pnpm@10.33.2",
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.3"
+  }
 }

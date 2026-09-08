@@ -57,18 +57,13 @@ paths:
                 summary: Minimal OPF
                 value:
                   $schema: "https://openpresentation.org/schema/opf/v1"
-                  meta:
-                    title: Example
+                  name: Example
                   design:
-                    theme: corporate-minimal
+                    theme: minimal
                   slides:
                     - id: s1
-                      layout: title-slide
-                      elements:
-                        - id: h1
-                          type: text
-                          content:
-                            text: Hello
+                      layout: title
+                      title: Hello
       responses:
         "200":
           description: Validation result
@@ -479,18 +474,63 @@ components:
 
     OpfDocument:
       type: object
-      description: OPF v1 document. See https://openpresentation.org/schema/opf/v1 for the canonical schema.
+      description: |
+        OPF v1 document. See https://openpresentation.org/schema/opf/v1 for the canonical schema.
+        This is a loose property sketch for API tooling, not a full mirror of the schema — deck identity
+        lives in `name` (there is no `meta` wrapper and no root `title`); slide content is authored via
+        content-kind fields (`text`, `items`, `bullets`, `image`, `chart`, `table`, `code`, `metric`,
+        `quote`, `timeline`, `blocks`) or promoted region keys, not a generic `elements` array.
       additionalProperties: true
+      required: [slides]
       properties:
         $schema:
           type: string
           const: "https://openpresentation.org/schema/opf/v1"
-        meta:
-          type: object
-          additionalProperties: true
+        name:
+          type: string
+          description: Display name of the presentation (deck identity, not slide content).
         design:
           type: object
           additionalProperties: true
+          description: Optional design system (theme, colorScheme, fontScheme, dimensions, background, logo, header, footer, etc).
+        assets:
+          type: object
+          additionalProperties: true
+          description: Optional reusable asset registry referenced elsewhere via `asset:<id>` strings.
+        catalogs:
+          type: object
+          additionalProperties: true
+          description: Optional per-kind catalog overrides (inline records and/or a non-default source).
+        narrative:
+          description: Structured storyline. A bare catalog id string, or an inline narrative object.
+          oneOf:
+            - type: string
+            - type: object
+              additionalProperties: true
+        audience:
+          description: Intended audience(s). A string shorthand, or an array of strings/inline audience objects.
+          oneOf:
+            - type: string
+            - type: array
+              items: {}
+        purpose:
+          description: Primary goal of the presentation. A string shorthand, or an inline purpose object.
+          oneOf:
+            - type: string
+            - type: object
+              additionalProperties: true
+        tone:
+          description: Desired tone. A string shorthand, or an inline tone object.
+          oneOf:
+            - type: string
+            - type: object
+              additionalProperties: true
+        language:
+          description: Presentation language. A BCP-47 tag or catalog id string, or an inline language object.
+          oneOf:
+            - type: string
+            - type: object
+              additionalProperties: true
         slides:
           type: array
           items:
@@ -604,7 +644,7 @@ components:
               type: string
             filename:
               type: string
-              description: Suggested download filename including extension (resolved from meta.filename or title).
+              description: Suggested download filename including extension (resolved from the OPF document's `filename` or a slug of its `name`).
             subtitle:
               type: string
         design:
@@ -653,7 +693,7 @@ components:
           type: string
         filename:
           type: string
-          description: Suggested output filename including extension (from meta.filename or title slug).
+          description: Suggested output filename including extension (from the OPF document's `filename` or a slug of its `name`).
         slideCount:
           type: integer
         validationWarnings:

@@ -1,0 +1,69 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.5.3/schema.json",
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  "files": {
+    "includes": [
+      "packages/javascript/src/**",
+      "packages/javascript/scripts/**",
+      "packages/javascript/test/**",
+      "packages/cli/src/**",
+      "packages/cli/test/**",
+      "scripts/**",
+      "!packages/javascript/src/generated",
+      "!**/dist",
+      "!**/node_modules"
+    ]
+  },
+  "formatter": {
+    "enabled": false
+  },
+  "assist": {
+    "enabled": true,
+    "actions": {
+      "source": {
+        "organizeImports": "off"
+      }
+    }
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "preset": "recommended"
+    }
+  },
+  "overrides": [
+    {
+      "includes": [
+        "packages/javascript/scripts/render-layout-previews.mjs"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "useTemplate": "off"
+          },
+          "correctness": {
+            "noUnusedVariables": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "scripts/generate-example-suite.mjs",
+        "scripts/regenerate-layouts.mjs"
+      ],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noUnusedVariables": "off",
+            "noUnusedFunctionParameters": "off"
+          }
+        }
+      }
+    }
+  ]
+}

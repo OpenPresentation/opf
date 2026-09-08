@@ -5,10 +5,11 @@ import { fileURLToPath } from "node:url";
 import path from "node:path";
 const root = fileURLToPath(new URL("../", import.meta.url)),
   out = path.join(root, "artifacts/npm");
-const consumer = path.join(out, "consumer");
-const manifest = JSON.parse(
-  await readFile(path.join(out, "manifest.json"), "utf8"),
-);
+const registry = process.argv.includes('--registry');
+const consumer = path.join(out, registry ? "registry-consumer" : "consumer");
+const manifest = registry
+  ? { artifacts: JSON.parse(await readFile(path.join(root, "release-plan.json"), "utf8")).packages }
+  : JSON.parse(await readFile(path.join(out, "manifest.json"), "utf8"));
 await rm(consumer, { recursive: true, force: true });
 await mkdir(consumer, { recursive: true });
 await writeFile(
@@ -19,7 +20,7 @@ await writeFile(
       private: true,
       type: "module",
       dependencies: Object.fromEntries(
-        manifest.artifacts.map((item) => [item.name, `file:../${item.file}`]),
+        manifest.artifacts.map((item) => [item.name, registry ? item.version : `file:../${item.file}`]),
       ),
     },
     null,
@@ -88,9 +89,22 @@ assert.ok(pptx.length>1000);
 console.log('Packed consumer: core, editor, SVG, measured fonts and PPTX passed.');\n`,
 );
 run(process.execPath, ["check.mjs"]);
+if (registry) {
+  for (const item of manifest.artifacts) {
+    const installed = JSON.parse(await readFile(path.join(consumer, 'node_modules', item.name, 'package.json'), 'utf8'));
+    if (installed.version !== item.version) throw new Error(`Expected ${item.name}@${item.version}, installed ${installed.version}`);
+  }
+  run(path.join(consumer, 'node_modules/.bin/opf'), ['--version']);
+  run(path.join(consumer, 'node_modules/.bin/opf'), ['create', 'registry.opf.json', '--title', 'Registry consumer']);
+  run(path.join(consumer, 'node_modules/.bin/opf'), ['validate', 'registry.opf.json']);
+}
+
 await writeFile(
   path.join(consumer, "browser.ts"),
-  `import {createCanvasEditor, type CanvasEditor} from '@openpresentation/opf-editor/canvas';
+  `import {presentation} from '@openpresentation/opf/schemas';
+export const compositionSchema = presentation.$defs.Composition;
+export const contentSchema = presentation.$defs.ContentPayload;
+import {createCanvasEditor, type CanvasEditor} from '@openpresentation/opf-editor/canvas';
 import {loadBrowserFontRegistry} from '@openpresentation/opf-render/fonts-browser';
 export {parseOpfTransfer,prepareOpfImport,serializeOpfTransfer} from '@openpresentation/opf-editor/transfer';
 export {loadOpfGallery,loadOpfGalleryItem} from '@openpresentation/opf-editor/galleries';
@@ -184,3 +198,5 @@ const creationHarness=(await readFile(path.join(root,'scripts/test-create-browse
 await writeFile(path.join(consumer,'create-tests.mjs'),creationHarness);
 await build({entryPoints:[path.join(consumer,'create-tests.mjs')],outfile:path.join(browserOut,'packed-create-tests.js'),bundle:true,platform:'browser',format:'esm'});
 await writeFile(path.join(browserOut,'packed-create-tests.html'),(await readFile(path.join(browserOut,'create-tests.html'),'utf8')).replace('./create-tests.js','./packed-create-tests.js'));
+
+console.log(registry ? 'Registry consumer passed for exact release-plan versions (no local package overrides).' : 'Local tarball consumer passed; this is not a registry verification.');

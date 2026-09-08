@@ -7,10 +7,10 @@ import path from "node:path";
 const root = fileURLToPath(new URL("../", import.meta.url));
 const out = path.join(root, "artifacts/npm");
 const packages = [
-  ["opf", "packages/javascript", "0.4.0-preview.10"],
-  ["opf-render", "../opf-render", "0.1.0-preview.10"],
-  ["opf-editor", "../opf-editor", "0.1.0-preview.10"],
-  ["opf-pptx", "../opf-pptx", "0.1.0-preview.10"],
+  ["opf", "packages/javascript", "0.4.0-preview.11"],
+  ["opf-render", "../opf-render", "0.1.0-preview.11"],
+  ["opf-editor", "../opf-editor", "0.1.0-preview.11"],
+  ["opf-pptx", "../opf-pptx", "0.1.0-preview.11"],
 ];
 const versions = Object.fromEntries(
   packages.map(([name, , version]) => [`@openpresentation/${name}`, version]),

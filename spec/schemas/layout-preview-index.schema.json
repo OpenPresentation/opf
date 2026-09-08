@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openpresentation.org/schema/opf-layout-preview-index/v1",
+  "title": "Layout Preview Index",
+  "description": "Shape of `spec/previews/layouts/index.json`, the manifest for the vendored slide-archetype preview gallery under `spec/previews/layouts/`. Each record names a preview id, its self-contained HTML file, and the file's exact UTF-8 byte length. These preview ids are an archetype taxonomy (e.g. 'swot-analysis', 'org-chart') distinct from the structural layout catalog at spec/catalogs/layouts/ (e.g. 'title', 'chart-2x') — see spec/README.md. This schema describes a repo-internal index file, not an OPF document or a catalog record; it is intentionally excluded from the package's published/typed schema surface.",
+  "type": "object",
+  "required": ["$schema", "version", "description", "records"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "const": "https://openpresentation.org/schema/opf-layout-preview-index/v1"
+    },
+    "version": {
+      "type": "string",
+      "description": "Index format version, as a string.",
+      "examples": ["1"]
+    },
+    "description": {
+      "type": "string",
+      "description": "Human-readable description of the preview gallery and its rendering conventions."
+    },
+    "records": {
+      "type": "array",
+      "description": "One entry per vendored preview HTML file.",
+      "items": { "$ref": "#/$defs/PreviewRecord" }
+    }
+  },
+  "$defs": {
+    "PreviewRecord": {
+      "type": "object",
+      "description": "Summary of one vendored preview HTML file.",
+      "required": ["id", "file", "bytes"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Slide-archetype preview id (e.g. 'swot-analysis', 'agenda', 'org-chart'). Does not correspond to a spec/catalogs/layouts/ record id.",
+          "pattern": "^[a-z][a-z0-9-]*$"
+        },
+        "file": {
+          "type": "string",
+          "description": "HTML filename, relative to this index file's directory.",
+          "pattern": "^[^/]+\\.html$"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Exact UTF-8 byte length of the referenced HTML file's contents."
+        }
+      }
+    }
+  }
+}

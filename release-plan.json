@@ -1,0 +1,9 @@
+{
+  "packages": [
+    { "name": "@openpresentation/opf", "version": "0.4.0" },
+    { "name": "@openpresentation/opf-render", "version": "0.1.0" },
+    { "name": "@openpresentation/opf-editor", "version": "0.1.0" },
+    { "name": "@openpresentation/opf-pptx", "version": "0.1.0" },
+    { "name": "@openpresentation/cli", "version": "0.1.0" }
+  ]
+}
