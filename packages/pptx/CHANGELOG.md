@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Restore native JPEG quarter-turns and mirrors into EXIF on import without recompressing pixels; preserve source JPEG bytes for this exporter's eight supported orientations.
+- Add bounded EXIF insertion/update that retains existing metadata offsets and links, plus import diagnostics for unsupported crop, rotation and metadata cases.
+
 - Preserve fixed solid/linear-gradient backgrounds as editable native fills, including opacity, stop colors, per-slide overrides and inline theme overrides.
 - Convert gradient direction and stop intervals between SVG bounding-box and native slide coordinates, with regression coverage across landscape, portrait and square canvases.
 - Import supported RGB solid/linear fills and expose path-specific diagnostics for native gradients outside the OPF representation. Native viewer appearance remains under verification.

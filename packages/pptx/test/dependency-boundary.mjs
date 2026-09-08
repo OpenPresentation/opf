@@ -30,6 +30,7 @@ await import("./table-import.mjs");
 await import("./object-ids.mjs");
 await import("./image-fit.mjs");
 await import("./image-orientation.mjs");
+await import("./image-import.mjs");
 await import("./image-media-type.mjs");
 await import("./webp-fallback.mjs");
 await import("./image-fallback-boundary.mjs");

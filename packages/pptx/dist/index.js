@@ -1,3 +1,4 @@
+import {importImageOrientation} from './image-import.js';
 import {nativeBackgroundFill, readNativeBackground} from './background.js';
 import { webpToPng } from '#image-fallback';
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
@@ -373,7 +374,7 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
   const background = readNativeBackground(slideRoot["p:cSld"]?.["p:bg"]?.["p:bgPr"], resolveCanvasDimensions(dimensions), diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}.design.background`}));
   if (background) slide.design = {background};
 
-  const items = collectSlideItems(entries, slideRoot, slidePath, relationships, dimensions)
+  const items = collectSlideItems(entries, slideRoot, slidePath, relationships, dimensions, options, slideIndex)
     .sort(comparePositionedItems);
   const titleItem = takeTitleItem(items, dimensions);
   if (titleItem) slide.title = firstLine(titleItem.text);
@@ -395,7 +396,7 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
   return slide;
 }
 
-function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensions) {
+function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensions, options, slideIndex) {
   const tree = slideRoot["p:cSld"]?.["p:spTree"];
   const items = [];
 
@@ -409,8 +410,9 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     if (item) items.push(item);
   }
 
-  for (const picture of asArray(tree?.["p:pic"])) {
-    const item = importPicture(entries, picture, slidePath, relationships);
+  for (const [index, picture] of asArray(tree?.["p:pic"]).entries()) {
+    const report = diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}.pictures.${index}`});
+    const item = importPicture(entries, picture, slidePath, relationships, report);
     if (item) items.push(item);
   }
 
@@ -483,13 +485,13 @@ function importGraphicFrame(entries, frame, slidePath, relationships) {
   };
 }
 
-function importPicture(entries, picture, slidePath, relationships) {
+function importPicture(entries, picture, slidePath, relationships, report) {
   const bounds = shapeBounds(picture["p:spPr"]?.["a:xfrm"]);
   const name = scalarText(picture["p:nvPicPr"]?.["p:cNvPr"]?.name).trim();
   const alt = scalarText(picture["p:nvPicPr"]?.["p:cNvPr"]?.descr).trim();
   const relId = picture["p:blipFill"]?.["a:blip"]?.["r:embed"];
   const relationship = relationships.get(relId);
-  const bytes = relationship?.path ? entries[relationship.path] : null;
+  let bytes = relationship?.path ? entries[relationship.path] : null;
   if (!bytes) {
     return {
       kind: "unknown",
@@ -498,6 +500,12 @@ function importPicture(entries, picture, slidePath, relationships) {
       text: `PowerPoint image: ${alt || name || "unresolved image"}`
     };
   }
+
+  const crop = picture["p:blipFill"]?.["a:srcRect"];
+  if (crop && ['l','r','t','b'].some(key => Number(crop[key] ?? 0) !== 0)) {
+    report({code: 'unsupported-image-crop', message: 'Native picture crop is not represented by the imported OPF asset; the full image was retained.'});
+  }
+  bytes = importImageOrientation(bytes, picture["p:spPr"]?.["a:xfrm"], report);
 
   return {
     kind: "image",

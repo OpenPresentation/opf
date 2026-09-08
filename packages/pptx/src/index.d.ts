@@ -48,7 +48,7 @@ export interface ToPptxOptions {
 }
 
 export interface FromPptxOptions {
-  /** Reports native background fills that cannot be represented by the OPF gradient contract. */
+  /** Reports native gradient or picture crop/transform details that OPF import cannot preserve. Picture paths identify the native picture index. */
   onDiagnostic?: (diagnostic: {code: string; path: string; message: string}) => void;
   fallbackName?: string;
   schema?: string;
