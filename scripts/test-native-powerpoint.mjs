@@ -25,7 +25,12 @@ const {toPptx, fromPptx} = await load('@openpresentation/opf-pptx');
 const output = path.join(consumer, 'evidence');
 await mkdir(output, {recursive:true});
 const writeJson = (name, value) => writeFile(path.join(output, name), JSON.stringify(value,null,2)+'\n');
-  const packages = Object.fromEntries(await Promise.all(['opf','opf-render','opf-pptx'].map(async name => [name,JSON.parse(await readFile(require.resolve('@openpresentation/'+name+'/package.json'),'utf8')).version])));
+const packages = Object.fromEntries(await Promise.all(['opf','opf-render','opf-pptx'].map(async name => [name,JSON.parse(await readFile(require.resolve('@openpresentation/'+name+'/package.json'),'utf8')).version])));
+const lock=await readFile(path.join(consumer,'package-lock.json'),'utf8').then(JSON.parse).catch(error=>{if(error.code==='ENOENT')return {};throw error;});
+const packageSources=Object.fromEntries(Object.entries(packages).map(([name,version])=>{
+  const record=lock.packages?.['node_modules/@openpresentation/'+name];
+  return [name,{version,source:record?.version===version&&record.resolved?.startsWith('https://registry.npmjs.org/')?'registry':'local-or-unverified',integrity:record?.integrity}];
+}));
 if (mode === 'generate') {
   // Installed Microsoft fonts are local test inputs, never committed or distributed.
   const fontDir = process.env.OPF_NATIVE_FONT_DIR ?? path.join(process.env.WINDIR ?? 'C:/Windows','Fonts');
@@ -57,7 +62,7 @@ if (mode === 'generate') {
   await writeFile(path.join(output,'source.pptx'),await toPptx(document,options));
   await writeJson('source.opf.json',document);
   assert.deepEqual(fonts.substitutions,[],'Exact local fonts required');
-  await writeJson('generation.json',{packages,slides:slides.length,fontFamily:'Calibri',fontFiles:faces.map(([file])=>file),fontSubstitutions:fonts.substitutions,diagnostics,scope:'Registry core/renderer plus installed PPTX package; consult consumer lockfile for candidate versus registry provenance.'});
+  await writeJson('generation.json',{packages,packageSources,slides:slides.length,fontFamily:'Calibri',fontFiles:faces.map(([file])=>file),fontSubstitutions:fonts.substitutions,diagnostics,scope:'Installed packages and exact local fonts; packageSources distinguishes registry releases from local candidates.'});
   console.log(`Generated ${slides.length} native fixtures in ${output}`);
 } else {
   const sharp = require('sharp');
@@ -111,6 +116,6 @@ if (mode === 'generate') {
     await writeJson(name+'.reimport.opf.json',document);
     imports.push({name,valid:true,tables:tables.length,mergesPreserved:true,diagnostics});
   }
-  await writeJson('comparison.json',{packages,native,nativeFeatures,comparisons,imports,scope:'Measured native PowerPoint rendering, editable native tables and save/reopen/reimport. Two targeted border raster assertions pass; global pixel differences are observations, not a passing equivalence threshold.'});
+  await writeJson('comparison.json',{packages,packageSources,native,nativeFeatures,comparisons,imports,scope:'Measured native PowerPoint rendering, editable native tables and save/reopen/reimport. Two targeted border raster assertions pass; global pixel differences are observations, not a passing equivalence threshold.'});
   console.log(JSON.stringify({nativeFeatures,comparisons,imports},null,2));
 }

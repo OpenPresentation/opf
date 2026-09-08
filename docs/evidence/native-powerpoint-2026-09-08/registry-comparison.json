@@ -1,0 +1,100 @@
+{
+  "packages": {
+    "opf": "0.7.0",
+    "opf-render": "0.5.0",
+    "opf-pptx": "0.5.0"
+  },
+  "packageSources": {
+    "opf": {
+      "version": "0.7.0",
+      "source": "registry",
+      "integrity": "sha512-ZYODnLgMSG1129eujM4CDGpkcF5CLoKr3bkZ713L04Gvh8VTHOudfPM4ICqngMBpRtcRXyoGaVSllLq2djIo1Q=="
+    },
+    "opf-render": {
+      "version": "0.5.0",
+      "source": "registry",
+      "integrity": "sha512-VsUTeRaOS00cnQl9z02dvQRuxSP/8ylNNozD86QhwZFxrlOBhpLOWRlq17yAWF4qAYxS2V1Gl9n9SVouYfaOEw=="
+    },
+    "opf-pptx": {
+      "version": "0.5.0",
+      "source": "registry",
+      "integrity": "sha512-GKVmqWjQ8GRuEMmpJajPs+W+q35MPy6q8+FL8nWH+d17Sh+/O87BBBfSi6m9KLGxQZav2o1I/bfMoftP5DNEfg=="
+    }
+  },
+  "native": {
+    "powerPointVersion": "16.0",
+    "tables": [
+      {
+        "rows": 3,
+        "columns": 3,
+        "slide": 2
+      },
+      {
+        "rows": 3,
+        "columns": 3,
+        "slide": 3
+      }
+    ],
+    "slides": 3,
+    "editReopened": true,
+    "rasterHeight": 720,
+    "tableCount": 2,
+    "rasterWidth": 1280
+  },
+  "nativeFeatures": [
+    {
+      "feature": "Lower merged-cell dash",
+      "coloredPixels": 36,
+      "minimum": 15
+    },
+    {
+      "feature": "Hidden lower merge border",
+      "unexpectedGreenPixels": 0,
+      "maximum": 0
+    }
+  ],
+  "comparisons": [
+    {
+      "slide": 1,
+      "meanAbsoluteChannelDifference": 3.2766655815972223,
+      "maxChannelDifference": 254,
+      "channelFractionOver10": 0.02250506365740741
+    },
+    {
+      "slide": 2,
+      "meanAbsoluteChannelDifference": 1.8506568287037037,
+      "maxChannelDifference": 254,
+      "channelFractionOver10": 0.012935112847222222
+    },
+    {
+      "slide": 3,
+      "meanAbsoluteChannelDifference": 2.594484230324074,
+      "maxChannelDifference": 254,
+      "channelFractionOver10": 0.016996889467592594
+    }
+  ],
+  "imports": [
+    {
+      "name": "source",
+      "valid": true,
+      "tables": 2,
+      "mergesPreserved": true,
+      "diagnostics": []
+    },
+    {
+      "name": "native-saved",
+      "valid": true,
+      "tables": 2,
+      "mergesPreserved": true,
+      "diagnostics": []
+    },
+    {
+      "name": "native-edited",
+      "valid": true,
+      "tables": 2,
+      "mergesPreserved": true,
+      "diagnostics": []
+    }
+  ],
+  "scope": "Measured native PowerPoint rendering, editable native tables and save/reopen/reimport. Two targeted border raster assertions pass; global pixel differences are observations, not a passing equivalence threshold."
+}
