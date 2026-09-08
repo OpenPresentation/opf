@@ -1,8 +1,8 @@
 # Changelog
 
-## Unreleased
+## 0.3.0
 
-- Render canonical rich table cells and headers with shared run measurement, styles, links and editor trace geometry. Existing scalar-cell raster output remains unchanged. This syntax requires the coordinated development core schema and is not supported by published core 0.4.1.
+- Render canonical rich table cells and headers with shared run measurement, styles, links and editor trace geometry. Existing scalar-cell raster output remains unchanged. Requires core 0.5.0; core 0.4.1 does not accept this syntax.
 
 ## 0.2.0
 
