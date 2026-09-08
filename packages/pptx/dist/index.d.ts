@@ -48,7 +48,7 @@ export interface ToPptxOptions {
 }
 
 export interface FromPptxOptions {
-  /** Reports native gradient or picture crop/transform details that OPF import cannot preserve. Picture paths identify the native picture index. */
+  /** Reports native background, picture and table details that OPF import cannot preserve. Table paths identify the native graphic-frame and row/cell indexes (including headers). */
   onDiagnostic?: (diagnostic: {code: string; path: string; message: string}) => void;
   fallbackName?: string;
   schema?: string;

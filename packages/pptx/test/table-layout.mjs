@@ -14,7 +14,7 @@ function find(value, key) {
   if (Array.isArray(value)) return value.flatMap(item => find(item, key));
   return Object.entries(value).flatMap(([name, child]) => name === key ? array(child) : find(child, key));
 }
-let checked = 0, shrunk = 0;
+let checked = 0, shrunk = 0, grown = 0;
 for (const scale of [1, 0.5]) {
 for (const [fontScheme, family] of [['roboto', 'Roboto'], [{major:'Calibri',minor:'Calibri'}, 'Carlito']]) {
 for (const align of ['left', 'center', 'right']) {
@@ -50,9 +50,12 @@ for (const align of ['left', 'center', 'right']) {
     const rows = array(nativeTable['a:tr']);
     const expectedRows = withHeaders ? [table.columns, ...table.rows] : table.rows;
     assert.equal(rows.length, expectedRows.length);
-    const rowHeight = Math.min(54 * scale, item.box.height / expectedRows.length);
     for (const [r, row] of rows.entries()) {
+      const firstPath = withHeaders && r === 0 ? `${item.path}.columns.0` : `${item.path}.rows.${r - Number(withHeaders)}.0`;
+      const rectangle = find(svg, 'rect').find(rect => rect['@_data-opf-path'] === firstPath);
+      const rowHeight = Number(rectangle['@_height']);
       assert.ok(Math.abs(Number(row['@_h']) / 9525 - rowHeight) < 0.001, 'Native row geometry matches preview');
+      if (rowHeight > 54 * scale + .001) grown++;
       const cells = array(row['a:tc']);
       assert.equal(cells.length, 2, 'Ragged rows retain every table column');
       for (const [c, cell] of cells.entries()) {
@@ -86,5 +89,5 @@ for (const align of ['left', 'center', 'right']) {
 }
 }
 }
-assert.ok(shrunk >= 24, 'Regression fixtures must exercise actual shrinking');
-console.log(`Table layout passed: ${checked} cells, ${shrunk} shrink cases, Roboto/Calibri substitution, two canvas sizes, header/no-header tables, alignment, native rows and source text preservation.`);
+assert.ok(grown >= 24, 'Wrapped rows must use available height instead of shrinking readable text');
+console.log(`Table layout passed: ${checked} cells, ${shrunk} shrink cases, ${grown} content-sized rows, Roboto/Calibri substitution, two canvas sizes, header/no-header tables, alignment, native rows and source text preservation.`);

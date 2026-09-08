@@ -67,7 +67,9 @@ The first importer is mechanical and schema-compatible:
 - Remaining text boxes map to `blocks[]` as text or list payloads, sorted by OOXML position.
 - PowerPoint tables map to OPF table blocks, embedded images map to data URI image blocks, and cached chart series map to basic OPF chart blocks.
 - Table imports retain empty rows. A native `firstRow` flag of `1` or `true` maps the first row to column labels; absent/false flags retain every row as data. New exports set this flag from OPF columns. Older exports without the flag retain their labels as the first data row rather than inferring headers.
-- Imported table values are display strings: numeric/boolean/null types, rich cell formatting, whitespace and merged-cell semantics are not losslessly reconstructed.
+- Native table text preserves run/field/break order, significant whitespace, and blank paragraphs. Cells with supported formatting become canonical `TextRun[]`; unstyled body cells stay strings. Explicit normal headers override OPF’s bold header default. Numeric/boolean/null source types cannot be reconstructed from native display text.
+- Imported runs retain bold, italic, underline, strike, point sizes, Latin font families, solid colors/alpha, external hyperlink URLs, and superscript/subscript direction. List-level and paragraph defaults apply before run overrides; supported theme fonts/colors resolve from the archive. Field values become their cached text, and underline/strike variants and baseline magnitudes reduce to OPF booleans.
+- Conditional table styles, merged-cell geometry, cell fills/borders/alignment, unsupported text fills/colors, and internal hyperlink actions are not fully reconstructed. `onDiagnostic` reports unsupported table style references, merges, fonts/colors/fills and links with native frame/cell paths. Table paths use the native graphic-frame and row indexes, including a header row. The shared core 0.6.0 layout sizes rows from their content and reports `text-overflow` when text cannot fit at the minimum size. These checks establish native XML conversion, not visual parity with PowerPoint.
 - Unknown non-text shapes and unsupported graphic frames become editable text fallback blocks instead of failing the import.
 
 There is no AI classification pass in the OSS runtime. Hosts can run optional cleanup or semantic remapping after `fromPptx` returns.
@@ -109,11 +111,11 @@ Required first-publish setup:
 
 This repo does not require an npm automation token when Trusted Publishing is configured.
 
-## Shared dynamic composition (local development)
+## Shared dynamic composition
 
 The current checkout uses `@openpresentation/opf/composition` for portable geometry. Slides can select `auto`, `row`, `column`, or `grid`, set weighted tracks, and request path-specific overflow diagnostics. See the sibling OPF repo's `docs/dynamic-composition.md` for the complete contract.
 
-Version 0.1.0 requires published `@openpresentation/opf@^0.4.0`. The optional renderer peer requires `@openpresentation/opf-render@^0.1.0`. Clean registry installs support the new composition APIs without sibling checkouts. For coordinated source development, build OPF and run `node scripts/link-ecosystem.mjs` there; `pnpm test:ecosystem` verifies shared geometry and import/export behavior.
+Version 0.4.0 requires published `@openpresentation/opf@^0.6.0`. The optional renderer peer requires `@openpresentation/opf-render@^0.4.0`. Clean registry installs support the new composition APIs without sibling checkouts. For coordinated source development, build OPF and run `node scripts/link-ecosystem.mjs` there; `pnpm test:ecosystem` verifies shared geometry and import/export behavior.
 
 For crowded drafts, run `paginatePresentation` from `@openpresentation/opf/pagination` first, then pass its returned presentation to both preview and `toPptx`. Native table row sizing now follows shared reference geometry; the exporter does not add hidden table continuation slides.
 
@@ -123,15 +125,15 @@ PptxGenJS is pinned to 4.0.1. Its unused `image-size` dependency remains flagged
 
 ### Native table fitting
 
-Core 0.5.0 accepts `TextRun[]` cells and headers. The 0.3.0 exporter preserves their resolved fonts, emphasis, color/alpha, hyperlinks, script positions and explicit line breaks as editable native runs. It measures rich content before export without inserting measured soft wraps. These changes are not in 0.2.1; version 0.3.0 requires core 0.5.0 and renderer 0.3.0. Native table import still flattens rich runs to strings, and native PowerPoint rendering remains unverified.
+Version 0.4.0 imports and exports supported rich table cells and headers as editable runs, retaining resolved fonts, emphasis, color/alpha, hyperlinks, script positions and explicit line breaks. Import reads native XML, including paragraph defaults and significant whitespace; unstyled body cells remain strings. Shared core 0.6.0 layout grows rows for multiline content and fits text consistently with renderer 0.4.0 without inserting measured soft wraps. Native PowerPoint rendering remains unverified.
 
-The development exporter measures every cell with the same `textMeasurement` provider, font roles and effective nested `minFontSize` used by the SVG preview. Native table cells retain the original strings and values as text, with matching fitted sizes, line spacing, alignment, margins and row/column geometry. Uneven rows receive empty cells for missing columns. Theme border colors now use the same slot as the preview.
+The exporter measures every cell with the same `textMeasurement` provider, font roles and effective nested `minFontSize` used by the SVG preview. Native table cells retain the original strings and values as text, with matching fitted sizes, line spacing, alignment, margins and row/column geometry. Uneven rows receive empty cells for missing columns. Theme border colors now use the same slot as the preview.
 
-`npm test` compares exported OOXML against the published SVG renderer across 168 cells, including 24 cases that require shrinking, Roboto and Calibri-to-Carlito substitution, two canvas sizes, headers and all three alignments. PowerPoint still performs its own natural wrapping and needs the resolved fonts installed. These document-property checks do not establish native raster parity or lossless typed-cell import.
+`npm test` compares exported OOXML against the published SVG renderer across 168 cells, including 24 cases that require taller rows, Roboto and Calibri-to-Carlito substitution, two canvas sizes, headers and all three alignments. PowerPoint still performs its own natural wrapping and needs the resolved fonts installed. These document-property checks do not establish native raster parity or lossless typed-cell import.
 
 A local macOS Quick Look check opened both Roboto and system-Arial specimens. Quick Look substituted a serif font for uninstalled Roboto; the Arial specimen used a sans-serif face but still differed in table wrapping and row proportions. This is evidence of remaining viewer differences, not a passing PowerPoint raster comparison.
 
-## Image geometry (unreleased)
+## Image geometry
 
 Native image exports now follow the browser's `design.imageFill`: `fit` (the default) centers an image without changing its aspect ratio, and `crop` fills the allocated box with a centered native crop. Slide settings override presentation settings. Geometry is calculated from the exact bytes embedded after asset resolution, so host resolvers are called once. PNG, JPEG, GIF and WebP dimension headers are supported; unsupported or unreadable dimensions produce a path-specific error rather than a distorted picture. Supply supported raster bytes through `imageResolver` for other formats.
 
@@ -156,7 +158,7 @@ Node conversion lazily loads the pinned open-source Sharp dependency and require
 `npm test` includes the Node pixel-reference cases and verifies browser bundling. To run the browser pixel checks, run `npm run build:browser-check`, serve this repository locally, and open `/artifacts/webp-fallback/browser/index.html`. The page reports 13 checks covering embedded PNG pixels, alpha, EXIF, the first animation frame, fit/crop, resolver calls and DOM canvas fallback. These are browser export checks, separate from the recorded Keynote viewing evidence.
 
 
-## Native background fills (unreleased)
+## Native background fills
 
 Fixed solid and linear-gradient backgrounds now export as native slide fills, keeping the background editable without rasterizing slide content. Deck defaults, inline theme overrides and per-slide overrides are resolved before export. Solid opacity, gradient stop colors/positions and combined color/background alpha are preserved. Empty and single-stop gradients follow the SVG preview's transparent/solid behavior; descending stop positions clamp to the preceding stop.
 
@@ -167,7 +169,7 @@ Import reads supported native RGB solid/linear fills directly; it uses no hidden
 Node 20/24 tests and the 126-deck / 805-slide structural corpus pass. This proves serialization and the mathematical mapping, not native viewer pixels. Keynote 14.4 recognizes the editable native gradients. Twelve captured native PNGs now support 18 comparisons, including a Keynote-generated PPTX import: opaque differences are at most 4/255 per channel (mean below 0.38), and transparent portrait alpha differs by at most 1/255. The checked-in references run in ordinary Node tests without Keynote. Quick Look still renders these specimens as a flat average color, so its thumbnails are not evidence of their native appearance. Microsoft PowerPoint remains unavailable and unverified. Pattern/image backgrounds, theme-aware native fills, and other design decorations remain separate fidelity work.
 
 
-## JPEG orientation on import (unreleased)
+## JPEG orientation on import
 
 `fromPptx` now preserves native quarter-turns and mirroring for JPEG pictures by writing the combined orientation into EXIF metadata. Existing embedded EXIF orientation is applied before the native transform. This requires no pixel decoder, recompression, upload or new dependency. The original PPTX remains unchanged, and alternative text survives. The eight orientations produced by this exporter restore the exact source JPEG bytes through repeated fit-mode export/import cycles.
 

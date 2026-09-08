@@ -38,7 +38,10 @@ assert.deepEqual(await toPptx(deck, options), bytes, 'ID repair must preserve de
 const imported = await fromPptx(bytes);
 assert.equal(imported.slides.length, 8);
 for (const slide of imported.slides) {
-  assert.equal(slide.blocks.filter(block => block.table).length, 2);
+  const tables = slide.blocks.filter(block => block.table).map(block => block.table);
+  assert.equal(tables.length, 2);
+  const text = cell => Array.isArray(cell) ? cell.map(run => typeof run === 'string' ? run : run.text).join('') : cell;
+  assert.deepEqual(tables.map(table => text(table.rows[0][0])).sort(), ['Alpha','Headerless'], 'Interleaved chart frames must not shift table text associations');
   assert.equal(slide.blocks.filter(block => block.image).length, 1);
   assert.equal(slide.blocks.filter(block => block.chart).length, 1);
 }

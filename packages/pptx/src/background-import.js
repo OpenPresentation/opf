@@ -1,18 +1,18 @@
 import {XMLParser} from 'fast-xml-parser';
 import {readNativeBackground, readBackgroundColor, colorTransforms} from './background.js';
 
-const orderedParser = new XMLParser({ignoreAttributes: false, attributeNamePrefix: '', preserveOrder: true, parseAttributeValue: false, parseTagValue: false});
+const orderedParser = new XMLParser({ignoreAttributes: false, attributeNamePrefix: '', preserveOrder: true, parseAttributeValue: false, parseTagValue: false, trimValues: false});
 const defaultMapping = {bg1:'lt1',tx1:'dk1',bg2:'lt2',tx2:'dk2'};
 const children = (nodes, name) => nodes?.find(node => Object.hasOwn(node, name))?.[name];
-function object(nodes) {
+export function drawingObject(nodes) {
   const result = Object.create(null);
   for (const node of nodes ?? []) for (const [name, value] of Object.entries(node)) {
     if (name === ':@' || name === '#text') continue;
-    const child = {...(node[':@'] ?? {}), ...object(value)};
+    const child = {...(node[':@'] ?? {}), ...drawingObject(value)};
     if (['a:srgbClr', 'a:sysClr', 'a:schemeClr'].includes(name)) {
       child[colorTransforms] = (value ?? []).flatMap(item => Object.keys(item)
         .filter(key => key !== ':@' && key !== '#text')
-        .map(key => [key, {...(item[':@'] ?? {}), ...object(item[key])}]));
+        .map(key => [key, {...(item[':@'] ?? {}), ...drawingObject(item[key])}]));
     }
     if (Object.hasOwn(result, name)) result[name] = Array.isArray(result[name]) ? [...result[name], child] : [result[name], child];
     else result[name] = child;
@@ -27,13 +27,13 @@ function parsed(bytes, parse) {
   if (!bytes) return undefined;
   if (!parsedParts.has(bytes)) {
     const tree = parse();
-    parsedParts.set(bytes, {tree, value: object(tree)});
+    parsedParts.set(bytes, {tree, value: drawingObject(tree)});
   }
   return parsedParts.get(bytes);
 }
 
 // Resolve only relationships inside the input archive; never fetch theme URLs.
-export function importBackground(slidePath, dimensions, {part, relationships, bytes}, report) {
+export function readSlideTheme(slidePath, {part, relationships, bytes}) {
   const parsedPart = path => parsed(bytes(path), () => part(path, orderedParser));
   const value = path => parsedPart(path)?.value;
   const related = (path, type) => [...relationships(path).values()].find(rel => rel.type.endsWith('/' + type) && bytes(rel.path))?.path;
@@ -49,7 +49,7 @@ export function importBackground(slidePath, dimensions, {part, relationships, by
     if (override?.['a:overrideClrMapping']) mapping = {...defaultMapping, ...override['a:overrideClrMapping']};
     else if (override && Object.hasOwn(override, 'a:masterClrMapping')) mapping = masterMapping;
   }
-  let colors, format, formatPath;
+  let colors, fonts, format, formatPath;
   for (const {path} of [...chain].reverse()) {
     for (const type of ['theme', 'themeOverride']) {
       const themePath = related(path, type);
@@ -57,9 +57,15 @@ export function importBackground(slidePath, dimensions, {part, relationships, by
       const doc = value(themePath);
       const elements = type === 'theme' ? doc?.['a:theme']?.['a:themeElements'] : doc?.['a:themeOverride'];
       if (elements?.['a:clrScheme']) colors = elements['a:clrScheme'];
+      if (elements?.['a:fontScheme']) fonts = elements['a:fontScheme'];
       if (elements?.['a:fmtScheme']) {format = elements['a:fmtScheme'];formatPath = themePath;}
     }
   }
+  return {chain, colors, mapping, fonts, format, formatPath, parsedPart};
+}
+
+export function importBackground(slidePath, dimensions, archive, report) {
+  const {chain, colors, mapping, format, formatPath, parsedPart} = readSlideTheme(slidePath, archive);
   const background = chain.map(item => item.root?.['p:cSld']?.['p:bg']).find(value => value !== undefined);
   if (!background) return undefined;
   const unsupported = () => {
@@ -84,5 +90,5 @@ export function importBackground(slidePath, dimensions, {part, relationships, by
   const style = styles?.[index < 1000 ? index - 1 : index - 1001];
   if (!style) return unsupported();
   context.placeholder = readBackgroundColor(reference, context);
-  return readNativeBackground(object([style]), dimensions, report, context);
+  return readNativeBackground(drawingObject([style]), dimensions, report, context);
 }

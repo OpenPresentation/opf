@@ -1,9 +1,10 @@
+import {importTableFrames} from './table-import.js';
 import {importImageOrientation} from './image-import.js';
 import {nativeBackgroundFill} from './background.js';
 import {importBackground} from './background-import.js';
 import { webpToPng } from '#image-fallback';
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
-import { composeSlide, fitText, fitRichText, textWidthMeasurer, resolveCanvasDimensions, resolveFontFamilies, resolveTextStyle } from "@openpresentation/opf/composition";
+import { layoutTable, composeSlide, fitText, fitRichText, textWidthMeasurer, resolveCanvasDimensions, resolveFontFamilies, resolveTextStyle } from "@openpresentation/opf/composition";
 import PptxGenJS from "pptxgenjs";
 import { unzipSync, zipSync } from "fflate";
 import { XMLParser } from "fast-xml-parser";
@@ -282,6 +283,7 @@ function parseRelationships(entries, sourcePartPath) {
       id: relationship.Id,
       type: relationship.Type ?? "",
       target: relationship.Target ?? "",
+      targetMode: relationship.TargetMode ?? "Internal",
       path: resolveRelationshipTarget(sourcePartPath, relationship.Target ?? "")
     });
   }
@@ -404,8 +406,13 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     if (item) items.push(item);
   }
 
-  for (const frame of asArray(tree?.["p:graphicFrame"])) {
-    const item = importGraphicFrame(entries, frame, slidePath, relationships);
+  const frames = asArray(tree?.["p:graphicFrame"]);
+  const tables = frames.some(frame => frame['a:graphic']?.['a:graphicData']?.['a:tbl'])
+    ? importTableFrames(slidePath, {
+      part: (path, parser) => parseRequiredXml(entries, path, parser), relationships: path => parseRelationships(entries, path), bytes: path => entries[path]
+    }, relationships, (frame, cell, code, message) => options.onDiagnostic?.({code, message, path: `slides.${slideIndex}.tables.${frame}${cell ? '.' + cell : ''}`})) : [];
+  for (const [index, frame] of frames.entries()) {
+    const item = importGraphicFrame(entries, frame, slidePath, relationships, tables[index]);
     if (item) items.push(item);
   }
 
@@ -446,7 +453,7 @@ function importShape(shape, dimensions) {
   };
 }
 
-function importGraphicFrame(entries, frame, slidePath, relationships) {
+function importGraphicFrame(entries, frame, slidePath, relationships, importedTable) {
   const bounds = shapeBounds(frame["p:xfrm"]);
   const name = scalarText(frame["p:nvGraphicFramePr"]?.["p:cNvPr"]?.name).trim();
   const graphicData = frame["a:graphic"]?.["a:graphicData"];
@@ -458,7 +465,7 @@ function importGraphicFrame(entries, frame, slidePath, relationships) {
       name,
       payload: {
         type: "table",
-        table: tableFromXml(table)
+        table: importedTable
       }
     };
   }
@@ -630,18 +637,6 @@ function payloadFromSlideItem(item) {
   }
   if (item.kind === "unknown" && item.text) return { type: "text", text: item.text };
   return null;
-}
-
-function tableFromXml(table) {
-  const rows = asArray(table["a:tr"])
-    .map((row) => asArray(row?.["a:tc"]).map((cell) => textFromTextBody(cell?.["a:txBody"])));
-  // DrawingML's firstRow flag applies header-row formatting. Without that
-  // signal, retain all rows as data instead of guessing from their contents.
-  const firstRow = table["a:tblPr"]?.firstRow;
-  const hasHeaders = firstRow === "1" || firstRow === "true";
-  return hasHeaders && rows.length
-    ? { columns: rows[0], rows: rows.slice(1) }
-    : { rows };
 }
 
 function chartFromRelationship(entries, slidePath, relationships, relId) {
@@ -1110,24 +1105,15 @@ function addTablePayload(slide, table, region, context, options, path) {
     return;
   }
 
-  const columnCount = Math.max(1, ...sourceRows.map(row => row.length));
-  const rowHeight = Math.min(54 * scale / 96, region.h / sourceRows.length);
-  const cellBox = {
-    x: 0, y: 0,
-    width: Math.max(scale, region.w * 96 / columnCount - 20 * scale),
-    height: Math.max(scale, rowHeight * 96 - 12 * scale),
-  };
-  const rows = sourceRows.map((row, rowIndex) => Array.from({ length: columnCount }, (_, columnIndex) => {
-    const header = hasHeaders && rowIndex === 0;
-    const cellPath = header ? `${path}.columns.${columnIndex}` : `${path}.rows.${rowIndex - Number(hasHeaders)}.${columnIndex}`;
-    const text = stringifyText(row[columnIndex]);
-    const style = resolveTextStyle({ fontFamily: context.fonts.body, fontWeight: header ? 700 : 400, italic: false, path: cellPath }, options.textMeasurement);
-    const rich = Array.isArray(row[columnIndex]);
-    const fit = rich
-      ? fitRichText(row[columnIndex], cellBox, 15 * scale, (context.composition?.minFontSize ?? 16) * scale, {style,textMeasurement:options.textMeasurement})
-      : fitText(text, cellBox, 15 * scale, (context.composition?.minFontSize ?? 16) * scale, textWidthMeasurer(style, options.textMeasurement));
+  const layout = layoutTable(table, {x:region.x*96,y:region.y*96,width:region.w*96,height:region.h*96}, {
+    scale, minFontSize:context.composition?.minFontSize, fontFamily:context.fonts.body, textMeasurement:options.textMeasurement, path
+  });
+  const columnCount = layout.columnCount;
+  const rows = layout.rows.map(row => row.cells.map(cell => {
+    const {header,rich,fit} = cell;
+    const text = stringifyText(cell.value), style = cell.textStyle;
     const fragments = rich ? fit.richLines.flatMap(line => line.fragments) : [];
-    const runs = rich ? row[columnIndex].flatMap((value, index) => {
+    const runs = rich ? cell.value.flatMap((value, index) => {
       const run = typeof value === 'string' ? {text:value} : value;
       const fragment = fragments.find(item => item.runIndex === index);
       const runStyle = fragment?.style ?? resolveTextStyle({...style,fontFamily:run.fontFamily ?? style.fontFamily,fontWeight:run.bold === undefined ? style.fontWeight : run.bold ? 700 : 400,italic:run.italic ?? style.italic}, options.textMeasurement);
@@ -1173,8 +1159,8 @@ function addTablePayload(slide, table, region, context, options, path) {
     x: region.x,
     y: region.y,
     w: region.w,
-    h: rowHeight * rows.length,
-    rowH: rowHeight,
+    h: layout.height / 96,
+    rowH: layout.rows.map(row => row.box.height / 96),
     colW: Array(columnCount).fill(region.w / columnCount),
     autoPage: false,
     fontFace: context.fonts.body,
