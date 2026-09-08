@@ -1,10 +1,16 @@
 # Changelog
 
+## 0.6.0
+
+- Add shared `layoutTable` geometry and fitting to the composition API. Wrapped and multiline rows grow into available space; constrained tables reduce spare row height before readable text, preserve complete cells and report real overflow. Short rows keep their existing preferred height.
+- Add optional uniform rich-text line advances for native table spacing. The coordinated renderer and PPTX exporter consume the same row and text geometry. No schema change is required.
+- Rebuild CLI 0.3.0 with bundled core 0.6.0. Downstream variable-row rendering and native rich-table import are coordinated development work until their releases are published.
+
 ## 0.5.0
 
 - Accept canonical `TextRun[]` values in table cells and column headers, alongside existing scalar cells and string headers. Measure rich cells with their actual font and run styles for overflow detection and pagination; preserve complete rows and repeated headers without mutating the document.
 - Rebuild the standalone CLI as 0.2.0 with bundled OPF 0.5.0. The generated table types now include rich arrays, so consumers that exhaustively handle scalar cells or string-only headers must handle the additional form.
-- Rich table rendering, editor interactions and editable PPTX export require the coordinated downstream development packages until their corresponding releases are published. Older core 0.4.1 does not accept this syntax; native PPTX import still flattens table text.
+- Rich table rendering, editor interactions and editable PPTX export are available in renderer 0.3.0, editor 0.2.0 and PPTX 0.3.0. Older core 0.4.1 does not accept this syntax; native PPTX import still flattens table text.
 
 ## 0.4.1
 
