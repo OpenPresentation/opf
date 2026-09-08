@@ -72,6 +72,15 @@ test('unmanaged destinations, links and another installer lock are preserved',()
   await symlink(outside,link,process.platform==='win32'?'junction':'dir');
   await assert.rejects(manageSkills('install',bundle,'1.0.0',{directory:link}),/symlink/);
   assert.deepEqual(await readdir(outside),['sentinel.txt']);
+  const project=path.join(root,'real-project'),alias=path.join(root,'linked-project');
+  await mkdir(project);
+  await symlink(project,alias,process.platform==='win32'?'junction':'dir');
+  const viaAlias={directory:path.join(alias,'.agents/skills')};
+  const linkedInstall=await manageSkills('install',bundle,'1.0.0',viaAlias);
+  assert.equal(linkedInstall.directory,path.join(await realpath(project),'.agents/skills'));
+  assert.equal(await readFile(path.join(project,'.agents/skills/opf-author/SKILL.md'),'utf8'),'# Author\n');
+  assert.equal((await manageSkills('status',bundle,'1.0.0',viaAlias)).skills[0].status,'managed');
+  assert.deepEqual((await manageSkills('update',bundle,'1.0.0',viaAlias)).changed,[]);
   const locked=path.join(root,'locked');await mkdir(locked);await writeFile(path.join(locked,'.opf-install.lock'),'Other installation');
   await assert.rejects(manageSkills('install',bundle,'1.0.0',{directory:locked}),/Another skill installation/);
   assert.equal(await readFile(path.join(locked,'.opf-install.lock'),'utf8'),'Other installation');

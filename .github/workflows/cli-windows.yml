@@ -1,4 +1,4 @@
-name: CLI on Windows
+name: CLI portability
 on:
   pull_request:
     paths:
@@ -25,11 +25,12 @@ concurrency:
   cancel-in-progress: true
 jobs:
   cli:
-    runs-on: windows-latest
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:
+        os: [windows-latest, macos-latest]
         node: [20, 24]
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1

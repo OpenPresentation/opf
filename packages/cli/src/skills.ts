@@ -6,6 +6,7 @@ import {
 	open,
 	readFile,
 	readdir,
+	realpath,
 	rename,
 	rmdir,
 	unlink,
@@ -57,6 +58,23 @@ async function noLinks(directory: string) {
 				`Skill destination contains a symlink or non-directory: ${current}`,
 			);
 	}
+}
+async function resolvedDestination(requested: string) {
+	const leaf = await stat(requested);
+	if (leaf?.isSymbolicLink() || (leaf && !leaf.isDirectory())) {
+		throw new SkillsError(`Refusing a symlink or non-directory skill destination: ${requested}`);
+	}
+	// Resolve existing ancestors once, including linked project directories and
+	// macOS /var or /tmp. All later inspection and writes use the canonical path.
+	let ancestor = requested;
+	const missing: string[] = [];
+	while (!(await stat(ancestor))) {
+		missing.unshift(path.basename(ancestor));
+		const parent = path.dirname(ancestor);
+		if (parent === ancestor) throw new SkillsError(`Cannot resolve skill destination: ${requested}`);
+		ancestor = parent;
+	}
+	return path.join(await realpath(ancestor), ...missing);
 }
 async function hashes(
 	directory: string,
@@ -162,7 +180,7 @@ export async function manageSkills(
 ) {
 	if (!["install", "update", "status"].includes(action))
 		throw new SkillsError("Use opf skills install, update, or status.", 2);
-	const root = skillDestination(options);
+	const root = await resolvedDestination(skillDestination(options));
 	await noLinks(root);
 	const names = Object.keys(bundle).sort();
 	for (const name of names) {
