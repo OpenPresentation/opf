@@ -18,7 +18,7 @@ for(const item of plan.packages){
  assert.ok(directory.startsWith(modules+path.sep)&&record?.version===item.version&&!record.link&&record.resolved?.startsWith('https://registry.npmjs.org/')&&record.integrity?.startsWith('sha512-'),'Expected registry installation: '+item.name);
 }
 const results=[];
-for(const [repo,tests] of [['opf-render',['webp.mjs','jpeg-orientation.mjs','golden.mjs']],['opf-pptx',['dependency-boundary.mjs']]]){
+for(const [repo,tests] of [['opf-render',['webp.mjs','jpeg-orientation.mjs','rich-table.mjs','golden.mjs']],['opf-pptx',['dependency-boundary.mjs']]]){
  const ref=plan.verificationRefs[repo];assert.match(ref,/^[a-f0-9]{40}$/);
  const directory=path.join(consumer,'fidelity',repo);await mkdir(directory,{recursive:true});
  const archive=path.join(directory,'tests.tar');

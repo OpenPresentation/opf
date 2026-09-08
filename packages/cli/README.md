@@ -13,7 +13,7 @@ npm install -g @openpresentation/cli
 opf --version
 ```
 
-Or install it as a development dependency and use `npx --no-install opf`. This checkout prepares CLI 0.2.0 with bundled OPF 0.5.0; that version supports rich table cells and headers during validation and pagination. Until 0.2.0 is published, the registry's latest release has the previous schema.
+Or install it as a development dependency and use `npx --no-install opf`. CLI 0.2.0 bundles OPF 0.5.0 and supports rich table cells and headers during validation and pagination.
 
 To verify the standalone package from source, run `pnpm install` and `pnpm test:cli:packed`. This creates `artifacts/cli/openpresentation-cli-0.2.0.tgz`, which can be installed using its absolute path. For source development, run `pnpm --filter @openpresentation/cli build` and `node packages/cli/dist/index.js --help`.
 
