@@ -7,11 +7,16 @@ const paint=()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationF
 let checks=0;const check=(ok,message)=>{if(!ok)throw new Error(message);checks++;output.textContent+='PASS '+message+'\n';};
 try{
  const faces=(await fetch('./fonts.json').then(r=>r.json())).filter(f=>['Roboto','Roboto Mono'].includes(f.family));
+ // The browser loader fetches entry.url (including data URLs), parses the
+ // resulting bytes and loads those same bytes through FontFace.
  const fonts=await loadBrowserFontRegistry(faces.map(f=>({...f,url:f.dataUrl})));
+ check(faces.length>0&&fonts.embeddedFonts.length===faces.length&&fonts.textMeasurement.measure('Cell',16,{fontFamily:'Roboto',fontWeight:700})>0,'Data-URL fonts load and measure actual glyphs');
  const rich=['Mixed ',{text:'bold',bold:true,color:'#AA0000'},' and ',{text:'linked',link:'https://example.com',underline:true}];
  const editor=createEditorSession({design:{theme:'classic',fontScheme:'roboto'},slides:[{table:{columns:['Header',['Normal ',{text:'bold',bold:true}]],rows:[['Plain',rich],[[],12]]}}]});
  const canvas=createCanvasEditor(host,{editor,renderOptions:{textMeasurement:fonts.textMeasurement}});await canvas.ready;
  const prefix='slides.0.table.';
+ // [] is a valid schema value; exercise it before editing normalizes runs.
+ check(!!host.querySelector('[data-opf-path="slides.0.table.rows.1.0"][data-opf-rich-text="true"]'),'Run-less empty cell has a rich-text trace');
  canvas.beginEdit(prefix+'rows.0.0');
  const format=[...host.querySelectorAll('button')].find(b=>b.textContent==='Format text');check(!!format,'Scalar table text offers the existing formatting action');format.click();await paint();
  check(Array.isArray(editor.get(prefix+'rows.0.0')),'Formatting promotes the cell to canonical TextRun[]');editor.undo();await paint();check(editor.get(prefix+'rows.0.0')==='Plain','Promotion is undoable');
