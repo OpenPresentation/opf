@@ -25,6 +25,7 @@ register("data:text/javascript," + encodeURIComponent(`
 
 await import("./smoke.mjs");
 await import("./background.mjs");
+await import("./native-background.mjs");
 await import("./table-layout.mjs");
 await import("./table-import.mjs");
 await import("./object-ids.mjs");

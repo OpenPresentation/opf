@@ -1,0 +1,75 @@
+{
+  "viewer": "Keynote 14.4",
+  "sourceCommit": "4a3a6e3",
+  "captured": "2026-09-08",
+  "groups": [
+    {
+      "name": "opaque",
+      "source": "opaque.opf.json",
+      "transparent": false,
+      "pngs": [
+        {
+          "file": "opaque-1.png",
+          "sha256": "94ba6406e71ff091a0ef404645884865fe7c54cb4d12366d958fc05ea8aa19bc"
+        },
+        {
+          "file": "opaque-2.png",
+          "sha256": "301970079936729bde9026900c8f579678a134a1bc6c3b5b2ebfe85878e60b2e"
+        },
+        {
+          "file": "opaque-3.png",
+          "sha256": "a6759c41622f40c3c95b6b4eb3c46baf599b1f24cc9fa96b6f79c772c3648a26"
+        },
+        {
+          "file": "opaque-4.png",
+          "sha256": "ebe757dbdc788f01b2532d3baa073cab0a2572710633db0378d12e8b171f2cfe"
+        },
+        {
+          "file": "opaque-5.png",
+          "sha256": "f0b0ee474c59b9bf5f73b4ad190b61daf9b6e21e9fec629aa64a54030a85f3b3"
+        },
+        {
+          "file": "opaque-6.png",
+          "sha256": "7371e17398ebd4eae0e6202abfc3fa6301daa3f178fab1a21172d1ef248b55d3"
+        }
+      ]
+    },
+    {
+      "name": "opacity",
+      "source": "opacity.opf.json",
+      "transparent": true,
+      "pngs": [
+        {
+          "file": "opacity-1.png",
+          "sha256": "ff76ecfb932287f30fa8cc8bfb3ba9b14197010b6b0d5895b194616c40273b50"
+        },
+        {
+          "file": "opacity-2.png",
+          "sha256": "e7e71a7a2c8f9d3f73a28b37a096685c175ff26e73767cefdaefa42a5ce3dc1d"
+        },
+        {
+          "file": "opacity-3.png",
+          "sha256": "eebe80b253e2f60b1ab510507a52233169a35dc19b93ad2520e78582d87985f8"
+        },
+        {
+          "file": "opacity-4.png",
+          "sha256": "8956544ce9753d20b09b2c827a93201c0ebf4e1ebb622a214805c70a1781c607"
+        },
+        {
+          "file": "opacity-5.png",
+          "sha256": "6c55d2da0ee2b4a3cba64c801c6df54ea6c6e6ebfdb5800edd4365ee7aef7e44"
+        },
+        {
+          "file": "opacity-6.png",
+          "sha256": "30882620abf8cdb2b1c806d4847ec19c271ae63e13b88c33417790544ceaec91"
+        }
+      ]
+    }
+  ],
+  "nativePptx": {
+    "file": "keynote-roundtrip.pptx",
+    "sha256": "ae8884349b7f181a1b8ec2c6982e357e3fd626b20b00d9df0073c4d6d284c467",
+    "originalSha256": "35d187b3a5227172a3a07b0b4cb7ec9f51908e4fdb7442c24f747dd5e01d6f12",
+    "normalization": "Only docProps/core.xml creator/modifier/timestamps and ZIP ordering/timestamps normalized; all presentation parts unchanged."
+  }
+}

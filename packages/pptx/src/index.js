@@ -389,10 +389,6 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
   const notes = readSlideNotes(entries, relationships);
   if (notes) slide.notes = notes;
 
-  if (!slide.title && !slide.blocks && !slide.notes) {
-    slide.title = `Slide ${slideIndex + 1}`;
-  }
-
   return slide;
 }
 

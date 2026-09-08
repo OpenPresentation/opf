@@ -1,0 +1,148 @@
+{
+  "slides": [
+    {
+      "design": {
+        "background": {
+          "type": "gradient",
+          "gradient": {
+            "angle": 0,
+            "stops": [
+              {
+                "position": 0,
+                "color": "#1E40AF"
+              },
+              {
+                "position": 0.6,
+                "color": "#22D3EE"
+              },
+              {
+                "position": 1,
+                "color": "#FFFFFF"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "design": {
+        "background": {
+          "type": "gradient",
+          "gradient": {
+            "angle": 30,
+            "stops": [
+              {
+                "position": 0,
+                "color": "#1E40AF"
+              },
+              {
+                "position": 0.6,
+                "color": "#22D3EE"
+              },
+              {
+                "position": 1,
+                "color": "#FFFFFF"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "design": {
+        "background": {
+          "type": "gradient",
+          "gradient": {
+            "angle": 45,
+            "stops": [
+              {
+                "position": 0,
+                "color": "#1E40AF"
+              },
+              {
+                "position": 0.6,
+                "color": "#22D3EE"
+              },
+              {
+                "position": 1,
+                "color": "#FFFFFF"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "design": {
+        "background": {
+          "type": "gradient",
+          "gradient": {
+            "angle": 90,
+            "stops": [
+              {
+                "position": 0,
+                "color": "#1E40AF"
+              },
+              {
+                "position": 0.6,
+                "color": "#22D3EE"
+              },
+              {
+                "position": 1,
+                "color": "#FFFFFF"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "design": {
+        "background": {
+          "type": "gradient",
+          "gradient": {
+            "angle": 180,
+            "stops": [
+              {
+                "position": 0,
+                "color": "#1E40AF"
+              },
+              {
+                "position": 0.6,
+                "color": "#22D3EE"
+              },
+              {
+                "position": 1,
+                "color": "#FFFFFF"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "design": {
+        "background": {
+          "type": "gradient",
+          "gradient": {
+            "angle": 270,
+            "stops": [
+              {
+                "position": 0,
+                "color": "#1E40AF"
+              },
+              {
+                "position": 0.6,
+                "color": "#22D3EE"
+              },
+              {
+                "position": 1,
+                "color": "#FFFFFF"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}
