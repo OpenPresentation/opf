@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Add coordinated styled-table regression coverage for `.value` typing/formatting, style/span preservation, empty cells, field discovery, rejected structural edits and atomic undo. The existing model supports these cells through the unpublished core schema. Browser pointer/keyboard verification and the coordinated dependency release remain pending.
+
 ## 0.3.0
 
 - Require core 0.6.0 and renderer 0.4.0 so the editor uses shared content-aware table rows. Multiline cells grow into available space while retaining formatting, typing, empty-cell editing and undo behavior.
