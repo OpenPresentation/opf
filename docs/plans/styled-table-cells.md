@@ -1,6 +1,6 @@
 # Styled and spanning table cells
 
-This work is unreleased. Published core 0.6.0 accepts scalar and rich-array cells; it does not accept the object form below. The coordinated development branches are `codex/styled-table-cells-20260908` in core, renderer and PPTX.
+This work is unreleased. Published core 0.6.0 accepts scalar and rich-array cells; it does not accept the object form below. The coordinated development branches are `codex/styled-table-cells-20260908` in core, renderer, editor and PPTX.
 
 ## Canonical representation
 
@@ -27,9 +27,11 @@ Padding and border widths are reference pixels, scaled from a 720-pixel canvas s
 
 - Core: schema and semantic validation, anchor ownership, source paths, geometry, scaling, rich text and pagination tests pass on Node 20 and 24. The complete 404-test suite passes on both runtimes.
 - Renderer: fills, alpha, per-edge borders, alignment, spanning rectangles and `.value` traces pass focused Node 20/24 tests. The existing 126-deck, 805-slide raster corpus is unchanged. A generated styled-table PNG has been visually inspected.
-- PPTX export: native XML tests verify dense merged grids, unique cell text, fully covered rows, fills/text alpha, edge dashes, zero/fractional padding, alignment, scaled heights and deterministic output on Node 20/24. The existing full Node 24 suite passes, including the 126-deck, 805-slide structural corpus.
+- PPTX export/import: native XML tests verify dense merged grids, unique cell text, fully covered rows, fills/text alpha, edge dashes, zero/fractional padding, alignment, scaled heights and deterministic output on Node 20/24. Import retains direct styles and conditional solid fills/theme fill references. Malformed merges retain all source text with diagnostics; valid merges crossing a flagged header retain the row as explicitly styled body content. The full suites pass, including the 126-deck, 805-slide structural corpus.
+- Clean local tarballs: core, renderer and PPTX install together without source loaders or duplicate core versions. Styled export/import checks pass on Node 20/24. A re-rendered imported table has been visually inspected; this is OPF/SVG evidence, not native PowerPoint raster evidence.
+- Editor model: `.value` typing/formatting, style/span preservation, empty cells, discoverable fields, invalid structural edits and atomic undo pass focused checks. Actual browser interaction for these objects remains pending.
 
-These are local source checks. Native style/merge import, editor pointer/keyboard/undo checks, packed-consumer tests, coordinated CI, versioned publication and public assets remain to be completed. No native PowerPoint raster equivalence has been established.
+Conditional native borders/effects, unequal native column widths, editor pointer/keyboard/undo checks, coordinated CI, versioned publication and public assets remain to be completed. Browser verification was unable to run while the host Mac was locked. No native PowerPoint raster equivalence has been established. The locally packed packages retain development versions and must not be confused with the packages already published under those version numbers.
 
 ## Reproduce focused checks
 
