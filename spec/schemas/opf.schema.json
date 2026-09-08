@@ -2488,8 +2488,8 @@
       "properties": {
         "columns": {
           "type": "array",
-          "items": { "type": "string" },
-          "description": "Optional column labels rendered above table rows.",
+          "items": { "oneOf": [{ "type": "string" }, { "type": "array", "items": { "$ref": "#/$defs/TextRun" } }] },
+          "description": "Optional column labels rendered above table rows. Each label is a string or an array of TextRun values for inline formatting.",
           "examples": [["Region", "Q3 Revenue", "Q4 Revenue", "YoY %"]]
         },
         "rows": {
@@ -2571,9 +2571,10 @@
         { "type": "string" },
         { "type": "number" },
         { "type": "boolean" },
-        { "type": "null" }
+        { "type": "null" },
+        { "type": "array", "items": { "$ref": "#/$defs/TextRun" } }
       ],
-      "description": "A cell in table content."
+      "description": "A cell in table content. Scalar values keep their text representation; TextRun arrays preserve inline formatting and use mixed-style text measurement."
     },
     "Catalogs": {
       "type": "object",

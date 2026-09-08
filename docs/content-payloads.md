@@ -135,6 +135,21 @@ Table-specific fields are grouped under `table`. Do not put loose `columns` or `
 }
 ```
 
+Table body cells accept strings, numbers, booleans, or `null`. In the development schema, a cell or column header also accepts the same `TextRun[]` used by rich text:
+
+```json
+{
+  "table": {
+    "columns": [["Quarter ", {"text": "growth", "bold": true}], "Value"],
+    "rows": [
+      [["Up ", {"text": "12%", "color": "#008800"}], 12]
+    ]
+  }
+}
+```
+
+This form is unreleased and requires coordinated core, renderer and PPTX development packages. Core measures run styles when checking overflow and keeps each row intact when paginating. The renderer traces rich cells for the editor's existing formatting, typing and undo controls; the exporter emits editable native text runs. Native PPTX table import currently flattens runs to strings, and native PowerPoint visual parity is not yet verified. Per-cell fills, borders, alignment and merged cells are separate work.
+
 ## Code
 
 Code-specific fields are grouped under `code`. A string value is shorthand for `code.source`; use object form when syntax highlighting or a file label matters. In object form, `source` is required.

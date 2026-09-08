@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {mkdtemp, mkdir, readFile, rm} from 'node:fs/promises';
+import {mkdtemp, mkdir, readFile, rm, writeFile} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -22,6 +22,9 @@ try {
  assert.ok(!manifest.private);assert.equal(Object.keys(manifest.dependencies??{}).length,0);
  const bin=path.join(temp,'bin/opf');
  assert.ok(JSON.parse(run(bin,['create','-','--title','Installed binary'],temp)).slides.length);
+ const richDeck={slides:[{table:{columns:[['Rich ',{text:'header',bold:true}]],rows:[[[{text:'Cell',italic:true}]]]}}]};
+ const richFile=path.join(temp,'rich-table.opf.json');await writeFile(richFile,JSON.stringify(richDeck));
+ run(bin,['validate',richFile],temp);
  const output=run(process.execPath,[path.join(pkg,'test/cli.mjs')],temp,{OPF_TEST_BIN:bin});
  console.log(output.trim());console.log(`Standalone global installation passed. Tarball: ${tarball}`);
 }finally{await rm(temp,{recursive:true,force:true});}
