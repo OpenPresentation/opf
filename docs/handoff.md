@@ -206,3 +206,27 @@ PPTX commit 821c047 resolves the earlier native gradient verification gap. Keyno
 The Keynote round-trip also exposed synthetic titles added to empty/background-only slides. Import now preserves blank content and notes-only slides. Project-authored native fixtures and their hashes are checked in; normal CI does not require Keynote. The historical importer fails the blank-slide assertion. Final Node 20/24 complete suites, syntax, package metadata and browser dependency checks pass, including the 126-deck/805-slide structural corpus with previously documented substitutions. Logs are artifacts/backgrounds/native-node20.log and native-node24.log in the PPTX worktree.
 
 The user has authorized pushing, PR updates and merging the four prepared follow-ups. Merge preparation covers PPTX 821c047, renderer 87663fb, site 2858456 and this core example/handoff branch. These changes do not publish new npm versions; the existing development version numbers must not overwrite registry releases. Historical pending-approval and locked-desktop notes above describe earlier checkpoints and are superseded here.
+
+## Published fidelity releases and registry verification
+
+The follow-up implementations are merged and now published through trusted publishing with npm provenance:
+
+| Package | Version | Tagged source | Publish workflow |
+| --- | --- | --- | --- |
+| @openpresentation/opf | 0.4.1 | aed5e5493998a5081fea68bf3bd42c52409e0c15 | 34204122730 |
+| @openpresentation/cli | 0.1.1 | aed5e5493998a5081fea68bf3bd42c52409e0c15 | 34204125018 |
+| @openpresentation/opf-render | 0.2.0 | df7ce5c6915a084f101adf90e6329117c0094a23 | 34204875207 |
+| @openpresentation/opf-pptx | 0.2.0 | 1fef9dcfadeeb8310b3c3b668f7506b52717b695 | 34205556749 |
+| @openpresentation/opf-editor | 0.1.2 | 5819a2ac12ec22f08a348c81bc3c66630682ecfb | 34205593335 |
+
+Core/CLI release PR 18, renderer PR 3, PPTX PR 3 and editor PR 2 were merged after Node 20/24 CI and automated review. Their merge commits passed CI before tags were pushed. GitHub releases contain matching changelog notes. Registry propagation briefly delayed PPTX availability; publication was not rerun, and the subsequent exact-version install passed.
+
+Renderer/PPTX 0.2.0 require Node 20.9 or later and core 0.4.1. Editor 0.1.2 accepts renderer 0.1.1 or 0.2.x through its optional peer; its development dependency explicitly installs renderer 0.2.0 for CI. The renderer release uses the individually reviewed corrected-image baseline and retains the preceding core-0.4.0 manifest for audit. Only the repaired example slide changes; the other 804 raster hashes remain identical.
+
+The clean registry consumer at artifacts/npm/registry-consumer installs all five exact release-plan versions without local package overrides. Model/API, TypeScript, browser bundling and CLI checks pass. The actual registry CLI reports 0.1.1 with bundled OPF 0.4.1 and passes 60 command checks. Eight complete JPEG image-slide previews are byte-identical before and after PPTX export/import using the installed registry packages.
+
+The new pnpm test:registry-fidelity command runs immutable test/fixture snapshots against installed npm dist files, checks registry lock records and real paths, and rejects local package overrides. It passes 23 WebP and 24 JPEG raster/PDF cases, all 805 raster baselines, 18 captured Keynote comparisons, table/image/background/import tests and the 126-deck/805-slide structural corpus with its documented fallback fonts and 26 synthetic image substitutions. Coordinated CI now pins the release commits and also runs the exact-version registry integration and fidelity checks on Node 20/24; full core history makes the pinned browser harness source available.
+
+Browser execution against the registry packages passes 176 editor harness checks plus 13 WebP and 16 JPEG checks. JPEG comparison retains the previously documented aggregate bounds (maximum channel 49, mean below 0.616, at most 1.225% of channels differing by more than 10); it is not pixel-identical browser output. These harnesses do not establish real OS IME, cross-browser behavior or Microsoft PowerPoint fidelity. Core remains free and provider-neutral; normal CI needs no native presentation application.
+
+Gallery and site release worktrees are /private/tmp/opf-release-gallery/pptx-gallery and /private/tmp/opf-release-site/openpresentation-site on codex/fidelity-release-20260908. Their locked core is 0.4.1, and editor/showcase assets are regenerated from the five-package registry consumer with version/integrity/hash manifests. All 854 gallery examples validate/render, 106 gallery tests pass, and both production builds pass. The site syncs opf-v0.4.1 and exposes 583 raw files/six skills. Public deployment verification follows these prepared updates; earlier production manifests remain historical until those PRs merge.
