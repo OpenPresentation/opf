@@ -18,27 +18,27 @@ jobs:
       matrix:
         node: [20, 24]
     steps:
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           path: opf
           fetch-depth: 0
           persist-credentials: false
       # These commits are the coordinated checkpoint, not mutable default branches.
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
           ref: 9f34d70002307fcb3795de638e7e4bf0605a33f8
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-editor
           ref: e8bdedf7f80e2eab0ff7d869b9436cd2050e426d
           path: opf-editor
           fetch-depth: 0
           persist-credentials: false
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-pptx
           ref: 6198def72d9b4d58e8d8a22dc7842d0d0760a5a6
