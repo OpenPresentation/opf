@@ -3,6 +3,7 @@ import {unzipSync, zipSync} from 'fflate';
 import {validatePresentation} from '@openpresentation/opf';
 import {renderSvg} from '@openpresentation/opf-render';
 import {fromPptx, toPptx} from '../dist/index.js';
+import {tableValues} from './table-values.js';
 
 const encoder=new TextEncoder(),decoder=new TextDecoder();
 const id='{12345678-1234-1234-1234-123456789ABC}';
@@ -12,7 +13,7 @@ const tx=(body='',attributes='')=>`<a:tcTxStyle ${attributes}>${body}</a:tcTxSty
 const rgb=value=>`<a:srgbClr val="${value}"/>`;
 const style=Object.entries(colors).map(([name,color])=>part(name,tx((name==='wholeTbl'?'<a:fontRef idx="minor"><a:srgbClr val="FFFFFF"/></a:fontRef>':'')+rgb(color),name==='band1H'?'i="on"':name==='band2H'?'i="off"':name==='firstRow'?'b="on"':''))).join('');
 const flags='firstRow="1" lastRow="1" firstCol="1" lastCol="1" bandRow="1" bandCol="1"';
-const tableOf=deck=>deck.slides[0].blocks.find(b=>b.table).table;
+const tableOf=deck=>tableValues(deck.slides[0].blocks.find(b=>b.table).table);
 const allRows=table=>table.columns?[table.columns,...table.rows]:table.rows;
 const run=cell=>Array.isArray(cell)?cell.find(r=>typeof r!=='string'):undefined;
 const text=cell=>Array.isArray(cell)?cell.map(r=>typeof r==='string'?r:r.text).join(''):cell;
@@ -79,8 +80,10 @@ assert.deepEqual(run(explicit.table.rows[0][0]),{text:'0,0',bold:false,italic:fa
 assert.equal(run(explicit.table.rows[0][1]).fontFamily,'Georgia');
 const placeholder=await fixture({properties:'',definition:part('wholeTbl',tx('<a:fontRef idx="major"><a:srgbClr val="2468AC"><a:alpha val="50000"/></a:srgbClr></a:fontRef><a:schemeClr val="phClr"><a:alphaMod val="50000"/></a:schemeClr>'))});
 assert.equal(run(placeholder.table.rows[0][0]).color,'#2468AC40');assert.equal(run(placeholder.table.rows[0][0]).fontFamily,'Aptos Display');
-const decoration=await fixture({properties:'',definition:part('wholeTbl',tx(rgb('123456'))+'<a:tcStyle><a:fill><a:solidFill><a:srgbClr val="CCCCCC"/></a:solidFill></a:fill></a:tcStyle>')});
-assert.equal(run(decoration.table.rows[0][0]).color,'#123456');assert.ok(decoration.diagnostics.some(d=>d.code==='unsupported-table-cell-style'&&d.path==='slides.0.tables.0.rows.0.0'));
+const removeDirectCellStyle=entries=>{const p='ppt/slides/slide1.xml';entries[p]=encoder.encode(decoder.decode(entries[p]).replace(/<a:tcPr\b[^>]*>[\s\S]*?<\/a:tcPr>/g,'<a:tcPr/>'));};
+const decoration=await fixture({properties:'',definition:part('wholeTbl',tx(rgb('123456'))+'<a:tcStyle><a:fill><a:solidFill><a:srgbClr val="CCCCCC"/></a:solidFill></a:fill></a:tcStyle>'),modify:removeDirectCellStyle});
+assert.equal(run(decoration.table.rows[0][0]).color,'#123456');assert.deepEqual(decoration.diagnostics,[]);
+assert.equal(decoration.deck.slides[0].blocks.find(b=>b.table).table.rows[0][0].style.fill,'#CCCCCC');
 const unresolved=await fixture({properties:'',definition:part('wholeTbl',tx('<a:schemeClr val="unknown"/>'))});assert.ok(unresolved.diagnostics.some(d=>d.code==='unsupported-table-text-color'));
 const inheritedPlaceholder=await fixture({properties:'firstRow="1"',definition:
  part('wholeTbl',tx('<a:fontRef idx="minor"><a:srgbClr val="13579B"/></a:fontRef>'+rgb('111111'),'b="on"'))+
@@ -102,3 +105,24 @@ if (process.env.OPF_TABLE_STYLE_FIXTURE) {
  const {writeFile}=await import('node:fs/promises');
  await writeFile(process.env.OPF_TABLE_STYLE_FIXTURE,themed.bytes);
 }
+
+const conditionalFills=await fixture({definition:Object.entries(colors).map(([name,color])=>part(name,`<a:tcStyle><a:fill><a:solidFill>${rgb(color)}</a:solidFill></a:fill></a:tcStyle>`)).join(''),modify:removeDirectCellStyle});
+assert.deepEqual(allRows(conditionalFills.deck.slides[0].blocks.find(b=>b.table).table).map(row=>row.map(cell=>cell.style.fill)),[
+ ['#D0D0D0','#B0B0B0','#B0B0B0','#B0B0B0','#C0C0C0'],
+ ['#707070','#404040','#505050','#404040','#606060'],
+ ['#707070','#404040','#505050','#404040','#606060'],
+ ['#707070','#404040','#505050','#404040','#606060'],
+ ['#A0A0A0','#808080','#808080','#808080','#909090']
+]);
+const fillReference=await fixture({properties:'',definition:part('wholeTbl','<a:tcStyle><a:fillRef idx="2"><a:srgbClr val="2468AC"><a:alpha val="50000"/></a:srgbClr></a:fillRef></a:tcStyle>'),modify:entries=>{
+ removeDirectCellStyle(entries);
+ const path=Object.keys(entries).find(path=>/^ppt\/theme\/theme\d+\.xml$/.test(path));
+ entries[path]=encoder.encode(decoder.decode(entries[path]).replace(/<a:fillStyleLst>[\s\S]*?<\/a:fillStyleLst>/,'<a:fillStyleLst><a:gradFill><a:gsLst/></a:gradFill><a:solidFill><a:schemeClr val="phClr"><a:alphaMod val="50000"/></a:schemeClr></a:solidFill><a:solidFill><a:srgbClr val="000000"/></a:solidFill></a:fillStyleLst>'));
+}});
+assert.deepEqual(fillReference.diagnostics,[]);
+assert.equal(fillReference.deck.slides[0].blocks.find(b=>b.table).table.rows[0][0].style.fill,'#2468AC40');
+const maskedFill=await fixture({properties:'',definition:part('wholeTbl','<a:tcStyle><a:fillRef idx="999"/></a:tcStyle>')});
+assert.deepEqual(maskedFill.diagnostics,[],'A direct fill masks an unresolved inherited fill reference');
+const missingFill=await fixture({properties:'',definition:part('wholeTbl','<a:tcStyle><a:fillRef idx="999"/></a:tcStyle>'),modify:removeDirectCellStyle});
+assert.ok(missingFill.diagnostics.some(d=>d.code==='unsupported-table-cell-fill'));
+console.log('Conditional cell fills passed: band/edge/corner precedence, ordered theme references, placeholder alpha and direct overrides.');

@@ -3,10 +3,11 @@ import {unzipSync, zipSync} from 'fflate';
 import {validatePresentation} from '@openpresentation/opf';
 import {renderSvg} from '@openpresentation/opf-render';
 import {fromPptx, toPptx} from '../dist/index.js';
+import {tableValues} from './table-values.js';
 
 const decoder = new TextDecoder(), encoder = new TextEncoder();
 const plain = cell => Array.isArray(cell) ? cell.map(run => typeof run === 'string' ? run : run.text).join('') : cell;
-const tableOf = deck => deck.slides[0].blocks.find(block => block.table).table;
+const tableOf = deck => tableValues(deck.slides[0].blocks.find(block => block.table).table);
 const source = {columns:[[{text:'Normal ',bold:false},{text:'bold',bold:true}],'Value'],rows:[
  [[{text:' A ',bold:true,italic:true,underline:true,strikethrough:true,color:'#12345680',fontSize:17,fontFamily:'Georgia',link:'https://example.com/?a=1&b=2'}],['H',{text:'2',subscript:true},'O']],
  [['\nStart\n',{text:'\nEnd\n',bold:true}],['x',{text:'2',superscript:true}]],

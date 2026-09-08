@@ -411,7 +411,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   const tables = frames.some(frame => frame['a:graphic']?.['a:graphicData']?.['a:tbl'])
     ? importTableFrames(slidePath, {
       part: (path, parser) => parseRequiredXml(entries, path, parser), relationships: path => parseRelationships(entries, path), bytes: path => entries[path]
-    }, relationships, (frame, cell, code, message) => options.onDiagnostic?.({code, message, path: `slides.${slideIndex}.tables.${frame}${cell ? '.' + cell : ''}`})) : [];
+    }, relationships, (frame, cell, code, message) => options.onDiagnostic?.({code, message, path: `slides.${slideIndex}.tables.${frame}${cell ? '.' + cell : ''}`}), dimensions) : [];
   for (const [index, frame] of frames.entries()) {
     const item = importGraphicFrame(entries, frame, slidePath, relationships, tables[index]);
     if (item) items.push(item);

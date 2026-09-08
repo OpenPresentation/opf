@@ -2,8 +2,9 @@ import assert from 'node:assert/strict';
 import { unzipSync, zipSync } from 'fflate';
 import { validatePresentation } from '@openpresentation/opf';
 import { fromPptx, toPptx } from '../dist/index.js';
+import {cellValue} from './table-values.js';
 
-const plainCell = cell => Array.isArray(cell) ? cell.map(run => typeof run === 'string' ? run : run.text).join('') : cell;
+const plainCell = input => {const cell=cellValue(input);return Array.isArray(cell) ? cell.map(run => typeof run === 'string' ? run : run.text).join('') : cell;};
 const plainTable = table => ({...(table.columns ? {columns:table.columns.map(plainCell)} : {}), rows:table.rows.map(row => row.map(plainCell))});
 
 const fixtures = [
