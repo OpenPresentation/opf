@@ -1,5 +1,15 @@
 # Windows release and adoption evidence — 2026-09-08
 
+## Published CLI installer and deployed website checkpoint
+
+CLI 0.5.0 merged in PR #27 as `7a2845f45bd7c6f48312b07100851c0ee29a9d1c`, identical to reviewed `fcaa85fb50c06dd737f9e71419f3b9a40618184d`. Final linked-parent fix passes [macOS/Windows Node 20/24](https://github.com/OpenPresentation/opf/actions/runs/34260124438), [Linux package CI](https://github.com/OpenPresentation/opf/actions/runs/34260124472), [coordinated CI](https://github.com/OpenPresentation/opf/actions/runs/34260124563) and successful Bugbot review. The finding is resolved. [Trusted publication](https://github.com/OpenPresentation/opf/actions/runs/34261574915) succeeded for tag `cli-v0.5.0`.
+
+Registry gitHead equals that merge; SLSA provenance exists. CLI tarball integrity is `sha512-zStGUvtciPZcRz7U9bwV5vYaF0BpoXY8De2sCATHBWXNEtbozakBzi0JmT3hseyv08e4yYx4rlJqMRn6e1LzMw==`. `node packages/cli/test/packed.mjs --registry` passes on Windows Node 20/24: fresh cache, npm registry download, isolated offline global installation, npx-style named-package installation of all six skills, preserved AGENTS.md, idempotent install and 69 installed CLI checks. Windows file-symlink privilege remains explicitly skipped; macOS/Linux CI covers file links, and Windows junction tests pass. Updated release-plan ecosystem checks pass on Node 20/24 with CLI 0.5.0; existing renderer/PPTX/editor versions are unchanged.
+
+Main-site PR #11 merged as `c1cbbbb4e91911392612a157155441b523f187dc`, identical to reviewed `6db427276aab2a918e4edd7cdda59a4f33fcb28c`. [Website CI](https://github.com/Data-Advantage/openpresentation-site/actions/runs/34260733732), Bugbot and Vercel preview pass. Production deployment `dpl_ApPs9yCN43U6zVsGEkSmfQ6tFRTM` serves the merged commit. `OPF_SITE_URL=https://www.openpresentation.org pnpm test:e2e` passes all three checks: published history/links/anchors, mobile overflow containment, and OPF/SVG/PPTX browser downloads with exact registry-showcase hashes. This closes the separate deployed-changelog milestone; CLI 0.5.0 site documentation and broader application workflow coverage continue separately.
+
+The installer-site follow-up builds 603 pages from immutable source `7a2845f45bd7c6f48312b07100851c0ee29a9d1c`, exporting six skills and 598 raw resources. Four local Edge tests additionally verify actual clipboard command copying and the size/hash of every served skill file. Gallery dependency maintenance passes 106 existing unit tests, a 1,925-page build and a zero-advisory pnpm audit, without muting alerts. Updated gallery artifacts validate/render 854 canonical documents and expose 625 schema fields; their final UI and deployment verification remain pending.
+
 This supplements the portable handoff. GitHub branches remain the source of truth; local artifacts can be regenerated. The ecosystem goal remains active, including adoption by developers and agents.
 
 ## Host preflight

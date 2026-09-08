@@ -8,6 +8,9 @@ import {spawnSync} from 'node:child_process';
 const root=fileURLToPath(new URL('../../../',import.meta.url));
 const pkg=path.join(root,'packages/cli'),out=path.join(root,'artifacts/cli');
 const temp=await mkdtemp(path.join(tmpdir(),'opf-cli-installed-'));
+const registry=process.argv.includes('--registry');
+const expected=JSON.parse(await readFile(path.join(pkg,'package.json'),'utf8'));
+const registrySpec=`${expected.name}@${expected.version}`;
 function run(command,args,cwd,env={}) {
  if(process.platform==='win32'&&(command==='npm'||command==='pnpm')){
   const entry=command==='npm'
@@ -21,14 +24,15 @@ function run(command,args,cwd,env={}) {
 }
 try {
  await mkdir(out,{recursive:true});
- run('pnpm',['build'],pkg);
+ if(!registry)run('pnpm',['build'],pkg);
  const cache=path.join(temp,'npm-cache');
- const packed=JSON.parse(run('npm',['pack','--json','--ignore-scripts','--pack-destination',out,'--cache',cache],pkg))[0];
+ const packed=JSON.parse(run('npm',['pack',...(registry?[registrySpec]:[]),'--json','--ignore-scripts','--pack-destination',out,'--cache',cache],pkg))[0];
  const tarball=path.join(out,packed.filename);
  // Install globally into an isolated prefix, offline, with no workspace links or dependencies.
  run('npm',['install','--global','--prefix',temp,'--offline','--ignore-scripts','--no-audit','--no-fund','--cache',cache,tarball],temp);
  const installed=path.join(temp,process.platform==='win32'?'node_modules':'lib/node_modules','@openpresentation/cli');
  const manifest=JSON.parse(await readFile(path.join(installed,'package.json'),'utf8'));
+ assert.equal(manifest.version,expected.version);
  assert.ok(!manifest.private);assert.equal(Object.keys(manifest.dependencies??{}).length,0);
  const bin=path.join(installed,manifest.bin.opf);
  assert.ok(JSON.parse(run(process.execPath,[bin,'create','-','--title','Installed binary'],temp)).slides.length);
@@ -36,13 +40,13 @@ try {
  const richFile=path.join(temp,'rich-table.opf.json');await writeFile(richFile,JSON.stringify(richDeck));
  run(process.execPath,[bin,'validate',richFile],temp);
  await writeFile(path.join(temp,'AGENTS.md'),'Keep existing project instructions.');
- const npxResult=JSON.parse(run('npm',['exec','--yes','--offline','--ignore-scripts','--cache',cache,'--package',tarball,'--','opf','skills','install'],temp));
+ const npxResult=JSON.parse(run('npm',['exec','--yes',registry?'--prefer-online':'--offline','--ignore-scripts','--cache',cache,'--package',registry?registrySpec:tarball,'--','opf','skills','install'],temp));
  assert.equal(npxResult.changed.length,6,'npx-style offline installation must install the bundled skills');
  assert.equal(await readFile(path.join(temp,'AGENTS.md'),'utf8'),'Keep existing project instructions.');
  assert.deepEqual(JSON.parse(run(process.execPath,[bin,'skills','install'],temp)).changed,[]);
  assert.ok(JSON.parse(await readFile(path.join(temp,'.agents/skills/opf-author/assets/decision-brief.opf.json'),'utf8')).slides.length);
  const output=run(process.execPath,[path.join(pkg,'test/cli.mjs')],temp,{OPF_TEST_BIN:bin});
- console.log(output.trim());console.log(`Standalone global installation passed. Tarball: ${tarball}`);
+ console.log(output.trim());console.log(`Standalone global and npx-style installation passed (${registry?'npm registry':'local pack'}). Integrity: ${packed.integrity}. Tarball: ${tarball}`);
 }finally{
  const actual=await realpath(temp),parent=await realpath(tmpdir());
  assert.ok(actual.startsWith(parent+path.sep)&&path.basename(actual).startsWith('opf-cli-installed-'));
