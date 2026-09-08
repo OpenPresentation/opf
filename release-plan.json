@@ -2,29 +2,29 @@
   "packages": [
     {
       "name": "@openpresentation/opf",
-      "version": "0.4.1"
+      "version": "0.5.0"
     },
     {
       "name": "@openpresentation/opf-render",
-      "version": "0.2.0"
+      "version": "0.3.0"
     },
     {
       "name": "@openpresentation/opf-editor",
-      "version": "0.1.2"
+      "version": "0.2.0"
     },
     {
       "name": "@openpresentation/opf-pptx",
-      "version": "0.2.1"
+      "version": "0.3.0"
     },
     {
       "name": "@openpresentation/cli",
-      "version": "0.1.1"
+      "version": "0.2.0"
     }
   ],
   "verificationRefs": {
-    "opf": "aed5e5493998a5081fea68bf3bd42c52409e0c15",
-    "opf-editor": "5819a2ac12ec22f08a348c81bc3c66630682ecfb",
-    "opf-render": "df7ce5c6915a084f101adf90e6329117c0094a23",
-    "opf-pptx": "6e6d3b2201f9c0c066085ea11eb541fbdc434c23"
+    "opf": "316617edbc4331b9724b029d57ad64ab0221bdba",
+    "opf-render": "7de3245ff73f53410b7b478aacc543855c045ecc",
+    "opf-pptx": "ae45c7fb903fc2e85264c68a4843f0f6764516d3",
+    "opf-editor": "c5142ebd3e116b66bd1bb4c0c138d37d6a414261"
   }
 }

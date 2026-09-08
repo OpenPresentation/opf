@@ -135,7 +135,7 @@ Table-specific fields are grouped under `table`. Do not put loose `columns` or `
 }
 ```
 
-Table body cells accept strings, numbers, booleans, or `null`. In the development schema, a cell or column header also accepts the same `TextRun[]` used by rich text:
+Table body cells accept strings, numbers, booleans, or `null`. Since core 0.5.0, a cell or column header also accepts the same `TextRun[]` used by rich text:
 
 ```json
 {
@@ -148,7 +148,7 @@ Table body cells accept strings, numbers, booleans, or `null`. In the developmen
 }
 ```
 
-This form is unreleased and requires coordinated core, renderer and PPTX development packages. Core measures run styles when checking overflow and keeps each row intact when paginating. The renderer traces rich cells for the editor's existing formatting, typing and undo controls; the exporter emits editable native text runs. Native PPTX table import currently flattens runs to strings, and native PowerPoint visual parity is not yet verified. Per-cell fills, borders, alignment and merged cells are separate work.
+Use core 0.5.0, renderer 0.3.0, editor 0.2.0 and PPTX 0.3.0 together for this form. Core measures run styles when checking overflow and keeps each row intact when paginating. The renderer traces rich cells for the editor's existing formatting, typing and undo controls; the exporter emits editable native text runs. Native PPTX table import currently flattens runs to strings, and native PowerPoint visual parity is not yet verified. Per-cell fills, borders, alignment and merged cells are separate work.
 
 ## Code
 

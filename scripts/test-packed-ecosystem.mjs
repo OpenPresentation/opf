@@ -92,6 +92,12 @@ assert.equal(editor.get('slides.0.blocks.2.text'),'Add your text');
 const svg=renderSvg(editor.document,{textMeasurement:fonts.textMeasurement});
 assert.match(svg,/Installed consumer/);
 assert.equal(typeof createCanvasEditor,'function');assert.equal(typeof loadBrowserFontRegistry,'function');
+const richEditor=createEditorSession({design:{fontScheme:'roboto'},slides:[{table:{columns:[['Rich ',{text:'header',bold:true}]],rows:[['Cell']]}}]});
+richEditor.set('slides.0.table.rows.0.0',formatRichTextRange('Cell',0,4,{bold:true,color:'#008800'}));
+assert.deepEqual(richEditor.get('slides.0.table.rows.0.0'),[{text:'Cell',bold:true,color:'#008800'}]);
+assert.match(renderSvg(richEditor.document,{trace:true,textMeasurement:fonts.textMeasurement}),/data-opf-rich-text="true"/);
+assert.ok((await toPptx(richEditor.document,{textMeasurement:fonts.textMeasurement})).length>1000);
+richEditor.undo();assert.equal(richEditor.get('slides.0.table.rows.0.0'),'Cell');
 const copied=parseOpfTransfer(serializeOpfTransfer(editor.document,{scope:'slide',format:'markdown'}));
 assert.equal(prepareOpfImport(editor.document,copied).document.slides.length,2);
 const gallery=await loadOpfGallery('https://gallery.example/registry.json',{fetch:async()=>new Response(JSON.stringify({items:[{name:'Example',opf:copied.document}]}))});
@@ -116,6 +122,8 @@ if (registry) {
 await writeFile(
   path.join(consumer, "browser.ts"),
   `import {presentation} from '@openpresentation/opf/schemas';
+import type {Presentation} from '@openpresentation/opf/types';
+export const richTable:Presentation={slides:[{table:{columns:[['Rich ',{text:'header',bold:true}]],rows:[[[{text:'Cell',italic:true}]]]}}]};
 export const compositionSchema = presentation.$defs.Composition;
 export const contentSchema = presentation.$defs.ContentPayload;
 import {createCanvasEditor, type CanvasEditor} from '@openpresentation/opf-editor/canvas';
