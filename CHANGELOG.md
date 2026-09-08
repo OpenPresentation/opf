@@ -4,7 +4,7 @@
 
 - Add shared `layoutTable` geometry and fitting to the composition API. Wrapped and multiline rows grow into available space; constrained tables reduce spare row height before readable text, preserve complete cells and report real overflow. Short rows keep their existing preferred height.
 - Add optional uniform rich-text line advances for native table spacing. The coordinated renderer and PPTX exporter consume the same row and text geometry. No schema change is required.
-- Rebuild CLI 0.3.0 with bundled core 0.6.0. Downstream variable-row rendering and native rich-table import are coordinated development work until their releases are published.
+- Rebuild CLI 0.3.0 with bundled core 0.6.0. Shared variable-row geometry is available in renderer/PPTX 0.4.0 and editor 0.3.0; PPTX 0.4.0 also imports supported native rich table text.
 
 ## 0.5.0
 

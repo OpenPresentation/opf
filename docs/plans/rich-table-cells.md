@@ -1,6 +1,6 @@
 # Rich table cells
 
-The coordinated rich-table release set is core 0.5.0, CLI 0.2.0, renderer 0.3.0, PPTX 0.3.0 and editor 0.2.0. Earlier versions do not form a supported installation for rich table arrays. Exact published sources are pinned in `release-plan.json`.
+The coordinated rich-table release set is core 0.6.0, CLI 0.3.0, renderer 0.4.0, PPTX 0.4.0 and editor 0.3.0. Rich arrays first shipped in core 0.5.0; this set adds shared content-aware row sizing and native rich-text import. Exact published sources are pinned in `release-plan.json`.
 
 The canonical form is `TextRun[]` directly in a body cell or column label. Existing scalar cells and string labels remain valid. Core measures rich runs for overflow and pagination. The renderer uses the existing rich text painter and source traces; the editor consequently exposes its existing formatting and typing controls. PPTX export preserves the original run content and explicit line breaks as native editable runs, with shared fitted font sizes.
 
@@ -21,4 +21,4 @@ Open `http://127.0.0.1:3137/`. The page reports 14 checks for cell/header format
 
 Core, renderer, editor and PPTX model suites pass under Node 24; focused core/renderer/PPTX rich-table checks also pass under Node 20. The unchanged scalar corpus retains all 805 renderer raster baselines. Export tests inspect native runs, whitespace and paragraphs, explicit false header emphasis, font resolution, point sizes, scripts, links, RGB/alpha and input immutability. Browser checks pass in the Codex in-app browser, including an additional pointer/keyboard commit.
 
-Native PPTX table import still flattens runs to strings. Native PowerPoint rendering, cross-engine interaction, real OS IME, merged cells, cell fills/borders/alignment and advanced table controls remain unverified or unimplemented. The registry gates exercise rich table formatting, SVG traces, PPTX export, undo and TypeScript types through the installed package set. Source, packed and registry checks remain separate from native viewer evidence.
+PPTX 0.4.0 imports supported native character styles, paragraph defaults, themes, links and whitespace as rich runs. Unstyled body cells remain strings. Native XML fixtures and 15 browser import/containment checks cover the conversion; shared row tests verify SVG/native heights and uniform mixed-size paragraph advances. Native PowerPoint rendering, cross-engine interaction, real OS IME, merged cells, cell fills/borders/alignment and advanced table controls remain unverified or unimplemented. The registry gates exercise rich table formatting, SVG traces, PPTX export, undo and TypeScript types through the installed package set. Source, packed and registry checks remain separate from native viewer evidence.

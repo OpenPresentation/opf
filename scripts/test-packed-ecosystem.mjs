@@ -8,6 +8,11 @@ const root = fileURLToPath(new URL("../", import.meta.url)),
 const librariesOnly = process.argv.includes('--registry-libraries');
 const registry = process.argv.includes('--registry') || librariesOnly;
 const releasePlan = registry ? JSON.parse(await readFile(path.join(root, "release-plan.json"), "utf8")) : null;
+// layoutTable first shipped in core 0.6.0. Keep historical registry plans
+// testable, while requiring the API and its pinned regression suite thereafter.
+const coreVersion = releasePlan?.packages.find(item => item.name === '@openpresentation/opf')?.version.split('.').map(Number);
+const verifyTableLayout = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] >= 6;
+
 async function readHarness(repo, file) {
   const directory = repo === 'opf' ? root : path.resolve(root, '..', repo);
   if (!registry) return readFile(path.join(directory, file), 'utf8');
@@ -107,7 +112,7 @@ assert.ok(pptx.length>1000);
 console.log('Packed consumer: core, editor, SVG, measured fonts and PPTX passed.');\n`,
 );
 run(process.execPath, ["check.mjs"]);
-if (!registry) {
+if (verifyTableLayout) {
   const tableHarness = (await readHarness('opf', 'packages/javascript/test/table-layout.test.mjs'))
     .replaceAll("'../dist/composition.js'", "'@openpresentation/opf/composition'")
     .replaceAll("'../dist/pagination.js'", "'@openpresentation/opf/pagination'");
@@ -142,7 +147,7 @@ export {createSchemaInspector} from '@openpresentation/opf-editor/schema-inspect
 export {formatRichTextRange,replaceRichTextRange,richTextContent,type TextRunFormat} from '@openpresentation/opf-editor/rich-text';
 export {prepareTrackResize,prepareBlockMove,listBlockContainers,prepareBlockInsert,prepareBlockDuplicate,prepareBlockRemove,createContentBlock} from '@openpresentation/opf-editor/layout';
 export {fitList,type ListFit,type ListValue} from '@openpresentation/opf/composition';
-${registry ? '' : "export {layoutTable,type TableLayout,type TableLayoutOptions,type TableCellLayout} from '@openpresentation/opf/composition';"}
+${verifyTableLayout ? "export {layoutTable,type TableLayout,type TableLayoutOptions,type TableCellLayout} from '@openpresentation/opf/composition';" : ''}
 export {schemaAtPath,listSchemaFields} from '@openpresentation/opf-editor/schema';
 export async function mount(container:HTMLElement):Promise<CanvasEditor> {
  const fonts=await loadBrowserFontRegistry([{url:'/fonts/Roboto.ttf'},{url:'/fonts/RobotoMono.ttf'}]);
