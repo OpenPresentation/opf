@@ -913,22 +913,39 @@ function renderTable(item, box, bound, options) {
   const scale = Math.min(bound.design.dimensions.width, bound.design.dimensions.height) / 720;
   const layout = layoutTable(item.value, box, {scale, minFontSize:(bound.composition ?? bound.geometry.composition).minFontSize, fontFamily:bound.design.fonts.body, textMeasurement:options.textMeasurement, path:item.path});
   const children = [];
+  const borders = [];
   for (const row of layout.rows) for (const cell of row.cells) {
+    const style = cell.style ?? {};
     children.push(tag("rect", {
       x: stableNumber(cell.box.x), y: stableNumber(cell.box.y),
       width: stableNumber(cell.box.width), height: stableNumber(cell.box.height),
-      fill: cell.header ? bound.design.colors.primary : bound.design.colors.surface,
-      stroke: bound.design.colors.border, "stroke-width":1,
-      ...traceAttrs(options, cell.path)
+      fill: style.fill ?? (cell.header ? bound.design.colors.primary : bound.design.colors.surface),
+      stroke: style.borders ? undefined : bound.design.colors.border, "stroke-width":style.borders ? undefined : 1,
+      ...traceAttrs(options, cell.sourcePath ?? cell.path)
     }));
+    if (style.borders) {
+      const {x, y, width, height} = cell.box;
+      const edges = {top:[x,y,x+width,y],right:[x+width,y,x+width,y+height],bottom:[x,y+height,x+width,y+height],left:[x,y,x,y+height]};
+      for (const [edge, [x1,y1,x2,y2]] of Object.entries(edges)) {
+        const border = style.borders[edge];
+        const strokeWidth = border ? border.width * scale : 1;
+        if (strokeWidth === 0) continue;
+        borders.push(tag('line', {
+          x1:stableNumber(x1), y1:stableNumber(y1), x2:stableNumber(x2), y2:stableNumber(y2),
+          stroke:border?.color ?? bound.design.colors.border, 'stroke-width':stableNumber(strokeWidth),
+          'stroke-dasharray':border?.dash === 'dash' ? `${strokeWidth*4} ${strokeWidth*3}` : border?.dash === 'dot' ? `${strokeWidth} ${strokeWidth*2}` : undefined,
+          ...traceAttrs(options, `${cell.sourcePath ?? cell.path}.style.borders.${edge}`)
+        }));
+      }
+    }
     children.push((cell.rich ? renderRichTextBox : renderTextBox)(cell.rich ? cell.value : flattenText(cell.value ?? ""), cell.textBox, bound, {
       path:cell.path, fontSize:15, fontFamily:bound.design.fonts.body,
       fontWeight:cell.header ? 700 : 400, textStyle:cell.textStyle, fit:cell.fit,
-      fill:cell.header ? "#FFFFFF" : bound.design.colors.text, options
+      fill:style.color ?? (cell.header ? "#FFFFFF" : bound.design.colors.text), align:style.align, options
     }));
   }
 
-  return tag("g", traceAttrs(options, item.path), children.join("\n"));
+  return tag("g", traceAttrs(options, item.path), [...children, ...borders].join("\n"));
 }
 
 function renderImportedChart(item, box, bound, options) {
@@ -1280,4 +1297,3 @@ function tag(name, attrs = {}, children = "") {
   if (children === "") return `<${name}${serializedAttrs}/>`;
   return `<${name}${serializedAttrs}>${children}</${name}>`;
 }
-
