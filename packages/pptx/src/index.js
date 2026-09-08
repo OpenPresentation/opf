@@ -1,3 +1,4 @@
+import {importTableFrames} from './table-import.js';
 import {importImageOrientation} from './image-import.js';
 import {nativeBackgroundFill} from './background.js';
 import {importBackground} from './background-import.js';
@@ -282,6 +283,7 @@ function parseRelationships(entries, sourcePartPath) {
       id: relationship.Id,
       type: relationship.Type ?? "",
       target: relationship.Target ?? "",
+      targetMode: relationship.TargetMode ?? "Internal",
       path: resolveRelationshipTarget(sourcePartPath, relationship.Target ?? "")
     });
   }
@@ -404,8 +406,13 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     if (item) items.push(item);
   }
 
-  for (const frame of asArray(tree?.["p:graphicFrame"])) {
-    const item = importGraphicFrame(entries, frame, slidePath, relationships);
+  const frames = asArray(tree?.["p:graphicFrame"]);
+  const tables = frames.some(frame => frame['a:graphic']?.['a:graphicData']?.['a:tbl'])
+    ? importTableFrames(slidePath, {
+      part: (path, parser) => parseRequiredXml(entries, path, parser), relationships: path => parseRelationships(entries, path), bytes: path => entries[path]
+    }, relationships, (frame, cell, code, message) => options.onDiagnostic?.({code, message, path: `slides.${slideIndex}.tables.${frame}${cell ? '.' + cell : ''}`})) : [];
+  for (const [index, frame] of frames.entries()) {
+    const item = importGraphicFrame(entries, frame, slidePath, relationships, tables[index]);
     if (item) items.push(item);
   }
 
@@ -446,7 +453,7 @@ function importShape(shape, dimensions) {
   };
 }
 
-function importGraphicFrame(entries, frame, slidePath, relationships) {
+function importGraphicFrame(entries, frame, slidePath, relationships, importedTable) {
   const bounds = shapeBounds(frame["p:xfrm"]);
   const name = scalarText(frame["p:nvGraphicFramePr"]?.["p:cNvPr"]?.name).trim();
   const graphicData = frame["a:graphic"]?.["a:graphicData"];
@@ -458,7 +465,7 @@ function importGraphicFrame(entries, frame, slidePath, relationships) {
       name,
       payload: {
         type: "table",
-        table: tableFromXml(table)
+        table: importedTable
       }
     };
   }
@@ -630,18 +637,6 @@ function payloadFromSlideItem(item) {
   }
   if (item.kind === "unknown" && item.text) return { type: "text", text: item.text };
   return null;
-}
-
-function tableFromXml(table) {
-  const rows = asArray(table["a:tr"])
-    .map((row) => asArray(row?.["a:tc"]).map((cell) => textFromTextBody(cell?.["a:txBody"])));
-  // DrawingML's firstRow flag applies header-row formatting. Without that
-  // signal, retain all rows as data instead of guessing from their contents.
-  const firstRow = table["a:tblPr"]?.firstRow;
-  const hasHeaders = firstRow === "1" || firstRow === "true";
-  return hasHeaders && rows.length
-    ? { columns: rows[0], rows: rows.slice(1) }
-    : { rows };
 }
 
 function chartFromRelationship(entries, slidePath, relationships, relId) {

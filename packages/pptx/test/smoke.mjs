@@ -85,7 +85,8 @@ assert.deepEqual(imported.slides[0].blocks[0].items, [
 ]);
 assert.equal(imported.slides[0].notes, "Smoke notes");
 assert.equal(imported.slides[1].blocks[0].chart.data.columns[1], "Revenue");
-assert.deepEqual(imported.slides[2].blocks[0].table.columns, ["Field", "Value"]);
+assert.deepEqual(imported.slides[2].blocks[0].table.columns.map(cell => cell.map(run => run.text).join('')), ["Field", "Value"]);
+assert.ok(imported.slides[2].blocks[0].table.columns.every(cell => cell[0].bold === true && cell[0].color === '#FFFFFF'), 'Native header formatting is imported');
 
 const roundTrip = await toPptx(imported);
 const roundTripEntries = unzipSync(roundTrip);
