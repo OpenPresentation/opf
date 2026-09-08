@@ -34,6 +34,8 @@ export interface ImageResolverContext {
 }
 
 export interface ToPptxOptions {
+  /** Default compatible converts WebP to a static PNG. Preserve embeds original WebP bytes. */
+  imageFormat?: "compatible" | "preserve";
   textMeasurement?: TextMeasurement;
   onDiagnostic?: (diagnostic: LayoutDiagnostic) => void;
   baseDir?: string;
@@ -46,6 +48,8 @@ export interface ToPptxOptions {
 }
 
 export interface FromPptxOptions {
+  /** Reports native gradient or picture crop/transform details that OPF import cannot preserve. Picture paths identify the native picture index. */
+  onDiagnostic?: (diagnostic: {code: string; path: string; message: string}) => void;
   fallbackName?: string;
   schema?: string;
 }

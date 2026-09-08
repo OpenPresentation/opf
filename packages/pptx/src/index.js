@@ -1,4 +1,8 @@
-import { composeSlide, resolveCanvasDimensions, resolveFontFamilies, resolveTextStyle } from "@openpresentation/opf/composition";
+import {importImageOrientation} from './image-import.js';
+import {nativeBackgroundFill, readNativeBackground} from './background.js';
+import { webpToPng } from '#image-fallback';
+import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
+import { composeSlide, fitText, textWidthMeasurer, resolveCanvasDimensions, resolveFontFamilies, resolveTextStyle } from "@openpresentation/opf/composition";
 import PptxGenJS from "pptxgenjs";
 import { unzipSync, zipSync } from "fflate";
 import { XMLParser } from "fast-xml-parser";
@@ -152,11 +156,18 @@ const CHART_COLORS = [
 ];
 
 export async function toPptx(input, options = {}) {
+  if (options.imageFormat !== undefined && !['compatible', 'preserve'].includes(options.imageFormat)) {
+    throw new OPFPptxError('invalid-image-format', 'imageFormat must be compatible or preserve.', {path: 'options.imageFormat'});
+  }
   const presentation = parseInput(input);
   assertValidBoundary(presentation);
 
   const context = resolvePresentationContext(presentation, {...options,textMeasurement:undefined});
   context.listMarkers = new Map();
+  context.tableHeaders = new Map();
+  context.imagePlacements = new Map();
+  context.backgroundFills = new Map();
+  context.imageFormat = options.imageFormat ?? "compatible";
   const pptx = new PptxGenJS();
   configurePresentation(pptx, presentation, {...context,fonts:resolveSlideContext(presentation,presentation.slides[0],context,options).fonts});
 
@@ -206,7 +217,7 @@ export async function fromPptx(input, options = {}) {
   if (dimensions) imported.design = { dimensions };
 
   for (let index = 0; index < slidePaths.length; index += 1) {
-    imported.slides.push(importSlide(entries, slidePaths[index], index, dimensions));
+    imported.slides.push(importSlide(entries, slidePaths[index], index, dimensions, options));
   }
 
   const result = validatePresentation(imported);
@@ -346,7 +357,7 @@ function dimensionsFromPresentation(presentationRoot) {
   };
 }
 
-function importSlide(entries, slidePath, slideIndex, presentationDimensions) {
+function importSlide(entries, slidePath, slideIndex, presentationDimensions, options) {
   const doc = parseRequiredXml(entries, slidePath);
   const slideRoot = doc["p:sld"];
   if (!slideRoot) {
@@ -360,17 +371,10 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions) {
   const slide = {};
   if (slideRoot.show === "0") slide.hidden = true;
 
-  const background = slideBackground(slideRoot);
-  if (background) {
-    slide.design = {
-      background: {
-        type: "solid",
-        color: background
-      }
-    };
-  }
+  const background = readNativeBackground(slideRoot["p:cSld"]?.["p:bg"]?.["p:bgPr"], resolveCanvasDimensions(dimensions), diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}.design.background`}));
+  if (background) slide.design = {background};
 
-  const items = collectSlideItems(entries, slideRoot, slidePath, relationships, dimensions)
+  const items = collectSlideItems(entries, slideRoot, slidePath, relationships, dimensions, options, slideIndex)
     .sort(comparePositionedItems);
   const titleItem = takeTitleItem(items, dimensions);
   if (titleItem) slide.title = firstLine(titleItem.text);
@@ -385,14 +389,10 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions) {
   const notes = readSlideNotes(entries, relationships);
   if (notes) slide.notes = notes;
 
-  if (!slide.title && !slide.blocks && !slide.notes) {
-    slide.title = `Slide ${slideIndex + 1}`;
-  }
-
   return slide;
 }
 
-function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensions) {
+function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensions, options, slideIndex) {
   const tree = slideRoot["p:cSld"]?.["p:spTree"];
   const items = [];
 
@@ -406,8 +406,9 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     if (item) items.push(item);
   }
 
-  for (const picture of asArray(tree?.["p:pic"])) {
-    const item = importPicture(entries, picture, slidePath, relationships);
+  for (const [index, picture] of asArray(tree?.["p:pic"]).entries()) {
+    const report = diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}.pictures.${index}`});
+    const item = importPicture(entries, picture, slidePath, relationships, report);
     if (item) items.push(item);
   }
 
@@ -480,13 +481,13 @@ function importGraphicFrame(entries, frame, slidePath, relationships) {
   };
 }
 
-function importPicture(entries, picture, slidePath, relationships) {
+function importPicture(entries, picture, slidePath, relationships, report) {
   const bounds = shapeBounds(picture["p:spPr"]?.["a:xfrm"]);
   const name = scalarText(picture["p:nvPicPr"]?.["p:cNvPr"]?.name).trim();
   const alt = scalarText(picture["p:nvPicPr"]?.["p:cNvPr"]?.descr).trim();
   const relId = picture["p:blipFill"]?.["a:blip"]?.["r:embed"];
   const relationship = relationships.get(relId);
-  const bytes = relationship?.path ? entries[relationship.path] : null;
+  let bytes = relationship?.path ? entries[relationship.path] : null;
   if (!bytes) {
     return {
       kind: "unknown",
@@ -496,6 +497,12 @@ function importPicture(entries, picture, slidePath, relationships) {
     };
   }
 
+  const crop = picture["p:blipFill"]?.["a:srcRect"];
+  if (crop && ['l','r','t','b'].some(key => Number(crop[key] ?? 0) !== 0)) {
+    report({code: 'unsupported-image-crop', message: 'Native picture crop is not represented by the imported OPF asset; the full image was retained.'});
+  }
+  bytes = importImageOrientation(bytes, picture["p:spPr"]?.["a:xfrm"], report);
+
   return {
     kind: "image",
     bounds,
@@ -503,7 +510,7 @@ function importPicture(entries, picture, slidePath, relationships) {
     payload: {
       type: "image",
       image: {
-        src: `data:${mediaTypeForPath(relationship.path)};base64,${bytesToBase64(bytes)}`,
+        src: `data:${rasterMetadata(bytes)?.mediaType ?? mediaTypeForPath(relationship.path)};base64,${bytesToBase64(bytes)}`,
         ...(alt ? { alt } : {})
       }
     }
@@ -624,13 +631,14 @@ function payloadFromSlideItem(item) {
 
 function tableFromXml(table) {
   const rows = asArray(table["a:tr"])
-    .map((row) => asArray(row?.["a:tc"]).map((cell) => textFromTextBody(cell?.["a:txBody"])))
-    .filter((row) => row.some(Boolean));
-  if (rows.length === 0) return { rows: [] };
-  return {
-    columns: rows[0],
-    rows: rows.slice(1)
-  };
+    .map((row) => asArray(row?.["a:tc"]).map((cell) => textFromTextBody(cell?.["a:txBody"])));
+  // DrawingML's firstRow flag applies header-row formatting. Without that
+  // signal, retain all rows as data instead of guessing from their contents.
+  const firstRow = table["a:tblPr"]?.firstRow;
+  const hasHeaders = firstRow === "1" || firstRow === "true";
+  return hasHeaders && rows.length
+    ? { columns: rows[0], rows: rows.slice(1) }
+    : { rows };
 }
 
 function chartFromRelationship(entries, slidePath, relationships, relId) {
@@ -715,10 +723,6 @@ function readSlideNotes(entries, relationships) {
   return bodyNotes.join("\n").trim();
 }
 
-function slideBackground(slideRoot) {
-  const color = slideRoot["p:cSld"]?.["p:bg"]?.["p:bgPr"]?.["a:solidFill"]?.["a:srgbClr"]?.val;
-  return color ? `#${normalizeHex(color)}` : "";
-}
 
 function textFromTextBody(txBody) {
   return readParagraphs(txBody).map((paragraph) => paragraph.text).filter(Boolean).join("\n").trim();
@@ -755,7 +759,9 @@ function isFullSlide(bounds, dimensions) {
 function emuToInches(value) {
   const number = Number(value);
   if (!Number.isFinite(number)) return null;
-  return Math.round((number / EMUS_PER_INCH) * 1_000_000) / 1_000_000;
+  // Keep native precision through layout/rendering. Rounding inches to six
+  // decimals turns a 1280-pixel canvas into 1279.999968 and changes raster edges.
+  return number / EMUS_PER_INCH;
 }
 
 function asArray(value) {
@@ -805,7 +811,7 @@ function assertValidBoundary(presentation) {
 
 function resolvePresentationContext(presentation, options) {
   const design = presentation.design ?? {};
-  const theme = resolveCatalogRecord(presentation, "themes", design.theme, DEFAULTS.theme);
+  const theme = resolveDesignRecord(presentation, "themes", design.theme, DEFAULTS.theme);
   const colorScheme = resolveDesignRecord(
     presentation,
     "colorSchemes",
@@ -833,6 +839,7 @@ function resolvePresentationContext(presentation, options) {
     layoutName: "OPF_CANVAS",
     dimensions,
     colorScheme,
+    backgroundDefinition: design.background ?? theme?.background,
     fonts,
     colors: {
       background,
@@ -840,7 +847,7 @@ function resolvePresentationContext(presentation, options) {
       mutedText: normalizeHex(colorScheme.textSecondary ?? (darkBackground ? colorScheme.light2 : colorScheme.dark2) ?? "#475569"),
       accent: normalizeHex(colorScheme.primary ?? colorScheme.accent1 ?? "#2874A6"),
       surface: normalizeHex(colorScheme.surface ?? (darkBackground ? colorScheme.dark2 : colorScheme.light2) ?? "#F8FAFC"),
-      border: normalizeHex(colorScheme.accent3 ?? "#CBD5E1")
+      border: normalizeHex(colorScheme.accent5 ?? "#CBD5E1")
     }
   };
 }
@@ -867,6 +874,10 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
   const slide = pptx.addSlide();
   const slideContext = resolveSlideContext(presentation, opfSlide, context, options);
   slide.background = { color: slideContext.colors.background };
+  const backgroundFill = nativeBackgroundFill(slideContext.backgroundDefinition, {
+    width: slideContext.dimensions.widthInches, height: slideContext.dimensions.heightInches
+  }, slideContext.colors.background);
+  if (backgroundFill) context.backgroundFills.set(`ppt/slides/slide${slideIndex + 1}.xml`, backgroundFill);
   slide.color = slideContext.colors.text;
   if (opfSlide.hidden === true) slide.hidden = true;
 
@@ -897,7 +908,7 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
     } else if (item.field === "text" && typeof item.value === "string") {
       slide.addText(item.text.lines.join("\n"), {...textBoxOptions(region, slideContext, item.text.fontSize * 0.75),fontFace:item.textStyle.fontFamily,bold:item.textStyle.fontWeight>=600,italic:item.textStyle.italic});
     } else {
-      await addPayload(slide, presentation, item.payload, region, item.path, slideContext, options);
+      await addPayload(slide, presentation, item.payload, region, item.path, { ...slideContext, composition: item.composition, contentAlignment: opfSlide.design?.contentAlignment ?? presentation.design?.contentAlignment ?? "left" }, options);
     }
   }
 
@@ -911,7 +922,7 @@ function resolveSlideContext(presentation, slide, baseContext, options) {
     || Math.abs(resolved.dimensions.heightInches - baseContext.dimensions.heightInches) > 1e-6) {
     throw new OPFPptxError("mixed-slide-dimensions", "PowerPoint requires one canvas size per presentation. Set dimensions on the deck or export this slide separately.");
   }
-  return { ...baseContext, colorScheme: resolved.colorScheme, fonts: resolved.fonts, colors: resolved.colors };
+  return { ...baseContext, backgroundDefinition: resolved.backgroundDefinition, colorScheme: resolved.colorScheme, fonts: resolved.fonts, colors: resolved.colors, imageFill: effective.design.imageFill ?? "fit" };
 }
 
 function fieldToType(field) {
@@ -937,7 +948,7 @@ async function addPayload(slide, presentation, payload, region, path, context, o
       addChartPayload(slide, payload.chart, region, context);
       break;
     case "table":
-      addTablePayload(slide, payload.table, region, context);
+      addTablePayload(slide, payload.table, region, context, options, path);
       break;
     case "code":
       addCodePayload(slide, payload.code, region, context);
@@ -1048,8 +1059,11 @@ async function addImagePayload(slide, presentation, asset, region, path, context
     addPlaceholderPayload(slide, "Image", asset, region, context);
     return;
   }
+  const objectName = `OPF image ${context.imagePlacements.size + 1}`;
+  context.imagePlacements.set(objectName, { region, mode: context.imageFill, path });
   slide.addImage({
     ...resolved,
+    objectName,
     x: region.x,
     y: region.y,
     w: region.w,
@@ -1084,36 +1098,49 @@ function addChartPayload(slide, chart, region, context) {
   });
 }
 
-function addTablePayload(slide, table, region, context) {
+function addTablePayload(slide, table, region, context, options, path) {
   const scale = Math.min(context.dimensions.widthInches * 96, context.dimensions.heightInches * 96) / 720;
-  const rows = [];
-  if (Array.isArray(table?.columns) && table.columns.length > 0) {
-    rows.push(table.columns.map((value) => ({
-      text: stringifyText(value),
-      options: {
-        bold: true,
-        color: "FFFFFF",
-        fill: { color: context.colors.accent }
-      }
-    })));
-  }
-  if (Array.isArray(table?.rows)) {
-    for (const row of table.rows) {
-      rows.push((Array.isArray(row) ? row : [row]).map((value) => ({
-        text: stringifyText(value),
-        options: { color: context.colors.text, fill: {color:context.colors.surface} }
-      })));
-    }
-  }
-
-  if (rows.length === 0) {
+  const hasHeaders = Array.isArray(table?.columns) && table.columns.length > 0;
+  const sourceRows = [...(hasHeaders ? [table.columns] : []), ...(table?.rows ?? [])];
+  if (sourceRows.length === 0) {
     addPlaceholderPayload(slide, "Table", table, region, context);
     return;
   }
 
-  const columnCount = Math.max(1, ...rows.map(row => row.length));
-  const rowHeight = Math.min(54 * scale / 96, region.h / rows.length);
+  const columnCount = Math.max(1, ...sourceRows.map(row => row.length));
+  const rowHeight = Math.min(54 * scale / 96, region.h / sourceRows.length);
+  const cellBox = {
+    x: 0, y: 0,
+    width: Math.max(scale, region.w * 96 / columnCount - 20 * scale),
+    height: Math.max(scale, rowHeight * 96 - 12 * scale),
+  };
+  const rows = sourceRows.map((row, rowIndex) => Array.from({ length: columnCount }, (_, columnIndex) => {
+    const header = hasHeaders && rowIndex === 0;
+    const cellPath = header ? `${path}.columns.${columnIndex}` : `${path}.rows.${rowIndex - Number(hasHeaders)}.${columnIndex}`;
+    const text = stringifyText(row[columnIndex]);
+    const style = resolveTextStyle({ fontFamily: context.fonts.body, fontWeight: header ? 700 : 400, italic: false, path: cellPath }, options.textMeasurement);
+    const fit = fitText(text, cellBox, 15 * scale, (context.composition?.minFontSize ?? 16) * scale, textWidthMeasurer(style, options.textMeasurement));
+    return {
+      // Keep native wrapping and the original cell value: inserting measured
+      // soft wraps into the text would change a later import or copy operation.
+      text,
+      options: {
+        fontFace: style.fontFamily,
+        fontSize: fit.fontSize * 0.75,
+        bold: style.fontWeight >= 600,
+        italic: style.italic,
+        lineSpacing: fit.lineHeight * 0.75,
+        paraSpaceAfter: 0,
+        align: context.contentAlignment,
+        color: header ? "FFFFFF" : context.colors.text,
+        fill: { color: header ? context.colors.accent : context.colors.surface },
+      },
+    };
+  }));
+  const objectName = `OPF table ${context.tableHeaders.size + 1}`;
+  context.tableHeaders.set(objectName, hasHeaders);
   slide.addTable(rows, {
+    objectName,
     x: region.x,
     y: region.y,
     w: region.w,
@@ -1477,7 +1504,7 @@ function isDarkHex(value) {
   return (red * 299 + green * 587 + blue * 114) / 1000 < 128;
 }
 
-function normalizePptxZip(raw, context) {
+async function normalizePptxZip(raw, context) {
   let entries;
   try {
     entries = unzipSync(raw);
@@ -1487,18 +1514,59 @@ function normalizePptxZip(raw, context) {
     });
   }
 
+  const imageSources = new Map();
+  for (const [part, bytes] of Object.entries(entries)) {
+    if (!/^ppt\/slides\/slide\d+\.xml$/.test(part)) continue;
+    const relationships = parseRelationships(entries, part);
+    for (const [picture] of decodeText(bytes).matchAll(/<p:pic>[\s\S]*?<\/p:pic>/g)) {
+      const placement = context.imagePlacements.get(picture.match(/name="(OPF image \d+)"/)?.[1]);
+      const id = picture.match(/<a:blip\b[^>]*r:embed="([^"]+)"/)?.[1];
+      if (placement) imageSources.set(relationships.get(id)?.path, placement.path);
+    }
+  }
+  const imageMetadata = new Map();
+  for (const [part, bytes] of Object.entries(entries)) {
+    if (!part.startsWith('ppt/media/')) continue;
+    let metadata = rasterMetadata(bytes);
+    if (metadata?.mediaType === 'image/webp' && context.imageFormat === 'compatible') {
+      try {
+        if (metadata.width * metadata.height > 40_000_000) throw new Error('Image dimensions exceed the 40 megapixel conversion limit.');
+        const png = await webpToPng(bytes);
+        metadata = rasterMetadata(png);
+        if (metadata?.mediaType !== 'image/png') throw new Error('The local decoder did not return a PNG.');
+        entries[part] = png;
+      } catch (error) {
+        throw new OPFPptxError('image-conversion-failed', 'WebP could not be converted to a compatible PNG.', {path: imageSources.get(part) ?? part, cause: errorMessage(error)});
+      }
+    }
+    imageMetadata.set(part, metadata);
+  }
   const output = {};
   const renameMaps = buildRenameMaps(Object.keys(entries));
+  // The host may transform assets or supply a filename/MIME hint that no
+  // longer matches its bytes. Native package metadata must describe the bytes.
+  renameMaps.media = new Map();
+  for (const [path, metadata] of imageMetadata) {
+    if (!metadata) continue;
+    const extension = metadata.mediaType.slice('image/'.length);
+    const currentExtension = path.split('.').at(-1).toLowerCase();
+    if (currentExtension === extension || (extension === 'jpeg' && currentExtension === 'jpg')) continue;
+    const target = path.replace(/\.[^/.]+$/, `.${extension}`);
+    if (target !== path && Object.hasOwn(entries, target)) throw new OPFPptxError('packaging-failed', 'Normalized image paths collide.', {path, target});
+    renameMaps.media.set(path, target);
+  }
   for (const path of Object.keys(entries).sort()) {
     const normalizedPath = normalizePartPath(path, renameMaps);
-    const bytes = normalizePartBytes(path, entries[path], context, renameMaps);
+    const bytes = normalizePartBytes(path, entries[path], context, renameMaps, entries, imageMetadata);
     output[normalizedPath] = [bytes, {
       level: context.compressionLevel,
       mtime: context.zipDate
     }];
   }
 
-  return zipSync(output, {
+  // Sort after chart/worksheet renaming; source counters can cross digit widths.
+  const sortedOutput = Object.fromEntries(Object.keys(output).sort().map(path => [path, output[path]]));
+  return zipSync(sortedOutput, {
     level: context.compressionLevel,
     mtime: context.zipDate
   });
@@ -1510,7 +1578,8 @@ function normalizeCoreProperties(xml, timestamp) {
     .replace(/<dcterms:modified xsi:type="dcterms:W3CDTF">[^<]*<\/dcterms:modified>/g, `<dcterms:modified xsi:type="dcterms:W3CDTF">${timestamp}</dcterms:modified>`);
 }
 
-function normalizePartBytes(path, bytes, context, renameMaps) {
+function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMetadata) {
+  if (imageMetadata.has(path)) return normalizeImageOrientation(bytes, imageMetadata.get(path));
   if (path.endsWith(".xlsx")) {
     return normalizeNestedZip(bytes, context);
   }
@@ -1519,7 +1588,53 @@ function normalizePartBytes(path, bytes, context, renameMaps) {
   }
   if (isXmlPart(path)) {
     let xml=decodeText(bytes);
+    if (path === '[Content_Types].xml') {
+      // Explicit per-part types also correct PptxGenJS's image/jpg default.
+      const overrides = [...imageMetadata].filter(([, metadata]) => metadata).map(([part, metadata]) =>
+        `<Override PartName="/${part}" ContentType="${metadata.mediaType}"/>`).join('');
+      xml = xml.replace('</Types>', `${overrides}</Types>`);
+    }
     if (/^ppt\/slides\/slide\d+\.xml$/.test(path)) {
+      const fill = context.backgroundFills.get(path);
+      if (fill) xml = xml.replace(/<p:bg>[\s\S]*?<\/p:bg>/, `<p:bg><p:bgPr>${fill}<a:effectLst/></p:bgPr></p:bg>`);
+      // PptxGenJS table IDs can collide with other objects on the same slide.
+      // Preserve existing IDs and allocate unused IDs only for duplicates. This
+      // export path creates no connector attachments or animation ID references.
+      const objectIds = [...xml.matchAll(/<p:cNvPr\b[^>]*\bid="(\d+)"/g)].map(match => Number(match[1]));
+      let nextObjectId = Math.max(0, ...objectIds) + 1;
+      const seenObjectIds = new Set();
+      xml = xml.replace(/(<p:cNvPr\b[^>]*\bid=")(\d+)(")/g, (node, before, rawId, after) => {
+        const id = Number(rawId);
+        if (seenObjectIds.has(id)) return `${before}${nextObjectId++}${after}`;
+        seenObjectIds.add(id);
+        return node;
+      });
+      // PptxGenJS 4 has no firstRow option. Set the native flag explicitly so
+      // viewers and later imports distinguish column labels from data rows.
+      xml = xml.replace(/<p:graphicFrame>([\s\S]*?)<\/p:graphicFrame>/g, frame => {
+        const name = frame.match(/name="(OPF table \d+)"/)?.[1];
+        if (!context.tableHeaders.has(name)) return frame;
+        return frame.replace('<a:tblPr/>', `<a:tblPr firstRow="${context.tableHeaders.get(name) ? 1 : 0}"/>`);
+      });
+      // Image data is already resolved and embedded by PptxGenJS. Read those
+      // exact bytes instead of fetching or resolving the source a second time.
+      const relationships = parseRelationships(entries, path);
+      xml = xml.replace(/<p:pic>([\s\S]*?)<\/p:pic>/g, picture => {
+        const placement = context.imagePlacements.get(picture.match(/name="(OPF image \d+)"/)?.[1]);
+        if (!placement) return picture;
+        const id = picture.match(/<a:blip\b[^>]*r:embed="([^"]+)"/)?.[1];
+        const dimensions = imageMetadata.get(relationships.get(id)?.path);
+        if (!dimensions) throw new OPFPptxError("unsupported-image-dimensions", "Image fitting requires readable PNG, JPEG, GIF or WebP dimensions. Supply a supported raster image through imageResolver.", { path: placement.path });
+        const fitted = pictureTransform(dimensions, placement.region, placement.mode);
+        const emu = value => Math.round(value * EMUS_PER_INCH);
+        const transformAttrs = `${fitted.rotation ? ` rot="${fitted.rotation * 60000}"` : ''}${fitted.flipH ? ' flipH="1"' : ''}${fitted.flipV ? ' flipV="1"' : ''}`;
+        picture = picture.replace(/<a:xfrm\b[^>]*>[\s\S]*?<\/a:xfrm>/, `<a:xfrm${transformAttrs}><a:off x="${emu(fitted.x)}" y="${emu(fitted.y)}"/><a:ext cx="${emu(fitted.w)}" cy="${emu(fitted.h)}"/></a:xfrm>`);
+        if (fitted.crop) {
+          const attrs = Object.entries(fitted.crop).map(([key, value]) => `${key}="${value}"`).join(' ');
+          picture = picture.replace('<a:stretch>', `<a:srcRect ${attrs}/><a:stretch>`);
+        }
+        return picture;
+      });
       // Native bullets otherwise inherit the first rich run's size, font and
       // color, which can differ from the measured list marker.
       xml=xml.replace(/<p:sp>([\s\S]*?)<\/p:sp>/g,(shape)=>{
@@ -1561,7 +1676,7 @@ function numberedFilenameMap(paths, pattern) {
 }
 
 function normalizePartPath(path, renameMaps) {
-  return normalizePartReferences(path, renameMaps);
+  return normalizePartReferences(renameMaps.media?.get(path) ?? path, renameMaps);
 }
 
 function normalizePartReferences(value, renameMaps) {
@@ -1575,6 +1690,14 @@ function normalizePartReferences(value, renameMaps) {
       `Microsoft_Excel_Worksheet${newId}.xlsx`
     );
   }
+  // Rewrite package references only, not user-visible text containing paths.
+  output = output.replace(/\b(Target|PartName)="([^"]+)"/g, (attribute, name, value) => {
+    const prefix = value.startsWith('../media/') ? '../' : value.startsWith('/ppt/media/') ? '/ppt/' : null;
+    if (!prefix) return attribute;
+    const part = 'ppt/' + value.slice(prefix.length);
+    const target = renameMaps.media?.get(part);
+    return target ? `${name}="${prefix}${target.slice('ppt/'.length)}"` : attribute;
+  });
   return output;
 }
 

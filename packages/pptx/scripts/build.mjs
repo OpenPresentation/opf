@@ -7,3 +7,10 @@ await rm(dist, { recursive: true, force: true });
 await mkdir(dist, { recursive: true });
 await copyFile(new URL("src/index.js", root), new URL("index.js", dist));
 await copyFile(new URL("src/index.d.ts", root), new URL("index.d.ts", dist));
+await copyFile(new URL("src/image-geometry.js", root), new URL("image-geometry.js", dist));
+for (const name of ['image-fallback-node.js', 'image-fallback-browser.js']) {
+  await copyFile(new URL(`src/${name}`, root), new URL(name, dist));
+}
+
+await copyFile(new URL('src/background.js', root), new URL('background.js', dist));
+await copyFile(new URL('src/image-import.js', root), new URL('image-import.js', dist));

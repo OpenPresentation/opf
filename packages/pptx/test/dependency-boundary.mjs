@@ -24,6 +24,18 @@ register("data:text/javascript," + encodeURIComponent(`
 `), import.meta.url);
 
 await import("./smoke.mjs");
+await import("./background.mjs");
+await import("./native-background.mjs");
+await import("./table-layout.mjs");
+await import("./table-import.mjs");
+await import("./object-ids.mjs");
+await import("./image-fit.mjs");
+await import("./image-orientation.mjs");
+await import("./image-import.mjs");
+await import("./image-media-type.mjs");
+await import("./webp-fallback.mjs");
+await import("./image-fallback-boundary.mjs");
+await import("./export-corpus.mjs");
 const { toPptx } = await import("../dist/index.js");
 const { unzipSync } = await import("fflate");
 const png = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aO8sAAAAASUVORK5CYII=", "base64");

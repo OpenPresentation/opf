@@ -1,0 +1,11 @@
+# Native Keynote background references
+
+These project-authored MIT fixtures were exported by Keynote 14.4 on macOS on 2026-09-08. They contain only solid/gradient backgrounds, not user documents. `opaque.opf.json` covers six landscape angles; `opacity.opf.json` covers portrait solid/gradient alpha, differing stop alpha, empty gradients and single-stop gradients. Source exporter commit: 4a3a6e3, using native fill implementation 4c06cf7.
+
+PNG files are the unchanged native exports. `manifest.json` records their SHA-256 hashes. `keynote-roundtrip.pptx` is Keynote's PowerPoint export of the opaque deck; only ZIP order/timestamps and any core-property author/date values were normalized. Its presentation parts are unchanged. The manifest also records the original export hash. No original author/date properties were present in this capture.
+
+The six opaque PNGs are 960×540; six transparent portrait PNGs are 540×960. Native PNGs carry ICC profiles. Tests decode both sides to sRGB RGBA and render the source at native pixel dimensions without resampling. They compare alpha separately for transparent fills, with premultiplied-color bounds to avoid mistaking low-alpha unpremultiplication differences for geometry errors. Observed opaque maximum difference is 4/255, opaque mean below 0.38; transparent maximum straight-channel difference is 8/255 and alpha difference at most 1/255. Test bounds allow small rounding variation and are not a claim of exact pixels across engines.
+
+Reproduce using the current exporter, then open the generated PPTX in Keynote. Check the inspector's editable Advanced Gradient Fill controls. Export all slides through File → Export To → Images → PNG. For the opacity group, enable Export with transparent backgrounds. Export the opaque deck to a new PowerPoint file as well. Verify actual UI state and outputs; do not substitute Quick Look thumbnails, which rendered these gradients as a flat average color. Review any fixture or threshold changes against the source and native outputs.
+
+Normal tests, installation, browser use and CI do not need Keynote or a paid service. Keynote is only an optional source of fresh native verification artifacts. Microsoft PowerPoint remains a separate verification target. The imported background-only decks must remain blank; no generated slide-title text is allowed.
