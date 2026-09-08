@@ -1,0 +1,45 @@
+name: Publish OPF CLI
+on:
+  push:
+    tags: [cli-v*]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: publish-cli
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4.4.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 24
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+      - run: npm install -g npm@11.16.0
+      - run: pnpm install --frozen-lockfile
+      - name: Verify release tag
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          VERSION="$(node -p "require('./packages/cli/package.json').version")"
+          test "${GITHUB_REF_NAME}" = "cli-v${VERSION}"
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm check:breaking
+      - name: Verify standalone executable installation
+        run: pnpm test:cli:packed
+      # Configure this workflow as the CLI's npm trusted publisher after the
+      # authenticated first publication. No long-lived npm token is required here.
+      - name: Publish bundled CLI
+        working-directory: packages/cli
+        run: npm publish --access public --provenance

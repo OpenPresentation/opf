@@ -13,10 +13,10 @@ pnpm install
 pnpm test:cli:packed
 ```
 
-That creates `artifacts/cli/openpresentation-cli-0.1.0-preview.1.tgz`. Install it globally using its absolute path:
+That creates `artifacts/cli/openpresentation-cli-0.1.0.tgz`. Install it globally using its absolute path:
 
 ```sh
-npm install -g /absolute/path/to/opf/artifacts/cli/openpresentation-cli-0.1.0-preview.1.tgz
+npm install -g /absolute/path/to/opf/artifacts/cli/openpresentation-cli-0.1.0.tgz
 opf --version
 ```
 
