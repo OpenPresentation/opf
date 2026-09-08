@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Render embedded WebP images in PNG/PDF output instead of dropping them. Preserve alpha, EXIF orientation, fit/crop and the first animation frame without modifying source SVG.
+- Add lazy Node-only Sharp 0.35.4 decoding; raise the Node minimum to 20.9.0. Report malformed embedded images with their source path and enforce a 40-megapixel input limit.
+- Check decoded PNG pixels, actual PDF image streams/alpha masks, image URI encodings and all 805 unchanged raster baselines.
+
 ## 0.1.1
 
 - Include rich-text line offsets and measured boxes in opt-in SVG tracing, including empty and trailing lines, for editor caret placement. Normal SVG/PNG output is unchanged; all 805 raster checks pass.
