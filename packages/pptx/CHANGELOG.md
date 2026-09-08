@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Preserve native dimension precision on import so standard-size canvases do not acquire small raster differences through rounded inch values.
+
 - Restore native JPEG quarter-turns and mirrors into EXIF on import without recompressing pixels; preserve source JPEG bytes for this exporter's eight supported orientations.
 - Add bounded EXIF insertion/update that retains existing metadata offsets and links, plus import diagnostics for unsupported crop, rotation and metadata cases.
 

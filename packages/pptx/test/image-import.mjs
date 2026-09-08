@@ -3,6 +3,7 @@ import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {unzipSync,zipSync} from 'fflate';
 import sharp from 'sharp';
 import {validatePresentation} from '@openpresentation/opf';
+import {resolveCanvasDimensions} from '@openpresentation/opf/composition';
 const {toPptx,fromPptx}=await import(process.env.OPF_TEST_PPTX_MODULE ?? '../dist/index.js');
 import {rasterMetadata} from '../dist/image-geometry.js';
 import {importImageOrientation} from '../dist/image-import.js';
@@ -18,6 +19,7 @@ for(const imageFill of ['fit','crop'])for(let orientation=1;orientation<=8;orien
  const imported=await fromPptx(native,{onDiagnostic:d=>reports.push(d)}),bytes=imageBytes(imported);
  assert.deepEqual(bytes,source,'Restore exact source JPEG metadata without recompressing pixels');
  assert.equal(sourceImage(imported).alt,'Orientation specimen');
+ assert.deepEqual(resolveCanvasDimensions(imported.design.dimensions),{width:1280,height:720},'Native canvas dimensions must retain full precision');
  assert.deepEqual(await raw(bytes),await raw(source),'Decoded pixels retain source orientation');
  assert.equal(validatePresentation(imported).valid,true);assert.deepEqual(Buffer.from(native),before,'Input PPTX is unchanged');
  assert.deepEqual(imageBytes(await fromPptx(await toPptx(imported))),source,'Repeated image round-trip stays stable');

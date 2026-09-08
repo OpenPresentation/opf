@@ -763,7 +763,9 @@ function isFullSlide(bounds, dimensions) {
 function emuToInches(value) {
   const number = Number(value);
   if (!Number.isFinite(number)) return null;
-  return Math.round((number / EMUS_PER_INCH) * 1_000_000) / 1_000_000;
+  // Keep native precision through layout/rendering. Rounding inches to six
+  // decimals turns a 1280-pixel canvas into 1279.999968 and changes raster edges.
+  return number / EMUS_PER_INCH;
 }
 
 function asArray(value) {
