@@ -153,7 +153,12 @@ export interface RichTextFragment {
 }
 export interface RichTextLine { fragments: RichTextFragment[]; width: number; y: number; baseline: number; height: number }
 export interface RichTextFit extends TextFit { richLines: RichTextLine[]; height: number }
-export interface RichTextOptions { style: TextStyle; textMeasurement?: TextMeasurement }
+export interface RichTextOptions {
+  style: TextStyle;
+  textMeasurement?: TextMeasurement;
+  /** Use one measured line advance for every line, as native table cells do. */
+  uniformLineHeight?: boolean;
+}
 
 /** Fit mixed styles without flattening font metrics. Run fontSize is in points. */
 export function fitRichText(input: readonly (string | RichTextRun)[], box: LayoutBox, requestedSize = 25, minFontSize = 16, options: RichTextOptions = {style:{fontFamily:'sans-serif',fontWeight:400}}): RichTextFit {
@@ -209,6 +214,16 @@ function richTextLayouter(input: readonly (string | RichTextRun)[], box: LayoutB
       const parts=fragments(range.start,range.end),ascent=Math.max(fontSize,...parts.map(part=>part.fontSize-part.baselineShift)),descent=Math.max(fontSize*.22,...parts.map(part=>part.fontSize*.22+part.baselineShift));
       const height=ascent+descent,line={fragments:parts,width:parts.reduce((sum,p)=>sum+p.width,0),y,baseline:y+ascent,height};y+=height;return line;
     });
+    if (options.uniformLineHeight) {
+      const height = Math.max(...richLines.map(line => line.height));
+      y = 0;
+      for (const line of richLines) {
+        line.baseline += y - line.y;
+        line.y = y;
+        line.height = height;
+        y += height;
+      }
+    }
     return {lines:ranges.map(range=>whole.slice(range.start,range.end)),fontSize,lineHeight:Math.max(fontSize*1.22,...richLines.map(line=>line.height)),richLines,height:y,overflow:y>box.height+.01||richLines.some(line=>line.width>box.width+.01)};
   };
   return layout;
@@ -275,19 +290,79 @@ function contentText(field: string, value: unknown): string | undefined {
   if (field === "quote") return flatten(record(value).text ?? value);
   return undefined;
 }
-function tableOverflows(value: unknown, box: LayoutBox, scale: number, settings: Composition, options: ComposeSlideOptions): boolean {
-  const table = record(value), rows: unknown[][] = Array.isArray(table.rows) ? table.rows : [];
-  const allRows = Array.isArray(table.columns) && table.columns.length ? [table.columns, ...rows] : rows;
-  const columns = Math.max(1, ...allRows.map(row => row.length));
-  const width = box.width / columns - 20 * scale;
-  const height = Math.min(54 * scale, box.height / Math.max(1, allRows.length)) - 12 * scale;
-  return width <= 0 || height <= 0 || allRows.some((row,index) => row.some(value => {
-    const style = {fontFamily:options.fonts?.body ?? "sans-serif",fontWeight:index===0 && table.columns?.length ? 700 : 400};
-    const cell = {x:0,y:0,width,height}, minimum = (settings.minFontSize ?? 16)*scale;
-    return (Array.isArray(value)
-      ? fitRichText(value,cell,15*scale,minimum,{style,textMeasurement:options.textMeasurement})
-      : fitText(flatten(value),cell,15*scale,minimum,textWidthMeasurer(resolveTextStyle(style,options.textMeasurement),options.textMeasurement))).overflow;
-  }));
+export interface TableLayoutOptions {
+  scale?: number;
+  minFontSize?: number;
+  fontFamily?: string;
+  textMeasurement?: TextMeasurement;
+  path?: string;
+}
+export interface TableCellLayout {
+  value: unknown;
+  path: string;
+  header: boolean;
+  rich: boolean;
+  box: LayoutBox;
+  textBox: LayoutBox;
+  textStyle: TextStyle;
+  fit: TextFit | RichTextFit;
+}
+export interface TableRowLayout { box: LayoutBox; cells: TableCellLayout[] }
+export interface TableLayout { rows: TableRowLayout[]; columnCount: number; height: number; overflow: boolean }
+
+/** Shared cell geometry and font fitting for SVG, native PPTX and pagination.
+ * Short rows retain their 54px preferred height. Multiline rows use the space
+ * their text needs; constrained tables consume row padding before readable text.
+ * All dimensions are canvas pixels; minFontSize is an unscaled canvas size.
+ */
+export function layoutTable(value: unknown, box: LayoutBox, options: TableLayoutOptions = {}): TableLayout {
+  const scale = options.scale ?? 1, requested = 15 * scale, minimum = (options.minFontSize ?? 16) * scale;
+  if (![box.x,box.y,box.width,box.height,scale,minimum].every(Number.isFinite) || box.width <= 0 || box.height <= 0 || scale <= 0 || minimum <= 0) throw new RangeError('Table dimensions, scale and font sizes must be finite and positive.');
+  const table = record(value), headers = Array.isArray(table.columns) && table.columns.length > 0;
+  const values: unknown[][] = [...(headers ? [table.columns] : []), ...(Array.isArray(table.rows) ? table.rows : [])];
+  const columnCount = Math.max(1, ...values.map(row => row.length)), cellWidth = box.width / columnCount;
+  const width = Math.max(scale, cellWidth - 20 * scale), padding = 12 * scale;
+  const fitCell = (cell: {value: unknown; style: TextStyle}, height: number, min: number): TextFit | RichTextFit => {
+    const textBox = {x:0,y:0,width,height:Math.max(scale,height)};
+    return Array.isArray(cell.value)
+      ? fitRichText(cell.value, textBox, requested, min, {style:cell.style,textMeasurement:options.textMeasurement,uniformLineHeight:true})
+      : fitText(flatten(cell.value), textBox, requested, min, textWidthMeasurer(resolveTextStyle(cell.style,options.textMeasurement),options.textMeasurement));
+  };
+  const textHeight = (fit: TextFit | RichTextFit) => 'height' in fit ? fit.height : fit.lines.length * fit.lineHeight;
+  const measured = values.map((row,index) => {
+    const header = headers && index === 0;
+    const cells = Array.from({length:columnCount}, (_,column) => {
+      const path = `${options.path ?? 'table'}.${header ? 'columns' : `rows.${index - Number(headers)}`}.${column}`;
+      return {value:row[column],path,header,style:{fontFamily:options.fontFamily ?? 'sans-serif',fontWeight:header ? 700 : 400,italic:false,path}};
+    });
+    const natural = Math.max(...cells.map(cell => textHeight(fitCell(cell,scale,requested)) + padding));
+    const preferred = Math.max(54 * scale, natural);
+    const needed = Math.min(preferred, Math.max(...cells.map(cell => textHeight(fitCell(cell,scale,minimum)) + padding)));
+    return {cells,preferred,natural,needed};
+  });
+  const preferred = measured.reduce((sum,row) => sum + row.preferred,0), natural = measured.reduce((sum,row) => sum + row.natural,0), needed = measured.reduce((sum,row) => sum + row.needed,0);
+  let y = box.y, overflow = cellWidth <= 20 * scale;
+  const rows = measured.map(row => {
+    const height = preferred <= box.height ? row.preferred : natural <= box.height
+      ? row.natural + (row.preferred - row.natural) * (box.height - natural) / Math.max(Number.EPSILON, preferred - natural)
+      : needed <= box.height
+      ? row.needed + (row.natural - row.needed) * (box.height - needed) / Math.max(Number.EPSILON, natural - needed)
+      : row.needed * box.height / needed;
+    const rowBox = {x:box.x,y,width:box.width,height};
+    const cells = row.cells.map((cell,column) => {
+      const cellBox = {x:box.x + column * cellWidth,y,width:cellWidth,height};
+      const textBox = {x:cellBox.x + 10 * scale,y:y + 8 * scale,width,height:Math.max(scale,height-padding)};
+      const fit = fitCell(cell,textBox.height,minimum);
+      overflow ||= height <= padding || fit.overflow;
+      return {value:cell.value,path:cell.path,header:cell.header,rich:Array.isArray(cell.value),box:cellBox,textBox,textStyle:resolveTextStyle(cell.style,options.textMeasurement),fit};
+    });
+    y += height;
+    return {box:rowBox,cells};
+  });
+  return {rows,columnCount,height:y-box.y,overflow};
+}
+function tableOverflows(value: unknown, box: LayoutBox, scale: number, settings: Composition, options: ComposeSlideOptions, path?: string): boolean {
+  return box.width <= 0 || box.height <= 0 || layoutTable(value,box,{scale,minFontSize:settings.minFontSize,fontFamily:options.fonts?.body,textMeasurement:options.textMeasurement,path}).overflow;
 }
 function flatten(value: unknown): string {
   if (value == null) return "";
@@ -411,7 +486,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
       const fit = fitContent(node.field,node.value,text,box,25*scale,(settings.minFontSize??16)*scale,node.path);
       score += (25 * scale - fit.fontSize) / scale + (fit.overflow ? 1000 : 0);
     }
-    if (node.field === "table" && tableOverflows(node.value, box, scale, settings, options)) score += 1000;
+    if (node.field === "table" && tableOverflows(node.value, box, scale, settings, options, node.path)) score += 1000;
     if (box.width < 100 * scale || box.height < 60 * scale) score += 100;
     return score;
   };
@@ -468,7 +543,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
 
   for (const item of items) {
     for (const key of ["x", "y", "width", "height"] as const) item.box[key] = round(item.box[key]);
-    if (item.field === "table" && tableOverflows(item.value,item.box,scale,item.composition,options)) diagnostics.push({ code: "text-overflow", path: item.path, message: "Table cells do not fit; use fewer rows, fewer columns, or split the table across slides." });
+    if (item.field === "table" && tableOverflows(item.value,item.box,scale,item.composition,options,item.path)) diagnostics.push({ code: "text-overflow", path: item.path, message: "Table cells do not fit; use fewer rows, fewer columns, or split the table across slides." });
     if (item.text?.overflow) diagnostics.push({ code: "text-overflow", path: item.path, message: "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide." });
   }
   for (const group of groups) for (const box of [group.box, group.contentBox]) for (const key of ["x", "y", "width", "height"] as const) box[key] = round(box[key]);

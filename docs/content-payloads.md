@@ -150,6 +150,9 @@ Table body cells accept strings, numbers, booleans, or `null`. Since core 0.5.0,
 
 Use core 0.5.0, renderer 0.3.0, editor 0.2.0 and PPTX 0.3.0 together for this form. Core measures run styles when checking overflow and keeps each row intact when paginating. The renderer traces rich cells for the editor's existing formatting, typing and undo controls; the exporter emits editable native text runs. Native PPTX table import currently flattens runs to strings, and native PowerPoint visual parity is not yet verified. Per-cell fills, borders, alignment and merged cells are separate work.
 
+The current development line (core 0.6.0) adds `layoutTable` from `@openpresentation/opf/composition`. It measures scalar and rich cells, keeps short rows compact, and gives wrapped or multiline rows the height they need. When space is constrained it reduces spare row height before shrinking text, and reports overflow when the minimum fitting size cannot fit. Pass the same `scale`, font family, measurement provider and effective `minFontSize` to each consumer. The returned row boxes, cell text boxes and fits are shared by the coordinated SVG and PPTX implementations; rich table cells use uniform line advances to match native cell paragraph spacing. These downstream changes and native rich-table import are not yet published. Native viewer fidelity remains a separate verification boundary.
+
+
 ## Code
 
 Code-specific fields are grouped under `code`. A string value is shorthand for `code.source`; use object form when syntax highlighting or a file label matters. In object form, `source` is required.

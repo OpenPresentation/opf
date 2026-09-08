@@ -107,6 +107,14 @@ assert.ok(pptx.length>1000);
 console.log('Packed consumer: core, editor, SVG, measured fonts and PPTX passed.');\n`,
 );
 run(process.execPath, ["check.mjs"]);
+if (!registry) {
+  const tableHarness = (await readHarness('opf', 'packages/javascript/test/table-layout.test.mjs'))
+    .replaceAll("'../dist/composition.js'", "'@openpresentation/opf/composition'")
+    .replaceAll("'../dist/pagination.js'", "'@openpresentation/opf/pagination'");
+  await writeFile(path.join(consumer, 'table-layout.test.mjs'), tableHarness);
+  run(process.execPath, ['--test', 'table-layout.test.mjs']);
+}
+
 if (registry) {
   for (const item of manifest.artifacts) {
     const installed = JSON.parse(await readFile(path.join(consumer, 'node_modules', item.name, 'package.json'), 'utf8'));
@@ -134,6 +142,7 @@ export {createSchemaInspector} from '@openpresentation/opf-editor/schema-inspect
 export {formatRichTextRange,replaceRichTextRange,richTextContent,type TextRunFormat} from '@openpresentation/opf-editor/rich-text';
 export {prepareTrackResize,prepareBlockMove,listBlockContainers,prepareBlockInsert,prepareBlockDuplicate,prepareBlockRemove,createContentBlock} from '@openpresentation/opf-editor/layout';
 export {fitList,type ListFit,type ListValue} from '@openpresentation/opf/composition';
+${registry ? '' : "export {layoutTable,type TableLayout,type TableLayoutOptions,type TableCellLayout} from '@openpresentation/opf/composition';"}
 export {schemaAtPath,listSchemaFields} from '@openpresentation/opf-editor/schema';
 export async function mount(container:HTMLElement):Promise<CanvasEditor> {
  const fonts=await loadBrowserFontRegistry([{url:'/fonts/Roboto.ttf'},{url:'/fonts/RobotoMono.ttf'}]);
