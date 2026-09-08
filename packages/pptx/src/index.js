@@ -3,7 +3,7 @@ import {nativeBackgroundFill} from './background.js';
 import {importBackground} from './background-import.js';
 import { webpToPng } from '#image-fallback';
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
-import { composeSlide, fitText, textWidthMeasurer, resolveCanvasDimensions, resolveFontFamilies, resolveTextStyle } from "@openpresentation/opf/composition";
+import { composeSlide, fitText, fitRichText, textWidthMeasurer, resolveCanvasDimensions, resolveFontFamilies, resolveTextStyle } from "@openpresentation/opf/composition";
 import PptxGenJS from "pptxgenjs";
 import { unzipSync, zipSync } from "fflate";
 import { XMLParser } from "fast-xml-parser";
@@ -1122,16 +1122,42 @@ function addTablePayload(slide, table, region, context, options, path) {
     const cellPath = header ? `${path}.columns.${columnIndex}` : `${path}.rows.${rowIndex - Number(hasHeaders)}.${columnIndex}`;
     const text = stringifyText(row[columnIndex]);
     const style = resolveTextStyle({ fontFamily: context.fonts.body, fontWeight: header ? 700 : 400, italic: false, path: cellPath }, options.textMeasurement);
-    const fit = fitText(text, cellBox, 15 * scale, (context.composition?.minFontSize ?? 16) * scale, textWidthMeasurer(style, options.textMeasurement));
+    const rich = Array.isArray(row[columnIndex]);
+    const fit = rich
+      ? fitRichText(row[columnIndex], cellBox, 15 * scale, (context.composition?.minFontSize ?? 16) * scale, {style,textMeasurement:options.textMeasurement})
+      : fitText(text, cellBox, 15 * scale, (context.composition?.minFontSize ?? 16) * scale, textWidthMeasurer(style, options.textMeasurement));
+    const fragments = rich ? fit.richLines.flatMap(line => line.fragments) : [];
+    const runs = rich ? row[columnIndex].flatMap((value, index) => {
+      const run = typeof value === 'string' ? {text:value} : value;
+      const fragment = fragments.find(item => item.runIndex === index);
+      const runStyle = fragment?.style ?? resolveTextStyle({...style,fontFamily:run.fontFamily ?? style.fontFamily,fontWeight:run.bold === undefined ? style.fontWeight : run.bold ? 700 : 400,italic:run.italic ?? style.italic}, options.textMeasurement);
+      const rawColor = /^#(?:[0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(run.color ?? '') ? run.color.slice(1) : header ? 'FFFFFF' : context.colors.text;
+      const color = normalizeHex(rawColor), transparency = rawColor.length === 8 ? (1 - parseInt(rawColor.slice(6), 16) / 255) * 100 : 0;
+      const runOptions = {
+        fontFace:runStyle.fontFamily,fontSize:fragment ? fragment.fontSize * .75 : fit.fontSize * .75,
+        bold:runStyle.fontWeight >= 600,italic:runStyle.italic,
+        underline:run.underline ? {color} : undefined,strike:run.strikethrough ? 'sngStrike' : undefined,
+        color,transparency,baseline:fragment?.baselineShift ? -fragment.baselineShift / fragment.fontSize * 2000 : undefined,
+        hyperlink:run.link && /^(https?:|mailto:)/i.test(run.link) ? {url:run.link} : undefined,
+      };
+      // PptxGenJS marks every part of a newline-containing run as a paragraph
+      // break, including its final part. Split explicitly so the next styled
+      // run stays on that final line, and preserve empty/trailing lines.
+      const parts = run.text.split(/\r*\n/);
+      return parts.map((text, part) => ({text,options:{...runOptions,breakLine:part < parts.length - 1}}));
+    }) : null;
     return {
       // Keep native wrapping and the original cell value: inserting measured
       // soft wraps into the text would change a later import or copy operation.
-      text,
+      text: rich ? runs : text,
       options: {
         fontFace: style.fontFamily,
         fontSize: fit.fontSize * 0.75,
-        bold: style.fontWeight >= 600,
-        italic: style.italic,
+        // PptxGenJS fills falsy run options from cell defaults. Rich runs
+        // carry their resolved weight, so a bold header default must not turn
+        // an explicit bold:false run back on.
+        bold: rich ? false : style.fontWeight >= 600,
+        italic: rich ? false : style.italic,
         lineSpacing: fit.lineHeight * 0.75,
         paraSpaceAfter: 0,
         align: context.contentAlignment,

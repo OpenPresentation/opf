@@ -123,6 +123,8 @@ PptxGenJS is pinned to 4.0.1. Its unused `image-size` dependency remains flagged
 
 ### Native table fitting (unreleased)
 
+The coordinated development schema accepts `TextRun[]` cells and headers. The development exporter preserves their resolved fonts, emphasis, color/alpha, hyperlinks, script positions and explicit line breaks as editable native runs. It measures rich content before export without inserting measured soft wraps. These changes are not in published 0.2.1; they require the development core and renderer. Native table import still flattens rich runs to strings, and native PowerPoint rendering remains unverified.
+
 The development exporter measures every cell with the same `textMeasurement` provider, font roles and effective nested `minFontSize` used by the SVG preview. Native table cells retain the original strings and values as text, with matching fitted sizes, line spacing, alignment, margins and row/column geometry. Uneven rows receive empty cells for missing columns. Theme border colors now use the same slot as the preview.
 
 `npm test` compares exported OOXML against the published SVG renderer across 168 cells, including 24 cases that require shrinking, Roboto and Calibri-to-Carlito substitution, two canvas sizes, headers and all three alignments. PowerPoint still performs its own natural wrapping and needs the resolved fonts installed. These document-property checks do not establish native raster parity or lossless typed-cell import.
