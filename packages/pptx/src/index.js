@@ -1,3 +1,4 @@
+import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
 import { composeSlide, resolveCanvasDimensions, resolveFontFamilies, resolveTextStyle } from "@openpresentation/opf/composition";
 import PptxGenJS from "pptxgenjs";
 import { unzipSync, zipSync } from "fflate";
@@ -157,6 +158,7 @@ export async function toPptx(input, options = {}) {
 
   const context = resolvePresentationContext(presentation, {...options,textMeasurement:undefined});
   context.listMarkers = new Map();
+  context.imagePlacements = new Map();
   const pptx = new PptxGenJS();
   configurePresentation(pptx, presentation, {...context,fonts:resolveSlideContext(presentation,presentation.slides[0],context,options).fonts});
 
@@ -911,7 +913,7 @@ function resolveSlideContext(presentation, slide, baseContext, options) {
     || Math.abs(resolved.dimensions.heightInches - baseContext.dimensions.heightInches) > 1e-6) {
     throw new OPFPptxError("mixed-slide-dimensions", "PowerPoint requires one canvas size per presentation. Set dimensions on the deck or export this slide separately.");
   }
-  return { ...baseContext, colorScheme: resolved.colorScheme, fonts: resolved.fonts, colors: resolved.colors };
+  return { ...baseContext, colorScheme: resolved.colorScheme, fonts: resolved.fonts, colors: resolved.colors, imageFill: effective.design.imageFill ?? "fit" };
 }
 
 function fieldToType(field) {
@@ -1048,8 +1050,11 @@ async function addImagePayload(slide, presentation, asset, region, path, context
     addPlaceholderPayload(slide, "Image", asset, region, context);
     return;
   }
+  const objectName = `OPF image ${context.imagePlacements.size + 1}`;
+  context.imagePlacements.set(objectName, { region, mode: context.imageFill, path });
   slide.addImage({
     ...resolved,
+    objectName,
     x: region.x,
     y: region.y,
     w: region.w,
@@ -1487,11 +1492,15 @@ function normalizePptxZip(raw, context) {
     });
   }
 
+  const imageMetadata = new Map();
+  for (const [part, bytes] of Object.entries(entries)) {
+    if (part.startsWith("ppt/media/")) imageMetadata.set(part, rasterMetadata(bytes));
+  }
   const output = {};
   const renameMaps = buildRenameMaps(Object.keys(entries));
   for (const path of Object.keys(entries).sort()) {
     const normalizedPath = normalizePartPath(path, renameMaps);
-    const bytes = normalizePartBytes(path, entries[path], context, renameMaps);
+    const bytes = normalizePartBytes(path, entries[path], context, renameMaps, entries, imageMetadata);
     output[normalizedPath] = [bytes, {
       level: context.compressionLevel,
       mtime: context.zipDate
@@ -1510,7 +1519,8 @@ function normalizeCoreProperties(xml, timestamp) {
     .replace(/<dcterms:modified xsi:type="dcterms:W3CDTF">[^<]*<\/dcterms:modified>/g, `<dcterms:modified xsi:type="dcterms:W3CDTF">${timestamp}</dcterms:modified>`);
 }
 
-function normalizePartBytes(path, bytes, context, renameMaps) {
+function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMetadata) {
+  if (imageMetadata.has(path)) return normalizeImageOrientation(bytes, imageMetadata.get(path));
   if (path.endsWith(".xlsx")) {
     return normalizeNestedZip(bytes, context);
   }
@@ -1520,6 +1530,25 @@ function normalizePartBytes(path, bytes, context, renameMaps) {
   if (isXmlPart(path)) {
     let xml=decodeText(bytes);
     if (/^ppt\/slides\/slide\d+\.xml$/.test(path)) {
+      // Image data is already resolved and embedded by PptxGenJS. Read those
+      // exact bytes instead of fetching or resolving the source a second time.
+      const relationships = parseRelationships(entries, path);
+      xml = xml.replace(/<p:pic>([\s\S]*?)<\/p:pic>/g, picture => {
+        const placement = context.imagePlacements.get(picture.match(/name="(OPF image \d+)"/)?.[1]);
+        if (!placement) return picture;
+        const id = picture.match(/<a:blip\b[^>]*r:embed="([^"]+)"/)?.[1];
+        const dimensions = imageMetadata.get(relationships.get(id)?.path);
+        if (!dimensions) throw new OPFPptxError("unsupported-image-dimensions", "Image fitting requires readable PNG, JPEG, GIF or WebP dimensions. Supply a supported raster image through imageResolver.", { path: placement.path });
+        const fitted = pictureTransform(dimensions, placement.region, placement.mode);
+        const emu = value => Math.round(value * EMUS_PER_INCH);
+        const transformAttrs = `${fitted.rotation ? ` rot="${fitted.rotation * 60000}"` : ''}${fitted.flipH ? ' flipH="1"' : ''}${fitted.flipV ? ' flipV="1"' : ''}`;
+        picture = picture.replace(/<a:xfrm\b[^>]*>[\s\S]*?<\/a:xfrm>/, `<a:xfrm${transformAttrs}><a:off x="${emu(fitted.x)}" y="${emu(fitted.y)}"/><a:ext cx="${emu(fitted.w)}" cy="${emu(fitted.h)}"/></a:xfrm>`);
+        if (fitted.crop) {
+          const attrs = Object.entries(fitted.crop).map(([key, value]) => `${key}="${value}"`).join(' ');
+          picture = picture.replace('<a:stretch>', `<a:srcRect ${attrs}/><a:stretch>`);
+        }
+        return picture;
+      });
       // Native bullets otherwise inherit the first rich run's size, font and
       // color, which can differ from the measured list marker.
       xml=xml.replace(/<p:sp>([\s\S]*?)<\/p:sp>/g,(shape)=>{

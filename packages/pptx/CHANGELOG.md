@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Preserve image proportions with centered native fit/crop matching presentation and slide imageFill settings.
+- Measure embedded PNG/JPEG/GIF/WebP bytes without a second resolver call or an image-size dependency. Unreadable/unsupported dimensions produce a path-specific error.
+- Translate all eight JPEG EXIF orientations into native rotation/mirroring while preserving compressed pixels and normalizing only the embedded orientation tag.
+
 ## 0.1.0
 
 - Require core 0.4.0, with an optional renderer 0.1.0 peer for coordinated consumers.

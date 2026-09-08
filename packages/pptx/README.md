@@ -118,3 +118,11 @@ For crowded drafts, run `paginatePresentation` from `@openpresentation/opf/pagin
 Pass the same `textMeasurement` provider used by preview and pagination to `toPptx`. Plain text and headings retain the measured line breaks and resolved font family in editable PowerPoint shapes. Font binaries are not yet embedded in PPTX; native viewers still need the resolved font installed.
 
 PptxGenJS is pinned to 4.0.1. Its unused `image-size` dependency remains flagged by npm audit; tested OPF operations run with that parser blocked. See [dependency reachability and regression coverage](DEPENDENCY-NOTES.md).
+
+## Image geometry (unreleased)
+
+Native image exports now follow the browser's `design.imageFill`: `fit` (the default) centers an image without changing its aspect ratio, and `crop` fills the allocated box with a centered native crop. Slide settings override presentation settings. Geometry is calculated from the exact bytes embedded after asset resolution, so host resolvers are called once. PNG, JPEG, GIF and WebP dimension headers are supported; unsupported or unreadable dimensions produce a path-specific error rather than a distorted picture. Supply supported raster bytes through `imageResolver` for other formats.
+
+JPEG EXIF orientations 1–8 are represented by native picture rotation and mirroring. The embedded copy's orientation tag is normalized to 1 to avoid viewer-dependent double rotation. Compressed pixels and other metadata remain unchanged; input data is not mutated. EXIF orientation in other containers, animated playback, SVG/vector assets, effects and lossless crop/orientation import are not covered by this change.
+
+Tests compare SVG/native fit and crop geometry across nine synthetic raster fixtures and cover all eight JPEG orientations. Keynote 14.4 visually preserves proportions for wide/tall fit/crop and displays all eight orientations correctly. This does not establish Microsoft PowerPoint raster parity or WebP support in every Office version.

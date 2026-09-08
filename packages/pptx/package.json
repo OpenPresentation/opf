@@ -35,7 +35,7 @@
   "sideEffects": false,
   "scripts": {
     "build": "node scripts/build.mjs",
-    "typecheck": "node --check src/index.js && node --check scripts/build.mjs && node --check scripts/validate-package.mjs && node --check test/smoke.mjs",
+    "typecheck": "node --check src/index.js && node --check scripts/build.mjs && node --check scripts/validate-package.mjs && node --check test/smoke.mjs && node --check src/image-geometry.js && node --check test/image-fit.mjs && node --check test/image-orientation.mjs",
     "test": "npm run build && node test/dependency-boundary.mjs",
     "validate": "node scripts/validate-package.mjs",
     "prepack": "npm run build"
@@ -53,5 +53,8 @@
     "@openpresentation/opf-render": {
       "optional": true
     }
+  },
+  "devDependencies": {
+    "@openpresentation/opf-render": "0.1.1"
   }
 }
