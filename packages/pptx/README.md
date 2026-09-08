@@ -176,3 +176,5 @@ This preserves image orientation, not arbitrary picture geometry. Crop windows, 
 Native dimensions retain full precision through import. Premature six-decimal inch rounding could change raster edges even on a 1280-pixel slide. With the local JPEG-aware renderer, all eight complete image-slide PNG previews now match their original OPF previews after native export/import; this remains an OPF-renderer comparison, not a native viewer pixel comparison.
 
 Background-only and empty slides now remain blank during PPTX import; the importer no longer inserts a synthetic “Slide N” title. Speaker notes remain separate from visible content. Native fixture verification covers this behavior using an actual Keynote-exported presentation.
+
+Version 0.2.0 requires Node 20.9 or later for native image decoding. Browser bundles continue using browser-safe entrypoints.

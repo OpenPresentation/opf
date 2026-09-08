@@ -1,6 +1,8 @@
 # Changelog
 
-## Unreleased
+## 0.2.0
+
+This minor release requires Node 20.9 or later and OPF 0.4.1. Browser entrypoints remain available without native Node dependencies.
 
 - Keep background-only and empty slides blank on import instead of adding a synthetic slide title.
 - Add captured Keynote 14.4 native PNG/PPTX regression references for editable gradients, portrait opacity and native import; document the Quick Look thumbnail limitation separately from native viewer evidence.
