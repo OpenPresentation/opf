@@ -2,24 +2,25 @@
 
 ## 0.4.0
 
-Prepared for release; not yet published.
+Published to npm on 2026-09-08 (UTC): [`@openpresentation/opf@0.4.0`](https://www.npmjs.com/package/@openpresentation/opf/v/0.4.0). See the [tagged release](https://github.com/OpenPresentation/opf/releases/tag/opf-v0.4.0) for the exact source snapshot.
 
 ### Added
 
 - Shared composition, nested groups, weighted tracks, measured rich text and lists, overflow diagnostics, and explicit content-preserving pagination.
 - CSV/TSV/JSON conversion for native table and chart content, with browser-safe `./composition`, `./pagination`, and `./data` package exports.
-- A standalone agent CLI and six portable skills for authoring, inspecting, validating, editing, and paginating OPF presentations.
+- Six portable agent skills for authoring, layout, presets, editing, export, and inspection, with shared APIs for validating and paginating OPF presentations.
 - Coordinated source and packed-consumer verification across the open renderer, editor, and PPTX packages.
 
 ### Changed
 
 - Smaller structural schema/catalog declarations and shared build chunks, retaining typed named schema definitions. Consumers that relied on inferred deeply nested literal types should use the schema values as JSON data or generated presentation types.
 - Catalog index schemas and narrative index consistency, accurate preview byte counts, spec-integrity checks, and Node 20/24 test discovery.
-- CLI validation reports stay on stdout for valid and invalid documents. Usage, JSON and I/O errors use exit 2; validation and edit conflicts use exit 1. The CLI is bundled and has no runtime package dependency.
 
 ### Compatibility and verification
 
-The JSON format keeps its existing catalog IDs and adds nested composition. The raw narrative catalog index uses `records` instead of `templates`. This minor version acknowledges the structural TypeScript declaration changes. Renderer, editor and PPTX package releases must require this core version before standalone installation is supported. Schema acceptance does not establish visual fidelity; advanced editing, media, fonts, historical raster baselines and native PowerPoint comparisons remain documented work.
+The JSON format keeps its existing catalog IDs and adds nested composition. The raw narrative catalog index uses `records` instead of `templates`. This minor version acknowledges the structural TypeScript declaration changes. Renderer, editor and PPTX package releases must require this core version before their new composition features support standalone installation. Schema acceptance does not establish visual fidelity; advanced editing, media, fonts and native PowerPoint comparisons remain documented work.
+
+The release source also prepares a standalone, bundled `@openpresentation/cli@0.1.0`. It is a separate package and was not published with this core release.
 
 ## 0.3.0
 
