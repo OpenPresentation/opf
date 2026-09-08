@@ -1,7 +1,8 @@
 # Changelog
 
-## Unreleased
+## 0.1.1
 
+- Require renderer 0.1.1 when using the canvas so empty-line caret geometry is available.
 - Add native mixed-style typing with glyph-aligned caret and pointer selection, composition lifecycle handling, draft undo/redo, cancellation and guarded commit.
 - Preserve run styles, links and metadata during typing, repeated-character edits and grapheme-safe changes; keep insertion style after deleting all text.
 - Keep empty blocks editable and use renderer trace geometry for trailing blank-line carets.
