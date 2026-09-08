@@ -14,7 +14,7 @@
     },
     {
       "name": "@openpresentation/opf-pptx",
-      "version": "0.2.0"
+      "version": "0.2.1"
     },
     {
       "name": "@openpresentation/cli",
@@ -25,6 +25,6 @@
     "opf": "aed5e5493998a5081fea68bf3bd42c52409e0c15",
     "opf-editor": "5819a2ac12ec22f08a348c81bc3c66630682ecfb",
     "opf-render": "df7ce5c6915a084f101adf90e6329117c0094a23",
-    "opf-pptx": "1fef9dcfadeeb8310b3c3b668f7506b52717b695"
+    "opf-pptx": "6e6d3b2201f9c0c066085ea11eb541fbdc434c23"
   }
 }
