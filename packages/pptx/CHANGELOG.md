@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Fit native table cell font sizes with the same loaded-font measurements and effective nested composition settings as the SVG preview.
+- Match table alignment, line spacing, margins and theme border colors; pad uneven rows so every column remains present.
+- Preserve original cell text and native editable tables. Natural wrapping still belongs to the PowerPoint viewer; native raster parity remains unverified.
+- Compare 168 cells across two slide sizes, Roboto and Calibri substitution, headers, uneven rows and all text alignments. Twenty-four cases require shrinking.
+
 ## 0.1.0
 
 - Require core 0.4.0, with an optional renderer 0.1.0 peer for coordinated consumers.

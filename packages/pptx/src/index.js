@@ -1,4 +1,4 @@
-import { composeSlide, resolveCanvasDimensions, resolveFontFamilies, resolveTextStyle } from "@openpresentation/opf/composition";
+import { composeSlide, fitText, textWidthMeasurer, resolveCanvasDimensions, resolveFontFamilies, resolveTextStyle } from "@openpresentation/opf/composition";
 import PptxGenJS from "pptxgenjs";
 import { unzipSync, zipSync } from "fflate";
 import { XMLParser } from "fast-xml-parser";
@@ -840,7 +840,7 @@ function resolvePresentationContext(presentation, options) {
       mutedText: normalizeHex(colorScheme.textSecondary ?? (darkBackground ? colorScheme.light2 : colorScheme.dark2) ?? "#475569"),
       accent: normalizeHex(colorScheme.primary ?? colorScheme.accent1 ?? "#2874A6"),
       surface: normalizeHex(colorScheme.surface ?? (darkBackground ? colorScheme.dark2 : colorScheme.light2) ?? "#F8FAFC"),
-      border: normalizeHex(colorScheme.accent3 ?? "#CBD5E1")
+      border: normalizeHex(colorScheme.accent5 ?? "#CBD5E1")
     }
   };
 }
@@ -897,7 +897,7 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
     } else if (item.field === "text" && typeof item.value === "string") {
       slide.addText(item.text.lines.join("\n"), {...textBoxOptions(region, slideContext, item.text.fontSize * 0.75),fontFace:item.textStyle.fontFamily,bold:item.textStyle.fontWeight>=600,italic:item.textStyle.italic});
     } else {
-      await addPayload(slide, presentation, item.payload, region, item.path, slideContext, options);
+      await addPayload(slide, presentation, item.payload, region, item.path, { ...slideContext, composition: item.composition, contentAlignment: opfSlide.design?.contentAlignment ?? presentation.design?.contentAlignment ?? "left" }, options);
     }
   }
 
@@ -937,7 +937,7 @@ async function addPayload(slide, presentation, payload, region, path, context, o
       addChartPayload(slide, payload.chart, region, context);
       break;
     case "table":
-      addTablePayload(slide, payload.table, region, context);
+      addTablePayload(slide, payload.table, region, context, options, path);
       break;
     case "code":
       addCodePayload(slide, payload.code, region, context);
@@ -1084,35 +1084,45 @@ function addChartPayload(slide, chart, region, context) {
   });
 }
 
-function addTablePayload(slide, table, region, context) {
+function addTablePayload(slide, table, region, context, options, path) {
   const scale = Math.min(context.dimensions.widthInches * 96, context.dimensions.heightInches * 96) / 720;
-  const rows = [];
-  if (Array.isArray(table?.columns) && table.columns.length > 0) {
-    rows.push(table.columns.map((value) => ({
-      text: stringifyText(value),
-      options: {
-        bold: true,
-        color: "FFFFFF",
-        fill: { color: context.colors.accent }
-      }
-    })));
-  }
-  if (Array.isArray(table?.rows)) {
-    for (const row of table.rows) {
-      rows.push((Array.isArray(row) ? row : [row]).map((value) => ({
-        text: stringifyText(value),
-        options: { color: context.colors.text, fill: {color:context.colors.surface} }
-      })));
-    }
-  }
-
-  if (rows.length === 0) {
+  const hasHeaders = Array.isArray(table?.columns) && table.columns.length > 0;
+  const sourceRows = [...(hasHeaders ? [table.columns] : []), ...(table?.rows ?? [])];
+  if (sourceRows.length === 0) {
     addPlaceholderPayload(slide, "Table", table, region, context);
     return;
   }
 
-  const columnCount = Math.max(1, ...rows.map(row => row.length));
-  const rowHeight = Math.min(54 * scale / 96, region.h / rows.length);
+  const columnCount = Math.max(1, ...sourceRows.map(row => row.length));
+  const rowHeight = Math.min(54 * scale / 96, region.h / sourceRows.length);
+  const cellBox = {
+    x: 0, y: 0,
+    width: Math.max(scale, region.w * 96 / columnCount - 20 * scale),
+    height: Math.max(scale, rowHeight * 96 - 12 * scale),
+  };
+  const rows = sourceRows.map((row, rowIndex) => Array.from({ length: columnCount }, (_, columnIndex) => {
+    const header = hasHeaders && rowIndex === 0;
+    const cellPath = header ? `${path}.columns.${columnIndex}` : `${path}.rows.${rowIndex - Number(hasHeaders)}.${columnIndex}`;
+    const text = stringifyText(row[columnIndex]);
+    const style = resolveTextStyle({ fontFamily: context.fonts.body, fontWeight: header ? 700 : 400, italic: false, path: cellPath }, options.textMeasurement);
+    const fit = fitText(text, cellBox, 15 * scale, (context.composition?.minFontSize ?? 16) * scale, textWidthMeasurer(style, options.textMeasurement));
+    return {
+      // Keep native wrapping and the original cell value: inserting measured
+      // soft wraps into the text would change a later import or copy operation.
+      text,
+      options: {
+        fontFace: style.fontFamily,
+        fontSize: fit.fontSize * 0.75,
+        bold: style.fontWeight >= 600,
+        italic: style.italic,
+        lineSpacing: fit.lineHeight * 0.75,
+        paraSpaceAfter: 0,
+        align: context.contentAlignment,
+        color: header ? "FFFFFF" : context.colors.text,
+        fill: { color: header ? context.colors.accent : context.colors.surface },
+      },
+    };
+  }));
   slide.addTable(rows, {
     x: region.x,
     y: region.y,
