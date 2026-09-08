@@ -281,7 +281,13 @@ function tableOverflows(value: unknown, box: LayoutBox, scale: number, settings:
   const columns = Math.max(1, ...allRows.map(row => row.length));
   const width = box.width / columns - 20 * scale;
   const height = Math.min(54 * scale, box.height / Math.max(1, allRows.length)) - 12 * scale;
-  return width <= 0 || height <= 0 || allRows.some((row,index) => row.some(value => fitText(flatten(value), {x:0,y:0,width,height},15*scale,(settings.minFontSize ?? 16)*scale,textWidthMeasurer(resolveTextStyle({fontFamily:options.fonts?.body ?? "sans-serif",fontWeight:index===0 && table.columns?.length ? 700 : 400},options.textMeasurement),options.textMeasurement)).overflow));
+  return width <= 0 || height <= 0 || allRows.some((row,index) => row.some(value => {
+    const style = {fontFamily:options.fonts?.body ?? "sans-serif",fontWeight:index===0 && table.columns?.length ? 700 : 400};
+    const cell = {x:0,y:0,width,height}, minimum = (settings.minFontSize ?? 16)*scale;
+    return (Array.isArray(value)
+      ? fitRichText(value,cell,15*scale,minimum,{style,textMeasurement:options.textMeasurement})
+      : fitText(flatten(value),cell,15*scale,minimum,textWidthMeasurer(resolveTextStyle(style,options.textMeasurement),options.textMeasurement))).overflow;
+  }));
 }
 function flatten(value: unknown): string {
   if (value == null) return "";
