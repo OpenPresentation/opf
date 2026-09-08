@@ -73,7 +73,9 @@ export function nativeCellStyle(properties, body, context, scale, report) {
     style.borders[edge] = {color:'#00000000',width:0};
     if (!line) continue;
     if (has(line,'a:noFill') || line.w === '0') continue;
-    const color = solid(line,context,report,'border');
+    if (line._opfUnresolvedTableLine) report('unsupported-table-border','The native line style reference or placeholder color could not be resolved from this archive.');
+    const hasFill=['a:solidFill','a:noFill','a:gradFill','a:blipFill','a:pattFill','a:grpFill'].some(key=>has(line,key));
+    const color = solid(line,context,report,'border') ?? (!hasFill&&!line._opfUnresolvedTableLine?'#000000':undefined);
     const width = Number(line.w ?? 12700) / (9525 * scale);
     const dash = {solid:'solid',dash:'dash',sysDash:'dash',sysDot:'dot',dot:'dot'}[line['a:prstDash']?.val ?? 'solid'];
     if (color !== undefined && Number.isFinite(width) && width >= 0 && width <= 32 && dash) style.borders[edge] = {color,width,...(dash === 'solid' ? {} : {dash})};
@@ -113,6 +115,21 @@ export function nativeTableGrid(cells, columnCount, headers, report) {
     }
   }
   if (malformed) return {headers,rows:cells.map(row=>row.map(cell=>({value:cell.value,style:cell.style})))};
+  // A canonical merged cell has one border per full edge. Native continuation
+  // cells can specify different edge segments; retain the anchor and report
+  // the loss rather than silently claiming that segmented border is preserved.
+  for (let r=0;r<cells.length;r++) for (let c=0;c<cells[r].length;c++) {
+    const owner=owners[r][c];
+    if (!owner || owner.r===r && owner.c===c) continue;
+    const anchor=rows[owner.r][owner.c],cell=cells[r][c];
+    const perimeter={top:r===owner.r,left:c===owner.c,bottom:r===owner.r+(anchor.rowSpan??1)-1,right:c===owner.c+(anchor.colSpan??1)-1};
+    const differs=edge=>{
+      const a=anchor.style.borders[edge],b=cell.style.borders[edge];
+      if (a.width===0 && b.width===0) return false;
+      return a.width!==b.width || a.color!==b.color || (a.dash??'solid')!==(b.dash??'solid');
+    };
+    if ((cell.borderEdges??[]).some(edge=>perimeter[edge]&&differs(edge))) report(`rows.${r}.${c}`,'unsupported-table-merge-border','Native continuation cells specify differing border segments around a merged cell. The merge and anchor borders are retained; segmented borders are not represented.');
+  }
   if (headers && rows[0]?.some(cell=>cell?.rowSpan>1)) {
     headers=false;
     report('','table-header-in-body','A native merge crosses the first row. It is retained in body rows with explicit formatting, because canonical repeated headers cannot span into body rows.');
