@@ -157,6 +157,7 @@ export async function toPptx(input, options = {}) {
 
   const context = resolvePresentationContext(presentation, {...options,textMeasurement:undefined});
   context.listMarkers = new Map();
+  context.tableHeaders = new Map();
   const pptx = new PptxGenJS();
   configurePresentation(pptx, presentation, {...context,fonts:resolveSlideContext(presentation,presentation.slides[0],context,options).fonts});
 
@@ -624,13 +625,14 @@ function payloadFromSlideItem(item) {
 
 function tableFromXml(table) {
   const rows = asArray(table["a:tr"])
-    .map((row) => asArray(row?.["a:tc"]).map((cell) => textFromTextBody(cell?.["a:txBody"])))
-    .filter((row) => row.some(Boolean));
-  if (rows.length === 0) return { rows: [] };
-  return {
-    columns: rows[0],
-    rows: rows.slice(1)
-  };
+    .map((row) => asArray(row?.["a:tc"]).map((cell) => textFromTextBody(cell?.["a:txBody"])));
+  // DrawingML's firstRow flag applies header-row formatting. Without that
+  // signal, retain all rows as data instead of guessing from their contents.
+  const firstRow = table["a:tblPr"]?.firstRow;
+  const hasHeaders = firstRow === "1" || firstRow === "true";
+  return hasHeaders && rows.length
+    ? { columns: rows[0], rows: rows.slice(1) }
+    : { rows };
 }
 
 function chartFromRelationship(entries, slidePath, relationships, relId) {
@@ -1123,7 +1125,10 @@ function addTablePayload(slide, table, region, context, options, path) {
       },
     };
   }));
+  const objectName = `OPF table ${context.tableHeaders.size + 1}`;
+  context.tableHeaders.set(objectName, hasHeaders);
   slide.addTable(rows, {
+    objectName,
     x: region.x,
     y: region.y,
     w: region.w,
@@ -1530,6 +1535,13 @@ function normalizePartBytes(path, bytes, context, renameMaps) {
   if (isXmlPart(path)) {
     let xml=decodeText(bytes);
     if (/^ppt\/slides\/slide\d+\.xml$/.test(path)) {
+      // PptxGenJS 4 has no firstRow option. Set the native flag explicitly so
+      // viewers and later imports distinguish column labels from data rows.
+      xml = xml.replace(/<p:graphicFrame>([\s\S]*?)<\/p:graphicFrame>/g, frame => {
+        const name = frame.match(/name="(OPF table \d+)"/)?.[1];
+        if (!context.tableHeaders.has(name)) return frame;
+        return frame.replace('<a:tblPr/>', `<a:tblPr firstRow="${context.tableHeaders.get(name) ? 1 : 0}"/>`);
+      });
       // Native bullets otherwise inherit the first rich run's size, font and
       // color, which can differ from the measured list marker.
       xml=xml.replace(/<p:sp>([\s\S]*?)<\/p:sp>/g,(shape)=>{

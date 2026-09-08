@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Preserve headerless table data and empty rows on import. Export native header-row flags and honor explicit XML boolean flags when importing, including edits from other applications.
+
 - Fit native table cell font sizes with the same loaded-font measurements and effective nested composition settings as the SVG preview.
 - Match table alignment, line spacing, margins and theme border colors; pad uneven rows so every column remains present.
 - Preserve original cell text and native editable tables. Natural wrapping still belongs to the PowerPoint viewer; native raster parity remains unverified.

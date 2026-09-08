@@ -66,6 +66,8 @@ The first importer is mechanical and schema-compatible:
 - Slide text placeholders and large top-of-slide text boxes map to `title` and `subtitle` when recognizable.
 - Remaining text boxes map to `blocks[]` as text or list payloads, sorted by OOXML position.
 - PowerPoint tables map to OPF table blocks, embedded images map to data URI image blocks, and cached chart series map to basic OPF chart blocks.
+- Table imports retain empty rows. A native `firstRow` flag of `1` or `true` maps the first row to column labels; absent/false flags retain every row as data. New exports set this flag from OPF columns. Older exports without the flag retain their labels as the first data row rather than inferring headers.
+- Imported table values are display strings: numeric/boolean/null types, rich cell formatting, whitespace and merged-cell semantics are not losslessly reconstructed.
 - Unknown non-text shapes and unsupported graphic frames become editable text fallback blocks instead of failing the import.
 
 There is no AI classification pass in the OSS runtime. Hosts can run optional cleanup or semantic remapping after `fromPptx` returns.

@@ -36,7 +36,7 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "typecheck": "node --check src/index.js && node --check scripts/build.mjs && node --check scripts/validate-package.mjs && node --check test/smoke.mjs",
-    "test": "npm run build && node test/dependency-boundary.mjs && node test/table-layout.mjs",
+    "test": "npm run build && node test/dependency-boundary.mjs && node test/table-layout.mjs && node test/table-import.mjs",
     "validate": "node scripts/validate-package.mjs",
     "prepack": "npm run build"
   },
