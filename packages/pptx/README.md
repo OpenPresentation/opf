@@ -141,4 +141,14 @@ The structural export/import corpus gate covers every installed core example (12
 
 Raster media filenames and package content types are derived from the embedded PNG/JPEG/GIF/WebP bytes. A resolver may change the format without preserving an old asset MIME hint; import likewise detects these formats from their bytes. This metadata repair does not recompress images, validate every compressed pixel stream, fetch resources or establish viewer support for each format.
 
-Native viewer check: Keynote 14.4 displays the PNG/JPEG/GIF media-type specimens, but imports the WebP specimen as an empty rectangle. WebP byte preservation and geometry checks therefore do not imply native viewer fidelity. Use a PNG/JPEG resolver result for this viewer; built-in raster fallback remains follow-up work. Microsoft PowerPoint has not been verified.
+Native viewer check: Keynote 14.4 displays the PNG/JPEG/GIF media-type specimens, but imports an unchanged WebP as an empty rectangle. The default compatible export now converts WebP to a static PNG locally. Keynote displays all six converted specimens, including alpha, EXIF orientation and the first animation frame. Microsoft PowerPoint has not been verified.
+
+### Compatible WebP pictures
+
+`toPptx` defaults to `imageFormat: "compatible"`. After resolving and embedding an image once, WebP bytes are decoded to a static PNG. Alpha and EXIF orientation are retained in the decoded pixels; animated input uses its first frame. Fit/crop is then calculated from the resulting PNG dimensions. The original OPF input and source bytes are unchanged, but the PPTX contains the PNG rather than the original WebP or its metadata.
+
+Set `imageFormat: "preserve"` to embed WebP unchanged when the receiving application supports it. Other image formats keep their existing export behavior. Conversion errors include the OPF image path; images above 40 megapixels are rejected before compatible conversion. Decoder differences can affect color/alpha rounding, so byte identity across platforms is not promised.
+
+Node conversion lazily loads the pinned open-source Sharp dependency and requires Node 20.9 or later. Normal package installation must include platform optional dependencies for its native binaries. Browser bundles select a separate browser decoder using local Blob/image/canvas APIs; Sharp and Node code are excluded. Neither path uploads images or fetches asset URLs. Source-preserving export and ordinary PNG/JPEG/GIF operations do not load Sharp.
+
+`npm test` includes the Node pixel-reference cases and verifies browser bundling. To run the browser pixel checks, run `npm run build:browser-check`, serve this repository locally, and open `/artifacts/webp-fallback/browser/index.html`. The page reports 13 checks covering embedded PNG pixels, alpha, EXIF, the first animation frame, fit/crop, resolver calls and DOM canvas fallback. These are browser export checks, separate from the recorded Keynote viewing evidence.

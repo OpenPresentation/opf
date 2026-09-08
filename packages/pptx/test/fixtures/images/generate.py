@@ -22,3 +22,20 @@ for width, height, shape in [(120,60,'wide'),(60,120,'tall'),(80,80,'square')]:
         for orientation in range(1,9):
             exif=Image.Exif();exif[274]=orientation
             image.save(root/f'orientation-{orientation}.jpg',quality=90,exif=exif)
+
+# Independent decoded-pixel references for compatible WebP export.
+import hashlib, json
+from PIL import ImageOps
+wide = Image.open(root/'wide.png')
+for orientation in [6,7]:
+    exif=Image.Exif();exif[274]=orientation
+    wide.save(root/f'webp-orientation-{orientation}.webp',lossless=True,exif=exif)
+wide.save(root/'wide-animated.webp',lossless=True,save_all=True,
+          append_images=[Image.new('RGB',wide.size,'blue')],duration=100,loop=0)
+references = {}
+for name in ['wide.webp','wide-lossy.webp','wide-alpha.webp','webp-orientation-6.webp','webp-orientation-7.webp','wide-animated.webp']:
+    with Image.open(root/name) as source:
+        source.seek(0)
+        decoded=ImageOps.exif_transpose(source).convert('RGBA')
+        references[name]={'width':decoded.width,'height':decoded.height,'rgbaSha256':hashlib.sha256(decoded.tobytes()).hexdigest()}
+(root/'webp-references.json').write_text(json.dumps(references,indent=2)+'\n')

@@ -34,6 +34,8 @@ export interface ImageResolverContext {
 }
 
 export interface ToPptxOptions {
+  /** Default compatible converts WebP to a static PNG. Preserve embeds original WebP bytes. */
+  imageFormat?: "compatible" | "preserve";
   textMeasurement?: TextMeasurement;
   onDiagnostic?: (diagnostic: LayoutDiagnostic) => void;
   baseDir?: string;

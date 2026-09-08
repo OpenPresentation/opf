@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Convert WebP to compatible static PNG pictures by default in Node and browser exports; preserve alpha, EXIF orientation and the first animation frame. Add imageFormat: "preserve" for original WebP embedding.
+- Use lazily loaded Sharp 0.35.4 for local Node conversion and browser image/canvas APIs in browser bundles. Raise the Node minimum to 20.9.0. Conversion errors include the image path and enforce a 40-megapixel limit.
+- Verify 36 cases against independent Pillow pixel references and 13 browser checks. Keynote 14.4 displays all six converted specimens, replacing its empty-rectangle WebP import.
+
 - Detect PNG/JPEG/GIF/WebP content from embedded bytes, repair native media extensions/content types and import correct data-URI MIME types even when filenames or resolver hints disagree.
 
 - Repair duplicate native object IDs on slides mixing tables with other objects, and sort normalized ZIP paths for stable multi-chart export bytes.

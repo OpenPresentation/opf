@@ -1,3 +1,4 @@
+import { webpToPng } from '#image-fallback';
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
 import { composeSlide, fitText, textWidthMeasurer, resolveCanvasDimensions, resolveFontFamilies, resolveTextStyle } from "@openpresentation/opf/composition";
 import PptxGenJS from "pptxgenjs";
@@ -153,6 +154,9 @@ const CHART_COLORS = [
 ];
 
 export async function toPptx(input, options = {}) {
+  if (options.imageFormat !== undefined && !['compatible', 'preserve'].includes(options.imageFormat)) {
+    throw new OPFPptxError('invalid-image-format', 'imageFormat must be compatible or preserve.', {path: 'options.imageFormat'});
+  }
   const presentation = parseInput(input);
   assertValidBoundary(presentation);
 
@@ -160,6 +164,7 @@ export async function toPptx(input, options = {}) {
   context.listMarkers = new Map();
   context.tableHeaders = new Map();
   context.imagePlacements = new Map();
+  context.imageFormat = options.imageFormat ?? "compatible";
   const pptx = new PptxGenJS();
   configurePresentation(pptx, presentation, {...context,fonts:resolveSlideContext(presentation,presentation.slides[0],context,options).fonts});
 
@@ -1497,7 +1502,7 @@ function isDarkHex(value) {
   return (red * 299 + green * 587 + blue * 114) / 1000 < 128;
 }
 
-function normalizePptxZip(raw, context) {
+async function normalizePptxZip(raw, context) {
   let entries;
   try {
     entries = unzipSync(raw);
@@ -1507,9 +1512,32 @@ function normalizePptxZip(raw, context) {
     });
   }
 
+  const imageSources = new Map();
+  for (const [part, bytes] of Object.entries(entries)) {
+    if (!/^ppt\/slides\/slide\d+\.xml$/.test(part)) continue;
+    const relationships = parseRelationships(entries, part);
+    for (const [picture] of decodeText(bytes).matchAll(/<p:pic>[\s\S]*?<\/p:pic>/g)) {
+      const placement = context.imagePlacements.get(picture.match(/name="(OPF image \d+)"/)?.[1]);
+      const id = picture.match(/<a:blip\b[^>]*r:embed="([^"]+)"/)?.[1];
+      if (placement) imageSources.set(relationships.get(id)?.path, placement.path);
+    }
+  }
   const imageMetadata = new Map();
   for (const [part, bytes] of Object.entries(entries)) {
-    if (part.startsWith("ppt/media/")) imageMetadata.set(part, rasterMetadata(bytes));
+    if (!part.startsWith('ppt/media/')) continue;
+    let metadata = rasterMetadata(bytes);
+    if (metadata?.mediaType === 'image/webp' && context.imageFormat === 'compatible') {
+      try {
+        if (metadata.width * metadata.height > 40_000_000) throw new Error('Image dimensions exceed the 40 megapixel conversion limit.');
+        const png = await webpToPng(bytes);
+        metadata = rasterMetadata(png);
+        if (metadata?.mediaType !== 'image/png') throw new Error('The local decoder did not return a PNG.');
+        entries[part] = png;
+      } catch (error) {
+        throw new OPFPptxError('image-conversion-failed', 'WebP could not be converted to a compatible PNG.', {path: imageSources.get(part) ?? part, cause: errorMessage(error)});
+      }
+    }
+    imageMetadata.set(part, metadata);
   }
   const output = {};
   const renameMaps = buildRenameMaps(Object.keys(entries));

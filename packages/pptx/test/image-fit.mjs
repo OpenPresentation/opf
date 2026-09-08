@@ -21,7 +21,7 @@ for (const [name,width,height] of fixtures) {
   const image=find(parser.parse(svg),'image')[0];
   assert.equal(image['@_preserveAspectRatio'],mode==='crop'?'xMidYMid slice':'xMidYMid meet');
   const bounds=Object.fromEntries(['x','y','width','height'].map(k=>[k,Number(image[`@_${k}`])]));
-  const output=await toPptx(deck,{strictAssets:true});
+  const output=await toPptx(deck,{imageFormat:"preserve",strictAssets:true});
   const entries=unzipSync(output), xml=parser.parse(new TextDecoder().decode(entries['ppt/slides/slide1.xml']));
   const picture=find(xml,'p:pic')[0], xfrm=picture['p:spPr']['a:xfrm'];
   const x=Number(xfrm['a:off']['@_x'])/9525,y=Number(xfrm['a:off']['@_y'])/9525,w=Number(xfrm['a:ext']['@_cx'])/9525,h=Number(xfrm['a:ext']['@_cy'])/9525;
@@ -47,7 +47,7 @@ for (const [name,width,height] of fixtures) {
 const png=await readFile(new URL('fixtures/images/tall.png',import.meta.url));
 let resolved=0;
 const hostDeck={assets:{photo:{src:'https://example.invalid/photo.jpg',mediaType:'image/png'}},slides:[{image:'asset:photo'}]};
-const hostBytes=await toPptx(hostDeck,{strictAssets:true,imageResolver:()=>{resolved++;return png;}});
+const hostBytes=await toPptx(hostDeck,{imageFormat:"preserve",strictAssets:true,imageResolver:()=>{resolved++;return png;}});
 assert.equal(resolved,1);
 const hostXml=parser.parse(new TextDecoder().decode(unzipSync(hostBytes)['ppt/slides/slide1.xml']));
 const hostFrame=find(hostXml,'p:pic')[0]['p:spPr']['a:xfrm']['a:ext'];
@@ -56,7 +56,7 @@ assert.ok(Math.abs(Number(hostFrame['@_cx'])/Number(hostFrame['@_cy'])-.5)<.0000
 for (const source of ['local','host-path','host-data']) {
  const local=new URL('fixtures/images/tall.png',import.meta.url).pathname;
  let calls=0;
- const result=await toPptx({slides:[{image:source==='local'?local:'https://example.invalid/image'}]},{strictAssets:true,...(source==='local'?{}:{imageResolver:()=>{calls++;return source==='host-path'?{path:local}:{data:png,mediaType:'image/png'};}})});
+ const result=await toPptx({slides:[{image:source==='local'?local:'https://example.invalid/image'}]},{imageFormat:"preserve",strictAssets:true,...(source==='local'?{}:{imageResolver:()=>{calls++;return source==='host-path'?{path:local}:{data:png,mediaType:'image/png'};}})});
  assert.equal(calls,source==='local'?0:1);
  const pic=find(parser.parse(new TextDecoder().decode(unzipSync(result)['ppt/slides/slide1.xml'])),'p:pic')[0];
  const ext=pic['p:spPr']['a:xfrm']['a:ext'];

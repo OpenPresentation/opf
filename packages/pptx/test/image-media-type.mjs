@@ -23,7 +23,7 @@ try {
    const source = mode === 'uri' ? uri : mode === 'path' ? wrongPath : 'https://example.invalid/asset';
    const value = mode === 'bytes' ? bytes : mode === 'object' ? {data:bytes} : mode === 'typed-object' ? {data:bytes,mediaType:wrongType} : mode === 'host-uri' ? uri : mode === 'host-string-path' ? wrongPath : {path:wrongPath};
    const deck = {slides:[{image:{src:source,mediaType:wrongType,alt:'Original image'}}]};
-   const options = {strictAssets:true,...(['uri','path'].includes(mode) ? {} : {imageResolver:()=>{calls++;return value;}})};
+   const options = {imageFormat:"preserve",strictAssets:true,...(['uri','path'].includes(mode) ? {} : {imageResolver:()=>{calls++;return value;}})};
    const output = await toPptx(deck,options), entries = unzipSync(output);
    assert.equal(calls,['uri','path'].includes(mode)?0:1);
    const relationships = array(parser.parse(text(entries['ppt/slides/_rels/slide1.xml.rels'])).Relationships.Relationship);

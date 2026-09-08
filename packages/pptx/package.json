@@ -6,7 +6,7 @@
   "type": "module",
   "private": false,
   "engines": {
-    "node": ">=20"
+    "node": ">=20.9.0"
   },
   "repository": {
     "type": "git",
@@ -35,16 +35,18 @@
   "sideEffects": false,
   "scripts": {
     "build": "node scripts/build.mjs",
-    "typecheck": "node --check src/index.js && node --check scripts/build.mjs && node --check scripts/validate-package.mjs && node --check test/smoke.mjs && node --check src/image-geometry.js && node --check test/image-fit.mjs && node --check test/image-orientation.mjs && node --check test/table-layout.mjs && node --check test/table-import.mjs && node --check test/object-ids.mjs && node --check test/export-corpus.mjs && node --check test/image-media-type.mjs",
-    "test": "npm run build && node test/dependency-boundary.mjs",
+    "typecheck": "node --check src/index.js && node --check scripts/build.mjs && node --check scripts/validate-package.mjs && node --check test/smoke.mjs && node --check src/image-geometry.js && node --check test/image-fit.mjs && node --check test/image-orientation.mjs && node --check test/table-layout.mjs && node --check test/table-import.mjs && node --check test/object-ids.mjs && node --check test/export-corpus.mjs && node --check test/image-media-type.mjs && node --check src/image-fallback-node.js && node --check src/image-fallback-browser.js && node --check test/webp-fallback.mjs && node --check scripts/build-browser-check.mjs && node --check test/webp-fallback-browser.js && node --check test/image-fallback-boundary.mjs",
+    "test": "npm run build && node test/dependency-boundary.mjs && npm run build:browser-check",
     "validate": "node scripts/validate-package.mjs",
-    "prepack": "npm run build"
+    "prepack": "npm run build",
+    "build:browser-check": "node scripts/build-browser-check.mjs"
   },
   "dependencies": {
     "@openpresentation/opf": "^0.4.0",
     "fast-xml-parser": "^5.8.0",
     "fflate": "^0.8.3",
-    "pptxgenjs": "4.0.1"
+    "pptxgenjs": "4.0.1",
+    "sharp": "0.35.4"
   },
   "peerDependencies": {
     "@openpresentation/opf-render": "^0.1.0"
@@ -55,6 +57,13 @@
     }
   },
   "devDependencies": {
-    "@openpresentation/opf-render": "0.1.1"
+    "@openpresentation/opf-render": "0.1.1",
+    "esbuild": "0.28.2"
+  },
+  "imports": {
+    "#image-fallback": {
+      "browser": "./dist/image-fallback-browser.js",
+      "default": "./dist/image-fallback-node.js"
+    }
   }
 }
