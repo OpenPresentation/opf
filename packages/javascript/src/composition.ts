@@ -1,3 +1,5 @@
+import {tableGrid,type TableCellStyle} from './table.js';
+export {tableGrid,tableRowBoundaries,type TableCellStyle,type TableBorder,type TableGrid,type TableGridCell,type TableGridIssue} from './table.js';
 /** Portable layout geometry. No fonts, DOM, renderer, or network dependencies. */
 export interface Composition {
   mode?: "auto" | "grid" | "row" | "column";
@@ -299,6 +301,10 @@ export interface TableLayoutOptions {
 }
 export interface TableCellLayout {
   value: unknown;
+  input: unknown;
+  sourcePath: string;
+  style: TableCellStyle;
+  row: number; column: number; rowSpan: number; colSpan: number;
   path: string;
   header: boolean;
   rich: boolean;
@@ -318,48 +324,54 @@ export interface TableLayout { rows: TableRowLayout[]; columnCount: number; heig
 export function layoutTable(value: unknown, box: LayoutBox, options: TableLayoutOptions = {}): TableLayout {
   const scale = options.scale ?? 1, requested = 15 * scale, minimum = (options.minFontSize ?? 16) * scale;
   if (![box.x,box.y,box.width,box.height,scale,minimum].every(Number.isFinite) || box.width <= 0 || box.height <= 0 || scale <= 0 || minimum <= 0) throw new RangeError('Table dimensions, scale and font sizes must be finite and positive.');
-  const table = record(value), headers = Array.isArray(table.columns) && table.columns.length > 0;
-  const values: unknown[][] = [...(headers ? [table.columns] : []), ...(Array.isArray(table.rows) ? table.rows : [])];
-  const columnCount = Math.max(1, ...values.map(row => row.length)), cellWidth = box.width / columnCount;
-  const width = Math.max(scale, cellWidth - 20 * scale), padding = 12 * scale;
-  const fitCell = (cell: {value: unknown; style: TextStyle}, height: number, min: number): TextFit | RichTextFit => {
-    const textBox = {x:0,y:0,width,height:Math.max(scale,height)};
+  const grid = tableGrid(value,options.path ?? 'table');
+  if(grid.issues.length) throw new RangeError(`${grid.issues[0]!.path}: ${grid.issues[0]!.message}`);
+  const columnCount=grid.columnCount,cellWidth=box.width/columnCount;
+  const cells=grid.rows.flat().map(cell=>{
+    const padding={top:8,right:10,bottom:4,left:10,...cell.style.padding};
+    const width=cellWidth*cell.colSpan-(padding.left+padding.right)*scale;
+    const style={fontFamily:options.fontFamily??'sans-serif',fontWeight:cell.header?700:400,italic:false,path:cell.valuePath};
+    return {...cell,padding,width,textStyle:style};
+  });
+  const fitCell=(cell:typeof cells[number],height:number,min:number):TextFit|RichTextFit=>{
+    const textBox={x:0,y:0,width:Math.max(scale,cell.width),height:Math.max(scale,height)};
     return Array.isArray(cell.value)
-      ? fitRichText(cell.value, textBox, requested, min, {style:cell.style,textMeasurement:options.textMeasurement,uniformLineHeight:true})
-      : fitText(flatten(cell.value), textBox, requested, min, textWidthMeasurer(resolveTextStyle(cell.style,options.textMeasurement),options.textMeasurement));
+      ? fitRichText(cell.value,textBox,requested,min,{style:cell.textStyle,textMeasurement:options.textMeasurement,uniformLineHeight:true})
+      : fitText(flatten(cell.value),textBox,requested,min,textWidthMeasurer(resolveTextStyle(cell.textStyle,options.textMeasurement),options.textMeasurement));
   };
-  const textHeight = (fit: TextFit | RichTextFit) => 'height' in fit ? fit.height : fit.lines.length * fit.lineHeight;
-  const measured = values.map((row,index) => {
-    const header = headers && index === 0;
-    const cells = Array.from({length:columnCount}, (_,column) => {
-      const path = `${options.path ?? 'table'}.${header ? 'columns' : `rows.${index - Number(headers)}`}.${column}`;
-      return {value:row[column],path,header,style:{fontFamily:options.fontFamily ?? 'sans-serif',fontWeight:header ? 700 : 400,italic:false,path}};
-    });
-    const natural = Math.max(...cells.map(cell => textHeight(fitCell(cell,scale,requested)) + padding));
-    const preferred = Math.max(54 * scale, natural);
-    const needed = Math.min(preferred, Math.max(...cells.map(cell => textHeight(fitCell(cell,scale,minimum)) + padding)));
-    return {cells,preferred,natural,needed};
-  });
-  const preferred = measured.reduce((sum,row) => sum + row.preferred,0), natural = measured.reduce((sum,row) => sum + row.natural,0), needed = measured.reduce((sum,row) => sum + row.needed,0);
-  let y = box.y, overflow = cellWidth <= 20 * scale;
-  const rows = measured.map(row => {
-    const height = preferred <= box.height ? row.preferred : natural <= box.height
-      ? row.natural + (row.preferred - row.natural) * (box.height - natural) / Math.max(Number.EPSILON, preferred - natural)
-      : needed <= box.height
-      ? row.needed + (row.natural - row.needed) * (box.height - needed) / Math.max(Number.EPSILON, natural - needed)
-      : row.needed * box.height / needed;
-    const rowBox = {x:box.x,y,width:box.width,height};
-    const cells = row.cells.map((cell,column) => {
-      const cellBox = {x:box.x + column * cellWidth,y,width:cellWidth,height};
-      const textBox = {x:cellBox.x + 10 * scale,y:y + 8 * scale,width,height:Math.max(scale,height-padding)};
-      const fit = fitCell(cell,textBox.height,minimum);
-      overflow ||= height <= padding || fit.overflow;
-      return {value:cell.value,path:cell.path,header:cell.header,rich:Array.isArray(cell.value),box:cellBox,textBox,textStyle:resolveTextStyle(cell.style,options.textMeasurement),fit};
-    });
-    y += height;
-    return {box:rowBox,cells};
-  });
-  return {rows,columnCount,height:y-box.y,overflow};
+  const textHeight=(fit:TextFit|RichTextFit)=>'height' in fit?fit.height:fit.lines.length*fit.lineHeight;
+  const required=(cell:typeof cells[number],size:number)=>textHeight(fitCell(cell,scale,size))+(cell.padding.top+cell.padding.bottom)*scale;
+  const natural=Array(grid.rowCount).fill(0) as number[],needed=Array(grid.rowCount).fill(0) as number[];
+  for(const cell of cells)if(cell.rowSpan===1){natural[cell.row]=Math.max(natural[cell.row]!,required(cell,requested));needed[cell.row]=Math.max(needed[cell.row]!,required(cell,minimum));}
+  // Satisfy every spanning cell over its full rectangle. Added height can only
+  // help previously processed constraints; no text is duplicated into covered rows.
+  for(const cell of cells)if(cell.rowSpan>1)for(const [heights,size] of [[natural,requested],[needed,minimum]] as const){
+    const current=heights.slice(cell.row,cell.row+cell.rowSpan).reduce((a,b)=>a+b,0);
+    const extra=Math.max(0,required(cell,size)-current)/cell.rowSpan;
+    for(let r=cell.row;r<cell.row+cell.rowSpan;r++)heights[r]!+=extra;
+  }
+  const preferred=natural.map(height=>Math.max(54*scale,height));
+  for(let r=0;r<needed.length;r++)needed[r]=Math.min(preferred[r]!,needed[r]!);
+  const sum=(values:number[])=>values.reduce((a,b)=>a+b,0);
+  const preferredTotal=sum(preferred),naturalTotal=sum(natural),neededTotal=sum(needed);
+  const heights=preferred.map((height,r)=>preferredTotal<=box.height?height:naturalTotal<=box.height
+    ? natural[r]!+(height-natural[r]!)*(box.height-naturalTotal)/Math.max(Number.EPSILON,preferredTotal-naturalTotal)
+    : neededTotal<=box.height
+    ? needed[r]!+(natural[r]!-needed[r]!)*(box.height-neededTotal)/Math.max(Number.EPSILON,naturalTotal-neededTotal)
+    : needed[r]!*box.height/neededTotal);
+  const ys=[box.y];for(const height of heights)ys.push(ys.at(-1)!+height);
+  let overflow=false;
+  const rows:TableRowLayout[]=heights.map((height,r)=>({box:{x:box.x,y:ys[r]!,width:box.width,height},cells:[]}));
+  for(const cell of cells){
+    const cellBox={x:box.x+cell.column*cellWidth,y:ys[cell.row]!,width:cell.colSpan*cellWidth,height:ys[cell.row+cell.rowSpan]!-ys[cell.row]!};
+    const available=cellBox.height-(cell.padding.top+cell.padding.bottom)*scale;
+    const fit=fitCell(cell,available,minimum),height=textHeight(fit);
+    const offset=cell.style.verticalAlign==='bottom'?Math.max(0,available-height):cell.style.verticalAlign==='middle'?Math.max(0,(available-height)/2):0;
+    const textBox={x:cellBox.x+cell.padding.left*scale,y:cellBox.y+cell.padding.top*scale+offset,width:Math.max(scale,cell.width),height:Math.max(scale,available-offset)};
+    overflow ||= cell.width<=0||available<=0||fit.overflow;
+    rows[cell.row]!.cells.push({value:cell.value,input:cell.input,path:cell.valuePath,sourcePath:cell.path,style:cell.style,row:cell.row,column:cell.column,rowSpan:cell.rowSpan,colSpan:cell.colSpan,header:cell.header,rich:Array.isArray(cell.value),box:cellBox,textBox,textStyle:resolveTextStyle(cell.textStyle,options.textMeasurement),fit});
+  }
+  return {rows,columnCount,height:sum(heights),overflow};
 }
 function tableOverflows(value: unknown, box: LayoutBox, scale: number, settings: Composition, options: ComposeSlideOptions, path?: string): boolean {
   return box.width <= 0 || box.height <= 0 || layoutTable(value,box,{scale,minFontSize:settings.minFontSize,fontFamily:options.fonts?.body,textMeasurement:options.textMeasurement,path}).overflow;
