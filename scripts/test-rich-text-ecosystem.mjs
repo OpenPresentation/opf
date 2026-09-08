@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import {createRequire} from 'node:module';
+import {mkdir,writeFile} from 'node:fs/promises';
+import {renderSvg} from '../../opf-render/src/svg.js';
+import {loadOfficeFontRegistry} from '../../opf-render/src/fonts-node.js';
+import {toPptx} from '../../opf-pptx/src/index.js';
+const require=createRequire(new URL('../../opf-pptx/package.json',import.meta.url));const {unzipSync,strFromU8}=require('fflate');
+const document={name:'Rich text reference',design:{fontScheme:'roboto'},slides:[{title:'Formatting is part of the document',text:['A normal sentence with ',{text:'bold emphasis',bold:true},', ',{text:'italic text',italic:true},', ',{text:'blue underline',underline:true,color:'#2563EB'},' and ',{text:'retired wording',strikethrough:true},'.\nA larger ',{text:'28-point heading',fontSize:28},' changes wrapping.\nWater: H',{text:'2',subscript:true},'O. Square: x',{text:'2',superscript:true},'.\n',{text:'OpenPresentation',link:'https://www.openpresentation.org',underline:true},' remains editable.']} ]};
+const fonts=await loadOfficeFontRegistry(),svg=renderSvg(document,{textMeasurement:fonts.textMeasurement,embeddedFonts:fonts.embeddedFonts,trace:true});
+for(const pattern of [/font-weight="700"/,/font-style="italic"/,/text-decoration="underline"/,/line-through/,/#2563EB/,/href="https:\/\/www.openpresentation.org"/])assert.match(svg,pattern);
+const bytes=await toPptx(document,{textMeasurement:fonts.textMeasurement}),files=unzipSync(bytes),xml=strFromU8(files['ppt/slides/slide1.xml']);
+for(const pattern of [/b="1"/,/i="1"/,/u="sng"/,/sngStrike/,/baseline="-/,/hlinkClick/])assert.match(xml,pattern);
+const bad=renderSvg({slides:[{text:[{text:'Safe text',link:'javascript:alert(1)'}]}]});assert.doesNotMatch(bad,/javascript:/);
+await mkdir('artifacts/rich-text',{recursive:true});await writeFile('artifacts/rich-text/reference.opf.json',JSON.stringify(document,null,2));await writeFile('artifacts/rich-text/reference.svg',svg);await writeFile('artifacts/rich-text/reference.pptx',bytes);
+console.log('Rich text ecosystem passed: measured SVG styles, native PPTX formatting, scripts and hyperlinks.');

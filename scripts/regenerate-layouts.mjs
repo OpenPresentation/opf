@@ -149,6 +149,7 @@ function canonicalRecord(canonical) {
     id: canonical.id,
     name: canonical.name,
     placeholders: canonical.placeholders,
+    ...(canonical.composition ? { composition: canonical.composition } : {}),
   };
 }
 

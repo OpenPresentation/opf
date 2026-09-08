@@ -24,5 +24,9 @@
     {
       "type": "list"
     }
-  ]
+  ],
+  "composition": {
+    "mode": "grid",
+    "columns": 3
+  }
 }

@@ -2,6 +2,9 @@ import { defineConfig } from "tsup";
 
 export default defineConfig({
   entry: {
+    data: "src/data.ts",
+    pagination: "src/pagination.ts",
+    composition: "src/composition.ts",
     index: "src/index.ts",
     schemas: "src/schemas.ts",
     catalogs: "src/catalogs.ts",
@@ -17,7 +20,7 @@ export default defineConfig({
   dts: true,
   sourcemap: false,
   clean: true,
-  splitting: false,
+  splitting: true,
   treeshake: true,
   target: "es2022",
   platform: "neutral",

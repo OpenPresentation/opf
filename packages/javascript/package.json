@@ -1,6 +1,6 @@
 {
   "name": "@openpresentation/opf",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Canonical Open Presentation Format schemas, catalogs, TypeScript types, and local validation.",
   "license": "MIT",
   "author": "Open Presentation",
@@ -71,7 +71,19 @@
       "import": "./dist/repo-readme.js"
     },
     "./spec/*": "./dist/spec/*",
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./composition": {
+      "types": "./dist/composition.d.ts",
+      "import": "./dist/composition.js"
+    },
+    "./pagination": {
+      "types": "./dist/pagination.d.ts",
+      "import": "./dist/pagination.js"
+    },
+    "./data": {
+      "types": "./dist/data.d.ts",
+      "import": "./dist/data.js"
+    }
   },
   "files": [
     "dist",
@@ -87,7 +99,7 @@
     "generate": "node scripts/generate.mjs && node scripts/generate-previews.mjs && node scripts/generate-content.mjs",
     "build": "pnpm run generate && tsup && node scripts/copy-spec.mjs",
     "typecheck": "pnpm run generate && tsc --noEmit",
-    "test": "pnpm run build && node test/smoke.mjs",
+    "test": "pnpm run build && node ../../scripts/run-node-tests.mjs && node test/composition.mjs && node test/pagination.mjs && node test/data.mjs && node test/rich-text.mjs && node test/lists.mjs",
     "test:packed": "node test/packed-install-smoke.mjs",
     "pack:dry-run": "pnpm run build && npm pack --dry-run --cache /tmp/opf-npm-cache"
   },

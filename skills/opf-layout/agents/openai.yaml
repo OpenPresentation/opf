@@ -1,0 +1,4 @@
+interface:
+  display_name: "OPF Dynamic Layout"
+  short_description: "Compose and repair readable dynamic slide layouts"
+  default_prompt: "Use $opf-layout to help with this OPF task using the current project schema and packages."

@@ -7,11 +7,41 @@
     "build": "pnpm --filter @openpresentation/opf build && pnpm --filter @openpresentation/cli build",
     "typecheck": "pnpm --filter @openpresentation/opf typecheck && pnpm --filter @openpresentation/cli typecheck",
     "check:text": "node scripts/check-text-integrity.mjs",
-    "test": "pnpm --filter @openpresentation/opf test && pnpm check:text",
-    "pack:dry-run": "pnpm --filter @openpresentation/opf pack:dry-run"
+    "test": "pnpm --filter @openpresentation/opf test && pnpm test:cli && pnpm check:text && pnpm check:spec",
+    "pack:dry-run": "pnpm --filter @openpresentation/opf pack:dry-run",
+    "test:ecosystem": "node --import ./scripts/register-local-opf.mjs scripts/test-ecosystem.mjs",
+    "test:gallery": "node --import ./scripts/register-local-opf.mjs scripts/test-gallery-snippets.mjs",
+    "demo:editor": "node scripts/build-editor-demo.mjs",
+    "test:pagination": "node --import ./scripts/register-local-opf.mjs scripts/test-pagination-ecosystem.mjs",
+    "test:fonts": "node --import ./scripts/register-local-opf.mjs scripts/test-font-ecosystem.mjs && node --import ./scripts/register-local-opf.mjs scripts/test-office-fonts.mjs",
+    "pack:ecosystem": "node scripts/pack-ecosystem.mjs",
+    "test:packed-ecosystem": "node scripts/test-packed-ecosystem.mjs",
+    "test:gallery-transfer": "node scripts/test-gallery-transfer.mjs",
+    "prepare:gallery": "node scripts/prepare-gallery-editor.mjs",
+    "build:spec-reference": "node scripts/build-spec-reference.mjs",
+    "test:skills": "node scripts/test-skills.mjs",
+    "test:cli": "pnpm --filter @openpresentation/cli test",
+    "test:cli:packed": "pnpm --filter @openpresentation/cli test:packed",
+    "test:data": "node --import ./scripts/register-local-opf.mjs scripts/test-data-ecosystem.mjs",
+    "test:rich-text": "node --import ./scripts/register-local-opf.mjs scripts/test-rich-text-ecosystem.mjs",
+    "test:agent-site": "node scripts/test-agent-site.mjs",
+    "test:layout": "node --import ./scripts/register-local-opf.mjs scripts/test-layout-ecosystem.mjs",
+    "test:lists": "node --import ./scripts/register-local-opf.mjs scripts/test-list-ecosystem.mjs",
+    "lint": "biome check .",
+    "check:spec": "node scripts/check-spec-integrity.mjs",
+    "check:examples": "node scripts/validate-examples.mjs",
+    "check:breaking": "node scripts/test-breaking-gate.mjs && node scripts/check-breaking-changes.mjs",
+    "test:packages": "node scripts/test-package-ecosystem.mjs",
+    "test:registry-ecosystem": "node scripts/test-packed-ecosystem.mjs --registry",
+    "test:registry-libraries": "node scripts/test-packed-ecosystem.mjs --registry-libraries",
+    "prepare:gallery:registry": "node scripts/prepare-gallery-editor.mjs --registry",
+    "build:showcase:registry": "node scripts/build-site-showcase.mjs --registry"
   },
   "engines": {
     "node": ">=20"
   },
-  "packageManager": "pnpm@10.33.2"
+  "packageManager": "pnpm@10.33.2",
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.3"
+  }
 }

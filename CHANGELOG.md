@@ -49,23 +49,42 @@ The release source also prepares a standalone, bundled `@openpresentation/cli@0.
 - Allowed a single string shorthand for `audience` in addition to the existing array form.
 - Documented the mixed slide-root payload shorthand in schema and content payload references.
 
-## 0.2.0 - Pending npm publish approval
+## 0.2.1
+
+_Prepared internally as `0.2.0` (see [`docs/migrations/0.2.0.md`](./docs/migrations/0.2.0.md) for the breaking catalog change drafted under that name), but the version was bumped straight to `0.2.1` before ever being published — `0.2.0` has no npm release or git tag. The changes below are what actually shipped, as `0.2.1`, the first release after `0.1.0`._
 
 ### Breaking Changes
 
 - Corrected the United Kingdom chart catalog ID from the removed misspelled slug to `united-kingdom`. See [`docs/migrations/0.2.0.md`](./docs/migrations/0.2.0.md).
 
+### Added
+
+- Added typed raw spec file manifest exports at `@openpresentation/opf/spec-files`.
+- Added a GitHub Actions npm publish workflow for semver tags with npm provenance.
+- Added layout preview generation (`generate-previews.mjs`, `render-layout-previews.mjs`) and a `previews.ts` module exporting an HTML preview per canonical layout record.
+
 ### Changed
 
-- Marked `@openpresentation/opf` as a public npm package at version `0.2.0`.
+- Marked `@openpresentation/opf` as a public npm package.
 - Kept the canonical spec npm artifact on the existing `@openpresentation/opf` package instead of adding a separate `@openpresentation/opf-spec` package.
 - Removed Xano-hosted chart preview URL objects from the bundled chart-type catalog records and chart-type index.
 - Kept the JavaScript package boundary local and format-level: schemas, catalogs, generated TypeScript types, and local validation only.
 - Included the full raw `spec/` tree in the packed JavaScript package, including the optional downstream-service reference `spec/openapi.yaml`, schemas, catalogs, reference files, and catalog indexes.
-- Added typed raw spec file manifest exports at `@openpresentation/opf/spec-files`.
-- Added a GitHub Actions npm publish workflow for semver tags with npm provenance.
-- Clarified that the OPF CLI remains local-only and is not published as part of `@openpresentation/opf` v0.2.0.
+- Clarified that the OPF CLI remains local-only and is not published as part of `@openpresentation/opf`.
 
 ### Not Included
 
 - No hosted rendering, parsing, generation, remote catalog fetching, or hosted-service client behavior is included in this release-prep change.
+
+## 0.1.0
+
+First published release of `@openpresentation/opf` to npm.
+
+### Added
+
+- Published `@openpresentation/opf` to npm, dropping `private: true` and bumping the package version from `0.0.0` to `0.1.0`.
+
+### Changed
+
+- Updated the package README to lead with `pnpm add @openpresentation/opf` instead of workspace build instructions, and reframed the top-level README around installing the published package.
+- Noted that the schema is pre-stable (0.x) and may include breaking changes between minor versions before a 1.0 release.

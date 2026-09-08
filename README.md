@@ -10,6 +10,10 @@ Open Presentation Format is the portable, human-readable JSON document format fo
 
 This repository is the canonical home for the OPF **spec**, **JSON Schemas**, **catalog presets**, examples, generated developer types, local validation tooling, and planning docs for the future render/edit/convert toolkit. OpenPresentation publishes open-source code and documentation only; it does not provide hosted APIs, hosted rendering functions, queues, storage, authentication, jobs, previews, SLAs, telemetry, or managed infrastructure.
 
+For AI agents, use the [OPF skill set](docs/agent-skills.md) for authoring, layout, presets, editing, export, and schema inspection.
+
+For LLM authoring, start with [the authoring guide](docs/llm-authoring.md), [dynamic composition](docs/dynamic-composition.md), and [local ecosystem verification](docs/ecosystem-development.md).
+
 ## File naming
 
 Open Presentation Format documents are JSON files. Use `*.opf.json` for complete OPF presentation documents, for example `board-review.opf.json` or `deck.opf.json`.
@@ -34,7 +38,7 @@ And they don't start from a blank canvas. [pptx.gallery](https://pptx.gallery) i
 
 1. **Install the format package.** `npm install @openpresentation/opf`.
 2. **Author and validate a deck.** Write a `*.opf.json` file — start from [`docs/how-opf-works.md`](./docs/how-opf-works.md) or copy [`examples/technical/full-feature-tour.opf.json`](./examples/technical/full-feature-tour.opf.json) — and run `validatePresentation` on it.
-3. **Build on it.** Browse presets at [pptx.gallery](https://pptx.gallery), pin the schemas in your pipeline, and track the [toolkit roadmap](#toolkit-roadmap) for the render and convert libraries.
+3. **Build on it.** Browse presets at [pptx.gallery](https://pptx.gallery), pin the schemas in your pipeline, and track the [toolkit libraries](#toolkit-libraries) for the render and convert libraries.
 
 Your deck lives in git from the first commit. Nothing in these steps calls a hosted service, and nothing ever will — that boundary is the point.
 
@@ -48,13 +52,13 @@ The canonical JavaScript/TypeScript package is published at [`packages/javascrip
 - generate TypeScript types, with `Presentation` as the top-level type
 - validate OPF JSON and catalog records locally
 
-It does not render `.pptx`, parse `.pptx`, generate content with AI, fetch remote catalogs, call hosted APIs, or provide managed services. Future render/edit/convert packages are planned as separate MIT repos that depend on `@openpresentation/opf`.
+It does not render `.pptx`, parse `.pptx`, generate content with AI, fetch remote catalogs, call hosted APIs, or provide managed services. Render/edit/convert packages live in separate MIT repos that depend on `@openpresentation/opf`. The format package also exposes pure composition geometry so those packages share layout behavior.
 
-## Toolkit roadmap
+## Toolkit libraries
 
-The OPF format package is shipping first. The planned toolkit lives outside this format-only repo:
+The local toolkit lives in sibling repositories. See [ecosystem development](docs/ecosystem-development.md) for coordinated builds and verification, and [dynamic composition](docs/dynamic-composition.md) for portable layout rules.
 
-| Planned repo | Role | Boundary |
+| Repo | Role | Boundary |
 |---|---|---|
 | `opf-render` | OPF to SVG/PNG/PDF | Local and embeddable rendering library |
 | `opf-editor` | WYSIWYG bindings/components | Headless editor primitives plus optional UI components |
@@ -120,14 +124,16 @@ import presentationSchema from "@openpresentation/opf/spec/schemas/opf.schema.js
 };
 ```
 
-Use the local-only CLI source during development:
+Use the [installable OPF CLI](./packages/cli/README.md) to create, validate, and edit files locally:
 
 ```sh
 pnpm --filter @openpresentation/cli build
-node packages/cli/dist/index.js schemas
-node packages/cli/dist/index.js catalogs
-node packages/cli/dist/index.js validate path/to/deck.opf.json
+node packages/cli/dist/index.js create deck.opf.json --title "Decision brief"
+node packages/cli/dist/index.js validate deck.opf.json
+node packages/cli/dist/index.js edit deck.opf.json --patch changes.json --in-place
 ```
+
+See [CSV and JSON data import](./docs/data-import.md) for editable tables and charts in the editor, CLI, and package API.
 
 ## Layout
 
@@ -140,6 +146,7 @@ node packages/cli/dist/index.js validate path/to/deck.opf.json
 | [`docs/catalog-schema-reference.md`](./docs/catalog-schema-reference.md) | Author-facing reference for every companion catalog schema. |
 | [`docs/content-payloads.md`](./docs/content-payloads.md) | Author-facing notes for slide and region content payloads, including chart and table object shapes. |
 | [`docs/examples.md`](./docs/examples.md) | Guide to the expanded scenario-oriented examples under `examples/gallery/`. |
+| [`docs/live-editor.md`](./docs/live-editor.md) | Browser canvas, live OPF editing, font loading, installable preview packages, and current fidelity limits. |
 | [`docs/release-process.md`](./docs/release-process.md) | Maintainer runbook for tagging, trusted npm publishing, verification, and GitHub release notes. |
 | [`spec/schemas/*.schema.json`](./spec/schemas) | Companion schemas for catalog records and sub-objects. |
 | [`spec/catalogs/<catalog-kind>/`](./spec/catalogs) | Canonical bundled catalog records. |
@@ -147,7 +154,7 @@ node packages/cli/dist/index.js validate path/to/deck.opf.json
 | [`examples/technical/`](./examples/technical) | Focused OPF fixtures for validator, renderer, catalog-resolution, design, content-payload, and region behavior. |
 | [`examples/gallery/`](./examples/gallery) | Broader OPF example decks organized by industry, function, education, government, presentation type, international, and design/media scenarios. |
 | [`packages/javascript/`](./packages/javascript) | Public pre-stable source for `@openpresentation/opf`. |
-| [`packages/cli/`](./packages/cli) | Local-only OPF CLI source; native distribution is deferred. |
+| [`packages/cli/`](./packages/cli) | Installable local CLI for creating, validating, editing, and inspecting OPF. |
 | [`legacy/`](./legacy) | Tombstone for service-specific clients, CLIs, tool integrations, and workflows removed from the OpenPresentation OSS repo. |
 
 ## OpenPresentation Boundary

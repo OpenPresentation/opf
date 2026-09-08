@@ -20,7 +20,7 @@ The optional payload `type` can make intent explicit, but OPF should usually inf
 
 ## Blocks
 
-Use slide-level `blocks` when a slide contains multiple content payloads, but exact placement should be inferred by the renderer. Blocks are not recursive; each block is a concrete content payload.
+Use slide-level `blocks` when a slide contains multiple content payloads, but exact placement should be inferred by the renderer. Blocks may contain a concrete content payload or a nested group with its own `blocks` and optional `composition`. Groups cannot mix child blocks with leaf payload fields. See [dynamic composition](dynamic-composition.md) for nesting and inheritance rules.
 
 ```json
 {

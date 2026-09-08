@@ -1,5 +1,5 @@
 {
-  "$schema": "https://openpresentation.org/schema/opf-font-scheme-index/v1",
+  "$schema": "https://openpresentation.org/schema/opf-catalog-index/v1",
   "version": "1",
   "description": "Catalog of font schemes available in the openpresentation.org catalog. Each entry is a lightweight summary; full font-scheme records live in the per-id JSON files alongside this index.",
   "records": [

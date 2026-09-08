@@ -1,0 +1,69 @@
+name: Coordinated public packages
+on:
+  pull_request:
+  push:
+    branches: [main, codex/opf-ecosystem-20260907]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ecosystem-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  packages:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [20, 24]
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          path: opf
+          persist-credentials: false
+      # These commits are the coordinated checkpoint, not mutable default branches.
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          repository: OpenPresentation/opf-render
+          ref: de53df7cdb0f5d2bed586f91d95109d99292b95e
+          path: opf-render
+          persist-credentials: false
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          repository: OpenPresentation/opf-editor
+          ref: dbbe1a17c865707c6d96a462a830fa0db9d46bab
+          path: opf-editor
+          persist-credentials: false
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          repository: OpenPresentation/opf-pptx
+          ref: 7a385fc2c713ebc09766fd782fc3ae636febbdef
+          path: opf-pptx
+          persist-credentials: false
+      - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4.4.0
+        with:
+          version: 10.33.2
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: ${{ matrix.node }}
+          cache: pnpm
+          cache-dependency-path: opf/pnpm-lock.yaml
+      - name: Install locked dependencies
+        run: |
+          pnpm --dir opf install --frozen-lockfile
+          for repo in opf-render opf-editor opf-pptx; do
+            npm ci --prefix "$repo"
+          done
+      - name: Build and link coordinated sources
+        working-directory: opf
+        run: |
+          pnpm build
+          node scripts/link-ecosystem.mjs --packages-only
+      - name: Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks
+        working-directory: opf
+        run: pnpm test:packages
+      - name: Report the verification boundary
+        if: always()
+        run: |
+          echo 'This job tests coordinated source and local tarball installs. It includes the reviewed renderer raster regression baseline, but does not establish complete visual correctness, npm publication, native PowerPoint fidelity, or browser interaction coverage. Private sites run separately.' >> "$GITHUB_STEP_SUMMARY"
