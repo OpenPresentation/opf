@@ -75,3 +75,11 @@ test('mixed-size table paragraphs reserve the native uniform line spacing',()=>{
  assert.ok(Math.abs(cell.fit.height-cell.fit.lines.length*cell.fit.lineHeight)<.001);
  assert.ok(cell.fit.height<=cell.textBox.height);
 });
+
+test('spare height in short rows is removed before any font shrinking',()=>{
+ const table={rows:[[['a\nb\nc']],['short']]};
+ const geometry=layoutTable(table,{...box,height:119},{minFontSize:8,textMeasurement:measurement});
+ assert.equal(geometry.overflow,false);
+ assert.ok(geometry.rows[1].box.height<54);
+ assert.ok(geometry.rows.every(row=>row.cells[0].fit.fontSize===15),'Available spare row height must preserve requested text size');
+});

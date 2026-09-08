@@ -335,15 +335,18 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
       const path = `${options.path ?? 'table'}.${header ? 'columns' : `rows.${index - Number(headers)}`}.${column}`;
       return {value:row[column],path,header,style:{fontFamily:options.fontFamily ?? 'sans-serif',fontWeight:header ? 700 : 400,italic:false,path}};
     });
-    const preferred = Math.max(54 * scale, ...cells.map(cell => textHeight(fitCell(cell,scale,requested)) + padding));
+    const natural = Math.max(...cells.map(cell => textHeight(fitCell(cell,scale,requested)) + padding));
+    const preferred = Math.max(54 * scale, natural);
     const needed = Math.min(preferred, Math.max(...cells.map(cell => textHeight(fitCell(cell,scale,minimum)) + padding)));
-    return {cells,preferred,needed};
+    return {cells,preferred,natural,needed};
   });
-  const preferred = measured.reduce((sum,row) => sum + row.preferred,0), needed = measured.reduce((sum,row) => sum + row.needed,0);
+  const preferred = measured.reduce((sum,row) => sum + row.preferred,0), natural = measured.reduce((sum,row) => sum + row.natural,0), needed = measured.reduce((sum,row) => sum + row.needed,0);
   let y = box.y, overflow = cellWidth <= 20 * scale;
   const rows = measured.map(row => {
-    const height = preferred <= box.height ? row.preferred : needed <= box.height
-      ? row.needed + (row.preferred - row.needed) * (box.height - needed) / Math.max(Number.EPSILON, preferred - needed)
+    const height = preferred <= box.height ? row.preferred : natural <= box.height
+      ? row.natural + (row.preferred - row.natural) * (box.height - natural) / Math.max(Number.EPSILON, preferred - natural)
+      : needed <= box.height
+      ? row.needed + (row.natural - row.needed) * (box.height - needed) / Math.max(Number.EPSILON, natural - needed)
       : row.needed * box.height / needed;
     const rowBox = {x:box.x,y,width:box.width,height};
     const cells = row.cells.map((cell,column) => {
