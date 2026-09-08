@@ -9,7 +9,10 @@ const root=fileURLToPath(new URL('../../../',import.meta.url));
 const pkg=path.join(root,'packages/cli'),out=path.join(root,'artifacts/cli');
 const temp=await mkdtemp(path.join(tmpdir(),'opf-cli-installed-'));
 const registry=process.argv.includes('--registry');
-const expected=JSON.parse(await readFile(path.join(pkg,'package.json'),'utf8'));
+const expected=registry
+ ? JSON.parse(await readFile(path.join(root,'release-plan.json'),'utf8')).packages.find(item=>item.name==='@openpresentation/cli')
+ : JSON.parse(await readFile(path.join(pkg,'package.json'),'utf8'));
+assert.ok(expected?.version,'Missing CLI version in the published release plan');
 const registrySpec=`${expected.name}@${expected.version}`;
 function run(command,args,cwd,env={}) {
  if(process.platform==='win32'&&(command==='npm'||command==='pnpm')){
@@ -45,7 +48,14 @@ try {
  assert.equal(await readFile(path.join(temp,'AGENTS.md'),'utf8'),'Keep existing project instructions.');
  assert.deepEqual(JSON.parse(run(process.execPath,[bin,'skills','install'],temp)).changed,[]);
  assert.ok(JSON.parse(await readFile(path.join(temp,'.agents/skills/opf-author/assets/decision-brief.opf.json'),'utf8')).slides.length);
- const output=run(process.execPath,[path.join(pkg,'test/cli.mjs')],temp,{OPF_TEST_BIN:bin});
+ let commandTests=path.join(pkg,'test/cli.mjs');
+ if(registry){
+  const plan=JSON.parse(await readFile(path.join(root,'release-plan.json'),'utf8'));
+  assert.match(plan.verificationRefs.cli,/^[a-f0-9]{40}$/);
+  commandTests=path.join(temp,'published-command-tests.mjs');
+  await writeFile(commandTests,run('git',['show',`${plan.verificationRefs.cli}:packages/cli/test/cli.mjs`],root));
+ }
+ const output=run(process.execPath,[commandTests],temp,{OPF_TEST_BIN:bin});
  console.log(output.trim());console.log(`Standalone global and npx-style installation passed (${registry?'npm registry':'local pack'}). Integrity: ${packed.integrity}. Tarball: ${tarball}`);
 }finally{
  const actual=await realpath(temp),parent=await realpath(tmpdir());
