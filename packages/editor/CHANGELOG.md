@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Verify existing formatting, mixed-style typing, empty-cell editing and undo controls against canonical rich table cells and headers. Requires coordinated development core and renderer packages; published core 0.4.1 does not accept rich table arrays. Reproduce the 12 browser checks with the core repository's `scripts/build-rich-table-browser.mjs` harness.
+
 ## 0.1.2
 
 - Accept renderer 0.2.x alongside 0.1.x through the optional peer dependency, allowing the new image-fidelity releases in a coordinated installation.
