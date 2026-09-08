@@ -1,4 +1,5 @@
-import { mkdir, readFile, writeFile, rm } from "node:fs/promises";
+import { mkdir, readFile, writeFile, rm, realpath } from "node:fs/promises";
+import { existsSync } from "node:fs";
 import { createRequire } from "node:module";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
@@ -29,6 +30,11 @@ const manifest = registry
   ? { artifacts: releasePlan.packages }
   : JSON.parse(await readFile(path.join(out, "manifest.json"), "utf8"));
 if (librariesOnly) manifest.artifacts = manifest.artifacts.filter(item => item.name !== '@openpresentation/cli');
+await mkdir(out,{recursive:true});
+const actualRoot=await realpath(root), actualOut=await realpath(out);
+if (!actualOut.startsWith(actualRoot+path.sep)) throw new Error('Consumer artifacts must remain inside this checkout');
+const actualConsumer=await realpath(consumer).catch(error=>{if(error.code==='ENOENT')return path.resolve(consumer);throw error;});
+if (!actualConsumer.startsWith(actualOut+path.sep)) throw new Error('Refusing to remove a consumer outside the artifact directory');
 await rm(consumer, { recursive: true, force: true });
 await mkdir(consumer, { recursive: true });
 await writeFile(
@@ -47,7 +53,20 @@ await writeFile(
   ),
 );
 function run(command, args) {
+  // npm's Windows shim is a batch file. Invoke its JS entrypoint without a
+  // shell so paths with spaces and package arguments remain literal values.
+  if (command==='npm' && process.platform==='win32') {
+    // pnpm scripts set npm_execpath to pnpm.cjs, which must not be used as npm.
+    const npmEntry=process.env.npm_execpath?.endsWith('npm-cli.js')?process.env.npm_execpath:(process.env.PATH??'').split(path.delimiter).flatMap(directory=>[
+      path.join(directory,'node_modules/npm/bin/npm-cli.js'),
+      path.resolve(directory,'../npm/bin/npm-cli.js'),
+    ]).find(existsSync);
+    if(!npmEntry||!existsSync(npmEntry))throw new Error('Cannot locate the npm JavaScript entrypoint');
+    args=[npmEntry,...args];
+    command=process.execPath;
+  }
   const result = spawnSync(command, args, { cwd: consumer, stdio: "inherit" });
+  if (result.error) throw result.error;
   if (result.status !== 0)
     throw new Error(`${command} exited ${result.status}`);
 }
@@ -56,8 +75,9 @@ run("npm", [
   "--ignore-scripts",
   "--no-audit",
   "--no-fund",
+  "--offline=false",
   "--cache",
-  "/tmp/opf-npm-cache",
+  path.join(out,'cache'),
 ]);
 await writeFile(
   path.join(consumer, "check.mjs"),
@@ -137,9 +157,12 @@ if (registry) {
     if (installed.version !== item.version) throw new Error(`Expected ${item.name}@${item.version}, installed ${installed.version}`);
   }
   if (!librariesOnly) {
-    run(path.join(consumer, 'node_modules/.bin/opf'), ['--version']);
-    run(path.join(consumer, 'node_modules/.bin/opf'), ['create', 'registry.opf.json', '--title', 'Registry consumer']);
-    run(path.join(consumer, 'node_modules/.bin/opf'), ['validate', 'registry.opf.json']);
+    const cliRoot=path.join(consumer,'node_modules/@openpresentation/cli');
+    const cli=JSON.parse(await readFile(path.join(cliRoot,'package.json'),'utf8'));
+    const entry=path.join(cliRoot,cli.bin.opf);
+    run(process.execPath, [entry,'--version']);
+    run(process.execPath, [entry,'create', 'registry.opf.json', '--title', 'Registry consumer']);
+    run(process.execPath, [entry,'validate', 'registry.opf.json']);
   }
 }
 
@@ -257,5 +280,16 @@ const creationHarness=(await readHarness('opf','scripts/test-create-browser.mjs'
 await writeFile(path.join(consumer,'create-tests.mjs'),creationHarness);
 await build({entryPoints:[path.join(consumer,'create-tests.mjs')],outfile:path.join(browserOut,'packed-create-tests.js'),bundle:true,platform:'browser',format:'esm'});
 await writeFile(path.join(browserOut,'packed-create-tests.html'),browserHtml('create'));
+
+if (verifyStyledTables) {
+  const styledHarness=(await readHarness('opf-editor','test/styled-table-browser.mjs'))
+    .replace('../src/canvas.js','@openpresentation/opf-editor/canvas')
+    .replace('../src/index.js','@openpresentation/opf-editor')
+    .replace('../src/rich-text.js','@openpresentation/opf-editor/rich-text');
+  await writeFile(path.join(consumer,'styled-table-tests.mjs'),styledHarness);
+  await build({entryPoints:[path.join(consumer,'styled-table-tests.mjs')],outfile:path.join(browserOut,'packed-styled-table-tests.js'),bundle:true,platform:'browser',format:'esm'});
+  await writeFile(path.join(browserOut,'packed-styled-table-tests.html'),browserHtml('styled-table'));
+  console.log('Installed styled-table browser harness built: artifacts/editor/packed-styled-table-tests.html. Open it to verify real pointer/keyboard interaction.');
+}
 
 console.log(librariesOnly ? 'Registry library consumer passed for four exact versions; CLI and complete release verification remain separate.' : registry ? 'Registry consumer passed for all five exact release-plan versions (no local package overrides).' : 'Local tarball consumer passed; this is not a registry verification.');
