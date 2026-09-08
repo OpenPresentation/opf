@@ -1,8 +1,11 @@
 # Changelog
 
-## Unreleased
+## 0.4.1
 
 - Replace the truncated PNG in the asset-source-forms example with a complete project-authored image so the inline asset can render and export.
+
+- Rebuild the standalone CLI as 0.1.1 with bundled OPF 0.4.1.
+- Verify the corrected example corpus against the reviewed renderer baseline and coordinated image/PPTX fidelity commits.
 
 ## 0.4.0
 
