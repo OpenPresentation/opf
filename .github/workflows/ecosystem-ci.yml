@@ -26,19 +26,19 @@ jobs:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           repository: OpenPresentation/opf-render
-          ref: c212f2cb145a88931a411b7af4ca9ee70468f1fd
+          ref: 207c32e232d1a90e5abe50dd61a1c7901fa7f278
           path: opf-render
           persist-credentials: false
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           repository: OpenPresentation/opf-editor
-          ref: 00ecac9fe465ce9961b1b5498ac71a1698ea7f90
+          ref: c8da0a91e531d8010c69275a25a5b8fdb520a5bf
           path: opf-editor
           persist-credentials: false
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           repository: OpenPresentation/opf-pptx
-          ref: 5f360d5e2a149a340f514ae9629f4a7d0c0c880d
+          ref: 7a385fc2c713ebc09766fd782fc3ae636febbdef
           path: opf-pptx
           persist-credentials: false
       - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4.4.0
@@ -66,4 +66,4 @@ jobs:
       - name: Report the verification boundary
         if: always()
         run: |
-          echo 'This job tests coordinated source and local tarball installs. It does not establish npm publication, approved pixel baselines, native PowerPoint fidelity, or browser interaction coverage. The renderer retains its historical corpus gate. Private sites run separately.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'This job tests coordinated source and local tarball installs. It includes the reviewed renderer raster regression baseline, but does not establish complete visual correctness, npm publication, native PowerPoint fidelity, or browser interaction coverage. Private sites run separately.' >> "$GITHUB_STEP_SUMMARY"
