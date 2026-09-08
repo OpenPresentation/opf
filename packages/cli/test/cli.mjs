@@ -37,7 +37,8 @@ try {
   run(['edit','deck.opf.json','--patch','patch.json','--in-place','--expect-sha256','0'.repeat(64)],{status:1});
   await chmod(path.join(temp,'deck.opf.json'),0o600);
   run(['edit','deck.opf.json','--patch','patch.json','--in-place','--expect-sha256',validated.sha256]);
-  assert.equal((await stat(path.join(temp,'deck.opf.json'))).mode & 0o777,0o600);
+  // Windows exposes a read-only attribute rather than POSIX owner/group modes.
+  if(process.platform!=='win32')assert.equal((await stat(path.join(temp,'deck.opf.json'))).mode & 0o777,0o600);
   let saved=await readFile(path.join(temp,'deck.opf.json'),'utf8');assert.equal(JSON.parse(saved).slides[1].notes,'Source note');
   await patch([{op:'replace',path:'/slides/0/title',value:'Partial'},{op:'test',path:'/slides/1/id',value:'stale'}]);
   run(['edit','deck.opf.json','--patch','patch.json','--in-place'],{status:1});assert.equal(await readFile(path.join(temp,'deck.opf.json'),'utf8'),saved);
@@ -63,7 +64,12 @@ try {
   run(['edit','deck.opf.json','--patch','-'],{input:'[]'});
   run(['edit','-','--patch','-'],{status:2});run(['edit','-','--patch','patch.json','--in-place'],{status:2});
   run(['edit','deck.opf.json','--patch','patch.json','--in-place','--output','bad.json'],{status:2});
-  await symlink(path.join(temp,'deck.opf.json'),path.join(temp,'alias.json'));run(['edit','alias.json','--patch','patch.json','--in-place'],{status:1});
+  let fileSymlink=true;
+  try{await symlink(path.join(temp,'deck.opf.json'),path.join(temp,'alias.json'));}catch(error){
+    if(process.platform!=='win32'||error.code!=='EPERM')throw error;
+    fileSymlink=false;console.log('SKIP file symlink rejection: this Windows account lacks file-symlink privileges; Unix CI covers this case.');
+  }
+  if(fileSymlink)run(['edit','alias.json','--patch','patch.json','--in-place'],{status:1});
   assert.equal(run(['schema','presentation','/$defs/Composition']).json.properties.mode.enum.includes('grid'),true);
   assert.ok(run(['schemas']).json.length>1);assert.ok(run(['catalogs']).json.length>1);
   assert.equal(run(['catalog','fontSchemes','roboto']).json.id,'roboto');run(['catalog','unknown'],{status:2});run(['schema','unknown'],{status:2});
@@ -81,6 +87,28 @@ try {
   assert.equal(await readFile(path.join(temp,'data-deck.json'),'utf8'),beforeData);
   run(['import-data','data.csv','--as','table','--path','/slides/0/table'],{status:2});
   run(['import-data','data.csv','--as','chart','--series','Revenue'],{status:2});
+  const styled={slides:[{table:{rows:[[{value:'Merged',rowSpan:2,colSpan:2,style:{fill:'#12345680',padding:{left:0},borders:{top:{color:'#ABCDEF',width:2,dash:'dot'}}}},null],[null,null]]}}]};
+  run(['create','styled.json','--from','-'],{input:JSON.stringify(styled)});
+  assert.equal(run(['validate','styled.json']).json.valid,true);
+  assert.ok(run(['schema','presentation','/$defs/StyledTableCell']).json.properties.rowSpan);
+  await patch([{op:'replace',path:'/slides/0/table/rows/0/0/value',value:['Edited ',{text:'cell',bold:true}]},{op:'replace',path:'/slides/0/table/rows/0/0/style/fill',value:'#FEDCBA80'}]);
+  run(['edit','styled.json','--patch','patch.json','--in-place']);
+  const styledSaved=await readFile(path.join(temp,'styled.json'),'utf8'),styledRows=JSON.parse(styledSaved).slides[0].table.rows;
+  assert.equal(styledRows[0][0].rowSpan,2);assert.equal(styledRows[0][0].colSpan,2);assert.equal(styledRows[1][1],null);
+  assert.deepEqual(styledRows[0][0].value,['Edited ',{text:'cell',bold:true}]);assert.equal(styledRows[0][0].style.fill,'#FEDCBA80');
+  assert.deepEqual(styledRows[0][0].style.borders,styled.slides[0].table.rows[0][0].style.borders);
+  for(const operation of [{op:'replace',path:'/slides/0/table/rows/1/1',value:'Hidden content'},{op:'replace',path:'/slides/0/table/rows/0/0/rowSpan',value:3},{op:'remove',path:'/slides/0/table/rows/1'}]){
+    await patch([operation]);run(['edit','styled.json','--patch','patch.json','--in-place'],{status:1});
+    assert.equal(await readFile(path.join(temp,'styled.json'),'utf8'),styledSaved,'Invalid merged-cell edits must preserve the entire file');
+  }
+  run(['paginate','styled.json','styled-pages.json']);
+  assert.equal(run(['validate','styled-pages.json']).json.valid,true);
+  const pages=JSON.parse(await readFile(path.join(temp,'styled-pages.json'),'utf8'));
+  assert.deepEqual(pages.slides[0].table.rows,styledRows,'Pagination preserves a connected merge group and its cell styles');
+  await patch([{op:'replace',path:'/slides/0/table/rows/0/0/rowSpan',value:1},{op:'remove',path:'/slides/0/table/rows/1'}]);
+  run(['edit','styled.json','--patch','patch.json','--in-place']);
+  const resized=JSON.parse(await readFile(path.join(temp,'styled.json'),'utf8')).slides[0].table.rows;
+  assert.equal(resized.length,1);assert.equal(resized[0][0].rowSpan,1);assert.equal(resized[0][0].colSpan,2);
   assert.equal((await (await import('node:fs/promises')).readdir(temp)).some(name=>name.endsWith('.tmp')),false);
   console.log(`CLI passed ${checks} command checks: file preservation, patch operations, validation, pipes, schema lookup, pagination.`);
 } finally {await rm(temp,{recursive:true,force:true});}

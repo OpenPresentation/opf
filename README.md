@@ -12,6 +12,8 @@ This repository is the canonical home for the OPF **spec**, **JSON Schemas**, **
 
 For AI agents, use the [OPF skill set](docs/agent-skills.md) for authoring, layout, presets, editing, export, and schema inspection.
 
+CLI 0.5.0 installs all six skills into your project with `npx @openpresentation/cli@latest skills install`. It uses local copies, preserves existing instructions and refuses to overwrite customized skills. See the [installation and update guide](docs/agent-skills.md) for personal or agent-specific targets and pre-release testing.
+
 For LLM authoring, start with [the authoring guide](docs/llm-authoring.md), [dynamic composition](docs/dynamic-composition.md), and [local ecosystem verification](docs/ecosystem-development.md).
 
 ## File naming

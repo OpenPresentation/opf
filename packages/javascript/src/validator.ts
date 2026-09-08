@@ -3,6 +3,7 @@ import addFormats from "ajv-formats";
 
 import { catalogSchemaNames, type CatalogKind } from "./catalogs.js";
 import { MAX_COMPOSITION_DEPTH } from "./composition.js";
+import {tableGrid} from "./table.js";
 import { catalogIds } from "./generated/catalog-ids.js";
 import type { JsonSchema } from "./json.js";
 import { schemas, type SchemaName } from "./schemas.js";
@@ -516,6 +517,12 @@ function validatePresentationSemantics(value: unknown): ValidationIssue[] {
         slideIds.add(slide.id);
       }
       issues.push(...validateSlideRegions(slide, `/slides/${index}`));
+      const visitTables = (node:Record<string,unknown>,path:string) => {
+        if (isRecord(node.table)) for(const issue of tableGrid(node.table).issues) issues.push(semanticIssue(pathFor(path,'table')+issue.path.slice(5).replaceAll('.','/'),issue.message));
+        if(Array.isArray(node.blocks)) node.blocks.forEach((block,i)=>{if(isRecord(block))visitTables(block,`${path}/blocks/${i}`);});
+        for(const key of promotedRegionKeys) if(isRecord(node[key]))visitTables(node[key] as Record<string,unknown>,pathFor(path,key));
+      };
+      visitTables(slide,`/slides/${index}`);
     }
   });
 

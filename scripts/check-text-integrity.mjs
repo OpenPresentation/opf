@@ -69,8 +69,18 @@ async function main() {
   const files = (await Promise.all(scanTargets.map(collectFiles))).flat().sort();
   const failures = [];
 
+  let binaryImages = 0;
+  const pngSignature = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
+
   for (const file of files) {
-    const content = await readFile(file, "utf8");
+    const bytes = await readFile(file);
+    // Native rendering evidence is binary; interpreting PNG compression bytes
+    // as UTF-8 can create false mojibake matches. Keep all text files covered.
+    if (bytes.subarray(0, 8).equals(pngSignature)) {
+      binaryImages++;
+      continue;
+    }
+    const content = bytes.toString("utf8");
     const lines = content.split(/\r?\n/u);
     for (const [index, line] of lines.entries()) {
       failures.push(...inspectLine(display(file), line, index + 1));
@@ -85,7 +95,7 @@ async function main() {
     process.exit(1);
   }
 
-  process.stdout.write(`${JSON.stringify({ valid: true, files: files.length }, null, 2)}\n`);
+  process.stdout.write(`${JSON.stringify({ valid: true, files: files.length - binaryImages, binaryImages }, null, 2)}\n`);
 }
 
 main().catch((error) => {
