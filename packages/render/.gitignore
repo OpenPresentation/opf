@@ -1,3 +1,6 @@
 node_modules/
 *.tgz
 .DS_Store
+
+# Generated raster review evidence; only the approved hash manifest is tracked.
+artifacts/

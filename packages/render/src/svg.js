@@ -863,12 +863,15 @@ function renderTimeline(item, box, bound, options) {
   const timeline = Array.isArray(item.value) ? { events: item.value } : item.value;
   const events = Array.isArray(timeline?.events) ? timeline.events : [];
   if (!events.length) return "";
-  const gap = box.width / Math.max(1, events.length - 1);
+  const labelWidth = box.width / Math.max(2, events.length);
+  const gap = (box.width - labelWidth) / Math.max(1, events.length - 1);
+  const start = events.length === 1 ? box.x + box.width / 2 : box.x + labelWidth / 2;
+  const end = events.length === 1 ? start : box.x + box.width - labelWidth / 2;
   const y = box.y + box.height * 0.46;
   const children = [
     tag("line", {
-      x1: box.x + 20,
-      x2: box.x + box.width - 20,
+      x1: start,
+      x2: end,
       y1: y,
       y2: y,
       stroke: bound.design.colors.border,
@@ -878,19 +881,19 @@ function renderTimeline(item, box, bound, options) {
   ];
 
   events.forEach((event, index) => {
-    const x = events.length === 1 ? box.x + box.width / 2 : box.x + index * gap;
+    const x = start + index * gap;
     const eventPath = `${item.path}.events.${index}`;
     children.push(tag("circle", {
       cx: x,
       cy: y,
-      r: 9,
+      r: Math.min(9, labelWidth / 5, box.height * 0.04),
       fill: bound.design.colors.primary,
       ...traceAttrs(options, eventPath)
     }));
     children.push(renderTextBox([event.when, event.what, event.description].filter(Boolean).join("\n"), {
-      x: x - box.width / Math.max(2, events.length) / 2,
+      x: x - labelWidth / 2,
       y: index % 2 === 0 ? box.y : y + 24,
-      width: box.width / Math.max(2, events.length),
+      width: labelWidth,
       height: box.height * 0.38
     }, bound, {
       path: eventPath,

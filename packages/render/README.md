@@ -82,10 +82,10 @@ npm run validate
 npm test
 ```
 
-When this repo is checked out beside `openpresentation/opf`, `npm test` also renders every `examples/**/*.opf.json` deck twice and asserts byte-identical SVG output. Golden PNG drift is checked against `test/golden/opf-examples-png.sha256.json` when the sibling corpus is at the approved OPF commit. To regenerate the approved PNG hash manifest after an intentional visual change:
+When this repo is checked out beside `openpresentation/opf`, `npm test` also renders every `examples/**/*.opf.json` deck twice and asserts byte-identical SVG output. Golden PNG drift is checked on every run against all 805 slides from the installed core package, identified by a content digest. Changed or missing corpora fail; Git history cannot skip the gate. To generate a review candidate after an intentional visual change:
 
 ```sh
-OPF_EXAMPLES_DIR=/path/to/opf/examples npm run golden:update
+npm run golden:update
 ```
 
 ## Release Lane
@@ -104,6 +104,8 @@ This repo does not require an npm automation token when Trusted Publishing is co
 
 The current checkout uses `@openpresentation/opf/composition` for portable geometry. Slides can select `auto`, `row`, `column`, or `grid`, set weighted tracks, and request path-specific overflow diagnostics. See the sibling OPF repo's `docs/dynamic-composition.md` for the complete contract.
 
-These new APIs are pending a coordinated OPF release. With all repos checked out beside each other, build OPF and run `node scripts/link-ecosystem.mjs` from that repo before building this package. Run `pnpm test:ecosystem` in OPF to check editing, rendering, editable PowerPoint geometry, and import together. The published OPF 0.3.0 package does not contain the new composition entry point; downstream publication must wait for the new core release and an updated minimum dependency version.
+Version 0.1.0 requires the published `@openpresentation/opf@^0.4.0` for composition, pagination and measured text. A clean `npm ci && npm test` uses registry packages and runs the full raster corpus without sibling checkouts. For coordinated source development, build OPF and run `node scripts/link-ecosystem.mjs` there; `pnpm test:ecosystem` checks editing, rendering, editable PowerPoint geometry and import together.
 
 For actual font measurement, load `loadBundledFontRegistry()` from `@openpresentation/opf-render/fonts-node`, then pass its `textMeasurement` to rendering and its `embeddedFonts` to SVG export. Pass its `fontFiles` to PNG/PDF conversion. The browser-safe `@openpresentation/opf-render/fonts` entry accepts local font bytes. Missing fonts/glyphs fail explicitly; aliases and fallback are opt-in and recorded in `registry.substitutions`. Bundled font license notices travel with embedded SVG fonts.
+
+Raster updates produce an HTML gallery and `artifacts/golden/candidate.json`; they never overwrite the approved baseline automatically. See [baseline review and known limitations](test/golden/README.md).
