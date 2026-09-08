@@ -913,22 +913,68 @@ function renderTable(item, box, bound, options) {
   const scale = Math.min(bound.design.dimensions.width, bound.design.dimensions.height) / 720;
   const layout = layoutTable(item.value, box, {scale, minFontSize:(bound.composition ?? bound.geometry.composition).minFontSize, fontFamily:bound.design.fonts.body, textMeasurement:options.textMeasurement, path:item.path});
   const children = [];
+  const separateBorders = layout.rows.some(row => row.cells.some(cell => cell.style?.borders));
+  const defaultEdges = [], explicitEdges = [];
   for (const row of layout.rows) for (const cell of row.cells) {
+    const style = cell.style ?? {};
     children.push(tag("rect", {
       x: stableNumber(cell.box.x), y: stableNumber(cell.box.y),
       width: stableNumber(cell.box.width), height: stableNumber(cell.box.height),
-      fill: cell.header ? bound.design.colors.primary : bound.design.colors.surface,
-      stroke: bound.design.colors.border, "stroke-width":1,
-      ...traceAttrs(options, cell.path)
+      fill: style.fill ?? (cell.header ? bound.design.colors.primary : bound.design.colors.surface),
+      stroke: separateBorders ? undefined : bound.design.colors.border, "stroke-width":separateBorders ? undefined : 1,
+      ...traceAttrs(options, cell.sourcePath ?? cell.path)
     }));
+    if (separateBorders) {
+      const {x, y, width, height} = cell.box;
+      const edges = {top:[x,y,x+width,y],right:[x+width,y,x+width,y+height],bottom:[x,y+height,x+width,y+height],left:[x,y,x,y+height]};
+      for (const [edge, coordinates] of Object.entries(edges)) {
+        const border = style.borders?.[edge];
+        (border ? explicitEdges : defaultEdges).push({coordinates, border, path:`${cell.sourcePath ?? cell.path}.style.borders.${edge}`});
+      }
+    }
+    // Core layout has already applied vertical alignment to cell.textBox.y.
     children.push((cell.rich ? renderRichTextBox : renderTextBox)(cell.rich ? cell.value : flattenText(cell.value ?? ""), cell.textBox, bound, {
       path:cell.path, fontSize:15, fontFamily:bound.design.fonts.body,
       fontWeight:cell.header ? 700 : 400, textStyle:cell.textStyle, fit:cell.fit,
-      fill:cell.header ? "#FFFFFF" : bound.design.colors.text, options
+      fill:style.color ?? (cell.header ? "#FFFFFF" : bound.design.colors.text), align:style.align, options
     }));
   }
 
-  return tag("g", traceAttrs(options, item.path), children.join("\n"));
+  return tag("g", traceAttrs(options, item.path), [...children, ...renderTableBorders(defaultEdges, explicitEdges, scale, bound.design.colors.border, options)].join("\n"));
+}
+
+// Explicit edges own their shared segment, including invisible/zero-width edges.
+// Split implicit neighbors at merge boundaries so they cannot fill dashed gaps,
+// cover alpha strokes, or reintroduce a border the author removed.
+function renderTableBorders(defaultEdges, explicitEdges, scale, defaultColor, options) {
+  const epsilon = 1e-7;
+  const segment = ({coordinates:[x1,y1,x2,y2]}) => y1 === y2
+    ? {horizontal:true, fixed:y1, start:x1, end:x2}
+    : {horizontal:false, fixed:x1, start:y1, end:y2};
+  const blockers = explicitEdges.map(segment);
+  const defaults = defaultEdges.flatMap(edge => {
+    const axis = segment(edge);
+    let intervals = [[axis.start, axis.end]];
+    for (const blocker of blockers) {
+      if (axis.horizontal !== blocker.horizontal || Math.abs(axis.fixed - blocker.fixed) > epsilon) continue;
+      intervals = intervals.flatMap(([start,end]) => {
+        if (blocker.end <= start + epsilon || blocker.start >= end - epsilon) return [[start,end]];
+        return [[start,Math.min(end,blocker.start)],[Math.max(start,blocker.end),end]].filter(([a,b]) => b-a > epsilon);
+      });
+    }
+    return intervals.map(([start,end]) => ({...edge,coordinates:axis.horizontal
+      ? [start,axis.fixed,end,axis.fixed] : [axis.fixed,start,axis.fixed,end]}));
+  });
+  return [...defaults,...explicitEdges].flatMap(({coordinates:[x1,y1,x2,y2],border,path}) => {
+    const width = border ? border.width * scale : 1;
+    if (width === 0) return [];
+    return [tag('line', {
+      x1:stableNumber(x1), y1:stableNumber(y1), x2:stableNumber(x2), y2:stableNumber(y2),
+      stroke:border?.color ?? defaultColor, 'stroke-width':stableNumber(width),
+      'stroke-dasharray':border?.dash === 'dash' ? `${width*4} ${width*3}` : border?.dash === 'dot' ? `${width} ${width*2}` : undefined,
+      ...traceAttrs(options,path)
+    })];
+  });
 }
 
 function renderImportedChart(item, box, bound, options) {
@@ -1280,4 +1326,3 @@ function tag(name, attrs = {}, children = "") {
   if (children === "") return `<${name}${serializedAttrs}/>`;
   return `<${name}${serializedAttrs}>${children}</${name}>`;
 }
-

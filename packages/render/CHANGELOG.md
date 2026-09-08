@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+## 0.5.0
+
+- Render the coordinated core's styled and spanning table cells with fills, text colors, alignment, reference-pixel padding and individual solid/dashed/dotted borders. Preserve anchor and `.value` traces for editing and keep the existing scalar raster corpus unchanged.
+- Require core 0.7.0. Coordinated native import and styled editor pointer/keyboard/formatting/undo checks pass with actual browser fonts; native PowerPoint raster equivalence remains unverified.
+
 ## 0.4.0
 
 - Consume shared core 0.6.0 table row and text geometry. Multiline cells grow into available space, constrained tables reduce spare row height before readable text, and rich cell line advances match native PPTX paragraph spacing. Short rows and the existing 805-slide raster baseline remain unchanged.
