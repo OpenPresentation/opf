@@ -24,3 +24,15 @@ const editor=createEditorSession({slides:[{text:original,notes:'Preserve'}]},{re
 editor.set('slides.0.text',format(original,0,5,{color:'#2563eb'}),{rejectInvalid:true});
 assert.equal(editor.get('slides.0.notes'),'Preserve');editor.undo();assert.deepEqual(editor.get('slides.0.text'),original);assert.equal(editor.canUndo,false);
 console.log('Rich range editing passed: cross-run preservation, replacement, style removal, script exclusivity, grapheme safety, validation and atomic undo.');
+
+const {updateRichTextInput} = await import('../dist/rich-text.js');
+const typed=[{text:'Hello ',bold:true,link:'https://example.org'}, {text:'world',italic:true,fontSize:24}];
+assert.deepEqual(updateRichTextInput(typed,'Hello brave world',{start:6,end:6,inputType:'insertText'}),[{text:'Hello brave ',bold:true,link:'https://example.org'},{text:'world',italic:true,fontSize:24}]);
+assert.deepEqual(updateRichTextInput([{text:'a',bold:true},{text:'a',italic:true}],'aaa',{start:0,end:0,inputType:'insertText'}),[{text:'aa',bold:true},{text:'a',italic:true}]);
+assert.deepEqual(updateRichTextInput([{text:'a',bold:true},{text:'a',italic:true}],'a',{start:0,end:1,inputType:'deleteContentBackward'}),[{text:'a',italic:true}]);
+assert.equal(content(updateRichTextInput([{text:'A👩‍💻B',bold:true}],'A👩‍🔬B')),'A👩‍🔬B');
+assert.deepEqual(updateRichTextInput([{text:'cafe',italic:true}], 'café'),[{text:'café',italic:true}]);
+let repeated=[{text:'A',bold:true}];for(let i=0;i<100;i++)repeated=updateRichTextInput(repeated,content(repeated)+'a');
+assert.equal(repeated.length,1,'continuous typing compacts equal adjacent styles');
+assert.equal(typed[0].text,'Hello ','native typing must not mutate the source');
+console.log('Native rich input passed: style/link preservation, repeated-character affinity, graphemes and bounded run growth.');

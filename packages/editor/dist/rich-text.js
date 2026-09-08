@@ -69,3 +69,45 @@ export function replaceRichTextRange(value, start, end, replacement) {
   if (!inserted && replacement) result.push(replacement);
   return result.length ? result : [''];
 }
+
+/** Map a native plain-text input change back onto styled runs without flattening them. */
+export function updateRichTextInput(value, nextText, change) {
+  const previous = richTextContent(value);
+  if (typeof nextText !== 'string') throw new TypeError('Input text must be a string.');
+  if (previous === nextText) return structuredClone(runs(value));
+  if (!nextText) return [piece(runs(value)[0] ?? "", "")];
+  const segments = text => [...new Intl.Segmenter(undefined, {granularity:'grapheme'}).segment(text)].map(part => part.segment);
+  const before = segments(previous), after = segments(nextText);
+  let prefix = 0, suffix = 0;
+  while (prefix < before.length && prefix < after.length && before[prefix] === after[prefix]) prefix++;
+  while (suffix < before.length-prefix && suffix < after.length-prefix && before[before.length-1-suffix] === after[after.length-1-suffix]) suffix++;
+  let start = before.slice(0,prefix).join('').length;
+  let end = previous.length-before.slice(before.length-suffix).join('').length;
+  let replacement = after.slice(prefix,after.length-suffix).join('');
+  if (change && Number.isInteger(change.start) && Number.isInteger(change.end)) {
+    let a = change.start, b = change.end;
+    const removed = previous.length-nextText.length;
+    if (a === b && removed > 0) {
+      if (/Backward$/.test(change.inputType ?? '')) a -= removed;
+      else if (/Forward$/.test(change.inputType ?? '')) b += removed;
+    }
+    const left = previous.slice(0,a), right = previous.slice(b);
+    if (a >= 0 && b >= a && b <= previous.length && nextText.length >= left.length+right.length && nextText.startsWith(left) && nextText.endsWith(right)) {
+      // Validate exact native selection boundaries before trusting their affinity.
+      try {
+        range(value,a,b,true);
+        start=a;end=b;replacement=nextText.slice(left.length,nextText.length-right.length);
+      } catch { /* Native deletion can split a cluster; use the whole-grapheme diff. */ }
+    }
+  }
+  const result = replaceRichTextRange(value,start,end,replacement), compact = [];
+  const style = run => typeof run === 'string' ? null : Object.fromEntries(Object.entries(run).filter(([key]) => key !== 'text').sort(([a],[b]) => a.localeCompare(b)));
+  for (const run of result) {
+    const last = compact.at(-1);
+    if (last !== undefined && JSON.stringify(style(last)) === JSON.stringify(style(run))) {
+      if (typeof last === 'string') compact[compact.length-1] += run;
+      else last.text += run.text;
+    } else compact.push(run);
+  }
+  return compact;
+}

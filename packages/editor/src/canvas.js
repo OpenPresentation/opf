@@ -17,6 +17,7 @@ import {
 } from "./canvas-fields.js";
 import { createBlockControls } from "./block-controls.js";
 import { createLayoutHandles } from "./layout-handles.js";
+import { createRichTextInput } from "./rich-text-input.js";
 import { createRichTextToolbar } from "./rich-text-toolbar.js";
 export { getEditableFields } from "./canvas-fields.js";
 
@@ -64,6 +65,7 @@ export function createCanvasEditor(container, options = {}) {
     notice.textContent = "";
   };
   const richToolbar = createRichTextToolbar(root, { editor, report, beforeChange: commit,
+    onTyping: beginEdit,
     onProperties(path) { if (commit()) openProperties(path, editor.get(path)); },
     validateChange(path, value) {
       renderSvg(createCanvasDraft(editor.document, path, value), {...renderOptions, slideIndex});
@@ -142,7 +144,7 @@ export function createCanvasEditor(container, options = {}) {
       // Prefer the containing group over its duplicate text/shape trace attributes.
       if (
         !node.matches("g,image") ||
-        (node.matches("g") && !node.querySelector("text,image,rect,path"))
+        (node.matches("g") && !node.querySelector("text,image,rect,path") && !node.hasAttribute("data-opf-rich-text"))
       )
         continue;
       seen.add(path);
@@ -154,8 +156,10 @@ export function createCanvasEditor(container, options = {}) {
         `Edit ${path.split(".").at(-1)}: ${["string", "number"].includes(typeof value) ? String(value).slice(0, 80) : "content properties"}`,
       );
       if (node.matches("g")) {
-        const bounds = node.getBBox(),
-          rect = doc.createElementNS("http://www.w3.org/2000/svg", "rect");
+        let bounds = node.getBBox();
+        const lines = JSON.parse(node.getAttribute("data-opf-rich-lines") ?? "[]");
+        if (!bounds.width && !bounds.height && lines.length) bounds = {x:lines[0].x,y:lines[0].y,width:Number(node.getAttribute("data-opf-box-width"))||8,height:lines.reduce((sum,line)=>sum+line.height,0)};
+        const rect = doc.createElementNS("http://www.w3.org/2000/svg", "rect");
         for (const [key, value] of Object.entries({
           x: bounds.x - 4,
           y: bounds.y - 4,
@@ -194,6 +198,7 @@ export function createCanvasEditor(container, options = {}) {
     layoutHandles.update(document, geometry);
     blockControls.update(document, geometry);
     if (active?.kind === "text") positionInput();
+    if (active?.kind === "rich-text") active.rich?.update();
     options.onRender?.({
       document,
       slideIndex,
@@ -223,7 +228,7 @@ export function createCanvasEditor(container, options = {}) {
         return;
       }
       try {
-        const value = parseCanvasValue(active.input.value, active.type);
+        const value = active.kind === "rich-text" ? active.rich.value : parseCanvasValue(active.input.value, active.type);
         const draft = createCanvasDraft(editor.document, active.path, value);
         clearNotice();
         active.valid = true;
@@ -376,7 +381,16 @@ export function createCanvasEditor(container, options = {}) {
       input.focus();
       input.select();
     } else if (Array.isArray(value) && target?.hasAttribute("data-opf-rich-text")) {
-      richToolbar.selectAll(path);
+      active = {kind:"rich-text",path,base:JSON.stringify(value),valid:true};
+      active.rich = createRichTextInput(root, overlay, {
+        path, value, getTarget,
+        onInput: queueDraft, onCommit: commit, onCancel: cancel, onError: report,
+        onFormat(start,end) {
+          if (!commit()) return;
+          if(start===end)richToolbar.selectAll(path);else richToolbar.selectRange(path,start,end);
+        },
+      });
+      active.input = active.rich.input;
     } else openProperties(path, value);
   }
   function propertyPatches(edit) {
@@ -565,7 +579,7 @@ export function createCanvasEditor(container, options = {}) {
     if (blockControls.editingPath) return false;
     if (!committing && layoutHandles.editingPath) return layoutHandles.commit();
     if (committing || !active) return true;
-    if (active.composing) return false;
+    if (active.composing || active.rich?.composing) return false;
     if (JSON.stringify(editor.get(active.path)) !== active.base) {
       report(
         new Error(
@@ -578,13 +592,14 @@ export function createCanvasEditor(container, options = {}) {
     const edit = active;
     try {
       let value;
-      if (edit.kind === "text")
+      if (edit.kind === "rich-text") value = edit.rich.value;
+      else if (edit.kind === "text")
         value = parseCanvasValue(edit.input.value, edit.type);
       else value = propertyDraft(edit);
-      if (edit.kind === "text")
-        createCanvasDraft(editor.document, edit.path, value);
+      if (edit.kind === "text" || edit.kind === "rich-text")
+        renderSvg(createCanvasDraft(editor.document, edit.path, value), {...renderOptions,slideIndex});
       committing = true;
-      if (edit.kind === "text" && JSON.stringify(value) !== edit.base)
+      if ((edit.kind === "text" || edit.kind === "rich-text") && JSON.stringify(value) !== edit.base)
         editor.set(edit.path, value, { source: "canvas", rejectInvalid: true });
       if (edit.kind === "properties") {
         const patches = propertyPatches(edit).filter(
@@ -600,6 +615,7 @@ export function createCanvasEditor(container, options = {}) {
       }
       committing = false;
       active = null;
+      edit.rich?.destroy();
       overlay.replaceChildren();
       options.propertiesContainer?.replaceChildren();
       clearNotice();
@@ -617,8 +633,9 @@ export function createCanvasEditor(container, options = {}) {
     if (blockControls.editingPath) { blockControls.cancel(); render(); return; }
     blockControls.cancel();
     if (layoutHandles.editingPath) { layoutHandles.cancel(clear); return; }
-    const path = active?.path;
+    const path = active?.path, rich = active?.rich;
     active = null;
+    rich?.destroy();
     if (frame) {
       win.cancelAnimationFrame(frame);
       frame = 0;
@@ -654,6 +671,7 @@ export function createCanvasEditor(container, options = {}) {
   });
   const resize = new win.ResizeObserver(() => {
     if (active?.kind === "text") positionInput();
+    active?.rich?.update();
   });
   resize.observe(root);
   root.addEventListener("keydown", (event) => {
@@ -734,6 +752,7 @@ export function createCanvasEditor(container, options = {}) {
     },
     destroy() {
       disposed = true;
+      active?.rich?.destroy();
       richToolbar.destroy();
       layoutHandles.destroy();
       blockControls.destroy();

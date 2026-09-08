@@ -1,7 +1,7 @@
 import {richTextContent, formatRichTextRange, replaceRichTextRange} from './rich-text.js';
 
 /** Native SVG selection stays on the exact rendered glyphs; no HTML reflow. */
-export function createRichTextToolbar(root, {editor, report, beforeChange, onProperties, validateChange, onChange}) {
+export function createRichTextToolbar(root, {editor, report, beforeChange, onProperties, onTyping, validateChange, onChange}) {
   const doc = root.ownerDocument, win = doc.defaultView;
   const toolbar = doc.createElement('div');
   toolbar.className = 'opf-rich-toolbar';
@@ -89,6 +89,7 @@ export function createRichTextToolbar(root, {editor, report, beforeChange, onPro
   replacement.onkeydown=event=>{if(event.key==='Enter'){event.preventDefault();try{apply(null,replacement.value);}catch(error){report(error);}}};
   button('Replace text',()=>apply(null,replacement.value));
   button('Reset style',()=>apply(Object.fromEntries(['bold','italic','underline','strikethrough','superscript','subscript','color','fontSize','fontFamily','link'].map(key=>[key,null]))));
+  button('Edit text',()=>{const path=selected?.path;hide();if(path)onTyping?.(path);});
   button('Edit runs',()=>{const path=selected?.path;hide();if(path)onProperties?.(path);});
   button('Done',()=>{hide();win.getSelection()?.removeAllRanges();});
   const status=doc.createElement('span');status.style.fontSize='11px';toolbar.append(status);
@@ -115,7 +116,11 @@ export function createRichTextToolbar(root, {editor, report, beforeChange, onPro
   doc.addEventListener('selectionchange',selectionChanged);
   const unsubscribe=editor.subscribe(()=>{if(!restoring)hide();});
   hide();
-  return {hide,selectAll(path) {
+  function selectRange(path,start,end) {
+    const value=editor.get(path);if(!Array.isArray(value)||start>=end)return false;
+    selected={path,start,end,base:JSON.stringify(value)};restore();sync();return true;
+  }
+  return {hide,selectRange,selectAll(path) {
     const value=editor.get(path);if(!Array.isArray(value))return false;
     const end=richTextContent(value).length;if(!end)return false;
     selected={path,start:0,end,base:JSON.stringify(value)};restore();sync();return true;

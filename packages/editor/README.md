@@ -34,7 +34,7 @@ Load the same font bytes into the browser using `loadBrowserFontRegistry` from `
 
 These APIs are included in version 0.1.0 and require core 0.4.0 and renderer 0.1.0 for the canvas. See the OPF repository’s `docs/live-editor.md` for setup, the support matrix and roadmap. `pnpm pack:ecosystem` in that repository also prepares local preview tarballs for coordinated development.
 
-The canvas retains canonical SVG glyphs while a transparent native input supplies the caret. Complete rich-text formatting, freeform drag/resize, all chart/media treatments, and cross-engine pixel identity remain work in progress. The Source dialog in the playground now provides a live JSON preview; changes are validated before committing.
+The canvas retains canonical SVG glyphs while a transparent native input supplies the caret. Advanced shaping, freeform object positioning, all chart/media treatments, and cross-engine pixel identity remain work in progress. The Source dialog in the playground now provides a live JSON preview; changes are validated before committing.
 
 ## Runtime Policy
 
@@ -207,7 +207,7 @@ Slide insertion does not merge root speakers, organizations, or narrative metada
 
 ### Rich text on the canvas
 
-Select rendered rich text to format it, or double-click a rich text block to select all of it. The toolbar supports character styles, point size, font family, hex color, links, scripts, and selected-text replacement. Plain text payloads offer **Format text** during inline editing. **Edit runs** opens the structured fields; `canvas.editProperties(path)` does the same programmatically. Each action is validated and undoable. Continuous rich-text typing with a mixed-style caret remains under development.
+Select rendered rich text to format it, or double-click a rich text block to select all of it. The toolbar supports character styles, point size, font family, hex color, links, scripts, and selected-text replacement. Plain text payloads offer **Format text** during inline editing. **Edit runs** opens the structured fields; `canvas.editProperties(path)` does the same programmatically. Each action is validated and undoable. The current development branch also supports direct mixed-style typing: double-click to type, drag to select, use Format selection for styles, and commit with Done or Ctrl/Cmd+Enter. Escape cancels. Native input and composition events preserve run metadata; the canonical SVG supplies glyph/caret geometry. The whole session commits as one undo step, with draft undo/redo available while typing. Empty-line caret geometry requires the renderer’s current development trace support. These additions are not in the published 0.1.0 release; cross-engine and real operating-system IME verification remain open.
 
 Headless applications and agents can import `formatRichTextRange`, `replaceRichTextRange`, and `richTextContent` from `@openpresentation/opf-editor/rich-text`. The helpers preserve surrounding run metadata and accept UTF-16 offsets on whole grapheme boundaries. A null format value removes an override. Apply the returned value through the editor session or validate the resulting document before saving.
 
