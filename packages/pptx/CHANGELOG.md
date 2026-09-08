@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Export the coordinated core's styled and spanning table cells as native editable merged grids. Preserve fills/text alpha, alignment, padding and individual border widths/dashes; normalize zero/fractional padding and dotted/transparent borders that PptxGenJS does not expose consistently. This syntax requires the unpublished coordinated core branch; import of these cell properties and the versioned rollout remain in progress.
+
 - Import supported native table-style character formatting from embedded style parts or inline definitions. Apply whole-table, row/column bands, edge and corner precedence before direct paragraph/run overrides; preserve theme/explicit Latin fonts, bold/italic and supported colors/alpha. Diagnose missing definitions, unsupported cell decorations and right-to-left table geometry.
 
 ## 0.4.0
