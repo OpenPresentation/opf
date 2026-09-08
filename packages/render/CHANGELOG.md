@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.0
+
+- Consume shared core 0.6.0 table row and text geometry. Multiline cells grow into available space, constrained tables reduce spare row height before readable text, and rich cell line advances match native PPTX paragraph spacing. Short rows and the existing 805-slide raster baseline remain unchanged.
+
 ## 0.3.0
 
 - Render canonical rich table cells and headers with shared run measurement, styles, links and editor trace geometry. Existing scalar-cell raster output remains unchanged. Requires core 0.5.0; core 0.4.1 does not accept this syntax.

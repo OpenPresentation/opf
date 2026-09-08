@@ -1,4 +1,4 @@
-import { fitList, fitRichText, composeSlide, resolveCanvasDimensions, resolveFontFamilies, resolveTextStyle, textWidthMeasurer, fitText } from "@openpresentation/opf/composition";
+import { layoutTable, fitList, fitRichText, composeSlide, resolveCanvasDimensions, resolveFontFamilies, resolveTextStyle, textWidthMeasurer, fitText } from "@openpresentation/opf/composition";
 import {
   catalogs as bundledCatalogs,
   validatePresentation
@@ -911,48 +911,22 @@ function renderTimeline(item, box, bound, options) {
 
 function renderTable(item, box, bound, options) {
   const scale = Math.min(bound.design.dimensions.width, bound.design.dimensions.height) / 720;
-  const table = item.value ?? {};
-  const columns = Array.isArray(table.columns) ? table.columns : [];
-  const rows = Array.isArray(table.rows) ? table.rows : [];
-  const allRows = columns.length ? [columns, ...rows] : rows;
-  const columnCount = Math.max(1, ...allRows.map((row) => Array.isArray(row) ? row.length : 1));
-  const rowCount = Math.max(1, allRows.length);
-  const cellWidth = box.width / columnCount;
-  const cellHeight = Math.min(54 * scale, box.height / rowCount);
+  const layout = layoutTable(item.value, box, {scale, minFontSize:(bound.composition ?? bound.geometry.composition).minFontSize, fontFamily:bound.design.fonts.body, textMeasurement:options.textMeasurement, path:item.path});
   const children = [];
-
-  allRows.forEach((row, rowIndex) => {
-    const cells = Array.isArray(row) ? row : [row];
-    for (let columnIndex = 0; columnIndex < columnCount; columnIndex += 1) {
-      const x = box.x + columnIndex * cellWidth;
-      const y = box.y + rowIndex * cellHeight;
-      const cellPath = rowIndex === 0 && columns.length ? `${item.path}.columns.${columnIndex}` : `${item.path}.rows.${rowIndex - (columns.length ? 1 : 0)}.${columnIndex}`;
-      children.push(tag("rect", {
-        x: stableNumber(x),
-        y: stableNumber(y),
-        width: stableNumber(cellWidth),
-        height: stableNumber(cellHeight),
-        fill: rowIndex === 0 && columns.length ? bound.design.colors.primary : bound.design.colors.surface,
-        stroke: bound.design.colors.border,
-        "stroke-width": 1,
-        ...traceAttrs(options, cellPath)
-      }));
-      const rich = Array.isArray(cells[columnIndex]);
-      children.push((rich ? renderRichTextBox : renderTextBox)(rich ? cells[columnIndex] : flattenText(cells[columnIndex] ?? ""), {
-        x: x + 10 * scale,
-        y: y + 8 * scale,
-        width: Math.max(scale, cellWidth - 20 * scale),
-        height: Math.max(scale, cellHeight - 12 * scale)
-      }, bound, {
-        path: cellPath,
-        fontSize: 15,
-        fontFamily: bound.design.fonts.body,
-        fontWeight: rowIndex === 0 && columns.length ? 700 : 400,
-        fill: rowIndex === 0 && columns.length ? "#FFFFFF" : bound.design.colors.text,
-        options
-      }));
-    }
-  });
+  for (const row of layout.rows) for (const cell of row.cells) {
+    children.push(tag("rect", {
+      x: stableNumber(cell.box.x), y: stableNumber(cell.box.y),
+      width: stableNumber(cell.box.width), height: stableNumber(cell.box.height),
+      fill: cell.header ? bound.design.colors.primary : bound.design.colors.surface,
+      stroke: bound.design.colors.border, "stroke-width":1,
+      ...traceAttrs(options, cell.path)
+    }));
+    children.push((cell.rich ? renderRichTextBox : renderTextBox)(cell.rich ? cell.value : flattenText(cell.value ?? ""), cell.textBox, bound, {
+      path:cell.path, fontSize:15, fontFamily:bound.design.fonts.body,
+      fontWeight:cell.header ? 700 : 400, textStyle:cell.textStyle, fit:cell.fit,
+      fill:cell.header ? "#FFFFFF" : bound.design.colors.text, options
+    }));
+  }
 
   return tag("g", traceAttrs(options, item.path), children.join("\n"));
 }
@@ -1168,7 +1142,7 @@ function renderEmbeddedFonts(fonts = []) {
 
 function renderRichTextBox(value, box, bound, config) {
   const scale=Math.min(bound.design.dimensions.width,bound.design.dimensions.height)/720;
-  const fit=fitRichText(value,box,config.fontSize*scale,((bound.composition??bound.geometry.composition).minFontSize??16)*scale,{style:{fontFamily:config.fontFamily,fontWeight:config.fontWeight??400,path:config.path},textMeasurement:config.options.textMeasurement});
+  const fit=config.fit??fitRichText(value,box,config.fontSize*scale,((bound.composition??bound.geometry.composition).minFontSize??16)*scale,{style:{fontFamily:config.fontFamily,fontWeight:config.fontWeight??400,path:config.path},textMeasurement:config.options.textMeasurement});
   if(fit.overflow){const diagnostic={code:'text-overflow',path:config.path,message:'Mixed-style text exceeds its cell at the minimum font size.'};reportDiagnostic(diagnostic,config.options);if((bound.composition??bound.geometry.composition).overflow==='error')throw new OPFRenderError('layout-overflow',diagnostic.message,{issues:[diagnostic]});}
   return renderRichLines(value,fit,box,bound,config);
 }
@@ -1196,8 +1170,8 @@ function renderRichLines(value,fit,box,bound,config) {
 
 function renderTextBox(text, box, bound, config) {
   const scale = Math.min(bound.design.dimensions.width, bound.design.dimensions.height) / 720;
-  const style = resolveTextStyle({fontFamily:config.fontFamily,fontWeight:config.fontWeight ?? 400,italic:config.italic ?? false,path:config.path},config.options.textMeasurement);
-  const fit = fitText(String(text ?? ""), box, config.fontSize * scale,
+  const style = config.textStyle ?? resolveTextStyle({fontFamily:config.fontFamily,fontWeight:config.fontWeight ?? 400,italic:config.italic ?? false,path:config.path},config.options.textMeasurement);
+  const fit = config.fit ?? fitText(String(text ?? ""), box, config.fontSize * scale,
     ((bound.composition ?? bound.geometry.composition).minFontSize ?? 16) * scale, textWidthMeasurer(style,config.options.textMeasurement));
   if (fit.overflow) {
     const diagnostic = { code: "text-overflow", path: config.path,
