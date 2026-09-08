@@ -20,7 +20,7 @@ export function nativeBackgroundFill(background, {width, height}, fallback = 'FF
   if (typeof background === 'string' && /^#[\da-f]{3}(?:[\da-f]{3}(?:[\da-f]{2})?)?$/i.test(background)) background = {type: 'solid', color: background};
   if (!background || typeof background !== 'object') return null;
   const opacity = background.opacity ?? 1;
-  if (background.type === 'solid') return `<a:solidFill>${colorXml(background.color, opacity, fallback)}</a:solidFill>`;
+  if (background.type === 'solid' || background.type === 'theme') return `<a:solidFill>${colorXml(background.type === 'theme' ? fallback : background.color, opacity, fallback)}</a:solidFill>`;
   if (background.type !== 'gradient') return null;
   const stops = background.gradient?.stops ?? [];
   if (!stops.length) return '<a:noFill/>';
@@ -38,21 +38,37 @@ export function nativeBackgroundFill(background, {width, height}, fallback = 'FF
   return `<a:gradFill rotWithShape="0"><a:gsLst>${nativeStops}</a:gsLst><a:lin ang="${angle}" scaled="0"/></a:gradFill>`;
 }
 
-function readColor(node) {
-  const c = node?.['a:srgbClr'];
-  if (!c || !/^[\da-f]{6}$/i.test(c.val) || Object.keys(c).some(k => k !== 'val' && k !== 'a:alpha')) return null;
+export function readBackgroundColor(node, context = {}, seen = new Set()) {
+  const kinds = ['a:srgbClr', 'a:sysClr', 'a:schemeClr'].filter(k => node?.[k]);
+  if (kinds.length !== 1) return null;
+  const kind = kinds[0], c = node[kind];
+  if (Array.isArray(c) || Object.keys(c).some(k => !['val', 'lastClr', 'a:alpha'].includes(k))) return null;
   const alpha = Number(c['a:alpha']?.val ?? 100000) / 100000;
   if (!Number.isFinite(alpha) || alpha < 0 || alpha > 1) return null;
-  return {hex: '#' + c.val.toUpperCase(), alpha};
+  if (Array.isArray(c['a:alpha'])) return null;
+  if (kind === 'a:schemeClr') {
+    // a:alpha sets opacity; multiplying would be a:alphaMod instead.
+    const withAlpha = resolved => resolved ? {...resolved, alpha: Object.hasOwn(c, 'a:alpha') ? alpha : resolved.alpha} : null;
+    if (c.val === 'phClr') return withAlpha(context.placeholder);
+    const slot = context.mapping?.[c.val] ?? c.val;
+    if (seen.has(slot)) return null;
+    const resolved = readBackgroundColor(context.colors?.['a:' + slot], context, new Set([...seen, slot]));
+    return withAlpha(resolved);
+  }
+  const hex = kind === 'a:sysClr' ? c.lastClr : c.val;
+  return /^[\da-f]{6}$/i.test(hex ?? '') ? {hex: '#' + hex.toUpperCase(), alpha} : null;
 }
 
-export function readNativeBackground(properties, {width, height}, report = () => {}) {
+export function readNativeBackground(properties, {width, height}, report = () => {}, context = {}) {
   if (!properties) return undefined;
   if (Object.hasOwn(properties, 'a:noFill')) return {type: 'solid', color: '#FFFFFF', opacity: 0};
-  const solid = readColor(properties['a:solidFill']);
+  const solid = readBackgroundColor(properties['a:solidFill'], context);
   if (solid) return {type: 'solid', color: solid.hex, ...(solid.alpha === 1 ? {} : {opacity: solid.alpha})};
   const gradient = properties['a:gradFill'];
-  if (!gradient) return undefined;
+  if (!gradient) {
+    report({code: 'unsupported-background-fill', message: 'This native background fill or color cannot be represented by the OPF background importer.'});
+    return undefined;
+  }
   const unsupported = () => {
     report({code: 'unsupported-background-gradient', message: 'This native gradient uses geometry or color transforms outside the OPF linear-gradient contract; its background was not imported.'});
     return undefined;
@@ -67,7 +83,7 @@ export function readNativeBackground(properties, {width, height}, report = () =>
   const angle = turn(Math.atan2(height * Math.sin(radians), width * Math.cos(radians)) * 180 / Math.PI);
   const a = angle * Math.PI / 180, span = Math.abs(Math.cos(a)) + Math.abs(Math.sin(a));
   const stops = list(gradient['a:gsLst']?.['a:gs']).map(stop => {
-    const c = readColor(stop), position = (Number(stop.pos) / 100000 - .5) * span + .5;
+    const c = readBackgroundColor(stop, context), position = (Number(stop.pos) / 100000 - .5) * span + .5;
     // Allow only native integer rounding, not a lossy clamping of arbitrary
     // corner-to-corner gradients that OPF's fixed endpoints cannot represent.
     if (!c || !Number.isFinite(position) || position < -.00002 || position > 1.00002) return null;

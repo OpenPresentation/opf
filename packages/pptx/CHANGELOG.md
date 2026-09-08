@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Import supported slide backgrounds inherited from layouts and masters, resolving theme colors, color-map overrides, theme overrides and background style references to explicit editable fills.
+- Preserve opacity when exporting OPF theme-slot backgrounds. Report unresolved or unsupported native background fills instead of silently ignoring them.
+- Add inheritance/style-reference regression coverage; native Keynote/PowerPoint compatibility remains separately qualified in the README.
+
 ## 0.2.0
 
 This minor release requires Node 20.9 or later and OPF 0.4.1. Browser entrypoints remain available without native Node dependencies.
