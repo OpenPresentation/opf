@@ -3,6 +3,7 @@ $ErrorActionPreference = 'Stop'
 $evidenceRoot = (Resolve-Path -LiteralPath $EvidenceDirectory).Path
 $sourcePath = Join-Path $evidenceRoot 'source.pptx'
 if (-not (Test-Path -LiteralPath $sourcePath -PathType Leaf)) { throw 'Generate source.pptx first.' }
+$sourceHash = (Get-FileHash -LiteralPath $sourcePath -Algorithm SHA256).Hash.ToLowerInvariant()
 # Use the Office object model; close only presentations opened by this test.
 # Do not quit PowerPoint or alter the user's other presentations/settings.
 $powerpoint = New-Object -ComObject PowerPoint.Application
@@ -52,7 +53,7 @@ try {
         }
     }
     if (-not $found) { throw 'Native cell edit did not survive save/reopen' }
-    $report = @{powerPointVersion=$powerpoint.Version; slides=$slideCount; tableCount=$tableCount; tables=$tableDetails; editReopened=$found; rasterWidth=1280; rasterHeight=720}
+    $report = @{sourcePptxSha256=$sourceHash; powerPointVersion=$powerpoint.Version; slides=$slideCount; tableCount=$tableCount; tables=$tableDetails; editReopened=$found; rasterWidth=1280; rasterHeight=720}
     $report | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $evidenceRoot 'native.json') -Encoding UTF8
     $report | ConvertTo-Json -Depth 8
 } finally {
