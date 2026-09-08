@@ -12,6 +12,8 @@ const releasePlan = registry ? JSON.parse(await readFile(path.join(root, "releas
 // testable, while requiring the API and its pinned regression suite thereafter.
 const coreVersion = releasePlan?.packages.find(item => item.name === '@openpresentation/opf')?.version.split('.').map(Number);
 const verifyTableLayout = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] >= 6;
+// Styled-cell rollout targets core 0.7; published 0.6 fixtures remain separate.
+const verifyStyledTables = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] >= 7;
 
 async function readHarness(repo, file) {
   const directory = repo === 'opf' ? root : path.resolve(root, '..', repo);
@@ -112,6 +114,15 @@ assert.ok(pptx.length>1000);
 console.log('Packed consumer: core, editor, SVG, measured fonts and PPTX passed.');\n`,
 );
 run(process.execPath, ["check.mjs"]);
+if (verifyStyledTables) {
+  for (const name of ['styled-table.mjs','styled-table-import.mjs','table-border-styles.mjs']) {
+    const source=(await readHarness('opf-pptx', `test/${name}`)).replaceAll("'../dist/index.js'", "'@openpresentation/opf-pptx'");
+    await writeFile(path.join(consumer,name),source);
+    run(process.execPath,[name]);
+  }
+  await writeFile(path.join(consumer,'styled-types.mts'),await readHarness('opf','packages/javascript/test/fixtures/styled-table-types.mts'));
+}
+
 if (verifyTableLayout) {
   const tableHarness = (await readHarness('opf', 'packages/javascript/test/table-layout.test.mjs'))
     .replaceAll("'../dist/composition.js'", "'@openpresentation/opf/composition'")
@@ -170,6 +181,7 @@ run(process.execPath, [
   "--lib",
   "ES2022,DOM",
   "browser.ts",
+  ...(verifyStyledTables ? ["styled-types.mts"] : []),
 ]);
 const { build } = createRequire(require.resolve("tsup"))("esbuild");
 await build({

@@ -4,6 +4,7 @@
 
 - Add an object form for table cells: `value`, optional `style`, `colSpan` and `rowSpan`. Existing scalar and rich-array cells remain valid. Styles cover fills, text colors, alignment, padding and individual borders.
 - Validate covered positions explicitly as `null`, reject overlapping or out-of-bounds merges, and preserve vertical merge groups during pagination. Shared table geometry emits each anchor once and retains editable content paths through `.value`.
+- Exercise styled creation, validation, edits and merge-aware pagination through the standalone CLI, including atomic span/row edits and file preservation on invalid changes.
 - This syntax is under coordinated development with the renderer, editor and PPTX converter; it is not supported by the published 0.6.0 package set. See `docs/plans/styled-table-cells.md` for the current verification boundary.
 
 ## 0.6.0
