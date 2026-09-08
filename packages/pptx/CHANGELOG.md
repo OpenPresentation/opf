@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.0
+
+- Export canonical rich table cells and headers as editable native runs with measured font sizes, resolved families, emphasis, colors/alpha, links and script baselines. Preserve explicit line breaks and whitespace across styled run boundaries. Requires core 0.5.0 and renderer 0.3.0; native PPTX table import still flattens text, and native PowerPoint rendering remains unverified.
+
 ## 0.2.1
 
 - Preserve ordered native luminance and opacity transforms in solid and linear-gradient backgrounds, including theme colors and style placeholders. Retain precision through the full color reference chain; diagnose unsupported transforms.
