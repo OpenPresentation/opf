@@ -1,3 +1,4 @@
+import {fileURLToPath} from 'node:url';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
@@ -8,7 +9,7 @@ import {rasterMetadata} from '../dist/image-geometry.js';
 const references=JSON.parse(await readFile(new URL('fixtures/images/webp-references.json',import.meta.url),'utf8'));
 let cases=0;
 for(const [file,reference] of Object.entries(references)) {
- const path=new URL('fixtures/images/'+file,import.meta.url).pathname;
+ const path=fileURLToPath(new URL('fixtures/images/'+file,import.meta.url));
  const bytes=new Uint8Array(await readFile(path));
  const original=new Uint8Array(bytes);
  for(const mode of ['fit','crop']) for(const source of ['uri','path','resolver']) {
