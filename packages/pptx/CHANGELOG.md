@@ -2,7 +2,7 @@
 
 ## 0.4.0
 
-- Use the shared core 0.6.0 development table layout for native row heights and font fitting. Multiline cells consume available height and use uniform native paragraph spacing; short-row output remains unchanged. Publication awaits the coordinated core and renderer releases.
+- Use the shared core 0.6.0 table layout for native row heights and font fitting. Multiline cells consume available height and use uniform native paragraph spacing; short-row output remains unchanged. Requires published core 0.6.0 and renderer 0.4.0.
 
 - Import native table cells and headers as canonical rich runs, preserving supported character styles, theme fonts/colors, alpha, external links, paragraph defaults, whitespace and run/field/break order. Explicit normal text stays normal in OPF headers. Styled cells now return arrays instead of flattened strings; unstyled body cells remain strings.
 - Retain blank paragraphs and report unsupported conditional table styles, merged geometry, unresolved text fonts/colors/fills and hyperlink actions with native table/cell paths. Field values remain cached text, and full native PowerPoint visual parity remains unverified.
