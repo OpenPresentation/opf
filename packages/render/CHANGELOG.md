@@ -1,6 +1,8 @@
 # Changelog
 
-## Unreleased
+## 0.2.0
+
+This minor release requires Node 20.9 or later and OPF 0.4.1. Browser entrypoints remain available without native Node dependencies.
 
 - Honor JPEG EXIF orientations 2–8 in PNG/PDF output while keeping ordinary JPEG source attributes and bytes unchanged. Verify all eight orientations, fit/crop and actual PDF pixels against independent references.
 - Add reproducible browser orientation checks with an incorrect-orientation control and keep native raster dependencies out of the browser build.

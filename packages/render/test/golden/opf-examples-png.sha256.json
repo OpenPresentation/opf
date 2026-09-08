@@ -3,7 +3,7 @@
   "source": {
     "repository": "OpenPresentation/opf",
     "path": "examples",
-    "sha256": "e53f00ee84b8b3e712382d7daea1a5ff659410972e09fb4510734ca79fe1a12d",
+    "sha256": "cbd0d2c7cfdaa01ec6312494179c68fe59ee95206d3b8a2e07f8b69f19ce29bd",
     "decks": 126
   },
   "format": "png-sha256",
@@ -2895,8 +2895,8 @@
       "bytes": 3486
     },
     "technical/asset-source-forms.opf.json#1": {
-      "sha256": "e45b2bbc27a0dffeb94278d2df14d6bb32ee0aa32a7adcb421eb43c147351f1c",
-      "bytes": 2921
+      "sha256": "5fd6225ee8771acce5bb5e1d47ab67cb945642a7b12ce0bfb18c11e08e97195b",
+      "bytes": 7277
     },
     "technical/asset-source-forms.opf.json#2": {
       "sha256": "a892c55cca0ae4c28134762fba7dfbc9a35e920126a974425b23667fe457d01f",
