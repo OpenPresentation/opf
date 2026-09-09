@@ -3,6 +3,7 @@ import {
   serializeOpfTransfer,
   prepareOpfImport,
   MAX_OPF_BYTES,
+  assertOpf,
 } from "../src/transfer.js";
 import {
   loadOpfGallery,
@@ -11,6 +12,7 @@ import {
   normalizeGalleryUrl,
 } from "../src/galleries.js";
 import { renderSvg } from "@openpresentation/opf-render/svg";
+import { readPptxFile, showConversionDiagnostics } from './pptx-controls.js';
 
 export function installTransferControls({
   editor,
@@ -58,6 +60,8 @@ export function installTransferControls({
   };
   const busy = (message) => {
     error("");
+    $("import-conversion").hidden = true;
+    $("import-diagnostics").replaceChildren();
     prepared = null;
     transfer = null;
     $("import-apply").disabled = true;
@@ -123,7 +127,7 @@ export function installTransferControls({
   function showTab(name) {
     source = name;
     cancelRequest();
-    busy("Choose OPF to preview");
+    busy("Choose content to preview");
     for (const key of ["paste", "file", "gallery", "url"]) {
       $(`import-tab-${key}`).setAttribute(
         "aria-selected",
@@ -266,10 +270,21 @@ export function installTransferControls({
     busy(`Reading ${file.name}…`);
     try {
       if (file.size > MAX_OPF_BYTES)
-        throw new Error("Choose OPF smaller than 20 MB.");
-      const text = await file.text();
+        throw new Error("Choose a file smaller than 20 MB.");
+      const pptx = /\.pptx$/i.test(file.name) || file.type === 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
+      const result = pptx ? await readPptxFile(file) : { document: await file.text() };
       if (id !== requestId || !importDialog.open) return;
-      receive(text);
+      if (pptx) {
+        $("import-conversion").hidden = false;
+        showConversionDiagnostics($("import-diagnostics"), result.diagnostics);
+        // Converted binary input is already structured OPF. Validate its shape
+        // without applying the unrelated JSON paste byte cap to embedded images.
+        const document = assertOpf(result.document);
+        transfer = { kind: 'presentation', value: document, document };
+        updatePreview();
+      } else {
+        receive(result.document);
+      }
       $("file-name").textContent = file.name;
     } catch (cause) {
       if (id === requestId) error(cause.message);
@@ -500,8 +515,8 @@ export function installTransferControls({
     const file = event.dataTransfer?.files?.[0];
     if (!file) return;
     event.preventDefault();
-    if (!/\.(opf|json)$/i.test(file.name)) {
-      status("Drop an .opf or .json file to import it.");
+    if (!/\.(opf|json|pptx)$/i.test(file.name)) {
+      status("Drop an .opf, .json or .pptx file to import it.");
       return;
     }
     if (importDialog.open) showTab("file");
