@@ -135,6 +135,28 @@ assert.ok(pptx.length>1000);
 console.log('Packed consumer: core, editor, SVG, measured fonts and PPTX passed.');\n`,
 );
 run(process.execPath, ["check.mjs"]);
+if (!registry) {
+  // These APIs are unreleased. Keep published 0.7/0.5 fixtures pinned to the
+  // release plan; add their future registry version gate during publication.
+  for (const file of ['quote-layout.test.mjs','quote-composition.test.mjs']) {
+    const source=(await readHarness('opf',`packages/javascript/test/${file}`))
+      .replaceAll("'../dist/composition.js'","'@openpresentation/opf/composition'")
+      .replaceAll("'../dist/pagination.js'","'@openpresentation/opf/pagination'");
+    await writeFile(path.join(consumer,file),source);
+    run(process.execPath,['--test',file]);
+  }
+  for (const repo of ['opf-render','opf-pptx']) {
+    const source=(await readHarness(repo,'test/shared-quote.mjs'))
+      .replaceAll("'../dist/svg.js'","'@openpresentation/opf-render/svg'")
+      .replaceAll("'../dist/fonts-node.js'","'@openpresentation/opf-render/fonts-node'")
+      .replaceAll("'../dist/index.js'","'@openpresentation/opf-pptx'");
+    const file=repo+'-shared-quote.mjs';
+    await writeFile(path.join(consumer,file),source);
+    run(process.execPath,[file]);
+  }
+  await writeFile(path.join(consumer,'quote-editor.mjs'),await readHarness('opf','scripts/test-packed-quote.mjs'));
+  run(process.execPath,['quote-editor.mjs']);
+}
 if (verifyStyledTables) {
   for (const name of ['styled-table.mjs','styled-table-import.mjs','table-border-styles.mjs']) {
     const source=(await readHarness('opf-pptx', `test/${name}`)).replaceAll("'../dist/index.js'", "'@openpresentation/opf-pptx'");
@@ -183,6 +205,7 @@ export {formatRichTextRange,replaceRichTextRange,richTextContent,type TextRunFor
 export {prepareTrackResize,prepareBlockMove,listBlockContainers,prepareBlockInsert,prepareBlockDuplicate,prepareBlockRemove,createContentBlock} from '@openpresentation/opf-editor/layout';
 export {fitList,type ListFit,type ListValue} from '@openpresentation/opf/composition';
 ${verifyTableLayout ? "export {layoutTable,type TableLayout,type TableLayoutOptions,type TableCellLayout} from '@openpresentation/opf/composition';" : ''}
+${!registry ? "export {layoutQuote,type QuoteLayout,type QuoteTextPart,type QuoteTextSource,type QuoteLayoutOptions,type CompositionExplanation} from '@openpresentation/opf/composition';" : ''}
 export {schemaAtPath,listSchemaFields} from '@openpresentation/opf-editor/schema';
 export async function mount(container:HTMLElement):Promise<CanvasEditor> {
  const fonts=await loadBrowserFontRegistry([{url:'/fonts/Roboto.ttf'},{url:'/fonts/RobotoMono.ttf'}]);

@@ -27,21 +27,21 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
-          ref: d8696224e7a99618701e641ef7573ef394489885
+          ref: 7f08cf9e6db1f5da58b96ca1625d9ae2614ea59b
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-editor
-          ref: e8bdedf7f80e2eab0ff7d869b9436cd2050e426d
+          ref: a143ee7b1c06b6cb7fbca482927661ca2b208226
           path: opf-editor
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-pptx
-          ref: 383666b366b8c9b8ed8e7e72934d1d3fd0fb634d
+          ref: 829103b67fdc96ae977bbb05f3e94457620645cd
           path: opf-pptx
           fetch-depth: 0
           persist-credentials: false
@@ -67,7 +67,7 @@ jobs:
       - name: Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks
         working-directory: opf
         env:
-          OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf/scripts/fixtures/opf-examples-png.sha256.json
+          OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf/scripts/fixtures/opf-examples-png.shared-quote.sha256.json
         run: pnpm test:packages
       - name: Verify exact published registry packages and fidelity fixtures
         working-directory: opf

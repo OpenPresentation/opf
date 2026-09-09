@@ -54,6 +54,10 @@ const paginatedDocument = result.presentation;
 
 Pagination preserves characters and payload order; it does not summarize. Text offsets in mappings are half-open UTF-16 ranges. Tables repeat columns, headings repeat, and notes stay on the first page. Atomic content that cannot fit rejects the operation. Validate and inspect output; chart and timeline density models are not complete. The editor's `paginateSlide(index, options)` records one undoable change and returns both the change and pagination result.
 
+Unreleased coordinated quote integration uses `grid-score-v2` and `quote-flow-v1`: quote items carry accepted `quoteLayout.parts`, including body/source boxes, fits, styles and UTF-16 source mappings. The body's compatibility `item.text` includes generated quotation marks. The allocator adjusts footer space before reducing fonts; consumers must reject reported failures and must not re-fit accepted parts. Glyph outlines can differ from these advance-based boxes. Published core 0.7.0 does not contain this integration.
+
+In that coordinated release, pagination persists the evaluated minimum in returned slides even when no extra page is needed. Apply the returned document; a one-page policy change is undoable in the coordinated editor, while a second unchanged invocation is a no-op. Quote bodies may split, but each fragment retains its complete attribution/source. Irreducible footers reject all output.
+
 
 ## Resizing tracks
 

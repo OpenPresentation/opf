@@ -77,27 +77,32 @@ function leafFor(path: string, field: string, value: any): Leaf {
 /** Explicit, lossless authoring transform. It never changes slide count during rendering. */
 export function paginateSlide(input: unknown, options: PaginationOptions = {}): PaginationResult {
   assertValidPresentation({slides:[input]});
-  const source = clone(input) as Record<string, any>;
+  let source = clone(input) as Record<string, any>;
   const maxSlides = options.maxSlides ?? 100;
   if (!Number.isInteger(maxSlides) || maxSlides < 1 || maxSlides > 10000) throw new RangeError('maxSlides must be an integer between 1 and 10000.');
   const minFontSize = options.minFontSize ?? 24;
   if (!Number.isFinite(minFontSize) || minFontSize < 8 || minFontSize > 32) throw new RangeError("Pagination minFontSize must be between 8 and 32.");
   const sourceIndex = options.slideIndex ?? 0, sourceBase = `slides.${sourceIndex}`;
-  const warnOnly = (slide: Record<string, any>): Record<string, any> => {
+  const withReadability = (slide: Record<string, any>, warn = false): Record<string, any> => {
     const result = clone(slide);
-    const visit = (node: Record<string, any>) => {
-      if (node.composition) node.composition = { ...node.composition, overflow: 'warn', minFontSize: Math.max(minFontSize,node.composition.minFontSize ?? 16) };
-      if (Array.isArray(node.blocks)) node.blocks.forEach(visit);
+    const rootMinimum = Math.max(minFontSize,result.composition?.minFontSize ?? (options.layout?.composition as any)?.minFontSize ?? 16);
+    result.composition = {...result.composition,minFontSize:rootMinimum};
+    const visit = (node: Record<string, any>, inheritedMinimum: number) => {
+      const minimum = Math.max(minFontSize,node.composition?.minFontSize ?? inheritedMinimum);
+      if (node.composition) node.composition = { ...node.composition, minFontSize:minimum, ...(warn?{overflow:'warn'}:{}) };
+      if (Array.isArray(node.blocks)) node.blocks.forEach(child=>{ visit(child,minimum); });
     };
-    visit(result);
-    for (const [key,value] of Object.entries(result)) if (isRecord(value) && /^(top|middle|bottom|left|center|right)([+:]|$)/.test(key)) visit(value);
-    result.composition = {...result.composition,overflow:'warn',minFontSize:Math.max(minFontSize,result.composition?.minFontSize ?? (options.layout?.composition as any)?.minFontSize ?? 16)};
+    visit(result,rootMinimum);
+    for (const [key,value] of Object.entries(result)) if (isRecord(value) && /^(top|middle|bottom|left|center|right)([+:]|$)/.test(key)) visit(value,rootMinimum);
     return result;
   };
+  // Persist the evaluated readability policy in the ordinary returned slides. Otherwise a
+  // footer measured at 24px during pagination would render at its old 17px nominal size.
+  source = withReadability(source);
   let evaluations = 0;
   const geometry = (slide: Record<string, any>) => {
     if (++evaluations > 20000) throw new OPFPaginationError('Pagination exceeded its layout evaluation limit. Split the input into smaller sections.');
-    return composeSlide(warnOnly(slide), options);
+    return composeSlide(withReadability(slide,true), options);
   };
   const initial = geometry(source);
   if (!initial.diagnostics.length) return { slides:[source], pages:[{slideIndex:sourceIndex,mappings:initial.items.map(item=>({sourcePath:item.path,outputPath:item.path}))}] };
@@ -160,7 +165,9 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
     const boundaries = leaf.boundaries ?? [0,1];
     const end = boundaries.at(-1)!;
     let start = 0;
-    do {
+    // Retry the same leaf after flushing an earlier page, even when its body range is
+    // empty: a quote can still carry an attribution/source that must not disappear.
+    while (true) {
       const make = (limit: number): Portion => ({leaf,start,end:limit,value:leaf.slice ? leaf.slice(start,limit) : leaf.value});
       let candidate = new Map(selected).set(leaf.path,make(end));
       let issues = diagnosticsFor(candidate);
@@ -189,7 +196,7 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
       if (best>start) { selected.set(leaf.path,make(best)); finish(); start=best; }
       else if (selected.size) finish();
       else throw new OPFPaginationError(`Content at ${leaf.path} cannot fit on an otherwise empty slide. Change its layout or split an atomic item.`,issues);
-    } while (start<end);
+    }
   }
   finish();
   if (!slides.length) throw new OPFPaginationError('No body content can be paginated.', initial.diagnostics);

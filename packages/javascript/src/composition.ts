@@ -54,6 +54,8 @@ export interface ComposedItem {
   box: LayoutBox;
   text?: TextFit | RichTextFit | ListFit;
   textStyle?: TextStyle;
+  /** Complete accepted quote internals; consumers must reuse these fits and styles. */
+  quoteLayout?: QuoteLayout;
   /** Effective container settings, including inherited readability constraints. */
   composition: Composition;
 }
@@ -70,7 +72,7 @@ export interface ComposedFlow {
   itemCount: number;
   slotCount: number;
 }
-/** Additive penalties in grid-score-v1; lower is preferred. These are not quality percentages. */
+/** Additive penalties in grid-score-v2; lower is preferred. These are not quality percentages. */
 export interface CompositionPenalties {
   cellProportions: number;
   fontReduction: number;
@@ -94,7 +96,7 @@ export interface CompositionDecision {
   candidates: CompositionCandidate[];
 }
 export interface CompositionExplanation {
-  algorithm: 'grid-score-v1';
+  algorithm: 'grid-score-v2';
   /** Provided widths do not establish shaping, glyph coverage or native fidelity. */
   textMeasurement: 'estimated' | 'provided';
   decisions: CompositionDecision[];
@@ -208,7 +210,7 @@ export interface QuoteLayoutDiagnostic extends LayoutDiagnostic {
   parts: QuoteTextPart['role'][];
 }
 export interface QuoteLayout {
-  algorithm: 'quote-insets-v1';
+  algorithm: 'quote-flow-v1';
   textMeasurement: 'estimated' | 'provided';
   parts: QuoteTextPart[];
   diagnostics: QuoteLayoutDiagnostic[];
@@ -225,8 +227,7 @@ export interface QuoteLayoutOptions {
   textMeasurement?: TextMeasurement;
 }
 /**
- * Measure all quote text in one operation for prospective composition/render/export consumers.
- * This additive API does not change composeSlide selection or paginate content. Callers must
+ * Allocate and measure quote body/footer space for composition, rendering and export. Callers must
  * check overflow before accepting the parts. Line boxes are not shaped glyph or native raster bounds.
  */
 export function layoutQuote(value: string | QuoteContent, box: LayoutBox, options: QuoteLayoutOptions = {}): QuoteLayout {
@@ -255,15 +256,7 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
     const requestedFontSize = Math.max(fontSize * scale, minimum);
     const part:QuoteTextPart = {role,path:partPath,text,sources,box:area,requestedFontSize,minFontSize:minimum,requestedStyle,style};
     parts.push(part);
-    if (![area.x,area.y,area.width,area.height].every(Number.isFinite) || area.width <= 0 || area.height <= 0) {
-      report('invalid-part-box',partPath,[role],`Quote ${role} has no usable space after its insets; increase the cell size or change the arrangement.`);
-      return;
-    }
-    if (area.x < box.x || area.y < box.y || area.x+area.width > box.x+box.width+.01 || area.y+area.height > box.y+box.height+.01) {
-      report('part-outside-cell',partPath,[role],`Quote ${role} extends outside its cell; increase the cell size or change the arrangement.`);
-    }
-    part.fit = fitText(text,area,requestedFontSize,minimum,textWidthMeasurer(style,options.textMeasurement));
-    if (part.fit.overflow) report('text-fit',partPath,[role],`Quote ${role} exceeds its reserved space at the readability floor; increase its space or change the arrangement.`);
+    return part;
   };
   let footer = '';
   const footerSources:QuoteTextSource[] = [];
@@ -275,13 +268,62 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
     footer += text;
   }
   const bodyPath = shorthand ? path : `${path}.text`;
-  add('body',`"${quote.text}"`,[source(bodyPath,quote.text,1)],
+  const body = add('body',`"${quote.text}"`,[source(bodyPath,quote.text,1)],
     {x:box.x+18,y:box.y+18,width:box.width-36,height:box.height-(footer?94:36)},
     28,options.fonts?.heading??'sans-serif',600,bodyPath);
-  if (footer) add('footer',footer,footerSources,
+  const attribution = footer ? add('footer',footer,footerSources,
     {x:box.x+18,y:box.y+box.height-58,width:box.width-36,height:40},
-    17,options.fonts?.body??'sans-serif',500,path);
-  const [body,attribution] = parts;
+    17,options.fonts?.body??'sans-serif',500,path) : undefined;
+  const usable = (area:LayoutBox) => [area.x,area.y,area.width,area.height].every(Number.isFinite) && area.width>0 && area.height>0;
+  const fit = (part:QuoteTextPart,area:LayoutBox,size=part.requestedFontSize,floor=minimum) => usable(area)
+    ? fitText(part.text,area,size,floor,textWidthMeasurer(part.style,options.textMeasurement)) : undefined;
+  const inner = {x:box.x+18,y:box.y+18,width:box.width-36,height:box.height-36};
+  if (!attribution) body.fit=fit(body,body.box);
+  else if (usable(inner) && inner.height>18) {
+    const available=inner.height-18;
+    const preferredBody=fit(body,inner,body.requestedFontSize,body.requestedFontSize)!;
+    const minimumBody=body.requestedFontSize===minimum ? preferredBody : fit(body,inner,minimum,minimum)!;
+    const preferredBodyHeight=preferredBody.lines.length*preferredBody.lineHeight;
+    const minimumBodyHeight=minimumBody.lines.length*minimumBody.lineHeight;
+    let selected:{bodyBox:LayoutBox;footerBox:LayoutBox;bodyFit?:TextFit;footerFit?:TextFit;score:number;overflow:boolean}|undefined;
+    // At most two footer sizes: its nominal request and the readability floor. Retain
+    // the fitting pair with the least total font reduction. A 40px footer is only a
+    // whitespace preference; it must not cause unnecessary shrinking or grid movement.
+    for (const size of new Set([attribution.requestedFontSize,minimum])) {
+      const natural=fit(attribution,inner,size,size)!;
+      const naturalHeight=natural.lines.length*natural.lineHeight;
+      const preferredHeight=Math.max(40,naturalHeight);
+      const bodyReservation=Math.min(minimumBodyHeight,Math.max(minimumBody.lineHeight,available-natural.lineHeight));
+      const footerHeight=preferredBodyHeight+preferredHeight<=available+.01 ? preferredHeight
+        : Math.min(naturalHeight,Math.max(0,available-bodyReservation));
+      const bodyBox={...inner,height:available-footerHeight};
+      const footerBox={...inner,y:inner.y+inner.height-footerHeight,height:footerHeight};
+      const bodyFit=fit(body,bodyBox);
+      const footerFit=usable(footerBox) ? {...natural,overflow:natural.overflow||naturalHeight>footerHeight+.01} : undefined;
+      const overflow=!bodyFit||!footerFit||bodyFit.overflow||footerFit.overflow;
+      const score=(body.requestedFontSize-(bodyFit?.fontSize??minimum)+attribution.requestedFontSize-size)/scale;
+      // When neither size fits, retain the floor-size trial so failure diagnostics
+      // describe the irreducible result, not a rejected larger-font attempt.
+      if (!selected || !overflow && (selected.overflow||score<selected.score) || overflow && selected.overflow) {
+        selected={bodyBox,footerBox,bodyFit,footerFit,score,overflow};
+      }
+    }
+    if (selected) {
+      body.box=selected.bodyBox;body.fit=selected.bodyFit;
+      attribution.box=selected.footerBox;attribution.fit=selected.footerFit;
+    }
+  }
+  for (const part of parts) {
+    const area=part.box;
+    if (!part.fit) {
+      report('invalid-part-box',part.path,[part.role],`Quote ${part.role} has no usable space after its insets; increase the cell size or change the arrangement.`);
+    } else if (part.fit.overflow) {
+      report('text-fit',part.path,[part.role],`Quote ${part.role} exceeds its available space at the readability floor; increase its space or change the arrangement.`);
+    }
+    if (usable(area) && (area.x<box.x || area.y<box.y || area.x+area.width>box.x+box.width+.01 || area.y+area.height>box.y+box.height+.01)) {
+      report('part-outside-cell',part.path,[part.role],`Quote ${part.role} extends outside its cell; increase the cell size or change the arrangement.`);
+    }
+  }
   // Conservative occupied line rectangles, not actual glyph outlines. Reserved boxes alone
   // are insufficient: an overflowing body's rendered lines can reach an otherwise fitting footer.
   if (body?.fit && attribution?.fit && body.box.y+body.fit.lines.length*body.fit.lineHeight > attribution.box.y+.01 &&
@@ -289,7 +331,7 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
     report('part-overlap',path,['body','footer'],'Quote body and footer line boxes overlap; do not accept this layout without more space.');
   }
   if (diagnostics.length && options.overflow === 'error') throw new OPFCompositionError(diagnostics);
-  return {algorithm:'quote-insets-v1',textMeasurement:options.textMeasurement?'provided':'estimated',parts,diagnostics,overflow:diagnostics.length>0};
+  return {algorithm:'quote-flow-v1',textMeasurement:options.textMeasurement?'provided':'estimated',parts,diagnostics,overflow:diagnostics.length>0};
 }
 
 export interface RichTextRun {
@@ -640,11 +682,20 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const amount = (settings.padding ?? 0) * Math.min(box.width, box.height);
     return { x: box.x + amount, y: box.y + amount, width: box.width - amount * 2, height: box.height - amount * 2 };
   };
+  const quoteBox = (box: LayoutBox): LayoutBox => ({x:round(box.x),y:round(box.y),width:round(box.width),height:round(box.height)});
+  const measureQuote = (node: Pending, box: LayoutBox, settings: Composition) => layoutQuote(node.value as string | QuoteContent, quoteBox(box), {
+    fonts:options.fonts,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,
+  });
   const leafScore = (node: Pending, box: LayoutBox, settings: Composition, penalties?: CompositionPenalties): number => {
     const text = contentText(node.field, node.value);
     let score = Math.abs(Math.log(box.width / box.height / 1.6));
     if (penalties) penalties.cellProportions += score;
-    if (text) {
+    if (node.field === 'quote') {
+      const quote = measureQuote(node,box,settings);
+      const reduction = quote.parts.reduce((sum,part)=>sum+(part.fit ? (part.requestedFontSize-part.fit.fontSize)/scale : 0),0);
+      score += reduction + (quote.overflow ? 1000 : 0);
+      if (penalties) { penalties.fontReduction += reduction; penalties.textOverflow += quote.overflow ? 1000 : 0; }
+    } else if (text) {
       const fit = fitContent(node.field,node.value,text,box,25*scale,(settings.minFontSize??16)*scale,node.path);
       const reduction = (25 * scale - fit.fontSize) / scale;
       score += reduction + (fit.overflow ? 1000 : 0);
@@ -709,8 +760,10 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
         arrange(node.children, inner, own, 0, (own.gap ?? 1 / 30) * Math.min(box.width, box.height), node.path);
       } else {
         const textValue = contentText(node.field, node.value);
-        const text = textValue !== undefined ? fitContent(node.field,node.value,textValue,box,25*scale,(settings.minFontSize??16)*scale,node.path) : undefined;
-        items.push({ path: node.path, field: node.field, type: node.type, value: node.value, payload: node.payload, box, text, textStyle: styleFor(node.field,node.path), composition: settings });
+        const quoteLayout = node.field === 'quote' ? measureQuote(node,box,settings) : undefined;
+        const text = quoteLayout ? quoteLayout.parts[0]?.fit : textValue !== undefined ? fitContent(node.field,node.value,textValue,box,25*scale,(settings.minFontSize??16)*scale,node.path) : undefined;
+        items.push({ path: node.path, field: node.field, type: node.type, value: node.value, payload: node.payload, box:quoteLayout?quoteBox(box):box,
+          text, textStyle: quoteLayout?.parts[0]?.style ?? styleFor(node.field,node.path), composition: settings, ...(quoteLayout?{quoteLayout}:{}) });
         if (box.width < 100 * scale || box.height < 60 * scale) diagnostics.push({ code: "small-cell", path: node.path, message: "Content cell is too small for comfortable reading; use fewer blocks or a different composition." });
       }
     });
@@ -722,14 +775,24 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   for (const item of items) {
     for (const key of ["x", "y", "width", "height"] as const) item.box[key] = round(item.box[key]);
     if (item.field === "table" && tableOverflows(item.value,item.box,scale,item.composition,options,item.path)) diagnostics.push({ code: "text-overflow", path: item.path, message: "Table cells do not fit; use fewer rows, fewer columns, or split the table across slides." });
-    if (item.text?.overflow) diagnostics.push({ code: "text-overflow", path: item.path, message: "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide." });
+    if (item.quoteLayout) diagnostics.push(...item.quoteLayout.diagnostics);
+    else if (item.text?.overflow) diagnostics.push({ code: "text-overflow", path: item.path, message: "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide." });
   }
   for (const group of groups) for (const box of [group.box, group.contentBox]) for (const key of ["x", "y", "width", "height"] as const) box[key] = round(box[key]);
   const strictPaths = new Set(items.filter(item => item.composition.overflow === "error").map(item => item.path));
-  const failures = diagnostics.filter(diagnostic => strictPaths.has(diagnostic.path));
+  const failures = diagnostics.filter(diagnostic => {
+    let path = diagnostic.path;
+    while (path) {
+      if (strictPaths.has(path)) return true;
+      const boundary = path.lastIndexOf('.');
+      if (boundary < 0) break;
+      path = path.slice(0,boundary);
+    }
+    return false;
+  });
   const explanation: CompositionExplanation | undefined = decisions ? {
-    algorithm:'grid-score-v1',textMeasurement:options.textMeasurement?'provided':'estimated',decisions,
-    unmeasuredPayloads:items.filter(item=>!headings.has(item.field)&&!['text','items','bullets','table'].includes(item.field)).map(item=>item.path),
+    algorithm:'grid-score-v2',textMeasurement:options.textMeasurement?'provided':'estimated',decisions,
+    unmeasuredPayloads:items.filter(item=>!headings.has(item.field)&&!item.quoteLayout&&!['text','items','bullets','table'].includes(item.field)).map(item=>item.path),
   } : undefined;
   if (failures.length) throw new OPFCompositionError(failures, explanation);
   return { width, height, contentBox, items, groups, flows, diagnostics, composition, ...(explanation?{explanation}:{}) };
