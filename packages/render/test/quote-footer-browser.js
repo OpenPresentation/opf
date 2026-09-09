@@ -9,13 +9,15 @@ try {
   for (const item of fixture.cases) {
     document.querySelector('main').innerHTML = await (await fetch(item.url)).text();
     await document.fonts.ready;
+    const bounds = document.querySelector('main svg').viewBox.baseVal;
+    if (bounds.width !== item.width || bounds.height !== item.height) throw new Error('Unexpected actual SVG dimensions: '+item.id);
     const body = document.querySelector('g[data-opf-path="slides.0.quote.text"]');
     const footer = [...document.querySelectorAll('g[data-opf-path="slides.0.quote"]')].find(node=>[...node.children].some(child=>child.tagName==='text'));
     if (!body || !footer) throw new Error('Missing quote body or attribution');
     const bodyBounds = body.getBBox(), footerBounds = footer.getBBox();
     if (bodyBounds.y + bodyBounds.height > footerBounds.y) throw new Error('Loaded-font quote glyphs overlap attribution: '+item.id);
     if (!footer.textContent.includes('Recorded interview')) throw new Error('Quote source is missing');
-    checks += 2;
+    checks += 3;
   }
   output.textContent = JSON.stringify({passed:true,cases:fixture.cases.length,checks,fonts:fixture.fonts.length,scope:'Actual browser SVG glyph bounds using the same bundled open font bytes as text measurement'},null,2);
   document.title = 'PASS: quote footer';

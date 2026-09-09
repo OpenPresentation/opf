@@ -5,9 +5,10 @@ const fonts = await loadBundledFontRegistry();
 let fitted = 0, rejected = 0;
 for (const dimensions of [{width:1280,height:720},{width:540,height:960}]) {
   for (const repeats of [12,16,20,24,80]) {
-    const deck = {design:{dimensions,fontScheme:'roboto'},slides:[{title:'A quote and its source',quote:{text:'A shared layout keeps the evidence readable when the words change. '.repeat(repeats),attribution:'A reviewer',source:'Recorded interview'}}]};
+    const deck = {design:{dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96},fontScheme:'roboto'},slides:[{title:'A quote and its source',quote:{text:'A shared layout keeps the evidence readable when the words change. '.repeat(repeats),attribution:'A reviewer',source:'Recorded interview'}}]};
     const diagnostics = [];
     const svg = renderSvg(deck,{trace:true,textMeasurement:fonts.textMeasurement,onDiagnostic:value=>diagnostics.push(value)});
+    assert.ok(svg.includes(`viewBox="0 0 ${dimensions.width} ${dimensions.height}"`), 'Actual SVG dimensions must match the fixture');
     if (diagnostics.some(value=>value.code==='text-overflow')) {
       deck.slides[0].composition = {overflow:'error'};
       assert.throws(()=>renderSvg(deck,{textMeasurement:fonts.textMeasurement}), {code:'layout-overflow'});

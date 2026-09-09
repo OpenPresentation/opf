@@ -23,13 +23,14 @@ for(const face of fonts.embeddedFonts.filter(face=>['Roboto','Roboto Medium','Ro
 assert.equal(fontManifest.length,4);
 const cases=[];
 for(const dimensions of [{width:1280,height:720},{width:540,height:960}])for(const repeats of [12,16,20,24]){
-  const deck={design:{dimensions,fontScheme:'roboto'},slides:[{title:'A quote and its source',quote:{text:'A shared layout keeps the evidence readable when the words change. '.repeat(repeats),attribution:'A reviewer',source:'Recorded interview'}}]};
+  const deck={design:{dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96},fontScheme:'roboto'},slides:[{title:'A quote and its source',quote:{text:'A shared layout keeps the evidence readable when the words change. '.repeat(repeats),attribution:'A reviewer',source:'Recorded interview'}}]};
   const diagnostics=[];
   const svg=renderSvg(deck,{trace:true,textMeasurement:fonts.textMeasurement,onDiagnostic:value=>diagnostics.push(value)});
   assert.equal(diagnostics.length,0);
   const id=`${dimensions.width}-${repeats}`,filename=id+'.svg';
   await writeFile(new URL(filename,quoteDirectory),svg);
-  cases.push({id,url:'./'+filename});
+  assert.ok(svg.includes(`viewBox="0 0 ${dimensions.width} ${dimensions.height}"`));
+  cases.push({id,url:'./'+filename,...dimensions});
 }
 await writeFile(new URL('fixtures.json',quoteDirectory),JSON.stringify({fonts:fontManifest,cases}));
 await build({entryPoints:[fileURLToPath(new URL('../test/quote-footer-browser.js',import.meta.url))],bundle:true,platform:'browser',format:'esm',outfile:fileURLToPath(new URL('bundle.js',quoteDirectory))});
