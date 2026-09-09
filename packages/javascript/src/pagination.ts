@@ -90,7 +90,7 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
     const visit = (node: Record<string, any>, inheritedMinimum: number) => {
       const minimum = Math.max(minFontSize,node.composition?.minFontSize ?? inheritedMinimum);
       if (node.composition) node.composition = { ...node.composition, minFontSize:minimum, ...(warn?{overflow:'warn'}:{}) };
-      if (Array.isArray(node.blocks)) node.blocks.forEach(child=>visit(child,minimum));
+      if (Array.isArray(node.blocks)) node.blocks.forEach(child=>{ visit(child,minimum); });
     };
     visit(result,rootMinimum);
     for (const [key,value] of Object.entries(result)) if (isRecord(value) && /^(top|middle|bottom|left|center|right)([+:]|$)/.test(key)) visit(value,rootMinimum);
