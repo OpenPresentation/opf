@@ -950,16 +950,16 @@ async function addPayload(slide, presentation, payload, region, path, context, o
       addTablePayload(slide, payload.table, region, context, options, path);
       break;
     case "code":
-      addCodePayload(slide, payload.code, region, context);
+      addCodePayload(slide, payload.code, region, context, options, path);
       break;
     case "metric":
-      addMetricPayload(slide, payload.metric, region, context);
+      addMetricPayload(slide, payload.metric, region, context, options, path);
       break;
     case "quote":
-      addQuotePayload(slide, payload.quote, region, context);
+      addQuotePayload(slide, payload.quote, region, context, options, path);
       break;
     case "timeline":
-      addTimelinePayload(slide, payload.timeline, region, context);
+      addTimelinePayload(slide, payload.timeline, region, context, options, path);
       break;
     default:
       addPlaceholderPayload(slide, "Unsupported OPF payload", payload, region, context);
@@ -1088,8 +1088,11 @@ function addChartPayload(slide, chart, region, context) {
     chartColors: CHART_COLORS,
     catAxisLabelFontFace: context.fonts.body,
     catAxisLabelFontSize: 9,
+    catAxisLabelColor: context.colors.text,
     valAxisLabelFontFace: context.fonts.body,
     valAxisLabelFontSize: 9,
+    valAxisLabelColor: context.colors.text,
+    legendColor: context.colors.text,
     showValue: false,
     valGridLine: { color: context.colors.border, transparency: 30, size: 1 },
     barDir: chartData.barDir,
@@ -1184,67 +1187,71 @@ function addTablePayload(slide, table, region, context, options, path) {
   });
 }
 
-function addCodePayload(slide, value, region, context) {
-  const code = typeof value === "string" ? { source: value } : value;
-  const title = code?.filename ? `${code.filename}${code.language ? ` (${code.language})` : ""}` : code?.language;
-  const body = [title, code?.source].filter(Boolean).join("\n");
-  slide.addText(body, {
-    ...textBoxOptions(region, context, 11),
-    fontFace: context.fonts.code,
-    fill: { color: context.colors.surface },
-    line: { color: context.colors.border, pt: 0.75 },
-    margin: 8,
-    fit: "shrink"
-  });
+function pixelBox(region) {
+  return {x: region.x * 96, y: region.y * 96, width: region.w * 96, height: region.h * 96};
 }
 
-function addMetricPayload(slide, value, region, context) {
-  const metric = isPlainObject(value) ? value : { value };
-  slide.addText(String(metric.value ?? ""), {
-    x: region.x,
-    y: region.y,
-    w: region.w,
-    h: Math.min(region.h, 0.68),
-    margin: 0,
-    fontFace: context.fonts.heading,
-    fontSize: 30,
-    bold: true,
-    color: context.colors.accent,
-    fit: "shrink"
-  });
-  slide.addText([metric.label, metric.description, metric.delta].filter(Boolean).join("\n"), {
-    x: region.x,
-    y: region.y + 0.76,
-    w: region.w,
-    h: Math.max(0.3, region.h - 0.78),
-    margin: 0,
-    fontFace: context.fonts.body,
-    fontSize: 12,
-    color: context.colors.text,
-    fit: "shrink"
-  });
+// Match the published renderer's payload geometry and shared core text fitting.
+// Each fitted line remains native editable text, without PowerPoint rewrapping it.
+function addMeasuredPayloadText(slide, text, box, context, options, config) {
+  const scale = Math.min(context.dimensions.widthInches, context.dimensions.heightInches) * 96 / 720;
+  const style = resolveTextStyle({fontFamily: config.fontFamily ?? context.fonts.body, fontWeight: config.fontWeight ?? 400, path: config.path}, options.textMeasurement);
+  const fit = fitText(String(text ?? ''), box, config.fontSize * scale, (context.composition?.minFontSize ?? 16) * scale, textWidthMeasurer(style, options.textMeasurement));
+  if (fit.overflow) {
+    const diagnostic = {code: 'text-overflow', path: config.path, message: 'Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide.'};
+    options.onDiagnostic?.(diagnostic);
+    if (context.composition?.overflow === 'error') throw new OPFPptxError('layout-overflow', diagnostic.message, {path: config.path, issues: [diagnostic]});
+  }
+  for (const [index, line] of fit.lines.entries()) {
+    if (!line) continue;
+    slide.addText(line, {
+      ...textBoxOptions({x: box.x / 96, y: (box.y + index * fit.lineHeight) / 96, w: box.width / 96, h: fit.lineHeight / 96}, context, fit.fontSize * .75),
+      fontFace: style.fontFamily, bold: style.fontWeight >= 600, italic: style.italic,
+      color: normalizeHex(config.color ?? context.colors.text), align: config.align ?? context.contentAlignment ?? 'left',
+      fit: 'none', wrap: false, lineSpacingMultiple: 1,
+    });
+  }
 }
 
-function addQuotePayload(slide, value, region, context) {
-  const quote = typeof value === "string" ? { text: value } : value;
-  const attribution = quote?.attribution ? `\n- ${quote.attribution}` : "";
-  slide.addText(`${quote?.text ?? ""}${attribution}`, {
-    ...textBoxOptions(region, context, 17),
-    italic: true,
-    color: context.colors.text,
-    fit: "shrink"
+function addCodePayload(slide, value, region, context, options, path) {
+  const box = pixelBox(region), code = typeof value === 'string' ? value : value?.source ?? JSON.stringify(value);
+  const label = typeof value === 'object' && value?.language ? String(value.language) : 'code';
+  slide.addShape('rect', {...region, fill: {color: '111827'}, line: {color: '334155', pt: .75}});
+  // The label has a fixed baseline in the SVG renderer; it does not participate in fitting.
+  slide.addText(label.toUpperCase(), {
+    ...textBoxOptions({x: (box.x + 18) / 96, y: (box.y + 14) / 96, w: Math.max(1, box.width - 36) / 96, h: 20 / 96}, context, 14 * .75),
+    fontFace: context.fonts.code, bold: true, color: '93C5FD', fit: 'none', wrap: false,
   });
+  addMeasuredPayloadText(slide, code, {x: box.x + 18, y: box.y + 46, width: box.width - 36, height: box.height - 64}, context, options, {path, fontSize: 18, fontFamily: context.fonts.code, color: 'E5E7EB'});
 }
 
-function addTimelinePayload(slide, value, region, context) {
-  const timeline = Array.isArray(value) ? { events: value } : value;
+function addMetricPayload(slide, value, region, context, options, path) {
+  const metric = isPlainObject(value) ? value : {value}, box = pixelBox(region);
+  addMeasuredPayloadText(slide, metric.value, {...box, height: box.height * .45}, context, options, {path: path + '.value', fontSize: Math.min(76, box.height * .28), fontFamily: context.fonts.heading, fontWeight: 800, color: context.colors.accent});
+  addMeasuredPayloadText(slide, [metric.label, metric.description, metric.delta].filter(Boolean).join('\n'), {x: box.x, y: box.y + box.height * .45, width: box.width, height: box.height * .55}, context, options, {path, fontSize: 23, fontWeight: 500});
+}
+
+function addQuotePayload(slide, value, region, context, options, path) {
+  const quote = isPlainObject(value) ? value : {text: value}, box = pixelBox(region);
+  addMeasuredPayloadText(slide, `"${quote.text ?? ''}"`, {x: box.x + 18, y: box.y + 18, width: Math.max(1, box.width - 36), height: Math.max(1, box.height - 36)}, context, options, {path: path + '.text', fontSize: 28, fontFamily: context.fonts.heading, fontWeight: 600});
+  addMeasuredPayloadText(slide, [quote.attribution, quote.source].filter(Boolean).join(' - '), {x: box.x + 18, y: box.y + box.height - 58, width: box.width - 36, height: 40}, context, options, {path, fontSize: 17, fontWeight: 500, color: context.colors.mutedText});
+}
+
+function addTimelinePayload(slide, value, region, context, options, path) {
+  const timeline = Array.isArray(value) ? {events: value} : value;
   const events = Array.isArray(timeline?.events) ? timeline.events : [];
-  const lines = events.map((event) => {
-    const when = event.when ? `${event.when}: ` : "";
-    const detail = event.description ? ` - ${event.description}` : "";
-    return `${when}${event.what ?? ""}${detail}`;
-  });
-  slide.addText(lines.join("\n"), textBoxOptions(region, context, 13));
+  if (!events.length) return;
+  const box = pixelBox(region), labelWidth = box.width / Math.max(2, events.length);
+  const gap = (box.width - labelWidth) / Math.max(1, events.length - 1);
+  const start = events.length === 1 ? box.x + box.width / 2 : box.x + labelWidth / 2;
+  const end = events.length === 1 ? start : box.x + box.width - labelWidth / 2;
+  const y = box.y + box.height * .46, radius = Math.min(9, labelWidth / 5, box.height * .04);
+  slide.addShape('line', {x: start / 96, y: y / 96, w: (end - start) / 96, h: 0, line: {color: context.colors.border, pt: 3 * .75}});
+  for (const [index, event] of events.entries()) {
+    const x = start + index * gap;
+    slide.addShape('ellipse', {x: (x - radius) / 96, y: (y - radius) / 96, w: radius * 2 / 96, h: radius * 2 / 96, fill: {color: context.colors.accent}, line: {transparency: 100}});
+    addMeasuredPayloadText(slide, [event.when, event.what, event.description].filter(Boolean).join('\n'), {x: x - labelWidth / 2, y: index % 2 === 0 ? box.y : y + 24, width: labelWidth, height: box.height * .38}, context, options, {path: `${path}.events.${index}`, fontSize: 16, fontWeight: 500, align: 'center'});
+  }
 }
 
 function addPlaceholderPayload(slide, label, value, region, context) {

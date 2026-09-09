@@ -1,6 +1,6 @@
 {
   "name": "@openpresentation/opf-pptx",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "Pure local OPF to PPTX export and PPTX to OPF import tooling.",
   "license": "MIT",
   "type": "module",
@@ -38,7 +38,7 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "typecheck": "node --check src/index.js && node --check scripts/build.mjs && node --check scripts/validate-package.mjs && node --check test/smoke.mjs && node --check src/image-geometry.js && node --check test/image-fit.mjs && node --check test/image-orientation.mjs && node --check test/table-layout.mjs && node --check test/table-import.mjs && node --check test/object-ids.mjs && node --check test/export-corpus.mjs && node --check test/image-media-type.mjs && node --check src/image-fallback-node.js && node --check src/image-fallback-browser.js && node --check test/webp-fallback.mjs && node --check scripts/build-browser-check.mjs && node --check test/webp-fallback-browser.js && node --check test/image-fallback-boundary.mjs && node --check src/background.js && node --check test/background.mjs && node --check src/image-import.js && node --check test/image-import.mjs && node --check test/native-background.mjs && node --check src/background-import.js && node --check test/background-inheritance.mjs && node --check test/rich-table.mjs && node --check src/table-import.js && node --check test/rich-table-import.mjs && node --check test/rich-table-import-browser.js && node --check test/table-row-sizing.mjs && node --check test/table-styles.mjs && node --check test/table-styles-browser.js && node --check test/styled-table.mjs && node --check src/table-cell-import.js && node --check test/styled-table-import.mjs && node --check test/styled-table-import-browser.js && node --check src/table-border-import.js && node --check test/table-border-styles.mjs",
-    "test": "npm run build && node test/dependency-boundary.mjs && npm run build:browser-check && npm run test:styled-table",
+    "test": "npm run build && node test/dependency-boundary.mjs && npm run build:browser-check && npm run test:styled-table && node test/content-layout.mjs",
     "validate": "node scripts/validate-package.mjs",
     "test:packed": "node test/packed-install.mjs",
     "test:compare-published": "node test/compare-published.mjs",
