@@ -2,12 +2,15 @@
 
 ## Unreleased
 
+## 0.8.0
+
 - Compose quote bodies and sources through shared `layoutQuote` geometry, resolved styles, UTF-16 source ranges, readability floors and explicit internal overflow. `quote-flow-v1` allocates footer space before reducing fonts or changing the outer grid. Coordinated renderer/PPTX source consumes accepted parts without re-fitting; these changes require the next coordinated package releases.
 - Version automatic scoring as `grid-score-v2`: measure both quote parts, charge their combined font reduction and one overflow penalty per quote, and recognize descendant strict-fit diagnostics.
 - Persist pagination's readability policy in returned slides, including a fitting one-page result. Preserve exact quote body fragments and repeated sources; reject irreducible empty-body quotes instead of dropping them after an earlier page. The coordinated editor treats a one-page policy change as an undoable edit.
 - Correct incomplete-payload reporting to include code: its language label and internal insets are not yet shared with composition fitting. This coverage correction does not alter geometry or claim to repair overflow.
 - Add opt-in composition explanations with versioned candidate costs, selection reasons, measurement scope and unmeasured payload paths. Explanations preserve existing geometry and measurement calls, including explicit modes, weights and promoted regions, and remain available on strict overflow errors. This exposes the current bounded grid search; it does not certify visual quality or add automatic repairs.
-- Upgrade the schema declaration generator to 16.0.0. Payloads reached through `Presentation['slides'][number]['blocks']` now reject extra object-literal properties and arbitrary string-key indexing, matching the existing closed JSON Schema. Schema-valid fields, runtime validation and serialized documents are unchanged. Consumers using the old accidental index signature must narrow to a known field or validate external data before use; this type tightening must be called out in the next core release, not republished as 0.7.0.
+- Upgrade the schema declaration generator to 16.0.0. Payloads reached through `Presentation['slides'][number]['blocks']` now reject extra object-literal properties and arbitrary string-key indexing, matching the existing closed JSON Schema. Schema-valid fields, runtime validation and serialized documents are unchanged. Consumers using the old accidental index signature must narrow to a known field or validate external data before use. This minor release acknowledges that public TypeScript tightening.
+- Prepare CLI 0.6.0 with bundled core 0.8.0 and updated portable skills. Quote composition and persisted pagination floors require the coordinated renderer 0.6.0, PPTX 0.6.0 and editor 0.5.0 rollout for shared browser/export behavior. Those downstream versions remain separate release gates.
 
 ## 0.7.0
 
