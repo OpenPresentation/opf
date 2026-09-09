@@ -833,8 +833,12 @@ function renderMetric(item, box, bound, options) {
 
 function renderQuote(item, box, bound, options) {
   const quote = isPlainObject(item.value) ? item.value : { text: item.value };
+  const attribution = [quote.attribution, quote.source].filter(Boolean).join(" - ");
+  const body = inset(box, 18);
+  // Reserve the attribution footer before fitting the quote; it is not an overlay.
+  if (attribution) body.height = Math.max(1, box.height - 94);
   const children = [
-    renderTextBox(`"${quote.text ?? ""}"`, inset(box, 18), bound, {
+    renderTextBox(`"${quote.text ?? ""}"`, body, bound, {
       path: `${item.path}.text`,
       fontSize: 28,
       fontFamily: bound.design.fonts.heading,
@@ -842,7 +846,7 @@ function renderQuote(item, box, bound, options) {
       fill: bound.design.colors.text,
       options
     }),
-    renderTextBox([quote.attribution, quote.source].filter(Boolean).join(" - "), {
+    renderTextBox(attribution, {
       x: box.x + 18,
       y: box.y + box.height - 58,
       width: box.width - 36,

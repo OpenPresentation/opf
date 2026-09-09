@@ -1,5 +1,7 @@
 # OPF Render
 
+Version 0.5.1 reserves quote attribution/source space before fitting long text. See [quote layout and real-browser evidence](docs/quote-footer-0.5.1.md) for regression coverage and overflow behavior.
+
 Deterministic local renderer for Open Presentation Format documents. The shared SVG core implements validation, catalog resolution, placeholder binding and text layout. Node APIs additionally convert SVG to PNG and raster-backed PDF.
 
 ## Scope
