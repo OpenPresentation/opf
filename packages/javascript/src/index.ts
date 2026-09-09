@@ -78,7 +78,7 @@ export type {
 } from "./spec-files.js";
 
 export { composeSlide, resolveCanvasDimensions, fitText, wrapText, measureText, resolveFontFamilies, resolveTextStyle, textWidthMeasurer, OPFCompositionError, MAX_COMPOSITION_DEPTH } from "./composition.js";
-export type { TextStyle, FontFamilies, TextMeasurement, MeasureTextWidth, Composition, LayoutBox, LayoutDiagnostic, TextFit, ComposedItem, ComposedGroup, ComposedFlow, CompositionTrack, SlideComposition, ComposeSlideOptions } from "./composition.js";
+export type { TextStyle, FontFamilies, TextMeasurement, MeasureTextWidth, Composition, LayoutBox, LayoutDiagnostic, TextFit, ComposedItem, ComposedGroup, ComposedFlow, CompositionTrack, CompositionPenalties, CompositionCandidate, CompositionDecision, CompositionExplanation, SlideComposition, ComposeSlideOptions } from "./composition.js";
 
 export { paginatePresentation, paginateSlide, OPFPaginationError } from './pagination.js';
 export type { PresentationPaginationOptions, PresentationPaginationResult, PaginationOptions, PaginationResult, PaginatedPage, PaginationMapping } from './pagination.js';

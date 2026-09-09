@@ -70,6 +70,37 @@ export interface ComposedFlow {
   itemCount: number;
   slotCount: number;
 }
+/** Additive penalties in grid-score-v1; lower is preferred. These are not quality percentages. */
+export interface CompositionPenalties {
+  cellProportions: number;
+  fontReduction: number;
+  textOverflow: number;
+  tableOverflow: number;
+  smallCells: number;
+  emptySlots: number;
+}
+export interface CompositionCandidate {
+  columns: number;
+  rows: number;
+  score: number;
+  penalties: CompositionPenalties;
+}
+export interface CompositionDecision {
+  path: string;
+  mode: NonNullable<Composition['mode']> | 'regions';
+  reason: 'lowest-score' | 'configured-mode' | 'promoted-regions';
+  selectedColumns?: number;
+  /** Only candidates actually evaluated by automatic selection, in tie-break order. */
+  candidates: CompositionCandidate[];
+}
+export interface CompositionExplanation {
+  algorithm: 'grid-score-v1';
+  /** Provided widths do not establish shaping, glyph coverage or native fidelity. */
+  textMeasurement: 'estimated' | 'provided';
+  decisions: CompositionDecision[];
+  /** Payloads whose complete internal fit is not covered by this scoring model. */
+  unmeasuredPayloads: string[];
+}
 export interface SlideComposition {
   width: number;
   height: number;
@@ -79,6 +110,7 @@ export interface SlideComposition {
   flows: ComposedFlow[];
   diagnostics: LayoutDiagnostic[];
   composition: Composition;
+  explanation?: CompositionExplanation;
 }
 export interface ComposeSlideOptions {
   fonts?: Partial<FontFamilies>;
@@ -87,12 +119,16 @@ export interface ComposeSlideOptions {
   height?: number;
   slideIndex?: number;
   layout?: Record<string, unknown>;
+  /** Return candidate scores and coverage without changing the selected geometry. */
+  explain?: boolean;
 }
 export class OPFCompositionError extends Error {
   readonly code = "layout-overflow";
-  constructor(public readonly diagnostics: LayoutDiagnostic[]) {
+  readonly explanation?: CompositionExplanation;
+  constructor(public readonly diagnostics: LayoutDiagnostic[], explanation?: CompositionExplanation) {
     super("Slide content does not fit its composition.");
     this.name = "OPFCompositionError";
+    if (explanation) this.explanation = explanation;
   }
 }
 const fields = ["text", "items", "bullets", "image", "video", "chart", "table", "code", "metric", "quote", "timeline"];
@@ -482,6 +518,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     ? regions.flatMap(key => collect(record(slide[key]), `${path}.${key}`).map(item => ({ ...item, region: regionParts(key) })))
     : Array.isArray(slide.blocks) ? slide.blocks.flatMap((block: unknown, index: number) => collect(record(block), `${path}.blocks.${index}`)) : collect(slide, path);
   const groups: ComposedGroup[] = [], flows: ComposedFlow[] = [];
+  const decisions: CompositionDecision[] | undefined = options.explain ? [] : undefined;
   const inheritedSettings = (parent: Composition, own: Composition = {}): Composition => ({
     minFontSize: parent.minFontSize,
     ...own,
@@ -491,15 +528,24 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const amount = (settings.padding ?? 0) * Math.min(box.width, box.height);
     return { x: box.x + amount, y: box.y + amount, width: box.width - amount * 2, height: box.height - amount * 2 };
   };
-  const leafScore = (node: Pending, box: LayoutBox, settings: Composition): number => {
+  const leafScore = (node: Pending, box: LayoutBox, settings: Composition, penalties?: CompositionPenalties): number => {
     const text = contentText(node.field, node.value);
     let score = Math.abs(Math.log(box.width / box.height / 1.6));
+    if (penalties) penalties.cellProportions += score;
     if (text) {
       const fit = fitContent(node.field,node.value,text,box,25*scale,(settings.minFontSize??16)*scale,node.path);
-      score += (25 * scale - fit.fontSize) / scale + (fit.overflow ? 1000 : 0);
+      const reduction = (25 * scale - fit.fontSize) / scale;
+      score += reduction + (fit.overflow ? 1000 : 0);
+      if (penalties) { penalties.fontReduction += reduction; penalties.textOverflow += fit.overflow ? 1000 : 0; }
     }
-    if (node.field === "table" && tableOverflows(node.value, box, scale, settings, options, node.path)) score += 1000;
-    if (box.width < 100 * scale || box.height < 60 * scale) score += 100;
+    if (node.field === "table" && tableOverflows(node.value, box, scale, settings, options, node.path)) {
+      score += 1000;
+      if (penalties) penalties.tableOverflow += 1000;
+    }
+    if (box.width < 100 * scale || box.height < 60 * scale) {
+      score += 100;
+      if (penalties) penalties.smallCells += 100;
+    }
     return score;
   };
   const modeFor = (settings: Composition) => settings.mode ?? "auto";
@@ -510,12 +556,12 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   // Candidate scoring walks descendants using their explicit tracks or geometric auto
   // seed. Only the selected candidate optimizes child autos. This bounds work by
   // O(nodes * nesting depth * candidate columns), rather than exponential search.
-  const scoreNode = (node: Pending, box: LayoutBox, settings: Composition): number => {
-    if (!node.children) return leafScore(node, box, settings);
+  const scoreNode = (node: Pending, box: LayoutBox, settings: Composition, penalties?: CompositionPenalties): number => {
+    if (!node.children) return leafScore(node, box, settings, penalties);
     const own = inheritedSettings(settings, node.composition), area = inset(box, own);
     const cols = defaultColumns(node.children.length, area, own);
     const boxes = gridBoxes(node.children.length, area, cols, (own.gap ?? 1 / 30) * Math.min(box.width, box.height), own.weights ?? [], modeFor(own) === "column");
-    return node.children.reduce((score, child, index) => score + scoreNode(child, boxes[index]!, own), 0);
+    return node.children.reduce((score, child, index) => score + scoreNode(child, boxes[index]!, own, penalties), 0);
   };
   const arrange = (nodes: Pending[], area: LayoutBox, settings: Composition, reserved = 0, gapOverride?: number, containerPath = path): void => {
     const count = Math.max(nodes.length, reserved);
@@ -524,14 +570,22 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     // Root gap retains the canvas-based contract; group gaps use their container.
     const actualGap = gapOverride ?? (settings === rootSettings ? gap : localGap);
     let cols = defaultColumns(count, area, settings);
-    if (mode === "auto" && !nodes.some(node => node.region)) {
+    const hasRegions = nodes.some(node => node.region);
+    const candidates: CompositionCandidate[] | undefined = decisions ? [] : undefined;
+    if (mode === "auto" && !hasRegions) {
       let best = Infinity;
       for (let candidate = 1; candidate <= Math.min(count, settings.columns ?? 6); candidate++) {
         const boxes = gridBoxes(count, area, candidate, actualGap, settings.weights ?? [], false);
-        const score = nodes.reduce((sum, node, i) => sum + scoreNode(node, boxes[i]!, settings), 0) + (Math.ceil(count / candidate) * candidate - count) * 2;
+        const emptySlots = (Math.ceil(count / candidate) * candidate - count) * 2;
+        const penalties: CompositionPenalties | undefined = candidates ? {cellProportions:0,fontReduction:0,textOverflow:0,tableOverflow:0,smallCells:0,emptySlots} : undefined;
+        const score = nodes.reduce((sum, node, i) => sum + scoreNode(node, boxes[i]!, settings, penalties), 0) + emptySlots;
+        if (penalties && candidates) candidates.push({columns:candidate,rows:Math.ceil(count/candidate),score,penalties});
         if (score < best) { best = score; cols = candidate; }
       }
     }
+    decisions?.push({path:containerPath,mode:hasRegions?'regions':mode,
+      reason:hasRegions?'promoted-regions':mode==='auto'?'lowest-score':'configured-mode',
+      ...(hasRegions?{}:{selectedColumns:cols}),candidates:candidates ?? []});
     const grid = gridGeometry(count, area, cols, actualGap, settings.weights ?? [], mode === "column");
     const boxes = grid.boxes;
     if (!nodes.some(node => node.region)) flows.push({path: containerPath, box: {...area}, composition: {...settings}, columns: grid.columns, rows: grid.rows, gap: grid.gap, itemCount: nodes.length, slotCount: count});
@@ -561,8 +615,12 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   for (const group of groups) for (const box of [group.box, group.contentBox]) for (const key of ["x", "y", "width", "height"] as const) box[key] = round(box[key]);
   const strictPaths = new Set(items.filter(item => item.composition.overflow === "error").map(item => item.path));
   const failures = diagnostics.filter(diagnostic => strictPaths.has(diagnostic.path));
-  if (failures.length) throw new OPFCompositionError(failures);
-  return { width, height, contentBox, items, groups, flows, diagnostics, composition };
+  const explanation: CompositionExplanation | undefined = decisions ? {
+    algorithm:'grid-score-v1',textMeasurement:options.textMeasurement?'provided':'estimated',decisions,
+    unmeasuredPayloads:items.filter(item=>!headings.has(item.field)&&!['text','items','bullets','code','table'].includes(item.field)).map(item=>item.path),
+  } : undefined;
+  if (failures.length) throw new OPFCompositionError(failures, explanation);
+  return { width, height, contentBox, items, groups, flows, diagnostics, composition, ...(explanation?{explanation}:{}) };
 }
 
 /** Canonical physical slide size, converted to reference pixels at 96 pixels/inch. */
