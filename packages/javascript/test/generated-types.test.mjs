@@ -6,7 +6,8 @@ import {fileURLToPath} from 'node:url';
 
 test('public generated payload declarations agree with closed schema fields', () => {
   const fixture=fileURLToPath(new URL('./generated-consumer-fixture.ts',import.meta.url));
-  const source=`import type {Presentation} from '../dist/index.js';
+  const source=`import {composeSlide, type Presentation, type CompositionExplanation} from '../dist/index.js';
+import type {CompositionExplanation as FocusedExplanation} from '../dist/composition.js';
 type ContentPayload = NonNullable<Presentation['slides'][number]['blocks']>[number];
 const payload: ContentPayload = {text:[{text:'Preserved rich text',bold:true}]};
 const nested: ContentPayload = {blocks:[payload],composition:{mode:'row'}};
@@ -16,7 +17,10 @@ const value: unknown = payload.text;
 const invalid: ContentPayload = {text:'A real payload',vendorField:1};
 // @ts-expect-error Closed payloads do not promise arbitrary string-key access.
 const arbitrary = payload['vendorField'];
-void [deck,value,invalid,arbitrary];`;
+const result=composeSlide(deck.slides[0],{explain:true});
+const explanation: CompositionExplanation | undefined=result.explanation;
+const focused: FocusedExplanation | undefined=explanation;
+void [deck,value,invalid,arbitrary,focused];`;
   const options={strict:true,noEmit:true,skipLibCheck:false,target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.NodeNext,moduleResolution:ts.ModuleResolutionKind.NodeNext,types:[]};
   const host=ts.createCompilerHost(options),read=host.readFile.bind(host),exists=host.fileExists.bind(host);
   host.readFile=file=>path.resolve(file)===fixture?source:read(file);
