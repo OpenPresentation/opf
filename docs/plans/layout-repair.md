@@ -21,6 +21,8 @@ The probe deliberately asserts the published gaps. It is a historical reproducti
 
 ## Next increments and acceptance criteria
 
+The standalone API below is merged in core PR #46 (`6d8df02940deec8f1fa89192d10576d6048de341`) after all core/coordinated/Windows/macOS checks and review passed. Continue the [exact consumer integration plan](shared-quote-integration.md) on `codex/shared-quote-integration-20260909`; it records the important strict-path, rounding, source-mapping and measurement-reuse boundaries. The primitive remains unreleased and is not yet connected to the other engines.
+
 Branch `codex/shared-quote-layout-20260909` starts the shared-measurement increment with an additive standalone `layoutQuote` API. It returns body/footer available boxes, complete display text, source ranges, requested/resolved styles, fits and reasoned diagnostics. It keeps the current 18-pixel insets and footer reservation for compatible readable cases, raises nominal text sizes when an explicit readability floor requires it, and leaves invalid available dimensions visible without inventing a one-pixel fit. Text-fit, out-of-cell and conservative line-box overlap failures can reject strictly. These line boxes do not establish glyph-outline or native raster equivalence.
 
 This API alone does not connect the three engines or repair layouts. Existing `composeSlide`, preview and PowerPoint output remain unchanged and still report quote/code as incomplete coverage. Next, consume the same result in candidate scoring, accepted geometry, rendering and native export, with no independent re-fitting after acceptance; then add code internals and dynamic repair/pagination. No publication is warranted from the standalone primitive alone.
