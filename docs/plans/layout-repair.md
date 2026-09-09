@@ -2,6 +2,10 @@
 
 This work implements the [ecosystem objective](ecosystem-objective-2026-09-09.md) in reviewable increments. It does not introduce a model, account, key, network or paid-service dependency into OPF. Proprietary applications remain optional compatibility-test environments.
 
+## Current source checkpoint
+
+Core PR #47 is merged with `quote-flow-v1` and `grid-score-v2`: quote candidate scoring measures both body and footer, accepted geometry is reused by the coordinated renderer/PPTX branches, and pagination persists readability without dropping irreducible empty-body content. The [shared quote checkpoint](shared-quote-integration.md) records exact commits, passing source/tarball/registry CI, browser/native evidence and remaining release gates. This is unreleased, and the complete deterministic repair/Auto arrange/font objective is still open. The sections below preserve the earlier increments and their evidence boundaries.
+
 ## Implemented first increment: explain existing selection
 
 Branch `codex/layout-repair-20260909` adds opt-in `composeSlide(slide, {explain:true, ...resolvedOptions})`. The result reports the versioned `grid-score-v1` candidate costs, selected column count, fixed-mode/region reasons, measurement-provider status and incomplete payload coverage. Strict overflow errors retain the same explanation. Core 0.7.0 is already published and does not include this API; a future release is required.

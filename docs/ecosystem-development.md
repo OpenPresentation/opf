@@ -9,7 +9,7 @@ pnpm test:ecosystem
 pnpm test:gallery
 ```
 
-The link command replaces only the installed `@openpresentation/opf` package in sibling `node_modules` with a link to this checkout and builds the toolkit packages. It also links the renderer into editor/converter consumers. It does not save machine-specific paths in package manifests or lockfiles. Reinstalling dependencies can replace the links; rerun the command afterwards. Use `--packages-only` to omit the gallery checkout.
+The link command replaces the installed `@openpresentation/opf` package in sibling `node_modules` with a link to this checkout and builds the toolkit packages. It also links the renderer into editor/converter consumers and the converter into the editor. It does not save machine-specific paths in package manifests or lockfiles. Reinstalling dependencies can replace the links; rerun the command afterwards. Use `--packages-only` to omit the gallery checkout.
 
 On Windows, directory junctions work without granting file-symlink privileges. The linker refuses a package parent that resolves outside the sibling checkout's `node_modules`, and replaces existing links without following them into source. npm/pnpm orchestration invokes the package manager's JavaScript entrypoint with the selected Node runtime instead of running a batch shim through a shell. Paths with spaces and shell metacharacters remain literal arguments. The supported npm-installed and npm-exec package-manager layouts are discovered from `PATH` or the matching `npm_execpath`; a missing manager returns an explicit installation error.
 
@@ -20,6 +20,23 @@ After integrating reviewed layout PR #43, the combined source passes all 420 cor
 Coordinated CI `34384776504` and `34385059710` caught an older isolated-link fixture copying the linker without its new helper, causing `ERR_MODULE_NOT_FOUND` before package tests ran. The fixture now copies both files, passes directly on Windows Node 20/24, and runs in the Windows/macOS matrix as well as coordinated CI. This failure was fixed rather than waived; renewed combined-source CI remains required.
 
 The published compatible set is core 0.7.0, CLI 0.5.0, renderer 0.5.1, PPTX 0.5.2 and editor 0.4.0. Clean registry installs include shared composition and styled table rows without sibling links. `release-plan.json` records exact versions and immutable verification sources; `pnpm test:registry-ecosystem` and `pnpm test:registry-fidelity` exercise those installed packages. Source links are for coordinated development.
+
+Execute the installed-package browser harnesses after their corresponding build:
+
+```sh
+pnpm test:packages
+pnpm test:packed-browser
+pnpm test:registry-ecosystem
+pnpm test:packed-browser registry
+```
+
+The renderer checkout supplies its locked Playwright test dependency. Install Chromium with `npm exec --prefix ../opf-render -- playwright install --with-deps chromium` on Linux. Local Windows runs use Edge; `OPF_BROWSER_CHANNEL` can explicitly select another installed Playwright channel. CI uses the matching official Playwright container pinned by digest, without installing OS packages during each run.
+
+Each build writes `artifacts/editor/packed-browser-manifest.json` with the mode, installed versions, consumer build ID, dependency-lock hash and exact font/HTML/JavaScript hashes. The runner rejects a different mode, stale consumer or changed asset. It serves only the verified bytes on loopback and rejects external requests and network writes. Rebuild before switching between candidate and registry modes. Reports include the browser and Node versions and are saved by mode/runtime; failures retain a screenshot.
+
+`node scripts/test-packed-browser-guards.mjs` verifies those four rejection cases against the current disposable harness and restores each changed fixture byte-for-byte. CI runs it after the registry browser checks.
+
+Seven suites exercise canvas, rich text, lists, creation, layout, block moves and styled tables. Real browser input covers divider resizing/cancellation/concurrent changes, block dragging, merged-cell typing/redo/undo, plain-to-rich conversion and bold formatting, and empty-cell typing/undo. Conversion and formatting currently create separate undo transactions. Harness DOM assertions also cover renderer agreement and preservation. These checks do not replace full application export/reimport, public deployment checks or native PowerPoint raster evidence.
 
 To browse the gallery with the linked package:
 
