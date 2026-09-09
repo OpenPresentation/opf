@@ -11,6 +11,8 @@ The user authorized resolving older PRs as well as completing active adoption wo
 
 These are actual deployed renderer 0.5.1/PPTX 0.5.2 adoption results. No package was republished. Existing native fidelity limits remain unchanged.
 
+The actual Author export downloaded during the public pptx.dev run also passes PowerPoint 16 native text/table edit, save/reopen and schema-valid reimport. Its raster was visually inspected; [public-export native report](evidence/pptx-dev-public-native-2026-09-09.json) binds the source, native-saved file and raster hashes to production `ccb8f496`. This one-slide native editability test does not establish arbitrary-file roundtrip or raster equivalence.
+
 ## Older PR disposition
 
 - Core [#16](https://github.com/OpenPresentation/opf/pull/16) (TypeScript 7) closed without merging. Reproduced tsup 8.5.1 / legacy compiler API declaration failure on Windows Node 24.20.0. [Issue #41](https://github.com/OpenPresentation/opf/issues/41) preserves tooling migration, packed consumer checks and minimum-runtime acceptance criteria.
@@ -26,4 +28,6 @@ Merged PR [#25](https://github.com/Data-Advantage/pptx-dev/pull/25) clears stale
 
 Website #18 is now `14bb8559e26700b00e2a0a1459b4abd2151e2503`. A stalled review was manually restarted once and found an advertised `/docs/reference/cli` URL without a corresponding source route. Hosted discovery now uses exactly the source-doc directory/filter, and a compatibility alias cannot overwrite a real hosted CLI document. Absent/present CLI fixture checks plus real HTTP checks of every advertised reference URL pass; the fresh build and six local Edge workflows pass (7.5s). Renewed review/CI and exact preview/public deployment remain gates. The earlier `09ece59` preview results do not verify this correction.
 
-No security alert has been dismissed or disabled. Notification grouping/scheduling from the prior milestone remains; Vercel duplicate-comment settings still await the previously requested dashboard sign-in. Preserve real authentication and security visibility while reducing redundant notices.
+YAML #28 is now `5d528a3ad495c965c8e71188b7f01271cc000d9d`. Manual review additionally reproduced non-finite YAML values silently becoming JSON `null`; non-finite values and cyclic aliases now return actionable errors. 597 tests/61 files, a fresh production build and eight local Edge workflows (17.6s) pass. Its preceding `6c19b11` preview passed eight Edge workflows (29.4s), but renewed exact-head CI `34380362278`, review and preview/public verification remain gates.
+
+A fresh GitHub audit finds zero open Dependabot security alerts in all seven repositories. No security alert has been dismissed or disabled. Notification grouping/scheduling from the prior milestone remains. The authenticated Vercel CLI resolved the previous dashboard dependency: all three public-site projects now have `gitComments.onCommit=false` and `gitComments.onPullRequest=false`, with deployment creation still enabled and commit status reporting not disabled. Fresh read-back verification is recorded in [the settings report](evidence/vercel-comment-settings-2026-09-09.json). The existing status checks retain deployment results/preview links; only redundant comment notifications were changed. GitHub security alerts, CI and review checks remain enabled.
