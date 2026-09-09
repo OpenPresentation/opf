@@ -2,8 +2,11 @@
 import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import {packageManagerInvocation} from './package-manager.mjs';
 const root = fileURLToPath(new URL('../', import.meta.url));
 function run(command, args, cwd = root) {
+  if (command === 'npm' || command === 'pnpm') ({command,args}=packageManagerInvocation(command,args));
+  else if (command === 'node') command=process.execPath;
   const result = spawnSync(command, args, { cwd, stdio: 'inherit' });
   if (result.error) throw result.error;
   if (result.status !== 0) throw new Error(`${command} ${args.join(' ')} failed (${result.status})`);
