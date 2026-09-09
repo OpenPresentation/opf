@@ -27,7 +27,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
-          ref: 9f34d70002307fcb3795de638e7e4bf0605a33f8
+          ref: d8696224e7a99618701e641ef7573ef394489885
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
@@ -41,7 +41,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-pptx
-          ref: f7f30082da3568a4f911d42493ffc75c77dd4e14
+          ref: 383666b366b8c9b8ed8e7e72934d1d3fd0fb634d
           path: opf-pptx
           fetch-depth: 0
           persist-credentials: false

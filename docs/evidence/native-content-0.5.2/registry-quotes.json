@@ -1,0 +1,123 @@
+{
+  "packages": [
+    {
+      "name": "@openpresentation/opf",
+      "version": "0.7.0",
+      "integrity": "sha512-ZYODnLgMSG1129eujM4CDGpkcF5CLoKr3bkZ713L04Gvh8VTHOudfPM4ICqngMBpRtcRXyoGaVSllLq2djIo1Q=="
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "version": "0.5.1",
+      "integrity": "sha512-rV3rMmSG/3Fl/75k4or+G4/OPZMkVj2ByOCg30ERGXQMhSxZ6o09pdTkhOVxbd2O7kpEuplZrQnSO6XWfW038w=="
+    },
+    {
+      "name": "@openpresentation/opf-pptx",
+      "version": "0.5.2",
+      "integrity": "sha512-I0Amtam9QxwUP7J739NU+FxOconhF5eRYJZWEA0HYAakDnsbKAVSIRvY0A+K3l7CIEkhPFWk/ZMNKFfJtIsQaw=="
+    }
+  ],
+  "powerPointVersion": "16.0",
+  "fontHashes": {
+    "calibri.ttf": "57e93ff143572bcc092c1f56202d43ddc07bb119aa104c6d7af163470fb551f6",
+    "calibrib.ttf": "0a8296747536ead27d5f48f67e911cc3b207742b3f704e66995251d12fd422e5",
+    "calibrii.ttf": "7f150e9eabe5db3e1b0f9469dca5c96176bc2fbb306dc9d48b7029dc69c52763",
+    "calibriz.ttf": "760539bfedbe24e7853ca8a621d9cb1f3de52036c116e81aae36b33c4ab60a7c"
+  },
+  "results": [
+    {
+      "id": "quote-1280",
+      "slides": 4,
+      "sourceSha256": "8cecd1262d03e047bb73ee712911a74c22a0246d65a37f89fa15e1ef95570631",
+      "native": {
+        "id": "quote-1280",
+        "slides": [
+          {
+            "bodyLines": 9,
+            "rasterSha256": "8a66843d4fd720e14ac6a713149df2e2be53281429e7441eeb4966580599979e",
+            "units": "points, PowerPoint TextRange2 bounds",
+            "bodyBottom": 354.2700080871582,
+            "footerTop": 453.29998779296875,
+            "slide": 1
+          },
+          {
+            "bodyLines": 12,
+            "rasterSha256": "5f109a7f73ad5801ec03aafb814a1238041586384028814b1dffd0c1c286bbb6",
+            "units": "points, PowerPoint TextRange2 bounds",
+            "bodyBottom": 431.1299934387207,
+            "footerTop": 453.29998779296875,
+            "slide": 2
+          },
+          {
+            "bodyLines": 14,
+            "rasterSha256": "eab228c2acbe1b1591ef6a3d0a9fa60eb8a9873bbf6cda88a5221720d3117dc3",
+            "units": "points, PowerPoint TextRange2 bounds",
+            "bodyBottom": 431.18999671936035,
+            "footerTop": 453.29998779296875,
+            "slide": 3
+          },
+          {
+            "bodyLines": 15,
+            "rasterSha256": "57f7d4bc7ae6a58e3af67bcff53fa2d6f20a38f1d9d3ec858b7bc3e02c696a85",
+            "units": "points, PowerPoint TextRange2 bounds",
+            "bodyBottom": 439.43999099731445,
+            "footerTop": 453.29998779296875,
+            "slide": 4
+          }
+        ],
+        "savedSha256": "66d928b0b6793cb613e142cbc1c7b5bfe42e7ab4290f464fce123ffe8aff0831",
+        "editedSha256": "a0ae5981625ce39fc74a2e590b06782e92590a0791b8a7bef7a418dfb00fee8c",
+        "editsReopened": 4,
+        "sourceSha256": "8cecd1262d03e047bb73ee712911a74c22a0246d65a37f89fa15e1ef95570631"
+      },
+      "validImports": 3
+    },
+    {
+      "id": "quote-540",
+      "slides": 4,
+      "sourceSha256": "628ade4105ba4b7dd2f011208eab719409fe79ec4904f9512ac1682c592e42f2",
+      "native": {
+        "id": "quote-540",
+        "slides": [
+          {
+            "bodyLines": 19,
+            "rasterSha256": "6ee9d460f923fa6849610b09e4ad0c61f2221fc46ca46d5d073c90c237742986",
+            "units": "points, PowerPoint TextRange2 bounds",
+            "bodyBottom": 461.22748374938965,
+            "footerTop": 644.0999755859375,
+            "slide": 1
+          },
+          {
+            "bodyLines": 25,
+            "rasterSha256": "c1d1852182753bf15e8945a641f931f1215f43654721e34fcda60b4e8e5c7285",
+            "units": "points, PowerPoint TextRange2 bounds",
+            "bodyBottom": 576.5174922943115,
+            "footerTop": 644.0999755859375,
+            "slide": 2
+          },
+          {
+            "bodyLines": 27,
+            "rasterSha256": "ee78db8b279907193f96cef2dbb3070ae79b039cd05722f0c632b4479ac1a1e4",
+            "units": "points, PowerPoint TextRange2 bounds",
+            "bodyBottom": 565.5674686431885,
+            "footerTop": 644.0999755859375,
+            "slide": 3
+          },
+          {
+            "bodyLines": 32,
+            "rasterSha256": "38c0e88036c5f2c4b61bf0b539442a43b78cbf88daea92ec6a000e1777c82a9a",
+            "units": "points, PowerPoint TextRange2 bounds",
+            "bodyBottom": 623.227466583252,
+            "footerTop": 644.0999755859375,
+            "slide": 4
+          }
+        ],
+        "savedSha256": "700aaddc3f308734bb408a2940a842bf7b35a90b15b9293d2633da6f64e63082",
+        "editedSha256": "01b666c369f0e4163864d82b93c8d9c218b062c8b37f36d67b3fb5e98210d1d7",
+        "editsReopened": 4,
+        "sourceSha256": "628ade4105ba4b7dd2f011208eab719409fe79ec4904f9512ac1682c592e42f2"
+      },
+      "validImports": 3
+    }
+  ],
+  "scope": "Actual registry exports are byte-identical to the eight native-tested long quote slides. Native glyph separation/save/reopen and six registry reimports verify. This does not assert general raster equivalence."
+}
