@@ -23,6 +23,8 @@ The gallery host example also offers local PPTX file import with preview/diagnos
 
 `pnpm prepare:gallery:registry` builds host controls from the immutable `exampleRefs.opf-editor` in `release-plan.json` while resolving libraries only from the fresh npm consumer. Package `verificationRefs` continue to point at actual published releases. The gallery manifest records both the example source hashes and registry package integrities. Updating example controls does not imply a new editor library release.
 
+The browser bundle links `playground.js.LEGAL.txt`, included in the hashed resources. It contains bundled license notices and package license files, including the vendored PptxGenJS MIT license. For dependencies that publish only an explicit MIT declaration in their README, the build retains that declaration/attribution and the standard terms; omitted upstream notices use a version-specific source URL and verified supplement hash. License collection runs offline from the verified installation and committed supplement. Runtime JavaScript is not rewritten to normalize comment whitespace.
+
 ## Embed in any browser application
 
 Mount after the host DOM exists. The container controls width; the slide retains its aspect ratio. React and Svelte applications can mount this framework-independent API in their normal client lifecycle and destroy it on unmount.
