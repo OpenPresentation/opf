@@ -1,6 +1,9 @@
 # Changelog
 
-## Unreleased
+## 0.5.1
+
+- Remove the unused, vulnerable image-size dependency from ordinary npm installations by shipping the exact MIT-licensed PptxGenJS 4.0.1 ESM distribution and license with verified upstream hashes. Keep JSZip as a direct dependency; preserve the conversion API and upstream runtime code. No paid service or application-specific package-manager override is required.
+- Add weekly grouped dependency updates, reviewed immutable CI actions and unfiltered installation/release audits.
 
 ## 0.5.0
 

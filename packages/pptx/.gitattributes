@@ -1,0 +1,3 @@
+# The third-party distribution and license are verified byte-for-byte.
+vendor/pptxgenjs/pptxgen.es.js -text
+vendor/pptxgenjs/LICENSE -text

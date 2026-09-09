@@ -1,0 +1,19 @@
+{
+  "name": "pptxgenjs",
+  "version": "4.0.1",
+  "license": "MIT",
+  "tarball": "https://registry.npmjs.org/pptxgenjs/-/pptxgenjs-4.0.1.tgz",
+  "integrity": "sha512-TeJISr8wouAuXw4C1F/mC33xbZs/FuEG6nH9FG1Zj+nuPcGMP5YRHl6X+j3HSUnS1f3at6k75ZZXPMZlA5Lj9A==",
+  "files": {
+    "pptxgen.es.js": {
+      "source": "package/dist/pptxgen.es.js",
+      "bytes": 516931,
+      "sha256": "05844c5625e2cda3b449eb967c2246dd57ca57341886a7c28eeebca263b29bd4"
+    },
+    "LICENSE": {
+      "source": "package/LICENSE",
+      "bytes": 1081,
+      "sha256": "7a2bfe96150786ed1908b8e63f98ebab88875c1e79e28faff6649e0f11f77e52"
+    }
+  }
+}

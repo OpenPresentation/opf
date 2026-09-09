@@ -1,0 +1,9 @@
+{
+  "reference": "@openpresentation/opf-pptx@0.5.0",
+  "integrity": "sha512-GKVmqWjQ8GRuEMmpJajPs+W+q35MPy6q8+FL8nWH+d17Sh+/O87BBBfSi6m9KLGxQZav2o1I/bfMoftP5DNEfg==",
+  "decks": 126,
+  "slides": 805,
+  "equal": 126,
+  "mismatches": [],
+  "scope": "Deterministic PPTX bytes with explicit image substitution and fallback fonts, not native viewer equivalence."
+}

@@ -1,12 +1,12 @@
 import assert from "node:assert/strict";
-import Module, { register } from "node:module";
+import Module, { register, createRequire } from "node:module";
 import { mkdtemp, writeFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 
-// Both ESM and CommonJS loading must work without PptxGenJS's unused,
-// unpatched image-size dependency. This is a release regression gate;
-// it does not remove the dependency or declare its advisory resolved.
+// The shipped upstream distribution does not use image-size. Require an actual
+// installation without it, in addition to blocking accidental runtime loading.
+assert.throws(() => createRequire(import.meta.url).resolve('image-size'), { code: 'MODULE_NOT_FOUND' });
 const blocked = /(^|[/\\])image-size([/\\]|$)/;
 const originalLoad = Module._load;
 Module._load = function (request, ...args) {

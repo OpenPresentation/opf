@@ -1,0 +1,8 @@
+{
+  "private": true,
+  "type": "module",
+  "browser": {
+    "node:fs": false,
+    "node:https": false
+  }
+}

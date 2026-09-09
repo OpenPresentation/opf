@@ -121,7 +121,7 @@ For crowded drafts, run `paginatePresentation` from `@openpresentation/opf/pagin
 
 Pass the same `textMeasurement` provider used by preview and pagination to `toPptx`. Plain text and headings retain the measured line breaks and resolved font family in editable PowerPoint shapes. Font binaries are not yet embedded in PPTX; native viewers still need the resolved font installed.
 
-PptxGenJS is pinned to 4.0.1. Its unused `image-size` dependency remains flagged by npm audit; tested OPF operations run with that parser blocked. See [dependency reachability and regression coverage](DEPENDENCY-NOTES.md).
+Since 0.5.1, the exact PptxGenJS 4.0.1 ESM distribution is shipped with its MIT license and verified upstream hashes. Its unused `image-size` dependency is not installed; JSZip is declared directly. See [dependency provenance and regression coverage](DEPENDENCY-NOTES.md). The published 0.5.0 package retains the older dependency graph.
 
 ### Native table fitting
 

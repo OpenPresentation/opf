@@ -1,4 +1,5 @@
 import { copyFile, mkdir, rm } from "node:fs/promises";
+import './verify-vendor.mjs';
 
 const root = new URL("../", import.meta.url);
 const dist = new URL("dist/", root);

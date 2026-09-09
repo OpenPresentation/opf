@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { unzipSync } from "fflate";
-import PptxGenJS from "pptxgenjs";
+import PptxGenJS from "../vendor/pptxgenjs/pptxgen.es.js";
 import { validatePresentation } from "@openpresentation/opf";
 import { fromPptx, OPFPptxError, runtimePolicy, toPptx } from "../dist/index.js";
 
