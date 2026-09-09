@@ -1,6 +1,6 @@
 # OPF font roadmap
 
-Status: starter pack implemented locally; broader coverage is planned. Keep the first release small and useful. Do not start an original font family as a prerequisite for shipping the editor.
+Status: the starter pack is published in renderer 0.5.1 and used by the local browser workflow. The [expanded ecosystem objective](ecosystem-objective-2026-09-09.md) requires substantially broader font conformance, installation/embedding, multilingual and native-platform evidence. The historical measurements below remain narrow samples; they do not establish general font or pixel equivalence. Evaluate existing open fonts and engine fixes before original font development.
 
 ## Ship the existing starter pack
 
@@ -55,4 +55,4 @@ For each target/substitute pair, record exact versions and file hashes, source/l
 
 Use three outcomes: verified within a stated test matrix, approximate with explicit reflow, or unsupported with an actionable diagnostic. Upstream metric intent is useful evidence but does not replace version-specific tests. Do not promote a candidate solely because screenshots look similar.
 
-The historical renderer image baseline still needs renewal. Font shaping, per-run fallback, native embedding, and all-platform pixel identity are not completed by the starter pack. Original font design is deferred until existing open fonts and targeted engine fixes have been evaluated.
+The 126-deck/805-slide renderer regression baseline passes unchanged with the published content releases. That stability does not measure general visual quality or validate proprietary/open font equivalence. Font shaping, per-run fallback, native embedding and additional platform evidence are not completed by the starter pack. Original font design is deferred until existing open fonts and targeted engine fixes have been evaluated.
