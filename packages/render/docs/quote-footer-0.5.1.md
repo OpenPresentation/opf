@@ -1,0 +1,9 @@
+# Quote footer separation in 0.5.1
+
+The native converter review exposed a renderer layout bug too: a long quote could fit the full body region and still cover attribution/source placed inside that same region. The body now reserves the 40px footer, 18px bottom padding and an 18px separation gap before shared core text fitting. Quotes without attribution/source retain the full padded body area. Existing irreducible overflow behavior is unchanged: warning mode reports it without deleting source text; strict mode rejects the slide. This fix guarantees separation for text that fits its allocated area, not arbitrary unlimited content.
+
+The new regression fails against 0.5.0. With the fix, eight fittable long quotes on 1280×720 and 540×960 canvases preserve footer separation; two oversized cases report overflow and reject in strict mode. Both Node 20 and 24 full suites pass, and the existing 126-deck/805-slide raster hashes remain unchanged. No baseline was promoted.
+
+Real Edge browser checks pass on Node 20/24: eight SVG cases use the exact four bundled open font faces used for measurement, wait for fonts and require actual glyph bounds to remain above visible attribution/source. The existing JPEG orientation browser suite also runs. Both suites are now gates in renderer CI and npm publication, using pinned Playwright and installed Chromium in CI. No native Node raster dependency enters the existing browser bundle. Generated test fonts include license metadata and are not added to the npm package payload.
+
+Repeat `npm ci`, `npm test`, `npm run test:browser` and `npm run validate`; CI installs Chromium first with `npx playwright install --with-deps chromium`. Local Windows runs use Edge. Full review and exact-head CI remain publication gates. Publish renderer 0.5.1 before the dependent PPTX 0.5.2 quote fix; update that converter's registry lockfile afterwards. This change is not a native PowerPoint raster-equivalence claim.

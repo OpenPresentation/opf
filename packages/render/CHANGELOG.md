@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.5.1
+
+- Reserve attribution/source footer space before fitting quote text. Long, otherwise fittable quotes no longer overlap their footer. Quotes that cannot fit at the minimum font size retain overflow diagnostics and strict-mode rejection.
+- Add wide/portrait long-quote regressions. The existing 126-deck/805-slide raster baseline is unchanged; this is a targeted layout fix, not a claim of native PowerPoint equivalence.
+
 ## 0.5.0
 
 - Render the coordinated core's styled and spanning table cells with fills, text colors, alignment, reference-pixel padding and individual solid/dashed/dotted borders. Preserve anchor and `.value` traces for editing and keep the existing scalar raster corpus unchanged.

@@ -38,5 +38,7 @@ jobs:
       - run: npm run typecheck
       - run: npm run validate
       - run: npm test
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:browser
       - run: npm pack --dry-run
       - run: npm publish --access public --provenance
