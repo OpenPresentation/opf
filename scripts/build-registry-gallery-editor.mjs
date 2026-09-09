@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile, copyFile, rm } from 'node:fs/promises';
+import { mkdir, readFile, writeFile, copyFile, rm, realpath } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { createRequire } from 'node:module';
 import { spawnSync } from 'node:child_process';
@@ -13,12 +13,22 @@ const out = path.join(root, 'artifacts/registry-gallery-editor');
 const source = path.join(out, 'source');
 const require = createRequire(path.join(root, 'packages/javascript/package.json'));
 const { build } = createRequire(require.resolve('tsup'))('esbuild');
-const ref = registry.verificationRefs['opf-editor'];
+// Host controls can evolve without republishing unchanged library packages.
+const ref = registry.exampleRefs?.['opf-editor'] ?? registry.verificationRefs['opf-editor'];
 if (!/^[a-f0-9]{40}$/.test(ref ?? '')) throw new Error('Missing immutable editor example ref');
 const sha256 = value => createHash('sha256').update(value).digest('hex');
 const exampleSources = {};
+const contained = (parent, child) => {
+  const relative = path.relative(parent, child);
+  return relative !== '' && !relative.startsWith('..') && !path.isAbsolute(relative);
+};
+await mkdir(out, { recursive: true });
+const actualRoot = await realpath(root), actualOut = await realpath(out);
+if (!contained(actualRoot, actualOut)) throw new Error('Gallery output must stay inside the workspace');
 await mkdir(source, { recursive: true });
-for (const file of ['playground.js', 'data-controls.js', 'transfer-controls.js', 'playground.html', 'playground.css', 'galleries.json']) {
+const actualSource = await realpath(source);
+if (!contained(actualOut, actualSource)) throw new Error('Gallery staging must stay inside the output directory');
+for (const file of ['playground.js', 'data-controls.js', 'transfer-controls.js', 'pptx-controls.js', 'playground.html', 'playground.css', 'galleries.json']) {
   const result = spawnSync('git', ['show', `${ref}:examples/${file}`], { cwd: editor, encoding: 'utf8' });
   if (result.status !== 0) throw new Error(`Cannot read editor example ${ref}:${file}: ${result.stderr}`);
   exampleSources[file] = sha256(result.stdout);
@@ -31,6 +41,9 @@ const bundle = await build({
   bundle: true, platform: 'browser', format: 'esm', minify: true, metafile: true,
   plugins: [registry.plugin(true)],
 });
+// Normalize generated comment whitespace without stripping bundled licenses.
+const bundlePath = path.join(out, 'playground.js');
+await writeFile(bundlePath, (await readFile(bundlePath, 'utf8')).replace(/[\t ]+$/gm, ''));
 for (const file of Object.keys(bundle.metafile.inputs)) {
   if (/opf-(editor|render|pptx)\/(src|dist)\//.test(file) && !file.includes('node_modules/')) {
     throw new Error(`Unpublished library leaked into gallery bundle: ${file}`);
@@ -71,5 +84,6 @@ await writeFile(path.join(out, 'manifest.json'), JSON.stringify({
   editorExamples: { commit: ref, files: exampleSources },
   galleryDocuments: gallery.items.length, files,
 }, null, 2) + '\n');
+if (await realpath(source) !== actualSource || await realpath(out) !== actualOut) throw new Error('Gallery staging location changed during build');
 await rm(source, { recursive: true });
 console.log(`Registry gallery editor built: ${gallery.items.length} validated/rendered documents, ${fields.length} schema fields.`);
