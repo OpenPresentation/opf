@@ -13,9 +13,9 @@ npm install -g @openpresentation/cli
 opf --version
 ```
 
-Or install it as a development dependency and use `npx --no-install opf`. CLI 0.5.0 bundles OPF 0.7.0, including styled and merged table cells, plus the six OPF agent skills.
+Or install it as a development dependency and use `npx --no-install opf`. CLI 0.6.0 bundles OPF 0.8.0, including shared quote composition, persisted pagination readability floors, styled/merged table cells, and the six OPF agent skills. Browser rendering and editable PowerPoint export require the coordinated library releases.
 
-To verify the standalone package from source, run `pnpm install` and `pnpm test:cli:packed`. This creates `artifacts/cli/openpresentation-cli-0.5.0.tgz`, which can be installed using its absolute path. For source development, run `pnpm --filter @openpresentation/cli build` and `node packages/cli/dist/index.js --help`.
+To verify the standalone package from source, run `pnpm install` and `pnpm test:cli:packed`. This creates `artifacts/cli/openpresentation-cli-0.6.0.tgz`, which can be installed using its absolute path. For source development, run `pnpm --filter @openpresentation/cli build` and `node packages/cli/dist/index.js --help`.
 
 ## Install agent skills
 
@@ -25,7 +25,7 @@ npx @openpresentation/cli@latest skills status
 npx @openpresentation/cli@latest skills update
 ```
 
-CLI 0.5.0 installs all six bundled skill folders into the current project's `.agents/skills`, including references, examples and inspection scripts. It requires no paid service, provider account or symlink privileges. Once the CLI is installed, these commands work offline. The command requires version 0.5.0; before that release is published, use the built CLI entrypoint for testing.
+CLI 0.5.0 and later install all six bundled skill folders into the current project's `.agents/skills`, including references, examples and inspection scripts. It requires no paid service, provider account or symlink privileges. Once the CLI is installed, these commands work offline.
 
 Use `--agent codex --global` for personal Codex skills, `--agent claude-code` or `--agent cursor` for those project skill directories, or `--directory <path>` for another compatible agent. The default `universal` target uses `.agents/skills`; its global target is `~/.agents/skills`. See [agent skill installation](https://github.com/OpenPresentation/opf/blob/main/docs/agent-skills.md) for the complete target mapping and update behavior.
 

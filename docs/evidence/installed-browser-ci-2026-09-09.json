@@ -1,0 +1,201 @@
+{
+  "pr": 48,
+  "reviewedHead": "565fbd2905006624c57a7c24c1b1fe62ac10ca4d",
+  "mergeCommit": "abf32daa67543c30b29dbe813b17996456b90e34",
+  "workflows": {
+    "core": 34399051774,
+    "coordinated": 34399051732
+  },
+  "allChecks": "passed",
+  "bugbot": "passed",
+  "container": "mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27",
+  "browserCI": [
+    {
+      "mode": "packed",
+      "node": "v20.20.2",
+      "browser": "153.0.8010.12",
+      "checkedAt": "2026-09-09T20:09:11.740Z",
+      "manifest": {
+        "mode": "packed",
+        "consumer": "artifacts/npm/consumer",
+        "browserBuildId": "b7792a93-edc4-4944-b9d7-afe5b82014b7",
+        "lockSha256": "35d6691c64767e8f3336caf55b73a42e5bc2196a49e2e4afb3556ad3838493a2",
+        "packages": {
+          "@openpresentation/opf": "0.4.0-preview.11",
+          "@openpresentation/opf-render": "0.1.0-preview.11",
+          "@openpresentation/opf-editor": "0.1.0-preview.11",
+          "@openpresentation/opf-pptx": "0.1.0-preview.11"
+        },
+        "suites": [
+          "canvas",
+          "rich-text",
+          "layout",
+          "block",
+          "list",
+          "create",
+          "styled-table"
+        ],
+        "files": {
+          "fonts.json": "c697f3979d65cb65482400d163604a8b4ac299e788702b8d3a502cce3f284c8d",
+          "packed-canvas-tests.html": "eabf718451f5b776946f68b7a65fde4df9f194b1b5013b0924ce3aa90b94ff92",
+          "packed-canvas-tests.js": "cbf93e1b07285e69467bfa904c272d9e20822d5f717a935182d389b303e820db",
+          "packed-rich-text-tests.html": "da4f8ebf7e8521d5d3361bf983559ad9dc598c0f2cd0586893b3944bb6dd41f9",
+          "packed-rich-text-tests.js": "c950132db59ba1521970b592c80ccaabb888e03fbe4754a187aaee5bb7258a40",
+          "packed-layout-tests.html": "2fe1eef3d16f6d7e5affe656821b1b063909f66e848599d4840625e36a97d2bf",
+          "packed-layout-tests.js": "78c6dcdb1b10d740eb2678a1abc4dfd08aeda5e918a27c65f68bfe078bc130ad",
+          "packed-block-tests.html": "56fb85286b8440a10dae1216acfec0f87a19fb2107989f12df075328f5a5747b",
+          "packed-block-tests.js": "cff128ef48988d9231e38940859fe8eed236890fbd5912ba9ea74c765d3c27b2",
+          "packed-list-tests.html": "5073bcc579d7a5919eeaf078a6f57474562e5ff14c56815bcd460f02c9844852",
+          "packed-list-tests.js": "809548178a45fec13e37a4b1ca1126699e9d00f848b1b7ba0ec0bcb843383896",
+          "packed-create-tests.html": "ce7ac5392d1c139aa9152a2e475f455a1ab1271fda7e9b9b8f3469fa9e436a94",
+          "packed-create-tests.js": "2bb2d9d729470e0092bef69089b1b37e7a436d8e8b042b9342a604474874ba1a",
+          "packed-styled-table-tests.html": "08d17f84d2ffcb057bba8355129e9453c279388fdfff23a39c5dad2b4be6acfa",
+          "packed-styled-table-tests.js": "dda4588c84a6a03f2edd29b604ea10a1be4811c1ba2f4e7c06207edef6d1860a"
+        }
+      },
+      "harnessAssertions": 230,
+      "trustedScenarios": 8
+    },
+    {
+      "mode": "registry",
+      "node": "v20.20.2",
+      "browser": "153.0.8010.12",
+      "checkedAt": "2026-09-09T20:09:28.091Z",
+      "manifest": {
+        "mode": "registry",
+        "consumer": "artifacts/npm/registry-consumer",
+        "browserBuildId": "caf1d2cc-b479-4ce9-8135-fd2305ec5f4f",
+        "lockSha256": "af07f21e3b57a95111435d822afcc78be7c2c3f669a4e3682522dd105218d19b",
+        "packages": {
+          "@openpresentation/opf": "0.7.0",
+          "@openpresentation/opf-render": "0.5.1",
+          "@openpresentation/opf-editor": "0.4.0",
+          "@openpresentation/opf-pptx": "0.5.2",
+          "@openpresentation/cli": "0.5.0"
+        },
+        "suites": [
+          "canvas",
+          "rich-text",
+          "layout",
+          "block",
+          "list",
+          "create",
+          "styled-table"
+        ],
+        "files": {
+          "fonts.json": "c697f3979d65cb65482400d163604a8b4ac299e788702b8d3a502cce3f284c8d",
+          "packed-canvas-tests.html": "eabf718451f5b776946f68b7a65fde4df9f194b1b5013b0924ce3aa90b94ff92",
+          "packed-canvas-tests.js": "63fd44b4c2cea9cf4f4a6e5a0cbcc2507a8f8c6207497da0a00a37696d09066e",
+          "packed-rich-text-tests.html": "da4f8ebf7e8521d5d3361bf983559ad9dc598c0f2cd0586893b3944bb6dd41f9",
+          "packed-rich-text-tests.js": "4342c2344cc8ad09bb206cd2935d500771ca9b239352851b3f2ebc24769895ba",
+          "packed-layout-tests.html": "2fe1eef3d16f6d7e5affe656821b1b063909f66e848599d4840625e36a97d2bf",
+          "packed-layout-tests.js": "105b971ef4e1de2136319ff4ca5a30d62515d7a1bc00baf8036d93c84b321980",
+          "packed-block-tests.html": "56fb85286b8440a10dae1216acfec0f87a19fb2107989f12df075328f5a5747b",
+          "packed-block-tests.js": "80e4a9da0355f3abfbcac82e1fa5ee4cb8b91941a6ed401bee4d5c105750130f",
+          "packed-list-tests.html": "5073bcc579d7a5919eeaf078a6f57474562e5ff14c56815bcd460f02c9844852",
+          "packed-list-tests.js": "9376c6d0794566170c89c42bd3fbcabf4605f6202e2739f5582023b997a1177c",
+          "packed-create-tests.html": "ce7ac5392d1c139aa9152a2e475f455a1ab1271fda7e9b9b8f3469fa9e436a94",
+          "packed-create-tests.js": "fb6a9391d05fac5f2de16104868bddf38ff6c1f75bd08a110512bc4d0f9c848d",
+          "packed-styled-table-tests.html": "08d17f84d2ffcb057bba8355129e9453c279388fdfff23a39c5dad2b4be6acfa",
+          "packed-styled-table-tests.js": "269b6054256e4fc634e89f2329daf1273ac4bbc03f9c2f8b3847e905f23e832a"
+        }
+      },
+      "harnessAssertions": 230,
+      "trustedScenarios": 8
+    },
+    {
+      "mode": "packed",
+      "node": "v24.20.0",
+      "browser": "153.0.8010.12",
+      "checkedAt": "2026-09-09T20:09:38.934Z",
+      "manifest": {
+        "mode": "packed",
+        "consumer": "artifacts/npm/consumer",
+        "browserBuildId": "5c837053-fb81-4706-8c18-2e7e99836f14",
+        "lockSha256": "58b52f5e7897bb09f8f6a62948e5b92eb15ad5ce9f87e1296c6544959ffdf4c4",
+        "packages": {
+          "@openpresentation/opf": "0.4.0-preview.11",
+          "@openpresentation/opf-render": "0.1.0-preview.11",
+          "@openpresentation/opf-editor": "0.1.0-preview.11",
+          "@openpresentation/opf-pptx": "0.1.0-preview.11"
+        },
+        "suites": [
+          "canvas",
+          "rich-text",
+          "layout",
+          "block",
+          "list",
+          "create",
+          "styled-table"
+        ],
+        "files": {
+          "fonts.json": "c697f3979d65cb65482400d163604a8b4ac299e788702b8d3a502cce3f284c8d",
+          "packed-canvas-tests.html": "eabf718451f5b776946f68b7a65fde4df9f194b1b5013b0924ce3aa90b94ff92",
+          "packed-canvas-tests.js": "cbf93e1b07285e69467bfa904c272d9e20822d5f717a935182d389b303e820db",
+          "packed-rich-text-tests.html": "da4f8ebf7e8521d5d3361bf983559ad9dc598c0f2cd0586893b3944bb6dd41f9",
+          "packed-rich-text-tests.js": "c950132db59ba1521970b592c80ccaabb888e03fbe4754a187aaee5bb7258a40",
+          "packed-layout-tests.html": "2fe1eef3d16f6d7e5affe656821b1b063909f66e848599d4840625e36a97d2bf",
+          "packed-layout-tests.js": "78c6dcdb1b10d740eb2678a1abc4dfd08aeda5e918a27c65f68bfe078bc130ad",
+          "packed-block-tests.html": "56fb85286b8440a10dae1216acfec0f87a19fb2107989f12df075328f5a5747b",
+          "packed-block-tests.js": "cff128ef48988d9231e38940859fe8eed236890fbd5912ba9ea74c765d3c27b2",
+          "packed-list-tests.html": "5073bcc579d7a5919eeaf078a6f57474562e5ff14c56815bcd460f02c9844852",
+          "packed-list-tests.js": "809548178a45fec13e37a4b1ca1126699e9d00f848b1b7ba0ec0bcb843383896",
+          "packed-create-tests.html": "ce7ac5392d1c139aa9152a2e475f455a1ab1271fda7e9b9b8f3469fa9e436a94",
+          "packed-create-tests.js": "2bb2d9d729470e0092bef69089b1b37e7a436d8e8b042b9342a604474874ba1a",
+          "packed-styled-table-tests.html": "08d17f84d2ffcb057bba8355129e9453c279388fdfff23a39c5dad2b4be6acfa",
+          "packed-styled-table-tests.js": "dda4588c84a6a03f2edd29b604ea10a1be4811c1ba2f4e7c06207edef6d1860a"
+        }
+      },
+      "harnessAssertions": 230,
+      "trustedScenarios": 8
+    },
+    {
+      "mode": "registry",
+      "node": "v24.20.0",
+      "browser": "153.0.8010.12",
+      "checkedAt": "2026-09-09T20:09:57.849Z",
+      "manifest": {
+        "mode": "registry",
+        "consumer": "artifacts/npm/registry-consumer",
+        "browserBuildId": "15ba04de-2c84-4f17-aad7-617269e2d6f6",
+        "lockSha256": "387ea04bd735bad3ac8fe697989ee238c7048e9e232e29bf26e09cf1e3287fae",
+        "packages": {
+          "@openpresentation/opf": "0.7.0",
+          "@openpresentation/opf-render": "0.5.1",
+          "@openpresentation/opf-editor": "0.4.0",
+          "@openpresentation/opf-pptx": "0.5.2",
+          "@openpresentation/cli": "0.5.0"
+        },
+        "suites": [
+          "canvas",
+          "rich-text",
+          "layout",
+          "block",
+          "list",
+          "create",
+          "styled-table"
+        ],
+        "files": {
+          "fonts.json": "c697f3979d65cb65482400d163604a8b4ac299e788702b8d3a502cce3f284c8d",
+          "packed-canvas-tests.html": "eabf718451f5b776946f68b7a65fde4df9f194b1b5013b0924ce3aa90b94ff92",
+          "packed-canvas-tests.js": "63fd44b4c2cea9cf4f4a6e5a0cbcc2507a8f8c6207497da0a00a37696d09066e",
+          "packed-rich-text-tests.html": "da4f8ebf7e8521d5d3361bf983559ad9dc598c0f2cd0586893b3944bb6dd41f9",
+          "packed-rich-text-tests.js": "4342c2344cc8ad09bb206cd2935d500771ca9b239352851b3f2ebc24769895ba",
+          "packed-layout-tests.html": "2fe1eef3d16f6d7e5affe656821b1b063909f66e848599d4840625e36a97d2bf",
+          "packed-layout-tests.js": "105b971ef4e1de2136319ff4ca5a30d62515d7a1bc00baf8036d93c84b321980",
+          "packed-block-tests.html": "56fb85286b8440a10dae1216acfec0f87a19fb2107989f12df075328f5a5747b",
+          "packed-block-tests.js": "80e4a9da0355f3abfbcac82e1fa5ee4cb8b91941a6ed401bee4d5c105750130f",
+          "packed-list-tests.html": "5073bcc579d7a5919eeaf078a6f57474562e5ff14c56815bcd460f02c9844852",
+          "packed-list-tests.js": "9376c6d0794566170c89c42bd3fbcabf4605f6202e2739f5582023b997a1177c",
+          "packed-create-tests.html": "ce7ac5392d1c139aa9152a2e475f455a1ab1271fda7e9b9b8f3469fa9e436a94",
+          "packed-create-tests.js": "fb6a9391d05fac5f2de16104868bddf38ff6c1f75bd08a110512bc4d0f9c848d",
+          "packed-styled-table-tests.html": "08d17f84d2ffcb057bba8355129e9453c279388fdfff23a39c5dad2b4be6acfa",
+          "packed-styled-table-tests.js": "269b6054256e4fc634e89f2329daf1273ac4bbc03f9c2f8b3847e905f23e832a"
+        }
+      },
+      "harnessAssertions": 230,
+      "trustedScenarios": 8
+    }
+  ],
+  "boundary": "CI executes installed-package model/browser assertions and eight trusted-input scenarios. Native PowerPoint, export/reimport and public sites retain separate evidence."
+}
