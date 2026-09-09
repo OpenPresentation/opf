@@ -617,7 +617,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const failures = diagnostics.filter(diagnostic => strictPaths.has(diagnostic.path));
   const explanation: CompositionExplanation | undefined = decisions ? {
     algorithm:'grid-score-v1',textMeasurement:options.textMeasurement?'provided':'estimated',decisions,
-    unmeasuredPayloads:items.filter(item=>!headings.has(item.field)&&!['text','items','bullets','code','table'].includes(item.field)).map(item=>item.path),
+    unmeasuredPayloads:items.filter(item=>!headings.has(item.field)&&!['text','items','bullets','table'].includes(item.field)).map(item=>item.path),
   } : undefined;
   if (failures.length) throw new OPFCompositionError(failures, explanation);
   return { width, height, contentBox, items, groups, flows, diagnostics, composition, ...(explanation?{explanation}:{}) };
