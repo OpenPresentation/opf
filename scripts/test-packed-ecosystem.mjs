@@ -76,6 +76,7 @@ run("npm", [
   "--no-audit",
   "--no-fund",
   "--offline=false",
+  "--prefer-online",
   "--cache",
   path.join(out,'cache'),
 ]);
