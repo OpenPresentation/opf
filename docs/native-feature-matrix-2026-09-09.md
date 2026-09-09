@@ -1,5 +1,13 @@
 # Native PowerPoint feature matrix — September 9, 2026
 
+## Candidate comparison support
+
+The registry baseline below is preserved. To evaluate an unpublished converter, pass its built `dist/index.js` as a fourth argument to both `generate` and `compare`, using a separate output directory. The report's `candidate` field explicitly labels it as `local-candidate-not-registry-release`, records the declared version and hashes every runtime/vendor file plus package/lock manifests. Its installed core/renderer versions and registry integrities must match the baseline consumer. Comparison rejects a missing or changed candidate; omitting the optional argument remains registry-only. Node 20/24 comparisons and deliberate omission rejection were executed on the native 0.5.2 candidate.
+
+Converter [PR #13](https://github.com/OpenPresentation/opf-pptx/pull/13), candidate `422f1e39e643cbb1c23260f0c9ddef7a3c6ec722`, improves metric/quote/code/timeline layout and chart-label contrast. Its [separate candidate evidence](https://github.com/OpenPresentation/opf-pptx/blob/422f1e39e643cbb1c23260f0c9ddef7a3c6ec722/docs/native-content-candidate.md) records native checks and remaining fidelity/release gates. This does not change published 0.5.1 or the historical observations below.
+
+## Published 0.5.1 observations
+
 Real PowerPoint 16 opens, rasterizes, edits and saves all 19 slides in eight controlled feature cases. Every native edit survives reopen and schema-valid reimport on Node 20/24. PowerPoint exposes three native tables, one editable Office chart and one native picture. The rich text/list, dynamic nested composition, scalar table, code, metric, quote, timeline, chart, grid-span and embedded-image cases come from installed registry core 0.7.0 examples. Renderer 0.5.0 and PPTX 0.5.1 are the actual registry packages, with lockfile integrities recorded in the [machine-readable report](evidence/native-feature-matrix/comparison.json).
 
 **Visual equivalence is not established.** The native rasters reveal substantive differences which file validity, editability and zero converter diagnostics did not detect:
