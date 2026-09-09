@@ -15,6 +15,8 @@ On Windows, directory junctions work without granting file-symlink privileges. T
 
 The core packed-install smoke check also uses this Windows invocation. Node 20/24 local evidence on the `codex/windows-test-harness-20260909` branch: all 414 core tests plus composition/pagination/data/rich-text/list suites pass, and actual local tarballs install into fresh temporary projects and pass 519 packed-entry checks. New isolated tests execute real npm builds, replace existing junctions, retain literal arguments, and reject an external `node_modules` parent without modifying its package. Windows/macOS CI repeats the core packed installation on both supported runtimes. These are local unpublished tarballs, not republished core 0.7.0 or proof of native rendering fidelity.
 
+After integrating reviewed layout PR #43, the combined source passes all 420 core tests on local Windows Node 24. Exact combined-source CI and review are recorded on PR #44.
+
 The published compatible set is core 0.7.0, CLI 0.5.0, renderer 0.5.1, PPTX 0.5.2 and editor 0.4.0. Clean registry installs include shared composition and styled table rows without sibling links. `release-plan.json` records exact versions and immutable verification sources; `pnpm test:registry-ecosystem` and `pnpm test:registry-fidelity` exercise those installed packages. Source links are for coordinated development.
 
 To browse the gallery with the linked package:
