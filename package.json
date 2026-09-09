@@ -44,5 +44,11 @@
   "packageManager": "pnpm@10.33.2",
   "devDependencies": {
     "@biomejs/biome": "^2.5.3"
+  },
+  "pnpm": {
+    "overrides": {
+      "esbuild@>=0.27.3 <0.28.1": "0.28.2",
+      "js-yaml@>=4.0.0 <4.3.2": "4.3.2"
+    }
   }
 }
