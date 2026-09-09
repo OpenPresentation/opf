@@ -13,6 +13,7 @@ This is an example/application change. Core 0.7.0, renderer 0.5.0, editor 0.4.0 
 - Actual download, native table XML/merge inspection, and schema validation of its converted OPF.
 - File import preview, application, full-document equality with the Node converter, and undo/redo.
 - OPF download preserving the imported document and malformed PPTX rejection preserving current state.
+- A PPTX under the 20 MB file cap whose embedded image expands beyond 20 MB of OPF JSON: conversion bypasses the unrelated paste-byte cap while retaining full schema, nesting and item validation; undo restores the previous document.
 
 The tests pass on Windows Node 20 and 24 with Edge 152.0.4191.66. Full editor model/component/transfer/schema/rich-text/layout/styled-table suites pass on both runtimes. Generated output is under ignored `artifacts/`; regenerate it from GitHub source rather than depending on another machine's artifacts.
 

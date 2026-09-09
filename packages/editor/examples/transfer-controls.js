@@ -3,6 +3,7 @@ import {
   serializeOpfTransfer,
   prepareOpfImport,
   MAX_OPF_BYTES,
+  assertOpf,
 } from "../src/transfer.js";
 import {
   loadOpfGallery,
@@ -276,8 +277,14 @@ export function installTransferControls({
       if (pptx) {
         $("import-conversion").hidden = false;
         showConversionDiagnostics($("import-diagnostics"), result.diagnostics);
+        // Converted binary input is already structured OPF. Validate its shape
+        // without applying the unrelated JSON paste byte cap to embedded images.
+        const document = assertOpf(result.document);
+        transfer = { kind: 'presentation', value: document, document };
+        updatePreview();
+      } else {
+        receive(result.document);
       }
-      receive(result.document);
       $("file-name").textContent = file.name;
     } catch (cause) {
       if (id === requestId) error(cause.message);

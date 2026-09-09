@@ -5,7 +5,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 import { chromium } from 'playwright';
-import { fromPptx } from '@openpresentation/opf-pptx';
+import { fromPptx, toPptx } from '@openpresentation/opf-pptx';
 import { validatePresentation } from '@openpresentation/opf';
 const JSZip = createRequire(import.meta.resolve('@openpresentation/opf-pptx'))('jszip');
 
@@ -107,12 +107,41 @@ try {
   assert.equal(await page.locator('#import-apply').isDisabled(), true);
   await button('Close import dialog').click();
   assert.deepEqual(await source(), imported);
+
+  // A valid PNG with a large ancillary text chunk compresses inside PPTX but
+  // expands beyond 20 MB when represented as embedded OPF base64. Its pixels
+  // remain a tiny image; this catches accidental reuse of the paste-size cap.
+  const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aB3sAAAAASUVORK5CYII=', 'base64');
+  const ancillary = Buffer.concat([Buffer.from('tEXtComment\0'), Buffer.alloc(16 * 1024 * 1024, 65)]);
+  let crc = 0xffffffff;
+  for (const byte of ancillary) {
+    crc ^= byte;
+    for (let bit = 0; bit < 8; bit++) crc = (crc >>> 1) ^ ((crc & 1) ? 0xedb88320 : 0);
+  }
+  const length = Buffer.alloc(4), checksum = Buffer.alloc(4);
+  length.writeUInt32BE(ancillary.length - 4); checksum.writeUInt32BE((crc ^ 0xffffffff) >>> 0);
+  const image = Buffer.concat([png.subarray(0, -12), length, ancillary, checksum, png.subarray(-12)]);
+  const imageDeck = { name: 'Expanded image import', slides: [{ title: 'Large embedded image', image: { src: 'data:image/png;base64,' + image.toString('base64') } }] };
+  const imagePptx = await toPptx(imageDeck);
+  assert.ok(imagePptx.length < 20 * 1024 * 1024);
+  const imageOpf = await fromPptx(imagePptx);
+  assert.ok(Buffer.byteLength(JSON.stringify(imageOpf)) > 20 * 1024 * 1024);
+  await button('Import').click();
+  await page.getByRole('tab', { name: 'File', exact: true }).click();
+  await page.locator('#opf-file').setInputFiles({ name: 'image-heavy.pptx', mimeType: 'application/vnd.openxmlformats-officedocument.presentationml.presentation', buffer: Buffer.from(imagePptx) });
+  await page.getByLabel('Import as', { exact: true }).selectOption('replace');
+  await page.waitForFunction(() => !document.querySelector('#import-apply').disabled || document.querySelector('#import-error').textContent, undefined, { timeout: 60000 });
+  assert.equal(await page.locator('#import-error').innerText(), '');
+  await page.locator('#import-apply').click();
+  assert.deepEqual(await source(), imageOpf);
+  await button('Undo').click();
+  assert.deepEqual(await source(), imported);
   assert.deepEqual(errors, []);
   assert.deepEqual(networkWrites, []);
   await mkdir(new URL('../artifacts/browser-evidence/', import.meta.url), { recursive: true });
   await writeFile(new URL('../artifacts/browser-evidence/export.pptx', import.meta.url), bytes);
   await page.screenshot({ path: fileURLToPath(new URL('../artifacts/browser-evidence/editor.png', import.meta.url)), fullPage: true });
-  console.log(JSON.stringify({ passed: true, browser: browser.version(), offlineAfterLoad: true, pptxBytes: bytes.length, nativeTable: true, mergedCells: true, exportCommitsDraft: true, importUndoRedo: true, malformedInputPreservesDocument: true, networkWrites: networkWrites.length }, null, 2));
+  console.log(JSON.stringify({ passed: true, browser: browser.version(), offlineAfterLoad: true, pptxBytes: bytes.length, nativeTable: true, mergedCells: true, exportCommitsDraft: true, importUndoRedo: true, expandedImageImport: true, malformedInputPreservesDocument: true, networkWrites: networkWrites.length }, null, 2));
 } finally {
   await browser?.close();
   await new Promise(resolve => server.close(resolve));
