@@ -4,6 +4,7 @@ import { createRequire } from "node:module";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
+import {createHash, randomUUID} from 'node:crypto';
 const root = fileURLToPath(new URL("../", import.meta.url)),
   out = path.join(root, "artifacts/npm");
 const librariesOnly = process.argv.includes('--registry-libraries');
@@ -37,6 +38,8 @@ const actualConsumer=await realpath(consumer).catch(error=>{if(error.code==='ENO
 if (!actualConsumer.startsWith(actualOut+path.sep)) throw new Error('Refusing to remove a consumer outside the artifact directory');
 await rm(consumer, { recursive: true, force: true });
 await mkdir(consumer, { recursive: true });
+const browserBuildId = randomUUID();
+await writeFile(path.join(consumer, 'browser-build-id.json'), JSON.stringify(browserBuildId));
 await writeFile(
   path.join(consumer, "package.json"),
   JSON.stringify(
@@ -316,4 +319,17 @@ if (verifyStyledTables) {
   console.log('Installed styled-table browser harness built: artifacts/editor/packed-styled-table-tests.html. Open it to verify real pointer/keyboard interaction.');
 }
 
+const browserSuites=['canvas','rich-text','layout','block','list','create',...(verifyStyledTables?['styled-table']:[])];
+const hashFile=async file=>createHash('sha256').update(await readFile(file)).digest('hex');
+await writeFile(path.join(browserOut,'packed-browser-manifest.json'),JSON.stringify({
+  mode:librariesOnly?'registry-libraries':registry?'registry':'packed',
+  consumer:path.relative(root,consumer).split(path.sep).join('/'),
+  browserBuildId,
+  lockSha256:await hashFile(path.join(consumer,'package-lock.json')),
+  packages:Object.fromEntries(await Promise.all(manifest.artifacts.map(async item=>[
+    item.name,JSON.parse(await readFile(path.join(consumer,'node_modules',item.name,'package.json'),'utf8')).version,
+  ]))),
+  suites:browserSuites,
+  files:Object.fromEntries(await Promise.all(['fonts.json',...browserSuites.flatMap(suite=>[`packed-${suite}-tests.html`,`packed-${suite}-tests.js`])].map(async file=>[file,await hashFile(path.join(browserOut,file))]))),
+},null,2)+'\n');
 console.log(librariesOnly ? 'Registry library consumer passed for four exact versions; CLI and complete release verification remain separate.' : registry ? 'Registry consumer passed for all five exact release-plan versions (no local package overrides).' : 'Local tarball consumer passed; this is not a registry verification.');

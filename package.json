@@ -16,6 +16,7 @@
     "test:fonts": "node --import ./scripts/register-local-opf.mjs scripts/test-font-ecosystem.mjs && node --import ./scripts/register-local-opf.mjs scripts/test-office-fonts.mjs",
     "pack:ecosystem": "node scripts/pack-ecosystem.mjs",
     "test:packed-ecosystem": "node scripts/test-packed-ecosystem.mjs",
+    "test:packed-browser": "node scripts/test-packed-browser.mjs",
     "test:gallery-transfer": "node scripts/test-gallery-transfer.mjs",
     "prepare:gallery": "node scripts/prepare-gallery-editor.mjs",
     "build:spec-reference": "node scripts/build-spec-reference.mjs",

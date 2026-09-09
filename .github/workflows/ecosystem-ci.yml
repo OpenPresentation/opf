@@ -12,6 +12,9 @@ concurrency:
 jobs:
   packages:
     runs-on: ubuntu-latest
+    # Matches the renderer's locked Playwright 1.63.0, including Chromium and
+    # system libraries; avoids mutable apt repositories during browser setup.
+    container: mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27
     timeout-minutes: 25
     strategy:
       fail-fast: false
@@ -69,14 +72,31 @@ jobs:
         env:
           OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf/scripts/fixtures/opf-examples-png.shared-quote.sha256.json
         run: pnpm test:packages
+      - name: Execute installed tarball browser interactions
+        working-directory: opf
+        run: |
+          node -e "if (require('../opf-render/node_modules/playwright/package.json').version !== '1.63.0') throw new Error('Update the pinned Playwright image with the renderer test package.');"
+          pnpm test:packed-browser
       - name: Verify exact published registry packages and fidelity fixtures
         working-directory: opf
         run: |
           pnpm test:registry-ecosystem
+          pnpm test:packed-browser registry
+          node scripts/test-packed-browser-guards.mjs
           pnpm test:registry-fidelity
           node scripts/test-quote-layout-geometry.mjs artifacts/npm/registry-consumer artifacts/quote-layout-geometry.json
           node packages/cli/test/packed.mjs --registry
+      - name: Preserve installed-browser evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: installed-browser-node${{ matrix.node }}
+          path: |
+            opf/artifacts/editor/packed-browser-*-report.json
+            opf/artifacts/editor/packed-browser-*-failure.png
+          retention-days: 7
+          if-no-files-found: ignore
       - name: Report the verification boundary
         if: always()
         run: |
-          echo 'This job tests coordinated source, local tarballs, and exact published registry installs against pinned fixtures. It includes the renderer raster regression baseline and generated browser bundles; native PowerPoint fidelity and executed browser interactions require separate evidence. Private sites run separately.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'This job tests coordinated source, local tarballs, and exact published registry installs against pinned fixtures. It executes installed-package browser harnesses, trusted pointer/keyboard editing and undo, and renderer raster regression checks. Native PowerPoint fidelity, full export/reimport workflows and private/public site interactions require their separate evidence.' >> "$GITHUB_STEP_SUMMARY"
