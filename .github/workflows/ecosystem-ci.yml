@@ -74,6 +74,7 @@ jobs:
         run: |
           pnpm test:registry-ecosystem
           pnpm test:registry-fidelity
+          node scripts/test-quote-layout-geometry.mjs artifacts/npm/registry-consumer artifacts/quote-layout-geometry.json
           node packages/cli/test/packed.mjs --registry
       - name: Report the verification boundary
         if: always()
