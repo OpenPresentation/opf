@@ -88,7 +88,7 @@ for (const directory of [...packageDirectories].sort()) {
     licenses.push(`${pkg.name ?? path.basename(directory)}${pkg.version ? '@' + pkg.version : ''} — ${file}\n\n${(await readFile(path.join(directory, file), 'utf8')).replace(/[\t ]+$/gm, '')}`);
   }
 }
-await writeFile(licensePath, licenses.join('\n\n') + '\n');
+await writeFile(licensePath, (licenses.join('\n\n') + '\n').replace(/\r\n?/g, '\n'));
 for (const file of Object.keys(bundle.metafile.inputs)) {
   if (/opf-(editor|render|pptx)\/(src|dist)\//.test(file) && !file.includes('node_modules/')) {
     throw new Error(`Unpublished library leaked into gallery bundle: ${file}`);
