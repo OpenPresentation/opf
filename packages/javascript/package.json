@@ -109,7 +109,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.19.0",
-    "json-schema-to-typescript": "^15.0.4",
+    "json-schema-to-typescript": "^16.0.0",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3"
   }
