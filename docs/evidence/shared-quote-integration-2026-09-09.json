@@ -1,0 +1,540 @@
+{
+  "date": "2026-09-09",
+  "status": "unreleased source candidates; registry versions unchanged",
+  "platform": "Windows; Edge 152.0.4191.66; native PowerPoint 16",
+  "sources": {
+    "opf": {
+      "packages/javascript/src/composition.ts": "c19af0eba547921e55fab355b331b2266314373673874ab897d2596529911cdb",
+      "packages/javascript/src/pagination.ts": "e462a7129288bdd62ab3329024db6c2e86550f2897f30739be89be4ad3961c20"
+    },
+    "opf-render": {
+      "src/svg.js": "8ec49dc8d98c2e21b158959550106b7cafa65821a867fc8f1f2de86f51c3fe60",
+      "test/shared-quote.mjs": "93d21212b0a99a072f5944d08f4b15ca13eed56998e72d491d3243a906a087aa",
+      "scripts/build-browser-check.mjs": "90bcb73371731023447bf0752a63d5811ee6185f31c565f9ec7ba18571885c4c",
+      "test/quote-footer-browser.js": "a8dceabb883dafae53581830bb34d367528208a1599739e4780e8f2ccdfee377"
+    },
+    "opf-pptx": {
+      "src/index.js": "cca8649a23c79cd499a97872e157158fb24a66bc6e3e89c46882de680976596c",
+      "test/shared-quote.mjs": "baa8c64716813d9c8e800a71a0309a293852d7e3108ec950372e96ba1ef7da81",
+      "test/native-quote.mjs": "2d565da14e497768eec0c3b268db4f5b8a0d470a55a24af46adcd4f08478d173",
+      "test/native-quote.ps1": "6f84da3faec5a2f813420e0aef13a50a6ad0b18d414de94fed1c6a774419163b"
+    },
+    "opf-editor": {
+      "src/index.js": "1e55461e1670d07b8bc725cad2272d6a13cb16358a03c45b0661ee2e6024a5a7",
+      "test/smoke.mjs": "ae6f10d7f23aa896fd014ab5f99290ea9c66e68818e80e2458d90761948e6999",
+      "test/playground-pptx.mjs": "d2dd3e70089d1d2bfad6293d451241d420a98a6fce134febe19fae40bc22ea8a"
+    }
+  },
+  "checks": {
+    "core": {
+      "node": [
+        20,
+        24
+      ],
+      "nodeTests": 433,
+      "preservationSuitesPassed": true
+    },
+    "renderer": {
+      "node": [
+        20,
+        24
+      ],
+      "fullSuitesPassed": true,
+      "corpusSlides": 805,
+      "corpusDecks": 126,
+      "reviewedRasterChanges": 41
+    },
+    "pptx": {
+      "node": [
+        20,
+        24
+      ],
+      "fullSuitesPassed": true
+    },
+    "editor": {
+      "node": [
+        20,
+        24
+      ],
+      "fullSuitesPassed": true
+    }
+  },
+  "browser": {
+    "renderer": {
+      "browser": "152.0.4191.66",
+      "suites": [
+        {
+          "name": "jpeg",
+          "passed": true,
+          "cases": 16,
+          "maxDifference": 49,
+          "controlMean": 56.419711642795136,
+          "measurements": [
+            {
+              "orientation": 1,
+              "imageFill": "fit",
+              "max": 49,
+              "mean": 0.3241276041666667,
+              "largePercent": 0.672119140625
+            },
+            {
+              "orientation": 1,
+              "imageFill": "crop",
+              "max": 49,
+              "mean": 0.3426852756076389,
+              "largePercent": 0.697021484375
+            },
+            {
+              "orientation": 2,
+              "imageFill": "fit",
+              "max": 49,
+              "mean": 0.32415174696180554,
+              "largePercent": 0.6720106336805556
+            },
+            {
+              "orientation": 2,
+              "imageFill": "crop",
+              "max": 49,
+              "mean": 0.34280029296875,
+              "largePercent": 0.6969672309027778
+            },
+            {
+              "orientation": 3,
+              "imageFill": "fit",
+              "max": 49,
+              "mean": 0.3241379123263889,
+              "largePercent": 0.6719835069444444
+            },
+            {
+              "orientation": 3,
+              "imageFill": "crop",
+              "max": 49,
+              "mean": 0.3427826605902778,
+              "largePercent": 0.696994357638889
+            },
+            {
+              "orientation": 4,
+              "imageFill": "fit",
+              "max": 49,
+              "mean": 0.3241552734375,
+              "largePercent": 0.672092013888889
+            },
+            {
+              "orientation": 4,
+              "imageFill": "crop",
+              "max": 49,
+              "mean": 0.3427205403645833,
+              "largePercent": 0.6970486111111112
+            },
+            {
+              "orientation": 5,
+              "imageFill": "fit",
+              "max": 45,
+              "mean": 0.08678656684027777,
+              "largePercent": 0.1814507378472222
+            },
+            {
+              "orientation": 5,
+              "imageFill": "crop",
+              "max": 39,
+              "mean": 0.6215879991319444,
+              "largePercent": 1.1771104600694444
+            },
+            {
+              "orientation": 6,
+              "imageFill": "fit",
+              "max": 45,
+              "mean": 0.08679904513888889,
+              "largePercent": 0.1814507378472222
+            },
+            {
+              "orientation": 6,
+              "imageFill": "crop",
+              "max": 39,
+              "mean": 0.6217607964409723,
+              "largePercent": 1.1771375868055556
+            },
+            {
+              "orientation": 7,
+              "imageFill": "fit",
+              "max": 45,
+              "mean": 0.0868017578125,
+              "largePercent": 0.181396484375
+            },
+            {
+              "orientation": 7,
+              "imageFill": "crop",
+              "max": 39,
+              "mean": 0.6217537434895833,
+              "largePercent": 1.17724609375
+            },
+            {
+              "orientation": 8,
+              "imageFill": "fit",
+              "max": 45,
+              "mean": 0.08679578993055556,
+              "largePercent": 0.181396484375
+            },
+            {
+              "orientation": 8,
+              "imageFill": "crop",
+              "max": 39,
+              "mean": 0.6217363823784722,
+              "largePercent": 1.177300347222222
+            }
+          ],
+          "checks": "Browser-rendered OPF SVG JPEG orientation and fit/crop against independent Pillow PNGs"
+        },
+        {
+          "name": "quote-footer",
+          "passed": true,
+          "cases": 10,
+          "checks": 80,
+          "fonts": 4,
+          "lineBoxOverhangs": [
+            {
+              "id": "1280-12",
+              "part": "footer",
+              "left": 1.0000015258789006,
+              "right": 0,
+              "top": 0,
+              "bottom": 0
+            },
+            {
+              "id": "1280-16",
+              "part": "body",
+              "left": 1.0000015258789006,
+              "right": 0,
+              "top": 0,
+              "bottom": 0
+            },
+            {
+              "id": "1280-16",
+              "part": "footer",
+              "left": 1.0000015258789006,
+              "right": 0,
+              "top": 0,
+              "bottom": 0.2599731445312834
+            },
+            {
+              "id": "1280-20",
+              "part": "footer",
+              "left": 1.0000015258789006,
+              "right": 0,
+              "top": 0,
+              "bottom": 0.2599731445312834
+            },
+            {
+              "id": "1280-24",
+              "part": "body",
+              "left": 1.0000015258789006,
+              "right": 0,
+              "top": 0,
+              "bottom": 0
+            },
+            {
+              "id": "1280-24",
+              "part": "footer",
+              "left": 1.0000015258789006,
+              "right": 0,
+              "top": 0,
+              "bottom": 0.2599731445312834
+            },
+            {
+              "id": "1280-expanded-footer",
+              "part": "footer",
+              "left": 0.0000015258789005656581,
+              "right": 0,
+              "top": 0,
+              "bottom": 0.2599731445312443
+            },
+            {
+              "id": "540-12",
+              "part": "body",
+              "left": 0.9999992370605497,
+              "right": 0,
+              "top": 0,
+              "bottom": 0
+            },
+            {
+              "id": "540-12",
+              "part": "footer",
+              "left": 0.9999992370605497,
+              "right": 0,
+              "top": 0,
+              "bottom": 0
+            },
+            {
+              "id": "540-16",
+              "part": "body",
+              "left": 0.9999992370605497,
+              "right": 0,
+              "top": 0,
+              "bottom": 0
+            },
+            {
+              "id": "540-16",
+              "part": "footer",
+              "left": 0.9999992370605497,
+              "right": 0,
+              "top": 0,
+              "bottom": 0
+            },
+            {
+              "id": "540-20",
+              "part": "body",
+              "left": 0.9999992370605497,
+              "right": 0,
+              "top": 0,
+              "bottom": 0
+            },
+            {
+              "id": "540-20",
+              "part": "footer",
+              "left": 0.9999992370605497,
+              "right": 0,
+              "top": 0,
+              "bottom": 0.19499511718738205
+            },
+            {
+              "id": "540-24",
+              "part": "body",
+              "left": 0.9999992370605497,
+              "right": 0,
+              "top": 0,
+              "bottom": 0
+            },
+            {
+              "id": "540-24",
+              "part": "footer",
+              "left": 0.9999992370605497,
+              "right": 0,
+              "top": 0,
+              "bottom": 0.19499511718738205
+            },
+            {
+              "id": "540-expanded-footer",
+              "part": "footer",
+              "left": 0,
+              "right": 0,
+              "top": 0,
+              "bottom": 0.1949951171874318
+            }
+          ],
+          "scope": "Actual browser SVG glyph containment in quote cells and body/footer separation with matching bundled font bytes. Part line boxes are not glyph outlines; overhangs into the inset are reported."
+        }
+      ]
+    },
+    "pptx": {
+      "browser": "152.0.4191.66",
+      "suites": [
+        {
+          "suite": "webp-fallback",
+          "passed": true,
+          "cases": 13,
+          "checks": "PPTX PNG embedding, source pixels, alpha, EXIF, first animation frame, fit/crop, resolver once, DOM canvas"
+        },
+        {
+          "suite": "native-rich-table-import",
+          "passed": true,
+          "cases": 20,
+          "checks": "Native XML import, style/default preservation, links, blank lines, repeated conversion and SVG preview"
+        },
+        {
+          "suite": "native-table-styles",
+          "passed": true,
+          "checks": 11
+        },
+        {
+          "suite": "native-styled-table-import",
+          "passed": true,
+          "checks": 12
+        },
+        {
+          "suite": "native-content-layout",
+          "passed": true,
+          "checks": 29,
+          "measurement": "browser-default; loaded fonts and native rasters verified separately"
+        }
+      ]
+    },
+    "editor": {
+      "passed": true,
+      "browser": "152.0.4191.66",
+      "offlineAfterLoad": true,
+      "pptxBytes": 15520,
+      "nativeTable": true,
+      "mergedCells": true,
+      "exportCommitsDraft": true,
+      "importUndoRedo": true,
+      "expandedImageImport": true,
+      "quoteSourceEditingUndo": true,
+      "onePageReadabilityUndo": true,
+      "quoteTextReimportUndo": true,
+      "quoteSemanticsRestored": false,
+      "malformedInputPreservesDocument": true,
+      "networkWrites": 0
+    },
+    "fonts": [
+      {
+        "family": "Roboto",
+        "weight": 400,
+        "italic": false,
+        "url": "./font-400.ttf",
+        "license": "Copyright 2011 The Roboto Project Authors (https://github.com/googlefonts/roboto-classic)\n\nThis Font Software is licensed under the SIL Open Font License, Version 1.1.\nThis license is copied below, and is also available with a FAQ at:\nhttps://openfontlicense.org\n\n\n-----------------------------------------------------------\nSIL OPEN FONT LICENSE Version 1.1 - 26 February 2007\n-----------------------------------------------------------\n\nPREAMBLE\nThe goals of the Open Font License (OFL) are to stimulate worldwide\ndevelopment of collaborative font projects, to support the font creation\nefforts of academic and linguistic communities, and to provide a free and\nopen framework in which fonts may be shared and improved in partnership\nwith others.\n\nThe OFL allows the licensed fonts to be used, studied, modified and\nredistributed freely as long as they are not sold by themselves. The\nfonts, including any derivative works, can be bundled, embedded, \nredistributed and/or sold with any software provided that any reserved\nnames are not used by derivative works. The fonts and derivatives,\nhowever, cannot be released under any other type of license. The\nrequirement for fonts to remain under this license does not apply\nto any document created using the fonts or their derivatives.\n\nDEFINITIONS\n\"Font Software\" refers to the set of files released by the Copyright\nHolder(s) under this license and clearly marked as such. This may\ninclude source files, build scripts and documentation.\n\n\"Reserved Font Name\" refers to any names specified as such after the\ncopyright statement(s).\n\n\"Original Version\" refers to the collection of Font Software components as\ndistributed by the Copyright Holder(s).\n\n\"Modified Version\" refers to any derivative made by adding to, deleting,\nor substituting -- in part or in whole -- any of the components of the\nOriginal Version, by changing formats or by porting the Font Software to a\nnew environment.\n\n\"Author\" refers to any designer, engineer, programmer, technical\nwriter or other person who contributed to the Font Software.\n\nPERMISSION & CONDITIONS\nPermission is hereby granted, free of charge, to any person obtaining\na copy of the Font Software, to use, study, copy, merge, embed, modify,\nredistribute, and sell modified and unmodified copies of the Font\nSoftware, subject to the following conditions:\n\n1) Neither the Font Software nor any of its individual components,\nin Original or Modified Versions, may be sold by itself.\n\n2) Original or Modified Versions of the Font Software may be bundled,\nredistributed and/or sold with any software, provided that each copy\ncontains the above copyright notice and this license. These can be\nincluded either as stand-alone text files, human-readable headers or\nin the appropriate machine-readable metadata fields within text or\nbinary files as long as those fields can be easily viewed by the user.\n\n3) No Modified Version of the Font Software may use the Reserved Font\nName(s) unless explicit written permission is granted by the corresponding\nCopyright Holder. This restriction only applies to the primary font name as\npresented to the users.\n\n4) The name(s) of the Copyright Holder(s) or the Author(s) of the Font\nSoftware shall not be used to promote, endorse or advertise any\nModified Version, except to acknowledge the contribution(s) of the\nCopyright Holder(s) and the Author(s) or with their explicit written\npermission.\n\n5) The Font Software, modified or unmodified, in part or in whole,\nmust be distributed entirely under this license, and must not be\ndistributed under any other license. The requirement for fonts to\nremain under this license does not apply to any document created\nusing the Font Software.\n\nTERMINATION\nThis license becomes null and void if any of the above conditions are\nnot met.\n\nDISCLAIMER\nTHE FONT SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND,\nEXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF\nMERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT\nOF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL THE\nCOPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,\nINCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL\nDAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING\nFROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM\nOTHER DEALINGS IN THE FONT SOFTWARE.\n",
+        "sha256": "15256405ecb0d880678833a582760efad538ab2932318b52c8105b267d159459"
+      },
+      {
+        "family": "Roboto Medium",
+        "weight": 500,
+        "italic": false,
+        "url": "./font-500.ttf",
+        "license": "Copyright 2011 The Roboto Project Authors (https://github.com/googlefonts/roboto-classic)\n\nThis Font Software is licensed under the SIL Open Font License, Version 1.1.\nThis license is copied below, and is also available with a FAQ at:\nhttps://openfontlicense.org\n\n\n-----------------------------------------------------------\nSIL OPEN FONT LICENSE Version 1.1 - 26 February 2007\n-----------------------------------------------------------\n\nPREAMBLE\nThe goals of the Open Font License (OFL) are to stimulate worldwide\ndevelopment of collaborative font projects, to support the font creation\nefforts of academic and linguistic communities, and to provide a free and\nopen framework in which fonts may be shared and improved in partnership\nwith others.\n\nThe OFL allows the licensed fonts to be used, studied, modified and\nredistributed freely as long as they are not sold by themselves. The\nfonts, including any derivative works, can be bundled, embedded, \nredistributed and/or sold with any software provided that any reserved\nnames are not used by derivative works. The fonts and derivatives,\nhowever, cannot be released under any other type of license. The\nrequirement for fonts to remain under this license does not apply\nto any document created using the fonts or their derivatives.\n\nDEFINITIONS\n\"Font Software\" refers to the set of files released by the Copyright\nHolder(s) under this license and clearly marked as such. This may\ninclude source files, build scripts and documentation.\n\n\"Reserved Font Name\" refers to any names specified as such after the\ncopyright statement(s).\n\n\"Original Version\" refers to the collection of Font Software components as\ndistributed by the Copyright Holder(s).\n\n\"Modified Version\" refers to any derivative made by adding to, deleting,\nor substituting -- in part or in whole -- any of the components of the\nOriginal Version, by changing formats or by porting the Font Software to a\nnew environment.\n\n\"Author\" refers to any designer, engineer, programmer, technical\nwriter or other person who contributed to the Font Software.\n\nPERMISSION & CONDITIONS\nPermission is hereby granted, free of charge, to any person obtaining\na copy of the Font Software, to use, study, copy, merge, embed, modify,\nredistribute, and sell modified and unmodified copies of the Font\nSoftware, subject to the following conditions:\n\n1) Neither the Font Software nor any of its individual components,\nin Original or Modified Versions, may be sold by itself.\n\n2) Original or Modified Versions of the Font Software may be bundled,\nredistributed and/or sold with any software, provided that each copy\ncontains the above copyright notice and this license. These can be\nincluded either as stand-alone text files, human-readable headers or\nin the appropriate machine-readable metadata fields within text or\nbinary files as long as those fields can be easily viewed by the user.\n\n3) No Modified Version of the Font Software may use the Reserved Font\nName(s) unless explicit written permission is granted by the corresponding\nCopyright Holder. This restriction only applies to the primary font name as\npresented to the users.\n\n4) The name(s) of the Copyright Holder(s) or the Author(s) of the Font\nSoftware shall not be used to promote, endorse or advertise any\nModified Version, except to acknowledge the contribution(s) of the\nCopyright Holder(s) and the Author(s) or with their explicit written\npermission.\n\n5) The Font Software, modified or unmodified, in part or in whole,\nmust be distributed entirely under this license, and must not be\ndistributed under any other license. The requirement for fonts to\nremain under this license does not apply to any document created\nusing the Font Software.\n\nTERMINATION\nThis license becomes null and void if any of the above conditions are\nnot met.\n\nDISCLAIMER\nTHE FONT SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND,\nEXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF\nMERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT\nOF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL THE\nCOPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,\nINCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL\nDAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING\nFROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM\nOTHER DEALINGS IN THE FONT SOFTWARE.\n",
+        "sha256": "79343dc641a2e8d48a703a4667b71fc8dc6565cc8ce47dfc34fc52c12aadbf38"
+      },
+      {
+        "family": "Roboto SemiBold",
+        "weight": 600,
+        "italic": false,
+        "url": "./font-600.ttf",
+        "license": "Copyright 2011 The Roboto Project Authors (https://github.com/googlefonts/roboto-classic)\n\nThis Font Software is licensed under the SIL Open Font License, Version 1.1.\nThis license is copied below, and is also available with a FAQ at:\nhttps://openfontlicense.org\n\n\n-----------------------------------------------------------\nSIL OPEN FONT LICENSE Version 1.1 - 26 February 2007\n-----------------------------------------------------------\n\nPREAMBLE\nThe goals of the Open Font License (OFL) are to stimulate worldwide\ndevelopment of collaborative font projects, to support the font creation\nefforts of academic and linguistic communities, and to provide a free and\nopen framework in which fonts may be shared and improved in partnership\nwith others.\n\nThe OFL allows the licensed fonts to be used, studied, modified and\nredistributed freely as long as they are not sold by themselves. The\nfonts, including any derivative works, can be bundled, embedded, \nredistributed and/or sold with any software provided that any reserved\nnames are not used by derivative works. The fonts and derivatives,\nhowever, cannot be released under any other type of license. The\nrequirement for fonts to remain under this license does not apply\nto any document created using the fonts or their derivatives.\n\nDEFINITIONS\n\"Font Software\" refers to the set of files released by the Copyright\nHolder(s) under this license and clearly marked as such. This may\ninclude source files, build scripts and documentation.\n\n\"Reserved Font Name\" refers to any names specified as such after the\ncopyright statement(s).\n\n\"Original Version\" refers to the collection of Font Software components as\ndistributed by the Copyright Holder(s).\n\n\"Modified Version\" refers to any derivative made by adding to, deleting,\nor substituting -- in part or in whole -- any of the components of the\nOriginal Version, by changing formats or by porting the Font Software to a\nnew environment.\n\n\"Author\" refers to any designer, engineer, programmer, technical\nwriter or other person who contributed to the Font Software.\n\nPERMISSION & CONDITIONS\nPermission is hereby granted, free of charge, to any person obtaining\na copy of the Font Software, to use, study, copy, merge, embed, modify,\nredistribute, and sell modified and unmodified copies of the Font\nSoftware, subject to the following conditions:\n\n1) Neither the Font Software nor any of its individual components,\nin Original or Modified Versions, may be sold by itself.\n\n2) Original or Modified Versions of the Font Software may be bundled,\nredistributed and/or sold with any software, provided that each copy\ncontains the above copyright notice and this license. These can be\nincluded either as stand-alone text files, human-readable headers or\nin the appropriate machine-readable metadata fields within text or\nbinary files as long as those fields can be easily viewed by the user.\n\n3) No Modified Version of the Font Software may use the Reserved Font\nName(s) unless explicit written permission is granted by the corresponding\nCopyright Holder. This restriction only applies to the primary font name as\npresented to the users.\n\n4) The name(s) of the Copyright Holder(s) or the Author(s) of the Font\nSoftware shall not be used to promote, endorse or advertise any\nModified Version, except to acknowledge the contribution(s) of the\nCopyright Holder(s) and the Author(s) or with their explicit written\npermission.\n\n5) The Font Software, modified or unmodified, in part or in whole,\nmust be distributed entirely under this license, and must not be\ndistributed under any other license. The requirement for fonts to\nremain under this license does not apply to any document created\nusing the Font Software.\n\nTERMINATION\nThis license becomes null and void if any of the above conditions are\nnot met.\n\nDISCLAIMER\nTHE FONT SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND,\nEXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF\nMERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT\nOF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL THE\nCOPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,\nINCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL\nDAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING\nFROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM\nOTHER DEALINGS IN THE FONT SOFTWARE.\n",
+        "sha256": "32fe2086b0e54eca85a68eb74e3d89bb16a7ffe59085d6dc7d079f5b3c26d6ab"
+      },
+      {
+        "family": "Roboto",
+        "weight": 700,
+        "italic": false,
+        "url": "./font-700.ttf",
+        "license": "Copyright 2011 The Roboto Project Authors (https://github.com/googlefonts/roboto-classic)\n\nThis Font Software is licensed under the SIL Open Font License, Version 1.1.\nThis license is copied below, and is also available with a FAQ at:\nhttps://openfontlicense.org\n\n\n-----------------------------------------------------------\nSIL OPEN FONT LICENSE Version 1.1 - 26 February 2007\n-----------------------------------------------------------\n\nPREAMBLE\nThe goals of the Open Font License (OFL) are to stimulate worldwide\ndevelopment of collaborative font projects, to support the font creation\nefforts of academic and linguistic communities, and to provide a free and\nopen framework in which fonts may be shared and improved in partnership\nwith others.\n\nThe OFL allows the licensed fonts to be used, studied, modified and\nredistributed freely as long as they are not sold by themselves. The\nfonts, including any derivative works, can be bundled, embedded, \nredistributed and/or sold with any software provided that any reserved\nnames are not used by derivative works. The fonts and derivatives,\nhowever, cannot be released under any other type of license. The\nrequirement for fonts to remain under this license does not apply\nto any document created using the fonts or their derivatives.\n\nDEFINITIONS\n\"Font Software\" refers to the set of files released by the Copyright\nHolder(s) under this license and clearly marked as such. This may\ninclude source files, build scripts and documentation.\n\n\"Reserved Font Name\" refers to any names specified as such after the\ncopyright statement(s).\n\n\"Original Version\" refers to the collection of Font Software components as\ndistributed by the Copyright Holder(s).\n\n\"Modified Version\" refers to any derivative made by adding to, deleting,\nor substituting -- in part or in whole -- any of the components of the\nOriginal Version, by changing formats or by porting the Font Software to a\nnew environment.\n\n\"Author\" refers to any designer, engineer, programmer, technical\nwriter or other person who contributed to the Font Software.\n\nPERMISSION & CONDITIONS\nPermission is hereby granted, free of charge, to any person obtaining\na copy of the Font Software, to use, study, copy, merge, embed, modify,\nredistribute, and sell modified and unmodified copies of the Font\nSoftware, subject to the following conditions:\n\n1) Neither the Font Software nor any of its individual components,\nin Original or Modified Versions, may be sold by itself.\n\n2) Original or Modified Versions of the Font Software may be bundled,\nredistributed and/or sold with any software, provided that each copy\ncontains the above copyright notice and this license. These can be\nincluded either as stand-alone text files, human-readable headers or\nin the appropriate machine-readable metadata fields within text or\nbinary files as long as those fields can be easily viewed by the user.\n\n3) No Modified Version of the Font Software may use the Reserved Font\nName(s) unless explicit written permission is granted by the corresponding\nCopyright Holder. This restriction only applies to the primary font name as\npresented to the users.\n\n4) The name(s) of the Copyright Holder(s) or the Author(s) of the Font\nSoftware shall not be used to promote, endorse or advertise any\nModified Version, except to acknowledge the contribution(s) of the\nCopyright Holder(s) and the Author(s) or with their explicit written\npermission.\n\n5) The Font Software, modified or unmodified, in part or in whole,\nmust be distributed entirely under this license, and must not be\ndistributed under any other license. The requirement for fonts to\nremain under this license does not apply to any document created\nusing the Font Software.\n\nTERMINATION\nThis license becomes null and void if any of the above conditions are\nnot met.\n\nDISCLAIMER\nTHE FONT SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND,\nEXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF\nMERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT\nOF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL THE\nCOPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,\nINCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL\nDAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING\nFROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM\nOTHER DEALINGS IN THE FONT SOFTWARE.\n",
+        "sha256": "4aaf8c5b661a386998c2e70cf2b87e2440f5404e0b8fd81164f0413fb3435ec6"
+      }
+    ]
+  },
+  "native": {
+    "version": "16.0",
+    "fixtures": 12,
+    "deckImports": 6,
+    "allGlyphsInsideCells": true,
+    "comparisons": [
+      {
+        "id": "quote-1280",
+        "slide": 1,
+        "meanAbsoluteChannelDifference": 13.740666232638889
+      },
+      {
+        "id": "quote-1280",
+        "slide": 2,
+        "meanAbsoluteChannelDifference": 18.03978081597222
+      },
+      {
+        "id": "quote-1280",
+        "slide": 3,
+        "meanAbsoluteChannelDifference": 18.867321686921297
+      },
+      {
+        "id": "quote-1280",
+        "slide": 4,
+        "meanAbsoluteChannelDifference": 17.68476634837963
+      },
+      {
+        "id": "quote-1280",
+        "slide": 5,
+        "meanAbsoluteChannelDifference": 8.68961009837963
+      },
+      {
+        "id": "quote-1280",
+        "slide": 6,
+        "meanAbsoluteChannelDifference": 5.745450303819444
+      },
+      {
+        "id": "quote-540",
+        "slide": 1,
+        "meanAbsoluteChannelDifference": 10.70287037037037
+      },
+      {
+        "id": "quote-540",
+        "slide": 2,
+        "meanAbsoluteChannelDifference": 13.85824909979424
+      },
+      {
+        "id": "quote-540",
+        "slide": 3,
+        "meanAbsoluteChannelDifference": 18.181612654320986
+      },
+      {
+        "id": "quote-540",
+        "slide": 4,
+        "meanAbsoluteChannelDifference": 19.676889146090534
+      },
+      {
+        "id": "quote-540",
+        "slide": 5,
+        "meanAbsoluteChannelDifference": 8.183586033950617
+      },
+      {
+        "id": "quote-540",
+        "slide": 6,
+        "meanAbsoluteChannelDifference": 4.171494984567901
+      }
+    ],
+    "report": "https://github.com/OpenPresentation/opf-pptx/blob/codex/shared-quote-integration-20260909/docs/evidence/shared-quote-integration/comparison.json"
+  },
+  "rasterReview": {
+    "changedSlides": [
+      "gallery/business-functions/compliance-readiness-review.opf.json#5",
+      "gallery/business-functions/demand-generation-campaign-brief.opf.json#5",
+      "gallery/business-functions/engineering-capacity-planning.opf.json#5",
+      "gallery/business-functions/investor-relations-update.opf.json#5",
+      "gallery/business-functions/model-governance-review.opf.json#5",
+      "gallery/business-functions/pricing-and-packaging-decision.opf.json#5",
+      "gallery/business-functions/pricing-and-packaging-decision.opf.json#6",
+      "gallery/business-functions/product-roadmap-decision-review.opf.json#5",
+      "gallery/business-functions/product-roadmap-decision-review.opf.json#6",
+      "gallery/business-functions/revenue-forecast-inspection.opf.json#5",
+      "gallery/business-functions/s-and-op-exception-review.opf.json#5",
+      "gallery/business-functions/strategy-offsite-pre-read.opf.json#5",
+      "gallery/business-functions/supplier-risk-heatmap.opf.json#5",
+      "gallery/business-functions/supplier-risk-heatmap.opf.json#6",
+      "gallery/design-and-media/data-storytelling-atlas.opf.json#5",
+      "gallery/design-and-media/kiosk-orientation-deck.opf.json#5",
+      "gallery/design-and-media/kiosk-orientation-deck.opf.json#6",
+      "gallery/design-and-media/photo-essay-portfolio.opf.json#5",
+      "gallery/design-and-media/video-demo-sales-narrative.opf.json#5",
+      "gallery/education/athletics-budget-review.opf.json#5",
+      "gallery/education/curriculum-approval-brief.opf.json#5",
+      "gallery/education/curriculum-approval-brief.opf.json#6",
+      "gallery/education/workforce-pathway-partnership.opf.json#5",
+      "gallery/government/broadband-public-hearing-deck.opf.json#5",
+      "gallery/government/housing-zoning-council-brief.opf.json#5",
+      "gallery/government/recycling-participation-campaign.opf.json#5",
+      "gallery/government/tax-portal-modernization.opf.json#5",
+      "gallery/government/transit-corridor-alternatives.opf.json#5",
+      "gallery/government/wildfire-evacuation-preparedness.opf.json#5",
+      "gallery/government/workforce-reskilling-initiative.opf.json#5",
+      "gallery/industries/airline-disruption-recovery-review.opf.json#5",
+      "gallery/industries/battery-line-supplier-readiness.opf.json#5",
+      "gallery/industries/boutique-hotel-revenue-recovery.opf.json#5",
+      "gallery/industries/construction-safety-stand-down.opf.json#5",
+      "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#5",
+      "gallery/industries/port-dwell-time-improvement-plan.opf.json#5",
+      "gallery/industries/tailings-monitoring-investment-brief.opf.json#5",
+      "gallery/industries/water-stewardship-grower-brief.opf.json#5",
+      "gallery/presentation-types/manager-training-deck.opf.json#5",
+      "gallery/presentation-types/product-launch-narrative.opf.json#5",
+      "gallery/presentation-types/research-findings-report.opf.json#5"
+    ],
+    "outerBoxesChanged": false,
+    "report": "https://github.com/OpenPresentation/opf-render/blob/codex/shared-quote-integration-20260909/docs/evidence/shared-quote-raster-review.json"
+  },
+  "remainingGates": [
+    "Coherent source and packed four-repository coordinator, including immutable candidate CI refs and separate published/candidate baselines",
+    "Remote CI and review before merge/publication",
+    "Registry installs and deployments after future dependency-ordered releases"
+  ],
+  "limits": [
+    "Advance-based part boxes are not exact glyph outlines; browser overhangs into the inset are reported.",
+    "Native quote reimport retains text blocks but loses OPF quote structure, font scheme and readability policy.",
+    "Calibri reference font bytes are local and are not redistributed; native raster differences are observations, not equivalence thresholds.",
+    "Code/metric/timeline/chart internals, full guarded repair, Auto arrange, broad font/shaping compatibility and macOS evidence remain unfinished."
+  ]
+}

@@ -42,8 +42,10 @@ const fixtureBytes=await readFile('docs/evidence/payload-fit-gaps-2026-09-09.opf
 const fixture=JSON.parse(fixtureBytes);
 const results=[];
 for (const dimensions of [{width:1280,height:720},{width:540,height:960}]) {
-  for (const overflowing of [false,true]) {
-    const quote={...fixture.slides[0].quote,...(overflowing?{}:{attribution:'Preserved author',source:'Preserved source'})};
+  for (const scenario of ['short','expanded-footer','irreducible']) {
+    const overflowing=scenario==='irreducible';
+    const quote={...fixture.slides[0].quote,...(scenario==='short'?{attribution:'Preserved author',source:'Preserved source'}:
+      overflowing?{attribution:fixture.slides[0].quote.attribution.repeat(10)}:{})};
     const deck={...fixture,design:{...fixture.design,dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96}},slides:[{quote}]};
     assert.ok(validatePresentation(deck).valid,'Probe inputs must use actual schema-valid dimensions');
     const bound=resolvePresentation(deck,{textMeasurement:registry.textMeasurement}).slides[0];
@@ -54,11 +56,12 @@ for (const dimensions of [{width:1280,height:720},{width:540,height:960}]) {
     assert.equal(layout.parts[1].text,quote.attribution+(quote.source?` - ${quote.source}`:''));
     assert.equal(layout.textMeasurement,'provided');
     assert.ok(layout.parts.every(part=>part.fit.fontSize>=part.minFontSize));
+    if (scenario==='expanded-footer') assert.ok(layout.parts[1].box.height>40,'Use available internal space before changing the outer grid');
     if (overflowing) {
       assert.ok(layout.diagnostics.some(item=>item.reason==='text-fit'&&item.parts[0]==='footer'));
       assert.throws(()=>layoutQuote(quote,bound.geometry.items[0].box,{...options,overflow:'error'}),OPFCompositionError);
     }
-    results.push({dimensions,overflowing,layout});
+    results.push({dimensions,scenario,overflowing,layout});
   }
 }
 const fontHashes=[];
@@ -85,7 +88,7 @@ async function fingerprint(file) {
   }
 }
 await fingerprint(path.join(dist,'composition.js'));
-const report={scope:'Unreleased standalone core source API with the release-plan registry renderer and open-font advances. Existing composition/render/export are unchanged; no browser glyph or native raster equivalence claim.',
+const report={scope:'Unreleased quote-flow core API with the release-plan registry renderer used only to supply existing outer boxes and open-font advances. This probe does not verify the candidate renderer/converter integrations or browser/native raster equivalence.',
   fixtureSha256:hash(fixtureBytes),sourceHashes,runtimeHashes,fontHashes,packages:[...checked.values()].map(({manifest,integrity})=>({name:manifest.name,version:manifest.version,integrity})),results};
 if (output) await writeFile(output,JSON.stringify(report,null,2)+'\n');
 console.log(`Verified ${results.length} wide/portrait quote layouts with exact installed font measurements.`);

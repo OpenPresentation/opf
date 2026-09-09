@@ -70,22 +70,22 @@ console.log(result.explanation.textMeasurement);
 console.log(result.explanation.unmeasuredPayloads);
 ```
 
-`resolvedOptions` supplies the same dimensions, layout, fonts and optional width provider as the preview. The versioned `grid-score-v1` explanation records each container in parent-before-child order. `lowest-score` reports the candidates actually tried; `configured-mode` respects resolved row/column/grid intent and returns no invented candidates. `promoted-regions` leaves region placement fixed and has no selected column count. Empty slides have no decisions. Automatic search tries one through `min(slotCount, columns ?? 6)` columns, in ascending order; ties retain the first candidate. Reserved placeholders count as slots. The schema caps an explicit candidate limit at twelve columns.
+`resolvedOptions` supplies the same dimensions, layout, fonts and optional width provider as the preview. The versioned `grid-score-v2` explanation records each container in parent-before-child order. `lowest-score` reports the candidates actually tried; `configured-mode` respects resolved row/column/grid intent and returns no invented candidates. `promoted-regions` leaves region placement fixed and has no selected column count. Empty slides have no decisions. Automatic search tries one through `min(slotCount, columns ?? 6)` columns, in ascending order; ties retain the first candidate. Reserved placeholders count as slots. The schema caps an explicit candidate limit at twelve columns.
 
 Each candidate has `columns`, `rows`, `score` and additive `penalties`:
 
 | Penalty | Rule |
 | --- | --- |
 | `cellProportions` | Sum of `abs(log(cellAspect / 1.6))` for descendant leaves |
-| `fontReduction` | Sum of the reduction from 25 reference pixels for supported text-like leaves |
-| `textOverflow` | 1,000 per text-like leaf still overflowing at its effective minimum |
+| `fontReduction` | Reduction from 25 reference pixels for text-like leaves; quotes sum requested-minus-fitted sizes for both parts, divided by canvas scale |
+| `textOverflow` | 1,000 per overflowing text-like leaf or complete quote, regardless of the number of quote failure reasons |
 | `tableOverflow` | 1,000 per table whose shared cell layout overflows |
 | `smallCells` | 100 per leaf narrower than 100 or shorter than 60 reference pixels |
 | `emptySlots` | 2 per unused position in the candidate grid's final row |
 
 Scores are preference costs, not quality percentages or guarantees. Floating-point summation can make the component total differ slightly from `score`. Parent scoring uses descendant explicit arrangements or geometric automatic seeds; child automatic grids are optimized only after selecting the parent. Candidate scores therefore describe the bounded search, not a full assessment of the final optimized subtree. Heading fit remains in ordinary diagnostics, outside body-grid scoring. A strict-fit rejection exposes the explanation on `OPFCompositionError` when requested.
 
-`textMeasurement` is `estimated` without a provider and `provided` with one. A provided width function does not establish font provenance, glyph coverage, shaping or native raster fidelity. Text, rich text, lists, code and table cells participate in the current fit model. `unmeasuredPayloads` identifies images, video, charts, metrics, quotes, timelines and code whose complete internal layout is not assessed. Quote body text and code source are scored, but their complete styled body/footer or language-label arrangements are not shared yet. Media aspect ratios, chart labels, metric labels and timeline annotations remain gaps. A zero score or empty diagnostics is not proof that those payloads fit.
+`textMeasurement` is `estimated` without a provider and `provided` with one. A provided width function does not establish font provenance, glyph coverage, shaping or native raster fidelity. Text, rich text, lists, quotes and table cells participate in the current fit model. `unmeasuredPayloads` identifies images, video, charts, metrics, timelines and code whose complete internal layout is not assessed. Both quote parts use shared geometry; code source is scored but its language label and insets remain incomplete. Media aspect ratios, chart labels, metric labels and timeline annotations remain gaps. A zero score or empty diagnostics is not proof that those payloads fit.
 
 This milestone exposes the existing search for inspection. Guarded layout repairs, automatic weight allocation, content-aware candidate improvements, a common payload-internal measurement model, CLI explanations and a canvas **Auto arrange** preview/undo operation remain subsequent work. It does not silently paginate or rewrite a document.
 
@@ -104,11 +104,11 @@ const single = paginateSlide(deck.slides[0], { width: 1280, height: 720, minFont
 
 Pagination is an authoring operation. It produces ordinary OPF slides; previews and PPTX export consume those exact pages. It preserves the input, body order, nested groups, promoted regions, rich-text formatting, and source text characters. Plain text and rich runs split at grapheme boundaries, preferring sentence/paragraph breaks and then word breaks. Lists split between items, tables between rows with column labels repeated, and code splits without rewriting its source. Indivisible payloads remain intact. Existing track weights continue to apply to positions on each resulting page.
 
-The default readability target is 24 reference pixels for body text; a higher existing minimum is respected within each payload’s requested font size. Small-format payloads such as table cells retain their own requested typography. Pagination relies on the shared engine's estimates; it is not a guarantee that every host font renders identically. Headings repeat unchanged, speaker notes remain on the first page, and continuation IDs avoid existing deck IDs. `pages[].mappings` records full source/output paths and half-open text or item ranges. Text offsets use UTF-16, so source strings can be reconstructed exactly.
+The default readability target is 24 reference pixels. In the next coordinated release, returned slides persist that floor in `composition.minFontSize`, including an already-fitting one-page result; existing higher minima and strict overflow policies remain intact. Quotes can raise their nominal body/footer sizes to the floor. Other small-format payloads such as table cells retain their existing typography caps. Pagination relies on the shared engine's estimates; it is not a guarantee that every host font renders identically. Headings repeat unchanged, speaker notes remain on the first page, and continuation IDs avoid existing deck IDs. `pages[].mappings` records full source/output paths and half-open text or item ranges. Text offsets use UTF-16, so source strings can be reconstructed exactly. Quote bodies split at grapheme boundaries and repeat complete attribution/source fields on each page. An irreducible footer rejects the whole operation, including a quote with an empty body after earlier content.
 
 If a heading, individual list item, table row, or other atomic payload cannot fit on an otherwise empty page, `OPFPaginationError` returns actionable diagnostics. There is no partial output. `maxSlides` defaults to 100, and a layout-evaluation limit bounds work on pathological input. Specialized chart and timeline internals still require visual inspection; their complete density models remain outstanding.
 
-The editor's `editor.paginateSlide(index)` is one validated transaction with undo/redo. It returns `{change, pagination}`; an already-fitting slide returns `change: null`. The playground includes an overflowing draft and **Split overflow** action. The CLI writes a new file and refuses to overwrite an existing one:
+The editor's `editor.paginateSlide(index)` is one validated transaction with undo/redo. It returns `{change, pagination}`. The next coordinated editor release commits a one-page readability-policy change too; repeating the operation after the policy is recorded returns `change: null`. The playground includes an overflowing draft and **Split overflow** action. The CLI writes a new file and refuses to overwrite an existing one:
 
 ```sh
 node packages/cli/dist/index.js paginate input.opf.json output.opf.json
@@ -123,7 +123,7 @@ SVG embeds raster data URI images locally. Remote and file images require a host
 See [the complete example](../examples/technical/dynamic-composition.opf.json) and [local ecosystem verification](ecosystem-development.md).
 
 
-## Quote internals (unreleased, standalone API)
+## Quote internals (unreleased coordinated integration)
 
 The next core API adds `layoutQuote(value, box, options)` from the root or composition entrypoint. Pass validated quote content (object or string shorthand), its allocated reference-pixel box, resolved `fonts`, `textMeasurement`, `scale` (canvas short edge / 720), effective `minFontSize`, `overflow` policy and its source `path`.
 
@@ -131,7 +131,11 @@ The result contains `parts` for the body and any nonempty footer, exact display 
 
 Check `overflow` and `diagnostics` before accepting the parts. Invalid available dimensions remain visible with `fit` absent, and `overflow: 'error'` throws `OPFCompositionError`. Diagnostics distinguish invalid part space, parts outside their cell, text that exceeds its reserved space, and overlapping line rectangles. Those rectangles are conservative text-layout bounds, not measured glyph outlines. The readability floor is scaled once and can raise the nominal body (28) or footer (17) size; it is never silently capped below the selected floor.
 
-`quote-insets-v1` deliberately retains the existing fixed 18-reference-pixel insets, 40-pixel footer and 18-pixel separation while font sizes scale with the canvas. A long footer may still be impossible within that reservation and must report failure. This standalone primitive does not yet change `composeSlide`, preview, export or pagination; shared consumer integration and repair remain pending. Core 0.7.0 does not include it.
+`quote-flow-v1` keeps 18-reference-pixel outer insets and an 18-pixel body/footer gap while fonts scale with the canvas. A 40-pixel footer is a whitespace preference. The allocator expands it for long sources or compacts it for dense bodies, trying at most the nominal and minimum footer sizes and selecting the fitting pair with least total font reduction. If neither fits, it returns floor-size failure diagnostics. This is a bounded internal allocation step, not a complete layout-repair engine.
+
+`composeSlide` scores both parts and accepts geometry against the final rounded item box. Each quote item carries `quoteLayout`; its compatibility `text` field is the same fit object as the quote body, including generated quotation marks. Consumers needing original offsets must use the explicit `sources` mappings. The coordinated renderer and PPTX candidates consume these parts without another measurement/style-resolution pass. Missing geometry or invalid part boxes reject rendering/export rather than omitting content. These APIs and consumer changes are absent from published core 0.7.0/renderer 0.5.1/PPTX 0.5.2.
+
+Browser glyph bounds can extend slightly beyond advance-based part boxes into the reserved inset. Current loaded-font tests record those overhangs, verify glyph containment inside the full quote cell and check body/footer separation. Native PowerPoint fixtures separately verify text, sizes, cell containment, save/reopen and reimport. Neither test establishes universal pixel equivalence. Original requested-font provenance through host substitutions and non-quote payload internals remain open requirements.
 
 ## Resizing in the preview
 

@@ -44,6 +44,21 @@ test('shorthand and empty metadata preserve schema paths without an invented foo
   }
 });
 
+test('body and footer share available space before shrinking text or changing the outer arrangement', () => {
+  const expanded=layoutQuote({text:'Short body',attribution:'Long attribution '.repeat(60)},cell);
+  assert.equal(expanded.overflow,false);
+  assert.ok(expanded.parts[1].box.height>40);
+  assert.equal(expanded.parts[0].fit.fontSize,28);
+  assert.equal(expanded.parts[1].fit.fontSize,17);
+  assert.equal(expanded.algorithm,'quote-flow-v1');
+  const compact=layoutQuote({text:'Keep the complete body. '.repeat(10),attribution:'Author'},{x:0,y:0,width:300,height:230});
+  assert.equal(compact.overflow,false);
+  assert.equal(compact.parts[0].fit.fontSize,16);
+  assert.equal(compact.parts[1].fit.fontSize,16);
+  assert.ok(compact.parts[1].box.height<40);
+  assert.ok(Math.abs(compact.parts[1].box.y-(compact.parts[0].box.y+compact.parts[0].box.height)-18)<1e-8);
+});
+
 test('long footer, body/footer collision and strict rejection remain explicit without source truncation', () => {
   const value={text:'A short quote',attribution:'Long attribution '.repeat(100)};
   const result=layoutQuote(value,cell,{path:'slides.0.quote'});

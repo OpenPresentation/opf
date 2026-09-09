@@ -40,7 +40,7 @@ assert.throws(()=>paginateSlide(slide,{maxSlides:1}),OPFPaginationError);
 assert.throws(()=>paginateSlide({title:original,text:'body'}),OPFPaginationError);
 assert.throws(()=>paginateSlide({items:[original]}),OPFPaginationError);
 assert.throws(()=>paginateSlide({text:'x'},{maxSlides:0}),RangeError);
-assert.deepEqual(paginateSlide({text:'Already fits'}).slides,[{text:'Already fits'}]);
+assert.deepEqual(paginateSlide({text:'Already fits'}).slides,[{text:'Already fits',composition:{minFontSize:24}}]);
 assert.deepEqual(wrapText('👨‍👩‍👧‍👦👨‍👩‍👧‍👦',10,16),['👨‍👩‍👧‍👦','👨‍👩‍👧‍👦']);
 console.log('Pagination: exact text/rich-run preservation, groups, lists, tables, regions, mappings, IDs, limits and fit passed.');
 const {paginatePresentation}=await import('../dist/pagination.js');
