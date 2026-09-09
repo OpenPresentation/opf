@@ -2,6 +2,17 @@
 
 The coordinated candidate now implements shared composition/preview/export quote geometry. All work uses branch `codex/shared-quote-integration-20260909` in the four public repositories. Core, renderer and PPTX retain their published manifest versions until release preparation; these branches are source candidates, not registry packages.
 
+Portable source checkpoints (fetch from GitHub; no old-machine artifacts required):
+
+| Repository | Tested implementation commit |
+| --- | --- |
+| OpenPresentation/opf | `7b8633a27a9b1fda9daefb3f57cd1b6a4334090d` |
+| OpenPresentation/opf-render | `7f08cf9e6db1f5da58b96ca1625d9ae2614ea59b` |
+| OpenPresentation/opf-pptx | `829103b67fdc96ae977bbb05f3e94457620645cd` |
+| OpenPresentation/opf-editor | `a143ee7b1c06b6cb7fbca482927661ca2b208226` |
+
+[Source-bound browser/native summary](../evidence/shared-quote-integration-2026-09-09.json), [41-slide raster review](https://github.com/OpenPresentation/opf-render/blob/7f08cf9e6db1f5da58b96ca1625d9ae2614ea59b/docs/evidence/shared-quote-raster-review.json), and [native report/contact sheets](https://github.com/OpenPresentation/opf-pptx/tree/829103b67fdc96ae977bbb05f3e94457620645cd/docs/evidence/shared-quote-integration) are committed. Native scripts in that converter commit regenerate the twelve local fixtures using Windows Calibri; font bytes are never committed. Clone these repositories as siblings, install each locked dependency set, build core, then use `node scripts/link-ecosystem.mjs --packages-only`. The editor browser harness also needs its installed `@openpresentation/opf-pptx` linked to the converter candidate; the generic linker currently links core/renderer only. Extend and test that setup as part of the next coordinator gate, rather than accidentally testing an older registry converter.
+
 `quote-flow-v1` allocates source space before shrinking or rearranging: fixed 18px insets/gap, preferred 40px footer, at most nominal/floor footer trials, least total font reduction among fitting trials. `grid-score-v2` measures both quote parts, charges one overflow penalty per leaf, and retains explicit modes, weights, source order and parent-before-child search. Accepted fits use rounded boxes and are reused by renderer/PPTX without another fit/style pass. Strict descendant-path failures and tiny unusable boxes reject explicitly. Source content is unchanged; `item.text` aliases the body fit including generated quotation marks, while `sources` maps original text offsets.
 
 Pagination persists evaluated readability floors and retains exact quote-body fragments, metadata and repeated attribution/source. An empty-body quote with an irreducible source after earlier content now rejects instead of being dropped. The editor records a one-page policy change in undo history; a repeated unchanged operation is a no-op.
@@ -12,7 +23,9 @@ Edge 152 checks ten wide/portrait quote cases with four loaded open font faces, 
 
 Editor integration starts from fetched main `ccd42d9276f7e47a545205469dc2665e03c28a8f`. Its offline browser harness covers source editing/undo, one-page readability preview/undo, native export and text reimport/undo. OOXML reimport currently flattens quotes into editable text blocks and does not restore the OPF quote structure, font scheme or readability policy. Preserve OPF as the authoring source; semantic/layout round-trip remains a goal gap.
 
-Remaining gates: finish the coherent four-repository source/packed coordinator and CLI checks, update its immutable source refs and separate candidate/published raster baselines, then run remote CI and review. Do not point actual registry verification refs at unpublished tests. No candidate is merged, published or deployed yet. Broader repair, Auto arrange, code/metric/timeline/chart internals, original requested-font provenance, multilingual shaping, Aptos Display fallback and native macOS evidence remain unfinished.
+Core/CLI typechecks, downstream metadata/syntax checks, all six skill checks and text integrity pass. CLI Node 24 passes 11 node tests and 69 command checks; Windows file-symlink rejection is explicitly skipped without that privilege and remains covered by Unix CI.
+
+Remaining gates: finish the coherent four-repository source/packed coordinator and packed CLI checks, update its immutable source refs and separate candidate/published raster baselines, then run remote CI and review. Do not point actual registry verification refs at unpublished tests. No candidate PR is opened yet; no candidate is merged, published or deployed. Broader repair, Auto arrange, code/metric/timeline/chart internals, original requested-font provenance, multilingual shaping, Aptos Display fallback and native macOS evidence remain unfinished.
 
 ## Original integration audit
 
