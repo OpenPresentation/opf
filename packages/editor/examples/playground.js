@@ -4,7 +4,8 @@ import {installTransferControls} from './transfer-controls.js';
 import { createEditorSession } from '../src/index.js';
 import {createCanvasEditor} from '../src/canvas.js';
 import {loadBrowserFontRegistry} from '@openpresentation/opf-render/fonts-browser';
-import { renderSvg } from '@openpresentation/opf-render';
+import { renderSvg } from '@openpresentation/opf-render/svg';
+import { installPptxExport } from './pptx-controls.js';
 
 const fontFaces = await fetch('./fonts.json').then(response => {
   if (!response.ok) throw new Error('Bundled fonts are unavailable. Rebuild the editor demo.');
@@ -222,6 +223,7 @@ render();
 
 const galleryConfig=await fetch('./galleries.json').then(response=>{if(!response.ok)throw new Error('Gallery configuration unavailable');return response.json();}).catch(()=>[{name:'PPTX.gallery',url:'https://www.pptx.gallery/registry.json'}]);
 installTransferControls({editor,getCanvas:()=>canvas,getSlideIndex:()=>slideIndex,getSelectedPath:()=>selectedPath,setSlideIndex:value=>{slideIndex=value;},status,renderOptions:layoutOptions,galleries:galleryConfig});
+installPptxExport({editor,getCanvas:()=>canvas,renderOptions:layoutOptions,status});
 
 let propertiesInspector;
 const propertiesDialog=element('properties-dialog');
