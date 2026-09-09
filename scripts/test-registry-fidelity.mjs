@@ -27,8 +27,13 @@ for(const [repo,tests] of [['opf-render',['webp.mjs','jpeg-orientation.mjs','ric
  execFileSync('git',['archive',ref,'test','--output',archive],{cwd:path.resolve(root,'..',repo)});
  execFileSync('tar',['-xf',archive,'-C',directory]);
  const installed=path.dirname(require.resolve('@openpresentation/'+repo+'/package.json'));
- await symlink(path.join(installed,'dist'),path.join(directory,'dist'),process.platform==='win32'?'junction':'dir').catch(e=>{if(e.code!=='EEXIST')throw e});
- assert.equal(await realpath(path.join(directory,'dist')),await realpath(path.join(installed,'dist')),'Test must execute the installed dist files');
+ const shipped=JSON.parse(await readFile(path.join(installed,'package.json'),'utf8'));
+ // Newer PPTX smoke fixtures reference the shipped, hash-verified vendor code.
+ // Link the actual installed directory, never a source checkout substitute.
+ for(const part of ['dist',...(shipped.files?.includes('vendor')?['vendor']:[])]){
+  await symlink(path.join(installed,part),path.join(directory,part),process.platform==='win32'?'junction':'dir').catch(e=>{if(e.code!=='EEXIST')throw e});
+  assert.equal(await realpath(path.join(directory,part)),await realpath(path.join(installed,part)),`Test must execute the installed ${part} files`);
+ }
  for(const test of tests){
   const env={...process.env};
   for(const key of ['NODE_OPTIONS','OPF_TEST_RASTER_MODULE','OPF_TEST_PPTX_MODULE','OPF_GOLDEN_BASELINE','OPF_EXAMPLES_DIR','OPF_GOLDEN_OUT','OPF_GOLDEN_SCALE']) delete env[key];

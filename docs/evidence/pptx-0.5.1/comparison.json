@@ -1,0 +1,107 @@
+{
+  "packages": {
+    "opf": "0.7.0",
+    "opf-render": "0.5.0",
+    "opf-pptx": "0.5.1"
+  },
+  "packageSources": {
+    "opf": {
+      "version": "0.7.0",
+      "source": "registry",
+      "integrity": "sha512-ZYODnLgMSG1129eujM4CDGpkcF5CLoKr3bkZ713L04Gvh8VTHOudfPM4ICqngMBpRtcRXyoGaVSllLq2djIo1Q=="
+    },
+    "opf-render": {
+      "version": "0.5.0",
+      "source": "registry",
+      "integrity": "sha512-VsUTeRaOS00cnQl9z02dvQRuxSP/8ylNNozD86QhwZFxrlOBhpLOWRlq17yAWF4qAYxS2V1Gl9n9SVouYfaOEw=="
+    },
+    "opf-pptx": {
+      "version": "0.5.1",
+      "source": "registry",
+      "integrity": "sha512-iXUW3ex9fMunbTuk0L+3BCU32g5oHkuZ7JLXyeteRrW3BaVtK4xagN0/4AAh0htXOgRj1NT+412u5jCwQCHS8w=="
+    }
+  },
+  "generationHashes": {
+    "source.pptx": "5fad86d8cc216ab3e1628bda7c01c7cde72f42ceeb539b7fb61fde7087d2986d",
+    "renderer-1.png": "fee260fed30fad70d62e932b0dc0f0d930c40f5ece3cd9cd19c7de8f8f782d2a",
+    "renderer-2.png": "c0d4d0e9fdfcb60a585e96c7434e79edf2980ca8bd3f188dd5443294ab3eaf88",
+    "renderer-3.png": "8b250d60230344e964f329bd43384bbd1e32361d205da31f293f17de96207c70"
+  },
+  "native": {
+    "rasterWidth": 1280,
+    "powerPointVersion": "16.0",
+    "rasterHeight": 720,
+    "slides": 3,
+    "tableCount": 2,
+    "tables": [
+      {
+        "columns": 3,
+        "slide": 2,
+        "rows": 3
+      },
+      {
+        "columns": 3,
+        "slide": 3,
+        "rows": 3
+      }
+    ],
+    "sourcePptxSha256": "5fad86d8cc216ab3e1628bda7c01c7cde72f42ceeb539b7fb61fde7087d2986d",
+    "editReopened": true
+  },
+  "nativeFeatures": [
+    {
+      "feature": "Lower merged-cell dash",
+      "coloredPixels": 36,
+      "minimum": 15
+    },
+    {
+      "feature": "Hidden lower merge border",
+      "unexpectedGreenPixels": 0,
+      "maximum": 0
+    }
+  ],
+  "comparisons": [
+    {
+      "slide": 1,
+      "meanAbsoluteChannelDifference": 3.2766655815972223,
+      "maxChannelDifference": 254,
+      "channelFractionOver10": 0.02250506365740741
+    },
+    {
+      "slide": 2,
+      "meanAbsoluteChannelDifference": 1.8506568287037037,
+      "maxChannelDifference": 254,
+      "channelFractionOver10": 0.012935112847222222
+    },
+    {
+      "slide": 3,
+      "meanAbsoluteChannelDifference": 2.594484230324074,
+      "maxChannelDifference": 254,
+      "channelFractionOver10": 0.016996889467592594
+    }
+  ],
+  "imports": [
+    {
+      "name": "source",
+      "valid": true,
+      "tables": 2,
+      "mergesPreserved": true,
+      "diagnostics": []
+    },
+    {
+      "name": "native-saved",
+      "valid": true,
+      "tables": 2,
+      "mergesPreserved": true,
+      "diagnostics": []
+    },
+    {
+      "name": "native-edited",
+      "valid": true,
+      "tables": 2,
+      "mergesPreserved": true,
+      "diagnostics": []
+    }
+  ],
+  "scope": "Measured native PowerPoint rendering, editable native tables and save/reopen/reimport. Two targeted border raster assertions pass; global pixel differences are observations, not a passing equivalence threshold."
+}

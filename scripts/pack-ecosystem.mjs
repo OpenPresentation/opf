@@ -1,5 +1,6 @@
 // Prepare coordinated, locally installable prereleases without changing registry state.
-import { cp, mkdir, readFile, writeFile, rm } from "node:fs/promises";
+import { cp, mkdir, readFile, writeFile, rm, realpath } from "node:fs/promises";
+import { existsSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
@@ -10,16 +11,21 @@ const packages = [
   ["opf", "packages/javascript", "0.4.0-preview.11"],
   ["opf-render", "../opf-render", "0.1.0-preview.11"],
   ["opf-editor", "../opf-editor", "0.1.0-preview.11"],
-  ["opf-pptx", "../opf-pptx", "0.1.0-preview.11"],
+  ["opf-pptx", process.env.OPF_PPTX_ROOT ?? "../opf-pptx", "0.1.0-preview.11"],
 ];
 const versions = Object.fromEntries(
   packages.map(([name, , version]) => [`@openpresentation/${name}`, version]),
 );
 const artifacts = [];
 await mkdir(out, { recursive: true });
+const actualRoot = await realpath(root), actualOut = await realpath(out);
+if (!actualOut.startsWith(actualRoot + path.sep)) throw new Error('Package artifacts must remain inside this checkout');
 for (const [name, source, version] of packages) {
   const directory = path.resolve(root, source),
     stage = path.join(out, "staging", name);
+  const actualStage = await realpath(stage).catch(error => { if (error.code === 'ENOENT') return path.resolve(stage); throw error; });
+  const actualStageParent = await realpath(path.dirname(stage)).catch(error => { if (error.code === 'ENOENT') return path.resolve(path.dirname(stage)); throw error; });
+  if (!actualStage.startsWith(actualOut + path.sep) || !actualStageParent.startsWith(actualOut + path.sep)) throw new Error('Refusing a staging path outside package artifacts');
   await rm(stage, { recursive: true, force: true });
   await mkdir(stage, { recursive: true });
   const manifest = JSON.parse(
@@ -37,26 +43,38 @@ for (const [name, source, version] of packages) {
   // The stage contains built distributables, so packing never executes a missing source build.
   delete manifest.scripts;
   delete manifest.devDependencies;
-  await cp(path.join(directory, "dist"), path.join(stage, "dist"), {
-    recursive: true,
-  });
-  for (const file of ["README.md", "LICENSE"])
-    await cp(path.join(directory, file), path.join(stage, file));
+  // Preserve every declared distributable, including vendored runtime/license
+  // files. Source package file lists currently contain literal relative paths.
+  for (const file of new Set([...(manifest.files ?? ['dist']), 'README.md', 'LICENSE'])) {
+    if (typeof file !== 'string' || path.isAbsolute(file) || file.split(/[/\\]/).includes('..') || /[*?\[\]{}!]/.test(file)) throw new Error(`Expected a literal contained package file: ${file}`);
+    await cp(path.join(directory, file), path.join(stage, file), { recursive: true });
+  }
   await writeFile(
     path.join(stage, "package.json"),
     JSON.stringify(manifest, null, 2) + "\n",
   );
-  const result = spawnSync(
-    "npm",
-    [
+  const packArgs = [
       "pack",
       "--json",
       "--ignore-scripts",
       "--pack-destination",
       out,
       "--cache",
-      "/tmp/opf-npm-cache",
-    ],
+      path.join(out, 'cache'),
+    ];
+  let npmCommand = 'npm';
+  if (process.platform === 'win32') {
+    const npmEntry = process.env.npm_execpath?.endsWith('npm-cli.js') ? process.env.npm_execpath : (process.env.PATH ?? '').split(path.delimiter).flatMap(directory => [
+      path.join(directory, 'node_modules/npm/bin/npm-cli.js'),
+      path.resolve(directory, '../npm/bin/npm-cli.js'),
+    ]).find(existsSync);
+    if (!npmEntry || !existsSync(npmEntry)) throw new Error('Cannot locate the npm JavaScript entrypoint');
+    npmCommand = process.execPath;
+    packArgs.unshift(npmEntry);
+  }
+  const result = spawnSync(
+    npmCommand,
+    packArgs,
     { cwd: stage, encoding: "utf8" },
   );
   if (result.status !== 0) throw new Error(result.stderr || result.stdout);
