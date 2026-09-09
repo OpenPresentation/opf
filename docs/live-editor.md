@@ -4,11 +4,11 @@ The current local preview provides an embeddable SVG canvas in `@openpresentatio
 
 This is a working preview release, not complete PowerPoint feature coverage. “Pixel perfect” is a fidelity target with specific prerequisites and remaining gaps described below.
 
-## Install the preview packages
+## Install the published packages
 
-The new APIs require the coordinated builds of OPF, the renderer, and the editor. The older registry versions do not contain them. Locally installable npm tarballs are generated under `artifacts/npm/`; `artifacts/npm/README.md` contains the exact install command and `manifest.json` contains versions and SHA-256 digests. These artifacts have **not** been published to npm.
+The verified public set is core 0.7.0, renderer 0.5.0, editor 0.4.0 and PPTX 0.5.1. Install with `npm install @openpresentation/opf@0.7.0 @openpresentation/opf-render@0.5.0 @openpresentation/opf-editor@0.4.0 @openpresentation/opf-pptx@0.5.1`. No paid service or provider account is required. The six agent skills install with `npx @openpresentation/cli@latest skills install`.
 
-To regenerate them from sibling checkouts:
+For library development, separately regenerate unpublished local preview tarballs from sibling checkouts:
 
 ```sh
 pnpm build
@@ -18,6 +18,12 @@ pnpm test:packed-ecosystem
 ```
 
 The packed consumer installs actual tarballs without workspace aliases, exercises editing/SVG/PPTX, checks TypeScript declarations, and bundles a browser entry without Node shims. For a public release, advance source versions and downstream minimums/lockfiles together and follow the release process.
+
+The gallery host example also offers local PPTX file import with preview/diagnostics and editable PowerPoint download. It commits active canvas text before export, shares preview text measurements and applies imports as a single undoable change. Save OPF to preserve the original source; native PowerPoint positions, fonts and unsupported features can change during conversion. The browser E2E checks run offline after loading and inspect the downloaded native merged table, then reimport and undo/redo. Native edit/save/reopen is a separate targeted check, not a pixel-equivalence claim.
+
+`pnpm prepare:gallery:registry` builds host controls from the immutable `exampleRefs.opf-editor` in `release-plan.json` while resolving libraries only from the fresh npm consumer. Package `verificationRefs` continue to point at actual published releases. The gallery manifest records both the example source hashes and registry package integrities. Updating example controls does not imply a new editor library release.
+
+The browser bundle links `playground.js.LEGAL.txt`, included in the hashed resources. It contains bundled license notices and package license files, including the vendored PptxGenJS MIT license. For dependencies that publish only an explicit MIT declaration in their README, the build retains that declaration/attribution and the standard terms; omitted upstream notices use a version-specific source URL and verified supplement hash. License collection runs offline from the verified installation and committed supplement. Runtime JavaScript is not rewritten to normalize comment whitespace.
 
 ## Embed in any browser application
 

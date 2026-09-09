@@ -1,0 +1,75 @@
+{
+  "scope": "Pinned tests and fixtures, installed registry dist files; no source package overrides",
+  "packages": [
+    {
+      "name": "@openpresentation/opf",
+      "version": "0.7.0"
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "version": "0.5.0"
+    },
+    {
+      "name": "@openpresentation/opf-editor",
+      "version": "0.4.0"
+    },
+    {
+      "name": "@openpresentation/opf-pptx",
+      "version": "0.5.1"
+    },
+    {
+      "name": "@openpresentation/cli",
+      "version": "0.5.0"
+    }
+  ],
+  "results": [
+    {
+      "repo": "opf-render",
+      "ref": "9f34d70002307fcb3795de638e7e4bf0605a33f8",
+      "test": "webp.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-render",
+      "ref": "9f34d70002307fcb3795de638e7e4bf0605a33f8",
+      "test": "jpeg-orientation.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-render",
+      "ref": "9f34d70002307fcb3795de638e7e4bf0605a33f8",
+      "test": "rich-table.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-render",
+      "ref": "9f34d70002307fcb3795de638e7e4bf0605a33f8",
+      "test": "golden.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-render",
+      "ref": "9f34d70002307fcb3795de638e7e4bf0605a33f8",
+      "test": "styled-table.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-pptx",
+      "ref": "f7f30082da3568a4f911d42493ffc75c77dd4e14",
+      "test": "dependency-boundary.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-pptx",
+      "ref": "f7f30082da3568a4f911d42493ffc75c77dd4e14",
+      "test": "styled-table.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-pptx",
+      "ref": "f7f30082da3568a4f911d42493ffc75c77dd4e14",
+      "test": "styled-table-import.mjs",
+      "passed": true
+    }
+  ]
+}

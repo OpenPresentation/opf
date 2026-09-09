@@ -1,0 +1,21 @@
+{
+  "rasterWidth": 1280,
+  "powerPointVersion": "16.0",
+  "rasterHeight": 720,
+  "slides": 3,
+  "tableCount": 2,
+  "tables": [
+    {
+      "columns": 3,
+      "slide": 2,
+      "rows": 3
+    },
+    {
+      "columns": 3,
+      "slide": 3,
+      "rows": 3
+    }
+  ],
+  "sourcePptxSha256": "5fad86d8cc216ab3e1628bda7c01c7cde72f42ceeb539b7fb61fde7087d2986d",
+  "editReopened": true
+}

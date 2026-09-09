@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Upgrade the schema declaration generator to 16.0.0. Payloads reached through `Presentation['slides'][number]['blocks']` now reject extra object-literal properties and arbitrary string-key indexing, matching the existing closed JSON Schema. Schema-valid fields, runtime validation and serialized documents are unchanged. Consumers using the old accidental index signature must narrow to a known field or validate external data before use; this type tightening must be called out in the next core release, not republished as 0.7.0.
+
 ## 0.7.0
 
 - Add an object form for table cells: `value`, optional `style`, `colSpan` and `rowSpan`. Existing scalar and rich-array cells remain valid. Styles cover fills, text colors, alignment, padding and individual borders.
