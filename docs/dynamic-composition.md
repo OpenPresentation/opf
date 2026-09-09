@@ -123,6 +123,16 @@ SVG embeds raster data URI images locally. Remote and file images require a host
 See [the complete example](../examples/technical/dynamic-composition.opf.json) and [local ecosystem verification](ecosystem-development.md).
 
 
+## Quote internals (unreleased, standalone API)
+
+The next core API adds `layoutQuote(value, box, options)` from the root or composition entrypoint. Pass validated quote content (object or string shorthand), its allocated reference-pixel box, resolved `fonts`, `textMeasurement`, `scale` (canvas short edge / 720), effective `minFontSize`, `overflow` policy and its source `path`.
+
+The result contains `parts` for the body and any nonempty footer, exact display `text`, source mappings, requested and resolved text styles, and the available boxes/fits. Source ranges use half-open UTF-16 offsets in both the source field and display string; generated quotation marks and the footer separator have no source range. The original content is never modified. A supplied width provider is reported as `provided`; it does not certify shaping or font fidelity.
+
+Check `overflow` and `diagnostics` before accepting the parts. Invalid available dimensions remain visible with `fit` absent, and `overflow: 'error'` throws `OPFCompositionError`. Diagnostics distinguish invalid part space, parts outside their cell, text that exceeds its reserved space, and overlapping line rectangles. Those rectangles are conservative text-layout bounds, not measured glyph outlines. The readability floor is scaled once and can raise the nominal body (28) or footer (17) size; it is never silently capped below the selected floor.
+
+`quote-insets-v1` deliberately retains the existing fixed 18-reference-pixel insets, 40-pixel footer and 18-pixel separation while font sizes scale with the canvas. A long footer may still be impossible within that reservation and must report failure. This standalone primitive does not yet change `composeSlide`, preview, export or pagination; shared consumer integration and repair remain pending. Core 0.7.0 does not include it.
+
 ## Resizing in the preview
 
 Choose **Arrange** in the editor to reveal track dividers. Drag a divider to redistribute the space between adjacent columns (row/grid) or rows (column), including nested groups. Arrow keys make small changes; Shift makes larger changes. Escape discards a pointer draft. One drag creates one undo step, and no content is removed. Strict overflow rejects a resize that violates its fit constraints.

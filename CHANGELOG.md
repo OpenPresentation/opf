@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Add standalone `layoutQuote` measurement for quote body/footer geometry, resolved styles, UTF-16 source ranges, readability floors and explicit internal overflow. It is preparatory: existing composition, renderer and converter calls are not switched to this API yet.
 - Correct incomplete-payload reporting to include code: its language label and internal insets are not yet shared with composition fitting. This coverage correction does not alter geometry or claim to repair overflow.
 - Add opt-in composition explanations with versioned candidate costs, selection reasons, measurement scope and unmeasured payload paths. Explanations preserve existing geometry and measurement calls, including explicit modes, weights and promoted regions, and remain available on strict overflow errors. This exposes the current bounded grid search; it does not certify visual quality or add automatic repairs.
 - Upgrade the schema declaration generator to 16.0.0. Payloads reached through `Presentation['slides'][number]['blocks']` now reject extra object-literal properties and arbitrary string-key indexing, matching the existing closed JSON Schema. Schema-valid fields, runtime validation and serialized documents are unchanged. Consumers using the old accidental index signature must narrow to a known field or validate external data before use; this type tightening must be called out in the next core release, not republished as 0.7.0.

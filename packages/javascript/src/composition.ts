@@ -180,6 +180,118 @@ export function fitText(text: string, box: LayoutBox, requestedSize = 25, minFon
   }
   return { lines, fontSize, lineHeight: fontSize * 1.22, overflow: lines.length * fontSize * 1.22 > box.height + 0.01 || lines.some(line => measure(line, fontSize) > box.width + 0.01) };
 }
+export interface QuoteContent { text: string; attribution?: string; source?: string }
+/** Source and displayed-text ranges are half-open UTF-16 offsets. Added punctuation has no source range. */
+export interface QuoteTextSource {
+  path: string;
+  start: number;
+  end: number;
+  outputStart: number;
+  outputEnd: number;
+}
+export interface QuoteTextPart {
+  role: 'body' | 'footer';
+  path: string;
+  text: string;
+  sources: QuoteTextSource[];
+  /** Available space, before fitting. Invalid dimensions remain visible in failed results. */
+  box: LayoutBox;
+  requestedFontSize: number;
+  minFontSize: number;
+  requestedStyle: TextStyle;
+  style: TextStyle;
+  /** Absent when the available box is invalid; never fit against an invented one-pixel box. */
+  fit?: TextFit;
+}
+export interface QuoteLayoutDiagnostic extends LayoutDiagnostic {
+  reason: 'invalid-part-box' | 'part-outside-cell' | 'text-fit' | 'part-overlap';
+  parts: QuoteTextPart['role'][];
+}
+export interface QuoteLayout {
+  algorithm: 'quote-insets-v1';
+  textMeasurement: 'estimated' | 'provided';
+  parts: QuoteTextPart[];
+  diagnostics: QuoteLayoutDiagnostic[];
+  overflow: boolean;
+}
+export interface QuoteLayoutOptions {
+  /** Canvas short edge divided by 720. Insets retain the current 18 reference-pixel contract. */
+  scale?: number;
+  fonts?: Partial<FontFamilies>;
+  /** Readability floor in reference pixels, before canvas scaling. */
+  minFontSize?: number;
+  overflow?: Composition['overflow'];
+  path?: string;
+  textMeasurement?: TextMeasurement;
+}
+/**
+ * Measure all quote text in one operation for prospective composition/render/export consumers.
+ * This additive API does not change composeSlide selection or paginate content. Callers must
+ * check overflow before accepting the parts. Line boxes are not shaped glyph or native raster bounds.
+ */
+export function layoutQuote(value: string | QuoteContent, box: LayoutBox, options: QuoteLayoutOptions = {}): QuoteLayout {
+  const shorthand = typeof value === 'string';
+  const quote = shorthand ? {text:value} : value;
+  if (!quote || Array.isArray(quote) || typeof quote.text !== 'string' ||
+    [quote.attribution, quote.source].some(field => field !== undefined && typeof field !== 'string')) {
+    throw new TypeError('Quote content must be a string or a text object with optional string attribution/source.');
+  }
+  const scale = options.scale ?? 1, minimum = (options.minFontSize ?? 16) * scale;
+  if (![box.x,box.y,box.width,box.height,scale,minimum].every(Number.isFinite) ||
+    box.width <= 0 || box.height <= 0 || scale <= 0 || minimum <= 0) {
+    throw new RangeError('Quote dimensions, scale and minimum font size must be finite and positive.');
+  }
+  if (options.overflow !== undefined && !['warn','error'].includes(options.overflow)) throw new RangeError('Invalid quote overflow policy.');
+  const path = options.path ?? 'quote';
+  const diagnostics: QuoteLayoutDiagnostic[] = [], parts: QuoteTextPart[] = [];
+  const report = (reason: QuoteLayoutDiagnostic['reason'], diagnosticPath: string, roles: QuoteTextPart['role'][], message: string) =>
+    diagnostics.push({code:'text-overflow',reason,path:diagnosticPath,parts:roles,message});
+  const source = (sourcePath:string, text:string, outputStart:number):QuoteTextSource =>
+    ({path:sourcePath,start:0,end:text.length,outputStart,outputEnd:outputStart+text.length});
+  const add = (role:QuoteTextPart['role'], text:string, sources:QuoteTextSource[], area:LayoutBox, fontSize:number, fontFamily:string, fontWeight:number, partPath:string) => {
+    const requestedStyle:TextStyle = {fontFamily,fontWeight,italic:false,path:partPath};
+    const style = resolveTextStyle({...requestedStyle}, options.textMeasurement);
+    // Unlike fitText's legacy cap, an explicit readability floor can raise the nominal size.
+    const requestedFontSize = Math.max(fontSize * scale, minimum);
+    const part:QuoteTextPart = {role,path:partPath,text,sources,box:area,requestedFontSize,minFontSize:minimum,requestedStyle,style};
+    parts.push(part);
+    if (![area.x,area.y,area.width,area.height].every(Number.isFinite) || area.width <= 0 || area.height <= 0) {
+      report('invalid-part-box',partPath,[role],`Quote ${role} has no usable space after its insets; increase the cell size or change the arrangement.`);
+      return;
+    }
+    if (area.x < box.x || area.y < box.y || area.x+area.width > box.x+box.width+.01 || area.y+area.height > box.y+box.height+.01) {
+      report('part-outside-cell',partPath,[role],`Quote ${role} extends outside its cell; increase the cell size or change the arrangement.`);
+    }
+    part.fit = fitText(text,area,requestedFontSize,minimum,textWidthMeasurer(style,options.textMeasurement));
+    if (part.fit.overflow) report('text-fit',partPath,[role],`Quote ${role} exceeds its reserved space at the readability floor; increase its space or change the arrangement.`);
+  };
+  let footer = '';
+  const footerSources:QuoteTextSource[] = [];
+  for (const field of ['attribution','source'] as const) {
+    const text = quote[field];
+    if (!text) continue;
+    if (footer) footer += ' - ';
+    footerSources.push(source(`${path}.${field}`,text,footer.length));
+    footer += text;
+  }
+  const bodyPath = shorthand ? path : `${path}.text`;
+  add('body',`"${quote.text}"`,[source(bodyPath,quote.text,1)],
+    {x:box.x+18,y:box.y+18,width:box.width-36,height:box.height-(footer?94:36)},
+    28,options.fonts?.heading??'sans-serif',600,bodyPath);
+  if (footer) add('footer',footer,footerSources,
+    {x:box.x+18,y:box.y+box.height-58,width:box.width-36,height:40},
+    17,options.fonts?.body??'sans-serif',500,path);
+  const [body,attribution] = parts;
+  // Conservative occupied line rectangles, not actual glyph outlines. Reserved boxes alone
+  // are insufficient: an overflowing body's rendered lines can reach an otherwise fitting footer.
+  if (body?.fit && attribution?.fit && body.box.y+body.fit.lines.length*body.fit.lineHeight > attribution.box.y+.01 &&
+    attribution.box.y+attribution.fit.lines.length*attribution.fit.lineHeight > body.box.y+.01) {
+    report('part-overlap',path,['body','footer'],'Quote body and footer line boxes overlap; do not accept this layout without more space.');
+  }
+  if (diagnostics.length && options.overflow === 'error') throw new OPFCompositionError(diagnostics);
+  return {algorithm:'quote-insets-v1',textMeasurement:options.textMeasurement?'provided':'estimated',parts,diagnostics,overflow:diagnostics.length>0};
+}
+
 export interface RichTextRun {
   text: string; bold?: boolean; italic?: boolean; underline?: boolean; strikethrough?: boolean;
   color?: string; fontSize?: number; fontFamily?: string; link?: string; superscript?: boolean; subscript?: boolean;
