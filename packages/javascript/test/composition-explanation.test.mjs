@@ -86,9 +86,10 @@ test('equal scores retain the first, lower-column candidate', () => {
 });
 
 test('unsupported internal fit stays visible and strict failures retain their explanation', () => {
-  const fields=['image','video','chart','metric','quote','timeline'];
+  const fields=['image','video','chart','metric','quote','timeline','code'];
   const values=['./image.png','./video.mp4',{type:'bar',data:{columns:['Category','Value'],rows:[['A',1],['B',2]]}},
-    {value:42,label:'Metric'},{text:'Body',attribution:'Footer'},{events:[{when:'Q1',what:'Launch'}]}];
+    {value:42,label:'Metric'},{text:'Body',attribution:'Footer'},{events:[{when:'Q1',what:'Launch'}]},
+    {source:'const value = 42;',language:'Language label'}];
   const slide={blocks:fields.map((field,i)=>({[field]:values[i]}))};
   assert.equal(validatePresentation({slides:[slide]}).valid,true);
   const result=composeSlide(slide,{explain:true});
