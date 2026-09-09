@@ -1233,8 +1233,10 @@ function addMetricPayload(slide, value, region, context, options, path) {
 
 function addQuotePayload(slide, value, region, context, options, path) {
   const quote = isPlainObject(value) ? value : {text: value}, box = pixelBox(region);
-  addMeasuredPayloadText(slide, `"${quote.text ?? ''}"`, {x: box.x + 18, y: box.y + 18, width: Math.max(1, box.width - 36), height: Math.max(1, box.height - 36)}, context, options, {path: path + '.text', fontSize: 28, fontFamily: context.fonts.heading, fontWeight: 600});
-  addMeasuredPayloadText(slide, [quote.attribution, quote.source].filter(Boolean).join(' - '), {x: box.x + 18, y: box.y + box.height - 58, width: box.width - 36, height: 40}, context, options, {path, fontSize: 17, fontWeight: 500, color: context.colors.mutedText});
+  const attribution = [quote.attribution, quote.source].filter(Boolean).join(' - ');
+  // Keep the footer and an 18px gap outside the body's text fitting area.
+  addMeasuredPayloadText(slide, `"${quote.text ?? ''}"`, {x: box.x + 18, y: box.y + 18, width: Math.max(1, box.width - 36), height: Math.max(1, box.height - (attribution ? 94 : 36))}, context, options, {path: path + '.text', fontSize: 28, fontFamily: context.fonts.heading, fontWeight: 600});
+  addMeasuredPayloadText(slide, attribution, {x: box.x + 18, y: box.y + box.height - 58, width: box.width - 36, height: 40}, context, options, {path, fontSize: 17, fontWeight: 500, color: context.colors.mutedText});
 }
 
 function addTimelinePayload(slide, value, region, context, options, path) {

@@ -58,6 +58,35 @@ for (const dimensions of [{widthInches: 1280 / 96, heightInches: 720 / 96}, {wid
   }
 }
 assert.ok(checkedText > 30);
+let separatedQuotes = 0, overflowQuotes = 0;
+for (const dimensions of [{width:1280,height:720},{width:540,height:960}]) for (const repeats of [12,16,20,24,80]) {
+  const deck = {design:{dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96},fontScheme:'roboto'},slides:[{title:'A quote and its source',quote:{text:'A shared layout keeps the evidence readable when the words change. '.repeat(repeats),attribution:'A reviewer',source:'Recorded interview'}}]};
+  const diagnostics = [];
+  const bytes = await toPptx(deck,{textMeasurement:fonts.textMeasurement,onDiagnostic:value=>diagnostics.push(value)});
+  const size = all(parser.parse(new TextDecoder().decode(unzipSync(bytes)['ppt/presentation.xml'])),'p:sldSz')[0];
+  assert.equal(Number(size.cx),dimensions.width*9525);
+  assert.equal(Number(size.cy),dimensions.height*9525);
+  if (diagnostics.some(value=>value.code==='text-overflow')) {
+    deck.slides[0].composition = {overflow:'error'};
+    await assert.rejects(()=>toPptx(deck,{textMeasurement:fonts.textMeasurement}),{code:'layout-overflow'});
+    overflowQuotes++;
+    continue;
+  }
+  const slide = parser.parse(new TextDecoder().decode(unzipSync(bytes)['ppt/slides/slide1.xml']));
+  const shapes = all(slide,'p:sp').filter(shape=>all(shape,'a:t').length);
+  const value = shape=>all(shape,'a:t').map(content).join('');
+  const footer = shapes.find(shape=>value(shape)==='A reviewer - Recorded interview');
+  assert.ok(footer,'Native footer text retained');
+  const footerTop = Number(all(footer,'a:xfrm')[0]['a:off'].y);
+  const body = shapes.filter(shape=>shape!==footer && value(shape)!=='A quote and its source');
+  assert.ok(body.length>1);
+  for (const shape of body) {
+    const transform = all(shape,'a:xfrm')[0];
+    assert.ok(Number(transform['a:off'].y)+Number(transform['a:ext'].cy)<=footerTop,'Fitted native quote lines cannot overlap attribution');
+  }
+  separatedQuotes++;
+}
+assert.ok(separatedQuotes>=4&&overflowQuotes>=1,'Native long quotes cover fitting and explicit overflow');
 const chartDeck = {slides: [{title: 'Readable native axes', chart: {type: 'line', data: {columns: ['Quarter', 'Value'], rows: [['Q1', 10], ['Q2', 20]]}}}]};
 const chartOptions = {textMeasurement: fonts.textMeasurement};
 const chartSvg = parser.parse(renderSvgDeck(chartDeck, chartOptions)[0]);
@@ -72,4 +101,4 @@ for (const kind of ['c:catAx', 'c:valAx']) {
   const properties = all(axis, 'a:defRPr')[0];
   assert.equal(all(properties, 'a:srgbClr')[0]?.val.toUpperCase(), axisLabel.fill.replace('#', '').toUpperCase(), 'Native axis labels follow readable preview colors');
 }
-console.log(`Native content layout passed: ${checkedText} payload text lines match actual renderer typography/geometry, code panel styling, quote source and editable timeline markers across two canvas sizes.`);
+console.log(`Native content layout passed: ${checkedText} payload text lines match actual renderer typography/geometry; ${separatedQuotes} long quotes preserve footer separation and ${overflowQuotes} oversized quotes reject in strict mode; code styling, quote source and editable timeline markers across two canvas sizes.`);

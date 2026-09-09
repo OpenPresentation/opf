@@ -4,7 +4,7 @@ Pure local PowerPoint conversion tooling for Open Presentation Format documents.
 
 ## Scope
 
-The unreleased 0.5.2 candidate improves native metrics, quotes, code panels, timelines and chart-label contrast. See [native content evidence and remaining gates](docs/native-content-candidate.md). Existing 0.5.1 remains the published baseline until review, packed/browser/native checks and publication complete.
+Version 0.5.2 improves native metrics, quotes, code panels, timelines and chart-label contrast, with renderer 0.5.1 compatibility and fitted quote footer separation. See [native content evidence and limitations](docs/native-content-candidate.md). Native chart geometry and general scalar-text wrapping remain different from preview; editability and valid reimport do not establish raster equivalence.
 
 - Package: `@openpresentation/opf-pptx`
 - Repository: `OpenPresentation/opf-pptx`

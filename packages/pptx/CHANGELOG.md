@@ -1,8 +1,8 @@
 # Changelog
 
-## 0.5.2 — unreleased
+## 0.5.2
 
-- Match metric, quote, code and timeline payload geometry and measured typography to renderer 0.5.0. Preserve quote attribution and source, export timeline lines/markers as editable native shapes, and prevent PowerPoint from rewrapping fitted payload lines.
+- Match metric, quote, code and timeline payload geometry and measured typography to renderer 0.5.1. Reserve quote footer space before fitting, preserve attribution and source, export timeline lines/markers as editable native shapes, and prevent PowerPoint from rewrapping fitted payload lines.
 - Use readable theme colors for native chart axis and legend labels while preserving editable Office charts. Native axis ticks/plot geometry and general scalar-text wrapping still differ from preview.
 - Add cross-renderer typography/geometry checks and a 19-slide real PowerPoint candidate comparison. File editability and schema-valid reimport do not establish complete raster or arbitrary Office round-trip equivalence.
 

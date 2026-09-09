@@ -25,7 +25,7 @@ let browser;
 try {
   browser = await chromium.launch({ channel: process.platform === 'win32' && !process.env.CI ? 'msedge' : undefined });
   const report = [];
-  for (const suite of ['webp-fallback', 'native-rich-table-import', 'native-table-styles', 'native-styled-table-import']) {
+  for (const suite of ['webp-fallback', 'native-rich-table-import', 'native-table-styles', 'native-styled-table-import', 'native-content-layout']) {
     const page = await browser.newPage();
     const errors = [];
     page.on('pageerror', error => errors.push(error.message));

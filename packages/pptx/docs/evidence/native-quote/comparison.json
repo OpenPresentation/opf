@@ -1,0 +1,330 @@
+{
+  "runtime": {
+    "dist/index.js": "b8b67e2bfef63331629550d5b170e06f792ac846ac1f1843216ad09c4af0ef66",
+    "package.json": "4b3114bd998394cbc61a19c8d1bc3ed50762d80920e2d1e8a444ae94f8e0d92f",
+    "package-lock.json": "599a4e38b67d807d81a094213969eb1cdb7484d8d53c5a5444fec6a20f3437ca"
+  },
+  "fontHashes": {
+    "calibri.ttf": "57e93ff143572bcc092c1f56202d43ddc07bb119aa104c6d7af163470fb551f6",
+    "calibrib.ttf": "0a8296747536ead27d5f48f67e911cc3b207742b3f704e66995251d12fd422e5",
+    "calibrii.ttf": "7f150e9eabe5db3e1b0f9469dca5c96176bc2fbb306dc9d48b7029dc69c52763",
+    "calibriz.ttf": "760539bfedbe24e7853ca8a621d9cb1f3de52036c116e81aae36b33c4ab60a7c"
+  },
+  "fontSubstitutions": [
+    {
+      "requestedFamily": "Calibri",
+      "sourceFamily": "Calibri",
+      "resolvedFamily": "Calibri",
+      "requestedWeight": 600,
+      "resolvedWeight": 700,
+      "italic": false,
+      "compatibility": "visual",
+      "path": "slides.0.quote.text"
+    },
+    {
+      "requestedFamily": "Calibri",
+      "sourceFamily": "Calibri",
+      "resolvedFamily": "Calibri",
+      "requestedWeight": 500,
+      "resolvedWeight": 400,
+      "italic": false,
+      "compatibility": "visual",
+      "path": "slides.0.quote"
+    },
+    {
+      "requestedFamily": "Calibri",
+      "sourceFamily": "Calibri",
+      "resolvedFamily": "Calibri",
+      "requestedWeight": 600,
+      "resolvedWeight": 700,
+      "italic": false,
+      "compatibility": "visual",
+      "path": "slides.1.quote.text"
+    },
+    {
+      "requestedFamily": "Calibri",
+      "sourceFamily": "Calibri",
+      "resolvedFamily": "Calibri",
+      "requestedWeight": 500,
+      "resolvedWeight": 400,
+      "italic": false,
+      "compatibility": "visual",
+      "path": "slides.1.quote"
+    },
+    {
+      "requestedFamily": "Calibri",
+      "sourceFamily": "Calibri",
+      "resolvedFamily": "Calibri",
+      "requestedWeight": 600,
+      "resolvedWeight": 700,
+      "italic": false,
+      "compatibility": "visual",
+      "path": "slides.2.quote.text"
+    },
+    {
+      "requestedFamily": "Calibri",
+      "sourceFamily": "Calibri",
+      "resolvedFamily": "Calibri",
+      "requestedWeight": 500,
+      "resolvedWeight": 400,
+      "italic": false,
+      "compatibility": "visual",
+      "path": "slides.2.quote"
+    },
+    {
+      "requestedFamily": "Calibri",
+      "sourceFamily": "Calibri",
+      "resolvedFamily": "Calibri",
+      "requestedWeight": 600,
+      "resolvedWeight": 700,
+      "italic": false,
+      "compatibility": "visual",
+      "path": "slides.3.quote.text"
+    },
+    {
+      "requestedFamily": "Calibri",
+      "sourceFamily": "Calibri",
+      "resolvedFamily": "Calibri",
+      "requestedWeight": 500,
+      "resolvedWeight": 400,
+      "italic": false,
+      "compatibility": "visual",
+      "path": "slides.3.quote"
+    }
+  ],
+  "decks": [
+    {
+      "id": "quote-1280",
+      "width": 1280,
+      "height": 720,
+      "slides": 4,
+      "hashes": {
+        "quote-1280.pptx": "8cecd1262d03e047bb73ee712911a74c22a0246d65a37f89fa15e1ef95570631",
+        "quote-1280.opf.json": "9f0570286660c701ab9ec21a42dbad595f3e8109307a87e11b4e9f15c404718c",
+        "quote-1280-renderer-1.png": "de0272c6596c0251f373fab1eebee6471b49d1acd79b794caed05928132eb7cf",
+        "quote-1280-renderer-2.png": "848ae6f9a3a896918eef60033ae3dacd0056f3ea8a3c3cdf4ee78ab4f22af097",
+        "quote-1280-renderer-3.png": "1dc7cd9fd2f309c225ec97545c4778124b8af474a7ce5ae5ec500f8479320bf0",
+        "quote-1280-renderer-4.png": "465e75b5288ed28ecb43280365a154a7d8f6b3ab2c16cab7edebd8a517c1b4bb"
+      }
+    },
+    {
+      "id": "quote-540",
+      "width": 540,
+      "height": 960,
+      "slides": 4,
+      "hashes": {
+        "quote-540.pptx": "628ade4105ba4b7dd2f011208eab719409fe79ec4904f9512ac1682c592e42f2",
+        "quote-540.opf.json": "15fecd9e3ca85eab7b75e6455f103accbcc3285c948c4b595013f2d34e6778fa",
+        "quote-540-renderer-1.png": "48f88ed58800dc7058f5c688b61ced99b86f5f872ac9a23da97dc88c61f82e0e",
+        "quote-540-renderer-2.png": "e1c16e5643d9443e2098b55ae6aaa9128ba2d87cd4b1849eb7b143252cace881",
+        "quote-540-renderer-3.png": "bfeae6b8de6df3064d7be839b2b485dacefc8967819aff17f27c366e7048e4b0",
+        "quote-540-renderer-4.png": "93e97358a64b11ca2e1c1f01fbb0578e90189a124e7f354e633b6205cd423575"
+      }
+    }
+  ],
+  "footer": "A reviewer - Recorded interview",
+  "scope": "Local Calibri; eight long quotes on wide/portrait slides. Intermediate weights resolve to the available regular/bold faces. Native glyph bounds and editable save/reimport are separate from raster-equivalence claims.",
+  "native": {
+    "decks": [
+      {
+        "id": "quote-1280",
+        "slides": [
+          {
+            "bodyLines": 9,
+            "rasterSha256": "8a66843d4fd720e14ac6a713149df2e2be53281429e7441eeb4966580599979e",
+            "units": "points, PowerPoint TextRange2 bounds",
+            "bodyBottom": 354.2700080871582,
+            "footerTop": 453.29998779296875,
+            "slide": 1
+          },
+          {
+            "bodyLines": 12,
+            "rasterSha256": "5f109a7f73ad5801ec03aafb814a1238041586384028814b1dffd0c1c286bbb6",
+            "units": "points, PowerPoint TextRange2 bounds",
+            "bodyBottom": 431.1299934387207,
+            "footerTop": 453.29998779296875,
+            "slide": 2
+          },
+          {
+            "bodyLines": 14,
+            "rasterSha256": "eab228c2acbe1b1591ef6a3d0a9fa60eb8a9873bbf6cda88a5221720d3117dc3",
+            "units": "points, PowerPoint TextRange2 bounds",
+            "bodyBottom": 431.18999671936035,
+            "footerTop": 453.29998779296875,
+            "slide": 3
+          },
+          {
+            "bodyLines": 15,
+            "rasterSha256": "57f7d4bc7ae6a58e3af67bcff53fa2d6f20a38f1d9d3ec858b7bc3e02c696a85",
+            "units": "points, PowerPoint TextRange2 bounds",
+            "bodyBottom": 439.43999099731445,
+            "footerTop": 453.29998779296875,
+            "slide": 4
+          }
+        ],
+        "savedSha256": "66d928b0b6793cb613e142cbc1c7b5bfe42e7ab4290f464fce123ffe8aff0831",
+        "editedSha256": "a0ae5981625ce39fc74a2e590b06782e92590a0791b8a7bef7a418dfb00fee8c",
+        "editsReopened": 4,
+        "sourceSha256": "8cecd1262d03e047bb73ee712911a74c22a0246d65a37f89fa15e1ef95570631"
+      },
+      {
+        "id": "quote-540",
+        "slides": [
+          {
+            "bodyLines": 19,
+            "rasterSha256": "6ee9d460f923fa6849610b09e4ad0c61f2221fc46ca46d5d073c90c237742986",
+            "units": "points, PowerPoint TextRange2 bounds",
+            "bodyBottom": 461.22748374938965,
+            "footerTop": 644.0999755859375,
+            "slide": 1
+          },
+          {
+            "bodyLines": 25,
+            "rasterSha256": "c1d1852182753bf15e8945a641f931f1215f43654721e34fcda60b4e8e5c7285",
+            "units": "points, PowerPoint TextRange2 bounds",
+            "bodyBottom": 576.5174922943115,
+            "footerTop": 644.0999755859375,
+            "slide": 2
+          },
+          {
+            "bodyLines": 27,
+            "rasterSha256": "ee78db8b279907193f96cef2dbb3070ae79b039cd05722f0c632b4479ac1a1e4",
+            "units": "points, PowerPoint TextRange2 bounds",
+            "bodyBottom": 565.5674686431885,
+            "footerTop": 644.0999755859375,
+            "slide": 3
+          },
+          {
+            "bodyLines": 32,
+            "rasterSha256": "38c0e88036c5f2c4b61bf0b539442a43b78cbf88daea92ec6a000e1777c82a9a",
+            "units": "points, PowerPoint TextRange2 bounds",
+            "bodyBottom": 623.227466583252,
+            "footerTop": 644.0999755859375,
+            "slide": 4
+          }
+        ],
+        "savedSha256": "700aaddc3f308734bb408a2940a842bf7b35a90b15b9293d2633da6f64e63082",
+        "editedSha256": "01b666c369f0e4163864d82b93c8d9c218b062c8b37f36d67b3fb5e98210d1d7",
+        "editsReopened": 4,
+        "sourceSha256": "628ade4105ba4b7dd2f011208eab719409fe79ec4904f9512ac1682c592e42f2"
+      }
+    ],
+    "powerPointVersion": "16.0"
+  },
+  "comparisons": [
+    {
+      "id": "quote-1280",
+      "slide": 1,
+      "meanAbsoluteChannelDifference": 13.740666232638889
+    },
+    {
+      "id": "quote-1280",
+      "slide": 2,
+      "meanAbsoluteChannelDifference": 18.03978081597222
+    },
+    {
+      "id": "quote-1280",
+      "slide": 3,
+      "meanAbsoluteChannelDifference": 20.837006293402776
+    },
+    {
+      "id": "quote-1280",
+      "slide": 4,
+      "meanAbsoluteChannelDifference": 17.72008572048611
+    },
+    {
+      "id": "quote-540",
+      "slide": 1,
+      "meanAbsoluteChannelDifference": 10.70287037037037
+    },
+    {
+      "id": "quote-540",
+      "slide": 2,
+      "meanAbsoluteChannelDifference": 13.85824909979424
+    },
+    {
+      "id": "quote-540",
+      "slide": 3,
+      "meanAbsoluteChannelDifference": 16.560500257201646
+    },
+    {
+      "id": "quote-540",
+      "slide": 4,
+      "meanAbsoluteChannelDifference": 19.648932613168725
+    }
+  ],
+  "imports": [
+    {
+      "file": "quote-1280.pptx",
+      "slides": 4,
+      "valid": true,
+      "footerPreserved": true,
+      "editsPreserved": false
+    },
+    {
+      "file": "quote-1280-native-saved.pptx",
+      "slides": 4,
+      "valid": true,
+      "footerPreserved": true,
+      "editsPreserved": false
+    },
+    {
+      "file": "quote-1280-native-edited.pptx",
+      "slides": 4,
+      "valid": true,
+      "footerPreserved": true,
+      "editsPreserved": true
+    },
+    {
+      "file": "quote-540.pptx",
+      "slides": 4,
+      "valid": true,
+      "footerPreserved": true,
+      "editsPreserved": false
+    },
+    {
+      "file": "quote-540-native-saved.pptx",
+      "slides": 4,
+      "valid": true,
+      "footerPreserved": true,
+      "editsPreserved": false
+    },
+    {
+      "file": "quote-540-native-edited.pptx",
+      "slides": 4,
+      "valid": true,
+      "footerPreserved": true,
+      "editsPreserved": true
+    }
+  ],
+  "contacts": [
+    {
+      "file": "quote-1280-contact.png",
+      "sha256": "f406021c06824c7e1e51d8c97dc4db0d3acb2bf39cd01b4c409bf82a6b19ae99",
+      "rows": [
+        12,
+        16,
+        20,
+        24
+      ],
+      "columns": [
+        "renderer",
+        "native PowerPoint"
+      ]
+    },
+    {
+      "file": "quote-540-contact.png",
+      "sha256": "c00594a550d24e32902dd520a096ba33996f33ed049f1054395695042c31253f",
+      "rows": [
+        12,
+        16,
+        20,
+        24
+      ],
+      "columns": [
+        "renderer",
+        "native PowerPoint"
+      ]
+    }
+  ]
+}
