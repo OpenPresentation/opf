@@ -8,6 +8,7 @@ on:
       - 'scripts/run-node-tests.mjs'
       - 'scripts/package-manager.mjs'
       - 'scripts/link-ecosystem.mjs'
+      - 'scripts/test-ecosystem-links.mjs'
       - 'scripts/test-package-ecosystem.mjs'
       - 'pnpm-lock.yaml'
       - '.gitattributes'
@@ -21,6 +22,7 @@ on:
       - 'scripts/run-node-tests.mjs'
       - 'scripts/package-manager.mjs'
       - 'scripts/link-ecosystem.mjs'
+      - 'scripts/test-ecosystem-links.mjs'
       - 'scripts/test-package-ecosystem.mjs'
       - 'pnpm-lock.yaml'
       - '.gitattributes'
@@ -52,6 +54,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter @openpresentation/opf test
       - run: node packages/javascript/test/packed-install-smoke.mjs
+      - run: node scripts/test-ecosystem-links.mjs
       - run: pnpm --filter @openpresentation/cli typecheck
       - run: pnpm test:cli
       - run: pnpm test:cli:packed

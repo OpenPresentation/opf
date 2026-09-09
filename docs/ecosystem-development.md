@@ -17,6 +17,8 @@ The core packed-install smoke check also uses this Windows invocation. Node 20/2
 
 After integrating reviewed layout PR #43, the combined source passes all 420 core tests on local Windows Node 24. Exact combined-source CI and review are recorded on PR #44.
 
+Coordinated CI `34384776504` and `34385059710` caught an older isolated-link fixture copying the linker without its new helper, causing `ERR_MODULE_NOT_FOUND` before package tests ran. The fixture now copies both files, passes directly on Windows Node 20/24, and runs in the Windows/macOS matrix as well as coordinated CI. This failure was fixed rather than waived; renewed combined-source CI remains required.
+
 The published compatible set is core 0.7.0, CLI 0.5.0, renderer 0.5.1, PPTX 0.5.2 and editor 0.4.0. Clean registry installs include shared composition and styled table rows without sibling links. `release-plan.json` records exact versions and immutable verification sources; `pnpm test:registry-ecosystem` and `pnpm test:registry-fidelity` exercise those installed packages. Source links are for coordinated development.
 
 To browse the gallery with the linked package:
