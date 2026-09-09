@@ -27,7 +27,7 @@ export async function registryToolchain() {
   await writeFile(resolver, 'export const resolve = specifier => import.meta.resolve(specifier);\n');
   const { resolve } = await import(pathToFileURL(resolver).href);
   return {
-    consumer, packages, verificationRefs: plan.verificationRefs,
+    consumer, packages, verificationRefs: plan.verificationRefs, exampleRefs: plan.exampleRefs,
     import: (specifier) => import(resolve(specifier)),
     plugin: (browser = false) => ({
       name: 'published-opf-packages',
