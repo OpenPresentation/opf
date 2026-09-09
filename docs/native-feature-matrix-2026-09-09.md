@@ -4,7 +4,13 @@
 
 The registry baseline below is preserved. To evaluate an unpublished converter, pass its built `dist/index.js` as a fourth argument to both `generate` and `compare`, using a separate output directory. The report's `candidate` field explicitly labels it as `local-candidate-not-registry-release`, records the declared version and hashes every runtime/vendor file plus package/lock manifests. Its installed core/renderer versions and registry integrities must match the baseline consumer. Comparison rejects a missing or changed candidate; omitting the optional argument remains registry-only. Node 20/24 comparisons and deliberate omission rejection were executed on the native 0.5.2 candidate.
 
-Converter [PR #13](https://github.com/OpenPresentation/opf-pptx/pull/13), candidate `422f1e39e643cbb1c23260f0c9ddef7a3c6ec722`, improves metric/quote/code/timeline layout and chart-label contrast. Its [separate candidate evidence](https://github.com/OpenPresentation/opf-pptx/blob/422f1e39e643cbb1c23260f0c9ddef7a3c6ec722/docs/native-content-candidate.md) records native checks and remaining fidelity/release gates. This does not change published 0.5.1 or the historical observations below.
+Review found that matching versions and lock integrities alone could allow a linked checkout to masquerade as an installed dependency. Candidate core/renderer paths must now resolve inside the candidate's installed `node_modules`, and their lock records must be non-linked registry URLs. The regression below passes on Node 20/24 and rejects a same-version linked dependency with a matching lock integrity before export:
+
+```powershell
+node scripts/test-native-candidate-guard.mjs artifacts/npm/registry-consumer artifacts/pptx-native-content
+```
+
+Converter [PR #13](https://github.com/OpenPresentation/opf-pptx/pull/13), candidate `422f1e39e643cbb1c23260f0c9ddef7a3c6ec722`, improves metric/quote/code/timeline layout and chart-label contrast. Its [separate candidate evidence](https://github.com/OpenPresentation/opf-pptx/blob/422f1e39e643cbb1c23260f0c9ddef7a3c6ec722/docs/native-content-candidate.md) records native checks and remaining fidelity/release gates. Review subsequently exposed long quotes overlapping the footer in both renderer and converter. Renderer [PR #8](https://github.com/OpenPresentation/opf-render/pull/8) prepares 0.5.1 with body space reserved before text fitting; the dependent converter fix requires that renderer's publication, a registry lock update and renewed candidate/native evidence. This does not change published PPTX 0.5.1 or the historical observations below.
 
 ## Published 0.5.1 observations
 

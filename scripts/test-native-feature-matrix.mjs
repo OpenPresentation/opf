@@ -43,12 +43,17 @@ if (candidateEntry) {
   const manifest = await json(path.join(candidateRoot, 'package.json'));
   const candidateLock = await json(path.join(candidateRoot, 'package-lock.json'));
   const candidateRequire = createRequire(path.join(candidateRoot, 'package.json'));
+  const candidateModules = await realpath(path.join(candidateRoot, 'node_modules'));
   assert.equal(manifest.name, '@openpresentation/opf-pptx');
   assert.equal(candidateEntry, await realpath(path.join(candidateRoot, 'dist/index.js')));
   for (const name of ['opf', 'opf-render']) {
     const fullName = '@openpresentation/' + name;
-    const installed = await json(candidateRequire.resolve(fullName + '/package.json'));
+    const installedManifest = candidateRequire.resolve(fullName + '/package.json');
+    const installedDirectory = await realpath(path.dirname(installedManifest));
+    assert.ok(installedDirectory.startsWith(candidateModules + path.sep), 'Candidate dependencies must resolve inside its installed node_modules: ' + fullName);
+    const installed = await json(installedManifest);
     const locked = candidateLock.packages['node_modules/' + fullName];
+    assert.ok(locked && !locked.link && locked.resolved?.startsWith('https://registry.npmjs.org/'), 'Candidate dependencies must be registry installations: ' + fullName);
     assert.equal(installed.version, packages[name].version, 'Candidate must use the same core/renderer versions');
     assert.equal(locked?.integrity, packages[name].integrity, 'Candidate must use the same registry core/renderer tarballs');
   }
