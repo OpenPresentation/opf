@@ -32,11 +32,14 @@ for (const name of names) {
   if (name === 'opf-pptx' || name === 'opf-editor') {
     linkPackage(directory, '@openpresentation/opf-render', path.resolve(root, '../opf-render'));
   }
+  if (name === 'opf-editor') {
+    linkPackage(directory, '@openpresentation/opf-pptx', path.resolve(root, '../opf-pptx'));
+  }
   if (name !== 'pptx-gallery') {
     const {command,args} = packageManagerInvocation('npm', ['run', 'build']);
     const result = spawnSync(command, args, { cwd: directory, stdio: 'inherit' });
     if (result.error) throw result.error;
     if (result.status !== 0) process.exit(result.status ?? 1);
   }
-  console.log(`${name}: linked current OPF${name === 'opf-pptx' || name === 'opf-editor' ? ' and renderer' : ''} checkout`);
+  console.log(`${name}: linked current OPF${name === 'opf-pptx' || name === 'opf-editor' ? ', renderer' : ''}${name === 'opf-editor' ? ', converter' : ''} checkout`);
 }

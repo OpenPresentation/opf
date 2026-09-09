@@ -51,7 +51,7 @@ test('local package links build through real npm and can replace existing juncti
     await mkdir(repo,{recursive:true});
     await writeFile(path.join(repo,'package.json'),JSON.stringify({name,private:true,scripts:{build:'node build.cjs'}}));
     await writeFile(path.join(repo,'build.cjs'),"require('node:fs').writeFileSync('built.json',JSON.stringify({node:process.version}))");
-    for (const dep of name==='opf-render'?['opf']:['opf','opf-render']) {
+    for (const dep of name==='opf-render'?['opf']:name==='opf-editor'?['opf','opf-render','opf-pptx']:['opf','opf-render']) {
       const installed=path.join(repo,'node_modules/@openpresentation',dep);
       await mkdir(installed,{recursive:true});
       await writeFile(path.join(installed,'package.json'),JSON.stringify({name:`@openpresentation/${dep}`}));
@@ -66,6 +66,7 @@ test('local package links build through real npm and can replace existing juncti
       assert.equal(await realpath(path.join(repo,'node_modules/@openpresentation/opf')),await realpath(path.join(root,'packages/javascript')));
       assert.equal(JSON.parse(await readFile(path.join(repo,'built.json'),'utf8')).node,process.version);
       if (name!=='opf-render') assert.equal(await realpath(path.join(repo,'node_modules/@openpresentation/opf-render')),await realpath(path.join(directory,'opf-render')));
+      if (name==='opf-editor') assert.equal(await realpath(path.join(repo,'node_modules/@openpresentation/opf-pptx')),await realpath(path.join(directory,'opf-pptx')));
     }
   }
 }));
