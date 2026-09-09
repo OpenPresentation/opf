@@ -6,6 +6,9 @@ on:
       - 'packages/javascript/**'
       - 'skills/**'
       - 'scripts/run-node-tests.mjs'
+      - 'scripts/package-manager.mjs'
+      - 'scripts/link-ecosystem.mjs'
+      - 'scripts/test-package-ecosystem.mjs'
       - 'pnpm-lock.yaml'
       - '.gitattributes'
       - '.github/workflows/cli-windows.yml'
@@ -16,6 +19,9 @@ on:
       - 'packages/javascript/**'
       - 'skills/**'
       - 'scripts/run-node-tests.mjs'
+      - 'scripts/package-manager.mjs'
+      - 'scripts/link-ecosystem.mjs'
+      - 'scripts/test-package-ecosystem.mjs'
       - 'pnpm-lock.yaml'
       - '.gitattributes'
       - '.github/workflows/cli-windows.yml'
@@ -45,6 +51,7 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter @openpresentation/opf test
+      - run: node packages/javascript/test/packed-install-smoke.mjs
       - run: pnpm --filter @openpresentation/cli typecheck
       - run: pnpm test:cli
       - run: pnpm test:cli:packed

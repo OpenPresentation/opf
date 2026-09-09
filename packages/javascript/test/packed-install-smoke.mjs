@@ -5,6 +5,7 @@ import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
+import {packageManagerInvocation} from '../../../scripts/package-manager.mjs';
 
 const execFile = promisify(execFileCallback);
 const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -14,6 +15,7 @@ const projectDir = path.join(tmpRoot, "project");
 
 async function run(command, args, options = {}) {
   try {
+    if (command === 'npm') ({command,args}=packageManagerInvocation(command,args));
     return await execFile(command, args, {
       maxBuffer: 10 * 1024 * 1024,
       ...options,
