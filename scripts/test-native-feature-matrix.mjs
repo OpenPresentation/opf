@@ -1,5 +1,5 @@
-// Registry-only native feature coverage. Generate, run the adjacent PowerShell script, then compare.
-// node scripts/test-native-feature-matrix.mjs <registry-consumer> <output-directory> generate|compare
+// Native feature coverage. Registry-only by default; an explicit candidate is hash-bound and labelled separately.
+// node scripts/test-native-feature-matrix.mjs <registry-consumer> <output-directory> generate|compare [candidate-pptx-entry]
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFile, writeFile, mkdir, realpath } from 'node:fs/promises';
@@ -35,7 +35,45 @@ const { validatePresentation } = await load('opf');
 const { examples } = await load('opf', './examples');
 const { renderSvgDeck, svgToPng } = await load('opf-render');
 const { createFontRegistry } = await load('opf-render', './fonts');
-const { toPptx, fromPptx } = await load('opf-pptx');
+const candidateEntry = process.argv[5] ? await realpath(path.resolve(process.argv[5])) : null;
+let candidate = null;
+if (candidateEntry) {
+  // Hash the complete shipped runtime, including internal imports and vendored code.
+  const candidateRoot = path.resolve(path.dirname(candidateEntry), '..');
+  const manifest = await json(path.join(candidateRoot, 'package.json'));
+  const candidateLock = await json(path.join(candidateRoot, 'package-lock.json'));
+  const candidateRequire = createRequire(path.join(candidateRoot, 'package.json'));
+  const candidateModules = await realpath(path.join(candidateRoot, 'node_modules'));
+  assert.equal(manifest.name, '@openpresentation/opf-pptx');
+  assert.equal(candidateEntry, await realpath(path.join(candidateRoot, 'dist/index.js')));
+  for (const name of ['opf', 'opf-render']) {
+    const fullName = '@openpresentation/' + name;
+    const installedManifest = candidateRequire.resolve(fullName + '/package.json');
+    const installedDirectory = await realpath(path.dirname(installedManifest));
+    assert.ok(installedDirectory.startsWith(candidateModules + path.sep), 'Candidate dependencies must resolve inside its installed node_modules: ' + fullName);
+    const installed = await json(installedManifest);
+    const locked = candidateLock.packages['node_modules/' + fullName];
+    assert.ok(locked && !locked.link && locked.resolved?.startsWith('https://registry.npmjs.org/'), 'Candidate dependencies must be registry installations: ' + fullName);
+    assert.equal(installed.version, packages[name].version, 'Candidate must use the same core/renderer versions');
+    assert.equal(locked?.integrity, packages[name].integrity, 'Candidate must use the same registry core/renderer tarballs');
+  }
+  const {readdir} = await import('node:fs/promises');
+  const files = {};
+  const walk = async directory => {
+    for (const entry of (await readdir(path.join(candidateRoot, directory), {withFileTypes: true})).sort((a, b) => a.name.localeCompare(b.name))) {
+      const relative = directory + '/' + entry.name;
+      assert.ok(!entry.isSymbolicLink(), 'Candidate runtime must not contain symlinks');
+      if (entry.isDirectory()) await walk(relative);
+      else if (entry.isFile()) files[relative] = hash(await readFile(path.join(candidateRoot, relative)));
+    }
+  };
+  await walk('dist');
+  await walk('vendor');
+  files['package.json'] = hash(await readFile(path.join(candidateRoot, 'package.json')));
+  files['package-lock.json'] = hash(await readFile(path.join(candidateRoot, 'package-lock.json')));
+  candidate = {kind: 'local-candidate-not-registry-release', package: manifest.name, declaredVersion: manifest.version, files};
+}
+const { toPptx, fromPptx } = candidateEntry ? await import(pathToFileURL(candidateEntry).href) : await load('opf-pptx');
 const sharp = require('sharp');
 const selected = ['rich-text-runs', 'dynamic-composition', 'table-cell-types', 'table-and-code', 'metrics-quotes-timeline', 'rows-chart', 'grid-spans'];
 
@@ -82,11 +120,12 @@ if (mode === 'generate') {
     console.log(`Generated ${id}: ${document.slides.length} slides`);
   }
   assert.ok(fonts.substitutions.every(item => item.requestedFamily === 'Calibri' && item.resolvedFamily === 'Calibri'), 'No family substitution allowed');
-  await writeJson('generation.json', {packages, fontFamily: 'Calibri', fontFiles: faces.map(([file]) => file), fontHashes, fontSubstitutions: fonts.substitutions, scope: 'Published technical examples with explicit local Calibri and 1280x720 dimensions; intermediate font weights resolve to available regular/bold faces and are recorded. Embedded image case uses only the published data URI. No external assets or proprietary fonts distributed.', decks: records});
+  await writeJson('generation.json', {packages, candidate, fontFamily: 'Calibri', fontFiles: faces.map(([file]) => file), fontHashes, fontSubstitutions: fonts.substitutions, scope: 'Published technical examples with explicit local Calibri and 1280x720 dimensions; intermediate font weights resolve to available regular/bold faces and are recorded. Embedded image case uses only the published data URI. No external assets or proprietary fonts distributed. The candidate field, when present, replaces the registry PPTX implementation and prevents a registry-release claim.', decks: records});
 } else {
   const generation = await json(path.join(output, 'generation.json'));
   const native = await json(path.join(output, 'native.json'));
   assert.deepEqual(generation.packages, packages, 'Regenerate when registry packages change');
+  assert.deepEqual(generation.candidate ?? null, candidate, 'Regenerate when the candidate implementation changes');
   const decks = [], contacts = [], contactSheets = [];
   for (const record of generation.decks) {
     const {id} = record;
@@ -139,6 +178,7 @@ if (mode === 'generate') {
   }
   const report = {packages, powerPointVersion: native.powerPointVersion, fontPolicy: generation.scope, slides: contacts.length, decks, scope: 'Native open/raster/edit/save/reopen and schema-valid reimport, measured RGB raster differences. Left contact column is renderer; right is PowerPoint. Differences are observations, not an equivalence pass threshold. Chart shape counts distinguish native Office charts from editable primitive renderings. This is a controlled feature sample, not arbitrary Office/media/language fidelity.'};
   report.fontSubstitutions = generation.fontSubstitutions;
+  report.candidate = candidate;
   report.fontHashes = generation.fontHashes;
   report.contactSheets = contactSheets;
   await writeJson('comparison.json', report);
