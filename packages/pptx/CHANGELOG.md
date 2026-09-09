@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.2
+
+- Match metric, quote, code and timeline payload geometry and measured typography to renderer 0.5.1. Reserve quote footer space before fitting, preserve attribution and source, export timeline lines/markers as editable native shapes, and prevent PowerPoint from rewrapping fitted payload lines.
+- Use readable theme colors for native chart axis and legend labels while preserving editable Office charts. Native axis ticks/plot geometry and general scalar-text wrapping still differ from preview.
+- Add cross-renderer typography/geometry checks and a 19-slide real PowerPoint candidate comparison. File editability and schema-valid reimport do not establish complete raster or arbitrary Office round-trip equivalence.
+
 ## 0.5.1
 
 - Remove the unused, vulnerable image-size dependency from ordinary npm installations by shipping the exact MIT-licensed PptxGenJS 4.0.1 ESM distribution and license with verified upstream hashes. Keep JSZip as a direct dependency; preserve the conversion API and upstream runtime code. No paid service or application-specific package-manager override is required.

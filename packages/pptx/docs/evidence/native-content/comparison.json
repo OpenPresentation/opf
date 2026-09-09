@@ -1,0 +1,1776 @@
+{
+  "packages": {
+    "opf": {
+      "version": "0.7.0",
+      "integrity": "sha512-ZYODnLgMSG1129eujM4CDGpkcF5CLoKr3bkZ713L04Gvh8VTHOudfPM4ICqngMBpRtcRXyoGaVSllLq2djIo1Q=="
+    },
+    "opf-render": {
+      "version": "0.5.1",
+      "integrity": "sha512-rV3rMmSG/3Fl/75k4or+G4/OPZMkVj2ByOCg30ERGXQMhSxZ6o09pdTkhOVxbd2O7kpEuplZrQnSO6XWfW038w=="
+    },
+    "opf-pptx": {
+      "version": "0.5.1",
+      "integrity": "sha512-iXUW3ex9fMunbTuk0L+3BCU32g5oHkuZ7JLXyeteRrW3BaVtK4xagN0/4AAh0htXOgRj1NT+412u5jCwQCHS8w=="
+    }
+  },
+  "powerPointVersion": "16.0",
+  "fontPolicy": "Published technical examples with explicit local Calibri and 1280x720 dimensions; intermediate font weights resolve to available regular/bold faces and are recorded. Embedded image case uses only the published data URI. No external assets or proprietary fonts distributed. The candidate field, when present, replaces the registry PPTX implementation and prevents a registry-release claim.",
+  "slides": 19,
+  "decks": [
+    {
+      "id": "rich-text-runs",
+      "source": "examples/technical/rich-text-runs.opf.json",
+      "sourceSha256": "b00ce375d2de6444172f60832cf4868bcd90ce64949297fb62304ca1f9cffac0",
+      "slides": 3,
+      "fontChanges": [
+        {
+          "path": "/slides/0/text/7/fontFamily",
+          "original": "Aptos",
+          "replacement": "Calibri"
+        }
+      ],
+      "diagnostics": [],
+      "hashes": {
+        "rich-text-runs-renderer-1.png": "4b2c0c659291ea61dc1689939bd4464a2ae18d182bcc126bae5c5ce4142a6b9f",
+        "rich-text-runs-renderer-2.png": "4f1a19ff896198f79f464fb8f43936e9aa2724eb252e0094eb24120625da0777",
+        "rich-text-runs-renderer-3.png": "1e762bc8d1cc0f14e7f58befc5ca87dc427cd6328d04bee288a3644979ef57de",
+        "rich-text-runs.pptx": "f615e89f38cdec38bc73c472091a8aaff6ff24bd35f1baf249d914be6a0319ce",
+        "rich-text-runs.opf.json": "0807e50953feba62483d0924e3d2d14ad6e934ba6423b1ae0db1aac17e091cb8"
+      },
+      "native": {
+        "editsReopened": 3,
+        "sourceSha256": "f615e89f38cdec38bc73c472091a8aaff6ff24bd35f1baf249d914be6a0319ce",
+        "editedSha256": "325de52e77419fddab99736e5fb9f4395da6774d3b3f518d09e89a0d1a7009f0",
+        "savedSha256": "3ed305add2d0e85269dc2d034044db6eccbc756f708c2f1a492596a276abc9c5",
+        "slides": [
+          {
+            "slide": 1,
+            "rasterSha256": "6a0bae55d4e187082319a95f7d885dc8b51addbd4f9414f8e4c1a575cb12aba7",
+            "shapes": [
+              {
+                "top": 43.20000076293945,
+                "type": 1,
+                "height": 49.40999984741211,
+                "left": 43.20000076293945,
+                "text": "Text Runs",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              },
+              {
+                "top": 110.61000061035156,
+                "type": 1,
+                "height": 22.87504005432129,
+                "left": 43.20000076293945,
+                "text": "Runs support bold, italic, underlined links, and custom color.",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              }
+            ]
+          },
+          {
+            "slide": 2,
+            "rasterSha256": "31f9002cb12292de68e825644b22be1bbd6c642160b6fe99c0901cf30101c03f",
+            "shapes": [
+              {
+                "top": 43.20000076293945,
+                "type": 1,
+                "height": 49.40999984741211,
+                "left": 43.20000076293945,
+                "text": "Rich List Items",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              },
+              {
+                "top": 110.61000061035156,
+                "type": 1,
+                "height": 22.87504005432129,
+                "left": 43.20000076293945,
+                "text": "Inline rich text works as a list item.",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              },
+              {
+                "top": 138.73504638671875,
+                "type": 1,
+                "height": 22.87504005432129,
+                "left": 43.20000076293945,
+                "text": "Object-form list item with description",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              },
+              {
+                "top": 163.86000061035156,
+                "type": 1,
+                "height": 18.75748062133789,
+                "left": 84.44999694824219,
+                "text": "Supporting detail can also include runs.",
+                "chart": false,
+                "width": 832.3499755859375,
+                "table": false
+              }
+            ]
+          },
+          {
+            "slide": 3,
+            "rasterSha256": "31bd8b11fce0c98f693265309d9b9bda13c23b9b8c526bae5d89b8da2a401a7e",
+            "shapes": [
+              {
+                "top": 43.20000076293945,
+                "type": 1,
+                "height": 49.40999984741211,
+                "left": 43.20000076293945,
+                "text": "Rich Bullets",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              },
+              {
+                "top": 110.61000061035156,
+                "type": 1,
+                "height": 22.87504005432129,
+                "left": 43.20000076293945,
+                "text": "Important bullet",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              },
+              {
+                "top": 138.73504638671875,
+                "type": 1,
+                "height": 22.87504005432129,
+                "left": 43.20000076293945,
+                "text": "Nested bullet",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              }
+            ]
+          }
+        ],
+        "id": "rich-text-runs"
+      },
+      "nativeObjects": {
+        "tables": 0,
+        "charts": 0,
+        "pictures": 0,
+        "editableTextShapes": 9
+      },
+      "comparisons": [
+        {
+          "slide": 1,
+          "meanAbsoluteChannelDifference": 1.2554503038194444,
+          "channelFractionOver10": 0.009105902777777777
+        },
+        {
+          "slide": 2,
+          "meanAbsoluteChannelDifference": 1.991087962962963,
+          "channelFractionOver10": 0.014687138310185185
+        },
+        {
+          "slide": 3,
+          "meanAbsoluteChannelDifference": 1.0289406105324075,
+          "channelFractionOver10": 0.007099609375
+        }
+      ],
+      "imports": [
+        {
+          "file": "rich-text-runs.pptx",
+          "valid": true,
+          "slides": 3,
+          "editsPreserved": false,
+          "diagnostics": []
+        },
+        {
+          "file": "rich-text-runs-native-saved.pptx",
+          "valid": true,
+          "slides": 3,
+          "editsPreserved": false,
+          "diagnostics": []
+        },
+        {
+          "file": "rich-text-runs-native-edited.pptx",
+          "valid": true,
+          "slides": 3,
+          "editsPreserved": true,
+          "diagnostics": []
+        }
+      ]
+    },
+    {
+      "id": "dynamic-composition",
+      "source": "examples/technical/dynamic-composition.opf.json",
+      "sourceSha256": "9031a5533b30392e632f371d62baf6442b26bbb59d619dd97fffe2b90dbd79f8",
+      "slides": 4,
+      "fontChanges": [],
+      "diagnostics": [],
+      "hashes": {
+        "dynamic-composition-renderer-1.png": "7a1f2ccd4afafa1f0fa0ba33ac15c818136dd5ac88903a65bdf45057e71a6e82",
+        "dynamic-composition-renderer-2.png": "1e009823a11b65b236365aabf23b572591ee571be364218771fd96383890d125",
+        "dynamic-composition-renderer-3.png": "e4b9a39233716af470d3040656e97193572aff06a499bbdc5bd762cb25041b3c",
+        "dynamic-composition-renderer-4.png": "01e301501b1db4b8c12e499c219401a49e7bbb3786f38cc732fd106c0af06cdf",
+        "dynamic-composition.pptx": "c94a2d28ef2b62e83ced7240b171a99fbf4cc9056299dc9c15e190c8c1c1c681",
+        "dynamic-composition.opf.json": "78da4638508cc1c26f451e860dbb778a64a4e9c25d0275e21911b8f3b53ce7a8"
+      },
+      "native": {
+        "editsReopened": 4,
+        "sourceSha256": "c94a2d28ef2b62e83ced7240b171a99fbf4cc9056299dc9c15e190c8c1c1c681",
+        "editedSha256": "f0aa04a305bb24369079881114fce90047ab554cea8d245e9652ab681a6278c2",
+        "savedSha256": "6ccd41b95b20c67bd1ba886abd51651e0cff1faa21f5f7151f432d72b334c768",
+        "slides": [
+          {
+            "slide": 1,
+            "rasterSha256": "1aaffd3ccf6507b5b9f3f49cc37f764a11d9a9584e2f22d613a7b2f310715c5d",
+            "shapes": [
+              {
+                "top": 43.20000076293945,
+                "type": 1,
+                "height": 49.40999984741211,
+                "left": 43.20000076293945,
+                "text": "Give the main idea more room",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              },
+              {
+                "top": 101.61000061035156,
+                "type": 1,
+                "height": 22.87504005432129,
+                "left": 43.20000076293945,
+                "text": "Weighted tracks preserve intent as the content changes.",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              },
+              {
+                "top": 142.48495483398438,
+                "type": 1,
+                "height": 354.3150329589844,
+                "left": 43.20000076293945,
+                "text": "A shared layout contract gives the editor, preview, and PowerPoint export\rthe same content geometry. The narrative stays in JSON and remains easy\rto revise.",
+                "chart": false,
+                "width": 570.4000244140625,
+                "table": false
+              },
+              {
+                "top": 142.48495483398438,
+                "type": 1,
+                "height": 354.3150329589844,
+                "left": 631.5999755859375,
+                "text": "Change the words. Keep the\rstructure. Review the result.",
+                "chart": false,
+                "width": 285.20001220703125,
+                "table": false
+              }
+            ]
+          },
+          {
+            "slide": 2,
+            "rasterSha256": "a712e03a213e4a09dd221b62d635d4a1856be184cc2c1b1d16371ee021a18aac",
+            "shapes": [
+              {
+                "top": 43.20000076293945,
+                "type": 1,
+                "height": 49.40999984741211,
+                "left": 43.20000076293945,
+                "text": "Let a growing set of ideas reflow",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              },
+              {
+                "top": 110.61000061035156,
+                "type": 1,
+                "height": 184.0950469970703,
+                "left": 43.20000076293945,
+                "text": "Describe the decision.",
+                "chart": false,
+                "width": 279.20001220703125,
+                "table": false
+              },
+              {
+                "top": 110.61000061035156,
+                "type": 1,
+                "height": 184.0950469970703,
+                "left": 340.3999938964844,
+                "text": "Support it with evidence and\rcontext that the audience can\runderstand.",
+                "chart": false,
+                "width": 279.20001220703125,
+                "table": false
+              },
+              {
+                "top": 110.61000061035156,
+                "type": 1,
+                "height": 184.0950469970703,
+                "left": 637.5999755859375,
+                "text": "Explain the tradeoffs.",
+                "chart": false,
+                "width": 279.20001220703125,
+                "table": false
+              },
+              {
+                "top": 312.7049560546875,
+                "type": 1,
+                "height": 184.0950469970703,
+                "left": 43.20000076293945,
+                "text": "Name the next step and the person\rresponsible for it.",
+                "chart": false,
+                "width": 279.20001220703125,
+                "table": false
+              },
+              {
+                "top": 312.7049560546875,
+                "type": 1,
+                "height": 184.0950469970703,
+                "left": 340.3999938964844,
+                "text": "Measure the result.",
+                "chart": false,
+                "width": 279.20001220703125,
+                "table": false
+              }
+            ]
+          },
+          {
+            "slide": 3,
+            "rasterSha256": "0a92251e3c5b51e02e90d281849fbde92ff38dc446fdcccc84847aed6c4e40f8",
+            "shapes": [
+              {
+                "top": 43.20000076293945,
+                "type": 1,
+                "height": 49.40999984741211,
+                "left": 43.20000076293945,
+                "text": "Promoted rows have distinct positions",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              },
+              {
+                "top": 380.07000732421875,
+                "type": 1,
+                "height": 116.7300033569336,
+                "left": 43.20000076293945,
+                "text": "Finally: make the recommendation.",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              },
+              {
+                "top": 245.33999633789062,
+                "type": 1,
+                "height": 116.7300033569336,
+                "left": 43.20000076293945,
+                "text": "Then: explain the change.",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              },
+              {
+                "top": 110.61000061035156,
+                "type": 1,
+                "height": 116.7300033569336,
+                "left": 43.20000076293945,
+                "text": "First: state the situation.",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              }
+            ]
+          },
+          {
+            "slide": 4,
+            "rasterSha256": "f3f9cb010908ee15757abc19ef6626b4e4d77d3b06e14ab04da2801fa7b990b8",
+            "shapes": [
+              {
+                "top": 43.20000076293945,
+                "type": 1,
+                "height": 49.40999984741211,
+                "left": 43.20000076293945,
+                "text": "Arrange each idea and its supporting details",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              },
+              {
+                "top": 118.33377838134766,
+                "type": 1,
+                "height": 119.28976440429688,
+                "left": 50.92377853393555,
+                "text": "Keep the recommendation and its evidence together.",
+                "chart": false,
+                "width": 554.952392578125,
+                "table": false
+              },
+              {
+                "top": 250.49661254882812,
+                "type": 1,
+                "height": 238.57960510253906,
+                "left": 50.92377853393555,
+                "text": "Evidence: share the same geometry\racross previews and exports.",
+                "chart": false,
+                "width": 273.4998474121094,
+                "table": false
+              },
+              {
+                "top": 250.49661254882812,
+                "type": 1,
+                "height": 238.57960510253906,
+                "left": 332.3763122558594,
+                "text": "Action: revise one group without\rrearranging the whole slide.",
+                "chart": false,
+                "width": 273.4998474121094,
+                "table": false
+              },
+              {
+                "top": 110.61000061035156,
+                "type": 1,
+                "height": 386.19000244140625,
+                "left": 631.5999755859375,
+                "text": "A separate column holds the\rsupporting context.",
+                "chart": false,
+                "width": 285.20001220703125,
+                "table": false
+              }
+            ]
+          }
+        ],
+        "id": "dynamic-composition"
+      },
+      "nativeObjects": {
+        "tables": 0,
+        "charts": 0,
+        "pictures": 0,
+        "editableTextShapes": 19
+      },
+      "comparisons": [
+        {
+          "slide": 1,
+          "meanAbsoluteChannelDifference": 5.755862630208333,
+          "channelFractionOver10": 0.03973126446759259
+        },
+        {
+          "slide": 2,
+          "meanAbsoluteChannelDifference": 4.781483651620371,
+          "channelFractionOver10": 0.032378472222222225
+        },
+        {
+          "slide": 3,
+          "meanAbsoluteChannelDifference": 3.437720630787037,
+          "channelFractionOver10": 0.02250506365740741
+        },
+        {
+          "slide": 4,
+          "meanAbsoluteChannelDifference": 6.058678023726852,
+          "channelFractionOver10": 0.040860460069444444
+        }
+      ],
+      "imports": [
+        {
+          "file": "dynamic-composition.pptx",
+          "valid": true,
+          "slides": 4,
+          "editsPreserved": false,
+          "diagnostics": []
+        },
+        {
+          "file": "dynamic-composition-native-saved.pptx",
+          "valid": true,
+          "slides": 4,
+          "editsPreserved": false,
+          "diagnostics": []
+        },
+        {
+          "file": "dynamic-composition-native-edited.pptx",
+          "valid": true,
+          "slides": 4,
+          "editsPreserved": true,
+          "diagnostics": []
+        }
+      ]
+    },
+    {
+      "id": "table-cell-types",
+      "source": "examples/technical/table-cell-types.opf.json",
+      "sourceSha256": "fa301c3ab1a9235f2adf60dcdecc0b9ad89f47af229999273339bf35b3e12702",
+      "slides": 2,
+      "fontChanges": [],
+      "diagnostics": [],
+      "hashes": {
+        "table-cell-types-renderer-1.png": "3594114bdfd6c8e75838997ba96ca250ababc1cfa03e17f2c2e055f1817e0b6a",
+        "table-cell-types-renderer-2.png": "a14fc53af31640ee077c965e0432779b149d1d3078907571f5a68214e71bcfb7",
+        "table-cell-types.pptx": "0ab6e483a6644f89870f08b773b84dddd7f43df6011f527865faacddfcef4df7",
+        "table-cell-types.opf.json": "d83225fc7f12e68e03dbdfe0bd65231dc2674fb2491cf969496f50891f50225f"
+      },
+      "native": {
+        "editsReopened": 2,
+        "sourceSha256": "0ab6e483a6644f89870f08b773b84dddd7f43df6011f527865faacddfcef4df7",
+        "editedSha256": "630f86f147845f854b097f0d4d82c7bfa686da65705b650ad6eed246c307f1a3",
+        "savedSha256": "b380de5d89802dd307eb7d8cd0c39e25ff2603fcdcee2a7650bf76f2352e7fb8",
+        "slides": [
+          {
+            "slide": 1,
+            "rasterSha256": "70488abc837b0a7f3aedd1353d4aa6a663ed9e79d3b61d5fe70c9ff75309ee34",
+            "shapes": [
+              {
+                "top": 43.20000076293945,
+                "type": 1,
+                "height": 49.40999984741211,
+                "left": 43.20000076293945,
+                "text": "Scalar Cells",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              },
+              {
+                "top": 110.61000061035156,
+                "type": 19,
+                "height": 121.5,
+                "left": 43.20000076293945,
+                "text": "",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": true
+              }
+            ]
+          },
+          {
+            "slide": 2,
+            "rasterSha256": "5687b5e6ad354b85d68f04f56de45995f47c33319e7eb66fc6faae040abf1074",
+            "shapes": [
+              {
+                "top": 43.20000076293945,
+                "type": 1,
+                "height": 49.40999984741211,
+                "left": 43.20000076293945,
+                "text": "Table Without Columns",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              },
+              {
+                "top": 110.61000061035156,
+                "type": 19,
+                "height": 81,
+                "left": 43.20000076293945,
+                "text": "",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": true
+              }
+            ]
+          }
+        ],
+        "id": "table-cell-types"
+      },
+      "nativeObjects": {
+        "tables": 2,
+        "charts": 0,
+        "pictures": 0,
+        "editableTextShapes": 2
+      },
+      "comparisons": [
+        {
+          "slide": 1,
+          "meanAbsoluteChannelDifference": 0.9763038917824074,
+          "channelFractionOver10": 0.00708080150462963
+        },
+        {
+          "slide": 2,
+          "meanAbsoluteChannelDifference": 1.4779358362268518,
+          "channelFractionOver10": 0.009387659143518518
+        }
+      ],
+      "imports": [
+        {
+          "file": "table-cell-types.pptx",
+          "valid": true,
+          "slides": 2,
+          "editsPreserved": false,
+          "diagnostics": []
+        },
+        {
+          "file": "table-cell-types-native-saved.pptx",
+          "valid": true,
+          "slides": 2,
+          "editsPreserved": false,
+          "diagnostics": []
+        },
+        {
+          "file": "table-cell-types-native-edited.pptx",
+          "valid": true,
+          "slides": 2,
+          "editsPreserved": true,
+          "diagnostics": []
+        }
+      ]
+    },
+    {
+      "id": "table-and-code",
+      "source": "examples/technical/table-and-code.opf.json",
+      "sourceSha256": "53a416beefb5a25a27cc354db1415dc8083d8c5d86f982046b648a23c203646e",
+      "slides": 2,
+      "fontChanges": [],
+      "diagnostics": [],
+      "hashes": {
+        "table-and-code-renderer-1.png": "a5f49999db3b4ccc2a92b41515eff01af1b0409533390b0fff44a35381efe5a1",
+        "table-and-code-renderer-2.png": "6067b930179ee9b35c2249f4ba205c8d85f8d626fb40ccb90b7b8f3506e94a50",
+        "table-and-code.pptx": "0013fdbc7e750695c9078e03873280c2ea27012d1cb0354b28d154ac3f501d3d",
+        "table-and-code.opf.json": "f369d96a2916b8879d8544e9955991e0277ba1ea56fb50d7f94844e1bb90061f"
+      },
+      "native": {
+        "editsReopened": 2,
+        "sourceSha256": "0013fdbc7e750695c9078e03873280c2ea27012d1cb0354b28d154ac3f501d3d",
+        "editedSha256": "809eb914aa5ed95a27b8563be556e4813a4e73e0e83b359c2733ef0d4abd6c9a",
+        "savedSha256": "88287c10a208940a34604bd05a35bfa882a212d593952e59d708cfb5bba36185",
+        "slides": [
+          {
+            "slide": 1,
+            "rasterSha256": "663ff1f1b7c784090c8db77c9bcda86b9663fa017b120d88692304147194dc29",
+            "shapes": [
+              {
+                "top": 43.20000076293945,
+                "type": 1,
+                "height": 49.40999984741211,
+                "left": 43.20000076293945,
+                "text": "Quarter Snapshot",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              },
+              {
+                "top": 380.07000732421875,
+                "type": 1,
+                "height": 116.7300033569336,
+                "left": 43.20000076293945,
+                "text": "Growth was broad-based, with margin expansion from infrastructure savings.",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              },
+              {
+                "top": 110.61000061035156,
+                "type": 19,
+                "height": 162,
+                "left": 43.20000076293945,
+                "text": "",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": true
+              }
+            ]
+          },
+          {
+            "slide": 2,
+            "rasterSha256": "2040dd898fc0e604e213d24758af064ac2074111bad3bb2062d83aeb59d5b889",
+            "shapes": [
+              {
+                "top": 43.20000076293945,
+                "type": 1,
+                "height": 49.40999984741211,
+                "left": 43.20000076293945,
+                "text": "Decision Rule",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              },
+              {
+                "top": 110.61000061035156,
+                "type": 1,
+                "height": 22.87504005432129,
+                "left": 340.3999938964844,
+                "text": "Escalate only when the decision is irreversible",
+                "chart": false,
+                "width": 576.4000244140625,
+                "table": false
+              },
+              {
+                "top": 138.73504638671875,
+                "type": 1,
+                "height": 22.87504005432129,
+                "left": 340.3999938964844,
+                "text": "Keep reversible changes moving",
+                "chart": false,
+                "width": 576.4000244140625,
+                "table": false
+              },
+              {
+                "top": 166.86000061035156,
+                "type": 1,
+                "height": 22.87504005432129,
+                "left": 340.3999938964844,
+                "text": "Write the reason back to the audit log",
+                "chart": false,
+                "width": 576.4000244140625,
+                "table": false
+              },
+              {
+                "top": 110.61000061035156,
+                "type": 1,
+                "height": 386.19000244140625,
+                "left": 43.20000076293945,
+                "text": "",
+                "chart": false,
+                "width": 279.20001220703125,
+                "table": false
+              },
+              {
+                "top": 121.11000061035156,
+                "type": 1,
+                "height": 15,
+                "left": 56.70000076293945,
+                "text": "PYTHON",
+                "chart": false,
+                "width": 252.1999969482422,
+                "table": false
+              },
+              {
+                "top": 145.11000061035156,
+                "type": 1,
+                "height": 16.469999313354492,
+                "left": 56.70000076293945,
+                "text": "if risk > threshold:",
+                "chart": false,
+                "width": 252.1999969482422,
+                "table": false
+              },
+              {
+                "top": 161.5800018310547,
+                "type": 1,
+                "height": 16.469999313354492,
+                "left": 56.70000076293945,
+                "text": "escalate(owner)",
+                "chart": false,
+                "width": 252.1999969482422,
+                "table": false
+              },
+              {
+                "top": 178.0500030517578,
+                "type": 1,
+                "height": 16.469999313354492,
+                "left": 56.70000076293945,
+                "text": "else:",
+                "chart": false,
+                "width": 252.1999969482422,
+                "table": false
+              },
+              {
+                "top": 194.52000427246094,
+                "type": 1,
+                "height": 16.469999313354492,
+                "left": 56.70000076293945,
+                "text": "approve(change)",
+                "chart": false,
+                "width": 252.1999969482422,
+                "table": false
+              }
+            ]
+          }
+        ],
+        "id": "table-and-code"
+      },
+      "nativeObjects": {
+        "tables": 1,
+        "charts": 0,
+        "pictures": 0,
+        "editableTextShapes": 11
+      },
+      "comparisons": [
+        {
+          "slide": 1,
+          "meanAbsoluteChannelDifference": 2.3680812355324075,
+          "channelFractionOver10": 0.017767650462962963
+        },
+        {
+          "slide": 2,
+          "meanAbsoluteChannelDifference": 2.5798365162037036,
+          "channelFractionOver10": 0.021796875
+        }
+      ],
+      "imports": [
+        {
+          "file": "table-and-code.pptx",
+          "valid": true,
+          "slides": 2,
+          "editsPreserved": false,
+          "diagnostics": []
+        },
+        {
+          "file": "table-and-code-native-saved.pptx",
+          "valid": true,
+          "slides": 2,
+          "editsPreserved": false,
+          "diagnostics": []
+        },
+        {
+          "file": "table-and-code-native-edited.pptx",
+          "valid": true,
+          "slides": 2,
+          "editsPreserved": true,
+          "diagnostics": []
+        }
+      ]
+    },
+    {
+      "id": "metrics-quotes-timeline",
+      "source": "examples/technical/metrics-quotes-timeline.opf.json",
+      "sourceSha256": "67ea12bd4d149e2abc70927db5b1feb088b06646618cc26547d494a027b61c81",
+      "slides": 3,
+      "fontChanges": [],
+      "diagnostics": [],
+      "hashes": {
+        "metrics-quotes-timeline-renderer-1.png": "88433c6c57d6d652ea1c1fd8159c41c2efb5f188d3ded19e57e12a63d1405aa8",
+        "metrics-quotes-timeline-renderer-2.png": "376f2ded33e2e20feb62012075e647a1a66b58eb7f31a7c588b816e30736c9de",
+        "metrics-quotes-timeline-renderer-3.png": "325f5209c7254d5b0e489ca72224cfee1b5d4f80c62882ec2bdf98ccfd1e3cd4",
+        "metrics-quotes-timeline.pptx": "1b5cf10ea4ac4f1df444b7eaaa27b7836a709caef4148e5e2bb16ddfc4e1ffc5",
+        "metrics-quotes-timeline.opf.json": "456bcc4761e99c335faedf784828dea4358877b6535cc762eedba7ed07eef1e4"
+      },
+      "native": {
+        "editsReopened": 3,
+        "sourceSha256": "1b5cf10ea4ac4f1df444b7eaaa27b7836a709caef4148e5e2bb16ddfc4e1ffc5",
+        "editedSha256": "7580600cf96c0e30b70832ab5c628b7a2dbc5a2610e38e87a020fd949a178e56",
+        "savedSha256": "4b981a35162cc9820dde1adfa382000dc79749f6880e2b1687e90c2044497120",
+        "slides": [
+          {
+            "slide": 1,
+            "rasterSha256": "afac7df4ed4f198810bc762bac603b26b5e58d5e013dd9b8f3cdd5c79a2bf9d2",
+            "shapes": [
+              {
+                "top": 43.20000076293945,
+                "type": 1,
+                "height": 49.40999984741211,
+                "left": 43.20000076293945,
+                "text": "Operating Metric",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              },
+              {
+                "top": 110.61000061035156,
+                "type": 1,
+                "height": 69.54000091552734,
+                "left": 43.20000076293945,
+                "text": "42%",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              },
+              {
+                "top": 284.3955078125,
+                "type": 1,
+                "height": 21.045040130615234,
+                "left": 43.20000076293945,
+                "text": "Review cycle reduction",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              },
+              {
+                "top": 305.4404602050781,
+                "type": 1,
+                "height": 21.045040130615234,
+                "left": 43.20000076293945,
+                "text": "Median reduction across customer review workflows.",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              },
+              {
+                "top": 326.4855041503906,
+                "type": 1,
+                "height": 21.045040130615234,
+                "left": 43.20000076293945,
+                "text": "+11 pts",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              }
+            ]
+          },
+          {
+            "slide": 2,
+            "rasterSha256": "35eb615f54e17728a8dacfa73aaa8e2478fb14b1c54a0fe1ecff0016cd7632a4",
+            "shapes": [
+              {
+                "top": 43.20000076293945,
+                "type": 1,
+                "height": 49.40999984741211,
+                "left": 43.20000076293945,
+                "text": "Customer Proof",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              },
+              {
+                "top": 124.11000061035156,
+                "type": 1,
+                "height": 25.6200008392334,
+                "left": 56.70000076293945,
+                "text": "\"The new workflow made exceptions visible before they became escalations.\"",
+                "chart": false,
+                "width": 846.5999755859375,
+                "table": false
+              },
+              {
+                "top": 453.29998779296875,
+                "type": 1,
+                "height": 15.555039405822754,
+                "left": 56.70000076293945,
+                "text": "VP Operations, Acme Corp - Customer interview",
+                "chart": false,
+                "width": 846.5999755859375,
+                "table": false
+              }
+            ]
+          },
+          {
+            "slide": 3,
+            "rasterSha256": "3f70a78bf41ecbd82db4b7b766db17b14e7875550fc18290af84d3397c44853a",
+            "shapes": [
+              {
+                "top": 43.20000076293945,
+                "type": 1,
+                "height": 49.40999984741211,
+                "left": 43.20000076293945,
+                "text": "Rollout Plan",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              },
+              {
+                "top": 288.2574157714844,
+                "type": 9,
+                "height": 0,
+                "left": 188.8000030517578,
+                "text": "",
+                "chart": false,
+                "width": 582.4000244140625,
+                "table": false
+              },
+              {
+                "top": 281.5074157714844,
+                "type": 1,
+                "height": 13.5,
+                "left": 182.0500030517578,
+                "text": "",
+                "chart": false,
+                "width": 13.5,
+                "table": false
+              },
+              {
+                "top": 110.61000061035156,
+                "type": 1,
+                "height": 14.640000343322754,
+                "left": 43.20000076293945,
+                "text": "Q1",
+                "chart": false,
+                "width": 291.20001220703125,
+                "table": false
+              },
+              {
+                "top": 125.25,
+                "type": 1,
+                "height": 14.640000343322754,
+                "left": 43.20000076293945,
+                "text": "Pilot",
+                "chart": false,
+                "width": 291.20001220703125,
+                "table": false
+              },
+              {
+                "top": 139.88999938964844,
+                "type": 1,
+                "height": 14.640000343322754,
+                "left": 43.20000076293945,
+                "text": "Launch with one operations team.",
+                "chart": false,
+                "width": 291.20001220703125,
+                "table": false
+              },
+              {
+                "top": 281.5074157714844,
+                "type": 1,
+                "height": 13.5,
+                "left": 473.25,
+                "text": "",
+                "chart": false,
+                "width": 13.5,
+                "table": false
+              },
+              {
+                "top": 306.2574157714844,
+                "type": 1,
+                "height": 14.640000343322754,
+                "left": 334.3999938964844,
+                "text": "Q2",
+                "chart": false,
+                "width": 291.20001220703125,
+                "table": false
+              },
+              {
+                "top": 320.89739990234375,
+                "type": 1,
+                "height": 14.640000343322754,
+                "left": 334.3999938964844,
+                "text": "Rollout",
+                "chart": false,
+                "width": 291.20001220703125,
+                "table": false
+              },
+              {
+                "top": 335.53741455078125,
+                "type": 1,
+                "height": 14.640000343322754,
+                "left": 334.3999938964844,
+                "text": "Expand to all regions.",
+                "chart": false,
+                "width": 291.20001220703125,
+                "table": false
+              },
+              {
+                "top": 281.5074157714844,
+                "type": 1,
+                "height": 13.5,
+                "left": 764.4500122070312,
+                "text": "",
+                "chart": false,
+                "width": 13.5,
+                "table": false
+              },
+              {
+                "top": 110.61000061035156,
+                "type": 1,
+                "height": 14.640000343322754,
+                "left": 625.5999755859375,
+                "text": "Q3",
+                "chart": false,
+                "width": 291.20001220703125,
+                "table": false
+              },
+              {
+                "top": 125.25,
+                "type": 1,
+                "height": 14.640000343322754,
+                "left": 625.5999755859375,
+                "text": "Scale",
+                "chart": false,
+                "width": 291.20001220703125,
+                "table": false
+              },
+              {
+                "top": 139.88999938964844,
+                "type": 1,
+                "height": 14.640000343322754,
+                "left": 625.5999755859375,
+                "text": "Automate exception reporting.",
+                "chart": false,
+                "width": 291.20001220703125,
+                "table": false
+              }
+            ]
+          }
+        ],
+        "id": "metrics-quotes-timeline"
+      },
+      "nativeObjects": {
+        "tables": 0,
+        "charts": 0,
+        "pictures": 0,
+        "editableTextShapes": 18
+      },
+      "comparisons": [
+        {
+          "slide": 1,
+          "meanAbsoluteChannelDifference": 2.201741898148148,
+          "channelFractionOver10": 0.016748046875
+        },
+        {
+          "slide": 2,
+          "meanAbsoluteChannelDifference": 2.2680656828703705,
+          "channelFractionOver10": 0.01666015625
+        },
+        {
+          "slide": 3,
+          "meanAbsoluteChannelDifference": 1.2004955150462964,
+          "channelFractionOver10": 0.010898075810185185
+        }
+      ],
+      "imports": [
+        {
+          "file": "metrics-quotes-timeline.pptx",
+          "valid": true,
+          "slides": 3,
+          "editsPreserved": false,
+          "diagnostics": []
+        },
+        {
+          "file": "metrics-quotes-timeline-native-saved.pptx",
+          "valid": true,
+          "slides": 3,
+          "editsPreserved": false,
+          "diagnostics": []
+        },
+        {
+          "file": "metrics-quotes-timeline-native-edited.pptx",
+          "valid": true,
+          "slides": 3,
+          "editsPreserved": true,
+          "diagnostics": []
+        }
+      ]
+    },
+    {
+      "id": "rows-chart",
+      "source": "examples/technical/rows-chart.opf.json",
+      "sourceSha256": "f0c39bf81d85ac483fdd1fbba8c397979ee3d9b12291c95d6f90f9cc56bd81a9",
+      "slides": 2,
+      "fontChanges": [],
+      "diagnostics": [],
+      "hashes": {
+        "rows-chart-renderer-1.png": "8f39f2e49a9981f776b749091474853e6cdc45c45e0b67db8a8e4d43db8ac42b",
+        "rows-chart-renderer-2.png": "c5c6222cb15cdc8d8f95d52c81de5e29306fecee90d885676ea29e9f37e23c07",
+        "rows-chart.pptx": "6fcceacc62989b3b02b1dd4618a182675bbc1f83e4cde0bfa520d757deca6d60",
+        "rows-chart.opf.json": "21b0dea342b4ad56ab1c17ba6229aa737e1c72b95994058fdf7d850235577c71"
+      },
+      "native": {
+        "editsReopened": 2,
+        "sourceSha256": "6fcceacc62989b3b02b1dd4618a182675bbc1f83e4cde0bfa520d757deca6d60",
+        "editedSha256": "b3c422c513c876e53a427f287a7ff57d2a8d4ed3c75ccd54e9e34f58b9fa9752",
+        "savedSha256": "f0f5fe98c46173b285b97111f5acdae9d136d79d7bffb9f9f72daf7dcbd5dad5",
+        "slides": [
+          {
+            "slide": 1,
+            "rasterSha256": "cd3a9cbd45598af3a8b84699439734cef85e2c10387e9d0ba851de5baff7f6ae",
+            "shapes": [
+              {
+                "top": 43.20000076293945,
+                "type": 1,
+                "height": 49.40999984741211,
+                "left": 43.20000076293945,
+                "text": "Performance",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              },
+              {
+                "top": 380.07000732421875,
+                "type": 1,
+                "height": 116.7300033569336,
+                "left": 43.20000076293945,
+                "text": "Latency improved 55% over the last four quarters.",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              },
+              {
+                "top": 110.61000061035156,
+                "type": 3,
+                "height": 251.4600067138672,
+                "left": 43.20000076293945,
+                "text": "",
+                "chart": true,
+                "width": 873.5999755859375,
+                "table": false
+              }
+            ]
+          },
+          {
+            "slide": 2,
+            "rasterSha256": "4ed975e2315a9ed5eb712368e2d388074418f0a575762da9319ad9253db6c741",
+            "shapes": [
+              {
+                "top": 43.20000076293945,
+                "type": 1,
+                "height": 49.40999984741211,
+                "left": 43.20000076293945,
+                "text": "Next Focus",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              },
+              {
+                "top": 245.33999633789062,
+                "type": 1,
+                "height": 22.87504005432129,
+                "left": 43.20000076293945,
+                "text": "Profile slow tool calls",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              },
+              {
+                "top": 273.46502685546875,
+                "type": 1,
+                "height": 22.87504005432129,
+                "left": 43.20000076293945,
+                "text": "Cache stable lookups",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              },
+              {
+                "top": 301.5899963378906,
+                "type": 1,
+                "height": 22.87504005432129,
+                "left": 43.20000076293945,
+                "text": "Batch low-risk writes",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              },
+              {
+                "top": 110.61000061035156,
+                "type": 1,
+                "height": 116.7300033569336,
+                "left": 43.20000076293945,
+                "text": "Reduce long-tail retries",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              }
+            ]
+          }
+        ],
+        "id": "rows-chart"
+      },
+      "nativeObjects": {
+        "tables": 0,
+        "charts": 1,
+        "pictures": 0,
+        "editableTextShapes": 7
+      },
+      "comparisons": [
+        {
+          "slide": 1,
+          "meanAbsoluteChannelDifference": 4.414541015625,
+          "channelFractionOver10": 0.04525028935185185
+        },
+        {
+          "slide": 2,
+          "meanAbsoluteChannelDifference": 1.769273726851852,
+          "channelFractionOver10": 0.012786096643518518
+        }
+      ],
+      "imports": [
+        {
+          "file": "rows-chart.pptx",
+          "valid": true,
+          "slides": 2,
+          "editsPreserved": false,
+          "diagnostics": []
+        },
+        {
+          "file": "rows-chart-native-saved.pptx",
+          "valid": true,
+          "slides": 2,
+          "editsPreserved": false,
+          "diagnostics": []
+        },
+        {
+          "file": "rows-chart-native-edited.pptx",
+          "valid": true,
+          "slides": 2,
+          "editsPreserved": true,
+          "diagnostics": []
+        }
+      ]
+    },
+    {
+      "id": "grid-spans",
+      "source": "examples/technical/grid-spans.opf.json",
+      "sourceSha256": "59c5d2b4dedf160fc1adbd51f8f3bd404caa65d1dfcda6a47af35ec7796eb334",
+      "slides": 2,
+      "fontChanges": [],
+      "diagnostics": [],
+      "hashes": {
+        "grid-spans-renderer-1.png": "d2dc082e3f90ea6b4feceb484bdae799c049d30158019a7c3826f7723ae52a8e",
+        "grid-spans-renderer-2.png": "a5d014e18a5f48ef98164e49dec3f0db6db0c35a20dffc276e8159a8a727ba73",
+        "grid-spans.pptx": "a5e1deb6b236460922a54f59bb24f159b57566abe9b83972022da9c4e3491916",
+        "grid-spans.opf.json": "9981f75c50618b3fa73e563bede14051c75f94c76df79abfd5b9183388374cef"
+      },
+      "native": {
+        "editsReopened": 2,
+        "sourceSha256": "a5e1deb6b236460922a54f59bb24f159b57566abe9b83972022da9c4e3491916",
+        "editedSha256": "a8ef32ec4b5366d31f2a5e6da1ef4b53a580a20bb7ffb00722bacb996051f727",
+        "savedSha256": "ad8748e3f35c16e2f241ab28436da2ce72aeea8a8b8925ead5fd6d3fa60aedb8",
+        "slides": [
+          {
+            "slide": 1,
+            "rasterSha256": "f1bdb0b8b58da7d0742b7e8a6bae17172afdd48ced9f4800390d3e105b8b7f4b",
+            "shapes": [
+              {
+                "top": 43.20000076293945,
+                "type": 1,
+                "height": 49.40999984741211,
+                "left": 43.20000076293945,
+                "text": "Operating Model",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              },
+              {
+                "top": 245.33999633789062,
+                "type": 1,
+                "height": 22.87504005432129,
+                "left": 43.20000076293945,
+                "text": "Queue",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              },
+              {
+                "top": 273.46502685546875,
+                "type": 1,
+                "height": 22.87504005432129,
+                "left": 43.20000076293945,
+                "text": "Route",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              },
+              {
+                "top": 301.5899963378906,
+                "type": 1,
+                "height": 22.87504005432129,
+                "left": 43.20000076293945,
+                "text": "Resolve",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              },
+              {
+                "top": 110.61000061035156,
+                "type": 1,
+                "height": 116.7300033569336,
+                "left": 340.3999938964844,
+                "text": "Processing",
+                "chart": false,
+                "width": 576.4000244140625,
+                "table": false
+              },
+              {
+                "top": 110.61000061035156,
+                "type": 1,
+                "height": 116.7300033569336,
+                "left": 43.20000076293945,
+                "text": "Inputs",
+                "chart": false,
+                "width": 279.20001220703125,
+                "table": false
+              }
+            ]
+          },
+          {
+            "slide": 2,
+            "rasterSha256": "c0f64ef0e906d4aaacbd9a0050e474f457594f0586c3bc3e8733758ebb44628c",
+            "shapes": [
+              {
+                "top": 43.20000076293945,
+                "type": 1,
+                "height": 49.40999984741211,
+                "left": 43.20000076293945,
+                "text": "Team Responsibilities",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              },
+              {
+                "top": 380.07000732421875,
+                "type": 1,
+                "height": 22.87504005432129,
+                "left": 43.20000076293945,
+                "text": "Weekly planning review",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              },
+              {
+                "top": 408.1950378417969,
+                "type": 1,
+                "height": 22.87504005432129,
+                "left": 43.20000076293945,
+                "text": "Shared risk register",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              },
+              {
+                "top": 436.32000732421875,
+                "type": 1,
+                "height": 22.87504005432129,
+                "left": 43.20000076293945,
+                "text": "Single launch checklist",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              },
+              {
+                "top": 110.61000061035156,
+                "type": 1,
+                "height": 251.4600067138672,
+                "left": 340.3999938964844,
+                "text": "Engineering",
+                "chart": false,
+                "width": 279.20001220703125,
+                "table": false
+              },
+              {
+                "top": 110.61000061035156,
+                "type": 1,
+                "height": 251.4600067138672,
+                "left": 43.20000076293945,
+                "text": "Product",
+                "chart": false,
+                "width": 279.20001220703125,
+                "table": false
+              },
+              {
+                "top": 110.61000061035156,
+                "type": 1,
+                "height": 251.4600067138672,
+                "left": 637.5999755859375,
+                "text": "Operations",
+                "chart": false,
+                "width": 279.20001220703125,
+                "table": false
+              }
+            ]
+          }
+        ],
+        "id": "grid-spans"
+      },
+      "nativeObjects": {
+        "tables": 0,
+        "charts": 0,
+        "pictures": 0,
+        "editableTextShapes": 13
+      },
+      "comparisons": [
+        {
+          "slide": 1,
+          "meanAbsoluteChannelDifference": 1.707529296875,
+          "channelFractionOver10": 0.011060474537037037
+        },
+        {
+          "slide": 2,
+          "meanAbsoluteChannelDifference": 2.7020066550925925,
+          "channelFractionOver10": 0.018806061921296295
+        }
+      ],
+      "imports": [
+        {
+          "file": "grid-spans.pptx",
+          "valid": true,
+          "slides": 2,
+          "editsPreserved": false,
+          "diagnostics": []
+        },
+        {
+          "file": "grid-spans-native-saved.pptx",
+          "valid": true,
+          "slides": 2,
+          "editsPreserved": false,
+          "diagnostics": []
+        },
+        {
+          "file": "grid-spans-native-edited.pptx",
+          "valid": true,
+          "slides": 2,
+          "editsPreserved": true,
+          "diagnostics": []
+        }
+      ]
+    },
+    {
+      "id": "embedded-raster",
+      "source": "examples/technical/asset-source-forms.opf.json#data-uri-image",
+      "sourceSha256": "994b6a30e3587e7c7b7d4f276b05f442354dbba518d3f2f7df6ce7ca6e2ba6f6",
+      "slides": 1,
+      "fontChanges": [],
+      "diagnostics": [],
+      "hashes": {
+        "embedded-raster-renderer-1.png": "45e507131a6f90142e9177b1e1ee6d4a2f2743a8522bf50924fc61c040c6001d",
+        "embedded-raster.pptx": "4ab65541239913267f8cbe6122ed6786ae15b8379339091b858e9d9e0263d981",
+        "embedded-raster.opf.json": "086d9bd010af5068957ae8ac8b76cf2a352fbb5c7965c30bbde277769653a74f"
+      },
+      "native": {
+        "editsReopened": 1,
+        "sourceSha256": "4ab65541239913267f8cbe6122ed6786ae15b8379339091b858e9d9e0263d981",
+        "editedSha256": "55bcd5fa42aa148f149c538cffb1ac859ae10c1455f5144cc01042cb89fc30e5",
+        "savedSha256": "6a0ddef803a56be975383d3256457ccd7384c5faf41241fdd955ad122bb12d46",
+        "slides": [
+          {
+            "slide": 1,
+            "rasterSha256": "856ec883f8ef0ba247ed96de3e5d83bef868d3737e33fc1e3c52b2ea6ee7cd64",
+            "shapes": [
+              {
+                "top": 43.20000076293945,
+                "type": 1,
+                "height": 49.40999984741211,
+                "left": 43.20000076293945,
+                "text": "Embedded raster stays an image",
+                "chart": false,
+                "width": 873.5999755859375,
+                "table": false
+              },
+              {
+                "top": 110.61000061035156,
+                "type": 13,
+                "height": 386.19000244140625,
+                "left": 286.905029296875,
+                "text": "",
+                "chart": false,
+                "width": 386.19000244140625,
+                "table": false
+              }
+            ]
+          }
+        ],
+        "id": "embedded-raster"
+      },
+      "nativeObjects": {
+        "tables": 0,
+        "charts": 0,
+        "pictures": 1,
+        "editableTextShapes": 1
+      },
+      "comparisons": [
+        {
+          "slide": 1,
+          "meanAbsoluteChannelDifference": 2.539945384837963,
+          "channelFractionOver10": 0.020372178819444444
+        }
+      ],
+      "imports": [
+        {
+          "file": "embedded-raster.pptx",
+          "valid": true,
+          "slides": 1,
+          "editsPreserved": false,
+          "diagnostics": []
+        },
+        {
+          "file": "embedded-raster-native-saved.pptx",
+          "valid": true,
+          "slides": 1,
+          "editsPreserved": false,
+          "diagnostics": []
+        },
+        {
+          "file": "embedded-raster-native-edited.pptx",
+          "valid": true,
+          "slides": 1,
+          "editsPreserved": true,
+          "diagnostics": []
+        }
+      ]
+    }
+  ],
+  "scope": "Native open/raster/edit/save/reopen and schema-valid reimport, measured RGB raster differences. Left contact column is renderer; right is PowerPoint. Differences are observations, not an equivalence pass threshold. Chart shape counts distinguish native Office charts from editable primitive renderings. This is a controlled feature sample, not arbitrary Office/media/language fidelity.",
+  "fontSubstitutions": [
+    {
+      "requestedFamily": "Calibri",
+      "sourceFamily": "Calibri",
+      "resolvedFamily": "Calibri",
+      "requestedWeight": 800,
+      "resolvedWeight": 700,
+      "italic": false,
+      "compatibility": "visual",
+      "path": "slides.0.metric.value"
+    },
+    {
+      "requestedFamily": "Calibri",
+      "sourceFamily": "Calibri",
+      "resolvedFamily": "Calibri",
+      "requestedWeight": 500,
+      "resolvedWeight": 400,
+      "italic": false,
+      "compatibility": "visual",
+      "path": "slides.0.metric"
+    },
+    {
+      "requestedFamily": "Calibri",
+      "sourceFamily": "Calibri",
+      "resolvedFamily": "Calibri",
+      "requestedWeight": 600,
+      "resolvedWeight": 700,
+      "italic": false,
+      "compatibility": "visual",
+      "path": "slides.1.quote.text"
+    },
+    {
+      "requestedFamily": "Calibri",
+      "sourceFamily": "Calibri",
+      "resolvedFamily": "Calibri",
+      "requestedWeight": 500,
+      "resolvedWeight": 400,
+      "italic": false,
+      "compatibility": "visual",
+      "path": "slides.1.quote"
+    },
+    {
+      "requestedFamily": "Calibri",
+      "sourceFamily": "Calibri",
+      "resolvedFamily": "Calibri",
+      "requestedWeight": 500,
+      "resolvedWeight": 400,
+      "italic": false,
+      "compatibility": "visual",
+      "path": "slides.2.timeline.events.0"
+    },
+    {
+      "requestedFamily": "Calibri",
+      "sourceFamily": "Calibri",
+      "resolvedFamily": "Calibri",
+      "requestedWeight": 500,
+      "resolvedWeight": 400,
+      "italic": false,
+      "compatibility": "visual",
+      "path": "slides.2.timeline.events.1"
+    },
+    {
+      "requestedFamily": "Calibri",
+      "sourceFamily": "Calibri",
+      "resolvedFamily": "Calibri",
+      "requestedWeight": 500,
+      "resolvedWeight": 400,
+      "italic": false,
+      "compatibility": "visual",
+      "path": "slides.2.timeline.events.2"
+    }
+  ],
+  "candidate": {
+    "kind": "local-candidate-not-registry-release",
+    "package": "@openpresentation/opf-pptx",
+    "declaredVersion": "0.5.2",
+    "files": {
+      "dist/background-import.js": "684f9b38cff01e596774b8120c979c3dbbfada273890f785f7a4e3db88cdcb22",
+      "dist/background.js": "081fb685677ca656341cdce89275331749174ffecd60e71451f26b9f896cca1c",
+      "dist/image-fallback-browser.js": "3c7f81d5677dd9a78a0a13fe5a94bbb14cef465031caaeda2c87e8451e9ff491",
+      "dist/image-fallback-node.js": "5ee323d3320420664b5d2c1714e246b04dd0806f459164f9696668552df87565",
+      "dist/image-geometry.js": "e083973a98c2bdf7d7dfce9ef1f6bef252f09ce0d69d987105ee0b73cc13d62e",
+      "dist/image-import.js": "cffccecc223e27d62b6e1aba0cdbe2c1c9aa94874ef898f76906b22e001bbd41",
+      "dist/index.d.ts": "2c86215568e72895ed9817603e9ec664493769777063ea63876c4beeddec4bbf",
+      "dist/index.js": "b8b67e2bfef63331629550d5b170e06f792ac846ac1f1843216ad09c4af0ef66",
+      "dist/table-border-import.js": "16678e0d93e63474d39daac268016a59517cc36d85dbd8751131f143db01ace5",
+      "dist/table-cell-import.js": "fa17507763a2240564401d7977f4f39bc180e3e6da9d4aa9c36202908e9126d1",
+      "dist/table-import.js": "9ae40bb38dd34c9fc0ae4a3f5a257068ae92bb651ed5d96641c2629ef7106cf1",
+      "vendor/pptxgenjs/LICENSE": "7a2bfe96150786ed1908b8e63f98ebab88875c1e79e28faff6649e0f11f77e52",
+      "vendor/pptxgenjs/package.json": "15ec5ec45f1001afef85aeacbc2098a05140f5a3e92f1502792c9575694dabc4",
+      "vendor/pptxgenjs/pptxgen.es.js": "05844c5625e2cda3b449eb967c2246dd57ca57341886a7c28eeebca263b29bd4",
+      "vendor/pptxgenjs/UPSTREAM.json": "319b973f4a71bb31cb355ad37e428848c26db57ab4c5e3e0c2f48939242c9270",
+      "package.json": "4b3114bd998394cbc61a19c8d1bc3ed50762d80920e2d1e8a444ae94f8e0d92f",
+      "package-lock.json": "599a4e38b67d807d81a094213969eb1cdb7484d8d53c5a5444fec6a20f3437ca"
+    }
+  },
+  "fontHashes": {
+    "calibri.ttf": "57e93ff143572bcc092c1f56202d43ddc07bb119aa104c6d7af163470fb551f6",
+    "calibrib.ttf": "0a8296747536ead27d5f48f67e911cc3b207742b3f704e66995251d12fd422e5",
+    "calibrii.ttf": "7f150e9eabe5db3e1b0f9469dca5c96176bc2fbb306dc9d48b7029dc69c52763",
+    "calibriz.ttf": "760539bfedbe24e7853ca8a621d9cb1f3de52036c116e81aae36b33c4ab60a7c"
+  },
+  "contactSheets": [
+    {
+      "file": "contact-1.png",
+      "sha256": "76a5a28171795fbb0ef8e474d70f289f9eb51e5afecdd9604df4e986e655d567",
+      "rows": [
+        {
+          "id": "rich-text-runs",
+          "slide": 1
+        },
+        {
+          "id": "rich-text-runs",
+          "slide": 2
+        },
+        {
+          "id": "rich-text-runs",
+          "slide": 3
+        },
+        {
+          "id": "dynamic-composition",
+          "slide": 1
+        },
+        {
+          "id": "dynamic-composition",
+          "slide": 2
+        },
+        {
+          "id": "dynamic-composition",
+          "slide": 3
+        }
+      ]
+    },
+    {
+      "file": "contact-2.png",
+      "sha256": "4f2aaafa27f6ba2b52452ca58b2d1c400c24fc12d277af61f8e559a87bfcd9b1",
+      "rows": [
+        {
+          "id": "dynamic-composition",
+          "slide": 4
+        },
+        {
+          "id": "table-cell-types",
+          "slide": 1
+        },
+        {
+          "id": "table-cell-types",
+          "slide": 2
+        },
+        {
+          "id": "table-and-code",
+          "slide": 1
+        },
+        {
+          "id": "table-and-code",
+          "slide": 2
+        },
+        {
+          "id": "metrics-quotes-timeline",
+          "slide": 1
+        }
+      ]
+    },
+    {
+      "file": "contact-3.png",
+      "sha256": "2ee1f0b5c28e8afd754d6363b5bfe89d6890344a412258addeab9b666ee66e73",
+      "rows": [
+        {
+          "id": "metrics-quotes-timeline",
+          "slide": 2
+        },
+        {
+          "id": "metrics-quotes-timeline",
+          "slide": 3
+        },
+        {
+          "id": "rows-chart",
+          "slide": 1
+        },
+        {
+          "id": "rows-chart",
+          "slide": 2
+        },
+        {
+          "id": "grid-spans",
+          "slide": 1
+        },
+        {
+          "id": "grid-spans",
+          "slide": 2
+        }
+      ]
+    },
+    {
+      "file": "contact-4.png",
+      "sha256": "4aaf1e9a24c36346ecb13e2e93fb1a997a08c88c4e8f62f1f855e0b3dffca8e5",
+      "rows": [
+        {
+          "id": "embedded-raster",
+          "slide": 1
+        }
+      ]
+    }
+  ]
+}

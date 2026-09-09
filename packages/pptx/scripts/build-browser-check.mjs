@@ -47,3 +47,10 @@ const styledResult=await build({alias:browserAliases,entryPoints:[fileURLToPath(
 assert.ok(!Object.keys(styledResult.metafile.inputs).some(path=>path.includes('sharp')||path.includes('image-fallback-node')),'Styled table browser output must exclude the native decoder');
 await writeFile(new URL('index.html',styledDirectory),'<!doctype html><meta charset="utf-8"><title>Native styled table import</title><h1>Native styled table verification</h1><pre>Running…</pre><main style="max-width:960px"></main><script type="module" src="./bundle.js"></script>');
 console.log('Native styled table browser bundle ready at /artifacts/native-styled-table-import/browser/index.html.');
+
+const contentDirectory=new URL('../artifacts/native-content-layout/browser/',import.meta.url);
+await mkdir(contentDirectory,{recursive:true});
+const contentResult=await build({alias:browserAliases,entryPoints:[fileURLToPath(new URL('../test/content-layout-browser.js',import.meta.url))],bundle:true,platform:'browser',format:'esm',outfile:fileURLToPath(new URL('bundle.js',contentDirectory)),metafile:true});
+assert.ok(!Object.keys(contentResult.metafile.inputs).some(path=>path.includes('sharp')||path.includes('image-fallback-node')),'Content layout browser output must exclude native Node modules');
+await writeFile(new URL('index.html',contentDirectory),'<!doctype html><meta charset="utf-8"><title>Native content layout</title><h1>Native content layout verification</h1><pre>Running…</pre><main style="max-width:960px"></main><script type="module" src="./bundle.js"></script>');
+console.log('Native content browser bundle ready at /artifacts/native-content-layout/browser/index.html.');

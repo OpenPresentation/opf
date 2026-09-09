@@ -36,14 +36,21 @@ for(const name of ['pptxgen.es.js','LICENSE']) {
  const bytes = await readFile(new URL('vendor/pptxgenjs/'+name,pkg));
  assert.equal(createHash('sha256').update(bytes).digest('hex'),manifest.files[name].sha256);
 }
-const input = {name:'Installed package',slides:[{title:'Editable output',table:{columns:['Item','Value'],rows:[['Quality',42]]}}]};
+const input = {name:'Installed package',slides:[
+ {title:'Editable output',table:{columns:['Item','Value'],rows:[['Quality',42]]}},
+ {title:'Metric',metric:{value:'42%',label:'Measured outcome'}},
+ {title:'Quote',quote:{text:'Keep the source.',attribution:'Reviewer',source:'Interview'}},
+ {title:'Code',code:{language:'python',source:'approve(change)'}},
+ {title:'Timeline',timeline:{events:[{when:'Q1',what:'Pilot'},{when:'Q2',what:'Rollout'}]}}
+]};
 const bytes = await toPptx(input);
 assert.ok(bytes.byteLength>1000);
 const restored = await fromPptx(bytes);
-assert.equal(restored.slides.length,1);
+assert.equal(restored.slides.length,input.slides.length);
 assert.equal(validatePresentation(restored).valid,true);
 assert.ok(JSON.stringify(restored).includes('Quality'));
-console.log('Packed consumer: vendored licenses/hashes, absent unused dependencies, editable table export/reimport and schema validation pass.');
+for(const text of ['42%','Reviewer - Interview','approve(change)','Pilot','Rollout']) assert.ok(JSON.stringify(restored).includes(text), 'Installed payload text: '+text);
+console.log('Packed consumer: vendored licenses/hashes, absent unused dependencies, table/metric/quote/code/timeline export/reimport and schema validation pass.');
 `);
   process.stdout.write(execFileSync(process.execPath, ['verify.mjs'], { cwd: consumer, encoding: 'utf8' }));
   console.log(`Packed installation audit: zero known vulnerabilities; ${packed.filename}, ${packed.integrity}`);
