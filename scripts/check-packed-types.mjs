@@ -31,9 +31,15 @@ export async function checkPackedTypes(directory, {downstream = false} = {}) {
 import type {Presentation} from '@openpresentation/opf/types';
 import {validatePresentation} from '@openpresentation/opf/validator';
 import {composeSlide} from '@openpresentation/opf/composition';
+import type {FontFaceSelection, TextStyle} from '@openpresentation/opf/composition';
 import {paginatePresentation} from '@openpresentation/opf/pagination';
 import {createDataContent} from '@openpresentation/opf/data';
 const deck: Presentation = {slides: [{title: 'Typed consumer'}]};
+const physicalFace: FontFaceSelection = {family: 'Roboto SemiBold', bold: false, italic: false};
+const measuredStyle: TextStyle = {fontFamily: 'Roboto SemiBold', fontWeight: 600, fontFace: physicalFace};
+// @ts-expect-error Physical style-link flags are booleans, independent of weight.
+const invalidFace: FontFaceSelection = {family: 'Roboto', bold: 600, italic: false};
+void measuredStyle; void invalidFace;
 const valid: boolean = validatePresentation(deck).valid;
 const pages = paginatePresentation(deck).presentation;
 composeSlide(pages.slides[0]);

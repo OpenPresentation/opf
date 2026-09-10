@@ -18,7 +18,9 @@ export interface LayoutDiagnostic {
   path: string;
   message: string;
 }
-export interface TextStyle { fontFamily: string; fontWeight: number; italic?: boolean; path?: string }
+/** Physical legacy-family selection supplied by a font provider, independently of its numeric weight. */
+export interface FontFaceSelection { family: string; bold: boolean; italic: boolean }
+export interface TextStyle { fontFamily: string; fontWeight: number; italic?: boolean; path?: string; fontFace?: FontFaceSelection }
 export interface FontFamilies { heading: string; body: string; code: string }
 export function resolveFontFamilies(input: unknown): FontFamilies {
   const scheme = record(input);
