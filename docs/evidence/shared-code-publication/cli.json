@@ -1,0 +1,64 @@
+{
+  "checkedAt": "2026-09-10T06:36:19.065Z",
+  "name": "@openpresentation/cli",
+  "version": "0.7.0",
+  "gitHead": "685733976a665d0190bdb9922b9a174ef94153d9",
+  "publishedAt": "2026-09-10T06:19:33.786Z",
+  "workflow": "https://github.com/OpenPresentation/opf/actions/runs/34444558025",
+  "dist": {
+    "integrity": "sha512-Pk8ZYXwVdYo+wYcBPAKvB1wNtZ2XzfqfLsOoAHnGlge7nS+DVUFGfwycZD/urVarlskCXH5xJwztwzuCnazuBA==",
+    "shasum": "921e860393abb2a572d648451bb302543dcd43a1",
+    "tarball": "https://registry.npmjs.org/@openpresentation/cli/-/cli-0.7.0.tgz",
+    "fileCount": 5,
+    "unpackedSize": 3161219,
+    "attestations": {
+      "url": "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fcli@0.7.0",
+      "provenance": {
+        "predicateType": "https://slsa.dev/provenance/v1"
+      }
+    },
+    "signatures": [
+      {
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+        "sig": "MEQCIAK2nlluiGWy20LMm/IQ4yUlhugpCYmjmx3jt9d6j9gSAiBTk8wf4DweZpI4dKkIUN37VzszyS5Pc+n5dgPgdDwZ1g=="
+      }
+    ]
+  },
+  "tarball": {
+    "bytes": 547111,
+    "sha256": "3b7cc154fb12557a1cf59cfb9586b0e0e7c7a8ad55eb82e19726337bcd9eb323"
+  },
+  "reports": [
+    {
+      "node": "20.20.2",
+      "logSha256": "f380f09de934a6e761c9154f2a918af4498d8ce282326a1b3c184605a8bc942c",
+      "checks": {
+        "coreVersion": "0.9.0",
+        "globalExecutable": true,
+        "npxSkills": 6,
+        "preservedUserInstructions": true,
+        "idempotentInstall": true,
+        "commandChecks": 69,
+        "signature": true,
+        "attestation": true,
+        "windowsFileSymlinkCase": "Skipped locally because file-symlink privilege is unavailable; Unix CI covers this case."
+      }
+    },
+    {
+      "node": "24.20.0",
+      "logSha256": "f380f09de934a6e761c9154f2a918af4498d8ce282326a1b3c184605a8bc942c",
+      "checks": {
+        "coreVersion": "0.9.0",
+        "globalExecutable": true,
+        "npxSkills": 6,
+        "preservedUserInstructions": true,
+        "idempotentInstall": true,
+        "commandChecks": 69,
+        "signature": true,
+        "attestation": true,
+        "windowsFileSymlinkCase": "Skipped locally because file-symlink privilege is unavailable; Unix CI covers this case."
+      }
+    }
+  ],
+  "scope": "Fresh actual npm package, standalone global executable and npx-style six-skill installs, 69 immutable command fixtures, core version and safety/preservation checks on both runtimes. Signature and publication attestation verified. No hosted provider is required. Renderer/export/editor adoption remains separate."
+}
