@@ -78,6 +78,7 @@ export type {
 } from "./spec-files.js";
 
 export { composeSlide, resolveCanvasDimensions, fitText, wrapText, measureText, resolveFontFamilies, resolveTextStyle, textWidthMeasurer, layoutQuote, OPFCompositionError, MAX_COMPOSITION_DEPTH } from "./composition.js";
+export {layoutFurniture,type FurnitureLayout,type FurniturePart,type FurnitureTextPart,type FurnitureImagePart,type FurniturePartBase} from './composition.js';
 export type { QuoteContent, QuoteTextSource, QuoteTextPart, QuoteLayoutDiagnostic, QuoteLayout, QuoteLayoutOptions } from './composition.js';
 export {layoutCode} from './composition.js';
 export type {CodeContent,CodeLineSegment,CodeLineSource,CodeTextFit,CodeTextPart,CodeLayoutDiagnostic,CodeLayout,CodeLayoutOptions} from './composition.js';

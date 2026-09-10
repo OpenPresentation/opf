@@ -22,6 +22,18 @@ OPF keeps authoring intent in JSON. Use `blocks` when content can reflow; use pr
 
 Headings reserve space according to their wrapped text. Content that exceeds the number of preset placeholders reflows together; it is not drawn over already-bound content. Promoted regions keep the 3×3 vocabulary, including standalone `top`, `middle`, and `bottom`. They ignore flow direction and track weights.
 
+## Unpublished shared headers and footers
+
+The `codex/shared-furniture-20260910` candidate adds `layoutFurniture(slide, options)` and `geometry.furniture`, separate from body `items`. Composition identifies the changed available-space policy as `grid-score-v9`. Raw callers pass the presentation as `options.presentation`, resolved dimensions/fonts and the same measurement provider used by preview. `slideIndex` identifies source paths; optional `slideNumber` is the one-based displayed number.
+
+The core resolver honors whole local header/footer overrides, including `false` and empty objects. Each zone retains its image and all configured text fields in source-aware parts. Literal text and dates preserve whitespace and empty strings. Organization and section values point to their metadata source; page numbers use the actual output sequence. A missing organization/section or `date: true` without a supported literal date produces `unresolved-content`; the implementation never consults a clock or invents source text.
+
+`furniture-flow-v1` gives each left/center/right zone 26% of the canvas width. Parts stack within a zone; the tallest zone sets the natural band height. Text uses at least the selected readability floor, with complete accepted source lines and optional measured outline placement. Header and footer bands reserve room before heading and body allocation. Irreducible text, conflicting bands or a heading displaced beyond the remaining space produce diagnostics; strict composition rejects them. No-furniture body geometry remains unchanged.
+
+Pagination repeats these fields without putting them among body slices. An optional `page.repeatedMappings` records repeated heading/furniture and metadata paths while the existing `page.mappings` retains its body-fragment contract. Whole-deck pagination evaluates final output numbers, including preceding continuation pages, and rejects unresolved repeated content atomically. Renderer and editor reuse the accepted parts; literal text/date fields, including empty values, support direct canvas editing and undo. Generated labels remain tied to metadata.
+
+Candidate PPTX export draws the accepted text boxes and fitted images. Semantic furniture reimport, native Office acceptance, corpus review, clean installed-package verification and coordinated publication are still pending. The published versions do not expose this contract. Bounds/readability checks do not certify whole-slide design quality: long labels can wrap heavily in portrait zones, and outline agreement does not establish native font identity.
+
 ## Nested groups
 
 ### Unpublished shared content cards
