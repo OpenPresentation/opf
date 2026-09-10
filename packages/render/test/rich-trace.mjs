@@ -15,3 +15,7 @@ for(let i=0;i<lines.length;i++) {
 }
 assert.ok(!renderSvg(deck).includes('data-opf-rich-lines'),'Caret metadata is opt-in tracing only');
 console.log('Rich trace passed: leading/trailing blank lines, CRLF, cross-run offsets and measured heights.');
+
+const widthOnly=renderSvg({slides:[{text:['Plain ',{text:'bold',bold:true}]}]},{textMeasurement:{measure:(value,size)=>value.length*size/2}});
+assert.match(widthOnly,/text-rendering="geometricPrecision"/);
+assert.doesNotMatch(widthOnly,/textLength|lengthAdjust/,'A width-only provider does not authorize glyph scaling');

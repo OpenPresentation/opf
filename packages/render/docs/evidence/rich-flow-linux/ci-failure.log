@@ -1,0 +1,222 @@
+package (24)	Run npm run test:rich-flow-browser	﻿2026-09-10T20:21:48.8165484Z ##[group]Run npm run test:rich-flow-browser
+package (24)	Run npm run test:rich-flow-browser	2026-09-10T20:21:48.8165869Z ^[[36;1mnpm run test:rich-flow-browser^[[0m
+package (24)	Run npm run test:rich-flow-browser	2026-09-10T20:21:48.8166221Z shell: sh -e {0}
+package (24)	Run npm run test:rich-flow-browser	2026-09-10T20:21:48.8166428Z env:
+package (24)	Run npm run test:rich-flow-browser	2026-09-10T20:21:48.8166923Z   OPF_GOLDEN_BASELINE: /home/runner/work/opf-render/opf-render/opf-render/test/golden/opf-examples-png.rich-flow.sha256.json
+package (24)	Run npm run test:rich-flow-browser	2026-09-10T20:21:48.8167874Z   PNPM_HOME: /github/home/setup-pnpm/node_modules/.bin
+package (24)	Run npm run test:rich-flow-browser	2026-09-10T20:21:48.8168186Z ##[endgroup]
+package (24)	Run npm run test:rich-flow-browser	2026-09-10T20:21:48.9718788Z 
+package (24)	Run npm run test:rich-flow-browser	2026-09-10T20:21:48.9719758Z > @openpresentation/opf-render@0.7.0 test:rich-flow-browser
+package (24)	Run npm run test:rich-flow-browser	2026-09-10T20:21:48.9720538Z > node test/rich-flow-browser.mjs
+package (24)	Run npm run test:rich-flow-browser	2026-09-10T20:21:48.9720816Z 
+package (24)	Run npm run test:rich-flow-browser	2026-09-10T20:21:50.3356490Z node:internal/modules/run_main:107
+package (24)	Run npm run test:rich-flow-browser	2026-09-10T20:21:50.3357745Z     triggerUncaughtException(
+package (24)	Run npm run test:rich-flow-browser	2026-09-10T20:21:50.3358732Z     ^
+package (24)	Run npm run test:rich-flow-browser	2026-09-10T20:21:50.3359086Z 
+package (24)	Run npm run test:rich-flow-browser	2026-09-10T20:21:50.3360323Z AssertionError [ERR_ASSERTION]: {"mode":"measured","align":"left","fixture":0} {"text":"bold","tag":"text","gap":0.7249908447265625,"baselineDifference":-0.0000015258789005656581}
+package (24)	Run npm run test:rich-flow-browser	2026-09-10T20:21:50.3361435Z     at file:///__w/opf-render/opf-render/opf-render/test/rich-flow-browser.mjs:58:252 {
+package (24)	Run npm run test:rich-flow-browser	2026-09-10T20:21:50.3361920Z   generatedMessage: false,
+package (24)	Run npm run test:rich-flow-browser	2026-09-10T20:21:50.3362192Z   code: 'ERR_ASSERTION',
+package (24)	Run npm run test:rich-flow-browser	2026-09-10T20:21:50.3362435Z   actual: false,
+package (24)	Run npm run test:rich-flow-browser	2026-09-10T20:21:50.3362658Z   expected: true,
+package (24)	Run npm run test:rich-flow-browser	2026-09-10T20:21:50.3362884Z   operator: '==',
+package (24)	Run npm run test:rich-flow-browser	2026-09-10T20:21:50.3363096Z   diff: 'simple'
+package (24)	Run npm run test:rich-flow-browser	2026-09-10T20:21:50.3363318Z }
+package (24)	Run npm run test:rich-flow-browser	2026-09-10T20:21:50.3363426Z 
+package (24)	Run npm run test:rich-flow-browser	2026-09-10T20:21:50.3363521Z Node.js v24.20.0
+package (24)	Run npm run test:rich-flow-browser	2026-09-10T20:21:50.3655007Z ##[error]Process completed with exit code 1.
+package (24)	Run npm run test:rich-spacing-browser	﻿2026-09-10T20:21:50.3708531Z ##[group]Run npm run test:rich-spacing-browser
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:50.3708933Z ^[[36;1mnpm run test:rich-spacing-browser^[[0m
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:50.3709285Z shell: sh -e {0}
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:50.3709488Z env:
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:50.3709985Z   OPF_GOLDEN_BASELINE: /home/runner/work/opf-render/opf-render/opf-render/test/golden/opf-examples-png.rich-flow.sha256.json
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:50.3710605Z   PNPM_HOME: /github/home/setup-pnpm/node_modules/.bin
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:50.3710912Z ##[endgroup]
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:50.5249460Z 
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:50.5250660Z > @openpresentation/opf-render@0.7.0 test:rich-spacing-browser
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:50.5251411Z > node test/rich-spacing-browser.mjs
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:50.5251729Z 
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3693557Z [
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3693875Z   {
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3694176Z     "name": "compliance-readiness-review",
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3694552Z     "mode": "estimated",
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3694812Z     "rendering": "default",
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3695128Z     "maxAdvanceDifference": 124.99999999999943,
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3695527Z     "maxBoundaryGap": 0.0001220703125
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3695822Z   },
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3706218Z   {
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3706729Z     "name": "compliance-readiness-review",
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3708302Z     "mode": "estimated",
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3708804Z     "rendering": "geometricPrecision",
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3709442Z     "maxAdvanceDifference": 126.65624999999943,
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3710029Z     "maxBoundaryGap": 0.0001220703125
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3710500Z   },
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3710783Z   {
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3711163Z     "name": "compliance-readiness-review",
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3711688Z     "mode": "measured",
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3712071Z     "rendering": "default",
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3713944Z     "maxAdvanceDifference": 3.02490234375,
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3714539Z     "maxBoundaryGap": 3.024993896484375
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3715451Z   },
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3715754Z   {
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3716169Z     "name": "compliance-readiness-review",
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3716722Z     "mode": "measured",
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3717632Z     "rendering": "geometricPrecision",
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3718241Z     "maxAdvanceDifference": 0.0146484375,
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3718809Z     "maxBoundaryGap": 0.009368896484375
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3719252Z   },
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3719567Z   {
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3719983Z     "name": "water-utility-capital-plan",
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3720507Z     "mode": "estimated",
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3721153Z     "rendering": "default",
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3721889Z     "maxAdvanceDifference": 98.08333333333297,
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3722420Z     "maxBoundaryGap": 0
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3722800Z   },
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3725129Z   {
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3725592Z     "name": "water-utility-capital-plan",
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3726150Z     "mode": "estimated",
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3726702Z     "rendering": "geometricPrecision",
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3727620Z     "maxAdvanceDifference": 102.45833333333297,
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3728193Z     "maxBoundaryGap": 0
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3728611Z   },
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3728949Z   {
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3729389Z     "name": "water-utility-capital-plan",
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3729914Z     "mode": "measured",
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3730319Z     "rendering": "default",
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3730844Z     "maxAdvanceDifference": 4.5330403645832575,
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3731448Z     "maxBoundaryGap": 4.53302001953125
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3731909Z   },
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3732217Z   {
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3732634Z     "name": "water-utility-capital-plan",
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3733149Z     "mode": "measured",
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3736018Z     "rendering": "geometricPrecision",
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3736764Z     "maxAdvanceDifference": 0.10758463541674246,
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3740254Z     "maxBoundaryGap": 0.10760498046875
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3740861Z   }
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.3741230Z ]
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.4000681Z node:internal/modules/run_main:107
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.4001691Z     triggerUncaughtException(
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.4002321Z     ^
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.4003075Z 
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.4003969Z AssertionError [ERR_ASSERTION]: compliance-readiness-review: measured run spacing differs by 3.024993896484375px
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.4005342Z     at file:///__w/opf-render/opf-render/opf-render/test/rich-spacing-browser.mjs:73:39 {
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.4006121Z   generatedMessage: false,
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.4006543Z   code: 'ERR_ASSERTION',
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.4006937Z   actual: false,
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.4007540Z   expected: true,
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.4007922Z   operator: '==',
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.4008284Z   diff: 'simple'
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.4008640Z }
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.4008813Z 
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.4008975Z Node.js v24.20.0
+package (24)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:53.4314828Z ##[error]Process completed with exit code 1.
+package (20)	Run npm run test:rich-flow-browser	﻿2026-09-10T20:21:54.8501832Z ##[group]Run npm run test:rich-flow-browser
+package (20)	Run npm run test:rich-flow-browser	2026-09-10T20:21:54.8502222Z ^[[36;1mnpm run test:rich-flow-browser^[[0m
+package (20)	Run npm run test:rich-flow-browser	2026-09-10T20:21:54.8502554Z shell: sh -e {0}
+package (20)	Run npm run test:rich-flow-browser	2026-09-10T20:21:54.8502761Z env:
+package (20)	Run npm run test:rich-flow-browser	2026-09-10T20:21:54.8503281Z   OPF_GOLDEN_BASELINE: /home/runner/work/opf-render/opf-render/opf-render/test/golden/opf-examples-png.rich-flow.sha256.json
+package (20)	Run npm run test:rich-flow-browser	2026-09-10T20:21:54.8503893Z   PNPM_HOME: /github/home/setup-pnpm/node_modules/.bin
+package (20)	Run npm run test:rich-flow-browser	2026-09-10T20:21:54.8504399Z ##[endgroup]
+package (20)	Run npm run test:rich-flow-browser	2026-09-10T20:21:55.0038281Z 
+package (20)	Run npm run test:rich-flow-browser	2026-09-10T20:21:55.0038993Z > @openpresentation/opf-render@0.7.0 test:rich-flow-browser
+package (20)	Run npm run test:rich-flow-browser	2026-09-10T20:21:55.0039633Z > node test/rich-flow-browser.mjs
+package (20)	Run npm run test:rich-flow-browser	2026-09-10T20:21:55.0039847Z 
+package (20)	Run npm run test:rich-flow-browser	2026-09-10T20:21:56.5242411Z node:internal/modules/run_main:123
+package (20)	Run npm run test:rich-flow-browser	2026-09-10T20:21:56.5243022Z     triggerUncaughtException(
+package (20)	Run npm run test:rich-flow-browser	2026-09-10T20:21:56.5243365Z     ^
+package (20)	Run npm run test:rich-flow-browser	2026-09-10T20:21:56.5243496Z 
+package (20)	Run npm run test:rich-flow-browser	2026-09-10T20:21:56.5244252Z AssertionError [ERR_ASSERTION]: {"mode":"measured","align":"left","fixture":0} {"text":"bold","tag":"text","gap":0.7249908447265625,"baselineDifference":-0.0000015258789005656581}
+package (20)	Run npm run test:rich-flow-browser	2026-09-10T20:21:56.5246071Z     at file:///__w/opf-render/opf-render/opf-render/test/rich-flow-browser.mjs:58:252 {
+package (20)	Run npm run test:rich-flow-browser	2026-09-10T20:21:56.5247093Z   generatedMessage: false,
+package (20)	Run npm run test:rich-flow-browser	2026-09-10T20:21:56.5247482Z   code: 'ERR_ASSERTION',
+package (20)	Run npm run test:rich-flow-browser	2026-09-10T20:21:56.5247733Z   actual: false,
+package (20)	Run npm run test:rich-flow-browser	2026-09-10T20:21:56.5247953Z   expected: true,
+package (20)	Run npm run test:rich-flow-browser	2026-09-10T20:21:56.5248178Z   operator: '=='
+package (20)	Run npm run test:rich-flow-browser	2026-09-10T20:21:56.5248386Z }
+package (20)	Run npm run test:rich-flow-browser	2026-09-10T20:21:56.5248484Z 
+package (20)	Run npm run test:rich-flow-browser	2026-09-10T20:21:56.5248576Z Node.js v20.20.2
+package (20)	Run npm run test:rich-flow-browser	2026-09-10T20:21:56.5473426Z ##[error]Process completed with exit code 1.
+package (20)	Run npm run test:rich-spacing-browser	﻿2026-09-10T20:21:56.5533419Z ##[group]Run npm run test:rich-spacing-browser
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:56.5533807Z ^[[36;1mnpm run test:rich-spacing-browser^[[0m
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:56.5534147Z shell: sh -e {0}
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:56.5534357Z env:
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:56.5534865Z   OPF_GOLDEN_BASELINE: /home/runner/work/opf-render/opf-render/opf-render/test/golden/opf-examples-png.rich-flow.sha256.json
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:56.5535830Z   PNPM_HOME: /github/home/setup-pnpm/node_modules/.bin
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:56.5536143Z ##[endgroup]
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:56.7108343Z 
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:56.7108869Z > @openpresentation/opf-render@0.7.0 test:rich-spacing-browser
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:56.7109397Z > node test/rich-spacing-browser.mjs
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:56.7109626Z 
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7838996Z [
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7839334Z   {
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7839661Z     "name": "compliance-readiness-review",
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7840005Z     "mode": "estimated",
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7840266Z     "rendering": "default",
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7840584Z     "maxAdvanceDifference": 124.99999999999943,
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7840974Z     "maxBoundaryGap": 0.0001220703125
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7841236Z   },
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7841420Z   {
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7841661Z     "name": "compliance-readiness-review",
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7841952Z     "mode": "estimated",
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7842227Z     "rendering": "geometricPrecision",
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7842560Z     "maxAdvanceDifference": 126.65624999999943,
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7842889Z     "maxBoundaryGap": 0.0001220703125
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7843170Z   },
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7843353Z   {
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7843589Z     "name": "compliance-readiness-review",
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7843874Z     "mode": "measured",
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7844111Z     "rendering": "default",
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7844389Z     "maxAdvanceDifference": 3.02490234375,
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7844707Z     "maxBoundaryGap": 3.024993896484375
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7844980Z   },
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7845152Z   {
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7845700Z     "name": "compliance-readiness-review",
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7846006Z     "mode": "measured",
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7846280Z     "rendering": "geometricPrecision",
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7846589Z     "maxAdvanceDifference": 0.0146484375,
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7846892Z     "maxBoundaryGap": 0.009368896484375
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7847147Z   },
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7847319Z   {
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7847725Z     "name": "water-utility-capital-plan",
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7848070Z     "mode": "estimated",
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7848447Z     "rendering": "default",
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7849009Z     "maxAdvanceDifference": 98.08333333333297,
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7849608Z     "maxBoundaryGap": 0
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7849948Z   },
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7850244Z   {
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7850575Z     "name": "water-utility-capital-plan",
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7851183Z     "mode": "estimated",
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7851513Z     "rendering": "geometricPrecision",
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7852565Z     "maxAdvanceDifference": 102.45833333333297,
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7852899Z     "maxBoundaryGap": 0
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7853135Z   },
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7853313Z   {
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7853557Z     "name": "water-utility-capital-plan",
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7853850Z     "mode": "measured",
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7854085Z     "rendering": "default",
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7854382Z     "maxAdvanceDifference": 4.5330403645832575,
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7854715Z     "maxBoundaryGap": 4.53302001953125
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7855052Z   },
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7855562Z   {
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7855999Z     "name": "water-utility-capital-plan",
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7856489Z     "mode": "measured",
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7857635Z     "rendering": "geometricPrecision",
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7858179Z     "maxAdvanceDifference": 0.10758463541674246,
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7858705Z     "maxBoundaryGap": 0.10760498046875
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7858984Z   }
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.7859171Z ]
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.8107734Z node:internal/modules/run_main:123
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.8108484Z     triggerUncaughtException(
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.8108923Z     ^
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.8109401Z 
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.8109929Z AssertionError [ERR_ASSERTION]: compliance-readiness-review: measured run spacing differs by 3.024993896484375px
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.8110714Z     at file:///__w/opf-render/opf-render/opf-render/test/rich-spacing-browser.mjs:73:39 {
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.8111180Z   generatedMessage: false,
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.8111448Z   code: 'ERR_ASSERTION',
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.8111682Z   actual: false,
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.8111894Z   expected: true,
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.8112114Z   operator: '=='
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.8112318Z }
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.8112424Z 
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.8112511Z Node.js v20.20.2
+package (20)	Run npm run test:rich-spacing-browser	2026-09-10T20:21:59.8353258Z ##[error]Process completed with exit code 1.

@@ -38,7 +38,12 @@ try {
           if(fragment.run.underline&&!computed.textDecorationLine.includes('underline'))throw Error('Underline lost');
           if(fragment.run.strikethrough&&!computed.textDecorationLine.includes('line-through'))throw Error('Strike lost');
           const placed=item.text.placement?.lines[lineIndex],expectedY=(placed?.baseline??item.box.y+line.baseline)+fragment.baselineShift;
-          fragments.push({text:fragment.text,tag:node.tagName,gap:previous?start.x-previous.x:null,baselineDifference:start.y-expectedY});previous=end;
+          let intrinsicWidth=null;
+          if(mode==='measured'){
+            const clone=node.cloneNode(true);clone.removeAttribute('textLength');clone.removeAttribute('lengthAdjust');clone.style.visibility='hidden';node.parentNode.append(clone);intrinsicWidth=clone.getComputedTextLength();clone.remove();
+            if(Math.abs(intrinsicWidth-fragment.width)>.001*fragment.width+1/64)throw Error('Accepted advance correction exceeds the bounded fixture allowance');
+          }
+          fragments.push({text:fragment.text,tag:node.tagName,gap:previous?start.x-previous.x:null,baselineDifference:start.y-expectedY,intrinsicWidth,acceptedWidth:fragment.width});previous=end;
         }
         let alignmentDifference=0;
         if(mode==='estimated'&&line.fragments.length) {
