@@ -10,22 +10,22 @@ import {loadOfficeFontRegistry} from '../dist/fonts-node.js';
 import {acceptedTextFixtures} from './accepted-text-fixtures.mjs';
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const fonts=await loadOfficeFontRegistry({substitutionPolicy:'visual'});
-const fixtures=acceptedTextFixtures(),out=process.argv[2];
+const fixtures=acceptedTextFixtures(),out=process.argv[2],textRasterPadding=Number(process.argv[3]??1);
 if(out)await mkdir(out,{recursive:true});
 const cases=fixtures.map(({id,deck})=>{
-  const options={trace:true,textMeasurement:fonts.textMeasurement},bound=resolvePresentation(deck,options).slides[0];
+  const options={trace:true,textMeasurement:fonts.textMeasurement,textRasterPadding},bound=resolvePresentation(deck,options).slides[0];
   const svg=renderSvg(deck,options);
   const expected=bound.geometry.items.flatMap(item=>{
     const fit=item.text,align=item.field==='title'?bound.design.titleAlignment:bound.design.contentAlignment;
-    return fit.richLines?fit.richLines.flatMap(line=>line.fragments.map(fragment=>({
+    return fit.richLines?fit.richLines.flatMap((line,index)=>line.fragments.map(fragment=>({
       text:fragment.text,path:item.path,box:item.box,style:fragment.style,size:fragment.fontSize,
-      x:item.box.x+(align==='right'?item.box.width-line.width:align==='center'?(item.box.width-line.width)/2:0)+fragment.x,
-      y:item.box.y+line.baseline+fragment.baselineShift,width:fragment.width,
+      x:(fit.placement?.lines[index].x??item.box.x+(align==='right'?item.box.width-line.width:align==='center'?(item.box.width-line.width)/2:0))+fragment.x,
+      y:(fit.placement?.lines[index].baseline??item.box.y+line.baseline)+fragment.baselineShift,width:fragment.width,
     }))):fit.lines.map((text,index)=>{
       const width=fonts.textMeasurement.measure(text,fit.fontSize,item.textStyle);
       return {text,path:item.path,box:item.box,style:item.textStyle,size:fit.fontSize,
-        x:item.box.x+(align==='right'?item.box.width-width:align==='center'?(item.box.width-width)/2:0),
-        y:item.box.y+fit.fontSize+index*fit.lineHeight,width};
+        x:fit.placement?.lines[index].x??item.box.x+(align==='right'?item.box.width-width:align==='center'?(item.box.width-width)/2:0),
+        y:fit.placement?.lines[index].baseline??item.box.y+fit.fontSize+index*fit.lineHeight,width};
     });
   });
   return {id,svg,svgSha256:hash(svg),sourceSha256:hash(JSON.stringify(deck)),expected};
@@ -94,7 +94,7 @@ try {
       if(outside.length)result.failures.push(`Paint leaves cell: ${sourcePath} (${outside.length} pixels)`);
     }
   }
-  const report={node:process.version,browser:browser.version(),platform:process.platform,
+  const report={node:process.version,browser:browser.version(),platform:process.platform,textRasterPadding,
     verifierSha256:hash(await readFile(new URL(import.meta.url))),rendererSha256:hash(await readFile(new URL('../dist/svg.js',import.meta.url))),
     fontHashes:faces.map(face=>({family:face.family,weight:face.weight,italic:face.italic,sha256:hash(Buffer.from(face.dataUrl.split(',')[1],'base64'))})),
     results,errors,requests,scope:'24 actual SVG cases. Exact Carlito regular/bold/italic/bold-italic bytes. Accepted-line source, 0.1 reference-pixel advance/origin tolerance. Font text rectangles are recorded separately from actual white-on-black text paint; all nonzero mask pixel centers must be within cells plus 0.1 pixel. Plain core fitting still normalizes whitespace. Aptos is an explicitly selected visual substitute; no Aptos equivalence, native export, shaping/bidi or raster equivalence claim.'};

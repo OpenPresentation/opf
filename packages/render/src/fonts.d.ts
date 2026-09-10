@@ -11,7 +11,7 @@ export interface FontRegistryOptions {
 export declare const FONT_COMPATIBILITY: readonly Readonly<{requestedFamily:string;substitutes:readonly string[];compatibility:"metric"|"visual";weights?:readonly number[];source?:string;note:string}>[];
 export declare const EXPERIMENTAL_FONT_CANDIDATES: readonly Readonly<{requestedFamily:string;substitute:string;source:string;note:string}>[];
 export interface FontRegistry {
-  textMeasurement: TextMeasurement;
+  textMeasurement: TextMeasurement & {outlineBounds: NonNullable<TextMeasurement['outlineBounds']>};
   clearSubstitutions(): void;
   resolveFont(style: TextStyle): FontResolution;
   readonly embeddedFonts: EmbeddedFont[];

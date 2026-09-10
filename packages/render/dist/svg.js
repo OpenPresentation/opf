@@ -485,7 +485,7 @@ function bindSlide(presentation, slide, layout, index, context) {
 
   const design = resolveDesign(presentation, slide, context);
   for (const role of ["heading","body","code"]) design.fonts[role] = resolveTextStyle({fontFamily:design.fonts[role],fontWeight:role === "heading" ? 700 : 400},context.options.textMeasurement).fontFamily;
-  const geometry = composeSlide(slide, { ...design.dimensions, layout, slideIndex: index, fonts: design.fonts, contentAlignment:design.contentAlignment, contentBox:design.contentBox, textMeasurement: context.options.textMeasurement });
+  const geometry = composeSlide(slide, { ...design.dimensions, layout, slideIndex: index, fonts: design.fonts, contentAlignment:design.contentAlignment, titleAlignment:design.titleAlignment, textRasterPadding:context.options.textRasterPadding, contentBox:design.contentBox, textMeasurement: context.options.textMeasurement });
   return {
     geometry,
     assets: presentation.assets ?? {},
@@ -1220,12 +1220,13 @@ function renderRichTextBox(value, box, bound, config) {
 }
 
 function renderRichLines(value,fit,box,bound,config) {
-  const alignment=config.align??bound.design.contentAlignment;
+  const alignment=fit.placement?.alignment??config.align??bound.design.contentAlignment;
   let textOffset=0;
   const runOffsets=value.map(run=>{const start=textOffset;textOffset+=(typeof run==='string'?run:run.text).length;return start;});
-  const content=fit.richLines.flatMap(line=>line.fragments.map(fragment=>{
+  const content=fit.richLines.flatMap((line,lineIndex)=>line.fragments.map(fragment=>{
     const run=fragment.run,offset=alignment==='right'?box.width-line.width:alignment==='center'?(box.width-line.width)/2:0;
-    const rendered=tag('text',{...(config.options.trace?{'data-opf-text-start':runOffsets[fragment.runIndex]+fragment.start,'data-opf-text-end':runOffsets[fragment.runIndex]+fragment.end}:{}),x:stableNumber(box.x+offset+fragment.x),y:stableNumber(box.y+line.baseline+fragment.baselineShift),'xml:space':'preserve','font-family':fontStack(fragment.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(fragment.fontSize),'font-weight':fragment.style.fontWeight,'font-style':fragment.style.italic?'italic':undefined,'text-decoration':[run.underline?'underline':'',run.strikethrough?'line-through':''].filter(Boolean).join(' ')||undefined,fill:/^#(?:[0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(run.color??'')?run.color:config.fill},escapeText(fragment.text));
+    const placed=fit.placement?.lines[lineIndex];
+    const rendered=tag('text',{...(config.options.trace?{'data-opf-text-start':runOffsets[fragment.runIndex]+fragment.start,'data-opf-text-end':runOffsets[fragment.runIndex]+fragment.end}:{}),x:stableNumber((placed?.x??box.x+offset)+fragment.x),y:stableNumber((placed?.baseline??box.y+line.baseline)+fragment.baselineShift),'xml:space':'preserve','font-family':fontStack(fragment.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(fragment.fontSize),'font-weight':fragment.style.fontWeight,'font-style':fragment.style.italic?'italic':undefined,'text-decoration':[run.underline?'underline':'',run.strikethrough?'line-through':''].filter(Boolean).join(' ')||undefined,fill:/^#(?:[0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(run.color??'')?run.color:config.fill},escapeText(fragment.text));
     if(run.link&&/^(https?:|mailto:)/i.test(run.link))return tag('a',{href:run.link,target:'_blank',rel:'noopener noreferrer'},rendered);
     return rendered;
   }));
@@ -1235,7 +1236,8 @@ function renderRichLines(value,fit,box,bound,config) {
     if(index){const newline=/^(\r\n|\r|\n)/.exec(whole.slice(cursor));if(newline)cursor+=newline[0].length;}
     const start=cursor;cursor+=(fit.lines[index]??'').length;
     const offset=alignment==='right'?box.width-line.width:alignment==='center'?(box.width-line.width)/2:0;
-    return {start,end:cursor,x:box.x+offset,y:box.y+line.y,height:line.height};
+    const placed=fit.placement?.lines[index];
+    return {start,end:cursor,x:placed?.x??box.x+offset,y:placed?.y??box.y+line.y,height:placed?.height??line.height};
   }):undefined;
   return tag('g',{...traceAttrs(config.options,config.path),...(config.options.trace?{'data-opf-box-width':box.width,'data-opf-rich-text':config.rich===false?undefined:'true','data-opf-rich-lines':JSON.stringify(lineTrace)}:{}),...(fit.overflow?{'data-opf-overflow':'true'}:{})},content.join('\n'));
 }
@@ -1255,11 +1257,11 @@ function renderTextBox(text, box, bound, config) {
   const totalHeight = fit.lines.length * fit.lineHeight;
   const startY = config.verticalAlign === "middle"
     ? box.y + Math.max(0, (box.height - totalHeight) / 2) + size : box.y + size;
-  const alignment=config.align??bound.design.contentAlignment;
+  const alignment=fit.placement?.alignment??config.align??bound.design.contentAlignment;
   const anchor = alignment === "center" ? "middle" : alignment === "right" ? "end" : "start";
   const x = alignment === "center" ? box.x + box.width / 2 : alignment === "right" ? box.x + box.width : box.x;
   const lines = fit.lines.map((line, index) => tag("text", {
-    x: stableNumber(x), y: stableNumber(startY + index * fit.lineHeight),
+    x: stableNumber(fit.placement?fit.placement.lines[index].x+fit.placement.lines[index].width*(alignment==='right'?1:alignment==='center'?.5:0):x), y: stableNumber(fit.placement?.lines[index].baseline??startY + index * fit.lineHeight),
     "text-anchor": anchor, "font-family": fontStack(style.fontFamily, config.fontFamily === bound.design.fonts.code ? "monospace" : bound.design.fontScheme.type),
     "font-size": stableNumber(size), "font-weight": style.fontWeight, "font-style": style.italic ? "italic" : undefined, fill: config.fill,
     ...traceAttrs(config.options, config.path)

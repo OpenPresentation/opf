@@ -85,24 +85,38 @@ export function createFontRegistry(entries, options = {}) {
   };
   const resolveFace = style => resolve(style).face;
   const resolveStyle = style => { const face=resolveFace(style); return {...style,fontFamily:face.family,fontWeight:face.weight,italic:face.italic}; };
-  const measure = (text,size,style) => {
+  const metrics = (text,size,style,includeOutline=false) => {
+    if (typeof text!=='string'||!Number.isFinite(size)||size<=0) throw new OPFFontError('invalid-text-measurement','Text measurement requires a string and a positive finite font size.');
     const face=resolveFace(style);
-    let width=face.cache.get(text);
-    if (width===undefined) {
+    let value=face.cache.get(text);
+    if (value===undefined) {
       if (options.strictGlyphs!==false) for(const character of text) {
         if (/\p{Default_Ignorable_Code_Point}/u.test(character)) continue;
         if (!face.font.hasGlyphForCodePoint(character.codePointAt(0))) throw new OPFFontError("missing-glyph", `Font '${face.family}' cannot display U+${character.codePointAt(0).toString(16).toUpperCase()}.`, {path:style.path,fontFamily:face.family,character});
       }
-      width=face.font.layout(text).positions.reduce((total,position)=>total+position.xAdvance,0)/face.font.unitsPerEm;
+    }
+    if(value===undefined||includeOutline&&!Object.hasOwn(value,'outline')) {
+      const run=face.font.layout(text);
+      value={width:run.positions.reduce((total,position)=>total+position.xAdvance,0)/face.font.unitsPerEm,...value};
+      if(includeOutline) {
+        const bounds=run.bbox,unit=face.font.unitsPerEm;
+        value.outline=[bounds.minX,bounds.minY,bounds.maxX,bounds.maxY].every(Number.isFinite)
+          ?{x:bounds.minX/unit,y:-bounds.maxY/unit,width:bounds.width/unit,height:bounds.height/unit}:null;
+      }
       if (text.length<=2048) {
-        if (face.cache.size>=512) face.cache.delete(face.cache.keys().next().value);
-        face.cache.set(text,width);
+        if (face.cache.size>=512&&!face.cache.has(text)) face.cache.delete(face.cache.keys().next().value);
+        face.cache.set(text,value);
       }
     }
-    return width*size;
+    return value;
+  };
+  const measure=(text,size,style)=>metrics(text,size,style).width*size;
+  const outlineBounds=(text,size,style)=>{
+    const bounds=metrics(text,size,style,true).outline;
+    return bounds===null?null:{x:bounds.x*size,y:bounds.y*size,width:bounds.width*size,height:bounds.height*size};
   };
   return {
-    textMeasurement: {measure,resolveStyle},
+    textMeasurement: {measure,resolveStyle,outlineBounds},
     resolveFont(style) { return resolve(style).resolution; },
     clearSubstitutions() { substitutions.clear(); },
     get substitutions() { return [...substitutions.values()]; },

@@ -5,28 +5,31 @@ import {acceptedTextFixtures} from './accepted-text-fixtures.mjs';
 const fonts=await loadOfficeFontRegistry({substitutionPolicy:'visual'});
 const escape=text=>text.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
 let cases=0;
-for(const {id,deck} of acceptedTextFixtures()) {
+for(const outlines of [false,true])for(const {id,deck} of acceptedTextFixtures()) {
   const source=JSON.stringify(deck);
-  let calls=0,styles=0;
+  let calls=0,styles=0,inkCalls=0;
   const options={trace:true,textMeasurement:{measure(...args){calls++;return fonts.textMeasurement.measure(...args);},
-    resolveStyle(style){styles++;return fonts.textMeasurement.resolveStyle(style);}}};
-  const bound=resolvePresentation(deck,options).slides[0],expectedCalls=calls,expectedStyles=styles;
-  calls=0;styles=0;
+    resolveStyle(style){styles++;return fonts.textMeasurement.resolveStyle(style);},
+    ...(outlines?{outlineBounds(...args){inkCalls++;return fonts.textMeasurement.outlineBounds(...args);}}:{})}};
+  const bound=resolvePresentation(deck,options).slides[0],expectedCalls=calls,expectedStyles=styles,expectedInkCalls=inkCalls;
+  calls=0;styles=0;inkCalls=0;
   const diagnostics=[],svg=renderSvg(deck,{...options,onDiagnostic:issue=>diagnostics.push(issue)});
   assert.equal(calls,expectedCalls,`${id}: painting must not measure accepted text again`);
   assert.equal(styles,expectedStyles,`${id}: painting must consume resolved styles`);
+  assert.equal(inkCalls,expectedInkCalls,`${id}: painting must consume accepted outlines`);
   assert.deepEqual(diagnostics,bound.geometry.diagnostics);
   assert.equal(JSON.stringify(deck),source);
   const nodes=[...svg.matchAll(/<text\b([^>]*)>([\s\S]*?)<\/text>/g)];let cursor=0;
   for(const item of bound.geometry.items) {
     const fit=item.text,align=item.field==='title'?bound.design.titleAlignment:bound.design.contentAlignment;
-    const lines=fit.richLines?fit.richLines.flatMap(line=>line.fragments.map(fragment=>({line,fragment}))):fit.lines.map((text,index)=>({text,index}));
+    const lines=fit.richLines?fit.richLines.flatMap((line,index)=>line.fragments.map(fragment=>({line,fragment,index}))):fit.lines.map((text,index)=>({text,index}));
     for(const entry of lines) {
       const [,attrs,text]=nodes[cursor++],attr=name=>new RegExp(`(?:^|\\s)${name}="([^"]*)"`).exec(attrs)?.[1];
       const fragment=entry.fragment,style=fragment?.style??item.textStyle;
-      const x=fragment?item.box.x+(align==='right'?item.box.width-entry.line.width:align==='center'?(item.box.width-entry.line.width)/2:0)+fragment.x:
+      const placed=fit.placement?.lines[entry.index],factor=align==='right'?1:align==='center'?.5:0;
+      const x=placed?placed.x+(fragment?fragment.x:placed.width*factor):fragment?item.box.x+(align==='right'?item.box.width-entry.line.width:align==='center'?(item.box.width-entry.line.width)/2:0)+fragment.x:
         item.box.x+(align==='right'?item.box.width:align==='center'?item.box.width/2:0);
-      const y=item.box.y+(fragment?entry.line.baseline+fragment.baselineShift:fit.fontSize+entry.index*fit.lineHeight);
+      const y=placed?placed.baseline+(fragment?.baselineShift??0):item.box.y+(fragment?entry.line.baseline+fragment.baselineShift:fit.fontSize+entry.index*fit.lineHeight);
       assert.equal(text,escape(fragment?.text??entry.text),id);
       assert.ok(Math.abs(Number(attr('x'))-x)<.001,id);
       assert.ok(Math.abs(Number(attr('y'))-y)<.001,id);

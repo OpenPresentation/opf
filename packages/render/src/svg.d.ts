@@ -48,6 +48,8 @@ export type RenderDiagnostic = LayoutDiagnostic | {
 
 export interface RenderSvgOptions {
   textMeasurement?: TextMeasurement;
+  /** Unscaled reference-pixel clearance around supplied vector text outlines; default 1. */
+  textRasterPadding?: number;
   embeddedFonts?: EmbeddedFont[];
   strictAssets?: boolean;
   imageResolver?: (src: string | undefined, context: { asset: unknown; path: string }) => string | null | undefined;

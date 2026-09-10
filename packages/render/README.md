@@ -1,5 +1,7 @@
 # OPF Render
 
+Unpublished integration work adds optional font-registry vector outlines and shared heading/scalar/rich line placement. Pass identical `textMeasurement` and `textRasterPadding` options to preview, pagination and export; padding defaults to one scaled reference pixel. SVG consumes accepted origins without remeasuring. See the [source contract and limits](https://github.com/OpenPresentation/opf/blob/codex/shared-metric-integration-20260910/docs/plans/text-placement.md). This is not part of the published 0.7.0 package or native raster certification.
+
 Version 0.7.0 requires core 0.9.0 and renders accepted quote and code geometry without fitting it again. Code filename/language/body parts preserve source whitespace, literal tabs and metadata case and expose trace targets for editing. The [43 reviewed code raster changes](docs/evidence/shared-code/raster-review.json) retain the other 762 corpus hashes. Coordinated releases PPTX 0.7.0 and editor 0.6.0 add native source recovery and editing. Glyph containment and separation do not establish native pixel equivalence.
 
 Deterministic local renderer for Open Presentation Format documents. The shared SVG core implements validation, catalog resolution, placeholder binding and text layout. Node APIs additionally convert SVG to PNG and raster-backed PDF.
