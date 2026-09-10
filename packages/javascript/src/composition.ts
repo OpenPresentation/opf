@@ -32,6 +32,9 @@ export function resolveFontFamilies(input: unknown): FontFamilies {
 export interface TextMeasurement {
   measure: (text: string, fontSize: number, style: TextStyle) => number;
   resolveStyle?: (style: TextStyle) => TextStyle;
+  /** Shaped vector ink relative to the left baseline origin (positive y down).
+   * Null means no outline. These are not hinted/antialiased raster bounds. */
+  outlineBounds?: (text: string, fontSize: number, style: TextStyle) => LayoutBox | null;
 }
 export type MeasureTextWidth = (text: string, fontSize: number) => number;
 export function resolveTextStyle(style: TextStyle, measurement?: TextMeasurement): TextStyle {
@@ -45,7 +48,53 @@ export function textWidthMeasurer(style: TextStyle, measurement?: TextMeasuremen
     return width;
   };
 }
-export interface TextFit { lines: string[]; fontSize: number; lineHeight: number; overflow: boolean }
+/** Validate an optional host outline measurement without inventing raster coverage. */
+export function measureTextOutline(text: string, fontSize: number, style: TextStyle, measurement?: TextMeasurement): LayoutBox | null | undefined {
+  if (measurement?.outlineBounds === undefined) return undefined;
+  if (typeof measurement.outlineBounds !== 'function') throw new TypeError('Text outline provider must be a function.');
+  const bounds = measurement.outlineBounds(text, fontSize, style);
+  if (bounds === null) return null;
+  if (!bounds || ![bounds.x,bounds.y,bounds.width,bounds.height].every(Number.isFinite) || bounds.width < 0 || bounds.height < 0) {
+    throw new RangeError('Text outline measurement must return null or finite bounds with nonnegative dimensions.');
+  }
+  return {x:bounds.x,y:bounds.y,width:bounds.width,height:bounds.height};
+}
+export interface TextLineInk { width: number; y: number; baseline: number; height: number; outline: LayoutBox | null }
+export interface TextPlacementLine { x: number; y: number; baseline: number; height: number; width: number; outline: LayoutBox | null }
+export interface TextPlacement {
+  alignment: 'left' | 'center' | 'right';
+  /** Reference-pixel clearance around vector outlines; not a universal raster guarantee. */
+  rasterPadding: number;
+  lines: TextPlacementLine[];
+  height: number;
+  overflow: boolean;
+}
+export interface TextFit { lines: string[]; fontSize: number; lineHeight: number; overflow: boolean; placement?: TextPlacement }
+/** Place complete measured lines, preserving alignment where it leaves room for ink.
+ * Move following baselines together when outlines need more vertical separation. */
+export function placeTextLines(lines: readonly TextLineInk[], box: LayoutBox, alignment: TextPlacement['alignment']='left', rasterPadding=0): TextPlacement {
+  if (!Array.isArray(lines)||!box||![box.x,box.y,box.width,box.height,rasterPadding].every(Number.isFinite)||box.width<=0||box.height<=0||rasterPadding<0||!['left','center','right'].includes(alignment)) throw new RangeError('Text placement requires lines, finite positive dimensions, nonnegative padding and a valid alignment.');
+  const factor=alignment==='right'?1:alignment==='center'?.5:0,placed:TextPlacementLine[]=[];
+  let shift=0,bottom=box.y,height=0,overflow=false;
+  for(const line of lines) {
+    if(!line||![line.width,line.y,line.baseline,line.height].every(Number.isFinite)||line.width<0||line.height<=0||line.y<0||line.baseline<line.y) throw new RangeError('Text lines require finite coordinates, nonnegative advances and a baseline at or below their top.');
+    const ink=line.outline;
+    if(ink!==null&&(!ink||![ink.x,ink.y,ink.width,ink.height].every(Number.isFinite)||ink.width<0||ink.height<0)) throw new RangeError('Text outlines must be null or finite coordinates with nonnegative dimensions.');
+    let x=box.x+(box.width-line.width)*factor;
+    if(ink) {
+      const low=box.x+rasterPadding-ink.x,high=box.x+box.width-rasterPadding-ink.x-ink.width;
+      if(low>high+.01)overflow=true;else x=Math.max(low,Math.min(x,high));
+      shift+=Math.max(0,bottom+rasterPadding-(box.y+line.baseline+shift+ink.y));
+    }
+    const y=box.y+line.y+shift,baseline=box.y+line.baseline+shift;
+    const outline=ink?{...ink,x:x+ink.x,y:baseline+ink.y}:null;
+    if(outline)bottom=outline.y+outline.height+rasterPadding;
+    height=Math.max(height,y+line.height-box.y,outline?bottom-box.y:0);
+    if(line.width>box.width+.01||height>box.height+.01)overflow=true;
+    placed.push({x,y,baseline,height:line.height,width:line.width,outline});
+  }
+  return {alignment,rasterPadding,lines:placed,height,overflow};
+}
 export interface ComposedItem {
   path: string;
   field: string;
@@ -79,7 +128,7 @@ export interface ComposedFlow {
   itemCount: number;
   slotCount: number;
 }
-/** Additive penalties in grid-score-v5; lower is preferred. These are not quality percentages. */
+/** Additive penalties in grid-score-v6; lower is preferred. These are not quality percentages. */
 export interface CompositionPenalties {
   cellProportions: number;
   fontReduction: number;
@@ -103,9 +152,13 @@ export interface CompositionDecision {
   candidates: CompositionCandidate[];
 }
 export interface CompositionExplanation {
-  algorithm: 'grid-score-v5';
+  algorithm: 'grid-score-v6';
   /** Provided widths do not establish shaping, glyph coverage or native fidelity. */
   textMeasurement: 'estimated' | 'provided';
+  /** Optional vector coverage for headings and scalar/rich text, not every payload. */
+  textOutlines: 'provided' | 'unavailable';
+  /** Effective canvas reference pixels; not a universal raster tolerance. */
+  textRasterPadding: number;
   decisions: CompositionDecision[];
   /** Payloads whose complete internal fit is not covered by this scoring model. */
   unmeasuredPayloads: string[];
@@ -123,8 +176,11 @@ export interface SlideComposition {
 }
 export interface ComposeSlideOptions {
   fonts?: Partial<FontFamilies>;
-  /** Host-resolved alignment for shared metric internals; slide design can override it. */
+  /** Host-resolved alignment for shared content; slide design can override it. */
   contentAlignment?: 'left' | 'center' | 'right';
+  titleAlignment?: 'left' | 'center' | 'right';
+  /** Unscaled reference pixels around provided vector outlines; defaults to 1. */
+  textRasterPadding?: number;
   /** Host-resolved body cards. A slide's explicit design.contentBox overrides this value. */
   contentBox?: boolean;
   textMeasurement?: TextMeasurement;
@@ -998,13 +1054,42 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const padding = (composition.padding ?? 0.08) * Math.min(width, height);
   const gap = (composition.gap ?? 1 / 30) * Math.min(width, height);
   const minSize = (composition.minFontSize ?? 16) * scale;
+  const rasterPadding=(options.textRasterPadding??1)*scale;
+  if(!Number.isFinite(rasterPadding)||rasterPadding<0)throw new RangeError('Text raster padding must be finite and nonnegative.');
   const styleFor = (field: string, path: string): TextStyle => resolveTextStyle({
     fontFamily: (field === "title" ? options.fonts?.heading : field === "code" ? options.fonts?.code : options.fonts?.body) ?? (field === "code" ? "monospace" : "sans-serif"),
     fontWeight: field === "title" ? 700 : 400, path,
   }, options.textMeasurement);
   const widthFor = (field: string, path: string) => textWidthMeasurer(styleFor(field,path),options.textMeasurement);
-  const fitContent = (field:string,value:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string) => field === 'text' && Array.isArray(value)
-    ? fitRichText(value,box,size,minimum,{style:styleFor(field,path),textMeasurement:options.textMeasurement})
+  const fitPlacedText = (field:string,value:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string):TextFit|RichTextFit => {
+    const style=styleFor(field,path),rich=field==='text'&&Array.isArray(value);
+    if(!options.textMeasurement?.outlineBounds)return rich?fitRichText(value,box,size,minimum,{style,textMeasurement:options.textMeasurement}):fitText(text,box,size,minimum,textWidthMeasurer(style,options.textMeasurement));
+    const alignment=(field==='title'?record(slide.design).titleAlignment??options.titleAlignment:record(slide.design).contentAlignment??options.contentAlignment)??'left';
+    const richLayout=rich?richTextLayouter(value,box,size,{style,textMeasurement:options.textMeasurement}):undefined;
+    const measure=textWidthMeasurer(style,options.textMeasurement),floor=Math.min(size,minimum);
+    // The nominal heading/body range fits within 64 reference-pixel steps; the
+    // last trial always evaluates the explicit floor even with unusual callers.
+    for(let trial=0;trial<=64;trial++) {
+      const fontSize=trial===64?floor:Math.max(floor,size-trial*scale);
+      const fit=richLayout?richLayout(fontSize):fitText(text,box,fontSize,fontSize,measure);
+      const richLines='richLines' in fit?(fit as RichTextFit).richLines:undefined;
+      const lines:TextLineInk[]=richLines?richLines.map(line=>{
+        let outline:LayoutBox|null=null;
+        for(const fragment of line.fragments) {
+          const bounds=measureTextOutline(fragment.text,fragment.fontSize,fragment.style,options.textMeasurement);
+          if(!bounds)continue;
+          const next={...bounds,x:fragment.x+bounds.x,y:fragment.baselineShift+bounds.y};
+          if(!outline)outline=next;else{const right=Math.max(outline.x+outline.width,next.x+next.width),bottom=Math.max(outline.y+outline.height,next.y+next.height);outline.x=Math.min(outline.x,next.x);outline.y=Math.min(outline.y,next.y);outline.width=right-outline.x;outline.height=bottom-outline.y;}
+        }
+        return {width:line.width,y:line.y,baseline:line.baseline,height:line.height,outline};
+      }):fit.lines.map((line,index)=>({width:measure(line,fontSize),y:index*fit.lineHeight,baseline:fontSize+index*fit.lineHeight,height:fit.lineHeight,outline:measureTextOutline(line,fontSize,style,options.textMeasurement)??null}));
+      const placement=placeTextLines(lines,box,alignment,rasterPadding),result={...fit,placement,overflow:fit.overflow||placement.overflow};
+      if(!result.overflow||fontSize===floor)return result;
+    }
+    throw new Error('Text placement did not evaluate its bounded floor trial.');
+  };
+  const fitContent = (field:string,value:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string) => field === 'text'
+    ? fitPlacedText(field,value,text,box,size,minimum,path)
     : (field==='items'||field==='bullets') ? fitList(value as ListValue[],box,size,minimum,{style:styleFor(field,path),textMeasurement:options.textMeasurement})
     : fitText(text,box,size,minimum,widthFor(field,path));
   const path = `slides.${options.slideIndex ?? 0}`;
@@ -1015,8 +1100,8 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const requested = (field === "title" ? 54 : field === "tag" ? 16 : 25) * scale;
     const maxHeight = height * (field === "title" ? 0.26 : field === "subtitle" ? 0.12 : 0.045);
     const box = { x: padding, y, width: width - padding * 2, height: maxHeight };
-    const text = fitText(String(slide[field]), box, requested, minSize, widthFor(field,`${path}.${field}`));
-    box.height = Math.min(maxHeight, text.lines.length * text.lineHeight);
+    const text = fitPlacedText(field,slide[field],String(slide[field]),box,requested,minSize,`${path}.${field}`);
+    box.height = Math.min(maxHeight, Math.max(text.lines.length * text.lineHeight,text.placement?.height??0));
     items.push({ path: `${path}.${field}`, field, type: "text", value: slide[field], payload: { text: slide[field] }, box, text, textStyle: styleFor(field,`${path}.${field}`), composition });
     y += box.height + gap * 0.5;
   }
@@ -1181,7 +1266,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     return false;
   });
   const explanation: CompositionExplanation | undefined = decisions ? {
-    algorithm:'grid-score-v5',textMeasurement:options.textMeasurement?'provided':'estimated',decisions,
+    algorithm:'grid-score-v6',textMeasurement:options.textMeasurement?'provided':'estimated',textOutlines:options.textMeasurement?.outlineBounds?'provided':'unavailable',textRasterPadding:rasterPadding,decisions,
     unmeasuredPayloads:items.filter(item=>!headings.has(item.field)&&!item.quoteLayout&&!item.codeLayout&&!item.metricLayout&&!['text','items','bullets','table'].includes(item.field)).map(item=>item.path),
   } : undefined;
   if (failures.length) throw new OPFCompositionError(failures, explanation);

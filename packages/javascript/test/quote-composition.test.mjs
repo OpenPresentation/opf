@@ -27,7 +27,7 @@ test('automatic candidates account for footer fit and choose the arrangement tha
   const slide={composition:{minFontSize:24},blocks:[{quote:{text:'A',attribution:'Evidence '.repeat(70)}},{quote:{text:'B',attribution:'Evidence '.repeat(70)}}]};
   const result=composeSlide(slide,{explain:true});
   const decision=result.explanation.decisions[0];
-  assert.equal(result.explanation.algorithm,'grid-score-v5');
+  assert.equal(result.explanation.algorithm,'grid-score-v6');
   assert.equal(decision.selectedColumns,1);
   assert.equal(decision.candidates[0].penalties.textOverflow,0);
   assert.equal(decision.candidates[1].penalties.textOverflow,2000);
@@ -41,7 +41,7 @@ test('strict ancestors reject a quote body diagnostic below the leaf path', () =
     assert.ok(error instanceof OPFCompositionError);
     assert.ok(error.diagnostics.every(item=>item.path==='slides.0.blocks.0.blocks.0.quote.text'));
     assert.ok(error.diagnostics.some(item=>item.reason==='text-fit'));
-    assert.equal(error.explanation.algorithm,'grid-score-v5');
+    assert.equal(error.explanation.algorithm,'grid-score-v6');
     return true;
   });
 });
