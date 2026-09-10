@@ -1,5 +1,15 @@
-param([string]$EvidenceDirectory='artifacts/native-chart-colors')
+param([string]$EvidenceDirectory='artifacts/native-chart-colors',[ValidateRange(0,8)][int]$EditSlide=0,[ValidateRange(5,60)][int]$TimeoutSeconds=45,[switch]$Worker)
 $ErrorActionPreference='Stop'
+if($EditSlide -eq 0) { throw 'Select exactly one embedded workbook with -EditSlide 1 through 8. Never automatically retry a blocked Office activation.' }
+. (Join-Path $PSScriptRoot 'native-process.ps1')
+if(-not $Worker) {
+    $root=(Resolve-Path -LiteralPath $EvidenceDirectory).Path
+    $result=Invoke-OpfNativeWorker -ScriptPath $PSCommandPath -WorkerArguments @('-EvidenceDirectory',$root,'-EditSlide',[string]$EditSlide,'-Worker') -OutputDirectory $root -TimeoutSeconds $TimeoutSeconds
+    Get-Content -LiteralPath (Join-Path $root 'worker.stdout.log')
+    if($result.timedOut) { throw 'Native chart worker timed out. No retry was started. Resolve any Office dialog before another invocation; generated-file cleanup may be incomplete.' }
+    if($result.exitCode -ne 0) { Get-Content -LiteralPath (Join-Path $root 'worker.stderr.log'); throw "Native chart worker failed with exit code $($result.exitCode). No retry was started." }
+    return
+}
 function Get-FixtureSha256([string]$FixturePath) { return (Get-FileHash -LiteralPath $FixturePath -Algorithm SHA256).Hash.ToLowerInvariant() }
 function Get-ColorHex($Value) {
     if ($Value -is [System.__ComObject]) { $Value=$Value.RGB }
@@ -43,24 +53,33 @@ function Read-FixtureCharts($Presentation,[string]$Phase) {
     return $results
 }
 $powerpoint=$null; $presentation=$null; $workbook=$null; $stage='connect'; $original=@(); $reopened=@()
+function Save-FixtureProgress([string]$Stage) {
+    $script:stage=$Stage
+    @{stage=$Stage;editSlide=$EditSlide;generationSha256=(Get-FixtureSha256 $generationFile);original=$original;reopened=$reopened} | ConvertTo-Json -Depth 15 | Set-Content -LiteralPath (Join-Path $evidenceRoot 'progress.json') -Encoding UTF8
+}
 try {
+    Save-FixtureProgress 'connect'
     $powerpoint=New-Object -ComObject PowerPoint.Application
-    $stage='open-original'
+    Save-FixtureProgress 'open-original'
     $presentation=$powerpoint.Presentations.Open($sourcePath,0,0,0)
     $original=@(Read-FixtureCharts $presentation 'original')
+    Save-FixtureProgress 'save-original'
     $savedPath=Join-Path $evidenceRoot 'charts-saved.pptx'
     $presentation.SaveAs($savedPath,24)
     $presentation.Close(); $presentation=$null
     $presentation=$powerpoint.Presentations.Open($savedPath,0,0,0)
     $reopened=@(Read-FixtureCharts $presentation 'reopened')
-    foreach($slide in $presentation.Slides) {
-        $stage="edit-slide-$($slide.SlideIndex)"
+    # One activation per invocation prevents cascading prompts when Excel is in
+    # a modal/editing state. Run separate fresh fixtures to cover other slides.
+    foreach($slide in @($presentation.Slides.Item($EditSlide))) {
+        Save-FixtureProgress "activate-slide-$($slide.SlideIndex)"
         Write-Output "Editing embedded workbook for generated slide $($slide.SlideIndex)."
         $shape=@($slide.Shapes | Where-Object { $_.HasChart -eq -1 })[0]
         $chart=$shape.Chart
         # Microsoft requires Activate before accessing the embedded Workbook:
         # https://learn.microsoft.com/en-us/office/vba/api/powerpoint.chartdata.activate
         $chart.ChartData.Activate()
+        Save-FixtureProgress "edit-slide-$($slide.SlideIndex)"
         Write-Output 'Embedded workbook activated.'
         $workbook=$chart.ChartData.Workbook
         foreach($window in $workbook.Windows) { $window.Visible=$false }
@@ -72,19 +91,20 @@ try {
         $sheet.Cells.Item(2,1).Value2=$edited.rows[0][0]
         $sheet.Cells.Item(2,2).Value2=[double]$edited.rows[0][1]
         Write-Output 'Heading, series, category and numeric value changed.'
+        Save-FixtureProgress "close-workbook-slide-$($slide.SlideIndex)"
         $workbook.Close($true); $workbook=$null
         $chart.Refresh()
         Write-Output 'Embedded workbook saved and chart refreshed.'
     }
     $editedPath=Join-Path $evidenceRoot 'charts-edited.pptx'
-    $stage='save-edited'
+    Save-FixtureProgress 'save-edited'
     $presentation.SaveAs($editedPath,24)
     $presentation.Close(); $presentation=$null
     $presentation=$powerpoint.Presentations.Open($editedPath,0,0,0)
     if($presentation.Slides.Count -ne 8) { throw 'Edited charts did not reopen' }
     $osVersion=Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
     $executable=Join-Path $powerpoint.Path 'POWERPNT.EXE'
-    @{generationSha256=(Get-FixtureSha256 $generationFile); savedSha256=(Get-FixtureSha256 $savedPath); editedSha256=(Get-FixtureSha256 $editedPath); powerPointVersion=(Get-Item -LiteralPath $executable).VersionInfo.FileVersion; windowsBuild="$($osVersion.CurrentBuild).$($osVersion.UBR)"; original=$original; reopened=$reopened} | ConvertTo-Json -Depth 15 | Set-Content -LiteralPath (Join-Path $evidenceRoot 'native.json') -Encoding UTF8
+    @{generationSha256=(Get-FixtureSha256 $generationFile); editedSlides=@($EditSlide); savedSha256=(Get-FixtureSha256 $savedPath); editedSha256=(Get-FixtureSha256 $editedPath); powerPointVersion=(Get-Item -LiteralPath $executable).VersionInfo.FileVersion; windowsBuild="$($osVersion.CurrentBuild).$($osVersion.UBR)"; original=$original; reopened=$reopened} | ConvertTo-Json -Depth 15 | Set-Content -LiteralPath (Join-Path $evidenceRoot 'native.json') -Encoding UTF8
 } catch {
     @{passed=$false; stage=$stage; error=$_.Exception.Message; generationSha256=(Get-FixtureSha256 $generationFile); original=$original; reopened=$reopened} | ConvertTo-Json -Depth 15 | Set-Content -LiteralPath (Join-Path $evidenceRoot 'failure.json') -Encoding UTF8
     throw

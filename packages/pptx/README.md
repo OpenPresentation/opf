@@ -8,6 +8,8 @@ Version 0.7.0's [shared-code integration](docs/code-roundtrip.md) preserves exac
 
 The current branch's [shared metric integration](docs/metric-roundtrip.md) is unpublished. Native alignment and exact tested field recovery are implemented; tab-position and raster fidelity gates remain open.
 
+The [native text verifier](docs/native-text-checks.md) prepares the accepted heading/scalar/rich matrix with exact open fonts and a temporary-font permission check. Fixture generation and font registration/removal pass; full native text execution is still pending after an embedded Excel chart activation stalled. Partial chart save/reopen evidence is not a completed native fidelity gate.
+
 The coordinated source branch also measures `design.contentBox` cards through core's padded interior and exports editable rounded frames at their outer allocation. Native tags identify unchanged empty generated frames on reimport, with a `content-card-reflow` diagnostic: frame appearance and placement are not reconstructed. A name alone never hides a shape; edited, untagged or ambiguous frames use ordinary native import, retaining text or an unsupported-shape description. These source checks do not establish native PowerPoint raster fidelity or availability in the published 0.7.0 package.
 
 ## Scope

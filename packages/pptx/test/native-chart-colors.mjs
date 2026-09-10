@@ -16,7 +16,7 @@ for(const name of ['@openpresentation/opf','@openpresentation/opf-pptx']){
  for(const file of name==='@openpresentation/opf'?['composition.js','validator.js','catalogs.js']:(await readdir(path.join(root,'dist'))).filter(file=>file.endsWith('.js')).sort())await visit(file);
  runtime[name+'/package.json']=hash(await readFile(path.join(root,'package.json')));
 }
-for(const file of ['test/native-chart-colors.mjs','test/native-chart-colors.ps1','vendor/pptxgenjs/pptxgen.es.js','package-lock.json'])runtime[file]=hash(await readFile(new URL('../'+file,import.meta.url)));
+for(const file of ['test/native-chart-colors.mjs','test/native-chart-colors.ps1','test/native-process.ps1','vendor/pptxgenjs/pptxgen.es.js','package-lock.json'])runtime[file]=hash(await readFile(new URL('../'+file,import.meta.url)));
 if(mode==='generate'){
  const slides=[],expected=[];
  for(const [background,surface,labelColor]of [['#000000','#334155','#FFFFFF'],['#000000','#F8FAFC','#000000'],['#FFFFFF','#0F172A','#FFFFFF'],['#000000','#FFFFFF80','#FFFFFF']])for(const type of ['column','pie']){
@@ -31,16 +31,17 @@ if(mode==='generate'){
  console.log('Generated eight editable native charts, including alpha and contrasting panel themes.');
 }else{
  const generation=await json('generation.json'),native=await json('native.json');assert.deepEqual(runtime,generation.runtime);assert.equal(native.generationSha256,hash(await readFile(path.join(output,'generation.json'))));
+ assert.equal(native.editedSlides.length,1);assert.ok(Number.isInteger(native.editedSlides[0])&&native.editedSlides[0]>=1&&native.editedSlides[0]<=8);
  let imports=0;
  for(const [file,phase]of [['charts.pptx','original'],['charts-saved.pptx','saved'],['charts-edited.pptx','edited']]){
   const bytes=await readFile(path.join(output,file));assert.equal(hash(bytes),phase==='original'?generation.pptxSha256:native[phase+'Sha256']);
   const deck=await fromPptx(bytes);assert.equal(deck.slides.length,generation.expected.length);
   for(const [i,slide]of deck.slides.entries()){
    const chart=slide.chart??slide.blocks?.find(block=>block.chart)?.chart;assert.ok(chart);
-   assert.deepEqual(chart.data,generation.expected[i][phase==='edited'?'edited':'data'],`${phase} slide ${i+1}`);imports++;
+   assert.deepEqual(chart.data,generation.expected[i][phase==='edited'&&native.editedSlides.includes(i+1)?'edited':'data'],`${phase} slide ${i+1}`);imports++;
   }
  }
- for(const phase of ['original','reopened'])for(const [i,slide]of native[phase].entries()){
+ for(const phase of ['original','reopened']){assert.equal(native[phase].length,8);for(const [i,slide]of native[phase].entries()){
   const expected=generation.expected[i];assert.equal(slide.panelColor,expected.surface.slice(0,7));
   assert.ok(Math.abs(slide.panelTransparency-(expected.surface.length===9?1-128/255:0))<.0001);
   assert.equal(slide.pointColors.length,(expected.data.columns.length-1)*expected.data.rows.length);
@@ -48,6 +49,7 @@ if(mode==='generate'){
   assert.equal(slide.legendColor,expected.labelColor);if(expected.type==='column'){assert.equal(slide.categoryColor,expected.labelColor);assert.equal(slide.valueColor,expected.labelColor);}
   assert.equal(slide.pngSha256,hash(await readFile(path.join(output,slide.png))));
  }
- await write('comparison.json',{node:process.version,nativeSha256:hash(await readFile(path.join(output,'native.json'))),imports,slides:8,passed:true,scope:'Native editable chart panel/axis/legend colors and alpha; source header, series names, category labels and values survive original/save/reopen and edits in the actual embedded Excel workbook. No browser/native raster or advanced chart-layout parity claim.'});
- console.log(`Native chart checks passed: ${imports} exact original/saved/edited data imports.`);
+ }
+ await write('comparison.json',{node:process.version,nativeSha256:hash(await readFile(path.join(output,'native.json'))),imports,slides:8,editedSlides:native.editedSlides,passed:true,scope:'Native editable chart panel/axis/legend colors and alpha across eight slides; original/saved data and one selected actual embedded Excel workbook edit preserve header, series names, categories and values. Full edit coverage requires separate successful runs for slides 1 through 8. No browser/native raster or advanced chart-layout parity claim.'});
+ console.log(`Native chart checks passed: ${imports} data imports, one actually edited workbook (slide ${native.editedSlides[0]}).`);
 }
