@@ -6,6 +6,10 @@ The [Windows reference-font advance study](evidence/shared-metric-native-anchor/
 
 The composition API accepts a `textMeasurement` provider. A provider resolves font faces and returns actual text widths; callers pass the same provider to pagination, editor geometry, SVG rendering, and PPTX export. Without one, the existing deterministic character-width estimate remains available.
 
+Unpublished renderer font preparation adds `prepareNodeFonts` from `/fonts-node`. Its returned `options` combine the same registry measurement, embedded SVG fonts and explicit raster files, with system/bundled fallback disabled for raster calls. Pass these options to pagination, editor geometry, SVG, PPTX and PNG/PDF export. `pack: 'base'` is the default for authored Roboto decks; `pack: 'office'` adds the six Office substitute families and retains metric policy unless visual substitution is explicitly requested. `registry.substitutions` records actual substitutions; the helper does not rewrite the authored document or add native embedding.
+
+Both Node loaders verify exact package versions, 33 font-file hashes and eight license-notice hashes against the immutable `BUNDLED_FONT_MANIFEST` exported from `/fonts-node`. Missing/modified resources reject with actionable errors. Default raster loading now includes all nine base faces instead of omitting Roboto semibold, italic and bold italic. Font files must remain available and unchanged between preparation and raster export. Browser loading, actual glyph coverage, variant naming, rich spacing, and native compatibility remain separate requirements. These APIs are source work beyond published renderer 0.7.0; use coordinated candidate packages until a new release is verified.
+
 The renderer's optional font registry uses [Fontkit](https://github.com/foliojs/fontkit) to shape text and measure glyph advances from local font bytes. It does not discover system fonts or fetch fonts. The Node helper loads the renderer's bundled Roboto and Roboto Mono faces:
 
 ```js

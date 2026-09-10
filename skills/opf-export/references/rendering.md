@@ -1,5 +1,22 @@
 # Rendering and conversion APIs
 
+## Prepared font inputs (unpublished source)
+
+The coordinated renderer source adds `prepareNodeFonts` in `/fonts-node`:
+
+```js
+const {registry, options} = await prepareNodeFonts({
+  pack: 'office', substitutionPolicy: 'visual',
+});
+const {presentation} = paginatePresentation(document, options);
+const slides = renderSvgDeck(presentation, options);
+const png = await svgToPng(slides[0], options);
+const pptx = await toPptx(presentation, options);
+console.log(registry.substitutions);
+```
+
+Import the named functions from the same public modules shown below. This helper verifies pinned font/notice hashes and supplies one consistent measurement/SVG/raster option set. `pack: 'base'` suits authored Roboto decks; Office visual substitutions are explicit. It leaves source content, font choices and native font installation unchanged. Renderer 0.7.0 does not include this helper; inspect the installed exports and use the existing loader recipe for published packages. Native PPTX embedding and pixel equivalence are separate gates.
+
 ## Node export
 
 ```js

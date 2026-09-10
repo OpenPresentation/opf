@@ -87,6 +87,50 @@ run("npm", [
   "--cache",
   path.join(out,'cache'),
 ]);
+if (!registry) {
+  await writeFile(path.join(consumer,'check-font-preparation.mjs'), `
+import assert from 'node:assert/strict';
+import {prepareNodeFonts} from '@openpresentation/opf-render/fonts-node';
+import {renderSvgDeck,resolvePresentation,svgToPng} from '@openpresentation/opf-render';
+import {paginatePresentation} from '@openpresentation/opf/pagination';
+import {createEditorSession} from '@openpresentation/opf-editor';
+import {toPptx,fromPptx} from '@openpresentation/opf-pptx';
+const {registry,options}=await prepareNodeFonts({pack:'office',substitutionPolicy:'visual'});
+const source={design:{fontScheme:'roboto'},slides:[{id:'fonts',title:'Prepared installed fonts',text:'A measured local document preserves its content.'}]};
+const original=JSON.stringify(source);
+const {presentation}=paginatePresentation(source,options);
+const editor=createEditorSession(presentation);
+assert.deepEqual(editor.composeSlide(0,options),resolvePresentation(presentation,options).slides[0].geometry);
+editor.set('slides.0.title','Editable prepared fonts');editor.undo();
+assert.equal(editor.document.slides[0].title,source.slides[0].title);
+const svgs=renderSvgDeck(editor.document,options);
+assert.ok((await svgToPng(svgs[0],options)).length>1000);
+const imported=await fromPptx(await toPptx(editor.document,options));
+assert.equal(imported.slides[0].title,source.slides[0].title);
+assert.equal(JSON.stringify(source),original);
+assert.equal(registry.embeddedFonts.length,33);
+console.log('Installed candidate font preparation passed layout, edit/undo, SVG/PNG, editable PPTX export and heading reimport.');
+`);
+  run(process.execPath,['check-font-preparation.mjs']);
+  await writeFile(path.join(consumer,'font-preparation-types.mts'), `
+import {prepareNodeFonts,type PreparedNodeFonts,type BundledFontManifest} from '@openpresentation/opf-render/fonts-node';
+import {renderSvgDeck,svgToPng} from '@openpresentation/opf-render';
+import {paginatePresentation} from '@openpresentation/opf/pagination';
+import {createEditorSession} from '@openpresentation/opf-editor';
+import {toPptx} from '@openpresentation/opf-pptx';
+const prepared:PreparedNodeFonts=await prepareNodeFonts({pack:'office',substitutionPolicy:'visual'});
+const manifest:BundledFontManifest=prepared.manifest;
+const {presentation}=paginatePresentation({slides:[{title:'Prepared type consumer'}]},prepared.options);
+const editor=createEditorSession(presentation);
+editor.composeSlide(0,prepared.options);
+await svgToPng(renderSvgDeck(presentation,prepared.options)[0],prepared.options);
+await toPptx(presentation,prepared.options);
+// @ts-expect-error The provenance catalog is immutable.
+manifest.packages[0].faces[0].sha256='changed';
+// @ts-expect-error Unknown packs are not valid inputs.
+await prepareNodeFonts({pack:'unknown'});
+`);
+}
 await writeFile(
   path.join(consumer, "check.mjs"),
   `import assert from 'node:assert/strict';
@@ -237,6 +281,7 @@ run(process.execPath, [
   "--lib",
   "ES2022,DOM",
   "browser.ts",
+  ...(!registry ? ["font-preparation-types.mts"] : []),
   ...(verifyStyledTables ? ["styled-types.mts"] : []),
 ]);
 const { build } = createRequire(require.resolve("tsup"))("esbuild");
