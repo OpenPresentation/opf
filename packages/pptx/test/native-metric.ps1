@@ -1,4 +1,4 @@
-param([string]$EvidenceDirectory = 'artifacts/native-metric')
+param([string]$EvidenceDirectory = 'artifacts/native-metric',[ValidateSet('','metric-1280-left','metric-1280-center','metric-1280-right','metric-540-left','metric-540-center','metric-540-right')][string]$Deck='',[ValidateRange(5,60)][int]$TimeoutSeconds=45,[switch]$Worker)
 $ErrorActionPreference = 'Stop'
 function Get-FixtureSha256([string]$FixturePath) {
     $hasher = [System.Security.Cryptography.SHA256]::Create()
@@ -8,21 +8,47 @@ function Get-FixtureSha256([string]$FixturePath) {
 $evidenceRoot = (Resolve-Path -LiteralPath $EvidenceDirectory).Path
 $generationFile = Join-Path $evidenceRoot 'generation.json'
 $generation = Get-Content -LiteralPath $generationFile -Raw -Encoding UTF8 | ConvertFrom-Json
-$powerpoint = New-Object -ComObject PowerPoint.Application
+if($Deck -eq '') { throw 'Select exactly one metric fixture with -Deck; a blocked Office invocation is never retried' }
+$runRoot=Join-Path $evidenceRoot "runs/$Deck"
+if(-not $Worker) {
+    if(Test-Path -LiteralPath $runRoot) { throw 'This attempt already exists; retain it and use a fresh generation directory' }
+    [void](New-Item -ItemType Directory -Path $runRoot)
+    . (Join-Path $PSScriptRoot 'native-process.ps1')
+    $result=Invoke-OpfNativeWorker -ScriptPath $PSCommandPath -WorkerArguments @('-EvidenceDirectory',$evidenceRoot,'-Deck',$Deck,'-Worker') -OutputDirectory $runRoot -TimeoutSeconds $TimeoutSeconds
+    Get-Content -LiteralPath (Join-Path $runRoot 'worker.stdout.log')
+    if($result.timedOut) { throw 'Native metric worker timed out. No retry was started; Office fixture cleanup is unconfirmed.' }
+    if($result.exitCode -ne 0) { Get-Content -LiteralPath (Join-Path $runRoot 'worker.stderr.log'); throw "Native metric worker failed with exit code $($result.exitCode). No retry was started." }
+    return
+}
+function Save-FixtureProgress([string]$Value) {
+    $script:stage=$Value
+    @{stage=$stage;deck=$Deck;generationSha256=(Get-FixtureSha256 $generationFile);decks=$reports;slides=$slides} | ConvertTo-Json -Depth 25 | Set-Content -LiteralPath (Join-Path $runRoot 'progress.json') -Encoding UTF8
+}
+function Open-OwnedFixture([string]$File,[int]$ReadOnly=0) {
+    Save-FixtureProgress "open-$([IO.Path]::GetFileName($File))"
+    for($i=1;$i -le $powerpoint.Presentations.Count;$i++) { if($powerpoint.Presentations.Item($i).FullName -eq $File) { throw 'Fixture already open; ownership is not established' } }
+    return $powerpoint.Presentations.Open($File,$ReadOnly,0,0)
+}
+$powerpoint = $null
 $presentation = $null
 $reopened = $null
 $reports = @()
+$slides = @(); $stage='connect'
 try {
-    foreach ($record in $generation.decks) {
+    Save-FixtureProgress 'connect'; $powerpoint=New-Object -ComObject PowerPoint.Application
+    $selected=@($generation.decks | Where-Object {$_.id -eq $Deck})
+    if($selected.Count -ne 1) { throw 'Selected metric fixture not found exactly once' }
+    foreach ($record in $selected) {
         $id = $record.id
         if ($id -notmatch '^metric-\d+-(left|center|right)$') { throw 'Invalid fixture filename' }
         $sourcePath = Join-Path $evidenceRoot "$id.pptx"
         if ((Get-FixtureSha256 $sourcePath) -ne $record.pptxSha256) { throw 'Stale source fixture' }
-        $presentation = $powerpoint.Presentations.Open($sourcePath, 0, 0, 0)
+        $presentation = Open-OwnedFixture $sourcePath
         if ($presentation.Slides.Count -ne $record.layouts.Count) { throw 'Native slide count mismatch' }
         $slides = @()
         $edits = @()
         foreach ($slide in $presentation.Slides) {
+            Save-FixtureProgress "observe-slide-$($slide.SlideIndex)"
             $layout = $record.layouts[$slide.SlideIndex-1]
             $expected = @($layout.parts | Where-Object { $_.visible } | ForEach-Object { $part = $_; $index = 0; $part.fit.sourceLines | ForEach-Object { @{part=$part; line=$_; index=$index}; $index++ } })
             $index = 0
@@ -104,12 +130,13 @@ try {
             $slides += @{slide=$slide.SlideIndex; lines=$observations; rasterSha256=(Get-FixtureSha256 $rasterPath); partRasters=$partRasters}
         }
         $savedPath = Join-Path $evidenceRoot "$id-saved.pptx"
+        Save-FixtureProgress 'save-and-edit'
         $presentation.SaveCopyAs($savedPath,24)
         foreach ($edit in $edits) { $edit.shape.TextFrame.TextRange.Text = $edit.text }
         $editedPath = Join-Path $evidenceRoot "$id-edited.pptx"
         $presentation.SaveAs($editedPath,24)
         $presentation.Close(); $presentation = $null
-        $reopened = $powerpoint.Presentations.Open($editedPath,-1,0,0)
+        $reopened = Open-OwnedFixture $editedPath -ReadOnly -1
         foreach ($edit in $edits) {
             $shape = $reopened.Slides.Item($edit.slide).Shapes.Item($edit.name)
             if ($shape.TextFrame.TextRange.Text -cne $edit.text) { throw 'Native metric edit did not survive reopen' }
@@ -121,7 +148,11 @@ try {
     }
     $nativeExecutable = Join-Path $powerpoint.Path 'POWERPNT.EXE'
     $osVersion = Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
-    @{powerPointVersion=$powerpoint.Version; executableVersion=(Get-Item -LiteralPath $nativeExecutable).VersionInfo.FileVersion; executableSha256=(Get-FixtureSha256 $nativeExecutable); windowsBuild="$($osVersion.CurrentBuild).$($osVersion.UBR)"; generationSha256=(Get-FixtureSha256 $generationFile); decks=$reports} | ConvertTo-Json -Depth 20 | Set-Content -LiteralPath (Join-Path $evidenceRoot 'native.json') -Encoding UTF8
+    @{powerPointVersion=$powerpoint.Version; executableVersion=(Get-Item -LiteralPath $nativeExecutable).VersionInfo.FileVersion; executableSha256=(Get-FixtureSha256 $nativeExecutable); windowsBuild="$($osVersion.CurrentBuild).$($osVersion.UBR)"; hostVersion=$PSVersionTable.PSVersion.ToString(); generationSha256=(Get-FixtureSha256 $generationFile); decks=$reports} | ConvertTo-Json -Depth 20 | Set-Content -LiteralPath (Join-Path $runRoot 'native.json') -Encoding UTF8
+    Save-FixtureProgress 'completed'
+} catch {
+    @{stage=$stage;error=$_.Exception.Message;decks=$reports;slides=$slides;generationSha256=(Get-FixtureSha256 $generationFile)} | ConvertTo-Json -Depth 25 | Set-Content -LiteralPath (Join-Path $runRoot 'failure.json') -Encoding UTF8
+    throw
 } finally {
     if ($null -ne $reopened) { $reopened.Close() }
     if ($null -ne $presentation) { $presentation.Close() }
