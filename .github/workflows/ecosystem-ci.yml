@@ -30,21 +30,21 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
-          ref: 7fe9905ad2d8a224efeef51b4a22d0aff0c413fe
+          ref: b5a3722725338e8d964783e8b7f1f7b80ce28cd3
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-editor
-          ref: dba5fe5e5580a4172c052132c4db5851d1decc4c
+          ref: 52e540b83e441892fd928e9f159bffbb29da5653
           path: opf-editor
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-pptx
-          ref: 898e3c27919a2488e1e3d384168d6b25aae4bd5c
+          ref: b4f4645cdaa2f5eff8a883f68533875d3b63f239
           path: opf-pptx
           fetch-depth: 0
           persist-credentials: false
@@ -70,13 +70,14 @@ jobs:
       - name: Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks
         working-directory: opf
         env:
-          OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf/scripts/fixtures/opf-examples-png.shared-quote.sha256.json
+          OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf/scripts/fixtures/opf-examples-png.shared-code.sha256.json
         run: pnpm test:packages
       - name: Execute installed tarball browser interactions
         working-directory: opf
         run: |
           node -e "if (require('../opf-render/node_modules/playwright/package.json').version !== '1.63.0') throw new Error('Update the pinned Playwright image with the renderer test package.');"
           pnpm test:packed-browser
+          node scripts/test-installed-code-guards.mjs
       - name: Verify exact published registry packages and fidelity fixtures
         working-directory: opf
         run: |
@@ -101,6 +102,7 @@ jobs:
             opf/artifacts/editor/packed-browser-*-failure.png
             opf/artifacts/code-layout-geometry.json
             opf/artifacts/code-layout-browser.json
+            opf/artifacts/editor/*installed-code*.json
           retention-days: 7
           if-no-files-found: ignore
       - name: Report the verification boundary

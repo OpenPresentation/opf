@@ -1,0 +1,701 @@
+{
+  "generationSha256": "25a61dcab0efaba5a2859054b2e50bbfce3bf8696d9e659f1900f8c9afd8a99e",
+  "executableSha256": "90fa931172c507b763ba92a82b19d5bc70816e008c5bb87577e1838e8a92e9f9",
+  "decks": [
+    {
+      "editsReopened": 6,
+      "id": "code-1280",
+      "slides": [
+        {
+          "lines": [
+            {
+              "width": 53.75,
+              "role": "language",
+              "left": 56.7,
+              "height": 21.6,
+              "text": "code",
+              "font": "Courier New",
+              "fontSize": 18.0,
+              "top": 56.7,
+              "tags": 1,
+              "tabTargets": []
+            },
+            {
+              "width": 10.75,
+              "role": "body",
+              "left": 56.7,
+              "height": 21.6,
+              "text": "",
+              "font": "Courier New",
+              "fontSize": 18.0,
+              "top": 87.66,
+              "tags": 1,
+              "tabTargets": []
+            }
+          ],
+          "glyphsInsideCell": true,
+          "slide": 1,
+          "rasterSha256": "f7586d334c6af5475b7891092ed29defa497cc659d8b34d99ffe5f8097a85379"
+        },
+        {
+          "lines": [
+            {
+              "width": 53.75,
+              "role": "language",
+              "left": 56.7,
+              "height": 21.6,
+              "text": "code",
+              "font": "Courier New",
+              "fontSize": 18.0,
+              "top": 56.7,
+              "tags": 1,
+              "tabTargets": []
+            },
+            {
+              "width": 97.15,
+              "role": "body",
+              "left": 56.7,
+              "height": 21.6,
+              "text": "\t\t",
+              "font": "Courier New",
+              "fontSize": 18.0,
+              "top": 87.66,
+              "tags": 1,
+              "tabTargets": []
+            }
+          ],
+          "glyphsInsideCell": true,
+          "slide": 2,
+          "rasterSha256": "f7586d334c6af5475b7891092ed29defa497cc659d8b34d99ffe5f8097a85379"
+        },
+        {
+          "lines": [
+            {
+              "width": 225.95,
+              "role": "filename",
+              "left": 56.7,
+              "height": 21.6,
+              "text": "src\tCaseSensitive.ts",
+              "font": "Courier New",
+              "fontSize": 18.0,
+              "top": 56.7,
+              "tags": 1,
+              "tabTargets": [
+                {
+                  "sourceStart": 4,
+                  "errorPoints": 0.007030487060546875
+                }
+              ]
+            },
+            {
+              "width": 118.25,
+              "role": "language",
+              "left": 56.7,
+              "height": 21.6,
+              "text": "TypeScript",
+              "font": "Courier New",
+              "fontSize": 18.0,
+              "top": 84.66,
+              "tags": 1,
+              "tabTargets": []
+            },
+            {
+              "width": 333.25,
+              "role": "body",
+              "left": 56.7,
+              "height": 21.6,
+              "text": "  const value = \"two  spaces\";",
+              "font": "Courier New",
+              "fontSize": 18.0,
+              "top": 115.62,
+              "tags": 1,
+              "tabTargets": []
+            },
+            {
+              "width": 10.75,
+              "role": "body",
+              "left": 56.7,
+              "height": 21.6,
+              "text": "",
+              "font": "Courier New",
+              "fontSize": 18.0,
+              "top": 137.58,
+              "tags": 1,
+              "tabTargets": []
+            },
+            {
+              "width": 849.25,
+              "role": "body",
+              "left": 56.7,
+              "height": 21.6,
+              "text": "longtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongto",
+              "font": "Courier New",
+              "fontSize": 18.0,
+              "top": 159.54,
+              "tags": 1,
+              "tabTargets": []
+            },
+            {
+              "width": 849.25,
+              "role": "body",
+              "left": 56.7,
+              "height": 21.6,
+              "text": "kenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlon",
+              "font": "Courier New",
+              "fontSize": 18.0,
+              "top": 181.5,
+              "tags": 1,
+              "tabTargets": []
+            },
+            {
+              "width": 462.25,
+              "role": "body",
+              "left": 56.7,
+              "height": 21.6,
+              "text": "gtokenlongtokenlongtokenlongtokenlongtoken",
+              "font": "Courier New",
+              "fontSize": 18.0,
+              "top": 203.46,
+              "tags": 1,
+              "tabTargets": []
+            },
+            {
+              "width": 215.2,
+              "role": "body",
+              "left": 56.7,
+              "height": 21.6,
+              "text": "\treturn value;  ",
+              "font": "Courier New",
+              "fontSize": 18.0,
+              "top": 225.42,
+              "tags": 1,
+              "tabTargets": [
+                {
+                  "sourceStart": 234,
+                  "errorPoints": 0.007030487060546875
+                }
+              ]
+            },
+            {
+              "width": 10.75,
+              "role": "body",
+              "left": 56.7,
+              "height": 21.6,
+              "text": "",
+              "font": "Courier New",
+              "fontSize": 18.0,
+              "top": 247.38,
+              "tags": 1,
+              "tabTargets": []
+            }
+          ],
+          "glyphsInsideCell": true,
+          "slide": 3,
+          "rasterSha256": "e2adc912a3fe8e21bfacdbab69e80cef58b34d2892223838945bbd334d89febd"
+        },
+        {
+          "lines": [
+            {
+              "width": 849.25,
+              "role": "filename",
+              "left": 56.7,
+              "height": 21.6,
+              "text": "a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long",
+              "font": "Courier New",
+              "fontSize": 18.0,
+              "top": 56.7,
+              "tags": 1,
+              "tabTargets": []
+            },
+            {
+              "width": 849.25,
+              "role": "filename",
+              "left": 56.7,
+              "height": 21.6,
+              "text": "-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/",
+              "font": "Courier New",
+              "fontSize": 18.0,
+              "top": 78.66,
+              "tags": 1,
+              "tabTargets": []
+            },
+            {
+              "width": 268.75,
+              "role": "filename",
+              "left": 56.7,
+              "height": 21.6,
+              "text": "a-long-path/a-long-path/",
+              "font": "Courier New",
+              "fontSize": 18.0,
+              "top": 100.62,
+              "tags": 1,
+              "tabTargets": []
+            },
+            {
+              "width": 849.25,
+              "role": "language",
+              "left": 56.7,
+              "height": 21.6,
+              "text": "Long-language-label-Long-language-label-Long-language-label-Long-language-labe",
+              "font": "Courier New",
+              "fontSize": 18.0,
+              "top": 128.58,
+              "tags": 1,
+              "tabTargets": []
+            },
+            {
+              "width": 849.25,
+              "role": "language",
+              "left": 56.7,
+              "height": 21.6,
+              "text": "l-Long-language-label-Long-language-label-Long-language-label-Long-language-la",
+              "font": "Courier New",
+              "fontSize": 18.0,
+              "top": 150.54,
+              "tags": 1,
+              "tabTargets": []
+            },
+            {
+              "width": 849.25,
+              "role": "language",
+              "left": 56.7,
+              "height": 21.6,
+              "text": "bel-Long-language-label-Long-language-label-Long-language-label-Long-language-",
+              "font": "Courier New",
+              "fontSize": 18.0,
+              "top": 172.5,
+              "tags": 1,
+              "tabTargets": []
+            },
+            {
+              "width": 75.25,
+              "role": "language",
+              "left": 56.7,
+              "height": 21.6,
+              "text": "label-",
+              "font": "Courier New",
+              "fontSize": 18.0,
+              "top": 194.46,
+              "tags": 1,
+              "tabTargets": []
+            },
+            {
+              "width": 10.75,
+              "role": "body",
+              "left": 56.7,
+              "height": 21.6,
+              "text": "",
+              "font": "Courier New",
+              "fontSize": 18.0,
+              "top": 225.42,
+              "tags": 1,
+              "tabTargets": []
+            }
+          ],
+          "glyphsInsideCell": true,
+          "slide": 4,
+          "rasterSha256": "7173b3d0cf388330956a78628b16c4ef7b03dc81afd2831c806312f9fe87bc78"
+        }
+      ],
+      "editedSha256": "13bb4d62affdfcf20c2924d923640edcae6d3c5b70b441fd666fb78292557fdd",
+      "savedSha256": "b34078722cd056a997415e720ab93e27abcf9acf17325a3be05c7b83ab3547ef"
+    },
+    {
+      "editsReopened": 6,
+      "id": "code-540",
+      "slides": [
+        {
+          "lines": [
+            {
+              "width": 40.62504,
+              "role": "language",
+              "left": 45.9,
+              "height": 16.2,
+              "text": "code",
+              "font": "Courier New",
+              "fontSize": 13.5,
+              "top": 45.9,
+              "tags": 1,
+              "tabTargets": []
+            },
+            {
+              "width": 8.125039,
+              "role": "body",
+              "left": 45.9,
+              "height": 16.2,
+              "text": "",
+              "font": "Courier New",
+              "fontSize": 13.5,
+              "top": 71.37,
+              "tags": 1,
+              "tabTargets": []
+            }
+          ],
+          "glyphsInsideCell": true,
+          "slide": 1,
+          "rasterSha256": "da9395af5234a34a6bfa92a3bfc6b3e0dd0b7067fc3ab9857ac1e0463dfe21e2"
+        },
+        {
+          "lines": [
+            {
+              "width": 40.62504,
+              "role": "language",
+              "left": 45.9,
+              "height": 16.2,
+              "text": "code",
+              "font": "Courier New",
+              "fontSize": 13.5,
+              "top": 45.9,
+              "tags": 1,
+              "tabTargets": []
+            },
+            {
+              "width": 72.92504,
+              "role": "body",
+              "left": 45.9,
+              "height": 16.2,
+              "text": "\t\t",
+              "font": "Courier New",
+              "fontSize": 13.5,
+              "top": 71.37,
+              "tags": 1,
+              "tabTargets": []
+            }
+          ],
+          "glyphsInsideCell": true,
+          "slide": 2,
+          "rasterSha256": "da9395af5234a34a6bfa92a3bfc6b3e0dd0b7067fc3ab9857ac1e0463dfe21e2"
+        },
+        {
+          "lines": [
+            {
+              "width": 170.52504,
+              "role": "filename",
+              "left": 45.9,
+              "height": 16.2,
+              "text": "src\tCaseSensitive.ts",
+              "font": "Courier New",
+              "fontSize": 13.5,
+              "top": 45.9,
+              "tags": 1,
+              "tabTargets": [
+                {
+                  "sourceStart": 4,
+                  "errorPoints": 0.00527191162109375
+                }
+              ]
+            },
+            {
+              "width": 89.37504,
+              "role": "language",
+              "left": 45.9,
+              "height": 16.2,
+              "text": "TypeScript",
+              "font": "Courier New",
+              "fontSize": 13.5,
+              "top": 68.37,
+              "tags": 1,
+              "tabTargets": []
+            },
+            {
+              "width": 251.87505,
+              "role": "body",
+              "left": 45.9,
+              "height": 16.2,
+              "text": "  const value = \"two  spaces\";",
+              "font": "Courier New",
+              "fontSize": 13.5,
+              "top": 93.84,
+              "tags": 1,
+              "tabTargets": []
+            },
+            {
+              "width": 8.125039,
+              "role": "body",
+              "left": 45.9,
+              "height": 16.2,
+              "text": "",
+              "font": "Courier New",
+              "fontSize": 13.5,
+              "top": 110.31,
+              "tags": 1,
+              "tabTargets": []
+            },
+            {
+              "width": 316.87503,
+              "role": "body",
+              "left": 45.9,
+              "height": 16.2,
+              "text": "longtokenlongtokenlongtokenlongtokenlo",
+              "font": "Courier New",
+              "fontSize": 13.5,
+              "top": 126.78,
+              "tags": 1,
+              "tabTargets": []
+            },
+            {
+              "width": 316.87503,
+              "role": "body",
+              "left": 45.9,
+              "height": 16.2,
+              "text": "ngtokenlongtokenlongtokenlongtokenlong",
+              "font": "Courier New",
+              "fontSize": 13.5,
+              "top": 143.25,
+              "tags": 1,
+              "tabTargets": []
+            },
+            {
+              "width": 316.87503,
+              "role": "body",
+              "left": 45.9,
+              "height": 16.2,
+              "text": "tokenlongtokenlongtokenlongtokenlongto",
+              "font": "Courier New",
+              "fontSize": 13.5,
+              "top": 159.72,
+              "tags": 1,
+              "tabTargets": []
+            },
+            {
+              "width": 316.87503,
+              "role": "body",
+              "left": 45.9,
+              "height": 16.2,
+              "text": "kenlongtokenlongtokenlongtokenlongtoke",
+              "font": "Courier New",
+              "fontSize": 13.5,
+              "top": 176.19,
+              "tags": 1,
+              "tabTargets": []
+            },
+            {
+              "width": 316.87503,
+              "role": "body",
+              "left": 45.9,
+              "height": 16.2,
+              "text": "nlongtokenlongtokenlongtokenlongtokenl",
+              "font": "Courier New",
+              "fontSize": 13.5,
+              "top": 192.66,
+              "tags": 1,
+              "tabTargets": []
+            },
+            {
+              "width": 73.12504,
+              "role": "body",
+              "left": 45.9,
+              "height": 16.2,
+              "text": "ongtoken",
+              "font": "Courier New",
+              "fontSize": 13.5,
+              "top": 209.13,
+              "tags": 1,
+              "tabTargets": []
+            },
+            {
+              "width": 162.4,
+              "role": "body",
+              "left": 45.9,
+              "height": 16.2,
+              "text": "\treturn value;  ",
+              "font": "Courier New",
+              "fontSize": 13.5,
+              "top": 225.6,
+              "tags": 1,
+              "tabTargets": [
+                {
+                  "sourceStart": 234,
+                  "errorPoints": 0.00527191162109375
+                }
+              ]
+            },
+            {
+              "width": 8.125039,
+              "role": "body",
+              "left": 45.9,
+              "height": 16.2,
+              "text": "",
+              "font": "Courier New",
+              "fontSize": 13.5,
+              "top": 242.07,
+              "tags": 1,
+              "tabTargets": []
+            }
+          ],
+          "glyphsInsideCell": true,
+          "slide": 3,
+          "rasterSha256": "6879997dcc2e1ece9608b8009e0a68f574b24edf599cd9aa62a17a99d29ef494"
+        },
+        {
+          "lines": [
+            {
+              "width": 316.87503,
+              "role": "filename",
+              "left": 45.9,
+              "height": 16.2,
+              "text": "a-long-path/a-long-path/a-long-path/a-",
+              "font": "Courier New",
+              "fontSize": 13.5,
+              "top": 45.9,
+              "tags": 1,
+              "tabTargets": []
+            },
+            {
+              "width": 316.87503,
+              "role": "filename",
+              "left": 45.9,
+              "height": 16.2,
+              "text": "long-path/a-long-path/a-long-path/a-lo",
+              "font": "Courier New",
+              "fontSize": 13.5,
+              "top": 62.37,
+              "tags": 1,
+              "tabTargets": []
+            },
+            {
+              "width": 316.87503,
+              "role": "filename",
+              "left": 45.9,
+              "height": 16.2,
+              "text": "ng-path/a-long-path/a-long-path/a-long",
+              "font": "Courier New",
+              "fontSize": 13.5,
+              "top": 78.84,
+              "tags": 1,
+              "tabTargets": []
+            },
+            {
+              "width": 316.87503,
+              "role": "filename",
+              "left": 45.9,
+              "height": 16.2,
+              "text": "-path/a-long-path/a-long-path/a-long-p",
+              "font": "Courier New",
+              "fontSize": 13.5,
+              "top": 95.31,
+              "tags": 1,
+              "tabTargets": []
+            },
+            {
+              "width": 235.62505,
+              "role": "filename",
+              "left": 45.9,
+              "height": 16.2,
+              "text": "ath/a-long-path/a-long-path/",
+              "font": "Courier New",
+              "fontSize": 13.5,
+              "top": 111.78,
+              "tags": 1,
+              "tabTargets": []
+            },
+            {
+              "width": 316.87503,
+              "role": "language",
+              "left": 45.9,
+              "height": 16.2,
+              "text": "Long-language-label-Long-language-labe",
+              "font": "Courier New",
+              "fontSize": 13.5,
+              "top": 134.25,
+              "tags": 1,
+              "tabTargets": []
+            },
+            {
+              "width": 316.87503,
+              "role": "language",
+              "left": 45.9,
+              "height": 16.2,
+              "text": "l-Long-language-label-Long-language-la",
+              "font": "Courier New",
+              "fontSize": 13.5,
+              "top": 150.72,
+              "tags": 1,
+              "tabTargets": []
+            },
+            {
+              "width": 316.87503,
+              "role": "language",
+              "left": 45.9,
+              "height": 16.2,
+              "text": "bel-Long-language-label-Long-language-",
+              "font": "Courier New",
+              "fontSize": 13.5,
+              "top": 167.19,
+              "tags": 1,
+              "tabTargets": []
+            },
+            {
+              "width": 316.87503,
+              "role": "language",
+              "left": 45.9,
+              "height": 16.2,
+              "text": "label-Long-language-label-Long-languag",
+              "font": "Courier New",
+              "fontSize": 13.5,
+              "top": 183.66,
+              "tags": 1,
+              "tabTargets": []
+            },
+            {
+              "width": 316.87503,
+              "role": "language",
+              "left": 45.9,
+              "height": 16.2,
+              "text": "e-label-Long-language-label-Long-langu",
+              "font": "Courier New",
+              "fontSize": 13.5,
+              "top": 200.13,
+              "tags": 1,
+              "tabTargets": []
+            },
+            {
+              "width": 316.87503,
+              "role": "language",
+              "left": 45.9,
+              "height": 16.2,
+              "text": "age-label-Long-language-label-Long-lan",
+              "font": "Courier New",
+              "fontSize": 13.5,
+              "top": 216.6,
+              "tags": 1,
+              "tabTargets": []
+            },
+            {
+              "width": 105.62504,
+              "role": "language",
+              "left": 45.9,
+              "height": 16.2,
+              "text": "guage-label-",
+              "font": "Courier New",
+              "fontSize": 13.5,
+              "top": 233.07,
+              "tags": 1,
+              "tabTargets": []
+            },
+            {
+              "width": 8.125039,
+              "role": "body",
+              "left": 45.9,
+              "height": 16.2,
+              "text": "",
+              "font": "Courier New",
+              "fontSize": 13.5,
+              "top": 258.54,
+              "tags": 1,
+              "tabTargets": []
+            }
+          ],
+          "glyphsInsideCell": true,
+          "slide": 4,
+          "rasterSha256": "d457dd18e9bc17efc8fb3a60ca85972dbf890998bec5adfd194aeee341776b46"
+        }
+      ],
+      "editedSha256": "f524045cb8fcac2a981aa4e8e7c0cc068744cfa1a952b8e8f6b077dd1250cc41",
+      "savedSha256": "16bd1a3f627dc6865861212ff422447bfa92981b3269eaf90d2059c840daacd1"
+    }
+  ],
+  "windowsBuild": "26200.9445",
+  "powerPointVersion": "16.0",
+  "executableVersion": "16.0.20326.20132"
+}

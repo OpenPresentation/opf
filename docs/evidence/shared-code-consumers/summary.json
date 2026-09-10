@@ -1,0 +1,313 @@
+{
+  "branch": "codex/shared-code-integration-20260909",
+  "sourceRefs": {
+    "opf": "8d11fd650eb14fad3473b918713d9caa95321b83",
+    "opf-render": "343ffea275e2eff478fc6a355551379897b748df",
+    "opf-pptx": "860e9476520659bf65822c945bf96b253cbe6c01",
+    "opf-editor": "52e540b83e441892fd928e9f159bffbb29da5653"
+  },
+  "checks": [
+    {
+      "repository": "opf-render",
+      "script": "typecheck",
+      "exitCode": 0,
+      "node": "20.20.2",
+      "log": "opf-render-typecheck-node20.20.2.log",
+      "logSha256": "1f8e0a786e56a2ba7105df59d969a885bb712fbcc799a874b1b412717d9b76db"
+    },
+    {
+      "repository": "opf-render",
+      "script": "validate",
+      "exitCode": 0,
+      "node": "20.20.2",
+      "log": "opf-render-validate-node20.20.2.log",
+      "logSha256": "15a081aec5526586c94a660f1e294d53b11b171abd0614a87410b6551801f89f"
+    },
+    {
+      "repository": "opf-render",
+      "script": "test",
+      "exitCode": 0,
+      "node": "20.20.2",
+      "log": "opf-render-test-node20.20.2.log",
+      "logSha256": "2a0973e54394cd20a28223df57269e294f7b1583d9cb30d77c2846ec728f486b"
+    },
+    {
+      "repository": "opf-render",
+      "script": "test:code",
+      "exitCode": 0,
+      "node": "20.20.2",
+      "log": "opf-render-test-code-node20.20.2.log",
+      "logSha256": "79f61a06d89e50b144d8c4d1d8072e3003e1872ff94024504db811d8919fddbc"
+    },
+    {
+      "repository": "opf-render",
+      "script": "test:browser",
+      "exitCode": 0,
+      "node": "20.20.2",
+      "log": "opf-render-test-browser-node20.20.2.log",
+      "logSha256": "dc477419f20b42c54380f687576b868c69a2f8209fadb6cb3bdb5a9677044c42"
+    },
+    {
+      "repository": "opf-pptx",
+      "script": "typecheck",
+      "exitCode": 0,
+      "node": "20.20.2",
+      "log": "opf-pptx-typecheck-node20.20.2.log",
+      "logSha256": "ea3dcd66f5c0fb76b6daf1549f9fca453d122107bd20468e244cec1d70640721"
+    },
+    {
+      "repository": "opf-pptx",
+      "script": "validate",
+      "exitCode": 0,
+      "node": "20.20.2",
+      "log": "opf-pptx-validate-node20.20.2.log",
+      "logSha256": "65a39f8f4594f2b9814bd0af43c7c1f2bb9b77b57c1595a0d2eaded2f10df020"
+    },
+    {
+      "repository": "opf-pptx",
+      "script": "test",
+      "exitCode": 0,
+      "node": "20.20.2",
+      "log": "opf-pptx-test-node20.20.2.log",
+      "logSha256": "c2625a83b45825d08a7bb05d392cc162b1851bd0329ff2c98b569af6ac9e3165"
+    },
+    {
+      "repository": "opf-pptx",
+      "script": "test:code",
+      "exitCode": 0,
+      "node": "20.20.2",
+      "log": "opf-pptx-test-code-node20.20.2.log",
+      "logSha256": "51393a08b8b1b1f4cf4fdfd58afc6d5889e90f9938ee6f5421ce81c74d82bb97"
+    },
+    {
+      "repository": "opf-pptx",
+      "script": "test:browser",
+      "exitCode": 0,
+      "node": "20.20.2",
+      "log": "opf-pptx-test-browser-node20.20.2.log",
+      "logSha256": "a6f663c17457f8541b7f151800b899b27f67928117fe5b98b79f6adfcbe2284c"
+    },
+    {
+      "repository": "opf-editor",
+      "script": "typecheck",
+      "exitCode": 0,
+      "node": "20.20.2",
+      "log": "opf-editor-typecheck-node20.20.2.log",
+      "logSha256": "50d49b290084998e09e4c3805a824c441beda494e9aef7a96612daccc801204a"
+    },
+    {
+      "repository": "opf-editor",
+      "script": "validate",
+      "exitCode": 0,
+      "node": "20.20.2",
+      "log": "opf-editor-validate-node20.20.2.log",
+      "logSha256": "d5a0fb67eb4e8a9d51b7ed5c3a17f885893cbda76e7962585bd0c3750cd5a941"
+    },
+    {
+      "repository": "opf-editor",
+      "script": "test",
+      "exitCode": 0,
+      "node": "20.20.2",
+      "log": "opf-editor-test-node20.20.2.log",
+      "logSha256": "ed1ea768667e765d11a308acbb2c0098fc0e229c4a716148a58f15cf11433dd0"
+    },
+    {
+      "repository": "opf-editor",
+      "script": "test:playground",
+      "exitCode": 0,
+      "node": "20.20.2",
+      "log": "opf-editor-test-playground-node20.20.2.log",
+      "logSha256": "9f5ed8383df94b8f5d0ba49b579c4672fd80e665effc6dc53b63a9e1e139743a"
+    },
+    {
+      "repository": "opf-render",
+      "script": "typecheck",
+      "exitCode": 0,
+      "node": "24.20.0",
+      "log": "opf-render-typecheck-node24.20.0.log",
+      "logSha256": "1f8e0a786e56a2ba7105df59d969a885bb712fbcc799a874b1b412717d9b76db"
+    },
+    {
+      "repository": "opf-render",
+      "script": "validate",
+      "exitCode": 0,
+      "node": "24.20.0",
+      "log": "opf-render-validate-node24.20.0.log",
+      "logSha256": "15a081aec5526586c94a660f1e294d53b11b171abd0614a87410b6551801f89f"
+    },
+    {
+      "repository": "opf-render",
+      "script": "test",
+      "exitCode": 0,
+      "node": "24.20.0",
+      "log": "opf-render-test-node24.20.0.log",
+      "logSha256": "2a0973e54394cd20a28223df57269e294f7b1583d9cb30d77c2846ec728f486b"
+    },
+    {
+      "repository": "opf-render",
+      "script": "test:code",
+      "exitCode": 0,
+      "node": "24.20.0",
+      "log": "opf-render-test-code-node24.20.0.log",
+      "logSha256": "79f61a06d89e50b144d8c4d1d8072e3003e1872ff94024504db811d8919fddbc"
+    },
+    {
+      "repository": "opf-render",
+      "script": "test:browser",
+      "exitCode": 0,
+      "node": "24.20.0",
+      "log": "opf-render-test-browser-node24.20.0.log",
+      "logSha256": "dc477419f20b42c54380f687576b868c69a2f8209fadb6cb3bdb5a9677044c42"
+    },
+    {
+      "repository": "opf-pptx",
+      "script": "typecheck",
+      "exitCode": 0,
+      "node": "24.20.0",
+      "log": "opf-pptx-typecheck-node24.20.0.log",
+      "logSha256": "ea3dcd66f5c0fb76b6daf1549f9fca453d122107bd20468e244cec1d70640721"
+    },
+    {
+      "repository": "opf-pptx",
+      "script": "validate",
+      "exitCode": 0,
+      "node": "24.20.0",
+      "log": "opf-pptx-validate-node24.20.0.log",
+      "logSha256": "65a39f8f4594f2b9814bd0af43c7c1f2bb9b77b57c1595a0d2eaded2f10df020"
+    },
+    {
+      "repository": "opf-pptx",
+      "script": "test",
+      "exitCode": 0,
+      "node": "24.20.0",
+      "log": "opf-pptx-test-node24.20.0.log",
+      "logSha256": "c2625a83b45825d08a7bb05d392cc162b1851bd0329ff2c98b569af6ac9e3165"
+    },
+    {
+      "repository": "opf-pptx",
+      "script": "test:code",
+      "exitCode": 0,
+      "node": "24.20.0",
+      "log": "opf-pptx-test-code-node24.20.0.log",
+      "logSha256": "51393a08b8b1b1f4cf4fdfd58afc6d5889e90f9938ee6f5421ce81c74d82bb97"
+    },
+    {
+      "repository": "opf-pptx",
+      "script": "test:browser",
+      "exitCode": 0,
+      "node": "24.20.0",
+      "log": "opf-pptx-test-browser-node24.20.0.log",
+      "logSha256": "a6f663c17457f8541b7f151800b899b27f67928117fe5b98b79f6adfcbe2284c"
+    },
+    {
+      "repository": "opf-editor",
+      "script": "typecheck",
+      "exitCode": 0,
+      "node": "24.20.0",
+      "log": "opf-editor-typecheck-node24.20.0.log",
+      "logSha256": "50d49b290084998e09e4c3805a824c441beda494e9aef7a96612daccc801204a"
+    },
+    {
+      "repository": "opf-editor",
+      "script": "validate",
+      "exitCode": 0,
+      "node": "24.20.0",
+      "log": "opf-editor-validate-node24.20.0.log",
+      "logSha256": "d5a0fb67eb4e8a9d51b7ed5c3a17f885893cbda76e7962585bd0c3750cd5a941"
+    },
+    {
+      "repository": "opf-editor",
+      "script": "test",
+      "exitCode": 0,
+      "node": "24.20.0",
+      "log": "opf-editor-test-node24.20.0.log",
+      "logSha256": "ed1ea768667e765d11a308acbb2c0098fc0e229c4a716148a58f15cf11433dd0"
+    },
+    {
+      "repository": "opf-editor",
+      "script": "test:playground",
+      "exitCode": 0,
+      "node": "24.20.0",
+      "log": "opf-editor-test-playground-node24.20.0.log",
+      "logSha256": "9f5ed8383df94b8f5d0ba49b579c4672fd80e665effc6dc53b63a9e1e139743a"
+    }
+  ],
+  "browsers": [
+    {
+      "repo": "opf-render",
+      "node": "20.20.2",
+      "file": "opf-render-code-browser-node20.20.2.json",
+      "sha256": "898dace83855f193f640210686b3fdf1136e7eab6cd5e6795d78a1809e1af702",
+      "browser": "152.0.4191.66"
+    },
+    {
+      "repo": "opf-render",
+      "node": "24.20.0",
+      "file": "opf-render-code-browser-node24.20.0.json",
+      "sha256": "898dace83855f193f640210686b3fdf1136e7eab6cd5e6795d78a1809e1af702",
+      "browser": "152.0.4191.66"
+    },
+    {
+      "repo": "opf-editor",
+      "node": "20.20.2",
+      "file": "opf-editor-code-browser-node20.20.2.json",
+      "sha256": "b373a075cc1fdee4ffbcefc33baa3efd9d2438daed8dc15fa8d486eb3807052d",
+      "browser": "152.0.4191.66"
+    },
+    {
+      "repo": "opf-editor",
+      "node": "24.20.0",
+      "file": "opf-editor-code-browser-node24.20.0.json",
+      "sha256": "b373a075cc1fdee4ffbcefc33baa3efd9d2438daed8dc15fa8d486eb3807052d",
+      "browser": "152.0.4191.66"
+    }
+  ],
+  "rasterReview": {
+    "changed": 43,
+    "unchanged": 762,
+    "source": {
+      "repository": "OpenPresentation/opf",
+      "path": "examples",
+      "sha256": "cbd0d2c7cfdaa01ec6312494179c68fe59ee95206d3b8a2e07f8b69f19ce29bd",
+      "decks": 126
+    },
+    "reviewedSheets": 8,
+    "fullResolutionIds": [
+      "03",
+      "40",
+      "41",
+      "42"
+    ],
+    "observations": "Filename and original-case language now appear; indentation and left-aligned code are preserved. All 43 before/after pairs reviewed; sparse code panels and source theme/logo placeholders remain quality gaps. Estimated-layout regression coverage is separate from loaded-font/browser/native coverage."
+  },
+  "native": {
+    "powerPointVersion": "16.0.20326.20132",
+    "windowsBuild": "26200.9445",
+    "executableSha256": "90fa931172c507b763ba92a82b19d5bc70816e008c5bb87577e1838e8a92e9f9",
+    "slides": 8,
+    "sourceSavedEditedSlideImports": 24,
+    "tabTargets": 4,
+    "maximumTabTargetErrorPoints": 0.007030487060546875,
+    "tabTolerancePoints": 0.02,
+    "comparisonNodes": [
+      "20.20.2",
+      "24.20.0"
+    ],
+    "comparisonSha256": "6d649066d6083fcc4453e810c4295376f4f14941aeed8d8188fb5c6c3c80e24e",
+    "generationSha256": "cd0396b881959bb4487c34298bc9dee592b6cc13e45ee9455405dc96df287b4f",
+    "nativeSha256": "d18d41e01319770ab452ab15e05cefbcd8b8325ceaa46264eb1d69d9c49b430f",
+    "visuallyInspected": [
+      "code-1280-native-3.png",
+      "code-1280-svg-3.png",
+      "code-540-native-4.png",
+      "code-540-svg-4.png"
+    ]
+  },
+  "scope": "Unreleased coordinated source builds with linked candidate packages. Not a fresh tarball or registry installation. Native code source/metadata preservation, cell containment and four tab targets are verified in the documented Windows environment; formatting/font theme/readability policy and pixel-equivalent arbitrary PPTX round trips are not established.",
+  "remaining": [
+    "Packed candidate code workflows and immutable coordinated CI/review",
+    "Versioned dependency-order release and fresh registry verification",
+    "Public deployment adoption only after a verified new published set",
+    "Remaining repair/Auto arrange/internal-payload/font/multilingual/macOS/Keynote objective"
+  ]
+}

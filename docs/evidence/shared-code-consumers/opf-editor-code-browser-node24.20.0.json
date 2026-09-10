@@ -1,0 +1,71 @@
+{
+  "browser": "152.0.4191.66",
+  "platform": "win32",
+  "bundleSha256": "74a3d6bc53ef3ac9a4507ccb2d684307ac3814809f206e5aefec018f9440f89a",
+  "verifierSha256": "75b5b74676edea774d69bacbf3b33cd4b447c3a89c46663699478c3198ddcf86",
+  "results": [
+    {
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
+      "exportSha256": "5d47b563974ef155ef39e7d218b10d94914de69d4e59495d3d77d184175e52a4",
+      "exportBytes": 17725,
+      "acceptedLines": 6,
+      "exactCodeRoundTrip": true,
+      "substitutions": [
+        {
+          "requestedFamily": "Aptos Display",
+          "sourceFamily": "Aptos Display",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 700,
+          "resolvedWeight": 700,
+          "italic": false,
+          "compatibility": "generic"
+        },
+        {
+          "requestedFamily": "Aptos",
+          "sourceFamily": "Aptos",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 400,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "generic"
+        }
+      ]
+    },
+    {
+      "dimensions": {
+        "width": 540,
+        "height": 960
+      },
+      "exportSha256": "08e65dd3fcf218e0bd4573485a38ce6495338738dfd063bbfe895e621a47c4ad",
+      "exportBytes": 17726,
+      "acceptedLines": 6,
+      "exactCodeRoundTrip": true,
+      "substitutions": [
+        {
+          "requestedFamily": "Aptos Display",
+          "sourceFamily": "Aptos Display",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 700,
+          "resolvedWeight": 700,
+          "italic": false,
+          "compatibility": "generic"
+        },
+        {
+          "requestedFamily": "Aptos",
+          "sourceFamily": "Aptos",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 400,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "generic"
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "externalRequests": [],
+  "scope": "Offline candidate canvas: real pointer/keyboard code and filename edits, CRLF no-op/preservation, tab insertion/cancel, undo/redo, one-page pagination/readability undo, browser native export and undoable exact code/metadata/source-boundary reimport. Native formatting, positioning and font scheme are not reconstructed; font fallback uses the existing playground policy and is recorded. No native PowerPoint or raster equivalence claim."
+}

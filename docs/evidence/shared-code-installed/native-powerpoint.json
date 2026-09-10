@@ -1,0 +1,701 @@
+{
+  "generationSha256": "e90a80655b59923f3d20c16ee0687c466cd9c89a11aafcb019facc48ed05449e",
+  "windowsBuild": "26200.9445",
+  "executableSha256": "90fa931172c507b763ba92a82b19d5bc70816e008c5bb87577e1838e8a92e9f9",
+  "powerPointVersion": "16.0",
+  "executableVersion": "16.0.20326.20132",
+  "decks": [
+    {
+      "id": "code-1280",
+      "editsReopened": 6,
+      "savedSha256": "19b2cd4467fabcb3d580f2188708a73e4302bcf6bb4284a4fce6b5f7a7dc6c87",
+      "editedSha256": "d66be2f5aa4692e9230eb586574c88b858b42896e80013296725a4c7795a8eb1",
+      "slides": [
+        {
+          "rasterSha256": "f7586d334c6af5475b7891092ed29defa497cc659d8b34d99ffe5f8097a85379",
+          "glyphsInsideCell": true,
+          "slide": 1,
+          "lines": [
+            {
+              "width": 53.75,
+              "role": "language",
+              "top": 56.7,
+              "text": "code",
+              "left": 56.7,
+              "fontSize": 18.0,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 21.6,
+              "tabTargets": []
+            },
+            {
+              "width": 10.75,
+              "role": "body",
+              "top": 87.66,
+              "text": "",
+              "left": 56.7,
+              "fontSize": 18.0,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 21.6,
+              "tabTargets": []
+            }
+          ]
+        },
+        {
+          "rasterSha256": "f7586d334c6af5475b7891092ed29defa497cc659d8b34d99ffe5f8097a85379",
+          "glyphsInsideCell": true,
+          "slide": 2,
+          "lines": [
+            {
+              "width": 53.75,
+              "role": "language",
+              "top": 56.7,
+              "text": "code",
+              "left": 56.7,
+              "fontSize": 18.0,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 21.6,
+              "tabTargets": []
+            },
+            {
+              "width": 97.15,
+              "role": "body",
+              "top": 87.66,
+              "text": "\t\t",
+              "left": 56.7,
+              "fontSize": 18.0,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 21.6,
+              "tabTargets": []
+            }
+          ]
+        },
+        {
+          "rasterSha256": "e2adc912a3fe8e21bfacdbab69e80cef58b34d2892223838945bbd334d89febd",
+          "glyphsInsideCell": true,
+          "slide": 3,
+          "lines": [
+            {
+              "width": 225.95,
+              "role": "filename",
+              "top": 56.7,
+              "text": "src\tCaseSensitive.ts",
+              "left": 56.7,
+              "fontSize": 18.0,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 21.6,
+              "tabTargets": [
+                {
+                  "sourceStart": 4,
+                  "errorPoints": 0.007030487060546875
+                }
+              ]
+            },
+            {
+              "width": 118.25,
+              "role": "language",
+              "top": 84.66,
+              "text": "TypeScript",
+              "left": 56.7,
+              "fontSize": 18.0,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 21.6,
+              "tabTargets": []
+            },
+            {
+              "width": 333.25,
+              "role": "body",
+              "top": 115.62,
+              "text": "  const value = \"two  spaces\";",
+              "left": 56.7,
+              "fontSize": 18.0,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 21.6,
+              "tabTargets": []
+            },
+            {
+              "width": 10.75,
+              "role": "body",
+              "top": 137.58,
+              "text": "",
+              "left": 56.7,
+              "fontSize": 18.0,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 21.6,
+              "tabTargets": []
+            },
+            {
+              "width": 849.25,
+              "role": "body",
+              "top": 159.54,
+              "text": "longtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongto",
+              "left": 56.7,
+              "fontSize": 18.0,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 21.6,
+              "tabTargets": []
+            },
+            {
+              "width": 849.25,
+              "role": "body",
+              "top": 181.5,
+              "text": "kenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlon",
+              "left": 56.7,
+              "fontSize": 18.0,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 21.6,
+              "tabTargets": []
+            },
+            {
+              "width": 462.25,
+              "role": "body",
+              "top": 203.46,
+              "text": "gtokenlongtokenlongtokenlongtokenlongtoken",
+              "left": 56.7,
+              "fontSize": 18.0,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 21.6,
+              "tabTargets": []
+            },
+            {
+              "width": 215.2,
+              "role": "body",
+              "top": 225.42,
+              "text": "\treturn value;  ",
+              "left": 56.7,
+              "fontSize": 18.0,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 21.6,
+              "tabTargets": [
+                {
+                  "sourceStart": 234,
+                  "errorPoints": 0.007030487060546875
+                }
+              ]
+            },
+            {
+              "width": 10.75,
+              "role": "body",
+              "top": 247.38,
+              "text": "",
+              "left": 56.7,
+              "fontSize": 18.0,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 21.6,
+              "tabTargets": []
+            }
+          ]
+        },
+        {
+          "rasterSha256": "7173b3d0cf388330956a78628b16c4ef7b03dc81afd2831c806312f9fe87bc78",
+          "glyphsInsideCell": true,
+          "slide": 4,
+          "lines": [
+            {
+              "width": 849.25,
+              "role": "filename",
+              "top": 56.7,
+              "text": "a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long",
+              "left": 56.7,
+              "fontSize": 18.0,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 21.6,
+              "tabTargets": []
+            },
+            {
+              "width": 849.25,
+              "role": "filename",
+              "top": 78.66,
+              "text": "-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/",
+              "left": 56.7,
+              "fontSize": 18.0,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 21.6,
+              "tabTargets": []
+            },
+            {
+              "width": 268.75,
+              "role": "filename",
+              "top": 100.62,
+              "text": "a-long-path/a-long-path/",
+              "left": 56.7,
+              "fontSize": 18.0,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 21.6,
+              "tabTargets": []
+            },
+            {
+              "width": 849.25,
+              "role": "language",
+              "top": 128.58,
+              "text": "Long-language-label-Long-language-label-Long-language-label-Long-language-labe",
+              "left": 56.7,
+              "fontSize": 18.0,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 21.6,
+              "tabTargets": []
+            },
+            {
+              "width": 849.25,
+              "role": "language",
+              "top": 150.54,
+              "text": "l-Long-language-label-Long-language-label-Long-language-label-Long-language-la",
+              "left": 56.7,
+              "fontSize": 18.0,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 21.6,
+              "tabTargets": []
+            },
+            {
+              "width": 849.25,
+              "role": "language",
+              "top": 172.5,
+              "text": "bel-Long-language-label-Long-language-label-Long-language-label-Long-language-",
+              "left": 56.7,
+              "fontSize": 18.0,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 21.6,
+              "tabTargets": []
+            },
+            {
+              "width": 75.25,
+              "role": "language",
+              "top": 194.46,
+              "text": "label-",
+              "left": 56.7,
+              "fontSize": 18.0,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 21.6,
+              "tabTargets": []
+            },
+            {
+              "width": 10.75,
+              "role": "body",
+              "top": 225.42,
+              "text": "",
+              "left": 56.7,
+              "fontSize": 18.0,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 21.6,
+              "tabTargets": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-540",
+      "editsReopened": 6,
+      "savedSha256": "e97624fb054482e4de1bbbb47b662d528596ad4928517651d2039287a719a77d",
+      "editedSha256": "ff6ecf32308a7673318b26e92d67ec50b089bbbbcf54d3f5c5bef547fd4cb8a3",
+      "slides": [
+        {
+          "rasterSha256": "da9395af5234a34a6bfa92a3bfc6b3e0dd0b7067fc3ab9857ac1e0463dfe21e2",
+          "glyphsInsideCell": true,
+          "slide": 1,
+          "lines": [
+            {
+              "width": 40.62504,
+              "role": "language",
+              "top": 45.9,
+              "text": "code",
+              "left": 45.9,
+              "fontSize": 13.5,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 16.2,
+              "tabTargets": []
+            },
+            {
+              "width": 8.125039,
+              "role": "body",
+              "top": 71.37,
+              "text": "",
+              "left": 45.9,
+              "fontSize": 13.5,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 16.2,
+              "tabTargets": []
+            }
+          ]
+        },
+        {
+          "rasterSha256": "da9395af5234a34a6bfa92a3bfc6b3e0dd0b7067fc3ab9857ac1e0463dfe21e2",
+          "glyphsInsideCell": true,
+          "slide": 2,
+          "lines": [
+            {
+              "width": 40.62504,
+              "role": "language",
+              "top": 45.9,
+              "text": "code",
+              "left": 45.9,
+              "fontSize": 13.5,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 16.2,
+              "tabTargets": []
+            },
+            {
+              "width": 72.92504,
+              "role": "body",
+              "top": 71.37,
+              "text": "\t\t",
+              "left": 45.9,
+              "fontSize": 13.5,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 16.2,
+              "tabTargets": []
+            }
+          ]
+        },
+        {
+          "rasterSha256": "6879997dcc2e1ece9608b8009e0a68f574b24edf599cd9aa62a17a99d29ef494",
+          "glyphsInsideCell": true,
+          "slide": 3,
+          "lines": [
+            {
+              "width": 170.52504,
+              "role": "filename",
+              "top": 45.9,
+              "text": "src\tCaseSensitive.ts",
+              "left": 45.9,
+              "fontSize": 13.5,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 16.2,
+              "tabTargets": [
+                {
+                  "sourceStart": 4,
+                  "errorPoints": 0.00527191162109375
+                }
+              ]
+            },
+            {
+              "width": 89.37504,
+              "role": "language",
+              "top": 68.37,
+              "text": "TypeScript",
+              "left": 45.9,
+              "fontSize": 13.5,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 16.2,
+              "tabTargets": []
+            },
+            {
+              "width": 251.87505,
+              "role": "body",
+              "top": 93.84,
+              "text": "  const value = \"two  spaces\";",
+              "left": 45.9,
+              "fontSize": 13.5,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 16.2,
+              "tabTargets": []
+            },
+            {
+              "width": 8.125039,
+              "role": "body",
+              "top": 110.31,
+              "text": "",
+              "left": 45.9,
+              "fontSize": 13.5,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 16.2,
+              "tabTargets": []
+            },
+            {
+              "width": 316.87503,
+              "role": "body",
+              "top": 126.78,
+              "text": "longtokenlongtokenlongtokenlongtokenlo",
+              "left": 45.9,
+              "fontSize": 13.5,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 16.2,
+              "tabTargets": []
+            },
+            {
+              "width": 316.87503,
+              "role": "body",
+              "top": 143.25,
+              "text": "ngtokenlongtokenlongtokenlongtokenlong",
+              "left": 45.9,
+              "fontSize": 13.5,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 16.2,
+              "tabTargets": []
+            },
+            {
+              "width": 316.87503,
+              "role": "body",
+              "top": 159.72,
+              "text": "tokenlongtokenlongtokenlongtokenlongto",
+              "left": 45.9,
+              "fontSize": 13.5,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 16.2,
+              "tabTargets": []
+            },
+            {
+              "width": 316.87503,
+              "role": "body",
+              "top": 176.19,
+              "text": "kenlongtokenlongtokenlongtokenlongtoke",
+              "left": 45.9,
+              "fontSize": 13.5,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 16.2,
+              "tabTargets": []
+            },
+            {
+              "width": 316.87503,
+              "role": "body",
+              "top": 192.66,
+              "text": "nlongtokenlongtokenlongtokenlongtokenl",
+              "left": 45.9,
+              "fontSize": 13.5,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 16.2,
+              "tabTargets": []
+            },
+            {
+              "width": 73.12504,
+              "role": "body",
+              "top": 209.13,
+              "text": "ongtoken",
+              "left": 45.9,
+              "fontSize": 13.5,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 16.2,
+              "tabTargets": []
+            },
+            {
+              "width": 162.4,
+              "role": "body",
+              "top": 225.6,
+              "text": "\treturn value;  ",
+              "left": 45.9,
+              "fontSize": 13.5,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 16.2,
+              "tabTargets": [
+                {
+                  "sourceStart": 234,
+                  "errorPoints": 0.00527191162109375
+                }
+              ]
+            },
+            {
+              "width": 8.125039,
+              "role": "body",
+              "top": 242.07,
+              "text": "",
+              "left": 45.9,
+              "fontSize": 13.5,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 16.2,
+              "tabTargets": []
+            }
+          ]
+        },
+        {
+          "rasterSha256": "d457dd18e9bc17efc8fb3a60ca85972dbf890998bec5adfd194aeee341776b46",
+          "glyphsInsideCell": true,
+          "slide": 4,
+          "lines": [
+            {
+              "width": 316.87503,
+              "role": "filename",
+              "top": 45.9,
+              "text": "a-long-path/a-long-path/a-long-path/a-",
+              "left": 45.9,
+              "fontSize": 13.5,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 16.2,
+              "tabTargets": []
+            },
+            {
+              "width": 316.87503,
+              "role": "filename",
+              "top": 62.37,
+              "text": "long-path/a-long-path/a-long-path/a-lo",
+              "left": 45.9,
+              "fontSize": 13.5,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 16.2,
+              "tabTargets": []
+            },
+            {
+              "width": 316.87503,
+              "role": "filename",
+              "top": 78.84,
+              "text": "ng-path/a-long-path/a-long-path/a-long",
+              "left": 45.9,
+              "fontSize": 13.5,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 16.2,
+              "tabTargets": []
+            },
+            {
+              "width": 316.87503,
+              "role": "filename",
+              "top": 95.31,
+              "text": "-path/a-long-path/a-long-path/a-long-p",
+              "left": 45.9,
+              "fontSize": 13.5,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 16.2,
+              "tabTargets": []
+            },
+            {
+              "width": 235.62505,
+              "role": "filename",
+              "top": 111.78,
+              "text": "ath/a-long-path/a-long-path/",
+              "left": 45.9,
+              "fontSize": 13.5,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 16.2,
+              "tabTargets": []
+            },
+            {
+              "width": 316.87503,
+              "role": "language",
+              "top": 134.25,
+              "text": "Long-language-label-Long-language-labe",
+              "left": 45.9,
+              "fontSize": 13.5,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 16.2,
+              "tabTargets": []
+            },
+            {
+              "width": 316.87503,
+              "role": "language",
+              "top": 150.72,
+              "text": "l-Long-language-label-Long-language-la",
+              "left": 45.9,
+              "fontSize": 13.5,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 16.2,
+              "tabTargets": []
+            },
+            {
+              "width": 316.87503,
+              "role": "language",
+              "top": 167.19,
+              "text": "bel-Long-language-label-Long-language-",
+              "left": 45.9,
+              "fontSize": 13.5,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 16.2,
+              "tabTargets": []
+            },
+            {
+              "width": 316.87503,
+              "role": "language",
+              "top": 183.66,
+              "text": "label-Long-language-label-Long-languag",
+              "left": 45.9,
+              "fontSize": 13.5,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 16.2,
+              "tabTargets": []
+            },
+            {
+              "width": 316.87503,
+              "role": "language",
+              "top": 200.13,
+              "text": "e-label-Long-language-label-Long-langu",
+              "left": 45.9,
+              "fontSize": 13.5,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 16.2,
+              "tabTargets": []
+            },
+            {
+              "width": 316.87503,
+              "role": "language",
+              "top": 216.6,
+              "text": "age-label-Long-language-label-Long-lan",
+              "left": 45.9,
+              "fontSize": 13.5,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 16.2,
+              "tabTargets": []
+            },
+            {
+              "width": 105.62504,
+              "role": "language",
+              "top": 233.07,
+              "text": "guage-label-",
+              "left": 45.9,
+              "fontSize": 13.5,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 16.2,
+              "tabTargets": []
+            },
+            {
+              "width": 8.125039,
+              "role": "body",
+              "top": 258.54,
+              "text": "",
+              "left": 45.9,
+              "fontSize": 13.5,
+              "tags": 1,
+              "font": "Courier New",
+              "height": 16.2,
+              "tabTargets": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
