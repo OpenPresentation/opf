@@ -18,7 +18,7 @@ jobs:
       run:
         working-directory: opf-pptx
     env:
-      OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf-render/test/golden/opf-examples-png.base-fonts.sha256.json
+      OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf-render/test/golden/opf-examples-png.source-whitespace.sha256.json
     strategy:
       fail-fast: false
       matrix:
@@ -35,21 +35,21 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
-          ref: 626bc8c80495733264a692401e6a8c96663dd62f
+          ref: 3eeea0ef83fc57a5a15f9563fb0d9c7d2cf30a49
           path: opf
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
-          ref: 44ff76fe19ae9de80d2aaa962aa7e43fabce02bc
+          ref: d04da692a579b2256ad27ee8de216105806b48d2
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-editor
-          ref: 6e0b7d2f1b4369fc0a228391cf36e913e05188f8
+          ref: d4c0af69dd96acba70430e31c4b7057b70891e49
           path: opf-editor
           fetch-depth: 0
           persist-credentials: false
@@ -91,6 +91,7 @@ jobs:
           pnpm pack:ecosystem
           pnpm test:packed-ecosystem
           pnpm test:packed-browser
+          node scripts/test-plain-whitespace-workflow.mjs artifacts/plain-whitespace-workflow installed
           node scripts/test-installed-code-guards.mjs
       - run: npm pack --dry-run
       - name: Preserve candidate and raster evidence
@@ -99,6 +100,7 @@ jobs:
         with:
           name: candidate-opf-pptx-${{ runner.os }}-node${{ matrix.node }}
           path: |
+            opf/artifacts/plain-whitespace-workflow/**
             opf/artifacts/editor/*report.json
             opf/artifacts/editor/*failure.png
             opf/artifacts/editor/*installed-code*.json

@@ -1,5 +1,6 @@
 import {XMLParser} from 'fast-xml-parser';
 import {attachTextTags,decodeTextTag} from './code-provenance.js';
+import {sourceLineParagraphs} from './text-provenance.js';
 const TAG='OPF_HEADING_V1',REL='http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags';
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false});
 const decoder=new TextDecoder('utf-8',{fatal:true}),array=value=>value===undefined?[]:Array.isArray(value)?value:[value];
@@ -34,9 +35,10 @@ export function importHeadingGroups(shapes,paragraphs,relationships,entries,repo
       if(item.ambiguous||data.group!==first.group||data.count!==count||!Number.isSafeInteger(data.line)||data.line<0||data.line>=count||ordered[data.line])throw Error('Ambiguous heading line.');
       ordered[data.line]=item;
     }
+    const restored=sourceLineParagraphs(ordered,paragraphs,{legacy:true});
     for(const item of ordered)consumed.add(item.shape);
-    items.push({field:first.field,shapes:ordered.map(item=>item.shape),paragraphs:ordered.flatMap(item=>paragraphs[item.index]??[])});
-    report({code:'heading-import-reflow',message:'Complete tagged heading lines retain their roles, order and current native text. Original wrapping, whitespace, formatting and geometry are not reconstructed.'});
+    items.push({field:first.field,shapes:ordered.map(item=>item.shape),paragraphs:restored});
+    report({code:'heading-import-reflow',message:'Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed.'});
   }catch(error){report({code:'invalid-heading-provenance',message:`${error.message} Ordinary import retains visible native text.`});}
   return {consumed,items};
 }

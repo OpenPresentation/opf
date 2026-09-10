@@ -4,6 +4,7 @@ import {attachCodeTags, codeManifest, importCodeGroups, nativeShapeParagraphs, n
 import {attachMetricTags,metricManifest,importMetricGroups} from './metric-provenance.js';
 import {attachCardTags,importCardFrames} from './card-provenance.js';
 import {attachHeadingTags,importHeadingGroups} from './heading-provenance.js';
+import {attachPlainTextTags,importPlainTextGroups} from './text-provenance.js';
 import {importImageOrientation} from './image-import.js';
 import {nativeBackgroundFill} from './background.js';
 import {importBackground} from './background-import.js';
@@ -177,6 +178,7 @@ export async function toPptx(input, options = {}) {
   context.backgroundFills = new Map();
   context.cardTags = new Map();
   context.headingTags = new Map();
+  context.plainTextTags = new Map();
   context.codeTags = new Map();
   context.metricTags = new Map();
   context.chartHeadings = new Map();
@@ -394,7 +396,7 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
     .sort(comparePositionedItems);
   // Complete OPF heading roles are authoritative. Nearby body lines must not
   // fill an absent role by geometry; explicit native placeholders still apply.
-  const inferHeadings = !items.some(item => item.heading);
+  const inferHeadings = !items.some(item => item.heading||item.sourceText);
   const heading = field => {const index=items.findIndex(item=>item.heading===field);return index<0?null:items.splice(index,1)[0];};
   const tagItem=heading('tag');
   if(tagItem)slide.tag=tagItem.text;
@@ -424,18 +426,19 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   const metric = importMetricGroups(shapes, paragraphs, relationships, entries, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.metric`}));
   const cards = importCardFrames(shapes, paragraphs, relationships, entries, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
   const headings=importHeadingGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
-  for(const group of headings.items) {
+  const plainText=importPlainTextGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
+  for(const group of [...headings.items,...plainText.items]) {
     const item=importShape(group.shapes[0],dimensions,group.paragraphs,true);
     if(item){
       const bounds=group.shapes.map(shape=>shapeBounds(shape['p:spPr']?.['a:xfrm'])).filter(Boolean);
       if(bounds.length){const x=Math.min(...bounds.map(b=>b.x)),y=Math.min(...bounds.map(b=>b.y));item.bounds={x,y,w:Math.max(...bounds.map(b=>b.x+b.w))-x,h:Math.max(...bounds.map(b=>b.y+b.h))-y};}
-      items.push({...item,heading:group.field});
+      items.push({...item,heading:group.field,sourceText:!group.field});
     }
   }
   for (const item of code.items) items.push({kind:'code',bounds:shapeBounds(item.shape['p:spPr']?.['a:xfrm']),payload:item.payload});
   for (const item of metric.items) items.push({kind:'metric',bounds:shapeBounds(item.shape['p:spPr']?.['a:xfrm']),payload:item.payload});
   for (const [index,shape] of shapes.entries()) {
-    if (code.consumed.has(shape)||metric.consumed.has(shape)||cards.has(shape)||headings.consumed.has(shape)) continue;
+    if (code.consumed.has(shape)||metric.consumed.has(shape)||cards.has(shape)||headings.consumed.has(shape)||plainText.consumed.has(shape)) continue;
     const item = importShape(shape, dimensions, paragraphs[index]);
     if (item) items.push(item);
   }
@@ -928,8 +931,8 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
         rectRadius:8*Math.min(widthInches,heightInches)/720,
         fill:paint(surface),line:{...paint(slideContext.colorScheme.accent5??`#${slideContext.colors.border}`),pt:.75},objectName:`OPF card ${item.path}`});
     }
-    if(['text','title','subtitle','tag'].includes(item.field)&&item.text?.placement&&!item.text.richLines) {
-      addMeasuredPayloadText(slide,item.text.lines.join('\n'),item.box,slideContext,options,{path:item.path,fit:item.text,textStyle:item.textStyle,diagnosticsHandled:true,heading:['title','subtitle','tag'].includes(item.field)?item.field:undefined,color:item.field==='tag'?slideContext.colors.accent:slideContext.colors.text});
+    if(['text','title','subtitle','tag'].includes(item.field)&&(item.text?.placement||item.text?.sourceLines)&&!item.text.richLines) {
+      addMeasuredPayloadText(slide,item.value,item.box,slideContext,options,{path:item.path,fit:item.text,textStyle:item.textStyle,sourceText:item.field==='text'&&!!item.text.sourceLines,diagnosticsHandled:true,heading:['title','subtitle','tag'].includes(item.field)?item.field:undefined,color:item.field==='tag'?slideContext.colors.accent:slideContext.colors.text});
     } else if (["title", "subtitle", "tag"].includes(item.field)) {
       // Estimated-font headings use one native text box, which still needs a
       // role tag. Role recovery must not depend on outline measurement support.
@@ -1255,6 +1258,8 @@ function pixelBox(region) {
 // Match the published renderer's payload geometry and shared core text fitting.
 // Each fitted line remains native editable text, without PowerPoint rewrapping it.
 function addMeasuredPayloadText(slide, text, box, context, options, config) {
+  const invalid=/[\u0000-\u0008\u000B\u000C\u000E-\u001F\uD800-\uDFFF\uFFFE\uFFFF]/u.exec(String(text??''));
+  if(invalid)throw new OPFPptxError('invalid-text',`Text contains U+${invalid[0].codePointAt(0).toString(16).toUpperCase().padStart(4,'0')} at UTF-16 offset ${invalid.index}, which DrawingML XML cannot represent.`,{path:config.path});
   const scale = Math.min(context.dimensions.widthInches, context.dimensions.heightInches) * 96 / 720;
   const style = config.textStyle ?? resolveTextStyle({fontFamily: config.fontFamily ?? context.fonts.body, fontWeight: config.fontWeight ?? 400, path: config.path}, options.textMeasurement);
   const fit = config.fit ?? fitText(String(text ?? ''), box, config.fontSize * scale, (context.composition?.minFontSize ?? 16) * scale, textWidthMeasurer(style, options.textMeasurement));
@@ -1264,15 +1269,18 @@ function addMeasuredPayloadText(slide, text, box, context, options, config) {
     if (context.composition?.overflow === 'error') throw new OPFPptxError('layout-overflow', diagnostic.message, {path: config.path, issues: [diagnostic]});
   }
   for (const [index, line] of fit.lines.entries()) {
-    if (!line&&!config.heading) continue;
+    if (!line&&!config.heading&&!config.sourceText) continue;
     const alignment=fit.placement?.alignment??config.align??context.contentAlignment??'left',placed=fit.placement?.lines[index],factor=alignment==='right'?1:alignment==='center'?.5:0;
-    const objectName=config.heading?`OPF heading ${config.path} line ${index}`:undefined;
-    if(objectName)context.headingTags.set(objectName,{v:1,group:config.path,field:config.heading,line:index,count:fit.lines.length});
+    const sourceLine=fit.sourceLines?.[index],boundary=sourceLine?{boundary:sourceLine.boundary,separator:String(text).slice(sourceLine.end,sourceLine.nextStart)}:{};
+    const objectName=config.heading?`OPF heading ${config.path} line ${index}`:config.sourceText?`OPF text ${config.path} line ${index}`:undefined;
+    if(config.heading)context.headingTags.set(objectName,{v:1,group:config.path,field:config.heading,line:index,count:fit.lines.length,...boundary});
+    else if(config.sourceText)context.plainTextTags.set(objectName,{v:1,group:config.path,line:index,count:fit.lines.length,...boundary});
     const area=placed?{x:(placed.x+placed.width*factor-box.width*factor)/96,y:(placed.baseline-fit.fontSize)/96,w:box.width/96,h:placed.height/96}:{x:box.x/96,y:(box.y+index*fit.lineHeight)/96,w:box.width/96,h:fit.lineHeight/96};
     slide.addText(line, {
       ...textBoxOptions(area, context, fit.fontSize * .75),
       ...nativeFontOptions(style),
       color: normalizeHex(config.color ?? context.colors.text), align: alignment,
+      tabStops:sourceLine?.segments.filter(segment=>segment.kind==='tab').map(segment=>({position:(segment.x+segment.width)/96,alignment:'l'})),
       objectName,
       fit: 'none', wrap: false, lineSpacingMultiple: 1,
     });
@@ -1670,6 +1678,7 @@ async function normalizePptxZip(raw, context) {
   attachMetricTags(entries,context.metricTags);
   attachCardTags(entries,context.cardTags);
   attachHeadingTags(entries,context.headingTags);
+  attachPlainTextTags(entries,context.plainTextTags);
   for(const [part,bytes]of Object.entries(entries)){
     if(!/^ppt\/slides\/slide\d+\.xml$/.test(part))continue;
     const relationships=parseRelationships(entries,part);

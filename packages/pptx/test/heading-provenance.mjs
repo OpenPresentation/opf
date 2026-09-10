@@ -7,7 +7,7 @@ import PptxGenJS from '../vendor/pptxgenjs/pptxgen.es.js';
 const fonts=await loadOfficeFontRegistry(),enc=new TextEncoder(),dec=new TextDecoder();
 const deck={design:{fontScheme:'roboto',dimensions:{widthInches:5.625,heightInches:10}},slides:[{tag:'Source',title:'A complete heading with enough words to wrap across lines',subtitle:'Supporting text',text:'Body remains present'}]};
 const bytes=await toPptx(deck,{textMeasurement:fonts.textMeasurement}),initial=(await fromPptx(bytes)).slides[0];
-assert.ok(initial.title.includes('\n'));
+assert.equal(initial.title,deck.slides[0].title);
 const subtitleOnly=await fromPptx(await toPptx({design:{fontScheme:'roboto'},slides:[{subtitle:'Keep the subtitle role'}]},{textMeasurement:fonts.textMeasurement}));
 assert.equal(subtitleOnly.slides[0].title,undefined);assert.equal(subtitleOnly.slides[0].subtitle,'Keep the subtitle role');
 const modify=mutate=>{const entries=unzipSync(bytes);mutate(entries);return zipSync(entries);};
@@ -16,6 +16,9 @@ const tags=entries=>Object.keys(entries).filter(file=>file.startsWith('ppt/tags/
 const data=bytes=>JSON.parse(Buffer.from(dec.decode(bytes).match(/val="([^"]+)"/)[1],'hex').toString());
 const tagFile=entries=>tags(entries).find(file=>data(entries[file]).field==='title');
 const editTag=(entries,mutate)=>{const file=tagFile(entries),xml=dec.decode(entries[file]),hex=xml.match(/val="([^"]+)"/)[1],value=data(entries[file]);mutate(value);entries[file]=enc.encode(xml.replace(hex,Buffer.from(JSON.stringify(value)).toString('hex').toUpperCase()));};
+const legacy=await fromPptx(modify(entries=>{for(const file of tags(entries)){const xml=dec.decode(entries[file]),hex=xml.match(/val="([^"]+)"/)[1],value=data(entries[file]);delete value.boundary;delete value.separator;entries[file]=enc.encode(xml.replace(hex,Buffer.from(JSON.stringify(value)).toString('hex').toUpperCase()));}}));
+const oldTitleLines=resolvePresentation(deck,{textMeasurement:fonts.textMeasurement}).slides[0].geometry.items.find(item=>item.field==='title').text.lines;
+assert.equal(legacy.slides[0].title,oldTitleLines.join('\n'),'Legacy tags retain current native line breaks without inventing source boundaries');
 const changed=await fromPptx(modify(entries=>slide(entries,xml=>xml.replace('A complete','An edited'))));
 assert.equal(changed.slides[0].title,initial.title.replace('A complete','An edited'),'Current native text wins over authoring source');
 const reordered=await fromPptx(modify(entries=>slide(entries,xml=>{const shapes=[...xml.matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(m=>m[0]);return xml.replace(/<p:sp>[\s\S]*?<\/p:sp>/g,()=>shapes.pop());})));
