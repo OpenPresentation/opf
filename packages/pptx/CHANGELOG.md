@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Consume physical family and bold/italic style-link metadata from accepted text styles across headings, scalar/rich text, lists, tables, quotes, code and metrics. Retain the legacy provider fallback and reject malformed selection metadata. Coordinated renderer preferred-family lookup selects installed Roboto 500/600/800 faces exactly; native paint verification remains separate.
+
 ## 0.7.0
 
 - Reject XML-forbidden controls and unpaired UTF-16 surrogates in code source/metadata with `invalid-code-text`, the OPF path and character offset, instead of emitting invalid XML or replacement characters. Tabs, line endings and valid supplementary Unicode remain accepted; this does not certify glyph coverage.

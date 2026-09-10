@@ -18,7 +18,7 @@ jobs:
       run:
         working-directory: opf-pptx
     env:
-      OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf/scripts/fixtures/opf-examples-png.shared-text.sha256.json
+      OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf-render/test/golden/opf-examples-png.base-fonts.sha256.json
     strategy:
       fail-fast: false
       matrix:
@@ -35,21 +35,21 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
-          ref: 2c01efdab4f63ecae2c7b0e6914983151433f247
+          ref: f30ae54134fb075749f228532b40df4b36a0770d
           path: opf
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
-          ref: 53e6f5fb5911ebecbfcdfef341bbb53e33c1f7a5
+          ref: 379b1402b4d06de79b98a35360f3ef5692d3659b
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-editor
-          ref: 0e8a1676c780919ceefe8b9972372f364e542944
+          ref: 6e0b7d2f1b4369fc0a228391cf36e913e05188f8
           path: opf-editor
           fetch-depth: 0
           persist-credentials: false
@@ -78,6 +78,7 @@ jobs:
       - run: npm run typecheck
       - run: npm run validate
       - run: npm test
+      - run: npm run test:font-variants
       - run: npm run test:code
       - name: Verify Playwright image version
         run: node -e "if (require('playwright/package.json').version !== '1.63.0') throw new Error('Update the pinned Playwright image with the test package.');"

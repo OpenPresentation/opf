@@ -31,8 +31,9 @@ for (const dimensions of [{width:1280,height:720},{width:540,height:960}]) {
       const {part,line,index:lineIndex}=expected[index];
       assert.equal(all(shape,'a:t').map(text).join(''),line);
       const run=all(shape,'a:rPr')[0],transform=all(shape,'a:xfrm')[0];
-      assert.equal(all(run,'a:latin')[0].typeface,part.style.fontFamily);
-      assert.equal(run.b==='1',part.style.fontWeight>=600);
+      assert.equal(all(run,'a:latin')[0].typeface,part.style.fontFace.family);
+      assert.equal(run.b==='1',part.style.fontFace.bold);
+      assert.equal(run.i==='1',part.style.fontFace.italic);
       assert.ok(Math.abs(Number(run.sz)/100-part.fit.fontSize*.75)<.02);
       assert.ok(Math.abs(Number(transform['a:off'].x)/9525-part.box.x)<.002);
       assert.ok(Math.abs(Number(transform['a:off'].y)/9525-(part.box.y+lineIndex*part.fit.lineHeight))<.002);

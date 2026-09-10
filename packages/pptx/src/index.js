@@ -929,9 +929,7 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
     } else if (["title", "subtitle", "tag"].includes(item.field)) {
       slide.addText(item.text.lines.join("\n"), {
         ...textBoxOptions(region, slideContext, item.text.fontSize * 0.75),
-        fontFace: item.textStyle.fontFamily,
-        bold: item.textStyle.fontWeight >= 600,
-        italic: item.textStyle.italic,
+        ...nativeFontOptions(item.textStyle),
         color: item.field === "tag" ? slideContext.colors.accent : slideContext.colors.text,
         breakLine: false
       });
@@ -940,13 +938,13 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
     } else if (item.field === "text" && item.text?.richLines) {
       const alignment=item.text.placement?.alignment??opfSlide.design?.contentAlignment??presentation.design?.contentAlignment??'left';
       for(const [index,line] of item.text.richLines.entries()){
-        const runs=line.fragments.map(fragment=>({text:fragment.text,options:{fontFace:fragment.style.fontFamily,fontSize:fragment.fontSize*.75,bold:fragment.style.fontWeight>=600,italic:fragment.style.italic,color:normalizeHex(fragment.run.color??slideContext.colors.text),underline:fragment.run.underline?{color:normalizeHex(fragment.run.color??slideContext.colors.text)}:undefined,strike:fragment.run.strikethrough?'sngStrike':undefined,baseline:fragment.baselineShift?-fragment.baselineShift/fragment.fontSize*2000:undefined,hyperlink:fragment.run.link&&/^(https?:|mailto:)/i.test(fragment.run.link)?{url:fragment.run.link}:undefined}}));
+        const runs=line.fragments.map(fragment=>({text:fragment.text,options:{...nativeFontOptions(fragment.style),fontSize:fragment.fontSize*.75,color:normalizeHex(fragment.run.color??slideContext.colors.text),underline:fragment.run.underline?{color:normalizeHex(fragment.run.color??slideContext.colors.text)}:undefined,strike:fragment.run.strikethrough?'sngStrike':undefined,baseline:fragment.baselineShift?-fragment.baselineShift/fragment.fontSize*2000:undefined,hyperlink:fragment.run.link&&/^(https?:|mailto:)/i.test(fragment.run.link)?{url:fragment.run.link}:undefined}}));
         const placed=item.text.placement?.lines[index],factor=alignment==='right'?1:alignment==='center'?.5:0;
         const area=placed?{...region,x:(placed.x+line.width*factor-item.box.width*factor)/96,y:placed.y/96,h:placed.height/96}:{...region,y:region.y+line.y/96,h:line.height/96};
         if(runs.length)slide.addText(runs,{...textBoxOptions(area,slideContext,item.text.fontSize*.75),align:alignment,fit:'none',wrap:false,lineSpacingMultiple:1});
       }
     } else if (item.field === "text" && typeof item.value === "string") {
-      slide.addText(item.text.lines.join("\n"), {...textBoxOptions(region, slideContext, item.text.fontSize * 0.75),fontFace:item.textStyle.fontFamily,bold:item.textStyle.fontWeight>=600,italic:item.textStyle.italic});
+      slide.addText(item.text.lines.join("\n"), {...textBoxOptions(region, slideContext, item.text.fontSize * 0.75),...nativeFontOptions(item.textStyle)});
     } else {
       await addPayload(slide, presentation, item.payload, region, item.path, { ...slideContext, composition: item.composition, contentAlignment: opfSlide.design?.contentAlignment ?? presentation.design?.contentAlignment ?? "left" }, options, item.quoteLayout, item.codeLayout,item.metricLayout);
     }
@@ -1030,7 +1028,7 @@ function addTextPayload(slide, value, region, context) {
 }
 
 function richLineRuns(line,color) {
-  return line.fragments.map(fragment=>({text:fragment.text,options:{fontFace:fragment.style.fontFamily,fontSize:fragment.fontSize*.75,bold:fragment.style.fontWeight>=600,italic:fragment.style.italic,color:normalizeHex(fragment.run.color??color),underline:fragment.run.underline?{color:normalizeHex(fragment.run.color??color)}:undefined,strike:fragment.run.strikethrough?'sngStrike':undefined,baseline:fragment.baselineShift?-fragment.baselineShift/fragment.fontSize*2000:undefined,hyperlink:fragment.run.link&&/^(https?:|mailto:)/i.test(fragment.run.link)?{url:fragment.run.link}:undefined}}));
+  return line.fragments.map(fragment=>({text:fragment.text,options:{...nativeFontOptions(fragment.style),fontSize:fragment.fontSize*.75,color:normalizeHex(fragment.run.color??color),underline:fragment.run.underline?{color:normalizeHex(fragment.run.color??color)}:undefined,strike:fragment.run.strikethrough?'sngStrike':undefined,baseline:fragment.baselineShift?-fragment.baselineShift/fragment.fontSize*2000:undefined,hyperlink:fragment.run.link&&/^(https?:|mailto:)/i.test(fragment.run.link)?{url:fragment.run.link}:undefined}}));
 }
 function addMeasuredList(slide,fit,context) {
   for(const entry of fit.listEntries){
@@ -1046,7 +1044,7 @@ function addMeasuredList(slide,fit,context) {
         // Keep paragraph intent identical across runs. ZIP normalization below
         // removes the duplicate paragraph-property nodes emitted by PptxGenJS.
         for(const run of runs)Object.assign(run.options,paragraph);
-        slide.addText(runs,{...textBoxOptions(region,context,text.fontSize*.75),fontFace:entry.marker.style.fontFamily,objectName,align:'left',fit:'none',wrap:false,lineSpacingMultiple:1,...paragraph});
+        slide.addText(runs,{...textBoxOptions(region,context,text.fontSize*.75),fontFace:nativeFontOptions(entry.marker.style).fontFace,objectName,align:'left',fit:'none',wrap:false,lineSpacingMultiple:1,...paragraph});
       });
     };
     addLines(entry.text,entry.textBox,context.colors.text,true);
@@ -1184,8 +1182,7 @@ function addTablePayload(slide, table, region, context, options, path) {
       const rawColor = /^#(?:[0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(run.color ?? '') ? run.color.slice(1) : baseColor;
       const color = normalizeHex(rawColor), transparency = rawColor.length === 8 ? (1 - parseInt(rawColor.slice(6), 16) / 255) * 100 : 0;
       const runOptions = {
-        fontFace:runStyle.fontFamily,fontSize:fragment ? fragment.fontSize * .75 : fit.fontSize * .75,
-        bold:runStyle.fontWeight >= 600,italic:runStyle.italic,
+        ...nativeFontOptions(runStyle),fontSize:fragment ? fragment.fontSize * .75 : fit.fontSize * .75,
         underline:run.underline ? {color} : undefined,strike:run.strikethrough ? 'sngStrike' : undefined,
         color,transparency,baseline:fragment?.baselineShift ? -fragment.baselineShift / fragment.fontSize * 2000 : undefined,
         hyperlink:run.link && /^(https?:|mailto:)/i.test(run.link) ? {url:run.link} : undefined,
@@ -1201,13 +1198,12 @@ function addTablePayload(slide, table, region, context, options, path) {
       // soft wraps into the text would change a later import or copy operation.
       text: rich ? runs : text,
       options: {
-        fontFace: style.fontFamily,
+        ...nativeFontOptions(style),
         fontSize: fit.fontSize * 0.75,
         // PptxGenJS fills falsy run options from cell defaults. Rich runs
         // carry their resolved weight, so a bold header default must not turn
         // an explicit bold:false run back on.
-        bold: rich ? false : style.fontWeight >= 600,
-        italic: rich ? false : style.italic,
+        ...(rich ? {bold:false,italic:false} : {}),
         lineSpacing: fit.lineHeight * 0.75,
         paraSpaceAfter: 0,
         align: cellStyle.align ?? context.contentAlignment,
@@ -1266,7 +1262,7 @@ function addMeasuredPayloadText(slide, text, box, context, options, config) {
     const area=placed?{x:(placed.x+placed.width*factor-box.width*factor)/96,y:(placed.baseline-fit.fontSize)/96,w:box.width/96,h:placed.height/96}:{x:box.x/96,y:(box.y+index*fit.lineHeight)/96,w:box.width/96,h:fit.lineHeight/96};
     slide.addText(line, {
       ...textBoxOptions(area, context, fit.fontSize * .75),
-      fontFace: style.fontFamily, bold: style.fontWeight >= 600, italic: style.italic,
+      ...nativeFontOptions(style),
       color: normalizeHex(config.color ?? context.colors.text), align: alignment,
       objectName,
       fit: 'none', wrap: false, lineSpacingMultiple: 1,
@@ -1294,7 +1290,7 @@ function addCodePayload(slide, value, layout, region, context, path) {
       context.codeTags.set(objectName,{v:1,group,role:'line',part:partIndex,line:index});
       slide.addText(part.text.slice(line.start,line.end),{
         ...textBoxOptions({x:part.box.x/96,y:(part.box.y+index*part.fit.lineHeight)/96,w:part.box.width/96,h:part.fit.lineHeight/96},context,part.fit.fontSize*.75),
-        fontFace:part.style.fontFamily,bold:part.style.fontWeight>=600,italic:part.style.italic,
+        ...nativeFontOptions(part.style),
         color:part.role==='body'?'E5E7EB':'93C5FD',align:'left',fit:'none',wrap:false,lineSpacingMultiple:1,
         tabStops:tabStops.length?tabStops:undefined,objectName,
       });
@@ -1321,7 +1317,7 @@ function addMetricPayload(slide,value,layout,context,path) {
       const anchor=origin.x+line.width*factor;
       slide.addText(part.text.slice(line.start,line.end),{
         ...textBoxOptions({x:(anchor-part.box.width*factor)/96,y:(origin.baseline-part.fit.fontSize)/96,w:part.box.width/96,h:part.fit.lineHeight/96},context,part.fit.fontSize*.75),
-        fontFace:part.style.fontFamily,bold:part.style.fontWeight>=600,italic:part.style.italic,
+        ...nativeFontOptions(part.style),
         color:part.role==='value'?context.colors.accent:context.colors.text,align:layout.alignment,fit:'none',wrap:false,lineSpacingMultiple:1,
         tabStops:tabStops.length?tabStops:undefined,objectName,
       });
@@ -1379,6 +1375,16 @@ function addPlaceholderPayload(slide, label, value, region, context) {
     valign: "mid",
     align: "center"
   });
+}
+
+function nativeFontOptions(style) {
+  const face=style.fontFace;
+  if(face!==undefined) {
+    if(!face || typeof face.family!=='string' || !face.family.trim() || typeof face.bold!=='boolean' || typeof face.italic!=='boolean')
+      throw new OPFPptxError('invalid-font-selection','The font provider must supply a family and explicit bold/italic style-link flags.',{path:style.path});
+    return {fontFace:face.family,bold:face.bold,italic:face.italic};
+  }
+  return {fontFace:style.fontFamily,bold:style.fontWeight>=600,italic:style.italic};
 }
 
 function textBoxOptions(region, context, fontSize) {
