@@ -2,7 +2,21 @@
 
 This work implements the [ecosystem objective](ecosystem-objective-2026-09-09.md) in reviewable increments. It does not introduce a model, account, key, network or paid-service dependency into OPF. Proprietary applications remain optional compatibility-test environments.
 
-## Current source checkpoint
+## Current checkpoint — published shared code complete; metric internals next
+
+Core 0.9.0, CLI 0.7.0, renderer/PPTX 0.7.0 and editor 0.6.0 are published and adopted on all three public sites. Core PR #57 merged the [public evidence](../evidence/shared-code-public-adoption/summary.json) as `115f3e915b9b36f0518e55ac6a4f8014ac7114cc`, after complete Node 20/24 coordinator `34456846499`, core CI `34456846509` and Bugbot passed. The 21 public workflows, exact font/editor/download assets and native PowerPoint public-Author fixture supplement the earlier registry matrices. The full repair/Auto arrange/font objective remains open.
+
+Continue `codex/shared-metric-layout-20260910`. The [published metric fixtures](../evidence/metric-layout-gap-2026-09-10.fixtures.json) reproduce identical results on [Node 20](../evidence/metric-layout-gap-2026-09-10.node20.json) and [Node 24](../evidence/metric-layout-gap-2026-09-10.node24.json):
+
+- `value: 42`, `unit: "ms"`, `delta: 0` and `trend: "flat"` serialize only the value and label in both SVG and native PPTX XML. The input JSON remains unchanged.
+- A metric label uses 23 reference pixels despite an explicit `minFontSize: 32`.
+- A long label passes composition with no diagnostic, then both renderer and converter reject strict overflow. Composition explanations correctly list the metric among unmeasured payloads.
+
+Reproduce with `node scripts/probe-metric-layout-gap.mjs <verified-registry-consumer> [output-prefix]`. The helper verifies all 555 installed core/renderer/converter files against the committed complete-set registry archive report and records actual open-font hashes. Its assertions intentionally document these versions' defects; they are not acceptable behavior for the replacement implementation. These are serialized output and font-size observations, not new browser glyph or native raster-equivalence evidence.
+
+The next bounded implementation is a shared metric measurement/placement primitive, followed by composition/scoring/pagination and consumer integration. Preserve scalar types and every provided field, including zero; distinguish source content from generated display separators. Return requested/resolved styles, complete part boxes and source mappings. Allocate available space before shrinking, enforce the selected floor even above nominal label size, reject irreducible parts under strict policy, and reuse accepted geometry in browser and native export. Cover wide/portrait dimensions, empty and long metadata, nested strict floors, numeric zero/negative values and controlled native edit/reimport before claiming the metric gap is closed. Do not mark metric coverage complete or release a new version from an unintegrated primitive.
+
+## Previous source checkpoint — shared code integration
 
 The shared code integration is merged in core PR #54 (`8d9c9c80b788bbdc80e18ad2b6468f07b2e2321d`), after complete Node 20/24 coordinator/core CI, Windows/macOS CLI and review passed. It consumes complete code measurement in composition/pagination and identifies changed scoring as `grid-score-v3`. All 448 core tests and preservation suites pass on both Node versions. Coordinated consumers and fresh candidate tarballs pass actual offline code editing/export/reimport; real Windows PowerPoint preserves code/metadata through 24 original/saved/edited imports. Code characters that XML cannot represent reject explicitly, without changing schema-valid source strings. [Integration details and evidence](shared-code-integration.md) distinguish source, installed-browser and native scopes. [Release preparation](shared-code-release.md) targets core 0.9.0/CLI 0.7.0 before consumers and public adoption; publication and the full repair/Auto arrange/font objective remain unfinished.
 
