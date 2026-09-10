@@ -47,7 +47,7 @@ export function createRichTextToolbar(root, {editor, report, beforeChange, onPro
   }
   function restore() {
     if (!selected) return;
-    const nodes=[...root.querySelectorAll('text[data-opf-text-start]')].filter(node=>node.closest('[data-opf-path]')?.getAttribute('data-opf-path')===selected.path);
+    const nodes=[...root.querySelectorAll('text[data-opf-text-start],tspan[data-opf-text-start]')].filter(node=>node.closest('[data-opf-path]')?.getAttribute('data-opf-path')===selected.path);
     const a=nodes.find(node=>+node.dataset.opfTextStart<=selected.start&&+node.dataset.opfTextEnd>selected.start);
     const b=nodes.findLast(node=>+node.dataset.opfTextStart<selected.end&&+node.dataset.opfTextEnd>=selected.end);
     if (!a?.firstChild || !b?.firstChild) return;
@@ -101,7 +101,7 @@ export function createRichTextToolbar(root, {editor, report, beforeChange, onPro
     }});
   function endpoint(node,offset) {
     if(node?.nodeType!==3) return null;
-    const element=node.parentElement?.closest('text[data-opf-text-start]');
+    const element=node.parentElement?.closest('text[data-opf-text-start],tspan[data-opf-text-start]');
     if(!element||!root.contains(element)||element.hasAttribute('data-opf-code-role'))return null;
     return {path:element.closest('[data-opf-path]')?.getAttribute('data-opf-path'),offset:Number(element.dataset.opfTextStart)+offset};
   }
