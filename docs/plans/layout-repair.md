@@ -4,13 +4,15 @@ This work implements the [ecosystem objective](ecosystem-objective-2026-09-09.md
 
 ## Current source checkpoint
 
-Core PR #47 is merged with `quote-flow-v1` and `grid-score-v2`: quote candidate scoring measures both body and footer, accepted geometry is reused by the coordinated renderer/PPTX branches, and pagination persists readability without dropping irreducible empty-body content. The [shared quote checkpoint](shared-quote-integration.md) records exact commits, passing source/tarball/registry CI, browser/native evidence and remaining release gates. This is unreleased, and the complete deterministic repair/Auto arrange/font objective is still open. The sections below preserve the earlier increments and their evidence boundaries.
+Core 0.8.0, CLI 0.6.0, renderer/PPTX 0.6.0 and editor 0.5.0 are published and verified together through merged core PR #51. `quote-flow-v1` and `grid-score-v2` measure both quote body and footer, reuse accepted geometry in preview/export, and persist pagination readability without dropping irreducible empty-body content. The [release checkpoint](shared-quote-release.md) records exact commits and fresh source/tarball/registry, browser and Windows PowerPoint evidence. The complete deterministic repair/Auto arrange/font objective is still open. The sections below preserve the earlier increments and their evidence boundaries.
+
+The next implementation milestone is shared code-language/body measurement: reproduce the preserved long-label counterexample with the new package set, define accepted internal geometry and diagnostics in core, then consume it in scoring, preview and native export without independent re-fitting. Keep every source character, readable minimum, requested/resolved style and source path explicit. Review that bounded payload change before extending metric/timeline/chart internals and the repair operation below. Public deployment adoption is a parallel release-verification milestone, not evidence that those remaining layout gaps are fixed.
 
 ## Implemented first increment: explain existing selection
 
 Branch `codex/layout-repair-20260909` adds opt-in `composeSlide(slide, {explain:true, ...resolvedOptions})`. The result reports the versioned `grid-score-v1` candidate costs, selected column count, fixed-mode/region reasons, measurement-provider status and incomplete payload coverage. Strict overflow errors retain the same explanation. Core 0.7.0 is already published and does not include this API; a future release is required.
 
-The geometry and selection algorithm remain unchanged. Costs expose current heuristics; they are not a polished-layout guarantee. See [the exact rules and scope](../dynamic-composition.md#explain-automatic-selection-next-core-release).
+The geometry and selection algorithm remain unchanged. Costs expose current heuristics; they are not a polished-layout guarantee. See [the exact rules and scope](../dynamic-composition.md#explain-automatic-selection-core-080).
 
 Local Windows verification on Node 20 and 24: 417 core tests, composition/nesting/pagination/data/rich-text/list suites, 11 CLI unit tests and 69 command checks pass. Six new tests cover geometry/content/measurement-call preservation across dimensions and modes, component cost accounting, configured weights/regions, candidate caps, reserved slots, tied scores, unsupported payload paths and strict error explanations. Public root and focused declaration imports compile. Typecheck, lint (existing warnings), 126 example files, schema/breaking gates, six portable skills with 17 helper checks and dependency audit pass. The root dependency tree was refreshed from the merged lockfile after an initial stale generator-15 installation caused the generator-16 type-contract test to fail; the locked rerun passes. Windows still skips the file-symlink CLI case when privileges are unavailable; no OS setting was changed.
 
@@ -23,7 +25,9 @@ The registry-only probe `node scripts/probe-payload-fit-gaps.mjs <registry-consu
 
 The probe deliberately asserts the published gaps. It is a historical reproduction command, not a claim that overflowing output is acceptable or a general quality gate for a future corrected release. Use the preserved fixture as an acceptance input for shared quote/code placement and diagnostics. Keep complete code coverage marked unmeasured until its label, body and internal constraints are actually shared. The coverage-only correction preserves geometry and passes all six explanation tests on Node 20/24 and all 420 core tests plus composition/pagination/data/rich-text/list suites on Node 24.
 
-## Next increments and acceptance criteria
+## Earlier quote checkpoints and next acceptance criteria
+
+The following standalone checkpoints are historical; the quote integration is now published as recorded above. Their source-only evidence must not be confused with the later actual registry and native evidence.
 
 The standalone API below is merged in core PR #46 (`6d8df02940deec8f1fa89192d10576d6048de341`) after all core/coordinated/Windows/macOS checks and review passed. Continue the [exact consumer integration plan](shared-quote-integration.md) on `codex/shared-quote-integration-20260909`; it records the important strict-path, rounding, source-mapping and measurement-reuse boundaries. The primitive remains unreleased and is not yet connected to the other engines.
 

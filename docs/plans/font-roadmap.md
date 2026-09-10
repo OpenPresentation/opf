@@ -1,6 +1,6 @@
 # OPF font roadmap
 
-Status: the starter pack is published in renderer 0.5.1 and used by the local browser workflow. The [expanded ecosystem objective](ecosystem-objective-2026-09-09.md) requires substantially broader font conformance, installation/embedding, multilingual and native-platform evidence. The historical measurements below remain narrow samples; they do not establish general font or pixel equivalence. Evaluate existing open fonts and engine fixes before original font development.
+Status: the starter pack is retained in published renderer 0.6.0 and used by the coordinated offline browser workflow. Package publication and actual registry checks preserve its existing font hashes/licenses; this release does not expand font compatibility claims. The [expanded ecosystem objective](ecosystem-objective-2026-09-09.md) requires substantially broader font conformance, installation/embedding, multilingual and native-platform evidence. The historical measurements below remain narrow samples; they do not establish general font or pixel equivalence. Evaluate existing open fonts and engine fixes before original font development.
 
 ## Ship the existing starter pack
 

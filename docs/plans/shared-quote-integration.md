@@ -1,6 +1,6 @@
 # Quote consumer integration checkpoint
 
-The coordinated candidate now implements shared composition/preview/export quote geometry. Core PR #47 merged as `01e69ba1a6c3915778ede6aa12fb7ecda652ea42`, tree-identical to reviewed `c81b8b1cdf7004af186dce81c2b81cfb9a25be12`. The downstream repositories still use `codex/shared-quote-integration-20260909`. Manifest versions remain published values until release preparation; the changes are unreleased source, not registry packages.
+This document preserves the original source integration checkpoint. Shared composition/preview/export quote geometry is now published in core 0.8.0, renderer/PPTX 0.6.0 and editor 0.5.0, with CLI 0.6.0; see the [actual registry release and deployment evidence](shared-quote-release.md). Core PR #47 originally merged as `01e69ba1a6c3915778ede6aa12fb7ecda652ea42`, tree-identical to reviewed `c81b8b1cdf7004af186dce81c2b81cfb9a25be12`. The historical source checkpoints below are retained separately from the published merge commits and registry artifacts.
 
 Portable source checkpoints (fetch from GitHub; no old-machine artifacts required):
 

@@ -56,7 +56,7 @@ console.log(result.diagnostics); // Path-specific text-overflow and small-cell m
 
 This pure function expects a validated slide. The caller resolves catalog records and passes the canvas size. The rendering and export packages perform those steps at their boundaries. No network, DOM, system font, or AI dependency is required.
 
-### Explain automatic selection (next core release)
+### Explain automatic selection (core 0.8.0)
 
 Pass `explain: true` to return `result.explanation`. This opt-in API requires core 0.8.0; it is absent from core 0.7.0. Enabling explanations adds no measurement calls and does not change geometry, source content, reading order, weights or selected arrangements within the same engine version.
 
@@ -108,7 +108,7 @@ The default readability target is 24 reference pixels. Core 0.8.0 returns slides
 
 If a heading, individual list item, table row, or other atomic payload cannot fit on an otherwise empty page, `OPFPaginationError` returns actionable diagnostics. There is no partial output. `maxSlides` defaults to 100, and a layout-evaluation limit bounds work on pathological input. Specialized chart and timeline internals still require visual inspection; their complete density models remain outstanding.
 
-The editor's `editor.paginateSlide(index)` is one validated transaction with undo/redo. It returns `{change, pagination}`. The next coordinated editor release commits a one-page readability-policy change too; repeating the operation after the policy is recorded returns `change: null`. The playground includes an overflowing draft and **Split overflow** action. The CLI writes a new file and refuses to overwrite an existing one:
+The editor's `editor.paginateSlide(index)` is one validated transaction with undo/redo. It returns `{change, pagination}`. Editor 0.5.0 commits a one-page readability-policy change too; repeating the operation after the policy is recorded returns `change: null`. The playground includes an overflowing draft and **Split overflow** action. The CLI writes a new file and refuses to overwrite an existing one:
 
 ```sh
 node packages/cli/dist/index.js paginate input.opf.json output.opf.json
@@ -123,9 +123,9 @@ SVG embeds raster data URI images locally. Remote and file images require a host
 See [the complete example](../examples/technical/dynamic-composition.opf.json) and [local ecosystem verification](ecosystem-development.md).
 
 
-## Quote internals (unreleased coordinated integration)
+## Quote internals (core 0.8.0 and coordinated packages)
 
-The next core API adds `layoutQuote(value, box, options)` from the root or composition entrypoint. Pass validated quote content (object or string shorthand), its allocated reference-pixel box, resolved `fonts`, `textMeasurement`, `scale` (canvas short edge / 720), effective `minFontSize`, `overflow` policy and its source `path`.
+Core 0.8.0 exports `layoutQuote(value, box, options)` from the root or composition entrypoint. Pass validated quote content (object or string shorthand), its allocated reference-pixel box, resolved `fonts`, `textMeasurement`, `scale` (canvas short edge / 720), effective `minFontSize`, `overflow` policy and its source `path`.
 
 The result contains `parts` for the body and any nonempty footer, exact display `text`, source mappings, requested and resolved text styles, and the available boxes/fits. Source ranges use half-open UTF-16 offsets in both the source field and display string; generated quotation marks and the footer separator have no source range. The original content is never modified. A supplied width provider is reported as `provided`; it does not certify shaping or font fidelity.
 
@@ -133,7 +133,7 @@ Check `overflow` and `diagnostics` before accepting the parts. Invalid available
 
 `quote-flow-v1` keeps 18-reference-pixel outer insets and an 18-pixel body/footer gap while fonts scale with the canvas. A 40-pixel footer is a whitespace preference. The allocator expands it for long sources or compacts it for dense bodies, trying at most the nominal and minimum footer sizes and selecting the fitting pair with least total font reduction. If neither fits, it returns floor-size failure diagnostics. This is a bounded internal allocation step, not a complete layout-repair engine.
 
-`composeSlide` scores both parts and accepts geometry against the final rounded item box. Each quote item carries `quoteLayout`; its compatibility `text` field is the same fit object as the quote body, including generated quotation marks. Consumers needing original offsets must use the explicit `sources` mappings. The coordinated renderer and PPTX consume these parts without another measurement/style-resolution pass. Missing geometry or invalid part boxes reject rendering/export rather than omitting content. This requires core 0.8.0 with renderer/PPTX 0.6.0; older core 0.7.0/renderer 0.5.1/PPTX 0.5.2 lack these changes. The coordinated rollout is a dependency-ordered release; use the published set recorded in `release-plan.json` until its registry verification advances.
+`composeSlide` scores both parts and accepts geometry against the final rounded item box. Each quote item carries `quoteLayout`; its compatibility `text` field is the same fit object as the quote body, including generated quotation marks. Consumers needing original offsets must use the explicit `sources` mappings. The coordinated renderer and PPTX consume these parts without another measurement/style-resolution pass. Missing geometry or invalid part boxes reject rendering/export rather than omitting content. This requires core 0.8.0 with renderer/PPTX 0.6.0; older core 0.7.0/renderer 0.5.1/PPTX 0.5.2 lack these changes. The complete published set, immutable verification refs and fresh registry evidence are recorded in `release-plan.json` and [the release plan](plans/shared-quote-release.md).
 
 Browser glyph bounds can extend slightly beyond advance-based part boxes into the reserved inset. Current loaded-font tests record those overhangs, verify glyph containment inside the full quote cell and check body/footer separation. Native PowerPoint fixtures separately verify text, sizes, cell containment, save/reopen and reimport. Neither test establishes universal pixel equivalence. Original requested-font provenance through host substitutions and non-quote payload internals remain open requirements.
 
