@@ -445,7 +445,11 @@ export interface MetricLayout {
   diagnostics: MetricLayoutDiagnostic[];
   overflow: boolean;
 }
-export interface MetricLayoutOptions extends QuoteLayoutOptions { align?: 'left' | 'center' | 'right' }
+export interface MetricLayoutOptions extends QuoteLayoutOptions {
+  align?: 'left' | 'center' | 'right';
+  /** Unscaled clearance around available vector outlines; defaults to one reference pixel. */
+  textRasterPadding?: number;
+}
 
 /**
  * Measure every metric field before accepting geometry. Short single-line values and units can
@@ -463,10 +467,12 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     throw new TypeError('Metric content requires a finite numeric or string value and schema-valid display metadata.');
   }
   const scale=options.scale??1,minimum=(options.minFontSize??16)*scale;
+  const rasterPadding=(options.textRasterPadding??1)*scale,hasOutlines=options.textMeasurement?.outlineBounds!==undefined;
   if (![box.x,box.y,box.width,box.height,box.x+box.width,box.y+box.height,scale,minimum,Math.max(76*scale,minimum)*1.22].every(Number.isFinite) ||
       box.width<=0||box.height<=0||scale<=0||minimum<=0) {
     throw new RangeError('Metric dimensions, scale and minimum font size must be finite and positive.');
   }
+  if(!Number.isFinite(rasterPadding)||rasterPadding<0)throw new RangeError('Metric raster padding must be finite and nonnegative.');
   if (options.overflow!==undefined&&!['warn','error'].includes(options.overflow)) throw new RangeError('Invalid metric overflow policy.');
   const alignment=options.align??'left';
   if (!['left','center','right'].includes(alignment)) throw new RangeError('Invalid metric alignment.');
@@ -484,14 +490,40 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
   }
   const primary=parts[0]!,metadata=parts.filter(part=>part!==primary&&part.visible),unit=metadata.find(part=>part.role==='unit');
   const usable=(area:LayoutBox)=>[area.x,area.y,area.width,area.height,area.x+area.width,area.y+area.height].every(Number.isFinite)&&area.width>0&&area.height>0;
-  const occupied=(fit:CodeTextFit)=>fit.lines.length*fit.lineHeight;
+  const occupied=(fit:CodeTextFit)=>fit.placement?.height??fit.lines.length*fit.lineHeight;
   const gap=8*scale,primaryGap=12*scale;
+  const lineInk=(part:MetricTextPart,fit:CodeTextFit):TextLineInk[]=>fit.sourceLines.map((line,index)=>{
+    let outline:LayoutBox|null=null;
+    for(const segment of line.segments) {
+      if(segment.kind!=='text')continue;
+      const bounds=measureTextOutline(part.text.slice(segment.start,segment.end),fit.fontSize,part.style,options.textMeasurement);
+      if(!bounds)continue;
+      const next={...bounds,x:segment.x+bounds.x};
+      if(!outline)outline=next;else{
+        const right=Math.max(outline.x+outline.width,next.x+next.width),bottom=Math.max(outline.y+outline.height,next.y+next.height);
+        outline.x=Math.min(outline.x,next.x);outline.y=Math.min(outline.y,next.y);outline.width=right-outline.x;outline.height=bottom-outline.y;
+      }
+    }
+    return {width:line.width,y:index*fit.lineHeight,baseline:fit.fontSize+index*fit.lineHeight,height:fit.lineHeight,outline};
+  });
+  const place=(part:MetricTextPart,fit:CodeTextFit,width:number):CodeTextFit=>{
+    if(!hasOutlines)return fit;
+    const placement=placeTextLines(lineInk(part,fit),{x:0,y:0,width,height:Number.MAX_VALUE},alignment,rasterPadding);
+    return {...fit,placement,overflow:placement.overflow};
+  };
+  const naturalWidth=(part:MetricTextPart,fit:CodeTextFit)=>{
+    if(!hasOutlines)return Math.max(...fit.sourceLines.map(line=>line.width));
+    const width=Math.max(...lineInk(part,fit).map(line=>Math.max(line.width,line.outline?line.outline.x+line.outline.width:0)-Math.min(0,line.outline?.x??0)));
+    // An empty primary value retains its nominal editor target, not a padding-only sliver.
+    return width>0?width+2*rasterPadding:0;
+  };
   const cache=new Map<string,CodeTextFit>();
   const measure=(part:MetricTextPart,size:number,width:number)=>{
     const key=JSON.stringify([part.role,size,width]);
     let fit=cache.get(key);
     if (!fit) {
-      fit=fitCodeText(part.text,{...box,width},size,size,scale,textWidthMeasurer(part.style,options.textMeasurement));
+      fit=fitCodeText(part.text,{...box,width:hasOutlines?Math.max(Number.MIN_VALUE,width-2*rasterPadding):width},size,size,scale,textWidthMeasurer(part.style,options.textMeasurement));
+      fit=place(part,fit,width);
       if (!Number.isFinite(occupied(fit))) throw new RangeError('Metric text layout exceeds finite coordinates.');
       cache.set(key,fit);
     }
@@ -504,7 +536,7 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     for (let step=0;step<=76;step++) {
       const size=Math.max(minimum,primary.requestedFontSize-step*scale);
       const natural=measure(primary,size,area.width);
-      const fit={...natural,overflow:singleLine&&natural.lines.length!==1||occupied(natural)>area.height+.01||natural.sourceLines.some(line=>line.width>area.width+.01)};
+      const fit={...natural,overflow:!!natural.placement?.overflow||singleLine&&natural.lines.length!==1||occupied(natural)>area.height+.01||natural.sourceLines.some(line=>line.width>area.width+.01)};
       if (!fit.overflow||size===minimum) return fit;
     }
   };
@@ -514,8 +546,9 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
   const reductions=Math.min(23,Math.ceil(Math.max(0,...metadata.map(part=>(part.requestedFontSize-minimum)/scale))));
   for (let reduction=0;reduction<=reductions;reduction++) {
     const measured=new Map(metadata.map(part=>[part,measure(part,Math.max(minimum,part.requestedFontSize-reduction*scale),box.width)]));
-    const unitFit=unit?measured.get(unit):undefined;
-    const unitWidth=unitFit?.sourceLines[0]?.width??0;
+    const measuredUnit=unit?measured.get(unit):undefined;
+    const unitWidth=unit&&measuredUnit?naturalWidth(unit,measuredUnit):0;
+    const unitFit=unit&&measuredUnit&&unitWidth>0?place(unit,measuredUnit,unitWidth):measuredUnit;
     const inline=unitFit?.lines.length===1&&unitWidth>0&&unitWidth<=box.width*.35&&unitWidth+gap<box.width;
     for (const arrangement of (inline?['inline-unit','stacked']:['stacked']) as MetricLayout['arrangement'][]) {
       attempts++;
@@ -527,13 +560,13 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
       const allocations:Allocation[]=[];
       let primaryHeight=valueHeight;
       if (arrangement==='inline-unit'&&unit&&unitFit&&valueFit) {
-        const valueBaseline=valueHeight-valueFit.lineHeight+valueFit.fontSize;
-        const unitBaseline=occupied(unitFit)-unitFit.lineHeight+unitFit.fontSize;
+        const valueBaseline=valueFit.placement?.lines.at(-1)?.baseline??valueHeight-valueFit.lineHeight+valueFit.fontSize;
+        const unitBaseline=unitFit.placement?.lines.at(-1)?.baseline??occupied(unitFit)-unitFit.lineHeight+unitFit.fontSize;
         const valueY=box.y+Math.max(0,unitBaseline-valueBaseline),unitY=box.y+Math.max(0,valueBaseline-unitBaseline);
-        const measuredWidth=Math.max(...valueFit.sourceLines.map(line=>line.width));
+        const measuredWidth=naturalWidth(primary,valueFit);
         const valueWidth=Math.min(area.width,measuredWidth||valueFit.fontSize);
-        allocations.push({part:primary,box:{...area,y:valueY,width:valueWidth,height:valueHeight},fit:valueFit});
-        allocations.push({part:unit,box:{x:box.x+valueWidth+gap,y:unitY,width:unitWidth,height:occupied(unitFit)},fit:{...unitFit,overflow:false}});
+        allocations.push({part:primary,box:{...area,y:valueY,width:valueWidth,height:valueHeight},fit:place(primary,valueFit,valueWidth)});
+        allocations.push({part:unit,box:{x:box.x+valueWidth+gap,y:unitY,width:unitWidth,height:occupied(unitFit)},fit:{...unitFit,overflow:!!unitFit.placement?.overflow}});
         primaryHeight=Math.max(valueY-box.y+valueHeight,unitY-box.y+occupied(unitFit));
       } else allocations.push({part:primary,box:valueFit?{...area,height:valueHeight}:area,fit:valueFit});
       // Keep related fields together. An arbitrary percentage gap disconnects a stacked unit
@@ -541,7 +574,7 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
       let y=box.y+primaryHeight+(tail.length?primaryGap:0);
       for (const part of tail) {
         const natural=measured.get(part)!,height=occupied(natural);
-        allocations.push({part,box:{...box,y,height},fit:{...natural,overflow:natural.sourceLines.some(line=>line.width>box.width+.01)}});
+        allocations.push({part,box:{...box,y,height},fit:{...natural,overflow:!!natural.placement?.overflow||natural.sourceLines.some(line=>line.width>box.width+.01)}});
         y+=height+gap;
       }
       const overflow=!valueFit||valueFit.overflow||arrangement==='inline-unit'&&valueFit.lines.length!==1||primaryHeight>area.height+.01||allocations.some(({box:area,fit})=>!fit||fit.overflow||!usable(area)||area.y+area.height>box.y+box.height+.01);
@@ -557,9 +590,14 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     const offset=(box.width-(unit.box.x+unit.box.width-box.x))*alignmentFactor;
     primary.box.x+=offset;unit.box.x+=offset;
   }
-  for (const part of parts) if (part.fit) part.linePositions=part.fit.sourceLines.map((line,index)=>({
-    x:part.box.x+(part.box.width-line.width)*alignmentFactor,baseline:part.box.y+part.fit!.fontSize+index*part.fit!.lineHeight,
-  }));
+  for (const part of parts) if (part.fit) {
+    if(part.fit.placement) {
+      part.fit={...part.fit,placement:{...part.fit.placement,lines:part.fit.placement.lines.map(line=>({...line,x:line.x+part.box.x,y:line.y+part.box.y,baseline:line.baseline+part.box.y,outline:line.outline?{...line.outline,x:line.outline.x+part.box.x,y:line.outline.y+part.box.y}:null}))}};
+      part.linePositions=part.fit.placement!.lines.map(({x,baseline})=>({x,baseline}));
+    } else part.linePositions=part.fit.sourceLines.map((line,index)=>({
+      x:part.box.x+(part.box.width-line.width)*alignmentFactor,baseline:part.box.y+part.fit!.fontSize+index*part.fit!.lineHeight,
+    }));
+  }
   const report=(reason:MetricLayoutDiagnostic['reason'],part:MetricTextPart,roles:MetricTextPart['role'][],message:string)=>
     diagnostics.push({code:'text-overflow',reason,path:part.path,parts:roles,message});
   for (const part of parts.filter(part=>part.visible)) {
@@ -1152,6 +1190,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   });
   const measureMetric = (node: Pending, box: LayoutBox, settings: Composition) => layoutMetric(node.value as string | number | MetricContent, acceptedBox(box), {
     fonts:options.fonts,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,
+    textRasterPadding:options.textRasterPadding,
     align:record(slide.design).contentAlignment??options.contentAlignment,
   });
   const leafScore = (node: Pending, box: LayoutBox, settings: Composition, penalties?: CompositionPenalties): number => {
