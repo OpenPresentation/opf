@@ -1,0 +1,114 @@
+{
+  "checkedAt": "2026-09-10T00:24:07.794Z",
+  "pr": 49,
+  "reviewedHead": "95f9982036a01a52e080992abe4c4350c4b72354",
+  "mergeCommit": "4dc292fa93bee52320bafa3fd0f5b05a2dc0a283",
+  "treeIdentical": true,
+  "checks": {
+    "core": 34400722403,
+    "coordinated": 34400722391,
+    "windowsMacosCLI": 34400722421,
+    "bugbot": "passed"
+  },
+  "packages": [
+    {
+      "name": "@openpresentation/opf",
+      "version": "0.8.0",
+      "npmPublishedAt": "2026-09-09T20:32:02.843Z",
+      "gitHead": "4dc292fa93bee52320bafa3fd0f5b05a2dc0a283",
+      "integrity": "sha512-1ubeINQsuD8pFNr542eFYPfzkhcECAcj/mM2pWNN+keFnVoWxePCsFTUtjuSSsvCtpm7QkgxBYRJYtEUmrlkkg==",
+      "tarball": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.8.0.tgz",
+      "attestations": {
+        "url": "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf@0.8.0",
+        "provenance": {
+          "predicateType": "https://slsa.dev/provenance/v1"
+        }
+      },
+      "tag": "opf-v0.8.0",
+      "publishWorkflow": "https://github.com/OpenPresentation/opf/actions/runs/34401446306",
+      "githubRelease": "https://github.com/OpenPresentation/opf/releases/tag/opf-v0.8.0"
+    },
+    {
+      "name": "@openpresentation/cli",
+      "version": "0.6.0",
+      "npmPublishedAt": "2026-09-09T20:39:35.937Z",
+      "gitHead": "4dc292fa93bee52320bafa3fd0f5b05a2dc0a283",
+      "integrity": "sha512-p02xCN30VF3K9pQHbD9lTDKxSpnceKnXZK9zhLDELqEWn2IBYO5ZwgcTVe/gVmv5ab/2wpG5Nx6HtmvO9SwWSQ==",
+      "tarball": "https://registry.npmjs.org/@openpresentation/cli/-/cli-0.6.0.tgz",
+      "attestations": {
+        "url": "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fcli@0.6.0",
+        "provenance": {
+          "predicateType": "https://slsa.dev/provenance/v1"
+        }
+      },
+      "tag": "cli-v0.6.0",
+      "publishWorkflow": "https://github.com/OpenPresentation/opf/actions/runs/34402210003",
+      "githubRelease": "https://github.com/OpenPresentation/opf/releases/tag/cli-v0.6.0"
+    }
+  ],
+  "runs": [
+    {
+      "package": "@openpresentation/opf",
+      "node": "v20.20.2",
+      "completedAt": "2026-09-09T20:36:35.522Z",
+      "logSha256": "e950819a71e788e5e5dcb567e9e78e7efec24238b79c93594fcb8f808b263a0e",
+      "checks": {
+        "entries": 519,
+        "publicImportAndSchemaSmoke": "passed",
+        "quoteApiAndCompositionTests": 13,
+        "signatures": 7,
+        "attestations": 1
+      }
+    },
+    {
+      "package": "@openpresentation/opf",
+      "node": "v24.20.0",
+      "completedAt": "2026-09-10T00:23:17.947Z",
+      "logSha256": "c881669e6c392ba3cb5f8447894cc69d929f2f27a99373d1c90edf0c504d38df",
+      "checks": {
+        "entries": 519,
+        "publicImportAndSchemaSmoke": "passed",
+        "quoteApiAndCompositionTests": 13,
+        "signatures": 7,
+        "attestations": 1
+      }
+    },
+    {
+      "package": "@openpresentation/cli",
+      "node": "v20.20.2",
+      "completedAt": "2026-09-10T00:18:04.168Z",
+      "logSha256": "685efd30106eb6fe966e6d3e8c782b4eebc5fac4f73fab8073f46ce2d1cfc1c0",
+      "checks": {
+        "cliVersion": "0.6.0",
+        "bundledCore": "0.8.0",
+        "globalExecutable": "passed",
+        "npxSkills": 6,
+        "existingAgentsFile": "preserved",
+        "repeatInstall": "unchanged",
+        "immutableCommandChecks": 69,
+        "signatures": 1,
+        "attestations": 1,
+        "windowsFileSymlinkCase": "skipped because file-symlink privilege is unavailable; Unix source CI covers this case"
+      }
+    },
+    {
+      "package": "@openpresentation/cli",
+      "node": "v24.20.0",
+      "completedAt": "2026-09-10T00:22:00.598Z",
+      "logSha256": "685efd30106eb6fe966e6d3e8c782b4eebc5fac4f73fab8073f46ce2d1cfc1c0",
+      "checks": {
+        "cliVersion": "0.6.0",
+        "bundledCore": "0.8.0",
+        "globalExecutable": "passed",
+        "npxSkills": 6,
+        "existingAgentsFile": "preserved",
+        "repeatInstall": "unchanged",
+        "immutableCommandChecks": 69,
+        "signatures": 1,
+        "attestations": 1,
+        "windowsFileSymlinkCase": "skipped because file-symlink privilege is unavailable; Unix source CI covers this case"
+      }
+    }
+  ],
+  "boundary": "These are actual core/CLI npm installs with matching inspected tarball integrity, signatures and provenance. Downstream publication evidence is recorded separately. Previous complete registry plan and native comparisons stay bound to their historical package/font hashes; no new native raster-equivalence claim."
+}

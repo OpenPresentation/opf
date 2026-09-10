@@ -1,14 +1,18 @@
 import assert from "node:assert/strict";
 import { execFile as execFileCallback } from "node:child_process";
-import { mkdir, mkdtemp, rm, stat, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, rm, stat, writeFile, readFile, realpath } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
+import {createHash} from 'node:crypto';
 import {packageManagerInvocation} from '../../../scripts/package-manager.mjs';
 
 const execFile = promisify(execFileCallback);
 const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const manifest = JSON.parse(await readFile(path.join(packageRoot,'package.json'),'utf8'));
+const registry = process.argv.includes('--registry');
+const packageSource = registry ? `${manifest.name}@${manifest.version}` : packageRoot;
 const tmpRoot = await mkdtemp(path.join(os.tmpdir(), "opf-packed-smoke-"));
 const packDir = path.join(tmpRoot, "pack");
 const projectDir = path.join(tmpRoot, "project");
@@ -40,7 +44,7 @@ try {
     `${JSON.stringify({ private: true, type: "module" }, null, 2)}\n`,
   );
 
-  const packResult = await run("npm", ["pack", packageRoot, "--pack-destination", packDir]);
+  const packResult = await run("npm", ["pack", packageSource, "--pack-destination", packDir, '--offline=false', '--prefer-online']);
   const tgzName = packResult.stdout.trim().split(/\r?\n/).at(-1);
   assert.ok(tgzName?.endsWith(".tgz"), `npm pack did not return a tarball name: ${packResult.stdout}`);
 
@@ -72,7 +76,13 @@ try {
 
   assert.equal(files.some((file) => file.endsWith(".map")), false, "npm package should not ship source maps");
 
-  await run("npm", ["install", "--ignore-scripts", "--no-audit", "--no-fund", tgzPath], { cwd: projectDir });
+  await run("npm", ["install", "--ignore-scripts", "--no-audit", "--no-fund", registry ? packageSource : tgzPath], { cwd: projectDir });
+  if (registry) {
+    const lock=JSON.parse(await readFile(path.join(projectDir,'package-lock.json'),'utf8'));
+    const entry=lock.packages[`node_modules/${manifest.name}`];
+    assert.ok(entry.resolved.startsWith('https://registry.npmjs.org/')&&!entry.link);
+    assert.equal(entry.integrity,`sha512-${createHash('sha512').update(await readFile(tgzPath)).digest('base64')}`,'Inspected tarball and installed registry dependency must match');
+  }
   await writeFile(
     path.join(projectDir, "smoke.mjs"),
     `import assert from "node:assert/strict";
@@ -94,6 +104,8 @@ import { repoReadme } from "@openpresentation/opf/repo-readme";
 import { paginatePresentation } from "@openpresentation/opf/pagination";
 import rawPresentation from "@openpresentation/opf/spec/schemas/opf.schema.json" with { type: "json" };
 import rawBoardAudience from "@openpresentation/opf/spec/catalogs/audiences/board.json" with { type: "json" };
+import installedManifest from "@openpresentation/opf/package.json" with { type: "json" };
+assert.equal(installedManifest.version,${JSON.stringify(manifest.version)});
 
 assert.equal(presentation.$id, "https://openpresentation.org/schema/opf/v1");
 assert.equal(focusedPresentation.$id, presentation.$id);
@@ -142,14 +154,28 @@ assert.ok(invalidResult.errors.length > 0, "invalid deck should return validatio
 `,
   );
   await run(process.execPath, ["smoke.mjs"], { cwd: projectDir });
+  if (registry) {
+    for (const file of ['quote-layout.test.mjs','quote-composition.test.mjs']) {
+      const source=(await readFile(path.join(packageRoot,'test',file),'utf8'))
+        .replaceAll("'../dist/composition.js'","'@openpresentation/opf/composition'")
+        .replaceAll("'../dist/pagination.js'","'@openpresentation/opf/pagination'");
+      await writeFile(path.join(projectDir,file),source);
+      const result=await run(process.execPath,['--test',file],{cwd:projectDir});
+      process.stdout.write(result.stdout);
+    }
+    const signatures=await run('npm',['audit','signatures'],{cwd:projectDir});
+    process.stdout.write(signatures.stdout);
+  }
 
   const { size } = await stat(tgzPath);
-  process.stdout.write(`Packed install smoke passed for ${tgzName} (${size} bytes).\n`);
+  process.stdout.write(`${registry?'Registry':'Packed'} install smoke passed for ${tgzName} (${size} bytes).\n`);
   process.stdout.write(`Packed tarball entries checked: ${files.length}.\n`);
 } finally {
   if (process.env.OPF_KEEP_PACKED_SMOKE_TMP) {
     process.stdout.write(`Preserved packed smoke temp directory: ${tmpRoot}\n`);
   } else {
-    await rm(tmpRoot, { recursive: true, force: true });
+    const actual=await realpath(tmpRoot),parent=await realpath(os.tmpdir());
+    assert.ok(actual.startsWith(parent+path.sep)&&path.basename(actual).startsWith('opf-packed-smoke-'),'Cleanup must stay inside the created temporary directory');
+    await rm(actual, { recursive: true, force: true });
   }
 }
