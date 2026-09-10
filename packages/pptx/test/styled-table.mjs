@@ -8,6 +8,23 @@ const parser = new XMLParser({ignoreAttributes:false, attributeNamePrefix:'', pa
 const array = value => value === undefined ? [] : Array.isArray(value) ? value : [value];
 const find = (value,key) => !value || typeof value !== 'object' ? [] : Array.isArray(value) ? value.flatMap(item => find(item,key)) : Object.entries(value).flatMap(([name,child]) => name === key ? array(child) : find(child,key));
 const fill = '#12345680', border = {color:'#aabbcc80', width:2, dash:'dot'};
+
+// Check actual native run colors rather than merely calling the shared chooser.
+for(const [fill,headerColor,bodyColor,explicit] of [
+  ['#F8FAFC','000000','000000'],['#0F172A','FFFFFF','FFFFFF'],
+  ['#777777','000000','000000'],['#767676','FFFFFF','000000'],
+  ['#FFFFFF80','FFFFFF','000000'],['#F8FAFC','FFFFFF','FFFFFF','#FFFFFF'],
+]){
+  const style={fill,...(explicit?{color:explicit}:{})};
+  const input={design:{background:'#FFFFFF',colorScheme:{id:'cool-horizon',dark1:'#000000'}},slides:[{table:{columns:[{value:'Header',style},{value:['Inherited',{text:'Explicit',color:'#FF0000'}],style}],rows:[[{value:'Body',style},{value:['BodyInherited',{text:'BodyExplicit',color:'#FF0000'}],style}]]}}]};
+  const original=structuredClone(input),bytes=await toPptx(input),xml=new TextDecoder().decode(unzipSync(bytes)['ppt/slides/slide1.xml']);
+  const runs=find(parser.parse(xml),'a:r');
+  for(const [text,color] of [['Header',headerColor],['Inherited',headerColor],['Body',bodyColor],['BodyInherited',bodyColor],['Explicit','FF0000'],['BodyExplicit','FF0000']]){
+    const run=runs.find(run=>run['a:t']===text);assert.ok(run,text);
+    assert.equal(run['a:rPr']['a:solidFill']['a:srgbClr'].val,color,`${fill} ${text}`);
+  }
+  assert.deepEqual(input,original);
+}
 const table = {rows:[
   [{value:['Merged ',{text:'red',color:'#ff0000'}],rowSpan:2,colSpan:2,style:{fill,color:'#abcdef80',align:'right',verticalAlign:'bottom',padding:{top:0,left:3,bottom:6},borders:{top:border,bottom:{color:'#000',width:0}}}},null,{value:'C',style:{padding:{left:17},borders:{right:{color:'#00ff00',width:3,dash:'dash'}}}}],
   [null,null,{value:'D',style:{align:'center',padding:{top:.25,right:19}}}],

@@ -6,7 +6,7 @@ import {nativeBackgroundFill} from './background.js';
 import {importBackground} from './background-import.js';
 import { webpToPng } from '#image-fallback';
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
-import { layoutTable, composeSlide, fitText, fitRichText, textWidthMeasurer, resolveCanvasDimensions, resolveFontFamilies, resolveTextStyle } from "@openpresentation/opf/composition";
+import { layoutTable, composeSlide, fitText, fitRichText, textWidthMeasurer, resolveCanvasDimensions, resolveFontFamilies, resolveTextStyle, textColorForFill } from "@openpresentation/opf/composition";
 import PptxGenJS from "../vendor/pptxgenjs/pptxgen.es.js";
 import { unzipSync, zipSync } from "fflate";
 import { XMLParser } from "fast-xml-parser";
@@ -1125,8 +1125,8 @@ function addTablePayload(slide, table, region, context, options, path) {
   const rows = layout.rows.map(row => row.cells.map(cell => {
     const {header,rich,fit} = cell;
     const cellStyle = cell.style ?? {};
-    const baseColor = (cellStyle.color ?? (header ? '#FFFFFF' : '#' + context.colors.text)).replace(/^#/, '');
     const baseFill = (cellStyle.fill ?? (header ? '#' + context.colors.accent : '#' + context.colors.surface)).replace(/^#/, '');
+    const baseColor = (cellStyle.color ?? textColorForFill('#' + baseFill, header ? '#FFFFFF' : '#' + context.colors.text)).replace(/^#/, '');
     const alpha = value => value.length === 8 ? (1 - parseInt(value.slice(6), 16) / 255) * 100 : 0;
     const text = stringifyText(cell.value), style = cell.textStyle;
     const fragments = rich ? fit.richLines.flatMap(line => line.fragments) : [];
