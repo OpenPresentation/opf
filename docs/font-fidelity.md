@@ -47,6 +47,8 @@ An available exact family takes precedence over aliases. The registry resolves a
 
 SVG embeds supplied fonts using data URIs and includes supplied license notices as metadata. The bundled loader carries the fonts' SIL Open Font License notices. For PNG/PDF, pass the same font files to the rasterizer; its native font loader does not depend on browser CSS font loading. In a browser, wait for `document.fonts.ready` before measuring or taking a screenshot. The editor playground loads and embeds bundled fonts and displays substitutions.
 
+Current `svgToPdf` output is image-only: each slide is rasterized and embedded as a PNG on a PDF page. Text is not selectable or searchable through PDF text objects, and shapes are not preserved as vectors. The accepted [selectable/vector PDF roadmap](plans/pdf-export.md) adds a separate backend and verification requirement, including permitted font embedding, Unicode extraction and shared placement. Raster PDF will remain an explicit compatibility mode when the verified vector mode becomes the default; no vector mode has shipped yet.
+
 ## Office compatibility pack
 
 `loadOfficeFontRegistry` from `@openpresentation/opf-render/fonts-node` supplies regular, bold, italic, and bold italic faces of Carlito, Caladea, Arimo, Tinos, Cousine, and Gelasio, plus the base Roboto pack. Package versions are pinned and each face carries its distribution's license notice. `includeBaseFonts: false` omits Roboto. Loading never installs fonts into the operating system or downloads fonts at render time.

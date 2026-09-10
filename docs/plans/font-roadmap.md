@@ -28,6 +28,10 @@ Existing checks: `pnpm test:fonts`, renderer font-policy tests, matching editor/
 
 ## Delivery order
 
+Selectable/vector PDF is an accepted product requirement with its own [delivery plan and verification gates](pdf-export.md). Its font work must reuse resolved faces and shaped placement, verify permission to embed/subset each face, and provide Unicode mappings for search and copy. The current raster PDF path does not satisfy that requirement; PDF embedding and text extraction are separate checks from browser font loading and native PPTX embedding.
+
+The [Mermaid/diagram and general SVG work](diagrams-svg.md) is sequenced after font reliability is accepted. Keep its requirements and full diagram-family inventory documented, but finish the active font/layout fixes and their browser/raster/native verification and release gates before starting diagram or SVG implementation.
+
 | Priority | Work | Deliverable | Acceptance gate |
 | --- | --- | --- | --- |
 | 1 | Make the starter reliable | Pinned font manifest, file hashes, license bundle, missing-font diagnostics, and reproducible package installation | A clean install renders the starter corpus without relying on system fonts; each substitution is reported |

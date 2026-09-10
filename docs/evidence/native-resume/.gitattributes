@@ -1,0 +1,3 @@
+# Preserve captured verifier, manifest, font and Office-output bytes exactly.
+* -text -whitespace
+README.md text eol=lf whitespace

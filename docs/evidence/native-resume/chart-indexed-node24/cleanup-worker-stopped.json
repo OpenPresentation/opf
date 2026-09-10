@@ -1,0 +1,6 @@
+{
+  "createdAt": "2026-09-10T09:26:14.078815-07:00",
+  "processId": 3548,
+  "scope": "The read-only COM status/exact-generated-file cleanup attempt also did not return. Stopped only its verified PowerShell worker; no Office process was stopped. Cleanup completion is unknown; do not infer an empty user session.",
+  "stoppedAt": "2026-09-10T16:27:42.1008542Z"
+}

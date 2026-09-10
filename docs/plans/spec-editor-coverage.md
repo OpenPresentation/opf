@@ -33,6 +33,14 @@ The gallery `/spec` and `/api/opf-spec.json` contain the same schema digest and 
 
 This table must not be reported as complete WYSIWYG support. The field inventory closes discovery and structured-authoring gaps. Outstanding visual and interaction items remain part of the user's broader ecosystem goal.
 
+## Accepted additions — September 10, 2026
+
+The [Mermaid and general SVG roadmap](diagrams-svg.md) adds a new `diagram` content type for Mermaid/semantic diagrams and SVG support within the existing `image` content type. It includes source/file import, validated preview, diagram label/node/connector editing, source/model synchronization, arrange preview and undo. These are planned capabilities, not fields already covered by the current schema inventory. Tests must distinguish editable semantic diagrams, editable drawing primitives and vector graphics treated as one object, then verify export/reimport and actual native PowerPoint editing.
+
+Implement these diagram/SVG capabilities after the font reliability work and its outstanding verification gates are accepted; recording this roadmap does not change the active font-first priority.
+
+The [PDF export roadmap](pdf-export.md) adds selectable/searchable text and vector output, with the exact previewed pages exported through supported APIs, CLI and editor/site controls. The current raster-only PDF implementation remains documented until the new mode passes its release gates.
+
 ## Verification
 
 - `npm test` in opf-editor: model/schema/transfer/session checks.
