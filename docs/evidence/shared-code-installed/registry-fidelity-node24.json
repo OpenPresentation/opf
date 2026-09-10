@@ -1,0 +1,99 @@
+{
+  "scope": "Pinned tests and fixtures, installed registry dist files; no source package overrides",
+  "packages": [
+    {
+      "name": "@openpresentation/opf",
+      "version": "0.8.0"
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "version": "0.6.0"
+    },
+    {
+      "name": "@openpresentation/opf-editor",
+      "version": "0.5.0"
+    },
+    {
+      "name": "@openpresentation/opf-pptx",
+      "version": "0.6.0"
+    },
+    {
+      "name": "@openpresentation/cli",
+      "version": "0.6.0"
+    }
+  ],
+  "results": [
+    {
+      "repo": "opf-render",
+      "ref": "7fe9905ad2d8a224efeef51b4a22d0aff0c413fe",
+      "test": "webp.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-render",
+      "ref": "7fe9905ad2d8a224efeef51b4a22d0aff0c413fe",
+      "test": "jpeg-orientation.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-render",
+      "ref": "7fe9905ad2d8a224efeef51b4a22d0aff0c413fe",
+      "test": "rich-table.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-render",
+      "ref": "7fe9905ad2d8a224efeef51b4a22d0aff0c413fe",
+      "test": "golden.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-render",
+      "ref": "7fe9905ad2d8a224efeef51b4a22d0aff0c413fe",
+      "test": "styled-table.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-render",
+      "ref": "7fe9905ad2d8a224efeef51b4a22d0aff0c413fe",
+      "test": "quote-footer.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-render",
+      "ref": "7fe9905ad2d8a224efeef51b4a22d0aff0c413fe",
+      "test": "shared-quote.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-pptx",
+      "ref": "898e3c27919a2488e1e3d384168d6b25aae4bd5c",
+      "test": "dependency-boundary.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-pptx",
+      "ref": "898e3c27919a2488e1e3d384168d6b25aae4bd5c",
+      "test": "styled-table.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-pptx",
+      "ref": "898e3c27919a2488e1e3d384168d6b25aae4bd5c",
+      "test": "styled-table-import.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-pptx",
+      "ref": "898e3c27919a2488e1e3d384168d6b25aae4bd5c",
+      "test": "content-layout.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-pptx",
+      "ref": "898e3c27919a2488e1e3d384168d6b25aae4bd5c",
+      "test": "shared-quote.mjs",
+      "passed": true
+    }
+  ]
+}

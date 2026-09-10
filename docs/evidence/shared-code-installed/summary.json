@@ -1,0 +1,275 @@
+{
+  "checkedAt": "2026-09-10T05:14:40.242Z",
+  "branch": "codex/shared-code-integration-20260909",
+  "sourceRefs": {
+    "opf": "9980ed4ddf87359dae1542fb6284f3ba6c3688ae",
+    "coreImplementation": "8d11fd650eb14fad3473b918713d9caa95321b83",
+    "opf-render": "343ffea275e2eff478fc6a355551379897b748df",
+    "opf-pptx": "860e9476520659bf65822c945bf96b253cbe6c01",
+    "opf-editor": "52e540b83e441892fd928e9f159bffbb29da5653"
+  },
+  "harnessScope": "New installed checks and CI wiring are committed alongside this evidence. Packages built from these source refs; no runtime changes after the tested core implementation.",
+  "candidate": {
+    "nodes": [
+      "v20.20.2",
+      "v24.20.0"
+    ],
+    "identicalTarballsAndRuntime": true,
+    "lockSha256": "88656c9a611b9515cd872c0a0d22a5db5d32a8eab75b658754b21c6261b85e3e",
+    "packages": [
+      {
+        "name": "@openpresentation/opf",
+        "version": "0.4.0-preview.11",
+        "file": "openpresentation-opf-0.4.0-preview.11.tgz",
+        "sha256": "5f4be4912d642065fad6b2595cd6607c748e6c5c6c29962c863e96aa9caeaa28",
+        "bytes": 636239,
+        "installedVersion": "0.4.0-preview.11",
+        "integrity": "sha512-nBLDP4HRzmscgrriHC4h5mwlSxIB7R2vDA9fT1wKAtgYSposm1c1lQv87/2qBEKDq38QUBphxgkco9gxrLpE3w=="
+      },
+      {
+        "name": "@openpresentation/opf-render",
+        "version": "0.1.0-preview.11",
+        "file": "openpresentation-opf-render-0.1.0-preview.11.tgz",
+        "sha256": "f92d6e5bb52407db1d9baebb9cd5261f9c413812bda1b3108f8259e8057e2a90",
+        "bytes": 33250,
+        "installedVersion": "0.1.0-preview.11",
+        "integrity": "sha512-yeKAl9DaCqIqaBaZcZfCsLLCTSxY6Ql6thbELUVFQpNb5JZN3YirbRZB4jGpf6l9+wXTQGHQRkSOu1jIRsGtWQ=="
+      },
+      {
+        "name": "@openpresentation/opf-editor",
+        "version": "0.1.0-preview.11",
+        "file": "openpresentation-opf-editor-0.1.0-preview.11.tgz",
+        "sha256": "dde1b1821f36701e9f13c640ca9e96ddacced1b1c848db07b9524b207fb33ef0",
+        "bytes": 55714,
+        "installedVersion": "0.1.0-preview.11",
+        "integrity": "sha512-LpwBeGibc5Jmf+P36VFnYMCc7r5dQtUmrmQ7jsoX1B2prObZM+gPmYPQCbWjl6b6nob3bH2uPt+n5I4CCpUVAg=="
+      },
+      {
+        "name": "@openpresentation/opf-pptx",
+        "version": "0.1.0-preview.11",
+        "file": "openpresentation-opf-pptx-0.1.0-preview.11.tgz",
+        "sha256": "2b8cd1404d71a2f2efac8ec3d0a2cf4da8e50561fb1ab36e6973e757ac05d42d",
+        "bytes": 197750,
+        "installedVersion": "0.1.0-preview.11",
+        "integrity": "sha512-uav/TpdwLVA3Qctutk2eFvZUXMrlL5idAtTsXnl1p7ZJJrTNL670wXkyEfKh64sUK2eYR/VEUfIUQ1ZInyFVSQ=="
+      }
+    ],
+    "sourceAliases": false,
+    "sourceUnitTests": 15,
+    "browserWorkflows": "Actual installed renderer and editor font-loaded offline pointer/keyboard, metadata, CRLF, Tab/cancel, pagination floors, undo/redo, export/reimport; all seven prior installed browser suites also pass.",
+    "guards": "Loader environment, modified runtime, wrong lock integrity and external modules rejected; bytes restored.",
+    "cli": "69 commands and standalone global/npx-style local-pack installation pass on Node 20 and 24; Windows file-symlink permission case skipped and covered by Unix CI."
+  },
+  "registry": {
+    "nodes": [
+      "20.20.2",
+      "24.20.0"
+    ],
+    "scope": "Separate fresh installs and pinned historical source fixtures for published core 0.8.0, renderer/PPTX 0.6.0, editor 0.5.0 and CLI 0.6.0. Registry does not claim the unreleased code feature.",
+    "checks": [
+      "exact package ecosystem",
+      "seven executed browser suites",
+      "pinned fidelity suites including 126 decks / 805 raster slides"
+    ]
+  },
+  "native": {
+    "nodeComparisons": [
+      "24.20.0",
+      "20.20.2"
+    ],
+    "slides": 8,
+    "originalSavedEditedImports": 24,
+    "powerPoint": "16.0.20326.20132",
+    "windowsBuild": "26200.9445",
+    "tabTargets": 4,
+    "maxTabTargetErrorPoints": 0.007030487060546875,
+    "tabTargetTolerancePoints": 0.02,
+    "referenceFontHashes": {
+      "cour.ttf": "e4a66a0259718d0c8f4b6e14319b4803ced45afbddf3abba8b8c3e2006856206",
+      "courbd.ttf": "11e629cef937cd08f942aa1bd994a71302dbe2819c72c6d4c183a623acbb421a"
+    },
+    "visualInspection": "Fresh installed wide and portrait source and native PNGs inspected. Wrapping and containment agree in these fixtures; native baselines and glyph appearance differ. No pixel-equivalence gate or substitute-font claim.",
+    "scope": "Fresh installed candidate runtime, native editable code and metadata, tags, save/reopen and exact source reimport. Native geometry, formatting, font theme and readability policy are not reconstructed. Local Courier New is neither redistributed nor embedded; PowerPoint and unrelated decks stay open."
+  },
+  "initialFailures": [
+    "Node24 installed harness initially used a named import from CommonJS Playwright; corrected to its default export.",
+    "The next attempt treated esbuild empty disabled node-module stubs as files. Now accepts only zero-byte, import-free stubs and still requires all real browser code under installed node_modules.",
+    "The initial Node24 full package wrapper is retained as failed evidence. Its source stages passed; renewed installed/tarball, browser, CLI and guard stages pass. The entire Node20 wrapper passes continuously. Full Linux CI remains required."
+  ],
+  "files": {
+    "candidate-node20.json": {
+      "sha256": "261a4f06c0275333a603bdf49b8c3f8bb303e49bc1cc06105822b936cbe5caff",
+      "bytes": 115108
+    },
+    "candidate-browser-node20.json": {
+      "sha256": "bfa30b91115bc75666e75705e720e82def7c5ae294f97ab877aed93b131c1a6e",
+      "bytes": 17111
+    },
+    "registry-browser-node20.json": {
+      "sha256": "83547522dfee65d9eddd156ca6e597c03d3d32889a7a9a91cba70d49e2f347ac",
+      "bytes": 17120
+    },
+    "registry-fidelity-node20.json": {
+      "sha256": "efb37a13b1d70f2ea5a1e024326b041dc6dca1271fc545869e706e0db314eb24",
+      "bytes": 2376
+    },
+    "candidate-node24.json": {
+      "sha256": "4f4070c4cae270e48e83e70dda6b4ea8b094a67ea6c01ff09e0a3c3c08261011",
+      "bytes": 115108
+    },
+    "candidate-browser-node24.json": {
+      "sha256": "eb60d6583778f83ae7f5791245ec4c42993a9d59f2438c3fdf8ee8dde6e2b3ea",
+      "bytes": 17111
+    },
+    "registry-browser-node24.json": {
+      "sha256": "f46fc829a776efea1210aa8773806443d046fef26505abeef4a25359de97ef81",
+      "bytes": 17120
+    },
+    "registry-fidelity-node24.json": {
+      "sha256": "efb37a13b1d70f2ea5a1e024326b041dc6dca1271fc545869e706e0db314eb24",
+      "bytes": 2376
+    },
+    "native-preparation.json": {
+      "sha256": "ef17dfb4c3a54012eb9a3ee6338758dec4a923840271bd4321d32b6533cd98e0",
+      "bytes": 9202
+    },
+    "native-generation.json": {
+      "sha256": "e90a80655b59923f3d20c16ee0687c466cd9c89a11aafcb019facc48ed05449e",
+      "bytes": 67056
+    },
+    "native-powerpoint.json": {
+      "sha256": "8fe541485dc4360e249a139ce73c57e6347c8debc2d92a9b4baaeb5f7d77fa33",
+      "bytes": 21710
+    },
+    "native-comparison.json": {
+      "sha256": "bf5bc530ee22554fc71f861fe38b1253febf98da3b4bfd50ae591de2b6d0fde0",
+      "bytes": 11999
+    },
+    "code-1280-svg-3.png": {
+      "sha256": "3c1e992f719fa526e0677e7322d5f6422eac75398ebd1a670a97fde5503ae731",
+      "bytes": 44639
+    },
+    "code-1280-native-3.png": {
+      "sha256": "e2adc912a3fe8e21bfacdbab69e80cef58b34d2892223838945bbd334d89febd",
+      "bytes": 8119
+    },
+    "code-540-svg-3.png": {
+      "sha256": "6e382b8ccd852e275bf6909edd34e368db502cdccc5a26a80e78e8b95ee988c8",
+      "bytes": 32953
+    },
+    "code-540-native-3.png": {
+      "sha256": "6879997dcc2e1ece9608b8009e0a68f574b24edf599cd9aa62a17a99d29ef494",
+      "bytes": 7084
+    }
+  },
+  "logs": [
+    {
+      "file": "coordinated-build-node20.log",
+      "sha256": "a9c6859a6e26b5b01f4ac72f5d369109c604608632f130d620ca439d326253f9",
+      "bytes": 6789,
+      "status": "passed"
+    },
+    {
+      "file": "coordinated-build-node24.log",
+      "sha256": "33d1c2dba1d13964ab1c50d1384ee5d3dff25f15871ac9929a291fc2cb83c37e",
+      "bytes": 6789,
+      "status": "passed"
+    },
+    {
+      "file": "coordinated-packages-node20.log",
+      "sha256": "8a1e108b9a187305271adaca2dd35fe7b5448fb4aa99da82e1b3012802b8ba60",
+      "bytes": 60521,
+      "status": "passed"
+    },
+    {
+      "file": "coordinated-packages-node24.log",
+      "sha256": "f12871b9fb796090ddc13554773019bb5fcb041d37f9df69f2a0b86a47935f21",
+      "bytes": 54271,
+      "status": "Initial harness failure after source checks; fixed remainder rerun separately"
+    },
+    {
+      "file": "installed-code-node24.log",
+      "sha256": "9234076ddec49098d300d022a419277a838a2192546654953d8398886d98edfe",
+      "bytes": 2584,
+      "status": "passed"
+    },
+    {
+      "file": "coordinated-packed-node24.log",
+      "sha256": "9ad3e6789093cd49d4d8104a366d6efdf42efce762bae948972ca09194bfad8f",
+      "bytes": 7214,
+      "status": "passed"
+    },
+    {
+      "file": "coordinated-browser-node20.log",
+      "sha256": "b57e4bc02a8a40c67f3949748e4ffaf4072466c48948f02a41b1aca7f110cc86",
+      "bytes": 629,
+      "status": "passed"
+    },
+    {
+      "file": "coordinated-browser-node24.log",
+      "sha256": "b57e4bc02a8a40c67f3949748e4ffaf4072466c48948f02a41b1aca7f110cc86",
+      "bytes": 629,
+      "status": "passed"
+    },
+    {
+      "file": "coordinated-cli-node24.log",
+      "sha256": "f11b797958f751a4192ff0fccd2875f5a95e900c5b3eac96c1f37fad465e113e",
+      "bytes": 793,
+      "status": "passed"
+    },
+    {
+      "file": "code-guards-node20.log",
+      "sha256": "4b754fc4813f2a2e50f432019aac0eccd9775e5017a2e08fb8ea9ffddb4132a1",
+      "bytes": 132,
+      "status": "passed"
+    },
+    {
+      "file": "code-guards-node24.log",
+      "sha256": "4b754fc4813f2a2e50f432019aac0eccd9775e5017a2e08fb8ea9ffddb4132a1",
+      "bytes": 132,
+      "status": "passed"
+    },
+    {
+      "file": "registry-node20.log",
+      "sha256": "5210d206b877dd1350f43674d9302b0e3303b5239091048cb8131c4b12200e00",
+      "bytes": 7666,
+      "status": "passed"
+    },
+    {
+      "file": "registry-node24.log",
+      "sha256": "90a08ece0da46f696805027020601f2901ae357aaacbcb4a8623dd85e7e48d9f",
+      "bytes": 5205,
+      "status": "passed"
+    },
+    {
+      "file": "registry-browser-node20.log",
+      "sha256": "aeea67ba63bb06152991b431a0b82c0f4307f0d75a1914555ef9d0a56595e595",
+      "bytes": 654,
+      "status": "passed"
+    },
+    {
+      "file": "registry-browser-node24.log",
+      "sha256": "aeea67ba63bb06152991b431a0b82c0f4307f0d75a1914555ef9d0a56595e595",
+      "bytes": 654,
+      "status": "passed"
+    },
+    {
+      "file": "registry-fidelity-node20.log",
+      "sha256": "24f94f77ec44e73f8c77c8e99a688d0c58fcd22eb60a92c1828b3dbf13db2e12",
+      "bytes": 5594,
+      "status": "passed"
+    },
+    {
+      "file": "registry-fidelity-node24.log",
+      "sha256": "24f94f77ec44e73f8c77c8e99a688d0c58fcd22eb60a92c1828b3dbf13db2e12",
+      "bytes": 5594,
+      "status": "passed"
+    }
+  ],
+  "remaining": [
+    "Linux coordinated CI and final PR review",
+    "Version preparation, dependency-ordered publication and fresh registry code workflows",
+    "Published release-plan update and public deployment adoption",
+    "Full layout/repair, Auto arrange, remaining payloads and font/native-platform roadmap"
+  ]
+}

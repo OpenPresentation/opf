@@ -18,6 +18,9 @@ const verifyTableLayout = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] 
 const verifyStyledTables = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] >= 7;
 // Shared quote APIs first shipped in core 0.8 with renderer/PPTX 0.6 and editor 0.5.
 const verifySharedQuotes = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] >= 8;
+// Code consumer integration is still unpublished. Enable the registry version
+// gate only after the complete coordinated set has been released.
+const verifySharedCode = !registry;
 
 async function readHarness(repo, file) {
   const directory = repo === 'opf' ? root : path.resolve(root, '..', repo);
@@ -140,6 +143,7 @@ assert.ok(pptx.length>1000);
 console.log('Packed consumer: core, editor, SVG, measured fonts and PPTX passed.');\n`,
 );
 run(process.execPath, ["check.mjs"]);
+if (verifySharedCode) run(process.execPath,[path.join(root,'scripts/test-installed-code.mjs'),consumer]);
 if (verifySharedQuotes) {
   // Historical release plans retain their old fixtures; the new complete set
   // must exercise its quote APIs and shared accepted geometry from actual npm.
@@ -211,6 +215,7 @@ export {prepareTrackResize,prepareBlockMove,listBlockContainers,prepareBlockInse
 export {fitList,type ListFit,type ListValue} from '@openpresentation/opf/composition';
 ${verifyTableLayout ? "export {layoutTable,type TableLayout,type TableLayoutOptions,type TableCellLayout} from '@openpresentation/opf/composition';" : ''}
 ${verifySharedQuotes ? "export {layoutQuote,type QuoteLayout,type QuoteTextPart,type QuoteTextSource,type QuoteLayoutOptions,type CompositionExplanation} from '@openpresentation/opf/composition';" : ''}
+${verifySharedCode ? "export {layoutCode,type CodeLayout,type CodeTextPart,type CodeTextFit,type CodeLayoutOptions} from '@openpresentation/opf/composition';" : ''}
 export {schemaAtPath,listSchemaFields} from '@openpresentation/opf-editor/schema';
 export async function mount(container:HTMLElement):Promise<CanvasEditor> {
  const fonts=await loadBrowserFontRegistry([{url:'/fonts/Roboto.ttf'},{url:'/fonts/RobotoMono.ttf'}]);

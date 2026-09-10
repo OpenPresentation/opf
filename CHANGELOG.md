@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Add shared code filename/language/body layout with exact source ranges, tab segments, metadata case, whitespace and original line boundaries. Composition and pagination consume the complete accepted code geometry, expose `item.codeLayout` and identify the updated candidate scoring as `grid-score-v3`. Strict ancestor failures and irreducible metadata cannot be hidden by an empty body.
+- Pin coordinated source verification to the new renderer/PPTX/editor code integration. Fresh candidate tarball tests cover code semantics, metadata guards and actual offline browser editing/export/reimport; published registry tests retain their immutable historical fixtures. Source/native evidence and remaining release/fidelity gates are recorded in `docs/plans/shared-code-integration.md`.
+
 ## 0.8.0
 
 - Compose quote bodies and sources through shared `layoutQuote` geometry, resolved styles, UTF-16 source ranges, readability floors and explicit internal overflow. `quote-flow-v1` allocates footer space before reducing fonts or changing the outer grid. Renderer/PPTX 0.6.0 consume accepted parts without re-fitting; use the coordinated published set in `release-plan.json`.

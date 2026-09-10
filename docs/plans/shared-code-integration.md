@@ -49,10 +49,29 @@ Real PowerPoint `16.0.20326.20132` on Windows `26200.9445` passes eight wide/por
 
 Reproduce in the converter checkout using `node test/native-code.mjs generate artifacts/native-code`, `& test/native-code.ps1 -EvidenceDirectory artifacts/native-code`, then `node test/native-code.mjs compare artifacts/native-code`. The importer reports that positioning, formatting, font theme and readability policy are not reconstructed. This scope is separate from the historical published-import defect above and does not establish native raster or arbitrary Office round-trip equivalence.
 
+## Fresh installation and native verification
+
+[Installed evidence](../evidence/shared-code-installed/summary.json) records fresh candidate packages built from core `9980ed4ddf87359dae1542fb6284f3ba6c3688ae` (runtime implementation `8d11fd650eb14fad3473b918713d9caa95321b83`) and the three exact consumer commits above. All four tarball hashes and installed runtime bytes match across Node 20.20.2/24.20.0. The local preview version labels are staging identities, not npm releases.
+
+`scripts/test-installed-code.mjs`, invoked by `test:packed-ecosystem`, verifies contained ordinary installs, tarball/lock integrity, staged runtime hashes and actual browser bundle inputs. It runs 15 core source/layout/pagination tests, converter source/metadata guards, renderer measurements and the real offline editor/renderer workflows against installed public APIs. No source loader or linked runtime package is accepted. `scripts/test-installed-code-guards.mjs` tests changed bytes, wrong integrity, external modules and loader environment rejection and restores its generated artifacts. All seven existing installed browser suites and 69 CLI commands/global/npx-style local-pack installation also pass on both runtimes.
+
+The complete Node 20 source/package command passes. The initial Node 24 command passed source stages and failed the new harness's CommonJS Playwright import; after correcting the harness, all remaining installed/tarball/browser/CLI/guard stages pass. A subsequent harness attempt exposed esbuild's empty disabled-module records; only zero-byte, import-free stubs are accepted, with every real browser input still verified inside installed modules. Full Linux CI remains required. Separate fresh published-registry ecosystem, seven browser and pinned fidelity suites pass on both runtimes; no candidate feature is attributed to those older releases.
+
+The actual installed converter passes the Windows PowerPoint workflow again: eight slides, all 24 original/saved/edited imports, exact code/metadata and save/reopen. Both Node versions compare successfully. Four native text-after-tab targets stay within 0.007031 point (gate 0.02). Source and native wide/portrait PNGs were inspected; glyph appearance and baselines differ, so no raster-equivalence claim is made. Reproduce after the fresh candidate workflow:
+
+```powershell
+node scripts/prepare-installed-code-native.mjs
+# Change to the verified consumer directory printed by that command.
+node test/native-code.mjs generate artifacts/native-code
+& test/native-code.ps1 -EvidenceDirectory artifacts/native-code
+node test/native-code.mjs compare artifacts/native-code
+```
+
+Preparation verifies lock/runtime fingerprints before copying the exact consumer-native harness and records source/adapted script hashes. Use Windows PowerPoint only for this compatibility check; it is not a package dependency. Local Courier New bytes are neither redistributed nor embedded. Unrelated presentations remain open.
+
 ## Remaining integration gates
 
-- Add code source/metadata/guard tests and actual editor/browser workflows to fresh installed-tarball verification. Keep historical registry harnesses pinned to their published implementation; no new code version is released yet.
-- Advance coordinated source CI to the exact consumer commits above and the reviewed code raster manifest; complete the full Node 20/24 source/tarball/registry matrices and review before opening/merging release PRs.
+- Complete the full Linux Node 20/24 source/tarball/registry matrices and review with the new installed-code gates, exact consumer commits and reviewed code raster manifest now wired into coordinated CI. Keep historical registry harnesses pinned to their published implementation; no new code version is released yet.
 - Prepare versions and publish core/CLI and consumers in dependency order, then refresh registry lockfiles, verify exact registry bytes/provenance and update the core published release plan/immutable refs.
 - Update public deployments only after the new complete published set passes its public workflows. Continue the full repair, Auto arrange, other payload internals and font/native-platform objective.
 
