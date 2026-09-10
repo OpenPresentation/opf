@@ -1,6 +1,10 @@
 # Shared metric integration — source checkpoint
 
-## Current checkpoint: vector outlines, shared text placement and native heading roles
+## Current checkpoint: source wrap-up and split continuation
+
+The [September 10 wrap-up](../handoff-2026-09-10-wrap-up.md) records the integration PRs, coordinated source/candidate CI, reviewed regression baseline and two-machine ownership. The source milestone does not publish new packages or close native/font/layout quality gates. Preserve the historical evidence below and use the new handoff for current status and continuation prompts.
+
+## Previous checkpoint: vector outlines, shared text placement and native heading roles
 
 Core `ac0c99fcdc03dd7cd7ac9840be841b903a941f77`, renderer `53e6f5fb5911ebecbfcdfef341bbb53e33c1f7a5`, PPTX `12c6cee646a5c8760dcbf964b722a108d21687b4` and editor `0e8a1676c780919ceefe8b9972372f364e542944` implement [the outline/placement contract](text-placement.md). [Evidence](../evidence/text-placement/README.md) records 598 hashed artifacts, Node20/24 checks, current native connection failure and all remaining gates. No version, baseline, immutable release ref or public deployment advanced.
 
