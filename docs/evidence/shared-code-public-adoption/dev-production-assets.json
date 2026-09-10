@@ -1,0 +1,361 @@
+{
+  "checkedAt": "2026-09-10T08:35:57.303Z",
+  "baseURL": "https://www.pptx.dev",
+  "mode": "production",
+  "browser": "152.0.4191.66",
+  "assets": {
+    "/opf-fonts/Carlito-400-normal-ca019755404c.ttf": {
+      "bytes": 593908,
+      "sha256": "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89"
+    },
+    "/opf-fonts/Carlito-400-italic-074cd1b89d53.ttf": {
+      "bytes": 580792,
+      "sha256": "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5"
+    },
+    "/opf-fonts/Carlito-700-normal-51edbfa32d8a.ttf": {
+      "bytes": 648128,
+      "sha256": "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0"
+    },
+    "/opf-fonts/Carlito-700-italic-25f5672c1985.ttf": {
+      "bytes": 745192,
+      "sha256": "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691"
+    },
+    "/opf-fonts/Caladea-400-normal-59faf27a90de.ttf": {
+      "bytes": 77020,
+      "sha256": "59faf27a90dee5c1b7813b12b26c725ea88adc1bfe37b0ac8e0b8b32a5732c2a"
+    },
+    "/opf-fonts/Caladea-400-italic-669e65b265d4.ttf": {
+      "bytes": 77336,
+      "sha256": "669e65b265d40899b59d7f3531ca136b7e0fda80a3d1b5d47bbe7825be81fbe3"
+    },
+    "/opf-fonts/Caladea-700-normal-11d1e1dc461d.ttf": {
+      "bytes": 79648,
+      "sha256": "11d1e1dc461d1e491b6a396d91934c3bb09d06a77cc3d21ad0b10346c39c3ec2"
+    },
+    "/opf-fonts/Caladea-700-italic-93d7c2003fe3.ttf": {
+      "bytes": 78792,
+      "sha256": "93d7c2003fe3fd8381cbd518af6cc2f4b510a37c7741c49a95893b6da8edbbc7"
+    },
+    "/opf-fonts/Arimo-400-normal-88cc899855d3.ttf": {
+      "bytes": 318320,
+      "sha256": "88cc899855d30f9c779b73c3319d0e077b098f927187aafce11ca029add707a6"
+    },
+    "/opf-fonts/Arimo-400-italic-6bd2c6a6fa87.ttf": {
+      "bytes": 340984,
+      "sha256": "6bd2c6a6fa87f4566cf0a92c5834884597acbd7be9719e550837865ac4167a42"
+    },
+    "/opf-fonts/Arimo-700-normal-ec96ac9fdd94.ttf": {
+      "bytes": 318844,
+      "sha256": "ec96ac9fdd94766f66f6140c1375bf011577558f88d43f76b3b59307d2a6bca3"
+    },
+    "/opf-fonts/Arimo-700-italic-b42b19c10bf5.ttf": {
+      "bytes": 342368,
+      "sha256": "b42b19c10bf5d526f00068303a643282c3df55a79c6fa2eea80b4a078a4a705a"
+    },
+    "/opf-fonts/Tinos-400-normal-924ef269e73d.ttf": {
+      "bytes": 508752,
+      "sha256": "924ef269e73da94c1803ff68877f5d998dd16605c5ffad82ee181034f8a1fffe"
+    },
+    "/opf-fonts/Tinos-400-italic-4a52de5bcf70.ttf": {
+      "bytes": 549824,
+      "sha256": "4a52de5bcf70e37bd71949f8a85302b75795a1943aedffbbee4f2db7744e1c81"
+    },
+    "/opf-fonts/Tinos-700-normal-576a19b5dc02.ttf": {
+      "bytes": 583484,
+      "sha256": "576a19b5dc026cafe6ae8fde4c849588dae6475cf5d912cebdf2827388c43ad9"
+    },
+    "/opf-fonts/Tinos-700-italic-10c90ef7896d.ttf": {
+      "bytes": 563688,
+      "sha256": "10c90ef7896d758923c06a1485d7824cdb457466da0bf7d42f81c5228931281b"
+    },
+    "/opf-fonts/Cousine-400-normal-ca2264d6750d.ttf": {
+      "bytes": 289556,
+      "sha256": "ca2264d6750d6c47df703be4486361a37ab943d42de6ea2bf794b7c7af767799"
+    },
+    "/opf-fonts/Cousine-400-italic-f1626b7287db.ttf": {
+      "bytes": 298680,
+      "sha256": "f1626b7287db36af8ba2ff88840c82f121f4cbda8971fe3f717f975e9fd782a8"
+    },
+    "/opf-fonts/Cousine-700-normal-f03c46c4bc5c.ttf": {
+      "bytes": 290500,
+      "sha256": "f03c46c4bc5c0a3af4a1f4fbe5e3e16954581cced05cea20b3bffe12740d99d3"
+    },
+    "/opf-fonts/Cousine-700-italic-acb798f3629c.ttf": {
+      "bytes": 300160,
+      "sha256": "acb798f3629cda0041fbd6234237cf549a1b932792f2a71b0986eb3e1382ed37"
+    },
+    "/opf-fonts/Gelasio-400-normal-44aae47442ad.ttf": {
+      "bytes": 105512,
+      "sha256": "44aae47442ad39e623788930f38f1e702febcf094c284c5058bf49f7da23de9a"
+    },
+    "/opf-fonts/Gelasio-400-italic-2b24b3d41c06.ttf": {
+      "bytes": 107376,
+      "sha256": "2b24b3d41c06d030a31db6610454595775e572a2992d73171cab783407d202a8"
+    },
+    "/opf-fonts/Gelasio-700-normal-fade86eca522.ttf": {
+      "bytes": 105776,
+      "sha256": "fade86eca52203e2ccaf9aee494aa4b0335589879738c47e9d92a53630696d10"
+    },
+    "/opf-fonts/Gelasio-700-italic-24f1cb5cf5f7.ttf": {
+      "bytes": 107452,
+      "sha256": "24f1cb5cf5f765acc5d744a54a6c5dfe34723e58842f5b1b696716497e032852"
+    },
+    "/opf-fonts/Roboto-400-normal-15256405ecb0.ttf": {
+      "bytes": 159108,
+      "sha256": "15256405ecb0d880678833a582760efad538ab2932318b52c8105b267d159459"
+    },
+    "/opf-fonts/Roboto-Medium-500-normal-79343dc641a2.ttf": {
+      "bytes": 159296,
+      "sha256": "79343dc641a2e8d48a703a4667b71fc8dc6565cc8ce47dfc34fc52c12aadbf38"
+    },
+    "/opf-fonts/Roboto-SemiBold-600-normal-32fe2086b0e5.ttf": {
+      "bytes": 159876,
+      "sha256": "32fe2086b0e54eca85a68eb74e3d89bb16a7ffe59085d6dc7d079f5b3c26d6ab"
+    },
+    "/opf-fonts/Roboto-700-normal-4aaf8c5b661a.ttf": {
+      "bytes": 159900,
+      "sha256": "4aaf8c5b661a386998c2e70cf2b87e2440f5404e0b8fd81164f0413fb3435ec6"
+    },
+    "/opf-fonts/Roboto-ExtraBold-800-normal-43d5ce98c583.ttf": {
+      "bytes": 160012,
+      "sha256": "43d5ce98c58336045220fa1dac2bd22281b1aab3eca66785cb34eb3ad1dfe1a5"
+    },
+    "/opf-fonts/Roboto-400-italic-6a372c348dc2.ttf": {
+      "bytes": 165268,
+      "sha256": "6a372c348dc20c246b92d60b9bda3c0a9ffedc129790ed3f31faf89daa99d793"
+    },
+    "/opf-fonts/Roboto-700-italic-c6a5e7c224d3.ttf": {
+      "bytes": 166256,
+      "sha256": "c6a5e7c224d3bf6698e5d3c124f0f0220cad20d5d413920447a96f033a0292ee"
+    },
+    "/opf-fonts/Roboto-Mono-400-normal-e4bf45837847.ttf": {
+      "bytes": 87540,
+      "sha256": "e4bf45837847d4abfa5a502b807a83393aa138727bdb9ea9c93fb17d53208d95"
+    },
+    "/opf-fonts/Roboto-Mono-700-normal-92649d819cc4.ttf": {
+      "bytes": 87696,
+      "sha256": "92649d819cc4c20480b23a47aaa111769924eb31c66b6ecdcf6f573662558c83"
+    }
+  },
+  "scripts": {
+    "/_next/static/immutable/chunks/1bjy9n50tf86m.js": {
+      "bytes": 9664,
+      "sha256": "64419d06ba06d0dde2bb423315a8a4baabe50dc9d3cdc4fd98d575355477cf77"
+    },
+    "/_next/static/immutable/chunks/0j13ko0htrqtv.js": {
+      "bytes": 28280,
+      "sha256": "9e0f7c876defd1c2744021566cbf1be9d3c588737f13888dd98a82eda926e7dc"
+    },
+    "/_next/static/immutable/chunks/0bypp5pxzkpm8.js": {
+      "bytes": 32165,
+      "sha256": "a41091e63e41f0a6e55f63de396be1fa6c0d815b454946aa5d6a7a66f7461156"
+    },
+    "/_next/static/immutable/chunks/1jfrnkitvod9_.js": {
+      "bytes": 41016,
+      "sha256": "3b44609c575ce4a6320c3e14bd83c5b047efc64b8582198ad1a0946fde95a89f"
+    },
+    "/_next/static/immutable/chunks/2e6hdmng1ykct.js": {
+      "bytes": 204608,
+      "sha256": "0e777e79dc13528f47c9d9b6a07aeca3bc9a9931be5764d1058bbf81db5d2e4d"
+    },
+    "/_next/static/immutable/chunks/2-r6_23-fjf-s.js": {
+      "bytes": 37093,
+      "sha256": "2087544d4bbf30ee119dcd924e17b4125cc94297e47e94f44cae36a2e7b8b338"
+    },
+    "/_next/static/immutable/chunks/2-lagrolmjz0b.js": {
+      "bytes": 829,
+      "sha256": "632a48b657ebfd16a8178fc1d0d9082a880acd517cf9a6a9e9d8ff75dba897d3"
+    },
+    "/_next/static/immutable/chunks/17k02l71mtsj_.js": {
+      "bytes": 1759,
+      "sha256": "cc30d20ee9a4b9905725e3f042233ae6cfdb31c885254e5e71c8c5302b80e424"
+    },
+    "/_next/static/immutable/chunks/turbopack-3bhl784rb1z-2.js": {
+      "bytes": 11073,
+      "sha256": "9715f13ac6ad7631a9e7a8637964e35dbd31163c547915e7b871e7a22c30ff3e"
+    },
+    "/_next/static/immutable/chunks/43upj6bxwdepw.js": {
+      "bytes": 114874,
+      "sha256": "b12bb9cf52dda403c585e7abf5cf01b7d931c0030b60c06b1cbc26487dfcebcc"
+    },
+    "/_next/static/immutable/chunks/0kh0s5et-kkqk.js": {
+      "bytes": 54578,
+      "sha256": "f05849bb9bb6ae2f777e2153f0882e0b5e65df720b73022a21cb152a61c723fa"
+    },
+    "/_next/static/immutable/chunks/3mg56xnkwktgr.js": {
+      "bytes": 115580,
+      "sha256": "7465ba6902b252078ad5947ff7b83df6888449fa8797e994c8e5429ad7df9279"
+    },
+    "/_next/static/immutable/chunks/1o1o2feikjkd1.js": {
+      "bytes": 14227,
+      "sha256": "8ce923bec18243664e9e55e0d4c0677b8b6cad9cf1fd3b8eeb7b4309f062e45e"
+    },
+    "/_next/static/immutable/chunks/1pldp2pjeilkv.js": {
+      "bytes": 166409,
+      "sha256": "20eacf811c798988bad56a1657496db9e3b1115d82c3bc5040ee2e1b12594a8e"
+    },
+    "/307bf2999b17c6fb/script.js": {
+      "bytes": 3106,
+      "sha256": "0bd2ad276f13ba1712f7444a40f1313df6399b920a64ede78922deeddc5d3408"
+    },
+    "/_next/static/immutable/chunks/0i9gw28tkqv9s.js": {
+      "bytes": 33542,
+      "sha256": "eba06e965421104840aa41c7295a75f7d5f6eefed46af5be404eb3f341772bdc"
+    },
+    "/_next/static/immutable/chunks/0_-kt8naw9vzn.js": {
+      "bytes": 27345,
+      "sha256": "199e7dea967031c788cb45b9016ee08337fe41ff795ae9be4cb4ad760778bb4d"
+    },
+    "/_next/static/immutable/chunks/3w4tcmg4-ew_k.js": {
+      "bytes": 41445,
+      "sha256": "e26b356662c7ac7736ea3b6c84cb9e513ffc49eb0eaba6bd44b58671a267ee22"
+    },
+    "/_next/static/immutable/chunks/0pqs7mvm-34vq.js": {
+      "bytes": 37196,
+      "sha256": "22caa07bd52aee4c8034c4c452ab308e7214b77cdb76187d1712014a0ac1147b"
+    },
+    "/_next/static/immutable/chunks/3i1xi9fo27pk0.js": {
+      "bytes": 77821,
+      "sha256": "747a3e31f01f87f73c079e556f08a49651c308b3876f7501d2b926455f3ff8f6"
+    },
+    "/_next/static/immutable/chunks/1jv8axzc2qe4l.js": {
+      "bytes": 47194,
+      "sha256": "3645e0cf8b5e1e773d87bf9d152a67fa6bb9eccf233186fd227b174f1ef48d85"
+    },
+    "/_next/static/immutable/chunks/3qlcd3bkvphfv.js": {
+      "bytes": 110159,
+      "sha256": "cc6f43eb1d9695422050c3eb6839e783fc5867ab575d3e43598451e1c6a1270b"
+    },
+    "/_next/static/immutable/chunks/0r264a-wjl9bb.js": {
+      "bytes": 239057,
+      "sha256": "e4565cfb6973f84dfb5bbbf62336e75a6f36aa078de73ec60155a8454ac06aed"
+    },
+    "/_next/static/immutable/chunks/111ym_e2ndcdo.js": {
+      "bytes": 32408,
+      "sha256": "127e73a71af20150242aec334973d2e38db8128ecb8017458dec1046cd198dfd"
+    },
+    "/_next/static/immutable/chunks/2738ssmf8i58e.js": {
+      "bytes": 51815,
+      "sha256": "751a0e8186ec1047dba26cb9f602f22433518839eb9d45e35ceffdadbf95d081"
+    },
+    "/_next/static/immutable/chunks/2fv8hig6prco8.js": {
+      "bytes": 263870,
+      "sha256": "05bcdd87a19bf028fc286d2a79ead5c9baba9a83d03f67a023f215354d24b8d2"
+    },
+    "/_next/static/immutable/chunks/2asp3hza0f9xe.js": {
+      "bytes": 28761,
+      "sha256": "64e06e8c1d9fb7fb8fd40f9d2aaf655b7c2e430676d95638d1439aa8b8d4227b"
+    },
+    "/_next/static/immutable/chunks/2h5iyuoa1sxg-.js": {
+      "bytes": 358311,
+      "sha256": "f6eb5250677500ae9cb127df98b20aa847442e18cbb66a4318ed4165ebb566f3"
+    },
+    "/_next/static/immutable/chunks/3rz_z0pmgqjzp.js": {
+      "bytes": 1261,
+      "sha256": "a377f2bde1f66207cb3accf60a1841429478274a6e0c32ccac7c76d2feffc661"
+    },
+    "/_next/static/immutable/chunks/28g1e5y57pxrm.js": {
+      "bytes": 22089,
+      "sha256": "00a92e0b14bf952d5bc2e8791b46349dbbb4d8927dfa44411172f80ad4ef3afe"
+    },
+    "/_next/static/immutable/chunks/20y5laky0e_36.js": {
+      "bytes": 50985,
+      "sha256": "a8d38bac888d57f466942161dc015d1ceaa13227741c11375c7464b54691c7ba"
+    },
+    "/_next/static/immutable/chunks/31ow4zyn3vtj1.js": {
+      "bytes": 620818,
+      "sha256": "ea0ad4c49a97c0776098579ae5a53f816098324bc3aee01062c35f3e1e32a341"
+    },
+    "/_next/static/immutable/chunks/3rhudznu6_wvk.js": {
+      "bytes": 714195,
+      "sha256": "12de61b18b54beca08099430b2723873a80d7c0208f831a2bc5ce888623cefce"
+    },
+    "/_next/static/immutable/chunks/25uqm7b1c4992.js": {
+      "bytes": 1272568,
+      "sha256": "2b285911e7d271512936a3a9f58f1d2bc62308122d41262d5a83f206e3d6e404"
+    },
+    "/_next/static/immutable/chunks/3g5yp2sxazehx.js": {
+      "bytes": 2492675,
+      "sha256": "dad45988c4b0bff50f7c0707077df563b437af75d4980cd7860143d78dbe69a9"
+    },
+    "/_next/static/immutable/chunks/turbopack-worker-2g80pj3ycf14_.js": {
+      "bytes": 849,
+      "sha256": "861da5809b4f43b053fab88fe560f16efe31827655a06502ada9274a742852de"
+    },
+    "/_next/static/immutable/chunks/1p4nvwyp54e0n.js": {
+      "bytes": 227,
+      "sha256": "78ebc8c8ab32c59dde1b3a551b7690ae684cb298ff9f08a3e420c4fc35ae0294"
+    },
+    "/_next/static/immutable/chunks/3b-heh9e8sclc.js": {
+      "bytes": 25484,
+      "sha256": "fc53bcad41411050baa2a0d3d8dabb29d72080af1cfda4b88db0eb86aabb3730"
+    },
+    "/_next/static/immutable/chunks/0e_ekc1i80th_.js": {
+      "bytes": 79732,
+      "sha256": "d2b71e0b8c9bf66b84b26a607092124e4eb3d574985b873f13a24bd919679202"
+    },
+    "/_next/static/immutable/chunks/1z_d832osmvtt.js": {
+      "bytes": 30509,
+      "sha256": "d1da0792c355ded825d2ff6a5270e2ff80da7d12a9a907ad9a26d36398e47ec2"
+    },
+    "/_next/static/immutable/chunks/432v-e5l_76ah.js": {
+      "bytes": 18579,
+      "sha256": "d83c0375ac00bdd76caa13eaf0066da26bc858c204dadf88597c539cf85fe171"
+    },
+    "/_next/static/immutable/chunks/turbopack-379pf_jijwoj_.js": {
+      "bytes": 10901,
+      "sha256": "8db711d39c68c05607b860630081c629529eb0cfed32acc9e49ec243c7883e16"
+    },
+    "/_next/static/immutable/chunks/1ususoxgrkoxs.js": {
+      "bytes": 529662,
+      "sha256": "2cbe5125abb0f5d3a753ecc623b046544820f60a666484c56964d873fa1e8d9a"
+    },
+    "/_next/static/immutable/chunks/turbopack-13rt2q77kirsj.js": {
+      "bytes": 10987,
+      "sha256": "5e2551898e1a87770f49c164c7c0c97a835796a9cace495c65feec068bbbdb8f"
+    },
+    "/_next/static/immutable/chunks/0x5b9spkl8qc9.js": {
+      "bytes": 25943,
+      "sha256": "6660ada253a615ca382db0a42c5e505c1fd61d873dd45a4254d00f19f40f421b"
+    },
+    "/_next/static/immutable/chunks/14xtrtee8fs0x.js": {
+      "bytes": 84520,
+      "sha256": "97182a1ee2b76135d5f5188b056cdea754af742982a0fd9b83f3f3597c6b1034"
+    },
+    "/_next/static/immutable/chunks/0j129-jm14ekk.js": {
+      "bytes": 43431,
+      "sha256": "ca83e96ce0eef77cad48e408c9a1c341b1abf61a56736d2069992792855d8e1f"
+    },
+    "/_next/static/immutable/chunks/13mk_w_sjt2_v.js": {
+      "bytes": 27719,
+      "sha256": "56b95fbf51a3355ebe60cceee2bf54339b1528effead5a8d3b2e166cf6dca4e3"
+    },
+    "/_next/static/immutable/chunks/1dsnwd3eqimna.js": {
+      "bytes": 2516,
+      "sha256": "ab332a50dd0bed70abd7ad025c60e17cc157c9761cc88da6d06660ff22ac6b11"
+    },
+    "/_next/static/immutable/chunks/0l756typ4nt_h.js": {
+      "bytes": 708,
+      "sha256": "7f00d8f63ac172557e3d89448fc77ae7ab48eec544ed0dfd01aa6a95e250cfc8"
+    },
+    "/_next/static/immutable/chunks/1lekf-e_uwht2.js": {
+      "bytes": 35668,
+      "sha256": "847f0946adefbe00200f35cbdb8db39d86896ae65644978cc68ca50794bd5e7c"
+    },
+    "/_next/static/immutable/chunks/1rj8l7rhv___g.js": {
+      "bytes": 37251,
+      "sha256": "4b8bc9368e2544e8dee5e0e2bebd63146a8d4852f49ac3ab5ddea0202d78294c"
+    },
+    "/_next/static/immutable/chunks/37-dw913eyc9b.js": {
+      "bytes": 6103,
+      "sha256": "a850497bd65b90f7ae2d04be4fa4bc528e1a916121475396178cacc3444ababd"
+    }
+  },
+  "pages": [
+    "/author",
+    "/inspector",
+    "/docs/opf-toolkit"
+  ],
+  "fontSource": "@openpresentation/opf-render@0.7.0",
+  "boundary": "Manifest assets are byte-verified against this checkout. Next.js JavaScript fingerprints record served bundles; minified chunks are not asserted byte-identical to npm source. Browser workflow and native PowerPoint evidence remain separate."
+}

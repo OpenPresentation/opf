@@ -1,0 +1,51 @@
+{
+  "passed": true,
+  "powerpointVersion": "16.0",
+  "slides": 1,
+  "nativeTables": 1,
+  "editedAndReopened": true,
+  "sourceSha256": "383512f28856d1b0d86ddd378d63b5a529e9928983743d9ebac72d99200c8ac4",
+  "savedSha256": "4a340b08427f8ee893b2ddcd760ad89316540b07518d94efd4929cd7ec14f6fd",
+  "raster": "dev-production-native.png",
+  "nativeSavedReimportValid": true,
+  "nativeSavedReimportTables": 1,
+  "environment": {
+    "windows": {
+      "revision": 9445,
+      "displayVersion": "25H2",
+      "build": "26200",
+      "product": "Windows 10 Home"
+    },
+    "culture": "en-US",
+    "uiCulture": "en-US",
+    "powerPointVersion": "16.0",
+    "executable": {
+      "fileVersion": "16.0.20326.20132",
+      "sha256": "90fa931172c507b763ba92a82b19d5bc70816e008c5bb87577e1838e8a92e9f9",
+      "productVersion": "16.0.20326.20132"
+    }
+  },
+  "environmentNote": "Windows build 26200.9445 / 25H2; ProductName is the registry string and is not used to infer the current marketing OS name.",
+  "deployment": {
+    "key": "dev",
+    "mode": "production",
+    "id": "dpl_FsecBQDSBH2JiBeEYyV8hsN5ggek",
+    "sha": "0004d4ceb595fc2ed8b561d4c8d7648cab1bc8a1",
+    "url": "https://pptx-e38tl1v08-dataadvantage.vercel.app",
+    "projectId": "prj_v8NIINr5fgzK9yoAQRy0CNoDPqC8",
+    "state": "READY",
+    "source": "git",
+    "target": "production",
+    "aliases": [
+      "api.pptx.dev",
+      "mcp.pptx.dev",
+      "www.pptx.dev",
+      "pptx-dev.vercel.app",
+      "pptx.dev",
+      "pptx-dev-dataadvantage.vercel.app",
+      "pptx-dev-git-master-dataadvantage.vercel.app"
+    ]
+  },
+  "visuallyInspected": true,
+  "scope": "One public Author export exposes an editable native title and table. The native edit survives save/reopen and valid controlled reimport. This is separate from the eight code/twelve quote registry-native fixtures and does not establish pixel equivalence."
+}

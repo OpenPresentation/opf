@@ -1,0 +1,84 @@
+{
+  "deployment": {
+    "key": "dev",
+    "mode": "production",
+    "id": "dpl_FsecBQDSBH2JiBeEYyV8hsN5ggek",
+    "sha": "0004d4ceb595fc2ed8b561d4c8d7648cab1bc8a1",
+    "url": "https://pptx-e38tl1v08-dataadvantage.vercel.app",
+    "projectId": "prj_v8NIINr5fgzK9yoAQRy0CNoDPqC8",
+    "state": "READY",
+    "source": "git",
+    "target": "production",
+    "aliases": [
+      "api.pptx.dev",
+      "mcp.pptx.dev",
+      "www.pptx.dev",
+      "pptx-dev.vercel.app",
+      "pptx.dev",
+      "pptx-dev-dataadvantage.vercel.app",
+      "pptx-dev-git-master-dataadvantage.vercel.app"
+    ]
+  },
+  "browser": "Microsoft Edge 152.0.4191.66",
+  "stats": {
+    "startTime": "2026-09-10T08:34:50.742Z",
+    "duration": 36658.14,
+    "expected": 10,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "cases": [
+    {
+      "file": "author.spec.ts",
+      "title": "anonymous code editing preserves source and visible selection through offline export/reimport at 1280x720",
+      "durationMs": 5762
+    },
+    {
+      "file": "author.spec.ts",
+      "title": "anonymous code editing preserves source and visible selection through offline export/reimport at 540x960",
+      "durationMs": 3970
+    },
+    {
+      "file": "author.spec.ts",
+      "title": "anonymous Author canvas edits survive tab changes, offline PowerPoint export and undoable reimport",
+      "durationMs": 6064
+    },
+    {
+      "file": "inspector.spec.ts",
+      "title": "published long quotes retain their footer in actual wide/portrait previews and PowerPoint downloads",
+      "durationMs": 2851
+    },
+    {
+      "file": "inspector.spec.ts",
+      "title": "shared navigation clears format errors and proposals from the previous deck",
+      "durationMs": 2419
+    },
+    {
+      "file": "inspector.spec.ts",
+      "title": "anonymous JSON authoring, preview, undo/redo, download and shared reimport",
+      "durationMs": 3213
+    },
+    {
+      "file": "monaco.spec.ts",
+      "title": "bundled JSON worker provides schema diagnostics, completion and recovery offline",
+      "durationMs": 2736
+    },
+    {
+      "file": "svg-security.spec.ts",
+      "title": "published SVG renderer keeps hostile shared and imported document strings inert",
+      "durationMs": 3496
+    },
+    {
+      "file": "toolkit.spec.ts",
+      "title": "public toolkit shows the deployed package set with working render, edit and export proofs",
+      "durationMs": 1379
+    },
+    {
+      "file": "yaml.spec.ts",
+      "title": "YAML and Markdown editing preserve OPF values and recover from malformed YAML offline",
+      "durationMs": 3944
+    }
+  ],
+  "scope": "Actual remote app with essential authoring/editor operations performed offline after required local assets load. No native raster equivalence inferred."
+}

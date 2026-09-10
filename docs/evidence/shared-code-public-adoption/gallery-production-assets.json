@@ -1,0 +1,108 @@
+{
+  "checkedAt": "2026-09-10T08:39:28.083Z",
+  "baseURL": "https://www.pptx.gallery",
+  "mode": "production",
+  "browser": "152.0.4191.66",
+  "assets": {
+    "/opf-editor/index.html": {
+      "bytes": 17496,
+      "sha256": "df3c5952c572fec526504eef03696748461835900b31731421f660fed4306159"
+    },
+    "/opf-editor/playground.js": {
+      "bytes": 1743491,
+      "sha256": "7a9f6296a2749f92bb03a9cbdd21bcdd522fd853abd28522017c54d78907043a"
+    },
+    "/opf-editor/playground.js.LEGAL.txt": {
+      "bytes": 77842,
+      "sha256": "98bf99a5bed9d0b6deeb12457d368a12dfbde1b55dac473dd282922ced66cb42"
+    },
+    "/opf-editor/playground.css": {
+      "bytes": 21332,
+      "sha256": "369f7d0ca6249e1fee44f58351be986de3d4f0f6bd8396fd1ffb927eb22ec183"
+    },
+    "/opf-editor/fonts.json": {
+      "bytes": 12574387,
+      "sha256": "c697f3979d65cb65482400d163604a8b4ac299e788702b8d3a502cce3f284c8d"
+    },
+    "/opf-editor/galleries.json": {
+      "bytes": 166,
+      "sha256": "58f9f58c7473843b5e76459b1d83dbece829e6095e6ff364d9ecd36c96dcc743"
+    },
+    "/opf-editor/gallery.json": {
+      "bytes": 753879,
+      "sha256": "66c62f8e58855859aed1092b1dc149a6d99542ab333132d76349049d489e3492"
+    },
+    "/opf-editor/opf-spec.json": {
+      "bytes": 305742,
+      "sha256": "d90eb126c47bef5bc2f7c3d7d6b0dc279082c980db8d1c8e1e426c0996d401dd"
+    }
+  },
+  "scripts": {
+    "/opf-editor/playground.js": {
+      "bytes": 1743491,
+      "sha256": "7a9f6296a2749f92bb03a9cbdd21bcdd522fd853abd28522017c54d78907043a"
+    }
+  },
+  "pages": [
+    "/opf-editor/index.html"
+  ],
+  "manifest": {
+    "source": "npm",
+    "packages": [
+      {
+        "name": "@openpresentation/opf",
+        "version": "0.9.0",
+        "tarball": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.9.0.tgz",
+        "integrity": "sha512-AnduMR/bPFKJv2fYT+cYEINLkiZmN0xuVBETcNzkU6IC7GdgTyb+x5fCiODHcowfrLIJJEjZ8jZzZJGBrxnX5A=="
+      },
+      {
+        "name": "@openpresentation/opf-render",
+        "version": "0.7.0",
+        "tarball": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.7.0.tgz",
+        "integrity": "sha512-eHBMbnmK5bELUmUwJ/qWRtJBIZFkUJsbUvkjzSc6yhNA2JQ2Em/My9+Of4c79y0tXrFCQaZ5xvOkOdtyGUu5Gw=="
+      },
+      {
+        "name": "@openpresentation/opf-editor",
+        "version": "0.6.0",
+        "tarball": "https://registry.npmjs.org/@openpresentation/opf-editor/-/opf-editor-0.6.0.tgz",
+        "integrity": "sha512-ySUZWdQuq8PgkOOkrT8m0xm+Ta0WGWcI8TtLZbyaNxe9lKubrX5MQRNVuqaJKr0TdWn8kvfN5PuKR0JUTbPuOQ=="
+      },
+      {
+        "name": "@openpresentation/opf-pptx",
+        "version": "0.7.0",
+        "tarball": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.7.0.tgz",
+        "integrity": "sha512-U/nqxWqkMQ/ZWxyW6DP8Ut1k/BlDDuD8nvhlIHoW0UpDqMxZTwQKo//p4QcBwJUK+ZZ1uklJwrxuzRdIZ9fY/A=="
+      },
+      {
+        "name": "@openpresentation/cli",
+        "version": "0.7.0",
+        "tarball": "https://registry.npmjs.org/@openpresentation/cli/-/cli-0.7.0.tgz",
+        "integrity": "sha512-Pk8ZYXwVdYo+wYcBPAKvB1wNtZ2XzfqfLsOoAHnGlge7nS+DVUFGfwycZD/urVarlskCXH5xJwztwzuCnazuBA=="
+      }
+    ],
+    "editorExamples": {
+      "commit": "fa4acf1c2108fd831d10ceb803fd708e908a4e17",
+      "files": {
+        "playground.js": "e8f0bc6af34cff26f1ad92af55a47f4e8ba28a890e823940ed2828e567b20414",
+        "data-controls.js": "75a8a380eb8dbf88a2333b31c777c07e3da27374c6e76c01623cf24bf79dc523",
+        "transfer-controls.js": "c709c07bb0818ccac58dcf0452a399dd0d7dcfdb82891e7fe1758f6b20d83c4e",
+        "pptx-controls.js": "9ac27802a5eb64b5470b7bab4a50f2315e131e10e5b9c2fe0bd56335a42f92d2",
+        "playground.html": "6508a2f4d06208ba916c809a0a4ff9bb666817d5fdc934cbb86bf06e866fa99c",
+        "playground.css": "369f7d0ca6249e1fee44f58351be986de3d4f0f6bd8396fd1ffb927eb22ec183",
+        "galleries.json": "58f9f58c7473843b5e76459b1d83dbece829e6095e6ff364d9ecd36c96dcc743"
+      }
+    },
+    "galleryDocuments": 126,
+    "files": {
+      "index.html": "df3c5952c572fec526504eef03696748461835900b31731421f660fed4306159",
+      "playground.js": "7a9f6296a2749f92bb03a9cbdd21bcdd522fd853abd28522017c54d78907043a",
+      "playground.js.LEGAL.txt": "98bf99a5bed9d0b6deeb12457d368a12dfbde1b55dac473dd282922ced66cb42",
+      "playground.css": "369f7d0ca6249e1fee44f58351be986de3d4f0f6bd8396fd1ffb927eb22ec183",
+      "fonts.json": "c697f3979d65cb65482400d163604a8b4ac299e788702b8d3a502cce3f284c8d",
+      "galleries.json": "58f9f58c7473843b5e76459b1d83dbece829e6095e6ff364d9ecd36c96dcc743",
+      "gallery.json": "66c62f8e58855859aed1092b1dc149a6d99542ab333132d76349049d489e3492",
+      "opf-spec.json": "d90eb126c47bef5bc2f7c3d7d6b0dc279082c980db8d1c8e1e426c0996d401dd"
+    }
+  },
+  "boundary": "Manifest assets are byte-verified against this checkout. Next.js JavaScript fingerprints record served bundles; minified chunks are not asserted byte-identical to npm source. Browser workflow and native PowerPoint evidence remain separate."
+}
