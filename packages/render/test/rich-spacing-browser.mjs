@@ -25,9 +25,9 @@ try {
     const fixture=examples.find(example=>example.file.endsWith('/'+name+'.opf.json'));assert.ok(fixture);
     const source=JSON.stringify(fixture.deck),slideIndex=5;
     if(out)await writeFile(path.join(out,name+'.opf.json'),source+'\n');
-    for(const mode of ['estimated','measured']) {
+    for(const mode of ['estimated','measured']) for(const rendering of ['default','geometricPrecision']) {
       const options={trace:true,slideIndex,...(mode==='measured'?{textMeasurement:fonts.textMeasurement}:{})};
-      const bound=resolvePresentation(fixture.deck,options).slides[slideIndex],svg=renderSvg(fixture.deck,options);
+      const bound=resolvePresentation(fixture.deck,options).slides[slideIndex],svg=renderSvg(fixture.deck,options).replace('<svg ',rendering==='default'?'<svg ':'<svg text-rendering="geometricPrecision" ');
       assert.equal(JSON.stringify(fixture.deck),source);
       const items=bound.geometry.items.filter(item=>item.field==='text'&&item.text?.richLines);assert.ok(items.length);
       const expected=items.map(item=>({path:item.path,source:item.value,lines:item.text.richLines}));
@@ -59,8 +59,8 @@ try {
       const fragments=result.parts.flatMap(part=>part.fragments);
       const maxAdvanceDifference=Math.max(...fragments.map(fragment=>Math.abs(fragment.widthDifference)));
       const maxBoundaryGap=Math.max(...fragments.map(fragment=>Math.abs(fragment.gapAfterPreviousFragment??0)));
-      results.push({name,mode,sourceSha256:hash(source),svgSha256:hash(svg),...result,maxAdvanceDifference,maxBoundaryGap});
-      if(out){await writeFile(path.join(out,`${name}-${mode}.svg`),svg);await page.locator('svg').screenshot({path:path.join(out,`${name}-${mode}.png`)});}
+      results.push({name,mode,rendering,sourceSha256:hash(source),svgSha256:hash(svg),...result,maxAdvanceDifference,maxBoundaryGap});
+      if(out){await writeFile(path.join(out,`${name}-${mode}-${rendering}.svg`),svg);await page.locator('svg').screenshot({path:path.join(out,`${name}-${mode}-${rendering}.png`)});}
 
     }
   }
@@ -69,6 +69,6 @@ try {
     fonts:faces.map(face=>({family:face.family,weight:face.weight,italic:face.italic,sha256:hash(Buffer.from(face.dataUrl.split(',')[1],'base64'))})),results,errors,requests,
     scope:'Two unchanged gallery slides with exact Carlito bytes in both modes; estimated control registers those bytes under the authored Aptos names to isolate measurement differences. Measured mode explicitly resolves Aptos to Carlito as a visual substitute. Rich source mapping, advances and fragment spacing are checked, not font compatibility, all-slide visual quality, native export or pixel equivalence.'};
   if(out)await writeFile(path.join(out,'report.json'),JSON.stringify(report,null,2)+'\n');
-  console.log(JSON.stringify(results.map(({name,mode,maxAdvanceDifference,maxBoundaryGap})=>({name,mode,maxAdvanceDifference,maxBoundaryGap})),null,2));
+  console.log(JSON.stringify(results.map(({name,mode,rendering,maxAdvanceDifference,maxBoundaryGap})=>({name,mode,rendering,maxAdvanceDifference,maxBoundaryGap})),null,2));
   for(const result of results){assert.ok(result.maxBoundaryGap<.1,`${result.name}: ${result.mode} run spacing differs by ${result.maxBoundaryGap}px`);if(result.mode==='measured')assert.ok(result.maxAdvanceDifference<.1,`${result.name}: measured width differs by ${result.maxAdvanceDifference}px`);}
 }finally{await browser.close();}

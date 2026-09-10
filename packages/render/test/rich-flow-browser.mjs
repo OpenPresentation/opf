@@ -49,11 +49,12 @@ try {
       }
       if(cursor!==nodes.length)throw Error('Extra source fragments');return {lines};
     },{svg,item,mode,align});
-    for(const line of actual.lines){assert.ok(Math.abs(line.alignmentDifference)<.1);for(const fragment of line.fragments){assert.ok(Math.abs(fragment.gap??0)<.1,'Adjacent runs must not have a layout gap');assert.ok(Math.abs(fragment.baselineDifference)<.1,'Script baseline must match the selected shift');}}
+
     results.push({mode,align,fixture:index,...actual});
   }
   assert.deepEqual(errors,[]);assert.deepEqual(requests,[]);
   const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
   await writeFile(path.join(output,'report.json'),JSON.stringify({node:process.version,browser:browser.version(),verifierSha256:hash(await readFile(new URL(import.meta.url))),rendererSha256:hash(await readFile(new URL('../dist/svg.js',import.meta.url))),results,errors,requests,scope:'30 actual offline browser cases check source spans, adjacent-run spacing, alignment, baseline shifts, exact requested styles, decorations and links. Estimated line breaks and cell fitting remain approximate; native Office and complete shaping fidelity are separate.'},null,2)+'\n');
+  for(const result of results)for(const line of result.lines){const label=JSON.stringify({mode:result.mode,align:result.align,fixture:result.fixture});assert.ok(Math.abs(line.alignmentDifference)<.1,label);for(const fragment of line.fragments){assert.ok(Math.abs(fragment.gap??0)<.1,label+' '+JSON.stringify(fragment));assert.ok(Math.abs(fragment.baselineDifference)<.1,label+' baseline '+JSON.stringify(fragment));}}
   console.log('All 30 rich-flow browser cases pass source/style/alignment/baseline and spacing checks.');
 }finally{await browser.close();}
