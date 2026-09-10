@@ -20,7 +20,7 @@ export function createRichTextInput(root, overlay, {path, value, getTarget, onIn
   function remember() {
     history.splice(historyIndex+1);history.push({value:structuredClone(current),start:input.selectionStart,end:input.selectionEnd});historyIndex++;
   }
-  function fragments() { return [...(getTarget(path)?.querySelectorAll('text[data-opf-text-start]')??[])]; }
+  function fragments() { return [...(getTarget(path)?.querySelectorAll('text[data-opf-text-start],tspan[data-opf-text-start]')??[])]; }
   function rect(node,start,end) {
     const range=doc.createRange();range.setStart(node.firstChild,start);range.setEnd(node.firstChild,end);return range.getBoundingClientRect();
   }

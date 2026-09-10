@@ -62,8 +62,11 @@ try {
     await page.getByRole('button',{name:'Undo',exact:true}).click();assert.deepEqual(await document(),beforePagination);
     await page.getByRole('button',{name:'Redo',exact:true}).click();const accepted=await document();
     // Selecting source text must not expose invalid rich-formatting operations.
-    await page.evaluate(()=>{const node=document.querySelector('text[data-opf-code-role="body"] tspan');const range=document.createRange();range.selectNodeContents(node);const selection=getSelection();selection.removeAllRanges();selection.addRange(range);document.dispatchEvent(new Event('selectionchange'));});
-    assert.equal(await page.getByRole('toolbar',{name:'Text formatting'}).isVisible(),false);
+    for(const role of ['body','filename','language']){
+      await page.evaluate(role=>{const node=[...document.querySelectorAll('text[data-opf-code-role="'+role+'"] tspan')].find(node=>/\S/.test(node.textContent));if(!node?.firstChild)throw Error('Missing code text span');const range=document.createRange();range.setStart(node.firstChild,0);range.setEnd(node.firstChild,node.textContent.length);const selection=getSelection();selection.removeAllRanges();selection.addRange(range);document.dispatchEvent(new Event('selectionchange'));},role);
+      assert.equal(await page.getByRole('toolbar',{name:'Text formatting'}).isVisible(),false,role+' must stay plain when selecting its nested text node');
+      assert.deepEqual(await document(),accepted);
+    }
     await page.getByRole('button',{name:'Export',exact:true}).click();await page.waitForFunction(()=>lastExport||failures.length);assert.deepEqual(await page.evaluate(()=>failures),[]);
     const bytes=await page.evaluate(()=>Array.from(lastExport));assert.ok(bytes.length>1000);
     await page.getByRole('button',{name:'Import',exact:true}).click();await page.waitForFunction(()=>lastImport||failures.length);assert.deepEqual(await page.evaluate(()=>failures),[]);
