@@ -1,0 +1,208 @@
+{
+  "runtime": {
+    "@openpresentation/opf/dist/composition.js": "6c77b9883ea592f6e67a6fac262e8c1dbd81968e6bd8b13d80cc7fe9f16f073e",
+    "@openpresentation/opf/dist/chunk-JA5W5TVA.js": "9617ee45fd259a0b060831f019f19672e1f5d860a3728b5a126019d6f7cad51c",
+    "@openpresentation/opf/dist/validator.js": "b6b8a02e1ee7f3b3c83382a2cd95bf03976165171c31f68583ee5cadc663db47",
+    "@openpresentation/opf/dist/chunk-ZGV6I23P.js": "a6ecf201e1543162d2ac22ef731cfaf7239160c696455679126ad7883ff0011b",
+    "@openpresentation/opf/dist/chunk-GQSK3T7X.js": "34f518c29c9757bc252b5c13eb5d7db8ada4b477496e6289d8149fb4fdc7cd45",
+    "@openpresentation/opf/dist/chunk-TWMRZ43O.js": "0d35cec97ec7ddaa67fb9f096bc672c927eb68ed5fae5ac27d4dff70d68313f4",
+    "@openpresentation/opf/dist/catalogs.js": "6d74d7b051844728b2622acdb5268472a043544c8b2ca04eb904b1cdf74ec739",
+    "@openpresentation/opf/package.json": "d7a9ed943e013a51e907d707e277806c4d89ec3a8b9a26d7336f66597b4f7fdb",
+    "@openpresentation/opf-render/dist/font-compatibility.js": "8d689401d826bf604b1e2b0bedaed2f47d89263d17041b03fcd1f91b254b82ac",
+    "@openpresentation/opf-render/dist/fonts-browser.js": "cee4d94c13aa1dc76581e9e4f3b401278ee859b69b21bbed88ed626c77e6ece7",
+    "@openpresentation/opf-render/dist/fonts.js": "db78254df6efadb5cb606169feefa1d19c153a249186bd8a38078f97d9502d22",
+    "@openpresentation/opf-render/dist/fonts-node.js": "0f1edc1f3d55472a64efd1ce344ff95e8a320e0ee53689085ed55a77a33a8f0e",
+    "@openpresentation/opf-render/dist/index.js": "1fdb45740a09bb6f48eb5dc79def3ffe692acdf0a5c319727edf4e19c0020d78",
+    "@openpresentation/opf-render/dist/svg.js": "06c0418263358daa88be604791c4fc494dc8f3fd93128cc74e81a70fa2afb039",
+    "@openpresentation/opf-render/dist/raster.js": "3b18ae6c2c3a04cc0f53c2c92c84be1c8fbdaf85eb7c1af232ef7092477bf305",
+    "@openpresentation/opf-render/dist/raster-images.js": "9d61faa7fd83452a98d2593431dcb29953b6d1a5f60d521aa22eadfc7d7e1843",
+    "@openpresentation/opf-render/package.json": "596bb20f010af3ea6bbda08f84f40f31dcb24310184f873c69e41758ba76a5e8",
+    "@openpresentation/opf-pptx/dist/background-import.js": "888583bbbaae46a9a4d174f046ca276cfadee5c021a76e39ab49050a1bfefe38",
+    "@openpresentation/opf-pptx/dist/background.js": "38f97d14394058737418e7517569d5babf99468574f299cc5df25ea1188dfe56",
+    "@openpresentation/opf-pptx/dist/code-provenance.js": "1c7af17306cd58bcec1cb72c4333edaebc4b5a5f41a439763e1617c0b8f2d0bf",
+    "@openpresentation/opf-pptx/dist/image-fallback-browser.js": "b2cd7aa15c3952abf324e6474e7bbdebbd6445dde84f145e068c94c43f9c0de8",
+    "@openpresentation/opf-pptx/dist/image-fallback-node.js": "72c4efba8ef521e7fdce15b09c57ce6039ba9394ae25a8437a2cb6e26b1b420d",
+    "@openpresentation/opf-pptx/dist/image-geometry.js": "c2d3d5e7b7f81cf421bcc94437093f17e47670f458a48cf9cf9aa73535a08346",
+    "@openpresentation/opf-pptx/dist/image-import.js": "898704890944137909c5d48c7d1b3b16e4f06403bd745240d0f6b21f7c8c444a",
+    "@openpresentation/opf-pptx/dist/index.js": "9182d9259a5a822da74856f464b6bd384556775e68873d654971f67a2ac1e0a1",
+    "@openpresentation/opf-pptx/dist/table-import.js": "b545fff80415d085f76c82b88ce0c72e1bcfd6947c621a0fbedcc08e5a9ea227",
+    "@openpresentation/opf-pptx/dist/table-cell-import.js": "d268a14eecf54fe12bab31246680807cf1c90407b9807b49d32c3c71d93a643b",
+    "@openpresentation/opf-pptx/dist/table-border-import.js": "10dc23b93881d691be62bb5f171678d61cdf77675a628f86f58a58ee962e7093",
+    "@openpresentation/opf-pptx/package.json": "3c3fb7b5f5b9c7ee8d20eb273e0be149f6bb286ddc27115fc904512a63ac0e2f",
+    "test/native-code.mjs": "ddd3db9caa4b29c31ac0d745a82bf607492eb76da254752d765e7b3959a48880",
+    "test/native-code.ps1": "04a792ec84e5a434db3c5fca17a74188fe2a8274395f4c3d34303269e6379c8a",
+    "vendor/pptxgenjs/pptxgen.es.js": "05844c5625e2cda3b449eb967c2246dd57ca57341886a7c28eeebca263b29bd4",
+    "package-lock.json": "751d154ad9541f0ca05be8171dec74660fd0a3dd6343b3aad669e7460556cfec"
+  },
+  "imports": [
+    {
+      "filename": "code-1280.pptx",
+      "sha256": "7f99ce2be37e62376709b5a07bd42ed8b83522dbe5e1435980e1caf1f4f6e84e",
+      "slides": 4,
+      "exactCodeAndMetadata": true,
+      "diagnostics": [
+        {
+          "code": "code-import-reflow",
+          "message": "Code source boundaries and native text were recovered. Native positioning, formatting and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.0.code"
+        },
+        {
+          "code": "code-import-reflow",
+          "message": "Code source boundaries and native text were recovered. Native positioning, formatting and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.1.code"
+        },
+        {
+          "code": "code-import-reflow",
+          "message": "Code source boundaries and native text were recovered. Native positioning, formatting and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.2.code"
+        },
+        {
+          "code": "code-import-reflow",
+          "message": "Code source boundaries and native text were recovered. Native positioning, formatting and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.3.code"
+        }
+      ]
+    },
+    {
+      "filename": "code-1280-saved.pptx",
+      "sha256": "7af2d5903d1a79bb3a6e24ef83eedfa397efc421307f9def59e250e438ad06a2",
+      "slides": 4,
+      "exactCodeAndMetadata": true,
+      "diagnostics": [
+        {
+          "code": "code-import-reflow",
+          "message": "Code source boundaries and native text were recovered. Native positioning, formatting and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.0.code"
+        },
+        {
+          "code": "code-import-reflow",
+          "message": "Code source boundaries and native text were recovered. Native positioning, formatting and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.1.code"
+        },
+        {
+          "code": "code-import-reflow",
+          "message": "Code source boundaries and native text were recovered. Native positioning, formatting and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.2.code"
+        },
+        {
+          "code": "code-import-reflow",
+          "message": "Code source boundaries and native text were recovered. Native positioning, formatting and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.3.code"
+        }
+      ]
+    },
+    {
+      "filename": "code-1280-edited.pptx",
+      "sha256": "cd4908a5160e652919cb03741cfe19e535432514e0b1b86abed9cbb244700fa1",
+      "slides": 4,
+      "exactCodeAndMetadata": true,
+      "diagnostics": [
+        {
+          "code": "code-import-reflow",
+          "message": "Code source boundaries and native text were recovered. Native positioning, formatting and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.0.code"
+        },
+        {
+          "code": "code-import-reflow",
+          "message": "Code source boundaries and native text were recovered. Native positioning, formatting and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.1.code"
+        },
+        {
+          "code": "code-import-reflow",
+          "message": "Code source boundaries and native text were recovered. Native positioning, formatting and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.2.code"
+        },
+        {
+          "code": "code-import-reflow",
+          "message": "Code source boundaries and native text were recovered. Native positioning, formatting and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.3.code"
+        }
+      ]
+    },
+    {
+      "filename": "code-540.pptx",
+      "sha256": "509c89d0f7676d779116736e701cb39c5176e626375f6d8afae4a9f40db1045d",
+      "slides": 4,
+      "exactCodeAndMetadata": true,
+      "diagnostics": [
+        {
+          "code": "code-import-reflow",
+          "message": "Code source boundaries and native text were recovered. Native positioning, formatting and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.0.code"
+        },
+        {
+          "code": "code-import-reflow",
+          "message": "Code source boundaries and native text were recovered. Native positioning, formatting and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.1.code"
+        },
+        {
+          "code": "code-import-reflow",
+          "message": "Code source boundaries and native text were recovered. Native positioning, formatting and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.2.code"
+        },
+        {
+          "code": "code-import-reflow",
+          "message": "Code source boundaries and native text were recovered. Native positioning, formatting and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.3.code"
+        }
+      ]
+    },
+    {
+      "filename": "code-540-saved.pptx",
+      "sha256": "0e954069e3e38b806e8a1c63ed94de1ce3b457a5f0f66b396d01f20d4c3a20f6",
+      "slides": 4,
+      "exactCodeAndMetadata": true,
+      "diagnostics": [
+        {
+          "code": "code-import-reflow",
+          "message": "Code source boundaries and native text were recovered. Native positioning, formatting and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.0.code"
+        },
+        {
+          "code": "code-import-reflow",
+          "message": "Code source boundaries and native text were recovered. Native positioning, formatting and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.1.code"
+        },
+        {
+          "code": "code-import-reflow",
+          "message": "Code source boundaries and native text were recovered. Native positioning, formatting and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.2.code"
+        },
+        {
+          "code": "code-import-reflow",
+          "message": "Code source boundaries and native text were recovered. Native positioning, formatting and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.3.code"
+        }
+      ]
+    },
+    {
+      "filename": "code-540-edited.pptx",
+      "sha256": "e1beb1b53bfd1abf5461637fa81ff9442176e8ac6f7e6cb50dcf9f48b9ed845b",
+      "slides": 4,
+      "exactCodeAndMetadata": true,
+      "diagnostics": [
+        {
+          "code": "code-import-reflow",
+          "message": "Code source boundaries and native text were recovered. Native positioning, formatting and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.0.code"
+        },
+        {
+          "code": "code-import-reflow",
+          "message": "Code source boundaries and native text were recovered. Native positioning, formatting and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.1.code"
+        },
+        {
+          "code": "code-import-reflow",
+          "message": "Code source boundaries and native text were recovered. Native positioning, formatting and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.2.code"
+        },
+        {
+          "code": "code-import-reflow",
+          "message": "Code source boundaries and native text were recovered. Native positioning, formatting and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.3.code"
+        }
+      ]
+    }
+  ],
+  "scope": "Original/native-saved/native-edited code semantics and exact source text, including CR/LF/CRLF, blank lines and soft wraps. Imported native geometry, formatting, font theme and raster equivalence remain outside this gate."
+}

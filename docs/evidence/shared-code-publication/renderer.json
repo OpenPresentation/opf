@@ -1,0 +1,61 @@
+{
+  "checkedAt": "2026-09-10T06:51:29.022Z",
+  "name": "@openpresentation/opf-render",
+  "version": "0.7.0",
+  "publishedAt": "2026-09-10T06:47:00.761Z",
+  "gitHead": "f4a1b8e1324cbc182b98d43f16528594c8006f86",
+  "reviewedHead": "c6b8ae18a0033dcd4c1f2893d760e76ee0bc9475",
+  "treeIdentical": true,
+  "pr": "https://github.com/OpenPresentation/opf-render/pull/11",
+  "ci": "https://github.com/OpenPresentation/opf-render/actions/runs/34446148105",
+  "review": "success after fixing the initial trace-height finding; discussion resolved",
+  "workflow": "https://github.com/OpenPresentation/opf-render/actions/runs/34446669234",
+  "dist": {
+    "integrity": "sha512-eHBMbnmK5bELUmUwJ/qWRtJBIZFkUJsbUvkjzSc6yhNA2JQ2Em/My9+Of4c79y0tXrFCQaZ5xvOkOdtyGUu5Gw==",
+    "shasum": "59891442d34874d27bf696ae69f20b609f612bbb",
+    "tarball": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.7.0.tgz",
+    "fileCount": 16,
+    "unpackedSize": 115649,
+    "attestations": {
+      "url": "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf-render@0.7.0",
+      "provenance": {
+        "predicateType": "https://slsa.dev/provenance/v1"
+      }
+    },
+    "signatures": [
+      {
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+        "sig": "MEYCIQCP1EeVds/HNB1n1eN0EVVMM+R1s95jN9f7gkjeoJ/fXwIhAMcFgQ2UIb2QvdBuOU/9qSu3SLr+YRy1+EXXooNI2LT1"
+      }
+    ]
+  },
+  "reports": [
+    {
+      "node": "v20.20.2",
+      "file": "renderer-node20.json",
+      "sha256": "ac685f5691ee2d13f7dda9f087fd90a101ff0dc3c44390f1d457d8f99d356a4e",
+      "immutableFileMatches": 16,
+      "fixtureSuites": 8,
+      "reviewedRaster": {
+        "decks": 126,
+        "slides": 805
+      },
+      "codeBrowserCases": 12,
+      "browser": "152.0.4191.66"
+    },
+    {
+      "node": "v24.20.0",
+      "file": "renderer-node24.json",
+      "sha256": "8cd6edfb68644113a0bfbcc90b8048ba74f8d5a60c19f82fea16731776ff5df4",
+      "immutableFileMatches": 16,
+      "fixtureSuites": 8,
+      "reviewedRaster": {
+        "decks": 126,
+        "slides": 805
+      },
+      "codeBrowserCases": 12,
+      "browser": "152.0.4191.66"
+    }
+  ],
+  "scope": "Actual renderer/core registry packages on both runtimes, all 16 shipped files matched to the immutable release commit, eight source-pinned fixture suites, reviewed corpus, existing JPEG/quote browser and twelve code/font browser cases, zero audited vulnerabilities and verified signatures/attestations. The Windows candidate archive integrity differs from the Linux registry archive; both retain their own byte-bound evidence. Native PowerPoint, converter/editor releases and complete-set public adoption remain separate gates."
+}

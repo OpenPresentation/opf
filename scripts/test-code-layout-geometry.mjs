@@ -1,4 +1,4 @@
-// Candidate core API + actual installed registry renderer/fonts. No source-package alias.
+// Current checkout core API + installed registry renderer/fonts. No source-package alias.
 import assert from 'node:assert/strict';
 import {readFile,writeFile,realpath} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
@@ -106,7 +106,7 @@ async function fingerprint(file) {
   }
 }
 await fingerprint(path.join(dist,'composition.js'));
-const report={scope:'Unreleased standalone code-flow-v1 core API with the release-plan registry renderer used only to supply existing outer boxes and open-font advances. Exact text/line boundaries, measured tabs, filename/language and a 24-reference-pixel floor are checked. This probe does not verify composition selection, renderer/converter integration, browser glyph bounds or native raster equivalence.',
+const report={scope:'Current checkout code-flow-v1 core API with the release-plan registry renderer used only to supply existing outer boxes and open-font advances. Exact text/line boundaries, measured tabs, filename/language and a 24-reference-pixel floor are checked. This source probe is separate from installed-registry code workflows and does not verify composition selection, renderer/converter integration, browser glyph bounds or native raster equivalence.',
   fixtureSha256:hash(fixtureBytes),sourceHashes,runtimeHashes,fontHashes,packages:[...checked.values()].map(({manifest,integrity})=>({name:manifest.name,version:manifest.version,integrity})),results};
 if (output) await writeFile(output,`${JSON.stringify(report,null,2)}\n`);
 console.log(`Verified ${results.length} wide/portrait code layouts with exact installed font measurements.`);

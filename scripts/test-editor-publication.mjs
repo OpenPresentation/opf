@@ -7,6 +7,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {packageManagerInvocation} from './package-manager.mjs';
 const root=fileURLToPath(new URL('../',import.meta.url));
+assert.ok(!process.env.NODE_OPTIONS&&!process.execArgv.some(arg=>/^(--import|--loader|--experimental-loader|--require|-r)(=|$)/.test(arg)),'Registry verification must not use source loaders or module aliases');
 const [version,ref,checkout=path.resolve(root,'../opf-editor')]=process.argv.slice(2);
 assert.match(version??'',/^\d+\.\d+\.\d+$/);assert.match(ref??'',/^[a-f0-9]{40}$/);
 const environment={...process.env};delete environment.NODE_OPTIONS;
@@ -14,6 +15,7 @@ const execute=(command,args,cwd,encoding='utf8')=>execFileSync(command,args,{cwd
 const git=args=>execute('git',args,checkout);
 const sourceManifest=JSON.parse(git(['show',`${ref}:package.json`]));
 assert.equal(sourceManifest.name,'@openpresentation/opf-editor');assert.equal(sourceManifest.version,version);
+const [releaseMajor,releaseMinor]=version.split('.').map(Number),verifyCode=releaseMajor>0||releaseMinor>=6;
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const artifactRoot=path.join(root,'artifacts/npm');await mkdir(artifactRoot,{recursive:true});
 assert.ok((await realpath(artifactRoot)).startsWith((await realpath(root))+path.sep));
@@ -62,8 +64,17 @@ try{
  }
  process.stdout.write(execute(process.execPath,[path.join(fixture,'scripts/build-playground.mjs')],temporary));
  const browser=JSON.parse(execute(process.execPath,[path.join(fixture,'test/playground-pptx.mjs')],temporary));
+ let codeBrowser;
+ if(verifyCode){
+  const output=path.join(temporary,'code-browser.json');
+  process.stdout.write(execute(process.execPath,[path.join(fixture,'test/code-browser.mjs'),output],temporary));
+  codeBrowser=JSON.parse(await readFile(output,'utf8'));
+  assert.equal(codeBrowser.results.length,2);assert.equal(codeBrowser.blankTargets.length,2);
+  assert.deepEqual(codeBrowser.errors,[]);assert.deepEqual(codeBrowser.externalRequests,[]);
+  assert.equal(codeBrowser.verifierSha256,hash(await readFile(path.join(fixture,'test/code-browser.mjs'))));
+ }
  for(const [file,digest] of Object.entries(files))assert.equal(hash(await readFile(path.join(installed,file))),digest,'Verification must not rebuild the published editor');
- const report={checkedAt:new Date().toISOString(),node:process.version,name:sourceManifest.name,version,gitHead:ref,integrity:entry.integrity,attestations:metadata.dist.attestations,dependencies,files,knownVulnerabilities:0,signatureVerification:signatures.trim(),tests,browser,boundary:'Actual npm editor and all predecessors; every shipped file matches the immutable release commit. Nine model/component suites and the offline browser author/edit/paginate/export/reimport/undo workflow execute installed distributables. Native comparisons, all canvas suites and deployed-site adoption are separate evidence.'};
+ const report={checkedAt:new Date().toISOString(),node:process.version,name:sourceManifest.name,version,gitHead:ref,integrity:entry.integrity,attestations:metadata.dist.attestations,dependencies,files,knownVulnerabilities:0,signatureVerification:signatures.trim(),tests,browser,...(codeBrowser?{codeBrowser}:{}),boundary:'Actual npm editor and all predecessors; every shipped file matches the immutable release commit. Nine model/component suites and the offline browser author/edit/paginate/export/reimport/undo workflow execute installed distributables. Editor 0.6+ adds wide/portrait code source/metadata/pagination/export/reimport and blank multiline target/no-op/edit/undo cases. Native comparisons, all canvas suites and deployed-site adoption are separate evidence.'};
  const reportPath=path.join(artifactRoot,`editor-${version}-node${major}-report.json`);await writeFile(reportPath,JSON.stringify(report,null,2)+'\n');
  console.log(`Published editor ${version} verified: ${Object.keys(files).length} immutable file matches, ${tests.length} model suites, offline browser ${browser.browser}. Report: ${reportPath}`);
 }finally{

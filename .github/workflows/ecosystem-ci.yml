@@ -30,21 +30,21 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
-          ref: b5a3722725338e8d964783e8b7f1f7b80ce28cd3
+          ref: f4a1b8e1324cbc182b98d43f16528594c8006f86
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-editor
-          ref: 52e540b83e441892fd928e9f159bffbb29da5653
+          ref: 7b6db50f42783979841674e628193b1ba2f5c0e2
           path: opf-editor
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-pptx
-          ref: b4f4645cdaa2f5eff8a883f68533875d3b63f239
+          ref: f421c91b7b127c7eeab788acdc0c51969402e057
           path: opf-pptx
           fetch-depth: 0
           persist-credentials: false
@@ -84,10 +84,11 @@ jobs:
           pnpm test:registry-ecosystem
           pnpm test:packed-browser registry
           node scripts/test-packed-browser-guards.mjs
+          node scripts/test-installed-code-guards.mjs --registry
           pnpm test:registry-fidelity
           node scripts/test-quote-layout-geometry.mjs artifacts/npm/registry-consumer artifacts/quote-layout-geometry.json
           node packages/cli/test/packed.mjs --registry
-      - name: Measure candidate code internals with registry fonts
+      - name: Measure current checkout code internals with registry fonts
         working-directory: opf
         run: |
           node scripts/test-code-layout-geometry.mjs artifacts/npm/registry-consumer artifacts/code-layout-geometry.json
@@ -108,4 +109,4 @@ jobs:
       - name: Report the verification boundary
         if: always()
         run: |
-          echo 'This job tests coordinated source, local tarballs, and exact published registry installs against pinned fixtures. It executes installed-package browser harnesses, trusted pointer/keyboard editing and undo, and renderer raster regression checks. Native PowerPoint fidelity, full export/reimport workflows and private/public site interactions require their separate evidence.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'This job tests coordinated source, local tarballs, and exact published registry installs against pinned fixtures. It executes installed-package browser harnesses, trusted pointer/keyboard editing and undo, controlled code export/reimport, and renderer raster regression checks. Native PowerPoint fidelity, arbitrary document round-tripping and private/public site interactions require separate evidence.' >> "$GITHUB_STEP_SUMMARY"

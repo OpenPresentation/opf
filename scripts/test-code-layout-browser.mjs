@@ -1,4 +1,4 @@
-// Verify the standalone candidate's accepted segment positions with actual bundled font bytes.
+// Verify the current checkout's accepted segment positions with actual bundled font bytes.
 // node scripts/test-code-layout-browser.mjs <registry-consumer> <geometry-report.json> [report.json] [renderer-checkout]
 import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
