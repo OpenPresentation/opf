@@ -8,6 +8,7 @@ import {chromium} from 'playwright';
 import {loadOfficeFontRegistry} from '@openpresentation/opf-render/fonts-node';
 
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
+const cards=process.argv.includes('--cards');
 const fingerprint=async()=>{
   const runtime={};
   for(const name of ['@openpresentation/opf','@openpresentation/opf-render','@openpresentation/opf-pptx','@openpresentation/opf-editor']){
@@ -56,9 +57,10 @@ try {
   };
   for(const dimensions of [{width:1280,height:720},{width:540,height:960}])for(const alignment of ['left','center','right']){
     const metric={value:42,unit:'ms',label:'Left\tRight  ',description:'Exact\r\n\r\ncontext',delta:0,trend:'flat'};
-    const deck={design:{fontScheme:'roboto',contentAlignment:alignment,dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96}},slides:[{metric}]};
+    const deck={design:{fontScheme:'roboto',...(cards?{contentBox:true}:{}),contentAlignment:alignment,dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96}},slides:[{metric}]};
     await page.evaluate(args=>mountMetric(args),{deck,faces});
     const geometry=await page.evaluate(()=>editor.composeSlide(0,{textMeasurement:fonts.textMeasurement}).items[0].metricLayout);
+    assert.equal(await page.evaluate(()=>Boolean(editor.composeSlide(0,{textMeasurement:fonts.textMeasurement}).items[0].frameBox)),cards);
     assert.equal(geometry.alignment,alignment);
     for(const part of geometry.parts){
       assert.equal(await target(part.path).count(),1);
@@ -127,7 +129,7 @@ try {
   }
   assert.deepEqual(errors,[]);assert.deepEqual(requests,[]);
   assert.deepEqual(await fingerprint(),runtime,'Resolved package sources changed during browser verification');
-  const report={mode:'resolved-package-browser',node:process.version,browser:browser.version(),platform:process.platform,runtime,bundleSha256:hash(bundle),verifierSha256:hash(await readFile(new URL(import.meta.url))),fontHashes:faces.map(face=>({family:face.family,weight:face.weight,italic:face.italic,sha256:hash(Buffer.from(face.dataUrl.split(',')[1],'base64'))})),results,scalarResults,invalidResults,errors,externalRequests:requests,
+  const report={mode:'resolved-package-browser',cards,node:process.version,browser:browser.version(),platform:process.platform,runtime,bundleSha256:hash(bundle),verifierSha256:hash(await readFile(new URL(import.meta.url))),fontHashes:faces.map(face=>({family:face.family,weight:face.weight,italic:face.italic,sha256:hash(Buffer.from(face.dataUrl.split(',')[1],'base64'))})),results,scalarResults,invalidResults,errors,externalRequests:requests,
     scope:'Offline canvas with resolved dependencies: six wide/portrait/alignment metric workflows; exact accepted SVG origins and inline style, every metadata field, source/type/CRLF/tab/no-op preservation, readable selection, numeric/trend validation, atomic pagination undo, export and undoable metric reimport. Eight scalar/blank workflows and two rejected edits. Dependency mode must be bound by the caller; this report alone is not registry evidence. Native formatting, position/font recovery and native PowerPoint raster equivalence are not established.'};
   if(process.argv[2])await writeFile(process.argv[2],JSON.stringify(report,null,2)+'\n');
   console.log(`Metric canvas: ${results.length} aligned workflows, ${scalarResults.length} scalar/blank edits and ${invalidResults.length} guarded rejections pass offline.`);
