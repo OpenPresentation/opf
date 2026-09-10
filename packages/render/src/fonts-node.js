@@ -1,44 +1,74 @@
 import { readFile } from "node:fs/promises";
 import { createRequire } from "node:module";
-import { createFontRegistry } from "./fonts.js";
+import path from "node:path";
+import { createHash } from "node:crypto";
+import { createFontRegistry, OPFFontError } from "./fonts.js";
+import { BUNDLED_FONT_MANIFEST } from "./font-manifest.js";
+export { BUNDLED_FONT_MANIFEST } from "./font-manifest.js";
 const require = createRequire(import.meta.url);
+
+async function verifiedFile(file, expected, details) {
+  let bytes;
+  try { bytes = await readFile(file); }
+  catch (error) { throw new OPFFontError("font-resource-unavailable", "Reinstall the pinned font package: a required local resource is unavailable.", {...details, cause: error.code}); }
+  const actual = createHash("sha256").update(bytes).digest("hex");
+  if (actual !== expected) throw new OPFFontError("font-integrity-mismatch", "The local font resource differs from the reviewed font manifest; reinstall the pinned package.", {...details, expected, actual});
+  return bytes;
+}
+
+async function loadPack(pack) {
+  const entries = [], fontFiles = [];
+  for (const pkg of BUNDLED_FONT_MANIFEST.packages.filter(item => item.pack === pack)) {
+    let manifestPath, installed;
+    try {
+      manifestPath = require.resolve(`${pkg.name}/package.json`);
+      installed = JSON.parse(await readFile(manifestPath, "utf8"));
+    } catch (error) {
+      throw new OPFFontError("font-resource-unavailable", `Install ${pkg.name}@${pkg.version} to use this offline font pack.`, {package:pkg.name, cause:error.code});
+    }
+    if (installed.version !== pkg.version) throw new OPFFontError("font-version-mismatch", `Expected ${pkg.name}@${pkg.version}; reinstall the pinned package.`, {package:pkg.name, expected:pkg.version, actual:installed.version});
+    const directory = path.dirname(manifestPath);
+    const license = (await verifiedFile(path.join(directory, pkg.licenseFile), pkg.licenseSha256, {package:pkg.name, file:pkg.licenseFile})).toString("utf8");
+    for (const face of pkg.faces) {
+      const file = path.join(directory, face.file);
+      const data = await verifiedFile(file, face.sha256, {package:pkg.name, file:face.file});
+      fontFiles.push(file);
+      entries.push({data:new Uint8Array(data), family:face.family, weight:face.weight, italic:face.italic, license});
+    }
+  }
+  return {entries, fontFiles};
+}
+
 /** Bundled, openly licensed faces. No system font discovery or network requests. */
 export async function loadBundledFontRegistry(options = {}) {
-  const definitions = [
-    ["roboto","400Regular","Roboto_400Regular",400,false],
-    ["roboto","500Medium","Roboto_500Medium",500,false],
-    ["roboto","600SemiBold","Roboto_600SemiBold",600,false],
-    ["roboto","700Bold","Roboto_700Bold",700,false],
-    ["roboto","800ExtraBold","Roboto_800ExtraBold",800,false],
-    ["roboto","400Regular_Italic","Roboto_400Regular_Italic",400,true],
-    ["roboto","700Bold_Italic","Roboto_700Bold_Italic",700,true],
-    ["roboto-mono","400Regular","RobotoMono_400Regular",400,false],
-    ["roboto-mono","700Bold","RobotoMono_700Bold",700,false],
-  ];
-  const licenses = Object.fromEntries(await Promise.all(["roboto","roboto-mono"].map(async pkg=>[pkg,await readFile(require.resolve(`@expo-google-fonts/${pkg}/LICENSE_FONT`),"utf8")])));
-  const fontFiles = definitions.map(([pkg,directory,name])=>require.resolve(`@expo-google-fonts/${pkg}/${directory}/${name}.ttf`));
-  const entries = await Promise.all(definitions.map(async ([pkg,,,weight,italic],index)=>({license:licenses[pkg],data:new Uint8Array(await readFile(fontFiles[index])),weight,italic})));
+  const {entries, fontFiles} = await loadPack("base");
   return Object.assign(createFontRegistry(entries,options),{fontFiles});
 }
 
 /** Six pinned open-source Office substitutes, optionally alongside the base Roboto pack. */
 export async function loadOfficeFontRegistry(options = {}) {
-  const packages = ["carlito","caladea","arimo","tinos","cousine","gelasio"];
-  const styles = [["400Regular",400,false],["400Regular_Italic",400,true],["700Bold",700,false],["700Bold_Italic",700,true]];
-  const entries = [], fontFiles = [];
-  for (const pkg of packages) {
-    const name = pkg[0].toUpperCase()+pkg.slice(1);
-    const license = await readFile(require.resolve(`@expo-google-fonts/${pkg}/LICENSE_FONT`),"utf8");
-    for (const [directory,weight,italic] of styles) {
-      const path = require.resolve(`@expo-google-fonts/${pkg}/${directory}/${name}_${directory}.ttf`);
-      fontFiles.push(path);
-      entries.push({data:new Uint8Array(await readFile(path)),weight,italic,license});
-    }
-  }
+  const {entries, fontFiles} = await loadPack("office");
   if (options.includeBaseFonts !== false) {
-    const base = await loadBundledFontRegistry();
+    const base = await loadPack("base");
     fontFiles.push(...base.fontFiles);
-    for (const face of base.embeddedFonts) entries.push({...face,data:Uint8Array.from(Buffer.from(face.dataUrl.split(",")[1],"base64"))});
+    entries.push(...base.entries);
   }
   return Object.assign(createFontRegistry(entries,{substitutionPolicy:"metric",...options}),{fontFiles});
+}
+
+/** One set of verified font inputs for layout, SVG, editor, PPTX, and Node raster export. */
+export async function prepareNodeFonts({pack = "base", ...options} = {}) {
+  if (pack !== "base" && pack !== "office") throw new OPFFontError("invalid-font-pack", "Choose the base or office font pack.", {pack});
+  const registry = await (pack === "base" ? loadBundledFontRegistry(options) : loadOfficeFontRegistry(options));
+  return {
+    registry,
+    manifest:BUNDLED_FONT_MANIFEST,
+    options:{
+      textMeasurement:registry.textMeasurement,
+      embeddedFonts:registry.embeddedFonts,
+      fontFiles:[...registry.fontFiles],
+      useBundledFonts:false,
+      loadSystemFonts:false,
+    },
+  };
 }
