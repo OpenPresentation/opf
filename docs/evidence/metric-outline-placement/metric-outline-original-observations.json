@@ -1,0 +1,680 @@
+{
+  "node": "v24.21.0",
+  "records": [
+    {
+      "family": "Roboto",
+      "alignment": "left",
+      "metric": {
+        "value": 123,
+        "unit": "ms",
+        "label": "Latency"
+      },
+      "cell": {
+        "x": 43.2,
+        "y": 43.2,
+        "width": 453.6,
+        "height": 873.6
+      },
+      "accepted": true,
+      "outlineOutliers": []
+    },
+    {
+      "family": "Roboto",
+      "alignment": "left",
+      "metric": {
+        "value": "42\n123",
+        "label": "First\nSecond"
+      },
+      "cell": {
+        "x": 43.2,
+        "y": 43.2,
+        "width": 453.6,
+        "height": 873.6
+      },
+      "accepted": true,
+      "outlineOutliers": []
+    },
+    {
+      "family": "Roboto",
+      "alignment": "left",
+      "metric": {
+        "value": "\t1\t%",
+        "unit": "ms",
+        "label": "\tBefore\tAfter  "
+      },
+      "cell": {
+        "x": 43.2,
+        "y": 43.2,
+        "width": 453.6,
+        "height": 873.6
+      },
+      "accepted": true,
+      "outlineOutliers": []
+    },
+    {
+      "family": "Roboto",
+      "alignment": "left",
+      "metric": {
+        "value": 123,
+        "unit": "ms",
+        "label": "Latency"
+      },
+      "cell": {
+        "x": 43.2,
+        "y": 43.2,
+        "width": 1164.8,
+        "height": 873.6
+      },
+      "accepted": true,
+      "outlineOutliers": []
+    },
+    {
+      "family": "Roboto",
+      "alignment": "left",
+      "metric": {
+        "value": "42\n123",
+        "label": "First\nSecond"
+      },
+      "cell": {
+        "x": 43.2,
+        "y": 43.2,
+        "width": 1164.8,
+        "height": 873.6
+      },
+      "accepted": true,
+      "outlineOutliers": []
+    },
+    {
+      "family": "Roboto",
+      "alignment": "left",
+      "metric": {
+        "value": "\t1\t%",
+        "unit": "ms",
+        "label": "\tBefore\tAfter  "
+      },
+      "cell": {
+        "x": 43.2,
+        "y": 43.2,
+        "width": 1164.8,
+        "height": 873.6
+      },
+      "accepted": true,
+      "outlineOutliers": []
+    },
+    {
+      "family": "Roboto",
+      "alignment": "center",
+      "metric": {
+        "value": 123,
+        "unit": "ms",
+        "label": "Latency"
+      },
+      "cell": {
+        "x": 43.2,
+        "y": 43.2,
+        "width": 453.6,
+        "height": 873.6
+      },
+      "accepted": true,
+      "outlineOutliers": []
+    },
+    {
+      "family": "Roboto",
+      "alignment": "center",
+      "metric": {
+        "value": "42\n123",
+        "label": "First\nSecond"
+      },
+      "cell": {
+        "x": 43.2,
+        "y": 43.2,
+        "width": 453.6,
+        "height": 873.6
+      },
+      "accepted": true,
+      "outlineOutliers": []
+    },
+    {
+      "family": "Roboto",
+      "alignment": "center",
+      "metric": {
+        "value": "\t1\t%",
+        "unit": "ms",
+        "label": "\tBefore\tAfter  "
+      },
+      "cell": {
+        "x": 43.2,
+        "y": 43.2,
+        "width": 453.6,
+        "height": 873.6
+      },
+      "accepted": true,
+      "outlineOutliers": []
+    },
+    {
+      "family": "Roboto",
+      "alignment": "center",
+      "metric": {
+        "value": 123,
+        "unit": "ms",
+        "label": "Latency"
+      },
+      "cell": {
+        "x": 43.2,
+        "y": 43.2,
+        "width": 1164.8,
+        "height": 873.6
+      },
+      "accepted": true,
+      "outlineOutliers": []
+    },
+    {
+      "family": "Roboto",
+      "alignment": "center",
+      "metric": {
+        "value": "42\n123",
+        "label": "First\nSecond"
+      },
+      "cell": {
+        "x": 43.2,
+        "y": 43.2,
+        "width": 1164.8,
+        "height": 873.6
+      },
+      "accepted": true,
+      "outlineOutliers": []
+    },
+    {
+      "family": "Roboto",
+      "alignment": "center",
+      "metric": {
+        "value": "\t1\t%",
+        "unit": "ms",
+        "label": "\tBefore\tAfter  "
+      },
+      "cell": {
+        "x": 43.2,
+        "y": 43.2,
+        "width": 1164.8,
+        "height": 873.6
+      },
+      "accepted": true,
+      "outlineOutliers": []
+    },
+    {
+      "family": "Roboto",
+      "alignment": "right",
+      "metric": {
+        "value": 123,
+        "unit": "ms",
+        "label": "Latency"
+      },
+      "cell": {
+        "x": 43.2,
+        "y": 43.2,
+        "width": 453.6,
+        "height": 873.6
+      },
+      "accepted": true,
+      "outlineOutliers": []
+    },
+    {
+      "family": "Roboto",
+      "alignment": "right",
+      "metric": {
+        "value": "42\n123",
+        "label": "First\nSecond"
+      },
+      "cell": {
+        "x": 43.2,
+        "y": 43.2,
+        "width": 453.6,
+        "height": 873.6
+      },
+      "accepted": true,
+      "outlineOutliers": []
+    },
+    {
+      "family": "Roboto",
+      "alignment": "right",
+      "metric": {
+        "value": "\t1\t%",
+        "unit": "ms",
+        "label": "\tBefore\tAfter  "
+      },
+      "cell": {
+        "x": 43.2,
+        "y": 43.2,
+        "width": 453.6,
+        "height": 873.6
+      },
+      "accepted": true,
+      "outlineOutliers": []
+    },
+    {
+      "family": "Roboto",
+      "alignment": "right",
+      "metric": {
+        "value": 123,
+        "unit": "ms",
+        "label": "Latency"
+      },
+      "cell": {
+        "x": 43.2,
+        "y": 43.2,
+        "width": 1164.8,
+        "height": 873.6
+      },
+      "accepted": true,
+      "outlineOutliers": []
+    },
+    {
+      "family": "Roboto",
+      "alignment": "right",
+      "metric": {
+        "value": "42\n123",
+        "label": "First\nSecond"
+      },
+      "cell": {
+        "x": 43.2,
+        "y": 43.2,
+        "width": 1164.8,
+        "height": 873.6
+      },
+      "accepted": true,
+      "outlineOutliers": []
+    },
+    {
+      "family": "Roboto",
+      "alignment": "right",
+      "metric": {
+        "value": "\t1\t%",
+        "unit": "ms",
+        "label": "\tBefore\tAfter  "
+      },
+      "cell": {
+        "x": 43.2,
+        "y": 43.2,
+        "width": 1164.8,
+        "height": 873.6
+      },
+      "accepted": true,
+      "outlineOutliers": []
+    },
+    {
+      "family": "Carlito",
+      "alignment": "left",
+      "metric": {
+        "value": 123,
+        "unit": "ms",
+        "label": "Latency"
+      },
+      "cell": {
+        "x": 43.2,
+        "y": 43.2,
+        "width": 453.6,
+        "height": 873.6
+      },
+      "accepted": true,
+      "outlineOutliers": []
+    },
+    {
+      "family": "Carlito",
+      "alignment": "left",
+      "metric": {
+        "value": "42\n123",
+        "label": "First\nSecond"
+      },
+      "cell": {
+        "x": 43.2,
+        "y": 43.2,
+        "width": 453.6,
+        "height": 873.6
+      },
+      "accepted": true,
+      "outlineOutliers": []
+    },
+    {
+      "family": "Carlito",
+      "alignment": "left",
+      "metric": {
+        "value": "\t1\t%",
+        "unit": "ms",
+        "label": "\tBefore\tAfter  "
+      },
+      "cell": {
+        "x": 43.2,
+        "y": 43.2,
+        "width": 453.6,
+        "height": 873.6
+      },
+      "accepted": true,
+      "outlineOutliers": []
+    },
+    {
+      "family": "Carlito",
+      "alignment": "left",
+      "metric": {
+        "value": 123,
+        "unit": "ms",
+        "label": "Latency"
+      },
+      "cell": {
+        "x": 43.2,
+        "y": 43.2,
+        "width": 1164.8,
+        "height": 873.6
+      },
+      "accepted": true,
+      "outlineOutliers": []
+    },
+    {
+      "family": "Carlito",
+      "alignment": "left",
+      "metric": {
+        "value": "42\n123",
+        "label": "First\nSecond"
+      },
+      "cell": {
+        "x": 43.2,
+        "y": 43.2,
+        "width": 1164.8,
+        "height": 873.6
+      },
+      "accepted": true,
+      "outlineOutliers": []
+    },
+    {
+      "family": "Carlito",
+      "alignment": "left",
+      "metric": {
+        "value": "\t1\t%",
+        "unit": "ms",
+        "label": "\tBefore\tAfter  "
+      },
+      "cell": {
+        "x": 43.2,
+        "y": 43.2,
+        "width": 1164.8,
+        "height": 873.6
+      },
+      "accepted": true,
+      "outlineOutliers": []
+    },
+    {
+      "family": "Carlito",
+      "alignment": "center",
+      "metric": {
+        "value": 123,
+        "unit": "ms",
+        "label": "Latency"
+      },
+      "cell": {
+        "x": 43.2,
+        "y": 43.2,
+        "width": 453.6,
+        "height": 873.6
+      },
+      "accepted": true,
+      "outlineOutliers": []
+    },
+    {
+      "family": "Carlito",
+      "alignment": "center",
+      "metric": {
+        "value": "42\n123",
+        "label": "First\nSecond"
+      },
+      "cell": {
+        "x": 43.2,
+        "y": 43.2,
+        "width": 453.6,
+        "height": 873.6
+      },
+      "accepted": true,
+      "outlineOutliers": []
+    },
+    {
+      "family": "Carlito",
+      "alignment": "center",
+      "metric": {
+        "value": "\t1\t%",
+        "unit": "ms",
+        "label": "\tBefore\tAfter  "
+      },
+      "cell": {
+        "x": 43.2,
+        "y": 43.2,
+        "width": 453.6,
+        "height": 873.6
+      },
+      "accepted": true,
+      "outlineOutliers": []
+    },
+    {
+      "family": "Carlito",
+      "alignment": "center",
+      "metric": {
+        "value": 123,
+        "unit": "ms",
+        "label": "Latency"
+      },
+      "cell": {
+        "x": 43.2,
+        "y": 43.2,
+        "width": 1164.8,
+        "height": 873.6
+      },
+      "accepted": true,
+      "outlineOutliers": []
+    },
+    {
+      "family": "Carlito",
+      "alignment": "center",
+      "metric": {
+        "value": "42\n123",
+        "label": "First\nSecond"
+      },
+      "cell": {
+        "x": 43.2,
+        "y": 43.2,
+        "width": 1164.8,
+        "height": 873.6
+      },
+      "accepted": true,
+      "outlineOutliers": []
+    },
+    {
+      "family": "Carlito",
+      "alignment": "center",
+      "metric": {
+        "value": "\t1\t%",
+        "unit": "ms",
+        "label": "\tBefore\tAfter  "
+      },
+      "cell": {
+        "x": 43.2,
+        "y": 43.2,
+        "width": 1164.8,
+        "height": 873.6
+      },
+      "accepted": true,
+      "outlineOutliers": []
+    },
+    {
+      "family": "Carlito",
+      "alignment": "right",
+      "metric": {
+        "value": 123,
+        "unit": "ms",
+        "label": "Latency"
+      },
+      "cell": {
+        "x": 43.2,
+        "y": 43.2,
+        "width": 453.6,
+        "height": 873.6
+      },
+      "accepted": true,
+      "outlineOutliers": []
+    },
+    {
+      "family": "Carlito",
+      "alignment": "right",
+      "metric": {
+        "value": "42\n123",
+        "label": "First\nSecond"
+      },
+      "cell": {
+        "x": 43.2,
+        "y": 43.2,
+        "width": 453.6,
+        "height": 873.6
+      },
+      "accepted": true,
+      "outlineOutliers": []
+    },
+    {
+      "family": "Carlito",
+      "alignment": "right",
+      "metric": {
+        "value": "\t1\t%",
+        "unit": "ms",
+        "label": "\tBefore\tAfter  "
+      },
+      "cell": {
+        "x": 43.2,
+        "y": 43.2,
+        "width": 453.6,
+        "height": 873.6
+      },
+      "accepted": true,
+      "outlineOutliers": []
+    },
+    {
+      "family": "Carlito",
+      "alignment": "right",
+      "metric": {
+        "value": 123,
+        "unit": "ms",
+        "label": "Latency"
+      },
+      "cell": {
+        "x": 43.2,
+        "y": 43.2,
+        "width": 1164.8,
+        "height": 873.6
+      },
+      "accepted": true,
+      "outlineOutliers": []
+    },
+    {
+      "family": "Carlito",
+      "alignment": "right",
+      "metric": {
+        "value": "42\n123",
+        "label": "First\nSecond"
+      },
+      "cell": {
+        "x": 43.2,
+        "y": 43.2,
+        "width": 1164.8,
+        "height": 873.6
+      },
+      "accepted": true,
+      "outlineOutliers": []
+    },
+    {
+      "family": "Carlito",
+      "alignment": "right",
+      "metric": {
+        "value": "\t1\t%",
+        "unit": "ms",
+        "label": "\tBefore\tAfter  "
+      },
+      "cell": {
+        "x": 43.2,
+        "y": 43.2,
+        "width": 1164.8,
+        "height": 873.6
+      },
+      "accepted": true,
+      "outlineOutliers": []
+    },
+    {
+      "family": "adversarial-outline-control",
+      "alignment": "left",
+      "metric": {
+        "value": "f",
+        "label": "Tall label"
+      },
+      "cell": {
+        "x": 10,
+        "y": 10,
+        "width": 250,
+        "height": 180
+      },
+      "accepted": true,
+      "outlineOutliers": [
+        {
+          "role": "value",
+          "text": "f",
+          "ink": {
+            "x": 7,
+            "y": 2.440000000000005,
+            "width": 31.200000000000003,
+            "height": 80.64000000000001
+          }
+        },
+        {
+          "role": "label",
+          "text": "Tall label",
+          "ink": {
+            "x": 7,
+            "y": 80.038,
+            "width": 121,
+            "height": 36.800000000000004
+          }
+        }
+      ]
+    },
+    {
+      "family": "adversarial-outline-control",
+      "alignment": "right",
+      "metric": {
+        "value": "f",
+        "label": "Tall label"
+      },
+      "cell": {
+        "x": 10,
+        "y": 10,
+        "width": 250,
+        "height": 180
+      },
+      "accepted": true,
+      "outlineOutliers": [
+        {
+          "role": "value",
+          "text": "f",
+          "ink": {
+            "x": 231.8,
+            "y": 2.440000000000005,
+            "width": 31.200000000000003,
+            "height": 80.64000000000001
+          }
+        },
+        {
+          "role": "label",
+          "text": "Tall label",
+          "ink": {
+            "x": 142,
+            "y": 80.038,
+            "width": 121,
+            "height": 36.800000000000004
+          }
+        }
+      ]
+    }
+  ],
+  "scope": "Measured vector outlines only, including adversarial provider controls; no native paint or raster equivalence claim."
+}

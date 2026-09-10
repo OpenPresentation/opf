@@ -81,6 +81,9 @@ jobs:
       - name: Check physical font selections in an offline browser
         working-directory: opf-render
         run: npm run test:font-variants-browser
+      - name: Check accepted metric outlines and actual offline SVG ink
+        working-directory: opf
+        run: node scripts/test-metric-outline-browser.mjs artifacts/metric-outline-browser
       - name: Verify exact published registry packages and fidelity fixtures
         working-directory: opf
         run: |
@@ -118,6 +121,7 @@ jobs:
             opf-render/artifacts/golden/**
             opf-render/artifacts/font-variants*.json
             opf/artifacts/npm/consumer/artifacts/*font-variants*.json
+            opf/artifacts/metric-outline-browser/**
           retention-days: 7
           if-no-files-found: ignore
       - name: Report the verification boundary

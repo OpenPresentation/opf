@@ -1,0 +1,33 @@
+{
+  "design": {
+    "dimensions": {
+      "widthInches": 5.625,
+      "heightInches": 10
+    },
+    "contentAlignment": "right",
+    "fontScheme": {
+      "id": "roboto",
+      "heading": {
+        "family": "Roboto"
+      },
+      "body": {
+        "family": "Roboto"
+      },
+      "code": {
+        "family": "Roboto"
+      }
+    }
+  },
+  "slides": [
+    {
+      "composition": {
+        "minFontSize": 24
+      },
+      "metric": {
+        "value": "42\r\n-0.5",
+        "unit": "milliseconds across all completed production requests",
+        "label": "Latency"
+      }
+    }
+  ]
+}

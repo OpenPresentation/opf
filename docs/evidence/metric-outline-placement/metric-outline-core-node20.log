@@ -1,0 +1,120 @@
+TAP version 13
+# Subtest: composition accepts complete metric geometry against its rounded cell and aliases the value fit
+ok 1 - composition accepts complete metric geometry against its rounded cell and aliases the value fit
+  ---
+  duration_ms: 4.251167
+  ...
+# Subtest: metric scoring includes long metadata and charges each failing leaf once
+ok 2 - metric scoring includes long metadata and charges each failing leaf once
+  ---
+  duration_ms: 4.109792
+  ...
+# Subtest: slide alignment overrides host alignment for complete metric parts
+ok 3 - slide alignment overrides host alignment for complete metric parts
+  ---
+  duration_ms: 0.365084
+  ...
+# Subtest: strict ancestors reject complete metric field paths without changing source
+ok 4 - strict ancestors reject complete metric field paths without changing source
+  ---
+  duration_ms: 532.562958
+  ...
+# Subtest: explicit metric placement and weights remain authoritative despite overflowing metadata
+ok 5 - explicit metric placement and weights remain authoritative despite overflowing metadata
+  ---
+  duration_ms: 34.730917
+  ...
+# Subtest: atomic metric pagination preserves scalar/metadata types and persists its readable floor
+ok 6 - atomic metric pagination preserves scalar/metadata types and persists its readable floor
+  ---
+  duration_ms: 71.318042
+  ...
+# Subtest: irreducible atomic metrics reject all pagination output including empty values after earlier content
+ok 7 - irreducible atomic metrics reject all pagination output including empty values after earlier content
+  ---
+  duration_ms: 87.524375
+  ...
+# Subtest: metric value, unit, labels, zero delta and trend retain their own editable source paths
+ok 8 - metric value, unit, labels, zero delta and trend retain their own editable source paths
+  ---
+  duration_ms: 3.064667
+  ...
+# Subtest: short units stay next to the value on the same baseline; long units and values stack
+ok 9 - short units stay next to the value on the same baseline; long units and values stack
+  ---
+  duration_ms: 22.860042
+  ...
+# Subtest: inline fitting tries a smaller single-line value before rejecting a compact readable metric
+ok 10 - inline fitting tries a smaller single-line value before rejecting a compact readable metric
+  ---
+  duration_ms: 1.040791
+  ...
+# Subtest: metric alignment positions the inline pair together and records exact origins for every source line
+ok 11 - metric alignment positions the inline pair together and records exact origins for every source line
+  ---
+  duration_ms: 0.348958
+  ...
+# Subtest: metadata borrows spare primary space before reducing type and exposes resolved style paths
+ok 12 - metadata borrows spare primary space before reducing type and exposes resolved style paths
+  ---
+  duration_ms: 0.247833
+  ...
+# Subtest: explicit readability floors raise nominal labels and remain invariant across canvas scales
+ok 13 - explicit readability floors raise nominal labels and remain invariant across canvas scales
+  ---
+  duration_ms: 0.419625
+  ...
+# Subtest: irreducible metadata retains all source and strict rejection reports its actual path
+ok 14 - irreducible metadata retains all source and strict rejection reports its actual path
+  ---
+  duration_ms: 1.579334
+  ...
+# Subtest: empty optional fields retain source without blank spacing and an empty value stays targetable
+ok 15 - empty optional fields retain source without blank spacing and an empty value stays targetable
+  ---
+  duration_ms: 0.206625
+  ...
+# Subtest: metric whitespace, tabs and Unicode retain exact line and segment boundaries
+ok 16 - metric whitespace, tabs and Unicode retain exact line and segment boundaries
+  ---
+  duration_ms: 1.167542
+  ...
+# Subtest: invalid input, failed measurement and non-finite geometry reject without plausible substitute fits
+ok 17 - invalid input, failed measurement and non-finite geometry reject without plausible substitute fits
+  ---
+  duration_ms: 0.597417
+  ...
+# Subtest: difficult metrics use a bounded deterministic candidate search independent of canvas scale
+ok 18 - difficult metrics use a bounded deterministic candidate search independent of canvas scale
+  ---
+  duration_ms: 135.5145
+  ...
+# Subtest: metric outlines preserve exact tabs and whitespace while containing overhangs, tall ink and inline baselines
+ok 19 - metric outlines preserve exact tabs and whitespace while containing overhangs, tall ink and inline baselines
+  ---
+  duration_ms: 9.461959
+  ...
+# Subtest: metric outline-aware fitting retains the readability floor and rejects irreducible ink
+ok 20 - metric outline-aware fitting retains the readability floor and rejects irreducible ink
+  ---
+  duration_ms: 2.680167
+  ...
+# Subtest: zero outline clearance is explicit and width-only providers retain prior geometry
+ok 21 - zero outline clearance is explicit and width-only providers retain prior geometry
+  ---
+  duration_ms: 0.518542
+  ...
+# Subtest: invalid metric outline providers and padding reject instead of silently accepting width-only fits
+ok 22 - invalid metric outline providers and padding reject instead of silently accepting width-only fits
+  ---
+  duration_ms: 0.347625
+  ...
+1..22
+# tests 22
+# suites 0
+# pass 22
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 839.666375
