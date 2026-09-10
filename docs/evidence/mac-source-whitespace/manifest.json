@@ -3,8 +3,8 @@
   "files": [
     {
       "file": "README.md",
-      "bytes": 5088,
-      "sha256": "43a9167f2e2cbe320819dfbbe38db4b752db2e3cb432fde076d9542575df297e"
+      "bytes": 5979,
+      "sha256": "4a4ae4ff6c3bf84a42798e20099da54d16cca6e1d023db961c72578f763dfd80"
     },
     {
       "file": "before-blank-target.log",
@@ -32,6 +32,11 @@
       "sha256": "c9381cbc8d6b3c0d703d7a32783e76c48f4424a50fe03b260da9b58d656795c1"
     },
     {
+      "file": "before-spatial-order-assumption.log",
+      "bytes": 1060,
+      "sha256": "2eca9b058e65f81a2b9a7dc2a31a4da5bd2ab325964212cc1d9fe2b4bc923915"
+    },
+    {
       "file": "before-stale-browser-consumer.log",
       "bytes": 749,
       "sha256": "6a6c7b36234cab3f9ac30cd7bc6e89c5024c1ce8ee4692cc0e5fdb1cb7027ae7"
@@ -47,6 +52,11 @@
       "sha256": "81edeadc44e03f3c952321925cbcc68b6cef8722b9cdb67159fe42267ecaad7d"
     },
     {
+      "file": "ci-linux24-source-line-shapes.log",
+      "bytes": 5271,
+      "sha256": "fcd36aa49b7fc220688c30c66aae05e8161fc93d582c7dd812e064c3765020eb"
+    },
+    {
       "file": "node20-browser-manifest.json",
       "bytes": 2316,
       "sha256": "1356445fd89e2f9403fd51292b8b1626b61e9ef70d4ea837c8357ac37248ff25"
@@ -57,9 +67,19 @@
       "sha256": "c4d7359a4e08c198537514dcbc6f45ea72d1633ee66623b90fe7775aab167469"
     },
     {
+      "file": "node20-coordinator.log",
+      "bytes": 1085,
+      "sha256": "4240eb234eafcd6a29e5660cd901e456f065e467725d3c8f7ba9e15ccb7a01c4"
+    },
+    {
       "file": "node20-core-focused.log",
       "bytes": 2154,
       "sha256": "72b21ea570669928cdc562c9cc001a66b3b2f29d7a87c7309ed782df21ec9e35"
+    },
+    {
+      "file": "node20-ecosystem.log",
+      "bytes": 270,
+      "sha256": "d41d110a24bc372517f41ca5f7523fa91734d387cd3bd89e4c2510a19e6e37bf"
     },
     {
       "file": "node20-packed-browser.json",
@@ -102,9 +122,19 @@
       "sha256": "c4d7359a4e08c198537514dcbc6f45ea72d1633ee66623b90fe7775aab167469"
     },
     {
+      "file": "node24-coordinator.log",
+      "bytes": 1085,
+      "sha256": "4240eb234eafcd6a29e5660cd901e456f065e467725d3c8f7ba9e15ccb7a01c4"
+    },
+    {
       "file": "node24-core.log",
       "bytes": 47181,
       "sha256": "a9562b4cf28af24994b594759fc4805f2f61634f59a3f7f5d7a8deaf7a6d5a00"
+    },
+    {
+      "file": "node24-ecosystem.log",
+      "bytes": 270,
+      "sha256": "ad09a7cdaa37e435219c19150a823163448bef41c1927ec7071e807fc44af156"
     },
     {
       "file": "node24-editor.log",
@@ -143,8 +173,8 @@
     },
     {
       "file": "source-graph.json",
-      "bytes": 344,
-      "sha256": "e80040934445f8888a23d0901faeddde1b24e5b23f9db101d3528dc3319301ab"
+      "bytes": 365,
+      "sha256": "97dae7bd9b3537fa8e49c0e75979f0c9ebfdc6f26f2e4837dc9bc42a2631adbd"
     }
   ]
 }

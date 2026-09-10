@@ -1,0 +1,35 @@
+packages (24)	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-10T21:26:12.1340491Z > node --import ./scripts/register-local-opf.mjs scripts/test-ecosystem.mjs
+packages (24)	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-10T21:26:12.1340897Z 
+packages (24)	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-10T21:26:12.5795837Z node:internal/modules/run_main:107
+packages (24)	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-10T21:26:12.5796343Z     triggerUncaughtException(
+packages (24)	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-10T21:26:12.5796583Z     ^
+packages (24)	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-10T21:26:12.5796686Z 
+packages (24)	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-10T21:26:12.5796994Z AssertionError [ERR_ASSERTION]: Every text payload stays an editable PowerPoint shape
+packages (24)	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-10T21:26:12.5797278Z 
+packages (24)	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-10T21:26:12.5797377Z 7 !== 4
+packages (24)	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-10T21:26:12.5797487Z 
+packages (24)	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-10T21:26:12.5798178Z     at file:///__w/opf/opf/opf/scripts/test-ecosystem.mjs:56:10 {
+packages (24)	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-10T21:26:12.5798527Z   generatedMessage: false,
+packages (24)	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-10T21:26:12.5798913Z   code: 'ERR_ASSERTION',
+packages (24)	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-10T21:26:12.5799118Z   actual: 7,
+packages (24)	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-10T21:26:12.5799312Z   expected: 4,
+packages (24)	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-10T21:26:12.5799512Z   operator: 'strictEqual',
+packages (24)	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-10T21:26:12.5799719Z   diff: 'simple'
+packages (24)	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-10T21:26:12.5799908Z }
+packages (24)	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-10T21:26:12.5799997Z 
+packages (24)	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-10T21:26:12.5800087Z Node.js v24.20.0
+packages (24)	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-10T21:26:12.6026460Z  ELIFECYCLE  Command failed with exit code 1.
+packages (24)	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-10T21:26:13.1416135Z file:///__w/opf/opf/opf/scripts/test-package-ecosystem.mjs:12
+packages (24)	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-10T21:26:13.1416725Z   if (result.status !== 0) throw new Error(`${command} ${args.join(' ')} failed (${result.status})`);
+packages (24)	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-10T21:26:13.1417130Z                                  ^
+packages (24)	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-10T21:26:13.1417272Z 
+packages (24)	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-10T21:26:13.1417419Z Error: pnpm test:ecosystem failed (1)
+packages (24)	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-10T21:26:13.1417780Z     at run (file:///__w/opf/opf/opf/scripts/test-package-ecosystem.mjs:12:34)
+packages (24)	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-10T21:26:13.1418232Z     at file:///__w/opf/opf/opf/scripts/test-package-ecosystem.mjs:22:148
+packages (24)	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-10T21:26:13.1418629Z     at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+packages (24)	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-10T21:26:13.1418957Z     at async node:internal/modules/esm/loader:647:26
+packages (24)	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-10T21:26:13.1419350Z     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+packages (24)	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-10T21:26:13.1419608Z 
+packages (24)	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-10T21:26:13.1419692Z Node.js v24.20.0
+packages (24)	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-10T21:26:13.1559524Z  ELIFECYCLE  Command failed with exit code 1.
+packages (24)	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-10T21:26:13.1733362Z ##[error]Process completed with exit code 1.

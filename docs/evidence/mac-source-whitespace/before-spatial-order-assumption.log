@@ -1,0 +1,38 @@
+
+> openpresentation-workspace@ test:ecosystem /Users/michael/.codex/worktrees/c193/opf
+> node --import ./scripts/register-local-opf.mjs scripts/test-ecosystem.mjs
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Native line groups reconstruct exact current body source in reading order
++ actual - expected
+
+  [
++   'First: state the situation.',
++   'Then: explain the change.',
+    'Finally: make the recommendation.',
+-   'Then: explain the change.',
+-   'First: state the situation.'
+  ]
+
+    at file:///Users/michael/.codex/worktrees/c193/opf/scripts/test-ecosystem.mjs:76:10 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: [
+    'First: state the situation.',
+    'Then: explain the change.',
+    'Finally: make the recommendation.'
+  ],
+  expected: [
+    'Finally: make the recommendation.',
+    'Then: explain the change.',
+    'First: state the situation.'
+  ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+ ELIFECYCLE  Command failed with exit code 1.
