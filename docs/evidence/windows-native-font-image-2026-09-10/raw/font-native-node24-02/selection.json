@@ -1,0 +1,176 @@
+{
+  "node": "v24.20.0",
+  "slides": 7,
+  "physicalFaces": 9,
+  "runs": [
+    {
+      "slide": 0,
+      "text": "Tag",
+      "family": "Roboto",
+      "bold": false,
+      "italic": false
+    },
+    {
+      "slide": 0,
+      "text": "Heading",
+      "family": "Roboto",
+      "bold": true,
+      "italic": false
+    },
+    {
+      "slide": 0,
+      "text": "Subtitle",
+      "family": "Roboto",
+      "bold": false,
+      "italic": false
+    },
+    {
+      "slide": 0,
+      "text": "Scalar text stays editable.",
+      "family": "Roboto",
+      "bold": false,
+      "italic": false
+    },
+    {
+      "slide": 1,
+      "text": "Regular ",
+      "family": "Roboto",
+      "bold": false,
+      "italic": false
+    },
+    {
+      "slide": 1,
+      "text": "bold ",
+      "family": "Roboto",
+      "bold": true,
+      "italic": false
+    },
+    {
+      "slide": 1,
+      "text": "italic ",
+      "family": "Roboto",
+      "bold": false,
+      "italic": true
+    },
+    {
+      "slide": 1,
+      "text": "both",
+      "family": "Roboto",
+      "bold": true,
+      "italic": true
+    },
+    {
+      "slide": 2,
+      "text": "Header ",
+      "family": "Roboto",
+      "bold": true,
+      "italic": false
+    },
+    {
+      "slide": 2,
+      "text": "normal",
+      "family": "Roboto",
+      "bold": false,
+      "italic": false
+    },
+    {
+      "slide": 2,
+      "text": "Cell ",
+      "family": "Roboto",
+      "bold": false,
+      "italic": false
+    },
+    {
+      "slide": 2,
+      "text": "emphasis",
+      "family": "Roboto",
+      "bold": false,
+      "italic": true
+    },
+    {
+      "slide": 3,
+      "text": "\"Quote body\"",
+      "family": "Roboto SemiBold",
+      "bold": false,
+      "italic": false
+    },
+    {
+      "slide": 3,
+      "text": "Quote author - Original source",
+      "family": "Roboto Medium",
+      "bold": false,
+      "italic": false
+    },
+    {
+      "slide": 4,
+      "text": "example.js",
+      "family": "Roboto Mono",
+      "bold": true,
+      "italic": false
+    },
+    {
+      "slide": 4,
+      "text": "JavaScript",
+      "family": "Roboto Mono",
+      "bold": true,
+      "italic": false
+    },
+    {
+      "slide": 4,
+      "text": "const count = 123;",
+      "family": "Roboto Mono",
+      "bold": false,
+      "italic": false
+    },
+    {
+      "slide": 5,
+      "text": "123",
+      "family": "Roboto ExtraBold",
+      "bold": false,
+      "italic": false
+    },
+    {
+      "slide": 5,
+      "text": "Weight 500 label",
+      "family": "Roboto Medium",
+      "bold": false,
+      "italic": false
+    },
+    {
+      "slide": 5,
+      "text": "Regular description",
+      "family": "Roboto",
+      "bold": false,
+      "italic": false
+    },
+    {
+      "slide": 5,
+      "text": "+2",
+      "family": "Roboto Medium",
+      "bold": false,
+      "italic": false
+    },
+    {
+      "slide": 6,
+      "text": "List ",
+      "family": "Roboto",
+      "bold": false,
+      "italic": false
+    },
+    {
+      "slide": 6,
+      "text": "bold",
+      "family": "Roboto",
+      "bold": true,
+      "italic": false
+    },
+    {
+      "slide": 6,
+      "text": "Second item",
+      "family": "Roboto",
+      "bold": false,
+      "italic": false
+    }
+  ],
+  "scope": "Actual serialized native font selections, source and reimport. Office paint remains separate."
+}
