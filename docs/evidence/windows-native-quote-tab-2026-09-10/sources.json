@@ -1,0 +1,29 @@
+{
+  "repositories": {
+    "OpenPresentation/opf": "476fdb2f5547e442d8a270047dfc8557f306bb49",
+    "OpenPresentation/opf-render": "379b1402b4d06de79b98a35360f3ef5692d3659b",
+    "OpenPresentation/opf-pptx": "26a52f34a846e4a00fd749a70b7e395efea4c034",
+    "OpenPresentation/opf-editor": "6e0b7d2f1b4369fc0a228391cf36e913e05188f8"
+  },
+  "controlHarnessCommit": "6993deac45f268d0326a482dbe26ca227498b089",
+  "pullRequests": {
+    "quote": "https://github.com/OpenPresentation/opf-pptx/pull/24",
+    "tabControl": "https://github.com/OpenPresentation/opf-pptx/pull/26"
+  },
+  "environment": {
+    "node": [
+      "20.20.2",
+      "24.20.0"
+    ],
+    "pnpm": "10.33.2",
+    "powerPointBuild": "16.0.20326.20132",
+    "windowsBuild": "26200.9445",
+    "nativePowerShell": "5.1.26100.9444"
+  },
+  "sourceEquivalence": {
+    "coreCi": "626bc8c80495733264a692401e6a8c96663dd62f",
+    "rendererCi": "44ff76fe19ae9de80d2aaa962aa7e43fabce02bc",
+    "verified": "No source/package.json diff for core packages/javascript/src and renderer src versus the actual checkout pins above. Runtime bindings remain the actual measured bytes."
+  },
+  "scope": "Fresh native quote runs on the coordinated fix; independent native-created tab controls use no OPF runtime. Proprietary fonts and Office binaries are represented only by hashes. Private PDF font subsets are excluded."
+}

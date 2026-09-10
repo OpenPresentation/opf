@@ -1,0 +1,130 @@
+{
+  "pdfSha256": "7fa57d9f924a43bf43c78c7d3cedd219d7659da5a39cea938006b59e9fe7154e",
+  "pptxSha256": "ae36e33855ba8d773950f2bb7b9077d97d5a5a438c354f89a36e17c08f616a70",
+  "rasterSha256": "9ce63009c4c3f4a4dd55e068aeb3fcee3e89709f11a5075527bf9ba59ec2ed1a",
+  "extractorSha256": "67adaf596dc0d558e582e72798c1a1e37a021374033566958c3879ce690d53cf",
+  "python": "3.12.14",
+  "pdfplumber": "0.11.9",
+  "pypdf": "6.10.0",
+  "records": [
+    {
+      "targetPoints": 16.25,
+      "drawingMlTabPoints": 16.25,
+      "nativeTabOffsetPoints": 16.25,
+      "nativeTabErrorPoints": 0.0,
+      "nativeLiteralOffsetPoints": 16.25,
+      "pdfTabX": 48.6,
+      "pdfLiteralX": 48.648,
+      "pdfTabMinusLiteralPoints": -0.04800000000000182,
+      "pdfTabFont": "BCDEEE+Calibri",
+      "pdfLiteralFont": "BCDEEE+Calibri"
+    },
+    {
+      "targetPoints": 16.26,
+      "drawingMlTabPoints": 16.26,
+      "nativeTabOffsetPoints": 16.25,
+      "nativeTabErrorPoints": 0.010000000000001563,
+      "nativeLiteralOffsetPoints": 16.259999999999998,
+      "pdfTabX": 48.6,
+      "pdfLiteralX": 48.672,
+      "pdfTabMinusLiteralPoints": -0.07199999999999562,
+      "pdfTabFont": "BCDEEE+Calibri",
+      "pdfLiteralFont": "BCDEEE+Calibri"
+    },
+    {
+      "targetPoints": 16.27,
+      "drawingMlTabPoints": 16.27,
+      "nativeTabOffsetPoints": 16.25,
+      "nativeTabErrorPoints": 0.019999999999999574,
+      "nativeLiteralOffsetPoints": 16.270000000000003,
+      "pdfTabX": 48.6,
+      "pdfLiteralX": 48.672,
+      "pdfTabMinusLiteralPoints": -0.07199999999999562,
+      "pdfTabFont": "BCDEEE+Calibri",
+      "pdfLiteralFont": "BCDEEE+Calibri"
+    },
+    {
+      "targetPoints": 16.27734375,
+      "drawingMlTabPoints": 16.27732283464567,
+      "nativeTabOffsetPoints": 16.300000000000004,
+      "nativeTabErrorPoints": 0.022656250000004263,
+      "nativeLiteralOffsetPoints": 16.277322400000003,
+      "pdfTabX": 48.72,
+      "pdfLiteralX": 48.696,
+      "pdfTabMinusLiteralPoints": 0.02400000000000091,
+      "pdfTabFont": "BCDEEE+Calibri",
+      "pdfLiteralFont": "BCDEEE+Calibri"
+    },
+    {
+      "targetPoints": 16.28,
+      "drawingMlTabPoints": 16.28,
+      "nativeTabOffsetPoints": 16.300000000000004,
+      "nativeTabErrorPoints": 0.020000000000003126,
+      "nativeLiteralOffsetPoints": 16.28,
+      "pdfTabX": 48.72,
+      "pdfLiteralX": 48.696,
+      "pdfTabMinusLiteralPoints": 0.02400000000000091,
+      "pdfTabFont": "BCDEEE+Calibri",
+      "pdfLiteralFont": "BCDEEE+Calibri"
+    },
+    {
+      "targetPoints": 16.29,
+      "drawingMlTabPoints": 16.29,
+      "nativeTabOffsetPoints": 16.300000000000004,
+      "nativeTabErrorPoints": 0.010000000000005116,
+      "nativeLiteralOffsetPoints": 16.29,
+      "pdfTabX": 48.72,
+      "pdfLiteralX": 48.696,
+      "pdfTabMinusLiteralPoints": 0.02400000000000091,
+      "pdfTabFont": "BCDEEE+Calibri",
+      "pdfLiteralFont": "BCDEEE+Calibri"
+    },
+    {
+      "targetPoints": 16.3,
+      "drawingMlTabPoints": 16.3,
+      "nativeTabOffsetPoints": 16.300000000000004,
+      "nativeTabErrorPoints": 3.552713678800501e-15,
+      "nativeLiteralOffsetPoints": 16.300000000000004,
+      "pdfTabX": 48.72,
+      "pdfLiteralX": 48.696,
+      "pdfTabMinusLiteralPoints": 0.02400000000000091,
+      "pdfTabFont": "BCDEEE+Calibri",
+      "pdfLiteralFont": "BCDEEE+Calibri"
+    },
+    {
+      "targetPoints": 16.31,
+      "drawingMlTabPoints": 16.31,
+      "nativeTabOffsetPoints": 16.300000000000004,
+      "nativeTabErrorPoints": 0.009999999999994458,
+      "nativeLiteralOffsetPoints": 16.310000000000002,
+      "pdfTabX": 48.72,
+      "pdfLiteralX": 48.72,
+      "pdfTabMinusLiteralPoints": 0.0,
+      "pdfTabFont": "BCDEEE+Calibri",
+      "pdfLiteralFont": "BCDEEE+Calibri"
+    },
+    {
+      "targetPoints": 77.3173828125,
+      "drawingMlTabPoints": 77.31740157480316,
+      "nativeTabOffsetPoints": 77.30000000000001,
+      "nativeTabErrorPoints": 0.01738281249998863,
+      "nativeLiteralOffsetPoints": 77.31739999999999,
+      "pdfTabX": 109.7,
+      "pdfLiteralX": 109.73,
+      "pdfTabMinusLiteralPoints": -0.030000000000001137,
+      "pdfTabFont": "BCDEEE+Calibri",
+      "pdfLiteralFont": "BCDEEE+Calibri"
+    }
+  ],
+  "fonts": [
+    {
+      "resource": "/F1",
+      "baseFont": "/BCDEEE+Calibri",
+      "subtype": "/TrueType"
+    }
+  ],
+  "saveReopenObservationsAndRasterIdentical": true,
+  "nativeTabTolerancePoints": 0.02,
+  "nativeTabGatePassed": false,
+  "scope": "PowerPoint-created control, no OPF input. Native bounds retain their 0.02 pt gate. PDF coordinates are independent observations with separate serialization precision, not proof of screen pixel placement or per-glyph physical font-file identity. No font programs are extracted."
+}

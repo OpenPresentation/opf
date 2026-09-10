@@ -1,0 +1,1 @@
+Native quote checks passed: 12 character-bound/separation observations and editable save/reopens, 6 valid deck imports with exact body/footer lines and title edits. Quotes reimport as text blocks; raster differences are observations, not equivalence thresholds.

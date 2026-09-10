@@ -1,0 +1,86 @@
+{
+  "pdfSha256": "7fa57d9f924a43bf43c78c7d3cedd219d7659da5a39cea938006b59e9fe7154e",
+  "rasterSha256": "9ce63009c4c3f4a4dd55e068aeb3fcee3e89709f11a5075527bf9ba59ec2ed1a",
+  "records": [
+    {
+      "targetPoints": 16.25,
+      "tabX": 48.6,
+      "literalX": 48.648,
+      "tabMinusLiteralPoints": -0.04800000000000182,
+      "tabFont": "BCDEEE+Calibri",
+      "literalFont": "BCDEEE+Calibri"
+    },
+    {
+      "targetPoints": 16.26,
+      "tabX": 48.6,
+      "literalX": 48.672,
+      "tabMinusLiteralPoints": -0.07199999999999562,
+      "tabFont": "BCDEEE+Calibri",
+      "literalFont": "BCDEEE+Calibri"
+    },
+    {
+      "targetPoints": 16.27,
+      "tabX": 48.6,
+      "literalX": 48.672,
+      "tabMinusLiteralPoints": -0.07199999999999562,
+      "tabFont": "BCDEEE+Calibri",
+      "literalFont": "BCDEEE+Calibri"
+    },
+    {
+      "targetPoints": 16.27734375,
+      "tabX": 48.72,
+      "literalX": 48.696,
+      "tabMinusLiteralPoints": 0.02400000000000091,
+      "tabFont": "BCDEEE+Calibri",
+      "literalFont": "BCDEEE+Calibri"
+    },
+    {
+      "targetPoints": 16.28,
+      "tabX": 48.72,
+      "literalX": 48.696,
+      "tabMinusLiteralPoints": 0.02400000000000091,
+      "tabFont": "BCDEEE+Calibri",
+      "literalFont": "BCDEEE+Calibri"
+    },
+    {
+      "targetPoints": 16.29,
+      "tabX": 48.72,
+      "literalX": 48.696,
+      "tabMinusLiteralPoints": 0.02400000000000091,
+      "tabFont": "BCDEEE+Calibri",
+      "literalFont": "BCDEEE+Calibri"
+    },
+    {
+      "targetPoints": 16.3,
+      "tabX": 48.72,
+      "literalX": 48.696,
+      "tabMinusLiteralPoints": 0.02400000000000091,
+      "tabFont": "BCDEEE+Calibri",
+      "literalFont": "BCDEEE+Calibri"
+    },
+    {
+      "targetPoints": 16.31,
+      "tabX": 48.72,
+      "literalX": 48.72,
+      "tabMinusLiteralPoints": 0.0,
+      "tabFont": "BCDEEE+Calibri",
+      "literalFont": "BCDEEE+Calibri"
+    },
+    {
+      "targetPoints": 77.3173828125,
+      "tabX": 109.7,
+      "literalX": 109.73,
+      "tabMinusLiteralPoints": -0.030000000000001137,
+      "tabFont": "BCDEEE+Calibri",
+      "literalFont": "BCDEEE+Calibri"
+    }
+  ],
+  "fonts": [
+    {
+      "resource": "/F1",
+      "baseFont": "/BCDEEE+Calibri",
+      "subtype": "/TrueType"
+    }
+  ],
+  "scope": "Native PDF text positions and font resource names, independently parsed; proprietary font programs are not extracted or redistributed."
+}

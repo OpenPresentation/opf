@@ -1,0 +1,164 @@
+[
+  {
+    "phase": "created",
+    "target": 16.25,
+    "stored": 16.25,
+    "actualOffset": 16.25,
+    "error": 0,
+    "literalOffset": 16.25,
+    "tabVsLiteral": 0
+  },
+  {
+    "phase": "created",
+    "target": 16.26,
+    "stored": 16.26,
+    "actualOffset": 16.25,
+    "error": -0.010000000000001563,
+    "literalOffset": 16.259999999999998,
+    "tabVsLiteral": -0.00999999999999801
+  },
+  {
+    "phase": "created",
+    "target": 16.27,
+    "stored": 16.27,
+    "actualOffset": 16.25,
+    "error": -0.019999999999999574,
+    "literalOffset": 16.270000000000003,
+    "tabVsLiteral": -0.020000000000003126
+  },
+  {
+    "phase": "created",
+    "target": 16.27734375,
+    "stored": 16.2773228,
+    "actualOffset": 16.300000000000004,
+    "error": 0.022656250000004263,
+    "literalOffset": 16.277322400000003,
+    "tabVsLiteral": 0.02267760000000152
+  },
+  {
+    "phase": "created",
+    "target": 16.28,
+    "stored": 16.28,
+    "actualOffset": 16.300000000000004,
+    "error": 0.020000000000003126,
+    "literalOffset": 16.28,
+    "tabVsLiteral": 0.020000000000003126
+  },
+  {
+    "phase": "created",
+    "target": 16.29,
+    "stored": 16.29,
+    "actualOffset": 16.300000000000004,
+    "error": 0.010000000000005116,
+    "literalOffset": 16.29,
+    "tabVsLiteral": 0.010000000000005116
+  },
+  {
+    "phase": "created",
+    "target": 16.3,
+    "stored": 16.3,
+    "actualOffset": 16.300000000000004,
+    "error": 3.552713678800501e-15,
+    "literalOffset": 16.300000000000004,
+    "tabVsLiteral": 0
+  },
+  {
+    "phase": "created",
+    "target": 16.31,
+    "stored": 16.31,
+    "actualOffset": 16.300000000000004,
+    "error": -0.009999999999994458,
+    "literalOffset": 16.310000000000002,
+    "tabVsLiteral": -0.00999999999999801
+  },
+  {
+    "phase": "created",
+    "target": 77.3173828125,
+    "stored": 77.3174,
+    "actualOffset": 77.30000000000001,
+    "error": -0.01738281249998863,
+    "literalOffset": 77.31739999999999,
+    "tabVsLiteral": -0.017399999999994975
+  },
+  {
+    "phase": "reopened",
+    "target": 16.25,
+    "stored": 16.25,
+    "actualOffset": 16.25,
+    "error": 0,
+    "literalOffset": 16.25,
+    "tabVsLiteral": 0
+  },
+  {
+    "phase": "reopened",
+    "target": 16.26,
+    "stored": 16.26,
+    "actualOffset": 16.25,
+    "error": -0.010000000000001563,
+    "literalOffset": 16.259999999999998,
+    "tabVsLiteral": -0.00999999999999801
+  },
+  {
+    "phase": "reopened",
+    "target": 16.27,
+    "stored": 16.27,
+    "actualOffset": 16.25,
+    "error": -0.019999999999999574,
+    "literalOffset": 16.270000000000003,
+    "tabVsLiteral": -0.020000000000003126
+  },
+  {
+    "phase": "reopened",
+    "target": 16.27734375,
+    "stored": 16.2773228,
+    "actualOffset": 16.300000000000004,
+    "error": 0.022656250000004263,
+    "literalOffset": 16.277322400000003,
+    "tabVsLiteral": 0.02267760000000152
+  },
+  {
+    "phase": "reopened",
+    "target": 16.28,
+    "stored": 16.28,
+    "actualOffset": 16.300000000000004,
+    "error": 0.020000000000003126,
+    "literalOffset": 16.28,
+    "tabVsLiteral": 0.020000000000003126
+  },
+  {
+    "phase": "reopened",
+    "target": 16.29,
+    "stored": 16.29,
+    "actualOffset": 16.300000000000004,
+    "error": 0.010000000000005116,
+    "literalOffset": 16.29,
+    "tabVsLiteral": 0.010000000000005116
+  },
+  {
+    "phase": "reopened",
+    "target": 16.3,
+    "stored": 16.3,
+    "actualOffset": 16.300000000000004,
+    "error": 3.552713678800501e-15,
+    "literalOffset": 16.300000000000004,
+    "tabVsLiteral": 0
+  },
+  {
+    "phase": "reopened",
+    "target": 16.31,
+    "stored": 16.31,
+    "actualOffset": 16.300000000000004,
+    "error": -0.009999999999994458,
+    "literalOffset": 16.310000000000002,
+    "tabVsLiteral": -0.00999999999999801
+  },
+  {
+    "phase": "reopened",
+    "target": 77.3173828125,
+    "stored": 77.3174,
+    "actualOffset": 77.30000000000001,
+    "error": -0.01738281249998863,
+    "literalOffset": 77.31739999999999,
+    "tabVsLiteral": -0.017399999999994975
+  }
+]
