@@ -50,6 +50,15 @@ test('short units stay next to the value on the same baseline; long units and va
   }
 });
 
+test('inline fitting tries a smaller single-line value before rejecting a compact readable metric',()=>{
+  const metric={value:'1234567890',unit:'ms',label:'L'},cell={x:0,y:0,width:104,height:72};
+  const result=layoutMetric(metric,cell,{minFontSize:16,overflow:'error',textMeasurement:{measure:(text,size)=>text.length*size*.5}});
+  assert.equal(result.overflow,false);assert.equal(result.arrangement,'inline-unit');
+  assert.deepEqual(result.parts[0].fit.lines,['1234567890']);assert.equal(result.parts[0].fit.fontSize,16);
+  for(const part of result.parts)assert.ok(part.box.y+part.box.height<=cell.height);
+  sourceIsComplete(result);
+});
+
 test('metadata borrows spare primary space before reducing type and exposes resolved style paths',()=>{
   const seen=[];
   const options={fonts:{heading:'Requested Heading',body:'Requested Body'},textMeasurement:{

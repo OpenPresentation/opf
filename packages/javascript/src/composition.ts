@@ -425,14 +425,14 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     }
     return fit;
   };
-  const fitValue=(area:LayoutBox)=>{
+  const fitValue=(area:LayoutBox,singleLine:boolean)=>{
     if (!usable(area)) return undefined;
     // Derive sizes from the requested size: repeated subtraction accumulates rounding
     // error and can add an extra trial at very small floors.
     for (let step=0;step<=76;step++) {
       const size=Math.max(minimum,primary.requestedFontSize-step*scale);
       const natural=measure(primary,size,area.width);
-      const fit={...natural,overflow:occupied(natural)>area.height+.01||natural.sourceLines.some(line=>line.width>area.width+.01)};
+      const fit={...natural,overflow:singleLine&&natural.lines.length!==1||occupied(natural)>area.height+.01||natural.sourceLines.some(line=>line.width>area.width+.01)};
       if (!fit.overflow||size===minimum) return fit;
     }
   };
@@ -451,7 +451,7 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
       const tailHeight=tail.reduce((sum,part)=>sum+occupied(measured.get(part)!),0)+Math.max(0,tail.length-1)*gap;
       if (!Number.isFinite(tailHeight)) throw new RangeError('Metric metadata exceeds finite coordinates.');
       const area={...box,width:arrangement==='inline-unit'?box.width-unitWidth-gap:box.width,height:box.height-tailHeight-(tail.length?primaryGap:0)};
-      const valueFit=fitValue(area),valueHeight=valueFit?occupied(valueFit):0;
+      const valueFit=fitValue(area,arrangement==='inline-unit'),valueHeight=valueFit?occupied(valueFit):0;
       const allocations:Allocation[]=[];
       let primaryHeight=valueHeight;
       if (arrangement==='inline-unit'&&unit&&unitFit&&valueFit) {

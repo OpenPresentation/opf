@@ -6,7 +6,7 @@ This milestone adds `layoutMetric` as a standalone shared primitive. [API rules]
 
 ## Verification
 
-Windows Node 20.20.2 and 24.20.0 pass all 457 core tests plus the existing composition/nesting, pagination, data, rich-text and list preservation suites. Nine focused metric tests cover zero/scalar types, exact text/ranges, alignment, long metadata, font-style resolution, scaled floors, empty fields, grapheme/CRLF/tab preservation, invalid measurements/dimensions and bounded deterministic failure. Root and focused public TypeScript declarations compile. Workspace typecheck and lint pass (existing lint warnings remain).
+Windows Node 20.20.2 and 24.20.0 pass all 458 core tests plus the existing composition/nesting, pagination, data, rich-text and list preservation suites. Ten focused metric tests cover zero/scalar types, exact text/ranges, alignment, long metadata, font-style resolution, scaled floors, empty fields, grapheme/CRLF/tab preservation, invalid measurements/dimensions and bounded deterministic failure. Root and focused public TypeScript declarations compile. Workspace typecheck and lint pass (existing lint warnings remain).
 
 The [geometry report](../evidence/shared-metric-layout-2026-09-10.json) is byte-identical across both runtimes. It binds the candidate source/runtime, all 33 installed font files and 535 published core/renderer files checked against prior verified registry archives. The registry renderer supplies outer cells and font advances only. Sixty schema-valid scenarios cover Carlito, Caladea and Roboto on 1280×720 and 540×960 canvases: 50 fit, six irreducible labels reject strictly, and four expected font-coverage failures reject without altering source. Carlito lacks U+0301 combining acute in these bytes; Caladea lacks U+03A9 Ω. Composed/decomposed Unicode is never silently normalized to evade those gaps.
 
@@ -19,6 +19,8 @@ node scripts/test-metric-layout-browser.mjs <verified-registry-consumer> artifac
 ```
 
 Use Node 20/24 without source aliases, loaders or `NODE_OPTIONS`. The actual registry consumer must match the preserved complete-set archive evidence. The renderer checkout supplies Playwright only. Coordinated CI now executes these separate candidate checks and preserves reports/rasters; complete Linux CI and review remain required before merge. The report intentionally distinguishes local candidate code from installed published runtime behavior.
+
+Review caught a valid compact-cell failure: a wrapped value fitted vertically, ending the inline search before a smaller single-line value was tried. The 104×72 regression (`1234567890`, unit `ms`, label `L`, 16px floor, deterministic half-em advances) previously rejected strictly; it now fits inline at the floor. The one-line condition is part of value fitting itself, with the same bounded search. Both complete core suites and all evidence probes were rerun after the correction.
 
 ## Next integration gates
 
