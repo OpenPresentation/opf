@@ -1,0 +1,24 @@
+{
+  "repositories": {
+    "OpenPresentation/opf": "8eac506f9238bfe37a8ce7b9dccde323d0709830",
+    "OpenPresentation/opf-pptx": "c92209f7168a83aa941ecd5960b55aa492138800",
+    "OpenPresentation/opf-render": "23432d0bc21c16d4bdc8bad33a1d9c5e7a8e2ccd",
+    "OpenPresentation/opf-editor": "6e0b7d2f1b4369fc0a228391cf36e913e05188f8"
+  },
+  "harnessCommits": {
+    "workerHandle": "95f5b9e0387dabb467a26d0fbbbdbe0171439a55",
+    "boundedText": "48843ccfaaa8db295ed9095d1cf5e21cdac677bc"
+  },
+  "pullRequests": {
+    "workerHandle": "https://github.com/OpenPresentation/opf-pptx/pull/17",
+    "boundedText": "https://github.com/OpenPresentation/opf-pptx/pull/18"
+  },
+  "environment": {
+    "node": ["20.20.2", "24.20.0"],
+    "powerPointBuild": "16.0.20326.20132",
+    "powerPointExecutableSha256": "90fa931172c507b763ba92a82b19d5bc70816e008c5bb87577e1838e8a92e9f9",
+    "windowsBuild": "26200.9445",
+    "nativePowerShell": "5.1.26100.9444"
+  },
+  "scope": "Product runtime baseline is unchanged. Chart source-refresh and added COM-observation verifiers are preserved as exact snapshots with their generation hashes. Temporary fonts are openly licensed Carlito; no proprietary font bytes or outlines are included. Application binaries are represented by hashes only."
+}

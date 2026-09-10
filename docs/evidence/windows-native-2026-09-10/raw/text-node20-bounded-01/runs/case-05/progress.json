@@ -1,0 +1,109 @@
+﻿{
+    "records":  [
+                    {
+                        "editedSha256":  "a30676e541c978a1775ba4934536190845ffb7383b075568c2ba8ed3480cb101",
+                        "lines":  [
+                                      {
+                                          "width":  873.6,
+                                          "height":  14.64,
+                                          "path":  "slides.0.tag",
+                                          "text":  "Source",
+                                          "left":  42.88362,
+                                          "tags":  1,
+                                          "line":  0,
+                                          "fonts":  [
+                                                        "Carlito"
+                                                    ],
+                                          "top":  43.2
+                                      },
+                                      {
+                                          "width":  873.6,
+                                          "height":  49.41,
+                                          "path":  "slides.0.title",
+                                          "text":  "A measured title that wraps when space is narrow",
+                                          "left":  42.5884247,
+                                          "tags":  1,
+                                          "line":  0,
+                                          "fonts":  [
+                                                        "Carlito"
+                                                    ],
+                                          "top":  66.84
+                                      },
+                                      {
+                                          "width":  873.6,
+                                          "height":  22.87504,
+                                          "path":  "slides.0.subtitle",
+                                          "text":  "Supporting text",
+                                          "left":  42.7796059,
+                                          "tags":  1,
+                                          "line":  0,
+                                          "fonts":  [
+                                                        "Carlito"
+                                                    ],
+                                          "top":  125.25
+                                      },
+                                      {
+                                          "width":  873.6,
+                                          "height":  22.87504,
+                                          "path":  "slides.0.text",
+                                          "text":  "Exact spacing with bold words and italics.",
+                                          "left":  43.2,
+                                          "tags":  0,
+                                          "line":  0,
+                                          "fonts":  [
+                                                        "Carlito"
+                                                    ],
+                                          "top":  166.125046
+                                      },
+                                      {
+                                          "width":  873.6,
+                                          "height":  24.4,
+                                          "path":  "slides.0.text",
+                                          "text":  "Raised note stays editable.",
+                                          "left":  43.2,
+                                          "tags":  0,
+                                          "line":  1,
+                                          "fonts":  [
+                                                        "Carlito"
+                                                    ],
+                                          "top":  189
+                                      }
+                                  ],
+                        "savedSha256":  "1291892e4f586ec0b2fa02f9f4ef97623419cda0704c37bae869164fde0609db",
+                        "masks":  [
+                                      {
+                                          "path":  "slides.0.tag",
+                                          "sha256":  "7bc15956f033e5da25576fcaf6c68512dace6023ea1db7aa8e66e39e30dc82ce",
+                                          "file":  "case-05-mask-0.png"
+                                      },
+                                      {
+                                          "path":  "slides.0.title",
+                                          "sha256":  "da9ea0e4ab83470cdce67d53ef20460f99a55db0da41cbc742f7d731730f0f4a",
+                                          "file":  "case-05-mask-1.png"
+                                      },
+                                      {
+                                          "path":  "slides.0.subtitle",
+                                          "sha256":  "797e1d9f57709c076dcceb28b66eb5c93f9767cdd829437b439b662476ea9661",
+                                          "file":  "case-05-mask-2.png"
+                                      },
+                                      {
+                                          "path":  "slides.0.text",
+                                          "sha256":  "152a245522166658fd90ce6b8b6b48428b534bd8624a68f1c9997c15c0c24e67",
+                                          "file":  "case-05-mask-3.png"
+                                      }
+                                  ],
+                        "reopened":  {
+                                         "sha256":  "1cb20141efe8ba66403b62594f6dcff2922319726c7c4877db39cba3f0515fb9",
+                                         "file":  "case-05-reopened.png"
+                                     },
+                        "original":  {
+                                         "sha256":  "1cb20141efe8ba66403b62594f6dcff2922319726c7c4877db39cba3f0515fb9",
+                                         "file":  "case-05-original.png"
+                                     },
+                        "file":  "case-05.pptx"
+                    }
+                ],
+    "case":  5,
+    "generationSha256":  "d0797519b9021529f70e5a928955bd2547788de4261a56ba55f1ac89d2e108bf",
+    "stage":  "completed"
+}

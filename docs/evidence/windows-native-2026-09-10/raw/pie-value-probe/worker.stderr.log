@@ -1,0 +1,5 @@
+OperationStopped: C:\Users\micha\.codex\worktrees\fd3f\opf\artifacts\windows-native\opf-pptx\artifacts\inspect-pie-values.ps1:18
+Line |
+  18 |  } finally { if($null -ne $presentation) { $presentation.Close() } }
+     |                                            ~~~~~~~~~~~~~~~~~~~~~
+     | The RPC server is unavailable. (0x800706BA)

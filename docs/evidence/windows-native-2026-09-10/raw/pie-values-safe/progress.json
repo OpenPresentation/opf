@@ -1,0 +1,28 @@
+﻿{
+    "observations":  [
+                         {
+                             "upper":  2,
+                             "rank":  1,
+                             "lower":  1,
+                             "type":  "System.Object[*]",
+                             "length":  2
+                         },
+                         {
+                             "indexed":  [
+                                             {
+                                                 "isNull":  true,
+                                                 "value":  null,
+                                                 "index":  1
+                                             },
+                                             {
+                                                 "isNull":  true,
+                                                 "value":  null,
+                                                 "index":  2
+                                             }
+                                         ]
+                         }
+                     ],
+    "hostVersion":  "5.1.26100.9444",
+    "stage":  "closed-owned-copy",
+    "apartment":  "STA"
+}
