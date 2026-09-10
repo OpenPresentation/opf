@@ -1,0 +1,632 @@
+{
+  "source": {
+    "repository": "OpenPresentation/opf",
+    "path": "examples",
+    "sha256": "3a1ed8ad00b30863b5852197a85602263a2238c613020fb891d933f86e124c4b",
+    "decks": 126
+  },
+  "total": 805,
+  "changed": 279,
+  "unchanged": 526,
+  "previousBaseline": "test/golden/opf-examples-png.rich-flow.sha256.json",
+  "previousRendererCommit": "c92198b0d0acc94892385a8594fe2879461d64b0",
+  "previousCoreCandidate": {
+    "renderer": "c92198b0d0acc94892385a8594fe2879461d64b0",
+    "coreCandidate": {
+      "name": "@openpresentation/opf",
+      "version": "0.4.0-preview.11",
+      "file": "openpresentation-opf-0.4.0-preview.11.tgz",
+      "sha256": "a092f26d022169c66a216e86401f7573c77985c67bd83b87246a953717ff54c6",
+      "bytes": 2340187
+    },
+    "candidateEvidence": "core docs/evidence/mac-rich-flow/followup/mac-node24-candidate-manifest.json at d1660790a7a60e7083b533075230f193058a4e50"
+  },
+  "verifierSha256": "825d6e33256a327b0c9d50132bbd7e5428fe61bba6b64381473ec0d1162c029d",
+  "sheets": [
+    {
+      "file": "sheet-0.png",
+      "sha256": "dd3a12762b6369b067250ad1c5b5630c8ada3a24504895f251560a1aa244c2ed",
+      "slides": [
+        "gallery/business-functions/compliance-readiness-review.opf.json#4",
+        "gallery/business-functions/compliance-readiness-review.opf.json#5",
+        "gallery/business-functions/compliance-readiness-review.opf.json#6",
+        "gallery/business-functions/contract-cycle-time-brief.opf.json#2",
+        "gallery/business-functions/contract-cycle-time-brief.opf.json#4",
+        "gallery/business-functions/data-platform-migration-plan.opf.json#2",
+        "gallery/business-functions/data-platform-migration-plan.opf.json#4",
+        "gallery/business-functions/data-platform-migration-plan.opf.json#5"
+      ]
+    },
+    {
+      "file": "sheet-1.png",
+      "sha256": "0a75ef7b26c1ab6068fb57fa24cc5026bf2600859ee28afb042ff2756a69c29b",
+      "slides": [
+        "gallery/business-functions/data-platform-migration-plan.opf.json#6",
+        "gallery/business-functions/defect-escape-reduction-review.opf.json#2",
+        "gallery/business-functions/defect-escape-reduction-review.opf.json#4",
+        "gallery/business-functions/demand-generation-campaign-brief.opf.json#0",
+        "gallery/business-functions/demand-generation-campaign-brief.opf.json#2",
+        "gallery/business-functions/demand-generation-campaign-brief.opf.json#4",
+        "gallery/business-functions/demand-generation-campaign-brief.opf.json#7",
+        "gallery/business-functions/employee-town-hall-run-of-show.opf.json#0"
+      ]
+    },
+    {
+      "file": "sheet-2.png",
+      "sha256": "8a6f1c36f40ba1b3b271b9678e48a8694094da5065f53d620bd16e5746a9f39e",
+      "slides": [
+        "gallery/business-functions/engineering-capacity-planning.opf.json#0",
+        "gallery/business-functions/engineering-capacity-planning.opf.json#3",
+        "gallery/business-functions/engineering-capacity-planning.opf.json#4",
+        "gallery/business-functions/engineering-capacity-planning.opf.json#5",
+        "gallery/business-functions/engineering-capacity-planning.opf.json#6",
+        "gallery/business-functions/engineering-capacity-planning.opf.json#7",
+        "gallery/business-functions/enterprise-account-expansion-plan.opf.json#2",
+        "gallery/business-functions/enterprise-account-expansion-plan.opf.json#4"
+      ]
+    },
+    {
+      "file": "sheet-3.png",
+      "sha256": "11a964a3326a587945dbf89e029089890e4d9af90ff1a31ce94315c6c84078b3",
+      "slides": [
+        "gallery/business-functions/field-enablement-certification.opf.json#2",
+        "gallery/business-functions/field-enablement-certification.opf.json#4",
+        "gallery/business-functions/fy27-budget-tradeoff-deck.opf.json#2",
+        "gallery/business-functions/identity-incident-executive-brief.opf.json#2",
+        "gallery/business-functions/identity-incident-executive-brief.opf.json#4",
+        "gallery/business-functions/investor-relations-update.opf.json#4",
+        "gallery/business-functions/investor-relations-update.opf.json#5",
+        "gallery/business-functions/investor-relations-update.opf.json#6"
+      ]
+    },
+    {
+      "file": "sheet-4.png",
+      "sha256": "3b5e324f4291ef8b71b4306863ae10cbeb50fc33c231b352ed5d759a7042a3fc",
+      "slides": [
+        "gallery/business-functions/model-governance-review.opf.json#2",
+        "gallery/business-functions/model-governance-review.opf.json#4",
+        "gallery/business-functions/model-governance-review.opf.json#6",
+        "gallery/business-functions/onboarding-experience-redesign.opf.json#2",
+        "gallery/business-functions/partner-ecosystem-launch-kit.opf.json#2",
+        "gallery/business-functions/pricing-and-packaging-decision.opf.json#2",
+        "gallery/business-functions/pricing-and-packaging-decision.opf.json#4",
+        "gallery/business-functions/pricing-and-packaging-decision.opf.json#6"
+      ]
+    },
+    {
+      "file": "sheet-5.png",
+      "sha256": "cabb7939cb00da4d1498a44b949eaf2a2d5683a110ea45c311ce8a0e2ea7ce71",
+      "slides": [
+        "gallery/business-functions/product-roadmap-decision-review.opf.json#2",
+        "gallery/business-functions/product-roadmap-decision-review.opf.json#4",
+        "gallery/business-functions/product-roadmap-decision-review.opf.json#5",
+        "gallery/business-functions/product-roadmap-decision-review.opf.json#6",
+        "gallery/business-functions/renewal-save-plan.opf.json#2",
+        "gallery/business-functions/renewal-save-plan.opf.json#4",
+        "gallery/business-functions/revenue-forecast-inspection.opf.json#2",
+        "gallery/business-functions/revenue-forecast-inspection.opf.json#3"
+      ]
+    },
+    {
+      "file": "sheet-6.png",
+      "sha256": "568e9d288f930f1e6cf9997271bd3e0cc201f92e7c5fdea836ffda19c26a0f88",
+      "slides": [
+        "gallery/business-functions/revenue-forecast-inspection.opf.json#4",
+        "gallery/business-functions/revenue-forecast-inspection.opf.json#5",
+        "gallery/business-functions/revenue-forecast-inspection.opf.json#6",
+        "gallery/business-functions/s-and-op-exception-review.opf.json#2",
+        "gallery/business-functions/s-and-op-exception-review.opf.json#4",
+        "gallery/business-functions/s-and-op-exception-review.opf.json#6",
+        "gallery/business-functions/scope-3-reporting-readiness.opf.json#2",
+        "gallery/business-functions/scope-3-reporting-readiness.opf.json#4"
+      ]
+    },
+    {
+      "file": "sheet-7.png",
+      "sha256": "a20fa0870544fc3802d3fca2006a169b4987e382c803ee061e63bbd1db2a9a20",
+      "slides": [
+        "gallery/business-functions/strategy-offsite-pre-read.opf.json#2",
+        "gallery/business-functions/strategy-offsite-pre-read.opf.json#4",
+        "gallery/business-functions/strategy-offsite-pre-read.opf.json#5",
+        "gallery/business-functions/strategy-offsite-pre-read.opf.json#6",
+        "gallery/business-functions/supplier-risk-heatmap.opf.json#4",
+        "gallery/business-functions/supplier-risk-heatmap.opf.json#5",
+        "gallery/business-functions/supplier-risk-heatmap.opf.json#6",
+        "gallery/business-functions/supplier-risk-heatmap.opf.json#7"
+      ]
+    },
+    {
+      "file": "sheet-8.png",
+      "sha256": "5ed01eda9aa3c97b61b1e7d9120f091a70caefc3dffa59443d13d204f58dabcd",
+      "slides": [
+        "gallery/business-functions/support-deflection-program.opf.json#2",
+        "gallery/business-functions/support-deflection-program.opf.json#3",
+        "gallery/business-functions/support-deflection-program.opf.json#4",
+        "gallery/business-functions/workplace-occupancy-reset.opf.json#2",
+        "gallery/business-functions/workplace-occupancy-reset.opf.json#4",
+        "gallery/design-and-media/data-storytelling-atlas.opf.json#2",
+        "gallery/design-and-media/data-storytelling-atlas.opf.json#4",
+        "gallery/design-and-media/data-storytelling-atlas.opf.json#6"
+      ]
+    },
+    {
+      "file": "sheet-9.png",
+      "sha256": "9acfcf7f07a863303255904195f0d64fead0a092b314996204c2e7b83d51aefb",
+      "slides": [
+        "gallery/design-and-media/data-storytelling-atlas.opf.json#7",
+        "gallery/design-and-media/kiosk-orientation-deck.opf.json#2",
+        "gallery/design-and-media/kiosk-orientation-deck.opf.json#4",
+        "gallery/design-and-media/kiosk-orientation-deck.opf.json#5",
+        "gallery/design-and-media/kiosk-orientation-deck.opf.json#6",
+        "gallery/design-and-media/photo-essay-portfolio.opf.json#2",
+        "gallery/design-and-media/photo-essay-portfolio.opf.json#4",
+        "gallery/design-and-media/photo-essay-portfolio.opf.json#5"
+      ]
+    },
+    {
+      "file": "sheet-10.png",
+      "sha256": "9422495046ef255f1cd87076a873fad663fa9075f05734dd2860879929dcebd0",
+      "slides": [
+        "gallery/design-and-media/photo-essay-portfolio.opf.json#6",
+        "gallery/design-and-media/video-demo-sales-narrative.opf.json#4",
+        "gallery/design-and-media/video-demo-sales-narrative.opf.json#5",
+        "gallery/design-and-media/video-demo-sales-narrative.opf.json#6",
+        "gallery/design-and-media/visual-brand-system-sampler.opf.json#2",
+        "gallery/design-and-media/visual-brand-system-sampler.opf.json#4",
+        "gallery/education/advising-retention-review.opf.json#2",
+        "gallery/education/advising-retention-review.opf.json#4"
+      ]
+    },
+    {
+      "file": "sheet-11.png",
+      "sha256": "880fdcc571df971a9056166f494de3d8f51172b4ff11ecf6d124386496acde98",
+      "slides": [
+        "gallery/education/alumni-giving-campaign.opf.json#2",
+        "gallery/education/alumni-giving-campaign.opf.json#4",
+        "gallery/education/apprenticeship-partnership-deck.opf.json#0",
+        "gallery/education/apprenticeship-partnership-deck.opf.json#2",
+        "gallery/education/apprenticeship-partnership-deck.opf.json#3",
+        "gallery/education/apprenticeship-partnership-deck.opf.json#4",
+        "gallery/education/athletics-budget-review.opf.json#2",
+        "gallery/education/athletics-budget-review.opf.json#3"
+      ]
+    },
+    {
+      "file": "sheet-12.png",
+      "sha256": "c2401ebd2deed09fcab8df213bc90011c81ea00a3e3c4db059ece9ec7b2c20f1",
+      "slides": [
+        "gallery/education/athletics-budget-review.opf.json#4",
+        "gallery/education/athletics-budget-review.opf.json#5",
+        "gallery/education/athletics-budget-review.opf.json#6",
+        "gallery/education/athletics-budget-review.opf.json#7",
+        "gallery/education/campus-energy-action-brief.opf.json#2",
+        "gallery/education/campus-energy-action-brief.opf.json#3",
+        "gallery/education/campus-energy-action-brief.opf.json#4",
+        "gallery/education/curriculum-approval-brief.opf.json#2"
+      ]
+    },
+    {
+      "file": "sheet-13.png",
+      "sha256": "6d9623c308147e9ed8195088b3049c15e62080353e235f5776483e52789b0b01",
+      "slides": [
+        "gallery/education/curriculum-approval-brief.opf.json#4",
+        "gallery/education/curriculum-approval-brief.opf.json#6",
+        "gallery/education/district-literacy-acceleration-plan.opf.json#0",
+        "gallery/education/district-literacy-acceleration-plan.opf.json#2",
+        "gallery/education/library-modernization-roadmap.opf.json#2",
+        "gallery/education/library-modernization-roadmap.opf.json#4",
+        "gallery/education/library-modernization-roadmap.opf.json#5",
+        "gallery/education/library-modernization-roadmap.opf.json#6"
+      ]
+    },
+    {
+      "file": "sheet-14.png",
+      "sha256": "c0ad25c419d117d4718229e0b1d40d0379db3eea0035e9dd9a5aadbf9d3b6ebe",
+      "slides": [
+        "gallery/education/online-program-launch-plan.opf.json#2",
+        "gallery/education/online-program-launch-plan.opf.json#4",
+        "gallery/education/research-grant-pitch.opf.json#2",
+        "gallery/education/research-grant-pitch.opf.json#4",
+        "gallery/education/school-safety-preparedness-brief.opf.json#2",
+        "gallery/education/special-education-services-plan.opf.json#2",
+        "gallery/education/stem-lab-funding-proposal.opf.json#2",
+        "gallery/education/student-mental-health-capacity-review.opf.json#2"
+      ]
+    },
+    {
+      "file": "sheet-15.png",
+      "sha256": "a4179e4cb0886cee8dfa3085f433fde37c5b6751447b111330f2c7be1e021608",
+      "slides": [
+        "gallery/education/student-mental-health-capacity-review.opf.json#4",
+        "gallery/education/workforce-pathway-partnership.opf.json#4",
+        "gallery/education/workforce-pathway-partnership.opf.json#6",
+        "gallery/government/broadband-public-hearing-deck.opf.json#2",
+        "gallery/government/broadband-public-hearing-deck.opf.json#4",
+        "gallery/government/broadband-public-hearing-deck.opf.json#5",
+        "gallery/government/broadband-public-hearing-deck.opf.json#6",
+        "gallery/government/court-backlog-reduction-plan.opf.json#2"
+      ]
+    },
+    {
+      "file": "sheet-16.png",
+      "sha256": "ac72d0937b20d35cf6c9fec45298f63f028f0b3dfdac5543cc36a62dc3961b2f",
+      "slides": [
+        "gallery/government/court-backlog-reduction-plan.opf.json#4",
+        "gallery/government/digital-services-modernization.opf.json#0",
+        "gallery/government/digital-services-modernization.opf.json#2",
+        "gallery/government/grant-equity-review.opf.json#2",
+        "gallery/government/housing-zoning-council-brief.opf.json#2",
+        "gallery/government/housing-zoning-council-brief.opf.json#4",
+        "gallery/government/housing-zoning-council-brief.opf.json#5",
+        "gallery/government/housing-zoning-council-brief.opf.json#6"
+      ]
+    },
+    {
+      "file": "sheet-17.png",
+      "sha256": "d853fcda0cdfb2fc29ae1427686da1f5656885e8af565c21ffa245b30020ccba",
+      "slides": [
+        "gallery/government/housing-zoning-council-brief.opf.json#7",
+        "gallery/government/parks-master-plan-workshop.opf.json#2",
+        "gallery/government/parks-master-plan-workshop.opf.json#4",
+        "gallery/government/police-training-program-update.opf.json#0",
+        "gallery/government/police-training-program-update.opf.json#2",
+        "gallery/government/police-training-program-update.opf.json#4",
+        "gallery/government/recycling-participation-campaign.opf.json#0",
+        "gallery/government/recycling-participation-campaign.opf.json#3"
+      ]
+    },
+    {
+      "file": "sheet-18.png",
+      "sha256": "a6a0e5a9079a2d8c4a765ce8e2d4bae6741b6889ae1a9288b3a9f7951adfe203",
+      "slides": [
+        "gallery/government/recycling-participation-campaign.opf.json#4",
+        "gallery/government/recycling-participation-campaign.opf.json#5",
+        "gallery/government/recycling-participation-campaign.opf.json#6",
+        "gallery/government/recycling-participation-campaign.opf.json#7",
+        "gallery/government/regulatory-risk-brief.opf.json#2",
+        "gallery/government/regulatory-risk-brief.opf.json#4",
+        "gallery/government/tax-portal-modernization.opf.json#2",
+        "gallery/government/tax-portal-modernization.opf.json#4"
+      ]
+    },
+    {
+      "file": "sheet-19.png",
+      "sha256": "41fcf3ac5ea94fd54afb8de3f350fd7c65330f6c8c7b2c1d48f2ad0ccb35e94d",
+      "slides": [
+        "gallery/government/tax-portal-modernization.opf.json#5",
+        "gallery/government/tax-portal-modernization.opf.json#6",
+        "gallery/government/transit-corridor-alternatives.opf.json#2",
+        "gallery/government/transit-corridor-alternatives.opf.json#4",
+        "gallery/government/transit-corridor-alternatives.opf.json#5",
+        "gallery/government/transit-corridor-alternatives.opf.json#6",
+        "gallery/government/vaccination-outreach-briefing.opf.json#2",
+        "gallery/government/vaccination-outreach-briefing.opf.json#4"
+      ]
+    },
+    {
+      "file": "sheet-20.png",
+      "sha256": "f7019f1680ef15c3d7784216d154e0f5c3eeded20d2289b6fc16cae50400bcf5",
+      "slides": [
+        "gallery/government/water-utility-capital-plan.opf.json#2",
+        "gallery/government/water-utility-capital-plan.opf.json#4",
+        "gallery/government/water-utility-capital-plan.opf.json#5",
+        "gallery/government/water-utility-capital-plan.opf.json#6",
+        "gallery/government/wildfire-evacuation-preparedness.opf.json#0",
+        "gallery/government/wildfire-evacuation-preparedness.opf.json#4",
+        "gallery/government/wildfire-evacuation-preparedness.opf.json#6",
+        "gallery/government/wildfire-evacuation-preparedness.opf.json#7"
+      ]
+    },
+    {
+      "file": "sheet-21.png",
+      "sha256": "3bc5fdcdbd8618dd138680e292188436caf3f9de353e0e1431cad707e42e682a",
+      "slides": [
+        "gallery/government/workforce-reskilling-initiative.opf.json#2",
+        "gallery/government/workforce-reskilling-initiative.opf.json#4",
+        "gallery/government/workforce-reskilling-initiative.opf.json#6",
+        "gallery/industries/airline-disruption-recovery-review.opf.json#2",
+        "gallery/industries/airline-disruption-recovery-review.opf.json#4",
+        "gallery/industries/airline-disruption-recovery-review.opf.json#5",
+        "gallery/industries/airline-disruption-recovery-review.opf.json#6",
+        "gallery/industries/airline-disruption-recovery-review.opf.json#7"
+      ]
+    },
+    {
+      "file": "sheet-22.png",
+      "sha256": "fe4dbc5b4136588462855fa3ab1598f8bc22de15c33c1a2359c5c35ab6a7b5b7",
+      "slides": [
+        "gallery/industries/ambulatory-access-recovery-plan.opf.json#2",
+        "gallery/industries/battery-line-supplier-readiness.opf.json#0",
+        "gallery/industries/battery-line-supplier-readiness.opf.json#3",
+        "gallery/industries/battery-line-supplier-readiness.opf.json#4",
+        "gallery/industries/battery-line-supplier-readiness.opf.json#5",
+        "gallery/industries/battery-line-supplier-readiness.opf.json#6",
+        "gallery/industries/boutique-hotel-revenue-recovery.opf.json#0",
+        "gallery/industries/boutique-hotel-revenue-recovery.opf.json#4"
+      ]
+    },
+    {
+      "file": "sheet-23.png",
+      "sha256": "2bd07610c8d268381aa14bdb957279fa22ccfd547da90eeb6ca3ee774c10e659",
+      "slides": [
+        "gallery/industries/boutique-hotel-revenue-recovery.opf.json#6",
+        "gallery/industries/branch-modernization-investment-case.opf.json#2",
+        "gallery/industries/claims-triage-operating-model.opf.json#2",
+        "gallery/industries/cold-chain-waste-reduction-review.opf.json#0",
+        "gallery/industries/cold-chain-waste-reduction-review.opf.json#2",
+        "gallery/industries/cold-chain-waste-reduction-review.opf.json#4",
+        "gallery/industries/construction-safety-stand-down.opf.json#2",
+        "gallery/industries/construction-safety-stand-down.opf.json#4"
+      ]
+    },
+    {
+      "file": "sheet-24.png",
+      "sha256": "fabc155b94e6d34a2737719115ad29b5bff30cab1f4f9a7f60d18d0df2305cb1",
+      "slides": [
+        "gallery/industries/construction-safety-stand-down.opf.json#5",
+        "gallery/industries/construction-safety-stand-down.opf.json#6",
+        "gallery/industries/consulting-margin-recovery-plan.opf.json#0",
+        "gallery/industries/consulting-margin-recovery-plan.opf.json#2",
+        "gallery/industries/consulting-margin-recovery-plan.opf.json#4",
+        "gallery/industries/drive-thru-throughput-playbook.opf.json#4",
+        "gallery/industries/fan-experience-operations-brief.opf.json#2",
+        "gallery/industries/fan-experience-operations-brief.opf.json#4"
+      ]
+    },
+    {
+      "file": "sheet-25.png",
+      "sha256": "38b6ff2c242ff76993e8d72f133898f76d1a17860f6d04a7dab89f3df87cd959",
+      "slides": [
+        "gallery/industries/food-bank-distribution-capacity-plan.opf.json#0",
+        "gallery/industries/food-bank-distribution-capacity-plan.opf.json#2",
+        "gallery/industries/grid-resilience-capital-plan.opf.json#2",
+        "gallery/industries/grid-resilience-capital-plan.opf.json#3",
+        "gallery/industries/grid-resilience-capital-plan.opf.json#4",
+        "gallery/industries/managed-detection-market-update.opf.json#2",
+        "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#2",
+        "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#4"
+      ]
+    },
+    {
+      "file": "sheet-26.png",
+      "sha256": "e0a1d737750744e683649326d00d64b63e4a56c8c415b32aaf383e138a0fc51b",
+      "slides": [
+        "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#5",
+        "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#6",
+        "gallery/industries/port-dwell-time-improvement-plan.opf.json#2",
+        "gallery/industries/port-dwell-time-improvement-plan.opf.json#4",
+        "gallery/industries/port-dwell-time-improvement-plan.opf.json#5",
+        "gallery/industries/port-dwell-time-improvement-plan.opf.json#6",
+        "gallery/industries/retail-launch-readiness-deck.opf.json#2",
+        "gallery/industries/retail-launch-readiness-deck.opf.json#4"
+      ]
+    },
+    {
+      "file": "sheet-27.png",
+      "sha256": "cc0153ecf59ab6d80fe589ced4e5add8728cfda13d3384506c19142aa70b27a3",
+      "slides": [
+        "gallery/industries/robotics-quality-escape-briefing.opf.json#2",
+        "gallery/industries/robotics-quality-escape-briefing.opf.json#4",
+        "gallery/industries/rural-broadband-expansion-proposal.opf.json#0",
+        "gallery/industries/rural-broadband-expansion-proposal.opf.json#2",
+        "gallery/industries/satellite-maintenance-readiness-review.opf.json#4",
+        "gallery/industries/streaming-churn-winback-strategy.opf.json#0",
+        "gallery/industries/streaming-churn-winback-strategy.opf.json#2",
+        "gallery/industries/streaming-churn-winback-strategy.opf.json#4"
+      ]
+    },
+    {
+      "file": "sheet-28.png",
+      "sha256": "663ca050c932994d57f2242fbedccc7ea8a9497902a5340e398a44674d93f1d6",
+      "slides": [
+        "gallery/industries/tailings-monitoring-investment-brief.opf.json#2",
+        "gallery/industries/tailings-monitoring-investment-brief.opf.json#4",
+        "gallery/industries/tailings-monitoring-investment-brief.opf.json#5",
+        "gallery/industries/tailings-monitoring-investment-brief.opf.json#6",
+        "gallery/industries/trial-enrollment-rescue-plan.opf.json#2",
+        "gallery/industries/trial-enrollment-rescue-plan.opf.json#4",
+        "gallery/industries/veterinary-staffing-stabilization.opf.json#0",
+        "gallery/industries/veterinary-staffing-stabilization.opf.json#2"
+      ]
+    },
+    {
+      "file": "sheet-29.png",
+      "sha256": "3da900d74236f05a048c3ddd285a669e299fd709891f3fae667f463e5d7bb906",
+      "slides": [
+        "gallery/industries/veterinary-staffing-stabilization.opf.json#3",
+        "gallery/industries/veterinary-staffing-stabilization.opf.json#4",
+        "gallery/industries/water-stewardship-grower-brief.opf.json#2",
+        "gallery/industries/water-stewardship-grower-brief.opf.json#4",
+        "gallery/industries/water-stewardship-grower-brief.opf.json#5",
+        "gallery/industries/water-stewardship-grower-brief.opf.json#6",
+        "gallery/international/arabic-digital-services-brief.opf.json#0",
+        "gallery/international/arabic-digital-services-brief.opf.json#2"
+      ]
+    },
+    {
+      "file": "sheet-30.png",
+      "sha256": "bdd399c5cf71af5b5e66dbf2a62581801d23f517e2a2c9188f2f218ce24bd6e9",
+      "slides": [
+        "gallery/international/arabic-digital-services-brief.opf.json#3",
+        "gallery/international/arabic-digital-services-brief.opf.json#4",
+        "gallery/international/brazil-climate-adaptation-brief.opf.json#0",
+        "gallery/international/brazil-climate-adaptation-brief.opf.json#2",
+        "gallery/international/brazil-climate-adaptation-brief.opf.json#4",
+        "gallery/international/german-works-council-update.opf.json#2",
+        "gallery/international/german-works-council-update.opf.json#4",
+        "gallery/international/japan-market-entry-readout.opf.json#2"
+      ]
+    },
+    {
+      "file": "sheet-31.png",
+      "sha256": "65ad5e257219d4d29f7ecd4478245eb3ab721bc80e21f831c3faeabda0c81105",
+      "slides": [
+        "gallery/presentation-types/customer-qbr-renewal-deck.opf.json#2",
+        "gallery/presentation-types/customer-qbr-renewal-deck.opf.json#3",
+        "gallery/presentation-types/customer-qbr-renewal-deck.opf.json#4",
+        "gallery/presentation-types/data-incident-postmortem.opf.json#2",
+        "gallery/presentation-types/data-incident-postmortem.opf.json#4",
+        "gallery/presentation-types/developer-conference-talk.opf.json#2",
+        "gallery/presentation-types/developer-conference-talk.opf.json#4",
+        "gallery/presentation-types/executive-workshop-facilitation.opf.json#2"
+      ]
+    },
+    {
+      "file": "sheet-32.png",
+      "sha256": "744cdefca460d83e151ff21d058024ecdc0687650b39389f4deb75bc24385f13",
+      "slides": [
+        "gallery/presentation-types/executive-workshop-facilitation.opf.json#4",
+        "gallery/presentation-types/manager-training-deck.opf.json#3",
+        "gallery/presentation-types/manager-training-deck.opf.json#4",
+        "gallery/presentation-types/manager-training-deck.opf.json#5",
+        "gallery/presentation-types/manager-training-deck.opf.json#6",
+        "gallery/presentation-types/monthly-board-update.opf.json#2",
+        "gallery/presentation-types/policy-briefing-for-advisors.opf.json#2",
+        "gallery/presentation-types/policy-briefing-for-advisors.opf.json#4"
+      ]
+    },
+    {
+      "file": "sheet-33.png",
+      "sha256": "fcf41117678ad5ba8f4c607e8d7be4815401a7d678b942cde90f1e987fb9eabd",
+      "slides": [
+        "gallery/presentation-types/policy-briefing-for-advisors.opf.json#5",
+        "gallery/presentation-types/policy-briefing-for-advisors.opf.json#6",
+        "gallery/presentation-types/product-launch-narrative.opf.json#2",
+        "gallery/presentation-types/product-launch-narrative.opf.json#4",
+        "gallery/presentation-types/product-launch-narrative.opf.json#6",
+        "gallery/presentation-types/research-findings-report.opf.json#4",
+        "gallery/presentation-types/research-findings-report.opf.json#6",
+        "gallery/presentation-types/seed-pitch-for-climate-risk-api.opf.json#0"
+      ]
+    },
+    {
+      "file": "sheet-34.png",
+      "sha256": "257b1065400ee6dae7967d6a8220866bb7e1fff17193ecd2e6dd9855c0388746",
+      "slides": [
+        "gallery/presentation-types/seed-pitch-for-climate-risk-api.opf.json#2",
+        "technical/chart-data-sources.opf.json#0",
+        "technical/chart-type-sampler.opf.json#0",
+        "technical/chart-type-sampler.opf.json#1",
+        "technical/dynamic-composition.opf.json#1",
+        "technical/dynamic-composition.opf.json#3",
+        "technical/slide-design-overrides.opf.json#2"
+      ]
+    }
+  ],
+  "full": [
+    {
+      "key": "gallery/business-functions/compliance-readiness-review.opf.json#4",
+      "files": [
+        {
+          "side": "before",
+          "svg": "full-0-before.svg",
+          "svgSha256": "88ddfe74dba0a62fc9c991347210a3fc070398c36fa82e1c40b5c1c03fed1638",
+          "png": "full-0-before.png",
+          "pngSha256": "29be2a402c90b54de8e7fd0ee8b837e0aaaca45b06e650fa44034eb1dd8e989a"
+        },
+        {
+          "side": "after",
+          "svg": "full-0-after.svg",
+          "svgSha256": "633cb45a4649169dca665c8eb3437446faf93bbab1ab6c657689e852e388051e",
+          "png": "full-0-after.png",
+          "pngSha256": "8442a93a5d3fd7c959bdeb30b2426d0d681e032faf9bc7a81ceae7e36571b0b0"
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/engineering-capacity-planning.opf.json#3",
+      "files": [
+        {
+          "side": "before",
+          "svg": "full-1-before.svg",
+          "svgSha256": "46b72c8d057a4ea480b02e41ca86e927f1650d6758a313fb51bde0920f59ce05",
+          "png": "full-1-before.png",
+          "pngSha256": "99d64fb8a7abe793f25d6ff0463149550b9fadc4fc526432681bf682b1d554db"
+        },
+        {
+          "side": "after",
+          "svg": "full-1-after.svg",
+          "svgSha256": "c718909155057d10b4e148857b1c873ad705018f3d84c36bd8e7d24b25e5e275",
+          "png": "full-1-after.png",
+          "pngSha256": "d125b8bef22bfec2e4879b544dfce86dd065b28e0ec01b834c35e1889d9c31b2"
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/supplier-risk-heatmap.opf.json#6",
+      "files": [
+        {
+          "side": "before",
+          "svg": "full-2-before.svg",
+          "svgSha256": "aa24caeb4c8fa62e4a7749cb7f1bf1cc19f2f48f2157443d3baf0d2aaed2b713",
+          "png": "full-2-before.png",
+          "pngSha256": "b12292a5e477f060dec3e7c52b060c7d977580044b80b4e01b7964fe8fa0a58f"
+        },
+        {
+          "side": "after",
+          "svg": "full-2-after.svg",
+          "svgSha256": "eb0b1dcc47ca95acfbfc5613cc6d917aa2b9d0debced9c92d61da2686f1ee0b7",
+          "png": "full-2-after.png",
+          "pngSha256": "9aaeafabf835b11ee61dc17b01884a90c4f7db058a91b68ceb75cb1f19784def"
+        }
+      ]
+    },
+    {
+      "key": "gallery/government/housing-zoning-council-brief.opf.json#5",
+      "files": [
+        {
+          "side": "before",
+          "svg": "full-3-before.svg",
+          "svgSha256": "cf676adb5284cfee85871308ff2da75973dc5a917aefdf7ac1c009a4dace8213",
+          "png": "full-3-before.png",
+          "pngSha256": "520c7454c4efbdf92da0fa3a38278ee1853342bc7880b62d200f00af770aca1e"
+        },
+        {
+          "side": "after",
+          "svg": "full-3-after.svg",
+          "svgSha256": "53822c65c009ddaa6787cfb07eb35c4b26868e1e88f39f3541558bde46377c4f",
+          "png": "full-3-after.png",
+          "pngSha256": "8442ee291f087737d30fe772b1ba9df2035fc9dfebb11a4b0be2065ab4f00081"
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/streaming-churn-winback-strategy.opf.json#0",
+      "files": [
+        {
+          "side": "before",
+          "svg": "full-4-before.svg",
+          "svgSha256": "e5208d57c8caa788a881a2cfd804930145762060cf9b6b53536ac06731fa17bb",
+          "png": "full-4-before.png",
+          "pngSha256": "06bd599954cd861652cc3a9d6e7049b74e5d0a8e06531e5e8024f0d9c0099388"
+        },
+        {
+          "side": "after",
+          "svg": "full-4-after.svg",
+          "svgSha256": "a3ed23e8de9ad5ddf587ccfd086d6dfe02278a5789f97c7812737f40fbc3ad8e",
+          "png": "full-4-after.png",
+          "pngSha256": "0e57fb3864fd4763e5f0c54f9482a708348523d971f067ac2c97f24590731f95"
+        }
+      ]
+    },
+    {
+      "key": "technical/slide-design-overrides.opf.json#2",
+      "files": [
+        {
+          "side": "before",
+          "svg": "full-5-before.svg",
+          "svgSha256": "a1afb4439a66bce8bb48b7b8d2a2bf65104d634378e38d6e30d86a0033443572",
+          "png": "full-5-before.png",
+          "pngSha256": "8a585f66f9dbe398ea4b25f6c951982497fa10cf0e66155965ca45b79996410e"
+        },
+        {
+          "side": "after",
+          "svg": "full-5-after.svg",
+          "svgSha256": "43899b2e93f289cd7fbe6ee21647852b9346cc29b8ef33e9df16c30c3fefc739",
+          "png": "full-5-after.png",
+          "pngSha256": "2bc25f917285d0e89730ac9ad5da3671697d9056fdbe5b57b3eeaa74e9bb6946"
+        }
+      ]
+    }
+  ]
+}

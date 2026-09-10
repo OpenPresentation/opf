@@ -1257,6 +1257,8 @@ function renderRichLines(value,fit,box,bound,config) {
 }
 
 function renderTextBox(text, box, bound, config) {
+  const invalid=/[\u0000-\u0008\u000B\u000C\u000E-\u001F\uD800-\uDFFF\uFFFE\uFFFF]/u.exec(String(text??''));
+  if(invalid)throw new OPFRenderError('invalid-text',`Text contains U+${invalid[0].codePointAt(0).toString(16).toUpperCase().padStart(4,'0')} at UTF-16 offset ${invalid.index}, which SVG XML cannot represent.`,{path:config.path});
   const scale = Math.min(bound.design.dimensions.width, bound.design.dimensions.height) / 720;
   const style = config.textStyle ?? resolveTextStyle({fontFamily:config.fontFamily,fontWeight:config.fontWeight ?? 400,italic:config.italic ?? false,path:config.path},config.options.textMeasurement);
   const fit = config.fit ?? fitText(String(text ?? ""), box, config.fontSize * scale,
@@ -1274,13 +1276,27 @@ function renderTextBox(text, box, bound, config) {
   const alignment=fit.placement?.alignment??config.align??bound.design.contentAlignment;
   const anchor = alignment === "center" ? "middle" : alignment === "right" ? "end" : "start";
   const x = alignment === "center" ? box.x + box.width / 2 : alignment === "right" ? box.x + box.width : box.x;
-  const lines = fit.lines.map((line, index) => tag("text", {
-    x: stableNumber(fit.placement?fit.placement.lines[index].x+fit.placement.lines[index].width*(alignment==='right'?1:alignment==='center'?.5:0):x), y: stableNumber(fit.placement?.lines[index].baseline??startY + index * fit.lineHeight),
-    "text-anchor": anchor, "font-family": fontStack(style.fontFamily, config.fontFamily === bound.design.fonts.code ? "monospace" : bound.design.fontScheme.type),
+  const lines = fit.lines.map((line, index) => {
+    const sourceLine=fit.sourceLines?.[index],placed=fit.placement?.lines[index],factor=alignment==='right'?1:alignment==='center'?.5:0;
+    const origin=placed?.x??x-(sourceLine?.width??0)*factor;
+    const tabs=sourceLine?.segments.some(segment=>segment.kind==='tab');
+    const content=tabs?sourceLine.segments.map(segment=>tag('tspan',{
+      x:stableNumber(origin+segment.x),textLength:segment.kind==='tab'||placed?stableNumber(segment.width):undefined,
+      lengthAdjust:segment.kind==='tab'||placed?'spacingAndGlyphs':undefined,
+      ...(config.options.trace?{'data-opf-source-start':segment.start,'data-opf-source-end':segment.end,'data-opf-segment':segment.kind}:{}),
+    },escapeText(line.slice(segment.start-sourceLine.start,segment.end-sourceLine.start)))).join(''):escapeText(line);
+    return tag("text", {
+    x: stableNumber(tabs?origin:placed?placed.x+placed.width*factor:x), y: stableNumber(placed?.baseline??startY + index * fit.lineHeight),
+    "text-anchor": tabs?'start':anchor, "font-family": fontStack(style.fontFamily, config.fontFamily === bound.design.fonts.code ? "monospace" : bound.design.fontScheme.type),
     "font-size": stableNumber(size), "font-weight": style.fontWeight, "font-style": style.italic ? "italic" : undefined, fill: config.fill,
-    ...traceAttrs(config.options, config.path)
-  }, escapeText(line)));
+    'xml:space':'preserve',style:'white-space:pre','text-rendering':config.options.textMeasurement?.measure?'geometricPrecision':undefined,
+    textLength:!tabs&&placed?.width>0?stableNumber(placed.width):undefined,lengthAdjust:!tabs&&placed?.width>0?'spacingAndGlyphs':undefined,
+    ...traceAttrs(config.options, config.path),
+    ...(config.options.trace&&sourceLine?{'data-opf-source-start':sourceLine.start,'data-opf-source-end':sourceLine.end,'data-opf-source-next-start':sourceLine.nextStart,'data-opf-line-boundary':sourceLine.boundary}:{}),
+  }, content);
+  });
   return tag("g", { ...traceAttrs(config.options, config.path),
+    ...(config.options.trace&&fit.sourceLines?{'data-opf-source-text':'true','data-opf-box-x':box.x,'data-opf-box-y':box.y,'data-opf-box-width':box.width,'data-opf-box-height':box.height}:{}),
     ...(fit.overflow ? { "data-opf-overflow": "true" } : {}) }, lines.join("\n"));
 }
 

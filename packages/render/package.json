@@ -76,7 +76,8 @@
     "test:text": "node test/font-outlines.mjs && node test/accepted-text.mjs",
     "test:text-browser": "node test/accepted-text-browser.mjs",
     "test:rich-spacing-browser": "node test/rich-spacing-browser.mjs",
-    "test:rich-flow-browser": "node test/rich-flow-browser.mjs"
+    "test:rich-flow-browser": "node test/rich-flow-browser.mjs",
+    "test:plain-whitespace-browser": "node test/plain-whitespace-browser.mjs"
   },
   "dependencies": {
     "@expo-google-fonts/arimo": "0.4.3",
