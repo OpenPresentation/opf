@@ -1,0 +1,16 @@
+{
+  "mode": "linked-source",
+  "results": [
+    {
+      "node": "v24.20.0",
+      "repo": "opf-editor",
+      "command": [
+        "node",
+        "test/metric-browser.mjs",
+        "C:\\Users\\micha\\Source\\opf\\artifacts\\shared-metric-integration\\metric-anchor-checks\\metric-browser-node24.json"
+      ],
+      "status": 0,
+      "log": "opf-editor-node24-0.log"
+    }
+  ]
+}

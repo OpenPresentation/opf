@@ -1,6 +1,20 @@
 # Shared metric integration — source checkpoint
 
-## Current checkpoint: consumers implemented; raster gates remain open
+## Current checkpoint: native anchors and corpus authoring corrections
+
+Core source `621bc86b6b04f2b33080fbe2565e10e4d3681aec` and PPTX `78993a14f2e79959df3390c370b2d35dadc0d059` are pushed on `codex/shared-metric-integration-20260910`; renderer/editor refs below are unchanged. [New source evidence](../evidence/shared-metric-native-anchor/summary.json) preserves the older reports separately. No package or public deployment has advanced.
+
+Native paragraph alignment now shares the accepted anchor and part width, removing the earlier nine character-bound overruns. Expanded real PowerPoint tests use 48 slides per Node 20.20.2/24.20.0 run, including leading tabs and whitespace-only parts. Each run preserves all 144 original/saved/edited source/type imports and observes no inter-field pixel-mask collision. Runtime and native/SVG raster hashes match across those runtimes. Masks are rendered by temporarily hiding other generated fields, restoring visibility before save. This is a finite raster check, not vector-outline or general native fidelity.
+
+The native gate remains nonzero: eight tab offsets exceed 0.02pt (maximum 0.067383pt), and the right-aligned portrait “Latency” label has ink at x=497 beyond a cell ending at x=496.8. The isolated unit ends at x=496. Every nonblank fixture field produces ink, and all 138 isolated field masks per runtime combine to exactly cover the full-slide ink pixels. Keep the remaining failures visible. The complete PPTX command, syntax/validation, code/metric tests and actual editor metric workflows pass again on both runtimes. Remaining renderer commands after the golden gate have now been run separately and pass; no claim is made that the full command passes.
+
+The 85 changed corpus slides were visually reviewed in nine before/after sheets. Forty fictional example metrics had inconsistent units and deltas that the old renderer hid; their authored data and generator are corrected and explicitly labelled illustrative. All 126 documents validate. `scripts/review-metric-corpus.mjs` verifies the prior registry files and binds separate old/current source digests and per-slide raster hashes, recording only metric payload revisions. The new candidate source digest is `e3c7194f1fc4ee452570d27a24633a9baa413ea1bbfe117668e3434d01686f50`. Contrast failures in pale/gradient templates and compact metric hierarchy remain quality work. The baseline has not been promoted.
+
+PPTX also contains a separate 1,024-case reference-font advance study. A candidate shaping/rounding model fits 949 observations within 0.02pt; 75 outliers remain. Explicit UTF-8 and independent native shapes prevent harness contamination; requested and native font-slot names are recorded, including unresolved theme tokens. This does not certify native font files or open substitutes and changes no runtime font behavior.
+
+Continue with native counterexamples and corpus quality, then reviewed golden promotion, coordinated source/candidate CI, draft PRs and review. Versions, lockfile release preparation, registry verification and deployment adoption follow those gates. Do not republish the current shared-code set.
+
+## Previous checkpoint: consumers implemented; raster gates remain open
 
 Continue `codex/shared-metric-integration-20260910` in all four repositories. No metric package has been versioned or published. The complete published shared-code set, release-plan refs and public deployments remain unchanged.
 

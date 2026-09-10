@@ -2,7 +2,13 @@
 
 This work implements the [ecosystem objective](ecosystem-objective-2026-09-09.md) in reviewable increments. It does not introduce a model, account, key, network or paid-service dependency into OPF. Proprietary applications remain optional compatibility-test environments.
 
-## Current checkpoint — metric consumers and source recovery; raster gates open
+## Current checkpoint — metric native anchors and visual corpus review
+
+The [metric integration checkpoint](shared-metric-integration.md) now includes a native paragraph-anchor fix and isolated field raster checks. Both Node 20/24 runs preserve 144 original/saved/edited imports from 48 real PowerPoint fixtures, with no character-bound overrun or inter-field pixel-mask collision. Eight tab-position outliers and one raster-edge outlier keep native comparisons failing. The affected PPTX checks, actual metric editor browser workflows and remaining post-golden renderer commands pass separately.
+
+All 85 changed corpus slides were visually reviewed; 40 fictional gallery metrics and their generator were corrected to consistent units/deltas. The revised corpus validates, but pale/gradient contrast and compact hierarchy remain quality findings. No baseline, package, registry dependency or public deployment has advanced. [Separate new evidence](../evidence/shared-metric-native-anchor/summary.json) preserves the previous checkpoint and its failures. Continue resolving these gates before coordinated CI/review and release preparation. The full deterministic repair/Auto arrange/font objective remains active.
+
+## Previous checkpoint — metric consumers and source recovery; raster gates open
 
 The [metric integration checkpoint](shared-metric-integration.md) includes accepted alignment/line origins, SVG/native export, guarded source/type recovery and actual editor/undo/pagination/export workflows. Core passes 466 tests on Node 20/24; focused consumer and browser checks pass. Real PowerPoint preserves tested fields/types in 108 original/saved/edited imports. Corpus review remains open for 85 changed rasters, and the native raster gate fails on one portrait/right fixture. Nine native advance-bound differences are recorded separately. No release or registry/public dependency changed. Continue this source branch and resolve its gates before release preparation; the larger deterministic repair/font objective remains active.
 
