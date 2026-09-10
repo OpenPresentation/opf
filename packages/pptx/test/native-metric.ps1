@@ -65,7 +65,12 @@ try {
                 if ($actual -cne $wanted) { throw "Changed native text: $id slide $($slide.SlideIndex) line $index" }
                 if ($shape.Tags.Count -lt 1) { throw 'Missing native metric tags' }
                 if ($actual -ne '' -and [Math]::Abs($shape.TextFrame.TextRange.Font.Size - $part.fit.fontSize * .75) -gt .02) { throw 'Native metric font size differs' }
-                $expectedX = $part.box.x
+                # The allocation box may include outline clearance. Compare the
+                # native paragraph with the accepted aligned line anchor, not
+                # the allocation's old advance-only left edge.
+                $factor=0.0
+                if($layout.alignment -eq 'right') { $factor=1.0 } elseif($layout.alignment -eq 'center') { $factor=0.5 }
+                $expectedX = $origin.x+($line.width-$part.box.width)*$factor
                 $expectedWidth = $part.box.width
                 if ([Math]::Abs($shape.Left - $expectedX*.75) -gt .02 -or [Math]::Abs($shape.Top - ($origin.baseline-$part.fit.fontSize)*.75) -gt .02 -or [Math]::Abs($shape.Width - $expectedWidth*.75) -gt .02) { throw 'Native metric shape differs from accepted geometry' }
                 $range = $shape.TextFrame2.TextRange
