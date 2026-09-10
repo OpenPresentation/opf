@@ -48,6 +48,10 @@ try {
       node.setAttribute('xml:space','preserve');node.style.whiteSpace='pre';node.style.tabSize='4';node.textContent=item.source;
       document.querySelector('#probe').append(node);
       const cssOnlyAdvance=node.getComputedTextLength();
+      // The model uses fractional font advances. Linux Chromium's default
+      // hinting rounds these even with the same font bytes; request geometric
+      // precision explicitly instead of accepting a platform-specific drift.
+      node.setAttribute('text-rendering','geometricPrecision');
       node.textContent='';
       const positions=[];
       for (const segment of item.segments) {
@@ -61,6 +65,11 @@ try {
         cssOnlyAdvance,acceptedAdvance:node.getComputedTextLength(),bboxWidth:node.getBBox().width,domText:node.textContent,positions};
     });
   },{faces,cases});
+  const report={browser:browser.version(),platform:process.platform,textRendering:'geometricPrecision',geometryReportSha256:hash(geometryBytes),verifierSha256:hash(await readFile(new URL(import.meta.url))),
+    fontHashes,toleranceReferencePixels:.1,results,externalRequests,errors,
+    scope:'Standalone core code geometry rendered by this controlled SVG harness using exact Cousine regular/bold bytes and explicit geometricPrecision text rendering. Eight cases preserve literal tabs/whitespace and must match accepted advances and segment starts/ends within 0.1 reference pixel. Default-hinting CSS-only tab behavior is observed separately. This is not integrated OPF renderer output, native PowerPoint output, glyph-outline equivalence or broad font/script conformance.'};
+  // Preserve the observations even when an assertion fails in a new browser.
+  if (output) await writeFile(output,`${JSON.stringify(report,null,2)}\n`);
   for (const item of results) {
     assert.equal(item.domText,item.source,'Literal tabs and whitespace must survive DOM text serialization.');
     assert.ok(Math.abs(item.acceptedAdvance-item.expectedAdvance)<=.1,`Accepted segment advance differs: ${JSON.stringify(item)}`);
@@ -70,9 +79,5 @@ try {
     }
   }
   assert.deepEqual(errors,[]);assert.deepEqual(externalRequests,[]);
-  const report={browser:browser.version(),geometryReportSha256:hash(geometryBytes),verifierSha256:hash(await readFile(new URL(import.meta.url))),
-    fontHashes,toleranceReferencePixels:.1,results,externalRequests,errors,
-    scope:'Standalone core code geometry rendered by this controlled SVG harness using exact Cousine regular/bold bytes. Eight cases preserve literal tabs/whitespace and match accepted advances and segment starts/ends within 0.1 reference pixel. CSS-only tab behavior is observed separately. This is not integrated OPF renderer output, native PowerPoint output, glyph-outline equivalence or broad font/script conformance.'};
-  if (output) await writeFile(output,`${JSON.stringify(report,null,2)}\n`);
   console.log(`Verified ${results.length} accepted code segment cases in browser ${report.browser}; no external requests or page errors.`);
 } finally {await browser.close();}

@@ -1,7 +1,9 @@
 {
   "browser": "152.0.4191.66",
+  "platform": "win32",
+  "textRendering": "geometricPrecision",
   "geometryReportSha256": "726a0cd9c05688d3f49e639cf2c2e5f4ed6dcc88b4b0f1442f13bf87d3f7ef06",
-  "verifierSha256": "340c9d41f20f645c9297b4d9226e9b2d471827ae8f2696f315c4cf2cde784724",
+  "verifierSha256": "2a43467951c74f91c11cd1e860d07a7bf9a50cb5a2b793e5b33e8287b64f354e",
   "fontHashes": [
     {
       "family": "Cousine",
@@ -293,5 +295,5 @@
   ],
   "externalRequests": [],
   "errors": [],
-  "scope": "Standalone core code geometry rendered by this controlled SVG harness using exact Cousine regular/bold bytes. Eight cases preserve literal tabs/whitespace and match accepted advances and segment starts/ends within 0.1 reference pixel. CSS-only tab behavior is observed separately. This is not integrated OPF renderer output, native PowerPoint output, glyph-outline equivalence or broad font/script conformance."
+  "scope": "Standalone core code geometry rendered by this controlled SVG harness using exact Cousine regular/bold bytes and explicit geometricPrecision text rendering. Eight cases preserve literal tabs/whitespace and must match accepted advances and segment starts/ends within 0.1 reference pixel. Default-hinting CSS-only tab behavior is observed separately. This is not integrated OPF renderer output, native PowerPoint output, glyph-outline equivalence or broad font/script conformance."
 }
