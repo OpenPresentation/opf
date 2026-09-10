@@ -1,0 +1,62 @@
+{
+  "evidenceCommit": "e862a5f48bbb9e34aa6e5115922848292e23797f",
+  "results": [
+    {
+      "directory": "metric-node20-bounded-01",
+      "slides": 48,
+      "isolatedMasks": 138,
+      "hashBoundReportedImports": 144,
+      "tabOutliers": 8,
+      "maximumTabErrorPoints": 0.0673828125,
+      "rasterOutliers": [
+        {
+          "id": "metric-540-right",
+          "slide": 4,
+          "engine": "native",
+          "ink": {
+            "left": 103,
+            "top": 59,
+            "right": 497,
+            "bottom": 238
+          },
+          "cell": {
+            "x": 43.2,
+            "y": 43.2,
+            "width": 453.6,
+            "height": 873.6
+          }
+        }
+      ],
+      "workerExitsAndMaskUnionAndNoCollisions": true
+    },
+    {
+      "directory": "metric-node24-bounded-01",
+      "slides": 48,
+      "isolatedMasks": 138,
+      "hashBoundReportedImports": 144,
+      "tabOutliers": 8,
+      "maximumTabErrorPoints": 0.0673828125,
+      "rasterOutliers": [
+        {
+          "id": "metric-540-right",
+          "slide": 4,
+          "engine": "native",
+          "ink": {
+            "left": 103,
+            "top": 59,
+            "right": 497,
+            "bottom": 238
+          },
+          "cell": {
+            "x": 43.2,
+            "y": 43.2,
+            "width": 453.6,
+            "height": 873.6
+          }
+        }
+      ],
+      "workerExitsAndMaskUnionAndNoCollisions": true
+    }
+  ],
+  "scope": "Independent review of committed Windows observations: decoded complete and isolated masks, raw tab arithmetic, worker results and import hash bindings. No new Office execution or claim that failed native gates pass."
+}

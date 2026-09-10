@@ -112,14 +112,31 @@ assert.equal(registry.embeddedFonts.length,33);
 console.log('Installed candidate font preparation passed layout, edit/undo, SVG/PNG, editable PPTX export and heading reimport.');
 `);
   run(process.execPath,['check-font-preparation.mjs']);
+  for (const repo of ['opf-render','opf-pptx']) {
+    const source=(await readHarness(repo,'test/font-variants.mjs'))
+      .replaceAll("'../dist/fonts-node.js'","'@openpresentation/opf-render/fonts-node'")
+      .replaceAll("'../dist/fonts.js'","'@openpresentation/opf-render/fonts'")
+      .replaceAll("'../dist/index.js'","'@openpresentation/opf-pptx'")
+      .replaceAll("new URL('../../opf-render/package.json',import.meta.url)","import.meta.resolve('@openpresentation/opf-render/package.json')");
+    const file=repo+'-font-variants.mjs';
+    await writeFile(path.join(consumer,file),source);
+    run(process.execPath,[file,'artifacts/'+repo+'-font-variants.json']);
+  }
   await writeFile(path.join(consumer,'font-preparation-types.mts'), `
 import {prepareNodeFonts,type PreparedNodeFonts,type BundledFontManifest} from '@openpresentation/opf-render/fonts-node';
 import {renderSvgDeck,svgToPng} from '@openpresentation/opf-render';
 import {paginatePresentation} from '@openpresentation/opf/pagination';
 import {createEditorSession} from '@openpresentation/opf-editor';
 import {toPptx} from '@openpresentation/opf-pptx';
+import type {FontFaceSelection,TextStyle} from '@openpresentation/opf/composition';
 const prepared:PreparedNodeFonts=await prepareNodeFonts({pack:'office',substitutionPolicy:'visual'});
 const manifest:BundledFontManifest=prepared.manifest;
+const physical:FontFaceSelection={family:'Roboto SemiBold',bold:false,italic:false};
+const measured:TextStyle=prepared.registry.textMeasurement.resolveStyle!({fontFamily:'Roboto',fontWeight:600,fontFace:physical});
+const selected:FontFaceSelection|undefined=measured.fontFace;
+void selected;
+// @ts-expect-error Native style flags must be booleans, independent of numeric CSS weights.
+const invalid:FontFaceSelection={family:'Roboto SemiBold',bold:600,italic:false};
 const {presentation}=paginatePresentation({slides:[{title:'Prepared type consumer'}]},prepared.options);
 const editor=createEditorSession(presentation);
 editor.composeSlide(0,prepared.options);

@@ -30,7 +30,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
-          ref: 91fe43e25dca9e4f04a2a18b1c6ee74e7e3d2863
+          ref: de14528555974f270807bca51614d21762a0bbf3
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
@@ -44,7 +44,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-pptx
-          ref: 24e7b2f12462df246e35a8a714a47923ecbd2bfe
+          ref: 2ce4a54429746ba4648534a653a2fd9c42d0b78f
           path: opf-pptx
           fetch-depth: 0
           persist-credentials: false
@@ -78,6 +78,9 @@ jobs:
           node -e "if (require('../opf-render/node_modules/playwright/package.json').version !== '1.63.0') throw new Error('Update the pinned Playwright image with the renderer test package.');"
           pnpm test:packed-browser
           node scripts/test-installed-code-guards.mjs
+      - name: Check physical font selections in an offline browser
+        working-directory: opf-render
+        run: npm run test:font-variants-browser
       - name: Verify exact published registry packages and fidelity fixtures
         working-directory: opf
         run: |
@@ -113,6 +116,8 @@ jobs:
             opf/artifacts/metric-layout-browser-*.png
             opf/artifacts/editor/*installed-code*.json
             opf-render/artifacts/golden/**
+            opf-render/artifacts/font-variants*.json
+            opf/artifacts/npm/consumer/artifacts/*font-variants*.json
           retention-days: 7
           if-no-files-found: ignore
       - name: Report the verification boundary
