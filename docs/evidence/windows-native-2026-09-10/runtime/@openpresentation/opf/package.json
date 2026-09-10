@@ -1,0 +1,116 @@
+{
+  "name": "@openpresentation/opf",
+  "version": "0.9.0",
+  "description": "Canonical Open Presentation Format schemas, catalogs, TypeScript types, and local validation.",
+  "license": "MIT",
+  "author": "Open Presentation",
+  "homepage": "https://openpresentation.org",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OpenPresentation/opf.git",
+    "directory": "packages/javascript"
+  },
+  "bugs": {
+    "url": "https://github.com/OpenPresentation/opf/issues"
+  },
+  "keywords": [
+    "opf",
+    "open-presentation-format",
+    "presentation",
+    "schema",
+    "json-schema",
+    "catalogs",
+    "slides"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./schemas": {
+      "types": "./dist/schemas.d.ts",
+      "import": "./dist/schemas.js"
+    },
+    "./catalogs": {
+      "types": "./dist/catalogs.d.ts",
+      "import": "./dist/catalogs.js"
+    },
+    "./validator": {
+      "types": "./dist/validator.d.ts",
+      "import": "./dist/validator.js"
+    },
+    "./types": {
+      "types": "./dist/types.d.ts",
+      "import": "./dist/types.js"
+    },
+    "./spec-files": {
+      "types": "./dist/spec-files.d.ts",
+      "import": "./dist/spec-files.js"
+    },
+    "./previews": {
+      "types": "./dist/previews.d.ts",
+      "import": "./dist/previews.js"
+    },
+    "./examples": {
+      "types": "./dist/examples.d.ts",
+      "import": "./dist/examples.js"
+    },
+    "./docs": {
+      "types": "./dist/docs.d.ts",
+      "import": "./dist/docs.js"
+    },
+    "./repo-readme": {
+      "types": "./dist/repo-readme.d.ts",
+      "import": "./dist/repo-readme.js"
+    },
+    "./spec/*": "./dist/spec/*",
+    "./package.json": "./package.json",
+    "./composition": {
+      "types": "./dist/composition.d.ts",
+      "import": "./dist/composition.js"
+    },
+    "./pagination": {
+      "types": "./dist/pagination.d.ts",
+      "import": "./dist/pagination.js"
+    },
+    "./data": {
+      "types": "./dist/data.d.ts",
+      "import": "./dist/data.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "package.json"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "clean": "rm -rf dist src/generated",
+    "generate": "node scripts/generate.mjs && node scripts/generate-previews.mjs && node scripts/generate-content.mjs",
+    "build": "pnpm run generate && tsup && node scripts/copy-spec.mjs",
+    "typecheck": "pnpm run generate && tsc --noEmit",
+    "test": "pnpm run build && node ../../scripts/run-node-tests.mjs && node test/composition.mjs && node test/pagination.mjs && node test/data.mjs && node test/rich-text.mjs && node test/lists.mjs",
+    "test:packed": "node test/packed-install-smoke.mjs",
+    "pack:dry-run": "pnpm run build && npm pack --dry-run --cache /tmp/opf-npm-cache"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.0",
+    "json-schema-to-typescript": "^16.0.0",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
+  }
+}

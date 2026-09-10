@@ -1,0 +1,5 @@
+C:\Users\micha\.codex\worktrees\fd3f\opf\artifacts\windows-native\opf-pptx\artifacts\process-controls-handle\failure\ow
+ned worker with spaces.ps1 : Controlled verifier failure
+    + CategoryInfo          : NotSpecified: (:) [Write-Error], WriteErrorException
+    + FullyQualifiedErrorId : Microsoft.PowerShell.Commands.WriteErrorException,owned worker with spaces.ps1
+ 

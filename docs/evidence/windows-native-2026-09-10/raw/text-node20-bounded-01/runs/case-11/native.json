@@ -1,0 +1,111 @@
+﻿{
+    "powerPointVersion":  "16.0.20326.20132",
+    "hostVersion":  "5.1.26100.9444",
+    "records":  [
+                    {
+                        "editedSha256":  "2b848ce2c0886005268bcac61db63dcd88ba87792c28861fa1d6c7f913045888",
+                        "lines":  [
+                                      {
+                                          "width":  873.6,
+                                          "height":  14.64,
+                                          "path":  "slides.0.tag",
+                                          "text":  "Source",
+                                          "left":  42.88362,
+                                          "tags":  1,
+                                          "line":  0,
+                                          "fonts":  [
+                                                        "Carlito"
+                                                    ],
+                                          "top":  43.2
+                                      },
+                                      {
+                                          "width":  873.6,
+                                          "height":  49.41,
+                                          "path":  "slides.0.title",
+                                          "text":  "A measured title that wraps when space is narrow",
+                                          "left":  42.5884247,
+                                          "tags":  1,
+                                          "line":  0,
+                                          "fonts":  [
+                                                        "Carlito"
+                                                    ],
+                                          "top":  66.84
+                                      },
+                                      {
+                                          "width":  873.6,
+                                          "height":  22.87504,
+                                          "path":  "slides.0.subtitle",
+                                          "text":  "Supporting text",
+                                          "left":  42.7796059,
+                                          "tags":  1,
+                                          "line":  0,
+                                          "fonts":  [
+                                                        "Carlito"
+                                                    ],
+                                          "top":  125.25
+                                      },
+                                      {
+                                          "width":  855.6,
+                                          "height":  22.87504,
+                                          "path":  "slides.0.text",
+                                          "text":  "Exact spacing with bold words and italics.",
+                                          "left":  52.2,
+                                          "tags":  0,
+                                          "line":  0,
+                                          "fonts":  [
+                                                        "Carlito"
+                                                    ],
+                                          "top":  175.125046
+                                      },
+                                      {
+                                          "width":  855.6,
+                                          "height":  24.4,
+                                          "path":  "slides.0.text",
+                                          "text":  "Raised note stays editable.",
+                                          "left":  52.2,
+                                          "tags":  0,
+                                          "line":  1,
+                                          "fonts":  [
+                                                        "Carlito"
+                                                    ],
+                                          "top":  198
+                                      }
+                                  ],
+                        "savedSha256":  "eede891c894722499fd2a778b14168cbba7c340f0158f335016bccfa6b562cba",
+                        "masks":  [
+                                      {
+                                          "path":  "slides.0.tag",
+                                          "sha256":  "7bc15956f033e5da25576fcaf6c68512dace6023ea1db7aa8e66e39e30dc82ce",
+                                          "file":  "case-11-mask-0.png"
+                                      },
+                                      {
+                                          "path":  "slides.0.title",
+                                          "sha256":  "da9ea0e4ab83470cdce67d53ef20460f99a55db0da41cbc742f7d731730f0f4a",
+                                          "file":  "case-11-mask-1.png"
+                                      },
+                                      {
+                                          "path":  "slides.0.subtitle",
+                                          "sha256":  "797e1d9f57709c076dcceb28b66eb5c93f9767cdd829437b439b662476ea9661",
+                                          "file":  "case-11-mask-2.png"
+                                      },
+                                      {
+                                          "path":  "slides.0.text",
+                                          "sha256":  "2becd2735e4ec100f0a42137444d17f77a33e3fdd1cae8e6e50704a77ef9668f",
+                                          "file":  "case-11-mask-3.png"
+                                      }
+                                  ],
+                        "reopened":  {
+                                         "sha256":  "251791487ce637e826f2db7a49f1e5cac84997f150bcea4991b454cbcb5d3590",
+                                         "file":  "case-11-reopened.png"
+                                     },
+                        "original":  {
+                                         "sha256":  "251791487ce637e826f2db7a49f1e5cac84997f150bcea4991b454cbcb5d3590",
+                                         "file":  "case-11-original.png"
+                                     },
+                        "file":  "case-11.pptx"
+                    }
+                ],
+    "executableSha256":  "90fa931172c507b763ba92a82b19d5bc70816e008c5bb87577e1838e8a92e9f9",
+    "windowsBuild":  "26200.9445",
+    "generationSha256":  "d0797519b9021529f70e5a928955bd2547788de4261a56ba55f1ac89d2e108bf"
+}

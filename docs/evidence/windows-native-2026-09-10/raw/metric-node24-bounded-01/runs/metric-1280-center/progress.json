@@ -1,0 +1,1399 @@
+﻿{
+    "generationSha256":  "c637af32648a7dd6b87d5041453ffa67e5d8abe6a73c190a3d98e5c996567607",
+    "decks":  [
+                  {
+                      "savedSha256":  "ae6bd2b774c4af4d88b77dca8b1f6b0755b138929108f20783d03e0ca13da096",
+                      "editsReopened":  23,
+                      "id":  "metric-1280-center",
+                      "slides":  [
+                                     {
+                                         "lines":  [
+                                                       {
+                                                           "width":  28.88,
+                                                           "fontSize":  57,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "0",
+                                                           "left":  465.562469,
+                                                           "tags":  1,
+                                                           "role":  "value",
+                                                           "height":  68.4,
+                                                           "paragraphWidth":  41.75,
+                                                           "top":  43.2,
+                                                           "font":  "Calibri",
+                                                           "characterBoundsInsideCell":  true
+                                                       }
+                                                   ],
+                                         "rasterSha256":  "a05f238f65f7244e39ea6601892e02b5579c0b3c391809d3df8cf52a1c70d3a8",
+                                         "partRasters":  [
+                                                             {
+                                                                 "sha256":  "a05f238f65f7244e39ea6601892e02b5579c0b3c391809d3df8cf52a1c70d3a8",
+                                                                 "file":  "metric-1280-center-native-1-value.png",
+                                                                 "role":  "value"
+                                                             }
+                                                         ],
+                                         "slide":  1
+                                     },
+                                     {
+                                         "lines":  [
+                                                       {
+                                                           "width":  12.8750391,
+                                                           "fontSize":  57,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "",
+                                                           "left":  479.997467,
+                                                           "tags":  1,
+                                                           "role":  "value",
+                                                           "height":  68.4,
+                                                           "paragraphWidth":  12.8750391,
+                                                           "top":  43.2,
+                                                           "font":  "Calibri",
+                                                           "characterBoundsInsideCell":  true
+                                                       }
+                                                   ],
+                                         "rasterSha256":  "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b",
+                                         "partRasters":  [
+                                                             {
+                                                                 "sha256":  "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b",
+                                                                 "file":  "metric-1280-center-native-2-value.png",
+                                                                 "role":  "value"
+                                                             }
+                                                         ],
+                                         "slide":  2
+                                     },
+                                     {
+                                         "lines":  [
+                                                       {
+                                                           "width":  57.75504,
+                                                           "fontSize":  57,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "42",
+                                                           "left":  437.4155,
+                                                           "tags":  1,
+                                                           "role":  "value",
+                                                           "height":  68.4,
+                                                           "paragraphWidth":  70.62504,
+                                                           "top":  43.2,
+                                                           "font":  "Calibri",
+                                                           "characterBoundsInsideCell":  true
+                                                       },
+                                                       {
+                                                           "width":  21.38,
+                                                           "fontSize":  18,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "ms",
+                                                           "left":  501.202118,
+                                                           "tags":  1,
+                                                           "role":  "unit",
+                                                           "height":  21.6,
+                                                           "paragraphWidth":  25.5,
+                                                           "top":  82.2,
+                                                           "font":  "Calibri",
+                                                           "characterBoundsInsideCell":  true
+                                                       },
+                                                       {
+                                                           "width":  78.51496,
+                                                           "fontSize":  18,
+                                                           "tabTargets":  [
+                                                                              {
+                                                                                  "errorPoints":  0.0046691894531,
+                                                                                  "actualOffsetPoints":  32.550018310546875,
+                                                                                  "expectedOffsetPoints":  32.5546875,
+                                                                                  "sourceStart":  5
+                                                                              }
+                                                                          ],
+                                                           "text":  "Left\tRight  ",
+                                                           "left":  440.745,
+                                                           "tags":  1,
+                                                           "role":  "label",
+                                                           "height":  21.6,
+                                                           "paragraphWidth":  82.634964,
+                                                           "top":  121.74,
+                                                           "font":  "Calibri",
+                                                           "characterBoundsInsideCell":  true
+                                                       },
+                                                       {
+                                                           "width":  38.43,
+                                                           "fontSize":  18,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "Exact",
+                                                           "left":  460.7875,
+                                                           "tags":  1,
+                                                           "role":  "description",
+                                                           "height":  21.6,
+                                                           "paragraphWidth":  42.55,
+                                                           "top":  149.7,
+                                                           "font":  "Calibri",
+                                                           "characterBoundsInsideCell":  true
+                                                       },
+                                                       {
+                                                           "width":  4.12503958,
+                                                           "fontSize":  18,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "",
+                                                           "left":  479.997467,
+                                                           "tags":  1,
+                                                           "role":  "description",
+                                                           "height":  21.6,
+                                                           "paragraphWidth":  4.12503958,
+                                                           "top":  171.66,
+                                                           "font":  "Calibri",
+                                                           "characterBoundsInsideCell":  true
+                                                       },
+                                                       {
+                                                           "width":  54.65496,
+                                                           "fontSize":  18,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "context",
+                                                           "left":  452.675,
+                                                           "tags":  1,
+                                                           "role":  "description",
+                                                           "height":  21.6,
+                                                           "paragraphWidth":  58.77496,
+                                                           "top":  193.62,
+                                                           "font":  "Calibri",
+                                                           "characterBoundsInsideCell":  true
+                                                       },
+                                                       {
+                                                           "width":  9.13,
+                                                           "fontSize":  18,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "0",
+                                                           "left":  475.437531,
+                                                           "tags":  1,
+                                                           "role":  "delta",
+                                                           "height":  21.6,
+                                                           "paragraphWidth":  13.25,
+                                                           "top":  221.58,
+                                                           "font":  "Calibri",
+                                                           "characterBoundsInsideCell":  true
+                                                       },
+                                                       {
+                                                           "width":  24.09,
+                                                           "fontSize":  18,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "flat",
+                                                           "left":  467.95752,
+                                                           "tags":  1,
+                                                           "role":  "trend",
+                                                           "height":  21.6,
+                                                           "paragraphWidth":  28.21,
+                                                           "top":  249.54,
+                                                           "font":  "Calibri",
+                                                           "characterBoundsInsideCell":  true
+                                                       }
+                                                   ],
+                                         "rasterSha256":  "b9cd9abbbd1b258e9edc2ff66a3f25b9be03e210d09d7e83ac87d72bdb946a13",
+                                         "partRasters":  [
+                                                             {
+                                                                 "sha256":  "edd85a65e119979b2c193b1ff81791b63f7e37096dc995b52f5aaaf6513a6860",
+                                                                 "file":  "metric-1280-center-native-3-value.png",
+                                                                 "role":  "value"
+                                                             },
+                                                             {
+                                                                 "sha256":  "51cd75e1f82462906ba1955f69a33d40ecd627edc82264e1b76c53ff1b57b2a2",
+                                                                 "file":  "metric-1280-center-native-3-unit.png",
+                                                                 "role":  "unit"
+                                                             },
+                                                             {
+                                                                 "sha256":  "a7b341b7f73c5bb51f0ffd2da955a4a48b8b89e2dbdc0570f3f57cb1e352005d",
+                                                                 "file":  "metric-1280-center-native-3-label.png",
+                                                                 "role":  "label"
+                                                             },
+                                                             {
+                                                                 "sha256":  "47df126b9d7f9ea42dbc4162a588e52f38673d4927b10eb71a07b91551295f5b",
+                                                                 "file":  "metric-1280-center-native-3-description.png",
+                                                                 "role":  "description"
+                                                             },
+                                                             {
+                                                                 "sha256":  "add4ae7d08119daef2fd32aa8d22afe9f78b0d610e8357ec9452689f3c4ad820",
+                                                                 "file":  "metric-1280-center-native-3-delta.png",
+                                                                 "role":  "delta"
+                                                             },
+                                                             {
+                                                                 "sha256":  "3dbaf9bf67e9d98a07213caca74a1fef2b033738b2d8d04b13d813b5482927fd",
+                                                                 "file":  "metric-1280-center-native-3-trend.png",
+                                                                 "role":  "trend"
+                                                             }
+                                                         ],
+                                         "slide":  3
+                                     },
+                                     {
+                                         "lines":  [
+                                                       {
+                                                           "width":  57.75496,
+                                                           "fontSize":  57,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "42",
+                                                           "left":  451.125,
+                                                           "tags":  1,
+                                                           "role":  "value",
+                                                           "height":  68.4,
+                                                           "paragraphWidth":  70.62496,
+                                                           "top":  43.2,
+                                                           "font":  "Calibri",
+                                                           "characterBoundsInsideCell":  true
+                                                       },
+                                                       {
+                                                           "width":  90.50504,
+                                                           "fontSize":  57,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "-0.5",
+                                                           "left":  434.75,
+                                                           "tags":  1,
+                                                           "role":  "value",
+                                                           "height":  68.4,
+                                                           "paragraphWidth":  103.375038,
+                                                           "top":  112.74,
+                                                           "font":  "Calibri",
+                                                           "characterBoundsInsideCell":  true
+                                                       },
+                                                       {
+                                                           "width":  394.774963,
+                                                           "fontSize":  18,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "milliseconds across all completed production requests",
+                                                           "left":  282.615,
+                                                           "tags":  1,
+                                                           "role":  "unit",
+                                                           "height":  21.6,
+                                                           "paragraphWidth":  398.894958,
+                                                           "top":  191.28,
+                                                           "font":  "Calibri",
+                                                           "characterBoundsInsideCell":  true
+                                                       },
+                                                       {
+                                                           "width":  56.14504,
+                                                           "fontSize":  18,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "Latency",
+                                                           "left":  451.93,
+                                                           "tags":  1,
+                                                           "role":  "label",
+                                                           "height":  21.6,
+                                                           "paragraphWidth":  60.2650375,
+                                                           "top":  219.24,
+                                                           "font":  "Calibri",
+                                                           "characterBoundsInsideCell":  true
+                                                       }
+                                                   ],
+                                         "rasterSha256":  "85c8701db9c18ddab52408ffaa0e9539a3e38f89b3f245746606f7478b8ee5a7",
+                                         "partRasters":  [
+                                                             {
+                                                                 "sha256":  "e7bd2c5437cf9715d796f682da4028c3555ce8a9a4d285623a86a82bf90c59b4",
+                                                                 "file":  "metric-1280-center-native-4-value.png",
+                                                                 "role":  "value"
+                                                             },
+                                                             {
+                                                                 "sha256":  "68e3311ca8830c094e86355ab0b4762c4bc74548345f68c3bc7245e0c183a009",
+                                                                 "file":  "metric-1280-center-native-4-unit.png",
+                                                                 "role":  "unit"
+                                                             },
+                                                             {
+                                                                 "sha256":  "20cad2aaa10884623bdbd09b6c11866a6bffdbe8f5df4999802388e00887b07a",
+                                                                 "file":  "metric-1280-center-native-4-label.png",
+                                                                 "role":  "label"
+                                                             }
+                                                         ],
+                                         "slide":  4
+                                     },
+                                     {
+                                         "lines":  [
+                                                       {
+                                                           "width":  12.8750391,
+                                                           "fontSize":  57,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "",
+                                                           "left":  479.997467,
+                                                           "tags":  1,
+                                                           "role":  "value",
+                                                           "height":  68.4,
+                                                           "paragraphWidth":  12.8750391,
+                                                           "top":  43.2,
+                                                           "font":  "Calibri",
+                                                           "characterBoundsInsideCell":  true
+                                                       },
+                                                       {
+                                                           "width":  19.00504,
+                                                           "fontSize":  18,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "up",
+                                                           "left":  470.5,
+                                                           "tags":  1,
+                                                           "role":  "trend",
+                                                           "height":  21.6,
+                                                           "paragraphWidth":  23.12504,
+                                                           "top":  121.74,
+                                                           "font":  "Calibri",
+                                                           "characterBoundsInsideCell":  true
+                                                       }
+                                                   ],
+                                         "rasterSha256":  "4384f842c830f35c16eb819c4dcfa9d4a5c4c537ac31a7ec08e26a1c0bd41738",
+                                         "partRasters":  [
+                                                             {
+                                                                 "sha256":  "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b",
+                                                                 "file":  "metric-1280-center-native-5-value.png",
+                                                                 "role":  "value"
+                                                             },
+                                                             {
+                                                                 "sha256":  "4384f842c830f35c16eb819c4dcfa9d4a5c4c537ac31a7ec08e26a1c0bd41738",
+                                                                 "file":  "metric-1280-center-native-5-trend.png",
+                                                                 "role":  "trend"
+                                                             }
+                                                         ],
+                                         "slide":  5
+                                     },
+                                     {
+                                         "lines":  [
+                                                       {
+                                                           "width":  28.88,
+                                                           "fontSize":  57,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "1",
+                                                           "left":  456.1289,
+                                                           "tags":  1,
+                                                           "role":  "value",
+                                                           "height":  68.4,
+                                                           "paragraphWidth":  41.75,
+                                                           "top":  43.2,
+                                                           "font":  "Calibri",
+                                                           "characterBoundsInsideCell":  true
+                                                       },
+                                                       {
+                                                           "width":  12.88,
+                                                           "fontSize":  18,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "%",
+                                                           "left":  491.007324,
+                                                           "tags":  1,
+                                                           "role":  "unit",
+                                                           "height":  21.6,
+                                                           "paragraphWidth":  17,
+                                                           "top":  82.2,
+                                                           "font":  "Calibri",
+                                                           "characterBoundsInsideCell":  true
+                                                       },
+                                                       {
+                                                           "width":  85.16,
+                                                           "fontSize":  18,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "Completion",
+                                                           "left":  437.4225,
+                                                           "tags":  1,
+                                                           "role":  "label",
+                                                           "height":  21.6,
+                                                           "paragraphWidth":  89.28,
+                                                           "top":  121.74,
+                                                           "font":  "Calibri",
+                                                           "characterBoundsInsideCell":  true
+                                                       }
+                                                   ],
+                                         "rasterSha256":  "aa196a5fe225d3f7a674bc01dfe2cb828db03c74feaa6b462575bab84de9af5a",
+                                         "partRasters":  [
+                                                             {
+                                                                 "sha256":  "ddc9d3940ac3f70326b8728c62c96049464a75cea3347c24cf73a4adccb755f0",
+                                                                 "file":  "metric-1280-center-native-6-value.png",
+                                                                 "role":  "value"
+                                                             },
+                                                             {
+                                                                 "sha256":  "bc5f79f6eb289529595cd346a0d7c8df8a45dca9205dbf081d8704489c789837",
+                                                                 "file":  "metric-1280-center-native-6-unit.png",
+                                                                 "role":  "unit"
+                                                             },
+                                                             {
+                                                                 "sha256":  "884a374d31d1df8e1002c0f29e8cf1bed5e74f05242469aa503c92db3a439d15",
+                                                                 "file":  "metric-1280-center-native-6-label.png",
+                                                                 "role":  "label"
+                                                             }
+                                                         ],
+                                         "slide":  6
+                                     },
+                                     {
+                                         "lines":  [
+                                                       {
+                                                           "width":  144.605042,
+                                                           "fontSize":  57,
+                                                           "tabTargets":  [
+                                                                              {
+                                                                                  "errorPoints":  0.0050659179688,
+                                                                                  "actualOffsetPoints":  51.54998779296875,
+                                                                                  "expectedOffsetPoints":  51.544921875,
+                                                                                  "sourceStart":  1
+                                                                              },
+                                                                              {
+                                                                                  "errorPoints":  0.010162353516,
+                                                                                  "actualOffsetPoints":  103.10000610351563,
+                                                                                  "expectedOffsetPoints":  103.08984375,
+                                                                                  "sourceStart":  3
+                                                                              }
+                                                                          ],
+                                                           "text":  "\t1\t%",
+                                                           "left":  393.9905,
+                                                           "tags":  1,
+                                                           "role":  "value",
+                                                           "height":  68.4,
+                                                           "paragraphWidth":  157.475037,
+                                                           "top":  43.2,
+                                                           "font":  "Calibri",
+                                                           "characterBoundsInsideCell":  true
+                                                       },
+                                                       {
+                                                           "width":  21.38,
+                                                           "fontSize":  18,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "ms",
+                                                           "left":  544.634033,
+                                                           "tags":  1,
+                                                           "role":  "unit",
+                                                           "height":  21.6,
+                                                           "paragraphWidth":  25.5,
+                                                           "top":  82.2,
+                                                           "font":  "Calibri",
+                                                           "characterBoundsInsideCell":  true
+                                                       },
+                                                       {
+                                                           "width":  110.285042,
+                                                           "fontSize":  18,
+                                                           "tabTargets":  [
+                                                                              {
+                                                                                  "errorPoints":  0.0226745605469,
+                                                                                  "actualOffsetPoints":  16.300018310546875,
+                                                                                  "expectedOffsetPoints":  16.27734375,
+                                                                                  "sourceStart":  1
+                                                                              },
+                                                                              {
+                                                                                  "errorPoints":  0.0093688964844,
+                                                                                  "actualOffsetPoints":  65.100006103515625,
+                                                                                  "expectedOffsetPoints":  65.109375,
+                                                                                  "sourceStart":  8
+                                                                              }
+                                                                          ],
+                                                           "text":  "\tBefore\tAfter  ",
+                                                           "left":  424.86,
+                                                           "tags":  1,
+                                                           "role":  "label",
+                                                           "height":  21.6,
+                                                           "paragraphWidth":  114.405037,
+                                                           "top":  121.74,
+                                                           "font":  "Calibri",
+                                                           "characterBoundsInsideCell":  true
+                                                       },
+                                                       {
+                                                           "width":  16.3050385,
+                                                           "fontSize":  18,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "\t",
+                                                           "left":  471.85,
+                                                           "tags":  1,
+                                                           "role":  "description",
+                                                           "height":  21.6,
+                                                           "paragraphWidth":  20.42504,
+                                                           "top":  149.7,
+                                                           "font":  "Calibri",
+                                                           "characterBoundsInsideCell":  true
+                                                       }
+                                                   ],
+                                         "rasterSha256":  "7d9c5ece51ad1d76d2ab00cd2d846bda23a41ebc223b9375cddf74d484183705",
+                                         "partRasters":  [
+                                                             {
+                                                                 "sha256":  "dc67564c7d419159d399f21ab65c82c878ba06577d07e18eda7fe578cf32d031",
+                                                                 "file":  "metric-1280-center-native-7-value.png",
+                                                                 "role":  "value"
+                                                             },
+                                                             {
+                                                                 "sha256":  "4d76c9cdee8a3479dc7952c248645fee5b770d8bf1907fd2bef31fc272c5a95e",
+                                                                 "file":  "metric-1280-center-native-7-unit.png",
+                                                                 "role":  "unit"
+                                                             },
+                                                             {
+                                                                 "sha256":  "74f611ed2000122be3f6dac9809737fec969fe1a313f5195639df90fa7d10dd4",
+                                                                 "file":  "metric-1280-center-native-7-label.png",
+                                                                 "role":  "label"
+                                                             },
+                                                             {
+                                                                 "sha256":  "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b",
+                                                                 "file":  "metric-1280-center-native-7-description.png",
+                                                                 "role":  "description"
+                                                             }
+                                                         ],
+                                         "slide":  7
+                                     },
+                                     {
+                                         "lines":  [
+                                                       {
+                                                           "width":  12.8750391,
+                                                           "fontSize":  57,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "",
+                                                           "left":  479.997467,
+                                                           "tags":  1,
+                                                           "role":  "value",
+                                                           "height":  68.4,
+                                                           "paragraphWidth":  12.8750391,
+                                                           "top":  43.2,
+                                                           "font":  "Calibri",
+                                                           "characterBoundsInsideCell":  true
+                                                       },
+                                                       {
+                                                           "width":  12.8750391,
+                                                           "fontSize":  57,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "",
+                                                           "left":  479.997467,
+                                                           "tags":  1,
+                                                           "role":  "value",
+                                                           "height":  68.4,
+                                                           "paragraphWidth":  12.8750391,
+                                                           "top":  112.74,
+                                                           "font":  "Calibri",
+                                                           "characterBoundsInsideCell":  true
+                                                       },
+                                                       {
+                                                           "width":  12.8750391,
+                                                           "fontSize":  57,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "",
+                                                           "left":  479.997467,
+                                                           "tags":  1,
+                                                           "role":  "value",
+                                                           "height":  68.4,
+                                                           "paragraphWidth":  12.8750391,
+                                                           "top":  182.28,
+                                                           "font":  "Calibri",
+                                                           "characterBoundsInsideCell":  true
+                                                       },
+                                                       {
+                                                           "width":  12.8750391,
+                                                           "fontSize":  57,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "",
+                                                           "left":  479.997467,
+                                                           "tags":  1,
+                                                           "role":  "value",
+                                                           "height":  68.4,
+                                                           "paragraphWidth":  12.8750391,
+                                                           "top":  251.82,
+                                                           "font":  "Calibri",
+                                                           "characterBoundsInsideCell":  true
+                                                       },
+                                                       {
+                                                           "width":  24.55496,
+                                                           "fontSize":  18,
+                                                           "tabTargets":  [
+                                                                              {
+                                                                                  "errorPoints":  0.0226440429688,
+                                                                                  "actualOffsetPoints":  16.29998779296875,
+                                                                                  "expectedOffsetPoints":  16.27734375,
+                                                                                  "sourceStart":  1
+                                                                              }
+                                                                          ],
+                                                           "text":  "\t  ",
+                                                           "left":  467.725,
+                                                           "tags":  1,
+                                                           "role":  "label",
+                                                           "height":  21.6,
+                                                           "paragraphWidth":  28.6749611,
+                                                           "top":  330.36,
+                                                           "font":  "Calibri",
+                                                           "characterBoundsInsideCell":  true
+                                                       },
+                                                       {
+                                                           "width":  4.12503958,
+                                                           "fontSize":  18,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "",
+                                                           "left":  479.997467,
+                                                           "tags":  1,
+                                                           "role":  "description",
+                                                           "height":  21.6,
+                                                           "paragraphWidth":  4.12503958,
+                                                           "top":  358.32,
+                                                           "font":  "Calibri",
+                                                           "characterBoundsInsideCell":  true
+                                                       },
+                                                       {
+                                                           "width":  4.12503958,
+                                                           "fontSize":  18,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "",
+                                                           "left":  479.997467,
+                                                           "tags":  1,
+                                                           "role":  "description",
+                                                           "height":  21.6,
+                                                           "paragraphWidth":  4.12503958,
+                                                           "top":  380.28,
+                                                           "font":  "Calibri",
+                                                           "characterBoundsInsideCell":  true
+                                                       }
+                                                   ],
+                                         "rasterSha256":  "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b",
+                                         "partRasters":  [
+                                                             {
+                                                                 "sha256":  "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b",
+                                                                 "file":  "metric-1280-center-native-8-value.png",
+                                                                 "role":  "value"
+                                                             },
+                                                             {
+                                                                 "sha256":  "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b",
+                                                                 "file":  "metric-1280-center-native-8-label.png",
+                                                                 "role":  "label"
+                                                             },
+                                                             {
+                                                                 "sha256":  "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b",
+                                                                 "file":  "metric-1280-center-native-8-description.png",
+                                                                 "role":  "description"
+                                                             }
+                                                         ],
+                                         "slide":  8
+                                     }
+                                 ],
+                      "editedSha256":  "647ca2ea9ded5cfac002a1a334b9120d3d08a5bc5aeaa7124b889acae62cf4c4"
+                  }
+              ],
+    "deck":  "metric-1280-center",
+    "stage":  "completed",
+    "slides":  [
+                   {
+                       "lines":  [
+                                     {
+                                         "width":  28.88,
+                                         "fontSize":  57,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "0",
+                                         "left":  465.562469,
+                                         "tags":  1,
+                                         "role":  "value",
+                                         "height":  68.4,
+                                         "paragraphWidth":  41.75,
+                                         "top":  43.2,
+                                         "font":  "Calibri",
+                                         "characterBoundsInsideCell":  true
+                                     }
+                                 ],
+                       "rasterSha256":  "a05f238f65f7244e39ea6601892e02b5579c0b3c391809d3df8cf52a1c70d3a8",
+                       "partRasters":  [
+                                           {
+                                               "sha256":  "a05f238f65f7244e39ea6601892e02b5579c0b3c391809d3df8cf52a1c70d3a8",
+                                               "file":  "metric-1280-center-native-1-value.png",
+                                               "role":  "value"
+                                           }
+                                       ],
+                       "slide":  1
+                   },
+                   {
+                       "lines":  [
+                                     {
+                                         "width":  12.8750391,
+                                         "fontSize":  57,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "",
+                                         "left":  479.997467,
+                                         "tags":  1,
+                                         "role":  "value",
+                                         "height":  68.4,
+                                         "paragraphWidth":  12.8750391,
+                                         "top":  43.2,
+                                         "font":  "Calibri",
+                                         "characterBoundsInsideCell":  true
+                                     }
+                                 ],
+                       "rasterSha256":  "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b",
+                       "partRasters":  [
+                                           {
+                                               "sha256":  "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b",
+                                               "file":  "metric-1280-center-native-2-value.png",
+                                               "role":  "value"
+                                           }
+                                       ],
+                       "slide":  2
+                   },
+                   {
+                       "lines":  [
+                                     {
+                                         "width":  57.75504,
+                                         "fontSize":  57,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "42",
+                                         "left":  437.4155,
+                                         "tags":  1,
+                                         "role":  "value",
+                                         "height":  68.4,
+                                         "paragraphWidth":  70.62504,
+                                         "top":  43.2,
+                                         "font":  "Calibri",
+                                         "characterBoundsInsideCell":  true
+                                     },
+                                     {
+                                         "width":  21.38,
+                                         "fontSize":  18,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "ms",
+                                         "left":  501.202118,
+                                         "tags":  1,
+                                         "role":  "unit",
+                                         "height":  21.6,
+                                         "paragraphWidth":  25.5,
+                                         "top":  82.2,
+                                         "font":  "Calibri",
+                                         "characterBoundsInsideCell":  true
+                                     },
+                                     {
+                                         "width":  78.51496,
+                                         "fontSize":  18,
+                                         "tabTargets":  [
+                                                            {
+                                                                "errorPoints":  0.0046691894531,
+                                                                "actualOffsetPoints":  32.550018310546875,
+                                                                "expectedOffsetPoints":  32.5546875,
+                                                                "sourceStart":  5
+                                                            }
+                                                        ],
+                                         "text":  "Left\tRight  ",
+                                         "left":  440.745,
+                                         "tags":  1,
+                                         "role":  "label",
+                                         "height":  21.6,
+                                         "paragraphWidth":  82.634964,
+                                         "top":  121.74,
+                                         "font":  "Calibri",
+                                         "characterBoundsInsideCell":  true
+                                     },
+                                     {
+                                         "width":  38.43,
+                                         "fontSize":  18,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "Exact",
+                                         "left":  460.7875,
+                                         "tags":  1,
+                                         "role":  "description",
+                                         "height":  21.6,
+                                         "paragraphWidth":  42.55,
+                                         "top":  149.7,
+                                         "font":  "Calibri",
+                                         "characterBoundsInsideCell":  true
+                                     },
+                                     {
+                                         "width":  4.12503958,
+                                         "fontSize":  18,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "",
+                                         "left":  479.997467,
+                                         "tags":  1,
+                                         "role":  "description",
+                                         "height":  21.6,
+                                         "paragraphWidth":  4.12503958,
+                                         "top":  171.66,
+                                         "font":  "Calibri",
+                                         "characterBoundsInsideCell":  true
+                                     },
+                                     {
+                                         "width":  54.65496,
+                                         "fontSize":  18,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "context",
+                                         "left":  452.675,
+                                         "tags":  1,
+                                         "role":  "description",
+                                         "height":  21.6,
+                                         "paragraphWidth":  58.77496,
+                                         "top":  193.62,
+                                         "font":  "Calibri",
+                                         "characterBoundsInsideCell":  true
+                                     },
+                                     {
+                                         "width":  9.13,
+                                         "fontSize":  18,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "0",
+                                         "left":  475.437531,
+                                         "tags":  1,
+                                         "role":  "delta",
+                                         "height":  21.6,
+                                         "paragraphWidth":  13.25,
+                                         "top":  221.58,
+                                         "font":  "Calibri",
+                                         "characterBoundsInsideCell":  true
+                                     },
+                                     {
+                                         "width":  24.09,
+                                         "fontSize":  18,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "flat",
+                                         "left":  467.95752,
+                                         "tags":  1,
+                                         "role":  "trend",
+                                         "height":  21.6,
+                                         "paragraphWidth":  28.21,
+                                         "top":  249.54,
+                                         "font":  "Calibri",
+                                         "characterBoundsInsideCell":  true
+                                     }
+                                 ],
+                       "rasterSha256":  "b9cd9abbbd1b258e9edc2ff66a3f25b9be03e210d09d7e83ac87d72bdb946a13",
+                       "partRasters":  [
+                                           {
+                                               "sha256":  "edd85a65e119979b2c193b1ff81791b63f7e37096dc995b52f5aaaf6513a6860",
+                                               "file":  "metric-1280-center-native-3-value.png",
+                                               "role":  "value"
+                                           },
+                                           {
+                                               "sha256":  "51cd75e1f82462906ba1955f69a33d40ecd627edc82264e1b76c53ff1b57b2a2",
+                                               "file":  "metric-1280-center-native-3-unit.png",
+                                               "role":  "unit"
+                                           },
+                                           {
+                                               "sha256":  "a7b341b7f73c5bb51f0ffd2da955a4a48b8b89e2dbdc0570f3f57cb1e352005d",
+                                               "file":  "metric-1280-center-native-3-label.png",
+                                               "role":  "label"
+                                           },
+                                           {
+                                               "sha256":  "47df126b9d7f9ea42dbc4162a588e52f38673d4927b10eb71a07b91551295f5b",
+                                               "file":  "metric-1280-center-native-3-description.png",
+                                               "role":  "description"
+                                           },
+                                           {
+                                               "sha256":  "add4ae7d08119daef2fd32aa8d22afe9f78b0d610e8357ec9452689f3c4ad820",
+                                               "file":  "metric-1280-center-native-3-delta.png",
+                                               "role":  "delta"
+                                           },
+                                           {
+                                               "sha256":  "3dbaf9bf67e9d98a07213caca74a1fef2b033738b2d8d04b13d813b5482927fd",
+                                               "file":  "metric-1280-center-native-3-trend.png",
+                                               "role":  "trend"
+                                           }
+                                       ],
+                       "slide":  3
+                   },
+                   {
+                       "lines":  [
+                                     {
+                                         "width":  57.75496,
+                                         "fontSize":  57,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "42",
+                                         "left":  451.125,
+                                         "tags":  1,
+                                         "role":  "value",
+                                         "height":  68.4,
+                                         "paragraphWidth":  70.62496,
+                                         "top":  43.2,
+                                         "font":  "Calibri",
+                                         "characterBoundsInsideCell":  true
+                                     },
+                                     {
+                                         "width":  90.50504,
+                                         "fontSize":  57,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "-0.5",
+                                         "left":  434.75,
+                                         "tags":  1,
+                                         "role":  "value",
+                                         "height":  68.4,
+                                         "paragraphWidth":  103.375038,
+                                         "top":  112.74,
+                                         "font":  "Calibri",
+                                         "characterBoundsInsideCell":  true
+                                     },
+                                     {
+                                         "width":  394.774963,
+                                         "fontSize":  18,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "milliseconds across all completed production requests",
+                                         "left":  282.615,
+                                         "tags":  1,
+                                         "role":  "unit",
+                                         "height":  21.6,
+                                         "paragraphWidth":  398.894958,
+                                         "top":  191.28,
+                                         "font":  "Calibri",
+                                         "characterBoundsInsideCell":  true
+                                     },
+                                     {
+                                         "width":  56.14504,
+                                         "fontSize":  18,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "Latency",
+                                         "left":  451.93,
+                                         "tags":  1,
+                                         "role":  "label",
+                                         "height":  21.6,
+                                         "paragraphWidth":  60.2650375,
+                                         "top":  219.24,
+                                         "font":  "Calibri",
+                                         "characterBoundsInsideCell":  true
+                                     }
+                                 ],
+                       "rasterSha256":  "85c8701db9c18ddab52408ffaa0e9539a3e38f89b3f245746606f7478b8ee5a7",
+                       "partRasters":  [
+                                           {
+                                               "sha256":  "e7bd2c5437cf9715d796f682da4028c3555ce8a9a4d285623a86a82bf90c59b4",
+                                               "file":  "metric-1280-center-native-4-value.png",
+                                               "role":  "value"
+                                           },
+                                           {
+                                               "sha256":  "68e3311ca8830c094e86355ab0b4762c4bc74548345f68c3bc7245e0c183a009",
+                                               "file":  "metric-1280-center-native-4-unit.png",
+                                               "role":  "unit"
+                                           },
+                                           {
+                                               "sha256":  "20cad2aaa10884623bdbd09b6c11866a6bffdbe8f5df4999802388e00887b07a",
+                                               "file":  "metric-1280-center-native-4-label.png",
+                                               "role":  "label"
+                                           }
+                                       ],
+                       "slide":  4
+                   },
+                   {
+                       "lines":  [
+                                     {
+                                         "width":  12.8750391,
+                                         "fontSize":  57,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "",
+                                         "left":  479.997467,
+                                         "tags":  1,
+                                         "role":  "value",
+                                         "height":  68.4,
+                                         "paragraphWidth":  12.8750391,
+                                         "top":  43.2,
+                                         "font":  "Calibri",
+                                         "characterBoundsInsideCell":  true
+                                     },
+                                     {
+                                         "width":  19.00504,
+                                         "fontSize":  18,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "up",
+                                         "left":  470.5,
+                                         "tags":  1,
+                                         "role":  "trend",
+                                         "height":  21.6,
+                                         "paragraphWidth":  23.12504,
+                                         "top":  121.74,
+                                         "font":  "Calibri",
+                                         "characterBoundsInsideCell":  true
+                                     }
+                                 ],
+                       "rasterSha256":  "4384f842c830f35c16eb819c4dcfa9d4a5c4c537ac31a7ec08e26a1c0bd41738",
+                       "partRasters":  [
+                                           {
+                                               "sha256":  "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b",
+                                               "file":  "metric-1280-center-native-5-value.png",
+                                               "role":  "value"
+                                           },
+                                           {
+                                               "sha256":  "4384f842c830f35c16eb819c4dcfa9d4a5c4c537ac31a7ec08e26a1c0bd41738",
+                                               "file":  "metric-1280-center-native-5-trend.png",
+                                               "role":  "trend"
+                                           }
+                                       ],
+                       "slide":  5
+                   },
+                   {
+                       "lines":  [
+                                     {
+                                         "width":  28.88,
+                                         "fontSize":  57,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "1",
+                                         "left":  456.1289,
+                                         "tags":  1,
+                                         "role":  "value",
+                                         "height":  68.4,
+                                         "paragraphWidth":  41.75,
+                                         "top":  43.2,
+                                         "font":  "Calibri",
+                                         "characterBoundsInsideCell":  true
+                                     },
+                                     {
+                                         "width":  12.88,
+                                         "fontSize":  18,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "%",
+                                         "left":  491.007324,
+                                         "tags":  1,
+                                         "role":  "unit",
+                                         "height":  21.6,
+                                         "paragraphWidth":  17,
+                                         "top":  82.2,
+                                         "font":  "Calibri",
+                                         "characterBoundsInsideCell":  true
+                                     },
+                                     {
+                                         "width":  85.16,
+                                         "fontSize":  18,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "Completion",
+                                         "left":  437.4225,
+                                         "tags":  1,
+                                         "role":  "label",
+                                         "height":  21.6,
+                                         "paragraphWidth":  89.28,
+                                         "top":  121.74,
+                                         "font":  "Calibri",
+                                         "characterBoundsInsideCell":  true
+                                     }
+                                 ],
+                       "rasterSha256":  "aa196a5fe225d3f7a674bc01dfe2cb828db03c74feaa6b462575bab84de9af5a",
+                       "partRasters":  [
+                                           {
+                                               "sha256":  "ddc9d3940ac3f70326b8728c62c96049464a75cea3347c24cf73a4adccb755f0",
+                                               "file":  "metric-1280-center-native-6-value.png",
+                                               "role":  "value"
+                                           },
+                                           {
+                                               "sha256":  "bc5f79f6eb289529595cd346a0d7c8df8a45dca9205dbf081d8704489c789837",
+                                               "file":  "metric-1280-center-native-6-unit.png",
+                                               "role":  "unit"
+                                           },
+                                           {
+                                               "sha256":  "884a374d31d1df8e1002c0f29e8cf1bed5e74f05242469aa503c92db3a439d15",
+                                               "file":  "metric-1280-center-native-6-label.png",
+                                               "role":  "label"
+                                           }
+                                       ],
+                       "slide":  6
+                   },
+                   {
+                       "lines":  [
+                                     {
+                                         "width":  144.605042,
+                                         "fontSize":  57,
+                                         "tabTargets":  [
+                                                            {
+                                                                "errorPoints":  0.0050659179688,
+                                                                "actualOffsetPoints":  51.54998779296875,
+                                                                "expectedOffsetPoints":  51.544921875,
+                                                                "sourceStart":  1
+                                                            },
+                                                            {
+                                                                "errorPoints":  0.010162353516,
+                                                                "actualOffsetPoints":  103.10000610351563,
+                                                                "expectedOffsetPoints":  103.08984375,
+                                                                "sourceStart":  3
+                                                            }
+                                                        ],
+                                         "text":  "\t1\t%",
+                                         "left":  393.9905,
+                                         "tags":  1,
+                                         "role":  "value",
+                                         "height":  68.4,
+                                         "paragraphWidth":  157.475037,
+                                         "top":  43.2,
+                                         "font":  "Calibri",
+                                         "characterBoundsInsideCell":  true
+                                     },
+                                     {
+                                         "width":  21.38,
+                                         "fontSize":  18,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "ms",
+                                         "left":  544.634033,
+                                         "tags":  1,
+                                         "role":  "unit",
+                                         "height":  21.6,
+                                         "paragraphWidth":  25.5,
+                                         "top":  82.2,
+                                         "font":  "Calibri",
+                                         "characterBoundsInsideCell":  true
+                                     },
+                                     {
+                                         "width":  110.285042,
+                                         "fontSize":  18,
+                                         "tabTargets":  [
+                                                            {
+                                                                "errorPoints":  0.0226745605469,
+                                                                "actualOffsetPoints":  16.300018310546875,
+                                                                "expectedOffsetPoints":  16.27734375,
+                                                                "sourceStart":  1
+                                                            },
+                                                            {
+                                                                "errorPoints":  0.0093688964844,
+                                                                "actualOffsetPoints":  65.100006103515625,
+                                                                "expectedOffsetPoints":  65.109375,
+                                                                "sourceStart":  8
+                                                            }
+                                                        ],
+                                         "text":  "\tBefore\tAfter  ",
+                                         "left":  424.86,
+                                         "tags":  1,
+                                         "role":  "label",
+                                         "height":  21.6,
+                                         "paragraphWidth":  114.405037,
+                                         "top":  121.74,
+                                         "font":  "Calibri",
+                                         "characterBoundsInsideCell":  true
+                                     },
+                                     {
+                                         "width":  16.3050385,
+                                         "fontSize":  18,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "\t",
+                                         "left":  471.85,
+                                         "tags":  1,
+                                         "role":  "description",
+                                         "height":  21.6,
+                                         "paragraphWidth":  20.42504,
+                                         "top":  149.7,
+                                         "font":  "Calibri",
+                                         "characterBoundsInsideCell":  true
+                                     }
+                                 ],
+                       "rasterSha256":  "7d9c5ece51ad1d76d2ab00cd2d846bda23a41ebc223b9375cddf74d484183705",
+                       "partRasters":  [
+                                           {
+                                               "sha256":  "dc67564c7d419159d399f21ab65c82c878ba06577d07e18eda7fe578cf32d031",
+                                               "file":  "metric-1280-center-native-7-value.png",
+                                               "role":  "value"
+                                           },
+                                           {
+                                               "sha256":  "4d76c9cdee8a3479dc7952c248645fee5b770d8bf1907fd2bef31fc272c5a95e",
+                                               "file":  "metric-1280-center-native-7-unit.png",
+                                               "role":  "unit"
+                                           },
+                                           {
+                                               "sha256":  "74f611ed2000122be3f6dac9809737fec969fe1a313f5195639df90fa7d10dd4",
+                                               "file":  "metric-1280-center-native-7-label.png",
+                                               "role":  "label"
+                                           },
+                                           {
+                                               "sha256":  "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b",
+                                               "file":  "metric-1280-center-native-7-description.png",
+                                               "role":  "description"
+                                           }
+                                       ],
+                       "slide":  7
+                   },
+                   {
+                       "lines":  [
+                                     {
+                                         "width":  12.8750391,
+                                         "fontSize":  57,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "",
+                                         "left":  479.997467,
+                                         "tags":  1,
+                                         "role":  "value",
+                                         "height":  68.4,
+                                         "paragraphWidth":  12.8750391,
+                                         "top":  43.2,
+                                         "font":  "Calibri",
+                                         "characterBoundsInsideCell":  true
+                                     },
+                                     {
+                                         "width":  12.8750391,
+                                         "fontSize":  57,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "",
+                                         "left":  479.997467,
+                                         "tags":  1,
+                                         "role":  "value",
+                                         "height":  68.4,
+                                         "paragraphWidth":  12.8750391,
+                                         "top":  112.74,
+                                         "font":  "Calibri",
+                                         "characterBoundsInsideCell":  true
+                                     },
+                                     {
+                                         "width":  12.8750391,
+                                         "fontSize":  57,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "",
+                                         "left":  479.997467,
+                                         "tags":  1,
+                                         "role":  "value",
+                                         "height":  68.4,
+                                         "paragraphWidth":  12.8750391,
+                                         "top":  182.28,
+                                         "font":  "Calibri",
+                                         "characterBoundsInsideCell":  true
+                                     },
+                                     {
+                                         "width":  12.8750391,
+                                         "fontSize":  57,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "",
+                                         "left":  479.997467,
+                                         "tags":  1,
+                                         "role":  "value",
+                                         "height":  68.4,
+                                         "paragraphWidth":  12.8750391,
+                                         "top":  251.82,
+                                         "font":  "Calibri",
+                                         "characterBoundsInsideCell":  true
+                                     },
+                                     {
+                                         "width":  24.55496,
+                                         "fontSize":  18,
+                                         "tabTargets":  [
+                                                            {
+                                                                "errorPoints":  0.0226440429688,
+                                                                "actualOffsetPoints":  16.29998779296875,
+                                                                "expectedOffsetPoints":  16.27734375,
+                                                                "sourceStart":  1
+                                                            }
+                                                        ],
+                                         "text":  "\t  ",
+                                         "left":  467.725,
+                                         "tags":  1,
+                                         "role":  "label",
+                                         "height":  21.6,
+                                         "paragraphWidth":  28.6749611,
+                                         "top":  330.36,
+                                         "font":  "Calibri",
+                                         "characterBoundsInsideCell":  true
+                                     },
+                                     {
+                                         "width":  4.12503958,
+                                         "fontSize":  18,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "",
+                                         "left":  479.997467,
+                                         "tags":  1,
+                                         "role":  "description",
+                                         "height":  21.6,
+                                         "paragraphWidth":  4.12503958,
+                                         "top":  358.32,
+                                         "font":  "Calibri",
+                                         "characterBoundsInsideCell":  true
+                                     },
+                                     {
+                                         "width":  4.12503958,
+                                         "fontSize":  18,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "",
+                                         "left":  479.997467,
+                                         "tags":  1,
+                                         "role":  "description",
+                                         "height":  21.6,
+                                         "paragraphWidth":  4.12503958,
+                                         "top":  380.28,
+                                         "font":  "Calibri",
+                                         "characterBoundsInsideCell":  true
+                                     }
+                                 ],
+                       "rasterSha256":  "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b",
+                       "partRasters":  [
+                                           {
+                                               "sha256":  "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b",
+                                               "file":  "metric-1280-center-native-8-value.png",
+                                               "role":  "value"
+                                           },
+                                           {
+                                               "sha256":  "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b",
+                                               "file":  "metric-1280-center-native-8-label.png",
+                                               "role":  "label"
+                                           },
+                                           {
+                                               "sha256":  "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b",
+                                               "file":  "metric-1280-center-native-8-description.png",
+                                               "role":  "description"
+                                           }
+                                       ],
+                       "slide":  8
+                   }
+               ]
+}

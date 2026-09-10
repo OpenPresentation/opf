@@ -1,0 +1,170 @@
+[
+  {
+    "slide": 1,
+    "originalCategories": [
+      [
+        "Q1",
+        "Q2"
+      ],
+      [
+        "Q1",
+        "Q2"
+      ]
+    ],
+    "saveReopenSame": true,
+    "editedReopenSame": false,
+    "editedCategories": [
+      [
+        "Edited Q1",
+        "Q2"
+      ],
+      [
+        "Edited Q1",
+        "Q2"
+      ]
+    ]
+  },
+  {
+    "slide": 2,
+    "originalCategories": [
+      [
+        null,
+        null
+      ]
+    ],
+    "saveReopenSame": true,
+    "editedReopenSame": true,
+    "editedCategories": [
+      [
+        null,
+        null
+      ]
+    ]
+  },
+  {
+    "slide": 3,
+    "originalCategories": [
+      [
+        "Q1",
+        "Q2"
+      ],
+      [
+        "Q1",
+        "Q2"
+      ]
+    ],
+    "saveReopenSame": true,
+    "editedReopenSame": true,
+    "editedCategories": [
+      [
+        "Q1",
+        "Q2"
+      ],
+      [
+        "Q1",
+        "Q2"
+      ]
+    ]
+  },
+  {
+    "slide": 4,
+    "originalCategories": [
+      [
+        null,
+        null
+      ]
+    ],
+    "saveReopenSame": true,
+    "editedReopenSame": true,
+    "editedCategories": [
+      [
+        null,
+        null
+      ]
+    ]
+  },
+  {
+    "slide": 5,
+    "originalCategories": [
+      [
+        "Q1",
+        "Q2"
+      ],
+      [
+        "Q1",
+        "Q2"
+      ]
+    ],
+    "saveReopenSame": true,
+    "editedReopenSame": true,
+    "editedCategories": [
+      [
+        "Q1",
+        "Q2"
+      ],
+      [
+        "Q1",
+        "Q2"
+      ]
+    ]
+  },
+  {
+    "slide": 6,
+    "originalCategories": [
+      [
+        null,
+        null
+      ]
+    ],
+    "saveReopenSame": true,
+    "editedReopenSame": true,
+    "editedCategories": [
+      [
+        null,
+        null
+      ]
+    ]
+  },
+  {
+    "slide": 7,
+    "originalCategories": [
+      [
+        "Q1",
+        "Q2"
+      ],
+      [
+        "Q1",
+        "Q2"
+      ]
+    ],
+    "saveReopenSame": true,
+    "editedReopenSame": true,
+    "editedCategories": [
+      [
+        "Q1",
+        "Q2"
+      ],
+      [
+        "Q1",
+        "Q2"
+      ]
+    ]
+  },
+  {
+    "slide": 8,
+    "originalCategories": [
+      [
+        null,
+        null
+      ]
+    ],
+    "saveReopenSame": true,
+    "editedReopenSame": true,
+    "editedCategories": [
+      [
+        null,
+        null
+      ]
+    ]
+  }
+]
