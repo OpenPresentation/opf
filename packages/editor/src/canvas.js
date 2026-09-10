@@ -264,8 +264,10 @@ export function createCanvasEditor(container, options = {}) {
     const item = geometry.items.find((item) => item.path === active.path);
     const metricLayout=geometry.items.find(item=>item.metricLayout?.parts.some(part=>part.path===active.path))?.metricLayout;
     const metricPart=metricLayout?.parts.find(part=>part.path===active.path);
+    const timelinePart=geometry.items.find(item=>item.timelineLayout?.parts.some(part=>part.path===active.path))?.timelineLayout?.parts.find(part=>part.path===active.path);
+    const internalPart=metricPart??timelinePart;
     const allText = target.querySelectorAll("text");
-    const lineHeight = metricPart?.fit?.lineHeight ?? (
+    const lineHeight = internalPart?.fit?.lineHeight ?? (
       allText.length > 1
         ? Number(allText[1].getAttribute("y")) - Number(text.getAttribute("y"))
         : fontSize * 1.22);
@@ -281,8 +283,8 @@ export function createCanvasEditor(container, options = {}) {
     const bounds = target.getBBox(),
       anchor = text.getAttribute("text-anchor");
     const tracedWidth = Number(target.getAttribute("data-opf-box-width"));
-    const width = metricPart?.box.width ?? item?.box.width ?? (tracedWidth > 0 ? tracedWidth : Math.max(80, bounds.width + 20));
-    const left = metricPart?.box.x ?? (anchor === "middle" ? x - width / 2 : anchor === "end" ? x - width : x);
+    const width = internalPart?.box.width ?? item?.box.width ?? (tracedWidth > 0 ? tracedWidth : Math.max(80, bounds.width + 20));
+    const left = internalPart?.box.x ?? (anchor === "middle" ? x - width / 2 : anchor === "end" ? x - width : x);
     const visibleText=active.composing||active.isCode||active.isMetric;
     Object.assign(active.input.style, {
       fontFamily: font.fontFamily,
@@ -292,7 +294,7 @@ export function createCanvasEditor(container, options = {}) {
       lineHeight: `${lineHeight * scale}px`,
       color: visibleText ? font.fill : "transparent",
       caretColor: font.fill,
-      textAlign: metricLayout?.alignment ?? (anchor === "middle" ? "center" : anchor === "end" ? "right" : "left"),
+      textAlign: timelinePart?.alignment ?? metricLayout?.alignment ?? (anchor === "middle" ? "center" : anchor === "end" ? "right" : "left"),
       width: `${width * scale}px`,
       height: `${Math.max(lineHeight, allText.length * lineHeight) * scale + 2}px`,
       minHeight: "0",
@@ -332,6 +334,7 @@ export function createCanvasEditor(container, options = {}) {
       input.setAttribute("aria-label", `Edit ${path.split(".").at(-1)} inline`);
       const isCode=text.hasAttribute('data-opf-code-role');
       const isMetric=text.hasAttribute('data-opf-metric-role');
+      const isTimeline=!!text.closest('[data-opf-timeline-role]');
       input.spellcheck = !isCode;
       input.style.cssText =
         "position:absolute;pointer-events:auto;resize:none;border:0;outline:1px solid #8975d9;outline-offset:4px;margin:0;padding:0;background:transparent;overflow:hidden;min-height:0;box-shadow:none;border-radius:0;white-space:pre-wrap;overflow-wrap:break-word;box-sizing:border-box;z-index:2";
@@ -349,6 +352,7 @@ export function createCanvasEditor(container, options = {}) {
       overlay.append(input);
       if(isCode){input.style.background='#111827';input.style.tabSize='4';input.style.overflow='auto';}
       if(isMetric){input.style.tabSize='4';input.style.overflow='auto';}
+      if(isTimeline)input.style.tabSize='4';
       // Only offer rich text where the canonical schema accepts TextRun[].
       if (typeof value === "string") {
         try {
