@@ -1,0 +1,17 @@
+All 144 original/saved/edited metric slide imports preserve source and types.
+{"gates":{"visibleInk":true,"characterBounds":true,"tabPositions":false,"interPartInk":true,"isolatedMaskCoverage":true},"advanceOutliers":0,"rasterOutliers":0,"tabOutliers":6,"interPartCollisions":0}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Native metric fidelity gates remain open; see comparison.json. Source recovery passing does not close these gates.
+    at file:///C:/Users/micha/.codex/worktrees/fd3f/opf/artifacts/windows-candidate/opf-pptx/test/native-metric.mjs:151:10 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.20.0

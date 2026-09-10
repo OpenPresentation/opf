@@ -1,0 +1,7 @@
+Native metric shape differs from accepted geometry
+At C:\Users\micha\.codex\worktrees\fd3f\opf\artifacts\windows-candidate\opf-pptx\test\native-metric.ps1:70 char:213
++ ...  -gt .02) { throw 'Native metric shape differs from accepted geometry ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (Native metric s...cepted geometry:String) [], RuntimeException
+    + FullyQualifiedErrorId : Native metric shape differs from accepted geometry
+ 
