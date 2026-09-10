@@ -44,7 +44,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-pptx
-          ref: 6f06406d9615b35a66f39e6424b35b1d32a73052
+          ref: d03e2daebaf9fb6c5d01a7461da22695da2bcb9f
           path: opf-pptx
           fetch-depth: 0
           persist-credentials: false
