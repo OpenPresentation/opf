@@ -6,8 +6,8 @@ import {fileURLToPath} from 'node:url';
 
 test('public generated payload declarations agree with closed schema fields', () => {
   const fixture=fileURLToPath(new URL('./generated-consumer-fixture.ts',import.meta.url));
-  const source=`import {composeSlide, layoutQuote, layoutCode, type CodeLayout, type QuoteLayout, type Presentation, type CompositionExplanation} from '../dist/index.js';
-import type {CodeLayout as FocusedCode, QuoteLayout as FocusedQuote, CompositionExplanation as FocusedExplanation} from '../dist/composition.js';
+  const source=`import {composeSlide, layoutQuote, layoutCode, layoutMetric, type MetricLayout, type CodeLayout, type QuoteLayout, type Presentation, type CompositionExplanation} from '../dist/index.js';
+import type {MetricLayout as FocusedMetric, CodeLayout as FocusedCode, QuoteLayout as FocusedQuote, CompositionExplanation as FocusedExplanation} from '../dist/composition.js';
 type ContentPayload = NonNullable<Presentation['slides'][number]['blocks']>[number];
 const payload: ContentPayload = {text:[{text:'Preserved rich text',bold:true}]};
 const nested: ContentPayload = {blocks:[payload],composition:{mode:'row'}};
@@ -29,10 +29,15 @@ const nextStart:number|undefined=focusedCode.parts[0]?.fit?.sourceLines[0]?.next
 const tabSize:4|undefined=focusedCode.parts[0]?.fit?.tabSize;
 const segmentKind:'text'|'tab'|undefined=focusedCode.parts[0]?.fit?.sourceLines[0]?.segments[0]?.kind;
 const accepted:CodeLayout|undefined=result.items[0]?.codeLayout;
+const metric:MetricLayout=layoutMetric({value:42,unit:'ms',delta:0,trend:'flat'},{x:0,y:0,width:600,height:400},{minFontSize:32});
+const focusedMetric:FocusedMetric=metric;
+const originalScalar:string|number|undefined=focusedMetric.parts[0]?.sources[0]?.value;
+// @ts-expect-error Unit follows the string field in the schema.
+layoutMetric({value:42,unit:1},{x:0,y:0,width:600,height:400});
 const scoreVersion:'grid-score-v3'|undefined=explanation?.algorithm;
 // @ts-expect-error Code metadata follows the string fields in the schema.
 layoutCode({source:'kept',language:42},{x:0,y:0,width:600,height:400});
-void [deck,value,invalid,arbitrary,focused,font,nextStart,tabSize,segmentKind,accepted,scoreVersion];`;
+void [deck,value,invalid,arbitrary,focused,font,nextStart,tabSize,segmentKind,accepted,scoreVersion,originalScalar];`;
   const options={strict:true,noEmit:true,skipLibCheck:false,target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.NodeNext,moduleResolution:ts.ModuleResolutionKind.NodeNext,types:[]};
   const host=ts.createCompilerHost(options),read=host.readFile.bind(host),exists=host.fileExists.bind(host);
   host.readFile=file=>path.resolve(file)===fixture?source:read(file);
