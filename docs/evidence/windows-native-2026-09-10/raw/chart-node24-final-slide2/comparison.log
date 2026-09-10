@@ -1,0 +1,17 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: ppt/slides/ppt/charts/chart1.xml
+    at xml (file:///C:/Users/micha/.codex/worktrees/fd3f/opf/artifacts/windows-native/opf-pptx/test/native-chart-colors.mjs:18:26)
+    at readChartCache (file:///C:/Users/micha/.codex/worktrees/fd3f/opf/artifacts/windows-native/opf-pptx/test/native-chart-colors.mjs:22:81)
+    at file:///C:/Users/micha/.codex/worktrees/fd3f/opf/artifacts/windows-native/opf-pptx/test/native-chart-colors.mjs:61:21 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: undefined,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.20.0
