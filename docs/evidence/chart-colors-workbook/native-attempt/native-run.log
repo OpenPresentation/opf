@@ -1,0 +1,9 @@
+New-Object : Retrieving the COM class factory for component with CLSID {91493441-5A91-11CF-8700-00AA0060263B} failed 
+due to the following error: 80010001 Call was rejected by callee. (Exception from HRESULT: 0x80010001 
+(RPC_E_CALL_REJECTED)).
+At C:\Users\micha\Source\opf\artifacts\shared-metric-integration\opf-pptx\test\native-chart-colors.ps1:38 char:17
++     $powerpoint=New-Object -ComObject PowerPoint.Application
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (:) [New-Object], COMException
+    + FullyQualifiedErrorId : NoCOMClassIdentified,Microsoft.PowerShell.Commands.NewObjectCommand
+ 

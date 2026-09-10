@@ -1,6 +1,14 @@
 # Shared metric integration — source checkpoint
 
-## Current checkpoint: native table colors and scoped gallery contrast evidence
+## Current checkpoint: chart visibility and editable workbook headings; native connection failure
+
+Core `a58a9e39a02b1ca13b947dd045bfa9f664c3db57`, renderer `a6c499434b98754597c6cb7e2b8ec744fdecd7fc`, PPTX `7ed519de3daadb49123baf574bab89fd817d411a` and unchanged editor `b30c25c5af426590857f1a84c54b775056fee5ca` are pushed on the integration branch. [Chart evidence](../evidence/chart-colors-workbook/README.md) records inherited panel/label/series contrast handling, actual editable category-heading preservation, 470 core tests per runtime, 40 chart cases per consumer, 37 workbook cases and four real-browser chart workflows. Full PPTX/browser/code/metric checks pass on Node 20/24; full renderer commands retain the unpromoted corpus failure.
+
+The unchanged source corpus has 141 final changed chart rasters, covered by initial and follow-up visual review with both complete 805-image sets hash-verified. Actual browser text findings drop from 962 to 942; placeholders and 28 other content rectangles remain. Series-to-panel contrast does not establish adjacent-series distinction or common palette/geometry semantics. Mid-gray theme resolution still differs between consumers; scatter and arbitrary embedded workbooks are outside heading recovery.
+
+The current native attempt failed at the COM connection with `0x80010001`, before opening the generated fixture. Its runtime-bound fixture and failure are preserved. No user Office file/process was closed. Resume native point colors and actual embedded Excel edit/save/reopen/reimport on both runtimes when PowerPoint accepts automation. Prior native table/metric results remain historical. Complete native/corpus/metric gates and coordinated candidate CI/review before release preparation; published packages and deployments are unchanged.
+
+## Previous checkpoint: native table colors and scoped gallery contrast evidence
 
 Core `c3edf5696c028d5150e77e32d7904060022eb83c`, renderer `a688f619b4617ca229bc910ce5d4dc1548dcf601`, PPTX `eac68e3b675c279f97fae61764e015566c2c1d39` and unchanged editor `b30c25c5af426590857f1a84c54b775056fee5ca` continue the integration branch. [Separate new evidence](../evidence/table-colors-gallery-contrast/README.md) binds the inherited table-color fallback and 96 authored gallery color improvements. Both supported Node runtimes pass 469 core tests, preservation/type checks and full PPTX commands; the renderer golden gate remains nonzero, with subsequent commands passing separately.
 

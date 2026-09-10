@@ -2,7 +2,13 @@
 
 This work implements the [ecosystem objective](ecosystem-objective-2026-09-09.md) in reviewable increments. It does not introduce a model, account, key, network or paid-service dependency into OPF. Proprietary applications remain optional compatibility-test environments.
 
-## Current checkpoint — table colors and measured gallery contrast findings
+## Current checkpoint — chart visibility and workbook data preservation
+
+The [integration checkpoint](shared-metric-integration.md) now shares an inherited series-to-panel contrast rule and resolves chart panel/text colors in SVG and PPTX. Actual workbook category headings survive supported import/export, including current edits, Unicode and whitespace. [Separate evidence](../evidence/chart-colors-workbook/README.md) records passing core/PPTX/browser checks on Node 20/24, reviewed chart raster changes and 942 remaining conservative contrast findings. Geometry and authored content were preserved; chart semantics, palette identity, internal label layout and general theme resolution still require shared-model work.
+
+Real PowerPoint verification of these chart changes remains open because the current COM connection failed before opening the fixture. Existing metric native tab/portrait-ink findings and the unpromoted corpus gate remain visible. No release or public deployment advances. Continue native recovery, corpus quality and coordinated source/candidate CI/review within the full deterministic repair/Auto arrange/font objective.
+
+## Previous checkpoint — table colors and measured gallery contrast findings
 
 The [integration checkpoint](shared-metric-integration.md) now shares inherited table text colors across SVG and editable PPTX and corrects authored colors in 96 gallery decks without altering content or geometry. Both supported Node runtimes pass the core/PPTX checks and real PowerPoint table color/save/reopen assertions. [New evidence](../evidence/table-colors-gallery-contrast/README.md) keeps the renderer golden gate, 656 changed raster reviews and 962 conservative contrast findings open. An actual browser glyph-mask counterexample separates an unrelated panel border from metric text ink; it does not dismiss other findings. Confirmed dark-chart label/background mismatch and unresolved placeholders remain quality work.
 
