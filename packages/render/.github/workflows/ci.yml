@@ -18,7 +18,7 @@ jobs:
       run:
         working-directory: opf-render
     env:
-      OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf-render/test/golden/opf-examples-png.readability.sha256.json
+      OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf-render/test/golden/opf-examples-png.timeline.sha256.json
     strategy:
       fail-fast: false
       matrix:
@@ -34,21 +34,21 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
-          ref: afa1a738efd3153a29ee0f6531fc847f306ffa88
+          ref: da2a76c2b134d6967b37941518b6bd241a8440b7
           path: opf
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-pptx
-          ref: 4c75ff713a19dff072e8f3660c368499973b78ab
+          ref: 6f06406d9615b35a66f39e6424b35b1d32a73052
           path: opf-pptx
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-editor
-          ref: aea29cf6998127fda96a5cbcd6b608db4c4890e3
+          ref: 78184f161bdb243822f2b21699ee0ab759c4c7bd
           path: opf-editor
           fetch-depth: 0
           persist-credentials: false
@@ -100,6 +100,8 @@ jobs:
           node scripts/test-installed-code-guards.mjs
           node scripts/test-plain-whitespace-workflow.mjs artifacts/plain-whitespace-workflow installed
           node scripts/test-readability-browser.mjs artifacts/readability-browser installed
+          node scripts/test-timeline-workflow.mjs artifacts/timeline-workflow installed
+          node scripts/test-timeline-acceptance.mjs artifacts/timeline-acceptance.json
       - run: npm pack --dry-run
       - name: Preserve candidate and raster evidence
         if: always()
@@ -115,6 +117,8 @@ jobs:
             opf-render/artifacts/font-variants*.json
             opf/artifacts/plain-whitespace-workflow/**
             opf/artifacts/readability-browser/**
+            opf/artifacts/timeline-workflow/**
+            opf/artifacts/timeline-acceptance.json
             opf-render/artifacts/plain-whitespace-browser/**
             opf-render/artifacts/rich-flow-browser/**
             opf-render/artifacts/rich-spacing-browser/**
