@@ -42,6 +42,7 @@ jobs:
       - name: Verify Playwright image version
         run: node -e "if (require('playwright/package.json').version !== '1.63.0') throw new Error('Update the pinned Playwright image with the test package.');"
       - run: npm run test:playground
+      - run: npm run test:code-browser
       - run: npm run test:packed
       - run: npm pack --dry-run
       - run: npm publish --access public --provenance

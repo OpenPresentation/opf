@@ -102,7 +102,7 @@ export function createRichTextToolbar(root, {editor, report, beforeChange, onPro
   function endpoint(node,offset) {
     if(node?.nodeType!==3) return null;
     const element=node.parentElement?.closest('text[data-opf-text-start]');
-    if(!element||!root.contains(element))return null;
+    if(!element||!root.contains(element)||element.hasAttribute('data-opf-code-role'))return null;
     return {path:element.closest('[data-opf-path]')?.getAttribute('data-opf-path'),offset:Number(element.dataset.opfTextStart)+offset};
   }
   function selectionChanged() {

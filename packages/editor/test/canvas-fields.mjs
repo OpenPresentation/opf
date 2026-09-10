@@ -3,6 +3,7 @@ import {
   getEditableFields,
   parseCanvasValue,
   createCanvasDraft,
+  preserveTextLineEndings,
 } from "../dist/canvas-fields.js";
 import {
   getValueAtPath,
@@ -24,6 +25,16 @@ assert.equal(value["sales.us"]["a/b~c"][0], 0);
 for (const invalid of ["", " ", "Infinity", "NaN"])
   assert.throws(() => parseCanvasValue(invalid, "number"));
 assert.equal(parseCanvasValue("-3.5", "number"), -3.5);
+for(const source of ['a\r\nb\r\nc\r\n','a\rb\rc\r','a\r\nb\nc\r']) {
+  const normalized=source.replace(/\r\n|\r/g,'\n');
+  assert.equal(preserveTextLineEndings(source,normalized),source,'Opening and committing a textarea is a byte-preserving no-op');
+  assert.equal(preserveTextLineEndings(source,normalized.replace('b','new\tvalue')),source.replace('b','new\tvalue'),'Untouched mixed line endings survive edits');
+  assert.equal(parseCanvasValue(normalized,'string',source),source);
+}
+assert.equal(preserveTextLineEndings('a\r\nb','a\nnew\nb'),'a\r\nnew\r\nb');
+assert.equal(preserveTextLineEndings('a\r\nb','ab'),'ab');
+assert.equal(preserveTextLineEndings('a\r\nb',''),'');
+assert.equal(preserveTextLineEndings('','first\nnext'),'first\nnext');
 assert.equal(parseCanvasValue(false, "boolean"), false);
 assert.equal(parseCanvasValue("null", "null"), null);
 assert.throws(() => parseCanvasValue("", "null"));

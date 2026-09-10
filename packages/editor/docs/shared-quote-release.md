@@ -1,5 +1,7 @@
 # Editor 0.5.0 release candidate
 
+Historical preparation record: editor 0.5.0 subsequently published from `dba5fe5e5580a4172c052132c4db5851d1decc4c` and passed actual registry verification. Do not republish it. The current successor is documented in [the shared-code release](shared-code-release.md); the candidate wording below records the earlier checkpoint.
+
 Branch `codex/shared-quote-release-20260909` prepares editor 0.5.0 with core `^0.8.0`, optional renderer peer `^0.6.0`, and renderer/PPTX 0.6.0 for the example workflow. Editor 0.5.0 is unpublished. The original tested integration remains at `a143ee7b1c06b6cb7fbca482927661ca2b208226` on `codex/shared-quote-integration-20260909`. All predecessors are now published and verified: core 0.8.0 (`4dc292fa93bee52320bafa3fd0f5b05a2dc0a283`), renderer 0.6.0 (`7fe9905ad2d8a224efeef51b4a22d0aff0c413fe`) and PPTX 0.6.0 (`898e3c27919a2488e1e3d384168d6b25aae4bd5c`).
 
 The refreshed lock resolves those actual npm packages without unrelated upgrades. A clean install, nine model/component suites, the offline playground workflow, metadata/syntax checks and fresh installed candidate checks pass on Node 20.20.2 and 24.20.0. One-page readability changes create history; repeated identical pagination is a no-op. Quote source edits, malformed-input preservation, export/reimport/undo and zero browser network writes pass on both runtimes with Edge 152.0.4191.66.

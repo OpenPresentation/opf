@@ -2,7 +2,7 @@
 
 Embeddable local editor primitives for Open Presentation Format documents. The package turns traced `@openpresentation/opf-render` SVG output into JSON-path-aware edits, validates OPF after each change, and records undo/redo as JSON Patch operations.
 
-Version 0.5.0 uses core 0.8.0 and renderer 0.6.0. `paginateSlide` records a one-page readability-policy change in undo history; repeating an unchanged result is a no-op. Quote preview uses accepted shared body/source geometry. The local example verifies source editing, pagination, export and reimport with PPTX 0.6.0; native reimport preserves quote text as editable blocks but loses its OPF quote structure, typography and readability policy.
+Version 0.6.0 uses core 0.9.0 and renderer 0.7.0. Code source/metadata edits preserve line endings, literal tabs and cancellation/undo through accepted trace targets. Committed preview uses shared quote/code geometry; the active source textarea uses native browser editing. `paginateSlide` records a one-page readability-policy change in undo history, and an unchanged repeat is a no-op. Coordinated examples use PPTX 0.7.0 for exact code source/metadata recovery. Native formatting, font theme and geometry are not restored; quotes still import as editable text blocks with structure and readability-policy loss.
 
 ## Scope
 
@@ -34,7 +34,7 @@ await canvas.ready;
 
 Load the same font bytes into the browser using `loadBrowserFontRegistry` from `@openpresentation/opf-render/fonts-browser` before mounting. The host owns font URLs, storage and collaboration. `onDraft` provides live document drafts; the session only changes on commit. Escape cancels. Concurrent edits to the selected payload cancel a stale draft.
 
-These APIs were introduced in 0.1.0. Version 0.5.0 requires core 0.8.0 and renderer 0.6.0 for the canvas, including shared quote geometry, styled/merged cells, rich table values, headers and content-aware row heights. See the OPF repository’s `docs/live-editor.md` for setup, the support matrix and roadmap. `pnpm pack:ecosystem` in that repository also prepares local preview tarballs for coordinated development.
+These APIs were introduced in 0.1.0. Version 0.6.0 requires core 0.9.0 and renderer 0.7.0 for the canvas, including shared quote/code geometry, styled/merged cells, rich table values, headers and content-aware row heights. See the OPF repository’s `docs/live-editor.md` for setup, the support matrix and roadmap. `pnpm pack:ecosystem` in that repository also prepares local preview tarballs for coordinated development.
 
 The canvas retains canonical SVG glyphs while a transparent native input supplies the caret. Advanced shaping, freeform object positioning, all chart/media treatments, and cross-engine pixel identity remain work in progress. The Source dialog in the playground now provides a live JSON preview; changes are validated before committing.
 
@@ -174,7 +174,7 @@ This repo does not require an npm automation token when Trusted Publishing is co
 
 The current checkout uses `@openpresentation/opf/composition` for portable geometry. Slides can select `auto`, `row`, `column`, or `grid`, set weighted tracks, and request path-specific overflow diagnostics. See the sibling OPF repo's `docs/dynamic-composition.md` for the complete contract.
 
-Version 0.3.0 requires `@openpresentation/opf@^0.6.0`. The optional renderer peer requires `@openpresentation/opf-render@^0.4.0`. Clean registry installs support the new composition APIs without sibling checkouts. For coordinated source development, build OPF and run `node scripts/link-ecosystem.mjs` there; `pnpm test:ecosystem` verifies shared geometry and import/export behavior.
+Version 0.6.0 requires `@openpresentation/opf@^0.9.0`. The optional renderer peer requires `@openpresentation/opf-render@^0.7.0`. Clean registry installs support the composition APIs without sibling checkouts. For coordinated source development, build OPF and run `node scripts/link-ecosystem.mjs` there; `pnpm test:ecosystem` verifies shared geometry and import/export behavior.
 
 ## Local interactive demo
 

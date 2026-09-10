@@ -1,0 +1,422 @@
+{
+  "checkedAt": "2026-09-10T07:40:30.375Z",
+  "packed": {
+    "node": "v20.20.2",
+    "name": "@openpresentation/opf-editor",
+    "version": "0.6.0",
+    "integrity": "sha512-xjVnrpPTjWdkwODFS5Tu+HS4LBOL6S7iYzKhb9tOQb+VIj/RVP3QYLKPuv1TnqBycx9b5OHXdudIremu/gpfUw==",
+    "files": {
+      "LICENSE": "e8c5cecaad448c0cab00af38f7ed8b6bb647c77ba79f3c50d20a9ea92e256cd3",
+      "README.md": "39217bcd170386f5d09378891187e865e2d0e288774bdb1fcd13f599fd429e59",
+      "dist/block-controls.js": "21f68e59d44f67069f78b19a2dfa355c0f424973cc138bd6e3b0021b0117702c",
+      "dist/blocks.d.ts": "2f2bcc6ef516ce43e1005d1787c2b07e91df0dcdb6b33bb1e7b6603b9b17ee05",
+      "dist/blocks.js": "f9926a4cb8c2b0380ffbe67055a428d01089873141af401edb72d8ebe6e7cdaf",
+      "dist/canvas-fields.js": "0159649cf54332879cc0f125b19fa52de120a85a9e29d7ea757fea55822f6ef6",
+      "dist/canvas.d.ts": "afafd31860ce913c3efcadf5b2ebb1bfc51e7f1524eb96228bdfc250c7181605",
+      "dist/canvas.js": "35d57747d1671555127a3fb7b871ee819f741f5638cd96a1f0a82cfaebc07e85",
+      "dist/data.d.ts": "74c193ed7ccadb27d1e11659ec55d51fb6da78d6cd1e5aac97b72e538f6e4dd5",
+      "dist/data.js": "32d3d8d7ca017a574ac791541ab1a2bb024dcff386ff1e5c5c1ac845b33d3dff",
+      "dist/galleries.d.ts": "21db86ccf7c9186391d643c057938ee813d391cd0cbe78f56e2446befcd15373",
+      "dist/galleries.js": "239539250f0bfa1ff02e5a717213bd6f40305221b43a78ff707df3c683208ada",
+      "dist/index.d.ts": "a316bbfa61677c7b395fb11f365ee84085af612121219592a5937d5c7f76a752",
+      "dist/index.js": "4731feaff16f5bfd285e8cf8799a5016fad3ec5a1f736acfba9fa6f73ef8f30b",
+      "dist/layout-handles.js": "e9f9d4197cae2fe07825abc894fd6243ea35c3d70974762d1a9021bd23781414",
+      "dist/layout.d.ts": "73d6212cf549436597dc97d9562faceaf3b171107c74a23210d6958f8893110e",
+      "dist/layout.js": "de8dc48f08a7c4ed6c99fcbcfa3e4508930d7b306827fc2cd29865c190141df8",
+      "dist/react.d.ts": "099fd451da4417bf9b3e6293aabde0b37d121c02f0f09750377d5454a2c708b9",
+      "dist/react.js": "df35ad472e11395a75549281d398171e1b1d345d2631a9f5f16c2f701c53b4f0",
+      "dist/rich-text-input.js": "b29c64566988aaaa541e8e8a38d3ad350dc579e6f03728a03ccc256227293167",
+      "dist/rich-text-toolbar.js": "ca0ceaf4ccd0b5ef0171ca71394424edfe35b56e2333e07e8ca294579374bbec",
+      "dist/rich-text.d.ts": "03f8c69b9c95cf60d858f5eb6394bd3d741db5d7564992d1ee4e266b2ccdb7cf",
+      "dist/rich-text.js": "0479bc3315dcfbffd8463222db265864ee3e4938f8a7e9df5fc7e2a4540d9c28",
+      "dist/schema-inspector.d.ts": "b2a52d4c9dc77c9738fde2be42cdb14267628feae31ec95d840c77a53b11ac46",
+      "dist/schema-inspector.js": "b61ac5c0574edd2f91c6cccb8f8b15d4ee518e354087e260bd649ddd5e943d3e",
+      "dist/schema.d.ts": "e46499fd6c25efc1d0ea22c1bc70aca1b9bd2bfda04161dd38101f11ce4e36e4",
+      "dist/schema.js": "d6882c45665318b8e311a3bd83ed76f87b784f24e8ef5f80566eebae4b0dd765",
+      "dist/svelte.d.ts": "2ce058056bedebdb55c2a923ef007cc683bf7285120e8fe2857736206d87bd98",
+      "dist/svelte.js": "ee6582606f927aeeb2947134e28c234c31a63035c2aef35d009dec5a83450cd4",
+      "dist/transfer.d.ts": "b6ae9315837abfa45eca7bd39d1bd8f77183fdc50ba05145a6f429ed9ddb2e9f",
+      "dist/transfer.js": "5b87f9a36b2a22ed690e21cacb69ce340cc735443758c98143530032b1c46abc",
+      "package.json": "99451edac93433d2a63b85c9cbf633d7144ee89aed68b0498718d4cd94080e99"
+    },
+    "dependencies": {
+      "@openpresentation/opf": {
+        "version": "0.9.0",
+        "resolved": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.9.0.tgz",
+        "integrity": "sha512-AnduMR/bPFKJv2fYT+cYEINLkiZmN0xuVBETcNzkU6IC7GdgTyb+x5fCiODHcowfrLIJJEjZ8jZzZJGBrxnX5A=="
+      },
+      "@openpresentation/opf-render": {
+        "version": "0.7.0",
+        "resolved": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.7.0.tgz",
+        "integrity": "sha512-eHBMbnmK5bELUmUwJ/qWRtJBIZFkUJsbUvkjzSc6yhNA2JQ2Em/My9+Of4c79y0tXrFCQaZ5xvOkOdtyGUu5Gw=="
+      },
+      "@openpresentation/opf-pptx": {
+        "version": "0.7.0",
+        "resolved": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.7.0.tgz",
+        "integrity": "sha512-U/nqxWqkMQ/ZWxyW6DP8Ut1k/BlDDuD8nvhlIHoW0UpDqMxZTwQKo//p4QcBwJUK+ZZ1uklJwrxuzRdIZ9fY/A=="
+      }
+    },
+    "tests": [
+      {
+        "file": "smoke.mjs",
+        "fixtureSha256": "e13802c871ddd20eae2efc7efd8584b8c44798bdc508f6b8510ea0a9ba72f83d",
+        "output": "opf-editor smoke passed"
+      },
+      {
+        "file": "component-smoke.mjs",
+        "fixtureSha256": "3231bbbf25620d6b3c2af9f43d2fc0071217ec5115a1c47c9825250fdc0133bc",
+        "output": "opf-editor component smoke passed"
+      },
+      {
+        "file": "canvas-fields.mjs",
+        "fixtureSha256": "e080fa7ec185c6921ef20cd6afce77e5948ef6a890b40aed2e9f842cd56496f6",
+        "output": "Canvas fields: escaped keys, types, immutable drafts, validation and undo passed."
+      },
+      {
+        "file": "transfer.mjs",
+        "fixtureSha256": "0208c67b257651f007953b470c9a51b55511ed38445a71d0ca66b29e3fc597dc",
+        "output": "Transfer: clipboard formats, code fences, fragments, collision-safe insertion, design/assets, undo and explicit gallery fetches passed."
+      },
+      {
+        "file": "schema.mjs",
+        "fixtureSha256": "00053a0119b0484e777503bf3aef8332ae3092591c3193eea1d969ee4a389cfb",
+        "output": "Schema controls: 625 documented fields, nested paths, catalog records, background forms, required defaults passed."
+      },
+      {
+        "file": "rich-text.mjs",
+        "fixtureSha256": "e8c941a0d844f900b5736d4f5aeb16d72c15c19a071696f9a32bc39f67075456",
+        "output": "Rich range editing passed: cross-run preservation, replacement, style removal, script exclusivity, grapheme safety, validation and atomic undo.\nNative rich input passed: style/link preservation, repeated-character affinity, graphemes and bounded run growth."
+      },
+      {
+        "file": "layout.mjs",
+        "fixtureSha256": "f1af2d06cc88678dc0c2fa69df1e4353eebe62a08c26d303f1864e75f95e63dd",
+        "output": "Layout resizing passed: exact track geometry, row/column/nested/grid behavior, auto freeze, weight bounds, metadata preservation, stale guards and undo."
+      },
+      {
+        "file": "blocks.mjs",
+        "fixtureSha256": "eb16932c48fc396aabf301c41346e2b0f3cb9229ce3863a6e7487103ef1817b7",
+        "output": "Block moves passed: sibling order, shifted group destinations, nested/ancestor/cross-slide moves, formatting/data preservation, no-op, cycle/empty rejection, guards and undo.\nBlock creation passed: presets, implicit normalization, groups/regions, duplication, empty ancestor pruning, guards, metadata and undo."
+      },
+      {
+        "file": "styled-table.mjs",
+        "fixtureSha256": "1160eb0ab06a0a62392738593381a7850eab677ebf256bcac56210399fea59fd",
+        "output": "Styled table editor model passed: value-path typing/formatting, styles/spans, empty cells, properties, guarded structural edits and atomic undo."
+      }
+    ],
+    "browser": "{\n  \"passed\": true,\n  \"browser\": \"152.0.4191.66\",\n  \"offlineAfterLoad\": true,\n  \"pptxBytes\": 15520,\n  \"nativeTable\": true,\n  \"mergedCells\": true,\n  \"exportCommitsDraft\": true,\n  \"importUndoRedo\": true,\n  \"expandedImageImport\": true,\n  \"quoteSourceEditingUndo\": true,\n  \"onePageReadabilityUndo\": true,\n  \"quoteTextReimportUndo\": true,\n  \"quoteSemanticsRestored\": false,\n  \"malformedInputPreservesDocument\": true,\n  \"networkWrites\": 0\n}",
+    "codeBrowser": {
+      "browser": "152.0.4191.66",
+      "platform": "win32",
+      "bundleSha256": "478b5db4f8ff013391c30f458f465bdc6505d1c927878fa42c9b7e14308a0c51",
+      "verifierSha256": "d4cf644d14de3e8b9417363a1a9b1ec22060aeed9fdaf7208ebad5883c4d2ca4",
+      "fontHashes": [
+        {
+          "family": "Roboto",
+          "weight": 400,
+          "italic": false,
+          "sha256": "15256405ecb0d880678833a582760efad538ab2932318b52c8105b267d159459"
+        },
+        {
+          "family": "Roboto",
+          "weight": 700,
+          "italic": false,
+          "sha256": "4aaf8c5b661a386998c2e70cf2b87e2440f5404e0b8fd81164f0413fb3435ec6"
+        },
+        {
+          "family": "Roboto Mono",
+          "weight": 400,
+          "italic": false,
+          "sha256": "e4bf45837847d4abfa5a502b807a83393aa138727bdb9ea9c93fb17d53208d95"
+        },
+        {
+          "family": "Roboto Mono",
+          "weight": 700,
+          "italic": false,
+          "sha256": "92649d819cc4c20480b23a47aaa111769924eb31c66b6ecdcf6f573662558c83"
+        }
+      ],
+      "results": [
+        {
+          "dimensions": {
+            "width": 1280,
+            "height": 720
+          },
+          "exportSha256": "5d47b563974ef155ef39e7d218b10d94914de69d4e59495d3d77d184175e52a4",
+          "exportBytes": 17725,
+          "acceptedLines": 6,
+          "exactCodeRoundTrip": true,
+          "selectionVisibility": {
+            "source": {
+              "color": "rgb(229, 231, 235)",
+              "selectionColor": "rgb(229, 231, 235)",
+              "start": 0,
+              "end": 47,
+              "length": 47
+            },
+            "filename": {
+              "color": "rgb(147, 197, 253)",
+              "selectionColor": "rgb(147, 197, 253)",
+              "start": 0,
+              "end": 20,
+              "length": 20
+            }
+          },
+          "substitutions": [
+            {
+              "requestedFamily": "Aptos Display",
+              "sourceFamily": "Aptos Display",
+              "resolvedFamily": "Roboto",
+              "requestedWeight": 700,
+              "resolvedWeight": 700,
+              "italic": false,
+              "compatibility": "generic"
+            },
+            {
+              "requestedFamily": "Aptos",
+              "sourceFamily": "Aptos",
+              "resolvedFamily": "Roboto",
+              "requestedWeight": 400,
+              "resolvedWeight": 400,
+              "italic": false,
+              "compatibility": "generic"
+            }
+          ]
+        },
+        {
+          "dimensions": {
+            "width": 540,
+            "height": 960
+          },
+          "exportSha256": "08e65dd3fcf218e0bd4573485a38ce6495338738dfd063bbfe895e621a47c4ad",
+          "exportBytes": 17726,
+          "acceptedLines": 6,
+          "exactCodeRoundTrip": true,
+          "selectionVisibility": {
+            "source": {
+              "color": "rgb(229, 231, 235)",
+              "selectionColor": "rgb(229, 231, 235)",
+              "start": 0,
+              "end": 47,
+              "length": 47
+            },
+            "filename": {
+              "color": "rgb(147, 197, 253)",
+              "selectionColor": "rgb(147, 197, 253)",
+              "start": 0,
+              "end": 20,
+              "length": 20
+            }
+          },
+          "substitutions": [
+            {
+              "requestedFamily": "Aptos Display",
+              "sourceFamily": "Aptos Display",
+              "resolvedFamily": "Roboto",
+              "requestedWeight": 700,
+              "resolvedWeight": 700,
+              "italic": false,
+              "compatibility": "generic"
+            },
+            {
+              "requestedFamily": "Aptos",
+              "sourceFamily": "Aptos",
+              "resolvedFamily": "Roboto",
+              "requestedWeight": 400,
+              "resolvedWeight": 400,
+              "italic": false,
+              "compatibility": "generic"
+            }
+          ]
+        }
+      ],
+      "blankTargets": [
+        {
+          "dimensions": {
+            "width": 1280,
+            "height": 720
+          },
+          "acceptedHeight": 537.28,
+          "selectableHeight": 545.28,
+          "noOpPreserved": true,
+          "editUndoPreserved": true
+        },
+        {
+          "dimensions": {
+            "width": 540,
+            "height": 960
+          },
+          "acceptedHeight": 810.96,
+          "selectableHeight": 818.96,
+          "noOpPreserved": true,
+          "editUndoPreserved": true
+        }
+      ],
+      "errors": [],
+      "externalRequests": [],
+      "scope": "Offline candidate canvas: real pointer/keyboard code and filename edits, CRLF no-op/preservation, tab insertion/cancel, undo/redo, one-page pagination/readability undo, browser native export and undoable exact code/metadata/source-boundary reimport. Native formatting, positioning and font scheme are not reconstructed; font fallback uses the existing playground policy and is recorded. No native PowerPoint or raster equivalence claim."
+    },
+    "signatureVerification": "audited 66 packages in 0s\n\n66 packages have verified registry signatures\n\n17 packages have verified attestations\n(use --json --include-attestations to view attestation details)",
+    "knownVulnerabilities": 0,
+    "boundary": "Actual installed editor candidate with byte-matched distributables and registry predecessors; nine model/component suites and offline browser author/edit/paginate/export/reimport/undo, including code source/metadata preservation and blank multiline targets. Native PowerPoint and complete-set deployed-site evidence are separate gates."
+  },
+  "sourceCodeBrowser": {
+    "browser": "152.0.4191.66",
+    "platform": "win32",
+    "bundleSha256": "478b5db4f8ff013391c30f458f465bdc6505d1c927878fa42c9b7e14308a0c51",
+    "verifierSha256": "d4cf644d14de3e8b9417363a1a9b1ec22060aeed9fdaf7208ebad5883c4d2ca4",
+    "fontHashes": [
+      {
+        "family": "Roboto",
+        "weight": 400,
+        "italic": false,
+        "sha256": "15256405ecb0d880678833a582760efad538ab2932318b52c8105b267d159459"
+      },
+      {
+        "family": "Roboto",
+        "weight": 700,
+        "italic": false,
+        "sha256": "4aaf8c5b661a386998c2e70cf2b87e2440f5404e0b8fd81164f0413fb3435ec6"
+      },
+      {
+        "family": "Roboto Mono",
+        "weight": 400,
+        "italic": false,
+        "sha256": "e4bf45837847d4abfa5a502b807a83393aa138727bdb9ea9c93fb17d53208d95"
+      },
+      {
+        "family": "Roboto Mono",
+        "weight": 700,
+        "italic": false,
+        "sha256": "92649d819cc4c20480b23a47aaa111769924eb31c66b6ecdcf6f573662558c83"
+      }
+    ],
+    "results": [
+      {
+        "dimensions": {
+          "width": 1280,
+          "height": 720
+        },
+        "exportSha256": "5d47b563974ef155ef39e7d218b10d94914de69d4e59495d3d77d184175e52a4",
+        "exportBytes": 17725,
+        "acceptedLines": 6,
+        "exactCodeRoundTrip": true,
+        "selectionVisibility": {
+          "source": {
+            "color": "rgb(229, 231, 235)",
+            "selectionColor": "rgb(229, 231, 235)",
+            "start": 0,
+            "end": 47,
+            "length": 47
+          },
+          "filename": {
+            "color": "rgb(147, 197, 253)",
+            "selectionColor": "rgb(147, 197, 253)",
+            "start": 0,
+            "end": 20,
+            "length": 20
+          }
+        },
+        "substitutions": [
+          {
+            "requestedFamily": "Aptos Display",
+            "sourceFamily": "Aptos Display",
+            "resolvedFamily": "Roboto",
+            "requestedWeight": 700,
+            "resolvedWeight": 700,
+            "italic": false,
+            "compatibility": "generic"
+          },
+          {
+            "requestedFamily": "Aptos",
+            "sourceFamily": "Aptos",
+            "resolvedFamily": "Roboto",
+            "requestedWeight": 400,
+            "resolvedWeight": 400,
+            "italic": false,
+            "compatibility": "generic"
+          }
+        ]
+      },
+      {
+        "dimensions": {
+          "width": 540,
+          "height": 960
+        },
+        "exportSha256": "08e65dd3fcf218e0bd4573485a38ce6495338738dfd063bbfe895e621a47c4ad",
+        "exportBytes": 17726,
+        "acceptedLines": 6,
+        "exactCodeRoundTrip": true,
+        "selectionVisibility": {
+          "source": {
+            "color": "rgb(229, 231, 235)",
+            "selectionColor": "rgb(229, 231, 235)",
+            "start": 0,
+            "end": 47,
+            "length": 47
+          },
+          "filename": {
+            "color": "rgb(147, 197, 253)",
+            "selectionColor": "rgb(147, 197, 253)",
+            "start": 0,
+            "end": 20,
+            "length": 20
+          }
+        },
+        "substitutions": [
+          {
+            "requestedFamily": "Aptos Display",
+            "sourceFamily": "Aptos Display",
+            "resolvedFamily": "Roboto",
+            "requestedWeight": 700,
+            "resolvedWeight": 700,
+            "italic": false,
+            "compatibility": "generic"
+          },
+          {
+            "requestedFamily": "Aptos",
+            "sourceFamily": "Aptos",
+            "resolvedFamily": "Roboto",
+            "requestedWeight": 400,
+            "resolvedWeight": 400,
+            "italic": false,
+            "compatibility": "generic"
+          }
+        ]
+      }
+    ],
+    "blankTargets": [
+      {
+        "dimensions": {
+          "width": 1280,
+          "height": 720
+        },
+        "acceptedHeight": 537.28,
+        "selectableHeight": 545.28,
+        "noOpPreserved": true,
+        "editUndoPreserved": true
+      },
+      {
+        "dimensions": {
+          "width": 540,
+          "height": 960
+        },
+        "acceptedHeight": 810.96,
+        "selectableHeight": 818.96,
+        "noOpPreserved": true,
+        "editUndoPreserved": true
+      }
+    ],
+    "errors": [],
+    "externalRequests": [],
+    "scope": "Offline candidate canvas: real pointer/keyboard code and filename edits, CRLF no-op/preservation, tab insertion/cancel, undo/redo, one-page pagination/readability undo, browser native export and undoable exact code/metadata/source-boundary reimport. Native formatting, positioning and font scheme are not reconstructed; font fallback uses the existing playground policy and is recorded. No native PowerPoint or raster equivalence claim."
+  },
+  "logs": {
+    "typecheck": "e27a2151ca15f72372a6ba0547dcaaf7e775aadcfc882fd7aae3aeca41454087",
+    "validate": "d45a21ac8b1ecc8f8919db11444222cea190ca4fdd465d6596b33e4f48b270a9",
+    "test": "f5c48684d9888f7c586cccd018c04434e5a193b526afb7b1b7f5ae5f5d894a80",
+    "test-playground": "0b20278887b5f58fd94bd91a0cc64d39155977e7c2196ad948c589a42a0299ad",
+    "test-code-browser": "33b4cc93f04a5f97ced1ef54bffc0494389d13c2f44f04934a499d74130ae487",
+    "test-packed": "83743709bfdb4e5ae63efcc79d0fce6e1907ae943ecc791053ce26d62962b757"
+  },
+  "scope": "Editor 0.6.0 candidate installed from a local archive with actual registry core 0.9.0, renderer/PPTX 0.7.0. All 32 files match; nine model suites, offline playground, wide/portrait code editing, blank targets, CRLF/no-op, Tab/cancel, pagination/readability, undo/redo and exact code export/reimport pass. Native formatting/theme/geometry restoration and pixel equivalence are not claimed. Final CI/review and actual editor registry verification remain release gates."
+}
