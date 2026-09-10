@@ -30,21 +30,21 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
-          ref: 85eb290bde665f9bdfffc9ad487007ea237ea676
+          ref: 044e690b6974b5430ccbaa2bd02ce385a48b9002
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-editor
-          ref: aea29cf6998127fda96a5cbcd6b608db4c4890e3
+          ref: 78184f161bdb243822f2b21699ee0ab759c4c7bd
           path: opf-editor
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-pptx
-          ref: 4c75ff713a19dff072e8f3660c368499973b78ab
+          ref: 6f06406d9615b35a66f39e6424b35b1d32a73052
           path: opf-pptx
           fetch-depth: 0
           persist-credentials: false
@@ -70,7 +70,7 @@ jobs:
       - name: Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks
         working-directory: opf
         env:
-          OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf-render/test/golden/opf-examples-png.readability.sha256.json
+          OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf-render/test/golden/opf-examples-png.timeline.sha256.json
         run: pnpm test:packages
       - name: Execute installed tarball browser interactions
         working-directory: opf
@@ -80,6 +80,8 @@ jobs:
           node scripts/test-installed-code-guards.mjs
           node scripts/test-plain-whitespace-workflow.mjs artifacts/plain-whitespace-installed installed
           node scripts/test-readability-browser.mjs artifacts/readability-browser installed
+          node scripts/test-timeline-workflow.mjs artifacts/timeline-workflow installed
+          node scripts/test-timeline-acceptance.mjs artifacts/timeline-acceptance.json
       - name: Check scalar source whitespace and accepted browser advances
         working-directory: opf-render
         run: node test/plain-whitespace-browser.mjs artifacts/plain-whitespace-browser
@@ -129,6 +131,8 @@ jobs:
             opf/artifacts/metric-outline-browser/**
             opf/artifacts/plain-whitespace-installed/**
             opf/artifacts/readability-browser/**
+            opf/artifacts/timeline-workflow/**
+            opf/artifacts/timeline-acceptance.json
             opf-render/artifacts/plain-whitespace-browser/**
           retention-days: 7
           if-no-files-found: ignore
