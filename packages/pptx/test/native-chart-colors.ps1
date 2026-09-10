@@ -19,7 +19,16 @@ function Read-FixtureCharts($Presentation,[string]$Phase) {
         if ($shapes.Count -ne 1) { throw 'Expected one editable chart per slide' }
         $chart=$shapes[0].Chart
         $record=@{slide=$slide.SlideIndex; panelColor=(Get-ColorHex $chart.ChartArea.Format.Fill.ForeColor.RGB); panelTransparency=$chart.ChartArea.Format.Fill.Transparency; plotFillVisible=$chart.PlotArea.Format.Fill.Visible; series=$chart.SeriesCollection().Count}
-        $record.pointColors=@(foreach($series in $chart.SeriesCollection()) { foreach($point in $series.Points()) { Get-ColorHex $point.Format.Fill.ForeColor.RGB } })
+        # PowerShell's COM enumerator can return null series even when Count and
+        # Item are valid. Use Office's one-based indexed collections explicitly.
+        $seriesCollection=$chart.SeriesCollection()
+        $record.pointColors=@(for($seriesIndex=1; $seriesIndex -le $seriesCollection.Count; $seriesIndex++) {
+            $series=$seriesCollection.Item($seriesIndex)
+            $points=$series.Points()
+            for($pointIndex=1; $pointIndex -le $points.Count; $pointIndex++) {
+                Get-ColorHex $points.Item($pointIndex).Format.Fill.ForeColor.RGB
+            }
+        })
         if (!$chart.HasLegend) { throw 'Missing native category/series legend' }
         $record.legendColor=Get-ColorHex $chart.Legend.Font.Color
         if ($generation.expected[$slide.SlideIndex-1].type -eq 'column') {
