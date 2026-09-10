@@ -1,9 +1,110 @@
 [
-  {"generation":"raw/chart-node24-slide1/generation.json","verifiers":"verifiers/chart-initial"},
-  {"generation":"raw/chart-node24-slide1-source-range/generation.json","verifiers":"verifiers/chart-source-range"},
-  {"generation":"raw/chart-node24-slide1-observed/generation.json","verifiers":"verifiers/chart-observed"},
-  {"generation":"raw/text-node24-bounded-02/generation.json","verifiers":"verifiers/text-bounded"},
-  {"generation":"raw/text-node20-bounded-01/generation.json","verifiers":"verifiers/text-bounded"},
-  {"generation":"raw/metric-node24-bounded-01/generation.json","verifiers":"verifiers/metric-bounded"},
-  {"generation":"raw/metric-node20-bounded-01/generation.json","verifiers":"verifiers/metric-bounded"}
+  {
+    "generation": "raw/chart-node24-slide1/generation.json",
+    "verifiers": "verifiers/chart-initial"
+  },
+  {
+    "generation": "raw/chart-node24-slide1-source-range/generation.json",
+    "verifiers": "verifiers/chart-source-range"
+  },
+  {
+    "generation": "raw/chart-node24-slide1-observed/generation.json",
+    "verifiers": "verifiers/chart-observed"
+  },
+  {
+    "generation": "raw/text-node24-bounded-02/generation.json",
+    "verifiers": "verifiers/text-bounded"
+  },
+  {
+    "generation": "raw/text-node20-bounded-01/generation.json",
+    "verifiers": "verifiers/text-bounded"
+  },
+  {
+    "generation": "raw/metric-node24-bounded-01/generation.json",
+    "verifiers": "verifiers/metric-bounded"
+  },
+  {
+    "generation": "raw/metric-node20-bounded-01/generation.json",
+    "verifiers": "verifiers/metric-bounded"
+  },
+  {
+    "generation": "raw/chart-node24-matrix-slide1/generation.json",
+    "verifiers": "verifiers/chart-matrix"
+  },
+  {
+    "generation": "raw/chart-node24-matrix-slide2/generation.json",
+    "verifiers": "verifiers/chart-matrix"
+  },
+  {
+    "generation": "raw/chart-node24-matrix-slide3/generation.json",
+    "verifiers": "verifiers/chart-matrix"
+  },
+  {
+    "generation": "raw/chart-node24-matrix-slide4/generation.json",
+    "verifiers": "verifiers/chart-matrix"
+  },
+  {
+    "generation": "raw/chart-node24-matrix-slide5/generation.json",
+    "verifiers": "verifiers/chart-matrix"
+  },
+  {
+    "generation": "raw/chart-node24-matrix-slide6/generation.json",
+    "verifiers": "verifiers/chart-matrix"
+  },
+  {
+    "generation": "raw/chart-node24-matrix-slide7/generation.json",
+    "verifiers": "verifiers/chart-matrix"
+  },
+  {
+    "generation": "raw/chart-node24-matrix-slide8/generation.json",
+    "verifiers": "verifiers/chart-matrix"
+  },
+  {
+    "generation": "raw/chart-node20-matrix02-slide1/generation.json",
+    "verifiers": "verifiers/chart-matrix"
+  },
+  {
+    "generation": "raw/chart-node20-matrix02-slide2/generation.json",
+    "verifiers": "verifiers/chart-matrix"
+  },
+  {
+    "generation": "raw/chart-node20-matrix02-slide3/generation.json",
+    "verifiers": "verifiers/chart-matrix"
+  },
+  {
+    "generation": "raw/chart-node20-matrix02-slide4/generation.json",
+    "verifiers": "verifiers/chart-matrix"
+  },
+  {
+    "generation": "raw/chart-node20-matrix02-slide5/generation.json",
+    "verifiers": "verifiers/chart-matrix"
+  },
+  {
+    "generation": "raw/chart-node20-matrix02-slide6/generation.json",
+    "verifiers": "verifiers/chart-matrix"
+  },
+  {
+    "generation": "raw/chart-node20-matrix02-slide7/generation.json",
+    "verifiers": "verifiers/chart-matrix"
+  },
+  {
+    "generation": "raw/chart-node20-matrix02-slide8/generation.json",
+    "verifiers": "verifiers/chart-matrix"
+  },
+  {
+    "generation": "raw/chart-node20-matrix-slide1/generation.json",
+    "verifiers": "verifiers/chart-matrix"
+  },
+  {
+    "generation": "raw/chart-node24-slide2-observed/generation.json",
+    "verifiers": "raw/chart-node24-slide2-observed/verifiers"
+  },
+  {
+    "generation": "raw/chart-node24-slide2-live/generation.json",
+    "verifiers": "raw/chart-node24-slide2-live/verifiers"
+  },
+  {
+    "generation": "raw/chart-node24-final-slide2/generation.json",
+    "verifiers": "raw/chart-node24-final-slide2/verifiers"
+  }
 ]

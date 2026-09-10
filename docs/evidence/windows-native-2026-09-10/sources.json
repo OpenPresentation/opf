@@ -8,15 +8,20 @@
   "harnessCommits": {
     "workerHandle": "95f5b9e0387dabb467a26d0fbbbdbe0171439a55",
     "boundedText": "48843ccfaaa8db295ed9095d1cf5e21cdac677bc",
-    "boundedMetric": "007ff5254e092a94699893250093b7f3b3708040"
+    "boundedMetric": "007ff5254e092a94699893250093b7f3b3708040",
+    "chartCaches": "1e74f4b64a6f5d981d90e2332ca2cb501b4409fc"
   },
   "pullRequests": {
     "workerHandle": "https://github.com/OpenPresentation/opf-pptx/pull/17",
     "boundedText": "https://github.com/OpenPresentation/opf-pptx/pull/18",
-    "boundedMetric": "https://github.com/OpenPresentation/opf-pptx/pull/19"
+    "boundedMetric": "https://github.com/OpenPresentation/opf-pptx/pull/19",
+    "chartCaches": "https://github.com/OpenPresentation/opf-pptx/pull/21"
   },
   "environment": {
-    "node": ["20.20.2", "24.20.0"],
+    "node": [
+      "20.20.2",
+      "24.20.0"
+    ],
     "powerPointBuild": "16.0.20326.20132",
     "powerPointExecutableSha256": "90fa931172c507b763ba92a82b19d5bc70816e008c5bb87577e1838e8a92e9f9",
     "windowsBuild": "26200.9445",

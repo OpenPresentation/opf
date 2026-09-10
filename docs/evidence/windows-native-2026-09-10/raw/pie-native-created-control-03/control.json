@@ -1,0 +1,41 @@
+﻿{
+    "powerPointVersion":  "16.0.20326.20132",
+    "pptxSha256":  "01471e9dcf400b1d2b317b11da2e9bdf582984cb3fbcdfe4f28e741778554706",
+    "pngSha256":  "9b05359856e278efb974f996976c51491bab95eaa03e57b0c9f0248ad2d6eb50",
+    "observed":  [
+                     {
+                         "phase":  "created",
+                         "values":  [
+                                        8.2,
+                                        3.2,
+                                        1.4,
+                                        1.2
+                                    ],
+                         "name":  "Sales",
+                         "categories":  [
+                                            "1st Qtr",
+                                            "2nd Qtr",
+                                            "3rd Qtr",
+                                            "4th Qtr"
+                                        ]
+                     },
+                     {
+                         "phase":  "reopened",
+                         "values":  [
+                                        8.2,
+                                        3.2,
+                                        1.4,
+                                        1.2
+                                    ],
+                         "name":  "Sales",
+                         "categories":  [
+                                            null,
+                                            null,
+                                            null,
+                                            null
+                                        ]
+                     }
+                 ],
+    "scope":  "Pie chart and default workbook created by PowerPoint AddChart2. No OPF input and no Series.Formula call.",
+    "hostVersion":  "5.1.26100.9444"
+}

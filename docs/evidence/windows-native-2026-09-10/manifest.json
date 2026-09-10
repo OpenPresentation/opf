@@ -8,18 +8,3023 @@
     },
     {
       "file": "README.md",
-      "bytes": 9292,
-      "sha256": "0b12730e7c85f38d2347b0a54c750758b7f9f74e7bb25360c7e9f4f5f8b03919"
+      "bytes": 11833,
+      "sha256": "055b93fb6979292bc7a0d9a322415a3132294dde091bc832ee2bb29411e7fe72"
     },
     {
       "file": "bindings.json",
-      "bytes": 733,
-      "sha256": "f8526295eafe8d99fc8d1a9e4a09777cd0b939685f853589c67b862be71eb50d"
+      "bytes": 3286,
+      "sha256": "01cfca85ddb3789ec11e9dc1fdc6715993c8244a17850fcea0a398e7268c0a5a"
+    },
+    {
+      "file": "chart-two-runtime-summary.json",
+      "bytes": 8280,
+      "sha256": "76e8c7e095a5ebbe9d13fc04ace5dd8fb417aed7d6d4d7b10e3802ac17c8e124"
     },
     {
       "file": "metric-two-runtime-summary.json",
       "bytes": 1694,
       "sha256": "6b4046779dc35c0b384b3fcd74cb4769f0900005380d25051e088701ff52019b"
+    },
+    {
+      "file": "raw/chart-node20-matrix-slide1/charts.pptx",
+      "bytes": 90423,
+      "sha256": "1907e3682a493f4582881fec2b7263f24bb5e9065af78ff9ea7bd77bb1601e3e"
+    },
+    {
+      "file": "raw/chart-node20-matrix-slide1/generation.json",
+      "bytes": 8995,
+      "sha256": "43b79231f51c8886dcc1d9ebc60af024ea5cb7a0b8ad000d5197cdbd8b9beef6"
+    },
+    {
+      "file": "raw/chart-node20-matrix-slide1/invocation-failure.json",
+      "bytes": 245,
+      "sha256": "e3fa08b86faa1e93a3ca7ddf56c7c9e6d73d2e15017fbf446c4c3ecdd4bd5d23"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide1/charts-edited.pptx",
+      "bytes": 103627,
+      "sha256": "fac1aca9790975a9d31356d9df1150bac85f8275806007e01bfa0608d2a7ac7b"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide1/charts-saved.pptx",
+      "bytes": 102079,
+      "sha256": "c4b9f4b9b0f65b1d006f1dfb8e1887e16555e15d3ee9e9638783b5d6dd4012f6"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide1/charts.pptx",
+      "bytes": 90423,
+      "sha256": "1907e3682a493f4582881fec2b7263f24bb5e9065af78ff9ea7bd77bb1601e3e"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide1/comparison.json",
+      "bytes": 5472,
+      "sha256": "b0518988182df121f59d2bf3535a678187e00dca8ef4e5f3aa09ad4ba2c45bbf"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide1/comparison.log",
+      "bytes": 86,
+      "sha256": "9d3d80492e0ec23510ea111faf7a06f22a4c54ca3862da514e1ad27d51ee8bcb"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide1/edited-1.png",
+      "bytes": 7875,
+      "sha256": "cdc90380c2aa3236a3d38337e0feddfc77e3bfb85fc4e9c3ee78ca0de69deed6"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide1/edited-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide1/edited-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide1/edited-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide1/edited-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide1/edited-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide1/edited-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide1/edited-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide1/generation.json",
+      "bytes": 8995,
+      "sha256": "43b79231f51c8886dcc1d9ebc60af024ea5cb7a0b8ad000d5197cdbd8b9beef6"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide1/native.json",
+      "bytes": 47786,
+      "sha256": "0beb00a69e619c5865d8371fbb3b8efd08ac5680791cb066beb833268b6f834f"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide1/original-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide1/original-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide1/original-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide1/original-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide1/original-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide1/original-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide1/original-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide1/original-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide1/progress.json",
+      "bytes": 31350,
+      "sha256": "8c065187003c9700f2c94de410c2676125875b6ef33c5c58ae1bb120a4e1defe"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide1/reopened-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide1/reopened-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide1/reopened-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide1/reopened-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide1/reopened-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide1/reopened-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide1/reopened-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide1/reopened-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide1/worker.json",
+      "bytes": 341,
+      "sha256": "75869c4dd01e162b42389f8e2abbad52cf134db3e7418da26e648e1e4d2d3c03"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide1/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide1/worker.stdout.log",
+      "bytes": 180,
+      "sha256": "857e0ce7b7b3fcd4c9668a76c0ed371b7439cba19e4c69fc9b4a60189c6e373d"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide2/charts-edited.pptx",
+      "bytes": 103628,
+      "sha256": "91b2b82105a3564d30ff9997e96a6820d08296db68af1415cafb86f303f265ea"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide2/charts-saved.pptx",
+      "bytes": 102080,
+      "sha256": "94ab349d57cdd8955d95ecc5454cbb61e5cab4cca66a529faefd987c731da456"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide2/charts.pptx",
+      "bytes": 90423,
+      "sha256": "1907e3682a493f4582881fec2b7263f24bb5e9065af78ff9ea7bd77bb1601e3e"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide2/comparison.json",
+      "bytes": 5472,
+      "sha256": "f697ae6d917ae57e37500d423845075272fed2200f84df2855d22ccab7c9378f"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide2/comparison.log",
+      "bytes": 86,
+      "sha256": "315e1dc168b4dc7c9a64f0e97d29637a046111f4e8d4ccc7010192820441a9db"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide2/edited-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide2/edited-2.png",
+      "bytes": 11944,
+      "sha256": "064be8d93de80523a0908681973ccb682f86fcdd94c752e361c9177b66b37060"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide2/edited-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide2/edited-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide2/edited-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide2/edited-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide2/edited-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide2/edited-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide2/generation.json",
+      "bytes": 8995,
+      "sha256": "43b79231f51c8886dcc1d9ebc60af024ea5cb7a0b8ad000d5197cdbd8b9beef6"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide2/native.json",
+      "bytes": 47294,
+      "sha256": "2e1666de0bde76f8b47fcea75ced8011e7ecb3d04dc0e35370cc3040de3ae7ca"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide2/original-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide2/original-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide2/original-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide2/original-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide2/original-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide2/original-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide2/original-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide2/original-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide2/progress.json",
+      "bytes": 31350,
+      "sha256": "352bc64a15899e3fd67ef7592ed791ead4995f66a54d7d8cc16b066cccc62945"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide2/reopened-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide2/reopened-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide2/reopened-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide2/reopened-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide2/reopened-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide2/reopened-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide2/reopened-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide2/reopened-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide2/worker.json",
+      "bytes": 341,
+      "sha256": "f04b9af8a911e64f0cad2584af5f3f2f8f8c3d50be9640c72d0dc8e316cb3cde"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide2/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide2/worker.stdout.log",
+      "bytes": 180,
+      "sha256": "1899d63185ea7a94d9604959f8b575a92a49c644b7ce7bda2258b59df8bccaa4"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide3/charts-edited.pptx",
+      "bytes": 103626,
+      "sha256": "24a05da3e6c6053736d8a45990033bf14b742591a7a395b91809aeb6fe180dbc"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide3/charts-saved.pptx",
+      "bytes": 102080,
+      "sha256": "389775a1c4a5748ee80e3e84b5592a70f505560df30e0b80eb40947bd12801de"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide3/charts.pptx",
+      "bytes": 90423,
+      "sha256": "1907e3682a493f4582881fec2b7263f24bb5e9065af78ff9ea7bd77bb1601e3e"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide3/comparison.json",
+      "bytes": 5472,
+      "sha256": "438ea7518342bd8dba09266577793b2a3b99c3b2072180bec2034989523257b1"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide3/comparison.log",
+      "bytes": 86,
+      "sha256": "2a24636048b835d7fba2f742407b7fce310176cb67e1c382761e37748e4db053"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide3/edited-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide3/edited-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide3/edited-3.png",
+      "bytes": 7872,
+      "sha256": "b28555bc3a5f9ff7fcf74ac331dfcf243e9b4f5479971e9e189baf07214eb5b1"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide3/edited-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide3/edited-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide3/edited-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide3/edited-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide3/edited-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide3/generation.json",
+      "bytes": 8995,
+      "sha256": "43b79231f51c8886dcc1d9ebc60af024ea5cb7a0b8ad000d5197cdbd8b9beef6"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide3/native.json",
+      "bytes": 47786,
+      "sha256": "45aa0a5889828b16bab618952acab9e8f973d0c254b84bee0798e4f4cf94a5e7"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide3/original-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide3/original-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide3/original-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide3/original-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide3/original-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide3/original-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide3/original-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide3/original-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide3/progress.json",
+      "bytes": 31350,
+      "sha256": "667017fcb5270b6df2b88d630c4681c67dc91d22e1a88f48e58d50d46a7c9a6a"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide3/reopened-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide3/reopened-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide3/reopened-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide3/reopened-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide3/reopened-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide3/reopened-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide3/reopened-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide3/reopened-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide3/worker.json",
+      "bytes": 341,
+      "sha256": "d887c2df807fa2e4299a8165f37b7318847685c898fa32f3904299d005d671b6"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide3/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide3/worker.stdout.log",
+      "bytes": 180,
+      "sha256": "af18127f7cb04c15a7a14e842a7cb9448f299d84f1bc4db8c15d965826534a97"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide4/charts-edited.pptx",
+      "bytes": 103621,
+      "sha256": "089eca625d7838bd5fbcafa3a804c6e1a19d32ace3636feb188bd8e5aaf66f07"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide4/charts-saved.pptx",
+      "bytes": 102071,
+      "sha256": "121217a28ea213f6c4ae1434810313fe19998a1e1161f669a3b33084b63c46af"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide4/charts.pptx",
+      "bytes": 90423,
+      "sha256": "1907e3682a493f4582881fec2b7263f24bb5e9065af78ff9ea7bd77bb1601e3e"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide4/comparison.json",
+      "bytes": 5472,
+      "sha256": "e09bcae761f5093f2c402eb1b8f5762ef543cb3c7af05f1b97ca5f329b3bf53f"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide4/comparison.log",
+      "bytes": 86,
+      "sha256": "b9f5e39d13ed45562431fd45d96eb2bdee0080afefe6aa65cdca8105d42bfaeb"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide4/edited-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide4/edited-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide4/edited-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide4/edited-4.png",
+      "bytes": 11940,
+      "sha256": "b2c7673a4278f96e454ddd13d0259adda9df3e00728d558ce2128cc431796083"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide4/edited-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide4/edited-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide4/edited-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide4/edited-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide4/generation.json",
+      "bytes": 8995,
+      "sha256": "43b79231f51c8886dcc1d9ebc60af024ea5cb7a0b8ad000d5197cdbd8b9beef6"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide4/native.json",
+      "bytes": 47294,
+      "sha256": "7197019a209357a0bdc5a8b60e33f0a85e13c3f3ddd3216d06af3c0a0be8aec4"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide4/original-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide4/original-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide4/original-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide4/original-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide4/original-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide4/original-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide4/original-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide4/original-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide4/progress.json",
+      "bytes": 31350,
+      "sha256": "7a74e37ea71b14f9de8a24fc6aafd8f8cefdd4bf92715918b1c8a2c514817918"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide4/reopened-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide4/reopened-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide4/reopened-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide4/reopened-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide4/reopened-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide4/reopened-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide4/reopened-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide4/reopened-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide4/worker.json",
+      "bytes": 341,
+      "sha256": "6300442650f4a5fb322230d5be97b2d0b64ea22c16423628cc115980db0e0d74"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide4/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide4/worker.stdout.log",
+      "bytes": 180,
+      "sha256": "f0ba12081eb2788313a99269e1c6bee6265bc6413bc7965501a18a292ecb7921"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide5/charts-edited.pptx",
+      "bytes": 103619,
+      "sha256": "2029a6931fad875d0f4583716179c88ec287e694527b83c35af61d148a20227e"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide5/charts-saved.pptx",
+      "bytes": 102076,
+      "sha256": "a6d06968b4a5448c7c16b8d446b28b7c20e09ab17ef532bdfc439609d5ea8ab5"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide5/charts.pptx",
+      "bytes": 90423,
+      "sha256": "1907e3682a493f4582881fec2b7263f24bb5e9065af78ff9ea7bd77bb1601e3e"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide5/comparison.json",
+      "bytes": 5472,
+      "sha256": "e1b8b2c06447e27a90e8280b618d0d9dafb3a30bf009cd9e1762361ac41dcaf8"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide5/comparison.log",
+      "bytes": 86,
+      "sha256": "ae747a53a06d281ddab1467ce9d93c2efb4bb563107085c52023f60962d05aec"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide5/edited-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide5/edited-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide5/edited-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide5/edited-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide5/edited-5.png",
+      "bytes": 7868,
+      "sha256": "4b764631a4512877f2d5a3676ad28434e142fc77d2cb13a02abcdc8c00a7e4a7"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide5/edited-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide5/edited-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide5/edited-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide5/generation.json",
+      "bytes": 8995,
+      "sha256": "43b79231f51c8886dcc1d9ebc60af024ea5cb7a0b8ad000d5197cdbd8b9beef6"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide5/native.json",
+      "bytes": 47786,
+      "sha256": "8643f2714d81f80ca498a39a95379b7d5965a7dda9d5eb54e4367a306d7831f9"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide5/original-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide5/original-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide5/original-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide5/original-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide5/original-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide5/original-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide5/original-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide5/original-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide5/progress.json",
+      "bytes": 31350,
+      "sha256": "ce9cfcd190548fa8782739cfac01c780909dc6b0492ac99c3eec27f9667a94a0"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide5/reopened-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide5/reopened-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide5/reopened-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide5/reopened-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide5/reopened-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide5/reopened-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide5/reopened-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide5/reopened-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide5/worker.json",
+      "bytes": 341,
+      "sha256": "825321ca031373552bbf51d2ef176b5c26f06ca487462b700e9df3f329ebe3c9"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide5/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide5/worker.stdout.log",
+      "bytes": 180,
+      "sha256": "e60a4578757e4975ecaacc14f2e80e27929259e9e5bf71d944c4b27881190ed4"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide6/charts-edited.pptx",
+      "bytes": 103624,
+      "sha256": "45cad792d153423f7da4882258584522c1e91e5698a357189288815781c7de8f"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide6/charts-saved.pptx",
+      "bytes": 102077,
+      "sha256": "138178dd23e2946489168ce06039351b674e1990846e267f37b5ba776ccd691b"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide6/charts.pptx",
+      "bytes": 90423,
+      "sha256": "1907e3682a493f4582881fec2b7263f24bb5e9065af78ff9ea7bd77bb1601e3e"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide6/comparison.json",
+      "bytes": 5472,
+      "sha256": "818ffe07fd089f10a965d64ef036f59c1e69c664d6dfb5be54c69deed79b5937"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide6/comparison.log",
+      "bytes": 86,
+      "sha256": "89d38e96a63a01fbb651f75831bfb28a9155f464c5cfb8b8097ffcd3c12efc94"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide6/edited-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide6/edited-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide6/edited-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide6/edited-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide6/edited-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide6/edited-6.png",
+      "bytes": 11933,
+      "sha256": "2d44eb263d57b45987af32cd0bb02775f31ead9e287553bf10c7cf424b3951b0"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide6/edited-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide6/edited-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide6/generation.json",
+      "bytes": 8995,
+      "sha256": "43b79231f51c8886dcc1d9ebc60af024ea5cb7a0b8ad000d5197cdbd8b9beef6"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide6/native.json",
+      "bytes": 47294,
+      "sha256": "28a720b24501d858613d4b7af56bb8c6adfe54b175872a48e31289fd238d1fff"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide6/original-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide6/original-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide6/original-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide6/original-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide6/original-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide6/original-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide6/original-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide6/original-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide6/progress.json",
+      "bytes": 31350,
+      "sha256": "d5bc8059b83c36d674fc4926615ddf16592e188f13fb953672daa7dcf45ebb2d"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide6/reopened-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide6/reopened-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide6/reopened-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide6/reopened-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide6/reopened-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide6/reopened-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide6/reopened-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide6/reopened-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide6/worker.json",
+      "bytes": 341,
+      "sha256": "f5270be995e1ef77814317b93b438c2474c80c9c3d5ec3de0879015d7bbedf0f"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide6/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide6/worker.stdout.log",
+      "bytes": 180,
+      "sha256": "d2c5fe2608cf744c33c942de9ce8908cec8dd56e131c6635bdf6a3226f25bb45"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide7/charts-edited.pptx",
+      "bytes": 103624,
+      "sha256": "343466ac4ec339d62bb6f308c1ffdc9febaf67e8f5b5a723b4e1d5961e716d51"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide7/charts-saved.pptx",
+      "bytes": 102077,
+      "sha256": "7bfb4545fb0893d211d00f1fd8f12786d1dc3e125659238b8cd82de1b1658287"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide7/charts.pptx",
+      "bytes": 90423,
+      "sha256": "1907e3682a493f4582881fec2b7263f24bb5e9065af78ff9ea7bd77bb1601e3e"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide7/comparison.json",
+      "bytes": 5472,
+      "sha256": "5cab4c0fc700df353d9835b521b6e7a864d04c15dc27f49efbe971c71cca433b"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide7/comparison.log",
+      "bytes": 86,
+      "sha256": "42a70a577247c6e5f5fd84ca3e3e090f9d40910052156de2c4fee56507102655"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide7/edited-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide7/edited-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide7/edited-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide7/edited-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide7/edited-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide7/edited-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide7/edited-7.png",
+      "bytes": 7873,
+      "sha256": "15fe50b0018eb0a38cb630f9adfc52bb96fa696f594823ce6cac244d0de15314"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide7/edited-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide7/generation.json",
+      "bytes": 8995,
+      "sha256": "43b79231f51c8886dcc1d9ebc60af024ea5cb7a0b8ad000d5197cdbd8b9beef6"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide7/native.json",
+      "bytes": 47786,
+      "sha256": "39d654831a386649aa99d0c10718a104d6974a6bb7425d5704dfbc7fe2dfdfb9"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide7/original-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide7/original-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide7/original-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide7/original-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide7/original-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide7/original-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide7/original-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide7/original-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide7/progress.json",
+      "bytes": 31350,
+      "sha256": "8725e42b736917ceb351656f1073018be3bfdf7ae48409587690237e1d39e5e4"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide7/reopened-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide7/reopened-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide7/reopened-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide7/reopened-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide7/reopened-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide7/reopened-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide7/reopened-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide7/reopened-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide7/worker.json",
+      "bytes": 341,
+      "sha256": "e7ee5bc42d43fd07661fad3039e01100b16d6ba02a895ddc434e0abf459bab27"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide7/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide7/worker.stdout.log",
+      "bytes": 180,
+      "sha256": "545ab4927a1be2db57841d5ec2ec4de6648ba4f4c8a496c7b1342f009f13f414"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide8/charts-edited.pptx",
+      "bytes": 103624,
+      "sha256": "0016054204def0f515580996a2b32c8c62c94c8601afcd09d3f4d19ffb539912"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide8/charts-saved.pptx",
+      "bytes": 102077,
+      "sha256": "2fe1a9b0021e74fd492ce1561c3081ab154b548f2d4263408b0b263ab054f631"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide8/charts.pptx",
+      "bytes": 90423,
+      "sha256": "1907e3682a493f4582881fec2b7263f24bb5e9065af78ff9ea7bd77bb1601e3e"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide8/comparison.json",
+      "bytes": 5472,
+      "sha256": "afaf894d4dcdb7a2991ec1f1dacbba7e30d9eac3477dd9fd4fb6c5a8c0d65c88"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide8/comparison.log",
+      "bytes": 86,
+      "sha256": "3b84b146d7390b4ccd2e8c8bd0cd535641243da1969ead4ef90fc409f8c48594"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide8/edited-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide8/edited-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide8/edited-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide8/edited-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide8/edited-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide8/edited-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide8/edited-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide8/edited-8.png",
+      "bytes": 11944,
+      "sha256": "c6f3503bcf0559969bc54498f02bdb940e374fc84c5293714fe105156edf7a93"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide8/generation.json",
+      "bytes": 8995,
+      "sha256": "43b79231f51c8886dcc1d9ebc60af024ea5cb7a0b8ad000d5197cdbd8b9beef6"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide8/native.json",
+      "bytes": 47294,
+      "sha256": "39877f355f6835b2508332d963750d0326c1b1c8f6c3e8532795d932f2b437a5"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide8/original-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide8/original-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide8/original-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide8/original-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide8/original-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide8/original-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide8/original-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide8/original-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide8/progress.json",
+      "bytes": 31350,
+      "sha256": "8299a4c5b12d954eee14ec8a33ec011167d9c7febb7043b9078032ab3bb8e06f"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide8/reopened-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide8/reopened-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide8/reopened-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide8/reopened-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide8/reopened-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide8/reopened-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide8/reopened-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide8/reopened-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide8/worker.json",
+      "bytes": 341,
+      "sha256": "98fde0c0f72b8db1dbe075bcee25b2cb8d9cf28c39f3b9c8d8d2b04ee5249daf"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide8/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/chart-node20-matrix02-slide8/worker.stdout.log",
+      "bytes": 180,
+      "sha256": "2226db8d7a171a8701384af658484b1c4be06041fbf7109226cccda17bc1a3e2"
+    },
+    {
+      "file": "raw/chart-node24-final-slide2/charts-edited.pptx",
+      "bytes": 103622,
+      "sha256": "dd87723f96852c36d9330e5b265c96d4f018cf18bb2415b4a7dba59bbe20db44"
+    },
+    {
+      "file": "raw/chart-node24-final-slide2/charts-saved.pptx",
+      "bytes": 102072,
+      "sha256": "eca528d66f49788bb44c0879bd623c34d29c844550c54c79bcfbe71e897bcd0d"
+    },
+    {
+      "file": "raw/chart-node24-final-slide2/charts.pptx",
+      "bytes": 90423,
+      "sha256": "1907e3682a493f4582881fec2b7263f24bb5e9065af78ff9ea7bd77bb1601e3e"
+    },
+    {
+      "file": "raw/chart-node24-final-slide2/comparison.log",
+      "bytes": 700,
+      "sha256": "f0252e7165f004e7118501ba3ea2edfb13eae5405933844ba4a7cc813afc19f4"
+    },
+    {
+      "file": "raw/chart-node24-final-slide2/edited-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node24-final-slide2/edited-2.png",
+      "bytes": 11944,
+      "sha256": "064be8d93de80523a0908681973ccb682f86fcdd94c752e361c9177b66b37060"
+    },
+    {
+      "file": "raw/chart-node24-final-slide2/edited-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node24-final-slide2/edited-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node24-final-slide2/edited-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node24-final-slide2/edited-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node24-final-slide2/edited-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node24-final-slide2/edited-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node24-final-slide2/generation.json",
+      "bytes": 8892,
+      "sha256": "f3d9b6f9651c02239a0dbbbd3fdf04453764290039361f1211667f31b385475f"
+    },
+    {
+      "file": "raw/chart-node24-final-slide2/native.json",
+      "bytes": 47294,
+      "sha256": "c278d9cb61478991b327b307565ce71feefbf2aeab111533149a5fa3f1287ae1"
+    },
+    {
+      "file": "raw/chart-node24-final-slide2/original-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node24-final-slide2/original-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node24-final-slide2/original-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node24-final-slide2/original-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node24-final-slide2/original-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node24-final-slide2/original-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node24-final-slide2/original-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node24-final-slide2/original-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node24-final-slide2/progress.json",
+      "bytes": 31350,
+      "sha256": "d872a33909d17df5c46fab31d7506b12835ca8e24072f4326e344ecf5b2f62ba"
+    },
+    {
+      "file": "raw/chart-node24-final-slide2/reopened-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node24-final-slide2/reopened-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node24-final-slide2/reopened-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node24-final-slide2/reopened-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node24-final-slide2/reopened-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node24-final-slide2/reopened-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node24-final-slide2/reopened-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node24-final-slide2/reopened-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node24-final-slide2/verifiers/native-chart-colors.mjs",
+      "bytes": 9859,
+      "sha256": "70f5a191119d5062e767881425c4205e01297f5d55a1a5e103e2824b620957a2"
+    },
+    {
+      "file": "raw/chart-node24-final-slide2/verifiers/native-chart-colors.ps1",
+      "bytes": 9874,
+      "sha256": "1e4608f416c166eda809f1be60a730ae6abcbfc81dafa2ceb3df074ca107720b"
+    },
+    {
+      "file": "raw/chart-node24-final-slide2/verifiers/native-process.ps1",
+      "bytes": 2368,
+      "sha256": "2a4fc2963bea2baf61c98c4cda23b7ec0be0cb1edcec3f72ccc65d1fc2857d00"
+    },
+    {
+      "file": "raw/chart-node24-final-slide2/worker.json",
+      "bytes": 341,
+      "sha256": "0fe0e8d0e83950ac6f0cc97fad777eae465e7eea7f060664aeaf72fe3dd754ab"
+    },
+    {
+      "file": "raw/chart-node24-final-slide2/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/chart-node24-final-slide2/worker.stdout.log",
+      "bytes": 180,
+      "sha256": "1899d63185ea7a94d9604959f8b575a92a49c644b7ce7bda2258b59df8bccaa4"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide1/charts-edited.pptx",
+      "bytes": 103625,
+      "sha256": "095ea828ea4fd353c56dd254db766a2a2dbe055ab43df66facc39ea04533e4c6"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide1/charts-saved.pptx",
+      "bytes": 102076,
+      "sha256": "cf76678f2aad00f6d57771939c01fc4fafdf52d54131f6b3afb1213f139e2878"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide1/charts.pptx",
+      "bytes": 90423,
+      "sha256": "1907e3682a493f4582881fec2b7263f24bb5e9065af78ff9ea7bd77bb1601e3e"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide1/comparison.json",
+      "bytes": 5472,
+      "sha256": "3fad575f7e3c8b8cf26b57c02ff2090df4c7c4d36cd6c6581b07ef117e2a0106"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide1/comparison.log",
+      "bytes": 86,
+      "sha256": "9d3d80492e0ec23510ea111faf7a06f22a4c54ca3862da514e1ad27d51ee8bcb"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide1/edited-1.png",
+      "bytes": 7875,
+      "sha256": "cdc90380c2aa3236a3d38337e0feddfc77e3bfb85fc4e9c3ee78ca0de69deed6"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide1/edited-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide1/edited-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide1/edited-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide1/edited-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide1/edited-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide1/edited-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide1/edited-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide1/generation.json",
+      "bytes": 8995,
+      "sha256": "cb5732ee4f303453261382c43d7e128a0cd9c1622fc3778002f022da375887a9"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide1/native.json",
+      "bytes": 47786,
+      "sha256": "58824b520732c8bb27ed710905f2d452c1779b4de40b8167bae53cfd5663e0b0"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide1/original-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide1/original-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide1/original-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide1/original-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide1/original-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide1/original-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide1/original-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide1/original-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide1/progress.json",
+      "bytes": 31350,
+      "sha256": "467cece2483135b43805dc5589b80d76d39fab57341550fb66445f81620c818e"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide1/reopened-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide1/reopened-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide1/reopened-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide1/reopened-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide1/reopened-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide1/reopened-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide1/reopened-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide1/reopened-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide1/worker.json",
+      "bytes": 341,
+      "sha256": "aa7f66c07454f7b2463df6a1bf4685ed2ac8ac91c4ff3d84c554c7e1cd051873"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide1/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide1/worker.stdout.log",
+      "bytes": 180,
+      "sha256": "857e0ce7b7b3fcd4c9668a76c0ed371b7439cba19e4c69fc9b4a60189c6e373d"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide2/charts-edited.pptx",
+      "bytes": 103622,
+      "sha256": "b5317c0b6fd220c5d888db968a16600f4ae7550935431108a53237367c7b8241"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide2/charts-saved.pptx",
+      "bytes": 102075,
+      "sha256": "769ac541b95e017d1b32e382e176e78e839f7cd39729819f86cfc7ee0cbfb14a"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide2/charts.pptx",
+      "bytes": 90423,
+      "sha256": "1907e3682a493f4582881fec2b7263f24bb5e9065af78ff9ea7bd77bb1601e3e"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide2/comparison.json",
+      "bytes": 5472,
+      "sha256": "c5d2b99010676dcfff0ed6b3a6f8bc095aa574080f02c286fede8fb302312ca5"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide2/comparison.log",
+      "bytes": 86,
+      "sha256": "315e1dc168b4dc7c9a64f0e97d29637a046111f4e8d4ccc7010192820441a9db"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide2/edited-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide2/edited-2.png",
+      "bytes": 11944,
+      "sha256": "064be8d93de80523a0908681973ccb682f86fcdd94c752e361c9177b66b37060"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide2/edited-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide2/edited-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide2/edited-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide2/edited-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide2/edited-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide2/edited-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide2/generation.json",
+      "bytes": 8995,
+      "sha256": "cb5732ee4f303453261382c43d7e128a0cd9c1622fc3778002f022da375887a9"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide2/native.json",
+      "bytes": 47294,
+      "sha256": "7647d35e39125cbc11d177f9de8cb095507562b215ba4b55541da7ea37d73bb6"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide2/original-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide2/original-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide2/original-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide2/original-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide2/original-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide2/original-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide2/original-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide2/original-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide2/progress.json",
+      "bytes": 31350,
+      "sha256": "f38a17899e3c7b7861d3b3da4a0417c530c557e8af73b42e61177c9de0d636b2"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide2/reopened-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide2/reopened-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide2/reopened-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide2/reopened-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide2/reopened-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide2/reopened-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide2/reopened-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide2/reopened-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide2/worker.json",
+      "bytes": 341,
+      "sha256": "076367b953d9d55c8861cf333d5f17ab189c434a35f6034938a424dedbc6981c"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide2/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide2/worker.stdout.log",
+      "bytes": 180,
+      "sha256": "1899d63185ea7a94d9604959f8b575a92a49c644b7ce7bda2258b59df8bccaa4"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide3/charts-edited.pptx",
+      "bytes": 103622,
+      "sha256": "8a6107ebd5ec6c37688562e9f939e533ccc7c23278cc3fdb32d7128e1717ab38"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide3/charts-saved.pptx",
+      "bytes": 102072,
+      "sha256": "cb3650cc05aa3249c62fc18f08cd0232bd8f5350a032414f45a09223752ad0de"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide3/charts.pptx",
+      "bytes": 90423,
+      "sha256": "1907e3682a493f4582881fec2b7263f24bb5e9065af78ff9ea7bd77bb1601e3e"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide3/comparison.json",
+      "bytes": 5472,
+      "sha256": "33d07cf5e4e42fcf255e96b1873afb2d430438567022838f867f28928a2cb529"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide3/comparison.log",
+      "bytes": 86,
+      "sha256": "2a24636048b835d7fba2f742407b7fce310176cb67e1c382761e37748e4db053"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide3/edited-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide3/edited-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide3/edited-3.png",
+      "bytes": 7872,
+      "sha256": "b28555bc3a5f9ff7fcf74ac331dfcf243e9b4f5479971e9e189baf07214eb5b1"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide3/edited-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide3/edited-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide3/edited-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide3/edited-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide3/edited-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide3/generation.json",
+      "bytes": 8995,
+      "sha256": "cb5732ee4f303453261382c43d7e128a0cd9c1622fc3778002f022da375887a9"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide3/native.json",
+      "bytes": 47786,
+      "sha256": "05eec1fb11115f2f67ddcb96652f432274f8879922e70fa12f7ca2c08b5dabce"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide3/original-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide3/original-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide3/original-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide3/original-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide3/original-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide3/original-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide3/original-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide3/original-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide3/progress.json",
+      "bytes": 31350,
+      "sha256": "ac5c072587bbca61a3ad2ea6e767158db9da745ebce9a50aea80cc6ef1527bf4"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide3/reopened-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide3/reopened-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide3/reopened-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide3/reopened-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide3/reopened-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide3/reopened-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide3/reopened-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide3/reopened-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide3/worker.json",
+      "bytes": 341,
+      "sha256": "ec22aaa5d9e09c6240d995d075e83aa5d08e836425b0ea689decea2916ec2353"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide3/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide3/worker.stdout.log",
+      "bytes": 180,
+      "sha256": "af18127f7cb04c15a7a14e842a7cb9448f299d84f1bc4db8c15d965826534a97"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide4/charts-edited.pptx",
+      "bytes": 103623,
+      "sha256": "687bb85604540058380af61f0401e1ccbe5018ac8763fa38e8ed1f7974a78100"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide4/charts-saved.pptx",
+      "bytes": 102075,
+      "sha256": "44a347da96fb6146b124558abfd0d5413c235a07f95261fe24c06e8c04ecd5c4"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide4/charts.pptx",
+      "bytes": 90423,
+      "sha256": "1907e3682a493f4582881fec2b7263f24bb5e9065af78ff9ea7bd77bb1601e3e"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide4/comparison.json",
+      "bytes": 5472,
+      "sha256": "084aac217d81d7593c44933c89f2f3e885ef3b2e24a59373281bf2c0ba835219"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide4/comparison.log",
+      "bytes": 86,
+      "sha256": "b9f5e39d13ed45562431fd45d96eb2bdee0080afefe6aa65cdca8105d42bfaeb"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide4/edited-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide4/edited-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide4/edited-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide4/edited-4.png",
+      "bytes": 11940,
+      "sha256": "b2c7673a4278f96e454ddd13d0259adda9df3e00728d558ce2128cc431796083"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide4/edited-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide4/edited-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide4/edited-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide4/edited-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide4/generation.json",
+      "bytes": 8995,
+      "sha256": "cb5732ee4f303453261382c43d7e128a0cd9c1622fc3778002f022da375887a9"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide4/native.json",
+      "bytes": 47294,
+      "sha256": "a0219409c8b438fe005c95b7650b94dcc7d91712c6006203005217ce39e5dcce"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide4/original-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide4/original-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide4/original-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide4/original-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide4/original-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide4/original-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide4/original-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide4/original-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide4/progress.json",
+      "bytes": 31350,
+      "sha256": "899534a4e32ef64a91dee662ffb7e9ac1a7e53055adc985625427bd1edcc927a"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide4/reopened-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide4/reopened-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide4/reopened-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide4/reopened-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide4/reopened-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide4/reopened-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide4/reopened-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide4/reopened-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide4/worker.json",
+      "bytes": 340,
+      "sha256": "30e0410a6fad04a3ed8285b18aa98e5718a511c95d540a33e87bda1cda2ee001"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide4/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide4/worker.stdout.log",
+      "bytes": 180,
+      "sha256": "f0ba12081eb2788313a99269e1c6bee6265bc6413bc7965501a18a292ecb7921"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide5/charts-edited.pptx",
+      "bytes": 103624,
+      "sha256": "ca9d6b7096d0b4aa6dba6b4bf9787c27c1fa6f866dcd5bb8b39fc7935008f2b5"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide5/charts-saved.pptx",
+      "bytes": 102082,
+      "sha256": "ae5ea8358f7af7affca2a40b23dce29e50d2eadf11dd412e2d26b976c9796f59"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide5/charts.pptx",
+      "bytes": 90423,
+      "sha256": "1907e3682a493f4582881fec2b7263f24bb5e9065af78ff9ea7bd77bb1601e3e"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide5/comparison.json",
+      "bytes": 5472,
+      "sha256": "fd1dfb45579ec93382ee7d8ffa240a21b8426dee4db1bc06724f38e2d094b0d2"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide5/comparison.log",
+      "bytes": 86,
+      "sha256": "ae747a53a06d281ddab1467ce9d93c2efb4bb563107085c52023f60962d05aec"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide5/edited-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide5/edited-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide5/edited-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide5/edited-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide5/edited-5.png",
+      "bytes": 7868,
+      "sha256": "4b764631a4512877f2d5a3676ad28434e142fc77d2cb13a02abcdc8c00a7e4a7"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide5/edited-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide5/edited-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide5/edited-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide5/generation.json",
+      "bytes": 8995,
+      "sha256": "cb5732ee4f303453261382c43d7e128a0cd9c1622fc3778002f022da375887a9"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide5/native.json",
+      "bytes": 47786,
+      "sha256": "31200f06edeb758135348bcb5b162a4907a63c00632fd449b32b15d1d6e83026"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide5/original-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide5/original-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide5/original-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide5/original-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide5/original-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide5/original-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide5/original-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide5/original-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide5/progress.json",
+      "bytes": 31350,
+      "sha256": "64c7c4f752e613a2293c79512f2c458ee7768ba653083de13dda031a611baa19"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide5/reopened-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide5/reopened-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide5/reopened-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide5/reopened-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide5/reopened-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide5/reopened-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide5/reopened-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide5/reopened-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide5/worker.json",
+      "bytes": 341,
+      "sha256": "d95967511a6304f191368975ea6bba042b359aab1385963291d4a87ec8c371dd"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide5/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide5/worker.stdout.log",
+      "bytes": 180,
+      "sha256": "e60a4578757e4975ecaacc14f2e80e27929259e9e5bf71d944c4b27881190ed4"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide6/charts-edited.pptx",
+      "bytes": 103619,
+      "sha256": "8f023ac1d08d643e163356c97242f4ae8f5c9ac8ba8160930e481247193470ea"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide6/charts-saved.pptx",
+      "bytes": 102073,
+      "sha256": "57a66de2fc4eba9b642dd409c456dedd2de24e6136d0e935c930c4ecd698a857"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide6/charts.pptx",
+      "bytes": 90423,
+      "sha256": "1907e3682a493f4582881fec2b7263f24bb5e9065af78ff9ea7bd77bb1601e3e"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide6/comparison.json",
+      "bytes": 5472,
+      "sha256": "7c95e50c50edd1a967cd6d2bc56c8e3f3687d7c028e65f8ba0689552f2fc51e6"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide6/comparison.log",
+      "bytes": 86,
+      "sha256": "89d38e96a63a01fbb651f75831bfb28a9155f464c5cfb8b8097ffcd3c12efc94"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide6/edited-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide6/edited-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide6/edited-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide6/edited-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide6/edited-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide6/edited-6.png",
+      "bytes": 11933,
+      "sha256": "2d44eb263d57b45987af32cd0bb02775f31ead9e287553bf10c7cf424b3951b0"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide6/edited-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide6/edited-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide6/generation.json",
+      "bytes": 8995,
+      "sha256": "cb5732ee4f303453261382c43d7e128a0cd9c1622fc3778002f022da375887a9"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide6/native.json",
+      "bytes": 47294,
+      "sha256": "6ea784d6720c8e1f56c89104f7989bb101c5e14b6adfa692d5ae4a208cb19007"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide6/original-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide6/original-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide6/original-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide6/original-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide6/original-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide6/original-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide6/original-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide6/original-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide6/progress.json",
+      "bytes": 31350,
+      "sha256": "392da8d105de5f2154315f23c614bcac14fc26feecd2305106bcc42b344b1af9"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide6/reopened-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide6/reopened-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide6/reopened-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide6/reopened-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide6/reopened-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide6/reopened-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide6/reopened-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide6/reopened-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide6/worker.json",
+      "bytes": 341,
+      "sha256": "fa8129ca3a22a709ac9d72fb82b5bf664378adf85535374f1cb94b1e5c355421"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide6/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide6/worker.stdout.log",
+      "bytes": 180,
+      "sha256": "d2c5fe2608cf744c33c942de9ce8908cec8dd56e131c6635bdf6a3226f25bb45"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide7/charts-edited.pptx",
+      "bytes": 103620,
+      "sha256": "9b3935beaf6b6d1cd3f59e6c87ad56e54a7ca65c39f5c596160e4c2ee48f9e82"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide7/charts-saved.pptx",
+      "bytes": 102072,
+      "sha256": "6c79c0d5dbf6e6a2b22d4a112992c5b04b7b1dfe0aed89f85e35c7ac266e890f"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide7/charts.pptx",
+      "bytes": 90423,
+      "sha256": "1907e3682a493f4582881fec2b7263f24bb5e9065af78ff9ea7bd77bb1601e3e"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide7/comparison.json",
+      "bytes": 5472,
+      "sha256": "bfa22fa5a6bafbf533cc605b8488cb80a96aa5501194cadc52f21ad68307290e"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide7/comparison.log",
+      "bytes": 86,
+      "sha256": "42a70a577247c6e5f5fd84ca3e3e090f9d40910052156de2c4fee56507102655"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide7/edited-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide7/edited-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide7/edited-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide7/edited-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide7/edited-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide7/edited-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide7/edited-7.png",
+      "bytes": 7873,
+      "sha256": "15fe50b0018eb0a38cb630f9adfc52bb96fa696f594823ce6cac244d0de15314"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide7/edited-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide7/generation.json",
+      "bytes": 8995,
+      "sha256": "cb5732ee4f303453261382c43d7e128a0cd9c1622fc3778002f022da375887a9"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide7/native.json",
+      "bytes": 47786,
+      "sha256": "e67853cd59f8d8368bcfe9ac399d42a5627317d694e86e7c02169323e374cfcc"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide7/original-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide7/original-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide7/original-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide7/original-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide7/original-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide7/original-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide7/original-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide7/original-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide7/progress.json",
+      "bytes": 31350,
+      "sha256": "e84a58bc21515df9ef30a4873ed77da85da48df88148b8060b1ba7a6b6d941db"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide7/reopened-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide7/reopened-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide7/reopened-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide7/reopened-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide7/reopened-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide7/reopened-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide7/reopened-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide7/reopened-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide7/worker.json",
+      "bytes": 341,
+      "sha256": "ece9b6929597bd4723fa1a9babea8d335184e44e9304bcba2d44b617a5593936"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide7/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide7/worker.stdout.log",
+      "bytes": 180,
+      "sha256": "545ab4927a1be2db57841d5ec2ec4de6648ba4f4c8a496c7b1342f009f13f414"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide8/charts-edited.pptx",
+      "bytes": 103630,
+      "sha256": "29630781474edf0fcb1f2565fff56aa9c95de10fda6ade091b9504f59618b7a0"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide8/charts-saved.pptx",
+      "bytes": 102081,
+      "sha256": "716627d53f3266c5f3f26df1d306b811e5104c878768c5ce43f4d10b8c830f99"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide8/charts.pptx",
+      "bytes": 90423,
+      "sha256": "1907e3682a493f4582881fec2b7263f24bb5e9065af78ff9ea7bd77bb1601e3e"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide8/comparison.json",
+      "bytes": 5472,
+      "sha256": "fbbfe4a73d76e3d82cf0f61e23075cdc88846b6388660d9fbdca7a21b998df29"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide8/comparison.log",
+      "bytes": 86,
+      "sha256": "3b84b146d7390b4ccd2e8c8bd0cd535641243da1969ead4ef90fc409f8c48594"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide8/edited-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide8/edited-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide8/edited-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide8/edited-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide8/edited-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide8/edited-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide8/edited-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide8/edited-8.png",
+      "bytes": 11944,
+      "sha256": "c6f3503bcf0559969bc54498f02bdb940e374fc84c5293714fe105156edf7a93"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide8/generation.json",
+      "bytes": 8995,
+      "sha256": "cb5732ee4f303453261382c43d7e128a0cd9c1622fc3778002f022da375887a9"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide8/native.json",
+      "bytes": 47294,
+      "sha256": "7029477c129bacfccc82febeb497a140902c8606aeaa72d97bc5b8eb0037a584"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide8/original-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide8/original-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide8/original-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide8/original-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide8/original-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide8/original-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide8/original-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide8/original-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide8/progress.json",
+      "bytes": 31350,
+      "sha256": "043c4875c8ccc47b97a36fa6690a82b82b9c063f803848e8bb8e07dd2d088d80"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide8/reopened-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide8/reopened-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide8/reopened-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide8/reopened-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide8/reopened-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide8/reopened-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide8/reopened-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide8/reopened-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide8/worker.json",
+      "bytes": 341,
+      "sha256": "95554d317ffd09bc7284cacce44128c6d300347003a5fc7a4bbd4c5aba350eb9"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide8/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/chart-node24-matrix-slide8/worker.stdout.log",
+      "bytes": 180,
+      "sha256": "2226db8d7a171a8701384af658484b1c4be06041fbf7109226cccda17bc1a3e2"
     },
     {
       "file": "raw/chart-node24-slide1-observed/charts-edited.pptx",
@@ -465,6 +3470,371 @@
       "file": "raw/chart-node24-slide1/worker.stdout.log",
       "bytes": 180,
       "sha256": "857e0ce7b7b3fcd4c9668a76c0ed371b7439cba19e4c69fc9b4a60189c6e373d"
+    },
+    {
+      "file": "raw/chart-node24-slide2-live/charts-edited.pptx",
+      "bytes": 103623,
+      "sha256": "c49dbd500f4be1110327500c2397399041f68afcf61acbabcf5b34e9c9b38acd"
+    },
+    {
+      "file": "raw/chart-node24-slide2-live/charts-saved.pptx",
+      "bytes": 102074,
+      "sha256": "221d964b856f57511683a95fd9a72fa0fc2fe63a3188a1c70b06427bda926764"
+    },
+    {
+      "file": "raw/chart-node24-slide2-live/charts.pptx",
+      "bytes": 90423,
+      "sha256": "1907e3682a493f4582881fec2b7263f24bb5e9065af78ff9ea7bd77bb1601e3e"
+    },
+    {
+      "file": "raw/chart-node24-slide2-live/edited-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node24-slide2-live/edited-2.png",
+      "bytes": 11944,
+      "sha256": "064be8d93de80523a0908681973ccb682f86fcdd94c752e361c9177b66b37060"
+    },
+    {
+      "file": "raw/chart-node24-slide2-live/edited-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node24-slide2-live/edited-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node24-slide2-live/edited-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node24-slide2-live/edited-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node24-slide2-live/edited-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node24-slide2-live/edited-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node24-slide2-live/generation.json",
+      "bytes": 8892,
+      "sha256": "62570b3220a71528ddfb2c14e7564395ee97cc6f84ca979824a49bff894430c5"
+    },
+    {
+      "file": "raw/chart-node24-slide2-live/native.json",
+      "bytes": 47294,
+      "sha256": "dab02ef9fbd9b2d6cdcbd7465b758c9ffd3144e252f0ebc231d837e345281b61"
+    },
+    {
+      "file": "raw/chart-node24-slide2-live/original-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node24-slide2-live/original-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node24-slide2-live/original-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node24-slide2-live/original-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node24-slide2-live/original-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node24-slide2-live/original-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node24-slide2-live/original-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node24-slide2-live/original-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node24-slide2-live/progress.json",
+      "bytes": 31350,
+      "sha256": "a6fe3e09090b2c0b93488f2a910d2bd621c4f380c02a5acd523d289e56fe5ae0"
+    },
+    {
+      "file": "raw/chart-node24-slide2-live/reopened-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node24-slide2-live/reopened-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node24-slide2-live/reopened-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node24-slide2-live/reopened-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node24-slide2-live/reopened-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node24-slide2-live/reopened-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node24-slide2-live/reopened-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node24-slide2-live/reopened-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node24-slide2-live/verifiers/native-chart-colors.mjs",
+      "bytes": 6500,
+      "sha256": "2ca655a1bed821d47ff0f53006d1232ff45787401856deada4991d15abf408ad"
+    },
+    {
+      "file": "raw/chart-node24-slide2-live/verifiers/native-chart-colors.ps1",
+      "bytes": 9874,
+      "sha256": "1e4608f416c166eda809f1be60a730ae6abcbfc81dafa2ceb3df074ca107720b"
+    },
+    {
+      "file": "raw/chart-node24-slide2-live/verifiers/native-process.ps1",
+      "bytes": 2368,
+      "sha256": "2a4fc2963bea2baf61c98c4cda23b7ec0be0cb1edcec3f72ccc65d1fc2857d00"
+    },
+    {
+      "file": "raw/chart-node24-slide2-live/worker.json",
+      "bytes": 341,
+      "sha256": "bff802039c7ff7d62bb380d8b5b6d963d2253d0069183b191974b2cece6dbe04"
+    },
+    {
+      "file": "raw/chart-node24-slide2-live/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/chart-node24-slide2-live/worker.stdout.log",
+      "bytes": 180,
+      "sha256": "1899d63185ea7a94d9604959f8b575a92a49c644b7ce7bda2258b59df8bccaa4"
+    },
+    {
+      "file": "raw/chart-node24-slide2-observed/charts-edited.pptx",
+      "bytes": 103640,
+      "sha256": "9451afe65ed88edf0d30d4922547146ea79babd98b9de6f94c584e3d4916b13d"
+    },
+    {
+      "file": "raw/chart-node24-slide2-observed/charts-saved.pptx",
+      "bytes": 102091,
+      "sha256": "5a284bb021c4154098c5cd23aedc9de0caecc3af4584a366cacc221899ab034c"
+    },
+    {
+      "file": "raw/chart-node24-slide2-observed/charts.pptx",
+      "bytes": 90423,
+      "sha256": "1907e3682a493f4582881fec2b7263f24bb5e9065af78ff9ea7bd77bb1601e3e"
+    },
+    {
+      "file": "raw/chart-node24-slide2-observed/comparison.log",
+      "bytes": 764,
+      "sha256": "773c5150e04ece55a88feb5b5bcbac158906ef806aeaea5bbc324c1bc95c04af"
+    },
+    {
+      "file": "raw/chart-node24-slide2-observed/edited-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node24-slide2-observed/edited-2.png",
+      "bytes": 11944,
+      "sha256": "064be8d93de80523a0908681973ccb682f86fcdd94c752e361c9177b66b37060"
+    },
+    {
+      "file": "raw/chart-node24-slide2-observed/edited-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node24-slide2-observed/edited-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node24-slide2-observed/edited-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node24-slide2-observed/edited-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node24-slide2-observed/edited-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node24-slide2-observed/edited-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node24-slide2-observed/generation.json",
+      "bytes": 8892,
+      "sha256": "48af6c235601f435e23191f1ef5ac7115497b7c7cba80089139ada8b178da8c8"
+    },
+    {
+      "file": "raw/chart-node24-slide2-observed/native.json",
+      "bytes": 46765,
+      "sha256": "8916b865f40ce03b5465acace45c9cc564bdcd92a67f437515dc350214705070"
+    },
+    {
+      "file": "raw/chart-node24-slide2-observed/original-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node24-slide2-observed/original-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node24-slide2-observed/original-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node24-slide2-observed/original-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node24-slide2-observed/original-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node24-slide2-observed/original-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node24-slide2-observed/original-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node24-slide2-observed/original-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node24-slide2-observed/progress.json",
+      "bytes": 31350,
+      "sha256": "9250bc09947b0844dace852a490e37cfc629a810fb7548c90d3a229babed5833"
+    },
+    {
+      "file": "raw/chart-node24-slide2-observed/reopened-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "file": "raw/chart-node24-slide2-observed/reopened-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "file": "raw/chart-node24-slide2-observed/reopened-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "file": "raw/chart-node24-slide2-observed/reopened-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "file": "raw/chart-node24-slide2-observed/reopened-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "file": "raw/chart-node24-slide2-observed/reopened-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "file": "raw/chart-node24-slide2-observed/reopened-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "file": "raw/chart-node24-slide2-observed/reopened-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "file": "raw/chart-node24-slide2-observed/verifiers/native-chart-colors.mjs",
+      "bytes": 6500,
+      "sha256": "2ca655a1bed821d47ff0f53006d1232ff45787401856deada4991d15abf408ad"
+    },
+    {
+      "file": "raw/chart-node24-slide2-observed/verifiers/native-chart-colors.ps1",
+      "bytes": 9482,
+      "sha256": "a2ebd7fece20a64fb13ec26f750c57d9cb9ae58c8ef4535b8ba25cf2063c7748"
+    },
+    {
+      "file": "raw/chart-node24-slide2-observed/verifiers/native-process.ps1",
+      "bytes": 2368,
+      "sha256": "2a4fc2963bea2baf61c98c4cda23b7ec0be0cb1edcec3f72ccc65d1fc2857d00"
+    },
+    {
+      "file": "raw/chart-node24-slide2-observed/worker.json",
+      "bytes": 341,
+      "sha256": "018d02a6bcbc7876836cb4f3ce3bc2c183ae6aff6eed6940cd8befcb7a13be88"
+    },
+    {
+      "file": "raw/chart-node24-slide2-observed/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/chart-node24-slide2-observed/worker.stdout.log",
+      "bytes": 180,
+      "sha256": "1899d63185ea7a94d9604959f8b575a92a49c644b7ce7bda2258b59df8bccaa4"
     },
     {
       "file": "raw/font-parent-controls-01/failure/font-registration.json",
@@ -3490,6 +6860,131 @@
       "file": "raw/metric-node24-bounded-01/tab-xml-diagnostic.json",
       "bytes": 3867,
       "sha256": "fcb53edb03e60c112a1267dc1445508de70ac70c1a0ab04dca4152e512b758c5"
+    },
+    {
+      "file": "raw/pie-native-created-control-01/control.json",
+      "bytes": 1143,
+      "sha256": "1a6ec2f72d787ec1780ab7f0f23607979387b662e4bcb145d3c0165187052a7a"
+    },
+    {
+      "file": "raw/pie-native-created-control-01/created-by-powerpoint.png",
+      "bytes": 18561,
+      "sha256": "9b05359856e278efb974f996976c51491bab95eaa03e57b0c9f0248ad2d6eb50"
+    },
+    {
+      "file": "raw/pie-native-created-control-01/created-by-powerpoint.pptx",
+      "bytes": 33747,
+      "sha256": "781e9793bb0b7e502260947dd8e0f1de6216280033e6908407c83ea2c501c84f"
+    },
+    {
+      "file": "raw/pie-native-created-control-01/progress.json",
+      "bytes": 787,
+      "sha256": "4cb09f7791b9e24450a5765c3522254a12cafe21a9229aaeb9f5dc5ffdc3af40"
+    },
+    {
+      "file": "raw/pie-native-created-control-01/verifier.ps1",
+      "bytes": 3209,
+      "sha256": "38e1dfd96092433abcd26571309a57905b4f012633ce406c38fa3664dd1c19e0"
+    },
+    {
+      "file": "raw/pie-native-created-control-01/worker.json",
+      "bytes": 341,
+      "sha256": "9b84baa9ae680d234bec31df7bd52dcafada3e88bf444631daf87e54eb9ab7eb"
+    },
+    {
+      "file": "raw/pie-native-created-control-01/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/pie-native-created-control-01/worker.stdout.log",
+      "bytes": 72,
+      "sha256": "3775959808b17f167754b51425a7738df2890198e4ddc57a51e47ff49d284d9c"
+    },
+    {
+      "file": "raw/pie-native-created-control-02/created-by-powerpoint.png",
+      "bytes": 18561,
+      "sha256": "9b05359856e278efb974f996976c51491bab95eaa03e57b0c9f0248ad2d6eb50"
+    },
+    {
+      "file": "raw/pie-native-created-control-02/created-by-powerpoint.pptx",
+      "bytes": 33745,
+      "sha256": "9d950df1f408039d950a8057b23250581785f851e8b6f38bb1d6dbcd7830b59a"
+    },
+    {
+      "file": "raw/pie-native-created-control-02/failure.json",
+      "bytes": 907,
+      "sha256": "f8a2b5fe6bfc6e093c6dfca212a5676fa1ab684f32761b4b671bfb9a743682cc"
+    },
+    {
+      "file": "raw/pie-native-created-control-02/progress.json",
+      "bytes": 802,
+      "sha256": "2c1f11ed331c4ad348261e6ea46a776bda33f6caae49f7bfbb7148163e45448c"
+    },
+    {
+      "file": "raw/pie-native-created-control-02/verifier.ps1",
+      "bytes": 3619,
+      "sha256": "dc94ffb66a5050a5d411f2a1c0f9441ad379ca3eef02a50ae8fa5cdd91987cf2"
+    },
+    {
+      "file": "raw/pie-native-created-control-02/worker.json",
+      "bytes": 340,
+      "sha256": "29bd8c699ca67ad183307f55de63d28cb44eb8717c476721a517c944b7f869d9"
+    },
+    {
+      "file": "raw/pie-native-created-control-02/worker.stderr.log",
+      "bytes": 502,
+      "sha256": "33d0d453687f6c06254eceb32e46f26bbb1cc0b30c3a3661fc1d0923bc8aa800"
+    },
+    {
+      "file": "raw/pie-native-created-control-02/worker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/pie-native-created-control-03/control.json",
+      "bytes": 1835,
+      "sha256": "59be705b640ec86ab126b59859ac55811bad4120b14770833aff5a439901a3d1"
+    },
+    {
+      "file": "raw/pie-native-created-control-03/created-by-powerpoint.png",
+      "bytes": 18561,
+      "sha256": "9b05359856e278efb974f996976c51491bab95eaa03e57b0c9f0248ad2d6eb50"
+    },
+    {
+      "file": "raw/pie-native-created-control-03/created-by-powerpoint.pptx",
+      "bytes": 48097,
+      "sha256": "01471e9dcf400b1d2b317b11da2e9bdf582984cb3fbcdfe4f28e741778554706"
+    },
+    {
+      "file": "raw/pie-native-created-control-03/empty-owned.pptx",
+      "bytes": 33730,
+      "sha256": "5af6065ee3c14f7f3cf11f8e2cfd9b53a6baa905e9158a4986975cfeb7cb47ee"
+    },
+    {
+      "file": "raw/pie-native-created-control-03/progress.json",
+      "bytes": 1479,
+      "sha256": "d5f50ba0cf1e78c969f79ceb3ada5826dcc057bfd90845f52ac05851d12bb035"
+    },
+    {
+      "file": "raw/pie-native-created-control-03/verifier.ps1",
+      "bytes": 3750,
+      "sha256": "3aa822c1adc4b18b3f602d7ea54e5dcba2fef93aa25a06709ef93a5b3ead3d60"
+    },
+    {
+      "file": "raw/pie-native-created-control-03/worker.json",
+      "bytes": 340,
+      "sha256": "77ea8712db837d7fb834d7b81867e34eda8ac6370eb97452f79aa25c70c16229"
+    },
+    {
+      "file": "raw/pie-native-created-control-03/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/pie-native-created-control-03/worker.stdout.log",
+      "bytes": 72,
+      "sha256": "3775959808b17f167754b51425a7738df2890198e4ddc57a51e47ff49d284d9c"
     },
     {
       "file": "raw/pie-value-probe/windows-application-error.json",
@@ -7798,8 +11293,8 @@
     },
     {
       "file": "sources.json",
-      "bytes": 1407,
-      "sha256": "eb676267364e6129fcac9ebe4e254c4a421b56656b537cc54847b613720fe223"
+      "bytes": 1563,
+      "sha256": "dd8afd1275d38534ff58d61c3fdf908b3add600fbba68587a7e3ed60ed5ebc34"
     },
     {
       "file": "text-two-runtime-summary.json",
@@ -7828,6 +11323,26 @@
     },
     {
       "file": "verifiers/chart-initial/native-process.ps1",
+      "bytes": 2368,
+      "sha256": "2a4fc2963bea2baf61c98c4cda23b7ec0be0cb1edcec3f72ccc65d1fc2857d00"
+    },
+    {
+      "file": "verifiers/chart-matrix/native-chart-cache.mjs",
+      "bytes": 2259,
+      "sha256": "b2a058ae019fff51de3aa16a7a4f85364f5aee0d87f3025937cb517f5a011f39"
+    },
+    {
+      "file": "verifiers/chart-matrix/native-chart-colors.mjs",
+      "bytes": 8456,
+      "sha256": "5bf6b82dfab5c6aa73a284d01a03bcb9b87b81f0d21f9f43e34bffa1e65795fd"
+    },
+    {
+      "file": "verifiers/chart-matrix/native-chart-colors.ps1",
+      "bytes": 9874,
+      "sha256": "1e4608f416c166eda809f1be60a730ae6abcbfc81dafa2ceb3df074ca107720b"
+    },
+    {
+      "file": "verifiers/chart-matrix/native-process.ps1",
       "bytes": 2368,
       "sha256": "2a4fc2963bea2baf61c98c4cda23b7ec0be0cb1edcec3f72ccc65d1fc2857d00"
     },
@@ -7920,6 +11435,11 @@
       "file": "verifiers/text-bounded/native-text.ps1",
       "bytes": 9942,
       "sha256": "0cd12455f6156cdeffdbf4b5fd9373837b6548ef17ca3077ec72e084ea9cb1d0"
+    },
+    {
+      "file": "verify-chart-matrix.mjs",
+      "bytes": 5016,
+      "sha256": "c4eb269d97c51d31b50a636a04fc16efcff4028dff9931ede5cf9a8469595d11"
     },
     {
       "file": "verify-evidence.mjs",

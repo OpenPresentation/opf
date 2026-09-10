@@ -1,0 +1,357 @@
+{
+  "node": "v24.20.0",
+  "runtime": {
+    "@openpresentation/opf/dist/composition.js": "5bb490548ed1f65d9474704452013e5e0dc1ee3a1682f6ba3a1a4bac52c29b30",
+    "@openpresentation/opf/dist/chunk-PA4UHUYO.js": "323e6ed96b7932d516d3a75518215a2231a219e1ccb7827937be369ecf1b0d0b",
+    "@openpresentation/opf/dist/validator.js": "d479ea78e65be19bc8a6f0cedd563c5dce652bf5a1460bdbd1dca7a2c304fc0e",
+    "@openpresentation/opf/dist/chunk-4BX4YX5C.js": "6acb12f539424ca7da7d8ce1a0b8583fb4e5bdccc722a456b15e720f99f32121",
+    "@openpresentation/opf/dist/chunk-GQSK3T7X.js": "34f518c29c9757bc252b5c13eb5d7db8ada4b477496e6289d8149fb4fdc7cd45",
+    "@openpresentation/opf/dist/chunk-TWMRZ43O.js": "0d35cec97ec7ddaa67fb9f096bc672c927eb68ed5fae5ac27d4dff70d68313f4",
+    "@openpresentation/opf/dist/catalogs.js": "6d74d7b051844728b2622acdb5268472a043544c8b2ca04eb904b1cdf74ec739",
+    "@openpresentation/opf/package.json": "d7a9ed943e013a51e907d707e277806c4d89ec3a8b9a26d7336f66597b4f7fdb",
+    "@openpresentation/opf-pptx/dist/background-import.js": "684f9b38cff01e596774b8120c979c3dbbfada273890f785f7a4e3db88cdcb22",
+    "@openpresentation/opf-pptx/dist/background.js": "081fb685677ca656341cdce89275331749174ffecd60e71451f26b9f896cca1c",
+    "@openpresentation/opf-pptx/dist/card-provenance.js": "ff1ca09b88500993abb4bb293162e5064f1f7fc38edfd999f8ca8eedce8b94b0",
+    "@openpresentation/opf-pptx/dist/code-provenance.js": "5eb65649d1736dd5a19ff49680422cb1a097b9f6f94a3b457e649001903b9688",
+    "@openpresentation/opf-pptx/dist/chart-workbook.js": "39db820e6f3a512779943a13e5e78c63ff866c2a0074e1e9c807fcfc7a9aa1e2",
+    "@openpresentation/opf-pptx/dist/heading-provenance.js": "f10385a2a0ac7ded90d3f71786693ec8d9d302ba4acf5f5111061a6705c8fcaf",
+    "@openpresentation/opf-pptx/dist/image-fallback-browser.js": "3c7f81d5677dd9a78a0a13fe5a94bbb14cef465031caaeda2c87e8451e9ff491",
+    "@openpresentation/opf-pptx/dist/image-fallback-node.js": "5ee323d3320420664b5d2c1714e246b04dd0806f459164f9696668552df87565",
+    "@openpresentation/opf-pptx/dist/image-geometry.js": "e083973a98c2bdf7d7dfce9ef1f6bef252f09ce0d69d987105ee0b73cc13d62e",
+    "@openpresentation/opf-pptx/dist/image-import.js": "cffccecc223e27d62b6e1aba0cdbe2c1c9aa94874ef898f76906b22e001bbd41",
+    "@openpresentation/opf-pptx/dist/index.js": "8bc92db28de28966434ebae6135c0386514799182e183e018be1f02e23c3c4e2",
+    "@openpresentation/opf-pptx/dist/table-import.js": "9ae40bb38dd34c9fc0ae4a3f5a257068ae92bb651ed5d96641c2629ef7106cf1",
+    "@openpresentation/opf-pptx/dist/table-cell-import.js": "fa17507763a2240564401d7977f4f39bc180e3e6da9d4aa9c36202908e9126d1",
+    "@openpresentation/opf-pptx/dist/table-border-import.js": "16678e0d93e63474d39daac268016a59517cc36d85dbd8751131f143db01ace5",
+    "@openpresentation/opf-pptx/dist/metric-provenance.js": "a058bfd8e84cf393476aa64c925bff31430d11e341c32b5e2f5b0d141922f0af",
+    "@openpresentation/opf-pptx/package.json": "17136e7873b29b75a421d1ebc72c69c15452b0e806fbc0bb4444047d4669f587",
+    "test/native-chart-colors.mjs": "2ca655a1bed821d47ff0f53006d1232ff45787401856deada4991d15abf408ad",
+    "test/native-chart-colors.ps1": "a2ebd7fece20a64fb13ec26f750c57d9cb9ae58c8ef4535b8ba25cf2063c7748",
+    "test/native-process.ps1": "2a4fc2963bea2baf61c98c4cda23b7ec0be0cb1edcec3f72ccc65d1fc2857d00",
+    "vendor/pptxgenjs/pptxgen.es.js": "05844c5625e2cda3b449eb967c2246dd57ca57341886a7c28eeebca263b29bd4",
+    "package-lock.json": "10edb4cb29e98fe9db00c1c361aa3126c9969ab06f2b062889915ccc76019bc7"
+  },
+  "pptxSha256": "1907e3682a493f4582881fec2b7263f24bb5e9065af78ff9ea7bd77bb1601e3e",
+  "expected": [
+    {
+      "type": "column",
+      "surface": "#334155",
+      "labelColor": "#FFFFFF",
+      "data": {
+        "columns": [
+          "Quarter & phase Ω",
+          "Current",
+          "Baseline"
+        ],
+        "rows": [
+          [
+            "Q1",
+            2,
+            1
+          ],
+          [
+            "Q2",
+            3,
+            2
+          ]
+        ]
+      },
+      "edited": {
+        "columns": [
+          "Native quarter Ω",
+          "Native Current",
+          "Baseline"
+        ],
+        "rows": [
+          [
+            "Edited Q1",
+            42,
+            1
+          ],
+          [
+            "Q2",
+            3,
+            2
+          ]
+        ]
+      }
+    },
+    {
+      "type": "pie",
+      "surface": "#334155",
+      "labelColor": "#FFFFFF",
+      "data": {
+        "columns": [
+          "Quarter & phase Ω",
+          "Current"
+        ],
+        "rows": [
+          [
+            "Q1",
+            2
+          ],
+          [
+            "Q2",
+            3
+          ]
+        ]
+      },
+      "edited": {
+        "columns": [
+          "Native quarter Ω",
+          "Native Current"
+        ],
+        "rows": [
+          [
+            "Edited Q1",
+            42
+          ],
+          [
+            "Q2",
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "type": "column",
+      "surface": "#F8FAFC",
+      "labelColor": "#000000",
+      "data": {
+        "columns": [
+          "Quarter & phase Ω",
+          "Current",
+          "Baseline"
+        ],
+        "rows": [
+          [
+            "Q1",
+            2,
+            1
+          ],
+          [
+            "Q2",
+            3,
+            2
+          ]
+        ]
+      },
+      "edited": {
+        "columns": [
+          "Native quarter Ω",
+          "Native Current",
+          "Baseline"
+        ],
+        "rows": [
+          [
+            "Edited Q1",
+            42,
+            1
+          ],
+          [
+            "Q2",
+            3,
+            2
+          ]
+        ]
+      }
+    },
+    {
+      "type": "pie",
+      "surface": "#F8FAFC",
+      "labelColor": "#000000",
+      "data": {
+        "columns": [
+          "Quarter & phase Ω",
+          "Current"
+        ],
+        "rows": [
+          [
+            "Q1",
+            2
+          ],
+          [
+            "Q2",
+            3
+          ]
+        ]
+      },
+      "edited": {
+        "columns": [
+          "Native quarter Ω",
+          "Native Current"
+        ],
+        "rows": [
+          [
+            "Edited Q1",
+            42
+          ],
+          [
+            "Q2",
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "type": "column",
+      "surface": "#0F172A",
+      "labelColor": "#FFFFFF",
+      "data": {
+        "columns": [
+          "Quarter & phase Ω",
+          "Current",
+          "Baseline"
+        ],
+        "rows": [
+          [
+            "Q1",
+            2,
+            1
+          ],
+          [
+            "Q2",
+            3,
+            2
+          ]
+        ]
+      },
+      "edited": {
+        "columns": [
+          "Native quarter Ω",
+          "Native Current",
+          "Baseline"
+        ],
+        "rows": [
+          [
+            "Edited Q1",
+            42,
+            1
+          ],
+          [
+            "Q2",
+            3,
+            2
+          ]
+        ]
+      }
+    },
+    {
+      "type": "pie",
+      "surface": "#0F172A",
+      "labelColor": "#FFFFFF",
+      "data": {
+        "columns": [
+          "Quarter & phase Ω",
+          "Current"
+        ],
+        "rows": [
+          [
+            "Q1",
+            2
+          ],
+          [
+            "Q2",
+            3
+          ]
+        ]
+      },
+      "edited": {
+        "columns": [
+          "Native quarter Ω",
+          "Native Current"
+        ],
+        "rows": [
+          [
+            "Edited Q1",
+            42
+          ],
+          [
+            "Q2",
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "type": "column",
+      "surface": "#FFFFFF80",
+      "labelColor": "#FFFFFF",
+      "data": {
+        "columns": [
+          "Quarter & phase Ω",
+          "Current",
+          "Baseline"
+        ],
+        "rows": [
+          [
+            "Q1",
+            2,
+            1
+          ],
+          [
+            "Q2",
+            3,
+            2
+          ]
+        ]
+      },
+      "edited": {
+        "columns": [
+          "Native quarter Ω",
+          "Native Current",
+          "Baseline"
+        ],
+        "rows": [
+          [
+            "Edited Q1",
+            42,
+            1
+          ],
+          [
+            "Q2",
+            3,
+            2
+          ]
+        ]
+      }
+    },
+    {
+      "type": "pie",
+      "surface": "#FFFFFF80",
+      "labelColor": "#FFFFFF",
+      "data": {
+        "columns": [
+          "Quarter & phase Ω",
+          "Current"
+        ],
+        "rows": [
+          [
+            "Q1",
+            2
+          ],
+          [
+            "Q2",
+            3
+          ]
+        ]
+      },
+      "edited": {
+        "columns": [
+          "Native quarter Ω",
+          "Native Current"
+        ],
+        "rows": [
+          [
+            "Edited Q1",
+            42
+          ],
+          [
+            "Q2",
+            3
+          ]
+        ]
+      }
+    }
+  ]
+}
