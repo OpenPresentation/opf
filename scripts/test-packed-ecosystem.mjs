@@ -18,9 +18,8 @@ const verifyTableLayout = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] 
 const verifyStyledTables = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] >= 7;
 // Shared quote APIs first shipped in core 0.8 with renderer/PPTX 0.6 and editor 0.5.
 const verifySharedQuotes = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] >= 8;
-// Code consumer integration is still unpublished. Enable the registry version
-// gate only after the complete coordinated set has been released.
-const verifySharedCode = !registry;
+// Shared code APIs shipped in core 0.9 with renderer/PPTX 0.7 and editor 0.6.
+const verifySharedCode = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] >= 9;
 
 async function readHarness(repo, file) {
   const directory = repo === 'opf' ? root : path.resolve(root, '..', repo);
@@ -143,7 +142,7 @@ assert.ok(pptx.length>1000);
 console.log('Packed consumer: core, editor, SVG, measured fonts and PPTX passed.');\n`,
 );
 run(process.execPath, ["check.mjs"]);
-if (verifySharedCode) run(process.execPath,[path.join(root,'scripts/test-installed-code.mjs'),consumer]);
+if (verifySharedCode) run(process.execPath,[path.join(root,'scripts/test-installed-code.mjs'),consumer,...(registry?['--registry']:[])]);
 if (verifySharedQuotes) {
   // Historical release plans retain their old fixtures; the new complete set
   // must exercise its quote APIs and shared accepted geometry from actual npm.
