@@ -1,0 +1,18 @@
+{
+  "design": {
+    "fontScheme": {
+      "id": "variant-audit",
+      "major": "Roboto ExtraBold",
+      "minor": "Roboto SemiBold"
+    }
+  },
+  "slides": [
+    {
+      "metric": {
+        "value": 123,
+        "label": "Exact weight metadata",
+        "description": "Existing explicit family request"
+      }
+    }
+  ]
+}

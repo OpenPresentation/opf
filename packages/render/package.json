@@ -71,6 +71,8 @@
     "test:images-browser": "node test/image-placeholders-browser.mjs",
     "test:font-preparation": "node test/font-preparation.mjs artifacts/font-preparation.json",
     "test:font-preparation-browser": "node test/font-preparation-browser.mjs artifacts/font-preparation-browser.json",
+    "test:font-variants": "node test/font-variants.mjs",
+    "test:font-variants-browser": "node test/font-variants-browser.mjs",
     "test:text": "node test/font-outlines.mjs && node test/accepted-text.mjs",
     "test:text-browser": "node test/accepted-text-browser.mjs",
     "test:rich-spacing-browser": "node test/rich-spacing-browser.mjs"

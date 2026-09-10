@@ -1,0 +1,314 @@
+{
+  "node": "v24.21.0",
+  "faces": [
+    {
+      "family": "Roboto",
+      "preferredFamily": "Roboto",
+      "weight": 400,
+      "italic": false,
+      "styleLink": {
+        "bold": false,
+        "italic": false
+      },
+      "sha256": "15256405ecb0d880678833a582760efad538ab2932318b52c8105b267d159459"
+    },
+    {
+      "family": "Roboto Medium",
+      "preferredFamily": "Roboto",
+      "weight": 500,
+      "italic": false,
+      "styleLink": {
+        "bold": false,
+        "italic": false
+      },
+      "sha256": "79343dc641a2e8d48a703a4667b71fc8dc6565cc8ce47dfc34fc52c12aadbf38"
+    },
+    {
+      "family": "Roboto SemiBold",
+      "preferredFamily": "Roboto",
+      "weight": 600,
+      "italic": false,
+      "styleLink": {
+        "bold": false,
+        "italic": false
+      },
+      "sha256": "32fe2086b0e54eca85a68eb74e3d89bb16a7ffe59085d6dc7d079f5b3c26d6ab"
+    },
+    {
+      "family": "Roboto",
+      "preferredFamily": "Roboto",
+      "weight": 700,
+      "italic": false,
+      "styleLink": {
+        "bold": true,
+        "italic": false
+      },
+      "sha256": "4aaf8c5b661a386998c2e70cf2b87e2440f5404e0b8fd81164f0413fb3435ec6"
+    },
+    {
+      "family": "Roboto ExtraBold",
+      "preferredFamily": "Roboto",
+      "weight": 800,
+      "italic": false,
+      "styleLink": {
+        "bold": false,
+        "italic": false
+      },
+      "sha256": "43d5ce98c58336045220fa1dac2bd22281b1aab3eca66785cb34eb3ad1dfe1a5"
+    },
+    {
+      "family": "Roboto",
+      "preferredFamily": "Roboto",
+      "weight": 400,
+      "italic": true,
+      "styleLink": {
+        "bold": false,
+        "italic": true
+      },
+      "sha256": "6a372c348dc20c246b92d60b9bda3c0a9ffedc129790ed3f31faf89daa99d793"
+    },
+    {
+      "family": "Roboto",
+      "preferredFamily": "Roboto",
+      "weight": 700,
+      "italic": true,
+      "styleLink": {
+        "bold": true,
+        "italic": true
+      },
+      "sha256": "c6a5e7c224d3bf6698e5d3c124f0f0220cad20d5d413920447a96f033a0292ee"
+    },
+    {
+      "family": "Roboto Mono",
+      "preferredFamily": "Roboto Mono",
+      "weight": 400,
+      "italic": false,
+      "styleLink": {
+        "bold": false,
+        "italic": false
+      },
+      "sha256": "e4bf45837847d4abfa5a502b807a83393aa138727bdb9ea9c93fb17d53208d95"
+    },
+    {
+      "family": "Roboto Mono",
+      "preferredFamily": "Roboto Mono",
+      "weight": 700,
+      "italic": false,
+      "styleLink": {
+        "bold": true,
+        "italic": false
+      },
+      "sha256": "92649d819cc4c20480b23a47aaa111769924eb31c66b6ecdcf6f573662558c83"
+    }
+  ],
+  "resolutions": [
+    {
+      "requested": {
+        "fontFamily": "Roboto",
+        "fontWeight": 400,
+        "path": "weights.400"
+      },
+      "actual": {
+        "requestedFamily": "Roboto",
+        "sourceFamily": "Roboto",
+        "resolvedFamily": "Roboto",
+        "requestedWeight": 400,
+        "resolvedWeight": 400,
+        "italic": false,
+        "compatibility": "exact",
+        "fontFace": {
+          "family": "Roboto",
+          "bold": false,
+          "italic": false
+        },
+        "path": "weights.400"
+      },
+      "expected": {
+        "family": "Roboto",
+        "preferredFamily": "Roboto",
+        "weight": 400,
+        "italic": false,
+        "styleLink": {
+          "bold": false,
+          "italic": false
+        },
+        "sha256": "15256405ecb0d880678833a582760efad538ab2932318b52c8105b267d159459"
+      },
+      "exactWeightSelected": true
+    },
+    {
+      "requested": {
+        "fontFamily": "Roboto",
+        "fontWeight": 500,
+        "path": "weights.500"
+      },
+      "actual": {
+        "requestedFamily": "Roboto",
+        "sourceFamily": "Roboto",
+        "resolvedFamily": "Roboto Medium",
+        "requestedWeight": 500,
+        "resolvedWeight": 500,
+        "italic": false,
+        "compatibility": "exact",
+        "fontFace": {
+          "family": "Roboto Medium",
+          "bold": false,
+          "italic": false
+        },
+        "path": "weights.500"
+      },
+      "expected": {
+        "family": "Roboto Medium",
+        "preferredFamily": "Roboto",
+        "weight": 500,
+        "italic": false,
+        "styleLink": {
+          "bold": false,
+          "italic": false
+        },
+        "sha256": "79343dc641a2e8d48a703a4667b71fc8dc6565cc8ce47dfc34fc52c12aadbf38"
+      },
+      "exactWeightSelected": true
+    },
+    {
+      "requested": {
+        "fontFamily": "Roboto",
+        "fontWeight": 600,
+        "path": "weights.600"
+      },
+      "actual": {
+        "requestedFamily": "Roboto",
+        "sourceFamily": "Roboto",
+        "resolvedFamily": "Roboto SemiBold",
+        "requestedWeight": 600,
+        "resolvedWeight": 600,
+        "italic": false,
+        "compatibility": "exact",
+        "fontFace": {
+          "family": "Roboto SemiBold",
+          "bold": false,
+          "italic": false
+        },
+        "path": "weights.600"
+      },
+      "expected": {
+        "family": "Roboto SemiBold",
+        "preferredFamily": "Roboto",
+        "weight": 600,
+        "italic": false,
+        "styleLink": {
+          "bold": false,
+          "italic": false
+        },
+        "sha256": "32fe2086b0e54eca85a68eb74e3d89bb16a7ffe59085d6dc7d079f5b3c26d6ab"
+      },
+      "exactWeightSelected": true
+    },
+    {
+      "requested": {
+        "fontFamily": "Roboto",
+        "fontWeight": 700,
+        "path": "weights.700"
+      },
+      "actual": {
+        "requestedFamily": "Roboto",
+        "sourceFamily": "Roboto",
+        "resolvedFamily": "Roboto",
+        "requestedWeight": 700,
+        "resolvedWeight": 700,
+        "italic": false,
+        "compatibility": "exact",
+        "fontFace": {
+          "family": "Roboto",
+          "bold": true,
+          "italic": false
+        },
+        "path": "weights.700"
+      },
+      "expected": {
+        "family": "Roboto",
+        "preferredFamily": "Roboto",
+        "weight": 700,
+        "italic": false,
+        "styleLink": {
+          "bold": true,
+          "italic": false
+        },
+        "sha256": "4aaf8c5b661a386998c2e70cf2b87e2440f5404e0b8fd81164f0413fb3435ec6"
+      },
+      "exactWeightSelected": true
+    },
+    {
+      "requested": {
+        "fontFamily": "Roboto",
+        "fontWeight": 800,
+        "path": "weights.800"
+      },
+      "actual": {
+        "requestedFamily": "Roboto",
+        "sourceFamily": "Roboto",
+        "resolvedFamily": "Roboto ExtraBold",
+        "requestedWeight": 800,
+        "resolvedWeight": 800,
+        "italic": false,
+        "compatibility": "exact",
+        "fontFace": {
+          "family": "Roboto ExtraBold",
+          "bold": false,
+          "italic": false
+        },
+        "path": "weights.800"
+      },
+      "expected": {
+        "family": "Roboto ExtraBold",
+        "preferredFamily": "Roboto",
+        "weight": 800,
+        "italic": false,
+        "styleLink": {
+          "bold": false,
+          "italic": false
+        },
+        "sha256": "43d5ce98c58336045220fa1dac2bd22281b1aab3eca66785cb34eb3ad1dfe1a5"
+      },
+      "exactWeightSelected": true
+    }
+  ],
+  "nativeRuns": [
+    {
+      "text": "123",
+      "family": "Roboto ExtraBold",
+      "bold": false,
+      "italic": false,
+      "expectedStyleLink": {
+        "bold": false,
+        "italic": false
+      },
+      "styleLinkMatches": true
+    },
+    {
+      "text": "Exact weight metadata",
+      "family": "Roboto SemiBold",
+      "bold": false,
+      "italic": false,
+      "expectedStyleLink": {
+        "bold": false,
+        "italic": false
+      },
+      "styleLinkMatches": true
+    },
+    {
+      "text": "Existing explicit family request",
+      "family": "Roboto SemiBold",
+      "bold": false,
+      "italic": false,
+      "expectedStyleLink": {
+        "bold": false,
+        "italic": false
+      },
+      "styleLinkMatches": true
+    }
+  ],
+  "selectionGaps": 0,
+  "nativeStyleGaps": 0,
+  "scope": "Installed exact font bytes and serialized DrawingML only. A mismatched native style flag is a synthesis/fallback risk, not observed PowerPoint paint."
+}

@@ -2,7 +2,7 @@ import type { TextMeasurement, TextStyle } from "@openpresentation/opf/compositi
 export interface FontFaceInput { data: Uint8Array; family?: string; weight?: number; italic?: boolean; postscriptName?: string; license?: string }
 export interface EmbeddedFont { family: string; weight: number; italic?: boolean; dataUrl: string; license?: string }
 export type FontCompatibility = "exact" | "metric" | "visual" | "generic";
-export interface FontResolution { requestedFamily:string; sourceFamily:string; resolvedFamily:string; requestedWeight:number; resolvedWeight:number; italic:boolean; compatibility:FontCompatibility; path?:string; source?:string; note?:string }
+export interface FontResolution { requestedFamily:string; sourceFamily:string; resolvedFamily:string; requestedWeight:number; resolvedWeight:number; italic:boolean; compatibility:FontCompatibility; fontFace?:TextStyle['fontFace']; path?:string; source?:string; note?:string }
 export interface FontRegistryOptions {
   aliases?: Record<string,string>; fallbackFamily?: string; strictGlyphs?: boolean;
   substitutionPolicy?: "none" | "metric" | "visual";

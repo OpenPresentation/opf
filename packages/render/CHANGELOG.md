@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Resolve installed preferred-family weight variants and carry physical family/style-link metadata through accepted text styles. Diagnose ambiguous grouped faces and preserve explicit caller family overrides. Requires the coordinated core type and PPTX source increment; native paint validation remains separate.
+
 - Add `prepareNodeFonts` with shared measurement, embedded SVG and raster font options. Check pinned local font versions, all 33 font hashes and eight license notices; expose the immutable provenance manifest. No runtime downloads or system font installation are required.
 - Use the complete nine-face base pack in default PNG/PDF raster export, including Roboto semibold, italic and bold italic. Missing or modified bundled resources fail explicitly. This does not add vector PDF or expand native/font compatibility claims.
 

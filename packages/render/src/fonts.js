@@ -25,12 +25,20 @@ export function createFontRegistry(entries, options = {}) {
     try { font = create(data, entry.postscriptName); } catch (error) { throw new OPFFontError("invalid-font-data", error.message); }
     if (!font?.layout || !font.unitsPerEm) throw new OPFFontError("font-collection", "Select one font from a collection with postscriptName.");
     const family = validFamily(entry.family ?? font.familyName);
+    // OpenType groups Medium/SemiBold/ExtraBold under a preferred family, while
+    // retaining separate legacy families for four-style native font selectors.
+    // An explicit caller rename owns its namespace and must not add this alias.
+    const familyGroup = entry.family && entry.family.toLowerCase() !== font.familyName?.toLowerCase()
+      ? family : validFamily(font.getName?.('preferredFamily', 'en') ?? family);
+    const linking = font['OS/2']?.fsSelection ?? font.head?.macStyle;
+    const fontFace = linking && typeof linking.bold === 'boolean' && typeof linking.italic === 'boolean'
+      ? {family:validFamily(font.getName?.('fontFamily', 'en') ?? font.familyName ?? family),bold:linking.bold,italic:linking.italic} : undefined;
     const weight = entry.weight ?? 400;
     const italic = entry.italic ?? !!font.italicAngle;
     if (!Number.isInteger(weight) || weight < 1 || weight > 1000) throw new OPFFontError("invalid-font-weight", "Font weight must be between 1 and 1000.");
     const signature = String.fromCharCode(...data.subarray(0,4));
     const format = signature === "OTTO" ? "otf" : signature === "wOFF" ? "woff" : signature === "wOF2" ? "woff2" : "ttf";
-    return {family,weight,italic,font,data,format,license:entry.license,cache:new Map()};
+    return {family,familyGroup,fontFace,weight,italic,font,data,format,license:entry.license,cache:new Map()};
   });
   const duplicates = new Set();
   for (const face of faces) {
@@ -38,12 +46,18 @@ export function createFontRegistry(entries, options = {}) {
     if (duplicates.has(id)) throw new OPFFontError("duplicate-font-face", `Duplicate face: ${id}`);
     duplicates.add(id);
   }
+  const familySlots = new Map();
+  for (const face of faces) for (const family of new Set([face.family,face.familyGroup])) {
+    const id=key(family,face.weight,face.italic),previous=familySlots.get(id);
+    if(previous && previous!==face) throw new OPFFontError('ambiguous-font-face', `Multiple physical faces match '${family}' at weight ${face.weight}.`, {fontFamily:family,fontWeight:face.weight,italic:face.italic});
+    familySlots.set(id,face);
+  }
   const substitutions = new Map();
   const aliases = new Map(Object.entries(options.aliases ?? {}).map(([from,to])=>[validFamily(from).toLowerCase(),validFamily(to)]));
   const policy = options.substitutionPolicy ?? "none";
   if (!["none","metric","visual"].includes(policy)) throw new OPFFontError("invalid-font-policy", "substitutionPolicy must be none, metric, or visual.");
   if (options.fallbackFamily) validFamily(options.fallbackFamily);
-  const findFamily = family => faces.filter(face=>face.family.toLowerCase()===family.toLowerCase());
+  const findFamily = family => faces.filter(face=>face.family.toLowerCase()===family.toLowerCase() || face.familyGroup.toLowerCase()===family.toLowerCase());
   const resolve = style => {
     const requested = validFamily(style?.fontFamily);
     const weight = style.fontWeight ?? 400;
@@ -79,12 +93,18 @@ export function createFontRegistry(entries, options = {}) {
     matching.sort((a,b)=>Math.abs(a.weight-weight)-Math.abs(b.weight-weight) || a.weight-b.weight);
     const face = matching[0];
     if (face.weight!==weight && compatibility!=="generic") compatibility="visual";
-    const resolution={requestedFamily:requested,sourceFamily:family,resolvedFamily:face.family,requestedWeight:weight,resolvedWeight:face.weight,italic:face.italic,compatibility,...(style.path?{path:style.path}:{}),...(rule?{source:rule.source,note:rule.note}:{})};
+    const resolution={requestedFamily:requested,sourceFamily:family,resolvedFamily:face.family,requestedWeight:weight,resolvedWeight:face.weight,italic:face.italic,compatibility,...(face.fontFace?{fontFace:{...face.fontFace}}:{}),...(style.path?{path:style.path}:{}),...(rule?{source:rule.source,note:rule.note}:{})};
     if (face.family.toLowerCase()!==family.toLowerCase() || face.weight!==weight) substitutions.set(JSON.stringify([requested,weight,!!style.italic,style.path]),resolution);
     return {face,resolution};
   };
   const resolveFace = style => resolve(style).face;
-  const resolveStyle = style => { const face=resolveFace(style); return {...style,fontFamily:face.family,fontWeight:face.weight,italic:face.italic}; };
+  const resolveStyle = style => {
+    const face=resolveFace(style),resolved={...style,fontFamily:face.family,fontWeight:face.weight,italic:face.italic};
+    // Never carry a stale selection from a previously resolved style.
+    delete resolved.fontFace;
+    if(face.fontFace) resolved.fontFace={...face.fontFace};
+    return resolved;
+  };
   const metrics = (text,size,style,includeOutline=false) => {
     if (typeof text!=='string'||!Number.isFinite(size)||size<=0) throw new OPFFontError('invalid-text-measurement','Text measurement requires a string and a positive finite font size.');
     const face=resolveFace(style);

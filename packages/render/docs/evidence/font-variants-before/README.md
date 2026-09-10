@@ -1,0 +1,11 @@
+# Open exact-weight and native-style findings
+
+These observations start the next font milestone after renderer #13 merged as `e4d0dc0070616bc3b63a10124ce92cb4aff40e21` and coordinated core #62 merged as `028178311dc7f29667086809c83eb09405cefc4a`. The preparation milestone is accepted as an unpublished source checkpoint: all renderer/core/coordinated/portability checks and independent review passed. It does not close the font roadmap.
+
+Run `node scripts/probe-font-variants.mjs <fresh-output-directory>` with the coordinated named siblings. The [report](report.json) records the exact installed font hashes, OpenType preferred family and legacy style-link flags, logical weight requests and actual resolutions. Roboto requests 500, 600 and 800 currently select 400, 700 and 700, although the matching physical faces are installed. The files identify their preferred family as Roboto and legacy families as Roboto Medium, Roboto SemiBold and Roboto ExtraBold.
+
+The [source fixture](source.opf.json) independently requests the explicit ExtraBold/SemiBold families. The [exported DrawingML](native.xml) sets `b="1"` on all three metric lines, although both selected font files identify their legacy-family style as regular. The [PPTX](native.pptx) preserves this observation. That is a native synthesis/fallback risk; no new PowerPoint paint observation is claimed.
+
+The next coordinated change must preserve both logical weight and physical face selection. Preferred-family lookup should find the installed exact weight while retaining legacy family names needed by native font selectors. Explicit caller family overrides must remain authoritative; ambiguous duplicate faces must be diagnosed. Carry actual style-link metadata through shared accepted text styles so PPTX does not infer bold solely from numeric weight. Keep approximate weight substitutions explicit and retain authored content unchanged.
+
+Acceptance requires exact-byte/weight checks for all nine base faces, overrides/aliases and duplicate controls, actual browser/raster observations, shared editor/layout geometry, and native family/style flags across scalar/rich/table/quote/code/metric paths. Preserve these failure records and validate native paint separately with the Windows owner. No runtime implementation or native result is introduced by this evidence checkpoint.
