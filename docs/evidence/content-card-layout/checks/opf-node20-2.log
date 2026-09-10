@@ -1,0 +1,405 @@
+
+> openpresentation-workspace@ lint C:\Users\micha\Source\opf\artifacts\shared-metric-integration\opf
+> biome check .
+
+The number of diagnostics exceeds the limit allowed. Use --max-diagnostics to increase it.
+Diagnostics not shown: 252.
+Checked 144 files in 173ms. No fixes applied.
+Found 106 warnings.
+Found 166 infos.
+packages\cli\src\index.ts:44:34 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  i Template literals are preferred over string concatenation.
+  
+    42 │   constructor(message: string, readonly code = 2, readonly details?: unknown) { super(message); }
+    43 │ }
+  > 44 │ const json = (value: unknown) => JSON.stringify(value, null, 2) + "\n";
+       │                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    45 │ const print = (value: unknown) => process.stdout.write(json(value));
+    46 │ const hash = (text: string) => createHash("sha256").update(text).digest("hex");
+  
+  i Unsafe fix: Use a template literal.
+  
+     42  42 │     constructor(message: string, readonly code = 2, readonly details?: unknown) { super(message); }
+     43  43 │   }
+     44     │ - const·json·=·(value:·unknown)·=>·JSON.stringify(value,·null,·2)·+·"\n";
+         44 │ + const·json·=·(value:·unknown)·=>·`${JSON.stringify(value,·null,·2)}\n`;
+     45  45 │   const print = (value: unknown) => process.stdout.write(json(value));
+     46  46 │   const hash = (text: string) => createHash("sha256").update(text).digest("hex");
+  
+
+packages\cli\src\skills.ts:93:45 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  i Template literals are preferred over string concatenation.
+  
+    91 │ 			);
+    92 │ 		if (entry.isDirectory())
+  > 93 │ 			Object.assign(result, await hashes(full, relative + "/"));
+       │ 			                                         ^^^^^^^^^^^^^^
+    94 │ 		else if (entry.isFile()) result[relative] = digest(await readFile(full));
+    95 │ 		else throw new SkillsError(`Unexpected installed skill entry: ${full}`);
+  
+  i Unsafe fix: Use a template literal.
+  
+     91  91 │         );
+     92  92 │       if (entry.isDirectory())
+     93     │ - → → → Object.assign(result,·await·hashes(full,·relative·+·"/"));
+         93 │ + → → → Object.assign(result,·await·hashes(full,·`${relative}/`));
+     94  94 │       else if (entry.isFile()) result[relative] = digest(await readFile(full));
+     95  95 │       else throw new SkillsError(`Unexpected installed skill entry: ${full}`);
+  
+
+packages\cli\src\skills.ts:265:6 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  i Template literals are preferred over string concatenation.
+  
+    263 │ 				await writeFile(
+    264 │ 					path.join(staged, marker),
+  > 265 │ 					JSON.stringify(
+        │ 					^^^^^^^^^^^^^^^
+  > 266 │ 						{
+         ...
+  > 277 │ 						2,
+  > 278 │ 					) + "\n",
+        │ 					^^^^^^^^
+    279 │ 					{ flag: "wx" },
+    280 │ 				);
+  
+  i Unsafe fix: Use a template literal.
+  
+    263 263 │           await writeFile(
+    264 264 │             path.join(staged, marker),
+    265     │ - → → → → → JSON.stringify(
+        265 │ + → → → → → `${JSON.stringify(
+    266 266 │               {
+    267 267 │                 format: 1,
+    ······· │ 
+    276 276 │               null,
+    277 277 │               2,
+    278     │ - → → → → → )·+·"\n",
+        278 │ + → → → → → )}\n`,
+    279 279 │             { flag: "wx" },
+    280 280 │           );
+  
+
+packages\cli\src\skills.ts:296:32 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  i Template literals are preferred over string concatenation.
+  
+    294 │ 				const destination = path.join(root, item.name),
+    295 │ 					backup = item.state
+  > 296 │ 						? path.join(transaction, item.name + ".previous")
+        │ 						                         ^^^^^^^^^^^^^^^^^^^^^^^
+    297 │ 						: undefined;
+    298 │ 				if (backup) await rename(destination, backup);
+  
+  i Unsafe fix: Use a template literal.
+  
+    294 294 │           const destination = path.join(root, item.name),
+    295 295 │             backup = item.state
+    296     │ - → → → → → → ?·path.join(transaction,·item.name·+·".previous")
+        296 │ + → → → → → → ?·path.join(transaction,·`${item.name}.previous`)
+    297 297 │               : undefined;
+    298 298 │           if (backup) await rename(destination, backup);
+  
+
+packages\cli\src\skills.ts:312:29 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  i Template literals are preferred over string concatenation.
+  
+    310 │ 				await rename(
+    311 │ 					path.join(root, item.name),
+  > 312 │ 					path.join(transaction, item.name + ".rolled-back"),
+        │ 					                       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    313 │ 				);
+    314 │ 				if (item.backup) await rename(item.backup, path.join(root, item.name));
+  
+  i Unsafe fix: Use a template literal.
+  
+    310 310 │           await rename(
+    311 311 │             path.join(root, item.name),
+    312     │ - → → → → → path.join(transaction,·item.name·+·".rolled-back"),
+        312 │ + → → → → → path.join(transaction,·`${item.name}.rolled-back`),
+    313 313 │           );
+    314 314 │           if (item.backup) await rename(item.backup, path.join(root, item.name));
+  
+
+packages\cli\test\cli.mjs:22:63 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  i Template literals are preferred over string concatenation.
+  
+    20 │   run(['create','deck.opf.json'],{status:1});assert.equal(await readFile(path.join(temp,'deck.opf.json'),'utf8'),original);
+    21 │   assert.equal(run(['create','-','--title','Piped']).json.slides[0].title,'Piped');
+  > 22 │   assert.equal(run(['create','copy.json','--from','-'],{input:'\uFEFF'+original}).json.valid,true);
+       │                                                               ^^^^^^^^^^^^^^^^^
+    23 │   run(['create','never.json','--from','-'],{input:'{"slides":"bad"}',status:1});
+    24 │   const validated=run(['validate','deck.opf.json']).json;assert.equal(validated.valid,true);assert.equal(validated.sha256.length,64);
+  
+  i Unsafe fix: Use a template literal.
+  
+     20  20 │     run(['create','deck.opf.json'],{status:1});assert.equal(await readFile(path.join(temp,'deck.opf.json'),'utf8'),original);
+     21  21 │     assert.equal(run(['create','-','--title','Piped']).json.slides[0].title,'Piped');
+     22     │ - ··assert.equal(run(['create','copy.json','--from','-'],{input:'\uFEFF'+original}).json.valid,true);
+         22 │ + ··assert.equal(run(['create','copy.json','--from','-'],{input:`\uFEFF${original}`}).json.valid,true);
+     23  23 │     run(['create','never.json','--from','-'],{input:'{"slides":"bad"}',status:1});
+     24  24 │     const validated=run(['validate','deck.opf.json']).json;assert.equal(validated.valid,true);assert.equal(validated.sha256.length,64);
+  
+
+packages\javascript\src\data.ts:63:81 lint/complexity/noUselessEscapeInRegex  FIXABLE  ━━━━━━━━━━━━━
+
+  i The character doesn't need to be escaped.
+  
+    61 │ export function parseTabularData(input: unknown, options: DataImportOptions = {}): TabularData {
+    62 │   let value: unknown = input;
+  > 63 │   const format = options.format ?? (typeof input === 'string' && !/^[\s\uFEFF]*[\[{]/.test(input) ? 'csv' : 'json');
+       │                                                                                 ^^
+    64 │   if (!['csv','tsv','json'].includes(format)) fail(`Unsupported data format: ${format}`);
+    65 │   let data: TabularData;
+  
+  i The character should only be escaped if it is outside a character class or under the `v` flag.
+  
+  i Safe fix: Unescape the character.
+  
+    63 │ ··const·format·=·options.format·??·(typeof·input·===·'string'·&&·!/^[\s\uFEFF]*[\[{]/.test(input)·?·'csv'·:·'json');
+       │                                                                                 -                                   
+
+scripts\verify-deployed-browser-fonts.mjs:43:51 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━━━━━━━━━━
+
+  i Template literals are preferred over string concatenation.
+  
+    41 │ }));
+    42 │ const report = { passed: true, deployment: origin.origin, source: deployed.source, fontFaces: faces.length, faces };
+  > 43 │ if (output) await writeFile(path.resolve(output), JSON.stringify(report, null, 2) + '\n');
+       │                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    44 │ console.log(`Verified ${faces.length} deployed font files and licenses against installed ${deployed.source}.`);
+    45 │ 
+  
+  i Unsafe fix: Use a template literal.
+  
+    41 41 │   }));
+    42 42 │   const report = { passed: true, deployment: origin.origin, source: deployed.source, fontFaces: faces.length, faces };
+    43    │ - if·(output)·await·writeFile(path.resolve(output),·JSON.stringify(report,·null,·2)·+·'\n');
+       43 │ + if·(output)·await·writeFile(path.resolve(output),·`${JSON.stringify(report,·null,·2)}\n`);
+    44 44 │   console.log(`Verified ${faces.length} deployed font files and licenses against installed ${deployed.source}.`);
+    45 45 │   
+  
+
+packages\cli\src\patch.ts:38:62 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+  
+    36 │ function change(document: unknown, parts: string[], mode: "add" | "replace" | "remove", value?: unknown): unknown {
+    37 │   if (!parts.length) return mode === "remove" ? undefined : structuredClone(value);
+  > 38 │   const parent = lookup(document, parts.slice(0, -1)), key = parts.at(-1)!;
+       │                                                              ^^^^^^^^^^^^^
+    39 │   if (!parent || typeof parent !== "object") throw new PatchError("Target parent must be an object or array.");
+    40 │   if (Array.isArray(parent)) {
+  
+
+packages\cli\src\patch.ts:9:45 lint/suspicious/noPrototypeBuiltins  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Do not access Object.prototype method 'hasOwnProperty' from target object.
+  
+     7 │   return Object.keys(left).length === Object.keys(right).length && Object.keys(left).every(key => own(right, key) && equal(left[key], right[key]));
+     8 │ }
+   > 9 │ const own = (value: object, key: string) => Object.prototype.hasOwnProperty.call(value, key);
+       │                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    10 │ 
+    11 │ export function tokens(pointer: unknown): string[] {
+  
+  i It's recommended using Object.hasOwn() instead of using Object.hasOwnProperty().
+  
+  i See MDN web docs for more details.
+  
+  i Safe fix: Use 'Object.hasOwn()' instead.
+  
+     7  7 │     return Object.keys(left).length === Object.keys(right).length && Object.keys(left).every(key => own(right, key) && equal(left[key], right[key]));
+     8  8 │   }
+     9    │ - const·own·=·(value:·object,·key:·string)·=>·Object.prototype.hasOwnProperty.call(value,·key);
+        9 │ + const·own·=·(value:·object,·key:·string)·=>·Object.hasOwn(value,·key);
+    10 10 │   
+    11 11 │   export function tokens(pointer: unknown): string[] {
+  
+
+packages\cli\test\cli.mjs:42:3 lint/style/useConst  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! This let declares a variable that is only assigned once.
+  
+    40 │   // Windows exposes a read-only attribute rather than POSIX owner/group modes.
+    41 │   if(process.platform!=='win32')assert.equal((await stat(path.join(temp,'deck.opf.json'))).mode & 0o777,0o600);
+  > 42 │   let saved=await readFile(path.join(temp,'deck.opf.json'),'utf8');assert.equal(JSON.parse(saved).slides[1].notes,'Source note');
+       │   ^^^
+    43 │   await patch([{op:'replace',path:'/slides/0/title',value:'Partial'},{op:'test',path:'/slides/1/id',value:'stale'}]);
+    44 │   run(['edit','deck.opf.json','--patch','patch.json','--in-place'],{status:1});assert.equal(await readFile(path.join(temp,'deck.opf.json'),'utf8'),saved);
+  
+  i 'saved' is never reassigned.
+  
+    40 │   // Windows exposes a read-only attribute rather than POSIX owner/group modes.
+    41 │   if(process.platform!=='win32')assert.equal((await stat(path.join(temp,'deck.opf.json'))).mode & 0o777,0o600);
+  > 42 │   let saved=await readFile(path.join(temp,'deck.opf.json'),'utf8');assert.equal(JSON.parse(saved).slides[1].notes,'Source note');
+       │       ^^^^^
+    43 │   await patch([{op:'replace',path:'/slides/0/title',value:'Partial'},{op:'test',path:'/slides/1/id',value:'stale'}]);
+    44 │   run(['edit','deck.opf.json','--patch','patch.json','--in-place'],{status:1});assert.equal(await readFile(path.join(temp,'deck.opf.json'),'utf8'),saved);
+  
+  i Safe fix: Use const instead.
+  
+     40  40 │     // Windows exposes a read-only attribute rather than POSIX owner/group modes.
+     41  41 │     if(process.platform!=='win32')assert.equal((await stat(path.join(temp,'deck.opf.json'))).mode & 0o777,0o600);
+     42     │ - ··let·saved=await·readFile(path.join(temp,'deck.opf.json'),'utf8');assert.equal(JSON.parse(saved).slides[1].notes,'Source·note');
+         42 │ + ··const·saved=await·readFile(path.join(temp,'deck.opf.json'),'utf8');assert.equal(JSON.parse(saved).slides[1].notes,'Source·note');
+     43  43 │     await patch([{op:'replace',path:'/slides/0/title',value:'Partial'},{op:'test',path:'/slides/1/id',value:'stale'}]);
+     44  44 │     run(['edit','deck.opf.json','--patch','patch.json','--in-place'],{status:1});assert.equal(await readFile(path.join(temp,'deck.opf.json'),'utf8'),saved);
+  
+
+packages\cli\test\cli.mjs:47:3 lint/style/useConst  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! This let declares a variable that is only assigned once.
+  
+    45 │   await patch([{op:'replace',path:'/slides',value:'bad'}]);run(['edit','deck.opf.json','--patch','patch.json','--in-place'],{status:1});assert.equal(await readFile(path.join(temp,'deck.opf.json'),'utf8'),saved);
+    46 │   await patch([{op:'copy',from:'/slides/0',path:'/slides/-'},{op:'replace',path:'/slides/2/id',value:'three'},{op:'move',from:'/slides/0',path:'/slides/2'},{op:'remove',path:'/slides/1'}]);
+  > 47 │   let edited=run(['edit','deck.opf.json','--patch','patch.json']).json;assert.deepEqual(edited.slides.map(s=>s.id),['two','slide-1']);
+       │   ^^^
+    48 │   for (const operations of [
+    49 │     [{op:'replace',path:'/missing',value:1}], [{op:'add',path:'/missing/child',value:1}],
+  
+  i 'edited' is never reassigned.
+  
+    45 │   await patch([{op:'replace',path:'/slides',value:'bad'}]);run(['edit','deck.opf.json','--patch','patch.json','--in-place'],{status:1});assert.equal(await readFile(path.join(temp,'deck.opf.json'),'utf8'),saved);
+    46 │   await patch([{op:'copy',from:'/slides/0',path:'/slides/-'},{op:'replace',path:'/slides/2/id',value:'three'},{op:'move',from:'/slides/0',path:'/slides/2'},{op:'remove',path:'/slides/1'}]);
+  > 47 │   let edited=run(['edit','deck.opf.json','--patch','patch.json']).json;assert.deepEqual(edited.slides.map(s=>s.id),['two','slide-1']);
+       │       ^^^^^^
+    48 │   for (const operations of [
+    49 │     [{op:'replace',path:'/missing',value:1}], [{op:'add',path:'/missing/child',value:1}],
+  
+  i Safe fix: Use const instead.
+  
+     45  45 │     await patch([{op:'replace',path:'/slides',value:'bad'}]);run(['edit','deck.opf.json','--patch','patch.json','--in-place'],{status:1});assert.equal(await readFile(path.join(temp,'deck.opf.json'),'utf8'),saved);
+     46  46 │     await patch([{op:'copy',from:'/slides/0',path:'/slides/-'},{op:'replace',path:'/slides/2/id',value:'three'},{op:'move',from:'/slides/0',path:'/slides/2'},{op:'remove',path:'/slides/1'}]);
+     47     │ - ··let·edited=run(['edit','deck.opf.json','--patch','patch.json']).json;assert.deepEqual(edited.slides.map(s=>s.id),['two','slide-1']);
+         47 │ + ··const·edited=run(['edit','deck.opf.json','--patch','patch.json']).json;assert.deepEqual(edited.slides.map(s=>s.id),['two','slide-1']);
+     48  48 │     for (const operations of [
+     49  49 │       [{op:'replace',path:'/missing',value:1}], [{op:'add',path:'/missing/child',value:1}],
+  
+
+packages\javascript\src\data.ts:52:35 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+  
+    50 │   if (!input.length || !input.every(Array.isArray)) return fail('Expected a nonempty array of rows.');
+    51 │   const rows = input as unknown[][];
+  > 52 │   const columns = header ? labels(rows[0]!) : labels(rows[0]!.map((_, i) => `Column ${i + 1}`));
+       │                                   ^^^^^^^^
+    53 │   return rectangular(columns, header ? rows.slice(1) : rows);
+    54 │ }
+  
+
+packages\javascript\src\data.ts:52:54 lint/style/noNonNullAssertion  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+  
+    50 │   if (!input.length || !input.every(Array.isArray)) return fail('Expected a nonempty array of rows.');
+    51 │   const rows = input as unknown[][];
+  > 52 │   const columns = header ? labels(rows[0]!) : labels(rows[0]!.map((_, i) => `Column ${i + 1}`));
+       │                                                      ^^^^^^^^
+    53 │   return rectangular(columns, header ? rows.slice(1) : rows);
+    54 │ }
+  
+  i Unsafe fix: Replace with optional chain operator ?. This operator includes runtime checks, so it is safer than the compile-only non-null assertion operator
+  
+     50  50 │     if (!input.length || !input.every(Array.isArray)) return fail('Expected a nonempty array of rows.');
+     51  51 │     const rows = input as unknown[][];
+     52     │ - ··const·columns·=·header·?·labels(rows[0]!)·:·labels(rows[0]!.map((_,·i)·=>·`Column·${i·+·1}`));
+         52 │ + ··const·columns·=·header·?·labels(rows[0]!)·:·labels(rows[0]?.map((_,·i)·=>·`Column·${i·+·1}`));
+     53  53 │     return rectangular(columns, header ? rows.slice(1) : rows);
+     54  54 │   }
+  
+
+packages\javascript\src\data.ts:87:76 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+  
+    85 │       const index = data.columns.indexOf(name); if (index < 0) fail(`Unknown column: ${name}`); return index;
+    86 │     });
+  > 87 │     data = {columns: selected, rows: data.rows.map(row => indices.map(i => row[i]!))};
+       │                                                                            ^^^^^^^
+    88 │   }
+    89 │   return data;
+  
+
+packages\javascript\src\data.ts:104:40 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+  
+    102 │   if (options.as === 'table') return { table: data };
+    103 │   if (options.as !== 'chart') return fail('Choose table or chart.');
+  > 104 │   const category = options.category ?? data.columns[0]!;
+        │                                        ^^^^^^^^^^^^^^^^
+    105 │   const series = options.series ?? data.columns.filter(name => name !== category);
+    106 │   if (!series.length || !data.rows.length) return fail('Charts need at least one category, numeric series, and data row.');
+  
+
+packages\javascript\src\data.ts:113:19 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+  
+    111 │   if (circular && series.length !== 1) return fail('Pie and donut charts require exactly one numeric series.');
+    112 │   const rows = data.rows.map((row, i) => indices.map((index, j) => {
+  > 113 │     const value = row[index]!;
+        │                   ^^^^^^^^^^^
+    114 │     if (!j) {
+    115 │       if (value === null || value === '') fail(`Row ${i + 1}: missing category ${category}.`);
+  
+
+packages\javascript\src\data.ts:20:45 lint/suspicious/noPrototypeBuiltins  FIXABLE  ━━━━━━━━━━━━━━━━
+
+  ! Do not access Object.prototype method 'hasOwnProperty' from target object.
+  
+    18 │ }
+    19 │ const fail = (message: string): never => { throw new OPFDataImportError(message); };
+  > 20 │ const own = (value: object, key: string) => Object.prototype.hasOwnProperty.call(value, key);
+       │                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    21 │ function cell(value: unknown, location: string): DataCell {
+    22 │   if (value === null || typeof value === 'string' || typeof value === 'boolean' || (typeof value === 'number' && Number.isFinite(value))) return value;
+  
+  i It's recommended using Object.hasOwn() instead of using Object.hasOwnProperty().
+  
+  i See MDN web docs for more details.
+  
+  i Safe fix: Use 'Object.hasOwn()' instead.
+  
+     18  18 │   }
+     19  19 │   const fail = (message: string): never => { throw new OPFDataImportError(message); };
+     20     │ - const·own·=·(value:·object,·key:·string)·=>·Object.prototype.hasOwnProperty.call(value,·key);
+         20 │ + const·own·=·(value:·object,·key:·string)·=>·Object.hasOwn(value,·key);
+     21  21 │   function cell(value: unknown, location: string): DataCell {
+     22  22 │     if (value === null || typeof value === 'string' || typeof value === 'boolean' || (typeof value === 'number' && Number.isFinite(value))) return value;
+  
+
+packages\javascript\src\table.ts:21:46 lint/suspicious/noExplicitAny ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Unexpected any. Specify a different type.
+  
+    19 │   issues: TableGridIssue[];
+    20 │ }
+  > 21 │ const record = (value:unknown):Record<string,any> => value && typeof value==='object'&&!Array.isArray(value)?value as Record<string,any>:{};
+       │                                              ^^^
+    22 │ export function tableGrid(value:unknown,path='table'):TableGrid {
+    23 │   const table=record(value),hasHeaders=Array.isArray(table.columns)&&table.columns.length>0;
+  
+  i any disables many type checking rules. Its use should be avoided.
+  
+
+packages\javascript\src\table.ts:21:133 lint/suspicious/noExplicitAny ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Unexpected any. Specify a different type.
+  
+    19 │   issues: TableGridIssue[];
+    20 │ }
+  > 21 │ const record = (value:unknown):Record<string,any> => value && typeof value==='object'&&!Array.isArray(value)?value as Record<string,any>:{};
+       │                                                                                                                                     ^^^
+    22 │ export function tableGrid(value:unknown,path='table'):TableGrid {
+    23 │   const table=record(value),hasHeaders=Array.isArray(table.columns)&&table.columns.length>0;
+  
+  i any disables many type checking rules. Its use should be avoided.
+  
+
