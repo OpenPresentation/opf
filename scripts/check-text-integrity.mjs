@@ -69,7 +69,7 @@ async function main() {
   const files = (await Promise.all(scanTargets.map(collectFiles))).flat().sort();
   const failures = [];
 
-  let binaryImages = 0;
+  let binaryImages = 0, binaryDocuments = 0, binaryFonts = 0;
   const pngSignature = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
 
   for (const file of files) {
@@ -78,6 +78,16 @@ async function main() {
     // as UTF-8 can create false mojibake matches. Keep all text files covered.
     if (bytes.subarray(0, 8).equals(pngSignature)) {
       binaryImages++;
+      continue;
+    }
+    // Only skip known binary evidence with the expected extension AND magic.
+    // Text reports, SVG/XML, JSON and logs remain subject to the same checks.
+    if (path.extname(file).toLowerCase() === '.pptx' && bytes.subarray(0,4).equals(Buffer.from([80,75,3,4]))) {
+      binaryDocuments++;
+      continue;
+    }
+    if (path.extname(file).toLowerCase() === '.ttf' && bytes.subarray(0,4).equals(Buffer.from([0,1,0,0]))) {
+      binaryFonts++;
       continue;
     }
     const content = bytes.toString("utf8");
@@ -95,7 +105,7 @@ async function main() {
     process.exit(1);
   }
 
-  process.stdout.write(`${JSON.stringify({ valid: true, files: files.length - binaryImages, binaryImages }, null, 2)}\n`);
+  process.stdout.write(`${JSON.stringify({ valid: true, files: files.length - binaryImages - binaryDocuments - binaryFonts, binaryImages, binaryDocuments, binaryFonts }, null, 2)}\n`);
 }
 
 main().catch((error) => {
