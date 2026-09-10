@@ -1,0 +1,125 @@
+{
+  "algorithm": "sha256",
+  "files": [
+    {
+      "file": "README.md",
+      "bytes": 3578,
+      "sha256": "8f5dfc06543d8a1a94dcacc07c5218e973227500429060af7aa736f46c3c4e43"
+    },
+    {
+      "file": "candidate-manifest.json",
+      "bytes": 1099,
+      "sha256": "6a5b99f6d58fefe7d06525af216908afb580ccc06588a46a35750922d7928b97"
+    },
+    {
+      "file": "native-quote-node20.json",
+      "bytes": 742,
+      "sha256": "6ce512c8b86cee2378a66c962cfcc9e2921c1e845637586fc4bd5b4691dcccb7"
+    },
+    {
+      "file": "native-quote-node24.json",
+      "bytes": 742,
+      "sha256": "cb9718945cdd768dc0e66c5c67b9ed04d29dbf2639f5249df536b4257790132d"
+    },
+    {
+      "file": "node20-packed-browser-manifest.json",
+      "bytes": 2316,
+      "sha256": "24c3b41b6bdce94abb5ff80e72a2cc58644014041b688456f2e9f025de408ab9"
+    },
+    {
+      "file": "node20-packed-browser-packed-node20-report.json",
+      "bytes": 20231,
+      "sha256": "64f2b37fac1e83bf051ac958c2e5f456491ebface1201227b648274b1afca31c"
+    },
+    {
+      "file": "node24-packed-browser-manifest.json",
+      "bytes": 2316,
+      "sha256": "11505f86887152d62a6c7d75b321608427608eed39ee35df8d785ec4687f4a24"
+    },
+    {
+      "file": "node24-packed-browser-packed-node24-report.json",
+      "bytes": 20231,
+      "sha256": "863f23b611fd37dd513ccfcc94ba6f1f95fb8c70a549f21a5a6a21df53a56be7"
+    },
+    {
+      "file": "packed-browser-node20.log",
+      "bytes": 687,
+      "sha256": "c4d7359a4e08c198537514dcbc6f45ea72d1633ee66623b90fe7775aab167469"
+    },
+    {
+      "file": "packed-browser-node24.log",
+      "bytes": 687,
+      "sha256": "c4d7359a4e08c198537514dcbc6f45ea72d1633ee66623b90fe7775aab167469"
+    },
+    {
+      "file": "packed-node20.log",
+      "bytes": 11943,
+      "sha256": "e79a9067168dbc2cd59e0c09ff74133eaecb8adb4360a7f3d340908b57c3b7d3"
+    },
+    {
+      "file": "packed-node24.log",
+      "bytes": 7656,
+      "sha256": "2ddb9e4a9c9d8f53288c91647aaf27e52700432b701e9fb4b7f7b2416d1bf1d8"
+    },
+    {
+      "file": "rich-flow-editor-estimated/report.json",
+      "bytes": 24769,
+      "sha256": "eb8e8397a6d3058d232cd4e504b55bfe079f9662f1d036458d24fe3e7ebeddd3"
+    },
+    {
+      "file": "rich-flow-editor-estimated/results.txt",
+      "bytes": 2156,
+      "sha256": "97fe245517af0210a95e227e9aeef4a5764de9e797030e6a01d3728b7c457632"
+    },
+    {
+      "file": "rich-flow-editor-estimated/rich-canvas.png",
+      "bytes": 110679,
+      "sha256": "0bf8a15d0ea2dda573ab286aff71c6d580f104b56c526577c39ec3f47cc4e790"
+    },
+    {
+      "file": "rich-flow-editor-estimated-node20/report.json",
+      "bytes": 24769,
+      "sha256": "12bcf624b6c140c079d05ecf7260e03ff78cf21300408f9c27a879ddadad80f7"
+    },
+    {
+      "file": "rich-flow-editor-estimated-node20/results.txt",
+      "bytes": 2156,
+      "sha256": "97fe245517af0210a95e227e9aeef4a5764de9e797030e6a01d3728b7c457632"
+    },
+    {
+      "file": "rich-flow-editor-estimated-node20/rich-canvas.png",
+      "bytes": 110679,
+      "sha256": "0bf8a15d0ea2dda573ab286aff71c6d580f104b56c526577c39ec3f47cc4e790"
+    },
+    {
+      "file": "rich-flow-editor-measured/report.json",
+      "bytes": 24768,
+      "sha256": "2af9938aa17b14af2dddb85df7f3716c8490ee7283f5a8b21be0c70fdf95ecd8"
+    },
+    {
+      "file": "rich-flow-editor-measured/results.txt",
+      "bytes": 2169,
+      "sha256": "95df3f69b9b7bd2a6a0b236793b94a4a50f07cf1e3780efd5b5df5605211e302"
+    },
+    {
+      "file": "rich-flow-editor-measured/rich-canvas.png",
+      "bytes": 110652,
+      "sha256": "7c0b62abb995bc51a5c8546f928dfd85e596447ed20f969a7a3d26da31160ac4"
+    },
+    {
+      "file": "rich-flow-editor-measured-node20/report.json",
+      "bytes": 24768,
+      "sha256": "e5152bc64a86ef188ca8f2fee1bc73ae1214feee58e64d72ef2499321c7d6d3d"
+    },
+    {
+      "file": "rich-flow-editor-measured-node20/results.txt",
+      "bytes": 2169,
+      "sha256": "95df3f69b9b7bd2a6a0b236793b94a4a50f07cf1e3780efd5b5df5605211e302"
+    },
+    {
+      "file": "rich-flow-editor-measured-node20/rich-canvas.png",
+      "bytes": 110652,
+      "sha256": "7c0b62abb995bc51a5c8546f928dfd85e596447ed20f969a7a3d26da31160ac4"
+    }
+  ]
+}
