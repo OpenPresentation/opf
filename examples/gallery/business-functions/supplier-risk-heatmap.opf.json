@@ -367,10 +367,9 @@
         {
           "metric": {
             "value": "$820K",
-            "label": "Expected improvement",
-            "unit": "%",
-            "delta": "+6 pts",
-            "trend": "up"
+            "delta": "+$20K",
+            "trend": "up",
+            "label": "Illustrative result"
           }
         }
       ]

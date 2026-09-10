@@ -379,11 +379,11 @@
         },
         {
           "metric": {
-            "value": "18%",
-            "label": "Expected improvement",
+            "value": 18,
             "unit": "%",
             "delta": "+6 pts",
-            "trend": "up"
+            "trend": "up",
+            "label": "Illustrative result"
           }
         }
       ]

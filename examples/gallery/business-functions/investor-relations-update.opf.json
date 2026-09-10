@@ -372,11 +372,11 @@
         },
         {
           "metric": {
-            "value": "2.4x",
-            "label": "Expected improvement",
-            "unit": "days",
-            "delta": "-3 days",
-            "trend": "down"
+            "value": 2.4,
+            "unit": "x",
+            "delta": "+0.3x",
+            "trend": "up",
+            "label": "Illustrative result"
           }
         }
       ]

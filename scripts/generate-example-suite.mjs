@@ -186,6 +186,22 @@ function metricValue(index) {
   return values[index % values.length];
 }
 
+function evidenceMetric(index) {
+  // Fictional gallery data: keep each value, unit and change dimensionally consistent.
+  // Currency stays formatted in value because OPF's unit follows the value.
+  const samples = [
+    { value: 18, unit: "%", delta: "+6 pts", trend: "up" },
+    { value: "$4.8M", delta: "+$0.3M", trend: "up" },
+    { value: 11, unit: "days", delta: "-3 days", trend: "down" },
+    { value: 2.4, unit: "x", delta: "+0.3x", trend: "up" },
+    { value: 91, unit: "%", delta: "+6 pts", trend: "up" },
+    { value: 42, unit: "pts", delta: "+6 pts", trend: "up" },
+    { value: "$820K", delta: "+$20K", trend: "up" },
+    { value: 31, unit: "%", delta: "+6 pts", trend: "up" },
+  ];
+  return { ...samples[index % samples.length], label: "Illustrative result" };
+}
+
 function trend(index) {
   return ["up", "flat", "down"][index % 3];
 }
@@ -542,13 +558,7 @@ function blocksSlide(spec, index, catalogs) {
         },
       },
       {
-        metric: {
-          value: metricValue(index + 2),
-          label: "Expected improvement",
-          unit: index % 2 === 0 ? "%" : "days",
-          delta: index % 2 === 0 ? "+6 pts" : "-3 days",
-          trend: index % 2 === 0 ? "up" : "down",
-        },
+        metric: evidenceMetric(index + 2),
       },
     ],
   };

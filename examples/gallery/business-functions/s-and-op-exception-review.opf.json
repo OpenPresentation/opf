@@ -388,11 +388,11 @@
         },
         {
           "metric": {
-            "value": "31%",
-            "label": "Expected improvement",
-            "unit": "days",
-            "delta": "-3 days",
-            "trend": "down"
+            "value": 31,
+            "unit": "%",
+            "delta": "+6 pts",
+            "trend": "up",
+            "label": "Illustrative result"
           }
         }
       ]

@@ -355,11 +355,11 @@
         },
         {
           "metric": {
-            "value": "11 days",
-            "label": "Expected improvement",
-            "unit": "%",
-            "delta": "+6 pts",
-            "trend": "up"
+            "value": 11,
+            "unit": "days",
+            "delta": "-3 days",
+            "trend": "down",
+            "label": "Illustrative result"
           }
         }
       ]
