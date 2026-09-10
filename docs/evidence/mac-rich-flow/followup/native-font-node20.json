@@ -1,0 +1,43 @@
+{
+  "evidenceCommit": "719ad1e9f3b205d3a3e2ba2f2141954936dcc521",
+  "node": "v20.20.2",
+  "reviewerSha256": "535a6b9eb34da757621e9c410f7bd5b3b748ef180bc0b1d9d2d4bd41736bd2a4",
+  "converterSha256": "f75e684288b7124289d48bb907d42297491cf7ed9ddab301039b76f3d16e3809",
+  "results": [
+    {
+      "nativeNode": "20",
+      "imports": 14,
+      "outputFaces": 9,
+      "pdfRasters": 7,
+      "rawPdfFontNames": [
+        "Roboto",
+        "Roboto ExtraBold",
+        "Roboto Medium",
+        "Roboto Mono",
+        "Roboto Mono,Bold",
+        "Roboto SemiBold",
+        "Roboto,Bold",
+        "Roboto,BoldItalic",
+        "Roboto,Italic"
+      ]
+    },
+    {
+      "nativeNode": "24",
+      "imports": 14,
+      "outputFaces": 9,
+      "pdfRasters": 7,
+      "rawPdfFontNames": [
+        "Roboto",
+        "Roboto ExtraBold",
+        "Roboto Medium",
+        "Roboto Mono",
+        "Roboto Mono,Bold",
+        "Roboto SemiBold",
+        "Roboto,Bold",
+        "Roboto,BoldItalic",
+        "Roboto,Italic"
+      ]
+    }
+  ],
+  "scope": "28 fresh native original/saved slide imports; native character family/style presence and independently parsed retained PDF glyph-name observations; all nine fixture files match exact bundled open bytes; seven PDF raster pairs identical across native runtimes. No private PDF extraction, Office execution, glyph-level physical file identity, synthetic-effect absence or image-native acceptance claimed."
+}

@@ -25,3 +25,14 @@ node scripts/review-native-quote-followup.mjs docs/evidence/windows-native-quote
 ```
 
 `manifest.json` hashes every retained file except itself. No version, release plan or deployment changes in this checkpoint.
+
+
+## Review follow-up
+
+The current source graph updates renderer to `6520f091a95aa95be5993580adf5df567eb439c8` and editor to `f0871842088d2180ed7de606c379d7921e7fbf0e`. The initial reports above retain their original source bindings. Linux controls reproduced measured browser gaps up to 4.533px; geometric precision reduced them but left a 0.1076px fractional-size discrepancy. The renderer now constrains horizontal advances only for accepted outline placement using SVG `textLength`/`spacingAndGlyphs`, while retaining nominal font size and baseline. Width-only providers receive no glyph scaling. Raw intrinsic font comparison remains separate; the browser fixture independently bounds the correction. No tolerance was widened.
+
+Independent editor review exposed a nested code-span selection that could show formatting controls. A text-node selection reproduces the failure; ancestor code-role checking corrects it. Body, filename and language selections pass on both wide and portrait fixtures while edit/undo/export/reimport remain functional. The earlier element-range selection did not exercise that endpoint; both failure and corrected logs are retained.
+
+The Mac also checked all 389 files in native evidence `719ad1e9f3b205d3a3e2ba2f2141954936dcc521` and independently imported 28 font slides on each supported Node version. All nine open files match the bundled pack, native/PDF family/style names agree, and seven PDF raster pairs match across native runtimes. All seven full-size rasters were inspected. `scripts/review-native-font-followup.mjs` reproduces the portable import/name checks. Native images remain blocked after the separately retained PowerPoint-created control timeout; no Office cleanup or image-fidelity pass is inferred.
+
+The final pair passes Linux Node 20.20.2 and 24.20.0 CI ([renderer run 34526853919](https://github.com/OpenPresentation/opf-render/actions/runs/34526853919), [editor run 34526952902](https://github.com/OpenPresentation/opf-editor/actions/runs/34526952902)). Retained Linux reports include all 30 flow cases, eight gallery/control cases and eight installed browser suites. A fresh Mac Node 24.21.0 candidate pack, consumer and installed browser run also passes all eight suites (276 assertions and eight trusted scenarios). These follow-up reports are distinct from the earlier Mac Node 20/24 source graph above.

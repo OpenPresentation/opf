@@ -3,13 +3,88 @@
   "files": [
     {
       "file": "README.md",
-      "bytes": 3578,
-      "sha256": "8f5dfc06543d8a1a94dcacc07c5218e973227500429060af7aa736f46c3c4e43"
+      "bytes": 5944,
+      "sha256": "df2f78eb00e4e1d33004cf56f055597378031ed23e445fee40bf0ace398c667c"
     },
     {
       "file": "candidate-manifest.json",
       "bytes": 1099,
       "sha256": "6a5b99f6d58fefe7d06525af216908afb580ccc06588a46a35750922d7928b97"
+    },
+    {
+      "file": "followup/code-guard-after.log",
+      "bytes": 2418,
+      "sha256": "b4bdbe96e801adb05027f56848ed8cc34f533cfbd1408ae685d467f1ff8cb386"
+    },
+    {
+      "file": "followup/code-guard-before.log",
+      "bytes": 2692,
+      "sha256": "540c498338a0b07caac81d80c4f916480fdeb24c67f62f8a153366b61eeba10a"
+    },
+    {
+      "file": "followup/linux-node20-packed-browser.json",
+      "bytes": 20231,
+      "sha256": "c5398c81e993d53ecc95e9e67b1e8e04cd7a46bde5309ef91588161374171961"
+    },
+    {
+      "file": "followup/linux-node20-rich-flow-browser.json",
+      "bytes": 41592,
+      "sha256": "7cd002281f265ef76d98ff18edf860fa65c299508cf0dc8c2bd53dbf445e44bf"
+    },
+    {
+      "file": "followup/linux-node20-rich-spacing-browser.json",
+      "bytes": 23617,
+      "sha256": "eeee408cfb35a2e814f3c6e2dee40d5291a226cd73740d09ecbb8021047433df"
+    },
+    {
+      "file": "followup/linux-node24-packed-browser.json",
+      "bytes": 20231,
+      "sha256": "b4cc9c8c9d4f1552c212b55ac9ce2bf4db4519d5450027e7f8b48911b09f70e4"
+    },
+    {
+      "file": "followup/linux-node24-rich-flow-browser.json",
+      "bytes": 41592,
+      "sha256": "3524e305a33595e79ec381e134de8e36ad5bdfb84d5760c08f91c45a678e8aed"
+    },
+    {
+      "file": "followup/linux-node24-rich-spacing-browser.json",
+      "bytes": 23617,
+      "sha256": "3c49bea493b2baecb74df07a972d52e9215a85079f07ced1be01913277d31617"
+    },
+    {
+      "file": "followup/mac-node24-candidate-manifest.json",
+      "bytes": 1099,
+      "sha256": "c0adb4e23816196f7ec76f9b929a6806d94b20ff6a9f07a32fa364f43026db20"
+    },
+    {
+      "file": "followup/mac-node24-packed-browser-manifest.json",
+      "bytes": 2316,
+      "sha256": "0c4d059af7786714f05114c7e9b119ce2a6471476ae5bba302fef6d4f74f4779"
+    },
+    {
+      "file": "followup/mac-node24-packed-browser.json",
+      "bytes": 20231,
+      "sha256": "646cfd38091047e68c0c8c476f0dcc441d336b3948a3d928a090042c0a8769a4"
+    },
+    {
+      "file": "followup/mac-node24-packed-browser.log",
+      "bytes": 687,
+      "sha256": "c4d7359a4e08c198537514dcbc6f45ea72d1633ee66623b90fe7775aab167469"
+    },
+    {
+      "file": "followup/mac-node24-packed.log",
+      "bytes": 7662,
+      "sha256": "7b339d59fe3203c778223d6e01f3a26da66c4a458e62500dd146016698d3a17a"
+    },
+    {
+      "file": "followup/native-font-node20.json",
+      "bytes": 1435,
+      "sha256": "7834e037b0b2f4e139e5aaf57d9d8c3a0d3eed9bb5a5f19a60b06e5b9c22f2c7"
+    },
+    {
+      "file": "followup/native-font-node24.json",
+      "bytes": 1435,
+      "sha256": "452b145ff80b3686025d35eafca163bc352559353785c13068d44cd57901b70d"
     },
     {
       "file": "native-quote-node20.json",
