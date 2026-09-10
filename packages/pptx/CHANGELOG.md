@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+## 0.6.0
+
+- Export accepted core quote parts as editable native lines without another fit/style pass. Reject missing geometry or unusable boxes explicitly. Requires core 0.8.0 and renderer 0.6.0 for coordinated preview/font measurement.
+- Add twelve controlled Calibri PowerPoint cases for wide/portrait long bodies, expanded sources and pagination readability floors: source lines, native glyph containment/separation, save/reopen and reimport. Raster differences remain measured observations, not equivalence guarantees; import still flattens quotes to editable text blocks.
+
 ## 0.5.2
 
 - Match metric, quote, code and timeline payload geometry and measured typography to renderer 0.5.1. Reserve quote footer space before fitting, preserve attribution and source, export timeline lines/markers as editable native shapes, and prevent PowerPoint from rewrapping fitted payload lines.

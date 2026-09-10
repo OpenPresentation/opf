@@ -4,7 +4,7 @@ Pure local PowerPoint conversion tooling for Open Presentation Format documents.
 
 ## Scope
 
-Version 0.5.2 improves native metrics, quotes, code panels, timelines and chart-label contrast, with renderer 0.5.1 compatibility and fitted quote footer separation. See [native content evidence and limitations](docs/native-content-candidate.md). Native chart geometry and general scalar-text wrapping remain different from preview; editability and valid reimport do not establish raster equivalence.
+Version 0.6.0 requires core 0.8.0 and uses renderer 0.6.0 for coordinated preview/font measurement. Quotes export their accepted body/source lines and styles without another fitting pass. [Controlled Windows PowerPoint evidence](docs/evidence/shared-quote-integration/comparison.json) records glyph containment, separation, save/reopen and text reimport against its exact source/font hashes. Native quote import returns editable text blocks and does not restore the original OPF quote structure, typography or readability policy. Native chart geometry and general scalar-text wrapping also remain different from preview; editability and valid reimport do not establish raster equivalence.
 
 - Package: `@openpresentation/opf-pptx`
 - Repository: `OpenPresentation/opf-pptx`

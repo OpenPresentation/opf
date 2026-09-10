@@ -12,6 +12,7 @@ concurrency:
 jobs:
   package:
     runs-on: ${{ matrix.os }}
+    container: ${{ matrix.os == 'ubuntu-latest' && 'mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27' || '' }}
     timeout-minutes: 20
     strategy:
       fail-fast: false
@@ -32,6 +33,9 @@ jobs:
       - run: npm run validate
       - run: npm test
       - run: npm run test:packed
-      - run: npx playwright install --with-deps chromium
+      - name: Verify Playwright image version
+        run: node -e "if (require('playwright/package.json').version !== '1.63.0') throw new Error('Update the pinned Playwright image with the test package.');"
+      - if: runner.os == 'Windows'
+        run: npx playwright install chromium
       - run: npm run test:browser
       - run: npm pack --dry-run

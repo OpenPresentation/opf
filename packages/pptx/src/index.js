@@ -907,7 +907,7 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
     } else if (item.field === "text" && typeof item.value === "string") {
       slide.addText(item.text.lines.join("\n"), {...textBoxOptions(region, slideContext, item.text.fontSize * 0.75),fontFace:item.textStyle.fontFamily,bold:item.textStyle.fontWeight>=600,italic:item.textStyle.italic});
     } else {
-      await addPayload(slide, presentation, item.payload, region, item.path, { ...slideContext, composition: item.composition, contentAlignment: opfSlide.design?.contentAlignment ?? presentation.design?.contentAlignment ?? "left" }, options);
+      await addPayload(slide, presentation, item.payload, region, item.path, { ...slideContext, composition: item.composition, contentAlignment: opfSlide.design?.contentAlignment ?? presentation.design?.contentAlignment ?? "left" }, options, item.quoteLayout);
     }
   }
 
@@ -928,7 +928,7 @@ function fieldToType(field) {
   return field === "items" || field === "bullets" ? "list" : field;
 }
 
-async function addPayload(slide, presentation, payload, region, path, context, options) {
+async function addPayload(slide, presentation, payload, region, path, context, options, quoteLayout) {
   const kind = inferPayloadKind(payload);
   switch (kind) {
     case "text":
@@ -956,7 +956,7 @@ async function addPayload(slide, presentation, payload, region, path, context, o
       addMetricPayload(slide, payload.metric, region, context, options, path);
       break;
     case "quote":
-      addQuotePayload(slide, payload.quote, region, context, options, path);
+      addQuotePayload(slide, quoteLayout, context, options, path);
       break;
     case "timeline":
       addTimelinePayload(slide, payload.timeline, region, context, options, path);
@@ -1195,9 +1195,9 @@ function pixelBox(region) {
 // Each fitted line remains native editable text, without PowerPoint rewrapping it.
 function addMeasuredPayloadText(slide, text, box, context, options, config) {
   const scale = Math.min(context.dimensions.widthInches, context.dimensions.heightInches) * 96 / 720;
-  const style = resolveTextStyle({fontFamily: config.fontFamily ?? context.fonts.body, fontWeight: config.fontWeight ?? 400, path: config.path}, options.textMeasurement);
-  const fit = fitText(String(text ?? ''), box, config.fontSize * scale, (context.composition?.minFontSize ?? 16) * scale, textWidthMeasurer(style, options.textMeasurement));
-  if (fit.overflow) {
+  const style = config.textStyle ?? resolveTextStyle({fontFamily: config.fontFamily ?? context.fonts.body, fontWeight: config.fontWeight ?? 400, path: config.path}, options.textMeasurement);
+  const fit = config.fit ?? fitText(String(text ?? ''), box, config.fontSize * scale, (context.composition?.minFontSize ?? 16) * scale, textWidthMeasurer(style, options.textMeasurement));
+  if (fit.overflow && !config.diagnosticsHandled) {
     const diagnostic = {code: 'text-overflow', path: config.path, message: 'Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide.'};
     options.onDiagnostic?.(diagnostic);
     if (context.composition?.overflow === 'error') throw new OPFPptxError('layout-overflow', diagnostic.message, {path: config.path, issues: [diagnostic]});
@@ -1231,12 +1231,15 @@ function addMetricPayload(slide, value, region, context, options, path) {
   addMeasuredPayloadText(slide, [metric.label, metric.description, metric.delta].filter(Boolean).join('\n'), {x: box.x, y: box.y + box.height * .45, width: box.width, height: box.height * .55}, context, options, {path, fontSize: 23, fontWeight: 500});
 }
 
-function addQuotePayload(slide, value, region, context, options, path) {
-  const quote = isPlainObject(value) ? value : {text: value}, box = pixelBox(region);
-  const attribution = [quote.attribution, quote.source].filter(Boolean).join(' - ');
-  // Keep the footer and an 18px gap outside the body's text fitting area.
-  addMeasuredPayloadText(slide, `"${quote.text ?? ''}"`, {x: box.x + 18, y: box.y + 18, width: Math.max(1, box.width - 36), height: Math.max(1, box.height - (attribution ? 94 : 36))}, context, options, {path: path + '.text', fontSize: 28, fontFamily: context.fonts.heading, fontWeight: 600});
-  addMeasuredPayloadText(slide, attribution, {x: box.x + 18, y: box.y + box.height - 58, width: box.width - 36, height: 40}, context, options, {path, fontSize: 17, fontWeight: 500, color: context.colors.mutedText});
+function addQuotePayload(slide, layout, context, options, path) {
+  if (!layout) throw new OPFPptxError('missing-quote-layout', 'Quote export requires a coordinated core build with shared quote geometry.', {path});
+  for (const part of layout.parts) {
+    if (!part.fit) throw new OPFPptxError('layout-overflow', 'Quote content has no usable internal space; increase its cell size before exporting.', {path:part.path,issues:layout.diagnostics});
+    addMeasuredPayloadText(slide,part.text,part.box,context,options,{
+      path:part.path,fit:part.fit,textStyle:part.style,diagnosticsHandled:true,
+      color:part.role==='footer'?context.colors.mutedText:context.colors.text,
+    });
+  }
 }
 
 function addTimelinePayload(slide, value, region, context, options, path) {
