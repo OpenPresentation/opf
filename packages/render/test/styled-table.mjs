@@ -12,10 +12,10 @@ const table = {rows: [
 const document = {design:{theme:'classic', fontScheme:'roboto'}, slides:[{table}]};
 const before = structuredClone(document);
 const svg = renderSvg(document, {trace:true});
-assert.equal((svg.match(/>Styled <\/text>/g) ?? []).length, 1);
-assert.equal((svg.match(/>red<\/text>/g) ?? []).length, 1);
-assert.ok(/<text(?=[^>]*fill="#00ff00")[^>]*>Styled <\/text>/.test(svg));
-assert.ok(/<text(?=[^>]*fill="#ff0000")[^>]*>red<\/text>/.test(svg));
+assert.equal((svg.match(/>Styled <\/tspan>/g) ?? []).length, 1);
+assert.equal((svg.match(/>red<\/tspan>/g) ?? []).length, 1);
+assert.ok(/<tspan(?=[^>]*fill="#00ff00")[^>]*>Styled <\/tspan>/.test(svg));
+assert.ok(/<tspan(?=[^>]*fill="#ff0000")[^>]*>red<\/tspan>/.test(svg));
 assert.ok(/<text(?=[^>]*fill="#123456")(?=[^>]*text-anchor="middle")[^>]*>Scalar<\/text>/.test(svg));
 assert.match(svg, /data-opf-path="slides\.0\.table\.rows\.0\.0\.value"/);
 assert.doesNotMatch(svg, /data-opf-path="slides\.0\.table\.rows\.(0\.1|1\.[01])"/);
@@ -41,7 +41,7 @@ for (const rich of [false,true]) {
     const aligned = renderSvg({design:{theme:'classic',fontScheme:'roboto'},slides:[{table:{rows:[
       [{value,rowSpan:2,style:{verticalAlign}},'B'],[null,'C']
     ]}}]});
-    const match = aligned.match(/<text([^>]*)>Align<\/text>/);
+    const match = rich ? aligned.match(/<text([^>]*)><tspan[^>]*>Align<\/tspan><\/text>/) : aligned.match(/<text([^>]*)>Align<\/text>/);
     assert.ok(match);
     baselines.push(Number(match[1].match(/\by="([^"]+)"/)[1]));
   }
@@ -63,7 +63,7 @@ for(const [fill,headerColor,bodyColor,explicit] of [
   const input={design:{background:'#FFFFFF',colorScheme:{id:'cool-horizon',dark1:'#000000'}},slides:[{table:{columns:[{value:'Header',style},{value:['Inherited',{text:'Explicit',color:'#FF0000'}],style}],rows:[[{value:'Body',style},{value:['BodyInherited',{text:'BodyExplicit',color:'#FF0000'}],style}]]}}]};
   const original=structuredClone(input),output=renderSvg(input);
   for(const [text,color] of [['Header',headerColor],['Inherited',headerColor],['Body',bodyColor],['BodyInherited',bodyColor],['Explicit','#FF0000'],['BodyExplicit','#FF0000']]){
-    const attributes=output.match(new RegExp(`<text([^>]*)>${text}</text>`))?.[1];assert.ok(attributes,text);
+    const attributes=output.match(new RegExp(`<(?:text|tspan)([^>]*)>${text}</(?:text|tspan)>`))?.[1];assert.ok(attributes,text);
     assert.ok(attributes.includes(`fill="${color}"`),`${fill} ${text}: ${attributes}`);
   }
   assert.deepEqual(input,original);

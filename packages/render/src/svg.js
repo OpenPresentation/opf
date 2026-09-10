@@ -1223,13 +1223,27 @@ function renderRichLines(value,fit,box,bound,config) {
   const alignment=fit.placement?.alignment??config.align??bound.design.contentAlignment;
   let textOffset=0;
   const runOffsets=value.map(run=>{const start=textOffset;textOffset+=(typeof run==='string'?run:run.text).length;return start;});
-  const content=fit.richLines.flatMap((line,lineIndex)=>line.fragments.map(fragment=>{
+  // With no measurement provider, fragment advances are estimates. Let SVG
+  // shape adjacent runs naturally inside each estimated line instead of turning
+  // those estimates into visible gaps. Supplied measurements keep exact origins.
+  const flow=!config.options.textMeasurement?.measure&&!fit.placement;
+  const content=fit.richLines.map((line,lineIndex)=>{
+    const fragments=line.fragments.map(fragment=>{
     const run=fragment.run,offset=alignment==='right'?box.width-line.width:alignment==='center'?(box.width-line.width)/2:0;
     const placed=fit.placement?.lines[lineIndex];
-    const rendered=tag('text',{...(config.options.trace?{'data-opf-text-start':runOffsets[fragment.runIndex]+fragment.start,'data-opf-text-end':runOffsets[fragment.runIndex]+fragment.end}:{}),x:stableNumber((placed?.x??box.x+offset)+fragment.x),y:stableNumber((placed?.baseline??box.y+line.baseline)+fragment.baselineShift),'xml:space':'preserve','font-family':fontStack(fragment.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(fragment.fontSize),'font-weight':fragment.style.fontWeight,'font-style':fragment.style.italic?'italic':undefined,'text-decoration':[run.underline?'underline':'',run.strikethrough?'line-through':''].filter(Boolean).join(' ')||undefined,fill:/^#(?:[0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(run.color??'')?run.color:config.fill},escapeText(fragment.text));
+    // Accepted outline placement owns the horizontal advance. Geometric precision
+    // avoids hinted browser advances; textLength also removes fractional-size
+    // quantization drift. Height and baseline retain the selected font size.
+    const position=flow?{'baseline-shift':fragment.baselineShift?stableNumber(-fragment.baselineShift):undefined}:{x:stableNumber((placed?.x??box.x+offset)+fragment.x),y:stableNumber((placed?.baseline??box.y+line.baseline)+fragment.baselineShift)};
+    const rendered=tag(flow?'tspan':'text',{...(config.options.trace?{'data-opf-text-start':runOffsets[fragment.runIndex]+fragment.start,'data-opf-text-end':runOffsets[fragment.runIndex]+fragment.end}:{}),...position,'xml:space':'preserve','text-rendering':flow?undefined:'geometricPrecision',textLength:placed&&fragment.width>0?stableNumber(fragment.width):undefined,lengthAdjust:placed&&fragment.width>0?'spacingAndGlyphs':undefined,'font-family':fontStack(fragment.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(fragment.fontSize),'font-weight':fragment.style.fontWeight,'font-style':fragment.style.italic?'italic':flow?'normal':undefined,'text-decoration':[run.underline?'underline':'',run.strikethrough?'line-through':''].filter(Boolean).join(' ')||undefined,fill:/^#(?:[0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(run.color??'')?run.color:config.fill},escapeText(fragment.text));
     if(run.link&&/^(https?:|mailto:)/i.test(run.link))return tag('a',{href:run.link,target:'_blank',rel:'noopener noreferrer'},rendered);
     return rendered;
-  }));
+    });
+    if(!flow)return fragments.join('\n');
+    const x=alignment==='right'?box.x+box.width:alignment==='center'?box.x+box.width/2:box.x;
+    const first=line.fragments[0];
+    return tag('text',{x:stableNumber(x),y:stableNumber(box.y+line.baseline),'text-anchor':alignment==='right'?'end':alignment==='center'?'middle':'start','xml:space':'preserve','font-family':fontStack(first?.style.fontFamily??config.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(first?.fontSize??fit.fontSize),'font-weight':first?.style.fontWeight??config.fontWeight??400,'font-style':first?.style.italic?'italic':undefined},fragments.join(''));
+  });
   let cursor=0;
   const whole=value.map(run=>typeof run==='string'?run:run.text).join('');
   const lineTrace=config.options.trace?fit.richLines.map((line,index)=>{
@@ -1239,7 +1253,7 @@ function renderRichLines(value,fit,box,bound,config) {
     const placed=fit.placement?.lines[index];
     return {start,end:cursor,x:placed?.x??box.x+offset,y:placed?.y??box.y+line.y,height:placed?.height??line.height};
   }):undefined;
-  return tag('g',{...traceAttrs(config.options,config.path),...(config.options.trace?{'data-opf-box-width':box.width,'data-opf-rich-text':config.rich===false?undefined:'true','data-opf-rich-lines':JSON.stringify(lineTrace)}:{}),...(fit.overflow?{'data-opf-overflow':'true'}:{})},content.join('\n'));
+  return tag('g',{...traceAttrs(config.options,config.path),...(config.options.trace?{'data-opf-box-width':box.width,'data-opf-rich-text':config.rich===false?undefined:'true','data-opf-rich-lines':JSON.stringify(lineTrace),'data-opf-rich-spacing':flow?'natural':'measured'}:{}),...(fit.overflow?{'data-opf-overflow':'true'}:{})},content.join('\n'));
 }
 
 function renderTextBox(text, box, bound, config) {
