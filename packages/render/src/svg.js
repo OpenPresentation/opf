@@ -880,53 +880,19 @@ function renderQuote(item, box, bound, options) {
 }
 
 function renderTimeline(item, box, bound, options) {
-  const timeline = Array.isArray(item.value) ? { events: item.value } : item.value;
-  const events = Array.isArray(timeline?.events) ? timeline.events : [];
-  if (!events.length) return "";
-  const labelWidth = box.width / Math.max(2, events.length);
-  const gap = (box.width - labelWidth) / Math.max(1, events.length - 1);
-  const start = events.length === 1 ? box.x + box.width / 2 : box.x + labelWidth / 2;
-  const end = events.length === 1 ? start : box.x + box.width - labelWidth / 2;
-  const y = box.y + box.height * 0.46;
-  const children = [
-    tag("line", {
-      x1: start,
-      x2: end,
-      y1: y,
-      y2: y,
-      stroke: bound.design.colors.border,
-      "stroke-width": 3,
-      ...traceAttrs(options, item.path)
-    })
-  ];
-
-  events.forEach((event, index) => {
-    const x = start + index * gap;
-    const eventPath = `${item.path}.events.${index}`;
-    children.push(tag("circle", {
-      cx: x,
-      cy: y,
-      r: Math.min(9, labelWidth / 5, box.height * 0.04),
-      fill: bound.design.colors.primary,
-      ...traceAttrs(options, eventPath)
-    }));
-    children.push(renderTextBox([event.when, event.what, event.description].filter(Boolean).join("\n"), {
-      x: x - labelWidth / 2,
-      y: index % 2 === 0 ? box.y : y + 24,
-      width: labelWidth,
-      height: box.height * 0.38
-    }, bound, {
-      path: eventPath,
-      fontSize: 16,
-      fontFamily: bound.design.fonts.body,
-      fontWeight: 500,
-      fill: bound.design.colors.text,
-      options,
-      align: "center"
-    }));
-  });
-
-  return tag("g", traceAttrs(options, item.path), children.join("\n"));
+  const layout=item.timelineLayout;
+  if(!layout)throw new OPFRenderError('missing-timeline-layout','Timeline rendering requires a coordinated core build with shared timeline geometry.',{path:item.path});
+  const scale=Math.min(bound.design.dimensions.width,bound.design.dimensions.height)/720;
+  const children=[tag('line',{...layout.connector,stroke:bound.design.colors.border,'stroke-width':3*scale,...traceAttrs(options,item.path)})];
+  for(const marker of layout.markers)children.push(tag('circle',{cx:marker.x,cy:marker.y,r:marker.radius,fill:bound.design.colors.primary,...traceAttrs(options,marker.path)}));
+  for(const part of layout.parts){
+    if(!part.fit)throw new OPFRenderError('layout-overflow','Timeline field has no usable space; change the arrangement or paginate events.',{path:part.path,issues:layout.diagnostics});
+    children.push(tag('g',options.trace?{'data-opf-timeline-role':part.role}:{},renderTextBox(part.text,part.box,bound,{
+      path:part.path,fit:part.fit,textStyle:part.style,fontFamily:part.requestedStyle.fontFamily,align:part.alignment,
+      fill:bound.design.colors.text,diagnosticsHandled:true,options,
+    })));
+  }
+  return tag('g',{...traceAttrs(options,item.path),...(options.trace?{'data-opf-timeline-arrangement':layout.arrangement}:{})},children.join('\n'));
 }
 
 function renderTable(item, box, bound, options) {
