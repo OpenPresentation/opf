@@ -14,14 +14,17 @@ const options = {
   onDiagnostic: issue => diagnostics.push(issue),
 };
 const slides = renderSvgDeck(document, {...options, embeddedFonts: fonts.embeddedFonts});
-const firstSlidePng = await svgToPng(slides[0]);
-const firstSlidePdf = await svgToPdf(slides[0]);
+const rasterOptions = {fontFiles: fonts.fontFiles, useBundledFonts: false, loadSystemFonts: false};
+const firstSlidePng = await svgToPng(slides[0], rasterOptions);
+const deckPdf = await svgToPdf(slides, rasterOptions);
 const pptx = await toPptx(document, options);
 // Write the returned strings/bytes to the user's requested local output paths.
 // const imported = await fromPptx(inputPptxBytes);
 ```
 
-`svgToPdf` converts one SVG; the example is a one-slide PDF, not a multi-page deck export. The Node font loader requires its installed font resources. If unavailable, supply explicitly licensed font files through the supported registry API rather than claiming the starter pack was loaded.
+The current Node `svgToPdf` accepts one SVG or an array, creating one PDF page per slide. The Node font loader requires its installed font resources. If unavailable, supply explicitly licensed font files through the supported registry API rather than claiming the starter pack was loaded. Pass those same font files to PNG/PDF conversion; embedding fonts in SVG does not by itself configure the Node rasterizer.
+
+`loadOfficeFontRegistry()` defaults to metric substitutions. Opt into `{substitutionPolicy:'visual'}` when approximate alternatives such as Carlito for Aptos are acceptable, and inspect `fonts.substitutions`. Synchronous SVG calls without `textMeasurement` estimate widths; loading a named font only at painting time can create gaps or overlaps between rich runs. Supply the registry to both layout and drawing. Plain core fitting still normalizes whitespace; code has a separate source-preserving layout contract.
 
 A raster snapshot embedded into PPTX is not equivalent to editable native shapes. The OPF PPTX converter writes supported native content, but visual and import coverage are incomplete. Verify what the requested deck uses.
 

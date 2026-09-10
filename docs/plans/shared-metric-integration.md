@@ -1,6 +1,14 @@
 # Shared metric integration — source checkpoint
 
-## Current checkpoint: actual offline artwork and image diagnostics; remaining native/corpus gates
+## Current checkpoint: shared card geometry and accepted text fits
+
+The latest authoritative checkpoint is [the handoff](../handoff-2026-09-08.md). Shared cards use core source `cc3c8131a14d7945c28e89f2819e4beeaa89cd51`; renderer `3068c0ecd7f453c00de3cd72a7a98979e31d14d5` additionally consumes accepted plain/rich/heading fits without refitting. PPTX `b9885ab6601c1bdecc7e3b5547baa33a2a467735` and editor `125782eb537a3a37f61dfba661f66cb9658a33f4` remain at their card checkpoint. [Card evidence](../evidence/content-card-layout/README.md) and [accepted-text evidence](../evidence/accepted-text-layout/README.md) preserve separate scopes and failures.
+
+Both supported runtimes pass 24 exact text cases, full PPTX/editor checks, six other browser suites and 46 rich editor checks. The renderer corpus gate remains unapproved; four exact-font portrait/right title paint cases retain a one-pixel counterexample. Two unchanged gallery slides pass measured rich-spacing gates with pinned Carlito bytes, while default estimated corpus rendering remains visibly imperfect. All 102 changed corpus slides were reviewed in five pair sheets; source/composition/normalized words stay unchanged. No release or public deployment advances.
+
+Continue shared ink bounds, plain whitespace preservation, measured-font preparation, missing CSV/chart semantics and native gates before clean candidate/review/release work. No native application check passed in this checkpoint; existing COM and metric/chart gaps remain open. The full goal is active.
+
+## Previous checkpoint: actual offline artwork and image diagnostics; remaining native/corpus gates
 
 Core `6cf9d138383846e14770bc6a5289f17fb0f5beb0` and renderer `5257b906fe3fd28ea19a4367474f9c594712a270` are pushed. PPTX/editor source refs below are unchanged. [New portable evidence](../evidence/gallery-artwork-images/README.md) preserves original MIT artwork, exact authoring-source guards, both runtime check matrices and real offline browser/image export/reimport reports. Eighty decks gain 400 embedded assets; 240 photo/video/data references remain explicit gaps. Renderer missing-image diagnostics, bounded accessible status labels/icons and complete branding fit are implemented and tested.
 

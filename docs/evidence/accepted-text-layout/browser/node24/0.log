@@ -1,0 +1,30 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   'portrait-plain-right-scalar: Paint leaves cell: slides.0.title (1 pixels)',
++   'portrait-plain-right-rich: Paint leaves cell: slides.0.title (1 pixels)',
++   'portrait-card-right-scalar: Paint leaves cell: slides.0.title (1 pixels)',
++   'portrait-card-right-rich: Paint leaves cell: slides.0.title (1 pixels)'
++ ]
+- []
+
+    at file:///C:/Users/micha/Source/opf/artifacts/shared-metric-integration/opf-render/test/accepted-text-browser.mjs:104:10 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    'portrait-plain-right-scalar: Paint leaves cell: slides.0.title (1 pixels)',
+    'portrait-plain-right-rich: Paint leaves cell: slides.0.title (1 pixels)',
+    'portrait-card-right-scalar: Paint leaves cell: slides.0.title (1 pixels)',
+    'portrait-card-right-rich: Paint leaves cell: slides.0.title (1 pixels)'
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.20.0
