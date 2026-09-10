@@ -1,0 +1,11 @@
+{
+  "node": "v20.20.2",
+  "generationSha256": "4783b59dd04ec50c0002ff23f3b16b343789b0df894a0245a8c361480870eab5",
+  "nativeSha256": "681cd4f3d6499a4efab5661e4d73b1ff44d0a736f0d7a587084b25efdcc2de96",
+  "slides": 6,
+  "phases": 2,
+  "cells": 48,
+  "characterColorObservations": 624,
+  "passed": true,
+  "scope": "Actual PowerPoint editable table text and every source character color survive native save/reopen. Explicit low-contrast colors and translucent fills remain intentional counterexamples. Native rasters are recorded for review, not claimed equivalent to browser output."
+}

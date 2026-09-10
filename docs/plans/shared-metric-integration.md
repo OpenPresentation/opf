@@ -1,6 +1,14 @@
 # Shared metric integration — source checkpoint
 
-## Current checkpoint: native anchors and corpus authoring corrections
+## Current checkpoint: native table colors and scoped gallery contrast evidence
+
+Core `c3edf5696c028d5150e77e32d7904060022eb83c`, renderer `a688f619b4617ca229bc910ce5d4dc1548dcf601`, PPTX `eac68e3b675c279f97fae61764e015566c2c1d39` and unchanged editor `b30c25c5af426590857f1a84c54b775056fee5ca` continue the integration branch. [Separate new evidence](../evidence/table-colors-gallery-contrast/README.md) binds the inherited table-color fallback and 96 authored gallery color improvements. Both supported Node runtimes pass 469 core tests, preservation/type checks and full PPTX commands; the renderer golden gate remains nonzero, with subsequent commands passing separately.
+
+Real PowerPoint verifies all 48 original/reopened table cell observations and 624 character-color observations per runtime; native rasters and source PPTX hashes match across runtimes. Explicit overrides and translucent-fill limitations remain intentional. The source guard preserves content/metadata/geometry and verifies both complete 805-PNG sets; 656 current rasters differ and require full visual review. The conservative audit retains 962 findings, including unresolved placeholders and the dark chart's white-panel/near-white-label defect. One metric border false positive is independently resolved by actual browser glyph masks. No baseline is promoted and no package/deployment advances.
+
+Continue chart/background, placeholder and corpus quality fixes alongside the existing native metric tab/raster counterexamples. Clean candidate CI, coordinated source checks and PR review precede releases. The previous metric evidence remains historical and was not rerun for this color-only runtime change.
+
+## Previous checkpoint: native anchors and corpus authoring corrections
 
 Core source `621bc86b6b04f2b33080fbe2565e10e4d3681aec` and PPTX `78993a14f2e79959df3390c370b2d35dadc0d059` are pushed on `codex/shared-metric-integration-20260910`; renderer/editor refs below are unchanged. [New source evidence](../evidence/shared-metric-native-anchor/summary.json) preserves the older reports separately. No package or public deployment has advanced.
 

@@ -2,7 +2,13 @@
 
 This work implements the [ecosystem objective](ecosystem-objective-2026-09-09.md) in reviewable increments. It does not introduce a model, account, key, network or paid-service dependency into OPF. Proprietary applications remain optional compatibility-test environments.
 
-## Current checkpoint — metric native anchors and visual corpus review
+## Current checkpoint — table colors and measured gallery contrast findings
+
+The [integration checkpoint](shared-metric-integration.md) now shares inherited table text colors across SVG and editable PPTX and corrects authored colors in 96 gallery decks without altering content or geometry. Both supported Node runtimes pass the core/PPTX checks and real PowerPoint table color/save/reopen assertions. [New evidence](../evidence/table-colors-gallery-contrast/README.md) keeps the renderer golden gate, 656 changed raster reviews and 962 conservative contrast findings open. An actual browser glyph-mask counterexample separates an unrelated panel border from metric text ink; it does not dismiss other findings. Confirmed dark-chart label/background mismatch and unresolved placeholders remain quality work.
+
+No baseline, release or public deployment advances. Existing native metric tab-position and portrait-label pixel counterexamples remain open. Continue quality fixes, coordinated source/candidate CI and PR review before release preparation; the broader deterministic repair/Auto arrange/font objective remains active.
+
+## Previous checkpoint — metric native anchors and visual corpus review
 
 The [metric integration checkpoint](shared-metric-integration.md) now includes a native paragraph-anchor fix and isolated field raster checks. Both Node 20/24 runs preserve 144 original/saved/edited imports from 48 real PowerPoint fixtures, with no character-bound overrun or inter-field pixel-mask collision. Eight tab-position outliers and one raster-edge outlier keep native comparisons failing. The affected PPTX checks, actual metric editor browser workflows and remaining post-golden renderer commands pass separately.
 

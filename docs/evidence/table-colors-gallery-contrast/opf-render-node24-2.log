@@ -1,0 +1,54 @@
+
+> @openpresentation/opf-render@0.7.0 test
+> npm run build && node test/smoke.mjs && node test/webp.mjs && node test/jpeg-orientation.mjs && node test/fonts.mjs && node test/office-fonts.mjs && node test/timeline.mjs && node test/quote-footer.mjs && node test/shared-quote.mjs && node test/rich-trace.mjs && node test/rich-table.mjs && node test/golden-gate.mjs && node test/golden.mjs && node test/fonts-browser.mjs && node test/design-preview.mjs && npm run build:browser-check && npm run test:styled-table
+
+
+> @openpresentation/opf-render@0.7.0 build
+> node scripts/build.mjs
+
+opf-render smoke passed (126 OPF corpus deck(s) rendered).
+WebP raster passed: 23 PNG/PDF and fit/crop cases; independent pixels, PDF image streams, alpha/EXIF/first frame, SVG input forms, errors and unchanged source SVG.
+JPEG orientation passed: 24 raster/PDF and fit/crop cases across all eight orientations; independent Pillow pixels (max channel difference 2), original orientation-1 bytes and path-specific errors.
+Fonts: actual advances, scaling, strict missing fonts/glyphs, explicit substitution, embedding and raster output passed.
+Office font policy passed: 24 bundled faces, exact-first lookup, scoped metric claims, theme aliases, explicit approximate fallback, and symbol/math/coverage errors.
+Timelines passed: 1/2/4/8 events, wide and portrait slides, measured text and marker containment.
+Quote footer passed: 8 fitted long quotes retain separation, 2 oversized cases diagnose/reject in strict mode across wide and portrait canvases.
+Shared quote SVG: 4 exact accepted layouts/styles with no extra measurement, reasoned overflow, strict rejection and no tiny-cell omission.
+Rich trace passed: leading/trailing blank lines, CRLF, cross-run offsets and measured heights.
+Rich table renderer passed: formatted cell/header runs, trace paths, links, empty rich cells, PNG output and strict overflow.
+Golden gate passed: missing baseline, pixel drift, source drift, non-mutating candidate generation and empty-corpus rejection.
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Golden corpus changed; inspect candidate and review the new corpus.
++ actual - expected
+
+  {
+    decks: 126,
+    path: 'examples',
+    repository: 'OpenPresentation/opf',
++   sha256: 'a7c34efedca3f700b475d15e02f83b6adab667de4046f1d1ebdf538ec2517078'
+-   sha256: 'cbd0d2c7cfdaa01ec6312494179c68fe59ee95206d3b8a2e07f8b69f19ce29bd'
+  }
+
+    at file:///C:/Users/micha/Source/opf/artifacts/shared-metric-integration/opf-render/test/golden.mjs:65:10 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: {
+    repository: 'OpenPresentation/opf',
+    path: 'examples',
+    sha256: 'a7c34efedca3f700b475d15e02f83b6adab667de4046f1d1ebdf538ec2517078',
+    decks: 126
+  },
+  expected: {
+    repository: 'OpenPresentation/opf',
+    path: 'examples',
+    sha256: 'cbd0d2c7cfdaa01ec6312494179c68fe59ee95206d3b8a2e07f8b69f19ce29bd',
+    decks: 126
+  },
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.20.0
