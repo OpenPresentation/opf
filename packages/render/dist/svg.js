@@ -1,4 +1,4 @@
-import { layoutTable, fitList, fitRichText, composeSlide, resolveCanvasDimensions, resolveFontFamilies, resolveTextStyle, textWidthMeasurer, fitText } from "@openpresentation/opf/composition";
+import { layoutTable, fitList, fitRichText, composeSlide, resolveCanvasDimensions, resolveFontFamilies, resolveTextStyle, textWidthMeasurer, fitText, textColorForFill, chartColorForFill } from "@openpresentation/opf/composition";
 import {
   catalogs as bundledCatalogs,
   validatePresentation
@@ -485,7 +485,7 @@ function bindSlide(presentation, slide, layout, index, context) {
 
   const design = resolveDesign(presentation, slide, context);
   for (const role of ["heading","body","code"]) design.fonts[role] = resolveTextStyle({fontFamily:design.fonts[role],fontWeight:role === "heading" ? 700 : 400},context.options.textMeasurement).fontFamily;
-  const geometry = composeSlide(slide, { ...design.dimensions, layout, slideIndex: index, fonts: design.fonts, textMeasurement: context.options.textMeasurement });
+  const geometry = composeSlide(slide, { ...design.dimensions, layout, slideIndex: index, fonts: design.fonts, contentAlignment:design.contentAlignment, titleAlignment:design.titleAlignment, textRasterPadding:context.options.textRasterPadding, contentBox:design.contentBox, textMeasurement: context.options.textMeasurement });
   return {
     geometry,
     assets: presentation.assets ?? {},
@@ -622,7 +622,8 @@ function renderBackground(bound, width, height, options) {
 function renderSlideContent(bound, width, height, options) {
   for (const diagnostic of bound.geometry.diagnostics) reportDiagnostic(diagnostic, options);
   return bound.geometry.items.map(item => {
-    const surface=bound.design.contentBox && !['title','subtitle','tag'].includes(item.field) ? tag('rect',{x:item.box.x,y:item.box.y,width:item.box.width,height:item.box.height,rx:8,fill:bound.design.colors.surface,stroke:bound.design.colors.border}) : '';
+    const frame=item.frameBox;
+    const surface=frame ? tag('rect',{x:frame.x,y:frame.y,width:frame.width,height:frame.height,rx:8*Math.min(width,height)/720,fill:bound.design.colors.surface,stroke:bound.design.colors.border}) : '';
     return surface+renderPayload(item, item.box, { ...bound, composition: item.composition }, options);
   });
 }
@@ -669,6 +670,9 @@ function renderTextPayload(item, box, bound, options) {
     fontFamily: item.field === "title" ? bound.design.fonts.heading : bound.design.fonts.body,
     fontWeight: item.field === "title" ? 700 : 400,
     fill: bound.design.colors.text,
+    fit: item.text,
+    textStyle: item.textStyle,
+    diagnosticsHandled: Boolean(item.text),
     options
   });
 }
@@ -689,11 +693,14 @@ function renderList(item, box, bound, options) {
 function renderImage(item, box, bound, options) {
   let asset = normalizeAsset(item.value);
   const seen = new Set();
+  let missingReference;
   while (asset.src?.startsWith("asset:")) {
     const id = asset.src.slice(6);
     if (seen.has(id)) throw new OPFRenderError("invalid-asset-reference", "Circular asset reference.", { path: item.path });
     seen.add(id);
-    asset = normalizeAsset(bound.assets[id]);
+    if (!Object.hasOwn(bound.assets,id)) { missingReference=id; break; }
+    const {src:_source,...overrides}=asset;
+    asset = {...normalizeAsset(bound.assets[id]),...overrides};
   }
   const source = options.imageResolver?.(asset.src, { asset, path: item.path }) ?? asset.src;
   if (typeof source === "string" && /^data:image\/(png|jpeg|gif|webp);base64,/i.test(source)) {
@@ -701,8 +708,18 @@ function renderImage(item, box, bound, options) {
       href: source, preserveAspectRatio: (options.imageFit ?? (bound.design.imageFill === "crop" ? "cover" : "contain")) === "cover" ? "xMidYMid slice" : "xMidYMid meet", role: "img", "aria-label": asset.alt ?? "Image",
       ...traceAttrs(options, item.path) });
   }
-  if (options.strictAssets) throw new OPFRenderError("unresolved-asset", "Image requires an embedded raster data URI or a host imageResolver.", { path: item.path });
+  const reason=missingReference?'missing-reference':!asset.src?'missing-source':'unsupported-source';
+  const message=missingReference?`Image asset ${missingReference} is missing; supply the referenced asset or resolve it in the host.`:'Image requires an embedded raster data URI or a host imageResolver.';
+  if (options.strictAssets) throw new OPFRenderError("unresolved-asset", message, { path: item.path,reason });
   const fill = bound.design.colors.surface;
+  const scale=Math.min(bound.design.dimensions.width,bound.design.dimensions.height)/720;
+  const padding=Math.min(24*scale,box.width*.06,box.height*.1),inner=inset(box,padding);
+  const description=asset.alt??asset.title??'Image';
+  const label=`Image unavailable\n${description}`;
+  const style=resolveTextStyle({fontFamily:bound.design.fonts.body,fontWeight:600,path:item.path},options.textMeasurement);
+  const fit=fitText(label,inner,20*scale,((bound.composition??bound.geometry.composition).minFontSize??16)*scale,textWidthMeasurer(style,options.textMeasurement));
+  const textColor=textColorForFill(fill,bound.design.colors.text);
+  reportDiagnostic({code:'unresolved-asset',path:item.path,message,reason,source:asset.src,assetId:missingReference,description,placeholder:fit.overflow?'icon':'label'},options);
   const children = [
     tag("rect", {
       x: box.x,
@@ -713,21 +730,28 @@ function renderImage(item, box, bound, options) {
       fill,
       stroke: bound.design.colors.border,
       "stroke-width": 1,
+      "stroke-dasharray": "4 3",
       ...traceAttrs(options, item.path)
-    }),
-    renderTextBox(asset.alt || asset.title || asset.src || "Image", inset(box, 24), bound, {
+    })
+  ];
+  if(!fit.overflow)children.push(renderTextBox(label, inner, bound, {
       path: item.path,
       fontSize: 20,
-      fontFamily: bound.design.fonts.body,
+      fontFamily: style.fontFamily,
       fontWeight: 600,
-      fill: bound.design.colors.mutedText,
+      textStyle:style,fit,diagnosticsHandled:true,
+      fill: textColor,
       options,
       align: "center",
       verticalAlign: "middle"
-    })
-  ];
-
-  return tag("g", traceAttrs(options, item.path), children.join("\n"));
+    }));
+  else {
+    // This is a status indicator, not shortened authored content. The complete
+    // description remains in the accessible name and the path-specific diagnostic.
+    const size=Math.max(0,Math.min(inner.width,inner.height,24*scale)),icon=centeredBox(inner,size,size);
+    children.push(tag('path',{d:`M ${icon.x} ${icon.y} L ${icon.x+size} ${icon.y+size} M ${icon.x+size} ${icon.y} L ${icon.x} ${icon.y+size}`,fill:'none',stroke:textColor,'stroke-width':Math.min(2*scale,size/8),'aria-hidden':'true'}));
+  }
+  return tag("g", {...traceAttrs(options,item.path),'data-opf-asset-status':'unresolved',role:'img','aria-label':`Image unavailable: ${description}`},children.join("\n"));
 }
 
 function renderMedia(item, box, bound, options) {
@@ -813,31 +837,32 @@ function renderCode(item, box, bound, options) {
 }
 
 function renderMetric(item, box, bound, options) {
-  const metric = isPlainObject(item.value) ? item.value : { value: item.value };
-  const children = [
-    renderTextBox(String(metric.value ?? ""), { ...box, height: box.height * 0.45 }, bound, {
-      path: `${item.path}.value`,
-      fontSize: Math.min(76, box.height * 0.28),
-      fontFamily: bound.design.fonts.heading,
-      fontWeight: 800,
-      fill: bound.design.colors.primary,
-      options
-    }),
-    renderTextBox([metric.label, metric.description, metric.delta].filter(Boolean).join("\n"), {
-      x: box.x,
-      y: box.y + box.height * 0.45,
-      width: box.width,
-      height: box.height * 0.55
-    }, bound, {
-      path: item.path,
-      fontSize: 23,
-      fontFamily: bound.design.fonts.body,
-      fontWeight: 500,
-      fill: bound.design.colors.text,
-      options
-    })
-  ];
-  return tag("g", traceAttrs(options, item.path), children.join("\n"));
+  const layout=item.metricLayout;
+  if (!layout) throw new OPFRenderError('missing-metric-layout','Metric rendering requires coordinated core metric geometry.',{path:item.path});
+  const children=[];
+  for (const part of layout.parts) {
+    const invalid=/[\u0000-\u0008\u000B\u000C\u000E-\u001F\uD800-\uDFFF\uFFFE\uFFFF]/u.exec(part.text);
+    if (invalid) throw new OPFRenderError('invalid-metric-text',`Metric text contains U+${invalid[0].codePointAt(0).toString(16).toUpperCase().padStart(4,'0')} at UTF-16 offset ${invalid.index}, which XML cannot represent; edit that character before rendering.`,{path:part.path});
+    if (!part.visible) continue;
+    if (!part.fit||part.linePositions?.length!==part.fit.sourceLines.length) throw new OPFRenderError('layout-overflow','Metric content has no accepted internal line positions; increase its cell size or coordinate package versions.',{path:part.path,issues:layout.diagnostics});
+    const lines=part.fit.sourceLines.map((line,index)=>{
+      const origin=part.linePositions[index];
+      return tag('text',{x:stableNumber(origin.x),y:stableNumber(origin.baseline),'text-anchor':'start',
+        'font-family':fontStack(part.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(part.fit.fontSize),
+        'font-weight':part.style.fontWeight,'font-style':part.style.italic?'italic':undefined,
+        'xml:space':'preserve',style:'white-space:pre','text-rendering':'geometricPrecision',fill:part.role==='value'?bound.design.colors.primary:bound.design.colors.text,
+        ...traceAttrs(options,part.path),...(options.trace?{'data-opf-metric-role':part.role,'data-opf-text-start':line.start,
+          'data-opf-text-end':line.end,'data-opf-text-next-start':line.nextStart,'data-opf-line-boundary':line.boundary}:{}),
+      },line.segments.map(segment=>tag('tspan',{x:stableNumber(origin.x+segment.x),
+        ...(segment.kind==='tab'?{textLength:stableNumber(segment.width),lengthAdjust:'spacingAndGlyphs'}:{}),
+        ...(options.trace?{'data-opf-segment':segment.kind,'data-opf-text-start':segment.start,'data-opf-text-end':segment.end}:{}),
+      },escapeText(part.text.slice(segment.start,segment.end)))).join(''));
+    });
+    children.push(tag('g',{...traceAttrs(options,part.path),...(options.trace?{'data-opf-metric-role':part.role,
+      'data-opf-box-x':part.box.x,'data-opf-box-y':part.box.y,'data-opf-box-width':part.box.width,'data-opf-box-height':part.box.height}:{}),
+      ...(part.fit.overflow?{'data-opf-overflow':'true'}:{})},lines.join('\n')));
+  }
+  return tag('g',{...traceAttrs(options,item.path),...(options.trace?{'data-opf-metric-container':'true'}:{})},children.join('\n'));
 }
 
 function renderQuote(item, box, bound, options) {
@@ -912,10 +937,11 @@ function renderTable(item, box, bound, options) {
   const defaultEdges = [], explicitEdges = [];
   for (const row of layout.rows) for (const cell of row.cells) {
     const style = cell.style ?? {};
+    const fill = style.fill ?? (cell.header ? bound.design.colors.primary : bound.design.colors.surface);
     children.push(tag("rect", {
       x: stableNumber(cell.box.x), y: stableNumber(cell.box.y),
       width: stableNumber(cell.box.width), height: stableNumber(cell.box.height),
-      fill: style.fill ?? (cell.header ? bound.design.colors.primary : bound.design.colors.surface),
+      fill,
       stroke: separateBorders ? undefined : bound.design.colors.border, "stroke-width":separateBorders ? undefined : 1,
       ...traceAttrs(options, cell.sourcePath ?? cell.path)
     }));
@@ -931,7 +957,7 @@ function renderTable(item, box, bound, options) {
     children.push((cell.rich ? renderRichTextBox : renderTextBox)(cell.rich ? cell.value : flattenText(cell.value ?? ""), cell.textBox, bound, {
       path:cell.path, fontSize:15, fontFamily:bound.design.fonts.body,
       fontWeight:cell.header ? 700 : 400, textStyle:cell.textStyle, fit:cell.fit,
-      fill:style.color ?? (cell.header ? "#FFFFFF" : bound.design.colors.text), align:style.align, options
+      fill:style.color ?? textColorForFill(fill, cell.header ? "#FFFFFF" : bound.design.colors.text), align:style.align, options
     }));
   }
 
@@ -976,9 +1002,10 @@ function renderImportedChart(item, box, bound, options) {
   const chart=item.value, rows=chart.data?.rows??[], columns=chart.data?.columns??[];
   if(!rows.length||columns.length<2)return null;
   const kind=chart.type, circular=['pie','donut','doughnut'].includes(kind);
-  const colors=[bound.design.colors.primary,bound.design.colors.secondary,'#9B6BCC','#D98944','#429B85','#CB5D79'];
+  const colors=[bound.design.colors.primary,bound.design.colors.secondary,'#9B6BCC','#D98944','#429B85','#CB5D79'].map(color=>chartColorForFill(bound.design.colors.surface,color));
   const children=[];
-  const text=(value,rect,path,size=16,align='center')=>renderTextBox(String(value),rect,bound,{path,fontSize:size,fontFamily:bound.design.fonts.body,fontWeight:400,fill:bound.design.colors.text,options,align,verticalAlign:'middle'});
+  const labelColor=textColorForFill(bound.design.colors.surface,bound.design.colors.text);
+  const text=(value,rect,path,size=16,align='center')=>renderTextBox(String(value),rect,bound,{path,fontSize:size,fontFamily:bound.design.fonts.body,fontWeight:400,fill:labelColor,options,align,verticalAlign:'middle'});
   const number=value=>typeof value==='number'&&Number.isFinite(value)?value:typeof value==='string'&&value.trim()&&Number.isFinite(Number(value))?Number(value):null;
   const series=columns.slice(1).map((name,j)=>({name,values:rows.map(row=>number(row[j+1]))}));
   children.push(tag('rect',{x:box.x,y:box.y,width:box.width,height:box.height,fill:bound.design.colors.surface,stroke:bound.design.colors.border,...traceAttrs(options,item.path)}));
@@ -1030,7 +1057,7 @@ function renderImportedChart(item, box, bound, options) {
         });
       }
     });
-    children.push(tag('line',{x1:horizontal?zero:plot.x,x2:horizontal?zero:plot.x+plot.width,y1:horizontal?plot.y:zero,y2:horizontal?plot.y+plot.height:zero,stroke:bound.design.colors.text,'stroke-width':1}));
+    children.push(tag('line',{x1:horizontal?zero:plot.x,x2:horizontal?zero:plot.x+plot.width,y1:horizontal?plot.y:zero,y2:horizontal?plot.y+plot.height:zero,stroke:labelColor,'stroke-width':1}));
   }
   return tag('g',traceAttrs(options,item.path),children.join('\n'));
 }
@@ -1045,13 +1072,17 @@ function renderChart(item, box, bound, options) {
   const data = inlineChartRows(chart.data);
   const plot = inset(box, 28);
   const max = Math.max(1, ...data.map((row) => Math.abs(row.value)));
+  const panelFill = bound.design.colors.surface;
+  const labelColor = textColorForFill(panelFill, bound.design.colors.text);
+  const primary = chartColorForFill(panelFill, bound.design.colors.primary);
+  const secondary = chartColorForFill(panelFill, bound.design.colors.secondary);
   const children = [
     tag("rect", {
       x: box.x,
       y: box.y,
       width: box.width,
       height: box.height,
-      fill: "#FFFFFF",
+      fill: panelFill,
       stroke: bound.design.colors.border,
       "stroke-width": 1,
       ...traceAttrs(options, item.path)
@@ -1064,7 +1095,7 @@ function renderChart(item, box, bound, options) {
       fontSize: 20,
       fontFamily: bound.design.fonts.body,
       fontWeight: 500,
-      fill: bound.design.colors.mutedText,
+      fill: labelColor,
       options,
       align: "center",
       verticalAlign: "middle"
@@ -1081,7 +1112,7 @@ function renderChart(item, box, bound, options) {
     children.push(tag("polyline", {
       points: points.map(([x, y]) => `${stableNumber(x)},${stableNumber(y)}`).join(" "),
       fill: "none",
-      stroke: bound.design.colors.primary,
+      stroke: primary,
       "stroke-width": 4,
       ...traceAttrs(options, `${item.path}.data`)
     }));
@@ -1089,7 +1120,7 @@ function renderChart(item, box, bound, options) {
       cx: stableNumber(x),
       cy: stableNumber(y),
       r: 5,
-      fill: bound.design.colors.primary,
+      fill: primary,
       ...traceAttrs(options, `${item.path}.data.rows.${index}`)
     })));
   } else {
@@ -1104,7 +1135,7 @@ function renderChart(item, box, bound, options) {
         y: stableNumber(y),
         width: stableNumber(barWidth),
         height: stableNumber(barHeight),
-        fill: index % 2 === 0 ? bound.design.colors.primary : bound.design.colors.secondary,
+        fill: index % 2 === 0 ? primary : secondary,
         ...traceAttrs(options, `${item.path}.data.rows.${index}`)
       }));
     });
@@ -1120,7 +1151,7 @@ function renderChart(item, box, bound, options) {
     fontSize: 12,
     fontFamily: bound.design.fonts.body,
     fontWeight: 400,
-    fill: bound.design.colors.mutedText,
+    fill: labelColor,
     options,
     align: "center"
   }));
@@ -1150,7 +1181,7 @@ function renderFurniture(bound, presentation, width, height, options, kind) {
   return tag('g',traceAttrs(options,root),['left','center','right'].map((zone,index)=>{
     const item=furniture[zone];if(!item)return '';
     const box={x:width*(.07+index*.3),y:kind==='header'?height*.025:height*.925,width:width*.26,height:height*.05};
-    if(item.image)return renderImage({value:item.image,path:`${root}.${zone}.image`},box,bound,options);
+    if(item.image)return renderImage({value:item.image,path:`${root}.${zone}.image`},box,bound,{...options,imageFit:'contain'});
     const pieces=[item.text,item.organization?organization?.name:null,item.section?bound.slide.section:null,item.slideNumber?String(bound.index+1):null,typeof item.date==='string'?item.date:null].filter(value=>value!==undefined&&value!==null&&value!=='');
     if(item.date===true)reportDiagnostic({code:'date-needs-value',path:`${root}.${zone}.date`,message:'Use a literal date string for a reproducible preview; the document does not define a presentation date.'},options);
     const anchor=['start','middle','end'][index],x=index===0?width*.07:index===1?width/2:width*.93;
@@ -1161,7 +1192,7 @@ function renderBranding(bound,presentation,width,height,options) {
   const design={...presentation.design,...bound.slide.design}, pieces=[];
   const rootFor=key=>bound.slide.design?.[key]!==undefined?`${bound.path}.design.${key}`:`design.${key}`;
   if(design.watermark){
-    pieces.push(tag('g',{opacity:typeof design.watermark==='object'?design.watermark.opacity??.08:.08},renderImage({value:design.watermark,path:rootFor('watermark')},{x:width*.3,y:height*.3,width:width*.4,height:height*.4},bound,options)));
+    pieces.push(tag('g',{opacity:typeof design.watermark==='object'?design.watermark.opacity??.08:.08},renderImage({value:design.watermark,path:rootFor('watermark')},{x:width*.3,y:height*.3,width:width*.4,height:height*.4},bound,{...options,imageFit:'contain'})));
   }
   return pieces.join('');
 }
@@ -1184,17 +1215,18 @@ function renderEmbeddedFonts(fonts = []) {
 function renderRichTextBox(value, box, bound, config) {
   const scale=Math.min(bound.design.dimensions.width,bound.design.dimensions.height)/720;
   const fit=config.fit??fitRichText(value,box,config.fontSize*scale,((bound.composition??bound.geometry.composition).minFontSize??16)*scale,{style:{fontFamily:config.fontFamily,fontWeight:config.fontWeight??400,path:config.path},textMeasurement:config.options.textMeasurement});
-  if(fit.overflow){const diagnostic={code:'text-overflow',path:config.path,message:'Mixed-style text exceeds its cell at the minimum font size.'};reportDiagnostic(diagnostic,config.options);if((bound.composition??bound.geometry.composition).overflow==='error')throw new OPFRenderError('layout-overflow',diagnostic.message,{issues:[diagnostic]});}
+  if(fit.overflow&&!config.diagnosticsHandled){const diagnostic={code:'text-overflow',path:config.path,message:'Mixed-style text exceeds its cell at the minimum font size.'};reportDiagnostic(diagnostic,config.options);if((bound.composition??bound.geometry.composition).overflow==='error')throw new OPFRenderError('layout-overflow',diagnostic.message,{issues:[diagnostic]});}
   return renderRichLines(value,fit,box,bound,config);
 }
 
 function renderRichLines(value,fit,box,bound,config) {
-  const alignment=config.align??bound.design.contentAlignment;
+  const alignment=fit.placement?.alignment??config.align??bound.design.contentAlignment;
   let textOffset=0;
   const runOffsets=value.map(run=>{const start=textOffset;textOffset+=(typeof run==='string'?run:run.text).length;return start;});
-  const content=fit.richLines.flatMap(line=>line.fragments.map(fragment=>{
+  const content=fit.richLines.flatMap((line,lineIndex)=>line.fragments.map(fragment=>{
     const run=fragment.run,offset=alignment==='right'?box.width-line.width:alignment==='center'?(box.width-line.width)/2:0;
-    const rendered=tag('text',{...(config.options.trace?{'data-opf-text-start':runOffsets[fragment.runIndex]+fragment.start,'data-opf-text-end':runOffsets[fragment.runIndex]+fragment.end}:{}),x:stableNumber(box.x+offset+fragment.x),y:stableNumber(box.y+line.baseline+fragment.baselineShift),'xml:space':'preserve','font-family':fontStack(fragment.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(fragment.fontSize),'font-weight':fragment.style.fontWeight,'font-style':fragment.style.italic?'italic':undefined,'text-decoration':[run.underline?'underline':'',run.strikethrough?'line-through':''].filter(Boolean).join(' ')||undefined,fill:/^#(?:[0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(run.color??'')?run.color:config.fill},escapeText(fragment.text));
+    const placed=fit.placement?.lines[lineIndex];
+    const rendered=tag('text',{...(config.options.trace?{'data-opf-text-start':runOffsets[fragment.runIndex]+fragment.start,'data-opf-text-end':runOffsets[fragment.runIndex]+fragment.end}:{}),x:stableNumber((placed?.x??box.x+offset)+fragment.x),y:stableNumber((placed?.baseline??box.y+line.baseline)+fragment.baselineShift),'xml:space':'preserve','font-family':fontStack(fragment.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(fragment.fontSize),'font-weight':fragment.style.fontWeight,'font-style':fragment.style.italic?'italic':undefined,'text-decoration':[run.underline?'underline':'',run.strikethrough?'line-through':''].filter(Boolean).join(' ')||undefined,fill:/^#(?:[0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(run.color??'')?run.color:config.fill},escapeText(fragment.text));
     if(run.link&&/^(https?:|mailto:)/i.test(run.link))return tag('a',{href:run.link,target:'_blank',rel:'noopener noreferrer'},rendered);
     return rendered;
   }));
@@ -1204,7 +1236,8 @@ function renderRichLines(value,fit,box,bound,config) {
     if(index){const newline=/^(\r\n|\r|\n)/.exec(whole.slice(cursor));if(newline)cursor+=newline[0].length;}
     const start=cursor;cursor+=(fit.lines[index]??'').length;
     const offset=alignment==='right'?box.width-line.width:alignment==='center'?(box.width-line.width)/2:0;
-    return {start,end:cursor,x:box.x+offset,y:box.y+line.y,height:line.height};
+    const placed=fit.placement?.lines[index];
+    return {start,end:cursor,x:placed?.x??box.x+offset,y:placed?.y??box.y+line.y,height:placed?.height??line.height};
   }):undefined;
   return tag('g',{...traceAttrs(config.options,config.path),...(config.options.trace?{'data-opf-box-width':box.width,'data-opf-rich-text':config.rich===false?undefined:'true','data-opf-rich-lines':JSON.stringify(lineTrace)}:{}),...(fit.overflow?{'data-opf-overflow':'true'}:{})},content.join('\n'));
 }
@@ -1224,11 +1257,11 @@ function renderTextBox(text, box, bound, config) {
   const totalHeight = fit.lines.length * fit.lineHeight;
   const startY = config.verticalAlign === "middle"
     ? box.y + Math.max(0, (box.height - totalHeight) / 2) + size : box.y + size;
-  const alignment=config.align??bound.design.contentAlignment;
+  const alignment=fit.placement?.alignment??config.align??bound.design.contentAlignment;
   const anchor = alignment === "center" ? "middle" : alignment === "right" ? "end" : "start";
   const x = alignment === "center" ? box.x + box.width / 2 : alignment === "right" ? box.x + box.width : box.x;
   const lines = fit.lines.map((line, index) => tag("text", {
-    x: stableNumber(x), y: stableNumber(startY + index * fit.lineHeight),
+    x: stableNumber(fit.placement?fit.placement.lines[index].x+fit.placement.lines[index].width*(alignment==='right'?1:alignment==='center'?.5:0):x), y: stableNumber(fit.placement?.lines[index].baseline??startY + index * fit.lineHeight),
     "text-anchor": anchor, "font-family": fontStack(style.fontFamily, config.fontFamily === bound.design.fonts.code ? "monospace" : bound.design.fontScheme.type),
     "font-size": stableNumber(size), "font-weight": style.fontWeight, "font-style": style.italic ? "italic" : undefined, fill: config.fill,
     ...traceAttrs(config.options, config.path)
