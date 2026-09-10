@@ -1,0 +1,264 @@
+{
+  "checkedAt": "2026-09-10T08:42:02.494Z",
+  "scope": "Published shared-code package adoption across all three public sites; preview and production are independently exercised.",
+  "corePlan": {
+    "pr": 56,
+    "reviewedHead": "db285830a4c4fa0bdad22254b5eacfafd3ad2ea6",
+    "merge": "921fce853fefacf6d17c3572d77b1714c139a9ab",
+    "coordinatedCI": 34452913573,
+    "coreCI": 34452913519,
+    "bugbot": "passed"
+  },
+  "currentPlanSha256": "fc1b3569d969bc0f5a2c068e53a5a41a85d7879e6ffcb36b474adb238b21e567",
+  "planHashConvention": "UTF-8 with CRLF normalized to LF, matching committed Git bytes.",
+  "releases": [
+    {
+      "name": "@openpresentation/opf",
+      "version": "0.9.0"
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "version": "0.7.0"
+    },
+    {
+      "name": "@openpresentation/opf-editor",
+      "version": "0.6.0"
+    },
+    {
+      "name": "@openpresentation/opf-pptx",
+      "version": "0.7.0"
+    },
+    {
+      "name": "@openpresentation/cli",
+      "version": "0.7.0"
+    }
+  ],
+  "exampleOnlyFix": {
+    "repository": "OpenPresentation/opf-editor",
+    "pr": 10,
+    "reviewedHead": "fa4acf1c2108fd831d10ceb803fd708e908a4e17",
+    "merge": "1b05f8ba97f9617b25b1a9d18ac05648419318c9",
+    "ci": 34455390448,
+    "bugbot": "passed",
+    "treeIdentical": true,
+    "problem": "Four toolbar buttons lost accessible names at the mobile breakpoint.",
+    "verification": "Failing 540px gallery workflow reproduced first. Persistent names and Source/Import actions pass upstream Node 20/24 CI and final gallery wide/portrait public workflows.",
+    "packageRepublished": false
+  },
+  "sites": [
+    {
+      "repository": "Data-Advantage/openpresentation-site",
+      "pr": 23,
+      "reviewedHead": "2aa5432e670fafb108e5c3bcb7f0b2d9a57bf97f",
+      "mergeCommit": "54347ac89b59658a57db95b6b26e806db8fd30f4",
+      "treeIdentical": true,
+      "ci": 34455007885,
+      "bugbot": "passed",
+      "dependencies": {
+        "@openpresentation/opf": "0.9.0"
+      },
+      "lockSha256": "912cf151a1ea9a0183d98ecf7709d5f8b30f82f48f7a8be12f30eb89327e3629",
+      "local": {
+        "node": "24.20.0",
+        "packageManager": "pnpm@10.33.2",
+        "tests": null,
+        "routes": 628,
+        "browserTests": 6,
+        "auditAdvisories": 0
+      },
+      "testSources": {
+        "tests/e2e/published-site.spec.ts": "43f9d1a5309765e0f600bf13f40d8a6015b912948af8f5760451c02e56391f5e",
+        "tests/e2e/reference-playground.spec.ts": "7a07361a912738efc2a2bb3d9bfcad5cfbd31cdb51dd800af301551a278bfcbc"
+      },
+      "deployments": [
+        {
+          "mode": "preview",
+          "key": "site",
+          "id": "dpl_24JsNyAWzLH7sx6LXgci2TKAwwMN",
+          "sha": "2aa5432e670fafb108e5c3bcb7f0b2d9a57bf97f",
+          "url": "https://openpresentation-site-gscm1bor9-dataadvantage.vercel.app",
+          "projectId": "prj_MnL89d86UvFUMWP1MAamRR3VE9IC",
+          "state": "READY",
+          "source": "git",
+          "target": null,
+          "aliases": [
+            "openpresentation-site-git-codex-shared-cod-2d2f93-dataadvantage.vercel.app"
+          ],
+          "browserReport": "site-preview-browser.json"
+        },
+        {
+          "mode": "production",
+          "key": "site",
+          "id": "dpl_DWCgLrVof7cjwGoauJSfKiLv3wcv",
+          "sha": "54347ac89b59658a57db95b6b26e806db8fd30f4",
+          "url": "https://openpresentation-site-bmzryy6be-dataadvantage.vercel.app",
+          "projectId": "prj_MnL89d86UvFUMWP1MAamRR3VE9IC",
+          "state": "READY",
+          "source": "git",
+          "target": "production",
+          "aliases": [
+            "openpresentation.org",
+            "www.openpresentation.org",
+            "openpresentation-site.vercel.app",
+            "openpresentation-site-dataadvantage.vercel.app",
+            "openpresentation-site-git-main-dataadvantage.vercel.app"
+          ],
+          "browserReport": "site-production-browser.json"
+        }
+      ]
+    },
+    {
+      "repository": "Data-Advantage/pptx-dev",
+      "pr": 31,
+      "reviewedHead": "f8d49a7da4175226b14e2dc086fe80b1433a68d3",
+      "mergeCommit": "0004d4ceb595fc2ed8b561d4c8d7648cab1bc8a1",
+      "treeIdentical": true,
+      "ci": 34455024630,
+      "bugbot": "passed",
+      "dependencies": {
+        "@openpresentation/opf": "0.9.0",
+        "@openpresentation/opf-editor": "0.6.0",
+        "@openpresentation/opf-pptx": "0.7.0",
+        "@openpresentation/opf-render": "0.7.0"
+      },
+      "lockSha256": "16adaf52e98e2229e136d09db22da435dd3a70c74c8c9bd06b6008142abaf7c9",
+      "local": {
+        "node": "24.20.0",
+        "packageManager": "pnpm@11.1.3",
+        "tests": 598,
+        "routes": 214,
+        "browserTests": 10,
+        "auditAdvisories": 0
+      },
+      "testSources": {
+        "tests/e2e/author.spec.ts": "8332c789d3ac0ad0179d460d6849be12816f35e00004921f2c24db838481d8ed",
+        "tests/e2e/inspector.spec.ts": "d0e956daaf433a33a6ab8b4d3361d52f0a1acb6f6e3821ce5370ef317031a9bc",
+        "tests/e2e/monaco.spec.ts": "a0bd6e22363e9552b9482a67a8875d3e9b49f77460cc5431e4e2f382735b2a55",
+        "tests/e2e/svg-security.spec.ts": "9e3a21eaa3f18d00a550139302786272c33088e977223bc0ee822e296907b873",
+        "tests/e2e/toolkit.spec.ts": "262603d599976178dc7ab6c60f6c5b202f5e34c0173576a12a83515aa3ea96b8",
+        "tests/e2e/yaml.spec.ts": "0206e8aad7562d7005cd8aed3de78aa460214d2ac0cc618000937c610ed6e52b"
+      },
+      "deployments": [
+        {
+          "mode": "preview",
+          "key": "dev",
+          "id": "dpl_5bLEBrp9VdyzWVt2dYgDjeezEpMj",
+          "sha": "f8d49a7da4175226b14e2dc086fe80b1433a68d3",
+          "url": "https://pptx-n7s42ln9o-dataadvantage.vercel.app",
+          "projectId": "prj_v8NIINr5fgzK9yoAQRy0CNoDPqC8",
+          "state": "READY",
+          "source": "git",
+          "target": null,
+          "aliases": [
+            "pptx-dev-git-codex-shared-code-adoption-20260910-dataadvantage.vercel.app"
+          ],
+          "browserReport": "dev-preview-browser.json"
+        },
+        {
+          "mode": "production",
+          "key": "dev",
+          "id": "dpl_FsecBQDSBH2JiBeEYyV8hsN5ggek",
+          "sha": "0004d4ceb595fc2ed8b561d4c8d7648cab1bc8a1",
+          "url": "https://pptx-e38tl1v08-dataadvantage.vercel.app",
+          "projectId": "prj_v8NIINr5fgzK9yoAQRy0CNoDPqC8",
+          "state": "READY",
+          "source": "git",
+          "target": "production",
+          "aliases": [
+            "api.pptx.dev",
+            "mcp.pptx.dev",
+            "www.pptx.dev",
+            "pptx-dev.vercel.app",
+            "pptx.dev",
+            "pptx-dev-dataadvantage.vercel.app",
+            "pptx-dev-git-master-dataadvantage.vercel.app"
+          ],
+          "browserReport": "dev-production-browser.json"
+        }
+      ]
+    },
+    {
+      "repository": "Data-Advantage/pptx-gallery",
+      "pr": 25,
+      "reviewedHead": "ce133ecce42506896cd88c5850fc26f1ed38bf00",
+      "mergeCommit": "d048252ab3309a769c1ea9aa9d0c63deded6ad46",
+      "treeIdentical": true,
+      "ci": 34455644878,
+      "bugbot": "passed",
+      "dependencies": {
+        "@openpresentation/opf": "0.9.0",
+        "@openpresentation/opf-pptx": "0.7.0"
+      },
+      "lockSha256": "a1073d78f61a4cadb720b55896cebfdd96d4a3b830cfbc201367bdd5929234c1",
+      "local": {
+        "node": "24.20.0",
+        "packageManager": "pnpm@10.33.2",
+        "tests": 106,
+        "routes": 1925,
+        "browserTests": 5,
+        "auditAdvisories": 0
+      },
+      "testSources": {
+        "tests/e2e/editor.spec.ts": "52dec8566140a9ca0eb82e511d824d104c679be6d673517b111d5a5b34a0fa77"
+      },
+      "deployments": [
+        {
+          "mode": "preview",
+          "key": "gallery",
+          "id": "dpl_GTRPt2TMf3Wn2BzBHkJpre6Ebq4B",
+          "sha": "ce133ecce42506896cd88c5850fc26f1ed38bf00",
+          "url": "https://pptx-gallery-jkkkvuoqw-dataadvantage.vercel.app",
+          "projectId": "prj_jaAjOxlbGlBOfbKs6h4usu3mRR5G",
+          "state": "READY",
+          "source": "git",
+          "target": null,
+          "aliases": [
+            "pptx-gallery-git-codex-shared-code-adoptio-46e8fb-dataadvantage.vercel.app"
+          ],
+          "browserReport": "gallery-preview-browser.json"
+        },
+        {
+          "mode": "production",
+          "key": "gallery",
+          "id": "dpl_4KfB7yEGfqFFnNj8A8yS6Dfa3PY9",
+          "sha": "d048252ab3309a769c1ea9aa9d0c63deded6ad46",
+          "url": "https://pptx-gallery-bxc7kc0iy-dataadvantage.vercel.app",
+          "projectId": "prj_jaAjOxlbGlBOfbKs6h4usu3mRR5G",
+          "state": "READY",
+          "source": "git",
+          "target": "production",
+          "aliases": [
+            "www.pptx.gallery",
+            "pptxgallery.vercel.app",
+            "pptx.gallery",
+            "pptx-gallery-dataadvantage.vercel.app",
+            "pptx-gallery-git-main-dataadvantage.vercel.app"
+          ],
+          "browserReport": "gallery-production-browser.json"
+        }
+      ]
+    }
+  ],
+  "files": {
+    "site-preview-browser.json": "bf1868602656285eab85e9ba3b8d8420dc3d1248230fcf994b378e4927b633ef",
+    "site-production-browser.json": "d5a5ed01d652d6d13a37c12b90e83ce66d0883bb997e256d5ba9de011f646c5a",
+    "site-production-assets.json": "0dee4c18b2c8575d3328eeed8e6da1e6ab8ff2440f7cea967bdcc65f671178d3",
+    "dev-preview-browser.json": "ccf6e5bc63aa41f47d12cd2ec03f33142ade7de58fb55b33aab2ce34a127c512",
+    "dev-production-browser.json": "f6b7f3aa62401c9560b0ee39cb5d42f80b4242f9c7b5a9bc1aaf741703a9c64a",
+    "dev-production-assets.json": "5997c329c66038a78ce93a008514622b5823917f2eabba4ad309549dc52294a9",
+    "gallery-preview-browser.json": "8dfb2a6057bfa55e667f9e167f010b18d692b45a91eb3823a203dd7292d3b3d4",
+    "gallery-production-browser.json": "34ae69943d1d5f63180c4437812cec7dc98537e4f5fcec7055a79bc590dd6f44",
+    "gallery-production-assets.json": "a0dfaa2742e9fdd7f36a9c1d7eb1fa322b2dc2093edc3632da5ee6257470eb0c",
+    "repository-audit.json": "b20f6ed2c4a456a361719941650016ea8691dbc6cd71a15d87a185e2377629cf",
+    "dev-production-fonts.json": "b2d01cca80cfcb2bae5ea369ea3c8a9dd7e0f50c128e5686232f291843e08e1d",
+    "dev-production-native.json": "130faf73def9635030c3b22e500a4181a94ffd5a36921fc460b4cbb8c7ab9d31",
+    "dev-production-native.png": "a0e88dc4b5030659862fd5dc18f785b73bd8af5926b6b6fcf9eadb00480ef882",
+    "site-production.png": "c5c51c4d7e8f80776938ac759b06b4a11d3afe9b3011f21e46440b12f3f5640d"
+  },
+  "limitations": [
+    "The 21 workflows pass once against previews and once against public production; they are not 42 different user journeys.",
+    "Public JavaScript fingerprints identify served bundles; they are not byte matches to unbundled npm code. Gallery assets, showcase downloads and 33 licensed dev font faces have separate exact-byte checks.",
+    "Schema validity, browser interaction, rendering regression, native editability and raster equivalence remain distinct.",
+    "Full deterministic repair, Auto arrange, metric/chart/timeline internals, multilingual font compatibility and native macOS PowerPoint/Keynote remain open."
+  ]
+}

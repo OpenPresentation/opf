@@ -1,0 +1,135 @@
+{
+  "checkedAt": "2026-09-10T08:34:45.446Z",
+  "baseURL": "https://www.openpresentation.org",
+  "mode": "production",
+  "browser": "152.0.4191.66",
+  "assets": {
+    "/showcase/example.opf.json": {
+      "bytes": 826,
+      "sha256": "902d6bd9de957598a123e5919ae0dd602e0241d27bdfc406c936c7c43a3d0dbd"
+    },
+    "/showcase/example.svg": {
+      "bytes": 431751,
+      "sha256": "de84138f9a1bb04e77468754fc56622d161d56507c5f6eb923737b08f2a63e93"
+    },
+    "/showcase/example.pptx": {
+      "bytes": 15113,
+      "sha256": "5cd591c6a01c644f618667865d94ae95cbf603f573e80419f88eef602490ec5f"
+    }
+  },
+  "scripts": {
+    "/_next/static/immutable/chunks/turbopack-03vzpr2cbz8d0.js": {
+      "bytes": 10986,
+      "sha256": "29f112eb897998857be41259cb57be79aa49d9e20c79a82db547d9b5ab00ce1e"
+    },
+    "/_next/static/immutable/chunks/0in1r0cpkewc0.js": {
+      "bytes": 6556,
+      "sha256": "bebf11b619471800adfa4f42c258f5763c0748bea619bca54918ca5723440c26"
+    },
+    "/_next/static/immutable/chunks/0_vmbi6_eqtot.js": {
+      "bytes": 29593,
+      "sha256": "d1f779eddae3a92640f205aa25119c1d971df9dbe2970da8f0525c7ad9710860"
+    },
+    "/_next/static/immutable/chunks/0kyraqldb8047.js": {
+      "bytes": 228423,
+      "sha256": "192425cb0dff4fbd5ebb8769d0f8e26d8cc7c3a7c5462c9cb5101022e5e92a49"
+    },
+    "/_next/static/immutable/chunks/368x1zgxru_7q.js": {
+      "bytes": 20139,
+      "sha256": "6064365f8a68f09b915432ab94cf607a74b2c361854e4764e5a7a81265b65d01"
+    },
+    "/_next/static/immutable/chunks/342qwzbovs2oc.js": {
+      "bytes": 14380,
+      "sha256": "d80465113a49ff9dd6f934ea576a34425a242e11ec160b9dc1fae87f71464078"
+    },
+    "/_next/static/immutable/chunks/2s3q2cd8038nj.js": {
+      "bytes": 32045,
+      "sha256": "f1336e1753b1bba55ca923f6454faea70e8f6b6ffd97f1b54d1d3db5446a2bdd"
+    },
+    "/_next/static/immutable/chunks/0q_z9szbqz59v.js": {
+      "bytes": 2011,
+      "sha256": "b9a303ee8488a048e352700a38453f09537dffa4e358c3a969878c3be510d116"
+    },
+    "/_next/static/immutable/chunks/1ymyt9i-4jdms.js": {
+      "bytes": 165227,
+      "sha256": "946e6ea386a3717be20de345905df986e4a5a96e2f4f03f9bb801c5bc1447c85"
+    },
+    "/_vercel/insights/script.js": {
+      "bytes": 3106,
+      "sha256": "0bd2ad276f13ba1712f7444a40f1313df6399b920a64ede78922deeddc5d3408"
+    },
+    "/_next/static/immutable/chunks/43ck7ashwy636.js": {
+      "bytes": 4230,
+      "sha256": "d23076b7c39ef10d545826df3e70e4c939f706bcabb1763c41c68b231265e3b7"
+    },
+    "/_next/static/immutable/chunks/2z8i-hud_jt4n.js": {
+      "bytes": 3566,
+      "sha256": "c111e602467d42aa3f9e2f369da8a9cae4bddbee0d085b93d260a0ed567a2f11"
+    },
+    "/_next/static/immutable/chunks/3rewd5cq9tqaf.js": {
+      "bytes": 29648,
+      "sha256": "79de60804817f0c8d692d192712b354efe6612ffb0acd1938a6562b6b2933b83"
+    },
+    "/_next/static/immutable/chunks/2g_axaodywt_p.js": {
+      "bytes": 11327,
+      "sha256": "6ef60b91cdce972e44127eb5379cb43ec32dc13290d10e3fb215c806d417b64f"
+    },
+    "/_next/static/immutable/chunks/3x7r6dtn-yxbx.js": {
+      "bytes": 308086,
+      "sha256": "d481c49b2e9ccaf9ce02353d86d6721baa5572f1e5bc976a51077b9de687eea8"
+    }
+  },
+  "pages": [
+    "/changelog",
+    "/agents",
+    "/playground"
+  ],
+  "manifest": {
+    "renderer": "@openpresentation/opf-render",
+    "source": "example.opf.json",
+    "preview": "example.svg",
+    "pptx": "example.pptx",
+    "sha256": "de84138f9a1bb04e77468754fc56622d161d56507c5f6eb923737b08f2a63e93",
+    "toolchain": {
+      "source": "npm",
+      "packages": [
+        {
+          "name": "@openpresentation/opf",
+          "version": "0.9.0",
+          "tarball": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.9.0.tgz",
+          "integrity": "sha512-AnduMR/bPFKJv2fYT+cYEINLkiZmN0xuVBETcNzkU6IC7GdgTyb+x5fCiODHcowfrLIJJEjZ8jZzZJGBrxnX5A=="
+        },
+        {
+          "name": "@openpresentation/opf-render",
+          "version": "0.7.0",
+          "tarball": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.7.0.tgz",
+          "integrity": "sha512-eHBMbnmK5bELUmUwJ/qWRtJBIZFkUJsbUvkjzSc6yhNA2JQ2Em/My9+Of4c79y0tXrFCQaZ5xvOkOdtyGUu5Gw=="
+        },
+        {
+          "name": "@openpresentation/opf-editor",
+          "version": "0.6.0",
+          "tarball": "https://registry.npmjs.org/@openpresentation/opf-editor/-/opf-editor-0.6.0.tgz",
+          "integrity": "sha512-ySUZWdQuq8PgkOOkrT8m0xm+Ta0WGWcI8TtLZbyaNxe9lKubrX5MQRNVuqaJKr0TdWn8kvfN5PuKR0JUTbPuOQ=="
+        },
+        {
+          "name": "@openpresentation/opf-pptx",
+          "version": "0.7.0",
+          "tarball": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.7.0.tgz",
+          "integrity": "sha512-U/nqxWqkMQ/ZWxyW6DP8Ut1k/BlDDuD8nvhlIHoW0UpDqMxZTwQKo//p4QcBwJUK+ZZ1uklJwrxuzRdIZ9fY/A=="
+        },
+        {
+          "name": "@openpresentation/cli",
+          "version": "0.7.0",
+          "tarball": "https://registry.npmjs.org/@openpresentation/cli/-/cli-0.7.0.tgz",
+          "integrity": "sha512-Pk8ZYXwVdYo+wYcBPAKvB1wNtZ2XzfqfLsOoAHnGlge7nS+DVUFGfwycZD/urVarlskCXH5xJwztwzuCnazuBA=="
+        }
+      ]
+    },
+    "files": {
+      "example.opf.json": "902d6bd9de957598a123e5919ae0dd602e0241d27bdfc406c936c7c43a3d0dbd",
+      "example.svg": "de84138f9a1bb04e77468754fc56622d161d56507c5f6eb923737b08f2a63e93",
+      "example.pptx": "5cd591c6a01c644f618667865d94ae95cbf603f573e80419f88eef602490ec5f"
+    }
+  },
+  "boundary": "Manifest assets are byte-verified against this checkout. Next.js JavaScript fingerprints record served bundles; minified chunks are not asserted byte-identical to npm source. Browser workflow and native PowerPoint evidence remain separate."
+}
