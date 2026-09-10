@@ -1,6 +1,6 @@
 {
   "name": "@openpresentation/opf-render",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Deterministic local OPF renderer for SVG, PNG, and PDF output.",
   "license": "MIT",
   "type": "module",
@@ -64,7 +64,9 @@
     "golden:update": "npm run build && node test/golden.mjs --update",
     "prepack": "npm run build",
     "build:browser-check": "node scripts/build-browser-check.mjs",
-    "test:styled-table": "node test/styled-table.mjs"
+    "test:styled-table": "node test/styled-table.mjs",
+    "test:code": "node test/shared-code.mjs",
+    "test:code-browser": "node test/shared-code-browser.mjs"
   },
   "dependencies": {
     "@expo-google-fonts/arimo": "0.4.3",
@@ -75,7 +77,7 @@
     "@expo-google-fonts/roboto": "^0.4.3",
     "@expo-google-fonts/roboto-mono": "^0.4.2",
     "@expo-google-fonts/tinos": "0.4.2",
-    "@openpresentation/opf": "^0.8.0",
+    "@openpresentation/opf": "^0.9.0",
     "@resvg/resvg-js": "^2.6.2",
     "fontkit": "^2.0.4",
     "pdf-lib": "^1.17.1",

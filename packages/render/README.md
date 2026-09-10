@@ -1,8 +1,10 @@
 # OPF Render
 
-Version 0.6.0 requires core 0.8.0 and renders its accepted quote body/source geometry without fitting it again. Adaptive footer allocation, readability floors and strict failures are shared with the coordinated PPTX 0.6.0 exporter. The 41 reviewed quote-footer raster changes keep their outer content boxes; see [the raster review](docs/evidence/shared-quote-raster-review.json). Glyph containment and separation do not establish native pixel equivalence.
+Version 0.7.0 requires core 0.9.0 and renders accepted quote and code geometry without fitting it again. Code filename/language/body parts preserve source whitespace, literal tabs and metadata case and expose trace targets for editing. The [43 reviewed code raster changes](docs/evidence/shared-code/raster-review.json) retain the other 762 corpus hashes. Planned coordinated releases PPTX 0.7.0 and editor 0.6.0 will add native source recovery and editing. Glyph containment and separation do not establish native pixel equivalence.
 
 Deterministic local renderer for Open Presentation Format documents. The shared SVG core implements validation, catalog resolution, placeholder binding and text layout. Node APIs additionally convert SVG to PNG and raster-backed PDF.
+
+Code strings that [XML 1.0 cannot represent](https://www.w3.org/TR/xml/#charsets) reject rendering with `invalid-code-text`, the OPF field path and UTF-16 offset. Input JSON stays unchanged. Tabs, line endings and valid supplementary Unicode remain accepted; schema validity and XML serialization do not certify font coverage or native fidelity.
 
 ## Scope
 

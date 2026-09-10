@@ -32,7 +32,7 @@ try{
   assert.ok(core.resolved.startsWith('https://registry.npmjs.org/')&&core.integrity.startsWith('sha512-')&&!core.link);
   const actualCore=await realpath(path.join(consumer,'node_modules/@openpresentation/opf'));
   assert.ok(actualCore.startsWith((await realpath(path.join(consumer,'node_modules')))+path.sep),'Core must be installed inside the clean consumer');
-  for(const file of ['shared-quote.mjs','quote-footer.mjs']){
+  for(const file of ['shared-quote.mjs','quote-footer.mjs','shared-code.mjs']){
     const source=(await readFile(path.join(root,'test',file),'utf8'))
       .replaceAll("'../dist/svg.js'","'@openpresentation/opf-render/svg'")
       .replaceAll("'../dist/fonts-node.js'","'@openpresentation/opf-render/fonts-node'");
@@ -46,7 +46,7 @@ try{
   await writeFile(path.join(root,`artifacts/packed-consumer-node${process.versions.node.split('.')[0]}.json`),JSON.stringify({
     node:process.version,package:manifest.name,version:manifest.version,integrity:packed.integrity,
     core:{version:core.version,resolved:core.resolved,integrity:core.integrity},files,knownVulnerabilities:0,
-    boundary:'Clean installed candidate with registry core, byte-matched shipped files and Node quote regressions. Browser glyph tests run separately; this is not native raster equivalence or renderer registry publication.',
+    boundary:'Clean installed candidate with registry core, byte-matched shipped files and Node quote/code regressions, including explicit XML character rejection. Browser glyph tests run separately; this is not native raster equivalence or renderer registry publication.',
   },null,2)+'\n');
   console.log(`Packed renderer passed: ${Object.keys(files).length} byte-matched files; registry core ${core.version}; ${packed.integrity}`);
 }finally{

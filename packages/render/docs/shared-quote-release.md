@@ -1,5 +1,7 @@
 # Renderer 0.6.0 release candidate
 
+Historical preparation record: renderer 0.6.0 was subsequently published from `7fe9905ad2d8a224efeef51b4a22d0aff0c413fe`. Continue with the [0.7.0 release gates](shared-code-release.md); the candidate status below describes the earlier checkpoint.
+
 Branch `codex/shared-quote-release-20260909` prepares renderer 0.6.0 with core `^0.8.0`. Renderer 0.6.0 is unpublished. The original tested integration remains at `7f08cf9e6db1f5da58b96ca1625d9ae2614ea59b` on `codex/shared-quote-integration-20260909`. Core/CLI release PR [#49](https://github.com/OpenPresentation/opf/pull/49) merged as `4dc292fa93bee52320bafa3fd0f5b05a2dc0a283`; core 0.8.0 is published and verified through fresh Node 20/24 registry installations and npm signatures/provenance.
 
 The lockfile now resolves actual registry core 0.8.0, with no unrelated dependency upgrades. A clean npm install, full package suites and unchanged reviewed 126-deck/805-slide raster baseline pass on Node 20.20.2 and 24.20.0. The two browser suites pass on both runtimes with Edge 152.0.4191.66, including ten quote fixtures with actual loaded fonts. Glyph overhangs into the inset remain reported separately from line-box geometry.

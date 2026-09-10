@@ -1,5 +1,11 @@
 # Raster regression baseline
 
+## Unreleased shared code review
+
+The shared code integration changes 43 of 805 slides, with the same 126-deck source digest. Every changed image was reproduced against ordinary registry renderer 0.6.0 and reviewed in eight before/after sheets; all three technical slides and one representative gallery code slide were also inspected at full resolution. Filenames now appear, metadata retains case, source indentation survives and code uses left alignment. The other 762 hashes are unchanged. Sparse gallery code panels and existing theme/logo placeholders remain quality limitations.
+
+The preceding approved manifest is `pre-shared-code-opf-examples-png.sha256.json`. `node test/review-code-raster.mjs <registry-consumer>` reproduces comparisons without approving them. The accepted baseline records regression behavior with bundled fonts and estimated layout; separate loaded-font browser and native PowerPoint checks are required. Neither thumbnail review nor matching hashes establishes general readability or pixel equivalence.
+
 The current manifest covers **805 slides in 126 bundled OPF example decks**, identified by a canonical content digest. Every `npm test` runs it against the installed core's example data. An explicit `OPF_EXAMPLES_DIR` must match the same content; missing, empty or changed corpora fail. Git HEAD changes cannot skip this check.
 
 The original 29713f5 baseline is retained as `historical-opf-examples-png.sha256.json` for audit history. It predates shared composition, rich text/lists and the current font/rendering behavior and is superseded, not claimed to pass.

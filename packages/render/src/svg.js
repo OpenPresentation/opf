@@ -370,7 +370,9 @@ function inferLayoutId(slide) {
   if (slide.table) return "table-1x";
   if (slide.image) return "image-1x";
   if (slide.video) return "media-1x";
-  if (slide.code) return "code-1x";
+  // Unspecified code layout uses the same automatic flow as core pagination
+  // and PPTX export. An explicit code-1x preset still reserves its own slots.
+  if (slide.code !== undefined) return "blank";
   if (slide.items || slide.bullets) return "list-1x";
   if (slide.text || slide.metric || slide.quote || slide.timeline) return "text-1x";
   if (slide.subtitle) return "title-subtitle";
@@ -768,8 +770,14 @@ function renderMedia(item, box, bound, options) {
 }
 
 function renderCode(item, box, bound, options) {
-  const code = typeof item.value === "string" ? item.value : item.value?.source ?? stableJson(item.value);
-  const label = typeof item.value === "object" && item.value?.language ? String(item.value.language) : "code";
+  const layout = item.codeLayout;
+  if (!layout) throw new OPFRenderError('missing-code-layout', 'Code rendering requires a coordinated core build with shared code geometry.', {path:item.path});
+  for (const part of layout.parts) {
+    // XML 1.0 Char excludes controls and unpaired UTF-16 surrogates. The u flag
+    // keeps valid supplementary characters (surrogate pairs) accepted.
+    const invalid = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\uD800-\uDFFF\uFFFE\uFFFF]/u.exec(part.text);
+    if (invalid) throw new OPFRenderError('invalid-code-text', `Code text contains U+${invalid[0].codePointAt(0).toString(16).toUpperCase().padStart(4,'0')} at UTF-16 offset ${invalid.index}, which XML cannot represent; edit that character before rendering.`, {path:part.path});
+  }
   const children = [
     tag("rect", {
       x: box.x,
@@ -780,27 +788,28 @@ function renderCode(item, box, bound, options) {
       stroke: "#334155",
       "stroke-width": 1,
       ...traceAttrs(options, item.path)
-    }),
-    tag("text", {
-      x: box.x + 18,
-      y: box.y + 28,
-      fill: "#93C5FD",
-      "font-family": fontStack(bound.design.fonts.code, "monospace"),
-      "font-size": 14,
-      "font-weight": 700,
-      ...traceAttrs(options, item.path)
-    }, escapeText(label.toUpperCase())),
-    renderTextBox(code, { x: box.x + 18, y: box.y + 46, width: box.width - 36, height: box.height - 64 }, bound, {
-      path: item.path,
-      fontSize: 18,
-      fontFamily: bound.design.fonts.code,
-      fontWeight: 400,
-      fill: "#E5E7EB",
-      options,
-      preserveNewlines: true
     })
   ];
-  return tag("g", traceAttrs(options, item.path), children.join("\n"));
+  for (const part of layout.parts) {
+    if (!part.fit) throw new OPFRenderError('layout-overflow', 'Code content has no usable internal space; increase its cell size before rendering.', {path:part.path,issues:layout.diagnostics});
+    const lines=part.fit.sourceLines.map((line,index)=>tag('text',{
+      x:stableNumber(part.box.x),y:stableNumber(part.box.y+part.fit.fontSize+index*part.fit.lineHeight),
+      'text-anchor':'start','font-family':fontStack(part.style.fontFamily,'monospace'),
+      'font-size':stableNumber(part.fit.fontSize),'font-weight':part.style.fontWeight,'font-style':part.style.italic?'italic':undefined,
+      'xml:space':'preserve',style:'white-space:pre','text-rendering':'geometricPrecision',fill:part.role==='body'?'#E5E7EB':'#93C5FD',
+      ...traceAttrs(options,part.path),...(options.trace?{'data-opf-code-role':part.role,'data-opf-generated':part.generated?'true':undefined,
+        'data-opf-text-start':line.start,'data-opf-text-end':line.end,'data-opf-text-next-start':line.nextStart,'data-opf-line-boundary':line.boundary}:{}),
+    },line.segments.map(segment=>tag('tspan',{
+      x:stableNumber(part.box.x+segment.x),
+      // SVG's CSS tab-size does not place literal tabs at their measured stops.
+      ...(segment.kind==='tab'?{textLength:stableNumber(segment.width),lengthAdjust:'spacingAndGlyphs'}:{}),
+      ...(options.trace?{'data-opf-segment':segment.kind,'data-opf-text-start':segment.start,'data-opf-text-end':segment.end}:{}),
+    },escapeText(part.text.slice(segment.start,segment.end)))).join('')));
+    children.push(tag('g',{...traceAttrs(options,part.path),...(options.trace?{'data-opf-code-role':part.role,'data-opf-generated':part.generated?'true':undefined,
+      'data-opf-box-x':part.box.x,'data-opf-box-y':part.box.y,'data-opf-box-width':part.box.width,'data-opf-box-height':part.box.height}:{}),
+      ...(part.fit.overflow?{'data-opf-overflow':'true'}:{})},lines.join('\n')));
+  }
+  return tag("g", {...traceAttrs(options,item.path),...(options.trace?{'data-opf-code-container':'true'}:{})}, children.join("\n"));
 }
 
 function renderMetric(item, box, bound, options) {
