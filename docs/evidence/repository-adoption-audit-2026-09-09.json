@@ -1,0 +1,41 @@
+{
+  "checkedAt": "2026-09-10T02:24:05.205Z",
+  "results": [
+    {
+      "repo": "OpenPresentation/opf",
+      "openPullRequests": [],
+      "openSecurityAlerts": []
+    },
+    {
+      "repo": "OpenPresentation/opf-render",
+      "openPullRequests": [],
+      "openSecurityAlerts": []
+    },
+    {
+      "repo": "OpenPresentation/opf-pptx",
+      "openPullRequests": [],
+      "openSecurityAlerts": []
+    },
+    {
+      "repo": "OpenPresentation/opf-editor",
+      "openPullRequests": [],
+      "openSecurityAlerts": []
+    },
+    {
+      "repo": "Data-Advantage/openpresentation-site",
+      "openPullRequests": [],
+      "openSecurityAlerts": []
+    },
+    {
+      "repo": "Data-Advantage/pptx-gallery",
+      "openPullRequests": [],
+      "openSecurityAlerts": []
+    },
+    {
+      "repo": "Data-Advantage/pptx-dev",
+      "openPullRequests": [],
+      "openSecurityAlerts": []
+    }
+  ],
+  "boundary": "Fresh GitHub open PR and Dependabot security-alert state; no alerts dismissed and no major upgrade silently merged. Historical PR dispositions remain in docs/pr-backlog-2026-09-09.md."
+}

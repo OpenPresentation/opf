@@ -1,6 +1,6 @@
 # OPF font roadmap
 
-Status: the starter pack is published in renderer 0.5.1 and used by the local browser workflow. The [expanded ecosystem objective](ecosystem-objective-2026-09-09.md) requires substantially broader font conformance, installation/embedding, multilingual and native-platform evidence. The historical measurements below remain narrow samples; they do not establish general font or pixel equivalence. Evaluate existing open fonts and engine fixes before original font development.
+Status: the starter pack is retained in published renderer 0.6.0 and used by the coordinated offline browser workflow. Package publication and actual registry checks preserve its existing font hashes/licenses; this release does not expand font compatibility claims. The [expanded ecosystem objective](ecosystem-objective-2026-09-09.md) requires substantially broader font conformance, installation/embedding, multilingual and native-platform evidence. The historical measurements below remain narrow samples; they do not establish general font or pixel equivalence. Evaluate existing open fonts and engine fixes before original font development.
 
 ## Ship the existing starter pack
 
@@ -55,4 +55,4 @@ For each target/substitute pair, record exact versions and file hashes, source/l
 
 Use three outcomes: verified within a stated test matrix, approximate with explicit reflow, or unsupported with an actionable diagnostic. Upstream metric intent is useful evidence but does not replace version-specific tests. Do not promote a candidate solely because screenshots look similar.
 
-The 126-deck/805-slide renderer regression baseline passes unchanged with the published content releases. That stability does not measure general visual quality or validate proprietary/open font equivalence. Font shaping, per-run fallback, native embedding and additional platform evidence are not completed by the starter pack. Original font design is deferred until existing open fonts and targeted engine fixes have been evaluated.
+Published renderer 0.6.0 passes the reviewed 126-deck/805-slide regression baseline. The shared quote rollout intentionally changed 41 baseline entries; the [release evidence](shared-quote-release.md) records that review separately from font compatibility. Matching the accepted baseline does not measure general visual quality or validate proprietary/open font equivalence. Font shaping, per-run fallback, native embedding and additional platform evidence are not completed by the starter pack. Original font design is deferred until existing open fonts and targeted engine fixes have been evaluated.
