@@ -670,6 +670,9 @@ function renderTextPayload(item, box, bound, options) {
     fontFamily: item.field === "title" ? bound.design.fonts.heading : bound.design.fonts.body,
     fontWeight: item.field === "title" ? 700 : 400,
     fill: bound.design.colors.text,
+    fit: item.text,
+    textStyle: item.textStyle,
+    diagnosticsHandled: Boolean(item.text),
     options
   });
 }
@@ -1212,7 +1215,7 @@ function renderEmbeddedFonts(fonts = []) {
 function renderRichTextBox(value, box, bound, config) {
   const scale=Math.min(bound.design.dimensions.width,bound.design.dimensions.height)/720;
   const fit=config.fit??fitRichText(value,box,config.fontSize*scale,((bound.composition??bound.geometry.composition).minFontSize??16)*scale,{style:{fontFamily:config.fontFamily,fontWeight:config.fontWeight??400,path:config.path},textMeasurement:config.options.textMeasurement});
-  if(fit.overflow){const diagnostic={code:'text-overflow',path:config.path,message:'Mixed-style text exceeds its cell at the minimum font size.'};reportDiagnostic(diagnostic,config.options);if((bound.composition??bound.geometry.composition).overflow==='error')throw new OPFRenderError('layout-overflow',diagnostic.message,{issues:[diagnostic]});}
+  if(fit.overflow&&!config.diagnosticsHandled){const diagnostic={code:'text-overflow',path:config.path,message:'Mixed-style text exceeds its cell at the minimum font size.'};reportDiagnostic(diagnostic,config.options);if((bound.composition??bound.geometry.composition).overflow==='error')throw new OPFRenderError('layout-overflow',diagnostic.message,{issues:[diagnostic]});}
   return renderRichLines(value,fit,box,bound,config);
 }
 

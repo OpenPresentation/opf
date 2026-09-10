@@ -1,10 +1,12 @@
 # OPF Render
 
-Version 0.7.0 requires core 0.9.0 and renders accepted quote and code geometry without fitting it again. Code filename/language/body parts preserve source whitespace, literal tabs and metadata case and expose trace targets for editing. The [43 reviewed code raster changes](docs/evidence/shared-code/raster-review.json) retain the other 762 corpus hashes. Planned coordinated releases PPTX 0.7.0 and editor 0.6.0 will add native source recovery and editing. Glyph containment and separation do not establish native pixel equivalence.
+Version 0.7.0 requires core 0.9.0 and renders accepted quote and code geometry without fitting it again. Code filename/language/body parts preserve source whitespace, literal tabs and metadata case and expose trace targets for editing. The [43 reviewed code raster changes](docs/evidence/shared-code/raster-review.json) retain the other 762 corpus hashes. Coordinated releases PPTX 0.7.0 and editor 0.6.0 add native source recovery and editing. Glyph containment and separation do not establish native pixel equivalence.
 
 Deterministic local renderer for Open Presentation Format documents. The shared SVG core implements validation, catalog resolution, placeholder binding and text layout. Node APIs additionally convert SVG to PNG and raster-backed PDF.
 
 On the unpublished coordinated source branch, `design.contentBox` uses core's shared padded geometry. The card renders at `item.frameBox`; its payload uses `item.box` and accepted internals. Card padding participates in composition scoring, strict overflow and pagination. This is not available in the published 0.7.0 renderer and requires the matching core branch.
+
+The same unpublished branch now paints plain and rich text, titles, subtitles and tags using composition's accepted fits and resolved styles. Painting does not measure those payloads again. Supply a font registry during composition: reusing an estimated fit cannot correct spacing when the actual drawing font has different advances.
 
 Code strings that [XML 1.0 cannot represent](https://www.w3.org/TR/xml/#charsets) reject rendering with `invalid-code-text`, the OPF field path and UTF-16 offset. Input JSON stays unchanged. Tabs, line endings and valid supplementary Unicode remain accepted; schema validity and XML serialization do not certify font coverage or native fidelity.
 
@@ -20,11 +22,20 @@ Code strings that [XML 1.0 cannot represent](https://www.w3.org/TR/xml/#charsets
 
 ```js
 import { renderSvgDeck } from "@openpresentation/opf-render";
+import { loadOfficeFontRegistry } from "@openpresentation/opf-render/fonts-node";
 
-const svgs = renderSvgDeck(opf, { trace: true });
+const fonts = await loadOfficeFontRegistry({ substitutionPolicy: "visual" });
+const svgs = renderSvgDeck(opf, {
+  trace: true,
+  textMeasurement: fonts.textMeasurement,
+  embeddedFonts: fonts.embeddedFonts,
+});
+console.log(fonts.substitutions);
 ```
 
 Set `trace: true` to stamp rendered SVG elements with `data-opf-path` values such as `slides.0.title`; omit it for smaller production SVG.
+
+The installed open font pack works offline. This example explicitly permits visual substitutes such as Carlito for Aptos; the substitution report identifies requested and resolved faces. A visual substitute is not a claim of metric or pixel equivalence. Omit `substitutionPolicy` to restrict the Office loader to its metric mappings, or supply your own licensed faces. Missing fonts/glyphs fail explicitly. Without `textMeasurement`, synchronous SVG APIs use estimated widths; named fonts alone do not make rich-run spacing reliable. Browser hosts should load the same bytes using the loader below.
 
 Unresolved images produce an `unresolved-asset` diagnostic through `onDiagnostic`, including the OPF path, reason and complete description. The fallback shows a bounded status label when it fits above the selected readability floor, otherwise an icon with the full accessible description. It preserves authored opacity, including faint decorative watermarks; a missing image is still missing even when its fallback fits. Use `strictAssets: true` to reject unresolved images. Supply embedded raster data URIs or a synchronous host `imageResolver` to resolve them; the renderer does not fetch URLs or read local paths. Caller descriptions and other metadata override referenced asset metadata through alias chains. These diagnostics identify unresolved sources, not malformed image bytes or native PowerPoint compatibility.
 
@@ -34,10 +45,13 @@ PNG and PDF conversion APIs are async because they load the local raster/PDF eng
 
 ```js
 import { renderSvgDeck, svgToPdf, svgToPng } from "@openpresentation/opf-render";
+import { loadOfficeFontRegistry } from "@openpresentation/opf-render/fonts-node";
 
-const svgs = renderSvgDeck(opf);
-const png = await svgToPng(svgs[0], { scale: 1 });
-const pdf = await svgToPdf(svgs, { scale: 1 });
+const fonts = await loadOfficeFontRegistry({ substitutionPolicy: "visual" });
+const svgs = renderSvgDeck(opf, { textMeasurement: fonts.textMeasurement });
+const rasterOptions = { scale: 1, fontFiles: fonts.fontFiles, useBundledFonts: false, loadSystemFonts: false };
+const png = await svgToPng(svgs[0], rasterOptions);
+const pdf = await svgToPdf(svgs, rasterOptions);
 ```
 
 `svgToPng` returns PNG bytes for one SVG. `svgToPdf` accepts one SVG or an array of SVGs and returns PDF bytes with one slide per page. The SVG page `width`/`height` or `viewBox` determines the PDF page size; `scale` controls raster density only.
@@ -91,6 +105,8 @@ npm run typecheck
 npm run validate
 npm test
 ```
+
+On the unpublished accepted-text branch, `npm run test:text` checks 24 combinations of dimensions, alignment, cards and formatting, including exact accepted positions/styles and strict overflow. `npm run test:rich-spacing-browser -- <new-output-directory>` compares two unchanged gallery slides with identical open font bytes. `npm run test:text-browser -- <new-output-directory>` also checks actual text paint: it currently exits 1 for four portrait/right title cases with one painted pixel beyond the 0.1-pixel cell tolerance in the recorded Windows Edge environment. Its advance/origin checks pass. Font text rectangles, painted-pixel containment, source whitespace and native fidelity are separate results; plain core fitting still normalizes whitespace. The full renderer corpus gate also remains unapproved on this integration branch.
 
 When this repo is checked out beside `openpresentation/opf`, `npm test` also renders every `examples/**/*.opf.json` deck twice and asserts byte-identical SVG output. Golden PNG drift is checked on every run against all 805 slides from the installed core package, identified by a content digest. Changed or missing corpora fail; Git history cannot skip the gate. To generate a review candidate after an intentional visual change:
 
