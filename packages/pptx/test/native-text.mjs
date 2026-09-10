@@ -8,8 +8,10 @@ import path from 'node:path';
 import sharp from 'sharp';
 import {loadOfficeFontRegistry} from '@openpresentation/opf-render/fonts-node';
 import {fromPptx} from '../dist/index.js';
-const [mode,directory='artifacts/native-text']=process.argv.slice(2);
-assert.ok(['generate','compare'].includes(mode));
+const [mode,directory='artifacts/native-text',caseArgument]=process.argv.slice(2);
+assert.ok(['generate','compare','compare-case'].includes(mode));
+const selectedCase=mode==='compare-case'?Number(caseArgument):null;
+if(mode==='compare-case')assert.ok(caseArgument!==undefined&&Number.isInteger(selectedCase)&&selectedCase>=0&&selectedCase<24,'Select case 0 through 23');
 const output=path.resolve(directory),hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 await mkdir(output,{recursive:true});
 const write=(file,value)=>writeFile(path.join(output,file),JSON.stringify(value,null,2)+'\n');
@@ -25,11 +27,12 @@ for(const name of ['@openpresentation/opf','@openpresentation/opf-render','@open
   for(const file of name==='@openpresentation/opf'?['composition.js','validator.js','catalogs.js']:(await readdir(path.join(root,'dist'))).filter(file=>file.endsWith('.js')).sort())await visit(file);
   runtime[name+'/package.json']=hash(await readFile(path.join(root,'package.json')));
 }
-for(const file of ['test/native-text.mjs','test/native-text.ps1','test/accepted-text.mjs','vendor/pptxgenjs/pptxgen.es.js','package-lock.json'])runtime[file]=hash(await readFile(new URL('../'+file,import.meta.url)));
+for(const file of ['test/native-text.mjs','test/native-text.ps1','test/native-text-fonts.ps1','test/native-process.ps1','test/accepted-text.mjs','vendor/pptxgenjs/pptxgen.es.js','package-lock.json'])runtime[file]=hash(await readFile(new URL('../'+file,import.meta.url)));
 const visible=value=>typeof value==='string'?[value]:Array.isArray(value)?value.flatMap(visible):value&&typeof value==='object'?Object.entries(value).flatMap(([key,item])=>['text','title','subtitle','tag','blocks'].includes(key)?visible(item):[]):[];
 if(mode==='generate') {
   const run=spawnSync(process.execPath,[fileURLToPath(new URL('./accepted-text.mjs',import.meta.url))],{env:{...process.env,OPF_TEXT_OUT:output},encoding:'utf8'});
-  await writeFile(path.join(output,'generation.log'),run.stdout+run.stderr);assert.equal(run.status,0,run.stdout+run.stderr);
+  const log=(run.stdout??'')+(run.stderr??'')+(run.error?String(run.error)+'\n':'');
+  await writeFile(path.join(output,'generation.log'),log);assert.ifError(run.error);assert.equal(run.status,0,log);
   const report=await json('report.json'),registry=await loadOfficeFontRegistry({substitutionPolicy:'visual'}),faces=registry.embeddedFonts.filter(face=>face.family==='Carlito');
   assert.equal(faces.length,4);await mkdir(path.join(output,'fonts'),{recursive:true});
   const fonts=[];
@@ -45,14 +48,25 @@ if(mode==='generate') {
   }),scope:'Four exact openly licensed Carlito faces for session-only native testing. Requested Aptos is an explicit visual substitute. Accepted text still normalizes plain whitespace; no arbitrary round-trip or native font-file identity claim.'});
   console.log(`Generated ${report.cases} native text fixtures with ${fonts.length} exact open font files.`);
 } else {
-  const generation=await json('generation.json'),native=await json('native.json');
-  assert.deepEqual(runtime,generation.runtime);assert.equal(hash(await readFile(path.join(output,'generation.json'))),native.generationSha256);
+  const generation=await json('generation.json'),generationSha256=hash(await readFile(path.join(output,'generation.json')));
+  const selectedRecords=selectedCase===null?generation.records:[generation.records[selectedCase]];
+  const native={records:[],fontRegistration:[],runs:[]};
+  for(const record of selectedRecords) {
+    const directory=`runs/${record.file.replace('.pptx','')}`;
+    const observed=await json(`${directory}/native.json`),worker=await json(`${directory}/worker.json`),fonts=await json(`${directory}/font-registration.json`);
+    assert.equal(worker.timedOut,false);assert.equal(worker.exitCode,0);assert.equal(observed.generationSha256,generationSha256);
+    assert.equal(observed.records.length,1);assert.equal(observed.records[0].file,record.file);
+    assert.deepEqual(fonts.map(({file,sha256})=>({file,sha256})),generation.fonts.map(({file,sha256})=>({file,sha256})));
+    native.records.push(...observed.records);native.fontRegistration.push(...fonts);
+    native.runs.push({file:`${directory}/native.json`,sha256:hash(await readFile(path.join(output,directory,'native.json'))),workerSha256:hash(await readFile(path.join(output,directory,'worker.json'))),fontRegistrationSha256:hash(await readFile(path.join(output,directory,'font-registration.json')))});
+  }
+  assert.deepEqual(runtime,generation.runtime);
   assert.equal(hash(await readFile(path.join(output,'report.json'))),generation.reportSha256);
   for(const face of generation.fonts)assert.equal(hash(await readFile(path.join(output,face.file))),face.sha256);
-  assert.equal(native.records.length,generation.records.length);
+  assert.equal(native.records.length,selectedRecords.length);
   assert.equal(native.fontRegistration.every(face=>face.added>0&&face.removed),true,'Remove each owned temporary font registration');
   const failures=[],imports=[],rasters=[];
-  for(const record of generation.records) {
+  for(const record of selectedRecords) {
     const observed=native.records.find(item=>item.file===record.file);assert.ok(observed);
     const expectedLines=record.items.flatMap(item=>item.text.lines.map((text,index)=>({text,index,item}))).filter(line=>line.text);
     assert.equal(observed.lines.length,expectedLines.length);
@@ -94,7 +108,7 @@ if(mode==='generate') {
       rasters.push({file:mask.file,path:item.path,box:item.box,sha256:hash(bytes),pixels,bounds,outside});
     }
   }
-  await write('comparison.json',{node:process.version,runtime,nativeSha256:hash(await readFile(path.join(output,'native.json'))),imports,rasters,failures,passed:failures.length===0,
+  await write(selectedCase===null?'comparison.json':`comparison-case-${String(selectedCase).padStart(2,'0')}.json`,{node:process.version,runtime,generationSha256,nativeRuns:native.runs,selectedCase,completeMatrix:selectedCase===null,imports,rasters,failures,passed:failures.length===0,
     scope:'Actual PowerPoint editable lines, unchanged accepted anchors, current heading/body text after native edits and renamed shapes, save/reopen and original/saved/edited reimport. Isolated white-on-black native text masks include decorations; every nonzero pixel center uses the browser fixture 0.1-reference-pixel containment gate. Native font descriptors and temporary exact font registration do not prove the font file selected for every glyph or browser/native pixel equivalence.'});
   console.log(`Native text: ${imports.length} imports, ${rasters.length} ink masks, ${failures.length} containment failures.`);
   assert.deepEqual(failures,[],'Native text paint gate remains open; see comparison.json');
