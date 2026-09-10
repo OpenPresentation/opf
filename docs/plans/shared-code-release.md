@@ -6,6 +6,8 @@ Branch `codex/shared-code-release-20260909` prepares core 0.9.0 and CLI 0.7.0 wi
 
 [Local release preparation evidence](../evidence/shared-code-release-preparation-2026-09-09.json) passes Node 20.20.2/24.20.0: 448 core tests and preservation suites, 11 CLI tests and 69 command checks, core/CLI declarations, actual core installs checking 519 tarball entries, and standalone global/npx-style CLI installation. All six skills/17 helpers, 126 examples, spec/schema gates and zero-advisory audit pass; lint has no errors. CLI local-pack integrity is identical across both runtimes: `sha512-d72DCb5aNuM66Ori83ll+fMOeZBNk5RmaLityd/sgad84oAYrmRnbmHCe/re86jvsU1IAsZ3acG5bQmjL2HpIA==`. These local archives are not registry releases; complete the release PR's full coordinated CI and review next.
 
+The standalone core verifier now runs all 28 quote/code layout and composition/pagination fixtures through actual installed public APIs in both local-tarball and registry modes. It rejects source-loader environments and replaces only test import paths. Local core 0.9.0 tarball checks pass on both runtimes; the registry mode must run after publication. This closes the previous verifier's omission of code fixtures without changing package runtime bytes.
+
 | Order | Proposed target | Required behavior and dependencies |
 | --- | --- | --- |
 | 1 | Core 0.9.0 | Public `layoutCode`/source-line types, accepted `codeLayout`, complete metadata/body candidate scoring and pagination; `grid-score-v3` acknowledges changed selection and explanation types. |
