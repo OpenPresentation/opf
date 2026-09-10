@@ -1,6 +1,6 @@
 # Code consumer integration checkpoint
 
-This is an unreleased work in progress on `codex/shared-code-integration-20260909`. The core primitive merged in [PR #53](https://github.com/OpenPresentation/opf/pull/53) as `7c978f8b7ef0cc649d8452f8f1b829f36a5ae6e3`, tree-identical to reviewed `f90f7c5152d4075a2c184959164df655ba05fa19`. Full coordinator `34433911033`, core `34433911144`, Windows/macOS CLI `34433911057` and Bugbot pass on that reviewed primitive. The integration changes below need their own final coordinated review. Published versions remain core 0.8.0, CLI 0.6.0, renderer/PPTX 0.6.0 and editor 0.5.0; never republish them.
+This is unreleased [PR #54](https://github.com/OpenPresentation/opf/pull/54) on `codex/shared-code-integration-20260909`. The core primitive merged in [PR #53](https://github.com/OpenPresentation/opf/pull/53) as `7c978f8b7ef0cc649d8452f8f1b829f36a5ae6e3`, tree-identical to reviewed `f90f7c5152d4075a2c184959164df655ba05fa19`. Full coordinator `34433911033`, core `34433911144`, Windows/macOS CLI `34433911057` and Bugbot pass on that reviewed primitive. The integration changes below need their own final coordinated review. Published versions remain core 0.8.0, CLI 0.6.0, renderer/PPTX 0.6.0 and editor 0.5.0; never republish them.
 
 Fetch these GitHub checkpoints for the consumer work:
 
