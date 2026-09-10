@@ -1364,6 +1364,9 @@ function addQuotePayload(slide, layout, context, options, path) {
 
 function addTimelinePayload(slide, value, layout, context, options, path) {
   if(!layout)throw new OPFPptxError('missing-timeline-layout','Timeline export requires a coordinated core build with shared timeline geometry.',{path});
+  // Validate optional field fits before the provenance manifest dereferences
+  // source lines or any drawing/tag mutation is performed.
+  for(const part of layout.parts)if(!part.fit)throw new OPFPptxError('layout-overflow','Timeline field has no usable space; change the arrangement or paginate events.',{path:part.path,issues:layout.diagnostics});
   const scale=Math.min(context.dimensions.widthInches,context.dimensions.heightInches)*96/720;
   const group=String(context.timelineTags.size),anchor=timelineManifest(value,layout),connectorName=`OPF timeline ${group} connector`;
   const {x1,y1,x2,y2}=layout.connector;
@@ -1375,7 +1378,6 @@ function addTimelinePayload(slide, value, layout, context, options, path) {
     context.timelineTags.set(objectName,{v:1,group,role:'marker',eventIndex:marker.eventIndex});
   }
   for(const [index,part]of layout.parts.entries()){
-    if(!part.fit)throw new OPFPptxError('layout-overflow','Timeline field has no usable space; change the arrangement or paginate events.',{path:part.path,issues:layout.diagnostics});
     addMeasuredPayloadText(slide,part.text,part.box,context,options,{path:part.path,fit:part.fit,textStyle:part.style,align:part.alignment,diagnosticsHandled:true,timeline:{group,part:index,anchor}});
   }
 }
