@@ -12,6 +12,7 @@ const execFile = promisify(execFileCallback);
 const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const manifest = JSON.parse(await readFile(path.join(packageRoot,'package.json'),'utf8'));
 const registry = process.argv.includes('--registry');
+assert.ok(!process.env.NODE_OPTIONS&&!process.execArgv.some(arg=>/^(--import|--loader|--experimental-loader|--require|-r)(=|$)/.test(arg)),'Standalone package verification must not use source loaders or module aliases');
 const packageSource = registry ? `${manifest.name}@${manifest.version}` : packageRoot;
 const tmpRoot = await mkdtemp(path.join(os.tmpdir(), "opf-packed-smoke-"));
 const packDir = path.join(tmpRoot, "pack");
@@ -154,15 +155,16 @@ assert.ok(invalidResult.errors.length > 0, "invalid deck should return validatio
 `,
   );
   await run(process.execPath, ["smoke.mjs"], { cwd: projectDir });
+  for (const file of ['quote-layout.test.mjs','quote-composition.test.mjs','code-layout.test.mjs','code-composition.test.mjs']) {
+    const source=(await readFile(path.join(packageRoot,'test',file),'utf8'))
+      .replaceAll("'../dist/index.js'","'@openpresentation/opf'")
+      .replaceAll("'../dist/composition.js'","'@openpresentation/opf/composition'")
+      .replaceAll("'../dist/pagination.js'","'@openpresentation/opf/pagination'");
+    await writeFile(path.join(projectDir,file),source);
+    const result=await run(process.execPath,['--test',file],{cwd:projectDir});
+    process.stdout.write(result.stdout);
+  }
   if (registry) {
-    for (const file of ['quote-layout.test.mjs','quote-composition.test.mjs']) {
-      const source=(await readFile(path.join(packageRoot,'test',file),'utf8'))
-        .replaceAll("'../dist/composition.js'","'@openpresentation/opf/composition'")
-        .replaceAll("'../dist/pagination.js'","'@openpresentation/opf/pagination'");
-      await writeFile(path.join(projectDir,file),source);
-      const result=await run(process.execPath,['--test',file],{cwd:projectDir});
-      process.stdout.write(result.stdout);
-    }
     const signatures=await run('npm',['audit','signatures'],{cwd:projectDir});
     process.stdout.write(signatures.stdout);
   }

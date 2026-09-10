@@ -56,7 +56,7 @@ console.log(result.diagnostics); // Path-specific text-overflow and small-cell m
 
 This pure function expects a validated slide. The caller resolves catalog records and passes the canvas size. The rendering and export packages perform those steps at their boundaries. No network, DOM, system font, or AI dependency is required.
 
-### Explain automatic selection (core 0.8.0)
+### Explain automatic selection (core 0.8.0 and later)
 
 Pass `explain: true` to return `result.explanation`. This opt-in API requires core 0.8.0; it is absent from core 0.7.0. Enabling explanations adds no measurement calls and does not change geometry, source content, reading order, weights or selected arrangements within the same engine version.
 
@@ -70,22 +70,22 @@ console.log(result.explanation.textMeasurement);
 console.log(result.explanation.unmeasuredPayloads);
 ```
 
-`resolvedOptions` supplies the same dimensions, layout, fonts and optional width provider as the preview. The versioned `grid-score-v2` explanation records each container in parent-before-child order. `lowest-score` reports the candidates actually tried; `configured-mode` respects resolved row/column/grid intent and returns no invented candidates. `promoted-regions` leaves region placement fixed and has no selected column count. Empty slides have no decisions. Automatic search tries one through `min(slotCount, columns ?? 6)` columns, in ascending order; ties retain the first candidate. Reserved placeholders count as slots. The schema caps an explicit candidate limit at twelve columns.
+`resolvedOptions` supplies the same dimensions, layout, fonts and optional width provider as the preview. Core 0.8.0 identifies its explanation as `grid-score-v2`; core 0.9.0 advances to `grid-score-v3` to include complete code metadata/body measurements. Both record containers in parent-before-child order. `lowest-score` reports the candidates actually tried; `configured-mode` respects resolved row/column/grid intent and returns no invented candidates. `promoted-regions` leaves region placement fixed and has no selected column count. Empty slides have no decisions. Automatic search tries one through `min(slotCount, columns ?? 6)` columns, in ascending order; ties retain the first candidate. Reserved placeholders count as slots. The schema caps an explicit candidate limit at twelve columns.
 
 Each candidate has `columns`, `rows`, `score` and additive `penalties`:
 
 | Penalty | Rule |
 | --- | --- |
 | `cellProportions` | Sum of `abs(log(cellAspect / 1.6))` for descendant leaves |
-| `fontReduction` | Reduction from 25 reference pixels for text-like leaves; quotes sum requested-minus-fitted sizes for both parts, divided by canvas scale |
-| `textOverflow` | 1,000 per overflowing text-like leaf or complete quote, regardless of the number of quote failure reasons |
+| `fontReduction` | Reduction from 25 reference pixels for text-like leaves; quotes and code in core 0.9 sum requested-minus-fitted sizes across their parts, divided by canvas scale |
+| `textOverflow` | 1,000 per overflowing text-like leaf, complete quote or complete code payload, regardless of the number of internal failure reasons |
 | `tableOverflow` | 1,000 per table whose shared cell layout overflows |
 | `smallCells` | 100 per leaf narrower than 100 or shorter than 60 reference pixels |
 | `emptySlots` | 2 per unused position in the candidate grid's final row |
 
 Scores are preference costs, not quality percentages or guarantees. Floating-point summation can make the component total differ slightly from `score`. Parent scoring uses descendant explicit arrangements or geometric automatic seeds; child automatic grids are optimized only after selecting the parent. Candidate scores therefore describe the bounded search, not a full assessment of the final optimized subtree. Heading fit remains in ordinary diagnostics, outside body-grid scoring. A strict-fit rejection exposes the explanation on `OPFCompositionError` when requested.
 
-`textMeasurement` is `estimated` without a provider and `provided` with one. A provided width function does not establish font provenance, glyph coverage, shaping or native raster fidelity. Text, rich text, lists, quotes and table cells participate in the current fit model. `unmeasuredPayloads` identifies images, video, charts, metrics, timelines and code whose complete internal layout is not assessed. Both quote parts use shared geometry; code source is scored but its language label and insets remain incomplete. Media aspect ratios, chart labels, metric labels and timeline annotations remain gaps. A zero score or empty diagnostics is not proof that those payloads fit.
+`textMeasurement` is `estimated` without a provider and `provided` with one. A provided width function does not establish font provenance, glyph coverage, shaping or native raster fidelity. Text, rich text, lists, quotes, table cells and code in core 0.9 participate in the fit model. `unmeasuredPayloads` identifies images, video, charts, metrics and timelines whose complete internal layout is not assessed. Core 0.8 also reports code as incomplete; core 0.9 measures its filename/language/body and insets. Media aspect ratios, chart labels, metric labels and timeline annotations remain gaps. A zero score or empty diagnostics is not proof that those payloads fit.
 
 This milestone exposes the existing search for inspection. Guarded layout repairs, automatic weight allocation, content-aware candidate improvements, a common payload-internal measurement model, CLI explanations and a canvas **Auto arrange** preview/undo operation remain subsequent work. It does not silently paginate or rewrite a document.
 
@@ -123,9 +123,9 @@ SVG embeds raster data URI images locally. Remote and file images require a host
 See [the complete example](../examples/technical/dynamic-composition.opf.json) and [local ecosystem verification](ecosystem-development.md).
 
 
-## Code internals (unreleased integration)
+## Code internals (core 0.9.0 and coordinated packages)
 
-The candidate `layoutCode(value, box, options)` API accepts the schema's string shorthand or `{source, language?, filename?}` object. It returns measured filename/language/body parts with exact original text, requested/resolved styles, readability floors, available boxes and diagnostics. The coordinated source integration uses these measurements in composition, pagination, rendering and native export, with editor source/metadata and undo workflows verified against fresh candidate installations. Final CI/review and publication remain gates. This API is not present in published core 0.8.0; the published engines still have the [recorded code-label, filename and whitespace defects](plans/layout-repair.md).
+Core 0.9.0's `layoutCode(value, box, options)` API accepts the schema's string shorthand or `{source, language?, filename?}` object. It returns measured filename/language/body parts with exact original text, requested/resolved styles, readability floors, available boxes and diagnostics. Renderer/PPTX 0.7.0 and editor 0.6.0 are its coordinated release targets for shared rendering, native export, source/metadata edits and undo. [Release gates](plans/shared-code-release.md) distinguish prepared versions from verified publication. Core 0.8.0 does not include this API and retains the [recorded code-label, filename and whitespace defects](plans/layout-repair.md).
 
 `grid-score-v3` charges code font reductions across all metadata/body parts and one overflow penalty per failing leaf. It preserves explicit modes, weights, regions and source order. Accepted `item.codeLayout` is fitted to the same rounded cell exposed as `item.box`; `item.text` and `item.textStyle` alias the body, not the first metadata part. Strict ancestor settings apply to internal `.source`, `.filename` and `.language` diagnostics. Code no longer appears in `explanation.unmeasuredPayloads`, which concerns the core advance-based model only. It does not mean browser/native fidelity is verified.
 

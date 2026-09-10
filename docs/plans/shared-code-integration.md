@@ -1,6 +1,6 @@
 # Code consumer integration checkpoint
 
-This is unreleased [PR #54](https://github.com/OpenPresentation/opf/pull/54) on `codex/shared-code-integration-20260909`. The core primitive merged in [PR #53](https://github.com/OpenPresentation/opf/pull/53) as `7c978f8b7ef0cc649d8452f8f1b829f36a5ae6e3`, tree-identical to reviewed `f90f7c5152d4075a2c184959164df655ba05fa19`. Full coordinator `34433911033`, core `34433911144`, Windows/macOS CLI `34433911057` and Bugbot pass on that reviewed primitive. The integration changes below need their own final coordinated review. Published versions remain core 0.8.0, CLI 0.6.0, renderer/PPTX 0.6.0 and editor 0.5.0; never republish them.
+Core integration [PR #54](https://github.com/OpenPresentation/opf/pull/54) merged as `8d9c9c80b788bbdc80e18ad2b6468f07b2e2321d`, tree-identical to reviewed `e8b520dd2c23e559a8d9affcfcb8772c8b8079b7`. Complete coordinator `34441603873`, core `34441603829`, Windows/macOS CLI `34441603812` and Bugbot pass, including the final renderer/converter character-boundary correction. [Portable CI evidence](../evidence/shared-code-ci-2026-09-09.json) complements the local installed/native reports below. The standalone primitive previously merged in PR #53 as `7c978f8b7ef0cc649d8452f8f1b829f36a5ae6e3`. Published versions remain core 0.8.0, CLI 0.6.0, renderer/PPTX 0.6.0 and editor 0.5.0; never republish them. Continue [release preparation](shared-code-release.md) before claiming this integration is available from npm or deployed sites.
 
 Fetch these GitHub checkpoints for the consumer work:
 
@@ -75,7 +75,7 @@ The format-boundary review found schema-valid XML-forbidden controls and unpaire
 
 The prior PR head `4f4a0b44584be945420f2b8d519f9417ee073e7d` passes coordinator `34440657844`, core `34440657756`, Windows/macOS CLI `34440657695` and Bugbot. The updated two consumer pins require their own renewed coordinated CI/review.
 
-- Complete the full Linux Node 20/24 source/tarball/registry matrices and review with the new installed-code gates, exact consumer commits and reviewed code raster manifest now wired into coordinated CI. Keep historical registry harnesses pinned to their published implementation; no new code version is released yet.
+- The full Linux Node 20/24 source/tarball/registry matrices and review are complete on the merged PR. Keep historical registry harnesses pinned to their published implementation; no new code version is released yet.
 - Prepare versions and publish core/CLI and consumers in dependency order, then refresh registry lockfiles, verify exact registry bytes/provenance and update the core published release plan/immutable refs.
 - Update public deployments only after the new complete published set passes its public workflows. Continue the full repair, Auto arrange, other payload internals and font/native-platform objective.
 

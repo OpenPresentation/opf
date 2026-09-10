@@ -58,6 +58,10 @@ Core 0.8.0's coordinated quote integration uses `grid-score-v2` and `quote-flow-
 
 In that coordinated release, pagination persists the evaluated minimum in returned slides even when no extra page is needed. Apply the returned document; a one-page policy change is undoable in the coordinated editor, while a second unchanged invocation is a no-op. Quote bodies may split, but each fragment retains its complete attribution/source. Irreducible footers reject all output.
 
+Core 0.9.0 adds `layoutCode(value, box, options)` and accepted `item.codeLayout.parts` for code filename, language and body. `grid-score-v3` includes every code part's requested-to-fitted font reduction and one overflow penalty per failing code leaf. Reuse the accepted boxes, styles and source/text-tab segments; do not trim source, replace tabs with spaces or fit the parts again. Each source line has half-open UTF-16 `start`, `end`, `nextStart` and a hard/soft/end boundary. Joining `part.text.slice(line.start, line.nextStart)` preserves original spaces and CR/LF/CRLF. Generated labels are not source fields.
+
+Code pagination preserves exact body fragments and repeats filename/language, retaining the evaluated floor. Irreducible metadata rejects the whole operation even with an empty body. Coordinated renderer/PPTX 0.7.0 and editor 0.6.0 reuse these measurements; inspect the installed versions and rollout plan before relying on them. SVG/PPTX reject XML-forbidden code characters with `invalid-code-text`, source path and UTF-16 offset; schema-valid JSON and font coverage are separate checks. Complete native code tags can recover source/metadata after edits, but native formatting, positions, font theme and readability policy are not reconstructed. Inspect native output and preserve the original PPTX; this is not pixel or arbitrary Office round-trip equivalence.
+
 
 ## Resizing tracks
 

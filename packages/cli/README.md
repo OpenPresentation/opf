@@ -13,9 +13,9 @@ npm install -g @openpresentation/cli
 opf --version
 ```
 
-Or install it as a development dependency and use `npx --no-install opf`. CLI 0.6.0 bundles OPF 0.8.0, including shared quote composition, persisted pagination readability floors, styled/merged table cells, and the six OPF agent skills. Browser rendering and editable PowerPoint export require the coordinated library releases.
+Or install it as a development dependency and use `npx --no-install opf`. CLI 0.7.0 bundles OPF 0.9.0, including complete code and quote composition, source-preserving pagination and readability floors, styled/merged table cells, and the six OPF agent skills. Browser rendering and editable PowerPoint export require the coordinated library releases; the current rollout is tracked in `docs/plans/shared-code-release.md` in the repository.
 
-To verify the standalone package from source, run `pnpm install` and `pnpm test:cli:packed`. This creates `artifacts/cli/openpresentation-cli-0.6.0.tgz`, which can be installed using its absolute path. For source development, run `pnpm --filter @openpresentation/cli build` and `node packages/cli/dist/index.js --help`.
+To verify the standalone package from source, run `pnpm install` and `pnpm test:cli:packed`. This creates `artifacts/cli/openpresentation-cli-0.7.0.tgz`, which can be installed using its absolute path. For source development, run `pnpm --filter @openpresentation/cli build` and `node packages/cli/dist/index.js --help`.
 
 ## Install agent skills
 
