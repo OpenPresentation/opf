@@ -1,5 +1,6 @@
 import {tableGrid,type TableCellStyle} from './table.js';
 export {tableGrid,tableRowBoundaries,type TableCellStyle,type TableBorder,type TableGrid,type TableGridCell,type TableGridIssue} from './table.js';
+export {colorContrast, textColorForFill} from './color.js';
 /** Portable layout geometry. No fonts, DOM, renderer, or network dependencies. */
 export interface Composition {
   mode?: "auto" | "grid" | "row" | "column";
