@@ -4,6 +4,8 @@ Pure local PowerPoint conversion tooling for Open Presentation Format documents.
 
 Version 0.7.0's [shared-code integration](docs/code-roundtrip.md) preserves exact source/metadata through guarded native tags and editable lines. XML-forbidden code characters reject export with `invalid-code-text`, the OPF field path and UTF-16 offset; schema validation alone does not establish XML representability. Native source recovery does not reconstruct formatting, geometry or font theme.
 
+The current branch's [shared metric integration](docs/metric-roundtrip.md) is unpublished. Native alignment and exact tested field recovery are implemented; tab-position and raster fidelity gates remain open.
+
 ## Scope
 
 Version 0.7.0 requires core 0.9.0 and uses renderer 0.7.0 for coordinated preview/font measurement. Quotes and code export their accepted internal lines and styles without another fitting pass. [Controlled Windows PowerPoint quote evidence](docs/evidence/shared-quote-integration/comparison.json) records glyph containment, separation, save/reopen and text reimport against its exact source/font hashes. Native quote import returns editable text blocks and does not restore the original OPF quote structure, typography or readability policy. Native chart geometry and general scalar-text wrapping also remain different from preview; editability and valid reimport do not establish raster equivalence.

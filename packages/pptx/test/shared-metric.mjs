@@ -20,10 +20,12 @@ for(const dimensions of [{width:1280,height:720},{width:540,height:960}])for(con
   assert.equal(shapes.length,expected.length,'Metrics add no hidden panel or flattened duplicate text');
   for(const [i,shape] of shapes.entries()){
     const {part,line,origin}=expected[i],position=shape['p:spPr']['a:xfrm'];
-    assert.ok(Math.abs(Number(position['a:off'].x)/9525-(line.width?origin.x:part.box.x))<.001);
+    const nativeX=Number(position['a:off'].x)/9525,nativeWidth=Number(position['a:ext'].cx)/9525,factor=align==='right'?1:align==='center'?.5:0;
+    assert.ok(Math.abs(nativeX+nativeWidth*factor-(origin.x+line.width*factor))<.001,'Native paragraph uses the accepted alignment anchor');
     assert.ok(Math.abs(Number(position['a:off'].y)/9525-(origin.baseline-part.fit.fontSize))<.001);
-    assert.ok(Math.abs(Number(position['a:ext'].cx)/9525-(line.width||part.box.width))<.001);
+    assert.ok(Math.abs(nativeWidth-part.box.width)<.001);
     const paragraphs=array(shape['p:txBody']['a:p']);
+    for(const paragraph of paragraphs)assert.equal(paragraph['a:pPr'].algn,{left:'l',center:'ctr',right:'r'}[align]);
     const text=paragraphs.map(p=>array(p['a:r']).map(r=>r['a:t']??'').join('')).join('\n');
     assert.equal(text,part.text.slice(line.start,line.end));
     for(const run of paragraphs.flatMap(p=>array(p['a:r'])))assert.ok(Math.abs(Number(run['a:rPr'].sz)/100-part.fit.fontSize*.75)<=.011);

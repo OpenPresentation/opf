@@ -1262,10 +1262,15 @@ function addMetricPayload(slide,value,layout,context,path) {
       const origin=part.linePositions[index],objectName=`OPF metric ${group} ${part.role} line ${index+1}`;
       context.metricTags.set(objectName,partIndex===0&&index===0?manifest:{v:1,group,role:'line',part:partIndex,line:index});
       const tabStops=line.segments.filter(segment=>segment.kind==='tab').map(segment=>({position:(segment.x+segment.width)/96,alignment:'l'}));
+      // Anchor the native paragraph to the same accepted left/center/right point.
+      // Left-aligning at a measured glyph origin loses the intended edge when the
+      // native shaper has a slightly different advance. No re-fitting is needed.
+      const factor=layout.alignment==='right'?1:layout.alignment==='center'?.5:0;
+      const anchor=origin.x+line.width*factor;
       slide.addText(part.text.slice(line.start,line.end),{
-        ...textBoxOptions({x:(line.width?origin.x:part.box.x)/96,y:(origin.baseline-part.fit.fontSize)/96,w:(line.width||part.box.width)/96,h:part.fit.lineHeight/96},context,part.fit.fontSize*.75),
+        ...textBoxOptions({x:(anchor-part.box.width*factor)/96,y:(origin.baseline-part.fit.fontSize)/96,w:part.box.width/96,h:part.fit.lineHeight/96},context,part.fit.fontSize*.75),
         fontFace:part.style.fontFamily,bold:part.style.fontWeight>=600,italic:part.style.italic,
-        color:part.role==='value'?context.colors.accent:context.colors.text,align:line.width?'left':layout.alignment,fit:'none',wrap:false,lineSpacingMultiple:1,
+        color:part.role==='value'?context.colors.accent:context.colors.text,align:layout.alignment,fit:'none',wrap:false,lineSpacingMultiple:1,
         tabStops:tabStops.length?tabStops:undefined,objectName,
       });
     }

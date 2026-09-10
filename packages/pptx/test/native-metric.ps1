@@ -7,7 +7,7 @@ function Get-FixtureSha256([string]$FixturePath) {
 }
 $evidenceRoot = (Resolve-Path -LiteralPath $EvidenceDirectory).Path
 $generationFile = Join-Path $evidenceRoot 'generation.json'
-$generation = Get-Content -LiteralPath $generationFile -Raw | ConvertFrom-Json
+$generation = Get-Content -LiteralPath $generationFile -Raw -Encoding UTF8 | ConvertFrom-Json
 $powerpoint = New-Object -ComObject PowerPoint.Application
 $presentation = $null
 $reopened = $null
@@ -39,9 +39,8 @@ try {
                 if ($actual -cne $wanted) { throw "Changed native text: $id slide $($slide.SlideIndex) line $index" }
                 if ($shape.Tags.Count -lt 1) { throw 'Missing native metric tags' }
                 if ($actual -ne '' -and [Math]::Abs($shape.TextFrame.TextRange.Font.Size - $part.fit.fontSize * .75) -gt .02) { throw 'Native metric font size differs' }
-                $expectedX = $origin.x
-                $expectedWidth = $line.width
-                if ($line.width -eq 0) { $expectedX = $part.box.x; $expectedWidth = $part.box.width }
+                $expectedX = $part.box.x
+                $expectedWidth = $part.box.width
                 if ([Math]::Abs($shape.Left - $expectedX*.75) -gt .02 -or [Math]::Abs($shape.Top - ($origin.baseline-$part.fit.fontSize)*.75) -gt .02 -or [Math]::Abs($shape.Width - $expectedWidth*.75) -gt .02) { throw 'Native metric shape differs from accepted geometry' }
                 $range = $shape.TextFrame2.TextRange
                 $tabTargets = @()
@@ -49,9 +48,11 @@ try {
                     $segment = $line.segments[$segmentIndex]
                     if ($line.segments[$segmentIndex-1].kind -eq 'tab' -and $segment.kind -eq 'text') {
                         $segmentRange = $range.Characters($segment.start - $line.start + 1, $segment.end - $segment.start)
-                        $errorPoints = [Math]::Abs($segmentRange.BoundLeft - $shape.Left - $segment.x*.75)
-                        if ($errorPoints -gt .02) { throw "Native metric text after tab misses the accepted stop: $errorPoints" }
-                        $tabTargets += @{sourceStart=$segment.start; errorPoints=$errorPoints}
+                        $lineLeft = $range.Characters(1,1).BoundLeft
+                        $errorPoints = [Math]::Abs($segmentRange.BoundLeft - $lineLeft - $segment.x*.75)
+                        # Collect every outlier so later slides and source recovery still run.
+                        # compare retains the strict 0.02-point gate and exits nonzero.
+                        $tabTargets += @{sourceStart=$segment.start; expectedOffsetPoints=$segment.x*.75; actualOffsetPoints=$segmentRange.BoundLeft-$lineLeft; errorPoints=$errorPoints}
                     }
                 }
                 # The full paragraph range includes an invisible terminator advance.
@@ -83,7 +84,24 @@ try {
             if ($index -ne $expected.Count) { throw 'Missing native accepted lines' }
             $rasterPath = Join-Path $evidenceRoot "$id-native-$($slide.SlideIndex).png"
             $slide.Export($rasterPath, 'PNG', [int]$record.width, [int]$record.height)
-            $slides += @{slide=$slide.SlideIndex; lines=$observations; rasterSha256=(Get-FixtureSha256 $rasterPath)}
+            # Isolate actual native raster ink for each semantic part. Temporarily hide
+            # only our generated shapes; always restore their original visibility.
+            $partRasters = @()
+            $visibility = @{}
+            foreach ($shape in $slide.Shapes) { $visibility[$shape.Name] = $shape.Visible }
+            try {
+                foreach ($part in @($layout.parts | Where-Object { $_.visible })) {
+                    foreach ($shape in $slide.Shapes) {
+                        $shape.Visible = 0
+                        if ($shape.Name -match "^OPF metric \d+ $($part.role) line \d+$") { $shape.Visible = $visibility[$shape.Name] }
+                    }
+                    $partFile = "$id-native-$($slide.SlideIndex)-$($part.role).png"
+                    $partPath = Join-Path $evidenceRoot $partFile
+                    $slide.Export($partPath, 'PNG', [int]$record.width, [int]$record.height)
+                    $partRasters += @{role=$part.role; file=$partFile; sha256=(Get-FixtureSha256 $partPath)}
+                }
+            } finally { foreach ($shape in $slide.Shapes) { $shape.Visible = $visibility[$shape.Name] } }
+            $slides += @{slide=$slide.SlideIndex; lines=$observations; rasterSha256=(Get-FixtureSha256 $rasterPath); partRasters=$partRasters}
         }
         $savedPath = Join-Path $evidenceRoot "$id-saved.pptx"
         $presentation.SaveCopyAs($savedPath,24)

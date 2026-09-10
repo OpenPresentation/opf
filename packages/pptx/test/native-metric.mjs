@@ -41,7 +41,9 @@ if(mode==='generate'){
       {value:42,unit:'ms',label:'Left\tRight  ',description:'Exact\r\n\r\ncontext',delta:0,trend:'flat'},
       {value:'42\r\n-0.5',unit:'milliseconds across all completed production requests',label:'Latency'},
       {value:'',unit:'',label:'',description:'',delta:'',trend:'up'},
-      {value:1,unit:'%',label:'Completion'}];
+      {value:1,unit:'%',label:'Completion'},
+      {value:'\t1\t%',unit:'ms',label:'\tBefore\tAfter  ',description:'\t'},
+      {value:'\r\n\r\n\n',label:'\t  ',description:'\n'}];
     const family={family:'Calibri'};
     const document={design:{dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96},contentAlignment:alignment,fontScheme:{id:'calibri',heading:family,body:family,code:family}},slides:values.map(metric=>({composition:{minFontSize:24},metric}))};
     const options={textMeasurement:fonts.textMeasurement},bound=resolvePresentation(document,options);
@@ -54,29 +56,46 @@ if(mode==='generate'){
     decks.push({id,...dimensions,alignment,document,pptxSha256:hash(pptx),svgRasterSha256:rasters,layouts:bound.slides.map(slide=>({cell:slide.geometry.items[0].box,...slide.geometry.items[0].metricLayout}))});
   }
   await write('generation.json',{mode:'resolved-source-packages',node:process.version,runtime,fontHashes,substitutions:fonts.substitutions,decks,scope:'Actual metric source-package export with local Calibri reference bytes; resolved 400/700 styles, not synthetic 500/800. Separate SVG and PowerPoint observations; neither registry installation nor substitute-font/pixel equivalence is established.'});
-  console.log('Generated 36 wide/portrait aligned native metric slides.');
+  console.log(`Generated ${decks.reduce((n,deck)=>n+deck.document.slides.length,0)} wide/portrait aligned native metric slides.`);
 }else{
   const generation=await json('generation.json'),native=await json('native.json');
   assert.deepEqual(runtime,generation.runtime,'Native evidence requires unchanged runtimes and verifiers');
   assert.equal(native.generationSha256,hash(await readFile(path.join(output,'generation.json'))));
-  const imports=[],rasters=[],advanceDifferences=[],rasterOutliers=[];
-  const inkBounds=async bytes=>{
+  const imports=[],rasters=[],advanceDifferences=[],rasterOutliers=[],tabOutliers=[],partInk=[],partCollisions=[];
+  const readInk=async bytes=>{
     const {data,info}=await sharp(bytes).removeAlpha().raw().toBuffer({resolveWithObject:true});
+    const mask=new Uint8Array(info.width*info.height);
     let left=info.width,top=info.height,right=-1,bottom=-1;
     for(let y=0;y<info.height;y++)for(let x=0;x<info.width;x++){
       const i=(y*info.width+x)*info.channels;
-      if([0,1,2].some(c=>Math.abs(data[i+c]-data[c])>2)){left=Math.min(left,x);right=Math.max(right,x);top=Math.min(top,y);bottom=Math.max(bottom,y);}
+      if([0,1,2].some(c=>Math.abs(data[i+c]-data[c])>2)){mask[y*info.width+x]=1;left=Math.min(left,x);right=Math.max(right,x);top=Math.min(top,y);bottom=Math.max(bottom,y);}
     }
-    return right<0?null:{left,top,right,bottom};
+    return {mask,width:info.width,height:info.height,bounds:right<0?null:{left,top,right,bottom}};
   };
   for(const deck of generation.decks){
     const record=native.decks.find(item=>item.id===deck.id);
+    assert.equal(record.slides.length,deck.layouts.length);
     for(const [index,slide] of record.slides.entries()){
       const cell=deck.layouts[index].cell;
       for(const line of slide.lines)if(!line.characterBoundsInsideCell)advanceDifferences.push({id:deck.id,slide:index+1,role:line.role,text:line.text,rightOverhangPoints:line.left+line.width-(cell.x+cell.width)*.75});
+      for(const line of slide.lines)for(const tab of line.tabTargets)if(tab.errorPoints>.02)tabOutliers.push({id:deck.id,slide:index+1,role:line.role,text:line.text,...tab});
       const nativeBytes=await readFile(path.join(output,`${deck.id}-native-${index+1}.png`)),svgBytes=await readFile(path.join(output,`${deck.id}-svg-${index+1}.png`));
       assert.equal(hash(nativeBytes),slide.rasterSha256);assert.equal(hash(svgBytes),deck.svgRasterSha256[index]);
-      const nativeInk=await inkBounds(nativeBytes),svgInk=await inkBounds(svgBytes);
+      const nativeInk=(await readInk(nativeBytes)).bounds,svgInk=(await readInk(svgBytes)).bounds;
+      assert.deepEqual(slide.partRasters.map(part=>part.role),deck.layouts[index].parts.filter(part=>part.visible).map(part=>part.role));
+      const masks=[];
+      for(const part of slide.partRasters){
+        assert.equal(part.file,`${deck.id}-native-${index+1}-${part.role}.png`);
+        const bytes=await readFile(path.join(output,part.file));assert.equal(hash(bytes),part.sha256);
+        const ink=await readInk(bytes);assert.equal(ink.width,deck.width);assert.equal(ink.height,deck.height);
+        partInk.push({id:deck.id,slide:index+1,role:part.role,sha256:part.sha256,bounds:ink.bounds});
+        for(const previous of masks){
+          let pixels=0,firstPixel;
+          for(let p=0;p<ink.mask.length;p++)if(ink.mask[p]&&previous.mask[p]){pixels++;firstPixel??={x:p%ink.width,y:Math.floor(p/ink.width)};}
+          if(pixels)partCollisions.push({id:deck.id,slide:index+1,roles:[previous.role,part.role],pixels,firstPixel});
+        }
+        masks.push({role:part.role,mask:ink.mask});
+      }
       let visibleInkInsideCell=true;
       for(const [engine,ink] of [['native',nativeInk],['svg',svgInk]])if(ink){
         if(!(ink.left>=Math.floor(cell.x)&&ink.top>=Math.floor(cell.y)&&ink.right<Math.ceil(cell.x+cell.width)&&ink.bottom<Math.ceil(cell.y+cell.height))){
@@ -108,7 +127,10 @@ if(mode==='generate'){
     assert.ok(diagnostics.every(issue=>issue.code==='metric-import-reflow'));
     imports.push({filename,sha256:hash(bytes),slides:result.slides.length,exactMetricFieldsSourceAndTypes:true,diagnostics});
   }
-  await write('comparison.json',{runtime,imports,rasters,advanceDifferences,rasterOutliers,visibleInkGatePassed:rasterOutliers.length===0,scope:'108 original/native-saved/native-edited metric slide imports preserve tested scalar types and exact source/metadata, including CRLF, blank lines and soft wraps. Visible SVG/native raster ink is tested against accepted cell integer pixel boundaries; outliers keep the raster gate failing. Character advances, including trailing whitespace, have separately recorded differences beyond 0.1 point; this is not exact advance equivalence or inter-part glyph collision proof. Native geometry/formatting/font theme are deliberately not reconstructed; no pixel equivalence is established.'});
-  console.log('All 108 original/saved/edited metric slide imports preserve source and types.');
-  assert.equal(rasterOutliers.length,0,'Visible native/SVG raster ink leaves accepted cells; see comparison.json. Source recovery passing does not close the native raster gate.');
+  const importedSlides=imports.reduce((n,item)=>n+item.slides,0);
+  const gates={visibleInk:rasterOutliers.length===0,characterBounds:advanceDifferences.length===0,tabPositions:tabOutliers.length===0,interPartInk:partCollisions.length===0};
+  await write('comparison.json',{runtime,imports,rasters,advanceDifferences,rasterOutliers,tabOutliers,partInk,partCollisions,gates,scope:`${importedSlides} original/native-saved/native-edited metric slide imports preserve tested scalar types and exact source/metadata, including CRLF, leading tabs, whitespace-only parts and soft wraps. Visible SVG/native raster ink is tested against accepted cell integer pixel boundaries. Native parts are independently rasterized with other generated shapes temporarily hidden and their original visibility restored before saving; pixel-mask intersections above a 2/255 RGB background difference test inter-part ink collisions at these fixture dimensions. Character ranges retain a 0.1-point cell tolerance and tab positions a 0.02-point tolerance. Any failed gate exits nonzero after writing all results. These finite raster observations do not prove vector-outline, alternate-resolution or arbitrary native fidelity. Native geometry/formatting/font theme are deliberately not reconstructed; no pixel equivalence is established.`});
+  console.log(`All ${importedSlides} original/saved/edited metric slide imports preserve source and types.`);
+  console.log(JSON.stringify({gates,advanceOutliers:advanceDifferences.length,rasterOutliers:rasterOutliers.length,tabOutliers:tabOutliers.length,interPartCollisions:partCollisions.length}));
+  assert.ok(Object.values(gates).every(Boolean),'Native metric fidelity gates remain open; see comparison.json. Source recovery passing does not close these gates.');
 }
