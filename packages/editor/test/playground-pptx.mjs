@@ -48,6 +48,21 @@ try {
   await page.locator('#preview svg').waitFor();
   await page.waitForFunction(() => !!document.querySelector('#export-pptx').onclick);
   await page.context().setOffline(true);
+  // Responsive CSS hides the button text on small screens. Keep names and actions usable.
+  for (const viewport of [{ width: 1280, height: 720 }, { width: 540, height: 960 }]) {
+    await page.setViewportSize(viewport);
+    for (const name of ['Import', 'Copy OPF', 'Source', 'Save OPF']) {
+      assert.equal(await button(name).count(), 1, `${name} keeps its accessible name at ${viewport.width}px`);
+      assert.equal(await button(name).isVisible(), true);
+    }
+    await button('Source').click();
+    assert.equal(await page.locator('#json').isVisible(), true);
+    await button('Close source editor').click();
+    await button('Import').click();
+    assert.equal(await page.getByRole('tab', { name: 'File', exact: true }).isVisible(), true);
+    await page.keyboard.press('Escape');
+  }
+  await page.setViewportSize({ width: 1440, height: 1000 });
   await button('Source').click();
   await page.locator('#json').fill(JSON.stringify(deck));
   await page.waitForFunction(() => !document.querySelector('#apply-json').disabled && document.querySelector('#source-preview').textContent.includes('An editable decision'));
