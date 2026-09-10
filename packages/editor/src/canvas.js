@@ -160,7 +160,7 @@ export function createCanvasEditor(container, options = {}) {
       );
       if (node.matches("g")) {
         let bounds = node.getBBox();
-        if (!bounds.width && !bounds.height && (node.hasAttribute('data-opf-code-role')||node.hasAttribute('data-opf-metric-role'))) bounds={x:Number(node.dataset.opfBoxX),y:Number(node.dataset.opfBoxY),width:Number(node.dataset.opfBoxWidth),height:Number(node.dataset.opfBoxHeight)};
+        if (!bounds.width && !bounds.height && (node.hasAttribute('data-opf-code-role')||node.hasAttribute('data-opf-metric-role')||node.hasAttribute('data-opf-source-text'))) bounds={x:Number(node.dataset.opfBoxX),y:Number(node.dataset.opfBoxY),width:Number(node.dataset.opfBoxWidth),height:Number(node.dataset.opfBoxHeight)};
         const lines = JSON.parse(node.getAttribute("data-opf-rich-lines") ?? "[]");
         if (!bounds.width && !bounds.height && lines.length) bounds = {x:lines[0].x,y:lines[0].y,width:Number(node.getAttribute("data-opf-box-width"))||8,height:lines.reduce((sum,line)=>sum+line.height,0)};
         const rect = doc.createElementNS("http://www.w3.org/2000/svg", "rect");
@@ -369,7 +369,14 @@ export function createCanvasEditor(container, options = {}) {
         } catch { /* This scalar field does not accept rich text. */ }
       }
       positionInput();
-      input.addEventListener("input", queueDraft);
+      input.addEventListener("input", () => {
+        // Compare each browser edit with the last canonical draft. Comparing
+        // only with the value at focus would normalize untouched mixed line
+        // endings between two edits in different parts of the same field.
+        if (active?.input===input && active.type==='string')
+          active.originalValue=parseCanvasValue(input.value,'string',active.originalValue);
+        queueDraft();
+      });
       input.addEventListener("compositionstart", () => {
         if (active) {
           active.composing = true;
