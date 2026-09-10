@@ -30,21 +30,21 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
-          ref: d04da692a579b2256ad27ee8de216105806b48d2
+          ref: 85eb290bde665f9bdfffc9ad487007ea237ea676
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-editor
-          ref: d4c0af69dd96acba70430e31c4b7057b70891e49
+          ref: aea29cf6998127fda96a5cbcd6b608db4c4890e3
           path: opf-editor
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-pptx
-          ref: 9dcc137387f50192ea5a0b2d00045b10fd476f6b
+          ref: 4c75ff713a19dff072e8f3660c368499973b78ab
           path: opf-pptx
           fetch-depth: 0
           persist-credentials: false
@@ -70,7 +70,7 @@ jobs:
       - name: Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks
         working-directory: opf
         env:
-          OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf-render/test/golden/opf-examples-png.source-whitespace.sha256.json
+          OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf-render/test/golden/opf-examples-png.readability.sha256.json
         run: pnpm test:packages
       - name: Execute installed tarball browser interactions
         working-directory: opf
@@ -79,6 +79,7 @@ jobs:
           pnpm test:packed-browser
           node scripts/test-installed-code-guards.mjs
           node scripts/test-plain-whitespace-workflow.mjs artifacts/plain-whitespace-installed installed
+          node scripts/test-readability-browser.mjs artifacts/readability-browser installed
       - name: Check scalar source whitespace and accepted browser advances
         working-directory: opf-render
         run: node test/plain-whitespace-browser.mjs artifacts/plain-whitespace-browser
@@ -127,6 +128,7 @@ jobs:
             opf/artifacts/npm/consumer/artifacts/*font-variants*.json
             opf/artifacts/metric-outline-browser/**
             opf/artifacts/plain-whitespace-installed/**
+            opf/artifacts/readability-browser/**
             opf-render/artifacts/plain-whitespace-browser/**
           retention-days: 7
           if-no-files-found: ignore

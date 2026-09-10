@@ -1,0 +1,13 @@
+{
+  "coreProduct": "ade2a4f0a8afa93f546a3b1e18f2ed23b84d0ac7",
+  "coreHarness": "afa1a738efd3153a29ee0f6531fc847f306ffa88",
+  "rendererProduct": "c7a7387f6e27cc21eeeec3015492afe289ec4ce3",
+  "rendererReviewedCheckpoint": "85eb290bde665f9bdfffc9ad487007ea237ea676",
+  "editorProduct": "aea29cf6998127fda96a5cbcd6b608db4c4890e3",
+  "pptxProduct": "4c75ff713a19dff072e8f3660c368499973b78ab",
+  "editorCi": "2071507c3b7a4ea9433423557dea649d14adf709",
+  "pptxCi": "ab5b1df912a8e46a2e7f46d6a35695861287c102",
+  "predecessorCore": "c51b02571eab6ee61d03560aa1f539072b2d381b",
+  "published": false,
+  "deploymentsChanged": false
+}

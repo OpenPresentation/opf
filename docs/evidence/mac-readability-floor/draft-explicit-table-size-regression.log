@@ -1,0 +1,42 @@
+
+> @openpresentation/opf-pptx@0.7.0 test
+> npm run build && node test/plain-whitespace.mjs && node test/accepted-text.mjs && node test/heading-provenance.mjs && node test/chart-colors.mjs && node test/content-cards.mjs && node test/chart-workbook.mjs && node test/dependency-boundary.mjs && npm run build:browser-check && npm run test:styled-table && node test/content-layout.mjs && node test/shared-quote.mjs
+
+
+> @openpresentation/opf-pptx@0.7.0 build
+> node scripts/build.mjs
+
+Vendored upstream distribution and license match recorded hashes.
+20 wide/portrait measured/estimated source exports preserve whitespace, tab-stop XML and exact reimport; native edits, clearing, reordering and seven damaged-group fallbacks pass.
+Accepted text PPTX: 24 cases / 144 editable lines retain shared anchors, sizes, styles, no-refit and words through import. Native raster and original OPF structure are separate gates.
+Heading provenance: native edits, shape renaming/reordering and 8 damaged/ambiguous group fallbacks preserve visible words.
+Heading role isolation: 16 wide/portrait quote imports, explicit native placeholders and ordinary untagged title/subtitle inference pass.
+Native chart colors passed: 40 charts, explicit chart panel, single alpha fill, axis/legend colors and exact data reimport.
+Content cards: 8 wide/portrait/on/off/alpha exports preserve source, shared frame and body bounds, radius and native metric fields; slide false overrides deck true. Native raster fidelity and frame reimport are not established.
+Chart workbook checks passed: 37 bounded heading/preservation cases, Unicode/whitespace, rich shared strings, unsupported/external/corrupt metadata and deterministic actual export/reimport.
+"RED" is not a valid scheme color or hex RGB! "000000" used instead. Only provide 6-digit RGB or 'pptx.SchemeColor' values!
+""/><EVIL/>" is not a valid scheme color or hex RGB! "000000" used instead. Only provide 6-digit RGB or 'pptx.SchemeColor' values!
+Backgrounds passed: 38 gradient/solid cases, 990 independently compared SVG/native samples, alpha, overrides, round-trips, native edits, empty/single/descending stops and unsupported-import diagnostics.
+Native background inheritance passed: 70 layout/master/theme/map/reference/diagnostic cases and theme-slot opacity.
+Native Keynote backgrounds passed: 18 PNG comparisons from 12 exported native images, native PPTX import, blank-slide preservation; observed max channel 8, alpha 1, opaque mean 0.37809606481481484.
+Table layout passed: 168 cells, 0 shrink cases, 24 content-sized rows, Roboto/Calibri substitution, two canvas sizes, header/no-header tables, alignment, native rows and source text preservation.
+Variable table rows passed: unchanged short rows, five-line rich cell containment, identical SVG/native row heights and native table extent.
+Table import passed: headers, headerless data, blank rows/headers, repeated round-trips, native edits and XML boolean forms.
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Explicit point size is retained
+
+'1920' !== '1800'
+
+    at file:///Users/michael/Source/opf-pptx/test/rich-table.mjs:40:8 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: '1920',
+  expected: '1800',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
