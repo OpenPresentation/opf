@@ -1,6 +1,12 @@
 # Shared metric integration — source checkpoint
 
-## Current checkpoint: shared card geometry and accepted text fits
+## Current checkpoint: vector outlines, shared text placement and native heading roles
+
+Core `ac0c99fcdc03dd7cd7ac9840be841b903a941f77`, renderer `53e6f5fb5911ebecbfcdfef341bbb53e33c1f7a5`, PPTX `12c6cee646a5c8760dcbf964b722a108d21687b4` and editor `0e8a1676c780919ceefe8b9972372f364e542944` implement [the outline/placement contract](text-placement.md). [Evidence](../evidence/text-placement/README.md) records 598 hashed artifacts, Node20/24 checks, current native connection failure and all remaining gates. No version, baseline, immutable release ref or public deployment advanced.
+
+All 24 actual Edge cases pass with shared clearance; zero-clearance controls retain exactly the original four failures under the same strict paint gate. Core has 482 passing tests; full PPTX/editor checks, 48 renderer contracts, seven browser suites and 46 rich-canvas checks pass per runtime. PPTX preserves accepted editable line geometry and complete native heading roles without stale source recovery. Default estimated output retains all 805 previous rasters and its unapproved baseline gate. Current native PowerPoint raster/save/reopen remains unverified because COM again rejects the connection. Continue remaining payload ink/source, font convenience, native/corpus/repair and PDF milestones before reviewed candidate/release/public work. The full goal remains active.
+
+## Previous checkpoint: shared card geometry and accepted text fits
 
 The latest authoritative checkpoint is [the handoff](../handoff-2026-09-08.md). Shared cards use core source `cc3c8131a14d7945c28e89f2819e4beeaa89cd51`; renderer `3068c0ecd7f453c00de3cd72a7a98979e31d14d5` additionally consumes accepted plain/rich/heading fits without refitting. PPTX `b9885ab6601c1bdecc7e3b5547baa33a2a467735` and editor `125782eb537a3a37f61dfba661f66cb9658a33f4` remain at their card checkpoint. [Card evidence](../evidence/content-card-layout/README.md) and [accepted-text evidence](../evidence/accepted-text-layout/README.md) preserve separate scopes and failures.
 
