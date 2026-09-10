@@ -2,7 +2,11 @@
 
 This work implements the [ecosystem objective](ecosystem-objective-2026-09-09.md) in reviewable increments. It does not introduce a model, account, key, network or paid-service dependency into OPF. Proprietary applications remain optional compatibility-test environments.
 
-## Current checkpoint — metric primitive merged; composition/pagination integration underway
+## Current checkpoint — metric consumers and source recovery; raster gates open
+
+The [metric integration checkpoint](shared-metric-integration.md) includes accepted alignment/line origins, SVG/native export, guarded source/type recovery and actual editor/undo/pagination/export workflows. Core passes 466 tests on Node 20/24; focused consumer and browser checks pass. Real PowerPoint preserves tested fields/types in 108 original/saved/edited imports. Corpus review remains open for 85 changed rasters, and the native raster gate fails on one portrait/right fixture. Nine native advance-bound differences are recorded separately. No release or registry/public dependency changed. Continue this source branch and resolve its gates before release preparation; the larger deterministic repair/font objective remains active.
+
+## Previous checkpoint — metric primitive merged; composition/pagination integration underway
 
 Core PR #58 merged as `5cfc944ee7709b54bc2d1e7192cd86b7a52d6cb7`, identical to reviewed `d484a32a910cd9f0c729bcb9e5dc57f1e1cdfaa6`, after complete Node 20/24 coordinator/core, Windows/macOS CLI and Bugbot passed. Continue `codex/shared-metric-integration-20260910`: the [initial source checkpoint](shared-metric-integration.md) consumes complete metrics in composition/scoring (`grid-score-v4`) and atomic pagination. All 464 core tests and existing preservation suites pass on both supported Node runtimes. Renderer/PPTX/editor changes, actual integrated browser/native gates and review remain open. No package has been bumped or published.
 

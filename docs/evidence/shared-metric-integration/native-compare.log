@@ -1,0 +1,19 @@
+All 108 original/saved/edited metric slide imports preserve source and types.
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Visible native/SVG raster ink leaves accepted cells; see comparison.json. Source recovery passing does not close the native raster gate.
+
+1 !== 0
+
+    at file:///C:/Users/micha/Source/opf/artifacts/shared-metric-integration/opf-pptx/test/native-metric.mjs:113:10 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.20.0
