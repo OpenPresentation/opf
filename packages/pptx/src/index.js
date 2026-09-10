@@ -5,6 +5,7 @@ import {attachMetricTags,metricManifest,importMetricGroups} from './metric-prove
 import {attachCardTags,importCardFrames} from './card-provenance.js';
 import {attachHeadingTags,importHeadingGroups} from './heading-provenance.js';
 import {attachPlainTextTags,importPlainTextGroups} from './text-provenance.js';
+import {attachTimelineTags,timelineManifest,importTimelineGroups} from './timeline-provenance.js';
 import {importImageOrientation} from './image-import.js';
 import {nativeBackgroundFill} from './background.js';
 import {importBackground} from './background-import.js';
@@ -179,6 +180,7 @@ export async function toPptx(input, options = {}) {
   context.cardTags = new Map();
   context.headingTags = new Map();
   context.plainTextTags = new Map();
+  context.timelineTags = new Map();
   context.codeTags = new Map();
   context.metricTags = new Map();
   context.chartHeadings = new Map();
@@ -427,6 +429,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   const cards = importCardFrames(shapes, paragraphs, relationships, entries, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
   const headings=importHeadingGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
   const plainText=importPlainTextGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
+  const timelines=importTimelineGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
   for(const group of [...headings.items,...plainText.items]) {
     const item=importShape(group.shapes[0],dimensions,group.paragraphs,true);
     if(item){
@@ -435,10 +438,15 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
       items.push({...item,heading:group.field,sourceText:!group.field});
     }
   }
+  for(const group of timelines.items){
+    const bounds=group.shapes.map(shape=>shapeBounds(shape['p:spPr']?.['a:xfrm'])).filter(Boolean);
+    let union;for(const bound of bounds){if(!union)union={...bound};else{const x=Math.min(union.x,bound.x),y=Math.min(union.y,bound.y);union={x,y,w:Math.max(union.x+union.w,bound.x+bound.w)-x,h:Math.max(union.y+union.h,bound.y+bound.h)-y};}}
+    items.push({kind:'timeline',sourceText:true,bounds:union,payload:group.payload});
+  }
   for (const item of code.items) items.push({kind:'code',bounds:shapeBounds(item.shape['p:spPr']?.['a:xfrm']),payload:item.payload});
   for (const item of metric.items) items.push({kind:'metric',bounds:shapeBounds(item.shape['p:spPr']?.['a:xfrm']),payload:item.payload});
   for (const [index,shape] of shapes.entries()) {
-    if (code.consumed.has(shape)||metric.consumed.has(shape)||cards.has(shape)||headings.consumed.has(shape)||plainText.consumed.has(shape)) continue;
+    if (code.consumed.has(shape)||metric.consumed.has(shape)||cards.has(shape)||headings.consumed.has(shape)||plainText.consumed.has(shape)||timelines.consumed.has(shape)) continue;
     const item = importShape(shape, dimensions, paragraphs[index]);
     if (item) items.push(item);
   }
@@ -958,7 +966,7 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
     } else if (item.field === "text" && typeof item.value === "string") {
       slide.addText(item.text.lines.join("\n"), {...textBoxOptions(region, slideContext, item.text.fontSize * 0.75),...nativeFontOptions(item.textStyle)});
     } else {
-      await addPayload(slide, presentation, item.payload, region, item.path, { ...slideContext, composition: item.composition, contentAlignment: opfSlide.design?.contentAlignment ?? presentation.design?.contentAlignment ?? "left" }, options, item.quoteLayout, item.codeLayout,item.metricLayout);
+      await addPayload(slide, presentation, item.payload, region, item.path, { ...slideContext, composition: item.composition, contentAlignment: opfSlide.design?.contentAlignment ?? presentation.design?.contentAlignment ?? "left" }, options, item.quoteLayout, item.codeLayout,item.metricLayout,item.timelineLayout);
     }
   }
 
@@ -979,7 +987,7 @@ function fieldToType(field) {
   return field === "items" || field === "bullets" ? "list" : field;
 }
 
-async function addPayload(slide, presentation, payload, region, path, context, options, quoteLayout, codeLayout,metricLayout) {
+async function addPayload(slide, presentation, payload, region, path, context, options, quoteLayout, codeLayout,metricLayout,timelineLayout) {
   const kind = inferPayloadKind(payload);
   switch (kind) {
     case "text":
@@ -1010,7 +1018,7 @@ async function addPayload(slide, presentation, payload, region, path, context, o
       addQuotePayload(slide, quoteLayout, context, options, path);
       break;
     case "timeline":
-      addTimelinePayload(slide, payload.timeline, region, context, options, path);
+      addTimelinePayload(slide, payload.timeline, timelineLayout, context, options, path);
       break;
     default:
       addPlaceholderPayload(slide, "Unsupported OPF payload", payload, region, context);
@@ -1269,11 +1277,12 @@ function addMeasuredPayloadText(slide, text, box, context, options, config) {
     if (context.composition?.overflow === 'error') throw new OPFPptxError('layout-overflow', diagnostic.message, {path: config.path, issues: [diagnostic]});
   }
   for (const [index, line] of fit.lines.entries()) {
-    if (!line&&!config.heading&&!config.sourceText) continue;
+    if (!line&&!config.heading&&!config.sourceText&&!config.timeline) continue;
     const alignment=fit.placement?.alignment??config.align??context.contentAlignment??'left',placed=fit.placement?.lines[index],factor=alignment==='right'?1:alignment==='center'?.5:0;
     const sourceLine=fit.sourceLines?.[index],boundary=sourceLine?{boundary:sourceLine.boundary,separator:String(text).slice(sourceLine.end,sourceLine.nextStart)}:{};
-    const objectName=config.heading?`OPF heading ${config.path} line ${index}`:config.sourceText?`OPF text ${config.path} line ${index}`:undefined;
+    const objectName=config.heading?`OPF heading ${config.path} line ${index}`:config.timeline?`OPF timeline ${config.timeline.group} part ${config.timeline.part} line ${index}`:config.sourceText?`OPF text ${config.path} line ${index}`:undefined;
     if(config.heading)context.headingTags.set(objectName,{v:1,group:config.path,field:config.heading,line:index,count:fit.lines.length,...boundary});
+    else if(config.timeline)context.timelineTags.set(objectName,{v:1,role:'text',group:config.timeline.group,part:config.timeline.part,line:index,count:fit.lines.length,...boundary,...(config.timeline.part===0&&index===0?{anchor:config.timeline.anchor}:{})});
     else if(config.sourceText)context.plainTextTags.set(objectName,{v:1,group:config.path,line:index,count:fit.lines.length,...boundary});
     const area=placed?{x:(placed.x+placed.width*factor-box.width*factor)/96,y:(placed.baseline-fit.fontSize)/96,w:box.width/96,h:placed.height/96}:{x:box.x/96,y:(box.y+index*fit.lineHeight)/96,w:box.width/96,h:fit.lineHeight/96};
     slide.addText(line, {
@@ -1353,20 +1362,21 @@ function addQuotePayload(slide, layout, context, options, path) {
   }
 }
 
-function addTimelinePayload(slide, value, region, context, options, path) {
-  const timeline = Array.isArray(value) ? {events: value} : value;
-  const events = Array.isArray(timeline?.events) ? timeline.events : [];
-  if (!events.length) return;
-  const box = pixelBox(region), labelWidth = box.width / Math.max(2, events.length);
-  const gap = (box.width - labelWidth) / Math.max(1, events.length - 1);
-  const start = events.length === 1 ? box.x + box.width / 2 : box.x + labelWidth / 2;
-  const end = events.length === 1 ? start : box.x + box.width - labelWidth / 2;
-  const y = box.y + box.height * .46, radius = Math.min(9, labelWidth / 5, box.height * .04);
-  slide.addShape('line', {x: start / 96, y: y / 96, w: (end - start) / 96, h: 0, line: {color: context.colors.border, pt: 3 * .75}});
-  for (const [index, event] of events.entries()) {
-    const x = start + index * gap;
-    slide.addShape('ellipse', {x: (x - radius) / 96, y: (y - radius) / 96, w: radius * 2 / 96, h: radius * 2 / 96, fill: {color: context.colors.accent}, line: {transparency: 100}});
-    addMeasuredPayloadText(slide, [event.when, event.what, event.description].filter(Boolean).join('\n'), {x: x - labelWidth / 2, y: index % 2 === 0 ? box.y : y + 24, width: labelWidth, height: box.height * .38}, context, options, {path: `${path}.events.${index}`, fontSize: 16, fontWeight: 500, align: 'center'});
+function addTimelinePayload(slide, value, layout, context, options, path) {
+  if(!layout)throw new OPFPptxError('missing-timeline-layout','Timeline export requires a coordinated core build with shared timeline geometry.',{path});
+  const scale=Math.min(context.dimensions.widthInches,context.dimensions.heightInches)*96/720;
+  const group=String(context.timelineTags.size),anchor=timelineManifest(value,layout),connectorName=`OPF timeline ${group} connector`;
+  const {x1,y1,x2,y2}=layout.connector;
+  slide.addShape('line',{objectName:connectorName,x:x1/96,y:y1/96,w:(x2-x1)/96,h:(y2-y1)/96,line:{color:context.colors.border,pt:3*scale*.75}});
+  context.timelineTags.set(connectorName,{v:1,group,role:'connector'});
+  for(const marker of layout.markers){
+    const objectName=`OPF timeline ${group} marker ${marker.eventIndex}`;
+    slide.addShape('ellipse',{objectName,x:(marker.x-marker.radius)/96,y:(marker.y-marker.radius)/96,w:marker.radius*2/96,h:marker.radius*2/96,fill:{color:context.colors.accent},line:{transparency:100}});
+    context.timelineTags.set(objectName,{v:1,group,role:'marker',eventIndex:marker.eventIndex});
+  }
+  for(const [index,part]of layout.parts.entries()){
+    if(!part.fit)throw new OPFPptxError('layout-overflow','Timeline field has no usable space; change the arrangement or paginate events.',{path:part.path,issues:layout.diagnostics});
+    addMeasuredPayloadText(slide,part.text,part.box,context,options,{path:part.path,fit:part.fit,textStyle:part.style,align:part.alignment,diagnosticsHandled:true,timeline:{group,part:index,anchor}});
   }
 }
 
@@ -1679,6 +1689,7 @@ async function normalizePptxZip(raw, context) {
   attachCardTags(entries,context.cardTags);
   attachHeadingTags(entries,context.headingTags);
   attachPlainTextTags(entries,context.plainTextTags);
+  attachTimelineTags(entries,context.timelineTags);
   for(const [part,bytes]of Object.entries(entries)){
     if(!/^ppt\/slides\/slide\d+\.xml$/.test(part))continue;
     const relationships=parseRelationships(entries,part);
