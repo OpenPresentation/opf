@@ -1,0 +1,68 @@
+▲ [WARNING] Ignoring this import because "packages/javascript/dist/chunk-DCJ2ZESA.js" was marked as having no side effects [ignored-bare-import]
+
+    packages/javascript/dist/pagination.js:2:7:
+      2 │ import './chunk-DCJ2ZESA.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  "sideEffects" is false in the enclosing "package.json" file:
+
+    packages/javascript/package.json:29:2:
+      29 │   "sideEffects": false,
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "packages/javascript/dist/chunk-BAWLYSUN.js" was marked as having no side effects [ignored-bare-import]
+
+    packages/javascript/dist/pagination.js:3:7:
+      3 │ import './chunk-BAWLYSUN.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  "sideEffects" is false in the enclosing "package.json" file:
+
+    packages/javascript/package.json:29:2:
+      29 │   "sideEffects": false,
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "packages/javascript/dist/chunk-GQSK3T7X.js" was marked as having no side effects [ignored-bare-import]
+
+    packages/javascript/dist/pagination.js:4:7:
+      4 │ import './chunk-GQSK3T7X.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  "sideEffects" is false in the enclosing "package.json" file:
+
+    packages/javascript/package.json:29:2:
+      29 │   "sideEffects": false,
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "packages/javascript/dist/chunk-TWMRZ43O.js" was marked as having no side effects [ignored-bare-import]
+
+    packages/javascript/dist/pagination.js:5:7:
+      5 │ import './chunk-TWMRZ43O.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  "sideEffects" is false in the enclosing "package.json" file:
+
+    packages/javascript/package.json:29:2:
+      29 │   "sideEffects": false,
+         ╵   ~~~~~~~~~~~~~
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+page.evaluate: OPFCompositionError: Slide content does not fit its composition.
+    at composeSlide (<anonymous>:15777:33)
+    at bindSlide (<anonymous>:43168:22)
+    at <anonymous>:43188:14
+    at Array.map (<anonymous>)
+    at resolvePresentation (<anonymous>:43186:41)
+    at renderSvg (<anonymous>:43197:22)
+    at render (<anonymous>:45604:23)
+    at createCanvasEditor (<anonymous>:46160:7)
+    at window.mount (<anonymous>:73574:26)
+    at async <anonymous>:337:30
+    at /Users/michael/.codex/worktrees/c193/opf/scripts/test-timeline-workflow.mjs:46:14 {
+  log: []
+}
+
+Node.js v24.21.0

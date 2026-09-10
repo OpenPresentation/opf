@@ -1,0 +1,55 @@
+{
+  "activeCase": {
+    "measured": false,
+    "width": 1280,
+    "height": 720,
+    "fixture": 3,
+    "deck": {
+      "design": {
+        "fontScheme": "roboto",
+        "dimensions": {
+          "widthInches": 13.333333333333334,
+          "heightInches": 7.5
+        }
+      },
+      "slides": [
+        {
+          "title": "Timeline editing",
+          "blocks": [
+            {
+              "timeline": {
+                "events": [
+                  {
+                    "when": "Q1",
+                    "what": "Pilot",
+                    "description": "Keep every source detail while measuring enough readable space for the complete milestone."
+                  },
+                  {
+                    "when": "Q2",
+                    "what": "Expand",
+                    "description": "Keep every source detail while measuring enough readable space for the complete milestone."
+                  }
+                ]
+              }
+            },
+            {
+              "text": "Keep this neighboring source."
+            }
+          ],
+          "composition": {
+            "mode": "row",
+            "weights": [
+              1,
+              4
+            ],
+            "minFontSize": 24,
+            "overflow": "error"
+          }
+        }
+      ]
+    }
+  },
+  "message": "page.evaluate: OPFCompositionError: Slide content does not fit its composition.\n    at composeSlide (<anonymous>:15777:33)\n    at bindSlide (<anonymous>:43168:22)\n    at <anonymous>:43188:14\n    at Array.map (<anonymous>)\n    at resolvePresentation (<anonymous>:43186:41)\n    at renderSvg (<anonymous>:43197:22)\n    at render (<anonymous>:45604:23)\n    at createCanvasEditor (<anonymous>:46160:7)\n    at window.mount (<anonymous>:73574:26)\n    at async <anonymous>:337:30",
+  "errors": [],
+  "requests": []
+}

@@ -1,0 +1,8 @@
+PASS packed canvas: 34 assertions; 0 trusted interaction scenarios
+PASS packed rich-text: 46 assertions; 0 trusted interaction scenarios
+PASS packed rich-text-estimated: 46 assertions; 0 trusted interaction scenarios
+PASS packed layout: 26 assertions; 4 trusted interaction scenarios
+PASS packed block: 21 assertions; 1 trusted interaction scenarios
+PASS packed list: 19 assertions; 0 trusted interaction scenarios
+PASS packed create: 40 assertions; 0 trusted interaction scenarios
+PASS packed styled-table: 44 assertions; 3 trusted interaction scenarios
