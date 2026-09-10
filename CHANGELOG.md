@@ -1,9 +1,11 @@
 # Changelog
 
-## Unreleased
+## 0.9.0
 
 - Add shared code filename/language/body layout with exact source ranges, tab segments, metadata case, whitespace and original line boundaries. Composition and pagination consume the complete accepted code geometry, expose `item.codeLayout` and identify the updated candidate scoring as `grid-score-v3`. Strict ancestor failures and irreducible metadata cannot be hidden by an empty body.
 - Pin coordinated source verification to the new renderer/PPTX/editor code integration. Fresh candidate tarball tests cover code semantics, metadata guards and actual offline browser editing/export/reimport; published registry tests retain their immutable historical fixtures. Source/native evidence and remaining release/fidelity gates are recorded in `docs/plans/shared-code-integration.md`.
+- The public explanation identifier changes from `grid-score-v2` to `grid-score-v3`; callers matching that literal must handle the new algorithm version. Schema-valid documents remain unchanged. Renderer/PPTX 0.7.0 and editor 0.6.0 are the coordinated targets for shared preview, native source recovery and editing; see `docs/plans/shared-code-release.md` for publication gates.
+- Bundle core 0.9.0 and updated portable layout guidance in CLI 0.7.0. The safe offline six-skill installer and existing authoring/validation/editing/pagination commands remain supported. Native formatting, font theme and raster equivalence remain separate fidelity limitations.
 
 ## 0.8.0
 

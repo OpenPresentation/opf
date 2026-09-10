@@ -1,0 +1,151 @@
+{
+  "checkedAt": "2026-09-10T05:53:30.725Z",
+  "branch": "codex/shared-code-release-20260909",
+  "baseCommit": "8d9c9c80b788bbdc80e18ad2b6468f07b2e2321d",
+  "prepared": {
+    "core": "0.9.0",
+    "cli": "0.7.0",
+    "published": false
+  },
+  "nodes": [
+    "20.20.2",
+    "24.20.0"
+  ],
+  "checks": {
+    "coreTests": 448,
+    "corePreservationSuites": true,
+    "cliUnitTests": 11,
+    "cliCommandChecks": 69,
+    "coreAndCliTypechecks": true,
+    "corePackedInstall": {
+      "entries": 519,
+      "tarballBytes": 639803,
+      "bothNodes": true
+    },
+    "cliStandaloneGlobalAndNpxInstall": true,
+    "skills": {
+      "folders": 6,
+      "validExamples": 3,
+      "helperChecks": 17
+    },
+    "validExamples": 126,
+    "schemaBreakingChanges": 0,
+    "auditAdvisories": 0,
+    "lintErrors": 0,
+    "lintWarnings": 96,
+    "lintInfos": 125
+  },
+  "cliTarball": {
+    "file": "openpresentation-cli-0.7.0.tgz",
+    "sha256": "5f6c97287090dad0b607c818a666ba69145853a37c9c0beb78750b52cffb5b33",
+    "integrity": "sha512-d72DCb5aNuM66Ori83ll+fMOeZBNk5RmaLityd/sgad84oAYrmRnbmHCe/re86jvsU1IAsZ3acG5bQmjL2HpIA==",
+    "bytes": 547254,
+    "sameIntegrityBothNodes": true
+  },
+  "files": {
+    "packages/javascript/package.json": "d7a9ed943e013a51e907d707e277806c4d89ec3a8b9a26d7336f66597b4f7fdb",
+    "packages/javascript/src/composition.ts": "3bccb9310acfc24acf7a5b0d7550aad7bdebca90798c5e552a4655630ce05941",
+    "packages/javascript/dist/composition.js": "6c77b9883ea592f6e67a6fac262e8c1dbd81968e6bd8b13d80cc7fe9f16f073e",
+    "packages/javascript/dist/composition.d.ts": "93ae873892e959c0058c652430334b386bf888d02e0c9611e41368c175296346",
+    "packages/cli/package.json": "43d508668029fb2fd2dd2050f53a1197387fa4a672f3e14f236be751dff16e72",
+    "packages/cli/dist/index.js": "bf97cad3db2bb52538089f41827f9e2437ee7c466ce79f726f5718a0c653e93d",
+    "skills/opf-layout/references/geometry.md": "5aedb5c77a0397793766a7f2c3f4e2acdc92cb11bfc2ad9ece67d1f5f8e3652f",
+    "docs/dynamic-composition.md": "7201249386f89307291db214958cf867fc9a07b4da6ce76f656c911f75426a08",
+    "pnpm-lock.yaml": "f897476933d095b26f6f55b06e72d196beb34da5da102e223ea6bc2da307327f"
+  },
+  "logs": [
+    {
+      "file": "release-install-node24.log",
+      "sha256": "2aea3f97b66668fc979a5d9d0d4450811bf2c465a3c66cbe9273a4996d56fd11",
+      "bytes": 142,
+      "exitCode": 0
+    },
+    {
+      "file": "release-types-node20.log",
+      "sha256": "736ad9f9be372b432e352819e63c4a1514fd419157267c3ae97ece2d881acb4b",
+      "bytes": 3627,
+      "exitCode": 0
+    },
+    {
+      "file": "release-types-node24.log",
+      "sha256": "b3d5568e0c022bef1421bfc7fb45292a7d840ab0dea97af2b9e4dd258c6f301a",
+      "bytes": 3627,
+      "exitCode": 0
+    },
+    {
+      "file": "release-tests-node20.log",
+      "sha256": "5b967d1744ae9307ccbf4f2f8078bbb8415144697b82c7bc82c076c42e28d1f8",
+      "bytes": 106263,
+      "exitCode": 0
+    },
+    {
+      "file": "release-tests-node24.log",
+      "sha256": "727eca4917348d0edd5058b3af652d780bb8d743f1aa964d9551ae6521979459",
+      "bytes": 48299,
+      "exitCode": 0
+    },
+    {
+      "file": "release-cli-node20.log",
+      "sha256": "1510dfdab0d0882b8c9850de8c7c8ddab297f02d091e52a9133a30212fd7a6d5",
+      "bytes": 715,
+      "exitCode": 0
+    },
+    {
+      "file": "release-cli-node24.log",
+      "sha256": "1510dfdab0d0882b8c9850de8c7c8ddab297f02d091e52a9133a30212fd7a6d5",
+      "bytes": 715,
+      "exitCode": 0
+    },
+    {
+      "file": "release-core-packed-node20.log",
+      "sha256": "1a47fc5f2987f1b9bd41b1e5bb40635f412ac26863dbac2e31b5f17be41bbd17",
+      "bytes": 118,
+      "exitCode": 0
+    },
+    {
+      "file": "release-core-packed-node24.log",
+      "sha256": "1a47fc5f2987f1b9bd41b1e5bb40635f412ac26863dbac2e31b5f17be41bbd17",
+      "bytes": 118,
+      "exitCode": 0
+    },
+    {
+      "file": "release-lint.log",
+      "sha256": "cad2960c0a8eb6b11e9907a78ebf1a473a58b887a5e5279d52d853e088b726fc",
+      "bytes": 26977,
+      "exitCode": 0
+    },
+    {
+      "file": "release-check-examples.log",
+      "sha256": "471eb0d905a163c6dd4c3d66914deac301e3880c517c18243c62c5b2d56aa39e",
+      "bytes": 154,
+      "exitCode": 0
+    },
+    {
+      "file": "release-check-breaking.log",
+      "sha256": "28b858a99c62b3fb2ab094dac3bb4ea77fcfc3b3a780ceb4ecb2577c9de2341c",
+      "bytes": 322,
+      "exitCode": 0
+    },
+    {
+      "file": "release-test-skills.log",
+      "sha256": "47df43c78830a927cb9e94708cf36f4517860e90edfb3ef01d921b4052bf9369",
+      "bytes": 237,
+      "exitCode": 0
+    },
+    {
+      "file": "release-audit.log",
+      "sha256": "4e4757ff226a44b5c448b1c4624619419c22d5272463dc19510b4754871a72f9",
+      "bytes": 32,
+      "exitCode": 0
+    }
+  ],
+  "scope": "Local Windows release candidate source, real standalone tarballs and installation tests. All six bundled skills use the updated provider-neutral source. Windows file-symlink privilege case is skipped locally and covered by Unix CI. No published-registry or native fidelity claim is added by version preparation. The prior merged integration has its separate installed/Linux/native evidence.",
+  "remaining": [
+    "Full release PR coordinated CI and review",
+    "Core 0.9.0 publication and actual registry verification",
+    "CLI 0.7.0 publication and actual registry verification",
+    "Dependency-ordered consumer lockfiles, releases and registry/native code workflows",
+    "Complete-plan and public adoption updates",
+    "Full layout repair, Auto arrange, payload internals and font/native-platform objective"
+  ]
+}
