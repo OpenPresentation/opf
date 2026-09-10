@@ -6,8 +6,8 @@ import {fileURLToPath} from 'node:url';
 
 test('public generated payload declarations agree with closed schema fields', () => {
   const fixture=fileURLToPath(new URL('./generated-consumer-fixture.ts',import.meta.url));
-  const source=`import {composeSlide, layoutQuote, type QuoteLayout, type Presentation, type CompositionExplanation} from '../dist/index.js';
-import type {QuoteLayout as FocusedQuote, CompositionExplanation as FocusedExplanation} from '../dist/composition.js';
+  const source=`import {composeSlide, layoutQuote, layoutCode, type CodeLayout, type QuoteLayout, type Presentation, type CompositionExplanation} from '../dist/index.js';
+import type {CodeLayout as FocusedCode, QuoteLayout as FocusedQuote, CompositionExplanation as FocusedExplanation} from '../dist/composition.js';
 type ContentPayload = NonNullable<Presentation['slides'][number]['blocks']>[number];
 const payload: ContentPayload = {text:[{text:'Preserved rich text',bold:true}]};
 const nested: ContentPayload = {blocks:[payload],composition:{mode:'row'}};
@@ -23,7 +23,14 @@ const focused: FocusedExplanation | undefined=explanation;
 const quote:QuoteLayout=layoutQuote({text:'Body',attribution:'Source'},{x:0,y:0,width:600,height:400},{minFontSize:24});
 const focusedQuote:FocusedQuote=quote;
 const font:string|undefined=focusedQuote.parts[0]?.style.fontFamily;
-void [deck,value,invalid,arbitrary,focused,font];`;
+const code:CodeLayout=layoutCode({source:'  kept',language:'ts',filename:'file.ts'},{x:0,y:0,width:600,height:400},{minFontSize:24});
+const focusedCode:FocusedCode=code;
+const nextStart:number|undefined=focusedCode.parts[0]?.fit?.sourceLines[0]?.nextStart;
+const tabSize:4|undefined=focusedCode.parts[0]?.fit?.tabSize;
+const segmentKind:'text'|'tab'|undefined=focusedCode.parts[0]?.fit?.sourceLines[0]?.segments[0]?.kind;
+// @ts-expect-error Code metadata follows the string fields in the schema.
+layoutCode({source:'kept',language:42},{x:0,y:0,width:600,height:400});
+void [deck,value,invalid,arbitrary,focused,font,nextStart,tabSize,segmentKind];`;
   const options={strict:true,noEmit:true,skipLibCheck:false,target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.NodeNext,moduleResolution:ts.ModuleResolutionKind.NodeNext,types:[]};
   const host=ts.createCompilerHost(options),read=host.readFile.bind(host),exists=host.fileExists.bind(host);
   host.readFile=file=>path.resolve(file)===fixture?source:read(file);
