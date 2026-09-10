@@ -136,4 +136,7 @@ test('difficult metrics use a bounded deterministic candidate search independent
     const first=layoutMetric(metric,cell,{scale,minFontSize:8}),second=layoutMetric(metric,cell,{scale,minFontSize:8});
     assert.deepEqual(first,second);assert.ok(first.attempts>1&&first.attempts<=48);sourceIsComplete(first);
   }
+  // 23 * .1 / .1 rounds above 23; the public bound still applies near a zero floor.
+  const nearZero=layoutMetric(metric,{x:0,y:0,width:30,height:18},{scale:.1,minFontSize:1e-300});
+  assert.ok(nearZero.attempts<=48);sourceIsComplete(nearZero);
 });

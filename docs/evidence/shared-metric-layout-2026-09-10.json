@@ -4,7 +4,7 @@
   "sourceHashes": [
     {
       "file": "packages/javascript/src/composition.ts",
-      "sha256": "50fe15331f5ff62c57caef996299db4b0b70a0b3f5cc6b6a882f76d462619212"
+      "sha256": "ced55701b2b76981ceb2cf8a69fa7ef923e5669e6049b385bbf0202b43a32112"
     },
     {
       "file": "packages/javascript/src/index.ts",
@@ -22,11 +22,11 @@
   "runtimeHashes": [
     {
       "file": "packages/javascript/dist/composition.js",
-      "sha256": "50d8a29d7fba3a01021a140342f59a5d192663a657ec008a6c38c504b70b3286"
+      "sha256": "b8277196f7e2839e68733f6542405d9ab3570c0aca8c950be6d1aa1da7afa253"
     },
     {
-      "file": "packages/javascript/dist/chunk-TSIK6TC2.js",
-      "sha256": "28eee07e431c276cd5b08c8e3990d1fcd0d27e3cc5fdf206d9c73749f5253686"
+      "file": "packages/javascript/dist/chunk-FSCC2JDW.js",
+      "sha256": "093f441d4361d8544625555aeb98b9709db072322b7300882c82dd792a0e4ae0"
     }
   ],
   "fontHashes": [

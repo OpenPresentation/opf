@@ -1,7 +1,7 @@
 {
   "browser": "152.0.4191.66",
   "platform": "win32",
-  "geometryReportSha256": "0f8440ac0ac4ab5aa7966d9ddb347ef7e39ba92d2b29889b30ac4cef1a741e56",
+  "geometryReportSha256": "0924a8839cebe4ce682c4f0e28ba306a6b52e41217f507990e5e85cbbb069bc2",
   "verifierSha256": "3480f554aaf963f7bbdcdc740eafae447b44c5a84c645b847b9ff13c322c555b",
   "textRendering": "geometricPrecision",
   "toleranceReferencePixels": 0.1,

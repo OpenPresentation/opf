@@ -427,18 +427,19 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
   };
   const fitValue=(area:LayoutBox)=>{
     if (!usable(area)) return undefined;
-    let size=primary.requestedFontSize;
-    while (true) {
+    // Derive sizes from the requested size: repeated subtraction accumulates rounding
+    // error and can add an extra trial at very small floors.
+    for (let step=0;step<=76;step++) {
+      const size=Math.max(minimum,primary.requestedFontSize-step*scale);
       const natural=measure(primary,size,area.width);
       const fit={...natural,overflow:occupied(natural)>area.height+.01||natural.sourceLines.some(line=>line.width>area.width+.01)};
       if (!fit.overflow||size===minimum) return fit;
-      size=Math.max(minimum,size-scale);
     }
   };
   type Allocation={part:MetricTextPart;box:LayoutBox;fit:CodeTextFit|undefined};
   type Candidate={arrangement:MetricLayout['arrangement'];allocations:Allocation[];score:number;overflow:boolean};
   let selected:Candidate|undefined,attempts=0;
-  const reductions=Math.ceil(Math.max(0,...metadata.map(part=>(part.requestedFontSize-minimum)/scale)));
+  const reductions=Math.min(23,Math.ceil(Math.max(0,...metadata.map(part=>(part.requestedFontSize-minimum)/scale))));
   for (let reduction=0;reduction<=reductions;reduction++) {
     const measured=new Map(metadata.map(part=>[part,measure(part,Math.max(minimum,part.requestedFontSize-reduction*scale),box.width)]));
     const unitFit=unit?measured.get(unit):undefined;
