@@ -1,0 +1,30 @@
+{
+  "design": {
+    "fontScheme": {
+      "heading": {
+        "family": "Carlito"
+      },
+      "body": {
+        "family": "Carlito"
+      },
+      "code": {
+        "family": "Cousine"
+      }
+    }
+  },
+  "slides": [
+    {
+      "code": {
+        "source": "const value = 42;",
+        "language": "very-long-language-label-very-long-language-label-very-long-language-label-very-long-language-label-very-long-language-label-very-long-language-label-very-long-language-label-very-long-language-label-very-long-language-label-very-long-language-label-very-long-language-label-very-long-language-label-very-long-language-label-very-long-language-label-very-long-language-label-very-long-language-label-very-long-language-label-very-long-language-label-very-long-language-label-very-long-language-label-"
+      }
+    },
+    {
+      "code": {
+        "source": "def check():\r\n    value = \"two  spaces\"\r\n    return value  \r\n",
+        "language": "python",
+        "filename": "src/check.py"
+      }
+    }
+  ]
+}

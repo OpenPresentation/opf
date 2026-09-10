@@ -1,0 +1,51 @@
+{
+  "checkedAt": "2026-09-10T02:39:47.191Z",
+  "origin": "https://www.openpresentation.org",
+  "browser": "152.0.4191.66",
+  "sourcePackageVersion": "0.8.0",
+  "documentationRef": "8fc5000bc78f5e89e5464d7efdfb3b96ed9cea01",
+  "sourceDigest": "aca6bca440a191ca4c04c2015076f8202cbb221dbf175fafa1afc6700115ea13",
+  "rawFiles": [
+    {
+      "path": "docs/dynamic-composition.md",
+      "bytes": 20977,
+      "sha256": "1c2409d2c0be3873a7102bde57a436fa4db11b547c500dfd1dab423be314c1d0"
+    },
+    {
+      "path": "docs/plans/shared-quote-release.md",
+      "bytes": 13012,
+      "sha256": "a1d192684338ff14381ee47913daa07763a3ef3cf59c5f97a69494277cf176e7"
+    },
+    {
+      "path": "docs/plans/font-roadmap.md",
+      "bytes": 7877,
+      "sha256": "89aec4153265b837ce51cded1062a875604766976ea6e7affda6b4c8179f59b3"
+    }
+  ],
+  "boundary": "Public reference headings, full LLM text and complete skill/raw-file manifest use the immutable reviewed documentation correction for published core 0.8.0. No npm version or schema is changed. Public browser/release/download checks and exact READY deployment provenance are attached separately.",
+  "pr": 22,
+  "reviewedHead": "f4cc87d10aa22370d5f2d7b901e85fa9bfbff449",
+  "mergeCommit": "e61319537de1c4defc2368b07ad92207e31c655b",
+  "treeIdentical": true,
+  "ci": 34429916760,
+  "bugbot": "passed",
+  "coreCheckpoint": {
+    "pr": 52,
+    "reviewedHead": "8fc5000bc78f5e89e5464d7efdfb3b96ed9cea01",
+    "mergeCommit": "74f39c68585586cb2eb41a4adc96e60eeab8e9da",
+    "ci": 34429765513,
+    "coordinatorCi": 34429765488,
+    "bugbot": "passed"
+  },
+  "preview": {
+    "deployment": "dpl_DTMb2QLi36meyXz3xuyDz2WpcVVp",
+    "tests": 6,
+    "seconds": 20.5
+  },
+  "production": {
+    "deployment": "dpl_HaHBwTk5BW7LACfpLYUtFH1S37PY",
+    "commit": "e61319537de1c4defc2368b07ad92207e31c655b",
+    "tests": 6,
+    "seconds": 18.7
+  }
+}
