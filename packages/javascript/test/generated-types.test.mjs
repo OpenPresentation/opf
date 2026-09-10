@@ -28,9 +28,11 @@ const focusedCode:FocusedCode=code;
 const nextStart:number|undefined=focusedCode.parts[0]?.fit?.sourceLines[0]?.nextStart;
 const tabSize:4|undefined=focusedCode.parts[0]?.fit?.tabSize;
 const segmentKind:'text'|'tab'|undefined=focusedCode.parts[0]?.fit?.sourceLines[0]?.segments[0]?.kind;
+const accepted:CodeLayout|undefined=result.items[0]?.codeLayout;
+const scoreVersion:'grid-score-v3'|undefined=explanation?.algorithm;
 // @ts-expect-error Code metadata follows the string fields in the schema.
 layoutCode({source:'kept',language:42},{x:0,y:0,width:600,height:400});
-void [deck,value,invalid,arbitrary,focused,font,nextStart,tabSize,segmentKind];`;
+void [deck,value,invalid,arbitrary,focused,font,nextStart,tabSize,segmentKind,accepted,scoreVersion];`;
   const options={strict:true,noEmit:true,skipLibCheck:false,target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.NodeNext,moduleResolution:ts.ModuleResolutionKind.NodeNext,types:[]};
   const host=ts.createCompilerHost(options),read=host.readFile.bind(host),exists=host.fileExists.bind(host);
   host.readFile=file=>path.resolve(file)===fixture?source:read(file);
