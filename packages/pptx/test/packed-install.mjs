@@ -75,12 +75,16 @@ console.log('Packed consumer: vendored licenses/hashes, absent unused dependenci
     assert.ok((await realpath(path.join(consumer,'node_modules',name))).startsWith((await realpath(path.join(consumer,'node_modules')))+path.sep));
     dependencies[name]={version:entry.version,resolved:entry.resolved,integrity:entry.integrity};
   }
-  const shared=(await readFile(path.join(root,'test/shared-quote.mjs'),'utf8')).replaceAll("'../dist/index.js'","'@openpresentation/opf-pptx'");
-  await writeFile(path.join(consumer,'shared-quote.mjs'),shared);
-  process.stdout.write(execFileSync(process.execPath,['shared-quote.mjs'],{cwd:consumer,encoding:'utf8'}));
+  for(const file of ['shared-quote.mjs','shared-code.mjs','code-provenance.mjs']){
+    const shared=(await readFile(path.join(root,'test',file),'utf8'))
+      .replaceAll("'../dist/index.js'","'@openpresentation/opf-pptx'")
+      .replaceAll("'../vendor/pptxgenjs/pptxgen.es.js'","'./node_modules/@openpresentation/opf-pptx/vendor/pptxgenjs/pptxgen.es.js'");
+    await writeFile(path.join(consumer,file),shared);
+    process.stdout.write(execFileSync(process.execPath,[file],{cwd:consumer,encoding:'utf8'}));
+  }
   const withRendererAudit=JSON.parse(npm(['audit','--json'],consumer));assert.equal(withRendererAudit.metadata.vulnerabilities.total,0);
   const signatures=npm(['audit','signatures'],consumer);process.stdout.write(signatures);
-  let nativeEvidence;
+  let nativeEvidence,nativeCodeEvidence;
   if(native){
     const tests=path.join(consumer,'test');await mkdir(tests);
     await writeFile(path.join(tests,'native-quote.mjs'),await readFile(path.join(root,'test/native-quote.mjs')));
@@ -89,9 +93,19 @@ console.log('Packed consumer: vendored licenses/hashes, absent unused dependenci
     process.stdout.write(execFileSync('powershell.exe',['-NoProfile','-File',path.join(root,'test/native-quote.ps1'),'-EvidenceDirectory',evidence],{cwd:consumer,encoding:'utf8',timeout:120000}));
     process.stdout.write(execFileSync(process.execPath,[path.join(tests,'native-quote.mjs'),'compare',evidence],{cwd:consumer,encoding:'utf8'}));
     nativeEvidence={report:path.relative(root,path.join(evidence,'comparison.json')).split(path.sep).join('/'),sha256:hash(await readFile(path.join(evidence,'comparison.json')))};
+    const codeSource=await readFile(path.join(root,'test/native-code.mjs'),'utf8');
+    const codeHarness=codeSource.replaceAll("'../dist/index.js'","'@openpresentation/opf-pptx'")
+      .replaceAll("'vendor/pptxgenjs/pptxgen.es.js'","'node_modules/@openpresentation/opf-pptx/vendor/pptxgenjs/pptxgen.es.js'");
+    await writeFile(path.join(tests,'native-code.mjs'),codeHarness);
+    await writeFile(path.join(tests,'native-code.ps1'),await readFile(path.join(root,'test/native-code.ps1')));
+    const codeEvidence=path.join(root,`artifacts/native-code-packed-node${process.versions.node.split('.')[0]}`);
+    process.stdout.write(execFileSync(process.execPath,[path.join(tests,'native-code.mjs'),'generate',codeEvidence],{cwd:consumer,encoding:'utf8'}));
+    process.stdout.write(execFileSync('powershell.exe',['-NoProfile','-File',path.join(tests,'native-code.ps1'),'-EvidenceDirectory',codeEvidence],{cwd:consumer,encoding:'utf8',timeout:120000}));
+    process.stdout.write(execFileSync(process.execPath,[path.join(tests,'native-code.mjs'),'compare',codeEvidence],{cwd:consumer,encoding:'utf8'}));
+    nativeCodeEvidence={report:path.relative(root,path.join(codeEvidence,'comparison.json')).split(path.sep).join('/'),sha256:hash(await readFile(path.join(codeEvidence,'comparison.json'))),sourceHarnessSha256:hash(codeSource),installedHarnessSha256:hash(codeHarness)};
   }
   await mkdir(path.join(root,'artifacts'),{recursive:true});
-  await writeFile(path.join(root,`artifacts/packed-consumer-node${process.versions.node.split('.')[0]}.json`),JSON.stringify({node:process.version,name:manifest.name,version:manifest.version,integrity:packed.integrity,files,dependencies,knownVulnerabilities:0,signatureVerification:signatures.trim(),nativeEvidence,boundary:'Fresh installed candidate, every shipped file byte-matched, actual registry predecessors, optional-renderer absence and shared accepted geometry tested. Native evidence, when present, covers twelve controlled Calibri cases and reports raster differences without an equivalence threshold.'},null,2)+'\n');
+  await writeFile(path.join(root,`artifacts/packed-consumer-node${process.versions.node.split('.')[0]}.json`),JSON.stringify({node:process.version,name:manifest.name,version:manifest.version,integrity:packed.integrity,files,dependencies,knownVulnerabilities:0,signatureVerification:signatures.trim(),nativeEvidence,nativeCodeEvidence,boundary:'Fresh installed candidate, every shipped file byte-matched, actual registry predecessors, optional-renderer absence, shared accepted quote/code geometry and guarded code provenance tested. Native evidence, when present, covers twelve controlled Calibri quote and eight Courier New code cases, including source/metadata edits and save/reopen; raster differences are observations without an equivalence threshold.'},null,2)+'\n');
   console.log(`Packed installation audit: zero known vulnerabilities; ${packed.filename}, ${packed.integrity}`);
 } finally {
   const actual=await realpath(temporary);assert.equal(actual,actualTemporary);

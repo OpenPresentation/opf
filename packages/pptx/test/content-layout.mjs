@@ -25,13 +25,14 @@ for (const dimensions of [{widthInches: 1280 / 96, heightInches: 720 / 96}, {wid
   const svgSlides = renderSvgDeck(deck, options);
   const pptx = await toPptx(deck, options), entries = unzipSync(pptx);
   const imported = await fromPptx(pptx);
+  assert.deepEqual(imported.slides[2].blocks,[{type:'code',code:deck.slides[2].code}],'Code source and metadata survive export/import');
   assert.ok(JSON.stringify(imported).includes('A reviewer - Interview'), 'Quote attribution and source must survive export/import');
   for (let index = 0; index < deck.slides.length; index++) {
     const svg = parser.parse(svgSlides[index]);
     const native = parser.parse(new TextDecoder().decode(entries[`ppt/slides/slide${index + 1}.xml`]));
     const nativeShapes = all(native, 'p:sp');
     for (const text of all(svg, 'text')) {
-      const value = content(text);
+      const value = text.tspan ? all(text,'tspan').map(content).join('') : content(text);
       if (!value || value === deck.slides[index].title) continue;
       const shape = nativeShapes.find(item => all(item, 'a:t').map(content).join('') === value);
       assert.ok(shape, `Native payload text must match preview: ${value}`);

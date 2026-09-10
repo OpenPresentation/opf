@@ -1,4 +1,5 @@
 import {importTableFrames} from './table-import.js';
+import {attachCodeTags, codeManifest, importCodeGroups, nativeShapeParagraphs, nativeTextShapes} from './code-provenance.js';
 import {importImageOrientation} from './image-import.js';
 import {nativeBackgroundFill} from './background.js';
 import {importBackground} from './background-import.js';
@@ -170,6 +171,7 @@ export async function toPptx(input, options = {}) {
   context.tableCells = new Map();
   context.imagePlacements = new Map();
   context.backgroundFills = new Map();
+  context.codeTags = new Map();
   context.imageFormat = options.imageFormat ?? "compatible";
   const pptx = new PptxGenJS();
   configurePresentation(pptx, presentation, {...context,fonts:resolveSlideContext(presentation,presentation.slides[0],context,options).fonts});
@@ -383,9 +385,9 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
   const items = collectSlideItems(entries, slideRoot, slidePath, relationships, dimensions, options, slideIndex)
     .sort(comparePositionedItems);
   const titleItem = takeTitleItem(items, dimensions);
-  if (titleItem) slide.title = firstLine(titleItem.text);
+  if (titleItem) slide.title = titleItem.text;
   const subtitleItem = takeSubtitleItem(items, titleItem, dimensions);
-  if (subtitleItem) slide.subtitle = firstLine(subtitleItem.text);
+  if (subtitleItem) slide.subtitle = subtitleItem.text;
 
   const blocks = mergeAdjacentBulletShapes(items)
     .map((item) => payloadFromSlideItem(item))
@@ -401,9 +403,14 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
 function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensions, options, slideIndex) {
   const tree = slideRoot["p:cSld"]?.["p:spTree"];
   const items = [];
-
-  for (const shape of asArray(tree?.["p:sp"])) {
-    const item = importShape(shape, dimensions);
+  const shapes = nativeTextShapes(tree);
+  if (tree?.['p:grpSp']) options.onDiagnostic?.({code:'grouped-text-reflow',path:`slides.${slideIndex}`,message:'Grouped native text is retained, but group transforms and non-text group members are not reconstructed; review the reflowed OPF.'});
+  const paragraphs = nativeShapeParagraphs(decodeText(entries[slidePath]));
+  const code = importCodeGroups(shapes, paragraphs, relationships, entries, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.code`}));
+  for (const item of code.items) items.push({kind:'code',bounds:shapeBounds(item.shape['p:spPr']?.['a:xfrm']),payload:item.payload});
+  for (const [index,shape] of shapes.entries()) {
+    if (code.consumed.has(shape)) continue;
+    const item = importShape(shape, dimensions, paragraphs[index]);
     if (item) items.push(item);
   }
 
@@ -426,9 +433,8 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   return items;
 }
 
-function importShape(shape, dimensions) {
-  const paragraphs = readParagraphs(shape["p:txBody"]);
-  const text = paragraphs.map((paragraph) => paragraph.text).filter(Boolean).join("\n").trim();
+function importShape(shape, dimensions, paragraphs = readParagraphs(shape["p:txBody"])) {
+  const text = paragraphs.map((paragraph) => paragraph.text).join("\n");
   const placeholder = shapePlaceholderType(shape);
   const bounds = shapeBounds(shape["p:spPr"]?.["a:xfrm"]);
   const name = scalarText(shape["p:nvSpPr"]?.["p:cNvPr"]?.name).trim();
@@ -544,13 +550,12 @@ function readParagraphs(txBody) {
         if (Number.isFinite(size)) sizes.push(size / 100);
       }
       return {
-        text: texts.join("").trim(),
+        text: texts.join(""),
         bullet: asArray(paragraph?.["a:pPr"]).some(props => props?.["a:buChar"] !== undefined || props?.["a:buAutoNum"] !== undefined),
         level: Number(asArray(paragraph?.["a:pPr"])[0]?.lvl ?? 0),
         maxFontSize: sizes.length > 0 ? Math.max(...sizes) : 0
       };
-    })
-    .filter((paragraph) => paragraph.text);
+    });
 }
 
 function shapePlaceholderType(shape) {
@@ -624,7 +629,7 @@ function mergeAdjacentBulletShapes(items) {
 function payloadFromSlideItem(item) {
   if (item.payload) return item.payload;
   if (item.kind === "text") {
-    if (item.paragraphs.length > 1 || item.paragraphs.some(p=>p.bullet)) {
+    if (item.paragraphs.some(p=>p.bullet)) {
       return {
         type: "list",
         items: item.paragraphs.map((paragraph) => (
@@ -907,7 +912,7 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
     } else if (item.field === "text" && typeof item.value === "string") {
       slide.addText(item.text.lines.join("\n"), {...textBoxOptions(region, slideContext, item.text.fontSize * 0.75),fontFace:item.textStyle.fontFamily,bold:item.textStyle.fontWeight>=600,italic:item.textStyle.italic});
     } else {
-      await addPayload(slide, presentation, item.payload, region, item.path, { ...slideContext, composition: item.composition, contentAlignment: opfSlide.design?.contentAlignment ?? presentation.design?.contentAlignment ?? "left" }, options, item.quoteLayout);
+      await addPayload(slide, presentation, item.payload, region, item.path, { ...slideContext, composition: item.composition, contentAlignment: opfSlide.design?.contentAlignment ?? presentation.design?.contentAlignment ?? "left" }, options, item.quoteLayout, item.codeLayout);
     }
   }
 
@@ -928,7 +933,7 @@ function fieldToType(field) {
   return field === "items" || field === "bullets" ? "list" : field;
 }
 
-async function addPayload(slide, presentation, payload, region, path, context, options, quoteLayout) {
+async function addPayload(slide, presentation, payload, region, path, context, options, quoteLayout, codeLayout) {
   const kind = inferPayloadKind(payload);
   switch (kind) {
     case "text":
@@ -950,7 +955,7 @@ async function addPayload(slide, presentation, payload, region, path, context, o
       addTablePayload(slide, payload.table, region, context, options, path);
       break;
     case "code":
-      addCodePayload(slide, payload.code, region, context, options, path);
+      addCodePayload(slide, payload.code, codeLayout, region, context, path);
       break;
     case "metric":
       addMetricPayload(slide, payload.metric, region, context, options, path);
@@ -1213,16 +1218,32 @@ function addMeasuredPayloadText(slide, text, box, context, options, config) {
   }
 }
 
-function addCodePayload(slide, value, region, context, options, path) {
-  const box = pixelBox(region), code = typeof value === 'string' ? value : value?.source ?? JSON.stringify(value);
-  const label = typeof value === 'object' && value?.language ? String(value.language) : 'code';
-  slide.addShape('rect', {...region, fill: {color: '111827'}, line: {color: '334155', pt: .75}});
-  // The label has a fixed baseline in the SVG renderer; it does not participate in fitting.
-  slide.addText(label.toUpperCase(), {
-    ...textBoxOptions({x: (box.x + 18) / 96, y: (box.y + 14) / 96, w: Math.max(1, box.width - 36) / 96, h: 20 / 96}, context, 14 * .75),
-    fontFace: context.fonts.code, bold: true, color: '93C5FD', fit: 'none', wrap: false,
-  });
-  addMeasuredPayloadText(slide, code, {x: box.x + 18, y: box.y + 46, width: box.width - 36, height: box.height - 64}, context, options, {path, fontSize: 18, fontFamily: context.fonts.code, color: 'E5E7EB'});
+function addCodePayload(slide, value, layout, region, context, path) {
+  if (!layout) throw new OPFPptxError('missing-code-layout', 'Code export requires a coordinated core build with shared code geometry.', {path});
+  for (const part of layout.parts) {
+    // XML 1.0 Char excludes controls and unpaired UTF-16 surrogates. The u flag
+    // keeps valid supplementary characters (surrogate pairs) accepted.
+    const invalid = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\uD800-\uDFFF\uFFFE\uFFFF]/u.exec(part.text);
+    if (invalid) throw new OPFPptxError('invalid-code-text', `Code text contains U+${invalid[0].codePointAt(0).toString(16).toUpperCase().padStart(4,'0')} at UTF-16 offset ${invalid.index}, which XML cannot represent; edit that character before exporting.`, {path:part.path});
+  }
+  const group = String(context.codeTags.size + 1), panelName = `OPF code ${group} panel`;
+  for (const part of layout.parts) if (!part.fit) throw new OPFPptxError('layout-overflow', 'Code content has no usable internal space; increase its cell size before exporting.', {path:part.path,issues:layout.diagnostics});
+  context.codeTags.set(panelName,codeManifest(value,layout,group));
+  slide.addShape('rect', {...region, fill: {color: '111827'}, line: {color: '334155', pt: .75}, objectName:panelName});
+  for (const [partIndex,part] of layout.parts.entries()) {
+    if (!part.fit) throw new OPFPptxError('layout-overflow', 'Code content has no usable internal space; increase its cell size before exporting.', {path:part.path,issues:layout.diagnostics});
+    for (const [index,line] of part.fit.sourceLines.entries()) {
+      const tabStops=line.segments.filter(segment=>segment.kind==='tab').map(segment=>({position:(segment.x+segment.width)/96,alignment:'l'}));
+      const objectName = `OPF code ${group} ${part.role} line ${index+1}`;
+      context.codeTags.set(objectName,{v:1,group,role:'line',part:partIndex,line:index});
+      slide.addText(part.text.slice(line.start,line.end),{
+        ...textBoxOptions({x:part.box.x/96,y:(part.box.y+index*part.fit.lineHeight)/96,w:part.box.width/96,h:part.fit.lineHeight/96},context,part.fit.fontSize*.75),
+        fontFace:part.style.fontFamily,bold:part.style.fontWeight>=600,italic:part.style.italic,
+        color:part.role==='body'?'E5E7EB':'93C5FD',align:'left',fit:'none',wrap:false,lineSpacingMultiple:1,
+        tabStops:tabStops.length?tabStops:undefined,objectName,
+      });
+    }
+  }
 }
 
 function addMetricPayload(slide, value, region, context, options, path) {
@@ -1553,6 +1574,7 @@ async function normalizePptxZip(raw, context) {
     });
   }
 
+  attachCodeTags(entries, context.codeTags);
   const imageSources = new Map();
   for (const [part, bytes] of Object.entries(entries)) {
     if (!/^ppt\/slides\/slide\d+\.xml$/.test(part)) continue;

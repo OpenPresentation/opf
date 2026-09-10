@@ -39,6 +39,7 @@ jobs:
       - run: npm run typecheck
       - run: npm run validate
       - run: npm test
+      - run: npm run test:code
       - run: npm run test:packed
       - name: Verify Playwright image version
         run: node -e "if (require('playwright/package.json').version !== '1.63.0') throw new Error('Update the pinned Playwright image with the test package.');"

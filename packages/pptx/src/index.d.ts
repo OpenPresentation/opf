@@ -48,7 +48,7 @@ export interface ToPptxOptions {
 }
 
 export interface FromPptxOptions {
-  /** Reports native background, picture and table details that OPF import cannot preserve. Table paths identify the native graphic-frame and row/cell indexes (including headers). */
+  /** Reports native details that import cannot preserve, including code provenance fallback/reflow and grouped text transforms. Table paths identify native frame and row/cell indexes (including headers). */
   onDiagnostic?: (diagnostic: {code: string; path: string; message: string}) => void;
   fallbackName?: string;
   schema?: string;

@@ -1,6 +1,11 @@
 # Changelog
 
-## Unreleased
+## 0.7.0
+
+- Reject XML-forbidden controls and unpaired UTF-16 surrogates in code source/metadata with `invalid-code-text`, the OPF path and character offset, instead of emitting invalid XML or replacement characters. Tabs, line endings and valid supplementary Unicode remain accepted; this does not certify glyph coverage.
+- Export accepted code parts as editable native lines with explicit tab stops. Retain complete code source and metadata through guarded native shape tags, including soft-wrap boundaries and CR/LF/CRLF. Missing or ambiguous groups retain visible shapes with diagnostics. See [code round-trip scope](docs/code-roundtrip.md).
+- Preserve significant whitespace, empty paragraphs, interleaved native fields and explicit line breaks during text import. Keep complete multiline titles rather than silently taking their first line. Grouped text is retained with a transform/reflow diagnostic.
+- Add wide/portrait offline browser and actual Windows PowerPoint source/edit/save/reopen/import checks. Native geometry, styling, font theme and raster equivalence are not reconstructed by this source round-trip feature. Requires core 0.9.0 and renderer 0.7.0 for coordinated preview/font measurement.
 
 ## 0.6.0
 
