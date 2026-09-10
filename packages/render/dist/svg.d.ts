@@ -31,12 +31,27 @@ export declare const engineDefaults: Readonly<{
   chartTypes: readonly ["stacked-column-3x", "stacked-area-3x", "line-with-markers-3x"];
 }>;
 
+export type RenderDiagnostic = LayoutDiagnostic | {
+  code: "unsupported-pattern" | "date-needs-value";
+  path: string;
+  message: string;
+} | {
+  code: "unresolved-asset";
+  path: string;
+  message: string;
+  reason: "missing-reference" | "missing-source" | "unsupported-source";
+  source?: string;
+  assetId?: string;
+  description: string;
+  placeholder: "label" | "icon";
+};
+
 export interface RenderSvgOptions {
   textMeasurement?: TextMeasurement;
   embeddedFonts?: EmbeddedFont[];
   strictAssets?: boolean;
   imageResolver?: (src: string | undefined, context: { asset: unknown; path: string }) => string | null | undefined;
-  onDiagnostic?: (diagnostic: LayoutDiagnostic) => void;
+  onDiagnostic?: (diagnostic: RenderDiagnostic) => void;
   slideIndex?: number;
   trace?: boolean;
   catalogs?: Record<string, { records?: unknown[] } | unknown[]>;

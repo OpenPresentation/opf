@@ -1,0 +1,34 @@
+import assert from 'node:assert/strict';
+import {renderSvg,renderSvgDeck} from '../dist/svg.js';
+import {colorContrast} from '@openpresentation/opf/composition';
+const raster='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aO8sAAAAASUVORK5CYII=';
+let cases=0;
+for(const [background,surface,text]of [['#FFFFFF','#F8FAFC','#000000'],['#000000','#334155','#FFFFFF'],['#000000','#F8FAFC','#FFFFFF'],['#FFFFFF','#0F172A','#000000']]){
+ const source={design:{background,colorScheme:{id:'cool-horizon',dark1:text,light1:text,dark2:surface,light2:surface},header:{right:{image:{src:'asset:icon',alt:'Caller-specific header description'}}},watermark:{src:'asset:icon',opacity:.06}},assets:{icon:{src:'./missing.png',alt:'Original description'}},slides:[{image:{src:'asset:icon',alt:'Full content description'}}]},before=structuredClone(source),diagnostics=[];
+ const svg=renderSvg(source,{trace:true,onDiagnostic:issue=>diagnostics.push(issue)});
+ assert.deepEqual(source,before);assert.equal(diagnostics.filter(d=>d.code==='unresolved-asset').length,3);
+ assert.ok(!diagnostics.some(d=>d.code==='text-overflow'),'Generated status labels must not introduce authored-content overflow');
+ assert.ok(svg.includes('opacity="0.06"'),'Preserve authored watermark opacity');
+ for(const description of ['Caller-specific header description','Original description','Full content description'])assert.ok(svg.includes(`aria-label="Image unavailable: ${description}"`));
+ assert.ok(!/<text[^>]*>[^<]*\.\/missing\.png/.test(svg),'Do not display a raw asset path as slide copy');
+ for(const [,fill]of svg.matchAll(/<text[^>]*\bfill="([^"]+)"/g))assert.ok(colorContrast(fill,surface)>=4.5,'Opaque placeholder text uses its own panel');
+ assert.throws(()=>renderSvg(source,{strictAssets:true}),{code:'unresolved-asset'});
+ cases++;
+}
+const tiny={design:{dimensions:{widthInches:1,heightInches:1},header:{right:{image:{src:'./missing.png',alt:'A complete long description & <not markup> '.repeat(4)}}}},slides:[{}]};
+const diagnostic=[];const svg=renderSvg(tiny,{trace:true,onDiagnostic:issue=>diagnostic.push(issue)});
+assert.equal(diagnostic[0].placeholder,'icon');assert.ok(svg.includes('A complete long description &amp; &lt;not markup&gt;'));assert.ok(!svg.includes('<text'));
+assert.ok(!svg.includes('data-opf-overflow'));cases++;
+const chain={assets:{one:{src:'asset:two',alt:'Alias description'},two:{src:raster,alt:'Base description'}},slides:[{image:{src:'asset:one',alt:'Caller description'}}]};
+let calls=0;const resolved=renderSvg(chain,{strictAssets:true,imageResolver:(src,context)=>{calls++;assert.equal(src,raster);assert.equal(context.asset.alt,'Caller description');return null;},onDiagnostic:()=>assert.fail('Resolved images must not emit missing-asset diagnostics')});
+assert.equal(calls,1);assert.ok(resolved.includes('aria-label="Caller description"'));assert.ok(!resolved.includes('data-opf-asset-status'));cases++;
+const missing={slides:[{image:{src:'asset:absent',alt:'Requested image'}}]},missingDiagnostics=[];
+renderSvg(missing,{onDiagnostic:issue=>missingDiagnostics.push(issue)});assert.equal(missingDiagnostics[0].reason,'missing-reference');assert.equal(missingDiagnostics[0].assetId,'absent');cases++;
+assert.ok(renderSvg(missing,{strictAssets:true,imageResolver:()=>raster}).includes('<image'));
+assert.throws(()=>renderSvg({assets:{one:'asset:two',two:'asset:one'},slides:[{image:'asset:one'}]}),{code:'invalid-asset-reference'});
+const repeated=[];renderSvgDeck({assets:{a:{src:'./missing.png'}},design:{header:{right:{image:'asset:a'}}},slides:[{},{}]},{onDiagnostic:issue=>repeated.push(issue)});assert.equal(repeated.filter(d=>d.code==='unresolved-asset').length,2,'Report inherited failures on every rendered slide');
+const cropped={assets:{a:{src:raster}},design:{imageFill:'crop',header:{right:{image:'asset:a'}},footer:{left:{image:'asset:a'}},watermark:{src:'asset:a',opacity:.06}},slides:[{image:'asset:a'}]};
+const fitted=renderSvg(cropped,{trace:true,strictAssets:true});
+for(const [,attrs]of fitted.matchAll(/<image\b([^>]*)>/g))assert.ok(attrs.includes(attrs.includes('data-opf-path="slides.0.image"')?'preserveAspectRatio="xMidYMid slice"':'preserveAspectRatio="xMidYMid meet"'),'Crop content pictures while fitting complete header/footer/watermark artwork');
+assert.equal([...fitted.matchAll(/<image\b/g)].length,4);
+console.log(`Image placeholders passed: ${cases} source-preserving theme, bounded-label/icon, accessible-description, alias override and resolver cases; opacity preserved and asset failures explicit.`);

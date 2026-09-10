@@ -689,11 +689,14 @@ function renderList(item, box, bound, options) {
 function renderImage(item, box, bound, options) {
   let asset = normalizeAsset(item.value);
   const seen = new Set();
+  let missingReference;
   while (asset.src?.startsWith("asset:")) {
     const id = asset.src.slice(6);
     if (seen.has(id)) throw new OPFRenderError("invalid-asset-reference", "Circular asset reference.", { path: item.path });
     seen.add(id);
-    asset = normalizeAsset(bound.assets[id]);
+    if (!Object.hasOwn(bound.assets,id)) { missingReference=id; break; }
+    const {src:_source,...overrides}=asset;
+    asset = {...normalizeAsset(bound.assets[id]),...overrides};
   }
   const source = options.imageResolver?.(asset.src, { asset, path: item.path }) ?? asset.src;
   if (typeof source === "string" && /^data:image\/(png|jpeg|gif|webp);base64,/i.test(source)) {
@@ -701,8 +704,18 @@ function renderImage(item, box, bound, options) {
       href: source, preserveAspectRatio: (options.imageFit ?? (bound.design.imageFill === "crop" ? "cover" : "contain")) === "cover" ? "xMidYMid slice" : "xMidYMid meet", role: "img", "aria-label": asset.alt ?? "Image",
       ...traceAttrs(options, item.path) });
   }
-  if (options.strictAssets) throw new OPFRenderError("unresolved-asset", "Image requires an embedded raster data URI or a host imageResolver.", { path: item.path });
+  const reason=missingReference?'missing-reference':!asset.src?'missing-source':'unsupported-source';
+  const message=missingReference?`Image asset ${missingReference} is missing; supply the referenced asset or resolve it in the host.`:'Image requires an embedded raster data URI or a host imageResolver.';
+  if (options.strictAssets) throw new OPFRenderError("unresolved-asset", message, { path: item.path,reason });
   const fill = bound.design.colors.surface;
+  const scale=Math.min(bound.design.dimensions.width,bound.design.dimensions.height)/720;
+  const padding=Math.min(24*scale,box.width*.06,box.height*.1),inner=inset(box,padding);
+  const description=asset.alt??asset.title??'Image';
+  const label=`Image unavailable\n${description}`;
+  const style=resolveTextStyle({fontFamily:bound.design.fonts.body,fontWeight:600,path:item.path},options.textMeasurement);
+  const fit=fitText(label,inner,20*scale,((bound.composition??bound.geometry.composition).minFontSize??16)*scale,textWidthMeasurer(style,options.textMeasurement));
+  const textColor=textColorForFill(fill,bound.design.colors.text);
+  reportDiagnostic({code:'unresolved-asset',path:item.path,message,reason,source:asset.src,assetId:missingReference,description,placeholder:fit.overflow?'icon':'label'},options);
   const children = [
     tag("rect", {
       x: box.x,
@@ -713,21 +726,28 @@ function renderImage(item, box, bound, options) {
       fill,
       stroke: bound.design.colors.border,
       "stroke-width": 1,
+      "stroke-dasharray": "4 3",
       ...traceAttrs(options, item.path)
-    }),
-    renderTextBox(asset.alt || asset.title || asset.src || "Image", inset(box, 24), bound, {
+    })
+  ];
+  if(!fit.overflow)children.push(renderTextBox(label, inner, bound, {
       path: item.path,
       fontSize: 20,
-      fontFamily: bound.design.fonts.body,
+      fontFamily: style.fontFamily,
       fontWeight: 600,
-      fill: bound.design.colors.mutedText,
+      textStyle:style,fit,diagnosticsHandled:true,
+      fill: textColor,
       options,
       align: "center",
       verticalAlign: "middle"
-    })
-  ];
-
-  return tag("g", traceAttrs(options, item.path), children.join("\n"));
+    }));
+  else {
+    // This is a status indicator, not shortened authored content. The complete
+    // description remains in the accessible name and the path-specific diagnostic.
+    const size=Math.max(0,Math.min(inner.width,inner.height,24*scale)),icon=centeredBox(inner,size,size);
+    children.push(tag('path',{d:`M ${icon.x} ${icon.y} L ${icon.x+size} ${icon.y+size} M ${icon.x+size} ${icon.y} L ${icon.x} ${icon.y+size}`,fill:'none',stroke:textColor,'stroke-width':Math.min(2*scale,size/8),'aria-hidden':'true'}));
+  }
+  return tag("g", {...traceAttrs(options,item.path),'data-opf-asset-status':'unresolved',role:'img','aria-label':`Image unavailable: ${description}`},children.join("\n"));
 }
 
 function renderMedia(item, box, bound, options) {
@@ -1157,7 +1177,7 @@ function renderFurniture(bound, presentation, width, height, options, kind) {
   return tag('g',traceAttrs(options,root),['left','center','right'].map((zone,index)=>{
     const item=furniture[zone];if(!item)return '';
     const box={x:width*(.07+index*.3),y:kind==='header'?height*.025:height*.925,width:width*.26,height:height*.05};
-    if(item.image)return renderImage({value:item.image,path:`${root}.${zone}.image`},box,bound,options);
+    if(item.image)return renderImage({value:item.image,path:`${root}.${zone}.image`},box,bound,{...options,imageFit:'contain'});
     const pieces=[item.text,item.organization?organization?.name:null,item.section?bound.slide.section:null,item.slideNumber?String(bound.index+1):null,typeof item.date==='string'?item.date:null].filter(value=>value!==undefined&&value!==null&&value!=='');
     if(item.date===true)reportDiagnostic({code:'date-needs-value',path:`${root}.${zone}.date`,message:'Use a literal date string for a reproducible preview; the document does not define a presentation date.'},options);
     const anchor=['start','middle','end'][index],x=index===0?width*.07:index===1?width/2:width*.93;
@@ -1168,7 +1188,7 @@ function renderBranding(bound,presentation,width,height,options) {
   const design={...presentation.design,...bound.slide.design}, pieces=[];
   const rootFor=key=>bound.slide.design?.[key]!==undefined?`${bound.path}.design.${key}`:`design.${key}`;
   if(design.watermark){
-    pieces.push(tag('g',{opacity:typeof design.watermark==='object'?design.watermark.opacity??.08:.08},renderImage({value:design.watermark,path:rootFor('watermark')},{x:width*.3,y:height*.3,width:width*.4,height:height*.4},bound,options)));
+    pieces.push(tag('g',{opacity:typeof design.watermark==='object'?design.watermark.opacity??.08:.08},renderImage({value:design.watermark,path:rootFor('watermark')},{x:width*.3,y:height*.3,width:width*.4,height:height*.4},bound,{...options,imageFit:'contain'})));
   }
   return pieces.join('');
 }
