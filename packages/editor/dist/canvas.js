@@ -137,6 +137,7 @@ export function createCanvasEditor(container, options = {}) {
         seen.has(path) ||
         node.getAttribute('data-opf-generated') === 'true' ||
         (node.hasAttribute('data-opf-code-container') && typeof value === 'string') ||
+        (node.hasAttribute('data-opf-metric-container') && ['string','number'].includes(typeof value)) ||
         (!item && !node.matches("g") && !node.matches("image")) ||
         value === undefined ||
         path === `slides.${slideIndex}` ||
@@ -159,7 +160,7 @@ export function createCanvasEditor(container, options = {}) {
       );
       if (node.matches("g")) {
         let bounds = node.getBBox();
-        if (!bounds.width && !bounds.height && node.hasAttribute('data-opf-code-role')) bounds={x:Number(node.dataset.opfBoxX),y:Number(node.dataset.opfBoxY),width:Number(node.dataset.opfBoxWidth),height:Number(node.dataset.opfBoxHeight)};
+        if (!bounds.width && !bounds.height && (node.hasAttribute('data-opf-code-role')||node.hasAttribute('data-opf-metric-role'))) bounds={x:Number(node.dataset.opfBoxX),y:Number(node.dataset.opfBoxY),width:Number(node.dataset.opfBoxWidth),height:Number(node.dataset.opfBoxHeight)};
         const lines = JSON.parse(node.getAttribute("data-opf-rich-lines") ?? "[]");
         if (!bounds.width && !bounds.height && lines.length) bounds = {x:lines[0].x,y:lines[0].y,width:Number(node.getAttribute("data-opf-box-width"))||8,height:lines.reduce((sum,line)=>sum+line.height,0)};
         const rect = doc.createElementNS("http://www.w3.org/2000/svg", "rect");
@@ -261,11 +262,13 @@ export function createCanvasEditor(container, options = {}) {
         renderOptions,
       ).slides[slideIndex].geometry;
     const item = geometry.items.find((item) => item.path === active.path);
+    const metricLayout=geometry.items.find(item=>item.metricLayout?.parts.some(part=>part.path===active.path))?.metricLayout;
+    const metricPart=metricLayout?.parts.find(part=>part.path===active.path);
     const allText = target.querySelectorAll("text");
-    const lineHeight =
+    const lineHeight = metricPart?.fit?.lineHeight ?? (
       allText.length > 1
         ? Number(allText[1].getAttribute("y")) - Number(text.getAttribute("y"))
-        : fontSize * 1.22;
+        : fontSize * 1.22);
     const canvas = doc.createElement("canvas"),
       ctx = canvas.getContext("2d");
     ctx.font = `${font.fontStyle} ${font.fontWeight} ${fontSize}px ${font.fontFamily}`;
@@ -278,17 +281,18 @@ export function createCanvasEditor(container, options = {}) {
     const bounds = target.getBBox(),
       anchor = text.getAttribute("text-anchor");
     const tracedWidth = Number(target.getAttribute("data-opf-box-width"));
-    const width = item?.box.width ?? (tracedWidth > 0 ? tracedWidth : Math.max(80, bounds.width + 20));
-    const left = anchor === "middle" ? x - width / 2 : anchor === "end" ? x - width : x;
+    const width = metricPart?.box.width ?? item?.box.width ?? (tracedWidth > 0 ? tracedWidth : Math.max(80, bounds.width + 20));
+    const left = metricPart?.box.x ?? (anchor === "middle" ? x - width / 2 : anchor === "end" ? x - width : x);
+    const visibleText=active.composing||active.isCode||active.isMetric;
     Object.assign(active.input.style, {
       fontFamily: font.fontFamily,
       fontSize: `${fontSize * scale}px`,
       fontWeight: font.fontWeight,
       fontStyle: font.fontStyle,
       lineHeight: `${lineHeight * scale}px`,
-      color: active.composing || active.isCode ? font.fill : "transparent",
+      color: visibleText ? font.fill : "transparent",
       caretColor: font.fill,
-      textAlign: anchor === "middle" ? "center" : anchor === "end" ? "right" : "left",
+      textAlign: metricLayout?.alignment ?? (anchor === "middle" ? "center" : anchor === "end" ? "right" : "left"),
       width: `${width * scale}px`,
       height: `${Math.max(lineHeight, allText.length * lineHeight) * scale + 2}px`,
       minHeight: "0",
@@ -297,9 +301,9 @@ export function createCanvasEditor(container, options = {}) {
     active.input.style.left = `${svgRect.left - rootRect.left + (left - viewBox.x) * scale}px`;
     active.input.style.top = `${svgRect.top - rootRect.top + (y - viewBox.y) * scale}px`;
     // When the input supplies visible text, its selected text needs the same fill.
-    active.input.style.setProperty('--opf-inline-selection-color',active.composing || active.isCode ? font.fill : 'transparent');
+    active.input.style.setProperty('--opf-inline-selection-color',visibleText ? font.fill : 'transparent');
     // Other text keeps the canonical SVG visible beneath the transparent input.
-    target.style.opacity = active.composing || active.isCode ? "0" : "1";
+    target.style.opacity = visibleText ? "0" : "1";
   }
   function beginEdit(path) {
     if (disposed) return;
@@ -327,6 +331,7 @@ export function createCanvasEditor(container, options = {}) {
       input.value = String(value);
       input.setAttribute("aria-label", `Edit ${path.split(".").at(-1)} inline`);
       const isCode=text.hasAttribute('data-opf-code-role');
+      const isMetric=text.hasAttribute('data-opf-metric-role');
       input.spellcheck = !isCode;
       input.style.cssText =
         "position:absolute;pointer-events:auto;resize:none;border:0;outline:1px solid #8975d9;outline-offset:4px;margin:0;padding:0;background:transparent;overflow:hidden;min-height:0;box-shadow:none;border-radius:0;white-space:pre-wrap;overflow-wrap:break-word;box-sizing:border-box;z-index:2";
@@ -336,12 +341,14 @@ export function createCanvasEditor(container, options = {}) {
         base: JSON.stringify(value),
         originalValue:value,
         isCode,
+        isMetric,
         type: typeof value,
         input,
         valid: true,
       };
       overlay.append(input);
       if(isCode){input.style.background='#111827';input.style.tabSize='4';input.style.overflow='auto';}
+      if(isMetric){input.style.tabSize='4';input.style.overflow='auto';}
       // Only offer rich text where the canonical schema accepts TextRun[].
       if (typeof value === "string") {
         try {

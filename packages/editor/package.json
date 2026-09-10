@@ -82,7 +82,8 @@
     "prepack": "npm run build",
     "build:playground": "node scripts/build-playground.mjs",
     "test:playground": "npm run build:playground && node test/playground-pptx.mjs",
-    "test:code-browser": "node test/code-browser.mjs"
+    "test:code-browser": "node test/code-browser.mjs",
+    "test:metric-browser": "node test/metric-browser.mjs"
   },
   "dependencies": {
     "@openpresentation/opf": "^0.9.0"

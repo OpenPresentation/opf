@@ -1,0 +1,9 @@
+# Metric source integration (unreleased)
+
+Continue `codex/shared-metric-integration-20260910` alongside the same branch in OpenPresentation/opf, opf-render and opf-pptx. Published core 0.9.0 does not expose the accepted `metricLayout` consumed here. Package versions and public deployments remain at the prior complete set.
+
+Composition forwards effective content alignment. The canvas exposes the actual metric value and metadata paths, including numeric zero and blank scalar values. Inline inputs use the accepted part width, alignment and line spacing; selected text remains visible. Numeric/trend edits use the existing schema guard, and string edits retain source line endings. Optional empty metadata remains available through property/schema editing rather than fabricated visible text. Undo/redo uses the existing session operations.
+
+With coordinated source links, both Windows Node 20.20.2 and 24.20.0 pass syntax/package validation, all existing model suites and code browser regressions. `npm run test:metric-browser` executes six wide/portrait/alignment workflows offline in Edge 152.0.4191.66: every metric field, CRLF/tabs/no-op, visible selection, edits/undo/redo, readability/pagination undo, native-format export and exact metric reimport. Eight scalar/blank workflows and two invalid numeric/trend edits also pass. The harness fingerprints resolved package runtime bytes and records actual font substitutions; separate Roboto weight-family names are not silently treated as the same family.
+
+The core handoff preserves evidence. These are linked-source browser runs, not fresh registry installs. Native PowerPoint source recovery passes the tested cases but its strict raster containment gate remains open, as do corpus review, clean candidate checks, CI/review and coordinated release/public adoption.
