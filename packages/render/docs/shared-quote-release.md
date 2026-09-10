@@ -1,0 +1,11 @@
+# Renderer 0.6.0 release candidate
+
+Branch `codex/shared-quote-release-20260909` prepares renderer 0.6.0 with core `^0.8.0`. Renderer 0.6.0 is unpublished. The original tested integration remains at `7f08cf9e6db1f5da58b96ca1625d9ae2614ea59b` on `codex/shared-quote-integration-20260909`. Core/CLI release PR [#49](https://github.com/OpenPresentation/opf/pull/49) merged as `4dc292fa93bee52320bafa3fd0f5b05a2dc0a283`; core 0.8.0 is published and verified through fresh Node 20/24 registry installations and npm signatures/provenance.
+
+The lockfile now resolves actual registry core 0.8.0, with no unrelated dependency upgrades. A clean npm install, full package suites and unchanged reviewed 126-deck/805-slide raster baseline pass on Node 20.20.2 and 24.20.0. The two browser suites pass on both runtimes with Edge 152.0.4191.66, including ten quote fixtures with actual loaded fonts. Glyph overhangs into the inset remain reported separately from line-box geometry.
+
+`npm run test:packed` builds and installs a fresh tarball, byte-matches all 16 shipped files, verifies core resolves inside the consumer from npm, and executes shared accepted-layout reuse/strict overflow and long-footer tests through installed public imports. Both Node versions pass with the same candidate integrity, zero audited advisories, 39 dependency signatures and seven attestations. The renderer candidate itself is not yet registry-attested. Portable [Node 20](evidence/renderer-060-packed-node20.json) and [Node 24](evidence/renderer-060-packed-node24.json) reports retain exact file hashes and registry core integrity. This gate now runs in CI and publication workflows.
+
+Linux CI/publication use the exact Playwright 1.63.0 image already verified by coordinated CI `34399051732`, pin its digest and check the installed test-package version. Full per-repository CI/review must pass before merge/tag/publication. No check is waived. Publish only a fresh `opf-render-v0.6.0` tag on the reviewed merge and verify npm/provenance before refreshing converter/editor locks.
+
+The reviewed 41 quote-footer raster changes retain outer content boxes. Advance-based geometry, browser glyph containment and native raster equivalence remain distinct. Keep the earlier report bound to its exact source/font hashes.

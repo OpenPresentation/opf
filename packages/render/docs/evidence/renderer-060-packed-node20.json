@@ -1,0 +1,31 @@
+{
+  "node": "v20.20.2",
+  "package": "@openpresentation/opf-render",
+  "version": "0.6.0",
+  "integrity": "sha512-FCP84pbKfx9UO/cNATHMYk8OicLJVigNVUCOfm0YXf6AS1CiNQGyiXLpYUgmQL6lRppaa/J48u7oAl6JdYb0sA==",
+  "core": {
+    "version": "0.8.0",
+    "resolved": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.8.0.tgz",
+    "integrity": "sha512-1ubeINQsuD8pFNr542eFYPfzkhcECAcj/mM2pWNN+keFnVoWxePCsFTUtjuSSsvCtpm7QkgxBYRJYtEUmrlkkg=="
+  },
+  "files": {
+    "LICENSE": "e8c5cecaad448c0cab00af38f7ed8b6bb647c77ba79f3c50d20a9ea92e256cd3",
+    "README.md": "527ee638e21291727e88ea94cd1cd2741670bb17dff3a8340e377096c8a74c46",
+    "dist/font-compatibility.js": "a50ee71748e81cd12ed3aeb6eee92506ebf91ef05021c6ca3f5a100665d03dac",
+    "dist/fonts-browser.d.ts": "ed7ae512990cde2ae389aa09768a8359ef5ca42b1693f2d994e26496d64a5732",
+    "dist/fonts-browser.js": "d0543d838b2f22a8c70bdc60100d72d3c69e3f8033d5ccedd3523ee63c66b8d4",
+    "dist/fonts-node.d.ts": "041c4690a08ada2551a07dac9fd1c74c1e8c3181123d533671856ad2088a6030",
+    "dist/fonts-node.js": "0e65abd7438f3a21fd0cb6ea64120d9e866ef3308510910d11b7b863399f8d8b",
+    "dist/fonts.d.ts": "da1619b194ac8628f62bfe6f28fae50fd44094223aaf6608f7c436ded6e49a8a",
+    "dist/fonts.js": "549932e2d013f1f623cd83973b40cbed68c63d52535adb2de6fd921d16bf400c",
+    "dist/index.d.ts": "283f12149d5fed9f6dfc277a08a40157ba435224f8ebdc80a744dab105c8414f",
+    "dist/index.js": "39c8f2b279ce10873f00289349b84cf9cab7e12c56e9e0d87447bd2406777234",
+    "dist/raster-images.js": "304cffe5e77553ac1ab590fc5805714dde34e6f69df5dc55e35dbc8df602753c",
+    "dist/raster.js": "6ea807bfd43ddaabea95c1137bc1bcf7d656f2ae9c6d87a7e6d2f867df86ea99",
+    "dist/svg.d.ts": "6eef867d427c2dc401466246d3c3f23935f7742d571d04a8dba0649727a85066",
+    "dist/svg.js": "8ec49dc8d98c2e21b158959550106b7cafa65821a867fc8f1f2de86f51c3fe60",
+    "package.json": "931ff25167cb344cfe02398c1b161103a2471fe64ad84e3460dfadc3fd1fac1c"
+  },
+  "knownVulnerabilities": 0,
+  "boundary": "Clean installed candidate with registry core, byte-matched shipped files and Node quote regressions. Browser glyph tests run separately; this is not native raster equivalence or renderer registry publication."
+}

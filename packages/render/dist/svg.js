@@ -626,7 +626,7 @@ function renderSlideContent(bound, width, height, options) {
 }
 
 function reportDiagnostic(diagnostic, options) {
-  const key = `${diagnostic.code}:${diagnostic.path}`;
+  const key = `${diagnostic.code}:${diagnostic.path}:${diagnostic.reason ?? ''}`;
   if (options._diagnosticPaths.has(key)) return;
   options._diagnosticPaths.add(key);
   options.onDiagnostic?.(diagnostic);
@@ -832,34 +832,16 @@ function renderMetric(item, box, bound, options) {
 }
 
 function renderQuote(item, box, bound, options) {
-  const quote = isPlainObject(item.value) ? item.value : { text: item.value };
-  const attribution = [quote.attribution, quote.source].filter(Boolean).join(" - ");
-  const body = inset(box, 18);
-  // Reserve the attribution footer before fitting the quote; it is not an overlay.
-  if (attribution) body.height = Math.max(1, box.height - 94);
-  const children = [
-    renderTextBox(`"${quote.text ?? ""}"`, body, bound, {
-      path: `${item.path}.text`,
-      fontSize: 28,
-      fontFamily: bound.design.fonts.heading,
-      fontWeight: 600,
-      fill: bound.design.colors.text,
-      options
-    }),
-    renderTextBox(attribution, {
-      x: box.x + 18,
-      y: box.y + box.height - 58,
-      width: box.width - 36,
-      height: 40
-    }, bound, {
-      path: item.path,
-      fontSize: 17,
-      fontFamily: bound.design.fonts.body,
-      fontWeight: 500,
-      fill: bound.design.colors.mutedText,
-      options
-    })
-  ];
+  const layout = item.quoteLayout;
+  if (!layout) throw new OPFRenderError('missing-quote-layout', 'Quote rendering requires a coordinated core build with shared quote geometry.', {path:item.path});
+  const children = layout.parts.map(part => {
+    if (!part.fit) throw new OPFRenderError('layout-overflow', 'Quote content has no usable internal space; increase its cell size before rendering.', {path:part.path,issues:layout.diagnostics});
+    return renderTextBox(part.text,part.box,bound,{
+      path:part.path,fit:part.fit,textStyle:part.style,fontFamily:part.requestedStyle.fontFamily,
+      fill:part.role==='footer'?bound.design.colors.mutedText:bound.design.colors.text,
+      diagnosticsHandled:true,options,
+    });
+  });
   return tag("g", traceAttrs(options, item.path), children.join("\n"));
 }
 
@@ -1223,7 +1205,7 @@ function renderTextBox(text, box, bound, config) {
   const style = config.textStyle ?? resolveTextStyle({fontFamily:config.fontFamily,fontWeight:config.fontWeight ?? 400,italic:config.italic ?? false,path:config.path},config.options.textMeasurement);
   const fit = config.fit ?? fitText(String(text ?? ""), box, config.fontSize * scale,
     ((bound.composition ?? bound.geometry.composition).minFontSize ?? 16) * scale, textWidthMeasurer(style,config.options.textMeasurement));
-  if (fit.overflow) {
+  if (fit.overflow && !config.diagnosticsHandled) {
     const diagnostic = { code: "text-overflow", path: config.path,
       message: "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide." };
     reportDiagnostic(diagnostic, config.options);

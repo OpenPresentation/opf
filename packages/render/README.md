@@ -1,6 +1,6 @@
 # OPF Render
 
-Version 0.5.1 reserves quote attribution/source space before fitting long text. See [quote layout and real-browser evidence](docs/quote-footer-0.5.1.md) for regression coverage and overflow behavior.
+Version 0.6.0 requires core 0.8.0 and renders its accepted quote body/source geometry without fitting it again. Adaptive footer allocation, readability floors and strict failures are shared with the coordinated PPTX 0.6.0 exporter. The 41 reviewed quote-footer raster changes keep their outer content boxes; see [the raster review](docs/evidence/shared-quote-raster-review.json). Glyph containment and separation do not establish native pixel equivalence.
 
 Deterministic local renderer for Open Presentation Format documents. The shared SVG core implements validation, catalog resolution, placeholder binding and text layout. Node APIs additionally convert SVG to PNG and raster-backed PDF.
 
@@ -34,7 +34,7 @@ const pdf = await svgToPdf(svgs, { scale: 1 });
 
 `svgToPng` returns PNG bytes for one SVG. `svgToPdf` accepts one SVG or an array of SVGs and returns PDF bytes with one slide per page. The SVG page `width`/`height` or `viewBox` determines the PDF page size; `scale` controls raster density only.
 
-## Browser preview and fonts (preview APIs)
+## Browser preview and fonts
 
 Use `@openpresentation/opf-render/svg` for browser rendering without Node dependencies. Browser-aware bundlers also select this shared SVG implementation for the root import; Node's root import retains PNG/PDF conversion.
 
@@ -51,7 +51,7 @@ container.innerHTML = renderSvg(presentation, {
 
 Each entry contains `url` or `data: Uint8Array`, with optional `family`, `weight`, `italic` and `license`. The loader registers browser FontFaces using the same bytes used for measurement. It fetches only URLs supplied by the host, supports an AbortSignal and custom fetch, and awaits font loading. Use pinned static faces and retain their licenses. For standalone SVG export also pass `embeddedFonts: fonts.embeddedFonts`; embedding is unnecessary for each live draft after browser fonts are loaded.
 
-The new entries require coordinated preview builds of OPF and the toolkit. The sibling OPF repository's `pnpm pack:ecosystem` prepares local npm tarballs; older registry releases do not include these APIs. See `opf/docs/live-editor.md` for installation and the fidelity contract. Identical SVG geometry does not guarantee identical raster pixels across browser engines or PowerPoint.
+These browser entrypoints are included in the published package. For coordinated development, the sibling OPF repository's `pnpm pack:ecosystem` prepares local npm tarballs. See the core repository's [live editor guide](https://github.com/OpenPresentation/opf/blob/main/docs/live-editor.md) for installation and the fidelity contract. Identical SVG geometry does not guarantee identical raster pixels across browser engines or PowerPoint.
 
 ## Runtime Policy
 
