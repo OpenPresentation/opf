@@ -16,6 +16,7 @@ for (const name of ['opf-render', 'opf-editor', 'opf-pptx']) {
   const cwd = path.resolve(root, '..', name);
   for (const task of ['typecheck', 'validate', 'test']) run('npm', ['run', task], cwd);
   if (name !== 'opf-editor') run('npm', ['run', 'test:code'], cwd);
+  if (name === 'opf-render') run('npm', ['run', 'test:font-preparation'], cwd);
 }
 for (const task of ['test:skills', 'test:ecosystem', 'test:pagination', 'test:layout', 'test:lists', 'test:rich-text', 'test:data', 'test:fonts']) run('pnpm', [task]);
 run('pnpm', ['demo:editor']);
