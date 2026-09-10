@@ -1,0 +1,16 @@
+Pagination: exact text/rich-run preservation, groups, lists, tables, regions, mappings, IDs, limits and fit passed.
+✔ furniture preserves inherited/local sources, whitespace and generated metadata at both floors (4.619875ms)
+✔ whole local overrides and explicit false preserve furniture-free body geometry (0.183208ms)
+✔ images and every authored/generated field coexist without deleting text (0.110208ms)
+✔ missing generated values diagnose controlling paths and strict composition/pagination reject them (57.941042ms)
+✔ irreducible furniture and provided ink cannot be hidden by body pagination (1.081959ms)
+✔ pagination repeats furniture and retains exact body source and mappings (35.585333ms)
+✔ a continuation whose wider number cannot fit fails atomically (13.040042ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 166.944792

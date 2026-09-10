@@ -1,0 +1,50 @@
+{
+  "scope": "Unpublished source candidate checkpoint; drawing/editing validated, semantic furniture reimport and corpus acceptance pending. No native Office execution, clean installed-package gate, release or site deployment.",
+  "graph": {
+    "core": "864b73e356c45211a28f3ca5afe0702b55868fa4",
+    "renderer": "4e11b9557b589e3a9d04c7c97b4a0c66bce83d94",
+    "editor": "e0c817fb372a5639f9fd1c829e85bf21fb1ba241",
+    "pptx": "d06bc9c72aef16fdbe345704309f53ed97321417"
+  },
+  "core": {
+    "node20": 507,
+    "node24": 507,
+    "legacyPagination": "passed after repeatedMappings separation"
+  },
+  "browser": {
+    "node20": 32,
+    "node24": 32,
+    "screenshotsReviewed": 4,
+    "crossRuntimePngHashes": "identical",
+    "networkRequests": 0,
+    "errors": 0
+  },
+  "pptxExport": {
+    "node20": 16,
+    "node24": 16,
+    "crossRuntimePptxHashes": "identical",
+    "semanticFurnitureReimport": "not implemented"
+  },
+  "existingEditorSuite": {
+    "node20": "pass",
+    "node24": "pass"
+  },
+  "existingPptxSuite": {
+    "node20": "pass",
+    "node24": "pass"
+  },
+  "renderer": {
+    "node24NonGolden": "pass including separately run checks after the golden gate",
+    "node20FocusedFurniture": "pass",
+    "corpusSlides": 805,
+    "changedSlides": 657,
+    "unchangedSlides": 148,
+    "sourceMatches": true,
+    "baselineAccepted": false
+  },
+  "limits": [
+    "Long organization names wrap heavily at a 32px portrait floor.",
+    "All changed corpus rasters need before/after review before a separate baseline is accepted.",
+    "Native provenance, clean candidate packages, CI and PR integration remain pending."
+  ]
+}

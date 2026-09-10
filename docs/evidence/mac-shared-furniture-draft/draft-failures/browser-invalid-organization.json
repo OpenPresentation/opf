@@ -1,0 +1,54 @@
+{
+  "activeCase": {
+    "measured": false,
+    "width": 1280,
+    "height": 720,
+    "floor": 16,
+    "local": false,
+    "deck": {
+      "organization": {
+        "name": "OpenPresentation"
+      },
+      "design": {
+        "fontScheme": "roboto",
+        "dimensions": {
+          "widthInches": 13.333333333333334,
+          "heightInches": 7.5
+        },
+        "header": {
+          "left": {
+            "text": "  A  B\tC D\r\n\r\ntrail  \r"
+          },
+          "center": {
+            "organization": true
+          },
+          "right": {
+            "section": true
+          }
+        },
+        "footer": {
+          "left": {
+            "date": " 2026-09-10 "
+          },
+          "right": {
+            "slideNumber": true
+          }
+        }
+      },
+      "slides": [
+        {
+          "title": "Shared furniture",
+          "section": "Review",
+          "text": "Body content keeps its own space.",
+          "composition": {
+            "minFontSize": 16,
+            "overflow": "error"
+          }
+        }
+      ]
+    }
+  },
+  "message": "page.evaluate: OPFRenderError: OPF validation failed.\n    at assertValidBoundary (<anonymous>:40628:13)\n    at resolvePresentation (<anonymous>:40913:5)\n    at renderSvg (<anonymous>:40926:22)\n    at render (<anonymous>:43328:23)\n    at createCanvasEditor (<anonymous>:43886:7)\n    at window.mount (<anonymous>:57638:27)\n    at async <anonymous>:337:30",
+  "errors": [],
+  "requests": []
+}

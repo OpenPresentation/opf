@@ -1,0 +1,13 @@
+Browser fonts: identical bytes, measurement, owned cleanup, network failure and abort passed.
+Design preview: header/footer zones, inheritance suppression, angles, opacity, patterns, image background and watermark passed.
+
+> @openpresentation/opf-render@0.7.0 build:browser-check
+> node scripts/build-browser-check.mjs
+
+Browser bundle passed: no native raster modules. Serve /artifacts/jpeg/browser/index.html to run the JPEG orientation comparisons.
+Quote browser fixtures ready: actual glyph containment with four bundled open font faces.
+
+> @openpresentation/opf-render@0.7.0 test:styled-table
+> node test/styled-table.mjs
+
+Styled table renderer passed: spans, fills/alpha, shared border precedence and suppression, scalar/rich vertical alignment, editable paths, run overrides and rasterization.
