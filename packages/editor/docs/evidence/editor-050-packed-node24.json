@@ -1,0 +1,108 @@
+{
+  "node": "v24.20.0",
+  "name": "@openpresentation/opf-editor",
+  "version": "0.5.0",
+  "integrity": "sha512-klsfsUO86L+6dPd0lzDkMtH0TyunHZPsrEWz7PNkYt6rSmBEx3rLGUVMohXfJ771SU2AbxWkpSJVRxMXmAJTkA==",
+  "files": {
+    "LICENSE": "e8c5cecaad448c0cab00af38f7ed8b6bb647c77ba79f3c50d20a9ea92e256cd3",
+    "README.md": "3ea4044b2dd2ca57810c098173d19528d5107ee10fd684b9806e429a943ccf46",
+    "dist/block-controls.js": "21f68e59d44f67069f78b19a2dfa355c0f424973cc138bd6e3b0021b0117702c",
+    "dist/blocks.d.ts": "2f2bcc6ef516ce43e1005d1787c2b07e91df0dcdb6b33bb1e7b6603b9b17ee05",
+    "dist/blocks.js": "f9926a4cb8c2b0380ffbe67055a428d01089873141af401edb72d8ebe6e7cdaf",
+    "dist/canvas-fields.js": "bb4ee47a1f8de1f1178f1410371ede62488f1cd35b09a66ee6d199a3a2433748",
+    "dist/canvas.d.ts": "afafd31860ce913c3efcadf5b2ebb1bfc51e7f1524eb96228bdfc250c7181605",
+    "dist/canvas.js": "a41a073fe52a73177b856a60b6a895280454693a30024529935a60de34072538",
+    "dist/data.d.ts": "74c193ed7ccadb27d1e11659ec55d51fb6da78d6cd1e5aac97b72e538f6e4dd5",
+    "dist/data.js": "32d3d8d7ca017a574ac791541ab1a2bb024dcff386ff1e5c5c1ac845b33d3dff",
+    "dist/galleries.d.ts": "21db86ccf7c9186391d643c057938ee813d391cd0cbe78f56e2446befcd15373",
+    "dist/galleries.js": "239539250f0bfa1ff02e5a717213bd6f40305221b43a78ff707df3c683208ada",
+    "dist/index.d.ts": "a316bbfa61677c7b395fb11f365ee84085af612121219592a5937d5c7f76a752",
+    "dist/index.js": "319748313605683f433c93baf8cf7470d3b726add9c736a80611b6a5b4638cef",
+    "dist/layout-handles.js": "e9f9d4197cae2fe07825abc894fd6243ea35c3d70974762d1a9021bd23781414",
+    "dist/layout.d.ts": "73d6212cf549436597dc97d9562faceaf3b171107c74a23210d6958f8893110e",
+    "dist/layout.js": "de8dc48f08a7c4ed6c99fcbcfa3e4508930d7b306827fc2cd29865c190141df8",
+    "dist/react.d.ts": "099fd451da4417bf9b3e6293aabde0b37d121c02f0f09750377d5454a2c708b9",
+    "dist/react.js": "df35ad472e11395a75549281d398171e1b1d345d2631a9f5f16c2f701c53b4f0",
+    "dist/rich-text-input.js": "b29c64566988aaaa541e8e8a38d3ad350dc579e6f03728a03ccc256227293167",
+    "dist/rich-text-toolbar.js": "1c53eb588dbe347f930494440130b7f4364d034ff84cca72efec17ce3ec9d280",
+    "dist/rich-text.d.ts": "03f8c69b9c95cf60d858f5eb6394bd3d741db5d7564992d1ee4e266b2ccdb7cf",
+    "dist/rich-text.js": "0479bc3315dcfbffd8463222db265864ee3e4938f8a7e9df5fc7e2a4540d9c28",
+    "dist/schema-inspector.d.ts": "b2a52d4c9dc77c9738fde2be42cdb14267628feae31ec95d840c77a53b11ac46",
+    "dist/schema-inspector.js": "b61ac5c0574edd2f91c6cccb8f8b15d4ee518e354087e260bd649ddd5e943d3e",
+    "dist/schema.d.ts": "e46499fd6c25efc1d0ea22c1bc70aca1b9bd2bfda04161dd38101f11ce4e36e4",
+    "dist/schema.js": "d6882c45665318b8e311a3bd83ed76f87b784f24e8ef5f80566eebae4b0dd765",
+    "dist/svelte.d.ts": "2ce058056bedebdb55c2a923ef007cc683bf7285120e8fe2857736206d87bd98",
+    "dist/svelte.js": "ee6582606f927aeeb2947134e28c234c31a63035c2aef35d009dec5a83450cd4",
+    "dist/transfer.d.ts": "b6ae9315837abfa45eca7bd39d1bd8f77183fdc50ba05145a6f429ed9ddb2e9f",
+    "dist/transfer.js": "5b87f9a36b2a22ed690e21cacb69ce340cc735443758c98143530032b1c46abc",
+    "package.json": "09eaaeb00cf8a17764af239ba5741225cc20d28c2dad4f48e96489f1234c432c"
+  },
+  "dependencies": {
+    "@openpresentation/opf": {
+      "version": "0.8.0",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.8.0.tgz",
+      "integrity": "sha512-1ubeINQsuD8pFNr542eFYPfzkhcECAcj/mM2pWNN+keFnVoWxePCsFTUtjuSSsvCtpm7QkgxBYRJYtEUmrlkkg=="
+    },
+    "@openpresentation/opf-render": {
+      "version": "0.6.0",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.6.0.tgz",
+      "integrity": "sha512-rYHS0qetT8FpDqkB8E9KMtwrh6NiB6UzxAeqaCwnMwrIDIEvejKC++Hw2Us4512ZIHRHdwuG42aq6QJodBJOPA=="
+    },
+    "@openpresentation/opf-pptx": {
+      "version": "0.6.0",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.6.0.tgz",
+      "integrity": "sha512-60giL1UxBU21AAPF+TtA3h8mMbzsGVU7WyPLt9GuQg4ZvPBpG6YRR6jw8hGjEsG6v/X7ohJXbh0LWM2zDHjQwA=="
+    }
+  },
+  "tests": [
+    {
+      "file": "smoke.mjs",
+      "fixtureSha256": "61775ddfc9f680c183fbb61df12489b2b521d123048c7c25244c987eddb40705",
+      "output": "opf-editor smoke passed"
+    },
+    {
+      "file": "component-smoke.mjs",
+      "fixtureSha256": "3231bbbf25620d6b3c2af9f43d2fc0071217ec5115a1c47c9825250fdc0133bc",
+      "output": "opf-editor component smoke passed"
+    },
+    {
+      "file": "canvas-fields.mjs",
+      "fixtureSha256": "9342b74c59940716984da1834a25b8b5bbd98ecb415841e7da95ff982e9421a3",
+      "output": "Canvas fields: escaped keys, types, immutable drafts, validation and undo passed."
+    },
+    {
+      "file": "transfer.mjs",
+      "fixtureSha256": "0208c67b257651f007953b470c9a51b55511ed38445a71d0ca66b29e3fc597dc",
+      "output": "Transfer: clipboard formats, code fences, fragments, collision-safe insertion, design/assets, undo and explicit gallery fetches passed."
+    },
+    {
+      "file": "schema.mjs",
+      "fixtureSha256": "00053a0119b0484e777503bf3aef8332ae3092591c3193eea1d969ee4a389cfb",
+      "output": "Schema controls: 625 documented fields, nested paths, catalog records, background forms, required defaults passed."
+    },
+    {
+      "file": "rich-text.mjs",
+      "fixtureSha256": "e8c941a0d844f900b5736d4f5aeb16d72c15c19a071696f9a32bc39f67075456",
+      "output": "Rich range editing passed: cross-run preservation, replacement, style removal, script exclusivity, grapheme safety, validation and atomic undo.\nNative rich input passed: style/link preservation, repeated-character affinity, graphemes and bounded run growth."
+    },
+    {
+      "file": "layout.mjs",
+      "fixtureSha256": "f1af2d06cc88678dc0c2fa69df1e4353eebe62a08c26d303f1864e75f95e63dd",
+      "output": "Layout resizing passed: exact track geometry, row/column/nested/grid behavior, auto freeze, weight bounds, metadata preservation, stale guards and undo."
+    },
+    {
+      "file": "blocks.mjs",
+      "fixtureSha256": "eb16932c48fc396aabf301c41346e2b0f3cb9229ce3863a6e7487103ef1817b7",
+      "output": "Block moves passed: sibling order, shifted group destinations, nested/ancestor/cross-slide moves, formatting/data preservation, no-op, cycle/empty rejection, guards and undo.\nBlock creation passed: presets, implicit normalization, groups/regions, duplication, empty ancestor pruning, guards, metadata and undo."
+    },
+    {
+      "file": "styled-table.mjs",
+      "fixtureSha256": "1160eb0ab06a0a62392738593381a7850eab677ebf256bcac56210399fea59fd",
+      "output": "Styled table editor model passed: value-path typing/formatting, styles/spans, empty cells, properties, guarded structural edits and atomic undo."
+    }
+  ],
+  "browser": "{\n  \"passed\": true,\n  \"browser\": \"152.0.4191.66\",\n  \"offlineAfterLoad\": true,\n  \"pptxBytes\": 15520,\n  \"nativeTable\": true,\n  \"mergedCells\": true,\n  \"exportCommitsDraft\": true,\n  \"importUndoRedo\": true,\n  \"expandedImageImport\": true,\n  \"quoteSourceEditingUndo\": true,\n  \"onePageReadabilityUndo\": true,\n  \"quoteTextReimportUndo\": true,\n  \"quoteSemanticsRestored\": false,\n  \"malformedInputPreservesDocument\": true,\n  \"networkWrites\": 0\n}",
+  "signatureVerification": "audited 66 packages in 0s\n\n66 packages have verified registry signatures\n\n17 packages have verified attestations\n(use --json --include-attestations to view attestation details)",
+  "knownVulnerabilities": 0,
+  "boundary": "Actual installed editor candidate with byte-matched distributables and registry predecessors; nine model/component suites and offline browser author/edit/paginate/export/reimport/undo. Native PowerPoint and complete-set deployed-site evidence are separate gates."
+}

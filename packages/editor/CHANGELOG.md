@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.5.0
+
+- Commit pagination readability changes even when content stays on one slide, with undo/redo and no duplicate history after an unchanged repeat. Requires core 0.8.0 and renderer 0.6.0 for persisted minimums and shared quote geometry.
+- Verify quote source editing, pagination, preview and PPTX export/reimport offline in Edge. Imported native quote lines retain text but do not reconstruct OPF quote structure, typography or readability policy.
+
 ## 0.4.0
 
 - Require core 0.7.0 and renderer 0.5.0 for canonical styled and spanning table cells.

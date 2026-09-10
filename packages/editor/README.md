@@ -2,6 +2,8 @@
 
 Embeddable local editor primitives for Open Presentation Format documents. The package turns traced `@openpresentation/opf-render` SVG output into JSON-path-aware edits, validates OPF after each change, and records undo/redo as JSON Patch operations.
 
+Version 0.5.0 uses core 0.8.0 and renderer 0.6.0. `paginateSlide` records a one-page readability-policy change in undo history; repeating an unchanged result is a no-op. Quote preview uses accepted shared body/source geometry. The local example verifies source editing, pagination, export and reimport with PPTX 0.6.0; native reimport preserves quote text as editable blocks but loses its OPF quote structure, typography and readability policy.
+
 ## Scope
 
 - Package: `@openpresentation/opf-editor`
@@ -14,7 +16,7 @@ Embeddable local editor primitives for Open Presentation Format documents. The p
 - JSON Patch state transitions with inverse patches for undo/redo
 - Optional DOM controls plus React and Svelte bindings in separate embeddable entry points
 
-## Live browser canvas (preview)
+## Live browser canvas
 
 The new `@openpresentation/opf-editor/canvas` entry provides a framework-independent SVG canvas with inline text/table-cell editing, live validated drafts, undo/redo, cancellation, and structured property forms for charts, lists, metrics, quotes, code, timelines and images. Mount it in a DOM container:
 
@@ -32,7 +34,7 @@ await canvas.ready;
 
 Load the same font bytes into the browser using `loadBrowserFontRegistry` from `@openpresentation/opf-render/fonts-browser` before mounting. The host owns font URLs, storage and collaboration. `onDraft` provides live document drafts; the session only changes on commit. Escape cancels. Concurrent edits to the selected payload cancel a stale draft.
 
-These APIs were introduced in 0.1.0. Version 0.4.0 requires core 0.7.0 and renderer 0.5.0 for the canvas, including styled/merged cells, rich table values, headers and content-aware row heights. See the OPF repository’s `docs/live-editor.md` for setup, the support matrix and roadmap. `pnpm pack:ecosystem` in that repository also prepares local preview tarballs for coordinated development.
+These APIs were introduced in 0.1.0. Version 0.5.0 requires core 0.8.0 and renderer 0.6.0 for the canvas, including shared quote geometry, styled/merged cells, rich table values, headers and content-aware row heights. See the OPF repository’s `docs/live-editor.md` for setup, the support matrix and roadmap. `pnpm pack:ecosystem` in that repository also prepares local preview tarballs for coordinated development.
 
 The canvas retains canonical SVG glyphs while a transparent native input supplies the caret. Advanced shaping, freeform object positioning, all chart/media treatments, and cross-engine pixel identity remain work in progress. The Source dialog in the playground now provides a live JSON preview; changes are validated before committing.
 

@@ -136,12 +136,65 @@ try {
   assert.deepEqual(await source(), imageOpf);
   await button('Undo').click();
   assert.deepEqual(await source(), imported);
+  // Shared quote geometry must keep displayed punctuation separate from source
+  // editing, and one-page pagination must commit its readability policy.
+  const quoteDeck={design:{fontScheme:'roboto'},slides:[{title:'Quote integration',quote:{text:'Original body',attribution:'Reviewer',source:'Recorded interview'}}]};
+  await button('Source').click();
+  await page.locator('#json').fill(JSON.stringify(quoteDeck));
+  await page.waitForFunction(()=>!document.querySelector('#apply-json').disabled && document.querySelector('#source-preview').textContent.includes('Quote integration'));
+  await button('Apply changes').click();
+  await page.locator('#preview [data-canvas-target][data-opf-path="slides.0.quote.text"]').dblclick();
+  const quoteInput=page.getByRole('textbox',{name:'Edit text inline',exact:true});
+  assert.equal(await quoteInput.inputValue(),'Original body','Generated quotation marks must not enter the editable source');
+  await quoteInput.fill('Edited quote body');
+  await quoteInput.press('Control+Enter');
+  const editedQuote=await source();
+  assert.equal(editedQuote.slides[0].quote.text,'Edited quote body');
+  await button('Undo').click(); assert.deepEqual(await source(),quoteDeck);
+  await button('Redo').click(); assert.deepEqual(await source(),editedQuote);
+  await page.getByRole('tab',{name:'Design',exact:true}).click();
+  await page.locator('#paginate').click();
+  const paginatedQuote=await source();
+  assert.equal(paginatedQuote.slides.length,1);
+  assert.equal(paginatedQuote.slides[0].composition.minFontSize,24);
+  assert.equal(await page.locator('#preview g[data-opf-path="slides.0.quote"] > text').getAttribute('font-size'),'24');
+  await page.locator('#paginate').click();
+  await button('Undo').click(); assert.deepEqual(await source(),editedQuote,'Repeating pagination must not add a history entry');
+  await button('Redo').click(); assert.deepEqual(await source(),paginatedQuote);
+  await button('PowerPoint').click();
+  await page.waitForFunction(()=>!document.querySelector('#download-pptx').disabled || document.querySelector('#export-error').textContent);
+  assert.equal(await page.locator('#export-error').innerText(),'');
+  const quoteDownloadEvent=page.waitForEvent('download');
+  await button('Download PowerPoint').click();
+  const quoteDownload=await quoteDownloadEvent;
+  assert.equal(await quoteDownload.failure(),null);
+  const quoteBytes=await readFile(await quoteDownload.path());
+  const quoteImport=await fromPptx(quoteBytes);
+  assert.equal(validatePresentation(quoteImport).valid,true);
+  assert.equal(quoteImport.slides.length,1);
+  assert.deepEqual(quoteImport.slides[0].blocks.map(block=>block.text),['"Edited quote body"','Reviewer - Recorded interview']);
+  // Current OOXML import retains editable lines, not the original OPF quote,
+  // font scheme or pagination policy. Keep this boundary explicit in evidence.
+  assert.equal(quoteImport.slides[0].quote,undefined);
+  const quoteXml=await (await JSZip.loadAsync(quoteBytes)).file('ppt/slides/slide1.xml').async('string');
+  assert.match(quoteXml,/Reviewer - Recorded interview/);
+  assert.match(quoteXml,/sz="1800"/,'Native source text uses the accepted 24px/18pt size');
+  await button('Close PowerPoint export').click();
+  await button('Import').click();
+  await page.getByRole('tab',{name:'File',exact:true}).click();
+  await page.locator('#opf-file').setInputFiles({name:'quote.pptx',mimeType:'application/vnd.openxmlformats-officedocument.presentationml.presentation',buffer:Buffer.from(quoteBytes)});
+  await page.getByLabel('Import as',{exact:true}).selectOption('replace');
+  await page.waitForFunction(()=>!document.querySelector('#import-apply').disabled || document.querySelector('#import-error').textContent);
+  assert.equal(await page.locator('#import-error').innerText(),'');
+  await page.locator('#import-apply').click();
+  assert.deepEqual(await source(),quoteImport);
+  await button('Undo').click(); assert.deepEqual(await source(),paginatedQuote);
   assert.deepEqual(errors, []);
   assert.deepEqual(networkWrites, []);
   await mkdir(new URL('../artifacts/browser-evidence/', import.meta.url), { recursive: true });
   await writeFile(new URL('../artifacts/browser-evidence/export.pptx', import.meta.url), bytes);
   await page.screenshot({ path: fileURLToPath(new URL('../artifacts/browser-evidence/editor.png', import.meta.url)), fullPage: true });
-  console.log(JSON.stringify({ passed: true, browser: browser.version(), offlineAfterLoad: true, pptxBytes: bytes.length, nativeTable: true, mergedCells: true, exportCommitsDraft: true, importUndoRedo: true, expandedImageImport: true, malformedInputPreservesDocument: true, networkWrites: networkWrites.length }, null, 2));
+  console.log(JSON.stringify({ passed: true, browser: browser.version(), offlineAfterLoad: true, pptxBytes: bytes.length, nativeTable: true, mergedCells: true, exportCommitsDraft: true, importUndoRedo: true, expandedImageImport: true, quoteSourceEditingUndo: true, onePageReadabilityUndo: true, quoteTextReimportUndo: true, quoteSemanticsRestored: false, malformedInputPreservesDocument: true, networkWrites: networkWrites.length }, null, 2));
 } finally {
   await browser?.close();
   await new Promise(resolve => server.close(resolve));

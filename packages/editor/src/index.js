@@ -244,7 +244,9 @@ export function createEditorSession(input, options = {}) {
     paginateSlide(slideIndex, options = {}, meta = {}) {
       const resolved = resolveCompositionOptions(document, slideIndex, options);
       const pagination = paginateSlide(document.slides[slideIndex], { ...resolved, reservedIds: document.slides.map(slide => slide.id).filter(Boolean) });
-      if (pagination.slides.length === 1) return { change: null, pagination };
+      // Pagination can persist a readability policy without adding a page. Commit
+      // that change too, so preview/export use the same minimum that was evaluated.
+      if (pagination.slides.length === 1 && jsonEqual(pagination.slides[0], document.slides[slideIndex])) return { change: null, pagination };
       const slides = [...document.slides];
       slides.splice(slideIndex, 1, ...pagination.slides);
       const change = editor.set('slides', slides, { ...meta, rejectInvalid: true, pagination: pagination.pages });
