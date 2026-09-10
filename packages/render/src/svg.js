@@ -485,7 +485,7 @@ function bindSlide(presentation, slide, layout, index, context) {
 
   const design = resolveDesign(presentation, slide, context);
   for (const role of ["heading","body","code"]) design.fonts[role] = resolveTextStyle({fontFamily:design.fonts[role],fontWeight:role === "heading" ? 700 : 400},context.options.textMeasurement).fontFamily;
-  const geometry = composeSlide(slide, { ...design.dimensions, layout, slideIndex: index, fonts: design.fonts, textMeasurement: context.options.textMeasurement });
+  const geometry = composeSlide(slide, { ...design.dimensions, layout, slideIndex: index, fonts: design.fonts, contentAlignment:design.contentAlignment, textMeasurement: context.options.textMeasurement });
   return {
     geometry,
     assets: presentation.assets ?? {},
@@ -813,31 +813,32 @@ function renderCode(item, box, bound, options) {
 }
 
 function renderMetric(item, box, bound, options) {
-  const metric = isPlainObject(item.value) ? item.value : { value: item.value };
-  const children = [
-    renderTextBox(String(metric.value ?? ""), { ...box, height: box.height * 0.45 }, bound, {
-      path: `${item.path}.value`,
-      fontSize: Math.min(76, box.height * 0.28),
-      fontFamily: bound.design.fonts.heading,
-      fontWeight: 800,
-      fill: bound.design.colors.primary,
-      options
-    }),
-    renderTextBox([metric.label, metric.description, metric.delta].filter(Boolean).join("\n"), {
-      x: box.x,
-      y: box.y + box.height * 0.45,
-      width: box.width,
-      height: box.height * 0.55
-    }, bound, {
-      path: item.path,
-      fontSize: 23,
-      fontFamily: bound.design.fonts.body,
-      fontWeight: 500,
-      fill: bound.design.colors.text,
-      options
-    })
-  ];
-  return tag("g", traceAttrs(options, item.path), children.join("\n"));
+  const layout=item.metricLayout;
+  if (!layout) throw new OPFRenderError('missing-metric-layout','Metric rendering requires coordinated core metric geometry.',{path:item.path});
+  const children=[];
+  for (const part of layout.parts) {
+    const invalid=/[\u0000-\u0008\u000B\u000C\u000E-\u001F\uD800-\uDFFF\uFFFE\uFFFF]/u.exec(part.text);
+    if (invalid) throw new OPFRenderError('invalid-metric-text',`Metric text contains U+${invalid[0].codePointAt(0).toString(16).toUpperCase().padStart(4,'0')} at UTF-16 offset ${invalid.index}, which XML cannot represent; edit that character before rendering.`,{path:part.path});
+    if (!part.visible) continue;
+    if (!part.fit||part.linePositions?.length!==part.fit.sourceLines.length) throw new OPFRenderError('layout-overflow','Metric content has no accepted internal line positions; increase its cell size or coordinate package versions.',{path:part.path,issues:layout.diagnostics});
+    const lines=part.fit.sourceLines.map((line,index)=>{
+      const origin=part.linePositions[index];
+      return tag('text',{x:stableNumber(origin.x),y:stableNumber(origin.baseline),'text-anchor':'start',
+        'font-family':fontStack(part.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(part.fit.fontSize),
+        'font-weight':part.style.fontWeight,'font-style':part.style.italic?'italic':undefined,
+        'xml:space':'preserve',style:'white-space:pre','text-rendering':'geometricPrecision',fill:part.role==='value'?bound.design.colors.primary:bound.design.colors.text,
+        ...traceAttrs(options,part.path),...(options.trace?{'data-opf-metric-role':part.role,'data-opf-text-start':line.start,
+          'data-opf-text-end':line.end,'data-opf-text-next-start':line.nextStart,'data-opf-line-boundary':line.boundary}:{}),
+      },line.segments.map(segment=>tag('tspan',{x:stableNumber(origin.x+segment.x),
+        ...(segment.kind==='tab'?{textLength:stableNumber(segment.width),lengthAdjust:'spacingAndGlyphs'}:{}),
+        ...(options.trace?{'data-opf-segment':segment.kind,'data-opf-text-start':segment.start,'data-opf-text-end':segment.end}:{}),
+      },escapeText(part.text.slice(segment.start,segment.end)))).join(''));
+    });
+    children.push(tag('g',{...traceAttrs(options,part.path),...(options.trace?{'data-opf-metric-role':part.role,
+      'data-opf-box-x':part.box.x,'data-opf-box-y':part.box.y,'data-opf-box-width':part.box.width,'data-opf-box-height':part.box.height}:{}),
+      ...(part.fit.overflow?{'data-opf-overflow':'true'}:{})},lines.join('\n')));
+  }
+  return tag('g',{...traceAttrs(options,item.path),...(options.trace?{'data-opf-metric-container':'true'}:{})},children.join('\n'));
 }
 
 function renderQuote(item, box, bound, options) {
