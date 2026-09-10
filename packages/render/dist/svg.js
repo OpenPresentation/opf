@@ -485,7 +485,7 @@ function bindSlide(presentation, slide, layout, index, context) {
 
   const design = resolveDesign(presentation, slide, context);
   for (const role of ["heading","body","code"]) design.fonts[role] = resolveTextStyle({fontFamily:design.fonts[role],fontWeight:role === "heading" ? 700 : 400},context.options.textMeasurement).fontFamily;
-  const geometry = composeSlide(slide, { ...design.dimensions, layout, slideIndex: index, fonts: design.fonts, contentAlignment:design.contentAlignment, textMeasurement: context.options.textMeasurement });
+  const geometry = composeSlide(slide, { ...design.dimensions, layout, slideIndex: index, fonts: design.fonts, contentAlignment:design.contentAlignment, contentBox:design.contentBox, textMeasurement: context.options.textMeasurement });
   return {
     geometry,
     assets: presentation.assets ?? {},
@@ -622,7 +622,8 @@ function renderBackground(bound, width, height, options) {
 function renderSlideContent(bound, width, height, options) {
   for (const diagnostic of bound.geometry.diagnostics) reportDiagnostic(diagnostic, options);
   return bound.geometry.items.map(item => {
-    const surface=bound.design.contentBox && !['title','subtitle','tag'].includes(item.field) ? tag('rect',{x:item.box.x,y:item.box.y,width:item.box.width,height:item.box.height,rx:8,fill:bound.design.colors.surface,stroke:bound.design.colors.border}) : '';
+    const frame=item.frameBox;
+    const surface=frame ? tag('rect',{x:frame.x,y:frame.y,width:frame.width,height:frame.height,rx:8*Math.min(width,height)/720,fill:bound.design.colors.surface,stroke:bound.design.colors.border}) : '';
     return surface+renderPayload(item, item.box, { ...bound, composition: item.composition }, options);
   });
 }
