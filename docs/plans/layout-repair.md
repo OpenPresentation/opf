@@ -2,7 +2,11 @@
 
 This work implements the [ecosystem objective](ecosystem-objective-2026-09-09.md) in reviewable increments. It does not introduce a model, account, key, network or paid-service dependency into OPF. Proprietary applications remain optional compatibility-test environments.
 
-## Current checkpoint — published shared code complete; metric internals next
+## Current checkpoint — standalone metric allocation verified; consumer integration next
+
+The [shared metric checkpoint](shared-metric-layout.md) records an unreleased standalone `layoutMetric` API on `codex/shared-metric-layout-20260910`. Complete metadata and numeric/scalar source types, proportional-font line/segment mappings, compact inline/stacked allocation and scaled floors are implemented. Both supported Node runtimes pass 457 core tests and the existing preservation suites. Sixty real-font cases include 50 fits, six irreducible strict failures and four explicit missing-glyph cases. Fifty controlled browser cases pass exact source/advance/segment checks offline; their evidence is byte-identical across Node 20.20.2/24.20.0. Glyph overhangs remain recorded separately. Full CI/review, composition/pagination integration and actual editor/PPTX/native workflows remain gates. Do not mark metric coverage complete or bump/release versions yet.
+
+## Previous checkpoint — published shared code complete; metric internals next
 
 Core 0.9.0, CLI 0.7.0, renderer/PPTX 0.7.0 and editor 0.6.0 are published and adopted on all three public sites. Core PR #57 merged the [public evidence](../evidence/shared-code-public-adoption/summary.json) as `115f3e915b9b36f0518e55ac6a4f8014ac7114cc`, after complete Node 20/24 coordinator `34456846499`, core CI `34456846509` and Bugbot passed. The 21 public workflows, exact font/editor/download assets and native PowerPoint public-Author fixture supplement the earlier registry matrices. The full repair/Auto arrange/font objective remains open.
 

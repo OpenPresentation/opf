@@ -336,6 +336,168 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
   return {algorithm:'quote-flow-v1',textMeasurement:options.textMeasurement?'provided':'estimated',parts,diagnostics,overflow:diagnostics.length>0};
 }
 
+export interface MetricContent {
+  value: string | number;
+  label?: string;
+  description?: string;
+  unit?: string;
+  delta?: string | number;
+  trend?: 'up' | 'down' | 'flat';
+}
+/** Ranges address String(sourceValue), not the numeric token spelling in serialized JSON. */
+export interface MetricTextSource { path: string; value: string | number; start: number; end: number }
+export interface MetricTextPart {
+  role: keyof MetricContent;
+  path: string;
+  text: string;
+  sources: MetricTextSource[];
+  /** Empty optional fields retain their source mapping but occupy no visible space. */
+  visible: boolean;
+  box: LayoutBox;
+  requestedFontSize: number;
+  minFontSize: number;
+  requestedStyle: TextStyle;
+  style: TextStyle;
+  /** Source-preserving line/segment representation shared with code, with proportional fonts. */
+  fit?: CodeTextFit;
+}
+export interface MetricLayoutDiagnostic extends LayoutDiagnostic {
+  reason: 'invalid-part-box' | 'part-outside-cell' | 'text-fit' | 'part-overlap';
+  parts: MetricTextPart['role'][];
+}
+export interface MetricLayout {
+  algorithm: 'metric-flow-v1';
+  textMeasurement: 'estimated' | 'provided';
+  arrangement: 'inline-unit' | 'stacked';
+  /** At most 48 arrangements; value fitting is bounded by 77 reference-size trials per arrangement. */
+  attempts: number;
+  parts: MetricTextPart[];
+  diagnostics: MetricLayoutDiagnostic[];
+  overflow: boolean;
+}
+export interface MetricLayoutOptions extends QuoteLayoutOptions {}
+
+/**
+ * Measure every metric field before accepting geometry. Short single-line values and units can
+ * share a baseline; longer values or units stack. No locale formatting, trend icons or rewritten
+ * source text are invented. Consumers must reuse these accepted parts and source ranges.
+ */
+export function layoutMetric(value: string | number | MetricContent, box: LayoutBox, options: MetricLayoutOptions = {}): MetricLayout {
+  const scalar = typeof value === 'string' || typeof value === 'number';
+  const metric = scalar ? {value} : value;
+  const isValue = (input: unknown) => typeof input === 'string' || typeof input === 'number' && Number.isFinite(input);
+  if (!metric || Array.isArray(metric) || !isValue(metric.value) ||
+      [metric.label,metric.description,metric.unit].some(field=>field!==undefined&&typeof field!=='string') ||
+      metric.delta!==undefined&&!isValue(metric.delta) ||
+      metric.trend!==undefined&&!['up','down','flat'].includes(metric.trend)) {
+    throw new TypeError('Metric content requires a finite numeric or string value and schema-valid display metadata.');
+  }
+  const scale=options.scale??1,minimum=(options.minFontSize??16)*scale;
+  if (![box.x,box.y,box.width,box.height,box.x+box.width,box.y+box.height,scale,minimum,Math.max(76*scale,minimum)*1.22].every(Number.isFinite) ||
+      box.width<=0||box.height<=0||scale<=0||minimum<=0) {
+    throw new RangeError('Metric dimensions, scale and minimum font size must be finite and positive.');
+  }
+  if (options.overflow!==undefined&&!['warn','error'].includes(options.overflow)) throw new RangeError('Invalid metric overflow policy.');
+  const sourcePath=options.path??'metric',parts:MetricTextPart[]=[],diagnostics:MetricLayoutDiagnostic[]=[];
+  for (const role of ['value','unit','label','description','delta','trend'] as const) {
+    const sourceValue=metric[role];
+    if (sourceValue===undefined) continue;
+    const text=String(sourceValue),path=scalar?sourcePath:`${sourcePath}.${role}`;
+    const nominal=role==='value'?Math.min(76*scale,box.height*.28):(role==='description'?20:role==='trend'?18:23)*scale;
+    const requestedStyle:TextStyle={fontFamily:(role==='value'?options.fonts?.heading:options.fonts?.body)??'sans-serif',fontWeight:role==='value'?800:role==='description'?400:500,italic:false,path};
+    const part:MetricTextPart={role,path,text,sources:[{path,value:sourceValue,start:0,end:text.length}],visible:role==='value'||text.length>0,
+      box:{...box,height:0},requestedFontSize:Math.max(nominal,minimum),minFontSize:minimum,requestedStyle,style:resolveTextStyle({...requestedStyle},options.textMeasurement)};
+    if (!part.visible) part.fit={lines:[],sourceLines:[],fontSize:part.requestedFontSize,lineHeight:part.requestedFontSize*1.22,tabSize:4,tabWidth:0,overflow:false};
+    parts.push(part);
+  }
+  const primary=parts[0]!,metadata=parts.filter(part=>part!==primary&&part.visible),unit=metadata.find(part=>part.role==='unit');
+  const usable=(area:LayoutBox)=>[area.x,area.y,area.width,area.height,area.x+area.width,area.y+area.height].every(Number.isFinite)&&area.width>0&&area.height>0;
+  const occupied=(fit:CodeTextFit)=>fit.lines.length*fit.lineHeight;
+  const gap=8*scale,primaryGap=12*scale;
+  const cache=new Map<string,CodeTextFit>();
+  const measure=(part:MetricTextPart,size:number,width:number)=>{
+    const key=JSON.stringify([part.role,size,width]);
+    let fit=cache.get(key);
+    if (!fit) {
+      fit=fitCodeText(part.text,{...box,width},size,size,scale,textWidthMeasurer(part.style,options.textMeasurement));
+      if (!Number.isFinite(occupied(fit))) throw new RangeError('Metric text layout exceeds finite coordinates.');
+      cache.set(key,fit);
+    }
+    return fit;
+  };
+  const fitValue=(area:LayoutBox)=>{
+    if (!usable(area)) return undefined;
+    let size=primary.requestedFontSize;
+    while (true) {
+      const natural=measure(primary,size,area.width);
+      const fit={...natural,overflow:occupied(natural)>area.height+.01||natural.sourceLines.some(line=>line.width>area.width+.01)};
+      if (!fit.overflow||size===minimum) return fit;
+      size=Math.max(minimum,size-scale);
+    }
+  };
+  type Allocation={part:MetricTextPart;box:LayoutBox;fit:CodeTextFit|undefined};
+  type Candidate={arrangement:MetricLayout['arrangement'];allocations:Allocation[];score:number;overflow:boolean};
+  let selected:Candidate|undefined,attempts=0;
+  const reductions=Math.ceil(Math.max(0,...metadata.map(part=>(part.requestedFontSize-minimum)/scale)));
+  for (let reduction=0;reduction<=reductions;reduction++) {
+    const measured=new Map(metadata.map(part=>[part,measure(part,Math.max(minimum,part.requestedFontSize-reduction*scale),box.width)]));
+    const unitFit=unit?measured.get(unit):undefined;
+    const unitWidth=unitFit?.sourceLines[0]?.width??0;
+    const inline=unitFit?.lines.length===1&&unitWidth>0&&unitWidth<=box.width*.35&&unitWidth+gap<box.width;
+    for (const arrangement of (inline?['inline-unit','stacked']:['stacked']) as MetricLayout['arrangement'][]) {
+      attempts++;
+      const tail=metadata.filter(part=>arrangement!=='inline-unit'||part!==unit);
+      const tailHeight=tail.reduce((sum,part)=>sum+occupied(measured.get(part)!),0)+Math.max(0,tail.length-1)*gap;
+      if (!Number.isFinite(tailHeight)) throw new RangeError('Metric metadata exceeds finite coordinates.');
+      const area={...box,width:arrangement==='inline-unit'?box.width-unitWidth-gap:box.width,height:box.height-tailHeight-(tail.length?primaryGap:0)};
+      const valueFit=fitValue(area),valueHeight=valueFit?occupied(valueFit):0;
+      const allocations:Allocation[]=[];
+      let primaryHeight=valueHeight;
+      if (arrangement==='inline-unit'&&unit&&unitFit&&valueFit) {
+        const valueBaseline=valueHeight-valueFit.lineHeight+valueFit.fontSize;
+        const unitBaseline=occupied(unitFit)-unitFit.lineHeight+unitFit.fontSize;
+        const valueY=box.y+Math.max(0,unitBaseline-valueBaseline),unitY=box.y+Math.max(0,valueBaseline-unitBaseline);
+        const valueWidth=Math.min(area.width,Math.max(valueFit.fontSize,...valueFit.sourceLines.map(line=>line.width)));
+        allocations.push({part:primary,box:{...area,y:valueY,width:valueWidth,height:valueHeight},fit:valueFit});
+        allocations.push({part:unit,box:{x:box.x+valueWidth+gap,y:unitY,width:unitWidth,height:occupied(unitFit)},fit:{...unitFit,overflow:false}});
+        primaryHeight=Math.max(valueY-box.y+valueHeight,unitY-box.y+occupied(unitFit));
+      } else allocations.push({part:primary,box:valueFit?{...area,height:valueHeight}:area,fit:valueFit});
+      // Keep related fields together. An arbitrary percentage gap disconnects a stacked unit
+      // from its value on tall cells and wastes space needed by longer labels.
+      let y=box.y+primaryHeight+(tail.length?primaryGap:0);
+      for (const part of tail) {
+        const natural=measured.get(part)!,height=occupied(natural);
+        allocations.push({part,box:{...box,y,height},fit:{...natural,overflow:natural.sourceLines.some(line=>line.width>box.width+.01)}});
+        y+=height+gap;
+      }
+      const overflow=!valueFit||valueFit.overflow||arrangement==='inline-unit'&&valueFit.lines.length!==1||primaryHeight>area.height+.01||allocations.some(({box:area,fit})=>!fit||fit.overflow||!usable(area)||area.y+area.height>box.y+box.height+.01);
+      const score=allocations.reduce((sum,{part,fit})=>sum+(part.requestedFontSize-(fit?.fontSize??minimum))/scale,0);
+      const candidate={arrangement,allocations,score,overflow};
+      if (!selected||!overflow&&(selected.overflow||score<selected.score)||overflow&&selected.overflow) selected=candidate;
+    }
+    if (selected&&!selected.overflow&&selected.score===0) break;
+  }
+  for (const allocation of selected!.allocations) {allocation.part.box=allocation.box;allocation.part.fit=allocation.fit;}
+  const report=(reason:MetricLayoutDiagnostic['reason'],part:MetricTextPart,roles:MetricTextPart['role'][],message:string)=>
+    diagnostics.push({code:'text-overflow',reason,path:part.path,parts:roles,message});
+  for (const part of parts.filter(part=>part.visible)) {
+    if (!part.fit||!usable(part.box)) report('invalid-part-box',part,[part.role],`Metric ${part.role} has no usable space after metadata; increase the cell or change the arrangement.`);
+    else if (part.fit.overflow) report('text-fit',part,[part.role],`Metric ${part.role} exceeds its space at the readability floor; increase the cell or change the arrangement.`);
+    if (usable(part.box)&&(part.box.x<box.x||part.box.y<box.y||part.box.x+part.box.width>box.x+box.width+.01||part.box.y+part.box.height>box.y+box.height+.01)) {
+      report('part-outside-cell',part,[part.role],`Metric ${part.role} extends outside its cell; increase the cell or change the arrangement.`);
+    }
+  }
+  const visible=parts.filter(part=>part.visible&&part.fit);
+  for (const [index,first] of visible.entries()) for (const second of visible.slice(index+1)) {
+    if (first.box.x<second.box.x+second.box.width-.01&&second.box.x<first.box.x+first.box.width-.01&&
+        first.box.y<second.box.y+occupied(second.fit!)-.01&&second.box.y<first.box.y+occupied(first.fit!)-.01) {
+      report('part-overlap',first,[first.role,second.role],'Metric part line boxes overlap; do not accept this layout without more space.');
+    }
+  }
+  if (diagnostics.length&&options.overflow==='error') throw new OPFCompositionError(diagnostics);
+  return {algorithm:'metric-flow-v1',textMeasurement:options.textMeasurement?'provided':'estimated',arrangement:selected!.arrangement,attempts,parts,diagnostics,overflow:diagnostics.length>0};
+}
+
 export interface CodeContent { source: string; language?: string; filename?: string }
 export interface CodeLineSegment {
   kind: 'text' | 'tab';
