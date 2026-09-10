@@ -1,0 +1,12 @@
+
+> @openpresentation/opf@0.9.0 typecheck /Users/michael/.codex/worktrees/c193/opf/packages/javascript
+> pnpm run generate && node ../../scripts/typecheck.mjs --noEmit
+
+
+> @openpresentation/opf@0.9.0 generate /Users/michael/.codex/worktrees/c193/opf/packages/javascript
+> node scripts/generate.mjs && node scripts/generate-previews.mjs && node scripts/generate-content.mjs
+
+Generated src/generated/previews.ts (70 previews)
+Generated src/generated/examples.ts (126 examples, 7 galleries)
+Generated src/generated/docs.ts (28 docs)
+Generated src/generated/repo-readme.ts (11388 bytes)

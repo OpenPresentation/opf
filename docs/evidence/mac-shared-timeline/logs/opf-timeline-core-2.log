@@ -1,0 +1,17 @@
+node:fs:1630
+  const result = binding.readdir(
+                         ^
+
+Error: ENOENT: no such file or directory, scandir 'test'
+    at readdirSync (node:fs:1630:26)
+    at file:///Users/michael/.codex/worktrees/c193/opf/scripts/run-node-tests.mjs:5:13
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'scandir',
+  path: 'test'
+}
+
+Node.js v24.21.0

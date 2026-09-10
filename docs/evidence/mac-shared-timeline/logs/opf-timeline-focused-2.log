@@ -1,0 +1,12 @@
+✔ timeline parts keep exact array/object source paths, whitespace, selected floors and outlined ink (3.857ms)
+✔ timeline tries a vertical arrangement before accepting unreadable narrow labels (0.273625ms)
+✔ timeline rejects irreducible fields and invalid inputs with bounded attempts and source diagnostics (2.911792ms)
+✔ composition measures nested timelines and pagination preserves atomic event order and metadata (78.331416ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 141.334667

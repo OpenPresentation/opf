@@ -1,0 +1,18 @@
+{
+  "reviewComment": "https://github.com/OpenPresentation/opf-pptx/pull/30#discussion_r3984269070",
+  "pptxCommit": "d03e2daebaf9fb6c5d01a7461da22695da2bcb9f",
+  "comparisons": [
+    {
+      "node": 20,
+      "sixteenNativeExportsByteIdentical": true,
+      "strict": 2,
+      "warn": 2
+    },
+    {
+      "node": 24,
+      "sixteenNativeExportsByteIdentical": true,
+      "strict": 2,
+      "warn": 2
+    }
+  ]
+}

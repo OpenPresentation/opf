@@ -53,7 +53,7 @@ test('composition preserves width-only behavior and exposes the actual outline p
   assert.equal(legacy.items[0].text.placement,undefined);
   assert.equal(legacy.explanation.textOutlines,'unavailable');
   const result=composeSlide(slide,{textMeasurement:measurement,titleAlignment:'right',contentAlignment:'center',explain:true});
-  assert.deepEqual(slide,source);assert.equal(result.explanation.algorithm,'grid-score-v7');
+  assert.deepEqual(slide,source);assert.equal(result.explanation.algorithm,'grid-score-v8');
   assert.equal(result.explanation.textOutlines,'provided');assert.equal(result.explanation.textRasterPadding,1);
   assert.equal(result.items[0].text.placement.alignment,'right');assert.equal(result.items[1].text.placement.alignment,'center');
   assert.equal(composeSlide({...slide,design:{titleAlignment:'left'}},{textMeasurement:measurement,titleAlignment:'right'}).items[0].text.placement.alignment,'left');

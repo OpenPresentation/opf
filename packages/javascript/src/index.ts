@@ -83,6 +83,8 @@ export {layoutCode} from './composition.js';
 export type {CodeContent,CodeLineSegment,CodeLineSource,CodeTextFit,CodeTextPart,CodeLayoutDiagnostic,CodeLayout,CodeLayoutOptions} from './composition.js';
 export {layoutMetric} from './composition.js';
 export type {MetricContent,MetricTextSource,MetricTextPart,MetricLayoutDiagnostic,MetricLayout,MetricLayoutOptions} from './composition.js';
+export {layoutTimeline} from './composition.js';
+export type {TimelineEvent,TimelineContent,TimelineTextPart,TimelineLayoutDiagnostic,TimelineLayout,TimelineLayoutOptions} from './composition.js';
 export type { TextStyle, FontFamilies, TextMeasurement, MeasureTextWidth, Composition, LayoutBox, LayoutDiagnostic, TextFit, ComposedItem, ComposedGroup, ComposedFlow, CompositionTrack, CompositionPenalties, CompositionCandidate, CompositionDecision, CompositionExplanation, SlideComposition, ComposeSlideOptions } from "./composition.js";
 
 export { paginatePresentation, paginateSlide, OPFPaginationError } from './pagination.js';

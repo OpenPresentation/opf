@@ -32,7 +32,7 @@ test('candidate penalties account for the score and report the selected flow', (
   ]};
   const result=composeSlide(slide,{width:720,height:1280,explain:true,slideIndex:4});
   const decision=result.explanation.decisions[0];
-  assert.equal(result.explanation.algorithm,'grid-score-v7');
+  assert.equal(result.explanation.algorithm,'grid-score-v8');
   assert.equal(result.explanation.textMeasurement,'estimated');
   assert.equal(decision.path,'slides.4');
   assert.equal(decision.reason,'lowest-score');
@@ -93,7 +93,7 @@ test('unsupported internal fit stays visible and strict failures retain their ex
   const slide={blocks:fields.map((field,i)=>({[field]:values[i]}))};
   assert.equal(validatePresentation({slides:[slide]}).valid,true);
   const result=composeSlide(slide,{explain:true});
-  assert.deepEqual(result.explanation.unmeasuredPayloads,fields.flatMap((field,i)=>['quote','code','metric'].includes(field)?[]:[`slides.0.blocks.${i}.${field}`]));
+  assert.deepEqual(result.explanation.unmeasuredPayloads,fields.flatMap((field,i)=>['quote','code','metric','timeline'].includes(field)?[]:[`slides.0.blocks.${i}.${field}`]));
   const overflow={text:'All original content. '.repeat(1000),composition:{overflow:'error'}};
   assert.throws(()=>composeSlide(overflow,{explain:true}),error=>{
     assert.ok(error instanceof OPFCompositionError);

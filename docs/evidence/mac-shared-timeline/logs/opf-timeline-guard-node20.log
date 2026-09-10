@@ -1,0 +1,29 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: The validation function is expected to return "true". Received false
+
+Caught error:
+
+OPFFontError: No local font face for 'Aptos Display'.
+    at async file:///Users/michael/Source/opf-pptx/test/shared-timeline.mjs:66:2 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: OPFFontError: No local font face for 'Aptos Display'.
+      at resolve (file:///Users/michael/Source/opf-render/dist/fonts.js:90:33)
+      at resolveFace (file:///Users/michael/Source/opf-render/dist/fonts.js:100:32)
+      at Object.resolveStyle (file:///Users/michael/Source/opf-render/dist/fonts.js:102:16)
+      at resolveTextStyle (file:///Users/michael/.codex/worktrees/c193/opf/packages/javascript/dist/chunk-BAWLYSUN.js:89:50)
+      at resolvePresentationContext (file:///Users/michael/Source/opf-pptx/dist/index.js:872:63)
+      at resolveSlideContext (file:///Users/michael/Source/opf-pptx/dist/index.js:978:20)
+      at toPptx (file:///Users/michael/Source/opf-pptx/dist/index.js:189:63)
+      at file:///Users/michael/Source/opf-pptx/test/shared-timeline.mjs:66:23 {
+    code: 'font-unavailable',
+    details: { path: undefined, fontFamily: 'Aptos Display' }
+  },
+  expected: [Function (anonymous)],
+  operator: 'rejects'
+}
+
+Node.js v20.20.2
