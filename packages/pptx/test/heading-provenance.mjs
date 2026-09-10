@@ -20,6 +20,15 @@ const reordered=await fromPptx(modify(entries=>slide(entries,xml=>{const shapes=
 for(const field of ['title','subtitle','tag'])assert.equal(reordered.slides[0][field],initial[field]);
 const renamed=await fromPptx(modify(entries=>slide(entries,xml=>xml.replace(/name="OPF heading [^"]+"/g,'name="Renamed heading"'))));
 assert.equal(renamed.slides[0].title,initial.title);
+// Clearing a complete tagged heading in Office must not become an unknown-shape
+// description or promote the body into its role. Tags never restore old text.
+for(const field of ['title','subtitle','tag']) {
+ const cleared=await fromPptx(modify(entries=>slide(entries,xml=>xml.replace(/<p:sp>[\s\S]*?<\/p:sp>/g,shape=>shape.includes(`name="OPF heading slides.0.${field} line `)?shape.replace(/<a:t>[\s\S]*?<\/a:t>/g,'<a:t></a:t>'):shape))));
+ assert.equal(cleared.slides[0][field].trim(),'');
+ assert.ok(!JSON.stringify(cleared).includes('PowerPoint shape:'));
+ assert.ok(JSON.stringify(cleared).includes('Body remains present'));
+ for(const other of ['title','subtitle','tag'].filter(value=>value!==field))assert.equal(cleared.slides[0][other],initial[other]);
+}
 const corruptions={
   duplicate:entries=>slide(entries,xml=>xml.replace(/(<p:sp>(?:(?!<p:sp>)[\s\S])*?name="OPF heading slides\.0\.title line 0"[\s\S]*?<\/p:sp>)/,'$1$1')),
   missingTag:entries=>{delete entries[tagFile(entries)];},

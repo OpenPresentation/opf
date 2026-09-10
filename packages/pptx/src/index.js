@@ -422,7 +422,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   const cards = importCardFrames(shapes, paragraphs, relationships, entries, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
   const headings=importHeadingGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
   for(const group of headings.items) {
-    const item=importShape(group.shapes[0],dimensions,group.paragraphs);
+    const item=importShape(group.shapes[0],dimensions,group.paragraphs,true);
     if(item){
       const bounds=group.shapes.map(shape=>shapeBounds(shape['p:spPr']?.['a:xfrm'])).filter(Boolean);
       if(bounds.length){const x=Math.min(...bounds.map(b=>b.x)),y=Math.min(...bounds.map(b=>b.y));item.bounds={x,y,w:Math.max(...bounds.map(b=>b.x+b.w))-x,h:Math.max(...bounds.map(b=>b.y+b.h))-y};}
@@ -456,13 +456,13 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   return items;
 }
 
-function importShape(shape, dimensions, paragraphs = readParagraphs(shape["p:txBody"])) {
+function importShape(shape, dimensions, paragraphs = readParagraphs(shape["p:txBody"]), allowEmptyText = false) {
   const text = paragraphs.map((paragraph) => paragraph.text).join("\n");
   const placeholder = shapePlaceholderType(shape);
   const bounds = shapeBounds(shape["p:spPr"]?.["a:xfrm"]);
   const name = scalarText(shape["p:nvSpPr"]?.["p:cNvPr"]?.name).trim();
 
-  if (text) {
+  if (text || allowEmptyText) {
     return {
       kind: "text",
       text,
@@ -924,7 +924,7 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
         rectRadius:8*Math.min(widthInches,heightInches)/720,
         fill:paint(surface),line:{...paint(slideContext.colorScheme.accent5??`#${slideContext.colors.border}`),pt:.75},objectName:`OPF card ${item.path}`});
     }
-    if(item.text?.placement&&!item.text.richLines) {
+    if(['text','title','subtitle','tag'].includes(item.field)&&item.text?.placement&&!item.text.richLines) {
       addMeasuredPayloadText(slide,item.text.lines.join('\n'),item.box,slideContext,options,{path:item.path,fit:item.text,textStyle:item.textStyle,diagnosticsHandled:true,heading:['title','subtitle','tag'].includes(item.field)?item.field:undefined,color:item.field==='tag'?slideContext.colors.accent:slideContext.colors.text});
     } else if (["title", "subtitle", "tag"].includes(item.field)) {
       slide.addText(item.text.lines.join("\n"), {
