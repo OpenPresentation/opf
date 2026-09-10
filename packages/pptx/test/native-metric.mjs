@@ -9,8 +9,9 @@ import {createFontRegistry} from '@openpresentation/opf-render/fonts';
 import {renderSvgDeck,resolvePresentation,svgToPng} from '@openpresentation/opf-render';
 import {validatePresentation} from '@openpresentation/opf';
 import {toPptx,fromPptx} from '../dist/index.js';
-const [mode,directory='artifacts/native-metric']=process.argv.slice(2);
-assert.ok(['generate','compare'].includes(mode));
+const [mode,directory='artifacts/native-metric',selectedId]=process.argv.slice(2);
+assert.ok(['generate','compare','compare-deck'].includes(mode));
+if(mode==='compare-deck')assert.match(selectedId??'',/^metric-(1280|540)-(left|center|right)$/);
 const output=path.resolve(directory),hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const write=(name,value)=>writeFile(path.join(output,name),JSON.stringify(value,null,2)+'\n');
 const json=async name=>JSON.parse((await readFile(path.join(output,name),'utf8')).replace(/^\uFEFF/,''));
@@ -27,7 +28,7 @@ for(const name of ['@openpresentation/opf','@openpresentation/opf-render','@open
   for(const file of files)await visit(file);
   runtime[name+'/package.json']=hash(await readFile(path.join(root,'package.json')));
 }
-for(const file of ['test/native-metric.mjs','test/native-metric.ps1','vendor/pptxgenjs/pptxgen.es.js','package-lock.json'])runtime[file]=hash(await readFile(new URL('../'+file,import.meta.url)));
+for(const file of ['test/native-metric.mjs','test/native-metric.ps1','test/native-process.ps1','vendor/pptxgenjs/pptxgen.es.js','package-lock.json'])runtime[file]=hash(await readFile(new URL('../'+file,import.meta.url)));
 if(mode==='generate'){
   assert.equal(process.platform,'win32');
   const faces=[],fontHashes={},fontFiles=[];
@@ -58,9 +59,17 @@ if(mode==='generate'){
   await write('generation.json',{mode:'resolved-source-packages',node:process.version,runtime,fontHashes,substitutions:fonts.substitutions,decks,scope:'Actual metric source-package export with local Calibri reference bytes; resolved 400/700 styles, not synthetic 500/800. Separate SVG and PowerPoint observations; neither registry installation nor substitute-font/pixel equivalence is established.'});
   console.log(`Generated ${decks.reduce((n,deck)=>n+deck.document.slides.length,0)} wide/portrait aligned native metric slides.`);
 }else{
-  const generation=await json('generation.json'),native=await json('native.json');
+  const generation=await json('generation.json'),generationSha256=hash(await readFile(path.join(output,'generation.json')));
+  const selectedDecks=mode==='compare-deck'?generation.decks.filter(deck=>deck.id===selectedId):generation.decks;
+  assert.equal(selectedDecks.length,mode==='compare-deck'?1:6);
+  const native={decks:[],runs:[]};
+  for(const deck of selectedDecks){
+    const file=`runs/${deck.id}/native.json`,observed=await json(file),worker=await json(`runs/${deck.id}/worker.json`);
+    assert.equal(worker.timedOut,false);assert.equal(worker.exitCode,0);assert.equal(observed.generationSha256,generationSha256);
+    assert.equal(observed.decks.length,1);assert.equal(observed.decks[0].id,deck.id);
+    native.decks.push(...observed.decks);native.runs.push({file,sha256:hash(await readFile(path.join(output,file))),workerSha256:hash(await readFile(path.join(output,`runs/${deck.id}/worker.json`)))});
+  }
   assert.deepEqual(runtime,generation.runtime,'Native evidence requires unchanged runtimes and verifiers');
-  assert.equal(native.generationSha256,hash(await readFile(path.join(output,'generation.json'))));
   const imports=[],rasters=[],advanceDifferences=[],rasterOutliers=[],tabOutliers=[],partInk=[],partCollisions=[],maskCoverageOutliers=[];
   const readInk=async bytes=>{
     const {data,info}=await sharp(bytes).removeAlpha().raw().toBuffer({resolveWithObject:true});
@@ -72,7 +81,7 @@ if(mode==='generate'){
     }
     return {mask,width:info.width,height:info.height,bounds:right<0?null:{left,top,right,bottom}};
   };
-  for(const deck of generation.decks){
+  for(const deck of selectedDecks){
     const record=native.decks.find(item=>item.id===deck.id);
     assert.equal(record.slides.length,deck.layouts.length);
     for(const [index,slide] of record.slides.entries()){
@@ -112,7 +121,7 @@ if(mode==='generate'){
       rasters.push({id:deck.id,slide:index+1,nativeSha256:hash(nativeBytes),svgSha256:hash(svgBytes),nativeInk,svgInk,visibleInkInsideCell});
     }
   }
-  for(const deck of generation.decks)for(const state of ['original','saved','edited']){
+  for(const deck of selectedDecks)for(const state of ['original','saved','edited']){
     const filename=deck.id+(state==='original'?'':`-${state}`)+'.pptx',bytes=await readFile(path.join(output,filename)),record=native.decks.find(item=>item.id===deck.id);
     assert.equal(hash(bytes),state==='original'?deck.pptxSha256:record[state+'Sha256']);
     const diagnostics=[],result=await fromPptx(bytes,{onDiagnostic:issue=>diagnostics.push(issue)});
@@ -136,7 +145,7 @@ if(mode==='generate'){
   }
   const importedSlides=imports.reduce((n,item)=>n+item.slides,0);
   const gates={visibleInk:rasterOutliers.length===0,characterBounds:advanceDifferences.length===0,tabPositions:tabOutliers.length===0,interPartInk:partCollisions.length===0,isolatedMaskCoverage:maskCoverageOutliers.length===0};
-  await write('comparison.json',{runtime,imports,rasters,advanceDifferences,rasterOutliers,tabOutliers,partInk,partCollisions,maskCoverageOutliers,gates,scope:`${importedSlides} original/native-saved/native-edited metric slide imports preserve tested scalar types and exact source/metadata, including CRLF, leading tabs, whitespace-only parts and soft wraps. Visible SVG/native raster ink is tested against accepted cell integer pixel boundaries. Native parts are independently rasterized with other generated shapes temporarily hidden and their original visibility restored before saving; pixel-mask intersections above a 2/255 RGB background difference test inter-part ink collisions at these fixture dimensions. Each nonblank fixture field must produce ink, and the isolated masks' union must reproduce every full-slide ink pixel. Per-part bounds identify any field outside its cell. Character ranges retain a 0.1-point cell tolerance and tab positions a 0.02-point tolerance. Any failed gate exits nonzero after writing all results. These finite raster observations do not prove vector-outline, alternate-resolution or arbitrary native fidelity. Native geometry/formatting/font theme are deliberately not reconstructed; no pixel equivalence is established.`});
+  await write(mode==='compare-deck'?`comparison-${selectedId}.json`:'comparison.json',{node:process.version,runtime,generationSha256,nativeRuns:native.runs,completeMatrix:mode==='compare',imports,rasters,advanceDifferences,rasterOutliers,tabOutliers,partInk,partCollisions,maskCoverageOutliers,gates,scope:`${importedSlides} original/native-saved/native-edited metric slide imports preserve tested scalar types and exact source/metadata, including CRLF, leading tabs, whitespace-only parts and soft wraps. Visible SVG/native raster ink is tested against accepted cell integer pixel boundaries. Native parts are independently rasterized with other generated shapes temporarily hidden and their original visibility restored before saving; pixel-mask intersections above a 2/255 RGB background difference test inter-part ink collisions at these fixture dimensions. Each nonblank fixture field must produce ink, and the isolated masks' union must reproduce every full-slide ink pixel. Per-part bounds identify any field outside its cell. Character ranges retain a 0.1-point cell tolerance and tab positions a 0.02-point tolerance. Any failed gate exits nonzero after writing all results. These finite raster observations do not prove vector-outline, alternate-resolution or arbitrary native fidelity. Native geometry/formatting/font theme are deliberately not reconstructed; no pixel equivalence is established.`});
   console.log(`All ${importedSlides} original/saved/edited metric slide imports preserve source and types.`);
   console.log(JSON.stringify({gates,advanceOutliers:advanceDifferences.length,rasterOutliers:rasterOutliers.length,tabOutliers:tabOutliers.length,interPartCollisions:partCollisions.length}));
   assert.ok(Object.values(gates).every(Boolean),'Native metric fidelity gates remain open; see comparison.json. Source recovery passing does not close these gates.');
