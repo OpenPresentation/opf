@@ -13,7 +13,7 @@ const after=JSON.parse(await readFile(path.join(afterDirectory,'candidate.json')
 assert.deepEqual(after.source,before.source,'The font-only review must preserve corpus source.');
 assert.deepEqual(Object.keys(after.entries),Object.keys(before.entries));
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex'),changes=[];
-const escape=value=>value.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
+const escapeXml=value=>value.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
 for(const [index,key]of Object.keys(after.entries).entries()){
   const file=`${String(index).padStart(4,'0')}.png`;
   const oldPng=await readFile(path.join(beforeDirectory,file)),newPng=await readFile(path.join(afterDirectory,file));
@@ -26,7 +26,7 @@ for(let offset=0;offset<changes.length;offset+=8){
   const items=changes.slice(offset,offset+8);
   const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="880"><rect width="1280" height="880" fill="#ddd"/>${items.map((item,i)=>{
     const x=(i%2)*640,y=Math.floor(i/2)*220;
-    return `<text x="${x+6}" y="${y+15}" font-family="Roboto" font-size="11">${item.index} ${escape(item.key).slice(-89)}</text><text x="${x+6}" y="${y+30}" font-family="Roboto" font-size="11">Before</text><text x="${x+326}" y="${y+30}" font-family="Roboto" font-size="11">After</text><image x="${x}" y="${y+36}" width="318" height="180" href="data:image/png;base64,${item.oldPng.toString('base64')}"/><image x="${x+320}" y="${y+36}" width="318" height="180" href="data:image/png;base64,${item.newPng.toString('base64')}"/>`;
+    return `<text x="${x+6}" y="${y+15}" font-family="Roboto" font-size="11">${item.index} ${escapeXml(item.key).slice(-89)}</text><text x="${x+6}" y="${y+30}" font-family="Roboto" font-size="11">Before</text><text x="${x+326}" y="${y+30}" font-family="Roboto" font-size="11">After</text><image x="${x}" y="${y+36}" width="318" height="180" href="data:image/png;base64,${item.oldPng.toString('base64')}"/><image x="${x+320}" y="${y+36}" width="318" height="180" href="data:image/png;base64,${item.newPng.toString('base64')}"/>`;
   }).join('')}</svg>`;
   await writeFile(path.join(output,`sheet-${offset/8}.png`),await svgToPng(svg));
 }
