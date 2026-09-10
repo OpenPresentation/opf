@@ -53,15 +53,19 @@
     "theme": "dark",
     "colorScheme": {
       "id": "pastel-red",
-      "primary": "#14B8A6",
+      "primary": "#0B6258",
       "secondary": "#0F172A",
-      "accent": "#1D4ED8",
+      "accent": "#1B49CB",
       "background": "#FFFFFF",
       "text": "#0F172A",
       "custom": {
         "signal": "#B45309",
         "risk": "#047857"
-      }
+      },
+      "dark1": "#0F172A",
+      "dark2": "#334155",
+      "light1": "#FFFFFF",
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "batang",
@@ -143,7 +147,7 @@
         {
           "text": "present a service redesign for arabic-first residents",
           "bold": true,
-          "color": "#14B8A6"
+          "color": "#0B6258"
         },
         " while making the operating tradeoffs clear to public services stakeholders."
       ]

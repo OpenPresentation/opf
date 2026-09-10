@@ -66,15 +66,19 @@
     "theme": "minimal",
     "colorScheme": {
       "id": "forest-green",
-      "primary": "#F8FAFC",
-      "secondary": "#E2E8F0",
-      "accent": "#F59E0B",
-      "background": "#0B1220",
-      "text": "#F8FAFC",
+      "primary": "#545556",
+      "secondary": "#545659",
+      "accent": "#784D05",
+      "background": "#FFFFFF",
+      "text": "#0F172A",
       "custom": {
         "signal": "#0F172A",
         "risk": "#14B8A6"
-      }
+      },
+      "dark1": "#0F172A",
+      "dark2": "#334155",
+      "light1": "#FFFFFF",
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "calibri",
@@ -157,7 +161,7 @@
         {
           "text": "align growers on irrigation telemetry and drought response",
           "bold": true,
-          "color": "#F8FAFC"
+          "color": "#545556"
         },
         " while making the operating tradeoffs clear to agriculture stakeholders."
       ]
@@ -287,7 +291,7 @@
           {
             "text": "align growers on irrigation telemetry and drought response",
             "bold": true,
-            "color": "#F8FAFC"
+            "color": "#545556"
           },
           " while making the operating tradeoffs clear to agriculture stakeholders."
         ]

@@ -75,15 +75,19 @@
     "theme": "classic",
     "colorScheme": {
       "id": "forest-green",
-      "primary": "#0369A1",
+      "primary": "#035B8C",
       "secondary": "#334155",
-      "accent": "#F8FAFC",
-      "background": "#0B1220",
-      "text": "#F8FAFC",
+      "accent": "#545556",
+      "background": "#FFFFFF",
+      "text": "#0F172A",
       "custom": {
         "signal": "#F59E0B",
         "risk": "#E2E8F0"
-      }
+      },
+      "dark1": "#0F172A",
+      "dark2": "#334155",
+      "light1": "#FFFFFF",
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "simsun",
@@ -107,11 +111,11 @@
         "angle": 35,
         "stops": [
           {
-            "color": "#0369A1",
+            "color": "#E6F0F6",
             "position": 0
           },
           {
-            "color": "#E2E8F0",
+            "color": "#FCFDFE",
             "position": 1
           }
         ]
@@ -174,7 +178,7 @@
         {
           "text": "prepare displaced workers for regional growth sectors",
           "bold": true,
-          "color": "#0369A1"
+          "color": "#035B8C"
         },
         " while making the operating tradeoffs clear to workforce development stakeholders."
       ]
@@ -304,7 +308,7 @@
           {
             "text": "prepare displaced workers for regional growth sectors",
             "bold": true,
-            "color": "#0369A1"
+            "color": "#035B8C"
           },
           " while making the operating tradeoffs clear to workforce development stakeholders."
         ]

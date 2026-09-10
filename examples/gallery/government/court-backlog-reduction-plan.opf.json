@@ -43,15 +43,19 @@
     "theme": "classic",
     "colorScheme": {
       "id": "burnt-orange",
-      "primary": "#047857",
-      "secondary": "#B45309",
-      "accent": "#BE123C",
-      "background": "#0B1220",
+      "primary": "#7AB7A6",
+      "secondary": "#D6A078",
+      "accent": "#E297A9",
+      "background": "#0F172A",
       "text": "#F8FAFC",
       "custom": {
         "signal": "#0369A1",
         "risk": "#6D28D9"
-      }
+      },
+      "dark1": "#0F172A",
+      "dark2": "#334155",
+      "light1": "#FFFFFF",
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "segoe-ui",
@@ -126,7 +130,7 @@
         {
           "text": "reduce case backlog through calendar redesign",
           "bold": true,
-          "color": "#047857"
+          "color": "#7AB7A6"
         },
         " while making the operating tradeoffs clear to justice administration stakeholders."
       ]

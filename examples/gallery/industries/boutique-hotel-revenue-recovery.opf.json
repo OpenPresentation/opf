@@ -66,15 +66,19 @@
     "theme": "bold",
     "colorScheme": {
       "id": "golden-yellow",
-      "primary": "#E2E8F0",
-      "secondary": "#F59E0B",
-      "accent": "#14B8A6",
+      "primary": "#545659",
+      "secondary": "#784D05",
+      "accent": "#0B6258",
       "background": "#FFFFFF",
       "text": "#0F172A",
       "custom": {
         "signal": "#1D4ED8",
         "risk": "#0F172A"
-      }
+      },
+      "dark1": "#0F172A",
+      "dark2": "#334155",
+      "light1": "#FFFFFF",
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "century-schoolbook",
@@ -151,7 +155,7 @@
         {
           "text": "recover weekday occupancy through segmented offers and events",
           "bold": true,
-          "color": "#E2E8F0"
+          "color": "#545659"
         },
         " while making the operating tradeoffs clear to hospitality stakeholders."
       ]
@@ -262,7 +266,7 @@
           {
             "text": "recover weekday occupancy through segmented offers and events",
             "bold": true,
-            "color": "#E2E8F0"
+            "color": "#545659"
           },
           " while making the operating tradeoffs clear to hospitality stakeholders."
         ]

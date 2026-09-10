@@ -43,15 +43,19 @@
     "theme": "bold",
     "colorScheme": {
       "id": "pastel-red",
-      "primary": "#6D28D9",
-      "secondary": "#0369A1",
+      "primary": "#6B27D5",
+      "secondary": "#035B8C",
       "accent": "#334155",
       "background": "#FFFFFF",
       "text": "#0F172A",
       "custom": {
         "signal": "#E2E8F0",
         "risk": "#F8FAFC"
-      }
+      },
+      "dark1": "#0F172A",
+      "dark2": "#334155",
+      "light1": "#FFFFFF",
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "noto-sans-khmer",
@@ -135,7 +139,7 @@
         {
           "text": "reduce campus energy use without disrupting instruction",
           "bold": true,
-          "color": "#6D28D9"
+          "color": "#6B27D5"
         },
         " while making the operating tradeoffs clear to higher education stakeholders."
       ]

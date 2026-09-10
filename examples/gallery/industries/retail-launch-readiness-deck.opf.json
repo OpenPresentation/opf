@@ -43,15 +43,19 @@
     "theme": "bold",
     "colorScheme": {
       "id": "pastel-red",
-      "primary": "#1D4ED8",
-      "secondary": "#047857",
-      "accent": "#B45309",
+      "primary": "#1B49CB",
+      "secondary": "#036247",
+      "accent": "#8C4107",
       "background": "#FFFFFF",
       "text": "#0F172A",
       "custom": {
         "signal": "#6D28D9",
         "risk": "#BE123C"
-      }
+      },
+      "dark1": "#0F172A",
+      "dark2": "#334155",
+      "light1": "#FFFFFF",
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "kartika",
@@ -128,7 +132,7 @@
         {
           "text": "coordinate field teams for a national product launch",
           "bold": true,
-          "color": "#1D4ED8"
+          "color": "#1B49CB"
         },
         " while making the operating tradeoffs clear to beauty retail stakeholders."
       ]

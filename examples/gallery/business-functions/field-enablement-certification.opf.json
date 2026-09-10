@@ -43,15 +43,19 @@
     "theme": "classic",
     "colorScheme": {
       "id": "burnt-orange",
-      "primary": "#F59E0B",
-      "secondary": "#14B8A6",
+      "primary": "#784D05",
+      "secondary": "#0B6258",
       "accent": "#0F172A",
-      "background": "#0B1220",
-      "text": "#F8FAFC",
+      "background": "#FFFFFF",
+      "text": "#0F172A",
       "custom": {
         "signal": "#047857",
         "risk": "#1D4ED8"
-      }
+      },
+      "dark1": "#0F172A",
+      "dark2": "#334155",
+      "light1": "#FFFFFF",
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "noto-sans-ethiopic",
@@ -79,11 +83,11 @@
         "angle": 35,
         "stops": [
           {
-            "color": "#F59E0B",
+            "color": "#FEF5E7",
             "position": 0
           },
           {
-            "color": "#1D4ED8",
+            "color": "#E8EDFB",
             "position": 1
           }
         ]
@@ -139,7 +143,7 @@
         {
           "text": "certify sellers on the new value narrative before launch",
           "bold": true,
-          "color": "#F59E0B"
+          "color": "#784D05"
         },
         " while making the operating tradeoffs clear to training and enablement stakeholders."
       ]

@@ -67,14 +67,18 @@
     "colorScheme": {
       "id": "golden-yellow",
       "primary": "#334155",
-      "secondary": "#F8FAFC",
-      "accent": "#E2E8F0",
+      "secondary": "#545556",
+      "accent": "#545659",
       "background": "#FFFFFF",
       "text": "#0F172A",
       "custom": {
         "signal": "#14B8A6",
         "risk": "#F59E0B"
-      }
+      },
+      "dark1": "#0F172A",
+      "dark2": "#334155",
+      "light1": "#FFFFFF",
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "skeena",

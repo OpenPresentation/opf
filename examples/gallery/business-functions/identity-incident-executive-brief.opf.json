@@ -44,14 +44,18 @@
     "colorScheme": {
       "id": "corporate-blue",
       "primary": "#F59E0B",
-      "secondary": "#14B8A6",
-      "accent": "#0F172A",
-      "background": "#0B1220",
+      "secondary": "#2CBFAF",
+      "accent": "#A9ABB2",
+      "background": "#0F172A",
       "text": "#F8FAFC",
       "custom": {
         "signal": "#047857",
         "risk": "#1D4ED8"
-      }
+      },
+      "dark1": "#0F172A",
+      "dark2": "#334155",
+      "light1": "#FFFFFF",
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "mingliu",

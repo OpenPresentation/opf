@@ -43,15 +43,19 @@
     "theme": "minimal",
     "colorScheme": {
       "id": "bold-red",
-      "primary": "#BE123C",
-      "secondary": "#6D28D9",
-      "accent": "#0369A1",
-      "background": "#0B1220",
-      "text": "#F8FAFC",
+      "primary": "#AB1036",
+      "secondary": "#6B27D5",
+      "accent": "#035B8C",
+      "background": "#FFFFFF",
+      "text": "#0F172A",
       "custom": {
         "signal": "#F8FAFC",
         "risk": "#334155"
-      }
+      },
+      "dark1": "#0F172A",
+      "dark2": "#334155",
+      "light1": "#FFFFFF",
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "fangsong",
@@ -127,7 +131,7 @@
         {
           "text": "increase lunch peak capacity with staffing and menu simplification",
           "bold": true,
-          "color": "#BE123C"
+          "color": "#AB1036"
         },
         " while making the operating tradeoffs clear to quick service restaurants stakeholders."
       ]

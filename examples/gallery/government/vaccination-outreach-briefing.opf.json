@@ -43,15 +43,19 @@
     "theme": "classic",
     "colorScheme": {
       "id": "luxury",
-      "primary": "#0369A1",
-      "secondary": "#334155",
+      "primary": "#7EB3CF",
+      "secondary": "#A7ADB6",
       "accent": "#F8FAFC",
-      "background": "#0B1220",
+      "background": "#0F172A",
       "text": "#F8FAFC",
       "custom": {
         "signal": "#F59E0B",
         "risk": "#E2E8F0"
-      }
+      },
+      "dark1": "#0F172A",
+      "dark2": "#334155",
+      "light1": "#FFFFFF",
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "poppins",
@@ -119,7 +123,7 @@
         {
           "text": "increase booster uptake in neighborhoods with low access",
           "bold": true,
-          "color": "#0369A1"
+          "color": "#7EB3CF"
         },
         " while making the operating tradeoffs clear to public health stakeholders."
       ]

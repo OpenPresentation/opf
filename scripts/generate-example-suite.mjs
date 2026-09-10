@@ -1,6 +1,7 @@
 import { mkdir, readdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { colorContrast } from "../packages/javascript/dist/index.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const examplesRoot = path.join(repoRoot, "examples", "gallery");
@@ -224,6 +225,28 @@ function color(index, offset = 0) {
   return pick(palette, index, offset);
 }
 
+function blendColor(from, to, amount) {
+  return '#' + [1, 3, 5].map(offset => Math.round(
+    Number.parseInt(from.slice(offset, offset + 2), 16) * (1 - amount) +
+    Number.parseInt(to.slice(offset, offset + 2), 16) * amount,
+  ).toString(16).padStart(2, '0')).join('').toUpperCase();
+}
+
+function darkGalleryBackground(index) {
+  return densityFor(index) === 'sparse' ? index % 3 === 2 : index % 8 === 1;
+}
+
+function galleryTextColor(index, offset) {
+  const dark = darkGalleryBackground(index), preferred = color(index, offset);
+  // Include panel fills and the darkest possible 20%-opacity image on white.
+  const backgrounds = dark ? ['#0F172A', '#334155'] : ['#CCCCCC', '#F8FAFC'];
+  for (let step = 0; step <= 100; step++) {
+    const candidate = blendColor(preferred, dark ? '#FFFFFF' : '#000000', step / 100);
+    if (backgrounds.every(background => colorContrast(candidate, background) >= 4.5)) return candidate;
+  }
+  throw new Error('No readable fictional-gallery color was found.');
+}
+
 function backgroundFor(index) {
   const variants = [
     "light1",
@@ -236,8 +259,8 @@ function backgroundFor(index) {
       gradient: {
         angle: 35,
         stops: [
-          { color: color(index, 1), position: 0 },
-          { color: color(index, 4), position: 1 },
+          { color: blendColor(color(index, 1), '#FFFFFF', .9), position: 0 },
+          { color: blendColor(color(index, 4), '#FFFFFF', .9), position: 1 },
         ],
       },
       opacity: 0.94,
@@ -314,11 +337,15 @@ function designFor(spec, index, catalogs, density) {
       ? pick(catalogs.colorSchemes, index)
       : {
           id: pick(catalogs.colorSchemes, index),
-          primary: color(index, 1),
-          secondary: color(index, 2),
-          accent: color(index, 3),
-          background: index % 2 === 0 ? "#FFFFFF" : "#0B1220",
-          text: index % 2 === 0 ? "#0F172A" : "#F8FAFC",
+          primary: galleryTextColor(index, 1),
+          secondary: galleryTextColor(index, 2),
+          accent: galleryTextColor(index, 3),
+          background: darkGalleryBackground(index) ? '#0F172A' : '#FFFFFF',
+          text: darkGalleryBackground(index) ? '#F8FAFC' : '#0F172A',
+          dark1: '#0F172A',
+          dark2: '#334155',
+          light1: '#FFFFFF',
+          light2: '#F8FAFC',
           custom: {
             signal: color(index, 5),
             risk: color(index, 4),
@@ -480,7 +507,7 @@ function languageFor(spec, index, catalogs, density) {
 function richText(spec, index) {
   return [
     `${spec.org} should focus the next cycle on `,
-    { text: spec.outcome.toLowerCase(), bold: true, color: color(index, 1) },
+    { text: spec.outcome.toLowerCase(), bold: true, color: galleryTextColor(index, 1) },
     ` while making the operating tradeoffs clear to ${spec.area.toLowerCase()} stakeholders.`,
   ];
 }
@@ -1064,7 +1091,11 @@ async function main() {
   console.log(`wrote ${scenarioSpecs.length} OPF gallery examples`);
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exit(1);
-});
+export { scenarioSpecs, deckFor, loadCatalogIds, catalogKinds };
+
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  main().catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
+}

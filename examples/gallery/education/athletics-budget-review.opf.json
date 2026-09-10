@@ -66,15 +66,19 @@
     "theme": "dark",
     "colorScheme": {
       "id": "boost",
-      "primary": "#14B8A6",
+      "primary": "#0B6258",
       "secondary": "#0F172A",
-      "accent": "#1D4ED8",
+      "accent": "#1B49CB",
       "background": "#FFFFFF",
       "text": "#0F172A",
       "custom": {
         "signal": "#B45309",
         "risk": "#047857"
-      }
+      },
+      "dark1": "#0F172A",
+      "dark2": "#334155",
+      "light1": "#FFFFFF",
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "noto-sans-tamil",
@@ -149,7 +153,7 @@
         {
           "text": "balance competitive goals with travel and facility constraints",
           "bold": true,
-          "color": "#14B8A6"
+          "color": "#0B6258"
         },
         " while making the operating tradeoffs clear to college athletics stakeholders."
       ]
@@ -279,7 +283,7 @@
           {
             "text": "balance competitive goals with travel and facility constraints",
             "bold": true,
-            "color": "#14B8A6"
+            "color": "#0B6258"
           },
           " while making the operating tradeoffs clear to college athletics stakeholders."
         ]

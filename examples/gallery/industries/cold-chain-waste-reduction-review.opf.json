@@ -43,15 +43,19 @@
     "theme": "dark",
     "colorScheme": {
       "id": "boost",
-      "primary": "#B45309",
-      "secondary": "#BE123C",
-      "accent": "#6D28D9",
+      "primary": "#8C4107",
+      "secondary": "#AB1036",
+      "accent": "#6B27D5",
       "background": "#FFFFFF",
       "text": "#0F172A",
       "custom": {
         "signal": "#334155",
         "risk": "#0369A1"
-      }
+      },
+      "dark1": "#0F172A",
+      "dark2": "#334155",
+      "light1": "#FFFFFF",
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "aptos",
@@ -126,7 +130,7 @@
         {
           "text": "cut shrink across produce and prepared foods without hurting freshness",
           "bold": true,
-          "color": "#B45309"
+          "color": "#8C4107"
         },
         " while making the operating tradeoffs clear to retail grocery stakeholders."
       ]

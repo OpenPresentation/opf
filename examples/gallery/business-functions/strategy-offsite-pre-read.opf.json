@@ -66,15 +66,19 @@
     "theme": "classic",
     "colorScheme": {
       "id": "luxury",
-      "primary": "#047857",
-      "secondary": "#B45309",
-      "accent": "#BE123C",
-      "background": "#0B1220",
-      "text": "#F8FAFC",
+      "primary": "#036247",
+      "secondary": "#8C4107",
+      "accent": "#AB1036",
+      "background": "#FFFFFF",
+      "text": "#0F172A",
       "custom": {
         "signal": "#0369A1",
         "risk": "#6D28D9"
-      }
+      },
+      "dark1": "#0F172A",
+      "dark2": "#334155",
+      "light1": "#FFFFFF",
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "nirmala-ui",
@@ -98,11 +102,11 @@
         "angle": 35,
         "stops": [
           {
-            "color": "#047857",
+            "color": "#E6F2EE",
             "position": 0
           },
           {
-            "color": "#6D28D9",
+            "color": "#F0EAFB",
             "position": 1
           }
         ]
@@ -165,7 +169,7 @@
         {
           "text": "focus leadership debate on the few choices that matter",
           "bold": true,
-          "color": "#047857"
+          "color": "#036247"
         },
         " while making the operating tradeoffs clear to corporate strategy stakeholders."
       ]
@@ -295,7 +299,7 @@
           {
             "text": "focus leadership debate on the few choices that matter",
             "bold": true,
-            "color": "#047857"
+            "color": "#036247"
           },
           " while making the operating tradeoffs clear to corporate strategy stakeholders."
         ]
