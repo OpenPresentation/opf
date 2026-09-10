@@ -123,9 +123,9 @@ SVG embeds raster data URI images locally. Remote and file images require a host
 See [the complete example](../examples/technical/dynamic-composition.opf.json) and [local ecosystem verification](ecosystem-development.md).
 
 
-## Metric internals (unreleased standalone API)
+## Metric internals (unreleased integration)
 
-The candidate `layoutMetric(value, box, options)` export accepts a finite number, string, or `{value, unit?, label?, description?, delta?, trend?}`. Import it from the root or composition entrypoint after building this checkout. It is not included in published core 0.9.0 and is not yet consumed by composition, pagination, SVG, the editor or PPTX. The [metric checkpoint](plans/shared-metric-layout.md) records the evidence and integration gates.
+The candidate `layoutMetric(value, box, options)` export accepts a finite number, string, or `{value, unit?, label?, description?, delta?, trend?}`. Import it from the root or composition entrypoint after building this checkout. It is not included in published core 0.9.0. This branch consumes it in composition and atomic pagination; SVG, editor and PPTX adoption remain unfinished. The [primitive checkpoint](plans/shared-metric-layout.md) and [source integration checkpoint](plans/shared-metric-integration.md) distinguish their evidence and remaining gates.
 
 Pass the allocated reference-pixel `box`, resolved heading/body `fonts`, `textMeasurement`, canvas `scale`, effective `minFontSize`, source `path` and optional `overflow: 'error'`. `metric-flow-v1` returns separate value/unit/label/description/delta/trend parts in that order. Numeric zero is visible; scalar values keep the scalar path. Every provided field retains its original string or number in `sources[].value`. Source ranges address `String(value)` using UTF-16 offsets; the original spelling of a numeric JSON token is not available. No locale formatting, trend icon, case conversion or separator is invented. Empty optional strings retain source mappings with `visible: false`; the required empty value keeps a targetable blank line.
 
@@ -134,6 +134,8 @@ The allocator tries an adjacent value/unit baseline when both fit one line and t
 Each part exposes requested/resolved styles and the same source-preserving line/segment representation used by code (`CodeTextFit`), measured with proportional heading/body fonts. CR/LF/CRLF, tabs, whitespace and grapheme boundaries remain exact. Consumers must reuse accepted line and segment positions, font sizes and styles rather than independently re-fit or normalize text. This API reports `provided` measurement when a provider is passed, without claiming that its glyph coverage or shaping is complete. Unsupported glyphs propagate the provider's error with the field path.
 
 Check `overflow` before consuming parts. Irreducible text, invalid available space, parts outside the cell and overlapping occupied line boxes return field-specific diagnostics; strict mode throws `OPFCompositionError`. Invalid available boxes retain their dimensions and have no fit. These are advance-based line rectangles, not glyph outlines: the controlled browser evidence separately records small glyph overhangs. The API is a bounded internal allocator, not the complete layout-repair/Auto arrange operation or a native export fidelity guarantee.
+
+`grid-score-v4` now accounts for every metric part's font reduction and applies one overflow penalty per failing metric leaf. `item.metricLayout` is measured against the rounded accepted cell; `item.text`/`item.textStyle` alias the value fit/style. Field diagnostics obey strict ancestor policies, while explicit modes/weights/regions remain authoritative. Metrics leave this branch's advance-model `unmeasuredPayloads` list. Explicit pagination retains metrics atomically with complete source types/metadata and rejects irreducible fields without returning partial output. These source contracts still require coordinated consumer/browser/native verification before release.
 
 ## Code internals (core 0.9.0 and coordinated packages)
 

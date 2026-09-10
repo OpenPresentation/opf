@@ -2,7 +2,7 @@
 
 Branch `codex/shared-metric-layout-20260910`, [core PR #58](https://github.com/OpenPresentation/opf/pull/58), starts from core PR #57's merged `115f3e915b9b36f0518e55ac6a4f8014ac7114cc`. Its initial `4ec5795a12a71a3cd427ba69a0add099bd896dea` records the [actual published defects](../evidence/metric-layout-gap-2026-09-10.node24.json): omitted unit/zero-delta/trend, a label below the selected floor, and strict composition accepting content that render/export later reject. The complete published package set and all three public deployments remain intact.
 
-This milestone adds `layoutMetric` as a standalone shared primitive. [API rules](../dynamic-composition.md#metric-internals-unreleased-standalone-api) document exact scalar/field paths, source types and ranges, empty fields, styles, inline/stacked candidates, compact spacing, bounded fitting and strict failures. It introduces no schema, dependency, runtime network or provider requirement. It does not remove metric from `unmeasuredPayloads`, change composition scoring/pagination, or claim to fix the published consumers. No version bump or publication is warranted yet.
+This milestone adds `layoutMetric` as a standalone shared primitive. [API rules](../dynamic-composition.md#metric-internals-unreleased-integration) document exact scalar/field paths, source types and ranges, empty fields, styles, inline/stacked candidates, compact spacing, bounded fitting and strict failures. It introduces no schema, dependency, runtime network or provider requirement. It does not remove metric from `unmeasuredPayloads`, change composition scoring/pagination, or claim to fix the published consumers. No version bump or publication is warranted yet.
 
 ## Verification
 

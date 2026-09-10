@@ -58,6 +58,8 @@ export interface ComposedItem {
   quoteLayout?: QuoteLayout;
   /** Complete accepted code internals, including source lines and literal tab positions. */
   codeLayout?: CodeLayout;
+  /** Complete shared metric geometry, including its unit, label and metadata. */
+  metricLayout?: MetricLayout;
   /** Effective container settings, including inherited readability constraints. */
   composition: Composition;
 }
@@ -74,7 +76,7 @@ export interface ComposedFlow {
   itemCount: number;
   slotCount: number;
 }
-/** Additive penalties in grid-score-v3; lower is preferred. These are not quality percentages. */
+/** Additive penalties in grid-score-v4; lower is preferred. These are not quality percentages. */
 export interface CompositionPenalties {
   cellProportions: number;
   fontReduction: number;
@@ -98,7 +100,7 @@ export interface CompositionDecision {
   candidates: CompositionCandidate[];
 }
 export interface CompositionExplanation {
-  algorithm: 'grid-score-v3';
+  algorithm: 'grid-score-v4';
   /** Provided widths do not establish shaping, glyph coverage or native fidelity. */
   textMeasurement: 'estimated' | 'provided';
   decisions: CompositionDecision[];
@@ -1032,12 +1034,15 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const measureCode = (node: Pending, box: LayoutBox, settings: Composition) => layoutCode(node.value as string | CodeContent, acceptedBox(box), {
     fonts:options.fonts,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,
   });
+  const measureMetric = (node: Pending, box: LayoutBox, settings: Composition) => layoutMetric(node.value as string | number | MetricContent, acceptedBox(box), {
+    fonts:options.fonts,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,
+  });
   const leafScore = (node: Pending, box: LayoutBox, settings: Composition, penalties?: CompositionPenalties): number => {
     const text = contentText(node.field, node.value);
     let score = Math.abs(Math.log(box.width / box.height / 1.6));
     if (penalties) penalties.cellProportions += score;
-    if (node.field === 'quote' || node.field === 'code') {
-      const internal = node.field === 'quote' ? measureQuote(node,box,settings) : measureCode(node,box,settings);
+    if (node.field === 'quote' || node.field === 'code' || node.field === 'metric') {
+      const internal = node.field === 'quote' ? measureQuote(node,box,settings) : node.field === 'code' ? measureCode(node,box,settings) : measureMetric(node,box,settings);
       const reduction = internal.parts.reduce((sum,part)=>sum+(part.fit ? (part.requestedFontSize-part.fit.fontSize)/scale : 0),0);
       score += reduction + (internal.overflow ? 1000 : 0);
       if (penalties) { penalties.fontReduction += reduction; penalties.textOverflow += internal.overflow ? 1000 : 0; }
@@ -1108,10 +1113,11 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
         const textValue = contentText(node.field, node.value);
         const quoteLayout = node.field === 'quote' ? measureQuote(node,box,settings) : undefined;
         const codeLayout = node.field === 'code' ? measureCode(node,box,settings) : undefined;
-        const internal = quoteLayout ?? codeLayout, body = internal?.parts.find(part=>part.role==='body');
+        const metricLayout = node.field === 'metric' ? measureMetric(node,box,settings) : undefined;
+        const internal = quoteLayout ?? codeLayout ?? metricLayout, body = internal?.parts.find(part=>part.role==='body'||part.role==='value');
         const text = internal ? body?.fit : textValue !== undefined ? fitContent(node.field,node.value,textValue,box,25*scale,(settings.minFontSize??16)*scale,node.path) : undefined;
         items.push({ path: node.path, field: node.field, type: node.type, value: node.value, payload: node.payload, box:internal?acceptedBox(box):box,
-          text, textStyle: body?.style ?? styleFor(node.field,node.path), composition: settings, ...(quoteLayout?{quoteLayout}:{}), ...(codeLayout?{codeLayout}:{}) });
+          text, textStyle: body?.style ?? styleFor(node.field,node.path), composition: settings, ...(quoteLayout?{quoteLayout}:{}), ...(codeLayout?{codeLayout}:{}), ...(metricLayout?{metricLayout}:{}) });
         if (box.width < 100 * scale || box.height < 60 * scale) diagnostics.push({ code: "small-cell", path: node.path, message: "Content cell is too small for comfortable reading; use fewer blocks or a different composition." });
       }
     });
@@ -1125,6 +1131,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     if (item.field === "table" && tableOverflows(item.value,item.box,scale,item.composition,options,item.path)) diagnostics.push({ code: "text-overflow", path: item.path, message: "Table cells do not fit; use fewer rows, fewer columns, or split the table across slides." });
     if (item.quoteLayout) diagnostics.push(...item.quoteLayout.diagnostics);
     else if (item.codeLayout) diagnostics.push(...item.codeLayout.diagnostics);
+    else if (item.metricLayout) diagnostics.push(...item.metricLayout.diagnostics);
     else if (item.text?.overflow) diagnostics.push({ code: "text-overflow", path: item.path, message: "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide." });
   }
   for (const group of groups) for (const box of [group.box, group.contentBox]) for (const key of ["x", "y", "width", "height"] as const) box[key] = round(box[key]);
@@ -1140,8 +1147,8 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     return false;
   });
   const explanation: CompositionExplanation | undefined = decisions ? {
-    algorithm:'grid-score-v3',textMeasurement:options.textMeasurement?'provided':'estimated',decisions,
-    unmeasuredPayloads:items.filter(item=>!headings.has(item.field)&&!item.quoteLayout&&!item.codeLayout&&!['text','items','bullets','table'].includes(item.field)).map(item=>item.path),
+    algorithm:'grid-score-v4',textMeasurement:options.textMeasurement?'provided':'estimated',decisions,
+    unmeasuredPayloads:items.filter(item=>!headings.has(item.field)&&!item.quoteLayout&&!item.codeLayout&&!item.metricLayout&&!['text','items','bullets','table'].includes(item.field)).map(item=>item.path),
   } : undefined;
   if (failures.length) throw new OPFCompositionError(failures, explanation);
   return { width, height, contentBox, items, groups, flows, diagnostics, composition, ...(explanation?{explanation}:{}) };

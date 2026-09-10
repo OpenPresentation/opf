@@ -2,7 +2,11 @@
 
 This work implements the [ecosystem objective](ecosystem-objective-2026-09-09.md) in reviewable increments. It does not introduce a model, account, key, network or paid-service dependency into OPF. Proprietary applications remain optional compatibility-test environments.
 
-## Current checkpoint — standalone metric allocation verified; consumer integration next
+## Current checkpoint — metric primitive merged; composition/pagination integration underway
+
+Core PR #58 merged as `5cfc944ee7709b54bc2d1e7192cd86b7a52d6cb7`, identical to reviewed `d484a32a910cd9f0c729bcb9e5dc57f1e1cdfaa6`, after complete Node 20/24 coordinator/core, Windows/macOS CLI and Bugbot passed. Continue `codex/shared-metric-integration-20260910`: the [initial source checkpoint](shared-metric-integration.md) consumes complete metrics in composition/scoring (`grid-score-v4`) and atomic pagination. All 464 core tests and existing preservation suites pass on both supported Node runtimes. Renderer/PPTX/editor changes, actual integrated browser/native gates and review remain open. No package has been bumped or published.
+
+## Previous checkpoint — standalone metric allocation verified; consumer integration next
 
 The [shared metric checkpoint](shared-metric-layout.md) records an unreleased standalone `layoutMetric` API on `codex/shared-metric-layout-20260910`. Complete metadata and numeric/scalar source types, proportional-font line/segment mappings, compact inline/stacked allocation and scaled floors are implemented. Both supported Node runtimes pass 458 core tests and the existing preservation suites. Sixty real-font cases include 50 fits, six irreducible strict failures and four explicit missing-glyph cases. Fifty controlled browser cases pass exact source/advance/segment checks offline; their evidence is byte-identical across Node 20.20.2/24.20.0. Glyph overhangs remain recorded separately. Full CI/review, composition/pagination integration and actual editor/PPTX/native workflows remain gates. Do not mark metric coverage complete or bump/release versions yet.
 
