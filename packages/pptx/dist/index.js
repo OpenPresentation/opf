@@ -1,4 +1,5 @@
 import {importTableFrames} from './table-import.js';
+import {readChartCategoryHeading,writeChartCategoryHeading} from './chart-workbook.js';
 import {attachCodeTags, codeManifest, importCodeGroups, nativeShapeParagraphs, nativeTextShapes} from './code-provenance.js';
 import {attachMetricTags,metricManifest,importMetricGroups} from './metric-provenance.js';
 import {importImageOrientation} from './image-import.js';
@@ -6,7 +7,7 @@ import {nativeBackgroundFill} from './background.js';
 import {importBackground} from './background-import.js';
 import { webpToPng } from '#image-fallback';
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
-import { layoutTable, composeSlide, fitText, fitRichText, textWidthMeasurer, resolveCanvasDimensions, resolveFontFamilies, resolveTextStyle, textColorForFill } from "@openpresentation/opf/composition";
+import { layoutTable, composeSlide, fitText, fitRichText, textWidthMeasurer, resolveCanvasDimensions, resolveFontFamilies, resolveTextStyle, textColorForFill, chartColorForFill } from "@openpresentation/opf/composition";
 import PptxGenJS from "../vendor/pptxgenjs/pptxgen.es.js";
 import { unzipSync, zipSync } from "fflate";
 import { XMLParser } from "fast-xml-parser";
@@ -174,6 +175,7 @@ export async function toPptx(input, options = {}) {
   context.backgroundFills = new Map();
   context.codeTags = new Map();
   context.metricTags = new Map();
+  context.chartHeadings = new Map();
   context.imageFormat = options.imageFormat ?? "compatible";
   const pptx = new PptxGenJS();
   configurePresentation(pptx, presentation, {...context,fonts:resolveSlideContext(presentation,presentation.slides[0],context,options).fonts});
@@ -678,7 +680,7 @@ function chartFromRelationship(entries, slidePath, relationships, relId) {
   return {
     type: chartNode.type,
     data: {
-      columns: ["Category", ...names],
+      columns: [readChartCategoryHeading(entries,relationship.path) ?? "Category", ...names],
       rows
     }
   };
@@ -1087,21 +1089,36 @@ function addChartPayload(slide, chart, region, context) {
     return;
   }
 
+  // Keep the resolved palette surface (including alpha) explicit in native
+  // chart/plot areas, so inherited labels are assessed against their own panel.
+  const panelFill = context.colorScheme.surface ?? context.colorScheme[isDarkHex(context.colors.background) ? 'dark2' : 'light2'] ?? `#${context.colors.surface}`;
+  const labelColor = normalizeHex(textColorForFill(panelFill, `#${context.colors.text}`));
+  const transparency = /^#[0-9a-f]{8}$/i.test(panelFill) ? (1 - parseInt(panelFill.slice(7), 16) / 255) * 100 : 0;
+  const fill = {color:normalizeHex(panelFill),transparency};
+  const objectName = `OPF chart ${context.chartHeadings.size + 1}`;
+  const circular = chartData.type === 'pie' || chartData.type === 'doughnut';
+  context.chartHeadings.set(objectName,{heading:chartData.type === 'scatter' ? undefined : chart.data.columns[0],labelColor});
   slide.addChart(chartData.type, chartData.series, {
+    objectName,
     x: region.x,
     y: region.y,
     w: region.w,
     h: region.h,
-    showLegend: chartData.series.length > 1,
+    showLegend: circular || chartData.series.length > 1,
     showTitle: false,
-    chartColors: CHART_COLORS,
+    chartColors: CHART_COLORS.map(color=>normalizeHex(chartColorForFill(panelFill,`#${color}`))),
+    chartArea: {fill:{...fill},roundedCorners:false},
+    // Paint alpha once in the chart area, rather than stacking two alpha fills.
+    plotArea: {fill:{color:null}},
     catAxisLabelFontFace: context.fonts.body,
     catAxisLabelFontSize: 9,
-    catAxisLabelColor: context.colors.text,
+    catAxisLabelColor: labelColor,
     valAxisLabelFontFace: context.fonts.body,
     valAxisLabelFontSize: 9,
-    valAxisLabelColor: context.colors.text,
-    legendColor: context.colors.text,
+    valAxisLabelColor: labelColor,
+    legendColor: labelColor,
+    legendFontFace: context.fonts.body,
+    dataLabelColor: labelColor,
     showValue: false,
     valGridLine: { color: context.colors.border, transparency: 30, size: 1 },
     barDir: chartData.barDir,
@@ -1601,6 +1618,21 @@ async function normalizePptxZip(raw, context) {
 
   attachCodeTags(entries, context.codeTags);
   attachMetricTags(entries,context.metricTags);
+  for(const [part,bytes]of Object.entries(entries)){
+    if(!/^ppt\/slides\/slide\d+\.xml$/.test(part))continue;
+    const relationships=parseRelationships(entries,part);
+    for(const [frame]of decodeText(bytes).matchAll(/<p:graphicFrame>[\s\S]*?<\/p:graphicFrame>/g)){
+      const name=frame.match(/<p:cNvPr\b[^>]*\bname="([^"]+)"/)?.[1];
+      if(!context.chartHeadings.has(name))continue;
+      const id=frame.match(/<c:chart\b[^>]*\br:id="([^"]+)"/)?.[1],chartPart=relationships.get(id)?.path;
+      if(!chartPart)throw new OPFPptxError('packaging-failed','Generated chart relationship is missing.');
+      const {heading,labelColor}=context.chartHeadings.get(name);
+      if(heading!==undefined)writeChartCategoryHeading(entries,chartPart,heading);
+      // PptxGenJS hardcodes a black fallback in pie/doughnut label properties.
+      // Normalize only our generated chart text styles; point/series fills stay intact.
+      entries[chartPart]=encodeText(decodeText(entries[chartPart]).replace(/<c:txPr>[\s\S]*?<\/c:txPr>/g,properties=>properties.replace(/<a:solidFill>[\s\S]*?<\/a:solidFill>/g,()=>`<a:solidFill><a:srgbClr val="${labelColor}"/></a:solidFill>`)));
+    }
+  }
   const imageSources = new Map();
   for (const [part, bytes] of Object.entries(entries)) {
     if (!/^ppt\/slides\/slide\d+\.xml$/.test(part)) continue;
