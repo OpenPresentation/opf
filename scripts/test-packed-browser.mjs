@@ -98,7 +98,10 @@ try{
       if(suite==='styled-table'){
         const target=value=>page.locator(`[data-canvas-target][data-opf-path="slides.0.table.rows.${value}.value"]`);
         await target('0.0').dblclick();
-        const rich=page.locator('textarea.opf-rich-input');await rich.press('Control+End');await rich.pressSequentially('!');await rich.press('Control+Enter');
+        const rich=page.locator('textarea.opf-rich-input');
+        await rich.press(process.platform==='darwin'?'Meta+ArrowDown':'Control+End');
+        assert.ok(await rich.evaluate(input=>input.selectionStart===input.value.length&&input.selectionEnd===input.value.length),'Trusted keyboard navigation must collapse the selection at the text end before appending');
+        await rich.pressSequentially('!');await rich.press('Control+Enter');
         await click(page,'Verify typed merge');await click(page,'Undo');await click(page,'Verify original');
         await click(page,'Redo');await click(page,'Verify typed merge');await click(page,'Undo');await click(page,'Verify original');
         await target('0.1').dblclick();await click(page,'Format text');

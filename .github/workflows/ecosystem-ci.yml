@@ -30,21 +30,21 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
-          ref: 4b9706367039c13399d0a8b33c9e2bd305904c4b
+          ref: 91fe43e25dca9e4f04a2a18b1c6ee74e7e3d2863
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-editor
-          ref: 26a04baed9ca1715c5ad50e2f3239d6cba67786e
+          ref: 6e0b7d2f1b4369fc0a228391cf36e913e05188f8
           path: opf-editor
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-pptx
-          ref: df43cfcf58cf9bcee6435620e36d9e9bfd5a253c
+          ref: 24e7b2f12462df246e35a8a714a47923ecbd2bfe
           path: opf-pptx
           fetch-depth: 0
           persist-credentials: false
@@ -70,7 +70,7 @@ jobs:
       - name: Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks
         working-directory: opf
         env:
-          OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf/scripts/fixtures/opf-examples-png.shared-text.sha256.json
+          OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf-render/test/golden/opf-examples-png.base-fonts.sha256.json
         run: pnpm test:packages
       - name: Execute installed tarball browser interactions
         working-directory: opf

@@ -25,6 +25,26 @@ pnpm test
 
 Run these from the repo root — they fan out to both workspace packages (`@openpresentation/opf` and `@openpresentation/cli`). `pnpm build` and `pnpm typecheck` regenerate TypeScript from `spec/` before compiling, so they will pick up any schema or catalog edits automatically.
 
+Typechecking uses TypeScript 7 through the root `@typescript/native` npm alias
+and `scripts/typecheck.mjs`. Declaration builds deliberately retain the
+package-local `typescript` dependency on the `~5.9.3` patch line: tsup 8's
+declaration bundler requires the legacy compiler API and fails with TypeScript 7.
+The explicit runner avoids ambiguous `tsc` binaries when both compilers are
+installed. Do not replace the declaration compiler with TypeScript 7 until the
+bundler supports it and public declarations have been compared. This follows
+Microsoft's [side-by-side compiler guidance](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/#running-side-by-side-with-typescript-6-0),
+while keeping our existing declaration output stable. Compatible compiler patches
+remain eligible; security advisories must be triaged independently of this pin.
+
+`node packages/javascript/test/packed-install-smoke.mjs` checks every typed export
+with TypeScript 5.9 and 7, under both NodeNext and Bundler resolution with
+`skipLibCheck: false`. It also exercises the published renderer, editor, and PPTX
+converter versions in `release-plan.json` against the candidate core tarball.
+The CLI publishes a bundled executable, not a TypeScript library; its source is
+typechecked with TypeScript 7 and `pnpm test:cli:packed` verifies isolated global
+and npx-style installs. OPF CI and CLI portability together run these checks on
+Node 20/24 and Linux/Windows/macOS, retaining schema and runtime-floor checks.
+
 ## Proposing changes
 
 ### Format and schema changes
