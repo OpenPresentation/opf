@@ -8,7 +8,7 @@ import {createEditorSession} from '../../opf-editor/dist/index.js';
 import {paginatePresentation} from '../packages/javascript/dist/pagination.js';
 const require=createRequire(new URL('../../opf-pptx/package.json',import.meta.url));
 const {unzipSync}=require('fflate');const {XMLParser}=require('fast-xml-parser');
-const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false});
+const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false});
 const array=v=>Array.isArray(v)?v:v?[v]:[];
 const fonts=await loadBundledFontRegistry();
 const options={textMeasurement:fonts.textMeasurement};
@@ -26,14 +26,18 @@ const bytes=await toPptx(presentation,options);const zip=unzipSync(bytes);
 for(let i=0;i<presentation.slides.length;i++){
  const xml=parser.parse(new TextDecoder().decode(zip[`ppt/slides/slide${i+1}.xml`]));
  const shapes=array(xml['p:sld']['p:cSld']['p:spTree']['p:sp']);
- const items=resolved.slides[i].geometry.items;
- assert.equal(shapes.length,items.length);
+ const lines=resolved.slides[i].geometry.items.flatMap(item=>item.text.placement.lines.map((placed,index)=>({item,placed,index})).filter(({index})=>item.text.lines[index]));
+ assert.equal(shapes.length,lines.length,'Each accepted nonblank line remains editable');
  shapes.forEach((shape,index)=>{
-  const transform=shape['p:spPr']['a:xfrm'],item=items[index];
-  for(const [actual,wanted] of [[transform['a:off'].x,item.box.x],[transform['a:off'].y,item.box.y],[transform['a:ext'].cx,item.box.width],[transform['a:ext'].cy,item.box.height]])assert.ok(Math.abs(Number(actual)/9525-wanted)<0.002);
+  const transform=shape['p:spPr']['a:xfrm'],{item,placed,index:lineIndex}=lines[index];
+  const alignment=item.text.placement.alignment,factor=alignment==='right'?1:alignment==='center'?.5:0;
+  const x=Number(transform['a:off'].x)/9525,width=Number(transform['a:ext'].cx)/9525;
+  for(const [actual,wanted] of [[x+width*factor,placed.x+placed.width*factor],[Number(transform['a:off'].y)/9525,placed.baseline-item.text.fontSize],[Number(transform['a:ext'].cy)/9525,placed.height]])assert.ok(Math.abs(actual-wanted)<0.002,'Accepted measured line geometry');
   const paragraphs=array(shape['p:txBody']['a:p']);
   const exported=paragraphs.map(p=>array(p['a:r']).map(r=>String(r['a:t']??'')).join('')).join('\n');
-  assert.equal(exported,item.text.lines.join('\n'));
+  assert.equal(exported,item.text.lines[lineIndex]);
+  assert.equal(shape['p:txBody']['a:bodyPr'].wrap,'none');
+  for(const auto of ['a:normAutofit','a:spAutoFit'])assert.ok(!Object.hasOwn(shape['p:txBody']['a:bodyPr'],auto));
   for(const paragraph of paragraphs)for(const run of array(paragraph['a:r']))assert.equal(run['a:rPr']['a:latin'].typeface,'Roboto');
  });
 }
