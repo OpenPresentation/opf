@@ -1,0 +1,29 @@
+{
+  "reviewNode": "v24.21.0",
+  "reviewerSha256": "2ad0c9223e37cf65d8f331983f9979c21afd5a7bcc34f7f158eef111fe11e08e",
+  "converterSha256": "f75e684288b7124289d48bb907d42297491cf7ed9ddab301039b76f3d16e3809",
+  "evidenceCommit": "5d39217f0716453bf3762057852006b4787de73b",
+  "results": [
+    {
+      "directory": "metric-candidate-node20-01",
+      "slides": 48,
+      "isolatedMasks": 138,
+      "actualCheckedImports": 144,
+      "tabOutliers": 6,
+      "maximumTabErrorPoints": 0.0226745605469,
+      "rasterOutliers": [],
+      "workerExitsAndMaskUnionAndNoCollisions": true
+    },
+    {
+      "directory": "metric-candidate-node24-02",
+      "slides": 48,
+      "isolatedMasks": 138,
+      "actualCheckedImports": 144,
+      "tabOutliers": 6,
+      "maximumTabErrorPoints": 0.0226745605469,
+      "rasterOutliers": [],
+      "workerExitsAndMaskUnionAndNoCollisions": true
+    }
+  ],
+  "scope": "Independent review of committed Windows observations: decoded complete and isolated masks, raw tab arithmetic, worker results and actual current-metric imports with native edits. No new Office execution or claim that failed native gates pass."
+}

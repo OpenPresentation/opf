@@ -1,0 +1,70 @@
+{
+  "name": "Akasia open-file assessment",
+  "design": {
+    "fontScheme": {
+      "id": "roboto",
+      "heading": {
+        "family": "Akasia"
+      },
+      "body": {
+        "family": "Akasia"
+      },
+      "accent": {
+        "family": "Akasia"
+      },
+      "code": {
+        "family": "Akasia"
+      }
+    }
+  },
+  "slides": [
+    {
+      "title": "Akasia open font candidate",
+      "subtitle": "Latin, Greek and Cyrillic specimens",
+      "text": "Office AVATAR Toffee affine 0123456789\nΚαλημέρα κόσμε Ελληνικά\nПривет мир Кириллица\nÁ ä ố ñ\n∑ √ ∞ ≠ ≤ ≥"
+    },
+    {
+      "title": "Complete quote and source",
+      "quote": {
+        "text": "Open files make exact selection, independent inspection and offline rendering possible. Matching advances alone does not establish visual or native compatibility.",
+        "attribution": "OPF font evaluation",
+        "source": "Open-file browser specimen"
+      }
+    },
+    {
+      "title": "Recorded scope",
+      "blocks": [
+        {
+          "metric": {
+            "value": 12,
+            "unit": "styles",
+            "label": "Open release files",
+            "description": "No Aptos equivalence claim"
+          }
+        },
+        {
+          "table": {
+            "columns": [
+              "Test",
+              "Scope"
+            ],
+            "rows": [
+              [
+                "Advances",
+                "Public upstream metric data"
+              ],
+              [
+                "Scripts",
+                "Selected Latin / Greek / Cyrillic"
+              ],
+              [
+                "Native Office",
+                "Still unverified"
+              ]
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
