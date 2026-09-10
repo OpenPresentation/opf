@@ -18,7 +18,7 @@ jobs:
       run:
         working-directory: opf-editor
     env:
-      OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf/scripts/fixtures/opf-examples-png.shared-text.sha256.json
+      OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf-render/test/golden/opf-examples-png.rich-flow.sha256.json
     strategy:
       fail-fast: false
       matrix:
@@ -34,21 +34,21 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
-          ref: 2c01efdab4f63ecae2c7b0e6914983151433f247
+          ref: 0f937d3ee94644ee3df312b7dbbf36b6efe27e70
           path: opf
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
-          ref: 53e6f5fb5911ebecbfcdfef341bbb53e33c1f7a5
+          ref: 57be896e761af102961521acd7dd6104273296bf
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-pptx
-          ref: c4a891af42928e4d1136d9db6fbf46baf7ad375d
+          ref: 8bf8aab4a69e2f89b489ff64cde2ae6b7c46de7e
           path: opf-pptx
           fetch-depth: 0
           persist-credentials: false
