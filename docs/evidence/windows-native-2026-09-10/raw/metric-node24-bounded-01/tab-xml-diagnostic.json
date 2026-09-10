@@ -1,0 +1,198 @@
+[
+  {
+    "id": "metric-1280-left",
+    "phase": "original",
+    "shape": "OPF metric 20 value line 1",
+    "tabs": [
+      {
+        "emu": 654621,
+        "points": 51.54496062992126,
+        "alignment": "l"
+      },
+      {
+        "emu": 1309241,
+        "points": 103.08984251968504,
+        "alignment": "l"
+      }
+    ],
+    "text": "\t1\t%"
+  },
+  {
+    "id": "metric-1280-left",
+    "phase": "original",
+    "shape": "OPF metric 20 label line 1",
+    "tabs": [
+      {
+        "emu": 206722,
+        "points": 16.27732283464567,
+        "alignment": "l"
+      },
+      {
+        "emu": 826889,
+        "points": 65.10937007874016,
+        "alignment": "l"
+      }
+    ],
+    "text": "\tBefore\tAfter  "
+  },
+  {
+    "id": "metric-1280-left",
+    "phase": "original",
+    "shape": "OPF metric 20 description line 1",
+    "tabs": [
+      {
+        "emu": 206722,
+        "points": 16.27732283464567,
+        "alignment": "l"
+      }
+    ],
+    "text": "\t"
+  },
+  {
+    "id": "metric-1280-left",
+    "phase": "-saved",
+    "shape": "OPF metric 20 value line 1",
+    "tabs": [
+      {
+        "emu": 654621,
+        "points": 51.54496062992126,
+        "alignment": "l"
+      },
+      {
+        "emu": 1309241,
+        "points": 103.08984251968504,
+        "alignment": "l"
+      }
+    ],
+    "text": "\t1\t%"
+  },
+  {
+    "id": "metric-1280-left",
+    "phase": "-saved",
+    "shape": "OPF metric 20 label line 1",
+    "tabs": [
+      {
+        "emu": 206722,
+        "points": 16.27732283464567,
+        "alignment": "l"
+      },
+      {
+        "emu": 826889,
+        "points": 65.10937007874016,
+        "alignment": "l"
+      }
+    ],
+    "text": "\tBefore\tAfter  "
+  },
+  {
+    "id": "metric-1280-left",
+    "phase": "-saved",
+    "shape": "OPF metric 20 description line 1",
+    "tabs": [
+      {
+        "emu": 206722,
+        "points": 16.27732283464567,
+        "alignment": "l"
+      }
+    ],
+    "text": "\t"
+  },
+  {
+    "id": "metric-540-right",
+    "phase": "original",
+    "shape": "OPF metric 20 value line 1",
+    "tabs": [
+      {
+        "emu": 490965,
+        "points": 38.65866141732283,
+        "alignment": "l"
+      },
+      {
+        "emu": 981931,
+        "points": 77.31740157480316,
+        "alignment": "l"
+      }
+    ],
+    "text": "\t1\t%"
+  },
+  {
+    "id": "metric-540-right",
+    "phase": "original",
+    "shape": "OPF metric 20 label line 1",
+    "tabs": [
+      {
+        "emu": 155042,
+        "points": 12.208031496062992,
+        "alignment": "l"
+      },
+      {
+        "emu": 620167,
+        "points": 48.83204724409449,
+        "alignment": "l"
+      }
+    ],
+    "text": "\tBefore\tAfter  "
+  },
+  {
+    "id": "metric-540-right",
+    "phase": "original",
+    "shape": "OPF metric 20 description line 1",
+    "tabs": [
+      {
+        "emu": 155042,
+        "points": 12.208031496062992,
+        "alignment": "l"
+      }
+    ],
+    "text": "\t"
+  },
+  {
+    "id": "metric-540-right",
+    "phase": "-saved",
+    "shape": "OPF metric 20 value line 1",
+    "tabs": [
+      {
+        "emu": 490965,
+        "points": 38.65866141732283,
+        "alignment": "l"
+      },
+      {
+        "emu": 981931,
+        "points": 77.31740157480316,
+        "alignment": "l"
+      }
+    ],
+    "text": "\t1\t%"
+  },
+  {
+    "id": "metric-540-right",
+    "phase": "-saved",
+    "shape": "OPF metric 20 label line 1",
+    "tabs": [
+      {
+        "emu": 155042,
+        "points": 12.208031496062992,
+        "alignment": "l"
+      },
+      {
+        "emu": 620167,
+        "points": 48.83204724409449,
+        "alignment": "l"
+      }
+    ],
+    "text": "\tBefore\tAfter  "
+  },
+  {
+    "id": "metric-540-right",
+    "phase": "-saved",
+    "shape": "OPF metric 20 description line 1",
+    "tabs": [
+      {
+        "emu": 155042,
+        "points": 12.208031496062992,
+        "alignment": "l"
+      }
+    ],
+    "text": "\t"
+  }
+]
