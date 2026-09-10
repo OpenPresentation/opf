@@ -4,7 +4,7 @@ import {readFile,writeFile,mkdir,readdir} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {toPptx} from '../dist/index.js';
+import {toPptx,fromPptx} from '../dist/index.js';
 const [mode,directory='artifacts/native-table-colors']=process.argv.slice(2);
 assert.ok(['generate','compare'].includes(mode));
 const output=path.resolve(directory),hash=bytes=>createHash('sha256').update(bytes).digest('hex');
@@ -25,7 +25,7 @@ for(const name of ['@openpresentation/opf','@openpresentation/opf-render','@open
  for(const file of files)await visit(file);
  runtime[name+'/package.json']=hash(await readFile(path.join(root,'package.json')));
 }
-for(const file of ['test/native-table-colors.mjs','test/native-table-colors.ps1','vendor/pptxgenjs/pptxgen.es.js','package-lock.json'])runtime[file]=hash(await readFile(new URL('../'+file,import.meta.url)));
+for(const file of ['test/native-table-colors.mjs','test/native-table-colors.ps1','test/native-process.ps1','vendor/pptxgenjs/pptxgen.es.js','package-lock.json'])runtime[file]=hash(await readFile(new URL('../'+file,import.meta.url)));
 if(mode==='generate'){
  const cases=[
   ['#F8FAFC','#000000','#000000'],['#0F172A','#FFFFFF','#FFFFFF'],
@@ -55,18 +55,39 @@ if(mode==='generate'){
  assert.equal(generation.pptxSha256,hash(await readFile(path.join(output,'table-colors.pptx'))));
  assert.equal(native.savedSha256,hash(await readFile(path.join(output,'table-colors-saved.pptx'))));
  let observations=0;
- for(const phase of ['original','reopened']){
+ for(const phase of ['original','reopened','edited']){
   assert.equal(native[phase].length,generation.expected.length);
   for(const [index,slide]of generation.expected.entries()){
    const actual=native[phase][index];assert.equal(actual.slide,index+1);assert.equal(actual.cells.length,slide.cells.length);
    for(const [j,cell]of slide.cells.entries()){
-    const wanted=cell.runs.flatMap(run=>Array.from(run.text,character=>({character,color:run.color})));
-    assert.deepEqual(actual.cells[j],{row:cell.row,column:cell.column,text:cell.runs.map(run=>run.text).join(''),characters:wanted},`${phase} slide ${index+1} cell ${j+1}`);
+    const runs=structuredClone(cell.runs);if(phase==='edited'&&cell.row===2&&cell.column===1)runs[0].text='Native '+runs[0].text;
+    const wanted=runs.flatMap(run=>Array.from(run.text,character=>({character,color:run.color})));
+    assert.deepEqual(actual.cells[j],{row:cell.row,column:cell.column,text:runs.map(run=>run.text).join(''),characters:wanted},`${phase} slide ${index+1} cell ${j+1}`);
     observations+=wanted.length;
    }
    assert.equal(actual.pngSha256,hash(await readFile(path.join(output,actual.png))));
   }
  }
- await write('comparison.json',{node:process.version,generationSha256:native.generationSha256,nativeSha256:hash(await readFile(path.join(output,'native.json'))),slides:6,phases:2,cells:48,characterColorObservations:observations,passed:true,scope:'Actual PowerPoint editable table text and every source character color survive native save/reopen. Explicit low-contrast colors and translucent fills remain intentional counterexamples. Native rasters are recorded for review, not claimed equivalent to browser output.'});
- console.log(`Native tables passed: 48 original/reopened cells, ${observations} character colors.`);
+ const imports=[];
+ const cellText=value=>typeof value==='string'?value:Array.isArray(value)?value.map(cellText).join(''):value&&typeof value==='object'?cellText(value.value??value.text):String(value??'');
+ for(const [phase,file,digest] of [['original','table-colors.pptx',generation.pptxSha256],['saved','table-colors-saved.pptx',native.savedSha256],['edited','table-colors-edited.pptx',native.editedSha256]]) {
+  const bytes=await readFile(path.join(output,file));assert.equal(hash(bytes),digest);
+  let document=await fromPptx(bytes);
+  for(let cycle=0;cycle<=2;cycle++) {
+   assert.equal(document.slides.length,6);
+   for(const [index,slide] of document.slides.entries()) {
+    const table=slide.table??slide.blocks?.find(block=>block.type==='table')?.table;assert.ok(table);
+    for(const cell of generation.expected[index].cells) {
+     const value=cell.row===1?table.columns[cell.column-1]:table.rows[cell.row-2][cell.column-1];
+     const expected=(phase==='edited'&&cell.row===2&&cell.column===1?'Native ':'')+cell.runs.map(run=>run.text).join('');
+     assert.equal(cellText(value),expected,`${phase} cycle ${cycle} slide ${index+1}`);
+    }
+   }
+   imports.push({phase,cycle,slides:6,currentCellText:true});
+   if(cycle<2){const exported=await toPptx(document);await writeFile(path.join(output,`table-${phase}-reexport-${cycle+1}.pptx`),exported);document=await fromPptx(exported);}
+  }
+ }
+ for(let i=0;i<6;i++)assert.equal(native.original[i].pngSha256,native.reopened[i].pngSha256,`slide ${i+1}: native save/reopen raster`);
+ await write('comparison.json',{node:process.version,generationSha256:native.generationSha256,nativeSha256:hash(await readFile(path.join(output,'native.json'))),slides:6,phases:3,cells:72,characterColorObservations:observations,imports,passed:true,scope:'Actual editable table text/character colors and six cell edits survive native save/reopen. Two additional export/import cycles preserve current cell text, without a formatting/geometry or native-raster claim for those reexports. Explicit low-contrast colors and translucent fills remain intentional counterexamples. Original/reopened native rasters match; no browser equivalence claim.'});
+ console.log(`Native tables passed: 72 native cells, ${observations} character colors, 54 slide imports including two further export/import cycles.`);
 }

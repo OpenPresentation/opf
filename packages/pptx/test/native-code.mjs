@@ -9,8 +9,9 @@ import {createFontRegistry} from '@openpresentation/opf-render/fonts';
 import {renderSvgDeck,resolvePresentation,svgToPng} from '@openpresentation/opf-render';
 import {validatePresentation} from '@openpresentation/opf';
 import {toPptx,fromPptx} from '../dist/index.js';
-const [mode,directory='artifacts/native-code']=process.argv.slice(2);
-assert.ok(['generate','compare'].includes(mode));
+const [mode,directory='artifacts/native-code',selectedDeck]=process.argv.slice(2);
+assert.ok(['generate','compare','compare-deck'].includes(mode));
+if(mode==='compare-deck')assert.ok(['code-1280','code-540'].includes(selectedDeck));
 const output=path.resolve(directory),hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const write=(name,value)=>writeFile(path.join(output,name),JSON.stringify(value,null,2)+'\n');
 const json=async name=>JSON.parse((await readFile(path.join(output,name),'utf8')).replace(/^\uFEFF/,''));
@@ -27,7 +28,7 @@ for(const name of ['@openpresentation/opf','@openpresentation/opf-render','@open
   for(const file of files)await visit(file);
   runtime[name+'/package.json']=hash(await readFile(path.join(root,'package.json')));
 }
-for(const file of ['test/native-code.mjs','test/native-code.ps1','vendor/pptxgenjs/pptxgen.es.js','package-lock.json'])runtime[file]=hash(await readFile(new URL('../'+file,import.meta.url)));
+for(const file of ['test/native-code.mjs','test/native-code.ps1','test/native-deck.ps1','test/native-process.ps1','vendor/pptxgenjs/pptxgen.es.js','package-lock.json'])runtime[file]=hash(await readFile(new URL('../'+file,import.meta.url)));
 if(mode==='generate') {
   assert.equal(process.platform,'win32');
   const faces=[],fontHashes={},fontFiles=[];
@@ -57,13 +58,21 @@ if(mode==='generate') {
   await write('generation.json',{node:process.version,runtime,fontHashes,decks,scope:'Actual candidate OPF code export with local Courier New reference bytes. Separate SVG raster and native PowerPoint observations; no substitute-font or pixel-equivalence claim.'});
   console.log('Generated eight wide/portrait native code slides with accepted source geometry.');
 } else {
-  const generation=await json('generation.json'),native=await json('native.json');
+  const generation=await json('generation.json');
+  const decks=generation.decks.filter(deck=>mode!=='compare-deck'||deck.id===selectedDeck),reports=[];
+  for(const deck of decks){const native=await json(`runs/${deck.id}/native.json`);assert.equal(native.generationSha256,hash(await readFile(path.join(output,'generation.json'))));assert.equal(native.decks.length,1);assert.equal(native.decks[0].id,deck.id);reports.push(...native.decks);}
   assert.deepEqual(runtime,generation.runtime,'Native evidence requires unchanged runtimes and verifiers');
-  assert.equal(native.generationSha256,hash(await readFile(path.join(output,'generation.json'))));
-  const imports=[];
-  for(const deck of generation.decks)for(const state of ['original','saved','edited']) {
+  const imports=[],tabOutliers=[],boundsOutliers=[];
+  for(const record of reports)for(const slide of record.slides){
+    assert.equal(slide.rasterSha256,hash(await readFile(path.join(output,`${record.id}-native-${slide.slide}.png`))));
+    for(const [lineIndex,line] of slide.lines.entries()) {
+      if(!line.glyphsInsideCell)boundsOutliers.push({deck:record.id,slide:slide.slide,line:lineIndex,...line});
+      for(const tab of line.tabTargets)if(tab.errorPoints>.02)tabOutliers.push({deck:record.id,slide:slide.slide,line:lineIndex,...tab});
+    }
+  }
+  for(const deck of decks)for(const state of ['original','saved','edited']) {
     const filename=deck.id+(state==='original'?'':`-${state}`)+'.pptx',bytes=await readFile(path.join(output,filename));
-    const record=native.decks.find(item=>item.id===deck.id);
+    const record=reports.find(item=>item.id===deck.id);
     assert.equal(hash(bytes),state==='original'?deck.pptxSha256:record[state+'Sha256']);
     const diagnostics=[],result=await fromPptx(bytes,{onDiagnostic:issue=>diagnostics.push(issue)});
     assert.equal(validatePresentation(result).valid,true);assert.equal(result.slides.length,deck.document.slides.length);
@@ -78,6 +87,8 @@ if(mode==='generate') {
     assert.ok(diagnostics.every(issue=>issue.code==='code-import-reflow'));
     imports.push({filename,sha256:hash(bytes),slides:result.slides.length,exactCodeAndMetadata:true,diagnostics});
   }
-  await write('comparison.json',{runtime,imports,scope:'Original/native-saved/native-edited code semantics and exact source text, including CR/LF/CRLF, blank lines and soft wraps. Imported native geometry, formatting, font theme and raster equivalence remain outside this gate.'});
-  console.log('All 24 original/saved/edited slide imports preserve exact code source and metadata.');
+  const passed=tabOutliers.length===0&&boundsOutliers.length===0;
+  await write(mode==='compare-deck'?`runs/${selectedDeck}/comparison.json`:'comparison.json',{node:process.version,runtime,imports,tabOutliers,boundsOutliers,passed,partial:mode==='compare-deck',scope:'Original/native-saved/native-edited code semantics and exact source text, including CR/LF/CRLF, blank lines and soft wraps. Native tab tolerance stays 0.02 points and character bounds stay 0.1 points. Imported geometry, formatting, font theme, pixel containment and raster equivalence remain outside this gate.'});
+  assert.ok(passed,`${tabOutliers.length} native tab outliers; ${boundsOutliers.length} character-bound outliers. Raw results preserved.`);
+  console.log(`All ${imports.reduce((sum,item)=>sum+item.slides,0)} original/saved/edited slide imports preserve exact code source and metadata; native tab/character-bound gates pass.`);
 }
