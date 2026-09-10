@@ -12,6 +12,9 @@ function Invoke-OpfNativeWorker {
     foreach($argument in $arguments) { if($argument.Contains('"')) { throw 'Unsupported quote in native worker argument' } }
     $quoted=@($arguments | ForEach-Object { '"'+$_+'"' })
     $worker=Start-Process -FilePath $hostExecutable -WindowStyle Hidden -ArgumentList $quoted -RedirectStandardOutput $stdout -RedirectStandardError $stderr -PassThru
+    # Windows PowerShell 5.1 can lose ExitCode if no process handle was retained
+    # before WaitForExit. Keep this exact owned process handle alive until Dispose.
+    $null=$worker.Handle
     $record=@{processId=$worker.Id;startedAt=(Get-Date).ToUniversalTime().ToString('o');timeoutSeconds=$TimeoutSeconds;timedOut=$false;exitCode=$null;scope='Owned verifier process only. A timeout does not prove cleanup completed; Office processes are never terminated.'}
     $record | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath (Join-Path $outputRoot 'worker.json') -Encoding UTF8
     try {

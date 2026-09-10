@@ -25,6 +25,15 @@ Run only one native Office test at a time. Close only the presentations or embed
 
 The chart harness requires an explicit `-EditSlide` from 1 through 8 and activates exactly that workbook. Its hidden helper has a 45-second deadline (maximum configurable deadline: 60 seconds), captures stdout/stderr and writes `progress.json` before Office calls. Failure or timeout stops the run without a retry. A timeout terminates only the owned verifier process; it does not close Office or prove that generated-file cleanup completed. `test/native-process-check.ps1` tests literal arguments, successful/failed exits and timeout termination using dummy scripts without Office.
 
+The worker retains its process handle before waiting. Windows PowerShell 5.1 otherwise returned a null exit code for a completed successful helper on the Windows test host, causing the parent to report failure. Run the existing controls in fresh directories under both supported PowerShell hosts before Office testing:
+
+```powershell
+powershell.exe -NoProfile -NonInteractive -File test/native-process-check.ps1 -OutputDirectory artifacts/process-controls-winps
+pwsh.exe -NoProfile -NonInteractive -File test/native-process-check.ps1 -OutputDirectory artifacts/process-controls-pwsh
+```
+
+These controls establish helper exit-code and deadline behavior only; they do not establish Office readiness or export fidelity.
+
 After resolving the Excel dialog or cell-edit state, use a fresh directory for one controlled chart check:
 
 ```powershell
