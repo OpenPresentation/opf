@@ -18,7 +18,7 @@ jobs:
       run:
         working-directory: opf-pptx
     env:
-      OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf-render/test/golden/opf-examples-png.source-whitespace.sha256.json
+      OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf-render/test/golden/opf-examples-png.readability.sha256.json
     strategy:
       fail-fast: false
       matrix:
@@ -35,21 +35,21 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
-          ref: 3eeea0ef83fc57a5a15f9563fb0d9c7d2cf30a49
+          ref: afa1a738efd3153a29ee0f6531fc847f306ffa88
           path: opf
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
-          ref: d04da692a579b2256ad27ee8de216105806b48d2
+          ref: 85eb290bde665f9bdfffc9ad487007ea237ea676
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-editor
-          ref: d4c0af69dd96acba70430e31c4b7057b70891e49
+          ref: aea29cf6998127fda96a5cbcd6b608db4c4890e3
           path: opf-editor
           fetch-depth: 0
           persist-credentials: false
@@ -92,6 +92,7 @@ jobs:
           pnpm test:packed-ecosystem
           pnpm test:packed-browser
           node scripts/test-plain-whitespace-workflow.mjs artifacts/plain-whitespace-workflow installed
+          node scripts/test-readability-browser.mjs artifacts/readability-browser installed
           node scripts/test-installed-code-guards.mjs
       - run: npm pack --dry-run
       - name: Preserve candidate and raster evidence
@@ -101,6 +102,7 @@ jobs:
           name: candidate-opf-pptx-${{ runner.os }}-node${{ matrix.node }}
           path: |
             opf/artifacts/plain-whitespace-workflow/**
+            opf/artifacts/readability-browser/**
             opf/artifacts/editor/*report.json
             opf/artifacts/editor/*failure.png
             opf/artifacts/editor/*installed-code*.json
