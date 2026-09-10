@@ -86,6 +86,11 @@ jobs:
           pnpm test:registry-fidelity
           node scripts/test-quote-layout-geometry.mjs artifacts/npm/registry-consumer artifacts/quote-layout-geometry.json
           node packages/cli/test/packed.mjs --registry
+      - name: Measure candidate code internals with registry fonts
+        working-directory: opf
+        run: |
+          node scripts/test-code-layout-geometry.mjs artifacts/npm/registry-consumer artifacts/code-layout-geometry.json
+          node scripts/test-code-layout-browser.mjs artifacts/npm/registry-consumer artifacts/code-layout-geometry.json artifacts/code-layout-browser.json
       - name: Preserve installed-browser evidence
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -94,6 +99,8 @@ jobs:
           path: |
             opf/artifacts/editor/packed-browser-*-report.json
             opf/artifacts/editor/packed-browser-*-failure.png
+            opf/artifacts/code-layout-geometry.json
+            opf/artifacts/code-layout-browser.json
           retention-days: 7
           if-no-files-found: ignore
       - name: Report the verification boundary

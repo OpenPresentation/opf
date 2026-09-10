@@ -1,0 +1,297 @@
+{
+  "browser": "152.0.4191.66",
+  "geometryReportSha256": "726a0cd9c05688d3f49e639cf2c2e5f4ed6dcc88b4b0f1442f13bf87d3f7ef06",
+  "verifierSha256": "340c9d41f20f645c9297b4d9226e9b2d471827ae8f2696f315c4cf2cde784724",
+  "fontHashes": [
+    {
+      "family": "Cousine",
+      "weight": 400,
+      "sha256": "ca2264d6750d6c47df703be4486361a37ab943d42de6ea2bf794b7c7af767799",
+      "license": "Copyright 2026 The Cousine Project Authors (https://github.com/googlefonts/cousine)\n\nThis Font Software is licensed under the SIL Open Font License, Version 1.1.\nThis license is copied below, and is also available with a FAQ at:\nhttps://openfontlicense.org\n\n\n-----------------------------------------------------------\nSIL OPEN FONT LICENSE Version 1.1 - 26 February 2007\n-----------------------------------------------------------\n\nPREAMBLE\nThe goals of the Open Font License (OFL) are to stimulate worldwide\ndevelopment of collaborative font projects, to support the font creation\nefforts of academic and linguistic communities, and to provide a free and\nopen framework in which fonts may be shared and improved in partnership\nwith others.\n\nThe OFL allows the licensed fonts to be used, studied, modified and\nredistributed freely as long as they are not sold by themselves. The\nfonts, including any derivative works, can be bundled, embedded, \nredistributed and/or sold with any software provided that any reserved\nnames are not used by derivative works. The fonts and derivatives,\nhowever, cannot be released under any other type of license. The\nrequirement for fonts to remain under this license does not apply\nto any document created using the fonts or their derivatives.\n\nDEFINITIONS\n\"Font Software\" refers to the set of files released by the Copyright\nHolder(s) under this license and clearly marked as such. This may\ninclude source files, build scripts and documentation.\n\n\"Reserved Font Name\" refers to any names specified as such after the\ncopyright statement(s).\n\n\"Original Version\" refers to the collection of Font Software components as\ndistributed by the Copyright Holder(s).\n\n\"Modified Version\" refers to any derivative made by adding to, deleting,\nor substituting -- in part or in whole -- any of the components of the\nOriginal Version, by changing formats or by porting the Font Software to a\nnew environment.\n\n\"Author\" refers to any designer, engineer, programmer, technical\nwriter or other person who contributed to the Font Software.\n\nPERMISSION & CONDITIONS\nPermission is hereby granted, free of charge, to any person obtaining\na copy of the Font Software, to use, study, copy, merge, embed, modify,\nredistribute, and sell modified and unmodified copies of the Font\nSoftware, subject to the following conditions:\n\n1) Neither the Font Software nor any of its individual components,\nin Original or Modified Versions, may be sold by itself.\n\n2) Original or Modified Versions of the Font Software may be bundled,\nredistributed and/or sold with any software, provided that each copy\ncontains the above copyright notice and this license. These can be\nincluded either as stand-alone text files, human-readable headers or\nin the appropriate machine-readable metadata fields within text or\nbinary files as long as those fields can be easily viewed by the user.\n\n3) No Modified Version of the Font Software may use the Reserved Font\nName(s) unless explicit written permission is granted by the corresponding\nCopyright Holder. This restriction only applies to the primary font name as\npresented to the users.\n\n4) The name(s) of the Copyright Holder(s) or the Author(s) of the Font\nSoftware shall not be used to promote, endorse or advertise any\nModified Version, except to acknowledge the contribution(s) of the\nCopyright Holder(s) and the Author(s) or with their explicit written\npermission.\n\n5) The Font Software, modified or unmodified, in part or in whole,\nmust be distributed entirely under this license, and must not be\ndistributed under any other license. The requirement for fonts to\nremain under this license does not apply to any document created\nusing the Font Software.\n\nTERMINATION\nThis license becomes null and void if any of the above conditions are\nnot met.\n\nDISCLAIMER\nTHE FONT SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND,\nEXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF\nMERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT\nOF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL THE\nCOPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,\nINCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL\nDAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING\nFROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM\nOTHER DEALINGS IN THE FONT SOFTWARE."
+    },
+    {
+      "family": "Cousine",
+      "weight": 700,
+      "sha256": "f03c46c4bc5c0a3af4a1f4fbe5e3e16954581cced05cea20b3bffe12740d99d3",
+      "license": "Copyright 2026 The Cousine Project Authors (https://github.com/googlefonts/cousine)\n\nThis Font Software is licensed under the SIL Open Font License, Version 1.1.\nThis license is copied below, and is also available with a FAQ at:\nhttps://openfontlicense.org\n\n\n-----------------------------------------------------------\nSIL OPEN FONT LICENSE Version 1.1 - 26 February 2007\n-----------------------------------------------------------\n\nPREAMBLE\nThe goals of the Open Font License (OFL) are to stimulate worldwide\ndevelopment of collaborative font projects, to support the font creation\nefforts of academic and linguistic communities, and to provide a free and\nopen framework in which fonts may be shared and improved in partnership\nwith others.\n\nThe OFL allows the licensed fonts to be used, studied, modified and\nredistributed freely as long as they are not sold by themselves. The\nfonts, including any derivative works, can be bundled, embedded, \nredistributed and/or sold with any software provided that any reserved\nnames are not used by derivative works. The fonts and derivatives,\nhowever, cannot be released under any other type of license. The\nrequirement for fonts to remain under this license does not apply\nto any document created using the fonts or their derivatives.\n\nDEFINITIONS\n\"Font Software\" refers to the set of files released by the Copyright\nHolder(s) under this license and clearly marked as such. This may\ninclude source files, build scripts and documentation.\n\n\"Reserved Font Name\" refers to any names specified as such after the\ncopyright statement(s).\n\n\"Original Version\" refers to the collection of Font Software components as\ndistributed by the Copyright Holder(s).\n\n\"Modified Version\" refers to any derivative made by adding to, deleting,\nor substituting -- in part or in whole -- any of the components of the\nOriginal Version, by changing formats or by porting the Font Software to a\nnew environment.\n\n\"Author\" refers to any designer, engineer, programmer, technical\nwriter or other person who contributed to the Font Software.\n\nPERMISSION & CONDITIONS\nPermission is hereby granted, free of charge, to any person obtaining\na copy of the Font Software, to use, study, copy, merge, embed, modify,\nredistribute, and sell modified and unmodified copies of the Font\nSoftware, subject to the following conditions:\n\n1) Neither the Font Software nor any of its individual components,\nin Original or Modified Versions, may be sold by itself.\n\n2) Original or Modified Versions of the Font Software may be bundled,\nredistributed and/or sold with any software, provided that each copy\ncontains the above copyright notice and this license. These can be\nincluded either as stand-alone text files, human-readable headers or\nin the appropriate machine-readable metadata fields within text or\nbinary files as long as those fields can be easily viewed by the user.\n\n3) No Modified Version of the Font Software may use the Reserved Font\nName(s) unless explicit written permission is granted by the corresponding\nCopyright Holder. This restriction only applies to the primary font name as\npresented to the users.\n\n4) The name(s) of the Copyright Holder(s) or the Author(s) of the Font\nSoftware shall not be used to promote, endorse or advertise any\nModified Version, except to acknowledge the contribution(s) of the\nCopyright Holder(s) and the Author(s) or with their explicit written\npermission.\n\n5) The Font Software, modified or unmodified, in part or in whole,\nmust be distributed entirely under this license, and must not be\ndistributed under any other license. The requirement for fonts to\nremain under this license does not apply to any document created\nusing the Font Software.\n\nTERMINATION\nThis license becomes null and void if any of the above conditions are\nnot met.\n\nDISCLAIMER\nTHE FONT SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND,\nEXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF\nMERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT\nOF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL THE\nCOPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,\nINCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL\nDAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING\nFROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM\nOTHER DEALINGS IN THE FONT SOFTWARE."
+    }
+  ],
+  "toleranceReferencePixels": 0.1,
+  "results": [
+    {
+      "source": "a\tb",
+      "role": "body",
+      "fontSize": 18,
+      "fontWeight": 400,
+      "expectedAdvance": 54.0087890625,
+      "cssOnlyAdvance": 32.40625,
+      "acceptedAdvance": 54.0302734375,
+      "bboxWidth": 54.01953125,
+      "domText": "a\tb",
+      "positions": [
+        {
+          "kind": "text",
+          "source": "a",
+          "expectedX": 0,
+          "expectedEndX": 10.8017578125,
+          "actualX": 0,
+          "actualEndX": 10.8125
+        },
+        {
+          "kind": "tab",
+          "source": "\t",
+          "expectedX": 10.8017578125,
+          "expectedEndX": 43.20703125,
+          "actualX": 10.801759719848633,
+          "actualEndX": 43.207035064697266
+        },
+        {
+          "kind": "text",
+          "source": "b",
+          "expectedX": 43.20703125,
+          "expectedEndX": 54.0087890625,
+          "actualX": 43.20703125,
+          "actualEndX": 54.01953125
+        }
+      ]
+    },
+    {
+      "source": "aaaa\tb",
+      "role": "body",
+      "fontSize": 18,
+      "fontWeight": 400,
+      "expectedAdvance": 97.2158203125,
+      "cssOnlyAdvance": 64.8125,
+      "acceptedAdvance": 97.23828125,
+      "bboxWidth": 97.2265625,
+      "domText": "aaaa\tb",
+      "positions": [
+        {
+          "kind": "text",
+          "source": "aaaa",
+          "expectedX": 0,
+          "expectedEndX": 43.20703125,
+          "actualX": 0,
+          "actualEndX": 43.21875
+        },
+        {
+          "kind": "tab",
+          "source": "\t",
+          "expectedX": 43.20703125,
+          "expectedEndX": 86.4140625,
+          "actualX": 43.207035064697266,
+          "actualEndX": 86.41407012939453
+        },
+        {
+          "kind": "text",
+          "source": "b",
+          "expectedX": 86.4140625,
+          "expectedEndX": 97.2158203125,
+          "actualX": 86.4140625,
+          "actualEndX": 97.2265625
+        }
+      ]
+    },
+    {
+      "source": "\tconst value = \"two  spaces\";",
+      "role": "body",
+      "fontSize": 18,
+      "fontWeight": 400,
+      "expectedAdvance": 345.65625,
+      "cssOnlyAdvance": 313.265625,
+      "acceptedAdvance": 345.66015625,
+      "bboxWidth": 345.66015625,
+      "domText": "\tconst value = \"two  spaces\";",
+      "positions": [
+        {
+          "kind": "tab",
+          "source": "\t",
+          "expectedX": 0,
+          "expectedEndX": 43.20703125,
+          "actualX": 0,
+          "actualEndX": 43.20703125
+        },
+        {
+          "kind": "text",
+          "source": "const value = \"two  spaces\";",
+          "expectedX": 43.20703125,
+          "expectedEndX": 345.65625,
+          "actualX": 43.20703125,
+          "actualEndX": 345.66015625
+        }
+      ]
+    },
+    {
+      "source": "  indentation  ",
+      "role": "body",
+      "fontSize": 18,
+      "fontWeight": 400,
+      "expectedAdvance": 162.0263671875,
+      "cssOnlyAdvance": 162.03125,
+      "acceptedAdvance": 162.03125,
+      "bboxWidth": 162.03125,
+      "domText": "  indentation  ",
+      "positions": [
+        {
+          "kind": "text",
+          "source": "  indentation  ",
+          "expectedX": 0,
+          "expectedEndX": 162.0263671875,
+          "actualX": 0,
+          "actualEndX": 162.03125
+        }
+      ]
+    },
+    {
+      "source": "a\t",
+      "role": "body",
+      "fontSize": 18,
+      "fontWeight": 400,
+      "expectedAdvance": 43.20703125,
+      "cssOnlyAdvance": 21.609375,
+      "acceptedAdvance": 43.2177734375,
+      "bboxWidth": 43.20703125,
+      "domText": "a\t",
+      "positions": [
+        {
+          "kind": "text",
+          "source": "a",
+          "expectedX": 0,
+          "expectedEndX": 10.8017578125,
+          "actualX": 0,
+          "actualEndX": 10.8125
+        },
+        {
+          "kind": "tab",
+          "source": "\t",
+          "expectedX": 10.8017578125,
+          "expectedEndX": 43.20703125,
+          "actualX": 10.801759719848633,
+          "actualEndX": 43.207035064697266
+        }
+      ]
+    },
+    {
+      "source": "\t\t",
+      "role": "body",
+      "fontSize": 18,
+      "fontWeight": 400,
+      "expectedAdvance": 86.4140625,
+      "cssOnlyAdvance": 21.609375,
+      "acceptedAdvance": 86.4140625,
+      "bboxWidth": 86.4140625,
+      "domText": "\t\t",
+      "positions": [
+        {
+          "kind": "tab",
+          "source": "\t",
+          "expectedX": 0,
+          "expectedEndX": 43.20703125,
+          "actualX": 0,
+          "actualEndX": 43.20703125
+        },
+        {
+          "kind": "tab",
+          "source": "\t",
+          "expectedX": 43.20703125,
+          "expectedEndX": 86.4140625,
+          "actualX": 43.207035064697266,
+          "actualEndX": 86.41407012939453
+        }
+      ]
+    },
+    {
+      "source": " \t \tkeep  ",
+      "role": "body",
+      "fontSize": 18,
+      "fontWeight": 400,
+      "expectedAdvance": 151.224609375,
+      "cssOnlyAdvance": 108.03125,
+      "acceptedAdvance": 151.248046875,
+      "bboxWidth": 151.2265625,
+      "domText": " \t \tkeep  ",
+      "positions": [
+        {
+          "kind": "text",
+          "source": " ",
+          "expectedX": 0,
+          "expectedEndX": 10.8017578125,
+          "actualX": 0,
+          "actualEndX": 10.8125
+        },
+        {
+          "kind": "tab",
+          "source": "\t",
+          "expectedX": 10.8017578125,
+          "expectedEndX": 43.20703125,
+          "actualX": 10.801759719848633,
+          "actualEndX": 43.207035064697266
+        },
+        {
+          "kind": "text",
+          "source": " ",
+          "expectedX": 43.20703125,
+          "expectedEndX": 54.0087890625,
+          "actualX": 43.20703125,
+          "actualEndX": 54.01953125
+        },
+        {
+          "kind": "tab",
+          "source": "\t",
+          "expectedX": 54.0087890625,
+          "expectedEndX": 86.4140625,
+          "actualX": 54.00878143310547,
+          "actualEndX": 86.41405487060547
+        },
+        {
+          "kind": "text",
+          "source": "keep  ",
+          "expectedX": 86.4140625,
+          "expectedEndX": 151.224609375,
+          "actualX": 86.4140625,
+          "actualEndX": 151.2265625
+        }
+      ]
+    },
+    {
+      "source": "src\tCaseSensitive.ts",
+      "role": "filename",
+      "fontSize": 16,
+      "fontWeight": 700,
+      "expectedAdvance": 192.03125,
+      "cssOnlyAdvance": 192.03125,
+      "acceptedAdvance": 192.0390625,
+      "bboxWidth": 192.03125,
+      "domText": "src\tCaseSensitive.ts",
+      "positions": [
+        {
+          "kind": "text",
+          "source": "src",
+          "expectedX": 0,
+          "expectedEndX": 28.8046875,
+          "actualX": 0,
+          "actualEndX": 28.8125
+        },
+        {
+          "kind": "tab",
+          "source": "\t",
+          "expectedX": 28.8046875,
+          "expectedEndX": 38.40625,
+          "actualX": 28.8046875,
+          "actualEndX": 38.40625
+        },
+        {
+          "kind": "text",
+          "source": "CaseSensitive.ts",
+          "expectedX": 38.40625,
+          "expectedEndX": 192.03125,
+          "actualX": 38.40625,
+          "actualEndX": 192.03125
+        }
+      ]
+    }
+  ],
+  "externalRequests": [],
+  "errors": [],
+  "scope": "Standalone core code geometry rendered by this controlled SVG harness using exact Cousine regular/bold bytes. Eight cases preserve literal tabs/whitespace and match accepted advances and segment starts/ends within 0.1 reference pixel. CSS-only tab behavior is observed separately. This is not integrated OPF renderer output, native PowerPoint output, glyph-outline equivalence or broad font/script conformance."
+}

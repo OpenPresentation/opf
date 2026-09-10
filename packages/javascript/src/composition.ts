@@ -334,6 +334,184 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
   return {algorithm:'quote-flow-v1',textMeasurement:options.textMeasurement?'provided':'estimated',parts,diagnostics,overflow:diagnostics.length>0};
 }
 
+export interface CodeContent { source: string; language?: string; filename?: string }
+export interface CodeLineSegment {
+  kind: 'text' | 'tab';
+  start: number;
+  end: number;
+  /** Measured position relative to this displayed line's origin, in reference pixels. */
+  x: number;
+  width: number;
+}
+/** Exact half-open UTF-16 offsets into the part text, including consumed hard line breaks. */
+export interface CodeLineSource {
+  start: number;
+  end: number;
+  nextStart: number;
+  boundary: 'soft' | 'hard' | 'end';
+  width: number;
+  /** Explicit tab placement is required in SVG; CSS tab-size alone does not implement it. */
+  segments: CodeLineSegment[];
+}
+export interface CodeTextFit extends TextFit {
+  sourceLines: CodeLineSource[];
+  /** Tabs advance to the next multiple of four measured spaces from each displayed line's origin. */
+  tabSize: 4;
+  tabWidth: number;
+}
+export interface CodeTextPart {
+  role: 'filename' | 'language' | 'body';
+  path: string;
+  /** Original text, without case conversion, whitespace normalization or discarded newlines. */
+  text: string;
+  sources: {path:string;start:number;end:number}[];
+  generated: boolean;
+  box: LayoutBox;
+  requestedFontSize: number;
+  minFontSize: number;
+  requestedStyle: TextStyle;
+  style: TextStyle;
+  fit?: CodeTextFit;
+}
+export interface CodeLayoutDiagnostic extends LayoutDiagnostic {
+  reason: 'invalid-part-box' | 'part-outside-cell' | 'text-fit' | 'part-overlap';
+  parts: CodeTextPart['role'][];
+}
+export interface CodeLayout {
+  algorithm: 'code-flow-v1';
+  textMeasurement: 'estimated' | 'provided';
+  parts: CodeTextPart[];
+  diagnostics: CodeLayoutDiagnostic[];
+  overflow: boolean;
+}
+export interface CodeLayoutOptions extends QuoteLayoutOptions {}
+
+/** Fit code without using prose whitespace normalization. The source remains reconstructable. */
+function fitCodeText(text:string,box:LayoutBox,size:number,minimum:number,step:number,measure:MeasureTextWidth):CodeTextFit {
+  const layout=(fontSize:number):CodeTextFit=>{
+    const tabWidth=measure(' ',fontSize)*4;
+    if (!Number.isFinite(tabWidth)||text.includes('\t')&&tabWidth<=0) throw new RangeError('Code tabs require a positive finite measured space advance.');
+    const measureLine=(start:number,end:number,record=false)=>{
+      let x=0,offset=start;
+      const segments:CodeLineSegment[]=[];
+      for (const [index,segment] of text.slice(start,end).split('\t').entries()) {
+        if (index) {
+          const next=(Math.floor(x/tabWidth+1e-9)+1)*tabWidth;
+          if (record) segments.push({kind:'tab',start:offset,end:offset+1,x,width:next-x});
+          x=next;offset++;
+        }
+        if (segment) {
+          const advance=measure(segment,fontSize);
+          if (record) segments.push({kind:'text',start:offset,end:offset+segment.length,x,width:advance});
+          x+=advance;offset+=segment.length;
+        }
+      }
+      return {width:x,segments};
+    };
+    const width=(start:number,end:number)=>measureLine(start,end).width;
+    const sourceLines:CodeLineSource[]=[];
+    let start=0,end=0;
+    const push=(last:number,nextStart:number,boundary:CodeLineSource['boundary'])=>{
+      sourceLines.push({start,end:last,nextStart,boundary,...measureLine(start,last,true)});
+      start=nextStart;end=nextStart;
+    };
+    for (const token of text.matchAll(/\r\n|\r|\n|[^\S\r\n]+|[^\s]+/gu)) {
+      if (token.index===undefined) throw new Error('Missing code token source offset.');
+      const a=token.index,b=a+token[0].length;
+      if (/^[\r\n]/.test(token[0])) {push(a,b,'hard');continue;}
+      if (width(start,b)<=box.width+.01) {end=b;continue;}
+      // Prefer a word boundary. Keep indentation with a following token's
+      // fitting prefix instead of eagerly placing it on a separate line.
+      if (end>start && /\S/u.test(text.slice(start,end))) push(a,a,'soft');
+      if (width(start,b)<=box.width+.01) {end=b;continue;}
+      for (const segment of textSegments.segment(token[0])) {
+        const next=a+segment.index+segment.segment.length;
+        if (end>start && width(start,next)>box.width+.01) push(a+segment.index,a+segment.index,'soft');
+        end=next;
+      }
+    }
+    push(end,end,'end');
+    const lineHeight=fontSize*1.22;
+    return {lines:sourceLines.map(line=>text.slice(line.start,line.end)),sourceLines,fontSize,lineHeight,tabSize:4,tabWidth,
+      overflow:sourceLines.length*lineHeight>box.height+.01||sourceLines.some(line=>line.width>box.width+.01)};
+  };
+  let result=layout(size);
+  // Sizes are nominal 14/18 reference pixels or the explicit floor, so this
+  // takes at most 19 trials regardless of the canvas scale.
+  while(result.overflow&&size>minimum) {size=Math.max(minimum,size-step);result=layout(size);}
+  return result;
+}
+
+/** Shared filename/language/body allocation. Consumers must reuse the accepted fits and styles. */
+export function layoutCode(value:string|CodeContent,box:LayoutBox,options:CodeLayoutOptions={}):CodeLayout {
+  const shorthand=typeof value==='string',code=shorthand?{source:value}:value;
+  if (!code||Array.isArray(code)||typeof code.source!=='string'||[code.language,code.filename].some(field=>field!==undefined&&typeof field!=='string')) {
+    throw new TypeError('Code content must be a string or source object with optional string language/filename.');
+  }
+  const scale=options.scale??1,minimum=(options.minFontSize??16)*scale;
+  if (![box.x,box.y,box.width,box.height,box.x+box.width,box.y+box.height,scale,minimum,Math.max(18*scale,minimum)*1.22].every(Number.isFinite)||box.width<=0||box.height<=0||scale<=0||minimum<=0) {
+    throw new RangeError('Code dimensions, scale and minimum font size must be finite and positive.');
+  }
+  if (options.overflow!==undefined&&!['warn','error'].includes(options.overflow)) throw new RangeError('Invalid code overflow policy.');
+  const path=options.path??'code',inner={x:box.x+18,y:box.y+18,width:box.width-36,height:box.height-36};
+  const parts:CodeTextPart[]=[],diagnostics:CodeLayoutDiagnostic[]=[];
+  const add=(role:CodeTextPart['role'],text:string,partPath:string,generated=false)=>{
+    const requestedStyle:TextStyle={fontFamily:options.fonts?.code??'monospace',fontWeight:role==='body'?400:700,italic:false,path:partPath};
+    const part:CodeTextPart={role,path:partPath,text,sources:generated?[]:[{path:partPath,start:0,end:text.length}],generated,box:{...inner},
+      requestedFontSize:Math.max((role==='body'?18:14)*scale,minimum),minFontSize:minimum,requestedStyle,
+      style:resolveTextStyle({...requestedStyle},options.textMeasurement)};
+    parts.push(part);return part;
+  };
+  if (code.filename) add('filename',code.filename,`${path}.filename`);
+  if (code.language) add('language',code.language,`${path}.language`);
+  if (!parts.length) add('language','code',path,true);
+  const body=add('body',code.source,shorthand?path:`${path}.source`),headers=parts.filter(part=>part!==body);
+  const usable=(area:LayoutBox)=>[area.x,area.y,area.width,area.height].every(Number.isFinite)&&area.width>0&&area.height>0;
+  const fit=(part:CodeTextPart,area:LayoutBox,size=part.requestedFontSize,floor=minimum)=>usable(area)
+    ?fitCodeText(part.text,area,size,floor,scale,textWidthMeasurer(part.style,options.textMeasurement)):undefined;
+  if (usable(inner)) {
+    // There are at most two metadata parts and four nominal/floor combinations.
+    const combinations=headers.reduce<{part:CodeTextPart;size:number}[][]>((choices,part)=>
+      choices.flatMap(choice=>[...new Set([part.requestedFontSize,minimum])].map(size=>[...choice,{part,size}])),[[]]);
+    type Allocation={part:CodeTextPart;box:LayoutBox;fit:CodeTextFit|undefined};
+    let selected:{allocations:Allocation[];score:number;overflow:boolean}|undefined;
+    for (const combination of combinations) {
+      let y=inner.y;
+      const allocations:Allocation[]=[];
+      for (const [index,{part,size}] of combination.entries()) {
+        const measured=fitCodeText(part.text,inner,size,size,scale,textWidthMeasurer(part.style,options.textMeasurement));
+        const area={...inner,y,height:measured.lines.length*measured.lineHeight};
+        allocations.push({part,box:area,fit:usable(area)?{...measured,overflow:measured.sourceLines.some(line=>line.width>area.width+.01)}:undefined});
+        y+=area.height+(index<headers.length-1?8:12);
+      }
+      const area={...inner,y,height:inner.y+inner.height-y};
+      allocations.push({part:body,box:area,fit:fit(body,area)});
+      const overflow=allocations.some(({box,fit})=>!fit||fit.overflow||!usable(box)||box.y+box.height>inner.y+inner.height+.01);
+      const score=allocations.reduce((sum,{part,fit})=>sum+(part.requestedFontSize-(fit?.fontSize??minimum))/scale,0);
+      if (!selected||!overflow&&(selected.overflow||score<selected.score)||overflow&&selected.overflow) selected={allocations,score,overflow};
+    }
+    if (selected) for (const {part,box,fit} of selected.allocations) {part.box=box;part.fit=fit;}
+  }
+  const report=(reason:CodeLayoutDiagnostic['reason'],part:CodeTextPart,roles:CodeTextPart['role'][],message:string)=>
+    diagnostics.push({code:'text-overflow',reason,path:part.path,parts:roles,message});
+  for (const part of parts) {
+    if (!part.fit) report('invalid-part-box',part,[part.role],`Code ${part.role} has no usable space after metadata and insets; increase the cell or change the arrangement.`);
+    else if (part.fit.overflow) report('text-fit',part,[part.role],`Code ${part.role} exceeds its space at the readability floor; increase its space or change the arrangement.`);
+    const area=part.box;
+    if (usable(area)&&(area.x<box.x||area.y<box.y||area.x+area.width>box.x+box.width+.01||area.y+area.height>box.y+box.height+.01)) {
+      report('part-outside-cell',part,[part.role],`Code ${part.role} extends outside its cell; increase the cell or change the arrangement.`);
+    }
+  }
+  for (const [index,first] of parts.entries()) {
+    const second=parts[index+1];
+    if (first.fit&&second?.fit&&first.box.y+first.fit.lines.length*first.fit.lineHeight>second.box.y+.01) {
+      report('part-overlap',first,[first.role,second.role],'Code part line boxes overlap; do not accept this layout without more space.');
+    }
+  }
+  if (diagnostics.length&&options.overflow==='error') throw new OPFCompositionError(diagnostics);
+  return {algorithm:'code-flow-v1',textMeasurement:options.textMeasurement?'provided':'estimated',parts,diagnostics,overflow:diagnostics.length>0};
+}
+
 export interface RichTextRun {
   text: string; bold?: boolean; italic?: boolean; underline?: boolean; strikethrough?: boolean;
   color?: string; fontSize?: number; fontFamily?: string; link?: string; superscript?: boolean; subscript?: boolean;
