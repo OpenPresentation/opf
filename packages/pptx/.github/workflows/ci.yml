@@ -35,14 +35,14 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
-          ref: f30ae54134fb075749f228532b40df4b36a0770d
+          ref: 626bc8c80495733264a692401e6a8c96663dd62f
           path: opf
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
-          ref: 379b1402b4d06de79b98a35360f3ef5692d3659b
+          ref: 44ff76fe19ae9de80d2aaa962aa7e43fabce02bc
           path: opf-render
           fetch-depth: 0
           persist-credentials: false

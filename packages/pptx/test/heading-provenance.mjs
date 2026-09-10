@@ -2,6 +2,8 @@ import assert from 'node:assert/strict';
 import {unzipSync,zipSync} from 'fflate';
 import {toPptx,fromPptx} from '../dist/index.js';
 import {loadOfficeFontRegistry} from '@openpresentation/opf-render/fonts-node';
+import {resolvePresentation} from '@openpresentation/opf-render/svg';
+import PptxGenJS from '../vendor/pptxgenjs/pptxgen.es.js';
 const fonts=await loadOfficeFontRegistry(),enc=new TextEncoder(),dec=new TextDecoder();
 const deck={design:{fontScheme:'roboto',dimensions:{widthInches:5.625,heightInches:10}},slides:[{tag:'Source',title:'A complete heading with enough words to wrap across lines',subtitle:'Supporting text',text:'Body remains present'}]};
 const bytes=await toPptx(deck,{textMeasurement:fonts.textMeasurement}),initial=(await fromPptx(bytes)).slides[0];
@@ -45,3 +47,40 @@ for(const [name,mutate] of Object.entries(corruptions)) {
   const text=JSON.stringify(result);for(const word of ['complete','heading','enough','words','wrap','across','lines'])assert.ok(text.includes(word),`${name}: retain native ${word}`);
 }
 console.log(`Heading provenance: native edits, shape renaming/reordering and ${Object.keys(corruptions).length} damaged/ambiguous group fallbacks preserve visible words.`);
+
+// A complete role prevents body promotion into *other*, absent heading roles.
+// Compare every quote line, including repeated lines and the final attribution.
+let roleCases=0;
+for(const textMeasurement of [fonts.textMeasurement,undefined])
+for(const dimensions of [{widthInches:1280/96,heightInches:720/96},{widthInches:540/96,heightInches:960/96}]) {
+ for(const headings of [{title:'Known title'},{tag:'Known tag'},{subtitle:'Known subtitle'},{title:'Known title',subtitle:'Known subtitle'}]) {
+  const document={design:{dimensions,fontScheme:'roboto'},slides:[{...headings,quote:{text:'Keep this body line in the body. '.repeat(6),attribution:'A reviewer',source:'Recorded interview'}}]};
+  const source=structuredClone(document),bound=resolvePresentation(document,{textMeasurement}).slides[0];
+  const expected=bound.geometry.items.find(item=>item.quoteLayout).quoteLayout.parts.flatMap(part=>part.fit.lines.filter(Boolean).map(text=>({type:'text',text})));
+  const exported=await toPptx(document,{textMeasurement}),copy=new Uint8Array(exported),result=(await fromPptx(exported)).slides[0];
+  assert.deepEqual(document,source);assert.deepEqual(exported,copy);
+  for(const field of ['title','subtitle','tag'])assert.equal(result[field],headings[field]);
+  assert.deepEqual(result.blocks,expected);roleCases++;
+  if(!headings.subtitle&&headings.title) {
+   const parts=unzipSync(exported);let changed=false;
+   slide(parts,xml=>xml.replace(/<p:sp>[\s\S]*?<\/p:sp>/g,shape=>{
+    if(changed||shape.includes('OPF heading')||!shape.includes('<a:t>'))return shape;
+    changed=true;
+    return shape.replace(/<p:nvPr\s*\/>|<p:nvPr>([\s\S]*?)<\/p:nvPr>/,(_,content)=>`<p:nvPr>${content??''}<p:ph type="subTitle"/></p:nvPr>`);
+   }));
+   assert.ok(changed);
+   const explicit=(await fromPptx(zipSync(parts))).slides[0];
+   assert.equal(explicit.subtitle,expected[0].text,'A current native subtitle placeholder remains authoritative');
+   assert.deepEqual(explicit.blocks,expected.slice(1));
+  }
+ }
+}
+// Presentations without OPF roles retain the existing native geometry fallback.
+const ordinary=new PptxGenJS(),native=ordinary.addSlide();
+native.addText('Ordinary title',{x:.4,y:.3,w:8,h:.4,fontSize:28});
+native.addText('Ordinary subtitle',{x:.4,y:.9,w:8,h:.3,fontSize:18});
+native.addText('Ordinary body',{x:.4,y:2,w:8,h:1,fontSize:16});
+const inferred=(await fromPptx(await ordinary.write({outputType:'nodebuffer'}))).slides[0];
+assert.equal(inferred.title,'Ordinary title');assert.equal(inferred.subtitle,'Ordinary subtitle');
+assert.deepEqual(inferred.blocks,[{type:'text',text:'Ordinary body'}]);
+console.log(`Heading role isolation: ${roleCases} wide/portrait quote imports, explicit native placeholders and ordinary untagged title/subtitle inference pass.`);

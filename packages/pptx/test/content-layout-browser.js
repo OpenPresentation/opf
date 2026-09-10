@@ -1,5 +1,5 @@
 import {toPptx, fromPptx} from '@openpresentation/opf-pptx';
-import {renderSvgDeck} from '@openpresentation/opf-render/svg';
+import {renderSvgDeck,resolvePresentation} from '@openpresentation/opf-render/svg';
 import {validatePresentation} from '@openpresentation/opf';
 import {unzipSync} from 'fflate';
 
@@ -38,6 +38,14 @@ try {
   check(JSON.stringify(imported).includes('Reviewer - Interview'), 'Quote source survives browser export/reimport');
   document.querySelector('main').innerHTML = svgs[1];
   check(document.querySelector('main').textContent.includes('Reviewer - Interview'), 'Quote attribution/source appears in actual preview DOM');
+  for(const width of [1280,540])for(const heading of ['title','subtitle','tag']) {
+    const quote={design:{fontScheme:'roboto',dimensions:{widthInches:width/96,heightInches:(width===540?960:720)/96}},slides:[{[heading]:'Known heading',quote:{text:'Keep the complete body line. '.repeat(6),attribution:'Reviewer',source:'Interview'}}]};
+    const layout=resolvePresentation(quote).slides[0].geometry.items.find(item=>item.quoteLayout).quoteLayout;
+    const expected=layout.parts.flatMap(part=>part.fit.lines.filter(Boolean).map(text=>({type:'text',text})));
+    const restored=(await fromPptx(await toPptx(quote))).slides[0];
+    for(const field of ['title','subtitle','tag'])check(restored[field]===(field===heading?'Known heading':undefined),'Absent heading roles stay absent: '+field);
+    check(JSON.stringify(restored.blocks)===JSON.stringify(expected),'Every quote body/footer line retains its order, multiplicity and role');
+  }
   output.textContent = JSON.stringify({passed: true, checks, measurement: 'browser-default; loaded fonts and native rasters verified separately'}, null, 2);
   document.title = 'PASS: native content layout';
 } catch (error) {

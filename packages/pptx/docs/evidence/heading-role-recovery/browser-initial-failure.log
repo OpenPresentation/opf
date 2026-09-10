@@ -1,0 +1,31 @@
+
+> @openpresentation/opf-pptx@0.7.0 test:browser
+> npm run build:browser-check && node test/browser-check.mjs
+
+
+> @openpresentation/opf-pptx@0.7.0 build:browser-check
+> node scripts/build-browser-check.mjs
+
+Browser build passed: browser decoder selected, no Sharp/native inputs. Serve the repository and open /artifacts/webp-fallback/browser/index.html for pixel checks.
+Native rich table import browser bundle ready at /artifacts/native-rich-table-import/browser/index.html.
+Native conditional table style browser bundle ready at /artifacts/native-table-styles/browser/index.html.
+Native styled table browser bundle ready at /artifacts/native-styled-table-import/browser/index.html.
+Native content browser bundle ready at /artifacts/native-content-layout/browser/index.html.
+Chart color/workbook browser bundle ready at /artifacts/chart-colors/browser/index.html.
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Error: Absent heading roles stay absent: title
+    at check (http://127.0.0.1:65348/artifacts/native-content-layout/browser/bundle.js:52567:21)
+    at http://127.0.0.1:65348/artifacts/native-content-layout/browser/bundle.js:52605:55
+    at file:///Users/michael/Source/opf-pptx/test/browser-check.mjs:37:12 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'FAIL: native content layout',
+  expected: /^PASS:/,
+  operator: 'match',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
