@@ -7,7 +7,7 @@ import {chromium} from 'playwright';
 import {examples} from '@openpresentation/opf/examples';
 import {renderSvg,resolvePresentation} from '../dist/svg.js';
 import {loadOfficeFontRegistry} from '../dist/fonts-node.js';
-const hash=bytes=>createHash('sha256').update(bytes).digest('hex'),out=process.argv[2];
+const hash=bytes=>createHash('sha256').update(bytes).digest('hex'),out=process.argv[2]??'artifacts/rich-spacing-browser';
 if(out)await mkdir(out,{recursive:true});
 const fonts=await loadOfficeFontRegistry({substitutionPolicy:'visual'}),faces=fonts.embeddedFonts.filter(face=>face.family==='Carlito');
 assert.equal(faces.length,4);
@@ -61,8 +61,7 @@ try {
       const maxBoundaryGap=Math.max(...fragments.map(fragment=>Math.abs(fragment.gapAfterPreviousFragment??0)));
       results.push({name,mode,sourceSha256:hash(source),svgSha256:hash(svg),...result,maxAdvanceDifference,maxBoundaryGap});
       if(out){await writeFile(path.join(out,`${name}-${mode}.svg`),svg);await page.locator('svg').screenshot({path:path.join(out,`${name}-${mode}.png`)});}
-      assert.ok(maxBoundaryGap<.1,`${name}: ${mode} run spacing differs`);
-      if(mode==='measured')assert.ok(maxAdvanceDifference<.1,`${name}: measured width differs`);
+
     }
   }
   assert.deepEqual(errors,[]);assert.deepEqual(requests,[]);
@@ -71,4 +70,5 @@ try {
     scope:'Two unchanged gallery slides with exact Carlito bytes in both modes; estimated control registers those bytes under the authored Aptos names to isolate measurement differences. Measured mode explicitly resolves Aptos to Carlito as a visual substitute. Rich source mapping, advances and fragment spacing are checked, not font compatibility, all-slide visual quality, native export or pixel equivalence.'};
   if(out)await writeFile(path.join(out,'report.json'),JSON.stringify(report,null,2)+'\n');
   console.log(JSON.stringify(results.map(({name,mode,maxAdvanceDifference,maxBoundaryGap})=>({name,mode,maxAdvanceDifference,maxBoundaryGap})),null,2));
+  for(const result of results){assert.ok(result.maxBoundaryGap<.1,`${result.name}: ${result.mode} run spacing differs by ${result.maxBoundaryGap}px`);if(result.mode==='measured')assert.ok(result.maxAdvanceDifference<.1,`${result.name}: measured width differs by ${result.maxAdvanceDifference}px`);}
 }finally{await browser.close();}
