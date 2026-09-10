@@ -43,7 +43,7 @@ export function importMetricGroups(shapes,paragraphs,relationships,entries,repor
       let tags;
       try {
         const all=array(parser.parse(decoder.decode(entries[rel.path]))['p:tagLst']?.['p:tag']);
-        tagCounts.set(shape,(tagCounts.get(shape)??0)+all.filter(tag=>[TAG,'OPF_CODE_V1'].includes(tag.name?.toUpperCase())).length);
+        tagCounts.set(shape,(tagCounts.get(shape)??0)+all.filter(tag=>/^OPF_/i.test(tag.name)).length);
         tags=all.filter(tag=>tag.name?.toUpperCase()===TAG);
       } catch {report({code:'invalid-metric-provenance',message:'Unreadable metric tags; visible native shapes were retained.'});continue;}
       for (const tag of tags) try {

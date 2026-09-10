@@ -128,7 +128,7 @@ export function importCodeGroups(shapes, paragraphs, relationships, entries, rep
       let tags;
       try {
         const all=array(parser.parse(dec.decode(entries[rel.path]))['p:tagLst']?.['p:tag']);
-        tagCounts.set(shape,(tagCounts.get(shape)??0)+all.filter(tag=>[TAG,'OPF_METRIC_V1'].includes(tag.name?.toUpperCase())).length);
+        tagCounts.set(shape,(tagCounts.get(shape)??0)+all.filter(tag=>/^OPF_/i.test(tag.name)).length);
         tags=all.filter(tag=>tag.name?.toUpperCase()===TAG);
       }
       catch { report({code:'invalid-code-provenance',message:'Unreadable code tags; visible native shapes were retained.'}); continue; }

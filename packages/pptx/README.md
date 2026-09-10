@@ -1,5 +1,7 @@
 # OPF PPTX
 
+Unpublished integration work consumes shared heading/scalar/rich line placement, including `textRasterPadding`, through editable native line boxes without autofit. Complete heading tags retain title/subtitle/tag roles, line ordering and current edited text during import. Incomplete, duplicate or ambiguous tags fall back to ordinary import with diagnostics; original whitespace, wrapping, formatting and geometry are not reconstructed. See the [source contract and limits](https://github.com/OpenPresentation/opf/blob/codex/shared-metric-integration-20260910/docs/plans/text-placement.md). These changes are not in published 0.7.0 and are not native raster certification.
+
 Pure local PowerPoint conversion tooling for Open Presentation Format documents. This repo owns the Phase 3 and Phase 4 toolkit lanes: OPF to PPTX export and PPTX to OPF import.
 
 Version 0.7.0's [shared-code integration](docs/code-roundtrip.md) preserves exact source/metadata through guarded native tags and editable lines. XML-forbidden code characters reject export with `invalid-code-text`, the OPF field path and UTF-16 offset; schema validation alone does not establish XML representability. Native source recovery does not reconstruct formatting, geometry or font theme.

@@ -37,6 +37,8 @@ export interface ToPptxOptions {
   /** Default compatible converts WebP to a static PNG. Preserve embeds original WebP bytes. */
   imageFormat?: "compatible" | "preserve";
   textMeasurement?: TextMeasurement;
+  /** Match preview/pagination clearance around supplied vector text outlines; default 1. */
+  textRasterPadding?: number;
   onDiagnostic?: (diagnostic: LayoutDiagnostic) => void;
   baseDir?: string;
   compressionLevel?: number;
