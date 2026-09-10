@@ -30,14 +30,14 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
-          ref: 44ff76fe19ae9de80d2aaa962aa7e43fabce02bc
+          ref: 6520f091a95aa95be5993580adf5df567eb439c8
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-editor
-          ref: 6e0b7d2f1b4369fc0a228391cf36e913e05188f8
+          ref: f0871842088d2180ed7de606c379d7921e7fbf0e
           path: opf-editor
           fetch-depth: 0
           persist-credentials: false
@@ -70,7 +70,7 @@ jobs:
       - name: Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks
         working-directory: opf
         env:
-          OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf-render/test/golden/opf-examples-png.base-fonts.sha256.json
+          OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf-render/test/golden/opf-examples-png.rich-flow.sha256.json
         run: pnpm test:packages
       - name: Execute installed tarball browser interactions
         working-directory: opf

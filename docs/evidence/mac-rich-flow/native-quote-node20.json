@@ -1,0 +1,19 @@
+{
+  "evidenceCommit": "28ae661a606d0a70ff39d98aac32e84240dbbb23",
+  "node": "v20.20.2",
+  "reviewerSha256": "1fa6994b8c44aa30c8864e331ae9a549a66f5a3e794372ed3f8ed1d6bbd9ac3f",
+  "converterSha256": "f75e684288b7124289d48bb907d42297491cf7ed9ddab301039b76f3d16e3809",
+  "results": [
+    {
+      "nativeNode": "20",
+      "imports": 36,
+      "rasters": 12
+    },
+    {
+      "nativeNode": "24",
+      "imports": 36,
+      "rasters": 12
+    }
+  ],
+  "scope": "72 fresh imports of native original/saved/edited quote slides verify exact current title/body/footer line order and multiplicity. Raw native bounds and 24 raster hashes checked. No new Office execution, semantic quote recovery, pixel equivalence or exact native font identity claim."
+}

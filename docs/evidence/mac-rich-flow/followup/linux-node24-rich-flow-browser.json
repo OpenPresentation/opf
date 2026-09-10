@@ -1,0 +1,1457 @@
+{
+  "node": "v24.20.0",
+  "browser": "153.0.8010.12",
+  "verifierSha256": "52bc88442c35889cbdb008451cb3cca67612d7841da75bca1da782847f59046f",
+  "rendererSha256": "4fd097eee3439bf1e41948ac56d5178cf74484668592ebcc1bcb5c85782152d0",
+  "results": [
+    {
+      "mode": "estimated",
+      "align": "left",
+      "fixture": 0,
+      "lines": [
+        {
+          "fragments": [
+            {
+              "text": "  Keep  ",
+              "tag": "tspan",
+              "gap": null,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 87.99999999999999
+            },
+            {
+              "text": "bold",
+              "tag": "tspan",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 54
+            },
+            {
+              "text": " and ",
+              "tag": "tspan",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 56.50000000000001
+            },
+            {
+              "text": "italic",
+              "tag": "tspan",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 81
+            },
+            {
+              "text": " with trailing  ",
+              "tag": "tspan",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 194.00000000000003
+            }
+          ],
+          "alignmentDifference": -0.0000015258789076710855
+        }
+      ]
+    },
+    {
+      "mode": "estimated",
+      "align": "left",
+      "fixture": 1,
+      "lines": [
+        {
+          "fragments": [
+            {
+              "text": "Link ",
+              "tag": "tspan",
+              "gap": null,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 64
+            },
+            {
+              "text": "selected words",
+              "tag": "tspan",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 183.50000000000003
+            },
+            {
+              "text": " and ",
+              "tag": "tspan",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 56.50000000000001
+            },
+            {
+              "text": "struck",
+              "tag": "tspan",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 81
+            }
+          ],
+          "alignmentDifference": -0.0000015258789076710855
+        }
+      ]
+    },
+    {
+      "mode": "estimated",
+      "align": "left",
+      "fixture": 2,
+      "lines": [
+        {
+          "fragments": [
+            {
+              "text": "Normal ",
+              "tag": "tspan",
+              "gap": null,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 91
+            },
+            {
+              "text": "raised",
+              "tag": "tspan",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 56.7
+            },
+            {
+              "text": " restored ",
+              "tag": "tspan",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 124.00000000000003
+            },
+            {
+              "text": "lowered",
+              "tag": "tspan",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 66.15
+            },
+            {
+              "text": " baseline",
+              "tag": "tspan",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 116.00000000000001
+            }
+          ],
+          "alignmentDifference": -0.0000015258789076710855
+        }
+      ]
+    },
+    {
+      "mode": "estimated",
+      "align": "left",
+      "fixture": 3,
+      "lines": [
+        {
+          "fragments": [],
+          "alignmentDifference": 0
+        },
+        {
+          "fragments": [
+            {
+              "text": "First ",
+              "tag": "tspan",
+              "gap": null,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 77.5
+            },
+            {
+              "text": "paragraph",
+              "tag": "tspan",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 121.50000000000001
+            }
+          ],
+          "alignmentDifference": -0.0000015258789076710855
+        },
+        {
+          "fragments": [],
+          "alignmentDifference": 0
+        },
+        {
+          "fragments": [
+            {
+              "text": "Final paragraph",
+              "tag": "tspan",
+              "gap": null,
+              "baselineDifference": 0.000006103515630684342,
+              "intrinsicWidth": null,
+              "acceptedWidth": 199
+            }
+          ],
+          "alignmentDifference": -0.0000015258789076710855
+        },
+        {
+          "fragments": [],
+          "alignmentDifference": 0
+        },
+        {
+          "fragments": [],
+          "alignmentDifference": 0
+        }
+      ]
+    },
+    {
+      "mode": "estimated",
+      "align": "left",
+      "fixture": 4,
+      "lines": [
+        {
+          "fragments": [
+            {
+              "text": "Italic first",
+              "tag": "tspan",
+              "gap": null,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 158.5
+            },
+            {
+              "text": " returns to normal ",
+              "tag": "tspan",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 234.50000000000006
+            },
+            {
+              "text": "bold only",
+              "tag": "tspan",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 115.99999999999999
+            }
+          ],
+          "alignmentDifference": -0.0000015258789076710855
+        }
+      ]
+    },
+    {
+      "mode": "estimated",
+      "align": "center",
+      "fixture": 0,
+      "lines": [
+        {
+          "fragments": [
+            {
+              "text": "  Keep  ",
+              "tag": "tspan",
+              "gap": null,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 87.99999999999999
+            },
+            {
+              "text": "bold",
+              "tag": "tspan",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 54
+            },
+            {
+              "text": " and ",
+              "tag": "tspan",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 56.50000000000001
+            },
+            {
+              "text": "italic",
+              "tag": "tspan",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 81
+            },
+            {
+              "text": " with trailing  ",
+              "tag": "tspan",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 194.00000000000003
+            }
+          ],
+          "alignmentDifference": 0
+        }
+      ]
+    },
+    {
+      "mode": "estimated",
+      "align": "center",
+      "fixture": 1,
+      "lines": [
+        {
+          "fragments": [
+            {
+              "text": "Link ",
+              "tag": "tspan",
+              "gap": null,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 64
+            },
+            {
+              "text": "selected words",
+              "tag": "tspan",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 183.50000000000003
+            },
+            {
+              "text": " and ",
+              "tag": "tspan",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 56.50000000000001
+            },
+            {
+              "text": "struck",
+              "tag": "tspan",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 81
+            }
+          ],
+          "alignmentDifference": 0
+        }
+      ]
+    },
+    {
+      "mode": "estimated",
+      "align": "center",
+      "fixture": 2,
+      "lines": [
+        {
+          "fragments": [
+            {
+              "text": "Normal ",
+              "tag": "tspan",
+              "gap": null,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 91
+            },
+            {
+              "text": "raised",
+              "tag": "tspan",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 56.7
+            },
+            {
+              "text": " restored ",
+              "tag": "tspan",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 124.00000000000003
+            },
+            {
+              "text": "lowered",
+              "tag": "tspan",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 66.15
+            },
+            {
+              "text": " baseline",
+              "tag": "tspan",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 116.00000000000001
+            }
+          ],
+          "alignmentDifference": 0
+        }
+      ]
+    },
+    {
+      "mode": "estimated",
+      "align": "center",
+      "fixture": 3,
+      "lines": [
+        {
+          "fragments": [],
+          "alignmentDifference": 0
+        },
+        {
+          "fragments": [
+            {
+              "text": "First ",
+              "tag": "tspan",
+              "gap": null,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 77.5
+            },
+            {
+              "text": "paragraph",
+              "tag": "tspan",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 121.50000000000001
+            }
+          ],
+          "alignmentDifference": 0
+        },
+        {
+          "fragments": [],
+          "alignmentDifference": 0
+        },
+        {
+          "fragments": [
+            {
+              "text": "Final paragraph",
+              "tag": "tspan",
+              "gap": null,
+              "baselineDifference": 0.000006103515630684342,
+              "intrinsicWidth": null,
+              "acceptedWidth": 199
+            }
+          ],
+          "alignmentDifference": 0
+        },
+        {
+          "fragments": [],
+          "alignmentDifference": 0
+        },
+        {
+          "fragments": [],
+          "alignmentDifference": 0
+        }
+      ]
+    },
+    {
+      "mode": "estimated",
+      "align": "center",
+      "fixture": 4,
+      "lines": [
+        {
+          "fragments": [
+            {
+              "text": "Italic first",
+              "tag": "tspan",
+              "gap": null,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 158.5
+            },
+            {
+              "text": " returns to normal ",
+              "tag": "tspan",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 234.50000000000006
+            },
+            {
+              "text": "bold only",
+              "tag": "tspan",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 115.99999999999999
+            }
+          ],
+          "alignmentDifference": 0
+        }
+      ]
+    },
+    {
+      "mode": "estimated",
+      "align": "right",
+      "fixture": 0,
+      "lines": [
+        {
+          "fragments": [
+            {
+              "text": "  Keep  ",
+              "tag": "tspan",
+              "gap": null,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 87.99999999999999
+            },
+            {
+              "text": "bold",
+              "tag": "tspan",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 54
+            },
+            {
+              "text": " and ",
+              "tag": "tspan",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 56.50000000000001
+            },
+            {
+              "text": "italic",
+              "tag": "tspan",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 81
+            },
+            {
+              "text": " with trailing  ",
+              "tag": "tspan",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 194.00000000000003
+            }
+          ],
+          "alignmentDifference": 0.000024414062522737368
+        }
+      ]
+    },
+    {
+      "mode": "estimated",
+      "align": "right",
+      "fixture": 1,
+      "lines": [
+        {
+          "fragments": [
+            {
+              "text": "Link ",
+              "tag": "tspan",
+              "gap": null,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 64
+            },
+            {
+              "text": "selected words",
+              "tag": "tspan",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 183.50000000000003
+            },
+            {
+              "text": " and ",
+              "tag": "tspan",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 56.50000000000001
+            },
+            {
+              "text": "struck",
+              "tag": "tspan",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 81
+            }
+          ],
+          "alignmentDifference": 0.000024414062522737368
+        }
+      ]
+    },
+    {
+      "mode": "estimated",
+      "align": "right",
+      "fixture": 2,
+      "lines": [
+        {
+          "fragments": [
+            {
+              "text": "Normal ",
+              "tag": "tspan",
+              "gap": null,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 91
+            },
+            {
+              "text": "raised",
+              "tag": "tspan",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 56.7
+            },
+            {
+              "text": " restored ",
+              "tag": "tspan",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 124.00000000000003
+            },
+            {
+              "text": "lowered",
+              "tag": "tspan",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 66.15
+            },
+            {
+              "text": " baseline",
+              "tag": "tspan",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 116.00000000000001
+            }
+          ],
+          "alignmentDifference": 0.000024414062522737368
+        }
+      ]
+    },
+    {
+      "mode": "estimated",
+      "align": "right",
+      "fixture": 3,
+      "lines": [
+        {
+          "fragments": [],
+          "alignmentDifference": 0
+        },
+        {
+          "fragments": [
+            {
+              "text": "First ",
+              "tag": "tspan",
+              "gap": null,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 77.5
+            },
+            {
+              "text": "paragraph",
+              "tag": "tspan",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 121.50000000000001
+            }
+          ],
+          "alignmentDifference": 0.000024414062636424205
+        },
+        {
+          "fragments": [],
+          "alignmentDifference": 0
+        },
+        {
+          "fragments": [
+            {
+              "text": "Final paragraph",
+              "tag": "tspan",
+              "gap": null,
+              "baselineDifference": 0.000006103515630684342,
+              "intrinsicWidth": null,
+              "acceptedWidth": 199
+            }
+          ],
+          "alignmentDifference": 0.000024414062636424205
+        },
+        {
+          "fragments": [],
+          "alignmentDifference": 0
+        },
+        {
+          "fragments": [],
+          "alignmentDifference": 0
+        }
+      ]
+    },
+    {
+      "mode": "estimated",
+      "align": "right",
+      "fixture": 4,
+      "lines": [
+        {
+          "fragments": [
+            {
+              "text": "Italic first",
+              "tag": "tspan",
+              "gap": null,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 158.5
+            },
+            {
+              "text": " returns to normal ",
+              "tag": "tspan",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 234.50000000000006
+            },
+            {
+              "text": "bold only",
+              "tag": "tspan",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": null,
+              "acceptedWidth": 115.99999999999999
+            }
+          ],
+          "alignmentDifference": 0.000024414062522737368
+        }
+      ]
+    },
+    {
+      "mode": "measured",
+      "align": "left",
+      "fixture": 0,
+      "lines": [
+        {
+          "fragments": [
+            {
+              "text": "  Keep  ",
+              "tag": "text",
+              "gap": null,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 80.734375,
+              "acceptedWidth": 80.72509765625
+            },
+            {
+              "text": "bold",
+              "tag": "text",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 48.875,
+              "acceptedWidth": 48.86474609375
+            },
+            {
+              "text": " and ",
+              "tag": "text",
+              "gap": 0.0000152587890625,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 53.90625,
+              "acceptedWidth": 53.90625
+            },
+            {
+              "text": "italic",
+              "tag": "text",
+              "gap": -0.0000152587890625,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 51.515625,
+              "acceptedWidth": 51.513671875
+            },
+            {
+              "text": " with trailing  ",
+              "tag": "text",
+              "gap": -0.000030517578125,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 147.46875,
+              "acceptedWidth": 147.4609375
+            }
+          ],
+          "alignmentDifference": 0
+        }
+      ]
+    },
+    {
+      "mode": "measured",
+      "align": "left",
+      "fixture": 1,
+      "lines": [
+        {
+          "fragments": [
+            {
+              "text": "Link ",
+              "tag": "text",
+              "gap": null,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 52.234375,
+              "acceptedWidth": 52.2216796875
+            },
+            {
+              "text": "selected words",
+              "tag": "text",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 168.609375,
+              "acceptedWidth": 168.603515625
+            },
+            {
+              "text": " and ",
+              "tag": "text",
+              "gap": -0.001007080078125,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 53.90625,
+              "acceptedWidth": 53.90625
+            },
+            {
+              "text": "struck",
+              "tag": "text",
+              "gap": 0.000030517578125,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 69.09375,
+              "acceptedWidth": 69.091796875
+            }
+          ],
+          "alignmentDifference": 0
+        }
+      ]
+    },
+    {
+      "mode": "measured",
+      "align": "left",
+      "fixture": 2,
+      "lines": [
+        {
+          "fragments": [
+            {
+              "text": "Normal ",
+              "tag": "text",
+              "gap": null,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 88.375,
+              "acceptedWidth": 88.36669921875
+            },
+            {
+              "text": "raised",
+              "tag": "text",
+              "gap": -0.0000152587890625,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 47.546875,
+              "acceptedWidth": 47.5439453125
+            },
+            {
+              "text": " restored ",
+              "tag": "text",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 104.59375,
+              "acceptedWidth": 104.58984375
+            },
+            {
+              "text": "lowered",
+              "tag": "text",
+              "gap": -0.0009765625,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 61.59375,
+              "acceptedWidth": 61.583251953125
+            },
+            {
+              "text": " baseline",
+              "tag": "text",
+              "gap": 0.0009765625,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 99.21875,
+              "acceptedWidth": 99.21875
+            }
+          ],
+          "alignmentDifference": 0
+        }
+      ]
+    },
+    {
+      "mode": "measured",
+      "align": "left",
+      "fixture": 3,
+      "lines": [
+        {
+          "fragments": [],
+          "alignmentDifference": 0
+        },
+        {
+          "fragments": [
+            {
+              "text": "First ",
+              "tag": "text",
+              "gap": null,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 55.65625,
+              "acceptedWidth": 55.65185546875
+            },
+            {
+              "text": "paragraph",
+              "tag": "text",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 114.0625,
+              "acceptedWidth": 114.05029296875
+            }
+          ],
+          "alignmentDifference": 0
+        },
+        {
+          "fragments": [],
+          "alignmentDifference": 0
+        },
+        {
+          "fragments": [
+            {
+              "text": "Final paragraph",
+              "tag": "text",
+              "gap": null,
+              "baselineDifference": 0.000006103515630684342,
+              "intrinsicWidth": 172.234375,
+              "acceptedWidth": 172.22900390625
+            }
+          ],
+          "alignmentDifference": 0
+        },
+        {
+          "fragments": [],
+          "alignmentDifference": 0
+        },
+        {
+          "fragments": [],
+          "alignmentDifference": 0
+        }
+      ]
+    },
+    {
+      "mode": "measured",
+      "align": "left",
+      "fixture": 4,
+      "lines": [
+        {
+          "fragments": [
+            {
+              "text": "Italic first",
+              "tag": "text",
+              "gap": null,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 100.453125,
+              "acceptedWidth": 100.45166015625
+            },
+            {
+              "text": " returns to normal ",
+              "tag": "text",
+              "gap": -0.0000152587890625,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 203.78125,
+              "acceptedWidth": 203.77197265625
+            },
+            {
+              "text": "bold only",
+              "tag": "text",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 102.40625,
+              "acceptedWidth": 102.40478515625
+            }
+          ],
+          "alignmentDifference": 0
+        }
+      ]
+    },
+    {
+      "mode": "measured",
+      "align": "center",
+      "fixture": 0,
+      "lines": [
+        {
+          "fragments": [
+            {
+              "text": "  Keep  ",
+              "tag": "text",
+              "gap": null,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 80.734375,
+              "acceptedWidth": 80.72509765625
+            },
+            {
+              "text": "bold",
+              "tag": "text",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 48.875,
+              "acceptedWidth": 48.86474609375
+            },
+            {
+              "text": " and ",
+              "tag": "text",
+              "gap": -0.00103759765625,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 53.90625,
+              "acceptedWidth": 53.90625
+            },
+            {
+              "text": "italic",
+              "tag": "text",
+              "gap": 0.0009765625,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 51.515625,
+              "acceptedWidth": 51.513671875
+            },
+            {
+              "text": " with trailing  ",
+              "tag": "text",
+              "gap": -0.00103759765625,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 147.46875,
+              "acceptedWidth": 147.4609375
+            }
+          ],
+          "alignmentDifference": 0
+        }
+      ]
+    },
+    {
+      "mode": "measured",
+      "align": "center",
+      "fixture": 1,
+      "lines": [
+        {
+          "fragments": [
+            {
+              "text": "Link ",
+              "tag": "text",
+              "gap": null,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 52.234375,
+              "acceptedWidth": 52.2216796875
+            },
+            {
+              "text": "selected words",
+              "tag": "text",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 168.609375,
+              "acceptedWidth": 168.603515625
+            },
+            {
+              "text": " and ",
+              "tag": "text",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 53.90625,
+              "acceptedWidth": 53.90625
+            },
+            {
+              "text": "struck",
+              "tag": "text",
+              "gap": 0.00006103515625,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 69.09375,
+              "acceptedWidth": 69.091796875
+            }
+          ],
+          "alignmentDifference": 0
+        }
+      ]
+    },
+    {
+      "mode": "measured",
+      "align": "center",
+      "fixture": 2,
+      "lines": [
+        {
+          "fragments": [
+            {
+              "text": "Normal ",
+              "tag": "text",
+              "gap": null,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 88.375,
+              "acceptedWidth": 88.36669921875
+            },
+            {
+              "text": "raised",
+              "tag": "text",
+              "gap": -0.0009765625,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 47.546875,
+              "acceptedWidth": 47.5439453125
+            },
+            {
+              "text": " restored ",
+              "tag": "text",
+              "gap": -0.00006103515625,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 104.59375,
+              "acceptedWidth": 104.58984375
+            },
+            {
+              "text": "lowered",
+              "tag": "text",
+              "gap": 0.00006103515625,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 61.59375,
+              "acceptedWidth": 61.583251953125
+            },
+            {
+              "text": " baseline",
+              "tag": "text",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 99.21875,
+              "acceptedWidth": 99.21875
+            }
+          ],
+          "alignmentDifference": 0
+        }
+      ]
+    },
+    {
+      "mode": "measured",
+      "align": "center",
+      "fixture": 3,
+      "lines": [
+        {
+          "fragments": [],
+          "alignmentDifference": 0
+        },
+        {
+          "fragments": [
+            {
+              "text": "First ",
+              "tag": "text",
+              "gap": null,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 55.65625,
+              "acceptedWidth": 55.65185546875
+            },
+            {
+              "text": "paragraph",
+              "tag": "text",
+              "gap": 0.00006103515625,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 114.0625,
+              "acceptedWidth": 114.05029296875
+            }
+          ],
+          "alignmentDifference": 0
+        },
+        {
+          "fragments": [],
+          "alignmentDifference": 0
+        },
+        {
+          "fragments": [
+            {
+              "text": "Final paragraph",
+              "tag": "text",
+              "gap": null,
+              "baselineDifference": 0.000006103515630684342,
+              "intrinsicWidth": 172.234375,
+              "acceptedWidth": 172.22900390625
+            }
+          ],
+          "alignmentDifference": 0
+        },
+        {
+          "fragments": [],
+          "alignmentDifference": 0
+        },
+        {
+          "fragments": [],
+          "alignmentDifference": 0
+        }
+      ]
+    },
+    {
+      "mode": "measured",
+      "align": "center",
+      "fixture": 4,
+      "lines": [
+        {
+          "fragments": [
+            {
+              "text": "Italic first",
+              "tag": "text",
+              "gap": null,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 100.453125,
+              "acceptedWidth": 100.45166015625
+            },
+            {
+              "text": " returns to normal ",
+              "tag": "text",
+              "gap": -0.0009765625,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 203.78125,
+              "acceptedWidth": 203.77197265625
+            },
+            {
+              "text": "bold only",
+              "tag": "text",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 102.40625,
+              "acceptedWidth": 102.40478515625
+            }
+          ],
+          "alignmentDifference": 0
+        }
+      ]
+    },
+    {
+      "mode": "measured",
+      "align": "right",
+      "fixture": 0,
+      "lines": [
+        {
+          "fragments": [
+            {
+              "text": "  Keep  ",
+              "tag": "text",
+              "gap": null,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 80.734375,
+              "acceptedWidth": 80.72509765625
+            },
+            {
+              "text": "bold",
+              "tag": "text",
+              "gap": -0.00006103515625,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 48.875,
+              "acceptedWidth": 48.86474609375
+            },
+            {
+              "text": " and ",
+              "tag": "text",
+              "gap": -0.00006103515625,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 53.90625,
+              "acceptedWidth": 53.90625
+            },
+            {
+              "text": "italic",
+              "tag": "text",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 51.515625,
+              "acceptedWidth": 51.513671875
+            },
+            {
+              "text": " with trailing  ",
+              "tag": "text",
+              "gap": -0.0001220703125,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 147.46875,
+              "acceptedWidth": 147.4609375
+            }
+          ],
+          "alignmentDifference": 0
+        }
+      ]
+    },
+    {
+      "mode": "measured",
+      "align": "right",
+      "fixture": 1,
+      "lines": [
+        {
+          "fragments": [
+            {
+              "text": "Link ",
+              "tag": "text",
+              "gap": null,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 52.234375,
+              "acceptedWidth": 52.2216796875
+            },
+            {
+              "text": "selected words",
+              "tag": "text",
+              "gap": -0.00006103515625,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 168.609375,
+              "acceptedWidth": 168.603515625
+            },
+            {
+              "text": " and ",
+              "tag": "text",
+              "gap": -0.0010986328125,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 53.90625,
+              "acceptedWidth": 53.90625
+            },
+            {
+              "text": "struck",
+              "tag": "text",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 69.09375,
+              "acceptedWidth": 69.091796875
+            }
+          ],
+          "alignmentDifference": 0
+        }
+      ]
+    },
+    {
+      "mode": "measured",
+      "align": "right",
+      "fixture": 2,
+      "lines": [
+        {
+          "fragments": [
+            {
+              "text": "Normal ",
+              "tag": "text",
+              "gap": null,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 88.375,
+              "acceptedWidth": 88.36669921875
+            },
+            {
+              "text": "raised",
+              "tag": "text",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 47.546875,
+              "acceptedWidth": 47.5439453125
+            },
+            {
+              "text": " restored ",
+              "tag": "text",
+              "gap": 0.00006103515625,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 104.59375,
+              "acceptedWidth": 104.58984375
+            },
+            {
+              "text": "lowered",
+              "tag": "text",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 61.59375,
+              "acceptedWidth": 61.583251953125
+            },
+            {
+              "text": " baseline",
+              "tag": "text",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 99.21875,
+              "acceptedWidth": 99.21875
+            }
+          ],
+          "alignmentDifference": 0
+        }
+      ]
+    },
+    {
+      "mode": "measured",
+      "align": "right",
+      "fixture": 3,
+      "lines": [
+        {
+          "fragments": [],
+          "alignmentDifference": 0
+        },
+        {
+          "fragments": [
+            {
+              "text": "First ",
+              "tag": "text",
+              "gap": null,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 55.65625,
+              "acceptedWidth": 55.65185546875
+            },
+            {
+              "text": "paragraph",
+              "tag": "text",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 114.0625,
+              "acceptedWidth": 114.05029296875
+            }
+          ],
+          "alignmentDifference": 0
+        },
+        {
+          "fragments": [],
+          "alignmentDifference": 0
+        },
+        {
+          "fragments": [
+            {
+              "text": "Final paragraph",
+              "tag": "text",
+              "gap": null,
+              "baselineDifference": 0.000006103515630684342,
+              "intrinsicWidth": 172.234375,
+              "acceptedWidth": 172.22900390625
+            }
+          ],
+          "alignmentDifference": 0
+        },
+        {
+          "fragments": [],
+          "alignmentDifference": 0
+        },
+        {
+          "fragments": [],
+          "alignmentDifference": 0
+        }
+      ]
+    },
+    {
+      "mode": "measured",
+      "align": "right",
+      "fixture": 4,
+      "lines": [
+        {
+          "fragments": [
+            {
+              "text": "Italic first",
+              "tag": "text",
+              "gap": null,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 100.453125,
+              "acceptedWidth": 100.45166015625
+            },
+            {
+              "text": " returns to normal ",
+              "tag": "text",
+              "gap": -0.00006103515625,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 203.78125,
+              "acceptedWidth": 203.77197265625
+            },
+            {
+              "text": "bold only",
+              "tag": "text",
+              "gap": 0,
+              "baselineDifference": -0.0000015258789005656581,
+              "intrinsicWidth": 102.40625,
+              "acceptedWidth": 102.40478515625
+            }
+          ],
+          "alignmentDifference": 0
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "requests": [],
+  "scope": "30 actual offline browser cases check source spans, adjacent-run spacing, alignment, baseline shifts, exact requested styles, decorations and links. Estimated line breaks and cell fitting remain approximate; native Office and complete shaping fidelity are separate."
+}

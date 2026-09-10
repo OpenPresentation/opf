@@ -343,6 +343,10 @@ const richHarness=(await readHarness('opf','scripts/test-rich-text-browser.mjs')
 await writeFile(path.join(consumer,'rich-tests.mjs'),richHarness);
 await build({entryPoints:[path.join(consumer,'rich-tests.mjs')],outfile:path.join(browserOut,'packed-rich-text-tests.js'),bundle:true,platform:'browser',format:'esm'});
 await writeFile(path.join(browserOut,'packed-rich-text-tests.html'),'<!doctype html><meta charset="utf-8"><title>Packed rich-text checks</title><h1>Packed rich-text checks</h1><div id="canvas" style="max-width:1100px"></div><pre id="results"></pre><script type="module" src="./packed-rich-text-tests.js"></script>');
+if(!registry){
+  await writeFile(path.join(browserOut,'packed-rich-text-estimated-tests.js'),await readFile(path.join(browserOut,'packed-rich-text-tests.js')));
+  await writeFile(path.join(browserOut,'packed-rich-text-estimated-tests.html'),browserHtml('rich-text-estimated'));
+}
 
 const layoutHarness=(await readHarness('opf','scripts/test-layout-browser.mjs'))
  .replace('../../opf-editor/src/canvas.js','@openpresentation/opf-editor/canvas')
@@ -387,7 +391,7 @@ if (verifyStyledTables) {
   console.log('Installed styled-table browser harness built: artifacts/editor/packed-styled-table-tests.html. Open it to verify real pointer/keyboard interaction.');
 }
 
-const browserSuites=['canvas','rich-text','layout','block','list','create',...(verifyStyledTables?['styled-table']:[])];
+const browserSuites=['canvas','rich-text',...(!registry?['rich-text-estimated']:[]),'layout','block','list','create',...(verifyStyledTables?['styled-table']:[])];
 const hashFile=async file=>createHash('sha256').update(await readFile(file)).digest('hex');
 await writeFile(path.join(browserOut,'packed-browser-manifest.json'),JSON.stringify({
   mode:librariesOnly?'registry-libraries':registry?'registry':'packed',
