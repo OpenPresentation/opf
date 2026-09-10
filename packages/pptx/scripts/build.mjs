@@ -12,6 +12,7 @@ await copyFile(new URL('src/metric-provenance.js', root), new URL('metric-proven
 await copyFile(new URL('src/card-provenance.js', root), new URL('card-provenance.js', dist));
 await copyFile(new URL('src/heading-provenance.js', root), new URL('heading-provenance.js', dist));
 await copyFile(new URL('src/text-provenance.js', root), new URL('text-provenance.js', dist));
+await copyFile(new URL('src/timeline-provenance.js', root), new URL('timeline-provenance.js', dist));
 await copyFile(new URL('src/chart-workbook.js', root), new URL('chart-workbook.js', dist));
 await copyFile(new URL("src/index.d.ts", root), new URL("index.d.ts", dist));
 await copyFile(new URL("src/image-geometry.js", root), new URL("image-geometry.js", dist));
