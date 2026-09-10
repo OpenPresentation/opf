@@ -2,6 +2,7 @@ import {importTableFrames} from './table-import.js';
 import {readChartCategoryHeading,writeChartCategoryHeading} from './chart-workbook.js';
 import {attachCodeTags, codeManifest, importCodeGroups, nativeShapeParagraphs, nativeTextShapes} from './code-provenance.js';
 import {attachMetricTags,metricManifest,importMetricGroups} from './metric-provenance.js';
+import {attachCardTags,importCardFrames} from './card-provenance.js';
 import {importImageOrientation} from './image-import.js';
 import {nativeBackgroundFill} from './background.js';
 import {importBackground} from './background-import.js';
@@ -173,6 +174,7 @@ export async function toPptx(input, options = {}) {
   context.tableCells = new Map();
   context.imagePlacements = new Map();
   context.backgroundFills = new Map();
+  context.cardTags = new Map();
   context.codeTags = new Map();
   context.metricTags = new Map();
   context.chartHeadings = new Map();
@@ -412,10 +414,11 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   const paragraphs = nativeShapeParagraphs(decodeText(entries[slidePath]));
   const code = importCodeGroups(shapes, paragraphs, relationships, entries, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.code`}));
   const metric = importMetricGroups(shapes, paragraphs, relationships, entries, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.metric`}));
+  const cards = importCardFrames(shapes, paragraphs, relationships, entries, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
   for (const item of code.items) items.push({kind:'code',bounds:shapeBounds(item.shape['p:spPr']?.['a:xfrm']),payload:item.payload});
   for (const item of metric.items) items.push({kind:'metric',bounds:shapeBounds(item.shape['p:spPr']?.['a:xfrm']),payload:item.payload});
   for (const [index,shape] of shapes.entries()) {
-    if (code.consumed.has(shape)||metric.consumed.has(shape)) continue;
+    if (code.consumed.has(shape)||metric.consumed.has(shape)||cards.has(shape)) continue;
     const item = importShape(shape, dimensions, paragraphs[index]);
     if (item) items.push(item);
   }
@@ -894,10 +897,19 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
   const { widthInches, heightInches } = slideContext.dimensions;
   const layout = resolveCatalogRecord(presentation, "layouts", opfSlide.layout, "blank") ?? {};
   if (opfSlide.layout && layout.id !== opfSlide.layout) throw new OPFPptxError("catalog-resolution-failed", `Layout '${opfSlide.layout}' needs an inline or bundled catalog record.`, { path: `slides.${slideIndex}.layout` });
-  const geometry = composeSlide(opfSlide, { width: widthInches * 96, height: heightInches * 96, layout, slideIndex, fonts: slideContext.fonts, contentAlignment:opfSlide.design?.contentAlignment??presentation.design?.contentAlignment, textMeasurement: options.textMeasurement });
+  const geometry = composeSlide(opfSlide, { width: widthInches * 96, height: heightInches * 96, layout, slideIndex, fonts: slideContext.fonts, contentAlignment:opfSlide.design?.contentAlignment??presentation.design?.contentAlignment, contentBox:opfSlide.design?.contentBox??presentation.design?.contentBox, textMeasurement: options.textMeasurement });
   for (const diagnostic of geometry.diagnostics) options.onDiagnostic?.(diagnostic);
   for (const item of geometry.items) {
     const region = { x: item.box.x / 96, y: item.box.y / 96, w: item.box.width / 96, h: item.box.height / 96 };
+    if (item.frameBox) {
+      const frame=item.frameBox;
+      context.cardTags.set(`OPF card ${item.path}`,item.path);
+      const paint=value=>({color:normalizeHex(value),transparency:/^#[0-9a-f]{8}$/i.test(value)?(1-parseInt(value.slice(7),16)/255)*100:0});
+      const surface=slideContext.colorScheme[isDarkHex(slideContext.colors.background)?'dark2':'light2']??`#${slideContext.colors.surface}`;
+      slide.addShape('roundRect',{x:frame.x/96,y:frame.y/96,w:frame.width/96,h:frame.height/96,
+        rectRadius:8*Math.min(widthInches,heightInches)/720,
+        fill:paint(surface),line:{...paint(slideContext.colorScheme.accent5??`#${slideContext.colors.border}`),pt:.75},objectName:`OPF card ${item.path}`});
+    }
     if (["title", "subtitle", "tag"].includes(item.field)) {
       slide.addText(item.text.lines.join("\n"), {
         ...textBoxOptions(region, slideContext, item.text.fontSize * 0.75),
@@ -1618,6 +1630,7 @@ async function normalizePptxZip(raw, context) {
 
   attachCodeTags(entries, context.codeTags);
   attachMetricTags(entries,context.metricTags);
+  attachCardTags(entries,context.cardTags);
   for(const [part,bytes]of Object.entries(entries)){
     if(!/^ppt\/slides\/slide\d+\.xml$/.test(part))continue;
     const relationships=parseRelationships(entries,part);

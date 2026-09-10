@@ -9,6 +9,7 @@ await mkdir(dist, { recursive: true });
 await copyFile(new URL("src/index.js", root), new URL("index.js", dist));
 await copyFile(new URL('src/code-provenance.js', root), new URL('code-provenance.js', dist));
 await copyFile(new URL('src/metric-provenance.js', root), new URL('metric-provenance.js', dist));
+await copyFile(new URL('src/card-provenance.js', root), new URL('card-provenance.js', dist));
 await copyFile(new URL('src/chart-workbook.js', root), new URL('chart-workbook.js', dist));
 await copyFile(new URL("src/index.d.ts", root), new URL("index.d.ts", dist));
 await copyFile(new URL("src/image-geometry.js", root), new URL("image-geometry.js", dist));

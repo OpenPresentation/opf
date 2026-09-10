@@ -6,6 +6,8 @@ Version 0.7.0's [shared-code integration](docs/code-roundtrip.md) preserves exac
 
 The current branch's [shared metric integration](docs/metric-roundtrip.md) is unpublished. Native alignment and exact tested field recovery are implemented; tab-position and raster fidelity gates remain open.
 
+The coordinated source branch also measures `design.contentBox` cards through core's padded interior and exports editable rounded frames at their outer allocation. Native tags identify unchanged empty generated frames on reimport, with a `content-card-reflow` diagnostic: frame appearance and placement are not reconstructed. A name alone never hides a shape; edited, untagged or ambiguous frames use ordinary native import, retaining text or an unsupported-shape description. These source checks do not establish native PowerPoint raster fidelity or availability in the published 0.7.0 package.
+
 ## Scope
 
 Version 0.7.0 requires core 0.9.0 and uses renderer 0.7.0 for coordinated preview/font measurement. Quotes and code export their accepted internal lines and styles without another fitting pass. [Controlled Windows PowerPoint quote evidence](docs/evidence/shared-quote-integration/comparison.json) records glyph containment, separation, save/reopen and text reimport against its exact source/font hashes. Native quote import returns editable text blocks and does not restore the original OPF quote structure, typography or readability policy. Native chart geometry and general scalar-text wrapping also remain different from preview; editability and valid reimport do not establish raster equivalence.
