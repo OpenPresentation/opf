@@ -10,6 +10,28 @@ On the unpublished coordinated source branch, `design.contentBox` uses core's sh
 
 The same unpublished branch now paints plain and rich text, titles, subtitles and tags using composition's accepted fits and resolved styles. Painting does not measure those payloads again. Supply a font registry during composition: reusing an estimated fit cannot correct spacing when the actual drawing font has different advances.
 
+Unpublished font preparation adds `prepareNodeFonts` in `/fonts-node`. It verifies all selected font files and license notices against the versioned `BUNDLED_FONT_MANIFEST`, including exact npm versions and SHA-256 hashes. The returned options configure layout, SVG, editing, PPTX, and Node raster output with the same font inputs:
+
+```js
+import { prepareNodeFonts } from '@openpresentation/opf-render/fonts-node';
+import { renderSvgDeck, svgToPng } from '@openpresentation/opf-render';
+import { paginatePresentation } from '@openpresentation/opf/pagination';
+import { toPptx } from '@openpresentation/opf-pptx';
+
+const { registry, options } = await prepareNodeFonts({
+  pack: 'office', substitutionPolicy: 'visual',
+});
+const { presentation } = paginatePresentation(opf, options);
+const slides = renderSvgDeck(presentation, options);
+const png = await svgToPng(slides[0], options);
+const pptx = await toPptx(presentation, options);
+console.log(registry.substitutions);
+```
+
+The default `pack: 'base'` contains nine Roboto/Roboto Mono faces and suits a document using `design.fontScheme: 'roboto'`. The Office pack includes 24 additional faces and defaults to metric substitution policy; visual substitution remains explicit. Neither helper changes the document's authored font scheme or installs system fonts. Missing resources, changed bytes/notices, and unexpected package versions fail with actionable font errors. Requested/resolved substitution records remain on `registry.substitutions`; source paths appear where the caller supplies them. Font coverage, variant naming, shaping, and native fidelity retain their documented limits.
+
+Default PNG/PDF raster loading now uses the same complete nine-face base pack, fixing omitted semibold and italic faces. Custom raster callers may still set `useBundledFonts: false`. Font files must stay available and unchanged for subsequent raster calls. `node scripts/update-font-manifest.mjs` is an explicit maintenance operation requiring review of font bytes, style metadata, licenses and raster changes; builds and installs never regenerate the expected hashes.
+
 Code strings that [XML 1.0 cannot represent](https://www.w3.org/TR/xml/#charsets) reject rendering with `invalid-code-text`, the OPF field path and UTF-16 offset. Input JSON stays unchanged. Tabs, line endings and valid supplementary Unicode remain accepted; schema validity and XML serialization do not certify font coverage or native fidelity.
 
 ## Scope

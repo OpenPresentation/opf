@@ -98,29 +98,17 @@ async function loadPdfLib() {
 
 async function bundledFontFiles() {
   if (!bundledFontFilesCache) {
-    bundledFontFilesCache = resolveBundledFontFiles();
+    bundledFontFilesCache = resolveBundledFontFiles().catch(error => {
+      bundledFontFilesCache = null;
+      throw error;
+    });
   }
   return bundledFontFilesCache;
 }
 
 async function resolveBundledFontFiles() {
-  try {
-    const { createRequire } = await import("node:module");
-    const path = await import("node:path");
-    const require = createRequire(import.meta.url);
-    const roboto = path.dirname(require.resolve("@expo-google-fonts/roboto/package.json"));
-    const robotoMono = path.dirname(require.resolve("@expo-google-fonts/roboto-mono/package.json"));
-    return [
-      path.join(roboto, "400Regular/Roboto_400Regular.ttf"),
-      path.join(roboto, "500Medium/Roboto_500Medium.ttf"),
-      path.join(roboto, "700Bold/Roboto_700Bold.ttf"),
-      path.join(roboto, "800ExtraBold/Roboto_800ExtraBold.ttf"),
-      path.join(robotoMono, "400Regular/RobotoMono_400Regular.ttf"),
-      path.join(robotoMono, "700Bold/RobotoMono_700Bold.ttf")
-    ];
-  } catch {
-    return [];
-  }
+  const {loadBundledFontRegistry} = await import('./fonts-node.js');
+  return (await loadBundledFontRegistry()).fontFiles;
 }
 
 function normalizeSvgList(value) {

@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Add `prepareNodeFonts` with shared measurement, embedded SVG and raster font options. Check pinned local font versions, all 33 font hashes and eight license notices; expose the immutable provenance manifest. No runtime downloads or system font installation are required.
+- Use the complete nine-face base pack in default PNG/PDF raster export, including Roboto semibold, italic and bold italic. Missing or modified bundled resources fail explicitly. This does not add vector PDF or expand native/font compatibility claims.
+
 ## 0.7.0
 
 - Reject XML-forbidden controls and unpaired UTF-16 surrogates in code source/metadata with `invalid-code-text`, the OPF path and character offset. Keep the input unchanged; tabs, line endings and valid supplementary Unicode remain accepted. Schema validity is separate from XML representability and font coverage.

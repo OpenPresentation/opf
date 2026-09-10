@@ -18,7 +18,7 @@ jobs:
       run:
         working-directory: opf-render
     env:
-      OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf/scripts/fixtures/opf-examples-png.shared-text.sha256.json
+      OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf-render/test/golden/opf-examples-png.base-fonts.sha256.json
     strategy:
       fail-fast: false
       matrix:
@@ -34,21 +34,21 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
-          ref: 2c01efdab4f63ecae2c7b0e6914983151433f247
+          ref: e882f357cd7860b3e0905fdf0b2fb3ff8c2464d8
           path: opf
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-pptx
-          ref: c4a891af42928e4d1136d9db6fbf46baf7ad375d
+          ref: 24e7b2f12462df246e35a8a714a47923ecbd2bfe
           path: opf-pptx
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-editor
-          ref: 0e8a1676c780919ceefe8b9972372f364e542944
+          ref: 6e0b7d2f1b4369fc0a228391cf36e913e05188f8
           path: opf-editor
           fetch-depth: 0
           persist-credentials: false
@@ -76,12 +76,14 @@ jobs:
       - run: npm audit
       - run: npm run typecheck
       - run: npm run validate
+      - run: npm run test:font-preparation
       - run: npm test
       - run: npm run test:code
       - name: Verify Playwright image version
         run: node -e "if (require('playwright/package.json').version !== '1.63.0') throw new Error('Update the pinned Playwright image with the test package.');"
       - run: npm run test:browser
       - run: npm run test:code-browser
+      - run: npm run test:font-preparation-browser
       - name: Install and exercise coordinated candidate tarballs
         working-directory: opf
         run: |
@@ -100,5 +102,6 @@ jobs:
             opf/artifacts/editor/*failure.png
             opf/artifacts/editor/*installed-code*.json
             opf-render/artifacts/golden/**
+            opf-render/artifacts/font-preparation*.json
           retention-days: 7
           if-no-files-found: ignore
