@@ -59,6 +59,28 @@ test('inline fitting tries a smaller single-line value before rejecting a compac
   sourceIsComplete(result);
 });
 
+test('metric alignment positions the inline pair together and records exact origins for every source line',()=>{
+  const cell={x:17,y:23,width:400,height:300};
+  const metric={value:1,unit:'%',label:'First\nSecond line'};
+  const measurement={measure:(text,size)=>text.length*size*.5};
+  for(const align of ['left','center','right']) {
+    const layout=layoutMetric(metric,cell,{align,textMeasurement:measurement}),factor=align==='center'?.5:align==='right'?1:0;
+    assert.equal(layout.alignment,align);assert.equal(layout.overflow,false);
+    const [value,unit,label]=layout.parts;
+    const width=value.fit.sourceLines[0].width;
+    assert.equal(value.box.width,width,'A narrow digit does not reserve an extra font-size-wide gap');
+    assert.equal(unit.box.x,value.box.x+width+8);
+    assert.equal(value.linePositions[0].baseline,unit.linePositions[0].baseline);
+    assert.equal(value.box.x,cell.x+(cell.width-width-8-unit.box.width)*factor);
+    for(const part of [value,unit,label])for(const [index,line] of part.fit.sourceLines.entries()) {
+      assert.equal(part.linePositions[index].x,part.box.x+(part.box.width-line.width)*factor);
+      assert.equal(part.linePositions[index].baseline,part.box.y+part.fit.fontSize+index*part.fit.lineHeight);
+    }
+    sourceIsComplete(layout);
+  }
+  assert.throws(()=>layoutMetric(metric,cell,{align:'justify'}),RangeError);
+});
+
 test('metadata borrows spare primary space before reducing type and exposes resolved style paths',()=>{
   const seen=[];
   const options={fonts:{heading:'Requested Heading',body:'Requested Body'},textMeasurement:{

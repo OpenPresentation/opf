@@ -7,7 +7,7 @@ import {resolvePresentation,renderSvg} from '../../opf-render/src/svg.js';
 import {loadOfficeFontRegistry} from '../../opf-render/src/fonts-node.js';
 import {toPptx} from '../../opf-pptx/src/index.js';
 const require=createRequire(new URL('../../opf-pptx/package.json',import.meta.url)),{unzipSync}=require('fflate'),{XMLParser}=require('fast-xml-parser');
-const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:''}),list=v=>Array.isArray(v)?v:v?[v]:[];
+const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false}),list=v=>Array.isArray(v)?v:v?[v]:[];
 const fonts=await loadOfficeFontRegistry(),options={textMeasurement:fonts.textMeasurement};
 const original={design:{fontScheme:'roboto'},slides:[{title:'Resize while keeping content',composition:{mode:'row',weights:[2,1]},blocks:[{composition:{mode:'column'},blocks:[{text:'Recommendation'},{text:'Supporting evidence remains editable.'}]},{text:'Context and next steps.'}]}]};
 const editor=createEditorSession(original,{rejectInvalid:true});
@@ -22,10 +22,17 @@ editor.applyPatch(prepareBlockDuplicate(editor.document,'slides.0.blocks.3').pat
 editor.applyPatch(prepareBlockRemove(editor.document,'slides.0.blocks.3').patches);
 geometry=resolvePresentation(editor.document,options).slides[0].geometry;
 const bytes=await toPptx(editor.document,options),files=unzipSync(bytes),xml=parser.parse(new TextDecoder().decode(files['ppt/slides/slide1.xml']));
-const shapes=list(xml['p:sld']['p:cSld']['p:spTree']['p:sp']);assert.equal(shapes.length,geometry.items.length);
+const nativeText=shape=>list(shape['p:txBody']?.['a:p']).map(p=>list(p['a:r']).map(r=>r['a:t']??'').join('')).join('\n');
+const expected=geometry.items.flatMap(item=>item.text.placement.lines.map((placed,index)=>({item,placed,index})).filter(({index})=>item.text.lines[index]));
+const shapes=list(xml['p:sld']['p:cSld']['p:spTree']['p:sp']).filter(shape=>nativeText(shape));assert.equal(shapes.length,expected.length,'One native shape per nonblank accepted line');
 for(let i=0;i<shapes.length;i++){
- const transform=shapes[i]['p:spPr']['a:xfrm'],box=geometry.items[i].box;
- for(const [actual,expected] of [[transform['a:off'].x,box.x],[transform['a:off'].y,box.y],[transform['a:ext'].cx,box.width],[transform['a:ext'].cy,box.height]])assert.ok(Math.abs(Number(actual)/9525-expected)<.002,'Resized PPTX shape differs from the preview geometry');
+ const {item,placed,index}=expected[i],shape=shapes[i],transform=shape['p:spPr']['a:xfrm'];
+ const alignment=item.text.placement.alignment,factor=alignment==='right'?1:alignment==='center'?.5:0;
+ const x=Number(transform['a:off'].x)/9525,width=Number(transform['a:ext'].cx)/9525;
+ for(const [actual,wanted] of [[x+width*factor,placed.x+placed.width*factor],[Number(transform['a:off'].y)/9525,item.text.richLines?placed.y:placed.baseline-item.text.fontSize],[Number(transform['a:ext'].cy)/9525,placed.height]])assert.ok(Math.abs(actual-wanted)<.002,'Resized native line differs from accepted preview geometry');
+ assert.equal(nativeText(shape),item.text.lines[index],'Editable line preserves accepted source text');
+ assert.equal(shape['p:txBody']['a:bodyPr'].wrap,'none');
+ for(const auto of ['a:normAutofit','a:spAutoFit'])assert.ok(!Object.hasOwn(shape['p:txBody']['a:bodyPr'],auto),'Native text must not refit accepted lines');
 }
 await mkdir('artifacts/layout-resize',{recursive:true});
 await writeFile('artifacts/layout-resize/resized.opf.json',JSON.stringify(editor.document,null,2));

@@ -2,6 +2,8 @@
 
 For the starter set and delivery priorities, see the [font roadmap](plans/font-roadmap.md).
 
+The [Windows reference-font advance study](evidence/shared-metric-native-anchor/font-study-comparison.json) is exploratory source-checkpoint evidence, not an additional compatibility certification. It measures 1,024 cases across regular/bold Calibri, Arial, Times New Roman and Courier New, recording local reference-file versions/hashes and native font-slot names. Disabling optional ligatures and rounding base glyph advances to eighth-point steps predicts 949 observations within 0.02pt; 75 outliers remain, including combining marks, Arabic and Calibri kerning. Office theme tokens and per-glyph fallback are not resolved to exact native files by these name properties. No runtime provider or open-font mapping changes from this hypothesis, and no reference font is redistributed.
+
 The composition API accepts a `textMeasurement` provider. A provider resolves font faces and returns actual text widths; callers pass the same provider to pagination, editor geometry, SVG rendering, and PPTX export. Without one, the existing deterministic character-width estimate remains available.
 
 The renderer's optional font registry uses [Fontkit](https://github.com/foliojs/fontkit) to shape text and measure glyph advances from local font bytes. It does not discover system fonts or fetch fonts. The Node helper loads the renderer's bundled Roboto and Roboto Mono faces:
@@ -44,6 +46,8 @@ registry.clearSubstitutions(); // Start a fresh render's diagnostic collection.
 An available exact family takes precedence over aliases. The registry resolves a requested weight to the closest supplied weight, reports the substitution, and makes the resolved style available to rendering. Missing italic/upright styles fail instead of synthesizing an unmeasured style. `strictGlyphs: false` is an explicit escape hatch for hosts with their own glyph-fallback policy; it is unsuitable for fidelity verification.
 
 SVG embeds supplied fonts using data URIs and includes supplied license notices as metadata. The bundled loader carries the fonts' SIL Open Font License notices. For PNG/PDF, pass the same font files to the rasterizer; its native font loader does not depend on browser CSS font loading. In a browser, wait for `document.fonts.ready` before measuring or taking a screenshot. The editor playground loads and embeds bundled fonts and displays substitutions.
+
+Current `svgToPdf` output is image-only: each slide is rasterized and embedded as a PNG on a PDF page. Text is not selectable or searchable through PDF text objects, and shapes are not preserved as vectors. The accepted [selectable/vector PDF roadmap](plans/pdf-export.md) adds a separate backend and verification requirement, including permitted font embedding, Unicode extraction and shared placement. Raster PDF will remain an explicit compatibility mode when the verified vector mode becomes the default; no vector mode has shipped yet.
 
 ## Office compatibility pack
 

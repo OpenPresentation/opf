@@ -1,6 +1,8 @@
 # OPF font roadmap
 
-Status: the starter pack is retained in published renderer 0.6.0 and used by the coordinated offline browser workflow. Package publication and actual registry checks preserve its existing font hashes/licenses; this release does not expand font compatibility claims. The [expanded ecosystem objective](ecosystem-objective-2026-09-09.md) requires substantially broader font conformance, installation/embedding, multilingual and native-platform evidence. The historical measurements below remain narrow samples; they do not establish general font or pixel equivalence. Evaluate existing open fonts and engine fixes before original font development.
+Status: the starter pack is retained in published renderer 0.7.0 and used by the coordinated offline browser workflow. Package publication and actual registry checks preserve its existing font hashes/licenses; this release does not expand font compatibility claims. The [expanded ecosystem objective](ecosystem-objective-2026-09-09.md) requires substantially broader font conformance, installation/embedding, multilingual and native-platform evidence. The historical measurements below remain narrow samples; they do not establish general font or pixel equivalence. Evaluate existing open fonts and engine fixes before original font development.
+
+The [new native advance study](../evidence/shared-metric-native-anchor/font-study-comparison.json) records 1,024 local reference-font observations, with 949 within a candidate model's 0.02pt comparison tolerance and 75 outliers. It tests native reference faces, not their open substitutes. Prioritize the remaining combining-mark, Arabic and Calibri kerning cases, explicit native font-file/fallback identification, and independent shaping/raster checks before considering a measurement profile. Fontkit file hashes and Office font-name properties alone cannot establish per-glyph native font identity. No proposed profile is shipped.
 
 ## Ship the existing starter pack
 
@@ -25,6 +27,10 @@ Entry point: `loadOfficeFontRegistry` in `@openpresentation/opf-render/fonts-nod
 Existing checks: `pnpm test:fonts`, renderer font-policy tests, matching editor/SVG/native PPTX box coordinates and line breaks, license notices, and strict missing-glyph errors. A local reference comparison matched Arimo, Tinos, and Cousine on 48 shaped-text samples across their four styles. Gelasio ligatures differed from Georgia by up to 2.0125%, so it is not in the strict metric tier. See [font fidelity](../font-fidelity.md) for evidence and limitations.
 
 ## Delivery order
+
+Selectable/vector PDF is an accepted product requirement with its own [delivery plan and verification gates](pdf-export.md). Its font work must reuse resolved faces and shaped placement, verify permission to embed/subset each face, and provide Unicode mappings for search and copy. The current raster PDF path does not satisfy that requirement; PDF embedding and text extraction are separate checks from browser font loading and native PPTX embedding.
+
+The [Mermaid/diagram and general SVG work](diagrams-svg.md) is sequenced after font reliability is accepted. Keep its requirements and full diagram-family inventory documented, but finish the active font/layout fixes and their browser/raster/native verification and release gates before starting diagram or SVG implementation.
 
 | Priority | Work | Deliverable | Acceptance gate |
 | --- | --- | --- | --- |

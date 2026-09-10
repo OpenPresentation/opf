@@ -1,0 +1,1125 @@
+{
+  "node": "v24.20.0",
+  "browser": "152.0.4191.66",
+  "rendererSha256": "8eb16de679dd894c517950b7cab5c5e07a3e330a49fef39f6e4d6c5bf9ad6f2b",
+  "verifierSha256": "be86a8e6becd12c265d0d779fe81f31c8ca1d7f4624629f229c65646454c1457",
+  "fontHashes": [
+    {
+      "family": "Roboto",
+      "weight": 400,
+      "italic": false,
+      "sha256": "15256405ecb0d880678833a582760efad538ab2932318b52c8105b267d159459"
+    },
+    {
+      "family": "Roboto Medium",
+      "weight": 500,
+      "italic": false,
+      "sha256": "79343dc641a2e8d48a703a4667b71fc8dc6565cc8ce47dfc34fc52c12aadbf38"
+    },
+    {
+      "family": "Roboto SemiBold",
+      "weight": 600,
+      "italic": false,
+      "sha256": "32fe2086b0e54eca85a68eb74e3d89bb16a7ffe59085d6dc7d079f5b3c26d6ab"
+    },
+    {
+      "family": "Roboto",
+      "weight": 700,
+      "italic": false,
+      "sha256": "4aaf8c5b661a386998c2e70cf2b87e2440f5404e0b8fd81164f0413fb3435ec6"
+    },
+    {
+      "family": "Roboto ExtraBold",
+      "weight": 800,
+      "italic": false,
+      "sha256": "43d5ce98c58336045220fa1dac2bd22281b1aab3eca66785cb34eb3ad1dfe1a5"
+    },
+    {
+      "family": "Roboto",
+      "weight": 400,
+      "italic": true,
+      "sha256": "6a372c348dc20c246b92d60b9bda3c0a9ffedc129790ed3f31faf89daa99d793"
+    },
+    {
+      "family": "Roboto",
+      "weight": 700,
+      "italic": true,
+      "sha256": "c6a5e7c224d3bf6698e5d3c124f0f0220cad20d5d413920447a96f033a0292ee"
+    },
+    {
+      "family": "Roboto Mono",
+      "weight": 400,
+      "italic": false,
+      "sha256": "e4bf45837847d4abfa5a502b807a83393aa138727bdb9ea9c93fb17d53208d95"
+    },
+    {
+      "family": "Roboto Mono",
+      "weight": 700,
+      "italic": false,
+      "sha256": "92649d819cc4c20480b23a47aaa111769924eb31c66b6ecdcf6f573662558c83"
+    }
+  ],
+  "results": [
+    {
+      "id": "1280-720-light",
+      "svgSha256": "8d1054799fc6ec81046d917bf3b3d4e78d199141801f5efc67cd12d01200c8da",
+      "diagnostics": [
+        {
+          "code": "unresolved-asset",
+          "path": "design.watermark",
+          "message": "Image requires an embedded raster data URI or a host imageResolver.",
+          "reason": "unsupported-source",
+          "source": "./missing.png",
+          "description": "Complete image description & <literal markup> ",
+          "placeholder": "label"
+        },
+        {
+          "code": "unresolved-asset",
+          "path": "slides.0.image",
+          "message": "Image requires an embedded raster data URI or a host imageResolver.",
+          "reason": "unsupported-source",
+          "source": "./missing.png",
+          "description": "Complete image description & <literal markup> ",
+          "placeholder": "label"
+        },
+        {
+          "code": "unresolved-asset",
+          "path": "design.header.right.image",
+          "message": "Image requires an embedded raster data URI or a host imageResolver.",
+          "reason": "unsupported-source",
+          "source": "./missing.png",
+          "description": "Complete image description & <literal markup> ",
+          "placeholder": "icon"
+        }
+      ],
+      "groups": [
+        {
+          "path": "design.watermark",
+          "role": "img",
+          "description": "Image unavailable: Complete image description & <literal markup> ",
+          "opacity": 0.06,
+          "panel": {
+            "x": 384,
+            "y": 216,
+            "width": 512,
+            "height": 288
+          },
+          "content": [
+            {
+              "tag": "text",
+              "text": "Image unavailable",
+              "box": {
+                "x": 558.3203125,
+                "y": 336.6000061035156,
+                "width": 163.55859375,
+                "height": 24
+              },
+              "fontSize": 20
+            },
+            {
+              "tag": "text",
+              "text": "Complete image description & <literal markup>",
+              "box": {
+                "x": 429.2421875,
+                "y": 361,
+                "width": 421.515625,
+                "height": 24
+              },
+              "fontSize": 20
+            }
+          ]
+        },
+        {
+          "path": "slides.0.image",
+          "role": "img",
+          "description": "Image unavailable: Complete image description & <literal markup> ",
+          "opacity": 1,
+          "panel": {
+            "x": 57.599998474121094,
+            "y": 57.599998474121094,
+            "width": 1164.800048828125,
+            "height": 604.7999877929688
+          },
+          "content": [
+            {
+              "tag": "text",
+              "text": "Image unavailable",
+              "box": {
+                "x": 558.3203125,
+                "y": 336.6000061035156,
+                "width": 163.55859375,
+                "height": 24
+              },
+              "fontSize": 20
+            },
+            {
+              "tag": "text",
+              "text": "Complete image description & <literal markup>",
+              "box": {
+                "x": 429.2421875,
+                "y": 361,
+                "width": 421.515625,
+                "height": 24
+              },
+              "fontSize": 20
+            }
+          ]
+        },
+        {
+          "path": "design.header.right.image",
+          "role": "img",
+          "description": "Image unavailable: Complete image description & <literal markup> ",
+          "opacity": 1,
+          "panel": {
+            "x": 857.5999755859375,
+            "y": 18,
+            "width": 332.79998779296875,
+            "height": 36
+          },
+          "content": [
+            {
+              "tag": "path",
+              "text": "",
+              "box": {
+                "x": 1012,
+                "y": 24,
+                "width": 24,
+                "height": 24
+              },
+              "fontSize": null
+            }
+          ]
+        }
+      ],
+      "screenshot": {
+        "file": "placeholder-1280-720-light.png",
+        "sha256": "fdd4f3be64e1e232fb05c9ab8c16cc6bb86a50ef73e20c87dc96f1ee301c658e"
+      }
+    },
+    {
+      "id": "1280-720-dark",
+      "svgSha256": "59f37c49b5ded96263939be9f6f9a94b0315479a0f348171a19da9fae325c401",
+      "diagnostics": [
+        {
+          "code": "unresolved-asset",
+          "path": "design.watermark",
+          "message": "Image requires an embedded raster data URI or a host imageResolver.",
+          "reason": "unsupported-source",
+          "source": "./missing.png",
+          "description": "Complete image description & <literal markup> ",
+          "placeholder": "label"
+        },
+        {
+          "code": "unresolved-asset",
+          "path": "slides.0.image",
+          "message": "Image requires an embedded raster data URI or a host imageResolver.",
+          "reason": "unsupported-source",
+          "source": "./missing.png",
+          "description": "Complete image description & <literal markup> ",
+          "placeholder": "label"
+        },
+        {
+          "code": "unresolved-asset",
+          "path": "design.header.right.image",
+          "message": "Image requires an embedded raster data URI or a host imageResolver.",
+          "reason": "unsupported-source",
+          "source": "./missing.png",
+          "description": "Complete image description & <literal markup> ",
+          "placeholder": "icon"
+        }
+      ],
+      "groups": [
+        {
+          "path": "design.watermark",
+          "role": "img",
+          "description": "Image unavailable: Complete image description & <literal markup> ",
+          "opacity": 0.06,
+          "panel": {
+            "x": 384,
+            "y": 216,
+            "width": 512,
+            "height": 288
+          },
+          "content": [
+            {
+              "tag": "text",
+              "text": "Image unavailable",
+              "box": {
+                "x": 558.3203125,
+                "y": 336.6000061035156,
+                "width": 163.55859375,
+                "height": 24
+              },
+              "fontSize": 20
+            },
+            {
+              "tag": "text",
+              "text": "Complete image description & <literal markup>",
+              "box": {
+                "x": 429.2421875,
+                "y": 361,
+                "width": 421.515625,
+                "height": 24
+              },
+              "fontSize": 20
+            }
+          ]
+        },
+        {
+          "path": "slides.0.image",
+          "role": "img",
+          "description": "Image unavailable: Complete image description & <literal markup> ",
+          "opacity": 1,
+          "panel": {
+            "x": 57.599998474121094,
+            "y": 57.599998474121094,
+            "width": 1164.800048828125,
+            "height": 604.7999877929688
+          },
+          "content": [
+            {
+              "tag": "text",
+              "text": "Image unavailable",
+              "box": {
+                "x": 558.3203125,
+                "y": 336.6000061035156,
+                "width": 163.55859375,
+                "height": 24
+              },
+              "fontSize": 20
+            },
+            {
+              "tag": "text",
+              "text": "Complete image description & <literal markup>",
+              "box": {
+                "x": 429.2421875,
+                "y": 361,
+                "width": 421.515625,
+                "height": 24
+              },
+              "fontSize": 20
+            }
+          ]
+        },
+        {
+          "path": "design.header.right.image",
+          "role": "img",
+          "description": "Image unavailable: Complete image description & <literal markup> ",
+          "opacity": 1,
+          "panel": {
+            "x": 857.5999755859375,
+            "y": 18,
+            "width": 332.79998779296875,
+            "height": 36
+          },
+          "content": [
+            {
+              "tag": "path",
+              "text": "",
+              "box": {
+                "x": 1012,
+                "y": 24,
+                "width": 24,
+                "height": 24
+              },
+              "fontSize": null
+            }
+          ]
+        }
+      ],
+      "screenshot": {
+        "file": "placeholder-1280-720-dark.png",
+        "sha256": "cf9b1d970571e2915b2576034df16c1940527ffa419e1d981bab0d1f499d736e"
+      }
+    },
+    {
+      "id": "540-960-light",
+      "svgSha256": "d2afddb4f085e172d75e3bb91e7469fa02acbff38fcc9a4b5fb8665ff2017115",
+      "diagnostics": [
+        {
+          "code": "unresolved-asset",
+          "path": "design.watermark",
+          "message": "Image requires an embedded raster data URI or a host imageResolver.",
+          "reason": "unsupported-source",
+          "source": "./missing.png",
+          "description": "Complete image description & <literal markup> ",
+          "placeholder": "label"
+        },
+        {
+          "code": "unresolved-asset",
+          "path": "slides.0.image",
+          "message": "Image requires an embedded raster data URI or a host imageResolver.",
+          "reason": "unsupported-source",
+          "source": "./missing.png",
+          "description": "Complete image description & <literal markup> ",
+          "placeholder": "label"
+        },
+        {
+          "code": "unresolved-asset",
+          "path": "design.header.right.image",
+          "message": "Image requires an embedded raster data URI or a host imageResolver.",
+          "reason": "unsupported-source",
+          "source": "./missing.png",
+          "description": "Complete image description & <literal markup> ",
+          "placeholder": "icon"
+        }
+      ],
+      "groups": [
+        {
+          "path": "design.watermark",
+          "role": "img",
+          "description": "Image unavailable: Complete image description & <literal markup> ",
+          "opacity": 0.06,
+          "panel": {
+            "x": 162,
+            "y": 288,
+            "width": 216,
+            "height": 384
+          },
+          "content": [
+            {
+              "tag": "text",
+              "text": "Image unavailable",
+              "box": {
+                "x": 208.734375,
+                "y": 453.54998779296875,
+                "width": 122.53125,
+                "height": 18
+              },
+              "fontSize": 15
+            },
+            {
+              "tag": "text",
+              "text": "Complete image description",
+              "box": {
+                "x": 175.015625,
+                "y": 471.8500061035156,
+                "width": 189.96875,
+                "height": 18
+              },
+              "fontSize": 15
+            },
+            {
+              "tag": "text",
+              "text": "& <literal markup>",
+              "box": {
+                "x": 208.7734375,
+                "y": 490.1499938964844,
+                "width": 122.697265625,
+                "height": 18
+              },
+              "fontSize": 15
+            }
+          ]
+        },
+        {
+          "path": "slides.0.image",
+          "role": "img",
+          "description": "Image unavailable: Complete image description & <literal markup> ",
+          "opacity": 1,
+          "panel": {
+            "x": 43.20000076293945,
+            "y": 43.20000076293945,
+            "width": 453.6000061035156,
+            "height": 873.5999755859375
+          },
+          "content": [
+            {
+              "tag": "text",
+              "text": "Image unavailable",
+              "box": {
+                "x": 208.734375,
+                "y": 462.70001220703125,
+                "width": 122.53125,
+                "height": 18
+              },
+              "fontSize": 15
+            },
+            {
+              "tag": "text",
+              "text": "Complete image description & <literal markup>",
+              "box": {
+                "x": 111.9296875,
+                "y": 481,
+                "width": 316.38623046875,
+                "height": 18
+              },
+              "fontSize": 15
+            }
+          ]
+        },
+        {
+          "path": "design.header.right.image",
+          "role": "img",
+          "description": "Image unavailable: Complete image description & <literal markup> ",
+          "opacity": 1,
+          "panel": {
+            "x": 361.79998779296875,
+            "y": 24,
+            "width": 140.39999389648438,
+            "height": 48
+          },
+          "content": [
+            {
+              "tag": "path",
+              "text": "",
+              "box": {
+                "x": 423,
+                "y": 39,
+                "width": 18,
+                "height": 18
+              },
+              "fontSize": null
+            }
+          ]
+        }
+      ],
+      "screenshot": {
+        "file": "placeholder-540-960-light.png",
+        "sha256": "d83c426346f6ee583c31225b5a7d45479db686beb8ff1e332c8415393c619a38"
+      }
+    },
+    {
+      "id": "540-960-dark",
+      "svgSha256": "6591e9ec671385bcc5696307b0b6147db4fe4bee23d350d83e883671153e0b07",
+      "diagnostics": [
+        {
+          "code": "unresolved-asset",
+          "path": "design.watermark",
+          "message": "Image requires an embedded raster data URI or a host imageResolver.",
+          "reason": "unsupported-source",
+          "source": "./missing.png",
+          "description": "Complete image description & <literal markup> ",
+          "placeholder": "label"
+        },
+        {
+          "code": "unresolved-asset",
+          "path": "slides.0.image",
+          "message": "Image requires an embedded raster data URI or a host imageResolver.",
+          "reason": "unsupported-source",
+          "source": "./missing.png",
+          "description": "Complete image description & <literal markup> ",
+          "placeholder": "label"
+        },
+        {
+          "code": "unresolved-asset",
+          "path": "design.header.right.image",
+          "message": "Image requires an embedded raster data URI or a host imageResolver.",
+          "reason": "unsupported-source",
+          "source": "./missing.png",
+          "description": "Complete image description & <literal markup> ",
+          "placeholder": "icon"
+        }
+      ],
+      "groups": [
+        {
+          "path": "design.watermark",
+          "role": "img",
+          "description": "Image unavailable: Complete image description & <literal markup> ",
+          "opacity": 0.06,
+          "panel": {
+            "x": 162,
+            "y": 288,
+            "width": 216,
+            "height": 384
+          },
+          "content": [
+            {
+              "tag": "text",
+              "text": "Image unavailable",
+              "box": {
+                "x": 208.734375,
+                "y": 453.54998779296875,
+                "width": 122.53125,
+                "height": 18
+              },
+              "fontSize": 15
+            },
+            {
+              "tag": "text",
+              "text": "Complete image description",
+              "box": {
+                "x": 175.015625,
+                "y": 471.8500061035156,
+                "width": 189.96875,
+                "height": 18
+              },
+              "fontSize": 15
+            },
+            {
+              "tag": "text",
+              "text": "& <literal markup>",
+              "box": {
+                "x": 208.7734375,
+                "y": 490.1499938964844,
+                "width": 122.697265625,
+                "height": 18
+              },
+              "fontSize": 15
+            }
+          ]
+        },
+        {
+          "path": "slides.0.image",
+          "role": "img",
+          "description": "Image unavailable: Complete image description & <literal markup> ",
+          "opacity": 1,
+          "panel": {
+            "x": 43.20000076293945,
+            "y": 43.20000076293945,
+            "width": 453.6000061035156,
+            "height": 873.5999755859375
+          },
+          "content": [
+            {
+              "tag": "text",
+              "text": "Image unavailable",
+              "box": {
+                "x": 208.734375,
+                "y": 462.70001220703125,
+                "width": 122.53125,
+                "height": 18
+              },
+              "fontSize": 15
+            },
+            {
+              "tag": "text",
+              "text": "Complete image description & <literal markup>",
+              "box": {
+                "x": 111.9296875,
+                "y": 481,
+                "width": 316.38623046875,
+                "height": 18
+              },
+              "fontSize": 15
+            }
+          ]
+        },
+        {
+          "path": "design.header.right.image",
+          "role": "img",
+          "description": "Image unavailable: Complete image description & <literal markup> ",
+          "opacity": 1,
+          "panel": {
+            "x": 361.79998779296875,
+            "y": 24,
+            "width": 140.39999389648438,
+            "height": 48
+          },
+          "content": [
+            {
+              "tag": "path",
+              "text": "",
+              "box": {
+                "x": 423,
+                "y": 39,
+                "width": 18,
+                "height": 18
+              },
+              "fontSize": null
+            }
+          ]
+        }
+      ],
+      "screenshot": {
+        "file": "placeholder-540-960-dark.png",
+        "sha256": "cf6eeb7c479a8c9cad98f0a20b599dae8a1ec0498aa6701b580cd3341d8032f3"
+      }
+    },
+    {
+      "id": "96-96-light",
+      "svgSha256": "a974d0c25fbbde2985b1df49c8a76139f9a2fb1f89e4cf2d7edb0328a253e88d",
+      "diagnostics": [
+        {
+          "code": "unresolved-asset",
+          "path": "design.watermark",
+          "message": "Image requires an embedded raster data URI or a host imageResolver.",
+          "reason": "unsupported-source",
+          "source": "./missing.png",
+          "description": "Complete image description & <literal markup> Complete image description & <literal markup> Complete image description & <literal markup> Complete image description & <literal markup> ",
+          "placeholder": "label"
+        },
+        {
+          "code": "unresolved-asset",
+          "path": "slides.0.image",
+          "message": "Image requires an embedded raster data URI or a host imageResolver.",
+          "reason": "unsupported-source",
+          "source": "./missing.png",
+          "description": "Complete image description & <literal markup> Complete image description & <literal markup> Complete image description & <literal markup> Complete image description & <literal markup> ",
+          "placeholder": "label"
+        },
+        {
+          "code": "unresolved-asset",
+          "path": "design.header.right.image",
+          "message": "Image requires an embedded raster data URI or a host imageResolver.",
+          "reason": "unsupported-source",
+          "source": "./missing.png",
+          "description": "Complete image description & <literal markup> Complete image description & <literal markup> Complete image description & <literal markup> Complete image description & <literal markup> ",
+          "placeholder": "icon"
+        }
+      ],
+      "groups": [
+        {
+          "path": "design.watermark",
+          "role": "img",
+          "description": "Image unavailable: Complete image description & <literal markup> Complete image description & <literal markup> Complete image description & <literal markup> Complete image description & <literal markup> ",
+          "opacity": 0.06,
+          "panel": {
+            "x": 28.799999237060547,
+            "y": 28.799999237060547,
+            "width": 38.400001525878906,
+            "height": 38.400001525878906
+          },
+          "content": [
+            {
+              "tag": "text",
+              "text": "Image unavailable",
+              "box": {
+                "x": 36.1328125,
+                "y": 33.027000427246094,
+                "width": 23.290176391601562,
+                "height": 4
+              },
+              "fontSize": 2.667
+            },
+            {
+              "tag": "text",
+              "text": "Complete image description",
+              "box": {
+                "x": 30.15625,
+                "y": 36.279998779296875,
+                "width": 35.19520568847656,
+                "height": 4
+              },
+              "fontSize": 2.667
+            },
+            {
+              "tag": "text",
+              "text": "& <literal markup>",
+              "box": {
+                "x": 36.140625,
+                "y": 39.53300094604492,
+                "width": 23.339569091796875,
+                "height": 4
+              },
+              "fontSize": 2.667
+            },
+            {
+              "tag": "text",
+              "text": "Complete image description",
+              "box": {
+                "x": 30.15625,
+                "y": 42.7869987487793,
+                "width": 35.19520568847656,
+                "height": 4
+              },
+              "fontSize": 2.667
+            },
+            {
+              "tag": "text",
+              "text": "& <literal markup>",
+              "box": {
+                "x": 36.140625,
+                "y": 46.040000915527344,
+                "width": 23.339569091796875,
+                "height": 4
+              },
+              "fontSize": 2.667
+            },
+            {
+              "tag": "text",
+              "text": "Complete image description",
+              "box": {
+                "x": 30.15625,
+                "y": 49.292999267578125,
+                "width": 35.19520568847656,
+                "height": 4
+              },
+              "fontSize": 2.667
+            },
+            {
+              "tag": "text",
+              "text": "& <literal markup>",
+              "box": {
+                "x": 36.140625,
+                "y": 52.547000885009766,
+                "width": 23.339569091796875,
+                "height": 4
+              },
+              "fontSize": 2.667
+            },
+            {
+              "tag": "text",
+              "text": "Complete image description",
+              "box": {
+                "x": 30.15625,
+                "y": 55.79999923706055,
+                "width": 35.19520568847656,
+                "height": 4
+              },
+              "fontSize": 2.667
+            },
+            {
+              "tag": "text",
+              "text": "& <literal markup>",
+              "box": {
+                "x": 36.140625,
+                "y": 59.053001403808594,
+                "width": 23.339569091796875,
+                "height": 4
+              },
+              "fontSize": 2.667
+            }
+          ]
+        },
+        {
+          "path": "slides.0.image",
+          "role": "img",
+          "description": "Image unavailable: Complete image description & <literal markup> Complete image description & <literal markup> Complete image description & <literal markup> Complete image description & <literal markup> ",
+          "opacity": 1,
+          "panel": {
+            "x": 7.679999828338623,
+            "y": 7.679999828338623,
+            "width": 80.63999938964844,
+            "height": 80.63999938964844
+          },
+          "content": [
+            {
+              "tag": "text",
+              "text": "Image unavailable",
+              "box": {
+                "x": 36.1328125,
+                "y": 39.53300094604492,
+                "width": 23.290176391601562,
+                "height": 4
+              },
+              "fontSize": 2.667
+            },
+            {
+              "tag": "text",
+              "text": "Complete image description & <literal markup> Complete",
+              "box": {
+                "x": 12.875,
+                "y": 42.7869987487793,
+                "width": 69.80361938476562,
+                "height": 4
+              },
+              "fontSize": 2.667
+            },
+            {
+              "tag": "text",
+              "text": "image description & <literal markup> Complete image",
+              "box": {
+                "x": 14.9453125,
+                "y": 46.040000915527344,
+                "width": 65.67207336425781,
+                "height": 4
+              },
+              "fontSize": 2.667
+            },
+            {
+              "tag": "text",
+              "text": "description & <literal markup> Complete image description &",
+              "box": {
+                "x": 10.703125,
+                "y": 49.292999267578125,
+                "width": 74.83908081054688,
+                "height": 4
+              },
+              "fontSize": 2.667
+            },
+            {
+              "tag": "text",
+              "text": "<literal markup>",
+              "box": {
+                "x": 37.34375,
+                "y": 52.547000885009766,
+                "width": 20.928955078125,
+                "height": 4
+              },
+              "fontSize": 2.667
+            }
+          ]
+        },
+        {
+          "path": "design.header.right.image",
+          "role": "img",
+          "description": "Image unavailable: Complete image description & <literal markup> Complete image description & <literal markup> Complete image description & <literal markup> Complete image description & <literal markup> ",
+          "opacity": 1,
+          "panel": {
+            "x": 64.31999969482422,
+            "y": 2.4000000953674316,
+            "width": 24.959999084472656,
+            "height": 4.800000190734863
+          },
+          "content": [
+            {
+              "tag": "path",
+              "text": "",
+              "box": {
+                "x": 75.19999694824219,
+                "y": 3.200000047683716,
+                "width": 3.2000045776367188,
+                "height": 3.200000047683716
+              },
+              "fontSize": null
+            }
+          ]
+        }
+      ],
+      "screenshot": {
+        "file": "placeholder-96-96-light.png",
+        "sha256": "9053e56f572dc4bf80717c8146540f0ee300159c801f7002fcf08484bb84db4f"
+      }
+    },
+    {
+      "id": "96-96-dark",
+      "svgSha256": "97e13bfffc53d917ad944080f23ce555db5368b62965901730007ef4b0f117a6",
+      "diagnostics": [
+        {
+          "code": "unresolved-asset",
+          "path": "design.watermark",
+          "message": "Image requires an embedded raster data URI or a host imageResolver.",
+          "reason": "unsupported-source",
+          "source": "./missing.png",
+          "description": "Complete image description & <literal markup> Complete image description & <literal markup> Complete image description & <literal markup> Complete image description & <literal markup> ",
+          "placeholder": "label"
+        },
+        {
+          "code": "unresolved-asset",
+          "path": "slides.0.image",
+          "message": "Image requires an embedded raster data URI or a host imageResolver.",
+          "reason": "unsupported-source",
+          "source": "./missing.png",
+          "description": "Complete image description & <literal markup> Complete image description & <literal markup> Complete image description & <literal markup> Complete image description & <literal markup> ",
+          "placeholder": "label"
+        },
+        {
+          "code": "unresolved-asset",
+          "path": "design.header.right.image",
+          "message": "Image requires an embedded raster data URI or a host imageResolver.",
+          "reason": "unsupported-source",
+          "source": "./missing.png",
+          "description": "Complete image description & <literal markup> Complete image description & <literal markup> Complete image description & <literal markup> Complete image description & <literal markup> ",
+          "placeholder": "icon"
+        }
+      ],
+      "groups": [
+        {
+          "path": "design.watermark",
+          "role": "img",
+          "description": "Image unavailable: Complete image description & <literal markup> Complete image description & <literal markup> Complete image description & <literal markup> Complete image description & <literal markup> ",
+          "opacity": 0.06,
+          "panel": {
+            "x": 28.799999237060547,
+            "y": 28.799999237060547,
+            "width": 38.400001525878906,
+            "height": 38.400001525878906
+          },
+          "content": [
+            {
+              "tag": "text",
+              "text": "Image unavailable",
+              "box": {
+                "x": 36.1328125,
+                "y": 33.027000427246094,
+                "width": 23.290176391601562,
+                "height": 4
+              },
+              "fontSize": 2.667
+            },
+            {
+              "tag": "text",
+              "text": "Complete image description",
+              "box": {
+                "x": 30.15625,
+                "y": 36.279998779296875,
+                "width": 35.19520568847656,
+                "height": 4
+              },
+              "fontSize": 2.667
+            },
+            {
+              "tag": "text",
+              "text": "& <literal markup>",
+              "box": {
+                "x": 36.140625,
+                "y": 39.53300094604492,
+                "width": 23.339569091796875,
+                "height": 4
+              },
+              "fontSize": 2.667
+            },
+            {
+              "tag": "text",
+              "text": "Complete image description",
+              "box": {
+                "x": 30.15625,
+                "y": 42.7869987487793,
+                "width": 35.19520568847656,
+                "height": 4
+              },
+              "fontSize": 2.667
+            },
+            {
+              "tag": "text",
+              "text": "& <literal markup>",
+              "box": {
+                "x": 36.140625,
+                "y": 46.040000915527344,
+                "width": 23.339569091796875,
+                "height": 4
+              },
+              "fontSize": 2.667
+            },
+            {
+              "tag": "text",
+              "text": "Complete image description",
+              "box": {
+                "x": 30.15625,
+                "y": 49.292999267578125,
+                "width": 35.19520568847656,
+                "height": 4
+              },
+              "fontSize": 2.667
+            },
+            {
+              "tag": "text",
+              "text": "& <literal markup>",
+              "box": {
+                "x": 36.140625,
+                "y": 52.547000885009766,
+                "width": 23.339569091796875,
+                "height": 4
+              },
+              "fontSize": 2.667
+            },
+            {
+              "tag": "text",
+              "text": "Complete image description",
+              "box": {
+                "x": 30.15625,
+                "y": 55.79999923706055,
+                "width": 35.19520568847656,
+                "height": 4
+              },
+              "fontSize": 2.667
+            },
+            {
+              "tag": "text",
+              "text": "& <literal markup>",
+              "box": {
+                "x": 36.140625,
+                "y": 59.053001403808594,
+                "width": 23.339569091796875,
+                "height": 4
+              },
+              "fontSize": 2.667
+            }
+          ]
+        },
+        {
+          "path": "slides.0.image",
+          "role": "img",
+          "description": "Image unavailable: Complete image description & <literal markup> Complete image description & <literal markup> Complete image description & <literal markup> Complete image description & <literal markup> ",
+          "opacity": 1,
+          "panel": {
+            "x": 7.679999828338623,
+            "y": 7.679999828338623,
+            "width": 80.63999938964844,
+            "height": 80.63999938964844
+          },
+          "content": [
+            {
+              "tag": "text",
+              "text": "Image unavailable",
+              "box": {
+                "x": 36.1328125,
+                "y": 39.53300094604492,
+                "width": 23.290176391601562,
+                "height": 4
+              },
+              "fontSize": 2.667
+            },
+            {
+              "tag": "text",
+              "text": "Complete image description & <literal markup> Complete",
+              "box": {
+                "x": 12.875,
+                "y": 42.7869987487793,
+                "width": 69.80361938476562,
+                "height": 4
+              },
+              "fontSize": 2.667
+            },
+            {
+              "tag": "text",
+              "text": "image description & <literal markup> Complete image",
+              "box": {
+                "x": 14.9453125,
+                "y": 46.040000915527344,
+                "width": 65.67207336425781,
+                "height": 4
+              },
+              "fontSize": 2.667
+            },
+            {
+              "tag": "text",
+              "text": "description & <literal markup> Complete image description &",
+              "box": {
+                "x": 10.703125,
+                "y": 49.292999267578125,
+                "width": 74.83908081054688,
+                "height": 4
+              },
+              "fontSize": 2.667
+            },
+            {
+              "tag": "text",
+              "text": "<literal markup>",
+              "box": {
+                "x": 37.34375,
+                "y": 52.547000885009766,
+                "width": 20.928955078125,
+                "height": 4
+              },
+              "fontSize": 2.667
+            }
+          ]
+        },
+        {
+          "path": "design.header.right.image",
+          "role": "img",
+          "description": "Image unavailable: Complete image description & <literal markup> Complete image description & <literal markup> Complete image description & <literal markup> Complete image description & <literal markup> ",
+          "opacity": 1,
+          "panel": {
+            "x": 64.31999969482422,
+            "y": 2.4000000953674316,
+            "width": 24.959999084472656,
+            "height": 4.800000190734863
+          },
+          "content": [
+            {
+              "tag": "path",
+              "text": "",
+              "box": {
+                "x": 75.19999694824219,
+                "y": 3.200000047683716,
+                "width": 3.2000045776367188,
+                "height": 3.200000047683716
+              },
+              "fontSize": null
+            }
+          ]
+        }
+      ],
+      "screenshot": {
+        "file": "placeholder-96-96-dark.png",
+        "sha256": "1a5ff33a47e769b8b8d26b9393efdbd27f8e1a6c79a11a89d7e371a994305921"
+      }
+    }
+  ],
+  "errors": [],
+  "externalRequests": [],
+  "scope": "Six actual SVG outputs in offline Edge with exact bundled font bytes: all 18 label/icon bounds within panels (0.1 reference pixel), full accessible descriptions queryable by role, readability floor and authored watermark opacity preserved. This verifies browser DOM/font bounds, not screen-reader speech, final opacity contrast, individual glyph pixels, arbitrary fonts or native export."
+}

@@ -1,0 +1,105 @@
+{
+  "lines": [
+    {
+      "text": "A measured title that",
+      "width": 356.807373046875,
+      "ink": {
+        "x": 0.0791015625,
+        "y": -28.4765625,
+        "width": 356.135009765625,
+        "height": 28.773193359375
+      },
+      "rightOverhang": -0.59326171875
+    },
+    {
+      "text": "wraps when space is",
+      "width": 344.190673828125,
+      "ink": {
+        "x": 0.138427734375,
+        "y": -28.417236328125,
+        "width": 343.02392578125,
+        "height": 34.784912109375
+      },
+      "rightOverhang": -1.0283203125
+    },
+    {
+      "text": "narrow",
+      "width": 121.8955078125,
+      "ink": {
+        "x": 2.4521484375,
+        "y": -20.0126953125,
+        "width": 119.304931640625,
+        "height": 20.309326171875
+      },
+      "rightOverhang": -0.138427734375
+    }
+  ],
+  "modes": [
+    {
+      "mode": "auto",
+      "pixels": 1605,
+      "bounds": {
+        "left": 377,
+        "top": 186,
+        "right": 497,
+        "bottom": 205
+      },
+      "outside": [
+        {
+          "x": 497,
+          "y": 186,
+          "coverage": 90
+        }
+      ],
+      "sha256": "6b0237ba926b5fc11cee6df03592f12d34a45bf610289a92cd4a43807a5cd342"
+    },
+    {
+      "mode": "geometricPrecision",
+      "pixels": 1605,
+      "bounds": {
+        "left": 377,
+        "top": 186,
+        "right": 497,
+        "bottom": 205
+      },
+      "outside": [
+        {
+          "x": 497,
+          "y": 186,
+          "coverage": 90
+        }
+      ],
+      "sha256": "6b0237ba926b5fc11cee6df03592f12d34a45bf610289a92cd4a43807a5cd342"
+    },
+    {
+      "mode": "optimizeLegibility",
+      "pixels": 1605,
+      "bounds": {
+        "left": 377,
+        "top": 186,
+        "right": 497,
+        "bottom": 205
+      },
+      "outside": [
+        {
+          "x": 497,
+          "y": 186,
+          "coverage": 90
+        }
+      ],
+      "sha256": "6b0237ba926b5fc11cee6df03592f12d34a45bf610289a92cd4a43807a5cd342"
+    },
+    {
+      "mode": "outline",
+      "pixels": 1471,
+      "bounds": {
+        "left": 377,
+        "top": 186,
+        "right": 496,
+        "bottom": 206
+      },
+      "outside": [],
+      "sha256": "9302e1988c7a6b66f21f256bc633bb66235d2b37251526904188c388a16778c5"
+    }
+  ]
+}

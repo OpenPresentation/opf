@@ -1,0 +1,11 @@
+# Shared-text regression baseline review — 2026-09-10
+
+The wrap-up promotes `scripts/fixtures/opf-examples-png.shared-text.sha256.json` as a **source-regression checkpoint**, not as approval to publish the package set or a claim that the gallery is polished. The historical shared-code baseline and published registry verification refs remain unchanged.
+
+The candidate records 805 slides in 126 decks, source digest `3a1ed8ad00b30863b5852197a85602263a2238c613020fb891d933f86e124c4b`, quarter-scale PNG, pinned bundled fonts and no system fonts. It is the candidate preserved in [text-placement evidence](text-placement/README.md). Node 20 and 24 agree, and all 2,415 previous/current image hashes were independently verified there. Runtime changes since that evidence concern native test tooling only.
+
+Review covered every slide in all 17 final overview sheets, following the individual milestone pair sheets and selected full-size/real-browser reviews recorded in the gallery-artwork, card, chart and accepted-text evidence. The changes retain offline artwork, shared card geometry, visible inherited chart/table labels, accepted heading sizes and measured text origins. The accepted-text outline milestone itself leaves all 805 default corpus rasters unchanged from its predecessor.
+
+Known quality limitations remain: sparse cards/excessive whitespace, estimated-font rich-run gaps, missing external CSV/workbook chart content, unresolved photo/video placeholders and dense timeline/table slides. This checkpoint prevents accidental changes while those issues are fixed in reviewable milestones. It does not waive them or promote estimated-font rendering as the supported fidelity path. Measured-font preparation, exact-source preservation and remaining payload layout are continuing project goals.
+
+Native text, chart editing and metric raster gates remain open as documented in [native-resume evidence](native-resume/README.md). Shared geometry, browser paint, editable DrawingML, real PowerPoint rendering and arbitrary round-tripping are separate claims. Linux/Windows agreement must be established by the wrap-up CI; a mismatch remains a failing check requiring inspection, not automatic baseline replacement.

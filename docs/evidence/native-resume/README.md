@@ -1,0 +1,26 @@
+# Native Office resume evidence
+
+The user dismissed an Office dialog and PowerPoint COM resumed with version `16.0`. The chart run then opened eight real editable charts, saved/reopened them and captured native rasters. It stopped responding while activating the **second embedded Excel workbook**. The user's [screenshot](office-dialog.png) identifies PowerPoint's warning about an open Excel dialog or Excel editing mode; the underlying Excel state is not yet established.
+
+This is a partial native milestone. No product runtime, version, accepted corpus baseline, immutable release ref or public deployment changed. [summary.json](summary.json) binds the captured artifacts and GitHub sources; raw bytes are preserved by the local attributes file.
+
+## Verified and prepared scope
+
+- PPTX collection fix `0e3b58fb7a91a6f29f52ce2338f2cc91b4f803dc` replaces the failing PowerShell COM series enumerator with one-based indexed access. The first failure remains in `chart-node24/failure.json`.
+- `chart-indexed-node24/partial-comparison.json` verifies all **16 original/native-saved chart data imports** and **eight byte-identical original/reopened native PNG pairs**. Runtime hashes and the actual verifiers are preserved. The first workbook's header, series, category and numeric edit calls returned successfully, but the edited deck was never saved and reimported. That is not a passing edit gate.
+- The column and pie rasters were visually inspected. The fixture requests unmeasured Roboto; it is not the exact-Calibri metric fixture or a native font-fidelity test. Chart gridline styling, general geometry and browser/native pixel equivalence are not certified.
+- PPTX `bf1c7bd8db21bfc400e92a7bf4275f4e3048c7e4` adds a bounded chart worker: exactly one requested workbook activation, progress persisted before Office calls, a default 45-second deadline and no automatic retry. Dummy-process tests pass for literal arguments, successful exit, exact failure exit and timeout termination. They make no Office calls.
+- The new accepted-text generator passes on Node 20.20.2 and 24.20.0: **24 fixtures / 144 editable lines per runtime**, with identical PPTX bytes and geometry. Four exact Carlito files and their license are retained. The Windows `-FontsOnly` preflight registered all four temporarily and successfully removed all four owned registrations. It wrote no permanent font registry or system files.
+- **Full native text execution has not run.** Its native edit/rename/save/reopen/import and actual-ink comparator are prepared, not passing evidence. Existing browser mask tolerances remain unchanged. Requested Aptos is an explicit visual substitution; registered font bytes and native font descriptors do not prove font-file selection for every glyph.
+- `metric-node24` contains 48 fresh Calibri-reference metric fixtures and SVG rasters, with reference hashes only. No proprietary font bytes are included. No current metric COM run occurred; historical tab-position and portrait-label ink counterexamples remain open.
+- The fresh seven-repository audit has zero open PRs and zero open Dependabot security alerts. Core roadmap PR #59 merged separately; the latest coordinated main run [34500983790](https://github.com/OpenPresentation/opf/actions/runs/34500983790) passes. It does not certify these unpublished integration sources.
+
+## Office state and next check
+
+The original chart helper was stopped after approximately eleven minutes without progress. Its separate status/exact-generated-file cleanup attempt also blocked and its helper was stopped. Both records are retained. **No Office process was killed, no user file was closed, and cleanup completion is unknown.** The generated `charts-saved.pptx` may remain open; compare its exact path before any cleanup. Do not interpret missing COM properties as an empty user session.
+
+The user has been asked to dismiss the PowerPoint warning and finish/save any Excel cell edit or dismiss its dialog while leaving workbooks open. No further Office call was started after that request. Once the interaction is resolved, use one controlled run of the bounded chart harness with `-EditSlide 1` (then other slides separately only after success), or start the queued text/metric checks. Do not automatically retry an Office warning. The new harness has no real native run yet and is not a proven fix for Excel's internal state.
+
+Fetch `codex/shared-metric-integration-20260910` in all four repositories. Product runtimes remain core `ac0c99fcdc03dd7cd7ac9840be841b903a941f77`, renderer `53e6f5fb5911ebecbfcdfef341bbb53e33c1f7a5`, PPTX `12c6cee646a5c8760dcbf964b722a108d21687b4` and editor `0e8a1676c780919ceefe8b9972372f364e542944`; the later PPTX commits change test harnesses/docs. See the [native verifier instructions](https://github.com/OpenPresentation/opf-pptx/blob/codex/shared-metric-integration-20260910/docs/native-text-checks.md). Always generate new evidence with the current verifier and runtime hashes. The old indexed chart attempt uses its preserved verifier; do not relabel it as a bounded-worker result.
+
+General shared payload outlines/source preservation, quality/repair, fonts/shaping, corpus approval, native export, candidate/review/release/registry/public adoption and unavailable native-platform evidence remain work. The complete ecosystem goal stays active.

@@ -1,0 +1,2313 @@
+{
+  "browser": "152.0.4191.66",
+  "platform": "win32",
+  "verifierSha256": "3a2126dfb88b598b4765a7a2aa6c8bb2e6dd76b6e63133543f2d07024c6da320",
+  "rendererSha256": "2df17dc0b7aeecad5738a5a8beb948638f20dc3334610f7a735f2f348beef007",
+  "fontHashes": [
+    {
+      "family": "Cousine",
+      "weight": 400,
+      "sha256": "ca2264d6750d6c47df703be4486361a37ab943d42de6ea2bf794b7c7af767799"
+    },
+    {
+      "family": "Cousine",
+      "weight": 700,
+      "sha256": "f03c46c4bc5c0a3af4a1f4fbe5e3e16954581cced05cea20b3bffe12740d99d3"
+    }
+  ],
+  "results": [
+    {
+      "id": "shorthand-1280",
+      "svgSha256": "23d5823253be9b7c7a1b5a83e6554adde875d8fd0cfd7d9ef5eb58a8fa665968",
+      "parts": [
+        {
+          "role": "language",
+          "sourcePreserved": true,
+          "box": {
+            "x": 75.6,
+            "y": 75.6,
+            "width": 1128.8,
+            "height": 29.28
+          },
+          "tracedBox": {
+            "x": 75.6,
+            "y": 75.6,
+            "width": 1128.8,
+            "height": 29.28
+          },
+          "lines": [
+            {
+              "expectedWidth": 57.609375,
+              "actualAdvance": 57.609375,
+              "advanceDifference": 0,
+              "bbox": {
+                "x": 75.5999984741211,
+                "y": 79.5999984741211,
+                "width": 57.60938262939453,
+                "height": 27
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 75.6,
+                  "start": 75.5999984741211,
+                  "expectedWidth": 57.609375,
+                  "actualAdvance": 57.609375
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "role": "body",
+          "sourcePreserved": true,
+          "box": {
+            "x": 75.6,
+            "y": 116.88,
+            "width": 1128.8,
+            "height": 527.52
+          },
+          "tracedBox": {
+            "x": 75.6,
+            "y": 116.88,
+            "width": 1128.8,
+            "height": 527.52
+          },
+          "lines": [
+            {
+              "expectedWidth": 489.6796875,
+              "actualAdvance": 489.6871337890625,
+              "advanceDifference": 0.0074462890625,
+              "bbox": {
+                "x": 75.5999984741211,
+                "y": 120.8800048828125,
+                "width": 489.6871032714844,
+                "height": 27
+              },
+              "segments": [
+                {
+                  "kind": "tab",
+                  "expectedX": 75.6,
+                  "start": 75.5999984741211,
+                  "expectedWidth": 57.609375,
+                  "actualAdvance": 57.60900115966797
+                },
+                {
+                  "kind": "text",
+                  "expectedX": 133.209375,
+                  "start": 133.20899963378906,
+                  "expectedWidth": 432.0703125,
+                  "actualAdvance": 432.078125
+                }
+              ]
+            },
+            {
+              "expectedWidth": 0,
+              "actualAdvance": 0,
+              "advanceDifference": 0,
+              "bbox": {
+                "x": 0,
+                "y": 0,
+                "width": 0,
+                "height": 0
+              },
+              "segments": []
+            },
+            {
+              "expectedWidth": 57.609375,
+              "actualAdvance": 57.609375,
+              "advanceDifference": 0,
+              "bbox": {
+                "x": 75.5999984741211,
+                "y": 179.44000244140625,
+                "width": 57.60938262939453,
+                "height": 27
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 75.6,
+                  "start": 75.5999984741211,
+                  "expectedWidth": 57.609375,
+                  "actualAdvance": 57.609375
+                }
+              ]
+            },
+            {
+              "expectedWidth": 0,
+              "actualAdvance": 0,
+              "advanceDifference": 0,
+              "bbox": {
+                "x": 0,
+                "y": 0,
+                "width": 0,
+                "height": 0
+              },
+              "segments": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blank-1280",
+      "svgSha256": "571bef211d6a06172d67aa6297e336f604bd7fb2f7baa7edf55801da3608c52f",
+      "parts": [
+        {
+          "role": "language",
+          "sourcePreserved": true,
+          "box": {
+            "x": 75.6,
+            "y": 75.6,
+            "width": 1128.8,
+            "height": 29.28
+          },
+          "tracedBox": {
+            "x": 75.6,
+            "y": 75.6,
+            "width": 1128.8,
+            "height": 29.28
+          },
+          "lines": [
+            {
+              "expectedWidth": 57.609375,
+              "actualAdvance": 57.609375,
+              "advanceDifference": 0,
+              "bbox": {
+                "x": 75.5999984741211,
+                "y": 79.5999984741211,
+                "width": 57.60938262939453,
+                "height": 27
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 75.6,
+                  "start": 75.5999984741211,
+                  "expectedWidth": 57.609375,
+                  "actualAdvance": 57.609375
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "role": "body",
+          "sourcePreserved": true,
+          "box": {
+            "x": 75.6,
+            "y": 116.88,
+            "width": 1128.8,
+            "height": 527.52
+          },
+          "tracedBox": {
+            "x": 75.6,
+            "y": 116.88,
+            "width": 1128.8,
+            "height": 527.52
+          },
+          "lines": [
+            {
+              "expectedWidth": 0,
+              "actualAdvance": 0,
+              "advanceDifference": 0,
+              "bbox": {
+                "x": 0,
+                "y": 0,
+                "width": 0,
+                "height": 0
+              },
+              "segments": []
+            },
+            {
+              "expectedWidth": 0,
+              "actualAdvance": 0,
+              "advanceDifference": 0,
+              "bbox": {
+                "x": 0,
+                "y": 0,
+                "width": 0,
+                "height": 0
+              },
+              "segments": []
+            },
+            {
+              "expectedWidth": 0,
+              "actualAdvance": 0,
+              "advanceDifference": 0,
+              "bbox": {
+                "x": 0,
+                "y": 0,
+                "width": 0,
+                "height": 0
+              },
+              "segments": []
+            },
+            {
+              "expectedWidth": 0,
+              "actualAdvance": 0,
+              "advanceDifference": 0,
+              "bbox": {
+                "x": 0,
+                "y": 0,
+                "width": 0,
+                "height": 0
+              },
+              "segments": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "metadata-1280",
+      "svgSha256": "cf78ad52dc122b244328fe53e7a78c9af97ba7a6dc3cb0b3094cbd7a4e8a306c",
+      "parts": [
+        {
+          "role": "filename",
+          "sourcePreserved": true,
+          "box": {
+            "x": 75.6,
+            "y": 75.6,
+            "width": 1128.8,
+            "height": 29.28
+          },
+          "tracedBox": {
+            "x": 75.6,
+            "y": 75.6,
+            "width": 1128.8,
+            "height": 29.28
+          },
+          "lines": [
+            {
+              "expectedWidth": 288.046875,
+              "actualAdvance": 288.0582580566406,
+              "advanceDifference": 0.011383056640625,
+              "bbox": {
+                "x": 75.5999984741211,
+                "y": 79.5999984741211,
+                "width": 288.0464782714844,
+                "height": 27
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 75.6,
+                  "start": 75.5999984741211,
+                  "expectedWidth": 43.20703125,
+                  "actualAdvance": 43.21875
+                },
+                {
+                  "kind": "tab",
+                  "expectedX": 118.80703125,
+                  "start": 118.80699920654297,
+                  "expectedWidth": 14.40234375,
+                  "actualAdvance": 14.402000427246094
+                },
+                {
+                  "kind": "text",
+                  "expectedX": 133.209375,
+                  "start": 133.20899963378906,
+                  "expectedWidth": 230.4375,
+                  "actualAdvance": 230.4375
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "role": "language",
+          "sourcePreserved": true,
+          "box": {
+            "x": 75.6,
+            "y": 112.88,
+            "width": 1128.8,
+            "height": 29.28
+          },
+          "tracedBox": {
+            "x": 75.6,
+            "y": 112.88,
+            "width": 1128.8,
+            "height": 29.28
+          },
+          "lines": [
+            {
+              "expectedWidth": 144.0234375,
+              "actualAdvance": 144.03125,
+              "advanceDifference": 0.0078125,
+              "bbox": {
+                "x": 75.5999984741211,
+                "y": 116.8800048828125,
+                "width": 144.03125,
+                "height": 27
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 75.6,
+                  "start": 75.5999984741211,
+                  "expectedWidth": 144.0234375,
+                  "actualAdvance": 144.03125
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "role": "body",
+          "sourcePreserved": true,
+          "box": {
+            "x": 75.6,
+            "y": 154.16,
+            "width": 1128.8,
+            "height": 490.24
+          },
+          "tracedBox": {
+            "x": 75.6,
+            "y": 154.16,
+            "width": 1128.8,
+            "height": 490.24
+          },
+          "lines": [
+            {
+              "expectedWidth": 72.01171875,
+              "actualAdvance": 72.01950073242188,
+              "advanceDifference": 0.007781982421875,
+              "bbox": {
+                "x": 75.5999984741211,
+                "y": 158.16000366210938,
+                "width": 72.01525115966797,
+                "height": 27
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 75.6,
+                  "start": 75.5999984741211,
+                  "expectedWidth": 14.40234375,
+                  "actualAdvance": 14.40625
+                },
+                {
+                  "kind": "tab",
+                  "expectedX": 90.00234375,
+                  "start": 90.00199890136719,
+                  "expectedWidth": 43.20703125,
+                  "actualAdvance": 43.207000732421875
+                },
+                {
+                  "kind": "text",
+                  "expectedX": 133.209375,
+                  "start": 133.20899963378906,
+                  "expectedWidth": 14.40234375,
+                  "actualAdvance": 14.40625
+                }
+              ]
+            },
+            {
+              "expectedWidth": 129.62109375,
+              "actualAdvance": 129.6246337890625,
+              "advanceDifference": 0.0035400390625,
+              "bbox": {
+                "x": 75.5999984741211,
+                "y": 187.44000244140625,
+                "width": 129.625244140625,
+                "height": 27
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 75.6,
+                  "start": 75.5999984741211,
+                  "expectedWidth": 57.609375,
+                  "actualAdvance": 57.609375
+                },
+                {
+                  "kind": "tab",
+                  "expectedX": 133.209375,
+                  "start": 133.20899963378906,
+                  "expectedWidth": 57.609375,
+                  "actualAdvance": 57.60900115966797
+                },
+                {
+                  "kind": "text",
+                  "expectedX": 190.81875,
+                  "start": 190.81900024414062,
+                  "expectedWidth": 14.40234375,
+                  "actualAdvance": 14.40625
+                }
+              ]
+            },
+            {
+              "expectedWidth": 115.21875,
+              "actualAdvance": 115.21800231933594,
+              "advanceDifference": -0.0007476806640625,
+              "bbox": {
+                "x": 75.5999984741211,
+                "y": 216.72000122070312,
+                "width": 115.2179946899414,
+                "height": 27
+              },
+              "segments": [
+                {
+                  "kind": "tab",
+                  "expectedX": 75.6,
+                  "start": 75.5999984741211,
+                  "expectedWidth": 57.609375,
+                  "actualAdvance": 57.60900115966797
+                },
+                {
+                  "kind": "tab",
+                  "expectedX": 133.209375,
+                  "start": 133.20899963378906,
+                  "expectedWidth": 57.609375,
+                  "actualAdvance": 57.60900115966797
+                }
+              ]
+            },
+            {
+              "expectedWidth": 201.6328125,
+              "actualAdvance": 201.64837646484375,
+              "advanceDifference": 0.01556396484375,
+              "bbox": {
+                "x": 75.5999984741211,
+                "y": 246,
+                "width": 201.640869140625,
+                "height": 27
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 75.6,
+                  "start": 75.5999984741211,
+                  "expectedWidth": 14.40234375,
+                  "actualAdvance": 14.40625
+                },
+                {
+                  "kind": "tab",
+                  "expectedX": 90.00234375,
+                  "start": 90.00199890136719,
+                  "expectedWidth": 43.20703125,
+                  "actualAdvance": 43.207000732421875
+                },
+                {
+                  "kind": "text",
+                  "expectedX": 133.209375,
+                  "start": 133.20899963378906,
+                  "expectedWidth": 14.40234375,
+                  "actualAdvance": 14.40625
+                },
+                {
+                  "kind": "tab",
+                  "expectedX": 147.61171875,
+                  "start": 147.61199951171875,
+                  "expectedWidth": 43.20703125,
+                  "actualAdvance": 43.207000732421875
+                },
+                {
+                  "kind": "text",
+                  "expectedX": 190.81875,
+                  "start": 190.81900024414062,
+                  "expectedWidth": 86.4140625,
+                  "actualAdvance": 86.421875
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "language-1280",
+      "svgSha256": "3b5ffae48e705da9211069ac070e5c626fc9a080928e25d1cc5a0514dd5e6e88",
+      "parts": [
+        {
+          "role": "language",
+          "sourcePreserved": true,
+          "box": {
+            "x": 75.6,
+            "y": 75.6,
+            "width": 1128.8,
+            "height": 175.68
+          },
+          "tracedBox": {
+            "x": 75.6,
+            "y": 75.6,
+            "width": 1128.8,
+            "height": 175.68
+          },
+          "lines": [
+            {
+              "expectedWidth": 1123.3828125,
+              "actualAdvance": 1123.390625,
+              "advanceDifference": 0.0078125,
+              "bbox": {
+                "x": 75.5999984741211,
+                "y": 79.5999984741211,
+                "width": 1123.390625,
+                "height": 27
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 75.6,
+                  "start": 75.5999984741211,
+                  "expectedWidth": 1123.3828125,
+                  "actualAdvance": 1123.390625
+                }
+              ]
+            },
+            {
+              "expectedWidth": 1123.3828125,
+              "actualAdvance": 1123.390625,
+              "advanceDifference": 0.0078125,
+              "bbox": {
+                "x": 75.5999984741211,
+                "y": 108.8800048828125,
+                "width": 1123.98046875,
+                "height": 27
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 75.6,
+                  "start": 75.5999984741211,
+                  "expectedWidth": 1123.3828125,
+                  "actualAdvance": 1123.390625
+                }
+              ]
+            },
+            {
+              "expectedWidth": 1123.3828125,
+              "actualAdvance": 1123.390625,
+              "advanceDifference": 0.0078125,
+              "bbox": {
+                "x": 75.5999984741211,
+                "y": 138.16000366210938,
+                "width": 1123.390625,
+                "height": 27
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 75.6,
+                  "start": 75.5999984741211,
+                  "expectedWidth": 1123.3828125,
+                  "actualAdvance": 1123.390625
+                }
+              ]
+            },
+            {
+              "expectedWidth": 1123.3828125,
+              "actualAdvance": 1123.390625,
+              "advanceDifference": 0.0078125,
+              "bbox": {
+                "x": 75.5999984741211,
+                "y": 167.44000244140625,
+                "width": 1123.390625,
+                "height": 27
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 75.6,
+                  "start": 75.5999984741211,
+                  "expectedWidth": 1123.3828125,
+                  "actualAdvance": 1123.390625
+                }
+              ]
+            },
+            {
+              "expectedWidth": 1123.3828125,
+              "actualAdvance": 1123.390625,
+              "advanceDifference": 0.0078125,
+              "bbox": {
+                "x": 75.5999984741211,
+                "y": 196.72000122070312,
+                "width": 1123.390625,
+                "height": 27
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 75.6,
+                  "start": 75.5999984741211,
+                  "expectedWidth": 1123.3828125,
+                  "actualAdvance": 1123.390625
+                }
+              ]
+            },
+            {
+              "expectedWidth": 144.0234375,
+              "actualAdvance": 144.03125,
+              "advanceDifference": 0.0078125,
+              "bbox": {
+                "x": 75.5999984741211,
+                "y": 226,
+                "width": 144.03125,
+                "height": 27
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 75.6,
+                  "start": 75.5999984741211,
+                  "expectedWidth": 144.0234375,
+                  "actualAdvance": 144.03125
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "role": "body",
+          "sourcePreserved": true,
+          "box": {
+            "x": 75.6,
+            "y": 263.28,
+            "width": 1128.8,
+            "height": 381.12
+          },
+          "tracedBox": {
+            "x": 75.6,
+            "y": 263.28,
+            "width": 1128.8,
+            "height": 381.12
+          },
+          "lines": [
+            {
+              "expectedWidth": 129.62109375,
+              "actualAdvance": 129.625,
+              "advanceDifference": 0.00390625,
+              "bbox": {
+                "x": 75.5999984741211,
+                "y": 267.2799987792969,
+                "width": 129.625,
+                "height": 27
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 75.6,
+                  "start": 75.5999984741211,
+                  "expectedWidth": 129.62109375,
+                  "actualAdvance": 129.625
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "filename-1280",
+      "svgSha256": "1c03b7a4b843cc130414d42f40230d0381e1911afc591f6630f332b895ebd03d",
+      "parts": [
+        {
+          "role": "filename",
+          "sourcePreserved": true,
+          "box": {
+            "x": 75.6,
+            "y": 75.6,
+            "width": 1128.8,
+            "height": 117.12
+          },
+          "tracedBox": {
+            "x": 75.6,
+            "y": 75.6,
+            "width": 1128.8,
+            "height": 117.12
+          },
+          "lines": [
+            {
+              "expectedWidth": 1123.3828125,
+              "actualAdvance": 1123.390625,
+              "advanceDifference": 0.0078125,
+              "bbox": {
+                "x": 75.5999984741211,
+                "y": 79.5999984741211,
+                "width": 1123.390625,
+                "height": 27
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 75.6,
+                  "start": 75.5999984741211,
+                  "expectedWidth": 1123.3828125,
+                  "actualAdvance": 1123.390625
+                }
+              ]
+            },
+            {
+              "expectedWidth": 1123.3828125,
+              "actualAdvance": 1123.390625,
+              "advanceDifference": 0.0078125,
+              "bbox": {
+                "x": 75.5999984741211,
+                "y": 108.8800048828125,
+                "width": 1123.390625,
+                "height": 27
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 75.6,
+                  "start": 75.5999984741211,
+                  "expectedWidth": 1123.3828125,
+                  "actualAdvance": 1123.390625
+                }
+              ]
+            },
+            {
+              "expectedWidth": 1123.3828125,
+              "actualAdvance": 1123.390625,
+              "advanceDifference": 0.0078125,
+              "bbox": {
+                "x": 75.5999984741211,
+                "y": 138.16000366210938,
+                "width": 1123.390625,
+                "height": 27
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 75.6,
+                  "start": 75.5999984741211,
+                  "expectedWidth": 1123.3828125,
+                  "actualAdvance": 1123.390625
+                }
+              ]
+            },
+            {
+              "expectedWidth": 302.44921875,
+              "actualAdvance": 302.453125,
+              "advanceDifference": 0.00390625,
+              "bbox": {
+                "x": 75.5999984741211,
+                "y": 167.44000244140625,
+                "width": 302.453125,
+                "height": 27
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 75.6,
+                  "start": 75.5999984741211,
+                  "expectedWidth": 302.44921875,
+                  "actualAdvance": 302.453125
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "role": "body",
+          "sourcePreserved": true,
+          "box": {
+            "x": 75.6,
+            "y": 204.72,
+            "width": 1128.8,
+            "height": 439.67999999999995
+          },
+          "tracedBox": {
+            "x": 75.6,
+            "y": 204.72,
+            "width": 1128.8,
+            "height": 439.67999999999995
+          },
+          "lines": [
+            {
+              "expectedWidth": 244.83984375,
+              "actualAdvance": 244.84375,
+              "advanceDifference": 0.00390625,
+              "bbox": {
+                "x": 75.5999984741211,
+                "y": 208.72000122070312,
+                "width": 244.84375,
+                "height": 27
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 75.6,
+                  "start": 75.5999984741211,
+                  "expectedWidth": 244.83984375,
+                  "actualAdvance": 244.84375
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wrapped-1280",
+      "svgSha256": "d22d53d15040f30f09dcfd8a8d8f21807fc234fcaa9f767fdd348364da874263",
+      "parts": [
+        {
+          "role": "language",
+          "sourcePreserved": true,
+          "box": {
+            "x": 75.6,
+            "y": 75.6,
+            "width": 1128.8,
+            "height": 29.28
+          },
+          "tracedBox": {
+            "x": 75.6,
+            "y": 75.6,
+            "width": 1128.8,
+            "height": 29.28
+          },
+          "lines": [
+            {
+              "expectedWidth": 28.8046875,
+              "actualAdvance": 28.8125,
+              "advanceDifference": 0.0078125,
+              "bbox": {
+                "x": 75.5999984741211,
+                "y": 79.5999984741211,
+                "width": 28.8125,
+                "height": 27
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 75.6,
+                  "start": 75.5999984741211,
+                  "expectedWidth": 28.8046875,
+                  "actualAdvance": 28.8125
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "role": "body",
+          "sourcePreserved": true,
+          "box": {
+            "x": 75.6,
+            "y": 116.88,
+            "width": 1128.8,
+            "height": 527.52
+          },
+          "tracedBox": {
+            "x": 75.6,
+            "y": 116.88,
+            "width": 1128.8,
+            "height": 527.52
+          },
+          "lines": [
+            {
+              "expectedWidth": 360.05859375,
+              "actualAdvance": 360.0625,
+              "advanceDifference": 0.00390625,
+              "bbox": {
+                "x": 75.5999984741211,
+                "y": 120.8800048828125,
+                "width": 360.0625,
+                "height": 27
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 75.6,
+                  "start": 75.5999984741211,
+                  "expectedWidth": 360.05859375,
+                  "actualAdvance": 360.0625
+                }
+              ]
+            },
+            {
+              "expectedWidth": 1123.3828125,
+              "actualAdvance": 1123.390625,
+              "advanceDifference": 0.0078125,
+              "bbox": {
+                "x": 75.5999984741211,
+                "y": 150.16000366210938,
+                "width": 1123.390625,
+                "height": 27
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 75.6,
+                  "start": 75.5999984741211,
+                  "expectedWidth": 1123.3828125,
+                  "actualAdvance": 1123.390625
+                }
+              ]
+            },
+            {
+              "expectedWidth": 1123.3828125,
+              "actualAdvance": 1123.390625,
+              "advanceDifference": 0.0078125,
+              "bbox": {
+                "x": 75.5999984741211,
+                "y": 179.44000244140625,
+                "width": 1123.390625,
+                "height": 27
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 75.6,
+                  "start": 75.5999984741211,
+                  "expectedWidth": 1123.3828125,
+                  "actualAdvance": 1123.390625
+                }
+              ]
+            },
+            {
+              "expectedWidth": 1123.3828125,
+              "actualAdvance": 1123.390625,
+              "advanceDifference": 0.0078125,
+              "bbox": {
+                "x": 75.5999984741211,
+                "y": 208.72000122070312,
+                "width": 1123.390625,
+                "height": 27
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 75.6,
+                  "start": 75.5999984741211,
+                  "expectedWidth": 1123.3828125,
+                  "actualAdvance": 1123.390625
+                }
+              ]
+            },
+            {
+              "expectedWidth": 518.484375,
+              "actualAdvance": 518.484375,
+              "advanceDifference": 0,
+              "bbox": {
+                "x": 75.5999984741211,
+                "y": 238,
+                "width": 518.484375,
+                "height": 27
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 75.6,
+                  "start": 75.5999984741211,
+                  "expectedWidth": 518.484375,
+                  "actualAdvance": 518.484375
+                }
+              ]
+            },
+            {
+              "expectedWidth": 273.64453125,
+              "actualAdvance": 273.6558837890625,
+              "advanceDifference": 0.0113525390625,
+              "bbox": {
+                "x": 75.5999984741211,
+                "y": 267.2799987792969,
+                "width": 273.6558532714844,
+                "height": 27
+              },
+              "segments": [
+                {
+                  "kind": "tab",
+                  "expectedX": 75.6,
+                  "start": 75.5999984741211,
+                  "expectedWidth": 57.609375,
+                  "actualAdvance": 57.60900115966797
+                },
+                {
+                  "kind": "text",
+                  "expectedX": 133.209375,
+                  "start": 133.20899963378906,
+                  "expectedWidth": 216.03515625,
+                  "actualAdvance": 216.046875
+                }
+              ]
+            },
+            {
+              "expectedWidth": 0,
+              "actualAdvance": 0,
+              "advanceDifference": 0,
+              "bbox": {
+                "x": 0,
+                "y": 0,
+                "width": 0,
+                "height": 0
+              },
+              "segments": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shorthand-540",
+      "svgSha256": "ac1bd9651dd88eb29d011779ca5418e1fa246747a3572678aa0303c9e920acf9",
+      "parts": [
+        {
+          "role": "language",
+          "sourcePreserved": true,
+          "box": {
+            "x": 61.2,
+            "y": 61.2,
+            "width": 417.6,
+            "height": 21.96
+          },
+          "tracedBox": {
+            "x": 61.2,
+            "y": 61.2,
+            "width": 417.6,
+            "height": 21.96
+          },
+          "lines": [
+            {
+              "expectedWidth": 43.20703125,
+              "actualAdvance": 43.21875,
+              "advanceDifference": 0.01171875,
+              "bbox": {
+                "x": 61.20000076293945,
+                "y": 64.19999694824219,
+                "width": 43.405269622802734,
+                "height": 20
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 61.2,
+                  "start": 61.20000076293945,
+                  "expectedWidth": 43.20703125,
+                  "actualAdvance": 43.21875
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "role": "body",
+          "sourcePreserved": true,
+          "box": {
+            "x": 61.2,
+            "y": 95.16,
+            "width": 417.6,
+            "height": 803.6400000000001
+          },
+          "tracedBox": {
+            "x": 61.2,
+            "y": 95.16,
+            "width": 417.6,
+            "height": 803.6400000000001
+          },
+          "lines": [
+            {
+              "expectedWidth": 367.259765625,
+              "actualAdvance": 367.2695007324219,
+              "advanceDifference": 0.009735107421875,
+              "bbox": {
+                "x": 61.20000076293945,
+                "y": 98.16000366210938,
+                "width": 367.26947021484375,
+                "height": 20
+              },
+              "segments": [
+                {
+                  "kind": "tab",
+                  "expectedX": 61.2,
+                  "start": 61.19999313354492,
+                  "expectedWidth": 43.20703125,
+                  "actualAdvance": 43.207000732421875
+                },
+                {
+                  "kind": "text",
+                  "expectedX": 104.40703125,
+                  "start": 104.40699768066406,
+                  "expectedWidth": 324.052734375,
+                  "actualAdvance": 324.0625
+                }
+              ]
+            },
+            {
+              "expectedWidth": 0,
+              "actualAdvance": 0,
+              "advanceDifference": 0,
+              "bbox": {
+                "x": 0,
+                "y": 0,
+                "width": 0,
+                "height": 0
+              },
+              "segments": []
+            },
+            {
+              "expectedWidth": 43.20703125,
+              "actualAdvance": 43.21875,
+              "advanceDifference": 0.01171875,
+              "bbox": {
+                "x": 61.20000076293945,
+                "y": 142.0800018310547,
+                "width": 43.218746185302734,
+                "height": 20
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 61.2,
+                  "start": 61.20000076293945,
+                  "expectedWidth": 43.20703125,
+                  "actualAdvance": 43.21875
+                }
+              ]
+            },
+            {
+              "expectedWidth": 0,
+              "actualAdvance": 0,
+              "advanceDifference": 0,
+              "bbox": {
+                "x": 0,
+                "y": 0,
+                "width": 0,
+                "height": 0
+              },
+              "segments": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blank-540",
+      "svgSha256": "f5c2761c25126d0db4287b77eb72c5ae0c174987141f2fd29576b2f78495fc92",
+      "parts": [
+        {
+          "role": "language",
+          "sourcePreserved": true,
+          "box": {
+            "x": 61.2,
+            "y": 61.2,
+            "width": 417.6,
+            "height": 21.96
+          },
+          "tracedBox": {
+            "x": 61.2,
+            "y": 61.2,
+            "width": 417.6,
+            "height": 21.96
+          },
+          "lines": [
+            {
+              "expectedWidth": 43.20703125,
+              "actualAdvance": 43.21875,
+              "advanceDifference": 0.01171875,
+              "bbox": {
+                "x": 61.20000076293945,
+                "y": 64.19999694824219,
+                "width": 43.405269622802734,
+                "height": 20
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 61.2,
+                  "start": 61.20000076293945,
+                  "expectedWidth": 43.20703125,
+                  "actualAdvance": 43.21875
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "role": "body",
+          "sourcePreserved": true,
+          "box": {
+            "x": 61.2,
+            "y": 95.16,
+            "width": 417.6,
+            "height": 803.6400000000001
+          },
+          "tracedBox": {
+            "x": 61.2,
+            "y": 95.16,
+            "width": 417.6,
+            "height": 803.6400000000001
+          },
+          "lines": [
+            {
+              "expectedWidth": 0,
+              "actualAdvance": 0,
+              "advanceDifference": 0,
+              "bbox": {
+                "x": 0,
+                "y": 0,
+                "width": 0,
+                "height": 0
+              },
+              "segments": []
+            },
+            {
+              "expectedWidth": 0,
+              "actualAdvance": 0,
+              "advanceDifference": 0,
+              "bbox": {
+                "x": 0,
+                "y": 0,
+                "width": 0,
+                "height": 0
+              },
+              "segments": []
+            },
+            {
+              "expectedWidth": 0,
+              "actualAdvance": 0,
+              "advanceDifference": 0,
+              "bbox": {
+                "x": 0,
+                "y": 0,
+                "width": 0,
+                "height": 0
+              },
+              "segments": []
+            },
+            {
+              "expectedWidth": 0,
+              "actualAdvance": 0,
+              "advanceDifference": 0,
+              "bbox": {
+                "x": 0,
+                "y": 0,
+                "width": 0,
+                "height": 0
+              },
+              "segments": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "metadata-540",
+      "svgSha256": "87ec481b421fd34221f2af75d4e46a312825cf90ecb51a9e8a43213f1096ddb9",
+      "parts": [
+        {
+          "role": "filename",
+          "sourcePreserved": true,
+          "box": {
+            "x": 61.2,
+            "y": 61.2,
+            "width": 417.6,
+            "height": 21.96
+          },
+          "tracedBox": {
+            "x": 61.2,
+            "y": 61.2,
+            "width": 417.6,
+            "height": 21.96
+          },
+          "lines": [
+            {
+              "expectedWidth": 216.03515625,
+              "actualAdvance": 216.036376953125,
+              "advanceDifference": 0.001220703125,
+              "bbox": {
+                "x": 61.20000076293945,
+                "y": 64.19999694824219,
+                "width": 216.0351104736328,
+                "height": 20
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 61.2,
+                  "start": 61.20000076293945,
+                  "expectedWidth": 32.4052734375,
+                  "actualAdvance": 32.40625
+                },
+                {
+                  "kind": "tab",
+                  "expectedX": 93.6052734375,
+                  "start": 93.6050033569336,
+                  "expectedWidth": 10.8017578125,
+                  "actualAdvance": 10.802000045776367
+                },
+                {
+                  "kind": "text",
+                  "expectedX": 104.40703125,
+                  "start": 104.40699768066406,
+                  "expectedWidth": 172.828125,
+                  "actualAdvance": 172.828125
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "role": "language",
+          "sourcePreserved": true,
+          "box": {
+            "x": 61.2,
+            "y": 91.16,
+            "width": 417.6,
+            "height": 21.96
+          },
+          "tracedBox": {
+            "x": 61.2,
+            "y": 91.16,
+            "width": 417.6,
+            "height": 21.96
+          },
+          "lines": [
+            {
+              "expectedWidth": 108.017578125,
+              "actualAdvance": 108.03125,
+              "advanceDifference": 0.013671875,
+              "bbox": {
+                "x": 61.20000076293945,
+                "y": 94.16000366210938,
+                "width": 108.03125,
+                "height": 20
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 61.2,
+                  "start": 61.20000076293945,
+                  "expectedWidth": 108.017578125,
+                  "actualAdvance": 108.03125
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "role": "body",
+          "sourcePreserved": true,
+          "box": {
+            "x": 61.2,
+            "y": 125.12,
+            "width": 417.6,
+            "height": 773.6800000000001
+          },
+          "tracedBox": {
+            "x": 61.2,
+            "y": 125.12,
+            "width": 417.6,
+            "height": 773.6800000000001
+          },
+          "lines": [
+            {
+              "expectedWidth": 54.0087890625,
+              "actualAdvance": 54.029998779296875,
+              "advanceDifference": 0.021209716796875,
+              "bbox": {
+                "x": 61.20000076293945,
+                "y": 128.1199951171875,
+                "width": 54.01949691772461,
+                "height": 20
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 61.2,
+                  "start": 61.20000076293945,
+                  "expectedWidth": 10.8017578125,
+                  "actualAdvance": 10.8125
+                },
+                {
+                  "kind": "tab",
+                  "expectedX": 72.0017578125,
+                  "start": 72.00199127197266,
+                  "expectedWidth": 32.4052734375,
+                  "actualAdvance": 32.404998779296875
+                },
+                {
+                  "kind": "text",
+                  "expectedX": 104.40703125,
+                  "start": 104.40699768066406,
+                  "expectedWidth": 10.8017578125,
+                  "actualAdvance": 10.8125
+                }
+              ]
+            },
+            {
+              "expectedWidth": 97.2158203125,
+              "actualAdvance": 97.23825073242188,
+              "advanceDifference": 0.022430419921875,
+              "bbox": {
+                "x": 61.20000076293945,
+                "y": 150.0800018310547,
+                "width": 97.22650146484375,
+                "height": 20
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 61.2,
+                  "start": 61.20000076293945,
+                  "expectedWidth": 43.20703125,
+                  "actualAdvance": 43.21875
+                },
+                {
+                  "kind": "tab",
+                  "expectedX": 104.40703125,
+                  "start": 104.40699768066406,
+                  "expectedWidth": 43.20703125,
+                  "actualAdvance": 43.207000732421875
+                },
+                {
+                  "kind": "text",
+                  "expectedX": 147.6140625,
+                  "start": 147.61399841308594,
+                  "expectedWidth": 10.8017578125,
+                  "actualAdvance": 10.8125
+                }
+              ]
+            },
+            {
+              "expectedWidth": 86.4140625,
+              "actualAdvance": 86.41400146484375,
+              "advanceDifference": -0.00006103515625,
+              "bbox": {
+                "x": 61.20000076293945,
+                "y": 172.0399932861328,
+                "width": 86.41400146484375,
+                "height": 20
+              },
+              "segments": [
+                {
+                  "kind": "tab",
+                  "expectedX": 61.2,
+                  "start": 61.19999313354492,
+                  "expectedWidth": 43.20703125,
+                  "actualAdvance": 43.207000732421875
+                },
+                {
+                  "kind": "tab",
+                  "expectedX": 104.40703125,
+                  "start": 104.40699768066406,
+                  "expectedWidth": 43.20703125,
+                  "actualAdvance": 43.207000732421875
+                }
+              ]
+            },
+            {
+              "expectedWidth": 151.224609375,
+              "actualAdvance": 151.24749755859375,
+              "advanceDifference": 0.02288818359375,
+              "bbox": {
+                "x": 61.20000076293945,
+                "y": 194,
+                "width": 151.22650146484375,
+                "height": 20
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 61.2,
+                  "start": 61.20000076293945,
+                  "expectedWidth": 10.8017578125,
+                  "actualAdvance": 10.8125
+                },
+                {
+                  "kind": "tab",
+                  "expectedX": 72.0017578125,
+                  "start": 72.00199127197266,
+                  "expectedWidth": 32.4052734375,
+                  "actualAdvance": 32.404998779296875
+                },
+                {
+                  "kind": "text",
+                  "expectedX": 104.40703125,
+                  "start": 104.40699768066406,
+                  "expectedWidth": 10.8017578125,
+                  "actualAdvance": 10.8125
+                },
+                {
+                  "kind": "tab",
+                  "expectedX": 115.2087890625,
+                  "start": 115.20901489257812,
+                  "expectedWidth": 32.4052734375,
+                  "actualAdvance": 32.404998779296875
+                },
+                {
+                  "kind": "text",
+                  "expectedX": 147.6140625,
+                  "start": 147.61399841308594,
+                  "expectedWidth": 64.810546875,
+                  "actualAdvance": 64.8125
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "language-540",
+      "svgSha256": "c7f82f2feadc694a3a64f4a31ab838e58ba154d8bdf2d14669ff39d8af99661d",
+      "parts": [
+        {
+          "role": "language",
+          "sourcePreserved": true,
+          "box": {
+            "x": 61.2,
+            "y": 61.2,
+            "width": 417.6,
+            "height": 241.56
+          },
+          "tracedBox": {
+            "x": 61.2,
+            "y": 61.2,
+            "width": 417.6,
+            "height": 241.56
+          },
+          "lines": [
+            {
+              "expectedWidth": 410.466796875,
+              "actualAdvance": 410.46875,
+              "advanceDifference": 0.001953125,
+              "bbox": {
+                "x": 61.20000076293945,
+                "y": 64.19999694824219,
+                "width": 410.6650390625,
+                "height": 20
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 61.2,
+                  "start": 61.20000076293945,
+                  "expectedWidth": 410.466796875,
+                  "actualAdvance": 410.46875
+                }
+              ]
+            },
+            {
+              "expectedWidth": 410.466796875,
+              "actualAdvance": 410.46875,
+              "advanceDifference": 0.001953125,
+              "bbox": {
+                "x": 61.20000076293945,
+                "y": 86.16000366210938,
+                "width": 410.6650390625,
+                "height": 20
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 61.2,
+                  "start": 61.20000076293945,
+                  "expectedWidth": 410.466796875,
+                  "actualAdvance": 410.46875
+                }
+              ]
+            },
+            {
+              "expectedWidth": 410.466796875,
+              "actualAdvance": 410.46875,
+              "advanceDifference": 0.001953125,
+              "bbox": {
+                "x": 61.20000076293945,
+                "y": 108.12000274658203,
+                "width": 410.46875,
+                "height": 19.99999237060547
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 61.2,
+                  "start": 61.20000076293945,
+                  "expectedWidth": 410.466796875,
+                  "actualAdvance": 410.46875
+                }
+              ]
+            },
+            {
+              "expectedWidth": 410.466796875,
+              "actualAdvance": 410.46875,
+              "advanceDifference": 0.001953125,
+              "bbox": {
+                "x": 61.20000076293945,
+                "y": 130.0800018310547,
+                "width": 410.6650390625,
+                "height": 20
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 61.2,
+                  "start": 61.20000076293945,
+                  "expectedWidth": 410.466796875,
+                  "actualAdvance": 410.46875
+                }
+              ]
+            },
+            {
+              "expectedWidth": 410.466796875,
+              "actualAdvance": 410.46875,
+              "advanceDifference": 0.001953125,
+              "bbox": {
+                "x": 61.20000076293945,
+                "y": 152.0399932861328,
+                "width": 410.46875,
+                "height": 20
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 61.2,
+                  "start": 61.20000076293945,
+                  "expectedWidth": 410.466796875,
+                  "actualAdvance": 410.46875
+                }
+              ]
+            },
+            {
+              "expectedWidth": 410.466796875,
+              "actualAdvance": 410.46875,
+              "advanceDifference": 0.001953125,
+              "bbox": {
+                "x": 61.20000076293945,
+                "y": 174,
+                "width": 410.46875,
+                "height": 20
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 61.2,
+                  "start": 61.20000076293945,
+                  "expectedWidth": 410.466796875,
+                  "actualAdvance": 410.46875
+                }
+              ]
+            },
+            {
+              "expectedWidth": 410.466796875,
+              "actualAdvance": 410.46875,
+              "advanceDifference": 0.001953125,
+              "bbox": {
+                "x": 61.20000076293945,
+                "y": 195.9600067138672,
+                "width": 410.6650390625,
+                "height": 20
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 61.2,
+                  "start": 61.20000076293945,
+                  "expectedWidth": 410.466796875,
+                  "actualAdvance": 410.46875
+                }
+              ]
+            },
+            {
+              "expectedWidth": 410.466796875,
+              "actualAdvance": 410.46875,
+              "advanceDifference": 0.001953125,
+              "bbox": {
+                "x": 61.20000076293945,
+                "y": 217.9199981689453,
+                "width": 410.6650390625,
+                "height": 20
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 61.2,
+                  "start": 61.20000076293945,
+                  "expectedWidth": 410.466796875,
+                  "actualAdvance": 410.46875
+                }
+              ]
+            },
+            {
+              "expectedWidth": 410.466796875,
+              "actualAdvance": 410.46875,
+              "advanceDifference": 0.001953125,
+              "bbox": {
+                "x": 61.20000076293945,
+                "y": 239.8800048828125,
+                "width": 410.6650390625,
+                "height": 20
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 61.2,
+                  "start": 61.20000076293945,
+                  "expectedWidth": 410.466796875,
+                  "actualAdvance": 410.46875
+                }
+              ]
+            },
+            {
+              "expectedWidth": 410.466796875,
+              "actualAdvance": 410.46875,
+              "advanceDifference": 0.001953125,
+              "bbox": {
+                "x": 61.20000076293945,
+                "y": 261.8399963378906,
+                "width": 410.46875,
+                "height": 20
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 61.2,
+                  "start": 61.20000076293945,
+                  "expectedWidth": 410.466796875,
+                  "actualAdvance": 410.46875
+                }
+              ]
+            },
+            {
+              "expectedWidth": 216.03515625,
+              "actualAdvance": 216.046875,
+              "advanceDifference": 0.01171875,
+              "bbox": {
+                "x": 61.20000076293945,
+                "y": 283.79998779296875,
+                "width": 216.04689025878906,
+                "height": 20
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 61.2,
+                  "start": 61.20000076293945,
+                  "expectedWidth": 216.03515625,
+                  "actualAdvance": 216.046875
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "role": "body",
+          "sourcePreserved": true,
+          "box": {
+            "x": 61.2,
+            "y": 314.76,
+            "width": 417.6,
+            "height": 584.0400000000001
+          },
+          "tracedBox": {
+            "x": 61.2,
+            "y": 314.76,
+            "width": 417.6,
+            "height": 584.0400000000001
+          },
+          "lines": [
+            {
+              "expectedWidth": 97.2158203125,
+              "actualAdvance": 97.21875,
+              "advanceDifference": 0.0029296875,
+              "bbox": {
+                "x": 61.20000076293945,
+                "y": 317.760009765625,
+                "width": 97.4140625,
+                "height": 20
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 61.2,
+                  "start": 61.20000076293945,
+                  "expectedWidth": 97.2158203125,
+                  "actualAdvance": 97.21875
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "filename-540",
+      "svgSha256": "d570fb9ae6feecd2ad97ff9ae99fe343217f9890e29c7adb346159f0a23d40bb",
+      "parts": [
+        {
+          "role": "filename",
+          "sourcePreserved": true,
+          "box": {
+            "x": 61.2,
+            "y": 61.2,
+            "width": 417.6,
+            "height": 153.72
+          },
+          "tracedBox": {
+            "x": 61.2,
+            "y": 61.2,
+            "width": 417.6,
+            "height": 153.72
+          },
+          "lines": [
+            {
+              "expectedWidth": 410.466796875,
+              "actualAdvance": 410.46875,
+              "advanceDifference": 0.001953125,
+              "bbox": {
+                "x": 61.20000076293945,
+                "y": 64.19999694824219,
+                "width": 410.6650390625,
+                "height": 20
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 61.2,
+                  "start": 61.20000076293945,
+                  "expectedWidth": 410.466796875,
+                  "actualAdvance": 410.46875
+                }
+              ]
+            },
+            {
+              "expectedWidth": 410.466796875,
+              "actualAdvance": 410.46875,
+              "advanceDifference": 0.001953125,
+              "bbox": {
+                "x": 61.20000076293945,
+                "y": 86.16000366210938,
+                "width": 410.6650390625,
+                "height": 20
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 61.2,
+                  "start": 61.20000076293945,
+                  "expectedWidth": 410.466796875,
+                  "actualAdvance": 410.46875
+                }
+              ]
+            },
+            {
+              "expectedWidth": 410.466796875,
+              "actualAdvance": 410.46875,
+              "advanceDifference": 0.001953125,
+              "bbox": {
+                "x": 61.20000076293945,
+                "y": 108.12000274658203,
+                "width": 410.46875,
+                "height": 19.99999237060547
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 61.2,
+                  "start": 61.20000076293945,
+                  "expectedWidth": 410.466796875,
+                  "actualAdvance": 410.46875
+                }
+              ]
+            },
+            {
+              "expectedWidth": 410.466796875,
+              "actualAdvance": 410.46875,
+              "advanceDifference": 0.001953125,
+              "bbox": {
+                "x": 61.20000076293945,
+                "y": 130.0800018310547,
+                "width": 410.46875,
+                "height": 20
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 61.2,
+                  "start": 61.20000076293945,
+                  "expectedWidth": 410.466796875,
+                  "actualAdvance": 410.46875
+                }
+              ]
+            },
+            {
+              "expectedWidth": 410.466796875,
+              "actualAdvance": 410.46875,
+              "advanceDifference": 0.001953125,
+              "bbox": {
+                "x": 61.20000076293945,
+                "y": 152.0399932861328,
+                "width": 410.6650390625,
+                "height": 20
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 61.2,
+                  "start": 61.20000076293945,
+                  "expectedWidth": 410.466796875,
+                  "actualAdvance": 410.46875
+                }
+              ]
+            },
+            {
+              "expectedWidth": 410.466796875,
+              "actualAdvance": 410.46875,
+              "advanceDifference": 0.001953125,
+              "bbox": {
+                "x": 61.20000076293945,
+                "y": 174,
+                "width": 410.46875,
+                "height": 20
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 61.2,
+                  "start": 61.20000076293945,
+                  "expectedWidth": 410.466796875,
+                  "actualAdvance": 410.46875
+                }
+              ]
+            },
+            {
+              "expectedWidth": 291.6474609375,
+              "actualAdvance": 291.65625,
+              "advanceDifference": 0.0087890625,
+              "bbox": {
+                "x": 61.20000076293945,
+                "y": 195.9600067138672,
+                "width": 291.845703125,
+                "height": 20
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 61.2,
+                  "start": 61.20000076293945,
+                  "expectedWidth": 291.6474609375,
+                  "actualAdvance": 291.65625
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "role": "body",
+          "sourcePreserved": true,
+          "box": {
+            "x": 61.2,
+            "y": 226.92000000000002,
+            "width": 417.6,
+            "height": 671.8800000000001
+          },
+          "tracedBox": {
+            "x": 61.2,
+            "y": 226.92000000000002,
+            "width": 417.6,
+            "height": 671.8800000000001
+          },
+          "lines": [
+            {
+              "expectedWidth": 183.6298828125,
+              "actualAdvance": 183.640625,
+              "advanceDifference": 0.0107421875,
+              "bbox": {
+                "x": 61.20000076293945,
+                "y": 229.9199981689453,
+                "width": 183.640625,
+                "height": 20
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 61.2,
+                  "start": 61.20000076293945,
+                  "expectedWidth": 183.6298828125,
+                  "actualAdvance": 183.640625
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wrapped-540",
+      "svgSha256": "60fb5adaee76232db51d6caeeb16e28f486eb4cec0761f9a4d5d695901ab9f8f",
+      "parts": [
+        {
+          "role": "language",
+          "sourcePreserved": true,
+          "box": {
+            "x": 61.2,
+            "y": 61.2,
+            "width": 417.6,
+            "height": 21.96
+          },
+          "tracedBox": {
+            "x": 61.2,
+            "y": 61.2,
+            "width": 417.6,
+            "height": 21.96
+          },
+          "lines": [
+            {
+              "expectedWidth": 21.603515625,
+              "actualAdvance": 21.609375,
+              "advanceDifference": 0.005859375,
+              "bbox": {
+                "x": 61.20000076293945,
+                "y": 64.19999694824219,
+                "width": 21.609371185302734,
+                "height": 20
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 61.2,
+                  "start": 61.20000076293945,
+                  "expectedWidth": 21.603515625,
+                  "actualAdvance": 21.609375
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "role": "body",
+          "sourcePreserved": true,
+          "box": {
+            "x": 61.2,
+            "y": 95.16,
+            "width": 417.6,
+            "height": 803.6400000000001
+          },
+          "tracedBox": {
+            "x": 61.2,
+            "y": 95.16,
+            "width": 417.6,
+            "height": 803.6400000000001
+          },
+          "lines": [
+            {
+              "expectedWidth": 270.0439453125,
+              "actualAdvance": 270.046875,
+              "advanceDifference": 0.0029296875,
+              "bbox": {
+                "x": 61.20000076293945,
+                "y": 98.16000366210938,
+                "width": 270.046875,
+                "height": 20
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 61.2,
+                  "start": 61.20000076293945,
+                  "expectedWidth": 270.0439453125,
+                  "actualAdvance": 270.046875
+                }
+              ]
+            },
+            {
+              "expectedWidth": 410.466796875,
+              "actualAdvance": 410.46875,
+              "advanceDifference": 0.001953125,
+              "bbox": {
+                "x": 61.20000076293945,
+                "y": 120.1199951171875,
+                "width": 410.46875,
+                "height": 20
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 61.2,
+                  "start": 61.20000076293945,
+                  "expectedWidth": 410.466796875,
+                  "actualAdvance": 410.46875
+                }
+              ]
+            },
+            {
+              "expectedWidth": 410.466796875,
+              "actualAdvance": 410.46875,
+              "advanceDifference": 0.001953125,
+              "bbox": {
+                "x": 61.20000076293945,
+                "y": 142.0800018310547,
+                "width": 410.46875,
+                "height": 20
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 61.2,
+                  "start": 61.20000076293945,
+                  "expectedWidth": 410.466796875,
+                  "actualAdvance": 410.46875
+                }
+              ]
+            },
+            {
+              "expectedWidth": 410.466796875,
+              "actualAdvance": 410.46875,
+              "advanceDifference": 0.001953125,
+              "bbox": {
+                "x": 61.20000076293945,
+                "y": 164.0399932861328,
+                "width": 410.46875,
+                "height": 20
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 61.2,
+                  "start": 61.20000076293945,
+                  "expectedWidth": 410.466796875,
+                  "actualAdvance": 410.46875
+                }
+              ]
+            },
+            {
+              "expectedWidth": 410.466796875,
+              "actualAdvance": 410.46875,
+              "advanceDifference": 0.001953125,
+              "bbox": {
+                "x": 61.20000076293945,
+                "y": 186,
+                "width": 410.46875,
+                "height": 20
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 61.2,
+                  "start": 61.20000076293945,
+                  "expectedWidth": 410.466796875,
+                  "actualAdvance": 410.46875
+                }
+              ]
+            },
+            {
+              "expectedWidth": 410.466796875,
+              "actualAdvance": 410.46875,
+              "advanceDifference": 0.001953125,
+              "bbox": {
+                "x": 61.20000076293945,
+                "y": 207.9600067138672,
+                "width": 410.6650390625,
+                "height": 20
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 61.2,
+                  "start": 61.20000076293945,
+                  "expectedWidth": 410.466796875,
+                  "actualAdvance": 410.46875
+                }
+              ]
+            },
+            {
+              "expectedWidth": 410.466796875,
+              "actualAdvance": 410.46875,
+              "advanceDifference": 0.001953125,
+              "bbox": {
+                "x": 61.20000076293945,
+                "y": 229.9199981689453,
+                "width": 410.46875,
+                "height": 20
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 61.2,
+                  "start": 61.20000076293945,
+                  "expectedWidth": 410.466796875,
+                  "actualAdvance": 410.46875
+                }
+              ]
+            },
+            {
+              "expectedWidth": 410.466796875,
+              "actualAdvance": 410.46875,
+              "advanceDifference": 0.001953125,
+              "bbox": {
+                "x": 61.20000076293945,
+                "y": 251.8800048828125,
+                "width": 410.46875,
+                "height": 20
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 61.2,
+                  "start": 61.20000076293945,
+                  "expectedWidth": 410.466796875,
+                  "actualAdvance": 410.46875
+                }
+              ]
+            },
+            {
+              "expectedWidth": 43.20703125,
+              "actualAdvance": 43.21875,
+              "advanceDifference": 0.01171875,
+              "bbox": {
+                "x": 61.20000076293945,
+                "y": 273.8399963378906,
+                "width": 43.218746185302734,
+                "height": 20
+              },
+              "segments": [
+                {
+                  "kind": "text",
+                  "expectedX": 61.2,
+                  "start": 61.20000076293945,
+                  "expectedWidth": 43.20703125,
+                  "actualAdvance": 43.21875
+                }
+              ]
+            },
+            {
+              "expectedWidth": 205.2333984375,
+              "actualAdvance": 205.23825073242188,
+              "advanceDifference": 0.004852294921875,
+              "bbox": {
+                "x": 61.20000076293945,
+                "y": 295.79998779296875,
+                "width": 205.2382354736328,
+                "height": 20
+              },
+              "segments": [
+                {
+                  "kind": "tab",
+                  "expectedX": 61.2,
+                  "start": 61.19999313354492,
+                  "expectedWidth": 43.20703125,
+                  "actualAdvance": 43.207000732421875
+                },
+                {
+                  "kind": "text",
+                  "expectedX": 104.40703125,
+                  "start": 104.40699768066406,
+                  "expectedWidth": 162.0263671875,
+                  "actualAdvance": 162.03125
+                }
+              ]
+            },
+            {
+              "expectedWidth": 0,
+              "actualAdvance": 0,
+              "advanceDifference": 0,
+              "bbox": {
+                "x": 0,
+                "y": 0,
+                "width": 0,
+                "height": 0
+              },
+              "segments": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "externalRequests": [],
+  "scope": "Twelve actual SVG outputs with exact Cousine regular/bold bytes: source/offset preservation, accepted complete edit-target boxes including blank multiline source, accepted segment starts within 0.1 reference pixel, glyph cell containment and separate metadata/body glyphs. Natural browser advance differences are recorded. This is not native export, shaping/bidi conformance or raster equivalence."
+}

@@ -1,0 +1,4 @@
+# Captured artifacts must retain the exact bytes bound by summary.json.
+# Console whitespace and Windows line endings are evidence, not source formatting.
+* -text -whitespace
+README.md text eol=lf whitespace

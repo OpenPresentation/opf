@@ -1,0 +1,1111 @@
+{
+  "mode": "resolved-package-browser",
+  "node": "v20.20.2",
+  "browser": "152.0.4191.66",
+  "platform": "win32",
+  "runtime": {
+    "@openpresentation/opf/package.json": "d7a9ed943e013a51e907d707e277806c4d89ec3a8b9a26d7336f66597b4f7fdb",
+    "@openpresentation/opf/dist/catalogs.js": "6d74d7b051844728b2622acdb5268472a043544c8b2ca04eb904b1cdf74ec739",
+    "@openpresentation/opf/dist/chunk-4BYTIVKO.js": "d43c4297360b3ae15e2e1c622bcd1bfba453028f7d5f284008176422ec6e8a17",
+    "@openpresentation/opf/dist/chunk-65WJCY5B.js": "318aa69efc24ef53cb31be89de9c89df85b5be42c74ab082f9954cf0678616b7",
+    "@openpresentation/opf/dist/chunk-GQSK3T7X.js": "34f518c29c9757bc252b5c13eb5d7db8ada4b477496e6289d8149fb4fdc7cd45",
+    "@openpresentation/opf/dist/chunk-NQWP2CKN.js": "a74fa27cfedbc61dec5a59042316340100553193f386e6f9ee89cb40b78879e4",
+    "@openpresentation/opf/dist/chunk-OZULJBSG.js": "9e3ce45dc68d39c646449baf4ec9aad7b92d3f69b85a3dfe37540d13820d0d1e",
+    "@openpresentation/opf/dist/chunk-PIQXLBBJ.js": "818578357a214f76a743db8cf63c0903825923e1ba970abf68c21912e59893ba",
+    "@openpresentation/opf/dist/chunk-SOSOBKQ2.js": "b2bcaf1f0e8725c9a8f3fff9b5c996c4e7e63c6bb8dd4d13c2d7609105b02915",
+    "@openpresentation/opf/dist/chunk-TWMRZ43O.js": "0d35cec97ec7ddaa67fb9f096bc672c927eb68ed5fae5ac27d4dff70d68313f4",
+    "@openpresentation/opf/dist/composition.js": "d0e3d2c86de8740cdb512d4dc1675dbb1a62f999259bfed3b3d0b2317ab1fc15",
+    "@openpresentation/opf/dist/data.js": "ae68ff3088ddcea772573952c572a3c58b8815086c9f81e57939d45848c64b95",
+    "@openpresentation/opf/dist/docs.js": "f2ec69be00f7bd31eb3c67ef659daa45d280ea365cb8562b83040b498f94f9de",
+    "@openpresentation/opf/dist/examples.js": "29a65e209b6daf91e20f73deccde2af09e1265a0dfe3c113ba7debd0b4bed02b",
+    "@openpresentation/opf/dist/index.js": "4bbc678d30198af7c279c31323999047ae136fdb4ac75c67d4647b5b740adba4",
+    "@openpresentation/opf/dist/pagination.js": "c19266e1c06afa55b4d3ef00a4a3915c984bb3ba792db149f146103a0c30a2b8",
+    "@openpresentation/opf/dist/previews.js": "043037d2d5dfec4d69072415032818d6a6c5e686938fcd644a4f103286033950",
+    "@openpresentation/opf/dist/repo-readme.js": "a8177f828c853554ce636a0ca702efb63d79f96175f5440f35c32e6834ac215a",
+    "@openpresentation/opf/dist/schemas.js": "52f40eb788685649099577a9241adb75c5f18b4a5c8cf1e55215b6fa3f52105c",
+    "@openpresentation/opf/dist/spec-files.js": "8302d015b9368a585ee6aea946a18b2f0036396acb963e273baee48a0c4ac817",
+    "@openpresentation/opf/dist/types.js": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "@openpresentation/opf/dist/validator.js": "a1a3ae05ccde6f25fc612a694ce542947389bdcb643bbb526787976d832c758d",
+    "@openpresentation/opf-render/package.json": "f8b44d3fcfa968dc1d88761d35961f116b9ca4a3fe530d24f22a8ff78c41d4cc",
+    "@openpresentation/opf-render/dist/font-compatibility.js": "a50ee71748e81cd12ed3aeb6eee92506ebf91ef05021c6ca3f5a100665d03dac",
+    "@openpresentation/opf-render/dist/fonts-browser.js": "d0543d838b2f22a8c70bdc60100d72d3c69e3f8033d5ccedd3523ee63c66b8d4",
+    "@openpresentation/opf-render/dist/fonts-node.js": "0e65abd7438f3a21fd0cb6ea64120d9e866ef3308510910d11b7b863399f8d8b",
+    "@openpresentation/opf-render/dist/fonts.js": "549932e2d013f1f623cd83973b40cbed68c63d52535adb2de6fd921d16bf400c",
+    "@openpresentation/opf-render/dist/index.js": "39c8f2b279ce10873f00289349b84cf9cab7e12c56e9e0d87447bd2406777234",
+    "@openpresentation/opf-render/dist/raster-images.js": "304cffe5e77553ac1ab590fc5805714dde34e6f69df5dc55e35dbc8df602753c",
+    "@openpresentation/opf-render/dist/raster.js": "6ea807bfd43ddaabea95c1137bc1bcf7d656f2ae9c6d87a7e6d2f867df86ea99",
+    "@openpresentation/opf-render/dist/svg.js": "41f8a1d0e57abd9cf5704325f8787326b6c1ec7c0a84e2e3575fc78f69ed9912",
+    "@openpresentation/opf-pptx/package.json": "c463a78ba1cd2113fc85a00ad659ee0ddcdf71f9efa7758bf044c2b0728e0558",
+    "@openpresentation/opf-pptx/dist/background-import.js": "684f9b38cff01e596774b8120c979c3dbbfada273890f785f7a4e3db88cdcb22",
+    "@openpresentation/opf-pptx/dist/background.js": "081fb685677ca656341cdce89275331749174ffecd60e71451f26b9f896cca1c",
+    "@openpresentation/opf-pptx/dist/code-provenance.js": "8ed460f85342009e7e4041f52d128d08db91ddebad51eea3190679a9c607c0d3",
+    "@openpresentation/opf-pptx/dist/image-fallback-browser.js": "3c7f81d5677dd9a78a0a13fe5a94bbb14cef465031caaeda2c87e8451e9ff491",
+    "@openpresentation/opf-pptx/dist/image-fallback-node.js": "5ee323d3320420664b5d2c1714e246b04dd0806f459164f9696668552df87565",
+    "@openpresentation/opf-pptx/dist/image-geometry.js": "e083973a98c2bdf7d7dfce9ef1f6bef252f09ce0d69d987105ee0b73cc13d62e",
+    "@openpresentation/opf-pptx/dist/image-import.js": "cffccecc223e27d62b6e1aba0cdbe2c1c9aa94874ef898f76906b22e001bbd41",
+    "@openpresentation/opf-pptx/dist/index.js": "6e7894e41435da358a8291c6f6b6f2941e030e8e2ac3fb4b21820f8dcbec39f9",
+    "@openpresentation/opf-pptx/dist/metric-provenance.js": "37fd909d5e0f015729a06d388a20092c0fd8e1d70ac958cad1ae29b46c652d98",
+    "@openpresentation/opf-pptx/dist/table-border-import.js": "16678e0d93e63474d39daac268016a59517cc36d85dbd8751131f143db01ace5",
+    "@openpresentation/opf-pptx/dist/table-cell-import.js": "fa17507763a2240564401d7977f4f39bc180e3e6da9d4aa9c36202908e9126d1",
+    "@openpresentation/opf-pptx/dist/table-import.js": "9ae40bb38dd34c9fc0ae4a3f5a257068ae92bb651ed5d96641c2629ef7106cf1",
+    "@openpresentation/opf-editor/package.json": "70372644cc7ed845e5a8b0be83f5e7f9a222af2af782f2b557814a3b7ba5fdb5",
+    "@openpresentation/opf-editor/dist/block-controls.js": "21f68e59d44f67069f78b19a2dfa355c0f424973cc138bd6e3b0021b0117702c",
+    "@openpresentation/opf-editor/dist/blocks.js": "f9926a4cb8c2b0380ffbe67055a428d01089873141af401edb72d8ebe6e7cdaf",
+    "@openpresentation/opf-editor/dist/canvas-fields.js": "0159649cf54332879cc0f125b19fa52de120a85a9e29d7ea757fea55822f6ef6",
+    "@openpresentation/opf-editor/dist/canvas.js": "6ac84b54ea5f3720dcb561695c57c336e7faa391bdaadfbccceed9f6e8a92716",
+    "@openpresentation/opf-editor/dist/data.js": "32d3d8d7ca017a574ac791541ab1a2bb024dcff386ff1e5c5c1ac845b33d3dff",
+    "@openpresentation/opf-editor/dist/galleries.js": "239539250f0bfa1ff02e5a717213bd6f40305221b43a78ff707df3c683208ada",
+    "@openpresentation/opf-editor/dist/index.js": "7ff518558051647f3b472916cf6cf712704fe654dd4fa5c43196a0b03bfc21ff",
+    "@openpresentation/opf-editor/dist/layout-handles.js": "e9f9d4197cae2fe07825abc894fd6243ea35c3d70974762d1a9021bd23781414",
+    "@openpresentation/opf-editor/dist/layout.js": "de8dc48f08a7c4ed6c99fcbcfa3e4508930d7b306827fc2cd29865c190141df8",
+    "@openpresentation/opf-editor/dist/react.js": "df35ad472e11395a75549281d398171e1b1d345d2631a9f5f16c2f701c53b4f0",
+    "@openpresentation/opf-editor/dist/rich-text-input.js": "b29c64566988aaaa541e8e8a38d3ad350dc579e6f03728a03ccc256227293167",
+    "@openpresentation/opf-editor/dist/rich-text-toolbar.js": "ca0ceaf4ccd0b5ef0171ca71394424edfe35b56e2333e07e8ca294579374bbec",
+    "@openpresentation/opf-editor/dist/rich-text.js": "0479bc3315dcfbffd8463222db265864ee3e4938f8a7e9df5fc7e2a4540d9c28",
+    "@openpresentation/opf-editor/dist/schema-inspector.js": "b61ac5c0574edd2f91c6cccb8f8b15d4ee518e354087e260bd649ddd5e943d3e",
+    "@openpresentation/opf-editor/dist/schema.js": "d6882c45665318b8e311a3bd83ed76f87b784f24e8ef5f80566eebae4b0dd765",
+    "@openpresentation/opf-editor/dist/svelte.js": "ee6582606f927aeeb2947134e28c234c31a63035c2aef35d009dec5a83450cd4",
+    "@openpresentation/opf-editor/dist/transfer.js": "5b87f9a36b2a22ed690e21cacb69ce340cc735443758c98143530032b1c46abc"
+  },
+  "bundleSha256": "f8212185b3652175035dcb3f2f45a0d6df5aceef50f0392226597a10aaa783cc",
+  "verifierSha256": "cc7467bf8b9b0d6626ae8e2f60c65c041f251a11f857509129b4d1fdb5a597d7",
+  "fontHashes": [
+    {
+      "family": "Roboto",
+      "weight": 400,
+      "italic": false,
+      "sha256": "15256405ecb0d880678833a582760efad538ab2932318b52c8105b267d159459"
+    },
+    {
+      "family": "Roboto Medium",
+      "weight": 500,
+      "italic": false,
+      "sha256": "79343dc641a2e8d48a703a4667b71fc8dc6565cc8ce47dfc34fc52c12aadbf38"
+    },
+    {
+      "family": "Roboto SemiBold",
+      "weight": 600,
+      "italic": false,
+      "sha256": "32fe2086b0e54eca85a68eb74e3d89bb16a7ffe59085d6dc7d079f5b3c26d6ab"
+    },
+    {
+      "family": "Roboto",
+      "weight": 700,
+      "italic": false,
+      "sha256": "4aaf8c5b661a386998c2e70cf2b87e2440f5404e0b8fd81164f0413fb3435ec6"
+    },
+    {
+      "family": "Roboto ExtraBold",
+      "weight": 800,
+      "italic": false,
+      "sha256": "43d5ce98c58336045220fa1dac2bd22281b1aab3eca66785cb34eb3ad1dfe1a5"
+    }
+  ],
+  "results": [
+    {
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
+      "alignment": "left",
+      "selection": {
+        "color": "rgb(255, 255, 255)",
+        "selectionColor": "rgb(255, 255, 255)",
+        "start": 0,
+        "end": 14,
+        "length": 14,
+        "alignment": "left",
+        "lineHeight": 15.25,
+        "width": 728,
+        "scale": 0.625
+      },
+      "parts": 6,
+      "exactMetricRoundTrip": true,
+      "exportSha256": "0ca824c688f7a8c79276183f71bcc02f11cb8c332825b7514bb632af22ba1fe0",
+      "exportBytes": 18173,
+      "substitutions": [
+        {
+          "requestedFamily": "Roboto Mono",
+          "sourceFamily": "Roboto Mono",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 400,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "generic"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 800,
+          "resolvedWeight": 700,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.metric.value"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.metric.unit"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.metric.label"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.metric.delta"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.metric.trend"
+        },
+        {
+          "requestedFamily": "Aptos Display",
+          "sourceFamily": "Aptos Display",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 700,
+          "resolvedWeight": 700,
+          "italic": false,
+          "compatibility": "generic"
+        },
+        {
+          "requestedFamily": "Aptos",
+          "sourceFamily": "Aptos",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 400,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "generic"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 800,
+          "resolvedWeight": 700,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.blocks.0.metric.value"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.blocks.0.metric.unit"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.blocks.0.metric.label"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.blocks.0.metric.delta"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.blocks.0.metric.trend"
+        }
+      ]
+    },
+    {
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
+      "alignment": "center",
+      "selection": {
+        "color": "rgb(255, 255, 255)",
+        "selectionColor": "rgb(255, 255, 255)",
+        "start": 0,
+        "end": 14,
+        "length": 14,
+        "alignment": "center",
+        "lineHeight": 15.25,
+        "width": 728,
+        "scale": 0.625
+      },
+      "parts": 6,
+      "exactMetricRoundTrip": true,
+      "exportSha256": "dccc51ba4dc5532a3e036f2e196266a5b3f3f688b2663473df36152677328936",
+      "exportBytes": 18224,
+      "substitutions": [
+        {
+          "requestedFamily": "Roboto Mono",
+          "sourceFamily": "Roboto Mono",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 400,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "generic"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 800,
+          "resolvedWeight": 700,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.metric.value"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.metric.unit"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.metric.label"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.metric.delta"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.metric.trend"
+        },
+        {
+          "requestedFamily": "Aptos Display",
+          "sourceFamily": "Aptos Display",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 700,
+          "resolvedWeight": 700,
+          "italic": false,
+          "compatibility": "generic"
+        },
+        {
+          "requestedFamily": "Aptos",
+          "sourceFamily": "Aptos",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 400,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "generic"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 800,
+          "resolvedWeight": 700,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.blocks.0.metric.value"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.blocks.0.metric.unit"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.blocks.0.metric.label"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.blocks.0.metric.delta"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.blocks.0.metric.trend"
+        }
+      ]
+    },
+    {
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
+      "alignment": "right",
+      "selection": {
+        "color": "rgb(255, 255, 255)",
+        "selectionColor": "rgb(255, 255, 255)",
+        "start": 0,
+        "end": 14,
+        "length": 14,
+        "alignment": "right",
+        "lineHeight": 15.25,
+        "width": 728,
+        "scale": 0.625
+      },
+      "parts": 6,
+      "exactMetricRoundTrip": true,
+      "exportSha256": "b6a3d4a1b387e2851cd8ab003214dd3e1a7945304a662f5c2c83fea4a4cc077a",
+      "exportBytes": 18221,
+      "substitutions": [
+        {
+          "requestedFamily": "Roboto Mono",
+          "sourceFamily": "Roboto Mono",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 400,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "generic"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 800,
+          "resolvedWeight": 700,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.metric.value"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.metric.unit"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.metric.label"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.metric.delta"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.metric.trend"
+        },
+        {
+          "requestedFamily": "Aptos Display",
+          "sourceFamily": "Aptos Display",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 700,
+          "resolvedWeight": 700,
+          "italic": false,
+          "compatibility": "generic"
+        },
+        {
+          "requestedFamily": "Aptos",
+          "sourceFamily": "Aptos",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 400,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "generic"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 800,
+          "resolvedWeight": 700,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.blocks.0.metric.value"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.blocks.0.metric.unit"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.blocks.0.metric.label"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.blocks.0.metric.delta"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.blocks.0.metric.trend"
+        }
+      ]
+    },
+    {
+      "dimensions": {
+        "width": 540,
+        "height": 960
+      },
+      "alignment": "left",
+      "selection": {
+        "color": "rgb(255, 255, 255)",
+        "selectionColor": "rgb(255, 255, 255)",
+        "start": 0,
+        "end": 14,
+        "length": 14,
+        "alignment": "left",
+        "lineHeight": 27.1111,
+        "width": 672,
+        "scale": 1.4814814814814814
+      },
+      "parts": 6,
+      "exactMetricRoundTrip": true,
+      "exportSha256": "60b91c7897a5e689dfc9b2be3823223692d056e75c17b0c7835ae97a93af6fb9",
+      "exportBytes": 18175,
+      "substitutions": [
+        {
+          "requestedFamily": "Roboto Mono",
+          "sourceFamily": "Roboto Mono",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 400,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "generic"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 800,
+          "resolvedWeight": 700,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.metric.value"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.metric.unit"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.metric.label"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.metric.delta"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.metric.trend"
+        },
+        {
+          "requestedFamily": "Aptos Display",
+          "sourceFamily": "Aptos Display",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 700,
+          "resolvedWeight": 700,
+          "italic": false,
+          "compatibility": "generic"
+        },
+        {
+          "requestedFamily": "Aptos",
+          "sourceFamily": "Aptos",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 400,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "generic"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 800,
+          "resolvedWeight": 700,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.blocks.0.metric.value"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.blocks.0.metric.unit"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.blocks.0.metric.label"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.blocks.0.metric.delta"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.blocks.0.metric.trend"
+        }
+      ]
+    },
+    {
+      "dimensions": {
+        "width": 540,
+        "height": 960
+      },
+      "alignment": "center",
+      "selection": {
+        "color": "rgb(255, 255, 255)",
+        "selectionColor": "rgb(255, 255, 255)",
+        "start": 0,
+        "end": 14,
+        "length": 14,
+        "alignment": "center",
+        "lineHeight": 27.1111,
+        "width": 672,
+        "scale": 1.4814814814814814
+      },
+      "parts": 6,
+      "exactMetricRoundTrip": true,
+      "exportSha256": "b0c7b3bce38dd1871b9317cdd442fc5fe0d264e2052e1eb02cc1e876bcc8bbfa",
+      "exportBytes": 18223,
+      "substitutions": [
+        {
+          "requestedFamily": "Roboto Mono",
+          "sourceFamily": "Roboto Mono",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 400,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "generic"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 800,
+          "resolvedWeight": 700,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.metric.value"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.metric.unit"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.metric.label"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.metric.delta"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.metric.trend"
+        },
+        {
+          "requestedFamily": "Aptos Display",
+          "sourceFamily": "Aptos Display",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 700,
+          "resolvedWeight": 700,
+          "italic": false,
+          "compatibility": "generic"
+        },
+        {
+          "requestedFamily": "Aptos",
+          "sourceFamily": "Aptos",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 400,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "generic"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 800,
+          "resolvedWeight": 700,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.blocks.0.metric.value"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.blocks.0.metric.unit"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.blocks.0.metric.label"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.blocks.0.metric.delta"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.blocks.0.metric.trend"
+        }
+      ]
+    },
+    {
+      "dimensions": {
+        "width": 540,
+        "height": 960
+      },
+      "alignment": "right",
+      "selection": {
+        "color": "rgb(255, 255, 255)",
+        "selectionColor": "rgb(255, 255, 255)",
+        "start": 0,
+        "end": 14,
+        "length": 14,
+        "alignment": "right",
+        "lineHeight": 27.1111,
+        "width": 672,
+        "scale": 1.4814814814814814
+      },
+      "parts": 6,
+      "exactMetricRoundTrip": true,
+      "exportSha256": "9037470fa5169cad1739ebb2d51140e69747548e9cf28de7c7505f8567c3dddb",
+      "exportBytes": 18220,
+      "substitutions": [
+        {
+          "requestedFamily": "Roboto Mono",
+          "sourceFamily": "Roboto Mono",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 400,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "generic"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 800,
+          "resolvedWeight": 700,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.metric.value"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.metric.unit"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.metric.label"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.metric.delta"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.metric.trend"
+        },
+        {
+          "requestedFamily": "Aptos Display",
+          "sourceFamily": "Aptos Display",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 700,
+          "resolvedWeight": 700,
+          "italic": false,
+          "compatibility": "generic"
+        },
+        {
+          "requestedFamily": "Aptos",
+          "sourceFamily": "Aptos",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 400,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "generic"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 800,
+          "resolvedWeight": 700,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.blocks.0.metric.value"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.blocks.0.metric.unit"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.blocks.0.metric.label"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.blocks.0.metric.delta"
+        },
+        {
+          "requestedFamily": "Roboto",
+          "sourceFamily": "Roboto",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 500,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "visual",
+          "path": "slides.0.blocks.0.metric.trend"
+        }
+      ]
+    }
+  ],
+  "scalarResults": [
+    {
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
+      "source": 0,
+      "type": "number",
+      "noOpPreserved": true,
+      "editUndoPreserved": true
+    },
+    {
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
+      "source": "",
+      "type": "string",
+      "noOpPreserved": true,
+      "editUndoPreserved": true
+    },
+    {
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
+      "source": "\r\n\r\n\n",
+      "type": "string",
+      "noOpPreserved": true,
+      "editUndoPreserved": true
+    },
+    {
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
+      "source": "0.00",
+      "type": "string",
+      "noOpPreserved": true,
+      "editUndoPreserved": true
+    },
+    {
+      "dimensions": {
+        "width": 540,
+        "height": 960
+      },
+      "source": 0,
+      "type": "number",
+      "noOpPreserved": true,
+      "editUndoPreserved": true
+    },
+    {
+      "dimensions": {
+        "width": 540,
+        "height": 960
+      },
+      "source": "",
+      "type": "string",
+      "noOpPreserved": true,
+      "editUndoPreserved": true
+    },
+    {
+      "dimensions": {
+        "width": 540,
+        "height": 960
+      },
+      "source": "\r\n\r\n\n",
+      "type": "string",
+      "noOpPreserved": true,
+      "editUndoPreserved": true
+    },
+    {
+      "dimensions": {
+        "width": 540,
+        "height": 960
+      },
+      "source": "0.00",
+      "type": "string",
+      "noOpPreserved": true,
+      "editUndoPreserved": true
+    }
+  ],
+  "invalidResults": [
+    {
+      "field": "value",
+      "original": 42,
+      "rejected": "not a number",
+      "cancelPreserved": true
+    },
+    {
+      "field": "trend",
+      "original": "flat",
+      "rejected": "sideways",
+      "cancelPreserved": true
+    }
+  ],
+  "errors": [],
+  "externalRequests": [],
+  "scope": "Offline canvas with resolved dependencies: six wide/portrait/alignment metric workflows; exact accepted SVG origins and inline style, every metadata field, source/type/CRLF/tab/no-op preservation, readable selection, numeric/trend validation, atomic pagination undo, export and undoable metric reimport. Eight scalar/blank workflows and two rejected edits. Dependency mode must be bound by the caller; this report alone is not registry evidence. Native formatting, position/font recovery and native PowerPoint raster equivalence are not established."
+}

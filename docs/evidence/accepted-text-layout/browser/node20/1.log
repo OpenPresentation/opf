@@ -1,0 +1,26 @@
+[
+  {
+    "name": "compliance-readiness-review",
+    "mode": "estimated",
+    "maxAdvanceDifference": 126.65624999999943,
+    "maxBoundaryGap": 105.89068603515625
+  },
+  {
+    "name": "compliance-readiness-review",
+    "mode": "measured",
+    "maxAdvanceDifference": 0.0146484375,
+    "maxBoundaryGap": 0.009368896484375
+  },
+  {
+    "name": "water-utility-capital-plan",
+    "mode": "estimated",
+    "maxAdvanceDifference": 102.41145833333297,
+    "maxBoundaryGap": 18.8017578125
+  },
+  {
+    "name": "water-utility-capital-plan",
+    "mode": "measured",
+    "maxAdvanceDifference": 0.07633463541674246,
+    "maxBoundaryGap": 0.07635498046875
+  }
+]

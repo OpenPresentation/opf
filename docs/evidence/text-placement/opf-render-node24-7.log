@@ -1,0 +1,5 @@
+
+> @openpresentation/opf-render@0.7.0 test:code
+> node test/shared-code.mjs
+
+Shared code SVG: 10 accepted layouts, source/whitespace/trace preservation, no extra measurement, strict/tiny-cell rejection, 132 XML-boundary rejections and valid character boundaries.

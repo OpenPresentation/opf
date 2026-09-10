@@ -2,7 +2,33 @@
 
 This work implements the [ecosystem objective](ecosystem-objective-2026-09-09.md) in reviewable increments. It does not introduce a model, account, key, network or paid-service dependency into OPF. Proprietary applications remain optional compatibility-test environments.
 
-## Current checkpoint — standalone metric allocation verified; consumer integration next
+## Current checkpoint — chart visibility and workbook data preservation
+
+The [integration checkpoint](shared-metric-integration.md) now shares an inherited series-to-panel contrast rule and resolves chart panel/text colors in SVG and PPTX. Actual workbook category headings survive supported import/export, including current edits, Unicode and whitespace. [Separate evidence](../evidence/chart-colors-workbook/README.md) records passing core/PPTX/browser checks on Node 20/24, reviewed chart raster changes and 942 remaining conservative contrast findings. Geometry and authored content were preserved; chart semantics, palette identity, internal label layout and general theme resolution still require shared-model work.
+
+Real PowerPoint verification of these chart changes remains open because the current COM connection failed before opening the fixture. Existing metric native tab/portrait-ink findings and the unpromoted corpus gate remain visible. No release or public deployment advances. Continue native recovery, corpus quality and coordinated source/candidate CI/review within the full deterministic repair/Auto arrange/font objective.
+
+## Previous checkpoint — table colors and measured gallery contrast findings
+
+The [integration checkpoint](shared-metric-integration.md) now shares inherited table text colors across SVG and editable PPTX and corrects authored colors in 96 gallery decks without altering content or geometry. Both supported Node runtimes pass the core/PPTX checks and real PowerPoint table color/save/reopen assertions. [New evidence](../evidence/table-colors-gallery-contrast/README.md) keeps the renderer golden gate, 656 changed raster reviews and 962 conservative contrast findings open. An actual browser glyph-mask counterexample separates an unrelated panel border from metric text ink; it does not dismiss other findings. Confirmed dark-chart label/background mismatch and unresolved placeholders remain quality work.
+
+No baseline, release or public deployment advances. Existing native metric tab-position and portrait-label pixel counterexamples remain open. Continue quality fixes, coordinated source/candidate CI and PR review before release preparation; the broader deterministic repair/Auto arrange/font objective remains active.
+
+## Previous checkpoint — metric native anchors and visual corpus review
+
+The [metric integration checkpoint](shared-metric-integration.md) now includes a native paragraph-anchor fix and isolated field raster checks. Both Node 20/24 runs preserve 144 original/saved/edited imports from 48 real PowerPoint fixtures, with no character-bound overrun or inter-field pixel-mask collision. Eight tab-position outliers and one raster-edge outlier keep native comparisons failing. The affected PPTX checks, actual metric editor browser workflows and remaining post-golden renderer commands pass separately.
+
+All 85 changed corpus slides were visually reviewed; 40 fictional gallery metrics and their generator were corrected to consistent units/deltas. The revised corpus validates, but pale/gradient contrast and compact hierarchy remain quality findings. No baseline, package, registry dependency or public deployment has advanced. [Separate new evidence](../evidence/shared-metric-native-anchor/summary.json) preserves the previous checkpoint and its failures. Continue resolving these gates before coordinated CI/review and release preparation. The full deterministic repair/Auto arrange/font objective remains active.
+
+## Previous checkpoint — metric consumers and source recovery; raster gates open
+
+The [metric integration checkpoint](shared-metric-integration.md) includes accepted alignment/line origins, SVG/native export, guarded source/type recovery and actual editor/undo/pagination/export workflows. Core passes 466 tests on Node 20/24; focused consumer and browser checks pass. Real PowerPoint preserves tested fields/types in 108 original/saved/edited imports. Corpus review remains open for 85 changed rasters, and the native raster gate fails on one portrait/right fixture. Nine native advance-bound differences are recorded separately. No release or registry/public dependency changed. Continue this source branch and resolve its gates before release preparation; the larger deterministic repair/font objective remains active.
+
+## Previous checkpoint — metric primitive merged; composition/pagination integration underway
+
+Core PR #58 merged as `5cfc944ee7709b54bc2d1e7192cd86b7a52d6cb7`, identical to reviewed `d484a32a910cd9f0c729bcb9e5dc57f1e1cdfaa6`, after complete Node 20/24 coordinator/core, Windows/macOS CLI and Bugbot passed. Continue `codex/shared-metric-integration-20260910`: the [initial source checkpoint](shared-metric-integration.md) consumes complete metrics in composition/scoring (`grid-score-v4`) and atomic pagination. All 464 core tests and existing preservation suites pass on both supported Node runtimes. Renderer/PPTX/editor changes, actual integrated browser/native gates and review remain open. No package has been bumped or published.
+
+## Previous checkpoint — standalone metric allocation verified; consumer integration next
 
 The [shared metric checkpoint](shared-metric-layout.md) records an unreleased standalone `layoutMetric` API on `codex/shared-metric-layout-20260910`. Complete metadata and numeric/scalar source types, proportional-font line/segment mappings, compact inline/stacked allocation and scaled floors are implemented. Both supported Node runtimes pass 458 core tests and the existing preservation suites. Sixty real-font cases include 50 fits, six irreducible strict failures and four explicit missing-glyph cases. Fifty controlled browser cases pass exact source/advance/segment checks offline; their evidence is byte-identical across Node 20.20.2/24.20.0. Glyph overhangs remain recorded separately. Full CI/review, composition/pagination integration and actual editor/PPTX/native workflows remain gates. Do not mark metric coverage complete or bump/release versions yet.
 

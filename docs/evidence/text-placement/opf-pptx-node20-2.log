@@ -1,0 +1,29 @@
+
+> @openpresentation/opf-pptx@0.7.0 test
+> npm run build && node test/accepted-text.mjs && node test/heading-provenance.mjs && node test/chart-colors.mjs && node test/content-cards.mjs && node test/chart-workbook.mjs && node test/dependency-boundary.mjs && npm run build:browser-check && npm run test:styled-table && node test/content-layout.mjs && node test/shared-quote.mjs
+
+
+> @openpresentation/opf-pptx@0.7.0 build
+> node scripts/build.mjs
+
+Accepted text PPTX: 24 cases / 144 editable lines retain shared anchors, sizes, styles, no-refit and words through import. Native raster and original OPF structure are separate gates.
+Heading provenance: native edits, shape renaming/reordering and 8 damaged/ambiguous group fallbacks preserve visible words.
+Native chart colors passed: 40 charts, explicit chart panel, single alpha fill, axis/legend colors and exact data reimport.
+Vendored upstream distribution and license match recorded hashes.
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert.ok(Math.abs(Number(actual)/9525-expected)<.001)
+
+    at file:///C:/Users/micha/Source/opf/artifacts/shared-metric-integration/opf-pptx/test/content-cards.mjs:28:165 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '=='
+}
+
+Node.js v20.20.2

@@ -17,7 +17,8 @@ const value: unknown = payload.text;
 const invalid: ContentPayload = {text:'A real payload',vendorField:1};
 // @ts-expect-error Closed payloads do not promise arbitrary string-key access.
 const arbitrary = payload['vendorField'];
-const result=composeSlide(deck.slides[0],{explain:true});
+const result=composeSlide(deck.slides[0],{explain:true,contentBox:true});
+const cardWidth:number|undefined=result.items[0]?.frameBox?.width;
 const explanation: CompositionExplanation | undefined=result.explanation;
 const focused: FocusedExplanation | undefined=explanation;
 const quote:QuoteLayout=layoutQuote({text:'Body',attribution:'Source'},{x:0,y:0,width:600,height:400},{minFontSize:24});
@@ -34,10 +35,10 @@ const focusedMetric:FocusedMetric=metric;
 const originalScalar:string|number|undefined=focusedMetric.parts[0]?.sources[0]?.value;
 // @ts-expect-error Unit follows the string field in the schema.
 layoutMetric({value:42,unit:1},{x:0,y:0,width:600,height:400});
-const scoreVersion:'grid-score-v3'|undefined=explanation?.algorithm;
+const scoreVersion:'grid-score-v6'|undefined=explanation?.algorithm;
 // @ts-expect-error Code metadata follows the string fields in the schema.
 layoutCode({source:'kept',language:42},{x:0,y:0,width:600,height:400});
-void [deck,value,invalid,arbitrary,focused,font,nextStart,tabSize,segmentKind,accepted,scoreVersion,originalScalar];`;
+void [deck,value,invalid,arbitrary,focused,font,nextStart,tabSize,segmentKind,accepted,scoreVersion,originalScalar,cardWidth];`;
   const options={strict:true,noEmit:true,skipLibCheck:false,target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.NodeNext,moduleResolution:ts.ModuleResolutionKind.NodeNext,types:[]};
   const host=ts.createCompilerHost(options),read=host.readFile.bind(host),exists=host.fileExists.bind(host);
   host.readFile=file=>path.resolve(file)===fixture?source:read(file);

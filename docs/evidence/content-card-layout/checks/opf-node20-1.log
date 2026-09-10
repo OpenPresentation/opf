@@ -1,0 +1,80 @@
+
+> openpresentation-workspace@ typecheck C:\Users\micha\Source\opf\artifacts\shared-metric-integration\opf
+> pnpm --filter @openpresentation/opf typecheck && pnpm --filter @openpresentation/cli typecheck
+
+
+> @openpresentation/opf@0.9.0 typecheck C:\Users\micha\Source\opf\artifacts\shared-metric-integration\opf\packages\javascript
+> pnpm run generate && tsc --noEmit
+
+
+> @openpresentation/opf@0.9.0 generate C:\Users\micha\Source\opf\artifacts\shared-metric-integration\opf\packages\javascript
+> node scripts/generate.mjs && node scripts/generate-previews.mjs && node scripts/generate-content.mjs
+
+Generated src/generated/previews.ts (70 previews)
+Generated src/generated/examples.ts (126 examples, 7 galleries)
+Generated src/generated/docs.ts (25 docs)
+Generated src/generated/repo-readme.ts (11388 bytes)
+
+> @openpresentation/cli@0.7.0 typecheck C:\Users\micha\Source\opf\artifacts\shared-metric-integration\opf\packages\cli
+> pnpm --filter @openpresentation/opf build && tsc --noEmit
+
+
+> @openpresentation/opf@0.9.0 build C:\Users\micha\Source\opf\artifacts\shared-metric-integration\opf\packages\javascript
+> pnpm run generate && tsup && node scripts/copy-spec.mjs
+
+
+> @openpresentation/opf@0.9.0 generate C:\Users\micha\Source\opf\artifacts\shared-metric-integration\opf\packages\javascript
+> node scripts/generate.mjs && node scripts/generate-previews.mjs && node scripts/generate-content.mjs
+
+Generated src/generated/previews.ts (70 previews)
+Generated src/generated/examples.ts (126 examples, 7 galleries)
+Generated src/generated/docs.ts (25 docs)
+Generated src/generated/repo-readme.ts (11388 bytes)
+CLI Building entry: {"data":"src/data.ts","pagination":"src/pagination.ts","composition":"src/composition.ts","index":"src/index.ts","schemas":"src/schemas.ts","catalogs":"src/catalogs.ts","validator":"src/validator.ts","types":"src/types.ts","spec-files":"src/spec-files.ts","previews":"src/previews.ts","examples":"src/examples.ts","docs":"src/docs.ts","repo-readme":"src/repo-readme.ts"}
+CLI Using tsconfig: tsconfig.json
+CLI tsup v8.5.1
+CLI Using tsup config: C:\Users\micha\Source\opf\artifacts\shared-metric-integration\opf\packages\javascript\tsup.config.ts
+CLI Target: es2022
+CLI Cleaning output folder
+ESM Build start
+DTS Build start
+ESM dist\spec-files.js     85.00 B
+ESM dist\data.js           95.00 B
+ESM dist\previews.js       130.00 B
+ESM dist\pagination.js     215.00 B
+ESM dist\composition.js    368.00 B
+ESM dist\index.js          1.31 KB
+ESM dist\chunk-SOSOBKQ2.js 6.52 KB
+ESM dist\repo-readme.js    11.47 KB
+ESM dist\chunk-OZULJBSG.js 117.86 KB
+ESM dist\schemas.js        202.00 B
+ESM dist\chunk-PIQXLBBJ.js 108.89 KB
+ESM dist\chunk-33AFTZZQ.js 12.90 KB
+ESM dist\catalogs.js       238.00 B
+ESM dist\validator.js      267.00 B
+ESM dist\chunk-K7QQGUOH.js 27.16 KB
+ESM dist\chunk-TFZ7E3FK.js 65.33 KB
+ESM dist\docs.js           466.91 KB
+ESM dist\chunk-GQSK3T7X.js 219.58 KB
+ESM dist\types.js          1.00 B
+ESM dist\chunk-TWMRZ43O.js 499.00 KB
+ESM dist\examples.js       3.48 MB
+ESM ⚡️ Build success in 359ms
+DTS ⚡️ Build success in 3169ms
+DTS dist\index.d.ts                 2.84 KB
+DTS dist\data.d.ts                  1005.00 B
+DTS dist\pagination.d.ts            2.15 KB
+DTS dist\previews.d.ts              1.71 KB
+DTS dist\repo-readme.d.ts           139.00 B
+DTS dist\examples.d.ts              2.09 KB
+DTS dist\docs.d.ts                  671.00 B
+DTS dist\composition.d.ts           18.45 KB
+DTS dist\validator.d.ts             1.54 KB
+DTS dist\spec-files.d.ts            19.57 KB
+DTS dist\schemas.d.ts               314.00 B
+DTS dist\catalogs.d.ts              454.00 B
+DTS dist\types.d.ts                 416.00 B
+DTS dist\presentation-BMTdX6O1.d.ts 113.38 KB
+DTS dist\schemas--QRVBhU1.d.ts      8.84 KB
+DTS dist\catalogs-BnnkUX9O.d.ts     46.31 KB
+Generated an empty chunk: "types".
