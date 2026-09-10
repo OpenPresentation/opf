@@ -71,6 +71,10 @@ Preparation verifies lock/runtime fingerprints before copying the exact consumer
 
 ## Remaining integration gates
 
+The format-boundary review found schema-valid XML-forbidden controls and unpaired UTF-16 surrogates were not handled safely. Renderer `b5a3722725338e8d964783e8b7f1f7b80ce28cd3` and converter `b4f4645cdaa2f5eff8a883f68533875d3b63f239` now reject them explicitly with `invalid-code-text`, the exact OPF field path and UTF-16 offset. The source document remains unchanged; the core schema and layout API are not tightened to an XML-specific character repertoire. Both engines pass 132 negative cases and accepted character boundaries on Node 20/24, including supplementary Unicode serialization without a glyph-coverage claim. The full Node 24 coordinated source/tarball/browser/CLI/guard command passes again. Renew the Node 20 and installed-native evidence before release. Earlier reports above retain their exact original source/runtime fingerprints.
+
+The prior PR head `4f4a0b44584be945420f2b8d519f9417ee073e7d` passes coordinator `34440657844`, core `34440657756`, Windows/macOS CLI `34440657695` and Bugbot. The updated two consumer pins require their own renewed coordinated CI/review.
+
 - Complete the full Linux Node 20/24 source/tarball/registry matrices and review with the new installed-code gates, exact consumer commits and reviewed code raster manifest now wired into coordinated CI. Keep historical registry harnesses pinned to their published implementation; no new code version is released yet.
 - Prepare versions and publish core/CLI and consumers in dependency order, then refresh registry lockfiles, verify exact registry bytes/provenance and update the core published release plan/immutable refs.
 - Update public deployments only after the new complete published set passes its public workflows. Continue the full repair, Auto arrange, other payload internals and font/native-platform objective.
