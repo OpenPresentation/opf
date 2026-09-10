@@ -1,0 +1,5 @@
+*.json -text whitespace=cr-at-eol
+# Preserve raw diagnostic formatting and its recorded hashes.
+*.log -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol
+*.svg -text
+*.mjs -text

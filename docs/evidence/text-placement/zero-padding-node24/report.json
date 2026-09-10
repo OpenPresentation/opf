@@ -1,0 +1,5899 @@
+{
+  "node": "v24.20.0",
+  "browser": "152.0.4191.66",
+  "platform": "win32",
+  "textRasterPadding": 0,
+  "verifierSha256": "fc58ef24086fcaaa4e14be88dbe0a7c97ed46c130acdd22767728bdddf8d7ca1",
+  "rendererSha256": "473222ae52bfbd35d6c8b202833ba446564f7f160b85d9b8f904b54f80486613",
+  "fontHashes": [
+    {
+      "family": "Carlito",
+      "weight": 400,
+      "italic": false,
+      "sha256": "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89"
+    },
+    {
+      "family": "Carlito",
+      "weight": 400,
+      "italic": true,
+      "sha256": "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5"
+    },
+    {
+      "family": "Carlito",
+      "weight": 700,
+      "italic": false,
+      "sha256": "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0"
+    },
+    {
+      "family": "Carlito",
+      "weight": 700,
+      "italic": true,
+      "sha256": "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691"
+    }
+  ],
+  "results": [
+    {
+      "id": "wide-plain-left-scalar",
+      "svgSha256": "678023f15d919e4989dad3ed47f7367d3b2f858e4655deb0d6a76079f0fdd821",
+      "sourceSha256": "c0e2fba1cecf773ca284927b615a4464aee193ac99b49ffb9d120dcdb75172e3",
+      "observations": [
+        {
+          "path": "slides.0.tag",
+          "text": "Source",
+          "expectedWidth": 44.265625,
+          "actualWidth": 44.265625,
+          "advanceDifference": 0,
+          "expectedX": 57.6,
+          "expectedY": 73.6,
+          "actualX": 57.599998474121094,
+          "actualY": 73.5999984741211,
+          "bbox": {
+            "x": 57.599998474121094,
+            "y": 58.599998474121094,
+            "width": 44.3046875,
+            "height": 19
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "A measured title that wraps when space is narrow",
+          "expectedWidth": 1121.607421875,
+          "actualWidth": 1121.609375,
+          "advanceDifference": 0.001953125,
+          "expectedX": 57.6,
+          "expectedY": 143.12,
+          "actualX": 57.599998474121094,
+          "actualY": 143.1199951171875,
+          "bbox": {
+            "x": 56.599998474121094,
+            "y": 92.1199951171875,
+            "width": 1123.37109375,
+            "height": 66
+          }
+        },
+        {
+          "path": "slides.0.subtitle",
+          "text": "Supporting text",
+          "expectedWidth": 156.7138671875,
+          "actualWidth": 156.71875,
+          "advanceDifference": 0.0048828125,
+          "expectedX": 57.6,
+          "expectedY": 192,
+          "actualX": 57.599998474121094,
+          "actualY": 192,
+          "bbox": {
+            "x": 57.599998474121094,
+            "y": 168,
+            "width": 157.33984375,
+            "height": 31
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "Full source",
+          "expectedWidth": 109.2041015625,
+          "actualWidth": 109.21875,
+          "advanceDifference": 0.0146484375,
+          "expectedX": 57.6,
+          "expectedY": 246.5,
+          "actualX": 57.599998474121094,
+          "actualY": 246.5,
+          "bbox": {
+            "x": 57.599998474121094,
+            "y": 222.5,
+            "width": 109.21875762939453,
+            "height": 31
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "Second paragraph.",
+          "expectedWidth": 189.208984375,
+          "actualWidth": 189.21875,
+          "advanceDifference": 0.009765625,
+          "expectedX": 57.6,
+          "expectedY": 277,
+          "actualX": 57.599998474121094,
+          "actualY": 277,
+          "bbox": {
+            "x": 57.599998474121094,
+            "y": 253,
+            "width": 189.21875,
+            "height": 31
+          }
+        }
+      ],
+      "textRectangleFindings": [
+        {
+          "path": "slides.0.tag",
+          "index": 0
+        },
+        {
+          "path": "slides.0.title",
+          "index": 1
+        },
+        {
+          "path": "slides.0.subtitle",
+          "index": 2
+        }
+      ],
+      "failures": [],
+      "ink": [
+        {
+          "path": "slides.0.tag",
+          "box": {
+            "x": 57.6,
+            "y": 57.6,
+            "width": 1164.8,
+            "height": 19.52
+          },
+          "pixels": 285,
+          "bounds": {
+            "left": 57,
+            "top": 63,
+            "right": 101,
+            "bottom": 73
+          },
+          "maskSha256": "efab4c3767c71778a2573c404b87d9f63f70d3fd97b62677910de87dc44c9739",
+          "outside": []
+        },
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 57.6,
+            "y": 89.12,
+            "width": 1164.8,
+            "height": 65.88
+          },
+          "pixels": 18278,
+          "bounds": {
+            "left": 57,
+            "top": 105,
+            "right": 1179,
+            "bottom": 151
+          },
+          "maskSha256": "9942a8149cba4dae9e26b7e2d160dc503fdfc61570b73126981f8c03ceaa04cd",
+          "outside": []
+        },
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 57.6,
+            "y": 167,
+            "width": 1164.8,
+            "height": 30.5
+          },
+          "pixels": 1300,
+          "bounds": {
+            "left": 57,
+            "top": 175,
+            "right": 214,
+            "bottom": 195
+          },
+          "maskSha256": "ead68d127880b44a30dd8625bfa97070b3905950ffc330d40df604079f7e6e84",
+          "outside": []
+        },
+        {
+          "path": "slides.0.text",
+          "box": {
+            "x": 57.6,
+            "y": 221.5,
+            "width": 1164.8,
+            "height": 440.9
+          },
+          "pixels": 2346,
+          "bounds": {
+            "left": 57,
+            "top": 230,
+            "right": 245,
+            "bottom": 280
+          },
+          "maskSha256": "b09d75068f064057dbefb11a531c7682adb116d514967788fca5189dec38b3ee",
+          "outside": []
+        }
+      ]
+    },
+    {
+      "id": "wide-plain-left-rich",
+      "svgSha256": "5c873415fc89aa4bebb04ed9078408cd4469a9068a4f91301775761ab849e633",
+      "sourceSha256": "e644c790be7c906f0ad04d6342750d763ee51a9b3cede1496e6932d38c823c3e",
+      "observations": [
+        {
+          "path": "slides.0.tag",
+          "text": "Source",
+          "expectedWidth": 44.265625,
+          "actualWidth": 44.265625,
+          "advanceDifference": 0,
+          "expectedX": 57.6,
+          "expectedY": 73.6,
+          "actualX": 57.599998474121094,
+          "actualY": 73.5999984741211,
+          "bbox": {
+            "x": 57.599998474121094,
+            "y": 58.599998474121094,
+            "width": 44.3046875,
+            "height": 19
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "A measured title that wraps when space is narrow",
+          "expectedWidth": 1121.607421875,
+          "actualWidth": 1121.609375,
+          "advanceDifference": 0.001953125,
+          "expectedX": 57.6,
+          "expectedY": 143.12,
+          "actualX": 57.599998474121094,
+          "actualY": 143.1199951171875,
+          "bbox": {
+            "x": 56.599998474121094,
+            "y": 92.1199951171875,
+            "width": 1123.37109375,
+            "height": 66
+          }
+        },
+        {
+          "path": "slides.0.subtitle",
+          "text": "Supporting text",
+          "expectedWidth": 156.7138671875,
+          "actualWidth": 156.71875,
+          "advanceDifference": 0.0048828125,
+          "expectedX": 57.6,
+          "expectedY": 192,
+          "actualX": 57.599998474121094,
+          "actualY": 192,
+          "bbox": {
+            "x": 57.599998474121094,
+            "y": 168,
+            "width": 157.33984375,
+            "height": 31
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "Exact spacing ",
+          "expectedWidth": 140.90576171875,
+          "actualWidth": 140.90625,
+          "advanceDifference": 0.00048828125,
+          "expectedX": 57.6,
+          "expectedY": 246.5,
+          "actualX": 57.599998474121094,
+          "actualY": 246.5,
+          "bbox": {
+            "x": 57.599998474121094,
+            "y": 222.5,
+            "width": 140.90625,
+            "height": 31
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "with bold words",
+          "expectedWidth": 168.39599609375,
+          "actualWidth": 168.40625,
+          "advanceDifference": 0.01025390625,
+          "expectedX": 198.50576171875,
+          "expectedY": 246.5,
+          "actualX": 198.50599670410156,
+          "actualY": 246.5,
+          "bbox": {
+            "x": 197.50599670410156,
+            "y": 222.5,
+            "width": 169.42283630371094,
+            "height": 31
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": " and ",
+          "expectedWidth": 49.54833984375,
+          "actualWidth": 49.5625,
+          "advanceDifference": 0.01416015625,
+          "expectedX": 366.9017578125,
+          "expectedY": 246.5,
+          "actualX": 366.9020080566406,
+          "actualY": 246.5,
+          "bbox": {
+            "x": 366.9020080566406,
+            "y": 222.5,
+            "width": 49.5625,
+            "height": 31
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "italics.",
+          "expectedWidth": 64.53857421875,
+          "actualWidth": 64.546875,
+          "advanceDifference": 0.00830078125,
+          "expectedX": 416.45009765625,
+          "expectedY": 246.5,
+          "actualX": 416.45001220703125,
+          "actualY": 246.5,
+          "bbox": {
+            "x": 416.45001220703125,
+            "y": 222.5,
+            "width": 64.546875,
+            "height": 31
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "A raised ",
+          "expectedWidth": 60.92529296875,
+          "actualWidth": 60.9375,
+          "advanceDifference": 0.01220703125,
+          "expectedX": 57.6,
+          "expectedY": 269.9166666666667,
+          "actualX": 57.599998474121094,
+          "actualY": 269.9169921875,
+          "bbox": {
+            "x": 56.599998474121094,
+            "y": 252.9169921875,
+            "width": 61.9375,
+            "height": 22
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "note",
+          "expectedWidth": 49.98697916666667,
+          "actualWidth": 49.984375,
+          "advanceDifference": -0.0026041666666714036,
+          "expectedX": 118.52529296875,
+          "expectedY": 278.6666666666667,
+          "actualX": 118.5250015258789,
+          "actualY": 278.6669921875,
+          "bbox": {
+            "x": 118.5250015258789,
+            "y": 253.6669921875,
+            "width": 49.98436737060547,
+            "height": 32
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": " stays editable. ",
+          "expectedWidth": 155.87158203125,
+          "actualWidth": 155.875,
+          "advanceDifference": 0.00341796875,
+          "expectedX": 168.51227213541668,
+          "expectedY": 278.6666666666667,
+          "actualX": 168.51199340820312,
+          "actualY": 278.6669921875,
+          "bbox": {
+            "x": 168.51199340820312,
+            "y": 254.6669921875,
+            "width": 155.875,
+            "height": 31
+          }
+        }
+      ],
+      "textRectangleFindings": [
+        {
+          "path": "slides.0.tag",
+          "index": 0
+        },
+        {
+          "path": "slides.0.title",
+          "index": 1
+        },
+        {
+          "path": "slides.0.subtitle",
+          "index": 2
+        },
+        {
+          "path": "slides.0.text",
+          "index": 7
+        }
+      ],
+      "failures": [],
+      "ink": [
+        {
+          "path": "slides.0.tag",
+          "box": {
+            "x": 57.6,
+            "y": 57.6,
+            "width": 1164.8,
+            "height": 19.52
+          },
+          "pixels": 285,
+          "bounds": {
+            "left": 57,
+            "top": 63,
+            "right": 101,
+            "bottom": 73
+          },
+          "maskSha256": "efab4c3767c71778a2573c404b87d9f63f70d3fd97b62677910de87dc44c9739",
+          "outside": []
+        },
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 57.6,
+            "y": 89.12,
+            "width": 1164.8,
+            "height": 65.88
+          },
+          "pixels": 18278,
+          "bounds": {
+            "left": 57,
+            "top": 105,
+            "right": 1179,
+            "bottom": 151
+          },
+          "maskSha256": "9942a8149cba4dae9e26b7e2d160dc503fdfc61570b73126981f8c03ceaa04cd",
+          "outside": []
+        },
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 57.6,
+            "y": 167,
+            "width": 1164.8,
+            "height": 30.5
+          },
+          "pixels": 1300,
+          "bounds": {
+            "left": 57,
+            "top": 175,
+            "right": 214,
+            "bottom": 195
+          },
+          "maskSha256": "ead68d127880b44a30dd8625bfa97070b3905950ffc330d40df604079f7e6e84",
+          "outside": []
+        },
+        {
+          "path": "slides.0.text",
+          "box": {
+            "x": 57.6,
+            "y": 221.5,
+            "width": 1164.8,
+            "height": 440.9
+          },
+          "pixels": 5706,
+          "bounds": {
+            "left": 57,
+            "top": 230,
+            "right": 479,
+            "bottom": 283
+          },
+          "maskSha256": "43b290e4d79a968c58a07eae51a9f6197876cc6390e2753d1b06880123f2a37f",
+          "outside": []
+        }
+      ]
+    },
+    {
+      "id": "wide-plain-center-scalar",
+      "svgSha256": "3bd5d77ec6dd2521c90f72305264965ac91b7d0087c3adaec0f4591c3825194c",
+      "sourceSha256": "c1741fd71ec2c19e4f42f1a8a97e6b167aa0cf88c299e526f81fe4694f08fa2d",
+      "observations": [
+        {
+          "path": "slides.0.tag",
+          "text": "Source",
+          "expectedWidth": 44.265625,
+          "actualWidth": 44.265625,
+          "advanceDifference": 0,
+          "expectedX": 617.8671875,
+          "expectedY": 73.6,
+          "actualX": 617.8671875,
+          "actualY": 73.5999984741211,
+          "bbox": {
+            "x": 617.8671875,
+            "y": 58.599998474121094,
+            "width": 44.3046875,
+            "height": 19
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "A measured title that wraps when space is narrow",
+          "expectedWidth": 1121.607421875,
+          "actualWidth": 1121.609375,
+          "advanceDifference": 0.001953125,
+          "expectedX": 79.19628906249997,
+          "expectedY": 143.12,
+          "actualX": 79.1953125,
+          "actualY": 143.1199951171875,
+          "bbox": {
+            "x": 78.1953125,
+            "y": 92.1199951171875,
+            "width": 1123.37109375,
+            "height": 66
+          }
+        },
+        {
+          "path": "slides.0.subtitle",
+          "text": "Supporting text",
+          "expectedWidth": 156.7138671875,
+          "actualWidth": 156.71875,
+          "advanceDifference": 0.0048828125,
+          "expectedX": 561.64306640625,
+          "expectedY": 192,
+          "actualX": 561.640625,
+          "actualY": 192,
+          "bbox": {
+            "x": 561.640625,
+            "y": 168,
+            "width": 157.33984375,
+            "height": 31
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "Full source",
+          "expectedWidth": 109.2041015625,
+          "actualWidth": 109.21875,
+          "advanceDifference": 0.0146484375,
+          "expectedX": 585.39794921875,
+          "expectedY": 246.5,
+          "actualX": 585.390625,
+          "actualY": 246.5,
+          "bbox": {
+            "x": 585.390625,
+            "y": 222.5,
+            "width": 109.21875,
+            "height": 31
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "Second paragraph.",
+          "expectedWidth": 189.208984375,
+          "actualWidth": 189.21875,
+          "advanceDifference": 0.009765625,
+          "expectedX": 545.3955078125,
+          "expectedY": 277,
+          "actualX": 545.390625,
+          "actualY": 277,
+          "bbox": {
+            "x": 545.390625,
+            "y": 253,
+            "width": 189.21875,
+            "height": 31
+          }
+        }
+      ],
+      "textRectangleFindings": [
+        {
+          "path": "slides.0.tag",
+          "index": 0
+        },
+        {
+          "path": "slides.0.title",
+          "index": 1
+        },
+        {
+          "path": "slides.0.subtitle",
+          "index": 2
+        }
+      ],
+      "failures": [],
+      "ink": [
+        {
+          "path": "slides.0.tag",
+          "box": {
+            "x": 57.6,
+            "y": 57.6,
+            "width": 1164.8,
+            "height": 19.52
+          },
+          "pixels": 282,
+          "bounds": {
+            "left": 618,
+            "top": 63,
+            "right": 661,
+            "bottom": 73
+          },
+          "maskSha256": "f44f0ba2cbebe9cd8d3ac2d54ec1262be7bd4762bb7ac380bb757dd1c57c9546",
+          "outside": []
+        },
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 57.6,
+            "y": 89.12,
+            "width": 1164.8,
+            "height": 65.88
+          },
+          "pixels": 18374,
+          "bounds": {
+            "left": 79,
+            "top": 105,
+            "right": 1200,
+            "bottom": 151
+          },
+          "maskSha256": "f7dacc923ba1f105615acf0d64b7c52f638e42fc90e89be9c59bdcc9c739370b",
+          "outside": []
+        },
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 57.6,
+            "y": 167,
+            "width": 1164.8,
+            "height": 30.5
+          },
+          "pixels": 1318,
+          "bounds": {
+            "left": 562,
+            "top": 175,
+            "right": 718,
+            "bottom": 195
+          },
+          "maskSha256": "9affcf748ff2a4050601a6b38237ca36c4c4572825b76d5a693065ffc1feb9c7",
+          "outside": []
+        },
+        {
+          "path": "slides.0.text",
+          "box": {
+            "x": 57.6,
+            "y": 221.5,
+            "width": 1164.8,
+            "height": 440.9
+          },
+          "pixels": 2319,
+          "bounds": {
+            "left": 545,
+            "top": 230,
+            "right": 733,
+            "bottom": 280
+          },
+          "maskSha256": "e252d3c02e93c6def247ec10a4ac52ad8669284d942a841413bda18c4dc4535b",
+          "outside": []
+        }
+      ]
+    },
+    {
+      "id": "wide-plain-center-rich",
+      "svgSha256": "4f40e9da0f4bd51e33e2963cb40c7d0959af7a52b789f2e131ca4e3e75cefd54",
+      "sourceSha256": "b157f86a89576d161bc5bd46e642d37f1e4c2e616d597e2123ce3ef9d4809ab6",
+      "observations": [
+        {
+          "path": "slides.0.tag",
+          "text": "Source",
+          "expectedWidth": 44.265625,
+          "actualWidth": 44.265625,
+          "advanceDifference": 0,
+          "expectedX": 617.8671875,
+          "expectedY": 73.6,
+          "actualX": 617.8671875,
+          "actualY": 73.5999984741211,
+          "bbox": {
+            "x": 617.8671875,
+            "y": 58.599998474121094,
+            "width": 44.3046875,
+            "height": 19
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "A measured title that wraps when space is narrow",
+          "expectedWidth": 1121.607421875,
+          "actualWidth": 1121.609375,
+          "advanceDifference": 0.001953125,
+          "expectedX": 79.19628906249997,
+          "expectedY": 143.12,
+          "actualX": 79.1953125,
+          "actualY": 143.1199951171875,
+          "bbox": {
+            "x": 78.1953125,
+            "y": 92.1199951171875,
+            "width": 1123.37109375,
+            "height": 66
+          }
+        },
+        {
+          "path": "slides.0.subtitle",
+          "text": "Supporting text",
+          "expectedWidth": 156.7138671875,
+          "actualWidth": 156.71875,
+          "advanceDifference": 0.0048828125,
+          "expectedX": 561.64306640625,
+          "expectedY": 192,
+          "actualX": 561.640625,
+          "actualY": 192,
+          "bbox": {
+            "x": 561.640625,
+            "y": 168,
+            "width": 157.33984375,
+            "height": 31
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "Exact spacing ",
+          "expectedWidth": 140.90576171875,
+          "actualWidth": 140.90625,
+          "advanceDifference": 0.00048828125,
+          "expectedX": 428.3056640625,
+          "expectedY": 246.5,
+          "actualX": 428.3059997558594,
+          "actualY": 246.5,
+          "bbox": {
+            "x": 428.3059997558594,
+            "y": 222.5,
+            "width": 140.90628051757812,
+            "height": 31
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "with bold words",
+          "expectedWidth": 168.39599609375,
+          "actualWidth": 168.40625,
+          "advanceDifference": 0.01025390625,
+          "expectedX": 569.21142578125,
+          "expectedY": 246.5,
+          "actualX": 569.2109985351562,
+          "actualY": 246.5,
+          "bbox": {
+            "x": 568.2109985351562,
+            "y": 222.5,
+            "width": 169.4228515625,
+            "height": 31
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": " and ",
+          "expectedWidth": 49.54833984375,
+          "actualWidth": 49.5625,
+          "advanceDifference": 0.01416015625,
+          "expectedX": 737.607421875,
+          "expectedY": 246.5,
+          "actualX": 737.6069946289062,
+          "actualY": 246.5,
+          "bbox": {
+            "x": 737.6069946289062,
+            "y": 222.5,
+            "width": 49.5625,
+            "height": 31
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "italics.",
+          "expectedWidth": 64.53857421875,
+          "actualWidth": 64.546875,
+          "advanceDifference": 0.00830078125,
+          "expectedX": 787.15576171875,
+          "expectedY": 246.5,
+          "actualX": 787.156005859375,
+          "actualY": 246.5,
+          "bbox": {
+            "x": 787.156005859375,
+            "y": 222.5,
+            "width": 64.546875,
+            "height": 31
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "A raised ",
+          "expectedWidth": 60.92529296875,
+          "actualWidth": 60.9375,
+          "advanceDifference": 0.01220703125,
+          "expectedX": 506.60807291666663,
+          "expectedY": 269.9166666666667,
+          "actualX": 506.6080017089844,
+          "actualY": 269.9169921875,
+          "bbox": {
+            "x": 505.6080017089844,
+            "y": 252.9169921875,
+            "width": 61.937530517578125,
+            "height": 22
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "note",
+          "expectedWidth": 49.98697916666667,
+          "actualWidth": 49.984375,
+          "advanceDifference": -0.0026041666666714036,
+          "expectedX": 567.5333658854166,
+          "expectedY": 278.6666666666667,
+          "actualX": 567.5330200195312,
+          "actualY": 278.6669921875,
+          "bbox": {
+            "x": 567.5330200195312,
+            "y": 253.6669921875,
+            "width": 49.984375,
+            "height": 32
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": " stays editable. ",
+          "expectedWidth": 155.87158203125,
+          "actualWidth": 155.875,
+          "advanceDifference": 0.00341796875,
+          "expectedX": 617.5203450520833,
+          "expectedY": 278.6666666666667,
+          "actualX": 617.52001953125,
+          "actualY": 278.6669921875,
+          "bbox": {
+            "x": 617.52001953125,
+            "y": 254.6669921875,
+            "width": 155.875,
+            "height": 31
+          }
+        }
+      ],
+      "textRectangleFindings": [
+        {
+          "path": "slides.0.tag",
+          "index": 0
+        },
+        {
+          "path": "slides.0.title",
+          "index": 1
+        },
+        {
+          "path": "slides.0.subtitle",
+          "index": 2
+        }
+      ],
+      "failures": [],
+      "ink": [
+        {
+          "path": "slides.0.tag",
+          "box": {
+            "x": 57.6,
+            "y": 57.6,
+            "width": 1164.8,
+            "height": 19.52
+          },
+          "pixels": 282,
+          "bounds": {
+            "left": 618,
+            "top": 63,
+            "right": 661,
+            "bottom": 73
+          },
+          "maskSha256": "f44f0ba2cbebe9cd8d3ac2d54ec1262be7bd4762bb7ac380bb757dd1c57c9546",
+          "outside": []
+        },
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 57.6,
+            "y": 89.12,
+            "width": 1164.8,
+            "height": 65.88
+          },
+          "pixels": 18374,
+          "bounds": {
+            "left": 79,
+            "top": 105,
+            "right": 1200,
+            "bottom": 151
+          },
+          "maskSha256": "f7dacc923ba1f105615acf0d64b7c52f638e42fc90e89be9c59bdcc9c739370b",
+          "outside": []
+        },
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 57.6,
+            "y": 167,
+            "width": 1164.8,
+            "height": 30.5
+          },
+          "pixels": 1318,
+          "bounds": {
+            "left": 562,
+            "top": 175,
+            "right": 718,
+            "bottom": 195
+          },
+          "maskSha256": "9affcf748ff2a4050601a6b38237ca36c4c4572825b76d5a693065ffc1feb9c7",
+          "outside": []
+        },
+        {
+          "path": "slides.0.text",
+          "box": {
+            "x": 57.6,
+            "y": 221.5,
+            "width": 1164.8,
+            "height": 440.9
+          },
+          "pixels": 5719,
+          "bounds": {
+            "left": 429,
+            "top": 230,
+            "right": 849,
+            "bottom": 283
+          },
+          "maskSha256": "eee311d6980fda0c6e70ab1d2adb0dfd68edb14c95305da76bf7d4c321b72f55",
+          "outside": []
+        }
+      ]
+    },
+    {
+      "id": "wide-plain-right-scalar",
+      "svgSha256": "4d5bef7f3019b571711ffa8bfe44d9f82a5b7223cc2710b38f9ae1bf9140720b",
+      "sourceSha256": "cae05f2d324311277a393e3da67820491453a31f96dbe6adc520814929b6d384",
+      "observations": [
+        {
+          "path": "slides.0.tag",
+          "text": "Source",
+          "expectedWidth": 44.265625,
+          "actualWidth": 44.265625,
+          "advanceDifference": 0,
+          "expectedX": 1178.1343749999999,
+          "expectedY": 73.6,
+          "actualX": 1178.1343994140625,
+          "actualY": 73.5999984741211,
+          "bbox": {
+            "x": 1178.1343994140625,
+            "y": 58.599998474121094,
+            "width": 44.3046875,
+            "height": 19
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "A measured title that wraps when space is narrow",
+          "expectedWidth": 1121.607421875,
+          "actualWidth": 1121.609375,
+          "advanceDifference": 0.001953125,
+          "expectedX": 100.79257812499995,
+          "expectedY": 143.12,
+          "actualX": 100.790771484375,
+          "actualY": 143.1199951171875,
+          "bbox": {
+            "x": 99.790771484375,
+            "y": 92.1199951171875,
+            "width": 1123.37109375,
+            "height": 66
+          }
+        },
+        {
+          "path": "slides.0.subtitle",
+          "text": "Supporting text",
+          "expectedWidth": 156.7138671875,
+          "actualWidth": 156.71875,
+          "advanceDifference": 0.0048828125,
+          "expectedX": 1065.6861328124999,
+          "expectedY": 192,
+          "actualX": 1065.6812744140625,
+          "actualY": 192,
+          "bbox": {
+            "x": 1065.6812744140625,
+            "y": 168,
+            "width": 157.33984375,
+            "height": 31
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "Full source",
+          "expectedWidth": 109.2041015625,
+          "actualWidth": 109.21875,
+          "advanceDifference": 0.0146484375,
+          "expectedX": 1113.1958984374999,
+          "expectedY": 246.5,
+          "actualX": 1113.1812744140625,
+          "actualY": 246.5,
+          "bbox": {
+            "x": 1113.1812744140625,
+            "y": 222.5,
+            "width": 109.21875,
+            "height": 31
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "Second paragraph.",
+          "expectedWidth": 189.208984375,
+          "actualWidth": 189.21875,
+          "advanceDifference": 0.009765625,
+          "expectedX": 1033.1910156249999,
+          "expectedY": 277,
+          "actualX": 1033.1812744140625,
+          "actualY": 277,
+          "bbox": {
+            "x": 1033.1812744140625,
+            "y": 253,
+            "width": 189.21875,
+            "height": 31
+          }
+        }
+      ],
+      "textRectangleFindings": [
+        {
+          "path": "slides.0.tag",
+          "index": 0
+        },
+        {
+          "path": "slides.0.title",
+          "index": 1
+        },
+        {
+          "path": "slides.0.subtitle",
+          "index": 2
+        }
+      ],
+      "failures": [],
+      "ink": [
+        {
+          "path": "slides.0.tag",
+          "box": {
+            "x": 57.6,
+            "y": 57.6,
+            "width": 1164.8,
+            "height": 19.52
+          },
+          "pixels": 278,
+          "bounds": {
+            "left": 1178,
+            "top": 63,
+            "right": 1222,
+            "bottom": 73
+          },
+          "maskSha256": "039fc2d98809d17d69004cdf417ec2a7bcce1a7ae71c0457450dfe6a4e414ec0",
+          "outside": []
+        },
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 57.6,
+            "y": 89.12,
+            "width": 1164.8,
+            "height": 65.88
+          },
+          "pixels": 18362,
+          "bounds": {
+            "left": 100,
+            "top": 105,
+            "right": 1222,
+            "bottom": 151
+          },
+          "maskSha256": "4a0b0ad9bb5886aefc21716492580256b0854130ad0a85ee516ba6ea3343c3a6",
+          "outside": []
+        },
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 57.6,
+            "y": 167,
+            "width": 1164.8,
+            "height": 30.5
+          },
+          "pixels": 1320,
+          "bounds": {
+            "left": 1066,
+            "top": 175,
+            "right": 1222,
+            "bottom": 195
+          },
+          "maskSha256": "a4db72ad410459340c28f46c05b6e44d5ffc7299dd288f51679dcc23707b741e",
+          "outside": []
+        },
+        {
+          "path": "slides.0.text",
+          "box": {
+            "x": 57.6,
+            "y": 221.5,
+            "width": 1164.8,
+            "height": 440.9
+          },
+          "pixels": 2307,
+          "bounds": {
+            "left": 1033,
+            "top": 230,
+            "right": 1221,
+            "bottom": 280
+          },
+          "maskSha256": "b2dd8a7173b05fc919050d6f80616b5465922407e9176d73ba031d7e1eaf5094",
+          "outside": []
+        }
+      ]
+    },
+    {
+      "id": "wide-plain-right-rich",
+      "svgSha256": "f2b7741898923add455be82cac8317b86116e86b6ca9a3426032ffc7b986c9e8",
+      "sourceSha256": "ba05ca9f89375a43786d9f2a4c4268ea507be1b0d7ae4e5b3b18891473e7ee46",
+      "observations": [
+        {
+          "path": "slides.0.tag",
+          "text": "Source",
+          "expectedWidth": 44.265625,
+          "actualWidth": 44.265625,
+          "advanceDifference": 0,
+          "expectedX": 1178.1343749999999,
+          "expectedY": 73.6,
+          "actualX": 1178.1343994140625,
+          "actualY": 73.5999984741211,
+          "bbox": {
+            "x": 1178.1343994140625,
+            "y": 58.599998474121094,
+            "width": 44.3046875,
+            "height": 19
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "A measured title that wraps when space is narrow",
+          "expectedWidth": 1121.607421875,
+          "actualWidth": 1121.609375,
+          "advanceDifference": 0.001953125,
+          "expectedX": 100.79257812499995,
+          "expectedY": 143.12,
+          "actualX": 100.790771484375,
+          "actualY": 143.1199951171875,
+          "bbox": {
+            "x": 99.790771484375,
+            "y": 92.1199951171875,
+            "width": 1123.37109375,
+            "height": 66
+          }
+        },
+        {
+          "path": "slides.0.subtitle",
+          "text": "Supporting text",
+          "expectedWidth": 156.7138671875,
+          "actualWidth": 156.71875,
+          "advanceDifference": 0.0048828125,
+          "expectedX": 1065.6861328124999,
+          "expectedY": 192,
+          "actualX": 1065.6812744140625,
+          "actualY": 192,
+          "bbox": {
+            "x": 1065.6812744140625,
+            "y": 168,
+            "width": 157.33984375,
+            "height": 31
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "Exact spacing ",
+          "expectedWidth": 140.90576171875,
+          "actualWidth": 140.90625,
+          "advanceDifference": 0.00048828125,
+          "expectedX": 799.011328125,
+          "expectedY": 246.5,
+          "actualX": 799.010986328125,
+          "actualY": 246.5,
+          "bbox": {
+            "x": 799.010986328125,
+            "y": 222.5,
+            "width": 140.90625,
+            "height": 31
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "with bold words",
+          "expectedWidth": 168.39599609375,
+          "actualWidth": 168.40625,
+          "advanceDifference": 0.01025390625,
+          "expectedX": 939.91708984375,
+          "expectedY": 246.5,
+          "actualX": 939.9169921875,
+          "actualY": 246.5,
+          "bbox": {
+            "x": 938.9169921875,
+            "y": 222.5,
+            "width": 169.4228515625,
+            "height": 31
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": " and ",
+          "expectedWidth": 49.54833984375,
+          "actualWidth": 49.5625,
+          "advanceDifference": 0.01416015625,
+          "expectedX": 1108.3130859375,
+          "expectedY": 246.5,
+          "actualX": 1108.31298828125,
+          "actualY": 246.5,
+          "bbox": {
+            "x": 1108.31298828125,
+            "y": 222.5,
+            "width": 49.5625,
+            "height": 31
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "italics.",
+          "expectedWidth": 64.53857421875,
+          "actualWidth": 64.546875,
+          "advanceDifference": 0.00830078125,
+          "expectedX": 1157.86142578125,
+          "expectedY": 246.5,
+          "actualX": 1157.8609619140625,
+          "actualY": 246.5,
+          "bbox": {
+            "x": 1157.8609619140625,
+            "y": 222.5,
+            "width": 64.546875,
+            "height": 31
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "A raised ",
+          "expectedWidth": 60.92529296875,
+          "actualWidth": 60.9375,
+          "advanceDifference": 0.01220703125,
+          "expectedX": 955.6161458333332,
+          "expectedY": 269.9166666666667,
+          "actualX": 955.6160278320312,
+          "actualY": 269.9169921875,
+          "bbox": {
+            "x": 954.6160278320312,
+            "y": 252.9169921875,
+            "width": 61.9375,
+            "height": 22
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "note",
+          "expectedWidth": 49.98697916666667,
+          "actualWidth": 49.984375,
+          "advanceDifference": -0.0026041666666714036,
+          "expectedX": 1016.5414388020832,
+          "expectedY": 278.6666666666667,
+          "actualX": 1016.541015625,
+          "actualY": 278.6669921875,
+          "bbox": {
+            "x": 1016.541015625,
+            "y": 253.6669921875,
+            "width": 49.984375,
+            "height": 32
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": " stays editable. ",
+          "expectedWidth": 155.87158203125,
+          "actualWidth": 155.875,
+          "advanceDifference": 0.00341796875,
+          "expectedX": 1066.5284179687499,
+          "expectedY": 278.6666666666667,
+          "actualX": 1066.5279541015625,
+          "actualY": 278.6669921875,
+          "bbox": {
+            "x": 1066.5279541015625,
+            "y": 254.6669921875,
+            "width": 155.875,
+            "height": 31
+          }
+        }
+      ],
+      "textRectangleFindings": [
+        {
+          "path": "slides.0.tag",
+          "index": 0
+        },
+        {
+          "path": "slides.0.title",
+          "index": 1
+        },
+        {
+          "path": "slides.0.subtitle",
+          "index": 2
+        }
+      ],
+      "failures": [],
+      "ink": [
+        {
+          "path": "slides.0.tag",
+          "box": {
+            "x": 57.6,
+            "y": 57.6,
+            "width": 1164.8,
+            "height": 19.52
+          },
+          "pixels": 278,
+          "bounds": {
+            "left": 1178,
+            "top": 63,
+            "right": 1222,
+            "bottom": 73
+          },
+          "maskSha256": "039fc2d98809d17d69004cdf417ec2a7bcce1a7ae71c0457450dfe6a4e414ec0",
+          "outside": []
+        },
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 57.6,
+            "y": 89.12,
+            "width": 1164.8,
+            "height": 65.88
+          },
+          "pixels": 18362,
+          "bounds": {
+            "left": 100,
+            "top": 105,
+            "right": 1222,
+            "bottom": 151
+          },
+          "maskSha256": "4a0b0ad9bb5886aefc21716492580256b0854130ad0a85ee516ba6ea3343c3a6",
+          "outside": []
+        },
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 57.6,
+            "y": 167,
+            "width": 1164.8,
+            "height": 30.5
+          },
+          "pixels": 1320,
+          "bounds": {
+            "left": 1066,
+            "top": 175,
+            "right": 1222,
+            "bottom": 195
+          },
+          "maskSha256": "a4db72ad410459340c28f46c05b6e44d5ffc7299dd288f51679dcc23707b741e",
+          "outside": []
+        },
+        {
+          "path": "slides.0.text",
+          "box": {
+            "x": 57.6,
+            "y": 221.5,
+            "width": 1164.8,
+            "height": 440.9
+          },
+          "pixels": 5755,
+          "bounds": {
+            "left": 800,
+            "top": 230,
+            "right": 1220,
+            "bottom": 283
+          },
+          "maskSha256": "9eead8bb938b725b5991f9a22b3387a00cc58744147b160427ec3853b3dd3b9a",
+          "outside": []
+        }
+      ]
+    },
+    {
+      "id": "wide-card-left-scalar",
+      "svgSha256": "3becc962557e75fbcacd504a3d2de321ef71700d14bc6eacd97acd0cdf532298",
+      "sourceSha256": "fc397347a4a40fbb397664a6895830705fdc9ae2240337ce9057024b3bfc8a31",
+      "observations": [
+        {
+          "path": "slides.0.tag",
+          "text": "Source",
+          "expectedWidth": 44.265625,
+          "actualWidth": 44.265625,
+          "advanceDifference": 0,
+          "expectedX": 57.6,
+          "expectedY": 73.6,
+          "actualX": 57.599998474121094,
+          "actualY": 73.5999984741211,
+          "bbox": {
+            "x": 57.599998474121094,
+            "y": 58.599998474121094,
+            "width": 44.3046875,
+            "height": 19
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "A measured title that wraps when space is narrow",
+          "expectedWidth": 1121.607421875,
+          "actualWidth": 1121.609375,
+          "advanceDifference": 0.001953125,
+          "expectedX": 57.6,
+          "expectedY": 143.12,
+          "actualX": 57.599998474121094,
+          "actualY": 143.1199951171875,
+          "bbox": {
+            "x": 56.599998474121094,
+            "y": 92.1199951171875,
+            "width": 1123.37109375,
+            "height": 66
+          }
+        },
+        {
+          "path": "slides.0.subtitle",
+          "text": "Supporting text",
+          "expectedWidth": 156.7138671875,
+          "actualWidth": 156.71875,
+          "advanceDifference": 0.0048828125,
+          "expectedX": 57.6,
+          "expectedY": 192,
+          "actualX": 57.599998474121094,
+          "actualY": 192,
+          "bbox": {
+            "x": 57.599998474121094,
+            "y": 168,
+            "width": 157.33984375,
+            "height": 31
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "Full source",
+          "expectedWidth": 109.2041015625,
+          "actualWidth": 109.21875,
+          "advanceDifference": 0.0146484375,
+          "expectedX": 69.6,
+          "expectedY": 258.5,
+          "actualX": 69.5999984741211,
+          "actualY": 258.5,
+          "bbox": {
+            "x": 69.5999984741211,
+            "y": 234.5,
+            "width": 109.21875762939453,
+            "height": 31
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "Second paragraph.",
+          "expectedWidth": 189.208984375,
+          "actualWidth": 189.21875,
+          "advanceDifference": 0.009765625,
+          "expectedX": 69.6,
+          "expectedY": 289,
+          "actualX": 69.5999984741211,
+          "actualY": 289,
+          "bbox": {
+            "x": 69.5999984741211,
+            "y": 265,
+            "width": 189.21875,
+            "height": 31
+          }
+        }
+      ],
+      "textRectangleFindings": [
+        {
+          "path": "slides.0.tag",
+          "index": 0
+        },
+        {
+          "path": "slides.0.title",
+          "index": 1
+        },
+        {
+          "path": "slides.0.subtitle",
+          "index": 2
+        }
+      ],
+      "failures": [],
+      "ink": [
+        {
+          "path": "slides.0.tag",
+          "box": {
+            "x": 57.6,
+            "y": 57.6,
+            "width": 1164.8,
+            "height": 19.52
+          },
+          "pixels": 285,
+          "bounds": {
+            "left": 57,
+            "top": 63,
+            "right": 101,
+            "bottom": 73
+          },
+          "maskSha256": "efab4c3767c71778a2573c404b87d9f63f70d3fd97b62677910de87dc44c9739",
+          "outside": []
+        },
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 57.6,
+            "y": 89.12,
+            "width": 1164.8,
+            "height": 65.88
+          },
+          "pixels": 18278,
+          "bounds": {
+            "left": 57,
+            "top": 105,
+            "right": 1179,
+            "bottom": 151
+          },
+          "maskSha256": "9942a8149cba4dae9e26b7e2d160dc503fdfc61570b73126981f8c03ceaa04cd",
+          "outside": []
+        },
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 57.6,
+            "y": 167,
+            "width": 1164.8,
+            "height": 30.5
+          },
+          "pixels": 1300,
+          "bounds": {
+            "left": 57,
+            "top": 175,
+            "right": 214,
+            "bottom": 195
+          },
+          "maskSha256": "ead68d127880b44a30dd8625bfa97070b3905950ffc330d40df604079f7e6e84",
+          "outside": []
+        },
+        {
+          "path": "slides.0.text",
+          "box": {
+            "x": 69.6,
+            "y": 233.5,
+            "width": 1140.8,
+            "height": 416.9
+          },
+          "pixels": 2346,
+          "bounds": {
+            "left": 69,
+            "top": 242,
+            "right": 257,
+            "bottom": 292
+          },
+          "maskSha256": "1678f48ef9b3127ff5d7c2cef6b8d74383e22223b0637442016f1764171d56e8",
+          "outside": []
+        }
+      ]
+    },
+    {
+      "id": "wide-card-left-rich",
+      "svgSha256": "0bd534bc31ab86324b42c265aae62c76eaefe8cd9f1701e74eb7f13465cef245",
+      "sourceSha256": "267f04af0723e14f0ecebb35f44d6a7ed39deb5e56792432d9b88ba4d9705436",
+      "observations": [
+        {
+          "path": "slides.0.tag",
+          "text": "Source",
+          "expectedWidth": 44.265625,
+          "actualWidth": 44.265625,
+          "advanceDifference": 0,
+          "expectedX": 57.6,
+          "expectedY": 73.6,
+          "actualX": 57.599998474121094,
+          "actualY": 73.5999984741211,
+          "bbox": {
+            "x": 57.599998474121094,
+            "y": 58.599998474121094,
+            "width": 44.3046875,
+            "height": 19
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "A measured title that wraps when space is narrow",
+          "expectedWidth": 1121.607421875,
+          "actualWidth": 1121.609375,
+          "advanceDifference": 0.001953125,
+          "expectedX": 57.6,
+          "expectedY": 143.12,
+          "actualX": 57.599998474121094,
+          "actualY": 143.1199951171875,
+          "bbox": {
+            "x": 56.599998474121094,
+            "y": 92.1199951171875,
+            "width": 1123.37109375,
+            "height": 66
+          }
+        },
+        {
+          "path": "slides.0.subtitle",
+          "text": "Supporting text",
+          "expectedWidth": 156.7138671875,
+          "actualWidth": 156.71875,
+          "advanceDifference": 0.0048828125,
+          "expectedX": 57.6,
+          "expectedY": 192,
+          "actualX": 57.599998474121094,
+          "actualY": 192,
+          "bbox": {
+            "x": 57.599998474121094,
+            "y": 168,
+            "width": 157.33984375,
+            "height": 31
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "Exact spacing ",
+          "expectedWidth": 140.90576171875,
+          "actualWidth": 140.90625,
+          "advanceDifference": 0.00048828125,
+          "expectedX": 69.6,
+          "expectedY": 258.5,
+          "actualX": 69.5999984741211,
+          "actualY": 258.5,
+          "bbox": {
+            "x": 69.5999984741211,
+            "y": 234.5,
+            "width": 140.90625,
+            "height": 31
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "with bold words",
+          "expectedWidth": 168.39599609375,
+          "actualWidth": 168.40625,
+          "advanceDifference": 0.01025390625,
+          "expectedX": 210.50576171875,
+          "expectedY": 258.5,
+          "actualX": 210.50599670410156,
+          "actualY": 258.5,
+          "bbox": {
+            "x": 209.50599670410156,
+            "y": 234.5,
+            "width": 169.42283630371094,
+            "height": 31
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": " and ",
+          "expectedWidth": 49.54833984375,
+          "actualWidth": 49.5625,
+          "advanceDifference": 0.01416015625,
+          "expectedX": 378.9017578125,
+          "expectedY": 258.5,
+          "actualX": 378.9020080566406,
+          "actualY": 258.5,
+          "bbox": {
+            "x": 378.9020080566406,
+            "y": 234.5,
+            "width": 49.5625,
+            "height": 31
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "italics.",
+          "expectedWidth": 64.53857421875,
+          "actualWidth": 64.546875,
+          "advanceDifference": 0.00830078125,
+          "expectedX": 428.45009765625,
+          "expectedY": 258.5,
+          "actualX": 428.45001220703125,
+          "actualY": 258.5,
+          "bbox": {
+            "x": 428.45001220703125,
+            "y": 234.5,
+            "width": 64.546875,
+            "height": 31
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "A raised ",
+          "expectedWidth": 60.92529296875,
+          "actualWidth": 60.9375,
+          "advanceDifference": 0.01220703125,
+          "expectedX": 69.6,
+          "expectedY": 281.9166666666667,
+          "actualX": 69.5999984741211,
+          "actualY": 281.9169921875,
+          "bbox": {
+            "x": 68.5999984741211,
+            "y": 264.9169921875,
+            "width": 61.93750762939453,
+            "height": 22
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "note",
+          "expectedWidth": 49.98697916666667,
+          "actualWidth": 49.984375,
+          "advanceDifference": -0.0026041666666714036,
+          "expectedX": 130.52529296875,
+          "expectedY": 290.6666666666667,
+          "actualX": 130.52499389648438,
+          "actualY": 290.6669921875,
+          "bbox": {
+            "x": 130.52499389648438,
+            "y": 265.6669921875,
+            "width": 49.984375,
+            "height": 32
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": " stays editable. ",
+          "expectedWidth": 155.87158203125,
+          "actualWidth": 155.875,
+          "advanceDifference": 0.00341796875,
+          "expectedX": 180.51227213541665,
+          "expectedY": 290.6666666666667,
+          "actualX": 180.51199340820312,
+          "actualY": 290.6669921875,
+          "bbox": {
+            "x": 180.51199340820312,
+            "y": 266.6669921875,
+            "width": 155.875,
+            "height": 31
+          }
+        }
+      ],
+      "textRectangleFindings": [
+        {
+          "path": "slides.0.tag",
+          "index": 0
+        },
+        {
+          "path": "slides.0.title",
+          "index": 1
+        },
+        {
+          "path": "slides.0.subtitle",
+          "index": 2
+        },
+        {
+          "path": "slides.0.text",
+          "index": 7
+        }
+      ],
+      "failures": [],
+      "ink": [
+        {
+          "path": "slides.0.tag",
+          "box": {
+            "x": 57.6,
+            "y": 57.6,
+            "width": 1164.8,
+            "height": 19.52
+          },
+          "pixels": 285,
+          "bounds": {
+            "left": 57,
+            "top": 63,
+            "right": 101,
+            "bottom": 73
+          },
+          "maskSha256": "efab4c3767c71778a2573c404b87d9f63f70d3fd97b62677910de87dc44c9739",
+          "outside": []
+        },
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 57.6,
+            "y": 89.12,
+            "width": 1164.8,
+            "height": 65.88
+          },
+          "pixels": 18278,
+          "bounds": {
+            "left": 57,
+            "top": 105,
+            "right": 1179,
+            "bottom": 151
+          },
+          "maskSha256": "9942a8149cba4dae9e26b7e2d160dc503fdfc61570b73126981f8c03ceaa04cd",
+          "outside": []
+        },
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 57.6,
+            "y": 167,
+            "width": 1164.8,
+            "height": 30.5
+          },
+          "pixels": 1300,
+          "bounds": {
+            "left": 57,
+            "top": 175,
+            "right": 214,
+            "bottom": 195
+          },
+          "maskSha256": "ead68d127880b44a30dd8625bfa97070b3905950ffc330d40df604079f7e6e84",
+          "outside": []
+        },
+        {
+          "path": "slides.0.text",
+          "box": {
+            "x": 69.6,
+            "y": 233.5,
+            "width": 1140.8,
+            "height": 416.9
+          },
+          "pixels": 5706,
+          "bounds": {
+            "left": 69,
+            "top": 242,
+            "right": 491,
+            "bottom": 295
+          },
+          "maskSha256": "1617466aa20f7c8640dd709b5d627293c350d9d008f7b41cfe9a024a16a5ee21",
+          "outside": []
+        }
+      ]
+    },
+    {
+      "id": "wide-card-center-scalar",
+      "svgSha256": "9421a367e55d96a57e2a4c17a0c9a366c63d200d9346c5f91134f8baa81615c5",
+      "sourceSha256": "b0f6a0c6a110585a46efe0354a4f6b4ed712c5c7e9415b34851d0209e615a799",
+      "observations": [
+        {
+          "path": "slides.0.tag",
+          "text": "Source",
+          "expectedWidth": 44.265625,
+          "actualWidth": 44.265625,
+          "advanceDifference": 0,
+          "expectedX": 617.8671875,
+          "expectedY": 73.6,
+          "actualX": 617.8671875,
+          "actualY": 73.5999984741211,
+          "bbox": {
+            "x": 617.8671875,
+            "y": 58.599998474121094,
+            "width": 44.3046875,
+            "height": 19
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "A measured title that wraps when space is narrow",
+          "expectedWidth": 1121.607421875,
+          "actualWidth": 1121.609375,
+          "advanceDifference": 0.001953125,
+          "expectedX": 79.19628906249997,
+          "expectedY": 143.12,
+          "actualX": 79.1953125,
+          "actualY": 143.1199951171875,
+          "bbox": {
+            "x": 78.1953125,
+            "y": 92.1199951171875,
+            "width": 1123.37109375,
+            "height": 66
+          }
+        },
+        {
+          "path": "slides.0.subtitle",
+          "text": "Supporting text",
+          "expectedWidth": 156.7138671875,
+          "actualWidth": 156.71875,
+          "advanceDifference": 0.0048828125,
+          "expectedX": 561.64306640625,
+          "expectedY": 192,
+          "actualX": 561.640625,
+          "actualY": 192,
+          "bbox": {
+            "x": 561.640625,
+            "y": 168,
+            "width": 157.33984375,
+            "height": 31
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "Full source",
+          "expectedWidth": 109.2041015625,
+          "actualWidth": 109.21875,
+          "advanceDifference": 0.0146484375,
+          "expectedX": 585.39794921875,
+          "expectedY": 258.5,
+          "actualX": 585.390625,
+          "actualY": 258.5,
+          "bbox": {
+            "x": 585.390625,
+            "y": 234.5,
+            "width": 109.21875,
+            "height": 31
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "Second paragraph.",
+          "expectedWidth": 189.208984375,
+          "actualWidth": 189.21875,
+          "advanceDifference": 0.009765625,
+          "expectedX": 545.3955078125,
+          "expectedY": 289,
+          "actualX": 545.390625,
+          "actualY": 289,
+          "bbox": {
+            "x": 545.390625,
+            "y": 265,
+            "width": 189.21875,
+            "height": 31
+          }
+        }
+      ],
+      "textRectangleFindings": [
+        {
+          "path": "slides.0.tag",
+          "index": 0
+        },
+        {
+          "path": "slides.0.title",
+          "index": 1
+        },
+        {
+          "path": "slides.0.subtitle",
+          "index": 2
+        }
+      ],
+      "failures": [],
+      "ink": [
+        {
+          "path": "slides.0.tag",
+          "box": {
+            "x": 57.6,
+            "y": 57.6,
+            "width": 1164.8,
+            "height": 19.52
+          },
+          "pixels": 282,
+          "bounds": {
+            "left": 618,
+            "top": 63,
+            "right": 661,
+            "bottom": 73
+          },
+          "maskSha256": "f44f0ba2cbebe9cd8d3ac2d54ec1262be7bd4762bb7ac380bb757dd1c57c9546",
+          "outside": []
+        },
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 57.6,
+            "y": 89.12,
+            "width": 1164.8,
+            "height": 65.88
+          },
+          "pixels": 18374,
+          "bounds": {
+            "left": 79,
+            "top": 105,
+            "right": 1200,
+            "bottom": 151
+          },
+          "maskSha256": "f7dacc923ba1f105615acf0d64b7c52f638e42fc90e89be9c59bdcc9c739370b",
+          "outside": []
+        },
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 57.6,
+            "y": 167,
+            "width": 1164.8,
+            "height": 30.5
+          },
+          "pixels": 1318,
+          "bounds": {
+            "left": 562,
+            "top": 175,
+            "right": 718,
+            "bottom": 195
+          },
+          "maskSha256": "9affcf748ff2a4050601a6b38237ca36c4c4572825b76d5a693065ffc1feb9c7",
+          "outside": []
+        },
+        {
+          "path": "slides.0.text",
+          "box": {
+            "x": 69.6,
+            "y": 233.5,
+            "width": 1140.8,
+            "height": 416.9
+          },
+          "pixels": 2319,
+          "bounds": {
+            "left": 545,
+            "top": 242,
+            "right": 733,
+            "bottom": 292
+          },
+          "maskSha256": "413cac85b44251ceb0a48c37c6a13abed23656b0ffe32ee89d727ed212da8c67",
+          "outside": []
+        }
+      ]
+    },
+    {
+      "id": "wide-card-center-rich",
+      "svgSha256": "1d28755a52b27436a105fbe52d191206cf50fc200336e4b59d6431f2fc5dc0d6",
+      "sourceSha256": "e765a4d648a2484cf727343bb86e4dd81b61b2edf26c4bdc6541d283f023d671",
+      "observations": [
+        {
+          "path": "slides.0.tag",
+          "text": "Source",
+          "expectedWidth": 44.265625,
+          "actualWidth": 44.265625,
+          "advanceDifference": 0,
+          "expectedX": 617.8671875,
+          "expectedY": 73.6,
+          "actualX": 617.8671875,
+          "actualY": 73.5999984741211,
+          "bbox": {
+            "x": 617.8671875,
+            "y": 58.599998474121094,
+            "width": 44.3046875,
+            "height": 19
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "A measured title that wraps when space is narrow",
+          "expectedWidth": 1121.607421875,
+          "actualWidth": 1121.609375,
+          "advanceDifference": 0.001953125,
+          "expectedX": 79.19628906249997,
+          "expectedY": 143.12,
+          "actualX": 79.1953125,
+          "actualY": 143.1199951171875,
+          "bbox": {
+            "x": 78.1953125,
+            "y": 92.1199951171875,
+            "width": 1123.37109375,
+            "height": 66
+          }
+        },
+        {
+          "path": "slides.0.subtitle",
+          "text": "Supporting text",
+          "expectedWidth": 156.7138671875,
+          "actualWidth": 156.71875,
+          "advanceDifference": 0.0048828125,
+          "expectedX": 561.64306640625,
+          "expectedY": 192,
+          "actualX": 561.640625,
+          "actualY": 192,
+          "bbox": {
+            "x": 561.640625,
+            "y": 168,
+            "width": 157.33984375,
+            "height": 31
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "Exact spacing ",
+          "expectedWidth": 140.90576171875,
+          "actualWidth": 140.90625,
+          "advanceDifference": 0.00048828125,
+          "expectedX": 428.3056640625,
+          "expectedY": 258.5,
+          "actualX": 428.3059997558594,
+          "actualY": 258.5,
+          "bbox": {
+            "x": 428.3059997558594,
+            "y": 234.5,
+            "width": 140.90628051757812,
+            "height": 31
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "with bold words",
+          "expectedWidth": 168.39599609375,
+          "actualWidth": 168.40625,
+          "advanceDifference": 0.01025390625,
+          "expectedX": 569.21142578125,
+          "expectedY": 258.5,
+          "actualX": 569.2109985351562,
+          "actualY": 258.5,
+          "bbox": {
+            "x": 568.2109985351562,
+            "y": 234.5,
+            "width": 169.4228515625,
+            "height": 31
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": " and ",
+          "expectedWidth": 49.54833984375,
+          "actualWidth": 49.5625,
+          "advanceDifference": 0.01416015625,
+          "expectedX": 737.607421875,
+          "expectedY": 258.5,
+          "actualX": 737.6069946289062,
+          "actualY": 258.5,
+          "bbox": {
+            "x": 737.6069946289062,
+            "y": 234.5,
+            "width": 49.5625,
+            "height": 31
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "italics.",
+          "expectedWidth": 64.53857421875,
+          "actualWidth": 64.546875,
+          "advanceDifference": 0.00830078125,
+          "expectedX": 787.15576171875,
+          "expectedY": 258.5,
+          "actualX": 787.156005859375,
+          "actualY": 258.5,
+          "bbox": {
+            "x": 787.156005859375,
+            "y": 234.5,
+            "width": 64.546875,
+            "height": 31
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "A raised ",
+          "expectedWidth": 60.92529296875,
+          "actualWidth": 60.9375,
+          "advanceDifference": 0.01220703125,
+          "expectedX": 506.60807291666663,
+          "expectedY": 281.9166666666667,
+          "actualX": 506.6080017089844,
+          "actualY": 281.9169921875,
+          "bbox": {
+            "x": 505.6080017089844,
+            "y": 264.9169921875,
+            "width": 61.937530517578125,
+            "height": 22
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "note",
+          "expectedWidth": 49.98697916666667,
+          "actualWidth": 49.984375,
+          "advanceDifference": -0.0026041666666714036,
+          "expectedX": 567.5333658854166,
+          "expectedY": 290.6666666666667,
+          "actualX": 567.5330200195312,
+          "actualY": 290.6669921875,
+          "bbox": {
+            "x": 567.5330200195312,
+            "y": 265.6669921875,
+            "width": 49.984375,
+            "height": 32
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": " stays editable. ",
+          "expectedWidth": 155.87158203125,
+          "actualWidth": 155.875,
+          "advanceDifference": 0.00341796875,
+          "expectedX": 617.5203450520833,
+          "expectedY": 290.6666666666667,
+          "actualX": 617.52001953125,
+          "actualY": 290.6669921875,
+          "bbox": {
+            "x": 617.52001953125,
+            "y": 266.6669921875,
+            "width": 155.875,
+            "height": 31
+          }
+        }
+      ],
+      "textRectangleFindings": [
+        {
+          "path": "slides.0.tag",
+          "index": 0
+        },
+        {
+          "path": "slides.0.title",
+          "index": 1
+        },
+        {
+          "path": "slides.0.subtitle",
+          "index": 2
+        }
+      ],
+      "failures": [],
+      "ink": [
+        {
+          "path": "slides.0.tag",
+          "box": {
+            "x": 57.6,
+            "y": 57.6,
+            "width": 1164.8,
+            "height": 19.52
+          },
+          "pixels": 282,
+          "bounds": {
+            "left": 618,
+            "top": 63,
+            "right": 661,
+            "bottom": 73
+          },
+          "maskSha256": "f44f0ba2cbebe9cd8d3ac2d54ec1262be7bd4762bb7ac380bb757dd1c57c9546",
+          "outside": []
+        },
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 57.6,
+            "y": 89.12,
+            "width": 1164.8,
+            "height": 65.88
+          },
+          "pixels": 18374,
+          "bounds": {
+            "left": 79,
+            "top": 105,
+            "right": 1200,
+            "bottom": 151
+          },
+          "maskSha256": "f7dacc923ba1f105615acf0d64b7c52f638e42fc90e89be9c59bdcc9c739370b",
+          "outside": []
+        },
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 57.6,
+            "y": 167,
+            "width": 1164.8,
+            "height": 30.5
+          },
+          "pixels": 1318,
+          "bounds": {
+            "left": 562,
+            "top": 175,
+            "right": 718,
+            "bottom": 195
+          },
+          "maskSha256": "9affcf748ff2a4050601a6b38237ca36c4c4572825b76d5a693065ffc1feb9c7",
+          "outside": []
+        },
+        {
+          "path": "slides.0.text",
+          "box": {
+            "x": 69.6,
+            "y": 233.5,
+            "width": 1140.8,
+            "height": 416.9
+          },
+          "pixels": 5719,
+          "bounds": {
+            "left": 429,
+            "top": 242,
+            "right": 849,
+            "bottom": 295
+          },
+          "maskSha256": "0649e77a82ea305393d76ab3fc9188bebef8b1d6121f13e7028179a2ca2cca03",
+          "outside": []
+        }
+      ]
+    },
+    {
+      "id": "wide-card-right-scalar",
+      "svgSha256": "d489250076d6ea45e8287076cdb1257b63f2e6607ab89a59e59419566f8ba974",
+      "sourceSha256": "5425288fed77ac90a69b043521f395994d22fc46d938322881428704568fa68f",
+      "observations": [
+        {
+          "path": "slides.0.tag",
+          "text": "Source",
+          "expectedWidth": 44.265625,
+          "actualWidth": 44.265625,
+          "advanceDifference": 0,
+          "expectedX": 1178.1343749999999,
+          "expectedY": 73.6,
+          "actualX": 1178.1343994140625,
+          "actualY": 73.5999984741211,
+          "bbox": {
+            "x": 1178.1343994140625,
+            "y": 58.599998474121094,
+            "width": 44.3046875,
+            "height": 19
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "A measured title that wraps when space is narrow",
+          "expectedWidth": 1121.607421875,
+          "actualWidth": 1121.609375,
+          "advanceDifference": 0.001953125,
+          "expectedX": 100.79257812499995,
+          "expectedY": 143.12,
+          "actualX": 100.790771484375,
+          "actualY": 143.1199951171875,
+          "bbox": {
+            "x": 99.790771484375,
+            "y": 92.1199951171875,
+            "width": 1123.37109375,
+            "height": 66
+          }
+        },
+        {
+          "path": "slides.0.subtitle",
+          "text": "Supporting text",
+          "expectedWidth": 156.7138671875,
+          "actualWidth": 156.71875,
+          "advanceDifference": 0.0048828125,
+          "expectedX": 1065.6861328124999,
+          "expectedY": 192,
+          "actualX": 1065.6812744140625,
+          "actualY": 192,
+          "bbox": {
+            "x": 1065.6812744140625,
+            "y": 168,
+            "width": 157.33984375,
+            "height": 31
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "Full source",
+          "expectedWidth": 109.2041015625,
+          "actualWidth": 109.21875,
+          "advanceDifference": 0.0146484375,
+          "expectedX": 1101.1958984374999,
+          "expectedY": 258.5,
+          "actualX": 1101.1812744140625,
+          "actualY": 258.5,
+          "bbox": {
+            "x": 1101.1812744140625,
+            "y": 234.5,
+            "width": 109.21875,
+            "height": 31
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "Second paragraph.",
+          "expectedWidth": 189.208984375,
+          "actualWidth": 189.21875,
+          "advanceDifference": 0.009765625,
+          "expectedX": 1021.191015625,
+          "expectedY": 289,
+          "actualX": 1021.1812744140625,
+          "actualY": 289,
+          "bbox": {
+            "x": 1021.1812744140625,
+            "y": 265,
+            "width": 189.21875,
+            "height": 31
+          }
+        }
+      ],
+      "textRectangleFindings": [
+        {
+          "path": "slides.0.tag",
+          "index": 0
+        },
+        {
+          "path": "slides.0.title",
+          "index": 1
+        },
+        {
+          "path": "slides.0.subtitle",
+          "index": 2
+        }
+      ],
+      "failures": [],
+      "ink": [
+        {
+          "path": "slides.0.tag",
+          "box": {
+            "x": 57.6,
+            "y": 57.6,
+            "width": 1164.8,
+            "height": 19.52
+          },
+          "pixels": 278,
+          "bounds": {
+            "left": 1178,
+            "top": 63,
+            "right": 1222,
+            "bottom": 73
+          },
+          "maskSha256": "039fc2d98809d17d69004cdf417ec2a7bcce1a7ae71c0457450dfe6a4e414ec0",
+          "outside": []
+        },
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 57.6,
+            "y": 89.12,
+            "width": 1164.8,
+            "height": 65.88
+          },
+          "pixels": 18362,
+          "bounds": {
+            "left": 100,
+            "top": 105,
+            "right": 1222,
+            "bottom": 151
+          },
+          "maskSha256": "4a0b0ad9bb5886aefc21716492580256b0854130ad0a85ee516ba6ea3343c3a6",
+          "outside": []
+        },
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 57.6,
+            "y": 167,
+            "width": 1164.8,
+            "height": 30.5
+          },
+          "pixels": 1320,
+          "bounds": {
+            "left": 1066,
+            "top": 175,
+            "right": 1222,
+            "bottom": 195
+          },
+          "maskSha256": "a4db72ad410459340c28f46c05b6e44d5ffc7299dd288f51679dcc23707b741e",
+          "outside": []
+        },
+        {
+          "path": "slides.0.text",
+          "box": {
+            "x": 69.6,
+            "y": 233.5,
+            "width": 1140.8,
+            "height": 416.9
+          },
+          "pixels": 2307,
+          "bounds": {
+            "left": 1021,
+            "top": 242,
+            "right": 1209,
+            "bottom": 292
+          },
+          "maskSha256": "0dc6a92556b595c4165a23d72c642772a617012a72bb44b1ebde91d21f60dd1f",
+          "outside": []
+        }
+      ]
+    },
+    {
+      "id": "wide-card-right-rich",
+      "svgSha256": "9714e1649384764e83c0bc5c80bbd40fbb599217596af53db48aaac9682fe6d9",
+      "sourceSha256": "1cee53c2e1075fd3d4d8517ffebf94869a419828391b167290f4d395b4290e36",
+      "observations": [
+        {
+          "path": "slides.0.tag",
+          "text": "Source",
+          "expectedWidth": 44.265625,
+          "actualWidth": 44.265625,
+          "advanceDifference": 0,
+          "expectedX": 1178.1343749999999,
+          "expectedY": 73.6,
+          "actualX": 1178.1343994140625,
+          "actualY": 73.5999984741211,
+          "bbox": {
+            "x": 1178.1343994140625,
+            "y": 58.599998474121094,
+            "width": 44.3046875,
+            "height": 19
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "A measured title that wraps when space is narrow",
+          "expectedWidth": 1121.607421875,
+          "actualWidth": 1121.609375,
+          "advanceDifference": 0.001953125,
+          "expectedX": 100.79257812499995,
+          "expectedY": 143.12,
+          "actualX": 100.790771484375,
+          "actualY": 143.1199951171875,
+          "bbox": {
+            "x": 99.790771484375,
+            "y": 92.1199951171875,
+            "width": 1123.37109375,
+            "height": 66
+          }
+        },
+        {
+          "path": "slides.0.subtitle",
+          "text": "Supporting text",
+          "expectedWidth": 156.7138671875,
+          "actualWidth": 156.71875,
+          "advanceDifference": 0.0048828125,
+          "expectedX": 1065.6861328124999,
+          "expectedY": 192,
+          "actualX": 1065.6812744140625,
+          "actualY": 192,
+          "bbox": {
+            "x": 1065.6812744140625,
+            "y": 168,
+            "width": 157.33984375,
+            "height": 31
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "Exact spacing ",
+          "expectedWidth": 140.90576171875,
+          "actualWidth": 140.90625,
+          "advanceDifference": 0.00048828125,
+          "expectedX": 787.011328125,
+          "expectedY": 258.5,
+          "actualX": 787.010986328125,
+          "actualY": 258.5,
+          "bbox": {
+            "x": 787.010986328125,
+            "y": 234.5,
+            "width": 140.90625,
+            "height": 31
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "with bold words",
+          "expectedWidth": 168.39599609375,
+          "actualWidth": 168.40625,
+          "advanceDifference": 0.01025390625,
+          "expectedX": 927.91708984375,
+          "expectedY": 258.5,
+          "actualX": 927.9169921875,
+          "actualY": 258.5,
+          "bbox": {
+            "x": 926.9169921875,
+            "y": 234.5,
+            "width": 169.4228515625,
+            "height": 31
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": " and ",
+          "expectedWidth": 49.54833984375,
+          "actualWidth": 49.5625,
+          "advanceDifference": 0.01416015625,
+          "expectedX": 1096.3130859375,
+          "expectedY": 258.5,
+          "actualX": 1096.31298828125,
+          "actualY": 258.5,
+          "bbox": {
+            "x": 1096.31298828125,
+            "y": 234.5,
+            "width": 49.5625,
+            "height": 31
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "italics.",
+          "expectedWidth": 64.53857421875,
+          "actualWidth": 64.546875,
+          "advanceDifference": 0.00830078125,
+          "expectedX": 1145.86142578125,
+          "expectedY": 258.5,
+          "actualX": 1145.8609619140625,
+          "actualY": 258.5,
+          "bbox": {
+            "x": 1145.8609619140625,
+            "y": 234.5,
+            "width": 64.546875,
+            "height": 31
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "A raised ",
+          "expectedWidth": 60.92529296875,
+          "actualWidth": 60.9375,
+          "advanceDifference": 0.01220703125,
+          "expectedX": 943.6161458333332,
+          "expectedY": 281.9166666666667,
+          "actualX": 943.6160278320312,
+          "actualY": 281.9169921875,
+          "bbox": {
+            "x": 942.6160278320312,
+            "y": 264.9169921875,
+            "width": 61.9375,
+            "height": 22
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "note",
+          "expectedWidth": 49.98697916666667,
+          "actualWidth": 49.984375,
+          "advanceDifference": -0.0026041666666714036,
+          "expectedX": 1004.5414388020832,
+          "expectedY": 290.6666666666667,
+          "actualX": 1004.541015625,
+          "actualY": 290.6669921875,
+          "bbox": {
+            "x": 1004.541015625,
+            "y": 265.6669921875,
+            "width": 49.984375,
+            "height": 32
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": " stays editable. ",
+          "expectedWidth": 155.87158203125,
+          "actualWidth": 155.875,
+          "advanceDifference": 0.00341796875,
+          "expectedX": 1054.5284179687499,
+          "expectedY": 290.6666666666667,
+          "actualX": 1054.5279541015625,
+          "actualY": 290.6669921875,
+          "bbox": {
+            "x": 1054.5279541015625,
+            "y": 266.6669921875,
+            "width": 155.875,
+            "height": 31
+          }
+        }
+      ],
+      "textRectangleFindings": [
+        {
+          "path": "slides.0.tag",
+          "index": 0
+        },
+        {
+          "path": "slides.0.title",
+          "index": 1
+        },
+        {
+          "path": "slides.0.subtitle",
+          "index": 2
+        }
+      ],
+      "failures": [],
+      "ink": [
+        {
+          "path": "slides.0.tag",
+          "box": {
+            "x": 57.6,
+            "y": 57.6,
+            "width": 1164.8,
+            "height": 19.52
+          },
+          "pixels": 278,
+          "bounds": {
+            "left": 1178,
+            "top": 63,
+            "right": 1222,
+            "bottom": 73
+          },
+          "maskSha256": "039fc2d98809d17d69004cdf417ec2a7bcce1a7ae71c0457450dfe6a4e414ec0",
+          "outside": []
+        },
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 57.6,
+            "y": 89.12,
+            "width": 1164.8,
+            "height": 65.88
+          },
+          "pixels": 18362,
+          "bounds": {
+            "left": 100,
+            "top": 105,
+            "right": 1222,
+            "bottom": 151
+          },
+          "maskSha256": "4a0b0ad9bb5886aefc21716492580256b0854130ad0a85ee516ba6ea3343c3a6",
+          "outside": []
+        },
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 57.6,
+            "y": 167,
+            "width": 1164.8,
+            "height": 30.5
+          },
+          "pixels": 1320,
+          "bounds": {
+            "left": 1066,
+            "top": 175,
+            "right": 1222,
+            "bottom": 195
+          },
+          "maskSha256": "a4db72ad410459340c28f46c05b6e44d5ffc7299dd288f51679dcc23707b741e",
+          "outside": []
+        },
+        {
+          "path": "slides.0.text",
+          "box": {
+            "x": 69.6,
+            "y": 233.5,
+            "width": 1140.8,
+            "height": 416.9
+          },
+          "pixels": 5755,
+          "bounds": {
+            "left": 788,
+            "top": 242,
+            "right": 1208,
+            "bottom": 295
+          },
+          "maskSha256": "d1b7ac824082997b80c8a751ef0920abdfa5eb27a0b8fc6f560966d8063ed893",
+          "outside": []
+        }
+      ]
+    },
+    {
+      "id": "portrait-plain-left-scalar",
+      "svgSha256": "bdc5ce29ee9c49bf6766ab713b000f9e6bcede47ffe0f1cabc7aa7ac23932f9d",
+      "sourceSha256": "a57d412e02044e74d76a16499fcf3d4cc9b9f382048b6ffeedf18d11789f9b5a",
+      "observations": [
+        {
+          "path": "slides.0.tag",
+          "text": "Source",
+          "expectedWidth": 33.19921875,
+          "actualWidth": 33.203125,
+          "advanceDifference": 0.00390625,
+          "expectedX": 43.2,
+          "expectedY": 55.2,
+          "actualX": 43.20000076293945,
+          "actualY": 55.20000076293945,
+          "bbox": {
+            "x": 43.20000076293945,
+            "y": 44.20000076293945,
+            "width": 33.228511810302734,
+            "height": 14
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "A measured title that",
+          "expectedWidth": 356.807373046875,
+          "actualWidth": 356.8125,
+          "advanceDifference": 0.005126953125,
+          "expectedX": 43.2,
+          "expectedY": 107.34,
+          "actualX": 43.20000076293945,
+          "actualY": 107.33999633789062,
+          "bbox": {
+            "x": 42.20000076293945,
+            "y": 68.33999633789062,
+            "width": 357.8125,
+            "height": 50
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "wraps when space is",
+          "expectedWidth": 344.190673828125,
+          "actualWidth": 344.203125,
+          "advanceDifference": 0.012451171875,
+          "expectedX": 43.2,
+          "expectedY": 156.75,
+          "actualX": 43.20000076293945,
+          "actualY": 156.75,
+          "bbox": {
+            "x": 42.20000076293945,
+            "y": 117.75,
+            "width": 345.203125,
+            "height": 50
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "narrow",
+          "expectedWidth": 121.8955078125,
+          "actualWidth": 121.90625,
+          "advanceDifference": 0.0107421875,
+          "expectedX": 43.2,
+          "expectedY": 206.16,
+          "actualX": 43.20000076293945,
+          "actualY": 206.16000366210938,
+          "bbox": {
+            "x": 43.20000076293945,
+            "y": 167.16000366210938,
+            "width": 122.71826171875,
+            "height": 50
+          }
+        },
+        {
+          "path": "slides.0.subtitle",
+          "text": "Supporting text",
+          "expectedWidth": 117.535400390625,
+          "actualWidth": 117.546875,
+          "advanceDifference": 0.011474609375,
+          "expectedX": 43.2,
+          "expectedY": 242.82,
+          "actualX": 43.20000076293945,
+          "actualY": 242.82000732421875,
+          "bbox": {
+            "x": 43.20000076293945,
+            "y": 224.82000732421875,
+            "width": 118.2548828125,
+            "height": 23
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "Full source",
+          "expectedWidth": 81.903076171875,
+          "actualWidth": 81.90625,
+          "advanceDifference": 0.003173828125,
+          "expectedX": 43.2,
+          "expectedY": 283.695,
+          "actualX": 43.20000076293945,
+          "actualY": 283.69500732421875,
+          "bbox": {
+            "x": 43.20000076293945,
+            "y": 265.69500732421875,
+            "width": 82.5738525390625,
+            "height": 23
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "Second paragraph.",
+          "expectedWidth": 141.90673828125,
+          "actualWidth": 141.921875,
+          "advanceDifference": 0.01513671875,
+          "expectedX": 43.2,
+          "expectedY": 306.57,
+          "actualX": 43.20000076293945,
+          "actualY": 306.57000732421875,
+          "bbox": {
+            "x": 43.20000076293945,
+            "y": 288.57000732421875,
+            "width": 141.921875,
+            "height": 23
+          }
+        }
+      ],
+      "textRectangleFindings": [
+        {
+          "path": "slides.0.tag",
+          "index": 0
+        },
+        {
+          "path": "slides.0.title",
+          "index": 1
+        },
+        {
+          "path": "slides.0.title",
+          "index": 2
+        },
+        {
+          "path": "slides.0.title",
+          "index": 3
+        },
+        {
+          "path": "slides.0.subtitle",
+          "index": 4
+        }
+      ],
+      "failures": [],
+      "ink": [
+        {
+          "path": "slides.0.tag",
+          "box": {
+            "x": 43.2,
+            "y": 43.2,
+            "width": 453.6,
+            "height": 14.64
+          },
+          "pixels": 182,
+          "bounds": {
+            "left": 43,
+            "top": 47,
+            "right": 76,
+            "bottom": 54
+          },
+          "maskSha256": "a241594d625ebf1247ea4f3b07441feb6a7cbafcd78b75f0b0dd97472c0e8317",
+          "outside": []
+        },
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 43.2,
+            "y": 66.84,
+            "width": 453.6,
+            "height": 148.23
+          },
+          "pixels": 10805,
+          "bounds": {
+            "left": 43,
+            "top": 79,
+            "right": 399,
+            "bottom": 205
+          },
+          "maskSha256": "b51f622b3453c20ca750a303ac21869e9369df44fc09761be95e9975c100814e",
+          "outside": []
+        },
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 43.2,
+            "y": 224.07,
+            "width": 453.6,
+            "height": 22.875
+          },
+          "pixels": 842,
+          "bounds": {
+            "left": 43,
+            "top": 230,
+            "right": 160,
+            "bottom": 245
+          },
+          "maskSha256": "f75fae1ce069e6b68ae4ae4c805533434d28323470415b1379d9a82495d0216c",
+          "outside": []
+        },
+        {
+          "path": "slides.0.text",
+          "box": {
+            "x": 43.2,
+            "y": 264.945,
+            "width": 453.6,
+            "height": 651.855
+          },
+          "pixels": 1523,
+          "bounds": {
+            "left": 43,
+            "top": 271,
+            "right": 184,
+            "bottom": 309
+          },
+          "maskSha256": "ef54c372fd63837afdec3f3145babb4dfcb709dc5c2ac71e29e02a05b92aef63",
+          "outside": []
+        }
+      ]
+    },
+    {
+      "id": "portrait-plain-left-rich",
+      "svgSha256": "427c0590307140299c001e524b32638a1dd8c22cfc5b77cdcbe59474f8a14928",
+      "sourceSha256": "6ebf3cd8a9f10242a2ccdd1788331c9a5ac455b852bb4083f3b5e5f17e3b5536",
+      "observations": [
+        {
+          "path": "slides.0.tag",
+          "text": "Source",
+          "expectedWidth": 33.19921875,
+          "actualWidth": 33.203125,
+          "advanceDifference": 0.00390625,
+          "expectedX": 43.2,
+          "expectedY": 55.2,
+          "actualX": 43.20000076293945,
+          "actualY": 55.20000076293945,
+          "bbox": {
+            "x": 43.20000076293945,
+            "y": 44.20000076293945,
+            "width": 33.228511810302734,
+            "height": 14
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "A measured title that",
+          "expectedWidth": 356.807373046875,
+          "actualWidth": 356.8125,
+          "advanceDifference": 0.005126953125,
+          "expectedX": 43.2,
+          "expectedY": 107.34,
+          "actualX": 43.20000076293945,
+          "actualY": 107.33999633789062,
+          "bbox": {
+            "x": 42.20000076293945,
+            "y": 68.33999633789062,
+            "width": 357.8125,
+            "height": 50
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "wraps when space is",
+          "expectedWidth": 344.190673828125,
+          "actualWidth": 344.203125,
+          "advanceDifference": 0.012451171875,
+          "expectedX": 43.2,
+          "expectedY": 156.75,
+          "actualX": 43.20000076293945,
+          "actualY": 156.75,
+          "bbox": {
+            "x": 42.20000076293945,
+            "y": 117.75,
+            "width": 345.203125,
+            "height": 50
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "narrow",
+          "expectedWidth": 121.8955078125,
+          "actualWidth": 121.90625,
+          "advanceDifference": 0.0107421875,
+          "expectedX": 43.2,
+          "expectedY": 206.16,
+          "actualX": 43.20000076293945,
+          "actualY": 206.16000366210938,
+          "bbox": {
+            "x": 43.20000076293945,
+            "y": 167.16000366210938,
+            "width": 122.71826171875,
+            "height": 50
+          }
+        },
+        {
+          "path": "slides.0.subtitle",
+          "text": "Supporting text",
+          "expectedWidth": 117.535400390625,
+          "actualWidth": 117.546875,
+          "advanceDifference": 0.011474609375,
+          "expectedX": 43.2,
+          "expectedY": 242.82,
+          "actualX": 43.20000076293945,
+          "actualY": 242.82000732421875,
+          "bbox": {
+            "x": 43.20000076293945,
+            "y": 224.82000732421875,
+            "width": 118.2548828125,
+            "height": 23
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "Exact spacing ",
+          "expectedWidth": 105.6793212890625,
+          "actualWidth": 105.6875,
+          "advanceDifference": 0.0081787109375,
+          "expectedX": 43.2,
+          "expectedY": 283.695,
+          "actualX": 43.20000076293945,
+          "actualY": 283.69500732421875,
+          "bbox": {
+            "x": 43.20000076293945,
+            "y": 265.69500732421875,
+            "width": 105.6875,
+            "height": 23
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "with bold words",
+          "expectedWidth": 126.2969970703125,
+          "actualWidth": 126.3125,
+          "advanceDifference": 0.0155029296875,
+          "expectedX": 148.8793212890625,
+          "expectedY": 283.695,
+          "actualX": 148.87899780273438,
+          "actualY": 283.69500732421875,
+          "bbox": {
+            "x": 147.87899780273438,
+            "y": 265.69500732421875,
+            "width": 127.817138671875,
+            "height": 23
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": " and ",
+          "expectedWidth": 37.1612548828125,
+          "actualWidth": 37.171875,
+          "advanceDifference": 0.0106201171875,
+          "expectedX": 275.176318359375,
+          "expectedY": 283.695,
+          "actualX": 275.1759948730469,
+          "actualY": 283.69500732421875,
+          "bbox": {
+            "x": 275.1759948730469,
+            "y": 265.69500732421875,
+            "width": 37.171875,
+            "height": 23
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "italics.",
+          "expectedWidth": 48.4039306640625,
+          "actualWidth": 48.40625,
+          "advanceDifference": 0.0023193359375,
+          "expectedX": 312.3375732421875,
+          "expectedY": 283.695,
+          "actualX": 312.3380126953125,
+          "actualY": 283.69500732421875,
+          "bbox": {
+            "x": 312.3380126953125,
+            "y": 265.69500732421875,
+            "width": 48.40625,
+            "height": 23
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "A raised ",
+          "expectedWidth": 45.6939697265625,
+          "actualWidth": 45.6875,
+          "advanceDifference": -0.0064697265625,
+          "expectedX": 43.2,
+          "expectedY": 307.9241666666667,
+          "actualX": 43.20000076293945,
+          "actualY": 307.92401123046875,
+          "bbox": {
+            "x": 42.20000076293945,
+            "y": 295.92401123046875,
+            "width": 46.687496185302734,
+            "height": 16
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "note",
+          "expectedWidth": 49.98697916666667,
+          "actualWidth": 49.984375,
+          "advanceDifference": -0.0026041666666714036,
+          "expectedX": 88.8939697265625,
+          "expectedY": 314.4866666666667,
+          "actualX": 88.89399719238281,
+          "actualY": 314.48699951171875,
+          "bbox": {
+            "x": 88.89399719238281,
+            "y": 289.48699951171875,
+            "width": 49.984375,
+            "height": 32
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": " stays editable. ",
+          "expectedWidth": 116.9036865234375,
+          "actualWidth": 116.90625,
+          "advanceDifference": 0.0025634765625,
+          "expectedX": 138.88094889322917,
+          "expectedY": 314.4866666666667,
+          "actualX": 138.88099670410156,
+          "actualY": 314.48699951171875,
+          "bbox": {
+            "x": 138.88099670410156,
+            "y": 296.48699951171875,
+            "width": 116.90625,
+            "height": 23
+          }
+        }
+      ],
+      "textRectangleFindings": [
+        {
+          "path": "slides.0.tag",
+          "index": 0
+        },
+        {
+          "path": "slides.0.title",
+          "index": 1
+        },
+        {
+          "path": "slides.0.title",
+          "index": 2
+        },
+        {
+          "path": "slides.0.title",
+          "index": 3
+        },
+        {
+          "path": "slides.0.subtitle",
+          "index": 4
+        },
+        {
+          "path": "slides.0.text",
+          "index": 9
+        }
+      ],
+      "failures": [],
+      "ink": [
+        {
+          "path": "slides.0.tag",
+          "box": {
+            "x": 43.2,
+            "y": 43.2,
+            "width": 453.6,
+            "height": 14.64
+          },
+          "pixels": 182,
+          "bounds": {
+            "left": 43,
+            "top": 47,
+            "right": 76,
+            "bottom": 54
+          },
+          "maskSha256": "a241594d625ebf1247ea4f3b07441feb6a7cbafcd78b75f0b0dd97472c0e8317",
+          "outside": []
+        },
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 43.2,
+            "y": 66.84,
+            "width": 453.6,
+            "height": 148.23
+          },
+          "pixels": 10805,
+          "bounds": {
+            "left": 43,
+            "top": 79,
+            "right": 399,
+            "bottom": 205
+          },
+          "maskSha256": "b51f622b3453c20ca750a303ac21869e9369df44fc09761be95e9975c100814e",
+          "outside": []
+        },
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 43.2,
+            "y": 224.07,
+            "width": 453.6,
+            "height": 22.875
+          },
+          "pixels": 842,
+          "bounds": {
+            "left": 43,
+            "top": 230,
+            "right": 160,
+            "bottom": 245
+          },
+          "maskSha256": "f75fae1ce069e6b68ae4ae4c805533434d28323470415b1379d9a82495d0216c",
+          "outside": []
+        },
+        {
+          "path": "slides.0.text",
+          "box": {
+            "x": 43.2,
+            "y": 264.945,
+            "width": 453.6,
+            "height": 651.855
+          },
+          "pixels": 3850,
+          "bounds": {
+            "left": 43,
+            "top": 271,
+            "right": 359,
+            "bottom": 319
+          },
+          "maskSha256": "a1fa88c0892e22c773da34ebb2d3e65aece125f2ec67015d55f3e972e54f7086",
+          "outside": []
+        }
+      ]
+    },
+    {
+      "id": "portrait-plain-center-scalar",
+      "svgSha256": "557f43f4be4f33bd0f54a6e4a900946c731f7fed2accafc3e6399a8e938b20e9",
+      "sourceSha256": "3a37a6ab623348915397a1217e98740206fbc04ee2e3c0fe2fc171f8f7b2b370",
+      "observations": [
+        {
+          "path": "slides.0.tag",
+          "text": "Source",
+          "expectedWidth": 33.19921875,
+          "actualWidth": 33.203125,
+          "advanceDifference": 0.00390625,
+          "expectedX": 253.400390625,
+          "expectedY": 55.2,
+          "actualX": 253.3984375,
+          "actualY": 55.20000076293945,
+          "bbox": {
+            "x": 253.3984375,
+            "y": 44.20000076293945,
+            "width": 33.228515625,
+            "height": 14
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "A measured title that",
+          "expectedWidth": 356.807373046875,
+          "actualWidth": 356.8125,
+          "advanceDifference": 0.005126953125,
+          "expectedX": 91.59631347656251,
+          "expectedY": 107.34,
+          "actualX": 91.59375,
+          "actualY": 107.33999633789062,
+          "bbox": {
+            "x": 90.59375,
+            "y": 68.33999633789062,
+            "width": 357.8125,
+            "height": 50
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "wraps when space is",
+          "expectedWidth": 344.190673828125,
+          "actualWidth": 344.203125,
+          "advanceDifference": 0.012451171875,
+          "expectedX": 97.90466308593751,
+          "expectedY": 156.75,
+          "actualX": 97.8984375,
+          "actualY": 156.75,
+          "bbox": {
+            "x": 96.8984375,
+            "y": 117.75,
+            "width": 345.203125,
+            "height": 50
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "narrow",
+          "expectedWidth": 121.8955078125,
+          "actualWidth": 121.90625,
+          "advanceDifference": 0.0107421875,
+          "expectedX": 209.05224609375,
+          "expectedY": 206.16,
+          "actualX": 209.046875,
+          "actualY": 206.16000366210938,
+          "bbox": {
+            "x": 209.046875,
+            "y": 167.16000366210938,
+            "width": 122.71826171875,
+            "height": 50
+          }
+        },
+        {
+          "path": "slides.0.subtitle",
+          "text": "Supporting text",
+          "expectedWidth": 117.535400390625,
+          "actualWidth": 117.546875,
+          "advanceDifference": 0.011474609375,
+          "expectedX": 211.2322998046875,
+          "expectedY": 242.82,
+          "actualX": 211.2265625,
+          "actualY": 242.82000732421875,
+          "bbox": {
+            "x": 211.2265625,
+            "y": 224.82000732421875,
+            "width": 118.2548828125,
+            "height": 23
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "Full source",
+          "expectedWidth": 81.903076171875,
+          "actualWidth": 81.90625,
+          "advanceDifference": 0.003173828125,
+          "expectedX": 229.0484619140625,
+          "expectedY": 283.695,
+          "actualX": 229.046875,
+          "actualY": 283.69500732421875,
+          "bbox": {
+            "x": 229.046875,
+            "y": 265.69500732421875,
+            "width": 82.5738525390625,
+            "height": 23
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "Second paragraph.",
+          "expectedWidth": 141.90673828125,
+          "actualWidth": 141.921875,
+          "advanceDifference": 0.01513671875,
+          "expectedX": 199.046630859375,
+          "expectedY": 306.57,
+          "actualX": 199.0390625,
+          "actualY": 306.57000732421875,
+          "bbox": {
+            "x": 199.0390625,
+            "y": 288.57000732421875,
+            "width": 141.921875,
+            "height": 23
+          }
+        }
+      ],
+      "textRectangleFindings": [
+        {
+          "path": "slides.0.tag",
+          "index": 0
+        },
+        {
+          "path": "slides.0.title",
+          "index": 3
+        },
+        {
+          "path": "slides.0.subtitle",
+          "index": 4
+        }
+      ],
+      "failures": [],
+      "ink": [
+        {
+          "path": "slides.0.tag",
+          "box": {
+            "x": 43.2,
+            "y": 43.2,
+            "width": 453.6,
+            "height": 14.64
+          },
+          "pixels": 178,
+          "bounds": {
+            "left": 253,
+            "top": 47,
+            "right": 286,
+            "bottom": 54
+          },
+          "maskSha256": "1ea3d51dcaf6667dd992f000543a8b41342cc4a0a0293e4e93d3c809100ebceb",
+          "outside": []
+        },
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 43.2,
+            "y": 66.84,
+            "width": 453.6,
+            "height": 148.23
+          },
+          "pixels": 10791,
+          "bounds": {
+            "left": 91,
+            "top": 79,
+            "right": 448,
+            "bottom": 205
+          },
+          "maskSha256": "96c4cc8e6d1991b432e42ebd8f5d6ba0ec840507b35e5213bf74d34a76c13d9e",
+          "outside": []
+        },
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 43.2,
+            "y": 224.07,
+            "width": 453.6,
+            "height": 22.875
+          },
+          "pixels": 844,
+          "bounds": {
+            "left": 211,
+            "top": 230,
+            "right": 328,
+            "bottom": 245
+          },
+          "maskSha256": "028ca63fad08615272061fa2e375f127164ae8187b513dd8c61725e079ae5600",
+          "outside": []
+        },
+        {
+          "path": "slides.0.text",
+          "box": {
+            "x": 43.2,
+            "y": 264.945,
+            "width": 453.6,
+            "height": 651.855
+          },
+          "pixels": 1495,
+          "bounds": {
+            "left": 199,
+            "top": 271,
+            "right": 340,
+            "bottom": 309
+          },
+          "maskSha256": "a8abb4713b284829bfb52447032730cde7cf0b8821818d3072e34f7edb600f20",
+          "outside": []
+        }
+      ]
+    },
+    {
+      "id": "portrait-plain-center-rich",
+      "svgSha256": "0b386cf7b823a3dba7aecedc202f4d6f9b83da6e244646774ae558d27d9849fc",
+      "sourceSha256": "35f3c902d7ba23df04dd7737cab8b7a3b96f04ac35a27e202ad5d9c56cbe07d2",
+      "observations": [
+        {
+          "path": "slides.0.tag",
+          "text": "Source",
+          "expectedWidth": 33.19921875,
+          "actualWidth": 33.203125,
+          "advanceDifference": 0.00390625,
+          "expectedX": 253.400390625,
+          "expectedY": 55.2,
+          "actualX": 253.3984375,
+          "actualY": 55.20000076293945,
+          "bbox": {
+            "x": 253.3984375,
+            "y": 44.20000076293945,
+            "width": 33.228515625,
+            "height": 14
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "A measured title that",
+          "expectedWidth": 356.807373046875,
+          "actualWidth": 356.8125,
+          "advanceDifference": 0.005126953125,
+          "expectedX": 91.59631347656251,
+          "expectedY": 107.34,
+          "actualX": 91.59375,
+          "actualY": 107.33999633789062,
+          "bbox": {
+            "x": 90.59375,
+            "y": 68.33999633789062,
+            "width": 357.8125,
+            "height": 50
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "wraps when space is",
+          "expectedWidth": 344.190673828125,
+          "actualWidth": 344.203125,
+          "advanceDifference": 0.012451171875,
+          "expectedX": 97.90466308593751,
+          "expectedY": 156.75,
+          "actualX": 97.8984375,
+          "actualY": 156.75,
+          "bbox": {
+            "x": 96.8984375,
+            "y": 117.75,
+            "width": 345.203125,
+            "height": 50
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "narrow",
+          "expectedWidth": 121.8955078125,
+          "actualWidth": 121.90625,
+          "advanceDifference": 0.0107421875,
+          "expectedX": 209.05224609375,
+          "expectedY": 206.16,
+          "actualX": 209.046875,
+          "actualY": 206.16000366210938,
+          "bbox": {
+            "x": 209.046875,
+            "y": 167.16000366210938,
+            "width": 122.71826171875,
+            "height": 50
+          }
+        },
+        {
+          "path": "slides.0.subtitle",
+          "text": "Supporting text",
+          "expectedWidth": 117.535400390625,
+          "actualWidth": 117.546875,
+          "advanceDifference": 0.011474609375,
+          "expectedX": 211.2322998046875,
+          "expectedY": 242.82,
+          "actualX": 211.2265625,
+          "actualY": 242.82000732421875,
+          "bbox": {
+            "x": 211.2265625,
+            "y": 224.82000732421875,
+            "width": 118.2548828125,
+            "height": 23
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "Exact spacing ",
+          "expectedWidth": 105.6793212890625,
+          "actualWidth": 105.6875,
+          "advanceDifference": 0.0081787109375,
+          "expectedX": 111.22924804687501,
+          "expectedY": 283.695,
+          "actualX": 111.22899627685547,
+          "actualY": 283.69500732421875,
+          "bbox": {
+            "x": 111.22899627685547,
+            "y": 265.69500732421875,
+            "width": 105.68750762939453,
+            "height": 23
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "with bold words",
+          "expectedWidth": 126.2969970703125,
+          "actualWidth": 126.3125,
+          "advanceDifference": 0.0155029296875,
+          "expectedX": 216.9085693359375,
+          "expectedY": 283.695,
+          "actualX": 216.90899658203125,
+          "actualY": 283.69500732421875,
+          "bbox": {
+            "x": 215.90899658203125,
+            "y": 265.69500732421875,
+            "width": 127.817138671875,
+            "height": 23
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": " and ",
+          "expectedWidth": 37.1612548828125,
+          "actualWidth": 37.171875,
+          "advanceDifference": 0.0106201171875,
+          "expectedX": 343.20556640625,
+          "expectedY": 283.695,
+          "actualX": 343.20599365234375,
+          "actualY": 283.69500732421875,
+          "bbox": {
+            "x": 343.20599365234375,
+            "y": 265.69500732421875,
+            "width": 37.171875,
+            "height": 23
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "italics.",
+          "expectedWidth": 48.4039306640625,
+          "actualWidth": 48.40625,
+          "advanceDifference": 0.0023193359375,
+          "expectedX": 380.3668212890625,
+          "expectedY": 283.695,
+          "actualX": 380.36700439453125,
+          "actualY": 283.69500732421875,
+          "bbox": {
+            "x": 380.36700439453125,
+            "y": 265.69500732421875,
+            "width": 48.40625,
+            "height": 23
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "A raised ",
+          "expectedWidth": 45.6939697265625,
+          "actualWidth": 45.6875,
+          "advanceDifference": -0.0064697265625,
+          "expectedX": 163.70768229166669,
+          "expectedY": 307.9241666666667,
+          "actualX": 163.70799255371094,
+          "actualY": 307.92401123046875,
+          "bbox": {
+            "x": 162.70799255371094,
+            "y": 295.92401123046875,
+            "width": 46.6875,
+            "height": 16
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "note",
+          "expectedWidth": 49.98697916666667,
+          "actualWidth": 49.984375,
+          "advanceDifference": -0.0026041666666714036,
+          "expectedX": 209.40165201822919,
+          "expectedY": 314.4866666666667,
+          "actualX": 209.40199279785156,
+          "actualY": 314.48699951171875,
+          "bbox": {
+            "x": 209.40199279785156,
+            "y": 289.48699951171875,
+            "width": 49.98435974121094,
+            "height": 32
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": " stays editable. ",
+          "expectedWidth": 116.9036865234375,
+          "actualWidth": 116.90625,
+          "advanceDifference": 0.0025634765625,
+          "expectedX": 259.38863118489587,
+          "expectedY": 314.4866666666667,
+          "actualX": 259.3890075683594,
+          "actualY": 314.48699951171875,
+          "bbox": {
+            "x": 259.3890075683594,
+            "y": 296.48699951171875,
+            "width": 116.90625,
+            "height": 23
+          }
+        }
+      ],
+      "textRectangleFindings": [
+        {
+          "path": "slides.0.tag",
+          "index": 0
+        },
+        {
+          "path": "slides.0.title",
+          "index": 3
+        },
+        {
+          "path": "slides.0.subtitle",
+          "index": 4
+        }
+      ],
+      "failures": [],
+      "ink": [
+        {
+          "path": "slides.0.tag",
+          "box": {
+            "x": 43.2,
+            "y": 43.2,
+            "width": 453.6,
+            "height": 14.64
+          },
+          "pixels": 178,
+          "bounds": {
+            "left": 253,
+            "top": 47,
+            "right": 286,
+            "bottom": 54
+          },
+          "maskSha256": "1ea3d51dcaf6667dd992f000543a8b41342cc4a0a0293e4e93d3c809100ebceb",
+          "outside": []
+        },
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 43.2,
+            "y": 66.84,
+            "width": 453.6,
+            "height": 148.23
+          },
+          "pixels": 10791,
+          "bounds": {
+            "left": 91,
+            "top": 79,
+            "right": 448,
+            "bottom": 205
+          },
+          "maskSha256": "96c4cc8e6d1991b432e42ebd8f5d6ba0ec840507b35e5213bf74d34a76c13d9e",
+          "outside": []
+        },
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 43.2,
+            "y": 224.07,
+            "width": 453.6,
+            "height": 22.875
+          },
+          "pixels": 844,
+          "bounds": {
+            "left": 211,
+            "top": 230,
+            "right": 328,
+            "bottom": 245
+          },
+          "maskSha256": "028ca63fad08615272061fa2e375f127164ae8187b513dd8c61725e079ae5600",
+          "outside": []
+        },
+        {
+          "path": "slides.0.text",
+          "box": {
+            "x": 43.2,
+            "y": 264.945,
+            "width": 453.6,
+            "height": 651.855
+          },
+          "pixels": 3869,
+          "bounds": {
+            "left": 112,
+            "top": 271,
+            "right": 427,
+            "bottom": 319
+          },
+          "maskSha256": "5cc5b3762f58ed7084e8cf46dd2ac471fc447f15dd6a569f4c24504b2bdb042c",
+          "outside": []
+        }
+      ]
+    },
+    {
+      "id": "portrait-plain-right-scalar",
+      "svgSha256": "461591423606074a34cc65d7dcf4ab52ad77df972344892c335308cc32c2181c",
+      "sourceSha256": "58870bc47eed257e2a86089d84d761f54f65246207816c5469bb81b49ace5908",
+      "observations": [
+        {
+          "path": "slides.0.tag",
+          "text": "Source",
+          "expectedWidth": 33.19921875,
+          "actualWidth": 33.203125,
+          "advanceDifference": 0.00390625,
+          "expectedX": 463.60078125,
+          "expectedY": 55.2,
+          "actualX": 463.59686279296875,
+          "actualY": 55.20000076293945,
+          "bbox": {
+            "x": 463.59686279296875,
+            "y": 44.20000076293945,
+            "width": 33.228515625,
+            "height": 14
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "A measured title that",
+          "expectedWidth": 356.807373046875,
+          "actualWidth": 356.8125,
+          "advanceDifference": 0.005126953125,
+          "expectedX": 139.992626953125,
+          "expectedY": 107.34,
+          "actualX": 139.98748779296875,
+          "actualY": 107.33999633789062,
+          "bbox": {
+            "x": 138.98748779296875,
+            "y": 68.33999633789062,
+            "width": 357.8125,
+            "height": 50
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "wraps when space is",
+          "expectedWidth": 344.190673828125,
+          "actualWidth": 344.203125,
+          "advanceDifference": 0.012451171875,
+          "expectedX": 152.609326171875,
+          "expectedY": 156.75,
+          "actualX": 152.59686279296875,
+          "actualY": 156.75,
+          "bbox": {
+            "x": 151.59686279296875,
+            "y": 117.75,
+            "width": 345.203125,
+            "height": 50
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "narrow",
+          "expectedWidth": 121.8955078125,
+          "actualWidth": 121.90625,
+          "advanceDifference": 0.0107421875,
+          "expectedX": 374.9044921875,
+          "expectedY": 206.16,
+          "actualX": 374.89373779296875,
+          "actualY": 206.16000366210938,
+          "bbox": {
+            "x": 374.89373779296875,
+            "y": 167.16000366210938,
+            "width": 122.71826171875,
+            "height": 50
+          }
+        },
+        {
+          "path": "slides.0.subtitle",
+          "text": "Supporting text",
+          "expectedWidth": 117.535400390625,
+          "actualWidth": 117.546875,
+          "advanceDifference": 0.011474609375,
+          "expectedX": 379.264599609375,
+          "expectedY": 242.82,
+          "actualX": 379.25311279296875,
+          "actualY": 242.82000732421875,
+          "bbox": {
+            "x": 379.25311279296875,
+            "y": 224.82000732421875,
+            "width": 118.2548828125,
+            "height": 23
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "Full source",
+          "expectedWidth": 81.903076171875,
+          "actualWidth": 81.90625,
+          "advanceDifference": 0.003173828125,
+          "expectedX": 414.896923828125,
+          "expectedY": 283.695,
+          "actualX": 414.89373779296875,
+          "actualY": 283.69500732421875,
+          "bbox": {
+            "x": 414.89373779296875,
+            "y": 265.69500732421875,
+            "width": 82.5738525390625,
+            "height": 23
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "Second paragraph.",
+          "expectedWidth": 141.90673828125,
+          "actualWidth": 141.921875,
+          "advanceDifference": 0.01513671875,
+          "expectedX": 354.89326171875,
+          "expectedY": 306.57,
+          "actualX": 354.87811279296875,
+          "actualY": 306.57000732421875,
+          "bbox": {
+            "x": 354.87811279296875,
+            "y": 288.57000732421875,
+            "width": 141.921875,
+            "height": 23
+          }
+        }
+      ],
+      "textRectangleFindings": [
+        {
+          "path": "slides.0.tag",
+          "index": 0
+        },
+        {
+          "path": "slides.0.title",
+          "index": 3
+        },
+        {
+          "path": "slides.0.subtitle",
+          "index": 4
+        },
+        {
+          "path": "slides.0.text",
+          "index": 5
+        }
+      ],
+      "failures": [
+        "Paint leaves cell: slides.0.title (1 pixels)"
+      ],
+      "ink": [
+        {
+          "path": "slides.0.tag",
+          "box": {
+            "x": 43.2,
+            "y": 43.2,
+            "width": 453.6,
+            "height": 14.64
+          },
+          "pixels": 177,
+          "bounds": {
+            "left": 463,
+            "top": 47,
+            "right": 496,
+            "bottom": 54
+          },
+          "maskSha256": "f201013f649ef49a012a13a5f1c366bdcf6c41060c9e77b38397be9b0b755501",
+          "outside": []
+        },
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 43.2,
+            "y": 66.84,
+            "width": 453.6,
+            "height": 148.23
+          },
+          "pixels": 10868,
+          "bounds": {
+            "left": 139,
+            "top": 79,
+            "right": 497,
+            "bottom": 205
+          },
+          "maskSha256": "698ee4c96bf22d9e1514c506e7b90e6ac3b5f2743ff4622f495173902d6a97a0",
+          "outside": [
+            {
+              "x": 497,
+              "y": 186,
+              "coverage": 90
+            }
+          ]
+        },
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 43.2,
+            "y": 224.07,
+            "width": 453.6,
+            "height": 22.875
+          },
+          "pixels": 847,
+          "bounds": {
+            "left": 379,
+            "top": 230,
+            "right": 496,
+            "bottom": 245
+          },
+          "maskSha256": "39fe8722140f2848b00353c8d4f89a233135661fab3efceebf3a7bd0a103780c",
+          "outside": []
+        },
+        {
+          "path": "slides.0.text",
+          "box": {
+            "x": 43.2,
+            "y": 264.945,
+            "width": 453.6,
+            "height": 651.855
+          },
+          "pixels": 1495,
+          "bounds": {
+            "left": 355,
+            "top": 271,
+            "right": 496,
+            "bottom": 309
+          },
+          "maskSha256": "54196d451f653b1d8a4c7c99f2b1ea880ff5d2f25d6a7f9e949a0f89184ac9ca",
+          "outside": []
+        }
+      ]
+    },
+    {
+      "id": "portrait-plain-right-rich",
+      "svgSha256": "d38891e9c893500b6d310a0c46732e7d93757a5607166f1e7d2ce123acc75720",
+      "sourceSha256": "42396dd8dfe39db35c8cd1b7df153a12a33d8c0cddc22f85fa5f0aef303645a7",
+      "observations": [
+        {
+          "path": "slides.0.tag",
+          "text": "Source",
+          "expectedWidth": 33.19921875,
+          "actualWidth": 33.203125,
+          "advanceDifference": 0.00390625,
+          "expectedX": 463.60078125,
+          "expectedY": 55.2,
+          "actualX": 463.59686279296875,
+          "actualY": 55.20000076293945,
+          "bbox": {
+            "x": 463.59686279296875,
+            "y": 44.20000076293945,
+            "width": 33.228515625,
+            "height": 14
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "A measured title that",
+          "expectedWidth": 356.807373046875,
+          "actualWidth": 356.8125,
+          "advanceDifference": 0.005126953125,
+          "expectedX": 139.992626953125,
+          "expectedY": 107.34,
+          "actualX": 139.98748779296875,
+          "actualY": 107.33999633789062,
+          "bbox": {
+            "x": 138.98748779296875,
+            "y": 68.33999633789062,
+            "width": 357.8125,
+            "height": 50
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "wraps when space is",
+          "expectedWidth": 344.190673828125,
+          "actualWidth": 344.203125,
+          "advanceDifference": 0.012451171875,
+          "expectedX": 152.609326171875,
+          "expectedY": 156.75,
+          "actualX": 152.59686279296875,
+          "actualY": 156.75,
+          "bbox": {
+            "x": 151.59686279296875,
+            "y": 117.75,
+            "width": 345.203125,
+            "height": 50
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "narrow",
+          "expectedWidth": 121.8955078125,
+          "actualWidth": 121.90625,
+          "advanceDifference": 0.0107421875,
+          "expectedX": 374.9044921875,
+          "expectedY": 206.16,
+          "actualX": 374.89373779296875,
+          "actualY": 206.16000366210938,
+          "bbox": {
+            "x": 374.89373779296875,
+            "y": 167.16000366210938,
+            "width": 122.71826171875,
+            "height": 50
+          }
+        },
+        {
+          "path": "slides.0.subtitle",
+          "text": "Supporting text",
+          "expectedWidth": 117.535400390625,
+          "actualWidth": 117.546875,
+          "advanceDifference": 0.011474609375,
+          "expectedX": 379.264599609375,
+          "expectedY": 242.82,
+          "actualX": 379.25311279296875,
+          "actualY": 242.82000732421875,
+          "bbox": {
+            "x": 379.25311279296875,
+            "y": 224.82000732421875,
+            "width": 118.2548828125,
+            "height": 23
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "Exact spacing ",
+          "expectedWidth": 105.6793212890625,
+          "actualWidth": 105.6875,
+          "advanceDifference": 0.0081787109375,
+          "expectedX": 179.25849609375,
+          "expectedY": 283.695,
+          "actualX": 179.25799560546875,
+          "actualY": 283.69500732421875,
+          "bbox": {
+            "x": 179.25799560546875,
+            "y": 265.69500732421875,
+            "width": 105.6875,
+            "height": 23
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "with bold words",
+          "expectedWidth": 126.2969970703125,
+          "actualWidth": 126.3125,
+          "advanceDifference": 0.0155029296875,
+          "expectedX": 284.9378173828125,
+          "expectedY": 283.695,
+          "actualX": 284.93798828125,
+          "actualY": 283.69500732421875,
+          "bbox": {
+            "x": 283.93798828125,
+            "y": 265.69500732421875,
+            "width": 127.817138671875,
+            "height": 23
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": " and ",
+          "expectedWidth": 37.1612548828125,
+          "actualWidth": 37.171875,
+          "advanceDifference": 0.0106201171875,
+          "expectedX": 411.234814453125,
+          "expectedY": 283.695,
+          "actualX": 411.2349853515625,
+          "actualY": 283.69500732421875,
+          "bbox": {
+            "x": 411.2349853515625,
+            "y": 265.69500732421875,
+            "width": 37.171875,
+            "height": 23
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "italics.",
+          "expectedWidth": 48.4039306640625,
+          "actualWidth": 48.40625,
+          "advanceDifference": 0.0023193359375,
+          "expectedX": 448.3960693359375,
+          "expectedY": 283.695,
+          "actualX": 448.39599609375,
+          "actualY": 283.69500732421875,
+          "bbox": {
+            "x": 448.39599609375,
+            "y": 265.69500732421875,
+            "width": 48.40625,
+            "height": 23
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "A raised ",
+          "expectedWidth": 45.6939697265625,
+          "actualWidth": 45.6875,
+          "advanceDifference": -0.0064697265625,
+          "expectedX": 284.2153645833333,
+          "expectedY": 307.9241666666667,
+          "actualX": 284.2149963378906,
+          "actualY": 307.92401123046875,
+          "bbox": {
+            "x": 283.2149963378906,
+            "y": 295.92401123046875,
+            "width": 46.6875,
+            "height": 16
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "note",
+          "expectedWidth": 49.98697916666667,
+          "actualWidth": 49.984375,
+          "advanceDifference": -0.0026041666666714036,
+          "expectedX": 329.9093343098958,
+          "expectedY": 314.4866666666667,
+          "actualX": 329.90899658203125,
+          "actualY": 314.48699951171875,
+          "bbox": {
+            "x": 329.90899658203125,
+            "y": 289.48699951171875,
+            "width": 49.984375,
+            "height": 32
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": " stays editable. ",
+          "expectedWidth": 116.9036865234375,
+          "actualWidth": 116.90625,
+          "advanceDifference": 0.0025634765625,
+          "expectedX": 379.8963134765625,
+          "expectedY": 314.4866666666667,
+          "actualX": 379.89599609375,
+          "actualY": 314.48699951171875,
+          "bbox": {
+            "x": 379.89599609375,
+            "y": 296.48699951171875,
+            "width": 116.90625,
+            "height": 23
+          }
+        }
+      ],
+      "textRectangleFindings": [
+        {
+          "path": "slides.0.tag",
+          "index": 0
+        },
+        {
+          "path": "slides.0.title",
+          "index": 3
+        },
+        {
+          "path": "slides.0.subtitle",
+          "index": 4
+        }
+      ],
+      "failures": [
+        "Paint leaves cell: slides.0.title (1 pixels)"
+      ],
+      "ink": [
+        {
+          "path": "slides.0.tag",
+          "box": {
+            "x": 43.2,
+            "y": 43.2,
+            "width": 453.6,
+            "height": 14.64
+          },
+          "pixels": 177,
+          "bounds": {
+            "left": 463,
+            "top": 47,
+            "right": 496,
+            "bottom": 54
+          },
+          "maskSha256": "f201013f649ef49a012a13a5f1c366bdcf6c41060c9e77b38397be9b0b755501",
+          "outside": []
+        },
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 43.2,
+            "y": 66.84,
+            "width": 453.6,
+            "height": 148.23
+          },
+          "pixels": 10868,
+          "bounds": {
+            "left": 139,
+            "top": 79,
+            "right": 497,
+            "bottom": 205
+          },
+          "maskSha256": "698ee4c96bf22d9e1514c506e7b90e6ac3b5f2743ff4622f495173902d6a97a0",
+          "outside": [
+            {
+              "x": 497,
+              "y": 186,
+              "coverage": 90
+            }
+          ]
+        },
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 43.2,
+            "y": 224.07,
+            "width": 453.6,
+            "height": 22.875
+          },
+          "pixels": 847,
+          "bounds": {
+            "left": 379,
+            "top": 230,
+            "right": 496,
+            "bottom": 245
+          },
+          "maskSha256": "39fe8722140f2848b00353c8d4f89a233135661fab3efceebf3a7bd0a103780c",
+          "outside": []
+        },
+        {
+          "path": "slides.0.text",
+          "box": {
+            "x": 43.2,
+            "y": 264.945,
+            "width": 453.6,
+            "height": 651.855
+          },
+          "pixels": 3846,
+          "bounds": {
+            "left": 180,
+            "top": 271,
+            "right": 495,
+            "bottom": 319
+          },
+          "maskSha256": "63853315e464cfa515d5ff014a289ab893fff4aee4c4cb70dfc3f3c05a5f4557",
+          "outside": []
+        }
+      ]
+    },
+    {
+      "id": "portrait-card-left-scalar",
+      "svgSha256": "437f3857e178d306c24eb9b7ae2e5ee67e80462a2d97099075fd1afc60343c99",
+      "sourceSha256": "512236d824050c877f94b45f09b0ae3d5c4f63bb83af7933c88ceff7be3a4429",
+      "observations": [
+        {
+          "path": "slides.0.tag",
+          "text": "Source",
+          "expectedWidth": 33.19921875,
+          "actualWidth": 33.203125,
+          "advanceDifference": 0.00390625,
+          "expectedX": 43.2,
+          "expectedY": 55.2,
+          "actualX": 43.20000076293945,
+          "actualY": 55.20000076293945,
+          "bbox": {
+            "x": 43.20000076293945,
+            "y": 44.20000076293945,
+            "width": 33.228511810302734,
+            "height": 14
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "A measured title that",
+          "expectedWidth": 356.807373046875,
+          "actualWidth": 356.8125,
+          "advanceDifference": 0.005126953125,
+          "expectedX": 43.2,
+          "expectedY": 107.34,
+          "actualX": 43.20000076293945,
+          "actualY": 107.33999633789062,
+          "bbox": {
+            "x": 42.20000076293945,
+            "y": 68.33999633789062,
+            "width": 357.8125,
+            "height": 50
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "wraps when space is",
+          "expectedWidth": 344.190673828125,
+          "actualWidth": 344.203125,
+          "advanceDifference": 0.012451171875,
+          "expectedX": 43.2,
+          "expectedY": 156.75,
+          "actualX": 43.20000076293945,
+          "actualY": 156.75,
+          "bbox": {
+            "x": 42.20000076293945,
+            "y": 117.75,
+            "width": 345.203125,
+            "height": 50
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "narrow",
+          "expectedWidth": 121.8955078125,
+          "actualWidth": 121.90625,
+          "advanceDifference": 0.0107421875,
+          "expectedX": 43.2,
+          "expectedY": 206.16,
+          "actualX": 43.20000076293945,
+          "actualY": 206.16000366210938,
+          "bbox": {
+            "x": 43.20000076293945,
+            "y": 167.16000366210938,
+            "width": 122.71826171875,
+            "height": 50
+          }
+        },
+        {
+          "path": "slides.0.subtitle",
+          "text": "Supporting text",
+          "expectedWidth": 117.535400390625,
+          "actualWidth": 117.546875,
+          "advanceDifference": 0.011474609375,
+          "expectedX": 43.2,
+          "expectedY": 242.82,
+          "actualX": 43.20000076293945,
+          "actualY": 242.82000732421875,
+          "bbox": {
+            "x": 43.20000076293945,
+            "y": 224.82000732421875,
+            "width": 118.2548828125,
+            "height": 23
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "Full source",
+          "expectedWidth": 81.903076171875,
+          "actualWidth": 81.90625,
+          "advanceDifference": 0.003173828125,
+          "expectedX": 52.2,
+          "expectedY": 292.695,
+          "actualX": 52.20000076293945,
+          "actualY": 292.69500732421875,
+          "bbox": {
+            "x": 52.20000076293945,
+            "y": 274.69500732421875,
+            "width": 82.5738525390625,
+            "height": 23
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "Second paragraph.",
+          "expectedWidth": 141.90673828125,
+          "actualWidth": 141.921875,
+          "advanceDifference": 0.01513671875,
+          "expectedX": 52.2,
+          "expectedY": 315.57,
+          "actualX": 52.20000076293945,
+          "actualY": 315.57000732421875,
+          "bbox": {
+            "x": 52.20000076293945,
+            "y": 297.57000732421875,
+            "width": 141.921875,
+            "height": 23
+          }
+        }
+      ],
+      "textRectangleFindings": [
+        {
+          "path": "slides.0.tag",
+          "index": 0
+        },
+        {
+          "path": "slides.0.title",
+          "index": 1
+        },
+        {
+          "path": "slides.0.title",
+          "index": 2
+        },
+        {
+          "path": "slides.0.title",
+          "index": 3
+        },
+        {
+          "path": "slides.0.subtitle",
+          "index": 4
+        }
+      ],
+      "failures": [],
+      "ink": [
+        {
+          "path": "slides.0.tag",
+          "box": {
+            "x": 43.2,
+            "y": 43.2,
+            "width": 453.6,
+            "height": 14.64
+          },
+          "pixels": 182,
+          "bounds": {
+            "left": 43,
+            "top": 47,
+            "right": 76,
+            "bottom": 54
+          },
+          "maskSha256": "a241594d625ebf1247ea4f3b07441feb6a7cbafcd78b75f0b0dd97472c0e8317",
+          "outside": []
+        },
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 43.2,
+            "y": 66.84,
+            "width": 453.6,
+            "height": 148.23
+          },
+          "pixels": 10805,
+          "bounds": {
+            "left": 43,
+            "top": 79,
+            "right": 399,
+            "bottom": 205
+          },
+          "maskSha256": "b51f622b3453c20ca750a303ac21869e9369df44fc09761be95e9975c100814e",
+          "outside": []
+        },
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 43.2,
+            "y": 224.07,
+            "width": 453.6,
+            "height": 22.875
+          },
+          "pixels": 842,
+          "bounds": {
+            "left": 43,
+            "top": 230,
+            "right": 160,
+            "bottom": 245
+          },
+          "maskSha256": "f75fae1ce069e6b68ae4ae4c805533434d28323470415b1379d9a82495d0216c",
+          "outside": []
+        },
+        {
+          "path": "slides.0.text",
+          "box": {
+            "x": 52.2,
+            "y": 273.945,
+            "width": 435.6,
+            "height": 633.855
+          },
+          "pixels": 1523,
+          "bounds": {
+            "left": 52,
+            "top": 280,
+            "right": 193,
+            "bottom": 318
+          },
+          "maskSha256": "4070c9a2029bc8fd85ad58176b96e7559c6bb5a79b2e551fd480bbacb30d519d",
+          "outside": []
+        }
+      ]
+    },
+    {
+      "id": "portrait-card-left-rich",
+      "svgSha256": "723d5df6dacb2ea2c6242be3e2785958b15fe252fc74551b9719102e2d651d0d",
+      "sourceSha256": "473b68b908903f20c6f54df3fbac53657a95bda25c5b2f6a5ba4a6cbccb07c80",
+      "observations": [
+        {
+          "path": "slides.0.tag",
+          "text": "Source",
+          "expectedWidth": 33.19921875,
+          "actualWidth": 33.203125,
+          "advanceDifference": 0.00390625,
+          "expectedX": 43.2,
+          "expectedY": 55.2,
+          "actualX": 43.20000076293945,
+          "actualY": 55.20000076293945,
+          "bbox": {
+            "x": 43.20000076293945,
+            "y": 44.20000076293945,
+            "width": 33.228511810302734,
+            "height": 14
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "A measured title that",
+          "expectedWidth": 356.807373046875,
+          "actualWidth": 356.8125,
+          "advanceDifference": 0.005126953125,
+          "expectedX": 43.2,
+          "expectedY": 107.34,
+          "actualX": 43.20000076293945,
+          "actualY": 107.33999633789062,
+          "bbox": {
+            "x": 42.20000076293945,
+            "y": 68.33999633789062,
+            "width": 357.8125,
+            "height": 50
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "wraps when space is",
+          "expectedWidth": 344.190673828125,
+          "actualWidth": 344.203125,
+          "advanceDifference": 0.012451171875,
+          "expectedX": 43.2,
+          "expectedY": 156.75,
+          "actualX": 43.20000076293945,
+          "actualY": 156.75,
+          "bbox": {
+            "x": 42.20000076293945,
+            "y": 117.75,
+            "width": 345.203125,
+            "height": 50
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "narrow",
+          "expectedWidth": 121.8955078125,
+          "actualWidth": 121.90625,
+          "advanceDifference": 0.0107421875,
+          "expectedX": 43.2,
+          "expectedY": 206.16,
+          "actualX": 43.20000076293945,
+          "actualY": 206.16000366210938,
+          "bbox": {
+            "x": 43.20000076293945,
+            "y": 167.16000366210938,
+            "width": 122.71826171875,
+            "height": 50
+          }
+        },
+        {
+          "path": "slides.0.subtitle",
+          "text": "Supporting text",
+          "expectedWidth": 117.535400390625,
+          "actualWidth": 117.546875,
+          "advanceDifference": 0.011474609375,
+          "expectedX": 43.2,
+          "expectedY": 242.82,
+          "actualX": 43.20000076293945,
+          "actualY": 242.82000732421875,
+          "bbox": {
+            "x": 43.20000076293945,
+            "y": 224.82000732421875,
+            "width": 118.2548828125,
+            "height": 23
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "Exact spacing ",
+          "expectedWidth": 105.6793212890625,
+          "actualWidth": 105.6875,
+          "advanceDifference": 0.0081787109375,
+          "expectedX": 52.2,
+          "expectedY": 292.695,
+          "actualX": 52.20000076293945,
+          "actualY": 292.69500732421875,
+          "bbox": {
+            "x": 52.20000076293945,
+            "y": 274.69500732421875,
+            "width": 105.6875,
+            "height": 23
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "with bold words",
+          "expectedWidth": 126.2969970703125,
+          "actualWidth": 126.3125,
+          "advanceDifference": 0.0155029296875,
+          "expectedX": 157.8793212890625,
+          "expectedY": 292.695,
+          "actualX": 157.87899780273438,
+          "actualY": 292.69500732421875,
+          "bbox": {
+            "x": 156.87899780273438,
+            "y": 274.69500732421875,
+            "width": 127.817138671875,
+            "height": 23
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": " and ",
+          "expectedWidth": 37.1612548828125,
+          "actualWidth": 37.171875,
+          "advanceDifference": 0.0106201171875,
+          "expectedX": 284.176318359375,
+          "expectedY": 292.695,
+          "actualX": 284.1759948730469,
+          "actualY": 292.69500732421875,
+          "bbox": {
+            "x": 284.1759948730469,
+            "y": 274.69500732421875,
+            "width": 37.171875,
+            "height": 23
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "italics.",
+          "expectedWidth": 48.4039306640625,
+          "actualWidth": 48.40625,
+          "advanceDifference": 0.0023193359375,
+          "expectedX": 321.3375732421875,
+          "expectedY": 292.695,
+          "actualX": 321.3380126953125,
+          "actualY": 292.69500732421875,
+          "bbox": {
+            "x": 321.3380126953125,
+            "y": 274.69500732421875,
+            "width": 48.40625,
+            "height": 23
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "A raised ",
+          "expectedWidth": 45.6939697265625,
+          "actualWidth": 45.6875,
+          "advanceDifference": -0.0064697265625,
+          "expectedX": 52.2,
+          "expectedY": 316.9241666666667,
+          "actualX": 52.20000076293945,
+          "actualY": 316.92401123046875,
+          "bbox": {
+            "x": 51.20000076293945,
+            "y": 304.92401123046875,
+            "width": 46.687496185302734,
+            "height": 16
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "note",
+          "expectedWidth": 49.98697916666667,
+          "actualWidth": 49.984375,
+          "advanceDifference": -0.0026041666666714036,
+          "expectedX": 97.8939697265625,
+          "expectedY": 323.4866666666667,
+          "actualX": 97.89399719238281,
+          "actualY": 323.48699951171875,
+          "bbox": {
+            "x": 97.89399719238281,
+            "y": 298.48699951171875,
+            "width": 49.984375,
+            "height": 32
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": " stays editable. ",
+          "expectedWidth": 116.9036865234375,
+          "actualWidth": 116.90625,
+          "advanceDifference": 0.0025634765625,
+          "expectedX": 147.88094889322917,
+          "expectedY": 323.4866666666667,
+          "actualX": 147.88099670410156,
+          "actualY": 323.48699951171875,
+          "bbox": {
+            "x": 147.88099670410156,
+            "y": 305.48699951171875,
+            "width": 116.90623474121094,
+            "height": 23
+          }
+        }
+      ],
+      "textRectangleFindings": [
+        {
+          "path": "slides.0.tag",
+          "index": 0
+        },
+        {
+          "path": "slides.0.title",
+          "index": 1
+        },
+        {
+          "path": "slides.0.title",
+          "index": 2
+        },
+        {
+          "path": "slides.0.title",
+          "index": 3
+        },
+        {
+          "path": "slides.0.subtitle",
+          "index": 4
+        },
+        {
+          "path": "slides.0.text",
+          "index": 9
+        }
+      ],
+      "failures": [],
+      "ink": [
+        {
+          "path": "slides.0.tag",
+          "box": {
+            "x": 43.2,
+            "y": 43.2,
+            "width": 453.6,
+            "height": 14.64
+          },
+          "pixels": 182,
+          "bounds": {
+            "left": 43,
+            "top": 47,
+            "right": 76,
+            "bottom": 54
+          },
+          "maskSha256": "a241594d625ebf1247ea4f3b07441feb6a7cbafcd78b75f0b0dd97472c0e8317",
+          "outside": []
+        },
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 43.2,
+            "y": 66.84,
+            "width": 453.6,
+            "height": 148.23
+          },
+          "pixels": 10805,
+          "bounds": {
+            "left": 43,
+            "top": 79,
+            "right": 399,
+            "bottom": 205
+          },
+          "maskSha256": "b51f622b3453c20ca750a303ac21869e9369df44fc09761be95e9975c100814e",
+          "outside": []
+        },
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 43.2,
+            "y": 224.07,
+            "width": 453.6,
+            "height": 22.875
+          },
+          "pixels": 842,
+          "bounds": {
+            "left": 43,
+            "top": 230,
+            "right": 160,
+            "bottom": 245
+          },
+          "maskSha256": "f75fae1ce069e6b68ae4ae4c805533434d28323470415b1379d9a82495d0216c",
+          "outside": []
+        },
+        {
+          "path": "slides.0.text",
+          "box": {
+            "x": 52.2,
+            "y": 273.945,
+            "width": 435.6,
+            "height": 633.855
+          },
+          "pixels": 3850,
+          "bounds": {
+            "left": 52,
+            "top": 280,
+            "right": 368,
+            "bottom": 328
+          },
+          "maskSha256": "bff079849bcff069b980d3244ba6d99c9b4959ee0f7fc20b74a6ad2e1d3c595b",
+          "outside": []
+        }
+      ]
+    },
+    {
+      "id": "portrait-card-center-scalar",
+      "svgSha256": "513d247409598f63c025f273895b2d4660def084f02825c248b220f5807a7454",
+      "sourceSha256": "147ecd7813d0b831630a510f786c9cd93a4989e339f332bd0793ac5d1f2ef57b",
+      "observations": [
+        {
+          "path": "slides.0.tag",
+          "text": "Source",
+          "expectedWidth": 33.19921875,
+          "actualWidth": 33.203125,
+          "advanceDifference": 0.00390625,
+          "expectedX": 253.400390625,
+          "expectedY": 55.2,
+          "actualX": 253.3984375,
+          "actualY": 55.20000076293945,
+          "bbox": {
+            "x": 253.3984375,
+            "y": 44.20000076293945,
+            "width": 33.228515625,
+            "height": 14
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "A measured title that",
+          "expectedWidth": 356.807373046875,
+          "actualWidth": 356.8125,
+          "advanceDifference": 0.005126953125,
+          "expectedX": 91.59631347656251,
+          "expectedY": 107.34,
+          "actualX": 91.59375,
+          "actualY": 107.33999633789062,
+          "bbox": {
+            "x": 90.59375,
+            "y": 68.33999633789062,
+            "width": 357.8125,
+            "height": 50
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "wraps when space is",
+          "expectedWidth": 344.190673828125,
+          "actualWidth": 344.203125,
+          "advanceDifference": 0.012451171875,
+          "expectedX": 97.90466308593751,
+          "expectedY": 156.75,
+          "actualX": 97.8984375,
+          "actualY": 156.75,
+          "bbox": {
+            "x": 96.8984375,
+            "y": 117.75,
+            "width": 345.203125,
+            "height": 50
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "narrow",
+          "expectedWidth": 121.8955078125,
+          "actualWidth": 121.90625,
+          "advanceDifference": 0.0107421875,
+          "expectedX": 209.05224609375,
+          "expectedY": 206.16,
+          "actualX": 209.046875,
+          "actualY": 206.16000366210938,
+          "bbox": {
+            "x": 209.046875,
+            "y": 167.16000366210938,
+            "width": 122.71826171875,
+            "height": 50
+          }
+        },
+        {
+          "path": "slides.0.subtitle",
+          "text": "Supporting text",
+          "expectedWidth": 117.535400390625,
+          "actualWidth": 117.546875,
+          "advanceDifference": 0.011474609375,
+          "expectedX": 211.2322998046875,
+          "expectedY": 242.82,
+          "actualX": 211.2265625,
+          "actualY": 242.82000732421875,
+          "bbox": {
+            "x": 211.2265625,
+            "y": 224.82000732421875,
+            "width": 118.2548828125,
+            "height": 23
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "Full source",
+          "expectedWidth": 81.903076171875,
+          "actualWidth": 81.90625,
+          "advanceDifference": 0.003173828125,
+          "expectedX": 229.0484619140625,
+          "expectedY": 292.695,
+          "actualX": 229.046875,
+          "actualY": 292.69500732421875,
+          "bbox": {
+            "x": 229.046875,
+            "y": 274.69500732421875,
+            "width": 82.5738525390625,
+            "height": 23
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "Second paragraph.",
+          "expectedWidth": 141.90673828125,
+          "actualWidth": 141.921875,
+          "advanceDifference": 0.01513671875,
+          "expectedX": 199.046630859375,
+          "expectedY": 315.57,
+          "actualX": 199.0390625,
+          "actualY": 315.57000732421875,
+          "bbox": {
+            "x": 199.0390625,
+            "y": 297.57000732421875,
+            "width": 141.921875,
+            "height": 23
+          }
+        }
+      ],
+      "textRectangleFindings": [
+        {
+          "path": "slides.0.tag",
+          "index": 0
+        },
+        {
+          "path": "slides.0.title",
+          "index": 3
+        },
+        {
+          "path": "slides.0.subtitle",
+          "index": 4
+        }
+      ],
+      "failures": [],
+      "ink": [
+        {
+          "path": "slides.0.tag",
+          "box": {
+            "x": 43.2,
+            "y": 43.2,
+            "width": 453.6,
+            "height": 14.64
+          },
+          "pixels": 178,
+          "bounds": {
+            "left": 253,
+            "top": 47,
+            "right": 286,
+            "bottom": 54
+          },
+          "maskSha256": "1ea3d51dcaf6667dd992f000543a8b41342cc4a0a0293e4e93d3c809100ebceb",
+          "outside": []
+        },
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 43.2,
+            "y": 66.84,
+            "width": 453.6,
+            "height": 148.23
+          },
+          "pixels": 10791,
+          "bounds": {
+            "left": 91,
+            "top": 79,
+            "right": 448,
+            "bottom": 205
+          },
+          "maskSha256": "96c4cc8e6d1991b432e42ebd8f5d6ba0ec840507b35e5213bf74d34a76c13d9e",
+          "outside": []
+        },
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 43.2,
+            "y": 224.07,
+            "width": 453.6,
+            "height": 22.875
+          },
+          "pixels": 844,
+          "bounds": {
+            "left": 211,
+            "top": 230,
+            "right": 328,
+            "bottom": 245
+          },
+          "maskSha256": "028ca63fad08615272061fa2e375f127164ae8187b513dd8c61725e079ae5600",
+          "outside": []
+        },
+        {
+          "path": "slides.0.text",
+          "box": {
+            "x": 52.2,
+            "y": 273.945,
+            "width": 435.6,
+            "height": 633.855
+          },
+          "pixels": 1495,
+          "bounds": {
+            "left": 199,
+            "top": 280,
+            "right": 340,
+            "bottom": 318
+          },
+          "maskSha256": "4037a9afd60c9f4522e48aa1999efcfe3c25a4f83a3b2002c8b6cfc703c15359",
+          "outside": []
+        }
+      ]
+    },
+    {
+      "id": "portrait-card-center-rich",
+      "svgSha256": "af257ae73f7280d6ff5bd5f5908892ef6dd54bd85bb682e8851fa13a38a353a5",
+      "sourceSha256": "dc0b8281e28491cba510fcb5f22b2678a7065c7803fc9659ffb36d5dacad238a",
+      "observations": [
+        {
+          "path": "slides.0.tag",
+          "text": "Source",
+          "expectedWidth": 33.19921875,
+          "actualWidth": 33.203125,
+          "advanceDifference": 0.00390625,
+          "expectedX": 253.400390625,
+          "expectedY": 55.2,
+          "actualX": 253.3984375,
+          "actualY": 55.20000076293945,
+          "bbox": {
+            "x": 253.3984375,
+            "y": 44.20000076293945,
+            "width": 33.228515625,
+            "height": 14
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "A measured title that",
+          "expectedWidth": 356.807373046875,
+          "actualWidth": 356.8125,
+          "advanceDifference": 0.005126953125,
+          "expectedX": 91.59631347656251,
+          "expectedY": 107.34,
+          "actualX": 91.59375,
+          "actualY": 107.33999633789062,
+          "bbox": {
+            "x": 90.59375,
+            "y": 68.33999633789062,
+            "width": 357.8125,
+            "height": 50
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "wraps when space is",
+          "expectedWidth": 344.190673828125,
+          "actualWidth": 344.203125,
+          "advanceDifference": 0.012451171875,
+          "expectedX": 97.90466308593751,
+          "expectedY": 156.75,
+          "actualX": 97.8984375,
+          "actualY": 156.75,
+          "bbox": {
+            "x": 96.8984375,
+            "y": 117.75,
+            "width": 345.203125,
+            "height": 50
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "narrow",
+          "expectedWidth": 121.8955078125,
+          "actualWidth": 121.90625,
+          "advanceDifference": 0.0107421875,
+          "expectedX": 209.05224609375,
+          "expectedY": 206.16,
+          "actualX": 209.046875,
+          "actualY": 206.16000366210938,
+          "bbox": {
+            "x": 209.046875,
+            "y": 167.16000366210938,
+            "width": 122.71826171875,
+            "height": 50
+          }
+        },
+        {
+          "path": "slides.0.subtitle",
+          "text": "Supporting text",
+          "expectedWidth": 117.535400390625,
+          "actualWidth": 117.546875,
+          "advanceDifference": 0.011474609375,
+          "expectedX": 211.2322998046875,
+          "expectedY": 242.82,
+          "actualX": 211.2265625,
+          "actualY": 242.82000732421875,
+          "bbox": {
+            "x": 211.2265625,
+            "y": 224.82000732421875,
+            "width": 118.2548828125,
+            "height": 23
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "Exact spacing ",
+          "expectedWidth": 105.6793212890625,
+          "actualWidth": 105.6875,
+          "advanceDifference": 0.0081787109375,
+          "expectedX": 111.22924804687501,
+          "expectedY": 292.695,
+          "actualX": 111.22899627685547,
+          "actualY": 292.69500732421875,
+          "bbox": {
+            "x": 111.22899627685547,
+            "y": 274.69500732421875,
+            "width": 105.68750762939453,
+            "height": 23
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "with bold words",
+          "expectedWidth": 126.2969970703125,
+          "actualWidth": 126.3125,
+          "advanceDifference": 0.0155029296875,
+          "expectedX": 216.9085693359375,
+          "expectedY": 292.695,
+          "actualX": 216.90899658203125,
+          "actualY": 292.69500732421875,
+          "bbox": {
+            "x": 215.90899658203125,
+            "y": 274.69500732421875,
+            "width": 127.817138671875,
+            "height": 23
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": " and ",
+          "expectedWidth": 37.1612548828125,
+          "actualWidth": 37.171875,
+          "advanceDifference": 0.0106201171875,
+          "expectedX": 343.20556640625,
+          "expectedY": 292.695,
+          "actualX": 343.20599365234375,
+          "actualY": 292.69500732421875,
+          "bbox": {
+            "x": 343.20599365234375,
+            "y": 274.69500732421875,
+            "width": 37.171875,
+            "height": 23
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "italics.",
+          "expectedWidth": 48.4039306640625,
+          "actualWidth": 48.40625,
+          "advanceDifference": 0.0023193359375,
+          "expectedX": 380.3668212890625,
+          "expectedY": 292.695,
+          "actualX": 380.36700439453125,
+          "actualY": 292.69500732421875,
+          "bbox": {
+            "x": 380.36700439453125,
+            "y": 274.69500732421875,
+            "width": 48.40625,
+            "height": 23
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "A raised ",
+          "expectedWidth": 45.6939697265625,
+          "actualWidth": 45.6875,
+          "advanceDifference": -0.0064697265625,
+          "expectedX": 163.70768229166669,
+          "expectedY": 316.9241666666667,
+          "actualX": 163.70799255371094,
+          "actualY": 316.92401123046875,
+          "bbox": {
+            "x": 162.70799255371094,
+            "y": 304.92401123046875,
+            "width": 46.6875,
+            "height": 16
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "note",
+          "expectedWidth": 49.98697916666667,
+          "actualWidth": 49.984375,
+          "advanceDifference": -0.0026041666666714036,
+          "expectedX": 209.40165201822919,
+          "expectedY": 323.4866666666667,
+          "actualX": 209.40199279785156,
+          "actualY": 323.48699951171875,
+          "bbox": {
+            "x": 209.40199279785156,
+            "y": 298.48699951171875,
+            "width": 49.98435974121094,
+            "height": 32
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": " stays editable. ",
+          "expectedWidth": 116.9036865234375,
+          "actualWidth": 116.90625,
+          "advanceDifference": 0.0025634765625,
+          "expectedX": 259.38863118489587,
+          "expectedY": 323.4866666666667,
+          "actualX": 259.3890075683594,
+          "actualY": 323.48699951171875,
+          "bbox": {
+            "x": 259.3890075683594,
+            "y": 305.48699951171875,
+            "width": 116.90625,
+            "height": 23
+          }
+        }
+      ],
+      "textRectangleFindings": [
+        {
+          "path": "slides.0.tag",
+          "index": 0
+        },
+        {
+          "path": "slides.0.title",
+          "index": 3
+        },
+        {
+          "path": "slides.0.subtitle",
+          "index": 4
+        }
+      ],
+      "failures": [],
+      "ink": [
+        {
+          "path": "slides.0.tag",
+          "box": {
+            "x": 43.2,
+            "y": 43.2,
+            "width": 453.6,
+            "height": 14.64
+          },
+          "pixels": 178,
+          "bounds": {
+            "left": 253,
+            "top": 47,
+            "right": 286,
+            "bottom": 54
+          },
+          "maskSha256": "1ea3d51dcaf6667dd992f000543a8b41342cc4a0a0293e4e93d3c809100ebceb",
+          "outside": []
+        },
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 43.2,
+            "y": 66.84,
+            "width": 453.6,
+            "height": 148.23
+          },
+          "pixels": 10791,
+          "bounds": {
+            "left": 91,
+            "top": 79,
+            "right": 448,
+            "bottom": 205
+          },
+          "maskSha256": "96c4cc8e6d1991b432e42ebd8f5d6ba0ec840507b35e5213bf74d34a76c13d9e",
+          "outside": []
+        },
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 43.2,
+            "y": 224.07,
+            "width": 453.6,
+            "height": 22.875
+          },
+          "pixels": 844,
+          "bounds": {
+            "left": 211,
+            "top": 230,
+            "right": 328,
+            "bottom": 245
+          },
+          "maskSha256": "028ca63fad08615272061fa2e375f127164ae8187b513dd8c61725e079ae5600",
+          "outside": []
+        },
+        {
+          "path": "slides.0.text",
+          "box": {
+            "x": 52.2,
+            "y": 273.945,
+            "width": 435.6,
+            "height": 633.855
+          },
+          "pixels": 3869,
+          "bounds": {
+            "left": 112,
+            "top": 280,
+            "right": 427,
+            "bottom": 328
+          },
+          "maskSha256": "8b19f549b87afd8cf19d4c466aa5569a744233ef33862e6e70db03ca488c0a0c",
+          "outside": []
+        }
+      ]
+    },
+    {
+      "id": "portrait-card-right-scalar",
+      "svgSha256": "362510b9ec792569932c568cb6a3c257d4b69b28bd068623dc30165825fcbb97",
+      "sourceSha256": "ac26041734d7ba279ed5c8f39a8bfe04df06f1e0ff0bf0de7ef0a134dc816142",
+      "observations": [
+        {
+          "path": "slides.0.tag",
+          "text": "Source",
+          "expectedWidth": 33.19921875,
+          "actualWidth": 33.203125,
+          "advanceDifference": 0.00390625,
+          "expectedX": 463.60078125,
+          "expectedY": 55.2,
+          "actualX": 463.59686279296875,
+          "actualY": 55.20000076293945,
+          "bbox": {
+            "x": 463.59686279296875,
+            "y": 44.20000076293945,
+            "width": 33.228515625,
+            "height": 14
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "A measured title that",
+          "expectedWidth": 356.807373046875,
+          "actualWidth": 356.8125,
+          "advanceDifference": 0.005126953125,
+          "expectedX": 139.992626953125,
+          "expectedY": 107.34,
+          "actualX": 139.98748779296875,
+          "actualY": 107.33999633789062,
+          "bbox": {
+            "x": 138.98748779296875,
+            "y": 68.33999633789062,
+            "width": 357.8125,
+            "height": 50
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "wraps when space is",
+          "expectedWidth": 344.190673828125,
+          "actualWidth": 344.203125,
+          "advanceDifference": 0.012451171875,
+          "expectedX": 152.609326171875,
+          "expectedY": 156.75,
+          "actualX": 152.59686279296875,
+          "actualY": 156.75,
+          "bbox": {
+            "x": 151.59686279296875,
+            "y": 117.75,
+            "width": 345.203125,
+            "height": 50
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "narrow",
+          "expectedWidth": 121.8955078125,
+          "actualWidth": 121.90625,
+          "advanceDifference": 0.0107421875,
+          "expectedX": 374.9044921875,
+          "expectedY": 206.16,
+          "actualX": 374.89373779296875,
+          "actualY": 206.16000366210938,
+          "bbox": {
+            "x": 374.89373779296875,
+            "y": 167.16000366210938,
+            "width": 122.71826171875,
+            "height": 50
+          }
+        },
+        {
+          "path": "slides.0.subtitle",
+          "text": "Supporting text",
+          "expectedWidth": 117.535400390625,
+          "actualWidth": 117.546875,
+          "advanceDifference": 0.011474609375,
+          "expectedX": 379.264599609375,
+          "expectedY": 242.82,
+          "actualX": 379.25311279296875,
+          "actualY": 242.82000732421875,
+          "bbox": {
+            "x": 379.25311279296875,
+            "y": 224.82000732421875,
+            "width": 118.2548828125,
+            "height": 23
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "Full source",
+          "expectedWidth": 81.903076171875,
+          "actualWidth": 81.90625,
+          "advanceDifference": 0.003173828125,
+          "expectedX": 405.896923828125,
+          "expectedY": 292.695,
+          "actualX": 405.89373779296875,
+          "actualY": 292.69500732421875,
+          "bbox": {
+            "x": 405.89373779296875,
+            "y": 274.69500732421875,
+            "width": 82.5738525390625,
+            "height": 23
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "Second paragraph.",
+          "expectedWidth": 141.90673828125,
+          "actualWidth": 141.921875,
+          "advanceDifference": 0.01513671875,
+          "expectedX": 345.89326171875,
+          "expectedY": 315.57,
+          "actualX": 345.87811279296875,
+          "actualY": 315.57000732421875,
+          "bbox": {
+            "x": 345.87811279296875,
+            "y": 297.57000732421875,
+            "width": 141.921875,
+            "height": 23
+          }
+        }
+      ],
+      "textRectangleFindings": [
+        {
+          "path": "slides.0.tag",
+          "index": 0
+        },
+        {
+          "path": "slides.0.title",
+          "index": 3
+        },
+        {
+          "path": "slides.0.subtitle",
+          "index": 4
+        },
+        {
+          "path": "slides.0.text",
+          "index": 5
+        }
+      ],
+      "failures": [
+        "Paint leaves cell: slides.0.title (1 pixels)"
+      ],
+      "ink": [
+        {
+          "path": "slides.0.tag",
+          "box": {
+            "x": 43.2,
+            "y": 43.2,
+            "width": 453.6,
+            "height": 14.64
+          },
+          "pixels": 177,
+          "bounds": {
+            "left": 463,
+            "top": 47,
+            "right": 496,
+            "bottom": 54
+          },
+          "maskSha256": "f201013f649ef49a012a13a5f1c366bdcf6c41060c9e77b38397be9b0b755501",
+          "outside": []
+        },
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 43.2,
+            "y": 66.84,
+            "width": 453.6,
+            "height": 148.23
+          },
+          "pixels": 10868,
+          "bounds": {
+            "left": 139,
+            "top": 79,
+            "right": 497,
+            "bottom": 205
+          },
+          "maskSha256": "698ee4c96bf22d9e1514c506e7b90e6ac3b5f2743ff4622f495173902d6a97a0",
+          "outside": [
+            {
+              "x": 497,
+              "y": 186,
+              "coverage": 90
+            }
+          ]
+        },
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 43.2,
+            "y": 224.07,
+            "width": 453.6,
+            "height": 22.875
+          },
+          "pixels": 847,
+          "bounds": {
+            "left": 379,
+            "top": 230,
+            "right": 496,
+            "bottom": 245
+          },
+          "maskSha256": "39fe8722140f2848b00353c8d4f89a233135661fab3efceebf3a7bd0a103780c",
+          "outside": []
+        },
+        {
+          "path": "slides.0.text",
+          "box": {
+            "x": 52.2,
+            "y": 273.945,
+            "width": 435.6,
+            "height": 633.855
+          },
+          "pixels": 1495,
+          "bounds": {
+            "left": 346,
+            "top": 280,
+            "right": 487,
+            "bottom": 318
+          },
+          "maskSha256": "61fa84db55a8c34f06ed94ff80bcbba1bb00b2885f92342c48a4b41d1dad69ed",
+          "outside": []
+        }
+      ]
+    },
+    {
+      "id": "portrait-card-right-rich",
+      "svgSha256": "a67e88e96c74220378cc19c8a40f37fd0dd1a6c9d4976fb11aca4813e62838f4",
+      "sourceSha256": "725ac7f51f9219dea88c69182716c9a9739b090c87e8ca87eb8e30c1c9fbb27d",
+      "observations": [
+        {
+          "path": "slides.0.tag",
+          "text": "Source",
+          "expectedWidth": 33.19921875,
+          "actualWidth": 33.203125,
+          "advanceDifference": 0.00390625,
+          "expectedX": 463.60078125,
+          "expectedY": 55.2,
+          "actualX": 463.59686279296875,
+          "actualY": 55.20000076293945,
+          "bbox": {
+            "x": 463.59686279296875,
+            "y": 44.20000076293945,
+            "width": 33.228515625,
+            "height": 14
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "A measured title that",
+          "expectedWidth": 356.807373046875,
+          "actualWidth": 356.8125,
+          "advanceDifference": 0.005126953125,
+          "expectedX": 139.992626953125,
+          "expectedY": 107.34,
+          "actualX": 139.98748779296875,
+          "actualY": 107.33999633789062,
+          "bbox": {
+            "x": 138.98748779296875,
+            "y": 68.33999633789062,
+            "width": 357.8125,
+            "height": 50
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "wraps when space is",
+          "expectedWidth": 344.190673828125,
+          "actualWidth": 344.203125,
+          "advanceDifference": 0.012451171875,
+          "expectedX": 152.609326171875,
+          "expectedY": 156.75,
+          "actualX": 152.59686279296875,
+          "actualY": 156.75,
+          "bbox": {
+            "x": 151.59686279296875,
+            "y": 117.75,
+            "width": 345.203125,
+            "height": 50
+          }
+        },
+        {
+          "path": "slides.0.title",
+          "text": "narrow",
+          "expectedWidth": 121.8955078125,
+          "actualWidth": 121.90625,
+          "advanceDifference": 0.0107421875,
+          "expectedX": 374.9044921875,
+          "expectedY": 206.16,
+          "actualX": 374.89373779296875,
+          "actualY": 206.16000366210938,
+          "bbox": {
+            "x": 374.89373779296875,
+            "y": 167.16000366210938,
+            "width": 122.71826171875,
+            "height": 50
+          }
+        },
+        {
+          "path": "slides.0.subtitle",
+          "text": "Supporting text",
+          "expectedWidth": 117.535400390625,
+          "actualWidth": 117.546875,
+          "advanceDifference": 0.011474609375,
+          "expectedX": 379.264599609375,
+          "expectedY": 242.82,
+          "actualX": 379.25311279296875,
+          "actualY": 242.82000732421875,
+          "bbox": {
+            "x": 379.25311279296875,
+            "y": 224.82000732421875,
+            "width": 118.2548828125,
+            "height": 23
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "Exact spacing ",
+          "expectedWidth": 105.6793212890625,
+          "actualWidth": 105.6875,
+          "advanceDifference": 0.0081787109375,
+          "expectedX": 170.25849609375,
+          "expectedY": 292.695,
+          "actualX": 170.25799560546875,
+          "actualY": 292.69500732421875,
+          "bbox": {
+            "x": 170.25799560546875,
+            "y": 274.69500732421875,
+            "width": 105.6875,
+            "height": 23
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "with bold words",
+          "expectedWidth": 126.2969970703125,
+          "actualWidth": 126.3125,
+          "advanceDifference": 0.0155029296875,
+          "expectedX": 275.9378173828125,
+          "expectedY": 292.695,
+          "actualX": 275.93798828125,
+          "actualY": 292.69500732421875,
+          "bbox": {
+            "x": 274.93798828125,
+            "y": 274.69500732421875,
+            "width": 127.817138671875,
+            "height": 23
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": " and ",
+          "expectedWidth": 37.1612548828125,
+          "actualWidth": 37.171875,
+          "advanceDifference": 0.0106201171875,
+          "expectedX": 402.234814453125,
+          "expectedY": 292.695,
+          "actualX": 402.2349853515625,
+          "actualY": 292.69500732421875,
+          "bbox": {
+            "x": 402.2349853515625,
+            "y": 274.69500732421875,
+            "width": 37.171875,
+            "height": 23
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "italics.",
+          "expectedWidth": 48.4039306640625,
+          "actualWidth": 48.40625,
+          "advanceDifference": 0.0023193359375,
+          "expectedX": 439.3960693359375,
+          "expectedY": 292.695,
+          "actualX": 439.39599609375,
+          "actualY": 292.69500732421875,
+          "bbox": {
+            "x": 439.39599609375,
+            "y": 274.69500732421875,
+            "width": 48.40625,
+            "height": 23
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "A raised ",
+          "expectedWidth": 45.6939697265625,
+          "actualWidth": 45.6875,
+          "advanceDifference": -0.0064697265625,
+          "expectedX": 275.2153645833333,
+          "expectedY": 316.9241666666667,
+          "actualX": 275.2149963378906,
+          "actualY": 316.92401123046875,
+          "bbox": {
+            "x": 274.2149963378906,
+            "y": 304.92401123046875,
+            "width": 46.6875,
+            "height": 16
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": "note",
+          "expectedWidth": 49.98697916666667,
+          "actualWidth": 49.984375,
+          "advanceDifference": -0.0026041666666714036,
+          "expectedX": 320.9093343098958,
+          "expectedY": 323.4866666666667,
+          "actualX": 320.90899658203125,
+          "actualY": 323.48699951171875,
+          "bbox": {
+            "x": 320.90899658203125,
+            "y": 298.48699951171875,
+            "width": 49.984375,
+            "height": 32
+          }
+        },
+        {
+          "path": "slides.0.text",
+          "text": " stays editable. ",
+          "expectedWidth": 116.9036865234375,
+          "actualWidth": 116.90625,
+          "advanceDifference": 0.0025634765625,
+          "expectedX": 370.8963134765625,
+          "expectedY": 323.4866666666667,
+          "actualX": 370.89599609375,
+          "actualY": 323.48699951171875,
+          "bbox": {
+            "x": 370.89599609375,
+            "y": 305.48699951171875,
+            "width": 116.90625,
+            "height": 23
+          }
+        }
+      ],
+      "textRectangleFindings": [
+        {
+          "path": "slides.0.tag",
+          "index": 0
+        },
+        {
+          "path": "slides.0.title",
+          "index": 3
+        },
+        {
+          "path": "slides.0.subtitle",
+          "index": 4
+        }
+      ],
+      "failures": [
+        "Paint leaves cell: slides.0.title (1 pixels)"
+      ],
+      "ink": [
+        {
+          "path": "slides.0.tag",
+          "box": {
+            "x": 43.2,
+            "y": 43.2,
+            "width": 453.6,
+            "height": 14.64
+          },
+          "pixels": 177,
+          "bounds": {
+            "left": 463,
+            "top": 47,
+            "right": 496,
+            "bottom": 54
+          },
+          "maskSha256": "f201013f649ef49a012a13a5f1c366bdcf6c41060c9e77b38397be9b0b755501",
+          "outside": []
+        },
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 43.2,
+            "y": 66.84,
+            "width": 453.6,
+            "height": 148.23
+          },
+          "pixels": 10868,
+          "bounds": {
+            "left": 139,
+            "top": 79,
+            "right": 497,
+            "bottom": 205
+          },
+          "maskSha256": "698ee4c96bf22d9e1514c506e7b90e6ac3b5f2743ff4622f495173902d6a97a0",
+          "outside": [
+            {
+              "x": 497,
+              "y": 186,
+              "coverage": 90
+            }
+          ]
+        },
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 43.2,
+            "y": 224.07,
+            "width": 453.6,
+            "height": 22.875
+          },
+          "pixels": 847,
+          "bounds": {
+            "left": 379,
+            "top": 230,
+            "right": 496,
+            "bottom": 245
+          },
+          "maskSha256": "39fe8722140f2848b00353c8d4f89a233135661fab3efceebf3a7bd0a103780c",
+          "outside": []
+        },
+        {
+          "path": "slides.0.text",
+          "box": {
+            "x": 52.2,
+            "y": 273.945,
+            "width": 435.6,
+            "height": 633.855
+          },
+          "pixels": 3846,
+          "bounds": {
+            "left": 171,
+            "top": 280,
+            "right": 486,
+            "bottom": 328
+          },
+          "maskSha256": "2191f5b4702444feb8b015063ca4df7ef6864c7cd420b21aade86796b02fe07a",
+          "outside": []
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "requests": [],
+  "scope": "24 actual SVG cases. Exact Carlito regular/bold/italic/bold-italic bytes. Accepted-line source, 0.1 reference-pixel advance/origin tolerance. Font text rectangles are recorded separately from actual white-on-black text paint; all nonzero mask pixel centers must be within cells plus 0.1 pixel. Plain core fitting still normalizes whitespace. Aptos is an explicitly selected visual substitute; no Aptos equivalence, native export, shaping/bidi or raster equivalence claim."
+}

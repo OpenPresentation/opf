@@ -1,0 +1,151 @@
+{
+  "browser": "152.0.4191.66",
+  "platform": "win32",
+  "bundleSha256": "e41220f0a8edecc1e7616974b20299ca1ef75d180f054afe97a3818caf7e4165",
+  "verifierSha256": "d8e76190414cd63ed349948b6800fa6d867951aeae6d9c4aced387b623dcf370",
+  "fontHashes": [
+    {
+      "family": "Roboto",
+      "weight": 400,
+      "italic": false,
+      "sha256": "15256405ecb0d880678833a582760efad538ab2932318b52c8105b267d159459"
+    },
+    {
+      "family": "Roboto",
+      "weight": 700,
+      "italic": false,
+      "sha256": "4aaf8c5b661a386998c2e70cf2b87e2440f5404e0b8fd81164f0413fb3435ec6"
+    },
+    {
+      "family": "Roboto Mono",
+      "weight": 400,
+      "italic": false,
+      "sha256": "e4bf45837847d4abfa5a502b807a83393aa138727bdb9ea9c93fb17d53208d95"
+    },
+    {
+      "family": "Roboto Mono",
+      "weight": 700,
+      "italic": false,
+      "sha256": "92649d819cc4c20480b23a47aaa111769924eb31c66b6ecdcf6f573662558c83"
+    }
+  ],
+  "results": [
+    {
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
+      "exportSha256": "5d47b563974ef155ef39e7d218b10d94914de69d4e59495d3d77d184175e52a4",
+      "exportBytes": 17725,
+      "acceptedLines": 6,
+      "exactCodeRoundTrip": true,
+      "selectionVisibility": {
+        "source": {
+          "color": "rgb(229, 231, 235)",
+          "selectionColor": "rgb(229, 231, 235)",
+          "start": 0,
+          "end": 47,
+          "length": 47
+        },
+        "filename": {
+          "color": "rgb(147, 197, 253)",
+          "selectionColor": "rgb(147, 197, 253)",
+          "start": 0,
+          "end": 20,
+          "length": 20
+        }
+      },
+      "substitutions": [
+        {
+          "requestedFamily": "Aptos Display",
+          "sourceFamily": "Aptos Display",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 700,
+          "resolvedWeight": 700,
+          "italic": false,
+          "compatibility": "generic"
+        },
+        {
+          "requestedFamily": "Aptos",
+          "sourceFamily": "Aptos",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 400,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "generic"
+        }
+      ]
+    },
+    {
+      "dimensions": {
+        "width": 540,
+        "height": 960
+      },
+      "exportSha256": "08e65dd3fcf218e0bd4573485a38ce6495338738dfd063bbfe895e621a47c4ad",
+      "exportBytes": 17726,
+      "acceptedLines": 6,
+      "exactCodeRoundTrip": true,
+      "selectionVisibility": {
+        "source": {
+          "color": "rgb(229, 231, 235)",
+          "selectionColor": "rgb(229, 231, 235)",
+          "start": 0,
+          "end": 47,
+          "length": 47
+        },
+        "filename": {
+          "color": "rgb(147, 197, 253)",
+          "selectionColor": "rgb(147, 197, 253)",
+          "start": 0,
+          "end": 20,
+          "length": 20
+        }
+      },
+      "substitutions": [
+        {
+          "requestedFamily": "Aptos Display",
+          "sourceFamily": "Aptos Display",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 700,
+          "resolvedWeight": 700,
+          "italic": false,
+          "compatibility": "generic"
+        },
+        {
+          "requestedFamily": "Aptos",
+          "sourceFamily": "Aptos",
+          "resolvedFamily": "Roboto",
+          "requestedWeight": 400,
+          "resolvedWeight": 400,
+          "italic": false,
+          "compatibility": "generic"
+        }
+      ]
+    }
+  ],
+  "blankTargets": [
+    {
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
+      "acceptedHeight": 537.28,
+      "selectableHeight": 545.28,
+      "noOpPreserved": true,
+      "editUndoPreserved": true
+    },
+    {
+      "dimensions": {
+        "width": 540,
+        "height": 960
+      },
+      "acceptedHeight": 810.96,
+      "selectableHeight": 818.96,
+      "noOpPreserved": true,
+      "editUndoPreserved": true
+    }
+  ],
+  "errors": [],
+  "externalRequests": [],
+  "scope": "Offline candidate canvas: real pointer/keyboard code and filename edits, CRLF no-op/preservation, tab insertion/cancel, undo/redo, one-page pagination/readability undo, browser native export and undoable exact code/metadata/source-boundary reimport. Native formatting, positioning and font scheme are not reconstructed; font fallback uses the existing playground policy and is recorded. No native PowerPoint or raster equivalence claim."
+}

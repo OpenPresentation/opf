@@ -1,0 +1,426 @@
+{
+  "node": "v24.20.0",
+  "verifierSha256": "b7f84e0a84fadbf9dd56fd48a9dcaaf7e2ce1fec08129c0db8555784e3d3f276",
+  "generationSha256": "3be332a9ad359f2965530fe6bd063b9f11dd597e9560e129179bae8d640a86ff",
+  "imports": [
+    {
+      "phase": "original",
+      "slide": 1,
+      "file": "charts.pptx",
+      "sha256": "1907e3682a493f4582881fec2b7263f24bb5e9065af78ff9ea7bd77bb1601e3e",
+      "data": {
+        "columns": [
+          "Quarter & phase Ω",
+          "Current",
+          "Baseline"
+        ],
+        "rows": [
+          [
+            "Q1",
+            2,
+            1
+          ],
+          [
+            "Q2",
+            3,
+            2
+          ]
+        ]
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 2,
+      "file": "charts.pptx",
+      "sha256": "1907e3682a493f4582881fec2b7263f24bb5e9065af78ff9ea7bd77bb1601e3e",
+      "data": {
+        "columns": [
+          "Quarter & phase Ω",
+          "Current"
+        ],
+        "rows": [
+          [
+            "Q1",
+            2
+          ],
+          [
+            "Q2",
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 3,
+      "file": "charts.pptx",
+      "sha256": "1907e3682a493f4582881fec2b7263f24bb5e9065af78ff9ea7bd77bb1601e3e",
+      "data": {
+        "columns": [
+          "Quarter & phase Ω",
+          "Current",
+          "Baseline"
+        ],
+        "rows": [
+          [
+            "Q1",
+            2,
+            1
+          ],
+          [
+            "Q2",
+            3,
+            2
+          ]
+        ]
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 4,
+      "file": "charts.pptx",
+      "sha256": "1907e3682a493f4582881fec2b7263f24bb5e9065af78ff9ea7bd77bb1601e3e",
+      "data": {
+        "columns": [
+          "Quarter & phase Ω",
+          "Current"
+        ],
+        "rows": [
+          [
+            "Q1",
+            2
+          ],
+          [
+            "Q2",
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 5,
+      "file": "charts.pptx",
+      "sha256": "1907e3682a493f4582881fec2b7263f24bb5e9065af78ff9ea7bd77bb1601e3e",
+      "data": {
+        "columns": [
+          "Quarter & phase Ω",
+          "Current",
+          "Baseline"
+        ],
+        "rows": [
+          [
+            "Q1",
+            2,
+            1
+          ],
+          [
+            "Q2",
+            3,
+            2
+          ]
+        ]
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 6,
+      "file": "charts.pptx",
+      "sha256": "1907e3682a493f4582881fec2b7263f24bb5e9065af78ff9ea7bd77bb1601e3e",
+      "data": {
+        "columns": [
+          "Quarter & phase Ω",
+          "Current"
+        ],
+        "rows": [
+          [
+            "Q1",
+            2
+          ],
+          [
+            "Q2",
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 7,
+      "file": "charts.pptx",
+      "sha256": "1907e3682a493f4582881fec2b7263f24bb5e9065af78ff9ea7bd77bb1601e3e",
+      "data": {
+        "columns": [
+          "Quarter & phase Ω",
+          "Current",
+          "Baseline"
+        ],
+        "rows": [
+          [
+            "Q1",
+            2,
+            1
+          ],
+          [
+            "Q2",
+            3,
+            2
+          ]
+        ]
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 8,
+      "file": "charts.pptx",
+      "sha256": "1907e3682a493f4582881fec2b7263f24bb5e9065af78ff9ea7bd77bb1601e3e",
+      "data": {
+        "columns": [
+          "Quarter & phase Ω",
+          "Current"
+        ],
+        "rows": [
+          [
+            "Q1",
+            2
+          ],
+          [
+            "Q2",
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "phase": "saved",
+      "slide": 1,
+      "file": "charts-saved.pptx",
+      "sha256": "e8c714124bbb82fdb2308be4f71fa603119cdbdf179449595d5eba77fe364c14",
+      "data": {
+        "columns": [
+          "Quarter & phase Ω",
+          "Current",
+          "Baseline"
+        ],
+        "rows": [
+          [
+            "Q1",
+            2,
+            1
+          ],
+          [
+            "Q2",
+            3,
+            2
+          ]
+        ]
+      }
+    },
+    {
+      "phase": "saved",
+      "slide": 2,
+      "file": "charts-saved.pptx",
+      "sha256": "e8c714124bbb82fdb2308be4f71fa603119cdbdf179449595d5eba77fe364c14",
+      "data": {
+        "columns": [
+          "Quarter & phase Ω",
+          "Current"
+        ],
+        "rows": [
+          [
+            "Q1",
+            2
+          ],
+          [
+            "Q2",
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "phase": "saved",
+      "slide": 3,
+      "file": "charts-saved.pptx",
+      "sha256": "e8c714124bbb82fdb2308be4f71fa603119cdbdf179449595d5eba77fe364c14",
+      "data": {
+        "columns": [
+          "Quarter & phase Ω",
+          "Current",
+          "Baseline"
+        ],
+        "rows": [
+          [
+            "Q1",
+            2,
+            1
+          ],
+          [
+            "Q2",
+            3,
+            2
+          ]
+        ]
+      }
+    },
+    {
+      "phase": "saved",
+      "slide": 4,
+      "file": "charts-saved.pptx",
+      "sha256": "e8c714124bbb82fdb2308be4f71fa603119cdbdf179449595d5eba77fe364c14",
+      "data": {
+        "columns": [
+          "Quarter & phase Ω",
+          "Current"
+        ],
+        "rows": [
+          [
+            "Q1",
+            2
+          ],
+          [
+            "Q2",
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "phase": "saved",
+      "slide": 5,
+      "file": "charts-saved.pptx",
+      "sha256": "e8c714124bbb82fdb2308be4f71fa603119cdbdf179449595d5eba77fe364c14",
+      "data": {
+        "columns": [
+          "Quarter & phase Ω",
+          "Current",
+          "Baseline"
+        ],
+        "rows": [
+          [
+            "Q1",
+            2,
+            1
+          ],
+          [
+            "Q2",
+            3,
+            2
+          ]
+        ]
+      }
+    },
+    {
+      "phase": "saved",
+      "slide": 6,
+      "file": "charts-saved.pptx",
+      "sha256": "e8c714124bbb82fdb2308be4f71fa603119cdbdf179449595d5eba77fe364c14",
+      "data": {
+        "columns": [
+          "Quarter & phase Ω",
+          "Current"
+        ],
+        "rows": [
+          [
+            "Q1",
+            2
+          ],
+          [
+            "Q2",
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "phase": "saved",
+      "slide": 7,
+      "file": "charts-saved.pptx",
+      "sha256": "e8c714124bbb82fdb2308be4f71fa603119cdbdf179449595d5eba77fe364c14",
+      "data": {
+        "columns": [
+          "Quarter & phase Ω",
+          "Current",
+          "Baseline"
+        ],
+        "rows": [
+          [
+            "Q1",
+            2,
+            1
+          ],
+          [
+            "Q2",
+            3,
+            2
+          ]
+        ]
+      }
+    },
+    {
+      "phase": "saved",
+      "slide": 8,
+      "file": "charts-saved.pptx",
+      "sha256": "e8c714124bbb82fdb2308be4f71fa603119cdbdf179449595d5eba77fe364c14",
+      "data": {
+        "columns": [
+          "Quarter & phase Ω",
+          "Current"
+        ],
+        "rows": [
+          [
+            "Q1",
+            2
+          ],
+          [
+            "Q2",
+            3
+          ]
+        ]
+      }
+    }
+  ],
+  "rasters": [
+    {
+      "slide": 1,
+      "originalSha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926",
+      "reopenedSha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "slide": 2,
+      "originalSha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd",
+      "reopenedSha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "slide": 3,
+      "originalSha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8",
+      "reopenedSha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "slide": 4,
+      "originalSha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da",
+      "reopenedSha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "slide": 5,
+      "originalSha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373",
+      "reopenedSha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "slide": 6,
+      "originalSha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317",
+      "reopenedSha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "slide": 7,
+      "originalSha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7",
+      "reopenedSha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "slide": 8,
+      "originalSha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a",
+      "reopenedSha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    }
+  ],
+  "scope": "PARTIAL: eight original and eight actual native-saved chart data imports agree; eight original/reopened native PNG pairs are byte-identical. No final native.json or edited deck exists while the original Office worker waits in ChartData.Activate for slide 2. Full native chart colors and embedded-workbook edit/reimport gates are not passed."
+}

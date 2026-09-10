@@ -1,0 +1,49 @@
+Code canvas: wide/portrait source editing, metadata, CRLF, tabs, pagination, undo, offline export and bounded reimport checks pass.
+▲ [WARNING] Ignoring this import because "../opf/packages/javascript/dist/chunk-K7QQGUOH.js" was marked as having no side effects [ignored-bare-import]
+
+    ../opf/packages/javascript/dist/pagination.js:2:7:
+      2 │ import './chunk-K7QQGUOH.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  "sideEffects" is false in the enclosing "package.json" file:
+
+    ../opf/packages/javascript/package.json:29:2:
+      29 │   "sideEffects": false,
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../opf/packages/javascript/dist/chunk-TFZ7E3FK.js" was marked as having no side effects [ignored-bare-import]
+
+    ../opf/packages/javascript/dist/pagination.js:3:7:
+      3 │ import './chunk-TFZ7E3FK.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  "sideEffects" is false in the enclosing "package.json" file:
+
+    ../opf/packages/javascript/package.json:29:2:
+      29 │   "sideEffects": false,
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../opf/packages/javascript/dist/chunk-GQSK3T7X.js" was marked as having no side effects [ignored-bare-import]
+
+    ../opf/packages/javascript/dist/pagination.js:4:7:
+      4 │ import './chunk-GQSK3T7X.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  "sideEffects" is false in the enclosing "package.json" file:
+
+    ../opf/packages/javascript/package.json:29:2:
+      29 │   "sideEffects": false,
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../opf/packages/javascript/dist/chunk-TWMRZ43O.js" was marked as having no side effects [ignored-bare-import]
+
+    ../opf/packages/javascript/dist/pagination.js:5:7:
+      5 │ import './chunk-TWMRZ43O.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  "sideEffects" is false in the enclosing "package.json" file:
+
+    ../opf/packages/javascript/package.json:29:2:
+      29 │   "sideEffects": false,
+         ╵   ~~~~~~~~~~~~~
+

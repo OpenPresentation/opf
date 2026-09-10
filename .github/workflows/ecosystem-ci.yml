@@ -30,21 +30,21 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
-          ref: f4a1b8e1324cbc182b98d43f16528594c8006f86
+          ref: 4b9706367039c13399d0a8b33c9e2bd305904c4b
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-editor
-          ref: 7b6db50f42783979841674e628193b1ba2f5c0e2
+          ref: 26a04baed9ca1715c5ad50e2f3239d6cba67786e
           path: opf-editor
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-pptx
-          ref: f421c91b7b127c7eeab788acdc0c51969402e057
+          ref: df43cfcf58cf9bcee6435620e36d9e9bfd5a253c
           path: opf-pptx
           fetch-depth: 0
           persist-credentials: false
@@ -70,7 +70,7 @@ jobs:
       - name: Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks
         working-directory: opf
         env:
-          OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf/scripts/fixtures/opf-examples-png.shared-code.sha256.json
+          OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf/scripts/fixtures/opf-examples-png.shared-text.sha256.json
         run: pnpm test:packages
       - name: Execute installed tarball browser interactions
         working-directory: opf
@@ -112,6 +112,7 @@ jobs:
             opf/artifacts/metric-layout-browser.json
             opf/artifacts/metric-layout-browser-*.png
             opf/artifacts/editor/*installed-code*.json
+            opf-render/artifacts/golden/**
           retention-days: 7
           if-no-files-found: ignore
       - name: Report the verification boundary

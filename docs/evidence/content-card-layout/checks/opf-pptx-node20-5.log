@@ -1,0 +1,40 @@
+{
+  "browser": "152.0.4191.66",
+  "suites": [
+    {
+      "suite": "webp-fallback",
+      "passed": true,
+      "cases": 13,
+      "checks": "PPTX PNG embedding, source pixels, alpha, EXIF, first animation frame, fit/crop, resolver once, DOM canvas"
+    },
+    {
+      "suite": "native-rich-table-import",
+      "passed": true,
+      "cases": 20,
+      "checks": "Native XML import, style/default preservation, links, blank lines, repeated conversion and SVG preview"
+    },
+    {
+      "suite": "native-table-styles",
+      "passed": true,
+      "checks": 11
+    },
+    {
+      "suite": "native-styled-table-import",
+      "passed": true,
+      "checks": 12
+    },
+    {
+      "suite": "native-content-layout",
+      "passed": true,
+      "checks": 29,
+      "measurement": "browser-default; loaded fonts and native rasters verified separately"
+    },
+    {
+      "suite": "chart-colors",
+      "passed": true,
+      "checks": 28,
+      "cases": 4,
+      "scope": "Actual browser export/import, editable workbook heading recovery and DOM color observations; no native PowerPoint or raster-equivalence claim."
+    }
+  ]
+}

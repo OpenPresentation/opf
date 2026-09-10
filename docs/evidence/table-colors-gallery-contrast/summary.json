@@ -1,0 +1,423 @@
+{
+  "mode": "linked-source-checkpoint",
+  "branch": "codex/shared-metric-integration-20260910",
+  "sourceRefs": {
+    "opf": "c3edf5696c028d5150e77e32d7904060022eb83c",
+    "opf-render": "a688f619b4617ca229bc910ce5d4dc1548dcf601",
+    "opf-pptx": "eac68e3b675c279f97fae61764e015566c2c1d39",
+    "opf-editor": "b30c25c5af426590857f1a84c54b775056fee5ca"
+  },
+  "checks": {
+    "core": {
+      "nodeVersions": [
+        "20.20.2",
+        "24.20.0"
+      ],
+      "testsPerRuntime": 469,
+      "fullCoreAndPreservationSuites": true,
+      "workspaceTypecheck": true,
+      "lintExitZero": true,
+      "all126ExamplesValidate": true
+    },
+    "pptx": {
+      "fullCommandBothRuntimes": true,
+      "syntaxValidationCodeMetric": true
+    },
+    "renderer": {
+      "fullCommandPasses": false,
+      "reason": "Unpromoted corpus source/raster changes",
+      "remainingCommandsRunSeparatelyPass": true
+    }
+  },
+  "native": {
+    "nodeVersions": [
+      "20.20.2",
+      "24.20.0"
+    ],
+    "powerPoint": "16.0.20326.20132",
+    "windows": "26200.9445",
+    "slidesPerRuntime": 6,
+    "cellsAcrossOriginalReopenedPerRuntime": 48,
+    "characterColorObservationsPerRuntime": 624,
+    "runtimeHashesMatch": true,
+    "sourcePptxHashesMatch": true,
+    "rastersMatchAcrossRuntimesAndReopen": true,
+    "rasters": [
+      {
+        "name": "native-table-slide-1.png",
+        "sha256": "b1cfae80d276fa84a3281f4854b1fbe53fec6f0e34e895dc3a7cbb60fe97fdb4"
+      },
+      {
+        "name": "native-table-slide-2.png",
+        "sha256": "e43c3cc0b2c924521ead3fe8af7f7d74a82e161cdf20e7ae3087630d8c7ddf97"
+      },
+      {
+        "name": "native-table-slide-3.png",
+        "sha256": "99e014844ffe6e0a7cc4cbc3af3e5e55cdfe89fc07540d0acf31ea333440940b"
+      },
+      {
+        "name": "native-table-slide-4.png",
+        "sha256": "d40ffa754b89792cad05f9f86611004ab9bf65991ce00a0915e310f5c476af06"
+      },
+      {
+        "name": "native-table-slide-5.png",
+        "sha256": "b9428f673e5a4d3ac276237433acfe99c019616b9e54b13275f1f94194cef308"
+      },
+      {
+        "name": "native-table-slide-6.png",
+        "sha256": "60d7b40a53346b21248dfefbf82a6e23241f5cbdef976cd69a2fd78f4e4b9934"
+      }
+    ],
+    "scope": "Native editable table source text and every character color after open/save/reopen; no browser/native raster-equivalence claim."
+  },
+  "contrast": {
+    "decks": 100,
+    "slides": 720,
+    "textRuns": 11691,
+    "historicalExploratoryFindings": 1454,
+    "currentFindings": 962,
+    "currentCategories": {
+      "otherContentRectangles": 28,
+      "watermarkPlaceholder": 610,
+      "chartLabels": 20,
+      "headerImagePlaceholder": 224,
+      "backgroundImagePlaceholder": 80
+    },
+    "unmeasured": 0,
+    "allFindingsRetained": true,
+    "scope": "Conservative environment-specific text-rectangle sampling. Font boxes can include unrelated colored borders. Shared group-opacity compositing is approximate, and per-glyph system font resolution is not certified. Historical baseline lacks the new runtime fingerprint; preserve it as exploratory evidence, not clean-candidate proof."
+  },
+  "corpus": {
+    "source": {
+      "repository": "OpenPresentation/opf",
+      "path": "examples",
+      "sha256": "a7c34efedca3f700b475d15e02f83b6adab667de4046f1d1ebdf538ec2517078",
+      "decks": 126
+    },
+    "authoredDecks": 96,
+    "changedColorFields": 725,
+    "changedRasters": 656,
+    "verifiedRastersPerCorpus": 805,
+    "contentMetadataAndGeometryPreserved": true,
+    "selectedPairs": [
+      "gallery/education/online-program-launch-plan.opf.json#1",
+      "gallery/business-functions/compliance-readiness-review.opf.json#5",
+      "gallery/business-functions/enterprise-account-expansion-plan.opf.json#2",
+      "gallery/industries/food-bank-distribution-capacity-plan.opf.json#3"
+    ],
+    "fullVisualReviewComplete": false,
+    "baselinePromoted": false
+  },
+  "openGates": [
+    "Twenty chart-label rectangle findings include confirmed near-white text on the legacy white chart panel in dark themes.",
+    "Other content rectangles need glyph-level or visual review; the shown metric border case is a confirmed conservative finding.",
+    "Unresolved image placeholders, compact hierarchy and remaining gallery visual quality need work.",
+    "Existing native metric tab-position and portrait-label raster counterexamples remain open; those metric fixtures were not rerun for this table-color milestone.",
+    "Full corpus review, coordinated source/clean-candidate CI and PR review precede release preparation.",
+    "Broader repair/Auto arrange, shared chart/timeline placement, open font packs, multilingual and missing native-platform evidence remain active."
+  ],
+  "packagesPublished": false,
+  "publicDeploymentsChanged": false,
+  "artifacts": {
+    "opf-node20-0.log": {
+      "sha256": "8cf150cc699a26f9aed495430c36945c0267bb2dcb15d5e56d649e24b657c662",
+      "bytes": 101309
+    },
+    "opf-node20-1.log": {
+      "sha256": "309e8c0b6dc2b6caba96e1cbecec1899f3e53ecd9d90b91f23584c311c7f2d1e",
+      "bytes": 3827
+    },
+    "opf-node20-2.log": {
+      "sha256": "6610b5ddb99bcb3b6ce907188c3b8afa83e7dcacdbfd5893fa44a4eec22c9c65",
+      "bytes": 26111
+    },
+    "opf-node20-3.log": {
+      "sha256": "e7e9b6758fc731c70ad33ff51f63cae01a90a3b185a5c5654b6b7113dde91b48",
+      "bytes": 186
+    },
+    "opf-node20-checks.json": {
+      "sha256": "8a792ecc5085b6f6d8c578c37e6703e6dab2afad2d51aed12fcbfaac5b9646e9",
+      "bytes": 797
+    },
+    "opf-node24-0.log": {
+      "sha256": "5a129c726e1cf1ff4e911a3ff622f5f91d2bac0e240c30b2929b5f0947a706b6",
+      "bytes": 44208
+    },
+    "opf-node24-1.log": {
+      "sha256": "9e8516f8e4c100ca0033efb3a385fccf5c983d994181ea3b2e796b38fdde6412",
+      "bytes": 3827
+    },
+    "opf-node24-2.log": {
+      "sha256": "a68053132c29ca01f68c03661be256ad9069a0241d4376bec65d91c60ac505d9",
+      "bytes": 26111
+    },
+    "opf-node24-3.log": {
+      "sha256": "e7e9b6758fc731c70ad33ff51f63cae01a90a3b185a5c5654b6b7113dde91b48",
+      "bytes": 186
+    },
+    "opf-node24-checks.json": {
+      "sha256": "34d278afbd9e93d7482532c307d5c095f266a4d35df0dc450c1edd9e4d4427a0",
+      "bytes": 797
+    },
+    "opf-pptx-node20-0.log": {
+      "sha256": "a1b13432a3c331194e3232b27d7d5fddfd6bf02cde18ff8817ce8a38ee8dd87f",
+      "bytes": 1595
+    },
+    "opf-pptx-node20-1.log": {
+      "sha256": "8cca294697a1b8e287df03a1faefa772ea2c1583d1c2e6d9fa3bf66168a9a922",
+      "bytes": 141
+    },
+    "opf-pptx-node20-2.log": {
+      "sha256": "776a4ea52eafb9225ad4452c8cbafd415dede00c176f72bc1e0ab76430e1f5be",
+      "bytes": 5541
+    },
+    "opf-pptx-node20-3.log": {
+      "sha256": "7dab469e836d1099c7cec0132f705b25a1fb244badafc6603be2a0a4ec68310a",
+      "bytes": 427
+    },
+    "opf-pptx-node20-4.log": {
+      "sha256": "0c510db2808fa3faa0a51e8d6d399a379afb1d95fa7ddc691823c6545ab9dd5f",
+      "bytes": 414
+    },
+    "opf-pptx-node20-checks.json": {
+      "sha256": "330fb18ebc8a4742f865aa311edc3aefdf7aec3ff9505e16869b8719e1b38a3f",
+      "bytes": 1025
+    },
+    "opf-pptx-node24-0.log": {
+      "sha256": "a1b13432a3c331194e3232b27d7d5fddfd6bf02cde18ff8817ce8a38ee8dd87f",
+      "bytes": 1595
+    },
+    "opf-pptx-node24-1.log": {
+      "sha256": "8cca294697a1b8e287df03a1faefa772ea2c1583d1c2e6d9fa3bf66168a9a922",
+      "bytes": 141
+    },
+    "opf-pptx-node24-2.log": {
+      "sha256": "776a4ea52eafb9225ad4452c8cbafd415dede00c176f72bc1e0ab76430e1f5be",
+      "bytes": 5541
+    },
+    "opf-pptx-node24-3.log": {
+      "sha256": "7dab469e836d1099c7cec0132f705b25a1fb244badafc6603be2a0a4ec68310a",
+      "bytes": 427
+    },
+    "opf-pptx-node24-4.log": {
+      "sha256": "0c510db2808fa3faa0a51e8d6d399a379afb1d95fa7ddc691823c6545ab9dd5f",
+      "bytes": 414
+    },
+    "opf-pptx-node24-checks.json": {
+      "sha256": "e7518652df6415f01e4a4f42c1c9003cd00796569651e2966a7f78757b9e49ae",
+      "bytes": 1025
+    },
+    "opf-render-node20-0.log": {
+      "sha256": "100242ee6305d3c756c43376fa0c386a16b56cf314f8a588af77dcbb985d067d",
+      "bytes": 763
+    },
+    "opf-render-node20-1.log": {
+      "sha256": "4a2046c8b24799642cf182386ba2728f5a4064c07bf76bcc55d2f8989fc5e70b",
+      "bytes": 145
+    },
+    "opf-render-node20-2.log": {
+      "sha256": "98c6729c9d3a8f028c9e0c368e5e88fc8085ef98ca407ad459f8df44bb806e7e",
+      "bytes": 3053
+    },
+    "opf-render-node20-3.log": {
+      "sha256": "8ca0cfe16f5f83f0f6072be93ae4382266f38bd7b1ed906fc9a5f387a3ba5d29",
+      "bytes": 94
+    },
+    "opf-render-node20-4.log": {
+      "sha256": "2ccc39c646151053e983e934a5b75a8c103054a56856557a0b275c823c9d1155",
+      "bytes": 128
+    },
+    "opf-render-node20-5.log": {
+      "sha256": "f90850859df445d6e2adfa01a0362a045e7e78f7a317dc773e5c2644847cec65",
+      "bytes": 319
+    },
+    "opf-render-node20-6.log": {
+      "sha256": "0acec1647ea78024937bd6a122865f71bbe0b5976a981f37eec4889c9f5e89ec",
+      "bytes": 259
+    },
+    "opf-render-node20-7.log": {
+      "sha256": "2d6b57d5164adff0cce4b9671129528f802016b7be62436d224b1cea5eadf310",
+      "bytes": 237
+    },
+    "opf-render-node20-checks.json": {
+      "sha256": "dbf72f4f5d574f6659ac8b96c7742fe6663e67bc68194ecef4dd2b1b4c706c43",
+      "bytes": 1671
+    },
+    "opf-render-node24-0.log": {
+      "sha256": "100242ee6305d3c756c43376fa0c386a16b56cf314f8a588af77dcbb985d067d",
+      "bytes": 763
+    },
+    "opf-render-node24-1.log": {
+      "sha256": "4a2046c8b24799642cf182386ba2728f5a4064c07bf76bcc55d2f8989fc5e70b",
+      "bytes": 145
+    },
+    "opf-render-node24-2.log": {
+      "sha256": "4c5414cfb678ac7ea6eb61a6d7a85febbda82afaf07dac711412787368a98b93",
+      "bytes": 3074
+    },
+    "opf-render-node24-3.log": {
+      "sha256": "8ca0cfe16f5f83f0f6072be93ae4382266f38bd7b1ed906fc9a5f387a3ba5d29",
+      "bytes": 94
+    },
+    "opf-render-node24-4.log": {
+      "sha256": "2ccc39c646151053e983e934a5b75a8c103054a56856557a0b275c823c9d1155",
+      "bytes": 128
+    },
+    "opf-render-node24-5.log": {
+      "sha256": "f90850859df445d6e2adfa01a0362a045e7e78f7a317dc773e5c2644847cec65",
+      "bytes": 319
+    },
+    "opf-render-node24-6.log": {
+      "sha256": "0acec1647ea78024937bd6a122865f71bbe0b5976a981f37eec4889c9f5e89ec",
+      "bytes": 259
+    },
+    "opf-render-node24-7.log": {
+      "sha256": "2d6b57d5164adff0cce4b9671129528f802016b7be62436d224b1cea5eadf310",
+      "bytes": 237
+    },
+    "opf-render-node24-checks.json": {
+      "sha256": "e1e5739bf5207ebfcd9058766baca4a2e073f65354abd5c9872b0b97103b8ea4",
+      "bytes": 1671
+    },
+    "native-generation-node20.json": {
+      "sha256": "4783b59dd04ec50c0002ff23f3b16b343789b0df894a0245a8c361480870eab5",
+      "bytes": 10580
+    },
+    "native-native-node20.json": {
+      "sha256": "681cd4f3d6499a4efab5661e4d73b1ff44d0a736f0d7a587084b25efdcc2de96",
+      "bytes": 212727
+    },
+    "native-comparison-node20.json": {
+      "sha256": "6974c014b9de75641e2a74438ee7146713aeba271f4245917ceca9c885a2300c",
+      "bytes": 583
+    },
+    "native-saved-node20.pptx": {
+      "sha256": "0314eeb28068a966daf63258eb8a8d3cf82c90e7169ad91692bf361bcdbee236",
+      "bytes": 30967
+    },
+    "native-generation-node24.json": {
+      "sha256": "860023ec2750713bd13923cc25f12c0a13348da71101a95a0ee5e885448ec030",
+      "bytes": 10580
+    },
+    "native-native-node24.json": {
+      "sha256": "d4f9cb3e36f7a0b91b30ed5452c534eb6ec80cbd44812546c8dcb977b3b15b15",
+      "bytes": 212727
+    },
+    "native-comparison-node24.json": {
+      "sha256": "a69bd55c6fa9e2c0500b49baf021a3e173d4391f992b0b33b94c9eeb11b1d568",
+      "bytes": 583
+    },
+    "native-saved-node24.pptx": {
+      "sha256": "88facfd1e21d70d217b86f7c0fea051cf6e772d32477c0578f12a789788fccc2",
+      "bytes": 30966
+    },
+    "table-colors.pptx": {
+      "sha256": "96311bad4867787d67a482132d13c99d6cc11a54acd73a76914077e3dc8f5284",
+      "bytes": 29118
+    },
+    "native-table-slide-1.png": {
+      "sha256": "b1cfae80d276fa84a3281f4854b1fbe53fec6f0e34e895dc3a7cbb60fe97fdb4",
+      "bytes": 3773
+    },
+    "native-table-slide-2.png": {
+      "sha256": "e43c3cc0b2c924521ead3fe8af7f7d74a82e161cdf20e7ae3087630d8c7ddf97",
+      "bytes": 3767
+    },
+    "native-table-slide-3.png": {
+      "sha256": "99e014844ffe6e0a7cc4cbc3af3e5e55cdfe89fc07540d0acf31ea333440940b",
+      "bytes": 3765
+    },
+    "native-table-slide-4.png": {
+      "sha256": "d40ffa754b89792cad05f9f86611004ab9bf65991ce00a0915e310f5c476af06",
+      "bytes": 3915
+    },
+    "native-table-slide-5.png": {
+      "sha256": "b9428f673e5a4d3ac276237433acfe99c019616b9e54b13275f1f94194cef308",
+      "bytes": 3270
+    },
+    "native-table-slide-6.png": {
+      "sha256": "60d7b40a53346b21248dfefbf82a6e23241f5cbdef976cd69a2fd78f4e4b9934",
+      "bytes": 3486
+    },
+    "contrast-exploratory-baseline.json": {
+      "sha256": "adcfcd9da300ad09e3e59eb2e2ef660dd71825b9d22ac9b7e8a417bd0290ae1d",
+      "bytes": 1238637
+    },
+    "contrast-current.json": {
+      "sha256": "f92d1dd3c339820dac9a201ee75fb9942fb2e3107df70fc3f1e2390dfd023adf",
+      "bytes": 947362
+    },
+    "corpus-candidate.json": {
+      "sha256": "363211a41ddc4233c1dc69c91ed9d18e4cdda98114c21718b65f76c80ea13867",
+      "bytes": 145217
+    },
+    "corpus-preservation.json": {
+      "sha256": "74f5e497f0f9f6ffac0e0c72bcf9677308fadff8303df4c86987fec4afa6867a",
+      "bytes": 315790
+    },
+    "metric-border-counterexample.png": {
+      "sha256": "b7e7f820e707139c93a4c015d8dc6eb60f493a2ef49030327daa2253dfa1cf99",
+      "bytes": 93511
+    },
+    "metric-border-counterexample.svg": {
+      "sha256": "20177ae3981f3ade1bb70d8b4becd6238daa30d4f4ebfe47f14857e6cd57e58f",
+      "bytes": 16588
+    },
+    "check-runner.mjs": {
+      "sha256": "67673ddb308b2219d98f40906bfe69f9172024fcc1ac7c457be4e6b0b16bffa3",
+      "bytes": 1906
+    },
+    "metric-border-browser.png": {
+      "sha256": "d6e06320661ef429374c32bdcb25ddc78d50cd498ae87c83ccc8f0b34bcae5e0",
+      "bytes": 84502
+    },
+    "metric-border-browser-no-text.png": {
+      "sha256": "fb82500d20bce054453ce91538f964d7403e7443d57eaddfd768ee3d9f82870a",
+      "bytes": 7104
+    },
+    "metric-border-browser.json": {
+      "sha256": "b5a9cded97f1762d065df7227b3f2f0d0d3ee7465dad796d560572e18470d688",
+      "bytes": 1218
+    },
+    "gallery-0-before.png": {
+      "sha256": "4828aff418acbc9e0af151d90dc12b7d05e3589dccba7a652a52b86239d779e9",
+      "bytes": 54709
+    },
+    "gallery-0-after.png": {
+      "sha256": "985909a4c3555947d76d77a725e34a0d9768e0a3e17e90612bfb56ea70095837",
+      "bytes": 22925
+    },
+    "gallery-1-before.png": {
+      "sha256": "643d8d84da3a4e0303eef8a26e423a279eb87e44ef58dde3187be9105d317fa5",
+      "bytes": 15364
+    },
+    "gallery-1-after.png": {
+      "sha256": "009d58e736f0c72c725e802c1dfc7f1eef7a3831458ec8f9c682611962a2ad27",
+      "bytes": 15150
+    },
+    "gallery-2-before.png": {
+      "sha256": "5918788c84b7fc9ad82f548d152f3fa3fd85f3145bc0cc98c26379bcfb306be5",
+      "bytes": 3648
+    },
+    "gallery-2-after.png": {
+      "sha256": "6cd6939e21e8ffc82bbaff113bfdf268b4b64c1c38af77ef2b7bac829e1f0991",
+      "bytes": 3656
+    },
+    "gallery-3-before.png": {
+      "sha256": "9a42c352bfb82cd0b18471233c0c0dc126a73723eae30995178fdeb4709ab827",
+      "bytes": 4241
+    },
+    "gallery-3-after.png": {
+      "sha256": "9a42c352bfb82cd0b18471233c0c0dc126a73723eae30995178fdeb4709ab827",
+      "bytes": 4241
+    },
+    "gallery-selected-pairs.png": {
+      "sha256": "b6833aa4db0e942d1cec0eeaf1bc764d1581d9831709f1f3824877b9de1770a7",
+      "bytes": 252208
+    },
+    "native-table-sheet.png": {
+      "sha256": "2f5e60a4d89db99fb9d23314b86784a070a0e0b2f685f1e159763f9c6e837e78",
+      "bytes": 38894
+    }
+  }
+}

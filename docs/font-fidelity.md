@@ -2,6 +2,8 @@
 
 For the starter set and delivery priorities, see the [font roadmap](plans/font-roadmap.md).
 
+The [Windows reference-font advance study](evidence/shared-metric-native-anchor/font-study-comparison.json) is exploratory source-checkpoint evidence, not an additional compatibility certification. It measures 1,024 cases across regular/bold Calibri, Arial, Times New Roman and Courier New, recording local reference-file versions/hashes and native font-slot names. Disabling optional ligatures and rounding base glyph advances to eighth-point steps predicts 949 observations within 0.02pt; 75 outliers remain, including combining marks, Arabic and Calibri kerning. Office theme tokens and per-glyph fallback are not resolved to exact native files by these name properties. No runtime provider or open-font mapping changes from this hypothesis, and no reference font is redistributed.
+
 The composition API accepts a `textMeasurement` provider. A provider resolves font faces and returns actual text widths; callers pass the same provider to pagination, editor geometry, SVG rendering, and PPTX export. Without one, the existing deterministic character-width estimate remains available.
 
 The renderer's optional font registry uses [Fontkit](https://github.com/foliojs/fontkit) to shape text and measure glyph advances from local font bytes. It does not discover system fonts or fetch fonts. The Node helper loads the renderer's bundled Roboto and Roboto Mono faces:

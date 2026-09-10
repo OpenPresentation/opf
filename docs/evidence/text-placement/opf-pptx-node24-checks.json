@@ -1,0 +1,124 @@
+{
+  "mode": "linked-source",
+  "runtime": {
+    "opf/dist/catalogs.js": "6d74d7b051844728b2622acdb5268472a043544c8b2ca04eb904b1cdf74ec739",
+    "opf/dist/chunk-4BX4YX5C.js": "6acb12f539424ca7da7d8ce1a0b8583fb4e5bdccc722a456b15e720f99f32121",
+    "opf/dist/chunk-AB2J7BDL.js": "27ae5b718f4668af41bd8c05f6d6761a8d2510874a306ec864cf97e286c78c2b",
+    "opf/dist/chunk-GQSK3T7X.js": "34f518c29c9757bc252b5c13eb5d7db8ada4b477496e6289d8149fb4fdc7cd45",
+    "opf/dist/chunk-OZULJBSG.js": "9e3ce45dc68d39c646449baf4ec9aad7b92d3f69b85a3dfe37540d13820d0d1e",
+    "opf/dist/chunk-PA4UHUYO.js": "323e6ed96b7932d516d3a75518215a2231a219e1ccb7827937be369ecf1b0d0b",
+    "opf/dist/chunk-PIQXLBBJ.js": "818578357a214f76a743db8cf63c0903825923e1ba970abf68c21912e59893ba",
+    "opf/dist/chunk-SOSOBKQ2.js": "b2bcaf1f0e8725c9a8f3fff9b5c996c4e7e63c6bb8dd4d13c2d7609105b02915",
+    "opf/dist/chunk-TWMRZ43O.js": "0d35cec97ec7ddaa67fb9f096bc672c927eb68ed5fae5ac27d4dff70d68313f4",
+    "opf/dist/composition.js": "5bb490548ed1f65d9474704452013e5e0dc1ee3a1682f6ba3a1a4bac52c29b30",
+    "opf/dist/data.js": "ae68ff3088ddcea772573952c572a3c58b8815086c9f81e57939d45848c64b95",
+    "opf/dist/docs.js": "bbdefe6818666a4d9ac91c85adb183bbcdc4416a710abb4a310e029bde396577",
+    "opf/dist/examples.js": "c69ccdcfaa0c4157f27174a3814ac3b6a1874440029b02d27a7fc971fc05fe1a",
+    "opf/dist/index.js": "a67508f712266db6ce07b049119547de5aec8058f38d0d9c1a3a0e18e7a167fe",
+    "opf/dist/pagination.js": "57c0dde18fec724953b76bd30b0f93c7b90bec8a28d9a878e80f12747bfbd592",
+    "opf/dist/previews.js": "043037d2d5dfec4d69072415032818d6a6c5e686938fcd644a4f103286033950",
+    "opf/dist/repo-readme.js": "a8177f828c853554ce636a0ca702efb63d79f96175f5440f35c32e6834ac215a",
+    "opf/dist/schemas.js": "52f40eb788685649099577a9241adb75c5f18b4a5c8cf1e55215b6fa3f52105c",
+    "opf/dist/spec-files.js": "8302d015b9368a585ee6aea946a18b2f0036396acb963e273baee48a0c4ac817",
+    "opf/dist/types.js": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "opf/dist/validator.js": "d479ea78e65be19bc8a6f0cedd563c5dce652bf5a1460bdbd1dca7a2c304fc0e",
+    "opf/package.json": "d7a9ed943e013a51e907d707e277806c4d89ec3a8b9a26d7336f66597b4f7fdb",
+    "opf-render/dist/font-compatibility.js": "a50ee71748e81cd12ed3aeb6eee92506ebf91ef05021c6ca3f5a100665d03dac",
+    "opf-render/dist/fonts-browser.js": "d0543d838b2f22a8c70bdc60100d72d3c69e3f8033d5ccedd3523ee63c66b8d4",
+    "opf-render/dist/fonts-node.js": "0e65abd7438f3a21fd0cb6ea64120d9e866ef3308510910d11b7b863399f8d8b",
+    "opf-render/dist/fonts.js": "2b451142b8e1097220382488113a49ae76c5d00d246ecd1c41e6187f81f156e8",
+    "opf-render/dist/index.js": "39c8f2b279ce10873f00289349b84cf9cab7e12c56e9e0d87447bd2406777234",
+    "opf-render/dist/raster-images.js": "304cffe5e77553ac1ab590fc5805714dde34e6f69df5dc55e35dbc8df602753c",
+    "opf-render/dist/raster.js": "6ea807bfd43ddaabea95c1137bc1bcf7d656f2ae9c6d87a7e6d2f867df86ea99",
+    "opf-render/dist/svg.js": "473222ae52bfbd35d6c8b202833ba446564f7f160b85d9b8f904b54f80486613",
+    "opf-render/package.json": "95bc4597bc54861de1fb7dfe68911a878eeaa3b8c3c00cda58ec65f1dd6e310f",
+    "opf-pptx/dist/background-import.js": "684f9b38cff01e596774b8120c979c3dbbfada273890f785f7a4e3db88cdcb22",
+    "opf-pptx/dist/background.js": "081fb685677ca656341cdce89275331749174ffecd60e71451f26b9f896cca1c",
+    "opf-pptx/dist/card-provenance.js": "41b78472f0d8363b98341d9d66529c48f9f821d39bc110b8e43b610205d535fb",
+    "opf-pptx/dist/chart-workbook.js": "92dedb19ef41f02a221057c3a0d5e9e7992bbc2d373f02a32326a6741d4630dc",
+    "opf-pptx/dist/code-provenance.js": "876296884d1eb5880f4d42de9f9ead1a275ba456cfb6daa9acb779108265ca51",
+    "opf-pptx/dist/heading-provenance.js": "c75b219b647ec2296513b78840430da98dae46feb077bf163b73761145eaec64",
+    "opf-pptx/dist/image-fallback-browser.js": "3c7f81d5677dd9a78a0a13fe5a94bbb14cef465031caaeda2c87e8451e9ff491",
+    "opf-pptx/dist/image-fallback-node.js": "5ee323d3320420664b5d2c1714e246b04dd0806f459164f9696668552df87565",
+    "opf-pptx/dist/image-geometry.js": "e083973a98c2bdf7d7dfce9ef1f6bef252f09ce0d69d987105ee0b73cc13d62e",
+    "opf-pptx/dist/image-import.js": "cffccecc223e27d62b6e1aba0cdbe2c1c9aa94874ef898f76906b22e001bbd41",
+    "opf-pptx/dist/index.js": "7f2f8cc2086f4a8184a4cc24edf9a212d020df21645d1d1009a4a444960b5b9f",
+    "opf-pptx/dist/metric-provenance.js": "a330abb76e5bb6723a37e64f1e809e4832a8a768402af64fb56155fdb3f194e0",
+    "opf-pptx/dist/table-border-import.js": "16678e0d93e63474d39daac268016a59517cc36d85dbd8751131f143db01ace5",
+    "opf-pptx/dist/table-cell-import.js": "fa17507763a2240564401d7977f4f39bc180e3e6da9d4aa9c36202908e9126d1",
+    "opf-pptx/dist/table-import.js": "9ae40bb38dd34c9fc0ae4a3f5a257068ae92bb651ed5d96641c2629ef7106cf1",
+    "opf-pptx/package.json": "17136e7873b29b75a421d1ebc72c69c15452b0e806fbc0bb4444047d4669f587"
+  },
+  "results": [
+    {
+      "node": "v24.20.0",
+      "repo": "opf-pptx",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "status": 0,
+      "log": "opf-pptx-node24-0.log",
+      "sha256": "a6dc7831a9c7994ead7b3d2990d38a5d3105279103a0872de053a502443fc3a0"
+    },
+    {
+      "node": "v24.20.0",
+      "repo": "opf-pptx",
+      "command": [
+        "npm",
+        "run",
+        "validate"
+      ],
+      "status": 0,
+      "log": "opf-pptx-node24-1.log",
+      "sha256": "8cca294697a1b8e287df03a1faefa772ea2c1583d1c2e6d9fa3bf66168a9a922"
+    },
+    {
+      "node": "v24.20.0",
+      "repo": "opf-pptx",
+      "command": [
+        "npm",
+        "test"
+      ],
+      "status": 1,
+      "log": "opf-pptx-node24-2.log",
+      "sha256": "3ef6c6e4ee8865842d00131d35b61e18bf37a3c3f34e0115da7aa9b6695705d8"
+    },
+    {
+      "node": "v24.20.0",
+      "repo": "opf-pptx",
+      "command": [
+        "npm",
+        "run",
+        "test:code"
+      ],
+      "status": 0,
+      "log": "opf-pptx-node24-3.log",
+      "sha256": "7dab469e836d1099c7cec0132f705b25a1fb244badafc6603be2a0a4ec68310a"
+    },
+    {
+      "node": "v24.20.0",
+      "repo": "opf-pptx",
+      "command": [
+        "npm",
+        "run",
+        "test:metric"
+      ],
+      "status": 0,
+      "log": "opf-pptx-node24-4.log",
+      "sha256": "0c510db2808fa3faa0a51e8d6d399a379afb1d95fa7ddc691823c6545ab9dd5f"
+    },
+    {
+      "node": "v24.20.0",
+      "repo": "opf-pptx",
+      "command": [
+        "node",
+        "test/browser-check.mjs"
+      ],
+      "status": 0,
+      "log": "opf-pptx-node24-5.log",
+      "sha256": "569bb9c878745ed9542e4f8cf1c43bb6ed40bd9b54b1ab8bb8b094a78a5fc870"
+    }
+  ]
+}

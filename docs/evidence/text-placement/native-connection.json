@@ -1,0 +1,11 @@
+{
+  "surface": "PowerPoint",
+  "connectedSessions": 0,
+  "attemptedAction": "Read Version through PowerPoint.Application COM factory",
+  "result": "COM class factory rejected connection",
+  "hresult": "0x80010001",
+  "code": "RPC_E_CALL_REJECTED",
+  "presentationsOpenedByThisAttempt": 0,
+  "userOfficeProcessesClosed": 0,
+  "nativeRasterGate": "not exercised"
+}

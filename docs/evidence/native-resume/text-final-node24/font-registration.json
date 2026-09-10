@@ -1,0 +1,26 @@
+[
+  {
+    "sha256": "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89",
+    "removed": true,
+    "file": "fonts/Carlito-400-normal.ttf",
+    "added": 1
+  },
+  {
+    "sha256": "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5",
+    "removed": true,
+    "file": "fonts/Carlito-400-italic.ttf",
+    "added": 1
+  },
+  {
+    "sha256": "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0",
+    "removed": true,
+    "file": "fonts/Carlito-700-normal.ttf",
+    "added": 1
+  },
+  {
+    "sha256": "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691",
+    "removed": true,
+    "file": "fonts/Carlito-700-italic.ttf",
+    "added": 1
+  }
+]

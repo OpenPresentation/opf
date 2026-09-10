@@ -1,0 +1,31 @@
+{
+  "scope": "Windows Node 24 coordinated source and clean candidate tarball/browser checks. No native Office or new published registry verification is claimed by these local logs.",
+  "source": {
+    "opf": "1cc9be9788e7ae0e940af94feb028347e27433b0",
+    "renderer": "4b9706367039c13399d0a8b33c9e2bd305904c4b",
+    "pptx": "df43cfcf58cf9bcee6435620e36d9e9bfd5a253c",
+    "editor": "26a04baed9ca1715c5ad50e2f3239d6cba67786e"
+  },
+  "files": [
+    {
+      "file": "browser-node24.json",
+      "bytes": 17111,
+      "sha256": "6e069e26cb7be1f5ffe1693b2c75ea7ce2454fade02e2164601aa8d848389f42"
+    },
+    {
+      "file": "browser-node24.log",
+      "bytes": 643,
+      "sha256": "9b718894ec3123c253c3c19c4e2fab26be685957c1452584b30dd294b1035359"
+    },
+    {
+      "file": "installed-code-node24.json",
+      "bytes": 129689,
+      "sha256": "8e7a53ec663551f32888822a9ec8ec6fa348be0b5b37bf1e6e87d9f5414deafd"
+    },
+    {
+      "file": "packages-node24.log",
+      "bytes": 59243,
+      "sha256": "530df145cd7c528467453432806353fcf97882097f34b88fdeb4df12966e629f"
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 import {tableGrid,type TableCellStyle} from './table.js';
 export {tableGrid,tableRowBoundaries,type TableCellStyle,type TableBorder,type TableGrid,type TableGridCell,type TableGridIssue} from './table.js';
+export {colorContrast, textColorForFill, chartColorForFill} from './color.js';
 /** Portable layout geometry. No fonts, DOM, renderer, or network dependencies. */
 export interface Composition {
   mode?: "auto" | "grid" | "row" | "column";
@@ -31,6 +32,9 @@ export function resolveFontFamilies(input: unknown): FontFamilies {
 export interface TextMeasurement {
   measure: (text: string, fontSize: number, style: TextStyle) => number;
   resolveStyle?: (style: TextStyle) => TextStyle;
+  /** Shaped vector ink relative to the left baseline origin (positive y down).
+   * Null means no outline. These are not hinted/antialiased raster bounds. */
+  outlineBounds?: (text: string, fontSize: number, style: TextStyle) => LayoutBox | null;
 }
 export type MeasureTextWidth = (text: string, fontSize: number) => number;
 export function resolveTextStyle(style: TextStyle, measurement?: TextMeasurement): TextStyle {
@@ -44,7 +48,53 @@ export function textWidthMeasurer(style: TextStyle, measurement?: TextMeasuremen
     return width;
   };
 }
-export interface TextFit { lines: string[]; fontSize: number; lineHeight: number; overflow: boolean }
+/** Validate an optional host outline measurement without inventing raster coverage. */
+export function measureTextOutline(text: string, fontSize: number, style: TextStyle, measurement?: TextMeasurement): LayoutBox | null | undefined {
+  if (measurement?.outlineBounds === undefined) return undefined;
+  if (typeof measurement.outlineBounds !== 'function') throw new TypeError('Text outline provider must be a function.');
+  const bounds = measurement.outlineBounds(text, fontSize, style);
+  if (bounds === null) return null;
+  if (!bounds || ![bounds.x,bounds.y,bounds.width,bounds.height].every(Number.isFinite) || bounds.width < 0 || bounds.height < 0) {
+    throw new RangeError('Text outline measurement must return null or finite bounds with nonnegative dimensions.');
+  }
+  return {x:bounds.x,y:bounds.y,width:bounds.width,height:bounds.height};
+}
+export interface TextLineInk { width: number; y: number; baseline: number; height: number; outline: LayoutBox | null }
+export interface TextPlacementLine { x: number; y: number; baseline: number; height: number; width: number; outline: LayoutBox | null }
+export interface TextPlacement {
+  alignment: 'left' | 'center' | 'right';
+  /** Reference-pixel clearance around vector outlines; not a universal raster guarantee. */
+  rasterPadding: number;
+  lines: TextPlacementLine[];
+  height: number;
+  overflow: boolean;
+}
+export interface TextFit { lines: string[]; fontSize: number; lineHeight: number; overflow: boolean; placement?: TextPlacement }
+/** Place complete measured lines, preserving alignment where it leaves room for ink.
+ * Move following baselines together when outlines need more vertical separation. */
+export function placeTextLines(lines: readonly TextLineInk[], box: LayoutBox, alignment: TextPlacement['alignment']='left', rasterPadding=0): TextPlacement {
+  if (!Array.isArray(lines)||!box||![box.x,box.y,box.width,box.height,rasterPadding].every(Number.isFinite)||box.width<=0||box.height<=0||rasterPadding<0||!['left','center','right'].includes(alignment)) throw new RangeError('Text placement requires lines, finite positive dimensions, nonnegative padding and a valid alignment.');
+  const factor=alignment==='right'?1:alignment==='center'?.5:0,placed:TextPlacementLine[]=[];
+  let shift=0,bottom=box.y,height=0,overflow=false;
+  for(const line of lines) {
+    if(!line||![line.width,line.y,line.baseline,line.height].every(Number.isFinite)||line.width<0||line.height<=0||line.y<0||line.baseline<line.y) throw new RangeError('Text lines require finite coordinates, nonnegative advances and a baseline at or below their top.');
+    const ink=line.outline;
+    if(ink!==null&&(!ink||![ink.x,ink.y,ink.width,ink.height].every(Number.isFinite)||ink.width<0||ink.height<0)) throw new RangeError('Text outlines must be null or finite coordinates with nonnegative dimensions.');
+    let x=box.x+(box.width-line.width)*factor;
+    if(ink) {
+      const low=box.x+rasterPadding-ink.x,high=box.x+box.width-rasterPadding-ink.x-ink.width;
+      if(low>high+.01)overflow=true;else x=Math.max(low,Math.min(x,high));
+      shift+=Math.max(0,bottom+rasterPadding-(box.y+line.baseline+shift+ink.y));
+    }
+    const y=box.y+line.y+shift,baseline=box.y+line.baseline+shift;
+    const outline=ink?{...ink,x:x+ink.x,y:baseline+ink.y}:null;
+    if(outline)bottom=outline.y+outline.height+rasterPadding;
+    height=Math.max(height,y+line.height-box.y,outline?bottom-box.y:0);
+    if(line.width>box.width+.01||height>box.height+.01)overflow=true;
+    placed.push({x,y,baseline,height:line.height,width:line.width,outline});
+  }
+  return {alignment,rasterPadding,lines:placed,height,overflow};
+}
 export interface ComposedItem {
   path: string;
   field: string;
@@ -52,12 +102,16 @@ export interface ComposedItem {
   value: unknown;
   payload: Record<string, unknown>;
   box: LayoutBox;
+  /** Optional visible card allocation; box and all accepted internals occupy its padded interior. */
+  frameBox?: LayoutBox;
   text?: TextFit | RichTextFit | ListFit | CodeTextFit;
   textStyle?: TextStyle;
   /** Complete accepted quote internals; consumers must reuse these fits and styles. */
   quoteLayout?: QuoteLayout;
   /** Complete accepted code internals, including source lines and literal tab positions. */
   codeLayout?: CodeLayout;
+  /** Complete shared metric geometry, including its unit, label and metadata. */
+  metricLayout?: MetricLayout;
   /** Effective container settings, including inherited readability constraints. */
   composition: Composition;
 }
@@ -74,7 +128,7 @@ export interface ComposedFlow {
   itemCount: number;
   slotCount: number;
 }
-/** Additive penalties in grid-score-v3; lower is preferred. These are not quality percentages. */
+/** Additive penalties in grid-score-v6; lower is preferred. These are not quality percentages. */
 export interface CompositionPenalties {
   cellProportions: number;
   fontReduction: number;
@@ -98,9 +152,13 @@ export interface CompositionDecision {
   candidates: CompositionCandidate[];
 }
 export interface CompositionExplanation {
-  algorithm: 'grid-score-v3';
+  algorithm: 'grid-score-v6';
   /** Provided widths do not establish shaping, glyph coverage or native fidelity. */
   textMeasurement: 'estimated' | 'provided';
+  /** Optional vector coverage for headings and scalar/rich text, not every payload. */
+  textOutlines: 'provided' | 'unavailable';
+  /** Effective canvas reference pixels; not a universal raster tolerance. */
+  textRasterPadding: number;
   decisions: CompositionDecision[];
   /** Payloads whose complete internal fit is not covered by this scoring model. */
   unmeasuredPayloads: string[];
@@ -118,6 +176,13 @@ export interface SlideComposition {
 }
 export interface ComposeSlideOptions {
   fonts?: Partial<FontFamilies>;
+  /** Host-resolved alignment for shared content; slide design can override it. */
+  contentAlignment?: 'left' | 'center' | 'right';
+  titleAlignment?: 'left' | 'center' | 'right';
+  /** Unscaled reference pixels around provided vector outlines; defaults to 1. */
+  textRasterPadding?: number;
+  /** Host-resolved body cards. A slide's explicit design.contentBox overrides this value. */
+  contentBox?: boolean;
   textMeasurement?: TextMeasurement;
   width?: number;
   height?: number;
@@ -353,6 +418,8 @@ export interface MetricTextPart {
   sources: MetricTextSource[];
   /** Empty optional fields retain their source mapping but occupy no visible space. */
   visible: boolean;
+  /** Accepted absolute origin/baseline for each fit.sourceLines entry, including blank lines. */
+  linePositions: {x:number;baseline:number}[];
   box: LayoutBox;
   requestedFontSize: number;
   minFontSize: number;
@@ -367,6 +434,7 @@ export interface MetricLayoutDiagnostic extends LayoutDiagnostic {
 }
 export interface MetricLayout {
   algorithm: 'metric-flow-v1';
+  alignment: 'left' | 'center' | 'right';
   textMeasurement: 'estimated' | 'provided';
   arrangement: 'inline-unit' | 'stacked';
   /** At most 48 arrangements; value fitting is bounded by 77 reference-size trials per arrangement. */
@@ -375,7 +443,7 @@ export interface MetricLayout {
   diagnostics: MetricLayoutDiagnostic[];
   overflow: boolean;
 }
-export interface MetricLayoutOptions extends QuoteLayoutOptions {}
+export interface MetricLayoutOptions extends QuoteLayoutOptions { align?: 'left' | 'center' | 'right' }
 
 /**
  * Measure every metric field before accepting geometry. Short single-line values and units can
@@ -398,6 +466,8 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     throw new RangeError('Metric dimensions, scale and minimum font size must be finite and positive.');
   }
   if (options.overflow!==undefined&&!['warn','error'].includes(options.overflow)) throw new RangeError('Invalid metric overflow policy.');
+  const alignment=options.align??'left';
+  if (!['left','center','right'].includes(alignment)) throw new RangeError('Invalid metric alignment.');
   const sourcePath=options.path??'metric',parts:MetricTextPart[]=[],diagnostics:MetricLayoutDiagnostic[]=[];
   for (const role of ['value','unit','label','description','delta','trend'] as const) {
     const sourceValue=metric[role];
@@ -405,7 +475,7 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     const text=String(sourceValue),path=scalar?sourcePath:`${sourcePath}.${role}`;
     const nominal=role==='value'?Math.min(76*scale,box.height*.28):(role==='description'?20:role==='trend'?18:23)*scale;
     const requestedStyle:TextStyle={fontFamily:(role==='value'?options.fonts?.heading:options.fonts?.body)??'sans-serif',fontWeight:role==='value'?800:role==='description'?400:500,italic:false,path};
-    const part:MetricTextPart={role,path,text,sources:[{path,value:sourceValue,start:0,end:text.length}],visible:role==='value'||text.length>0,
+    const part:MetricTextPart={role,path,text,sources:[{path,value:sourceValue,start:0,end:text.length}],visible:role==='value'||text.length>0,linePositions:[],
       box:{...box,height:0},requestedFontSize:Math.max(nominal,minimum),minFontSize:minimum,requestedStyle,style:resolveTextStyle({...requestedStyle},options.textMeasurement)};
     if (!part.visible) part.fit={lines:[],sourceLines:[],fontSize:part.requestedFontSize,lineHeight:part.requestedFontSize*1.22,tabSize:4,tabWidth:0,overflow:false};
     parts.push(part);
@@ -458,7 +528,8 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
         const valueBaseline=valueHeight-valueFit.lineHeight+valueFit.fontSize;
         const unitBaseline=occupied(unitFit)-unitFit.lineHeight+unitFit.fontSize;
         const valueY=box.y+Math.max(0,unitBaseline-valueBaseline),unitY=box.y+Math.max(0,valueBaseline-unitBaseline);
-        const valueWidth=Math.min(area.width,Math.max(valueFit.fontSize,...valueFit.sourceLines.map(line=>line.width)));
+        const measuredWidth=Math.max(...valueFit.sourceLines.map(line=>line.width));
+        const valueWidth=Math.min(area.width,measuredWidth||valueFit.fontSize);
         allocations.push({part:primary,box:{...area,y:valueY,width:valueWidth,height:valueHeight},fit:valueFit});
         allocations.push({part:unit,box:{x:box.x+valueWidth+gap,y:unitY,width:unitWidth,height:occupied(unitFit)},fit:{...unitFit,overflow:false}});
         primaryHeight=Math.max(valueY-box.y+valueHeight,unitY-box.y+occupied(unitFit));
@@ -479,6 +550,14 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     if (selected&&!selected.overflow&&selected.score===0) break;
   }
   for (const allocation of selected!.allocations) {allocation.part.box=allocation.box;allocation.part.fit=allocation.fit;}
+  const alignmentFactor=alignment==='center'?.5:alignment==='right'?1:0;
+  if (selected!.arrangement==='inline-unit'&&unit) {
+    const offset=(box.width-(unit.box.x+unit.box.width-box.x))*alignmentFactor;
+    primary.box.x+=offset;unit.box.x+=offset;
+  }
+  for (const part of parts) if (part.fit) part.linePositions=part.fit.sourceLines.map((line,index)=>({
+    x:part.box.x+(part.box.width-line.width)*alignmentFactor,baseline:part.box.y+part.fit!.fontSize+index*part.fit!.lineHeight,
+  }));
   const report=(reason:MetricLayoutDiagnostic['reason'],part:MetricTextPart,roles:MetricTextPart['role'][],message:string)=>
     diagnostics.push({code:'text-overflow',reason,path:part.path,parts:roles,message});
   for (const part of parts.filter(part=>part.visible)) {
@@ -496,7 +575,7 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     }
   }
   if (diagnostics.length&&options.overflow==='error') throw new OPFCompositionError(diagnostics);
-  return {algorithm:'metric-flow-v1',textMeasurement:options.textMeasurement?'provided':'estimated',arrangement:selected!.arrangement,attempts,parts,diagnostics,overflow:diagnostics.length>0};
+  return {algorithm:'metric-flow-v1',alignment,textMeasurement:options.textMeasurement?'provided':'estimated',arrangement:selected!.arrangement,attempts,parts,diagnostics,overflow:diagnostics.length>0};
 }
 
 export interface CodeContent { source: string; language?: string; filename?: string }
@@ -969,18 +1048,48 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const width = options.width ?? 1280, height = options.height ?? 720;
   if (![width, height].every(value => Number.isFinite(value) && value > 0)) throw new RangeError("Canvas dimensions must be finite and positive.");
   const scale = Math.min(width, height) / 720;
+  const hasCards = record(slide.design).contentBox ?? options.contentBox ?? false;
   const composition: Composition = { ...record(layout.composition), ...record(slide.composition) };
   assertComposition(composition);
   const padding = (composition.padding ?? 0.08) * Math.min(width, height);
   const gap = (composition.gap ?? 1 / 30) * Math.min(width, height);
   const minSize = (composition.minFontSize ?? 16) * scale;
+  const rasterPadding=(options.textRasterPadding??1)*scale;
+  if(!Number.isFinite(rasterPadding)||rasterPadding<0)throw new RangeError('Text raster padding must be finite and nonnegative.');
   const styleFor = (field: string, path: string): TextStyle => resolveTextStyle({
     fontFamily: (field === "title" ? options.fonts?.heading : field === "code" ? options.fonts?.code : options.fonts?.body) ?? (field === "code" ? "monospace" : "sans-serif"),
     fontWeight: field === "title" ? 700 : 400, path,
   }, options.textMeasurement);
   const widthFor = (field: string, path: string) => textWidthMeasurer(styleFor(field,path),options.textMeasurement);
-  const fitContent = (field:string,value:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string) => field === 'text' && Array.isArray(value)
-    ? fitRichText(value,box,size,minimum,{style:styleFor(field,path),textMeasurement:options.textMeasurement})
+  const fitPlacedText = (field:string,value:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string):TextFit|RichTextFit => {
+    const style=styleFor(field,path),rich=field==='text'&&Array.isArray(value);
+    if(!options.textMeasurement?.outlineBounds)return rich?fitRichText(value,box,size,minimum,{style,textMeasurement:options.textMeasurement}):fitText(text,box,size,minimum,textWidthMeasurer(style,options.textMeasurement));
+    const alignment=(field==='title'?record(slide.design).titleAlignment??options.titleAlignment:record(slide.design).contentAlignment??options.contentAlignment)??'left';
+    const richLayout=rich?richTextLayouter(value,box,size,{style,textMeasurement:options.textMeasurement}):undefined;
+    const measure=textWidthMeasurer(style,options.textMeasurement),floor=Math.min(size,minimum);
+    // The nominal heading/body range fits within 64 reference-pixel steps; the
+    // last trial always evaluates the explicit floor even with unusual callers.
+    for(let trial=0;trial<=64;trial++) {
+      const fontSize=trial===64?floor:Math.max(floor,size-trial*scale);
+      const fit=richLayout?richLayout(fontSize):fitText(text,box,fontSize,fontSize,measure);
+      const richLines='richLines' in fit?(fit as RichTextFit).richLines:undefined;
+      const lines:TextLineInk[]=richLines?richLines.map(line=>{
+        let outline:LayoutBox|null=null;
+        for(const fragment of line.fragments) {
+          const bounds=measureTextOutline(fragment.text,fragment.fontSize,fragment.style,options.textMeasurement);
+          if(!bounds)continue;
+          const next={...bounds,x:fragment.x+bounds.x,y:fragment.baselineShift+bounds.y};
+          if(!outline)outline=next;else{const right=Math.max(outline.x+outline.width,next.x+next.width),bottom=Math.max(outline.y+outline.height,next.y+next.height);outline.x=Math.min(outline.x,next.x);outline.y=Math.min(outline.y,next.y);outline.width=right-outline.x;outline.height=bottom-outline.y;}
+        }
+        return {width:line.width,y:line.y,baseline:line.baseline,height:line.height,outline};
+      }):fit.lines.map((line,index)=>({width:measure(line,fontSize),y:index*fit.lineHeight,baseline:fontSize+index*fit.lineHeight,height:fit.lineHeight,outline:measureTextOutline(line,fontSize,style,options.textMeasurement)??null}));
+      const placement=placeTextLines(lines,box,alignment,rasterPadding),result={...fit,placement,overflow:fit.overflow||placement.overflow};
+      if(!result.overflow||fontSize===floor)return result;
+    }
+    throw new Error('Text placement did not evaluate its bounded floor trial.');
+  };
+  const fitContent = (field:string,value:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string) => field === 'text'
+    ? fitPlacedText(field,value,text,box,size,minimum,path)
     : (field==='items'||field==='bullets') ? fitList(value as ListValue[],box,size,minimum,{style:styleFor(field,path),textMeasurement:options.textMeasurement})
     : fitText(text,box,size,minimum,widthFor(field,path));
   const path = `slides.${options.slideIndex ?? 0}`;
@@ -991,8 +1100,8 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const requested = (field === "title" ? 54 : field === "tag" ? 16 : 25) * scale;
     const maxHeight = height * (field === "title" ? 0.26 : field === "subtitle" ? 0.12 : 0.045);
     const box = { x: padding, y, width: width - padding * 2, height: maxHeight };
-    const text = fitText(String(slide[field]), box, requested, minSize, widthFor(field,`${path}.${field}`));
-    box.height = Math.min(maxHeight, text.lines.length * text.lineHeight);
+    const text = fitPlacedText(field,slide[field],String(slide[field]),box,requested,minSize,`${path}.${field}`);
+    box.height = Math.min(maxHeight, Math.max(text.lines.length * text.lineHeight,text.placement?.height??0));
     items.push({ path: `${path}.${field}`, field, type: "text", value: slide[field], payload: { text: slide[field] }, box, text, textStyle: styleFor(field,`${path}.${field}`), composition });
     y += box.height + gap * 0.5;
   }
@@ -1026,18 +1135,30 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     return { x: box.x + amount, y: box.y + amount, width: box.width - amount * 2, height: box.height - amount * 2 };
   };
   const acceptedBox = (box: LayoutBox): LayoutBox => ({x:round(box.x),y:round(box.y),width:round(box.width),height:round(box.height)});
+  // Keep the allocation/explicit region intact. All scoring and final measurement
+  // use the same rounded interior, including strict overflow and pagination.
+  const payloadBox = (box: LayoutBox): LayoutBox => {
+    if (!hasCards) return box;
+    const frame = acceptedBox(box), padding = Math.min(12 * scale, frame.width / 4, frame.height / 4);
+    return acceptedBox({x:frame.x+padding,y:frame.y+padding,width:frame.width-2*padding,height:frame.height-2*padding});
+  };
   const measureQuote = (node: Pending, box: LayoutBox, settings: Composition) => layoutQuote(node.value as string | QuoteContent, acceptedBox(box), {
     fonts:options.fonts,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,
   });
   const measureCode = (node: Pending, box: LayoutBox, settings: Composition) => layoutCode(node.value as string | CodeContent, acceptedBox(box), {
     fonts:options.fonts,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,
   });
+  const measureMetric = (node: Pending, box: LayoutBox, settings: Composition) => layoutMetric(node.value as string | number | MetricContent, acceptedBox(box), {
+    fonts:options.fonts,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,
+    align:record(slide.design).contentAlignment??options.contentAlignment,
+  });
   const leafScore = (node: Pending, box: LayoutBox, settings: Composition, penalties?: CompositionPenalties): number => {
+    box = payloadBox(box);
     const text = contentText(node.field, node.value);
     let score = Math.abs(Math.log(box.width / box.height / 1.6));
     if (penalties) penalties.cellProportions += score;
-    if (node.field === 'quote' || node.field === 'code') {
-      const internal = node.field === 'quote' ? measureQuote(node,box,settings) : measureCode(node,box,settings);
+    if (node.field === 'quote' || node.field === 'code' || node.field === 'metric') {
+      const internal = node.field === 'quote' ? measureQuote(node,box,settings) : node.field === 'code' ? measureCode(node,box,settings) : measureMetric(node,box,settings);
       const reduction = internal.parts.reduce((sum,part)=>sum+(part.fit ? (part.requestedFontSize-part.fit.fontSize)/scale : 0),0);
       score += reduction + (internal.overflow ? 1000 : 0);
       if (penalties) { penalties.fontReduction += reduction; penalties.textOverflow += internal.overflow ? 1000 : 0; }
@@ -1099,19 +1220,23 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const boxes = grid.boxes;
     if (!nodes.some(node => node.region)) flows.push({path: containerPath, box: {...area}, composition: {...settings}, columns: grid.columns, rows: grid.rows, gap: grid.gap, itemCount: nodes.length, slotCount: count});
     nodes.forEach((node, index) => {
-      const box = node.region ? regionBox(node.region, area, actualGap) : boxes[index]!;
+      let box = node.region ? regionBox(node.region, area, actualGap) : boxes[index]!;
       if (node.children) {
         const own = inheritedSettings(settings, node.composition), inner = inset(box, own);
         groups.push({ path: node.path, box, contentBox: inner, composition: own });
         arrange(node.children, inner, own, 0, (own.gap ?? 1 / 30) * Math.min(box.width, box.height), node.path);
       } else {
+        const frameBox = hasCards ? acceptedBox(box) : undefined;
+        box = payloadBox(box);
         const textValue = contentText(node.field, node.value);
         const quoteLayout = node.field === 'quote' ? measureQuote(node,box,settings) : undefined;
         const codeLayout = node.field === 'code' ? measureCode(node,box,settings) : undefined;
-        const internal = quoteLayout ?? codeLayout, body = internal?.parts.find(part=>part.role==='body');
+        const metricLayout = node.field === 'metric' ? measureMetric(node,box,settings) : undefined;
+        const internal = quoteLayout ?? codeLayout ?? metricLayout, body = internal?.parts.find(part=>part.role==='body'||part.role==='value');
         const text = internal ? body?.fit : textValue !== undefined ? fitContent(node.field,node.value,textValue,box,25*scale,(settings.minFontSize??16)*scale,node.path) : undefined;
         items.push({ path: node.path, field: node.field, type: node.type, value: node.value, payload: node.payload, box:internal?acceptedBox(box):box,
-          text, textStyle: body?.style ?? styleFor(node.field,node.path), composition: settings, ...(quoteLayout?{quoteLayout}:{}), ...(codeLayout?{codeLayout}:{}) });
+          ...(frameBox ? {frameBox} : {}),
+          text, textStyle: body?.style ?? styleFor(node.field,node.path), composition: settings, ...(quoteLayout?{quoteLayout}:{}), ...(codeLayout?{codeLayout}:{}), ...(metricLayout?{metricLayout}:{}) });
         if (box.width < 100 * scale || box.height < 60 * scale) diagnostics.push({ code: "small-cell", path: node.path, message: "Content cell is too small for comfortable reading; use fewer blocks or a different composition." });
       }
     });
@@ -1125,6 +1250,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     if (item.field === "table" && tableOverflows(item.value,item.box,scale,item.composition,options,item.path)) diagnostics.push({ code: "text-overflow", path: item.path, message: "Table cells do not fit; use fewer rows, fewer columns, or split the table across slides." });
     if (item.quoteLayout) diagnostics.push(...item.quoteLayout.diagnostics);
     else if (item.codeLayout) diagnostics.push(...item.codeLayout.diagnostics);
+    else if (item.metricLayout) diagnostics.push(...item.metricLayout.diagnostics);
     else if (item.text?.overflow) diagnostics.push({ code: "text-overflow", path: item.path, message: "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide." });
   }
   for (const group of groups) for (const box of [group.box, group.contentBox]) for (const key of ["x", "y", "width", "height"] as const) box[key] = round(box[key]);
@@ -1140,8 +1266,8 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     return false;
   });
   const explanation: CompositionExplanation | undefined = decisions ? {
-    algorithm:'grid-score-v3',textMeasurement:options.textMeasurement?'provided':'estimated',decisions,
-    unmeasuredPayloads:items.filter(item=>!headings.has(item.field)&&!item.quoteLayout&&!item.codeLayout&&!['text','items','bullets','table'].includes(item.field)).map(item=>item.path),
+    algorithm:'grid-score-v6',textMeasurement:options.textMeasurement?'provided':'estimated',textOutlines:options.textMeasurement?.outlineBounds?'provided':'unavailable',textRasterPadding:rasterPadding,decisions,
+    unmeasuredPayloads:items.filter(item=>!headings.has(item.field)&&!item.quoteLayout&&!item.codeLayout&&!item.metricLayout&&!['text','items','bullets','table'].includes(item.field)).map(item=>item.path),
   } : undefined;
   if (failures.length) throw new OPFCompositionError(failures, explanation);
   return { width, height, contentBox, items, groups, flows, diagnostics, composition, ...(explanation?{explanation}:{}) };

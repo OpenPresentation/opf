@@ -1,0 +1,5 @@
+
+> @openpresentation/opf-pptx@0.7.0 validate
+> node scripts/validate-package.mjs
+
+@openpresentation/opf-pptx metadata is release-lane ready.

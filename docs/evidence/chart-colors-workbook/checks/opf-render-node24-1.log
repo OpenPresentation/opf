@@ -1,0 +1,5 @@
+
+> @openpresentation/opf-render@0.7.0 validate
+> node scripts/validate-package.mjs
+
+@openpresentation/opf-render metadata is release-lane ready.

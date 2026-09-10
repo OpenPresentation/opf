@@ -1,0 +1,965 @@
+{
+  "sources": {
+    "opf": {
+      "branch": "codex/shared-metric-integration-20260910",
+      "commit": "dcb0c4c9058027e5088200ae29ba41aebf70f80a"
+    },
+    "opf-render": {
+      "branch": "codex/shared-metric-integration-20260910",
+      "commit": "53e6f5fb5911ebecbfcdfef341bbb53e33c1f7a5"
+    },
+    "opf-pptx": {
+      "branch": "codex/shared-metric-integration-20260910",
+      "commit": "bf1c7bd8db21bfc400e92a7bf4275f4e3048c7e4"
+    },
+    "opf-editor": {
+      "branch": "codex/shared-metric-integration-20260910",
+      "commit": "0e8a1676c780919ceefe8b9972372f364e542944"
+    }
+  },
+  "chartExecutionSource": "0e3b58fb7a91a6f29f52ce2338f2cc91b4f803dc",
+  "scope": "Unpublished native test/harness milestone only. No product runtime, package version, approved baseline or public deployment changes.",
+  "chart": {
+    "dataImports": 16,
+    "nativeSaveReopenRasterPairs": 8,
+    "fullEditGate": "incomplete: second ChartData.Activate stalled",
+    "nativeTextGate": "not run"
+  },
+  "text": {
+    "fixturesPerNode": 24,
+    "nodeVersions": [
+      "v20.20.2",
+      "v24.20.0"
+    ],
+    "identicalBytesAndGeometry": true,
+    "fontRegistrations": 4,
+    "allOwnedRegistrationsRemoved": true,
+    "nativeApplicationRun": false
+  },
+  "workerControls": [
+    {
+      "passed": true,
+      "result": {
+        "processId": 9368,
+        "exitCode": 0,
+        "finishedAt": "2026-09-10T16:35:05.9946683Z",
+        "scope": "Owned verifier process only. A timeout does not prove cleanup completed; Office processes are never terminated.",
+        "timeoutSeconds": 10,
+        "startedAt": "2026-09-10T16:35:05.755898Z",
+        "timedOut": false
+      },
+      "case": "success"
+    },
+    {
+      "passed": true,
+      "result": {
+        "processId": 26408,
+        "exitCode": 17,
+        "finishedAt": "2026-09-10T16:35:06.975858Z",
+        "scope": "Owned verifier process only. A timeout does not prove cleanup completed; Office processes are never terminated.",
+        "timeoutSeconds": 10,
+        "startedAt": "2026-09-10T16:35:06.1630899Z",
+        "timedOut": false
+      },
+      "case": "failure"
+    },
+    {
+      "passed": true,
+      "result": {
+        "processId": 19064,
+        "exitCode": -1,
+        "finishedAt": "2026-09-10T16:35:08.1698133Z",
+        "scope": "Owned verifier process only. A timeout does not prove cleanup completed; Office processes are never terminated.",
+        "timeoutSeconds": 1,
+        "startedAt": "2026-09-10T16:35:07.1455941Z",
+        "timedOut": true
+      },
+      "case": "timeout"
+    }
+  ],
+  "remaining": "The original chart helper and its blocked status/cleanup helper were explicitly terminated. Office processes were not stopped; generated-file cleanup completion is unknown. The user supplied the Excel-dialog/editing-mode warning. Do not retry Office until that interaction is resolved. Existing metric tab/ink, general layout/font, review/release/registry/public and native-platform gates remain open.",
+  "artifactCount": 176,
+  "bytes": 8937100.0,
+  "artifacts": [
+    {
+      "path": "chart-bounded-node20/charts.pptx",
+      "bytes": 90423,
+      "sha256": "1907e3682a493f4582881fec2b7263f24bb5e9065af78ff9ea7bd77bb1601e3e"
+    },
+    {
+      "path": "chart-bounded-node20/generation.json",
+      "bytes": 8892,
+      "sha256": "3f5cc01de7722df1ab9438a1ffde6ea9e1256c8e745fc20f3ca8e5a54cc500e4"
+    },
+    {
+      "path": "chart-bounded-node24/charts.pptx",
+      "bytes": 90423,
+      "sha256": "1907e3682a493f4582881fec2b7263f24bb5e9065af78ff9ea7bd77bb1601e3e"
+    },
+    {
+      "path": "chart-bounded-node24/generation.json",
+      "bytes": 8892,
+      "sha256": "ffbf3a3248a049db87b5c99ca0d5e92d4c6c4494a930fb68514bf31f4359a8cb"
+    },
+    {
+      "path": "chart-indexed-node24/charts-saved.pptx",
+      "bytes": 102073,
+      "sha256": "e8c714124bbb82fdb2308be4f71fa603119cdbdf179449595d5eba77fe364c14"
+    },
+    {
+      "path": "chart-indexed-node24/charts.pptx",
+      "bytes": 90423,
+      "sha256": "1907e3682a493f4582881fec2b7263f24bb5e9065af78ff9ea7bd77bb1601e3e"
+    },
+    {
+      "path": "chart-indexed-node24/cleanup-worker-stopped.json",
+      "bytes": 368,
+      "sha256": "a80714298892102fc9201068aefc657d2f9e2471696104fbb2559a040178e837"
+    },
+    {
+      "path": "chart-indexed-node24/generation.json",
+      "bytes": 8793,
+      "sha256": "3be332a9ad359f2965530fe6bd063b9f11dd597e9560e129179bae8d640a86ff"
+    },
+    {
+      "path": "chart-indexed-node24/original-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "path": "chart-indexed-node24/original-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "path": "chart-indexed-node24/original-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "path": "chart-indexed-node24/original-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "path": "chart-indexed-node24/original-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "path": "chart-indexed-node24/original-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "path": "chart-indexed-node24/original-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "path": "chart-indexed-node24/original-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "path": "chart-indexed-node24/partial-comparison.json",
+      "bytes": 9468,
+      "sha256": "2608da520226ac553192562b43cd19d93a3195d97ae6c229e043d29e7d7c2ec6"
+    },
+    {
+      "path": "chart-indexed-node24/reopened-1.png",
+      "bytes": 11877,
+      "sha256": "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926"
+    },
+    {
+      "path": "chart-indexed-node24/reopened-2.png",
+      "bytes": 11779,
+      "sha256": "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd"
+    },
+    {
+      "path": "chart-indexed-node24/reopened-3.png",
+      "bytes": 11879,
+      "sha256": "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8"
+    },
+    {
+      "path": "chart-indexed-node24/reopened-4.png",
+      "bytes": 11779,
+      "sha256": "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da"
+    },
+    {
+      "path": "chart-indexed-node24/reopened-5.png",
+      "bytes": 11872,
+      "sha256": "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373"
+    },
+    {
+      "path": "chart-indexed-node24/reopened-6.png",
+      "bytes": 11778,
+      "sha256": "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317"
+    },
+    {
+      "path": "chart-indexed-node24/reopened-7.png",
+      "bytes": 11868,
+      "sha256": "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7"
+    },
+    {
+      "path": "chart-indexed-node24/reopened-8.png",
+      "bytes": 11784,
+      "sha256": "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a"
+    },
+    {
+      "path": "chart-indexed-node24/verifiers/check-native-resume-partial.mjs",
+      "bytes": 2573,
+      "sha256": "b7f84e0a84fadbf9dd56fd48a9dcaaf7e2ce1fec08129c0db8555784e3d3f276"
+    },
+    {
+      "path": "chart-indexed-node24/verifiers/native-chart-colors.mjs",
+      "bytes": 5297,
+      "sha256": "5597c9bf9f743cc967c6229ba1f44c017ce70709865a1fc8ecd6377f1b2871d7"
+    },
+    {
+      "path": "chart-indexed-node24/verifiers/native-chart-colors.ps1",
+      "bytes": 6197,
+      "sha256": "92debd40466f552b8a316e1175ecfe01bdb1bafe0c6dcfe459058f0fc98d6cb0"
+    },
+    {
+      "path": "chart-indexed-node24/worker-stopped.json",
+      "bytes": 399,
+      "sha256": "2c0c5a6f7ecf4213d660776a0ab19dfff2b9da6548ad155dec5c1bc20a90a87c"
+    },
+    {
+      "path": "chart-node24/charts.pptx",
+      "bytes": 90423,
+      "sha256": "1907e3682a493f4582881fec2b7263f24bb5e9065af78ff9ea7bd77bb1601e3e"
+    },
+    {
+      "path": "chart-node24/failure.json",
+      "bytes": 252,
+      "sha256": "7e09ed4df5f37e6daf936648269f9cd157a1f06c0af0bdc097e55e5265fa4086"
+    },
+    {
+      "path": "chart-node24/generation.json",
+      "bytes": 8793,
+      "sha256": "5512fcae4e00faf855e8556979a68a9b6ebe8c25bbc3835a723ac4e25a2716cb"
+    },
+    {
+      "path": "coordinated-ci.json",
+      "bytes": 200,
+      "sha256": "c12c6f330bff9c0eb2a76749277ec8cd5846d5c008a75fadc7c6e2d4c9dc5574"
+    },
+    {
+      "path": "environment.json",
+      "bytes": 518,
+      "sha256": "e7b8d8b7cb0c8ab00f2ac9eaa872076dc77849bcd8e64b9c72397a1578ce7ac0"
+    },
+    {
+      "path": "github-audit.json",
+      "bytes": 929,
+      "sha256": "587e5003523b43c06b16556f4d7cabfaef303204a243c9346afd411ca38f936c"
+    },
+    {
+      "path": "metric-node24/generation.json",
+      "bytes": 392864,
+      "sha256": "122cd37f7ce593102815bb5e52d440bbede9bddfaf8dd0fee4bf46dfb198c9a6"
+    },
+    {
+      "path": "metric-node24/metric-1280-center-svg-1.png",
+      "bytes": 6536,
+      "sha256": "c26f2668c3573d55949050177162fce1878e53a4755ddf33b2744624c3afe225"
+    },
+    {
+      "path": "metric-node24/metric-1280-center-svg-2.png",
+      "bytes": 5215,
+      "sha256": "33b7012097462a4f634da7976610314c09d7b85840693cf0ae24f1d088dc717f"
+    },
+    {
+      "path": "metric-node24/metric-1280-center-svg-3.png",
+      "bytes": 12776,
+      "sha256": "5a745b6bff65aa30e82345dc8b0401f231edf657ab72c11b8ebc5b3db614f265"
+    },
+    {
+      "path": "metric-node24/metric-1280-center-svg-4.png",
+      "bytes": 16971,
+      "sha256": "e0e7f61c2e7382ef51a55bbb5a4795dc63ddfa4120eaa5715f6a30ba69c1f8f3"
+    },
+    {
+      "path": "metric-node24/metric-1280-center-svg-5.png",
+      "bytes": 5884,
+      "sha256": "fea864ca373d8697dc6c037e97de50e84b498370951333dd4ced678aa79704ac"
+    },
+    {
+      "path": "metric-node24/metric-1280-center-svg-6.png",
+      "bytes": 8501,
+      "sha256": "0afc3067faabb9468054dc2acea84d6aaac8de8281e859d5cd07141f08d9804a"
+    },
+    {
+      "path": "metric-node24/metric-1280-center-svg-7.png",
+      "bytes": 10367,
+      "sha256": "e8f5c3c6b9095f634cc3cd8b7f7d851779581bbf8a166e6a370300fe3c58988a"
+    },
+    {
+      "path": "metric-node24/metric-1280-center-svg-8.png",
+      "bytes": 5215,
+      "sha256": "33b7012097462a4f634da7976610314c09d7b85840693cf0ae24f1d088dc717f"
+    },
+    {
+      "path": "metric-node24/metric-1280-center.pptx",
+      "bytes": 44597,
+      "sha256": "b5630d8461f0cd02adc7979254ab0e568d6e09cb08544a0f6dc7e767b3eff38d"
+    },
+    {
+      "path": "metric-node24/metric-1280-left-svg-1.png",
+      "bytes": 6564,
+      "sha256": "ab1997a701bcccb5d3059945c9d9b3e006f8fe575b6b78c330a9df180e2f573c"
+    },
+    {
+      "path": "metric-node24/metric-1280-left-svg-2.png",
+      "bytes": 5215,
+      "sha256": "33b7012097462a4f634da7976610314c09d7b85840693cf0ae24f1d088dc717f"
+    },
+    {
+      "path": "metric-node24/metric-1280-left-svg-3.png",
+      "bytes": 12549,
+      "sha256": "0a18615719ced5dcf1a7ae51f3d4c7d82d24b499dbe1618ea7f27d0eead774e7"
+    },
+    {
+      "path": "metric-node24/metric-1280-left-svg-4.png",
+      "bytes": 16700,
+      "sha256": "db087471a27a942f6ba483fb6f6b7dde3497dca31ba726cbd2ff036c32b7cdab"
+    },
+    {
+      "path": "metric-node24/metric-1280-left-svg-5.png",
+      "bytes": 5920,
+      "sha256": "f4f338b2bc5251690b85314cb2827dff96324c6638b9c86fd72606b5551ce691"
+    },
+    {
+      "path": "metric-node24/metric-1280-left-svg-6.png",
+      "bytes": 8425,
+      "sha256": "a4e95e4b064b0fa2bbfb125df083b9d4634fe327eb2039b1808c50f36e624460"
+    },
+    {
+      "path": "metric-node24/metric-1280-left-svg-7.png",
+      "bytes": 10359,
+      "sha256": "60cd84c6fc460cb27b153e932e1223ec33e65017ba5b818ea66b0a74709e266a"
+    },
+    {
+      "path": "metric-node24/metric-1280-left-svg-8.png",
+      "bytes": 5215,
+      "sha256": "33b7012097462a4f634da7976610314c09d7b85840693cf0ae24f1d088dc717f"
+    },
+    {
+      "path": "metric-node24/metric-1280-left.pptx",
+      "bytes": 44557,
+      "sha256": "90e1fdaa3588d190036d0e9b50ce11c440dd2d606db1bfeaef4d47c47a3e72e1"
+    },
+    {
+      "path": "metric-node24/metric-1280-right-svg-1.png",
+      "bytes": 6629,
+      "sha256": "4c8ea833e8eab955ab7fc0cd767c4e2a065825be4c98123a18974dc7b503c23b"
+    },
+    {
+      "path": "metric-node24/metric-1280-right-svg-2.png",
+      "bytes": 5215,
+      "sha256": "33b7012097462a4f634da7976610314c09d7b85840693cf0ae24f1d088dc717f"
+    },
+    {
+      "path": "metric-node24/metric-1280-right-svg-3.png",
+      "bytes": 12671,
+      "sha256": "d353e718b98386741a92bd4ab57bd6ea885e70049621a009bee2692e48b0e2a8"
+    },
+    {
+      "path": "metric-node24/metric-1280-right-svg-4.png",
+      "bytes": 17075,
+      "sha256": "6d796b609f1d52d6dfaeaa4452e312654ec005fd76bd3b7280e47b4f803f329d"
+    },
+    {
+      "path": "metric-node24/metric-1280-right-svg-5.png",
+      "bytes": 5896,
+      "sha256": "13183c378e7654ea2f85b9235bf266004c0cd6e56c36f397ed0e2ce8a06f98fc"
+    },
+    {
+      "path": "metric-node24/metric-1280-right-svg-6.png",
+      "bytes": 8417,
+      "sha256": "a8fbfffb7897cae3a5e7853750e05314d70e2be98b058400469bad9195259e3e"
+    },
+    {
+      "path": "metric-node24/metric-1280-right-svg-7.png",
+      "bytes": 10401,
+      "sha256": "e30241a35105fe138946f9ce95ada1ac349d3e460268d2030f22e56d78f337f0"
+    },
+    {
+      "path": "metric-node24/metric-1280-right-svg-8.png",
+      "bytes": 5215,
+      "sha256": "33b7012097462a4f634da7976610314c09d7b85840693cf0ae24f1d088dc717f"
+    },
+    {
+      "path": "metric-node24/metric-1280-right.pptx",
+      "bytes": 44585,
+      "sha256": "9202539faf88df25b6b5e99c9bbf80dfc5b9b0f96d8459988ece99024903d8e0"
+    },
+    {
+      "path": "metric-node24/metric-540-center-svg-1.png",
+      "bytes": 5090,
+      "sha256": "be465a7909c3b58464b1383d9bb2e1bf2acd0b3dbb545a879c8250ca1193c143"
+    },
+    {
+      "path": "metric-node24/metric-540-center-svg-2.png",
+      "bytes": 4046,
+      "sha256": "15c3195254c94dc16df9d7927fc1a560519f8d44e40593dd19304ed6348a16bb"
+    },
+    {
+      "path": "metric-node24/metric-540-center-svg-3.png",
+      "bytes": 9606,
+      "sha256": "c0750478b57a09b0aa64afbff911d9e877639b488496d23fef3541230bf58469"
+    },
+    {
+      "path": "metric-node24/metric-540-center-svg-4.png",
+      "bytes": 12650,
+      "sha256": "b443d36e243646d7f4c681d6d21eb2ccb3f6f79461458b582260221e6b4f89a3"
+    },
+    {
+      "path": "metric-node24/metric-540-center-svg-5.png",
+      "bytes": 4594,
+      "sha256": "d9ef2b8db2b314029f531eada7da3df309bb76221d2cc4f48ff4749be8c3574c"
+    },
+    {
+      "path": "metric-node24/metric-540-center-svg-6.png",
+      "bytes": 6569,
+      "sha256": "6cd7565c1be267de908dfd3780c55d88e3b5efcb0fdd724a78b5ddb3fc82b876"
+    },
+    {
+      "path": "metric-node24/metric-540-center-svg-7.png",
+      "bytes": 7725,
+      "sha256": "313b540f0a64922c59fe6a7971976135f78dba5be3331bf4f394243002064945"
+    },
+    {
+      "path": "metric-node24/metric-540-center-svg-8.png",
+      "bytes": 4046,
+      "sha256": "15c3195254c94dc16df9d7927fc1a560519f8d44e40593dd19304ed6348a16bb"
+    },
+    {
+      "path": "metric-node24/metric-540-center.pptx",
+      "bytes": 44584,
+      "sha256": "db89c4d930cf212ce237f63b4c79196f2989dd42318bde7ace46d001ce824623"
+    },
+    {
+      "path": "metric-node24/metric-540-left-svg-1.png",
+      "bytes": 5124,
+      "sha256": "80e52d020f80e0f7604c067b8eb2224b292c6236c7f87e806011438c670eeb26"
+    },
+    {
+      "path": "metric-node24/metric-540-left-svg-2.png",
+      "bytes": 4046,
+      "sha256": "15c3195254c94dc16df9d7927fc1a560519f8d44e40593dd19304ed6348a16bb"
+    },
+    {
+      "path": "metric-node24/metric-540-left-svg-3.png",
+      "bytes": 9531,
+      "sha256": "f241a4134e73257fa3be536a42f23225e762db8c5bd481720162a13b1c156112"
+    },
+    {
+      "path": "metric-node24/metric-540-left-svg-4.png",
+      "bytes": 12446,
+      "sha256": "59ba5040874f40463f76c43de3367bad6978495c874137cc170ace6dea43a2fa"
+    },
+    {
+      "path": "metric-node24/metric-540-left-svg-5.png",
+      "bytes": 4591,
+      "sha256": "349908c50f32d39ab690a0dbbcf1c2ca0a2f249df2c48da09f5664174ebe7205"
+    },
+    {
+      "path": "metric-node24/metric-540-left-svg-6.png",
+      "bytes": 6517,
+      "sha256": "2159f20283f0748d203f0f33da95934811cc6ed1300f043e60fa667af95d9140"
+    },
+    {
+      "path": "metric-node24/metric-540-left-svg-7.png",
+      "bytes": 7830,
+      "sha256": "e02afee79c66bd070314abfc81451cdbf562057c1160b93039d47946360a96fc"
+    },
+    {
+      "path": "metric-node24/metric-540-left-svg-8.png",
+      "bytes": 4046,
+      "sha256": "15c3195254c94dc16df9d7927fc1a560519f8d44e40593dd19304ed6348a16bb"
+    },
+    {
+      "path": "metric-node24/metric-540-left.pptx",
+      "bytes": 44548,
+      "sha256": "02e3277fa1915eee4af358b349a5199449c28910c36c60c66bb78c663fd9f932"
+    },
+    {
+      "path": "metric-node24/metric-540-right-svg-1.png",
+      "bytes": 5052,
+      "sha256": "2a1e18d5784285dd9489e90c29dd230b13e298930fe52de3192b9c801edd48f7"
+    },
+    {
+      "path": "metric-node24/metric-540-right-svg-2.png",
+      "bytes": 4046,
+      "sha256": "15c3195254c94dc16df9d7927fc1a560519f8d44e40593dd19304ed6348a16bb"
+    },
+    {
+      "path": "metric-node24/metric-540-right-svg-3.png",
+      "bytes": 9484,
+      "sha256": "de4ebe67529fe02eb6d0ec43a4e7f30359b3dfbc685f63289de58de03ecc7cf7"
+    },
+    {
+      "path": "metric-node24/metric-540-right-svg-4.png",
+      "bytes": 12543,
+      "sha256": "1875f961a97c7c1ff988f05b5f634c46bd2e289c3cb873c16608471b13ed121a"
+    },
+    {
+      "path": "metric-node24/metric-540-right-svg-5.png",
+      "bytes": 4599,
+      "sha256": "88a163580cff6f55f8a38babbe7517166ac5b06ae9b0c1343a660085b99fa625"
+    },
+    {
+      "path": "metric-node24/metric-540-right-svg-6.png",
+      "bytes": 6481,
+      "sha256": "ffa8db85b2745ef74621d48ba9ec47606aea40f4a3c85190a5e8199d4c65c6aa"
+    },
+    {
+      "path": "metric-node24/metric-540-right-svg-7.png",
+      "bytes": 7713,
+      "sha256": "dfa0d09e6d4a66952a86686ca3ab9e3ba2f6bc61b9f9c1b93076aa21b797bfb0"
+    },
+    {
+      "path": "metric-node24/metric-540-right-svg-8.png",
+      "bytes": 4046,
+      "sha256": "15c3195254c94dc16df9d7927fc1a560519f8d44e40593dd19304ed6348a16bb"
+    },
+    {
+      "path": "metric-node24/metric-540-right.pptx",
+      "bytes": 44568,
+      "sha256": "2d8cd5e1a8296bbbcb84d3898abc3ab3f4a6b34606a7d28408c2958c93b6bd50"
+    },
+    {
+      "path": "office-dialog.png",
+      "bytes": 13184,
+      "sha256": "be6356ee739f808d6888f0a7596f381dfa70852b6860252b58c0fc78f1e138d3"
+    },
+    {
+      "path": "text-final-node20/case-00.pptx",
+      "bytes": 16119,
+      "sha256": "f3faee95a6d5fb771ac69b020313e6131798cbe577c02ffd78464a18ca09d390"
+    },
+    {
+      "path": "text-final-node20/case-01.pptx",
+      "bytes": 16221,
+      "sha256": "287f46e613226e120c359e8ca4bf3681708e87d967fb9e519e4c3dca8dc2e70f"
+    },
+    {
+      "path": "text-final-node20/case-02.pptx",
+      "bytes": 16098,
+      "sha256": "b0c391585cf3e25a3f6330a35cdfbd88b8ecd38052e2ca7c412a9a6d7d7c7002"
+    },
+    {
+      "path": "text-final-node20/case-03.pptx",
+      "bytes": 16205,
+      "sha256": "fa6896e01f3171ac240fdeb96efdc52878e4da9665276eceba606b0d7c5f444d"
+    },
+    {
+      "path": "text-final-node20/case-04.pptx",
+      "bytes": 16123,
+      "sha256": "3be1d1e740b414bca7d05c3e0d582bda196b54d342a76c69f8900d586defb0b2"
+    },
+    {
+      "path": "text-final-node20/case-05.pptx",
+      "bytes": 16224,
+      "sha256": "8671f6e950eb787bc8ad143502d5b3aa78dc7c8c594b9acf70b7ecee6f347c16"
+    },
+    {
+      "path": "text-final-node20/case-06.pptx",
+      "bytes": 16808,
+      "sha256": "28eedf19fae1c76232f9c880753f6df3b11bfec9b0d758a92629d799533d69d0"
+    },
+    {
+      "path": "text-final-node20/case-07.pptx",
+      "bytes": 16911,
+      "sha256": "158f24b5ad69b79951400fbe56a07fd67c29609616c72228c4b09566fe190ac1"
+    },
+    {
+      "path": "text-final-node20/case-08.pptx",
+      "bytes": 16788,
+      "sha256": "3e8053cfbf08ef87e76e7f702cb82d63badc9f272b83f4ef48c59fa2e5c76433"
+    },
+    {
+      "path": "text-final-node20/case-09.pptx",
+      "bytes": 16896,
+      "sha256": "3bf9f0df9f04bc9eab24bb0f73207f7ba4afd9b282feede210c6c70a2af6e24c"
+    },
+    {
+      "path": "text-final-node20/case-10.pptx",
+      "bytes": 16814,
+      "sha256": "f865e9567f74b85000ffb479c91efbdff440b57343ad41b0bee94adf3fdc4102"
+    },
+    {
+      "path": "text-final-node20/case-11.pptx",
+      "bytes": 16917,
+      "sha256": "9c3d0680006a6e2480b0299892e586f3f87f2229183c841159c4022a8a6f3278"
+    },
+    {
+      "path": "text-final-node20/case-12.pptx",
+      "bytes": 16915,
+      "sha256": "1dd587125743a52b52f19059eb80f7dd3b0d0cb29348f7149343cf940452c8a5"
+    },
+    {
+      "path": "text-final-node20/case-13.pptx",
+      "bytes": 17021,
+      "sha256": "7ce5d0ef0144ceca783470b3e17fba0636597a06e7abeab1eb89d05ba7b37100"
+    },
+    {
+      "path": "text-final-node20/case-14.pptx",
+      "bytes": 16888,
+      "sha256": "3b3868b7440ece99618fd97771b10f3a49f780dacb163904c0d10fa7d760b2b3"
+    },
+    {
+      "path": "text-final-node20/case-15.pptx",
+      "bytes": 16997,
+      "sha256": "b9d3b8dc97b543a2aa59c0a0d2ef44093500b336f6dc22600be730485dc4751a"
+    },
+    {
+      "path": "text-final-node20/case-16.pptx",
+      "bytes": 16924,
+      "sha256": "e1208859943fd2d05413c7422c10d4e1181ad53fe06dfb0c8566d9ceb3d92688"
+    },
+    {
+      "path": "text-final-node20/case-17.pptx",
+      "bytes": 17025,
+      "sha256": "85c9737ced72cc7fc7d778f824916798a1ce6c054587984984121061b5760732"
+    },
+    {
+      "path": "text-final-node20/case-18.pptx",
+      "bytes": 17613,
+      "sha256": "58a1ddce553b4dba312e29c2da768687bd53a41d50cd7ac3ca9804749c49f335"
+    },
+    {
+      "path": "text-final-node20/case-19.pptx",
+      "bytes": 17716,
+      "sha256": "c6dae134b3a217847242a46a2d45cb0a9763cbea0aa880cb8943d5b9719d31b3"
+    },
+    {
+      "path": "text-final-node20/case-20.pptx",
+      "bytes": 17582,
+      "sha256": "f2e605620a1fe405daf2b3409dab7227168c4da3f398ec8cc7048e6fa7630038"
+    },
+    {
+      "path": "text-final-node20/case-21.pptx",
+      "bytes": 17691,
+      "sha256": "308bc23ad38d18db60f54fdd6218d7f25465c8ecd65c7c37215336555881e40d"
+    },
+    {
+      "path": "text-final-node20/case-22.pptx",
+      "bytes": 17618,
+      "sha256": "7ee8ac568a84590f18410443684a1e5253a652f2d56a28897c1ff277604d3a27"
+    },
+    {
+      "path": "text-final-node20/case-23.pptx",
+      "bytes": 17719,
+      "sha256": "7f7f974500ac5442c2761d8f891096cd590d9d4abf81d2d0cee9d5bf20f30c09"
+    },
+    {
+      "path": "text-final-node20/fonts/Carlito-400-italic.ttf",
+      "bytes": 580792,
+      "sha256": "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5"
+    },
+    {
+      "path": "text-final-node20/fonts/Carlito-400-normal.ttf",
+      "bytes": 593908,
+      "sha256": "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89"
+    },
+    {
+      "path": "text-final-node20/fonts/Carlito-700-italic.ttf",
+      "bytes": 745192,
+      "sha256": "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691"
+    },
+    {
+      "path": "text-final-node20/fonts/Carlito-700-normal.ttf",
+      "bytes": 648128,
+      "sha256": "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0"
+    },
+    {
+      "path": "text-final-node20/fonts/LICENSE.txt",
+      "bytes": 4424,
+      "sha256": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00"
+    },
+    {
+      "path": "text-final-node20/generation.json",
+      "bytes": 242346,
+      "sha256": "5bdc09528e1ddc39c5508c093ec2daca2d5e75ea56ecd1529ba4ce83b3828f44"
+    },
+    {
+      "path": "text-final-node20/generation.log",
+      "bytes": 184,
+      "sha256": "adb22efc0df24ca31581749a31f293aae94c7043051340a69dfc28c7c2f7827d"
+    },
+    {
+      "path": "text-final-node20/report.json",
+      "bytes": 342685,
+      "sha256": "0bc03e13d6ab205b4400dcf78fb3b6051f268129ff9ae53e68cb2aa5c410b5ee"
+    },
+    {
+      "path": "text-final-node24/case-00.pptx",
+      "bytes": 16119,
+      "sha256": "f3faee95a6d5fb771ac69b020313e6131798cbe577c02ffd78464a18ca09d390"
+    },
+    {
+      "path": "text-final-node24/case-01.pptx",
+      "bytes": 16221,
+      "sha256": "287f46e613226e120c359e8ca4bf3681708e87d967fb9e519e4c3dca8dc2e70f"
+    },
+    {
+      "path": "text-final-node24/case-02.pptx",
+      "bytes": 16098,
+      "sha256": "b0c391585cf3e25a3f6330a35cdfbd88b8ecd38052e2ca7c412a9a6d7d7c7002"
+    },
+    {
+      "path": "text-final-node24/case-03.pptx",
+      "bytes": 16205,
+      "sha256": "fa6896e01f3171ac240fdeb96efdc52878e4da9665276eceba606b0d7c5f444d"
+    },
+    {
+      "path": "text-final-node24/case-04.pptx",
+      "bytes": 16123,
+      "sha256": "3be1d1e740b414bca7d05c3e0d582bda196b54d342a76c69f8900d586defb0b2"
+    },
+    {
+      "path": "text-final-node24/case-05.pptx",
+      "bytes": 16224,
+      "sha256": "8671f6e950eb787bc8ad143502d5b3aa78dc7c8c594b9acf70b7ecee6f347c16"
+    },
+    {
+      "path": "text-final-node24/case-06.pptx",
+      "bytes": 16808,
+      "sha256": "28eedf19fae1c76232f9c880753f6df3b11bfec9b0d758a92629d799533d69d0"
+    },
+    {
+      "path": "text-final-node24/case-07.pptx",
+      "bytes": 16911,
+      "sha256": "158f24b5ad69b79951400fbe56a07fd67c29609616c72228c4b09566fe190ac1"
+    },
+    {
+      "path": "text-final-node24/case-08.pptx",
+      "bytes": 16788,
+      "sha256": "3e8053cfbf08ef87e76e7f702cb82d63badc9f272b83f4ef48c59fa2e5c76433"
+    },
+    {
+      "path": "text-final-node24/case-09.pptx",
+      "bytes": 16896,
+      "sha256": "3bf9f0df9f04bc9eab24bb0f73207f7ba4afd9b282feede210c6c70a2af6e24c"
+    },
+    {
+      "path": "text-final-node24/case-10.pptx",
+      "bytes": 16814,
+      "sha256": "f865e9567f74b85000ffb479c91efbdff440b57343ad41b0bee94adf3fdc4102"
+    },
+    {
+      "path": "text-final-node24/case-11.pptx",
+      "bytes": 16917,
+      "sha256": "9c3d0680006a6e2480b0299892e586f3f87f2229183c841159c4022a8a6f3278"
+    },
+    {
+      "path": "text-final-node24/case-12.pptx",
+      "bytes": 16915,
+      "sha256": "1dd587125743a52b52f19059eb80f7dd3b0d0cb29348f7149343cf940452c8a5"
+    },
+    {
+      "path": "text-final-node24/case-13.pptx",
+      "bytes": 17021,
+      "sha256": "7ce5d0ef0144ceca783470b3e17fba0636597a06e7abeab1eb89d05ba7b37100"
+    },
+    {
+      "path": "text-final-node24/case-14.pptx",
+      "bytes": 16888,
+      "sha256": "3b3868b7440ece99618fd97771b10f3a49f780dacb163904c0d10fa7d760b2b3"
+    },
+    {
+      "path": "text-final-node24/case-15.pptx",
+      "bytes": 16997,
+      "sha256": "b9d3b8dc97b543a2aa59c0a0d2ef44093500b336f6dc22600be730485dc4751a"
+    },
+    {
+      "path": "text-final-node24/case-16.pptx",
+      "bytes": 16924,
+      "sha256": "e1208859943fd2d05413c7422c10d4e1181ad53fe06dfb0c8566d9ceb3d92688"
+    },
+    {
+      "path": "text-final-node24/case-17.pptx",
+      "bytes": 17025,
+      "sha256": "85c9737ced72cc7fc7d778f824916798a1ce6c054587984984121061b5760732"
+    },
+    {
+      "path": "text-final-node24/case-18.pptx",
+      "bytes": 17613,
+      "sha256": "58a1ddce553b4dba312e29c2da768687bd53a41d50cd7ac3ca9804749c49f335"
+    },
+    {
+      "path": "text-final-node24/case-19.pptx",
+      "bytes": 17716,
+      "sha256": "c6dae134b3a217847242a46a2d45cb0a9763cbea0aa880cb8943d5b9719d31b3"
+    },
+    {
+      "path": "text-final-node24/case-20.pptx",
+      "bytes": 17582,
+      "sha256": "f2e605620a1fe405daf2b3409dab7227168c4da3f398ec8cc7048e6fa7630038"
+    },
+    {
+      "path": "text-final-node24/case-21.pptx",
+      "bytes": 17691,
+      "sha256": "308bc23ad38d18db60f54fdd6218d7f25465c8ecd65c7c37215336555881e40d"
+    },
+    {
+      "path": "text-final-node24/case-22.pptx",
+      "bytes": 17618,
+      "sha256": "7ee8ac568a84590f18410443684a1e5253a652f2d56a28897c1ff277604d3a27"
+    },
+    {
+      "path": "text-final-node24/case-23.pptx",
+      "bytes": 17719,
+      "sha256": "7f7f974500ac5442c2761d8f891096cd590d9d4abf81d2d0cee9d5bf20f30c09"
+    },
+    {
+      "path": "text-final-node24/font-registration.json",
+      "bytes": 713,
+      "sha256": "4fd481924be7a4bdb7ef1619a78aee50014eefefa7b57b3f482f6059b68813de"
+    },
+    {
+      "path": "text-final-node24/fonts/Carlito-400-italic.ttf",
+      "bytes": 580792,
+      "sha256": "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5"
+    },
+    {
+      "path": "text-final-node24/fonts/Carlito-400-normal.ttf",
+      "bytes": 593908,
+      "sha256": "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89"
+    },
+    {
+      "path": "text-final-node24/fonts/Carlito-700-italic.ttf",
+      "bytes": 745192,
+      "sha256": "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691"
+    },
+    {
+      "path": "text-final-node24/fonts/Carlito-700-normal.ttf",
+      "bytes": 648128,
+      "sha256": "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0"
+    },
+    {
+      "path": "text-final-node24/fonts/LICENSE.txt",
+      "bytes": 4424,
+      "sha256": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00"
+    },
+    {
+      "path": "text-final-node24/generation.json",
+      "bytes": 242346,
+      "sha256": "f6a0027ca838384e53d92629a13f11d1a3ff3b2433cd7ce1f2494bf8d26a732f"
+    },
+    {
+      "path": "text-final-node24/generation.log",
+      "bytes": 184,
+      "sha256": "adb22efc0df24ca31581749a31f293aae94c7043051340a69dfc28c7c2f7827d"
+    },
+    {
+      "path": "text-final-node24/report.json",
+      "bytes": 342685,
+      "sha256": "7a2551cdf6ad44a6805fb363248a1dc9470c77e9e7c1ebc46357afe037a99838"
+    },
+    {
+      "path": "verifiers/accepted-text.mjs",
+      "bytes": 5601,
+      "sha256": "4d4a3a815f1bf4b1f5baca79a3871473fff694f4320c7b6bd15e95ba06814e52"
+    },
+    {
+      "path": "verifiers/native-chart-colors.mjs",
+      "bytes": 5709,
+      "sha256": "a476dc13ff5b3d41564e05507c3c2272b220a1aeaa9c1cb2a4fc148608385716"
+    },
+    {
+      "path": "verifiers/native-chart-colors.ps1",
+      "bytes": 8027,
+      "sha256": "2a08468f7b45d8dffe51a26e7af8a21dfe2a6fc2cc30d1edb653b962f2606f48"
+    },
+    {
+      "path": "verifiers/native-process-check.ps1",
+      "bytes": 2333,
+      "sha256": "50ae41cf771dab0e0c9245f3627abc4586451df8414bdc986df882d3ceda5027"
+    },
+    {
+      "path": "verifiers/native-process.ps1",
+      "bytes": 2151,
+      "sha256": "e5c9de7af97570b05c2f1412bcf233aa22703565edc5c83035f85ff44d6ac72f"
+    },
+    {
+      "path": "verifiers/native-text.mjs",
+      "bytes": 9024,
+      "sha256": "8469ec0c97b1d8e9b022ee2291d95fa860c5f1752b2cbc92e2be4657f5ba1691"
+    },
+    {
+      "path": "verifiers/native-text.ps1",
+      "bytes": 9612,
+      "sha256": "34aed65ea4141f2a0c717e9b1ecd3927bcc6528636b295b9e018921bcd2e118f"
+    },
+    {
+      "path": "worker-controls/failure/owned worker with spaces.ps1",
+      "bytes": 52,
+      "sha256": "51e4c57d6bfbd3afd445942626ad82d680a757f6f36107e9af55cc73bcd588ac"
+    },
+    {
+      "path": "worker-controls/failure/worker.json",
+      "bytes": 318,
+      "sha256": "775ce9f839f23c21abf8ddc7475ac00c34b808dd934ee76f14ea323a6f6ba54e"
+    },
+    {
+      "path": "worker-controls/failure/worker.stderr.log",
+      "bytes": 42,
+      "sha256": "8f39eed803712b9694eb1a16a5b4a2fa7d366f7b49f8d485018326f4bd07e746"
+    },
+    {
+      "path": "worker-controls/failure/worker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "worker-controls/report.json",
+      "bytes": 1261,
+      "sha256": "e7bd83b8c4a6b7f4b0563609bf36c56208d0aad1c329656c78018fd09657dfb3"
+    },
+    {
+      "path": "worker-controls/success/owned worker with spaces.ps1",
+      "bytes": 52,
+      "sha256": "db0d717103134f4d2b96db3b20820e9a2c78c73673be28192d4a193a636fdbcc"
+    },
+    {
+      "path": "worker-controls/success/worker.json",
+      "bytes": 316,
+      "sha256": "efa0c6b3e392c1a22043c4feac712ee70ccab61cd000dff0c4d128ad5f1e05d4"
+    },
+    {
+      "path": "worker-controls/success/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "worker-controls/success/worker.stdout.log",
+      "bytes": 52,
+      "sha256": "4ebdaf27f710724fedac9c583e436d48e33cc4507da8d064a496d3d3cf1d43a0"
+    },
+    {
+      "path": "worker-controls/timeout/owned worker with spaces.ps1",
+      "bytes": 130,
+      "sha256": "aa0249692eebcf795492008b215fc14c9af6509d5df2858e09cc3338aed28b98"
+    },
+    {
+      "path": "worker-controls/timeout/worker.json",
+      "bytes": 316,
+      "sha256": "f48cafa3cbd4ec01aa85420fa42f6460735f6d5fa48430bc4df6177c37cf1cd3"
+    },
+    {
+      "path": "worker-controls/timeout/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "worker-controls/timeout/worker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}
