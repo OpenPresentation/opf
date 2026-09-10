@@ -1,0 +1,257 @@
+{
+  "node": "v20.20.2",
+  "core": "cc4b5245ba1c197746a2c307b78ff58f45df02cc",
+  "renderer": "1e5cd95a76e356c09ae5da0c8604809a202b1f40",
+  "pptx": "6f06406d9615b35a66f39e6424b35b1d32a73052",
+  "scope": "Read-only shared header/footer gap probe; parsed PPTX current text only, no native Office execution.",
+  "results": [
+    {
+      "width": 1280,
+      "height": 720,
+      "floor": 16,
+      "source": {
+        "design": {
+          "fontScheme": "roboto",
+          "dimensions": {
+            "widthInches": 13.333333333333334,
+            "heightInches": 7.5
+          },
+          "header": {
+            "left": {
+              "text": "Authored header words"
+            }
+          },
+          "footer": {
+            "left": {
+              "text": "Authored footer words"
+            },
+            "right": {
+              "slideNumber": true
+            }
+          }
+        },
+        "slides": [
+          {
+            "title": "Furniture control",
+            "text": "Body stays present.",
+            "composition": {
+              "minFontSize": 16,
+              "overflow": "error"
+            }
+          }
+        ]
+      },
+      "sourceSha256": "50cf9762ccde0b293925c62aac506fdf39f4d0574884a845d908bde711aebe21",
+      "sourceUnchanged": true,
+      "coreDiagnostics": [],
+      "svgSha256": "acb024fda153e8305ab2ad0a194c1d49f556987e84636247ce16bad50632ca7a",
+      "pptxSha256": "1f4602bf4f82b1a23c893b89db3573fcf2f57442b70709ef91664ae26098a740",
+      "furniture": [
+        {
+          "svg": "<text data-opf-path=\"design.header.left\" fill=\"#F0F0F0\" font-family=\"Roboto, sans-serif\" font-size=\"13\" text-anchor=\"start\" x=\"89.6\" y=\"36\">Authored header words</text>",
+          "fontSize": 13
+        },
+        {
+          "svg": "<text data-opf-path=\"design.footer.left\" fill=\"#F0F0F0\" font-family=\"Roboto, sans-serif\" font-size=\"13\" text-anchor=\"start\" x=\"89.6\" y=\"692\">Authored footer words</text>",
+          "fontSize": 13
+        },
+        {
+          "svg": "<text data-opf-path=\"design.footer.right\" fill=\"#F0F0F0\" font-family=\"Roboto, sans-serif\" font-size=\"13\" text-anchor=\"end\" x=\"1190.4\" y=\"692\">1</text>",
+          "fontSize": 13
+        }
+      ],
+      "nativeTexts": [
+        "Furniture control",
+        "Body stays present."
+      ],
+      "nativeHasHeader": false,
+      "nativeHasFooter": false
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "floor": 32,
+      "source": {
+        "design": {
+          "fontScheme": "roboto",
+          "dimensions": {
+            "widthInches": 13.333333333333334,
+            "heightInches": 7.5
+          },
+          "header": {
+            "left": {
+              "text": "Authored header words"
+            }
+          },
+          "footer": {
+            "left": {
+              "text": "Authored footer words"
+            },
+            "right": {
+              "slideNumber": true
+            }
+          }
+        },
+        "slides": [
+          {
+            "title": "Furniture control",
+            "text": "Body stays present.",
+            "composition": {
+              "minFontSize": 32,
+              "overflow": "error"
+            }
+          }
+        ]
+      },
+      "sourceSha256": "51a22519172f3a51f58406c031d124a3dd9c3c4b7cd537c73d6d1153d8977dbe",
+      "sourceUnchanged": true,
+      "coreDiagnostics": [],
+      "svgSha256": "e92032dd5298cfc868d35e63220b247b13142f5b979836f5f0f32f409738c05f",
+      "pptxSha256": "f668c472aa1436244ec9f234b659fe097128b7e3b3ef3bc81afa2e729ed52271",
+      "furniture": [
+        {
+          "svg": "<text data-opf-path=\"design.header.left\" fill=\"#F0F0F0\" font-family=\"Roboto, sans-serif\" font-size=\"13\" text-anchor=\"start\" x=\"89.6\" y=\"36\">Authored header words</text>",
+          "fontSize": 13
+        },
+        {
+          "svg": "<text data-opf-path=\"design.footer.left\" fill=\"#F0F0F0\" font-family=\"Roboto, sans-serif\" font-size=\"13\" text-anchor=\"start\" x=\"89.6\" y=\"692\">Authored footer words</text>",
+          "fontSize": 13
+        },
+        {
+          "svg": "<text data-opf-path=\"design.footer.right\" fill=\"#F0F0F0\" font-family=\"Roboto, sans-serif\" font-size=\"13\" text-anchor=\"end\" x=\"1190.4\" y=\"692\">1</text>",
+          "fontSize": 13
+        }
+      ],
+      "nativeTexts": [
+        "Furniture control",
+        "Body stays present."
+      ],
+      "nativeHasHeader": false,
+      "nativeHasFooter": false
+    },
+    {
+      "width": 720,
+      "height": 1280,
+      "floor": 16,
+      "source": {
+        "design": {
+          "fontScheme": "roboto",
+          "dimensions": {
+            "widthInches": 7.5,
+            "heightInches": 13.333333333333334
+          },
+          "header": {
+            "left": {
+              "text": "Authored header words"
+            }
+          },
+          "footer": {
+            "left": {
+              "text": "Authored footer words"
+            },
+            "right": {
+              "slideNumber": true
+            }
+          }
+        },
+        "slides": [
+          {
+            "title": "Furniture control",
+            "text": "Body stays present.",
+            "composition": {
+              "minFontSize": 16,
+              "overflow": "error"
+            }
+          }
+        ]
+      },
+      "sourceSha256": "2468749df64cd2fabd54ccb4d1e6af6648442075de4bd571a2be024480a8a2f4",
+      "sourceUnchanged": true,
+      "coreDiagnostics": [],
+      "svgSha256": "ece99284d5a55baf8c3425f53edc1795ddf1362a95b2a9084fdc8f170164ff4a",
+      "pptxSha256": "e87cf9afbac49e3e7e8aa5ae12ddabe50cec0dd9233b1668f2b540f17d7e9b2a",
+      "furniture": [
+        {
+          "svg": "<text data-opf-path=\"design.header.left\" fill=\"#F0F0F0\" font-family=\"Roboto, sans-serif\" font-size=\"13\" text-anchor=\"start\" x=\"50.4\" y=\"64\">Authored header words</text>",
+          "fontSize": 13
+        },
+        {
+          "svg": "<text data-opf-path=\"design.footer.left\" fill=\"#F0F0F0\" font-family=\"Roboto, sans-serif\" font-size=\"13\" text-anchor=\"start\" x=\"50.4\" y=\"1252\">Authored footer words</text>",
+          "fontSize": 13
+        },
+        {
+          "svg": "<text data-opf-path=\"design.footer.right\" fill=\"#F0F0F0\" font-family=\"Roboto, sans-serif\" font-size=\"13\" text-anchor=\"end\" x=\"669.6\" y=\"1252\">1</text>",
+          "fontSize": 13
+        }
+      ],
+      "nativeTexts": [
+        "Furniture control",
+        "Body stays present."
+      ],
+      "nativeHasHeader": false,
+      "nativeHasFooter": false
+    },
+    {
+      "width": 720,
+      "height": 1280,
+      "floor": 32,
+      "source": {
+        "design": {
+          "fontScheme": "roboto",
+          "dimensions": {
+            "widthInches": 7.5,
+            "heightInches": 13.333333333333334
+          },
+          "header": {
+            "left": {
+              "text": "Authored header words"
+            }
+          },
+          "footer": {
+            "left": {
+              "text": "Authored footer words"
+            },
+            "right": {
+              "slideNumber": true
+            }
+          }
+        },
+        "slides": [
+          {
+            "title": "Furniture control",
+            "text": "Body stays present.",
+            "composition": {
+              "minFontSize": 32,
+              "overflow": "error"
+            }
+          }
+        ]
+      },
+      "sourceSha256": "b33436b4507d068a85e04a16ae337f854bedd14860178e921627c3ccc64cfe66",
+      "sourceUnchanged": true,
+      "coreDiagnostics": [],
+      "svgSha256": "e6fb89e31d13dd58a9214da737dd178c5531698e29847d124a6a9d6852c7d86d",
+      "pptxSha256": "411d57c9470b52a8e724671438da89847633a668ef1e75d0138325b0e9bfaaaa",
+      "furniture": [
+        {
+          "svg": "<text data-opf-path=\"design.header.left\" fill=\"#F0F0F0\" font-family=\"Roboto, sans-serif\" font-size=\"13\" text-anchor=\"start\" x=\"50.4\" y=\"64\">Authored header words</text>",
+          "fontSize": 13
+        },
+        {
+          "svg": "<text data-opf-path=\"design.footer.left\" fill=\"#F0F0F0\" font-family=\"Roboto, sans-serif\" font-size=\"13\" text-anchor=\"start\" x=\"50.4\" y=\"1252\">Authored footer words</text>",
+          "fontSize": 13
+        },
+        {
+          "svg": "<text data-opf-path=\"design.footer.right\" fill=\"#F0F0F0\" font-family=\"Roboto, sans-serif\" font-size=\"13\" text-anchor=\"end\" x=\"669.6\" y=\"1252\">1</text>",
+          "fontSize": 13
+        }
+      ],
+      "nativeTexts": [
+        "Furniture control",
+        "Body stays present."
+      ],
+      "nativeHasHeader": false,
+      "nativeHasFooter": false
+    }
+  ]
+}

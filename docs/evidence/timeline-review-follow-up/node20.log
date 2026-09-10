@@ -1,0 +1,49 @@
+▲ [WARNING] Ignoring this import because "packages/javascript/dist/chunk-DCJ2ZESA.js" was marked as having no side effects [ignored-bare-import]
+
+    packages/javascript/dist/pagination.js:2:7:
+      2 │ import './chunk-DCJ2ZESA.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  "sideEffects" is false in the enclosing "package.json" file:
+
+    packages/javascript/package.json:29:2:
+      29 │   "sideEffects": false,
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "packages/javascript/dist/chunk-BAWLYSUN.js" was marked as having no side effects [ignored-bare-import]
+
+    packages/javascript/dist/pagination.js:3:7:
+      3 │ import './chunk-BAWLYSUN.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  "sideEffects" is false in the enclosing "package.json" file:
+
+    packages/javascript/package.json:29:2:
+      29 │   "sideEffects": false,
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "packages/javascript/dist/chunk-GQSK3T7X.js" was marked as having no side effects [ignored-bare-import]
+
+    packages/javascript/dist/pagination.js:4:7:
+      4 │ import './chunk-GQSK3T7X.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  "sideEffects" is false in the enclosing "package.json" file:
+
+    packages/javascript/package.json:29:2:
+      29 │   "sideEffects": false,
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "packages/javascript/dist/chunk-TWMRZ43O.js" was marked as having no side effects [ignored-bare-import]
+
+    packages/javascript/dist/pagination.js:5:7:
+      5 │ import './chunk-TWMRZ43O.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  "sideEffects" is false in the enclosing "package.json" file:
+
+    packages/javascript/package.json:29:2:
+      29 │   "sideEffects": false,
+         ╵   ~~~~~~~~~~~~~
+
+16 offline timeline workflows preserve source fields through selection, editing, undo/redo and semantic PPTX reimport.
