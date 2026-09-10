@@ -1,4 +1,4 @@
-import { layoutTable, fitList, fitRichText, composeSlide, resolveCanvasDimensions, resolveFontFamilies, resolveTextStyle, textWidthMeasurer, fitText, textColorForFill } from "@openpresentation/opf/composition";
+import { layoutTable, fitList, fitRichText, composeSlide, resolveCanvasDimensions, resolveFontFamilies, resolveTextStyle, textWidthMeasurer, fitText, textColorForFill, chartColorForFill } from "@openpresentation/opf/composition";
 import {
   catalogs as bundledCatalogs,
   validatePresentation
@@ -978,9 +978,10 @@ function renderImportedChart(item, box, bound, options) {
   const chart=item.value, rows=chart.data?.rows??[], columns=chart.data?.columns??[];
   if(!rows.length||columns.length<2)return null;
   const kind=chart.type, circular=['pie','donut','doughnut'].includes(kind);
-  const colors=[bound.design.colors.primary,bound.design.colors.secondary,'#9B6BCC','#D98944','#429B85','#CB5D79'];
+  const colors=[bound.design.colors.primary,bound.design.colors.secondary,'#9B6BCC','#D98944','#429B85','#CB5D79'].map(color=>chartColorForFill(bound.design.colors.surface,color));
   const children=[];
-  const text=(value,rect,path,size=16,align='center')=>renderTextBox(String(value),rect,bound,{path,fontSize:size,fontFamily:bound.design.fonts.body,fontWeight:400,fill:bound.design.colors.text,options,align,verticalAlign:'middle'});
+  const labelColor=textColorForFill(bound.design.colors.surface,bound.design.colors.text);
+  const text=(value,rect,path,size=16,align='center')=>renderTextBox(String(value),rect,bound,{path,fontSize:size,fontFamily:bound.design.fonts.body,fontWeight:400,fill:labelColor,options,align,verticalAlign:'middle'});
   const number=value=>typeof value==='number'&&Number.isFinite(value)?value:typeof value==='string'&&value.trim()&&Number.isFinite(Number(value))?Number(value):null;
   const series=columns.slice(1).map((name,j)=>({name,values:rows.map(row=>number(row[j+1]))}));
   children.push(tag('rect',{x:box.x,y:box.y,width:box.width,height:box.height,fill:bound.design.colors.surface,stroke:bound.design.colors.border,...traceAttrs(options,item.path)}));
@@ -1032,7 +1033,7 @@ function renderImportedChart(item, box, bound, options) {
         });
       }
     });
-    children.push(tag('line',{x1:horizontal?zero:plot.x,x2:horizontal?zero:plot.x+plot.width,y1:horizontal?plot.y:zero,y2:horizontal?plot.y+plot.height:zero,stroke:bound.design.colors.text,'stroke-width':1}));
+    children.push(tag('line',{x1:horizontal?zero:plot.x,x2:horizontal?zero:plot.x+plot.width,y1:horizontal?plot.y:zero,y2:horizontal?plot.y+plot.height:zero,stroke:labelColor,'stroke-width':1}));
   }
   return tag('g',traceAttrs(options,item.path),children.join('\n'));
 }
@@ -1047,13 +1048,17 @@ function renderChart(item, box, bound, options) {
   const data = inlineChartRows(chart.data);
   const plot = inset(box, 28);
   const max = Math.max(1, ...data.map((row) => Math.abs(row.value)));
+  const panelFill = bound.design.colors.surface;
+  const labelColor = textColorForFill(panelFill, bound.design.colors.text);
+  const primary = chartColorForFill(panelFill, bound.design.colors.primary);
+  const secondary = chartColorForFill(panelFill, bound.design.colors.secondary);
   const children = [
     tag("rect", {
       x: box.x,
       y: box.y,
       width: box.width,
       height: box.height,
-      fill: "#FFFFFF",
+      fill: panelFill,
       stroke: bound.design.colors.border,
       "stroke-width": 1,
       ...traceAttrs(options, item.path)
@@ -1066,7 +1071,7 @@ function renderChart(item, box, bound, options) {
       fontSize: 20,
       fontFamily: bound.design.fonts.body,
       fontWeight: 500,
-      fill: bound.design.colors.mutedText,
+      fill: labelColor,
       options,
       align: "center",
       verticalAlign: "middle"
@@ -1083,7 +1088,7 @@ function renderChart(item, box, bound, options) {
     children.push(tag("polyline", {
       points: points.map(([x, y]) => `${stableNumber(x)},${stableNumber(y)}`).join(" "),
       fill: "none",
-      stroke: bound.design.colors.primary,
+      stroke: primary,
       "stroke-width": 4,
       ...traceAttrs(options, `${item.path}.data`)
     }));
@@ -1091,7 +1096,7 @@ function renderChart(item, box, bound, options) {
       cx: stableNumber(x),
       cy: stableNumber(y),
       r: 5,
-      fill: bound.design.colors.primary,
+      fill: primary,
       ...traceAttrs(options, `${item.path}.data.rows.${index}`)
     })));
   } else {
@@ -1106,7 +1111,7 @@ function renderChart(item, box, bound, options) {
         y: stableNumber(y),
         width: stableNumber(barWidth),
         height: stableNumber(barHeight),
-        fill: index % 2 === 0 ? bound.design.colors.primary : bound.design.colors.secondary,
+        fill: index % 2 === 0 ? primary : secondary,
         ...traceAttrs(options, `${item.path}.data.rows.${index}`)
       }));
     });
@@ -1122,7 +1127,7 @@ function renderChart(item, box, bound, options) {
     fontSize: 12,
     fontFamily: bound.design.fonts.body,
     fontWeight: 400,
-    fill: bound.design.colors.mutedText,
+    fill: labelColor,
     options,
     align: "center"
   }));
