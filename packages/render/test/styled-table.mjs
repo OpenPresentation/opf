@@ -51,6 +51,23 @@ for (const rich of [false,true]) {
 }
 const lines = output => [...output.matchAll(/<line\b([^>]*)>/g)].map(match =>
   Object.fromEntries([...match[1].matchAll(/([\w-]+)="([^"]*)"/g)].map(([,key,value]) => [key,value])));
+
+// Bright fills used to receive invisible white headers. Body cells must also
+// adapt inherited colors; explicit cell/run colors always remain authoritative.
+for(const [fill,headerColor,bodyColor,explicit] of [
+  ['#F8FAFC','#000000','#000000'],['#0F172A','#FFFFFF','#FFFFFF'],
+  ['#777777','#000000','#000000'],['#767676','#FFFFFF','#000000'],
+  ['#FFFFFF80','#FFFFFF','#000000'],['#F8FAFC','#FFFFFF','#FFFFFF','#FFFFFF'],
+]){
+  const style={fill,...(explicit?{color:explicit}:{})};
+  const input={design:{background:'#FFFFFF',colorScheme:{id:'cool-horizon',dark1:'#000000'}},slides:[{table:{columns:[{value:'Header',style},{value:['Inherited',{text:'Explicit',color:'#FF0000'}],style}],rows:[[{value:'Body',style},{value:['BodyInherited',{text:'BodyExplicit',color:'#FF0000'}],style}]]}}]};
+  const original=structuredClone(input),output=renderSvg(input);
+  for(const [text,color] of [['Header',headerColor],['Inherited',headerColor],['Body',bodyColor],['BodyInherited',bodyColor],['Explicit','#FF0000'],['BodyExplicit','#FF0000']]){
+    const attributes=output.match(new RegExp(`<text([^>]*)>${text}</text>`))?.[1];assert.ok(attributes,text);
+    assert.ok(attributes.includes(`fill="${color}"`),`${fill} ${text}: ${attributes}`);
+  }
+  assert.deepEqual(input,original);
+}
 // An earlier custom merge edge must not be covered by later styled defaults.
 const edgeTable = {rows:[
   [{value:'Merged',rowSpan:2,style:{borders:{right:{color:'#a100a1',width:2,dash:'dot'}}}}, {value:'B',style:{borders:{top:{color:'#111111',width:1}}}}],

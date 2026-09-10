@@ -1,4 +1,4 @@
-import { layoutTable, fitList, fitRichText, composeSlide, resolveCanvasDimensions, resolveFontFamilies, resolveTextStyle, textWidthMeasurer, fitText } from "@openpresentation/opf/composition";
+import { layoutTable, fitList, fitRichText, composeSlide, resolveCanvasDimensions, resolveFontFamilies, resolveTextStyle, textWidthMeasurer, fitText, textColorForFill } from "@openpresentation/opf/composition";
 import {
   catalogs as bundledCatalogs,
   validatePresentation
@@ -913,10 +913,11 @@ function renderTable(item, box, bound, options) {
   const defaultEdges = [], explicitEdges = [];
   for (const row of layout.rows) for (const cell of row.cells) {
     const style = cell.style ?? {};
+    const fill = style.fill ?? (cell.header ? bound.design.colors.primary : bound.design.colors.surface);
     children.push(tag("rect", {
       x: stableNumber(cell.box.x), y: stableNumber(cell.box.y),
       width: stableNumber(cell.box.width), height: stableNumber(cell.box.height),
-      fill: style.fill ?? (cell.header ? bound.design.colors.primary : bound.design.colors.surface),
+      fill,
       stroke: separateBorders ? undefined : bound.design.colors.border, "stroke-width":separateBorders ? undefined : 1,
       ...traceAttrs(options, cell.sourcePath ?? cell.path)
     }));
@@ -932,7 +933,7 @@ function renderTable(item, box, bound, options) {
     children.push((cell.rich ? renderRichTextBox : renderTextBox)(cell.rich ? cell.value : flattenText(cell.value ?? ""), cell.textBox, bound, {
       path:cell.path, fontSize:15, fontFamily:bound.design.fonts.body,
       fontWeight:cell.header ? 700 : 400, textStyle:cell.textStyle, fit:cell.fit,
-      fill:style.color ?? (cell.header ? "#FFFFFF" : bound.design.colors.text), align:style.align, options
+      fill:style.color ?? textColorForFill(fill, cell.header ? "#FFFFFF" : bound.design.colors.text), align:style.align, options
     }));
   }
 
