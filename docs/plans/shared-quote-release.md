@@ -1,6 +1,6 @@
 # Shared quote release gates
 
-All five targets are published and independently verified from fresh npm installs on Node 20/24. `release-plan.json` and immutable CI refs now select core 0.8.0, CLI 0.6.0, renderer/PPTX 0.6.0 and editor 0.5.0. Final combined source/tarball/registry/browser checks and the three public site adoptions remain gates. Existing versions must never be republished.
+All five targets are published and independently verified from fresh npm installs on Node 20/24. `release-plan.json` and immutable CI refs now select core 0.8.0, CLI 0.6.0, renderer/PPTX 0.6.0 and editor 0.5.0. Final combined source/tarball/registry/browser checks pass locally on both runtimes; remote CI/review and the three public site adoptions remain gates. Existing versions must never be republished.
 
 | Order | Published target | Reason |
 | --- | --- | --- |
@@ -49,6 +49,8 @@ node scripts/test-editor-publication.mjs 0.5.0 dba5fe5e5580a4172c052132c4db5851d
 ```
 
 Omit `--native` outside Windows PowerPoint. The converter helper captures the exact native reference environment before and after execution. Node 20/24 registry installs execute the same immutable fixtures against shipped bytes. The full coordinator now enables shared quote API/geometry/source tests for registry core 0.8.0 and later, with the reviewed raster baseline pinned to published renderer 0.6.0. Renew all seven combined installed-browser suites, trusted interactions, evidence guards, CLI and registry fidelity before merging the complete-plan checkpoint.
+
+Those combined local checks now pass on Node 20.20.2 and 24.20.0 against core candidate `e635249` and all three published downstream merge commits in isolated worktrees. Each tarball/registry browser run executes seven suites, 230 assertions and eight trusted scenarios with no page errors or external requests. Four evidence-rejection guards pass. Twelve pinned fidelity suites include the 805-slide raster corpus and shared quote export tests. The five-package registry installations verify 64 signatures/15 attestations with zero advisories; exact native-tested exports and line-preserving reimports pass against each actual consumer. [Portable coordinated evidence](../evidence/shared-quote-coordinator-2026-09-09.json). The auxiliary quote geometry probe uses checkout core with actual registry font measurement; it remains separately labeled from all-registry API tests and native/raster fidelity.
 
 Then adopt the published set in all three sites, regenerate bundled assets/fonts and accurate UTC release dates, review/deploy, and execute public workflows against exact READY deployment commits and bundle hashes. Website #20 has merged; the adoption base is main `e5dd771e6df3ddabb4544e8e435561b1dba178f3`. Gallery begins at `b28d33564d7da2836f5c5d2e060ea461a7ac96bb`; pptx.dev begins on master at `b922f2f89fdb1e68f0e71a7f1df638be9c5314d4`. These sites still use the earlier published set until adoption is verified.
 
