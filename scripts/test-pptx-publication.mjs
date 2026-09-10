@@ -7,6 +7,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {packageManagerInvocation} from './package-manager.mjs';
 const root=fileURLToPath(new URL('../',import.meta.url));
+assert.ok(!process.env.NODE_OPTIONS&&!process.execArgv.some(arg=>/^(--import|--loader|--experimental-loader|--require|-r)(=|$)/.test(arg)),'Registry verification must not use source loaders or module aliases');
 const [version,ref,checkout=path.resolve(root,'../opf-pptx')]=process.argv.slice(2).filter(value=>value!=='--native');
 const native=process.argv.includes('--native');
 assert.match(version??'',/^\d+\.\d+\.\d+$/);assert.match(ref??'',/^[a-f0-9]{40}$/);
@@ -17,6 +18,7 @@ const execute=(command,args,cwd,encoding='utf8')=>execFileSync(command,args,{cwd
 const git=args=>execute('git',args,checkout);
 const sourceManifest=JSON.parse(git(['show',`${ref}:package.json`]));
 assert.equal(sourceManifest.name,'@openpresentation/opf-pptx');assert.equal(sourceManifest.version,version);
+const [releaseMajor,releaseMinor]=version.split('.').map(Number),verifyCode=releaseMajor>0||releaseMinor>=7;
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const artifactRoot=path.join(root,'artifacts/npm');await mkdir(artifactRoot,{recursive:true});
 assert.ok((await realpath(artifactRoot)).startsWith((await realpath(root))+path.sep));
@@ -63,12 +65,12 @@ try{
   assert.equal(await realpath(path.join(fixture,part)),await realpath(path.join(installed,part)));
  }
  const tests=[];
- for(const test of ['dependency-boundary.mjs','styled-table.mjs','styled-table-import.mjs','content-layout.mjs','shared-quote.mjs']){
+ for(const test of ['dependency-boundary.mjs','styled-table.mjs','styled-table-import.mjs','content-layout.mjs','shared-quote.mjs',...(verifyCode?['shared-code.mjs','code-provenance.mjs']:[])]){
   const output=execute(process.execPath,[path.join(fixture,'test',test)],temporary);process.stdout.write(output);tests.push({test,output:output.trim()});
  }
  process.stdout.write(execute(process.execPath,[path.join(fixture,'scripts/build-browser-check.mjs')],temporary));
  const browser=JSON.parse(execute(process.execPath,[path.join(fixture,'test/browser-check.mjs')],temporary));
- let nativeEvidence;
+ let nativeEvidence,nativeCodeEvidence;
  if(native){
   const readEnvironment=()=>JSON.parse(execute('powershell.exe',['-NoProfile','-File',path.join(root,'scripts/powerpoint-environment.ps1')],temporary));
   const nativeEnvironment=readEnvironment();
@@ -76,11 +78,18 @@ try{
   process.stdout.write(execute(process.execPath,[path.join(fixture,'test/native-quote.mjs'),'generate',output],temporary));
   process.stdout.write(execute('powershell.exe',['-NoProfile','-File',path.join(fixture,'test/native-quote.ps1'),'-EvidenceDirectory',output],temporary));
   process.stdout.write(execute(process.execPath,[path.join(fixture,'test/native-quote.mjs'),'compare',output],temporary));
-  assert.deepEqual(readEnvironment(),nativeEnvironment,'PowerPoint/Windows reference environment changed during verification');
   const report=path.join(output,'comparison.json');nativeEvidence={report:path.relative(root,report).split(path.sep).join('/'),sha256:hash(await readFile(report)),environment:nativeEnvironment};
+  if(verifyCode){
+   const codeOutput=path.join(artifactRoot,`pptx-${version}-code-native-node${major}`);
+   process.stdout.write(execute(process.execPath,[path.join(fixture,'test/native-code.mjs'),'generate',codeOutput],temporary));
+   process.stdout.write(execute('powershell.exe',['-NoProfile','-File',path.join(fixture,'test/native-code.ps1'),'-EvidenceDirectory',codeOutput],temporary));
+   process.stdout.write(execute(process.execPath,[path.join(fixture,'test/native-code.mjs'),'compare',codeOutput],temporary));
+   const report=path.join(codeOutput,'comparison.json');nativeCodeEvidence={report:path.relative(root,report).split(path.sep).join('/'),sha256:hash(await readFile(report)),environment:nativeEnvironment};
+  }
+  assert.deepEqual(readEnvironment(),nativeEnvironment,'PowerPoint/Windows reference environment changed during verification');
  }
  for(const [file,digest] of Object.entries(files))assert.equal(hash(await readFile(path.join(installed,file))),digest,'Verification must not rebuild the published converter');
- const report={checkedAt:new Date().toISOString(),node:process.version,name:sourceManifest.name,version,gitHead:ref,integrity:entry.integrity,attestations:metadata.dist.attestations,dependencies,files,knownVulnerabilities:0,signatureVerification:signatures.trim(),tests,browser,nativeEvidence,boundary:'Actual npm converter and predecessors; every shipped file matches the immutable release commit, pinned full model/corpus and browser fixtures execute installed dist/vendor. Optional native evidence covers twelve controlled Calibri cases, editable save/reopen and valid reimports with raster observations, without an equivalence threshold.'};
+ const report={checkedAt:new Date().toISOString(),node:process.version,name:sourceManifest.name,version,gitHead:ref,integrity:entry.integrity,attestations:metadata.dist.attestations,dependencies,files,knownVulnerabilities:0,signatureVerification:signatures.trim(),tests,browser,nativeEvidence,...(nativeCodeEvidence?{nativeCodeEvidence}:{}),boundary:'Actual npm converter and predecessors; every shipped file matches the immutable release commit, pinned full model/corpus and browser fixtures execute installed dist/vendor. Converter 0.7+ adds code source/XML-boundary and provenance fixtures. Optional native evidence covers twelve controlled Calibri quote cases and, for 0.7+, eight Courier New code cases with editable source/metadata, save/reopen and reimport. Raster observations have no equivalence threshold.'};
  const reportPath=path.join(artifactRoot,`pptx-${version}-node${major}-report.json`);await writeFile(reportPath,JSON.stringify(report,null,2)+'\n');
  console.log(`Published PPTX ${version} verified: ${Object.keys(files).length} immutable file matches, full model/corpus and browser ${browser.browser}${native?', native PowerPoint passed':''}. Report: ${reportPath}`);
 }finally{
