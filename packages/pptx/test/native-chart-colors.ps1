@@ -4,6 +4,7 @@ if($EditSlide -eq 0) { throw 'Select exactly one embedded workbook with -EditSli
 . (Join-Path $PSScriptRoot 'native-process.ps1')
 if(-not $Worker) {
     $root=(Resolve-Path -LiteralPath $EvidenceDirectory).Path
+    if(Test-Path -LiteralPath (Join-Path $root 'worker.json')) { throw 'This chart attempt already exists; preserve it and use a fresh generation directory' }
     $result=Invoke-OpfNativeWorker -ScriptPath $PSCommandPath -WorkerArguments @('-EvidenceDirectory',$root,'-EditSlide',[string]$EditSlide,'-Worker') -OutputDirectory $root -TimeoutSeconds $TimeoutSeconds
     Get-Content -LiteralPath (Join-Path $root 'worker.stdout.log')
     if($result.timedOut) { throw 'Native chart worker timed out. No retry was started. Resolve any Office dialog before another invocation; generated-file cleanup may be incomplete.' }
@@ -32,6 +33,10 @@ function Read-FixtureCharts($Presentation,[string]$Phase) {
         # PowerShell's COM enumerator can return null series even when Count and
         # Item are valid. Use Office's one-based indexed collections explicitly.
         $seriesCollection=$chart.SeriesCollection()
+        $record.seriesData=@(for($seriesIndex=1; $seriesIndex -le $seriesCollection.Count; $seriesIndex++) {
+            $series=$seriesCollection.Item($seriesIndex)
+            @{name=$series.Name;categories=@($series.XValues);values=@($series.Values)}
+        })
         $record.pointColors=@(for($seriesIndex=1; $seriesIndex -le $seriesCollection.Count; $seriesIndex++) {
             $series=$seriesCollection.Item($seriesIndex)
             $points=$series.Points()
@@ -57,17 +62,22 @@ function Save-FixtureProgress([string]$Stage) {
     $script:stage=$Stage
     @{stage=$Stage;editSlide=$EditSlide;generationSha256=(Get-FixtureSha256 $generationFile);original=$original;reopened=$reopened} | ConvertTo-Json -Depth 15 | Set-Content -LiteralPath (Join-Path $evidenceRoot 'progress.json') -Encoding UTF8
 }
+function Open-OwnedFixture([string]$File) {
+    Save-FixtureProgress "open-$([IO.Path]::GetFileName($File))"
+    for($i=1;$i -le $powerpoint.Presentations.Count;$i++) { if($powerpoint.Presentations.Item($i).FullName -eq $File) { throw 'Chart fixture already open; ownership is not established' } }
+    return $powerpoint.Presentations.Open($File,0,0,0)
+}
 try {
     Save-FixtureProgress 'connect'
     $powerpoint=New-Object -ComObject PowerPoint.Application
     Save-FixtureProgress 'open-original'
-    $presentation=$powerpoint.Presentations.Open($sourcePath,0,0,0)
+    $presentation=Open-OwnedFixture $sourcePath
     $original=@(Read-FixtureCharts $presentation 'original')
     Save-FixtureProgress 'save-original'
     $savedPath=Join-Path $evidenceRoot 'charts-saved.pptx'
     $presentation.SaveAs($savedPath,24)
     $presentation.Close(); $presentation=$null
-    $presentation=$powerpoint.Presentations.Open($savedPath,0,0,0)
+    $presentation=Open-OwnedFixture $savedPath
     $reopened=@(Read-FixtureCharts $presentation 'reopened')
     # One activation per invocation prevents cascading prompts when Excel is in
     # a modal/editing state. Run separate fresh fixtures to cover other slides.
@@ -91,6 +101,19 @@ try {
         $sheet.Cells.Item(2,1).Value2=$edited.rows[0][0]
         $sheet.Cells.Item(2,2).Value2=[double]$edited.rows[0][1]
         Write-Output 'Heading, series, category and numeric value changed.'
+        # Refresh redraws the chart; explicitly rebind its existing source range
+        # so the native chart incorporates the edited embedded worksheet cells.
+        Save-FixtureProgress "set-source-slide-$($slide.SlideIndex)"
+        $lastColumn=[char](64+$edited.columns.Count)
+        $lastRow=$edited.rows.Count+1
+        $sourceRange="='"+$sheet.Name.Replace("'","''")+"'!"+'$A$1:$'+$lastColumn+'$'+$lastRow
+        $chart.SetSourceData($sourceRange,2)
+        Save-FixtureProgress "read-live-edit-slide-$($slide.SlideIndex)"
+        $editedSeries=$chart.SeriesCollection()
+        $editedLive=@(for($seriesIndex=1;$seriesIndex -le $editedSeries.Count;$seriesIndex++){
+            $series=$editedSeries.Item($seriesIndex)
+            @{name=$series.Name;categories=@($series.XValues);values=@($series.Values)}
+        })
         Save-FixtureProgress "close-workbook-slide-$($slide.SlideIndex)"
         $workbook.Close($true); $workbook=$null
         $chart.Refresh()
@@ -100,11 +123,13 @@ try {
     Save-FixtureProgress 'save-edited'
     $presentation.SaveAs($editedPath,24)
     $presentation.Close(); $presentation=$null
-    $presentation=$powerpoint.Presentations.Open($editedPath,0,0,0)
+    $presentation=Open-OwnedFixture $editedPath
     if($presentation.Slides.Count -ne 8) { throw 'Edited charts did not reopen' }
+    Save-FixtureProgress 'read-edited'
+    $editedCharts=@(Read-FixtureCharts $presentation 'edited')
     $osVersion=Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
     $executable=Join-Path $powerpoint.Path 'POWERPNT.EXE'
-    @{generationSha256=(Get-FixtureSha256 $generationFile); editedSlides=@($EditSlide); savedSha256=(Get-FixtureSha256 $savedPath); editedSha256=(Get-FixtureSha256 $editedPath); powerPointVersion=(Get-Item -LiteralPath $executable).VersionInfo.FileVersion; windowsBuild="$($osVersion.CurrentBuild).$($osVersion.UBR)"; original=$original; reopened=$reopened} | ConvertTo-Json -Depth 15 | Set-Content -LiteralPath (Join-Path $evidenceRoot 'native.json') -Encoding UTF8
+    @{generationSha256=(Get-FixtureSha256 $generationFile); editedSlides=@($EditSlide); editedLive=$editedLive; savedSha256=(Get-FixtureSha256 $savedPath); editedSha256=(Get-FixtureSha256 $editedPath); powerPointVersion=(Get-Item -LiteralPath $executable).VersionInfo.FileVersion; executableSha256=(Get-FixtureSha256 $executable); windowsBuild="$($osVersion.CurrentBuild).$($osVersion.UBR)"; original=$original; reopened=$reopened; edited=$editedCharts} | ConvertTo-Json -Depth 15 | Set-Content -LiteralPath (Join-Path $evidenceRoot 'native.json') -Encoding UTF8
 } catch {
     @{passed=$false; stage=$stage; error=$_.Exception.Message; generationSha256=(Get-FixtureSha256 $generationFile); original=$original; reopened=$reopened} | ConvertTo-Json -Depth 15 | Set-Content -LiteralPath (Join-Path $evidenceRoot 'failure.json') -Encoding UTF8
     throw
