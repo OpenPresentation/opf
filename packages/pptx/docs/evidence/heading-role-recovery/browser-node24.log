@@ -1,0 +1,54 @@
+
+> @openpresentation/opf-pptx@0.7.0 test:browser
+> npm run build:browser-check && node test/browser-check.mjs
+
+
+> @openpresentation/opf-pptx@0.7.0 build:browser-check
+> node scripts/build-browser-check.mjs
+
+Browser build passed: browser decoder selected, no Sharp/native inputs. Serve the repository and open /artifacts/webp-fallback/browser/index.html for pixel checks.
+Native rich table import browser bundle ready at /artifacts/native-rich-table-import/browser/index.html.
+Native conditional table style browser bundle ready at /artifacts/native-table-styles/browser/index.html.
+Native styled table browser bundle ready at /artifacts/native-styled-table-import/browser/index.html.
+Native content browser bundle ready at /artifacts/native-content-layout/browser/index.html.
+Chart color/workbook browser bundle ready at /artifacts/chart-colors/browser/index.html.
+{
+  "browser": "153.0.8010.12",
+  "suites": [
+    {
+      "suite": "webp-fallback",
+      "passed": true,
+      "cases": 13,
+      "checks": "PPTX PNG embedding, source pixels, alpha, EXIF, first animation frame, fit/crop, resolver once, DOM canvas"
+    },
+    {
+      "suite": "native-rich-table-import",
+      "passed": true,
+      "cases": 20,
+      "checks": "Native XML import, style/default preservation, links, blank lines, repeated conversion and SVG preview"
+    },
+    {
+      "suite": "native-table-styles",
+      "passed": true,
+      "checks": 11
+    },
+    {
+      "suite": "native-styled-table-import",
+      "passed": true,
+      "checks": 13
+    },
+    {
+      "suite": "native-content-layout",
+      "passed": true,
+      "checks": 53,
+      "measurement": "browser-default; loaded fonts and native rasters verified separately"
+    },
+    {
+      "suite": "chart-colors",
+      "passed": true,
+      "checks": 28,
+      "cases": 4,
+      "scope": "Actual browser export/import, editable workbook heading recovery and DOM color observations; no native PowerPoint or raster-equivalence claim."
+    }
+  ]
+}

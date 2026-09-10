@@ -10,7 +10,8 @@ try {
   [{value:'One native merged cell',colSpan:3,style:{fill:'#F1F5F9',padding:{top:12,bottom:12},borders:{top:{color:'#64748B',width:2,dash:'dash'}}}},null,null]
  ]}}]};
  const diagnostics=[],deck=await fromPptx(await toPptx(source),{onDiagnostic:d=>diagnostics.push(d)});
- check(diagnostics.length===0,'Native properties import without diagnostics');
+ check(diagnostics.length===1&&diagnostics[0].code==='heading-import-reflow','Native properties import with one supported heading recovery diagnostic');
+ check(deck.slides[0].title===source.slides[0].title,'The tagged native heading retains its current title text');
  check(validatePresentation(deck).valid,'Imported document validates');
  const table=deck.slides[0].blocks.find(block=>block.table).table;
  check(table.rows[0][0].rowSpan===2&&table.rows[1][0]===null,'Vertical anchor and covered slot');

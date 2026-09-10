@@ -392,12 +392,15 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
 
   const items = collectSlideItems(entries, slideRoot, slidePath, relationships, dimensions, options, slideIndex)
     .sort(comparePositionedItems);
+  // Complete OPF heading roles are authoritative. Nearby body lines must not
+  // fill an absent role by geometry; explicit native placeholders still apply.
+  const inferHeadings = !items.some(item => item.heading);
   const heading = field => {const index=items.findIndex(item=>item.heading===field);return index<0?null:items.splice(index,1)[0];};
   const tagItem=heading('tag');
   if(tagItem)slide.tag=tagItem.text;
-  const titleItem = heading('title')??takeTitleItem(items, dimensions);
+  const titleItem = heading('title')??takeTitleItem(items, dimensions, inferHeadings);
   if (titleItem) slide.title = titleItem.text;
-  const subtitleItem = heading('subtitle')??takeSubtitleItem(items, titleItem, dimensions);
+  const subtitleItem = heading('subtitle')??takeSubtitleItem(items, titleItem, dimensions, inferHeadings);
   if (subtitleItem) slide.subtitle = subtitleItem.text;
 
   const blocks = mergeAdjacentBulletShapes(items)
@@ -595,9 +598,10 @@ function shapeBounds(xfrm) {
   return { x, y, w, h };
 }
 
-function takeTitleItem(items, dimensions) {
+function takeTitleItem(items, dimensions, inferHeadings) {
   const explicitIndex = items.findIndex((item) => ["title", "ctrTitle"].includes(item.placeholder));
   if (explicitIndex >= 0) return items.splice(explicitIndex, 1)[0];
+  if (!inferHeadings) return null;
 
   const titleLimit = dimensions.heightInches * 0.28;
   const candidateIndex = items.findIndex((item) => {
@@ -609,15 +613,15 @@ function takeTitleItem(items, dimensions) {
   return null;
 }
 
-function takeSubtitleItem(items, titleItem, dimensions) {
+function takeSubtitleItem(items, titleItem, dimensions, inferHeadings) {
   const explicitIndex = items.findIndex((item) => item.placeholder === "subTitle");
   if (explicitIndex >= 0) return items.splice(explicitIndex, 1)[0];
-  if (!titleItem) return null;
+  if (!inferHeadings || !titleItem) return null;
 
   const titleBottom = (titleItem.bounds?.y ?? 0) + (titleItem.bounds?.h ?? 0);
   const subtitleLimit = Math.min(dimensions.heightInches * 0.34, 1.45);
   const candidateIndex = items.findIndex((item) => {
-    if (item.kind !== "text" || !item.text || item.paragraphs.some(p=>p.bullet)) return false;
+    if (item.heading || item.kind !== "text" || !item.text || item.paragraphs.some(p=>p.bullet)) return false;
     const y = item.bounds?.y ?? 0;
     const h = item.bounds?.h ?? 0;
     return y >= titleBottom - 0.05
@@ -927,10 +931,15 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
     if(['text','title','subtitle','tag'].includes(item.field)&&item.text?.placement&&!item.text.richLines) {
       addMeasuredPayloadText(slide,item.text.lines.join('\n'),item.box,slideContext,options,{path:item.path,fit:item.text,textStyle:item.textStyle,diagnosticsHandled:true,heading:['title','subtitle','tag'].includes(item.field)?item.field:undefined,color:item.field==='tag'?slideContext.colors.accent:slideContext.colors.text});
     } else if (["title", "subtitle", "tag"].includes(item.field)) {
+      // Estimated-font headings use one native text box, which still needs a
+      // role tag. Role recovery must not depend on outline measurement support.
+      const objectName = `OPF heading ${item.path} line 0`;
+      context.headingTags.set(objectName,{v:1,group:item.path,field:item.field,line:0,count:1});
       slide.addText(item.text.lines.join("\n"), {
         ...textBoxOptions(region, slideContext, item.text.fontSize * 0.75),
         ...nativeFontOptions(item.textStyle),
         color: item.field === "tag" ? slideContext.colors.accent : slideContext.colors.text,
+        objectName,
         breakLine: false
       });
     } else if ((item.field === "items" || item.field === "bullets") && item.text?.listEntries) {

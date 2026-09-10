@@ -77,7 +77,7 @@ This pass did not require an OPF schema change. The deferred full OOXML placehol
 The first importer is mechanical and schema-compatible:
 
 - Presentation core properties map to OPF `name`, `description`, and `author`.
-- Slide text placeholders and large top-of-slide text boxes map to `title` and `subtitle` when recognizable.
+- Native title/subtitle placeholders retain their roles. On slides without complete OPF heading tags, recognizable text-box positions and sizes provide a fallback. If any complete OPF heading role is recovered, untagged body text stays in `blocks[]` instead of being promoted into an absent heading role. Damaged tags retain visible text through ordinary import and diagnostics.
 - Remaining text boxes map to `blocks[]` as text or list payloads, sorted by OOXML position.
 - PowerPoint tables map to OPF table blocks, embedded images map to data URI image blocks, and cached chart series map to basic OPF chart blocks.
 - Table imports retain empty rows. A native `firstRow` flag of `1` or `true` maps the first row to column labels; absent/false flags retain every row as data. New exports set this flag from OPF columns. Older exports without the flag retain their labels as the first data row rather than inferring headers.

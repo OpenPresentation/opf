@@ -1,0 +1,25 @@
+{
+  "evidenceCommit": "2024141c116e81608d3c6632b02c7bcbcd2a2bcc",
+  "node": "v24.21.0",
+  "runtimeSha256": "f75e684288b7124289d48bb907d42297491cf7ed9ddab301039b76f3d16e3809",
+  "reviewerSha256": "f1dc91712821b22f45a74f8e64fd6493046a86fe74e4031a78b8a6352185d172",
+  "mode": "after",
+  "results": [
+    {
+      "nativeNode": "20",
+      "tableImports": 54,
+      "nativeTableCharacterColorObservations": 978,
+      "codeImports": 24,
+      "quoteImports": 36
+    },
+    {
+      "nativeNode": "24",
+      "tableImports": 54,
+      "nativeTableCharacterColorObservations": 978,
+      "codeImports": 24,
+      "quoteImports": 36
+    }
+  ],
+  "quoteRoleOutliers": [],
+  "scope": "Fresh imports of retained native fixtures and extra table export/import cycles; exact current content, native edits, raw character-color and reported bound/tab observations. No new Office execution, semantic quote recovery, font identity or native raster equivalence claim."
+}
