@@ -1,0 +1,175 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Every current body/footer line survives in exact order and multiplicity
++ actual - expected
+
+  [
+    {
+-     text: '"A shared layout keeps the evidence readable',
+-     type: 'text'
+-   },
+-   {
+      text: 'when the words change. A shared layout keeps',
+      type: 'text'
+    },
+    {
+      text: 'the evidence readable when the words change.',
+
+    at file:///C:/Users/micha/.codex/worktrees/fd3f/opf/artifacts/windows-native/opf-pptx/test/native-quote.mjs:111:16 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: [
+    {
+      type: 'text',
+      text: 'when the words change. A shared layout keeps'
+    },
+    {
+      type: 'text',
+      text: 'the evidence readable when the words change.'
+    },
+    {
+      type: 'text',
+      text: 'A shared layout keeps the evidence readable'
+    },
+    {
+      type: 'text',
+      text: 'when the words change. A shared layout keeps'
+    },
+    {
+      type: 'text',
+      text: 'the evidence readable when the words change.'
+    },
+    {
+      type: 'text',
+      text: 'A shared layout keeps the evidence readable'
+    },
+    {
+      type: 'text',
+      text: 'when the words change. A shared layout keeps'
+    },
+    {
+      type: 'text',
+      text: 'the evidence readable when the words change.'
+    },
+    {
+      type: 'text',
+      text: 'A shared layout keeps the evidence readable'
+    },
+    {
+      type: 'text',
+      text: 'when the words change. A shared layout keeps'
+    },
+    {
+      type: 'text',
+      text: 'the evidence readable when the words change.'
+    },
+    {
+      type: 'text',
+      text: 'A shared layout keeps the evidence readable'
+    },
+    {
+      type: 'text',
+      text: 'when the words change. A shared layout keeps'
+    },
+    {
+      type: 'text',
+      text: 'the evidence readable when the words change.'
+    },
+    {
+      type: 'text',
+      text: 'A shared layout keeps the evidence readable'
+    },
+    {
+      type: 'text',
+      text: 'when the words change. A shared layout keeps'
+    },
+    {
+      type: 'text',
+      text: 'the evidence readable when the words change.'
+    },
+    { type: 'text', text: '"' },
+    { type: 'text', text: 'A reviewer - Recorded interview' }
+  ],
+  expected: [
+    {
+      type: 'text',
+      text: '"A shared layout keeps the evidence readable'
+    },
+    {
+      type: 'text',
+      text: 'when the words change. A shared layout keeps'
+    },
+    {
+      type: 'text',
+      text: 'the evidence readable when the words change.'
+    },
+    {
+      type: 'text',
+      text: 'A shared layout keeps the evidence readable'
+    },
+    {
+      type: 'text',
+      text: 'when the words change. A shared layout keeps'
+    },
+    {
+      type: 'text',
+      text: 'the evidence readable when the words change.'
+    },
+    {
+      type: 'text',
+      text: 'A shared layout keeps the evidence readable'
+    },
+    {
+      type: 'text',
+      text: 'when the words change. A shared layout keeps'
+    },
+    {
+      type: 'text',
+      text: 'the evidence readable when the words change.'
+    },
+    {
+      type: 'text',
+      text: 'A shared layout keeps the evidence readable'
+    },
+    {
+      type: 'text',
+      text: 'when the words change. A shared layout keeps'
+    },
+    {
+      type: 'text',
+      text: 'the evidence readable when the words change.'
+    },
+    {
+      type: 'text',
+      text: 'A shared layout keeps the evidence readable'
+    },
+    {
+      type: 'text',
+      text: 'when the words change. A shared layout keeps'
+    },
+    {
+      type: 'text',
+      text: 'the evidence readable when the words change.'
+    },
+    {
+      type: 'text',
+      text: 'A shared layout keeps the evidence readable'
+    },
+    {
+      type: 'text',
+      text: 'when the words change. A shared layout keeps'
+    },
+    {
+      type: 'text',
+      text: 'the evidence readable when the words change.'
+    },
+    { type: 'text', text: '"' },
+    { type: 'text', text: 'A reviewer - Recorded interview' }
+  ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.20.0

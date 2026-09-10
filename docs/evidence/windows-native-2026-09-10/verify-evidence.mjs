@@ -56,10 +56,13 @@ if(mode==='create') {
       assert.equal(sha(read(retained)),expected,`${binding.generation}: ${file}`);
     }
     const directory=path.posix.dirname(binding.generation);
-    if(generation.pptxSha256)assert.equal(sha(read(`${directory}/charts.pptx`)),generation.pptxSha256);
+    if(generation.pptxSha256)assert.equal(sha(read(`${directory}/${binding.fixture??'charts.pptx'}`)),generation.pptxSha256);
     for(const record of generation.records??[])assert.equal(sha(read(`${directory}/${record.file}`)),record.sha256);
     for(const font of generation.fonts??[])assert.equal(sha(read(`${directory}/${font.file}`)),font.sha256);
-    for(const deck of generation.decks??[])assert.equal(sha(read(`${directory}/${deck.id}.pptx`)),deck.pptxSha256);
+    for(const deck of generation.decks??[]) {
+      if(deck.pptxSha256)assert.equal(sha(read(`${directory}/${deck.id}.pptx`)),deck.pptxSha256);
+      for(const [file,expected] of Object.entries(deck.hashes??{})) {assert.equal(path.posix.basename(file),file);assert.equal(sha(read(`${directory}/${file}`)),expected);}
+    }
   }
   console.log(`Verified ${manifest.files.length} evidence files against ${mode==='index'?'staged Git blobs':ref}.`);
 }
