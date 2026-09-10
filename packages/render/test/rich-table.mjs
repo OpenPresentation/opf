@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {renderSvg,svgToPng} from '../dist/index.js';
 const table={columns:[['Normal ',{text:'bold',bold:true}]],rows:[[['A ',{text:'red',color:'#AA0000',bold:true}]],[[{text:'link',link:'https://example.com',italic:true}]], [[]]]};
 const svg=renderSvg({design:{theme:'classic',fontScheme:'roboto'},slides:[{table}]},{trace:true});
-assert.ok(/<text(?=[^>]*fill="#AA0000")(?=[^>]*font-weight="700")[^>]*>red<\/text>/.test(svg));
+assert.ok(/<tspan(?=[^>]*fill="#AA0000")(?=[^>]*font-weight="700")[^>]*>red<\/tspan>/.test(svg));
 assert.match(svg,/data-opf-path="slides\.0\.table\.rows\.0\.0"/);
 assert.match(svg,/data-opf-rich-text="true"/);
 assert.match(svg,/href="https:\/\/example.com"/);

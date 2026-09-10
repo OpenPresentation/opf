@@ -37,7 +37,7 @@ try {
         for(const item of expected) {
           const group=[...document.querySelectorAll('g[data-opf-path]')].find(node=>node.getAttribute('data-opf-path')===item.path);
           if(!group)throw Error('Missing rich edit target');
-          const nodes=[...group.querySelectorAll('text')],fragments=[];let cursor=0;
+          const nodes=[...group.querySelectorAll('text[data-opf-text-start],tspan[data-opf-text-start]')],fragments=[];let cursor=0;
           for(const [lineIndex,line]of item.lines.entries()) {
             let previous;
             for(const fragment of line.fragments) {
@@ -61,7 +61,8 @@ try {
       const maxBoundaryGap=Math.max(...fragments.map(fragment=>Math.abs(fragment.gapAfterPreviousFragment??0)));
       results.push({name,mode,sourceSha256:hash(source),svgSha256:hash(svg),...result,maxAdvanceDifference,maxBoundaryGap});
       if(out){await writeFile(path.join(out,`${name}-${mode}.svg`),svg);await page.locator('svg').screenshot({path:path.join(out,`${name}-${mode}.png`)});}
-      if(mode==='measured'){assert.ok(maxAdvanceDifference<.1,`${name}: measured width differs`);assert.ok(maxBoundaryGap<.1,`${name}: measured run spacing differs`);}
+      assert.ok(maxBoundaryGap<.1,`${name}: ${mode} run spacing differs`);
+      if(mode==='measured')assert.ok(maxAdvanceDifference<.1,`${name}: measured width differs`);
     }
   }
   assert.deepEqual(errors,[]);assert.deepEqual(requests,[]);
