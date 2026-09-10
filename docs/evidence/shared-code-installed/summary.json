@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-09-10T05:14:40.242Z",
+  "checkedAt": "2026-09-10T05:17:07.394Z",
   "branch": "codex/shared-code-integration-20260909",
   "sourceRefs": {
     "opf": "9980ed4ddf87359dae1542fb6284f3ba6c3688ae",
@@ -138,8 +138,10 @@
       "bytes": 67056
     },
     "native-powerpoint.json": {
-      "sha256": "8fe541485dc4360e249a139ce73c57e6347c8debc2d92a9b4baaeb5f7d77fa33",
-      "bytes": 21710
+      "sha256": "f9e7571db8a386ca193457a9bdccf293e733cb3a5535b1afe75ced5d298f22b8",
+      "bytes": 21009,
+      "sourceSha256": "8fe541485dc4360e249a139ce73c57e6347c8debc2d92a9b4baaeb5f7d77fa33",
+      "normalization": "CRLF to LF for portable Git evidence"
     },
     "native-comparison.json": {
       "sha256": "bf5bc530ee22554fc71f861fe38b1253febf98da3b4bfd50ae591de2b6d0fde0",
