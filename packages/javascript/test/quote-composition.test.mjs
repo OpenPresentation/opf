@@ -24,14 +24,20 @@ test('accepted quote geometry includes all parts without changing source or re-m
 });
 
 test('automatic candidates account for footer fit and choose the arrangement that keeps it readable', () => {
-  const slide={composition:{minFontSize:24},blocks:[{quote:{text:'A',attribution:'Evidence '.repeat(70)}},{quote:{text:'B',attribution:'Evidence '.repeat(70)}}]};
+  // Retained trailing spaces now contribute to line widths. At 68 repetitions
+  // the column candidate fits; the row candidate's shorter cells do not.
+  const slide={composition:{minFontSize:24},blocks:[{quote:{text:'A',attribution:'Evidence '.repeat(68)}},{quote:{text:'B',attribution:'Evidence '.repeat(68)}}]};
   const result=composeSlide(slide,{explain:true});
   const decision=result.explanation.decisions[0];
   assert.equal(result.explanation.algorithm,'grid-score-v6');
-  assert.equal(decision.selectedColumns,1);
-  assert.equal(decision.candidates[0].penalties.textOverflow,0);
-  assert.equal(decision.candidates[1].penalties.textOverflow,2000);
+  assert.equal(decision.selectedColumns,2);
+  assert.equal(decision.candidates[0].penalties.textOverflow,2000);
+  assert.equal(decision.candidates[1].penalties.textOverflow,0);
   assert.deepEqual(result.diagnostics,[]);
+  for(const item of result.items)assert.equal(item.quoteLayout.parts[1].fit.lines.join(''),'Evidence '.repeat(68));
+  const tooLong=structuredClone(slide);
+  for(const block of tooLong.blocks)block.quote.attribution='Evidence '.repeat(70);
+  assert.equal(composeSlide(tooLong).diagnostics.length,2,'The former normalized fixture must report retained-space overflow.');
 });
 
 test('strict ancestors reject a quote body diagnostic below the leaf path', () => {

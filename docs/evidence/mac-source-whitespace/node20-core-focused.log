@@ -1,0 +1,55 @@
+TAP version 13
+# Subtest: plain source ranges retain whitespace, hard breaks and explicit tabs at every width
+ok 1 - plain source ranges retain whitespace, hard breaks and explicit tabs at every width
+  ---
+  duration_ms: 2.882834
+  ...
+# Subtest: nonbreaking prose tokens stay intact and overflow at the readability floor
+ok 2 - nonbreaking prose tokens stay intact and overflow at the readability floor
+  ---
+  duration_ms: 0.178041
+  ...
+# Subtest: accepted scalar placement unions text outlines at tab stops without shaping controls
+ok 3 - accepted scalar placement unions text outlines at tab stops without shaping controls
+  ---
+  duration_ms: 1.166542
+  ...
+# Subtest: accepted quote geometry includes all parts without changing source or re-measuring for explanations
+ok 4 - accepted quote geometry includes all parts without changing source or re-measuring for explanations
+  ---
+  duration_ms: 2.479125
+  ...
+# Subtest: automatic candidates account for footer fit and choose the arrangement that keeps it readable
+ok 5 - automatic candidates account for footer fit and choose the arrangement that keeps it readable
+  ---
+  duration_ms: 3.971833
+  ...
+# Subtest: strict ancestors reject a quote body diagnostic below the leaf path
+ok 6 - strict ancestors reject a quote body diagnostic below the leaf path
+  ---
+  duration_ms: 100.230959
+  ...
+# Subtest: strict path matching respects component boundaries rather than numeric prefixes
+ok 7 - strict path matching respects component boundaries rather than numeric prefixes
+  ---
+  duration_ms: 89.631458
+  ...
+# Subtest: pagination preserves quote body, repeated metadata, ranges and the accepted readability floor
+ok 8 - pagination preserves quote body, repeated metadata, ranges and the accepted readability floor
+  ---
+  duration_ms: 663.790959
+  ...
+# Subtest: irreducible footer overflow rejects pagination without mutating or returning partial content
+ok 9 - irreducible footer overflow rejects pagination without mutating or returning partial content
+  ---
+  duration_ms: 13.886
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 944.795334

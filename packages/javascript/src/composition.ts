@@ -222,34 +222,14 @@ export function measureText(text: string, fontSize: number): number {
   return units * fontSize;
 }
 export function wrapText(text: string, width: number, fontSize: number, measure: MeasureTextWidth = measureText): string[] {
-  const result: string[] = [];
-  for (const paragraph of text.replace(/\r\n?/g, "\n").split("\n")) {
-    let line = "";
-    for (const word of paragraph.split(/\s+/u).filter(Boolean)) {
-      if (line && measure(`${line} ${word}`, fontSize) > width) { result.push(line); line = ""; }
-      if (measure(word, fontSize) <= width) { line += (line ? " " : "") + word; continue; }
-      // Keep combining marks and emoji sequences intact when breaking long tokens.
-      for (const { segment: character } of textSegments.segment(word)) {
-        if (line && measure(line + character, fontSize) > width) { result.push(line); line = ""; }
-        line += character;
-      }
-    }
-    result.push(line);
-  }
-  return result;
+  return fitSourceText(text,{x:0,y:0,width,height:Number.MAX_VALUE},fontSize,fontSize,1,measure,true).lines;
 }
-export function fitText(text: string, box: LayoutBox, requestedSize = 25, minFontSize = 16, measure: MeasureTextWidth = measureText): TextFit {
+export function fitText(text: string, box: LayoutBox, requestedSize = 25, minFontSize = 16, measure: MeasureTextWidth = measureText): SourceTextFit {
   if (![box.width, box.height, requestedSize, minFontSize].every(Number.isFinite) || box.width <= 0 || box.height <= 0 || requestedSize <= 0 || minFontSize <= 0) {
     throw new RangeError("Text dimensions and font sizes must be finite and positive.");
   }
   const minimum = Math.min(minFontSize, requestedSize);
-  let fontSize = requestedSize;
-  let lines = wrapText(text, box.width, fontSize, measure);
-  while (fontSize > minimum && (lines.length * fontSize * 1.22 > box.height || lines.some(line => measure(line, fontSize) > box.width))) {
-    fontSize = Math.max(minimum, fontSize - 1);
-    lines = wrapText(text, box.width, fontSize, measure);
-  }
-  return { lines, fontSize, lineHeight: fontSize * 1.22, overflow: lines.length * fontSize * 1.22 > box.height + 0.01 || lines.some(line => measure(line, fontSize) > box.width + 0.01) };
+  return fitSourceText(text,box,requestedSize,minimum,1,measure,true);
 }
 export interface QuoteContent { text: string; attribution?: string; source?: string }
 /** Source and displayed-text ranges are half-open UTF-16 offsets. Added punctuation has no source range. */
@@ -619,7 +599,7 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
 }
 
 export interface CodeContent { source: string; language?: string; filename?: string }
-export interface CodeLineSegment {
+export interface TextLineSegment {
   kind: 'text' | 'tab';
   start: number;
   end: number;
@@ -628,21 +608,25 @@ export interface CodeLineSegment {
   width: number;
 }
 /** Exact half-open UTF-16 offsets into the part text, including consumed hard line breaks. */
-export interface CodeLineSource {
+export interface TextLineSource {
   start: number;
   end: number;
   nextStart: number;
   boundary: 'soft' | 'hard' | 'end';
   width: number;
   /** Explicit tab placement is required in SVG; CSS tab-size alone does not implement it. */
-  segments: CodeLineSegment[];
+  segments: TextLineSegment[];
 }
-export interface CodeTextFit extends TextFit {
-  sourceLines: CodeLineSource[];
+export interface SourceTextFit extends TextFit {
+  sourceLines: TextLineSource[];
   /** Tabs advance to the next multiple of four measured spaces from each displayed line's origin. */
   tabSize: 4;
   tabWidth: number;
 }
+/** Compatibility names for the shared source-preserving line contract. */
+export type CodeLineSegment = TextLineSegment;
+export type CodeLineSource = TextLineSource;
+export interface CodeTextFit extends SourceTextFit {}
 export interface CodeTextPart {
   role: 'filename' | 'language' | 'body';
   path: string;
@@ -672,9 +656,14 @@ export interface CodeLayoutOptions extends QuoteLayoutOptions {}
 
 /** Fit code without using prose whitespace normalization. The source remains reconstructable. */
 function fitCodeText(text:string,box:LayoutBox,size:number,minimum:number,step:number,measure:MeasureTextWidth):CodeTextFit {
+  return fitSourceText(text,box,size,minimum,step,measure);
+}
+
+/** Retain exact source ranges and position tabs without passing control characters to a font shaper. */
+function fitSourceText(text:string,box:LayoutBox,size:number,minimum:number,step:number,measure:MeasureTextWidth,prose=false):SourceTextFit {
   const layout=(fontSize:number):CodeTextFit=>{
     const tabWidth=measure(' ',fontSize)*4;
-    if (!Number.isFinite(tabWidth)||text.includes('\t')&&tabWidth<=0) throw new RangeError('Code tabs require a positive finite measured space advance.');
+    if (!Number.isFinite(tabWidth)||text.includes('\t')&&tabWidth<=0) throw new RangeError('Text tabs require a positive finite measured space advance.');
     const measureLine=(start:number,end:number,record=false)=>{
       let x=0,offset=start;
       const segments:CodeLineSegment[]=[];
@@ -699,7 +688,8 @@ function fitCodeText(text:string,box:LayoutBox,size:number,minimum:number,step:n
       sourceLines.push({start,end:last,nextStart,boundary,...measureLine(start,last,true)});
       start=nextStart;end=nextStart;
     };
-    for (const token of text.matchAll(/\r\n|\r|\n|[^\S\r\n]+|[^\s]+/gu)) {
+    const tokens=prose?/\r\n|\r|\n|[^\S\r\n\u00a0\u202f\ufeff]+|(?:[^\s]|\u00a0|\u202f|\ufeff)+/gu:/\r\n|\r|\n|[^\S\r\n]+|[^\s]+/gu;
+    for (const token of text.matchAll(tokens)) {
       if (token.index===undefined) throw new Error('Missing code token source offset.');
       const a=token.index,b=a+token[0].length;
       if (/^[\r\n]/.test(token[0])) {push(a,b,'hard');continue;}
@@ -708,6 +698,9 @@ function fitCodeText(text:string,box:LayoutBox,size:number,minimum:number,step:n
       // fitting prefix instead of eagerly placing it on a separate line.
       if (end>start && /\S/u.test(text.slice(start,end))) push(a,a,'soft');
       if (width(start,b)<=box.width+.01) {end=b;continue;}
+      // Nonbreaking spaces and word joiners carry an explicit author constraint.
+      // Keep the protected token intact and report overflow at the chosen floor.
+      if (prose&&/[\u00a0\u202f\u2060\ufeff]/u.test(token[0])) {end=b;continue;}
       for (const segment of textSegments.segment(token[0])) {
         const next=a+segment.index+segment.segment.length;
         if (end>start && width(start,next)>box.width+.01) push(a+segment.index,a+segment.index,'soft');
@@ -1122,7 +1115,17 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
           if(!outline)outline=next;else{const right=Math.max(outline.x+outline.width,next.x+next.width),bottom=Math.max(outline.y+outline.height,next.y+next.height);outline.x=Math.min(outline.x,next.x);outline.y=Math.min(outline.y,next.y);outline.width=right-outline.x;outline.height=bottom-outline.y;}
         }
         return {width:line.width,y:line.y,baseline:line.baseline,height:line.height,outline};
-      }):fit.lines.map((line,index)=>({width:measure(line,fontSize),y:index*fit.lineHeight,baseline:fontSize+index*fit.lineHeight,height:fit.lineHeight,outline:measureTextOutline(line,fontSize,style,options.textMeasurement)??null}));
+      }):(fit as SourceTextFit).sourceLines.map((line,index)=>{
+        let outline:LayoutBox|null=null;
+        for(const segment of line.segments) {
+          if(segment.kind==='tab')continue;
+          const bounds=measureTextOutline(text.slice(segment.start,segment.end),fontSize,style,options.textMeasurement);
+          if(!bounds)continue;
+          const next={...bounds,x:segment.x+bounds.x};
+          if(!outline)outline=next;else{const right=Math.max(outline.x+outline.width,next.x+next.width),bottom=Math.max(outline.y+outline.height,next.y+next.height);outline.x=Math.min(outline.x,next.x);outline.y=Math.min(outline.y,next.y);outline.width=right-outline.x;outline.height=bottom-outline.y;}
+        }
+        return {width:line.width,y:index*fit.lineHeight,baseline:fontSize+index*fit.lineHeight,height:fit.lineHeight,outline};
+      });
       const placement=placeTextLines(lines,box,alignment,rasterPadding),result={...fit,placement,overflow:fit.overflow||placement.overflow};
       if(!result.overflow||fontSize===floor)return result;
     }

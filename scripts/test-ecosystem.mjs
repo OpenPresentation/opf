@@ -12,7 +12,7 @@ import { createEditorSession } from '../../opf-editor/dist/index.js';
 const require = createRequire(new URL('../../opf-pptx/package.json', import.meta.url));
 const { unzipSync } = require('fflate');
 const { XMLParser } = require('fast-xml-parser');
-const parser = new XMLParser({ignoreAttributes:false,attributeNamePrefix:''});
+const parser = new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false});
 const array = value => Array.isArray(value) ? value : value ? [value] : [];
 const deck = JSON.parse(await readFile(new URL('../examples/technical/dynamic-composition.opf.json',import.meta.url),'utf8'));
 assert.equal(validatePresentation(deck).valid,true);
@@ -53,18 +53,30 @@ for (let index=0;index<deck.slides.length;index++) {
   const xml = parser.parse(new TextDecoder().decode(entries[`ppt/slides/slide${index+1}.xml`]));
   const shapes = array(xml['p:sld']['p:cSld']['p:spTree']['p:sp']);
   const items = resolved.slides[index].geometry.items;
-  assert.equal(shapes.length,items.length,'Every text payload stays an editable PowerPoint shape');
+  const lines=items.flatMap(item=>item.text.lines.map((text,line)=>({item,text,line})));
+  assert.equal(shapes.length,lines.length,'Every accepted source line stays an editable PowerPoint shape');
   shapes.forEach((shape,i)=>{
     const transform=shape['p:spPr']['a:xfrm'];
-    const box=items[i].box;
+    const {item,text,line}=lines[i];
+    const box={...item.box,y:item.box.y+line*item.text.lineHeight,height:item.text.lineHeight};
     for (const [actual,expected] of [[transform['a:off'].x,box.x],[transform['a:off'].y,box.y],[transform['a:ext'].cx,box.width],[transform['a:ext'].cy,box.height]]) {
       assert.ok(Math.abs(Number(actual)/9525-expected)<0.002,`Slide ${index}: OOXML coordinates differ from preview geometry`);
     }
+    const current=array(shape['p:txBody']['a:p']).map(p=>array(p['a:r']).map(run=>String(run['a:t']??'')).join('')).join('\n');
+    assert.equal(current,text,'Editable native text retains every accepted source character');
+    assert.equal(shape['p:txBody']['a:bodyPr'].wrap,'none');
+    for(const auto of ['a:normAutofit','a:spAutoFit'])assert.ok(!Object.hasOwn(shape['p:txBody']['a:bodyPr'],auto),'Native text must not refit accepted lines');
   });
 }
 const imported = await fromPptx(bytes);
 assert.equal(validatePresentation(imported).valid,true);
 assert.equal(imported.slides.length,deck.slides.length);
+for(const [index,slide]of imported.slides.entries()) {
+  const items=resolved.slides[index].geometry.items;
+  const spatialOrder=items.filter(item=>item.field==='text').sort((a,b)=>a.box.y-b.box.y||a.box.x-b.box.x);
+  assert.deepEqual(slide.blocks?.map(block=>block.text)??[],spatialOrder.map(item=>item.value),'Native line groups reconstruct exact current body source in spatial order');
+  for(const item of items.filter(item=>['title','subtitle','tag'].includes(item.field)))assert.equal(slide[item.field],item.value,'Native heading groups reconstruct exact current source');
+}
 const portrait={design:{dimensions:{widthInches:7.5,heightInches:40/3}},slides:[{title:'Portrait',text:'A custom physical canvas.'}]};
 assert.deepEqual(resolvePresentation(portrait).slides[0].design.dimensions,{width:720,height:1280});
 assert.deepEqual(resolveCanvasDimensions('letter'),{width:1056,height:816});
