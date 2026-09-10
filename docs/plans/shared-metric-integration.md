@@ -1,6 +1,14 @@
 # Shared metric integration — source checkpoint
 
-## Current checkpoint: chart visibility and editable workbook headings; native connection failure
+## Current checkpoint: actual offline artwork and image diagnostics; remaining native/corpus gates
+
+Core `6cf9d138383846e14770bc6a5289f17fb0f5beb0` and renderer `5257b906fe3fd28ea19a4367474f9c594712a270` are pushed. PPTX/editor source refs below are unchanged. [New portable evidence](../evidence/gallery-artwork-images/README.md) preserves original MIT artwork, exact authoring-source guards, both runtime check matrices and real offline browser/image export/reimport reports. Eighty decks gain 400 embedded assets; 240 photo/video/data references remain explicit gaps. Renderer missing-image diagnostics, bounded accessible status labels/icons and complete branding fit are implemented and tested.
+
+Both runtimes pass 470 core tests and preservation checks, 400 independent PNG decodes, all 400 actual image browser/PPTX byte round trips, six placeholder browser cases and full PPTX/six-browser-suite checks. Renderer full commands still fail at the unpromoted baseline. All 2,415 raster hashes verify; the current manifests match, with 642 changed slides. All 17 final overview sheets and six full-size images were inspected. The browser rectangle audit retains 28 content findings after 914 missing-image-label findings disappear with actual artwork. This changes the text population, not the readability of faint decorative text.
+
+No native application image fidelity is claimed, and no package or deployment advances. Resume the native chart connection/workbook/point-color gate, investigate the 28 remaining rectangle findings and existing native metric counterexamples, complete missing resources/region fidelity and detailed baseline acceptance, then finish coordinated candidate CI/PR review before release preparation. A fresh seven-repository audit has zero open PRs/security alerts; no integration PR is open. The full goal remains active.
+
+## Previous checkpoint: chart visibility and editable workbook headings; native connection failure
 
 Core `a58a9e39a02b1ca13b947dd045bfa9f664c3db57`, renderer `a6c499434b98754597c6cb7e2b8ec744fdecd7fc`, PPTX `7ed519de3daadb49123baf574bab89fd817d411a` and unchanged editor `b30c25c5af426590857f1a84c54b775056fee5ca` are pushed on the integration branch. [Chart evidence](../evidence/chart-colors-workbook/README.md) records inherited panel/label/series contrast handling, actual editable category-heading preservation, 470 core tests per runtime, 40 chart cases per consumer, 37 workbook cases and four real-browser chart workflows. Full PPTX/browser/code/metric checks pass on Node 20/24; full renderer commands retain the unpromoted corpus failure.
 

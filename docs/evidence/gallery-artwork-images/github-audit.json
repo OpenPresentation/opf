@@ -1,0 +1,40 @@
+{
+  "checkedAt": "2026-09-10T13:41:20.758Z",
+  "repositories": [
+    {
+      "repository": "OpenPresentation/opf",
+      "openPrs": [],
+      "securityAlerts": []
+    },
+    {
+      "repository": "OpenPresentation/opf-render",
+      "openPrs": [],
+      "securityAlerts": []
+    },
+    {
+      "repository": "OpenPresentation/opf-pptx",
+      "openPrs": [],
+      "securityAlerts": []
+    },
+    {
+      "repository": "OpenPresentation/opf-editor",
+      "openPrs": [],
+      "securityAlerts": []
+    },
+    {
+      "repository": "Data-Advantage/openpresentation-site",
+      "openPrs": [],
+      "securityAlerts": []
+    },
+    {
+      "repository": "Data-Advantage/pptx-gallery",
+      "openPrs": [],
+      "securityAlerts": []
+    },
+    {
+      "repository": "Data-Advantage/pptx-dev",
+      "openPrs": [],
+      "securityAlerts": []
+    }
+  ]
+}
