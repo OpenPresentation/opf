@@ -236,7 +236,7 @@ export function paginatePresentation(input: unknown, options: PresentationPagina
     const fontReference = design.fontScheme ?? theme.fontScheme ?? "roboto";
     const fontScheme = typeof fontReference === "string" ? resolve("fontSchemes",fontReference) : {...resolve("fontSchemes",fontReference.id),...fontReference};
     const fonts = resolveFontFamilies(fontScheme);
-    const result = paginateSlide(slide,{...resolveCanvasDimensions(design.dimensions ?? theme.dimensions),layout,fonts,contentAlignment:design.contentAlignment,textMeasurement:options.textMeasurement,...overrides,slideIndex:index,maxSlides:maxSlides-output.length,minFontSize:options.minFontSize,reservedIds});
+    const result = paginateSlide(slide,{...resolveCanvasDimensions(design.dimensions ?? theme.dimensions),layout,fonts,contentAlignment:design.contentAlignment,contentBox:design.contentBox,textMeasurement:options.textMeasurement,...overrides,slideIndex:index,maxSlides:maxSlides-output.length,minFontSize:options.minFontSize,reservedIds});
     const outputStart = output.length;
     result.pages.forEach((page,pageIndex)=>{ pages.push({sourceSlideIndex:index,slideIndex:outputStart+pageIndex,mappings:page.mappings.map(mapping=>({...mapping,outputPath:mapping.outputPath.replace(/^slides\.\d+/,`slides.${outputStart+pageIndex}`)}))}); });
     output.push(...result.slides);

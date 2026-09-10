@@ -24,6 +24,12 @@ Headings reserve space according to their wrapped text. Content that exceeds the
 
 ## Nested groups
 
+### Unpublished shared content cards
+
+The coordinated `codex/shared-metric-integration-20260910` source branches add `grid-score-v5`. For `design.contentBox: true`, each body leaf carries a `frameBox` at its outer allocation and a `box` padded inward by 12 reference pixels at a 720-pixel short edge, capped at one quarter of the frame's width or height. Scoring, accepted payload measurement, strict overflow and pagination all use that rounded interior. Headings remain unframed, nested groups keep their original padding, and explicit outer regions/track weights remain authoritative. Automatic candidates may change because their available content space changes.
+
+Raw composition callers pass their resolved deck flag as `composeSlide(slide, {contentBox: effectiveDesign.contentBox, ...options})`; a slide's explicit `design.contentBox: false` overrides it. Coordinated renderer, editor and whole-presentation pagination resolve this option for their callers. Consumers draw at `frameBox` and use the accepted `box` and payload internals without another inset. Published core 0.9.0 does not expose this behavior. Content cards do not make the incomplete chart/timeline density models complete or certify native raster fidelity.
+
 A block or promoted region can contain its own `blocks` and `composition`. The optional discriminator is `"type": "group"`. A group has at least one child and cannot mix children with leaf fields such as `text` or `image`.
 
 ```json

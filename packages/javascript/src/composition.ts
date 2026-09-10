@@ -53,6 +53,8 @@ export interface ComposedItem {
   value: unknown;
   payload: Record<string, unknown>;
   box: LayoutBox;
+  /** Optional visible card allocation; box and all accepted internals occupy its padded interior. */
+  frameBox?: LayoutBox;
   text?: TextFit | RichTextFit | ListFit | CodeTextFit;
   textStyle?: TextStyle;
   /** Complete accepted quote internals; consumers must reuse these fits and styles. */
@@ -77,7 +79,7 @@ export interface ComposedFlow {
   itemCount: number;
   slotCount: number;
 }
-/** Additive penalties in grid-score-v4; lower is preferred. These are not quality percentages. */
+/** Additive penalties in grid-score-v5; lower is preferred. These are not quality percentages. */
 export interface CompositionPenalties {
   cellProportions: number;
   fontReduction: number;
@@ -101,7 +103,7 @@ export interface CompositionDecision {
   candidates: CompositionCandidate[];
 }
 export interface CompositionExplanation {
-  algorithm: 'grid-score-v4';
+  algorithm: 'grid-score-v5';
   /** Provided widths do not establish shaping, glyph coverage or native fidelity. */
   textMeasurement: 'estimated' | 'provided';
   decisions: CompositionDecision[];
@@ -123,6 +125,8 @@ export interface ComposeSlideOptions {
   fonts?: Partial<FontFamilies>;
   /** Host-resolved alignment for shared metric internals; slide design can override it. */
   contentAlignment?: 'left' | 'center' | 'right';
+  /** Host-resolved body cards. A slide's explicit design.contentBox overrides this value. */
+  contentBox?: boolean;
   textMeasurement?: TextMeasurement;
   width?: number;
   height?: number;
@@ -988,6 +992,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const width = options.width ?? 1280, height = options.height ?? 720;
   if (![width, height].every(value => Number.isFinite(value) && value > 0)) throw new RangeError("Canvas dimensions must be finite and positive.");
   const scale = Math.min(width, height) / 720;
+  const hasCards = record(slide.design).contentBox ?? options.contentBox ?? false;
   const composition: Composition = { ...record(layout.composition), ...record(slide.composition) };
   assertComposition(composition);
   const padding = (composition.padding ?? 0.08) * Math.min(width, height);
@@ -1045,6 +1050,13 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     return { x: box.x + amount, y: box.y + amount, width: box.width - amount * 2, height: box.height - amount * 2 };
   };
   const acceptedBox = (box: LayoutBox): LayoutBox => ({x:round(box.x),y:round(box.y),width:round(box.width),height:round(box.height)});
+  // Keep the allocation/explicit region intact. All scoring and final measurement
+  // use the same rounded interior, including strict overflow and pagination.
+  const payloadBox = (box: LayoutBox): LayoutBox => {
+    if (!hasCards) return box;
+    const frame = acceptedBox(box), padding = Math.min(12 * scale, frame.width / 4, frame.height / 4);
+    return acceptedBox({x:frame.x+padding,y:frame.y+padding,width:frame.width-2*padding,height:frame.height-2*padding});
+  };
   const measureQuote = (node: Pending, box: LayoutBox, settings: Composition) => layoutQuote(node.value as string | QuoteContent, acceptedBox(box), {
     fonts:options.fonts,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,
   });
@@ -1056,6 +1068,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     align:record(slide.design).contentAlignment??options.contentAlignment,
   });
   const leafScore = (node: Pending, box: LayoutBox, settings: Composition, penalties?: CompositionPenalties): number => {
+    box = payloadBox(box);
     const text = contentText(node.field, node.value);
     let score = Math.abs(Math.log(box.width / box.height / 1.6));
     if (penalties) penalties.cellProportions += score;
@@ -1122,12 +1135,14 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const boxes = grid.boxes;
     if (!nodes.some(node => node.region)) flows.push({path: containerPath, box: {...area}, composition: {...settings}, columns: grid.columns, rows: grid.rows, gap: grid.gap, itemCount: nodes.length, slotCount: count});
     nodes.forEach((node, index) => {
-      const box = node.region ? regionBox(node.region, area, actualGap) : boxes[index]!;
+      let box = node.region ? regionBox(node.region, area, actualGap) : boxes[index]!;
       if (node.children) {
         const own = inheritedSettings(settings, node.composition), inner = inset(box, own);
         groups.push({ path: node.path, box, contentBox: inner, composition: own });
         arrange(node.children, inner, own, 0, (own.gap ?? 1 / 30) * Math.min(box.width, box.height), node.path);
       } else {
+        const frameBox = hasCards ? acceptedBox(box) : undefined;
+        box = payloadBox(box);
         const textValue = contentText(node.field, node.value);
         const quoteLayout = node.field === 'quote' ? measureQuote(node,box,settings) : undefined;
         const codeLayout = node.field === 'code' ? measureCode(node,box,settings) : undefined;
@@ -1135,6 +1150,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
         const internal = quoteLayout ?? codeLayout ?? metricLayout, body = internal?.parts.find(part=>part.role==='body'||part.role==='value');
         const text = internal ? body?.fit : textValue !== undefined ? fitContent(node.field,node.value,textValue,box,25*scale,(settings.minFontSize??16)*scale,node.path) : undefined;
         items.push({ path: node.path, field: node.field, type: node.type, value: node.value, payload: node.payload, box:internal?acceptedBox(box):box,
+          ...(frameBox ? {frameBox} : {}),
           text, textStyle: body?.style ?? styleFor(node.field,node.path), composition: settings, ...(quoteLayout?{quoteLayout}:{}), ...(codeLayout?{codeLayout}:{}), ...(metricLayout?{metricLayout}:{}) });
         if (box.width < 100 * scale || box.height < 60 * scale) diagnostics.push({ code: "small-cell", path: node.path, message: "Content cell is too small for comfortable reading; use fewer blocks or a different composition." });
       }
@@ -1165,7 +1181,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     return false;
   });
   const explanation: CompositionExplanation | undefined = decisions ? {
-    algorithm:'grid-score-v4',textMeasurement:options.textMeasurement?'provided':'estimated',decisions,
+    algorithm:'grid-score-v5',textMeasurement:options.textMeasurement?'provided':'estimated',decisions,
     unmeasuredPayloads:items.filter(item=>!headings.has(item.field)&&!item.quoteLayout&&!item.codeLayout&&!item.metricLayout&&!['text','items','bullets','table'].includes(item.field)).map(item=>item.path),
   } : undefined;
   if (failures.length) throw new OPFCompositionError(failures, explanation);
