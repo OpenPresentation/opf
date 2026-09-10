@@ -1,0 +1,150 @@
+{
+  "algorithm": "sha256",
+  "files": [
+    {
+      "file": "README.md",
+      "bytes": 5088,
+      "sha256": "43a9167f2e2cbe320819dfbbe38db4b752db2e3cb432fde076d9542575df297e"
+    },
+    {
+      "file": "before-blank-target.log",
+      "bytes": 2225,
+      "sha256": "06a8492a03290500e02785ea8f98eb5cf91656d7fc3db03e53c9d5e3f72c1f18"
+    },
+    {
+      "file": "before-heading-expectation.log",
+      "bytes": 1106,
+      "sha256": "d8abe590df522ba08574ae79486c20cef56559211cd20fd4028431da56501884"
+    },
+    {
+      "file": "before-mixed-input.log",
+      "bytes": 2448,
+      "sha256": "edd6814a72c55767425ea78a1f865898582495d3d2a87412943a8c22bff8d826"
+    },
+    {
+      "file": "before-quote-expectation.log",
+      "bytes": 47919,
+      "sha256": "7d0ed9d2793179fa4179db6f9f87f52335204b0a75b85c4a11cbadfa0def8fe4"
+    },
+    {
+      "file": "before-source.json",
+      "bytes": 349,
+      "sha256": "c9381cbc8d6b3c0d703d7a32783e76c48f4424a50fe03b260da9b58d656795c1"
+    },
+    {
+      "file": "before-stale-browser-consumer.log",
+      "bytes": 749,
+      "sha256": "6a6c7b36234cab3f9ac30cd7bc6e89c5024c1ce8ee4692cc0e5fdb1cb7027ae7"
+    },
+    {
+      "file": "bulk-replacement-observation.json",
+      "bytes": 408,
+      "sha256": "c2ed39cc72951e610eebe34f198b7119d08f723d96647ed96c6bd2e4f8201c28"
+    },
+    {
+      "file": "candidate-manifest.json",
+      "bytes": 1099,
+      "sha256": "81edeadc44e03f3c952321925cbcc68b6cef8722b9cdb67159fe42267ecaad7d"
+    },
+    {
+      "file": "node20-browser-manifest.json",
+      "bytes": 2316,
+      "sha256": "1356445fd89e2f9403fd51292b8b1626b61e9ef70d4ea837c8357ac37248ff25"
+    },
+    {
+      "file": "node20-browser.log",
+      "bytes": 687,
+      "sha256": "c4d7359a4e08c198537514dcbc6f45ea72d1633ee66623b90fe7775aab167469"
+    },
+    {
+      "file": "node20-core-focused.log",
+      "bytes": 2154,
+      "sha256": "72b21ea570669928cdc562c9cc001a66b3b2f29d7a87c7309ed782df21ec9e35"
+    },
+    {
+      "file": "node20-packed-browser.json",
+      "bytes": 20231,
+      "sha256": "ce3639d2e8a196b62aedd5b276872080ca70fbacf17d4543d9c0ffd5882f27cf"
+    },
+    {
+      "file": "node20-packed.log",
+      "bytes": 11942,
+      "sha256": "89115b95ff2ee08e7cb12793e123fe090a0a20da5eeccd1286b7ebc9250e464b"
+    },
+    {
+      "file": "node20-pptx.log",
+      "bytes": 6991,
+      "sha256": "4795f81aa972655e4db2aba1c3681edbfda001f031b4001b0aa15299c0565572"
+    },
+    {
+      "file": "node20-renderer.log",
+      "bytes": 3632,
+      "sha256": "43988253cdacc721702187ac1770369272a779c90d1e11c4af878502b37a61fa"
+    },
+    {
+      "file": "node20-whitespace-installed.json",
+      "bytes": 5400,
+      "sha256": "1ef1ea159a6503fff2c31b1fc53d10c21508cea630ce77f96639dd3bf90dc052"
+    },
+    {
+      "file": "node20-whitespace-installed.log",
+      "bytes": 94,
+      "sha256": "51fe93ebb9f3752c16e908a751eee5d08b724371a1dc907ef24e53e8c7a2ca31"
+    },
+    {
+      "file": "node24-browser-manifest.json",
+      "bytes": 2316,
+      "sha256": "4839bff2025e603835cdd9e7e51509a8bde8a9e361cdba19b719a55ebfc5c9bf"
+    },
+    {
+      "file": "node24-browser.log",
+      "bytes": 687,
+      "sha256": "c4d7359a4e08c198537514dcbc6f45ea72d1633ee66623b90fe7775aab167469"
+    },
+    {
+      "file": "node24-core.log",
+      "bytes": 47181,
+      "sha256": "a9562b4cf28af24994b594759fc4805f2f61634f59a3f7f5d7a8deaf7a6d5a00"
+    },
+    {
+      "file": "node24-editor.log",
+      "bytes": 1787,
+      "sha256": "d8652d52fb26f01b0a4f13570bac3440ca94edd0ede9f4a7957c7364402378be"
+    },
+    {
+      "file": "node24-packed-browser.json",
+      "bytes": 20231,
+      "sha256": "af32dd9025abcb01df6f1854ca509de55a3ddbe0c071f60840324763b60001e3"
+    },
+    {
+      "file": "node24-packed.log",
+      "bytes": 7659,
+      "sha256": "bd1713687c8ffea301535424271fab85c0abde20e86bf8e7fdf953e52673d0a4"
+    },
+    {
+      "file": "node24-pptx-final.log",
+      "bytes": 180,
+      "sha256": "59c9359043e8b396ce17c715633590aefa9d83250474489603a9834867ae0cdd"
+    },
+    {
+      "file": "node24-pptx.log",
+      "bytes": 6991,
+      "sha256": "4795f81aa972655e4db2aba1c3681edbfda001f031b4001b0aa15299c0565572"
+    },
+    {
+      "file": "node24-whitespace-installed.json",
+      "bytes": 5400,
+      "sha256": "d75430f128df9c958a5beb9d6ae1c705d737182f1b7ca58b2f2a81ba77cf901c"
+    },
+    {
+      "file": "node24-whitespace-installed.log",
+      "bytes": 94,
+      "sha256": "51fe93ebb9f3752c16e908a751eee5d08b724371a1dc907ef24e53e8c7a2ca31"
+    },
+    {
+      "file": "source-graph.json",
+      "bytes": 344,
+      "sha256": "e80040934445f8888a23d0901faeddde1b24e5b23f9db101d3528dc3319301ab"
+    }
+  ]
+}

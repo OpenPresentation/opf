@@ -14,6 +14,8 @@ The [Akasia v0.0.2 assessment](../evidence/akasia-assessment/README.md) now chec
 
 The shared metric outline increment in core #66 clears the recorded portrait/right native Latency ink overflow in fresh Windows evidence at core #68. All 288 current-metric imports, 96 full-slide rasters and 276 isolated masks pass their scoped checks. Six leading-tab outliers remain per runtime at a maximum of 0.0226745605469pt against the unchanged 0.02pt gate. The independent [Mac review](../evidence/metric-outline-placement/native-candidate-independent-review.json) preserves that remaining failure.
 
+The [scalar whitespace candidate](plain-text-whitespace.md) retains source spaces, tabs and exact line boundaries, with explicit tab geometry and bounded measured SVG advances. It includes blank-field selection and per-input mixed-ending preservation. Native verification and the separate remaining text-feature/coverage gates are still required.
+
 ## Ship the existing starter pack
 
 Default new presentations to Roboto, with Roboto Mono for code. Use the same supplied font bytes for measurement, browser previews, and raster exports. Native PowerPoint exports name the resolved open font; recipients currently need that font installed.

@@ -30,21 +30,21 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
-          ref: 6520f091a95aa95be5993580adf5df567eb439c8
+          ref: d04da692a579b2256ad27ee8de216105806b48d2
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-editor
-          ref: f0871842088d2180ed7de606c379d7921e7fbf0e
+          ref: d4c0af69dd96acba70430e31c4b7057b70891e49
           path: opf-editor
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-pptx
-          ref: 8bf8aab4a69e2f89b489ff64cde2ae6b7c46de7e
+          ref: 9dcc137387f50192ea5a0b2d00045b10fd476f6b
           path: opf-pptx
           fetch-depth: 0
           persist-credentials: false
@@ -70,7 +70,7 @@ jobs:
       - name: Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks
         working-directory: opf
         env:
-          OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf-render/test/golden/opf-examples-png.rich-flow.sha256.json
+          OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf-render/test/golden/opf-examples-png.source-whitespace.sha256.json
         run: pnpm test:packages
       - name: Execute installed tarball browser interactions
         working-directory: opf
@@ -78,6 +78,10 @@ jobs:
           node -e "if (require('../opf-render/node_modules/playwright/package.json').version !== '1.63.0') throw new Error('Update the pinned Playwright image with the renderer test package.');"
           pnpm test:packed-browser
           node scripts/test-installed-code-guards.mjs
+          node scripts/test-plain-whitespace-workflow.mjs artifacts/plain-whitespace-installed installed
+      - name: Check scalar source whitespace and accepted browser advances
+        working-directory: opf-render
+        run: node test/plain-whitespace-browser.mjs artifacts/plain-whitespace-browser
       - name: Check physical font selections in an offline browser
         working-directory: opf-render
         run: npm run test:font-variants-browser
@@ -122,6 +126,8 @@ jobs:
             opf-render/artifacts/font-variants*.json
             opf/artifacts/npm/consumer/artifacts/*font-variants*.json
             opf/artifacts/metric-outline-browser/**
+            opf/artifacts/plain-whitespace-installed/**
+            opf-render/artifacts/plain-whitespace-browser/**
           retention-days: 7
           if-no-files-found: ignore
       - name: Report the verification boundary
