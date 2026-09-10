@@ -1,0 +1,410 @@
+{
+  "runs": [
+    {
+      "directory": "raw/table-node20-bounded-01",
+      "node": "v20.20.2",
+      "generationSha256": "ae387f26cc73e1013933302d53b80ff4bc28f9a16258ddf79de97f19560eb7da",
+      "comparisonSha256": "d2099f8d78cce46bc68aaf7d5f26cdae8fa4e7cd59eef688664c5f2ab6baf917",
+      "scope": "Actual editable table text/character colors and six cell edits survive native save/reopen. Two additional export/import cycles preserve current cell text, without a formatting/geometry or native-raster claim for those reexports. Explicit low-contrast colors and translucent fills remain intentional counterexamples. Original/reopened native rasters match; no browser equivalence claim."
+    },
+    {
+      "directory": "raw/code-node20-bounded-01",
+      "node": "v20.20.2",
+      "generationSha256": "af367ee2412fb38ecf90a4c42b82a6d1b8e2d92da4166584a891c3deec01b8ab",
+      "comparisonSha256": "956ee57cfc124e7862b28cc84ef5fceb565ca8e1249fc1d08e5dd8b5f4befc7a",
+      "scope": "Original/native-saved/native-edited code semantics and exact source text, including CR/LF/CRLF, blank lines and soft wraps. Native tab tolerance stays 0.02 points and character bounds stay 0.1 points. Imported geometry, formatting, font theme, pixel containment and raster equivalence remain outside this gate."
+    },
+    {
+      "directory": "raw/quote-node20-bounded-01",
+      "node": "v20.20.2",
+      "generationSha256": "138074af1f26abe1cfb80015a16b1804a4fad98094a214ff09726a1302cc4ecb",
+      "comparisonSha256": "5805fff729221e9f8a8c4934061ddf14432b86dfc39dd2c8e3df139de9997dcc",
+      "scope": "Earlier footer-only gate; does not establish body line roles"
+    },
+    {
+      "directory": "raw/quote-node20-bounded-02",
+      "node": "v20.20.2",
+      "generationSha256": "70418c9f4e9ecc78ad93fffd6abe6e9c667b04126ea0f71c40604b78872c82b5",
+      "classificationOutliers": [
+        {
+          "file": "quote-540.pptx",
+          "pptxSha256": "414c7ad5ec8d56c4844f6c1ece183b53683d3137ca6581720367202ea010c929",
+          "slide": 1,
+          "expectedBodyLine": "\"A shared layout keeps the evidence readable",
+          "actualSubtitle": "\"A shared layout keeps the evidence readable",
+          "remainingBodyAndFooterExact": true,
+          "textLost": false
+        },
+        {
+          "file": "quote-540.pptx",
+          "pptxSha256": "414c7ad5ec8d56c4844f6c1ece183b53683d3137ca6581720367202ea010c929",
+          "slide": 2,
+          "expectedBodyLine": "\"A shared layout keeps the evidence readable",
+          "actualSubtitle": "\"A shared layout keeps the evidence readable",
+          "remainingBodyAndFooterExact": true,
+          "textLost": false
+        },
+        {
+          "file": "quote-540.pptx",
+          "pptxSha256": "414c7ad5ec8d56c4844f6c1ece183b53683d3137ca6581720367202ea010c929",
+          "slide": 3,
+          "expectedBodyLine": "\"A shared layout keeps the evidence readable",
+          "actualSubtitle": "\"A shared layout keeps the evidence readable",
+          "remainingBodyAndFooterExact": true,
+          "textLost": false
+        },
+        {
+          "file": "quote-540.pptx",
+          "pptxSha256": "414c7ad5ec8d56c4844f6c1ece183b53683d3137ca6581720367202ea010c929",
+          "slide": 4,
+          "expectedBodyLine": "\"A shared layout keeps the evidence readable when the",
+          "actualSubtitle": "\"A shared layout keeps the evidence readable when the",
+          "remainingBodyAndFooterExact": true,
+          "textLost": false
+        },
+        {
+          "file": "quote-540.pptx",
+          "pptxSha256": "414c7ad5ec8d56c4844f6c1ece183b53683d3137ca6581720367202ea010c929",
+          "slide": 5,
+          "expectedBodyLine": "\"Keep the complete source visible.\"",
+          "actualSubtitle": "\"Keep the complete source visible.\"",
+          "remainingBodyAndFooterExact": true,
+          "textLost": false
+        },
+        {
+          "file": "quote-540.pptx",
+          "pptxSha256": "414c7ad5ec8d56c4844f6c1ece183b53683d3137ca6581720367202ea010c929",
+          "slide": 6,
+          "expectedBodyLine": "\"This source keeps the selected readability",
+          "actualSubtitle": "\"This source keeps the selected readability",
+          "remainingBodyAndFooterExact": true,
+          "textLost": false
+        },
+        {
+          "file": "quote-540-native-saved.pptx",
+          "pptxSha256": "7b01dcf039cdbd966ad567d083f1bd412561f43a526c16fd9682ad103e57dca5",
+          "slide": 1,
+          "expectedBodyLine": "\"A shared layout keeps the evidence readable",
+          "actualSubtitle": "\"A shared layout keeps the evidence readable",
+          "remainingBodyAndFooterExact": true,
+          "textLost": false
+        },
+        {
+          "file": "quote-540-native-saved.pptx",
+          "pptxSha256": "7b01dcf039cdbd966ad567d083f1bd412561f43a526c16fd9682ad103e57dca5",
+          "slide": 2,
+          "expectedBodyLine": "\"A shared layout keeps the evidence readable",
+          "actualSubtitle": "\"A shared layout keeps the evidence readable",
+          "remainingBodyAndFooterExact": true,
+          "textLost": false
+        },
+        {
+          "file": "quote-540-native-saved.pptx",
+          "pptxSha256": "7b01dcf039cdbd966ad567d083f1bd412561f43a526c16fd9682ad103e57dca5",
+          "slide": 3,
+          "expectedBodyLine": "\"A shared layout keeps the evidence readable",
+          "actualSubtitle": "\"A shared layout keeps the evidence readable",
+          "remainingBodyAndFooterExact": true,
+          "textLost": false
+        },
+        {
+          "file": "quote-540-native-saved.pptx",
+          "pptxSha256": "7b01dcf039cdbd966ad567d083f1bd412561f43a526c16fd9682ad103e57dca5",
+          "slide": 4,
+          "expectedBodyLine": "\"A shared layout keeps the evidence readable when the",
+          "actualSubtitle": "\"A shared layout keeps the evidence readable when the",
+          "remainingBodyAndFooterExact": true,
+          "textLost": false
+        },
+        {
+          "file": "quote-540-native-saved.pptx",
+          "pptxSha256": "7b01dcf039cdbd966ad567d083f1bd412561f43a526c16fd9682ad103e57dca5",
+          "slide": 5,
+          "expectedBodyLine": "\"Keep the complete source visible.\"",
+          "actualSubtitle": "\"Keep the complete source visible.\"",
+          "remainingBodyAndFooterExact": true,
+          "textLost": false
+        },
+        {
+          "file": "quote-540-native-saved.pptx",
+          "pptxSha256": "7b01dcf039cdbd966ad567d083f1bd412561f43a526c16fd9682ad103e57dca5",
+          "slide": 6,
+          "expectedBodyLine": "\"This source keeps the selected readability",
+          "actualSubtitle": "\"This source keeps the selected readability",
+          "remainingBodyAndFooterExact": true,
+          "textLost": false
+        },
+        {
+          "file": "quote-540-native-edited.pptx",
+          "pptxSha256": "f2729cc6797b537cfcfaae076fda1e41b582106b90a6ee9a7bdd5f44b36ab5a3",
+          "slide": 1,
+          "expectedBodyLine": "\"A shared layout keeps the evidence readable",
+          "actualSubtitle": "\"A shared layout keeps the evidence readable",
+          "remainingBodyAndFooterExact": true,
+          "textLost": false
+        },
+        {
+          "file": "quote-540-native-edited.pptx",
+          "pptxSha256": "f2729cc6797b537cfcfaae076fda1e41b582106b90a6ee9a7bdd5f44b36ab5a3",
+          "slide": 2,
+          "expectedBodyLine": "\"A shared layout keeps the evidence readable",
+          "actualSubtitle": "\"A shared layout keeps the evidence readable",
+          "remainingBodyAndFooterExact": true,
+          "textLost": false
+        },
+        {
+          "file": "quote-540-native-edited.pptx",
+          "pptxSha256": "f2729cc6797b537cfcfaae076fda1e41b582106b90a6ee9a7bdd5f44b36ab5a3",
+          "slide": 3,
+          "expectedBodyLine": "\"A shared layout keeps the evidence readable",
+          "actualSubtitle": "\"A shared layout keeps the evidence readable",
+          "remainingBodyAndFooterExact": true,
+          "textLost": false
+        },
+        {
+          "file": "quote-540-native-edited.pptx",
+          "pptxSha256": "f2729cc6797b537cfcfaae076fda1e41b582106b90a6ee9a7bdd5f44b36ab5a3",
+          "slide": 4,
+          "expectedBodyLine": "\"A shared layout keeps the evidence readable when the",
+          "actualSubtitle": "\"A shared layout keeps the evidence readable when the",
+          "remainingBodyAndFooterExact": true,
+          "textLost": false
+        },
+        {
+          "file": "quote-540-native-edited.pptx",
+          "pptxSha256": "f2729cc6797b537cfcfaae076fda1e41b582106b90a6ee9a7bdd5f44b36ab5a3",
+          "slide": 5,
+          "expectedBodyLine": "\"Keep the complete source visible.\"",
+          "actualSubtitle": "\"Keep the complete source visible.\"",
+          "remainingBodyAndFooterExact": true,
+          "textLost": false
+        },
+        {
+          "file": "quote-540-native-edited.pptx",
+          "pptxSha256": "f2729cc6797b537cfcfaae076fda1e41b582106b90a6ee9a7bdd5f44b36ab5a3",
+          "slide": 6,
+          "expectedBodyLine": "\"This source keeps the selected readability",
+          "actualSubtitle": "\"This source keeps the selected readability",
+          "remainingBodyAndFooterExact": true,
+          "textLost": false
+        }
+      ],
+      "passed": false
+    },
+    {
+      "directory": "raw/table-node24-bounded-01",
+      "node": "v24.20.0",
+      "generationSha256": "56f11473963711c9aed1148b39451ea34378f7c087ecfa734c167c1ba5817a5e",
+      "comparisonSha256": "c15c4c63abb746fd0e544c95124f9dce148dd3ecbadf5435fc49e124da505143",
+      "scope": "Actual editable table text/character colors and six cell edits survive native save/reopen. Two additional export/import cycles preserve current cell text, without a formatting/geometry or native-raster claim for those reexports. Explicit low-contrast colors and translucent fills remain intentional counterexamples. Original/reopened native rasters match; no browser equivalence claim."
+    },
+    {
+      "directory": "raw/code-node24-bounded-01",
+      "node": "v24.20.0",
+      "generationSha256": "6c556380c8220f916b9f13cd21069478b337d56dcbf463a9c30d79c5ab87c3c2",
+      "comparisonSha256": "ce641b8512517aeb83f4ad6a5de29fb6dc64fdbed81d302bf4bf9c5fdb2df25a",
+      "scope": "Original/native-saved/native-edited code semantics and exact source text, including CR/LF/CRLF, blank lines and soft wraps. Native tab tolerance stays 0.02 points and character bounds stay 0.1 points. Imported geometry, formatting, font theme, pixel containment and raster equivalence remain outside this gate."
+    },
+    {
+      "directory": "raw/quote-node24-bounded-01",
+      "node": "v24.20.0",
+      "generationSha256": "47094a1c2395524266c4ff4e3d4db664d724e9a3382c8a5d9fb761f60b8a96e0",
+      "comparisonSha256": "1bd401d4a4ea2fbe4ca2c7d4f5991454db0617a92f8775db85ac79cdd55b821a",
+      "scope": "Earlier footer-only gate; does not establish body line roles"
+    },
+    {
+      "directory": "raw/quote-node24-bounded-02",
+      "node": "v24.20.0",
+      "generationSha256": "b58af2d4548124fe870b285856b84bb935430f470707c9a55bf980b128951a8a",
+      "classificationOutliers": [
+        {
+          "file": "quote-540.pptx",
+          "pptxSha256": "414c7ad5ec8d56c4844f6c1ece183b53683d3137ca6581720367202ea010c929",
+          "slide": 1,
+          "expectedBodyLine": "\"A shared layout keeps the evidence readable",
+          "actualSubtitle": "\"A shared layout keeps the evidence readable",
+          "remainingBodyAndFooterExact": true,
+          "textLost": false
+        },
+        {
+          "file": "quote-540.pptx",
+          "pptxSha256": "414c7ad5ec8d56c4844f6c1ece183b53683d3137ca6581720367202ea010c929",
+          "slide": 2,
+          "expectedBodyLine": "\"A shared layout keeps the evidence readable",
+          "actualSubtitle": "\"A shared layout keeps the evidence readable",
+          "remainingBodyAndFooterExact": true,
+          "textLost": false
+        },
+        {
+          "file": "quote-540.pptx",
+          "pptxSha256": "414c7ad5ec8d56c4844f6c1ece183b53683d3137ca6581720367202ea010c929",
+          "slide": 3,
+          "expectedBodyLine": "\"A shared layout keeps the evidence readable",
+          "actualSubtitle": "\"A shared layout keeps the evidence readable",
+          "remainingBodyAndFooterExact": true,
+          "textLost": false
+        },
+        {
+          "file": "quote-540.pptx",
+          "pptxSha256": "414c7ad5ec8d56c4844f6c1ece183b53683d3137ca6581720367202ea010c929",
+          "slide": 4,
+          "expectedBodyLine": "\"A shared layout keeps the evidence readable when the",
+          "actualSubtitle": "\"A shared layout keeps the evidence readable when the",
+          "remainingBodyAndFooterExact": true,
+          "textLost": false
+        },
+        {
+          "file": "quote-540.pptx",
+          "pptxSha256": "414c7ad5ec8d56c4844f6c1ece183b53683d3137ca6581720367202ea010c929",
+          "slide": 5,
+          "expectedBodyLine": "\"Keep the complete source visible.\"",
+          "actualSubtitle": "\"Keep the complete source visible.\"",
+          "remainingBodyAndFooterExact": true,
+          "textLost": false
+        },
+        {
+          "file": "quote-540.pptx",
+          "pptxSha256": "414c7ad5ec8d56c4844f6c1ece183b53683d3137ca6581720367202ea010c929",
+          "slide": 6,
+          "expectedBodyLine": "\"This source keeps the selected readability",
+          "actualSubtitle": "\"This source keeps the selected readability",
+          "remainingBodyAndFooterExact": true,
+          "textLost": false
+        },
+        {
+          "file": "quote-540-native-saved.pptx",
+          "pptxSha256": "ad40d606a71ac011951a280376f9d39178100cf5ec4e8fb66b14a7dfd5f1a706",
+          "slide": 1,
+          "expectedBodyLine": "\"A shared layout keeps the evidence readable",
+          "actualSubtitle": "\"A shared layout keeps the evidence readable",
+          "remainingBodyAndFooterExact": true,
+          "textLost": false
+        },
+        {
+          "file": "quote-540-native-saved.pptx",
+          "pptxSha256": "ad40d606a71ac011951a280376f9d39178100cf5ec4e8fb66b14a7dfd5f1a706",
+          "slide": 2,
+          "expectedBodyLine": "\"A shared layout keeps the evidence readable",
+          "actualSubtitle": "\"A shared layout keeps the evidence readable",
+          "remainingBodyAndFooterExact": true,
+          "textLost": false
+        },
+        {
+          "file": "quote-540-native-saved.pptx",
+          "pptxSha256": "ad40d606a71ac011951a280376f9d39178100cf5ec4e8fb66b14a7dfd5f1a706",
+          "slide": 3,
+          "expectedBodyLine": "\"A shared layout keeps the evidence readable",
+          "actualSubtitle": "\"A shared layout keeps the evidence readable",
+          "remainingBodyAndFooterExact": true,
+          "textLost": false
+        },
+        {
+          "file": "quote-540-native-saved.pptx",
+          "pptxSha256": "ad40d606a71ac011951a280376f9d39178100cf5ec4e8fb66b14a7dfd5f1a706",
+          "slide": 4,
+          "expectedBodyLine": "\"A shared layout keeps the evidence readable when the",
+          "actualSubtitle": "\"A shared layout keeps the evidence readable when the",
+          "remainingBodyAndFooterExact": true,
+          "textLost": false
+        },
+        {
+          "file": "quote-540-native-saved.pptx",
+          "pptxSha256": "ad40d606a71ac011951a280376f9d39178100cf5ec4e8fb66b14a7dfd5f1a706",
+          "slide": 5,
+          "expectedBodyLine": "\"Keep the complete source visible.\"",
+          "actualSubtitle": "\"Keep the complete source visible.\"",
+          "remainingBodyAndFooterExact": true,
+          "textLost": false
+        },
+        {
+          "file": "quote-540-native-saved.pptx",
+          "pptxSha256": "ad40d606a71ac011951a280376f9d39178100cf5ec4e8fb66b14a7dfd5f1a706",
+          "slide": 6,
+          "expectedBodyLine": "\"This source keeps the selected readability",
+          "actualSubtitle": "\"This source keeps the selected readability",
+          "remainingBodyAndFooterExact": true,
+          "textLost": false
+        },
+        {
+          "file": "quote-540-native-edited.pptx",
+          "pptxSha256": "31b40a4b42fbeb05849d174877ba2a00199f8256543c39dec4894f2876a6bf0f",
+          "slide": 1,
+          "expectedBodyLine": "\"A shared layout keeps the evidence readable",
+          "actualSubtitle": "\"A shared layout keeps the evidence readable",
+          "remainingBodyAndFooterExact": true,
+          "textLost": false
+        },
+        {
+          "file": "quote-540-native-edited.pptx",
+          "pptxSha256": "31b40a4b42fbeb05849d174877ba2a00199f8256543c39dec4894f2876a6bf0f",
+          "slide": 2,
+          "expectedBodyLine": "\"A shared layout keeps the evidence readable",
+          "actualSubtitle": "\"A shared layout keeps the evidence readable",
+          "remainingBodyAndFooterExact": true,
+          "textLost": false
+        },
+        {
+          "file": "quote-540-native-edited.pptx",
+          "pptxSha256": "31b40a4b42fbeb05849d174877ba2a00199f8256543c39dec4894f2876a6bf0f",
+          "slide": 3,
+          "expectedBodyLine": "\"A shared layout keeps the evidence readable",
+          "actualSubtitle": "\"A shared layout keeps the evidence readable",
+          "remainingBodyAndFooterExact": true,
+          "textLost": false
+        },
+        {
+          "file": "quote-540-native-edited.pptx",
+          "pptxSha256": "31b40a4b42fbeb05849d174877ba2a00199f8256543c39dec4894f2876a6bf0f",
+          "slide": 4,
+          "expectedBodyLine": "\"A shared layout keeps the evidence readable when the",
+          "actualSubtitle": "\"A shared layout keeps the evidence readable when the",
+          "remainingBodyAndFooterExact": true,
+          "textLost": false
+        },
+        {
+          "file": "quote-540-native-edited.pptx",
+          "pptxSha256": "31b40a4b42fbeb05849d174877ba2a00199f8256543c39dec4894f2876a6bf0f",
+          "slide": 5,
+          "expectedBodyLine": "\"Keep the complete source visible.\"",
+          "actualSubtitle": "\"Keep the complete source visible.\"",
+          "remainingBodyAndFooterExact": true,
+          "textLost": false
+        },
+        {
+          "file": "quote-540-native-edited.pptx",
+          "pptxSha256": "31b40a4b42fbeb05849d174877ba2a00199f8256543c39dec4894f2876a6bf0f",
+          "slide": 6,
+          "expectedBodyLine": "\"This source keeps the selected readability",
+          "actualSubtitle": "\"This source keeps the selected readability",
+          "remainingBodyAndFooterExact": true,
+          "textLost": false
+        }
+      ],
+      "passed": false
+    }
+  ],
+  "table": {
+    "runtimes": 2,
+    "nativeCellsPerRuntime": 72,
+    "nativeCharacterColorsPerRuntime": 978,
+    "slideImportsPerRuntime": 54,
+    "actualNativeCellEditsPerRuntime": 6,
+    "passed": true
+  },
+  "code": {
+    "runtimes": 2,
+    "slideImportsPerRuntime": 24,
+    "tabOutliers": 0,
+    "characterBoundOutliers": 0,
+    "passed": true
+  },
+  "quote": {
+    "runtimes": 2,
+    "nativeCharacterBoundsAndSeparation": true,
+    "wideExactImports": true,
+    "portraitClassificationOutliersPerRuntime": 18,
+    "semanticQuoteTypeRecovered": false,
+    "passed": false
+  },
+  "scope": "Table/code gates pass. Strong quote role classification fails; no text is lost. Independent visible-ink, Office font-file identity and browser/native equivalence are not established by these content gates."
+}

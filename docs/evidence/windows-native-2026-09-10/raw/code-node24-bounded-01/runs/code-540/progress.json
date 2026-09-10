@@ -1,0 +1,480 @@
+﻿{
+    "decks":  [
+
+              ],
+    "generationSha256":  "6c556380c8220f916b9f13cd21069478b337d56dcbf463a9c30d79c5ab87c3c2",
+    "stage":  "open-code-540-edited.pptx",
+    "slides":  [
+                   {
+                       "glyphsInsideCell":  true,
+                       "lines":  [
+                                     {
+                                         "width":  40.62504,
+                                         "fontSize":  13.5,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "code",
+                                         "left":  45.9,
+                                         "tags":  1,
+                                         "role":  "language",
+                                         "height":  16.2,
+                                         "glyphsInsideCell":  true,
+                                         "top":  45.9,
+                                         "font":  "Courier New"
+                                     },
+                                     {
+                                         "width":  8.125039,
+                                         "fontSize":  13.5,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "",
+                                         "left":  45.9,
+                                         "tags":  1,
+                                         "role":  "body",
+                                         "height":  16.2,
+                                         "glyphsInsideCell":  true,
+                                         "top":  71.37,
+                                         "font":  "Courier New"
+                                     }
+                                 ],
+                       "rasterSha256":  "da9395af5234a34a6bfa92a3bfc6b3e0dd0b7067fc3ab9857ac1e0463dfe21e2",
+                       "slide":  1
+                   },
+                   {
+                       "glyphsInsideCell":  true,
+                       "lines":  [
+                                     {
+                                         "width":  40.62504,
+                                         "fontSize":  13.5,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "code",
+                                         "left":  45.9,
+                                         "tags":  1,
+                                         "role":  "language",
+                                         "height":  16.2,
+                                         "glyphsInsideCell":  true,
+                                         "top":  45.9,
+                                         "font":  "Courier New"
+                                     },
+                                     {
+                                         "width":  72.92504,
+                                         "fontSize":  13.5,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "\t\t",
+                                         "left":  45.9,
+                                         "tags":  1,
+                                         "role":  "body",
+                                         "height":  16.2,
+                                         "glyphsInsideCell":  true,
+                                         "top":  71.37,
+                                         "font":  "Courier New"
+                                     }
+                                 ],
+                       "rasterSha256":  "da9395af5234a34a6bfa92a3bfc6b3e0dd0b7067fc3ab9857ac1e0463dfe21e2",
+                       "slide":  2
+                   },
+                   {
+                       "glyphsInsideCell":  true,
+                       "lines":  [
+                                     {
+                                         "width":  170.52504,
+                                         "fontSize":  13.5,
+                                         "tabTargets":  [
+                                                            {
+                                                                "passed":  true,
+                                                                "errorPoints":  0.0052719116211,
+                                                                "sourceStart":  4
+                                                            }
+                                                        ],
+                                         "text":  "src\tCaseSensitive.ts",
+                                         "left":  45.9,
+                                         "tags":  1,
+                                         "role":  "filename",
+                                         "height":  16.2,
+                                         "glyphsInsideCell":  true,
+                                         "top":  45.9,
+                                         "font":  "Courier New"
+                                     },
+                                     {
+                                         "width":  89.37504,
+                                         "fontSize":  13.5,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "TypeScript",
+                                         "left":  45.9,
+                                         "tags":  1,
+                                         "role":  "language",
+                                         "height":  16.2,
+                                         "glyphsInsideCell":  true,
+                                         "top":  68.37,
+                                         "font":  "Courier New"
+                                     },
+                                     {
+                                         "width":  251.875046,
+                                         "fontSize":  13.5,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "  const value = \"two  spaces\";",
+                                         "left":  45.9,
+                                         "tags":  1,
+                                         "role":  "body",
+                                         "height":  16.2,
+                                         "glyphsInsideCell":  true,
+                                         "top":  93.84,
+                                         "font":  "Courier New"
+                                     },
+                                     {
+                                         "width":  8.125039,
+                                         "fontSize":  13.5,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "",
+                                         "left":  45.9,
+                                         "tags":  1,
+                                         "role":  "body",
+                                         "height":  16.2,
+                                         "glyphsInsideCell":  true,
+                                         "top":  110.31,
+                                         "font":  "Courier New"
+                                     },
+                                     {
+                                         "width":  316.875031,
+                                         "fontSize":  13.5,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "longtokenlongtokenlongtokenlongtokenlo",
+                                         "left":  45.9,
+                                         "tags":  1,
+                                         "role":  "body",
+                                         "height":  16.2,
+                                         "glyphsInsideCell":  true,
+                                         "top":  126.78,
+                                         "font":  "Courier New"
+                                     },
+                                     {
+                                         "width":  316.875031,
+                                         "fontSize":  13.5,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "ngtokenlongtokenlongtokenlongtokenlong",
+                                         "left":  45.9,
+                                         "tags":  1,
+                                         "role":  "body",
+                                         "height":  16.2,
+                                         "glyphsInsideCell":  true,
+                                         "top":  143.25,
+                                         "font":  "Courier New"
+                                     },
+                                     {
+                                         "width":  316.875031,
+                                         "fontSize":  13.5,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "tokenlongtokenlongtokenlongtokenlongto",
+                                         "left":  45.9,
+                                         "tags":  1,
+                                         "role":  "body",
+                                         "height":  16.2,
+                                         "glyphsInsideCell":  true,
+                                         "top":  159.72,
+                                         "font":  "Courier New"
+                                     },
+                                     {
+                                         "width":  316.875031,
+                                         "fontSize":  13.5,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "kenlongtokenlongtokenlongtokenlongtoke",
+                                         "left":  45.9,
+                                         "tags":  1,
+                                         "role":  "body",
+                                         "height":  16.2,
+                                         "glyphsInsideCell":  true,
+                                         "top":  176.19,
+                                         "font":  "Courier New"
+                                     },
+                                     {
+                                         "width":  316.875031,
+                                         "fontSize":  13.5,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "nlongtokenlongtokenlongtokenlongtokenl",
+                                         "left":  45.9,
+                                         "tags":  1,
+                                         "role":  "body",
+                                         "height":  16.2,
+                                         "glyphsInsideCell":  true,
+                                         "top":  192.66,
+                                         "font":  "Courier New"
+                                     },
+                                     {
+                                         "width":  73.12504,
+                                         "fontSize":  13.5,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "ongtoken",
+                                         "left":  45.9,
+                                         "tags":  1,
+                                         "role":  "body",
+                                         "height":  16.2,
+                                         "glyphsInsideCell":  true,
+                                         "top":  209.13,
+                                         "font":  "Courier New"
+                                     },
+                                     {
+                                         "width":  162.4,
+                                         "fontSize":  13.5,
+                                         "tabTargets":  [
+                                                            {
+                                                                "passed":  true,
+                                                                "errorPoints":  0.0052719116211,
+                                                                "sourceStart":  234
+                                                            }
+                                                        ],
+                                         "text":  "\treturn value;  ",
+                                         "left":  45.9,
+                                         "tags":  1,
+                                         "role":  "body",
+                                         "height":  16.2,
+                                         "glyphsInsideCell":  true,
+                                         "top":  225.6,
+                                         "font":  "Courier New"
+                                     },
+                                     {
+                                         "width":  8.125039,
+                                         "fontSize":  13.5,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "",
+                                         "left":  45.9,
+                                         "tags":  1,
+                                         "role":  "body",
+                                         "height":  16.2,
+                                         "glyphsInsideCell":  true,
+                                         "top":  242.07,
+                                         "font":  "Courier New"
+                                     }
+                                 ],
+                       "rasterSha256":  "6879997dcc2e1ece9608b8009e0a68f574b24edf599cd9aa62a17a99d29ef494",
+                       "slide":  3
+                   },
+                   {
+                       "glyphsInsideCell":  true,
+                       "lines":  [
+                                     {
+                                         "width":  316.875031,
+                                         "fontSize":  13.5,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "a-long-path/a-long-path/a-long-path/a-",
+                                         "left":  45.9,
+                                         "tags":  1,
+                                         "role":  "filename",
+                                         "height":  16.2,
+                                         "glyphsInsideCell":  true,
+                                         "top":  45.9,
+                                         "font":  "Courier New"
+                                     },
+                                     {
+                                         "width":  316.875031,
+                                         "fontSize":  13.5,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "long-path/a-long-path/a-long-path/a-lo",
+                                         "left":  45.9,
+                                         "tags":  1,
+                                         "role":  "filename",
+                                         "height":  16.2,
+                                         "glyphsInsideCell":  true,
+                                         "top":  62.37,
+                                         "font":  "Courier New"
+                                     },
+                                     {
+                                         "width":  316.875031,
+                                         "fontSize":  13.5,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "ng-path/a-long-path/a-long-path/a-long",
+                                         "left":  45.9,
+                                         "tags":  1,
+                                         "role":  "filename",
+                                         "height":  16.2,
+                                         "glyphsInsideCell":  true,
+                                         "top":  78.84,
+                                         "font":  "Courier New"
+                                     },
+                                     {
+                                         "width":  316.875031,
+                                         "fontSize":  13.5,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "-path/a-long-path/a-long-path/a-long-p",
+                                         "left":  45.9,
+                                         "tags":  1,
+                                         "role":  "filename",
+                                         "height":  16.2,
+                                         "glyphsInsideCell":  true,
+                                         "top":  95.31,
+                                         "font":  "Courier New"
+                                     },
+                                     {
+                                         "width":  235.625046,
+                                         "fontSize":  13.5,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "ath/a-long-path/a-long-path/",
+                                         "left":  45.9,
+                                         "tags":  1,
+                                         "role":  "filename",
+                                         "height":  16.2,
+                                         "glyphsInsideCell":  true,
+                                         "top":  111.78,
+                                         "font":  "Courier New"
+                                     },
+                                     {
+                                         "width":  316.875031,
+                                         "fontSize":  13.5,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "Long-language-label-Long-language-labe",
+                                         "left":  45.9,
+                                         "tags":  1,
+                                         "role":  "language",
+                                         "height":  16.2,
+                                         "glyphsInsideCell":  true,
+                                         "top":  134.25,
+                                         "font":  "Courier New"
+                                     },
+                                     {
+                                         "width":  316.875031,
+                                         "fontSize":  13.5,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "l-Long-language-label-Long-language-la",
+                                         "left":  45.9,
+                                         "tags":  1,
+                                         "role":  "language",
+                                         "height":  16.2,
+                                         "glyphsInsideCell":  true,
+                                         "top":  150.72,
+                                         "font":  "Courier New"
+                                     },
+                                     {
+                                         "width":  316.875031,
+                                         "fontSize":  13.5,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "bel-Long-language-label-Long-language-",
+                                         "left":  45.9,
+                                         "tags":  1,
+                                         "role":  "language",
+                                         "height":  16.2,
+                                         "glyphsInsideCell":  true,
+                                         "top":  167.19,
+                                         "font":  "Courier New"
+                                     },
+                                     {
+                                         "width":  316.875031,
+                                         "fontSize":  13.5,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "label-Long-language-label-Long-languag",
+                                         "left":  45.9,
+                                         "tags":  1,
+                                         "role":  "language",
+                                         "height":  16.2,
+                                         "glyphsInsideCell":  true,
+                                         "top":  183.66,
+                                         "font":  "Courier New"
+                                     },
+                                     {
+                                         "width":  316.875031,
+                                         "fontSize":  13.5,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "e-label-Long-language-label-Long-langu",
+                                         "left":  45.9,
+                                         "tags":  1,
+                                         "role":  "language",
+                                         "height":  16.2,
+                                         "glyphsInsideCell":  true,
+                                         "top":  200.13,
+                                         "font":  "Courier New"
+                                     },
+                                     {
+                                         "width":  316.875031,
+                                         "fontSize":  13.5,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "age-label-Long-language-label-Long-lan",
+                                         "left":  45.9,
+                                         "tags":  1,
+                                         "role":  "language",
+                                         "height":  16.2,
+                                         "glyphsInsideCell":  true,
+                                         "top":  216.6,
+                                         "font":  "Courier New"
+                                     },
+                                     {
+                                         "width":  105.625038,
+                                         "fontSize":  13.5,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "guage-label-",
+                                         "left":  45.9,
+                                         "tags":  1,
+                                         "role":  "language",
+                                         "height":  16.2,
+                                         "glyphsInsideCell":  true,
+                                         "top":  233.07,
+                                         "font":  "Courier New"
+                                     },
+                                     {
+                                         "width":  8.125039,
+                                         "fontSize":  13.5,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "",
+                                         "left":  45.9,
+                                         "tags":  1,
+                                         "role":  "body",
+                                         "height":  16.2,
+                                         "glyphsInsideCell":  true,
+                                         "top":  258.54,
+                                         "font":  "Courier New"
+                                     }
+                                 ],
+                       "rasterSha256":  "d457dd18e9bc17efc8fb3a60ca85972dbf890998bec5adfd194aeee341776b46",
+                       "slide":  4
+                   }
+               ]
+}

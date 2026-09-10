@@ -106,5 +106,39 @@
   {
     "generation": "raw/chart-node24-final-slide2/generation.json",
     "verifiers": "raw/chart-node24-final-slide2/verifiers"
+  },
+  {
+    "generation": "raw/table-node20-bounded-01/generation.json",
+    "verifiers": "verifiers/content-bounded",
+    "fixture": "table-colors.pptx"
+  },
+  {
+    "generation": "raw/code-node20-bounded-01/generation.json",
+    "verifiers": "verifiers/content-bounded"
+  },
+  {
+    "generation": "raw/quote-node20-bounded-01/generation.json",
+    "verifiers": "verifiers/quote-initial"
+  },
+  {
+    "generation": "raw/quote-node20-bounded-02/generation.json",
+    "verifiers": "verifiers/content-bounded"
+  },
+  {
+    "generation": "raw/table-node24-bounded-01/generation.json",
+    "verifiers": "verifiers/content-bounded",
+    "fixture": "table-colors.pptx"
+  },
+  {
+    "generation": "raw/code-node24-bounded-01/generation.json",
+    "verifiers": "verifiers/content-bounded"
+  },
+  {
+    "generation": "raw/quote-node24-bounded-01/generation.json",
+    "verifiers": "verifiers/quote-initial"
+  },
+  {
+    "generation": "raw/quote-node24-bounded-02/generation.json",
+    "verifiers": "verifiers/content-bounded"
   }
 ]

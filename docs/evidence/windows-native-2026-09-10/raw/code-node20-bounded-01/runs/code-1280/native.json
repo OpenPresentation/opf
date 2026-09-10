@@ -1,0 +1,368 @@
+﻿{
+    "powerPointVersion":  "16.0",
+    "executableVersion":  "16.0.20326.20132",
+    "executableSha256":  "90fa931172c507b763ba92a82b19d5bc70816e008c5bb87577e1838e8a92e9f9",
+    "decks":  [
+                  {
+                      "savedSha256":  "19313264f4f97fc79158072bc11d399337533d69c334f2fcaa905f31f3269ba3",
+                      "editsReopened":  6,
+                      "id":  "code-1280",
+                      "slides":  [
+                                     {
+                                         "glyphsInsideCell":  true,
+                                         "lines":  [
+                                                       {
+                                                           "width":  53.75,
+                                                           "fontSize":  18,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "code",
+                                                           "left":  56.7,
+                                                           "tags":  1,
+                                                           "role":  "language",
+                                                           "height":  21.6,
+                                                           "glyphsInsideCell":  true,
+                                                           "top":  56.7,
+                                                           "font":  "Courier New"
+                                                       },
+                                                       {
+                                                           "width":  10.75,
+                                                           "fontSize":  18,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "",
+                                                           "left":  56.7,
+                                                           "tags":  1,
+                                                           "role":  "body",
+                                                           "height":  21.6,
+                                                           "glyphsInsideCell":  true,
+                                                           "top":  87.66,
+                                                           "font":  "Courier New"
+                                                       }
+                                                   ],
+                                         "rasterSha256":  "f7586d334c6af5475b7891092ed29defa497cc659d8b34d99ffe5f8097a85379",
+                                         "slide":  1
+                                     },
+                                     {
+                                         "glyphsInsideCell":  true,
+                                         "lines":  [
+                                                       {
+                                                           "width":  53.75,
+                                                           "fontSize":  18,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "code",
+                                                           "left":  56.7,
+                                                           "tags":  1,
+                                                           "role":  "language",
+                                                           "height":  21.6,
+                                                           "glyphsInsideCell":  true,
+                                                           "top":  56.7,
+                                                           "font":  "Courier New"
+                                                       },
+                                                       {
+                                                           "width":  97.15,
+                                                           "fontSize":  18,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "\t\t",
+                                                           "left":  56.7,
+                                                           "tags":  1,
+                                                           "role":  "body",
+                                                           "height":  21.6,
+                                                           "glyphsInsideCell":  true,
+                                                           "top":  87.66,
+                                                           "font":  "Courier New"
+                                                       }
+                                                   ],
+                                         "rasterSha256":  "f7586d334c6af5475b7891092ed29defa497cc659d8b34d99ffe5f8097a85379",
+                                         "slide":  2
+                                     },
+                                     {
+                                         "glyphsInsideCell":  true,
+                                         "lines":  [
+                                                       {
+                                                           "width":  225.95,
+                                                           "fontSize":  18,
+                                                           "tabTargets":  [
+                                                                              {
+                                                                                  "passed":  true,
+                                                                                  "errorPoints":  0.0070304870606,
+                                                                                  "sourceStart":  4
+                                                                              }
+                                                                          ],
+                                                           "text":  "src\tCaseSensitive.ts",
+                                                           "left":  56.7,
+                                                           "tags":  1,
+                                                           "role":  "filename",
+                                                           "height":  21.6,
+                                                           "glyphsInsideCell":  true,
+                                                           "top":  56.7,
+                                                           "font":  "Courier New"
+                                                       },
+                                                       {
+                                                           "width":  118.25,
+                                                           "fontSize":  18,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "TypeScript",
+                                                           "left":  56.7,
+                                                           "tags":  1,
+                                                           "role":  "language",
+                                                           "height":  21.6,
+                                                           "glyphsInsideCell":  true,
+                                                           "top":  84.66,
+                                                           "font":  "Courier New"
+                                                       },
+                                                       {
+                                                           "width":  333.25,
+                                                           "fontSize":  18,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "  const value = \"two  spaces\";",
+                                                           "left":  56.7,
+                                                           "tags":  1,
+                                                           "role":  "body",
+                                                           "height":  21.6,
+                                                           "glyphsInsideCell":  true,
+                                                           "top":  115.62,
+                                                           "font":  "Courier New"
+                                                       },
+                                                       {
+                                                           "width":  10.75,
+                                                           "fontSize":  18,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "",
+                                                           "left":  56.7,
+                                                           "tags":  1,
+                                                           "role":  "body",
+                                                           "height":  21.6,
+                                                           "glyphsInsideCell":  true,
+                                                           "top":  137.58,
+                                                           "font":  "Courier New"
+                                                       },
+                                                       {
+                                                           "width":  849.25,
+                                                           "fontSize":  18,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "longtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongto",
+                                                           "left":  56.7,
+                                                           "tags":  1,
+                                                           "role":  "body",
+                                                           "height":  21.6,
+                                                           "glyphsInsideCell":  true,
+                                                           "top":  159.54,
+                                                           "font":  "Courier New"
+                                                       },
+                                                       {
+                                                           "width":  849.25,
+                                                           "fontSize":  18,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "kenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlon",
+                                                           "left":  56.7,
+                                                           "tags":  1,
+                                                           "role":  "body",
+                                                           "height":  21.6,
+                                                           "glyphsInsideCell":  true,
+                                                           "top":  181.5,
+                                                           "font":  "Courier New"
+                                                       },
+                                                       {
+                                                           "width":  462.25,
+                                                           "fontSize":  18,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "gtokenlongtokenlongtokenlongtokenlongtoken",
+                                                           "left":  56.7,
+                                                           "tags":  1,
+                                                           "role":  "body",
+                                                           "height":  21.6,
+                                                           "glyphsInsideCell":  true,
+                                                           "top":  203.46,
+                                                           "font":  "Courier New"
+                                                       },
+                                                       {
+                                                           "width":  215.2,
+                                                           "fontSize":  18,
+                                                           "tabTargets":  [
+                                                                              {
+                                                                                  "passed":  true,
+                                                                                  "errorPoints":  0.0070304870606,
+                                                                                  "sourceStart":  234
+                                                                              }
+                                                                          ],
+                                                           "text":  "\treturn value;  ",
+                                                           "left":  56.7,
+                                                           "tags":  1,
+                                                           "role":  "body",
+                                                           "height":  21.6,
+                                                           "glyphsInsideCell":  true,
+                                                           "top":  225.42,
+                                                           "font":  "Courier New"
+                                                       },
+                                                       {
+                                                           "width":  10.75,
+                                                           "fontSize":  18,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "",
+                                                           "left":  56.7,
+                                                           "tags":  1,
+                                                           "role":  "body",
+                                                           "height":  21.6,
+                                                           "glyphsInsideCell":  true,
+                                                           "top":  247.38,
+                                                           "font":  "Courier New"
+                                                       }
+                                                   ],
+                                         "rasterSha256":  "e2adc912a3fe8e21bfacdbab69e80cef58b34d2892223838945bbd334d89febd",
+                                         "slide":  3
+                                     },
+                                     {
+                                         "glyphsInsideCell":  true,
+                                         "lines":  [
+                                                       {
+                                                           "width":  849.25,
+                                                           "fontSize":  18,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long",
+                                                           "left":  56.7,
+                                                           "tags":  1,
+                                                           "role":  "filename",
+                                                           "height":  21.6,
+                                                           "glyphsInsideCell":  true,
+                                                           "top":  56.7,
+                                                           "font":  "Courier New"
+                                                       },
+                                                       {
+                                                           "width":  849.25,
+                                                           "fontSize":  18,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/",
+                                                           "left":  56.7,
+                                                           "tags":  1,
+                                                           "role":  "filename",
+                                                           "height":  21.6,
+                                                           "glyphsInsideCell":  true,
+                                                           "top":  78.66,
+                                                           "font":  "Courier New"
+                                                       },
+                                                       {
+                                                           "width":  268.75,
+                                                           "fontSize":  18,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "a-long-path/a-long-path/",
+                                                           "left":  56.7,
+                                                           "tags":  1,
+                                                           "role":  "filename",
+                                                           "height":  21.6,
+                                                           "glyphsInsideCell":  true,
+                                                           "top":  100.62,
+                                                           "font":  "Courier New"
+                                                       },
+                                                       {
+                                                           "width":  849.25,
+                                                           "fontSize":  18,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "Long-language-label-Long-language-label-Long-language-label-Long-language-labe",
+                                                           "left":  56.7,
+                                                           "tags":  1,
+                                                           "role":  "language",
+                                                           "height":  21.6,
+                                                           "glyphsInsideCell":  true,
+                                                           "top":  128.58,
+                                                           "font":  "Courier New"
+                                                       },
+                                                       {
+                                                           "width":  849.25,
+                                                           "fontSize":  18,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "l-Long-language-label-Long-language-label-Long-language-label-Long-language-la",
+                                                           "left":  56.7,
+                                                           "tags":  1,
+                                                           "role":  "language",
+                                                           "height":  21.6,
+                                                           "glyphsInsideCell":  true,
+                                                           "top":  150.54,
+                                                           "font":  "Courier New"
+                                                       },
+                                                       {
+                                                           "width":  849.25,
+                                                           "fontSize":  18,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "bel-Long-language-label-Long-language-label-Long-language-label-Long-language-",
+                                                           "left":  56.7,
+                                                           "tags":  1,
+                                                           "role":  "language",
+                                                           "height":  21.6,
+                                                           "glyphsInsideCell":  true,
+                                                           "top":  172.5,
+                                                           "font":  "Courier New"
+                                                       },
+                                                       {
+                                                           "width":  75.25,
+                                                           "fontSize":  18,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "label-",
+                                                           "left":  56.7,
+                                                           "tags":  1,
+                                                           "role":  "language",
+                                                           "height":  21.6,
+                                                           "glyphsInsideCell":  true,
+                                                           "top":  194.46,
+                                                           "font":  "Courier New"
+                                                       },
+                                                       {
+                                                           "width":  10.75,
+                                                           "fontSize":  18,
+                                                           "tabTargets":  [
+
+                                                                          ],
+                                                           "text":  "",
+                                                           "left":  56.7,
+                                                           "tags":  1,
+                                                           "role":  "body",
+                                                           "height":  21.6,
+                                                           "glyphsInsideCell":  true,
+                                                           "top":  225.42,
+                                                           "font":  "Courier New"
+                                                       }
+                                                   ],
+                                         "rasterSha256":  "7173b3d0cf388330956a78628b16c4ef7b03dc81afd2831c806312f9fe87bc78",
+                                         "slide":  4
+                                     }
+                                 ],
+                      "editedSha256":  "d984cea4748a4649d5d8c43ee4dbc84d1ff04849f69046b8508de5a2092051cf"
+                  }
+              ],
+    "windowsBuild":  "26200.9445",
+    "generationSha256":  "af367ee2412fb38ecf90a4c42b82a6d1b8e2d92da4166584a891c3deec01b8ab"
+}

@@ -9,13 +9,15 @@
     "workerHandle": "95f5b9e0387dabb467a26d0fbbbdbe0171439a55",
     "boundedText": "48843ccfaaa8db295ed9095d1cf5e21cdac677bc",
     "boundedMetric": "007ff5254e092a94699893250093b7f3b3708040",
-    "chartCaches": "1e74f4b64a6f5d981d90e2332ca2cb501b4409fc"
+    "chartCaches": "1e74f4b64a6f5d981d90e2332ca2cb501b4409fc",
+    "boundedContent": "632d9589c9c7be471559c2f22c4dab7e6c25d2c9"
   },
   "pullRequests": {
     "workerHandle": "https://github.com/OpenPresentation/opf-pptx/pull/17",
     "boundedText": "https://github.com/OpenPresentation/opf-pptx/pull/18",
     "boundedMetric": "https://github.com/OpenPresentation/opf-pptx/pull/19",
-    "chartCaches": "https://github.com/OpenPresentation/opf-pptx/pull/21"
+    "chartCaches": "https://github.com/OpenPresentation/opf-pptx/pull/21",
+    "boundedContent": "https://github.com/OpenPresentation/opf-pptx/pull/22"
   },
   "environment": {
     "node": [
