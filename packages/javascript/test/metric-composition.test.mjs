@@ -31,6 +31,14 @@ test('metric scoring includes long metadata and charges each failing leaf once',
   for(const candidate of decision.candidates)assert.ok(Math.abs(candidate.score-Object.values(candidate.penalties).reduce((a,b)=>a+b,0))<1e-8);
 });
 
+test('slide alignment overrides host alignment for complete metric parts',()=>{
+  const metric={value:1,unit:'%',label:'Completion'};
+  assert.equal(composeSlide({metric},{contentAlignment:'center'}).items[0].metricLayout.alignment,'center');
+  const item=composeSlide({design:{contentAlignment:'right'},metric},{contentAlignment:'center'}).items[0];
+  assert.equal(item.metricLayout.alignment,'right');
+  assert.ok(Math.abs(item.metricLayout.parts[1].box.x+item.metricLayout.parts[1].box.width-item.box.x-item.box.width)<1e-8);
+});
+
 test('strict ancestors reject complete metric field paths without changing source',()=>{
   for (const field of ['value','unit','label','description','delta']) {
     const metric={value:42,unit:'ms',label:'Latency',delta:0,trend:'flat',[field]:'Unabridged '.repeat(1000)};

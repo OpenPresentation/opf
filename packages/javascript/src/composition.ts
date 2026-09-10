@@ -120,6 +120,8 @@ export interface SlideComposition {
 }
 export interface ComposeSlideOptions {
   fonts?: Partial<FontFamilies>;
+  /** Host-resolved alignment for shared metric internals; slide design can override it. */
+  contentAlignment?: 'left' | 'center' | 'right';
   textMeasurement?: TextMeasurement;
   width?: number;
   height?: number;
@@ -355,6 +357,8 @@ export interface MetricTextPart {
   sources: MetricTextSource[];
   /** Empty optional fields retain their source mapping but occupy no visible space. */
   visible: boolean;
+  /** Accepted absolute origin/baseline for each fit.sourceLines entry, including blank lines. */
+  linePositions: {x:number;baseline:number}[];
   box: LayoutBox;
   requestedFontSize: number;
   minFontSize: number;
@@ -369,6 +373,7 @@ export interface MetricLayoutDiagnostic extends LayoutDiagnostic {
 }
 export interface MetricLayout {
   algorithm: 'metric-flow-v1';
+  alignment: 'left' | 'center' | 'right';
   textMeasurement: 'estimated' | 'provided';
   arrangement: 'inline-unit' | 'stacked';
   /** At most 48 arrangements; value fitting is bounded by 77 reference-size trials per arrangement. */
@@ -377,7 +382,7 @@ export interface MetricLayout {
   diagnostics: MetricLayoutDiagnostic[];
   overflow: boolean;
 }
-export interface MetricLayoutOptions extends QuoteLayoutOptions {}
+export interface MetricLayoutOptions extends QuoteLayoutOptions { align?: 'left' | 'center' | 'right' }
 
 /**
  * Measure every metric field before accepting geometry. Short single-line values and units can
@@ -400,6 +405,8 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     throw new RangeError('Metric dimensions, scale and minimum font size must be finite and positive.');
   }
   if (options.overflow!==undefined&&!['warn','error'].includes(options.overflow)) throw new RangeError('Invalid metric overflow policy.');
+  const alignment=options.align??'left';
+  if (!['left','center','right'].includes(alignment)) throw new RangeError('Invalid metric alignment.');
   const sourcePath=options.path??'metric',parts:MetricTextPart[]=[],diagnostics:MetricLayoutDiagnostic[]=[];
   for (const role of ['value','unit','label','description','delta','trend'] as const) {
     const sourceValue=metric[role];
@@ -407,7 +414,7 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     const text=String(sourceValue),path=scalar?sourcePath:`${sourcePath}.${role}`;
     const nominal=role==='value'?Math.min(76*scale,box.height*.28):(role==='description'?20:role==='trend'?18:23)*scale;
     const requestedStyle:TextStyle={fontFamily:(role==='value'?options.fonts?.heading:options.fonts?.body)??'sans-serif',fontWeight:role==='value'?800:role==='description'?400:500,italic:false,path};
-    const part:MetricTextPart={role,path,text,sources:[{path,value:sourceValue,start:0,end:text.length}],visible:role==='value'||text.length>0,
+    const part:MetricTextPart={role,path,text,sources:[{path,value:sourceValue,start:0,end:text.length}],visible:role==='value'||text.length>0,linePositions:[],
       box:{...box,height:0},requestedFontSize:Math.max(nominal,minimum),minFontSize:minimum,requestedStyle,style:resolveTextStyle({...requestedStyle},options.textMeasurement)};
     if (!part.visible) part.fit={lines:[],sourceLines:[],fontSize:part.requestedFontSize,lineHeight:part.requestedFontSize*1.22,tabSize:4,tabWidth:0,overflow:false};
     parts.push(part);
@@ -460,7 +467,8 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
         const valueBaseline=valueHeight-valueFit.lineHeight+valueFit.fontSize;
         const unitBaseline=occupied(unitFit)-unitFit.lineHeight+unitFit.fontSize;
         const valueY=box.y+Math.max(0,unitBaseline-valueBaseline),unitY=box.y+Math.max(0,valueBaseline-unitBaseline);
-        const valueWidth=Math.min(area.width,Math.max(valueFit.fontSize,...valueFit.sourceLines.map(line=>line.width)));
+        const measuredWidth=Math.max(...valueFit.sourceLines.map(line=>line.width));
+        const valueWidth=Math.min(area.width,measuredWidth||valueFit.fontSize);
         allocations.push({part:primary,box:{...area,y:valueY,width:valueWidth,height:valueHeight},fit:valueFit});
         allocations.push({part:unit,box:{x:box.x+valueWidth+gap,y:unitY,width:unitWidth,height:occupied(unitFit)},fit:{...unitFit,overflow:false}});
         primaryHeight=Math.max(valueY-box.y+valueHeight,unitY-box.y+occupied(unitFit));
@@ -481,6 +489,14 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     if (selected&&!selected.overflow&&selected.score===0) break;
   }
   for (const allocation of selected!.allocations) {allocation.part.box=allocation.box;allocation.part.fit=allocation.fit;}
+  const alignmentFactor=alignment==='center'?.5:alignment==='right'?1:0;
+  if (selected!.arrangement==='inline-unit'&&unit) {
+    const offset=(box.width-(unit.box.x+unit.box.width-box.x))*alignmentFactor;
+    primary.box.x+=offset;unit.box.x+=offset;
+  }
+  for (const part of parts) if (part.fit) part.linePositions=part.fit.sourceLines.map((line,index)=>({
+    x:part.box.x+(part.box.width-line.width)*alignmentFactor,baseline:part.box.y+part.fit!.fontSize+index*part.fit!.lineHeight,
+  }));
   const report=(reason:MetricLayoutDiagnostic['reason'],part:MetricTextPart,roles:MetricTextPart['role'][],message:string)=>
     diagnostics.push({code:'text-overflow',reason,path:part.path,parts:roles,message});
   for (const part of parts.filter(part=>part.visible)) {
@@ -498,7 +514,7 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     }
   }
   if (diagnostics.length&&options.overflow==='error') throw new OPFCompositionError(diagnostics);
-  return {algorithm:'metric-flow-v1',textMeasurement:options.textMeasurement?'provided':'estimated',arrangement:selected!.arrangement,attempts,parts,diagnostics,overflow:diagnostics.length>0};
+  return {algorithm:'metric-flow-v1',alignment,textMeasurement:options.textMeasurement?'provided':'estimated',arrangement:selected!.arrangement,attempts,parts,diagnostics,overflow:diagnostics.length>0};
 }
 
 export interface CodeContent { source: string; language?: string; filename?: string }
@@ -1036,6 +1052,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   });
   const measureMetric = (node: Pending, box: LayoutBox, settings: Composition) => layoutMetric(node.value as string | number | MetricContent, acceptedBox(box), {
     fonts:options.fonts,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,
+    align:record(slide.design).contentAlignment??options.contentAlignment,
   });
   const leafScore = (node: Pending, box: LayoutBox, settings: Composition, penalties?: CompositionPenalties): number => {
     const text = contentText(node.field, node.value);
