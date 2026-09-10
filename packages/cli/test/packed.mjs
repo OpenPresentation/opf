@@ -7,13 +7,19 @@ import {fileURLToPath} from 'node:url';
 import {spawnSync} from 'node:child_process';
 const root=fileURLToPath(new URL('../../../',import.meta.url));
 const pkg=path.join(root,'packages/cli'),out=path.join(root,'artifacts/cli');
-const temp=await mkdtemp(path.join(tmpdir(),'opf-cli-installed-'));
 const registry=process.argv.includes('--registry');
+const plan=JSON.parse(await readFile(path.join(root,'release-plan.json'),'utf8'));
+const option=name=>process.argv.find(value=>value.startsWith(`${name}=`))?.slice(name.length+1);
+const version=option('--version'),verificationRef=option('--verification-ref');
+assert.ok((!version&&!verificationRef)||(registry&&version&&verificationRef),'Use --registry with both --version=<version> and --verification-ref=<40-character commit>');
+if(version)assert.match(version,/^\d+\.\d+\.\d+$/);
+if(verificationRef)assert.match(verificationRef,/^[a-f0-9]{40}$/);
 const expected=registry
- ? JSON.parse(await readFile(path.join(root,'release-plan.json'),'utf8')).packages.find(item=>item.name==='@openpresentation/cli')
+ ? (version?{name:'@openpresentation/cli',version}:plan.packages.find(item=>item.name==='@openpresentation/cli'))
  : JSON.parse(await readFile(path.join(pkg,'package.json'),'utf8'));
 assert.ok(expected?.version,'Missing CLI version in the published release plan');
 const registrySpec=`${expected.name}@${expected.version}`;
+const temp=await mkdtemp(path.join(tmpdir(),'opf-cli-installed-'));
 function run(command,args,cwd,env={}) {
  if(process.platform==='win32'&&(command==='npm'||command==='pnpm')){
   const entry=command==='npm'
@@ -31,6 +37,19 @@ try {
  const cache=path.join(temp,'npm-cache');
  const packed=JSON.parse(run('npm',['pack',...(registry?[registrySpec]:[]),'--json','--ignore-scripts','--pack-destination',out,'--cache',cache],pkg))[0];
  const tarball=path.join(out,packed.filename);
+ if(registry){
+  // Install directly from npm as well as from the inspected tarball so npm can
+  // authenticate the registry signature and provenance for this exact artifact.
+  const consumer=path.join(temp,'registry-consumer');await mkdir(consumer);
+  await writeFile(path.join(consumer,'package.json'),JSON.stringify({private:true}));
+  run('npm',['install','--ignore-scripts','--no-fund','--no-audit','--prefer-online','--cache',cache,registrySpec],consumer);
+  const lock=JSON.parse(await readFile(path.join(consumer,'package-lock.json'),'utf8'));
+  const entry=lock.packages[`node_modules/${expected.name}`];
+  assert.equal(entry.version,expected.version);
+  assert.ok(entry.resolved.startsWith('https://registry.npmjs.org/')&&!entry.link);
+  assert.equal(entry.integrity,packed.integrity,'Registry install must match the inspected tarball');
+  console.log(run('npm',['audit','signatures','--cache',cache],consumer).trim());
+ }
  // Install globally into an isolated prefix, offline, with no workspace links or dependencies.
  run('npm',['install','--global','--prefix',temp,'--offline','--ignore-scripts','--no-audit','--no-fund','--cache',cache,tarball],temp);
  const installed=path.join(temp,process.platform==='win32'?'node_modules':'lib/node_modules','@openpresentation/cli');
@@ -38,6 +57,16 @@ try {
  assert.equal(manifest.version,expected.version);
  assert.ok(!manifest.private);assert.equal(Object.keys(manifest.dependencies??{}).length,0);
  const bin=path.join(installed,manifest.bin.opf);
+ const versions=JSON.parse(run(process.execPath,[bin,'--version'],temp));
+ assert.equal(versions.cli,expected.version);
+ if(registry){
+  const ref=verificationRef??plan.verificationRefs.cli;
+  assert.match(ref,/^[a-f0-9]{40}$/);
+  const cliManifest=JSON.parse(run('git',['show',`${ref}:packages/cli/package.json`],root));
+  assert.equal(cliManifest.version,expected.version,'Command tests must belong to the selected CLI version');
+  const coreManifest=JSON.parse(run('git',['show',`${ref}:packages/javascript/package.json`],root));
+  assert.equal(versions.opf,coreManifest.version,'Bundled core must match the immutable CLI source');
+ }
  assert.ok(JSON.parse(run(process.execPath,[bin,'create','-','--title','Installed binary'],temp)).slides.length);
  const richDeck={slides:[{table:{columns:[['Rich ',{text:'header',bold:true}]],rows:[[[{text:'Cell',italic:true}]]]}}]};
  const richFile=path.join(temp,'rich-table.opf.json');await writeFile(richFile,JSON.stringify(richDeck));
@@ -50,10 +79,10 @@ try {
  assert.ok(JSON.parse(await readFile(path.join(temp,'.agents/skills/opf-author/assets/decision-brief.opf.json'),'utf8')).slides.length);
  let commandTests=path.join(pkg,'test/cli.mjs');
  if(registry){
-  const plan=JSON.parse(await readFile(path.join(root,'release-plan.json'),'utf8'));
-  assert.match(plan.verificationRefs.cli,/^[a-f0-9]{40}$/);
+  const ref=verificationRef??plan.verificationRefs.cli;
+  assert.match(ref,/^[a-f0-9]{40}$/);
   commandTests=path.join(temp,'published-command-tests.mjs');
-  await writeFile(commandTests,run('git',['show',`${plan.verificationRefs.cli}:packages/cli/test/cli.mjs`],root));
+  await writeFile(commandTests,run('git',['show',`${ref}:packages/cli/test/cli.mjs`],root));
  }
  const output=run(process.execPath,[commandTests],temp,{OPF_TEST_BIN:bin});
  console.log(output.trim());console.log(`Standalone global and npx-style installation passed (${registry?'npm registry':'local pack'}). Integrity: ${packed.integrity}. Tarball: ${tarball}`);
