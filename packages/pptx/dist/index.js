@@ -1,5 +1,6 @@
 import {importTableFrames} from './table-import.js';
 import {attachCodeTags, codeManifest, importCodeGroups, nativeShapeParagraphs, nativeTextShapes} from './code-provenance.js';
+import {attachMetricTags,metricManifest,importMetricGroups} from './metric-provenance.js';
 import {importImageOrientation} from './image-import.js';
 import {nativeBackgroundFill} from './background.js';
 import {importBackground} from './background-import.js';
@@ -172,6 +173,7 @@ export async function toPptx(input, options = {}) {
   context.imagePlacements = new Map();
   context.backgroundFills = new Map();
   context.codeTags = new Map();
+  context.metricTags = new Map();
   context.imageFormat = options.imageFormat ?? "compatible";
   const pptx = new PptxGenJS();
   configurePresentation(pptx, presentation, {...context,fonts:resolveSlideContext(presentation,presentation.slides[0],context,options).fonts});
@@ -407,9 +409,11 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   if (tree?.['p:grpSp']) options.onDiagnostic?.({code:'grouped-text-reflow',path:`slides.${slideIndex}`,message:'Grouped native text is retained, but group transforms and non-text group members are not reconstructed; review the reflowed OPF.'});
   const paragraphs = nativeShapeParagraphs(decodeText(entries[slidePath]));
   const code = importCodeGroups(shapes, paragraphs, relationships, entries, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.code`}));
+  const metric = importMetricGroups(shapes, paragraphs, relationships, entries, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.metric`}));
   for (const item of code.items) items.push({kind:'code',bounds:shapeBounds(item.shape['p:spPr']?.['a:xfrm']),payload:item.payload});
+  for (const item of metric.items) items.push({kind:'metric',bounds:shapeBounds(item.shape['p:spPr']?.['a:xfrm']),payload:item.payload});
   for (const [index,shape] of shapes.entries()) {
-    if (code.consumed.has(shape)) continue;
+    if (code.consumed.has(shape)||metric.consumed.has(shape)) continue;
     const item = importShape(shape, dimensions, paragraphs[index]);
     if (item) items.push(item);
   }
@@ -888,7 +892,7 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
   const { widthInches, heightInches } = slideContext.dimensions;
   const layout = resolveCatalogRecord(presentation, "layouts", opfSlide.layout, "blank") ?? {};
   if (opfSlide.layout && layout.id !== opfSlide.layout) throw new OPFPptxError("catalog-resolution-failed", `Layout '${opfSlide.layout}' needs an inline or bundled catalog record.`, { path: `slides.${slideIndex}.layout` });
-  const geometry = composeSlide(opfSlide, { width: widthInches * 96, height: heightInches * 96, layout, slideIndex, fonts: slideContext.fonts, textMeasurement: options.textMeasurement });
+  const geometry = composeSlide(opfSlide, { width: widthInches * 96, height: heightInches * 96, layout, slideIndex, fonts: slideContext.fonts, contentAlignment:opfSlide.design?.contentAlignment??presentation.design?.contentAlignment, textMeasurement: options.textMeasurement });
   for (const diagnostic of geometry.diagnostics) options.onDiagnostic?.(diagnostic);
   for (const item of geometry.items) {
     const region = { x: item.box.x / 96, y: item.box.y / 96, w: item.box.width / 96, h: item.box.height / 96 };
@@ -912,7 +916,7 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
     } else if (item.field === "text" && typeof item.value === "string") {
       slide.addText(item.text.lines.join("\n"), {...textBoxOptions(region, slideContext, item.text.fontSize * 0.75),fontFace:item.textStyle.fontFamily,bold:item.textStyle.fontWeight>=600,italic:item.textStyle.italic});
     } else {
-      await addPayload(slide, presentation, item.payload, region, item.path, { ...slideContext, composition: item.composition, contentAlignment: opfSlide.design?.contentAlignment ?? presentation.design?.contentAlignment ?? "left" }, options, item.quoteLayout, item.codeLayout);
+      await addPayload(slide, presentation, item.payload, region, item.path, { ...slideContext, composition: item.composition, contentAlignment: opfSlide.design?.contentAlignment ?? presentation.design?.contentAlignment ?? "left" }, options, item.quoteLayout, item.codeLayout,item.metricLayout);
     }
   }
 
@@ -933,7 +937,7 @@ function fieldToType(field) {
   return field === "items" || field === "bullets" ? "list" : field;
 }
 
-async function addPayload(slide, presentation, payload, region, path, context, options, quoteLayout, codeLayout) {
+async function addPayload(slide, presentation, payload, region, path, context, options, quoteLayout, codeLayout,metricLayout) {
   const kind = inferPayloadKind(payload);
   switch (kind) {
     case "text":
@@ -958,7 +962,7 @@ async function addPayload(slide, presentation, payload, region, path, context, o
       addCodePayload(slide, payload.code, codeLayout, region, context, path);
       break;
     case "metric":
-      addMetricPayload(slide, payload.metric, region, context, options, path);
+      addMetricPayload(slide, payload.metric,metricLayout,context,path);
       break;
     case "quote":
       addQuotePayload(slide, quoteLayout, context, options, path);
@@ -1246,10 +1250,26 @@ function addCodePayload(slide, value, layout, region, context, path) {
   }
 }
 
-function addMetricPayload(slide, value, region, context, options, path) {
-  const metric = isPlainObject(value) ? value : {value}, box = pixelBox(region);
-  addMeasuredPayloadText(slide, metric.value, {...box, height: box.height * .45}, context, options, {path: path + '.value', fontSize: Math.min(76, box.height * .28), fontFamily: context.fonts.heading, fontWeight: 800, color: context.colors.accent});
-  addMeasuredPayloadText(slide, [metric.label, metric.description, metric.delta].filter(Boolean).join('\n'), {x: box.x, y: box.y + box.height * .45, width: box.width, height: box.height * .55}, context, options, {path, fontSize: 23, fontWeight: 500});
+function addMetricPayload(slide,value,layout,context,path) {
+  if (!layout) throw new OPFPptxError('missing-metric-layout','Metric export requires coordinated core metric geometry.',{path});
+  const group=String(context.metricTags.size+1),manifest=metricManifest(value,layout,group);
+  for (const [partIndex,part] of layout.parts.entries()) {
+    const invalid=/[\u0000-\u0008\u000B\u000C\u000E-\u001F\uD800-\uDFFF\uFFFE\uFFFF]/u.exec(part.text);
+    if (invalid) throw new OPFPptxError('invalid-metric-text',`Metric text contains U+${invalid[0].codePointAt(0).toString(16).toUpperCase().padStart(4,'0')} at UTF-16 offset ${invalid.index}, which XML cannot represent; edit that character before exporting.`,{path:part.path});
+    if (!part.visible) continue;
+    if (!part.fit||part.linePositions?.length!==part.fit.sourceLines.length) throw new OPFPptxError('layout-overflow','Metric content has no accepted internal line positions; increase its cell size or coordinate package versions.',{path:part.path,issues:layout.diagnostics});
+    for (const [index,line] of part.fit.sourceLines.entries()) {
+      const origin=part.linePositions[index],objectName=`OPF metric ${group} ${part.role} line ${index+1}`;
+      context.metricTags.set(objectName,partIndex===0&&index===0?manifest:{v:1,group,role:'line',part:partIndex,line:index});
+      const tabStops=line.segments.filter(segment=>segment.kind==='tab').map(segment=>({position:(segment.x+segment.width)/96,alignment:'l'}));
+      slide.addText(part.text.slice(line.start,line.end),{
+        ...textBoxOptions({x:(line.width?origin.x:part.box.x)/96,y:(origin.baseline-part.fit.fontSize)/96,w:(line.width||part.box.width)/96,h:part.fit.lineHeight/96},context,part.fit.fontSize*.75),
+        fontFace:part.style.fontFamily,bold:part.style.fontWeight>=600,italic:part.style.italic,
+        color:part.role==='value'?context.colors.accent:context.colors.text,align:line.width?'left':layout.alignment,fit:'none',wrap:false,lineSpacingMultiple:1,
+        tabStops:tabStops.length?tabStops:undefined,objectName,
+      });
+    }
+  }
 }
 
 function addQuotePayload(slide, layout, context, options, path) {
@@ -1575,6 +1595,7 @@ async function normalizePptxZip(raw, context) {
   }
 
   attachCodeTags(entries, context.codeTags);
+  attachMetricTags(entries,context.metricTags);
   const imageSources = new Map();
   for (const [part, bytes] of Object.entries(entries)) {
     if (!/^ppt\/slides\/slide\d+\.xml$/.test(part)) continue;
