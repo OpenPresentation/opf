@@ -1,0 +1,456 @@
+﻿{
+    "privatePdfSha256":  "ded146e2129a109af380cc34bf44bb425349fc0cae04b9e9cf288bcc91de1c0b",
+    "hostVersion":  "5.1.26100.9444",
+    "windowsBuild":  "26200.9445",
+    "powerPointBuild":  "16.0.20326.20132",
+    "phases":  [
+                   {
+                       "slides":  [
+                                      {
+                                          "sha256":  "e624d4ea18202136bf39a4080669058fdd0ef23d6db9ff65293f33636ab6f5b8",
+                                          "runs":  [
+                                                       {
+                                                           "text":  "Tag",
+                                                           "key":  "Roboto|0|0",
+                                                           "family":  "Roboto",
+                                                           "italic":  false,
+                                                           "bold":  false
+                                                       },
+                                                       {
+                                                           "text":  "Heading",
+                                                           "key":  "Roboto|-1|0",
+                                                           "family":  "Roboto",
+                                                           "italic":  false,
+                                                           "bold":  true
+                                                       },
+                                                       {
+                                                           "text":  "Subtitle",
+                                                           "key":  "Roboto|0|0",
+                                                           "family":  "Roboto",
+                                                           "italic":  false,
+                                                           "bold":  false
+                                                       },
+                                                       {
+                                                           "text":  "Scalar text stays editable.",
+                                                           "key":  "Roboto|0|0",
+                                                           "family":  "Roboto",
+                                                           "italic":  false,
+                                                           "bold":  false
+                                                       }
+                                                   ],
+                                          "png":  "original-1.png",
+                                          "slide":  1
+                                      },
+                                      {
+                                          "sha256":  "eb7600b47868c1a51d8cae3946ff6bbd7fdc6f083d595ed6c66261e43647b2a2",
+                                          "runs":  [
+                                                       {
+                                                           "text":  "Regular ",
+                                                           "key":  "Roboto|0|0",
+                                                           "family":  "Roboto",
+                                                           "italic":  false,
+                                                           "bold":  false
+                                                       },
+                                                       {
+                                                           "text":  "bold ",
+                                                           "key":  "Roboto|-1|0",
+                                                           "family":  "Roboto",
+                                                           "italic":  false,
+                                                           "bold":  true
+                                                       },
+                                                       {
+                                                           "text":  "italic ",
+                                                           "key":  "Roboto|0|-1",
+                                                           "family":  "Roboto",
+                                                           "italic":  true,
+                                                           "bold":  false
+                                                       },
+                                                       {
+                                                           "text":  "both",
+                                                           "key":  "Roboto|-1|-1",
+                                                           "family":  "Roboto",
+                                                           "italic":  true,
+                                                           "bold":  true
+                                                       }
+                                                   ],
+                                          "png":  "original-2.png",
+                                          "slide":  2
+                                      },
+                                      {
+                                          "sha256":  "42401bbd8031f7994d6f0dd95fa33880726f012e2119c044f9a7016c69c280c2",
+                                          "runs":  [
+                                                       {
+                                                           "text":  "Header ",
+                                                           "key":  "Roboto|-1|0",
+                                                           "family":  "Roboto",
+                                                           "italic":  false,
+                                                           "bold":  true
+                                                       },
+                                                       {
+                                                           "text":  "normal",
+                                                           "key":  "Roboto|0|0",
+                                                           "family":  "Roboto",
+                                                           "italic":  false,
+                                                           "bold":  false
+                                                       },
+                                                       {
+                                                           "text":  "Cell ",
+                                                           "key":  "Roboto|0|0",
+                                                           "family":  "Roboto",
+                                                           "italic":  false,
+                                                           "bold":  false
+                                                       },
+                                                       {
+                                                           "text":  "emphasis",
+                                                           "key":  "Roboto|0|-1",
+                                                           "family":  "Roboto",
+                                                           "italic":  true,
+                                                           "bold":  false
+                                                       }
+                                                   ],
+                                          "png":  "original-3.png",
+                                          "slide":  3
+                                      },
+                                      {
+                                          "sha256":  "fe0003d92293b24fe0d7c52b9f7a51e79b91686ef44adf16a533919b56ed0ae5",
+                                          "runs":  [
+                                                       {
+                                                           "text":  "\"Quote body\"",
+                                                           "key":  "Roboto SemiBold|0|0",
+                                                           "family":  "Roboto SemiBold",
+                                                           "italic":  false,
+                                                           "bold":  false
+                                                       },
+                                                       {
+                                                           "text":  "Quote author - Original source",
+                                                           "key":  "Roboto Medium|0|0",
+                                                           "family":  "Roboto Medium",
+                                                           "italic":  false,
+                                                           "bold":  false
+                                                       }
+                                                   ],
+                                          "png":  "original-4.png",
+                                          "slide":  4
+                                      },
+                                      {
+                                          "sha256":  "73a12e2440965291dee5798b0419f0a8430a1672a0383b7e04846dbee253b5b1",
+                                          "runs":  [
+                                                       {
+                                                           "text":  "example.js",
+                                                           "key":  "Roboto Mono|-1|0",
+                                                           "family":  "Roboto Mono",
+                                                           "italic":  false,
+                                                           "bold":  true
+                                                       },
+                                                       {
+                                                           "text":  "JavaScript",
+                                                           "key":  "Roboto Mono|-1|0",
+                                                           "family":  "Roboto Mono",
+                                                           "italic":  false,
+                                                           "bold":  true
+                                                       },
+                                                       {
+                                                           "text":  "const count = 123;",
+                                                           "key":  "Roboto Mono|0|0",
+                                                           "family":  "Roboto Mono",
+                                                           "italic":  false,
+                                                           "bold":  false
+                                                       }
+                                                   ],
+                                          "png":  "original-5.png",
+                                          "slide":  5
+                                      },
+                                      {
+                                          "sha256":  "0e157c330d37de9336cdd8b6a0ea662d77638e94d43ecbf74304c63103b6f779",
+                                          "runs":  [
+                                                       {
+                                                           "text":  "123",
+                                                           "key":  "Roboto ExtraBold|0|0",
+                                                           "family":  "Roboto ExtraBold",
+                                                           "italic":  false,
+                                                           "bold":  false
+                                                       },
+                                                       {
+                                                           "text":  "Weight 500 label",
+                                                           "key":  "Roboto Medium|0|0",
+                                                           "family":  "Roboto Medium",
+                                                           "italic":  false,
+                                                           "bold":  false
+                                                       },
+                                                       {
+                                                           "text":  "Regular description",
+                                                           "key":  "Roboto|0|0",
+                                                           "family":  "Roboto",
+                                                           "italic":  false,
+                                                           "bold":  false
+                                                       },
+                                                       {
+                                                           "text":  "+2",
+                                                           "key":  "Roboto Medium|0|0",
+                                                           "family":  "Roboto Medium",
+                                                           "italic":  false,
+                                                           "bold":  false
+                                                       }
+                                                   ],
+                                          "png":  "original-6.png",
+                                          "slide":  6
+                                      },
+                                      {
+                                          "sha256":  "6cf484e5457ee65164c89a43539260af37b6391e6fd75de7e14b369f682614e4",
+                                          "runs":  [
+                                                       {
+                                                           "text":  "List ",
+                                                           "key":  "Roboto|0|0",
+                                                           "family":  "Roboto",
+                                                           "italic":  false,
+                                                           "bold":  false
+                                                       },
+                                                       {
+                                                           "text":  "bold",
+                                                           "key":  "Roboto|-1|0",
+                                                           "family":  "Roboto",
+                                                           "italic":  false,
+                                                           "bold":  true
+                                                       },
+                                                       {
+                                                           "text":  "Second item",
+                                                           "key":  "Roboto|0|0",
+                                                           "family":  "Roboto",
+                                                           "italic":  false,
+                                                           "bold":  false
+                                                       }
+                                                   ],
+                                          "png":  "original-7.png",
+                                          "slide":  7
+                                      }
+                                  ],
+                       "phase":  "original"
+                   },
+                   {
+                       "slides":  [
+                                      {
+                                          "sha256":  "e624d4ea18202136bf39a4080669058fdd0ef23d6db9ff65293f33636ab6f5b8",
+                                          "runs":  [
+                                                       {
+                                                           "text":  "Tag",
+                                                           "key":  "Roboto|0|0",
+                                                           "family":  "Roboto",
+                                                           "italic":  false,
+                                                           "bold":  false
+                                                       },
+                                                       {
+                                                           "text":  "Heading",
+                                                           "key":  "Roboto|-1|0",
+                                                           "family":  "Roboto",
+                                                           "italic":  false,
+                                                           "bold":  true
+                                                       },
+                                                       {
+                                                           "text":  "Subtitle",
+                                                           "key":  "Roboto|0|0",
+                                                           "family":  "Roboto",
+                                                           "italic":  false,
+                                                           "bold":  false
+                                                       },
+                                                       {
+                                                           "text":  "Scalar text stays editable.",
+                                                           "key":  "Roboto|0|0",
+                                                           "family":  "Roboto",
+                                                           "italic":  false,
+                                                           "bold":  false
+                                                       }
+                                                   ],
+                                          "png":  "reopened-1.png",
+                                          "slide":  1
+                                      },
+                                      {
+                                          "sha256":  "eb7600b47868c1a51d8cae3946ff6bbd7fdc6f083d595ed6c66261e43647b2a2",
+                                          "runs":  [
+                                                       {
+                                                           "text":  "Regular ",
+                                                           "key":  "Roboto|0|0",
+                                                           "family":  "Roboto",
+                                                           "italic":  false,
+                                                           "bold":  false
+                                                       },
+                                                       {
+                                                           "text":  "bold ",
+                                                           "key":  "Roboto|-1|0",
+                                                           "family":  "Roboto",
+                                                           "italic":  false,
+                                                           "bold":  true
+                                                       },
+                                                       {
+                                                           "text":  "italic ",
+                                                           "key":  "Roboto|0|-1",
+                                                           "family":  "Roboto",
+                                                           "italic":  true,
+                                                           "bold":  false
+                                                       },
+                                                       {
+                                                           "text":  "both",
+                                                           "key":  "Roboto|-1|-1",
+                                                           "family":  "Roboto",
+                                                           "italic":  true,
+                                                           "bold":  true
+                                                       }
+                                                   ],
+                                          "png":  "reopened-2.png",
+                                          "slide":  2
+                                      },
+                                      {
+                                          "sha256":  "42401bbd8031f7994d6f0dd95fa33880726f012e2119c044f9a7016c69c280c2",
+                                          "runs":  [
+                                                       {
+                                                           "text":  "Header ",
+                                                           "key":  "Roboto|-1|0",
+                                                           "family":  "Roboto",
+                                                           "italic":  false,
+                                                           "bold":  true
+                                                       },
+                                                       {
+                                                           "text":  "normal",
+                                                           "key":  "Roboto|0|0",
+                                                           "family":  "Roboto",
+                                                           "italic":  false,
+                                                           "bold":  false
+                                                       },
+                                                       {
+                                                           "text":  "Cell ",
+                                                           "key":  "Roboto|0|0",
+                                                           "family":  "Roboto",
+                                                           "italic":  false,
+                                                           "bold":  false
+                                                       },
+                                                       {
+                                                           "text":  "emphasis",
+                                                           "key":  "Roboto|0|-1",
+                                                           "family":  "Roboto",
+                                                           "italic":  true,
+                                                           "bold":  false
+                                                       }
+                                                   ],
+                                          "png":  "reopened-3.png",
+                                          "slide":  3
+                                      },
+                                      {
+                                          "sha256":  "fe0003d92293b24fe0d7c52b9f7a51e79b91686ef44adf16a533919b56ed0ae5",
+                                          "runs":  [
+                                                       {
+                                                           "text":  "\"Quote body\"",
+                                                           "key":  "Roboto SemiBold|0|0",
+                                                           "family":  "Roboto SemiBold",
+                                                           "italic":  false,
+                                                           "bold":  false
+                                                       },
+                                                       {
+                                                           "text":  "Quote author - Original source",
+                                                           "key":  "Roboto Medium|0|0",
+                                                           "family":  "Roboto Medium",
+                                                           "italic":  false,
+                                                           "bold":  false
+                                                       }
+                                                   ],
+                                          "png":  "reopened-4.png",
+                                          "slide":  4
+                                      },
+                                      {
+                                          "sha256":  "73a12e2440965291dee5798b0419f0a8430a1672a0383b7e04846dbee253b5b1",
+                                          "runs":  [
+                                                       {
+                                                           "text":  "example.js",
+                                                           "key":  "Roboto Mono|-1|0",
+                                                           "family":  "Roboto Mono",
+                                                           "italic":  false,
+                                                           "bold":  true
+                                                       },
+                                                       {
+                                                           "text":  "JavaScript",
+                                                           "key":  "Roboto Mono|-1|0",
+                                                           "family":  "Roboto Mono",
+                                                           "italic":  false,
+                                                           "bold":  true
+                                                       },
+                                                       {
+                                                           "text":  "const count = 123;",
+                                                           "key":  "Roboto Mono|0|0",
+                                                           "family":  "Roboto Mono",
+                                                           "italic":  false,
+                                                           "bold":  false
+                                                       }
+                                                   ],
+                                          "png":  "reopened-5.png",
+                                          "slide":  5
+                                      },
+                                      {
+                                          "sha256":  "0e157c330d37de9336cdd8b6a0ea662d77638e94d43ecbf74304c63103b6f779",
+                                          "runs":  [
+                                                       {
+                                                           "text":  "123",
+                                                           "key":  "Roboto ExtraBold|0|0",
+                                                           "family":  "Roboto ExtraBold",
+                                                           "italic":  false,
+                                                           "bold":  false
+                                                       },
+                                                       {
+                                                           "text":  "Weight 500 label",
+                                                           "key":  "Roboto Medium|0|0",
+                                                           "family":  "Roboto Medium",
+                                                           "italic":  false,
+                                                           "bold":  false
+                                                       },
+                                                       {
+                                                           "text":  "Regular description",
+                                                           "key":  "Roboto|0|0",
+                                                           "family":  "Roboto",
+                                                           "italic":  false,
+                                                           "bold":  false
+                                                       },
+                                                       {
+                                                           "text":  "+2",
+                                                           "key":  "Roboto Medium|0|0",
+                                                           "family":  "Roboto Medium",
+                                                           "italic":  false,
+                                                           "bold":  false
+                                                       }
+                                                   ],
+                                          "png":  "reopened-6.png",
+                                          "slide":  6
+                                      },
+                                      {
+                                          "sha256":  "6cf484e5457ee65164c89a43539260af37b6391e6fd75de7e14b369f682614e4",
+                                          "runs":  [
+                                                       {
+                                                           "text":  "List ",
+                                                           "key":  "Roboto|0|0",
+                                                           "family":  "Roboto",
+                                                           "italic":  false,
+                                                           "bold":  false
+                                                       },
+                                                       {
+                                                           "text":  "bold",
+                                                           "key":  "Roboto|-1|0",
+                                                           "family":  "Roboto",
+                                                           "italic":  false,
+                                                           "bold":  true
+                                                       },
+                                                       {
+                                                           "text":  "Second item",
+                                                           "key":  "Roboto|0|0",
+                                                           "family":  "Roboto",
+                                                           "italic":  false,
+                                                           "bold":  false
+                                                       }
+                                                   ],
+                                          "png":  "reopened-7.png",
+                                          "slide":  7
+                                      }
+                                  ],
+                       "phase":  "reopened"
+                   }
+               ],
+    "executableSha256":  "90fa931172c507b763ba92a82b19d5bc70816e008c5bb87577e1838e8a92e9f9",
+    "scope":  "Owned seven-slide font fixture; private PDF is excluded from portable evidence. Font names do not establish every physical glyph file.",
+    "generationSha256":  "1add70b4ba9439d9731ff959236a7fd035125a559009b001a40fbd88b5612c24",
+    "savedSha256":  "9eb4cc4379204bc7f6d68d99faa710b34807eb9e36d5c46404a48a19844f5b64"
+}

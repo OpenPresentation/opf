@@ -1,0 +1,57 @@
+{
+  "node": "v24.20.0",
+  "passed": true,
+  "nativeFaces": 9,
+  "nativeSlides": 14,
+  "identicalSaveReopenPngPairs": 7,
+  "identicalCurrentContentSlideImports": 14,
+  "temporaryFontRegistrationsRemoved": 9,
+  "pdfFontFaces": [
+    [
+      "Roboto",
+      false,
+      false
+    ],
+    [
+      "Roboto",
+      false,
+      true
+    ],
+    [
+      "Roboto",
+      true,
+      false
+    ],
+    [
+      "Roboto",
+      true,
+      true
+    ],
+    [
+      "Roboto ExtraBold",
+      false,
+      false
+    ],
+    [
+      "Roboto Medium",
+      false,
+      false
+    ],
+    [
+      "Roboto Mono",
+      false,
+      false
+    ],
+    [
+      "Roboto Mono",
+      true,
+      false
+    ],
+    [
+      "Roboto SemiBold",
+      false,
+      false
+    ]
+  ],
+  "scope": "Nine serialized physical font styles are observed in native character properties and native PDF output font names. This identifies output faces, not each glyph physical file, and does not establish browser/native pixel equivalence."
+}

@@ -1,0 +1,38 @@
+{
+  "nativeGate": "blocked",
+  "editorUndo": {
+    "node": [
+      "20.20.2",
+      "24.20.0"
+    ],
+    "passed": true,
+    "documentAndPptxRestored": true,
+    "staleGuardRejected": true,
+    "nativeImagesProven": false
+  },
+  "attempts": [
+    {
+      "directory": "raw/images-native-node24-01",
+      "imageFormat": "preserve",
+      "result": "Immediate open-original refusal; no native slide observations"
+    },
+    {
+      "directory": "raw/images-native-node24-02",
+      "imageFormat": "compatible",
+      "result": "Immediate open-original refusal; no native slide observations"
+    },
+    {
+      "directory": "raw/image-open-opf-png",
+      "result": "Single PNG OPF deck refused immediately"
+    },
+    {
+      "directory": "raw/image-open-vendor-png",
+      "result": "Single PNG direct PptxGenJS deck refused immediately"
+    },
+    {
+      "directory": "raw/image-native-created-01",
+      "result": "PowerPoint-created picture control timed out at 45 seconds after empty-owned.pptx checkpoint; exact blocked call unknown because this diagnostic did not persist individual stages. Only helper PID 16992 terminated; owned presentation cleanup unconfirmed."
+    }
+  ],
+  "scope": "Source PNG CRCs, all archive XML and relationships validate. No attribution to OPF, PptxGenJS, WebP, Office codec or internal cause is established. No native image passes claimed. No Office calls after the timeout; user asked to save/close/reopen normally before resuming."
+}
