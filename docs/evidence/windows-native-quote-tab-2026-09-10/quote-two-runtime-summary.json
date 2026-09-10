@@ -1,0 +1,27 @@
+{
+  "runs": [
+    {
+      "directory": "raw/quote-coordinated-node24-01",
+      "node": "v24.20.0",
+      "generationSha256": "efab52fcc634ddfae0b7574a97fba8947fefe330a7d91cefd684db1c72903474",
+      "comparisonSha256": "8130a8359be653b3b35354b68b468709367f08d51e3b8e6d7cced6402f5349bd",
+      "nativeSlides": 12,
+      "imports": 36,
+      "passed": true,
+      "scope": "Exact current body/footer line order and multiplicity, title edits, native bounds and separation. Quotes import as text blocks, not semantic quotes."
+    },
+    {
+      "directory": "raw/quote-coordinated-node20-01",
+      "node": "v20.20.2",
+      "generationSha256": "7d4d348c05127f8bf73cc9da1100c472bc33639511653788303c9a8ad3c6f7e2",
+      "comparisonSha256": "02dac11fc6ba5ca3a3f442ec6116e3c16ee36f7a47f9526b246d251994594e11",
+      "nativeSlides": 12,
+      "imports": 36,
+      "passed": true,
+      "scope": "Exact current body/footer line order and multiplicity, title edits, native bounds and separation. Quotes import as text blocks, not semantic quotes."
+    }
+  ],
+  "fixtureAndRuntimeBytesIdentical": true,
+  "baseline": "../windows-native-2026-09-10/content-two-runtime-summary.json",
+  "priorClassificationFailures": 36
+}
