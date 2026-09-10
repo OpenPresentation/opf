@@ -1,0 +1,41 @@
+{
+  "mode": "packed",
+  "consumer": "artifacts/npm/consumer",
+  "browserBuildId": "8a46dde2-f2fc-4524-9ee8-ffc00a72b26d",
+  "lockSha256": "53a6f416de6a151264ebbd7529ed8b4753659e803e292cee09807731ce51cac6",
+  "packages": {
+    "@openpresentation/opf": "0.4.0-preview.11",
+    "@openpresentation/opf-render": "0.1.0-preview.11",
+    "@openpresentation/opf-editor": "0.1.0-preview.11",
+    "@openpresentation/opf-pptx": "0.1.0-preview.11"
+  },
+  "suites": [
+    "canvas",
+    "rich-text",
+    "rich-text-estimated",
+    "layout",
+    "block",
+    "list",
+    "create",
+    "styled-table"
+  ],
+  "files": {
+    "fonts.json": "c697f3979d65cb65482400d163604a8b4ac299e788702b8d3a502cce3f284c8d",
+    "packed-canvas-tests.html": "eabf718451f5b776946f68b7a65fde4df9f194b1b5013b0924ce3aa90b94ff92",
+    "packed-canvas-tests.js": "feb78b45ba58ab258e06ed70e7d97deb0d8cc46b31dadc3ff5ca9aaaee1ecca6",
+    "packed-rich-text-tests.html": "da4f8ebf7e8521d5d3361bf983559ad9dc598c0f2cd0586893b3944bb6dd41f9",
+    "packed-rich-text-tests.js": "64d8926c7c9780370f4bd44d929831b8fce843068f598adc58982b9dd06ca64c",
+    "packed-rich-text-estimated-tests.html": "f072e2182da9de881805dc068b1635503a13291edd847e7e3c07da06d7a3692e",
+    "packed-rich-text-estimated-tests.js": "64d8926c7c9780370f4bd44d929831b8fce843068f598adc58982b9dd06ca64c",
+    "packed-layout-tests.html": "2fe1eef3d16f6d7e5affe656821b1b063909f66e848599d4840625e36a97d2bf",
+    "packed-layout-tests.js": "1d082b50a188272b66adc8e7be23cd64dee7e7ae6278f246df1721b8b80a4722",
+    "packed-block-tests.html": "56fb85286b8440a10dae1216acfec0f87a19fb2107989f12df075328f5a5747b",
+    "packed-block-tests.js": "8a3b2547d52c12e727eaa17821c5618a51d9a265486552f98b8b3cd8d46f9473",
+    "packed-list-tests.html": "5073bcc579d7a5919eeaf078a6f57474562e5ff14c56815bcd460f02c9844852",
+    "packed-list-tests.js": "21b42efd63908e7d7739bf7bbfe9776c96e63dc27fe331111037e62128c723b0",
+    "packed-create-tests.html": "ce7ac5392d1c139aa9152a2e475f455a1ab1271fda7e9b9b8f3469fa9e436a94",
+    "packed-create-tests.js": "968841821940a5b36ffc0e16d01de95a5dd707b2f24ca891d52c21667234ea72",
+    "packed-styled-table-tests.html": "08d17f84d2ffcb057bba8355129e9453c279388fdfff23a39c5dad2b4be6acfa",
+    "packed-styled-table-tests.js": "42e5d04a54dfd83c19511f623515a65bcae551c885ca8e4dab0dea9409dab10b"
+  }
+}

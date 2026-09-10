@@ -16,6 +16,8 @@ The shared metric outline increment in core #66 clears the recorded portrait/rig
 
 The [scalar whitespace candidate](plain-text-whitespace.md) retains source spaces, tabs and exact line boundaries, with explicit tab geometry and bounded measured SVG advances. It includes blank-field selection and per-input mixed-ending preservation. Native verification and the separate remaining text-feature/coverage gates are still required.
 
+The [readability floor candidate](readability-floor.md) enforces selected minima on actual scalar/rich/list/table glyphs and bounds each fitting search to 65 layouts. Both runtime source and installed browser matrices pass 48 cases; the separate reviewed raster checkpoint covers 262 changed slides. Small template text, chart/timeline internals, coverage and broader layout repair remain open. See [portable evidence](../evidence/mac-readability-floor/README.md).
+
 ## Ship the existing starter pack
 
 Default new presentations to Roboto, with Roboto Mono for code. Use the same supplied font bytes for measurement, browser previews, and raster exports. Native PowerPoint exports name the resolved open font; recipients currently need that font installed.

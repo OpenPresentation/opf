@@ -11,7 +11,7 @@ test('composition accepts complete metric geometry against its rounded cell and 
     const ordinary=composeSlide(slide,options),count=calls;calls=0;
     const {explanation,...explained}=composeSlide(slide,{...options,explain:true});
     assert.deepEqual(explained,ordinary);assert.equal(calls,count);assert.deepEqual(slide,before);
-    assert.equal(explanation.algorithm,'grid-score-v6');assert.deepEqual(explanation.unmeasuredPayloads,[]);
+    assert.equal(explanation.algorithm,'grid-score-v7');assert.deepEqual(explanation.unmeasuredPayloads,[]);
     const item=ordinary.items[0],value=item.metricLayout.parts.find(part=>part.role==='value');
     assert.equal(item.text,value.fit);assert.equal(item.textStyle,value.style);
     assert.deepEqual(item.metricLayout,layoutMetric(metric,item.box,{...options,path:item.path,minFontSize:32,scale:options.width/720}));
@@ -44,7 +44,7 @@ test('strict ancestors reject complete metric field paths without changing sourc
     const metric={value:42,unit:'ms',label:'Latency',delta:0,trend:'flat',[field]:'Unabridged '.repeat(1000)};
     const slide={composition:{overflow:'error',minFontSize:32},blocks:[{composition:{overflow:'warn'},blocks:[{metric}]}]},before=structuredClone(slide);
     assert.throws(()=>composeSlide(slide,{explain:true}),error=>{
-      assert.ok(error instanceof OPFCompositionError);assert.equal(error.explanation.algorithm,'grid-score-v6');
+      assert.ok(error instanceof OPFCompositionError);assert.equal(error.explanation.algorithm,'grid-score-v7');
       assert.ok(error.diagnostics.some(d=>d.path===`slides.0.blocks.0.blocks.0.metric.${field}`));return true;
     });
     assert.deepEqual(slide,before);

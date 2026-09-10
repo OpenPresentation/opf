@@ -32,7 +32,7 @@ test('candidate penalties account for the score and report the selected flow', (
   ]};
   const result=composeSlide(slide,{width:720,height:1280,explain:true,slideIndex:4});
   const decision=result.explanation.decisions[0];
-  assert.equal(result.explanation.algorithm,'grid-score-v6');
+  assert.equal(result.explanation.algorithm,'grid-score-v7');
   assert.equal(result.explanation.textMeasurement,'estimated');
   assert.equal(decision.path,'slides.4');
   assert.equal(decision.reason,'lowest-score');

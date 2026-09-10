@@ -1,0 +1,38 @@
+[
+  {
+    "node": "v20.20.2",
+    "installed": false,
+    "cases": 48,
+    "minimumSvgMarginPx": 0,
+    "minimumNativeMarginPt": 0.0,
+    "errors": [],
+    "requests": []
+  },
+  {
+    "node": "v20.20.2",
+    "installed": true,
+    "cases": 48,
+    "minimumSvgMarginPx": 0,
+    "minimumNativeMarginPt": 0.0,
+    "errors": [],
+    "requests": []
+  },
+  {
+    "node": "v24.21.0",
+    "installed": false,
+    "cases": 48,
+    "minimumSvgMarginPx": 0,
+    "minimumNativeMarginPt": 0.0,
+    "errors": [],
+    "requests": []
+  },
+  {
+    "node": "v24.21.0",
+    "installed": true,
+    "cases": 48,
+    "minimumSvgMarginPx": 0,
+    "minimumNativeMarginPt": 0.0,
+    "errors": [],
+    "requests": []
+  }
+]
