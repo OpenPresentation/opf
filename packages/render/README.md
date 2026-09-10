@@ -32,6 +32,8 @@ The default `pack: 'base'` contains nine Roboto/Roboto Mono faces and suits a do
 
 Default PNG/PDF raster loading now uses the same complete nine-face base pack, fixing omitted semibold and italic faces. Custom raster callers may still set `useBundledFonts: false`. Font files must stay available and unchanged for subsequent raster calls. `node scripts/update-font-manifest.mjs` is an explicit maintenance operation requiring review of font bytes, style metadata, licenses and raster changes; builds and installs never regenerate the expected hashes.
 
+The next unpublished source increment resolves OpenType preferred-family groups, so a Roboto request at 500, 600 or 800 selects the installed Medium, SemiBold or ExtraBold face. Explicit caller family renames keep their own namespace; ambiguous grouped faces reject. Resolved styles also carry optional `fontFace` metadata with the physical legacy family and its bold/italic style-link flags. Coordinated PPTX export consumes those flags independently of numeric weight. This prevents requesting a second bold style from an already named ExtraBold/SemiBold family. Browser CSS and native selectors retain their respective family names; no font is synthesized or installed by this lookup. See [exact-weight evidence and limits](docs/evidence/font-variants/README.md).
+
 Code strings that [XML 1.0 cannot represent](https://www.w3.org/TR/xml/#charsets) reject rendering with `invalid-code-text`, the OPF field path and UTF-16 offset. Input JSON stays unchanged. Tabs, line endings and valid supplementary Unicode remain accepted; schema validity and XML serialization do not certify font coverage or native fidelity.
 
 ## Scope
