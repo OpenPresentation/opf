@@ -61,7 +61,7 @@ for(const [name,change]of [
  failures.push({name,diagnostics:result.diagnostics});
 }
 const multiple={slides:[{blocks:[{timeline:control.timeline},{timeline:fixtures[1]}]}]};assert.deepEqual((await fromPptx(await toPptx(multiple))).slides[0].blocks,multiple.slides[0].blocks.map(block=>({type:'timeline',...block})));
-const dense={slides:[{timeline:{events:Array.from({length:12},(_,index)=>({when:`Q${index+1}`,what:`Milestone ${index+1}`,description:'Keep every label inside its allocated space.'}))},composition:{minFontSize:32,overflow:'error'}}]};
+const dense={design:{fontScheme:'roboto'},slides:[{timeline:{events:Array.from({length:12},(_,index)=>({when:`Q${index+1}`,what:`Milestone ${index+1}`,description:'Keep every label inside its allocated space.'}))},composition:{minFontSize:32,overflow:'error'}}]};
 for(const options of [{},fontOptions]){
  await assert.rejects(toPptx(dense,options),error=>error.code==='layout-overflow'&&!(error instanceof TypeError));
  const warned=structuredClone(dense),diagnostics=[];warned.slides[0].composition.overflow='warn';
@@ -69,5 +69,5 @@ for(const options of [{},fontOptions]){
  assert.ok(diagnostics.some(diagnostic=>diagnostic.code==='text-overflow'));
  assert.deepEqual((await fromPptx(bytes)).slides[0].blocks,[{type:'timeline',timeline:dense.slides[0].timeline}]);
 }
-if(process.argv[2]){await mkdir(path.dirname(path.resolve(process.argv[2])),{recursive:true});await writeFile(process.argv[2],JSON.stringify({node:process.version,verifierSha256:hash(await readFile(new URL(import.meta.url))),results,failures,scope:'Editable XML structure and controlled native-text mutations only; no native Office execution. Current field values, array/object form and source boundaries survive complete tags. Damaged tags retain ordinary native text.'},null,2)+'\n');}
-console.log('16 timeline exports match accepted text boxes, fonts and source; current edits, clearing, reordering, six damaged-group controls and multiple timelines pass.');
+if(process.argv[2]){await mkdir(path.dirname(path.resolve(process.argv[2])),{recursive:true});await writeFile(process.argv[2],JSON.stringify({node:process.version,verifierSha256:hash(await readFile(new URL(import.meta.url))),results,failures,overflowControls:{strict:2,warn:2},scope:'Editable XML structure and controlled native-text mutations only; no native Office execution. Current field values, array/object form and source boundaries survive complete tags. Damaged tags retain ordinary native text.'},null,2)+'\n');}
+console.log('16 timeline exports match accepted text boxes, fonts and source; current edits, clearing, reordering, six damaged-group controls multiple timelines and four strict/warn overflow controls pass.');
