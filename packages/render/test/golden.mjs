@@ -7,7 +7,7 @@ import { examples } from '@openpresentation/opf/examples';
 import { renderSvgDeck, svgToPng } from '../dist/index.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const baselinePath = path.resolve(process.env.OPF_GOLDEN_BASELINE ?? path.join(root, 'test/golden/opf-examples-png.source-whitespace.sha256.json'));
+const baselinePath = path.resolve(process.env.OPF_GOLDEN_BASELINE ?? path.join(root, 'test/golden/opf-examples-png.readability.sha256.json'));
 const output = path.resolve(process.env.OPF_GOLDEN_OUT ?? path.join(root, 'artifacts/golden'));
 const update = process.argv.includes('--update');
 const scale = Number(process.env.OPF_GOLDEN_SCALE ?? '0.25');
