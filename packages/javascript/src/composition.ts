@@ -130,7 +130,7 @@ export interface ComposedFlow {
   itemCount: number;
   slotCount: number;
 }
-/** Additive penalties in grid-score-v6; lower is preferred. These are not quality percentages. */
+/** Additive penalties in grid-score-v7; lower is preferred. These are not quality percentages. */
 export interface CompositionPenalties {
   cellProportions: number;
   fontReduction: number;
@@ -154,7 +154,7 @@ export interface CompositionDecision {
   candidates: CompositionCandidate[];
 }
 export interface CompositionExplanation {
-  algorithm: 'grid-score-v6';
+  algorithm: 'grid-score-v7';
   /** Provided widths do not establish shaping, glyph coverage or native fidelity. */
   textMeasurement: 'estimated' | 'provided';
   /** Optional vector coverage for headings and scalar/rich text, not every payload. */
@@ -228,8 +228,18 @@ export function fitText(text: string, box: LayoutBox, requestedSize = 25, minFon
   if (![box.width, box.height, requestedSize, minFontSize].every(Number.isFinite) || box.width <= 0 || box.height <= 0 || requestedSize <= 0 || minFontSize <= 0) {
     throw new RangeError("Text dimensions and font sizes must be finite and positive.");
   }
-  const minimum = Math.min(minFontSize, requestedSize);
-  return fitSourceText(text,box,requestedSize,minimum,1,measure,true);
+  return fitSourceText(text,box,Math.max(requestedSize,minFontSize),minFontSize,1,measure,true);
+}
+
+/** At most 65 layout trials, including the floor even for unusually large requests. */
+function fitAtSizes<T extends {overflow:boolean}>(layout:(size:number)=>T,requested:number,minimum:number,step=1):T {
+  const start=Math.max(requested,minimum);
+  if(![start,minimum,step].every(value=>Number.isFinite(value)&&value>0))throw new RangeError('Readable font sizes and fitting steps must be finite and positive.');
+  for(let trial=0;trial<=64;trial++) {
+    const size=trial===64?minimum:Math.max(minimum,start-trial*step),result=layout(size);
+    if(!result.overflow||size===minimum)return result;
+  }
+  throw new Error('Text fitting did not evaluate its bounded floor trial.');
 }
 export interface QuoteContent { text: string; attribution?: string; source?: string }
 /** Source and displayed-text ranges are half-open UTF-16 offsets. Added punctuation has no source range. */
@@ -301,7 +311,7 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
   const add = (role:QuoteTextPart['role'], text:string, sources:QuoteTextSource[], area:LayoutBox, fontSize:number, fontFamily:string, fontWeight:number, partPath:string) => {
     const requestedStyle:TextStyle = {fontFamily,fontWeight,italic:false,path:partPath};
     const style = resolveTextStyle({...requestedStyle}, options.textMeasurement);
-    // Unlike fitText's legacy cap, an explicit readability floor can raise the nominal size.
+    // An explicit readability floor can raise the nominal size.
     const requestedFontSize = Math.max(fontSize * scale, minimum);
     const part:QuoteTextPart = {role,path:partPath,text,sources,box:area,requestedFontSize,minFontSize:minimum,requestedStyle,style};
     parts.push(part);
@@ -712,11 +722,7 @@ function fitSourceText(text:string,box:LayoutBox,size:number,minimum:number,step
     return {lines:sourceLines.map(line=>text.slice(line.start,line.end)),sourceLines,fontSize,lineHeight,tabSize:4,tabWidth,
       overflow:sourceLines.length*lineHeight>box.height+.01||sourceLines.some(line=>line.width>box.width+.01)};
   };
-  let result=layout(size);
-  // Sizes are nominal 14/18 reference pixels or the explicit floor, so this
-  // takes at most 19 trials regardless of the canvas scale.
-  while(result.overflow&&size>minimum) {size=Math.max(minimum,size-step);result=layout(size);}
-  return result;
+  return fitAtSizes(layout,size,minimum,step);
 }
 
 /** Shared filename/language/body allocation. Consumers must reuse the accepted fits and styles. */
@@ -810,10 +816,19 @@ export interface RichTextOptions {
 /** Fit mixed styles without flattening font metrics. Run fontSize is in points. */
 export function fitRichText(input: readonly (string | RichTextRun)[], box: LayoutBox, requestedSize = 25, minFontSize = 16, options: RichTextOptions = {style:{fontFamily:'sans-serif',fontWeight:400}}): RichTextFit {
   if (![box.width,box.height,requestedSize,minFontSize].every(value=>Number.isFinite(value)&&value>0)) throw new RangeError('Rich text dimensions and font sizes must be finite and positive.');
-  const layout=richTextLayouter(input,box,requestedSize,options),minimum=Math.min(requestedSize,minFontSize);
-  let size=requestedSize,result=layout(size);
-  while(result.overflow&&size>minimum){size=Math.max(minimum,size-1);result=layout(size);}
-  return result;
+  const layout=richTextLayouter(input,box,requestedSize,options);
+  return fitAtSizes(layout,requestedSize,richMinimum(input,requestedSize,minFontSize));
+}
+/** Retain the existing relative shrink limit and enforce the floor on painted glyph sizes. */
+function richMinimum(input:readonly (string|RichTextRun)[],requested:number,minimum:number):number {
+  let floor=Math.min(requested,minimum),visible=false;
+  for(const value of input) {
+    const run=typeof value==='string'?{text:value}:value;
+    if(!run.text)continue;
+    const ratio=(run.fontSize===undefined?1:run.fontSize*4/3/requested)*(run.superscript||run.subscript?0.7:1);
+    floor=Math.max(floor,minimum/ratio);visible=true;
+  }
+  return visible?floor:minimum;
 }
 function richTextLayouter(input: readonly (string | RichTextRun)[], box: LayoutBox, requestedSize: number, options: RichTextOptions): (fontSize:number)=>RichTextFit {
   let offset=0;
@@ -922,9 +937,12 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=2
     const height=y-box.y;
     return {listEntries:entries,lines,fontSize,lineHeight:fontSize*1.22,height,overflow:overflow||height>box.height+.01};
   };
-  const minimum=Math.min(requestedSize,minFontSize);let size=requestedSize,result=layout(size);
-  while(result.overflow&&size>minimum){size=Math.max(minimum,size-1);result=layout(size);}
-  return result;
+  let minimum=minFontSize;
+  for(const item of source) {
+    minimum=Math.max(minimum,richMinimum(item.runs,requestedSize,minFontSize));
+    if(item.descriptionRuns!==undefined)minimum=Math.max(minimum,richMinimum(item.descriptionRuns,requestedSize*.82,minFontSize)/.82);
+  }
+  return fitAtSizes(layout,requestedSize,minimum);
 }
 
 function contentText(field: string, value: unknown): string | undefined {
@@ -967,7 +985,7 @@ export interface TableLayout { rows: TableRowLayout[]; columnCount: number; heig
  * All dimensions are canvas pixels; minFontSize is an unscaled canvas size.
  */
 export function layoutTable(value: unknown, box: LayoutBox, options: TableLayoutOptions = {}): TableLayout {
-  const scale = options.scale ?? 1, requested = 15 * scale, minimum = (options.minFontSize ?? 16) * scale;
+  const scale = options.scale ?? 1, minimum = (options.minFontSize ?? 16) * scale, requested = Math.max(15 * scale,minimum);
   if (![box.x,box.y,box.width,box.height,scale,minimum].every(Number.isFinite) || box.width <= 0 || box.height <= 0 || scale <= 0 || minimum <= 0) throw new RangeError('Table dimensions, scale and font sizes must be finite and positive.');
   const grid = tableGrid(value,options.path ?? 'table');
   if(grid.issues.length) throw new RangeError(`${grid.issues[0]!.path}: ${grid.issues[0]!.message}`);
@@ -978,6 +996,7 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
     const style={fontFamily:options.fontFamily??'sans-serif',fontWeight:cell.header?700:400,italic:false,path:cell.valuePath};
     return {...cell,padding,width,textStyle:style};
   });
+  const cellMinimum=(cell:typeof cells[number])=>Array.isArray(cell.value)?richMinimum(cell.value,requested,minimum):minimum;
   const fitCell=(cell:typeof cells[number],height:number,min:number):TextFit|RichTextFit=>{
     const textBox={x:0,y:0,width:Math.max(scale,cell.width),height:Math.max(scale,height)};
     return Array.isArray(cell.value)
@@ -985,14 +1004,21 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
       : fitText(flatten(cell.value),textBox,requested,min,textWidthMeasurer(resolveTextStyle(cell.textStyle,options.textMeasurement),options.textMeasurement));
   };
   const textHeight=(fit:TextFit|RichTextFit)=>'height' in fit?fit.height:fit.lines.length*fit.lineHeight;
-  const required=(cell:typeof cells[number],size:number)=>textHeight(fitCell(cell,scale,size))+(cell.padding.top+cell.padding.bottom)*scale;
+  const required=(cell:typeof cells[number],natural:boolean)=>{
+    const floor=cellMinimum(cell),size=natural?Math.max(requested,floor):floor;
+    const textBox={x:0,y:0,width:Math.max(scale,cell.width),height:scale};
+    const fit=Array.isArray(cell.value)
+      ?richTextLayouter(cell.value,textBox,requested,{style:cell.textStyle,textMeasurement:options.textMeasurement,uniformLineHeight:true})(size)
+      :fitText(flatten(cell.value),textBox,size,size,textWidthMeasurer(resolveTextStyle(cell.textStyle,options.textMeasurement),options.textMeasurement));
+    return textHeight(fit)+(cell.padding.top+cell.padding.bottom)*scale;
+  };
   const natural=Array(grid.rowCount).fill(0) as number[],needed=Array(grid.rowCount).fill(0) as number[];
-  for(const cell of cells)if(cell.rowSpan===1){natural[cell.row]=Math.max(natural[cell.row]!,required(cell,requested));needed[cell.row]=Math.max(needed[cell.row]!,required(cell,minimum));}
+  for(const cell of cells)if(cell.rowSpan===1){natural[cell.row]=Math.max(natural[cell.row]!,required(cell,true));needed[cell.row]=Math.max(needed[cell.row]!,required(cell,false));}
   // Satisfy every spanning cell over its full rectangle. Added height can only
   // help previously processed constraints; no text is duplicated into covered rows.
-  for(const cell of cells)if(cell.rowSpan>1)for(const [heights,size] of [[natural,requested],[needed,minimum]] as const){
+  for(const cell of cells)if(cell.rowSpan>1)for(const [heights,preferredSize] of [[natural,true],[needed,false]] as const){
     const current=heights.slice(cell.row,cell.row+cell.rowSpan).reduce((a,b)=>a+b,0);
-    const extra=Math.max(0,required(cell,size)-current)/cell.rowSpan;
+    const extra=Math.max(0,required(cell,preferredSize)-current)/cell.rowSpan;
     for(let r=cell.row;r<cell.row+cell.rowSpan;r++)heights[r]!+=extra;
   }
   const preferred=natural.map(height=>Math.max(54*scale,height));
@@ -1099,11 +1125,11 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     if(!options.textMeasurement?.outlineBounds)return rich?fitRichText(value,box,size,minimum,{style,textMeasurement:options.textMeasurement}):fitText(text,box,size,minimum,textWidthMeasurer(style,options.textMeasurement));
     const alignment=(field==='title'?record(slide.design).titleAlignment??options.titleAlignment:record(slide.design).contentAlignment??options.contentAlignment)??'left';
     const richLayout=rich?richTextLayouter(value,box,size,{style,textMeasurement:options.textMeasurement}):undefined;
-    const measure=textWidthMeasurer(style,options.textMeasurement),floor=Math.min(size,minimum);
+    const measure=textWidthMeasurer(style,options.textMeasurement),floor=rich?richMinimum(value,size,minimum):minimum,start=Math.max(size,floor);
     // The nominal heading/body range fits within 64 reference-pixel steps; the
     // last trial always evaluates the explicit floor even with unusual callers.
     for(let trial=0;trial<=64;trial++) {
-      const fontSize=trial===64?floor:Math.max(floor,size-trial*scale);
+      const fontSize=trial===64?floor:Math.max(floor,start-trial*scale);
       const fit=richLayout?richLayout(fontSize):fitText(text,box,fontSize,fontSize,measure);
       const richLines='richLines' in fit?(fit as RichTextFit).richLines:undefined;
       const lines:TextLineInk[]=richLines?richLines.map(line=>{
@@ -1141,7 +1167,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   for (const field of ["tag", "title", "subtitle"]) {
     if (!slide[field]) continue;
     const requested = (field === "title" ? 54 : field === "tag" ? 16 : 25) * scale;
-    const maxHeight = height * (field === "title" ? 0.26 : field === "subtitle" ? 0.12 : 0.045);
+    const maxHeight = Math.max(height * (field === "title" ? 0.26 : field === "subtitle" ? 0.12 : 0.045),minSize*1.22+2*rasterPadding);
     const box = { x: padding, y, width: width - padding * 2, height: maxHeight };
     const text = fitPlacedText(field,slide[field],String(slide[field]),box,requested,minSize,`${path}.${field}`);
     box.height = Math.min(maxHeight, Math.max(text.lines.length * text.lineHeight,text.placement?.height??0));
@@ -1208,7 +1234,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
       if (penalties) { penalties.fontReduction += reduction; penalties.textOverflow += internal.overflow ? 1000 : 0; }
     } else if (text) {
       const fit = fitContent(node.field,node.value,text,box,25*scale,(settings.minFontSize??16)*scale,node.path);
-      const reduction = (25 * scale - fit.fontSize) / scale;
+      const reduction = Math.max(0,25 * scale - fit.fontSize) / scale;
       score += reduction + (fit.overflow ? 1000 : 0);
       if (penalties) { penalties.fontReduction += reduction; penalties.textOverflow += fit.overflow ? 1000 : 0; }
     }
@@ -1310,7 +1336,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     return false;
   });
   const explanation: CompositionExplanation | undefined = decisions ? {
-    algorithm:'grid-score-v6',textMeasurement:options.textMeasurement?'provided':'estimated',textOutlines:options.textMeasurement?.outlineBounds?'provided':'unavailable',textRasterPadding:rasterPadding,decisions,
+    algorithm:'grid-score-v7',textMeasurement:options.textMeasurement?'provided':'estimated',textOutlines:options.textMeasurement?.outlineBounds?'provided':'unavailable',textRasterPadding:rasterPadding,decisions,
     unmeasuredPayloads:items.filter(item=>!headings.has(item.field)&&!item.quoteLayout&&!item.codeLayout&&!item.metricLayout&&!['text','items','bullets','table'].includes(item.field)).map(item=>item.path),
   } : undefined;
   if (failures.length) throw new OPFCompositionError(failures, explanation);
