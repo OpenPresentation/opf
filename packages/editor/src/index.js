@@ -19,7 +19,7 @@ function resolveCompositionOptions(document, slideIndex, options = {}) {
       const reference = slide.design?.fontScheme ?? document.design?.fontScheme ?? theme?.fontScheme ?? "roboto";
       const id = typeof reference === "string" ? reference : reference.id;
       const fontScheme = {...(document.catalogs?.fontSchemes?.records?.find(record=>record.id===id) ?? bundledCatalogs.fontSchemes.find(record=>record.id===id)),...(typeof reference === "object" ? reference : {})};
-      return { ...resolveCanvasDimensions(slide.design?.dimensions ?? document.design?.dimensions ?? theme?.dimensions), fonts:resolveFontFamilies(fontScheme), ...options, layout, slideIndex };
+      return { ...resolveCanvasDimensions(slide.design?.dimensions ?? document.design?.dimensions ?? theme?.dimensions), fonts:resolveFontFamilies(fontScheme), contentAlignment:slide.design?.contentAlignment??document.design?.contentAlignment, titleAlignment:slide.design?.titleAlignment??document.design?.titleAlignment, contentBox:slide.design?.contentBox??document.design?.contentBox, ...options, layout, slideIndex };
 }
 
 export const packageName = "@openpresentation/opf-editor";

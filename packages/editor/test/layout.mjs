@@ -45,3 +45,12 @@ assert.throws(()=>guard.applyPatch([{op:'replace',path:'/slides/0/title',value:'
 assert.equal(guard.get('slides.0.title'),'Before');assert.equal(guard.canUndo,false);
 assert.throws(()=>guard.applyPatch([{op:'test',path:'/missing',value:null}]));
 assert.throws(()=>guard.applyPatch([{op:'test',path:'/slides/0/title'}]));
+
+const cardDocument={design:{contentBox:true},slides:[{blocks:[{text:'Exact source. '.repeat(80)}]}]};
+const cardEditor=createEditorSession(cardDocument,{rejectInvalid:true});
+assert.ok(cardEditor.composeSlide(0).items.every(item=>item.frameBox));
+cardEditor.paginateSlide(0,{minFontSize:25});
+assert.ok(cardEditor.composeSlide(0).items.every(item=>item.frameBox));
+cardEditor.undo();assert.deepEqual(cardEditor.document,cardDocument);
+cardEditor.set('slides.0.design',{contentBox:false});assert.ok(cardEditor.composeSlide(0).items.every(item=>!item.frameBox));
+cardEditor.undo();assert.deepEqual(cardEditor.document,cardDocument);
