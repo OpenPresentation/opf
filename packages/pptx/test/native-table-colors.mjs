@@ -14,7 +14,15 @@ await mkdir(output,{recursive:true});
 const runtime={};
 for(const name of ['@openpresentation/opf','@openpresentation/opf-render','@openpresentation/opf-pptx']){
  const root=path.dirname(fileURLToPath(import.meta.resolve(name+'/package.json')));
- for(const file of (await readdir(path.join(root,'dist'))).filter(file=>file.endsWith('.js')).sort())runtime[name+'/dist/'+file]=hash(await readFile(path.join(root,'dist',file)));
+ // Fingerprint the core functions/data actually used by export, not unrelated
+ // generated documentation containing these evidence reports themselves.
+ const seen=new Set(),visit=async file=>{
+  if(seen.has(file))return;seen.add(file);
+  const bytes=await readFile(path.join(root,'dist',file));runtime[name+'/dist/'+file]=hash(bytes);
+  for(const [,child]of bytes.toString().matchAll(/(?:from\s*|import\s*)['"](\.\/[^'"]+\.js)['"]/g))await visit(path.posix.join(path.posix.dirname(file),child));
+ };
+ const files=name==='@openpresentation/opf'?['composition.js','validator.js','catalogs.js']:(await readdir(path.join(root,'dist'))).filter(file=>file.endsWith('.js')).sort();
+ for(const file of files)await visit(file);
  runtime[name+'/package.json']=hash(await readFile(path.join(root,'package.json')));
 }
 for(const file of ['test/native-table-colors.mjs','test/native-table-colors.ps1','vendor/pptxgenjs/pptxgen.es.js','package-lock.json'])runtime[file]=hash(await readFile(new URL('../'+file,import.meta.url)));
