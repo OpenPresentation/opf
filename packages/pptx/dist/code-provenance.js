@@ -21,6 +21,12 @@ export function codeManifest(value, layout, group) {
 }
 
 export function attachCodeTags(entries, records) {
+  return attachTextTags(entries,records,TAG,'opfCode','code');
+}
+
+export {unhex as decodeTextTag};
+
+export function attachTextTags(entries, records, tagName, prefix, kind) {
   if (!records.size) return;
   let count = 0;
   const seen = new Set(), types = [];
@@ -31,23 +37,23 @@ export function attachCodeTags(entries, records) {
     const xml = dec.decode(entries[path]).replace(/<p:sp>[\s\S]*?<\/p:sp>/g, shape=>{
       const name = shape.match(/<p:cNvPr\b[^>]*\bname="([^"]+)"/)?.[1];
       if (!records.has(name)) return shape;
-      if (seen.has(name)) throw new Error('Duplicate generated code shape.');
+      if (seen.has(name)) throw new Error(`Duplicate generated ${kind} shape.`);
       seen.add(name);
-      const part = `ppt/tags/opfCode${++count}.xml`;
-      let id = `rIdOpfCode${count}`;
+      const part = `ppt/tags/${prefix}${++count}.xml`;
+      let id = `rId${prefix[0].toUpperCase()+prefix.slice(1)}${count}`;
       while (ids.has(id)) id += '_';
       ids.add(id);
-      entries[part] = enc.encode(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><p:tagLst xmlns:p="${NS}"><p:tag name="${TAG}" val="${hex(records.get(name))}"/></p:tagLst>`);
+      entries[part] = enc.encode(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><p:tagLst xmlns:p="${NS}"><p:tag name="${tagName}" val="${hex(records.get(name))}"/></p:tagLst>`);
       types.push(`<Override PartName="/${part}" ContentType="application/vnd.openxmlformats-officedocument.presentationml.tags+xml"/>`);
-      rels = rels.replace('</Relationships>',`<Relationship Id="${id}" Type="${REL}" Target="../tags/opfCode${count}.xml"/></Relationships>`);
+      rels = rels.replace('</Relationships>',`<Relationship Id="${id}" Type="${REL}" Target="../tags/${prefix}${count}.xml"/></Relationships>`);
       shape = shape.replace(/<p:nvPr\s*\/>/,'<p:nvPr></p:nvPr>');
-      if (!shape.includes('</p:nvPr>')) throw new Error('Generated code shape has no native application properties.');
+      if (!shape.includes('</p:nvPr>')) throw new Error(`Generated ${kind} shape has no native application properties.`);
       return shape.replace('</p:nvPr>',`<p:custDataLst><p:tags r:id="${id}"/></p:custDataLst></p:nvPr>`);
     });
     entries[path] = enc.encode(xml);
     entries[relPath] = enc.encode(rels);
   }
-  if (seen.size !== records.size) throw new Error('Missing generated code shapes.');
+  if (seen.size !== records.size) throw new Error(`Missing generated ${kind} shapes.`);
   entries['[Content_Types].xml'] = enc.encode(dec.decode(entries['[Content_Types].xml']).replace('</Types>',types.join('')+'</Types>'));
 }
 
@@ -120,10 +126,13 @@ export function importCodeGroups(shapes, paragraphs, relationships, entries, rep
       const rel = relationships.get(link['r:id']);
       if (rel?.type !== REL || rel.targetMode === 'External' || !rel.path || !entries[rel.path]) continue;
       let tags;
-      try { tags = array(parser.parse(dec.decode(entries[rel.path]))['p:tagLst']?.['p:tag']).filter(tag=>tag.name?.toUpperCase() === TAG); }
+      try {
+        const all=array(parser.parse(dec.decode(entries[rel.path]))['p:tagLst']?.['p:tag']);
+        tagCounts.set(shape,(tagCounts.get(shape)??0)+all.filter(tag=>/^OPF_/i.test(tag.name)).length);
+        tags=all.filter(tag=>tag.name?.toUpperCase()===TAG);
+      }
       catch { report({code:'invalid-code-provenance',message:'Unreadable code tags; visible native shapes were retained.'}); continue; }
       for (const tag of tags) {
-        tagCounts.set(shape,(tagCounts.get(shape) ?? 0)+1);
         try {
           const data = unhex(tag.val);
           if (data.v !== 1 || typeof data.group !== 'string' || !/^\d+$/.test(data.group)) throw new Error('Invalid code identity.');

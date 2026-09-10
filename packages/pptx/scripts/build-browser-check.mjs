@@ -54,3 +54,10 @@ const contentResult=await build({alias:browserAliases,entryPoints:[fileURLToPath
 assert.ok(!Object.keys(contentResult.metafile.inputs).some(path=>path.includes('sharp')||path.includes('image-fallback-node')),'Content layout browser output must exclude native Node modules');
 await writeFile(new URL('index.html',contentDirectory),'<!doctype html><meta charset="utf-8"><title>Native content layout</title><h1>Native content layout verification</h1><pre>Running…</pre><main style="max-width:960px"></main><script type="module" src="./bundle.js"></script>');
 console.log('Native content browser bundle ready at /artifacts/native-content-layout/browser/index.html.');
+
+const chartDirectory=new URL('../artifacts/chart-colors/browser/',import.meta.url);
+await mkdir(chartDirectory,{recursive:true});
+const chartResult=await build({alias:browserAliases,entryPoints:[fileURLToPath(new URL('../test/chart-colors-browser.js',import.meta.url))],bundle:true,platform:'browser',format:'esm',outfile:fileURLToPath(new URL('bundle.js',chartDirectory)),metafile:true});
+assert.ok(!Object.keys(chartResult.metafile.inputs).some(path=>path.includes('sharp')||path.includes('image-fallback-node')),'Chart browser output must exclude the native decoder');
+await writeFile(new URL('index.html',chartDirectory),'<!doctype html><meta charset="utf-8"><title>Chart colors</title><pre>Running…</pre><main></main><script type="module" src="./bundle.js"></script>');
+console.log('Chart color/workbook browser bundle ready at /artifacts/chart-colors/browser/index.html.');

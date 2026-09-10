@@ -1,8 +1,16 @@
 # OPF PPTX
 
+Unpublished integration work consumes shared heading/scalar/rich line placement, including `textRasterPadding`, through editable native line boxes without autofit. Complete heading tags retain title/subtitle/tag roles, line ordering and current edited text during import. Incomplete, duplicate or ambiguous tags fall back to ordinary import with diagnostics; original whitespace, wrapping, formatting and geometry are not reconstructed. See the [source contract and limits](https://github.com/OpenPresentation/opf/blob/codex/shared-metric-integration-20260910/docs/plans/text-placement.md). These changes are not in published 0.7.0 and are not native raster certification.
+
 Pure local PowerPoint conversion tooling for Open Presentation Format documents. This repo owns the Phase 3 and Phase 4 toolkit lanes: OPF to PPTX export and PPTX to OPF import.
 
 Version 0.7.0's [shared-code integration](docs/code-roundtrip.md) preserves exact source/metadata through guarded native tags and editable lines. XML-forbidden code characters reject export with `invalid-code-text`, the OPF field path and UTF-16 offset; schema validation alone does not establish XML representability. Native source recovery does not reconstruct formatting, geometry or font theme.
+
+The current branch's [shared metric integration](docs/metric-roundtrip.md) is unpublished. Native alignment and exact tested field recovery are implemented; tab-position and raster fidelity gates remain open.
+
+The [native text verifier](docs/native-text-checks.md) prepares the accepted heading/scalar/rich matrix with exact open fonts and a temporary-font permission check. Fixture generation and font registration/removal pass; full native text execution is still pending after an embedded Excel chart activation stalled. Partial chart save/reopen evidence is not a completed native fidelity gate.
+
+The coordinated source branch also measures `design.contentBox` cards through core's padded interior and exports editable rounded frames at their outer allocation. Native tags identify unchanged empty generated frames on reimport, with a `content-card-reflow` diagnostic: frame appearance and placement are not reconstructed. A name alone never hides a shape; edited, untagged or ambiguous frames use ordinary native import, retaining text or an unsupported-shape description. These source checks do not establish native PowerPoint raster fidelity or availability in the published 0.7.0 package.
 
 ## Scope
 
