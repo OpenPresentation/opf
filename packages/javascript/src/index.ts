@@ -96,4 +96,4 @@ export type { RichTextRun, RichTextFragment, RichTextLine, RichTextFit, RichText
 
 export {fitList} from './composition.js';
 export type {ListText,ListValue,ListEntryLayout,ListFit} from './composition.js';
-export {colorContrast, textColorForFill} from './color.js';
+export {colorContrast, textColorForFill, chartColorForFill} from './color.js';
