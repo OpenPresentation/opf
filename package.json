@@ -44,7 +44,8 @@
   },
   "packageManager": "pnpm@10.33.2",
   "devDependencies": {
-    "@biomejs/biome": "^2.5.3"
+    "@biomejs/biome": "^2.5.3",
+    "@typescript/native": "npm:typescript@~7.0.2"
   },
   "pnpm": {
     "overrides": {

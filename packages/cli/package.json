@@ -9,7 +9,7 @@
   },
   "scripts": {
     "build": "pnpm --filter @openpresentation/opf build && tsup",
-    "typecheck": "pnpm --filter @openpresentation/opf build && tsc --noEmit",
+    "typecheck": "pnpm --filter @openpresentation/opf build && node ../../scripts/typecheck.mjs --noEmit",
     "clean": "rm -rf dist",
     "test": "pnpm build && node ../../scripts/run-node-tests.mjs && node test/cli.mjs",
     "test:packed": "node test/packed.mjs",
@@ -18,7 +18,7 @@
   "devDependencies": {
     "@types/node": "^20.19.0",
     "tsup": "^8.5.1",
-    "typescript": "^5.9.3",
+    "typescript": "~5.9.3",
     "@openpresentation/opf": "workspace:*"
   },
   "files": [

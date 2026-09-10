@@ -1,0 +1,70 @@
+
+> openpresentation-workspace@ test:packed-browser /Users/michael/.codex/worktrees/c193/opf
+> node scripts/test-packed-browser.mjs
+
+PASS packed canvas: 34 assertions; 0 trusted interaction scenarios
+PASS packed rich-text: 46 assertions; 0 trusted interaction scenarios
+PASS packed layout: 26 assertions; 4 trusted interaction scenarios
+PASS packed block: 21 assertions; 1 trusted interaction scenarios
+PASS packed list: 19 assertions; 0 trusted interaction scenarios
+PASS packed create: 40 assertions; 0 trusted interaction scenarios
+Suite styled-table: PASS Actual Roboto font bytes are loaded and measured
+PASS Merged anchor has a visible rectangle
+PASS Covered grid position is not an editable target
+PASS slides.0.table.rows.0.0.value is a keyboard/pointer target
+PASS slides.0.table.rows.0.1.value is a keyboard/pointer target
+PASS slides.0.table.rows.1.2.value is a keyboard/pointer target
+PASS Merged-cell glyphs stay inside the anchor
+PASS Merged-cell glyphs stay inside the anchor
+PASS Merged-cell glyphs stay inside the anchor
+READY for pointer, keyboard, formatting and undo checks
+FAIL Error: Pointer edit commits rich text
+    at check (http://127.0.0.1:58742/packed-styled-table-tests.js:57299:18)
+    at http://127.0.0.1:58742/packed-styled-table-tests.js:57345:5
+    at b.onclick (http://127.0.0.1:58742/packed-styled-table-tests.js:57317:7) []
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: The input was expected to not match the regular expression /FAIL/. Input:
+
+'PASS Actual Roboto font bytes are loaded and measured\n' +
+  'PASS Merged anchor has a visible rectangle\n' +
+  'PASS Covered grid position is not an editable target\n' +
+  'PASS slides.0.table.rows.0.0.value is a keyboard/pointer target\n' +
+  'PASS slides.0.table.rows.0.1.value is a keyboard/pointer target\n' +
+  'PASS slides.0.table.rows.1.2.value is a keyboard/pointer target\n' +
+  'PASS Merged-cell glyphs stay inside the anchor\n' +
+  'PASS Merged-cell glyphs stay inside the anchor\n' +
+  'PASS Merged-cell glyphs stay inside the anchor\n' +
+  'READY for pointer, keyboard, formatting and undo checks\n' +
+  'FAIL Error: Pointer edit commits rich text\n' +
+  '    at check (http://127.0.0.1:58742/packed-styled-table-tests.js:57299:18)\n' +
+  '    at http://127.0.0.1:58742/packed-styled-table-tests.js:57345:5\n' +
+  '    at b.onclick (http://127.0.0.1:58742/packed-styled-table-tests.js:57317:7)'
+
+    at click (file:///Users/michael/.codex/worktrees/c193/opf/scripts/test-packed-browser.mjs:44:114)
+    at async file:///Users/michael/.codex/worktrees/c193/opf/scripts/test-packed-browser.mjs:102:9 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 'PASS Actual Roboto font bytes are loaded and measured\n' +
+    'PASS Merged anchor has a visible rectangle\n' +
+    'PASS Covered grid position is not an editable target\n' +
+    'PASS slides.0.table.rows.0.0.value is a keyboard/pointer target\n' +
+    'PASS slides.0.table.rows.0.1.value is a keyboard/pointer target\n' +
+    'PASS slides.0.table.rows.1.2.value is a keyboard/pointer target\n' +
+    'PASS Merged-cell glyphs stay inside the anchor\n' +
+    'PASS Merged-cell glyphs stay inside the anchor\n' +
+    'PASS Merged-cell glyphs stay inside the anchor\n' +
+    'READY for pointer, keyboard, formatting and undo checks\n' +
+    'FAIL Error: Pointer edit commits rich text\n' +
+    '    at check (http://127.0.0.1:58742/packed-styled-table-tests.js:57299:18)\n' +
+    '    at http://127.0.0.1:58742/packed-styled-table-tests.js:57345:5\n' +
+    '    at b.onclick (http://127.0.0.1:58742/packed-styled-table-tests.js:57317:7)',
+  expected: /FAIL/,
+  operator: 'doesNotMatch',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+ ELIFECYCLE  Command failed with exit code 1.

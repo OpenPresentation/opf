@@ -67,3 +67,6 @@ jobs:
 
       - name: Verify packed package install
         run: node packages/javascript/test/packed-install-smoke.mjs
+
+      - name: Verify packed CLI install
+        run: pnpm test:cli:packed
