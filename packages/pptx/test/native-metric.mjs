@@ -61,7 +61,7 @@ if(mode==='generate'){
   const generation=await json('generation.json'),native=await json('native.json');
   assert.deepEqual(runtime,generation.runtime,'Native evidence requires unchanged runtimes and verifiers');
   assert.equal(native.generationSha256,hash(await readFile(path.join(output,'generation.json'))));
-  const imports=[],rasters=[],advanceDifferences=[],rasterOutliers=[],tabOutliers=[],partInk=[],partCollisions=[];
+  const imports=[],rasters=[],advanceDifferences=[],rasterOutliers=[],tabOutliers=[],partInk=[],partCollisions=[],maskCoverageOutliers=[];
   const readInk=async bytes=>{
     const {data,info}=await sharp(bytes).removeAlpha().raw().toBuffer({resolveWithObject:true});
     const mask=new Uint8Array(info.width*info.height);
@@ -81,14 +81,18 @@ if(mode==='generate'){
       for(const line of slide.lines)for(const tab of line.tabTargets)if(tab.errorPoints>.02)tabOutliers.push({id:deck.id,slide:index+1,role:line.role,text:line.text,...tab});
       const nativeBytes=await readFile(path.join(output,`${deck.id}-native-${index+1}.png`)),svgBytes=await readFile(path.join(output,`${deck.id}-svg-${index+1}.png`));
       assert.equal(hash(nativeBytes),slide.rasterSha256);assert.equal(hash(svgBytes),deck.svgRasterSha256[index]);
-      const nativeInk=(await readInk(nativeBytes)).bounds,svgInk=(await readInk(svgBytes)).bounds;
+      const nativePixels=await readInk(nativeBytes),nativeInk=nativePixels.bounds,svgInk=(await readInk(svgBytes)).bounds;
       assert.deepEqual(slide.partRasters.map(part=>part.role),deck.layouts[index].parts.filter(part=>part.visible).map(part=>part.role));
-      const masks=[];
+      const masks=[],combinedMask=new Uint8Array(nativePixels.mask.length);
       for(const part of slide.partRasters){
         assert.equal(part.file,`${deck.id}-native-${index+1}-${part.role}.png`);
         const bytes=await readFile(path.join(output,part.file));assert.equal(hash(bytes),part.sha256);
         const ink=await readInk(bytes);assert.equal(ink.width,deck.width);assert.equal(ink.height,deck.height);
-        partInk.push({id:deck.id,slide:index+1,role:part.role,sha256:part.sha256,bounds:ink.bounds});
+        const acceptedPart=deck.layouts[index].parts.find(item=>item.role===part.role);
+        assert.equal(Boolean(ink.bounds),Boolean(acceptedPart.text.trim()),'Isolated field ink must cover each nonblank fixture field: '+part.file);
+        const insideCell=!ink.bounds||(ink.bounds.left>=Math.floor(cell.x)&&ink.bounds.top>=Math.floor(cell.y)&&ink.bounds.right<Math.ceil(cell.x+cell.width)&&ink.bounds.bottom<Math.ceil(cell.y+cell.height));
+        partInk.push({id:deck.id,slide:index+1,role:part.role,sha256:part.sha256,bounds:ink.bounds,insideCell});
+        for(let p=0;p<ink.mask.length;p++)combinedMask[p]|=ink.mask[p];
         for(const previous of masks){
           let pixels=0,firstPixel;
           for(let p=0;p<ink.mask.length;p++)if(ink.mask[p]&&previous.mask[p]){pixels++;firstPixel??={x:p%ink.width,y:Math.floor(p/ink.width)};}
@@ -96,6 +100,9 @@ if(mode==='generate'){
         }
         masks.push({role:part.role,mask:ink.mask});
       }
+      let missingPixels=0,extraPixels=0;
+      for(let p=0;p<combinedMask.length;p++)if(combinedMask[p]!==nativePixels.mask[p]){if(nativePixels.mask[p])missingPixels++;else extraPixels++;}
+      if(missingPixels||extraPixels)maskCoverageOutliers.push({id:deck.id,slide:index+1,missingPixels,extraPixels});
       let visibleInkInsideCell=true;
       for(const [engine,ink] of [['native',nativeInk],['svg',svgInk]])if(ink){
         if(!(ink.left>=Math.floor(cell.x)&&ink.top>=Math.floor(cell.y)&&ink.right<Math.ceil(cell.x+cell.width)&&ink.bottom<Math.ceil(cell.y+cell.height))){
@@ -128,8 +135,8 @@ if(mode==='generate'){
     imports.push({filename,sha256:hash(bytes),slides:result.slides.length,exactMetricFieldsSourceAndTypes:true,diagnostics});
   }
   const importedSlides=imports.reduce((n,item)=>n+item.slides,0);
-  const gates={visibleInk:rasterOutliers.length===0,characterBounds:advanceDifferences.length===0,tabPositions:tabOutliers.length===0,interPartInk:partCollisions.length===0};
-  await write('comparison.json',{runtime,imports,rasters,advanceDifferences,rasterOutliers,tabOutliers,partInk,partCollisions,gates,scope:`${importedSlides} original/native-saved/native-edited metric slide imports preserve tested scalar types and exact source/metadata, including CRLF, leading tabs, whitespace-only parts and soft wraps. Visible SVG/native raster ink is tested against accepted cell integer pixel boundaries. Native parts are independently rasterized with other generated shapes temporarily hidden and their original visibility restored before saving; pixel-mask intersections above a 2/255 RGB background difference test inter-part ink collisions at these fixture dimensions. Character ranges retain a 0.1-point cell tolerance and tab positions a 0.02-point tolerance. Any failed gate exits nonzero after writing all results. These finite raster observations do not prove vector-outline, alternate-resolution or arbitrary native fidelity. Native geometry/formatting/font theme are deliberately not reconstructed; no pixel equivalence is established.`});
+  const gates={visibleInk:rasterOutliers.length===0,characterBounds:advanceDifferences.length===0,tabPositions:tabOutliers.length===0,interPartInk:partCollisions.length===0,isolatedMaskCoverage:maskCoverageOutliers.length===0};
+  await write('comparison.json',{runtime,imports,rasters,advanceDifferences,rasterOutliers,tabOutliers,partInk,partCollisions,maskCoverageOutliers,gates,scope:`${importedSlides} original/native-saved/native-edited metric slide imports preserve tested scalar types and exact source/metadata, including CRLF, leading tabs, whitespace-only parts and soft wraps. Visible SVG/native raster ink is tested against accepted cell integer pixel boundaries. Native parts are independently rasterized with other generated shapes temporarily hidden and their original visibility restored before saving; pixel-mask intersections above a 2/255 RGB background difference test inter-part ink collisions at these fixture dimensions. Each nonblank fixture field must produce ink, and the isolated masks' union must reproduce every full-slide ink pixel. Per-part bounds identify any field outside its cell. Character ranges retain a 0.1-point cell tolerance and tab positions a 0.02-point tolerance. Any failed gate exits nonzero after writing all results. These finite raster observations do not prove vector-outline, alternate-resolution or arbitrary native fidelity. Native geometry/formatting/font theme are deliberately not reconstructed; no pixel equivalence is established.`});
   console.log(`All ${importedSlides} original/saved/edited metric slide imports preserve source and types.`);
   console.log(JSON.stringify({gates,advanceOutliers:advanceDifferences.length,rasterOutliers:rasterOutliers.length,tabOutliers:tabOutliers.length,interPartCollisions:partCollisions.length}));
   assert.ok(Object.values(gates).every(Boolean),'Native metric fidelity gates remain open; see comparison.json. Source recovery passing does not close these gates.');
