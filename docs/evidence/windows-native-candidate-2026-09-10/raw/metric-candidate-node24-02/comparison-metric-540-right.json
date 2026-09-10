@@ -1,0 +1,617 @@
+{
+  "node": "v24.20.0",
+  "runtime": {
+    "@openpresentation/opf/dist/composition.js": "a2d69048632dd6ff5ba4db397acd86e8c9c5c16365633319a24999466ebbd586",
+    "@openpresentation/opf/dist/chunk-NT3IYAYX.js": "193a39ad7d395d4f26af96e24aa9d23617afe3f63c9f71ec8b18d2a16c68bf97",
+    "@openpresentation/opf/dist/validator.js": "fc419645499641ca2e45e3bfde4dba90a951e171bbfdf45125da1057b5805b45",
+    "@openpresentation/opf/dist/chunk-DA4NWAQV.js": "ac4e9b8e38a998aebb074459f0788dcba6cf13f57e5f5b3f1ace472e0161f2cb",
+    "@openpresentation/opf/dist/chunk-GQSK3T7X.js": "34f518c29c9757bc252b5c13eb5d7db8ada4b477496e6289d8149fb4fdc7cd45",
+    "@openpresentation/opf/dist/chunk-TWMRZ43O.js": "0d35cec97ec7ddaa67fb9f096bc672c927eb68ed5fae5ac27d4dff70d68313f4",
+    "@openpresentation/opf/dist/catalogs.js": "6d74d7b051844728b2622acdb5268472a043544c8b2ca04eb904b1cdf74ec739",
+    "@openpresentation/opf/package.json": "6c1dcd6b72429c2179c51827e8f97419991b1dd7057fa105d67ecb2db01529b6",
+    "@openpresentation/opf-render/dist/font-compatibility.js": "a50ee71748e81cd12ed3aeb6eee92506ebf91ef05021c6ca3f5a100665d03dac",
+    "@openpresentation/opf-render/dist/font-manifest.js": "0af55027613ac952e645ed06f6b873c174e0767efbbb8e4de17e44b0158c1974",
+    "@openpresentation/opf-render/dist/fonts-browser.js": "d0543d838b2f22a8c70bdc60100d72d3c69e3f8033d5ccedd3523ee63c66b8d4",
+    "@openpresentation/opf-render/dist/fonts.js": "860198e21bee950a77a2e47882395629956090eed93399557da3e9cc3b202741",
+    "@openpresentation/opf-render/dist/fonts-node.js": "d45bd167367c1c40202b12362e52483f15e6a6d5ee67e8641b68418de3f1a8dc",
+    "@openpresentation/opf-render/dist/index.js": "39c8f2b279ce10873f00289349b84cf9cab7e12c56e9e0d87447bd2406777234",
+    "@openpresentation/opf-render/dist/svg.js": "36c6e714e5a09181b702e294621cf4a25a59601ec03525fd58e84366a00f50c2",
+    "@openpresentation/opf-render/dist/raster.js": "8e98aba22982ec8c7cece31be19f8cd92fc942a7d538bf64c2e4f32bdd14fc6d",
+    "@openpresentation/opf-render/dist/raster-images.js": "304cffe5e77553ac1ab590fc5805714dde34e6f69df5dc55e35dbc8df602753c",
+    "@openpresentation/opf-render/package.json": "70b562c5f36c1ebfe5208c4fcf866cd03e9e6493f130eedc39660b47e7e83435",
+    "@openpresentation/opf-pptx/dist/background-import.js": "684f9b38cff01e596774b8120c979c3dbbfada273890f785f7a4e3db88cdcb22",
+    "@openpresentation/opf-pptx/dist/background.js": "081fb685677ca656341cdce89275331749174ffecd60e71451f26b9f896cca1c",
+    "@openpresentation/opf-pptx/dist/card-provenance.js": "ff1ca09b88500993abb4bb293162e5064f1f7fc38edfd999f8ca8eedce8b94b0",
+    "@openpresentation/opf-pptx/dist/code-provenance.js": "5eb65649d1736dd5a19ff49680422cb1a097b9f6f94a3b457e649001903b9688",
+    "@openpresentation/opf-pptx/dist/chart-workbook.js": "39db820e6f3a512779943a13e5e78c63ff866c2a0074e1e9c807fcfc7a9aa1e2",
+    "@openpresentation/opf-pptx/dist/heading-provenance.js": "f10385a2a0ac7ded90d3f71786693ec8d9d302ba4acf5f5111061a6705c8fcaf",
+    "@openpresentation/opf-pptx/dist/image-fallback-browser.js": "3c7f81d5677dd9a78a0a13fe5a94bbb14cef465031caaeda2c87e8451e9ff491",
+    "@openpresentation/opf-pptx/dist/image-fallback-node.js": "5ee323d3320420664b5d2c1714e246b04dd0806f459164f9696668552df87565",
+    "@openpresentation/opf-pptx/dist/image-geometry.js": "e083973a98c2bdf7d7dfce9ef1f6bef252f09ce0d69d987105ee0b73cc13d62e",
+    "@openpresentation/opf-pptx/dist/image-import.js": "cffccecc223e27d62b6e1aba0cdbe2c1c9aa94874ef898f76906b22e001bbd41",
+    "@openpresentation/opf-pptx/dist/index.js": "d38194e82b91a6438f9ca08d080354e9189e900c229901ba9f2955819652ce14",
+    "@openpresentation/opf-pptx/dist/table-import.js": "9ae40bb38dd34c9fc0ae4a3f5a257068ae92bb651ed5d96641c2629ef7106cf1",
+    "@openpresentation/opf-pptx/dist/table-cell-import.js": "fa17507763a2240564401d7977f4f39bc180e3e6da9d4aa9c36202908e9126d1",
+    "@openpresentation/opf-pptx/dist/table-border-import.js": "16678e0d93e63474d39daac268016a59517cc36d85dbd8751131f143db01ace5",
+    "@openpresentation/opf-pptx/dist/metric-provenance.js": "a058bfd8e84cf393476aa64c925bff31430d11e341c32b5e2f5b0d141922f0af",
+    "@openpresentation/opf-pptx/package.json": "e29ba9014069c90555cdbd39cbfb86b7350eb5d4f603ca33519b287655aadc93",
+    "test/native-metric.mjs": "9eb61c7a1afcdc351ade944952cd4f76c4de09909993708235c20ded7ce2524c",
+    "test/native-metric.ps1": "de9942735aca4fe432d1bd50ee04b8689b78a5c2b4c7a85ae29b991984cc0f19",
+    "test/native-process.ps1": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+    "vendor/pptxgenjs/pptxgen.es.js": "05844c5625e2cda3b449eb967c2246dd57ca57341886a7c28eeebca263b29bd4",
+    "package-lock.json": "10edb4cb29e98fe9db00c1c361aa3126c9969ab06f2b062889915ccc76019bc7"
+  },
+  "generationSha256": "911afc658088a0c32a22a010ffa6fe8a60e013d33868dd68988ff8504028bc12",
+  "nativeRuns": [
+    {
+      "file": "runs/metric-540-right/native.json",
+      "sha256": "0b3be3727d6b944f656f801b992b7c9e821e9df5010f89bd1e1046de87a19abf",
+      "workerSha256": "68700bd3941b7c2a876e193718ab1663fd8b3ab0df82c6cac543fa7422137863"
+    }
+  ],
+  "completeMatrix": false,
+  "imports": [
+    {
+      "filename": "metric-540-right.pptx",
+      "sha256": "ef239e7d309c4a862483c9a1988f4b0b9f4c4e283bdc6378c7b21137cebc8649",
+      "slides": 8,
+      "exactMetricFieldsSourceAndTypes": true,
+      "diagnostics": [
+        {
+          "code": "metric-import-reflow",
+          "message": "Metric fields, source boundaries and native text were recovered. Native formatting, positioning, alignment and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.0.metric"
+        },
+        {
+          "code": "metric-import-reflow",
+          "message": "Metric fields, source boundaries and native text were recovered. Native formatting, positioning, alignment and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.1.metric"
+        },
+        {
+          "code": "metric-import-reflow",
+          "message": "Metric fields, source boundaries and native text were recovered. Native formatting, positioning, alignment and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.2.metric"
+        },
+        {
+          "code": "metric-import-reflow",
+          "message": "Metric fields, source boundaries and native text were recovered. Native formatting, positioning, alignment and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.3.metric"
+        },
+        {
+          "code": "metric-import-reflow",
+          "message": "Metric fields, source boundaries and native text were recovered. Native formatting, positioning, alignment and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.4.metric"
+        },
+        {
+          "code": "metric-import-reflow",
+          "message": "Metric fields, source boundaries and native text were recovered. Native formatting, positioning, alignment and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.5.metric"
+        },
+        {
+          "code": "metric-import-reflow",
+          "message": "Metric fields, source boundaries and native text were recovered. Native formatting, positioning, alignment and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.6.metric"
+        },
+        {
+          "code": "metric-import-reflow",
+          "message": "Metric fields, source boundaries and native text were recovered. Native formatting, positioning, alignment and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.7.metric"
+        }
+      ]
+    },
+    {
+      "filename": "metric-540-right-saved.pptx",
+      "sha256": "ca46af4d14cff1c374b90d2ad79a82e36c12a3e88a3e0aabb6de4cd4971fca2d",
+      "slides": 8,
+      "exactMetricFieldsSourceAndTypes": true,
+      "diagnostics": [
+        {
+          "code": "metric-import-reflow",
+          "message": "Metric fields, source boundaries and native text were recovered. Native formatting, positioning, alignment and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.0.metric"
+        },
+        {
+          "code": "metric-import-reflow",
+          "message": "Metric fields, source boundaries and native text were recovered. Native formatting, positioning, alignment and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.1.metric"
+        },
+        {
+          "code": "metric-import-reflow",
+          "message": "Metric fields, source boundaries and native text were recovered. Native formatting, positioning, alignment and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.2.metric"
+        },
+        {
+          "code": "metric-import-reflow",
+          "message": "Metric fields, source boundaries and native text were recovered. Native formatting, positioning, alignment and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.3.metric"
+        },
+        {
+          "code": "metric-import-reflow",
+          "message": "Metric fields, source boundaries and native text were recovered. Native formatting, positioning, alignment and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.4.metric"
+        },
+        {
+          "code": "metric-import-reflow",
+          "message": "Metric fields, source boundaries and native text were recovered. Native formatting, positioning, alignment and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.5.metric"
+        },
+        {
+          "code": "metric-import-reflow",
+          "message": "Metric fields, source boundaries and native text were recovered. Native formatting, positioning, alignment and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.6.metric"
+        },
+        {
+          "code": "metric-import-reflow",
+          "message": "Metric fields, source boundaries and native text were recovered. Native formatting, positioning, alignment and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.7.metric"
+        }
+      ]
+    },
+    {
+      "filename": "metric-540-right-edited.pptx",
+      "sha256": "cc05790c7bb857695c330ffcd0fee30c4c2fc7e25e7b133ea8c992c2739d9012",
+      "slides": 8,
+      "exactMetricFieldsSourceAndTypes": true,
+      "diagnostics": [
+        {
+          "code": "metric-import-reflow",
+          "message": "Metric fields, source boundaries and native text were recovered. Native formatting, positioning, alignment and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.0.metric"
+        },
+        {
+          "code": "metric-import-reflow",
+          "message": "Metric fields, source boundaries and native text were recovered. Native formatting, positioning, alignment and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.1.metric"
+        },
+        {
+          "code": "metric-import-reflow",
+          "message": "Metric fields, source boundaries and native text were recovered. Native formatting, positioning, alignment and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.2.metric"
+        },
+        {
+          "code": "metric-import-reflow",
+          "message": "Metric fields, source boundaries and native text were recovered. Native formatting, positioning, alignment and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.3.metric"
+        },
+        {
+          "code": "metric-import-reflow",
+          "message": "Metric fields, source boundaries and native text were recovered. Native formatting, positioning, alignment and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.4.metric"
+        },
+        {
+          "code": "metric-import-reflow",
+          "message": "Metric fields, source boundaries and native text were recovered. Native formatting, positioning, alignment and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.5.metric"
+        },
+        {
+          "code": "metric-import-reflow",
+          "message": "Metric fields, source boundaries and native text were recovered. Native formatting, positioning, alignment and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.6.metric"
+        },
+        {
+          "code": "metric-import-reflow",
+          "message": "Metric fields, source boundaries and native text were recovered. Native formatting, positioning, alignment and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.7.metric"
+        }
+      ]
+    }
+  ],
+  "rasters": [
+    {
+      "id": "metric-540-right",
+      "slide": 1,
+      "nativeSha256": "fdb9663f8ee6a49b7d260a2b9c0a218de545346a6f3151c4c20738fad9a848d3",
+      "svgSha256": "2a1e18d5784285dd9489e90c29dd230b13e298930fe52de3192b9c801edd48f7",
+      "nativeInk": {
+        "left": 469,
+        "top": 59,
+        "right": 495,
+        "bottom": 96
+      },
+      "svgInk": {
+        "left": 469,
+        "top": 63,
+        "right": 495,
+        "bottom": 100
+      },
+      "visibleInkInsideCell": true
+    },
+    {
+      "id": "metric-540-right",
+      "slide": 2,
+      "nativeSha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0",
+      "svgSha256": "15c3195254c94dc16df9d7927fc1a560519f8d44e40593dd19304ed6348a16bb",
+      "nativeInk": null,
+      "svgInk": null,
+      "visibleInkInsideCell": true
+    },
+    {
+      "id": "metric-540-right",
+      "slide": 3,
+      "nativeSha256": "907c5f5808ebc9b04bb5015af10846fd266739224611854c6ff26f29ec529d9d",
+      "svgSha256": "bd90bb8dbb3e6e1d77bb341876ef2f437b390c865e8fd0706ae1f5a6373fdfa6",
+      "nativeInk": {
+        "left": 411,
+        "top": 59,
+        "right": 496,
+        "bottom": 266
+      },
+      "svgInk": {
+        "left": 411,
+        "top": 63,
+        "right": 495,
+        "bottom": 267
+      },
+      "visibleInkInsideCell": true
+    },
+    {
+      "id": "metric-540-right",
+      "slide": 4,
+      "nativeSha256": "11b20715407c39dbd5420ab7cd7fdd052188eefaa63540cacf9426aedbf5f601",
+      "svgSha256": "0f0da8abdec8983e26d98cbefce36720df2f6b7ee70dd9ae1ee69fcbf4deaf64",
+      "nativeInk": {
+        "left": 103,
+        "top": 59,
+        "right": 496,
+        "bottom": 238
+      },
+      "svgInk": {
+        "left": 104,
+        "top": 63,
+        "right": 495,
+        "bottom": 240
+      },
+      "visibleInkInsideCell": true
+    },
+    {
+      "id": "metric-540-right",
+      "slide": 5,
+      "nativeSha256": "743dd3b2ca800a6f94fcc5b2e75341868719f6b34d235dcef0c1e474336df210",
+      "svgSha256": "88a163580cff6f55f8a38babbe7517166ac5b06ae9b0c1343a660085b99fa625",
+      "nativeInk": {
+        "left": 478,
+        "top": 131,
+        "right": 496,
+        "bottom": 141
+      },
+      "svgInk": {
+        "left": 479,
+        "top": 131,
+        "right": 495,
+        "bottom": 142
+      },
+      "visibleInkInsideCell": true
+    },
+    {
+      "id": "metric-540-right",
+      "slide": 6,
+      "nativeSha256": "de81f2e76fb78c206bbac87a460582f5eea55be29190a8450c6e032bcaceafbc",
+      "svgSha256": "744d633956750ee1c36a2f12c4fb30842e2e08d2e12b4a031d7a8e82b4121b29",
+      "nativeInk": {
+        "left": 411,
+        "top": 60,
+        "right": 496,
+        "bottom": 141
+      },
+      "svgInk": {
+        "left": 412,
+        "top": 64,
+        "right": 495,
+        "bottom": 142
+      },
+      "visibleInkInsideCell": true
+    },
+    {
+      "id": "metric-540-right",
+      "slide": 7,
+      "nativeSha256": "6027835aa25fce51ecc6682bf0843960e379492ceaf90fa825bd3aae9c66ffad",
+      "svgSha256": "29c4c9d538505053cd9555f61070f952f783cfa23ddea830841eebe0d41044f5",
+      "nativeInk": {
+        "left": 378,
+        "top": 59,
+        "right": 495,
+        "bottom": 138
+      },
+      "svgInk": {
+        "left": 379,
+        "top": 63,
+        "right": 495,
+        "bottom": 139
+      },
+      "visibleInkInsideCell": true
+    },
+    {
+      "id": "metric-540-right",
+      "slide": 8,
+      "nativeSha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0",
+      "svgSha256": "15c3195254c94dc16df9d7927fc1a560519f8d44e40593dd19304ed6348a16bb",
+      "nativeInk": null,
+      "svgInk": null,
+      "visibleInkInsideCell": true
+    }
+  ],
+  "advanceDifferences": [],
+  "rasterOutliers": [],
+  "tabOutliers": [],
+  "partInk": [
+    {
+      "id": "metric-540-right",
+      "slide": 1,
+      "role": "value",
+      "sha256": "fdb9663f8ee6a49b7d260a2b9c0a218de545346a6f3151c4c20738fad9a848d3",
+      "bounds": {
+        "left": 469,
+        "top": 59,
+        "right": 495,
+        "bottom": 96
+      },
+      "insideCell": true
+    },
+    {
+      "id": "metric-540-right",
+      "slide": 2,
+      "role": "value",
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0",
+      "bounds": null,
+      "insideCell": true
+    },
+    {
+      "id": "metric-540-right",
+      "slide": 3,
+      "role": "value",
+      "sha256": "39f03933462984c8f7d05a746ee87433dd368df3b436a0878346bfa1d25eef54",
+      "bounds": {
+        "left": 411,
+        "top": 59,
+        "right": 465,
+        "bottom": 96
+      },
+      "insideCell": true
+    },
+    {
+      "id": "metric-540-right",
+      "slide": 3,
+      "role": "unit",
+      "sha256": "f79bb8b7b6bee48e23b5080c631566c601423003bcd05afc862aa9d749babf39",
+      "bounds": {
+        "left": 476,
+        "top": 91,
+        "right": 495,
+        "bottom": 98
+      },
+      "insideCell": true
+    },
+    {
+      "id": "metric-540-right",
+      "slide": 3,
+      "role": "label",
+      "sha256": "94d86f9ef7676f860e67ddeeb80f351ee907a5ebfb78a42c928bf522e78ad582",
+      "bounds": {
+        "left": 419,
+        "top": 127,
+        "right": 488,
+        "bottom": 141
+      },
+      "insideCell": true
+    },
+    {
+      "id": "metric-540-right",
+      "slide": 3,
+      "role": "description",
+      "sha256": "6ceffc74b05cd66af7f2a1afb68278e4347924b88e6d70e69e00e628028d88ae",
+      "bounds": {
+        "left": 442,
+        "top": 156,
+        "right": 496,
+        "bottom": 210
+      },
+      "insideCell": true
+    },
+    {
+      "id": "metric-540-right",
+      "slide": 3,
+      "role": "delta",
+      "sha256": "6fe06e971f6131cf17b9ab9d9781c3e95e6817a01ffe5c6ae24dd0e07718bfe4",
+      "bounds": {
+        "left": 487,
+        "top": 228,
+        "right": 495,
+        "bottom": 238
+      },
+      "insideCell": true
+    },
+    {
+      "id": "metric-540-right",
+      "slide": 3,
+      "role": "trend",
+      "sha256": "e812ab6d858ae20f64ce7757529494ce586359074280f785c11f9468f1d1fd6e",
+      "bounds": {
+        "left": 472,
+        "top": 255,
+        "right": 495,
+        "bottom": 266
+      },
+      "insideCell": true
+    },
+    {
+      "id": "metric-540-right",
+      "slide": 4,
+      "role": "value",
+      "sha256": "6d1fc54dc73aa1b91880b1c7f3dc9532db2144322c2274f34cf5dd5cbee707fe",
+      "bounds": {
+        "left": 408,
+        "top": 59,
+        "right": 494,
+        "bottom": 166
+      },
+      "insideCell": true
+    },
+    {
+      "id": "metric-540-right",
+      "slide": 4,
+      "role": "unit",
+      "sha256": "5899bf1c09881d646a6093ff0eecc06817e3d8dfb7caa3f775be13d662bf4741",
+      "bounds": {
+        "left": 103,
+        "top": 196,
+        "right": 496,
+        "bottom": 210
+      },
+      "insideCell": true
+    },
+    {
+      "id": "metric-540-right",
+      "slide": 4,
+      "role": "label",
+      "sha256": "608bf37fd2c4cc1ac5859c1153ea2e7f9ab1842df0b5ebac7593c0c7c3cdd30c",
+      "bounds": {
+        "left": 441,
+        "top": 225,
+        "right": 496,
+        "bottom": 238
+      },
+      "insideCell": true
+    },
+    {
+      "id": "metric-540-right",
+      "slide": 5,
+      "role": "value",
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0",
+      "bounds": null,
+      "insideCell": true
+    },
+    {
+      "id": "metric-540-right",
+      "slide": 5,
+      "role": "trend",
+      "sha256": "743dd3b2ca800a6f94fcc5b2e75341868719f6b34d235dcef0c1e474336df210",
+      "bounds": {
+        "left": 478,
+        "top": 131,
+        "right": 496,
+        "bottom": 141
+      },
+      "insideCell": true
+    },
+    {
+      "id": "metric-540-right",
+      "slide": 6,
+      "role": "value",
+      "sha256": "a105ea6b217de5cc3cd82cc8f60153faf4140e720a13605b39157ca4db52a323",
+      "bounds": {
+        "left": 451,
+        "top": 60,
+        "right": 473,
+        "bottom": 96
+      },
+      "insideCell": true
+    },
+    {
+      "id": "metric-540-right",
+      "slide": 6,
+      "role": "unit",
+      "sha256": "5452bc1190cd5883b0a6bd3a1a5048eea80ec80edc52bcd805fd57d3796c25e5",
+      "bounds": {
+        "left": 484,
+        "top": 87,
+        "right": 496,
+        "bottom": 98
+      },
+      "insideCell": true
+    },
+    {
+      "id": "metric-540-right",
+      "slide": 6,
+      "role": "label",
+      "sha256": "606d524737989f3747fbccd18e2ec6ed0048acbc8e57f8b6f51cefd776d4e7ff",
+      "bounds": {
+        "left": 411,
+        "top": 127,
+        "right": 495,
+        "bottom": 141
+      },
+      "insideCell": true
+    },
+    {
+      "id": "metric-540-right",
+      "slide": 7,
+      "role": "value",
+      "sha256": "3a4f217176e1230a2540bb29e76a9a1950abc55a0bb4baa696b2bebfcb39d376",
+      "bounds": {
+        "left": 378,
+        "top": 59,
+        "right": 466,
+        "bottom": 97
+      },
+      "insideCell": true
+    },
+    {
+      "id": "metric-540-right",
+      "slide": 7,
+      "role": "unit",
+      "sha256": "f79bb8b7b6bee48e23b5080c631566c601423003bcd05afc862aa9d749babf39",
+      "bounds": {
+        "left": 476,
+        "top": 91,
+        "right": 495,
+        "bottom": 98
+      },
+      "insideCell": true
+    },
+    {
+      "id": "metric-540-right",
+      "slide": 7,
+      "role": "label",
+      "sha256": "8947a893480b8ea850df6614b9136633fd098505320db4d5c0e5664b599cacd7",
+      "bounds": {
+        "left": 404,
+        "top": 127,
+        "right": 489,
+        "bottom": 138
+      },
+      "insideCell": true
+    },
+    {
+      "id": "metric-540-right",
+      "slide": 7,
+      "role": "description",
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0",
+      "bounds": null,
+      "insideCell": true
+    },
+    {
+      "id": "metric-540-right",
+      "slide": 8,
+      "role": "value",
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0",
+      "bounds": null,
+      "insideCell": true
+    },
+    {
+      "id": "metric-540-right",
+      "slide": 8,
+      "role": "label",
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0",
+      "bounds": null,
+      "insideCell": true
+    },
+    {
+      "id": "metric-540-right",
+      "slide": 8,
+      "role": "description",
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0",
+      "bounds": null,
+      "insideCell": true
+    }
+  ],
+  "partCollisions": [],
+  "maskCoverageOutliers": [],
+  "gates": {
+    "visibleInk": true,
+    "characterBounds": true,
+    "tabPositions": true,
+    "interPartInk": true,
+    "isolatedMaskCoverage": true
+  },
+  "scope": "24 original/native-saved/native-edited metric slide imports preserve tested scalar types and exact source/metadata, including CRLF, leading tabs, whitespace-only parts and soft wraps. Visible SVG/native raster ink is tested against accepted cell integer pixel boundaries. Native parts are independently rasterized with other generated shapes temporarily hidden and their original visibility restored before saving; pixel-mask intersections above a 2/255 RGB background difference test inter-part ink collisions at these fixture dimensions. Each nonblank fixture field must produce ink, and the isolated masks' union must reproduce every full-slide ink pixel. Per-part bounds identify any field outside its cell. Character ranges retain a 0.1-point cell tolerance and tab positions a 0.02-point tolerance. Any failed gate exits nonzero after writing all results. These finite raster observations do not prove vector-outline, alternate-resolution or arbitrary native fidelity. Native geometry/formatting/font theme are deliberately not reconstructed; no pixel equivalence is established."
+}
