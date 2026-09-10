@@ -114,6 +114,8 @@ export interface ComposedItem {
   codeLayout?: CodeLayout;
   /** Complete shared metric geometry, including its unit, label and metadata. */
   metricLayout?: MetricLayout;
+  /** Complete timeline fields, markers and connector accepted by composition. */
+  timelineLayout?: TimelineLayout;
   /** Effective container settings, including inherited readability constraints. */
   composition: Composition;
 }
@@ -130,7 +132,7 @@ export interface ComposedFlow {
   itemCount: number;
   slotCount: number;
 }
-/** Additive penalties in grid-score-v7; lower is preferred. These are not quality percentages. */
+/** Additive penalties in grid-score-v8; lower is preferred. These are not quality percentages. */
 export interface CompositionPenalties {
   cellProportions: number;
   fontReduction: number;
@@ -154,7 +156,7 @@ export interface CompositionDecision {
   candidates: CompositionCandidate[];
 }
 export interface CompositionExplanation {
-  algorithm: 'grid-score-v7';
+  algorithm: 'grid-score-v8';
   /** Provided widths do not establish shaping, glyph coverage or native fidelity. */
   textMeasurement: 'estimated' | 'provided';
   /** Optional vector coverage for headings and scalar/rich text, not every payload. */
@@ -606,6 +608,134 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
   }
   if (diagnostics.length&&options.overflow==='error') throw new OPFCompositionError(diagnostics);
   return {algorithm:'metric-flow-v1',alignment,textMeasurement:options.textMeasurement?'provided':'estimated',arrangement:selected!.arrangement,attempts,parts,diagnostics,overflow:diagnostics.length>0};
+}
+
+export interface TimelineEvent { when?: string; what: string; description?: string }
+export interface TimelineContent { name?: string; description?: string; events: TimelineEvent[] }
+export interface TimelineTextPart {
+  role: 'name' | 'description' | 'when' | 'what' | 'event-description';
+  eventIndex?: number;
+  path: string;
+  text: string;
+  sources: {path:string;start:number;end:number}[];
+  box: LayoutBox;
+  alignment: 'left' | 'center';
+  requestedFontSize: number;
+  minFontSize: number;
+  requestedStyle: TextStyle;
+  style: TextStyle;
+  fit?: SourceTextFit;
+}
+export interface TimelineLayoutDiagnostic extends LayoutDiagnostic {
+  reason: 'text-fit' | 'part-outside-cell' | 'event-space';
+}
+export interface TimelineLayout {
+  algorithm: 'timeline-flow-v1';
+  arrangement: 'alternating' | 'vertical';
+  attempts: number;
+  textMeasurement: 'provided' | 'estimated';
+  textOutlines: 'provided' | 'unavailable';
+  parts: TimelineTextPart[];
+  markers: {path:string;eventIndex:number;x:number;y:number;radius:number}[];
+  connector: {x1:number;y1:number;x2:number;y2:number};
+  diagnostics: TimelineLayoutDiagnostic[];
+  overflow: boolean;
+}
+export interface TimelineLayoutOptions extends QuoteLayoutOptions { textRasterPadding?: number }
+
+/** Preserve event order and field boundaries while trying at most 50 readable arrangements. */
+export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent, box: LayoutBox, options: TimelineLayoutOptions = {}): TimelineLayout {
+  const shorthand=Array.isArray(value),timeline=(shorthand?{events:value}:value) as TimelineContent;
+  if(!timeline||!Array.isArray(timeline.events)||!timeline.events.length||
+    [timeline.name,timeline.description].some(field=>field!==undefined&&typeof field!=='string')||
+    timeline.events.some(event=>!event||typeof event.what!=='string'||[event.when,event.description].some(field=>field!==undefined&&typeof field!=='string'))) {
+    throw new TypeError('Timeline content requires ordered events with string labels and optional string metadata.');
+  }
+  const scale=options.scale??1,minimum=(options.minFontSize??16)*scale,padding=(options.textRasterPadding??1)*scale;
+  if(![box.x,box.y,box.width,box.height,scale,minimum,padding].every(Number.isFinite)||box.width<=0||box.height<=0||scale<=0||minimum<=0||padding<0)throw new RangeError('Timeline dimensions, scale and minimum must be positive, with finite nonnegative raster padding.');
+  if(options.overflow!==undefined&&!['warn','error'].includes(options.overflow))throw new RangeError('Invalid timeline overflow policy.');
+  const outlines=options.textMeasurement?.outlineBounds!==undefined;
+  if(outlines&&typeof options.textMeasurement?.outlineBounds!=='function')throw new TypeError('Text outline provider must be a function.');
+  const path=options.path??'timeline',eventPath=(index:number)=>shorthand?`${path}.${index}`:`${path}.events.${index}`;
+  const fonts=resolveFontFamilies(options.fonts),source:TimelineTextPart[]=[];
+  const add=(role:TimelineTextPart['role'],text:string|undefined,partPath:string,size:number,weight:number,eventIndex?:number)=>{
+    if(text===undefined)return;
+    const requestedStyle:TextStyle={fontFamily:fonts.body,fontWeight:weight,italic:false,path:partPath};
+    source.push({role,eventIndex,path:partPath,text,sources:[{path:partPath,start:0,end:text.length}],box:{...box},alignment:'center',requestedFontSize:Math.max(size*scale,minimum),minFontSize:minimum,requestedStyle,style:resolveTextStyle({...requestedStyle},options.textMeasurement)});
+  };
+  add('name',timeline.name,`${path}.name`,24,700);add('description',timeline.description,`${path}.description`,18,400);
+  timeline.events.forEach((event,index)=>{add('when',event.when,`${eventPath(index)}.when`,16,500,index);add('what',event.what,`${eventPath(index)}.what`,16,500,index);add('event-description',event.description,`${eventPath(index)}.description`,16,500,index);});
+  const metadata:TimelineTextPart[]=[],events:TimelineTextPart[][]=timeline.events.map(()=>[]);
+  for(const part of source)if(part.eventIndex===undefined)metadata.push(part);else events[part.eventIndex]!.push(part);
+  const cache=new Map<string,{fit:SourceTextFit;ink:TextLineInk[];height:number}>();
+  const measure=(part:TimelineTextPart,size:number,width:number,alignment:TimelineTextPart['alignment'])=>{
+    const key=JSON.stringify([part.path,size,width,alignment]);let measured=cache.get(key);
+    if(measured)return measured;
+    const fit=fitText(part.text,{x:0,y:0,width:Math.max(Number.MIN_VALUE,width-(outlines?2*padding:0)),height:Number.MAX_VALUE},size,size,textWidthMeasurer(part.style,options.textMeasurement));
+    const ink:TextLineInk[]=fit.sourceLines.map((line,index)=>{
+      let left=Infinity,top=Infinity,right=-Infinity,bottom=-Infinity,hasInk=false;
+      if(outlines)for(const segment of line.segments)if(segment.kind==='text'){
+        const outline=measureTextOutline(part.text.slice(segment.start,segment.end),size,part.style,options.textMeasurement);
+        if(outline){hasInk=true;left=Math.min(left,outline.x+segment.x);top=Math.min(top,outline.y);right=Math.max(right,outline.x+segment.x+outline.width);bottom=Math.max(bottom,outline.y+outline.height);}
+      }
+      return {width:line.width,y:index*fit.lineHeight,baseline:size+index*fit.lineHeight,height:fit.lineHeight,outline:hasInk?{x:left,y:top,width:right-left,height:bottom-top}:null};
+    });
+    const placement=outlines?placeTextLines(ink,{x:0,y:0,width,height:Number.MAX_VALUE},alignment,padding):undefined;
+    const height=placement?.height??fit.sourceLines.length*fit.lineHeight;
+    if(!Number.isFinite(height))throw new RangeError('Timeline text exceeds finite layout coordinates.');
+    measured={fit,ink,height};cache.set(key,measured);return measured;
+  };
+  type Candidate={arrangement:TimelineLayout['arrangement'];parts:TimelineTextPart[];markers:TimelineLayout['markers'];connector:TimelineLayout['connector'];diagnostics:TimelineLayoutDiagnostic[];score:number};
+  let selected:Candidate|undefined,attempts=0;
+  let reductionLimit=0;
+  for(const part of source)reductionLimit=Math.max(reductionLimit,(part.requestedFontSize-minimum)/scale);
+  const reductions=Math.min(24,Math.ceil(reductionLimit));
+  for(let reduction=0;reduction<=reductions;reduction++){
+    for(const arrangement of ['alternating','vertical'] as const){
+      attempts++;
+      const parts:TimelineTextPart[]=[],markers:TimelineLayout['markers']=[],diagnostics:TimelineLayoutDiagnostic[]=[];
+      let score=0;
+      const report=(part:TimelineTextPart,reason:TimelineLayoutDiagnostic['reason'],message:string,excess=1)=>{diagnostics.push({code:'text-overflow',reason,path:part.path,message});score+=Math.max(1,excess);};
+      const place=(part:TimelineTextPart,x:number,y:number,width:number,alignment:TimelineTextPart['alignment'])=>{
+        const measured=measure(part,Math.max(minimum,part.requestedFontSize-reduction*scale),Math.max(scale,width),alignment);
+        const area={x,y,width:Math.max(scale,width),height:Math.max(scale,measured.height)},placement=outlines?placeTextLines(measured.ink,area,alignment,padding):undefined;
+        const fit={...measured.fit,...(placement?{placement}:{}),overflow:measured.fit.overflow||!!placement?.overflow};
+        const accepted={...part,box:area,alignment,fit};parts.push(accepted);
+        if(fit.overflow)report(accepted,'text-fit','Timeline field exceeds its readable width; increase its space or split the timeline.');
+        if(area.x<box.x-.01||area.y<box.y-.01||area.x+area.width>box.x+box.width+.01||area.y+area.height>box.y+box.height+.01)report(accepted,'part-outside-cell','Timeline field extends outside its cell; increase the cell or paginate events.',Math.max(area.x+area.width-box.x-box.width,area.y+area.height-box.y-box.height));
+        return accepted;
+      };
+      let y=box.y;
+      for(const part of metadata){const placed=place(part,box.x,y,box.width,'center');y+=placed.box.height+8*scale;}
+      const available=box.y+box.height-y,count=events.length,radius=Math.min(9*scale,box.width/Math.max(2,count)/5,Math.max(scale,available)*.04);
+      if(arrangement==='alternating'){
+        const width=box.width/Math.max(2,count),step=(box.width-width)/Math.max(1,count-1),start=count===1?box.x+box.width/2:box.x+width/2;
+        const lineY=y+Math.max(scale,available)*.46;
+        events.forEach((fields,index)=>{
+          const x=start+index*step,top=index%2===0?y:lineY+24*scale,bottom=index%2===0?lineY-24*scale:box.y+box.height;
+          markers.push({path:eventPath(index),eventIndex:index,x,y:lineY,radius});let cursor=top;
+          for(const part of fields){const placed=place(part,x-width/2,cursor,width,'center');cursor+=placed.box.height;if(cursor>bottom+.01)report(placed,'event-space','Timeline event labels exceed their side of the connector; change the arrangement or paginate events.',cursor-bottom);}
+        });
+      }else{
+        const x=box.x+radius,textX=box.x+24*scale,width=box.width-24*scale;
+        events.forEach((fields,index)=>{
+          const top=y;let first:TimelineTextPart|undefined;
+          for(const part of fields){const placed=place(part,textX,y,width,'left');first??=placed;y+=placed.box.height;}
+          markers.push({path:eventPath(index),eventIndex:index,x,y:top+Math.min(first?.box.height??2*radius,2*radius)/2,radius});
+          y+=16*scale;
+        });
+      }
+      for(const marker of markers)if(marker.x-marker.radius<box.x-.01||marker.y-marker.radius<box.y-.01||marker.x+marker.radius>box.x+box.width+.01||marker.y+marker.radius>box.y+box.height+.01){diagnostics.push({code:'text-overflow',reason:'event-space',path:marker.path,message:'Timeline marker has no usable space; increase the cell or paginate events.'});score+=1;}
+      const first=markers[0]!,last=markers.at(-1)!,connector={x1:first.x,y1:first.y,x2:last.x,y2:last.y};
+      const candidate={arrangement,parts,markers,connector,diagnostics,score};
+      if(!selected||score<selected.score)selected=candidate;
+      if(!diagnostics.length)break;
+    }
+    if(!selected!.diagnostics.length)break;
+  }
+  const {score,...result}=selected!;
+  if(result.diagnostics.length&&options.overflow==='error')throw new OPFCompositionError(result.diagnostics);
+  return {algorithm:'timeline-flow-v1',attempts,textMeasurement:options.textMeasurement?'provided':'estimated',textOutlines:outlines?'provided':'unavailable',...result,overflow:result.diagnostics.length>0};
 }
 
 export interface CodeContent { source: string; language?: string; filename?: string }
@@ -1222,13 +1352,16 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     textRasterPadding:options.textRasterPadding,
     align:record(slide.design).contentAlignment??options.contentAlignment,
   });
+  const measureTimeline = (node: Pending, box: LayoutBox, settings: Composition) => layoutTimeline(node.value as TimelineContent, acceptedBox(box), {
+    fonts:options.fonts,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,textRasterPadding:options.textRasterPadding,
+  });
   const leafScore = (node: Pending, box: LayoutBox, settings: Composition, penalties?: CompositionPenalties): number => {
     box = payloadBox(box);
     const text = contentText(node.field, node.value);
     let score = Math.abs(Math.log(box.width / box.height / 1.6));
     if (penalties) penalties.cellProportions += score;
-    if (node.field === 'quote' || node.field === 'code' || node.field === 'metric') {
-      const internal = node.field === 'quote' ? measureQuote(node,box,settings) : node.field === 'code' ? measureCode(node,box,settings) : measureMetric(node,box,settings);
+    if (node.field === 'quote' || node.field === 'code' || node.field === 'metric' || node.field === 'timeline') {
+      const internal = node.field === 'quote' ? measureQuote(node,box,settings) : node.field === 'code' ? measureCode(node,box,settings) : node.field === 'metric' ? measureMetric(node,box,settings) : measureTimeline(node,box,settings);
       const reduction = internal.parts.reduce((sum,part)=>sum+(part.fit ? (part.requestedFontSize-part.fit.fontSize)/scale : 0),0);
       score += reduction + (internal.overflow ? 1000 : 0);
       if (penalties) { penalties.fontReduction += reduction; penalties.textOverflow += internal.overflow ? 1000 : 0; }
@@ -1302,11 +1435,12 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
         const quoteLayout = node.field === 'quote' ? measureQuote(node,box,settings) : undefined;
         const codeLayout = node.field === 'code' ? measureCode(node,box,settings) : undefined;
         const metricLayout = node.field === 'metric' ? measureMetric(node,box,settings) : undefined;
-        const internal = quoteLayout ?? codeLayout ?? metricLayout, body = internal?.parts.find(part=>part.role==='body'||part.role==='value');
+        const timelineLayout = node.field === 'timeline' ? measureTimeline(node,box,settings) : undefined;
+        const internal = quoteLayout ?? codeLayout ?? metricLayout ?? timelineLayout, body = internal?.parts.find(part=>part.role==='body'||part.role==='value');
         const text = internal ? body?.fit : textValue !== undefined ? fitContent(node.field,node.value,textValue,box,25*scale,(settings.minFontSize??16)*scale,node.path) : undefined;
         items.push({ path: node.path, field: node.field, type: node.type, value: node.value, payload: node.payload, box:internal?acceptedBox(box):box,
           ...(frameBox ? {frameBox} : {}),
-          text, textStyle: body?.style ?? styleFor(node.field,node.path), composition: settings, ...(quoteLayout?{quoteLayout}:{}), ...(codeLayout?{codeLayout}:{}), ...(metricLayout?{metricLayout}:{}) });
+          text, textStyle: body?.style ?? styleFor(node.field,node.path), composition: settings, ...(quoteLayout?{quoteLayout}:{}), ...(codeLayout?{codeLayout}:{}), ...(metricLayout?{metricLayout}:{}), ...(timelineLayout?{timelineLayout}:{}) });
         if (box.width < 100 * scale || box.height < 60 * scale) diagnostics.push({ code: "small-cell", path: node.path, message: "Content cell is too small for comfortable reading; use fewer blocks or a different composition." });
       }
     });
@@ -1321,6 +1455,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     if (item.quoteLayout) diagnostics.push(...item.quoteLayout.diagnostics);
     else if (item.codeLayout) diagnostics.push(...item.codeLayout.diagnostics);
     else if (item.metricLayout) diagnostics.push(...item.metricLayout.diagnostics);
+    else if (item.timelineLayout) diagnostics.push(...item.timelineLayout.diagnostics);
     else if (item.text?.overflow) diagnostics.push({ code: "text-overflow", path: item.path, message: "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide." });
   }
   for (const group of groups) for (const box of [group.box, group.contentBox]) for (const key of ["x", "y", "width", "height"] as const) box[key] = round(box[key]);
@@ -1336,8 +1471,8 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     return false;
   });
   const explanation: CompositionExplanation | undefined = decisions ? {
-    algorithm:'grid-score-v7',textMeasurement:options.textMeasurement?'provided':'estimated',textOutlines:options.textMeasurement?.outlineBounds?'provided':'unavailable',textRasterPadding:rasterPadding,decisions,
-    unmeasuredPayloads:items.filter(item=>!headings.has(item.field)&&!item.quoteLayout&&!item.codeLayout&&!item.metricLayout&&!['text','items','bullets','table'].includes(item.field)).map(item=>item.path),
+    algorithm:'grid-score-v8',textMeasurement:options.textMeasurement?'provided':'estimated',textOutlines:options.textMeasurement?.outlineBounds?'provided':'unavailable',textRasterPadding:rasterPadding,decisions,
+    unmeasuredPayloads:items.filter(item=>!headings.has(item.field)&&!item.quoteLayout&&!item.codeLayout&&!item.metricLayout&&!item.timelineLayout&&!['text','items','bullets','table'].includes(item.field)).map(item=>item.path),
   } : undefined;
   if (failures.length) throw new OPFCompositionError(failures, explanation);
   return { width, height, contentBox, items, groups, flows, diagnostics, composition, ...(explanation?{explanation}:{}) };

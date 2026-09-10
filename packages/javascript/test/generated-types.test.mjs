@@ -35,7 +35,7 @@ const focusedMetric:FocusedMetric=metric;
 const originalScalar:string|number|undefined=focusedMetric.parts[0]?.sources[0]?.value;
 // @ts-expect-error Unit follows the string field in the schema.
 layoutMetric({value:42,unit:1},{x:0,y:0,width:600,height:400});
-const scoreVersion:'grid-score-v7'|undefined=explanation?.algorithm;
+const scoreVersion:'grid-score-v8'|undefined=explanation?.algorithm;
 // @ts-expect-error Code metadata follows the string fields in the schema.
 layoutCode({source:'kept',language:42},{x:0,y:0,width:600,height:400});
 void [deck,value,invalid,arbitrary,focused,font,nextStart,tabSize,segmentKind,accepted,scoreVersion,originalScalar,cardWidth];`;

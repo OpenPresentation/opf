@@ -12,7 +12,7 @@ test('accepted code uses rounded cells and preserves body compatibility without 
   calls=0;
   const {explanation,...explained}=composeSlide(slide,{...options,explain:true});
   assert.deepEqual(explained,ordinary);assert.equal(calls,count);assert.deepEqual(slide,before);
-  assert.equal(explanation.algorithm,'grid-score-v7');assert.deepEqual(explanation.unmeasuredPayloads,[]);
+  assert.equal(explanation.algorithm,'grid-score-v8');assert.deepEqual(explanation.unmeasuredPayloads,[]);
   const item=ordinary.items[0],body=item.codeLayout.parts.find(part=>part.role==='body');
   assert.equal(item.text,body.fit);assert.equal(item.textStyle,body.style);
   assert.equal(item.codeLayout.parts[0].role,'filename');assert.notEqual(item.text,item.codeLayout.parts[0].fit);
@@ -40,7 +40,7 @@ test('strict ancestors reject code metadata paths and cannot be weakened by desc
     assert.throws(()=>composeSlide(slide,{explain:true}),error=>{
       assert.ok(error instanceof OPFCompositionError);
       assert.ok(error.diagnostics.some(item=>item.path===`slides.0.blocks.0.blocks.0.code.${field}`));
-      assert.equal(error.explanation.algorithm,'grid-score-v7');return true;
+      assert.equal(error.explanation.algorithm,'grid-score-v8');return true;
     });
     assert.deepEqual(slide,before);
   }
