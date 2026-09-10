@@ -1,0 +1,105 @@
+{
+  "issue": "https://github.com/OpenPresentation/opf/issues/41",
+  "date": "2026-09-10",
+  "baseRef": "5cfc944ee7709b54bc2d1e7192cd86b7a52d6cb7",
+  "typechecker": "7.0.2",
+  "declarationCompiler": "5.9.3",
+  "declarationBundler": "tsup 8.5.1",
+  "declarationComparison": "All 16 declaration files byte-identical to the unmodified baseline build; exports, executable entrypoints and Node >=20 engines unchanged.",
+  "declarationsSha256": {
+    "catalogs-BnnkUX9O.d.ts": "f7d971f05c1bd8b7ce91ba97facef39cbd845e6471bc40c422d1c2073b0bf815",
+    "catalogs.d.ts": "ada6d51aefc77f449a62e3899d4ef04dd4e169a67de1cd39ae5fccc2e82d06b0",
+    "composition.d.ts": "495a524dec60e4431f22e65f11089197c207917c64719c951243fd7fb49c2507",
+    "data.d.ts": "e3a6322a1445932bc6236395999d22ec8b533c5a7f453e8a6c9ec8d0f3d3d142",
+    "docs.d.ts": "80367c579659357c6c0fde511706a8512f0152a589fcaaac2d78bf2b41aa94f7",
+    "examples.d.ts": "ce57766896939fe997cb077fee46a627de96fdc93ee5511b9a05ccbaf458fc32",
+    "index.d.ts": "cb339bcfe5f727819a3ef84188cc564a48cba5e63a46d627ac925809d644cb10",
+    "pagination.d.ts": "33157c9d2fe2c465d02d3e05ad0c3dabd09168d47ba47fcf3b03ce12df50ba15",
+    "presentation-BMTdX6O1.d.ts": "df606e76151db8eefd175d4819e67c3dfea86dc7ef4c0ff1f78f0c9dd804f7b9",
+    "previews.d.ts": "0c116207a43cc54b1224b55e043ec92846a213b84c52d01ac795562d6c61adb4",
+    "repo-readme.d.ts": "efa7477233f1982692546f2aaa2b2133546021755b66139970b136a724b45455",
+    "schemas--QRVBhU1.d.ts": "e6bb391134730687afcd5c131d1cca7ac96f737ae59404f82928bd28664dba2b",
+    "schemas.d.ts": "454f70f6a02b743d7db5c3250e867f161a4118ceb2225cc5bb60f168feb971f5",
+    "spec-files.d.ts": "78e16c22834604c3e02a22b771a55d2e24ace4e90cc8ef0b7353d409cff2d68f",
+    "types.d.ts": "6c265542f06fdda65069239acc63037cb4424cc64853d6d4832033252f29433c",
+    "validator.d.ts": "a61baa3b578d65e05f328e600cf48efe7eea4df27c202e70cb6d5f0cc154df62"
+  },
+  "verification": [
+    {
+      "node": "v20.20.2",
+      "platform": "win32",
+      "pnpm": "10.33.2",
+      "passed": [
+        "typecheck",
+        "test",
+        "packages-javascript-test-packed-install-smoke-mjs",
+        "test-cli-packed",
+        "lint",
+        "check-examples",
+        "check-breaking"
+      ],
+      "logSha256": {
+        "typecheck": "3c42577c010cac4c4e07c92843e32ec34fffbcc25e71ca56639319959a3d0791",
+        "test": "edaae4e61f7b465188ce72641434b2611b50064ea95618c72ad91a34ee81d0ed",
+        "packages-javascript-test-packed-install-smoke-mjs": "bdf5b3f7fbd8e5d572404e31e2c6d88b275669cf8a240eec92c43563cd309594",
+        "test-cli-packed": "3187996433cdac91826f8dadb4f40179370b6c0c3f0eeafbd8aee53b1eac84bd",
+        "lint": "7ce46f67ee8f136124983a43b78482ac84730ecfb5f5670b7252a28450edd9bd",
+        "check-examples": "649ee984efbed1a7e83655f516405fe588de28fd259cc3edaad201421c36acb9",
+        "check-breaking": "bbf0744d8be43be6a05a9f5d0fd26d4f36f7d6bdc2fd3724b4156ced7e7f1e1a"
+      }
+    },
+    {
+      "node": "v24.21.0",
+      "platform": "win32",
+      "pnpm": "10.33.2",
+      "passed": [
+        "typecheck",
+        "test",
+        "packages-javascript-test-packed-install-smoke-mjs",
+        "test-cli-packed",
+        "lint",
+        "check-examples",
+        "check-breaking"
+      ],
+      "logSha256": {
+        "typecheck": "fb9cd469f3d3b96c0aef0dda264f7eccc1fa7c10322320519619ac06e0746cf1",
+        "test": "9e823ac92ebcf062385f93e763e73ccda58e62172fba95e285a70e383476b6e4",
+        "packages-javascript-test-packed-install-smoke-mjs": "827a692524d3805b85493c27b0b5d72d3f1a81a8daa1da44a6a71b592b077653",
+        "test-cli-packed": "330bb443b2d2a0ca272f42799ff7f5e80abd9c04045efbd791d6d532dd6b11ec",
+        "lint": "d35ba71c43a8cc32ea33dc4ffbf0f91d002f6a789130c93e6743bf10f7c5ba15",
+        "check-examples": "1fd364b43a4a6e6ecd436576ebaf6968accf69e0f426325e131a1d37db4121a1",
+        "check-breaking": "b2d6c01a683d23d83144dc0644e2c11d9c465f7bf1c96841b638948a4f962bc0"
+      }
+    }
+  ],
+  "packedConsumers": {
+    "typedExports": 13,
+    "compilers": [
+      "5.9.3",
+      "7.0.2"
+    ],
+    "moduleResolution": [
+      "NodeNext",
+      "Bundler"
+    ],
+    "skipLibCheck": false,
+    "downstream": [
+      "@openpresentation/opf-render@0.7.0",
+      "@openpresentation/opf-editor@0.6.0",
+      "@openpresentation/opf-pptx@0.7.0"
+    ],
+    "checks": [
+      "All runtime entrypoints import",
+      "Downstream packages resolve candidate core tarball",
+      "Editor edit/undo",
+      "SVG rendering",
+      "PPTX export",
+      "Global and npx-style CLI install"
+    ]
+  },
+  "audit": {
+    "command": "pnpm audit --json",
+    "advisories": 0
+  },
+  "remaining": "Updated Linux/Windows/macOS Node 20/24 GitHub CI must pass before closing the issue. Local verification covers Windows only."
+}

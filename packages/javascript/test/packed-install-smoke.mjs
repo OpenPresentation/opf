@@ -7,11 +7,17 @@ import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
 import {createHash} from 'node:crypto';
 import {packageManagerInvocation} from '../../../scripts/package-manager.mjs';
+import {checkPackedTypes} from '../../../scripts/check-packed-types.mjs';
+import {createRequire} from 'node:module';
 
 const execFile = promisify(execFileCallback);
 const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const manifest = JSON.parse(await readFile(path.join(packageRoot,'package.json'),'utf8'));
 const registry = process.argv.includes('--registry');
+const require = createRequire(import.meta.url);
+const nodeTypesVersion = require('@types/node/package.json').version;
+const plan = JSON.parse(await readFile(new URL('../../../release-plan.json', import.meta.url), 'utf8'));
+const downstream = registry ? [] : plan.packages.filter(item => ['@openpresentation/opf-render', '@openpresentation/opf-editor', '@openpresentation/opf-pptx'].includes(item.name));
 assert.ok(!process.env.NODE_OPTIONS&&!process.execArgv.some(arg=>/^(--import|--loader|--experimental-loader|--require|-r)(=|$)/.test(arg)),'Standalone package verification must not use source loaders or module aliases');
 const packageSource = registry ? `${manifest.name}@${manifest.version}` : packageRoot;
 const tmpRoot = await mkdtemp(path.join(os.tmpdir(), "opf-packed-smoke-"));
@@ -42,7 +48,7 @@ try {
   await mkdir(projectDir, { recursive: true });
   await writeFile(
     path.join(projectDir, "package.json"),
-    `${JSON.stringify({ private: true, type: "module" }, null, 2)}\n`,
+    `${JSON.stringify({ private: true, type: "module", overrides: {'@openpresentation/opf': '$@openpresentation/opf'} }, null, 2)}\n`,
   );
 
   const packResult = await run("npm", ["pack", packageSource, "--pack-destination", packDir, '--offline=false', '--prefer-online']);
@@ -77,7 +83,33 @@ try {
 
   assert.equal(files.some((file) => file.endsWith(".map")), false, "npm package should not ship source maps");
 
-  await run("npm", ["install", "--ignore-scripts", "--no-audit", "--no-fund", registry ? packageSource : tgzPath], { cwd: projectDir });
+  await run("npm", ["install", "--ignore-scripts", "--no-audit", "--no-fund", registry ? packageSource : tgzPath, `@types/node@${nodeTypesVersion}`, ...downstream.map(item => `${item.name}@${item.version}`)], { cwd: projectDir });
+  await checkPackedTypes(projectDir, {downstream: downstream.length > 0});
+  // Resolve and load every runtime export, including newly added subpaths.
+  await writeFile(path.join(projectDir, 'exports.mjs'), `
+import manifest from '@openpresentation/opf/package.json' with {type: 'json'};
+for (const [entry, target] of Object.entries(manifest.exports)) {
+  if (typeof target === 'object') await import(manifest.name + (entry === '.' ? '' : entry.slice(1)));
+}
+`);
+  await run(process.execPath, ['exports.mjs'], {cwd: projectDir});
+  if (downstream.length) {
+    await writeFile(path.join(projectDir, 'downstream.mjs'), `
+import assert from 'node:assert/strict';
+import {createEditorSession} from '@openpresentation/opf-editor';
+import {renderSvg} from '@openpresentation/opf-render';
+import {toPptx} from '@openpresentation/opf-pptx';
+import {validatePresentation} from '@openpresentation/opf';
+const editor = createEditorSession({slides: [{title: 'Compiler compatibility'}]});
+editor.set('slides.0.title', 'Packed downstream');
+assert.equal(validatePresentation(editor.document).valid, true);
+assert.match(renderSvg(editor.document), /Packed downstream/);
+assert.ok((await toPptx(editor.document)).length > 1000);
+editor.undo();
+assert.equal(editor.document.slides[0].title, 'Compiler compatibility');
+`);
+    await run(process.execPath, ['downstream.mjs'], {cwd: projectDir});
+  }
   if (registry) {
     const lock=JSON.parse(await readFile(path.join(projectDir,'package-lock.json'),'utf8'));
     const entry=lock.packages[`node_modules/${manifest.name}`];

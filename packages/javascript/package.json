@@ -98,7 +98,7 @@
     "clean": "rm -rf dist src/generated",
     "generate": "node scripts/generate.mjs && node scripts/generate-previews.mjs && node scripts/generate-content.mjs",
     "build": "pnpm run generate && tsup && node scripts/copy-spec.mjs",
-    "typecheck": "pnpm run generate && tsc --noEmit",
+    "typecheck": "pnpm run generate && node ../../scripts/typecheck.mjs --noEmit",
     "test": "pnpm run build && node ../../scripts/run-node-tests.mjs && node test/composition.mjs && node test/pagination.mjs && node test/data.mjs && node test/rich-text.mjs && node test/lists.mjs",
     "test:packed": "node test/packed-install-smoke.mjs",
     "pack:dry-run": "pnpm run build && npm pack --dry-run --cache /tmp/opf-npm-cache"
@@ -111,6 +111,6 @@
     "@types/node": "^20.19.0",
     "json-schema-to-typescript": "^16.0.0",
     "tsup": "^8.5.1",
-    "typescript": "^5.9.3"
+    "typescript": "~5.9.3"
   }
 }
