@@ -16,6 +16,8 @@ const coreVersion = releasePlan?.packages.find(item => item.name === '@openprese
 const verifyTableLayout = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] >= 6;
 // Styled-cell rollout targets core 0.7; published 0.6 fixtures remain separate.
 const verifyStyledTables = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] >= 7;
+// Shared quote APIs first shipped in core 0.8 with renderer/PPTX 0.6 and editor 0.5.
+const verifySharedQuotes = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] >= 8;
 
 async function readHarness(repo, file) {
   const directory = repo === 'opf' ? root : path.resolve(root, '..', repo);
@@ -138,9 +140,9 @@ assert.ok(pptx.length>1000);
 console.log('Packed consumer: core, editor, SVG, measured fonts and PPTX passed.');\n`,
 );
 run(process.execPath, ["check.mjs"]);
-if (!registry) {
-  // These APIs are unreleased. Keep published 0.7/0.5 fixtures pinned to the
-  // release plan; add their future registry version gate during publication.
+if (verifySharedQuotes) {
+  // Historical release plans retain their old fixtures; the new complete set
+  // must exercise its quote APIs and shared accepted geometry from actual npm.
   for (const file of ['quote-layout.test.mjs','quote-composition.test.mjs']) {
     const source=(await readHarness('opf',`packages/javascript/test/${file}`))
       .replaceAll("'../dist/composition.js'","'@openpresentation/opf/composition'")
@@ -208,7 +210,7 @@ export {formatRichTextRange,replaceRichTextRange,richTextContent,type TextRunFor
 export {prepareTrackResize,prepareBlockMove,listBlockContainers,prepareBlockInsert,prepareBlockDuplicate,prepareBlockRemove,createContentBlock} from '@openpresentation/opf-editor/layout';
 export {fitList,type ListFit,type ListValue} from '@openpresentation/opf/composition';
 ${verifyTableLayout ? "export {layoutTable,type TableLayout,type TableLayoutOptions,type TableCellLayout} from '@openpresentation/opf/composition';" : ''}
-${!registry ? "export {layoutQuote,type QuoteLayout,type QuoteTextPart,type QuoteTextSource,type QuoteLayoutOptions,type CompositionExplanation} from '@openpresentation/opf/composition';" : ''}
+${verifySharedQuotes ? "export {layoutQuote,type QuoteLayout,type QuoteTextPart,type QuoteTextSource,type QuoteLayoutOptions,type CompositionExplanation} from '@openpresentation/opf/composition';" : ''}
 export {schemaAtPath,listSchemaFields} from '@openpresentation/opf-editor/schema';
 export async function mount(container:HTMLElement):Promise<CanvasEditor> {
  const fonts=await loadBrowserFontRegistry([{url:'/fonts/Roboto.ttf'},{url:'/fonts/RobotoMono.ttf'}]);

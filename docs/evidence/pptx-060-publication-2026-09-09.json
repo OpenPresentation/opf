@@ -1,0 +1,254 @@
+{
+  "pr": 14,
+  "reviewedHead": "268fcb523924c95b453acbe407d1b5359ea5f485",
+  "mergeCommit": "898e3c27919a2488e1e3d384168d6b25aae4bd5c",
+  "treeIdentical": true,
+  "ci": 34422214063,
+  "bugbot": "passed",
+  "publishWorkflow": 34422584331,
+  "npmPublishedAt": "2026-09-10T00:47:11.629Z",
+  "runs": [
+    {
+      "checkedAt": "2026-09-10T00:50:09.092Z",
+      "node": "v20.20.2",
+      "name": "@openpresentation/opf-pptx",
+      "version": "0.6.0",
+      "gitHead": "898e3c27919a2488e1e3d384168d6b25aae4bd5c",
+      "integrity": "sha512-60giL1UxBU21AAPF+TtA3h8mMbzsGVU7WyPLt9GuQg4ZvPBpG6YRR6jw8hGjEsG6v/X7ohJXbh0LWM2zDHjQwA==",
+      "attestations": {
+        "url": "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf-pptx@0.6.0",
+        "provenance": {
+          "predicateType": "https://slsa.dev/provenance/v1"
+        }
+      },
+      "dependencies": {
+        "@openpresentation/opf": {
+          "version": "0.8.0",
+          "integrity": "sha512-1ubeINQsuD8pFNr542eFYPfzkhcECAcj/mM2pWNN+keFnVoWxePCsFTUtjuSSsvCtpm7QkgxBYRJYtEUmrlkkg=="
+        },
+        "@openpresentation/opf-render": {
+          "version": "0.6.0",
+          "integrity": "sha512-rYHS0qetT8FpDqkB8E9KMtwrh6NiB6UzxAeqaCwnMwrIDIEvejKC++Hw2Us4512ZIHRHdwuG42aq6QJodBJOPA=="
+        }
+      },
+      "files": {
+        "LICENSE": "c977d11e7e9de5bd31ab787b9a302475c0487837c66f665c174d9f92b18937d2",
+        "vendor/pptxgenjs/LICENSE": "7a2bfe96150786ed1908b8e63f98ebab88875c1e79e28faff6649e0f11f77e52",
+        "dist/background-import.js": "888583bbbaae46a9a4d174f046ca276cfadee5c021a76e39ab49050a1bfefe38",
+        "dist/background.js": "38f97d14394058737418e7517569d5babf99468574f299cc5df25ea1188dfe56",
+        "dist/image-fallback-browser.js": "b2cd7aa15c3952abf324e6474e7bbdebbd6445dde84f145e068c94c43f9c0de8",
+        "dist/image-fallback-node.js": "72c4efba8ef521e7fdce15b09c57ce6039ba9394ae25a8437a2cb6e26b1b420d",
+        "dist/image-geometry.js": "c2d3d5e7b7f81cf421bcc94437093f17e47670f458a48cf9cf9aa73535a08346",
+        "dist/image-import.js": "898704890944137909c5d48c7d1b3b16e4f06403bd745240d0f6b21f7c8c444a",
+        "dist/index.js": "c6e27193f0d091df550c1c0b3fafb4369058f46e3ca1a7db370474e43f765967",
+        "vendor/pptxgenjs/pptxgen.es.js": "05844c5625e2cda3b449eb967c2246dd57ca57341886a7c28eeebca263b29bd4",
+        "dist/table-border-import.js": "10dc23b93881d691be62bb5f171678d61cdf77675a628f86f58a58ee962e7093",
+        "dist/table-cell-import.js": "d268a14eecf54fe12bab31246680807cf1c90407b9807b49d32c3c71d93a643b",
+        "dist/table-import.js": "b545fff80415d085f76c82b88ce0c72e1bcfd6947c621a0fbedcc08e5a9ea227",
+        "package.json": "69e8910cf2452bee92bc7351295dc23b59da4ffa2216c76bcf5492b84f320c61",
+        "vendor/pptxgenjs/package.json": "17fce7ff4b8f6d3fab96bdf31bb1162c31bdc6b60ef456e3a119ba1ccd50909e",
+        "vendor/pptxgenjs/UPSTREAM.json": "00e2131269f673c739fb9be04477273bd3edbea0a8c2b225884ab0e7bc13808e",
+        "DEPENDENCY-NOTES.md": "a107bd313dd2fa8bc6897d1244ac3de0844dfc855be46f2d30441ce04bfaea53",
+        "README.md": "d40e425de0c6777a8b0408e3d01937fc44d412f88843a0b85a712cd75c319acc",
+        "dist/index.d.ts": "13587ee5e6bb8f25e75bc618bd48e1a500789b4225153cbd12c318c62d6c83f9"
+      },
+      "knownVulnerabilities": 0,
+      "signatureVerification": "audited 66 packages in 0s\n\n66 packages have verified registry signatures\n\n17 packages have verified attestations\n(use --json --include-attestations to view attestation details)",
+      "tests": [
+        {
+          "test": "dependency-boundary.mjs",
+          "output": "Backgrounds passed: 38 gradient/solid cases, 990 independently compared SVG/native samples, alpha, overrides, round-trips, native edits, empty/single/descending stops and unsupported-import diagnostics.\nNative background inheritance passed: 70 layout/master/theme/map/reference/diagnostic cases and theme-slot opacity.\nNative Keynote backgrounds passed: 18 PNG comparisons from 12 exported native images, native PPTX import, blank-slide preservation; observed max channel 8, alpha 1, opaque mean 0.37809606481481484.\nTable layout passed: 168 cells, 24 shrink cases, 24 content-sized rows, Roboto/Calibri substitution, two canvas sizes, header/no-header tables, alignment, native rows and source text preservation.\nVariable table rows passed: unchanged short rows, five-line rich cell containment, identical SVG/native row heights and native table extent.\nTable import passed: headers, headerless data, blank rows/headers, repeated round-trips, native edits and XML boolean forms.\nRich tables passed: canonical headers/cells, SVG traces/styles/links, native editable runs/fonts/styles/point sizes/scripts/hyperlinks, scalar preservation and immutable input.\nNative rich table import passed: styles, alpha, theme fonts/colors, defaults/resets, links, XML child order, fields, whitespace/blank lines, repeated conversion and path-specific diagnostics.\nNative conditional table text styles passed: archive/inline definitions, DrawingML precedence, edge/corner overlaps, band parity, fonts/colors/alpha, direct overrides, repeated conversion, and diagnostics.\nConditional cell fills passed: band/edge/corner precedence, ordered theme references, placeholder alpha and direct overrides.\nNative conditional table borders passed: outer frame/interior grid, bands/edges/corners, partial/direct overrides, theme lines/alpha, missing-reference masking, repeated conversion and diagnostics.\nObject IDs passed: eight slides mixing tables, text, pictures, charts and lists, deterministic bytes and native import.\nImage fitting passed: 45 SVG/native geometry cases, 9 raster fixtures, fit/crop, slide overrides, byte/alt preservation, host resolution and malformed headers.\nImage orientation passed: all 8 EXIF orientations in fit/crop, native corner transforms, normalized metadata, unchanged pixels and bounded EXIF offsets.\nPicture import passed: 42 orientation/native-edit/EXIF cases, exact source JPEG round-trips, independent pixel permutations, metadata preservation and crop/transform diagnostics.\nImage media types passed: 32 byte/object/data-URI/local/host-path cases, native extensions/content types, byte preservation and imported MIME.\nWebP fallback passed: 36 fit/crop and input-form cases, Pillow pixel references, alpha, EXIF, first animation frame, deterministic output, errors and unchanged source bytes.\nNative decoder boundary passed: ordinary/preserved images work without Sharp; unavailable WebP conversion fails with its OPF path.\nCorpus structure passed: 126 decks, 805 slides, 26 explicitly substituted images; fallback fonts, valid slide XML, unique IDs, finite geometry, table grids and imported slide counts.\nPPTX dependency boundary passed: model suite and data/local/resolved images work without image-size."
+        },
+        {
+          "test": "styled-table.mjs",
+          "output": "Styled native table export passed: merged grid, unique text, full covered rows, colors/alpha, border dashes, zero/fractional padding, alignment, scaled row geometry and determinism.\nNative merge perimeter regression passed: continuation and neighbor edges, transparent dashes, dotted top, hidden bottom and scaling."
+        },
+        {
+          "test": "styled-table-import.mjs",
+          "output": "Styled native table import passed: direct fills/alpha, borders, margins, alignment, dense merges, repeated conversion, header crossing and text-preserving malformed-merge diagnostics."
+        },
+        {
+          "test": "content-layout.mjs",
+          "output": "Native content layout passed: 34 payload text lines match actual renderer typography/geometry; 8 long quotes preserve footer separation and 2 oversized quotes reject in strict mode; code styling, quote source and editable timeline markers across two canvas sizes."
+        },
+        {
+          "test": "shared-quote.mjs",
+          "output": "Shared quote PPTX: 4 wide/portrait decks and 6 native lines match accepted geometry/styles without re-fitting; reimport and strict/unusable-space rejection pass."
+        }
+      ],
+      "browser": {
+        "browser": "152.0.4191.66",
+        "suites": [
+          {
+            "suite": "webp-fallback",
+            "passed": true,
+            "cases": 13,
+            "checks": "PPTX PNG embedding, source pixels, alpha, EXIF, first animation frame, fit/crop, resolver once, DOM canvas"
+          },
+          {
+            "suite": "native-rich-table-import",
+            "passed": true,
+            "cases": 20,
+            "checks": "Native XML import, style/default preservation, links, blank lines, repeated conversion and SVG preview"
+          },
+          {
+            "suite": "native-table-styles",
+            "passed": true,
+            "checks": 11
+          },
+          {
+            "suite": "native-styled-table-import",
+            "passed": true,
+            "checks": 12
+          },
+          {
+            "suite": "native-content-layout",
+            "passed": true,
+            "checks": 29,
+            "measurement": "browser-default; loaded fonts and native rasters verified separately"
+          }
+        ]
+      },
+      "boundary": "Actual npm converter and predecessors; every shipped file matches the immutable release commit, pinned full model/corpus and browser fixtures execute installed dist/vendor. Optional native evidence covers twelve controlled Calibri cases, editable save/reopen and valid reimports with raster observations, without an equivalence threshold."
+    },
+    {
+      "checkedAt": "2026-09-10T00:54:42.308Z",
+      "node": "v24.20.0",
+      "name": "@openpresentation/opf-pptx",
+      "version": "0.6.0",
+      "gitHead": "898e3c27919a2488e1e3d384168d6b25aae4bd5c",
+      "integrity": "sha512-60giL1UxBU21AAPF+TtA3h8mMbzsGVU7WyPLt9GuQg4ZvPBpG6YRR6jw8hGjEsG6v/X7ohJXbh0LWM2zDHjQwA==",
+      "attestations": {
+        "url": "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf-pptx@0.6.0",
+        "provenance": {
+          "predicateType": "https://slsa.dev/provenance/v1"
+        }
+      },
+      "dependencies": {
+        "@openpresentation/opf": {
+          "version": "0.8.0",
+          "integrity": "sha512-1ubeINQsuD8pFNr542eFYPfzkhcECAcj/mM2pWNN+keFnVoWxePCsFTUtjuSSsvCtpm7QkgxBYRJYtEUmrlkkg=="
+        },
+        "@openpresentation/opf-render": {
+          "version": "0.6.0",
+          "integrity": "sha512-rYHS0qetT8FpDqkB8E9KMtwrh6NiB6UzxAeqaCwnMwrIDIEvejKC++Hw2Us4512ZIHRHdwuG42aq6QJodBJOPA=="
+        }
+      },
+      "files": {
+        "LICENSE": "c977d11e7e9de5bd31ab787b9a302475c0487837c66f665c174d9f92b18937d2",
+        "vendor/pptxgenjs/LICENSE": "7a2bfe96150786ed1908b8e63f98ebab88875c1e79e28faff6649e0f11f77e52",
+        "dist/background-import.js": "888583bbbaae46a9a4d174f046ca276cfadee5c021a76e39ab49050a1bfefe38",
+        "dist/background.js": "38f97d14394058737418e7517569d5babf99468574f299cc5df25ea1188dfe56",
+        "dist/image-fallback-browser.js": "b2cd7aa15c3952abf324e6474e7bbdebbd6445dde84f145e068c94c43f9c0de8",
+        "dist/image-fallback-node.js": "72c4efba8ef521e7fdce15b09c57ce6039ba9394ae25a8437a2cb6e26b1b420d",
+        "dist/image-geometry.js": "c2d3d5e7b7f81cf421bcc94437093f17e47670f458a48cf9cf9aa73535a08346",
+        "dist/image-import.js": "898704890944137909c5d48c7d1b3b16e4f06403bd745240d0f6b21f7c8c444a",
+        "dist/index.js": "c6e27193f0d091df550c1c0b3fafb4369058f46e3ca1a7db370474e43f765967",
+        "vendor/pptxgenjs/pptxgen.es.js": "05844c5625e2cda3b449eb967c2246dd57ca57341886a7c28eeebca263b29bd4",
+        "dist/table-border-import.js": "10dc23b93881d691be62bb5f171678d61cdf77675a628f86f58a58ee962e7093",
+        "dist/table-cell-import.js": "d268a14eecf54fe12bab31246680807cf1c90407b9807b49d32c3c71d93a643b",
+        "dist/table-import.js": "b545fff80415d085f76c82b88ce0c72e1bcfd6947c621a0fbedcc08e5a9ea227",
+        "package.json": "69e8910cf2452bee92bc7351295dc23b59da4ffa2216c76bcf5492b84f320c61",
+        "vendor/pptxgenjs/package.json": "17fce7ff4b8f6d3fab96bdf31bb1162c31bdc6b60ef456e3a119ba1ccd50909e",
+        "vendor/pptxgenjs/UPSTREAM.json": "00e2131269f673c739fb9be04477273bd3edbea0a8c2b225884ab0e7bc13808e",
+        "DEPENDENCY-NOTES.md": "a107bd313dd2fa8bc6897d1244ac3de0844dfc855be46f2d30441ce04bfaea53",
+        "README.md": "d40e425de0c6777a8b0408e3d01937fc44d412f88843a0b85a712cd75c319acc",
+        "dist/index.d.ts": "13587ee5e6bb8f25e75bc618bd48e1a500789b4225153cbd12c318c62d6c83f9"
+      },
+      "knownVulnerabilities": 0,
+      "signatureVerification": "audited 66 packages in 0s\n\n66 packages have verified registry signatures\n\n17 packages have verified attestations\n(use --json --include-attestations to view attestation details)",
+      "tests": [
+        {
+          "test": "dependency-boundary.mjs",
+          "output": "Backgrounds passed: 38 gradient/solid cases, 990 independently compared SVG/native samples, alpha, overrides, round-trips, native edits, empty/single/descending stops and unsupported-import diagnostics.\nNative background inheritance passed: 70 layout/master/theme/map/reference/diagnostic cases and theme-slot opacity.\nNative Keynote backgrounds passed: 18 PNG comparisons from 12 exported native images, native PPTX import, blank-slide preservation; observed max channel 8, alpha 1, opaque mean 0.37809606481481484.\nTable layout passed: 168 cells, 24 shrink cases, 24 content-sized rows, Roboto/Calibri substitution, two canvas sizes, header/no-header tables, alignment, native rows and source text preservation.\nVariable table rows passed: unchanged short rows, five-line rich cell containment, identical SVG/native row heights and native table extent.\nTable import passed: headers, headerless data, blank rows/headers, repeated round-trips, native edits and XML boolean forms.\nRich tables passed: canonical headers/cells, SVG traces/styles/links, native editable runs/fonts/styles/point sizes/scripts/hyperlinks, scalar preservation and immutable input.\nNative rich table import passed: styles, alpha, theme fonts/colors, defaults/resets, links, XML child order, fields, whitespace/blank lines, repeated conversion and path-specific diagnostics.\nNative conditional table text styles passed: archive/inline definitions, DrawingML precedence, edge/corner overlaps, band parity, fonts/colors/alpha, direct overrides, repeated conversion, and diagnostics.\nConditional cell fills passed: band/edge/corner precedence, ordered theme references, placeholder alpha and direct overrides.\nNative conditional table borders passed: outer frame/interior grid, bands/edges/corners, partial/direct overrides, theme lines/alpha, missing-reference masking, repeated conversion and diagnostics.\nObject IDs passed: eight slides mixing tables, text, pictures, charts and lists, deterministic bytes and native import.\nImage fitting passed: 45 SVG/native geometry cases, 9 raster fixtures, fit/crop, slide overrides, byte/alt preservation, host resolution and malformed headers.\nImage orientation passed: all 8 EXIF orientations in fit/crop, native corner transforms, normalized metadata, unchanged pixels and bounded EXIF offsets.\nPicture import passed: 42 orientation/native-edit/EXIF cases, exact source JPEG round-trips, independent pixel permutations, metadata preservation and crop/transform diagnostics.\nImage media types passed: 32 byte/object/data-URI/local/host-path cases, native extensions/content types, byte preservation and imported MIME.\nWebP fallback passed: 36 fit/crop and input-form cases, Pillow pixel references, alpha, EXIF, first animation frame, deterministic output, errors and unchanged source bytes.\nNative decoder boundary passed: ordinary/preserved images work without Sharp; unavailable WebP conversion fails with its OPF path.\nCorpus structure passed: 126 decks, 805 slides, 26 explicitly substituted images; fallback fonts, valid slide XML, unique IDs, finite geometry, table grids and imported slide counts.\nPPTX dependency boundary passed: model suite and data/local/resolved images work without image-size."
+        },
+        {
+          "test": "styled-table.mjs",
+          "output": "Styled native table export passed: merged grid, unique text, full covered rows, colors/alpha, border dashes, zero/fractional padding, alignment, scaled row geometry and determinism.\nNative merge perimeter regression passed: continuation and neighbor edges, transparent dashes, dotted top, hidden bottom and scaling."
+        },
+        {
+          "test": "styled-table-import.mjs",
+          "output": "Styled native table import passed: direct fills/alpha, borders, margins, alignment, dense merges, repeated conversion, header crossing and text-preserving malformed-merge diagnostics."
+        },
+        {
+          "test": "content-layout.mjs",
+          "output": "Native content layout passed: 34 payload text lines match actual renderer typography/geometry; 8 long quotes preserve footer separation and 2 oversized quotes reject in strict mode; code styling, quote source and editable timeline markers across two canvas sizes."
+        },
+        {
+          "test": "shared-quote.mjs",
+          "output": "Shared quote PPTX: 4 wide/portrait decks and 6 native lines match accepted geometry/styles without re-fitting; reimport and strict/unusable-space rejection pass."
+        }
+      ],
+      "browser": {
+        "browser": "152.0.4191.66",
+        "suites": [
+          {
+            "suite": "webp-fallback",
+            "passed": true,
+            "cases": 13,
+            "checks": "PPTX PNG embedding, source pixels, alpha, EXIF, first animation frame, fit/crop, resolver once, DOM canvas"
+          },
+          {
+            "suite": "native-rich-table-import",
+            "passed": true,
+            "cases": 20,
+            "checks": "Native XML import, style/default preservation, links, blank lines, repeated conversion and SVG preview"
+          },
+          {
+            "suite": "native-table-styles",
+            "passed": true,
+            "checks": 11
+          },
+          {
+            "suite": "native-styled-table-import",
+            "passed": true,
+            "checks": 12
+          },
+          {
+            "suite": "native-content-layout",
+            "passed": true,
+            "checks": 29,
+            "measurement": "browser-default; loaded fonts and native rasters verified separately"
+          }
+        ]
+      },
+      "nativeEvidence": {
+        "report": "artifacts/npm/pptx-0.6.0-native-node24/comparison.json",
+        "sha256": "7c32381ad2dba22634cb89e8ea7237c86ea0ac9f6b02af9089bef7da059bd630",
+        "environment": {
+          "windows": {
+            "revision": 9445,
+            "displayVersion": "25H2",
+            "build": "26200",
+            "product": "Windows 10 Home"
+          },
+          "culture": "en-US",
+          "uiCulture": "en-US",
+          "powerPointVersion": "16.0",
+          "executable": {
+            "fileVersion": "16.0.20326.20132",
+            "sha256": "90fa931172c507b763ba92a82b19d5bc70816e008c5bb87577e1838e8a92e9f9",
+            "productVersion": "16.0.20326.20132"
+          }
+        }
+      },
+      "boundary": "Actual npm converter and predecessors; every shipped file matches the immutable release commit, pinned full model/corpus and browser fixtures execute installed dist/vendor. Optional native evidence covers twelve controlled Calibri cases, editable save/reopen and valid reimports with raster observations, without an equivalence threshold."
+    }
+  ],
+  "nativeReport": "pptx-060-native-registry-2026-09-09.json",
+  "contactSheets": [
+    {
+      "file": "quote-1280-contact.png",
+      "sha256": "228479e7405a5008fb271bf46a4fa9e99644ec5e8e99faa9406decd5cd78b8bc",
+      "byteIdenticalToReviewedCandidate": true,
+      "url": "https://github.com/OpenPresentation/opf-pptx/blob/898e3c27919a2488e1e3d384168d6b25aae4bd5c/docs/evidence/pptx-060-native/quote-1280-contact.png"
+    },
+    {
+      "file": "quote-540-contact.png",
+      "sha256": "15e4cc16f377c8dce60d9f1a9246dda3b6f6a6664edbf4cecac03bccc7b2830b",
+      "byteIdenticalToReviewedCandidate": true,
+      "url": "https://github.com/OpenPresentation/opf-pptx/blob/898e3c27919a2488e1e3d384168d6b25aae4bd5c/docs/evidence/pptx-060-native/quote-540-contact.png"
+    }
+  ],
+  "boundary": "Actual registry converter/predecessors and Windows PowerPoint reference build. The product field in the Windows environment is the raw legacy registry product string; build/revision identify the OS. Native raster differences are observations without an equivalence threshold, and no current macOS/Keynote execution is claimed."
+}

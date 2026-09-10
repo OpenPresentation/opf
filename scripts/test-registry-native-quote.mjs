@@ -31,6 +31,9 @@ const {toPptx,fromPptx}=await load('@openpresentation/opf-pptx');
 const {createFontRegistry}=await load('@openpresentation/opf-render/fonts');
 const {validatePresentation}=await load('@openpresentation/opf');
 const generation=await json(path.join(evidence,'generation.json')),native=await json(path.join(evidence,'native.json'));
+assert.equal(generation.decks.length,2,'Expected the controlled wide and portrait fixture decks');
+const sharedQuotes=generation.decks.every(record=>record.layouts?.every(layout=>Array.isArray(layout.parts)));
+const expectedSlides=sharedQuotes?12:8;
 const faces=[['calibri.ttf',400,false],['calibrib.ttf',700,false],['calibrii.ttf',400,true],['calibriz.ttf',700,true]];
 const fonts=createFontRegistry(await Promise.all(faces.map(async([file,weight,italic])=>{
  const data=await readFile(path.join(process.env.WINDIR??'C:/Windows','Fonts',file));
@@ -53,7 +56,8 @@ for(const record of generation.decks) {
  assert.equal(observation.editsReopened,record.slides);
  assert.equal(observation.slides.length,record.slides);
  for(const slide of observation.slides) {
-  assert.ok(slide.bodyLines>1&&slide.bodyBottom<=slide.footerTop);
+  assert.ok(slide.bodyLines>=(sharedQuotes?1:2)&&slide.bodyBottom<=slide.footerTop);
+  if(sharedQuotes)assert.equal(slide.glyphsInsideCell,true);
   assert.equal(hash(await readFile(path.join(evidence,`${record.id}-native-${slide.slide}.png`))),slide.rasterSha256);
  }
  for(const suffix of ['', '-native-saved','-native-edited']) {
@@ -62,13 +66,21 @@ for(const record of generation.decks) {
   const restored=await fromPptx(bytes);
   assert.ok(validatePresentation(restored).valid);assert.equal(restored.slides.length,record.slides);
   for(const [index,slide] of restored.slides.entries()) {
-   assert.ok(JSON.stringify(slide).includes(generation.footer));
+   if(sharedQuotes){
+    const expectedLines=record.layouts[index].parts.flatMap(part=>part.fit.lines.filter(line=>line!==''));
+    assert.ok(slide.blocks.every(block=>block.type==='text'&&typeof block.text==='string'));
+    const title=suffix==='-native-edited'?`Native edit ${record.id} slide ${index+1}`:document.slides[index].title;
+    // The importer may classify the first quote line as a subtitle. Include it
+    // in reading order without claiming reconstruction of the OPF quote shape.
+    const actualLines=[slide.title,slide.subtitle,...slide.blocks.map(block=>block.text)].filter(value=>value!==undefined);
+    assert.deepEqual(actualLines,[title,...expectedLines],'Every heading/body/footer line must survive in order, including repeated identical lines');
+   }else assert.ok(JSON.stringify(slide).includes(generation.footer));
    if(suffix==='-native-edited')assert.ok(JSON.stringify(slide).includes(`Native edit ${record.id} slide ${index+1}`));
   }
  }
  results.push({id:record.id,slides:record.slides,sourceSha256:hash(bytes),native:observation,validImports:3});
 }
-assert.equal(results.reduce((sum,item)=>sum+item.slides,0),8);
-const report={packages,powerPointVersion:native.powerPointVersion,fontHashes:generation.fontHashes,results,scope:'Actual registry exports are byte-identical to the eight native-tested long quote slides. Native glyph separation/save/reopen and six registry reimports verify. This does not assert general raster equivalence.'};
+assert.equal(results.reduce((sum,item)=>sum+item.slides,0),expectedSlides);
+const report={packages,powerPointVersion:native.powerPointVersion,fontHashes:generation.fontHashes,results,scope:`Actual registry exports are byte-identical to ${expectedSlides} native-tested quote slides. Native glyph separation/save/reopen and six registry reimports verify.${sharedQuotes?' All accepted body/footer lines survive in order with exact multiplicity.':''} This does not assert general raster equivalence or OPF quote semantic reconstruction.`};
 if(reportArg)await writeFile(path.resolve(reportArg),JSON.stringify(report,null,2)+'\n');
-console.log('Registry/native quote passed: eight byte-identical native-tested exports, eight glyph separations/save/reopens, six valid reimports preserving all footers and native edits.');
+console.log(`Registry/native quote passed: ${expectedSlides} byte-identical native-tested exports and glyph separations/save/reopens, six valid reimports${sharedQuotes?' with exact body/footer line order and multiplicity':' preserving footers'} and native edits.`);
