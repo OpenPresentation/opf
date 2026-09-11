@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Require Node 24 (`24.x`) for the next release and development; upgrade from Node 20 or 22 before installing. Retain browser and operating-system checks, and retire duplicate Node 20 CI jobs. Previously published packages and evidence are unchanged.
+
 ## 0.6.0
 
 - Edit code source and metadata through accepted renderer trace targets, including empty source and shorthand values. Preserve source line endings through no-op commits and edits; insert literal tabs and support cancel/undo. Generated labels are not editable source targets, and code selection does not offer invalid rich-text formatting.
