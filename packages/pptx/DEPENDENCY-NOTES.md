@@ -10,7 +10,7 @@ Every build checks the vendored code and license against `UPSTREAM.json`. `node 
 
 ## Compatible raster decoding
 
-Sharp 0.35.4 (Apache-2.0) is pinned for Node-only WebP-to-PNG conversion and loads lazily only when conversion is needed. Its platform packages include libvips and codec licenses; retain the upstream license files distributed by npm. Node 20.9+ and normal optional-platform dependency installation are required. Browser builds use the browser's decoder/canvas and a conditional package import; a bundling check rejects Sharp or the Node adapter in browser output. Ordinary/preserved image exports are tested with Sharp loading blocked.
+Sharp 0.35.4 (Apache-2.0) is pinned for Node-only WebP-to-PNG conversion and loads lazily only when conversion is needed. Its platform packages include libvips and codec licenses; retain the upstream license files distributed by npm. This package requires Node 24 and normal optional-platform dependency installation. Browser builds use the browser's decoder/canvas and a conditional package import; a bundling check rejects Sharp or the Node adapter in browser output. Ordinary/preserved image exports are tested with Sharp loading blocked.
 
 The candidate's complete npm audit reports no known vulnerabilities in the installed graph. npm does not audit vendored source as an installed PptxGenJS package: maintainers must also review upstream PptxGenJS advisories and releases when updating or auditing the vendor directory. The browser bundler esbuild 0.28.2 and Playwright are development-only. No hosted service, paid API or telemetry was added.
 

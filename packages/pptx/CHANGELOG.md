@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Require Node 24 (`24.x`) for the next release and development; upgrade from Node 20 or 22 before installing. Retain browser and operating-system checks, and retire duplicate Node 20 CI jobs. Previously published packages and evidence are unchanged.
+
 - Consume physical family and bold/italic style-link metadata from accepted text styles across headings, scalar/rich text, lists, tables, quotes, code and metrics. Retain the legacy provider fallback and reject malformed selection metadata. Coordinated renderer preferred-family lookup selects installed Roboto 500/600/800 faces exactly; native paint verification remains separate.
 
 ## 0.7.0
