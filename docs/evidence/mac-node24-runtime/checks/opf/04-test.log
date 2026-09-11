@@ -1,0 +1,754 @@
+
+> openpresentation-workspace@ test /Users/michael/.codex/worktrees/c193/opf
+> pnpm --filter @openpresentation/opf test && pnpm test:cli && pnpm check:text && pnpm check:spec
+
+
+> @openpresentation/opf@0.9.0 test /Users/michael/.codex/worktrees/c193/opf/packages/javascript
+> pnpm run build && node ../../scripts/run-node-tests.mjs && node test/composition.mjs && node test/pagination.mjs && node test/data.mjs && node test/rich-text.mjs && node test/lists.mjs
+
+
+> @openpresentation/opf@0.9.0 build /Users/michael/.codex/worktrees/c193/opf/packages/javascript
+> pnpm run generate && tsup && node scripts/copy-spec.mjs
+
+
+> @openpresentation/opf@0.9.0 generate /Users/michael/.codex/worktrees/c193/opf/packages/javascript
+> node scripts/generate.mjs && node scripts/generate-previews.mjs && node scripts/generate-content.mjs
+
+Generated src/generated/previews.ts (70 previews)
+Generated src/generated/examples.ts (126 examples, 7 galleries)
+Generated src/generated/docs.ts (28 docs)
+Generated src/generated/repo-readme.ts (11388 bytes)
+CLI Building entry: {"data":"src/data.ts","pagination":"src/pagination.ts","composition":"src/composition.ts","index":"src/index.ts","schemas":"src/schemas.ts","catalogs":"src/catalogs.ts","validator":"src/validator.ts","types":"src/types.ts","spec-files":"src/spec-files.ts","previews":"src/previews.ts","examples":"src/examples.ts","docs":"src/docs.ts","repo-readme":"src/repo-readme.ts"}
+CLI Using tsconfig: tsconfig.json
+CLI tsup v8.5.1
+CLI Using tsup config: /Users/michael/.codex/worktrees/c193/opf/packages/javascript/tsup.config.ts
+CLI Target: es2022
+CLI Cleaning output folder
+ESM Build start
+Generated an empty chunk: "types".
+DTS Build start
+ESM dist/spec-files.js     85.00 B
+ESM dist/repo-readme.js    11.47 KB
+ESM dist/data.js           95.00 B
+ESM dist/composition.js    420.00 B
+ESM dist/index.js          1.37 KB
+ESM dist/chunk-OZULJBSG.js 117.86 KB
+ESM dist/pagination.js     215.00 B
+ESM dist/previews.js       130.00 B
+ESM dist/chunk-SOSOBKQ2.js 6.52 KB
+ESM dist/chunk-PIQXLBBJ.js 108.89 KB
+ESM dist/chunk-DCJ2ZESA.js 27.16 KB
+ESM dist/catalogs.js       238.00 B
+ESM dist/schemas.js        202.00 B
+ESM dist/chunk-KOC4AH2F.js 12.98 KB
+ESM dist/validator.js      267.00 B
+ESM dist/types.js          1.00 B
+ESM dist/chunk-BAWLYSUN.js 85.39 KB
+ESM dist/chunk-GQSK3T7X.js 219.58 KB
+ESM dist/chunk-TWMRZ43O.js 499.00 KB
+ESM dist/docs.js           517.63 KB
+ESM dist/examples.js       3.48 MB
+ESM ⚡️ Build success in 446ms
+DTS ⚡️ Build success in 2712ms
+DTS dist/index.d.ts                 3.05 KB
+DTS dist/data.d.ts                  1005.00 B
+DTS dist/pagination.d.ts            2.26 KB
+DTS dist/previews.d.ts              1.71 KB
+DTS dist/repo-readme.d.ts           139.00 B
+DTS dist/examples.d.ts              2.09 KB
+DTS dist/docs.d.ts                  671.00 B
+DTS dist/composition.d.ts           22.86 KB
+DTS dist/validator.d.ts             1.54 KB
+DTS dist/spec-files.d.ts            19.57 KB
+DTS dist/schemas.d.ts               314.00 B
+DTS dist/catalogs.d.ts              454.00 B
+DTS dist/types.d.ts                 416.00 B
+DTS dist/presentation-BMTdX6O1.d.ts 113.38 KB
+DTS dist/schemas--QRVBhU1.d.ts      8.84 KB
+DTS dist/catalogs-BnnkUX9O.d.ts     46.31 KB
+✔ cards preserve outer tracks, regions and headings while measuring a rounded inner box (6.357833ms)
+✔ slide false overrides host cards; nested leaves receive one inset and preserve group geometry (0.739208ms)
+✔ card padding participates in automatic score, strict overflow and whole-document pagination (299.234959ms)
+✔ accepted code uses rounded cells and preserves body compatibility without repeated explanation measurements (2.677334ms)
+✔ candidate penalties include complete code metadata and charge overflowing leaves once (9.908791ms)
+✔ strict ancestors reject code metadata paths and cannot be weakened by descendants (436.07075ms)
+✔ explicit code placement and weights remain authoritative even when metadata overflows (19.523417ms)
+✔ pagination preserves exact code bytes, metadata, ranges and floors across wide and portrait slides (370.271583ms)
+✔ irreducible code metadata rejects pagination even after earlier content or with an empty body (315.473166ms)
+✔ complete code parts preserve exact filename, language, body, whitespace and hard line boundaries (1.764125ms)
+✔ shorthand, empty source and absent metadata retain their source and generated-label distinction (0.253125ms)
+✔ long language labels and filenames are measured within their cell before allocating the body (5.991875ms)
+✔ wrapped whitespace and graphemes retain contiguous source offsets, including CRLF and blank final lines (2.409959ms)
+✔ tabs use measured space stops and never send control tabs to the font-width provider (0.538291ms)
+✔ readability floors scale once and body shrinking preserves all code content (0.256ms)
+✔ irreducible body and metadata failures remain explicit; strict mode does not return partial output (7.151ms)
+✔ invalid inner boxes never become invented one-pixel fits; malformed options reject (0.225583ms)
+✔ font trials stay bounded independently of canvas scale (8.254584ms)
+✔ opaque contrast follows unrounded sRGB luminance thresholds (1.222833ms)
+✔ chart marks retain passing colors and brighten/darken failing opaque palettes (19.586125ms)
+✔ bright and dark fills select readable inherited text without guessing alpha backdrops (0.093709ms)
+✔ explanation preserves geometry, source values and measurement calls (15.087208ms)
+✔ candidate penalties account for the score and report the selected flow (44.511583ms)
+✔ fixed modes and promoted regions retain placement with no invented search (0.50125ms)
+✔ reserved slots, candidate caps and empty slides are explicit (164.303375ms)
+✔ equal scores retain the first, lower-column candidate (2.704125ms)
+✔ unsupported internal fit stays visible and strict failures retain their explanation (1650.855166ms)
+▶ example catalog sanity
+  ✔ has at least one example (0.278292ms)
+  ✔ has at least one gallery (0.057292ms)
+  ✔ example categories include 'gallery' (0.043625ms)
+✔ example catalog sanity (0.800083ms)
+▶ every bundled example validates cleanly
+  ✔ example 'compliance-readiness-review' has the expected shape and validates without warnings (397.148959ms)
+  ✔ example 'contract-cycle-time-brief' has the expected shape and validates without warnings (3.796042ms)
+  ✔ example 'data-platform-migration-plan' has the expected shape and validates without warnings (1.164875ms)
+  ✔ example 'defect-escape-reduction-review' has the expected shape and validates without warnings (0.319041ms)
+  ✔ example 'demand-generation-campaign-brief' has the expected shape and validates without warnings (0.378ms)
+  ✔ example 'employee-town-hall-run-of-show' has the expected shape and validates without warnings (0.139583ms)
+  ✔ example 'engineering-capacity-planning' has the expected shape and validates without warnings (0.351375ms)
+  ✔ example 'enterprise-account-expansion-plan' has the expected shape and validates without warnings (0.1845ms)
+  ✔ example 'field-enablement-certification' has the expected shape and validates without warnings (0.202792ms)
+  ✔ example 'fy27-budget-tradeoff-deck' has the expected shape and validates without warnings (0.092917ms)
+  ✔ example 'identity-incident-executive-brief' has the expected shape and validates without warnings (0.13725ms)
+  ✔ example 'investor-relations-update' has the expected shape and validates without warnings (0.206458ms)
+  ✔ example 'model-governance-review' has the expected shape and validates without warnings (0.20725ms)
+  ✔ example 'onboarding-experience-redesign' has the expected shape and validates without warnings (0.065042ms)
+  ✔ example 'partner-ecosystem-launch-kit' has the expected shape and validates without warnings (0.05375ms)
+  ✔ example 'pricing-and-packaging-decision' has the expected shape and validates without warnings (0.185ms)
+  ✔ example 'product-roadmap-decision-review' has the expected shape and validates without warnings (0.182ms)
+  ✔ example 'renewal-save-plan' has the expected shape and validates without warnings (0.102583ms)
+  ✔ example 'revenue-forecast-inspection' has the expected shape and validates without warnings (0.179ms)
+  ✔ example 's-and-op-exception-review' has the expected shape and validates without warnings (0.197333ms)
+  ✔ example 'scope-3-reporting-readiness' has the expected shape and validates without warnings (0.125167ms)
+  ✔ example 'strategy-offsite-pre-read' has the expected shape and validates without warnings (0.186417ms)
+  ✔ example 'supplier-risk-heatmap' has the expected shape and validates without warnings (0.202583ms)
+  ✔ example 'support-deflection-program' has the expected shape and validates without warnings (0.107709ms)
+  ✔ example 'workplace-occupancy-reset' has the expected shape and validates without warnings (0.105916ms)
+  ✔ example 'data-storytelling-atlas' has the expected shape and validates without warnings (0.172791ms)
+  ✔ example 'kiosk-orientation-deck' has the expected shape and validates without warnings (0.184875ms)
+  ✔ example 'photo-essay-portfolio' has the expected shape and validates without warnings (0.172666ms)
+  ✔ example 'video-demo-sales-narrative' has the expected shape and validates without warnings (0.174417ms)
+  ✔ example 'visual-brand-system-sampler' has the expected shape and validates without warnings (0.10475ms)
+  ✔ example 'advising-retention-review' has the expected shape and validates without warnings (0.107541ms)
+  ✔ example 'alumni-giving-campaign' has the expected shape and validates without warnings (0.095ms)
+  ✔ example 'apprenticeship-partnership-deck' has the expected shape and validates without warnings (0.094875ms)
+  ✔ example 'athletics-budget-review' has the expected shape and validates without warnings (0.162041ms)
+  ✔ example 'campus-energy-action-brief' has the expected shape and validates without warnings (0.10275ms)
+  ✔ example 'curriculum-approval-brief' has the expected shape and validates without warnings (0.15975ms)
+  ✔ example 'district-literacy-acceleration-plan' has the expected shape and validates without warnings (0.056292ms)
+  ✔ example 'library-modernization-roadmap' has the expected shape and validates without warnings (29.2925ms)
+  ✔ example 'online-program-launch-plan' has the expected shape and validates without warnings (0.232709ms)
+  ✔ example 'research-grant-pitch' has the expected shape and validates without warnings (0.127458ms)
+  ✔ example 'school-safety-preparedness-brief' has the expected shape and validates without warnings (0.074334ms)
+  ✔ example 'special-education-services-plan' has the expected shape and validates without warnings (0.061875ms)
+  ✔ example 'stem-lab-funding-proposal' has the expected shape and validates without warnings (0.053834ms)
+  ✔ example 'student-mental-health-capacity-review' has the expected shape and validates without warnings (0.116166ms)
+  ✔ example 'workforce-pathway-partnership' has the expected shape and validates without warnings (0.2055ms)
+  ✔ example 'broadband-public-hearing-deck' has the expected shape and validates without warnings (0.165125ms)
+  ✔ example 'court-backlog-reduction-plan' has the expected shape and validates without warnings (0.099541ms)
+  ✔ example 'digital-services-modernization' has the expected shape and validates without warnings (0.317792ms)
+  ✔ example 'grant-equity-review' has the expected shape and validates without warnings (0.065458ms)
+  ✔ example 'housing-zoning-council-brief' has the expected shape and validates without warnings (0.1885ms)
+  ✔ example 'parks-master-plan-workshop' has the expected shape and validates without warnings (0.095708ms)
+  ✔ example 'police-training-program-update' has the expected shape and validates without warnings (0.093208ms)
+  ✔ example 'recycling-participation-campaign' has the expected shape and validates without warnings (0.172542ms)
+  ✔ example 'regulatory-risk-brief' has the expected shape and validates without warnings (0.100125ms)
+  ✔ example 'tax-portal-modernization' has the expected shape and validates without warnings (0.155167ms)
+  ✔ example 'transit-corridor-alternatives' has the expected shape and validates without warnings (0.152375ms)
+  ✔ example 'vaccination-outreach-briefing' has the expected shape and validates without warnings (0.088917ms)
+  ✔ example 'water-utility-capital-plan' has the expected shape and validates without warnings (0.15775ms)
+  ✔ example 'wildfire-evacuation-preparedness' has the expected shape and validates without warnings (0.150083ms)
+  ✔ example 'workforce-reskilling-initiative' has the expected shape and validates without warnings (0.175833ms)
+  ✔ example 'airline-disruption-recovery-review' has the expected shape and validates without warnings (0.151917ms)
+  ✔ example 'ambulatory-access-recovery-plan' has the expected shape and validates without warnings (0.058666ms)
+  ✔ example 'battery-line-supplier-readiness' has the expected shape and validates without warnings (0.144459ms)
+  ✔ example 'boutique-hotel-revenue-recovery' has the expected shape and validates without warnings (0.145375ms)
+  ✔ example 'branch-modernization-investment-case' has the expected shape and validates without warnings (0.055167ms)
+  ✔ example 'claims-triage-operating-model' has the expected shape and validates without warnings (0.049708ms)
+  ✔ example 'cold-chain-waste-reduction-review' has the expected shape and validates without warnings (0.196417ms)
+  ✔ example 'construction-safety-stand-down' has the expected shape and validates without warnings (0.179375ms)
+  ✔ example 'consulting-margin-recovery-plan' has the expected shape and validates without warnings (0.1ms)
+  ✔ example 'drive-thru-throughput-playbook' has the expected shape and validates without warnings (0.075959ms)
+  ✔ example 'fan-experience-operations-brief' has the expected shape and validates without warnings (0.064583ms)
+  ✔ example 'food-bank-distribution-capacity-plan' has the expected shape and validates without warnings (0.041458ms)
+  ✔ example 'grid-resilience-capital-plan' has the expected shape and validates without warnings (0.064209ms)
+  ✔ example 'managed-detection-market-update' has the expected shape and validates without warnings (0.037375ms)
+  ✔ example 'mixed-use-leasing-pipeline-review' has the expected shape and validates without warnings (0.116042ms)
+  ✔ example 'port-dwell-time-improvement-plan' has the expected shape and validates without warnings (0.109458ms)
+  ✔ example 'retail-launch-readiness-deck' has the expected shape and validates without warnings (0.070042ms)
+  ✔ example 'robotics-quality-escape-briefing' has the expected shape and validates without warnings (0.058291ms)
+  ✔ example 'rural-broadband-expansion-proposal' has the expected shape and validates without warnings (0.037083ms)
+  ✔ example 'satellite-maintenance-readiness-review' has the expected shape and validates without warnings (0.05625ms)
+  ✔ example 'streaming-churn-winback-strategy' has the expected shape and validates without warnings (0.057625ms)
+  ✔ example 'tailings-monitoring-investment-brief' has the expected shape and validates without warnings (0.103708ms)
+  ✔ example 'trial-enrollment-rescue-plan' has the expected shape and validates without warnings (0.070292ms)
+  ✔ example 'veterinary-staffing-stabilization' has the expected shape and validates without warnings (0.060208ms)
+  ✔ example 'water-stewardship-grower-brief' has the expected shape and validates without warnings (0.117292ms)
+  ✔ example 'arabic-digital-services-brief' has the expected shape and validates without warnings (0.064834ms)
+  ✔ example 'brazil-climate-adaptation-brief' has the expected shape and validates without warnings (0.067792ms)
+  ✔ example 'german-works-council-update' has the expected shape and validates without warnings (0.056542ms)
+  ✔ example 'india-rural-payments-pilot' has the expected shape and validates without warnings (0.035167ms)
+  ✔ example 'japan-market-entry-readout' has the expected shape and validates without warnings (0.034584ms)
+  ✔ example 'customer-qbr-renewal-deck' has the expected shape and validates without warnings (0.059875ms)
+  ✔ example 'data-incident-postmortem' has the expected shape and validates without warnings (0.051875ms)
+  ✔ example 'developer-conference-talk' has the expected shape and validates without warnings (0.051334ms)
+  ✔ example 'executive-workshop-facilitation' has the expected shape and validates without warnings (0.066041ms)
+  ✔ example 'manager-training-deck' has the expected shape and validates without warnings (0.14075ms)
+  ✔ example 'monthly-board-update' has the expected shape and validates without warnings (0.039792ms)
+  ✔ example 'policy-briefing-for-advisors' has the expected shape and validates without warnings (0.1135ms)
+  ✔ example 'product-launch-narrative' has the expected shape and validates without warnings (0.110958ms)
+  ✔ example 'research-findings-report' has the expected shape and validates without warnings (0.103333ms)
+  ✔ example 'seed-pitch-for-climate-risk-api' has the expected shape and validates without warnings (0.036541ms)
+  ✔ example 'asset-source-forms' has the expected shape and validates without warnings (0.121167ms)
+  ✔ example 'block-composition' has the expected shape and validates without warnings (0.073917ms)
+  ✔ example 'catalog-overrides' has the expected shape and validates without warnings (0.101375ms)
+  ✔ example 'chart-data-sources' has the expected shape and validates without warnings (0.03975ms)
+  ✔ example 'chart-type-sampler' has the expected shape and validates without warnings (0.077625ms)
+  ✔ example 'columns' has the expected shape and validates without warnings (0.082583ms)
+  ✔ example 'content-payload-matrix' has the expected shape and validates without warnings (0.192125ms)
+  ✔ example 'design-backgrounds' has the expected shape and validates without warnings (0.093416ms)
+  ✔ example 'dynamic-composition' has the expected shape and validates without warnings (0.176958ms)
+  ✔ example 'full-feature-tour' has the expected shape and validates without warnings (0.339084ms)
+  ✔ example 'grid-spans' has the expected shape and validates without warnings (0.098334ms)
+  ✔ example 'header-footer-logo-set' has the expected shape and validates without warnings (0.074625ms)
+  ✔ example 'language-and-writing' has the expected shape and validates without warnings (0.035583ms)
+  ✔ example 'media-and-follow-up' has the expected shape and validates without warnings (0.059834ms)
+  ✔ example 'metadata-array-forms' has the expected shape and validates without warnings (0.03025ms)
+  ✔ example 'metrics-quotes-timeline' has the expected shape and validates without warnings (0.049333ms)
+  ✔ example 'minimal' has the expected shape and validates without warnings (0.040959ms)
+  ✔ example 'narrative-beats' has the expected shape and validates without warnings (0.048333ms)
+  ✔ example 'promoted-region-grid' has the expected shape and validates without warnings (0.115166ms)
+  ✔ example 'rich-text-runs' has the expected shape and validates without warnings (0.081416ms)
+  ✔ example 'root-content' has the expected shape and validates without warnings (0.0355ms)
+  ✔ example 'rows-chart' has the expected shape and validates without warnings (0.066666ms)
+  ✔ example 'slide-design-overrides' has the expected shape and validates without warnings (0.074667ms)
+  ✔ example 'slide-sections' has the expected shape and validates without warnings (0.059542ms)
+  ✔ example 'table-and-code' has the expected shape and validates without warnings (0.065209ms)
+  ✔ example 'table-cell-types' has the expected shape and validates without warnings (0.0555ms)
+✔ every bundled example validates cleanly (446.948416ms)
+▶ galleries
+  ✔ gallery 'business-functions' is well-formed (0.056292ms)
+  ✔ gallery 'design-and-media' is well-formed (0.014833ms)
+  ✔ gallery 'education' is well-formed (0.013417ms)
+  ✔ gallery 'government' is well-formed (0.0135ms)
+  ✔ gallery 'industries' is well-formed (0.0205ms)
+  ✔ gallery 'international' is well-formed (0.013917ms)
+  ✔ gallery 'presentation-types' is well-formed (0.013584ms)
+  ✔ getExamplesByGallery matches gallery.examples length for the first gallery (0.0705ms)
+  ✔ getGallery resolves a known slug and returns undefined for a bogus one (0.029583ms)
+✔ galleries (0.32975ms)
+✔ getExample resolves a known slug (0.033ms)
+✔ getExamplesByCategory returns results for a known category (0.029584ms)
+▶ bundled docs
+  ✔ has at least one doc (0.097ms)
+  ✔ doc 'agent-skills' has required fields (0.023833ms)
+  ✔ doc 'catalog-schema-reference' has required fields (0.013041ms)
+  ✔ doc 'content-item-design-overrides' has required fields (0.012833ms)
+  ✔ doc 'content-payloads' has required fields (0.017041ms)
+  ✔ doc 'data-import' has required fields (0.0125ms)
+  ✔ doc 'design-resolution' has required fields (0.012083ms)
+  ✔ doc 'dynamic-composition' has required fields (0.012541ms)
+  ✔ doc 'ecosystem-development' has required fields (0.013ms)
+  ✔ doc 'evidence-2026-09-08-windows' has required fields (0.013958ms)
+  ✔ doc 'examples' has required fields (0.015834ms)
+  ✔ doc 'font-fidelity' has required fields (0.012625ms)
+  ✔ doc 'handoff-2026-09-08' has required fields (0.01325ms)
+  ✔ doc 'handoff-2026-09-10-wrap-up' has required fields (0.012208ms)
+  ✔ doc 'handoff-mac-owner-2026-09-10' has required fields (0.014791ms)
+  ✔ doc 'handoff-windows-native-2026-09-10' has required fields (0.013291ms)
+  ✔ doc 'handoff' has required fields (0.011542ms)
+  ✔ doc 'how-opf-works' has required fields (0.012916ms)
+  ✔ doc 'live-editor' has required fields (0.012167ms)
+  ✔ doc 'llm-authoring' has required fields (0.01275ms)
+  ✔ doc 'native-content-release-2026-09-09' has required fields (0.011167ms)
+  ✔ doc 'native-feature-matrix-2026-09-09' has required fields (0.013708ms)
+  ✔ doc 'open-ecosystem' has required fields (0.014541ms)
+  ✔ doc 'pr-backlog-2026-09-09' has required fields (0.032458ms)
+  ✔ doc 'release-process' has required fields (0.01225ms)
+  ✔ doc 'rich-text' has required fields (0.012291ms)
+  ✔ doc 'schema-reference' has required fields (0.012333ms)
+  ✔ doc 'security-2026-09-09' has required fields (0.023166ms)
+  ✔ doc 'table-text-colors' has required fields (0.011916ms)
+  ✔ doc slugs include 'schema-reference' and getDoc resolves known/unknown slugs (0.040875ms)
+✔ bundled docs (0.750166ms)
+▶ fenced JSON presentation examples embedded in docs
+  ✔ doc 'design-resolution' fenced JSON example #0 validates cleanly (0.095834ms)
+  ✔ doc 'design-resolution' fenced JSON example #1 validates cleanly (0.044292ms)
+  ✔ doc 'dynamic-composition' fenced JSON example #0 validates cleanly (0.04225ms)
+  ✔ doc 'how-opf-works' fenced JSON example #0 validates cleanly (0.026583ms)
+  ✔ doc 'how-opf-works' fenced JSON example #1 validates cleanly (0.045875ms)
+  ✔ doc 'how-opf-works' fenced JSON example #2 validates cleanly (0.027667ms)
+  ✔ doc 'how-opf-works' fenced JSON example #3 validates cleanly (0.109625ms)
+  ✔ doc 'llm-authoring' fenced JSON example #0 validates cleanly (0.047542ms)
+  ✔ at least 5 presentation examples are validated across docs (0.024084ms)
+✔ fenced JSON presentation examples embedded in docs (0.54375ms)
+▶ schema $ids
+  ✔ presentation schema has the canonical $id (0.273209ms)
+  ✔ audience schema has the canonical $id (0.057584ms)
+  ✔ socialPlatform schema has the canonical $id (0.041667ms)
+✔ schema $ids (0.80775ms)
+▶ catalog export shapes
+  ✔ audiences catalog is non-empty (0.125208ms)
+  ✔ tones catalog is non-empty (0.0395ms)
+  ✔ socialPlatforms catalog is non-empty (0.032208ms)
+  ✔ catalogs.audiences matches the audiences export length (0.045083ms)
+  ✔ catalogs.socialPlatforms matches the socialPlatforms export length (0.04475ms)
+  ✔ catalogs.chartTypes is non-empty (0.04625ms)
+  ✔ chartTypes catalog keeps 'united-kingdom' and drops the removed typo id (0.078083ms)
+  ✔ chartTypes catalogEntries entry has the expected schemaName and files (0.060292ms)
+  ✔ socialPlatforms catalogEntries entry has the expected schemaName (0.039583ms)
+  ✔ purposes catalog is non-empty (0.026041ms)
+  ✔ languages catalog includes English (US) and English (GB) with correct bcp47 tags (0.058333ms)
+✔ catalog export shapes (0.817ms)
+▶ catalog entries validate
+  ✔ catalog 'audiences' has records and its first record validates (96.662958ms)
+  ✔ catalog 'purposes' has records and its first record validates (3.700667ms)
+  ✔ catalog 'tones' has records and its first record validates (1.158542ms)
+  ✔ catalog 'themes' has records and its first record validates (12.415459ms)
+  ✔ catalog 'layouts' has records and its first record validates (7.516625ms)
+  ✔ catalog 'chartTypes' has records and its first record validates (43.192708ms)
+  ✔ catalog 'narratives' has records and its first record validates (2.005833ms)
+  ✔ catalog 'socialPlatforms' has records and its first record validates (6.064083ms)
+  ✔ catalog 'languages' has records and its first record validates (1.021542ms)
+  ✔ catalog 'colorSchemes' has records and its first record validates (0.9975ms)
+  ✔ catalog 'fontSchemes' has records and its first record validates (0.985416ms)
+✔ catalog entries validate (176.388166ms)
+▶ catalog cross-links resolve
+  ✔ audiences/executives has no broken cross-links (0.123584ms)
+  ✔ audiences/board has no broken cross-links (0.0315ms)
+  ✔ audiences/engineering-team has no broken cross-links (0.024666ms)
+  ✔ audiences/investors has no broken cross-links (0.021083ms)
+  ✔ audiences/customers has no broken cross-links (0.022791ms)
+  ✔ audiences/sales-team has no broken cross-links (0.025125ms)
+  ✔ audiences/marketing-team has no broken cross-links (0.018667ms)
+  ✔ audiences/all-hands has no broken cross-links (0.019209ms)
+  ✔ audiences/candidates has no broken cross-links (0.01775ms)
+  ✔ audiences/regulators has no broken cross-links (0.024125ms)
+  ✔ purposes/inform has no broken cross-links (0.02075ms)
+  ✔ purposes/decide has no broken cross-links (0.021709ms)
+  ✔ purposes/align has no broken cross-links (0.019334ms)
+  ✔ purposes/persuade has no broken cross-links (0.112583ms)
+  ✔ purposes/educate has no broken cross-links (0.833833ms)
+  ✔ purposes/report has no broken cross-links (0.056458ms)
+  ✔ purposes/pitch has no broken cross-links (0.027125ms)
+  ✔ purposes/sell has no broken cross-links (0.024042ms)
+  ✔ purposes/plan has no broken cross-links (1.114209ms)
+  ✔ tones/formal has no broken cross-links (0.221834ms)
+  ✔ tones/casual has no broken cross-links (0.096542ms)
+  ✔ tones/inspirational has no broken cross-links (0.047667ms)
+  ✔ tones/technical has no broken cross-links (0.124375ms)
+  ✔ tones/persuasive has no broken cross-links (0.063917ms)
+  ✔ tones/authoritative has no broken cross-links (0.041ms)
+  ✔ tones/conversational has no broken cross-links (0.03475ms)
+  ✔ invalid en-UK language catalog record is rejected with a helpful message (0.29625ms)
+  ✔ broken cross-links in a catalog record warn, never error (0.604333ms)
+✔ catalog cross-links resolve (7.277709ms)
+▶ repo readme export
+  ✔ repoReadme ships as a non-trivial string mentioning the format name (0.392458ms)
+✔ repo readme export (0.481667ms)
+✔ public generated payload declarations agree with closed schema fields (1554.502917ms)
+✔ composition accepts complete metric geometry against its rounded cell and aliases the value fit (11.386542ms)
+✔ metric scoring includes long metadata and charges each failing leaf once (7.825375ms)
+✔ slide alignment overrides host alignment for complete metric parts (0.321417ms)
+✔ strict ancestors reject complete metric field paths without changing source (1970.874041ms)
+✔ explicit metric placement and weights remain authoritative despite overflowing metadata (57.845292ms)
+✔ atomic metric pagination preserves scalar/metadata types and persists its readable floor (165.037333ms)
+✔ irreducible atomic metrics reject all pagination output including empty values after earlier content (179.657625ms)
+✔ metric value, unit, labels, zero delta and trend retain their own editable source paths (3.956541ms)
+✔ short units stay next to the value on the same baseline; long units and values stack (146.074458ms)
+✔ inline fitting tries a smaller single-line value before rejecting a compact readable metric (6.435667ms)
+✔ metric alignment positions the inline pair together and records exact origins for every source line (1.963375ms)
+✔ metadata borrows spare primary space before reducing type and exposes resolved style paths (0.629083ms)
+✔ explicit readability floors raise nominal labels and remain invariant across canvas scales (2.619959ms)
+✔ irreducible metadata retains all source and strict rejection reports its actual path (4.765334ms)
+✔ empty optional fields retain source without blank spacing and an empty value stays targetable (0.230708ms)
+✔ metric whitespace, tabs and Unicode retain exact line and segment boundaries (0.898083ms)
+✔ invalid input, failed measurement and non-finite geometry reject without plausible substitute fits (0.477833ms)
+✔ difficult metrics use a bounded deterministic candidate search independent of canvas scale (536.631875ms)
+✔ metric outlines preserve exact tabs and whitespace while containing overhangs, tall ink and inline baselines (10.72975ms)
+✔ metric outline-aware fitting retains the readability floor and rejects irreducible ink (5.183417ms)
+✔ zero outline clearance is explicit and width-only providers retain prior geometry (0.454084ms)
+✔ invalid metric outline providers and padding reject instead of silently accepting width-only fits (0.258792ms)
+✔ plain source ranges retain whitespace, hard breaks and explicit tabs at every width (5.384542ms)
+✔ nonbreaking prose tokens stay intact and overflow at the readability floor (0.266833ms)
+✔ accepted scalar placement unions text outlines at tab stops without shaping controls (1.296416ms)
+▶ layoutPreviews export
+  ✔ is a non-empty record of HTML strings (0.378375ms)
+✔ layoutPreviews export (1.387833ms)
+▶ layoutPreviewIndex export
+  ✔ records match Object.keys(layoutPreviews) exactly (0.65325ms)
+  ✔ preview record 'action-plan' bytes match its source file's UTF-8 byte length (0.32625ms)
+  ✔ preview record 'agenda' bytes match its source file's UTF-8 byte length (0.08ms)
+  ✔ preview record 'appendix-index' bytes match its source file's UTF-8 byte length (0.064ms)
+  ✔ preview record 'architecture-stack' bytes match its source file's UTF-8 byte length (0.0555ms)
+  ✔ preview record 'assumptions-dependencies' bytes match its source file's UTF-8 byte length (0.0555ms)
+  ✔ preview record 'before-after' bytes match its source file's UTF-8 byte length (0.079ms)
+  ✔ preview record 'benchmark-target-table' bytes match its source file's UTF-8 byte length (0.062417ms)
+  ✔ preview record 'bullet-list' bytes match its source file's UTF-8 byte length (0.083458ms)
+  ✔ preview record 'business-model-canvas' bytes match its source file's UTF-8 byte length (0.072041ms)
+  ✔ preview record 'capability-map' bytes match its source file's UTF-8 byte length (0.054083ms)
+  ✔ preview record 'case-study' bytes match its source file's UTF-8 byte length (0.0475ms)
+  ✔ preview record 'chapter-recap' bytes match its source file's UTF-8 byte length (0.041208ms)
+  ✔ preview record 'circular-lifecycle' bytes match its source file's UTF-8 byte length (0.037917ms)
+  ✔ preview record 'comparison' bytes match its source file's UTF-8 byte length (0.035583ms)
+  ✔ preview record 'competitive-landscape' bytes match its source file's UTF-8 byte length (0.047041ms)
+  ✔ preview record 'customer-journey' bytes match its source file's UTF-8 byte length (0.039875ms)
+  ✔ preview record 'customer-logos' bytes match its source file's UTF-8 byte length (0.041458ms)
+  ✔ preview record 'dashboard' bytes match its source file's UTF-8 byte length (0.036542ms)
+  ✔ preview record 'data-visualization' bytes match its source file's UTF-8 byte length (0.044333ms)
+  ✔ preview record 'decision-tree' bytes match its source file's UTF-8 byte length (0.0375ms)
+  ✔ preview record 'detailed-data-table' bytes match its source file's UTF-8 byte length (0.040292ms)
+  ✔ preview record 'ecosystem-map' bytes match its source file's UTF-8 byte length (0.035583ms)
+  ✔ preview record 'executive-decision' bytes match its source file's UTF-8 byte length (0.039292ms)
+  ✔ preview record 'executive-summary' bytes match its source file's UTF-8 byte length (0.038209ms)
+  ✔ preview record 'faq' bytes match its source file's UTF-8 byte length (0.048958ms)
+  ✔ preview record 'feature-comparison-matrix' bytes match its source file's UTF-8 byte length (0.058333ms)
+  ✔ preview record 'forecast-scenario' bytes match its source file's UTF-8 byte length (0.050042ms)
+  ✔ preview record 'funnel-pyramid' bytes match its source file's UTF-8 byte length (0.040417ms)
+  ✔ preview record 'gantt-project-plan' bytes match its source file's UTF-8 byte length (0.037667ms)
+  ✔ preview record 'geographic-map' bytes match its source file's UTF-8 byte length (0.036708ms)
+  ✔ preview record 'heatmap-cohort' bytes match its source file's UTF-8 byte length (0.081833ms)
+  ✔ preview record 'hub-and-spoke' bytes match its source file's UTF-8 byte length (0.038625ms)
+  ✔ preview record 'icon-grid' bytes match its source file's UTF-8 byte length (0.0375ms)
+  ✔ preview record 'image-focus' bytes match its source file's UTF-8 byte length (0.035208ms)
+  ✔ preview record 'key-takeaway' bytes match its source file's UTF-8 byte length (0.034542ms)
+  ✔ preview record 'kpi-scorecard' bytes match its source file's UTF-8 byte length (0.040667ms)
+  ✔ preview record 'logic-tree' bytes match its source file's UTF-8 byte length (0.036ms)
+  ✔ preview record 'market-size' bytes match its source file's UTF-8 byte length (0.035625ms)
+  ✔ preview record 'matrix-quadrant' bytes match its source file's UTF-8 byte length (0.041417ms)
+  ✔ preview record 'network-dependency-map' bytes match its source file's UTF-8 byte length (0.043042ms)
+  ✔ preview record 'one-column-explainer' bytes match its source file's UTF-8 byte length (0.044291ms)
+  ✔ preview record 'org-chart' bytes match its source file's UTF-8 byte length (0.039416ms)
+  ✔ preview record 'persona-grid' bytes match its source file's UTF-8 byte length (0.042334ms)
+  ✔ preview record 'photo-grid' bytes match its source file's UTF-8 byte length (0.042791ms)
+  ✔ preview record 'pricing-table' bytes match its source file's UTF-8 byte length (0.036ms)
+  ✔ preview record 'process-flow' bytes match its source file's UTF-8 byte length (0.079584ms)
+  ✔ preview record 'product-feature' bytes match its source file's UTF-8 byte length (0.038167ms)
+  ✔ preview record 'pros-cons' bytes match its source file's UTF-8 byte length (0.039416ms)
+  ✔ preview record 'qa-discussion' bytes match its source file's UTF-8 byte length (0.039875ms)
+  ✔ preview record 'quote-highlight' bytes match its source file's UTF-8 byte length (0.049833ms)
+  ✔ preview record 'raci-matrix' bytes match its source file's UTF-8 byte length (0.041291ms)
+  ✔ preview record 'risk-heatmap' bytes match its source file's UTF-8 byte length (0.032792ms)
+  ✔ preview record 'roadmap' bytes match its source file's UTF-8 byte length (0.031875ms)
+  ✔ preview record 'screenshot-walkthrough' bytes match its source file's UTF-8 byte length (0.042667ms)
+  ✔ preview record 'section-divider' bytes match its source file's UTF-8 byte length (0.122167ms)
+  ✔ preview record 'single-message-statement' bytes match its source file's UTF-8 byte length (0.226041ms)
+  ✔ preview record 'stats-metrics' bytes match its source file's UTF-8 byte length (0.1545ms)
+  ✔ preview record 'status-rag' bytes match its source file's UTF-8 byte length (1.765167ms)
+  ✔ preview record 'swimlane-process' bytes match its source file's UTF-8 byte length (0.332875ms)
+  ✔ preview record 'swot-analysis' bytes match its source file's UTF-8 byte length (0.185959ms)
+  ✔ preview record 'team-bio' bytes match its source file's UTF-8 byte length (0.982625ms)
+  ✔ preview record 'testimonial-grid' bytes match its source file's UTF-8 byte length (0.416291ms)
+  ✔ preview record 'thank-you-cta' bytes match its source file's UTF-8 byte length (0.410834ms)
+  ✔ preview record 'three-column' bytes match its source file's UTF-8 byte length (0.216833ms)
+  ✔ preview record 'timeline' bytes match its source file's UTF-8 byte length (0.202834ms)
+  ✔ preview record 'title-slide' bytes match its source file's UTF-8 byte length (0.151208ms)
+  ✔ preview record 'two-column' bytes match its source file's UTF-8 byte length (0.128709ms)
+  ✔ preview record 'venn-overlap' bytes match its source file's UTF-8 byte length (0.13475ms)
+  ✔ preview record 'waterfall-bridge' bytes match its source file's UTF-8 byte length (0.141625ms)
+  ✔ preview record 'wheel-radial' bytes match its source file's UTF-8 byte length (0.107333ms)
+✔ layoutPreviewIndex export (10.286416ms)
+▶ getLayoutPreview
+  ✔ returns the HTML for a known slug (0.165375ms)
+  ✔ returns undefined for a bogus slug (0.089083ms)
+✔ getLayoutPreview (0.379667ms)
+▶ hasLayoutPreview
+  ✔ returns true for a known slug (0.089083ms)
+  ✔ returns false for a bogus slug (0.043334ms)
+✔ hasLayoutPreview (0.198375ms)
+✔ accepted quote geometry includes all parts without changing source or re-measuring for explanations (2.638375ms)
+✔ automatic candidates account for footer fit and choose the arrangement that keeps it readable (6.169208ms)
+✔ strict ancestors reject a quote body diagnostic below the leaf path (490.052333ms)
+✔ strict path matching respects component boundaries rather than numeric prefixes (379.229334ms)
+✔ pagination preserves quote body, repeated metadata, ranges and the accepted readability floor (1625.101542ms)
+✔ irreducible footer overflow rejects pagination without mutating or returning partial content (17.064667ms)
+✔ complete quote layout preserves source ranges, requested/resolved styles and legacy readable geometry (1.756208ms)
+✔ shorthand and empty metadata preserve schema paths without an invented footer (0.27575ms)
+✔ body and footer share available space before shrinking text or changing the outer arrangement (9.912458ms)
+✔ long footer, body/footer collision and strict rejection remain explicit without source truncation (155.228708ms)
+✔ tiny cells retain invalid available dimensions and never measure an invented fitting box (1.177916ms)
+✔ explicit readability floors are respected after scaling, including above nominal footer size (0.232666ms)
+✔ invalid content, geometry, scales and policies fail before reporting a usable layout (0.157042ms)
+✔ plain, rich, list description, marker and table glyphs honor selected floors (19.708667ms)
+✔ short headings and nested content use the scaled floor with or without outlines (6.677375ms)
+✔ irreducible content reports overflow and bounded fitting always evaluates the floor (65.204833ms)
+✔ pagination retains source and enforces the selected floor on table cells and descriptions (366.090459ms)
+✔ rich table cells and headers use canonical runs while scalar values remain valid (306.68375ms)
+✔ table overflow uses run metrics and pagination preserves whole rich cells (71.175291ms)
+▶ spec file manifest
+  ✔ spec-files subpath export matches the main index's specFileEntries (0.593792ms)
+  ✔ specFilePaths includes the expected canonical paths (0.160292ms)
+  ✔ openapi.yaml manifest entry has the expected kind, mediaType, and packagePath (0.17675ms)
+✔ spec file manifest (1.862792ms)
+▶ dist/spec assets
+  ✔ dist/spec ships openapi.yaml, the presentation schema, and the layouts catalog index (0.230083ms)
+  ✔ dist/spec/openapi.yaml starts with an 'openapi:' declaration (0.235459ms)
+  ✔ dist/spec/schemas/opf.schema.json $id matches the exported presentation schema's $id (0.60125ms)
+✔ dist/spec assets (1.180958ms)
+✔ styled values coexist with scalar, rich, empty and merged header cells (384.831916ms)
+✔ schema rejects ambiguous values and unsupported style properties (6.591375ms)
+✔ spans reject hidden content, missing covered positions, overlap and header crossing (6.485125ms)
+✔ span rectangles preserve dense column indexes and editable value paths (1.351208ms)
+✔ vertical alignment and padding use the full merged rectangle (0.399792ms)
+✔ staggered vertical merges reserve enough space for every anchor (0.2315ms)
+✔ pagination preserves vertical merge groups, rich styles, headers and source ranges (38.771ms)
+✔ overlapping merge groups are atomic, and oversized groups fail without partial output (1.681667ms)
+✔ short table rows preserve baseline geometry and missing cells (1.590625ms)
+✔ wrapped and rich multiline rows grow into available space (3.699084ms)
+✔ constrained tables consume spare row height before reporting real overflow (0.279416ms)
+✔ readability settings and mixed-font metrics govern row fitting (0.1935ms)
+✔ pagination retains complete multiline rows and repeated headers (350.285458ms)
+✔ mixed-size table paragraphs reserve the native uniform line spacing (0.414834ms)
+✔ spare height in short rows is removed before any font shrinking (0.303542ms)
+✔ optional outline providers distinguish unknown measurement from no ink (2.7225ms)
+✔ shared placement respects alignment and contains negative bearings and right overhangs (0.660958ms)
+✔ tall outlines move following baselines as a group without intersecting (0.183042ms)
+✔ missing ink preserves empty lines; irreducible width or height remains overflow (0.149917ms)
+✔ malformed placements and providers reject invalid numeric claims (0.752792ms)
+✔ composition preserves width-only behavior and exposes the actual outline policy (2.337667ms)
+✔ outline failures participate in bounded fitting, candidate scores and strict errors (4.044792ms)
+✔ presentation pagination forwards outline padding and effective title alignment (321.8285ms)
+✔ invalid outline coordinates fail instead of silently claiming fit (0.124208ms)
+✔ timeline parts keep exact array/object source paths, whitespace, selected floors and outlined ink (6.782291ms)
+✔ timeline tries a vertical arrangement before accepting unreadable narrow labels (0.341458ms)
+✔ timeline rejects irreducible fields and invalid inputs with bounded attempts and source diagnostics (5.791708ms)
+✔ composition measures nested timelines and pagination preserves atomic event order and metadata (397.497083ms)
+▶ basic presentation validation entry points
+  ✔ well-formed presentation validates via validatePresentation (349.029916ms)
+  ✔ well-formed presentation validates via validate(doc, 'presentation') (0.126583ms)
+  ✔ well-formed presentation passes assertValid without throwing (0.122417ms)
+✔ basic presentation validation entry points (349.756916ms)
+▶ presentation shapes that must validate
+  ✔ Root Payload (0.230833ms)
+  ✔ Array Metadata (0.109333ms)
+  ✔ Slide Design (1.029125ms)
+  ✔ Inline Language (0.081375ms)
+  ✔ Inline Audience Purpose Tone (0.151625ms)
+  ✔ Columns (1.004084ms)
+  ✔ Rows (9.334292ms)
+  ✔ Chart And Table Objects (0.795458ms)
+  ✔ Chart Data Source (0.515583ms)
+  ✔ Grid (0.147584ms)
+  ✔ Blocks (0.205208ms)
+  ✔ Rich Text (0.059166ms)
+  ✔ Bullets (0.297042ms)
+  ✔ Media Source String Forms (0.843875ms)
+  ✔ Code Block (0.071625ms)
+  ✔ Metric Quote Timeline (0.258583ms)
+  ✔ Implicit Text List Blocks (0.058166ms)
+  ✔ Implicit Text Bullets List Blocks (0.055083ms)
+  ✔ Implicit Mixed Content Blocks (0.067125ms)
+  ✔ Singular Audience Text (0.053083ms)
+✔ presentation shapes that must validate (15.742833ms)
+▶ presentation shapes that must be rejected
+  ✔ Overlap (0.306708ms)
+  ✔ Bad Span (0.075042ms)
+  ✔ Root Title (root-level "title" field is rejected) (0.044167ms)
+  ✔ Unknown Slide Field (4.594333ms)
+  ✔ Mixed Root And Regions (0.176917ms)
+  ✔ Missing List Items (0.069708ms)
+  ✔ Missing Image Source (0.042167ms)
+  ✔ Missing Video Source (0.033042ms)
+  ✔ Missing Chart Payload (0.031916ms)
+  ✔ Missing Chart Data (0.055708ms)
+  ✔ Old Chart Data Shape Rejected (0.063083ms)
+  ✔ Missing Table Payload (0.030083ms)
+  ✔ Removed Loose Chart Fields (0.040167ms)
+  ✔ Removed Loose Table Fields (0.044666ms)
+  ✔ Removed Table Headers Field (0.091792ms)
+  ✔ Removed Chart Data Asset Field (0.053292ms)
+  ✔ Image Array Rejected (0.047875ms)
+  ✔ Video Array Rejected (0.041667ms)
+  ✔ Missing Asset Src (0.034875ms)
+  ✔ Removed Asset Type Field (0.056667ms)
+  ✔ Missing List Item Text (0.047167ms)
+  ✔ Bullet Description Rejected (0.046334ms)
+  ✔ Removed Runs Field (0.0325ms)
+  ✔ Removed Src Field (0.049459ms)
+  ✔ Renamed Design Overrides (0.033667ms)
+  ✔ Removed Loose Code Language Field (0.040542ms)
+  ✔ Missing Code Source (0.041167ms)
+  ✔ Missing Metric Payload (0.031334ms)
+  ✔ Missing Metric Value (0.040666ms)
+  ✔ Removed Loose Metric Fields (0.033625ms)
+  ✔ Missing Quote Payload (0.026125ms)
+  ✔ Missing Quote Text (0.05075ms)
+  ✔ Removed Loose Quote Fields (0.038584ms)
+  ✔ Missing Timeline Payload (0.028833ms)
+  ✔ Missing Timeline Event What (0.045ms)
+  ✔ Removed Loose Events Field (0.031875ms)
+  ✔ Removed Placeholder Type (0.027583ms)
+  ✔ Removed Prompt Field (0.0645ms)
+  ✔ Removed Expected Type Field (0.030042ms)
+  ✔ Removed Group Type (0.23175ms)
+  ✔ Removed Children Field (0.634125ms)
+  ✔ Nested Blocks Field (0.75275ms)
+  ✔ Removed Shape Type (0.625041ms)
+  ✔ Removed Shape Field (0.08725ms)
+  ✔ Explicit Type Mixed Payload Kinds (0.05925ms)
+  ✔ Region Mixed Payload Kinds (0.07075ms)
+  ✔ Incomplete Language (0.053916ms)
+  ✔ Incomplete Audience (0.172833ms)
+  ✔ Incomplete Purpose (0.326667ms)
+  ✔ Incomplete Tone (0.279667ms)
+  ✔ Invalid UK English Tag (0.153084ms)
+  ✔ Fractional Duration (0.74625ms)
+✔ presentation shapes that must be rejected (11.636208ms)
+▶ catalog-id warning behavior
+  ✔ unknown narrative id warns but does not invalidate (0.920541ms)
+  ✔ known narrative id produces no warnings (0.096375ms)
+  ✔ object-form narrative with unknown id is a custom inline narrative, not a broken reference (0.092958ms)
+  ✔ unknown design references warn at their respective paths (2.374125ms)
+  ✔ unknown chart type id warns at the chart type path (1.804375ms)
+  ✔ inline catalog record legitimizes an id the bundled catalogs don't know (0.875542ms)
+  ✔ custom catalog source legitimizes an id the bundled catalogs don't know (0.181ms)
+✔ catalog-id warning behavior (6.641833ms)
+✔ Windows package invocation preserves literal arguments and ignores the other manager (53.645834ms)
+✔ local package links build through real npm and can replace existing junctions (1350.286583ms)
+✔ local linking refuses a node_modules parent that resolves outside its checkout (46.030833ms)
+ℹ tests 500
+ℹ suites 20
+ℹ pass 500
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2982.75925
+Composition: geometry, preservation, responsive grids, weights, regions, diagnostics and schemas passed.
+Nested groups: containment, source paths, region composition, inheritance, strict overflow and depth guards passed.
+Pagination: exact text/rich-run preservation, groups, lists, tables, regions, mappings, IDs, limits and fit passed.
+Data import passed 40 parsing, preservation, mapping, and error checks.
+Rich text passed 16 shared-layout checks.
+Lists passed: rich runs, descriptions, nesting, hanging indents, consistent shrink, source paths, Unicode, overflow and exact pagination.
+
+> openpresentation-workspace@ test:cli /Users/michael/.codex/worktrees/c193/opf
+> pnpm --filter @openpresentation/cli test
+
+
+> @openpresentation/cli@0.7.0 test /Users/michael/.codex/worktrees/c193/opf/packages/cli
+> pnpm build && node ../../scripts/run-node-tests.mjs && node test/cli.mjs
+
+
+> @openpresentation/cli@0.7.0 build /Users/michael/.codex/worktrees/c193/opf/packages/cli
+> pnpm --filter @openpresentation/opf build && tsup
+
+
+> @openpresentation/opf@0.9.0 build /Users/michael/.codex/worktrees/c193/opf/packages/javascript
+> pnpm run generate && tsup && node scripts/copy-spec.mjs
+
+
+> @openpresentation/opf@0.9.0 generate /Users/michael/.codex/worktrees/c193/opf/packages/javascript
+> node scripts/generate.mjs && node scripts/generate-previews.mjs && node scripts/generate-content.mjs
+
+Generated src/generated/previews.ts (70 previews)
+Generated src/generated/examples.ts (126 examples, 7 galleries)
+Generated src/generated/docs.ts (28 docs)
+Generated src/generated/repo-readme.ts (11388 bytes)
+CLI Building entry: {"data":"src/data.ts","pagination":"src/pagination.ts","composition":"src/composition.ts","index":"src/index.ts","schemas":"src/schemas.ts","catalogs":"src/catalogs.ts","validator":"src/validator.ts","types":"src/types.ts","spec-files":"src/spec-files.ts","previews":"src/previews.ts","examples":"src/examples.ts","docs":"src/docs.ts","repo-readme":"src/repo-readme.ts"}
+CLI Using tsconfig: tsconfig.json
+CLI tsup v8.5.1
+CLI Using tsup config: /Users/michael/.codex/worktrees/c193/opf/packages/javascript/tsup.config.ts
+CLI Target: es2022
+CLI Cleaning output folder
+ESM Build start
+Generated an empty chunk: "types".
+DTS Build start
+ESM dist/spec-files.js     85.00 B
+ESM dist/data.js           95.00 B
+ESM dist/index.js          1.37 KB
+ESM dist/repo-readme.js    11.47 KB
+ESM dist/composition.js    420.00 B
+ESM dist/previews.js       130.00 B
+ESM dist/schemas.js        202.00 B
+ESM dist/chunk-SOSOBKQ2.js 6.52 KB
+ESM dist/chunk-KOC4AH2F.js 12.98 KB
+ESM dist/catalogs.js       238.00 B
+ESM dist/chunk-OZULJBSG.js 117.86 KB
+ESM dist/chunk-DCJ2ZESA.js 27.16 KB
+ESM dist/validator.js      267.00 B
+ESM dist/chunk-GQSK3T7X.js 219.58 KB
+ESM dist/types.js          1.00 B
+ESM dist/chunk-BAWLYSUN.js 85.39 KB
+ESM dist/chunk-TWMRZ43O.js 499.00 KB
+ESM dist/docs.js           517.63 KB
+ESM dist/pagination.js     215.00 B
+ESM dist/chunk-PIQXLBBJ.js 108.89 KB
+ESM dist/examples.js       3.48 MB
+ESM ⚡️ Build success in 301ms
+DTS ⚡️ Build success in 2103ms
+DTS dist/index.d.ts                 3.05 KB
+DTS dist/data.d.ts                  1005.00 B
+DTS dist/pagination.d.ts            2.26 KB
+DTS dist/previews.d.ts              1.71 KB
+DTS dist/repo-readme.d.ts           139.00 B
+DTS dist/examples.d.ts              2.09 KB
+DTS dist/docs.d.ts                  671.00 B
+DTS dist/composition.d.ts           22.86 KB
+DTS dist/validator.d.ts             1.54 KB
+DTS dist/spec-files.d.ts            19.57 KB
+DTS dist/schemas.d.ts               314.00 B
+DTS dist/catalogs.d.ts              454.00 B
+DTS dist/types.d.ts                 416.00 B
+DTS dist/presentation-BMTdX6O1.d.ts 113.38 KB
+DTS dist/schemas--QRVBhU1.d.ts      8.84 KB
+DTS dist/catalogs-BnnkUX9O.d.ts     46.31 KB
+CLI Building entry: {"index":"src/index.ts"}
+CLI Using tsconfig: tsconfig.json
+CLI tsup v8.5.1
+CLI Using tsup config: /Users/michael/.codex/worktrees/c193/opf/packages/cli/tsup.config.ts
+CLI Target: node24
+CLI Cleaning output folder
+ESM Build start
+ESM dist/index.js     1.21 MB
+ESM dist/index.js.map 1.89 MB
+ESM ⚡️ Build success in 44ms
+▶ opf validate
+  ✔ validates a well-formed deck with exit code 0 and reports valid: true (110.315083ms)
+  ✔ rejects an invalid deck with a non-zero exit code and reports errors (107.920834ms)
+  ✔ reports a read/parse error and exits 2 for a nonexistent file (42.479333ms)
+  ✔ prints usage and exits 2 when 'validate' is called without a file argument (43.454917ms)
+✔ opf validate (304.707208ms)
+▶ opf usage
+  ✔ prints help and exits 0 with no arguments (46.52425ms)
+  ✔ prints usage and exits 2 for an unknown command (41.441333ms)
+✔ opf usage (88.08675ms)
+▶ opf catalogs
+  ✔ lists every bundled catalog kind with its record count (43.026417ms)
+✔ opf catalogs (43.115417ms)
+▶ opf schemas
+  ✔ lists every bundled schema name, file, and $id (41.701208ms)
+✔ opf schemas (41.782833ms)
+✔ managed skills install, idempotence, safe update and recoverable previous files (22.267833ms)
+✔ unmanaged destinations, links and another installer lock are preserved (8.809666ms)
+✔ CLI bundles all six complete skills and advertises the actual npx command (344.203084ms)
+ℹ tests 11
+ℹ suites 4
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 539.11425
+CLI passed 70 command checks: file preservation, patch operations, validation, pipes, schema lookup, pagination.
+
+> openpresentation-workspace@ check:text /Users/michael/.codex/worktrees/c193/opf
+> node scripts/check-text-integrity.mjs
+
+{
+  "valid": true,
+  "files": 3663,
+  "binaryImages": 6387,
+  "binaryDocuments": 497,
+  "binaryFonts": 43
+}
+
+> openpresentation-workspace@ check:spec /Users/michael/.codex/worktrees/c193/opf
+> node scripts/check-spec-integrity.mjs
+
+[b] chart-types: skipped (no matching root $def; chart-type is referenced as a bare string, not an inline object)
+[b] layouts: skipped (no matching root $def; layout is referenced as a bare string, not an inline object)
+[b] social-platforms: skipped (no matching root $def; social-platform is referenced as a bare string, not an inline object)
+{
+  "valid": true,
+  "catalogKinds": 11
+}

@@ -1,0 +1,148 @@
+$ pnpm prepare:opf-browser && pnpm sync:opf-spec && next build
+$ node scripts/prepare-opf-browser.mjs
+Prepared 33 licensed OPF font faces from installed packages.
+$ node --experimental-strip-types scripts/sync-opf-spec.ts
+▲ Next.js 16.3.4 (Turbopack)
+✓ Running next.config.ts took 1166ms
+- Experiments (use with caution):
+  ✓ globalNotFound
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 12.0s
+  Running TypeScript ...
+  Finished TypeScript in 7.4s ...
+  Collecting page data using 9 workers ...
+  Generating static pages using 9 workers (0/214) ...
+  Generating static pages using 9 workers (53/214) 
+  Generating static pages using 9 workers (106/214) 
+  Generating static pages using 9 workers (160/214) 
+✓ Generating static pages using 9 workers (214/214) in 933ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ○ /.well-known/mcp/server-card.json
+├ ƒ /account/api-keys
+├ ƒ /account/org-api-keys
+├ ƒ /account/organization
+├ ƒ /api/checkout
+├ ƒ /api/mcp
+├ ○ /api/openapi.json
+├ ƒ /api/v1/author
+├ ƒ /api/v1/author/export
+├ ƒ /api/v1/author/follow-ups
+├ ƒ /api/v1/author/gallery-sources
+├ ƒ /api/v1/author/gallery-sources/[sourceId]
+├ ƒ /api/v1/author/runs/[runId]
+├ ƒ /api/v1/author/threads
+├ ƒ /api/v1/author/threads/[threadId]
+├ ƒ /api/v1/author/threads/[threadId]/messages
+├ ƒ /api/v1/author/threads/[threadId]/tools
+├ ƒ /api/v1/author/tools
+├ ƒ /api/v1/convert
+├ ƒ /api/v1/generate
+├ ƒ /api/v1/health
+├ ƒ /api/v1/parse
+├ ƒ /api/v1/parse/[parseId]/metadata
+├ ƒ /api/v1/parse/[parseId]/slides/[index]
+├ ƒ /api/v1/parse/[parseId]/text
+├ ƒ /api/v1/preview
+├ ƒ /api/v1/render
+├ ƒ /api/v1/validate
+├ ƒ /api/v1/webhooks
+├ ƒ /api/v1/webhooks/[id]
+├ ƒ /api/webhook
+├ ○ /author
+├ ƒ /billing
+├ ○ /cancel
+├ ƒ /dashboard
+├ ○ /decoder
+├ ○ /docs
+├ ○ /docs/api
+├ ○ /docs/api/llms.txt
+├ ○ /docs/cli
+├ ○ /docs/mcp
+├ ○ /docs/mcp/llms.txt
+├ ○ /docs/opf
+├ ○ /docs/opf-toolkit
+├ ○ /docs/registry
+├ ○ /docs/sdk/go
+├ ○ /docs/sdk/python
+├ ○ /docs/sdk/typescript
+├ ○ /gallery
+├ ○ /gallery/audiences
+├   /gallery/audiences/[id]
+│ ├ ● /gallery/audiences/executives
+│ ├ ● /gallery/audiences/board
+│ ├ ● /gallery/audiences/engineering-team
+│ └ ● [+7 more paths]
+├ ○ /gallery/charts
+├ ○ /gallery/color-schemes
+├   /gallery/color-schemes/[slug]
+│ ├ ● /gallery/color-schemes/corporate-blue
+│ ├ ● /gallery/color-schemes/deep-purple
+│ ├ ● /gallery/color-schemes/steel-blue
+│ └ ● [+11 more paths]
+├ ○ /gallery/font-schemes
+├   /gallery/font-schemes/[type]
+│ ├ ● /gallery/font-schemes/sans-serif
+│ ├ ● /gallery/font-schemes/serif
+│ ├ ● /gallery/font-schemes/monospace
+│ └ ● [+2 more paths]
+├ ○ /gallery/languages
+├   /gallery/languages/[id]
+│ ├ ● /gallery/languages/afrikaans
+│ ├ ● /gallery/languages/albanian
+│ ├ ● /gallery/languages/amharic
+│ └ ● [+90 more paths]
+├ ○ /gallery/layouts
+├ ○ /gallery/layouts/previews
+├ ○ /gallery/narratives
+├   /gallery/narratives/[slug]
+│ ├ ● /gallery/narratives/classic-story
+│ ├ ● /gallery/narratives/challenge-resolution
+│ ├ ● /gallery/narratives/persuasive-sales
+│ └ ● [+7 more paths]
+├ ○ /gallery/socials
+├   /gallery/socials/[id]
+│ ├ ● /gallery/socials/linkedin
+│ ├ ● /gallery/socials/x
+│ ├ ● /gallery/socials/github
+│ └ ● [+7 more paths]
+├ ○ /gallery/themes
+├   /gallery/themes/[slug]
+│ ├ ● /gallery/themes/minimal
+│ ├ ● /gallery/themes/classic
+│ ├ ● /gallery/themes/dark
+│ └ ● /gallery/themes/bold
+├ ○ /gallery/tones
+├   /gallery/tones/[id]
+│ ├ ● /gallery/tones/formal
+│ ├ ● /gallery/tones/casual
+│ ├ ● /gallery/tones/inspirational
+│ └ ● [+4 more paths]
+├ ƒ /go
+├ ○ /inspector
+├ ○ /llms.txt
+├ ○ /openapi.yaml
+├ ○ /playground
+├ ○ /privacy
+├ ○ /robots.txt
+├ ○ /schema/opf/v1
+├ ○ /schema/registry.schema.json
+├ ƒ /sign-in/[[...sign-in]]
+├ ƒ /sign-up/[[...sign-up]]
+├ ○ /sitemap.xml
+├ ○ /studio
+├ ○ /success
+├ ○ /terms
+└ ○ /workspace
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+ƒ  (Dynamic)  server-rendered on demand
+

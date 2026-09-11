@@ -1,0 +1,168 @@
+
+> pptx-gallery@0.1.0 prebuild /Users/michael/Source/pptx-gallery
+> node scripts/verify-published-editor.mjs
+
+Published editor verified: @openpresentation/opf@0.9.0, @openpresentation/opf-render@0.7.0, @openpresentation/opf-editor@0.6.0, @openpresentation/opf-pptx@0.7.0, @openpresentation/cli@0.7.0; 8 exact file hashes.
+
+> pptx-gallery@0.1.0 build /Users/michael/Source/pptx-gallery
+> next build
+
+▲ Next.js 16.3.4 (Turbopack)
+✓ Running next.config.ts took 1361ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 5.7s
+  Running TypeScript ...
+  Finished TypeScript in 2.8s ...
+  Collecting page data using 9 workers ...
+  Generating static pages using 9 workers (0/1925) ...
+  Generating static pages using 9 workers (481/1925) 
+  Generating static pages using 9 workers (962/1925) 
+  Generating static pages using 9 workers (1443/1925) 
+✓ Generating static pages using 9 workers (1925/1925) in 4.0s
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├   /api/[dimension]
+│ ├ ● /api/layouts.json
+│ ├ ● /api/color-schemes.json
+│ ├ ● /api/font-schemes.json
+│ └ ● [+14 more paths]
+├ ƒ /api/composition.json
+├ ○ /api/layout-previews.json
+├   /api/layout-previews/[slug]
+│ ├ ● /api/layout-previews/action-plan.html
+│ ├ ● /api/layout-previews/action-plan.json
+│ ├ ● /api/layout-previews/agenda.html
+│ └ ● [+137 more paths]
+├ ƒ /api/og
+├ ○ /api/opf-spec.json
+├ ƒ /api/pagination.json
+├ ○ /api/search-index.json
+├ ○ /audiences
+├   /audiences/[slug]
+│ ├ ● /audiences/executive
+│ ├ ● /audiences/investor
+│ ├ ● /audiences/board
+│ └ ● [+11 more paths]
+├ ○ /backgrounds
+├   /backgrounds/[slug]
+│ ├ ● /backgrounds/solid-color
+│ ├ ● /backgrounds/subtle-gradient
+│ ├ ● /backgrounds/geometric-pattern
+│ └ ● [+3 more paths]
+├ ○ /blocks
+├   /blocks/[slug]
+│ ├ ● /blocks/pitch-deck-intro
+│ ├ ● /blocks/agenda-overview
+│ ├ ● /blocks/section-break
+│ └ ● [+29 more paths]
+├ ○ /charts
+├   /charts/[slug]
+│ ├ ● /charts/column
+│ ├ ● /charts/clustered-column
+│ ├ ● /charts/stacked-column-2x
+│ └ ● [+73 more paths]
+├ ○ /color-schemes
+├   /color-schemes/[slug]
+│ ├ ● /color-schemes/black-and-white
+│ ├ ● /color-schemes/bold-red
+│ ├ ● /color-schemes/boost
+│ └ ● [+25 more paths]
+├ ○ /colors
+├   /colors/[slug]
+│ ├ ● /colors/black-and-white
+│ ├ ● /colors/bold-red
+│ ├ ● /colors/boost
+│ └ ● [+25 more paths]
+├ ○ /docs
+├ ○ /docs/api
+├ ○ /editor
+├ ○ /font-schemes
+├   /font-schemes/[slug]
+│ ├ ● /font-schemes/consolas
+│ ├ ● /font-schemes/courier-new
+│ ├ ● /font-schemes/arial
+│ └ ● [+90 more paths]
+├ ○ /headers-footers
+├   /headers-footers/[slug]
+│ ├ ● /headers-footers/slide-number-only
+│ ├ ● /headers-footers/slide-number-progress
+│ ├ ● /headers-footers/section-marker-header
+│ └ ● [+7 more paths]
+├ ○ /how-to
+├   /how-to/[slug]
+│ ├ ● /how-to/backgrounds-solid-gradient-geometric
+│ ├ ● /how-to/box-and-whisker-charts
+│ ├ ● /how-to/building-a-color-scheme
+│ └ ● [+73 more paths]
+├ ○ /image-treatments
+├   /image-treatments/[slug]
+│ ├ ● /image-treatments/full-bleed
+│ ├ ● /image-treatments/text-overlay
+│ ├ ● /image-treatments/side-by-side
+│ └ ● [+12 more paths]
+├ ○ /languages
+├   /languages/[slug]
+│ ├ ● /languages/afrikaans
+│ ├ ● /languages/albanian
+│ ├ ● /languages/amharic
+│ └ ● [+90 more paths]
+├ ○ /layouts
+├   /layouts/[slug]
+│ ├ ● /layouts/title-slide
+│ ├ ● /layouts/two-column
+│ ├ ● /layouts/image-focus
+│ └ ● [+467 more paths]
+├ ○ /llms.txt
+├ ○ /narratives
+├   /narratives/[slug]
+│ ├ ● /narratives/problem-solution
+│ ├ ● /narratives/heros-journey
+│ ├ ● /narratives/what-so-what-now-what
+│ └ ● [+7 more paths]
+├ ○ /registry.json
+├   /registry/[category]/[descriptor]
+│ ├ ● /registry/layouts/title-slide.json
+│ ├ ● /registry/layouts/two-column.json
+│ ├ ● /registry/layouts/image-focus.json
+│ └ ● [+666 more paths]
+├ ○ /robots.txt
+├ ○ /sitemap.xml
+├ ○ /social-platforms
+├ ƒ /social-platforms/[slug]
+├ ○ /socials
+├   /socials/[slug]
+│ ├ ● /socials/linkedin
+│ ├ ● /socials/x
+│ ├ ● /socials/github
+│ └ ● [+7 more paths]
+├ ○ /spec
+├ ○ /themes
+├   /themes/[slug]
+│ ├ ● /themes/minimal
+│ ├ ● /themes/classic
+│ ├ ● /themes/dark
+│ └ ● /themes/bold
+├ ○ /tones
+├   /tones/[slug]
+│ ├ ● /tones/formal
+│ ├ ● /tones/casual
+│ ├ ● /tones/inspirational
+│ └ ● [+4 more paths]
+├ ○ /typography
+└   /typography/[slug]
+  ├ ● /typography/consolas
+  ├ ● /typography/courier-new
+  ├ ● /typography/arial
+  └ ● [+90 more paths]
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+ƒ  (Dynamic)  server-rendered on demand
+

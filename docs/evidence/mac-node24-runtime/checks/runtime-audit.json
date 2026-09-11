@@ -1,0 +1,164 @@
+[
+  {
+    "repo": "opf",
+    "engines": {
+      "package.json": "24.x",
+      "packages/javascript/package.json": "24.x",
+      "packages/cli/package.json": "24.x"
+    },
+    "nvmrc": "24",
+    "setupNode": [
+      {
+        "workflow": "cli-windows.yml",
+        "line": 57,
+        "node": "24"
+      },
+      {
+        "workflow": "cli-publish.yml",
+        "line": 25,
+        "node": "24"
+      },
+      {
+        "workflow": "npm-publish.yml",
+        "line": 38,
+        "node": "24"
+      },
+      {
+        "workflow": "ecosystem-ci.yml",
+        "line": 52,
+        "node": "24"
+      },
+      {
+        "workflow": "opf-ci.yml",
+        "line": 34,
+        "node": "24"
+      }
+    ]
+  },
+  {
+    "repo": "opf-render",
+    "engines": {
+      "package.json": "24.x"
+    },
+    "nvmrc": "24",
+    "setupNode": [
+      {
+        "workflow": "npm-publish.yml",
+        "line": 25,
+        "node": "24"
+      },
+      {
+        "workflow": "ci.yml",
+        "line": 56,
+        "node": "24"
+      }
+    ]
+  },
+  {
+    "repo": "opf-editor",
+    "engines": {
+      "package.json": "24.x"
+    },
+    "nvmrc": "24",
+    "setupNode": [
+      {
+        "workflow": "release.yml",
+        "line": 25,
+        "node": "24"
+      },
+      {
+        "workflow": "ci.yml",
+        "line": 56,
+        "node": "24"
+      }
+    ]
+  },
+  {
+    "repo": "opf-pptx",
+    "engines": {
+      "package.json": "24.x"
+    },
+    "nvmrc": "24",
+    "setupNode": [
+      {
+        "workflow": "release.yml",
+        "line": 25,
+        "node": "24"
+      },
+      {
+        "workflow": "ci.yml",
+        "line": 60,
+        "node": "24"
+      }
+    ]
+  },
+  {
+    "repo": "openpresentation-site",
+    "engines": {
+      "package.json": "24.x"
+    },
+    "nvmrc": "24",
+    "setupNode": [
+      {
+        "workflow": "site-ci.yml",
+        "line": 25,
+        "node": "24"
+      }
+    ]
+  },
+  {
+    "repo": "pptx-gallery",
+    "engines": {
+      "package.json": "24.x"
+    },
+    "nvmrc": "24",
+    "setupNode": [
+      {
+        "workflow": "validate-gallery-registry.yml",
+        "line": 61,
+        "node": "24"
+      }
+    ]
+  },
+  {
+    "repo": "pptx-dev",
+    "engines": {
+      "package.json": "24.x",
+      "sdk/typescript/package.json": "24.x",
+      "sdk/cli/package.json": "24.x"
+    },
+    "nvmrc": "24",
+    "setupNode": [
+      {
+        "workflow": "application-ci.yml",
+        "line": 28,
+        "node": "24"
+      },
+      {
+        "workflow": "publish-cli-pypi.yml",
+        "line": 33,
+        "node": "24"
+      },
+      {
+        "workflow": "publish-cli-pypi.yml",
+        "line": 137,
+        "node": "24"
+      },
+      {
+        "workflow": "publish-sdk-typescript.yml",
+        "line": 34,
+        "node": "24"
+      },
+      {
+        "workflow": "publish-cli-npm.yml",
+        "line": 33,
+        "node": "24"
+      },
+      {
+        "workflow": "publish-cli-npm.yml",
+        "line": 98,
+        "node": "24"
+      }
+    ]
+  }
+]

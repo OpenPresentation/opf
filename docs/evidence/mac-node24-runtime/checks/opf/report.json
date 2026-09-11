@@ -1,0 +1,72 @@
+{
+  "node": "v24.21.0",
+  "repo": "opf",
+  "startedAt": "2026-09-11T00:22:35.318611+00:00",
+  "commands": [
+    {
+      "argv": [
+        "pnpm",
+        "lint"
+      ],
+      "exitCode": 0,
+      "log": "01-lint.log"
+    },
+    {
+      "argv": [
+        "pnpm",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "log": "02-typecheck.log"
+    },
+    {
+      "argv": [
+        "pnpm",
+        "build"
+      ],
+      "exitCode": 0,
+      "log": "03-build.log"
+    },
+    {
+      "argv": [
+        "pnpm",
+        "test"
+      ],
+      "exitCode": 0,
+      "log": "04-test.log"
+    },
+    {
+      "argv": [
+        "pnpm",
+        "check:examples"
+      ],
+      "exitCode": 0,
+      "log": "05-check_examples.log"
+    },
+    {
+      "argv": [
+        "pnpm",
+        "check:breaking"
+      ],
+      "exitCode": 0,
+      "log": "06-check_breaking.log"
+    },
+    {
+      "argv": [
+        "node",
+        "scripts/link-ecosystem.mjs",
+        "--packages-only"
+      ],
+      "exitCode": 0,
+      "log": "07---packages-only.log"
+    },
+    {
+      "argv": [
+        "pnpm",
+        "test:packages"
+      ],
+      "exitCode": 0,
+      "log": "08-test_packages.log"
+    }
+  ]
+}
