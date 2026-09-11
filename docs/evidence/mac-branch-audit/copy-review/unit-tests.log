@@ -1,0 +1,11 @@
+$ pnpm sync:opf-spec && vitest run
+$ node --experimental-strip-types scripts/sync-opf-spec.ts
+
+ RUN  v4.1.11 /Users/michael/Source/pptx-dev
+
+
+ Test Files  61 passed (61)
+      Tests  598 passed (598)
+   Start at  21:19:19
+   Duration  3.19s (transform 2.92s, setup 0ms, import 8.42s, tests 11.26s, environment 5ms)
+
