@@ -1,5 +1,9 @@
 # OPF Release Process
 
+Use Node 24 (`24.x`) for all future source, candidate and registry verification.
+The next releases must document the [Node 24 migration](migrations/node24.md)
+and use new versions. Historical dual-runtime release records remain unchanged.
+
 This document is the release runbook for the public JavaScript package,
 [`@openpresentation/opf`](https://www.npmjs.com/package/@openpresentation/opf).
 

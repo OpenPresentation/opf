@@ -1,0 +1,14 @@
+Scope: all 3 workspace projects
+? Verifying lockfile against supply-chain policies (1366 entries)...
+✓ Lockfile passes supply-chain policies (1366 entries in 4.7s)
+Progress: resolved 1, reused 0, downloaded 0, added 0
+[WARN] deprecated eslint@9.39.5: This version is no longer supported. Please see https://eslint.org/version-support for other options.
+Progress: resolved 53, reused 0, downloaded 0, added 0
+Progress: resolved 587, reused 0, downloaded 0, added 0
+Progress: resolved 1074, reused 0, downloaded 0, added 0
+Progress: resolved 1311, reused 0, downloaded 0, added 0
+Progress: resolved 1312, reused 0, downloaded 0, added 0
+Progress: resolved 1366, reused 0, downloaded 0, added 0, done
+[WARN] Issues with peer dependencies found. Run "pnpm peers check" to list them.
+
+Done in 11.2s using pnpm v11.1.3

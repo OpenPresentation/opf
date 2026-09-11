@@ -14,7 +14,7 @@ async function fixture(run){
   const root=await mkdtemp(path.join(tmpdir(),'opf-skills-test-'));
   try{
     const module=path.join(root,'skills.mjs');
-    await build({entryPoints:[fileURLToPath(new URL('../src/skills.ts',import.meta.url))],outfile:module,bundle:true,platform:'node',format:'esm',target:'node20'});
+    await build({entryPoints:[fileURLToPath(new URL('../src/skills.ts',import.meta.url))],outfile:module,bundle:true,platform:'node',format:'esm',target:'node24'});
     await run(root,await import(pathToFileURL(module).href));
   }finally{
     const actual=await realpath(root),parent=await realpath(tmpdir());

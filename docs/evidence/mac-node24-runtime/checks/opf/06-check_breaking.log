@@ -1,0 +1,10 @@
+
+> openpresentation-workspace@ check:breaking /Users/michael/.codex/worktrees/c193/opf
+> node scripts/test-breaking-gate.mjs && node scripts/check-breaking-changes.mjs
+
+Release gate regression passed: a tag at HEAD cannot hide removals from the prior release.
+{
+  "valid": true,
+  "tag": "opf-v0.9.0",
+  "breakingChanges": 0
+}

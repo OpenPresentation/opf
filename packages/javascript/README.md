@@ -22,7 +22,7 @@ pnpm add @openpresentation/opf
 # or: yarn add @openpresentation/opf
 ```
 
-Requires Node 20 or later.
+Requires Node 24 for this checkout and the next release. Earlier published versions retain their recorded runtime requirements.
 
 ## Usage
 

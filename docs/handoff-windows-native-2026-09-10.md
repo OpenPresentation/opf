@@ -1,5 +1,7 @@
 # Windows native testing checkpoint
 
+Runtime update (September 10): use **Node 24 only** for new development and verification; see [migration instructions](migrations/node24.md). Historical Node 20/24 results and commands below describe prior checkpoints. Keep distinct browser/OS/native gates and the existing Office recovery prerequisite.
+
 The [Windows evidence bundle](evidence/windows-native-2026-09-10/README.md) records completed accepted-text native testing on the immutable source baselines in its `sources.json`. Both Node 20.20.2 and 24.20.0 passed all 24 separate bounded cases: 144 editable lines, 72 original/saved/edited imports, 24 unchanged save/reopen PNG pairs and 96 original-text ink masks per runtime. The 0.1-reference-pixel containment rule is unchanged. All four owned temporary Carlito registrations were removed after every case, including separate dummy-worker failure/timeout controls.
 
 [PPTX #17](https://github.com/OpenPresentation/opf-pptx/pull/17), retaining the owned worker handle for Windows PowerShell exit codes, and [PPTX #18](https://github.com/OpenPresentation/opf-pptx/pull/18), adding bounded text workers and parent-owned font cleanup, were reviewed and merged by the Mac owner. [PPTX #19](https://github.com/OpenPresentation/opf-pptx/pull/19) contains the separately bounded metric suite. Native results and exact verifier snapshots are in the evidence bundle. Product runtime and release refs are unchanged.

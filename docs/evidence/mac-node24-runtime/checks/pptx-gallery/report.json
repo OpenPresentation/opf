@@ -1,0 +1,39 @@
+{
+  "node": "v24.21.0",
+  "repo": "pptx-gallery",
+  "startedAt": "2026-09-11T00:22:43.227337+00:00",
+  "commands": [
+    {
+      "argv": [
+        "pnpm",
+        "test"
+      ],
+      "exitCode": 0,
+      "log": "01-test.log"
+    },
+    {
+      "argv": [
+        "pnpm",
+        "build"
+      ],
+      "exitCode": 0,
+      "log": "02-build.log"
+    },
+    {
+      "argv": [
+        "pnpm",
+        "lint"
+      ],
+      "exitCode": 0,
+      "log": "03-lint.log"
+    },
+    {
+      "argv": [
+        "pnpm",
+        "audit"
+      ],
+      "exitCode": 0,
+      "log": "04-audit.log"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # @openpresentation/cli
 
-A local CLI for agents and people working with `.opf.json` presentations. Create documents, validate them, apply precise edits, paginate content, and inspect the bundled schemas and catalogs. Node 20+ on macOS, Linux, or Windows is required.
+A local CLI for agents and people working with `.opf.json` presentations. Create documents, validate them, apply precise edits, paginate content, and inspect the bundled schemas and catalogs. Node 24 on macOS, Linux, or Windows is required.
 
 The CLI bundles its OPF schema, catalogs, and validator. It needs no separate core package, API key, or network connection at runtime. `opf --version` reports the CLI and bundled core versions. It does not render slides; successful validation is not visual verification.
 

@@ -22,7 +22,7 @@ updates:
       timezone: "America/Los_Angeles"
     versioning-strategy: increase-if-necessary
     open-pull-requests-limit: 3
-    # Match the minimum supported Node runtime. This semver rule only limits
+    # Match the supported Node 24 runtime. This semver rule only limits
     # routine version updates; do not add ignored advisory IDs or versions.
     ignore:
       - dependency-name: "@types/node"

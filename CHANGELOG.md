@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Require Node 24 (`24.x`) for core, CLI and coordinated development. Node 20 and 22 users must upgrade before installing the next releases. Retain browser and operating-system coverage while retiring duplicate Node 20 jobs. See [migration instructions](docs/migrations/node24.md); earlier published packages and historical evidence are unchanged.
+
 ## 0.9.0
 
 - Add shared code filename/language/body layout with exact source ranges, tab segments, metadata case, whitespace and original line boundaries. Composition and pagination consume the complete accepted code geometry, expose `item.codeLayout` and identify the updated candidate scoring as `grid-score-v3`. Strict ancestor failures and irreducible metadata cannot be hidden by an empty body.

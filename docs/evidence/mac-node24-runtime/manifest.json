@@ -1,0 +1,321 @@
+{
+  "node": "v24.21.0",
+  "platform": "darwin-arm64",
+  "files": [
+    {
+      "path": "browser/packed-browser-report.json",
+      "bytes": 20231,
+      "sha256": "37513cc9dc70415ce116e2f3ff7cef9c00872402a788c916a678e168cf1c617a"
+    },
+    {
+      "path": "browser/plain-whitespace/report.json",
+      "bytes": 5400,
+      "sha256": "0a3ed7411e0622d58ce15a1c3951e717280b5a30fb3cf5aefb2d1a108d7c8433"
+    },
+    {
+      "path": "browser/readability/report.json",
+      "bytes": 97083,
+      "sha256": "6e41ab6c06874d1584a18219fcf49917bcc2fe31d23875ac997f16bd25859211"
+    },
+    {
+      "path": "browser/timeline/report.json",
+      "bytes": 410786,
+      "sha256": "2e1be2150635db5dc7ce21930e3b81eecf1fa17920dcc06e13f4965f3efa4cb8"
+    },
+    {
+      "path": "browser/timeline-acceptance.json",
+      "bytes": 6236,
+      "sha256": "3a1b00cdb34dfb616df9742a8dc2b7e2a0dc4120caf1a982097a6ca4ac49ae02"
+    },
+    {
+      "path": "checks/openpresentation-site/01-build.log",
+      "bytes": 3795,
+      "sha256": "d32d6a0986244963d1311b01f1fa4112f5314d3d93d97c1d616e2fdd972b1b99"
+    },
+    {
+      "path": "checks/openpresentation-site/02-test.log",
+      "bytes": 437,
+      "sha256": "1b385149a1341a409a32452074e73d43a8f3a11e93c203c4985f9d14e5971bdc"
+    },
+    {
+      "path": "checks/openpresentation-site/03-verify_registry.log",
+      "bytes": 264,
+      "sha256": "4ad0c3fcf287ebc51de1f6e5ab91b87c072143d6435aed58cab277ea2d7a3b0e"
+    },
+    {
+      "path": "checks/openpresentation-site/04-audit.log",
+      "bytes": 31,
+      "sha256": "15950a68a7ed99c59779717acefdceb3f69cfd31bde67d2c954f2a3cea4d7955"
+    },
+    {
+      "path": "checks/openpresentation-site/e2e.log",
+      "bytes": 1497,
+      "sha256": "dfe8bcc7b02e4d99970fff7e6dac60248648d93d3e6700cb1c25b5de1a4a7b99"
+    },
+    {
+      "path": "checks/openpresentation-site/report.json",
+      "bytes": 625,
+      "sha256": "33fa10ac668fe15dec7af2d6e3162c427749224f566ebe662e62ec47fd7cfee5"
+    },
+    {
+      "path": "checks/opf/01-lint.log",
+      "bytes": 26620,
+      "sha256": "5c18758407231647ace30543c234cfccdd4e6922329f49d1faa2f1269cbba6ee"
+    },
+    {
+      "path": "checks/opf/02-typecheck.log",
+      "bytes": 3710,
+      "sha256": "b4888ef8c917f0748d8ec8ec5398901cd129fb8b1a7f2eb871962caf6da2f229"
+    },
+    {
+      "path": "checks/opf/03-build.log",
+      "bytes": 6181,
+      "sha256": "b22cf2c1e7a6dba1bc000a81e179e9773020ebd583645085fa85eeb2be0332d5"
+    },
+    {
+      "path": "checks/opf/04-test.log",
+      "bytes": 53831,
+      "sha256": "c316aac02193ea4f19f89dfe6c7aae7768e7553dc920d2244e81b068d8be9d22"
+    },
+    {
+      "path": "checks/opf/05-check_examples.log",
+      "bytes": 161,
+      "sha256": "b1e7353dfcf3774028587025548a3066f3b225d97f7af9d628764902c003b6cb"
+    },
+    {
+      "path": "checks/opf/06-check_breaking.log",
+      "bytes": 327,
+      "sha256": "5a65c988facfe8812713149b2fce60d983356b81ae5509c7afe7087fb4a22f2e"
+    },
+    {
+      "path": "checks/opf/07---packages-only.log",
+      "bytes": 423,
+      "sha256": "c10ce8e3fab980561d1cbb480a5630b8beb07f07b87ea100be3d701dc9903107"
+    },
+    {
+      "path": "checks/opf/08-test_packages.log",
+      "bytes": 61788,
+      "sha256": "9c5e4593d542606ec6ade2cdaa84cc4acdeeb54dda94fdf9b2c9ff11527fee04"
+    },
+    {
+      "path": "checks/opf/audit.log",
+      "bytes": 31,
+      "sha256": "15950a68a7ed99c59779717acefdceb3f69cfd31bde67d2c954f2a3cea4d7955"
+    },
+    {
+      "path": "checks/opf/final-lint.log",
+      "bytes": 28624,
+      "sha256": "c056422ed338b9acf40ee5e756e41d0804de5e3135fea5f85e55a846cf88dae5"
+    },
+    {
+      "path": "checks/opf/report.json",
+      "bytes": 1179,
+      "sha256": "6f32c317b7d16cd19995f7f08747e2f58844c10f32cf46dfc23fde54bf9864f9"
+    },
+    {
+      "path": "checks/opf-browser/01-test_packed-browser.log",
+      "bytes": 687,
+      "sha256": "c4d7359a4e08c198537514dcbc6f45ea72d1633ee66623b90fe7775aab167469"
+    },
+    {
+      "path": "checks/opf-browser/02-scripts_test-installed-code-guards.mjs.log",
+      "bytes": 131,
+      "sha256": "8e88922087e22ea3753b5d9967ab9096d79d989d0db29e3522d5d6832e299e50"
+    },
+    {
+      "path": "checks/opf-browser/03-installed.log",
+      "bytes": 94,
+      "sha256": "51fe93ebb9f3752c16e908a751eee5d08b724371a1dc907ef24e53e8c7a2ca31"
+    },
+    {
+      "path": "checks/opf-browser/04-installed.log",
+      "bytes": 92,
+      "sha256": "a50a266d7b306dae81eda560a95be66dfe972cc224eae29413237855a032e1b2"
+    },
+    {
+      "path": "checks/opf-browser/05-installed.log",
+      "bytes": 119,
+      "sha256": "5080eaee5a94296fb0bd5f80f612b800129d781c252604f881654f03d410fc7e"
+    },
+    {
+      "path": "checks/opf-browser/06-artifacts_node24-runtime_timeline-acceptance.json.log",
+      "bytes": 2899,
+      "sha256": "3a89e3ded112191b54b6210afde9b19c18621885b39acc98b3c845c9606780af"
+    },
+    {
+      "path": "checks/opf-browser/report.json",
+      "bytes": 1383,
+      "sha256": "bd4950eab7b2d01f11de4bb0d4851b1d0354b4105c53023f5df0684706a2dbce"
+    },
+    {
+      "path": "checks/pptx-dev/01-test.log",
+      "bytes": 315,
+      "sha256": "b1d1593f1f515379f5f639ec8cf996327499d3bc2c64e6841e6855253f859bb2"
+    },
+    {
+      "path": "checks/pptx-dev/02-typecheck.log",
+      "bytes": 15,
+      "sha256": "8366207267355d3e3d5bf3bf6e8c94c5f93f6078c34f08973fa2b38cdda6cc92"
+    },
+    {
+      "path": "checks/pptx-dev/03-typecheck.log",
+      "bytes": 15,
+      "sha256": "8366207267355d3e3d5bf3bf6e8c94c5f93f6078c34f08973fa2b38cdda6cc92"
+    },
+    {
+      "path": "checks/pptx-dev/04-prepublishOnly.log",
+      "bytes": 946,
+      "sha256": "9ee9520cd64f17e851c2d5823f8ab1e5aaaeb44f75dea90b808af5db128c17d3"
+    },
+    {
+      "path": "checks/pptx-dev/05-typecheck.log",
+      "bytes": 15,
+      "sha256": "8366207267355d3e3d5bf3bf6e8c94c5f93f6078c34f08973fa2b38cdda6cc92"
+    },
+    {
+      "path": "checks/pptx-dev/06-prepublishOnly.log",
+      "bytes": 1100,
+      "sha256": "cc998273c014007b9b56c6fff916fba104cf91f330be8fe66558b337a0deb6b6"
+    },
+    {
+      "path": "checks/pptx-dev/07-build_bundle.log",
+      "bytes": 342,
+      "sha256": "5c4f478f5b57a714622587f594b827115567d6df5bcb45722a256cccb1c642cb"
+    },
+    {
+      "path": "checks/pptx-dev/08---help.log",
+      "bytes": 1267,
+      "sha256": "8b86e2f0cb7921c0281b2dae3dd1fb015f2c87cc815cf495d0c9633d49f8a789"
+    },
+    {
+      "path": "checks/pptx-dev/09-build.log",
+      "bytes": 4474,
+      "sha256": "afeec063eff70dea95da961a8f9dc391c5a9c299076675c3c3ab83fc7edecf3e"
+    },
+    {
+      "path": "checks/pptx-dev/10-audit.log",
+      "bytes": 31,
+      "sha256": "15950a68a7ed99c59779717acefdceb3f69cfd31bde67d2c954f2a3cea4d7955"
+    },
+    {
+      "path": "checks/pptx-dev/e2e.log",
+      "bytes": 2224,
+      "sha256": "9cd4eb3efa31132912edf8f0c79578f28e7eb3a2feb814e09022d1613d3ee8d4"
+    },
+    {
+      "path": "checks/pptx-dev/report.json",
+      "bytes": 1618,
+      "sha256": "99957958b07708c8f6819297de4b8769d0066fd0518b2548c415ecf1797284e8"
+    },
+    {
+      "path": "checks/pptx-gallery/01-test.log",
+      "bytes": 299,
+      "sha256": "94c2b9de1f1a36f8a24a574fbd9004f8b956df25bc9ccfcad2d02e68bedabe58"
+    },
+    {
+      "path": "checks/pptx-gallery/02-build.log",
+      "bytes": 5160,
+      "sha256": "12435f44821491782347d27a109ce49c3994b05d46b7c8e875c33d98cf6b23d9"
+    },
+    {
+      "path": "checks/pptx-gallery/03-lint.log",
+      "bytes": 78,
+      "sha256": "72fc864668f212f92aad45ca351cfcfb5f6ca4b5ee4b5292872d4b86ccade991"
+    },
+    {
+      "path": "checks/pptx-gallery/04-audit.log",
+      "bytes": 31,
+      "sha256": "15950a68a7ed99c59779717acefdceb3f69cfd31bde67d2c954f2a3cea4d7955"
+    },
+    {
+      "path": "checks/pptx-gallery/e2e.log",
+      "bytes": 1375,
+      "sha256": "75a3665ac091a2efd2d0edd6e209ae095de5cb1d97cf523fcc97a2705bf46447"
+    },
+    {
+      "path": "checks/pptx-gallery/report.json",
+      "bytes": 594,
+      "sha256": "a250c65c8a5dbbefce890d7179c63cf5f157163792957920e37cbed21bd91af9"
+    },
+    {
+      "path": "checks/runtime-audit.json",
+      "bytes": 2945,
+      "sha256": "ebe6d1e9f0c8e5597ca5f5f6882cec5cde43254e78a561fcb09bdba1151ecb13"
+    },
+    {
+      "path": "installs/node24-openpresentation-site-install.log",
+      "bytes": 289,
+      "sha256": "534f3bdedcebc15c72c2eac1def64610c9931d0566a01b16bc2d29bb3bc04f4b"
+    },
+    {
+      "path": "installs/node24-openpresentation-site-lock.log",
+      "bytes": 206,
+      "sha256": "cba72548d17a30f3443f71ae1301fb8096dd173bb5be5928280c8462140c56f0"
+    },
+    {
+      "path": "installs/node24-opf-editor-install.log",
+      "bytes": 446,
+      "sha256": "9d72694dfd332e1f9f3135850d398d563144a0def10bc47b7bb6ecb976b57dba"
+    },
+    {
+      "path": "installs/node24-opf-editor-lock.log",
+      "bytes": 133,
+      "sha256": "bf17b01d68d23a95a980e01d1fbd749a48310496abe625a7e9d87478c50ddb0d"
+    },
+    {
+      "path": "installs/node24-opf-install.log",
+      "bytes": 1142,
+      "sha256": "7d958bfaeefbdc0a993cf921eb82040762a9dd3484e176b7113366761407967c"
+    },
+    {
+      "path": "installs/node24-opf-lock.log",
+      "bytes": 183,
+      "sha256": "653db6ce6a890eeac2bd9ee85291180a8b69050e6bef2d3243a195769087a3d0"
+    },
+    {
+      "path": "installs/node24-opf-pptx-install.log",
+      "bytes": 446,
+      "sha256": "16a4551aa2bbb1ed4adfa2fe9bd8ab072a9567529dba1c5ec7d684f7caa5ad01"
+    },
+    {
+      "path": "installs/node24-opf-pptx-lock.log",
+      "bytes": 133,
+      "sha256": "ab6e9b9ba7ac40a4fd207e8a3f82be15c1da903e9fc8edeb3ef9a23face7f102"
+    },
+    {
+      "path": "installs/node24-opf-render-install.log",
+      "bytes": 445,
+      "sha256": "7937d7ecf33fda8a3072b944ebde74fa6bfd3515fe39f3a2bd59b256dc0156e4"
+    },
+    {
+      "path": "installs/node24-opf-render-lock.log",
+      "bytes": 132,
+      "sha256": "df5c2d5e90584da8b1cc8089b46479cf0c9ab84c4760ba866c573455442e5a38"
+    },
+    {
+      "path": "installs/node24-pptx-dev-install.log",
+      "bytes": 2918,
+      "sha256": "3a289e9544ce5676547078e8ae3f714503b1f6b0b35aea779560012d17ed6133"
+    },
+    {
+      "path": "installs/node24-pptx-dev-lock.log",
+      "bytes": 815,
+      "sha256": "d276d1439c84ceab8aaf30052ef512f0a6e2f4a3f9fd155017d1940183901272"
+    },
+    {
+      "path": "installs/node24-pptx-gallery-install.log",
+      "bytes": 295,
+      "sha256": "7fa301dfdabc6d94fa7a8db3e253984923b2d59ed8e93cb16201906c6bce7d33"
+    },
+    {
+      "path": "installs/node24-pptx-gallery-lock.log",
+      "bytes": 206,
+      "sha256": "f1d8db31cb8e212669ff76913835001eca40a1da40110ca680ab61898d0dcd70"
+    },
+    {
+      "path": "product-refs.json",
+      "bytes": 425,
+      "sha256": "37dd69a588a3c22e5cf5392dd6e9c8dc8921814e4da49cc8d4abb5119df38f5a"
+    }
+  ]
+}

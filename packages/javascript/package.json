@@ -92,7 +92,7 @@
     "package.json"
   ],
   "engines": {
-    "node": ">=20"
+    "node": "24.x"
   },
   "scripts": {
     "clean": "rm -rf dist src/generated",
@@ -108,7 +108,7 @@
     "ajv-formats": "^3.0.1"
   },
   "devDependencies": {
-    "@types/node": "^20.19.0",
+    "@types/node": "^24.13.4",
     "json-schema-to-typescript": "^16.0.0",
     "tsup": "^8.5.1",
     "typescript": "~5.9.3"

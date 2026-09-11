@@ -49,3 +49,15 @@ Support Mermaid diagram authoring through a new `diagram` content type, and gene
 Target Mermaid's full documented diagram catalog, with an explicit per-family support matrix and staged implementation. Initial flowchart/sequence work must not narrow that objective. Preserve each family's semantics and separately verify parsing, rendering, editing, vector PDF, native PPTX and reimport.
 
 Sequence Mermaid/diagram and general SVG implementation after the font reliability work is working and accepted, including its outstanding layout, rendering and native verification gates. Keep these capabilities on the roadmap now without diverting the active implementation effort from fonts.
+
+## Accepted runtime simplification — September 10, 2026
+
+Standardize on Node 24 and retire Node 20 support and duplicated Node 20 testing. Schedule this as the next bounded maintenance milestone after current in-flight checks, before the next coordinated package release. Node 20 has reached end-of-life; Node 24 is the chosen LTS runtime. See the [official Node.js release schedule](https://github.com/nodejs/Release#release-schedule).
+
+- Audit core/CLI, renderer, editor, PPTX, the three sites, local tooling and Windows coordination for runtime declarations and Node 20/24 matrices.
+- Align package engine requirements, development setup, CI, packaging, clean-install verification and site build settings on Node 24. Document the new runtime requirement in the next releases and migration instructions; users of Node 20 or 22 must upgrade for those releases.
+- Verify the coordinated candidate packages and essential offline authoring/import → layout/preview → edit/undo → export/reimport workflows on Node 24, then remove Node 20 jobs, duplicate workflow runs and active release gates. Routine development and future release verification should use one Node major.
+- Retain browser, operating-system and native PowerPoint checks where they cover distinct behavior. Removing a Node version does not close existing native compatibility failures or justify relaxed visual/source-preservation checks.
+- Preserve historical Node 20 evidence and already published artifacts. Update active roadmaps, handoffs and reproduction instructions so old dual-runtime requirements do not keep triggering new duplicate runs.
+
+Completion means the active ecosystem build/test/release path uses Node 24, fresh installs and public-site builds pass under that runtime, and Node 20 is no longer an active compatibility promise or acceptance gate. This roadmap addition authorizes the planned migration; it does not claim that runtime configuration has already changed.

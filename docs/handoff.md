@@ -1,5 +1,7 @@
 # Continue the OPF ecosystem work
 
+Runtime update (September 10): use **Node 24 only** for new development and verification; see [migration instructions](migrations/node24.md). Historical Node 20/24 results and commands below describe prior checkpoints. Keep distinct browser/OS/native gates and the existing Office recovery prerequisite.
+
 The coordinated ecosystem PRs were merged on September 8, 2026 UTC. Continue from `main` in these repositories:
 
 | Checkout | Merged PR |
