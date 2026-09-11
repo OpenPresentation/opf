@@ -16,7 +16,7 @@
     "prepack": "pnpm build"
   },
   "devDependencies": {
-    "@types/node": "^20.19.0",
+    "@types/node": "^24.13.4",
     "tsup": "^8.5.1",
     "typescript": "~5.9.3",
     "@openpresentation/opf": "workspace:*"
@@ -27,7 +27,7 @@
     "LICENSE"
   ],
   "engines": {
-    "node": ">=20"
+    "node": "24.x"
   },
   "publishConfig": {
     "access": "public"

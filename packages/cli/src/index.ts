@@ -8,7 +8,7 @@ import {manageSkills, SkillsError, type SkillBundle} from './skills.js';
 declare const CLI_VERSION: string;
 declare const OPF_VERSION: string;
 declare const OPF_SKILLS: SkillBundle;
-const usage = `OPF — local presentation files for agents (Node 20+)
+const usage = `OPF — local presentation files for agents (Node 24)
   opf create [output.opf.json|-] [--title <text>] [--from <file|->] [--force]
   opf validate <file|-> [--strict]
   opf edit <file|-> --patch <patch.json|-> [--output <file|-> | --in-place]

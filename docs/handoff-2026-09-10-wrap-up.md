@@ -1,5 +1,7 @@
 # Source wrap-up and two-machine continuation — September 10, 2026
 
+Runtime update (September 10): use **Node 24 only** for new development and verification; see [migration instructions](migrations/node24.md). Historical Node 20/24 results and commands below describe prior checkpoints. Keep distinct browser/OS/native gates and the existing Office recovery prerequisite.
+
 The user requested that existing integration work be committed, synchronized and merged, then continued by a Mac project owner and a separate Windows native-PowerPoint testing owner. This is a source milestone. The broader [accepted objective](plans/ecosystem-objective-2026-09-09.md), publication, public adoption and unresolved native/quality gates remain open.
 
 ## Portable checkpoint

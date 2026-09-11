@@ -40,7 +40,7 @@
     "test:registry-fidelity": "node scripts/test-registry-fidelity.mjs"
   },
   "engines": {
-    "node": ">=20"
+    "node": "24.x"
   },
   "packageManager": "pnpm@10.33.2",
   "devDependencies": {

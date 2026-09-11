@@ -3,7 +3,7 @@ import { createRequire } from 'node:module';
 import { readFile, stat } from 'node:fs/promises';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 import path from 'node:path';
-const usage = `OPF local inspection (Node 20+)
+const usage = `OPF local inspection (Node 24)
   version
   schema [schemaName=presentation] [schemaJsonPointer]
   find-schema <query>

@@ -23,7 +23,7 @@ The root `AGENTS.md` points repository agents to these entrypoints. Skills read 
 
 ## Install in an agent environment
 
-CLI 0.5.0 bundles all six complete skill folders. From your project directory, install them with Node 20+:
+The installer introduced in CLI 0.5.0 bundles all six complete skill folders. Use Node 24 for this checkout and the next release. From your project directory:
 
 ```sh
 npx @openpresentation/cli@latest skills install
@@ -51,7 +51,7 @@ Supply the same target options used for installation. `status` is read-only and 
 
 No skills are installed by the repository build. Manual installation remains supported: copy whole folders from `skills/`, including references and scripts, to your agent's skill directory. Each folder is self-contained. The managed installer treats existing manual copies as unmanaged and preserves them.
 
-The inspection helper requires Node 20+ and `@openpresentation/opf` in the current project. In this checkout, build with `pnpm build` first. For an installed skill used outside the checkout, either run from an npm project that has the package or set `OPF_ROOT` to the built OPF checkout. It does not install dependencies, fetch catalogs, or modify input files.
+The inspection helper requires Node 24 and `@openpresentation/opf` in the current project. In this checkout, build with `pnpm build` first. For an installed skill used outside the checkout, either run from an npm project that has the package or set `OPF_ROOT` to the built OPF checkout. It does not install dependencies, fetch catalogs, or modify input files.
 
 ## Local CLI
 

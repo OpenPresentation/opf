@@ -23,7 +23,7 @@ export default defineConfig({
   define: { CLI_VERSION: JSON.stringify(manifest.version), OPF_VERSION: JSON.stringify(core.version), OPF_SKILLS:JSON.stringify(skills) },
   sourcemap: true,
   clean: true,
-  target: "node20",
+  target: "node24",
   platform: "node",
   banner: { js: "#!/usr/bin/env node" },
 });

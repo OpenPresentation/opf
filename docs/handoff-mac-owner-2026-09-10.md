@@ -1,5 +1,7 @@
 # Mac owner checkpoint — 10 September 2026
 
+Runtime update (September 10): use **Node 24 only** for new development and verification; see [migration instructions](migrations/node24.md). Historical Node 20/24 results and commands below describe prior checkpoints. Keep distinct browser/OS/native gates and the existing Office recovery prerequisite.
+
 The active goal covers the full OpenPresentation ecosystem, with font/layout reliability before vector PDF, then SVG/Mermaid, followed by coordinated new releases and public-site verification. This checkpoint does not complete that goal. Read the full [8 September handoff](handoff-2026-09-08.md), [10 September wrap-up](handoff-2026-09-10-wrap-up.md), [ecosystem objective](plans/ecosystem-objective-2026-09-09.md), [font roadmap](plans/font-roadmap.md) and [text placement plan](plans/text-placement.md).
 
 ## PR backlog and current state

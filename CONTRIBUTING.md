@@ -8,13 +8,13 @@ Before making changes, it helps to understand how the pieces fit together:
 
 - [`spec/`](./spec) is the **source of truth** for the format: JSON Schemas (`spec/schemas/`) and bundled catalog records (`spec/catalogs/<kind>/`, one JSON file per record plus an `index.json` per kind). If you are proposing a change to the format itself, this is where it lives.
 - [`packages/javascript`](./packages/javascript) publishes `@openpresentation/opf` to npm. Its TypeScript types, generated content, and layout previews are **generated from `spec/` at build time** by `packages/javascript/scripts/generate*.mjs`. Generated output (e.g. `src/generated/`) is never edited by hand — it is produced fresh on every build and would simply be overwritten.
-- [`packages/cli`](./packages/cli) is a local-only CLI built on top of the same package; it is not currently published separately.
+- [`packages/cli`](./packages/cli) is the local-only `@openpresentation/cli` package, published separately with the matching core bundled inside.
 - [`examples/`](./examples) contains `*.opf.json` decks that are validated against the schema in CI and, for the top-level `examples/` tree, bundled into the npm package.
 - [`docs/`](./docs) holds human-facing reference material (schema reference, catalog reference, conceptual guides) plus `docs/plans/` (design proposals, not all of which are fully shipped — check each plan's status banner) and `docs/migrations/` (upgrade notes for breaking changes).
 
 ## Development setup
 
-Requirements: [pnpm](https://pnpm.io) and Node.js **>= 20**.
+Requirements: [pnpm](https://pnpm.io) and Node.js **24.x** (see `.nvmrc`). Node 20 and 22 users must upgrade before using the next coordinated release; see [migration instructions](docs/migrations/node24.md).
 
 ```sh
 pnpm install
@@ -43,7 +43,7 @@ converter versions in `release-plan.json` against the candidate core tarball.
 The CLI publishes a bundled executable, not a TypeScript library; its source is
 typechecked with TypeScript 7 and `pnpm test:cli:packed` verifies isolated global
 and npx-style installs. OPF CI and CLI portability together run these checks on
-Node 20/24 and Linux/Windows/macOS, retaining schema and runtime-floor checks.
+Node 24 and Linux/Windows/macOS, retaining schema and runtime-floor checks.
 
 ## Proposing changes
 
