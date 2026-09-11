@@ -1,5 +1,7 @@
 # OPF PPTX
 
+This checkout and the next release require Node 24 (`24.x`). Use `.nvmrc` for local development. Earlier published versions retain their original engine declarations. Browser entrypoints remain browser-safe; native application compatibility is verified separately.
+
 Unpublished integration work consumes shared heading/scalar/rich line placement, including `textRasterPadding`, through editable native line boxes without autofit. Complete heading tags retain title/subtitle/tag roles, line ordering and current edited text during import. The later source-whitespace candidate also records hard-line separators, so complete scalar/heading groups recover current native text with spaces, tabs and exact authored line endings. Incomplete, duplicate, ambiguous or bulleted groups fall back to ordinary import with diagnostics. Legacy heading tags retain their prior native-line behavior; arbitrary formatting, nesting and geometry are not reconstructed. See the [source contract and limits](https://github.com/OpenPresentation/opf/blob/codex/shared-metric-integration-20260910/docs/plans/text-placement.md). These changes are not in published 0.7.0 and are not native raster certification.
 
 Pure local PowerPoint conversion tooling for Open Presentation Format documents. This repo owns the Phase 3 and Phase 4 toolkit lanes: OPF to PPTX export and PPTX to OPF import.
@@ -167,7 +169,7 @@ Native viewer check: Keynote 14.4 displays the PNG/JPEG/GIF media-type specimens
 
 Set `imageFormat: "preserve"` to embed WebP unchanged when the receiving application supports it. Other image formats keep their existing export behavior. Conversion errors include the OPF image path; images above 40 megapixels are rejected before compatible conversion. Decoder differences can affect color/alpha rounding, so byte identity across platforms is not promised.
 
-Node conversion lazily loads the pinned open-source Sharp dependency and requires Node 20.9 or later. Normal package installation must include platform optional dependencies for its native binaries. Browser bundles select a separate browser decoder using local Blob/image/canvas APIs; Sharp and Node code are excluded. Neither path uploads images or fetches asset URLs. Source-preserving export and ordinary PNG/JPEG/GIF operations do not load Sharp.
+Node conversion lazily loads the pinned open-source Sharp dependency and requires Node 24. Normal package installation must include platform optional dependencies for its native binaries. Browser bundles select a separate browser decoder using local Blob/image/canvas APIs; Sharp and Node code are excluded. Neither path uploads images or fetches asset URLs. Source-preserving export and ordinary PNG/JPEG/GIF operations do not load Sharp.
 
 `npm test` includes the Node pixel-reference cases and verifies browser bundling. To run the browser pixel checks, run `npm run build:browser-check`, serve this repository locally, and open `/artifacts/webp-fallback/browser/index.html`. The page reports 13 checks covering embedded PNG pixels, alpha, EXIF, the first animation frame, fit/crop, resolver calls and DOM canvas fallback. These are browser export checks, separate from the recorded Keynote viewing evidence.
 
