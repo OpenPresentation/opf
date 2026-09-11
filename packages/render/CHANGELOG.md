@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Require Node 24 (`24.x`) for the next release and development; upgrade from Node 20 or 22 before installing. Retain browser and operating-system checks, and retire duplicate Node 20 CI jobs. Previously published packages and evidence are unchanged.
+
 - Resolve installed preferred-family weight variants and carry physical family/style-link metadata through accepted text styles. Diagnose ambiguous grouped faces and preserve explicit caller family overrides. Requires the coordinated core type and PPTX source increment; native paint validation remains separate.
 
 - Add `prepareNodeFonts` with shared measurement, embedded SVG and raster font options. Check pinned local font versions, all 33 font hashes and eight license notices; expose the immutable provenance manifest. No runtime downloads or system font installation are required.

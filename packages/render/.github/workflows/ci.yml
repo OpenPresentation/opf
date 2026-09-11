@@ -19,10 +19,6 @@ jobs:
         working-directory: opf-render
     env:
       OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf-render/test/golden/opf-examples-png.timeline.sha256.json
-    strategy:
-      fail-fast: false
-      matrix:
-        node: [20, 24]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -57,7 +53,7 @@ jobs:
           version: 10.33.2
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: ${{ matrix.node }}
+          node-version: 24
           cache: npm
           cache-dependency-path: opf-render/package-lock.json
       - name: Install locked coordinated dependencies
@@ -107,7 +103,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: candidate-opf-render-${{ runner.os }}-node${{ matrix.node }}
+          name: candidate-opf-render-${{ runner.os }}-node24
           path: |
             opf/artifacts/editor/*report.json
             opf/artifacts/editor/*failure.png
