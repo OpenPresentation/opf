@@ -1,0 +1,9 @@
+
+Running 2 tests using 1 worker
+
+(node:3875) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/e2e/monaco.spec.ts:3:5 › bundled JSON worker provides schema diagnostics, completion and recovery offline (2.0s)
+  ✓  2 tests/e2e/yaml.spec.ts:4:5 › YAML and Markdown editing preserve OPF values and recover from malformed YAML offline (3.3s)
+
+  2 passed (5.7s)

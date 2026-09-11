@@ -1,0 +1,15 @@
+
+Running 8 tests using 1 worker
+
+(node:1254) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/e2e/author.spec.ts:26:80 › anonymous code editing preserves source and visible selection through offline export/reimport at 1280x720 (3.2s)
+  ✓  2 tests/e2e/author.spec.ts:26:80 › anonymous code editing preserves source and visible selection through offline export/reimport at 540x960 (2.9s)
+  ✓  3 tests/e2e/author.spec.ts:55:5 › anonymous Author canvas edits survive tab changes, offline PowerPoint export and undoable reimport (3.7s)
+  ✓  4 tests/e2e/inspector.spec.ts:9:5 › published long quotes retain their footer in actual wide/portrait previews and PowerPoint downloads (1.4s)
+  ✓  5 tests/e2e/inspector.spec.ts:63:5 › shared navigation clears format errors and proposals from the previous deck (1.1s)
+  ✓  6 tests/e2e/inspector.spec.ts:105:5 › anonymous JSON authoring, preview, undo/redo, download and shared reimport (1.4s)
+  ✓  7 tests/e2e/svg-security.spec.ts:31:5 › published SVG renderer keeps hostile shared and imported document strings inert (2.3s)
+  ✓  8 tests/e2e/toolkit.spec.ts:4:5 › public toolkit shows the deployed package set with working render, edit and export proofs (122ms)
+
+  8 passed (16.7s)
