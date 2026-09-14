@@ -1,0 +1,97 @@
+▲ [WARNING] Ignoring this import because "packages/javascript/dist/chunk-YCN5Z46O.js" was marked as having no side effects [ignored-bare-import]
+
+    packages/javascript/dist/pagination.js:2:7:
+      2 │ import './chunk-YCN5Z46O.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  "sideEffects" is false in the enclosing "package.json" file:
+
+    packages/javascript/package.json:29:2:
+      29 │   "sideEffects": false,
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "packages/javascript/dist/chunk-JMD6N4GQ.js" was marked as having no side effects [ignored-bare-import]
+
+    packages/javascript/dist/pagination.js:3:7:
+      3 │ import './chunk-JMD6N4GQ.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  "sideEffects" is false in the enclosing "package.json" file:
+
+    packages/javascript/package.json:29:2:
+      29 │   "sideEffects": false,
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "packages/javascript/dist/chunk-GQSK3T7X.js" was marked as having no side effects [ignored-bare-import]
+
+    packages/javascript/dist/pagination.js:4:7:
+      4 │ import './chunk-GQSK3T7X.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  "sideEffects" is false in the enclosing "package.json" file:
+
+    packages/javascript/package.json:29:2:
+      29 │   "sideEffects": false,
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "packages/javascript/dist/chunk-TWMRZ43O.js" was marked as having no side effects [ignored-bare-import]
+
+    packages/javascript/dist/pagination.js:5:7:
+      5 │ import './chunk-TWMRZ43O.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  "sideEffects" is false in the enclosing "package.json" file:
+
+    packages/javascript/package.json:29:2:
+      29 │   "sideEffects": false,
+         ╵   ~~~~~~~~~~~~~
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+browserType.launch: Target page, context or browser has been closed
+Browser logs:
+
+<launching> /Users/michael/Library/Caches/ms-playwright/chromium_headless_shell-1243/chrome-headless-shell-mac-arm64/chrome-headless-shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,Translate,AutoDeElevate,OptimizationHints,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/var/folders/zj/5tv5dvds3793_qhx2jyxs0000000gn/T/playwright_chromiumdev_profile-VPSYaF --remote-debugging-pipe --no-startup-window
+<launched> pid=57907
+[pid=57907][err] [0914/140037.336376:ERROR:base/power_monitor/thermal_state_observer_mac.mm:140] ThermalStateObserverMac unable to register to power notifications. Result: 9
+[pid=57907][err] [0914/140037.354332:ERROR:net/dns/dns_config_service_posix.cc:138] DNS config watch failed to start.
+[pid=57907][err] [0914/140037.357087:WARNING:net/dns/dns_config_service_posix.cc:197] Failed to read DnsConfig.
+[pid=57907][err] [0914/140037.364074:FATAL:base/apple/mach_port_rendezvous_mac.cc:159] Check failed: kr == KERN_SUCCESS. bootstrap_check_in org.chromium.Chromium.MachPortRendezvousServer.57907: Permission denied (1100)
+Call log:
+[2m  - <launching> /Users/michael/Library/Caches/ms-playwright/chromium_headless_shell-1243/chrome-headless-shell-mac-arm64/chrome-headless-shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,Translate,AutoDeElevate,OptimizationHints,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/var/folders/zj/5tv5dvds3793_qhx2jyxs0000000gn/T/playwright_chromiumdev_profile-VPSYaF --remote-debugging-pipe --no-startup-window[22m
+[2m  - <launched> pid=57907[22m
+[2m  - [pid=57907][err] [0914/140037.336376:ERROR:base/power_monitor/thermal_state_observer_mac.mm:140] ThermalStateObserverMac unable to register to power notifications. Result: 9[22m
+[2m  - [pid=57907][err] [0914/140037.354332:ERROR:net/dns/dns_config_service_posix.cc:138] DNS config watch failed to start.[22m
+[2m  - [pid=57907][err] [0914/140037.357087:WARNING:net/dns/dns_config_service_posix.cc:197] Failed to read DnsConfig.[22m
+[2m  - [pid=57907][err] [0914/140037.364074:FATAL:base/apple/mach_port_rendezvous_mac.cc:159] Check failed: kr == KERN_SUCCESS. bootstrap_check_in org.chromium.Chromium.MachPortRendezvousServer.57907: Permission denied (1100)[22m
+[2m  - [pid=57907] <gracefully close start>[22m
+[2m  - [pid=57907] <kill>[22m
+[2m  - [pid=57907] <will force kill>[22m
+[2m  - [pid=57907] exception while trying to kill process: Error: kill EPERM[22m
+[2m  - [pid=57907] <process did exit: exitCode=null, signal=SIGTRAP>[22m
+[2m  - [pid=57907] starting temporary directories cleanup[22m
+[2m  - [pid=57907] finished temporary directories cleanup[22m
+[2m  - [pid=57907] <gracefully close end>[22m
+
+    at /Users/michael/Source/opf/scripts/test-furniture-workflow.mjs:39:63 {
+  log: [
+    '  - <launching> /Users/michael/Library/Caches/ms-playwright/chromium_headless_shell-1243/chrome-headless-shell-mac-arm64/chrome-headless-shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,Translate,AutoDeElevate,OptimizationHints,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/var/folders/zj/5tv5dvds3793_qhx2jyxs0000000gn/T/playwright_chromiumdev_profile-VPSYaF --remote-debugging-pipe --no-startup-window',
+    '  - <launched> pid=57907',
+    '  - [pid=57907][err] [0914/140037.336376:ERROR:base/power_monitor/thermal_state_observer_mac.mm:140] ThermalStateObserverMac unable to register to power notifications. Result: 9',
+    '  - [pid=57907][err] [0914/140037.354332:ERROR:net/dns/dns_config_service_posix.cc:138] DNS config watch failed to start.',
+    '  - [pid=57907][err] [0914/140037.357087:WARNING:net/dns/dns_config_service_posix.cc:197] Failed to read DnsConfig.',
+    '  - [pid=57907][err] [0914/140037.364074:FATAL:base/apple/mach_port_rendezvous_mac.cc:159] Check failed: kr == KERN_SUCCESS. bootstrap_check_in org.chromium.Chromium.MachPortRendezvousServer.57907: Permission denied (1100)',
+    '  - [pid=57907] <gracefully close start>',
+    '  - [pid=57907] <kill>',
+    '  - [pid=57907] <will force kill>',
+    '  - [pid=57907] exception while trying to kill process: Error: kill EPERM',
+    '  - [pid=57907] <process did exit: exitCode=null, signal=SIGTRAP>',
+    '  - [pid=57907] starting temporary directories cleanup',
+    '  - [pid=57907] finished temporary directories cleanup',
+    '  - [pid=57907] <gracefully close end>'
+  ]
+}
+
+Node.js v24.21.0

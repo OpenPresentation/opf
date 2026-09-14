@@ -1,0 +1,164 @@
+{
+  "id": "literal-and-generated",
+  "source": {
+    "design": {
+      "fontScheme": "roboto",
+      "header": {
+        "left": {
+          "text": "  Header\twords\r\nsecond  \r\n"
+        },
+        "right": {
+          "section": true
+        }
+      },
+      "footer": {
+        "left": {
+          "date": " 2026-09-14 "
+        },
+        "right": {
+          "slideNumber": true
+        }
+      }
+    },
+    "slides": [
+      {
+        "title": "First",
+        "section": "Overview",
+        "text": "First body"
+      },
+      {
+        "title": "Second",
+        "section": "Details",
+        "text": "Second body"
+      }
+    ]
+  },
+  "imported": {
+    "$schema": "https://openpresentation.org/schema/opf/v1",
+    "name": "OPF Presentation",
+    "slides": [
+      {
+        "design": {
+          "background": {
+            "type": "solid",
+            "color": "#011842"
+          }
+        },
+        "title": "First",
+        "blocks": [
+          {
+            "type": "text",
+            "text": "  Header\twords"
+          },
+          {
+            "type": "text",
+            "text": "Overview"
+          },
+          {
+            "type": "text",
+            "text": "second  "
+          },
+          {
+            "type": "text",
+            "text": "PowerPoint shape: OPF furniture 0 part 0 line 2"
+          },
+          {
+            "type": "text",
+            "text": "First body"
+          },
+          {
+            "type": "text",
+            "text": " 2026-09-14 "
+          },
+          {
+            "type": "text",
+            "text": "1"
+          }
+        ]
+      },
+      {
+        "design": {
+          "background": {
+            "type": "solid",
+            "color": "#011842"
+          }
+        },
+        "title": "Second",
+        "blocks": [
+          {
+            "type": "text",
+            "text": "  Header\twords"
+          },
+          {
+            "type": "text",
+            "text": "Details"
+          },
+          {
+            "type": "text",
+            "text": "second  "
+          },
+          {
+            "type": "text",
+            "text": "PowerPoint shape: OPF furniture 1 part 0 line 2"
+          },
+          {
+            "type": "text",
+            "text": "Second body"
+          },
+          {
+            "type": "text",
+            "text": " 2026-09-14 "
+          },
+          {
+            "type": "text",
+            "text": "2"
+          }
+        ]
+      }
+    ],
+    "author": "OpenPresentation",
+    "design": {
+      "dimensions": {
+        "widthInches": 13.333333333333334,
+        "heightInches": 7.5
+      }
+    }
+  },
+  "checks": {
+    "literalWhitespace": false,
+    "literalDate": false,
+    "generatedNumberIntent": false,
+    "sectionIntent": false,
+    "currentSectionMetadata": false
+  },
+  "failures": [
+    "literalWhitespace",
+    "literalDate",
+    "generatedNumberIntent",
+    "sectionIntent",
+    "currentSectionMetadata"
+  ],
+  "diagnostics": [
+    {
+      "code": "heading-import-reflow",
+      "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed.",
+      "path": "slides.0"
+    },
+    {
+      "code": "text-import-reflow",
+      "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.",
+      "path": "slides.0"
+    },
+    {
+      "code": "heading-import-reflow",
+      "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed.",
+      "path": "slides.1"
+    },
+    {
+      "code": "text-import-reflow",
+      "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.",
+      "path": "slides.1"
+    }
+  ],
+  "pptxSha256": "1208d09e925b8d604ca68d5403fb5b9c8f9e89cbbe5e8f17a07d4c71df5279ef"
+}

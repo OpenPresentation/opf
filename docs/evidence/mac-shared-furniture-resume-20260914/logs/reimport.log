@@ -1,0 +1,16 @@
+{
+  "cases": 5,
+  "failedChecks": [
+    "literal-and-generated: literalWhitespace",
+    "literal-and-generated: literalDate",
+    "literal-and-generated: generatedNumberIntent",
+    "literal-and-generated: sectionIntent",
+    "literal-and-generated: currentSectionMetadata",
+    "false-and-empty: explicitFalse",
+    "false-and-empty: explicitEmpty",
+    "false-and-empty: inheritedLiteral",
+    "image: imageRole",
+    "image: imageAlt",
+    "current-native-edit: furnitureRoleRetained"
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "id": "ordinary-text-control",
+  "source": {
+    "design": {
+      "fontScheme": "roboto"
+    },
+    "slides": [
+      {
+        "title": "Ordinary heading",
+        "text": "Ordinary body"
+      }
+    ]
+  },
+  "imported": {
+    "$schema": "https://openpresentation.org/schema/opf/v1",
+    "name": "OPF Presentation",
+    "slides": [
+      {
+        "design": {
+          "background": {
+            "type": "solid",
+            "color": "#011842"
+          }
+        },
+        "title": "Ordinary heading",
+        "blocks": [
+          {
+            "type": "text",
+            "text": "Ordinary body"
+          }
+        ]
+      }
+    ],
+    "author": "OpenPresentation",
+    "design": {
+      "dimensions": {
+        "widthInches": 13.333333333333334,
+        "heightInches": 7.5
+      }
+    }
+  },
+  "checks": {
+    "noInventedHeader": true,
+    "noInventedFooter": true,
+    "bodyRetained": true
+  },
+  "failures": [],
+  "diagnostics": [
+    {
+      "code": "heading-import-reflow",
+      "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed.",
+      "path": "slides.0"
+    },
+    {
+      "code": "text-import-reflow",
+      "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.",
+      "path": "slides.0"
+    }
+  ],
+  "pptxSha256": "cddc0b942f8bd0a30566f9755359c156ec8cf4f2096ea5b912b0ac53f181a92c"
+}
