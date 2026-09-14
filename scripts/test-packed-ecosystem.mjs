@@ -112,6 +112,16 @@ assert.equal(registry.embeddedFonts.length,33);
 console.log('Installed candidate font preparation passed layout, edit/undo, SVG/PNG, editable PPTX export and heading reimport.');
 `);
   run(process.execPath,['check-font-preparation.mjs']);
+  // Furniture is an unpublished coordinated API. Exercise its mutation guards
+  // using the installed converter/core/fonts, never a sibling source alias.
+  const furnitureHarness = (await readHarness('opf-pptx', 'test/furniture-provenance.mjs'))
+    .replaceAll("'../dist/index.js'", "'@openpresentation/opf-pptx'")
+    .replaceAll("'../vendor/pptxgenjs/pptxgen.es.js'", "'./node_modules/@openpresentation/opf-pptx/vendor/pptxgenjs/pptxgen.es.js'");
+  await mkdir(path.join(consumer, 'fixtures/images'), {recursive: true});
+  for (const name of ['wide.png', 'tall.png']) await writeFile(path.join(consumer, 'fixtures/images', name),
+    await readFile(path.resolve(root, '../opf-pptx/test/fixtures/images', name)));
+  await writeFile(path.join(consumer, 'furniture-provenance.mjs'), furnitureHarness);
+  run(process.execPath, ['furniture-provenance.mjs']);
   for (const repo of ['opf-render','opf-pptx']) {
     const source=(await readHarness(repo,'test/font-variants.mjs'))
       .replaceAll("'../dist/fonts-node.js'","'@openpresentation/opf-render/fonts-node'")

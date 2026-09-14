@@ -26,21 +26,21 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
-          ref: 3032110e007f0dfceb4ba57ad88febc2f380baf4
+          ref: c91a683a47ac05556b97eb5169f836d7a1822ca3
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-editor
-          ref: 6f15884a34fd1b00e2852c2027661f0df2e219f4
+          ref: 50384b8cd4d96a9db26bcab6304136440effed35
           path: opf-editor
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-pptx
-          ref: cac8f6e058e0d18cbb404730d0094d21d44665eb
+          ref: ca4e13574400f059246dc67e8abf6591dcd663da
           path: opf-pptx
           fetch-depth: 0
           persist-credentials: false
@@ -77,6 +77,7 @@ jobs:
           node scripts/test-plain-whitespace-workflow.mjs artifacts/plain-whitespace-installed installed
           node scripts/test-readability-browser.mjs artifacts/readability-browser installed
           node scripts/test-timeline-workflow.mjs artifacts/timeline-workflow installed
+          node scripts/test-furniture-workflow.mjs artifacts/furniture-workflow installed
           node scripts/test-timeline-acceptance.mjs artifacts/timeline-acceptance.json
       - name: Check scalar source whitespace and accepted browser advances
         working-directory: opf-render
@@ -128,6 +129,7 @@ jobs:
             opf/artifacts/plain-whitespace-installed/**
             opf/artifacts/readability-browser/**
             opf/artifacts/timeline-workflow/**
+            opf/artifacts/furniture-workflow/**
             opf/artifacts/timeline-acceptance.json
             opf-render/artifacts/plain-whitespace-browser/**
           retention-days: 7
