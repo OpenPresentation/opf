@@ -1,0 +1,10 @@
+{
+  "node": "24.21.0",
+  "rendererCommit": "d0ff86abe6e67436a5674778605bc8562314ad1c",
+  "command": "npm test",
+  "exitCode": 0,
+  "log": "renderer-full-suite.log",
+  "logSha256": "614efb10cdb88276166feff783d9342350110996dd6efe135b7f13189ade6590",
+  "goldenSlides": 805,
+  "nativeOfficeAcceptance": false
+}
