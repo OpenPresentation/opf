@@ -63,3 +63,13 @@ and body separation remain intact; the narrow 32px organization label wraps one
 character earlier while preserving all words. This is a scoped clearance fix,
 not general visual-quality approval. Fresh coordinated source, installed Linux
 and Windows, and unchanged-corpus checks remain required.
+
+Final clearance acceptance: all six coordinated CI runs pass at core `8a322c1`,
+renderer `3d4fa8c`, editor `40023fb` and PPTX `ee89b26`. The evidence and verifier
+in `docs/evidence/mac-furniture-clearance-20260914` retain exact heads, full logs,
+field masks and original failures. Core passes 508 tests; both renderer and core
+ecosystem pass all 805 unchanged furniture baseline slides. Mac/Linux/Windows
+each pass sixteen installed workflows and forty field masks; negative controls
+fail as intended. Accepted geometry, semantic imports and PPTX bytes agree across
+platforms. Native Office recovery and font/tab/image/provenance acceptance remain
+required before release/public adoption. The overall ecosystem goal remains open.
