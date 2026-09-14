@@ -27,3 +27,15 @@ The resumed evidence directory is `docs/evidence/mac-shared-furniture-resume-202
 September 14 visual checkpoint: the predecessor was regenerated from current Node 24 default source and reproduced all 805 timeline baseline entries exactly. The candidate reproduced the same 657 changes and unchanged source digest. All 83 paired contact sheets and seven original-size before/after controls were visually reviewed. Renderer commit `d0ff86abe6e67436a5674778605bc8562314ad1c` retains the paired evidence, manifests, initial failures and review decision under `docs/evidence/furniture-corpus-review`; it introduces a separate `opf-examples-png.furniture.sha256.json` baseline. The timeline baseline is unchanged. The full local renderer suite now passes, including all 805 rasters. This accepts regression stability of the furniture change, not general visual quality or native/font compatibility.
 
 Coordinated draft PRs are core #79, renderer #20, editor #17 and PPTX #34. The first pass passed core package verification, Mac/Windows CLI, editor, and Linux/Windows PPTX checks. Core ecosystem and renderer CI failed at the retained 657-slide raster gate, as expected before review; their remaining later steps were not established by those first runs. The current CI pins the reviewed renderer/baseline so those steps can complete. Native Office recovery and image/font/tab acceptance, final coordinated CI and registry release/public-site adoption remain required. The separately prioritized homepage JSON editor was merged in website PR29 and passed all nine production browser tests; it uses published core validation and does not imply furniture package publication.
+
+September 14 CI audit correction: all status badges were green, but the full PPTX
+Windows log contains a failed installed furniture browser assertion that was
+masked by later successful commands in a PowerShell multiline step. The field
+`design.header.left.text` has a Canvas-derived left ink estimate outside the
+accepted box by 0.07001078651686px, beyond the existing 0.05px allowance. Linux
+completes the sixteen workflows; Windows does not. The 37 Windows provenance
+imports pass separately. `docs/evidence/mac-furniture-windows-ci-20260914` retains
+all original logs and the failed artifact. Fix failure propagation first, then
+inspect exact SVG paint and geometry before changing placement or measurement.
+The harness gains failure capture, with no tolerance or runtime changes. Native
+Office recovery remains required; no COM call is authorized by a green CI badge.

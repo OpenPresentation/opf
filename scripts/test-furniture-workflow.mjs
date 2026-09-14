@@ -5,7 +5,7 @@ import path from 'node:path';
 import {createRequire} from 'node:module';
 import {pathToFileURL} from 'node:url';
 const require=createRequire(new URL('../../opf-render/package.json',import.meta.url));
-const {build}=require('esbuild'),{chromium}=require('playwright');
+const {build}=require('esbuild'),{chromium}=require('playwright'),sharp=require('sharp');
 import {prepareNodeFonts} from '../../opf-render/dist/fonts-node.js';
 const output=path.resolve(process.argv[2]??'artifacts/furniture-workflow');await mkdir(output,{recursive:true});
 const installed=process.argv[3]==='installed',consumer=path.resolve('artifacts/npm/consumer');
@@ -36,9 +36,9 @@ if(installed){
   const actual=await realpath(path.resolve(input));assert.ok(actual.startsWith(modules+path.sep),`Browser runtime is outside the installed consumer: ${input}`);bundleInputs[input]=hash(await readFile(actual));
  }
 }
-const bundle=built.outputFiles[0].text,browser=await chromium.launch(),results=[],errors=[],requests=[];let activeCase;
+const bundle=built.outputFiles[0].text,browser=await chromium.launch(),results=[],errors=[],requests=[];let activeCase,page,lastGeometry;
 try{
- const page=await browser.newPage({viewport:{width:1400,height:1100}});
+ page=await browser.newPage({viewport:{width:1400,height:1100}});
  page.on('pageerror',error=>errors.push(error.message));page.on('console',message=>{if(message.type()==='error')errors.push(message.text());});
  await page.route(/^https?:/,route=>{requests.push(route.request().url());return route.abort();});
  await page.setContent('<button id="undo">Undo</button><button id="redo">Redo</button><button id="export">Export</button><div id="canvas" style="width:900px"></div>');await page.addScriptTag({content:bundle});
@@ -60,10 +60,16 @@ try{
       const anchor=line.getAttribute('text-anchor'),factor=anchor==='middle'?.5:anchor==='end'?1:0,x=Number(segment.getAttribute('x'))-width*factor,baseline=Number(line.getAttribute('y'));
       return {x:x-metrics.actualBoundingBoxLeft*ratio,y:baseline-metrics.actualBoundingBoxAscent,width:(metrics.actualBoundingBoxLeft+metrics.actualBoundingBoxRight)*ratio,height:metrics.actualBoundingBoxAscent+metrics.actualBoundingBoxDescent};
      });
-     return {text:line.textContent,size:parseFloat(style.fontSize),ink,start:Number(line.getAttribute('data-opf-source-start')),end:Number(line.getAttribute('data-opf-source-end'))};
+     const svgBox=line.getBBox();
+     return {text:line.textContent,size:parseFloat(style.fontSize),font:context.font,svgAdvance:line.getComputedTextLength(),
+      svgBox:{x:svgBox.x,y:svgBox.y,width:svgBox.width,height:svgBox.height},segments:segments.map(segment=>{
+       const metrics=context.measureText(segment.textContent);return {text:segment.textContent,x:segment.getAttribute('x'),textLength:segment.getAttribute('textLength'),
+        advance:metrics.width,left:metrics.actualBoundingBoxLeft,right:metrics.actualBoundingBoxRight,ascent:metrics.actualBoundingBoxAscent,descent:metrics.actualBoundingBoxDescent};
+      }),ink,start:Number(line.getAttribute('data-opf-source-start')),end:Number(line.getAttribute('data-opf-source-end'))};
     })};
    })};
   });
+  lastGeometry=geometry;
   assert.deepEqual(geometry.diagnostics,[]);assert.ok(geometry.contentBox.y>=geometry.furniture.headerBottom);assert.ok(geometry.contentBox.y+geometry.contentBox.height<=geometry.furniture.footerTop);
   for(const actual of geometry.actual){
    const part=geometry.furniture.parts.find(part=>part.path===actual.path);assert.equal(actual.selectable,!part.generated);assert.equal(actual.lines.length,part.fit.sourceLines.length);
@@ -94,4 +100,34 @@ try{
  await writeFile(path.join(output,'report.json'),JSON.stringify({node:process.version,mode:installed?'installed':'source',...(installed?{lockSha256:hash(await readFile(path.join(consumer,'package-lock.json'))),bundleInputs}:{}),browser:browser.version(),verifierSha256:hash(await readFile(new URL(import.meta.url))),bundleSha256:hash(bundle),results,errors,requests,scope:`${results.length} offline browser workflows verify readable shared furniture, actual source selection, no-op/edit/undo/redo, empty fields, literal dates and current-content PPTX reimport. Generated values remain bound to metadata. Native Office, full corpus visual review and release acceptance remain separate.`},null,2)+'\n');
  console.log(`${results.length} offline ${installed?'installed':'source'} furniture workflows passed: geometry, readability, source editing, generated values, empty fields, undo/redo and PPTX reimport.`);
 }catch(error){await pageFailure(error);throw error;}finally{await browser.close();}
-async function pageFailure(error){await writeFile(path.join(output,'failure.json'),JSON.stringify({activeCase,message:error.message,errors,requests},null,2)+'\n');}
+async function pageFailure(error){
+ const report={node:process.version,platform:process.platform,browser:browser.version(),activeCase,message:error.message,errors,requests,geometry:lastGeometry,
+  fonts:registry.embeddedFonts.map(face=>({family:face.family,weight:face.weight,italic:face.italic,sha256:hash(Buffer.from(face.dataUrl.split(',')[1],'base64'))}))};
+ // Keep the original failure even if supplementary paint inspection fails.
+ await writeFile(path.join(output,'failure.json'),JSON.stringify(report,null,2)+'\n');
+ try{
+  await page.screenshot({path:path.join(output,'failure-page.png'),fullPage:true});
+  const sourcePath=JSON.parse(error.message).path,part=lastGeometry.furniture.parts.find(part=>part.path===sourcePath);
+  if(!part)return;
+  const svg=await page.evaluate(async({sourcePath,width,height})=>{
+   const group=[...document.querySelectorAll('[data-opf-source-text]')].find(node=>node.getAttribute('data-opf-path')===sourcePath),original=group.closest('svg'),mask=original.cloneNode(false);
+   mask.removeAttribute('class');mask.setAttribute('width',width);mask.setAttribute('height',height);
+   mask.style.cssText=`background:#000;width:${width}px;height:${height}px;max-width:none;display:block`;
+   for(const node of original.querySelectorAll('defs,style'))mask.append(node.cloneNode(true));
+   for(const node of group.querySelectorAll('text')){const clone=node.cloneNode(true);clone.style.fill='#fff';clone.style.color='#fff';mask.append(clone);}
+   document.body.style.margin='0';document.body.replaceChildren(mask);await document.fonts.ready;
+   return mask.outerHTML;
+  },{sourcePath,width:activeCase.width,height:activeCase.height});
+  await writeFile(path.join(output,'failure-field.svg'),svg);
+  const png=await page.locator('svg').screenshot({path:path.join(output,'failure-field.png')});
+  const {data,info}=await sharp(png).removeAlpha().raw().toBuffer({resolveWithObject:true});
+  assert.equal(info.width,activeCase.width);assert.equal(info.height,activeCase.height);
+  const box=part.box;let pixels=0,outsideCount=0;const outside=[];
+  for(let y=0;y<info.height;y++)for(let x=0;x<info.width;x++){
+   const at=(y*info.width+x)*info.channels,coverage=Math.max(data[at],data[at+1],data[at+2]);if(!coverage)continue;pixels++;
+   if(Math.max(box.x-(x+.5),box.y-(y+.5),x+.5-(box.x+box.width),y+.5-(box.y+box.height))>.05+1e-9){outsideCount++;if(outside.length<100)outside.push({x,y,coverage});}
+  }
+  report.paint={path:sourcePath,box,pixels,outsideCount,outside,sha256:hash(png),scope:'Supplementary actual SVG paint at one reference pixel per raster pixel; nonzero pixel centers compared with the unchanged 0.05 containment allowance. This does not override the original Canvas metric failure.'};
+ }catch(diagnosticError){report.paintInspectionError=diagnosticError.message;}
+ await writeFile(path.join(output,'failure.json'),JSON.stringify(report,null,2)+'\n');
+}
