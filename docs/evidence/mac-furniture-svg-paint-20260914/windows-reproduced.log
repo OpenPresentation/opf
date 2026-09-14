@@ -1,0 +1,186 @@
+package (windows-latest)	Install and exercise coordinated candidate tarballs	﻿2026-09-14T23:25:10.8354029Z ##[group]Run pnpm pack:ecosystem
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:10.8354607Z ^[[36;1mpnpm pack:ecosystem^[[0m
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:10.8354938Z ^[[36;1mpnpm test:packed-ecosystem^[[0m
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:10.8355245Z ^[[36;1mpnpm test:packed-browser^[[0m
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:10.8355742Z ^[[36;1mnode scripts/test-plain-whitespace-workflow.mjs artifacts/plain-whitespace-workflow installed^[[0m
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:10.8356924Z ^[[36;1mnode scripts/test-readability-browser.mjs artifacts/readability-browser installed^[[0m
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:10.8357989Z ^[[36;1mnode scripts/test-timeline-workflow.mjs artifacts/timeline-workflow installed^[[0m
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:10.8359080Z ^[[36;1mnode scripts/test-furniture-workflow.mjs artifacts/furniture-workflow installed^[[0m
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:10.8360065Z ^[[36;1mnode scripts/test-timeline-acceptance.mjs artifacts/timeline-acceptance.json^[[0m
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:10.8360912Z ^[[36;1mnode scripts/test-installed-code-guards.mjs^[[0m
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:10.8379147Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:10.8379593Z env:
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:10.8380013Z   OPF_GOLDEN_BASELINE: D:\a\opf-pptx\opf-pptx/opf-render/test/golden/opf-examples-png.furniture.sha256.json
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:10.8380619Z   PNPM_HOME: C:\Users\runneradmin\setup-pnpm\node_modules\.bin
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:10.8380966Z ##[endgroup]
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:11.4076280Z 
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:11.4077183Z > openpresentation-workspace@ pack:ecosystem D:\a\opf-pptx\opf-pptx\opf
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:11.4078014Z > node scripts/pack-ecosystem.mjs
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:11.4078324Z 
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:15.4402591Z [
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:15.4402971Z   {
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:15.4403352Z     "name": "@openpresentation/opf",
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:15.4403890Z     "version": "0.4.0-preview.11",
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:15.4404463Z     "file": "openpresentation-opf-0.4.0-preview.11.tgz",
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:15.4405291Z     "sha256": "69483927c7b5c90662650a6587856583dce16a62cc12ad85b0c118f15202ead8",
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:15.4406250Z     "bytes": 2354085
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:15.4406609Z   },
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:15.4406881Z   {
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:15.4407250Z     "name": "@openpresentation/opf-render",
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:15.4408010Z     "version": "0.1.0-preview.11",
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:15.4408624Z     "file": "openpresentation-opf-render-0.1.0-preview.11.tgz",
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:15.4421055Z     "sha256": "cbe2468e41ac65fa7711fdafa28cc258f6c39860ee75afe9dc5e874bf2af866d",
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:15.4421842Z     "bytes": 42286
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:15.4422167Z   },
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:15.4422432Z   {
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:15.4422801Z     "name": "@openpresentation/opf-editor",
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:15.4423338Z     "version": "0.1.0-preview.11",
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:15.4423951Z     "file": "openpresentation-opf-editor-0.1.0-preview.11.tgz",
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:15.4424813Z     "sha256": "a5aa33cd58709629ee732155d930325398e8d6868c1f55073007637c77ea6d0c",
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:15.4425473Z     "bytes": 56665
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:15.4425773Z   },
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:15.4426028Z   {
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:15.4426380Z     "name": "@openpresentation/opf-pptx",
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:15.4426897Z     "version": "0.1.0-preview.11",
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:15.4427487Z     "file": "openpresentation-opf-pptx-0.1.0-preview.11.tgz",
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:15.4428324Z     "sha256": "6559836644f6e576f8eba90927c67e0b0e85395a197284109edd248b946ccdd2",
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:15.4428996Z     "bytes": 217075
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:15.4429907Z   }
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:15.4430349Z ]
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:15.9978693Z 
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:15.9979910Z > openpresentation-workspace@ test:packed-ecosystem D:\a\opf-pptx\opf-pptx\opf
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:15.9980827Z > node scripts/test-packed-ecosystem.mjs
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:15.9981164Z 
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:16.5136487Z npm warn Unknown env config "npm-globalconfig". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:16.5139172Z npm warn Unknown env config "verify-deps-before-run". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:16.5144250Z npm warn Unknown env config "_jsr-registry". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:23.7338847Z 
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:23.7339433Z added 63 packages in 8s
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:25.4201977Z Installed candidate font preparation passed layout, edit/undo, SVG/PNG, editable PPTX export and heading reimport.
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:27.2128886Z Furniture provenance: 8 measured/estimated local/inherited wide/portrait cases, 12 damaged-tag controls, edits/clearing/reordering, current images and metadata conflicts pass (37 validated imports). Native Office is a separate gate.
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:27.6740242Z Nine exact grouped faces preserve measured bytes and physical style links; overrides, aliases, duplicates and approximation controls pass.
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:28.6613023Z 7 payload slides use all nine real physical font styles; deterministic output, source, reimport and provider controls pass.
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:29.4014570Z Packed consumer: core, editor, SVG, measured fonts and PPTX passed.
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:29.8222233Z ✔ complete code parts preserve exact filename, language, body, whitespace and hard line boundaries (4.6081ms)
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:29.8224427Z ✔ shorthand, empty source and absent metadata retain their source and generated-label distinction (0.7552ms)
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:29.8226588Z ✔ long language labels and filenames are measured within their cell before allocating the body (6.5713ms)
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:29.8228628Z ✔ wrapped whitespace and graphemes retain contiguous source offsets, including CRLF and blank final lines (1.0708ms)
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:29.8231314Z ✔ tabs use measured space stops and never send control tabs to the font-width provider (1.2215ms)
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:29.8232848Z ✔ readability floors scale once and body shrinking preserves all code content (0.7627ms)
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:29.8237322Z ✔ irreducible body and metadata failures remain explicit; strict mode does not return partial output (8.9482ms)
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:29.8241937Z ✔ invalid inner boxes never become invented one-pixel fits; malformed options reject (0.5849ms)
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:29.8245365Z ✔ font trials stay bounded independently of canvas scale (11.7741ms)
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:29.8385731Z ℹ tests 9
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:29.8386163Z ℹ suites 0
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:29.8386480Z ℹ pass 9
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:29.8386834Z ℹ fail 0
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:29.8387161Z ℹ cancelled 0
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:29.8387431Z ℹ skipped 0
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:29.8387639Z ℹ todo 0
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:29.8387889Z ℹ duration_ms 215.0441
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:30.7492755Z ✔ accepted code uses rounded cells and preserves body compatibility without repeated explanation measurements (8.0822ms)
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:30.7494942Z ✔ candidate penalties include complete code metadata and charge overflowing leaves once (12.9019ms)
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:30.7498487Z ✔ strict ancestors reject code metadata paths and cannot be weakened by descendants (217.8807ms)
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:30.7504287Z ✔ explicit code placement and weights remain authoritative even when metadata overflows (12.7178ms)
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:30.7509817Z ✔ pagination preserves exact code bytes, metadata, ranges and floors across wide and portrait slides (265.696ms)
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:30.7513974Z ✔ irreducible code metadata rejects pagination even after earlier content or with an empty body (181.2589ms)
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:30.7671036Z ℹ tests 6
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:30.7671421Z ℹ suites 0
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:30.7671752Z ℹ pass 6
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:30.7672100Z ℹ fail 0
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:30.7672462Z ℹ cancelled 0
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:30.7673256Z ℹ skipped 0
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:30.7673627Z ℹ todo 0
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:30.7673980Z ℹ duration_ms 872.4222
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:31.9038326Z Shared code PPTX: 8 decks, 37 accepted native lines, 8 tab stops, six whitespace imports, strict failures, 132 XML-boundary rejections and valid character boundaries verified.
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:33.0288976Z Code provenance: exact source/metadata, native edits, ordering, empty/Unicode values, five damaged groups and edited generated label verified.
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:33.6913774Z Shared code SVG: 10 accepted layouts, source/whitespace/trace preservation, no extra measurement, strict/tiny-cell rejection, 132 XML-boundary rejections and valid character boundaries.
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:37.6939470Z Actual shared code browser: 12 wide/portrait cases with source preservation, accepted tab positions and contained glyphs.
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:44.2546050Z Code canvas: wide/portrait source editing, metadata, CRLF, tabs, pagination, undo, offline export and bounded reimport checks pass.
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:44.5678665Z Installed code: candidate source, pagination, metadata guards and actual offline browser workflows passed.
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:44.8481215Z ✔ complete quote layout preserves source ranges, requested/resolved styles and legacy readable geometry (4.131ms)
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:44.8491427Z ✔ shorthand and empty metadata preserve schema paths without an invented footer (0.7942ms)
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:44.8494622Z ✔ body and footer share available space before shrinking text or changing the outer arrangement (14.2095ms)
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:44.8496363Z ✔ long footer, body/footer collision and strict rejection remain explicit without source truncation (107.4943ms)
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:44.8497674Z ✔ tiny cells retain invalid available dimensions and never measure an invented fitting box (0.3332ms)
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:44.8500391Z ✔ explicit readability floors are respected after scaling, including above nominal footer size (0.3405ms)
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:44.8504618Z ✔ invalid content, geometry, scales and policies fail before reporting a usable layout (0.4791ms)
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:44.8628907Z ℹ tests 7
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:44.8629368Z ℹ suites 0
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:44.8630274Z ℹ pass 7
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:44.8630604Z ℹ fail 0
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:44.8630960Z ℹ cancelled 0
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:44.8631686Z ℹ skipped 0
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:44.8632048Z ℹ todo 0
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:44.8632475Z ℹ duration_ms 233.4608
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:47.2129547Z ✔ accepted quote geometry includes all parts without changing source or re-measuring for explanations (7.2726ms)
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:47.2131553Z ✔ automatic candidates account for footer fit and choose the arrangement that keeps it readable (10.4493ms)
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:47.2136239Z ✔ strict ancestors reject a quote body diagnostic below the leaf path (233.4824ms)
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:47.2138008Z ✔ strict path matching respects component boundaries rather than numeric prefixes (213.1707ms)
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:47.2139974Z ✔ pagination preserves quote body, repeated metadata, ranges and the accepted readability floor (1636.8085ms)
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:47.2144192Z ✔ irreducible footer overflow rejects pagination without mutating or returning partial content (34.2244ms)
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:47.2329193Z ℹ tests 6
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:47.2329668Z ℹ suites 0
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:47.2330112Z ℹ pass 6
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:47.2330517Z ℹ fail 0
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:47.2330875Z ℹ cancelled 0
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:47.2331470Z ℹ skipped 0
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:47.2331902Z ℹ todo 0
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:47.2332387Z ℹ duration_ms 2312.4692
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:48.3232122Z Shared quote SVG: 4 exact accepted layouts/styles with no extra measurement, reasoned overflow, strict rejection and no tiny-cell omission.
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:49.2297321Z Shared quote PPTX: 4 wide/portrait decks and 6 native lines match accepted geometry/styles without re-fitting; reimport and strict/unusable-space rejection pass.
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:49.9275469Z Packed quote editor passed: accepted one-page policy, source preservation, actual fonts, SVG/PPTX, undo/redo and editable native text reimport. Quote semantics are not reconstructed on import.
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:50.6126331Z Styled native table export passed: merged grid, unique text, full covered rows, colors/alpha, border dashes, zero/fractional padding, alignment, scaled row geometry and determinism.
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:50.6375063Z Native merge perimeter regression passed: continuation and neighbor edges, transparent dashes, dotted top, hidden bottom and scaling.
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:51.4106458Z Styled native table import passed: direct fills/alpha, borders, margins, alignment, dense merges, repeated conversion, header crossing and text-preserving malformed-merge diagnostics.
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:52.3417339Z Native conditional table borders passed: outer frame/interior grid, bands/edges/corners, partial/direct overrides, theme lines/alpha, missing-reference masking, repeated conversion and diagnostics.
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:52.8382782Z ✔ short table rows preserve baseline geometry and missing cells (4.1374ms)
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:52.8384481Z ✔ wrapped and rich multiline rows grow into available space (6.3571ms)
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:52.8386060Z ✔ constrained tables consume spare row height before reporting real overflow (1.432ms)
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:52.8387451Z ✔ readability settings and mixed-font metrics govern row fitting (0.6338ms)
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:52.8388733Z ✔ pagination retains complete multiline rows and repeated headers (248.2534ms)
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:52.8390208Z ✔ mixed-size table paragraphs reserve the native uniform line spacing (0.4756ms)
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:52.8394853Z ✔ spare height in short rows is removed before any font shrinking (0.4167ms)
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:52.8542288Z ℹ tests 7
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:52.8542740Z ℹ suites 0
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:52.8543169Z ℹ pass 7
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:52.8544050Z ℹ fail 0
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:52.8544461Z ℹ cancelled 0
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:52.8544883Z ℹ skipped 0
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:52.8545253Z ℹ todo 0
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:52.8545653Z ℹ duration_ms 436.6963
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:54.3314595Z Packed consumer: TypeScript declarations and browser bundle passed.
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:55.0620127Z Packed browser harness built: artifacts/editor/packed-canvas-tests.html (serve alongside demo fonts.json).
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:55.4976519Z Installed styled-table browser harness built: artifacts/editor/packed-styled-table-tests.html. Open it to verify real pointer/keyboard interaction.
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:55.5253247Z Local tarball consumer passed; this is not a registry verification.
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:56.0394026Z 
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:56.0395047Z > openpresentation-workspace@ test:packed-browser D:\a\opf-pptx\opf-pptx\opf
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:56.0396125Z > node scripts/test-packed-browser.mjs
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:56.0396412Z 
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:57.6954211Z PASS packed canvas: 34 assertions; 0 trusted interaction scenarios
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:58.8451055Z PASS packed rich-text: 46 assertions; 0 trusted interaction scenarios
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:25:59.9277261Z PASS packed rich-text-estimated: 46 assertions; 0 trusted interaction scenarios
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:26:01.8292288Z PASS packed layout: 26 assertions; 4 trusted interaction scenarios
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:26:02.3956071Z PASS packed block: 21 assertions; 1 trusted interaction scenarios
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:26:03.0907704Z PASS packed list: 19 assertions; 0 trusted interaction scenarios
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:26:03.6065951Z PASS packed create: 40 assertions; 0 trusted interaction scenarios
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:26:05.4436173Z PASS packed styled-table: 44 assertions; 3 trusted interaction scenarios
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:26:14.3871984Z 12 plain text browser workflows preserve source through edit, undo/redo, export and reimport.
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:26:16.8860792Z 48 offline browser/PPTX cases honor selected glyph floors while preserving source metadata.
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:26:28.7762818Z 16 offline timeline workflows preserve source fields through selection, editing, undo/redo and semantic PPTX reimport.
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:26:36.4862706Z node:internal/modules/run_main:107
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:26:36.4863305Z     triggerUncaughtException(
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:26:36.4863729Z     ^
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:26:36.4863920Z 
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:26:36.4876377Z AssertionError [ERR_ASSERTION]: {"activeCase":{"measured":true,"width":1280,"height":720,"floor":16,"local":false,"deck":{"organization":{"id":"openpresentation","name":"OpenPresentation"},"design":{"fontScheme":"roboto","dimensions":{"widthInches":13.333333333333334,"heightInches":7.5},"header":{"left":{"text":"  A  B\tC D\r\n\r\ntrail  \r"},"center":{"organization":true},"right":{"section":true}},"footer":{"left":{"date":" 2026-09-10 "},"right":{"slideNumber":true}}},"slides":[{"title":"Shared furniture","section":"Review","text":"Body content keeps its own space.","composition":{"minFontSize":16,"overflow":"error"}}]}},"path":"design.header.left.text","line":{"text":"trail  ","size":16,"font":"16px Roboto, sans-serif","svgAdvance":34.76599884033203,"svgBox":{"x":89.52999114990234,"y":58.040000915527344,"width":35.76600646972656,"height":19},"segments":[{"text":"trail  ","x":"90.53","textLength":"34.766","advance":34.765625,"left":1,"right":25.9375,"ascent":12,"descent":0}],"ink":[{"x":89.52998921348315,"y":61.040000000000006,"width":26.93779056179775,"height":12}],"start":14,"end":21},"box":{"x":89.60000000000001,"y":18,"width":332.8,"height":78.08}}
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:26:36.4880821Z     at file:///D:/a/opf-pptx/opf-pptx/opf/scripts/test-furniture-workflow.mjs:78:70 {
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:26:36.4881277Z   generatedMessage: false,
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:26:36.4881517Z   code: 'ERR_ASSERTION',
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:26:36.4881737Z   actual: false,
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:26:36.4881928Z   expected: true,
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:26:36.4882117Z   operator: '==',
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:26:36.4882308Z   diff: 'simple'
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:26:36.4882486Z }
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:26:36.4882579Z 
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:26:36.4882659Z Node.js v24.20.0
+package (windows-latest)	Install and exercise coordinated candidate tarballs	2026-09-14T23:26:36.5209278Z ##[error]Process completed with exit code 1.

@@ -39,3 +39,13 @@ all original logs and the failed artifact. Fix failure propagation first, then
 inspect exact SVG paint and geometry before changing placement or measurement.
 The harness gains failure capture, with no tolerance or runtime changes. Native
 Office recovery remains required; no COM call is authorized by a green CI badge.
+
+The fail-fast rerun reproduces the Windows assertion and now correctly fails.
+Its isolated SVG paint has zero outside pixels while Canvas and SVG conservative
+bounds exceed the box. `docs/evidence/mac-furniture-svg-paint-20260914` retains
+the actual failure capture. The verifier now checks nonzero SVG mask pixel centers
+for all measured fields at 1:1 scale and the unchanged 0.05 allowance, retains
+Canvas observations, and requires a displaced-text control to fail. Mac source
+passes sixteen workflows and forty measured field masks. This changes verification
+of actual paint, not production geometry or the corpus baseline. Fresh Windows
+installed-package verification remains required.
