@@ -1,0 +1,62 @@
+
+> @openpresentation/opf-pptx@0.7.0 test
+> npm run build && node test/plain-whitespace.mjs && node test/accepted-text.mjs && node test/heading-provenance.mjs && node test/chart-colors.mjs && node test/content-cards.mjs && node test/chart-workbook.mjs && node test/dependency-boundary.mjs && npm run build:browser-check && npm run test:styled-table && node test/content-layout.mjs && node test/shared-quote.mjs && npm run test:timeline
+
+
+> @openpresentation/opf-pptx@0.7.0 build
+> node scripts/build.mjs
+
+Vendored upstream distribution and license match recorded hashes.
+20 wide/portrait measured/estimated source exports preserve whitespace, tab-stop XML and exact reimport; native edits, clearing, reordering and seven damaged-group fallbacks pass.
+Accepted text PPTX: 24 cases / 144 editable lines retain shared anchors, sizes, styles, no-refit and words through import. Native raster and original OPF structure are separate gates.
+Heading provenance: native edits, shape renaming/reordering and 8 damaged/ambiguous group fallbacks preserve visible words.
+Heading role isolation: 16 wide/portrait quote imports, explicit native placeholders and ordinary untagged title/subtitle inference pass.
+Native chart colors passed: 40 charts, explicit chart panel, single alpha fill, axis/legend colors and exact data reimport.
+Content cards: 8 wide/portrait/on/off/alpha exports preserve source, shared frame and body bounds, radius and native metric fields; slide false overrides deck true. Native raster fidelity and frame reimport are not established.
+Chart workbook checks passed: 37 bounded heading/preservation cases, Unicode/whitespace, rich shared strings, unsupported/external/corrupt metadata and deterministic actual export/reimport.
+"RED" is not a valid scheme color or hex RGB! "000000" used instead. Only provide 6-digit RGB or 'pptx.SchemeColor' values!
+""/><EVIL/>" is not a valid scheme color or hex RGB! "000000" used instead. Only provide 6-digit RGB or 'pptx.SchemeColor' values!
+Backgrounds passed: 38 gradient/solid cases, 990 independently compared SVG/native samples, alpha, overrides, round-trips, native edits, empty/single/descending stops and unsupported-import diagnostics.
+Native background inheritance passed: 70 layout/master/theme/map/reference/diagnostic cases and theme-slot opacity.
+Native Keynote backgrounds passed: 18 PNG comparisons from 12 exported native images, native PPTX import, blank-slide preservation; observed max channel 8, alpha 1, opaque mean 0.37809606481481484.
+Table layout passed: 168 cells, 0 shrink cases, 24 content-sized rows, Roboto/Calibri substitution, two canvas sizes, header/no-header tables, alignment, native rows and source text preservation.
+Variable table rows passed: unchanged short rows, five-line rich cell containment, identical SVG/native row heights and native table extent.
+Table import passed: headers, headerless data, blank rows/headers, repeated round-trips, native edits and XML boolean forms.
+Rich tables passed: canonical headers/cells, SVG traces/styles/links, native editable runs/fonts/styles/point sizes/scripts/hyperlinks, scalar preservation and immutable input.
+Native rich table import passed: styles, alpha, theme fonts/colors, defaults/resets, links, XML child order, fields, whitespace/blank lines, repeated conversion and path-specific diagnostics.
+Native conditional table text styles passed: archive/inline definitions, DrawingML precedence, edge/corner overlaps, band parity, fonts/colors/alpha, direct overrides, repeated conversion, and diagnostics.
+Conditional cell fills passed: band/edge/corner precedence, ordered theme references, placeholder alpha and direct overrides.
+Native conditional table borders passed: outer frame/interior grid, bands/edges/corners, partial/direct overrides, theme lines/alpha, missing-reference masking, repeated conversion and diagnostics.
+Object IDs passed: eight slides mixing tables, text, pictures, charts and lists, deterministic bytes and native import.
+Image fitting passed: 45 SVG/native geometry cases, 9 raster fixtures, fit/crop, slide overrides, byte/alt preservation, host resolution and malformed headers.
+Image orientation passed: all 8 EXIF orientations in fit/crop, native corner transforms, normalized metadata, unchanged pixels and bounded EXIF offsets.
+Picture import passed: 42 orientation/native-edit/EXIF cases, exact source JPEG round-trips, independent pixel permutations, metadata preservation and crop/transform diagnostics.
+Image media types passed: 32 byte/object/data-URI/local/host-path cases, native extensions/content types, byte preservation and imported MIME.
+WebP fallback passed: 36 fit/crop and input-form cases, Pillow pixel references, alpha, EXIF, first animation frame, deterministic output, errors and unchanged source bytes.
+Native decoder boundary passed: ordinary/preserved images work without Sharp; unavailable WebP conversion fails with its OPF path.
+Corpus structure passed: 126 decks, 805 slides, 607 explicitly substituted images; fallback fonts, valid slide XML, unique IDs, finite geometry, table grids and imported slide counts.
+PPTX dependency boundary passed: model suite and data/local/resolved images work without image-size.
+
+> @openpresentation/opf-pptx@0.7.0 build:browser-check
+> node scripts/build-browser-check.mjs
+
+Browser build passed: browser decoder selected, no Sharp/native inputs. Serve the repository and open /artifacts/webp-fallback/browser/index.html for pixel checks.
+Native rich table import browser bundle ready at /artifacts/native-rich-table-import/browser/index.html.
+Native conditional table style browser bundle ready at /artifacts/native-table-styles/browser/index.html.
+Native styled table browser bundle ready at /artifacts/native-styled-table-import/browser/index.html.
+Native content browser bundle ready at /artifacts/native-content-layout/browser/index.html.
+Chart color/workbook browser bundle ready at /artifacts/chart-colors/browser/index.html.
+
+> @openpresentation/opf-pptx@0.7.0 test:styled-table
+> node test/styled-table.mjs && node test/styled-table-import.mjs
+
+Styled native table export passed: merged grid, unique text, full covered rows, colors/alpha, border dashes, zero/fractional padding, alignment, scaled row geometry and determinism.
+Native merge perimeter regression passed: continuation and neighbor edges, transparent dashes, dotted top, hidden bottom and scaling.
+Styled native table import passed: direct fills/alpha, borders, margins, alignment, dense merges, repeated conversion, header crossing and text-preserving malformed-merge diagnostics.
+Native content layout passed: 36 payload text lines match actual renderer typography/geometry; 8 long quotes preserve footer separation and 2 oversized quotes reject in strict mode; code styling, quote source and editable timeline markers across two canvas sizes.
+Shared quote PPTX: 4 wide/portrait decks and 6 native lines match accepted geometry/styles without re-fitting; reimport and strict/unusable-space rejection pass.
+
+> @openpresentation/opf-pptx@0.7.0 test:timeline
+> node test/shared-timeline.mjs
+
+16 timeline exports match accepted text boxes, fonts and source; current edits, clearing, reordering, six damaged-group controls multiple timelines and four strict/warn overflow controls pass.

@@ -14,7 +14,7 @@ export interface Composition {
 export const MAX_COMPOSITION_DEPTH = 32;
 export interface LayoutBox { x: number; y: number; width: number; height: number }
 export interface LayoutDiagnostic {
-  code: "text-overflow" | "small-cell";
+  code: "text-overflow" | "small-cell" | "unresolved-content";
   path: string;
   message: string;
 }
@@ -132,7 +132,7 @@ export interface ComposedFlow {
   itemCount: number;
   slotCount: number;
 }
-/** Additive penalties in grid-score-v8; lower is preferred. These are not quality percentages. */
+/** Additive penalties in grid-score-v9; lower is preferred. These are not quality percentages. */
 export interface CompositionPenalties {
   cellProportions: number;
   fontReduction: number;
@@ -156,7 +156,7 @@ export interface CompositionDecision {
   candidates: CompositionCandidate[];
 }
 export interface CompositionExplanation {
-  algorithm: 'grid-score-v8';
+  algorithm: 'grid-score-v9';
   /** Provided widths do not establish shaping, glyph coverage or native fidelity. */
   textMeasurement: 'estimated' | 'provided';
   /** Optional vector coverage for headings and scalar/rich text, not every payload. */
@@ -176,9 +176,15 @@ export interface SlideComposition {
   flows: ComposedFlow[];
   diagnostics: LayoutDiagnostic[];
   composition: Composition;
+  /** Repeated furniture is measured separately from body pagination leaves. */
+  furniture?: FurnitureLayout;
   explanation?: CompositionExplanation;
 }
 export interface ComposeSlideOptions {
+  /** Context for inherited furniture and generated organization names. */
+  presentation?: { design?: { header?: unknown; footer?: unknown }; organization?: unknown };
+  /** One-based displayed number; source paths still use slideIndex. */
+  slideNumber?: number;
   fonts?: Partial<FontFamilies>;
   /** Host-resolved alignment for shared content; slide design can override it. */
   contentAlignment?: 'left' | 'center' | 'right';
@@ -211,6 +217,109 @@ const columns = ["left", "center", "right"];
 const record = (value: unknown): Record<string, any> => value && typeof value === "object" && !Array.isArray(value) ? value : {};
 const kind = (field: string) => field === "items" || field === "bullets" ? "list" : field;
 const round = (value: number) => Math.round(value * 1e6) / 1e6 || value;
+
+export interface FurniturePartBase {
+  kind: 'header' | 'footer';
+  zone: 'left' | 'center' | 'right';
+  field: 'text' | 'image' | 'organization' | 'section' | 'slideNumber' | 'date';
+  /** Literal field or controlling flag, with the actual inherited/local path. */
+  path: string;
+  /** String/asset source, when different from a generated field's flag. */
+  sourcePath?: string;
+  generated: boolean;
+  box: LayoutBox;
+  alignment: 'left' | 'center' | 'right';
+}
+export interface FurnitureTextPart extends FurniturePartBase {
+  type: 'text'; text: string; style: TextStyle;
+  requestedFontSize: number; minFontSize: number; fit: SourceTextFit;
+}
+export interface FurnitureImagePart extends FurniturePartBase { type: 'image'; image: unknown }
+export type FurniturePart = FurnitureTextPart | FurnitureImagePart;
+export interface FurnitureLayout {
+  algorithm: 'furniture-flow-v1';
+  /** Includes explicitly empty definitions, which override inherited furniture. */
+  configured: boolean;
+  textMeasurement: 'estimated' | 'provided';
+  textOutlines: 'provided' | 'unavailable';
+  parts: FurniturePart[];
+  /** Outer occupied edges; composeSlide adds its normal content gap. */
+  headerBottom: number; footerTop: number;
+  diagnostics: LayoutDiagnostic[]; overflow: boolean;
+}
+
+/** Resolve and measure repeated fields without mutating metadata or consulting a clock. */
+export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {}): FurnitureLayout {
+  const slide=record(input),width=options.width??1280,height=options.height??720,scale=Math.min(width,height)/720;
+  const settings:Composition={...record(record(options.layout).composition),...record(slide.composition)};
+  assertComposition(settings);
+  const minimum=(settings.minFontSize??16)*scale,size=Math.max(13*scale,minimum),padding=(options.textRasterPadding??1)*scale;
+  if(![width,height,scale,minimum,padding].every(Number.isFinite)||width<=0||height<=0||minimum<=0||padding<0)throw new RangeError('Furniture requires finite positive dimensions and nonnegative raster padding.');
+  const number=options.slideNumber??(options.slideIndex??0)+1;
+  if(!Number.isSafeInteger(number)||number<1)throw new RangeError('Displayed slide number must be a positive safe integer.');
+  const outlines=options.textMeasurement?.outlineBounds!==undefined,parts:FurniturePart[]=[],diagnostics:LayoutDiagnostic[]=[];
+  const sourceRoot=`slides.${options.slideIndex??0}`,organizations=Array.isArray(options.presentation?.organization)?options.presentation.organization:[options.presentation?.organization];
+  const primaryIndex=organizations.findIndex(item=>record(item).role==='primary'),organizationIndex=primaryIndex>=0?primaryIndex:organizations.findIndex(Boolean);
+  const organization=record(organizations[organizationIndex]),organizationPath=Array.isArray(options.presentation?.organization)?`organization.${organizationIndex}.name`:'organization.name';
+  const fontFamily=options.fonts?.body??'sans-serif';let headerBottom=0,footerTop=height,configured=false;
+  const error=(path:string,message:string,code:LayoutDiagnostic['code']='text-overflow')=>diagnostics.push({code,path,message});
+  for(const kind of ['header','footer'] as const){
+    const local=record(slide.design)[kind]!==undefined,value=local?record(slide.design)[kind]:options.presentation?.design?.[kind];
+    if(value===undefined||value===false)continue;
+    const root=local?`${sourceRoot}.design.${kind}`:`design.${kind}`;
+    if(!value||typeof value!=='object'||Array.isArray(value))throw new TypeError('Header/footer content must be an object or false.');
+    configured=true;
+    const zones:FurniturePart[][]=[];
+    for(const [index,zone]of (['left','center','right'] as const).entries()){
+      const content=record(record(value)[zone]),path=`${root}.${zone}`,x=width*(.07+index*.3),zoneWidth=width*.26,zoneParts:FurniturePart[]=[];let y=0;
+      const add=(field:FurniturePartBase['field'],text:unknown,generated=false,sourcePath?:string)=>{
+        if(text===undefined)return;
+        if(typeof text!=='string')throw new TypeError(`Furniture field ${path}.${field} requires string content.`);
+        const partPath=`${path}.${field}`,style=resolveTextStyle({fontFamily,fontWeight:400,italic:false,path:partPath},options.textMeasurement);
+        const fit=fitText(text,{x:0,y:0,width:Math.max(Number.MIN_VALUE,zoneWidth-(outlines?2*padding:0)),height:Number.MAX_VALUE},size,size,textWidthMeasurer(style,options.textMeasurement));
+        const ink=fit.sourceLines.map((line,index)=>{
+          let outline:LayoutBox|null=null;
+          if(outlines)for(const segment of line.segments)if(segment.kind==='text'){
+            const bounds=measureTextOutline(text.slice(segment.start,segment.end),size,style,options.textMeasurement);
+            if(bounds){const next={...bounds,x:bounds.x+segment.x};if(!outline)outline=next;else{const right=Math.max(outline.x+outline.width,next.x+next.width),bottom=Math.max(outline.y+outline.height,next.y+next.height);outline.x=Math.min(outline.x,next.x);outline.y=Math.min(outline.y,next.y);outline.width=right-outline.x;outline.height=bottom-outline.y;}}
+          }
+          return {width:line.width,y:index*fit.lineHeight,baseline:size+index*fit.lineHeight,height:fit.lineHeight,outline};
+        });
+        const natural=outlines?placeTextLines(ink,{x,y,width:zoneWidth,height:Number.MAX_VALUE},zone,padding):undefined;
+        const partHeight=natural?.height??fit.sourceLines.length*fit.lineHeight;
+        if(!Number.isFinite(partHeight))throw new RangeError('Furniture exceeds finite layout coordinates.');
+        const box={x,y,width:zoneWidth,height:Math.max(scale,partHeight)},placement=outlines?placeTextLines(ink,box,zone,padding):undefined;
+        const accepted={...fit,...(placement?{placement}:{}),overflow:fit.overflow||!!placement?.overflow};
+        zoneParts.push({type:'text',kind,zone,field,path:partPath,sourcePath:sourcePath??(!generated?partPath:undefined),generated,text,style,requestedFontSize:13*scale,minFontSize:minimum,box,alignment:zone,fit:accepted});
+        if(accepted.overflow)error(partPath,'Repeated text exceeds its zone at the selected readability floor; change the furniture or slide design.');
+        y+=box.height;
+      };
+      if(content.image!==undefined){
+        const box={x,y,width:zoneWidth,height:Math.max(32*scale,Math.min(height*.05,72*scale))};
+        zoneParts.push({type:'image',kind,zone,field:'image',path:`${path}.image`,sourcePath:`${path}.image`,generated:false,image:content.image,box,alignment:zone});y+=box.height;
+      }
+      add('text',content.text);
+      if(content.organization===true){if(typeof organization.name==='string')add('organization',organization.name,true,organizationPath);else error(`${path}.organization`,'Generated organization name needs a named organization in the presentation.','unresolved-content');}
+      if(content.section===true){if(typeof slide.section==='string')add('section',slide.section,true,`${sourceRoot}.section`);else error(`${path}.section`,'Generated section needs a literal slide section.','unresolved-content');}
+      if(content.slideNumber===true)add('slideNumber',String(number),true);
+      if(content.date===true)error(`${path}.date`,'Use a literal date string for deterministic header/footer content.','unresolved-content');
+      else if(typeof content.date==='string')add('date',content.date);
+      zones.push(zoneParts);
+    }
+    const tallest=Math.max(0,...zones.map(zone=>zone.reduce((sum,part)=>sum+part.box.height,0)));
+    if(!tallest)continue;
+    const top=kind==='header'?height*.025:Math.max(height*.025,height-height*.04-tallest);
+    if(kind==='header')headerBottom=top+tallest;else footerTop=top;
+    for(const zone of zones)for(const part of zone){
+      part.box.y+=top;
+      if(part.type==='text'&&part.fit.placement)for(const line of part.fit.placement.lines){line.y+=top;line.baseline+=top;if(line.outline)line.outline.y+=top;}
+      if(part.box.y+part.box.height>height-height*.04+.01)error(part.path,'Repeated header/footer content extends beyond the usable slide height. Change its content or design before pagination.');
+      parts.push(part);
+    }
+  }
+  if(headerBottom>footerTop+.01)error(parts.find(part=>part.kind==='footer')?.path??sourceRoot,'Header and footer content overlap; repeated content cannot be repaired by splitting body content.');
+  return {algorithm:'furniture-flow-v1',configured,textMeasurement:options.textMeasurement?'provided':'estimated',textOutlines:outlines?'provided':'unavailable',parts,headerBottom,footerTop,diagnostics,overflow:diagnostics.length>0};
+}
 
 const textSegments = new Intl.Segmenter("und", { granularity: "grapheme" });
 
@@ -1293,7 +1402,11 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     : fitText(text,box,size,minimum,widthFor(field,path));
   const path = `slides.${options.slideIndex ?? 0}`;
   const items: ComposedItem[] = [], diagnostics: LayoutDiagnostic[] = [];
-  let y = padding;
+  const measuredFurniture=layoutFurniture(slide,options);
+  const furniture=measuredFurniture.configured||measuredFurniture.diagnostics.length?measuredFurniture:undefined;
+  if(furniture)diagnostics.push(...furniture.diagnostics);
+  const bodyBottom=Math.min(height-padding,furniture&&furniture.footerTop<height?furniture.footerTop-gap*.5:height-padding);
+  let y = Math.max(padding,furniture?.headerBottom?furniture.headerBottom+gap*.5:padding);
   for (const field of ["tag", "title", "subtitle"]) {
     if (!slide[field]) continue;
     const requested = (field === "title" ? 54 : field === "tag" ? 16 : 25) * scale;
@@ -1301,11 +1414,12 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const box = { x: padding, y, width: width - padding * 2, height: maxHeight };
     const text = fitPlacedText(field,slide[field],String(slide[field]),box,requested,minSize,`${path}.${field}`);
     box.height = Math.min(maxHeight, Math.max(text.lines.length * text.lineHeight,text.placement?.height??0));
+    if(furniture&&box.y+box.height>bodyBottom+.01)diagnostics.push({code:'text-overflow',path:`${path}.${field}`,message:'Repeated furniture leaves too little room for this heading. Change the header/footer or slide design.'});
     items.push({ path: `${path}.${field}`, field, type: "text", value: slide[field], payload: { text: slide[field] }, box, text, textStyle: styleFor(field,`${path}.${field}`), composition });
     y += box.height + gap * 0.5;
   }
   if (items.length) y += gap * 0.5;
-  const contentBox = { x: padding, y, width: width - padding * 2, height: Math.max(scale, height - padding - y) };
+  const contentBox = { x: padding, y, width: width - padding * 2, height: Math.max(scale, bodyBottom - y) };
   type Pending = { field: string; type: string; value: unknown; path: string; payload: Record<string, unknown>; children?: Pending[]; composition?: Composition; region?: [number[], number[]] };
   const collect = (host: Record<string, any>, basePath: string, depth = 0, ancestors: unknown[] = []): Pending[] => {
     if (Array.isArray(host.blocks)) {
@@ -1461,6 +1575,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   for (const group of groups) for (const box of [group.box, group.contentBox]) for (const key of ["x", "y", "width", "height"] as const) box[key] = round(box[key]);
   const strictPaths = new Set(items.filter(item => item.composition.overflow === "error").map(item => item.path));
   const failures = diagnostics.filter(diagnostic => {
+    if(composition.overflow==='error')return true;
     let path = diagnostic.path;
     while (path) {
       if (strictPaths.has(path)) return true;
@@ -1471,11 +1586,11 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     return false;
   });
   const explanation: CompositionExplanation | undefined = decisions ? {
-    algorithm:'grid-score-v8',textMeasurement:options.textMeasurement?'provided':'estimated',textOutlines:options.textMeasurement?.outlineBounds?'provided':'unavailable',textRasterPadding:rasterPadding,decisions,
+    algorithm:'grid-score-v9',textMeasurement:options.textMeasurement?'provided':'estimated',textOutlines:options.textMeasurement?.outlineBounds?'provided':'unavailable',textRasterPadding:rasterPadding,decisions,
     unmeasuredPayloads:items.filter(item=>!headings.has(item.field)&&!item.quoteLayout&&!item.codeLayout&&!item.metricLayout&&!item.timelineLayout&&!['text','items','bullets','table'].includes(item.field)).map(item=>item.path),
   } : undefined;
   if (failures.length) throw new OPFCompositionError(failures, explanation);
-  return { width, height, contentBox, items, groups, flows, diagnostics, composition, ...(explanation?{explanation}:{}) };
+  return { width, height, contentBox, items, groups, flows, diagnostics, composition, ...(furniture?{furniture}:{}), ...(explanation?{explanation}:{}) };
 }
 
 /** Canonical physical slide size, converted to reference pixels at 96 pixels/inch. */
