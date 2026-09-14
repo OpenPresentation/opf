@@ -161,7 +161,7 @@ export interface CompositionExplanation {
   textMeasurement: 'estimated' | 'provided';
   /** Optional vector coverage for headings and scalar/rich text, not every payload. */
   textOutlines: 'provided' | 'unavailable';
-  /** Effective canvas reference pixels; not a universal raster tolerance. */
+  /** Effective body-text reference pixels; furniture reports its own placement padding. Not a universal raster tolerance. */
   textRasterPadding: number;
   decisions: CompositionDecision[];
   /** Payloads whose complete internal fit is not covered by this scoring model. */
@@ -189,7 +189,7 @@ export interface ComposeSlideOptions {
   /** Host-resolved alignment for shared content; slide design can override it. */
   contentAlignment?: 'left' | 'center' | 'right';
   titleAlignment?: 'left' | 'center' | 'right';
-  /** Unscaled reference pixels around provided vector outlines; defaults to 1. */
+  /** Unscaled reference pixels around provided vector outlines; defaults to 1 for body text and 2 for furniture. Explicit values apply to both. */
   textRasterPadding?: number;
   /** Host-resolved body cards. A slide's explicit design.contentBox overrides this value. */
   contentBox?: boolean;
@@ -237,7 +237,7 @@ export interface FurnitureTextPart extends FurniturePartBase {
 export interface FurnitureImagePart extends FurniturePartBase { type: 'image'; image: unknown }
 export type FurniturePart = FurnitureTextPart | FurnitureImagePart;
 export interface FurnitureLayout {
-  algorithm: 'furniture-flow-v1';
+  algorithm: 'furniture-flow-v2';
   /** Includes explicitly empty definitions, which override inherited furniture. */
   configured: boolean;
   textMeasurement: 'estimated' | 'provided';
@@ -253,7 +253,11 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
   const slide=record(input),width=options.width??1280,height=options.height??720,scale=Math.min(width,height)/720;
   const settings:Composition={...record(record(options.layout).composition),...record(slide.composition)};
   assertComposition(settings);
-  const minimum=(settings.minFontSize??16)*scale,size=Math.max(13*scale,minimum),padding=(options.textRasterPadding??1)*scale;
+  // Standalone furniture can sit directly at a field edge. One reference pixel
+  // did not contain actual Linux SVG paint for Roboto's rasterized `t`; reserve two
+  // in the shared geometry so SVG and PPTX consume the same accepted clearance.
+  // Explicit host padding (including zero) remains authoritative.
+  const minimum=(settings.minFontSize??16)*scale,size=Math.max(13*scale,minimum),padding=(options.textRasterPadding??2)*scale;
   if(![width,height,scale,minimum,padding].every(Number.isFinite)||width<=0||height<=0||minimum<=0||padding<0)throw new RangeError('Furniture requires finite positive dimensions and nonnegative raster padding.');
   const number=options.slideNumber??(options.slideIndex??0)+1;
   if(!Number.isSafeInteger(number)||number<1)throw new RangeError('Displayed slide number must be a positive safe integer.');
@@ -318,7 +322,7 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
     }
   }
   if(headerBottom>footerTop+.01)error(parts.find(part=>part.kind==='footer')?.path??sourceRoot,'Header and footer content overlap; repeated content cannot be repaired by splitting body content.');
-  return {algorithm:'furniture-flow-v1',configured,textMeasurement:options.textMeasurement?'provided':'estimated',textOutlines:outlines?'provided':'unavailable',parts,headerBottom,footerTop,diagnostics,overflow:diagnostics.length>0};
+  return {algorithm:'furniture-flow-v2',configured,textMeasurement:options.textMeasurement?'provided':'estimated',textOutlines:outlines?'provided':'unavailable',parts,headerBottom,footerTop,diagnostics,overflow:diagnostics.length>0};
 }
 
 const textSegments = new Intl.Segmenter("und", { granularity: "grapheme" });

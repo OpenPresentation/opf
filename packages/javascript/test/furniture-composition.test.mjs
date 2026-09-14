@@ -22,7 +22,7 @@ test('furniture preserves inherited/local sources, whitespace and generated meta
     const geometry=composeSlide(slide,options),layout=geometry.furniture;
     assert.deepEqual({presentation,slide},before);assert.deepEqual(geometry.diagnostics,[]);
     assert.deepEqual(geometry,composeSlide(slide,options));
-    assert.equal(layout.parts.length,6);assert.equal(layout.algorithm,'furniture-flow-v1');
+    assert.equal(layout.parts.length,6);assert.equal(layout.algorithm,'furniture-flow-v2');
     const byField=field=>layout.parts.find(part=>part.field===field);
     assert.equal(byField('organization').text,' Primary ');assert.equal(byField('organization').sourcePath,'organization.1.name');
     assert.equal(byField('section').sourcePath,'slides.4.section');assert.equal(byField('slideNumber').text,'11');
@@ -32,11 +32,23 @@ test('furniture preserves inherited/local sources, whitespace and generated meta
       sourceRanges(part);assert.ok(part.fit.fontSize>=minFontSize);assert.equal(part.style.fontFamily,'Fixture');
       assert.ok(part.box.y>=0&&part.box.y+part.box.height<=height);
       for(const line of part.fit.placement?.lines??[]){if(!line.outline)continue;const ink=line.outline;
-        assert.ok(ink.x>=part.box.x+1-.001&&ink.x+ink.width<=part.box.x+part.box.width-1+.001);
-        assert.ok(ink.y>=part.box.y+1-.001&&ink.y+ink.height<=part.box.y+part.box.height-1+.001);
+        assert.ok(ink.x>=part.box.x+2-.001&&ink.x+ink.width<=part.box.x+part.box.width-2+.001);
+        assert.ok(ink.y>=part.box.y+2-.001&&ink.y+ink.height<=part.box.y+part.box.height-2+.001);
       }
     }
   }
+});
+test('furniture clearance scales with the canvas and respects explicit host padding',()=>{
+  const slide={text:'Body',design:{header:{left:{text:'trail  '}}}},before=structuredClone(slide);
+  for(const [width,height]of [[1280,720],[640,360]])for(const padding of [undefined,0,1,3]){
+    const geometry=composeSlide(slide,{width,height,textMeasurement:outlined,textRasterPadding:padding});
+    const part=geometry.furniture.parts[0],actual=(padding??2)*Math.min(width,height)/720;
+    assert.equal(part.fit.placement.rasterPadding,actual);
+    for(const line of part.fit.placement.lines)if(line.outline)assert.ok(line.outline.x>=part.box.x+actual-.001);
+    assert.ok(geometry.contentBox.y>=geometry.furniture.headerBottom);
+    assert.equal(part.text,slide.design.header.left.text);sourceRanges(part);
+  }
+  assert.deepEqual(slide,before);
 });
 test('whole local overrides and explicit false preserve furniture-free body geometry',()=>{
   const presentation={design:{header:{left:{text:'Inherited'}},footer:{right:{slideNumber:true}}}};

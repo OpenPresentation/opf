@@ -152,7 +152,7 @@ async function pageFailure(error){
  await writeFile(path.join(output,'failure.json'),JSON.stringify(report,null,2)+'\n');
  try{
   await page.screenshot({path:path.join(output,'failure-page.png'),fullPage:true});
-  const sourcePath=JSON.parse(error.message).path,part=lastGeometry.furniture.parts.find(part=>part.path===sourcePath);
+  const sourcePath=JSON.parse(error.message.split('\n\n')[0]).path,part=lastGeometry.furniture.parts.find(part=>part.path===sourcePath);
   if(!part)return;
   const svg=await page.evaluate(async({sourcePath,width,height})=>{
    const group=[...document.querySelectorAll('[data-opf-source-text]')].find(node=>node.getAttribute('data-opf-path')===sourcePath),original=group.closest('svg'),mask=original.cloneNode(false);

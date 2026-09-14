@@ -49,3 +49,17 @@ Canvas observations, and requires a displaced-text control to fail. Mac source
 passes sixteen workflows and forty measured field masks. This changes verification
 of actual paint, not production geometry or the corpus baseline. Fresh Windows
 installed-package verification remains required.
+
+The stronger paint verifier found a distinct real Linux overflow: two nonzero
+pixels at x=89 (coverage 7/255) extend beyond the field's x=89.6 edge in run
+34909245051; Windows passes all forty field masks. Do not discard faint pixels or
+widen the 0.05 containment allowance. The `furniture-flow-v2` candidate reserves
+two reference pixels around measured furniture outlines by default, while explicit
+`textRasterPadding` values remain authoritative. The body default remains one.
+SVG and PPTX receive the same core placement. Mac passes eight core furniture
+checks, sixteen browser workflows/forty masks and sixteen PPTX geometry exports.
+Four before/after wide/portrait local/inherited screenshots were reviewed: content
+and body separation remain intact; the narrow 32px organization label wraps one
+character earlier while preserving all words. This is a scoped clearance fix,
+not general visual-quality approval. Fresh coordinated source, installed Linux
+and Windows, and unchanged-corpus checks remain required.
