@@ -58,7 +58,19 @@ Fresh packages verify 37 shipped hashes and TypeScript consumers. The September
 15 follow-up `1b3da21` corrects CFF2 advances before positioning; `41311de` adds
 reviewed glyph-paint diagnostics and complete retained evidence. Both are
 pushed. All 356 default Fontkit Mac browser cases now pass; five optional
-HarfBuzz TrueType width comparisons still fail. New-head CI remains separate. See
+HarfBuzz TrueType width comparisons still fail.
+
+The pushed renderer checkpoint `74f0b8b` adds a reproducible native portability
+report with source-identity and sample-coverage guards. Completed `41311de` CI
+passes Mac/Windows shaping diagnostics and earlier Linux acceptance, then
+fails both Linux variable-font gates on five Fontkit TrueType cases. All Linux
+CFF2 and prepared HarfBuzz cases pass. Three-platform glyph diagnostics support
+sampled instance selection, but the native advance comparison proves some
+platform widths cannot share one prediction within the precision target.
+The complete failures, raw reports, primary-source hashes and reviewed images
+are retained. The next paint experiment must use accepted per-glyph positions
+without losing logical text or editing/export semantics. No runtime policy,
+tolerance, publication or production-site behavior changed. See
 [font-shaping.md](font-shaping.md) for exact evidence and remaining font/native
 acceptance requirements.
 

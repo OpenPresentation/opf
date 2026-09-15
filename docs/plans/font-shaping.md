@@ -234,17 +234,48 @@ On Mac, no default/minimum/maximum control is closer than the selected outline;
 the reviewed thin italic still shows stroke differences. An initial cropped
 probe is retained as invalid evidence. The final probe rejects cropped ink,
 records widths separately, and runs in pinned Chromium on all three platforms
-plus system Edge on Windows. New Windows/Linux paint results are pending.
+plus system Edge on Windows. Windows/Linux results were pending at that
+checkpoint; the completed comparison follows below.
 
-Continue with actual Windows glyph/instance painting and the TrueType
-metric/paint relationship, preserving shaping-dependent positions. Matching
-native pixels across source wrappers is not alone proof of correct instance
-painting. The new glyph diagnostic supports selection in sampled characters;
-it does not establish identical rasterization or full-slide/native fidelity.
-A font-functions implementation also requires explicit ownership/lifetime
-verification; a final-width offset remains inappropriate.
+### Native metric/paint checkpoint — September 15, 2026
 
-Next: complete wider axis-mapping coverage and the CFF2/variable metric/paint gate, paragraph
+Renderer [checkpoint `74f0b8b`](https://github.com/OpenPresentation/opf-render/tree/74f0b8b8968ba168f1a5d67e5951184fc3602365/docs/evidence/native-metric-portability-20260915)
+adds a reproducible cross-platform report and retains completed CI at
+`41311de`. The Mac and Windows shaping/diagnostic jobs passed. Linux passed the
+earlier 805-slide, browser and coordinated installed workflows, then failed
+both source and fresh installed variable-font gates. Each Linux report has
+712 matching nonempty pixel comparisons; all CFF2 cases and all 356 HarfBuzz
+cases pass. Five Fontkit TrueType cases fail (maximum 0.134625px). The fresh
+package also verifies 37 shipped hashes, the 712 Node cases, normalization,
+439 earlier browser pairs, TypeScript consumers and zero audit findings.
+
+Each platform's 564 selected-outline glyph comparisons supports selection for
+the sampled `H`, `g` and `W`; no default/minimum/maximum control is closer.
+Windows Edge repeats the Chromium observations. Reviewed thin italic strokes
+still differ, so this is not identical rasterization or full-slide acceptance.
+
+With the same font bytes, coordinates, Chromium 153 and HarfBuzz 14.4.0, native
+Mac/Linux CFF2 widths agree while Windows uses pixel-rounded advances. In the
+repeated-H diagnostic, the maximum native gap is 64.509765625px for CFF2 and
+4.568359375px for TrueType. Some gaps exceed twice the 0.1px precision target:
+no common measurement can be within that target of both native widths.
+The report verifies identity/sample coverage and retains all joined cases;
+four malformed/incomparable-report controls reject. Pinned Chromium/Skia source
+routes CFF2 through Fontations and contains a hinted advance-rounding path
+consistent with the observations. This is not a captured native call trace.
+
+The next rendering experiment must paint the accepted glyph IDs and per-glyph
+positions from the same run used by layout, while retaining selectable and
+accessible logical text, exact UTF-16 source ranges, rich formatting,
+preview editing/undo and editable PPTX semantics. Verify complete lines,
+ligatures, combining marks and full-slide ink. Keep native-text comparisons
+separate and unchanged; neither a final-width correction nor platform-dependent
+hidden metrics resolves the common rendering contract. No runtime policy,
+default, tolerance, package or deployment changed in this diagnostic increment.
+A font-functions adapter also requires ownership/lifetime verification.
+
+Next: complete the shared glyph-paint contract, wider axis-mapping coverage and
+the CFF2/variable metric/paint gate, paragraph
 itemization/bidi, fallback, performance/lifetime analysis, complete slide/ink
 review and shared editing/undo/export acceptance. Fontkit remains the default;
 this is not registry publication, site adoption or native compatibility proof.

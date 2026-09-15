@@ -44,8 +44,15 @@ correction matches 188 independent FreeType instances and resolves 458 CFF2
 glyph diagnostic disagreements. Fresh packages verify 37 shipped hashes and
 the unchanged corpus. CFF2 advances are then corrected before Fontkit positioning:
 all 356 default-backend Mac browser cases pass, while five prepared TrueType
-cases still fail. Selected-outline paint comparisons are now included in CI;
-Windows/Linux results and the broader metric/paint relationship remain open. See
+cases still fail. Completed CI at `41311de` passes all Linux CFF2 cases and all
+prepared HarfBuzz cases but retains five Fontkit TrueType failures in both
+source and fresh-package runs. Checkpoint `74f0b8b` retains 564 selected-outline
+comparisons per platform plus Windows Edge. Sampled instance selection agrees;
+native advances do not: Windows CFF2 widths are pixel-rounded, while Mac
+TrueType widths differ from Linux/Windows. The same native fonts can differ by
+more than twice the precision target, so the next rendering experiment must
+paint accepted per-glyph positions while retaining logical text, source ranges
+and editing/export semantics. Existing native-text gates remain unchanged. See
 [the current shaping checkpoint](font-shaping.md); CFF/variable acceptance,
 a verified variable metric/paint contract, wider axis-mapping coverage, paragraph handling,
 shared editing/export and native acceptance are still required. The study above
