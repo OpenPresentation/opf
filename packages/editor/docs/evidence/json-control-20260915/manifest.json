@@ -63,5 +63,10 @@
     "sha256": "0e55d4d48ed1817521b5c9ac1bfd82d6d7308e6e1f529adfd7d26f1c576777d9",
     "uncompressedSha256": "e63e97d9f87770ee99431696abd6d9eee143f6671b65595355eb035a2ca476c2",
     "bytes": 1096
+  },
+  "ci-linux-after-redo.log.gz": {
+    "sha256": "8c0be779c2882259acc64bab8db961097c2d02b37b22e658826d19e02e06363a",
+    "uncompressedSha256": "758dc7f41f978a10fde1d34e114a4b339e53f288d2452cd8d5b0e73bed120eba",
+    "bytes": 263584
   }
 }
