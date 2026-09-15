@@ -29,7 +29,9 @@ registry's face/policy/coverage contracts and reproduces the Akasia correction
 through actual runtime APIs. Default and published measurement remain unchanged;
 the subsequent [container checkpoint](font-shaping.md#container-checkpoint--september-14-2026)
 adds bounded WOFF/WOFF2 preparation and consistent selected-TTC measurement,
-embedding and browser pixels. DFont/CFF/variable coverage, paragraph handling,
+embedding and browser pixels. The optional horizontal-metrics follow-up covers
+99 literal-glyph inputs and preserves the original wrapper/license alongside
+the compatible browser face. Shared collection metrics, DFont/CFF/variable coverage, paragraph handling,
 shared editing/export and native acceptance are still required. The study above
 remains the historical probe checkpoint.
 

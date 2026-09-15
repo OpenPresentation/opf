@@ -66,10 +66,28 @@ inputs rejected by the preceding installed candidate now preserve the original
 glyph runs within the configured limit. Fresh installed checks include 72
 browser pixel pairs; all 805 baseline slides still pass. The
 [failure and corrected acceptance](https://github.com/OpenPresentation/opf-render/tree/a8e13eb82de9779593876aa882adc2eafef6a956/docs/evidence/woff2-reconstruction-20260914)
-are retained separately. Initial container CI passed on all three OS jobs;
-current-head checks remain the authority for this follow-up.
+are retained separately. Both the initial container run and
+[reconstruction follow-up CI](https://github.com/OpenPresentation/opf-render/actions/runs/34923247963)
+passed Windows/macOS Node and Linux browser/installed/coordinated checks.
 
-Next: applicable null-glyf/transformed-hmtx combinations, DFont resources,
+Renderer `f5a02752e96e1c1d40f2df2dca75ffcb1fd3dba1` fixes transformed horizontal
+metrics with literal glyph/location tables. All three transform flags across
+33 bundled faces preserve every advance/bearing and original glyph run; an
+independent FontTools check accepts all 99 source-hashed fixtures. Seventeen
+malformed inputs reject. The Google/browser decoder limitation is retained
+separately from the original OPF failure. The registry supplies a compatible
+standalone face for painting and keeps the complete original WOFF2 wrapper and
+license in SVG metadata, reporting the compatibility reason explicitly.
+
+The [metrics evidence](https://github.com/OpenPresentation/opf-render/tree/f5a02752e96e1c1d40f2df2dca75ffcb1fd3dba1/docs/evidence/woff2-hmtx-20260914)
+retains both failures, independent checks and fresh tarball acceptance. All
+171 installed browser pixel pairs are identical and nonempty; source metadata,
+local-only requests, CSP, TypeScript consumers and zero audit findings pass.
+All 805 reviewed-baseline slides remain unchanged. This is local and fresh
+installed acceptance; [current-head CI](https://github.com/OpenPresentation/opf-render/actions/runs/34925451758)
+is separate and must be consulted before accepting cross-platform completion.
+
+Next: transformed metrics with shared collection glyph tables, DFont resources,
 CFF/CFF2 and variable-instance coverage, paragraph
 itemization/bidi, fallback, performance/lifetime analysis, complete slide/ink
 review and shared editing/undo/export acceptance. Fontkit remains the default;
