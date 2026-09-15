@@ -1,5 +1,11 @@
 # OPF font roadmap
 
+Remaining native Office checks are tracked in the
+[PowerPoint compatibility roadmap](powerpoint-acceptance.md), separately from
+portable PR acceptance at the project owner's September 15 request. Browser
+font-metrics, source preservation and painting checks remain required for the
+features they cover.
+
 The published package set and all seven ecosystem repositories now target Node 24, completing the [runtime simplification milestone](ecosystem-objective-2026-09-09.md#accepted-runtime-simplification--september-10-2026). Continue font/layout verification on Node 24 with distinct browser and native-platform coverage. Historical dual-runtime results below remain evidence, not a requirement to repeat both runtimes indefinitely.
 
 Status (September 15): [renderer 0.8.0 is published](https://github.com/OpenPresentation/opf-render/releases/tag/opf-render-v0.8.0) with verified local font preparation, all 33 office-pack faces and the complete nine-face base raster pack. Package and registry checks preserve exact font hashes/licenses; this release does not expand font compatibility claims. The [expanded ecosystem objective](ecosystem-objective-2026-09-09.md) requires substantially broader font conformance, installation/embedding, multilingual and native-platform evidence. The historical measurements below remain narrow samples; they do not establish general font or pixel equivalence. Evaluate existing open fonts and engine fixes before original font development.
