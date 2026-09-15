@@ -21,6 +21,8 @@ Lint is read-only and local. It returns JSON diagnostics with stable rule IDs, s
 
 Free-form audience/purpose descriptions and arbitrary extension data do not become catalog references because of their spelling. An inline custom tone/narrative remains distinct from a string catalog reference. External catalog sources remain visible as informational diagnostics; URL and `pkg:` records are not resolved by this local lint pass. Suggestions name records actually present in the supplied context and never silently replace authored values.
 
+Language string shorthands with [BCP-47 syntax](https://www.rfc-editor.org/rfc/rfc5646.html#section-2.1), including regional, extended, private-use and grandfathered forms, do not require a language catalog record. Their spelling is preserved. This is syntax recognition, not IANA registry validation; an explicit `language.id` is still a catalog reference, and the existing OPF `en-UK` error remains enforced. Custom inline narrative IDs remain valid with or without a `beats` array.
+
 `valid` means no lint errors. `schemaValid` separately reports structural validation, and is `null` when malformed JSON prevented validation. Exit code 0 means no lint errors; 1 means lint errors, or warnings with `--strict`; 2 means a usage, configuration or I/O failure. The existing `opf validate` command retains its existing report and exit behavior.
 
 ## Catalog context and design contracts

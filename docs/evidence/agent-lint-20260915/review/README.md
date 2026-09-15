@@ -1,0 +1,13 @@
+# Lint corpus and review corrections
+
+The 126-example audit found 41 real companion-catalog schema errors: 40 inline theme records use a string background where the theme schema requires an object; one inline color scheme lacks `name`. The top-level OPF schema accepts generic catalog objects, so the existing example validator passes these files. Lint correctly reports the stricter companion-schema errors. Source files and all authored values remain unchanged; these findings require a separate reviewed example/generator correction.
+
+The audit also exposed a false warning for custom inline narrative IDs and imprecise schema links for AJV subschemas compiled as separate roots. Those diagnostics are corrected. A private weak-map lookup uses the actual schema object to locate the constraint; public validation issue fields remain unchanged. Base properties remain visible through nested `anyOf` branches. This additionally finds two previously missed audience/purpose references in the custom-catalog fixture.
+
+PR81 review identified BCP-47 shorthand language tags being mistaken for missing catalog IDs. Regional, extended, variant, private-use and grandfathered syntax now remains intact. An explicit `language.id` still references the catalog, and the existing invalid `en-UK` semantic error remains. This is syntax recognition, not IANA registry validation or source canonicalization.
+
+Final local acceptance: 515 core tests (including 14 lint tests), 11 CLI tests, 81 CLI command checks, typecheck, repository lint and text/spec checks pass on Node 24.21.0 / pnpm 10.33.2. Fresh packed core exports/types/consumers pass; the fresh offline global/npx CLI passes the same 81 commands. Exact code hashes and raw logs are retained. The earlier checkpoint's evidence remains unchanged.
+
+`corpus-before.json` and `corpus-after.json` bind all 126 source hashes and retain every error/warning; informational source notices are counted. Both report 85 lint-valid files and 41 errors. The corrected report has four reference warnings: three explicit custom IDs not supplied as catalog records, and a color-scheme reference whose inline record is invalid. It no longer warns on the valid custom narrative. There are 401 informational notices for unfetched catalog sources. This corpus inspection is a diagnostic result, not a passing-example or release claim.
+
+Reproduce after building with `node scripts/inspect-lint-examples.mjs artifacts/lint-corpus.json`. The command exits 1 while those document errors remain. The schema and examples were not weakened or rewritten to obtain passing code tests. Npm publication, editor dependency updates, and the separate native/furniture/font gates remain pending.

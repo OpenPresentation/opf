@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { readFileSync } from 'node:fs';
 import { lintPresentation, lintSource } from '../dist/lint.js';
+import { validateCatalogRecord } from '../dist/validator.js';
 
 const layout = (id, name = id) => ({
 	id,
@@ -300,5 +301,111 @@ test('asset references diagnose missing registry entries and cycles without fetc
 			'/design/watermark/src',
 			'/slides/0/video',
 		],
+	);
+});
+
+test('custom inline narrative IDs remain custom even without beats', () => {
+	for (const narrative of [
+		{ id: 'custom-arc' },
+		{ id: 'custom-arc', beats: [] },
+	]) {
+		const result = lintPresentation({ narrative, slides: [{ title: 'Keep' }] });
+		assert.equal(result.valid, true);
+		assert.deepEqual(result.diagnostics, []);
+	}
+	assert.ok(
+		lintPresentation({
+			narrative: 'custom-arc',
+			slides: [{ title: 'Keep' }],
+		}).diagnostics.some((issue) => issue.ruleId === 'opf/catalog-reference'),
+	);
+});
+
+test('catalog diagnostics locate referenced schema constraints without changing validator reports', () => {
+	const record = {
+		$schema: 'https://openpresentation.org/schema/opf-theme/v1',
+		id: 'custom',
+		name: 'Custom',
+		background: 'light1',
+	};
+	const validation = validateCatalogRecord('themes', record);
+	assert.equal(validation.valid, false);
+	const source = JSON.stringify({
+		catalogs: { themes: { records: [record] } },
+		slides: [{ title: 'Keep' }],
+	});
+	const diagnostic = lintSource(source).diagnostics.find(
+		(issue) => issue.ruleId === 'opf/catalog-record',
+	);
+	assert.equal(diagnostic.path, '/catalogs/themes/records/0/background');
+	assert.equal(
+		diagnostic.definition,
+		'https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type',
+	);
+	assert.deepEqual(diagnostic.lookup, [
+		'opf',
+		'schema',
+		'theme',
+		'/$defs/ThemeBackground/type',
+	]);
+	assert.equal(diagnostic.location.offset, source.indexOf('"light1"'));
+	assert.deepEqual(Object.keys(validation.errors[0]).sort(), [
+		'keyword',
+		'message',
+		'params',
+		'path',
+		'schemaPath',
+	]);
+	assert.deepEqual(diagnostic.validation, validation.errors[0]);
+});
+
+test('language tags preserve regional, extended, private and grandfathered forms', () => {
+	for (const language of [
+		'en-US',
+		'en-GB',
+		'ja-JP',
+		'fr',
+		'sr-Latn-RS',
+		'es-419',
+		'zh-cmn-Hans-CN',
+		'de-CH-1901',
+		'en-US-u-ca-gregory',
+		'x-private',
+		'en-x-business',
+		'i-klingon',
+		'sgn-BE-FR',
+		'en-GB-oed',
+	]) {
+		const source = JSON.stringify({ language, slides: [{ title: 'Keep' }] });
+		const result = lintSource(source);
+		assert.equal(result.valid, true, language);
+		assert.deepEqual(result.diagnostics, [], language);
+	}
+	assert.equal(
+		lintPresentation({ language: 'en-UK', slides: [{ title: 'Keep' }] }).valid,
+		false,
+	);
+	const explicitId = lintPresentation({
+		language: { id: 'custom-language-id', bcp47: 'en-US' },
+		slides: [{ title: 'Keep' }],
+	});
+	assert.ok(
+		explicitId.diagnostics.some(
+			(issue) =>
+				issue.path === '/language/id' &&
+				issue.ruleId === 'opf/catalog-reference',
+		),
+	);
+	const nested = lintPresentation({
+		language: { bcp47: 'en-US', fontScheme: 'missing-font' },
+		slides: [{ title: 'Keep' }],
+	});
+	assert.deepEqual(
+		nested.diagnostics.map((issue) => issue.path),
+		['/language/fontScheme'],
+	);
+	assert.equal(
+		nested.diagnostics[0].definition,
+		'https://openpresentation.org/schema/opf/v1#/$defs/Language/properties/fontScheme',
 	);
 });

@@ -31,6 +31,7 @@ try {
   await writeFile(path.join(temp,'lint.opf.json'),lintRaw);
   const linted=run(['lint','lint.opf.json']).json;assert.equal(linted.valid,true);assert.equal(linted.counts.warning,1);assert.equal(linted.diagnostics[0].location.offset,lintRaw.indexOf('"pratner"'));
   assert.equal(run(['lint','lint.opf.json','--strict'],{status:1}).json.valid,true);
+  assert.equal(run(['lint','-','--strict'],{input:'{"language":"en-US","slides":[{"title":"Regional tag"}]}'}).json.counts.warning,0);
   assert.equal(run(['lint','-'],{input:'{"slides":[}',status:1}).json.schemaValid,null);
   assert.ok(run(['lint','-'],{input:'{"slides":[{"title":"Earlier","title":"Later"}]}',status:1}).json.diagnostics.some(issue=>issue.ruleId==='json/duplicate-key'));
   const config={catalogs:{layouts:[{id:'pratner',name:'Authoritative custom spelling',placeholders:[{type:'title'}]}]}},configRaw=JSON.stringify(config);

@@ -18,6 +18,7 @@ import {
 	type ValidationIssue,
 } from './validator.js';
 import type { JsonPrimitive, JsonSchema } from './json.js';
+import { validationDefinition } from './validation-definitions.js';
 
 export type LintSeverity = 'error' | 'warning' | 'info';
 export interface LintLocation {
@@ -203,14 +204,22 @@ function schemaDiagnostic(
 				: ''),
 		entry = schemaEntries.find((entry) => entry.name === schemaName);
 	if (!entry) throw new TypeError(`Unknown schema ${schemaName}`);
-	const definition = issue.schemaPath.startsWith('#')
-		? entry.schema.$id + issue.schemaPath
-		: issue.schemaPath;
+	const precise = validationDefinition(issue);
+	const definition =
+		precise?.uri ??
+		(issue.keyword === 'opf'
+			? 'packages/javascript/src/validator.ts'
+			: issue.schemaPath.startsWith('#')
+				? entry.schema.$id + issue.schemaPath
+				: issue.schemaPath);
 	const lookup = [
 		'opf',
 		'schema',
-		schemaName,
-		issue.schemaPath.startsWith('#') ? issue.schemaPath.slice(1) : '',
+		precise?.schemaName ?? schemaName,
+		precise?.pointer ??
+			(issue.keyword !== 'opf' && issue.schemaPath.startsWith('#')
+				? issue.schemaPath.slice(1)
+				: ''),
 	];
 	let help =
 		'Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.';
@@ -254,6 +263,7 @@ interface Cursor {
 	schema: JsonSchema;
 	root: JsonSchema;
 	path: string;
+	baseSchemas?: Cursor[];
 }
 function resolve(cursor: Cursor, seen = new Set<string>()): Cursor {
 	const ref = cursor.schema.$ref;
@@ -311,31 +321,92 @@ function active(cursor: Cursor, value: unknown): Cursor {
 		alternatives = resolved.schema.oneOf ?? resolved.schema.anyOf;
 	if (!Array.isArray(alternatives)) return resolved;
 	const keyword = resolved.schema.oneOf ? 'oneOf' : 'anyOf';
-	const candidates = alternatives
-		.filter(object)
-		.map((schema, index) =>
-			active(
-				{
-					schema: schema as JsonSchema,
-					root: resolved.root,
-					path: `${resolved.path}/${keyword}/${index}`,
-				},
-				value,
-			),
-		);
-	return (
-		candidates.sort(
-			(a, b) => score(b.schema, value) - score(a.schema, value),
-		)[0] ?? resolved
+	const candidates = alternatives.filter(object).map((schema, index) =>
+		active(
+			{
+				schema: schema as JsonSchema,
+				root: resolved.root,
+				path: `${resolved.path}/${keyword}/${index}`,
+			},
+			value,
+		),
 	);
+	const selected = candidates.sort((a, b) => score(b.schema, value) - score(a.schema, value))[0];
+	return selected ? { ...selected, baseSchemas: [...(selected.baseSchemas ?? []), resolved] } : resolved;
 }
 function catalogIn(schema: JsonSchema): CatalogKind | undefined {
 	const text = String(schema.description ?? '');
+	if (/\bfont-scheme id\b/.test(text)) return 'fontSchemes';
 	return catalogKinds.find(
 		(kind) =>
 			text.includes(`catalogs.${kind}`) ||
 			new RegExp(`\\b${kind}['’]? catalog`).test(text),
 	);
+}
+
+// Recognize the syntactic alternatives in RFC 5646 section 2.1. This only
+// distinguishes possible language tags from catalog IDs; it does not check the
+// IANA registry, canonicalize spelling, or replace OPF's existing en-UK error.
+const languageTagSyntax = new RegExp(
+	'^(?:(?:[a-z]{2,3}(?:-[a-z]{3}){0,3}|[a-z]{4}|[a-z]{5,8})' +
+		'(?:-[a-z]{4})?(?:-(?:[a-z]{2}|[0-9]{3}))?' +
+		'(?:-(?:[a-z0-9]{5,8}|[0-9][a-z0-9]{3}))*' +
+		'(?:-[0-9a-wy-z](?:-[a-z0-9]{2,8})+)*(?:-x(?:-[a-z0-9]{1,8})+)?' +
+		'|x(?:-[a-z0-9]{1,8})+)$',
+	'i',
+);
+const irregularLanguageTags = new Set([
+	'en-gb-oed',
+	'i-ami',
+	'i-bnn',
+	'i-default',
+	'i-enochian',
+	'i-hak',
+	'i-klingon',
+	'i-lux',
+	'i-mingo',
+	'i-navajo',
+	'i-pwn',
+	'i-tao',
+	'i-tay',
+	'i-tsu',
+	'sgn-be-fr',
+	'sgn-be-nl',
+	'sgn-ch-de',
+]);
+
+function childCursor(cursors: Cursor[], key: string): Cursor | undefined {
+	for (const keyword of [
+		'properties',
+		'patternProperties',
+		'additionalProperties',
+	] as const) {
+		for (const cursor of cursors) {
+			const declarations = cursor.schema[keyword];
+			if (!object(declarations)) continue;
+			const name =
+				keyword === 'properties'
+					? key
+					: keyword === 'patternProperties'
+						? Object.keys(declarations).find((pattern) =>
+								new RegExp(pattern).test(key),
+							)
+						: undefined;
+			const schema =
+				keyword === 'additionalProperties'
+					? declarations
+					: name === undefined
+						? undefined
+						: declarations[name];
+			if (object(schema))
+				return {
+					schema: schema as JsonSchema,
+					root: cursor.root,
+					path: `${cursor.path}/${keyword}${name === undefined ? '' : pointer([name])}`,
+				};
+		}
+	}
+	return undefined;
 }
 interface Field {
 	path: string;
@@ -390,15 +461,17 @@ function fields(document: unknown): Field[] {
 			assetReference,
 		});
 		const ancestors = [...entry.ancestors, entry.value];
-		if (Array.isArray(entry.value) && object(selected.schema.items))
+		const cursors = [selected, ...(selected.baseSchemas ?? []), resolved];
+		const arrayCursor = cursors.find(cursor => object(cursor.schema.items));
+		if (Array.isArray(entry.value) && arrayCursor)
 			entry.value.forEach((value, index) => {
 				stack.push({
 					value,
 					path: [...entry.path, index],
 					cursor: {
-						schema: selected.schema.items as JsonSchema,
-						root: selected.root,
-						path: `${selected.path}/items`,
+						schema: arrayCursor.schema.items as JsonSchema,
+						root: arrayCursor.root,
+						path: `${arrayCursor.path}/items`,
 					},
 					ancestors,
 				});
@@ -406,28 +479,14 @@ function fields(document: unknown): Field[] {
 		else if (object(entry.value))
 			for (const [key, value] of Object.entries(entry.value)) {
 				if (entry.path.length === 0 && key === 'catalogs') continue;
-				const properties = object(selected.schema.properties)
-						? selected.schema.properties
-						: {},
-					patterns = object(selected.schema.patternProperties)
-						? selected.schema.patternProperties
-						: {};
-				const pattern = Object.keys(patterns).find((pattern) =>
-					new RegExp(pattern).test(key),
-				);
-				const schema =
-					properties[key] ??
-					(pattern ? patterns[pattern] : selected.schema.additionalProperties);
-				if (!object(schema)) continue;
-				const path = own(properties, key)
-					? `${selected.path}/properties/${pointer([key]).slice(1)}`
-					: pattern
-						? `${selected.path}/patternProperties/${pointer([pattern]).slice(1)}`
-						: `${selected.path}/additionalProperties`;
+				// Union branches can add only required fields while the properties
+				// remain on the common schema. Retain their actual definition paths.
+				const cursor = childCursor(cursors, key);
+				if (!cursor) continue;
 				stack.push({
 					value,
 					path: [...entry.path, key],
-					cursor: { schema: schema as JsonSchema, root: selected.root, path },
+					cursor,
 					ancestors,
 				});
 			}
@@ -588,12 +647,21 @@ export function lintPresentation(
 		}
 		if (!field.path || !field.kind) continue;
 		const { kind } = field;
+		if (
+			kind === 'languages' &&
+			field.path === '/language' &&
+			typeof field.value === 'string' &&
+			(languageTagSyntax.test(field.value) ||
+				irregularLanguageTags.has(field.value.toLowerCase()))
+		)
+			continue;
 		// These schema forms deliberately allow arbitrary human descriptions.
 		if (kind !== 'layouts' && /free-form/i.test(field.description)) continue;
 		if (
 			kind === 'narratives' &&
-			object(field.value) &&
-			Array.isArray(field.value.beats)
+			(object(field.value) ||
+				(field.cursor.root.$id === schemas.presentation.$id &&
+					field.cursor.path === '/$defs/Narrative/properties/id'))
 		)
 			continue;
 		const value = object(field.value) ? field.value.id : field.value,
