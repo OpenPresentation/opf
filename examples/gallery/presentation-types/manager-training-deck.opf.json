@@ -566,7 +566,10 @@
           "name": "PeopleCraft Working Theme",
           "colorScheme": "cool-horizon",
           "fontScheme": "yu-gothic",
-          "background": "dark1",
+          "background": {
+            "type": "theme",
+            "slot": "dark1"
+          },
           "tags": [
             "training",
             "example"

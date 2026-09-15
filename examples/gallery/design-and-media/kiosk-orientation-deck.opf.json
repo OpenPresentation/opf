@@ -589,7 +589,10 @@
           "name": "Northgate Museum Working Theme",
           "colorScheme": "bold-red",
           "fontScheme": "constantia",
-          "background": "light1",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
           "tags": [
             "visitor-orientation",
             "example"

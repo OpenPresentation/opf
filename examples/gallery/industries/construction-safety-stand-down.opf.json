@@ -570,7 +570,10 @@
           "name": "Keystone Build Partners Working Theme",
           "colorScheme": "burnt-orange",
           "fontScheme": "gautami",
-          "background": "#F8FAFC",
+          "background": {
+            "type": "theme",
+            "slot": "light2"
+          },
           "tags": [
             "construction",
             "example"

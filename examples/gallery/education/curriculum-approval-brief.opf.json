@@ -573,7 +573,10 @@
           "name": "Oakbridge Faculty Senate Working Theme",
           "colorScheme": "burnt-orange",
           "fontScheme": "noto-sans-tc",
-          "background": "#F8FAFC",
+          "background": {
+            "type": "theme",
+            "slot": "light2"
+          },
           "tags": [
             "academic-governance",
             "example"

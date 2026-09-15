@@ -563,7 +563,10 @@
           "name": "City Sanitation Bureau Working Theme",
           "colorScheme": "deep-purple",
           "fontScheme": "shruti",
-          "background": "dark1",
+          "background": {
+            "type": "theme",
+            "slot": "dark1"
+          },
           "tags": [
             "sanitation",
             "example"

@@ -570,7 +570,10 @@
           "name": "Blue Ridge Institute Working Theme",
           "colorScheme": "corporate-blue",
           "fontScheme": "angsana-new",
-          "background": "#F8FAFC",
+          "background": {
+            "type": "theme",
+            "slot": "light2"
+          },
           "tags": [
             "research-report",
             "example"

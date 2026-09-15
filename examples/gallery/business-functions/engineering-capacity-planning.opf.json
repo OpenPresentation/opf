@@ -568,7 +568,10 @@
           "name": "Relay Cloud Working Theme",
           "colorScheme": "black-and-white",
           "fontScheme": "malgun-gothic",
-          "background": "dark1",
+          "background": {
+            "type": "theme",
+            "slot": "dark1"
+          },
           "tags": [
             "engineering",
             "example"

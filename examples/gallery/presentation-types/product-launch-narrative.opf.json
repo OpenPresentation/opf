@@ -578,7 +578,10 @@
           "name": "Kiteframe Working Theme",
           "colorScheme": "boost",
           "fontScheme": "verdana",
-          "background": "#F8FAFC",
+          "background": {
+            "type": "theme",
+            "slot": "light2"
+          },
           "tags": [
             "product-launch",
             "example"

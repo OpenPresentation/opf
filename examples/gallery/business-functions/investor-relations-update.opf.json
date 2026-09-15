@@ -575,7 +575,10 @@
           "name": "Asteria Robotics Working Theme",
           "colorScheme": "forest-green",
           "fontScheme": "noto-sans-hebrew",
-          "background": "dark1",
+          "background": {
+            "type": "theme",
+            "slot": "dark1"
+          },
           "tags": [
             "investor-relations",
             "example"

@@ -580,7 +580,10 @@
           "name": "Civic Futures Lab Working Theme",
           "colorScheme": "burnt-orange",
           "fontScheme": "vrinda",
-          "background": "light1",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
           "tags": [
             "policy-briefing",
             "example"
