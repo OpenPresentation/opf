@@ -25,12 +25,12 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
           path: opf-render
-      # Unpublished shared APIs require the coordinated source graph. Registry
-      # predecessor checks remain a release gate after core publication.
+      # Keep coordinated consumers pinned to the released core. Verify the
+      # registry dependency graph before replacing it with local source links.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
-          ref: 08f96cdcee12616a1696cfe4f22ef8d5f91fd269
+          ref: f94125a1ff95bf0974a055fe1c081d348dad54f2
           path: opf
           fetch-depth: 0
           persist-credentials: false
@@ -64,6 +64,8 @@ jobs:
           for repo in opf-render opf-pptx opf-editor; do
             npm ci --prefix "$repo"
           done
+      - name: Verify renderer with published core
+        run: npm run test:packed
       - name: Build and link coordinated sources
         working-directory: opf
         run: |
