@@ -1,0 +1,1 @@
+{"node":"v24.21.0","core":"0.10.0","cli":"0.8.0","diagnostics":[{"ruleId":"json/duplicate-key","path":"/name"},{"ruleId":"opf/catalog-reference","path":"/slides/0/layout"}],"preservedSource":true,"cliExit":1}
