@@ -1,0 +1,16 @@
+{
+  "renderer": "a5f3ec6d8acbccaae3ade462621349070d5244f7",
+  "harfbuzz": "14.4.0",
+  "scope": "Diagnostic only; naive rounding counterexamples, not a normalization or shaping fix.",
+  "evidence": {
+    "glyph-advance-comparison.json.gz": {
+      "sha256": "9ee1833d5d1aacc9aef818ba918a7cd655d92e053e8404714e5e609bb3b88fe5",
+      "decodedSha256": "af095b8b2151db6d1b8f384fd0c2426e3170c20bd13338159436b30b7e2c10cb"
+    },
+    "probe.mjs.gz": {
+      "sha256": "910a7312077b59695c303132f5fea4982df6187bbd0f071de7e44bc8ea5df6d8",
+      "decodedSha256": "fca164c8bab04a8f889c7a76d8206d5e87e50eb9901456d6d3121c121ece6c1a"
+    }
+  },
+  "fontManifestSha256": "a246fd9ed10bb72b5924f1b4018beffb9277c94899085d526ed34536293690cb"
+}

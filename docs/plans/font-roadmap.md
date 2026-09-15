@@ -38,9 +38,10 @@ fresh packages pass 373 identical nonempty browser pixel pairs and the unchanged
 backends while retaining the complete original container/license. Independent
 resource parsing and 439 fresh-package browser pixel pairs pass. A later draft
 fixed-instance checkpoint adds 712 Node cases and matching Chromium pixel
-comparisons, but ten advance comparisons fail the unchanged 0.1px gate. See
+comparisons, but ten advance comparisons fail the unchanged 0.1px gate. Fresh installed Node/TypeScript coverage and payload measurements are now recorded;
+Linux/Mac browser advances differ. See
 [the current shaping checkpoint](font-shaping.md); CFF/variable acceptance,
-fresh installed instance coverage, browser payload measurement, paragraph handling,
+a verified variable metric/paint contract, normalization correctness, paragraph handling,
 shared editing/export and native acceptance are still required. The study above
 remains the historical probe checkpoint.
 

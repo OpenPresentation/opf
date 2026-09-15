@@ -152,12 +152,40 @@ TTF cases. Maximum observed differences are 0.134625px and 0.132061px. The full
 805-slide renderer regression and syntax/package checks pass. CI now includes
 the unresolved browser gate; this commit is not accepted for release.
 
-Before promotion, resolve the advance differences, add malformed/extended
-`fvar` and named PostScript controls, extend fresh installed-package and public
-TypeScript coverage to this matrix, and measure browser payload impact. No
-package publication, deployment or native variable-instance acceptance occurred.
+The subsequent renderer checkpoint `a5f3ec6d8acbccaae3ade462621349070d5244f7`
+adds stricter variation-input/standalone-name validation and
+[portable installed evidence](https://github.com/OpenPresentation/opf-render/tree/a5f3ec6d8acbccaae3ade462621349070d5244f7/docs/evidence/variable-metrics-portability-20260914).
+The metadata suite passes 88 positive controls and 58 rejection/limit controls;
+16 record the pinned HarfBuzz rejection of hypothetical extended fvar records.
+Fresh packages verify 36 shipped hashes, the 712-case Node matrix, public
+TypeScript variation APIs, existing 439 browser comparisons and a zero-finding
+audit. Their new variable browser matrix reproduces all ten Mac failures and
+correctly exits nonzero. The full 805-slide regression remains unchanged.
 
-Next: resolve the CFF2/variable advance gate and complete installed coverage, paragraph
+Linux Chromium has the same pixels within its matrix, but fails ten Fontkit
+advance cases and zero prepared HarfBuzz cases. Mac fails five with each backend.
+Native advances differ by up to 0.134765625px for five TrueType instances. The
+repeated-glyph diagnostic amplifies the difference to about 4.57px. Pinned
+HarfBuzz rounds HVAR deltas before scaling, so increasing output precision alone
+does not recover those fractions. CI at 7916fc1 passed Mac/Windows Node and all
+earlier Linux acceptance steps before failing this new browser gate. Raw logs
+and complete reports are retained. The new head adds native diagnostics on all
+three platforms; its CI remains separate.
+
+Controlled browser bundles add 74,415 gzip bytes for the font loader and 413 for
+SVG versus the verified DFont predecessor, without pulling in HarfBuzz WASM.
+These are bundle measurements, not deployed page-load measurements. No package
+publication, deployment or native variable-instance acceptance occurred.
+
+A further [CFF2 glyph probe](../evidence/variable-rounding-probe-20260914/README.md)
+finds 458 one-unit counterexamples to naive HVAR delta rounding across 143,207
+glyph/instance combinations. Investigate the specified 16.16 normalization and
+2.14 output, avar boundaries and derived-value precision before any blanket
+rounding change. Then verify the relationship between metrics and painting on
+each target; retain shaping-dependent glyph positions and authored source. A
+font-functions implementation also requires ownership/lifetime verification.
+
+Next: resolve normalization and the CFF2/variable metric/paint gate, paragraph
 itemization/bidi, fallback, performance/lifetime analysis, complete slide/ink
 review and shared editing/undo/export acceptance. Fontkit remains the default;
 this is not registry publication, site adoption or native compatibility proof.
