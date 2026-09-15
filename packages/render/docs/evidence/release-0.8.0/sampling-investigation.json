@@ -1,0 +1,202 @@
+[
+  {
+    "args": [],
+    "browser": "153.0.8010.12",
+    "results": [
+      {
+        "cpu": false,
+        "mode": "svg",
+        "width": 1280,
+        "height": 720,
+        "max": 31,
+        "mean": 0.7754158528645834,
+        "largePercent": 2.7991265190972223
+      },
+      {
+        "cpu": false,
+        "mode": "native",
+        "width": 60,
+        "height": 120,
+        "max": 0,
+        "mean": 0,
+        "largePercent": 0
+      },
+      {
+        "cpu": false,
+        "mode": "upscaled",
+        "width": 1165,
+        "height": 2330,
+        "max": 31,
+        "mean": 0.3692921217926283,
+        "largePercent": 0.9869494741107775
+      },
+      {
+        "cpu": false,
+        "mode": "nearest",
+        "width": 1165,
+        "height": 2330,
+        "max": 255,
+        "mean": 0.05926439978632872,
+        "largePercent": 0.06686437399841588
+      },
+      {
+        "cpu": true,
+        "mode": "svg",
+        "width": 1280,
+        "height": 720,
+        "max": 31,
+        "mean": 0.7754158528645834,
+        "largePercent": 2.7991265190972223
+      },
+      {
+        "cpu": true,
+        "mode": "native",
+        "width": 60,
+        "height": 120,
+        "max": 0,
+        "mean": 0,
+        "largePercent": 0
+      },
+      {
+        "cpu": true,
+        "mode": "upscaled",
+        "width": 1165,
+        "height": 2330,
+        "max": 31,
+        "mean": 0.3692921217926283,
+        "largePercent": 0.9869494741107775
+      },
+      {
+        "cpu": true,
+        "mode": "nearest",
+        "width": 1165,
+        "height": 2330,
+        "max": 255,
+        "mean": 0.05926439978632872,
+        "largePercent": 0.06686437399841588
+      },
+      {
+        "mode": "same-browser-decoded-PNG",
+        "rendering": "",
+        "max": 31,
+        "mean": 0.7754158528645834,
+        "largePercent": 2.7991265190972223
+      },
+      {
+        "mode": "same-browser-decoded-PNG",
+        "rendering": " image-rendering=\"pixelated\"",
+        "max": 0,
+        "mean": 0,
+        "largePercent": 0
+      },
+      {
+        "mode": "same-browser-decoded-PNG",
+        "rendering": " image-rendering=\"optimizeSpeed\"",
+        "max": 31,
+        "mean": 0.7754158528645834,
+        "largePercent": 2.7991265190972223
+      }
+    ]
+  },
+  {
+    "args": [
+      "--disable-gpu"
+    ],
+    "browser": "153.0.8010.12",
+    "results": [
+      {
+        "cpu": false,
+        "mode": "svg",
+        "width": 1280,
+        "height": 720,
+        "max": 31,
+        "mean": 0.7754158528645834,
+        "largePercent": 2.7991265190972223
+      },
+      {
+        "cpu": false,
+        "mode": "native",
+        "width": 60,
+        "height": 120,
+        "max": 0,
+        "mean": 0,
+        "largePercent": 0
+      },
+      {
+        "cpu": false,
+        "mode": "upscaled",
+        "width": 1165,
+        "height": 2330,
+        "max": 31,
+        "mean": 0.3692921217926283,
+        "largePercent": 0.9869494741107775
+      },
+      {
+        "cpu": false,
+        "mode": "nearest",
+        "width": 1165,
+        "height": 2330,
+        "max": 255,
+        "mean": 0.05926439978632872,
+        "largePercent": 0.06686437399841588
+      },
+      {
+        "cpu": true,
+        "mode": "svg",
+        "width": 1280,
+        "height": 720,
+        "max": 31,
+        "mean": 0.7754158528645834,
+        "largePercent": 2.7991265190972223
+      },
+      {
+        "cpu": true,
+        "mode": "native",
+        "width": 60,
+        "height": 120,
+        "max": 0,
+        "mean": 0,
+        "largePercent": 0
+      },
+      {
+        "cpu": true,
+        "mode": "upscaled",
+        "width": 1165,
+        "height": 2330,
+        "max": 31,
+        "mean": 0.3692921217926283,
+        "largePercent": 0.9869494741107775
+      },
+      {
+        "cpu": true,
+        "mode": "nearest",
+        "width": 1165,
+        "height": 2330,
+        "max": 255,
+        "mean": 0.05926439978632872,
+        "largePercent": 0.06686437399841588
+      },
+      {
+        "mode": "same-browser-decoded-PNG",
+        "rendering": "",
+        "max": 31,
+        "mean": 0.7754158528645834,
+        "largePercent": 2.7991265190972223
+      },
+      {
+        "mode": "same-browser-decoded-PNG",
+        "rendering": " image-rendering=\"pixelated\"",
+        "max": 0,
+        "mean": 0,
+        "largePercent": 0
+      },
+      {
+        "mode": "same-browser-decoded-PNG",
+        "rendering": " image-rendering=\"optimizeSpeed\"",
+        "max": 31,
+        "mean": 0.7754158528645834,
+        "largePercent": 2.7991265190972223
+      }
+    ]
+  }
+]

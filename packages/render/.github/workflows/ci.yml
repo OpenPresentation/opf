@@ -111,6 +111,8 @@ jobs:
             opf/artifacts/editor/*failure.png
             opf/artifacts/editor/*installed-code*.json
             opf-render/artifacts/golden/**
+            opf-render/artifacts/jpeg/browser/report.json
+            opf-render/artifacts/quote-footer/browser/report.json
             opf-render/artifacts/font-preparation*.json
             opf-render/artifacts/font-variants*.json
             opf/artifacts/plain-whitespace-workflow/**

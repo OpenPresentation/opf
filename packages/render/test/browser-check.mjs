@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {createServer} from 'node:http';
-import {readFile} from 'node:fs/promises';
+import {readFile, writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {chromium} from 'playwright';
@@ -28,6 +28,7 @@ try {
     assert.equal(response.status(),200);
     await page.waitForFunction(()=>/^(PASS|FAIL):/.test(document.title),undefined,{timeout:60000});
     const result=await page.locator('pre').innerText();
+    await writeFile(path.join(root, 'artifacts', name, 'browser', 'report.json'), result + '\n');
     assert.match(await page.title(),/^PASS:/,result);
     assert.deepEqual(errors,[]);
     suites.push({name,...JSON.parse(result)});
