@@ -30,6 +30,8 @@ Design example:
 
 Theme defaults sit below explicit deck and slide design. Inline `id` plus overrides resolve the base record before overriding fields. Header/footer/watermark `false` differs from omission. Dimensions accept presets or explicit inches; don't encode pixels as inches. Backgrounds can be theme slots, hex strings, or typed theme/solid/gradient/image/pattern objects. Background image objects use `{src, fit}`, not a bare source string.
 
+That background flexibility applies to deck/slide design overrides. Catalog theme records use a theme-controlled object such as `{"type":"theme","slot":"light2"}`; the slot must be `light1`, `light2`, `dark1`, or `dark2`. Keep a fixed hex background in an explicit `design.background` override. Validate catalog records against their companion schemas, including required names, rather than relying only on presentation validation.
+
 Use font schemes for pair/role selection; load the actual font files separately. The core package contains font metadata, not every font binary. Rich text run overrides and schema-accepted design controls may exceed current SVG/PPTX visual coverage.
 
 ## Gallery reuse

@@ -577,7 +577,10 @@
           "name": "Northbeam Software Working Theme",
           "colorScheme": "corporate-blue",
           "fontScheme": "noto-sans-gujarati",
-          "background": "#F8FAFC",
+          "background": {
+            "type": "theme",
+            "slot": "light2"
+          },
           "tags": [
             "pricing",
             "example"

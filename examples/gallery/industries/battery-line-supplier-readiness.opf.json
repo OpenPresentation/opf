@@ -557,7 +557,10 @@
           "name": "Voltcrest Components Working Theme",
           "colorScheme": "boost",
           "fontScheme": "garamond",
-          "background": "dark1",
+          "background": {
+            "type": "theme",
+            "slot": "dark1"
+          },
           "tags": [
             "automotive-supply",
             "example"

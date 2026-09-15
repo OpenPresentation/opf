@@ -589,7 +589,10 @@
           "name": "Lakehaven Water District Working Theme",
           "colorScheme": "vibes",
           "fontScheme": "roboto",
-          "background": "light1",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
           "tags": [
             "public-utilities",
             "example"

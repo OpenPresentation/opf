@@ -577,7 +577,10 @@
           "name": "Cedarwell Properties Working Theme",
           "colorScheme": "luxury",
           "fontScheme": "consolas",
-          "background": "light1",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
           "tags": [
             "commercial-real-estate",
             "example"

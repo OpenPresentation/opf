@@ -91,7 +91,9 @@
           "light1": "#FFFFFF",
           "dark1": "#0B1B2B",
           "background": "#0B1B2B",
-          "text": "#E8F1F8"
+          "text": "#E8F1F8",
+          "$schema": "https://openpresentation.org/schema/opf-color-scheme/v1",
+          "name": "Acme Night"
         }
       ]
     }

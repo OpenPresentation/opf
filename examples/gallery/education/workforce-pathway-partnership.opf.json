@@ -562,7 +562,10 @@
           "name": "Metro Technical College Working Theme",
           "colorScheme": "black-and-white",
           "fontScheme": "noto-sans-oriya",
-          "background": "#F8FAFC",
+          "background": {
+            "type": "theme",
+            "slot": "light2"
+          },
           "tags": [
             "community-college",
             "example"

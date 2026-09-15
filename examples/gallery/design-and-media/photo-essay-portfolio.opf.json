@@ -570,7 +570,10 @@
           "name": "Urban Lens Collective Working Theme",
           "colorScheme": "vibes",
           "fontScheme": "century-schoolbook",
-          "background": "dark1",
+          "background": {
+            "type": "theme",
+            "slot": "dark1"
+          },
           "tags": [
             "portfolio",
             "example"
