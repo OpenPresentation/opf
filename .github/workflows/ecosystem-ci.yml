@@ -33,7 +33,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-editor
-          ref: 8e184ee5145289c24ab03ec5a3130239f9ec9d89
+          ref: 8d6e313b83bf5f17414013cde1b410cf629c753d
           path: opf-editor
           fetch-depth: 0
           persist-credentials: false
@@ -79,6 +79,7 @@ jobs:
           node scripts/test-readability-browser.mjs artifacts/readability-browser installed
           node scripts/test-timeline-workflow.mjs artifacts/timeline-workflow installed
           node scripts/test-furniture-workflow.mjs artifacts/furniture-workflow installed
+          node ../opf-editor/test/json-editor-browser.mjs artifacts/editor/json-editor-installed.json artifacts/npm/consumer
           node scripts/test-timeline-acceptance.mjs artifacts/timeline-acceptance.json
       - name: Check scalar source whitespace and accepted browser advances
         working-directory: opf-render
@@ -116,6 +117,7 @@ jobs:
           name: installed-browser-node24
           path: |
             opf/artifacts/editor/packed-browser-*-report.json
+            opf/artifacts/editor/json-editor-installed.json
             opf/artifacts/editor/packed-browser-*-failure.png
             opf/artifacts/code-layout-geometry.json
             opf/artifacts/code-layout-browser.json
