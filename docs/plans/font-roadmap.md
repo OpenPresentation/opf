@@ -34,7 +34,10 @@ embedding and browser pixels. The optional horizontal-metrics follow-up covers
 the compatible browser face. The shared-collection follow-up preserves per-face
 metrics across 198 selected-face cases and independently reconstructs each face;
 fresh packages pass 373 identical nonempty browser pixel pairs and the unchanged
-805-slide baseline. DFont/CFF/variable coverage, paragraph handling,
+805-slide baseline. Selected DFont resources now work with both registry
+backends while retaining the complete original container/license. Independent
+resource parsing and 439 fresh-package browser pixel pairs pass. CFF/variable
+coverage, paragraph handling,
 shared editing/export and native acceptance are still required. The study above
 remains the historical probe checkpoint.
 

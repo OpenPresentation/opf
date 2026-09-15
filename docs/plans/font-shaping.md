@@ -113,16 +113,35 @@ expanded fixture transfer uses bounded batches on one persistent page/shaper
 after reproducing Chromium's DevTools message-size limit. All 805 reviewed
 baseline slides, public TypeScript consumers and the zero-finding audit pass.
 [CI at this head](https://github.com/OpenPresentation/opf-render/actions/runs/34928184737)
-has passed Mac/Windows Node checks, including all 198 collection cases; raw logs
-were inspected. Linux browser, installed-package and coordinated checks remain
-in progress and must be consulted before accepting that CI matrix.
+passed Mac/Windows Node and Linux browser, installed-package and coordinated
+checks. Raw logs were inspected and are retained with the DFont checkpoint.
 
-Next: DFont resources, CFF/CFF2 and variable-instance coverage, paragraph
+Renderer `0ca1656c1884f6ba5f00a8e15ef17898df0be983` corrects selected DFont
+resources for both backends. Previously the default embedded the outer resource
+container as a TTF, and the prepared backend rejected it. The registry now
+validates the supplied raw resource map, requires a unique PostScript name and
+extracts that same face for measurement and browser loading. Complete original
+container bytes and licenses survive in SVG metadata. Preparation reports the
+resource ID/index and an explicit `dfont-resource` reason. No OS font lookup or
+installation occurs.
+
+The [DFont evidence](https://github.com/OpenPresentation/opf-render/tree/0ca1656c1884f6ba5f00a8e15ef17898df0be983/docs/evidence/dfont-resources-20260914)
+retains both predecessor failures, all 66 selected-face/backend cases, first/single
+resource controls and 19 malformed/selection controls. Independent FontTools
+parsing checks all 66 sfnt resources in 33 containers against every original
+byte and identity. The full 439 browser pixel pairs, 805 unchanged baseline
+slides, 35 fresh-package file hashes, public TypeScript consumers and zero-finding
+audit pass. Default DFont cases compare Fontkit metrics/outlines; prepared cases
+also compare shaped glyphs and source ranges. [Current-head CI](https://github.com/OpenPresentation/opf-render/actions/runs/34929695382)
+is running and remains a separate acceptance requirement. Raw resources are covered; MacBinary/AppleDouble wrappers
+and Type 1 suitcase conversion are separate formats.
+
+Next: CFF/CFF2 and variable-instance coverage, paragraph
 itemization/bidi, fallback, performance/lifetime analysis, complete slide/ink
 review and shared editing/undo/export acceptance. Fontkit remains the default;
 this is not registry publication, site adoption or native compatibility proof.
 
-## Next runtime implementation
+## Implementation and promotion requirements
 
 1. Add a reusable shaping service behind the existing font registry. Preserve
    physical-face resolution, theme/alias/substitution policy, explicit errors,
@@ -138,8 +157,9 @@ this is not registry publication, site adoption or native compatibility proof.
 3. Cover every currently supported font input, including WOFF/WOFF2 and selected
    collection faces, before changing defaults. Verify variable-face behavior,
    resource lifetime, initialization errors, browser asset/CSP requirements,
-   offline bundling, payload size and repeated-call performance. The current
-   probe handles only twelve static TTFs and must not silently stand in for this.
+   offline bundling, payload size and repeated-call performance. The original
+   Akasia probe covers twelve static TTFs; the container checkpoints above remain
+   separate matrices and must not stand in for uncovered formats.
 4. Extend exact-face comparisons to all bundled base and Office-substitute packs,
    kerning, ligatures, combining marks, script/language itemization, mixed-script
    runs, bidi, fallback and supplementary characters. A buffer's guessed script
