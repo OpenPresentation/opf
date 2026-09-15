@@ -39,9 +39,12 @@ backends while retaining the complete original container/license. Independent
 resource parsing and 439 fresh-package browser pixel pairs pass. A later draft
 fixed-instance checkpoint adds 712 Node cases and matching Chromium pixel
 comparisons, but ten advance comparisons fail the unchanged 0.1px gate. Fresh installed Node/TypeScript coverage and payload measurements are now recorded;
-Linux/Mac browser advances differ. See
+Linux/Mac browser advances differ. The subsequent fixed-point normalization
+correction matches 188 independent FreeType instances and resolves 458 CFF2
+glyph diagnostic disagreements. Fresh packages verify 37 shipped hashes and
+the unchanged corpus, but still fail the variable browser advance gate. See
 [the current shaping checkpoint](font-shaping.md); CFF/variable acceptance,
-a verified variable metric/paint contract, normalization correctness, paragraph handling,
+a verified variable metric/paint contract, wider axis-mapping coverage, paragraph handling,
 shared editing/export and native acceptance are still required. The study above
 remains the historical probe checkpoint.
 

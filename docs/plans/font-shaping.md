@@ -181,7 +181,11 @@ selections produce identical repeated-H widths in both modes. The preceding
 Windows result used Edge 152 with kerning disabled; its much larger CFF2 drift
 cannot yet be generalized to Chromium 153 or normal kerning. The diagnostic
 records finite positive measurements and cleanup, not fidelity acceptance.
-New-head CI remains pending. Product metrics and tolerances remain unchanged.
+The completed Windows diagnostic shows the same repeated-H CFF2 differences
+in Chromium 153 and Edge 152 with either kerning mode. Neither version nor
+kerning setting explains this Windows observation. The run was cancelled by
+the later implementation push after both Mac/Windows jobs passed and Linux
+failed its installed variable gate; its source-browser result was incomplete.
 
 Controlled browser bundles add 74,415 gzip bytes for the font loader and 413 for
 SVG versus the verified DFont predecessor, without pulling in HarfBuzz WASM.
@@ -189,14 +193,38 @@ These are bundle measurements, not deployed page-load measurements. No package
 publication, deployment or native variable-instance acceptance occurred.
 
 A further [CFF2 glyph probe](../evidence/variable-rounding-probe-20260914/README.md)
-finds 458 one-unit counterexamples to naive HVAR delta rounding across 143,207
-glyph/instance combinations. Investigate the specified 16.16 normalization and
-2.14 output, avar boundaries and derived-value precision before any blanket
-rounding change. Then verify the relationship between metrics and painting on
-each target; retain shaping-dependent glyph positions and authored source. A
-font-functions implementation also requires ownership/lifetime verification.
+found 458 one-unit counterexamples to naive HVAR delta rounding across 143,207
+glyph/instance combinations. Renderer `489273e1ae0688cb8295cd09b7137636ad4c72f5`
+corrects Fontkit coordinate normalization before glyph/layout caches populate:
+16.16 input and mapping calculations, followed by signed 2.14 coordinates.
+It also preserves exact four-character tags and fixes defaults at axis maxima.
+Original font bytes, user values and source text remain unchanged. The new
+bounded reader supports `avar` 1.0 and explicitly rejects unsupported mapping
+versions, including `avar` 2; broader axis-mapping coverage remains open.
 
-Next: resolve normalization and the CFF2/variable metric/paint gate, paragraph
+An independently built FreeType 2.14.1 confirms all 188 fixture instances.
+Four Source Sans Semibold boundaries differ from FontTools 4.60.2's floating
+reference; both references and the initial failure are retained. All 143,207
+CFF2 glyph comparisons now agree with HarfBuzz after applying its integer
+advance policy in the diagnostic. No runtime rounding of derived advances
+was added. Endpoint, collapsed-axis, exact-tag and mapping controls pass.
+
+The unchanged 805-slide regression and source Node matrix pass. Fresh tarballs
+verify all 37 shipped-file hashes, the independent normalization controls,
+712 Node cases, original 439 browser pixel pairs, public TypeScript consumers
+and a zero-finding audit. Both the source and installed 712-case browser
+matrices still fail five Fontkit CFF2 and five prepared TrueType advance
+comparisons on Mac, while all within-platform pixels match. The normalization
+correction resolves a prerequisite; it does not close the metric/paint gate.
+Renderer evidence checkpoint `e293b55` retains full reports and failures.
+
+Next verify actual glyph/instance painting and the relationship between metrics
+and painting on each target, preserving shaping-dependent positions. Matching
+two browsers' views of the same source is insufficient proof of correct selected
+instance painting. A font-functions implementation also requires explicit
+ownership/lifetime verification; a final-width offset remains inappropriate.
+
+Next: complete wider axis-mapping coverage and the CFF2/variable metric/paint gate, paragraph
 itemization/bidi, fallback, performance/lifetime analysis, complete slide/ink
 review and shared editing/undo/export acceptance. Fontkit remains the default;
 this is not registry publication, site adoption or native compatibility proof.

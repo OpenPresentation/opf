@@ -48,10 +48,14 @@ unchanged 0.1px advance tolerance. The complete reports remain preserved; pixel
 comparisons match within each platform. Passing diagnostics do not establish
 native font fidelity.
 
-The latest renderer checkpoint `1b17e70` is committed and pushed. It separates
-browser versions and kerning settings in the native diagnostic and preserves
-the preceding completed CI evidence. Its local Mac probe and syntax checks
-pass; new-head CI is pending. No product metric or tolerance changed. See
+Renderer `1b17e70` separates browser versions and kerning settings in the native
+diagnostic. The later implementation commit `489273e` corrects fixed-point
+coordinate normalization, axis endpoint defaults and exact tags; evidence
+commit `e293b55` preserves its independent reference, source and installed
+results. Both commits are pushed. All 188 FreeType instance coordinates,
+143,207 CFF2 glyph diagnostics and the unchanged 805-slide regression pass.
+Fresh packages verify 37 shipped hashes and TypeScript consumers. Ten Mac
+variable browser width checks still fail; new-head CI remains separate. See
 [font-shaping.md](font-shaping.md) for exact evidence and remaining font/native
 acceptance requirements.
 
