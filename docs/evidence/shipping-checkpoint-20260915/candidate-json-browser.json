@@ -1,0 +1,21 @@
+{
+  "status": "passed",
+  "runtime": "installed",
+  "node": "v24.21.0",
+  "browser": "153.0.8010.12",
+  "platform": "darwin",
+  "keymapPlatform": "darwin",
+  "checks": [
+    "Paired delimiters, nested indentation, Tab/outdent and keyboard undo/redo",
+    "Bullet continuation supplies commas/quotes and retains tabs, mixed line endings and unrelated content",
+    "Native deletion/undo preserves original CRLF and unrelated external updates; split-CRLF replacement rejected",
+    "Dispatched clipboard event preserves observed mixed endings through undo/redo (OS clipboard not claimed)",
+    "Keyboard and pointer catalog menus, filtering, one-token replacement, undo and stale context dismissal",
+    "Invalid drafts retained, search panel and explicit formatting preserve JSON values and numeric lexemes",
+    "Destroy cancels pending menus and remount creates one editor"
+  ],
+  "errors": [],
+  "externalRequests": [],
+  "verifierSha256": "b8d1386a8277c3cf629f62f59f8a018fdfc27203fa6843d8fffe89f760ad8384",
+  "bundleSha256": "cedc24bf3bb7cae7a1bbb3c7c07f8fbefc4404f964391d49550fb83acfc79f22"
+}

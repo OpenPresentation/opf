@@ -1,0 +1,23 @@
+{
+  "version": "0.8.0",
+  "gitHead": "f94125a1ff95bf0974a055fe1c081d348dad54f2",
+  "dist": {
+    "integrity": "sha512-qlMfSEJEZBlyLv9xXDs2DAo2JuHcHFM1iEYDBH6S+vR3Cgfeoj3idp5XkvxrqNLJH+JpJcKjVWzXfVj9D9A+fQ==",
+    "shasum": "9a94f6079dd5e5e118f90c9bc299672431af0350",
+    "tarball": "https://registry.npmjs.org/@openpresentation/cli/-/cli-0.8.0.tgz",
+    "fileCount": 5,
+    "unpackedSize": 3465865,
+    "attestations": {
+      "url": "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fcli@0.8.0",
+      "provenance": {
+        "predicateType": "https://slsa.dev/provenance/v1"
+      }
+    },
+    "signatures": [
+      {
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+        "sig": "MEYCIQCTj0zilABPisiWHqa7qye9rSep81MiKv8j5czCk3cICQIhAM/SnyZ4VI2bOsqwdAQKLapmh21BSkRrB9SsQHFEtLKs"
+      }
+    ]
+  }
+}
