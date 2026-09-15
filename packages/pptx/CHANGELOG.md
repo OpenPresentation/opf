@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+## 0.8.0
+
+- Remove content-type declarations for nonexistent generated slide masters, retaining every actual part and relationship. Add the audited package-integrity regression; notes-master ordering is unchanged.
+- Require core 0.10.0 and renderer 0.8.0. Export accepted metric/timeline/card/text geometry with guarded native source recovery, preserving current edits, scalar whitespace, selected readability floors and explicit font style links.
+- Keep native chart workbooks and visible text authoritative during supported reimport. Native font identity, tab positioning and image acceptance retain their documented independent compatibility requirements.
+- Shared furniture provenance and joint source-shaping/tab drafts are not included in this release.
+
 - Require Node 24 (`24.x`) for the next release and development; upgrade from Node 20 or 22 before installing. Retain browser and operating-system checks, and retire duplicate Node 20 CI jobs. Previously published packages and evidence are unchanged.
 
 - Consume physical family and bold/italic style-link metadata from accepted text styles across headings, scalar/rich text, lists, tables, quotes, code and metrics. Retain the legacy provider fallback and reject malformed selection metadata. Coordinated renderer preferred-family lookup selects installed Roboto 500/600/800 faces exactly; native paint verification remains separate.
