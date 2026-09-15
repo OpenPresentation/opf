@@ -1,6 +1,6 @@
 # OPF lint for humans and agents
 
-The **unreleased source checkout** adds `opf lint` and the browser-safe `@openpresentation/opf/lint` entrypoint. Published core 0.9.0 and CLI 0.7.0 do not include them. Build the checkout or use a verified coordinated candidate; check `opf --help` before asking an installed CLI to lint.
+Core **0.10.0** adds the browser-safe `@openpresentation/opf/lint` entrypoint, and CLI **0.8.0** adds `opf lint`. Earlier versions do not include them; check `opf --help` before asking an installed CLI to lint.
 
 ```sh
 node packages/cli/dist/index.js lint deck.opf.json

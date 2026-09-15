@@ -1,0 +1,11 @@
+{
+  "mode": "registry",
+  "node": "v24.21.0",
+  "checks": [
+    "Rebuild the requested installed-package harness before testing it",
+    "Browser assets are from a stale consumer build",
+    "Installed dependency lock changed after bundling",
+    "Browser asset changed after bundling: fonts.json"
+  ],
+  "fixturesRestored": true
+}

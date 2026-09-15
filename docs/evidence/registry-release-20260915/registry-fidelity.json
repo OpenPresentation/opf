@@ -1,0 +1,165 @@
+{
+  "scope": "Pinned tests and fixtures, installed registry dist files; no source package overrides",
+  "packages": [
+    {
+      "name": "@openpresentation/opf",
+      "version": "0.10.0"
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "version": "0.8.0"
+    },
+    {
+      "name": "@openpresentation/opf-editor",
+      "version": "0.7.0"
+    },
+    {
+      "name": "@openpresentation/opf-pptx",
+      "version": "0.8.0"
+    },
+    {
+      "name": "@openpresentation/cli",
+      "version": "0.8.0"
+    }
+  ],
+  "results": [
+    {
+      "repo": "opf-render",
+      "ref": "3ad2f8d1073f6fc733ca5371f6b98b4c8a05f6b8",
+      "test": "webp.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-render",
+      "ref": "3ad2f8d1073f6fc733ca5371f6b98b4c8a05f6b8",
+      "test": "jpeg-orientation.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-render",
+      "ref": "3ad2f8d1073f6fc733ca5371f6b98b4c8a05f6b8",
+      "test": "rich-table.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-render",
+      "ref": "3ad2f8d1073f6fc733ca5371f6b98b4c8a05f6b8",
+      "test": "golden.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-render",
+      "ref": "3ad2f8d1073f6fc733ca5371f6b98b4c8a05f6b8",
+      "test": "styled-table.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-render",
+      "ref": "3ad2f8d1073f6fc733ca5371f6b98b4c8a05f6b8",
+      "test": "quote-footer.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-render",
+      "ref": "3ad2f8d1073f6fc733ca5371f6b98b4c8a05f6b8",
+      "test": "shared-quote.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-render",
+      "ref": "3ad2f8d1073f6fc733ca5371f6b98b4c8a05f6b8",
+      "test": "shared-code.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-render",
+      "ref": "3ad2f8d1073f6fc733ca5371f6b98b4c8a05f6b8",
+      "test": "accepted-text.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-render",
+      "ref": "3ad2f8d1073f6fc733ca5371f6b98b4c8a05f6b8",
+      "test": "shared-metric.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-render",
+      "ref": "3ad2f8d1073f6fc733ca5371f6b98b4c8a05f6b8",
+      "test": "timeline.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-pptx",
+      "ref": "4356e3679988206b202d799cd94140686b3b6ea0",
+      "test": "dependency-boundary.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-pptx",
+      "ref": "4356e3679988206b202d799cd94140686b3b6ea0",
+      "test": "styled-table.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-pptx",
+      "ref": "4356e3679988206b202d799cd94140686b3b6ea0",
+      "test": "styled-table-import.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-pptx",
+      "ref": "4356e3679988206b202d799cd94140686b3b6ea0",
+      "test": "content-layout.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-pptx",
+      "ref": "4356e3679988206b202d799cd94140686b3b6ea0",
+      "test": "shared-quote.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-pptx",
+      "ref": "4356e3679988206b202d799cd94140686b3b6ea0",
+      "test": "shared-code.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-pptx",
+      "ref": "4356e3679988206b202d799cd94140686b3b6ea0",
+      "test": "code-provenance.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-pptx",
+      "ref": "4356e3679988206b202d799cd94140686b3b6ea0",
+      "test": "plain-whitespace.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-pptx",
+      "ref": "4356e3679988206b202d799cd94140686b3b6ea0",
+      "test": "accepted-text.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-pptx",
+      "ref": "4356e3679988206b202d799cd94140686b3b6ea0",
+      "test": "content-cards.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-pptx",
+      "ref": "4356e3679988206b202d799cd94140686b3b6ea0",
+      "test": "shared-timeline.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-pptx",
+      "ref": "4356e3679988206b202d799cd94140686b3b6ea0",
+      "test": "font-variants.mjs",
+      "passed": true
+    }
+  ]
+}

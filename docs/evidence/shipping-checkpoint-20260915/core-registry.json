@@ -1,0 +1,27 @@
+{
+  "version": "0.10.0",
+  "gitHead": "f94125a1ff95bf0974a055fe1c081d348dad54f2",
+  "dist": {
+    "shasum": "03f0886977c45e71050889a1e41229fb43b25db1",
+    "tarball": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.10.0.tgz",
+    "fileCount": 522,
+    "integrity": "sha512-YhdTFFXgtjgkV7375BBYwKZQecJPlT9Ops/fpnUQGEfRIKSAbfNauZEviWdkdUwvpvCjo+UCCn0JOPXkfKj6BQ==",
+    "signatures": [
+      {
+        "sig": "MEUCIQDFDSo7R+YjAh3slKxDrI2uk9ZLqA/BxXrFxVi6vB3GnQIgJkiOhcwl8tYwYNzGBWAOwCn2ankw3JL1EGeAMVnBfgY=",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      },
+      {
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+        "sig": "MEYCIQCCLdG5TXthmVqeXPescAXo9DL+JKOw2Y1x78DeCFNYZQIhAMEYZ6fig15vSW0+qvvbPtJtx6DidA1iZIZriAyPsj2j"
+      }
+    ],
+    "attestations": {
+      "url": "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf@0.10.0",
+      "provenance": {
+        "predicateType": "https://slsa.dev/provenance/v1"
+      }
+    },
+    "unpackedSize": 6396840
+  }
+}
