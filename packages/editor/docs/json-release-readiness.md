@@ -7,3 +7,20 @@ The installed test retains `artifacts/packed-json-browser-node24.json` and `arti
 As of September 15, npm still publishes editor 0.6.0, core 0.9.0 and renderer/PPTX 0.7.0. The current editor's other merged features require newer coordinated core/renderer APIs. Its full suite with the registry predecessors fails the `frameBox` assertion in `test/layout.mjs`; that failure is retained in PR19 evidence. Coordinate dependency versions and full installed-package acceptance before tagging a new release. This change does not alter versions or runtime source and does not publish a package. The next release requires Node 24; existing npm versions remain immutable.
 
 [Current verification evidence](evidence/json-release-checks-20260915/README.md) retains the passing source/installed JSON checks and the complete renewed package failure. The installed report byte-matches all 39 shipped files with actual registry predecessors; it does not replace the overall command result.
+
+## Layout discovery
+
+The JSON layout picker pins the current layout, then groups available records by
+exact placeholder types and counts, compatible text/subtitle slots, different
+counts of those types, other layouts, and unspecified placeholders. Names sort
+alphabetically with numeric ordering inside each group. The Similar filter shows
+the current layout plus exact/compatible alternatives; search always covers all
+available layouts. Matching describes declared placeholders, not rendering or
+content-fit guarantees. Unknown placeholder definitions are never assumed to match.
+
+Record resolution remains document > host-supplied > standard for the same ID.
+The stable `source` API values remain `Document catalog`, `Loaded catalog`, and
+`Built-in catalog`; `sourceLabel` and `sourceDescription` provide the clearer UI
+labels `In this document`, `Provided by app`, and `Standard OPF`. External gallery
+or catalog URLs are not automatically loaded. The website carries the same option
+logic locally until a published editor package can replace its existing adapter.
