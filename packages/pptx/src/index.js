@@ -6,6 +6,7 @@ import {attachCardTags,importCardFrames} from './card-provenance.js';
 import {attachHeadingTags,importHeadingGroups} from './heading-provenance.js';
 import {attachPlainTextTags,importPlainTextGroups} from './text-provenance.js';
 import {attachTimelineTags,timelineManifest,importTimelineGroups} from './timeline-provenance.js';
+import {attachFurnitureTags, furnitureManifest, importFurniture} from './furniture-provenance.js';
 import {importImageOrientation} from './image-import.js';
 import {nativeBackgroundFill} from './background.js';
 import {importBackground} from './background-import.js';
@@ -181,6 +182,8 @@ export async function toPptx(input, options = {}) {
   context.headingTags = new Map();
   context.plainTextTags = new Map();
   context.timelineTags = new Map();
+  context.furnitureTags = new Map();
+  context.furnitureManifests = new Map();
   context.codeTags = new Map();
   context.metricTags = new Map();
   context.chartHeadings = new Map();
@@ -233,8 +236,21 @@ export async function fromPptx(input, options = {}) {
   if (core.author) imported.author = core.author;
   if (dimensions) imported.design = { dimensions };
 
+  const furnitureContexts = slidePaths.map((slidePath, index) => {
+    const root = parseRequiredXml(entries, slidePath)['p:sld'];
+    if (!root) throw new OPFPptxError('invalid-pptx', `PPTX slide is not a PresentationML slide: ${slidePath}.`, {path: slidePath});
+    const tree = root['p:cSld']?.['p:spTree'], relationships = parseRelationships(entries, slidePath);
+    return {root, relationships, shapes: nativeTextShapes(tree), pictures: nativePictures(tree),
+      paragraphs: nativeShapeParagraphs(decodeText(entries[slidePath])),
+      readPicture: picture => importPicture(entries, picture, slidePath, relationships,
+        diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${index}.design`}))};
+  });
+  const furniture = importFurniture(furnitureContexts, entries, options.onDiagnostic);
+  if (Object.keys(furniture.design).length) imported.design = {...imported.design, ...furniture.design};
+  if (furniture.organization) imported.organization = furniture.organization;
+
   for (let index = 0; index < slidePaths.length; index += 1) {
-    imported.slides.push(importSlide(entries, slidePaths[index], index, dimensions, options));
+    imported.slides.push(importSlide(entries, slidePaths[index], index, dimensions, options, furniture.slides[index], furnitureContexts[index]));
   }
 
   const result = validatePresentation(imported);
@@ -375,16 +391,9 @@ function dimensionsFromPresentation(presentationRoot) {
   };
 }
 
-function importSlide(entries, slidePath, slideIndex, presentationDimensions, options) {
-  const doc = parseRequiredXml(entries, slidePath);
-  const slideRoot = doc["p:sld"];
-  if (!slideRoot) {
-    throw new OPFPptxError("invalid-pptx", `PPTX slide is not a PresentationML slide: ${slidePath}.`, {
-      path: slidePath
-    });
-  }
-
-  const relationships = parseRelationships(entries, slidePath);
+function importSlide(entries, slidePath, slideIndex, presentationDimensions, options, furniture, nativeContext) {
+  const slideRoot = nativeContext.root;
+  const relationships = nativeContext.relationships;
   const dimensions = presentationDimensions ?? DIMENSION_PRESETS.widescreen;
   const slide = {};
   if (slideRoot.show === "0") slide.hidden = true;
@@ -393,8 +402,10 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
     part: (path, parser) => parseRequiredXml(entries, path, parser), relationships: path => parseRelationships(entries, path), bytes: path => entries[path]
   }, diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}.design.background`}));
   if (background) slide.design = {background};
+  if (Object.keys(furniture.design).length) slide.design = {...slide.design, ...furniture.design};
+  if (furniture.section !== undefined) slide.section = furniture.section;
 
-  const items = collectSlideItems(entries, slideRoot, slidePath, relationships, dimensions, options, slideIndex)
+  const items = collectSlideItems(entries, slideRoot, slidePath, relationships, dimensions, options, slideIndex, furniture, nativeContext)
     .sort(comparePositionedItems);
   // Complete OPF heading roles are authoritative. Nearby body lines must not
   // fill an absent role by geometry; explicit native placeholders still apply.
@@ -418,12 +429,14 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
   return slide;
 }
 
-function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensions, options, slideIndex) {
+const nativePictures = tree => [...asArray(tree?.['p:pic']), ...asArray(tree?.['p:grpSp']).flatMap(nativePictures)];
+
+function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensions, options, slideIndex, furniture, nativeContext) {
   const tree = slideRoot["p:cSld"]?.["p:spTree"];
   const items = [];
-  const shapes = nativeTextShapes(tree);
-  if (tree?.['p:grpSp']) options.onDiagnostic?.({code:'grouped-text-reflow',path:`slides.${slideIndex}`,message:'Grouped native text is retained, but group transforms and non-text group members are not reconstructed; review the reflowed OPF.'});
-  const paragraphs = nativeShapeParagraphs(decodeText(entries[slidePath]));
+  const shapes = nativeContext.shapes;
+  if (tree?.['p:grpSp']) options.onDiagnostic?.({code:'grouped-text-reflow',path:`slides.${slideIndex}`,message:'Grouped native text and pictures are retained, but group transforms and unsupported group members are not reconstructed; review the reflowed OPF.'});
+  const paragraphs = nativeContext.paragraphs;
   const code = importCodeGroups(shapes, paragraphs, relationships, entries, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.code`}));
   const metric = importMetricGroups(shapes, paragraphs, relationships, entries, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.metric`}));
   const cards = importCardFrames(shapes, paragraphs, relationships, entries, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
@@ -446,8 +459,12 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   for (const item of code.items) items.push({kind:'code',bounds:shapeBounds(item.shape['p:spPr']?.['a:xfrm']),payload:item.payload});
   for (const item of metric.items) items.push({kind:'metric',bounds:shapeBounds(item.shape['p:spPr']?.['a:xfrm']),payload:item.payload});
   for (const [index,shape] of shapes.entries()) {
+    if (furniture.text.has(index)) continue;
     if (code.consumed.has(shape)||metric.consumed.has(shape)||cards.has(shape)||headings.consumed.has(shape)||plainText.consumed.has(shape)||timelines.consumed.has(shape)) continue;
-    const item = importShape(shape, dimensions, paragraphs[index]);
+    const item = importShape(shape, dimensions, paragraphs[index], furniture.taggedText.has(index));
+    // A damaged/edited furniture group falls back to current native text,
+    // including cleared text boxes, without inventing a title or shape label.
+    if (item && furniture.taggedText.has(index)) item.sourceText = true;
     if (item) items.push(item);
   }
 
@@ -461,7 +478,8 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     if (item) items.push(item);
   }
 
-  for (const [index, picture] of asArray(tree?.["p:pic"]).entries()) {
+  for (const [index, picture] of nativeContext.pictures.entries()) {
+    if (furniture.pictures.has(index)) continue;
     const report = diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}.pictures.${index}`});
     const item = importPicture(entries, picture, slidePath, relationships, report);
     if (item) items.push(item);
@@ -538,7 +556,7 @@ function importGraphicFrame(entries, frame, slidePath, relationships, importedTa
 function importPicture(entries, picture, slidePath, relationships, report) {
   const bounds = shapeBounds(picture["p:spPr"]?.["a:xfrm"]);
   const name = scalarText(picture["p:nvPicPr"]?.["p:cNvPr"]?.name).trim();
-  const alt = scalarText(picture["p:nvPicPr"]?.["p:cNvPr"]?.descr).trim();
+  const alt = scalarText(picture["p:nvPicPr"]?.["p:cNvPr"]?.descr);
   const relId = picture["p:blipFill"]?.["a:blip"]?.["r:embed"];
   const relationship = relationships.get(relId);
   let bytes = relationship?.path ? entries[relationship.path] : null;
@@ -926,8 +944,9 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
   const { widthInches, heightInches } = slideContext.dimensions;
   const layout = resolveCatalogRecord(presentation, "layouts", opfSlide.layout, "blank") ?? {};
   if (opfSlide.layout && layout.id !== opfSlide.layout) throw new OPFPptxError("catalog-resolution-failed", `Layout '${opfSlide.layout}' needs an inline or bundled catalog record.`, { path: `slides.${slideIndex}.layout` });
-  const geometry = composeSlide(opfSlide, { width: widthInches * 96, height: heightInches * 96, layout, slideIndex, fonts: slideContext.fonts, contentAlignment:opfSlide.design?.contentAlignment??presentation.design?.contentAlignment, titleAlignment:opfSlide.design?.titleAlignment??presentation.design?.titleAlignment, textRasterPadding:options.textRasterPadding, contentBox:opfSlide.design?.contentBox??presentation.design?.contentBox, textMeasurement: options.textMeasurement });
+  const geometry = composeSlide(opfSlide, { width: widthInches * 96, height: heightInches * 96, layout, presentation, slideIndex, fonts: slideContext.fonts, contentAlignment:opfSlide.design?.contentAlignment??presentation.design?.contentAlignment, titleAlignment:opfSlide.design?.titleAlignment??presentation.design?.titleAlignment, textRasterPadding:options.textRasterPadding, contentBox:opfSlide.design?.contentBox??presentation.design?.contentBox, textMeasurement: options.textMeasurement });
   for (const diagnostic of geometry.diagnostics) options.onDiagnostic?.(diagnostic);
+  await addFurniture(slide,presentation,opfSlide,geometry.furniture,slideContext,options,slideIndex);
   for (const item of geometry.items) {
     const region = { x: item.box.x / 96, y: item.box.y / 96, w: item.box.width / 96, h: item.box.height / 96 };
     if (item.frameBox) {
@@ -1128,6 +1147,7 @@ async function addImagePayload(slide, presentation, asset, region, path, context
     h: region.h,
     altText: assetAlt(asset, presentation)
   });
+  return objectName;
 }
 
 function addChartPayload(slide, chart, region, context) {
@@ -1277,12 +1297,13 @@ function addMeasuredPayloadText(slide, text, box, context, options, config) {
     if (context.composition?.overflow === 'error') throw new OPFPptxError('layout-overflow', diagnostic.message, {path: config.path, issues: [diagnostic]});
   }
   for (const [index, line] of fit.lines.entries()) {
-    if (!line&&!config.heading&&!config.sourceText&&!config.timeline) continue;
+    if (!line&&!config.heading&&!config.sourceText&&!config.timeline&&!config.keepEmpty) continue;
     const alignment=fit.placement?.alignment??config.align??context.contentAlignment??'left',placed=fit.placement?.lines[index],factor=alignment==='right'?1:alignment==='center'?.5:0;
     const sourceLine=fit.sourceLines?.[index],boundary=sourceLine?{boundary:sourceLine.boundary,separator:String(text).slice(sourceLine.end,sourceLine.nextStart)}:{};
-    const objectName=config.heading?`OPF heading ${config.path} line ${index}`:config.timeline?`OPF timeline ${config.timeline.group} part ${config.timeline.part} line ${index}`:config.sourceText?`OPF text ${config.path} line ${index}`:undefined;
+    const objectName=config.heading?`OPF heading ${config.path} line ${index}`:config.timeline?`OPF timeline ${config.timeline.group} part ${config.timeline.part} line ${index}`:config.sourceText?`OPF text ${config.path} line ${index}`:config.objectName?`${config.objectName} line ${index}`:undefined;
     if(config.heading)context.headingTags.set(objectName,{v:1,group:config.path,field:config.heading,line:index,count:fit.lines.length,...boundary});
     else if(config.timeline)context.timelineTags.set(objectName,{v:1,role:'text',group:config.timeline.group,part:config.timeline.part,line:index,count:fit.lines.length,...boundary,...(config.timeline.part===0&&index===0?{anchor:config.timeline.anchor}:{})});
+    else if(config.furniture)context.furnitureTags.set(objectName,{v:1,role:'text',...config.furniture,line:index,count:fit.lines.length,...boundary});
     else if(config.sourceText)context.plainTextTags.set(objectName,{v:1,group:config.path,line:index,count:fit.lines.length,...boundary});
     const area=placed?{x:(placed.x+placed.width*factor-box.width*factor)/96,y:(placed.baseline-fit.fontSize)/96,w:box.width/96,h:placed.height/96}:{x:box.x/96,y:(box.y+index*fit.lineHeight)/96,w:box.width/96,h:fit.lineHeight/96};
     slide.addText(line, {
@@ -1294,6 +1315,27 @@ function addMeasuredPayloadText(slide, text, box, context, options, config) {
       fit: 'none', wrap: false, lineSpacingMultiple: 1,
     });
   }
+}
+
+async function addFurniture(slide,presentation,source,layout,context,options,slideIndex) {
+  if(!layout){
+    if(['header','footer'].some(kind=>(source.design?.[kind]??presentation.design?.[kind])))throw new OPFPptxError('missing-furniture-layout','Header/footer export requires coordinated core furniture geometry.',{path:`slides.${slideIndex}.design`});
+    const manifest = furnitureManifest(presentation, source, {parts: []}, slideIndex);
+    if (manifest) context.furnitureManifests.set(`ppt/slides/slide${slideIndex + 1}.xml`, manifest);
+    return;
+  }
+  for(const [index,part]of layout.parts.entries()){
+    if(part.type==='image'){
+      const region={x:part.box.x/96,y:part.box.y/96,w:part.box.width/96,h:part.box.height/96};
+      const objectName = await addImagePayload(slide,presentation,part.image,region,part.path,{...context,imageFill:'fit'},options);
+      if (objectName) context.furnitureTags.set(objectName, {v:1, role:'image', group:String(slideIndex), part:index});
+    }else{
+      if(!part.fit?.sourceLines)throw new OPFPptxError('missing-furniture-layout','Repeated text requires accepted source lines from core.',{path:part.path});
+      addMeasuredPayloadText(slide,part.text,part.box,context,options,{path:part.path,fit:part.fit,textStyle:part.style,align:part.alignment,diagnosticsHandled:true,color:context.colors.mutedText,keepEmpty:true,objectName:`OPF furniture ${slideIndex} part ${index}`,furniture:{group:String(slideIndex),part:index}});
+    }
+  }
+  const manifest = furnitureManifest(presentation, source, layout, slideIndex);
+  if (manifest) context.furnitureManifests.set(`ppt/slides/slide${slideIndex + 1}.xml`, manifest);
 }
 
 function addCodePayload(slide, value, layout, region, context, path) {
@@ -1692,6 +1734,7 @@ async function normalizePptxZip(raw, context) {
   attachHeadingTags(entries,context.headingTags);
   attachPlainTextTags(entries,context.plainTextTags);
   attachTimelineTags(entries,context.timelineTags);
+  attachFurnitureTags(entries,context.furnitureTags,context.furnitureManifests);
   for(const [part,bytes]of Object.entries(entries)){
     if(!/^ppt\/slides\/slide\d+\.xml$/.test(part))continue;
     const relationships=parseRelationships(entries,part);

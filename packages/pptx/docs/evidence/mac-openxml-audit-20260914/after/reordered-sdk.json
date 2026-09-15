@@ -1,0 +1,386 @@
+{
+  "schema": "opf-openxml-audit-v1",
+  "sdkVersion": "3.5.1.0",
+  "dotnetVersion": "8.0.31",
+  "scope": "Read-only Open XML SDK package/schema validation. Does not establish native Office, rendering, font, or import fidelity.",
+  "results": [
+    {
+      "file": "disabled-furniture.pptx",
+      "sha256": "289efbc5084f5cf49d3fa41eb3d38531dacbab249214105d376386947c6b367b",
+      "versions": [
+        {
+          "target": "Office2007",
+          "errors": []
+        },
+        {
+          "target": "Office2019",
+          "errors": []
+        },
+        {
+          "target": "Microsoft365",
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "empty-furniture.pptx",
+      "sha256": "4b8aaff20005cb27cf071125df57eb1557b88a228058106f0d7cb7fee288ee7a",
+      "versions": [
+        {
+          "target": "Office2007",
+          "errors": []
+        },
+        {
+          "target": "Office2019",
+          "errors": []
+        },
+        {
+          "target": "Microsoft365",
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "furniture-estimated-1280-16-inherited.pptx",
+      "sha256": "127e7df13fe5780ee9e154bef71ec2594b23c9a6c0d4312336f329e6a9658d7b",
+      "versions": [
+        {
+          "target": "Office2007",
+          "errors": []
+        },
+        {
+          "target": "Office2019",
+          "errors": []
+        },
+        {
+          "target": "Microsoft365",
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "furniture-estimated-1280-16-local.pptx",
+      "sha256": "e028666349e14b7d3b661ad0bf5264a0e302191057b6cd81d1440b5dd7f8ed8f",
+      "versions": [
+        {
+          "target": "Office2007",
+          "errors": []
+        },
+        {
+          "target": "Office2019",
+          "errors": []
+        },
+        {
+          "target": "Microsoft365",
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "furniture-estimated-1280-32-inherited.pptx",
+      "sha256": "4073d59fd9944af32f97721267bc63451bb144a20738d9c68ed79f2756653071",
+      "versions": [
+        {
+          "target": "Office2007",
+          "errors": []
+        },
+        {
+          "target": "Office2019",
+          "errors": []
+        },
+        {
+          "target": "Microsoft365",
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "furniture-estimated-1280-32-local.pptx",
+      "sha256": "810eb7171a60320ec686262f91a858ad22f007e38a5ed4acba4e20c6997df4b6",
+      "versions": [
+        {
+          "target": "Office2007",
+          "errors": []
+        },
+        {
+          "target": "Office2019",
+          "errors": []
+        },
+        {
+          "target": "Microsoft365",
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "furniture-estimated-720-16-inherited.pptx",
+      "sha256": "96379a67fdbd45a9d2ab10f9b4ac36a117f0abebc9c4a4ead8057d6a1048f2ee",
+      "versions": [
+        {
+          "target": "Office2007",
+          "errors": []
+        },
+        {
+          "target": "Office2019",
+          "errors": []
+        },
+        {
+          "target": "Microsoft365",
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "furniture-estimated-720-16-local.pptx",
+      "sha256": "21437f05018fda3bb5a4d0b8f7e0367745d06d90dca4c9f1ea407527b9e5dc1b",
+      "versions": [
+        {
+          "target": "Office2007",
+          "errors": []
+        },
+        {
+          "target": "Office2019",
+          "errors": []
+        },
+        {
+          "target": "Microsoft365",
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "furniture-estimated-720-32-inherited.pptx",
+      "sha256": "0338789026f7ddecd0cd53e2553e0f5fb349d9fa9d66d451f114ba3ba2f24468",
+      "versions": [
+        {
+          "target": "Office2007",
+          "errors": []
+        },
+        {
+          "target": "Office2019",
+          "errors": []
+        },
+        {
+          "target": "Microsoft365",
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "furniture-estimated-720-32-local.pptx",
+      "sha256": "dad181f6e341686290e3b6aab422c94b7c731a50e8404732f6c1af9aa77ba28f",
+      "versions": [
+        {
+          "target": "Office2007",
+          "errors": []
+        },
+        {
+          "target": "Office2019",
+          "errors": []
+        },
+        {
+          "target": "Microsoft365",
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "furniture-measured-1280-16-inherited.pptx",
+      "sha256": "8f125b4a3c2c3652bab488561290a5676553c60179c3b95528bbb2199d29eb28",
+      "versions": [
+        {
+          "target": "Office2007",
+          "errors": []
+        },
+        {
+          "target": "Office2019",
+          "errors": []
+        },
+        {
+          "target": "Microsoft365",
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "furniture-measured-1280-16-local.pptx",
+      "sha256": "2b38b3fd0a10ec24c93faf339bb23af8707e05712c04f6e1c3663e0fbe50c5a1",
+      "versions": [
+        {
+          "target": "Office2007",
+          "errors": []
+        },
+        {
+          "target": "Office2019",
+          "errors": []
+        },
+        {
+          "target": "Microsoft365",
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "furniture-measured-1280-32-inherited.pptx",
+      "sha256": "dda8bac25b4b6335d5910f1be35f36cfb7d2c0ca0115e552f5081e8ea7d8c57a",
+      "versions": [
+        {
+          "target": "Office2007",
+          "errors": []
+        },
+        {
+          "target": "Office2019",
+          "errors": []
+        },
+        {
+          "target": "Microsoft365",
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "furniture-measured-1280-32-local.pptx",
+      "sha256": "810eb7171a60320ec686262f91a858ad22f007e38a5ed4acba4e20c6997df4b6",
+      "versions": [
+        {
+          "target": "Office2007",
+          "errors": []
+        },
+        {
+          "target": "Office2019",
+          "errors": []
+        },
+        {
+          "target": "Microsoft365",
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "furniture-measured-720-16-inherited.pptx",
+      "sha256": "b5e174328d1af7512fd32e09567a18c0b11273648a772d5b8b34c3ab0ed72290",
+      "versions": [
+        {
+          "target": "Office2007",
+          "errors": []
+        },
+        {
+          "target": "Office2019",
+          "errors": []
+        },
+        {
+          "target": "Microsoft365",
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "furniture-measured-720-16-local.pptx",
+      "sha256": "cad2fe05f6ec318458450248b3b83c9dd2b55758a7ea4b376daf633c360f4532",
+      "versions": [
+        {
+          "target": "Office2007",
+          "errors": []
+        },
+        {
+          "target": "Office2019",
+          "errors": []
+        },
+        {
+          "target": "Microsoft365",
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "furniture-measured-720-32-inherited.pptx",
+      "sha256": "6bd23a1becbe4740b984a9ad4a435979d73f1ca2f677984c85d0538742dcdf62",
+      "versions": [
+        {
+          "target": "Office2007",
+          "errors": []
+        },
+        {
+          "target": "Office2019",
+          "errors": []
+        },
+        {
+          "target": "Microsoft365",
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "furniture-measured-720-32-local.pptx",
+      "sha256": "f9b64272c472d76d12b1e8e3a73387e55edb66e7ec0df47f8c46fa78ab0b1219",
+      "versions": [
+        {
+          "target": "Office2007",
+          "errors": []
+        },
+        {
+          "target": "Office2019",
+          "errors": []
+        },
+        {
+          "target": "Microsoft365",
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "image-control.pptx",
+      "sha256": "8a309b23c74fd77756d7f77c536b91606c38ede37d8211873a9a043f5bb19ded",
+      "versions": [
+        {
+          "target": "Office2007",
+          "errors": []
+        },
+        {
+          "target": "Office2019",
+          "errors": []
+        },
+        {
+          "target": "Microsoft365",
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "notes-control.pptx",
+      "sha256": "1b263edfc81ce6489179498925acf4e0ad7546288a84a33efec16900811fe6f4",
+      "versions": [
+        {
+          "target": "Office2007",
+          "errors": []
+        },
+        {
+          "target": "Office2019",
+          "errors": []
+        },
+        {
+          "target": "Microsoft365",
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "plain-control.pptx",
+      "sha256": "326f543d2229aa4d50ca15555f4d5b01d550cf463f6fe8f79788887e604b4aca",
+      "versions": [
+        {
+          "target": "Office2007",
+          "errors": []
+        },
+        {
+          "target": "Office2019",
+          "errors": []
+        },
+        {
+          "target": "Microsoft365",
+          "errors": []
+        }
+      ]
+    }
+  ]
+}

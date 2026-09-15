@@ -11,12 +11,16 @@ const fonts=await loadOfficeFontRegistry({fallbackFamily:"Roboto",strictGlyphs:f
 const substituteAssets = true;
 const syntheticImage = new Uint8Array(await readFile(new URL('./fixtures/images/wide.png', import.meta.url)));
 let substitutedAssets = 0;
-const report={decks:examples.length,slides:0,exported:0,imported:0,failures:[],duplicates:[],invalidXml:[],invalidGeometry:[],invalidTables:[]};
+const report={decks:examples.length,slides:0,exported:0,imported:0,failures:[],duplicates:[],invalidXml:[],invalidGeometry:[],invalidTables:[],invalidContentTypeOverrides:[]};
 for(const {file,deck} of examples){
  report.slides+=deck.slides.length;
  try{
   const bytes=await toPptx(deck,{textMeasurement:fonts.textMeasurement,...(substituteAssets ? {imageResolver:async () => {substitutedAssets++;return syntheticImage;}} : {})});report.exported++;
   const entries=unzipSync(bytes);
+  const contentTypes = new TextDecoder().decode(entries['[Content_Types].xml']);
+  for (const [, part] of contentTypes.matchAll(/<Override\b[^>]*\bPartName="([^"]+)"/g)) {
+   if (!entries[part.slice(1)]) report.invalidContentTypeOverrides.push({file, part});
+  }
   for(const [part,data] of Object.entries(entries)){
    if(!/^ppt\/slides\/slide\d+\.xml$/.test(part))continue;
    const xml=new TextDecoder().decode(data),valid=XMLValidator.validate(xml);
@@ -47,7 +51,7 @@ for(const {file,deck} of examples){
 }
 assert.equal(report.exported, report.decks, JSON.stringify(report.failures));
 assert.equal(report.imported, report.decks, JSON.stringify(report.failures));
-for (const key of ['failures', 'duplicates', 'invalidXml', 'invalidGeometry', 'invalidTables']) {
+for (const key of ['failures', 'duplicates', 'invalidXml', 'invalidGeometry', 'invalidTables', 'invalidContentTypeOverrides']) {
  assert.deepEqual(report[key], [], key);
 }
-console.log(`Corpus structure passed: ${report.decks} decks, ${report.slides} slides, ${substitutedAssets} explicitly substituted images; fallback fonts, valid slide XML, unique IDs, finite geometry, table grids and imported slide counts.`);
+console.log(`Corpus structure passed: ${report.decks} decks, ${report.slides} slides, ${substitutedAssets} explicitly substituted images; fallback fonts, valid slide XML, unique IDs, finite geometry, table grids, valid content-type targets and imported slide counts.`);

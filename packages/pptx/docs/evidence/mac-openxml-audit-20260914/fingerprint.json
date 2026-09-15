@@ -1,0 +1,18 @@
+{
+  "basePptxHead": "ee89b266527a954bb573aea00075db997c8a253a",
+  "coreHead": "531987aa1ee075e52ec53e8c2c1dce8080593706",
+  "rendererHead": "3d4fa8ce8172c2a6b38bf217d5f8d0ce5a1b62af",
+  "editorHead": "40023fb3b65611ada05de8a9860bc41733a415a9",
+  "sha256": {
+    "src/index.js": "cffafb0d99634bc9b8739b3418c836ecd174e7f4b73ded18f3d6bc9cb94f9739",
+    "dist/index.js": "cffafb0d99634bc9b8739b3418c836ecd174e7f4b73ded18f3d6bc9cb94f9739",
+    "test/export-corpus.mjs": "022d2833dc8d8de9dc93c01f918226c7c8d9d68422d0405da7e354eb330bcbc4",
+    "test/smoke.mjs": "006689a3a8e0ac89b60a44b6191ee1f9e94838de165e01527bdf9cca375dc226",
+    "test/openxml/generate.mjs": "7319f2501ef3920e4543a9b1b75e176fce84a05b651614b773e7994ee055672b",
+    "test/openxml/inspect-opc.mjs": "c55ec73c98d575fe2220764ba9fdf03e6485661a592fcccd87d59aed59e833cd",
+    "test/openxml/Program.cs": "96af4dbaa5bcad0e1ae1ac52b6e7d4582f803554ffc9eb1a4c1273b5e922b21f",
+    "test/openxml/Validator.csproj": "b8f4d37b30d96cf8bba88df02d8aaf05e060dca416c986f36a283f8a9f65119a",
+    "test/openxml/packages.lock.json": "18b84cb3e69ddf7f908258cb27b79508bd4b0a1c7af7ae5ba7f8ab54c17a670d",
+    "vendor/pptxgenjs/pptxgen.es.js": "05844c5625e2cda3b449eb967c2246dd57ca57341886a7c28eeebca263b29bd4"
+  }
+}

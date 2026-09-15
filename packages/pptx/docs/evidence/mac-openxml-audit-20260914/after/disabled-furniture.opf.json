@@ -1,0 +1,18 @@
+{
+  "design": {
+    "header": {
+      "left": {
+        "text": "Disabled"
+      }
+    }
+  },
+  "slides": [
+    {
+      "text": "Body",
+      "design": {
+        "header": false,
+        "footer": false
+      }
+    }
+  ]
+}

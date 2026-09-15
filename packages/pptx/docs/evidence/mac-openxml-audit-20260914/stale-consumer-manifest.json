@@ -1,0 +1,198 @@
+{
+  "node": "v24.21.0",
+  "mode": "installed",
+  "converterModule": "file:///Users/michael/Source/opf/artifacts/npm/consumer/node_modules/@openpresentation/opf-pptx/dist/index.js",
+  "fontModule": "file:///Users/michael/Source/opf/artifacts/npm/consumer/node_modules/@openpresentation/opf-render/dist/fonts-node.js",
+  "verifierSha256": "7319f2501ef3920e4543a9b1b75e176fce84a05b651614b773e7994ee055672b",
+  "cases": [
+    {
+      "id": "furniture-estimated-1280-16-inherited",
+      "originalSha256": "d5fc7aaf69254720880b5a1bd357f01473b499ca05c8c535a9c9ff218b61f6e2",
+      "reorderedSha256": "127e7df13fe5780ee9e154bef71ec2594b23c9a6c0d4312336f329e6a9658d7b",
+      "changedParts": [
+        "ppt/presentation.xml"
+      ],
+      "semanticImportSha256": "7ab2ac0e9dcff91457f17228d60cee72c7e31c3b99f66bd27473097158647f28"
+    },
+    {
+      "id": "furniture-estimated-1280-16-local",
+      "originalSha256": "76e7010006490eed6f57c4fa03344505309b11dd2fdcca506039ca2f73278c7f",
+      "reorderedSha256": "e028666349e14b7d3b661ad0bf5264a0e302191057b6cd81d1440b5dd7f8ed8f",
+      "changedParts": [
+        "ppt/presentation.xml"
+      ],
+      "semanticImportSha256": "6f0c45f31158ee47764ec601f92ef14985df2e7be62efaca8586b24f0b215c66"
+    },
+    {
+      "id": "furniture-estimated-1280-32-inherited",
+      "originalSha256": "7f4d00bcec4b0c0262d889e78637b26fa49ae9b60e4ea8f8e287f8333f18da31",
+      "reorderedSha256": "4073d59fd9944af32f97721267bc63451bb144a20738d9c68ed79f2756653071",
+      "changedParts": [
+        "ppt/presentation.xml"
+      ],
+      "semanticImportSha256": "7ab2ac0e9dcff91457f17228d60cee72c7e31c3b99f66bd27473097158647f28"
+    },
+    {
+      "id": "furniture-estimated-1280-32-local",
+      "originalSha256": "c824ccb3f47ab411709001fe85120abe9c42ac2c6b55909047abfdab34fe38d1",
+      "reorderedSha256": "810eb7171a60320ec686262f91a858ad22f007e38a5ed4acba4e20c6997df4b6",
+      "changedParts": [
+        "ppt/presentation.xml"
+      ],
+      "semanticImportSha256": "6f0c45f31158ee47764ec601f92ef14985df2e7be62efaca8586b24f0b215c66"
+    },
+    {
+      "id": "furniture-estimated-720-16-inherited",
+      "originalSha256": "1944e7c6570b533aa18c779e54bf7deac3c49180eb50471f57d3ca72603de48a",
+      "reorderedSha256": "96379a67fdbd45a9d2ab10f9b4ac36a117f0abebc9c4a4ead8057d6a1048f2ee",
+      "changedParts": [
+        "ppt/presentation.xml"
+      ],
+      "semanticImportSha256": "0e31a36649fcf4917ada4926ecb93b16aeb337fea4ee756c2ffc3a1bc954684b"
+    },
+    {
+      "id": "furniture-estimated-720-16-local",
+      "originalSha256": "e5b3f8b7c484bbdc9c8a6cd0e4cd6941f6ca1c0a4f54c373428b499f87a00adc",
+      "reorderedSha256": "21437f05018fda3bb5a4d0b8f7e0367745d06d90dca4c9f1ea407527b9e5dc1b",
+      "changedParts": [
+        "ppt/presentation.xml"
+      ],
+      "semanticImportSha256": "109056f2912de0ca167a4a2d7aef4b78097da752a8baba3359119f897595575e"
+    },
+    {
+      "id": "furniture-estimated-720-32-inherited",
+      "originalSha256": "ff31363063b9422e0cdc9532f7bc517df0263ce3420fbba789ea80e89f5ff04a",
+      "reorderedSha256": "0338789026f7ddecd0cd53e2553e0f5fb349d9fa9d66d451f114ba3ba2f24468",
+      "changedParts": [
+        "ppt/presentation.xml"
+      ],
+      "semanticImportSha256": "0e31a36649fcf4917ada4926ecb93b16aeb337fea4ee756c2ffc3a1bc954684b"
+    },
+    {
+      "id": "furniture-estimated-720-32-local",
+      "originalSha256": "d087e80db1cde331355074c89be8c871c715712f32e83c907b266068ce1edc20",
+      "reorderedSha256": "dad181f6e341686290e3b6aab422c94b7c731a50e8404732f6c1af9aa77ba28f",
+      "changedParts": [
+        "ppt/presentation.xml"
+      ],
+      "semanticImportSha256": "109056f2912de0ca167a4a2d7aef4b78097da752a8baba3359119f897595575e"
+    },
+    {
+      "id": "furniture-measured-1280-16-inherited",
+      "originalSha256": "2c1755d676ce9285ae2bafa98174ddcf9f728c645fd51d36fdeb3d194d13d931",
+      "reorderedSha256": "8f125b4a3c2c3652bab488561290a5676553c60179c3b95528bbb2199d29eb28",
+      "changedParts": [
+        "ppt/presentation.xml"
+      ],
+      "semanticImportSha256": "7ab2ac0e9dcff91457f17228d60cee72c7e31c3b99f66bd27473097158647f28"
+    },
+    {
+      "id": "furniture-measured-1280-16-local",
+      "originalSha256": "aa53845a8178e4f64177f0e4dd37fbd5d11ca869266ebf8f6b09757ec72c9ef1",
+      "reorderedSha256": "2b38b3fd0a10ec24c93faf339bb23af8707e05712c04f6e1c3663e0fbe50c5a1",
+      "changedParts": [
+        "ppt/presentation.xml"
+      ],
+      "semanticImportSha256": "6f0c45f31158ee47764ec601f92ef14985df2e7be62efaca8586b24f0b215c66"
+    },
+    {
+      "id": "furniture-measured-1280-32-inherited",
+      "originalSha256": "ffc93ef860383ba0647d9b3585ed188e15a5b11497859e2b49710eb829bf5409",
+      "reorderedSha256": "dda8bac25b4b6335d5910f1be35f36cfb7d2c0ca0115e552f5081e8ea7d8c57a",
+      "changedParts": [
+        "ppt/presentation.xml"
+      ],
+      "semanticImportSha256": "7ab2ac0e9dcff91457f17228d60cee72c7e31c3b99f66bd27473097158647f28"
+    },
+    {
+      "id": "furniture-measured-1280-32-local",
+      "originalSha256": "c824ccb3f47ab411709001fe85120abe9c42ac2c6b55909047abfdab34fe38d1",
+      "reorderedSha256": "810eb7171a60320ec686262f91a858ad22f007e38a5ed4acba4e20c6997df4b6",
+      "changedParts": [
+        "ppt/presentation.xml"
+      ],
+      "semanticImportSha256": "6f0c45f31158ee47764ec601f92ef14985df2e7be62efaca8586b24f0b215c66"
+    },
+    {
+      "id": "furniture-measured-720-16-inherited",
+      "originalSha256": "520454b092f44892c24e5f069e5fcc17b9d71a66351d04f50199e1a8653581ac",
+      "reorderedSha256": "b5e174328d1af7512fd32e09567a18c0b11273648a772d5b8b34c3ab0ed72290",
+      "changedParts": [
+        "ppt/presentation.xml"
+      ],
+      "semanticImportSha256": "0e31a36649fcf4917ada4926ecb93b16aeb337fea4ee756c2ffc3a1bc954684b"
+    },
+    {
+      "id": "furniture-measured-720-16-local",
+      "originalSha256": "63fdc23c86b993a4d5b62a0d78bfe8b70e122e52763592ceb93e31de5a6071ee",
+      "reorderedSha256": "cad2fe05f6ec318458450248b3b83c9dd2b55758a7ea4b376daf633c360f4532",
+      "changedParts": [
+        "ppt/presentation.xml"
+      ],
+      "semanticImportSha256": "109056f2912de0ca167a4a2d7aef4b78097da752a8baba3359119f897595575e"
+    },
+    {
+      "id": "furniture-measured-720-32-inherited",
+      "originalSha256": "f9d4a2b09e6bebb2c9b10d12613dded17a6a7585b5edbe91b1cedbb444b26317",
+      "reorderedSha256": "6bd23a1becbe4740b984a9ad4a435979d73f1ca2f677984c85d0538742dcdf62",
+      "changedParts": [
+        "ppt/presentation.xml"
+      ],
+      "semanticImportSha256": "0e31a36649fcf4917ada4926ecb93b16aeb337fea4ee756c2ffc3a1bc954684b"
+    },
+    {
+      "id": "furniture-measured-720-32-local",
+      "originalSha256": "5fde188220f96947858456dd8c36d0285d82c3d786e340ddc30ff9258307332d",
+      "reorderedSha256": "f9b64272c472d76d12b1e8e3a73387e55edb66e7ec0df47f8c46fa78ab0b1219",
+      "changedParts": [
+        "ppt/presentation.xml"
+      ],
+      "semanticImportSha256": "109056f2912de0ca167a4a2d7aef4b78097da752a8baba3359119f897595575e"
+    },
+    {
+      "id": "notes-control",
+      "originalSha256": "8594c29f7f12bfd8b9e263110fc84dbbce3f2f3f5fcca41b9ad4c27da52fa8d1",
+      "reorderedSha256": "a04b48a36effe883f7ac6ab1ec7c4ab1589b7d6f897a363e2c869501e919d482",
+      "changedParts": [
+        "ppt/presentation.xml"
+      ],
+      "semanticImportSha256": "87abaadda67da943754f2f9d9d8acb60cb6f397c2c770fdaa54c82d6a68d13be"
+    },
+    {
+      "id": "plain-control",
+      "originalSha256": "4dd235c923eb346ee19ac7ee89a93cce9a355eec7355692259d81c541bb3556d",
+      "reorderedSha256": "326f543d2229aa4d50ca15555f4d5b01d550cf463f6fe8f79788887e604b4aca",
+      "changedParts": [
+        "ppt/presentation.xml"
+      ],
+      "semanticImportSha256": "693dd4df228c80832b3105a84e09d4be150aae708368d7e7fb86f4d3a69390db"
+    },
+    {
+      "id": "image-control",
+      "originalSha256": "c588addc4296a95127ee5589d4fc52df2e3fce62d331e034c679d3bb6fe10ae5",
+      "reorderedSha256": "8a309b23c74fd77756d7f77c536b91606c38ede37d8211873a9a043f5bb19ded",
+      "changedParts": [
+        "ppt/presentation.xml"
+      ],
+      "semanticImportSha256": "c50da3e61e457eb87cd88694adaeb80d03ae6f4de660c9415ac8c932ec6fdd25"
+    },
+    {
+      "id": "empty-furniture",
+      "originalSha256": "d6da7669550a4287b3a9fd56c2e77c066beecc28fa5041974f8050b83e1cb624",
+      "reorderedSha256": "4b8aaff20005cb27cf071125df57eb1557b88a228058106f0d7cb7fee288ee7a",
+      "changedParts": [
+        "ppt/presentation.xml"
+      ],
+      "semanticImportSha256": "b8ecd9be1090ecb29eb0790754c22758e5c675e57809cfbb476e3a86063e4197"
+    },
+    {
+      "id": "disabled-furniture",
+      "originalSha256": "6a8defbdebe2bc87de5e0b7409c412da68bce8e0a50db19a2fab3a3d488d7b94",
+      "reorderedSha256": "289efbc5084f5cf49d3fa41eb3d38531dacbab249214105d376386947c6b367b",
+      "changedParts": [
+        "ppt/presentation.xml"
+      ],
+      "semanticImportSha256": "eb8f0feda7b1f266c60a1fd092743486797380aa8d4d4f39ae9c5550a06c930a"
+    }
+  ]
+}

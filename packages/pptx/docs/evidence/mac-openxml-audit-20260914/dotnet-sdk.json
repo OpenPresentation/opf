@@ -1,0 +1,8 @@
+{
+  "release-date": "2026-09-08",
+  "version": "8.0.425",
+  "name": "dotnet-sdk-osx-arm64.tar.gz",
+  "rid": "osx-arm64",
+  "url": "https://builds.dotnet.microsoft.com/dotnet/Sdk/8.0.425/dotnet-sdk-8.0.425-osx-arm64.tar.gz",
+  "hash": "d42156be70b489236479a415536013a89a9fd6eaca57d5716a7017612fcc65bdb459068973d7cffd6fe710f2799af8bee95b2046ba032762d47df176f5c4a7d6"
+}
