@@ -572,7 +572,10 @@
           "name": "SignalKit Working Theme",
           "colorScheme": "steel-blue",
           "fontScheme": "calibri",
-          "background": "light1",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
           "tags": [
             "sales-demo",
             "example"

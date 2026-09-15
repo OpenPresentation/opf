@@ -582,7 +582,10 @@
           "name": "Sunfield Cooperative Working Theme",
           "colorScheme": "forest-green",
           "fontScheme": "calibri",
-          "background": "dark1",
+          "background": {
+            "type": "theme",
+            "slot": "dark1"
+          },
           "tags": [
             "agriculture",
             "example"

@@ -1,0 +1,29 @@
+packages	Measure current checkout metric internals with registry fonts	﻿2026-09-15T18:53:35.7943990Z ##[group]Run node scripts/test-metric-layout-geometry.mjs artifacts/npm/registry-consumer artifacts/metric-layout-geometry.json
+packages	Measure current checkout metric internals with registry fonts	2026-09-15T18:53:35.7944981Z ^[[36;1mnode scripts/test-metric-layout-geometry.mjs artifacts/npm/registry-consumer artifacts/metric-layout-geometry.json^[[0m
+packages	Measure current checkout metric internals with registry fonts	2026-09-15T18:53:35.7946296Z ^[[36;1mnode scripts/test-metric-layout-browser.mjs artifacts/npm/registry-consumer artifacts/metric-layout-geometry.json artifacts/metric-layout-browser.json^[[0m
+packages	Measure current checkout metric internals with registry fonts	2026-09-15T18:53:35.7947087Z shell: sh -e {0}
+packages	Measure current checkout metric internals with registry fonts	2026-09-15T18:53:35.7947290Z env:
+packages	Measure current checkout metric internals with registry fonts	2026-09-15T18:53:35.7947540Z   PNPM_HOME: /github/home/setup-pnpm/node_modules/.bin
+packages	Measure current checkout metric internals with registry fonts	2026-09-15T18:53:35.7947855Z ##[endgroup]
+packages	Measure current checkout metric internals with registry fonts	2026-09-15T18:53:35.8933437Z node:internal/modules/run_main:107
+packages	Measure current checkout metric internals with registry fonts	2026-09-15T18:53:35.8934497Z     triggerUncaughtException(
+packages	Measure current checkout metric internals with registry fonts	2026-09-15T18:53:35.8935167Z     ^
+packages	Measure current checkout metric internals with registry fonts	2026-09-15T18:53:35.8935377Z 
+packages	Measure current checkout metric internals with registry fonts	2026-09-15T18:53:35.8936123Z AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+packages	Measure current checkout metric internals with registry fonts	2026-09-15T18:53:35.8936638Z + actual - expected
+packages	Measure current checkout metric internals with registry fonts	2026-09-15T18:53:35.8936864Z 
+packages	Measure current checkout metric internals with registry fonts	2026-09-15T18:53:35.8937311Z + 'sha512-TtlaoQ7R6GsvHQ2eWMgoGOCbhgfaCzZLqvfJ+N+r7VyeCr/214jjAVi1reBugGXZ/zLqrGZuz0wacIWP6dN2yg=='
+packages	Measure current checkout metric internals with registry fonts	2026-09-15T18:53:35.8938199Z - 'sha512-eHBMbnmK5bELUmUwJ/qWRtJBIZFkUJsbUvkjzSc6yhNA2JQ2Em/My9+Of4c79y0tXrFCQaZ5xvOkOdtyGUu5Gw=='
+packages	Measure current checkout metric internals with registry fonts	2026-09-15T18:53:35.8938649Z 
+packages	Measure current checkout metric internals with registry fonts	2026-09-15T18:53:35.8938936Z     at load (file:///__w/opf/opf/opf/scripts/test-metric-layout-geometry.mjs:27:12)
+packages	Measure current checkout metric internals with registry fonts	2026-09-15T18:53:35.8939528Z     at async file:///__w/opf/opf/opf/scripts/test-metric-layout-geometry.mjs:37:29 {
+packages	Measure current checkout metric internals with registry fonts	2026-09-15T18:53:35.8939949Z   generatedMessage: true,
+packages	Measure current checkout metric internals with registry fonts	2026-09-15T18:53:35.8940204Z   code: 'ERR_ASSERTION',
+packages	Measure current checkout metric internals with registry fonts	2026-09-15T18:53:35.8940770Z   actual: 'sha512-TtlaoQ7R6GsvHQ2eWMgoGOCbhgfaCzZLqvfJ+N+r7VyeCr/214jjAVi1reBugGXZ/zLqrGZuz0wacIWP6dN2yg==',
+packages	Measure current checkout metric internals with registry fonts	2026-09-15T18:53:35.8941650Z   expected: 'sha512-eHBMbnmK5bELUmUwJ/qWRtJBIZFkUJsbUvkjzSc6yhNA2JQ2Em/My9+Of4c79y0tXrFCQaZ5xvOkOdtyGUu5Gw==',
+packages	Measure current checkout metric internals with registry fonts	2026-09-15T18:53:35.8942219Z   operator: 'strictEqual',
+packages	Measure current checkout metric internals with registry fonts	2026-09-15T18:53:35.8942462Z   diff: 'simple'
+packages	Measure current checkout metric internals with registry fonts	2026-09-15T18:53:35.8942989Z }
+packages	Measure current checkout metric internals with registry fonts	2026-09-15T18:53:35.8943097Z 
+packages	Measure current checkout metric internals with registry fonts	2026-09-15T18:53:35.8943190Z Node.js v24.20.0
+packages	Measure current checkout metric internals with registry fonts	2026-09-15T18:53:35.9012405Z ##[error]Process completed with exit code 1.

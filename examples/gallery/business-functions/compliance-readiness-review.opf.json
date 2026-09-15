@@ -572,7 +572,10 @@
           "name": "Tandem BioSystems Working Theme",
           "colorScheme": "deep-purple",
           "fontScheme": "noto-sans-gurmukhi",
-          "background": "light1",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
           "tags": [
             "compliance",
             "example"

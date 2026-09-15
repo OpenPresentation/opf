@@ -185,6 +185,40 @@
           "minor": "Aptos"
         }
       ]
+    },
+    "audiences": {
+      "records": [
+        {
+          "$schema": "https://openpresentation.org/schema/opf-audience/v1",
+          "id": "technical-reviewers",
+          "name": "Technical Reviewers",
+          "technicalFluency": "high",
+          "decisionPower": "advisory"
+        }
+      ]
+    },
+    "purposes": {
+      "records": [
+        {
+          "$schema": "https://openpresentation.org/schema/opf-purpose/v1",
+          "id": "technical-approval",
+          "name": "Technical Approval",
+          "outcome": "Approve the fixture contract"
+        }
+      ]
+    },
+    "tones": {
+      "records": [
+        {
+          "$schema": "https://openpresentation.org/schema/opf-tone/v1",
+          "id": "precise-plain",
+          "name": "Precise Plain",
+          "voiceCues": [
+            "Name the object shape before the rationale.",
+            "Prefer short exact claims."
+          ]
+        }
+      ]
     }
   }
 }

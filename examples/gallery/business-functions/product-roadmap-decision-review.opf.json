@@ -580,7 +580,10 @@
           "name": "LatticeLane Working Theme",
           "colorScheme": "vibes",
           "fontScheme": "lucida-sans",
-          "background": "light1",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
           "tags": [
             "product",
             "example"

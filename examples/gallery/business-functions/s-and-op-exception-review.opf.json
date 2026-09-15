@@ -586,7 +586,10 @@
           "name": "Cobalt Supply Working Theme",
           "colorScheme": "bold-red",
           "fontScheme": "mangal",
-          "background": "#F8FAFC",
+          "background": {
+            "type": "theme",
+            "slot": "light2"
+          },
           "tags": [
             "operations",
             "example"

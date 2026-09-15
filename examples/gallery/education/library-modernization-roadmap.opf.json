@@ -573,7 +573,10 @@
           "name": "Easton University Library Working Theme",
           "colorScheme": "bold-red",
           "fontScheme": "noto-sans-sc",
-          "background": "light1",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
           "tags": [
             "academic-library",
             "example"

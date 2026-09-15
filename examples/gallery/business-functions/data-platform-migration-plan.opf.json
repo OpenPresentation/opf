@@ -580,7 +580,10 @@
           "name": "Fathom Retail Working Theme",
           "colorScheme": "slate-gray",
           "fontScheme": "noto-nastaliq-urdu",
-          "background": "light1",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
           "tags": [
             "data-engineering",
             "example"

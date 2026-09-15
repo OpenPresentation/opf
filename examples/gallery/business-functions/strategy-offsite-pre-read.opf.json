@@ -586,7 +586,10 @@
           "name": "Northstar Studio Working Theme",
           "colorScheme": "luxury",
           "fontScheme": "nirmala-ui",
-          "background": "dark1",
+          "background": {
+            "type": "theme",
+            "slot": "dark1"
+          },
           "tags": [
             "corporate-strategy",
             "example"

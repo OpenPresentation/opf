@@ -571,7 +571,10 @@
           "name": "Summit State Athletics Working Theme",
           "colorScheme": "boost",
           "fontScheme": "noto-sans-tamil",
-          "background": "dark1",
+          "background": {
+            "type": "theme",
+            "slot": "dark1"
+          },
           "tags": [
             "college-athletics",
             "example"

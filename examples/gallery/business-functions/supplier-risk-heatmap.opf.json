@@ -582,7 +582,10 @@
           "name": "Ironwood Devices Working Theme",
           "colorScheme": "golden-yellow",
           "fontScheme": "ms-mincho",
-          "background": "light1",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
           "tags": [
             "procurement",
             "example"

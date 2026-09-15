@@ -593,7 +593,10 @@
           "name": "Bluewater Logistics Working Theme",
           "colorScheme": "deep-purple",
           "fontScheme": "bookman",
-          "background": "light1",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
           "tags": [
             "ports-and-logistics",
             "example"

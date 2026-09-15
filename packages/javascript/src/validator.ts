@@ -7,6 +7,7 @@ import {tableGrid} from "./table.js";
 import { catalogIds } from "./generated/catalog-ids.js";
 import type { JsonSchema } from "./json.js";
 import { schemas, type SchemaName } from "./schemas.js";
+import { rememberValidationDefinition } from './validation-definitions.js';
 import type { Presentation } from "./types.js";
 
 export interface ValidationIssue {
@@ -202,6 +203,7 @@ function getAjv(): Ajv2020 {
 
   const instance = new Ajv2020({
     allErrors: true,
+    verbose: true,
     strict: false,
     allowUnionTypes: true,
   });
@@ -254,13 +256,15 @@ function resolveValidator(schemaOrKind: SchemaOrKind): {
 }
 
 function toIssue(error: ErrorObject): ValidationIssue {
-  return {
+  const issue: ValidationIssue = {
     path: error.instancePath || "/",
     message: error.message ?? "failed validation",
     keyword: error.keyword,
     schemaPath: error.schemaPath,
     params: error.params as Record<string, unknown>,
   };
+  rememberValidationDefinition(issue, error.parentSchema, error.keyword);
+  return issue;
 }
 
 function semanticIssue(path: string, message: string, params: Record<string, unknown> = {}): ValidationIssue {

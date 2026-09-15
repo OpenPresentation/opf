@@ -1,0 +1,33 @@
+{
+  "published": false,
+  "artifacts": [
+    {
+      "name": "@openpresentation/opf",
+      "version": "0.4.0-preview.11",
+      "file": "openpresentation-opf-0.4.0-preview.11.tgz",
+      "sha256": "1bb7ee51b13d0036f7dbc173dff6868f4b7a9c101a6e226a304c45067be29d0a",
+      "bytes": 2361530
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "version": "0.1.0-preview.11",
+      "file": "openpresentation-opf-render-0.1.0-preview.11.tgz",
+      "sha256": "48d4b6ef53b3938f6443f4268a77c9eb0ecabf61ab6d9b87e22ce39c08f240d5",
+      "bytes": 42388
+    },
+    {
+      "name": "@openpresentation/opf-editor",
+      "version": "0.1.0-preview.11",
+      "file": "openpresentation-opf-editor-0.1.0-preview.11.tgz",
+      "sha256": "ef88c4c30342ba8ae1f5eadc5228c61c6bb4cdf6ee44f1064adaf1eeec6b9b07",
+      "bytes": 67455
+    },
+    {
+      "name": "@openpresentation/opf-pptx",
+      "version": "0.1.0-preview.11",
+      "file": "openpresentation-opf-pptx-0.1.0-preview.11.tgz",
+      "sha256": "ef174691b4840b9fbca6cfb494ac57bee492c3d22675f8adf3e793df2861ac26",
+      "bytes": 211717
+    }
+  ]
+}

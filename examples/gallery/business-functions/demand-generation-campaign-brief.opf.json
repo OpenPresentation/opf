@@ -571,7 +571,10 @@
           "name": "Brightpath Analytics Working Theme",
           "colorScheme": "steel-blue",
           "fontScheme": "latha",
-          "background": "#F8FAFC",
+          "background": {
+            "type": "theme",
+            "slot": "light2"
+          },
           "tags": [
             "marketing",
             "example"

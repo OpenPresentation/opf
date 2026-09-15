@@ -593,7 +593,10 @@
           "name": "Department of Revenue Services Working Theme",
           "colorScheme": "golden-yellow",
           "fontScheme": "skeena",
-          "background": "light1",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
           "tags": [
             "tax-administration",
             "example"

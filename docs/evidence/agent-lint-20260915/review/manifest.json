@@ -1,0 +1,51 @@
+{
+  "baseCommit": "285be3eb5e72ef57157387736f3edb5fb50c2fc9",
+  "node": "v24.21.0",
+  "pnpm": "10.33.2",
+  "platform": "darwin",
+  "sourceHashes": {
+    "packages/javascript/src/lint.ts": "3b2ecf5251bb02339a8cde3fafe653eb01c0195e909548b0837375ac93c60a15",
+    "packages/javascript/src/validator.ts": "7c0f95897713f7a04d1af5cb9de52865e260bd99920b22f49a5636c036d49035",
+    "packages/javascript/src/validation-definitions.ts": "e77f4df16470cb47c249280556f643dc59163ef342418968f1cbbd97f49df317",
+    "packages/javascript/test/lint.test.mjs": "db0a491deab7b4299ca16cb32f3610858d06b9e158fabb96de86b84abe245aa3",
+    "packages/cli/test/cli.mjs": "621431e935cb38fcb01b39c68b5166ffe35c34d86bb710729b507e430053c7dd",
+    "scripts/inspect-lint-examples.mjs": "1a2ba634bee2fcc20b73356e2151d6abe652690216289f146abc5b0f810f7dc9"
+  },
+  "artifacts": [
+    {
+      "file": "lint.log",
+      "bytes": 28790,
+      "sha256": "ccaced2a8e7b7726560994d846cf3aa75f125cc794b2c6dc0f05c138a43c286a"
+    },
+    {
+      "file": "typecheck.log",
+      "bytes": 3923,
+      "sha256": "6986a942bd52440a511d2c0f9ced4b006ab121d374c823e0f4a77325c4df5e7c"
+    },
+    {
+      "file": "tests.log",
+      "bytes": 55482,
+      "sha256": "dd9b9c9c8c56501da6bcb8e2495e147ddb1e5960564464b3ff57cf98452d739d"
+    },
+    {
+      "file": "installed-core.log",
+      "bytes": 3774,
+      "sha256": "b70ac9f85462b8b5d3d58cd96b9ddf952b696757de2303c1a4ad7483fd91b2f8"
+    },
+    {
+      "file": "installed-cli.log",
+      "bytes": 806,
+      "sha256": "14e50cefe4f62b013b38a9235bda32f2281419de97d4ccd2c4cd596ee6f04e4a"
+    },
+    {
+      "file": "corpus-after.json",
+      "bytes": 92492,
+      "sha256": "6a1caba47279ef9343ad55d6eb9f152f97dba256f666e12a43276a38599fe43e"
+    },
+    {
+      "file": "corpus-before.json",
+      "bytes": 89014,
+      "sha256": "d8bdf96a1a80ceed56863209b37cdccf280e228d3c8ad08bca8c324a41a82ee9"
+    }
+  ]
+}
