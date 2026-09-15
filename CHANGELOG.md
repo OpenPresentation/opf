@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.10.0
+
+- Add offline OPF lint with exact source locations, schema and catalog context, asset diagnostics, explicit design contracts and actionable alternatives. Expose the same read-only diagnostics through CLI 0.8.0 without fetching catalogs or modifying source.
+- Share vector-aware text/metric placement, content-card interiors and timeline field geometry across composition and pagination. Preserve scalar source whitespace, selected readability floors and explicit human layout choices. The public explanation identifier advances to `grid-score-v8`; coordinated consumers must support the updated geometry.
+- Carry resolved physical font selections in text styles, validate inline example catalogs and retain reviewed source/browser evidence. Native font identity, Office rendering and general reimport fidelity remain separately documented compatibility boundaries.
+
 - Require Node 24 (`24.x`) for core, CLI and coordinated development. Node 20 and 22 users must upgrade before installing the next releases. Retain browser and operating-system coverage while retiring duplicate Node 20 jobs. See [migration instructions](docs/migrations/node24.md); earlier published packages and historical evidence are unchanged.
 
 ## 0.9.0
