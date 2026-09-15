@@ -1,0 +1,3005 @@
+{
+  "summary": {
+    "files": 126,
+    "valid": 85,
+    "counts": {
+      "error": 41,
+      "warning": 4,
+      "info": 401
+    }
+  },
+  "reports": [
+    {
+      "file": "examples/gallery/business-functions/compliance-readiness-review.opf.json",
+      "sha256": "b0df7d9583579f11f9f9a83372b0d270008c9c59fc4bac865fabdc8a7d6654de",
+      "valid": false,
+      "schemaValid": true,
+      "counts": {
+        "error": 1,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          },
+          "location": {
+            "offset": 42591,
+            "length": 8,
+            "line": 575,
+            "column": 25
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/contract-cycle-time-brief.opf.json",
+      "sha256": "c734a19e01615dbc1c8c931b572ab7cfcaff8bbf53feb99ee06505dd4cfefbf6",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/business-functions/data-platform-migration-plan.opf.json",
+      "sha256": "1aaef9e60f7ac644d94492ef4db2ded3593428810c87fc9032807208651acd40",
+      "valid": false,
+      "schemaValid": true,
+      "counts": {
+        "error": 1,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          },
+          "location": {
+            "offset": 43925,
+            "length": 8,
+            "line": 583,
+            "column": 25
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/defect-escape-reduction-review.opf.json",
+      "sha256": "c9b99a750ea01e3ab30aed39a5b043bee05f6c7ace911c8ab9d256d26ae10acd",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/business-functions/demand-generation-campaign-brief.opf.json",
+      "sha256": "c4c04edd46f49c5816047702c4802e84dd7afeb0400fc725314c94574ed5dc66",
+      "valid": false,
+      "schemaValid": true,
+      "counts": {
+        "error": 1,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          },
+          "location": {
+            "offset": 43376,
+            "length": 9,
+            "line": 574,
+            "column": 25
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/employee-town-hall-run-of-show.opf.json",
+      "sha256": "e10af0a962b75a1f2423fafc5d1131d8a01db2e3f9170baec7c2767f7d979866",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/business-functions/engineering-capacity-planning.opf.json",
+      "sha256": "5c9f2671fb9ce2b689f8f813c25cfdeab0844be1824edea5a9f9335615d3090f",
+      "valid": false,
+      "schemaValid": true,
+      "counts": {
+        "error": 1,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          },
+          "location": {
+            "offset": 42965,
+            "length": 7,
+            "line": 571,
+            "column": 25
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/enterprise-account-expansion-plan.opf.json",
+      "sha256": "f9a6f2521c69d564e8564f3a2e77cbc5f01cf074f413b88a1cbda3005de097ec",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/business-functions/field-enablement-certification.opf.json",
+      "sha256": "af1ba2c9d4b67c13d6e7a215188405396bf736d0c484ce4aba338489b7c5b255",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/business-functions/fy27-budget-tradeoff-deck.opf.json",
+      "sha256": "9905751a84884d698126af8085b84d251206551ef4c67483e190f374aa9061bd",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/business-functions/identity-incident-executive-brief.opf.json",
+      "sha256": "53e99861578be9203368239670d8d2c6646e9128d4392d47b5767c052b063238",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/business-functions/investor-relations-update.opf.json",
+      "sha256": "c7f662843cc13af3f508b8ab0922f8ed62760987cc380924fb4cf4ef293be1da",
+      "valid": false,
+      "schemaValid": true,
+      "counts": {
+        "error": 1,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          },
+          "location": {
+            "offset": 46211,
+            "length": 7,
+            "line": 578,
+            "column": 25
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/model-governance-review.opf.json",
+      "sha256": "fd183ed4b414b845a66054370e14051ad1ab98ebfc40f307404a54d06d2b8a7b",
+      "valid": false,
+      "schemaValid": true,
+      "counts": {
+        "error": 1,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          },
+          "location": {
+            "offset": 43090,
+            "length": 9,
+            "line": 581,
+            "column": 25
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/onboarding-experience-redesign.opf.json",
+      "sha256": "f3bb1a8c9f4934e8240352776e1d7d450bf354fd2bb4c01a4c3a849d2e29aa70",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/business-functions/partner-ecosystem-launch-kit.opf.json",
+      "sha256": "ec06b4c284bd1bf270af4ff83af7a6d0dba3b614e2c88845c986bf17ac87dacc",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/business-functions/pricing-and-packaging-decision.opf.json",
+      "sha256": "7c15fdef3c49cf85f1b0e4c6fcdebe35c84de56e74c95d6cc42a644a2321b977",
+      "valid": false,
+      "schemaValid": true,
+      "counts": {
+        "error": 1,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          },
+          "location": {
+            "offset": 44204,
+            "length": 9,
+            "line": 580,
+            "column": 25
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/product-roadmap-decision-review.opf.json",
+      "sha256": "8815a44579acb74796aff75228e43c24a15c0e27ccc849dd4d4b9c5a202925e6",
+      "valid": false,
+      "schemaValid": true,
+      "counts": {
+        "error": 1,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          },
+          "location": {
+            "offset": 43676,
+            "length": 8,
+            "line": 583,
+            "column": 25
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/renewal-save-plan.opf.json",
+      "sha256": "35c2aa5dc14e25557bbaabca2efc50782370ad3e04a760ce36d1b6089f7e8b4c",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/business-functions/revenue-forecast-inspection.opf.json",
+      "sha256": "1153f1b230cf79f974e44fe8273e304e1fe960cb5e58cc0c2f7a9d3f2520d768",
+      "valid": false,
+      "schemaValid": true,
+      "counts": {
+        "error": 1,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          },
+          "location": {
+            "offset": 43132,
+            "length": 7,
+            "line": 581,
+            "column": 25
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/s-and-op-exception-review.opf.json",
+      "sha256": "6d4223ae2aebbd88e4c5d66f1878ed31c2f207b591a8e0fb92527ad6cc3ac8ed",
+      "valid": false,
+      "schemaValid": true,
+      "counts": {
+        "error": 1,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          },
+          "location": {
+            "offset": 43917,
+            "length": 9,
+            "line": 589,
+            "column": 25
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/scope-3-reporting-readiness.opf.json",
+      "sha256": "73fb9535e4b50c58eacfeb0b88f9db352b67003cd5af3b57d918cd9c288db1c5",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/business-functions/strategy-offsite-pre-read.opf.json",
+      "sha256": "94a4bc7c40c6ae157967aa30b42a7eae98e29a7580ceac88750b5980e0921343",
+      "valid": false,
+      "schemaValid": true,
+      "counts": {
+        "error": 1,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          },
+          "location": {
+            "offset": 45947,
+            "length": 7,
+            "line": 589,
+            "column": 25
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/supplier-risk-heatmap.opf.json",
+      "sha256": "702281579766e0f91809f149d561ea753859b2d2b7fce9d87e4cbc838e7bf104",
+      "valid": false,
+      "schemaValid": true,
+      "counts": {
+        "error": 1,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          },
+          "location": {
+            "offset": 42766,
+            "length": 8,
+            "line": 585,
+            "column": 25
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/support-deflection-program.opf.json",
+      "sha256": "05df7d0900ae94aec55308f3c8572b6881a1e32f050c03048798e83f9bd295e4",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/business-functions/workplace-occupancy-reset.opf.json",
+      "sha256": "ceae76ba248ec8d1a077d9a14e6141e3e719c1110c30e75a173998f94b28ba66",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/design-and-media/data-storytelling-atlas.opf.json",
+      "sha256": "e1646dd96869b5a6086d716f2dad6a95341b9b090bca7797d03189d6e1dbbe28",
+      "valid": false,
+      "schemaValid": true,
+      "counts": {
+        "error": 1,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          },
+          "location": {
+            "offset": 43500,
+            "length": 9,
+            "line": 579,
+            "column": 25
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/design-and-media/kiosk-orientation-deck.opf.json",
+      "sha256": "3f7354f7eb5e85d7af97c4913e071869e3989bfaf3b0c997780caa65ca8ab9f4",
+      "valid": false,
+      "schemaValid": true,
+      "counts": {
+        "error": 1,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          },
+          "location": {
+            "offset": 43498,
+            "length": 8,
+            "line": 592,
+            "column": 25
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/design-and-media/photo-essay-portfolio.opf.json",
+      "sha256": "b0faf5e80a230bb87d03f661e7693eb73d02eda0ffa377fe502c08652544fa68",
+      "valid": false,
+      "schemaValid": true,
+      "counts": {
+        "error": 1,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          },
+          "location": {
+            "offset": 45958,
+            "length": 7,
+            "line": 573,
+            "column": 25
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/design-and-media/video-demo-sales-narrative.opf.json",
+      "sha256": "1f56d9fec550fba83f0a2f61f3f256feca8fbf28be9eb09fc6874a72707eaa1a",
+      "valid": false,
+      "schemaValid": true,
+      "counts": {
+        "error": 1,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          },
+          "location": {
+            "offset": 42440,
+            "length": 8,
+            "line": 575,
+            "column": 25
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/design-and-media/visual-brand-system-sampler.opf.json",
+      "sha256": "0f3c70990695c2c58b6e0646c81e619b6fb389f21934801adc7f6391fe261eeb",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/education/advising-retention-review.opf.json",
+      "sha256": "be7ae9e9cc1efdf48d63f26fec1889d3d4b0014dd91b81399236f1ef43e0438a",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/education/alumni-giving-campaign.opf.json",
+      "sha256": "ce7c9bb0a4cffd0e86c8b89cb2c84ed763c7e5a151b6b45d7f66780f2c5f4a66",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/education/apprenticeship-partnership-deck.opf.json",
+      "sha256": "1f3771725ed83321221e30bc6f0acc20768f8c3dce70592a4156ad25d3f5a712",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/education/athletics-budget-review.opf.json",
+      "sha256": "636a9850738714e9ab094d1d7c38dc4dcf8623ac97332bb94655b1b17ed6225d",
+      "valid": false,
+      "schemaValid": true,
+      "counts": {
+        "error": 1,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          },
+          "location": {
+            "offset": 43056,
+            "length": 7,
+            "line": 574,
+            "column": 25
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/education/campus-energy-action-brief.opf.json",
+      "sha256": "08ccc5612eb33c21ba37a2fa7cba862c9662d562a91c0546de35613eab24a7e8",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/education/curriculum-approval-brief.opf.json",
+      "sha256": "6fdd62aac4a0dd700014615fd799285327d76541069ec206faefe65ad4e16c72",
+      "valid": false,
+      "schemaValid": true,
+      "counts": {
+        "error": 1,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          },
+          "location": {
+            "offset": 44101,
+            "length": 9,
+            "line": 576,
+            "column": 25
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/education/district-literacy-acceleration-plan.opf.json",
+      "sha256": "5b54df815419254a73e44f8abc64ac04080e08c4e0cdf4a105224ff25ff45ef3",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/education/library-modernization-roadmap.opf.json",
+      "sha256": "863026dfe32ba55d05d5a67bee3c084b2a73f64c5601bb751a1d971e2cccc0d9",
+      "valid": false,
+      "schemaValid": true,
+      "counts": {
+        "error": 1,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          },
+          "location": {
+            "offset": 43873,
+            "length": 8,
+            "line": 576,
+            "column": 25
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/education/online-program-launch-plan.opf.json",
+      "sha256": "1866a5eaccc2277a39924daf3fbd0dc33d91166eea1847c8b23dd495bd48a1b9",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/education/research-grant-pitch.opf.json",
+      "sha256": "621965a92fa0127e05afaf4b790e6552f99e0148de9c1da53d10b227bb4ffe37",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/education/school-safety-preparedness-brief.opf.json",
+      "sha256": "64c9024b60ab5e4430ede79328b942952a5f9810de7e1e04a5b7aa0b618e27e4",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/education/special-education-services-plan.opf.json",
+      "sha256": "afcb98fc6b60055e3ff9b6229f17ec55e8b0a9e18294574e8bd450ffba7de8ec",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/education/stem-lab-funding-proposal.opf.json",
+      "sha256": "26ebbce28c9b37354f4d02531f8585d4d47cd5a031f245280478407d0e04bda9",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/education/student-mental-health-capacity-review.opf.json",
+      "sha256": "3f6282fbe18f4a37f55c0b85c1a5d1cb937f70b88e6534ccafc8582dc9caeff3",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/education/workforce-pathway-partnership.opf.json",
+      "sha256": "af23b5e4d2a57eb9cf735648036afed9e0b04050505c4b792b3c03698a498e1b",
+      "valid": false,
+      "schemaValid": true,
+      "counts": {
+        "error": 1,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          },
+          "location": {
+            "offset": 43571,
+            "length": 9,
+            "line": 565,
+            "column": 25
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/government/broadband-public-hearing-deck.opf.json",
+      "sha256": "15c84204991cd4de43300082961f025d0696d9a54c668f02c635affbe1ea9213",
+      "valid": false,
+      "schemaValid": true,
+      "counts": {
+        "error": 1,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          },
+          "location": {
+            "offset": 46606,
+            "length": 7,
+            "line": 580,
+            "column": 25
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/government/court-backlog-reduction-plan.opf.json",
+      "sha256": "bb98fb734f213e6caa51b0d47384632a3b49d5dd3f16b07be5a4b5a7f711bc00",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/government/digital-services-modernization.opf.json",
+      "sha256": "5361775a4b7ce6995ef1c37a3f3f0b6d0981e0f8b0e1fdd79673f1fba219b0fa",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/government/grant-equity-review.opf.json",
+      "sha256": "a7cf706aec3c41734773a9d4ea9e4ce16a85208a16fb9369dd0783a7cd83ccc0",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/government/housing-zoning-council-brief.opf.json",
+      "sha256": "d1dbef20a850fe657ff2332a24ba19635348393305cc1c8882d1201db94c92e7",
+      "valid": false,
+      "schemaValid": true,
+      "counts": {
+        "error": 1,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          },
+          "location": {
+            "offset": 43092,
+            "length": 8,
+            "line": 598,
+            "column": 25
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/government/parks-master-plan-workshop.opf.json",
+      "sha256": "786dc14cd5a444af433ed246e43fa9f8e1c9afabc3073757b50d1af323c3a577",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/government/police-training-program-update.opf.json",
+      "sha256": "566a349199128a7075b15b526f5379d2b808f0002372139cb8a66467d784ca5b",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/government/recycling-participation-campaign.opf.json",
+      "sha256": "a4e688c320b151ea518c1ec0fb546cafb4327a0a451cc723b266b6c2b84010ae",
+      "valid": false,
+      "schemaValid": true,
+      "counts": {
+        "error": 1,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          },
+          "location": {
+            "offset": 42993,
+            "length": 7,
+            "line": 566,
+            "column": 25
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/government/regulatory-risk-brief.opf.json",
+      "sha256": "68d3ac5c0bdaf5e2c69ba5863f25491c4cf526090c884a03408e2ea1a0f5d14d",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/government/tax-portal-modernization.opf.json",
+      "sha256": "bd65140e6c6b0944375257ede5d9f2619d62a2511ec625b1ca95a6a9dc19a6fd",
+      "valid": false,
+      "schemaValid": true,
+      "counts": {
+        "error": 1,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          },
+          "location": {
+            "offset": 43377,
+            "length": 8,
+            "line": 596,
+            "column": 25
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/government/transit-corridor-alternatives.opf.json",
+      "sha256": "164405600713a7aa2701cb341e9438db07d05ad8d40744b21c65bb7d342ea6a0",
+      "valid": false,
+      "schemaValid": true,
+      "counts": {
+        "error": 1,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          },
+          "location": {
+            "offset": 46296,
+            "length": 7,
+            "line": 576,
+            "column": 25
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/government/vaccination-outreach-briefing.opf.json",
+      "sha256": "44ddc98b5c07934268f4feff3315a08291b8c89f3b4891ac0a08fdb2fe551abc",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/government/water-utility-capital-plan.opf.json",
+      "sha256": "7530d607f991d7d3ed9a9c04aa717239b8d342fd7d16d74a1cc18ec24c454e4c",
+      "valid": false,
+      "schemaValid": true,
+      "counts": {
+        "error": 1,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          },
+          "location": {
+            "offset": 44113,
+            "length": 8,
+            "line": 592,
+            "column": 25
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/government/wildfire-evacuation-preparedness.opf.json",
+      "sha256": "7055e7e96359a0a7978aad4bffc35344025be928216007829d2436ba11b93db5",
+      "valid": false,
+      "schemaValid": true,
+      "counts": {
+        "error": 1,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          },
+          "location": {
+            "offset": 43837,
+            "length": 9,
+            "line": 566,
+            "column": 25
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/government/workforce-reskilling-initiative.opf.json",
+      "sha256": "27c0afa9a72a67b8a80ee9853dd62631dd6f207806f087e0375505b6a7166f88",
+      "valid": false,
+      "schemaValid": true,
+      "counts": {
+        "error": 1,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          },
+          "location": {
+            "offset": 44748,
+            "length": 9,
+            "line": 603,
+            "column": 25
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/airline-disruption-recovery-review.opf.json",
+      "sha256": "09d1c72b003ecf460a082d7b3d2184dc17650923b59d51661035282bc65b3ebe",
+      "valid": false,
+      "schemaValid": true,
+      "counts": {
+        "error": 1,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          },
+          "location": {
+            "offset": 43010,
+            "length": 8,
+            "line": 593,
+            "column": 25
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/ambulatory-access-recovery-plan.opf.json",
+      "sha256": "03d9ab32b7c9fcf83d540cd36e866155ff2596df4f4e3ab8031b6cd743f59654",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/industries/battery-line-supplier-readiness.opf.json",
+      "sha256": "5ba0a0601665fa38f207b2efa21be85e3ff393da3172492e51209bf5386d72c7",
+      "valid": false,
+      "schemaValid": true,
+      "counts": {
+        "error": 1,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          },
+          "location": {
+            "offset": 42936,
+            "length": 7,
+            "line": 560,
+            "column": 25
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/boutique-hotel-revenue-recovery.opf.json",
+      "sha256": "c4727ee2d5b478553efd76ccba4c875e6097dff5060826e6718d793da97b154f",
+      "valid": false,
+      "schemaValid": true,
+      "counts": {
+        "error": 1,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          },
+          "location": {
+            "offset": 43405,
+            "length": 9,
+            "line": 560,
+            "column": 25
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/branch-modernization-investment-case.opf.json",
+      "sha256": "6a0325bb6f5e3efbfa9b89858ad1cdbf922757f6040aa93c801b4c043a40048f",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/industries/claims-triage-operating-model.opf.json",
+      "sha256": "dc89bec26012406f79ad2455b5649fdafefe1563d8b561812f14c8a39b4e5004",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/industries/cold-chain-waste-reduction-review.opf.json",
+      "sha256": "9e99bcc586513025dd6ae8f72a32d12391f10364d9fd6363344417f736c82ae9",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/industries/construction-safety-stand-down.opf.json",
+      "sha256": "034fa77b91c7de870739a205c5d2a0f94137d942afe50472c4a546c3de1d724b",
+      "valid": false,
+      "schemaValid": true,
+      "counts": {
+        "error": 1,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          },
+          "location": {
+            "offset": 43697,
+            "length": 9,
+            "line": 573,
+            "column": 25
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/consulting-margin-recovery-plan.opf.json",
+      "sha256": "61853f557e026c567aebf1d3184f877654dbf711e0070d1b696e7e4f93d3ef79",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/industries/drive-thru-throughput-playbook.opf.json",
+      "sha256": "08401b7b70ebfac04fe5174a2f192ecc2a63b84d11daf797bf673bca8fd3d189",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/industries/fan-experience-operations-brief.opf.json",
+      "sha256": "0d3a4cbc985c5bbc58af5945ff66edd44a727b1983cd035661db3f78eec5a871",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/industries/food-bank-distribution-capacity-plan.opf.json",
+      "sha256": "c30eaef17587f85b54b5a9c7f5e9a36019fdb58bbd6332de3e8625d7f1d5aea5",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/industries/grid-resilience-capital-plan.opf.json",
+      "sha256": "140b6782170546ddb17963b0d2b6109033718847c2a6c7074ce766bba4a062e6",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/industries/managed-detection-market-update.opf.json",
+      "sha256": "ad575478c14e55154e0b30ce284a428bd6cc2c3575d539bb2fb0b1e97040ca4b",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/industries/mixed-use-leasing-pipeline-review.opf.json",
+      "sha256": "1f771cd5545eed0ef15be22a5f57d41d578d25ccf03e89507d0c94f75d337348",
+      "valid": false,
+      "schemaValid": true,
+      "counts": {
+        "error": 1,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          },
+          "location": {
+            "offset": 43969,
+            "length": 8,
+            "line": 580,
+            "column": 25
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/port-dwell-time-improvement-plan.opf.json",
+      "sha256": "3b64342fc5eb64cff331cb8abde19afe8d2c7fc2af70077dd4585f4217350a87",
+      "valid": false,
+      "schemaValid": true,
+      "counts": {
+        "error": 1,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          },
+          "location": {
+            "offset": 43148,
+            "length": 8,
+            "line": 596,
+            "column": 25
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/retail-launch-readiness-deck.opf.json",
+      "sha256": "881fb9ca3be06681dde1516838077f6c6ebc93949f562451a6c306c643f4f9f2",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/industries/robotics-quality-escape-briefing.opf.json",
+      "sha256": "c816d0e5c31dab0c0b78f57f2ec958ee9bdf0417e3850eb33c7d70e53c895537",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/industries/rural-broadband-expansion-proposal.opf.json",
+      "sha256": "1ae65c02dfcc0bd06e23627354a1f6c23417d798126fad51c88d7058f435e29e",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/industries/satellite-maintenance-readiness-review.opf.json",
+      "sha256": "fd2f96ba2927cd9ec625d8e039baf0a032106f611d88bf2136a6339956b47d53",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/industries/streaming-churn-winback-strategy.opf.json",
+      "sha256": "24bbeb84ae60b012fd265459394ff0c2bfdd57eda0572aa7637780830e5c0ec3",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/industries/tailings-monitoring-investment-brief.opf.json",
+      "sha256": "c223e1ad3996022b7734f10357e1ac4a0f337af41570eb9e945e121f5d1e94d5",
+      "valid": false,
+      "schemaValid": true,
+      "counts": {
+        "error": 1,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          },
+          "location": {
+            "offset": 46166,
+            "length": 7,
+            "line": 576,
+            "column": 25
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/trial-enrollment-rescue-plan.opf.json",
+      "sha256": "3ec55ae456ba3ffb6ad67028bc18fe17248a3fdd738f278487dafc4439943c5d",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/industries/veterinary-staffing-stabilization.opf.json",
+      "sha256": "fe57260d5027e18a0ecbd33c969a84b10beb20a8ef197e96796b68445d3712b5",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/industries/water-stewardship-grower-brief.opf.json",
+      "sha256": "eedb5d506364c91d9cc4fde7e34f5bd751195ed07e053db0d74af477f429f02b",
+      "valid": false,
+      "schemaValid": true,
+      "counts": {
+        "error": 1,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          },
+          "location": {
+            "offset": 46476,
+            "length": 7,
+            "line": 585,
+            "column": 25
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/international/arabic-digital-services-brief.opf.json",
+      "sha256": "600362a72fbada69c78e5eb977a7219bcd812e6fa5f69d661a4b4803ebd4734c",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/international/brazil-climate-adaptation-brief.opf.json",
+      "sha256": "59173d23749a4eac627af531d27d97dcf9d3f17a020d4462edddc45c71f8ccc7",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/international/german-works-council-update.opf.json",
+      "sha256": "139f8a98b0bded1a2f7f9b17e905ebd9ce8c0e9b4bd7090feb4a149d8c18b7c9",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/international/india-rural-payments-pilot.opf.json",
+      "sha256": "e76d85491c715344b391c6ff2876c657d0c632817dced514901ddc6d7c663826",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/international/japan-market-entry-readout.opf.json",
+      "sha256": "0d705211efd8fad04c3a5342370b02929e0d946f7a83ab35a046f8e6d249b785",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/presentation-types/customer-qbr-renewal-deck.opf.json",
+      "sha256": "e34fe71356625b58f99bed1fe82a655ffe0015be068954666b055207abf1fd03",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/presentation-types/data-incident-postmortem.opf.json",
+      "sha256": "a1309ab78d74080502815a8ad5d295fa74ecce2ccc229b2869d719f0f034913d",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/presentation-types/developer-conference-talk.opf.json",
+      "sha256": "106c6f2a35608b3a1cf5d4b19097dca2e7199fa5d93660e4ea017a6d0425a589",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/presentation-types/executive-workshop-facilitation.opf.json",
+      "sha256": "42f05dafdddc140389a95b120ceb42226722f2731a56848a043ea3825e7b12c4",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/presentation-types/manager-training-deck.opf.json",
+      "sha256": "46f44a3ffe1fbcd5716b3f65e9f4759e59d54e5644439fe6f53bbb9369bcfb1e",
+      "valid": false,
+      "schemaValid": true,
+      "counts": {
+        "error": 1,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          },
+          "location": {
+            "offset": 42043,
+            "length": 7,
+            "line": 569,
+            "column": 25
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/presentation-types/monthly-board-update.opf.json",
+      "sha256": "4a59f53177b3892ec31807e447270ff53b7f311cb448ba488a4274b32ac4171d",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/presentation-types/policy-briefing-for-advisors.opf.json",
+      "sha256": "069ce472928747ad9c6da4575a92393dc3353f571313331817ea8e39b370611e",
+      "valid": false,
+      "schemaValid": true,
+      "counts": {
+        "error": 1,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          },
+          "location": {
+            "offset": 43625,
+            "length": 8,
+            "line": 583,
+            "column": 25
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/presentation-types/product-launch-narrative.opf.json",
+      "sha256": "29d139df11df3c11c4308d2ca7cd03d96dea1e6a91084a7f657f2aadec2f64de",
+      "valid": false,
+      "schemaValid": true,
+      "counts": {
+        "error": 1,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          },
+          "location": {
+            "offset": 43161,
+            "length": 9,
+            "line": 581,
+            "column": 25
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/presentation-types/research-findings-report.opf.json",
+      "sha256": "3f910577cc8fca1725a3113094628caf366e2cf5a23e1d7433148f903a563081",
+      "valid": false,
+      "schemaValid": true,
+      "counts": {
+        "error": 1,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          },
+          "location": {
+            "offset": 43840,
+            "length": 9,
+            "line": 573,
+            "column": 25
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/presentation-types/seed-pitch-for-climate-risk-api.opf.json",
+      "sha256": "598271822ef294a7ee232536026203127d83d713a973bc3e57f0c036e400b973",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/asset-source-forms.opf.json",
+      "sha256": "719be8c5fc90b5a107ae6f181f4841cfbf33f528a8db852bf6dc94bc78a28979",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/block-composition.opf.json",
+      "sha256": "ab69284bffc719bac0ea1a9571058abf8c31ad6ad6a4bc5fe4cb280368ed60fc",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/catalog-overrides.opf.json",
+      "sha256": "d35470eaa2a6024090d7b49a078a7e08fb5bb57de61a141a2107dc58a416fe9a",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 3,
+        "info": 1
+      },
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-reference",
+          "severity": "warning",
+          "scope": "document",
+          "path": "/tone/id",
+          "message": "Unknown tones catalog id \"precise-plain\" in the available local context.",
+          "help": "Choose an available record or supply the intended custom catalog context. External references and native rendering are not verified by this check.",
+          "definition": "https://openpresentation.org/schema/opf/v1#/properties/tone",
+          "lookup": [
+            "opf",
+            "catalog",
+            "tones"
+          ],
+          "suggestions": [
+            {
+              "value": "casual",
+              "label": "Casual",
+              "origin": "built-in",
+              "definition": "spec/catalogs/tones/casual.json"
+            },
+            {
+              "value": "persuasive",
+              "label": "Persuasive",
+              "origin": "built-in",
+              "definition": "spec/catalogs/tones/persuasive.json"
+            },
+            {
+              "value": "technical",
+              "label": "Technical",
+              "origin": "built-in",
+              "definition": "spec/catalogs/tones/technical.json"
+            },
+            {
+              "value": "formal",
+              "label": "Formal",
+              "origin": "built-in",
+              "definition": "spec/catalogs/tones/formal.json"
+            },
+            {
+              "value": "inspirational",
+              "label": "Inspirational",
+              "origin": "built-in",
+              "definition": "spec/catalogs/tones/inspirational.json"
+            }
+          ],
+          "location": {
+            "offset": 512,
+            "length": 15,
+            "line": 19,
+            "column": 11
+          }
+        },
+        {
+          "ruleId": "opf/catalog-reference",
+          "severity": "warning",
+          "scope": "document",
+          "path": "/purpose/id",
+          "message": "Unknown purposes catalog id \"technical-approval\" in the available local context.",
+          "help": "Choose an available record or supply the intended custom catalog context. External references and native rendering are not verified by this check.",
+          "definition": "https://openpresentation.org/schema/opf/v1#/$defs/Purpose/properties/id",
+          "lookup": [
+            "opf",
+            "catalog",
+            "purposes"
+          ],
+          "suggestions": [
+            {
+              "value": "decide",
+              "label": "Drive a Decision",
+              "origin": "built-in",
+              "definition": "spec/catalogs/purposes/decide.json"
+            },
+            {
+              "value": "educate",
+              "label": "Educate",
+              "origin": "built-in",
+              "definition": "spec/catalogs/purposes/educate.json"
+            },
+            {
+              "value": "report",
+              "label": "Report",
+              "origin": "built-in",
+              "definition": "spec/catalogs/purposes/report.json"
+            },
+            {
+              "value": "sell",
+              "label": "Sell",
+              "origin": "built-in",
+              "definition": "spec/catalogs/purposes/sell.json"
+            },
+            {
+              "value": "align",
+              "label": "Align",
+              "origin": "built-in",
+              "definition": "spec/catalogs/purposes/align.json"
+            }
+          ],
+          "location": {
+            "offset": 383,
+            "length": 20,
+            "line": 14,
+            "column": 11
+          }
+        },
+        {
+          "ruleId": "opf/catalog-reference",
+          "severity": "warning",
+          "scope": "document",
+          "path": "/audience/0/id",
+          "message": "Unknown audiences catalog id \"technical-reviewers\" in the available local context.",
+          "help": "Choose an available record or supply the intended custom catalog context. External references and native rendering are not verified by this check.",
+          "definition": "https://openpresentation.org/schema/opf/v1#/$defs/Audience/properties/id",
+          "lookup": [
+            "opf",
+            "catalog",
+            "audiences"
+          ],
+          "suggestions": [
+            {
+              "value": "candidates",
+              "label": "Candidates",
+              "origin": "built-in",
+              "definition": "spec/catalogs/audiences/candidates.json"
+            },
+            {
+              "value": "executives",
+              "label": "Executives",
+              "origin": "built-in",
+              "definition": "spec/catalogs/audiences/executives.json"
+            },
+            {
+              "value": "customers",
+              "label": "Customers",
+              "origin": "built-in",
+              "definition": "spec/catalogs/audiences/customers.json"
+            },
+            {
+              "value": "engineering-team",
+              "label": "Engineering Team",
+              "origin": "built-in",
+              "definition": "spec/catalogs/audiences/engineering-team.json"
+            },
+            {
+              "value": "investors",
+              "label": "Investors",
+              "origin": "built-in",
+              "definition": "spec/catalogs/audiences/investors.json"
+            }
+          ],
+          "location": {
+            "offset": 219,
+            "length": 21,
+            "line": 7,
+            "column": 13
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/technical/chart-data-sources.opf.json",
+      "sha256": "777657bc25cd1be1d3ddf1d2757cd5fc1534a4fa788dc24076ad4ad4f5774443",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/chart-type-sampler.opf.json",
+      "sha256": "c50d3fa881ed30e06592fc527999cf5d446393dac5509c497c75d8b964e55722",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/columns.opf.json",
+      "sha256": "0a45dfa2440120341c81f31829c3deff6e9a00ee1961e4f1c0ab9768d75a3cb8",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/content-payload-matrix.opf.json",
+      "sha256": "9b5ba575287af91f138ef2d49d8edb0c3a164a3ac3fcca6a22e003f28e1639b3",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/design-backgrounds.opf.json",
+      "sha256": "a395bcbb56785765bbfe024e2d91c346da04a6b1c67e75336b19a3370507aa89",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/dynamic-composition.opf.json",
+      "sha256": "54d08bf006ae56f3a4b47ef6b11aafd3160c6e3029c45e6613b508cf67a11fee",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/full-feature-tour.opf.json",
+      "sha256": "27c6475df959411ac06c16229506e060e1dad947004d2b689ea9fd4438bdb3d3",
+      "valid": false,
+      "schemaValid": true,
+      "counts": {
+        "error": 1,
+        "warning": 1,
+        "info": 0
+      },
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/colorSchemes/records/0",
+          "scope": "document",
+          "message": "must have required property 'name'",
+          "help": "Add the required \"name\" field in this object, using the intended schema form.",
+          "definition": "https://openpresentation.org/schema/opf-color-scheme/v1#/required",
+          "lookup": [
+            "opf",
+            "schema",
+            "colorScheme",
+            "/required"
+          ],
+          "validation": {
+            "path": "/",
+            "message": "must have required property 'name'",
+            "keyword": "required",
+            "schemaPath": "#/required",
+            "params": {
+              "missingProperty": "name"
+            }
+          },
+          "location": {
+            "offset": 3027,
+            "length": 197,
+            "line": 88,
+            "column": 9
+          }
+        },
+        {
+          "ruleId": "opf/catalog-reference",
+          "severity": "warning",
+          "scope": "document",
+          "path": "/slides/8/design/colorScheme",
+          "message": "Unknown colorSchemes catalog id \"acme-night\" in the available local context.",
+          "help": "Choose an available record or supply the intended custom catalog context. External references and native rendering are not verified by this check.",
+          "definition": "https://openpresentation.org/schema/opf/v1#/$defs/Design/properties/colorScheme",
+          "lookup": [
+            "opf",
+            "catalog",
+            "colorSchemes"
+          ],
+          "suggestions": [
+            {
+              "value": "bold-red",
+              "label": "Bold Red",
+              "origin": "built-in",
+              "definition": "spec/catalogs/color-schemes/bold-red.json"
+            },
+            {
+              "value": "boost",
+              "label": "Boost",
+              "origin": "built-in",
+              "definition": "spec/catalogs/color-schemes/boost.json"
+            },
+            {
+              "value": "pastel-red",
+              "label": "Pastel Red",
+              "origin": "built-in",
+              "definition": "spec/catalogs/color-schemes/pastel-red.json"
+            },
+            {
+              "value": "slate-gray",
+              "label": "Slate Gray",
+              "origin": "built-in",
+              "definition": "spec/catalogs/color-schemes/slate-gray.json"
+            },
+            {
+              "value": "steel-blue",
+              "label": "Steel Blue",
+              "origin": "built-in",
+              "definition": "spec/catalogs/color-schemes/steel-blue.json"
+            }
+          ],
+          "location": {
+            "offset": 6857,
+            "length": 12,
+            "line": 227,
+            "column": 24
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/technical/grid-spans.opf.json",
+      "sha256": "fa1282518c8852a06451689901f0aed09bfef296c6b4ab72241113b1ae24846c",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/header-footer-logo-set.opf.json",
+      "sha256": "ad5b98a78921557bb9b42224bb1c7a2d66c2fcac84400463e7aedc5cc5d59863",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/language-and-writing.opf.json",
+      "sha256": "f54220d7a054e478bbf7f86667ab00e0f4230559ccd8acbf1968d93654628c52",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/media-and-follow-up.opf.json",
+      "sha256": "e6079202cab83948d637b4c9721740007a4cb57d1183c71ed92e193d21473324",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/metadata-array-forms.opf.json",
+      "sha256": "4089f2d7de22b2e8b7eb3fd588bf161864a8ce50b14cb1cd49baa72b831267fa",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/metrics-quotes-timeline.opf.json",
+      "sha256": "7cfda743528fe55a1e666b82fc6c1a846cbc1764e80f9b590330402b0af51c9b",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/minimal.opf.json",
+      "sha256": "11cc28ea74c0e34facbd94634b5caac97e456a649c84e647cb88605970880659",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/narrative-beats.opf.json",
+      "sha256": "9d9342a56ec005c2c2844a3c113195a7aad679a5975f75e90cd225057197d8f2",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/promoted-region-grid.opf.json",
+      "sha256": "c9004c66606b9f16d918c211159cd05c3f77850cbb69e24018e57d6d8d31c831",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/rich-text-runs.opf.json",
+      "sha256": "e84f81176cb91277be1292c44318c942e8ecc03e5157715c13955aae91429ca3",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/root-content.opf.json",
+      "sha256": "d902f14cfe0b6ca0d66ef21cb81268616053ddd9e31d5394a2e9ead9a7d6ae78",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/rows-chart.opf.json",
+      "sha256": "d4e492c90ac13e97d274eea9cf73b6005d6951c7a0753836adb3a280d7413e1b",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/slide-design-overrides.opf.json",
+      "sha256": "533130933698389cfec89435d3834c10a27c870dd07fced1b74b8ecfcba74c8b",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/slide-sections.opf.json",
+      "sha256": "7f46675a9f669c09895b152af2c5db619eaa8c68dc8afab365a182d06161ab6f",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/table-and-code.opf.json",
+      "sha256": "29a4df6caf6f93f8473c65aa51564ee865da8d5f200e08c8d98f43055bca542f",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/table-cell-types.opf.json",
+      "sha256": "6e3151022c69ca82f2fa589da3ed1a34eb95864602a601c4665d802d88384334",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    }
+  ]
+}

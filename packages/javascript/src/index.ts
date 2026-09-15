@@ -71,6 +71,8 @@ export type {
 } from "./previews.js";
 
 export type * from "./types.js";
+export {lintPresentation, lintSource} from './lint.js';
+export type {LintSeverity, LintLocation, LintSuggestion, LintDiagnostic, LintContract, LintOptions, LintReport} from './lint.js';
 export type {
   SpecFileEntry,
   SpecFilePath,

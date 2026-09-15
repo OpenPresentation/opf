@@ -1,0 +1,131 @@
+{
+  "name": "OpenPresentation Partner Demo",
+  "description": "A five-slide walkthrough of the published OpenPresentation workflow. Chart figures are illustrative sample data.",
+  "audience": "Business partner",
+  "purpose": "Demonstrate the working presentation workflow and discuss a focused customer pilot.",
+  "design": {
+    "theme": "minimal",
+    "fontScheme": "roboto",
+    "colorScheme": "deep-purple"
+  },
+  "slides": [
+    {
+      "id": "intro",
+      "layout": "title-subtitle",
+      "title": "OpenPresentation",
+      "subtitle": "A shared presentation format for people and AI tools",
+      "text": "Create a deck, refine it in the browser, and deliver an editable PowerPoint file.",
+      "notes": "Open with the live workflow. The deck is an ordinary OPF JSON document. Source: https://www.openpresentation.org/"
+    },
+    {
+      "id": "workflow",
+      "title": "People keep control of the presentation",
+      "items": [
+        "Edit the words directly on the slide.",
+        "Undo a change and restore it with redo.",
+        "Keep the source as a portable JSON file.",
+        "Export PowerPoint from the same document."
+      ],
+      "notes": "Use this slide for the live edit. Change the title to People stay in control, then undo and redo. Sources: https://www.pptx.gallery/editor and https://www.pptx.dev/author"
+    },
+    {
+      "id": "data",
+      "title": "Structured data stays editable",
+      "subtitle": "Illustrative sample data, not company results",
+      "composition": {
+        "mode": "row",
+        "weights": [
+          1,
+          1
+        ]
+      },
+      "blocks": [
+        {
+          "table": {
+            "columns": [
+              "Quarter",
+              "Sample sales"
+            ],
+            "rows": [
+              [
+                "Q1",
+                12
+              ],
+              [
+                "Q2",
+                18
+              ],
+              [
+                "Q3",
+                24
+              ]
+            ]
+          }
+        },
+        {
+          "chart": {
+            "type": "column",
+            "data": {
+              "columns": [
+                "Quarter",
+                "Sample sales"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  12
+                ],
+                [
+                  "Q2",
+                  18
+                ],
+                [
+                  "Q3",
+                  24
+                ]
+              ]
+            }
+          }
+        }
+      ],
+      "notes": "These numbers are fictional and only demonstrate editable tables and charts. This is not company performance or customer traction."
+    },
+    {
+      "id": "ecosystem",
+      "title": "Three public sites, one workflow",
+      "table": {
+        "columns": [
+          "Site",
+          "Role"
+        ],
+        "rows": [
+          [
+            "openpresentation.org",
+            "Open format, documentation and examples"
+          ],
+          [
+            "pptx.gallery",
+            "Shared design catalog and visual editor"
+          ],
+          [
+            "pptx.dev",
+            "Author and Inspector, with optional hosted services"
+          ]
+        ]
+      },
+      "notes": "The local authoring and export workflow needs no API key. Hosted AI and persistence are separate services. Sources: https://www.openpresentation.org/ https://www.pptx.gallery/ https://www.pptx.dev/"
+    },
+    {
+      "id": "pilot",
+      "title": "A focused customer pilot",
+      "subtitle": "Proposal for discussion",
+      "items": [
+        "Choose one recurring presentation, such as a customer update.",
+        "Agree on the source content and design choices.",
+        "Review the result with its real author and recipient.",
+        "Measure preparation time and the edits still needed."
+      ],
+      "notes": "This is a proposed next step, not a committed schedule or a claim of measured savings."
+    }
+  ]
+}

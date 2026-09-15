@@ -187,6 +187,25 @@ assert.ok(invalidResult.errors.length > 0, "invalid deck should return validatio
 `,
   );
   await run(process.execPath, ["smoke.mjs"], { cwd: projectDir });
+  if(!registry){
+    assertTarIncludes(files,'package/dist/lint.js');assertTarIncludes(files,'package/dist/lint.d.ts');
+    await writeFile(path.join(projectDir,'lint.mjs'),`
+import assert from 'node:assert/strict';
+import {lintSource as rootLint} from '@openpresentation/opf';
+import {lintSource,lintPresentation} from '@openpresentation/opf/lint';
+globalThis.fetch=()=>{throw new Error('Offline lint must not fetch');};
+assert.equal(rootLint,lintSource);
+const source='{\\r\\n"slides":[{"layout":"partner","title":"Keep  spaces"}]\\n}';
+const options={catalogs:{layouts:[{id:'partner',name:'Partner',placeholders:[{type:'title'}]}]}};
+assert.equal(lintSource(source,options).valid,true);
+assert.equal(lintSource(source).diagnostics.find(issue=>issue.ruleId==='opf/catalog-reference').location.offset,source.indexOf('"partner"'));
+assert.equal(lintSource('{"slides":[{"title":"First","title":"Second"}]}').valid,false);
+const policy=lintPresentation(JSON.parse(source),{...options,contracts:[{path:'/slides/*/layout',allowedValues:['text-1x']}]});
+assert.equal(policy.valid,false);assert.equal(policy.schemaValid,true);assert.ok(policy.diagnostics.some(issue=>issue.ruleId==='opf/contract'));
+console.log('Installed lint: public entrypoints, exact ranges, loaded records, duplicate keys and contracts pass offline.');
+`);
+    const lint=await run(process.execPath,['lint.mjs'],{cwd:projectDir});process.stdout.write(lint.stdout);
+  }
   for (const file of ['quote-layout.test.mjs','quote-composition.test.mjs','code-layout.test.mjs','code-composition.test.mjs']) {
     const source=(await readFile(path.join(packageRoot,'test',file),'utf8'))
       .replaceAll("'../dist/index.js'","'@openpresentation/opf'")

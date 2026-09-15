@@ -1,0 +1,64 @@
+Packed TypeScript 5.9/7 consumers passed: 14 exports, NodeNext/Bundler, published renderer/editor/PPTX.
+Installed lint: public entrypoints, exact ranges, loaded records, duplicate keys and contracts pass offline.
+✔ complete quote layout preserves source ranges, requested/resolved styles and legacy readable geometry (1.380584ms)
+✔ shorthand and empty metadata preserve schema paths without an invented footer (0.227042ms)
+✔ body and footer share available space before shrinking text or changing the outer arrangement (4.036209ms)
+✔ long footer, body/footer collision and strict rejection remain explicit without source truncation (41.476583ms)
+✔ tiny cells retain invalid available dimensions and never measure an invented fitting box (0.127166ms)
+✔ explicit readability floors are respected after scaling, including above nominal footer size (0.118542ms)
+✔ invalid content, geometry, scales and policies fail before reporting a usable layout (0.1305ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 87.981375
+✔ accepted quote geometry includes all parts without changing source or re-measuring for explanations (2.3285ms)
+✔ automatic candidates account for footer fit and choose the arrangement that keeps it readable (3.770666ms)
+✔ strict ancestors reject a quote body diagnostic below the leaf path (95.703083ms)
+✔ strict path matching respects component boundaries rather than numeric prefixes (78.77075ms)
+✔ pagination preserves quote body, repeated metadata, ranges and the accepted readability floor (621.937ms)
+✔ irreducible footer overflow rejects pagination without mutating or returning partial content (13.483166ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 877.6865
+✔ complete code parts preserve exact filename, language, body, whitespace and hard line boundaries (1.532291ms)
+✔ shorthand, empty source and absent metadata retain their source and generated-label distinction (0.208875ms)
+✔ long language labels and filenames are measured within their cell before allocating the body (2.733292ms)
+✔ wrapped whitespace and graphemes retain contiguous source offsets, including CRLF and blank final lines (0.457708ms)
+✔ tabs use measured space stops and never send control tabs to the font-width provider (0.335916ms)
+✔ readability floors scale once and body shrinking preserves all code content (0.187875ms)
+✔ irreducible body and metadata failures remain explicit; strict mode does not return partial output (2.978208ms)
+✔ invalid inner boxes never become invented one-pixel fits; malformed options reject (0.160417ms)
+✔ font trials stay bounded independently of canvas scale (4.2615ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 74.351
+✔ accepted code uses rounded cells and preserves body compatibility without repeated explanation measurements (2.693458ms)
+✔ candidate penalties include complete code metadata and charge overflowing leaves once (4.907834ms)
+✔ strict ancestors reject code metadata paths and cannot be weakened by descendants (88.059375ms)
+✔ explicit code placement and weights remain authoritative even when metadata overflows (5.211416ms)
+✔ pagination preserves exact code bytes, metadata, ranges and floors across wide and portrait slides (79.535ms)
+✔ irreducible code metadata rejects pagination even after earlier content or with an empty body (74.018333ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 314.39
+Packed install smoke passed for openpresentation-opf-0.9.0.tgz (2358721 bytes).
+Packed tarball entries checked: 522.
