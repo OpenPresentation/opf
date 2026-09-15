@@ -29,7 +29,12 @@ const quoteFooter=atLeast('@openpresentation/opf-render',[0,5,1]);
 const nativeContent=atLeast('@openpresentation/opf-pptx',[0,5,2]);
 const sharedQuotes=atLeast('@openpresentation/opf',[0,8,0]);
 const sharedCode=atLeast('@openpresentation/opf',[0,9,0]);
-for(const [repo,tests] of [['opf-render',['webp.mjs','jpeg-orientation.mjs','rich-table.mjs','golden.mjs',...(styled?['styled-table.mjs']:[]),...(quoteFooter?['quote-footer.mjs']:[]),...(sharedQuotes?['shared-quote.mjs']:[]),...(sharedCode?['shared-code.mjs']:[])]],['opf-pptx',['dependency-boundary.mjs',...(styled?['styled-table.mjs','styled-table-import.mjs']:[]),...(nativeContent?['content-layout.mjs']:[]),...(sharedQuotes?['shared-quote.mjs']:[]),...(sharedCode?['shared-code.mjs','code-provenance.mjs']:[])]]]){
+const acceptedLayout=atLeast('@openpresentation/opf',[0,10,0]);
+const suites=[
+ ['opf-render',['webp.mjs','jpeg-orientation.mjs','rich-table.mjs','golden.mjs',...(styled?['styled-table.mjs']:[]),...(quoteFooter?['quote-footer.mjs']:[]),...(sharedQuotes?['shared-quote.mjs']:[]),...(sharedCode?['shared-code.mjs']:[]),...(acceptedLayout?['accepted-text.mjs','shared-metric.mjs','timeline.mjs']:[])]],
+ ['opf-pptx',['dependency-boundary.mjs',...(styled?['styled-table.mjs','styled-table-import.mjs']:[]),...(nativeContent?['content-layout.mjs']:[]),...(sharedQuotes?['shared-quote.mjs']:[]),...(sharedCode?['shared-code.mjs','code-provenance.mjs']:[]),...(acceptedLayout?['plain-whitespace.mjs','accepted-text.mjs','content-cards.mjs','shared-timeline.mjs','font-variants.mjs']:[])]],
+];
+for(const [repo,tests] of suites){
  const ref=plan.verificationRefs[repo];assert.match(ref,/^[a-f0-9]{40}$/);
  const directory=path.join(consumer,'fidelity',repo);await mkdir(directory,{recursive:true});
  const archive=path.join(directory,'tests.tar');
