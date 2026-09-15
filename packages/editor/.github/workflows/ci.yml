@@ -18,7 +18,7 @@ jobs:
       run:
         working-directory: opf-editor
     env:
-      OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf-render/test/golden/opf-examples-png.timeline.sha256.json
+      OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf-render/test/golden/opf-examples-png.furniture.sha256.json
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -29,21 +29,21 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
-          ref: f94125a1ff95bf0974a055fe1c081d348dad54f2
+          ref: b9f5291faacb844f52339b676a910eaf22a5eddd
           path: opf
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
-          ref: 3ad2f8d1073f6fc733ca5371f6b98b4c8a05f6b8
+          ref: bda38af161c25c68f6d24257f341e394602e61a5
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-pptx
-          ref: 4356e3679988206b202d799cd94140686b3b6ea0
+          ref: 5be8fefcf799d403d7bfc888d12b8d693c0d49a6
           path: opf-pptx
           fetch-depth: 0
           persist-credentials: false
@@ -90,6 +90,7 @@ jobs:
           node scripts/test-plain-whitespace-workflow.mjs artifacts/plain-whitespace-workflow installed
           node scripts/test-readability-browser.mjs artifacts/readability-browser installed
           node scripts/test-timeline-workflow.mjs artifacts/timeline-workflow installed
+          node scripts/test-furniture-workflow.mjs artifacts/furniture-workflow installed
           node scripts/test-timeline-acceptance.mjs artifacts/timeline-acceptance.json
           node scripts/test-installed-code-guards.mjs
           node ../opf-editor/test/rich-input-browser.mjs artifacts/editor/rich-input-installed.json measured artifacts/npm/consumer
@@ -112,6 +113,7 @@ jobs:
             opf/artifacts/plain-whitespace-workflow/**
             opf/artifacts/readability-browser/**
             opf/artifacts/timeline-workflow/**
+            opf/artifacts/furniture-workflow/**
             opf/artifacts/timeline-acceptance.json
             opf/artifacts/editor/*report.json
             opf/artifacts/editor/*failure.png

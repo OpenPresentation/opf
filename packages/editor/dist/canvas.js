@@ -136,12 +136,13 @@ export function createCanvasEditor(container, options = {}) {
       if (
         seen.has(path) ||
         node.getAttribute('data-opf-generated') === 'true' ||
+        node.closest('[data-opf-furniture-generated="true"]') ||
         (node.hasAttribute('data-opf-code-container') && typeof value === 'string') ||
         (node.hasAttribute('data-opf-metric-container') && ['string','number'].includes(typeof value)) ||
         (!item && !node.matches("g") && !node.matches("image")) ||
         value === undefined ||
         path === `slides.${slideIndex}` ||
-        path.includes(".design.")
+        (path.includes(".design.")&&!node.closest('[data-opf-furniture-editable="true"]'))
       )
         continue;
       // Prefer the containing group over its duplicate text/shape trace attributes.
@@ -265,7 +266,8 @@ export function createCanvasEditor(container, options = {}) {
     const metricLayout=geometry.items.find(item=>item.metricLayout?.parts.some(part=>part.path===active.path))?.metricLayout;
     const metricPart=metricLayout?.parts.find(part=>part.path===active.path);
     const timelinePart=geometry.items.find(item=>item.timelineLayout?.parts.some(part=>part.path===active.path))?.timelineLayout?.parts.find(part=>part.path===active.path);
-    const internalPart=metricPart??timelinePart;
+    const furniturePart=geometry.furniture?.parts.find(part=>part.type==='text'&&part.path===active.path);
+    const internalPart=metricPart??timelinePart??furniturePart;
     const allText = target.querySelectorAll("text");
     const lineHeight = internalPart?.fit?.lineHeight ?? (
       allText.length > 1
@@ -294,7 +296,7 @@ export function createCanvasEditor(container, options = {}) {
       lineHeight: `${lineHeight * scale}px`,
       color: visibleText ? font.fill : "transparent",
       caretColor: font.fill,
-      textAlign: timelinePart?.alignment ?? metricLayout?.alignment ?? (anchor === "middle" ? "center" : anchor === "end" ? "right" : "left"),
+      textAlign: furniturePart?.alignment ?? timelinePart?.alignment ?? metricLayout?.alignment ?? (anchor === "middle" ? "center" : anchor === "end" ? "right" : "left"),
       width: `${width * scale}px`,
       height: `${Math.max(lineHeight, allText.length * lineHeight) * scale + 2}px`,
       minHeight: "0",
@@ -335,6 +337,7 @@ export function createCanvasEditor(container, options = {}) {
       const isCode=text.hasAttribute('data-opf-code-role');
       const isMetric=text.hasAttribute('data-opf-metric-role');
       const isTimeline=!!text.closest('[data-opf-timeline-role]');
+      const isFurniture=!!text.closest('[data-opf-furniture-editable="true"]');
       input.spellcheck = !isCode;
       input.style.cssText =
         "position:absolute;pointer-events:auto;resize:none;border:0;outline:1px solid #8975d9;outline-offset:4px;margin:0;padding:0;background:transparent;overflow:hidden;min-height:0;box-shadow:none;border-radius:0;white-space:pre-wrap;overflow-wrap:break-word;box-sizing:border-box;z-index:2";
@@ -352,7 +355,7 @@ export function createCanvasEditor(container, options = {}) {
       overlay.append(input);
       if(isCode){input.style.background='#111827';input.style.tabSize='4';input.style.overflow='auto';}
       if(isMetric){input.style.tabSize='4';input.style.overflow='auto';}
-      if(isTimeline)input.style.tabSize='4';
+      if(isTimeline||isFurniture)input.style.tabSize='4';
       // Only offer rich text where the canonical schema accepts TextRun[].
       if (typeof value === "string") {
         try {
