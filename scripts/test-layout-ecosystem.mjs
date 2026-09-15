@@ -4,7 +4,7 @@ import {mkdir,writeFile} from 'node:fs/promises';
 import {createEditorSession} from '../../opf-editor/src/index.js';
 import {prepareTrackResize,prepareBlockMove,prepareBlockInsert,prepareBlockDuplicate,prepareBlockRemove} from '../../opf-editor/src/layout.js';
 import {resolvePresentation,renderSvg} from '../../opf-render/src/svg.js';
-import {loadOfficeFontRegistry} from '../../opf-render/src/fonts-node.js';
+import {loadOfficeFontRegistry} from '../../opf-render/dist/fonts-node.js';
 import {toPptx} from '../../opf-pptx/src/index.js';
 const require=createRequire(new URL('../../opf-pptx/package.json',import.meta.url)),{unzipSync}=require('fflate'),{XMLParser}=require('fast-xml-parser');
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false}),list=v=>Array.isArray(v)?v:v?[v]:[];

@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
 import {mkdir,writeFile} from 'node:fs/promises';
 import {renderSvg} from '../../opf-render/src/svg.js';
-import {loadOfficeFontRegistry} from '../../opf-render/src/fonts-node.js';
+import {loadOfficeFontRegistry} from '../../opf-render/dist/fonts-node.js';
 import {toPptx} from '../../opf-pptx/src/index.js';
 const require=createRequire(new URL('../../opf-pptx/package.json',import.meta.url));const {unzipSync,strFromU8}=require('fflate');
 const document={name:'Rich text reference',design:{fontScheme:'roboto'},slides:[{title:'Formatting is part of the document',text:['A normal sentence with ',{text:'bold emphasis',bold:true},', ',{text:'italic text',italic:true},', ',{text:'blue underline',underline:true,color:'#2563EB'},' and ',{text:'retired wording',strikethrough:true},'.\nA larger ',{text:'28-point heading',fontSize:28},' changes wrapping.\nWater: H',{text:'2',subscript:true},'O. Square: x',{text:'2',superscript:true},'.\n',{text:'OpenPresentation',link:'https://www.openpresentation.org',underline:true},' remains editable.']} ]};

@@ -352,7 +352,8 @@ const richHarness=(await readHarness('opf','scripts/test-rich-text-browser.mjs')
  .replace('../../opf-editor/src/canvas.js','@openpresentation/opf-editor/canvas')
  .replace('../../opf-editor/src/index.js','@openpresentation/opf-editor')
  .replace('../../opf-editor/src/rich-text.js','@openpresentation/opf-editor/rich-text')
- .replace('../../opf-render/src/fonts-browser.js','@openpresentation/opf-render/fonts-browser');
+ .replace('../../opf-render/src/fonts-browser.js','@openpresentation/opf-render/fonts-browser')
+ .replace('../../opf-render/dist/fonts-browser.js','@openpresentation/opf-render/fonts-browser');
 await writeFile(path.join(consumer,'rich-tests.mjs'),richHarness);
 await build({entryPoints:[path.join(consumer,'rich-tests.mjs')],outfile:path.join(browserOut,'packed-rich-text-tests.js'),bundle:true,platform:'browser',format:'esm'});
 await writeFile(path.join(browserOut,'packed-rich-text-tests.html'),'<!doctype html><meta charset="utf-8"><title>Packed rich-text checks</title><h1>Packed rich-text checks</h1><div id="canvas" style="max-width:1100px"></div><pre id="results"></pre><script type="module" src="./packed-rich-text-tests.js"></script>');
@@ -380,7 +381,8 @@ await writeFile(path.join(browserOut,'packed-block-tests.html'),browserHtml('blo
 const listHarness=(await readHarness('opf','scripts/test-list-browser.mjs'))
  .replace('../../opf-editor/src/canvas.js','@openpresentation/opf-editor/canvas')
  .replace('../../opf-editor/src/index.js','@openpresentation/opf-editor')
- .replace('../../opf-render/src/fonts-browser.js','@openpresentation/opf-render/fonts-browser');
+ .replace('../../opf-render/src/fonts-browser.js','@openpresentation/opf-render/fonts-browser')
+ .replace('../../opf-render/dist/fonts-browser.js','@openpresentation/opf-render/fonts-browser');
 await writeFile(path.join(consumer,'list-tests.mjs'),listHarness);
 await build({entryPoints:[path.join(consumer,'list-tests.mjs')],outfile:path.join(browserOut,'packed-list-tests.js'),bundle:true,platform:'browser',format:'esm'});
 await writeFile(path.join(browserOut,'packed-list-tests.html'),browserHtml('list'));

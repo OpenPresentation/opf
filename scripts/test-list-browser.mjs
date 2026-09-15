@@ -1,6 +1,6 @@
 import {createCanvasEditor} from '../../opf-editor/src/canvas.js';
 import {createEditorSession} from '../../opf-editor/src/index.js';
-import {loadBrowserFontRegistry} from '../../opf-render/src/fonts-browser.js';
+import {loadBrowserFontRegistry} from '../../opf-render/dist/fonts-browser.js';
 const host=document.querySelector('#canvas'),out=document.querySelector('#results');let checks=0;
 const check=(condition,message)=>{if(!condition)throw new Error(message);out.textContent+=`PASS ${message}\n`;checks++;};
 const original={design:{fontScheme:'roboto'},slides:[{title:'Edit every list entry',composition:{mode:'row'},blocks:[{items:[

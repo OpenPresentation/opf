@@ -24,7 +24,7 @@ for(const kind of ['rich','styled']){
     alias: {
       ...coreAliases,
       '@openpresentation/opf-render/svg': path.join(renderer, 'src/svg.js'),
-      '@openpresentation/opf-render/fonts-browser': path.join(renderer, 'src/fonts-browser.js'),
+      '@openpresentation/opf-render/fonts-browser': path.join(renderer, 'dist/fonts-browser.js'),
       '@openpresentation/opf-render': path.join(renderer, 'src/svg.js'),
     },
   });
