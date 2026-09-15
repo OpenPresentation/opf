@@ -19,3 +19,11 @@ The Linux native variable-font report contains 356 observations per backend. Fon
 The latest Windows-owner handoff remains [comment 5673073461](https://github.com/OpenPresentation/opf/pull/71#issuecomment-5673073461); user-reviewed Office recovery is still required before further native automation. No Office or process action was taken.
 
 Run `node docs/evidence/rich-input-and-platform-ci-20260915/verify.mjs` from this checkout to verify every retained file hash, the three complete painting matrices, equal five-slide hashes, all Linux backend observations and the executed editor CI commands offline.
+
+## Compressed-text checker correction
+
+Core `751ffc6` CI run `34951011328` completed the model and CLI tests but failed the final text-integrity check because the checker decoded compressed `.json.gz`/`.log.gz` bytes as UTF-8. The failed log is retained as `core-751ffc6-ci-failed.log.gz`; the original reports are unchanged.
+
+The checker now decompresses declared gzip text reports with a 64 MiB output bound and checks their actual UTF-8 text using the unchanged rejected-pattern rules. Invalid gzip headers, truncated archives, oversized output and invalid UTF-8 fail. Existing PNG/PPTX/TTF recognition is unchanged. Four regressions cover equivalent plain/compressed findings and locations, the actual CI false-match specimen, input-byte preservation, malformed/oversized archives and existing binary recognition.
+
+Both `pnpm check:text` and full `pnpm test` pass on Node 24.21.0 after the fix; full logs are retained. The first sandboxed pnpm invocation could not reach the registry to verify the pinned package-manager release; it was not treated as a passing check or bypassed. The normal network-enabled invocation verified and ran the pinned pnpm version successfully. New CI on the checker-fix commit remains required.

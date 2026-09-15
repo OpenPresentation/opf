@@ -1,6 +1,7 @@
 import { readdir, readFile, stat } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { gunzipSync } from "node:zlib";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -65,36 +66,38 @@ function inspectLine(file, line, lineNumber) {
   return failures;
 }
 
+export function inspectTextBytes(file, bytes, { maxOutputLength = 64 * 1024 * 1024 } = {}) {
+  const pngSignature = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
+  if (bytes.subarray(0, 8).equals(pngSignature)) return { kind: "binaryImages" };
+  if (path.extname(file).toLowerCase() === ".pptx" && bytes.subarray(0, 4).equals(Buffer.from([80, 75, 3, 4]))) return { kind: "binaryDocuments" };
+  if (path.extname(file).toLowerCase() === ".ttf" && bytes.subarray(0, 4).equals(Buffer.from([0, 1, 0, 0]))) return { kind: "binaryFonts" };
+  // These are compressed text reports, not text encoded in gzip bytes. Keep
+  // their actual contents covered, and fail on malformed/oversized archives.
+  const compressed = /\.(?:json|log|txt|md|svg|xml)\.gz$/i.test(file);
+  if (compressed && !bytes.subarray(0, 3).equals(Buffer.from([31, 139, 8]))) {
+    throw new Error(`Expected a gzip text report: ${file}`);
+  }
+  const content = compressed
+    ? new TextDecoder("utf-8", { fatal: true }).decode(gunzipSync(bytes, { maxOutputLength }))
+    : bytes.toString("utf8");
+  return {
+    kind: "text", compressed,
+    failures: content.split(/\r?\n/u).flatMap((line, index) => inspectLine(file, line, index + 1)),
+  };
+}
+
 async function main() {
   const files = (await Promise.all(scanTargets.map(collectFiles))).flat().sort();
   const failures = [];
 
-  let binaryImages = 0, binaryDocuments = 0, binaryFonts = 0;
-  const pngSignature = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
+  const counts = { binaryImages: 0, binaryDocuments: 0, binaryFonts: 0, compressedText: 0 };
 
   for (const file of files) {
     const bytes = await readFile(file);
-    // Native rendering evidence is binary; interpreting PNG compression bytes
-    // as UTF-8 can create false mojibake matches. Keep all text files covered.
-    if (bytes.subarray(0, 8).equals(pngSignature)) {
-      binaryImages++;
-      continue;
-    }
-    // Only skip known binary evidence with the expected extension AND magic.
-    // Text reports, SVG/XML, JSON and logs remain subject to the same checks.
-    if (path.extname(file).toLowerCase() === '.pptx' && bytes.subarray(0,4).equals(Buffer.from([80,75,3,4]))) {
-      binaryDocuments++;
-      continue;
-    }
-    if (path.extname(file).toLowerCase() === '.ttf' && bytes.subarray(0,4).equals(Buffer.from([0,1,0,0]))) {
-      binaryFonts++;
-      continue;
-    }
-    const content = bytes.toString("utf8");
-    const lines = content.split(/\r?\n/u);
-    for (const [index, line] of lines.entries()) {
-      failures.push(...inspectLine(display(file), line, index + 1));
-    }
+    const result = inspectTextBytes(display(file), bytes);
+    if (result.kind !== "text") { counts[result.kind]++; continue; }
+    if (result.compressed) counts.compressedText++;
+    failures.push(...result.failures);
   }
 
   if (failures.length > 0) {
@@ -105,10 +108,12 @@ async function main() {
     process.exit(1);
   }
 
-  process.stdout.write(`${JSON.stringify({ valid: true, files: files.length - binaryImages - binaryDocuments - binaryFonts, binaryImages, binaryDocuments, binaryFonts }, null, 2)}\n`);
+  process.stdout.write(`${JSON.stringify({ valid: true, files: files.length - counts.binaryImages - counts.binaryDocuments - counts.binaryFonts, ...counts }, null, 2)}\n`);
 }
 
-main().catch((error) => {
-  process.stderr.write(`${error.stack ?? error}\n`);
-  process.exit(1);
-});
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  main().catch((error) => {
+    process.stderr.write(`${error.stack ?? error}\n`);
+    process.exit(1);
+  });
+}
