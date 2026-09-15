@@ -218,11 +218,31 @@ comparisons on Mac, while all within-platform pixels match. The normalization
 correction resolves a prerequisite; it does not close the metric/paint gate.
 Renderer evidence checkpoint `e293b55` retains full reports and failures.
 
-Next verify actual glyph/instance painting and the relationship between metrics
-and painting on each target, preserving shaping-dependent positions. Matching
-two browsers' views of the same source is insufficient proof of correct selected
-instance painting. A font-functions implementation also requires explicit
-ownership/lifetime verification; a final-width offset remains inappropriate.
+The subsequent CFF2 implementation `1b3da21926fa81b0614a4407b0e10142853d8a9f`
+applies HarfBuzz's integer HVAR advance policy before Fontkit glyph positioning.
+It leaves outline, interpolation, kerning and mark deltas fractional. All
+143,207 actual CFF2 glyph advances and 188 complete positioning runs agree with
+the independent reference; 112 runs retain fractional positioning. The source
+and fresh installed Mac matrices now pass all 356 default Fontkit cases, with
+maximum source advance drift 0.002414013px. All 712 pixel comparisons match.
+Only the five prepared HarfBuzz TrueType cases still fail on Mac. The full
+805-slide regression and 37-hash installed-package checks pass unchanged.
+
+[Evidence checkpoint 41311de](https://github.com/OpenPresentation/opf-render/tree/41311deeaf18fa738f7e5934620c7e84710fde9e/docs/evidence/cff2-advances-paint-20260914)
+also adds selected-outline versus actual-paint diagnostics for 564 glyph cases.
+On Mac, no default/minimum/maximum control is closer than the selected outline;
+the reviewed thin italic still shows stroke differences. An initial cropped
+probe is retained as invalid evidence. The final probe rejects cropped ink,
+records widths separately, and runs in pinned Chromium on all three platforms
+plus system Edge on Windows. New Windows/Linux paint results are pending.
+
+Continue with actual Windows glyph/instance painting and the TrueType
+metric/paint relationship, preserving shaping-dependent positions. Matching
+native pixels across source wrappers is not alone proof of correct instance
+painting. The new glyph diagnostic supports selection in sampled characters;
+it does not establish identical rasterization or full-slide/native fidelity.
+A font-functions implementation also requires explicit ownership/lifetime
+verification; a final-width offset remains inappropriate.
 
 Next: complete wider axis-mapping coverage and the CFF2/variable metric/paint gate, paragraph
 itemization/bidi, fallback, performance/lifetime analysis, complete slide/ink

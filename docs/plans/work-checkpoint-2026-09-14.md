@@ -54,8 +54,11 @@ coordinate normalization, axis endpoint defaults and exact tags; evidence
 commit `e293b55` preserves its independent reference, source and installed
 results. Both commits are pushed. All 188 FreeType instance coordinates,
 143,207 CFF2 glyph diagnostics and the unchanged 805-slide regression pass.
-Fresh packages verify 37 shipped hashes and TypeScript consumers. Ten Mac
-variable browser width checks still fail; new-head CI remains separate. See
+Fresh packages verify 37 shipped hashes and TypeScript consumers. The September
+15 follow-up `1b3da21` corrects CFF2 advances before positioning; `41311de` adds
+reviewed glyph-paint diagnostics and complete retained evidence. Both are
+pushed. All 356 default Fontkit Mac browser cases now pass; five optional
+HarfBuzz TrueType width comparisons still fail. New-head CI remains separate. See
 [font-shaping.md](font-shaping.md) for exact evidence and remaining font/native
 acceptance requirements.
 

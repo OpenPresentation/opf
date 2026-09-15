@@ -42,7 +42,10 @@ comparisons, but ten advance comparisons fail the unchanged 0.1px gate. Fresh in
 Linux/Mac browser advances differ. The subsequent fixed-point normalization
 correction matches 188 independent FreeType instances and resolves 458 CFF2
 glyph diagnostic disagreements. Fresh packages verify 37 shipped hashes and
-the unchanged corpus, but still fail the variable browser advance gate. See
+the unchanged corpus. CFF2 advances are then corrected before Fontkit positioning:
+all 356 default-backend Mac browser cases pass, while five prepared TrueType
+cases still fail. Selected-outline paint comparisons are now included in CI;
+Windows/Linux results and the broader metric/paint relationship remain open. See
 [the current shaping checkpoint](font-shaping.md); CFF/variable acceptance,
 a verified variable metric/paint contract, wider axis-mapping coverage, paragraph handling,
 shared editing/export and native acceptance are still required. The study above
