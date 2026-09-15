@@ -1,0 +1,7 @@
+{
+  "name": "opf-font-shaping-probe",
+  "private": true,
+  "type": "module",
+  "engines": { "node": "24.x" },
+  "dependencies": { "harfbuzzjs": "1.6.1" }
+}

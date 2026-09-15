@@ -1,0 +1,60 @@
+{
+  "version": "1",
+  "pip_version": "25.0.1",
+  "install": [
+    {
+      "download_info": {
+        "url": "https://files.pythonhosted.org/packages/3b/f8/e9b50519563943d597cd8721a2583a5295ad59f26e4cbd74d9c85f1e777b/uharfbuzz-0.56.1-cp310-abi3-macosx_10_9_universal2.whl",
+        "archive_info": {
+          "hash": "sha256=d2fcfafe2eac8497fa3c78462babbeddcfd50980b263859248a93fe8bb222507",
+          "hashes": {
+            "sha256": "d2fcfafe2eac8497fa3c78462babbeddcfd50980b263859248a93fe8bb222507"
+          }
+        }
+      },
+      "is_direct": false,
+      "is_yanked": false,
+      "requested": true,
+      "metadata": {
+        "metadata_version": "2.4",
+        "name": "uharfbuzz",
+        "version": "0.56.1",
+        "dynamic": [
+          "author",
+          "author-email",
+          "description",
+          "description-content-type",
+          "home-page",
+          "license",
+          "license-file",
+          "requires-python",
+          "summary"
+        ],
+        "summary": "Streamlined Cython bindings for the harfbuzz shaping engine",
+        "description": "## uharfbuzz\n\n<div align=\"center\">\n<p><img src=\"./logo.png\" alt=\"uharfbuzz Logo\" width=\"256\" align=\"center\"/></p>\n\n[![Build + Deploy](https://github.com/harfbuzz/uharfbuzz/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/harfbuzz/uharfbuzz/actions/workflows/ci.yml)\n[![PyPI](https://img.shields.io/pypi/v/uharfbuzz.svg)](https://pypi.org/project/uharfbuzz)\n[![Documentation Status](https://readthedocs.org/projects/uharfbuzz/badge/?version=stable)](https://uharfbuzz.readthedocs.io)\n\n</div>\n\nStreamlined Cython bindings for the [HarfBuzz][hb] shaping engine.\n\n\n### Example\n\n```python\nimport sys\n\nimport uharfbuzz as hb\n\n\nfontfile = sys.argv[1]\ntext = sys.argv[2]\n\nblob = hb.Blob.from_file_path(fontfile)\nface = hb.Face(blob)\nfont = hb.Font(face)\n\nbuf = hb.Buffer()\nbuf.add_str(text)\nbuf.guess_segment_properties()\n\nfeatures = {\"kern\": True, \"liga\": True}\nhb.shape(font, buf, features)\n\ninfos = buf.glyph_infos\npositions = buf.glyph_positions\n\nfor info, pos in zip(infos, positions):\n    gid = info.codepoint\n    glyph_name = font.glyph_to_string(gid)\n    cluster = info.cluster\n    x_advance = pos.x_advance\n    y_advance = pos.y_advance\n    x_offset = pos.x_offset\n    y_offset = pos.y_offset\n    print(\n        f\"{glyph_name=} {gid=} {cluster=} \"\n        f\"{x_advance=} {y_advance=} \"\n        f\"{x_offset=} {y_offset=}\"\n    )\n```\n\n### Installation\n\nWhen building the uharfbuzz package, it automatically incorporates minimal HarfBuzz sources so you don't have to install the native HarfBuzz library.\n\nHowever, if you want to use uharfbuzz with your system-provided HarfBuzz (e.g., if you built it from sources with custom configuration), you can set `USE_SYSTEM_LIBS=1` environment variable (see example below).\n\n```shell\nUSE_SYSTEM_LIBS=1 pip install uharfbuzz --no-binary :uharfbuzz:\n```\n\nharfbuzz installation is found using `pkg-config`, so you must have harfbuzz's `.pc` files in your system.\nIf you've built it from sources, meson installs them automatically. Otherwise, you may want to install harfbuzz development package, like `harfbuzz-devel` on Fedora-derived distros.\n\n### How to make a release\n\nUse `git tag -a` to make a new annotated tag, or `git tag -s` for a GPG-signed annotated tag, if you prefer.\n\nName the new tag with with a leading ‘v’ followed by three MAJOR.MINOR.PATCH digits, like in semantic versioning. Look at the existing tags for examples.\n\nIn the tag message write some short release notes describing the changes since the previous tag. The subject line will be the release name and the message body will be the release notes.\n\nFinally, push the tag to the remote repository (e.g. assuming upstream is called origin):\n\n    $ git push origin v0.4.3\n\nThis will trigger the CI to build the distribution packages and upload them to the Python Package Index automatically, if all the tests pass successfully. The CI will also automatically create a new Github Release and use the content of the annotated git tag for the release notes.\n\n\n[hb]: https://github.com/harfbuzz/harfbuzz\n",
+        "description_content_type": "text/markdown",
+        "home_page": "https://github.com/trufont/uharfbuzz",
+        "author": "Adrien Tétar",
+        "author_email": "adri-from-59@hotmail.fr",
+        "license": "Apache License 2.0",
+        "license_file": [
+          "LICENSE"
+        ],
+        "requires_python": ">=3.10"
+      }
+    }
+  ],
+  "environment": {
+    "implementation_name": "cpython",
+    "implementation_version": "3.12.14",
+    "os_name": "posix",
+    "platform_machine": "arm64",
+    "platform_release": "25.6.0",
+    "platform_system": "Darwin",
+    "platform_version": "Darwin Kernel Version 25.6.0: Fri Jul 31 19:11:03 PDT 2026; root:xnu-12377.161.14~5/RELEASE_ARM64_T8132",
+    "python_full_version": "3.12.14",
+    "platform_python_implementation": "CPython",
+    "python_version": "3.12",
+    "sys_platform": "darwin"
+  }
+}
