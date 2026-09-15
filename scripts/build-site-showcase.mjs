@@ -2,7 +2,7 @@ import {mkdir,writeFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 const registry = process.argv.includes('--registry') ? await (await import('./registry-toolchain.mjs')).registryToolchain() : null;
 const {renderSvg} = registry ? await registry.import('@openpresentation/opf-render/svg') : await import('../../opf-render/src/svg.js');
-const {loadOfficeFontRegistry} = registry ? await registry.import('@openpresentation/opf-render/fonts-node') : await import('../../opf-render/dist/fonts-node.js');
+const {loadOfficeFontRegistry} = registry ? await registry.import('@openpresentation/opf-render/fonts-node') : await import('../../opf-render/src/fonts-node.js');
 const {toPptx} = registry ? await registry.import('@openpresentation/opf-pptx') : await import('../../opf-pptx/src/index.js');
 const {validatePresentation} = registry ? await registry.import('@openpresentation/opf') : await import('../packages/javascript/dist/index.js');
 const document={name:'Open tools. Editable presentations.',design:{theme:'classic',fontScheme:'roboto',dimensions:'widescreen'},slides:[{id:'open-foundation',title:'One format. Open tools.',composition:{mode:'row',weights:[2,1]},blocks:[{text:['Write plain JSON. ',{text:'Keep every word editable.',bold:true},'\nValidate, preview, and export with the same free libraries.']},{items:['Portable agent skills','Local CLI and editor','Editable PPTX export']}]}]};

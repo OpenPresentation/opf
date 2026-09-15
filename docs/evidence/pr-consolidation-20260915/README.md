@@ -1,5 +1,10 @@
 # Shared header/footer PR consolidation — September 15, 2026
 
+Historical review checkpoints: later instructions moved the four remaining
+prototypes into archived roadmap work. See [the final handoff](../../handoff-2026-09-15.md)
+for the completed PR disposition and current release boundary. Draft counts
+and candidate test results below describe the preserved pre-deferral state.
+
 The four furniture PRs were integrated with the current published package
 branches rather than restoring their older release manifests or test setup.
 The new release fixes, registry acceptance checks and reviewed furniture

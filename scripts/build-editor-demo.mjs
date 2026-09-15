@@ -28,11 +28,11 @@ await build({
     "@openpresentation/opf/data": path.join(root, "packages/javascript/dist/data.js"),
     "@openpresentation/opf-render/fonts-browser": path.resolve(
       root,
-      "../opf-render/dist/fonts-browser.js",
+      "../opf-render/src/fonts-browser.js",
     ),
     "@openpresentation/opf-render/fonts": path.resolve(
       root,
-      "../opf-render/dist/fonts.js",
+      "../opf-render/src/fonts.js",
     ),
     "@openpresentation/opf-render/svg": path.resolve(
       root,
@@ -55,7 +55,7 @@ await build({
     "@openpresentation/opf/data": path.join(root, "packages/javascript/dist/data.js"),
     "@openpresentation/opf-render/fonts-browser": path.resolve(
       root,
-      "../opf-render/dist/fonts-browser.js",
+      "../opf-render/src/fonts-browser.js",
     ),
     "@openpresentation/opf-render/svg": path.resolve(
       root,

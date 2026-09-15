@@ -382,30 +382,6 @@ pending; this does not promote the backend or close native/font gates. See the
 
 ## Implementation and promotion requirements
 
-[Whole-source grapheme editing](../evidence/cross-run-graphemes-20260915/README.md)
-now excludes illegal caret stops at formatting boundaries, with twenty prepared
-and thirty-nine rich-input workflows passing from fresh packages. A retained
-installed probe also shows a remaining shaping-context defect: splitting
-identically formatted Arimo `AV` changes width by 2.375px, and Gelasio `office`
-by 0.765625px. Preserve shaping across compatible run boundaries while retaining
-source/run mappings; these cases must be fixed before claiming complete rich
-shaping or promoting the backend.
-
-[Visible-line navigation](../evidence/visual-line-navigation-20260915/README.md)
-now passes from fresh packages: 19 prepared and 36 rich-input workflows cover
-vertical/line-edge keys, Shift selection and pointer affinity without rewriting
-source or changing slide ink. The same checkpoint records a concrete native
-table-tab conflict (64px versus 48px stops across one soft-wrapped paragraph),
-which remains unresolved. Current Linux native variable-font failures are
-retained separately from editor acceptance.
-
-The subsequent [rich-tab/direction checkpoint](../evidence/rich-tabs-and-direction-20260915/README.md)
-fixes pure RTL arrow navigation and keeps tab controls out of physical font
-shaping. Fifteen prepared-editing and thirty rich-input installed workflows
-pass, along with the unchanged 805-slide corpus and shared body/list tab export.
-Current CI, rich table-cell tabs and the wider font/native requirements below
-remain separate; this checkpoint does not change the default backend.
-
 1. Add a reusable shaping service behind the existing font registry. Preserve
    physical-face resolution, theme/alias/substitution policy, explicit errors,
    licenses, glyph coverage and bounded caches. Initialize the pinned WASM

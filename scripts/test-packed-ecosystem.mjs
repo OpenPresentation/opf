@@ -55,7 +55,6 @@ await writeFile(
       name: "opf-packed-consumer",
       private: true,
       type: "module",
-      ...(!registry?{devDependencies:{playwright:'1.63.0'}}:{}),
       dependencies: Object.fromEntries(
         manifest.artifacts.map((item) => [item.name, registry ? item.version : `file:../${item.file}`]),
       ),
@@ -117,9 +116,9 @@ assert.equal(registry.embeddedFonts.length,33);
 console.log('Installed font preparation passed layout, edit/undo, SVG/PNG, editable PPTX export and heading reimport.');
 `);
   run(process.execPath,['check-font-preparation.mjs']);
-  // Furniture and joint rich-source shaping are unpublished coordinated APIs.
-  // Their guards apply to candidate tarballs; the pinned registry release
-  // predates them. Add released-version gates when publishing these features.
+  // Furniture is an unpublished coordinated API. Its mutation guards apply to
+  // candidate tarballs; the pinned registry release predates this harness/API.
+  // Add its released-version gate alongside the others when publishing it.
   if (!registry) {
     const furnitureHarness = (await readHarness('opf-pptx', 'test/furniture-provenance.mjs'))
       .replaceAll("'../dist/index.js'", "'@openpresentation/opf-pptx'")
@@ -129,21 +128,6 @@ console.log('Installed font preparation passed layout, edit/undo, SVG/PNG, edita
       await readFile(path.resolve(root, '../opf-pptx/test/fixtures/images', name)));
     await writeFile(path.join(consumer, 'furniture-provenance.mjs'), furnitureHarness);
     run(process.execPath, ['furniture-provenance.mjs']);
-    const richTabsHarness=(await readHarness('opf-pptx','test/rich-tabs.mjs')).replaceAll("'../dist/index.js'","'@openpresentation/opf-pptx'");
-    await writeFile(path.join(consumer,'rich-tabs.mjs'),richTabsHarness);
-    run(process.execPath,['rich-tabs.mjs']);
-    const richSourceHarness=(await readHarness('opf-pptx','test/rich-source-groups.mjs')).replaceAll("'../dist/index.js'","'@openpresentation/opf-pptx'");
-    await writeFile(path.join(consumer,'rich-source-groups.mjs'),richSourceHarness);
-    run(process.execPath,['rich-source-groups.mjs']);
-    await mkdir(path.join(consumer,'test'),{recursive:true});
-    for(const name of ['font-source-groups.mjs','font-source-groups-browser.mjs']){
-      const source=(await readHarness('opf-render','test/'+name))
-        .replaceAll("'../dist/fonts-node.js'","'@openpresentation/opf-render/fonts-node'")
-        .replaceAll("'../dist/font-shaping.js'","'@openpresentation/opf-render/font-shaping'")
-        .replaceAll("'../dist/svg.js'","'@openpresentation/opf-render/svg'");
-      await writeFile(path.join(consumer,'test',name),source);
-    }
-    run(process.execPath,['test/font-source-groups.mjs']);
   }
   for (const repo of ['opf-render','opf-pptx']) {
     const source=(await readHarness(repo,'test/font-variants.mjs'))
@@ -372,8 +356,7 @@ const richHarness=(await readHarness('opf','scripts/test-rich-text-browser.mjs')
  .replace('../../opf-editor/src/canvas.js','@openpresentation/opf-editor/canvas')
  .replace('../../opf-editor/src/index.js','@openpresentation/opf-editor')
  .replace('../../opf-editor/src/rich-text.js','@openpresentation/opf-editor/rich-text')
- .replace('../../opf-render/src/fonts-browser.js','@openpresentation/opf-render/fonts-browser')
- .replace('../../opf-render/dist/fonts-browser.js','@openpresentation/opf-render/fonts-browser');
+ .replace('../../opf-render/src/fonts-browser.js','@openpresentation/opf-render/fonts-browser');
 await writeFile(path.join(consumer,'rich-tests.mjs'),richHarness);
 await build({entryPoints:[path.join(consumer,'rich-tests.mjs')],outfile:path.join(browserOut,'packed-rich-text-tests.js'),bundle:true,platform:'browser',format:'esm'});
 await writeFile(path.join(browserOut,'packed-rich-text-tests.html'),'<!doctype html><meta charset="utf-8"><title>Packed rich-text checks</title><h1>Packed rich-text checks</h1><div id="canvas" style="max-width:1100px"></div><pre id="results"></pre><script type="module" src="./packed-rich-text-tests.js"></script>');
@@ -401,8 +384,7 @@ await writeFile(path.join(browserOut,'packed-block-tests.html'),browserHtml('blo
 const listHarness=(await readHarness('opf','scripts/test-list-browser.mjs'))
  .replace('../../opf-editor/src/canvas.js','@openpresentation/opf-editor/canvas')
  .replace('../../opf-editor/src/index.js','@openpresentation/opf-editor')
- .replace('../../opf-render/src/fonts-browser.js','@openpresentation/opf-render/fonts-browser')
- .replace('../../opf-render/dist/fonts-browser.js','@openpresentation/opf-render/fonts-browser');
+ .replace('../../opf-render/src/fonts-browser.js','@openpresentation/opf-render/fonts-browser');
 await writeFile(path.join(consumer,'list-tests.mjs'),listHarness);
 await build({entryPoints:[path.join(consumer,'list-tests.mjs')],outfile:path.join(browserOut,'packed-list-tests.js'),bundle:true,platform:'browser',format:'esm'});
 await writeFile(path.join(browserOut,'packed-list-tests.html'),browserHtml('list'));

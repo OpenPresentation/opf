@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
 import {mkdir,writeFile} from 'node:fs/promises';
 import {renderSvg,resolvePresentation} from '../../opf-render/src/svg.js';
-import {loadOfficeFontRegistry} from '../../opf-render/dist/fonts-node.js';
+import {loadOfficeFontRegistry} from '../../opf-render/src/fonts-node.js';
 import {toPptx} from '../../opf-pptx/src/index.js';
 const require=createRequire(new URL('../../opf-pptx/package.json',import.meta.url));
 const {unzipSync}=require('fflate'),{XMLParser}=require('fast-xml-parser');
