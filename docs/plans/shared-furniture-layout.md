@@ -73,3 +73,21 @@ each pass sixteen installed workflows and forty field masks; negative controls
 fail as intended. Accepted geometry, semantic imports and PPTX bytes agree across
 platforms. Native Office recovery and font/tab/image/provenance acceptance remain
 required before release/public adoption. The overall ecosystem goal remains open.
+
+Independent package audit: PPTX `1363a653c8b0e80c50d970bc30db3587bcf6f14e`
+removes generated content-type declarations for nonexistent slide masters. The
+new smoke regression fails before the fix; all 126 decks/805 slides and a fresh
+installed consumer pass afterward. Its `docs/evidence/mac-openxml-audit-20260914`
+retains 21 source/installed fixture pairs, before/after part comparisons and an
+independent Open XML SDK 3.5.1 probe. Only the two-slide control's content-type
+manifest changes; current content, notes, geometry, media and provenance stay
+byte-identical. The core coordinated CI now includes this correction.
+
+The audit also exposes an unresolved schema discrepancy: all original exports
+place `notesMasterIdLst` after `sldIdLst`, which the SDK rejects. Test-only reordered
+copies pass all three SDK targets, but upstream explicitly warns about native
+PowerPoint behavior with that change. The exporter retains its notes-master
+ordering pending native comparison; no notes or relationships are discarded.
+Do not infer native image recovery or full OOXML conformance from SDK success.
+Fresh CI for the package correction and the existing user-reviewed Office
+recovery/native/font gates remain required. No Office automation was attempted.
