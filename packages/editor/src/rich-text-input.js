@@ -1,4 +1,5 @@
 import {richTextContent, updateRichTextInput} from './rich-text.js';
+import {textInputMap} from './text-input.js';
 
 /** Native input owns keyboard/IME; caret and selection use the canonical SVG glyphs. */
 export function createRichTextInput(root, overlay, {path, value, getTarget, onInput, onCommit, onCancel, onFormat, onError}) {
@@ -9,7 +10,7 @@ export function createRichTextInput(root, overlay, {path, value, getTarget, onIn
   input.style.cssText='position:absolute;width:1px;padding:0;border:0;opacity:0;pointer-events:none;resize:none;overflow:hidden;z-index:3';
   marks.className='opf-rich-selection';marks.setAttribute('aria-hidden','true');marks.style.cssText='position:absolute;inset:0;pointer-events:none';
   actions.style.cssText='position:absolute;bottom:8px;left:8px;display:flex;gap:6px;pointer-events:auto;z-index:4';
-  for(const [label,action] of [['Format selection',()=>onFormat(input.selectionStart,input.selectionEnd)],['Done',onCommit]]) {
+  for(const [label,action] of [['Format selection',()=>{const map=currentMap();onFormat(map.toSource(input.selectionStart),map.toSource(input.selectionEnd));}],['Done',onCommit]]) {
     const button=doc.createElement('button');button.type='button';button.textContent=label;
     button.style.cssText='padding:6px 10px;background:#fff;color:#574774;border:1px solid #d5cce5;border-radius:5px';
     button.onmousedown=event=>event.preventDefault();button.onclick=action;actions.append(button);
@@ -17,6 +18,7 @@ export function createRichTextInput(root, overlay, {path, value, getTarget, onIn
   overlay.append(marks,input,actions);
   let current=structuredClone(value), composing=false, change=null, anchor=null, disposed=false, emptyAnchor=null;
   let history=[{value:structuredClone(current),start:0,end:input.value.length}], historyIndex=0, compositionBase=null;
+  const currentMap=()=>textInputMap(richTextContent(current));
   function remember() {
     history.splice(historyIndex+1);history.push({value:structuredClone(current),start:input.selectionStart,end:input.selectionEnd});historyIndex++;
   }
@@ -45,7 +47,7 @@ export function createRichTextInput(root, overlay, {path, value, getTarget, onIn
   }
   function update() {
     if(disposed)return;marks.replaceChildren();
-    const origin=root.getBoundingClientRect(),start=input.selectionStart,end=input.selectionEnd;
+    const map=currentMap(),origin=root.getBoundingClientRect(),start=map.toSource(input.selectionStart),end=map.toSource(input.selectionEnd);
     const append=(box,caret=false)=>{
       const mark=doc.createElement('div');mark.className=caret?'opf-rich-caret':'opf-rich-range';
       mark.style.cssText=`position:absolute;left:${box.left-origin.left}px;top:${box.top-origin.top}px;width:${caret?1.5:box.width}px;height:${Math.max(12,box.height)}px;background:${caret?(box.color??'#6551ba'):'#8975d955'}`;
@@ -78,13 +80,13 @@ export function createRichTextInput(root, overlay, {path, value, getTarget, onIn
   function pointerDown(event) {
     if(event.button!==0||!getTarget(path)?.contains(event.target))return;
     event.preventDefault();event.stopPropagation();
-    anchor=event.shiftKey?input.selectionStart:nearest(event);input.focus({preventScroll:true});
-    const end=nearest(event);input.setSelectionRange(Math.min(anchor,end),Math.max(anchor,end),end<anchor?'backward':'forward');
+    const map=currentMap();anchor=event.shiftKey?map.toSource(input.selectionStart):nearest(event);input.focus({preventScroll:true});
+    const end=nearest(event);input.setSelectionRange(map.toInput(Math.min(anchor,end)),map.toInput(Math.max(anchor,end)),end<anchor?'backward':'forward');
     root.setPointerCapture(event.pointerId);update();
   }
   function pointerMove(event) {
-    if(anchor===null)return;event.preventDefault();const end=nearest(event);
-    input.setSelectionRange(Math.min(anchor,end),Math.max(anchor,end),end<anchor?'backward':'forward');update();
+    if(anchor===null)return;event.preventDefault();const end=nearest(event),map=currentMap();
+    input.setSelectionRange(map.toInput(Math.min(anchor,end)),map.toInput(Math.max(anchor,end)),end<anchor?'backward':'forward');update();
   }
   function pointerUp(event) {if(anchor!==null){anchor=null;if(root.hasPointerCapture(event.pointerId))root.releasePointerCapture(event.pointerId);}}
   function undo(direction) {

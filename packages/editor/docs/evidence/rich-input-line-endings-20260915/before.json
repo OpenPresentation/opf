@@ -1,0 +1,32 @@
+{
+  "original": [
+    {
+      "text": "First\r\n",
+      "bold": true,
+      "link": "https://example.org"
+    },
+    {
+      "text": "Second\rThird",
+      "italic": true
+    }
+  ],
+  "input": "First\nSecond\nThird!",
+  "actual": [
+    {
+      "text": "First\nSecond\nThird!",
+      "bold": true,
+      "link": "https://example.org"
+    }
+  ],
+  "expected": [
+    {
+      "text": "First\r\n",
+      "bold": true,
+      "link": "https://example.org"
+    },
+    {
+      "text": "Second\rThird!",
+      "italic": true
+    }
+  ]
+}

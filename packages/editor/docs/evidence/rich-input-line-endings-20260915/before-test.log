@@ -1,0 +1,48 @@
+Rich range editing passed: cross-run preservation, replacement, style removal, script exclusivity, grapheme safety, validation and atomic undo.
+Native rich input passed: style/link preservation, repeated-character affinity, graphemes and bounded run growth.
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: appending after mixed line endings preserves source and later styles
++ actual - expected
+
+  [
+    {
+      bold: true,
+      link: 'https://example.org',
++     text: 'First\nSecond\nThird!'
+-     text: 'First\r\n'
+    },
+-   {
+-     extension: {
+-       keep: 'second'
+-     },
+-     italic: true,
+-     text: 'Second\rThird!'
+-   }
+  ]
+
+    at file:///Users/michael/Source/opf-editor/test/rich-text.mjs:42:8 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: [
+    {
+      text: 'First\nSecond\nThird!',
+      bold: true,
+      link: 'https://example.org'
+    }
+  ],
+  expected: [
+    { text: 'First\r\n', bold: true, link: 'https://example.org' },
+    {
+      text: 'Second\rThird!',
+      italic: true,
+      extension: { keep: 'second' }
+    }
+  ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

@@ -52,11 +52,16 @@ try{
  const codeBrowser=JSON.parse(await readFile(codeReport,'utf8'));
  assert.equal(codeBrowser.results.length,2);assert.equal(codeBrowser.blankTargets.length,2);
  assert.deepEqual(codeBrowser.errors,[]);assert.deepEqual(codeBrowser.externalRequests,[]);
+ const richReport=path.join(temporary,'rich-input-browser.json');
+ process.stdout.write(execFileSync(process.execPath,[path.join(fixture,'test/rich-input-browser.mjs'),richReport,'measured',consumer],{cwd:consumer,encoding:'utf8',maxBuffer:8*1024*1024}));
+ const richBrowser=JSON.parse(await readFile(richReport,'utf8'));
+ assert.equal(richBrowser.status,'passed');assert.equal(richBrowser.runtime,'installed');assert.equal(richBrowser.checks.length,10);
+ assert.deepEqual(richBrowser.errors,[]);assert.deepEqual(richBrowser.externalRequests,[]);
  for(const [file,digest] of Object.entries(files))assert.equal(hash(await readFile(path.join(installed,file))),digest,'Browser verification must not rebuild the installed editor');
  const audit=JSON.parse(npm(['audit','--json'],consumer));assert.equal(audit.metadata.vulnerabilities.total,0);
  const signatures=npm(['audit','signatures'],consumer);process.stdout.write(signatures);
  await mkdir(path.join(root,'artifacts'),{recursive:true});
- await writeFile(path.join(root,`artifacts/packed-consumer-node${process.versions.node.split('.')[0]}.json`),JSON.stringify({node:process.version,name:manifest.name,version:manifest.version,integrity:packed.integrity,files,dependencies,tests,browser:browser.trim(),codeBrowser,signatureVerification:signatures.trim(),knownVulnerabilities:0,boundary:'Actual installed editor candidate with byte-matched distributables and registry predecessors; nine model/component suites and offline browser author/edit/paginate/export/reimport/undo, including code source/metadata preservation and blank multiline targets. Native PowerPoint and complete-set deployed-site evidence are separate gates.'},null,2)+'\n');
+ await writeFile(path.join(root,`artifacts/packed-consumer-node${process.versions.node.split('.')[0]}.json`),JSON.stringify({node:process.version,name:manifest.name,version:manifest.version,integrity:packed.integrity,files,dependencies,tests,browser:browser.trim(),codeBrowser,richBrowser,signatureVerification:signatures.trim(),knownVulnerabilities:0,boundary:'Actual installed editor candidate with byte-matched distributables and registry predecessors; nine model/component suites and offline browser author/edit/paginate/export/reimport/undo, including code source/metadata preservation, blank multiline targets and rich-input source/selection/formatting/undo. Native PowerPoint and complete-set deployed-site evidence are separate gates.'},null,2)+'\n');
  console.log(`Packed editor passed: ${Object.keys(files).length} byte-matched files, ${tests.length} model suites, offline browser workflow; ${packed.integrity}`);
 }finally{
  const actual=await realpath(temporary);assert.equal(actual,actualTemporary);

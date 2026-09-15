@@ -36,3 +36,21 @@ let repeated=[{text:'A',bold:true}];for(let i=0;i<100;i++)repeated=updateRichTex
 assert.equal(repeated.length,1,'continuous typing compacts equal adjacent styles');
 assert.equal(typed[0].text,'Hello ','native typing must not mutate the source');
 console.log('Native rich input passed: style/link preservation, repeated-character affinity, graphemes and bounded run growth.');
+
+const mixedEndings=[{text:'First\r\n',bold:true,link:'https://example.org'},{text:'Second\rThird',italic:true,extension:{keep:'second'}}];
+const mixedCopy=structuredClone(mixedEndings);
+assert.deepEqual(updateRichTextInput(mixedEndings,'First\nSecond\nThird!',{start:18,end:18,inputType:'insertText'}),[mixedEndings[0],{...mixedEndings[1],text:'Second\rThird!'}],'appending after mixed line endings preserves source and later styles');
+assert.deepEqual(updateRichTextInput(mixedEndings,'First\nSecond\nThird'),mixedEndings,'native newline normalization alone is not a source edit');
+let edited=updateRichTextInput(mixedEndings,'First!\nSecond\nThird',{start:5,end:5,inputType:'insertText'});
+edited=updateRichTextInput(edited,'First!\nSecond\nThird?',{start:19,end:19,inputType:'insertText'});
+assert.deepEqual(edited,[{...mixedEndings[0],text:'First!\r\n'},{...mixedEndings[1],text:'Second\rThird?'}],'separate edits do not rewrite untouched line endings between them');
+assert.deepEqual(updateRichTextInput(mixedEndings,'FirstSecond\nThird',{start:5,end:6,inputType:'deleteContentForward'}),[{...mixedEndings[0],text:'First'},mixedEndings[1]],'deleting one native newline removes the complete source CRLF');
+assert.deepEqual(updateRichTextInput(mixedEndings,'First\nSecond\nNew\nThird',{start:13,end:13,inputType:'insertLineBreak'}),[mixedEndings[0],{...mixedEndings[1],text:'Second\rNew\r\nThird'}],'new line endings follow the established scalar input convention');
+const splitEnding=[{text:'A\r',bold:true},{text:'\nB',italic:true}];
+assert.deepEqual(updateRichTextInput(splitEnding,'A\nB!',{start:3,end:3,inputType:'insertText'}),[splitEnding[0],{...splitEnding[1],text:'\nB!'}],'a CRLF split across styled runs stays intact');
+const repeatedAfterLine=[{text:'X\r\na',bold:true},{text:'a',italic:true}];
+assert.deepEqual(updateRichTextInput(repeatedAfterLine,'X\naaa',{start:2,end:2,inputType:'insertText'}),[{text:'X\r\naa',bold:true},repeatedAfterLine[1]],'native affinity after a CRLF stays with the selected run');
+const markedAfterLine=[{text:'A\r\n',bold:true},{text:'e\u0301😀',italic:true}];
+assert.deepEqual(updateRichTextInput(markedAfterLine,'A\né😀',{start:2,end:4,inputType:'insertCompositionText'}),[markedAfterLine[0],{text:'é😀',italic:true}],'source mapping preserves whole graphemes after a CRLF');
+assert.deepEqual(mixedEndings,mixedCopy);
+console.log('Native rich input preserves mixed source line endings, cross-run CRLF, selection affinity, marks and metadata.');
