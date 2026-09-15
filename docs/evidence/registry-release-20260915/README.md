@@ -1,0 +1,15 @@
+# Published package-set acceptance — September 15, 2026
+
+This continues the [earlier shipping checkpoint](../shipping-checkpoint-20260915/README.md). It records registry releases separately from candidate/source, deployed-site and native Office acceptance.
+
+- [x] Core 0.10.0 and CLI 0.8.0 are published, with fresh registry lint/API/CLI verification recorded in the earlier checkpoint.
+- [x] Renderer 0.8.0 is merged through [PR23](https://github.com/OpenPresentation/opf-render/pull/23) at `3ad2f8d1073f6fc733ca5371f6b98b4c8a05f6b8`. [Publication succeeded](https://github.com/OpenPresentation/opf-render/actions/runs/35003035018), and [npm metadata](renderer-registry.json) verifies the version, source commit, tarball integrity and provenance. Its 17-file tarball integrity equals the locally tested candidate.
+- [x] The renderer's macOS JPEG reference failure was investigated and fixed without changing production rendering or tolerances. All eight native decodes match independent Pillow references exactly; 16 enlarged cases pass and reject 32 wrong-orientation/fit controls. Old failure and sampling measurements remain in [renderer release evidence](https://github.com/OpenPresentation/opf-render/tree/3ad2f8d1073f6fc733ca5371f6b98b4c8a05f6b8/docs/evidence/release-0.8.0). Linux CI and automated review passed.
+- [x] PPTX 0.8.0 passes clean local registry installation, package/packed/font/browser checks against core 0.10.0 and renderer 0.8.0. Its 26 shipped files are byte-matched. [PR36](https://github.com/OpenPresentation/opf-pptx/pull/36) records this evidence and requires Linux/Windows CI before publication.
+- [ ] Publish and verify PPTX 0.8.0.
+- [ ] Publish and verify editor 0.7.0, including its reusable JSON control and contextual choices.
+- [ ] Verify all five exact registry versions together, including font preparation, estimated text, JSON/preview editing, undo/redo and export/reimport.
+- [ ] Update `release-plan.json` and immutable verification references to the accepted complete set.
+- [ ] Deploy and verify openpresentation.org, pptx.gallery and pptx.dev against the new published set.
+
+The last verified complete set stays in `release-plan.json` until the new set is accepted. Current font documentation now identifies published renderer 0.8.0's preparation APIs; it does not claim that prepared HarfBuzz shaping, variable-instance matching, shared furniture or native Office gates are complete. Office recovery remains the Windows owner's prerequisite; no COM retries or process actions occurred here.
