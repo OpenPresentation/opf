@@ -167,14 +167,43 @@ five metric failures (maximum 0.134625px), while native HarfBuzz passes there;
 the earlier Mac report has the opposite backend outcome. Prepared painting
 does not replace the native metric requirement.
 
+## September 15 JSON, lint and furniture integration
+
+The JSON control is merged through editor PR19, with publication verification
+in PR20. Agent-facing read-only lint and explicit design contracts are merged
+through core PR81. The homepage and playground JSON/preview interactions are
+deployed through website PR29/30/32/33/34. Core PR80 retains the partner-demo
+walkthrough and offline fallback. These updates supersede the earlier pending
+JSON-extraction and lint wording.
+
+Core furniture merge `4694815` incorporates main through `2d29cf0`; editor
+furniture merge `8d6e313` incorporates main through `4557f55`. Core `86c856b`,
+renderer `02fc71e` and PPTX `1486dc7` pin that runtime graph and require the
+installed JSON browser suite alongside furniture workflows. They retain the
+reviewed renderer and corrected converter runtime, without changing source
+examples, geometry, visual baselines, release versions or font policy.
+
+[Integration evidence](../evidence/furniture-json-integration-20260915/README.md)
+retains 523 passing core tests, 81 CLI commands, the full coordinated package
+suite, all 805 reviewed raster entries, eight installed browser suites, seven
+installed JSON workflows and sixteen installed furniture workflows with forty
+field masks. Four full-size screenshots match the previously reviewed views
+byte-for-byte. The exact editor layout regression, including the frameBox
+assertions that fail with registry predecessors, passes from the new installed
+candidate graph. CI results and complete logs are bound to their immutable
+source/workflow commits in the same evidence directory.
+
 ## Still outstanding
 
-The website JSON control has not yet been extracted into the reusable
-`opf-editor` package. OPF has strict document validation and composition
-diagnostics, but no unified agent-facing `opf lint` contract/repair command.
-The shared furniture and font drafts have not been published as new package
-versions or adopted by the production sites. Native Office compatibility
-remains a separate gate under its existing recovery constraints.
+The reusable editor JSON package and lint CLI have not been published as new
+npm versions. Website adoption of that reusable package remains separate from
+its already deployed local JSON implementation. Shared furniture and font drafts
+also remain unpublished and unadopted by production sites. Native Office
+compatibility remains a separate gate under its existing recovery constraints.
+The lint corpus identifies 41 existing companion-catalog errors and four
+reference warnings; examples and authoritative schemas have not been changed
+to conceal them. Complete coordinated dependency releases, fresh registry checks
+and the remaining native/font gates before claiming release acceptance.
 
 `pptx-gallery` and `pptx-dev` had no local changes and matched their remote
 default branches (`main` and `master` respectively). Every existing local
