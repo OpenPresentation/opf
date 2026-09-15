@@ -274,7 +274,35 @@ hidden metrics resolves the common rendering contract. No runtime policy,
 default, tolerance, package or deployment changed in this diagnostic increment.
 A font-functions adapter also requires ownership/lifetime verification.
 
-Next: complete the shared glyph-paint contract, wider axis-mapping coverage and
+### Prepared painting draft — September 15, 2026
+
+Renderer implementation `e46a850` now exposes a `textPainting` provider from the
+prepared HarfBuzz registry. SVG uses selected glyph paths and per-glyph
+positions while retaining transparent logical text, source ranges, whitespace,
+links and formatting. The painter and layout must share the same registry.
+Fontkit remains the default; color and bitmap painting reject explicitly.
+
+The separately pushed [browser/evidence checkpoint `e6bc0c1`](https://github.com/OpenPresentation/opf-render/tree/e6bc0c19cf1177c1f5ac1d0f24dc2592b772f11f/docs/evidence/shaped-paint-draft-20260915)
+retains the first implementation's limits. Node covers 650 supported glyph
+runs and 13 explicit coverage rejections; five slides retain identical layout
+and logical text. The existing 805-slide raster regression passes. Local
+Chromium preserves glyph IDs, source text and exact advances across those
+650 supported cases, but 54 SVG/Canvas comparisons fail the zero-difference
+pixel requirement (maximum alpha difference 4/255). The cause remains open.
+
+Five full-slide controls retain logical text selection and identical visible
+ink after changing the logical text's native font family. This does not prove
+caret positions align with the painted glyphs: the editor still uses native
+DOM Range geometry. Preview editing/undo, full visual/accessibility review,
+fresh installed painting, browser platforms and native export remain separate
+acceptance work. The explicit browser command is not yet wired into installed
+or CI matrices; the existing native variable-font gates remain unchanged.
+The preceding `74f0b8b` CI completed with Mac/Windows success and Linux source
+and installed variable-font failures. No release or production adoption occurs
+at this checkpoint.
+
+Next: investigate the pixel differences and complete the shared glyph-paint
+and caret contract, wider axis-mapping coverage and
 the CFF2/variable metric/paint gate, paragraph
 itemization/bidi, fallback, performance/lifetime analysis, complete slide/ink
 review and shared editing/undo/export acceptance. Fontkit remains the default;

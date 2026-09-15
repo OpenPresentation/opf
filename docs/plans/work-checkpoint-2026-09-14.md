@@ -39,7 +39,7 @@ while moving on to another feature.
   stacked on PR20: prepared source-preserving shaping, compressed-font and
   collection handling, DFont extraction, and fixed variable instances.
 
-Fresh GitHub inspection confirms successful checks on core PR79 at `f6d4434`,
+Fresh GitHub inspection confirms successful checks on core PR79 at `eee3060`,
 renderer PR20 at `3d4fa8c`, editor PR17 at `40023fb` and PPTX PR34 at `1363a65`.
 Renderer PR21's completed `a5f3ec6` CI passes Mac/Windows shaping and all earlier
 Linux checks, including the 805-slide regression and coordinated packages.
@@ -79,6 +79,40 @@ are recorded as separate focused commits. All 22 local branch tips across the
 seven repositories were compared directly with GitHub with no unpushed commits;
 the subsequent renderer checkpoint was also pushed. The only retained untracked
 files are the 12 demo copies already merged into core `origin/main`.
+
+## September 15 commit and PR audit
+
+All 22 local branch tips across seven repositories were compared directly with
+GitHub again, with no unpushed commits. Website PR29/30/32/33 are merged and the
+Vercel deployment for `8d8fc5e` is successful. The 12 local demo files still
+match merged core `origin/main` byte for byte. Gallery and pptx.dev have clean
+working trees and unchanged default branches.
+
+The pending renderer work is now recorded in two focused, pushed commits:
+
+- `e46a850`: prepared SVG glyph painting, retained logical text, public types,
+  Node controls and API documentation.
+- `e6bc0c1`: a separate browser acceptance command and complete retained
+  evidence, including its failure. Renderer PR21 remains a draft.
+
+The local Node suite passes, including 650 supported runs, 13 explicit
+coverage rejections and the unchanged 805-slide regression. The browser
+experiment keeps source text, glyph IDs and exact advances in all 650
+supported cases. Five full-slide controls preserve selection and native-font
+independence of visible ink. However, 54 cases differ from an independent
+Canvas pixel reference (maximum alpha difference 4/255 against a zero
+requirement). Caret geometry, editing/undo, fresh installed painting and native
+export remain unaccepted. The new browser command is not yet in the installed
+or CI matrices. [Complete renderer evidence](https://github.com/OpenPresentation/opf-render/tree/e6bc0c19cf1177c1f5ac1d0f24dc2592b772f11f/docs/evidence/shaped-paint-draft-20260915)
+preserves these limits and the original observations.
+
+Completed renderer CI at `74f0b8b` passes Mac/Windows shaping jobs and fails
+the Linux source and fresh installed variable-font gates. The new renderer
+commits have separate pending CI; they do not convert those prior failures
+into acceptance. Core PR79, renderer PR20, editor PR17 and PPTX PR34 have
+successful checks at the audited heads, with their separate native/release
+requirements still open. No package release or site adoption of these drafts
+occurred during this audit.
 
 ## Still outstanding
 
