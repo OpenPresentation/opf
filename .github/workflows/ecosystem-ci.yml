@@ -26,21 +26,21 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
-          ref: f2446b0e39a878c3836f5c4b9d9e79f918280a93
+          ref: 89e1f3beb20a4154e7f753eff1bba34c5c233f46
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-editor
-          ref: 7c9e0b3e59791f9b9caf47be4f21764daed3a245
+          ref: a5f958acf8fc3e0e66d5ca61a674a2dc542b288b
           path: opf-editor
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-pptx
-          ref: 91d99d2eb720596128606530185a8f43b498127a
+          ref: 8a53c7545aa854b6498f17dabb529c6b91ed2c01
           path: opf-pptx
           fetch-depth: 0
           persist-credentials: false
@@ -73,6 +73,7 @@ jobs:
         run: |
           node -e "if (require('../opf-render/node_modules/playwright/package.json').version !== '1.63.0') throw new Error('Update the pinned Playwright image with the renderer test package.');"
           pnpm test:packed-browser
+          node artifacts/npm/consumer/test/font-source-groups-browser.mjs
           node scripts/test-installed-code-guards.mjs
           node ../opf-editor/test/rich-input-browser.mjs artifacts/editor/rich-input-installed.json measured artifacts/npm/consumer
           node scripts/test-plain-whitespace-workflow.mjs artifacts/plain-whitespace-installed installed

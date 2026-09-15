@@ -51,6 +51,7 @@ await writeFile(
       name: "opf-packed-consumer",
       private: true,
       type: "module",
+      ...(!registry?{devDependencies:{playwright:'1.63.0'}}:{}),
       dependencies: Object.fromEntries(
         manifest.artifacts.map((item) => [item.name, registry ? item.version : `file:../${item.file}`]),
       ),
@@ -125,6 +126,18 @@ console.log('Installed candidate font preparation passed layout, edit/undo, SVG/
   const richTabsHarness=(await readHarness('opf-pptx','test/rich-tabs.mjs')).replaceAll("'../dist/index.js'","'@openpresentation/opf-pptx'");
   await writeFile(path.join(consumer,'rich-tabs.mjs'),richTabsHarness);
   run(process.execPath,['rich-tabs.mjs']);
+  const richSourceHarness=(await readHarness('opf-pptx','test/rich-source-groups.mjs')).replaceAll("'../dist/index.js'","'@openpresentation/opf-pptx'");
+  await writeFile(path.join(consumer,'rich-source-groups.mjs'),richSourceHarness);
+  run(process.execPath,['rich-source-groups.mjs']);
+  await mkdir(path.join(consumer,'test'),{recursive:true});
+  for(const name of ['font-source-groups.mjs','font-source-groups-browser.mjs']){
+    const source=(await readHarness('opf-render','test/'+name))
+      .replaceAll("'../dist/fonts-node.js'","'@openpresentation/opf-render/fonts-node'")
+      .replaceAll("'../dist/font-shaping.js'","'@openpresentation/opf-render/font-shaping'")
+      .replaceAll("'../dist/svg.js'","'@openpresentation/opf-render/svg'");
+    await writeFile(path.join(consumer,'test',name),source);
+  }
+  run(process.execPath,['test/font-source-groups.mjs']);
   for (const repo of ['opf-render','opf-pptx']) {
     const source=(await readHarness(repo,'test/font-variants.mjs'))
       .replaceAll("'../dist/fonts-node.js'","'@openpresentation/opf-render/fonts-node'")
