@@ -1,0 +1,9 @@
+[WARN] The "pnpm" field in package.json is no longer read by pnpm. The following keys were ignored: "pnpm.overrides". See https://pnpm.io/settings for the new home of each setting.
+
+> openpresentation-workspace@ check:examples /Users/michael/Source/opf
+> node scripts/validate-examples.mjs
+
+{
+  "valid": true,
+  "files": 126
+}
