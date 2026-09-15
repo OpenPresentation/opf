@@ -13,7 +13,36 @@ The test-only model demonstrates the intended behavior through core `fitText`:
 underestimated text wraps before its advance exceeds the available width, while
 overestimated text avoids an unnecessary wrap. Original source ranges, accents,
 tabs, mixed line endings, blank lines and the selected font-size floor survive.
-No production backend or published font mapping has changed.
+At that study checkpoint no production backend or published font mapping changed.
+
+## Runtime checkpoint — September 14, 2026
+
+[Renderer PR21](https://github.com/OpenPresentation/opf-render/pull/21), commit
+`d0d417952b706806e250c178bdc46732be429e9f`, implements the prepared opt-in
+service behind the registry. Initialization is asynchronous and measurement
+stays synchronous. Widths, outlines and original UTF-16 ranges come from one
+run; caches bound both entries and glyphs. Registries own their bytes, including
+Node Buffer input, and disposal leaves other owners usable. Physical selection,
+coverage errors, substitutions and licenses retain existing policy. Fontkit
+remains the default.
+
+The [runtime evidence](https://github.com/OpenPresentation/opf-render/tree/d0d417952b706806e250c178bdc46732be429e9f/docs/evidence/font-shaping-service-20260914)
+checks all 8,568 prior Akasia observations and three actual core wrapping/source
+fixtures through the registry. All 33 bundled faces participate in Node and
+offline-browser tests: 165 browser cases shape and 33 preserve coverage errors.
+Node/browser glyphs agree; SVG advances differ by at most 0.01525px within the
+unchanged 0.1px gate. Fresh candidate tarballs pass runtime-byte checks, those
+APIs, public TypeScript consumers and dependency audit. The default renderer
+still passes all 805 furniture-baseline golden slides.
+
+This is an implementation checkpoint, not backend promotion or release. The
+draft adds macOS/Windows Node and Linux package/browser CI; consult its current
+checks rather than treating local results as those runs. Next: compressed-font
+preparation and browser collection painting, followed by the variable/CFF,
+itemization/bidi, fallback, performance, complete slide/ink and shared
+editor/export acceptance below. Explicit WOFF rejection is a temporary
+candidate limitation, not the target format contract. Native prerequisites
+remain unchanged.
 
 ## Next runtime implementation
 
@@ -55,7 +84,9 @@ The prototype pins `harfbuzzjs` 1.6.1 and `uharfbuzz` 0.56.1, both reporting
 HarfBuzz 14.4.0. Two bindings of the same shaping engine are a cross-binding
 check, not two independent shaping algorithms. The npm lockfile records its
 integrity; the evidence records the actual JS/WASM hashes and Python install
-report. Neither binding is a product dependency.
+report. The Python binding remains test-only. Renderer PR21 adds pinned
+harfbuzzjs as a candidate product dependency, including the unchanged WASM and
+both upstream license notices; it is not a published dependency change.
 
 The [JavaScript migration guide](https://github.com/harfbuzz/harfbuzzjs/blob/main/MIGRATING.md)
 documents module-load WASM initialization and automatic object cleanup. The
