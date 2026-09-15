@@ -1,0 +1,1166 @@
+{
+  "valid": false,
+  "generated": 100,
+  "failures": [
+    {
+      "file": "examples/gallery/industries/port-dwell-time-improvement-plan.opf.json",
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/water-stewardship-grower-brief.opf.json",
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/boutique-hotel-revenue-recovery.opf.json",
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/mixed-use-leasing-pipeline-review.opf.json",
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/battery-line-supplier-readiness.opf.json",
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/construction-safety-stand-down.opf.json",
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/airline-disruption-recovery-review.opf.json",
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/tailings-monitoring-investment-brief.opf.json",
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/demand-generation-campaign-brief.opf.json",
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/product-roadmap-decision-review.opf.json",
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/engineering-capacity-planning.opf.json",
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/s-and-op-exception-review.opf.json",
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/supplier-risk-heatmap.opf.json",
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/strategy-offsite-pre-read.opf.json",
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/model-governance-review.opf.json",
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/data-platform-migration-plan.opf.json",
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/revenue-forecast-inspection.opf.json",
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/pricing-and-packaging-decision.opf.json",
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/compliance-readiness-review.opf.json",
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/investor-relations-update.opf.json",
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/education/workforce-pathway-partnership.opf.json",
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/education/library-modernization-roadmap.opf.json",
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/education/athletics-budget-review.opf.json",
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/education/curriculum-approval-brief.opf.json",
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/government/housing-zoning-council-brief.opf.json",
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/government/transit-corridor-alternatives.opf.json",
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/government/wildfire-evacuation-preparedness.opf.json",
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/government/water-utility-capital-plan.opf.json",
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/government/recycling-participation-campaign.opf.json",
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/government/workforce-reskilling-initiative.opf.json",
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/government/tax-portal-modernization.opf.json",
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/government/broadband-public-hearing-deck.opf.json",
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/presentation-types/product-launch-narrative.opf.json",
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/presentation-types/policy-briefing-for-advisors.opf.json",
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/presentation-types/manager-training-deck.opf.json",
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/presentation-types/research-findings-report.opf.json",
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/design-and-media/video-demo-sales-narrative.opf.json",
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/design-and-media/photo-essay-portfolio.opf.json",
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/design-and-media/data-storytelling-atlas.opf.json",
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/design-and-media/kiosk-orientation-deck.opf.json",
+      "diagnostics": [
+        {
+          "ruleId": "opf/catalog-record",
+          "severity": "error",
+          "path": "/catalogs/themes/records/0/background",
+          "scope": "document",
+          "message": "must be object",
+          "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+          "definition": "https://openpresentation.org/schema/opf-theme/v1#/$defs/ThemeBackground/type",
+          "lookup": [
+            "opf",
+            "schema",
+            "theme",
+            "/$defs/ThemeBackground/type"
+          ],
+          "validation": {
+            "path": "/background",
+            "message": "must be object",
+            "keyword": "type",
+            "schemaPath": "#/type",
+            "params": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

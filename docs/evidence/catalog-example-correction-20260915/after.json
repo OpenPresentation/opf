@@ -1,0 +1,1525 @@
+{
+  "summary": {
+    "files": 126,
+    "valid": 126,
+    "counts": {
+      "error": 0,
+      "warning": 0,
+      "info": 401
+    }
+  },
+  "reports": [
+    {
+      "file": "examples/gallery/business-functions/compliance-readiness-review.opf.json",
+      "sha256": "a91e19a67599a617030bbdd482b980c13fb5d3d7a0e7f8daaf2fbcb7d29a40dc",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/business-functions/contract-cycle-time-brief.opf.json",
+      "sha256": "c734a19e01615dbc1c8c931b572ab7cfcaff8bbf53feb99ee06505dd4cfefbf6",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/business-functions/data-platform-migration-plan.opf.json",
+      "sha256": "e452713c4159b15f1503ff4383c4be37ac619007e2ed534f706c70c4dde3b0bb",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/business-functions/defect-escape-reduction-review.opf.json",
+      "sha256": "c9b99a750ea01e3ab30aed39a5b043bee05f6c7ace911c8ab9d256d26ae10acd",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/business-functions/demand-generation-campaign-brief.opf.json",
+      "sha256": "642ec166e00cfc7cdfeff3a4607f4cb97732a72beabbb47c4d7c58909df63651",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/business-functions/employee-town-hall-run-of-show.opf.json",
+      "sha256": "e10af0a962b75a1f2423fafc5d1131d8a01db2e3f9170baec7c2767f7d979866",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/business-functions/engineering-capacity-planning.opf.json",
+      "sha256": "8664d9f9958557cf77e6abb17b9bb7aec5e4a5b7ea9d3e83a43ce579d20eb978",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/business-functions/enterprise-account-expansion-plan.opf.json",
+      "sha256": "f9a6f2521c69d564e8564f3a2e77cbc5f01cf074f413b88a1cbda3005de097ec",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/business-functions/field-enablement-certification.opf.json",
+      "sha256": "af1ba2c9d4b67c13d6e7a215188405396bf736d0c484ce4aba338489b7c5b255",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/business-functions/fy27-budget-tradeoff-deck.opf.json",
+      "sha256": "9905751a84884d698126af8085b84d251206551ef4c67483e190f374aa9061bd",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/business-functions/identity-incident-executive-brief.opf.json",
+      "sha256": "53e99861578be9203368239670d8d2c6646e9128d4392d47b5767c052b063238",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/business-functions/investor-relations-update.opf.json",
+      "sha256": "366fd03cd492669cf9b57500c66f2dc892ce0498b390908520b1bd87a3ae0058",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/business-functions/model-governance-review.opf.json",
+      "sha256": "c89ebbf880645c2bc4fbda807de2bd80e98e7820c1fa5bb59ec7ac3a0496c5fa",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/business-functions/onboarding-experience-redesign.opf.json",
+      "sha256": "f3bb1a8c9f4934e8240352776e1d7d450bf354fd2bb4c01a4c3a849d2e29aa70",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/business-functions/partner-ecosystem-launch-kit.opf.json",
+      "sha256": "ec06b4c284bd1bf270af4ff83af7a6d0dba3b614e2c88845c986bf17ac87dacc",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/business-functions/pricing-and-packaging-decision.opf.json",
+      "sha256": "cd4bccf221e4f598edcc03f9850e8da9886f7abde32d17dc551c46895b5546b3",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/business-functions/product-roadmap-decision-review.opf.json",
+      "sha256": "ffa8a6ec350365be6dc1e1495c32cf1687cca8a01bfd631357ad95de45e5f46f",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/business-functions/renewal-save-plan.opf.json",
+      "sha256": "35c2aa5dc14e25557bbaabca2efc50782370ad3e04a760ce36d1b6089f7e8b4c",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/business-functions/revenue-forecast-inspection.opf.json",
+      "sha256": "83234faba44b3df64a572c9a1455e0647865c6a598134c8573d6c183f699b3da",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/business-functions/s-and-op-exception-review.opf.json",
+      "sha256": "82352424eecef31bcdb896c48b8c646f10ac9ee324cdcc4e1e76a983bc77c112",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/business-functions/scope-3-reporting-readiness.opf.json",
+      "sha256": "73fb9535e4b50c58eacfeb0b88f9db352b67003cd5af3b57d918cd9c288db1c5",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/business-functions/strategy-offsite-pre-read.opf.json",
+      "sha256": "4a178dec1323828a2b932345ca477793fa546da07a640b3406123099d96402af",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/business-functions/supplier-risk-heatmap.opf.json",
+      "sha256": "484b80a1706400a45fb99d29e18356966377856bc0d8eaf9d8d3f46b39089c10",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/business-functions/support-deflection-program.opf.json",
+      "sha256": "05df7d0900ae94aec55308f3c8572b6881a1e32f050c03048798e83f9bd295e4",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/business-functions/workplace-occupancy-reset.opf.json",
+      "sha256": "ceae76ba248ec8d1a077d9a14e6141e3e719c1110c30e75a173998f94b28ba66",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/design-and-media/data-storytelling-atlas.opf.json",
+      "sha256": "4a050bfa8a42f38ebe567bfcb08b95b30c4afe50bf944c627fe4908b84fec78d",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/design-and-media/kiosk-orientation-deck.opf.json",
+      "sha256": "c6068dfab3d3b3e3d4f5c6a7c60ec65a401e0fddddcb345a348e49e213e9c0e0",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/design-and-media/photo-essay-portfolio.opf.json",
+      "sha256": "d9048f51f0efdaa100140af95276c3f8585e20935f84d61754e0f94cdddda19b",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/design-and-media/video-demo-sales-narrative.opf.json",
+      "sha256": "07903ac11dc681643774d55cb1a2d70b507b3a76eeccf4a23ccdd50beba61636",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/design-and-media/visual-brand-system-sampler.opf.json",
+      "sha256": "0f3c70990695c2c58b6e0646c81e619b6fb389f21934801adc7f6391fe261eeb",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/education/advising-retention-review.opf.json",
+      "sha256": "be7ae9e9cc1efdf48d63f26fec1889d3d4b0014dd91b81399236f1ef43e0438a",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/education/alumni-giving-campaign.opf.json",
+      "sha256": "ce7c9bb0a4cffd0e86c8b89cb2c84ed763c7e5a151b6b45d7f66780f2c5f4a66",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/education/apprenticeship-partnership-deck.opf.json",
+      "sha256": "1f3771725ed83321221e30bc6f0acc20768f8c3dce70592a4156ad25d3f5a712",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/education/athletics-budget-review.opf.json",
+      "sha256": "cc31e694dbed2ec741ebcf96f88aa0b62005563dd599af858117103a590204b5",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/education/campus-energy-action-brief.opf.json",
+      "sha256": "08ccc5612eb33c21ba37a2fa7cba862c9662d562a91c0546de35613eab24a7e8",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/education/curriculum-approval-brief.opf.json",
+      "sha256": "b5a0fcef9070c87235037f37229a5958a948aea179ec615763cf4aef2fc82db2",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/education/district-literacy-acceleration-plan.opf.json",
+      "sha256": "5b54df815419254a73e44f8abc64ac04080e08c4e0cdf4a105224ff25ff45ef3",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/education/library-modernization-roadmap.opf.json",
+      "sha256": "7e49c5284e19abe9ac98ee401d30ab4f9b0fa2722e15af46a40c256ae9268b76",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/education/online-program-launch-plan.opf.json",
+      "sha256": "1866a5eaccc2277a39924daf3fbd0dc33d91166eea1847c8b23dd495bd48a1b9",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/education/research-grant-pitch.opf.json",
+      "sha256": "621965a92fa0127e05afaf4b790e6552f99e0148de9c1da53d10b227bb4ffe37",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/education/school-safety-preparedness-brief.opf.json",
+      "sha256": "64c9024b60ab5e4430ede79328b942952a5f9810de7e1e04a5b7aa0b618e27e4",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/education/special-education-services-plan.opf.json",
+      "sha256": "afcb98fc6b60055e3ff9b6229f17ec55e8b0a9e18294574e8bd450ffba7de8ec",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/education/stem-lab-funding-proposal.opf.json",
+      "sha256": "26ebbce28c9b37354f4d02531f8585d4d47cd5a031f245280478407d0e04bda9",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/education/student-mental-health-capacity-review.opf.json",
+      "sha256": "3f6282fbe18f4a37f55c0b85c1a5d1cb937f70b88e6534ccafc8582dc9caeff3",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/education/workforce-pathway-partnership.opf.json",
+      "sha256": "3c13feb79cebc9aa0b1909b5e4f63dddc04ad016e122afb6d9b346bd732894b4",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/government/broadband-public-hearing-deck.opf.json",
+      "sha256": "3e7edc433eac144b8f4765430b7be3a021b274afb24cee3c81954839ddc77008",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/government/court-backlog-reduction-plan.opf.json",
+      "sha256": "bb98fb734f213e6caa51b0d47384632a3b49d5dd3f16b07be5a4b5a7f711bc00",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/government/digital-services-modernization.opf.json",
+      "sha256": "5361775a4b7ce6995ef1c37a3f3f0b6d0981e0f8b0e1fdd79673f1fba219b0fa",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/government/grant-equity-review.opf.json",
+      "sha256": "a7cf706aec3c41734773a9d4ea9e4ce16a85208a16fb9369dd0783a7cd83ccc0",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/government/housing-zoning-council-brief.opf.json",
+      "sha256": "7313879c0a01522ce4aa2094cf59e78f95aca6cbe405414f06c6ae9ee6becedc",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/government/parks-master-plan-workshop.opf.json",
+      "sha256": "786dc14cd5a444af433ed246e43fa9f8e1c9afabc3073757b50d1af323c3a577",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/government/police-training-program-update.opf.json",
+      "sha256": "566a349199128a7075b15b526f5379d2b808f0002372139cb8a66467d784ca5b",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/government/recycling-participation-campaign.opf.json",
+      "sha256": "1601126c7e304a4f9a27d4863b9092684aaad750f2500361a2ca36d5422e4d6e",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/government/regulatory-risk-brief.opf.json",
+      "sha256": "68d3ac5c0bdaf5e2c69ba5863f25491c4cf526090c884a03408e2ea1a0f5d14d",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/government/tax-portal-modernization.opf.json",
+      "sha256": "4c7bd1f17df5b9c9d305c3fd082e3178911391b243a3797622247ea7cbddb0e7",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/government/transit-corridor-alternatives.opf.json",
+      "sha256": "d60911a62682952b9cbccd2b3a205f8753452a52bd70310d3b40224137d53ce4",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/government/vaccination-outreach-briefing.opf.json",
+      "sha256": "44ddc98b5c07934268f4feff3315a08291b8c89f3b4891ac0a08fdb2fe551abc",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/government/water-utility-capital-plan.opf.json",
+      "sha256": "e5c7b51a205f274b8d8f252c493eea5c03239771bd2fa5253ae67ef55a83c0ef",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/government/wildfire-evacuation-preparedness.opf.json",
+      "sha256": "4c10b8b444dfa44e8e446a4aaf4c289a467bbe5971be43ce3fb21ad0d465dd5f",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/government/workforce-reskilling-initiative.opf.json",
+      "sha256": "b8ce90d13f52756d98dc41fa6adf716c4e4d828e32476f2b22b0366b38795df9",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/industries/airline-disruption-recovery-review.opf.json",
+      "sha256": "de5b4ed88f8f96955e1d5a5c63ef90bd6244857061ba0c6338b6f4c216459720",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/industries/ambulatory-access-recovery-plan.opf.json",
+      "sha256": "03d9ab32b7c9fcf83d540cd36e866155ff2596df4f4e3ab8031b6cd743f59654",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/industries/battery-line-supplier-readiness.opf.json",
+      "sha256": "faa412cefa4190b3b78b28681fd6c62bfdfb25a0152ce71336e0e8fbe92f1907",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/industries/boutique-hotel-revenue-recovery.opf.json",
+      "sha256": "31e1838c5d19d3697e02dfdf28bd68b77dc290e5631d662efbbc58f33b51f9d5",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/industries/branch-modernization-investment-case.opf.json",
+      "sha256": "6a0325bb6f5e3efbfa9b89858ad1cdbf922757f6040aa93c801b4c043a40048f",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/industries/claims-triage-operating-model.opf.json",
+      "sha256": "dc89bec26012406f79ad2455b5649fdafefe1563d8b561812f14c8a39b4e5004",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/industries/cold-chain-waste-reduction-review.opf.json",
+      "sha256": "9e99bcc586513025dd6ae8f72a32d12391f10364d9fd6363344417f736c82ae9",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/industries/construction-safety-stand-down.opf.json",
+      "sha256": "46c3c3a4e793480168c36b5568860b083970c6449ebc40e741f2594f7a4f09a1",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/industries/consulting-margin-recovery-plan.opf.json",
+      "sha256": "61853f557e026c567aebf1d3184f877654dbf711e0070d1b696e7e4f93d3ef79",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/industries/drive-thru-throughput-playbook.opf.json",
+      "sha256": "08401b7b70ebfac04fe5174a2f192ecc2a63b84d11daf797bf673bca8fd3d189",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/industries/fan-experience-operations-brief.opf.json",
+      "sha256": "0d3a4cbc985c5bbc58af5945ff66edd44a727b1983cd035661db3f78eec5a871",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/industries/food-bank-distribution-capacity-plan.opf.json",
+      "sha256": "c30eaef17587f85b54b5a9c7f5e9a36019fdb58bbd6332de3e8625d7f1d5aea5",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/industries/grid-resilience-capital-plan.opf.json",
+      "sha256": "140b6782170546ddb17963b0d2b6109033718847c2a6c7074ce766bba4a062e6",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/industries/managed-detection-market-update.opf.json",
+      "sha256": "ad575478c14e55154e0b30ce284a428bd6cc2c3575d539bb2fb0b1e97040ca4b",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/industries/mixed-use-leasing-pipeline-review.opf.json",
+      "sha256": "e05ee99159e5abb23071dbbba6f3e53c372995c7d09febaf4541f305d97c0d11",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/industries/port-dwell-time-improvement-plan.opf.json",
+      "sha256": "825b5c358aa51cc3953e2631f4c0e50c489a88b99ec6e224e4e1cc311edc4fa2",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/industries/retail-launch-readiness-deck.opf.json",
+      "sha256": "881fb9ca3be06681dde1516838077f6c6ebc93949f562451a6c306c643f4f9f2",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/industries/robotics-quality-escape-briefing.opf.json",
+      "sha256": "c816d0e5c31dab0c0b78f57f2ec958ee9bdf0417e3850eb33c7d70e53c895537",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/industries/rural-broadband-expansion-proposal.opf.json",
+      "sha256": "1ae65c02dfcc0bd06e23627354a1f6c23417d798126fad51c88d7058f435e29e",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/industries/satellite-maintenance-readiness-review.opf.json",
+      "sha256": "fd2f96ba2927cd9ec625d8e039baf0a032106f611d88bf2136a6339956b47d53",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/industries/streaming-churn-winback-strategy.opf.json",
+      "sha256": "24bbeb84ae60b012fd265459394ff0c2bfdd57eda0572aa7637780830e5c0ec3",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/industries/tailings-monitoring-investment-brief.opf.json",
+      "sha256": "0f51b1878e6b65e8729b8f81b4f5d4c058f0cdd6873f953538d1a1dcfff51285",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/industries/trial-enrollment-rescue-plan.opf.json",
+      "sha256": "3ec55ae456ba3ffb6ad67028bc18fe17248a3fdd738f278487dafc4439943c5d",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/industries/veterinary-staffing-stabilization.opf.json",
+      "sha256": "fe57260d5027e18a0ecbd33c969a84b10beb20a8ef197e96796b68445d3712b5",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/industries/water-stewardship-grower-brief.opf.json",
+      "sha256": "2e41bfa86f1292df62535c32f2beb7f8c85860592a19fdc0de7c17b50eaa95c0",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/international/arabic-digital-services-brief.opf.json",
+      "sha256": "600362a72fbada69c78e5eb977a7219bcd812e6fa5f69d661a4b4803ebd4734c",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/international/brazil-climate-adaptation-brief.opf.json",
+      "sha256": "59173d23749a4eac627af531d27d97dcf9d3f17a020d4462edddc45c71f8ccc7",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/international/german-works-council-update.opf.json",
+      "sha256": "139f8a98b0bded1a2f7f9b17e905ebd9ce8c0e9b4bd7090feb4a149d8c18b7c9",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/international/india-rural-payments-pilot.opf.json",
+      "sha256": "e76d85491c715344b391c6ff2876c657d0c632817dced514901ddc6d7c663826",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/international/japan-market-entry-readout.opf.json",
+      "sha256": "0d705211efd8fad04c3a5342370b02929e0d946f7a83ab35a046f8e6d249b785",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/presentation-types/customer-qbr-renewal-deck.opf.json",
+      "sha256": "e34fe71356625b58f99bed1fe82a655ffe0015be068954666b055207abf1fd03",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/presentation-types/data-incident-postmortem.opf.json",
+      "sha256": "a1309ab78d74080502815a8ad5d295fa74ecce2ccc229b2869d719f0f034913d",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/presentation-types/developer-conference-talk.opf.json",
+      "sha256": "106c6f2a35608b3a1cf5d4b19097dca2e7199fa5d93660e4ea017a6d0425a589",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/presentation-types/executive-workshop-facilitation.opf.json",
+      "sha256": "42f05dafdddc140389a95b120ceb42226722f2731a56848a043ea3825e7b12c4",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/presentation-types/manager-training-deck.opf.json",
+      "sha256": "084134234ffbbbc7eb5a5dbceddc12c20fcd84751db2d2d3d35bdf519e29f89b",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/presentation-types/monthly-board-update.opf.json",
+      "sha256": "4a59f53177b3892ec31807e447270ff53b7f311cb448ba488a4274b32ac4171d",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/presentation-types/policy-briefing-for-advisors.opf.json",
+      "sha256": "692f1ee437599447979ded0948612d0d7b79e435e5a78a906bd0e76559143578",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/presentation-types/product-launch-narrative.opf.json",
+      "sha256": "407a0afeb8411e1e02b1e0a8eacd9cd09dc799bc025ad85e5221be3f72bb064c",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/presentation-types/research-findings-report.opf.json",
+      "sha256": "b77686ec7a7fc0858490354b17ea5be101dc20e2305a694bd688e1eb446a7495",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 10
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/gallery/presentation-types/seed-pitch-for-climate-risk-api.opf.json",
+      "sha256": "598271822ef294a7ee232536026203127d83d713a973bc3e57f0c036e400b973",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/asset-source-forms.opf.json",
+      "sha256": "719be8c5fc90b5a107ae6f181f4841cfbf33f528a8db852bf6dc94bc78a28979",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/block-composition.opf.json",
+      "sha256": "ab69284bffc719bac0ea1a9571058abf8c31ad6ad6a4bc5fe4cb280368ed60fc",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/catalog-overrides.opf.json",
+      "sha256": "68092730eae65f94e187926ddd4406d22a15a87da3aebff8f3491dbc3d233284",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 1
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/chart-data-sources.opf.json",
+      "sha256": "777657bc25cd1be1d3ddf1d2757cd5fc1534a4fa788dc24076ad4ad4f5774443",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/chart-type-sampler.opf.json",
+      "sha256": "c50d3fa881ed30e06592fc527999cf5d446393dac5509c497c75d8b964e55722",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/columns.opf.json",
+      "sha256": "0a45dfa2440120341c81f31829c3deff6e9a00ee1961e4f1c0ab9768d75a3cb8",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/content-payload-matrix.opf.json",
+      "sha256": "9b5ba575287af91f138ef2d49d8edb0c3a164a3ac3fcca6a22e003f28e1639b3",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/design-backgrounds.opf.json",
+      "sha256": "a395bcbb56785765bbfe024e2d91c346da04a6b1c67e75336b19a3370507aa89",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/dynamic-composition.opf.json",
+      "sha256": "54d08bf006ae56f3a4b47ef6b11aafd3160c6e3029c45e6613b508cf67a11fee",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/full-feature-tour.opf.json",
+      "sha256": "2e3cad5bfea178614505f6841a772af01769fdd334bc813e57e01506943a0bae",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/grid-spans.opf.json",
+      "sha256": "fa1282518c8852a06451689901f0aed09bfef296c6b4ab72241113b1ae24846c",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/header-footer-logo-set.opf.json",
+      "sha256": "ad5b98a78921557bb9b42224bb1c7a2d66c2fcac84400463e7aedc5cc5d59863",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/language-and-writing.opf.json",
+      "sha256": "f54220d7a054e478bbf7f86667ab00e0f4230559ccd8acbf1968d93654628c52",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/media-and-follow-up.opf.json",
+      "sha256": "e6079202cab83948d637b4c9721740007a4cb57d1183c71ed92e193d21473324",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/metadata-array-forms.opf.json",
+      "sha256": "4089f2d7de22b2e8b7eb3fd588bf161864a8ce50b14cb1cd49baa72b831267fa",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/metrics-quotes-timeline.opf.json",
+      "sha256": "7cfda743528fe55a1e666b82fc6c1a846cbc1764e80f9b590330402b0af51c9b",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/minimal.opf.json",
+      "sha256": "11cc28ea74c0e34facbd94634b5caac97e456a649c84e647cb88605970880659",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/narrative-beats.opf.json",
+      "sha256": "9d9342a56ec005c2c2844a3c113195a7aad679a5975f75e90cd225057197d8f2",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/promoted-region-grid.opf.json",
+      "sha256": "c9004c66606b9f16d918c211159cd05c3f77850cbb69e24018e57d6d8d31c831",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/rich-text-runs.opf.json",
+      "sha256": "e84f81176cb91277be1292c44318c942e8ecc03e5157715c13955aae91429ca3",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/root-content.opf.json",
+      "sha256": "d902f14cfe0b6ca0d66ef21cb81268616053ddd9e31d5394a2e9ead9a7d6ae78",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/rows-chart.opf.json",
+      "sha256": "d4e492c90ac13e97d274eea9cf73b6005d6951c7a0753836adb3a280d7413e1b",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/slide-design-overrides.opf.json",
+      "sha256": "533130933698389cfec89435d3834c10a27c870dd07fced1b74b8ecfcba74c8b",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/slide-sections.opf.json",
+      "sha256": "7f46675a9f669c09895b152af2c5db619eaa8c68dc8afab365a182d06161ab6f",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/table-and-code.opf.json",
+      "sha256": "29a4df6caf6f93f8473c65aa51564ee865da8d5f200e08c8d98f43055bca542f",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "file": "examples/technical/table-cell-types.opf.json",
+      "sha256": "6e3151022c69ca82f2fa589da3ed1a34eb95864602a601c4665d802d88384334",
+      "valid": true,
+      "schemaValid": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "info": 0
+      },
+      "diagnostics": []
+    }
+  ]
+}
