@@ -133,10 +133,31 @@ byte and identity. The full 439 browser pixel pairs, 805 unchanged baseline
 slides, 35 fresh-package file hashes, public TypeScript consumers and zero-finding
 audit pass. Default DFont cases compare Fontkit metrics/outlines; prepared cases
 also compare shaped glyphs and source ranges. [Current-head CI](https://github.com/OpenPresentation/opf-render/actions/runs/34929695382)
-is running and remains a separate acceptance requirement. Raw resources are covered; MacBinary/AppleDouble wrappers
+passed Mac/Windows Node and Linux browser, installed-package and coordinated checks; raw logs are retained in the following checkpoint. Raw resources are covered; MacBinary/AppleDouble wrappers
 and Type 1 suitcase conversion are separate formats.
 
-Next: CFF/CFF2 and variable-instance coverage, paragraph
+Renderer `28bd820286e0bf28b2efcaca3610d56988b1079e` preserves a **draft** fixed-variable-instance
+implementation and its unresolved browser gate. Both backends receive selected
+coordinates or named instances; browser FontFace and SVG CSS retain the same
+selection and original source bytes. The bounded `fvar` adapter handles standard
+subfamily IDs and record offsets. Compressed fonts now use the bounded decoder
+with the default backend as well; browser payload impact remains unmeasured.
+
+The [immutable draft evidence](https://github.com/OpenPresentation/opf-render/tree/28bd820286e0bf28b2efcaca3610d56988b1079e/docs/evidence/variable-instances-draft-20260914)
+contains 712 passing Node format/instance/backend cases across 16 pinned OFL
+fonts, 148 independently recorded named instances and 12 rejection controls.
+All 712 Chromium pixel comparisons match, but ten measurements exceed the
+unchanged 0.1px browser advance gate: five Fontkit CFF2 and five HarfBuzz variable
+TTF cases. Maximum observed differences are 0.134625px and 0.132061px. The full
+805-slide renderer regression and syntax/package checks pass. CI now includes
+the unresolved browser gate; this commit is not accepted for release.
+
+Before promotion, resolve the advance differences, add malformed/extended
+`fvar` and named PostScript controls, extend fresh installed-package and public
+TypeScript coverage to this matrix, and measure browser payload impact. No
+package publication, deployment or native variable-instance acceptance occurred.
+
+Next: resolve the CFF2/variable advance gate and complete installed coverage, paragraph
 itemization/bidi, fallback, performance/lifetime analysis, complete slide/ink
 review and shared editing/undo/export acceptance. Fontkit remains the default;
 this is not registry publication, site adoption or native compatibility proof.
