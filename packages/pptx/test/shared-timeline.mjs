@@ -6,8 +6,8 @@ import {unzipSync,zipSync} from 'fflate';
 import {XMLParser} from 'fast-xml-parser';
 import {toPptx,fromPptx} from '../dist/index.js';
 import {decodeTextTag} from '../dist/code-provenance.js';
-import {prepareNodeFonts} from '../../opf-render/dist/fonts-node.js';
-import {resolvePresentation} from '../../opf-render/dist/svg.js';
+import {prepareNodeFonts} from '@openpresentation/opf-render/fonts-node';
+import {resolvePresentation} from '@openpresentation/opf-render/svg';
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false}),decode=bytes=>new TextDecoder().decode(bytes),encode=text=>new TextEncoder().encode(text),array=v=>v===undefined?[]:Array.isArray(v)?v:[v];
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex'),{options:fontOptions}=await prepareNodeFonts(),results=[];
 const fixtures=[

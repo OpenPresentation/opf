@@ -7,7 +7,7 @@ import {XMLParser} from 'fast-xml-parser';
 import {prepareNodeFonts} from '@openpresentation/opf-render/fonts-node';
 import {toPptx,fromPptx} from '../dist/index.js';
 
-const require=createRequire(new URL('../../opf-render/package.json',import.meta.url)),{create}=require('fontkit');
+const require=createRequire(import.meta.resolve('@openpresentation/opf-render/package.json')),{create}=require('fontkit');
 const {options}=await prepareNodeFonts(),allowed=new Map();
 const key=(family,bold,italic)=>JSON.stringify([family,!!bold,!!italic]);
 for(const file of options.fontFiles){

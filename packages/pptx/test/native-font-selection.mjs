@@ -12,7 +12,7 @@ const write=(f,v)=>writeFile(path.join(root,f),JSON.stringify(v,null,2)+'\n');
 if(mode==='generate'){
  await mkdir(root,{recursive:true});await assert.rejects(readFile(path.join(root,'generation.json')),e=>e.code==='ENOENT');
  execFileSync(process.execPath,['test/font-variants.mjs',path.join(root,'selection.json')],{stdio:'inherit'});
- const require=createRequire(new URL('../../opf-render/package.json',import.meta.url)),{create}=require('fontkit'),{options}=await prepareNodeFonts();
+ const require=createRequire(import.meta.resolve('@openpresentation/opf-render/package.json')),{create}=require('fontkit'),{options}=await prepareNodeFonts();
  const fonts=[];await mkdir(path.join(root,'fonts'));
  for(const [index,source]of options.fontFiles.entries()){
   const bytes=await readFile(source),font=create(bytes),file=`fonts/face-${index}.ttf`,style=font['OS/2'].fsSelection;
