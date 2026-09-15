@@ -1,0 +1,53 @@
+$ playwright test
+
+Running 10 tests using 1 worker
+
+(node:57829) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/e2e/author.spec.ts:26:80 › anonymous code editing preserves source and visible selection through offline export/reimport at 1280x720 (7.5s)
+  ✓   2 tests/e2e/author.spec.ts:26:80 › anonymous code editing preserves source and visible selection through offline export/reimport at 540x960 (4.7s)
+  ✓   3 tests/e2e/author.spec.ts:55:5 › anonymous Author canvas edits survive tab changes, offline PowerPoint export and undoable reimport (6.8s)
+  ✓   4 tests/e2e/inspector.spec.ts:9:5 › published long quotes retain their footer in actual wide/portrait previews and PowerPoint downloads (4.3s)
+  ✓   5 tests/e2e/inspector.spec.ts:63:5 › shared navigation clears format errors and proposals from the previous deck (5.1s)
+  ✓   6 tests/e2e/inspector.spec.ts:105:5 › anonymous JSON authoring, preview, undo/redo, download and shared reimport (4.0s)
+  ✘   7 tests/e2e/monaco.spec.ts:3:5 › bundled JSON worker provides schema diagnostics, completion and recovery offline (23.3s)
+(node:57984) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   8 tests/e2e/svg-security.spec.ts:31:5 › published SVG renderer keeps hostile shared and imported document strings inert (3.9s)
+  ✓   9 tests/e2e/toolkit.spec.ts:4:5 › public toolkit shows the deployed package set with working render, edit and export proofs (1.6s)
+  ✓  10 tests/e2e/yaml.spec.ts:4:5 › YAML and Markdown editing preserve OPF values and recover from malformed YAML offline (5.1s)
+
+
+  1) tests/e2e/monaco.spec.ts:3:5 › bundled JSON worker provides schema diagnostics, completion and recovery offline 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 0
+    Received: 1
+
+    Call Log:
+    - Timeout 20000ms exceeded while waiting on the predicate
+
+      52 |     }).toBeTruthy();
+      53 |   }
+    > 54 |   await expect.poll(() => pendingScripts.size, {timeout: 20_000}).toBe(0);
+         |                                                                   ^
+      55 |   await page.context().setOffline(true);
+      56 |
+      57 |   // Incomplete property text cannot be moved by asynchronous format-on-paste.
+        at /private/tmp/opf-publish-ready-20260915.kFIiNe/pptx-dev/tests/e2e/monaco.spec.ts:54:67
+
+    Error Context: test-results/monaco-bundled-JSON-worker-5b20e-letion-and-recovery-offline/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/monaco-bundled-JSON-worker-5b20e-letion-and-recovery-offline/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/monaco-bundled-JSON-worker-5b20e-letion-and-recovery-offline/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests/e2e/monaco.spec.ts:3:5 › bundled JSON worker provides schema diagnostics, completion and recovery offline 
+  9 passed (1.1m)
+[ELIFECYCLE] Command failed with exit code 1.

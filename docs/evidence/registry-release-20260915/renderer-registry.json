@@ -1,0 +1,27 @@
+{
+  "version": "0.8.0",
+  "gitHead": "3ad2f8d1073f6fc733ca5371f6b98b4c8a05f6b8",
+  "dist": {
+    "shasum": "dba8edab45c6cd6b5254a9cdf5cd3301fde66ec4",
+    "tarball": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.8.0.tgz",
+    "fileCount": 17,
+    "integrity": "sha512-TtlaoQ7R6GsvHQ2eWMgoGOCbhgfaCzZLqvfJ+N+r7VyeCr/214jjAVi1reBugGXZ/zLqrGZuz0wacIWP6dN2yg==",
+    "signatures": [
+      {
+        "sig": "MEQCIC+CChPj23HWQ9874qo1wIvxjR9ctb1a6QOgeSLpYMrUAiB8Y/mX/ygEGMspYDiQ5vwkjCrLkhnAiG9BNMMXqNeYJg==",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      },
+      {
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+        "sig": "MEYCIQCjic3lWBQaT81tUi/nmz59cjxuuZg0VPKBfH6pqXwgFAIhANh1Sr9lmyM3mGo2GDCYDEZBbkZjucGCvme67UMcOmPh"
+      }
+    ],
+    "attestations": {
+      "url": "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf-render@0.8.0",
+      "provenance": {
+        "predicateType": "https://slsa.dev/provenance/v1"
+      }
+    },
+    "unpackedSize": 148953
+  }
+}

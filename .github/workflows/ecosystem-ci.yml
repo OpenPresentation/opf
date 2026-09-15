@@ -26,21 +26,21 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
-          ref: d0e1f4a633a45256539b7c89c912dff5a617ec37
+          ref: 3ad2f8d1073f6fc733ca5371f6b98b4c8a05f6b8
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-editor
-          ref: 4557f55ea60c24ac5a8cd407f1810d4a5db6f76f
+          ref: 71c6a90a5d0531991f999baf8ac800f0e322a7ad
           path: opf-editor
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-pptx
-          ref: cac8f6e058e0d18cbb404730d0094d21d44665eb
+          ref: 4356e3679988206b202d799cd94140686b3b6ea0
           path: opf-pptx
           fetch-depth: 0
           persist-credentials: false
@@ -92,6 +92,7 @@ jobs:
         run: |
           pnpm test:registry-ecosystem
           pnpm test:packed-browser registry
+          node ../opf-editor/test/json-editor-browser.mjs artifacts/editor/json-editor-registry.json artifacts/npm/registry-consumer
           node scripts/test-packed-browser-guards.mjs
           node scripts/test-installed-code-guards.mjs --registry
           pnpm test:registry-fidelity
@@ -105,6 +106,7 @@ jobs:
       - name: Measure current checkout metric internals with registry fonts
         working-directory: opf
         run: |
+          node scripts/test-metric-registry-guards.mjs artifacts/npm/registry-consumer
           node scripts/test-metric-layout-geometry.mjs artifacts/npm/registry-consumer artifacts/metric-layout-geometry.json
           node scripts/test-metric-layout-browser.mjs artifacts/npm/registry-consumer artifacts/metric-layout-geometry.json artifacts/metric-layout-browser.json
       - name: Preserve installed-browser evidence
@@ -121,6 +123,8 @@ jobs:
             opf/artifacts/metric-layout-browser.json
             opf/artifacts/metric-layout-browser-*.png
             opf/artifacts/editor/*installed-code*.json
+            opf/artifacts/editor/json-editor-registry.json
+            opf/artifacts/npm/registry-consumer/fidelity/report.json
             opf-render/artifacts/golden/**
             opf-render/artifacts/font-variants*.json
             opf/artifacts/npm/consumer/artifacts/*font-variants*.json

@@ -1,0 +1,46 @@
+{
+  "verifiedAt": "2026-09-15T19:05:43.701330+00:00",
+  "node": "v24.21.0",
+  "deployments": [
+    {
+      "repository": "Data-Advantage/openpresentation-site",
+      "defaultBranch": "main",
+      "commit": "5998ef249aebd0c76124d828be0d88f8cdc493c6",
+      "pullRequest": 37,
+      "url": "https://www.openpresentation.org",
+      "deploymentId": 6466301895,
+      "deploymentUrl": "https://openpresentation-site-1767s53ex-dataadvantage.vercel.app",
+      "deployedAt": "2026-09-15T19:02:04Z",
+      "ciRun": 35009299061,
+      "browserTestsPassed": 26,
+      "log": "site-production.log"
+    },
+    {
+      "repository": "Data-Advantage/pptx-gallery",
+      "defaultBranch": "main",
+      "commit": "fc51a04cf50fe86af67e0a8d040d6569a60d2249",
+      "pullRequest": 30,
+      "url": "https://www.pptx.gallery",
+      "deploymentId": 6466078792,
+      "deploymentUrl": "https://pptx-gallery-1i5159ors-dataadvantage.vercel.app",
+      "deployedAt": "2026-09-15T18:49:46Z",
+      "ciRun": 35009030421,
+      "browserTestsPassed": 5,
+      "log": "gallery-production.log"
+    },
+    {
+      "repository": "Data-Advantage/pptx-dev",
+      "defaultBranch": "master",
+      "commit": "7008ed069bcd33231c8049d445dba05b773d2661",
+      "pullRequest": 39,
+      "url": "https://www.pptx.dev",
+      "deploymentId": 6466097872,
+      "deploymentUrl": "https://pptx-2wnblmr1o-dataadvantage.vercel.app",
+      "deployedAt": "2026-09-15T18:50:47Z",
+      "ciRun": 35009025201,
+      "browserTestsPassed": 10,
+      "log": "app-production.log"
+    }
+  ],
+  "totalProductionBrowserTestsPassed": 41
+}
