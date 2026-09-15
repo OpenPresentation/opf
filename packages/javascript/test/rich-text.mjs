@@ -49,3 +49,30 @@ assert.ok(composedTabs.items[0].text.richLines.flatMap(line=>line.fragments).som
 assert.deepEqual(tabs,tabSource);
 assert.throws(()=>fitRichText(['\t'],box,20,20,{...tabOptions,textMeasurement:{measure:()=>0}}),/positive finite/);
 console.log('Rich tabs preserve source/style boundaries and line-relative stops across wrapping; width and outline providers never receive control tabs.');
+
+// A non-additive provider exposes accidental shaping at source-run boundaries.
+const jointCalls=[];
+const jointMeasurement={measure(text,size){jointCalls.push(text);return size*(text.length*.5-(text.match(/AV/g)?.length??0)*.2-(text.match(/ffi/g)?.length??0)*.1);}};
+const jointOptions={...options,textMeasurement:jointMeasurement};
+const split=[{text:'A',color:'#CC2222',link:'https://example.org',underline:true},{text:'V of',color:'#2222CC'},{text:'fice\t tail\r'},{text:'\nA'},{text:'\u0301B'}];
+const saved=structuredClone(split),joined=split.map(run=>run.text).join('');
+for(const width of [200,82,41]){
+ const actual=fitRichText(split,{...box,width,height:1000},20,20,jointOptions);
+ const reference=fitRichText([joined],{...box,width,height:1000},20,20,jointOptions);
+ assert.deepEqual(actual.lines,reference.lines,'Authored run boundaries cannot change wrapping');
+ assert.deepEqual(actual.richLines.map(line=>line.width),reference.richLines.map(line=>line.width));
+ for(const line of actual.richLines)for(const part of line.fragments){
+  const sources=part.sources??[part];
+  assert.equal(part.text,sources.map(source=>source.text).join(''));
+  for(const source of sources){
+   assert.equal(source.text,split[source.runIndex].text.slice(source.start,source.end));
+   assert.equal(source.run,split[source.runIndex],'Source formatting and metadata retain the original run');
+  }
+ }
+}
+assert.deepEqual(split,saved);
+assert.ok(jointCalls.includes('AV office'));
+const isolated=fitRichText([{text:'A'},{text:'V',bold:true},{text:'A',italic:true},{text:'V',superscript:true},{text:'A',fontFamily:'Another'},{text:'V',fontSize:30}],{...box,width:1000},20,20,jointOptions);
+assert.equal(isolated.richLines[0].fragments.length,6,'Effective typography changes retain separate contexts');
+assert.ok(isolated.richLines[0].fragments.every(part=>!part.sources));
+console.log('Cross-run shaping preserves joint widths, wraps, graphemes, tabs, original spans and paint metadata; effective typography changes remain separate.');

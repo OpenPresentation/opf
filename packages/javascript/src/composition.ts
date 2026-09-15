@@ -1049,7 +1049,15 @@ export interface RichTextFragment {
   x: number; width: number; fontSize: number; baselineShift: number;
   style: TextStyle; run: RichTextRun;
 }
-export interface RichTextLine { fragments: RichTextFragment[]; width: number; y: number; baseline: number; height: number }
+/** Original run-relative source and formatting within a jointly shaped fragment. */
+export type RichTextSourceSpan = Pick<RichTextFragment,'text'|'runIndex'|'start'|'end'|'style'|'run'>;
+/** One typography context can span authored runs without merging their source. */
+export interface RichTextShapingGroup {
+  text: string; sources: RichTextSourceSpan[];
+  x: number; width: number; fontSize: number; baselineShift: number; style: TextStyle;
+  kind?: never;
+}
+export interface RichTextLine { fragments: (RichTextFragment | RichTextShapingGroup)[]; width: number; y: number; baseline: number; height: number }
 export interface RichTextFit extends TextFit { richLines: RichTextLine[]; height: number }
 export interface RichTextOptions {
   style: TextStyle;
@@ -1087,8 +1095,8 @@ function richTextLayouter(input: readonly (string | RichTextRun)[], box: LayoutB
   const whole=source.map(entry=>entry.run.text).join('');
   const layout=(fontSize:number):RichTextFit=>{
     const ratio=fontSize/requestedSize;
-    const fragments=(start:number,end:number):RichTextFragment[]=>{
-      let x=0;const result:RichTextFragment[]=[];
+    const fragments=(start:number,end:number):(RichTextFragment|RichTextShapingGroup)[]=>{
+      let x=0;const result:(RichTextFragment|RichTextShapingGroup)[]=[];
       for(const entry of source){
         const a=Math.max(start,entry.start),b=Math.min(end,entry.end);if(b<=a)continue;
         const text=whole.slice(a,b),normalSize=(entry.run.fontSize!==undefined?entry.run.fontSize*4/3:requestedSize)*ratio;
@@ -1096,7 +1104,16 @@ function richTextLayouter(input: readonly (string | RichTextRun)[], box: LayoutB
         const size=normalSize*(script?0.7:1),baselineShift=entry.run.superscript?-normalSize*.35:entry.run.subscript?normalSize*.2:0;
         const measure=textWidthMeasurer(entry.style,options.textMeasurement);
         const add=(text:string,start:number,width:number,kind?:'tab')=>{
-          result.push({text,runIndex:entry.runIndex,start:start-entry.start,end:start+text.length-entry.start,x,width,fontSize:size,baselineShift,style:entry.style,run:entry.run,...(kind?{kind}:{})});x+=width;
+          const span={text,runIndex:entry.runIndex,start:start-entry.start,end:start+text.length-entry.start,style:entry.style,run:entry.run};
+          const previous=result.at(-1);
+          if(!kind&&previous&&!previous.kind&&previous.fontSize===size&&previous.baselineShift===baselineShift&&sameTypography(previous.style,entry.style)){
+            const joined=previous.text+text,joinedWidth=measure(joined,size);
+            const sources='sources' in previous?previous.sources:[{text:previous.text,runIndex:previous.runIndex,start:previous.start,end:previous.end,style:previous.style,run:previous.run}];
+            result[result.length-1]={text:joined,sources:[...sources,span],x:previous.x,width:joinedWidth,fontSize:size,baselineShift,style:previous.style};
+            x=previous.x+joinedWidth;
+          }else{
+            result.push({...span,x,width,fontSize:size,baselineShift,...(kind?{kind}:{})});x+=width;
+          }
         };
         let cursor=a;
         for(const [index,part]of text.split('\t').entries()){
@@ -1145,6 +1162,11 @@ function richTextLayouter(input: readonly (string | RichTextRun)[], box: LayoutB
     return {lines:ranges.map(range=>whole.slice(range.start,range.end)),fontSize,lineHeight:Math.max(fontSize*1.22,...richLines.map(line=>line.height)),richLines,height:y,overflow:y>box.height+.01||richLines.some(line=>line.width>box.width+.01)};
   };
   return layout;
+}
+
+function sameTypography(a:TextStyle,b:TextStyle):boolean {
+  return a.fontFamily===b.fontFamily&&a.fontWeight===b.fontWeight&&!!a.italic===!!b.italic&&
+    a.fontFace?.family===b.fontFace?.family&&a.fontFace?.bold===b.fontFace?.bold&&a.fontFace?.italic===b.fontFace?.italic;
 }
 
 export type ListText = string | readonly (string | RichTextRun)[];
