@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.8.0
+
+- Require core 0.10.0 and render accepted metric, timeline, content-card and vector-aware text geometry. Preserve selected readability floors and scalar source whitespace; keep estimated rich text flowing with native SVG advances.
+- Retain reviewed 805-slide corpus baselines and corrected catalog examples. Shared furniture and the prepared HarfBuzz/variable-instance draft are not included in this release.
+
 - Require Node 24 (`24.x`) for the next release and development; upgrade from Node 20 or 22 before installing. Retain browser and operating-system checks, and retire duplicate Node 20 CI jobs. Previously published packages and evidence are unchanged.
 
 - Resolve installed preferred-family weight variants and carry physical family/style-link metadata through accepted text styles. Diagnose ambiguous grouped faces and preserve explicit caller family overrides. Requires the coordinated core type and PPTX source increment; native paint validation remains separate.

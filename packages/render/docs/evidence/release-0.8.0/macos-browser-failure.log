@@ -1,0 +1,26 @@
+
+> @openpresentation/opf-render@0.8.0 test:browser
+> npm run build:browser-check && node test/browser-check.mjs
+
+
+> @openpresentation/opf-render@0.8.0 build:browser-check
+> node scripts/build-browser-check.mjs
+
+Browser bundle passed: no native raster modules. Serve /artifacts/jpeg/browser/index.html to run the JPEG orientation comparisons.
+Quote browser fixtures ready: actual glyph containment with four bundled open font faces.
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Error: Orientation 7 crop: excessive image mismatch
+    at http://127.0.0.1:62398/artifacts/jpeg/browser/bundle.js:36960:66
+    at file:///private/tmp/opf-publish-ready-20260915.kFIiNe/opf-render/test/browser-check.mjs:31:12 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'FAIL: JPEG browser orientation',
+  expected: /^PASS:/,
+  operator: 'match',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
