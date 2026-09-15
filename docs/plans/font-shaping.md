@@ -90,11 +90,34 @@ exports absent from published 0.9.0. Both failures are
 [retained with the CI correction](https://github.com/OpenPresentation/opf-render/tree/246459149000f0be41766a1cf020676f4e38e0ff/docs/evidence/woff2-hmtx-ci-20260914).
 Renderer `246459149000f0be41766a1cf020676f4e38e0ff` uses the same pinned core
 candidate as Linux and stops at each failed preparation command. Runtime and
-tests are unchanged from `f5a0275`; [current-head CI](https://github.com/OpenPresentation/opf-render/actions/runs/34925817838)
-remains separate and must be consulted before accepting cross-platform completion.
+tests are unchanged from `f5a0275`; [CI at that correction](https://github.com/OpenPresentation/opf-render/actions/runs/34925817838)
+passed Mac/Windows Node and Linux browser, installed-package and coordinated
+checks. Its raw logs are retained in the following collection checkpoint.
 
-Next: transformed metrics with shared collection glyph tables, DFont resources,
-CFF/CFF2 and variable-instance coverage, paragraph
+Renderer `9bd4d320588750d8afa4f1b5732ec5fa4517393d` preserves each collection
+face's transformed metrics when glyph tables are shared. Reused glyph bounds
+and counts remain local to one decode; horizontal metric counts remain specific
+to each face. It validates table identity/pairing before decompression and rejects
+inconsistent shared metric reconstruction. All 33 bundled faces participate in
+198 selected-face cases with distinct metric tables, four shared-metric/literal
+controls and seven malformed controls. Test derivatives are renamed and retain
+licenses; shipped fonts remain unchanged.
+
+The [collection evidence](https://github.com/OpenPresentation/opf-render/tree/9bd4d320588750d8afa4f1b5732ec5fa4517393d/docs/evidence/woff2-collections-20260914)
+retains the initial product failure, source hashes and independent FontTools
+per-face reconstruction of every metric, glyph coordinate and instruction byte.
+That reference check does not claim whole-collection decoding; its separate
+recompilation limitation is recorded. All 373 browser pixel pairs are identical
+and nonempty, including fresh tarballs, within the unchanged advance gate. The
+expanded fixture transfer uses bounded batches on one persistent page/shaper
+after reproducing Chromium's DevTools message-size limit. All 805 reviewed
+baseline slides, public TypeScript consumers and the zero-finding audit pass.
+[CI at this head](https://github.com/OpenPresentation/opf-render/actions/runs/34928184737)
+has passed Mac/Windows Node checks, including all 198 collection cases; raw logs
+were inspected. Linux browser, installed-package and coordinated checks remain
+in progress and must be consulted before accepting that CI matrix.
+
+Next: DFont resources, CFF/CFF2 and variable-instance coverage, paragraph
 itemization/bidi, fallback, performance/lifetime analysis, complete slide/ink
 review and shared editing/undo/export acceptance. Fontkit remains the default;
 this is not registry publication, site adoption or native compatibility proof.

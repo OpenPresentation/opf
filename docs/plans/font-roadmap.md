@@ -31,7 +31,10 @@ the subsequent [container checkpoint](font-shaping.md#container-checkpoint--sept
 adds bounded WOFF/WOFF2 preparation and consistent selected-TTC measurement,
 embedding and browser pixels. The optional horizontal-metrics follow-up covers
 99 literal-glyph inputs and preserves the original wrapper/license alongside
-the compatible browser face. Shared collection metrics, DFont/CFF/variable coverage, paragraph handling,
+the compatible browser face. The shared-collection follow-up preserves per-face
+metrics across 198 selected-face cases and independently reconstructs each face;
+fresh packages pass 373 identical nonempty browser pixel pairs and the unchanged
+805-slide baseline. DFont/CFF/variable coverage, paragraph handling,
 shared editing/export and native acceptance are still required. The study above
 remains the historical probe checkpoint.
 
