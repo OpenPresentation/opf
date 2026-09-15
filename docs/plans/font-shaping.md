@@ -60,7 +60,17 @@ TypeScript consumers and a zero-finding audit. The source-pinned WOFF2 adapter
 uses bounded synchronous Brotli and works without JavaScript `unsafe-eval`.
 These are portable local/installed results; consult PR21 for current-head CI.
 
-Next: DFont resources, CFF/CFF2 and variable-instance coverage, paragraph
+The follow-up renderer `a8e13eb82de9779593876aa882adc2eafef6a956` corrects
+allocation based on advisory WOFF2 glyph-table lengths. Two Google-accepted
+inputs rejected by the preceding installed candidate now preserve the original
+glyph runs within the configured limit. Fresh installed checks include 72
+browser pixel pairs; all 805 baseline slides still pass. The
+[failure and corrected acceptance](https://github.com/OpenPresentation/opf-render/tree/a8e13eb82de9779593876aa882adc2eafef6a956/docs/evidence/woff2-reconstruction-20260914)
+are retained separately. Initial container CI passed on all three OS jobs;
+current-head checks remain the authority for this follow-up.
+
+Next: applicable null-glyf/transformed-hmtx combinations, DFont resources,
+CFF/CFF2 and variable-instance coverage, paragraph
 itemization/bidi, fallback, performance/lifetime analysis, complete slide/ink
 review and shared editing/undo/export acceptance. Fontkit remains the default;
 this is not registry publication, site adoption or native compatibility proof.
