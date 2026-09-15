@@ -382,6 +382,15 @@ pending; this does not promote the backend or close native/font gates. See the
 
 ## Implementation and promotion requirements
 
+[Whole-source grapheme editing](../evidence/cross-run-graphemes-20260915/README.md)
+now excludes illegal caret stops at formatting boundaries, with twenty prepared
+and thirty-nine rich-input workflows passing from fresh packages. A retained
+installed probe also shows a remaining shaping-context defect: splitting
+identically formatted Arimo `AV` changes width by 2.375px, and Gelasio `office`
+by 0.765625px. Preserve shaping across compatible run boundaries while retaining
+source/run mappings; these cases must be fixed before claiming complete rich
+shaping or promoting the backend.
+
 [Visible-line navigation](../evidence/visual-line-navigation-20260915/README.md)
 now passes from fresh packages: 19 prepared and 36 rich-input workflows cover
 vertical/line-edge keys, Shift selection and pointer affinity without rewriting
