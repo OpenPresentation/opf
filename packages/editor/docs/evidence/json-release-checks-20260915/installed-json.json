@@ -1,0 +1,98 @@
+{
+  "node": "v24.21.0",
+  "name": "@openpresentation/opf-editor",
+  "version": "0.6.0",
+  "integrity": "sha512-w9+04FXBWqdBQ5RJ+JoQ7zpt3jmT/Mci8qZEUlYuRltWfVesc5FUfPZX5FNczrb9tOYqoOplmJdcHry6MY0mIQ==",
+  "files": {
+    "LICENSE": "c977d11e7e9de5bd31ab787b9a302475c0487837c66f665c174d9f92b18937d2",
+    "README.md": "e58cee38e3a49c4e3e3578ae0fd0e434ffd19c2349c3c5e1d7b1e09dc0de65da",
+    "dist/block-controls.js": "e47850c451e316b160941d44e7b52025bd4f85fa7b5ad80ef6eb71271d323e44",
+    "dist/blocks.d.ts": "b554c438461c3ce9e4ecb90cedff8d8d220029e69c8f562747d3d3afc89077f9",
+    "dist/blocks.js": "50d64df19203caec4864b3e731b86f73eb9b2b72f23d3c55edd6972852d63d8a",
+    "dist/canvas-fields.js": "0a0aef0d429e7b933126ff3c602b6f68bbca335a98c6e08bc86f5106a2ca7346",
+    "dist/canvas.d.ts": "b30ec3576734acbceb4a802082b37ecf45a680c727c773da5f9aa2f3cc7624f5",
+    "dist/canvas.js": "6fd0df1553a95bfa5f65c15d44d5c5a94ebaf5d91a4eff23d3ce31d6f1f9a169",
+    "dist/data.d.ts": "46de200f31d07423f61ff3c7cf6285c3527deeb2df165350748a5d5679ce41e4",
+    "dist/data.js": "cdc50b4b2aa02ab1049ab10dec3f3f0b5aa8e7d35e1d76b763ecead205ecf754",
+    "dist/galleries.d.ts": "0810ffea96fc14749bd08635589a1ff9af1b99a98d2ec21389282ee491ee37ce",
+    "dist/galleries.js": "7cfb910e9965c0f56e222a460d24c98a840fb976bf7fe1dd38a0d73e8cf65247",
+    "dist/index.d.ts": "389f8cd2721c89dd827dd74bb22fa4b48f4d91783b12a2c5761f069e2866a21a",
+    "dist/index.js": "6fba43a1cc82ede8da349555316ae266fb107135c06f89203f4e1e054f6463b9",
+    "dist/json-editor.d.ts": "2141f7805af0bee4455203cf55e8377685993da18e9c1c46b37a7413fd410fbb",
+    "dist/json-editor.js": "47e3ec2c4463de57d08f355ac4ca3fdeda9e15117ce6f56e910722f5e9ea07d2",
+    "dist/json-menu.js": "90cf5180efac9f22030316fb83a9ad15f07117f62d96e495d625d832ee79f9b5",
+    "dist/json-options.d.ts": "316509db38e65994ec7767227670df0420ec78a9438c765da2f141cb86753ae8",
+    "dist/json-options.js": "836dd868f4b499b7fa9218c4e635ce2fd8895e520afd8adffb411980c0c7a3a2",
+    "dist/json-source.js": "561d453b88487d80a6e33a059a10a43bc45ed29bcfa5da8fe1e6a60342e5e4e2",
+    "dist/layout-handles.js": "b78ea7a5be0ed1f5c91dd217974086800b19f6c44c75fa2e3946918e5b46edf0",
+    "dist/layout.d.ts": "eceb7dcbd0694cd78cef3ec91129f4620dd58bb4b6eee29edf18373944adeed7",
+    "dist/layout.js": "2dc0796ec514dcd03c240782587bb62e9779ea5e3992bf503a41d2a1df6695f2",
+    "dist/react.d.ts": "ae67a6dac4eb3cec0a601c5bb23b4e81cf5e18430fc44d7411f0c7b73cd45d1d",
+    "dist/react.js": "a26b7d481505653d297e981e2a80673e2673096ef7ab62e47e9ca5089a03c3cf",
+    "dist/rich-text-input.js": "b16f9162f4491c8757623811547c337fea1922b3f2ff86409cc4c4db8dc3e8c8",
+    "dist/rich-text-toolbar.js": "d76a671693dccacbd02bc999104d526a64bd8f212eeb7e4aa8cbe1f4b4626d39",
+    "dist/rich-text.d.ts": "857894362cbd2b11ae1b65fb9633a111f50c1f6f9e53cc4245636774ded69580",
+    "dist/rich-text.js": "04ce1f9b5ab81f5f6fe49b2368d4764813f86c7a0acb7f31acbd2784b35d10e1",
+    "dist/schema-inspector.d.ts": "bd38e4993959288ef0f5d768602920b9017167a9b983adcc4586e341181bd53b",
+    "dist/schema-inspector.js": "c03b4d66d37ae1e098ec4248ded1986782139d2641b7faa3ed0765febd0ec488",
+    "dist/schema.d.ts": "9efccc40a432649623b4c390b3acba8a209763587c0e1d508a35d49aac9c6e75",
+    "dist/schema.js": "b1a1b2d67a6d21c7dccc4781f22562b6127890be98d453c5cd3fa3ebeaabe5ef",
+    "dist/svelte.d.ts": "94b07603d052d3ee8b56826e0f95e7e4cfd440bef3ca7f4f9ee21f051339ce58",
+    "dist/svelte.js": "973e1ff64700b4090b351ca60c1a2d72db5161e2543574e88b3e2df776e2e7ae",
+    "dist/text-input.js": "5e805cfb0a014795631992b9f3ce34865e43d86f141b8091dc78a4238b87dd83",
+    "dist/transfer.d.ts": "a31c567cf5ff0143c6216f4f0a70eacc32c556272c48bacb0db112caa9a893c4",
+    "dist/transfer.js": "1fb5d0de5ed85f77a0f7a9ad86915e7a57b465b7f91bd4a68ee2577c955dab8c",
+    "package.json": "decd45246a87b9698efc962e7360dbe940547769955ea1803fb1f01d7795fdaf"
+  },
+  "dependencies": {
+    "@openpresentation/opf": {
+      "version": "0.9.0",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.9.0.tgz",
+      "integrity": "sha512-AnduMR/bPFKJv2fYT+cYEINLkiZmN0xuVBETcNzkU6IC7GdgTyb+x5fCiODHcowfrLIJJEjZ8jZzZJGBrxnX5A=="
+    },
+    "@openpresentation/opf-render": {
+      "version": "0.7.0",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.7.0.tgz",
+      "integrity": "sha512-eHBMbnmK5bELUmUwJ/qWRtJBIZFkUJsbUvkjzSc6yhNA2JQ2Em/My9+Of4c79y0tXrFCQaZ5xvOkOdtyGUu5Gw=="
+    },
+    "@openpresentation/opf-pptx": {
+      "version": "0.7.0",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.7.0.tgz",
+      "integrity": "sha512-U/nqxWqkMQ/ZWxyW6DP8Ut1k/BlDDuD8nvhlIHoW0UpDqMxZTwQKo//p4QcBwJUK+ZZ1uklJwrxuzRdIZ9fY/A=="
+    }
+  },
+  "tests": [
+    {
+      "file": "json-source.mjs",
+      "fixtureSha256": "f3518b94d6aa1582ff5fdc157121064b1ab6ee599de4fbae9954d11d86012f6b",
+      "output": "JSON source: exact mixed endings through typing, multi-range edits, deletion, native history, explicit paste and external changes."
+    },
+    {
+      "file": "json-options.mjs",
+      "fixtureSha256": "2b90b6b3b88c61ebb994bf33b744af3d300f3868edf93a9b6f5db7391b450523",
+      "output": "JSON options: schema paths, catalog precedence, exact token edits, custom values, invalid drafts, malformed catalog arrays and duplicate-key rejection pass."
+    }
+  ],
+  "jsonBrowser": {
+    "status": "passed",
+    "runtime": "installed",
+    "node": "v24.21.0",
+    "browser": "153.0.8010.12",
+    "platform": "darwin",
+    "keymapPlatform": "darwin",
+    "checks": [
+      "Paired delimiters, nested indentation, Tab/outdent and keyboard undo/redo",
+      "Bullet continuation supplies commas/quotes and retains tabs, mixed line endings and unrelated content",
+      "Native deletion/undo preserves original CRLF and unrelated external updates; split-CRLF replacement rejected",
+      "Dispatched clipboard event preserves observed mixed endings through undo/redo (OS clipboard not claimed)",
+      "Keyboard and pointer catalog menus, filtering, one-token replacement, undo and stale context dismissal",
+      "Invalid drafts retained, search panel and explicit formatting preserve JSON values and numeric lexemes",
+      "Destroy cancels pending menus and remount creates one editor"
+    ],
+    "errors": [],
+    "externalRequests": [],
+    "verifierSha256": "3054057fa7439c0e23d7ececfd6be4c15172d79feeb364e45ebbc15598af699f",
+    "bundleSha256": "4182d0ee1be5d9e62a413c6a03249430f56764511a43cf879d20f1ce0106e634"
+  },
+  "boundary": "JSON control only, from a byte-matched installed candidate and registry dependencies. Full-package acceptance still requires every subsequent gate and a successful overall command exit."
+}
