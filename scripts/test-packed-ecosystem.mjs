@@ -20,6 +20,10 @@ const verifyStyledTables = !registry || coreVersion?.[0] > 0 || coreVersion?.[1]
 const verifySharedQuotes = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] >= 8;
 // Shared code APIs shipped in core 0.9 with renderer/PPTX 0.7 and editor 0.6.
 const verifySharedCode = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] >= 9;
+// Font preparation ships in renderer 0.8; keep prior registry plans testable.
+const rendererVersion = releasePlan?.packages.find(item => item.name === '@openpresentation/opf-render')?.version.split('.').map(Number);
+const verifyFontPreparation = !registry || rendererVersion?.[0] > 0 || rendererVersion?.[1] >= 8;
+const verifyEstimatedRichText = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] >= 10;
 
 async function readHarness(repo, file) {
   const directory = repo === 'opf' ? root : path.resolve(root, '..', repo);
@@ -88,7 +92,7 @@ run("npm", [
   "--cache",
   path.join(out,'cache'),
 ]);
-if (!registry) {
+if (verifyFontPreparation) {
   await writeFile(path.join(consumer,'check-font-preparation.mjs'), `
 import assert from 'node:assert/strict';
 import {prepareNodeFonts} from '@openpresentation/opf-render/fonts-node';
@@ -110,34 +114,37 @@ const imported=await fromPptx(await toPptx(editor.document,options));
 assert.equal(imported.slides[0].title,source.slides[0].title);
 assert.equal(JSON.stringify(source),original);
 assert.equal(registry.embeddedFonts.length,33);
-console.log('Installed candidate font preparation passed layout, edit/undo, SVG/PNG, editable PPTX export and heading reimport.');
+console.log('Installed font preparation passed layout, edit/undo, SVG/PNG, editable PPTX export and heading reimport.');
 `);
   run(process.execPath,['check-font-preparation.mjs']);
-  // Furniture is an unpublished coordinated API. Exercise its mutation guards
-  // using the installed converter/core/fonts, never a sibling source alias.
-  const furnitureHarness = (await readHarness('opf-pptx', 'test/furniture-provenance.mjs'))
-    .replaceAll("'../dist/index.js'", "'@openpresentation/opf-pptx'")
-    .replaceAll("'../vendor/pptxgenjs/pptxgen.es.js'", "'./node_modules/@openpresentation/opf-pptx/vendor/pptxgenjs/pptxgen.es.js'");
-  await mkdir(path.join(consumer, 'fixtures/images'), {recursive: true});
-  for (const name of ['wide.png', 'tall.png']) await writeFile(path.join(consumer, 'fixtures/images', name),
-    await readFile(path.resolve(root, '../opf-pptx/test/fixtures/images', name)));
-  await writeFile(path.join(consumer, 'furniture-provenance.mjs'), furnitureHarness);
-  run(process.execPath, ['furniture-provenance.mjs']);
-  const richTabsHarness=(await readHarness('opf-pptx','test/rich-tabs.mjs')).replaceAll("'../dist/index.js'","'@openpresentation/opf-pptx'");
-  await writeFile(path.join(consumer,'rich-tabs.mjs'),richTabsHarness);
-  run(process.execPath,['rich-tabs.mjs']);
-  const richSourceHarness=(await readHarness('opf-pptx','test/rich-source-groups.mjs')).replaceAll("'../dist/index.js'","'@openpresentation/opf-pptx'");
-  await writeFile(path.join(consumer,'rich-source-groups.mjs'),richSourceHarness);
-  run(process.execPath,['rich-source-groups.mjs']);
-  await mkdir(path.join(consumer,'test'),{recursive:true});
-  for(const name of ['font-source-groups.mjs','font-source-groups-browser.mjs']){
-    const source=(await readHarness('opf-render','test/'+name))
-      .replaceAll("'../dist/fonts-node.js'","'@openpresentation/opf-render/fonts-node'")
-      .replaceAll("'../dist/font-shaping.js'","'@openpresentation/opf-render/font-shaping'")
-      .replaceAll("'../dist/svg.js'","'@openpresentation/opf-render/svg'");
-    await writeFile(path.join(consumer,'test',name),source);
+  // Furniture is an unpublished coordinated API. Its mutation guards apply to
+  // candidate tarballs; the pinned registry release predates this harness/API.
+  // Add its released-version gate alongside the others when publishing it.
+  if (!registry) {
+    const furnitureHarness = (await readHarness('opf-pptx', 'test/furniture-provenance.mjs'))
+      .replaceAll("'../dist/index.js'", "'@openpresentation/opf-pptx'")
+      .replaceAll("'../vendor/pptxgenjs/pptxgen.es.js'", "'./node_modules/@openpresentation/opf-pptx/vendor/pptxgenjs/pptxgen.es.js'");
+    await mkdir(path.join(consumer, 'fixtures/images'), {recursive: true});
+    for (const name of ['wide.png', 'tall.png']) await writeFile(path.join(consumer, 'fixtures/images', name),
+      await readFile(path.resolve(root, '../opf-pptx/test/fixtures/images', name)));
+    await writeFile(path.join(consumer, 'furniture-provenance.mjs'), furnitureHarness);
+    run(process.execPath, ['furniture-provenance.mjs']);
+    const richTabsHarness=(await readHarness('opf-pptx','test/rich-tabs.mjs')).replaceAll("'../dist/index.js'","'@openpresentation/opf-pptx'");
+    await writeFile(path.join(consumer,'rich-tabs.mjs'),richTabsHarness);
+    run(process.execPath,['rich-tabs.mjs']);
+    const richSourceHarness=(await readHarness('opf-pptx','test/rich-source-groups.mjs')).replaceAll("'../dist/index.js'","'@openpresentation/opf-pptx'");
+    await writeFile(path.join(consumer,'rich-source-groups.mjs'),richSourceHarness);
+    run(process.execPath,['rich-source-groups.mjs']);
+    await mkdir(path.join(consumer,'test'),{recursive:true});
+    for(const name of ['font-source-groups.mjs','font-source-groups-browser.mjs']){
+      const source=(await readHarness('opf-render','test/'+name))
+        .replaceAll("'../dist/fonts-node.js'","'@openpresentation/opf-render/fonts-node'")
+        .replaceAll("'../dist/font-shaping.js'","'@openpresentation/opf-render/font-shaping'")
+        .replaceAll("'../dist/svg.js'","'@openpresentation/opf-render/svg'");
+      await writeFile(path.join(consumer,'test',name),source);
+    }
+    run(process.execPath,['test/font-source-groups.mjs']);
   }
-  run(process.execPath,['test/font-source-groups.mjs']);
   for (const repo of ['opf-render','opf-pptx']) {
     const source=(await readHarness(repo,'test/font-variants.mjs'))
       .replaceAll("'../dist/fonts-node.js'","'@openpresentation/opf-render/fonts-node'")
@@ -324,7 +331,7 @@ run(process.execPath, [
   "--lib",
   "ES2022,DOM",
   "browser.ts",
-  ...(!registry ? ["font-preparation-types.mts"] : []),
+  ...(verifyFontPreparation ? ["font-preparation-types.mts"] : []),
   ...(verifyStyledTables ? ["styled-types.mts"] : []),
 ]);
 const { build } = createRequire(require.resolve("tsup"))("esbuild");
@@ -370,7 +377,7 @@ const richHarness=(await readHarness('opf','scripts/test-rich-text-browser.mjs')
 await writeFile(path.join(consumer,'rich-tests.mjs'),richHarness);
 await build({entryPoints:[path.join(consumer,'rich-tests.mjs')],outfile:path.join(browserOut,'packed-rich-text-tests.js'),bundle:true,platform:'browser',format:'esm'});
 await writeFile(path.join(browserOut,'packed-rich-text-tests.html'),'<!doctype html><meta charset="utf-8"><title>Packed rich-text checks</title><h1>Packed rich-text checks</h1><div id="canvas" style="max-width:1100px"></div><pre id="results"></pre><script type="module" src="./packed-rich-text-tests.js"></script>');
-if(!registry){
+if(verifyEstimatedRichText){
   await writeFile(path.join(browserOut,'packed-rich-text-estimated-tests.js'),await readFile(path.join(browserOut,'packed-rich-text-tests.js')));
   await writeFile(path.join(browserOut,'packed-rich-text-estimated-tests.html'),browserHtml('rich-text-estimated'));
 }
@@ -419,7 +426,7 @@ if (verifyStyledTables) {
   console.log('Installed styled-table browser harness built: artifacts/editor/packed-styled-table-tests.html. Open it to verify real pointer/keyboard interaction.');
 }
 
-const browserSuites=['canvas','rich-text',...(!registry?['rich-text-estimated']:[]),'layout','block','list','create',...(verifyStyledTables?['styled-table']:[])];
+const browserSuites=['canvas','rich-text',...(verifyEstimatedRichText?['rich-text-estimated']:[]),'layout','block','list','create',...(verifyStyledTables?['styled-table']:[])];
 const hashFile=async file=>createHash('sha256').update(await readFile(file)).digest('hex');
 await writeFile(path.join(browserOut,'packed-browser-manifest.json'),JSON.stringify({
   mode:librariesOnly?'registry-libraries':registry?'registry':'packed',

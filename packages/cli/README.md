@@ -13,9 +13,9 @@ npm install -g @openpresentation/cli
 opf --version
 ```
 
-Or install it as a development dependency and use `npx --no-install opf`. CLI 0.7.0 bundles OPF 0.9.0, including complete code and quote composition, source-preserving pagination and readability floors, styled/merged table cells, and the six OPF agent skills. Browser rendering and editable PowerPoint export require the coordinated library releases; the current rollout is tracked in `docs/plans/shared-code-release.md` in the repository.
+Or install it as a development dependency and use `npx --no-install opf`. CLI 0.8.0 bundles OPF 0.10.0, including complete code and quote composition, source-preserving pagination and readability floors, styled/merged table cells, and the six OPF agent skills. Browser rendering and editable PowerPoint export require the coordinated library releases; the current rollout is tracked in `docs/plans/shared-code-release.md` in the repository.
 
-To verify the standalone package from source, run `pnpm install` and `pnpm test:cli:packed`. This creates `artifacts/cli/openpresentation-cli-0.7.0.tgz`, which can be installed using its absolute path. For source development, run `pnpm --filter @openpresentation/cli build` and `node packages/cli/dist/index.js --help`.
+To verify the standalone package from source, run `pnpm install` and `pnpm test:cli:packed`. This creates `artifacts/cli/openpresentation-cli-0.8.0.tgz`, which can be installed using its absolute path. For source development, run `pnpm --filter @openpresentation/cli build` and `node packages/cli/dist/index.js --help`.
 
 ## Install agent skills
 
@@ -127,4 +127,4 @@ Pagination emits ordinary OPF slides and a page mapping. Preview the result with
 
 ## OPF lint (unreleased)
 
-This checkout adds `opf lint <file|-> [--config <local-json-file>] [--strict]`. It reports source ranges, schema constraints, local catalog alternatives, asset registry errors and explicit design contracts without modifying the document or fetching resources. JSON reports include source/configuration hashes and distinguish structural checks from unperformed layout/font/native checks. Published CLI 0.7.0 does not include this command yet; use a built checkout or verified candidate. See [the lint guide](../../docs/lint.md).
+CLI 0.8.0 adds `opf lint <file|-> [--config <local-json-file>] [--strict]`. It reports source ranges, schema constraints, local catalog alternatives, asset registry errors and explicit design contracts without modifying the document or fetching resources. JSON reports include source/configuration hashes and distinguish structural checks from unperformed layout/font/native checks. Earlier CLI versions do not include this command. See [the lint guide](../../docs/lint.md).

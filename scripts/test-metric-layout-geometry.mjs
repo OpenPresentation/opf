@@ -1,4 +1,4 @@
-// Current checkout metric API; registry renderer supplies only outer cells and font advances.
+// Current checkout metric API with current registry outer cells and font advances.
 // node scripts/test-metric-layout-geometry.mjs <registry-consumer> [report.json]
 import assert from 'node:assert/strict';
 import {readFile,writeFile,realpath} from 'node:fs/promises';
@@ -14,17 +14,26 @@ const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const modules=await realpath(path.join(consumer,'node_modules'));
 const lock=JSON.parse(await readFile(path.join(consumer,'package-lock.json'),'utf8'));
 const plan=JSON.parse(await readFile('release-plan.json','utf8'));
-const baselineBytes=await readFile('docs/evidence/shared-code-complete/registry-code-node24.json');
+// The installed-code step verifies the current plan against fresh npm archives.
+// Historical release evidence must never pin a newer consumer to older bytes.
+const baselineFile='artifacts/editor/installed-code-registry-summary.json';
+const baselineBytes=await readFile(baselineFile);
 const baseline=JSON.parse(baselineBytes),packages=[];
+assert.equal(baseline.mode,'registry','Metric verification requires registry evidence');
+assert.equal(await realpath(baseline.consumer),consumer,'Registry evidence must describe this consumer');
+assert.equal(baseline.lockSha256,hash(await readFile(path.join(consumer,'package-lock.json'))),'Registry evidence must match the installed lock');
 async function load(name,entrypoint) {
   const dir=await realpath(path.join(modules,name));
   assert.ok(dir.startsWith(modules+path.sep),`No source link for ${name}`);
   const manifest=JSON.parse(await readFile(path.join(dir,'package.json'),'utf8'));
   if (!packages.some(p=>p.name===name)) {
     const entry=lock.packages['node_modules/'+name],expected=baseline.packages.find(p=>p.name===name);
+    assert.ok(expected,`Missing verified registry package: ${name}`);
     assert.equal(manifest.version,plan.packages.find(p=>p.name===name).version);
+    assert.equal(expected.version,manifest.version,'Registry evidence must match the installed version');
+    assert.equal(expected.gitHead,plan.verificationRefs[name.split('/').at(-1)],'Registry evidence must match the immutable release');
     assert.equal(entry.version,manifest.version);assert.ok(!entry.link&&entry.resolved.startsWith('https://registry.npmjs.org/'));
-    assert.equal(entry.integrity,expected.integrity);
+    assert.equal(entry.integrity,expected.integrity,'Registry evidence must match the installed integrity');
     for (const [file,digest] of Object.entries(expected.files)) {
       const actual=await realpath(path.join(dir,file));assert.ok(actual.startsWith(dir+path.sep));
       assert.equal(hash(await readFile(actual)),digest,`${name}/${file} must match its verified registry archive`);
@@ -41,7 +50,17 @@ const registry=await loadOfficeFontRegistry(),results=[];
 for (const fixture of metricLayoutFixtures()) {
   const {id,family,dimensions,document,metric,minFontSize,overflow}=fixture,before=JSON.stringify(document);
   assert.equal(validatePresentation(document).valid,true);
-  const bound=resolvePresentation(document,{textMeasurement:registry.textMeasurement}).slides[0];
+  if (fixture.missingGlyph) {
+    // The published renderer now lays out metric text itself and must reject the
+    // same missing glyph before returning a slide. Use its estimated path only
+    // to obtain an outer cell for the independent measured-core rejection below.
+    assert.throws(()=>resolvePresentation(document,{textMeasurement:registry.textMeasurement}),actual=>{
+      assert.equal(actual.code,'missing-glyph');assert.equal(actual.details.character,fixture.missingGlyph);
+      assert.equal(actual.details.path,'slides.0.metric.label');assert.equal(actual.details.fontFamily,family);
+      return true;
+    });
+  }
+  const bound=resolvePresentation(document,fixture.missingGlyph?{}:{textMeasurement:registry.textMeasurement}).slides[0];
   assert.deepEqual(bound.design.dimensions,dimensions);
   const box=bound.geometry.items[0].box,scale=Math.min(dimensions.width,dimensions.height)/720;
   const options={fonts:bound.design.fonts,textMeasurement:registry.textMeasurement,path:'slides.0.metric',minFontSize,scale};
@@ -53,7 +72,7 @@ for (const fixture of metricLayoutFixtures()) {
       error={code:actual.code,details:actual.details};return true;
     });
     assert.equal(JSON.stringify(document),before);
-    results.push({id,family,dimensions,box,scale,minFontSize,error,sourceUnchanged:true});
+    results.push({id,family,dimensions,box,scale,minFontSize,error,rendererRejectedMissingGlyph:true,sourceUnchanged:true});
     continue;
   }
   const layout=layoutMetric(metric,box,options);
@@ -105,7 +124,7 @@ async function fingerprint(file) {
   for (const [,specifier] of bytes.toString('utf8').matchAll(/\b(?:from|import)\s*['"](\.\/[^'"]+\.js)['"]/g)) await fingerprint(path.resolve(path.dirname(file),specifier));
 }
 await fingerprint(path.join(dist,'composition.js'));
-const report={scope:'Standalone candidate metric-flow-v1 with exact registry font bytes. The published renderer supplies existing outer cells only; no composition/pagination, integrated SVG/editor or native PPTX improvement is claimed. Source preservation, deterministic geometry, requested/resolved styles, readability floors, conservative bounds and strict irreducible failure are verified, not glyph appearance or raster equivalence.',
-  baselineSha256:hash(baselineBytes),sourceHashes,runtimeHashes,fontHashes,packages,results};
+const report={scope:'Standalone candidate metric-flow-v1 with exact registry font bytes. The published renderer supplies outer cells and independently rejects expected missing glyphs; integrated rendering, pagination, editing and native PPTX checks remain separate suites. Source preservation, deterministic geometry, requested/resolved styles, readability floors, conservative bounds and strict irreducible failure are verified, not glyph appearance or raster equivalence.',
+  baselineFile,baselineSha256:hash(baselineBytes),sourceHashes,runtimeHashes,fontHashes,packages,results};
 if (output) await writeFile(output,JSON.stringify(report,null,2)+'\n');
 console.log(`Verified ${results.length} standalone metric layouts across three font families and wide/portrait canvases.`);

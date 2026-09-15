@@ -1,5 +1,12 @@
 # Shared header and footer reliability candidate
 
+September 15 scope update: the project owner requested that remaining
+PowerPoint acceptance gaps be split into the
+[PowerPoint compatibility roadmap](powerpoint-acceptance.md). Completed portable
+layout, preview, editor and controlled export/reimport work may merge after
+fresh coordinated checks. Earlier statements below that make native acceptance
+a merge prerequisite are historical; native compatibility is not claimed.
+
 Read-only probes of the shared-timeline product graph reproduce the same defect on Mac Node 20/24: every header/footer run renders at 13px regardless of selected floors 16/32, and authored header/footer words are absent from parsed PPTX output. Core reports no diagnostics. Sources remain unchanged. Retain all four wide/portrait cases per runtime before implementation.
 
 Unify inherited/local header and footer resolution, source/generated values, font styles, readable text measurement and placement. Resolve all three zones, explicit false overrides, literal dates, primary organization, section and slide numbers deterministically. Preserve source strings and whitespace; generated separators or missing-date diagnostics must not rewrite source. Image furniture should keep its original source and supported image-fit behavior.

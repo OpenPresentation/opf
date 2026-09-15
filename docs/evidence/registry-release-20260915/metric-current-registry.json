@@ -1,0 +1,61 @@
+{
+  "node": "v24.21.0",
+  "geometryReportSha256": "05085163d4ea6eed4bc39371deb9ce7efe8a1da47778c4fbe8f382781a2e4b52",
+  "browserReportSha256": "5f3e0e26a397743d258deefc03ee0c7112000f717892450de4477003d966e6f4",
+  "geometryCases": 60,
+  "browserCases": 50,
+  "registryEvidence": {
+    "file": "artifacts/editor/installed-code-registry-summary.json",
+    "sha256": "dddc3221009c506493af7080b14b44444830afbb5d15621ab2c49c59cdc4252e"
+  },
+  "packages": [
+    {
+      "name": "@openpresentation/opf-render",
+      "version": "0.8.0",
+      "integrity": "sha512-TtlaoQ7R6GsvHQ2eWMgoGOCbhgfaCzZLqvfJ+N+r7VyeCr/214jjAVi1reBugGXZ/zLqrGZuz0wacIWP6dN2yg==",
+      "verifiedFiles": 17
+    },
+    {
+      "name": "@openpresentation/opf",
+      "version": "0.10.0",
+      "integrity": "sha512-YhdTFFXgtjgkV7375BBYwKZQecJPlT9Ops/fpnUQGEfRIKSAbfNauZEviWdkdUwvpvCjo+UCCn0JOPXkfKj6BQ==",
+      "verifiedFiles": 522
+    }
+  ],
+  "sourceHashes": [
+    {
+      "file": "packages/javascript/src/composition.ts",
+      "sha256": "43fc8b4ac2e90cfc985d51b26bf2dd3555911b0b5fcd8ecce87e509ef4daaf05"
+    },
+    {
+      "file": "packages/javascript/src/index.ts",
+      "sha256": "128f600d562c59a3f326c375f175ed9c005c9ac0f21a9dae37eda1faff178742"
+    },
+    {
+      "file": "scripts/metric-layout-fixtures.mjs",
+      "sha256": "9d50451ff33e4c7b81800621828bb27810711955951d783016912b8488971944"
+    },
+    {
+      "file": "scripts/test-metric-layout-geometry.mjs",
+      "sha256": "254b3ced1253f0fda7e4834d82287a73d7a891f6fd59c1d254270d461a2ea42b"
+    }
+  ],
+  "runtimeHashes": [
+    {
+      "file": "packages/javascript/dist/composition.js",
+      "sha256": "2bd97a14d938919f45db4fc13d5fc73ebf4abec789cc754f5cd2f9d07ec5554c"
+    },
+    {
+      "file": "packages/javascript/dist/chunk-BAWLYSUN.js",
+      "sha256": "dff3f79d0341fc91dfc2332f17d0ddaacc3e2ca719e8d2b8a84d42b3b67faa9a"
+    }
+  ],
+  "browser": "153.0.8010.12",
+  "toleranceReferencePixels": 0.1,
+  "maxAdvanceDifference": 0.0234375,
+  "negativeEvidenceControls": 6,
+  "expectedMissingGlyphs": 4,
+  "errors": [],
+  "externalRequests": [],
+  "inkPartCollisions": []
+}

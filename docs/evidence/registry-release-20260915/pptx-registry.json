@@ -1,0 +1,27 @@
+{
+  "version": "0.8.0",
+  "gitHead": "4356e3679988206b202d799cd94140686b3b6ea0",
+  "dist": {
+    "shasum": "37fd2dd5cacbf26320ee3861cae2d52a815c1199",
+    "tarball": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.8.0.tgz",
+    "fileCount": 26,
+    "integrity": "sha512-168nkcPtCzUtBJKpeNH2wLlMmZ6+TH67lZ9MbPfPvsMeeS5EwZVJDLbcjH+4jPaCLBS8jIDZCJJuR8TDrBMJtw==",
+    "signatures": [
+      {
+        "sig": "MEQCIBhDusqLBRh7IReeD7XopOku6K5hb/X4Lfy36+7X7harAiBSYMit3319q0SSQ3cqMY7UH8NziEajS+ZXI/nfVCgCVQ==",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      },
+      {
+        "sig": "MEYCIQDUxVgzlJfGV1bzdKHoBb99IFE7RXMo7k3ZOkVlAmordwIhAL9bytLvN05Mkk33oByJY/H9cDudlv/JVqHPa1QpNcuO",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      }
+    ],
+    "attestations": {
+      "url": "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf-pptx@0.8.0",
+      "provenance": {
+        "predicateType": "https://slsa.dev/provenance/v1"
+      }
+    },
+    "unpackedSize": 755252
+  }
+}
