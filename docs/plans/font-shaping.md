@@ -84,8 +84,14 @@ retains both failures, independent checks and fresh tarball acceptance. All
 171 installed browser pixel pairs are identical and nonempty; source metadata,
 local-only requests, CSP, TypeScript consumers and zero audit findings pass.
 All 805 reviewed-baseline slides remain unchanged. This is local and fresh
-installed acceptance; [current-head CI](https://github.com/OpenPresentation/opf-render/actions/runs/34925451758)
-is separate and must be consulted before accepting cross-platform completion.
+installed acceptance. The first Mac/Windows CI jobs failed before the new
+metrics cases ran because importing SVG required candidate core composition
+exports absent from published 0.9.0. Both failures are
+[retained with the CI correction](https://github.com/OpenPresentation/opf-render/tree/246459149000f0be41766a1cf020676f4e38e0ff/docs/evidence/woff2-hmtx-ci-20260914).
+Renderer `246459149000f0be41766a1cf020676f4e38e0ff` uses the same pinned core
+candidate as Linux and stops at each failed preparation command. Runtime and
+tests are unchanged from `f5a0275`; [current-head CI](https://github.com/OpenPresentation/opf-render/actions/runs/34925817838)
+remains separate and must be consulted before accepting cross-platform completion.
 
 Next: transformed metrics with shared collection glyph tables, DFont resources,
 CFF/CFF2 and variable-instance coverage, paragraph
