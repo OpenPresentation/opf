@@ -26,7 +26,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
-          ref: d0ff86abe6e67436a5674778605bc8562314ad1c
+          ref: aaa9e6f6dfd4bdc99789da93bca6eda6885827ca
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
