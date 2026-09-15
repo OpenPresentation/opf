@@ -1,0 +1,30 @@
+[
+  {
+    "repo": "Data-Advantage/openpresentation-site",
+    "pr": 27,
+    "sha": "bb6b006e5fa18f565779781ad347a839fea4ec83",
+    "mergedAt": "2026-09-15T19:46:44Z",
+    "deployments": [
+      {
+        "id": 6467123382,
+        "environment": "Production",
+        "state": "success",
+        "url": "https://openpresentation-site-q48nhlsc8-dataadvantage.vercel.app"
+      }
+    ]
+  },
+  {
+    "repo": "Data-Advantage/pptx-gallery",
+    "pr": 29,
+    "sha": "fe395e4e7187cdb85c2b8a4041ef2801fd81f72d",
+    "mergedAt": "2026-09-15T19:48:50Z",
+    "deployments": [
+      {
+        "id": 6467142849,
+        "environment": "Production",
+        "state": "success",
+        "url": "https://pptx-gallery-r9rin5yay-dataadvantage.vercel.app"
+      }
+    ]
+  }
+]

@@ -1,0 +1,162 @@
+[
+  {
+    "repo": "OpenPresentation/opf",
+    "number": 79,
+    "checks": {
+      "headRefOid": "a0faba89bea1d340dac0c1685814d1055639b174",
+      "isDraft": true,
+      "mergeable": "MERGEABLE",
+      "state": "OPEN",
+      "statusCheckRollup": [
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-09-15T20:02:08Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/35016747008/job/104541984645",
+          "name": "cli (windows-latest)",
+          "startedAt": "2026-09-15T19:58:18Z",
+          "status": "COMPLETED",
+          "workflowName": "CLI portability"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-09-15T20:09:02Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/35016746927/job/104541985331",
+          "name": "packages",
+          "startedAt": "2026-09-15T19:58:19Z",
+          "status": "COMPLETED",
+          "workflowName": "Coordinated public packages"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-09-15T20:01:07Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/35016746904/job/104541983876",
+          "name": "Verify OPF packages",
+          "startedAt": "2026-09-15T19:58:18Z",
+          "status": "COMPLETED",
+          "workflowName": "OPF CI"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-09-15T20:01:00Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/35016747008/job/104541984354",
+          "name": "cli (macos-latest)",
+          "startedAt": "2026-09-15T19:58:26Z",
+          "status": "COMPLETED",
+          "workflowName": "CLI portability"
+        }
+      ]
+    },
+    "merged": {
+      "mergeCommit": {
+        "oid": "d0c884170b592b29535ab07faa71ffa15bb32f71"
+      },
+      "mergedAt": "2026-09-15T20:10:23Z",
+      "state": "MERGED",
+      "url": "https://github.com/OpenPresentation/opf/pull/79"
+    }
+  },
+  {
+    "repo": "OpenPresentation/opf-render",
+    "number": 20,
+    "checks": {
+      "headRefOid": "1c7904cee02908e052c267aa832eb49f919e22da",
+      "isDraft": true,
+      "mergeable": "MERGEABLE",
+      "state": "OPEN",
+      "statusCheckRollup": [
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-09-15T19:40:24Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/OpenPresentation/opf-render/actions/runs/35014645513/job/104534884828",
+          "name": "package",
+          "startedAt": "2026-09-15T19:36:38Z",
+          "status": "COMPLETED",
+          "workflowName": "CI"
+        }
+      ]
+    },
+    "merged": {
+      "mergeCommit": {
+        "oid": "130a2fa68954bd8f28c0c147cca1204f8b18561a"
+      },
+      "mergedAt": "2026-09-15T20:10:28Z",
+      "state": "MERGED",
+      "url": "https://github.com/OpenPresentation/opf-render/pull/20"
+    }
+  },
+  {
+    "repo": "OpenPresentation/opf-editor",
+    "number": 17,
+    "checks": {
+      "headRefOid": "fa386eee84d767eea1798e55ee6cd4bde0df715e",
+      "isDraft": true,
+      "mergeable": "MERGEABLE",
+      "state": "OPEN",
+      "statusCheckRollup": [
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-09-15T19:41:12Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/OpenPresentation/opf-editor/actions/runs/35014648251/job/104534891482",
+          "name": "package",
+          "startedAt": "2026-09-15T19:36:39Z",
+          "status": "COMPLETED",
+          "workflowName": "CI"
+        }
+      ]
+    },
+    "merged": {
+      "mergeCommit": {
+        "oid": "cfdeae6627a42aa438c3d0bea5ea4155eb1688c4"
+      },
+      "mergedAt": "2026-09-15T20:10:33Z",
+      "state": "MERGED",
+      "url": "https://github.com/OpenPresentation/opf-editor/pull/17"
+    }
+  },
+  {
+    "repo": "OpenPresentation/opf-pptx",
+    "number": 34,
+    "checks": {
+      "headRefOid": "7b3ea9d679926bd9c55d91f5628334eeb21e81c0",
+      "isDraft": true,
+      "mergeable": "MERGEABLE",
+      "state": "OPEN",
+      "statusCheckRollup": [
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-09-15T19:40:42Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/OpenPresentation/opf-pptx/actions/runs/35014650245/job/104534898769",
+          "name": "package (ubuntu-latest)",
+          "startedAt": "2026-09-15T19:36:40Z",
+          "status": "COMPLETED",
+          "workflowName": "CI"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-09-15T19:43:32Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/OpenPresentation/opf-pptx/actions/runs/35014650245/job/104534899023",
+          "name": "package (windows-latest)",
+          "startedAt": "2026-09-15T19:36:41Z",
+          "status": "COMPLETED",
+          "workflowName": "CI"
+        }
+      ]
+    },
+    "merged": {
+      "mergeCommit": {
+        "oid": "c077b7a426f6ebb04ae53102400d488fc2278f2b"
+      },
+      "mergedAt": "2026-09-15T20:10:38Z",
+      "state": "MERGED",
+      "url": "https://github.com/OpenPresentation/opf-pptx/pull/34"
+    }
+  }
+]

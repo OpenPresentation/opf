@@ -117,9 +117,9 @@ assert.equal(registry.embeddedFonts.length,33);
 console.log('Installed font preparation passed layout, edit/undo, SVG/PNG, editable PPTX export and heading reimport.');
 `);
   run(process.execPath,['check-font-preparation.mjs']);
-  // Furniture is an unpublished coordinated API. Its mutation guards apply to
-  // candidate tarballs; the pinned registry release predates this harness/API.
-  // Add its released-version gate alongside the others when publishing it.
+  // Furniture and joint rich-source shaping are unpublished coordinated APIs.
+  // Their guards apply to candidate tarballs; the pinned registry release
+  // predates them. Add released-version gates when publishing these features.
   if (!registry) {
     const furnitureHarness = (await readHarness('opf-pptx', 'test/furniture-provenance.mjs'))
       .replaceAll("'../dist/index.js'", "'@openpresentation/opf-pptx'")
