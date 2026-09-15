@@ -255,7 +255,7 @@ OPF documents usually reference these records with string ids such as `design.th
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `type` | yes | `enum:title \| subtitle \| tag \| text \| list \| chart \| picture \| table \| media \| diagram \| code` | OPF placeholder kind. 'text' and 'list' are flexible textual content regions. The named kinds describe a specific content role used by pickers, AI generation, and engine defaulting. |
+| `type` | yes | `enum:title \| subtitle \| tag \| text \| metric \| list \| chart \| picture \| table \| media \| diagram \| code` | OPF placeholder kind. 'text' and 'list' are flexible textual content regions. 'metric' describes numeric/KPI content using the metric payload. |
 
 ## Narrative Template
 

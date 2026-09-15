@@ -172,6 +172,8 @@ Code-specific fields are grouped under `code`. A string value is shorthand for `
 
 Metric-specific fields are grouped under `metric`. A string or number value is shorthand for `metric.value`; numeric values stay numeric and are formatted by renderers at display time. Use object form when labels, descriptions, units, deltas, or trends matter.
 
+The `number-1x` through `number-6x` layout IDs declare one title placeholder and one through six `metric` placeholders. The IDs retain their existing names; the content kind and payload key are `metric`, not `number` or `text`. For several metrics, use separate `{ "metric": ... }` entries in `blocks`. Choosing a layout does not reinterpret existing text as numeric data.
+
 ```json
 {
   "title": "Operating Metric",
