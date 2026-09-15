@@ -169,8 +169,19 @@ repeated-glyph diagnostic amplifies the difference to about 4.57px. Pinned
 HarfBuzz rounds HVAR deltas before scaling, so increasing output precision alone
 does not recover those fractions. CI at 7916fc1 passed Mac/Windows Node and all
 earlier Linux acceptance steps before failing this new browser gate. Raw logs
-and complete reports are retained. The new head adds native diagnostics on all
-three platforms; its CI remains separate.
+and complete reports are retained. CI at `a5f3ec6` also completes with passing
+Mac/Windows shaping jobs and all earlier Linux checks, followed by failures in
+both the fresh installed and source variable browser gates. The raw reports
+and three platform logs are retained in the next renderer checkpoint.
+
+Renderer `1b17e70` adds controlled browser/kerning context to that diagnostic:
+pinned Chromium on both Mac and Windows, system Edge as a separate Windows
+comparison, and both `none` and `normal` kerning. Locally, the 188 Mac instance
+selections produce identical repeated-H widths in both modes. The preceding
+Windows result used Edge 152 with kerning disabled; its much larger CFF2 drift
+cannot yet be generalized to Chromium 153 or normal kerning. The diagnostic
+records finite positive measurements and cleanup, not fidelity acceptance.
+New-head CI remains pending. Product metrics and tolerances remain unchanged.
 
 Controlled browser bundles add 74,415 gzip bytes for the font loader and 413 for
 SVG versus the verified DFont predecessor, without pulling in HarfBuzz WASM.

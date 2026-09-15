@@ -39,14 +39,27 @@ while moving on to another feature.
   stacked on PR20: prepared source-preserving shaping, compressed-font and
   collection handling, DFont extraction, and fixed variable instances.
 
-All five PRs had successful CI on their preceding pushed heads. The new
-renderer checkpoint `28bd820286e0bf28b2efcaca3610d56988b1079e` retains a known
-failure: 10 of 712 variable-instance browser advance comparisons exceed the
-unchanged 0.1px tolerance, although all pixel comparisons match. Its Node matrix
-and the existing full 805-slide regression pass. CI now includes the failing
-browser gate; its new results must be checked separately from the preceding
-green DFont run. See [font-shaping.md](font-shaping.md) for exact evidence and
-remaining installed-package, payload, font and native acceptance requirements.
+Fresh GitHub inspection confirms successful checks on core PR79 at `f6d4434`,
+renderer PR20 at `3d4fa8c`, editor PR17 at `40023fb` and PPTX PR34 at `1363a65`.
+Renderer PR21's completed `a5f3ec6` CI passes Mac/Windows shaping and all earlier
+Linux checks, including the 805-slide regression and coordinated packages.
+Both Linux source and fresh installed variable browser gates then fail the
+unchanged 0.1px advance tolerance. The complete reports remain preserved; pixel
+comparisons match within each platform. Passing diagnostics do not establish
+native font fidelity.
+
+The latest renderer checkpoint `1b17e70` is committed and pushed. It separates
+browser versions and kerning settings in the native diagnostic and preserves
+the preceding completed CI evidence. Its local Mac probe and syntax checks
+pass; new-head CI is pending. No product metric or tolerance changed. See
+[font-shaping.md](font-shaping.md) for exact evidence and remaining font/native
+acceptance requirements.
+
+Implementation fixes, test/evidence improvements and integration documentation
+are recorded as separate focused commits. All 22 local branch tips across the
+seven repositories were compared directly with GitHub with no unpushed commits;
+the subsequent renderer checkpoint was also pushed. The only retained untracked
+files are the 12 demo copies already merged into core `origin/main`.
 
 ## Still outstanding
 
