@@ -1,0 +1,78 @@
+{
+  "installed-prepared.json.gz": {
+    "sha256": "27ad1ae269ee02b9e6d387bf9c3376b201085219e55f652c1487113a60505c05",
+    "contentSha256": "b798a36df63290627e756d209eb4867f6ab0d83aa876cfd1be64fbe3b5d2b6a7"
+  },
+  "installed-measured.json.gz": {
+    "sha256": "a212231de885a0364cd1c343834e06bbf803b580e866cf73e25b81716fcbb89d",
+    "contentSha256": "769abcea12dd966770c187e010b9cfdf60cd19fe8c2154a0161626caf6bf1db9"
+  },
+  "installed-estimated.json.gz": {
+    "sha256": "37a804f1472ddb9dfd038a8dd34a7b9e07f699f2c40e07065aaa16dc1de3827c",
+    "contentSha256": "3d9df47207386090da7eda55fa19cb74f4f83d5788f481c301745ad55f1d1f3b"
+  },
+  "installed-painted.json.gz": {
+    "sha256": "90fb1fc8ee5ced03d233e3bf4a5f7235f241ef0884094c875eaf381353dca69a",
+    "contentSha256": "88707138a48c70f16058aa9b3d4bdf68816c72f69bb43810cedb09443998006a"
+  },
+  "package-manifest.json.gz": {
+    "sha256": "0b36e2914310b3a4fe601216227e222cf5e16e3d90aacd497ff0669c16b44372",
+    "contentSha256": "9ea5207768e0de7350dd9acf0d4a7f16c9f78f536e1b3ccccad4de6d9412167a"
+  },
+  "consumer-lock.json.gz": {
+    "sha256": "523d930fac2ee0bab361b370d8d5b6e1b8e1719d8e80a32a5d135e9001af6e7f",
+    "contentSha256": "71dac3f323e3dbece4fb3f62f2814597abbe5d8c35074989e65476b72f38e28f"
+  },
+  "installed.log.gz": {
+    "sha256": "c719ea28d21b2aac6647fd9a490b6789f3655a961ad36f83c20cd563879e5b85",
+    "contentSha256": "2df731d44e7f26cfa0ab9a0ba8c3c7ccb538ebc920703e2e709395da60dab5be"
+  },
+  "installed-browser.log.gz": {
+    "sha256": "90248febbe5b41f9a0220a357ad953fd0b929b97e52e90bf395a49aaec3c3da0",
+    "contentSha256": "b632bf81955bb39bc3ac7628737e10a806f4cafdd335c34f3f1cd8c41b42941c"
+  },
+  "editor-ci-checkpoint.json.gz": {
+    "sha256": "3fddfd2f11519a2d85e29cfb027dedc3530cc46973b5be657357bf4c823a5754",
+    "contentSha256": "f9381417c0c66c800e53cca7a35a738ef05eccd73ad079ab44556745c454d801"
+  },
+  "core-ci-checkpoint.json.gz": {
+    "sha256": "d7080dd76857ea99003cf770b7887d3a89f079fbe6641c2b20fabc5ba0bab7c3",
+    "contentSha256": "9087937607de54e4fa11ab0617a402e94960a67ee3eb0af710bf9850c3361ed0"
+  },
+  "renderer-ci-failed.log.gz": {
+    "sha256": "b514eed0429d5d556eeac6e8c2c52c4ec1b9f4fbeaf4f8a4d2144b733f447aa8",
+    "contentSha256": "7465fa00576db4e4666f04aeb68f433346eaef05388e432acee3019f67304514"
+  },
+  "table-tab-conflict.json.gz": {
+    "sha256": "f5dfac7b8bb08e3cd9bb4e019b1eab04ad84797f6fb2886e2f1731913bfc53e4",
+    "contentSha256": "d955da88152c765940e6f07fbb86daba2762d23f7d39e10cc763880351ba9641"
+  },
+  "editor-ci-final.json.gz": {
+    "sha256": "99856b94ad6b1129798ffe85b1ee7cac21c8349783b23f15b010944dca71d59f",
+    "contentSha256": "2d995243cd3d25af5dae9925c944f784412cce7cf6063eaae395b62044bc8848"
+  },
+  "editor-ci-source-prepared.json.gz": {
+    "sha256": "6a936ad62e155330e23cd607833a3bbf9649e479e59971cf370bb56144525b17",
+    "contentSha256": "484ff7d1e279245b31427ce50320cac55decd3da80db37314863c26a47d6ec97"
+  },
+  "editor-ci-installed-prepared.json.gz": {
+    "sha256": "4a7fea5d57aa72600dba18ee5c76e0d887597f252620ff893f77a28e56bd137f",
+    "contentSha256": "e6c8aba3c98ca8d60b95d87613ad16d10dbf151ef6805f2345b5a88311f40570"
+  },
+  "editor-ci-installed-rich-painted.json.gz": {
+    "sha256": "fc3a24ac12e473e85c09506a7250fc3f76e4fab71b26416526fdf4ba16272c14",
+    "contentSha256": "4f223d3604b377e7cf50f19fb70f93b2d310fff9419fa4516aa0248faa1eb217"
+  },
+  "core-ci-final.json.gz": {
+    "sha256": "b3ed35340c9e75807eb1ada438d8558bfe1523c6659a5057045ca3512f122d7a",
+    "contentSha256": "e063a67b8145b1e030a9eb9088e37b7415a5a9af480bd17c97199d0a8ba00122"
+  },
+  "core-ci-final-list.json.gz": {
+    "sha256": "937d76aea7267d27353a5a345233191cdb1e9a41c9b0c02605df22c7f0cd37b5",
+    "contentSha256": "9d0f5b4c2c98e1f9bd446e07c30d308a1f12aa792bf812805319fbc165c68a3f"
+  },
+  "core-ci-watch.log.gz": {
+    "sha256": "cf51c9597000daa12858f8f4c3b5e96276fb89b79c32fcd9039b1eb542bdf1d0",
+    "contentSha256": "08bf4c575c79b03dc8cbf614145633dcd099c78b34b488f22e85ffc29efc125e"
+  }
+}

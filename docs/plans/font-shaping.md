@@ -382,6 +382,14 @@ pending; this does not promote the backend or close native/font gates. See the
 
 ## Implementation and promotion requirements
 
+[Visible-line navigation](../evidence/visual-line-navigation-20260915/README.md)
+now passes from fresh packages: 19 prepared and 36 rich-input workflows cover
+vertical/line-edge keys, Shift selection and pointer affinity without rewriting
+source or changing slide ink. The same checkpoint records a concrete native
+table-tab conflict (64px versus 48px stops across one soft-wrapped paragraph),
+which remains unresolved. Current Linux native variable-font failures are
+retained separately from editor acceptance.
+
 The subsequent [rich-tab/direction checkpoint](../evidence/rich-tabs-and-direction-20260915/README.md)
 fixes pure RTL arrow navigation and keeps tab controls out of physical font
 shaping. Fifteen prepared-editing and thirty rich-input installed workflows
