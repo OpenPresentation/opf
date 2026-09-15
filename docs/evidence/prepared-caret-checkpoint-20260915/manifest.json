@@ -1,0 +1,22 @@
+{
+  "browser-candidate.json.gz": {
+    "sha256": "3153a370877b66353b073a1e84a404e6050efa463b5c6e14141a473911be286c",
+    "contentSha256": "4d02db882f3ddbcd73da73b5a664e942240e21ee4c6de77d2ab43c0feecc310a"
+  },
+  "browser-predecessor.json.gz": {
+    "sha256": "62b18954bf9cd609073341f63e49c3e5d449f2ebed5d47a34851f433e1c735bc",
+    "contentSha256": "16f355ed215509f4864992c12061585d26740c35cbd68df931c994a0033768a3"
+  },
+  "rich-input-measured.json.gz": {
+    "sha256": "6436b62a1e1cad8d52f64c318db7c87dc6ac7eab083a4b0611d833948bc1979e",
+    "contentSha256": "3d0575c206fe9343ef04ccc24e9b697f0c7c2f08d57bbc46f107c73d8b51a1b9"
+  },
+  "rich-input-estimated.json.gz": {
+    "sha256": "6675ea5512e469bc91fb4d7d0fa0b1553f9c116a7e9300bddf6b706ce10616fc",
+    "contentSha256": "74a86ea49732dcdf6f932bf76e688ce32a6bf8672cb1878310f789e157638826"
+  },
+  "renderer-carets.json.gz": {
+    "sha256": "56e7ef44e24fb1f34c3feb06eefc783e84ba8eb0a1a92dad2727a0230530703e",
+    "contentSha256": "c45abdcc19799ecebedf2eee8c2c50d72307678793f5a9a26858f95a888ddd6a"
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "id": "current-native-edit",
+  "source": {
+    "design": {
+      "fontScheme": "roboto",
+      "header": {
+        "left": {
+          "text": "Original header"
+        }
+      }
+    },
+    "slides": [
+      {
+        "title": "Current native text",
+        "text": "Body"
+      }
+    ]
+  },
+  "imported": {
+    "$schema": "https://openpresentation.org/schema/opf/v1",
+    "name": "OPF Presentation",
+    "slides": [
+      {
+        "design": {
+          "background": {
+            "type": "solid",
+            "color": "#011842"
+          }
+        },
+        "title": "Current native text",
+        "blocks": [
+          {
+            "type": "text",
+            "text": "Body"
+          }
+        ]
+      }
+    ],
+    "author": "OpenPresentation",
+    "design": {
+      "dimensions": {
+        "widthInches": 13.333333333333334,
+        "heightInches": 7.5
+      },
+      "header": {
+        "left": {
+          "text": "Edited header"
+        }
+      }
+    }
+  },
+  "checks": {
+    "currentTextRetained": true,
+    "staleTextAbsent": true,
+    "furnitureRoleRetained": true
+  },
+  "failures": [],
+  "diagnostics": [
+    {
+      "code": "furniture-import-reflow",
+      "path": "slides.0.design",
+      "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+    },
+    {
+      "code": "heading-import-reflow",
+      "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed.",
+      "path": "slides.0"
+    },
+    {
+      "code": "text-import-reflow",
+      "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.",
+      "path": "slides.0"
+    }
+  ],
+  "pptxSha256": "7b09058b1ffba759287752e2b7fc90bc172a24415878fffe51fadd3cd27d6e07"
+}

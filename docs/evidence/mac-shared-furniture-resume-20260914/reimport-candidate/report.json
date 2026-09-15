@@ -1,0 +1,58 @@
+{
+  "node": "v24.21.0",
+  "verifierSha256": "3a0a2bdd0b7fca25fc6823cb2335a4aa12dcfa5212c02cfbefda3a277412afed",
+  "results": [
+    {
+      "id": "literal-and-generated",
+      "checks": {
+        "literalWhitespace": true,
+        "literalDate": true,
+        "generatedNumberIntent": true,
+        "sectionIntent": true,
+        "currentSectionMetadata": true
+      },
+      "failures": [],
+      "pptxSha256": "a447a19a2f4fb27a181d1f74e0e2b4873364498e3d653a73f61e7336e52021ee"
+    },
+    {
+      "id": "false-and-empty",
+      "checks": {
+        "explicitFalse": true,
+        "explicitEmpty": true,
+        "inheritedLiteral": true
+      },
+      "failures": [],
+      "pptxSha256": "d8433a7cc956d795639c217f5f4326b1e61cccf9f1d76058dd1f31e0aeca8dad"
+    },
+    {
+      "id": "image",
+      "checks": {
+        "imageRole": true,
+        "imageAlt": true
+      },
+      "failures": [],
+      "pptxSha256": "1039e1e20b402a32017d4e47558bc592ff28f14666677793ea8ef8fd9d4212c7"
+    },
+    {
+      "id": "current-native-edit",
+      "checks": {
+        "currentTextRetained": true,
+        "staleTextAbsent": true,
+        "furnitureRoleRetained": true
+      },
+      "failures": [],
+      "pptxSha256": "7b09058b1ffba759287752e2b7fc90bc172a24415878fffe51fadd3cd27d6e07"
+    },
+    {
+      "id": "ordinary-text-control",
+      "checks": {
+        "noInventedHeader": true,
+        "noInventedFooter": true,
+        "bodyRetained": true
+      },
+      "failures": [],
+      "pptxSha256": "cddc0b942f8bd0a30566f9755359c156ec8cf4f2096ea5b912b0ac53f181a92c"
+    }
+  ],
+  "scope": "Source export/reimport acceptance probe. XML edits simulate current native content. No native Office execution, visual approval or installed-package acceptance."
+}

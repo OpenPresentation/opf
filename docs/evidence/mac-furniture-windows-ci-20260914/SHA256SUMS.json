@@ -1,0 +1,67 @@
+[
+  {
+    "file": "core-verify.json",
+    "bytes": 3451,
+    "sha256": "d08857374f5364c10013283a64bd962c93b70875f5cc13ebbf65928cfa4b8f64"
+  },
+  {
+    "file": "core-verify.log",
+    "bytes": 313135,
+    "sha256": "dd41712ca6ab555008d6a3d4494ccd6769ab08c7b603e7796f5c47c61c2acbde"
+  },
+  {
+    "file": "core-cli.json",
+    "bytes": 6247,
+    "sha256": "f54ffcf46b2b508ad90c4b7de891a1e260b49c4e985d8fcb78b40cf5acecd380"
+  },
+  {
+    "file": "core-cli.log",
+    "bytes": 319457,
+    "sha256": "8532e33e97d9e816e29e40c37899f69ccaf8f30c7b570b89c933784f74b450a9"
+  },
+  {
+    "file": "core-ecosystem.json",
+    "bytes": 5825,
+    "sha256": "d3ef780efb6deed49ff47dd365398e756ce8464ae644ab44c827d415422e7316"
+  },
+  {
+    "file": "core-ecosystem.log",
+    "bytes": 284202,
+    "sha256": "7b8f282108dad3c6130c9ad1762fe7234a532d669e13e52a98c43f7c1ffb333c"
+  },
+  {
+    "file": "renderer.json",
+    "bytes": 6970,
+    "sha256": "a465a9af78e330714738ded383644eeaeff42828a59ca8a8385cfb7db93fa3f4"
+  },
+  {
+    "file": "renderer.log",
+    "bytes": 196033,
+    "sha256": "0dcf304403d3279032a7b4d6e713406e54d5b845bff01f107636bd67182af587"
+  },
+  {
+    "file": "editor.json",
+    "bytes": 5578,
+    "sha256": "115acd8c165b75536bc5a3e22f31d70bff8273fe8e08346eb5ef2289fe34464b"
+  },
+  {
+    "file": "editor.log",
+    "bytes": 175468,
+    "sha256": "93a89ea9aa2d78e3383e0e36e405b1325e2bfcd996708106cb1ebe436668dd95"
+  },
+  {
+    "file": "pptx.json",
+    "bytes": 11299,
+    "sha256": "14c843e83c1a2b22b7561c44bc7dbef922df00bcb2e09b6a087b342b8189dbb5"
+  },
+  {
+    "file": "pptx.log",
+    "bytes": 424296,
+    "sha256": "3209fd91d029dba91a760d7c31b07530a8575ce8407810e12ee1a023c8c8a7b9"
+  },
+  {
+    "file": "windows-original-failure.json",
+    "bytes": 2121,
+    "sha256": "b3212a34a3e9a0a730b0ec208580476f8ea9b17158abd5afd7ea214af4a9eba0"
+  }
+]

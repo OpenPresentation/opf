@@ -1,0 +1,1662 @@
+package	UNKNOWN STEP	﻿2026-09-14T21:45:22.1236843Z Current runner version: '2.337.0'
+package	UNKNOWN STEP	2026-09-14T21:45:22.1274599Z ##[group]Runner Image Provisioner
+package	UNKNOWN STEP	2026-09-14T21:45:22.1276132Z Hosted Compute Agent
+package	UNKNOWN STEP	2026-09-14T21:45:22.1277047Z Version: 20260828.587
+package	UNKNOWN STEP	2026-09-14T21:45:22.1278033Z Commit: abac92662cab4cc7352de4f9f9d2e2419aad9c29
+package	UNKNOWN STEP	2026-09-14T21:45:22.1279314Z Build Date: 2026-08-28T16:44:25Z
+package	UNKNOWN STEP	2026-09-14T21:45:22.1280503Z Worker ID: {f805a7b9-fa21-4e74-8be9-4584a24c2a33}
+package	UNKNOWN STEP	2026-09-14T21:45:22.1282012Z Azure Region: eastus2
+package	UNKNOWN STEP	2026-09-14T21:45:22.1282960Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:22.1284941Z ##[group]Operating System
+package	UNKNOWN STEP	2026-09-14T21:45:22.1286107Z Ubuntu
+package	UNKNOWN STEP	2026-09-14T21:45:22.1286974Z 24.04.5
+package	UNKNOWN STEP	2026-09-14T21:45:22.1287844Z LTS
+package	UNKNOWN STEP	2026-09-14T21:45:22.1288666Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:22.1289516Z ##[group]Runner Image
+package	UNKNOWN STEP	2026-09-14T21:45:22.1290632Z Image: ubuntu-24.04
+package	UNKNOWN STEP	2026-09-14T21:45:22.1291801Z Version: 20260907.300.1
+package	UNKNOWN STEP	2026-09-14T21:45:22.1293858Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260907.300/images/ubuntu/Ubuntu2404-Readme.md
+package	UNKNOWN STEP	2026-09-14T21:45:22.1296432Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260907.300
+package	UNKNOWN STEP	2026-09-14T21:45:22.1298227Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:22.1299859Z ##[group]GITHUB_TOKEN Permissions
+package	UNKNOWN STEP	2026-09-14T21:45:22.1303174Z Contents: read
+package	UNKNOWN STEP	2026-09-14T21:45:22.1304026Z Metadata: read
+package	UNKNOWN STEP	2026-09-14T21:45:22.1304978Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:22.1308114Z Secret source: Actions
+package	UNKNOWN STEP	2026-09-14T21:45:22.1309529Z Cache mode: write
+package	UNKNOWN STEP	2026-09-14T21:45:22.1311216Z Prepare workflow directory
+package	UNKNOWN STEP	2026-09-14T21:45:22.2158268Z Prepare all required actions
+package	UNKNOWN STEP	2026-09-14T21:45:22.2229603Z Getting action download info
+package	UNKNOWN STEP	2026-09-14T21:45:22.4178024Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+package	UNKNOWN STEP	2026-09-14T21:45:22.5307819Z Download action repository 'pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413' (SHA:ea17c68df8912ef543352723c149a84f56e3d413)
+package	UNKNOWN STEP	2026-09-14T21:45:22.6850385Z Download action repository 'actions/setup-node@820762786026740c76f36085b0efc47a31fe5020' (SHA:820762786026740c76f36085b0efc47a31fe5020)
+package	UNKNOWN STEP	2026-09-14T21:45:22.7702887Z Download action repository 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a' (SHA:043fb46d1a93c77aae656e7c1c64a875d1fc6a0a)
+package	UNKNOWN STEP	2026-09-14T21:45:23.0209669Z Complete job name: package
+package	UNKNOWN STEP	2026-09-14T21:45:23.0925714Z ##[group]Checking docker version
+package	UNKNOWN STEP	2026-09-14T21:45:23.0939945Z ##[command]/usr/bin/docker version --format '{{.Server.APIVersion}}'
+package	UNKNOWN STEP	2026-09-14T21:45:23.1783442Z '1.48'
+package	UNKNOWN STEP	2026-09-14T21:45:23.1793358Z Docker daemon API version: '1.48'
+package	UNKNOWN STEP	2026-09-14T21:45:23.1794631Z ##[command]/usr/bin/docker version --format '{{.Client.APIVersion}}'
+package	UNKNOWN STEP	2026-09-14T21:45:23.1999834Z '1.48'
+package	UNKNOWN STEP	2026-09-14T21:45:23.2025710Z Docker client API version: '1.48'
+package	UNKNOWN STEP	2026-09-14T21:45:23.2032368Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:23.2036729Z ##[group]Clean up resources from previous jobs
+package	UNKNOWN STEP	2026-09-14T21:45:23.2045098Z ##[command]/usr/bin/docker ps --all --quiet --no-trunc --filter "label=8347ed"
+package	UNKNOWN STEP	2026-09-14T21:45:23.2219120Z ##[command]/usr/bin/docker network prune --force --filter "label=8347ed"
+package	UNKNOWN STEP	2026-09-14T21:45:23.2370946Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:23.2372074Z ##[group]Create local container network
+package	UNKNOWN STEP	2026-09-14T21:45:23.2384016Z ##[command]/usr/bin/docker network create --label 8347ed github_network_a4929a0a3c754e0b85501953584169ef
+package	UNKNOWN STEP	2026-09-14T21:45:23.2970945Z 0c4f14c55da82b789bbabdf9d261e560c0d108c24e35608ed61c3ecd77a03efe
+package	UNKNOWN STEP	2026-09-14T21:45:23.2992983Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:23.3019731Z ##[group]Starting job container
+package	UNKNOWN STEP	2026-09-14T21:45:23.3044121Z ##[command]/usr/bin/docker pull mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27
+package	UNKNOWN STEP	2026-09-14T21:45:23.4471246Z mcr.microsoft.com/playwright@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27: Pulling from playwright
+package	UNKNOWN STEP	2026-09-14T21:45:23.4876312Z 0926a8eb0e60: Already exists
+package	UNKNOWN STEP	2026-09-14T21:45:23.4904752Z e2bfec3c8017: Pulling fs layer
+package	UNKNOWN STEP	2026-09-14T21:45:23.4906188Z 74c72610aa2d: Pulling fs layer
+package	UNKNOWN STEP	2026-09-14T21:45:23.4907700Z d8cf7dc1ff62: Pulling fs layer
+package	UNKNOWN STEP	2026-09-14T21:45:23.4908576Z b4dfe9b5d621: Pulling fs layer
+package	UNKNOWN STEP	2026-09-14T21:45:23.4909392Z a2ac83a9a562: Pulling fs layer
+package	UNKNOWN STEP	2026-09-14T21:45:23.4910204Z 1b189482e65c: Pulling fs layer
+package	UNKNOWN STEP	2026-09-14T21:45:23.4911014Z b4dfe9b5d621: Waiting
+package	UNKNOWN STEP	2026-09-14T21:45:23.4912065Z a2ac83a9a562: Waiting
+package	UNKNOWN STEP	2026-09-14T21:45:23.4912837Z 1b189482e65c: Waiting
+package	UNKNOWN STEP	2026-09-14T21:45:23.5653144Z 74c72610aa2d: Verifying Checksum
+package	UNKNOWN STEP	2026-09-14T21:45:23.5654660Z 74c72610aa2d: Download complete
+package	UNKNOWN STEP	2026-09-14T21:45:24.0966077Z e2bfec3c8017: Verifying Checksum
+package	UNKNOWN STEP	2026-09-14T21:45:24.0972435Z e2bfec3c8017: Download complete
+package	UNKNOWN STEP	2026-09-14T21:45:24.8418645Z a2ac83a9a562: Verifying Checksum
+package	UNKNOWN STEP	2026-09-14T21:45:24.8420725Z a2ac83a9a562: Download complete
+package	UNKNOWN STEP	2026-09-14T21:45:25.0145170Z d8cf7dc1ff62: Verifying Checksum
+package	UNKNOWN STEP	2026-09-14T21:45:25.0148400Z d8cf7dc1ff62: Download complete
+package	UNKNOWN STEP	2026-09-14T21:45:25.2960360Z b4dfe9b5d621: Verifying Checksum
+package	UNKNOWN STEP	2026-09-14T21:45:25.2961150Z b4dfe9b5d621: Download complete
+package	UNKNOWN STEP	2026-09-14T21:45:25.5353096Z 1b189482e65c: Verifying Checksum
+package	UNKNOWN STEP	2026-09-14T21:45:25.5353713Z 1b189482e65c: Download complete
+package	UNKNOWN STEP	2026-09-14T21:45:32.1201094Z e2bfec3c8017: Pull complete
+package	UNKNOWN STEP	2026-09-14T21:45:32.1439727Z 74c72610aa2d: Pull complete
+package	UNKNOWN STEP	2026-09-14T21:45:40.7125543Z d8cf7dc1ff62: Pull complete
+package	UNKNOWN STEP	2026-09-14T21:45:45.5132811Z b4dfe9b5d621: Pull complete
+package	UNKNOWN STEP	2026-09-14T21:45:47.4578727Z a2ac83a9a562: Pull complete
+package	UNKNOWN STEP	2026-09-14T21:45:49.3664147Z 1b189482e65c: Pull complete
+package	UNKNOWN STEP	2026-09-14T21:45:49.3702090Z Digest: sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27
+package	UNKNOWN STEP	2026-09-14T21:45:49.3708134Z Status: Downloaded newer image for mcr.microsoft.com/playwright@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27
+package	UNKNOWN STEP	2026-09-14T21:45:49.3717409Z mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27
+package	UNKNOWN STEP	2026-09-14T21:45:49.3810936Z ##[command]/usr/bin/docker create --name 37fe2058cadc40a5a2fb432a19fa6ad6_mcrmicrosoftcomplaywrightv1630noblesha256eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27_ef5f0b --label 8347ed --workdir /__w/opf-editor/opf-editor --network github_network_a4929a0a3c754e0b85501953584169ef  -e "HOME=/github/home" -e GITHUB_ACTIONS=true -e CI=true -v "/var/run/docker.sock":"/var/run/docker.sock" -v "/home/runner/work":"/__w" -v "/home/runner/actions-runner/cached/2.337.0/externals":"/__e":ro -v "/home/runner/work/_temp":"/__w/_temp" -v "/home/runner/work/_actions":"/__w/_actions" -v "/opt/hostedtoolcache":"/__t" -v "/home/runner/work/_temp/_github_home":"/github/home" -v "/home/runner/work/_temp/_github_workflow":"/github/workflow" --entrypoint "tail" mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27 "-f" "/dev/null"
+package	UNKNOWN STEP	2026-09-14T21:45:49.4129263Z 31314bb1989e8ec14bcf0751d892b7bb432feabaa9e98d0f27b5100e341b0375
+package	UNKNOWN STEP	2026-09-14T21:45:49.4152681Z ##[command]/usr/bin/docker start 31314bb1989e8ec14bcf0751d892b7bb432feabaa9e98d0f27b5100e341b0375
+package	UNKNOWN STEP	2026-09-14T21:45:49.5955682Z 31314bb1989e8ec14bcf0751d892b7bb432feabaa9e98d0f27b5100e341b0375
+package	UNKNOWN STEP	2026-09-14T21:45:49.5994176Z ##[command]/usr/bin/docker ps --all --filter id=31314bb1989e8ec14bcf0751d892b7bb432feabaa9e98d0f27b5100e341b0375 --filter status=running --no-trunc --format "{{.ID}} {{.Status}}"
+package	UNKNOWN STEP	2026-09-14T21:45:49.6127488Z 31314bb1989e8ec14bcf0751d892b7bb432feabaa9e98d0f27b5100e341b0375 Up Less than a second
+package	UNKNOWN STEP	2026-09-14T21:45:49.6150504Z ##[command]/usr/bin/docker inspect --format "{{range .Config.Env}}{{println .}}{{end}}" 31314bb1989e8ec14bcf0751d892b7bb432feabaa9e98d0f27b5100e341b0375
+package	UNKNOWN STEP	2026-09-14T21:45:49.6294017Z HOME=/github/home
+package	UNKNOWN STEP	2026-09-14T21:45:49.6294691Z GITHUB_ACTIONS=true
+package	UNKNOWN STEP	2026-09-14T21:45:49.6294982Z CI=true
+package	UNKNOWN STEP	2026-09-14T21:45:49.6295291Z PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+package	UNKNOWN STEP	2026-09-14T21:45:49.6295828Z LANG=C.UTF-8
+package	UNKNOWN STEP	2026-09-14T21:45:49.6296149Z LC_ALL=C.UTF-8
+package	UNKNOWN STEP	2026-09-14T21:45:49.6296593Z PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
+package	UNKNOWN STEP	2026-09-14T21:45:49.6320579Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:49.6330843Z ##[group]Waiting for all services to be ready
+package	UNKNOWN STEP	2026-09-14T21:45:49.6333333Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:49.6635401Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+package	UNKNOWN STEP	2026-09-14T21:45:49.6636214Z with:
+package	UNKNOWN STEP	2026-09-14T21:45:49.6636465Z   persist-credentials: false
+package	UNKNOWN STEP	2026-09-14T21:45:49.6636735Z   fetch-depth: 0
+package	UNKNOWN STEP	2026-09-14T21:45:49.6636956Z   path: opf-editor
+package	UNKNOWN STEP	2026-09-14T21:45:49.6637213Z   repository: OpenPresentation/opf-editor
+package	UNKNOWN STEP	2026-09-14T21:45:49.6640263Z   token: ***
+package	UNKNOWN STEP	2026-09-14T21:45:49.6640492Z   ssh-strict: true
+package	UNKNOWN STEP	2026-09-14T21:45:49.6640718Z   ssh-user: git
+package	UNKNOWN STEP	2026-09-14T21:45:49.6640922Z   clean: true
+package	UNKNOWN STEP	2026-09-14T21:45:49.6641151Z   sparse-checkout-cone-mode: true
+package	UNKNOWN STEP	2026-09-14T21:45:49.6641421Z   fetch-tags: false
+package	UNKNOWN STEP	2026-09-14T21:45:49.6641838Z   show-progress: true
+package	UNKNOWN STEP	2026-09-14T21:45:49.6642061Z   lfs: false
+package	UNKNOWN STEP	2026-09-14T21:45:49.6642263Z   submodules: false
+package	UNKNOWN STEP	2026-09-14T21:45:49.6642487Z   set-safe-directory: true
+package	UNKNOWN STEP	2026-09-14T21:45:49.6642749Z   allow-unsafe-pr-checkout: false
+package	UNKNOWN STEP	2026-09-14T21:45:49.6643227Z env:
+package	UNKNOWN STEP	2026-09-14T21:45:49.6643792Z   OPF_GOLDEN_BASELINE: /home/runner/work/opf-editor/opf-editor/opf-render/test/golden/opf-examples-png.furniture.sha256.json
+package	UNKNOWN STEP	2026-09-14T21:45:49.6644346Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:49.6711240Z ##[command]/usr/bin/docker exec  31314bb1989e8ec14bcf0751d892b7bb432feabaa9e98d0f27b5100e341b0375 sh -c "cat /etc/*release | grep ^ID"
+package	UNKNOWN STEP	2026-09-14T21:45:50.0647539Z Syncing repository: OpenPresentation/opf-editor
+package	UNKNOWN STEP	2026-09-14T21:45:50.0649546Z ##[group]Getting Git version info
+package	UNKNOWN STEP	2026-09-14T21:45:50.0650173Z Working directory is '/__w/opf-editor/opf-editor/opf-editor'
+package	UNKNOWN STEP	2026-09-14T21:45:50.0651073Z [command]/usr/bin/git version
+package	UNKNOWN STEP	2026-09-14T21:45:50.0884085Z git version 2.43.0
+package	UNKNOWN STEP	2026-09-14T21:45:50.0905157Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:50.0918683Z Temporarily overriding HOME='/__w/_temp/d8b3628d-2f1a-41b5-b409-456d7ea09b8e' before making global git config changes
+package	UNKNOWN STEP	2026-09-14T21:45:50.0919837Z Adding repository directory to the temporary git global config as a safe directory
+package	UNKNOWN STEP	2026-09-14T21:45:50.0924225Z [command]/usr/bin/git config --global --add safe.directory /__w/opf-editor/opf-editor/opf-editor
+package	UNKNOWN STEP	2026-09-14T21:45:50.0963123Z ##[group]Determining repository object format
+package	UNKNOWN STEP	2026-09-14T21:45:50.0964785Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:50.0965348Z ##[group]Initializing the repository
+package	UNKNOWN STEP	2026-09-14T21:45:50.0969545Z [command]/usr/bin/git init /__w/opf-editor/opf-editor/opf-editor
+package	UNKNOWN STEP	2026-09-14T21:45:50.1015307Z hint: Using 'master' as the name for the initial branch. This default branch name
+package	UNKNOWN STEP	2026-09-14T21:45:50.1020503Z hint: is subject to change. To configure the initial branch name to use in all
+package	UNKNOWN STEP	2026-09-14T21:45:50.1021462Z hint: of your new repositories, which will suppress this warning, call:
+package	UNKNOWN STEP	2026-09-14T21:45:50.1022385Z hint: 
+package	UNKNOWN STEP	2026-09-14T21:45:50.1022858Z hint: 	git config --global init.defaultBranch <name>
+package	UNKNOWN STEP	2026-09-14T21:45:50.1023483Z hint: 
+package	UNKNOWN STEP	2026-09-14T21:45:50.1024204Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+package	UNKNOWN STEP	2026-09-14T21:45:50.1025426Z hint: 'development'. The just-created branch can be renamed via this command:
+package	UNKNOWN STEP	2026-09-14T21:45:50.1026489Z hint: 
+package	UNKNOWN STEP	2026-09-14T21:45:50.1027049Z hint: 	git branch -m <name>
+package	UNKNOWN STEP	2026-09-14T21:45:50.1028969Z Initialized empty Git repository in /__w/opf-editor/opf-editor/opf-editor/.git/
+package	UNKNOWN STEP	2026-09-14T21:45:50.1035336Z [command]/usr/bin/git remote add origin https://github.com/OpenPresentation/opf-editor
+package	UNKNOWN STEP	2026-09-14T21:45:50.1086069Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:50.1087298Z ##[group]Disabling automatic garbage collection
+package	UNKNOWN STEP	2026-09-14T21:45:50.1088031Z [command]/usr/bin/git config --local gc.auto 0
+package	UNKNOWN STEP	2026-09-14T21:45:50.1129529Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:50.1130126Z ##[group]Setting up auth
+package	UNKNOWN STEP	2026-09-14T21:45:50.1130655Z Removing SSH command configuration
+package	UNKNOWN STEP	2026-09-14T21:45:50.1135632Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+package	UNKNOWN STEP	2026-09-14T21:45:50.1176443Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+package	UNKNOWN STEP	2026-09-14T21:45:50.1913273Z Removing HTTP extra header
+package	UNKNOWN STEP	2026-09-14T21:45:50.1919915Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+package	UNKNOWN STEP	2026-09-14T21:45:50.1959873Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+package	UNKNOWN STEP	2026-09-14T21:45:50.2227569Z Removing includeIf entries pointing to credentials config files
+package	UNKNOWN STEP	2026-09-14T21:45:50.2233313Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+package	UNKNOWN STEP	2026-09-14T21:45:50.2272974Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+package	UNKNOWN STEP	2026-09-14T21:45:50.2549859Z [command]/usr/bin/git config --file /__w/_temp/git-credentials-215544be-90c3-430b-b862-2f471939bc59.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+package	UNKNOWN STEP	2026-09-14T21:45:50.2597098Z [command]/usr/bin/git config --local includeIf.gitdir:/__w/opf-editor/opf-editor/opf-editor/.git.path /__w/_temp/git-credentials-215544be-90c3-430b-b862-2f471939bc59.config
+package	UNKNOWN STEP	2026-09-14T21:45:50.2643446Z [command]/usr/bin/git config --local includeIf.gitdir:/__w/opf-editor/opf-editor/opf-editor/.git/worktrees/*.path /__w/_temp/git-credentials-215544be-90c3-430b-b862-2f471939bc59.config
+package	UNKNOWN STEP	2026-09-14T21:45:50.2676092Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/opf-editor/.git.path /github/runner_temp/git-credentials-215544be-90c3-430b-b862-2f471939bc59.config
+package	UNKNOWN STEP	2026-09-14T21:45:50.2715785Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/opf-editor/.git/worktrees/*.path /github/runner_temp/git-credentials-215544be-90c3-430b-b862-2f471939bc59.config
+package	UNKNOWN STEP	2026-09-14T21:45:50.2750636Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:50.2751094Z ##[group]Fetching the repository
+package	UNKNOWN STEP	2026-09-14T21:45:50.2759973Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/* +654ba8ae17201f98927983ae9027f1c023cea6de:refs/remotes/pull/17/merge
+package	UNKNOWN STEP	2026-09-14T21:45:51.1019063Z From https://github.com/OpenPresentation/opf-editor
+package	UNKNOWN STEP	2026-09-14T21:45:51.1019907Z  * [new branch]      codex/shared-furniture-20260910          -> origin/codex/shared-furniture-20260910
+package	UNKNOWN STEP	2026-09-14T21:45:51.1021010Z  * [new branch]      codex/shared-furniture-20260914          -> origin/codex/shared-furniture-20260914
+package	UNKNOWN STEP	2026-09-14T21:45:51.1022157Z  * [new branch]      main                                     -> origin/main
+package	UNKNOWN STEP	2026-09-14T21:45:51.1022874Z  * [new tag]         opf-editor-v0.1.0                        -> opf-editor-v0.1.0
+package	UNKNOWN STEP	2026-09-14T21:45:51.1023556Z  * [new tag]         opf-editor-v0.1.1                        -> opf-editor-v0.1.1
+package	UNKNOWN STEP	2026-09-14T21:45:51.1024259Z  * [new tag]         opf-editor-v0.1.2                        -> opf-editor-v0.1.2
+package	UNKNOWN STEP	2026-09-14T21:45:51.1024957Z  * [new tag]         opf-editor-v0.2.0                        -> opf-editor-v0.2.0
+package	UNKNOWN STEP	2026-09-14T21:45:51.1026489Z  * [new tag]         opf-editor-v0.3.0                        -> opf-editor-v0.3.0
+package	UNKNOWN STEP	2026-09-14T21:45:51.1029880Z  * [new tag]         opf-editor-v0.4.0                        -> opf-editor-v0.4.0
+package	UNKNOWN STEP	2026-09-14T21:45:51.1031388Z  * [new tag]         opf-editor-v0.5.0                        -> opf-editor-v0.5.0
+package	UNKNOWN STEP	2026-09-14T21:45:51.1032264Z  * [new tag]         opf-editor-v0.6.0                        -> opf-editor-v0.6.0
+package	UNKNOWN STEP	2026-09-14T21:45:51.1037476Z  * [new ref]         654ba8ae17201f98927983ae9027f1c023cea6de -> pull/17/merge
+package	UNKNOWN STEP	2026-09-14T21:45:51.1065856Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:51.1066465Z ##[group]Determining the checkout info
+package	UNKNOWN STEP	2026-09-14T21:45:51.1067818Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:51.1072821Z [command]/usr/bin/git sparse-checkout disable
+package	UNKNOWN STEP	2026-09-14T21:45:51.1118285Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+package	UNKNOWN STEP	2026-09-14T21:45:51.1154054Z ##[group]Checking out the ref
+package	UNKNOWN STEP	2026-09-14T21:45:51.1157450Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/17/merge
+package	UNKNOWN STEP	2026-09-14T21:45:51.1278899Z Note: switching to 'refs/remotes/pull/17/merge'.
+package	UNKNOWN STEP	2026-09-14T21:45:51.1279317Z 
+package	UNKNOWN STEP	2026-09-14T21:45:51.1279640Z You are in 'detached HEAD' state. You can look around, make experimental
+package	UNKNOWN STEP	2026-09-14T21:45:51.1280374Z changes and commit them, and you can discard any commits you make in this
+package	UNKNOWN STEP	2026-09-14T21:45:51.1281085Z state without impacting any branches by switching back to a branch.
+package	UNKNOWN STEP	2026-09-14T21:45:51.1281429Z 
+package	UNKNOWN STEP	2026-09-14T21:45:51.1281893Z If you want to create a new branch to retain commits you create, you may
+package	UNKNOWN STEP	2026-09-14T21:45:51.1282474Z do so (now or later) by using -c with the switch command. Example:
+package	UNKNOWN STEP	2026-09-14T21:45:51.1282820Z 
+package	UNKNOWN STEP	2026-09-14T21:45:51.1282968Z   git switch -c <new-branch-name>
+package	UNKNOWN STEP	2026-09-14T21:45:51.1283204Z 
+package	UNKNOWN STEP	2026-09-14T21:45:51.1283335Z Or undo this operation with:
+package	UNKNOWN STEP	2026-09-14T21:45:51.1283563Z 
+package	UNKNOWN STEP	2026-09-14T21:45:51.1283789Z   git switch -
+package	UNKNOWN STEP	2026-09-14T21:45:51.1283960Z 
+package	UNKNOWN STEP	2026-09-14T21:45:51.1284257Z Turn off this advice by setting config variable advice.detachedHead to false
+package	UNKNOWN STEP	2026-09-14T21:45:51.1284686Z 
+package	UNKNOWN STEP	2026-09-14T21:45:51.1285128Z HEAD is now at 654ba8a Merge acc216476add8b5ed8a86065cb84c769720624f7 into 76249a18d73b12cf168152ed0be9df533a9d1069
+package	UNKNOWN STEP	2026-09-14T21:45:51.1286669Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:51.1342068Z [command]/usr/bin/git log -1 --format=%H
+package	UNKNOWN STEP	2026-09-14T21:45:51.1376141Z 654ba8ae17201f98927983ae9027f1c023cea6de
+package	UNKNOWN STEP	2026-09-14T21:45:51.1394596Z ##[group]Removing auth
+package	UNKNOWN STEP	2026-09-14T21:45:51.1394911Z Removing SSH command configuration
+package	UNKNOWN STEP	2026-09-14T21:45:51.1395377Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+package	UNKNOWN STEP	2026-09-14T21:45:51.1431502Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+package	UNKNOWN STEP	2026-09-14T21:45:51.1716284Z Removing HTTP extra header
+package	UNKNOWN STEP	2026-09-14T21:45:51.1717064Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+package	UNKNOWN STEP	2026-09-14T21:45:51.1790636Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+package	UNKNOWN STEP	2026-09-14T21:45:51.2038716Z Removing includeIf entries pointing to credentials config files
+package	UNKNOWN STEP	2026-09-14T21:45:51.2042584Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+package	UNKNOWN STEP	2026-09-14T21:45:51.2074275Z includeif.gitdir:/__w/opf-editor/opf-editor/opf-editor/.git.path
+package	UNKNOWN STEP	2026-09-14T21:45:51.2074835Z includeif.gitdir:/__w/opf-editor/opf-editor/opf-editor/.git/worktrees/*.path
+package	UNKNOWN STEP	2026-09-14T21:45:51.2075308Z includeif.gitdir:/github/workspace/opf-editor/.git.path
+package	UNKNOWN STEP	2026-09-14T21:45:51.2075751Z includeif.gitdir:/github/workspace/opf-editor/.git/worktrees/*.path
+package	UNKNOWN STEP	2026-09-14T21:45:51.2093439Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/__w/opf-editor/opf-editor/opf-editor/.git.path
+package	UNKNOWN STEP	2026-09-14T21:45:51.2114306Z /__w/_temp/git-credentials-215544be-90c3-430b-b862-2f471939bc59.config
+package	UNKNOWN STEP	2026-09-14T21:45:51.2126187Z [command]/usr/bin/git config --local --unset includeif.gitdir:/__w/opf-editor/opf-editor/opf-editor/.git.path \/__w\/_temp\/git\-credentials\-215544be\-90c3\-430b\-b862\-2f471939bc59\.config
+package	UNKNOWN STEP	2026-09-14T21:45:51.2167048Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/__w/opf-editor/opf-editor/opf-editor/.git/worktrees/*.path
+package	UNKNOWN STEP	2026-09-14T21:45:51.2199623Z /__w/_temp/git-credentials-215544be-90c3-430b-b862-2f471939bc59.config
+package	UNKNOWN STEP	2026-09-14T21:45:51.2206415Z [command]/usr/bin/git config --local --unset includeif.gitdir:/__w/opf-editor/opf-editor/opf-editor/.git/worktrees/*.path \/__w\/_temp\/git\-credentials\-215544be\-90c3\-430b\-b862\-2f471939bc59\.config
+package	UNKNOWN STEP	2026-09-14T21:45:51.2248139Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/opf-editor/.git.path
+package	UNKNOWN STEP	2026-09-14T21:45:51.2278737Z /github/runner_temp/git-credentials-215544be-90c3-430b-b862-2f471939bc59.config
+package	UNKNOWN STEP	2026-09-14T21:45:51.2287962Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/opf-editor/.git.path \/github\/runner_temp\/git\-credentials\-215544be\-90c3\-430b\-b862\-2f471939bc59\.config
+package	UNKNOWN STEP	2026-09-14T21:45:51.2332555Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/opf-editor/.git/worktrees/*.path
+package	UNKNOWN STEP	2026-09-14T21:45:51.2366668Z /github/runner_temp/git-credentials-215544be-90c3-430b-b862-2f471939bc59.config
+package	UNKNOWN STEP	2026-09-14T21:45:51.2376139Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/opf-editor/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-215544be\-90c3\-430b\-b862\-2f471939bc59\.config
+package	UNKNOWN STEP	2026-09-14T21:45:51.2419707Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+package	UNKNOWN STEP	2026-09-14T21:45:51.2712894Z Removing credentials config '/__w/_temp/git-credentials-215544be-90c3-430b-b862-2f471939bc59.config'
+package	UNKNOWN STEP	2026-09-14T21:45:51.2721211Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:51.3102620Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+package	UNKNOWN STEP	2026-09-14T21:45:51.3103027Z with:
+package	UNKNOWN STEP	2026-09-14T21:45:51.3103254Z   repository: OpenPresentation/opf
+package	UNKNOWN STEP	2026-09-14T21:45:51.3103559Z   ref: e9d42f54ff6d7a2c717faddb17594f72c8d1fa02
+package	UNKNOWN STEP	2026-09-14T21:45:51.3103855Z   path: opf
+package	UNKNOWN STEP	2026-09-14T21:45:51.3104057Z   fetch-depth: 0
+package	UNKNOWN STEP	2026-09-14T21:45:51.3104291Z   persist-credentials: false
+package	UNKNOWN STEP	2026-09-14T21:45:51.3107137Z   token: ***
+package	UNKNOWN STEP	2026-09-14T21:45:51.3107354Z   ssh-strict: true
+package	UNKNOWN STEP	2026-09-14T21:45:51.3107571Z   ssh-user: git
+package	UNKNOWN STEP	2026-09-14T21:45:51.3107777Z   clean: true
+package	UNKNOWN STEP	2026-09-14T21:45:51.3108003Z   sparse-checkout-cone-mode: true
+package	UNKNOWN STEP	2026-09-14T21:45:51.3108279Z   fetch-tags: false
+package	UNKNOWN STEP	2026-09-14T21:45:51.3108522Z   show-progress: true
+package	UNKNOWN STEP	2026-09-14T21:45:51.3108758Z   lfs: false
+package	UNKNOWN STEP	2026-09-14T21:45:51.3108975Z   submodules: false
+package	UNKNOWN STEP	2026-09-14T21:45:51.3109225Z   set-safe-directory: true
+package	UNKNOWN STEP	2026-09-14T21:45:51.3109497Z   allow-unsafe-pr-checkout: false
+package	UNKNOWN STEP	2026-09-14T21:45:51.3109747Z env:
+package	UNKNOWN STEP	2026-09-14T21:45:51.3110292Z   OPF_GOLDEN_BASELINE: /home/runner/work/opf-editor/opf-editor/opf-render/test/golden/opf-examples-png.furniture.sha256.json
+package	UNKNOWN STEP	2026-09-14T21:45:51.3110850Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:51.3119694Z ##[command]/usr/bin/docker exec  31314bb1989e8ec14bcf0751d892b7bb432feabaa9e98d0f27b5100e341b0375 sh -c "cat /etc/*release | grep ^ID"
+package	UNKNOWN STEP	2026-09-14T21:45:51.5030325Z Syncing repository: OpenPresentation/opf
+package	UNKNOWN STEP	2026-09-14T21:45:51.5031709Z ##[group]Getting Git version info
+package	UNKNOWN STEP	2026-09-14T21:45:51.5042454Z Working directory is '/__w/opf-editor/opf-editor/opf'
+package	UNKNOWN STEP	2026-09-14T21:45:51.5117233Z [command]/usr/bin/git version
+package	UNKNOWN STEP	2026-09-14T21:45:51.5132440Z git version 2.43.0
+package	UNKNOWN STEP	2026-09-14T21:45:51.5234136Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:51.5282973Z Temporarily overriding HOME='/__w/_temp/a70121e2-e674-4a19-9099-829dbaa6d2e8' before making global git config changes
+package	UNKNOWN STEP	2026-09-14T21:45:51.5302908Z Adding repository directory to the temporary git global config as a safe directory
+package	UNKNOWN STEP	2026-09-14T21:45:51.5312919Z [command]/usr/bin/git config --global --add safe.directory /__w/opf-editor/opf-editor/opf
+package	UNKNOWN STEP	2026-09-14T21:45:51.5382823Z ##[group]Determining repository object format
+package	UNKNOWN STEP	2026-09-14T21:45:51.5402989Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:51.5412799Z ##[group]Initializing the repository
+package	UNKNOWN STEP	2026-09-14T21:45:51.5413682Z [command]/usr/bin/git init /__w/opf-editor/opf-editor/opf
+package	UNKNOWN STEP	2026-09-14T21:45:51.5414543Z hint: Using 'master' as the name for the initial branch. This default branch name
+package	UNKNOWN STEP	2026-09-14T21:45:51.5415177Z hint: is subject to change. To configure the initial branch name to use in all
+package	UNKNOWN STEP	2026-09-14T21:45:51.5415740Z hint: of your new repositories, which will suppress this warning, call:
+package	UNKNOWN STEP	2026-09-14T21:45:51.5416179Z hint: 
+package	UNKNOWN STEP	2026-09-14T21:45:51.5416526Z hint: 	git config --global init.defaultBranch <name>
+package	UNKNOWN STEP	2026-09-14T21:45:51.5416934Z hint: 
+package	UNKNOWN STEP	2026-09-14T21:45:51.5417320Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+package	UNKNOWN STEP	2026-09-14T21:45:51.5417902Z hint: 'development'. The just-created branch can be renamed via this command:
+package	UNKNOWN STEP	2026-09-14T21:45:51.5418747Z hint: 
+package	UNKNOWN STEP	2026-09-14T21:45:51.5419040Z hint: 	git branch -m <name>
+package	UNKNOWN STEP	2026-09-14T21:45:51.5419481Z Initialized empty Git repository in /__w/opf-editor/opf-editor/opf/.git/
+package	UNKNOWN STEP	2026-09-14T21:45:51.5420710Z [command]/usr/bin/git remote add origin https://github.com/OpenPresentation/opf
+package	UNKNOWN STEP	2026-09-14T21:45:51.5422645Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:51.5423367Z ##[group]Disabling automatic garbage collection
+package	UNKNOWN STEP	2026-09-14T21:45:51.5423998Z [command]/usr/bin/git config --local gc.auto 0
+package	UNKNOWN STEP	2026-09-14T21:45:51.5425387Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:51.5426025Z ##[group]Setting up auth
+package	UNKNOWN STEP	2026-09-14T21:45:51.5426515Z Removing SSH command configuration
+package	UNKNOWN STEP	2026-09-14T21:45:51.5427170Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+package	UNKNOWN STEP	2026-09-14T21:45:51.5428890Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+package	UNKNOWN STEP	2026-09-14T21:45:51.5754051Z Removing HTTP extra header
+package	UNKNOWN STEP	2026-09-14T21:45:51.5760100Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+package	UNKNOWN STEP	2026-09-14T21:45:51.5799067Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+package	UNKNOWN STEP	2026-09-14T21:45:51.6099941Z Removing includeIf entries pointing to credentials config files
+package	UNKNOWN STEP	2026-09-14T21:45:51.6101156Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+package	UNKNOWN STEP	2026-09-14T21:45:51.6154668Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+package	UNKNOWN STEP	2026-09-14T21:45:51.6452117Z [command]/usr/bin/git config --file /__w/_temp/git-credentials-241d8de1-47cb-44e8-91e8-517bb2d5fe54.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+package	UNKNOWN STEP	2026-09-14T21:45:51.6507867Z [command]/usr/bin/git config --local includeIf.gitdir:/__w/opf-editor/opf-editor/opf/.git.path /__w/_temp/git-credentials-241d8de1-47cb-44e8-91e8-517bb2d5fe54.config
+package	UNKNOWN STEP	2026-09-14T21:45:51.6547006Z [command]/usr/bin/git config --local includeIf.gitdir:/__w/opf-editor/opf-editor/opf/.git/worktrees/*.path /__w/_temp/git-credentials-241d8de1-47cb-44e8-91e8-517bb2d5fe54.config
+package	UNKNOWN STEP	2026-09-14T21:45:51.6588214Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/opf/.git.path /github/runner_temp/git-credentials-241d8de1-47cb-44e8-91e8-517bb2d5fe54.config
+package	UNKNOWN STEP	2026-09-14T21:45:51.6628735Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/opf/.git/worktrees/*.path /github/runner_temp/git-credentials-241d8de1-47cb-44e8-91e8-517bb2d5fe54.config
+package	UNKNOWN STEP	2026-09-14T21:45:51.6664955Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:51.6665357Z ##[group]Fetching the repository
+package	UNKNOWN STEP	2026-09-14T21:45:51.6674323Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/*
+package	UNKNOWN STEP	2026-09-14T21:45:53.5874211Z From https://github.com/OpenPresentation/opf
+package	UNKNOWN STEP	2026-09-14T21:45:53.5875244Z  * [new branch]      claude/pen-dev-format-analysis-24vs61 -> origin/claude/pen-dev-format-analysis-24vs61
+package	UNKNOWN STEP	2026-09-14T21:45:53.5876406Z  * [new branch]      codex/ecosystem-branch-audit-20260910 -> origin/codex/ecosystem-branch-audit-20260910
+package	UNKNOWN STEP	2026-09-14T21:45:53.5877472Z  * [new branch]      codex/shared-furniture-20260910 -> origin/codex/shared-furniture-20260910
+package	UNKNOWN STEP	2026-09-14T21:45:53.5878450Z  * [new branch]      codex/shared-furniture-20260914 -> origin/codex/shared-furniture-20260914
+package	UNKNOWN STEP	2026-09-14T21:45:53.5879681Z  * [new branch]      dependabot/npm_and_yarn/npm-minor-patch-7a0c24a58d -> origin/dependabot/npm_and_yarn/npm-minor-patch-7a0c24a58d
+package	UNKNOWN STEP	2026-09-14T21:45:53.5880687Z  * [new branch]      main       -> origin/main
+package	UNKNOWN STEP	2026-09-14T21:45:53.5883286Z  * [new tag]         cli-v0.1.1 -> cli-v0.1.1
+package	UNKNOWN STEP	2026-09-14T21:45:53.5886002Z  * [new tag]         cli-v0.2.0 -> cli-v0.2.0
+package	UNKNOWN STEP	2026-09-14T21:45:53.5889102Z  * [new tag]         cli-v0.3.0 -> cli-v0.3.0
+package	UNKNOWN STEP	2026-09-14T21:45:53.5891448Z  * [new tag]         cli-v0.4.0 -> cli-v0.4.0
+package	UNKNOWN STEP	2026-09-14T21:45:53.5893829Z  * [new tag]         cli-v0.5.0 -> cli-v0.5.0
+package	UNKNOWN STEP	2026-09-14T21:45:53.5895033Z  * [new tag]         cli-v0.6.0 -> cli-v0.6.0
+package	UNKNOWN STEP	2026-09-14T21:45:53.5897353Z  * [new tag]         cli-v0.7.0 -> cli-v0.7.0
+package	UNKNOWN STEP	2026-09-14T21:45:53.5900282Z  * [new tag]         go/v0.1.0  -> go/v0.1.0
+package	UNKNOWN STEP	2026-09-14T21:45:53.5902923Z  * [new tag]         js/v0.2.1  -> js/v0.2.1
+package	UNKNOWN STEP	2026-09-14T21:45:53.5903472Z  * [new tag]         opf-v0.2.2 -> opf-v0.2.2
+package	UNKNOWN STEP	2026-09-14T21:45:53.5914231Z  * [new tag]         opf-v0.3.0 -> opf-v0.3.0
+package	UNKNOWN STEP	2026-09-14T21:45:53.5914764Z  * [new tag]         opf-v0.4.0 -> opf-v0.4.0
+package	UNKNOWN STEP	2026-09-14T21:45:53.5915203Z  * [new tag]         opf-v0.4.1 -> opf-v0.4.1
+package	UNKNOWN STEP	2026-09-14T21:45:53.5915591Z  * [new tag]         opf-v0.5.0 -> opf-v0.5.0
+package	UNKNOWN STEP	2026-09-14T21:45:53.5915882Z  * [new tag]         opf-v0.6.0 -> opf-v0.6.0
+package	UNKNOWN STEP	2026-09-14T21:45:53.5916167Z  * [new tag]         opf-v0.7.0 -> opf-v0.7.0
+package	UNKNOWN STEP	2026-09-14T21:45:53.5916712Z  * [new tag]         opf-v0.8.0 -> opf-v0.8.0
+package	UNKNOWN STEP	2026-09-14T21:45:53.5916989Z  * [new tag]         opf-v0.9.0 -> opf-v0.9.0
+package	UNKNOWN STEP	2026-09-14T21:45:53.5945655Z [command]/usr/bin/git rev-parse --verify --quiet e9d42f54ff6d7a2c717faddb17594f72c8d1fa02^{object}
+package	UNKNOWN STEP	2026-09-14T21:45:53.5977260Z e9d42f54ff6d7a2c717faddb17594f72c8d1fa02
+package	UNKNOWN STEP	2026-09-14T21:45:53.5982092Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:53.5982694Z ##[group]Determining the checkout info
+package	UNKNOWN STEP	2026-09-14T21:45:53.5983370Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:53.5987837Z [command]/usr/bin/git sparse-checkout disable
+package	UNKNOWN STEP	2026-09-14T21:45:53.6030627Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+package	UNKNOWN STEP	2026-09-14T21:45:53.6065760Z ##[group]Checking out the ref
+package	UNKNOWN STEP	2026-09-14T21:45:53.6068920Z [command]/usr/bin/git checkout --progress --force e9d42f54ff6d7a2c717faddb17594f72c8d1fa02
+package	UNKNOWN STEP	2026-09-14T21:45:54.6261134Z Note: switching to 'e9d42f54ff6d7a2c717faddb17594f72c8d1fa02'.
+package	UNKNOWN STEP	2026-09-14T21:45:54.6261850Z 
+package	UNKNOWN STEP	2026-09-14T21:45:54.6262208Z You are in 'detached HEAD' state. You can look around, make experimental
+package	UNKNOWN STEP	2026-09-14T21:45:54.6262986Z changes and commit them, and you can discard any commits you make in this
+package	UNKNOWN STEP	2026-09-14T21:45:54.6263729Z state without impacting any branches by switching back to a branch.
+package	UNKNOWN STEP	2026-09-14T21:45:54.6264161Z 
+package	UNKNOWN STEP	2026-09-14T21:45:54.6264456Z If you want to create a new branch to retain commits you create, you may
+package	UNKNOWN STEP	2026-09-14T21:45:54.6265143Z do so (now or later) by using -c with the switch command. Example:
+package	UNKNOWN STEP	2026-09-14T21:45:54.6265542Z 
+package	UNKNOWN STEP	2026-09-14T21:45:54.6265707Z   git switch -c <new-branch-name>
+package	UNKNOWN STEP	2026-09-14T21:45:54.6265975Z 
+package	UNKNOWN STEP	2026-09-14T21:45:54.6266125Z Or undo this operation with:
+package	UNKNOWN STEP	2026-09-14T21:45:54.6266371Z 
+package	UNKNOWN STEP	2026-09-14T21:45:54.6266496Z   git switch -
+package	UNKNOWN STEP	2026-09-14T21:45:54.6266686Z 
+package	UNKNOWN STEP	2026-09-14T21:45:54.6267010Z Turn off this advice by setting config variable advice.detachedHead to false
+package	UNKNOWN STEP	2026-09-14T21:45:54.6267496Z 
+package	UNKNOWN STEP	2026-09-14T21:45:54.6267889Z HEAD is now at e9d42f5 Verify furniture reimport in source and installed offline workflows
+package	UNKNOWN STEP	2026-09-14T21:45:54.6307422Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:54.6358148Z [command]/usr/bin/git log -1 --format=%H
+package	UNKNOWN STEP	2026-09-14T21:45:54.6393877Z e9d42f54ff6d7a2c717faddb17594f72c8d1fa02
+package	UNKNOWN STEP	2026-09-14T21:45:54.6403136Z ##[group]Removing auth
+package	UNKNOWN STEP	2026-09-14T21:45:54.6403447Z Removing SSH command configuration
+package	UNKNOWN STEP	2026-09-14T21:45:54.6407497Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+package	UNKNOWN STEP	2026-09-14T21:45:54.6446436Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+package	UNKNOWN STEP	2026-09-14T21:45:54.6739482Z Removing HTTP extra header
+package	UNKNOWN STEP	2026-09-14T21:45:54.6744088Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+package	UNKNOWN STEP	2026-09-14T21:45:54.6784687Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+package	UNKNOWN STEP	2026-09-14T21:45:54.7069909Z Removing includeIf entries pointing to credentials config files
+package	UNKNOWN STEP	2026-09-14T21:45:54.7073411Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+package	UNKNOWN STEP	2026-09-14T21:45:54.7104922Z includeif.gitdir:/__w/opf-editor/opf-editor/opf/.git.path
+package	UNKNOWN STEP	2026-09-14T21:45:54.7105642Z includeif.gitdir:/__w/opf-editor/opf-editor/opf/.git/worktrees/*.path
+package	UNKNOWN STEP	2026-09-14T21:45:54.7106205Z includeif.gitdir:/github/workspace/opf/.git.path
+package	UNKNOWN STEP	2026-09-14T21:45:54.7106581Z includeif.gitdir:/github/workspace/opf/.git/worktrees/*.path
+package	UNKNOWN STEP	2026-09-14T21:45:54.7114356Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/__w/opf-editor/opf-editor/opf/.git.path
+package	UNKNOWN STEP	2026-09-14T21:45:54.7145225Z /__w/_temp/git-credentials-241d8de1-47cb-44e8-91e8-517bb2d5fe54.config
+package	UNKNOWN STEP	2026-09-14T21:45:54.7155596Z [command]/usr/bin/git config --local --unset includeif.gitdir:/__w/opf-editor/opf-editor/opf/.git.path \/__w\/_temp\/git\-credentials\-241d8de1\-47cb\-44e8\-91e8\-517bb2d5fe54\.config
+package	UNKNOWN STEP	2026-09-14T21:45:54.7196281Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/__w/opf-editor/opf-editor/opf/.git/worktrees/*.path
+package	UNKNOWN STEP	2026-09-14T21:45:54.7225846Z /__w/_temp/git-credentials-241d8de1-47cb-44e8-91e8-517bb2d5fe54.config
+package	UNKNOWN STEP	2026-09-14T21:45:54.7235561Z [command]/usr/bin/git config --local --unset includeif.gitdir:/__w/opf-editor/opf-editor/opf/.git/worktrees/*.path \/__w\/_temp\/git\-credentials\-241d8de1\-47cb\-44e8\-91e8\-517bb2d5fe54\.config
+package	UNKNOWN STEP	2026-09-14T21:45:54.7273586Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/opf/.git.path
+package	UNKNOWN STEP	2026-09-14T21:45:54.7301320Z /github/runner_temp/git-credentials-241d8de1-47cb-44e8-91e8-517bb2d5fe54.config
+package	UNKNOWN STEP	2026-09-14T21:45:54.7333033Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/opf/.git.path \/github\/runner_temp\/git\-credentials\-241d8de1\-47cb\-44e8\-91e8\-517bb2d5fe54\.config
+package	UNKNOWN STEP	2026-09-14T21:45:54.7397002Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/opf/.git/worktrees/*.path
+package	UNKNOWN STEP	2026-09-14T21:45:54.7431097Z /github/runner_temp/git-credentials-241d8de1-47cb-44e8-91e8-517bb2d5fe54.config
+package	UNKNOWN STEP	2026-09-14T21:45:54.7443388Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/opf/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-241d8de1\-47cb\-44e8\-91e8\-517bb2d5fe54\.config
+package	UNKNOWN STEP	2026-09-14T21:45:54.7478514Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+package	UNKNOWN STEP	2026-09-14T21:45:54.7757394Z Removing credentials config '/__w/_temp/git-credentials-241d8de1-47cb-44e8-91e8-517bb2d5fe54.config'
+package	UNKNOWN STEP	2026-09-14T21:45:54.7767349Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:54.7957092Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+package	UNKNOWN STEP	2026-09-14T21:45:54.7957480Z with:
+package	UNKNOWN STEP	2026-09-14T21:45:54.7957711Z   repository: OpenPresentation/opf-render
+package	UNKNOWN STEP	2026-09-14T21:45:54.7958023Z   ref: d0ff86abe6e67436a5674778605bc8562314ad1c
+package	UNKNOWN STEP	2026-09-14T21:45:54.7958336Z   path: opf-render
+package	UNKNOWN STEP	2026-09-14T21:45:54.7958557Z   fetch-depth: 0
+package	UNKNOWN STEP	2026-09-14T21:45:54.7958783Z   persist-credentials: false
+package	UNKNOWN STEP	2026-09-14T21:45:54.7961804Z   token: ***
+package	UNKNOWN STEP	2026-09-14T21:45:54.7962014Z   ssh-strict: true
+package	UNKNOWN STEP	2026-09-14T21:45:54.7962227Z   ssh-user: git
+package	UNKNOWN STEP	2026-09-14T21:45:54.7962430Z   clean: true
+package	UNKNOWN STEP	2026-09-14T21:45:54.7962656Z   sparse-checkout-cone-mode: true
+package	UNKNOWN STEP	2026-09-14T21:45:54.7962918Z   fetch-tags: false
+package	UNKNOWN STEP	2026-09-14T21:45:54.7963137Z   show-progress: true
+package	UNKNOWN STEP	2026-09-14T21:45:54.7963352Z   lfs: false
+package	UNKNOWN STEP	2026-09-14T21:45:54.7963543Z   submodules: false
+package	UNKNOWN STEP	2026-09-14T21:45:54.7963766Z   set-safe-directory: true
+package	UNKNOWN STEP	2026-09-14T21:45:54.7964019Z   allow-unsafe-pr-checkout: false
+package	UNKNOWN STEP	2026-09-14T21:45:54.7964269Z env:
+package	UNKNOWN STEP	2026-09-14T21:45:54.7964803Z   OPF_GOLDEN_BASELINE: /home/runner/work/opf-editor/opf-editor/opf-render/test/golden/opf-examples-png.furniture.sha256.json
+package	UNKNOWN STEP	2026-09-14T21:45:54.7965353Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:54.7973424Z ##[command]/usr/bin/docker exec  31314bb1989e8ec14bcf0751d892b7bb432feabaa9e98d0f27b5100e341b0375 sh -c "cat /etc/*release | grep ^ID"
+package	UNKNOWN STEP	2026-09-14T21:45:54.9937870Z Syncing repository: OpenPresentation/opf-render
+package	UNKNOWN STEP	2026-09-14T21:45:54.9945903Z ##[group]Getting Git version info
+package	UNKNOWN STEP	2026-09-14T21:45:54.9946571Z Working directory is '/__w/opf-editor/opf-editor/opf-render'
+package	UNKNOWN STEP	2026-09-14T21:45:54.9995825Z [command]/usr/bin/git version
+package	UNKNOWN STEP	2026-09-14T21:45:55.0062513Z git version 2.43.0
+package	UNKNOWN STEP	2026-09-14T21:45:55.0086291Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:55.0104152Z Temporarily overriding HOME='/__w/_temp/bd42cdaf-eff9-482c-b7ab-0db352fcad38' before making global git config changes
+package	UNKNOWN STEP	2026-09-14T21:45:55.0105195Z Adding repository directory to the temporary git global config as a safe directory
+package	UNKNOWN STEP	2026-09-14T21:45:55.0106167Z [command]/usr/bin/git config --global --add safe.directory /__w/opf-editor/opf-editor/opf-render
+package	UNKNOWN STEP	2026-09-14T21:45:55.0168092Z ##[group]Determining repository object format
+package	UNKNOWN STEP	2026-09-14T21:45:55.0169109Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:55.0170011Z ##[group]Initializing the repository
+package	UNKNOWN STEP	2026-09-14T21:45:55.0170845Z [command]/usr/bin/git init /__w/opf-editor/opf-editor/opf-render
+package	UNKNOWN STEP	2026-09-14T21:45:55.0263267Z hint: Using 'master' as the name for the initial branch. This default branch name
+package	UNKNOWN STEP	2026-09-14T21:45:55.0264771Z hint: is subject to change. To configure the initial branch name to use in all
+package	UNKNOWN STEP	2026-09-14T21:45:55.0272952Z hint: of your new repositories, which will suppress this warning, call:
+package	UNKNOWN STEP	2026-09-14T21:45:55.0292691Z hint: 
+package	UNKNOWN STEP	2026-09-14T21:45:55.0293437Z hint: 	git config --global init.defaultBranch <name>
+package	UNKNOWN STEP	2026-09-14T21:45:55.0294107Z hint: 
+package	UNKNOWN STEP	2026-09-14T21:45:55.0294705Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+package	UNKNOWN STEP	2026-09-14T21:45:55.0295803Z hint: 'development'. The just-created branch can be renamed via this command:
+package	UNKNOWN STEP	2026-09-14T21:45:55.0296615Z hint: 
+package	UNKNOWN STEP	2026-09-14T21:45:55.0297140Z hint: 	git branch -m <name>
+package	UNKNOWN STEP	2026-09-14T21:45:55.0298161Z Initialized empty Git repository in /__w/opf-editor/opf-editor/opf-render/.git/
+package	UNKNOWN STEP	2026-09-14T21:45:55.0300309Z [command]/usr/bin/git remote add origin https://github.com/OpenPresentation/opf-render
+package	UNKNOWN STEP	2026-09-14T21:45:55.0315414Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:55.0339065Z ##[group]Disabling automatic garbage collection
+package	UNKNOWN STEP	2026-09-14T21:45:55.0339684Z [command]/usr/bin/git config --local gc.auto 0
+package	UNKNOWN STEP	2026-09-14T21:45:55.0373291Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:55.0373867Z ##[group]Setting up auth
+package	UNKNOWN STEP	2026-09-14T21:45:55.0374303Z Removing SSH command configuration
+package	UNKNOWN STEP	2026-09-14T21:45:55.0374971Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+package	UNKNOWN STEP	2026-09-14T21:45:55.0424809Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+package	UNKNOWN STEP	2026-09-14T21:45:55.0711678Z Removing HTTP extra header
+package	UNKNOWN STEP	2026-09-14T21:45:55.0712688Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+package	UNKNOWN STEP	2026-09-14T21:45:55.0751140Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+package	UNKNOWN STEP	2026-09-14T21:45:55.1043696Z Removing includeIf entries pointing to credentials config files
+package	UNKNOWN STEP	2026-09-14T21:45:55.1049081Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+package	UNKNOWN STEP	2026-09-14T21:45:55.1090484Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+package	UNKNOWN STEP	2026-09-14T21:45:55.1384892Z [command]/usr/bin/git config --file /__w/_temp/git-credentials-38ff4698-a760-4167-9b24-1b546d51dcdd.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+package	UNKNOWN STEP	2026-09-14T21:45:55.1439588Z [command]/usr/bin/git config --local includeIf.gitdir:/__w/opf-editor/opf-editor/opf-render/.git.path /__w/_temp/git-credentials-38ff4698-a760-4167-9b24-1b546d51dcdd.config
+package	UNKNOWN STEP	2026-09-14T21:45:55.1479187Z [command]/usr/bin/git config --local includeIf.gitdir:/__w/opf-editor/opf-editor/opf-render/.git/worktrees/*.path /__w/_temp/git-credentials-38ff4698-a760-4167-9b24-1b546d51dcdd.config
+package	UNKNOWN STEP	2026-09-14T21:45:55.1516400Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/opf-render/.git.path /github/runner_temp/git-credentials-38ff4698-a760-4167-9b24-1b546d51dcdd.config
+package	UNKNOWN STEP	2026-09-14T21:45:55.1552512Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/opf-render/.git/worktrees/*.path /github/runner_temp/git-credentials-38ff4698-a760-4167-9b24-1b546d51dcdd.config
+package	UNKNOWN STEP	2026-09-14T21:45:55.1585359Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:55.1585861Z ##[group]Fetching the repository
+package	UNKNOWN STEP	2026-09-14T21:45:55.1593717Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/*
+package	UNKNOWN STEP	2026-09-14T21:45:58.7933280Z From https://github.com/OpenPresentation/opf-render
+package	UNKNOWN STEP	2026-09-14T21:45:58.7935507Z  * [new branch]      codex/shared-furniture-20260910 -> origin/codex/shared-furniture-20260910
+package	UNKNOWN STEP	2026-09-14T21:45:58.7938396Z  * [new branch]      codex/shared-furniture-20260914 -> origin/codex/shared-furniture-20260914
+package	UNKNOWN STEP	2026-09-14T21:45:58.7940151Z  * [new branch]      main              -> origin/main
+package	UNKNOWN STEP	2026-09-14T21:45:58.7940989Z  * [new tag]         opf-render-v0.1.0 -> opf-render-v0.1.0
+package	UNKNOWN STEP	2026-09-14T21:45:58.7942328Z  * [new tag]         opf-render-v0.1.1 -> opf-render-v0.1.1
+package	UNKNOWN STEP	2026-09-14T21:45:58.7943027Z  * [new tag]         opf-render-v0.2.0 -> opf-render-v0.2.0
+package	UNKNOWN STEP	2026-09-14T21:45:58.7943686Z  * [new tag]         opf-render-v0.3.0 -> opf-render-v0.3.0
+package	UNKNOWN STEP	2026-09-14T21:45:58.7944563Z  * [new tag]         opf-render-v0.4.0 -> opf-render-v0.4.0
+package	UNKNOWN STEP	2026-09-14T21:45:58.7945480Z  * [new tag]         opf-render-v0.5.0 -> opf-render-v0.5.0
+package	UNKNOWN STEP	2026-09-14T21:45:58.7946082Z  * [new tag]         opf-render-v0.5.1 -> opf-render-v0.5.1
+package	UNKNOWN STEP	2026-09-14T21:45:58.7946637Z  * [new tag]         opf-render-v0.6.0 -> opf-render-v0.6.0
+package	UNKNOWN STEP	2026-09-14T21:45:58.7947250Z  * [new tag]         opf-render-v0.7.0 -> opf-render-v0.7.0
+package	UNKNOWN STEP	2026-09-14T21:45:58.7977754Z [command]/usr/bin/git rev-parse --verify --quiet d0ff86abe6e67436a5674778605bc8562314ad1c^{object}
+package	UNKNOWN STEP	2026-09-14T21:45:58.8010028Z d0ff86abe6e67436a5674778605bc8562314ad1c
+package	UNKNOWN STEP	2026-09-14T21:45:58.8015214Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:58.8015919Z ##[group]Determining the checkout info
+package	UNKNOWN STEP	2026-09-14T21:45:58.8016544Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:58.8019268Z [command]/usr/bin/git sparse-checkout disable
+package	UNKNOWN STEP	2026-09-14T21:45:58.8061881Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+package	UNKNOWN STEP	2026-09-14T21:45:58.8095947Z ##[group]Checking out the ref
+package	UNKNOWN STEP	2026-09-14T21:45:58.8099795Z [command]/usr/bin/git checkout --progress --force d0ff86abe6e67436a5674778605bc8562314ad1c
+package	UNKNOWN STEP	2026-09-14T21:45:59.0658887Z Note: switching to 'd0ff86abe6e67436a5674778605bc8562314ad1c'.
+package	UNKNOWN STEP	2026-09-14T21:45:59.0659358Z 
+package	UNKNOWN STEP	2026-09-14T21:45:59.0659687Z You are in 'detached HEAD' state. You can look around, make experimental
+package	UNKNOWN STEP	2026-09-14T21:45:59.0660428Z changes and commit them, and you can discard any commits you make in this
+package	UNKNOWN STEP	2026-09-14T21:45:59.0661177Z state without impacting any branches by switching back to a branch.
+package	UNKNOWN STEP	2026-09-14T21:45:59.0661793Z 
+package	UNKNOWN STEP	2026-09-14T21:45:59.0662066Z If you want to create a new branch to retain commits you create, you may
+package	UNKNOWN STEP	2026-09-14T21:45:59.0662521Z do so (now or later) by using -c with the switch command. Example:
+package	UNKNOWN STEP	2026-09-14T21:45:59.0662779Z 
+package	UNKNOWN STEP	2026-09-14T21:45:59.0662888Z   git switch -c <new-branch-name>
+package	UNKNOWN STEP	2026-09-14T21:45:59.0663061Z 
+package	UNKNOWN STEP	2026-09-14T21:45:59.0663165Z Or undo this operation with:
+package	UNKNOWN STEP	2026-09-14T21:45:59.0663331Z 
+package	UNKNOWN STEP	2026-09-14T21:45:59.0663423Z   git switch -
+package	UNKNOWN STEP	2026-09-14T21:45:59.0663552Z 
+package	UNKNOWN STEP	2026-09-14T21:45:59.0663770Z Turn off this advice by setting config variable advice.detachedHead to false
+package	UNKNOWN STEP	2026-09-14T21:45:59.0664078Z 
+package	UNKNOWN STEP	2026-09-14T21:45:59.0664275Z HEAD is now at d0ff86a Review and accept shared furniture raster baseline
+package	UNKNOWN STEP	2026-09-14T21:45:59.0680851Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:59.0728328Z [command]/usr/bin/git log -1 --format=%H
+package	UNKNOWN STEP	2026-09-14T21:45:59.0761071Z d0ff86abe6e67436a5674778605bc8562314ad1c
+package	UNKNOWN STEP	2026-09-14T21:45:59.0771885Z ##[group]Removing auth
+package	UNKNOWN STEP	2026-09-14T21:45:59.0772199Z Removing SSH command configuration
+package	UNKNOWN STEP	2026-09-14T21:45:59.0775451Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+package	UNKNOWN STEP	2026-09-14T21:45:59.0812269Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+package	UNKNOWN STEP	2026-09-14T21:45:59.1088823Z Removing HTTP extra header
+package	UNKNOWN STEP	2026-09-14T21:45:59.1092611Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+package	UNKNOWN STEP	2026-09-14T21:45:59.1132499Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+package	UNKNOWN STEP	2026-09-14T21:45:59.1408654Z Removing includeIf entries pointing to credentials config files
+package	UNKNOWN STEP	2026-09-14T21:45:59.1411178Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+package	UNKNOWN STEP	2026-09-14T21:45:59.1443732Z includeif.gitdir:/__w/opf-editor/opf-editor/opf-render/.git.path
+package	UNKNOWN STEP	2026-09-14T21:45:59.1444261Z includeif.gitdir:/__w/opf-editor/opf-editor/opf-render/.git/worktrees/*.path
+package	UNKNOWN STEP	2026-09-14T21:45:59.1444733Z includeif.gitdir:/github/workspace/opf-render/.git.path
+package	UNKNOWN STEP	2026-09-14T21:45:59.1445262Z includeif.gitdir:/github/workspace/opf-render/.git/worktrees/*.path
+package	UNKNOWN STEP	2026-09-14T21:45:59.1452698Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/__w/opf-editor/opf-editor/opf-render/.git.path
+package	UNKNOWN STEP	2026-09-14T21:45:59.1482484Z /__w/_temp/git-credentials-38ff4698-a760-4167-9b24-1b546d51dcdd.config
+package	UNKNOWN STEP	2026-09-14T21:45:59.1492367Z [command]/usr/bin/git config --local --unset includeif.gitdir:/__w/opf-editor/opf-editor/opf-render/.git.path \/__w\/_temp\/git\-credentials\-38ff4698\-a760\-4167\-9b24\-1b546d51dcdd\.config
+package	UNKNOWN STEP	2026-09-14T21:45:59.1531463Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/__w/opf-editor/opf-editor/opf-render/.git/worktrees/*.path
+package	UNKNOWN STEP	2026-09-14T21:45:59.1560086Z /__w/_temp/git-credentials-38ff4698-a760-4167-9b24-1b546d51dcdd.config
+package	UNKNOWN STEP	2026-09-14T21:45:59.1571808Z [command]/usr/bin/git config --local --unset includeif.gitdir:/__w/opf-editor/opf-editor/opf-render/.git/worktrees/*.path \/__w\/_temp\/git\-credentials\-38ff4698\-a760\-4167\-9b24\-1b546d51dcdd\.config
+package	UNKNOWN STEP	2026-09-14T21:45:59.1613915Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/opf-render/.git.path
+package	UNKNOWN STEP	2026-09-14T21:45:59.1642022Z /github/runner_temp/git-credentials-38ff4698-a760-4167-9b24-1b546d51dcdd.config
+package	UNKNOWN STEP	2026-09-14T21:45:59.1656472Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/opf-render/.git.path \/github\/runner_temp\/git\-credentials\-38ff4698\-a760\-4167\-9b24\-1b546d51dcdd\.config
+package	UNKNOWN STEP	2026-09-14T21:45:59.1700945Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/opf-render/.git/worktrees/*.path
+package	UNKNOWN STEP	2026-09-14T21:45:59.1730288Z /github/runner_temp/git-credentials-38ff4698-a760-4167-9b24-1b546d51dcdd.config
+package	UNKNOWN STEP	2026-09-14T21:45:59.1738706Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/opf-render/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-38ff4698\-a760\-4167\-9b24\-1b546d51dcdd\.config
+package	UNKNOWN STEP	2026-09-14T21:45:59.1777942Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+package	UNKNOWN STEP	2026-09-14T21:45:59.2040263Z Removing credentials config '/__w/_temp/git-credentials-38ff4698-a760-4167-9b24-1b546d51dcdd.config'
+package	UNKNOWN STEP	2026-09-14T21:45:59.2049840Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:59.2242360Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+package	UNKNOWN STEP	2026-09-14T21:45:59.2242765Z with:
+package	UNKNOWN STEP	2026-09-14T21:45:59.2242996Z   repository: OpenPresentation/opf-pptx
+package	UNKNOWN STEP	2026-09-14T21:45:59.2243308Z   ref: ca4e13574400f059246dc67e8abf6591dcd663da
+package	UNKNOWN STEP	2026-09-14T21:45:59.2243603Z   path: opf-pptx
+package	UNKNOWN STEP	2026-09-14T21:45:59.2243823Z   fetch-depth: 0
+package	UNKNOWN STEP	2026-09-14T21:45:59.2244042Z   persist-credentials: false
+package	UNKNOWN STEP	2026-09-14T21:45:59.2247070Z   token: ***
+package	UNKNOWN STEP	2026-09-14T21:45:59.2247289Z   ssh-strict: true
+package	UNKNOWN STEP	2026-09-14T21:45:59.2247506Z   ssh-user: git
+package	UNKNOWN STEP	2026-09-14T21:45:59.2247706Z   clean: true
+package	UNKNOWN STEP	2026-09-14T21:45:59.2247928Z   sparse-checkout-cone-mode: true
+package	UNKNOWN STEP	2026-09-14T21:45:59.2248197Z   fetch-tags: false
+package	UNKNOWN STEP	2026-09-14T21:45:59.2248413Z   show-progress: true
+package	UNKNOWN STEP	2026-09-14T21:45:59.2248639Z   lfs: false
+package	UNKNOWN STEP	2026-09-14T21:45:59.2248836Z   submodules: false
+package	UNKNOWN STEP	2026-09-14T21:45:59.2249049Z   set-safe-directory: true
+package	UNKNOWN STEP	2026-09-14T21:45:59.2249311Z   allow-unsafe-pr-checkout: false
+package	UNKNOWN STEP	2026-09-14T21:45:59.2249557Z env:
+package	UNKNOWN STEP	2026-09-14T21:45:59.2250103Z   OPF_GOLDEN_BASELINE: /home/runner/work/opf-editor/opf-editor/opf-render/test/golden/opf-examples-png.furniture.sha256.json
+package	UNKNOWN STEP	2026-09-14T21:45:59.2250655Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:59.2258785Z ##[command]/usr/bin/docker exec  31314bb1989e8ec14bcf0751d892b7bb432feabaa9e98d0f27b5100e341b0375 sh -c "cat /etc/*release | grep ^ID"
+package	UNKNOWN STEP	2026-09-14T21:45:59.4153560Z Syncing repository: OpenPresentation/opf-pptx
+package	UNKNOWN STEP	2026-09-14T21:45:59.4172639Z ##[group]Getting Git version info
+package	UNKNOWN STEP	2026-09-14T21:45:59.4192626Z Working directory is '/__w/opf-editor/opf-editor/opf-pptx'
+package	UNKNOWN STEP	2026-09-14T21:45:59.4223092Z [command]/usr/bin/git version
+package	UNKNOWN STEP	2026-09-14T21:45:59.4263807Z git version 2.43.0
+package	UNKNOWN STEP	2026-09-14T21:45:59.4330948Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:59.4333046Z Temporarily overriding HOME='/__w/_temp/ddcff77f-1334-4cd1-9b26-145ece1f1b07' before making global git config changes
+package	UNKNOWN STEP	2026-09-14T21:45:59.4334150Z Adding repository directory to the temporary git global config as a safe directory
+package	UNKNOWN STEP	2026-09-14T21:45:59.4341187Z [command]/usr/bin/git config --global --add safe.directory /__w/opf-editor/opf-editor/opf-pptx
+package	UNKNOWN STEP	2026-09-14T21:45:59.4380513Z ##[group]Determining repository object format
+package	UNKNOWN STEP	2026-09-14T21:45:59.4383446Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:59.4384185Z ##[group]Initializing the repository
+package	UNKNOWN STEP	2026-09-14T21:45:59.4388555Z [command]/usr/bin/git init /__w/opf-editor/opf-editor/opf-pptx
+package	UNKNOWN STEP	2026-09-14T21:45:59.4433125Z hint: Using 'master' as the name for the initial branch. This default branch name
+package	UNKNOWN STEP	2026-09-14T21:45:59.4434037Z hint: is subject to change. To configure the initial branch name to use in all
+package	UNKNOWN STEP	2026-09-14T21:45:59.4434830Z hint: of your new repositories, which will suppress this warning, call:
+package	UNKNOWN STEP	2026-09-14T21:45:59.4435417Z hint: 
+package	UNKNOWN STEP	2026-09-14T21:45:59.4435809Z hint: 	git config --global init.defaultBranch <name>
+package	UNKNOWN STEP	2026-09-14T21:45:59.4437172Z hint: 
+package	UNKNOWN STEP	2026-09-14T21:45:59.4437646Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+package	UNKNOWN STEP	2026-09-14T21:45:59.4438467Z hint: 'development'. The just-created branch can be renamed via this command:
+package	UNKNOWN STEP	2026-09-14T21:45:59.4439082Z hint: 
+package	UNKNOWN STEP	2026-09-14T21:45:59.4439392Z hint: 	git branch -m <name>
+package	UNKNOWN STEP	2026-09-14T21:45:59.4439998Z Initialized empty Git repository in /__w/opf-editor/opf-editor/opf-pptx/.git/
+package	UNKNOWN STEP	2026-09-14T21:45:59.4450119Z [command]/usr/bin/git remote add origin https://github.com/OpenPresentation/opf-pptx
+package	UNKNOWN STEP	2026-09-14T21:45:59.4490557Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:59.4494935Z ##[group]Disabling automatic garbage collection
+package	UNKNOWN STEP	2026-09-14T21:45:59.4495866Z [command]/usr/bin/git config --local gc.auto 0
+package	UNKNOWN STEP	2026-09-14T21:45:59.4534086Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:59.4535111Z ##[group]Setting up auth
+package	UNKNOWN STEP	2026-09-14T21:45:59.4535901Z Removing SSH command configuration
+package	UNKNOWN STEP	2026-09-14T21:45:59.4541002Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+package	UNKNOWN STEP	2026-09-14T21:45:59.4578920Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+package	UNKNOWN STEP	2026-09-14T21:45:59.4861218Z Removing HTTP extra header
+package	UNKNOWN STEP	2026-09-14T21:45:59.4865190Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+package	UNKNOWN STEP	2026-09-14T21:45:59.4905145Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+package	UNKNOWN STEP	2026-09-14T21:45:59.5194767Z Removing includeIf entries pointing to credentials config files
+package	UNKNOWN STEP	2026-09-14T21:45:59.5199882Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+package	UNKNOWN STEP	2026-09-14T21:45:59.5238640Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+package	UNKNOWN STEP	2026-09-14T21:45:59.5512207Z [command]/usr/bin/git config --file /__w/_temp/git-credentials-9ddeb530-87a4-40e6-a8d4-833f8eaa8fb6.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+package	UNKNOWN STEP	2026-09-14T21:45:59.5565586Z [command]/usr/bin/git config --local includeIf.gitdir:/__w/opf-editor/opf-editor/opf-pptx/.git.path /__w/_temp/git-credentials-9ddeb530-87a4-40e6-a8d4-833f8eaa8fb6.config
+package	UNKNOWN STEP	2026-09-14T21:45:59.5603033Z [command]/usr/bin/git config --local includeIf.gitdir:/__w/opf-editor/opf-editor/opf-pptx/.git/worktrees/*.path /__w/_temp/git-credentials-9ddeb530-87a4-40e6-a8d4-833f8eaa8fb6.config
+package	UNKNOWN STEP	2026-09-14T21:45:59.5639479Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/opf-pptx/.git.path /github/runner_temp/git-credentials-9ddeb530-87a4-40e6-a8d4-833f8eaa8fb6.config
+package	UNKNOWN STEP	2026-09-14T21:45:59.5676004Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/opf-pptx/.git/worktrees/*.path /github/runner_temp/git-credentials-9ddeb530-87a4-40e6-a8d4-833f8eaa8fb6.config
+package	UNKNOWN STEP	2026-09-14T21:45:59.5708198Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:45:59.5708607Z ##[group]Fetching the repository
+package	UNKNOWN STEP	2026-09-14T21:45:59.5716180Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/*
+package	UNKNOWN STEP	2026-09-14T21:46:00.3636113Z From https://github.com/OpenPresentation/opf-pptx
+package	UNKNOWN STEP	2026-09-14T21:46:00.3636737Z  * [new branch]      codex/shared-furniture-20260910 -> origin/codex/shared-furniture-20260910
+package	UNKNOWN STEP	2026-09-14T21:46:00.3637347Z  * [new branch]      codex/shared-furniture-20260914 -> origin/codex/shared-furniture-20260914
+package	UNKNOWN STEP	2026-09-14T21:46:00.3645072Z  * [new branch]      dependabot/npm_and_yarn/npm-minor-patch-eeaca2aeb5 -> origin/dependabot/npm_and_yarn/npm-minor-patch-eeaca2aeb5
+package	UNKNOWN STEP	2026-09-14T21:46:00.3646102Z  * [new branch]      main            -> origin/main
+package	UNKNOWN STEP	2026-09-14T21:46:00.3646647Z  * [new tag]         opf-pptx-v0.1.0 -> opf-pptx-v0.1.0
+package	UNKNOWN STEP	2026-09-14T21:46:00.3647169Z  * [new tag]         opf-pptx-v0.2.0 -> opf-pptx-v0.2.0
+package	UNKNOWN STEP	2026-09-14T21:46:00.3647665Z  * [new tag]         opf-pptx-v0.2.1 -> opf-pptx-v0.2.1
+package	UNKNOWN STEP	2026-09-14T21:46:00.3648166Z  * [new tag]         opf-pptx-v0.3.0 -> opf-pptx-v0.3.0
+package	UNKNOWN STEP	2026-09-14T21:46:00.3648679Z  * [new tag]         opf-pptx-v0.4.0 -> opf-pptx-v0.4.0
+package	UNKNOWN STEP	2026-09-14T21:46:00.3649180Z  * [new tag]         opf-pptx-v0.5.0 -> opf-pptx-v0.5.0
+package	UNKNOWN STEP	2026-09-14T21:46:00.3649662Z  * [new tag]         opf-pptx-v0.5.1 -> opf-pptx-v0.5.1
+package	UNKNOWN STEP	2026-09-14T21:46:00.3650157Z  * [new tag]         opf-pptx-v0.5.2 -> opf-pptx-v0.5.2
+package	UNKNOWN STEP	2026-09-14T21:46:00.3650657Z  * [new tag]         opf-pptx-v0.6.0 -> opf-pptx-v0.6.0
+package	UNKNOWN STEP	2026-09-14T21:46:00.3652565Z  * [new tag]         opf-pptx-v0.7.0 -> opf-pptx-v0.7.0
+package	UNKNOWN STEP	2026-09-14T21:46:00.3684765Z [command]/usr/bin/git rev-parse --verify --quiet ca4e13574400f059246dc67e8abf6591dcd663da^{object}
+package	UNKNOWN STEP	2026-09-14T21:46:00.3716676Z ca4e13574400f059246dc67e8abf6591dcd663da
+package	UNKNOWN STEP	2026-09-14T21:46:00.3720833Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:46:00.3721411Z ##[group]Determining the checkout info
+package	UNKNOWN STEP	2026-09-14T21:46:00.3722645Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:46:00.3726203Z [command]/usr/bin/git sparse-checkout disable
+package	UNKNOWN STEP	2026-09-14T21:46:00.3768986Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+package	UNKNOWN STEP	2026-09-14T21:46:00.3803734Z ##[group]Checking out the ref
+package	UNKNOWN STEP	2026-09-14T21:46:00.3807376Z [command]/usr/bin/git checkout --progress --force ca4e13574400f059246dc67e8abf6591dcd663da
+package	UNKNOWN STEP	2026-09-14T21:46:00.4301959Z Note: switching to 'ca4e13574400f059246dc67e8abf6591dcd663da'.
+package	UNKNOWN STEP	2026-09-14T21:46:00.4302400Z 
+package	UNKNOWN STEP	2026-09-14T21:46:00.4302712Z You are in 'detached HEAD' state. You can look around, make experimental
+package	UNKNOWN STEP	2026-09-14T21:46:00.4303424Z changes and commit them, and you can discard any commits you make in this
+package	UNKNOWN STEP	2026-09-14T21:46:00.4304542Z state without impacting any branches by switching back to a branch.
+package	UNKNOWN STEP	2026-09-14T21:46:00.4304993Z 
+package	UNKNOWN STEP	2026-09-14T21:46:00.4305266Z If you want to create a new branch to retain commits you create, you may
+package	UNKNOWN STEP	2026-09-14T21:46:00.4305931Z do so (now or later) by using -c with the switch command. Example:
+package	UNKNOWN STEP	2026-09-14T21:46:00.4306194Z 
+package	UNKNOWN STEP	2026-09-14T21:46:00.4306333Z   git switch -c <new-branch-name>
+package	UNKNOWN STEP	2026-09-14T21:46:00.4306497Z 
+package	UNKNOWN STEP	2026-09-14T21:46:00.4306613Z Or undo this operation with:
+package	UNKNOWN STEP	2026-09-14T21:46:00.4306767Z 
+package	UNKNOWN STEP	2026-09-14T21:46:00.4306880Z   git switch -
+package	UNKNOWN STEP	2026-09-14T21:46:00.4307015Z 
+package	UNKNOWN STEP	2026-09-14T21:46:00.4307231Z Turn off this advice by setting config variable advice.detachedHead to false
+package	UNKNOWN STEP	2026-09-14T21:46:00.4307537Z 
+package	UNKNOWN STEP	2026-09-14T21:46:00.4307804Z HEAD is now at ca4e135 Preserve current header and footer content through PPTX reimport
+package	UNKNOWN STEP	2026-09-14T21:46:00.4311149Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:46:00.4359331Z [command]/usr/bin/git log -1 --format=%H
+package	UNKNOWN STEP	2026-09-14T21:46:00.4392500Z ca4e13574400f059246dc67e8abf6591dcd663da
+package	UNKNOWN STEP	2026-09-14T21:46:00.4407393Z ##[group]Removing auth
+package	UNKNOWN STEP	2026-09-14T21:46:00.4407826Z Removing SSH command configuration
+package	UNKNOWN STEP	2026-09-14T21:46:00.4408329Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+package	UNKNOWN STEP	2026-09-14T21:46:00.4445152Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+package	UNKNOWN STEP	2026-09-14T21:46:00.4722388Z Removing HTTP extra header
+package	UNKNOWN STEP	2026-09-14T21:46:00.4726433Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+package	UNKNOWN STEP	2026-09-14T21:46:00.4769784Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+package	UNKNOWN STEP	2026-09-14T21:46:00.5040925Z Removing includeIf entries pointing to credentials config files
+package	UNKNOWN STEP	2026-09-14T21:46:00.5044479Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+package	UNKNOWN STEP	2026-09-14T21:46:00.5078025Z includeif.gitdir:/__w/opf-editor/opf-editor/opf-pptx/.git.path
+package	UNKNOWN STEP	2026-09-14T21:46:00.5078771Z includeif.gitdir:/__w/opf-editor/opf-editor/opf-pptx/.git/worktrees/*.path
+package	UNKNOWN STEP	2026-09-14T21:46:00.5079233Z includeif.gitdir:/github/workspace/opf-pptx/.git.path
+package	UNKNOWN STEP	2026-09-14T21:46:00.5079921Z includeif.gitdir:/github/workspace/opf-pptx/.git/worktrees/*.path
+package	UNKNOWN STEP	2026-09-14T21:46:00.5087065Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/__w/opf-editor/opf-editor/opf-pptx/.git.path
+package	UNKNOWN STEP	2026-09-14T21:46:00.5116288Z /__w/_temp/git-credentials-9ddeb530-87a4-40e6-a8d4-833f8eaa8fb6.config
+package	UNKNOWN STEP	2026-09-14T21:46:00.5126886Z [command]/usr/bin/git config --local --unset includeif.gitdir:/__w/opf-editor/opf-editor/opf-pptx/.git.path \/__w\/_temp\/git\-credentials\-9ddeb530\-87a4\-40e6\-a8d4\-833f8eaa8fb6\.config
+package	UNKNOWN STEP	2026-09-14T21:46:00.5166807Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/__w/opf-editor/opf-editor/opf-pptx/.git/worktrees/*.path
+package	UNKNOWN STEP	2026-09-14T21:46:00.5196367Z /__w/_temp/git-credentials-9ddeb530-87a4-40e6-a8d4-833f8eaa8fb6.config
+package	UNKNOWN STEP	2026-09-14T21:46:00.5205910Z [command]/usr/bin/git config --local --unset includeif.gitdir:/__w/opf-editor/opf-editor/opf-pptx/.git/worktrees/*.path \/__w\/_temp\/git\-credentials\-9ddeb530\-87a4\-40e6\-a8d4\-833f8eaa8fb6\.config
+package	UNKNOWN STEP	2026-09-14T21:46:00.5245126Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/opf-pptx/.git.path
+package	UNKNOWN STEP	2026-09-14T21:46:00.5274002Z /github/runner_temp/git-credentials-9ddeb530-87a4-40e6-a8d4-833f8eaa8fb6.config
+package	UNKNOWN STEP	2026-09-14T21:46:00.5287901Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/opf-pptx/.git.path \/github\/runner_temp\/git\-credentials\-9ddeb530\-87a4\-40e6\-a8d4\-833f8eaa8fb6\.config
+package	UNKNOWN STEP	2026-09-14T21:46:00.5328551Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/opf-pptx/.git/worktrees/*.path
+package	UNKNOWN STEP	2026-09-14T21:46:00.5357420Z /github/runner_temp/git-credentials-9ddeb530-87a4-40e6-a8d4-833f8eaa8fb6.config
+package	UNKNOWN STEP	2026-09-14T21:46:00.5365149Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/opf-pptx/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-9ddeb530\-87a4\-40e6\-a8d4\-833f8eaa8fb6\.config
+package	UNKNOWN STEP	2026-09-14T21:46:00.5402737Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+package	UNKNOWN STEP	2026-09-14T21:46:00.5666309Z Removing credentials config '/__w/_temp/git-credentials-9ddeb530-87a4-40e6-a8d4-833f8eaa8fb6.config'
+package	UNKNOWN STEP	2026-09-14T21:46:00.5676220Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:46:00.5866740Z ##[group]Run pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413
+package	UNKNOWN STEP	2026-09-14T21:46:00.5867365Z with:
+package	UNKNOWN STEP	2026-09-14T21:46:00.5867663Z   version: 10.33.2
+package	UNKNOWN STEP	2026-09-14T21:46:00.5867997Z   dest: ~/setup-pnpm
+package	UNKNOWN STEP	2026-09-14T21:46:00.5868343Z   run_install: null
+package	UNKNOWN STEP	2026-09-14T21:46:00.5868670Z   cache: false
+package	UNKNOWN STEP	2026-09-14T21:46:00.5869029Z   cache_dependency_path: pnpm-lock.yaml
+package	UNKNOWN STEP	2026-09-14T21:46:00.5869523Z   package_json_file: package.json
+package	UNKNOWN STEP	2026-09-14T21:46:00.5869926Z   standalone: false
+package	UNKNOWN STEP	2026-09-14T21:46:00.5870246Z env:
+package	UNKNOWN STEP	2026-09-14T21:46:00.5871053Z   OPF_GOLDEN_BASELINE: /home/runner/work/opf-editor/opf-editor/opf-render/test/golden/opf-examples-png.furniture.sha256.json
+package	UNKNOWN STEP	2026-09-14T21:46:00.5872262Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:46:00.5877532Z ##[command]/usr/bin/docker exec  31314bb1989e8ec14bcf0751d892b7bb432feabaa9e98d0f27b5100e341b0375 sh -c "cat /etc/*release | grep ^ID"
+package	UNKNOWN STEP	2026-09-14T21:46:00.8488066Z ##[group]Running self-installer...
+package	UNKNOWN STEP	2026-09-14T21:46:01.6818355Z 
+package	UNKNOWN STEP	2026-09-14T21:46:01.6819630Z added 1 package, and audited 2 packages in 748ms
+package	UNKNOWN STEP	2026-09-14T21:46:01.6820251Z 
+package	UNKNOWN STEP	2026-09-14T21:46:01.6820414Z 1 package is looking for funding
+package	UNKNOWN STEP	2026-09-14T21:46:01.6821264Z   run `npm fund` for details
+package	UNKNOWN STEP	2026-09-14T21:46:01.6829602Z 
+package	UNKNOWN STEP	2026-09-14T21:46:01.6830080Z found 0 vulnerabilities
+package	UNKNOWN STEP	2026-09-14T21:46:02.2852742Z Checking for updates...
+package	UNKNOWN STEP	2026-09-14T21:46:02.4856562Z Switching pnpm from v11.25.0 to v10.33.2...
+package	UNKNOWN STEP	2026-09-14T21:46:03.0302938Z .../v11/3bc-1a0a1e260be-3367158dfc3cd97b | Progress: resolved 1, reused 0, downloaded 0, added 0
+package	UNKNOWN STEP	2026-09-14T21:46:03.0321019Z .../v11/3bc-1a0a1e260be-3367158dfc3cd97b |   +1 +
+package	UNKNOWN STEP	2026-09-14T21:46:03.3869093Z .../v11/3bc-1a0a1e260be-3367158dfc3cd97b | Progress: resolved 1, reused 0, downloaded 1, added 1, done
+package	UNKNOWN STEP	2026-09-14T21:46:03.7912112Z [WARN] Detected a pnpm v10 installation layout at PNPM_HOME. The pnpm shims at PNPM_HOME have been refreshed so the new version is active, but pnpm v11 expects bins in PNPM_HOME/bin. Run "pnpm setup" to migrate your PATH to the v11 layout.
+package	UNKNOWN STEP	2026-09-14T21:46:03.7941828Z Successfully updated pnpm to v10.33.2
+package	UNKNOWN STEP	2026-09-14T21:46:03.8262338Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:46:03.8262704Z Installation Completed!
+package	UNKNOWN STEP	2026-09-14T21:46:03.8462144Z ##[group]Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+package	UNKNOWN STEP	2026-09-14T21:46:03.8462566Z with:
+package	UNKNOWN STEP	2026-09-14T21:46:03.8462767Z   node-version: 24
+package	UNKNOWN STEP	2026-09-14T21:46:03.8462977Z   cache: npm
+package	UNKNOWN STEP	2026-09-14T21:46:03.8463259Z   cache-dependency-path: opf-editor/package-lock.json
+package	UNKNOWN STEP	2026-09-14T21:46:03.8463590Z   check-latest: false
+package	UNKNOWN STEP	2026-09-14T21:46:03.8466390Z   token: ***
+package	UNKNOWN STEP	2026-09-14T21:46:03.8466624Z   package-manager-cache: true
+package	UNKNOWN STEP	2026-09-14T21:46:03.8466886Z env:
+package	UNKNOWN STEP	2026-09-14T21:46:03.8467381Z   OPF_GOLDEN_BASELINE: /home/runner/work/opf-editor/opf-editor/opf-render/test/golden/opf-examples-png.furniture.sha256.json
+package	UNKNOWN STEP	2026-09-14T21:46:03.8467990Z   PNPM_HOME: /github/home/setup-pnpm/node_modules/.bin
+package	UNKNOWN STEP	2026-09-14T21:46:03.8468297Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:46:03.8477006Z ##[command]/usr/bin/docker exec  31314bb1989e8ec14bcf0751d892b7bb432feabaa9e98d0f27b5100e341b0375 sh -c "cat /etc/*release | grep ^ID"
+package	UNKNOWN STEP	2026-09-14T21:46:04.0873645Z Found in cache @ /__t/node/24.20.0/x64
+package	UNKNOWN STEP	2026-09-14T21:46:04.0877105Z ##[group]Environment details
+package	UNKNOWN STEP	2026-09-14T21:46:04.4475713Z node: v24.20.0
+package	UNKNOWN STEP	2026-09-14T21:46:04.4476104Z npm: 11.19.0
+package	UNKNOWN STEP	2026-09-14T21:46:04.4476395Z yarn: 1.22.22
+package	UNKNOWN STEP	2026-09-14T21:46:04.4476906Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:46:04.4489773Z [command]/__t/node/24.20.0/x64/bin/npm config get cache
+package	UNKNOWN STEP	2026-09-14T21:46:04.5613746Z /github/home/.npm
+package	UNKNOWN STEP	2026-09-14T21:46:04.6484117Z Cache hit for: node-cache-Linux-x64-npm-33aa6c2e49ef37cf8ca22f930ac5c19e763eccb0be2a5a5baf75652b385b348a
+package	UNKNOWN STEP	2026-09-14T21:46:05.1256792Z Received 50157898 of 50157898 (100.0%), 115.5 MBs/sec
+package	UNKNOWN STEP	2026-09-14T21:46:05.1258270Z Cache Size: ~48 MB (50157898 B)
+package	UNKNOWN STEP	2026-09-14T21:46:05.1285538Z [command]/usr/bin/tar -xf /__w/_temp/c0a2d9c7-1280-4c99-8c0b-bef90e07d180/cache.tgz -P -C /__w/opf-editor/opf-editor -z
+package	UNKNOWN STEP	2026-09-14T21:46:05.4543405Z Cache restored successfully
+package	UNKNOWN STEP	2026-09-14T21:46:05.4577588Z Cache restored from key: node-cache-Linux-x64-npm-33aa6c2e49ef37cf8ca22f930ac5c19e763eccb0be2a5a5baf75652b385b348a
+package	UNKNOWN STEP	2026-09-14T21:46:05.4786290Z ##[group]Run pnpm --dir opf install --frozen-lockfile
+package	UNKNOWN STEP	2026-09-14T21:46:05.4786780Z ^[[36;1mpnpm --dir opf install --frozen-lockfile^[[0m
+package	UNKNOWN STEP	2026-09-14T21:46:05.4787176Z ^[[36;1mfor repo in opf-render opf-pptx opf-editor; do^[[0m
+package	UNKNOWN STEP	2026-09-14T21:46:05.4787538Z ^[[36;1m  npm ci --prefix "$repo"^[[0m
+package	UNKNOWN STEP	2026-09-14T21:46:05.4787808Z ^[[36;1mdone^[[0m
+package	UNKNOWN STEP	2026-09-14T21:46:05.4791350Z shell: bash --noprofile --norc -e -o pipefail {0}
+package	UNKNOWN STEP	2026-09-14T21:46:05.4791927Z env:
+package	UNKNOWN STEP	2026-09-14T21:46:05.4792450Z   OPF_GOLDEN_BASELINE: /home/runner/work/opf-editor/opf-editor/opf-render/test/golden/opf-examples-png.furniture.sha256.json
+package	UNKNOWN STEP	2026-09-14T21:46:05.4793105Z   PNPM_HOME: /github/home/setup-pnpm/node_modules/.bin
+package	UNKNOWN STEP	2026-09-14T21:46:05.4793423Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:46:05.8957972Z Scope: all 3 workspace projects
+package	UNKNOWN STEP	2026-09-14T21:46:05.9298604Z Lockfile is up to date, resolution step is skipped
+package	UNKNOWN STEP	2026-09-14T21:46:05.9505549Z Progress: resolved 1, reused 0, downloaded 0, added 0
+package	UNKNOWN STEP	2026-09-14T21:46:05.9708819Z Packages: +72
+package	UNKNOWN STEP	2026-09-14T21:46:05.9710304Z ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+package	UNKNOWN STEP	2026-09-14T21:46:06.9526950Z Progress: resolved 72, reused 0, downloaded 71, added 55
+package	UNKNOWN STEP	2026-09-14T21:46:07.0312265Z Progress: resolved 72, reused 0, downloaded 72, added 72, done
+package	UNKNOWN STEP	2026-09-14T21:46:07.1151829Z 
+package	UNKNOWN STEP	2026-09-14T21:46:07.1152545Z devDependencies:
+package	UNKNOWN STEP	2026-09-14T21:46:07.1152920Z + @biomejs/biome 2.5.12
+package	UNKNOWN STEP	2026-09-14T21:46:07.1153538Z + @typescript/native <- typescript 7.0.2
+package	UNKNOWN STEP	2026-09-14T21:46:07.1153825Z 
+package	UNKNOWN STEP	2026-09-14T21:46:07.1281158Z ╭ Warning ─────────────────────────────────────────────────────────────────────╮
+package	UNKNOWN STEP	2026-09-14T21:46:07.1282015Z │                                                                              │
+package	UNKNOWN STEP	2026-09-14T21:46:07.1282932Z │   Ignored build scripts: esbuild@0.28.2.                                     │
+package	UNKNOWN STEP	2026-09-14T21:46:07.1283668Z │   Run "pnpm approve-builds" to pick which dependencies should be allowed     │
+package	UNKNOWN STEP	2026-09-14T21:46:07.1284576Z │   to run scripts.                                                            │
+package	UNKNOWN STEP	2026-09-14T21:46:07.1285334Z │                                                                              │
+package	UNKNOWN STEP	2026-09-14T21:46:07.1286199Z ╰──────────────────────────────────────────────────────────────────────────────╯
+package	UNKNOWN STEP	2026-09-14T21:46:07.1413540Z Done in 1.5s using pnpm v10.33.2
+package	UNKNOWN STEP	2026-09-14T21:46:09.3403467Z 
+package	UNKNOWN STEP	2026-09-14T21:46:09.3404519Z added 45 packages, and audited 46 packages in 2s
+package	UNKNOWN STEP	2026-09-14T21:46:09.3404999Z 
+package	UNKNOWN STEP	2026-09-14T21:46:09.3405257Z 6 packages are looking for funding
+package	UNKNOWN STEP	2026-09-14T21:46:09.3407256Z   run `npm fund` for details
+package	UNKNOWN STEP	2026-09-14T21:46:09.3417234Z 
+package	UNKNOWN STEP	2026-09-14T21:46:09.3417918Z found 0 vulnerabilities
+package	UNKNOWN STEP	2026-09-14T21:46:09.3430268Z npm warn install-scripts 1 package has install scripts not yet covered by allowScripts:
+package	UNKNOWN STEP	2026-09-14T21:46:09.3431105Z npm warn install-scripts   esbuild@0.28.2 (postinstall: node install.js)
+package	UNKNOWN STEP	2026-09-14T21:46:09.3431742Z npm warn install-scripts
+package	UNKNOWN STEP	2026-09-14T21:46:09.3432457Z npm warn install-scripts Run `npm install-scripts ls` to review, or `npm install-scripts approve <pkg>` to allow.
+package	UNKNOWN STEP	2026-09-14T21:46:11.3847913Z 
+package	UNKNOWN STEP	2026-09-14T21:46:11.3848916Z added 67 packages, and audited 68 packages in 2s
+package	UNKNOWN STEP	2026-09-14T21:46:11.3849401Z 
+package	UNKNOWN STEP	2026-09-14T21:46:11.3849604Z 15 packages are looking for funding
+package	UNKNOWN STEP	2026-09-14T21:46:11.3850293Z   run `npm fund` for details
+package	UNKNOWN STEP	2026-09-14T21:46:11.3859335Z 
+package	UNKNOWN STEP	2026-09-14T21:46:11.3859665Z found 0 vulnerabilities
+package	UNKNOWN STEP	2026-09-14T21:46:11.3870681Z npm warn install-scripts 1 package has install scripts not yet covered by allowScripts:
+package	UNKNOWN STEP	2026-09-14T21:46:11.3871489Z npm warn install-scripts   esbuild@0.28.2 (postinstall: node install.js)
+package	UNKNOWN STEP	2026-09-14T21:46:11.3872121Z npm warn install-scripts
+package	UNKNOWN STEP	2026-09-14T21:46:11.3872739Z npm warn install-scripts Run `npm install-scripts ls` to review, or `npm install-scripts approve <pkg>` to allow.
+package	UNKNOWN STEP	2026-09-14T21:46:13.3933463Z 
+package	UNKNOWN STEP	2026-09-14T21:46:13.3935004Z added 67 packages, and audited 68 packages in 2s
+package	UNKNOWN STEP	2026-09-14T21:46:13.3935385Z 
+package	UNKNOWN STEP	2026-09-14T21:46:13.3935571Z 14 packages are looking for funding
+package	UNKNOWN STEP	2026-09-14T21:46:13.3936306Z   run `npm fund` for details
+package	UNKNOWN STEP	2026-09-14T21:46:13.3944964Z 
+package	UNKNOWN STEP	2026-09-14T21:46:13.3946074Z found 0 vulnerabilities
+package	UNKNOWN STEP	2026-09-14T21:46:13.3956669Z npm warn install-scripts 1 package has install scripts not yet covered by allowScripts:
+package	UNKNOWN STEP	2026-09-14T21:46:13.3957800Z npm warn install-scripts   esbuild@0.28.2 (postinstall: node install.js)
+package	UNKNOWN STEP	2026-09-14T21:46:13.3958481Z npm warn install-scripts
+package	UNKNOWN STEP	2026-09-14T21:46:13.3959465Z npm warn install-scripts Run `npm install-scripts ls` to review, or `npm install-scripts approve <pkg>` to allow.
+package	UNKNOWN STEP	2026-09-14T21:46:13.4278487Z ##[group]Run pnpm build
+package	UNKNOWN STEP	2026-09-14T21:46:13.4278787Z ^[[36;1mpnpm build^[[0m
+package	UNKNOWN STEP	2026-09-14T21:46:13.4279090Z ^[[36;1mnode scripts/link-ecosystem.mjs --packages-only^[[0m
+package	UNKNOWN STEP	2026-09-14T21:46:13.4280094Z shell: sh -e {0}
+package	UNKNOWN STEP	2026-09-14T21:46:13.4280312Z env:
+package	UNKNOWN STEP	2026-09-14T21:46:13.4280819Z   OPF_GOLDEN_BASELINE: /home/runner/work/opf-editor/opf-editor/opf-render/test/golden/opf-examples-png.furniture.sha256.json
+package	UNKNOWN STEP	2026-09-14T21:46:13.4281447Z   PNPM_HOME: /github/home/setup-pnpm/node_modules/.bin
+package	UNKNOWN STEP	2026-09-14T21:46:13.4282042Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:46:13.7566951Z 
+package	UNKNOWN STEP	2026-09-14T21:46:13.7567568Z > openpresentation-workspace@ build /__w/opf-editor/opf-editor/opf
+package	UNKNOWN STEP	2026-09-14T21:46:13.7568300Z > pnpm --filter @openpresentation/opf build && pnpm --filter @openpresentation/cli build
+package	UNKNOWN STEP	2026-09-14T21:46:13.7568699Z 
+package	UNKNOWN STEP	2026-09-14T21:46:14.0593951Z 
+package	UNKNOWN STEP	2026-09-14T21:46:14.0595164Z > @openpresentation/opf@0.9.0 build /__w/opf-editor/opf-editor/opf/packages/javascript
+package	UNKNOWN STEP	2026-09-14T21:46:14.0596310Z > pnpm run generate && tsup && node scripts/copy-spec.mjs
+package	UNKNOWN STEP	2026-09-14T21:46:14.0596717Z 
+package	UNKNOWN STEP	2026-09-14T21:46:14.3412877Z 
+package	UNKNOWN STEP	2026-09-14T21:46:14.3414070Z > @openpresentation/opf@0.9.0 generate /__w/opf-editor/opf-editor/opf/packages/javascript
+package	UNKNOWN STEP	2026-09-14T21:46:14.3415377Z > node scripts/generate.mjs && node scripts/generate-previews.mjs && node scripts/generate-content.mjs
+package	UNKNOWN STEP	2026-09-14T21:46:14.3416021Z 
+package	UNKNOWN STEP	2026-09-14T21:46:14.7625846Z Generated src/generated/previews.ts (70 previews)
+package	UNKNOWN STEP	2026-09-14T21:46:14.8770219Z Generated src/generated/examples.ts (126 examples, 7 galleries)
+package	UNKNOWN STEP	2026-09-14T21:46:14.8884686Z Generated src/generated/docs.ts (28 docs)
+package	UNKNOWN STEP	2026-09-14T21:46:14.8890541Z Generated src/generated/repo-readme.ts (11388 bytes)
+package	UNKNOWN STEP	2026-09-14T21:46:15.2115533Z ^[[34mCLI^[[39m Building entry: {"data":"src/data.ts","pagination":"src/pagination.ts","composition":"src/composition.ts","index":"src/index.ts","schemas":"src/schemas.ts","catalogs":"src/catalogs.ts","validator":"src/validator.ts","types":"src/types.ts","spec-files":"src/spec-files.ts","previews":"src/previews.ts","examples":"src/examples.ts","docs":"src/docs.ts","repo-readme":"src/repo-readme.ts"}
+package	UNKNOWN STEP	2026-09-14T21:46:15.2117247Z ^[[34mCLI^[[39m Using tsconfig: tsconfig.json
+package	UNKNOWN STEP	2026-09-14T21:46:15.2117709Z ^[[34mCLI^[[39m tsup v8.5.1
+package	UNKNOWN STEP	2026-09-14T21:46:15.2118395Z ^[[34mCLI^[[39m Using tsup config: /__w/opf-editor/opf-editor/opf/packages/javascript/tsup.config.ts
+package	UNKNOWN STEP	2026-09-14T21:46:15.2164830Z ^[[34mCLI^[[39m Target: es2022
+package	UNKNOWN STEP	2026-09-14T21:46:15.2203895Z ^[[34mCLI^[[39m Cleaning output folder
+package	UNKNOWN STEP	2026-09-14T21:46:15.2217046Z ^[[34mESM^[[39m Build start
+package	UNKNOWN STEP	2026-09-14T21:46:15.8582750Z Generated an empty chunk: "types".
+package	UNKNOWN STEP	2026-09-14T21:46:16.0480856Z ^[[34mDTS^[[39m Build start
+package	UNKNOWN STEP	2026-09-14T21:46:16.3464325Z ^[[32mESM^[[39m ^[[1mdist/previews.js       ^[[22m^[[32m130.00 B^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:16.3472427Z ^[[32mESM^[[39m ^[[1mdist/spec-files.js     ^[[22m^[[32m85.00 B^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:16.3473285Z ^[[32mESM^[[39m ^[[1mdist/data.js           ^[[22m^[[32m95.00 B^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:16.3474110Z ^[[32mESM^[[39m ^[[1mdist/pagination.js     ^[[22m^[[32m215.00 B^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:16.3474928Z ^[[32mESM^[[39m ^[[1mdist/repo-readme.js    ^[[22m^[[32m11.47 KB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:16.3475883Z ^[[32mESM^[[39m ^[[1mdist/composition.js    ^[[22m^[[32m437.00 B^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:16.3476642Z ^[[32mESM^[[39m ^[[1mdist/index.js          ^[[22m^[[32m1.38 KB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:16.3477566Z ^[[32mESM^[[39m ^[[1mdist/chunk-PIQXLBBJ.js ^[[22m^[[32m108.89 KB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:16.3478370Z ^[[32mESM^[[39m ^[[1mdist/chunk-TFZ6YIH3.js ^[[22m^[[32m14.23 KB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:16.3479143Z ^[[32mESM^[[39m ^[[1mdist/schemas.js        ^[[22m^[[32m202.00 B^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:16.3480012Z ^[[32mESM^[[39m ^[[1mdist/catalogs.js       ^[[22m^[[32m238.00 B^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:16.3480778Z ^[[32mESM^[[39m ^[[1mdist/validator.js      ^[[22m^[[32m267.00 B^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:16.3481716Z ^[[32mESM^[[39m ^[[1mdist/chunk-OZULJBSG.js ^[[22m^[[32m117.86 KB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:16.3482502Z ^[[32mESM^[[39m ^[[1mdist/chunk-SOSOBKQ2.js ^[[22m^[[32m6.52 KB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:16.3483700Z ^[[32mESM^[[39m ^[[1mdist/chunk-YCN5Z46O.js ^[[22m^[[32m27.16 KB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:16.3484475Z ^[[32mESM^[[39m ^[[1mdist/chunk-JMD6N4GQ.js ^[[22m^[[32m93.98 KB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:16.3485221Z ^[[32mESM^[[39m ^[[1mdist/types.js          ^[[22m^[[32m1.00 B^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:16.3485992Z ^[[32mESM^[[39m ^[[1mdist/chunk-GQSK3T7X.js ^[[22m^[[32m219.58 KB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:16.3486766Z ^[[32mESM^[[39m ^[[1mdist/chunk-TWMRZ43O.js ^[[22m^[[32m499.00 KB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:16.3487543Z ^[[32mESM^[[39m ^[[1mdist/docs.js           ^[[22m^[[32m526.61 KB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:16.3488302Z ^[[32mESM^[[39m ^[[1mdist/examples.js       ^[[22m^[[32m3.48 MB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:16.3488978Z ^[[32mESM^[[39m ⚡️ Build success in 1125ms
+package	UNKNOWN STEP	2026-09-14T21:46:22.0443518Z ^[[32mDTS^[[39m ⚡️ Build success in 6425ms
+package	UNKNOWN STEP	2026-09-14T21:46:22.0452888Z ^[[32mDTS^[[39m ^[[1mdist/index.d.ts                 ^[[22m^[[32m3.16 KB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:22.0472975Z ^[[32mDTS^[[39m ^[[1mdist/data.d.ts                  ^[[22m^[[32m1005.00 B^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:22.0474264Z ^[[32mDTS^[[39m ^[[1mdist/pagination.d.ts            ^[[22m^[[32m2.40 KB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:22.0475437Z ^[[32mDTS^[[39m ^[[1mdist/previews.d.ts              ^[[22m^[[32m1.71 KB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:22.0476587Z ^[[32mDTS^[[39m ^[[1mdist/repo-readme.d.ts           ^[[22m^[[32m139.00 B^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:22.0477684Z ^[[32mDTS^[[39m ^[[1mdist/examples.d.ts              ^[[22m^[[32m2.09 KB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:22.0478768Z ^[[32mDTS^[[39m ^[[1mdist/docs.d.ts                  ^[[22m^[[32m671.00 B^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:22.0480066Z ^[[32mDTS^[[39m ^[[1mdist/composition.d.ts           ^[[22m^[[32m24.91 KB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:22.0480971Z ^[[32mDTS^[[39m ^[[1mdist/validator.d.ts             ^[[22m^[[32m1.54 KB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:22.0481996Z ^[[32mDTS^[[39m ^[[1mdist/spec-files.d.ts            ^[[22m^[[32m19.57 KB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:22.0482814Z ^[[32mDTS^[[39m ^[[1mdist/schemas.d.ts               ^[[22m^[[32m314.00 B^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:22.0483602Z ^[[32mDTS^[[39m ^[[1mdist/catalogs.d.ts              ^[[22m^[[32m454.00 B^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:22.0484410Z ^[[32mDTS^[[39m ^[[1mdist/types.d.ts                 ^[[22m^[[32m416.00 B^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:22.0485210Z ^[[32mDTS^[[39m ^[[1mdist/presentation-BMTdX6O1.d.ts ^[[22m^[[32m113.38 KB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:22.0486020Z ^[[32mDTS^[[39m ^[[1mdist/schemas--QRVBhU1.d.ts      ^[[22m^[[32m8.84 KB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:22.0486813Z ^[[32mDTS^[[39m ^[[1mdist/catalogs-BnnkUX9O.d.ts     ^[[22m^[[32m46.31 KB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:22.6702061Z 
+package	UNKNOWN STEP	2026-09-14T21:46:22.6703239Z > @openpresentation/cli@0.7.0 build /__w/opf-editor/opf-editor/opf/packages/cli
+package	UNKNOWN STEP	2026-09-14T21:46:22.6704228Z > pnpm --filter @openpresentation/opf build && tsup
+package	UNKNOWN STEP	2026-09-14T21:46:22.6704621Z 
+package	UNKNOWN STEP	2026-09-14T21:46:22.9742688Z 
+package	UNKNOWN STEP	2026-09-14T21:46:22.9743776Z > @openpresentation/opf@0.9.0 build /__w/opf-editor/opf-editor/opf/packages/javascript
+package	UNKNOWN STEP	2026-09-14T21:46:22.9744800Z > pnpm run generate && tsup && node scripts/copy-spec.mjs
+package	UNKNOWN STEP	2026-09-14T21:46:22.9745810Z 
+package	UNKNOWN STEP	2026-09-14T21:46:23.2603940Z 
+package	UNKNOWN STEP	2026-09-14T21:46:23.2605029Z > @openpresentation/opf@0.9.0 generate /__w/opf-editor/opf-editor/opf/packages/javascript
+package	UNKNOWN STEP	2026-09-14T21:46:23.2605934Z > node scripts/generate.mjs && node scripts/generate-previews.mjs && node scripts/generate-content.mjs
+package	UNKNOWN STEP	2026-09-14T21:46:23.2606350Z 
+package	UNKNOWN STEP	2026-09-14T21:46:23.6857280Z Generated src/generated/previews.ts (70 previews)
+package	UNKNOWN STEP	2026-09-14T21:46:23.7992933Z Generated src/generated/examples.ts (126 examples, 7 galleries)
+package	UNKNOWN STEP	2026-09-14T21:46:23.8108663Z Generated src/generated/docs.ts (28 docs)
+package	UNKNOWN STEP	2026-09-14T21:46:23.8113942Z Generated src/generated/repo-readme.ts (11388 bytes)
+package	UNKNOWN STEP	2026-09-14T21:46:24.1224249Z ^[[34mCLI^[[39m Building entry: {"data":"src/data.ts","pagination":"src/pagination.ts","composition":"src/composition.ts","index":"src/index.ts","schemas":"src/schemas.ts","catalogs":"src/catalogs.ts","validator":"src/validator.ts","types":"src/types.ts","spec-files":"src/spec-files.ts","previews":"src/previews.ts","examples":"src/examples.ts","docs":"src/docs.ts","repo-readme":"src/repo-readme.ts"}
+package	UNKNOWN STEP	2026-09-14T21:46:24.1226953Z ^[[34mCLI^[[39m Using tsconfig: tsconfig.json
+package	UNKNOWN STEP	2026-09-14T21:46:24.1227610Z ^[[34mCLI^[[39m tsup v8.5.1
+package	UNKNOWN STEP	2026-09-14T21:46:24.1229072Z ^[[34mCLI^[[39m Using tsup config: /__w/opf-editor/opf-editor/opf/packages/javascript/tsup.config.ts
+package	UNKNOWN STEP	2026-09-14T21:46:24.1267318Z ^[[34mCLI^[[39m Target: es2022
+package	UNKNOWN STEP	2026-09-14T21:46:24.1501382Z ^[[34mCLI^[[39m Cleaning output folder
+package	UNKNOWN STEP	2026-09-14T21:46:24.1513639Z ^[[34mESM^[[39m Build start
+package	UNKNOWN STEP	2026-09-14T21:46:24.6263738Z Generated an empty chunk: "types".
+package	UNKNOWN STEP	2026-09-14T21:46:24.8219890Z ^[[34mDTS^[[39m Build start
+package	UNKNOWN STEP	2026-09-14T21:46:25.2961090Z ^[[32mESM^[[39m ^[[1mdist/previews.js       ^[[22m^[[32m130.00 B^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:25.2962279Z ^[[32mESM^[[39m ^[[1mdist/spec-files.js     ^[[22m^[[32m85.00 B^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:25.2965787Z ^[[32mESM^[[39m ^[[1mdist/repo-readme.js    ^[[22m^[[32m11.47 KB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:25.2966864Z ^[[32mESM^[[39m ^[[1mdist/data.js           ^[[22m^[[32m95.00 B^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:25.2967846Z ^[[32mESM^[[39m ^[[1mdist/pagination.js     ^[[22m^[[32m215.00 B^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:25.2968779Z ^[[32mESM^[[39m ^[[1mdist/composition.js    ^[[22m^[[32m437.00 B^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:25.2969701Z ^[[32mESM^[[39m ^[[1mdist/index.js          ^[[22m^[[32m1.38 KB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:25.2970632Z ^[[32mESM^[[39m ^[[1mdist/chunk-PIQXLBBJ.js ^[[22m^[[32m108.89 KB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:25.2971715Z ^[[32mESM^[[39m ^[[1mdist/chunk-SOSOBKQ2.js ^[[22m^[[32m6.52 KB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:25.2972620Z ^[[32mESM^[[39m ^[[1mdist/chunk-TFZ6YIH3.js ^[[22m^[[32m14.23 KB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:25.2973501Z ^[[32mESM^[[39m ^[[1mdist/schemas.js        ^[[22m^[[32m202.00 B^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:25.2974368Z ^[[32mESM^[[39m ^[[1mdist/catalogs.js       ^[[22m^[[32m238.00 B^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:25.2975249Z ^[[32mESM^[[39m ^[[1mdist/validator.js      ^[[22m^[[32m267.00 B^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:25.2976159Z ^[[32mESM^[[39m ^[[1mdist/chunk-OZULJBSG.js ^[[22m^[[32m117.86 KB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:25.2977064Z ^[[32mESM^[[39m ^[[1mdist/chunk-YCN5Z46O.js ^[[22m^[[32m27.16 KB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:25.2977984Z ^[[32mESM^[[39m ^[[1mdist/chunk-GQSK3T7X.js ^[[22m^[[32m219.58 KB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:25.2978898Z ^[[32mESM^[[39m ^[[1mdist/types.js          ^[[22m^[[32m1.00 B^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:25.2989870Z ^[[32mESM^[[39m ^[[1mdist/chunk-JMD6N4GQ.js ^[[22m^[[32m93.98 KB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:25.2990879Z ^[[32mESM^[[39m ^[[1mdist/chunk-TWMRZ43O.js ^[[22m^[[32m499.00 KB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:25.2992002Z ^[[32mESM^[[39m ^[[1mdist/docs.js           ^[[22m^[[32m526.61 KB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:25.2993005Z ^[[32mESM^[[39m ^[[1mdist/examples.js       ^[[22m^[[32m3.48 MB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:25.2993853Z ^[[32mESM^[[39m ⚡️ Build success in 1144ms
+package	UNKNOWN STEP	2026-09-14T21:46:30.7714254Z ^[[32mDTS^[[39m ⚡️ Build success in 6240ms
+package	UNKNOWN STEP	2026-09-14T21:46:30.7720321Z ^[[32mDTS^[[39m ^[[1mdist/index.d.ts                 ^[[22m^[[32m3.16 KB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:30.7721476Z ^[[32mDTS^[[39m ^[[1mdist/data.d.ts                  ^[[22m^[[32m1005.00 B^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:30.7722979Z ^[[32mDTS^[[39m ^[[1mdist/pagination.d.ts            ^[[22m^[[32m2.40 KB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:30.7724473Z ^[[32mDTS^[[39m ^[[1mdist/previews.d.ts              ^[[22m^[[32m1.71 KB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:30.7725224Z ^[[32mDTS^[[39m ^[[1mdist/repo-readme.d.ts           ^[[22m^[[32m139.00 B^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:30.7725969Z ^[[32mDTS^[[39m ^[[1mdist/examples.d.ts              ^[[22m^[[32m2.09 KB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:30.7727158Z ^[[32mDTS^[[39m ^[[1mdist/docs.d.ts                  ^[[22m^[[32m671.00 B^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:30.7728072Z ^[[32mDTS^[[39m ^[[1mdist/composition.d.ts           ^[[22m^[[32m24.91 KB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:30.7728786Z ^[[32mDTS^[[39m ^[[1mdist/validator.d.ts             ^[[22m^[[32m1.54 KB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:30.7730201Z ^[[32mDTS^[[39m ^[[1mdist/spec-files.d.ts            ^[[22m^[[32m19.57 KB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:30.7731438Z ^[[32mDTS^[[39m ^[[1mdist/schemas.d.ts               ^[[22m^[[32m314.00 B^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:30.7732749Z ^[[32mDTS^[[39m ^[[1mdist/catalogs.d.ts              ^[[22m^[[32m454.00 B^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:30.7733813Z ^[[32mDTS^[[39m ^[[1mdist/types.d.ts                 ^[[22m^[[32m416.00 B^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:30.7735132Z ^[[32mDTS^[[39m ^[[1mdist/presentation-BMTdX6O1.d.ts ^[[22m^[[32m113.38 KB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:30.7761486Z ^[[32mDTS^[[39m ^[[1mdist/schemas--QRVBhU1.d.ts      ^[[22m^[[32m8.84 KB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:30.7763581Z ^[[32mDTS^[[39m ^[[1mdist/catalogs-BnnkUX9O.d.ts     ^[[22m^[[32m46.31 KB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:31.8952575Z ^[[34mCLI^[[39m Building entry: {"index":"src/index.ts"}
+package	UNKNOWN STEP	2026-09-14T21:46:31.8953567Z ^[[34mCLI^[[39m Using tsconfig: tsconfig.json
+package	UNKNOWN STEP	2026-09-14T21:46:31.8955303Z ^[[34mCLI^[[39m tsup v8.5.1
+package	UNKNOWN STEP	2026-09-14T21:46:31.8956043Z ^[[34mCLI^[[39m Using tsup config: /__w/opf-editor/opf-editor/opf/packages/cli/tsup.config.ts
+package	UNKNOWN STEP	2026-09-14T21:46:31.8972162Z ^[[34mCLI^[[39m Target: node24
+package	UNKNOWN STEP	2026-09-14T21:46:31.8997351Z ^[[34mCLI^[[39m Cleaning output folder
+package	UNKNOWN STEP	2026-09-14T21:46:31.9008704Z ^[[34mESM^[[39m Build start
+package	UNKNOWN STEP	2026-09-14T21:46:32.0434588Z ^[[32mESM^[[39m ^[[1mdist/index.js     ^[[22m^[[32m1.22 MB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:32.0435450Z ^[[32mESM^[[39m ^[[1mdist/index.js.map ^[[22m^[[32m1.90 MB^[[39m
+package	UNKNOWN STEP	2026-09-14T21:46:32.0436153Z ^[[32mESM^[[39m ⚡️ Build success in 143ms
+package	UNKNOWN STEP	2026-09-14T21:46:32.2157317Z 
+package	UNKNOWN STEP	2026-09-14T21:46:32.2157848Z > @openpresentation/opf-render@0.7.0 build
+package	UNKNOWN STEP	2026-09-14T21:46:32.2158454Z > node scripts/build.mjs
+package	UNKNOWN STEP	2026-09-14T21:46:32.2158714Z 
+package	UNKNOWN STEP	2026-09-14T21:46:32.2587538Z opf-render: linked current OPF checkout
+package	UNKNOWN STEP	2026-09-14T21:46:32.3702657Z 
+package	UNKNOWN STEP	2026-09-14T21:46:32.3703461Z > @openpresentation/opf-pptx@0.7.0 build
+package	UNKNOWN STEP	2026-09-14T21:46:32.3704057Z > node scripts/build.mjs
+package	UNKNOWN STEP	2026-09-14T21:46:32.3704314Z 
+package	UNKNOWN STEP	2026-09-14T21:46:32.4127853Z Vendored upstream distribution and license match recorded hashes.
+package	UNKNOWN STEP	2026-09-14T21:46:32.4283738Z opf-pptx: linked current OPF, renderer checkout
+package	UNKNOWN STEP	2026-09-14T21:46:32.5392588Z 
+package	UNKNOWN STEP	2026-09-14T21:46:32.5393355Z > @openpresentation/opf-editor@0.6.0 build
+package	UNKNOWN STEP	2026-09-14T21:46:32.5394002Z > node scripts/build.mjs
+package	UNKNOWN STEP	2026-09-14T21:46:32.5394269Z 
+package	UNKNOWN STEP	2026-09-14T21:46:32.5858463Z opf-editor: linked current OPF, renderer, converter checkout
+package	UNKNOWN STEP	2026-09-14T21:46:32.5967620Z ##[group]Run npm audit
+package	UNKNOWN STEP	2026-09-14T21:46:32.5967921Z ^[[36;1mnpm audit^[[0m
+package	UNKNOWN STEP	2026-09-14T21:46:32.5968286Z shell: sh -e {0}
+package	UNKNOWN STEP	2026-09-14T21:46:32.5968500Z env:
+package	UNKNOWN STEP	2026-09-14T21:46:32.5969009Z   OPF_GOLDEN_BASELINE: /home/runner/work/opf-editor/opf-editor/opf-render/test/golden/opf-examples-png.furniture.sha256.json
+package	UNKNOWN STEP	2026-09-14T21:46:32.5969628Z   PNPM_HOME: /github/home/setup-pnpm/node_modules/.bin
+package	UNKNOWN STEP	2026-09-14T21:46:32.5969961Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:46:33.0736741Z found 0 vulnerabilities
+package	UNKNOWN STEP	2026-09-14T21:46:33.0903322Z ##[group]Run npm run typecheck
+package	UNKNOWN STEP	2026-09-14T21:46:33.0903659Z ^[[36;1mnpm run typecheck^[[0m
+package	UNKNOWN STEP	2026-09-14T21:46:33.0904088Z shell: sh -e {0}
+package	UNKNOWN STEP	2026-09-14T21:46:33.0904306Z env:
+package	UNKNOWN STEP	2026-09-14T21:46:33.0904823Z   OPF_GOLDEN_BASELINE: /home/runner/work/opf-editor/opf-editor/opf-render/test/golden/opf-examples-png.furniture.sha256.json
+package	UNKNOWN STEP	2026-09-14T21:46:33.0905451Z   PNPM_HOME: /github/home/setup-pnpm/node_modules/.bin
+package	UNKNOWN STEP	2026-09-14T21:46:33.0905766Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:46:33.2473939Z 
+package	UNKNOWN STEP	2026-09-14T21:46:33.2474591Z > @openpresentation/opf-editor@0.6.0 typecheck
+package	UNKNOWN STEP	2026-09-14T21:46:33.2478504Z > node --check src/index.js && node --check src/react.js && node --check src/svelte.js && node --check scripts/build.mjs && node --check scripts/validate-package.mjs && node --check test/smoke.mjs && node --check test/component-smoke.mjs && node --check src/canvas.js && node --check src/canvas-fields.js && node --check test/canvas-fields.mjs && node --check test/browser-canvas.mjs && node --check src/transfer.js && node --check src/galleries.js && node --check examples/transfer-controls.js && node --check src/schema.js && node --check src/schema-inspector.js && node --check test/rich-table-browser.mjs && node --check test/styled-table.mjs && node --check test/styled-table-browser.mjs && node --check examples/pptx-controls.js && node --check scripts/build-playground.mjs && node --check test/playground-pptx.mjs
+package	UNKNOWN STEP	2026-09-14T21:46:33.2481451Z 
+package	UNKNOWN STEP	2026-09-14T21:46:33.8240940Z ##[group]Run npm run validate
+package	UNKNOWN STEP	2026-09-14T21:46:33.8241268Z ^[[36;1mnpm run validate^[[0m
+package	UNKNOWN STEP	2026-09-14T21:46:33.8241932Z shell: sh -e {0}
+package	UNKNOWN STEP	2026-09-14T21:46:33.8242247Z env:
+package	UNKNOWN STEP	2026-09-14T21:46:33.8242913Z   OPF_GOLDEN_BASELINE: /home/runner/work/opf-editor/opf-editor/opf-render/test/golden/opf-examples-png.furniture.sha256.json
+package	UNKNOWN STEP	2026-09-14T21:46:33.8243534Z   PNPM_HOME: /github/home/setup-pnpm/node_modules/.bin
+package	UNKNOWN STEP	2026-09-14T21:46:33.8243850Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:46:33.9747317Z 
+package	UNKNOWN STEP	2026-09-14T21:46:33.9748125Z > @openpresentation/opf-editor@0.6.0 validate
+package	UNKNOWN STEP	2026-09-14T21:46:33.9748847Z > node scripts/validate-package.mjs
+package	UNKNOWN STEP	2026-09-14T21:46:33.9749166Z 
+package	UNKNOWN STEP	2026-09-14T21:46:34.0069265Z @openpresentation/opf-editor metadata is release-lane ready.
+package	UNKNOWN STEP	2026-09-14T21:46:34.0252829Z ##[group]Run npm test
+package	UNKNOWN STEP	2026-09-14T21:46:34.0253422Z ^[[36;1mnpm test^[[0m
+package	UNKNOWN STEP	2026-09-14T21:46:34.0254155Z shell: sh -e {0}
+package	UNKNOWN STEP	2026-09-14T21:46:34.0254514Z env:
+package	UNKNOWN STEP	2026-09-14T21:46:34.0255302Z   OPF_GOLDEN_BASELINE: /home/runner/work/opf-editor/opf-editor/opf-render/test/golden/opf-examples-png.furniture.sha256.json
+package	UNKNOWN STEP	2026-09-14T21:46:34.0256286Z   PNPM_HOME: /github/home/setup-pnpm/node_modules/.bin
+package	UNKNOWN STEP	2026-09-14T21:46:34.0256895Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:46:34.1925427Z 
+package	UNKNOWN STEP	2026-09-14T21:46:34.1926161Z > @openpresentation/opf-editor@0.6.0 test
+package	UNKNOWN STEP	2026-09-14T21:46:34.1927656Z > npm run build && node test/accepted-text.mjs && node test/smoke.mjs && node test/component-smoke.mjs && node test/canvas-fields.mjs && node test/transfer.mjs && node test/schema.mjs && node test/rich-text.mjs && node test/layout.mjs && node test/blocks.mjs && node test/styled-table.mjs
+package	UNKNOWN STEP	2026-09-14T21:46:34.1928597Z 
+package	UNKNOWN STEP	2026-09-14T21:46:34.2933189Z 
+package	UNKNOWN STEP	2026-09-14T21:46:34.2933786Z > @openpresentation/opf-editor@0.6.0 build
+package	UNKNOWN STEP	2026-09-14T21:46:34.2934508Z > node scripts/build.mjs
+package	UNKNOWN STEP	2026-09-14T21:46:34.2934833Z 
+package	UNKNOWN STEP	2026-09-14T21:46:34.8884646Z Accepted text editor: 12 wide/portrait/alignment/card layouts match rendering across edit, undo/redo and explicit pagination.
+package	UNKNOWN STEP	2026-09-14T21:46:35.1831891Z opf-editor smoke passed
+package	UNKNOWN STEP	2026-09-14T21:46:35.9508716Z opf-editor component smoke passed
+package	UNKNOWN STEP	2026-09-14T21:46:36.2495345Z Canvas fields: escaped keys, types, immutable drafts, validation and undo passed.
+package	UNKNOWN STEP	2026-09-14T21:46:36.5820415Z Transfer: clipboard formats, code fences, fragments, collision-safe insertion, design/assets, undo and explicit gallery fetches passed.
+package	UNKNOWN STEP	2026-09-14T21:46:36.8918271Z Schema controls: 625 documented fields, nested paths, catalog records, background forms, required defaults passed.
+package	UNKNOWN STEP	2026-09-14T21:46:37.1839680Z Rich range editing passed: cross-run preservation, replacement, style removal, script exclusivity, grapheme safety, validation and atomic undo.
+package	UNKNOWN STEP	2026-09-14T21:46:37.1923173Z Native rich input passed: style/link preservation, repeated-character affinity, graphemes and bounded run growth.
+package	UNKNOWN STEP	2026-09-14T21:46:37.4943095Z Layout resizing passed: exact track geometry, row/column/nested/grid behavior, auto freeze, weight bounds, metadata preservation, stale guards and undo.
+package	UNKNOWN STEP	2026-09-14T21:46:37.8151193Z Block moves passed: sibling order, shifted group destinations, nested/ancestor/cross-slide moves, formatting/data preservation, no-op, cycle/empty rejection, guards and undo.
+package	UNKNOWN STEP	2026-09-14T21:46:37.8258190Z Block creation passed: presets, implicit normalization, groups/regions, duplication, empty ancestor pruning, guards, metadata and undo.
+package	UNKNOWN STEP	2026-09-14T21:46:38.1329543Z Styled table editor model passed: value-path typing/formatting, styles/spans, empty cells, properties, guarded structural edits and atomic undo.
+package	UNKNOWN STEP	2026-09-14T21:46:38.1608635Z ##[group]Run node -e "if (require('playwright/package.json').version !== '1.63.0') throw new Error('Update the pinned Playwright image with the test package.');"
+package	UNKNOWN STEP	2026-09-14T21:46:38.1609644Z ^[[36;1mnode -e "if (require('playwright/package.json').version !== '1.63.0') throw new Error('Update the pinned Playwright image with the test package.');"^[[0m
+package	UNKNOWN STEP	2026-09-14T21:46:38.1610393Z shell: sh -e {0}
+package	UNKNOWN STEP	2026-09-14T21:46:38.1610610Z env:
+package	UNKNOWN STEP	2026-09-14T21:46:38.1611116Z   OPF_GOLDEN_BASELINE: /home/runner/work/opf-editor/opf-editor/opf-render/test/golden/opf-examples-png.furniture.sha256.json
+package	UNKNOWN STEP	2026-09-14T21:46:38.1612637Z   PNPM_HOME: /github/home/setup-pnpm/node_modules/.bin
+package	UNKNOWN STEP	2026-09-14T21:46:38.1612968Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:46:38.2494236Z ##[group]Run npm run test:playground
+package	UNKNOWN STEP	2026-09-14T21:46:38.2494592Z ^[[36;1mnpm run test:playground^[[0m
+package	UNKNOWN STEP	2026-09-14T21:46:38.2494968Z shell: sh -e {0}
+package	UNKNOWN STEP	2026-09-14T21:46:38.2495196Z env:
+package	UNKNOWN STEP	2026-09-14T21:46:38.2495713Z   OPF_GOLDEN_BASELINE: /home/runner/work/opf-editor/opf-editor/opf-render/test/golden/opf-examples-png.furniture.sha256.json
+package	UNKNOWN STEP	2026-09-14T21:46:38.2496342Z   PNPM_HOME: /github/home/setup-pnpm/node_modules/.bin
+package	UNKNOWN STEP	2026-09-14T21:46:38.2496666Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:46:38.4046011Z 
+package	UNKNOWN STEP	2026-09-14T21:46:38.4046922Z > @openpresentation/opf-editor@0.6.0 test:playground
+package	UNKNOWN STEP	2026-09-14T21:46:38.4047820Z > npm run build:playground && node test/playground-pptx.mjs
+package	UNKNOWN STEP	2026-09-14T21:46:38.4048247Z 
+package	UNKNOWN STEP	2026-09-14T21:46:38.5048390Z 
+package	UNKNOWN STEP	2026-09-14T21:46:38.5049308Z > @openpresentation/opf-editor@0.6.0 build:playground
+package	UNKNOWN STEP	2026-09-14T21:46:38.5050046Z > node scripts/build-playground.mjs
+package	UNKNOWN STEP	2026-09-14T21:46:38.5050418Z 
+package	UNKNOWN STEP	2026-09-14T21:46:38.7238210Z ▲ [WARNING] Ignoring this import because "../opf/packages/javascript/dist/chunk-YCN5Z46O.js" was marked as having no side effects [ignored-bare-import]
+package	UNKNOWN STEP	2026-09-14T21:46:38.7238883Z 
+package	UNKNOWN STEP	2026-09-14T21:46:38.7239352Z     ../opf/packages/javascript/dist/pagination.js:2:7:
+package	UNKNOWN STEP	2026-09-14T21:46:38.7240086Z       2 │ import './chunk-YCN5Z46O.js';
+package	UNKNOWN STEP	2026-09-14T21:46:38.7240697Z         ╵        ~~~~~~~~~~~~~~~~~~~~~
+package	UNKNOWN STEP	2026-09-14T21:46:38.7241046Z 
+package	UNKNOWN STEP	2026-09-14T21:46:38.7241503Z   "sideEffects" is false in the enclosing "package.json" file:
+package	UNKNOWN STEP	2026-09-14T21:46:38.7242291Z 
+package	UNKNOWN STEP	2026-09-14T21:46:38.7242609Z     ../opf/packages/javascript/package.json:29:2:
+package	UNKNOWN STEP	2026-09-14T21:46:38.7243321Z       29 │   "sideEffects": false,
+package	UNKNOWN STEP	2026-09-14T21:46:38.7243786Z          ╵   ~~~~~~~~~~~~~
+package	UNKNOWN STEP	2026-09-14T21:46:38.7244016Z 
+package	UNKNOWN STEP	2026-09-14T21:46:38.7245198Z ▲ [WARNING] Ignoring this import because "../opf/packages/javascript/dist/chunk-JMD6N4GQ.js" was marked as having no side effects [ignored-bare-import]
+package	UNKNOWN STEP	2026-09-14T21:46:38.7246133Z 
+package	UNKNOWN STEP	2026-09-14T21:46:38.7246416Z     ../opf/packages/javascript/dist/pagination.js:3:7:
+package	UNKNOWN STEP	2026-09-14T21:46:38.7247063Z       3 │ import './chunk-JMD6N4GQ.js';
+package	UNKNOWN STEP	2026-09-14T21:46:38.7247642Z         ╵        ~~~~~~~~~~~~~~~~~~~~~
+package	UNKNOWN STEP	2026-09-14T21:46:38.7247916Z 
+package	UNKNOWN STEP	2026-09-14T21:46:38.7248180Z   "sideEffects" is false in the enclosing "package.json" file:
+package	UNKNOWN STEP	2026-09-14T21:46:38.7248442Z 
+package	UNKNOWN STEP	2026-09-14T21:46:38.7248609Z     ../opf/packages/javascript/package.json:29:2:
+package	UNKNOWN STEP	2026-09-14T21:46:38.7249006Z       29 │   "sideEffects": false,
+package	UNKNOWN STEP	2026-09-14T21:46:38.7249306Z          ╵   ~~~~~~~~~~~~~
+package	UNKNOWN STEP	2026-09-14T21:46:38.7249457Z 
+package	UNKNOWN STEP	2026-09-14T21:46:38.7250199Z ▲ [WARNING] Ignoring this import because "../opf/packages/javascript/dist/chunk-GQSK3T7X.js" was marked as having no side effects [ignored-bare-import]
+package	UNKNOWN STEP	2026-09-14T21:46:38.7250774Z 
+package	UNKNOWN STEP	2026-09-14T21:46:38.7250955Z     ../opf/packages/javascript/dist/pagination.js:4:7:
+package	UNKNOWN STEP	2026-09-14T21:46:38.7251370Z       4 │ import './chunk-GQSK3T7X.js';
+package	UNKNOWN STEP	2026-09-14T21:46:38.7256832Z         ╵        ~~~~~~~~~~~~~~~~~~~~~
+package	UNKNOWN STEP	2026-09-14T21:46:38.7257411Z 
+package	UNKNOWN STEP	2026-09-14T21:46:38.7257655Z   "sideEffects" is false in the enclosing "package.json" file:
+package	UNKNOWN STEP	2026-09-14T21:46:38.7257929Z 
+package	UNKNOWN STEP	2026-09-14T21:46:38.7258102Z     ../opf/packages/javascript/package.json:29:2:
+package	UNKNOWN STEP	2026-09-14T21:46:38.7258565Z       29 │   "sideEffects": false,
+package	UNKNOWN STEP	2026-09-14T21:46:38.7259044Z          ╵   ~~~~~~~~~~~~~
+package	UNKNOWN STEP	2026-09-14T21:46:38.7259298Z 
+package	UNKNOWN STEP	2026-09-14T21:46:38.7260280Z ▲ [WARNING] Ignoring this import because "../opf/packages/javascript/dist/chunk-TWMRZ43O.js" was marked as having no side effects [ignored-bare-import]
+package	UNKNOWN STEP	2026-09-14T21:46:38.7285857Z 
+package	UNKNOWN STEP	2026-09-14T21:46:38.7286118Z     ../opf/packages/javascript/dist/pagination.js:5:7:
+package	UNKNOWN STEP	2026-09-14T21:46:38.7286645Z       5 │ import './chunk-TWMRZ43O.js';
+package	UNKNOWN STEP	2026-09-14T21:46:38.7287021Z         ╵        ~~~~~~~~~~~~~~~~~~~~~
+package	UNKNOWN STEP	2026-09-14T21:46:38.7287252Z 
+package	UNKNOWN STEP	2026-09-14T21:46:38.7287472Z   "sideEffects" is false in the enclosing "package.json" file:
+package	UNKNOWN STEP	2026-09-14T21:46:38.7287739Z 
+package	UNKNOWN STEP	2026-09-14T21:46:38.7287911Z     ../opf/packages/javascript/package.json:29:2:
+package	UNKNOWN STEP	2026-09-14T21:46:38.7288321Z       29 │   "sideEffects": false,
+package	UNKNOWN STEP	2026-09-14T21:46:38.7288944Z          ╵   ~~~~~~~~~~~~~
+package	UNKNOWN STEP	2026-09-14T21:46:38.7289107Z 
+package	UNKNOWN STEP	2026-09-14T21:46:39.3231047Z Browser editor built in artifacts/playground
+package	UNKNOWN STEP	2026-09-14T21:47:06.0531443Z {
+package	UNKNOWN STEP	2026-09-14T21:47:06.0531951Z   "passed": true,
+package	UNKNOWN STEP	2026-09-14T21:47:06.0532246Z   "browser": "153.0.8010.12",
+package	UNKNOWN STEP	2026-09-14T21:47:06.0532563Z   "offlineAfterLoad": true,
+package	UNKNOWN STEP	2026-09-14T21:47:06.0532841Z   "pptxBytes": 16376,
+package	UNKNOWN STEP	2026-09-14T21:47:06.0533170Z   "nativeTable": true,
+package	UNKNOWN STEP	2026-09-14T21:47:06.0533497Z   "mergedCells": true,
+package	UNKNOWN STEP	2026-09-14T21:47:06.0533849Z   "exportCommitsDraft": true,
+package	UNKNOWN STEP	2026-09-14T21:47:06.0534219Z   "importUndoRedo": true,
+package	UNKNOWN STEP	2026-09-14T21:47:06.0534641Z   "expandedImageImport": true,
+package	UNKNOWN STEP	2026-09-14T21:47:06.0535109Z   "quoteSourceEditingUndo": true,
+package	UNKNOWN STEP	2026-09-14T21:47:06.0535579Z   "onePageReadabilityUndo": true,
+package	UNKNOWN STEP	2026-09-14T21:47:06.0536012Z   "quoteTextReimportUndo": true,
+package	UNKNOWN STEP	2026-09-14T21:47:06.0536454Z   "quoteSemanticsRestored": false,
+package	UNKNOWN STEP	2026-09-14T21:47:06.0536979Z   "malformedInputPreservesDocument": true,
+package	UNKNOWN STEP	2026-09-14T21:47:06.0537451Z   "networkWrites": 0
+package	UNKNOWN STEP	2026-09-14T21:47:06.0537775Z }
+package	UNKNOWN STEP	2026-09-14T21:47:06.1469551Z ##[group]Run npm run test:code-browser
+package	UNKNOWN STEP	2026-09-14T21:47:06.1470145Z ^[[36;1mnpm run test:code-browser^[[0m
+package	UNKNOWN STEP	2026-09-14T21:47:06.1470692Z shell: sh -e {0}
+package	UNKNOWN STEP	2026-09-14T21:47:06.1471026Z env:
+package	UNKNOWN STEP	2026-09-14T21:47:06.1472112Z   OPF_GOLDEN_BASELINE: /home/runner/work/opf-editor/opf-editor/opf-render/test/golden/opf-examples-png.furniture.sha256.json
+package	UNKNOWN STEP	2026-09-14T21:47:06.1473134Z   PNPM_HOME: /github/home/setup-pnpm/node_modules/.bin
+package	UNKNOWN STEP	2026-09-14T21:47:06.1473667Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:47:06.3007642Z 
+package	UNKNOWN STEP	2026-09-14T21:47:06.3008281Z > @openpresentation/opf-editor@0.6.0 test:code-browser
+package	UNKNOWN STEP	2026-09-14T21:47:06.3008747Z > node test/code-browser.mjs
+package	UNKNOWN STEP	2026-09-14T21:47:06.3008937Z 
+package	UNKNOWN STEP	2026-09-14T21:47:07.3503831Z ▲ [WARNING] Ignoring this import because "../opf/packages/javascript/dist/chunk-YCN5Z46O.js" was marked as having no side effects [ignored-bare-import]
+package	UNKNOWN STEP	2026-09-14T21:47:07.3509173Z 
+package	UNKNOWN STEP	2026-09-14T21:47:07.3509616Z     ../opf/packages/javascript/dist/pagination.js:2:7:
+package	UNKNOWN STEP	2026-09-14T21:47:07.3510574Z       2 │ import './chunk-YCN5Z46O.js';
+package	UNKNOWN STEP	2026-09-14T21:47:07.3511137Z         ╵        ~~~~~~~~~~~~~~~~~~~~~
+package	UNKNOWN STEP	2026-09-14T21:47:07.3511449Z 
+package	UNKNOWN STEP	2026-09-14T21:47:07.3512075Z   "sideEffects" is false in the enclosing "package.json" file:
+package	UNKNOWN STEP	2026-09-14T21:47:07.3512491Z 
+package	UNKNOWN STEP	2026-09-14T21:47:07.3512763Z     ../opf/packages/javascript/package.json:29:2:
+package	UNKNOWN STEP	2026-09-14T21:47:07.3513375Z       29 │   "sideEffects": false,
+package	UNKNOWN STEP	2026-09-14T21:47:07.3513832Z          ╵   ~~~~~~~~~~~~~
+package	UNKNOWN STEP	2026-09-14T21:47:07.3514113Z 
+package	UNKNOWN STEP	2026-09-14T21:47:07.3515326Z ▲ [WARNING] Ignoring this import because "../opf/packages/javascript/dist/chunk-JMD6N4GQ.js" was marked as having no side effects [ignored-bare-import]
+package	UNKNOWN STEP	2026-09-14T21:47:07.3516199Z 
+package	UNKNOWN STEP	2026-09-14T21:47:07.3516491Z     ../opf/packages/javascript/dist/pagination.js:3:7:
+package	UNKNOWN STEP	2026-09-14T21:47:07.3516952Z       3 │ import './chunk-JMD6N4GQ.js';
+package	UNKNOWN STEP	2026-09-14T21:47:07.3517773Z         ╵        ~~~~~~~~~~~~~~~~~~~~~
+package	UNKNOWN STEP	2026-09-14T21:47:07.3517945Z 
+package	UNKNOWN STEP	2026-09-14T21:47:07.3518183Z   "sideEffects" is false in the enclosing "package.json" file:
+package	UNKNOWN STEP	2026-09-14T21:47:07.3518450Z 
+package	UNKNOWN STEP	2026-09-14T21:47:07.3518613Z     ../opf/packages/javascript/package.json:29:2:
+package	UNKNOWN STEP	2026-09-14T21:47:07.3519004Z       29 │   "sideEffects": false,
+package	UNKNOWN STEP	2026-09-14T21:47:07.3519309Z          ╵   ~~~~~~~~~~~~~
+package	UNKNOWN STEP	2026-09-14T21:47:07.3519459Z 
+package	UNKNOWN STEP	2026-09-14T21:47:07.3520197Z ▲ [WARNING] Ignoring this import because "../opf/packages/javascript/dist/chunk-GQSK3T7X.js" was marked as having no side effects [ignored-bare-import]
+package	UNKNOWN STEP	2026-09-14T21:47:07.3520746Z 
+package	UNKNOWN STEP	2026-09-14T21:47:07.3520924Z     ../opf/packages/javascript/dist/pagination.js:4:7:
+package	UNKNOWN STEP	2026-09-14T21:47:07.3521317Z       4 │ import './chunk-GQSK3T7X.js';
+package	UNKNOWN STEP	2026-09-14T21:47:07.3522009Z         ╵        ~~~~~~~~~~~~~~~~~~~~~
+package	UNKNOWN STEP	2026-09-14T21:47:07.3522276Z 
+package	UNKNOWN STEP	2026-09-14T21:47:07.3522584Z   "sideEffects" is false in the enclosing "package.json" file:
+package	UNKNOWN STEP	2026-09-14T21:47:07.3522988Z 
+package	UNKNOWN STEP	2026-09-14T21:47:07.3523241Z     ../opf/packages/javascript/package.json:29:2:
+package	UNKNOWN STEP	2026-09-14T21:47:07.3523815Z       29 │   "sideEffects": false,
+package	UNKNOWN STEP	2026-09-14T21:47:07.3524244Z          ╵   ~~~~~~~~~~~~~
+package	UNKNOWN STEP	2026-09-14T21:47:07.3524466Z 
+package	UNKNOWN STEP	2026-09-14T21:47:07.3525629Z ▲ [WARNING] Ignoring this import because "../opf/packages/javascript/dist/chunk-TWMRZ43O.js" was marked as having no side effects [ignored-bare-import]
+package	UNKNOWN STEP	2026-09-14T21:47:07.3526480Z 
+package	UNKNOWN STEP	2026-09-14T21:47:07.3526736Z     ../opf/packages/javascript/dist/pagination.js:5:7:
+package	UNKNOWN STEP	2026-09-14T21:47:07.3527340Z       5 │ import './chunk-TWMRZ43O.js';
+package	UNKNOWN STEP	2026-09-14T21:47:07.3527830Z         ╵        ~~~~~~~~~~~~~~~~~~~~~
+package	UNKNOWN STEP	2026-09-14T21:47:07.3528087Z 
+package	UNKNOWN STEP	2026-09-14T21:47:07.3528398Z   "sideEffects" is false in the enclosing "package.json" file:
+package	UNKNOWN STEP	2026-09-14T21:47:07.3528769Z 
+package	UNKNOWN STEP	2026-09-14T21:47:07.3529024Z     ../opf/packages/javascript/package.json:29:2:
+package	UNKNOWN STEP	2026-09-14T21:47:07.3529608Z       29 │   "sideEffects": false,
+package	UNKNOWN STEP	2026-09-14T21:47:07.3530125Z          ╵   ~~~~~~~~~~~~~
+package	UNKNOWN STEP	2026-09-14T21:47:07.3530381Z 
+package	UNKNOWN STEP	2026-09-14T21:47:10.0302788Z Code canvas: wide/portrait source editing, metadata, CRLF, tabs, pagination, undo, offline export and bounded reimport checks pass.
+package	UNKNOWN STEP	2026-09-14T21:47:10.0937319Z ##[group]Run pnpm pack:ecosystem
+package	UNKNOWN STEP	2026-09-14T21:47:10.0937669Z ^[[36;1mpnpm pack:ecosystem^[[0m
+package	UNKNOWN STEP	2026-09-14T21:47:10.0937952Z ^[[36;1mpnpm test:packed-ecosystem^[[0m
+package	UNKNOWN STEP	2026-09-14T21:47:10.0938245Z ^[[36;1mpnpm test:packed-browser^[[0m
+package	UNKNOWN STEP	2026-09-14T21:47:10.0938748Z ^[[36;1mnode scripts/test-plain-whitespace-workflow.mjs artifacts/plain-whitespace-workflow installed^[[0m
+package	UNKNOWN STEP	2026-09-14T21:47:10.0939436Z ^[[36;1mnode scripts/test-readability-browser.mjs artifacts/readability-browser installed^[[0m
+package	UNKNOWN STEP	2026-09-14T21:47:10.0940036Z ^[[36;1mnode scripts/test-timeline-workflow.mjs artifacts/timeline-workflow installed^[[0m
+package	UNKNOWN STEP	2026-09-14T21:47:10.0940618Z ^[[36;1mnode scripts/test-furniture-workflow.mjs artifacts/furniture-workflow installed^[[0m
+package	UNKNOWN STEP	2026-09-14T21:47:10.0941204Z ^[[36;1mnode scripts/test-timeline-acceptance.mjs artifacts/timeline-acceptance.json^[[0m
+package	UNKNOWN STEP	2026-09-14T21:47:10.0941953Z ^[[36;1mnode scripts/test-installed-code-guards.mjs^[[0m
+package	UNKNOWN STEP	2026-09-14T21:47:10.0942370Z shell: sh -e {0}
+package	UNKNOWN STEP	2026-09-14T21:47:10.0942618Z env:
+package	UNKNOWN STEP	2026-09-14T21:47:10.0943108Z   OPF_GOLDEN_BASELINE: /home/runner/work/opf-editor/opf-editor/opf-render/test/golden/opf-examples-png.furniture.sha256.json
+package	UNKNOWN STEP	2026-09-14T21:47:10.0943721Z   PNPM_HOME: /github/home/setup-pnpm/node_modules/.bin
+package	UNKNOWN STEP	2026-09-14T21:47:10.0944045Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:47:10.4275736Z 
+package	UNKNOWN STEP	2026-09-14T21:47:10.4276871Z > openpresentation-workspace@ pack:ecosystem /__w/opf-editor/opf-editor/opf
+package	UNKNOWN STEP	2026-09-14T21:47:10.4277748Z > node scripts/pack-ecosystem.mjs
+package	UNKNOWN STEP	2026-09-14T21:47:10.4278059Z 
+package	UNKNOWN STEP	2026-09-14T21:47:12.6877647Z [
+package	UNKNOWN STEP	2026-09-14T21:47:12.6878203Z   {
+package	UNKNOWN STEP	2026-09-14T21:47:12.6878646Z     "name": "@openpresentation/opf",
+package	UNKNOWN STEP	2026-09-14T21:47:12.6879217Z     "version": "0.4.0-preview.11",
+package	UNKNOWN STEP	2026-09-14T21:47:12.6879857Z     "file": "openpresentation-opf-0.4.0-preview.11.tgz",
+package	UNKNOWN STEP	2026-09-14T21:47:12.6880664Z     "sha256": "69483927c7b5c90662650a6587856583dce16a62cc12ad85b0c118f15202ead8",
+package	UNKNOWN STEP	2026-09-14T21:47:12.6881936Z     "bytes": 2354085
+package	UNKNOWN STEP	2026-09-14T21:47:12.6882328Z   },
+package	UNKNOWN STEP	2026-09-14T21:47:12.6882658Z   {
+package	UNKNOWN STEP	2026-09-14T21:47:12.6883086Z     "name": "@openpresentation/opf-render",
+package	UNKNOWN STEP	2026-09-14T21:47:12.6883670Z     "version": "0.1.0-preview.11",
+package	UNKNOWN STEP	2026-09-14T21:47:12.6884325Z     "file": "openpresentation-opf-render-0.1.0-preview.11.tgz",
+package	UNKNOWN STEP	2026-09-14T21:47:12.6885268Z     "sha256": "5f62ba4174b4d5fcc1e5c7c0ce2da3beebb0e3c2292c3f19a69990b50b190f11",
+package	UNKNOWN STEP	2026-09-14T21:47:12.6886026Z     "bytes": 42112
+package	UNKNOWN STEP	2026-09-14T21:47:12.6886429Z   },
+package	UNKNOWN STEP	2026-09-14T21:47:12.6886736Z   {
+package	UNKNOWN STEP	2026-09-14T21:47:12.6887225Z     "name": "@openpresentation/opf-editor",
+package	UNKNOWN STEP	2026-09-14T21:47:12.6887852Z     "version": "0.1.0-preview.11",
+package	UNKNOWN STEP	2026-09-14T21:47:12.6888590Z     "file": "openpresentation-opf-editor-0.1.0-preview.11.tgz",
+package	UNKNOWN STEP	2026-09-14T21:47:12.6889573Z     "sha256": "8b110ea0073bf32100c4917c2c00ebcb958b6e6dc5ff83ced2e3a9ac269ef66f",
+package	UNKNOWN STEP	2026-09-14T21:47:12.6890332Z     "bytes": 56389
+package	UNKNOWN STEP	2026-09-14T21:47:12.6890779Z   },
+package	UNKNOWN STEP	2026-09-14T21:47:12.6891138Z   {
+package	UNKNOWN STEP	2026-09-14T21:47:12.6891723Z     "name": "@openpresentation/opf-pptx",
+package	UNKNOWN STEP	2026-09-14T21:47:12.6892334Z     "version": "0.1.0-preview.11",
+package	UNKNOWN STEP	2026-09-14T21:47:12.6893018Z     "file": "openpresentation-opf-pptx-0.1.0-preview.11.tgz",
+package	UNKNOWN STEP	2026-09-14T21:47:12.6894031Z     "sha256": "eca9bc6d795c28b5582be02d68899a7be4640fb01f21419b5d4bd970aa7f586c",
+package	UNKNOWN STEP	2026-09-14T21:47:12.6894777Z     "bytes": 216730
+package	UNKNOWN STEP	2026-09-14T21:47:12.6895187Z   }
+package	UNKNOWN STEP	2026-09-14T21:47:12.6895568Z ]
+package	UNKNOWN STEP	2026-09-14T21:47:12.9754305Z 
+package	UNKNOWN STEP	2026-09-14T21:47:12.9755457Z > openpresentation-workspace@ test:packed-ecosystem /__w/opf-editor/opf-editor/opf
+package	UNKNOWN STEP	2026-09-14T21:47:12.9756077Z > node scripts/test-packed-ecosystem.mjs
+package	UNKNOWN STEP	2026-09-14T21:47:12.9756303Z 
+package	UNKNOWN STEP	2026-09-14T21:47:13.2583541Z npm warn Unknown env config "verify-deps-before-run". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+package	UNKNOWN STEP	2026-09-14T21:47:13.2585508Z npm warn Unknown env config "npm-globalconfig". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+package	UNKNOWN STEP	2026-09-14T21:47:13.2587860Z npm warn Unknown env config "_jsr-registry". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+package	UNKNOWN STEP	2026-09-14T21:47:17.5922991Z 
+package	UNKNOWN STEP	2026-09-14T21:47:17.5923617Z added 64 packages in 5s
+package	UNKNOWN STEP	2026-09-14T21:47:19.3106626Z Installed candidate font preparation passed layout, edit/undo, SVG/PNG, editable PPTX export and heading reimport.
+package	UNKNOWN STEP	2026-09-14T21:47:20.8284179Z Furniture provenance: 8 measured/estimated local/inherited wide/portrait cases, 12 damaged-tag controls, edits/clearing/reordering, current images and metadata conflicts pass (37 validated imports). Native Office is a separate gate.
+package	UNKNOWN STEP	2026-09-14T21:47:21.2688126Z Nine exact grouped faces preserve measured bytes and physical style links; overrides, aliases, duplicates and approximation controls pass.
+package	UNKNOWN STEP	2026-09-14T21:47:22.1268377Z 7 payload slides use all nine real physical font styles; deterministic output, source, reimport and provider controls pass.
+package	UNKNOWN STEP	2026-09-14T21:47:22.7499230Z Packed consumer: core, editor, SVG, measured fonts and PPTX passed.
+package	UNKNOWN STEP	2026-09-14T21:47:23.0687250Z ✔ complete code parts preserve exact filename, language, body, whitespace and hard line boundaries (4.280407ms)
+package	UNKNOWN STEP	2026-09-14T21:47:23.0689570Z ✔ shorthand, empty source and absent metadata retain their source and generated-label distinction (0.615813ms)
+package	UNKNOWN STEP	2026-09-14T21:47:23.0692037Z ✔ long language labels and filenames are measured within their cell before allocating the body (8.636716ms)
+package	UNKNOWN STEP	2026-09-14T21:47:23.0693692Z ✔ wrapped whitespace and graphemes retain contiguous source offsets, including CRLF and blank final lines (1.1601ms)
+package	UNKNOWN STEP	2026-09-14T21:47:23.0695097Z ✔ tabs use measured space stops and never send control tabs to the font-width provider (1.16741ms)
+package	UNKNOWN STEP	2026-09-14T21:47:23.0696689Z ✔ readability floors scale once and body shrinking preserves all code content (0.607771ms)
+package	UNKNOWN STEP	2026-09-14T21:47:23.0700021Z ✔ irreducible body and metadata failures remain explicit; strict mode does not return partial output (11.444299ms)
+package	UNKNOWN STEP	2026-09-14T21:47:23.0702223Z ✔ invalid inner boxes never become invented one-pixel fits; malformed options reject (0.584236ms)
+package	UNKNOWN STEP	2026-09-14T21:47:23.0704014Z ✔ font trials stay bounded independently of canvas scale (10.096464ms)
+package	UNKNOWN STEP	2026-09-14T21:47:23.0835006Z ℹ tests 9
+package	UNKNOWN STEP	2026-09-14T21:47:23.0835313Z ℹ suites 0
+package	UNKNOWN STEP	2026-09-14T21:47:23.0835561Z ℹ pass 9
+package	UNKNOWN STEP	2026-09-14T21:47:23.0835786Z ℹ fail 0
+package	UNKNOWN STEP	2026-09-14T21:47:23.0836023Z ℹ cancelled 0
+package	UNKNOWN STEP	2026-09-14T21:47:23.0836269Z ℹ skipped 0
+package	UNKNOWN STEP	2026-09-14T21:47:23.0836493Z ℹ todo 0
+package	UNKNOWN STEP	2026-09-14T21:47:23.0836763Z ℹ duration_ms 175.883008
+package	UNKNOWN STEP	2026-09-14T21:47:23.8805684Z ✔ accepted code uses rounded cells and preserves body compatibility without repeated explanation measurements (7.934275ms)
+package	UNKNOWN STEP	2026-09-14T21:47:23.8809254Z ✔ candidate penalties include complete code metadata and charge overflowing leaves once (13.978977ms)
+package	UNKNOWN STEP	2026-09-14T21:47:23.8810771Z ✔ strict ancestors reject code metadata paths and cannot be weakened by descendants (202.217355ms)
+package	UNKNOWN STEP	2026-09-14T21:47:23.8812297Z ✔ explicit code placement and weights remain authoritative even when metadata overflows (11.699517ms)
+package	UNKNOWN STEP	2026-09-14T21:47:23.8813261Z ✔ pagination preserves exact code bytes, metadata, ranges and floors across wide and portrait slides (238.01928ms)
+package	UNKNOWN STEP	2026-09-14T21:47:23.8817367Z ✔ irreducible code metadata rejects pagination even after earlier content or with an empty body (166.818898ms)
+package	UNKNOWN STEP	2026-09-14T21:47:23.8973184Z ℹ tests 6
+package	UNKNOWN STEP	2026-09-14T21:47:23.8973599Z ℹ suites 0
+package	UNKNOWN STEP	2026-09-14T21:47:23.8973945Z ℹ pass 6
+package	UNKNOWN STEP	2026-09-14T21:47:23.8974275Z ℹ fail 0
+package	UNKNOWN STEP	2026-09-14T21:47:23.8974609Z ℹ cancelled 0
+package	UNKNOWN STEP	2026-09-14T21:47:23.8974980Z ℹ skipped 0
+package	UNKNOWN STEP	2026-09-14T21:47:23.8975320Z ℹ todo 0
+package	UNKNOWN STEP	2026-09-14T21:47:23.8975699Z ℹ duration_ms 775.319644
+package	UNKNOWN STEP	2026-09-14T21:47:24.8668073Z Shared code PPTX: 8 decks, 37 accepted native lines, 8 tab stops, six whitespace imports, strict failures, 132 XML-boundary rejections and valid character boundaries verified.
+package	UNKNOWN STEP	2026-09-14T21:47:25.7839974Z Code provenance: exact source/metadata, native edits, ordering, empty/Unicode values, five damaged groups and edited generated label verified.
+package	UNKNOWN STEP	2026-09-14T21:47:26.3590741Z Shared code SVG: 10 accepted layouts, source/whitespace/trace preservation, no extra measurement, strict/tiny-cell rejection, 132 XML-boundary rejections and valid character boundaries.
+package	UNKNOWN STEP	2026-09-14T21:47:28.1438192Z Actual shared code browser: 12 wide/portrait cases with source preservation, accepted tab positions and contained glyphs.
+package	UNKNOWN STEP	2026-09-14T21:47:32.1461939Z Code canvas: wide/portrait source editing, metadata, CRLF, tabs, pagination, undo, offline export and bounded reimport checks pass.
+package	UNKNOWN STEP	2026-09-14T21:47:32.2199832Z Installed code: candidate source, pagination, metadata guards and actual offline browser workflows passed.
+package	UNKNOWN STEP	2026-09-14T21:47:32.4323939Z ✔ complete quote layout preserves source ranges, requested/resolved styles and legacy readable geometry (3.608892ms)
+package	UNKNOWN STEP	2026-09-14T21:47:32.4326196Z ✔ shorthand and empty metadata preserve schema paths without an invented footer (0.698285ms)
+package	UNKNOWN STEP	2026-09-14T21:47:32.4329558Z ✔ body and footer share available space before shrinking text or changing the outer arrangement (12.878687ms)
+package	UNKNOWN STEP	2026-09-14T21:47:32.4331917Z ✔ long footer, body/footer collision and strict rejection remain explicit without source truncation (90.927738ms)
+package	UNKNOWN STEP	2026-09-14T21:47:32.4335689Z ✔ tiny cells retain invalid available dimensions and never measure an invented fitting box (0.34334ms)
+package	UNKNOWN STEP	2026-09-14T21:47:32.4337578Z ✔ explicit readability floors are respected after scaling, including above nominal footer size (0.336048ms)
+package	UNKNOWN STEP	2026-09-14T21:47:32.4339564Z ✔ invalid content, geometry, scales and policies fail before reporting a usable layout (0.37771ms)
+package	UNKNOWN STEP	2026-09-14T21:47:32.4439580Z ℹ tests 7
+package	UNKNOWN STEP	2026-09-14T21:47:32.4439985Z ℹ suites 0
+package	UNKNOWN STEP	2026-09-14T21:47:32.4440406Z ℹ pass 7
+package	UNKNOWN STEP	2026-09-14T21:47:32.4440763Z ℹ fail 0
+package	UNKNOWN STEP	2026-09-14T21:47:32.4441134Z ℹ cancelled 0
+package	UNKNOWN STEP	2026-09-14T21:47:32.4441919Z ℹ skipped 0
+package	UNKNOWN STEP	2026-09-14T21:47:32.4442409Z ℹ todo 0
+package	UNKNOWN STEP	2026-09-14T21:47:32.4443517Z ℹ duration_ms 185.324234
+package	UNKNOWN STEP	2026-09-14T21:47:34.4946185Z ✔ accepted quote geometry includes all parts without changing source or re-measuring for explanations (6.409003ms)
+package	UNKNOWN STEP	2026-09-14T21:47:34.4949019Z ✔ automatic candidates account for footer fit and choose the arrangement that keeps it readable (12.625871ms)
+package	UNKNOWN STEP	2026-09-14T21:47:34.4953282Z ✔ strict ancestors reject a quote body diagnostic below the leaf path (210.151722ms)
+package	UNKNOWN STEP	2026-09-14T21:47:34.4954618Z ✔ strict path matching respects component boundaries rather than numeric prefixes (205.754546ms)
+package	UNKNOWN STEP	2026-09-14T21:47:34.4956203Z ✔ pagination preserves quote body, repeated metadata, ranges and the accepted readability floor (1433.055515ms)
+package	UNKNOWN STEP	2026-09-14T21:47:34.4957750Z ✔ irreducible footer overflow rejects pagination without mutating or returning partial content (31.62901ms)
+package	UNKNOWN STEP	2026-09-14T21:47:34.5189467Z ℹ tests 6
+package	UNKNOWN STEP	2026-09-14T21:47:34.5189827Z ℹ suites 0
+package	UNKNOWN STEP	2026-09-14T21:47:34.5190079Z ℹ pass 6
+package	UNKNOWN STEP	2026-09-14T21:47:34.5195972Z ℹ fail 0
+package	UNKNOWN STEP	2026-09-14T21:47:34.5196356Z ℹ cancelled 0
+package	UNKNOWN STEP	2026-09-14T21:47:34.5196610Z ℹ skipped 0
+package	UNKNOWN STEP	2026-09-14T21:47:34.5196838Z ℹ todo 0
+package	UNKNOWN STEP	2026-09-14T21:47:34.5197116Z ℹ duration_ms 2037.136362
+package	UNKNOWN STEP	2026-09-14T21:47:35.5107245Z Shared quote SVG: 4 exact accepted layouts/styles with no extra measurement, reasoned overflow, strict rejection and no tiny-cell omission.
+package	UNKNOWN STEP	2026-09-14T21:47:36.3269272Z Shared quote PPTX: 4 wide/portrait decks and 6 native lines match accepted geometry/styles without re-fitting; reimport and strict/unusable-space rejection pass.
+package	UNKNOWN STEP	2026-09-14T21:47:36.9163879Z Packed quote editor passed: accepted one-page policy, source preservation, actual fonts, SVG/PPTX, undo/redo and editable native text reimport. Quote semantics are not reconstructed on import.
+package	UNKNOWN STEP	2026-09-14T21:47:37.4663231Z Styled native table export passed: merged grid, unique text, full covered rows, colors/alpha, border dashes, zero/fractional padding, alignment, scaled row geometry and determinism.
+package	UNKNOWN STEP	2026-09-14T21:47:37.4834550Z Native merge perimeter regression passed: continuation and neighbor edges, transparent dashes, dotted top, hidden bottom and scaling.
+package	UNKNOWN STEP	2026-09-14T21:47:38.1048739Z Styled native table import passed: direct fills/alpha, borders, margins, alignment, dense merges, repeated conversion, header crossing and text-preserving malformed-merge diagnostics.
+package	UNKNOWN STEP	2026-09-14T21:47:38.8534863Z Native conditional table borders passed: outer frame/interior grid, bands/edges/corners, partial/direct overrides, theme lines/alpha, missing-reference masking, repeated conversion and diagnostics.
+package	UNKNOWN STEP	2026-09-14T21:47:39.2600705Z ✔ short table rows preserve baseline geometry and missing cells (3.536214ms)
+package	UNKNOWN STEP	2026-09-14T21:47:39.2602306Z ✔ wrapped and rich multiline rows grow into available space (6.541379ms)
+package	UNKNOWN STEP	2026-09-14T21:47:39.2605105Z ✔ constrained tables consume spare row height before reporting real overflow (0.908878ms)
+package	UNKNOWN STEP	2026-09-14T21:47:39.2606161Z ✔ readability settings and mixed-font metrics govern row fitting (0.541023ms)
+package	UNKNOWN STEP	2026-09-14T21:47:39.2606945Z ✔ pagination retains complete multiline rows and repeated headers (225.695571ms)
+package	UNKNOWN STEP	2026-09-14T21:47:39.2608166Z ✔ mixed-size table paragraphs reserve the native uniform line spacing (0.464549ms)
+package	UNKNOWN STEP	2026-09-14T21:47:39.2609071Z ✔ spare height in short rows is removed before any font shrinking (0.3781ms)
+package	UNKNOWN STEP	2026-09-14T21:47:39.2752195Z ℹ tests 7
+package	UNKNOWN STEP	2026-09-14T21:47:39.2752618Z ℹ suites 0
+package	UNKNOWN STEP	2026-09-14T21:47:39.2752977Z ℹ pass 7
+package	UNKNOWN STEP	2026-09-14T21:47:39.2753313Z ℹ fail 0
+package	UNKNOWN STEP	2026-09-14T21:47:39.2753679Z ℹ cancelled 0
+package	UNKNOWN STEP	2026-09-14T21:47:39.2754062Z ℹ skipped 0
+package	UNKNOWN STEP	2026-09-14T21:47:39.2754415Z ℹ todo 0
+package	UNKNOWN STEP	2026-09-14T21:47:39.2754835Z ℹ duration_ms 370.232492
+package	UNKNOWN STEP	2026-09-14T21:47:40.5393922Z Packed consumer: TypeScript declarations and browser bundle passed.
+package	UNKNOWN STEP	2026-09-14T21:47:41.2950963Z Packed browser harness built: artifacts/editor/packed-canvas-tests.html (serve alongside demo fonts.json).
+package	UNKNOWN STEP	2026-09-14T21:47:41.6536575Z Installed styled-table browser harness built: artifacts/editor/packed-styled-table-tests.html. Open it to verify real pointer/keyboard interaction.
+package	UNKNOWN STEP	2026-09-14T21:47:41.6816671Z Local tarball consumer passed; this is not a registry verification.
+package	UNKNOWN STEP	2026-09-14T21:47:41.9714471Z 
+package	UNKNOWN STEP	2026-09-14T21:47:41.9715689Z > openpresentation-workspace@ test:packed-browser /__w/opf-editor/opf-editor/opf
+package	UNKNOWN STEP	2026-09-14T21:47:41.9716600Z > node scripts/test-packed-browser.mjs
+package	UNKNOWN STEP	2026-09-14T21:47:41.9716945Z 
+package	UNKNOWN STEP	2026-09-14T21:47:43.5555940Z PASS packed canvas: 34 assertions; 0 trusted interaction scenarios
+package	UNKNOWN STEP	2026-09-14T21:47:44.6732558Z PASS packed rich-text: 46 assertions; 0 trusted interaction scenarios
+package	UNKNOWN STEP	2026-09-14T21:47:45.7239831Z PASS packed rich-text-estimated: 46 assertions; 0 trusted interaction scenarios
+package	UNKNOWN STEP	2026-09-14T21:47:47.4892449Z PASS packed layout: 26 assertions; 4 trusted interaction scenarios
+package	UNKNOWN STEP	2026-09-14T21:47:48.0391977Z PASS packed block: 21 assertions; 1 trusted interaction scenarios
+package	UNKNOWN STEP	2026-09-14T21:47:48.7455244Z PASS packed list: 19 assertions; 0 trusted interaction scenarios
+package	UNKNOWN STEP	2026-09-14T21:47:49.2144095Z PASS packed create: 40 assertions; 0 trusted interaction scenarios
+package	UNKNOWN STEP	2026-09-14T21:47:51.2539222Z PASS packed styled-table: 44 assertions; 3 trusted interaction scenarios
+package	UNKNOWN STEP	2026-09-14T21:48:00.2889955Z 12 plain text browser workflows preserve source through edit, undo/redo, export and reimport.
+package	UNKNOWN STEP	2026-09-14T21:48:02.4963924Z 48 offline browser/PPTX cases honor selected glyph floors while preserving source metadata.
+package	UNKNOWN STEP	2026-09-14T21:48:14.5095363Z 16 offline timeline workflows preserve source fields through selection, editing, undo/redo and semantic PPTX reimport.
+package	UNKNOWN STEP	2026-09-14T21:48:27.4581507Z 16 offline installed furniture workflows passed: geometry, readability, source editing, generated values, empty fields, undo/redo and PPTX reimport.
+package	UNKNOWN STEP	2026-09-14T21:48:28.2044279Z [
+package	UNKNOWN STEP	2026-09-14T21:48:28.2044625Z   {
+package	UNKNOWN STEP	2026-09-14T21:48:28.2044909Z     "count": 2,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2045249Z     "width": 1280,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2045561Z     "height": 720,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2045871Z     "minimum": 16,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2046203Z     "coreDiagnostics": [],
+package	UNKNOWN STEP	2026-09-14T21:48:28.2046638Z     "render": "passed"
+package	UNKNOWN STEP	2026-09-14T21:48:28.2047009Z   },
+package	UNKNOWN STEP	2026-09-14T21:48:28.2047267Z   {
+package	UNKNOWN STEP	2026-09-14T21:48:28.2047554Z     "count": 2,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2047851Z     "width": 1280,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2048516Z     "height": 720,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2048873Z     "minimum": 32,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2049196Z     "coreDiagnostics": [],
+package	UNKNOWN STEP	2026-09-14T21:48:28.2049560Z     "render": "passed"
+package	UNKNOWN STEP	2026-09-14T21:48:28.2049863Z   },
+package	UNKNOWN STEP	2026-09-14T21:48:28.2050123Z   {
+package	UNKNOWN STEP	2026-09-14T21:48:28.2050378Z     "count": 2,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2050687Z     "width": 720,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2050996Z     "height": 1280,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2051303Z     "minimum": 16,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2051872Z     "coreDiagnostics": [],
+package	UNKNOWN STEP	2026-09-14T21:48:28.2052219Z     "render": "passed"
+package	UNKNOWN STEP	2026-09-14T21:48:28.2052521Z   },
+package	UNKNOWN STEP	2026-09-14T21:48:28.2052774Z   {
+package	UNKNOWN STEP	2026-09-14T21:48:28.2053085Z     "count": 2,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2053422Z     "width": 720,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2053751Z     "height": 1280,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2054082Z     "minimum": 32,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2054390Z     "coreDiagnostics": [],
+package	UNKNOWN STEP	2026-09-14T21:48:28.2054723Z     "render": "passed"
+package	UNKNOWN STEP	2026-09-14T21:48:28.2054996Z   },
+package	UNKNOWN STEP	2026-09-14T21:48:28.2055222Z   {
+package	UNKNOWN STEP	2026-09-14T21:48:28.2055477Z     "count": 4,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2055768Z     "width": 1280,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2056135Z     "height": 720,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2056437Z     "minimum": 16,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2056820Z     "coreDiagnostics": [],
+package	UNKNOWN STEP	2026-09-14T21:48:28.2057206Z     "render": "passed"
+package	UNKNOWN STEP	2026-09-14T21:48:28.2057493Z   },
+package	UNKNOWN STEP	2026-09-14T21:48:28.2057804Z   {
+package	UNKNOWN STEP	2026-09-14T21:48:28.2058058Z     "count": 4,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2058344Z     "width": 1280,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2058639Z     "height": 720,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2058921Z     "minimum": 32,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2059209Z     "coreDiagnostics": [],
+package	UNKNOWN STEP	2026-09-14T21:48:28.2059544Z     "render": "passed"
+package	UNKNOWN STEP	2026-09-14T21:48:28.2059899Z   },
+package	UNKNOWN STEP	2026-09-14T21:48:28.2060194Z   {
+package	UNKNOWN STEP	2026-09-14T21:48:28.2060531Z     "count": 4,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2060870Z     "width": 720,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2061225Z     "height": 1280,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2061780Z     "minimum": 16,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2062444Z     "coreDiagnostics": [],
+package	UNKNOWN STEP	2026-09-14T21:48:28.2062871Z     "render": "passed"
+package	UNKNOWN STEP	2026-09-14T21:48:28.2063221Z   },
+package	UNKNOWN STEP	2026-09-14T21:48:28.2063506Z   {
+package	UNKNOWN STEP	2026-09-14T21:48:28.2063833Z     "count": 4,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2064168Z     "width": 720,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2064504Z     "height": 1280,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2064854Z     "minimum": 32,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2065177Z     "coreDiagnostics": [],
+package	UNKNOWN STEP	2026-09-14T21:48:28.2065573Z     "render": "passed"
+package	UNKNOWN STEP	2026-09-14T21:48:28.2065913Z   },
+package	UNKNOWN STEP	2026-09-14T21:48:28.2066198Z   {
+package	UNKNOWN STEP	2026-09-14T21:48:28.2066645Z     "count": 8,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2066995Z     "width": 1280,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2067335Z     "height": 720,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2067680Z     "minimum": 16,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2068041Z     "coreDiagnostics": [],
+package	UNKNOWN STEP	2026-09-14T21:48:28.2068451Z     "render": "passed"
+package	UNKNOWN STEP	2026-09-14T21:48:28.2068776Z   },
+package	UNKNOWN STEP	2026-09-14T21:48:28.2069026Z   {
+package	UNKNOWN STEP	2026-09-14T21:48:28.2069295Z     "count": 8,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2069648Z     "width": 1280,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2069964Z     "height": 720,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2070285Z     "minimum": 32,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2070588Z     "coreError": {
+package	UNKNOWN STEP	2026-09-14T21:48:28.2071099Z       "message": "Slide content does not fit its composition.",
+package	UNKNOWN STEP	2026-09-14T21:48:28.2073854Z       "code": "layout-overflow"
+package	UNKNOWN STEP	2026-09-14T21:48:28.2074234Z     },
+package	UNKNOWN STEP	2026-09-14T21:48:28.2074511Z     "renderError": {
+package	UNKNOWN STEP	2026-09-14T21:48:28.2075080Z       "message": "Slide content does not fit its composition.",
+package	UNKNOWN STEP	2026-09-14T21:48:28.2075652Z       "code": "layout-overflow"
+package	UNKNOWN STEP	2026-09-14T21:48:28.2076051Z     }
+package	UNKNOWN STEP	2026-09-14T21:48:28.2076363Z   },
+package	UNKNOWN STEP	2026-09-14T21:48:28.2076677Z   {
+package	UNKNOWN STEP	2026-09-14T21:48:28.2076965Z     "count": 8,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2077314Z     "width": 720,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2077670Z     "height": 1280,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2078035Z     "minimum": 16,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2078383Z     "coreDiagnostics": [],
+package	UNKNOWN STEP	2026-09-14T21:48:28.2078790Z     "render": "passed"
+package	UNKNOWN STEP	2026-09-14T21:48:28.2079151Z   },
+package	UNKNOWN STEP	2026-09-14T21:48:28.2079420Z   {
+package	UNKNOWN STEP	2026-09-14T21:48:28.2079723Z     "count": 8,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2080086Z     "width": 720,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2080425Z     "height": 1280,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2080761Z     "minimum": 32,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2081385Z     "coreError": {
+package	UNKNOWN STEP	2026-09-14T21:48:28.2082146Z       "message": "Slide content does not fit its composition.",
+package	UNKNOWN STEP	2026-09-14T21:48:28.2082679Z       "code": "layout-overflow"
+package	UNKNOWN STEP	2026-09-14T21:48:28.2083026Z     },
+package	UNKNOWN STEP	2026-09-14T21:48:28.2083373Z     "renderError": {
+package	UNKNOWN STEP	2026-09-14T21:48:28.2083870Z       "message": "Slide content does not fit its composition.",
+package	UNKNOWN STEP	2026-09-14T21:48:28.2084424Z       "code": "layout-overflow"
+package	UNKNOWN STEP	2026-09-14T21:48:28.2084802Z     }
+package	UNKNOWN STEP	2026-09-14T21:48:28.2085070Z   },
+package	UNKNOWN STEP	2026-09-14T21:48:28.2085373Z   {
+package	UNKNOWN STEP	2026-09-14T21:48:28.2085678Z     "count": 12,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2086012Z     "width": 1280,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2086362Z     "height": 720,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2086692Z     "minimum": 16,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2087035Z     "coreDiagnostics": [],
+package	UNKNOWN STEP	2026-09-14T21:48:28.2087441Z     "render": "passed"
+package	UNKNOWN STEP	2026-09-14T21:48:28.2087795Z   },
+package	UNKNOWN STEP	2026-09-14T21:48:28.2088085Z   {
+package	UNKNOWN STEP	2026-09-14T21:48:28.2088399Z     "count": 12,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2088742Z     "width": 1280,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2089051Z     "height": 720,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2089426Z     "minimum": 32,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2089775Z     "coreError": {
+package	UNKNOWN STEP	2026-09-14T21:48:28.2090280Z       "message": "Slide content does not fit its composition.",
+package	UNKNOWN STEP	2026-09-14T21:48:28.2090871Z       "code": "layout-overflow"
+package	UNKNOWN STEP	2026-09-14T21:48:28.2091256Z     },
+package	UNKNOWN STEP	2026-09-14T21:48:28.2091731Z     "renderError": {
+package	UNKNOWN STEP	2026-09-14T21:48:28.2092268Z       "message": "Slide content does not fit its composition.",
+package	UNKNOWN STEP	2026-09-14T21:48:28.2092858Z       "code": "layout-overflow"
+package	UNKNOWN STEP	2026-09-14T21:48:28.2093317Z     }
+package	UNKNOWN STEP	2026-09-14T21:48:28.2093750Z   },
+package	UNKNOWN STEP	2026-09-14T21:48:28.2094527Z   {
+package	UNKNOWN STEP	2026-09-14T21:48:28.2094985Z     "count": 12,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2122246Z     "width": 720,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2122722Z     "height": 1280,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2123107Z     "minimum": 16,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2123459Z     "coreDiagnostics": [],
+package	UNKNOWN STEP	2026-09-14T21:48:28.2124267Z     "render": "passed"
+package	UNKNOWN STEP	2026-09-14T21:48:28.2124610Z   },
+package	UNKNOWN STEP	2026-09-14T21:48:28.2124933Z   {
+package	UNKNOWN STEP	2026-09-14T21:48:28.2125233Z     "count": 12,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2125584Z     "width": 720,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2125940Z     "height": 1280,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2126279Z     "minimum": 32,
+package	UNKNOWN STEP	2026-09-14T21:48:28.2126599Z     "coreError": {
+package	UNKNOWN STEP	2026-09-14T21:48:28.2127135Z       "message": "Slide content does not fit its composition.",
+package	UNKNOWN STEP	2026-09-14T21:48:28.2127727Z       "code": "layout-overflow"
+package	UNKNOWN STEP	2026-09-14T21:48:28.2128128Z     },
+package	UNKNOWN STEP	2026-09-14T21:48:28.2128467Z     "renderError": {
+package	UNKNOWN STEP	2026-09-14T21:48:28.2128976Z       "message": "Slide content does not fit its composition.",
+package	UNKNOWN STEP	2026-09-14T21:48:28.2129532Z       "code": "layout-overflow"
+package	UNKNOWN STEP	2026-09-14T21:48:28.2129894Z     }
+package	UNKNOWN STEP	2026-09-14T21:48:28.2130209Z   }
+package	UNKNOWN STEP	2026-09-14T21:48:28.2130481Z ]
+package	UNKNOWN STEP	2026-09-14T21:48:28.4796271Z Installed code guards: runtime drift, wrong integrity, external modules and loader environment rejected; exact artifacts restored.
+package	UNKNOWN STEP	2026-09-14T21:48:28.4932262Z ##[group]Run npm pack --dry-run
+package	UNKNOWN STEP	2026-09-14T21:48:28.4932656Z ^[[36;1mnpm pack --dry-run^[[0m
+package	UNKNOWN STEP	2026-09-14T21:48:28.4933009Z shell: sh -e {0}
+package	UNKNOWN STEP	2026-09-14T21:48:28.4933244Z env:
+package	UNKNOWN STEP	2026-09-14T21:48:28.4933768Z   OPF_GOLDEN_BASELINE: /home/runner/work/opf-editor/opf-editor/opf-render/test/golden/opf-examples-png.furniture.sha256.json
+package	UNKNOWN STEP	2026-09-14T21:48:28.4934395Z   PNPM_HOME: /github/home/setup-pnpm/node_modules/.bin
+package	UNKNOWN STEP	2026-09-14T21:48:28.4934715Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:48:28.8150823Z 
+package	UNKNOWN STEP	2026-09-14T21:48:28.8151447Z > @openpresentation/opf-editor@0.6.0 prepack
+package	UNKNOWN STEP	2026-09-14T21:48:28.8152033Z > npm run build
+package	UNKNOWN STEP	2026-09-14T21:48:28.8152180Z 
+package	UNKNOWN STEP	2026-09-14T21:48:28.9282703Z 
+package	UNKNOWN STEP	2026-09-14T21:48:28.9283515Z > @openpresentation/opf-editor@0.6.0 build
+package	UNKNOWN STEP	2026-09-14T21:48:28.9284172Z > node scripts/build.mjs
+package	UNKNOWN STEP	2026-09-14T21:48:28.9284441Z 
+package	UNKNOWN STEP	2026-09-14T21:48:29.2388550Z npm notice
+package	UNKNOWN STEP	2026-09-14T21:48:29.2390638Z npm notice 📦  @openpresentation/opf-editor@0.6.0
+package	UNKNOWN STEP	2026-09-14T21:48:29.2391046Z npm notice Tarball Contents
+package	UNKNOWN STEP	2026-09-14T21:48:29.2399011Z npm notice 1.1kB LICENSE
+package	UNKNOWN STEP	2026-09-14T21:48:29.2399505Z npm notice 18.6kB README.md
+package	UNKNOWN STEP	2026-09-14T21:48:29.2400039Z npm notice 16.1kB dist/block-controls.js
+package	UNKNOWN STEP	2026-09-14T21:48:29.2400570Z npm notice 1.2kB dist/blocks.d.ts
+package	UNKNOWN STEP	2026-09-14T21:48:29.2401051Z npm notice 9.2kB dist/blocks.js
+package	UNKNOWN STEP	2026-09-14T21:48:29.2401695Z npm notice 2.9kB dist/canvas-fields.js
+package	UNKNOWN STEP	2026-09-14T21:48:29.2402247Z npm notice 2.3kB dist/canvas.d.ts
+package	UNKNOWN STEP	2026-09-14T21:48:29.2402777Z npm notice 31.8kB dist/canvas.js
+package	UNKNOWN STEP	2026-09-14T21:48:29.2403257Z npm notice 200B dist/data.d.ts
+package	UNKNOWN STEP	2026-09-14T21:48:29.2403703Z npm notice 100B dist/data.js
+package	UNKNOWN STEP	2026-09-14T21:48:29.2404175Z npm notice 935B dist/galleries.d.ts
+package	UNKNOWN STEP	2026-09-14T21:48:29.2404667Z npm notice 8.2kB dist/galleries.js
+package	UNKNOWN STEP	2026-09-14T21:48:29.2405162Z npm notice 6.6kB dist/index.d.ts
+package	UNKNOWN STEP	2026-09-14T21:48:29.2405630Z npm notice 28.3kB dist/index.js
+package	UNKNOWN STEP	2026-09-14T21:48:29.2406119Z npm notice 8.1kB dist/layout-handles.js
+package	UNKNOWN STEP	2026-09-14T21:48:29.2406630Z npm notice 655B dist/layout.d.ts
+package	UNKNOWN STEP	2026-09-14T21:48:29.2407114Z npm notice 2.7kB dist/layout.js
+package	UNKNOWN STEP	2026-09-14T21:48:29.2407575Z npm notice 913B dist/react.d.ts
+package	UNKNOWN STEP	2026-09-14T21:48:29.2408026Z npm notice 2.9kB dist/react.js
+package	UNKNOWN STEP	2026-09-14T21:48:29.2408488Z npm notice 8.6kB dist/rich-text-input.js
+package	UNKNOWN STEP	2026-09-14T21:48:29.2408928Z npm notice 9.3kB dist/rich-text-toolbar.js
+package	UNKNOWN STEP	2026-09-14T21:48:29.2409271Z npm notice 1.2kB dist/rich-text.d.ts
+package	UNKNOWN STEP	2026-09-14T21:48:29.2409599Z npm notice 6.8kB dist/rich-text.js
+package	UNKNOWN STEP	2026-09-14T21:48:29.2409928Z npm notice 520B dist/schema-inspector.d.ts
+package	UNKNOWN STEP	2026-09-14T21:48:29.2410290Z npm notice 10.6kB dist/schema-inspector.js
+package	UNKNOWN STEP	2026-09-14T21:48:29.2410608Z npm notice 861B dist/schema.d.ts
+package	UNKNOWN STEP	2026-09-14T21:48:29.2410906Z npm notice 6.4kB dist/schema.js
+package	UNKNOWN STEP	2026-09-14T21:48:29.2411193Z npm notice 841B dist/svelte.d.ts
+package	UNKNOWN STEP	2026-09-14T21:48:29.2411497Z npm notice 3.0kB dist/svelte.js
+package	UNKNOWN STEP	2026-09-14T21:48:29.2412014Z npm notice 810B dist/transfer.d.ts
+package	UNKNOWN STEP	2026-09-14T21:48:29.2412348Z npm notice 9.2kB dist/transfer.js
+package	UNKNOWN STEP	2026-09-14T21:48:29.2412639Z npm notice 3.9kB package.json
+package	UNKNOWN STEP	2026-09-14T21:48:29.2412926Z npm notice Tarball Details
+package	UNKNOWN STEP	2026-09-14T21:48:29.2413596Z npm notice name: @openpresentation/opf-editor
+package	UNKNOWN STEP	2026-09-14T21:48:29.2413943Z npm notice version: 0.6.0
+package	UNKNOWN STEP	2026-09-14T21:48:29.2414332Z npm notice filename: openpresentation-opf-editor-0.6.0.tgz
+package	UNKNOWN STEP	2026-09-14T21:48:29.2414737Z npm notice package size: 56.7 kB
+package	UNKNOWN STEP	2026-09-14T21:48:29.2415054Z npm notice unpacked size: 204.6 kB
+package	UNKNOWN STEP	2026-09-14T21:48:29.2415447Z npm notice shasum: 2761cb4806458271857d7d0b01257f3c04989b22
+package	UNKNOWN STEP	2026-09-14T21:48:29.2415908Z npm notice integrity: sha512-HjNfLkM/n/8De[...]QMViinAe1fnKw==
+package	UNKNOWN STEP	2026-09-14T21:48:29.2416272Z npm notice total files: 32
+package	UNKNOWN STEP	2026-09-14T21:48:29.2416517Z npm notice
+package	UNKNOWN STEP	2026-09-14T21:48:29.2416832Z openpresentation-opf-editor-0.6.0.tgz
+package	UNKNOWN STEP	2026-09-14T21:48:29.2615014Z ##[group]Run actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+package	UNKNOWN STEP	2026-09-14T21:48:29.2615446Z with:
+package	UNKNOWN STEP	2026-09-14T21:48:29.2615685Z   name: candidate-opf-editor-Linux-node24
+package	UNKNOWN STEP	2026-09-14T21:48:29.2616991Z   path: opf/artifacts/plain-whitespace-workflow/**
+package	UNKNOWN STEP	opf/artifacts/readability-browser/**
+package	UNKNOWN STEP	opf/artifacts/timeline-workflow/**
+package	UNKNOWN STEP	opf/artifacts/furniture-workflow/**
+package	UNKNOWN STEP	opf/artifacts/timeline-acceptance.json
+package	UNKNOWN STEP	opf/artifacts/editor/*report.json
+package	UNKNOWN STEP	opf/artifacts/editor/*failure.png
+package	UNKNOWN STEP	opf/artifacts/editor/*installed-code*.json
+package	UNKNOWN STEP	opf-render/artifacts/golden/**
+package	UNKNOWN STEP	
+package	UNKNOWN STEP	2026-09-14T21:48:29.2618267Z   retention-days: 7
+package	UNKNOWN STEP	2026-09-14T21:48:29.2618502Z   if-no-files-found: ignore
+package	UNKNOWN STEP	2026-09-14T21:48:29.2618757Z   compression-level: 6
+package	UNKNOWN STEP	2026-09-14T21:48:29.2619000Z   overwrite: false
+package	UNKNOWN STEP	2026-09-14T21:48:29.2619239Z   include-hidden-files: false
+package	UNKNOWN STEP	2026-09-14T21:48:29.2619495Z   archive: true
+package	UNKNOWN STEP	2026-09-14T21:48:29.2619709Z env:
+package	UNKNOWN STEP	2026-09-14T21:48:29.2620235Z   OPF_GOLDEN_BASELINE: /home/runner/work/opf-editor/opf-editor/opf-render/test/golden/opf-examples-png.furniture.sha256.json
+package	UNKNOWN STEP	2026-09-14T21:48:29.2620847Z   PNPM_HOME: /github/home/setup-pnpm/node_modules/.bin
+package	UNKNOWN STEP	2026-09-14T21:48:29.2621160Z ##[endgroup]
+package	UNKNOWN STEP	2026-09-14T21:48:29.2626412Z ##[command]/usr/bin/docker exec  31314bb1989e8ec14bcf0751d892b7bb432feabaa9e98d0f27b5100e341b0375 sh -c "cat /etc/*release | grep ^ID"
+package	UNKNOWN STEP	2026-09-14T21:48:29.5301038Z Multiple search paths detected. Calculating the least common ancestor of all paths
+package	UNKNOWN STEP	2026-09-14T21:48:29.5305601Z The least common ancestor is /__w/opf-editor/opf-editor. This will be the root directory of the artifact
+package	UNKNOWN STEP	2026-09-14T21:48:29.5306810Z With the provided path, there will be 25 files uploaded
+package	UNKNOWN STEP	2026-09-14T21:48:29.5307939Z Artifact name is valid!
+package	UNKNOWN STEP	2026-09-14T21:48:29.5308559Z Root directory input is valid!
+package	UNKNOWN STEP	2026-09-14T21:48:29.7399444Z Uploading artifact: candidate-opf-editor-Linux-node24.zip
+package	UNKNOWN STEP	2026-09-14T21:48:29.7440753Z Beginning upload of artifact content to blob storage
+package	UNKNOWN STEP	2026-09-14T21:48:29.8771232Z Uploaded bytes 525995
+package	UNKNOWN STEP	2026-09-14T21:48:29.8907039Z Finished uploading artifact content to blob storage!
+package	UNKNOWN STEP	2026-09-14T21:48:29.8908212Z SHA256 digest of uploaded artifact is c4fa56a554156dc02aaf237de18682755046812f4df56608c3864937ed00fac6
+package	UNKNOWN STEP	2026-09-14T21:48:29.8909031Z Finalizing artifact upload
+package	UNKNOWN STEP	2026-09-14T21:48:30.1641458Z Artifact candidate-opf-editor-Linux-node24 successfully finalized. Artifact ID 10370506823
+package	UNKNOWN STEP	2026-09-14T21:48:30.1642847Z Artifact candidate-opf-editor-Linux-node24 has been successfully uploaded! Final size is 525995 bytes. Artifact ID is 10370506823
+package	UNKNOWN STEP	2026-09-14T21:48:30.1647460Z Artifact download URL: https://github.com/OpenPresentation/opf-editor/actions/runs/34900534834/artifacts/10370506823
+package	UNKNOWN STEP	2026-09-14T21:48:30.1898227Z Post job cleanup.
+package	UNKNOWN STEP	2026-09-14T21:48:30.1905755Z ##[command]/usr/bin/docker exec  31314bb1989e8ec14bcf0751d892b7bb432feabaa9e98d0f27b5100e341b0375 sh -c "cat /etc/*release | grep ^ID"
+package	UNKNOWN STEP	2026-09-14T21:48:30.4264728Z Cache hit occurred on the primary key node-cache-Linux-x64-npm-33aa6c2e49ef37cf8ca22f930ac5c19e763eccb0be2a5a5baf75652b385b348a, not saving cache.
+package	UNKNOWN STEP	2026-09-14T21:48:30.4411099Z Post job cleanup.
+package	UNKNOWN STEP	2026-09-14T21:48:30.4415785Z ##[command]/usr/bin/docker exec  31314bb1989e8ec14bcf0751d892b7bb432feabaa9e98d0f27b5100e341b0375 sh -c "cat /etc/*release | grep ^ID"
+package	UNKNOWN STEP	2026-09-14T21:48:30.7075875Z Pruning is unnecessary.
+package	UNKNOWN STEP	2026-09-14T21:48:30.7322427Z Post job cleanup.
+package	UNKNOWN STEP	2026-09-14T21:48:30.7336053Z ##[command]/usr/bin/docker exec  31314bb1989e8ec14bcf0751d892b7bb432feabaa9e98d0f27b5100e341b0375 sh -c "cat /etc/*release | grep ^ID"
+package	UNKNOWN STEP	2026-09-14T21:48:30.9402997Z [command]/usr/bin/git version
+package	UNKNOWN STEP	2026-09-14T21:48:30.9485664Z git version 2.43.0
+package	UNKNOWN STEP	2026-09-14T21:48:30.9536992Z Temporarily overriding HOME='/__w/_temp/e93e8107-5af2-4a0d-a187-02a84e58f70c' before making global git config changes
+package	UNKNOWN STEP	2026-09-14T21:48:30.9538647Z Adding repository directory to the temporary git global config as a safe directory
+package	UNKNOWN STEP	2026-09-14T21:48:30.9543412Z [command]/usr/bin/git config --global --add safe.directory /__w/opf-editor/opf-editor/opf-pptx
+package	UNKNOWN STEP	2026-09-14T21:48:30.9596630Z Removing SSH command configuration
+package	UNKNOWN STEP	2026-09-14T21:48:30.9601282Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+package	UNKNOWN STEP	2026-09-14T21:48:30.9660962Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+package	UNKNOWN STEP	2026-09-14T21:48:31.0044913Z Removing HTTP extra header
+package	UNKNOWN STEP	2026-09-14T21:48:31.0046715Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+package	UNKNOWN STEP	2026-09-14T21:48:31.0108010Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+package	UNKNOWN STEP	2026-09-14T21:48:31.0513486Z Removing includeIf entries pointing to credentials config files
+package	UNKNOWN STEP	2026-09-14T21:48:31.0523586Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+package	UNKNOWN STEP	2026-09-14T21:48:31.0578176Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+package	UNKNOWN STEP	2026-09-14T21:48:31.1094071Z Post job cleanup.
+package	UNKNOWN STEP	2026-09-14T21:48:31.1103498Z ##[command]/usr/bin/docker exec  31314bb1989e8ec14bcf0751d892b7bb432feabaa9e98d0f27b5100e341b0375 sh -c "cat /etc/*release | grep ^ID"
+package	UNKNOWN STEP	2026-09-14T21:48:31.3081282Z [command]/usr/bin/git version
+package	UNKNOWN STEP	2026-09-14T21:48:31.3145174Z git version 2.43.0
+package	UNKNOWN STEP	2026-09-14T21:48:31.3189160Z Temporarily overriding HOME='/__w/_temp/9e24f4a6-85ac-49b0-afc1-774e1c95b8a3' before making global git config changes
+package	UNKNOWN STEP	2026-09-14T21:48:31.3192758Z Adding repository directory to the temporary git global config as a safe directory
+package	UNKNOWN STEP	2026-09-14T21:48:31.3194957Z [command]/usr/bin/git config --global --add safe.directory /__w/opf-editor/opf-editor/opf-render
+package	UNKNOWN STEP	2026-09-14T21:48:31.3238354Z Removing SSH command configuration
+package	UNKNOWN STEP	2026-09-14T21:48:31.3245431Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+package	UNKNOWN STEP	2026-09-14T21:48:31.3297404Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+package	UNKNOWN STEP	2026-09-14T21:48:31.3597361Z Removing HTTP extra header
+package	UNKNOWN STEP	2026-09-14T21:48:31.3603457Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+package	UNKNOWN STEP	2026-09-14T21:48:31.3644068Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+package	UNKNOWN STEP	2026-09-14T21:48:31.3954461Z Removing includeIf entries pointing to credentials config files
+package	UNKNOWN STEP	2026-09-14T21:48:31.3960910Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+package	UNKNOWN STEP	2026-09-14T21:48:31.4006929Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+package	UNKNOWN STEP	2026-09-14T21:48:31.4492310Z Post job cleanup.
+package	UNKNOWN STEP	2026-09-14T21:48:31.4500871Z ##[command]/usr/bin/docker exec  31314bb1989e8ec14bcf0751d892b7bb432feabaa9e98d0f27b5100e341b0375 sh -c "cat /etc/*release | grep ^ID"
+package	UNKNOWN STEP	2026-09-14T21:48:31.6473656Z [command]/usr/bin/git version
+package	UNKNOWN STEP	2026-09-14T21:48:31.6525988Z git version 2.43.0
+package	UNKNOWN STEP	2026-09-14T21:48:31.6578393Z Temporarily overriding HOME='/__w/_temp/d854dbd1-0a76-40f8-8167-c4baa98289dd' before making global git config changes
+package	UNKNOWN STEP	2026-09-14T21:48:31.6580334Z Adding repository directory to the temporary git global config as a safe directory
+package	UNKNOWN STEP	2026-09-14T21:48:31.6585547Z [command]/usr/bin/git config --global --add safe.directory /__w/opf-editor/opf-editor/opf
+package	UNKNOWN STEP	2026-09-14T21:48:31.6627747Z Removing SSH command configuration
+package	UNKNOWN STEP	2026-09-14T21:48:31.6635865Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+package	UNKNOWN STEP	2026-09-14T21:48:31.6684770Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+package	UNKNOWN STEP	2026-09-14T21:48:31.7008032Z Removing HTTP extra header
+package	UNKNOWN STEP	2026-09-14T21:48:31.7014156Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+package	UNKNOWN STEP	2026-09-14T21:48:31.7061367Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+package	UNKNOWN STEP	2026-09-14T21:48:31.7388060Z Removing includeIf entries pointing to credentials config files
+package	UNKNOWN STEP	2026-09-14T21:48:31.7395943Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+package	UNKNOWN STEP	2026-09-14T21:48:31.7444243Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+package	UNKNOWN STEP	2026-09-14T21:48:31.7975959Z Post job cleanup.
+package	UNKNOWN STEP	2026-09-14T21:48:31.7984382Z ##[command]/usr/bin/docker exec  31314bb1989e8ec14bcf0751d892b7bb432feabaa9e98d0f27b5100e341b0375 sh -c "cat /etc/*release | grep ^ID"
+package	UNKNOWN STEP	2026-09-14T21:48:32.0006903Z [command]/usr/bin/git version
+package	UNKNOWN STEP	2026-09-14T21:48:32.0060952Z git version 2.43.0
+package	UNKNOWN STEP	2026-09-14T21:48:32.0115186Z Temporarily overriding HOME='/__w/_temp/becc493f-2311-4859-ab35-5ad44719a7be' before making global git config changes
+package	UNKNOWN STEP	2026-09-14T21:48:32.0116653Z Adding repository directory to the temporary git global config as a safe directory
+package	UNKNOWN STEP	2026-09-14T21:48:32.0122611Z [command]/usr/bin/git config --global --add safe.directory /__w/opf-editor/opf-editor/opf-editor
+package	UNKNOWN STEP	2026-09-14T21:48:32.0166039Z Removing SSH command configuration
+package	UNKNOWN STEP	2026-09-14T21:48:32.0172069Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+package	UNKNOWN STEP	2026-09-14T21:48:32.0231831Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+package	UNKNOWN STEP	2026-09-14T21:48:32.0528545Z Removing HTTP extra header
+package	UNKNOWN STEP	2026-09-14T21:48:32.0529626Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+package	UNKNOWN STEP	2026-09-14T21:48:32.0576235Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+package	UNKNOWN STEP	2026-09-14T21:48:32.0908879Z Removing includeIf entries pointing to credentials config files
+package	UNKNOWN STEP	2026-09-14T21:48:32.0923598Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+package	UNKNOWN STEP	2026-09-14T21:48:32.0975733Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+package	UNKNOWN STEP	2026-09-14T21:48:32.1460817Z Stop and remove container: 37fe2058cadc40a5a2fb432a19fa6ad6_mcrmicrosoftcomplaywrightv1630noblesha256eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27_ef5f0b
+package	UNKNOWN STEP	2026-09-14T21:48:32.1467386Z ##[command]/usr/bin/docker rm --force 31314bb1989e8ec14bcf0751d892b7bb432feabaa9e98d0f27b5100e341b0375
+package	UNKNOWN STEP	2026-09-14T21:48:32.2682906Z 31314bb1989e8ec14bcf0751d892b7bb432feabaa9e98d0f27b5100e341b0375
+package	UNKNOWN STEP	2026-09-14T21:48:32.2716761Z Remove container network: github_network_a4929a0a3c754e0b85501953584169ef
+package	UNKNOWN STEP	2026-09-14T21:48:32.2720936Z ##[command]/usr/bin/docker network rm github_network_a4929a0a3c754e0b85501953584169ef
+package	UNKNOWN STEP	2026-09-14T21:48:32.3941974Z github_network_a4929a0a3c754e0b85501953584169ef
+package	UNKNOWN STEP	2026-09-14T21:48:32.4021197Z Cleaning up orphan processes

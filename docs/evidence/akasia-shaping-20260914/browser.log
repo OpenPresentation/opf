@@ -1,0 +1,232 @@
+{
+  "cases": 8568,
+  "summary": [
+    {
+      "file": "Akasia-Black.ttf",
+      "cases": 714,
+      "fontkitOutside01": 39,
+      "harfbuzzOutside01": 0,
+      "maxFontkitDelta": 4.9375,
+      "maxHarfbuzzDelta": 0
+    },
+    {
+      "file": "Akasia-BlackItalic.ttf",
+      "cases": 714,
+      "fontkitOutside01": 46,
+      "harfbuzzOutside01": 0,
+      "maxFontkitDelta": 5.203125,
+      "maxHarfbuzzDelta": 0
+    },
+    {
+      "file": "Akasia-Bold.ttf",
+      "cases": 714,
+      "fontkitOutside01": 37,
+      "harfbuzzOutside01": 0,
+      "maxFontkitDelta": 4.03125,
+      "maxHarfbuzzDelta": 0
+    },
+    {
+      "file": "Akasia-BoldItalic.ttf",
+      "cases": 714,
+      "fontkitOutside01": 39,
+      "harfbuzzOutside01": 0,
+      "maxFontkitDelta": 4.359375,
+      "maxHarfbuzzDelta": 0
+    },
+    {
+      "file": "Akasia-ExtraBold.ttf",
+      "cases": 714,
+      "fontkitOutside01": 39,
+      "harfbuzzOutside01": 0,
+      "maxFontkitDelta": 4.609375,
+      "maxHarfbuzzDelta": 0
+    },
+    {
+      "file": "Akasia-ExtraBoldItalic.ttf",
+      "cases": 714,
+      "fontkitOutside01": 39,
+      "harfbuzzOutside01": 0,
+      "maxFontkitDelta": 4.78125,
+      "maxHarfbuzzDelta": 0
+    },
+    {
+      "file": "Akasia-Italic.ttf",
+      "cases": 714,
+      "fontkitOutside01": 39,
+      "harfbuzzOutside01": 0,
+      "maxFontkitDelta": 3.875,
+      "maxHarfbuzzDelta": 0
+    },
+    {
+      "file": "Akasia-Light.ttf",
+      "cases": 714,
+      "fontkitOutside01": 31,
+      "harfbuzzOutside01": 0,
+      "maxFontkitDelta": 2.84375,
+      "maxHarfbuzzDelta": 0
+    },
+    {
+      "file": "Akasia-LightItalic.ttf",
+      "cases": 714,
+      "fontkitOutside01": 38,
+      "harfbuzzOutside01": 0,
+      "maxFontkitDelta": 3.625,
+      "maxHarfbuzzDelta": 0
+    },
+    {
+      "file": "Akasia-Regular.ttf",
+      "cases": 714,
+      "fontkitOutside01": 37,
+      "harfbuzzOutside01": 0,
+      "maxFontkitDelta": 3.078125,
+      "maxHarfbuzzDelta": 0
+    },
+    {
+      "file": "Akasia-SemiBold.ttf",
+      "cases": 714,
+      "fontkitOutside01": 36,
+      "harfbuzzOutside01": 0,
+      "maxFontkitDelta": 3.34375,
+      "maxHarfbuzzDelta": 0
+    },
+    {
+      "file": "Akasia-SemiBoldItalic.ttf",
+      "cases": 714,
+      "fontkitOutside01": 40,
+      "harfbuzzOutside01": 0,
+      "maxFontkitDelta": 4.125,
+      "maxHarfbuzzDelta": 0
+    }
+  ],
+  "lines": [
+    {
+      "id": "underestimated-greek",
+      "modes": [
+        {
+          "mode": "before",
+          "lines": [
+            {
+              "text": "ώώώώώώώώώώ",
+              "expected": 233.90625,
+              "actual": 285.9375,
+              "outside": true
+            }
+          ]
+        },
+        {
+          "mode": "after",
+          "lines": [
+            {
+              "text": "ώώώώώώώώ",
+              "expected": 228.75,
+              "actual": 228.75,
+              "outside": false
+            },
+            {
+              "text": "ώώ",
+              "expected": 57.1875,
+              "actual": 57.1875,
+              "outside": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "overestimated-greek",
+      "modes": [
+        {
+          "mode": "before",
+          "lines": [
+            {
+              "text": "ΊΊΊΊΊΊΊ",
+              "expected": 106.640625,
+              "actual": 72.078125,
+              "outside": false
+            },
+            {
+              "text": "ΊΊΊ",
+              "expected": 45.703125,
+              "actual": 30.890625,
+              "outside": false
+            }
+          ]
+        },
+        {
+          "mode": "after",
+          "lines": [
+            {
+              "text": "ΊΊΊΊΊΊΊΊΊΊ",
+              "expected": 102.96875,
+              "actual": 102.96875,
+              "outside": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "source-boundaries",
+      "modes": [
+        {
+          "mode": "before",
+          "lines": [
+            {
+              "text": "  ố\tώ ώ",
+              "expected": 105.28125,
+              "actual": 115.6875,
+              "outside": false
+            },
+            {
+              "text": "",
+              "expected": 0,
+              "actual": 0,
+              "outside": false
+            },
+            {
+              "text": "Ư  ",
+              "expected": 35.515625,
+              "actual": 40.359375,
+              "outside": false
+            },
+            {
+              "text": "",
+              "expected": 0,
+              "actual": 0,
+              "outside": false
+            }
+          ]
+        },
+        {
+          "mode": "after",
+          "lines": [
+            {
+              "text": "  ố\tώ ώ",
+              "expected": 115.6875,
+              "actual": 115.6875,
+              "outside": false
+            },
+            {
+              "text": "",
+              "expected": 0,
+              "actual": 0,
+              "outside": false
+            },
+            {
+              "text": "Ư  ",
+              "expected": 40.359375,
+              "actual": 40.359375,
+              "outside": false
+            },
+            {
+              "text": "",
+              "expected": 0,
+              "actual": 0,
+              "outside": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,5 +1,11 @@
 # OPF font roadmap
 
+Remaining native Office checks are tracked in the
+[PowerPoint compatibility roadmap](powerpoint-acceptance.md), separately from
+portable PR acceptance at the project owner's September 15 request. Browser
+font-metrics, source preservation and painting checks remain required for the
+features they cover.
+
 The published package set and all seven ecosystem repositories now target Node 24, completing the [runtime simplification milestone](ecosystem-objective-2026-09-09.md#accepted-runtime-simplification--september-10-2026). Continue font/layout verification on Node 24 with distinct browser and native-platform coverage. Historical dual-runtime results below remain evidence, not a requirement to repeat both runtimes indefinitely.
 
 Status (September 15): [renderer 0.8.0 is published](https://github.com/OpenPresentation/opf-render/releases/tag/opf-render-v0.8.0) with verified local font preparation, all 33 office-pack faces and the complete nine-face base raster pack. Package and registry checks preserve exact font hashes/licenses; this release does not expand font compatibility claims. The [expanded ecosystem objective](ecosystem-objective-2026-09-09.md) requires substantially broader font conformance, installation/embedding, multilingual and native-platform evidence. The historical measurements below remain narrow samples; they do not establish general font or pixel equivalence. Evaluate existing open fonts and engine fixes before original font development.
@@ -12,7 +18,7 @@ The natural rich text implementation published in renderer 0.8.0 removes estimat
 
 The [new native advance study](../evidence/shared-metric-native-anchor/font-study-comparison.json) records 1,024 local reference-font observations, with 949 within a candidate model's 0.02pt comparison tolerance and 75 outliers. It tests native reference faces, not their open substitutes. Prioritize the remaining combining-mark, Arabic and Calibri kerning cases, explicit native font-file/fallback identification, and independent shaping/raster checks before considering a measurement profile. Fontkit file hashes and Office font-name properties alone cannot establish per-glyph native font identity. No proposed profile is shipped.
 
-The [Akasia v0.0.2 assessment](../evidence/akasia-assessment/README.md) now checks twelve exact open files against public upstream metric data and offline Chromium. Nominal advances, supported kerning pairs and three default ligatures per style agree with upstream values; this is not an independent Aptos comparison. Fourteen reference codepoints remain absent. Black Italic decomposed accents differ by 0.421875px at size 32 between Fontkit and Chromium on both Node runtimes. Keep Akasia experimental; the retained source/NFC control identifies a normalization/shaping question without changing authored text or widening tolerances.
+The [Akasia v0.0.2 assessment](../evidence/akasia-assessment/README.md) checks twelve exact open files against public upstream metric data and offline Chromium. Nominal advances, supported kerning pairs and three default ligatures per style agree with upstream values; this is not an independent Aptos comparison. Fourteen reference codepoints remain absent. The [expanded Node 24 shaping study](../evidence/akasia-shaping-20260914/README.md) finds 460 Fontkit/Chromium advance differences among 8,568 canonical-form specimens, reaching 5.203125px at size 32. Two pinned HarfBuzz bindings match each other and actual browser advances for every specimen. A test-only callback corrects both excessive and insufficient wrapping through core `fitText` while preserving source ranges and whitespace. The [integration plan](font-shaping.md) prioritizes a source-preserving shaping backend with complete format, packaging, corpus and native gates. Default measurement remains unchanged and Akasia remains experimental; no authored text normalization, tolerance widening or Aptos equivalence is accepted.
 
 The shared metric outline increment in core #66 clears the recorded portrait/right native Latency ink overflow in fresh Windows evidence at core #68. All 288 current-metric imports, 96 full-slide rasters and 276 isolated masks pass their scoped checks. Six leading-tab outliers remain per runtime at a maximum of 0.0226745605469pt against the unchanged 0.02pt gate. The independent [Mac review](../evidence/metric-outline-placement/native-candidate-independent-review.json) preserves that remaining failure.
 
@@ -21,6 +27,42 @@ The [scalar whitespace candidate](plain-text-whitespace.md) retains source space
 The [readability floor candidate](readability-floor.md) enforces selected minima on actual scalar/rich/list/table glyphs and bounds each fitting search to 65 layouts. Both runtime source and installed browser matrices pass 48 cases; the separate reviewed raster checkpoint covers 262 changed slides. Small template text, chart internals, coverage and broader layout repair remain open. See [portable evidence](../evidence/mac-readability-floor/README.md).
 
 ## Ship the existing starter pack
+
+The [prepared shaping candidate](font-shaping.md#runtime-checkpoint--september-14-2026)
+now implements an opt-in renderer service in
+[PR21](https://github.com/OpenPresentation/opf-render/pull/21). It retains the
+registry's face/policy/coverage contracts and reproduces the Akasia correction
+through actual runtime APIs. Default and published measurement remain unchanged;
+the subsequent [container checkpoint](font-shaping.md#container-checkpoint--september-14-2026)
+adds bounded WOFF/WOFF2 preparation and consistent selected-TTC measurement,
+embedding and browser pixels. The optional horizontal-metrics follow-up covers
+99 literal-glyph inputs and preserves the original wrapper/license alongside
+the compatible browser face. The shared-collection follow-up preserves per-face
+metrics across 198 selected-face cases and independently reconstructs each face;
+fresh packages pass 373 identical nonempty browser pixel pairs and the unchanged
+805-slide baseline. Selected DFont resources now work with both registry
+backends while retaining the complete original container/license. Independent
+resource parsing and 439 fresh-package browser pixel pairs pass. A later draft
+fixed-instance checkpoint adds 712 Node cases and matching Chromium pixel
+comparisons, but ten advance comparisons fail the unchanged 0.1px gate. Fresh installed Node/TypeScript coverage and payload measurements are now recorded;
+Linux/Mac browser advances differ. The subsequent fixed-point normalization
+correction matches 188 independent FreeType instances and resolves 458 CFF2
+glyph diagnostic disagreements. Fresh packages verify 37 shipped hashes and
+the unchanged corpus. CFF2 advances are then corrected before Fontkit positioning:
+all 356 default-backend Mac browser cases pass, while five prepared TrueType
+cases still fail. Completed CI at `41311de` passes all Linux CFF2 cases and all
+prepared HarfBuzz cases but retains five Fontkit TrueType failures in both
+source and fresh-package runs. Checkpoint `74f0b8b` retains 564 selected-outline
+comparisons per platform plus Windows Edge. Sampled instance selection agrees;
+native advances do not: Windows CFF2 widths are pixel-rounded, while Mac
+TrueType widths differ from Linux/Windows. The same native fonts can differ by
+more than twice the precision target, so the next rendering experiment must
+paint accepted per-glyph positions while retaining logical text, source ranges
+and editing/export semantics. Existing native-text gates remain unchanged. See
+[the current shaping checkpoint](font-shaping.md); CFF/variable acceptance,
+a verified variable metric/paint contract, wider axis-mapping coverage, paragraph handling,
+shared editing/export and native acceptance are still required. The study above
+remains the historical probe checkpoint.
 
 Default new presentations to Roboto, with Roboto Mono for code. Use the same supplied font bytes for measurement, browser previews, and raster exports. Native PowerPoint exports name the resolved open font; recipients currently need that font installed.
 

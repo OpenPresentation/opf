@@ -1,0 +1,266 @@
+{
+  "scope": "Test-only shaping and core fitText/browser probe; product runtime unchanged; no native or Aptos compatibility acceptance.",
+  "heads": {
+    "opf": "411aac5d14b55cae24df1d545172953cc7fcf5e6",
+    "opf-render": "3d4fa8ce8172c2a6b38bf217d5f8d0ce5a1b62af",
+    "opf-editor": "40023fb3b65611ada05de8a9860bc41733a415a9",
+    "opf-pptx": "1363a653c8b0e80c50d970bc30db3587bcf6f14e"
+  },
+  "runtime": [
+    {
+      "file": "packages/javascript/src/composition.ts",
+      "sha256": "20ca3236b00374a007b35606971a414038a00f9078ace69d1d38cbab33e0d219"
+    },
+    {
+      "file": "packages/javascript/dist/composition.js",
+      "sha256": "d95834afebd579101b587c7601dc6b43082ed5e4798ac159ca003be1a9fba849"
+    },
+    {
+      "file": "../opf-render/src/fonts.js",
+      "sha256": "4bd31191fd99f5283f249a8c69093abef95da6522b57bf13e24bf2322b6a73d5"
+    }
+  ],
+  "tools": [
+    {
+      "file": "scripts/font-shaping-probe/README.md",
+      "bytes": 3200,
+      "sha256": "444ee00317899adf42d042be859157cd1295a858fb9f89a0c2a9726a696ed896"
+    },
+    {
+      "file": "scripts/font-shaping-probe/browser.mjs",
+      "bytes": 9113,
+      "sha256": "f9e4bce3b7ad901205f0ae970ee3a4b065d0c00bf9ca5e3c5cf6d55376acd941"
+    },
+    {
+      "file": "scripts/font-shaping-probe/json.mjs",
+      "bytes": 318,
+      "sha256": "7f59084fd528ec9e3a48221022d0baf1f393c021dc6e3b595e57f0aa4b09a7f6"
+    },
+    {
+      "file": "scripts/font-shaping-probe/model.mjs",
+      "bytes": 2049,
+      "sha256": "9a1d908a453d3cfad06756692005641a8741de591763d95b1341aeaac9d06027"
+    },
+    {
+      "file": "scripts/font-shaping-probe/package-lock.json",
+      "bytes": 562,
+      "sha256": "224026475dd81037e3dd6cf545e66530af23221b0e0bbfe223af3d8ffaf76886"
+    },
+    {
+      "file": "scripts/font-shaping-probe/package.json",
+      "bytes": 156,
+      "sha256": "915c2cb45d1569214eacc0dbc75d157d0cced5c8ae1463296a4a0ec1db3946d6"
+    },
+    {
+      "file": "scripts/font-shaping-probe/prepare.mjs",
+      "bytes": 2434,
+      "sha256": "69b7353288dad7670d6b23e2fc5e9ecddb6768aa5408486ee8f804b06bf6257e"
+    },
+    {
+      "file": "scripts/font-shaping-probe/requirements.txt",
+      "bytes": 18,
+      "sha256": "5b2d6ed937a42dd2b22b8ab7865015a3d9aed938900d1c5c14eae5cdb492cd7b"
+    },
+    {
+      "file": "scripts/font-shaping-probe/shape-js.mjs",
+      "bytes": 3957,
+      "sha256": "e6c47d691ed185e39b34e66ae477bf5a0ed86e4260f026d6633473725afda6d3"
+    },
+    {
+      "file": "scripts/font-shaping-probe/shape.py",
+      "bytes": 2019,
+      "sha256": "9b5d4bef4d978b907d92e77b6050200da47721ff186de5a6e299feb708569b57"
+    }
+  ],
+  "files": [
+    {
+      "file": "README.md",
+      "bytes": 4318,
+      "sha256": "f3de5276f7529b396f8ade97bdff600e4d4f158b2f4ed4ac60d8c0044814c6fa"
+    },
+    {
+      "file": "browser-matrix.json",
+      "bytes": 1698610,
+      "sha256": "ae6b20012cd9db23b420a31637bb27722c0034500c4193f1434d3ead581bc5a8"
+    },
+    {
+      "file": "browser-whitespace-harness-failure.json",
+      "bytes": 1870192,
+      "sha256": "9b786e495146114dd5b70a55271e8d5cca6f009cb8bf0ad3650f57176863cc57"
+    },
+    {
+      "file": "browser-whitespace-harness-failure.log",
+      "bytes": 478,
+      "sha256": "5e799d324c77d9abe6801d7f8b69c8edddfb73565b4df5c02591247152c9e005"
+    },
+    {
+      "file": "browser.log",
+      "bytes": 5404,
+      "sha256": "4ec7024f8ccbf2514a66148c3028e362c6dbad620f9cf4f9f668c1d4b810f05f"
+    },
+    {
+      "file": "fontkit-matrix.json",
+      "bytes": 2429292,
+      "sha256": "df4efa46ab202ae5c1a14c62b1819d6b89a1162c3637a33d51fdcef92ef609c2"
+    },
+    {
+      "file": "harfbuzz-matrix.json",
+      "bytes": 1844805,
+      "sha256": "7a3760837f771091de7fb473b11781d28f12edd65123a3778f971d2970187b51"
+    },
+    {
+      "file": "harfbuzz-trace.json",
+      "bytes": 8724,
+      "sha256": "39fe1b8ce317b8ae24a008e4c37390d71900d17498396cad7a2a7d8cd1ebde82"
+    },
+    {
+      "file": "javascript-matrix.json",
+      "bytes": 2166245,
+      "sha256": "6834ebdfeffd9e8bab75396d789533b760a8dacb6e378041e5940872500aa8ed"
+    },
+    {
+      "file": "python-install-report.json",
+      "bytes": 5086,
+      "sha256": "488697ba719cf163edaf1c0d7e3b21113e436b69be7d03966fc776f4b96c67b0"
+    },
+    {
+      "file": "verify.mjs",
+      "bytes": 6488,
+      "sha256": "a755c2d19dd6e34e247e91076e53aabcb61a57f447a9ead75f654a8adc4dab59"
+    },
+    {
+      "file": "wrapping.png",
+      "bytes": 42084,
+      "sha256": "07dfa8420b11513ae6d50693708f964d6a168bae5b620d7a9237e6a5858b986b"
+    }
+  ],
+  "fonts": [
+    {
+      "id": "Probe0",
+      "file": "Akasia-Black.ttf",
+      "sha256": "4c7f86ad9a129a3e1d469a3b18ef39c21c9040f1a945992b452452b061b12a91",
+      "weight": 900,
+      "italic": false,
+      "unitsPerEm": 2048
+    },
+    {
+      "id": "Probe1",
+      "file": "Akasia-BlackItalic.ttf",
+      "sha256": "8d75ecd19b3bcc968af9c1bd22e44fdcbf2839a08ace0906e17360bc869f4a79",
+      "weight": 900,
+      "italic": true,
+      "unitsPerEm": 2048
+    },
+    {
+      "id": "Probe2",
+      "file": "Akasia-Bold.ttf",
+      "sha256": "e342fdc06e29575eb53aac85b85442e2fcffb6cc16d82d0a692651029ba54baf",
+      "weight": 700,
+      "italic": false,
+      "unitsPerEm": 2048
+    },
+    {
+      "id": "Probe3",
+      "file": "Akasia-BoldItalic.ttf",
+      "sha256": "528a249515ef1490da8b839ce2d5adb879c5ed55ac704bed910a55716239baff",
+      "weight": 700,
+      "italic": true,
+      "unitsPerEm": 2048
+    },
+    {
+      "id": "Probe4",
+      "file": "Akasia-ExtraBold.ttf",
+      "sha256": "c60d3081cfcc0536e44e132298c8c87e0c8df09d398873e84800ff1435247718",
+      "weight": 800,
+      "italic": false,
+      "unitsPerEm": 2048
+    },
+    {
+      "id": "Probe5",
+      "file": "Akasia-ExtraBoldItalic.ttf",
+      "sha256": "1dbfbeba162bfd53482cdae5d55e458c7924c3d26651c6d3f1360e8bdef871b0",
+      "weight": 800,
+      "italic": true,
+      "unitsPerEm": 2048
+    },
+    {
+      "id": "Probe6",
+      "file": "Akasia-Italic.ttf",
+      "sha256": "03568e7af56c9ba37993c36bc0f6cb63ba94d8a801a1746595108e4b29583c67",
+      "weight": 400,
+      "italic": true,
+      "unitsPerEm": 2048
+    },
+    {
+      "id": "Probe7",
+      "file": "Akasia-Light.ttf",
+      "sha256": "d72c354d9bc96818b33159d8b97b8445db92f6cdcc88392d34ed2ec959f36f3f",
+      "weight": 300,
+      "italic": false,
+      "unitsPerEm": 2048
+    },
+    {
+      "id": "Probe8",
+      "file": "Akasia-LightItalic.ttf",
+      "sha256": "4b45886a81577cbf5e52cd40c7260aa9ce4ff500190f8e35b8c1901dd1170808",
+      "weight": 300,
+      "italic": true,
+      "unitsPerEm": 2048
+    },
+    {
+      "id": "Probe9",
+      "file": "Akasia-Regular.ttf",
+      "sha256": "b81ddc5a801bf6417c6df870ee1f5857a97807e35df7476f7ae0f7d251aa85cd",
+      "weight": 400,
+      "italic": false,
+      "unitsPerEm": 2048
+    },
+    {
+      "id": "Probe10",
+      "file": "Akasia-SemiBold.ttf",
+      "sha256": "12de77b853fa2658b70a05e50307e6eac594a756949136fd1f935bc39b91e1d6",
+      "weight": 600,
+      "italic": false,
+      "unitsPerEm": 2048
+    },
+    {
+      "id": "Probe11",
+      "file": "Akasia-SemiBoldItalic.ttf",
+      "sha256": "6244344998c257c3df3db11ee785403922da33417b2dbbad72f97fb3d6e1189c",
+      "weight": 600,
+      "italic": true,
+      "unitsPerEm": 2048
+    }
+  ],
+  "browserAssets": [
+    {
+      "path": "/",
+      "sha256": "52fc38cada1ade7fcc7f3a996e855f52333c3c315725733cf348ab479d95bb63"
+    },
+    {
+      "path": "/model.mjs",
+      "sha256": "9a1d908a453d3cfad06756692005641a8741de591763d95b1341aeaac9d06027"
+    },
+    {
+      "path": "/hb/index.mjs",
+      "sha256": "04ece1914c8720ad96257728119c1bf24088ee4ef3ab2a2ca688c9a4895d4e7e"
+    },
+    {
+      "path": "/hb/harfbuzz.js",
+      "sha256": "ba43463df44851fd58211ef8c19aa7956965390857727ae867b70dc7b3682de1"
+    },
+    {
+      "path": "/hb/harfbuzz.wasm",
+      "sha256": "37777ced92a2ba10279c33e1dbacf08835ddcacc215b7fcb3131e558dd01ce71"
+    }
+  ],
+  "host": {
+    "system": "Darwin",
+    "release": "25.6.0",
+    "machine": "arm64"
+  },
+  "failures": {
+    "originalWhitespaceReportSha256": "b0bae965dbf3a0e6196b4cba03e006016281683f0a652df2b3578c79a687f9ed",
+    "retainedSerialization": "ASCII JSON escapes; parsed values preserved"
+  }
+}

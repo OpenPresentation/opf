@@ -1,0 +1,65 @@
+▲ [WARNING] Ignoring this import because "packages/javascript/dist/chunk-YCN5Z46O.js" was marked as having no side effects [ignored-bare-import]
+
+    packages/javascript/dist/pagination.js:2:7:
+      2 │ import './chunk-YCN5Z46O.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  "sideEffects" is false in the enclosing "package.json" file:
+
+    packages/javascript/package.json:29:2:
+      29 │   "sideEffects": false,
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "packages/javascript/dist/chunk-JMD6N4GQ.js" was marked as having no side effects [ignored-bare-import]
+
+    packages/javascript/dist/pagination.js:3:7:
+      3 │ import './chunk-JMD6N4GQ.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  "sideEffects" is false in the enclosing "package.json" file:
+
+    packages/javascript/package.json:29:2:
+      29 │   "sideEffects": false,
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "packages/javascript/dist/chunk-GQSK3T7X.js" was marked as having no side effects [ignored-bare-import]
+
+    packages/javascript/dist/pagination.js:4:7:
+      4 │ import './chunk-GQSK3T7X.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  "sideEffects" is false in the enclosing "package.json" file:
+
+    packages/javascript/package.json:29:2:
+      29 │   "sideEffects": false,
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "packages/javascript/dist/chunk-TWMRZ43O.js" was marked as having no side effects [ignored-bare-import]
+
+    packages/javascript/dist/pagination.js:5:7:
+      5 │ import './chunk-TWMRZ43O.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  "sideEffects" is false in the enclosing "package.json" file:
+
+    packages/javascript/package.json:29:2:
+      29 │   "sideEffects": false,
+         ╵   ~~~~~~~~~~~~~
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+page.evaluate: OPFRenderError: OPF validation failed.
+    at assertValidBoundary (<anonymous>:40628:13)
+    at resolvePresentation (<anonymous>:40913:5)
+    at renderSvg (<anonymous>:40926:22)
+    at render (<anonymous>:43328:23)
+    at createCanvasEditor (<anonymous>:43886:7)
+    at window.mount (<anonymous>:57638:27)
+    at async <anonymous>:337:30
+    at /Users/michael/.codex/worktrees/c193/opf/scripts/test-furniture-workflow.mjs:34:14 {
+  log: []
+}
+
+Node.js v24.21.0
