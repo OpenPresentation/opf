@@ -32,3 +32,11 @@ The dependency review separately merged passing maintenance PRs after refreshing
 their bases, retained Node 24, and fixed actual Zod migration and lockfile
 conflicts. `dependency-merge-results.json` is an intermediate operation log;
 subsequent PR state and deployment acceptance must be read from GitHub.
+
+The final integrated CI found a harness boundary bug: the current furniture
+provenance test was requested from the older immutable registry verification
+ref, which predates that unpublished API. The harness now runs this test only
+against candidate tarballs; all existing released-feature registry checks remain.
+Both complete installed consumer modes pass locally after the correction, with
+the original failure and corrected logs retained here. Publishing furniture must
+add its released-version gate and pinned acceptance harness to the release plan.
