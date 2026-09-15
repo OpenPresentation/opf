@@ -1,0 +1,54 @@
+{
+  "sourceCommit": "000a76a64d97a28b6f0b5b22e68a54448835eafa",
+  "node": "v24.21.0",
+  "pnpm": "10.33.2",
+  "platform": "darwin",
+  "arch": "arm64",
+  "artifacts": [
+    {
+      "file": "repository-lint.log",
+      "bytes": 26906,
+      "sha256": "4df532663f1ab30d0cf0c315b9f85f1cf7edd77a18acd98dcf4b479b73e5a8ab"
+    },
+    {
+      "file": "typecheck.log",
+      "bytes": 3923,
+      "sha256": "85988603fda90c43b7ceacce2856b5a6541c7719a01d7a1912ef4b8aa6457776"
+    },
+    {
+      "file": "tests.log",
+      "bytes": 55201,
+      "sha256": "98de07ff78e29fbc149617d0efd0596bc0725707392b02e4f7822bf596ef0624"
+    },
+    {
+      "file": "build.log",
+      "bytes": 6500,
+      "sha256": "61b672d94d679082ef17887bba61b4411783c1b5bfc2181b1a2ebd5ac60f3232"
+    },
+    {
+      "file": "installed-core.log",
+      "bytes": 3762,
+      "sha256": "c737dd8b618abc71af12188bfc5f22d083ac8d329a44d7c003ac51f616763a66"
+    },
+    {
+      "file": "installed-cli.log",
+      "bytes": 806,
+      "sha256": "f425b4612ca6d926cd3420c337fcba94f264c091570e63ba54e29be60c7821ea"
+    },
+    {
+      "file": "examples.log",
+      "bytes": 327,
+      "sha256": "6ec3fce3df1c189c714931239089e410d88436e20e635185ecce8f752bd33f78"
+    },
+    {
+      "file": "breaking-changes.log",
+      "bytes": 493,
+      "sha256": "b365ed5844241addaa76daf9f76930d22e46c3e43c4d504b8c484529fd885094"
+    },
+    {
+      "file": "dependency-audit.log",
+      "bytes": 212,
+      "sha256": "f0a8a60089c34dc72c410fa0fbb366cfcc7462d54eb1abe2bb6ffe18e706593a"
+    }
+  ]
+}

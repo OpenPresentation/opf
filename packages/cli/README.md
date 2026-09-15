@@ -124,3 +124,7 @@ Pagination emits ordinary OPF slides and a page mapping. Preview the result with
 ## Development checks
 
 `pnpm test:cli` runs command-level regression checks. `pnpm test:cli:packed` builds and packs the CLI, installs the tarball offline into an isolated global prefix, exercises the actual executable, and reruns the same checks against the installation. It does not change your global installation. Package builds bundle their current core dependency; rebuild after schema/catalog changes.
+
+## OPF lint (unreleased)
+
+This checkout adds `opf lint <file|-> [--config <local-json-file>] [--strict]`. It reports source ranges, schema constraints, local catalog alternatives, asset registry errors and explicit design contracts without modifying the document or fetching resources. JSON reports include source/configuration hashes and distinguish structural checks from unperformed layout/font/native checks. Published CLI 0.7.0 does not include this command yet; use a built checkout or verified candidate. See [the lint guide](../../docs/lint.md).
