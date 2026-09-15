@@ -114,6 +114,26 @@ successful checks at the audited heads, with their separate native/release
 requirements still open. No package release or site adoption of these drafts
 occurred during this audit.
 
+## Composed painting follow-up
+
+Two more focused renderer commits are pushed to PR21: `75a20ab` composes glyph
+transforms before rasterization, and `dcd77ea` adds fresh-package/CI checks and
+retained evidence. Source and fresh installed painting now match all RGBA
+channels exactly in 650 supported cases, with 13 explicit coverage rejections.
+Five reviewed slide PNGs match between source and installed packages; the
+public TypeScript interfaces and all 37 shipped-file hashes pass.
+
+The complete installed command remains nonzero at the separate native
+variable-font gate. Three source-editor probes preserve live edits and undo,
+but broader caret/selection, IME, bidi and installed editor acceptance remain
+open. The new three-platform CI is pending at its own head. Core checks at
+`3a78463` completed successfully. No draft was merged or published.
+
+[Composed painting evidence](https://github.com/OpenPresentation/opf-render/tree/dcd77ea88313aaf43c1f5da11ac7347d7001d9c1/docs/evidence/composed-glyph-paint-20260915)
+retains the precision probe, old sequential-transform differences, corrected
+type-fixture failure, final native failure and complete source/installed
+reports. The next steps are recorded in the font-shaping plan.
+
 ## Still outstanding
 
 The website JSON control has not yet been extracted into the reusable

@@ -288,7 +288,8 @@ runs and 13 explicit coverage rejections; five slides retain identical layout
 and logical text. The existing 805-slide raster regression passes. Local
 Chromium preserves glyph IDs, source text and exact advances across those
 650 supported cases, but 54 SVG/Canvas comparisons fail the zero-difference
-pixel requirement (maximum alpha difference 4/255). The cause remains open.
+pixel requirement (maximum alpha difference 4/255). The cause was open at
+that initial checkpoint; the composed-transform follow-up below resolves it.
 
 Five full-slide controls retain logical text selection and identical visible
 ink after changing the logical text's native font family. This does not prove
@@ -301,8 +302,40 @@ The preceding `74f0b8b` CI completed with Mac/Windows success and Linux source
 and installed variable-font failures. No release or production adoption occurs
 at this checkpoint.
 
-Next: investigate the pixel differences and complete the shared glyph-paint
-and caret contract, wider axis-mapping coverage and
+### Composed-transform acceptance — September 15, 2026
+
+Renderer `75a20ab` composes one matrix per glyph in source precision before SVG
+parses it. A nine-case diagnostic isolated precision loss in nested SVG/Canvas
+composition. Independently composing matrices from original-font glyphs and
+accepted positions matches exactly; the sequential reference remains recorded
+as a diagnostic. No source, advance, font, layout or tolerance is adjusted.
+
+[Checkpoint `dcd77ea`](https://github.com/OpenPresentation/opf-render/tree/dcd77ea88313aaf43c1f5da11ac7347d7001d9c1/docs/evidence/composed-glyph-paint-20260915)
+adds fresh-package and three-platform CI painting checks. The local source and
+fresh tarballs pass all 650 supported cases in every RGBA channel, with zero
+required difference, plus 13 explicit coverage rejections. Five reviewed
+full-slide controls retain selection, formatting, whitespace and visible
+furniture; their source and installed PNG hashes match. All 37 shipped-file
+hashes, TypeScript NodeNext/Bundler interfaces and a zero-finding audit pass.
+CI must still be inspected at this exact head before platform acceptance.
+
+The full installed command still fails the unchanged native variable-font
+gate: five optional HarfBuzz TrueType cases exceed 0.1px (maximum
+0.1320605468749818px). All 356 default Fontkit cases pass (maximum
+0.0024140127331975236px). Both the earlier type-fixture failure and final native
+failure remain in the evidence. Passing path painting does not replace this
+native comparison or authorize a package release.
+
+Three actual source-editor probes with Arimo, Caladea and Gelasio preserve
+live draft isolation, formatting, links, decomposed marks, metadata and
+one-step undo. Across 62 sampled cluster starts, caret/paint origin drift is
+at most 0.02099609375 CSS pixels. These probes exclude ligature interiors,
+wrapped/multiple styled runs, bidi, IME, other platforms and installed editor
+packages. Native DOM Range remains the caret mechanism; this limited result
+does not establish full editing acceptance.
+
+Next: inspect the exact-head platform painting checks and complete the shared
+glyph-paint and caret contract, wider axis-mapping coverage and
 the CFF2/variable metric/paint gate, paragraph
 itemization/bidi, fallback, performance/lifetime analysis, complete slide/ink
 review and shared editing/undo/export acceptance. Fontkit remains the default;
