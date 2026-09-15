@@ -59,9 +59,15 @@
         "List",
         "Image",
         "Number",
-        "Chart"
+        "Metric",
+        "Chart",
+        "Table",
+        "Code",
+        "Video",
+        "Quote",
+        "Timeline"
       ],
-      "description": "Primary kind of content the layout holds. Drives pickers and AI placement decisions."
+      "description": "Primary kind of content the layout holds. Drives pickers and AI placement decisions. Metric is the canonical numeric/KPI category; Number remains an accepted legacy label."
     },
     "contentMultiple": {
       "type": "string",
@@ -268,6 +274,8 @@
             "tag",
             "text",
             "metric",
+            "quote",
+            "timeline",
             "list",
             "chart",
             "picture",
@@ -276,7 +284,7 @@
             "diagram",
             "code"
           ],
-          "description": "OPF placeholder kind. 'text' and 'list' are flexible textual content regions. 'metric' is a numeric/KPI content region filled by a metric payload, including its optional label, description, unit, delta, and trend. The named kinds describe a specific content role used by pickers, AI generation, and engine defaulting."
+          "description": "OPF placeholder kind. 'text' and 'list' are flexible textual content regions. 'metric' is a numeric/KPI content region filled by a metric payload, including its optional label, description, unit, delta, and trend. The named kinds describe a specific content role used by pickers, AI generation, and engine defaulting. 'picture' and legacy 'diagram' use image payloads; 'media' uses video. Quote and timeline use their corresponding payload fields."
         }
       }
     },

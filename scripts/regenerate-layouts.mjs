@@ -175,7 +175,7 @@ async function writeCatalog(records) {
   const sorted = [...records].sort((a, b) => a.id.localeCompare(b.id));
   await Promise.all(sorted.map((record) => writeJson(path.join(layoutsDir, `${record.id}.json`), record)));
   await writeJson(path.join(layoutsDir, "index.json"), {
-    $schema: "https://openpresentation.org/schema/opf-layout-index/v1",
+    $schema: "https://openpresentation.org/schema/opf-catalog-index/v1",
     version: "1",
     description:
       "Catalog of slide layouts available in the openpresentation.org catalog. Each entry is a lightweight summary; full layout records live in the per-id JSON files alongside this index.",

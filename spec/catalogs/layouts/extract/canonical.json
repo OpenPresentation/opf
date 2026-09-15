@@ -556,5 +556,29 @@
     "id": "blank",
     "name": "Blank",
     "placeholders": []
+  },
+  {
+    "id": "quote-1x",
+    "name": "Quote 1x",
+    "placeholders": [
+      {
+        "type": "title"
+      },
+      {
+        "type": "quote"
+      }
+    ]
+  },
+  {
+    "id": "timeline-1x",
+    "name": "Timeline 1x",
+    "placeholders": [
+      {
+        "type": "title"
+      },
+      {
+        "type": "timeline"
+      }
+    ]
   }
 ]

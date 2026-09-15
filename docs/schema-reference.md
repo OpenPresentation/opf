@@ -35,23 +35,6 @@ This reference documents the author-facing shape of a complete `*.opf.json` pres
 
 ## Object And Type Reference
 
-### Composition
-
-- Type: `object`
-- Required fields: none
-- Purpose: Portable dynamic composition. Slide fields override the resolved layout. Nested groups arrange their children independently, inheriting only minFontSize and overflow. Explicit promoted regions retain their positions.
-
-| Field | Required | Type | Notes |
-| --- | --- | --- | --- |
-| `mode` | no | `enum:auto \| grid \| row \| column` | auto chooses a grid from available space and content; grid uses columns; row and column use one horizontal or vertical track. |
-| `columns` | no | `integer` | Column count for grid. In auto mode this caps the number of columns. |
-| `gap` | no | `number` | Space between cells as a fraction of the container short edge (canvas at slide root). Default 0.03333333333333333. |
-| `padding` | no | `number` | Inset as a fraction of the container short edge. Default 0.08 on a slide, 0 inside a group. |
-| `weights` | no | `array<number>` | Relative track sizes: columns for row/grid/auto, rows for column. Omitted tracks have weight 1; extra weights are ignored. |
-| `minFontSize` | no | `number` | Minimum readable text size in reference pixels at a 720-pixel canvas short edge. Default 16. Overflow is diagnosed when text cannot fit at this size. |
-| `overflow` | no | `enum:warn \| error` | warn returns diagnostics for content that does not fit; error rejects layout. Content is never silently removed. Default warn. |
-
-
 ### Assets
 
 - Type: `object`
@@ -546,7 +529,6 @@ _No named properties._
 | `id` | no | `string` | Optional stable identifier for the slide within the document. Use when another system needs to reference a slide across edits, comments, generation state, exports, or narrative tooling. Slide order is defined by the s... |
 | `type` | no | `enum:text \| list \| image \| chart \| table \| video \| code \| metric \| quote \| timeline` | Optional full-slide content kind. When omitted, engines infer the kind from root payload fields. |
 | `beat` | no | `oneOf:string / array<string>` | Optional reference to one or more narrative beats (each value matches an id from narrative.beats or the resolved template). A single string declares the slide's primary beat; an array declares that one slide covers mu... |
-| `composition` | no | `ref:Composition` |  |
 | `layout` | no | `string` | Optional slide layout reference. Resolves to the 'id' of a 'layouts' catalog record. When omitted, engines infer a layout from the slide's root payload or promoted region keys. Accepts a bare id (lowercase kebab-case,... |
 | `title` | no | `string` | Slide-level title content. When the resolved layout exposes a 'title' placeholder, the engine renders this value there. |
 | `subtitle` | no | `string` | Slide-level subtitle or supporting line. When the resolved layout exposes a 'subtitle' placeholder, the engine renders this value there. |
@@ -615,6 +597,7 @@ _No named properties._
 | `notes` | no | `string` | Speaker notes shown in presenter view. |
 | `section` | no | `string` | PowerPoint-style slide section label. Consecutive slides with the same value belong to the same section in presenter view, outlines, and PowerPoint section-aware exports. |
 | `hidden` | no | `boolean` | Whether the slide is hidden from the presented sequence. |
+| `composition` | no | `ref:Composition` |  |
 
 
 ### ContentPayload
@@ -752,7 +735,7 @@ _No named properties._
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `columns` | no | `array<string>` | Optional column labels rendered above table rows. |
+| `columns` | no | `array<oneOf:string / array<ref:TextRun> / ref:StyledTableCell / null>` | Optional column labels. Labels may be strings, rich runs or styled cell objects. Null is an empty label or a placeholder covered by a preceding column span. |
 | `rows` | yes | `array<array<ref:TableCell>>` | Two-dimensional table row data; each row aligns by index with columns when columns are supplied. |
 
 
@@ -793,11 +776,77 @@ _No named properties._
 
 ### TableCell
 
-- Type: `oneOf:string / number / boolean / null`
+- Type: `oneOf:ref:TableCellValue / ref:StyledTableCell`
 - Required fields: none
-- Purpose: A cell in table content.
+- Purpose: A scalar, rich-run array, or styled/spanning cell object. Existing scalar and rich forms remain valid.
 
 _No named properties._
+
+
+### TableCellValue
+
+- Type: `oneOf:string / number / boolean / null / array<ref:TextRun>`
+- Required fields: none
+- Purpose: A scalar table value or canonical rich text runs, without cell decoration or geometry.
+
+_No named properties._
+
+
+### StyledTableCell
+
+- Type: `object`
+- Required fields: `value`
+- Purpose: A cell with explicit visual style or merged geometry. Its position remains its array column index; use null placeholders for every covered grid position.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `value` | yes | `ref:TableCellValue` | Editable cell content; styling and spans do not change its scalar type or rich runs. |
+| `style` | no | `ref:TableCellStyle` |  |
+| `colSpan` | no | `integer` | Number of grid columns covered, starting at this cell. Covered positions must contain null. Default 1. |
+| `rowSpan` | no | `integer` | Number of grid rows covered, starting at this cell. Covered positions must contain null. Header cells cannot span into body rows. Default 1. |
+
+
+### TableCellStyle
+
+- Type: `object`
+- Required fields: none
+- Purpose: Cell appearance. Sizes use reference pixels at a 720-pixel canvas short edge and scale with the slide.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `fill` | no | `string` | Explicit RGB or RGBA color. Eight-digit colors include alpha; #00000000 is transparent. |
+| `color` | no | `string` | Default text color, overridden by individual rich run colors. |
+| `align` | no | `enum:left \| center \| right` | Horizontal text alignment inside the cell. |
+| `verticalAlign` | no | `enum:top \| middle \| bottom` | Vertical alignment inside the padded cell box. |
+| `padding` | no | `ref:TableCellPadding` |  |
+| `borders` | no | `object` | Independent cell edges. Omitted edges retain the table theme border; width 0 removes an edge. |
+
+
+### TableCellPadding
+
+- Type: `object`
+- Required fields: none
+- Purpose: Text insets in reference pixels. Defaults: top 8, right 10, bottom 4, left 10.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `top` | no | `number` |  |
+| `right` | no | `number` |  |
+| `bottom` | no | `number` |  |
+| `left` | no | `number` |  |
+
+
+### TableCellBorder
+
+- Type: `object`
+- Required fields: `color`, `width`
+- Purpose: One explicit cell border.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `color` | yes | `string` | Explicit RGB or RGBA color. Eight-digit colors include alpha; #00000000 is transparent. |
+| `width` | yes | `number` | Border width in reference pixels; 0 removes this edge. |
+| `dash` | no | `enum:solid \| dash \| dot` | Default solid. |
 
 
 ### Catalogs
@@ -840,3 +889,20 @@ _No named properties._
 - Purpose: Catalog source location. Accepts: - A bare URL pointing at a catalog directory (e.g. 'https://acme.com/decks/narratives'); record ids resolve to '<base>/<id>.json'. - A URL pointing at an index file (e.g. 'https://acme.com/decks/narratives/index.json'); records are resolved relative to the index file's directory and the index entries describe what's available. - A package reference of the form 'pkg:<package>[/<subpath>]'; resolved through a locally-installed package on the engine's package path.
 
 _No named properties._
+
+
+### Composition
+
+- Type: `object`
+- Required fields: none
+- Purpose: Portable dynamic composition. Slide fields override the resolved layout. Nested groups arrange their children independently, inheriting only minFontSize and overflow. Explicit promoted regions retain their positions.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `mode` | no | `enum:auto \| grid \| row \| column` | auto chooses a grid from available space and content; grid uses columns; row and column use one horizontal or vertical track. |
+| `columns` | no | `integer` | Column count for grid. In auto mode this caps the number of columns. |
+| `gap` | no | `number` | Space between cells as a fraction of the container short edge (canvas at slide root). Default 0.03333333333333333. |
+| `padding` | no | `number` | Inset as a fraction of the container short edge. Default 0.08 on a slide, 0 inside a group. |
+| `weights` | no | `array<number>` | Relative track sizes: columns for row/grid/auto, rows for column. Omitted tracks have weight 1; extra weights are ignored. |
+| `minFontSize` | no | `number` | Minimum readable text size in reference pixels at a 720-pixel canvas short edge. Default 16. Overflow is diagnosed when text cannot fit at this size. |
+| `overflow` | no | `enum:warn \| error` | warn returns diagnostics for content that does not fit; error rejects layout. Content is never silently removed. Default warn. |

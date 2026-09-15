@@ -114,6 +114,11 @@
       "file": "number-6x.json"
     },
     {
+      "id": "quote-1x",
+      "name": "Quote 1x",
+      "file": "quote-1x.json"
+    },
+    {
       "id": "table-1x",
       "name": "Table 1x",
       "file": "table-1x.json"
@@ -132,6 +137,11 @@
       "id": "text-3x",
       "name": "Text 3x",
       "file": "text-3x.json"
+    },
+    {
+      "id": "timeline-1x",
+      "name": "Timeline 1x",
+      "file": "timeline-1x.json"
     },
     {
       "id": "title",

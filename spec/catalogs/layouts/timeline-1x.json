@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "timeline-1x",
+  "name": "Timeline 1x",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "timeline"
+    }
+  ]
+}
