@@ -1,0 +1,9 @@
+{
+  "files": {
+    "README.md": "f2ac671163bf9fea3d4a9c2d652575909fe3f8c51a9ea3af95eb2d5ceaa7cf0f",
+    "before-test.log": "5dff5fa53e198d0651200a75b76b4011b74cf702bbbdd8baa2e5b41f0f70ad05",
+    "before.json": "8c9a452880361ce25b95223725a2cfca6c4583942e0c0f756be1a8a13c581cab",
+    "packed-install-failure.log.gz": "70f0995b60dfb91a049a4aa62cfedd0b5bfcb8499d2eb95fa017935c36c3edb0",
+    "source-browser-build-failure.log": "0abb43fe7018c1b2fbbaa1efdb1e0e1bb15eae8ee1026cd8cfa6d41d9dffcbb3"
+  }
+}

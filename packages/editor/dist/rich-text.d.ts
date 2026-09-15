@@ -8,5 +8,5 @@ export declare function richTextContent(value:string|TextRun[]):string;
 /** Nonempty UTF-16 range on grapheme boundaries; null removes an override. */
 export declare function formatRichTextRange(value:string|TextRun[],start:number,end:number,format:TextRunFormat):TextRun[];
 export declare function replaceRichTextRange(value:string|TextRun[],start:number,end:number,replacement:string):TextRun[];
-/** Preserve run metadata across a native input change, on grapheme boundaries. */
+/** Preserve run metadata and untouched source line endings. Change offsets use the textarea's LF-normalized UTF-16 text; inserted newlines follow the source's first ending. */
 export declare function updateRichTextInput(value:string|TextRun[],nextText:string,change?:{start:number;end:number;inputType?:string}):TextRun[];

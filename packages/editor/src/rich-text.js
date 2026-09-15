@@ -1,4 +1,6 @@
-/** UTF-16 ranges match DOM Selection; boundaries must be whole graphemes. */
+import {textInputMap,preferredLineEnding} from './text-input.js';
+
+/** UTF-16 ranges match the source; boundaries must be whole graphemes. */
 export function richTextContent(value) {
   return runs(value).map(run => typeof run === 'string' ? run : run.text).join('');
 }
@@ -72,8 +74,9 @@ export function replaceRichTextRange(value, start, end, replacement) {
 
 /** Map a native plain-text input change back onto styled runs without flattening them. */
 export function updateRichTextInput(value, nextText, change) {
-  const previous = richTextContent(value);
   if (typeof nextText !== 'string') throw new TypeError('Input text must be a string.');
+  const source=richTextContent(value),mapping=textInputMap(source),previous=mapping.text;
+  nextText=nextText.replace(/\r\n|\r/g,'\n');
   if (previous === nextText) return structuredClone(runs(value));
   if (!nextText) return [piece(runs(value)[0] ?? "", "")];
   const segments = text => [...new Intl.Segmenter(undefined, {granularity:'grapheme'}).segment(text)].map(part => part.segment);
@@ -95,12 +98,12 @@ export function updateRichTextInput(value, nextText, change) {
     if (a >= 0 && b >= a && b <= previous.length && nextText.length >= left.length+right.length && nextText.startsWith(left) && nextText.endsWith(right)) {
       // Validate exact native selection boundaries before trusting their affinity.
       try {
-        range(value,a,b,true);
+        range(value,mapping.toSource(a),mapping.toSource(b),true);
         start=a;end=b;replacement=nextText.slice(left.length,nextText.length-right.length);
       } catch { /* Native deletion can split a cluster; use the whole-grapheme diff. */ }
     }
   }
-  const result = replaceRichTextRange(value,start,end,replacement), compact = [];
+  const result = replaceRichTextRange(value,mapping.toSource(start),mapping.toSource(end),replacement.replaceAll('\n',preferredLineEnding(source))), compact = [];
   const style = run => typeof run === 'string' ? null : Object.fromEntries(Object.entries(run).filter(([key]) => key !== 'text').sort(([a],[b]) => a.localeCompare(b)));
   for (const run of result) {
     const last = compact.at(-1);

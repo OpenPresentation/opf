@@ -5,6 +5,8 @@ import {
   splitOpfPath,
   opfPathToJsonPointer,
 } from "./index.js";
+import {preserveTextLineEndings} from './text-input.js';
+export {preserveTextLineEndings} from './text-input.js';
 /** Scalar fields and collection paths use JSON Pointer to preserve arbitrary object keys. */
 export function getEditableFields(value, path) {
   const fields = [],
@@ -50,18 +52,6 @@ export function parseCanvasValue(text, type, original) {
   return type === 'string' && typeof original === 'string' ? preserveTextLineEndings(original,String(text)) : text;
 }
 
-/** Textareas normalize line endings; retain unchanged source bytes around an edit. */
-export function preserveTextLineEndings(original, input) {
-  const normalized=original.replace(/\r\n|\r/g,'\n'),next=input.replace(/\r\n|\r/g,'\n');
-  if(normalized===next)return original;
-  let prefix=0,suffix=0;
-  while(prefix<normalized.length&&prefix<next.length&&normalized[prefix]===next[prefix])prefix++;
-  while(suffix<normalized.length-prefix&&suffix<next.length-prefix&&normalized[normalized.length-1-suffix]===next[next.length-1-suffix])suffix++;
-  const offsets=[0];
-  for(let i=0;i<original.length;i++){if(original[i]==='\r'&&original[i+1]==='\n')i++;offsets.push(i+1);}
-  const ending=/\r\n|\r|\n/.exec(original)?.[0]??'\n';
-  return original.slice(0,offsets[prefix])+next.slice(prefix,next.length-suffix).replaceAll('\n',ending)+original.slice(offsets[normalized.length-suffix]);
-}
 export function createCanvasDraft(document, path, value) {
   const draft = applyJsonPatch(
     document,
