@@ -33,7 +33,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-editor
-          ref: 50384b8cd4d96a9db26bcab6304136440effed35
+          ref: 8e184ee5145289c24ab03ec5a3130239f9ec9d89
           path: opf-editor
           fetch-depth: 0
           persist-credentials: false
@@ -74,6 +74,7 @@ jobs:
           node -e "if (require('../opf-render/node_modules/playwright/package.json').version !== '1.63.0') throw new Error('Update the pinned Playwright image with the renderer test package.');"
           pnpm test:packed-browser
           node scripts/test-installed-code-guards.mjs
+          node ../opf-editor/test/rich-input-browser.mjs artifacts/editor/rich-input-installed.json measured artifacts/npm/consumer
           node scripts/test-plain-whitespace-workflow.mjs artifacts/plain-whitespace-installed installed
           node scripts/test-readability-browser.mjs artifacts/readability-browser installed
           node scripts/test-timeline-workflow.mjs artifacts/timeline-workflow installed
@@ -122,6 +123,8 @@ jobs:
             opf/artifacts/metric-layout-browser.json
             opf/artifacts/metric-layout-browser-*.png
             opf/artifacts/editor/*installed-code*.json
+            opf/artifacts/editor/rich-input-installed*.json
+            opf/artifacts/editor/rich-input-installed*.png
             opf-render/artifacts/golden/**
             opf-render/artifacts/font-variants*.json
             opf/artifacts/npm/consumer/artifacts/*font-variants*.json

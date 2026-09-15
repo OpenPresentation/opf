@@ -341,6 +341,33 @@ itemization/bidi, fallback, performance/lifetime analysis, complete slide/ink
 review and shared editing/undo/export acceptance. Fontkit remains the default;
 this is not registry publication, site adoption or native compatibility proof.
 
+## Rich input integration and completed platform CI
+
+Editor [PR18](https://github.com/OpenPresentation/opf-editor/pull/18), merged
+at `7b5d75f` after successful CI on `b6e0fe9`, fixes a browser input/source-offset mismatch after CRLF/CR endings.
+Ten workflows pass with measured, estimated and prepared-painting renderers,
+from checkout and from actual installed coordinated candidates. Coverage now
+includes wrapped/multiple styles, decomposed marks, original source traces,
+keyboard/pointer editing, exact-range formatting, undo, concurrent notes,
+cancellation and simulated composition. Its identical browser test detects
+the old source corruption. Caret comparisons still use logical DOM ranges;
+painted ligature interiors, bidi, broader physical fonts and real OS IME
+remain open. Source and installed reports are retained in the editor PR.
+
+Renderer `dcd77ea` CI run `34947283538` completed with successful Mac/Windows
+shaping jobs and a failed Linux package job. The Linux source and installed
+native variable-font gate reports Fontkit 334.06213682353496px versus native
+334.193115234375px for Source Serif 4 Roman SmText Bold, exceeding the existing
+strict 0.1px requirement. See
+[the exact-head checkpoint](../evidence/rich-input-and-platform-ci-20260915/README.md).
+All three prepared-painting reports pass 650 supported cases and thirteen
+explicit coverage rejections, with zero RGBA differences and identical five
+slide hashes matching the reviewed source images. Linux native Fontkit has
+five metric failures, maximum 0.134625px, whereas native HarfBuzz passes
+there. The prior Mac native report has the opposite backend outcome. The
+native metric gate remains unresolved; no renderer promotion follows from
+passing prepared painting or editor source-preservation checks.
+
 ## Implementation and promotion requirements
 
 1. Add a reusable shaping service behind the existing font registry. Preserve

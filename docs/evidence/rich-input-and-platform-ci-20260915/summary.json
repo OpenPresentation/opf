@@ -1,0 +1,67 @@
+{
+  "rendererHead": "dcd77ea88313aaf43c1f5da11ac7347d7001d9c1",
+  "rendererRun": 34947283538,
+  "painting": {
+    "Linux": {
+      "browser": "153.0.8010.12",
+      "node": "v24.20.0",
+      "supported": 650,
+      "explicitRejections": 13,
+      "maximumChannelDifference": 0,
+      "slideHashes": [
+        "0c9016f41c82aae45a6d0db2e9fe5a7f7ad585b5a1bdf86cdeb31b956f3f3774",
+        "49320eda575469f3d4f6772225d83078ca7647f05201eebb122cb7dcb15b7cdb",
+        "bb750caed857fe7f60a8f96a2a57100d4200a603d663ef27c9effc36b4d6bbae",
+        "c99b393040111526ce5c3d30d2ec4c0d5be58a8e95f005d35d05fb6c9be49582",
+        "7053596e67a1e04a047e63a0a771afa34a3fc2c20f8268859631c58a74c0c98c"
+      ],
+      "reportSha256": "b38574fc0bb25c5b9abec228841708a391e4750a18d25f12de8656a3e6a41276"
+    },
+    "macOS": {
+      "browser": "153.0.8010.12",
+      "node": "v24.20.0",
+      "supported": 650,
+      "explicitRejections": 13,
+      "maximumChannelDifference": 0,
+      "slideHashes": [
+        "0c9016f41c82aae45a6d0db2e9fe5a7f7ad585b5a1bdf86cdeb31b956f3f3774",
+        "49320eda575469f3d4f6772225d83078ca7647f05201eebb122cb7dcb15b7cdb",
+        "bb750caed857fe7f60a8f96a2a57100d4200a603d663ef27c9effc36b4d6bbae",
+        "c99b393040111526ce5c3d30d2ec4c0d5be58a8e95f005d35d05fb6c9be49582",
+        "7053596e67a1e04a047e63a0a771afa34a3fc2c20f8268859631c58a74c0c98c"
+      ],
+      "reportSha256": "ec1064c179f7964d8328a15ca6dc3f87c33135385a43da0dd777f5af0e618353"
+    },
+    "Windows": {
+      "browser": "153.0.8010.12",
+      "node": "v24.20.0",
+      "supported": 650,
+      "explicitRejections": 13,
+      "maximumChannelDifference": 0,
+      "slideHashes": [
+        "0c9016f41c82aae45a6d0db2e9fe5a7f7ad585b5a1bdf86cdeb31b956f3f3774",
+        "49320eda575469f3d4f6772225d83078ca7647f05201eebb122cb7dcb15b7cdb",
+        "bb750caed857fe7f60a8f96a2a57100d4200a603d663ef27c9effc36b4d6bbae",
+        "c99b393040111526ce5c3d30d2ec4c0d5be58a8e95f005d35d05fb6c9be49582",
+        "7053596e67a1e04a047e63a0a771afa34a3fc2c20f8268859631c58a74c0c98c"
+      ],
+      "reportSha256": "0a46ab01e89641d76db6d3f916f9a38ef928a1952066cfd79a9cad11d57ec6f6"
+    }
+  },
+  "crossPlatformSlideHashesEqual": true,
+  "nativeMetricsLinux": {
+    "fontkit": {
+      "observations": 356,
+      "failuresAtStrictPointOnePx": 5,
+      "maxAbsoluteErrorPx": 0.1346250000000282
+    },
+    "harfbuzz": {
+      "observations": 356,
+      "failuresAtStrictPointOnePx": 0,
+      "maxAbsoluteErrorPx": 0.04947705078126319
+    }
+  },
+  "editorHead": "b6e0fe96f0a9b1ddbb7a531582f39d82697660d8",
+  "editorRun": 34950054828,
+  "editorCI": "success"
+}

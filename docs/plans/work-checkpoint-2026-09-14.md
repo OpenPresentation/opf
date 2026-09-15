@@ -134,6 +134,39 @@ retains the precision probe, old sequential-transform differences, corrected
 type-fixture failure, final native failure and complete source/installed
 reports. The next steps are recorded in the font-shaping plan.
 
+## Rich input browser and installed follow-up
+
+Editor [PR18](https://github.com/OpenPresentation/opf-editor/pull/18) is now pushed
+in two focused commits: `90e57c3` fixes source corruption caused by native
+textarea line-ending normalization, and `b6e0fe9` adds actual browser and
+installed-package regression coverage. Both the Node and browser tests fail
+against the pre-fix editor and pass against the fix. The new browser checks
+preserve original mixed endings, runs, links, source offsets, live draft
+isolation, pointer selection, formatting, undo, metadata and simulated
+composition. Ten workflows pass in all three rendering modes from checkout
+and fresh candidate installations; 79 installed runtime files match their
+staged packages. Existing coordinated package tests and all eight installed
+browser suites also pass. Detailed evidence is linked from
+[the new checkpoint](../evidence/rich-input-and-platform-ci-20260915/README.md).
+
+The follow-up browser commit passed CI run `34950054828`, including all
+three new browser commands. PR18 merged into main at `7b5d75f`; furniture
+continuation `8e184ee` incorporates it and passes source/syntax checks plus ten
+measured browser workflows. Core coordinated CI pins that commit and adds
+the installed rich-input fixture; those new CI runs remain pending. The standalone
+registry-predecessor layout failure remains separate from coordinated
+candidate acceptance. No new package was published.
+
+Renderer `dcd77ea` CI completed: Mac/Windows shaping jobs pass, while Linux
+fails the native variable-font source and fresh-installed metric checks.
+The failure is retained, with exact measurements, in the checkpoint above.
+All three platform painting reports pass 650 supported cases with zero RGBA
+differences and thirteen explicit coverage rejections; the five slide hashes
+match each other and the previously reviewed images. Linux native Fontkit has
+five metric failures (maximum 0.134625px), while native HarfBuzz passes there;
+the earlier Mac report has the opposite backend outcome. Prepared painting
+does not replace the native metric requirement.
+
 ## Still outstanding
 
 The website JSON control has not yet been extracted into the reusable
