@@ -368,6 +368,18 @@ there. The prior Mac native report has the opposite backend outcome. The
 native metric gate remains unresolved; no renderer promotion follows from
 passing prepared painting or editor source-preservation checks.
 
+## Prepared caret checkpoint — September 15, 2026
+
+Renderer `6fed8d4` supplies original-source caret maps from the accepted glyph
+run, including physical-font GDEF positions and explicitly labeled interpolation.
+Editor `67ce1b7` consumes those maps for scalar/rich caret, selection and pointer
+geometry. Both are pushed draft PRs. The [checkpoint evidence](../evidence/prepared-caret-checkpoint-20260915/README.md)
+retains a failing predecessor, six passing independent caret browser workflows,
+ten measured and ten estimated rich-input workflows, and the Node direction/font
+matrix. Fresh installed/CI acceptance and broader prepared-input coverage remain
+pending; this does not promote the backend or close native/font gates. See the
+[repository status](../status-2026-09-15.md) for merged, published and draft work.
+
 ## Implementation and promotion requirements
 
 1. Add a reusable shaping service behind the existing font registry. Preserve
