@@ -1,7 +1,7 @@
 import { readFile, writeFile, lstat, link, rename, unlink } from "node:fs/promises";
 import { createHash, randomUUID } from "node:crypto";
 import path from "node:path";
-import { createDataContent, OPFDataImportError, paginatePresentation, catalogEntries, schemaEntries, validatePresentation } from "@openpresentation/opf";
+import { createDataContent, OPFDataImportError, paginatePresentation, catalogEntries, schemaEntries, validatePresentation, lintSource, type LintOptions } from "@openpresentation/opf";
 import { applyPatch, lookup, tokens, PatchError } from "./patch.js";
 import {manageSkills, SkillsError, type SkillBundle} from './skills.js';
 
@@ -11,6 +11,7 @@ declare const OPF_SKILLS: SkillBundle;
 const usage = `OPF — local presentation files for agents (Node 24)
   opf create [output.opf.json|-] [--title <text>] [--from <file|->] [--force]
   opf validate <file|-> [--strict]
+  opf lint <file|-> [--config <local-json-file>] [--strict]
   opf edit <file|-> --patch <patch.json|-> [--output <file|-> | --in-place]
            [--dry-run] [--expect-sha256 <hash>] [--force] [--strict]
   opf import-data <data.csv|data.json|-> --as <table|chart> [--format <csv|tsv|json>]
@@ -33,6 +34,8 @@ Edits apply JSON Patch (add/remove/replace/move/copy/test), validate the whole
 result, and save atomically. --dry-run emits the result without saving.
 Exit codes: 0 success, 1 invalid document/patch/conflict, 2 usage/JSON/I/O error.
 Validation checks structure and references, not visual fidelity.
+Lint adds source locations, contextual suggestions and explicit host contracts.
+Lint syntax/schema/policy errors exit 1; --strict also rejects warnings.
 
 Install all six bundled OPF agent skills in this project:
   npx @openpresentation/cli@latest skills install
@@ -44,7 +47,7 @@ class CliError extends Error {
 const json = (value: unknown) => JSON.stringify(value, null, 2) + "\n";
 const print = (value: unknown) => process.stdout.write(json(value));
 const hash = (text: string) => createHash("sha256").update(text).digest("hex");
-const valueOptions = new Set(["title", "from", "patch", "output", "expect-sha256", "as", "format", "into", "path", "category", "series", "columns", "chart-type", "delimiter", "agent", "directory"]);
+const valueOptions = new Set(["title", "from", "patch", "output", "expect-sha256", "as", "format", "into", "path", "category", "series", "columns", "chart-type", "delimiter", "agent", "directory", "config"]);
 function parse(args: string[], allowed: string[]) {
   const positional: string[] = [], options: Record<string, string | boolean> = Object.create(null);
   let literal = false;
@@ -134,6 +137,22 @@ async function main(argv: string[]) {
     const { raw, value } = await readJson(positional[0]), result = validatePresentation(value);
     print({ ...result, sha256: hash(raw) });
     if (!result.valid || (options.strict && result.warnings.length)) process.exitCode = 1;
+    return;
+  }
+  if (command === 'lint') {
+    const { positional, options } = parse(args, ['config', 'strict']);
+    arity(positional, 1);
+    const input = positional[0];
+    if (!input) throw new CliError('Lint requires a file or stdin (-).');
+    if (options.config === '-') throw new CliError('Lint configuration must be an explicit local JSON file.');
+    const raw = input === '-' ? await stdin() : await readFile(input, 'utf8');
+    const config = options.config ? await readJson(String(options.config)) : undefined;
+    const result = lintSource(raw, config?.value as LintOptions | undefined);
+    print({
+      ...result, sha256: hash(raw), opfVersion: OPF_VERSION,
+      ...(config ? { context: { file: path.resolve(String(options.config)), sha256: hash(config.raw) } } : {}),
+    });
+    if (!result.valid || (options.strict && result.counts.warning)) process.exitCode = 1;
     return;
   }
   if (command === "edit") {

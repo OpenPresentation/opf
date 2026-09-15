@@ -27,6 +27,19 @@ try {
   assert.equal(run(['validate','-','--strict'],{input:warning,status:1}).json.valid,true);
   assert.equal(run(['validate','-'],{input:'{"slides":"bad"}',status:1}).json.valid,false);
   run(['validate','-'],{input:'{',status:2});run(['validate','missing.json'],{status:2});run(['validate','deck.opf.json','extra'],{status:2});run(['create','--oops'],{status:2});
+  const lintRaw='\uFEFF{\r\n  "name" : "Keep  spacing",\r  "slides": [{"title":"Lint target","layout":"pratner"}]\n}';
+  await writeFile(path.join(temp,'lint.opf.json'),lintRaw);
+  const linted=run(['lint','lint.opf.json']).json;assert.equal(linted.valid,true);assert.equal(linted.counts.warning,1);assert.equal(linted.diagnostics[0].location.offset,lintRaw.indexOf('"pratner"'));
+  assert.equal(run(['lint','lint.opf.json','--strict'],{status:1}).json.valid,true);
+  assert.equal(run(['lint','-'],{input:'{"slides":[}',status:1}).json.schemaValid,null);
+  assert.ok(run(['lint','-'],{input:'{"slides":[{"title":"Earlier","title":"Later"}]}',status:1}).json.diagnostics.some(issue=>issue.ruleId==='json/duplicate-key'));
+  const config={catalogs:{layouts:[{id:'pratner',name:'Authoritative custom spelling',placeholders:[{type:'title'}]}]}},configRaw=JSON.stringify(config);
+  await writeFile(path.join(temp,'lint-config.json'),configRaw);
+  const configured=run(['lint','lint.opf.json','--config','lint-config.json','--strict']).json;assert.equal(configured.valid,true);assert.equal(configured.counts.warning,0);assert.match(configured.context.sha256,/^[a-f0-9]{64}$/);assert.equal(configured.sha256,linted.sha256);
+  config.contracts=[{path:'/slides/*/layout',allowedValues:['text-1x'],message:'Brand layouts: {{allowed}}.'}];await writeFile(path.join(temp,'lint-config.json'),JSON.stringify(config));
+  const policy=run(['lint','lint.opf.json','--config','lint-config.json'],{status:1}).json;assert.ok(policy.diagnostics.some(issue=>issue.ruleId==='opf/contract'&&issue.message.includes('text-1x')));
+  await writeFile(path.join(temp,'bad-lint-config.json'),'{"contract":[]}');run(['lint','lint.opf.json','--config','bad-lint-config.json'],{status:2});run(['lint','lint.opf.json','--config','-'],{status:2});run(['lint','missing.opf.json'],{status:2});run(['lint','lint.opf.json','--fix'],{status:2});
+  assert.equal(await readFile(path.join(temp,'lint.opf.json'),'utf8'),lintRaw,'Lint never rewrites source, including BOM and mixed line endings');
   await patch([{op:'test',path:'/slides/0/id',value:'slide-1'},{op:'replace',path:'/slides/0/title',value:'Updated'},{op:'add',path:'/slides/-',value:{id:'two',text:'Preserve me',notes:'Source note'}}]);
   assert.equal(run(['edit','deck.opf.json','--patch','patch.json']).json.slides.length,2);
   assert.equal(await readFile(path.join(temp,'deck.opf.json'),'utf8'),original);
@@ -110,5 +123,5 @@ try {
   const resized=JSON.parse(await readFile(path.join(temp,'styled.json'),'utf8')).slides[0].table.rows;
   assert.equal(resized.length,1);assert.equal(resized[0][0].rowSpan,1);assert.equal(resized[0][0].colSpan,2);
   assert.equal((await (await import('node:fs/promises')).readdir(temp)).some(name=>name.endsWith('.tmp')),false);
-  console.log(`CLI passed ${checks} command checks: file preservation, patch operations, validation, pipes, schema lookup, pagination.`);
+  console.log(`CLI passed ${checks} command checks: file preservation, patch operations, validation, lint diagnostics/contracts, pipes, schema lookup, pagination.`);
 } finally {await rm(temp,{recursive:true,force:true});}
