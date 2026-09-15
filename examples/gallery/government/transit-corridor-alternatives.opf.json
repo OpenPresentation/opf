@@ -573,7 +573,10 @@
           "name": "Metro Transit Authority Working Theme",
           "colorScheme": "slate-gray",
           "fontScheme": "raavi",
-          "background": "dark1",
+          "background": {
+            "type": "theme",
+            "slot": "dark1"
+          },
           "tags": [
             "transportation",
             "example"

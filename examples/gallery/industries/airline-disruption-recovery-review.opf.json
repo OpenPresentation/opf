@@ -590,7 +590,10 @@
           "name": "AeroVista Airlines Working Theme",
           "colorScheme": "cool-horizon",
           "fontScheme": "georgia",
-          "background": "light1",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
           "tags": [
             "air-travel",
             "example"

@@ -573,7 +573,10 @@
           "name": "Copper Mesa Mining Working Theme",
           "colorScheme": "corporate-blue",
           "fontScheme": "gisha",
-          "background": "dark1",
+          "background": {
+            "type": "theme",
+            "slot": "dark1"
+          },
           "tags": [
             "mining",
             "example"

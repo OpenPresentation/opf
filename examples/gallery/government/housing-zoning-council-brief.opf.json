@@ -595,7 +595,10 @@
           "name": "City of Redwood Falls Working Theme",
           "colorScheme": "pastel-red",
           "fontScheme": "pt-serif",
-          "background": "light1",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
           "tags": [
             "city-government",
             "example"

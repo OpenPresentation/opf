@@ -777,7 +777,9 @@ function catalogOverrides(spec, index, catalogs) {
           name: `${spec.org} Working Theme`,
           colorScheme: pick(catalogs.colorSchemes, index),
           fontScheme: pick(catalogs.fontSchemes, index),
-          background: pick(["light1", "dark1", "#F8FAFC"], index),
+          // Catalog themes use slots. The deck's authored light2 is #F8FAFC;
+          // literal deck/slide backgrounds remain explicit design overrides.
+          background: { type: "theme", slot: pick(["light1", "dark1", "light2"], index) },
           tags: [slug(spec.area), "example"],
         },
       ],

@@ -577,7 +577,10 @@
           "name": "Rural Connectivity Office Working Theme",
           "colorScheme": "luxury",
           "fontScheme": "sylfaen",
-          "background": "dark1",
+          "background": {
+            "type": "theme",
+            "slot": "dark1"
+          },
           "tags": [
             "public-engagement",
             "example"

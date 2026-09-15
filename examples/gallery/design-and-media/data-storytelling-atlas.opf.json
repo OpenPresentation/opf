@@ -576,7 +576,10 @@
           "name": "Civic Data Lab Working Theme",
           "colorScheme": "black-and-white",
           "fontScheme": "consolas",
-          "background": "#F8FAFC",
+          "background": {
+            "type": "theme",
+            "slot": "light2"
+          },
           "tags": [
             "data-storytelling",
             "example"

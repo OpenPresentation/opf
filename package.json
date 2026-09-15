@@ -30,7 +30,7 @@
     "test:lists": "node --import ./scripts/register-local-opf.mjs scripts/test-list-ecosystem.mjs",
     "lint": "biome check .",
     "check:spec": "node scripts/check-spec-integrity.mjs",
-    "check:examples": "node scripts/validate-examples.mjs",
+    "check:examples": "node scripts/validate-examples.mjs && node scripts/inspect-lint-examples.mjs && node scripts/check-generated-examples.mjs",
     "check:breaking": "node scripts/test-breaking-gate.mjs && node scripts/check-breaking-changes.mjs",
     "test:packages": "node scripts/test-package-ecosystem.mjs",
     "test:registry-ecosystem": "node scripts/test-packed-ecosystem.mjs --registry",

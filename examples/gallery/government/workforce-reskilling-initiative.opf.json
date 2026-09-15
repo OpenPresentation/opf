@@ -600,7 +600,10 @@
           "name": "State Workforce Board Working Theme",
           "colorScheme": "forest-green",
           "fontScheme": "simsun",
-          "background": "#F8FAFC",
+          "background": {
+            "type": "theme",
+            "slot": "light2"
+          },
           "tags": [
             "workforce-development",
             "example"

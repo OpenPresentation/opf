@@ -578,7 +578,10 @@
           "name": "FoundryGrid Working Theme",
           "colorScheme": "cool-horizon",
           "fontScheme": "noto-sans-georgian",
-          "background": "dark1",
+          "background": {
+            "type": "theme",
+            "slot": "dark1"
+          },
           "tags": [
             "revenue-operations",
             "example"

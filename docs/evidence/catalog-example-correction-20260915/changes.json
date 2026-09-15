@@ -1,0 +1,935 @@
+{
+  "count": {
+    "light1": 14,
+    "dark1": 13,
+    "light2": 13
+  },
+  "files": [
+    {
+      "file": "examples/gallery/business-functions/compliance-readiness-review.opf.json",
+      "beforeSha256": "b0df7d9583579f11f9f9a83372b0d270008c9c59fc4bac865fabdc8a7d6654de",
+      "afterSha256": "a91e19a67599a617030bbdd482b980c13fb5d3d7a0e7f8daaf2fbcb7d29a40dc",
+      "changes": [
+        {
+          "path": [
+            "catalogs",
+            "themes",
+            "records",
+            0,
+            "background"
+          ],
+          "before": "light1",
+          "after": {
+            "type": "theme",
+            "slot": "light1"
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/data-platform-migration-plan.opf.json",
+      "beforeSha256": "1aaef9e60f7ac644d94492ef4db2ded3593428810c87fc9032807208651acd40",
+      "afterSha256": "e452713c4159b15f1503ff4383c4be37ac619007e2ed534f706c70c4dde3b0bb",
+      "changes": [
+        {
+          "path": [
+            "catalogs",
+            "themes",
+            "records",
+            0,
+            "background"
+          ],
+          "before": "light1",
+          "after": {
+            "type": "theme",
+            "slot": "light1"
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/demand-generation-campaign-brief.opf.json",
+      "beforeSha256": "c4c04edd46f49c5816047702c4802e84dd7afeb0400fc725314c94574ed5dc66",
+      "afterSha256": "642ec166e00cfc7cdfeff3a4607f4cb97732a72beabbb47c4d7c58909df63651",
+      "changes": [
+        {
+          "path": [
+            "catalogs",
+            "themes",
+            "records",
+            0,
+            "background"
+          ],
+          "before": "#F8FAFC",
+          "after": {
+            "type": "theme",
+            "slot": "light2"
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/engineering-capacity-planning.opf.json",
+      "beforeSha256": "5c9f2671fb9ce2b689f8f813c25cfdeab0844be1824edea5a9f9335615d3090f",
+      "afterSha256": "8664d9f9958557cf77e6abb17b9bb7aec5e4a5b7ea9d3e83a43ce579d20eb978",
+      "changes": [
+        {
+          "path": [
+            "catalogs",
+            "themes",
+            "records",
+            0,
+            "background"
+          ],
+          "before": "dark1",
+          "after": {
+            "type": "theme",
+            "slot": "dark1"
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/investor-relations-update.opf.json",
+      "beforeSha256": "c7f662843cc13af3f508b8ab0922f8ed62760987cc380924fb4cf4ef293be1da",
+      "afterSha256": "366fd03cd492669cf9b57500c66f2dc892ce0498b390908520b1bd87a3ae0058",
+      "changes": [
+        {
+          "path": [
+            "catalogs",
+            "themes",
+            "records",
+            0,
+            "background"
+          ],
+          "before": "dark1",
+          "after": {
+            "type": "theme",
+            "slot": "dark1"
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/model-governance-review.opf.json",
+      "beforeSha256": "fd183ed4b414b845a66054370e14051ad1ab98ebfc40f307404a54d06d2b8a7b",
+      "afterSha256": "c89ebbf880645c2bc4fbda807de2bd80e98e7820c1fa5bb59ec7ac3a0496c5fa",
+      "changes": [
+        {
+          "path": [
+            "catalogs",
+            "themes",
+            "records",
+            0,
+            "background"
+          ],
+          "before": "#F8FAFC",
+          "after": {
+            "type": "theme",
+            "slot": "light2"
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/pricing-and-packaging-decision.opf.json",
+      "beforeSha256": "7c15fdef3c49cf85f1b0e4c6fcdebe35c84de56e74c95d6cc42a644a2321b977",
+      "afterSha256": "cd4bccf221e4f598edcc03f9850e8da9886f7abde32d17dc551c46895b5546b3",
+      "changes": [
+        {
+          "path": [
+            "catalogs",
+            "themes",
+            "records",
+            0,
+            "background"
+          ],
+          "before": "#F8FAFC",
+          "after": {
+            "type": "theme",
+            "slot": "light2"
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/product-roadmap-decision-review.opf.json",
+      "beforeSha256": "8815a44579acb74796aff75228e43c24a15c0e27ccc849dd4d4b9c5a202925e6",
+      "afterSha256": "ffa8a6ec350365be6dc1e1495c32cf1687cca8a01bfd631357ad95de45e5f46f",
+      "changes": [
+        {
+          "path": [
+            "catalogs",
+            "themes",
+            "records",
+            0,
+            "background"
+          ],
+          "before": "light1",
+          "after": {
+            "type": "theme",
+            "slot": "light1"
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/revenue-forecast-inspection.opf.json",
+      "beforeSha256": "1153f1b230cf79f974e44fe8273e304e1fe960cb5e58cc0c2f7a9d3f2520d768",
+      "afterSha256": "83234faba44b3df64a572c9a1455e0647865c6a598134c8573d6c183f699b3da",
+      "changes": [
+        {
+          "path": [
+            "catalogs",
+            "themes",
+            "records",
+            0,
+            "background"
+          ],
+          "before": "dark1",
+          "after": {
+            "type": "theme",
+            "slot": "dark1"
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/s-and-op-exception-review.opf.json",
+      "beforeSha256": "6d4223ae2aebbd88e4c5d66f1878ed31c2f207b591a8e0fb92527ad6cc3ac8ed",
+      "afterSha256": "82352424eecef31bcdb896c48b8c646f10ac9ee324cdcc4e1e76a983bc77c112",
+      "changes": [
+        {
+          "path": [
+            "catalogs",
+            "themes",
+            "records",
+            0,
+            "background"
+          ],
+          "before": "#F8FAFC",
+          "after": {
+            "type": "theme",
+            "slot": "light2"
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/strategy-offsite-pre-read.opf.json",
+      "beforeSha256": "94a4bc7c40c6ae157967aa30b42a7eae98e29a7580ceac88750b5980e0921343",
+      "afterSha256": "4a178dec1323828a2b932345ca477793fa546da07a640b3406123099d96402af",
+      "changes": [
+        {
+          "path": [
+            "catalogs",
+            "themes",
+            "records",
+            0,
+            "background"
+          ],
+          "before": "dark1",
+          "after": {
+            "type": "theme",
+            "slot": "dark1"
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/supplier-risk-heatmap.opf.json",
+      "beforeSha256": "702281579766e0f91809f149d561ea753859b2d2b7fce9d87e4cbc838e7bf104",
+      "afterSha256": "484b80a1706400a45fb99d29e18356966377856bc0d8eaf9d8d3f46b39089c10",
+      "changes": [
+        {
+          "path": [
+            "catalogs",
+            "themes",
+            "records",
+            0,
+            "background"
+          ],
+          "before": "light1",
+          "after": {
+            "type": "theme",
+            "slot": "light1"
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/design-and-media/data-storytelling-atlas.opf.json",
+      "beforeSha256": "e1646dd96869b5a6086d716f2dad6a95341b9b090bca7797d03189d6e1dbbe28",
+      "afterSha256": "4a050bfa8a42f38ebe567bfcb08b95b30c4afe50bf944c627fe4908b84fec78d",
+      "changes": [
+        {
+          "path": [
+            "catalogs",
+            "themes",
+            "records",
+            0,
+            "background"
+          ],
+          "before": "#F8FAFC",
+          "after": {
+            "type": "theme",
+            "slot": "light2"
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/design-and-media/kiosk-orientation-deck.opf.json",
+      "beforeSha256": "3f7354f7eb5e85d7af97c4913e071869e3989bfaf3b0c997780caa65ca8ab9f4",
+      "afterSha256": "c6068dfab3d3b3e3d4f5c6a7c60ec65a401e0fddddcb345a348e49e213e9c0e0",
+      "changes": [
+        {
+          "path": [
+            "catalogs",
+            "themes",
+            "records",
+            0,
+            "background"
+          ],
+          "before": "light1",
+          "after": {
+            "type": "theme",
+            "slot": "light1"
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/design-and-media/photo-essay-portfolio.opf.json",
+      "beforeSha256": "b0faf5e80a230bb87d03f661e7693eb73d02eda0ffa377fe502c08652544fa68",
+      "afterSha256": "d9048f51f0efdaa100140af95276c3f8585e20935f84d61754e0f94cdddda19b",
+      "changes": [
+        {
+          "path": [
+            "catalogs",
+            "themes",
+            "records",
+            0,
+            "background"
+          ],
+          "before": "dark1",
+          "after": {
+            "type": "theme",
+            "slot": "dark1"
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/design-and-media/video-demo-sales-narrative.opf.json",
+      "beforeSha256": "1f56d9fec550fba83f0a2f61f3f256feca8fbf28be9eb09fc6874a72707eaa1a",
+      "afterSha256": "07903ac11dc681643774d55cb1a2d70b507b3a76eeccf4a23ccdd50beba61636",
+      "changes": [
+        {
+          "path": [
+            "catalogs",
+            "themes",
+            "records",
+            0,
+            "background"
+          ],
+          "before": "light1",
+          "after": {
+            "type": "theme",
+            "slot": "light1"
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/education/athletics-budget-review.opf.json",
+      "beforeSha256": "636a9850738714e9ab094d1d7c38dc4dcf8623ac97332bb94655b1b17ed6225d",
+      "afterSha256": "cc31e694dbed2ec741ebcf96f88aa0b62005563dd599af858117103a590204b5",
+      "changes": [
+        {
+          "path": [
+            "catalogs",
+            "themes",
+            "records",
+            0,
+            "background"
+          ],
+          "before": "dark1",
+          "after": {
+            "type": "theme",
+            "slot": "dark1"
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/education/curriculum-approval-brief.opf.json",
+      "beforeSha256": "6fdd62aac4a0dd700014615fd799285327d76541069ec206faefe65ad4e16c72",
+      "afterSha256": "b5a0fcef9070c87235037f37229a5958a948aea179ec615763cf4aef2fc82db2",
+      "changes": [
+        {
+          "path": [
+            "catalogs",
+            "themes",
+            "records",
+            0,
+            "background"
+          ],
+          "before": "#F8FAFC",
+          "after": {
+            "type": "theme",
+            "slot": "light2"
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/education/library-modernization-roadmap.opf.json",
+      "beforeSha256": "863026dfe32ba55d05d5a67bee3c084b2a73f64c5601bb751a1d971e2cccc0d9",
+      "afterSha256": "7e49c5284e19abe9ac98ee401d30ab4f9b0fa2722e15af46a40c256ae9268b76",
+      "changes": [
+        {
+          "path": [
+            "catalogs",
+            "themes",
+            "records",
+            0,
+            "background"
+          ],
+          "before": "light1",
+          "after": {
+            "type": "theme",
+            "slot": "light1"
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/education/workforce-pathway-partnership.opf.json",
+      "beforeSha256": "af23b5e4d2a57eb9cf735648036afed9e0b04050505c4b792b3c03698a498e1b",
+      "afterSha256": "3c13feb79cebc9aa0b1909b5e4f63dddc04ad016e122afb6d9b346bd732894b4",
+      "changes": [
+        {
+          "path": [
+            "catalogs",
+            "themes",
+            "records",
+            0,
+            "background"
+          ],
+          "before": "#F8FAFC",
+          "after": {
+            "type": "theme",
+            "slot": "light2"
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/government/broadband-public-hearing-deck.opf.json",
+      "beforeSha256": "15c84204991cd4de43300082961f025d0696d9a54c668f02c635affbe1ea9213",
+      "afterSha256": "3e7edc433eac144b8f4765430b7be3a021b274afb24cee3c81954839ddc77008",
+      "changes": [
+        {
+          "path": [
+            "catalogs",
+            "themes",
+            "records",
+            0,
+            "background"
+          ],
+          "before": "dark1",
+          "after": {
+            "type": "theme",
+            "slot": "dark1"
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/government/housing-zoning-council-brief.opf.json",
+      "beforeSha256": "d1dbef20a850fe657ff2332a24ba19635348393305cc1c8882d1201db94c92e7",
+      "afterSha256": "7313879c0a01522ce4aa2094cf59e78f95aca6cbe405414f06c6ae9ee6becedc",
+      "changes": [
+        {
+          "path": [
+            "catalogs",
+            "themes",
+            "records",
+            0,
+            "background"
+          ],
+          "before": "light1",
+          "after": {
+            "type": "theme",
+            "slot": "light1"
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/government/recycling-participation-campaign.opf.json",
+      "beforeSha256": "a4e688c320b151ea518c1ec0fb546cafb4327a0a451cc723b266b6c2b84010ae",
+      "afterSha256": "1601126c7e304a4f9a27d4863b9092684aaad750f2500361a2ca36d5422e4d6e",
+      "changes": [
+        {
+          "path": [
+            "catalogs",
+            "themes",
+            "records",
+            0,
+            "background"
+          ],
+          "before": "dark1",
+          "after": {
+            "type": "theme",
+            "slot": "dark1"
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/government/tax-portal-modernization.opf.json",
+      "beforeSha256": "bd65140e6c6b0944375257ede5d9f2619d62a2511ec625b1ca95a6a9dc19a6fd",
+      "afterSha256": "4c7bd1f17df5b9c9d305c3fd082e3178911391b243a3797622247ea7cbddb0e7",
+      "changes": [
+        {
+          "path": [
+            "catalogs",
+            "themes",
+            "records",
+            0,
+            "background"
+          ],
+          "before": "light1",
+          "after": {
+            "type": "theme",
+            "slot": "light1"
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/government/transit-corridor-alternatives.opf.json",
+      "beforeSha256": "164405600713a7aa2701cb341e9438db07d05ad8d40744b21c65bb7d342ea6a0",
+      "afterSha256": "d60911a62682952b9cbccd2b3a205f8753452a52bd70310d3b40224137d53ce4",
+      "changes": [
+        {
+          "path": [
+            "catalogs",
+            "themes",
+            "records",
+            0,
+            "background"
+          ],
+          "before": "dark1",
+          "after": {
+            "type": "theme",
+            "slot": "dark1"
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/government/water-utility-capital-plan.opf.json",
+      "beforeSha256": "7530d607f991d7d3ed9a9c04aa717239b8d342fd7d16d74a1cc18ec24c454e4c",
+      "afterSha256": "e5c7b51a205f274b8d8f252c493eea5c03239771bd2fa5253ae67ef55a83c0ef",
+      "changes": [
+        {
+          "path": [
+            "catalogs",
+            "themes",
+            "records",
+            0,
+            "background"
+          ],
+          "before": "light1",
+          "after": {
+            "type": "theme",
+            "slot": "light1"
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/government/wildfire-evacuation-preparedness.opf.json",
+      "beforeSha256": "7055e7e96359a0a7978aad4bffc35344025be928216007829d2436ba11b93db5",
+      "afterSha256": "4c10b8b444dfa44e8e446a4aaf4c289a467bbe5971be43ce3fb21ad0d465dd5f",
+      "changes": [
+        {
+          "path": [
+            "catalogs",
+            "themes",
+            "records",
+            0,
+            "background"
+          ],
+          "before": "#F8FAFC",
+          "after": {
+            "type": "theme",
+            "slot": "light2"
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/government/workforce-reskilling-initiative.opf.json",
+      "beforeSha256": "27c0afa9a72a67b8a80ee9853dd62631dd6f207806f087e0375505b6a7166f88",
+      "afterSha256": "b8ce90d13f52756d98dc41fa6adf716c4e4d828e32476f2b22b0366b38795df9",
+      "changes": [
+        {
+          "path": [
+            "catalogs",
+            "themes",
+            "records",
+            0,
+            "background"
+          ],
+          "before": "#F8FAFC",
+          "after": {
+            "type": "theme",
+            "slot": "light2"
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/airline-disruption-recovery-review.opf.json",
+      "beforeSha256": "09d1c72b003ecf460a082d7b3d2184dc17650923b59d51661035282bc65b3ebe",
+      "afterSha256": "de5b4ed88f8f96955e1d5a5c63ef90bd6244857061ba0c6338b6f4c216459720",
+      "changes": [
+        {
+          "path": [
+            "catalogs",
+            "themes",
+            "records",
+            0,
+            "background"
+          ],
+          "before": "light1",
+          "after": {
+            "type": "theme",
+            "slot": "light1"
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/battery-line-supplier-readiness.opf.json",
+      "beforeSha256": "5ba0a0601665fa38f207b2efa21be85e3ff393da3172492e51209bf5386d72c7",
+      "afterSha256": "faa412cefa4190b3b78b28681fd6c62bfdfb25a0152ce71336e0e8fbe92f1907",
+      "changes": [
+        {
+          "path": [
+            "catalogs",
+            "themes",
+            "records",
+            0,
+            "background"
+          ],
+          "before": "dark1",
+          "after": {
+            "type": "theme",
+            "slot": "dark1"
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/boutique-hotel-revenue-recovery.opf.json",
+      "beforeSha256": "c4727ee2d5b478553efd76ccba4c875e6097dff5060826e6718d793da97b154f",
+      "afterSha256": "31e1838c5d19d3697e02dfdf28bd68b77dc290e5631d662efbbc58f33b51f9d5",
+      "changes": [
+        {
+          "path": [
+            "catalogs",
+            "themes",
+            "records",
+            0,
+            "background"
+          ],
+          "before": "#F8FAFC",
+          "after": {
+            "type": "theme",
+            "slot": "light2"
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/construction-safety-stand-down.opf.json",
+      "beforeSha256": "034fa77b91c7de870739a205c5d2a0f94137d942afe50472c4a546c3de1d724b",
+      "afterSha256": "46c3c3a4e793480168c36b5568860b083970c6449ebc40e741f2594f7a4f09a1",
+      "changes": [
+        {
+          "path": [
+            "catalogs",
+            "themes",
+            "records",
+            0,
+            "background"
+          ],
+          "before": "#F8FAFC",
+          "after": {
+            "type": "theme",
+            "slot": "light2"
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/mixed-use-leasing-pipeline-review.opf.json",
+      "beforeSha256": "1f771cd5545eed0ef15be22a5f57d41d578d25ccf03e89507d0c94f75d337348",
+      "afterSha256": "e05ee99159e5abb23071dbbba6f3e53c372995c7d09febaf4541f305d97c0d11",
+      "changes": [
+        {
+          "path": [
+            "catalogs",
+            "themes",
+            "records",
+            0,
+            "background"
+          ],
+          "before": "light1",
+          "after": {
+            "type": "theme",
+            "slot": "light1"
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/port-dwell-time-improvement-plan.opf.json",
+      "beforeSha256": "3b64342fc5eb64cff331cb8abde19afe8d2c7fc2af70077dd4585f4217350a87",
+      "afterSha256": "825b5c358aa51cc3953e2631f4c0e50c489a88b99ec6e224e4e1cc311edc4fa2",
+      "changes": [
+        {
+          "path": [
+            "catalogs",
+            "themes",
+            "records",
+            0,
+            "background"
+          ],
+          "before": "light1",
+          "after": {
+            "type": "theme",
+            "slot": "light1"
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/tailings-monitoring-investment-brief.opf.json",
+      "beforeSha256": "c223e1ad3996022b7734f10357e1ac4a0f337af41570eb9e945e121f5d1e94d5",
+      "afterSha256": "0f51b1878e6b65e8729b8f81b4f5d4c058f0cdd6873f953538d1a1dcfff51285",
+      "changes": [
+        {
+          "path": [
+            "catalogs",
+            "themes",
+            "records",
+            0,
+            "background"
+          ],
+          "before": "dark1",
+          "after": {
+            "type": "theme",
+            "slot": "dark1"
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/water-stewardship-grower-brief.opf.json",
+      "beforeSha256": "eedb5d506364c91d9cc4fde7e34f5bd751195ed07e053db0d74af477f429f02b",
+      "afterSha256": "2e41bfa86f1292df62535c32f2beb7f8c85860592a19fdc0de7c17b50eaa95c0",
+      "changes": [
+        {
+          "path": [
+            "catalogs",
+            "themes",
+            "records",
+            0,
+            "background"
+          ],
+          "before": "dark1",
+          "after": {
+            "type": "theme",
+            "slot": "dark1"
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/presentation-types/manager-training-deck.opf.json",
+      "beforeSha256": "46f44a3ffe1fbcd5716b3f65e9f4759e59d54e5644439fe6f53bbb9369bcfb1e",
+      "afterSha256": "084134234ffbbbc7eb5a5dbceddc12c20fcd84751db2d2d3d35bdf519e29f89b",
+      "changes": [
+        {
+          "path": [
+            "catalogs",
+            "themes",
+            "records",
+            0,
+            "background"
+          ],
+          "before": "dark1",
+          "after": {
+            "type": "theme",
+            "slot": "dark1"
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/presentation-types/policy-briefing-for-advisors.opf.json",
+      "beforeSha256": "069ce472928747ad9c6da4575a92393dc3353f571313331817ea8e39b370611e",
+      "afterSha256": "692f1ee437599447979ded0948612d0d7b79e435e5a78a906bd0e76559143578",
+      "changes": [
+        {
+          "path": [
+            "catalogs",
+            "themes",
+            "records",
+            0,
+            "background"
+          ],
+          "before": "light1",
+          "after": {
+            "type": "theme",
+            "slot": "light1"
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/presentation-types/product-launch-narrative.opf.json",
+      "beforeSha256": "29d139df11df3c11c4308d2ca7cd03d96dea1e6a91084a7f657f2aadec2f64de",
+      "afterSha256": "407a0afeb8411e1e02b1e0a8eacd9cd09dc799bc025ad85e5221be3f72bb064c",
+      "changes": [
+        {
+          "path": [
+            "catalogs",
+            "themes",
+            "records",
+            0,
+            "background"
+          ],
+          "before": "#F8FAFC",
+          "after": {
+            "type": "theme",
+            "slot": "light2"
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/presentation-types/research-findings-report.opf.json",
+      "beforeSha256": "3f910577cc8fca1725a3113094628caf366e2cf5a23e1d7433148f903a563081",
+      "afterSha256": "b77686ec7a7fc0858490354b17ea5be101dc20e2305a694bd688e1eb446a7495",
+      "changes": [
+        {
+          "path": [
+            "catalogs",
+            "themes",
+            "records",
+            0,
+            "background"
+          ],
+          "before": "#F8FAFC",
+          "after": {
+            "type": "theme",
+            "slot": "light2"
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/technical/catalog-overrides.opf.json",
+      "beforeSha256": "d35470eaa2a6024090d7b49a078a7e08fb5bb57de61a141a2107dc58a416fe9a",
+      "afterSha256": "68092730eae65f94e187926ddd4406d22a15a87da3aebff8f3491dbc3d233284",
+      "changes": [
+        {
+          "path": [
+            "catalogs",
+            "audiences"
+          ],
+          "after": {
+            "records": [
+              {
+                "$schema": "https://openpresentation.org/schema/opf-audience/v1",
+                "id": "technical-reviewers",
+                "name": "Technical Reviewers",
+                "technicalFluency": "high",
+                "decisionPower": "advisory"
+              }
+            ]
+          }
+        },
+        {
+          "path": [
+            "catalogs",
+            "purposes"
+          ],
+          "after": {
+            "records": [
+              {
+                "$schema": "https://openpresentation.org/schema/opf-purpose/v1",
+                "id": "technical-approval",
+                "name": "Technical Approval",
+                "outcome": "Approve the fixture contract"
+              }
+            ]
+          }
+        },
+        {
+          "path": [
+            "catalogs",
+            "tones"
+          ],
+          "after": {
+            "records": [
+              {
+                "$schema": "https://openpresentation.org/schema/opf-tone/v1",
+                "id": "precise-plain",
+                "name": "Precise Plain",
+                "voiceCues": [
+                  "Name the object shape before the rationale.",
+                  "Prefer short exact claims."
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "file": "examples/technical/full-feature-tour.opf.json",
+      "beforeSha256": "27c6475df959411ac06c16229506e060e1dad947004d2b689ea9fd4438bdb3d3",
+      "afterSha256": "2e3cad5bfea178614505f6841a772af01769fdd334bc813e57e01506943a0bae",
+      "changes": [
+        {
+          "path": [
+            "catalogs",
+            "colorSchemes",
+            "records",
+            0,
+            "$schema"
+          ],
+          "after": "https://openpresentation.org/schema/opf-color-scheme/v1"
+        },
+        {
+          "path": [
+            "catalogs",
+            "colorSchemes",
+            "records",
+            0,
+            "name"
+          ],
+          "after": "Acme Night"
+        }
+      ]
+    }
+  ]
+}
