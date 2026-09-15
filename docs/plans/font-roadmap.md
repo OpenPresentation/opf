@@ -1,5 +1,7 @@
 # OPF font roadmap
 
+Current September 15 status: see the [developer-adoption roadmap](developer-adoption-20260915.md) and [deferred shaping checkpoint](deferred-shaping-20260915.md). Older version labels and candidate descriptions below are historical; shipped package exports and the latest acceptance evidence govern current capabilities.
+
 Remaining native Office checks are tracked in the
 [PowerPoint compatibility roadmap](powerpoint-acceptance.md), separately from
 portable PR acceptance at the project owner's September 15 request. Browser

@@ -1,0 +1,30 @@
+[
+  {
+    "repo": "opf",
+    "localOnlyCommits": ""
+  },
+  {
+    "repo": "opf-render",
+    "localOnlyCommits": ""
+  },
+  {
+    "repo": "opf-editor",
+    "localOnlyCommits": ""
+  },
+  {
+    "repo": "opf-pptx",
+    "localOnlyCommits": ""
+  },
+  {
+    "repo": "openpresentation-site",
+    "localOnlyCommits": ""
+  },
+  {
+    "repo": "pptx-dev",
+    "localOnlyCommits": ""
+  },
+  {
+    "repo": "pptx-gallery",
+    "localOnlyCommits": ""
+  }
+]

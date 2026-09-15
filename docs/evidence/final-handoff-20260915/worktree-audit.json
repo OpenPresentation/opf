@@ -1,0 +1,338 @@
+[
+  {
+    "repo": "opf",
+    "trees": [
+      {
+        "path": "/Users/michael/Source/opf",
+        "status": "",
+        "head": "225b7cb5a4234a2c7ff1ae9cdb79ec5d55cbb6b0",
+        "remoteBranchesContainingHead": [
+          "origin/codex/rich-tabs-20260915"
+        ]
+      },
+      {
+        "path": "/private/tmp/opf-native-review-20260910",
+        "missingGitMetadata": true
+      },
+      {
+        "path": "/private/tmp/opf-partner-demo-pr-20260914",
+        "status": "",
+        "head": "aff466792521fa81f761a65724bd9caa921db1f2",
+        "remoteBranchesContainingHead": [
+          "origin/codex/partner-demo-20260914"
+        ]
+      },
+      {
+        "path": "/private/tmp/opf-pr-review-20260915/advanced/opf",
+        "status": "",
+        "head": "36ff66b3d62b39d7d27dcda022b7e79e541bd603",
+        "remoteBranchesContainingHead": [
+          "origin/codex/rich-tabs-20260915"
+        ]
+      },
+      {
+        "path": "/private/tmp/opf-pr-review-20260915/furniture/opf",
+        "status": "",
+        "head": "a0faba89bea1d340dac0c1685814d1055639b174",
+        "remoteBranchesContainingHead": [
+          "origin/codex/rich-tabs-20260915",
+          "  origin/codex/shared-furniture-20260914"
+        ]
+      },
+      {
+        "path": "/private/tmp/opf-publish-ready-20260915.kFIiNe/opf",
+        "status": "",
+        "head": "2eef0ada0604853897cc5f0bd1b5fbbaf6430b11",
+        "remoteBranchesContainingHead": [
+          "origin/HEAD -> origin/main",
+          "  origin/codex/rich-tabs-20260915",
+          "  origin/codex/shared-furniture-20260914",
+          "  origin/dependabot/npm_and_yarn/npm-minor-patch-7a0c24a58d",
+          "  origin/main"
+        ]
+      },
+      {
+        "path": "/Users/michael/.codex/worktrees/c7109cf6-2f47-46f1-96d6-06d820e5baa1/opf",
+        "status": "",
+        "head": "225b7cb5a4234a2c7ff1ae9cdb79ec5d55cbb6b0",
+        "remoteBranchesContainingHead": [
+          "origin/codex/rich-tabs-20260915"
+        ]
+      }
+    ],
+    "stashes": ""
+  },
+  {
+    "repo": "opf-render",
+    "trees": [
+      {
+        "path": "/Users/michael/Source/opf-render",
+        "status": "",
+        "head": "aec153be28d5b2b9c2c0e6b0f15705fe3efaba5e",
+        "remoteBranchesContainingHead": [
+          "origin/codex/font-shaping-20260914"
+        ]
+      },
+      {
+        "path": "/private/tmp/opf-pr-review-20260915/advanced/opf-render",
+        "status": "",
+        "head": "343fb84223f4383ffe546157c6989ccc505c0acb",
+        "remoteBranchesContainingHead": [
+          "origin/codex/font-shaping-20260914"
+        ]
+      },
+      {
+        "path": "/private/tmp/opf-pr-review-20260915/furniture/opf-render",
+        "status": "",
+        "head": "1c7904cee02908e052c267aa832eb49f919e22da",
+        "remoteBranchesContainingHead": [
+          "origin/codex/font-shaping-20260914",
+          "  origin/codex/shared-furniture-20260914"
+        ]
+      },
+      {
+        "path": "/private/tmp/opf-publish-ready-20260915.kFIiNe/opf-render",
+        "status": "",
+        "head": "3ad2f8d1073f6fc733ca5371f6b98b4c8a05f6b8",
+        "remoteBranchesContainingHead": [
+          "origin/HEAD -> origin/main",
+          "  origin/codex/font-shaping-20260914",
+          "  origin/codex/shared-furniture-20260914",
+          "  origin/main"
+        ]
+      }
+    ],
+    "stashes": ""
+  },
+  {
+    "repo": "opf-editor",
+    "trees": [
+      {
+        "path": "/Users/michael/Source/opf-editor",
+        "status": "",
+        "head": "b9c3d2e4e205d93d74c9263f00222f9dea5a9aae",
+        "remoteBranchesContainingHead": [
+          "origin/codex/prepared-text-editing-20260915"
+        ]
+      },
+      {
+        "path": "/private/tmp/opf-editor-layout-picker",
+        "status": "?? node_modules\n",
+        "head": "9c86fd2f12919148d6ef31a5980fb03b8ed1fbc3",
+        "remoteBranchesContainingHead": [
+          "origin/codex/prepared-text-editing-20260915"
+        ]
+      },
+      {
+        "path": "/private/tmp/opf-pr-review-20260915/advanced/opf-editor",
+        "status": "",
+        "head": "ae4cc6426b04c7ca428c1b4acacea2e11d99fa84",
+        "remoteBranchesContainingHead": [
+          "origin/codex/prepared-text-editing-20260915"
+        ]
+      },
+      {
+        "path": "/private/tmp/opf-pr-review-20260915/furniture/opf-editor",
+        "status": "",
+        "head": "fa386eee84d767eea1798e55ee6cd4bde0df715e",
+        "remoteBranchesContainingHead": [
+          "origin/codex/prepared-text-editing-20260915",
+          "  origin/codex/shared-furniture-20260914"
+        ]
+      },
+      {
+        "path": "/private/tmp/opf-publish-ready-20260915.kFIiNe/opf-editor",
+        "status": "",
+        "head": "71c6a90a5d0531991f999baf8ac800f0e322a7ad",
+        "remoteBranchesContainingHead": [
+          "origin/HEAD -> origin/main",
+          "  origin/codex/prepared-text-editing-20260915",
+          "  origin/codex/shared-furniture-20260914",
+          "  origin/main"
+        ]
+      }
+    ],
+    "stashes": ""
+  },
+  {
+    "repo": "opf-pptx",
+    "trees": [
+      {
+        "path": "/Users/michael/Source/opf-pptx",
+        "status": "",
+        "head": "8a53c7545aa854b6498f17dabb529c6b91ed2c01",
+        "remoteBranchesContainingHead": [
+          "origin/codex/rich-tabs-20260915"
+        ]
+      },
+      {
+        "path": "/private/tmp/opf-pr-review-20260915/advanced/opf-pptx",
+        "status": "",
+        "head": "fbe9a73d012dbd51d65a39251e405e488651a70b",
+        "remoteBranchesContainingHead": [
+          "origin/codex/rich-tabs-20260915"
+        ]
+      },
+      {
+        "path": "/private/tmp/opf-pr-review-20260915/furniture/opf-pptx",
+        "status": "",
+        "head": "7b3ea9d679926bd9c55d91f5628334eeb21e81c0",
+        "remoteBranchesContainingHead": [
+          "origin/codex/rich-tabs-20260915",
+          "  origin/codex/shared-furniture-20260914"
+        ]
+      },
+      {
+        "path": "/private/tmp/opf-publish-ready-20260915.kFIiNe/opf-pptx",
+        "status": "",
+        "head": "4356e3679988206b202d799cd94140686b3b6ea0",
+        "remoteBranchesContainingHead": [
+          "origin/HEAD -> origin/main",
+          "  origin/codex/rich-tabs-20260915",
+          "  origin/codex/shared-furniture-20260914",
+          "  origin/dependabot/npm_and_yarn/npm-minor-patch-eeaca2aeb5",
+          "  origin/main"
+        ]
+      }
+    ],
+    "stashes": ""
+  },
+  {
+    "repo": "openpresentation-site",
+    "trees": [
+      {
+        "path": "/Users/michael/Source/openpresentation-site",
+        "status": "",
+        "head": "c37317e2a88c75bb53c0025fa37dd1902b028750",
+        "remoteBranchesContainingHead": [
+          "origin/HEAD -> origin/main",
+          "  origin/codex/published-editor-20260915",
+          "  origin/dependabot/github_actions/actions/checkout-7.0.1",
+          "  origin/dependabot/npm_and_yarn/vercel/analytics-2.0.1",
+          "  origin/main"
+        ]
+      },
+      {
+        "path": "/private/tmp/openpresentation-layout-picker",
+        "status": "",
+        "head": "3b76ef986bc6211e24b859468956b1d884724f7b",
+        "remoteBranchesContainingHead": [
+          "origin/HEAD -> origin/main",
+          "  origin/codex/layout-picker-20260915",
+          "  origin/codex/layout-picker-viewport-test-20260915",
+          "  origin/codex/published-editor-20260915",
+          "  origin/dependabot/github_actions/actions/checkout-7.0.1",
+          "  origin/dependabot/npm_and_yarn/vercel/analytics-2.0.1",
+          "  origin/main"
+        ]
+      },
+      {
+        "path": "/private/tmp/opf-pr-review-20260915/worktrees/openpresentation-site",
+        "status": "",
+        "head": "42bf4a9be81563acf2f914d7e750a1d32479650a",
+        "remoteBranchesContainingHead": [
+          "origin/dependabot/npm_and_yarn/vercel/analytics-2.0.1"
+        ]
+      },
+      {
+        "path": "/private/tmp/opf-publish-ready-20260915.kFIiNe/openpresentation-site",
+        "status": "",
+        "head": "5998ef249aebd0c76124d828be0d88f8cdc493c6",
+        "remoteBranchesContainingHead": [
+          "origin/HEAD -> origin/main",
+          "  origin/dependabot/github_actions/actions/checkout-7.0.1",
+          "  origin/dependabot/npm_and_yarn/vercel/analytics-2.0.1",
+          "  origin/main"
+        ]
+      }
+    ],
+    "stashes": ""
+  },
+  {
+    "repo": "pptx-dev",
+    "trees": [
+      {
+        "path": "/Users/michael/Source/pptx-dev",
+        "status": "",
+        "head": "8f61e12e0af17bd278a280b3bf85bc83675b88da",
+        "remoteBranchesContainingHead": [
+          "origin/HEAD -> origin/master",
+          "  origin/codex/published-editor-20260915",
+          "  origin/dependabot/github_actions/actions/setup-python-7",
+          "  origin/dependabot/github_actions/softprops/action-gh-release-3",
+          "  origin/dependabot/npm_and_yarn/compatible-dependencies-ff4776c311",
+          "  origin/dependabot/npm_and_yarn/vitest-5.0.0",
+          "  origin/dependabot/npm_and_yarn/zod-4.6.2",
+          "  origin/master"
+        ]
+      },
+      {
+        "path": "/private/tmp/opf-pr-review-20260915/python-action/pptx-dev",
+        "status": "",
+        "head": "3c5236a2734517c78df5d0b74603f98b26a33af7",
+        "remoteBranchesContainingHead": [
+          "origin/dependabot/github_actions/actions/setup-python-7"
+        ]
+      },
+      {
+        "path": "/private/tmp/opf-pr-review-20260915/worktrees/pptx-dev",
+        "status": "",
+        "head": "eeaa8707ede46bbba956b76c71e7dedaebca31f6",
+        "remoteBranchesContainingHead": [
+          "origin/dependabot/npm_and_yarn/zod-4.6.2"
+        ]
+      },
+      {
+        "path": "/private/tmp/opf-publish-ready-20260915.kFIiNe/pptx-dev",
+        "status": "",
+        "head": "7008ed069bcd33231c8049d445dba05b773d2661",
+        "remoteBranchesContainingHead": [
+          "origin/HEAD -> origin/master",
+          "  origin/dependabot/github_actions/actions/setup-python-7",
+          "  origin/dependabot/github_actions/softprops/action-gh-release-3",
+          "  origin/dependabot/npm_and_yarn/compatible-dependencies-ff4776c311",
+          "  origin/dependabot/npm_and_yarn/vitest-5.0.0",
+          "  origin/dependabot/npm_and_yarn/zod-4.6.2",
+          "  origin/master"
+        ]
+      }
+    ],
+    "stashes": ""
+  },
+  {
+    "repo": "pptx-gallery",
+    "trees": [
+      {
+        "path": "/Users/michael/Source/pptx-gallery",
+        "status": "",
+        "head": "24d242658d4f03305c3521846645c1446af4c240",
+        "remoteBranchesContainingHead": [
+          "origin/HEAD -> origin/main",
+          "  origin/codex/published-editor-20260915",
+          "  origin/dependabot/npm_and_yarn/typescript-7.0.2",
+          "  origin/dependabot/npm_and_yarn/vitest-5.0.0",
+          "  origin/main"
+        ]
+      },
+      {
+        "path": "/private/tmp/opf-pr-review-20260915/worktrees/pptx-gallery",
+        "status": "",
+        "head": "838afb309d592456e5dcf74494342bd4a565ef39",
+        "remoteBranchesContainingHead": [
+          "origin/dependabot/npm_and_yarn/typescript-7.0.2"
+        ]
+      },
+      {
+        "path": "/private/tmp/opf-publish-ready-20260915.kFIiNe/pptx-gallery",
+        "status": "",
+        "head": "fc51a04cf50fe86af67e0a8d040d6569a60d2249",
+        "remoteBranchesContainingHead": [
+          "origin/HEAD -> origin/main",
+          "  origin/dependabot/npm_and_yarn/typescript-7.0.2",
+          "  origin/main"
+        ]
+      }
+    ],
+    "stashes": ""
+  }
+]

@@ -1,5 +1,7 @@
 # OPF editor and site coverage
 
+Current September 15 status: see the [developer-adoption roadmap](developer-adoption-20260915.md) and [deferred shaping checkpoint](deferred-shaping-20260915.md). Older version labels and candidate descriptions below are historical; shipped package exports and the latest acceptance evidence govern current capabilities.
+
 The acceptance target is every aspect of the canonical OPF specification, with visual properties reflected faithfully in the browser and nonvisual properties editable without losing data. Field discovery is one dimension of coverage; rendering, interaction, and PPTX parity require separate evidence.
 
 ## Current implementation
