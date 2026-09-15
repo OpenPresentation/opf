@@ -77,6 +77,7 @@ jobs:
         run: node -e "if (require('playwright/package.json').version !== '1.63.0') throw new Error('Update the pinned Playwright image with the test package.');"
       - run: npm run test:playground
       - run: npm run test:code-browser
+      - run: npm run test:json-browser -- artifacts/json-editor-browser.json
       - run: npm run test:rich-input-browser -- artifacts/rich-input-browser.json measured
       - run: npm run test:rich-input-browser -- artifacts/rich-input-browser-estimated.json estimated
       - name: Install and exercise coordinated candidate tarballs
@@ -91,6 +92,7 @@ jobs:
           node scripts/test-timeline-acceptance.mjs artifacts/timeline-acceptance.json
           node scripts/test-installed-code-guards.mjs
           node ../opf-editor/test/rich-input-browser.mjs artifacts/editor/rich-input-installed.json measured artifacts/npm/consumer
+          node ../opf-editor/test/json-editor-browser.mjs artifacts/editor/json-editor-installed.json artifacts/npm/consumer
       - run: npm pack --dry-run
       - name: Preserve candidate and raster evidence
         if: always()
@@ -99,6 +101,8 @@ jobs:
           name: candidate-opf-editor-${{ runner.os }}-node24
           path: |
             opf-editor/artifacts/rich-input-browser*.json
+            opf-editor/artifacts/json-editor-browser.json
+            opf/artifacts/editor/json-editor-installed.json
             opf-editor/artifacts/rich-input-browser*.png
             opf/artifacts/editor/rich-input-installed*.json
             opf/artifacts/editor/rich-input-installed*.png
