@@ -122,6 +122,9 @@ console.log('Installed candidate font preparation passed layout, edit/undo, SVG/
     await readFile(path.resolve(root, '../opf-pptx/test/fixtures/images', name)));
   await writeFile(path.join(consumer, 'furniture-provenance.mjs'), furnitureHarness);
   run(process.execPath, ['furniture-provenance.mjs']);
+  const richTabsHarness=(await readHarness('opf-pptx','test/rich-tabs.mjs')).replaceAll("'../dist/index.js'","'@openpresentation/opf-pptx'");
+  await writeFile(path.join(consumer,'rich-tabs.mjs'),richTabsHarness);
+  run(process.execPath,['rich-tabs.mjs']);
   for (const repo of ['opf-render','opf-pptx']) {
     const source=(await readHarness(repo,'test/font-variants.mjs'))
       .replaceAll("'../dist/fonts-node.js'","'@openpresentation/opf-render/fonts-node'")

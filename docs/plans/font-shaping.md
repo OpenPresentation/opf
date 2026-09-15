@@ -382,6 +382,13 @@ pending; this does not promote the backend or close native/font gates. See the
 
 ## Implementation and promotion requirements
 
+The subsequent [rich-tab/direction checkpoint](../evidence/rich-tabs-and-direction-20260915/README.md)
+fixes pure RTL arrow navigation and keeps tab controls out of physical font
+shaping. Fifteen prepared-editing and thirty rich-input installed workflows
+pass, along with the unchanged 805-slide corpus and shared body/list tab export.
+Current CI, rich table-cell tabs and the wider font/native requirements below
+remain separate; this checkpoint does not change the default backend.
+
 1. Add a reusable shaping service behind the existing font registry. Preserve
    physical-face resolution, theme/alias/substitution policy, explicit errors,
    licenses, glyph coverage and bounded caches. Initialize the pinned WASM

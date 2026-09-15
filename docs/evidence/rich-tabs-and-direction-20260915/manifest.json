@@ -1,0 +1,130 @@
+{
+  "source-prepared.json.gz": {
+    "sha256": "e9fefb90cac76d6228237becb2c54926fe7af33eb3fd55da651b8572a709d99e",
+    "contentSha256": "1471b22affaf3e213de95536ce0ef21a3440c239f7ac810ff49a5b2e7cbf2d0c"
+  },
+  "installed-prepared.json.gz": {
+    "sha256": "bf6edc38bba3e01bfe02925643618e6b85fbc3e16824c65c8ed7fc679e04a880",
+    "contentSha256": "a864cba0abc9b74d3819b6ead4a465b17ec085cba8882e33a5685f3ac49fd8a2"
+  },
+  "installed-rich-painted.json.gz": {
+    "sha256": "7fc846de776f44b2ff95d839300923ff23af82e58aa3b5400b026f5ffb755f7a",
+    "contentSha256": "676248a427f19687af44bba2537dee627c83242076ce31b6e3a3ea3e552edad7"
+  },
+  "installed-rich-measured.json.gz": {
+    "sha256": "d2660a522c0984f703591b4c19f58986dff3faa390eb15d9a6581c972191b159",
+    "contentSha256": "4e2761574a2cc99709a5b936ba58a97ae7544068410502606c61fb7a6a15616c"
+  },
+  "installed-rich-estimated.json.gz": {
+    "sha256": "1e8c460520771577b3e6936439214193a41b5b44c09f3815f3260ccae92737b0",
+    "contentSha256": "979dfd0a67b903298752a04eca02f0c966dd0ce2a805017d486867c18a133f9b"
+  },
+  "rtl-keyboard-before.json.gz": {
+    "sha256": "748f41a8646caea9f0234ccdb4e97afe6585240f6763b61bd704c9b09bf743a5",
+    "contentSha256": "288463df9fbf983769c03567fa8f87dec89436baee3dc36dee1eac99e61ef045"
+  },
+  "tab-caret-before.json.gz": {
+    "sha256": "1a2272a3de6828fc45f0da0c0f11cbcce353629684f3a6c162075c1f79cb8fb6",
+    "contentSha256": "3cb45eac0fe877cbb0ddd7b258c68c951cc9cd0d4522865b9e5e75d84095afb6"
+  },
+  "rich-tab-font-before.json.gz": {
+    "sha256": "adf0eb0194d86528d77d3f2e80d3febb8761a31724c33a4f3dffb5352054b39e",
+    "contentSha256": "a6cc5ff8b5720a7e3330fe28163beab66291fafbcbeb4a1fa96e6cded189e9cb"
+  },
+  "tab-selection-harness-before.json.gz": {
+    "sha256": "ec4ce3699363ff1601bb72e304b972f1740554e32a8d4c516674acc98a08bae7",
+    "contentSha256": "c28600734bdb2c5330aadf8f8670155a8881fd0ef3cf631adb183928c14cc4ef"
+  },
+  "renderer-caret-layout.json.gz": {
+    "sha256": "0498e8bca5d368b76a97ef601f21c45bf8fba7e62a9dfe0eefd9c9ee45c67109",
+    "contentSha256": "114caf918a242ff73dc018bf0459ab766a052ab10d4e357ea383cd5b7aef5aef"
+  },
+  "package-manifest.json.gz": {
+    "sha256": "100e7ccf326a7e3f6097fa112c6aff9999ad04d32a4c06fa3f1e5a45cd8453a3",
+    "contentSha256": "9cf8f543c8db8832255b27e523dbdb4a03f83181f457c0f4b51d8fc8f27ff036"
+  },
+  "consumer-lock.json.gz": {
+    "sha256": "0a1b5805b5b4dae0908f12441554a212cf126c4c860d1113937544f5d0100520",
+    "contentSha256": "0ab2bd48bc7c3595fa09650c0305256ae8e87356471548d21ae2fe2743acba05"
+  },
+  "core-tests.log.gz": {
+    "sha256": "69d4d8ce6a99811645ad57c9440e51d93fa0ac7405557e160c164e9adbde7e74",
+    "contentSha256": "f3e1165a603f5db6e6222f438fba0f5de26fc5ac69ce384b417f8125a793ae89"
+  },
+  "renderer-tests.log.gz": {
+    "sha256": "90bd5e101e195ebbe9f597c871175f5789161aa0f9779817a3f0f6b8473ecc72",
+    "contentSha256": "0ac02b54f8774c4be25485e13bababc9dde0f3ea21f1f106bc2ce6d8d25f1d01"
+  },
+  "editor-tests.log.gz": {
+    "sha256": "aab0d4326d6a9a8c615bb17643fdf484f2651a85270a092496e399e5ddfa90af",
+    "contentSha256": "20c5042025a41129134d53236c916c74080d28c6337c5fddbbfbb7bcc06b4449"
+  },
+  "pptx-tests.log.gz": {
+    "sha256": "56c578cfb7b7eb5ca280cd9f73ed5fcdf41657658258de8e4db18d45de067dfc",
+    "contentSha256": "bb9b2133fa505f24f2adcb8796c61bbc1632a5d4cb9b06be882ed0604b0e8b6c"
+  },
+  "installed-tests.log.gz": {
+    "sha256": "720da517ded54ad21a7956568a7f086e36f1958b9e6c703308f809c742ca8d8a",
+    "contentSha256": "6c06e6bbf01daf66ce11c3f835f82ee32c0d365cd33e549f639b868aa20a3272"
+  },
+  "installed-browser.log.gz": {
+    "sha256": "3de82256bbf4e2ad705fda6038dfae39dbbe60fbebe022c1c1060ac122f36591",
+    "contentSha256": "44bd5fb8ed8bf6a6872f3d0af4c9c5c85dbb9158a417ee9c94b404c44609b3d0"
+  },
+  "editor-build-race.log.gz": {
+    "sha256": "d2b7717a90ec645776972e3f235db4f666ea5b1398533aa0141cdf21e036097f",
+    "contentSha256": "c3fd3228acdeb4cd049320b99b49f14aa9b7d4af98e87b8f6481c70866ba5b4b"
+  },
+  "pptx-build-race.log.gz": {
+    "sha256": "9789f41c860dce94986d02b8644d43317df2d4f1c7fa694eebc88136fdef6073",
+    "contentSha256": "5b2245f3a42d34d1000335a9c491580e14ee5c49460df29fdfb8afa5b7519799"
+  },
+  "windows-ci-before.log.gz": {
+    "sha256": "daa0d6ce6d64832ad0b54731d93ea4cf91597372b8b25ac48ac4933e79ae540e",
+    "contentSha256": "21257de1e3a01190901df62d1a63f01cea79667c94ede34330f61333d31d4ffb"
+  },
+  "renderer-ci-before.log.gz": {
+    "sha256": "e4921b76a37d27aaeacdbfc11139cb4c4cbec75de6fab15945485365db5772e1",
+    "contentSha256": "e7e6bb207975455e3de4a14b043c3df925ad210a78a338f6643d817a7fd42bc9"
+  },
+  "editor-ci-previous-installed.json.gz": {
+    "sha256": "2b3f9da78aecb32195c2fb4cab396b14fb16cb818320001558ed33a4efcf9f89",
+    "contentSha256": "b6b7ca109d04cca9de18f792dd87abc98ea4d683a9282ff3e48da7b663e94c21"
+  },
+  "editor-ci-current.json.gz": {
+    "sha256": "54f04846cb8c070aad14997e3231a3c569589bec0a36dd4f2aa6d631edbcc7ee",
+    "contentSha256": "1efee4d5922291055cff32f37ac475b76bfe48f35b4f113dadcd3b18946e5011"
+  },
+  "pptx-ci-current.json.gz": {
+    "sha256": "00107e7478bd5b7a22fa73562f757b98ea9d0ab6b37a08eb04ec60495e0a9e51",
+    "contentSha256": "e97dfd928b2c0df84517a4f0d91642bc4d8918640ac61ca776504ca40183ebe7"
+  },
+  "pptx-ci-current.log.gz": {
+    "sha256": "dc5c11e7ec0e112e4fba01823429e02f92cd25a5d8a0dac16aa69a8ee6734c23",
+    "contentSha256": "3d0820ca35993dc2929cf2dce958c59000fc957fd0bdfd86f8ccd50df721242c"
+  },
+  "renderer-ci-checkpoint.json.gz": {
+    "sha256": "b1d6358c59c6926012ecf70e184eb3e0583e4cd1851b0cb70a7a453050997e9d",
+    "contentSha256": "20e5f61c2300025bd3dd2ee48b5600e20a996d384d782e22ee0e9299a9cd7ab5"
+  },
+  "editor-ci-source-prepared.json.gz": {
+    "sha256": "440adc2c3f1f7b8a44c65b42040e2eca5070e5ca3b7822086e9f7231e20b7510",
+    "contentSha256": "290f1f100ec6b6dc64dad164b5ca3513f27a06e3f9db39ae2917ab4aab91381c"
+  },
+  "editor-ci-installed-prepared.json.gz": {
+    "sha256": "cbd58d78781df3a61b76cddcfb328ecd29a04ec871b4c459d0c0bc68a2b1e9a7",
+    "contentSha256": "8a88d92e1773275ae3d5dfaf6acab0327400bf3f4a75632cd74f87d8007c083d"
+  },
+  "editor-ci-source-rich-painted.json.gz": {
+    "sha256": "078af4d6e2f1bfdbc8a18a7bae275ecaa74576ee0c7f4ccb24ee4ee205183516",
+    "contentSha256": "fdba9eae14f5432db2b529b9f38eb5fe691b4a706ddd875247f9bf9a7f3291a4"
+  },
+  "editor-ci-installed-rich-painted.json.gz": {
+    "sha256": "4e075a1f76a1a648ff96207bb86783b99516eb40560b23a4e1b0daf38a7a07f7",
+    "contentSha256": "308b815ebe2de0891ceb4bbdaf9a50690592630f5e6dd2dab35fdabfcb153a1e"
+  },
+  "editor-ci-installed-rich-measured.json.gz": {
+    "sha256": "75e4eec4070ee97aa6eaa4a32bc319e1913b6374ef999867d75406860f35afd6",
+    "contentSha256": "0beb84d0ac6ba03c2f87ea253a7a01287bfe0348699a4fb3c04d09f2ea514340"
+  }
+}
