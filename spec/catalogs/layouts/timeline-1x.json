@@ -1,13 +1,13 @@
 {
   "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-  "id": "number-1x",
-  "name": "Number 1x",
+  "id": "timeline-1x",
+  "name": "Timeline 1x",
   "placeholders": [
     {
       "type": "title"
     },
     {
-      "type": "metric"
+      "type": "timeline"
     }
   ]
 }

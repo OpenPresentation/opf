@@ -214,7 +214,7 @@
         "type": "title"
       },
       {
-        "type": "text"
+        "type": "metric"
       }
     ]
   },
@@ -226,10 +226,10 @@
         "type": "title"
       },
       {
-        "type": "text"
+        "type": "metric"
       },
       {
-        "type": "text"
+        "type": "metric"
       }
     ],
     "composition": {
@@ -244,13 +244,13 @@
         "type": "title"
       },
       {
-        "type": "text"
+        "type": "metric"
       },
       {
-        "type": "text"
+        "type": "metric"
       },
       {
-        "type": "text"
+        "type": "metric"
       }
     ],
     "composition": {
@@ -265,16 +265,16 @@
         "type": "title"
       },
       {
-        "type": "text"
+        "type": "metric"
       },
       {
-        "type": "text"
+        "type": "metric"
       },
       {
-        "type": "text"
+        "type": "metric"
       },
       {
-        "type": "text"
+        "type": "metric"
       }
     ],
     "composition": {
@@ -290,19 +290,19 @@
         "type": "title"
       },
       {
-        "type": "text"
+        "type": "metric"
       },
       {
-        "type": "text"
+        "type": "metric"
       },
       {
-        "type": "text"
+        "type": "metric"
       },
       {
-        "type": "text"
+        "type": "metric"
       },
       {
-        "type": "text"
+        "type": "metric"
       }
     ],
     "composition": {
@@ -318,22 +318,22 @@
         "type": "title"
       },
       {
-        "type": "text"
+        "type": "metric"
       },
       {
-        "type": "text"
+        "type": "metric"
       },
       {
-        "type": "text"
+        "type": "metric"
       },
       {
-        "type": "text"
+        "type": "metric"
       },
       {
-        "type": "text"
+        "type": "metric"
       },
       {
-        "type": "text"
+        "type": "metric"
       }
     ],
     "composition": {
@@ -556,5 +556,29 @@
     "id": "blank",
     "name": "Blank",
     "placeholders": []
+  },
+  {
+    "id": "quote-1x",
+    "name": "Quote 1x",
+    "placeholders": [
+      {
+        "type": "title"
+      },
+      {
+        "type": "quote"
+      }
+    ]
+  },
+  {
+    "id": "timeline-1x",
+    "name": "Timeline 1x",
+    "placeholders": [
+      {
+        "type": "title"
+      },
+      {
+        "type": "timeline"
+      }
+    ]
   }
 ]

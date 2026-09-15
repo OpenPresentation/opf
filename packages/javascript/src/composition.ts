@@ -215,7 +215,7 @@ const headings = new Set(["title", "subtitle", "tag"]);
 const rows = ["top", "middle", "bottom"];
 const columns = ["left", "center", "right"];
 const record = (value: unknown): Record<string, any> => value && typeof value === "object" && !Array.isArray(value) ? value : {};
-const kind = (field: string) => field === "items" || field === "bullets" ? "list" : field;
+const kind = (field: string) => field === "items" ? "list" : field === "bullets" ? "text" : field;
 const round = (value: number) => Math.round(value * 1e6) / 1e6 || value;
 
 export interface FurniturePartBase {

@@ -175,7 +175,7 @@
             "quote",
             "timeline"
           ],
-          "description": "Default content kind for the beat's slide. Mirrors ContentPayload.type and helps engines choose a sensible layout when only the beat is specified."
+          "description": "Default content kind for the beat's slide. Uses ContentPayload.type names to help engines choose a layout. The legacy shape value is retained for compatibility and requests an image representation; it is not a native ContentPayload type."
         },
         "layoutHint": {
           "type": "string",

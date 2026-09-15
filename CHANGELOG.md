@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.10.1
+
+- Declare metric placeholders for number layouts and add native quote and timeline layouts. Extend layout classification to match supported content kinds while retaining the legacy Number label.
+- Preserve text-style bullets as text in composed payloads so returned payloads remain valid OPF. Clarify legacy diagram and narrative shape representations.
+- Correct the layout regeneration index schema and rebuild CLI 0.8.1 with the updated catalog and schema.
+
 ## 0.10.0
 
 - Add offline OPF lint with exact source locations, schema and catalog context, asset diagnostics, explicit design contracts and actionable alternatives. Expose the same read-only diagnostics through CLI 0.8.0 without fetching catalogs or modifying source.

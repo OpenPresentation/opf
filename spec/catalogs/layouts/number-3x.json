@@ -7,13 +7,13 @@
       "type": "title"
     },
     {
-      "type": "text"
+      "type": "metric"
     },
     {
-      "type": "text"
+      "type": "metric"
     },
     {
-      "type": "text"
+      "type": "metric"
     }
   ],
   "composition": {
