@@ -1782,6 +1782,11 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
   if (isXmlPart(path)) {
     let xml=decodeText(bytes);
     if (path === '[Content_Types].xml') {
+      // PptxGenJS 4.0.1 emits one slide-master override per slide even
+      // though it creates only the actual master parts. Omit phantom master
+      // declarations without changing any existing part or relationship.
+      xml = xml.replace(/<Override PartName="\/(ppt\/slideMasters\/slideMaster\d+\.xml)"[^>]*\/>/g,
+        (override, part) => Object.hasOwn(entries, part) ? override : '');
       // Explicit per-part types also correct PptxGenJS's image/jpg default.
       const overrides = [...imageMetadata].filter(([, metadata]) => metadata).map(([part, metadata]) =>
         `<Override PartName="/${part}" ContentType="${metadata.mediaType}"/>`).join('');
