@@ -1,0 +1,15 @@
+{
+  "key": "technical/design-backgrounds.opf.json#2",
+  "records": [
+    {
+      "side": "before",
+      "svgSha256": "1e074784f1b1e5d1b671d8cdec9d4babca2145b6140c7f02b99f4065baec5cff",
+      "pngSha256": "8fd1507e9dd055ecff5c3496f470b340bbb13ea1371dc07eabb7438af4df9647"
+    },
+    {
+      "side": "after",
+      "svgSha256": "1e188b2760f370ce78b53b99e4a527950eeff78ac7e14a176781708f6244488d",
+      "pngSha256": "e2c8a3be6c0cf4f0ddbea1f850149c0f70857d6ae7e1af910439b1e1b71c106e"
+    }
+  ]
+}

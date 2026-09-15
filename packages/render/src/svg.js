@@ -485,7 +485,7 @@ function bindSlide(presentation, slide, layout, index, context) {
 
   const design = resolveDesign(presentation, slide, context);
   for (const role of ["heading","body","code"]) design.fonts[role] = resolveTextStyle({fontFamily:design.fonts[role],fontWeight:role === "heading" ? 700 : 400},context.options.textMeasurement).fontFamily;
-  const geometry = composeSlide(slide, { ...design.dimensions, layout, slideIndex: index, fonts: design.fonts, contentAlignment:design.contentAlignment, titleAlignment:design.titleAlignment, textRasterPadding:context.options.textRasterPadding, contentBox:design.contentBox, textMeasurement: context.options.textMeasurement });
+  const geometry = composeSlide(slide, { ...design.dimensions, layout, presentation, slideIndex: index, fonts: design.fonts, contentAlignment:design.contentAlignment, titleAlignment:design.titleAlignment, textRasterPadding:context.options.textRasterPadding, contentBox:design.contentBox, textMeasurement: context.options.textMeasurement });
   return {
     geometry,
     assets: presentation.assets ?? {},
@@ -1138,20 +1138,16 @@ function inlineChartRows(data) {
 }
 
 function renderFurniture(bound, presentation, width, height, options, kind) {
-  const local=bound.slide.design?.[kind] !== undefined;
-  const furniture=local?bound.slide.design[kind]:presentation.design?.[kind];
-  if(!furniture)return "";
-  const root=local?`${bound.path}.design.${kind}`:`design.${kind}`;
-  const organizations=Array.isArray(presentation.organization)?presentation.organization:[presentation.organization];
-  const organization=organizations.find(item=>item?.role==='primary')??organizations.find(Boolean);
-  return tag('g',traceAttrs(options,root),['left','center','right'].map((zone,index)=>{
-    const item=furniture[zone];if(!item)return '';
-    const box={x:width*(.07+index*.3),y:kind==='header'?height*.025:height*.925,width:width*.26,height:height*.05};
-    if(item.image)return renderImage({value:item.image,path:`${root}.${zone}.image`},box,bound,{...options,imageFit:'contain'});
-    const pieces=[item.text,item.organization?organization?.name:null,item.section?bound.slide.section:null,item.slideNumber?String(bound.index+1):null,typeof item.date==='string'?item.date:null].filter(value=>value!==undefined&&value!==null&&value!=='');
-    if(item.date===true)reportDiagnostic({code:'date-needs-value',path:`${root}.${zone}.date`,message:'Use a literal date string for a reproducible preview; the document does not define a presentation date.'},options);
-    const anchor=['start','middle','end'][index],x=index===0?width*.07:index===1?width/2:width*.93;
-    return tag('text',{x:stableNumber(x),y:stableNumber(kind==='header'?height*.05:height-28),'text-anchor':anchor,'font-family':fontStack(bound.design.fonts.body,bound.design.fontScheme.type),'font-size':13,fill:bound.design.colors.mutedText,...traceAttrs(options,`${root}.${zone}`)},escapeText(pieces.join(' · ')));
+  const layout=bound.geometry.furniture;
+  if(!layout){
+    const value=bound.slide.design?.[kind]!==undefined?bound.slide.design[kind]:presentation.design?.[kind];
+    if(value)throw new OPFRenderError('missing-furniture-layout','Header/footer rendering requires coordinated core furniture geometry.',{path:bound.path});
+    return '';
+  }
+  return tag('g',{},layout.parts.filter(part=>part.kind===kind).map(part=>{
+    const trace=options.trace?{'data-opf-furniture-kind':kind,'data-opf-furniture-field':part.field,'data-opf-furniture-generated':String(part.generated),'data-opf-furniture-editable':!part.generated?'true':undefined,'data-opf-furniture-source':part.sourcePath}:{};
+    if(part.type==='image')return tag('g',trace,renderImage({value:part.image,path:part.path},part.box,bound,{...options,imageFit:'contain'}));
+    return tag('g',trace,renderTextBox(part.text,part.box,bound,{path:part.path,fit:part.fit,textStyle:part.style,fontFamily:part.style.fontFamily,align:part.alignment,fill:bound.design.colors.mutedText,diagnosticsHandled:true,options}));
   }).join(''));
 }
 function renderBranding(bound,presentation,width,height,options) {

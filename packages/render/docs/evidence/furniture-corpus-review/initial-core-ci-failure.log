@@ -1,0 +1,89 @@
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	﻿2026-09-14T21:33:28.8227031Z ##[group]Run pnpm test:packages
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:28.8227386Z ^[[36;1mpnpm test:packages^[[0m
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:28.8228029Z shell: sh -e {0}
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:28.8228260Z env:
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:28.8228519Z   PNPM_HOME: /github/home/setup-pnpm/node_modules/.bin
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:28.8229096Z   OPF_GOLDEN_BASELINE: /home/runner/work/opf/opf/opf-render/test/golden/opf-examples-png.timeline.sha256.json
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:28.8229610Z ##[endgroup]
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:29.1524447Z 
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:29.1525464Z > openpresentation-workspace@ test:packages /__w/opf/opf/opf
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:29.1526284Z > node scripts/test-package-ecosystem.mjs
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:29.1526621Z 
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:30.0006353Z Coordinated links passed: core, renderer and editor converter, repeat setup and packages-only isolation.
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:30.0928899Z npm warn Unknown env config "verify-deps-before-run". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:30.0930969Z npm warn Unknown env config "npm-globalconfig". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:30.0932226Z npm warn Unknown env config "_jsr-registry". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:30.1085698Z 
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:30.1086228Z > @openpresentation/opf-render@0.7.0 typecheck
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:30.1091424Z > node --check src/index.js && node --check scripts/build.mjs && node --check scripts/validate-package.mjs && node --check test/smoke.mjs && node --check test/golden.mjs && node --check src/fonts.js && node --check src/fonts-node.js && node --check src/font-compatibility.js && node --check test/office-fonts.mjs && node --check src/fonts-browser.js && node --check test/fonts-browser.mjs && node --check src/svg.js && node --check src/raster.js && node --check src/raster-images.js && node --check test/webp.mjs && node --check test/jpeg-orientation.mjs && node --check scripts/build-browser-check.mjs && node --check test/jpeg-browser.js && node --check test/rich-table.mjs && node --check test/styled-table.mjs && node --check test/chart-colors.mjs && node --check test/image-placeholders.mjs && node --check test/image-placeholders-browser.mjs && node --check test/accepted-text.mjs && node --check test/accepted-text-fixtures.mjs && node --check test/accepted-text-browser.mjs && node --check test/rich-spacing-browser.mjs && node --check test/rich-flow-browser.mjs && node --check test/rich-flow-review-sheets.mjs && node --check test/furniture.mjs
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:30.1095202Z 
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:30.9887292Z npm warn Unknown env config "verify-deps-before-run". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:30.9889209Z npm warn Unknown env config "npm-globalconfig". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:30.9890348Z npm warn Unknown env config "_jsr-registry". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:31.0035823Z 
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:31.0036462Z > @openpresentation/opf-render@0.7.0 validate
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:31.0037057Z > node scripts/validate-package.mjs
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:31.0037269Z 
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:31.1145640Z @openpresentation/opf-render metadata is release-lane ready.
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:31.2102438Z npm warn Unknown env config "verify-deps-before-run". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:31.2104513Z npm warn Unknown env config "npm-globalconfig". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:31.2106433Z npm warn Unknown env config "_jsr-registry". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:31.2258757Z 
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:31.2259449Z > @openpresentation/opf-render@0.7.0 test
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:31.2263960Z > npm run build && node test/furniture.mjs && node test/font-outlines.mjs && node test/accepted-text.mjs && node test/image-placeholders.mjs && node test/chart-colors.mjs && node test/smoke.mjs && node test/webp.mjs && node test/jpeg-orientation.mjs && node test/fonts.mjs && node test/office-fonts.mjs && node test/timeline.mjs && node test/quote-footer.mjs && node test/shared-quote.mjs && node test/rich-trace.mjs && node test/rich-table.mjs && node test/golden-gate.mjs && node test/golden.mjs && node test/fonts-browser.mjs && node test/design-preview.mjs && npm run build:browser-check && npm run test:styled-table
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:31.2267152Z 
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:31.3148960Z npm warn Unknown env config "verify-deps-before-run". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:31.3151031Z npm warn Unknown env config "npm-globalconfig". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:31.3153040Z npm warn Unknown env config "_jsr-registry". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:31.3301970Z 
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:31.3302739Z > @openpresentation/opf-render@0.7.0 build
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:31.3303278Z > node scripts/build.mjs
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:31.3303454Z 
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:31.9675734Z Furniture renderer passed: shared readable fields, combined image/text, generated metadata, fit images, local disabling and unresolved-content rejection.
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:33.0588227Z Font outlines: 99 pinned face/text combinations preserve advances, scaling and cache isolation; empty ink, negative bearings, substitution and strict errors pass.
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:34.1637122Z Accepted text: 48 wide/portrait/card/alignment/scalar/rich cases consume exact accepted fits and styles; overflow diagnostics and strict rejection pass.
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:34.4863492Z Image placeholders passed: 7 source-preserving theme, bounded-label/icon, accessible-description, alias override and resolver cases; opacity preserved and asset failures explicit.
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:34.8359417Z Chart colors passed: 40 simple/catalog paths, light/dark/opposite surfaces, retained alpha and unresolved data; no source mutation.
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:36.5226457Z opf-render smoke passed (126 OPF corpus deck(s) rendered).
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:37.6780582Z WebP raster passed: 23 PNG/PDF and fit/crop cases; independent pixels, PDF image streams, alpha/EXIF/first frame, SVG input forms, errors and unchanged source SVG.
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:38.2578400Z JPEG orientation passed: 24 raster/PDF and fit/crop cases across all eight orientations; independent Pillow pixels (max channel difference 2), original orientation-1 bytes and path-specific errors.
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:38.8767136Z Fonts: actual advances, scaling, strict missing fonts/glyphs, explicit substitution, embedding and raster output passed.
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:40.8568366Z Office font policy passed: 24 bundled faces, exact-first lookup, scoped metric claims, theme aliases, explicit approximate fallback, and symbol/math/coverage errors.
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:41.3398472Z Timelines passed: 1/2/4/8 events, wide and portrait slides, measured text and marker containment.
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:44.0619827Z Quote footer passed: 8 fitted long quotes retain separation, 2 oversized cases diagnose/reject in strict mode across wide and portrait canvases.
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:45.0729637Z Shared quote SVG: 4 exact accepted layouts/styles with no extra measurement, reasoned overflow, strict rejection and no tiny-cell omission.
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:45.3747293Z Rich trace passed: leading/trailing blank lines, CRLF, cross-run offsets and measured heights.
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:45.7865198Z Rich table renderer passed: formatted cell/header runs, trace paths, links, empty rich cells, PNG output and strict overflow.
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:48.5617690Z Golden gate passed: missing baseline, pixel drift, source drift, non-mutating candidate generation and empty-corpus rejection.
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:57.1922503Z node:internal/modules/run_main:107
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:57.1924468Z     triggerUncaughtException(
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:57.1924893Z     ^
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:57.1925050Z 
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:57.1925749Z AssertionError [ERR_ASSERTION]: 657 raster baselines changed; see /__w/opf/opf/opf-render/artifacts/golden/diff.json
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:57.1926389Z 
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:57.1926522Z 657 !== 0
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:57.1926680Z 
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:57.1926962Z     at file:///__w/opf/opf/opf-render/test/golden.mjs:70:10 {
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:57.1927473Z   generatedMessage: false,
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:57.1928061Z   code: 'ERR_ASSERTION',
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:57.1928427Z   actual: 657,
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:57.1928717Z   expected: 0,
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:57.1929069Z   operator: 'strictEqual',
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:57.1929432Z   diff: 'simple'
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:57.1929699Z }
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:57.1929840Z 
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:57.1929964Z Node.js v24.20.0
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:57.2199594Z file:///__w/opf/opf/opf/scripts/test-package-ecosystem.mjs:12
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:57.2200428Z   if (result.status !== 0) throw new Error(`${command} ${args.join(' ')} failed (${result.status})`);
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:57.2200918Z                                  ^
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:57.2201096Z 
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:57.2201262Z Error: npm run test failed (1)
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:57.2201701Z     at run (file:///__w/opf/opf/opf/scripts/test-package-ecosystem.mjs:12:34)
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:57.2202221Z     at file:///__w/opf/opf/opf/scripts/test-package-ecosystem.mjs:17:57
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:57.2202700Z     at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:57.2203126Z     at async node:internal/modules/esm/loader:647:26
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:57.2203665Z     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:57.2203992Z 
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:57.2204096Z Node.js v24.20.0
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:57.2366775Z  ELIFECYCLE  Command failed with exit code 1.
+packages	Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks	2026-09-14T21:33:57.5074338Z ##[error]Process completed with exit code 1.

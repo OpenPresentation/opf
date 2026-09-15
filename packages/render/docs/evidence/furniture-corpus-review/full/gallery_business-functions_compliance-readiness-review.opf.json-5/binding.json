@@ -1,0 +1,15 @@
+{
+  "key": "gallery/business-functions/compliance-readiness-review.opf.json#5",
+  "records": [
+    {
+      "side": "before",
+      "svgSha256": "a1a0aaef658d8e9645ce3308b6be6ff4375b9f763b138258a3ab1e1f12f038fa",
+      "pngSha256": "0c2d9c8ce5365342e3c224014554fd51a45987583dcb993a8d2fea1539be9364"
+    },
+    {
+      "side": "after",
+      "svgSha256": "e7f70a599b192974aef0ca7e719be94cc13d99c7d6b3cdffaf3c8d45d1a97b2a",
+      "pngSha256": "f3439aeef6d26c19472691ba65908735e8addb90de6eb9cf370d51faf601c933"
+    }
+  ]
+}

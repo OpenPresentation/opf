@@ -18,7 +18,7 @@ jobs:
       run:
         working-directory: opf-render
     env:
-      OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf-render/test/golden/opf-examples-png.timeline.sha256.json
+      OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf-render/test/golden/opf-examples-png.furniture.sha256.json
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -30,21 +30,21 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
-          ref: f94125a1ff95bf0974a055fe1c081d348dad54f2
+          ref: b9f5291faacb844f52339b676a910eaf22a5eddd
           path: opf
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-pptx
-          ref: e480f4e6225a4ef74bb30be45a493e2c7336baaa
+          ref: 5be8fefcf799d403d7bfc888d12b8d693c0d49a6
           path: opf-pptx
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-editor
-          ref: 4557f55ea60c24ac5a8cd407f1810d4a5db6f76f
+          ref: 810690a93dda35fdc55f395db6a911779bab93bd
           path: opf-editor
           fetch-depth: 0
           persist-credentials: false
@@ -99,6 +99,8 @@ jobs:
           node scripts/test-plain-whitespace-workflow.mjs artifacts/plain-whitespace-workflow installed
           node scripts/test-readability-browser.mjs artifacts/readability-browser installed
           node scripts/test-timeline-workflow.mjs artifacts/timeline-workflow installed
+          node scripts/test-furniture-workflow.mjs artifacts/furniture-workflow installed
+          node ../opf-editor/test/json-editor-browser.mjs artifacts/editor/json-editor-installed.json artifacts/npm/consumer
           node scripts/test-timeline-acceptance.mjs artifacts/timeline-acceptance.json
       - run: npm pack --dry-run
       - name: Preserve candidate and raster evidence
@@ -108,6 +110,7 @@ jobs:
           name: candidate-opf-render-${{ runner.os }}-node24
           path: |
             opf/artifacts/editor/*report.json
+            opf/artifacts/editor/json-editor-installed.json
             opf/artifacts/editor/*failure.png
             opf/artifacts/editor/*installed-code*.json
             opf-render/artifacts/golden/**
@@ -118,6 +121,7 @@ jobs:
             opf/artifacts/plain-whitespace-workflow/**
             opf/artifacts/readability-browser/**
             opf/artifacts/timeline-workflow/**
+            opf/artifacts/furniture-workflow/**
             opf/artifacts/timeline-acceptance.json
             opf-render/artifacts/plain-whitespace-browser/**
             opf-render/artifacts/rich-flow-browser/**

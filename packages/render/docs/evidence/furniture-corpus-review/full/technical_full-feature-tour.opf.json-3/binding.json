@@ -1,0 +1,15 @@
+{
+  "key": "technical/full-feature-tour.opf.json#3",
+  "records": [
+    {
+      "side": "before",
+      "svgSha256": "0ebf375e593577966172a56c34e74c2190d0e7bd239a7ced0ed552551b6f446b",
+      "pngSha256": "2e8d033feea12c4d72b223f99f5ccab6000820789c79d6da477dbf1b04f95da9"
+    },
+    {
+      "side": "after",
+      "svgSha256": "f5b7d88ea85fdafd02fcee5a5f189037ccfa78180f943b1496ddf77f7ae94a06",
+      "pngSha256": "324d57e0bdec8d598ec72c85f00c041b6b14de8f8da54288c316b59164766b51"
+    }
+  ]
+}

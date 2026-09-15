@@ -1,0 +1,15 @@
+{
+  "key": "gallery/business-functions/contract-cycle-time-brief.opf.json#0",
+  "records": [
+    {
+      "side": "before",
+      "svgSha256": "dacd5942ee606c0dba99526caa0c358fe8dbc18f2a6ba93be5ef20abe81ccaa4",
+      "pngSha256": "2fd93d918bf67c6944e925e2fed668b2ca1c0191a552267295563de21c9f4015"
+    },
+    {
+      "side": "after",
+      "svgSha256": "5ed2896856638702d3f9ca8b9b5c45273c752b4c1d8a50e7b14481f7093ff079",
+      "pngSha256": "31a70ce22641d0a4131f0119d5f2fe6bc35e3940541bf624037ece9b3716e5f1"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "key": "gallery/government/wildfire-evacuation-preparedness.opf.json#5",
+  "records": [
+    {
+      "side": "before",
+      "svgSha256": "e5b7c6999414415695a62549c606e38cc4953b9478a91d7bd40343cc48cbe190",
+      "pngSha256": "8b32d7af129c22205c79ea9351a2107bd2736cd74a3bea3731e4dcb57d19fa23"
+    },
+    {
+      "side": "after",
+      "svgSha256": "4d5ce1d0057fd0f2b27b5dfa2e1c40f8da754f2c0bbb7101e951acf3e09eb025",
+      "pngSha256": "9893e69e0fc18c94bd4ff887635d8fb86371cf24897a89f0a93822ce92f9902d"
+    }
+  ]
+}
