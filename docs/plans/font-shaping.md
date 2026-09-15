@@ -37,12 +37,33 @@ still passes all 805 furniture-baseline golden slides.
 
 This is an implementation checkpoint, not backend promotion or release. The
 draft adds macOS/Windows Node and Linux package/browser CI; consult its current
-checks rather than treating local results as those runs. Next: compressed-font
-preparation and browser collection painting, followed by the variable/CFF,
-itemization/bidi, fallback, performance, complete slide/ink and shared
-editor/export acceptance below. Explicit WOFF rejection is a temporary
-candidate limitation, not the target format contract. Native prerequisites
-remain unchanged.
+checks rather than treating local results as those runs. The temporary WOFF
+rejection at that checkpoint is superseded by the container increment below.
+Native prerequisites remain unchanged.
+
+### Container checkpoint — September 14, 2026
+
+Renderer `955aaf8261885c645ff95446269584b35b40cc71` prepares WOFF/WOFF2 locally
+and fixes selected TTC browser/embedding bytes. All 33 bundled faces pass 66
+compressed-instance comparisons; both faces of TTC and WOFF2 collections match
+the originals. Seventy browser canvas pairs paint identical nonempty pixels to
+their original selected faces, with geometric-precision advance differences
+below the unchanged 0.1px gate. Standalone wrappers retain metadata/private
+bytes, selected tables survive extraction, checksum repair and invalidated
+signature removal are explicit, and fourteen malformed/limit controls reject.
+
+The [retained container evidence](https://github.com/OpenPresentation/opf-render/tree/955aaf8261885c645ff95446269584b35b40cc71/docs/evidence/font-containers-20260914)
+includes the initial canvas-mode mismatch and fixture errors. Full Node 24
+renderer acceptance still covers all 805 unchanged golden slides; fresh
+core/renderer tarballs pass the Node/browser matrix, all shipped-file hashes,
+TypeScript consumers and a zero-finding audit. The source-pinned WOFF2 adapter
+uses bounded synchronous Brotli and works without JavaScript `unsafe-eval`.
+These are portable local/installed results; consult PR21 for current-head CI.
+
+Next: DFont resources, CFF/CFF2 and variable-instance coverage, paragraph
+itemization/bidi, fallback, performance/lifetime analysis, complete slide/ink
+review and shared editing/undo/export acceptance. Fontkit remains the default;
+this is not registry publication, site adoption or native compatibility proof.
 
 ## Next runtime implementation
 

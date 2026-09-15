@@ -27,8 +27,11 @@ now implements an opt-in renderer service in
 [PR21](https://github.com/OpenPresentation/opf-render/pull/21). It retains the
 registry's face/policy/coverage contracts and reproduces the Akasia correction
 through actual runtime APIs. Default and published measurement remain unchanged;
-full format, paragraph, shared editing/export and native acceptance are still
-required. The study above remains the historical probe checkpoint.
+the subsequent [container checkpoint](font-shaping.md#container-checkpoint--september-14-2026)
+adds bounded WOFF/WOFF2 preparation and consistent selected-TTC measurement,
+embedding and browser pixels. DFont/CFF/variable coverage, paragraph handling,
+shared editing/export and native acceptance are still required. The study above
+remains the historical probe checkpoint.
 
 Default new presentations to Roboto, with Roboto Mono for code. Use the same supplied font bytes for measurement, browser previews, and raster exports. Native PowerPoint exports name the resolved open font; recipients currently need that font installed.
 
