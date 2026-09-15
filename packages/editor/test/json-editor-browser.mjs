@@ -22,12 +22,13 @@ if(consumer){
   }
 }
 const browser=await chromium.launch({channel:process.platform==='win32'?'msedge':undefined});
-const errors=[],requests=[],checks=[],mod=process.platform==='darwin'?'Meta':'Control';
+const errors=[],requests=[],checks=[],keymapPlatform=process.env.OPF_JSON_TEST_PLATFORM??process.platform,mod=keymapPlatform==='darwin'?'Meta':'Control';
 let page;
 try{
   page=await browser.newPage({viewport:{width:1000,height:800}});
   page.on('pageerror',error=>errors.push(error.message));page.on('request',request=>requests.push(request.url()));
   await page.setContent('<style>#editor{width:700px;height:650px}.cm-editor{height:100%}.cm-scroller{overflow:auto}</style><div id="editor"></div><button>After editor</button>');
+  if(process.env.OPF_JSON_TEST_PLATFORM)await page.evaluate(platform=>Object.defineProperty(navigator,'platform',{value:platform==='darwin'?'MacIntel':platform==='win32'?'Win32':'Linux x86_64'}),keymapPlatform);
   await page.addScriptTag({content:bundle.outputFiles[0].text});await page.context().setOffline(true);
   const source=page.getByRole('textbox',{name:'OPF JSON',exact:true});
   const read=()=>page.evaluate(()=>control.api.getValue());
@@ -77,7 +78,7 @@ try{
   await page.evaluate(()=>mount('{"slides":[]}'));assert.equal(await source.count(),1);await page.evaluate(()=>control.destroy());assert.equal(await source.count(),0);
   checks.push('Destroy cancels pending menus and remount creates one editor');
   assert.deepEqual(await page.evaluate(()=>failures),[]);assert.deepEqual(errors,[]);assert.deepEqual(requests,[]);
-  const report={status:'passed',runtime:consumer?'installed':'checkout',node:process.version,browser:browser.version(),platform:process.platform,checks,errors,externalRequests:requests,verifierSha256:createHash('sha256').update(await readFile(new URL(import.meta.url))).digest('hex'),bundleSha256:createHash('sha256').update(bundle.outputFiles[0].text).digest('hex')};
+  const report={status:'passed',runtime:consumer?'installed':'checkout',node:process.version,browser:browser.version(),platform:process.platform,keymapPlatform,checks,errors,externalRequests:requests,verifierSha256:createHash('sha256').update(await readFile(new URL(import.meta.url))).digest('hex'),bundleSha256:createHash('sha256').update(bundle.outputFiles[0].text).digest('hex')};
   if(process.argv[2])await writeFile(process.argv[2],JSON.stringify(report,null,2)+'\n');
   console.log(`JSON editor: ${checks.length} offline browser workflows pass (${report.runtime}).`);
 }catch(error){

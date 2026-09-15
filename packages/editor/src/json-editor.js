@@ -1,6 +1,6 @@
 import { Annotation, Compartment, EditorSelection, EditorState, Prec, StateEffect, StateField, Transaction } from "@codemirror/state";
 import { Decoration, EditorView, drawSelection, keymap, lineNumbers } from "@codemirror/view";
-import { defaultKeymap, history, historyKeymap, indentWithTab, isolateHistory } from "@codemirror/commands";
+import { defaultKeymap, history, historyKeymap, indentWithTab, isolateHistory, redo } from "@codemirror/commands";
 import { HighlightStyle, bracketMatching, codeFolding, foldKeymap, indentOnInput, indentUnit, syntaxHighlighting } from "@codemirror/language";
 import { json, jsonParseLinter } from "@codemirror/lang-json";
 import { closeBrackets, closeBracketsKeymap } from "@codemirror/autocomplete";
@@ -148,6 +148,14 @@ function mountJsonCodeEditor(parent, options) {
     // Some platforms report a lowercase key even with Shift held. Handle
     // formatting before the standard Mod-f search binding normalizes the key.
     Prec.high(EditorView.domEventHandlers({ keydown(event) {
+      // A lowercase "z" with Shift can match CodeMirror's unshifted undo
+      // binding first. Resolve redo before that fallback, even with older
+      // undo steps still available (otherwise it silently performs undo).
+      if ((event.metaKey || event.ctrlKey) && event.shiftKey && !event.altKey && event.key.toLowerCase() === "z") {
+        event.preventDefault();
+        redo(view);
+        return true;
+      }
       if ((event.metaKey || event.ctrlKey) && event.shiftKey && !event.altKey && event.key.toLowerCase() === "f") {
         event.preventDefault();
         api.format();

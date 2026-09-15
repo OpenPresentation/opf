@@ -38,5 +38,30 @@
     "sha256": "eea00065cc6432a203d0919b37b5da757b3fc09c0feecca1ed734e1050af4d72",
     "uncompressedSha256": "447044e971ba984bae56bdddd648c03416f2fa704802258d7130f620155d2bbf",
     "bytes": 736
+  },
+  "ci-linux-before-redo.log.gz": {
+    "sha256": "bcf696aa53d1d89aaea8fc81664124f2974be340dcdcdce5082832ec658f2436",
+    "uncompressedSha256": "ec407220ff2794ec7ccbd9b1969fb040b63f281bc76a4a715112ff91417db788",
+    "bytes": 16143
+  },
+  "linux-keymap-before-redo.json.gz": {
+    "sha256": "f9038549de5934c8f1b4d89e95b7564411e2831fe9af004ad03506b9b4e725dc",
+    "uncompressedSha256": "99350608060e3be10559f2b37f6461337316fb065d5bb07c116888c71fc2921f",
+    "bytes": 765
+  },
+  "linux-keymap-after-redo.json.gz": {
+    "sha256": "6660dbcfe5092acd83740558fafcfe7b71457042f5fdad3a740fd5cbf88b0c53",
+    "uncompressedSha256": "8d7e55814c29ff168d0fd544d68e64756705545ffb2e8c29538d6f03b0cfdfca",
+    "bytes": 1095
+  },
+  "windows-keymap-after-redo.json.gz": {
+    "sha256": "ad4bc6fadf804b8e9f7c0f76d7f9400363fd6bfaae8fc6e765afcb5e1832b044",
+    "uncompressedSha256": "bd08d4b457c5ddcab0d4f95871ea179eaf8b5a48d4a78ceb85669422859d25a8",
+    "bytes": 1095
+  },
+  "mac-after-redo.json.gz": {
+    "sha256": "0e55d4d48ed1817521b5c9ac1bfd82d6d7308e6e1f529adfd7d26f1c576777d9",
+    "uncompressedSha256": "e63e97d9f87770ee99431696abd6d9eee143f6671b65595355eb035a2ca476c2",
+    "bytes": 1096
   }
 }

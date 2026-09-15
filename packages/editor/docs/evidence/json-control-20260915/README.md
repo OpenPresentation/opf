@@ -23,3 +23,9 @@ Host applications still own authoritative drafts, OPF validation, last-valid pre
 ## Reproduce
 
 Use Node 24 and the checked-in lockfile. Run `npm run test:json`, then `npm run test:json-browser -- report.json`. For an already installed consumer, append its absolute directory after the report path; the verifier rejects runtime imports outside that consumer's node_modules. Use the existing coordinated linking/packaging tooling for the full editor suite. `manifest.json` records both compressed and original-byte hashes for every retained report.
+
+## Linux CI redo correction
+
+CI run `34954301385` at `f3e030a` failed during the JSON clipboard undo/redo workflow. A Shift-modified lowercase `z` can match CodeMirror's unshifted undo binding before its redo fallback. When an earlier undo step remains, redo incorrectly executes that older undo. The same failure reproduced locally with Linux key bindings; both complete failures are retained.
+
+The control now handles Cmd/Ctrl+Shift+Z before CodeMirror's unshifted fallback, including when redo history is empty. Seven complete workflows pass on the Mac browser with native Mac bindings and with Linux/Windows binding configurations. The latter override `navigator.platform` for diagnosis; they do not constitute native Windows/Linux acceptance. Reports identify both host and keymap platforms. New native Linux CI remains required before merging; the earlier installed report predates this correction.
