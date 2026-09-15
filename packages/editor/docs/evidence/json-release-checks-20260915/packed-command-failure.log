@@ -1,0 +1,129 @@
+
+> @openpresentation/opf-editor@0.6.0 test:packed
+> node test/packed-install.mjs
+
+
+> @openpresentation/opf-editor@0.6.0 prepack
+> npm run build
+
+
+> @openpresentation/opf-editor@0.6.0 build
+> node scripts/build.mjs
+
+JSON source: exact mixed endings through typing, multi-range edits, deletion, native history, explicit paste and external changes.
+JSON options: schema paths, catalog precedence, exact token edits, custom values, invalid drafts, malformed catalog arrays and duplicate-key rejection pass.
+JSON editor: 7 offline browser workflows pass (installed).
+opf-editor smoke passed
+opf-editor component smoke passed
+Canvas fields: escaped keys, types, immutable drafts, validation and undo passed.
+Transfer: clipboard formats, code fences, fragments, collision-safe insertion, design/assets, undo and explicit gallery fetches passed.
+Schema controls: 625 documented fields, nested paths, catalog records, background forms, required defaults passed.
+Rich range editing passed: cross-run preservation, replacement, style removal, script exclusivity, grapheme safety, validation and atomic undo.
+Native rich input passed: style/link preservation, repeated-character affinity, graphemes and bounded run growth.
+Native rich input preserves mixed source line endings, cross-run CRLF, selection affinity, marks and metadata.
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert.ok(cardEditor.composeSlide(0).items.every(item=>item.frameBox))
+
+    at file:///private/var/folders/zj/5tv5dvds3793_qhx2jyxs0000000gn/T/opf-editor-packed-SzXaaj/consumer/verification/test/layout.mjs:51:8
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+node:internal/errors:986
+  const err = new Error(message);
+              ^
+
+Error: Command failed: /Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node /var/folders/zj/5tv5dvds3793_qhx2jyxs0000000gn/T/opf-editor-packed-SzXaaj/consumer/verification/test/layout.mjs
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert.ok(cardEditor.composeSlide(0).items.every(item=>item.frameBox))
+
+    at file:///private/var/folders/zj/5tv5dvds3793_qhx2jyxs0000000gn/T/opf-editor-packed-SzXaaj/consumer/verification/test/layout.mjs:51:8
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+
+    at genericNodeError (node:internal/errors:986:15)
+    at wrappedFn (node:internal/errors:540:14)
+    at checkExecSyncError (node:child_process:942:11)
+    at execFileSync (node:child_process:978:15)
+    at file:///Users/michael/Source/opf-editor/test/packed-install.mjs:59:16 {
+  status: 1,
+  signal: null,
+  output: [
+    null,
+    'Layout resizing passed: exact track geometry, row/column/nested/grid behavior, auto freeze, weight bounds, metadata preservation, stale guards and undo.\n',
+    'node:internal/modules/run_main:107\n' +
+      '    triggerUncaughtException(\n' +
+      '    ^\n' +
+      '\n' +
+      'AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n' +
+      '\n' +
+      '  assert.ok(cardEditor.composeSlide(0).items.every(item=>item.frameBox))\n' +
+      '\n' +
+      '    at file:///private/var/folders/zj/5tv5dvds3793_qhx2jyxs0000000gn/T/opf-editor-packed-SzXaaj/consumer/verification/test/layout.mjs:51:8\n' +
+      '    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n' +
+      '    at async node:internal/modules/esm/loader:647:26\n' +
+      '    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {\n' +
+      '  generatedMessage: true,\n' +
+      "  code: 'ERR_ASSERTION',\n" +
+      '  actual: false,\n' +
+      '  expected: true,\n' +
+      "  operator: '==',\n" +
+      "  diff: 'simple'\n" +
+      '}\n' +
+      '\n' +
+      'Node.js v24.21.0\n'
+  ],
+  pid: 59281,
+  stdout: 'Layout resizing passed: exact track geometry, row/column/nested/grid behavior, auto freeze, weight bounds, metadata preservation, stale guards and undo.\n',
+  stderr: 'node:internal/modules/run_main:107\n' +
+    '    triggerUncaughtException(\n' +
+    '    ^\n' +
+    '\n' +
+    'AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n' +
+    '\n' +
+    '  assert.ok(cardEditor.composeSlide(0).items.every(item=>item.frameBox))\n' +
+    '\n' +
+    '    at file:///private/var/folders/zj/5tv5dvds3793_qhx2jyxs0000000gn/T/opf-editor-packed-SzXaaj/consumer/verification/test/layout.mjs:51:8\n' +
+    '    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n' +
+    '    at async node:internal/modules/esm/loader:647:26\n' +
+    '    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {\n' +
+    '  generatedMessage: true,\n' +
+    "  code: 'ERR_ASSERTION',\n" +
+    '  actual: false,\n' +
+    '  expected: true,\n' +
+    "  operator: '==',\n" +
+    "  diff: 'simple'\n" +
+    '}\n' +
+    '\n' +
+    'Node.js v24.21.0\n'
+}
+
+Node.js v24.21.0

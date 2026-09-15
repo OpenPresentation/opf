@@ -41,6 +41,20 @@ try{
   assert.equal(await realpath(path.join(fixture,alias)),await realpath(path.join(installed,'dist')));
  }
  const tests=[];
+ for(const file of ['json-source.mjs','json-options.mjs']){
+  const output=execFileSync(process.execPath,[path.join(fixture,'test',file)],{cwd:consumer,encoding:'utf8'});
+  process.stdout.write(output);tests.push({file,fixtureSha256:hash(await readFile(path.join(fixture,'test',file))),output:output.trim()});
+ }
+ // Exercise the public JSON entrypoint using only installed consumer bytes.
+ // Retain this scoped checkpoint even if an unrelated later package gate fails.
+ await mkdir(path.join(root,'artifacts'),{recursive:true});
+ const jsonReport=path.join(root,`artifacts/packed-json-browser-node${process.versions.node.split('.')[0]}.json`);
+ process.stdout.write(execFileSync(process.execPath,[path.join(fixture,'test/json-editor-browser.mjs'),jsonReport,consumer],{cwd:consumer,encoding:'utf8',maxBuffer:8*1024*1024}));
+ const jsonBrowser=JSON.parse(await readFile(jsonReport,'utf8'));
+ assert.equal(jsonBrowser.status,'passed');assert.equal(jsonBrowser.runtime,'installed');assert.equal(jsonBrowser.checks.length,7);
+ assert.deepEqual(jsonBrowser.errors,[]);assert.deepEqual(jsonBrowser.externalRequests,[]);
+ for(const [file,digest] of Object.entries(files))assert.equal(hash(await readFile(path.join(installed,file))),digest,'JSON verification must not rebuild the installed editor');
+ await writeFile(path.join(root,`artifacts/packed-json-consumer-node${process.versions.node.split('.')[0]}.json`),JSON.stringify({node:process.version,name:manifest.name,version:manifest.version,integrity:packed.integrity,files,dependencies,tests:[...tests],jsonBrowser,boundary:'JSON control only, from a byte-matched installed candidate and registry dependencies. Full-package acceptance still requires every subsequent gate and a successful overall command exit.'},null,2)+'\n');
  for(const file of ['smoke.mjs','component-smoke.mjs','canvas-fields.mjs','transfer.mjs','schema.mjs','rich-text.mjs','layout.mjs','blocks.mjs','styled-table.mjs']){
   const output=execFileSync(process.execPath,[path.join(fixture,'test',file)],{cwd:consumer,encoding:'utf8'});
   process.stdout.write(output);tests.push({file,fixtureSha256:hash(await readFile(path.join(fixture,'test',file))),output:output.trim()});
@@ -61,7 +75,7 @@ try{
  const audit=JSON.parse(npm(['audit','--json'],consumer));assert.equal(audit.metadata.vulnerabilities.total,0);
  const signatures=npm(['audit','signatures'],consumer);process.stdout.write(signatures);
  await mkdir(path.join(root,'artifacts'),{recursive:true});
- await writeFile(path.join(root,`artifacts/packed-consumer-node${process.versions.node.split('.')[0]}.json`),JSON.stringify({node:process.version,name:manifest.name,version:manifest.version,integrity:packed.integrity,files,dependencies,tests,browser:browser.trim(),codeBrowser,richBrowser,signatureVerification:signatures.trim(),knownVulnerabilities:0,boundary:'Actual installed editor candidate with byte-matched distributables and registry predecessors; nine model/component suites and offline browser author/edit/paginate/export/reimport/undo, including code source/metadata preservation, blank multiline targets and rich-input source/selection/formatting/undo. Native PowerPoint and complete-set deployed-site evidence are separate gates.'},null,2)+'\n');
+ await writeFile(path.join(root,`artifacts/packed-consumer-node${process.versions.node.split('.')[0]}.json`),JSON.stringify({node:process.version,name:manifest.name,version:manifest.version,integrity:packed.integrity,files,dependencies,tests,browser:browser.trim(),codeBrowser,richBrowser,jsonBrowser,signatureVerification:signatures.trim(),knownVulnerabilities:0,boundary:'Actual installed editor candidate with byte-matched distributables and registry predecessors; eleven model/component suites and offline browser author/edit/paginate/export/reimport/undo, including JSON control/history/catalog menus, code source/metadata preservation, blank multiline targets and rich-input source/selection/formatting/undo. Native PowerPoint and complete-set deployed-site evidence are separate gates.'},null,2)+'\n');
  console.log(`Packed editor passed: ${Object.keys(files).length} byte-matched files, ${tests.length} model suites, offline browser workflow; ${packed.integrity}`);
 }finally{
  const actual=await realpath(temporary);assert.equal(actual,actualTemporary);
