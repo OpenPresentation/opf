@@ -1,0 +1,42 @@
+{
+  "browser-checkout.json.gz": {
+    "sha256": "607ff4d2b37fd5bf44a8b19fd089f3f99aeac136d6254008c5f236a001b66bc0",
+    "uncompressedSha256": "4e00048cff974bc0ebe603b7ddba5cb50f8a9d407ead2df26e7fea9847edbf29",
+    "bytes": 1066
+  },
+  "browser-installed.json.gz": {
+    "sha256": "8cc5c2149af580459f88a267990f5f11084a183e46e0548d9e76524e06dfbbf8",
+    "uncompressedSha256": "e2234e9b0317229834e1255ffb60667feb99f8986c775ed15224d9cc7606b805",
+    "bytes": 1067
+  },
+  "installed-runtime-audit.json.gz": {
+    "sha256": "1c4681b68b6334c0f94c6ffa0f9798011bd1ea235963edbeaeda9190db6bf5b4",
+    "uncompressedSha256": "0a538dc4fbdc79f6a6fef5c4bde4c6c23cf69bcda0893017aee8f9f9f68584ba",
+    "bytes": 10800
+  },
+  "registry-audit.json.gz": {
+    "sha256": "601bd3b63c7186ad50b7fcb80dda1b91321ef0cd6cf8c5ade368d5ca7f37fb15",
+    "uncompressedSha256": "20c715f3061f8e5af176e12dd2616a4a7b58e22c7eb9670c4ab9ced52a40d970",
+    "bytes": 360
+  },
+  "registry-signatures.log.gz": {
+    "sha256": "e2583ce3edfcc001a12425131d202896337a1e85e2bd7baeecf40c08fd2443b2",
+    "uncompressedSha256": "a57ff87c433e83e945c2e2b001e51b2dc3122386b9b7b1008b65e398910045d0",
+    "bytes": 176
+  },
+  "registry-predecessor-full-test-failure.log.gz": {
+    "sha256": "2a6ad290fd17c4dbec5e744ce4e012e01b1a8d82ca511e271d955ea67a0d7056",
+    "uncompressedSha256": "7c7be16537141ba656d263084421e2bc7c34b7b1e1145fb353d2982cc7bb961f",
+    "bytes": 2138
+  },
+  "coordinated-full-test.log.gz": {
+    "sha256": "aab0d4326d6a9a8c615bb17643fdf484f2651a85270a092496e399e5ddfa90af",
+    "uncompressedSha256": "20c5042025a41129134d53236c916c74080d28c6337c5fddbbfbb7bcc06b4449",
+    "bytes": 2245
+  },
+  "public-types.ts.gz": {
+    "sha256": "eea00065cc6432a203d0919b37b5da757b3fc09c0feecca1ed734e1050af4d72",
+    "uncompressedSha256": "447044e971ba984bae56bdddd648c03416f2fa704802258d7130f620155d2bbf",
+    "bytes": 736
+  }
+}

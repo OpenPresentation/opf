@@ -93,7 +93,8 @@
     "test:code-browser": "node test/code-browser.mjs",
     "test:metric-browser": "node test/metric-browser.mjs",
     "test:rich-input-browser": "node test/rich-input-browser.mjs",
-    "test:json": "npm run build && node test/json-source.mjs && node test/json-options.mjs"
+    "test:json": "npm run build && node test/json-source.mjs && node test/json-options.mjs",
+    "test:json-browser": "node test/json-editor-browser.mjs"
   },
   "dependencies": {
     "@codemirror/autocomplete": "6.20.3",

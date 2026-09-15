@@ -6,6 +6,34 @@ Unpublished integration work forwards effective title alignment and shared outli
 
 Embeddable local editor primitives for Open Presentation Format documents. The package turns traced `@openpresentation/opf-render` SVG output into JSON-path-aware edits, validates OPF after each change, and records undo/redo as JSON Patch operations.
 
+### Reusable JSON control (unreleased)
+
+This checkout exposes `mountJsonCodeEditor` from `@openpresentation/opf-editor/json-editor` and `getJsonFieldContext` / `replaceFieldOption` from `/json-options`. These exports are not in published version 0.6.0. They extract the code editing and contextual choices already used on openpresentation.org, so hosts can reuse them without replacing their surrounding UI.
+
+```js
+import { mountJsonCodeEditor } from '@openpresentation/opf-editor/json-editor';
+const control = mountJsonCodeEditor(container, {
+  code: source,
+  label: 'OPF JSON document',
+  lineNumbers: true,
+  catalogs: loadedCatalogRecords,
+  onChange: nextSource => receiveDraft(nextSource),
+  onError: error => showError(error),
+});
+// After a preview edit, send the updated source back through the same control.
+control.update(nextSource);
+// On unmount:
+control.destroy();
+```
+
+The host owns the source draft, OPF validation, slide preview, persistence and session history. `onChange` includes invalid JSON while typing; keep the last valid preview until the draft validates. `update` applies external source without emitting `onChange` or creating a local undo step. It preserves unrelated edits through CodeMirror's history mapping; it is not a collaboration/conflict-resolution protocol. Importing either entrypoint does not require a DOM; mounting requires an existing browser container.
+
+The control provides indentation, paired quotes/brackets, folding shortcuts, search, undo/redo, JSON syntax diagnostics and explicit formatting (`Cmd/Ctrl+Shift+F`). Enter at the end of a nonempty string array item supplies indentation, quotes and commas. Other Enter positions use ordinary JSON indentation. Source offsets are UTF-16 in the original authored string. Existing CRLF, CR and LF spellings survive ordinary edits and undo; new typed lines use the first existing separator. Paste retains the text delivered by the browser clipboard event. Explicit formatting deliberately standardizes whitespace, preserving JSON values and numeric lexemes.
+
+Click a categorical property/value or press `Ctrl+Space`, `Cmd+Space` or `Alt+Down` to open its choices. Document catalog records override already-loaded records, which override built-ins; the actual schema supplies enums and booleans. Prose and extension fields do not gain menus just because their keys resemble schema fields. External catalog URLs are not fetched. `setCatalogs` replaces the host's loaded context and closes stale choices. Supply `onOptions(left?, top?)` to retain an existing menu UI; the host can use the pure `/json-options` helpers, checking that `context.source` still matches before replacing its token with `control.api.replace`.
+
+Run `npm run test:json` and `npm run test:json-browser` for the focused model and offline browser checks. The browser runner also accepts a report path followed by a clean installed consumer directory. These checks cover the JSON control; renderer, native PowerPoint and production adoption remain separate acceptance steps.
+
 Version 0.6.0 uses core 0.9.0 and renderer 0.7.0. Code source/metadata edits preserve line endings, literal tabs and cancellation/undo through accepted trace targets. Committed preview uses shared quote/code geometry; the active source textarea uses native browser editing. `paginateSlide` records a one-page readability-policy change in undo history, and an unchanged repeat is a no-op. Coordinated examples use PPTX 0.7.0 for exact code source/metadata recovery. Native formatting, font theme and geometry are not restored; quotes still import as editable text blocks with structure and readability-policy loss.
 
 ## Scope
