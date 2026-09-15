@@ -1,0 +1,9 @@
+# PPTX 0.8.0 registry acceptance — 2026-09-15
+
+The release uses actual npm core 0.10.0 and renderer 0.8.0. The refreshed lockfile contains registry URLs and integrities, and a clean `npm ci` passes with zero known vulnerabilities on macOS arm64, Node 24.21.0. No local OPF source links are used for this checkpoint.
+
+The full package test command, typecheck, validation, isolated packed install, code/provenance tests, font-variant tests and browser export/import suite pass. The direct smoke test also passes its new check that every content-type override names a real ZIP member; the fix removes only phantom slide-master declarations and leaves notes-master ordering unchanged.
+
+[The packed-consumer report](packed-consumer-node24.json) records byte-matched shipped files, the exact installed upstream versions/integrities, zero known vulnerabilities and verified registry signatures/provenance. It tests both absence of the optional renderer and accepted quote/code export/reimport when the published renderer is installed.
+
+CI now runs the packed registry test before source linking, on Linux and Windows. Those checks must pass before merge and publication. This is portable package/browser/ZIP acceptance, not PowerPoint COM acceptance. The native image, tab and Office-recovery constraints remain open; no COM process action was attempted. Shared furniture and prepared-font shaping remain separate draft work.

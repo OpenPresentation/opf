@@ -66,6 +66,9 @@ assert.ok(entries["ppt/presentation.xml"]);
 assert.ok(entries["ppt/slides/slide1.xml"]);
 assert.ok(entries["ppt/slides/slide2.xml"]);
 assert.ok(entries["ppt/charts/chart1.xml"]);
+for (const [, part] of text(entries['[Content_Types].xml']).matchAll(/<Override\b[^>]*\bPartName="([^"]+)"/g)) {
+  assert.ok(entries[part.slice(1)], `Content type refers to a missing package part: ${part}`);
+}
 assert.match(text(entries["docProps/core.xml"]), /1980-01-01T00:00:00Z/);
 assert.match(text(entries["ppt/slides/slide1.xml"]), /Editable Text/);
 

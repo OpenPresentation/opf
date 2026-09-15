@@ -29,19 +29,18 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
           path: opf-pptx
-      # Unpublished shared APIs require the coordinated source graph. Registry
-      # predecessor checks remain a release gate after core publication.
+      # Verify registry dependencies before linking the pinned source graph.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
-          ref: 3c26eae4af8d6197e1be442a171b80cbde19a68b
+          ref: f94125a1ff95bf0974a055fe1c081d348dad54f2
           path: opf
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
-          ref: 3032110e007f0dfceb4ba57ad88febc2f380baf4
+          ref: 3ad2f8d1073f6fc733ca5371f6b98b4c8a05f6b8
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
@@ -68,6 +67,8 @@ jobs:
           for repo in opf-render opf-pptx opf-editor; do
             npm ci --prefix "$repo"
           done
+      - name: Verify PPTX with published dependencies
+        run: npm run test:packed
       - name: Build and link coordinated sources
         working-directory: opf
         run: |
@@ -110,5 +111,6 @@ jobs:
             opf/artifacts/editor/*failure.png
             opf/artifacts/editor/*installed-code*.json
             opf-render/artifacts/golden/**
+            opf-pptx/artifacts/packed-consumer-node24.json
           retention-days: 7
           if-no-files-found: ignore

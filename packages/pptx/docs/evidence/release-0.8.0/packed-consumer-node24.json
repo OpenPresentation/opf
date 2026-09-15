@@ -1,0 +1,49 @@
+{
+  "node": "v24.21.0",
+  "name": "@openpresentation/opf-pptx",
+  "version": "0.8.0",
+  "integrity": "sha512-168nkcPtCzUtBJKpeNH2wLlMmZ6+TH67lZ9MbPfPvsMeeS5EwZVJDLbcjH+4jPaCLBS8jIDZCJJuR8TDrBMJtw==",
+  "files": {
+    "DEPENDENCY-NOTES.md": "2caf2c8f9fedde48f8fb868094deaa8ff5b4de8f3a3341ad67b65a7493f4ad33",
+    "LICENSE": "c977d11e7e9de5bd31ab787b9a302475c0487837c66f665c174d9f92b18937d2",
+    "README.md": "1d05179722ae746eac54caf340684e47f41fc428744512f1ef3894df2b7bc4f9",
+    "dist/background-import.js": "888583bbbaae46a9a4d174f046ca276cfadee5c021a76e39ab49050a1bfefe38",
+    "dist/background.js": "38f97d14394058737418e7517569d5babf99468574f299cc5df25ea1188dfe56",
+    "dist/card-provenance.js": "41b78472f0d8363b98341d9d66529c48f9f821d39bc110b8e43b610205d535fb",
+    "dist/chart-workbook.js": "92dedb19ef41f02a221057c3a0d5e9e7992bbc2d373f02a32326a6741d4630dc",
+    "dist/code-provenance.js": "28e8e68ad54002d840ca87fd4613abaea8878e1af48023af1da4e352e639a61c",
+    "dist/heading-provenance.js": "edbe08567ebe62e00f761c78244c39b563d004d360c4394566f1c21e62cb7f14",
+    "dist/image-fallback-browser.js": "b2cd7aa15c3952abf324e6474e7bbdebbd6445dde84f145e068c94c43f9c0de8",
+    "dist/image-fallback-node.js": "72c4efba8ef521e7fdce15b09c57ce6039ba9394ae25a8437a2cb6e26b1b420d",
+    "dist/image-geometry.js": "c2d3d5e7b7f81cf421bcc94437093f17e47670f458a48cf9cf9aa73535a08346",
+    "dist/image-import.js": "898704890944137909c5d48c7d1b3b16e4f06403bd745240d0f6b21f7c8c444a",
+    "dist/index.d.ts": "322dc06801f9bc997916cfcfc6ee5ba7df20052ff20f2dde8ce5b17dca1c6106",
+    "dist/index.js": "b794ded1612fa7db9a5af4c34c3d2debe379882a16bc577a97c67ee5410ad51d",
+    "dist/metric-provenance.js": "a330abb76e5bb6723a37e64f1e809e4832a8a768402af64fb56155fdb3f194e0",
+    "dist/table-border-import.js": "10dc23b93881d691be62bb5f171678d61cdf77675a628f86f58a58ee962e7093",
+    "dist/table-cell-import.js": "d268a14eecf54fe12bab31246680807cf1c90407b9807b49d32c3c71d93a643b",
+    "dist/table-import.js": "b545fff80415d085f76c82b88ce0c72e1bcfd6947c621a0fbedcc08e5a9ea227",
+    "dist/text-provenance.js": "8f8c7f14ffbb568eadac9f010215cb619d48c2ab8515172b059dd51f2a816b46",
+    "dist/timeline-provenance.js": "4745965ae18f6625b6f14326b8bc9cbf7af16a6deb7e0649107c5bb9e913a1c3",
+    "package.json": "579be41e32736bea1ff934386cecdeabd52450d6f5e5cbba0b227f79d2cd876c",
+    "vendor/pptxgenjs/LICENSE": "7a2bfe96150786ed1908b8e63f98ebab88875c1e79e28faff6649e0f11f77e52",
+    "vendor/pptxgenjs/package.json": "17fce7ff4b8f6d3fab96bdf31bb1162c31bdc6b60ef456e3a119ba1ccd50909e",
+    "vendor/pptxgenjs/pptxgen.es.js": "05844c5625e2cda3b449eb967c2246dd57ca57341886a7c28eeebca263b29bd4",
+    "vendor/pptxgenjs/UPSTREAM.json": "00e2131269f673c739fb9be04477273bd3edbea0a8c2b225884ab0e7bc13808e"
+  },
+  "dependencies": {
+    "@openpresentation/opf": {
+      "version": "0.10.0",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.10.0.tgz",
+      "integrity": "sha512-YhdTFFXgtjgkV7375BBYwKZQecJPlT9Ops/fpnUQGEfRIKSAbfNauZEviWdkdUwvpvCjo+UCCn0JOPXkfKj6BQ=="
+    },
+    "@openpresentation/opf-render": {
+      "version": "0.8.0",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.8.0.tgz",
+      "integrity": "sha512-TtlaoQ7R6GsvHQ2eWMgoGOCbhgfaCzZLqvfJ+N+r7VyeCr/214jjAVi1reBugGXZ/zLqrGZuz0wacIWP6dN2yg=="
+    }
+  },
+  "knownVulnerabilities": 0,
+  "signatureVerification": "audited 63 packages in 0s\n\n63 packages have verified registry signatures\n\n13 packages have verified attestations\n(use --json --include-attestations to view attestation details)",
+  "boundary": "Fresh installed candidate, every shipped file byte-matched, actual registry predecessors, optional-renderer absence, shared accepted quote/code geometry and guarded code provenance tested. Native evidence, when present, covers twelve controlled Calibri quote and eight Courier New code cases, including source/metadata edits and save/reopen; raster differences are observations without an equivalence threshold."
+}
