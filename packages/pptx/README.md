@@ -1,5 +1,7 @@
 # OPF PPTX
 
+Version 0.8.1 requires core 0.10.1, including metric, quote and timeline layout placeholders and the corrected text-bullet contract. It retains the existing PowerPoint export APIs.
+
 Unfinished prepared shaping work is preserved in the [September 15 roadmap](docs/roadmap-shaping-20260915.md); it is not part of the published runtime.
 
 Version 0.8.0 and this checkout require Node 24 (`24.x`). Use `.nvmrc` for local development. Earlier published versions retain their original engine declarations. Browser entrypoints remain browser-safe; native application compatibility is verified separately.
