@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.7.0
+
+- Add reusable browser-safe JSON editor and contextual options entrypoints. Preserve exact source line endings through editing, indentation, paired quotes/brackets, array-item continuation, search, folding, formatting and undo/redo; expose catalog/schema choices from already loaded context.
+- Use core 0.10.0 and renderer 0.8.0 for merged metric/timeline/content-card editing, scalar and rich source preservation, selection and undo. Keep native PPTX fidelity separate from browser and JSON-control acceptance.
+- Verify actual installed JSON controls in the publication workflow. Shared furniture and prepared-glyph editing drafts are not included in this release.
+
 - Require Node 24 (`24.x`) for the next release and development; upgrade from Node 20 or 22 before installing. Retain browser and operating-system checks, and retire duplicate Node 20 CI jobs. Previously published packages and evidence are unchanged.
 
 ## 0.6.0
