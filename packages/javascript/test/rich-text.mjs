@@ -28,3 +28,24 @@ const boldRows=composeSlide({composition:{mode:'row'},blocks:[{text:[{text:'Big 
 check(boldRows.items[0].text.richLines.length>0,'Composition stores mixed-style geometry');
 check(boldRows.diagnostics.some(d=>d.code==='text-overflow'),'Composition reports actual mixed-style overflow');
 console.log(`Rich text passed ${checks} shared-layout checks.`);
+
+const tabs=[{text:'A\t',fontSize:12,color:'#123456'},{text:'\tB\r\n\tC',fontSize:18,underline:true}];
+const tabSource=structuredClone(tabs),measured=[];
+const tabMeasurement={
+  measure(text,size){assert.ok(!/[\r\n\t]/.test(text),'Control whitespace must never reach the font width provider');measured.push(text);return text.length*size/2;},
+  outlineBounds(text,size){assert.ok(!/[\r\n\t]/.test(text),'Control whitespace must never reach the font outline provider');return {x:0,y:-size,width:text.length*size/2,height:size};},
+};
+const tabOptions={style:{fontFamily:'Base',fontWeight:400},textMeasurement:tabMeasurement};
+const tabFit=fitRichText(tabs,{x:0,y:0,width:300,height:200},16,16,tabOptions);
+assert.deepEqual(tabFit.lines,['A\t\tB','\tC']);
+assert.deepEqual(tabFit.richLines.map(line=>line.width),[60,60]);
+assert.deepEqual(tabFit.richLines.map(line=>line.fragments.filter(part=>part.kind==='tab').map(part=>part.x+part.width)),[[32,48],[48]],'Stops are relative to the line and use the current run font size');
+for(const line of tabFit.richLines)for(const part of line.fragments)assert.equal(part.text,tabs[part.runIndex].text.slice(part.start,part.end));
+const wrappedTabs=fitRichText(tabs,{x:0,y:0,width:40,height:500},16,16,tabOptions);
+assert.equal(wrappedTabs.lines.join(''),tabs.map(run=>run.text).join('').replace(/\r\n/g,''),'Wrapping retains every original tab');
+assert.ok(wrappedTabs.richLines.every(line=>line.width<=40||line.fragments.length===1&&line.fragments[0].kind==='tab'));
+const composedTabs=composeSlide({text:tabs},{width:1280,height:720,textMeasurement:tabMeasurement});
+assert.ok(composedTabs.items[0].text.richLines.flatMap(line=>line.fragments).some(part=>part.kind==='tab'));
+assert.deepEqual(tabs,tabSource);
+assert.throws(()=>fitRichText(['\t'],box,20,20,{...tabOptions,textMeasurement:{measure:()=>0}}),/positive finite/);
+console.log('Rich tabs preserve source/style boundaries and line-relative stops across wrapping; width and outline providers never receive control tabs.');

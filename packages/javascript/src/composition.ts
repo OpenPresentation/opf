@@ -1044,6 +1044,8 @@ export interface RichTextRun {
 }
 export interface RichTextFragment {
   text: string; runIndex: number; start: number; end: number;
+  /** Tabs retain source text but use a layout advance, never a font glyph. */
+  kind?: 'tab';
   x: number; width: number; fontSize: number; baselineShift: number;
   style: TextStyle; run: RichTextRun;
 }
@@ -1092,8 +1094,19 @@ function richTextLayouter(input: readonly (string | RichTextRun)[], box: LayoutB
         const text=whole.slice(a,b),normalSize=(entry.run.fontSize!==undefined?entry.run.fontSize*4/3:requestedSize)*ratio;
         const script=entry.run.superscript||entry.run.subscript;
         const size=normalSize*(script?0.7:1),baselineShift=entry.run.superscript?-normalSize*.35:entry.run.subscript?normalSize*.2:0;
-        const width=textWidthMeasurer(entry.style,options.textMeasurement)(text,size);
-        result.push({text,runIndex:entry.runIndex,start:a-entry.start,end:b-entry.start,x,width,fontSize:size,baselineShift,style:entry.style,run:entry.run});x+=width;
+        const measure=textWidthMeasurer(entry.style,options.textMeasurement);
+        const add=(text:string,start:number,width:number,kind?:'tab')=>{
+          result.push({text,runIndex:entry.runIndex,start:start-entry.start,end:start+text.length-entry.start,x,width,fontSize:size,baselineShift,style:entry.style,run:entry.run,...(kind?{kind}:{})});x+=width;
+        };
+        let cursor=a;
+        for(const [index,part]of text.split('\t').entries()){
+          if(index){
+            const stop=measure(' ',size)*4;
+            if(!Number.isFinite(stop)||stop<=0)throw new RangeError('Rich text tabs require a positive finite measured space advance.');
+            add('\t',cursor,(Math.floor(x/stop+1e-9)+1)*stop-x,'tab');cursor++;
+          }
+          if(part.length){add(part,cursor,measure(part,size));cursor+=part.length;}
+        }
       }return result;
     };
     const width=(start:number,end:number)=>fragments(start,end).reduce((sum,fragment)=>sum+fragment.width,0);
@@ -1378,6 +1391,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
       const lines:TextLineInk[]=richLines?richLines.map(line=>{
         let outline:LayoutBox|null=null;
         for(const fragment of line.fragments) {
+          if(fragment.kind==='tab')continue;
           const bounds=measureTextOutline(fragment.text,fragment.fontSize,fragment.style,options.textMeasurement);
           if(!bounds)continue;
           const next={...bounds,x:fragment.x+bounds.x,y:fragment.baselineShift+bounds.y};
