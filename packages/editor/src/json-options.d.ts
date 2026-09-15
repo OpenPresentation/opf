@@ -7,6 +7,13 @@ export interface JsonFieldOption {
   description?: string;
   source: 'Built-in catalog' | 'Loaded catalog' | 'Document catalog' | 'Schema' | 'Current value';
   suggested?: boolean;
+  /** User-facing provenance; source remains stable for existing consumers. */
+  sourceLabel?: string;
+  sourceDescription?: string;
+  layoutGroup?: 'Current layout' | 'Same placeholders' | 'Compatible placeholders' | 'Different counts' | 'Other layouts' | 'Unspecified placeholders';
+  /** Declared placeholder types and counts, not a rendering guarantee. */
+  placeholders?: string;
+  related?: boolean;
 }
 export interface JsonFieldContext {
   source: string;

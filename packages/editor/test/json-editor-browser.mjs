@@ -61,6 +61,18 @@ try{
   const deck='{\r\n  "slides": [{"layout":"text-1x","title":"Keep title","text":"Keep  text"}]\n}';
   await page.evaluate(code=>mount(code,{layouts:[{id:'partner-detail',name:'Partner detail',placeholders:[{type:'title'},{type:'text'}]}]}),deck);
   await at('"layout"',1);await source.press('Control+Space');const menu=page.getByRole('dialog',{name:'layout options',exact:true});await menu.waitFor();
+  assert.equal(await menu.getByRole('option').count(),4);
+  assert.ok((await menu.getByRole('option').first().innerText()).includes('Text 1x'));
+  assert.ok((await menu.getByRole('group',{name:'Same placeholders',exact:true}).innerText()).includes('Partner detail'));
+  await menu.getByRole('button',{name:'All layouts (29)',exact:true}).click();
+  assert.equal(await menu.getByRole('option').count(),29);
+  assert.ok((await menu.getByRole('group',{name:'Different counts',exact:true}).innerText()).includes('Text × 3'));
+  await menu.getByRole('button',{name:'Similar (4)',exact:true}).click();
+  await menu.getByRole('combobox').fill('chart-1x');assert.equal(await menu.getByRole('option').count(),1);
+  await menu.getByRole('combobox').fill('');assert.equal(await menu.getByRole('option').count(),4);
+  await menu.getByRole('combobox').press('ArrowDown');
+  const active=await menu.getByRole('combobox').getAttribute('aria-activedescendant');
+  assert.ok((await page.locator(`[id="${active}"]`).innerText()).includes('Number 1x'));
   await menu.getByRole('combobox').fill('partner-detail');assert.equal(await menu.getByRole('option').count(),1);await menu.getByRole('combobox').press('Enter');assert.equal(await read(),deck.replace('text-1x','partner-detail'));
   await source.press(`${mod}+z`);assert.equal(await read(),deck);
   // A real click on the highlighted key opens the same menu.
