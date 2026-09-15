@@ -1,0 +1,497 @@
+{
+  "node": "v24.21.0",
+  "runtime": "installed",
+  "examples": 126,
+  "choices": [
+    {
+      "file": "examples/gallery/business-functions/compliance-readiness-review.opf.json",
+      "path": [
+        "design",
+        "theme"
+      ],
+      "id": "tandem-biosystems-theme",
+      "beforeSource": "absent",
+      "afterSource": "Document catalog",
+      "label": "Tandem BioSystems Working Theme"
+    },
+    {
+      "file": "examples/gallery/business-functions/data-platform-migration-plan.opf.json",
+      "path": [
+        "design",
+        "theme"
+      ],
+      "id": "fathom-retail-theme",
+      "beforeSource": "absent",
+      "afterSource": "Document catalog",
+      "label": "Fathom Retail Working Theme"
+    },
+    {
+      "file": "examples/gallery/business-functions/demand-generation-campaign-brief.opf.json",
+      "path": [
+        "design",
+        "theme"
+      ],
+      "id": "brightpath-analytics-theme",
+      "beforeSource": "absent",
+      "afterSource": "Document catalog",
+      "label": "Brightpath Analytics Working Theme"
+    },
+    {
+      "file": "examples/gallery/business-functions/engineering-capacity-planning.opf.json",
+      "path": [
+        "design",
+        "theme"
+      ],
+      "id": "relay-cloud-theme",
+      "beforeSource": "absent",
+      "afterSource": "Document catalog",
+      "label": "Relay Cloud Working Theme"
+    },
+    {
+      "file": "examples/gallery/business-functions/investor-relations-update.opf.json",
+      "path": [
+        "design",
+        "theme"
+      ],
+      "id": "asteria-robotics-theme",
+      "beforeSource": "absent",
+      "afterSource": "Document catalog",
+      "label": "Asteria Robotics Working Theme"
+    },
+    {
+      "file": "examples/gallery/business-functions/model-governance-review.opf.json",
+      "path": [
+        "design",
+        "theme"
+      ],
+      "id": "clearlake-data-theme",
+      "beforeSource": "absent",
+      "afterSource": "Document catalog",
+      "label": "ClearLake Data Working Theme"
+    },
+    {
+      "file": "examples/gallery/business-functions/pricing-and-packaging-decision.opf.json",
+      "path": [
+        "design",
+        "theme"
+      ],
+      "id": "northbeam-software-theme",
+      "beforeSource": "absent",
+      "afterSource": "Document catalog",
+      "label": "Northbeam Software Working Theme"
+    },
+    {
+      "file": "examples/gallery/business-functions/product-roadmap-decision-review.opf.json",
+      "path": [
+        "design",
+        "theme"
+      ],
+      "id": "latticelane-theme",
+      "beforeSource": "absent",
+      "afterSource": "Document catalog",
+      "label": "LatticeLane Working Theme"
+    },
+    {
+      "file": "examples/gallery/business-functions/revenue-forecast-inspection.opf.json",
+      "path": [
+        "design",
+        "theme"
+      ],
+      "id": "foundrygrid-theme",
+      "beforeSource": "absent",
+      "afterSource": "Document catalog",
+      "label": "FoundryGrid Working Theme"
+    },
+    {
+      "file": "examples/gallery/business-functions/s-and-op-exception-review.opf.json",
+      "path": [
+        "design",
+        "theme"
+      ],
+      "id": "cobalt-supply-theme",
+      "beforeSource": "absent",
+      "afterSource": "Document catalog",
+      "label": "Cobalt Supply Working Theme"
+    },
+    {
+      "file": "examples/gallery/business-functions/strategy-offsite-pre-read.opf.json",
+      "path": [
+        "design",
+        "theme"
+      ],
+      "id": "northstar-studio-theme",
+      "beforeSource": "absent",
+      "afterSource": "Document catalog",
+      "label": "Northstar Studio Working Theme"
+    },
+    {
+      "file": "examples/gallery/business-functions/supplier-risk-heatmap.opf.json",
+      "path": [
+        "design",
+        "theme"
+      ],
+      "id": "ironwood-devices-theme",
+      "beforeSource": "absent",
+      "afterSource": "Document catalog",
+      "label": "Ironwood Devices Working Theme"
+    },
+    {
+      "file": "examples/gallery/design-and-media/data-storytelling-atlas.opf.json",
+      "path": [
+        "design",
+        "theme"
+      ],
+      "id": "civic-data-lab-theme",
+      "beforeSource": "absent",
+      "afterSource": "Document catalog",
+      "label": "Civic Data Lab Working Theme"
+    },
+    {
+      "file": "examples/gallery/design-and-media/kiosk-orientation-deck.opf.json",
+      "path": [
+        "design",
+        "theme"
+      ],
+      "id": "northgate-museum-theme",
+      "beforeSource": "absent",
+      "afterSource": "Document catalog",
+      "label": "Northgate Museum Working Theme"
+    },
+    {
+      "file": "examples/gallery/design-and-media/photo-essay-portfolio.opf.json",
+      "path": [
+        "design",
+        "theme"
+      ],
+      "id": "urban-lens-collective-theme",
+      "beforeSource": "absent",
+      "afterSource": "Document catalog",
+      "label": "Urban Lens Collective Working Theme"
+    },
+    {
+      "file": "examples/gallery/design-and-media/video-demo-sales-narrative.opf.json",
+      "path": [
+        "design",
+        "theme"
+      ],
+      "id": "signalkit-theme",
+      "beforeSource": "absent",
+      "afterSource": "Document catalog",
+      "label": "SignalKit Working Theme"
+    },
+    {
+      "file": "examples/gallery/education/athletics-budget-review.opf.json",
+      "path": [
+        "design",
+        "theme"
+      ],
+      "id": "summit-state-athletics-theme",
+      "beforeSource": "absent",
+      "afterSource": "Document catalog",
+      "label": "Summit State Athletics Working Theme"
+    },
+    {
+      "file": "examples/gallery/education/curriculum-approval-brief.opf.json",
+      "path": [
+        "design",
+        "theme"
+      ],
+      "id": "oakbridge-faculty-senate-theme",
+      "beforeSource": "absent",
+      "afterSource": "Document catalog",
+      "label": "Oakbridge Faculty Senate Working Theme"
+    },
+    {
+      "file": "examples/gallery/education/library-modernization-roadmap.opf.json",
+      "path": [
+        "design",
+        "theme"
+      ],
+      "id": "easton-university-library-theme",
+      "beforeSource": "absent",
+      "afterSource": "Document catalog",
+      "label": "Easton University Library Working Theme"
+    },
+    {
+      "file": "examples/gallery/education/workforce-pathway-partnership.opf.json",
+      "path": [
+        "design",
+        "theme"
+      ],
+      "id": "metro-technical-college-theme",
+      "beforeSource": "absent",
+      "afterSource": "Document catalog",
+      "label": "Metro Technical College Working Theme"
+    },
+    {
+      "file": "examples/gallery/government/broadband-public-hearing-deck.opf.json",
+      "path": [
+        "design",
+        "theme"
+      ],
+      "id": "rural-connectivity-office-theme",
+      "beforeSource": "absent",
+      "afterSource": "Document catalog",
+      "label": "Rural Connectivity Office Working Theme"
+    },
+    {
+      "file": "examples/gallery/government/housing-zoning-council-brief.opf.json",
+      "path": [
+        "design",
+        "theme"
+      ],
+      "id": "city-of-redwood-falls-theme",
+      "beforeSource": "absent",
+      "afterSource": "Document catalog",
+      "label": "City of Redwood Falls Working Theme"
+    },
+    {
+      "file": "examples/gallery/government/recycling-participation-campaign.opf.json",
+      "path": [
+        "design",
+        "theme"
+      ],
+      "id": "city-sanitation-bureau-theme",
+      "beforeSource": "absent",
+      "afterSource": "Document catalog",
+      "label": "City Sanitation Bureau Working Theme"
+    },
+    {
+      "file": "examples/gallery/government/tax-portal-modernization.opf.json",
+      "path": [
+        "design",
+        "theme"
+      ],
+      "id": "department-of-revenue-services-theme",
+      "beforeSource": "absent",
+      "afterSource": "Document catalog",
+      "label": "Department of Revenue Services Working Theme"
+    },
+    {
+      "file": "examples/gallery/government/transit-corridor-alternatives.opf.json",
+      "path": [
+        "design",
+        "theme"
+      ],
+      "id": "metro-transit-authority-theme",
+      "beforeSource": "absent",
+      "afterSource": "Document catalog",
+      "label": "Metro Transit Authority Working Theme"
+    },
+    {
+      "file": "examples/gallery/government/water-utility-capital-plan.opf.json",
+      "path": [
+        "design",
+        "theme"
+      ],
+      "id": "lakehaven-water-district-theme",
+      "beforeSource": "absent",
+      "afterSource": "Document catalog",
+      "label": "Lakehaven Water District Working Theme"
+    },
+    {
+      "file": "examples/gallery/government/wildfire-evacuation-preparedness.opf.json",
+      "path": [
+        "design",
+        "theme"
+      ],
+      "id": "pine-county-emergency-management-theme",
+      "beforeSource": "absent",
+      "afterSource": "Document catalog",
+      "label": "Pine County Emergency Management Working Theme"
+    },
+    {
+      "file": "examples/gallery/government/workforce-reskilling-initiative.opf.json",
+      "path": [
+        "design",
+        "theme"
+      ],
+      "id": "state-workforce-board-theme",
+      "beforeSource": "absent",
+      "afterSource": "Document catalog",
+      "label": "State Workforce Board Working Theme"
+    },
+    {
+      "file": "examples/gallery/industries/airline-disruption-recovery-review.opf.json",
+      "path": [
+        "design",
+        "theme"
+      ],
+      "id": "aerovista-airlines-theme",
+      "beforeSource": "absent",
+      "afterSource": "Document catalog",
+      "label": "AeroVista Airlines Working Theme"
+    },
+    {
+      "file": "examples/gallery/industries/battery-line-supplier-readiness.opf.json",
+      "path": [
+        "design",
+        "theme"
+      ],
+      "id": "voltcrest-components-theme",
+      "beforeSource": "absent",
+      "afterSource": "Document catalog",
+      "label": "Voltcrest Components Working Theme"
+    },
+    {
+      "file": "examples/gallery/industries/boutique-hotel-revenue-recovery.opf.json",
+      "path": [
+        "design",
+        "theme"
+      ],
+      "id": "harbor-and-loom-hotels-theme",
+      "beforeSource": "absent",
+      "afterSource": "Document catalog",
+      "label": "Harbor & Loom Hotels Working Theme"
+    },
+    {
+      "file": "examples/gallery/industries/construction-safety-stand-down.opf.json",
+      "path": [
+        "design",
+        "theme"
+      ],
+      "id": "keystone-build-partners-theme",
+      "beforeSource": "absent",
+      "afterSource": "Document catalog",
+      "label": "Keystone Build Partners Working Theme"
+    },
+    {
+      "file": "examples/gallery/industries/mixed-use-leasing-pipeline-review.opf.json",
+      "path": [
+        "design",
+        "theme"
+      ],
+      "id": "cedarwell-properties-theme",
+      "beforeSource": "absent",
+      "afterSource": "Document catalog",
+      "label": "Cedarwell Properties Working Theme"
+    },
+    {
+      "file": "examples/gallery/industries/port-dwell-time-improvement-plan.opf.json",
+      "path": [
+        "design",
+        "theme"
+      ],
+      "id": "bluewater-logistics-theme",
+      "beforeSource": "absent",
+      "afterSource": "Document catalog",
+      "label": "Bluewater Logistics Working Theme"
+    },
+    {
+      "file": "examples/gallery/industries/tailings-monitoring-investment-brief.opf.json",
+      "path": [
+        "design",
+        "theme"
+      ],
+      "id": "copper-mesa-mining-theme",
+      "beforeSource": "absent",
+      "afterSource": "Document catalog",
+      "label": "Copper Mesa Mining Working Theme"
+    },
+    {
+      "file": "examples/gallery/industries/water-stewardship-grower-brief.opf.json",
+      "path": [
+        "design",
+        "theme"
+      ],
+      "id": "sunfield-cooperative-theme",
+      "beforeSource": "absent",
+      "afterSource": "Document catalog",
+      "label": "Sunfield Cooperative Working Theme"
+    },
+    {
+      "file": "examples/gallery/presentation-types/manager-training-deck.opf.json",
+      "path": [
+        "design",
+        "theme"
+      ],
+      "id": "peoplecraft-theme",
+      "beforeSource": "absent",
+      "afterSource": "Document catalog",
+      "label": "PeopleCraft Working Theme"
+    },
+    {
+      "file": "examples/gallery/presentation-types/policy-briefing-for-advisors.opf.json",
+      "path": [
+        "design",
+        "theme"
+      ],
+      "id": "civic-futures-lab-theme",
+      "beforeSource": "absent",
+      "afterSource": "Document catalog",
+      "label": "Civic Futures Lab Working Theme"
+    },
+    {
+      "file": "examples/gallery/presentation-types/product-launch-narrative.opf.json",
+      "path": [
+        "design",
+        "theme"
+      ],
+      "id": "kiteframe-theme",
+      "beforeSource": "absent",
+      "afterSource": "Document catalog",
+      "label": "Kiteframe Working Theme"
+    },
+    {
+      "file": "examples/gallery/presentation-types/research-findings-report.opf.json",
+      "path": [
+        "design",
+        "theme"
+      ],
+      "id": "blue-ridge-institute-theme",
+      "beforeSource": "absent",
+      "afterSource": "Document catalog",
+      "label": "Blue Ridge Institute Working Theme"
+    },
+    {
+      "file": "examples/technical/catalog-overrides.opf.json",
+      "path": [
+        "audience",
+        0,
+        "id"
+      ],
+      "id": "technical-reviewers",
+      "beforeSource": "Current value",
+      "afterSource": "Document catalog",
+      "label": "Technical Reviewers"
+    },
+    {
+      "file": "examples/technical/catalog-overrides.opf.json",
+      "path": [
+        "purpose",
+        "id"
+      ],
+      "id": "technical-approval",
+      "beforeSource": "Current value",
+      "afterSource": "Document catalog",
+      "label": "Technical Approval"
+    },
+    {
+      "file": "examples/technical/catalog-overrides.opf.json",
+      "path": [
+        "tone",
+        "id"
+      ],
+      "id": "precise-plain",
+      "beforeSource": "Current value",
+      "afterSource": "Document catalog",
+      "label": "Precise Plain"
+    },
+    {
+      "file": "examples/technical/full-feature-tour.opf.json",
+      "path": [
+        "slides",
+        8,
+        "design",
+        "colorScheme"
+      ],
+      "id": "acme-night",
+      "beforeSource": "Current value",
+      "afterSource": "Document catalog",
+      "label": "Acme Night"
+    }
+  ],
+  "lockSha256": "ca4cc4771dfd047784e56bc6af85943ac6efc69ac2e68cf09676d6b8f74249f7",
+  "externalFetch": "disabled",
+  "boundary": "Production lint and JSON catalog options from fresh candidate packages. Input source is the reviewed checked-in JSON; this check does not claim browser or native rendering fidelity."
+}

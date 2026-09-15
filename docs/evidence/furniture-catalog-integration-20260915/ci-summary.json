@@ -1,0 +1,32 @@
+[
+  {
+    "name": "core",
+    "repo": "core",
+    "id": 34967517101
+  },
+  {
+    "name": "cli",
+    "repo": "core",
+    "id": 34967517090
+  },
+  {
+    "name": "packages",
+    "repo": "core",
+    "id": 34967517097
+  },
+  {
+    "name": "renderer",
+    "repo": "renderer",
+    "id": 34967523596
+  },
+  {
+    "name": "editor",
+    "repo": "editor",
+    "id": 34967529801
+  },
+  {
+    "name": "pptx",
+    "repo": "pptx",
+    "id": 34967535412
+  }
+]

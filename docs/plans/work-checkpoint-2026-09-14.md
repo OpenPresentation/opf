@@ -193,6 +193,33 @@ assertions that fail with registry predecessors, passes from the new installed
 candidate graph. CI results and complete logs are bound to their immutable
 source/workflow commits in the same evidence directory.
 
+## September 15 catalog correction and furniture integration
+
+Core [PR82](https://github.com/OpenPresentation/opf/pull/82) and renderer
+[PR22](https://github.com/OpenPresentation/opf-render/pull/22) are merged into
+main at `72f2241` and `cbf058e` after their final-head checks passed. The saved
+examples now have zero lint errors and warnings, and the generator produces
+100 valid decks without overwriting authored examples. All bytes outside the
+corrected catalog records remain unchanged. This supersedes the earlier
+41-error/four-warning status while retaining that original audit.
+
+Core furniture merge `8414e83` and renderer merge `aaa9e6f` bring the accepted
+correction into the existing drafts. The furniture baseline changes only its
+source fingerprint: all 805 raster entries remain identical. Core `363711d`,
+editor `651a532` and PPTX `891fc5f` record coordinated immutable CI references.
+The editor and converter runtime files remain unchanged.
+
+[Integration evidence](../evidence/furniture-catalog-integration-20260915/README.md)
+retains 523 core tests, eleven CLI tests, four text-checker tests, type checks,
+the complete coordinated package command and 81 CLI commands. Fresh packages
+expose all 44 corrected catalog choices offline and pass the exact editor
+layout/pagination/undo fixture, eight installed browser suites, seven JSON
+workflows and sixteen furniture workflows. All forty field masks, their
+displaced negative control and four full-size views match the previous review
+byte for byte. All six exact-head CI runs pass: core, CLI macOS/Windows,
+coordinated packages, renderer, editor and converter Linux/Windows. Complete
+job metadata and logs are retained in the same evidence directory.
+
 ## Still outstanding
 
 The reusable editor JSON package and lint CLI have not been published as new
@@ -200,9 +227,9 @@ npm versions. Website adoption of that reusable package remains separate from
 its already deployed local JSON implementation. Shared furniture and font drafts
 also remain unpublished and unadopted by production sites. Native Office
 compatibility remains a separate gate under its existing recovery constraints.
-The lint corpus identifies 41 existing companion-catalog errors and four
-reference warnings; examples and authoritative schemas have not been changed
-to conceal them. Complete coordinated dependency releases, fresh registry checks
+The catalog correction is merged without relaxing authoritative schemas or
+lint rules. Its 401 external-source notices remain informational. Complete
+coordinated dependency releases, fresh registry checks
 and the remaining native/font gates before claiming release acceptance.
 
 `pptx-gallery` and `pptx-dev` had no local changes and matched their remote
