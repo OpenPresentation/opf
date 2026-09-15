@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.8.0
+
+- Require Node 24 and bundle core 0.10.0. Add `opf lint <file|-> [--config <local-json-file>] [--strict]` with exact source/configuration hashes, contextual catalog/schema diagnostics and design contracts. Lint does not rewrite documents or fetch resources.
+- Include current source-preserving scalar, metric and timeline layout, readability policies and `grid-score-v8` explanations. Retain offline authoring, patch/undo-oriented workflows, pagination and all six portable agent skills.
+- Browser rendering and editable PPTX remain companion-library workflows; schema and local layout checks do not certify native font/Office equivalence.
+
 ## 0.7.0
 
 - Bundle core 0.9.0 with complete code filename/language/body composition, exact source/tab mappings, metadata-aware pagination and `grid-score-v3` explanations in the bundled library.
