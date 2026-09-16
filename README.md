@@ -43,7 +43,7 @@ And they don't start from a blank canvas. [pptx.gallery](https://pptx.gallery) i
 ## Start in three steps
 
 1. **Install the coordinated published packages** on Node 24. See [the developer quickstart](docs/quickstart.md) for the current pin set (`@openpresentation/opf@0.10.1` plus renderer, editor, PPTX and CLI 0.8.1 / 0.7.1).
-2. **Author, lint, paginate, preview and export.** Copy [`examples/developer-quickstart/developer-quickstart.opf.json`](./examples/developer-quickstart/developer-quickstart.opf.json) and run the commands in that guide. `validatePresentation` / `opf validate` is local schema checking, not visual verification.
+2. **Author, lint, paginate, preview and export.** Copy [`docs/quickstart/developer-quickstart.opf.json`](./docs/quickstart/developer-quickstart.opf.json) and run the commands in that guide. `validatePresentation` / `opf validate` is local schema checking, not visual verification.
 3. **Know the limits.** The [compatibility matrix](docs/compatibility-matrix.md) lists shipped APIs versus renderer issue 24, native PowerPoint issue 87, and other deferred work. Browse presets at [pptx.gallery](https://pptx.gallery).
 
 Your deck lives in git from the first commit. Nothing in these steps calls a hosted service, and nothing ever will — that boundary is the point.

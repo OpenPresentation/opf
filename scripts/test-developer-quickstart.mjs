@@ -11,7 +11,11 @@ import {packageManagerInvocation} from './package-manager.mjs';
 const execFile = promisify(execFileCallback);
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const plan = JSON.parse(await readFile(path.join(root, 'release-plan.json'), 'utf8'));
-const deckSource = path.join(root, 'examples/developer-quickstart/developer-quickstart.opf.json');
+const deckSource = path.join(root, 'docs/quickstart/developer-quickstart.opf.json');
+assert.ok(
+  !path.relative(root, deckSource).split(path.sep).includes('examples'),
+  'Quickstart fixture must stay outside examples/ so the published 126-deck catalog and renderer golden corpus stay unchanged',
+);
 
 assert.ok(
   !process.env.NODE_OPTIONS && !process.execArgv.some((arg) => /^(--import|--loader|--experimental-loader|--require|-r)(=|$)/.test(arg)),

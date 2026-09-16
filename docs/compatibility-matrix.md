@@ -40,6 +40,7 @@ not a pending unpublished increment.
 | Capability | How | Notes |
 | --- | --- | --- |
 | JSON authoring | `*.opf.json` plus CLI `opf create` | Local files only |
+| Bundled examples catalog | `@openpresentation/opf/examples` | **126** decks; the quickstart JSON is a docs fixture, not a 127th catalog entry |
 | Validate | `validatePresentation` / `opf validate` | Schema and semantic checks |
 | Lint | `lintSource` / `opf lint` | Read-only; no network catalog fetch |
 | Offline fonts | `prepareNodeFonts` (`/fonts-node`) | Bundled Roboto pack; hashed files |

@@ -2,7 +2,8 @@
 // .opf.json decks, the top-level docs/*.md files, and the repo README.md.
 //
 // Source-of-truth lives at the repo root:
-//   - examples/**/*.opf.json
+//   - examples/**/*.opf.json  (published examples catalog and renderer golden
+//     corpus; keep docs-only fixtures such as docs/quickstart/*.opf.json out)
 //   - docs/*.md       (top-level only; subdirectories like docs/migrations and
 //                      docs/plans are intentionally excluded for now — they
 //                      change too often to ship inside a pinned npm release)

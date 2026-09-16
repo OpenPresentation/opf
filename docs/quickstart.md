@@ -24,8 +24,9 @@ npm install @openpresentation/opf@0.10.1 \
   @openpresentation/cli@0.8.1
 ```
 
-Copy [`examples/developer-quickstart/developer-quickstart.opf.json`](../examples/developer-quickstart/developer-quickstart.opf.json)
-into that project as `deck.opf.json`. Verify the install came from the registry
+Copy [`docs/quickstart/developer-quickstart.opf.json`](quickstart/developer-quickstart.opf.json)
+into that project as `deck.opf.json`. That file is a docs fixture, not one of
+the 126 decks in `@openpresentation/opf/examples`. Verify the install came from the registry
 (`package-lock.json` `resolved` URLs start with `https://registry.npmjs.org/`)
 and that you did not add `file:` dependencies on this repository.
 
