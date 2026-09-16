@@ -14,6 +14,10 @@ For AI agents, use the [OPF skill set](docs/agent-skills.md) for authoring, layo
 
 CLI 0.5.0 installs all six skills into your project with `npx @openpresentation/cli@latest skills install`. It uses local copies, preserves existing instructions and refuses to overwrite customized skills. See the [installation and update guide](docs/agent-skills.md) for personal or agent-specific targets and pre-release testing.
 
+For a fresh Node 24 project that installs **published** packages (not this
+checkout), follow the [developer quickstart](docs/quickstart.md) and the
+[compatibility matrix](docs/compatibility-matrix.md).
+
 For LLM authoring, start with [the authoring guide](docs/llm-authoring.md), [dynamic composition](docs/dynamic-composition.md), and [local ecosystem verification](docs/ecosystem-development.md).
 
 ## File naming
@@ -38,9 +42,9 @@ And they don't start from a blank canvas. [pptx.gallery](https://pptx.gallery) i
 
 ## Start in three steps
 
-1. **Install the format package.** `npm install @openpresentation/opf`.
-2. **Author and validate a deck.** Write a `*.opf.json` file — start from [`docs/how-opf-works.md`](./docs/how-opf-works.md) or copy [`examples/technical/full-feature-tour.opf.json`](./examples/technical/full-feature-tour.opf.json) — and run `validatePresentation` on it.
-3. **Build on it.** Browse presets at [pptx.gallery](https://pptx.gallery), pin the schemas in your pipeline, and track the [toolkit libraries](#toolkit-libraries) for the render and convert libraries.
+1. **Install the coordinated published packages** on Node 24. See [the developer quickstart](docs/quickstart.md) for the current pin set (`@openpresentation/opf@0.10.1` plus renderer, editor, PPTX and CLI 0.8.1 / 0.7.1).
+2. **Author, lint, paginate, preview and export.** Copy [`examples/developer-quickstart/developer-quickstart.opf.json`](./examples/developer-quickstart/developer-quickstart.opf.json) and run the commands in that guide. `validatePresentation` / `opf validate` is local schema checking, not visual verification.
+3. **Know the limits.** The [compatibility matrix](docs/compatibility-matrix.md) lists shipped APIs versus renderer issue 24, native PowerPoint issue 87, and other deferred work. Browse presets at [pptx.gallery](https://pptx.gallery).
 
 Your deck lives in git from the first commit. Nothing in these steps calls a hosted service, and nothing ever will — that boundary is the point.
 

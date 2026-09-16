@@ -1,5 +1,13 @@
 # Copy/paste prompt for the next project owner
 
+**Current pins (16 Sep 2026):** npm `@openpresentation/opf@0.10.1`,
+`opf-render@0.8.1`, `opf-editor@0.7.1`, `opf-pptx@0.8.1`, `cli@0.8.1` on
+Node 24. Furniture is in that set. Start from
+[handoff-2026-09-16](handoff-2026-09-16.md), the
+[developer quickstart](quickstart.md) and the
+[compatibility matrix](compatibility-matrix.md). The 15 Sep files below are
+dated checkpoints.
+
 Continue OpenPresentation as its primary project owner. Build on accepted work,
 keep changes committed and pushed through focused PRs as you go, and carry the
 next bounded developer-readiness milestone through validation and release.

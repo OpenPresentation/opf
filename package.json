@@ -38,7 +38,8 @@
     "prepare:gallery:registry": "node scripts/prepare-gallery-editor.mjs --registry",
     "build:showcase:registry": "node scripts/build-site-showcase.mjs --registry",
     "test:registry-fidelity": "node scripts/test-registry-fidelity.mjs",
-    "test:layout-contracts:registry": "node scripts/test-layout-contract-registry.mjs"
+    "test:layout-contracts:registry": "node scripts/test-layout-contract-registry.mjs",
+    "test:developer-quickstart": "node scripts/test-developer-quickstart.mjs"
   },
   "engines": {
     "node": "24.x"

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.1
+
+- Rebuild with core 0.10.1 catalogs and schema, including metric/quote/timeline layout placeholders and the corrected text-bullet contract.
+
 ## 0.8.0
 
 - Require Node 24 and bundle core 0.10.0. Add `opf lint <file|-> [--config <local-json-file>] [--strict]` with exact source/configuration hashes, contextual catalog/schema diagnostics and design contracts. Lint does not rewrite documents or fetch resources.

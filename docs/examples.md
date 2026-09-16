@@ -3,6 +3,7 @@
 The `examples/` directory has three layers:
 
 - `examples/technical/` contains compact fixtures that isolate one or two schema behaviors.
+- `examples/developer-quickstart/` is the representative deck for [the published-package quickstart](../docs/quickstart.md).
 - `examples/gallery/` contains scenario-oriented decks that show OPF working across industries, functions, education, government, international, presentation-type, and design/media use cases.
 - The examples root is kept as an organizing directory rather than a home for standalone OPF files.
 
