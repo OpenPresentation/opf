@@ -41,7 +41,8 @@ The cleanup accepted eleven dependency updates and four furniture increments
 (core79, renderer20, editor17, PPTX34), and closed the Node26-types update.
 Four shaping PRs (core83, renderer21, editor21, PPTX35) conclude with docs/
 evidence only. Their prototypes are archived, not released. Check final PR/CI
-states. Main's new furniture APIs still need coordinated package releases.
+states. Portable furniture geometry is in the published 0.10.1 / 0.8.1 set as
+tagged PPTX shapes, not native Office Header/Footer objects.
 The public sites passed 41 production browser workflows at the handoff commits;
 retain evidence and rerun affected flows when changing them.
 
@@ -72,10 +73,14 @@ painting behavior and retain failures. No offsets, platform guesses, relaxed
 assertions or golden rewrites. The archived editor separately expects ten packed
 rich-input checks while thirteen pass: repair and rerun that harness on resume.
 
-Native PowerPoint acceptance is split into core issue87 and its plan. Preserve
-image opening, provenance edit/save/reopen, tabs, notes-master ordering and
-physical font identity/embedding gaps. Serialization/self-import are not native
-acceptance. Do not retry Windows COM or kill Office processes until host recovery
+Native PowerPoint acceptance is split into core issue87 and its plan. OPF
+shared headers/footers **must** compile into native Header/Footer objects
+(Insert → Header & Footer, notes master, `p:hf` date/slide-number/footer).
+Published PPTX 0.8.1 paints `OPF_FURNITURE_V1` slide shapes and leaves `p:hf`
+off; that is not the intended end state. Also preserve image opening,
+provenance edit/save/reopen, tabs, notes-master ordering and physical font
+identity/embedding gaps. Serialization/self-import/tagged furniture are not
+native acceptance. Do not retry Windows COM or kill Office processes until host recovery
 is confirmed. Do not use/distribute restricted Aptos4.40 without compatible
 explicit permission. Broader fonts/IME/bidi/fallback, layout repair and complete
 visual editor interactions remain planned. Current PDF is raster-backed;

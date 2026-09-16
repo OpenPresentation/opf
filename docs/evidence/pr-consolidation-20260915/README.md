@@ -28,10 +28,13 @@ wrapping is retained, not hidden by shrinking its text.
 
 The project owner requested a separate
 [PowerPoint acceptance roadmap](../../plans/powerpoint-acceptance.md). Native
-Office recovery, images, tabs, font identity, provenance save/reopen and
-notes-master ordering are open compatibility work, not claims established by
-these portable tests. Prepared shaping remains a separate stack with an
-unresolved native-browser variable-font metric comparison.
+Office recovery, compiling OPF headers/footers to Header/Footer objects
+(Insert → Header & Footer, notes master, `p:hf` — not `OPF_FURNITURE_V1` slide
+shapes), images, tabs, font identity, provenance save/reopen and notes-master
+ordering are open compatibility work, not claims established by these portable
+tests. Tagged-shape furniture is not PowerPoint furniture done. Prepared
+shaping remains a separate stack with an unresolved native-browser
+variable-font metric comparison.
 
 The dependency review separately merged passing maintenance PRs after refreshing
 their bases, retained Node 24, and fixed actual Zod migration and lockfile
