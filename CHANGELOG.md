@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Record that [PR 91](https://github.com/OpenPresentation/opf/pull/91) merged the developer quickstart and compatibility matrix onto `main`. PPTX furniture in the published 0.8.1 set is tagged slide shapes (`OPF_FURNITURE_V1`), not native Office Header/Footer (`p:hf` / notes master); that native requirement remains [issue 87](https://github.com/OpenPresentation/opf/issues/87). Renderer [issue 24](https://github.com/OpenPresentation/opf-render/issues/24) and site [issue 88](https://github.com/OpenPresentation/opf/issues/88) stay open. The developer-ready milestone is not complete.
 - Document the independently installable [developer quickstart](docs/quickstart.md) and a truthful [compatibility matrix](docs/compatibility-matrix.md) for the published 0.10.1 / 0.8.1 / 0.7.1 set. Add `docs/quickstart/developer-quickstart.opf.json` and `pnpm test:developer-quickstart`, which installs those versions from the npm registry. The fixture is not part of the published examples catalog.
 
 ## 0.10.1

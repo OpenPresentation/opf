@@ -33,7 +33,10 @@ Install that whole set together. Mixing an older renderer or editor with core
 
 Shared header/footer geometry (`furniture-flow-v2`) shipped in this set (core
 composition plus renderer 0.8.x / editor 0.7.x / PPTX 0.8.x consumers). It is
-not a pending unpublished increment.
+not a pending unpublished increment. PPTX 0.8.1 writes furniture as tagged
+slide shapes (`OPF_FURNITURE_V1`), not native Office Header/Footer objects
+(`p:hf` / notes master). Native Header/Footer compilation is
+[issue 87](https://github.com/OpenPresentation/opf/issues/87) only.
 
 ## Supported in this set
 
@@ -51,7 +54,7 @@ not a pending unpublished increment.
 | SVG preview | `renderSvg` / `renderSvgDeck` | Local; same options as layout |
 | PNG | `svgToPng` | Node raster of SVG |
 | PDF | `svgToPdf` | **Raster-backed**, not selectable text |
-| Editable PPTX export | `toPptx` | OPF → PPTX serialization |
+| Editable PPTX export | `toPptx` | OPF → PPTX serialization. Furniture is tagged slide shapes (`OPF_FURNITURE_V1`), not native `p:hf` / notes-master Header/Footer objects |
 | Agent skills | `opf skills install` | Offline after the CLI is installed |
 | Browser canvas | `@openpresentation/opf-editor/canvas` | Host must supply font bytes |
 
@@ -60,7 +63,7 @@ not a pending unpublished increment.
 | Topic | Tracker | Do not describe as done |
 | --- | --- | --- |
 | Linux vs Chromium native-width residual at the 0.1px gate | [opf-render#24](https://github.com/OpenPresentation/opf-render/issues/24) | Rounding that fixes Linux but breaks macOS is rejected |
-| Native PowerPoint open/edit/save/reopen, provenance, tabs, notes-master, font embedding | [opf#87](https://github.com/OpenPresentation/opf/issues/87) | Self-import and `toPptx` are not Office acceptance |
+| Native PowerPoint open/edit/save/reopen, provenance, tabs, notes-master, font embedding, real Office Header/Footer objects (`p:hf`) | [opf#87](https://github.com/OpenPresentation/opf/issues/87) | Self-import and `toPptx` tagged-shape furniture are not Office acceptance |
 | Public site route-by-route adoption | [opf#88](https://github.com/OpenPresentation/opf/issues/88) | Dependency bumps are not production verification |
 | HarfBuzz / prepared-glyph shaping | Archive branches `codex/archive-shaping-20260915` | Prototypes are preserved, not in npm |
 | Selectable vector PDF | [pdf plan](plans/pdf-export.md) | Follows font reliability |
