@@ -66,3 +66,6 @@ jobs:
 
       - name: Verify packed CLI install
         run: pnpm test:cli:packed
+
+      - name: Verify developer quickstart from the npm registry
+        run: pnpm test:developer-quickstart

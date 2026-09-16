@@ -1,0 +1,84 @@
+{
+  "name": "Developer quickstart",
+  "description": "Representative local deck for the published OPF toolchain: JSON authoring, lint, furniture, pagination, undo, preview and export.",
+  "organization": {
+    "id": "openpresentation",
+    "name": "OpenPresentation"
+  },
+  "design": {
+    "theme": "minimal",
+    "fontScheme": "roboto",
+    "header": {
+      "left": {
+        "text": "Developer  quickstart"
+      },
+      "center": {
+        "organization": true
+      },
+      "right": {
+        "section": true
+      }
+    },
+    "footer": {
+      "left": {
+        "text": "Local, no account"
+      },
+      "right": {
+        "slideNumber": true
+      }
+    }
+  },
+  "slides": [
+    {
+      "id": "title",
+      "section": "Start",
+      "title": "Install published OPF packages",
+      "subtitle": "Author, lint, paginate, undo, preview and export locally."
+    },
+    {
+      "id": "decision",
+      "section": "Start",
+      "title": "What this deck must prove",
+      "items": [
+        "JSON authoring in a fresh Node 24 project",
+        "validate and lint without a model call",
+        "offline Roboto faces from the renderer font pack",
+        "shared header and footer geometry",
+        "composition and pagination with source mappings",
+        "JSON edits with undo",
+        "SVG preview plus PNG, raster PDF and editable PPTX"
+      ]
+    },
+    {
+      "id": "overflow",
+      "section": "Pagination",
+      "title": "Pagination keeps authored items",
+      "items": [
+        "Pin the coordinated published versions from the compatibility matrix.",
+        "Do not import sibling checkouts or unpublished dist folders.",
+        "Preserve authored text, whitespace, formatting and reading order.",
+        "Header and footer occupy reserved bands; body content stays between them.",
+        "Pagination emits ordinary slides and a mapping back to the source.",
+        "Unsupported native PowerPoint behavior is documented, not advertised as shipped.",
+        "Renderer native-width residuals stay on renderer issue 24.",
+        "Deferred shaping prototypes stay on archive branches.",
+        "PDF from svgToPdf is raster-backed in this release.",
+        "The CLI validates, lints, edits and paginates; it does not render slides.",
+        "Site adoption under core issue 88 is a separate production verification.",
+        "A failed edit or invalid document must leave the previous file untouched.",
+        "Keep Node 24 and the coordinated package set; do not mix 0.10.0 consumers with 0.10.1 core.",
+        "Record remaining ecosystem work in durable roadmaps instead of describing it as shipped.",
+        "Review complete rendered slides, not only metrics or hashes.",
+        "Whitespace, empty fields and false furniture overrides are authored content.",
+        "Source mappings from pagination must point back at the original items.",
+        "Undo must restore the previous title including internal double spaces."
+      ]
+    },
+    {
+      "id": "next",
+      "section": "Next",
+      "title": "Next  steps",
+      "text": "Copy this file into an empty Node 24 project, install the published packages, and run the commands in docs/quickstart.md."
+    }
+  ]
+}

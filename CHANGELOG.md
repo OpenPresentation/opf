@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Document the independently installable [developer quickstart](docs/quickstart.md) and a truthful [compatibility matrix](docs/compatibility-matrix.md) for the published 0.10.1 / 0.8.1 / 0.7.1 set. Add `docs/quickstart/developer-quickstart.opf.json` and `pnpm test:developer-quickstart`, which installs those versions from the npm registry. The fixture is not part of the published examples catalog.
+
 ## 0.10.1
 
 - Declare metric placeholders for number layouts and add native quote and timeline layouts. Extend layout classification to match supported content kinds while retaining the legacy Number label.
