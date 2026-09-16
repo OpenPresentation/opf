@@ -20,7 +20,11 @@ OPF keeps authoring intent in JSON. Use `blocks` when content can reflow; use pr
 
 `gap` defaults to 1/30 and `padding` to 0.08, both fractions of the canvas's shorter edge. Large gaps are reduced when necessary to keep cells positive. `minFontSize` defaults to 16 reference pixels at a 720-pixel short edge. The reference coordinate system uses 96 pixels per inch. Explicit inch dimensions override presets independently for each axis.
 
-Headings reserve space according to their wrapped text. Content that exceeds the number of preset placeholders reflows together; it is not drawn over already-bound content. Promoted regions keep the 3×3 vocabulary, including standalone `top`, `middle`, and `bottom`. They ignore flow direction and track weights.
+Title and subtitle placeholders share the slide's padded width. Hierarchy is typographic. A narrower subtitle is an intentional layout choice, not the default.
+
+Cover slides (`title`, `title-subtitle`, heading-only documents with no body payloads) vertically center the combined heading group in the remaining safe area. Wrapped headings increase that group's height and the group recenters. Content slides keep headings near the top and reserve two title line-heights at the requested title size before the body so typical one- and two-line titles share a body origin. Missing subtitle and tag fields leave no extra gap. Heading `item.box` values are the allocated editable bounds (full width, fitted height). These are reference-engine defaults, not new schema fields.
+
+Content that exceeds the number of preset placeholders reflows together; it is not drawn over already-bound content. Promoted regions keep the 3×3 vocabulary, including standalone `top`, `middle`, and `bottom`. They ignore flow direction and track weights.
 
 ## Unpublished shared headers and footers
 
