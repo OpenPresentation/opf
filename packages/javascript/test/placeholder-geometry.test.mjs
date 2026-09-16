@@ -134,3 +134,29 @@ test('content layouts stay top-aligned even without a body payload', () => {
   assert.ok(Math.abs(title.box.y - padding) < 1e-6);
   assert.ok(title.box.y + title.box.height < 360);
 });
+
+test('promoted-region metrics keep stacked parts under a typical one-line title', () => {
+  const slide = {
+    title: 'Operating Model',
+    'top:left': {
+      metric: {
+        value: '18%',
+        label: 'Primary signal',
+        description: 'Close audit evidence gaps before external assessment',
+        trend: 'up',
+      },
+    },
+    'top:center+right': {text: 'Keep the operating tradeoffs visible.'},
+    'middle+bottom:left': {quote: {text: 'Keep the metric simple.', attribution: 'Working group'}},
+    'middle+bottom:center+right': {text: 'Supporting detail.'},
+  };
+  const layout = {id: 'number-1x', placeholders: [{type: 'title'}, {type: 'metric'}]};
+  const result = composeSlide(slide, {contentBox: true, layout});
+  const metric = byField(result, 'metric');
+  assert.equal(metric.metricLayout.overflow, false);
+  assert.deepEqual(metric.metricLayout.diagnostics, []);
+  assert.ok(metric.box.height >= 130, `region metric cell is ${metric.box.height}`);
+  const one = composeSlide({title: 'Short title', text: 'Body stays here.'}, {layout: text1x});
+  const two = composeSlide({title: 'First heading line\nSecond heading line', text: 'Body stays here.'}, {layout: text1x});
+  assert.ok(Math.abs(byField(one, 'text').box.y - byField(two, 'text').box.y) < 1e-6);
+});

@@ -231,6 +231,9 @@ const headings = new Set(["title", "subtitle", "tag"]);
 const COVER_LAYOUT_IDS = new Set(["title", "title-subtitle"]);
 /** Content slides reserve this many title line-heights at the requested title size so typical 1- and 2-line titles share a body origin. */
 const TITLE_BAND_LINES = 2;
+/** Minimum inner height for stacked metric value, label, wrapped description and trend at scale 1. */
+const METRIC_STACK_MIN = 130;
+const CONTENT_CARD_PAD = 12;
 const rows = ["top", "middle", "bottom"];
 const columns = ["left", "center", "right"];
 const record = (value: unknown): Record<string, any> => value && typeof value === "object" && !Array.isArray(value) ? value : {};
@@ -1466,7 +1469,16 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
       if (titleItem) {
         const titleBand = TITLE_BAND_LINES * 54 * scale * 1.22;
         const spare = Math.max(0, titleBand - titleItem.box.height);
-        y += Math.min(spare, Math.max(0, bodyBottom - y - scale));
+        const trailingGap = gap * 0.5;
+        let allowed = Math.max(0, bodyBottom - y - scale);
+        if (regions.length) {
+          // 3×3 region tracks. Unused title space cannot shrink a one-row cell
+          // below stacked metric metadata after the content-card inset.
+          const minTrack = (METRIC_STACK_MIN + 2 * CONTENT_CARD_PAD) * scale;
+          const minBody = 3 * minTrack + 2 * gap;
+          allowed = Math.min(allowed, Math.max(0, bodyBottom - (y + trailingGap) - minBody));
+        }
+        y += Math.min(spare, allowed);
       }
       y += gap * 0.5;
     }
