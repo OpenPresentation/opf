@@ -37,7 +37,8 @@
     "test:registry-libraries": "node scripts/test-packed-ecosystem.mjs --registry-libraries",
     "prepare:gallery:registry": "node scripts/prepare-gallery-editor.mjs --registry",
     "build:showcase:registry": "node scripts/build-site-showcase.mjs --registry",
-    "test:registry-fidelity": "node scripts/test-registry-fidelity.mjs"
+    "test:registry-fidelity": "node scripts/test-registry-fidelity.mjs",
+    "test:layout-contracts:registry": "node scripts/test-layout-contract-registry.mjs"
   },
   "engines": {
     "node": "24.x"
