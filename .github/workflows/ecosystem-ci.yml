@@ -26,21 +26,21 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
-          ref: bda38af161c25c68f6d24257f341e394602e61a5
+          ref: ae7031444a5114692489193a23e1e5eb2c1b09ca
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-editor
-          ref: 2622d6be718abd52a7241e098cfecf5eaa3bb8c1
+          ref: bb1dc2cc031bcc6826cc1351190b83c2a50c63ab
           path: opf-editor
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-pptx
-          ref: 5be8fefcf799d403d7bfc888d12b8d693c0d49a6
+          ref: 8584473f435d57066845550489648deef92176fd
           path: opf-pptx
           fetch-depth: 0
           persist-credentials: false
@@ -94,6 +94,7 @@ jobs:
         working-directory: opf
         run: |
           pnpm test:registry-ecosystem
+          pnpm test:layout-contracts:registry
           pnpm test:packed-browser registry
           node ../opf-editor/test/json-editor-browser.mjs artifacts/editor/json-editor-registry.json artifacts/npm/registry-consumer
           node scripts/test-packed-browser-guards.mjs
