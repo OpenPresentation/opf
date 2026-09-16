@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Record that published shared header/footer PPTX export is tagged slide shapes (`OPF_FURNITURE_V1`, vendor `p:hf` off), not native Office Header/Footer objects ([issue 87](https://github.com/OpenPresentation/opf/issues/87)).
 - Document the independently installable [developer quickstart](docs/quickstart.md) and a truthful [compatibility matrix](docs/compatibility-matrix.md) for the published 0.10.1 / 0.8.1 / 0.7.1 set. Add `docs/quickstart/developer-quickstart.opf.json` and `pnpm test:developer-quickstart`, which installs those versions from the npm registry. The fixture is not part of the published examples catalog.
 
 ## 0.10.1

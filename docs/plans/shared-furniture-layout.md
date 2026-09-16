@@ -7,6 +7,15 @@ layout, preview, editor and controlled export/reimport work may merge after
 fresh coordinated checks. Earlier statements below that make native acceptance
 a merge prerequisite are historical; native compatibility is not claimed.
 
+September 16 requirement: OPF shared headers/footers **must** compile into
+native PowerPoint Header/Footer objects (Office Insert → Header & Footer, notes
+master, `p:hf` date/slide-number/footer). Published PPTX 0.8.1 still paints
+ordinary slide shapes tagged `OPF_FURNITURE_V1` and leaves vendor `p:hf` flags
+off. That tagged-shape plus common-slide provenance is portable layout/export,
+not the intended PowerPoint end state. Native Office objects remain deferred
+[issue 87](https://github.com/OpenPresentation/opf/issues/87) work. Do not treat
+furniture as done for PowerPoint.
+
 Read-only probes of the shared-timeline product graph reproduce the same defect on Mac Node 20/24: every header/footer run renders at 13px regardless of selected floors 16/32, and authored header/footer words are absent from parsed PPTX output. Core reports no diagnostics. Sources remain unchanged. Retain all four wide/portrait cases per runtime before implementation.
 
 Unify inherited/local header and footer resolution, source/generated values, font styles, readable text measurement and placement. Resolve all three zones, explicit false overrides, literal dates, primary organization, section and slide numbers deterministically. Preserve source strings and whitespace; generated separators or missing-date diagnostics must not rewrite source. Image furniture should keep its original source and supported image-fit behavior.
@@ -98,3 +107,9 @@ ordering pending native comparison; no notes or relationships are discarded.
 Do not infer native image recovery or full OOXML conformance from SDK success.
 Fresh CI for the package correction and the existing user-reviewed Office
 recovery/native/font gates remain required. No Office automation was attempted.
+
+Native Header/Footer objects remain open on [issue 87](https://github.com/OpenPresentation/opf/issues/87):
+OPF `design.header` / `design.footer` must become Office Insert → Header &
+Footer fields, notes-master placeholders, and `p:hf` date/slide-number/footer
+flags. `OPF_FURNITURE_V1` slide shapes with `p:hf` off are not that work. The
+converter is deferred; this layout plan records the requirement only.

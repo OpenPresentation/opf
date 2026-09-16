@@ -59,10 +59,14 @@ released scope. These successes do not close the failures below.
    workflows, but the aggregate assertion expects ten. Repair this stale
    coverage assertion and rerun the complete packed command when resuming.
    It is separate from native font fidelity; do not count this run as green.
-3. Native PowerPoint tab positions, image opening, provenance edit/save/reopen,
+3. Native PowerPoint Header/Footer objects (Insert → Header & Footer, notes
+   master, `p:hf` date/slide-number/footer — not `OPF_FURNITURE_V1` slide
+   shapes), tab positions, image opening, provenance edit/save/reopen,
    notes-master ordering and font identity remain in
    [issue87](https://github.com/OpenPresentation/opf/issues/87) and the
-   [native acceptance plan](powerpoint-acceptance.md).
+   [native acceptance plan](powerpoint-acceptance.md). Tagged-shape furniture
+   in PPTX 0.8.1 does not close this item. The Linux 0.1px / issue24 gate
+   above is unchanged.
 
 Original failing logs are retained in the final handoff evidence directory and
 in the renderer/editor roadmap PRs. Moving work into the roadmap does not

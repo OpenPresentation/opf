@@ -75,7 +75,10 @@ or change the authored scheme. Reuse the same `options` for SVG preview and
 PPTX export.
 
 Shared headers and footers use `furniture-flow-v2`. Body content stays between
-`geometry.furniture.headerBottom` and `geometry.furniture.footerTop`.
+`geometry.furniture.headerBottom` and `geometry.furniture.footerTop`. PPTX
+export of those bands is ordinary slide shapes tagged `OPF_FURNITURE_V1` with
+vendor `p:hf` off, not native Office Header/Footer objects
+([issue 87](https://github.com/OpenPresentation/opf/issues/87)).
 
 Pagination returns a new presentation plus source mappings. It preserves
 authored text, whitespace and reading order; it does not drop overflowed
@@ -141,8 +144,10 @@ It fails if any package is a `file:` or workspace link.
 
 - Renderer native-width residuals:
   [opf-render#24](https://github.com/OpenPresentation/opf-render/issues/24)
-- Native PowerPoint open/edit/save/reopen:
-  [opf#87](https://github.com/OpenPresentation/opf/issues/87)
+- Native PowerPoint Header/Footer objects (Insert → Header & Footer, notes
+  master, `p:hf`) plus open/edit/save/reopen:
+  [opf#87](https://github.com/OpenPresentation/opf/issues/87). Tagged furniture
+  shapes are not that work.
 - Public-site adoption:
   [opf#88](https://github.com/OpenPresentation/opf/issues/88)
 - Archived font-shaping prototypes (not in the published runtime)
