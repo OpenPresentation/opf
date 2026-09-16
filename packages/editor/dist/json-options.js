@@ -1,7 +1,8 @@
 import { catalogKinds, catalogSchemaNames, schemas, validateCatalogRecord, validatePresentation } from "@openpresentation/opf";
 import { getCatalogOptions } from "./index.js";
 import { schemaAtPath, schemaVariants } from "./schema.js";
-import { findNodeAtOffset, getNodePath, parseTree } from "jsonc-parser";
+import { applyEdits, findNodeAtLocation, findNodeAtOffset, getNodePath, modify, parseTree } from "jsonc-parser";
+import { populateLayoutPlaceholders } from "./layout-placeholders.js";
 function catalogFor(description) {
     return catalogKinds.find(kind => description.includes(`catalogs.${kind}`)
         || new RegExp(`\\b${kind}['’]? catalog`).test(description));
@@ -18,8 +19,8 @@ function placeholderSummary(types) {
         return "Placeholders not specified";
     if (!types.length)
         return "No placeholders";
-    const labels = { title: "Title", subtitle: "Subtitle", text: "Text", list: "List", picture: "Image", chart: "Chart", table: "Table", code: "Code", media: "Media" };
-    const order = ["title", "subtitle", "text", "list", "picture", "chart", "table", "code", "media"];
+    const labels = { title: "Title", subtitle: "Subtitle", text: "Text", metric: "Metric", list: "List", picture: "Image", chart: "Chart", table: "Table", code: "Code", media: "Video", quote: "Quote", timeline: "Timeline", tag: "Tag", diagram: "Image" };
+    const order = ["title", "subtitle", "text", "metric", "list", "picture", "chart", "table", "code", "media", "quote", "timeline", "tag", "diagram"];
     return [...new Set(types)].sort((a, b) => order.indexOf(a) - order.indexOf(b)).map(type => {
         const count = types.filter(value => value === type).length;
         return `${labels[type] ?? type}${count > 1 ? ` × ${count}` : ""}`;
@@ -45,6 +46,7 @@ function describeOptions(choices, records, current, catalog) {
         if (catalog !== "layouts")
             continue;
         const types = layoutTypes(option.value === current ? currentRecord : records.get(String(option.value)));
+        option.placeholderTypes = records.get(String(option.value))?.placeholders?.map(placeholder => placeholder.type);
         option.placeholders = placeholderSummary(types);
         const same = types && currentTypes && signature(types) === signature(currentTypes);
         const equivalent = types && currentTypes && signature(compatible(types)) === signature(compatible(currentTypes));
@@ -145,12 +147,47 @@ export function getJsonFieldContext(source, position, loadedCatalogs = {}) {
 export function replaceFieldOption(context, value) {
     if (!context.options.some(option => option.value === value))
         throw new Error("This choice is no longer available.");
-    const next = context.source.slice(0, context.offset) + JSON.stringify(value) + context.source.slice(context.offset + context.length);
+    let next = context.source.slice(0, context.offset) + JSON.stringify(value) + context.source.slice(context.offset + context.length);
     const document = JSON.parse(next);
     if (context.path.reduce((current, key) => current?.[key], document) !== value)
         throw new Error("This field has a duplicate key. Resolve it in the JSON before choosing an option.");
-    const result = validatePresentation(document);
+    const types = context.options.find(option => option.value === value).placeholderTypes;
+    if (value !== context.value && types && context.catalog === 'layouts' && context.path.length === 3
+        && context.path[0] === 'slides' && context.path[2] === 'layout' && validatePresentation(document).valid) {
+        const populated = populateLayoutPlaceholders(document, context.path[1], types);
+        next = updateSource(next, document, populated);
+    }
+    const result = validatePresentation(JSON.parse(next));
     if (!result.valid && validatePresentation(JSON.parse(context.source)).valid)
         throw new Error(result.errors[0]?.message ?? "This option is not valid here.");
     return next;
+}
+
+// Keep existing scalar spellings and unrelated source bytes when adding slots.
+function updateSource(source, before, after) {
+    const indent = source.match(/^[\t ]+(?=\S)/m)?.[0] ?? '  ';
+    const formattingOptions = {insertSpaces: !indent.includes('\t'), tabSize: indent.length, eol: source.includes('\r\n') ? '\r\n' : '\n'};
+    function visit(a, b, path) {
+        if (JSON.stringify(a) === JSON.stringify(b)) return;
+        if (a && b && typeof a === 'object' && typeof b === 'object' && !Array.isArray(a) && !Array.isArray(b)) {
+            for (const key of new Set([...Object.keys(a), ...Object.keys(b)])) visit(a[key], b[key], [...path, key]);
+        } else if (Array.isArray(a) && Array.isArray(b) && a.length === b.length) {
+            b.forEach((value, index) => visit(a[index], value, [...path, index]));
+        } else {
+            const node = findNodeAtLocation(parseTree(source), path);
+            if (node && b !== undefined) source = source.slice(0, node.offset) + JSON.stringify(b) + source.slice(node.offset + node.length);
+            else source = applyEdits(source, modify(source, path, b, {formattingOptions}));
+        }
+    }
+    visit(before, after, []);
+    return source;
+}
+
+/** One source edit so layout changes and new slots share one undo step. */
+export function fieldOptionEdit(context, value) {
+    const next = replaceFieldOption(context, value), source = context.source;
+    let from = 0, to = source.length, end = next.length;
+    while (from < to && from < end && source[from] === next[from]) from++;
+    while (to > from && end > from && source[to - 1] === next[end - 1]) { to--; end--; }
+    return {from, to, insert: next.slice(from, end)};
 }

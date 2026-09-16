@@ -1,4 +1,4 @@
-import {getJsonFieldContext,replaceFieldOption} from './json-options.js';
+import {getJsonFieldContext,fieldOptionEdit} from './json-options.js';
 let nextMenuId=0;
 
 /** Optional DOM menu; hosts may provide their own onOptions renderer instead. */
@@ -35,7 +35,7 @@ export function mountJsonFieldMenu(parent,api,catalogs,left,top,onClose){
   function resize(){close();}
   function choose(option){
     if(api.getValue()!==source){close();return;}
-    try{replaceFieldOption(context,option.value);api.replace(context.offset,context.offset+context.length,JSON.stringify(option.value));close();api.focus();}
+    try{const edit=fieldOptionEdit(context,option.value);api.replace(edit.from,edit.to,edit.insert);close();api.focus();}
     catch(cause){error.hidden=false;error.textContent=cause.message;}
   }
   function highlight(){

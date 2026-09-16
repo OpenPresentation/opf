@@ -13,6 +13,8 @@ export interface JsonFieldOption {
   layoutGroup?: 'Current layout' | 'Same placeholders' | 'Compatible placeholders' | 'Different counts' | 'Other layouts' | 'Unspecified placeholders';
   /** Declared placeholder types and counts, not a rendering guarantee. */
   placeholders?: string;
+  /** Declared kinds in layout order, used to create missing blank content. */
+  placeholderTypes?: string[];
   related?: boolean;
 }
 export interface JsonFieldContext {
@@ -29,5 +31,7 @@ export interface JsonFieldContext {
 }
 /** Null for invalid JSON or a field with no categorical choices. */
 export declare function getJsonFieldContext(source: string, position: number, loadedCatalogs?: JsonCatalogContext): JsonFieldContext | null;
-/** Replace only the token. Hosts must reject a context whose source is stale. */
+/** Replace the token and add missing layout payloads. Hosts must reject stale sources. */
 export declare function replaceFieldOption(context: JsonFieldContext, value: JsonOptionValue): string;
+/** Minimal single replacement for atomic source-editor undo. */
+export declare function fieldOptionEdit(context: JsonFieldContext, value: JsonOptionValue): {from:number;to:number;insert:string};

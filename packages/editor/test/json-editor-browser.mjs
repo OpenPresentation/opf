@@ -8,8 +8,19 @@ import {chromium} from 'playwright';
 
 const root=fileURLToPath(new URL('../',import.meta.url)),consumer=process.argv[3],resolveDir=consumer?path.resolve(consumer):root;
 const editorImport=consumer?'@openpresentation/opf-editor/json-editor':'./dist/json-editor.js';
-const bundle=await build({stdin:{resolveDir,contents:`
+const alias={};
+if(process.env.OPF_CORE_ROOT){
+  const core=path.resolve(process.env.OPF_CORE_ROOT),manifest=JSON.parse(await readFile(path.join(core,'package.json'),'utf8'));
+  for(const [key,value] of Object.entries(manifest.exports)){
+    if(key.includes('*'))continue;
+    const target=typeof value==='string'?value:value.import??value.default;
+    if(target)alias['@openpresentation/opf'+(key==='.'?'':key.slice(1))]=path.join(core,target);
+  }
+}
+const bundle=await build({alias,stdin:{resolveDir,contents:`
   import {mountJsonCodeEditor} from ${JSON.stringify(editorImport)};
+  import {layouts} from '@openpresentation/opf/catalogs';
+  window.layoutContracts={count:layouts.length,metric:layouts.find(layout=>layout.id==='number-1x')?.placeholders.some(slot=>slot.type==='metric')};
   window.changes=[];window.failures=[];
   window.mount=(code,catalogs={})=>{
     window.control?.destroy();window.changes=[];
@@ -30,6 +41,7 @@ try{
   await page.setContent('<style>#editor{width:700px;height:650px}.cm-editor{height:100%}.cm-scroller{overflow:auto}</style><div id="editor"></div><button>After editor</button>');
   if(process.env.OPF_JSON_TEST_PLATFORM)await page.evaluate(platform=>Object.defineProperty(navigator,'platform',{value:platform==='darwin'?'MacIntel':platform==='win32'?'Win32':'Linux x86_64'}),keymapPlatform);
   await page.addScriptTag({content:bundle.outputFiles[0].text});await page.context().setOffline(true);
+  const contracts=await page.evaluate(()=>layoutContracts),similarCount=contracts.metric?3:4,layoutCount=contracts.count+1;
   const source=page.getByRole('textbox',{name:'OPF JSON',exact:true});
   const read=()=>page.evaluate(()=>control.api.getValue());
   const select=async(from,to=from)=>page.evaluate(([from,to])=>{control.api.focus();control.api.setSelection(from,to);},[from,to]);
@@ -61,18 +73,18 @@ try{
   const deck='{\r\n  "slides": [{"layout":"text-1x","title":"Keep title","text":"Keep  text"}]\n}';
   await page.evaluate(code=>mount(code,{layouts:[{id:'partner-detail',name:'Partner detail',placeholders:[{type:'title'},{type:'text'}]}]}),deck);
   await at('"layout"',1);await source.press('Control+Space');const menu=page.getByRole('dialog',{name:'layout options',exact:true});await menu.waitFor();
-  assert.equal(await menu.getByRole('option').count(),4);
+  assert.equal(await menu.getByRole('option').count(),similarCount);
   assert.ok((await menu.getByRole('option').first().innerText()).includes('Text 1x'));
   assert.ok((await menu.getByRole('group',{name:'Same placeholders',exact:true}).innerText()).includes('Partner detail'));
-  await menu.getByRole('button',{name:'All layouts (29)',exact:true}).click();
-  assert.equal(await menu.getByRole('option').count(),29);
+  await menu.getByRole('button',{name:`All layouts (${layoutCount})`,exact:true}).click();
+  assert.equal(await menu.getByRole('option').count(),layoutCount);
   assert.ok((await menu.getByRole('group',{name:'Different counts',exact:true}).innerText()).includes('Text × 3'));
-  await menu.getByRole('button',{name:'Similar (4)',exact:true}).click();
+  await menu.getByRole('button',{name:`Similar (${similarCount})`,exact:true}).click();
   await menu.getByRole('combobox').fill('chart-1x');assert.equal(await menu.getByRole('option').count(),1);
-  await menu.getByRole('combobox').fill('');assert.equal(await menu.getByRole('option').count(),4);
+  await menu.getByRole('combobox').fill('');assert.equal(await menu.getByRole('option').count(),similarCount);
   await menu.getByRole('combobox').press('ArrowDown');
   const active=await menu.getByRole('combobox').getAttribute('aria-activedescendant');
-  assert.ok((await page.locator(`[id="${active}"]`).innerText()).includes('Number 1x'));
+  assert.ok((await page.locator(`[id="${active}"]`).innerText()).includes(contracts.metric?'Partner detail':'Number 1x'));
   await menu.getByRole('combobox').fill('partner-detail');assert.equal(await menu.getByRole('option').count(),1);await menu.getByRole('combobox').press('Enter');assert.equal(await read(),deck.replace('text-1x','partner-detail'));
   await source.press(`${mod}+z`);assert.equal(await read(),deck);
   // A real click on the highlighted key opens the same menu.
@@ -80,6 +92,23 @@ try{
   await page.evaluate(()=>control.update(control.api.getValue().replace('Keep title','External title')));assert.equal(await menu.count(),0);
   await at('"layout"',1);await source.press('Control+Space');await menu.waitFor();await page.evaluate(()=>control.setCatalogs({}));assert.equal(await menu.count(),0);
   checks.push('Keyboard and pointer catalog menus, filtering, one-token replacement, undo and stale context dismissal');
+
+  if(contracts.metric){
+    const cover=JSON.stringify({slides:[{layout:'title-subtitle',title:'Keep title',subtitle:'Keep subtitle',notes:'Keep notes'}]},null,2);
+    await page.evaluate(code=>mount(code),cover);await at('"layout"',1);await source.press('Control+Space');await menu.waitFor();
+    await menu.getByRole('combobox').fill('number-1x');
+    assert.ok((await menu.getByRole('option').innerText()).includes('Title + Metric'));
+    await menu.getByRole('combobox').press('Enter');
+    const changed=await read();
+    assert.deepEqual(JSON.parse(changed).slides[0],{...JSON.parse(cover).slides[0],layout:'number-1x',metric:{value:'',label:''}});
+    await source.press(`${mod}+z`);assert.equal(await read(),cover);
+    await source.press(`${mod}+Shift+z`);assert.equal(await read(),changed);
+    await at('"layout"',1);await source.press('Control+Space');await menu.waitFor();
+    await menu.getByRole('combobox').fill('number-3x');await menu.getByRole('combobox').press('Enter');
+    assert.deepEqual(JSON.parse(await read()).slides[0].blocks,Array.from({length:3},()=>({metric:{value:'',label:''}})));
+    await source.press(`${mod}+z`);assert.equal(await read(),changed);
+    checks.push('Metric layout choices scaffold empty values and repeated blocks, preserve subtitle/notes, and undo/redo atomically');
+  }
 
   await page.evaluate(()=>mount('{"slides":['));await select(5);await source.press('Control+Space');await page.evaluate(()=>control.openOptions());assert.equal(await page.getByRole('dialog').count(),0);assert.equal(await page.evaluate(()=>control.api.format()),false);assert.equal(await read(),'{"slides":[');
   const compact='{"name":"Keep  spaces","slides":[],"x-value":1.2300}';await page.evaluate(code=>mount(code),compact);await source.press(`${mod}+f`);await page.locator('.cm-search').waitFor();await page.locator('.cm-search input[name="search"]').fill('Keep');await page.locator('.cm-search input[name="search"]').press('Escape');await source.press(`${mod}+Shift+f`);

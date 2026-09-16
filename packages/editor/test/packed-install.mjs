@@ -51,7 +51,8 @@ try{
  const jsonReport=path.join(root,`artifacts/packed-json-browser-node${process.versions.node.split('.')[0]}.json`);
  process.stdout.write(execFileSync(process.execPath,[path.join(fixture,'test/json-editor-browser.mjs'),jsonReport,consumer],{cwd:consumer,encoding:'utf8',maxBuffer:8*1024*1024}));
  const jsonBrowser=JSON.parse(await readFile(jsonReport,'utf8'));
- assert.equal(jsonBrowser.status,'passed');assert.equal(jsonBrowser.runtime,'installed');assert.equal(jsonBrowser.checks.length,7);
+ assert.equal(jsonBrowser.status,'passed');assert.equal(jsonBrowser.runtime,'installed');assert.equal(jsonBrowser.checks.length,8);
+ assert.ok(jsonBrowser.checks.some(check=>check.startsWith('Metric layout choices scaffold empty values')));
  assert.deepEqual(jsonBrowser.errors,[]);assert.deepEqual(jsonBrowser.externalRequests,[]);
  for(const [file,digest] of Object.entries(files))assert.equal(hash(await readFile(path.join(installed,file))),digest,'JSON verification must not rebuild the installed editor');
  await writeFile(path.join(root,`artifacts/packed-json-consumer-node${process.versions.node.split('.')[0]}.json`),JSON.stringify({node:process.version,name:manifest.name,version:manifest.version,integrity:packed.integrity,files,dependencies,tests:[...tests],jsonBrowser,boundary:'JSON control only, from a byte-matched installed candidate and registry dependencies. Full-package acceptance still requires every subsequent gate and a successful overall command exit.'},null,2)+'\n');
