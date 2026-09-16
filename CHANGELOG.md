@@ -4,6 +4,7 @@
 
 - Document the independently installable [developer quickstart](docs/quickstart.md) and a truthful [compatibility matrix](docs/compatibility-matrix.md) for the published 0.10.1 / 0.8.1 / 0.7.1 set. Add `docs/quickstart/developer-quickstart.opf.json` and `pnpm test:developer-quickstart`, which installs those versions from the npm registry. The fixture is not part of the published examples catalog.
 - Default heading geometry is a reference-engine policy, not extra JSON. Title and subtitle share the padded width. Cover layouts (`title`, `title-subtitle`, heading-only slides with no body) vertically center the heading group in the remaining safe area; wrapping recenters the group. Content slides reserve two title line-heights so typical one- and two-line titles share a body origin, except when that unused space would shrink a 3×3 region cell below stacked metric metadata. Missing subtitle and tag fields leave no gap. `item.box` remains the allocated editable bounds. Renderer, editor and PPTX consume `composeSlide` without a schema change.
+- Coordinated packages golden uses `scripts/fixtures/opf-examples-png.placeholder-geometry.sha256.json` for unpublished heading defaults (764 inspected cover-recenter and content title-band hashes; region metric operating-model `#5` slides unchanged; furniture bands unmoved). The renderer furniture golden remains the published-core 0.10.1 gate. The 0.1px accepted-text gate is unchanged.
 
 
 ## 0.10.1
