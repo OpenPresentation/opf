@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.9.1
+
+- Raise the optional `@openpresentation/opf-render` peer to `^0.9.0` so a packed install of editor 0.8.0 + render 0.9.0 + pptx 0.9.1 resolves. Keep `@openpresentation/opf` at `^0.11.0`. No conversion-behavior change.
+
 ## 0.9.0
 
 - Require published `@openpresentation/opf@^0.11.0`. Resolve content ColorRef values (hex, effective color-scheme slots and roles, and `var:<id>` variables) through core `resolveColorRef()` to sRGB hex before PptxGenJS export for styled table fill/text/borders and rich text runs. Eight-digit hex alpha is preserved for native transparency (core `normalizeHexColor` strips the AA byte). Unrecognized run colors still validate and fall back to the theme text color (`color:'invalid'` contract). Design backgrounds and gradients are unchanged; native `schemeClr`, theme `clrScheme` writes, and native `p:hf` remain follow-up work. Import still flattens theme colors to hex.

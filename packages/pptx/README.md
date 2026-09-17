@@ -1,6 +1,6 @@
 # OPF PPTX
 
-Version 0.9.0 requires core 0.11.0, including ColorRef / `variables` on content colors. It hex-resolves named colors through core `resolveColorRef()` before PptxGenJS `srgbClr` export. Unrecognized run colors such as `color:'invalid'` still validate and fall back to the theme text color. Native DrawingML `schemeClr` and theme `clrScheme` writes, and native `p:hf` headers/footers, are not in this release. Import still flattens theme colors to hex. Metric, quote and timeline layout placeholders and the corrected text-bullet contract from 0.8.1 are retained.
+Version 0.9.1 keeps core `^0.11.0` and raises the optional `@openpresentation/opf-render` peer to `^0.9.0` so it coexists with editor 0.8.0. ColorRef / `variables` on content colors still hex-resolve through core `resolveColorRef()` before PptxGenJS `srgbClr` export. Unrecognized run colors such as `color:'invalid'` still validate and fall back to the theme text color. Native DrawingML `schemeClr` and theme `clrScheme` writes, and native `p:hf` headers/footers, are not in this release. Import still flattens theme colors to hex. Metric, quote and timeline layout placeholders and the corrected text-bullet contract from 0.8.1 are retained.
 
 Unfinished prepared shaping work is preserved in the [September 15 roadmap](docs/roadmap-shaping-20260915.md); it is not part of the published runtime.
 
