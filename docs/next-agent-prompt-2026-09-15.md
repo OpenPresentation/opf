@@ -1,12 +1,15 @@
 # Copy/paste prompt for the next project owner
 
-**Current pins (16 Sep 2026):** npm `@openpresentation/opf@0.10.1`,
+**Current pins (17 Sep 2026):** npm `@openpresentation/opf@0.10.1`,
 `opf-render@0.8.1`, `opf-editor@0.7.1`, `opf-pptx@0.8.1`, `cli@0.8.1` on
 Node 24. `furniture-flow-v2` is in that set. [PR 91](https://github.com/OpenPresentation/opf/pull/91)
-is squashed and merged; [quickstart](quickstart.md) and
-[compatibility matrix](compatibility-matrix.md) are on `main`. Start from
-[handoff-2026-09-16](handoff-2026-09-16.md). The 15 Sep files below are
-dated checkpoints. The developer-ready milestone is **not** complete.
+is squashed and merged. Issue88 Inspector overlay/json-options, gallery
+Playground+Editor links, and the Header & footer playground example are **live**
+on `www.pptx.dev` / `www.pptx.gallery` / `www.openpresentation.org` (squash
+`17de6da` / `c7d3754` / `ea0d032`). GitHub [issue 88](https://github.com/OpenPresentation/opf/issues/88)
+stays **open**. Start from [handoff-2026-09-16](handoff-2026-09-16.md). The
+developer-ready milestone is **not** complete. Do not implement `p:hf`. Do not
+weaken issue 24.
 
 Continue OpenPresentation as its primary project owner. Build on accepted work,
 keep changes committed and pushed through focused PRs as you go, and carry the
@@ -54,10 +57,11 @@ them.
 [PR 91](https://github.com/OpenPresentation/opf/pull/91) merged the independent
 registry-install quickstart and compatibility matrix onto main. Re-run
 `pnpm test:developer-quickstart` against live npm, not unpublished local
-tarballs. Next: finish public-site adoption under core issue88 and verify
-canonical production routes, not only dependency manifests. Do not mark the
-developer-ready milestone complete. Issue24 stays deferred at the unchanged
-0.1px gate. Do not publish npm from this docs checkpoint.
+tarballs. Production issue88 features above are live; leave GitHub issue88
+**open** until its checklist is fully satisfied. Do not describe geometry
+drafts or homepage-renderer as shipped. Do not mark the developer-ready
+milestone complete. Issue24 stays deferred at the unchanged 0.1px gate. Do
+not implement native `p:hf`. Do not publish npm from this docs checkpoint.
 
 Preserve each library's remote codex/archive-shaping-20260915 branch. Immutable
 checkpoints: core 36ff66b3d62b39d7d27dcda022b7e79e541bd603;

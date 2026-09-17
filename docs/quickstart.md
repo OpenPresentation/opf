@@ -144,9 +144,11 @@ It fails if any package is a `file:` or workspace link.
 
 - Renderer native-width residuals:
   [opf-render#24](https://github.com/OpenPresentation/opf-render/issues/24)
-- Native PowerPoint open/edit/save/reopen:
+- Native PowerPoint open/edit/save/reopen and real Office Header/Footer (`p:hf`):
   [opf#87](https://github.com/OpenPresentation/opf/issues/87)
-- Public-site adoption:
-  [opf#88](https://github.com/OpenPresentation/opf/issues/88)
+- Remaining GitHub [issue 88](https://github.com/OpenPresentation/opf/issues/88)
+  checklist (the Inspector overlay/json-options, gallery Playground+Editor
+  links, and Header & footer playground example are already live on
+  production; the issue stays open)
 - Archived font-shaping prototypes (not in the published runtime)
 - Selectable vector PDF, general SVG diagrams, and Mermaid
