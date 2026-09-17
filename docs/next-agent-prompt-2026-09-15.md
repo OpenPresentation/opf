@@ -1,24 +1,27 @@
 # Copy/paste prompt for the next project owner
 
-**Current pins (16 Sep 2026):** npm `@openpresentation/opf@0.10.1`,
+**Current pins (17 Sep 2026):** npm `@openpresentation/opf@0.10.1`,
 `opf-render@0.8.1`, `opf-editor@0.7.1`, `opf-pptx@0.8.1`, `cli@0.8.1` on
-Node 24. Furniture is in that set. Start from
-[handoff-2026-09-16](handoff-2026-09-16.md), the
-[developer quickstart](quickstart.md) and the
-[compatibility matrix](compatibility-matrix.md). The 15 Sep files below are
-dated checkpoints.
+Node 24. `furniture-flow-v2` is in that set. [PR 91](https://github.com/OpenPresentation/opf/pull/91)
+is squashed and merged. Issue88 Inspector overlay/json-options, gallery
+Playground+Editor links, and the Header & footer playground example are **live**
+on `www.pptx.dev` / `www.pptx.gallery` / `www.openpresentation.org` (squash
+`17de6da` / `c7d3754` / `ea0d032`). GitHub [issue 88](https://github.com/OpenPresentation/opf/issues/88)
+stays **open**. Start from [handoff-2026-09-16](handoff-2026-09-16.md). The
+developer-ready milestone is **not** complete. Do not implement `p:hf`. Do not
+weaken issue 24.
 
 Continue OpenPresentation as its primary project owner. Build on accepted work,
 keep changes committed and pushed through focused PRs as you go, and carry the
 next bounded developer-readiness milestone through validation and release.
 Do not restart the ecosystem or redesign the published websites.
 
-Read OpenPresentation/opf docs/handoff-2026-09-15.md, docs/status-2026-09-15.md,
+Read OpenPresentation/opf docs/handoff-2026-09-16.md, docs/status-2026-09-16.md,
 docs/plans/developer-adoption-20260915.md,
 docs/plans/deferred-shaping-20260915.md and
 docs/plans/ecosystem-objective-2026-09-09.md. Inspect current defaults, PRs,
 registry and deployments: these files are dated checkpoints, not assumptions
-that nothing has changed.
+that nothing has changed. The 15 Sep handoff/status files remain historical.
 
 Repositories: OpenPresentation/{opf,opf-render,opf-editor,opf-pptx} and
 Data-Advantage/{openpresentation-site,pptx-gallery,pptx-dev}. Default branches
@@ -28,33 +31,37 @@ managers (pnpm10.33.2 core/site/gallery, pnpm11.1.3 pptx-dev, npm libraries),
 each AGENTS.md and relevant OPF skills. Schemas/catalogs are authoritative, but
 schema support does not certify editor, renderer or native export fidelity.
 
-At this checkpoint npm versions are @openpresentation/opf0.10.0,
-opf-render0.8.0, opf-editor0.7.0, opf-pptx0.8.0 and cli0.8.0. Home/playground
-have editable JSON, live previews, preview edits back to JSON, contextual
-catalog choices and code-editor assistance. Preserve their appearance. Lint
-and contextual design contracts exist. The CLI supports create, validate,
-lint, revision-guarded JSON edits, data import, pagination, schemas/catalogs and
-six-skill installation/update/status. Check actual help before promising other
-commands; rendering/export is available through documented library/UI APIs.
+The 15 Sep checkpoint recorded npm @openpresentation/opf0.10.0,
+opf-render0.8.0, opf-editor0.7.0, opf-pptx0.8.0 and cli0.8.0. Those pins are
+outdated. Current published set is core 0.10.1, renderer/PPTX/CLI 0.8.1, editor
+0.7.1. Home/playground have editable JSON, live previews, preview edits back to
+JSON, contextual catalog choices and code-editor assistance. Preserve their
+appearance. Lint and contextual design contracts exist. The CLI supports create,
+validate, lint, revision-guarded JSON edits, data import, pagination,
+schemas/catalogs and six-skill installation/update/status. Check actual help
+before promising other commands; rendering/export is available through
+documented library/UI APIs.
 
 The cleanup accepted eleven dependency updates and four furniture increments
 (core79, renderer20, editor17, PPTX34), and closed the Node26-types update.
 Four shaping PRs (core83, renderer21, editor21, PPTX35) conclude with docs/
-evidence only. Their prototypes are archived, not released. Check final PR/CI
-states. Main's new furniture APIs still need coordinated package releases.
-The public sites passed 41 production browser workflows at the handoff commits;
-retain evidence and rerun affected flows when changing them.
+evidence only. Their prototypes are archived, not released. Furniture APIs
+shipped in 0.10.1 / 0.8.1 / 0.7.1; do not cut another npm release for missing
+furniture. PPTX furniture is tagged slide shapes (`OPF_FURNITURE_V1`), not
+native Office Header/Footer objects (`p:hf` / notes master). That native
+requirement is issue87 only — do not implement it as remaining developer-ready
+package work. The public sites passed 41 production browser workflows at the
+15 Sep handoff commits; retain evidence and rerun affected flows when changing
+them.
 
-First deliver a clear starting path from real published packages: release the
-accepted furniture increment in dependency order, then an independently
-installable example that authors JSON, validates/lints, resolves offline fonts,
-composes/paginates, edits with undo, previews and exports supported formats.
-Correct stale API/version guidance in docs/skills, publish a truthful feature
-matrix, and verify browser/Node boundaries without hidden sibling imports.
-Update release-plan and immutable verification refs; never overwrite versions.
-Inspect actual tarballs, fresh installs and intended predecessor compatibility.
-Adopt features across the existing sites under core issue88 and verify canonical
-production routes, not only dependency manifests.
+[PR 91](https://github.com/OpenPresentation/opf/pull/91) merged the independent
+registry-install quickstart and compatibility matrix onto main. Re-run
+`pnpm test:developer-quickstart` against live npm, not unpublished local
+tarballs. Production issue88 features above are live; leave GitHub issue88
+**open** until its checklist is fully satisfied. Do not describe geometry
+drafts or homepage-renderer as shipped. Do not mark the developer-ready
+milestone complete. Issue24 stays deferred at the unchanged 0.1px gate. Do
+not implement native `p:hf`. Do not publish npm from this docs checkpoint.
 
 Preserve each library's remote codex/archive-shaping-20260915 branch. Immutable
 checkpoints: core 36ff66b3d62b39d7d27dcda022b7e79e541bd603;
@@ -74,8 +81,10 @@ rich-input checks while thirteen pass: repair and rerun that harness on resume.
 
 Native PowerPoint acceptance is split into core issue87 and its plan. Preserve
 image opening, provenance edit/save/reopen, tabs, notes-master ordering and
-physical font identity/embedding gaps. Serialization/self-import are not native
-acceptance. Do not retry Windows COM or kill Office processes until host recovery
+physical font identity/embedding gaps. Compiling furniture into real Office
+Header/Footer objects (`p:hf` / notes master) is that issue only; today's
+export uses tagged slide shapes (`OPF_FURNITURE_V1`). Serialization/self-import
+are not native acceptance. Do not retry Windows COM or kill Office processes until host recovery
 is confirmed. Do not use/distribute restricted Aptos4.40 without compatible
 explicit permission. Broader fonts/IME/bidi/fallback, layout repair and complete
 visual editor interactions remain planned. Current PDF is raster-backed;
