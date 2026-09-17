@@ -10,11 +10,8 @@ const fixture = JSON.parse(
 const forest = colorSchemes.find((scheme) => scheme.id === 'forest-green');
 assert.ok(forest, 'forest-green color scheme');
 
-// Reference-layer fields are schema-valid only after core 0.11; skip boundary
-// validation for the vendored OPF fixture until the coordinated pin lands.
-const renderOptions = { validate: false };
 const svgDeck = fixture.slides.slice(0, 3).map((_, index) =>
-  renderSvg(fixture, { slideIndex: index, ...renderOptions }),
+  renderSvg(fixture, { slideIndex: index }),
 );
 
 const [namedRuns, variableRuns, styledCells] = svgDeck;
@@ -27,6 +24,15 @@ const highlight = fixture.variables.highlight.toUpperCase();
 assert.match(variableRuns, new RegExp(`fill="${risk}"`));
 assert.match(variableRuns, new RegExp(`fill="${highlight}"`));
 assert.match(variableRuns, /fill="#0F172A"/);
+
+const authoredHex = renderSvg({
+  design: { theme: 'classic', colorScheme: 'cool-horizon' },
+  slides: [{
+    text: [{ text: 'Toolbar', color: '#2563eb' }],
+  }],
+});
+assert.ok(/<tspan(?=[^>]*fill="#2563eb")[^>]*>Toolbar<\/tspan>/.test(authoredHex));
+assert.doesNotMatch(authoredHex, /fill="#2563EB"/);
 
 assert.match(styledCells, new RegExp(`fill="${forest.light2.toUpperCase()}"`, 'i'));
 assert.match(styledCells, new RegExp(`fill="${risk}"`));

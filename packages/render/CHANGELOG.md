@@ -2,7 +2,9 @@
 
 ## Unreleased
 
-- Resolve content ColorRef values (hex, color-scheme slots and roles, and `var:<id>` document variables) for styled table fills, text colors, and border strokes before SVG paint. Rich text runs keep warn-and-fallback semantics for unrecognized colors such as `invalid`. Vendored `test/fixtures/color-references.opf.json` covers the OPF reference-layer fixture without expanding the 126-deck examples golden until `@openpresentation/opf` 0.11.x publishes.
+## 0.9.0
+
+- Require `@openpresentation/opf` ^0.11.0. Resolve content ColorRef values (hex, color-scheme slots and roles, and `var:<id>` document variables) for styled table fills, text colors, and border strokes through core `resolveColorRef()` before SVG paint. Authored `#RRGGBB` / `#RRGGBBAA` keep their written casing so packed-browser editor selection colors match. Rich text runs keep warn-and-fallback semantics for unrecognized colors such as `invalid`. Vendored `test/fixtures/color-references.opf.json` covers the OPF reference-layer fixture without expanding the 126-deck examples golden.
 
 ## 0.8.0
 

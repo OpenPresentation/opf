@@ -1,6 +1,8 @@
 # OPF Render
 
-Version 0.8.1 requires core 0.10.1, including metric, quote and timeline layout placeholders and the corrected text-bullet contract. It retains the existing rendering APIs.
+Version 0.9.0 requires `@openpresentation/opf` ^0.11.0 and resolves content ColorRef / `variables` through core `resolveColorRef()`. Authored `#RRGGBB` paint stays authored. It retains the existing rendering APIs.
+
+Version 0.8.1 required core 0.10.1, including metric, quote and timeline layout placeholders and the corrected text-bullet contract.
 
 Unfinished prepared shaping work is preserved in the [September 15 roadmap](docs/roadmap-shaping-20260915.md); it is not part of the published runtime.
 

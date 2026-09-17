@@ -54,7 +54,7 @@ export interface RenderSvgOptions {
   strictAssets?: boolean;
   imageResolver?: (src: string | undefined, context: { asset: unknown; path: string }) => string | null | undefined;
   onDiagnostic?: (diagnostic: RenderDiagnostic) => void;
-  /** When false, skip AJV boundary validation (reference-layer fixtures before core 0.11). Default true. */
+  /** When false, skip AJV boundary validation. Default true. */
   validate?: boolean;
   slideIndex?: number;
   trace?: boolean;

@@ -1,6 +1,7 @@
 import { layoutTable, fitList, fitRichText, composeSlide, resolveCanvasDimensions, resolveFontFamilies, resolveTextStyle, textWidthMeasurer, fitText, textColorForFill, chartColorForFill } from "@openpresentation/opf/composition";
 import {
   catalogs as bundledCatalogs,
+  resolveColorRef as resolveCoreColorRef,
   validatePresentation
 } from "@openpresentation/opf";
 
@@ -291,54 +292,30 @@ function normalizeColor(value, fallback) {
   return fallback;
 }
 
-const COLOR_SCHEME_SLOTS = new Set([
-  "dark1", "dark2", "light1", "light2",
-  "accent1", "accent2", "accent3", "accent4", "accent5", "accent6",
-  "hyperlink", "followedHyperlink"
-]);
-const COLOR_SCHEME_ROLES = new Set([
-  "primary", "secondary", "accent", "background", "surface", "text", "textSecondary"
-]);
-
-function resolveVariableColor(id, variables) {
-  if (!variables || typeof id !== "string" || !id) return null;
-  const entry = variables[id];
-  if (typeof entry === "string") return normalizeColor(entry, null);
-  if (isPlainObject(entry) && entry.type === "color" && typeof entry.value === "string") {
-    return normalizeColor(entry.value, null);
-  }
-  return null;
-}
-
-/** Resolve content ColorRef until core exports resolveColorRef(). */
+/** Resolve content ColorRef via core; keep authored #RRGGBB / #RRGGBBAA casing. */
 function resolveColorRef(value, bound, fallback) {
   if (value == null || value === "") return fallback;
   if (typeof value !== "string") return fallback;
   const trimmed = value.trim();
-  if (trimmed.startsWith("#")) {
-    if (/^#[0-9a-fA-F]{3}$/.test(trimmed)) return normalizeColor(trimmed, fallback);
-    if (/^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$/.test(trimmed)) return trimmed;
-    return normalizeColor(trimmed, fallback);
-  }
-  if (trimmed.startsWith("var:")) {
-    const resolved = resolveVariableColor(trimmed.slice(4), bound.design.variables);
-    return resolved ?? fallback;
-  }
-  const scheme = bound.design.colorScheme;
-  const colors = bound.design.colors;
-  if (COLOR_SCHEME_ROLES.has(trimmed)) {
-    if (trimmed === "textSecondary") return colors.mutedText ?? fallback;
-    if (trimmed === "text") return colors.text ?? fallback;
-    if (trimmed === "background") return colors.background ?? fallback;
-    if (trimmed === "surface") return colors.surface ?? fallback;
-    if (trimmed === "primary") return colors.primary ?? fallback;
-    if (trimmed === "secondary") return colors.secondary ?? fallback;
-    if (trimmed === "accent") return colors.accent ?? fallback;
-  }
-  if (COLOR_SCHEME_SLOTS.has(trimmed) || (scheme && trimmed in scheme)) {
-    return colorFromScheme(scheme, trimmed, fallback);
-  }
-  return fallback;
+  // Core normalizeHexColor uppercases literals and strips #RRGGBBAA alpha.
+  // Packed-browser editor checks keep toolbar hex like #2563eb as authored.
+  if (/^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$/.test(trimmed)) return trimmed;
+  if (/^#[0-9a-fA-F]{3}$/.test(trimmed)) return normalizeColor(trimmed, fallback);
+  const colors = bound.design.colors ?? {};
+  return resolveCoreColorRef(trimmed, {
+    colorScheme: bound.design.colorScheme ?? {},
+    roles: {
+      primary: colors.primary,
+      secondary: colors.secondary,
+      accent: colors.accent,
+      background: colors.background,
+      surface: colors.surface,
+      text: colors.text,
+      textSecondary: colors.mutedText
+    },
+    variables: bound.design.variables,
+    fallback
+  });
 }
 
 function resolveBackground(background, colorScheme) {
