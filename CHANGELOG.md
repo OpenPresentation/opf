@@ -2,16 +2,20 @@
 
 ## Unreleased
 
+## 0.11.0
+
 - Add content color references: rich-text run colors and styled table cell `fill`/`color` and border colors accept a color-scheme slot name (`accent1`–`accent6`, `dark1/2`, `light1/2`, `hyperlink`, `followedHyperlink`), an abstract role name (`primary`, `secondary`, `accent`, `background`, `surface`, `text`, `textSecondary`), or a `var:<id>` reference, in addition to literal hex. The styled-cell fields enforce the forms through the shared `ColorRef` definition (widened from hex-only — a pure widening); `TextRun.color` stays an open string so imported decks with unrecognized run colors keep validating, matching the coordinated exporters' fallback contract — validators warn and renderers fall back to the theme color. Prefer names over hex so styled content survives re-theming.
 - Add a top-level `variables` map of named color variables (`{ "risk": "#B42318" }` or `{ "type": "color", "value": ..., "description": ... }`), referenced from content color fields as `var:<id>`. Unknown `var:` references are validation warnings, never errors.
 - Add optional `id` and `extensions` to content payloads and `extensions` to slides. Payload ids share a document-wide uniqueness namespace with slide ids (duplicates are validation errors); extensions round-trip untouched at document, slide, and payload scope.
 - Add `bundlePresentation` and `opf bundle <input> <output>`: resolve every catalog reference a document uses (including transitive references from resolved records, e.g. a theme's schemes) and inline the records into `catalogs.<kind>.records`, so the file resolves every catalog reference offline — remote media and data assets are not inlined. Kinds with a custom `source` are left untouched; the report lists added, already-inline, and unresolved ids. Bundling is idempotent.
 - Add [`docs/format-card.md`](docs/format-card.md), a self-contained authoring card sized for pasting into a model's context, linked first from `llms.txt`. Document color-reference resolution in `design-resolution.md` and `content-payloads.md`, and record the token-first requirement for future styling surfaces in `content-item-design-overrides.md`. A validated reference fixture lives at [`docs/fixtures/color-references.opf.json`](docs/fixtures/color-references.opf.json), outside `examples/`, so the published example corpus and the renderer golden baseline stay unchanged until the next coordinated renderer update adds it to the corpus.
-
-- Document the independently installable [developer quickstart](docs/quickstart.md) and a truthful [compatibility matrix](docs/compatibility-matrix.md) for the published 0.10.1 / 0.8.1 / 0.7.1 set. Add `docs/quickstart/developer-quickstart.opf.json` and `pnpm test:developer-quickstart`, which installs those versions from the npm registry. The fixture is not part of the published examples catalog.
+- Update stock narrative catalog `layoutHint` values from pre-collapse layout ids (`text-1x-left`, `title-left`, `title-center`) to canonical bundled layouts (`text-1x`, `title`). `check:spec` now rejects narrative hints that do not resolve to a bundled layout id.
+- Export shared `resolveColorRef()` and `normalizeHexColor()` from `@openpresentation/opf` so renderers and exporters resolve slot names, abstract roles, `var:<id>` references, and literal hex with one implementation.
+- Rebuild CLI 0.9.0 with bundled core 0.11.0 catalogs and schema.
 
 ## 0.10.1
 
+- Document the independently installable [developer quickstart](docs/quickstart.md) and a truthful [compatibility matrix](docs/compatibility-matrix.md) for the published 0.10.1 / 0.8.1 / 0.7.1 set. Add `docs/quickstart/developer-quickstart.opf.json` and `pnpm test:developer-quickstart`, which installs those versions from the npm registry. The fixture is not part of the published examples catalog.
 - Declare metric placeholders for number layouts and add native quote and timeline layouts. Extend layout classification to match supported content kinds while retaining the legacy Number label.
 - Preserve text-style bullets as text in composed payloads so returned payloads remain valid OPF. Clarify legacy diagram and narrative shape representations.
 - Correct the layout regeneration index schema and rebuild CLI 0.8.1 with the updated catalog and schema.

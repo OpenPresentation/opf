@@ -25,7 +25,7 @@
       "description": "Open by establishing the product or service this strategy is for, and what window of time it covers. One slide that tells the audience exactly which world they're being asked to weigh in on.",
       "instructions": "Establish product/service specifics",
       "slideType": "text",
-      "layoutHint": "text-1x-left"
+      "layoutHint": "text-1x"
     },
     {
       "id": "objective",
@@ -33,7 +33,7 @@
       "description": "State the marketing goals in measurable terms: revenue, pipeline, awareness, share. Two or three goals, ranked. Goals without ranking get equal energy and equal mediocrity.",
       "instructions": "Share marketing goals",
       "slideType": "text",
-      "layoutHint": "text-1x-left"
+      "layoutHint": "text-1x"
     },
     {
       "id": "customer",
@@ -41,7 +41,7 @@
       "description": "Detail the target audience. Segments, jobs-to-be-done, decision criteria, where they live in the buying cycle. Specificity here is the foundation everything else stands on.",
       "instructions": "Detail target audience",
       "slideType": "text",
-      "layoutHint": "text-1x-left"
+      "layoutHint": "text-1x"
     },
     {
       "id": "market",
@@ -49,7 +49,7 @@
       "description": "Describe the market landscape: size, growth, segments, behavioral trends. Use external data for credibility and your own research for nuance. Show how the market is changing, not just how big it is.",
       "instructions": "Discuss market landscape",
       "slideType": "text",
-      "layoutHint": "text-1x-left"
+      "layoutHint": "text-1x"
     },
     {
       "id": "competition",
@@ -57,7 +57,7 @@
       "description": "Map the competitive set honestly. Direct, indirect, and substitutes. A 2x2 or feature-comparison framework helps; what matters is that the audience trusts your read of the field.",
       "instructions": "Analyze competitive environment",
       "slideType": "text",
-      "layoutHint": "text-1x-left"
+      "layoutHint": "text-1x"
     },
     {
       "id": "strategy",
@@ -65,7 +65,7 @@
       "description": "Articulate the marketing approach in one sentence and a single supporting frame. Positioning, primary motion, where you choose to play and not play. Clarity here is what makes the tactics that follow coherent.",
       "instructions": "Elaborate marketing approach",
       "slideType": "text",
-      "layoutHint": "text-1x-left"
+      "layoutHint": "text-1x"
     },
     {
       "id": "product",
@@ -73,7 +73,7 @@
       "description": "Highlight the unique value the product brings to the strategy. Lead with the customer outcome; tie it directly back to the customer beat. Avoid feature soup.",
       "instructions": "Highlight unique value",
       "slideType": "text",
-      "layoutHint": "text-1x-left"
+      "layoutHint": "text-1x"
     },
     {
       "id": "price",
@@ -81,7 +81,7 @@
       "description": "Justify pricing and packaging. Show the logic — cost-plus, value-based, competitor-anchored — and the levers you'll use over the period. Price decisions are strategy decisions.",
       "instructions": "Justify pricing strategy",
       "slideType": "text",
-      "layoutHint": "text-1x-left"
+      "layoutHint": "text-1x"
     },
     {
       "id": "place",
@@ -89,7 +89,7 @@
       "description": "Describe distribution channels and the role each plays. Direct, partner, marketplace, retail. Channel mix is often where strategies quietly succeed or fail.",
       "instructions": "Discuss distribution channels",
       "slideType": "text",
-      "layoutHint": "text-1x-left"
+      "layoutHint": "text-1x"
     },
     {
       "id": "promotion",
@@ -97,13 +97,13 @@
       "description": "Reveal the campaign and content tactics that bring the strategy to market. Pair each tactic with the audience and metric it serves. Avoid listing channels for their own sake.",
       "instructions": "Reveal promotional tactics",
       "slideType": "text",
-      "layoutHint": "text-1x-left"
+      "layoutHint": "text-1x"
     },
     {
       "id": "summary",
       "name": "Summary",
       "description": "Recap the strategy in a single page: customer, position, motion, expected outcome. End with the decision or commitment you need from the audience.",
-      "layoutHint": "title-left",
+      "layoutHint": "title",
       "instructions": "Recap key points",
       "slideType": "text"
     }

@@ -215,15 +215,15 @@ describe("bundlePresentation", () => {
     assert.deepEqual(report.unresolved.chartTypes, ["no-such-left", "no-such-nested"]);
   });
 
-  test("keeps stock narrative layout hints out of the report", () => {
+  test("inlines resolved stock narrative layout hints without reporting them as unresolved", () => {
     const { report } = bundlePresentation(deck());
     assert.equal(report.unresolved.layouts, undefined, JSON.stringify(report.unresolved));
     assert.deepEqual(report.unresolved, {});
-    // The slide's own layout still resolves and is inlined.
-    assert.deepEqual(report.added.layouts, ["chart-1x"]);
+    // Slide layout plus narrative beat hints from classic-story resolve and inline.
+    assert.deepEqual(report.added.layouts, ["chart-1x", "text-1x", "title"]);
     const reported = JSON.stringify(report);
-    for (const stale of ["text-1x-left", "title-left"]) {
-      assert.ok(!reported.includes(stale), `stock layout hint ${stale} should not surface in the report`);
+    for (const stale of ["text-1x-left", "title-left", "title-center"]) {
+      assert.ok(!reported.includes(stale), `pre-collapse layout hint ${stale} should not surface in the report`);
     }
   });
 

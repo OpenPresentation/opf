@@ -1,3 +1,87 @@
+const schemeColorSlots = new Set([
+  'accent1', 'accent2', 'accent3', 'accent4', 'accent5', 'accent6',
+  'dark1', 'dark2', 'light1', 'light2', 'hyperlink', 'followedHyperlink',
+]);
+
+const schemeColorRoles = new Set([
+  'primary', 'secondary', 'accent', 'background', 'surface', 'text', 'textSecondary',
+]);
+
+const defaultRoleSlots: Record<string, string> = {
+  primary: 'accent1',
+  secondary: 'accent2',
+  accent: 'accent3',
+  background: 'light1',
+  surface: 'light2',
+  text: 'dark1',
+  textSecondary: 'dark2',
+};
+
+/** Normalize a literal hex color to uppercase #RRGGBB. */
+export function normalizeHexColor(value: unknown): string | undefined {
+  if (typeof value !== 'string') return undefined;
+  let hex = value.trim();
+  if (/^#[0-9a-f]{3}$/i.test(hex)) hex = `#${[...hex.slice(1)].map((char) => char + char).join('')}`;
+  if (/^#[0-9a-f]{6}([0-9a-f]{2})?$/i.test(hex)) return hex.length === 9 ? `#${hex.slice(1, 7).toUpperCase()}` : hex.toUpperCase();
+  return undefined;
+}
+
+export type ResolveColorRefRoles = Partial<Record<
+  'primary' | 'secondary' | 'accent' | 'background' | 'surface' | 'text' | 'textSecondary',
+  string
+>>;
+
+export interface ResolveColorRefOptions {
+  /** Effective color scheme after design resolution (OOXML slots plus optional role hex overrides). */
+  colorScheme: Record<string, unknown>;
+  /** Optional resolved chrome colors (e.g. renderer `design.colors` with `textSecondary` mapped to `mutedText`). */
+  roles?: ResolveColorRefRoles;
+  /** Top-level presentation `variables` map. */
+  variables?: Record<string, unknown>;
+  /** Theme text color returned when a reference cannot be resolved. */
+  fallback: string;
+}
+
+function schemeSlot(colorScheme: Record<string, unknown>, slot: string, fallback: string): string {
+  return normalizeHexColor(colorScheme[slot]) ?? fallback;
+}
+
+function resolveVariable(variables: Record<string, unknown>, id: string, fallback: string): string {
+  const entry = variables[id];
+  if (typeof entry === 'string') return normalizeHexColor(entry) ?? fallback;
+  if (entry && typeof entry === 'object' && (entry as { type?: string }).type === 'color') {
+    return normalizeHexColor((entry as { value?: unknown }).value) ?? fallback;
+  }
+  return fallback;
+}
+
+/** Resolve a ColorRef or TextRun.color string to a literal hex color. */
+export function resolveColorRef(reference: string, options: ResolveColorRefOptions): string {
+  const { colorScheme, roles, variables = {}, fallback } = options;
+  const literal = normalizeHexColor(reference);
+  if (literal) return literal;
+
+  if (reference.startsWith('var:')) {
+    const id = reference.slice('var:'.length);
+    if (/^[a-z][a-z0-9-]*$/.test(id)) return resolveVariable(variables, id, fallback);
+    return fallback;
+  }
+
+  if (schemeColorRoles.has(reference)) {
+    const roleKey = reference as keyof ResolveColorRefRoles;
+    const fromRoles = roles?.[roleKey];
+    if (fromRoles) return normalizeHexColor(fromRoles) ?? fallback;
+    const fromScheme = normalizeHexColor(colorScheme[reference]);
+    if (fromScheme) return fromScheme;
+    const slot = defaultRoleSlots[reference];
+    return slot ? schemeSlot(colorScheme, slot, fallback) : fallback;
+  }
+
+  if (schemeColorSlots.has(reference)) return schemeSlot(colorScheme, reference, fallback);
+
+  return fallback;
+}
+
 /** Relative luminance contrast for opaque #RGB/#RRGGBB/#RRGGBBFF colors.
  * Unknown or translucent colors need a resolved backdrop and remain unmeasured.
  * https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html

@@ -11,17 +11,17 @@ shipped versus deferred.
 
 ## Versions
 
-Pin the coordinated set from `release-plan.json` (currently core **0.10.1**,
-renderer/PPTX/CLI **0.8.1**, editor **0.7.1**). All of these packages declare
+Pin the coordinated set from `release-plan.json` (currently core **0.11.0**,
+CLI **0.9.0**, renderer/PPTX **0.8.1**, editor **0.7.1**). All of these packages declare
 `engines.node: 24.x`.
 
 ```sh
 node -v   # must be 24.x
-npm install @openpresentation/opf@0.10.1 \
+npm install @openpresentation/opf@0.11.0 \
   @openpresentation/opf-render@0.8.1 \
   @openpresentation/opf-editor@0.7.1 \
   @openpresentation/opf-pptx@0.8.1 \
-  @openpresentation/cli@0.8.1
+  @openpresentation/cli@0.9.0
 ```
 
 Copy [`docs/quickstart/developer-quickstart.opf.json`](quickstart/developer-quickstart.opf.json)

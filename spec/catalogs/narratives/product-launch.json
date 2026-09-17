@@ -24,7 +24,7 @@
       "id": "opening",
       "name": "Opening",
       "description": "Open with the company brand and a confident visual. Set the tone — this is a moment, not a meeting. One slide that signals the audience is somewhere worth being.",
-      "layoutHint": "title-left",
+      "layoutHint": "title",
       "instructions": "Show company branding",
       "slideType": "text"
     },
@@ -34,7 +34,7 @@
       "description": "Hook the audience with the promise of the talk. Tell them, in one sentence, what they're about to see and why it matters to them. Specific promises buy patient audiences.",
       "instructions": "Hook the audience",
       "slideType": "text",
-      "layoutHint": "text-1x-left"
+      "layoutHint": "text-1x"
     },
     {
       "id": "context",
@@ -42,7 +42,7 @@
       "description": "Set the stage with the world the product enters. The customer reality, the market state, the unmet expectation. Context turns the launch from a product release into a moment in a larger story.",
       "instructions": "Set the stage",
       "slideType": "text",
-      "layoutHint": "text-1x-left"
+      "layoutHint": "text-1x"
     },
     {
       "id": "conflict",
@@ -50,7 +50,7 @@
       "description": "Introduce the villain — the problem, friction, or status quo the product opposes. Make the conflict concrete enough that the audience can name a moment they've felt it themselves.",
       "instructions": "Introduce villain/problem",
       "slideType": "text",
-      "layoutHint": "text-1x-left"
+      "layoutHint": "text-1x"
     },
     {
       "id": "stakes",
@@ -58,7 +58,7 @@
       "description": "Emphasize what's at risk if the conflict isn't resolved. Quantify, personalize, dramatize. Stakes are what convert a curious audience into an invested one.",
       "instructions": "Emphasize importance",
       "slideType": "text",
-      "layoutHint": "text-1x-left"
+      "layoutHint": "text-1x"
     },
     {
       "id": "reveal",
@@ -66,7 +66,7 @@
       "description": "Showcase the product. One striking visual, one defining capability, one sentence that captures what's new. Earn the applause line; don't bury it under a bullet list.",
       "instructions": "Showcase the solution",
       "slideType": "text",
-      "layoutHint": "text-1x-left"
+      "layoutHint": "text-1x"
     },
     {
       "id": "raise-stakes",
@@ -74,7 +74,7 @@
       "description": "Highlight where the alternatives fall short and what they cost the customer. Re-energize the room midway by sharpening the contrast with the reveal.",
       "instructions": "Highlight shortcomings of alternatives",
       "slideType": "text",
-      "layoutHint": "text-1x-left"
+      "layoutHint": "text-1x"
     },
     {
       "id": "raise-stakes-again",
@@ -82,7 +82,7 @@
       "description": "Reinforce why change is non-negotiable now. A second beat of stakes, framed differently — perhaps a customer voice or a future cost. Cement the reason to act.",
       "instructions": "Reinforce the need for change",
       "slideType": "text",
-      "layoutHint": "text-1x-left"
+      "layoutHint": "text-1x"
     },
     {
       "id": "sell",
@@ -90,13 +90,13 @@
       "description": "Make the audience want the product. Lead with the outcome it produces in their lives. Pricing, packaging, availability go here, but only after the desire is built.",
       "instructions": "Make them want your solution",
       "slideType": "text",
-      "layoutHint": "text-1x-left"
+      "layoutHint": "text-1x"
     },
     {
       "id": "cta",
       "name": "Call to Action",
       "description": "Close with the single action you want from the audience. Pre-order, sign up, attend, share. Make it simple, specific, and immediate.",
-      "layoutHint": "title-left",
+      "layoutHint": "title",
       "instructions": "Inspire action",
       "slideType": "text"
     }
