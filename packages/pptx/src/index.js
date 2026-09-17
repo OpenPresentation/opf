@@ -13,6 +13,7 @@ import {importBackground} from './background-import.js';
 import { webpToPng } from '#image-fallback';
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
 import { layoutTable, composeSlide, fitText, fitRichText, textWidthMeasurer, resolveCanvasDimensions, resolveFontFamilies, resolveTextStyle, textColorForFill, chartColorForFill } from "@openpresentation/opf/composition";
+import { colorContext, resolveExportColor, resolveVariableColors } from "./color-ref.js";
 import PptxGenJS from "../vendor/pptxgenjs/pptxgen.es.js";
 import { unzipSync, zipSync } from "fflate";
 import { XMLParser } from "fast-xml-parser";
@@ -908,8 +909,13 @@ function resolvePresentationContext(presentation, options) {
       accent: normalizeHex(colorScheme.primary ?? colorScheme.accent1 ?? "#2874A6"),
       surface: normalizeHex(colorScheme.surface ?? (darkBackground ? colorScheme.dark2 : colorScheme.light2) ?? "#F8FAFC"),
       border: normalizeHex(colorScheme.accent5 ?? "#CBD5E1")
-    }
+    },
+    variables: resolveVariableColors(presentation.variables)
   };
+}
+
+function exportColor(entry, context, fallback) {
+  return resolveExportColor(entry, colorContext(context, fallback));
 }
 
 function configurePresentation(pptx, presentation, context) {
@@ -977,7 +983,10 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
     } else if (item.field === "text" && item.text?.richLines) {
       const alignment=item.text.placement?.alignment??opfSlide.design?.contentAlignment??presentation.design?.contentAlignment??'left';
       for(const [index,line] of item.text.richLines.entries()){
-        const runs=line.fragments.map(fragment=>({text:fragment.text,options:{...nativeFontOptions(fragment.style),fontSize:fragment.fontSize*.75,color:normalizeHex(fragment.run.color??slideContext.colors.text),underline:fragment.run.underline?{color:normalizeHex(fragment.run.color??slideContext.colors.text)}:undefined,strike:fragment.run.strikethrough?'sngStrike':undefined,baseline:fragment.baselineShift?-fragment.baselineShift/fragment.fontSize*2000:undefined,hyperlink:fragment.run.link&&/^(https?:|mailto:)/i.test(fragment.run.link)?{url:fragment.run.link}:undefined}}));
+        const runs=line.fragments.map(fragment=>{
+          const runColor=exportColor(fragment.run.color,slideContext,slideContext.colors.text);
+          return {text:fragment.text,options:{...nativeFontOptions(fragment.style),fontSize:fragment.fontSize*.75,color:normalizeHex(runColor),underline:fragment.run.underline?{color:normalizeHex(runColor)}:undefined,strike:fragment.run.strikethrough?'sngStrike':undefined,baseline:fragment.baselineShift?-fragment.baselineShift/fragment.fontSize*2000:undefined,hyperlink:fragment.run.link&&/^(https?:|mailto:)/i.test(fragment.run.link)?{url:fragment.run.link}:undefined}};
+        });
         const placed=item.text.placement?.lines[index],factor=alignment==='right'?1:alignment==='center'?.5:0;
         const area=placed?{...region,x:(placed.x+line.width*factor-item.box.width*factor)/96,y:placed.y/96,h:placed.height/96}:{...region,y:region.y+line.y/96,h:line.height/96};
         if(runs.length)slide.addText(runs,{...textBoxOptions(area,slideContext,item.text.fontSize*.75),align:alignment,fit:'none',wrap:false,lineSpacingMultiple:1});
@@ -999,7 +1008,7 @@ function resolveSlideContext(presentation, slide, baseContext, options) {
     || Math.abs(resolved.dimensions.heightInches - baseContext.dimensions.heightInches) > 1e-6) {
     throw new OPFPptxError("mixed-slide-dimensions", "PowerPoint requires one canvas size per presentation. Set dimensions on the deck or export this slide separately.");
   }
-  return { ...baseContext, backgroundDefinition: resolved.backgroundDefinition, colorScheme: resolved.colorScheme, fonts: resolved.fonts, colors: resolved.colors, imageFill: effective.design.imageFill ?? "fit" };
+  return { ...baseContext, backgroundDefinition: resolved.backgroundDefinition, colorScheme: resolved.colorScheme, fonts: resolved.fonts, colors: resolved.colors, variables: resolved.variables, imageFill: effective.design.imageFill ?? "fit" };
 }
 
 function fieldToType(field) {
@@ -1066,8 +1075,12 @@ function addTextPayload(slide, value, region, context) {
   slide.addText(stringifyText(value), textBoxOptions(region, context, 18));
 }
 
-function richLineRuns(line,color) {
-  return line.fragments.map(fragment=>({text:fragment.text,options:{...nativeFontOptions(fragment.style),fontSize:fragment.fontSize*.75,color:normalizeHex(fragment.run.color??color),underline:fragment.run.underline?{color:normalizeHex(fragment.run.color??color)}:undefined,strike:fragment.run.strikethrough?'sngStrike':undefined,baseline:fragment.baselineShift?-fragment.baselineShift/fragment.fontSize*2000:undefined,hyperlink:fragment.run.link&&/^(https?:|mailto:)/i.test(fragment.run.link)?{url:fragment.run.link}:undefined}}));
+function richLineRuns(line,color,context) {
+  const fallback=color.replace(/^#/,'');
+  return line.fragments.map(fragment=>{
+    const runColor=exportColor(fragment.run.color,context,fallback);
+    return {text:fragment.text,options:{...nativeFontOptions(fragment.style),fontSize:fragment.fontSize*.75,color:normalizeHex(runColor),underline:fragment.run.underline?{color:normalizeHex(runColor)}:undefined,strike:fragment.run.strikethrough?'sngStrike':undefined,baseline:fragment.baselineShift?-fragment.baselineShift/fragment.fontSize*2000:undefined,hyperlink:fragment.run.link&&/^(https?:|mailto:)/i.test(fragment.run.link)?{url:fragment.run.link}:undefined}};
+  });
 }
 function addMeasuredList(slide,fit,context) {
   for(const entry of fit.listEntries){
@@ -1078,7 +1091,7 @@ function addMeasuredList(slide,fit,context) {
         const objectName=first?`OPF list paragraph ${context.listMarkers.size+1}`:undefined;
         if(first)context.listMarkers.set(objectName,{fontFamily:entry.marker.style.fontFamily,fontSize:entry.marker.fontSize*.75,color:normalizeHex(context.colors.text)});
         const paragraph=first?{bullet:{characterCode:entry.marker.text.codePointAt(0).toString(16).padStart(4,'0'),indent:entry.marker.indent*.75},indentLevel:level}:{bullet:false};
-        const runs=richLineRuns(line,color);
+        const runs=richLineRuns(line,color,context);
         if(!runs.length)runs.push({text:'',options:{}});
         // Keep paragraph intent identical across runs. ZIP normalization below
         // removes the duplicate paragraph-property nodes emitted by PptxGenJS.
@@ -1210,8 +1223,10 @@ function addTablePayload(slide, table, region, context, options, path) {
   const rows = layout.rows.map(row => row.cells.map(cell => {
     const {header,rich,fit} = cell;
     const cellStyle = cell.style ?? {};
-    const baseFill = (cellStyle.fill ?? (header ? '#' + context.colors.accent : '#' + context.colors.surface)).replace(/^#/, '');
-    const baseColor = (cellStyle.color ?? textColorForFill('#' + baseFill, header ? '#FFFFFF' : '#' + context.colors.text)).replace(/^#/, '');
+    const defaultFillHex = header ? context.colors.accent : context.colors.surface;
+    const baseFill = exportColor(cellStyle.fill ?? defaultFillHex, context, defaultFillHex);
+    const inheritedText = textColorForFill(`#${baseFill}`, header ? "#FFFFFF" : `#${context.colors.text}`);
+    const baseColor = exportColor(cellStyle.color ?? inheritedText.replace(/^#/, ""), context, inheritedText.replace(/^#/, ""));
     const alpha = value => value.length === 8 ? (1 - parseInt(value.slice(6), 16) / 255) * 100 : 0;
     const text = stringifyText(cell.value), style = cell.textStyle;
     const fragments = rich ? fit.richLines.flatMap(line => line.fragments) : [];
@@ -1219,7 +1234,7 @@ function addTablePayload(slide, table, region, context, options, path) {
       const run = typeof value === 'string' ? {text:value} : value;
       const fragment = fragments.find(item => item.runIndex === index);
       const runStyle = fragment?.style ?? resolveTextStyle({...style,fontFamily:run.fontFamily ?? style.fontFamily,fontWeight:run.bold === undefined ? style.fontWeight : run.bold ? 700 : 400,italic:run.italic ?? style.italic}, options.textMeasurement);
-      const rawColor = /^#(?:[0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(run.color ?? '') ? run.color.slice(1) : baseColor;
+      const rawColor = run.color !== undefined && run.color !== '' ? exportColor(run.color, context, baseColor) : baseColor;
       const color = normalizeHex(rawColor), transparency = rawColor.length === 8 ? (1 - parseInt(rawColor.slice(6), 16) / 255) * 100 : 0;
       const runOptions = {
         ...nativeFontOptions(runStyle),fontSize:fragment ? fragment.fontSize * .75 : fit.fontSize * .75,
@@ -1494,9 +1509,9 @@ function textRuns(value, context, fallbackFontSize) {
       options: {
         bold: run?.bold,
         italic: run?.italic,
-        underline: run?.underline ? { color: normalizeHex(run.color ?? context.colors.text) } : undefined,
+        underline: run?.underline ? { color: normalizeHex(exportColor(run?.color, context, context.colors.text)) } : undefined,
         strike: run?.strikethrough ? "sngStrike" : undefined,
-        color: normalizeHex(run?.color ?? context.colors.text),
+        color: normalizeHex(exportColor(run?.color, context, context.colors.text)),
         fontFace: run?.fontFamily ?? context.fonts.body,
         fontSize: run?.fontSize ?? fallbackFontSize,
         superscript: run?.superscript,
@@ -1672,18 +1687,19 @@ function resolveDimensions(value) {
 }
 
 function resolveBackground(value, colorScheme) {
+  const fallback = "FFFFFF";
   if (typeof value === "string") {
-    if (value.startsWith("#")) return normalizeHex(value);
-    return normalizeHex(colorScheme[value] ?? colorScheme.background ?? colorScheme.light1 ?? "#FFFFFF");
+    if (value.startsWith("#")) return normalizeHex(value, fallback);
+    return normalizeHex(colorScheme[value] ?? colorScheme.background ?? colorScheme.light1 ?? "#FFFFFF", fallback);
   }
   if (isPlainObject(value)) {
-    if (value.type === "solid" && value.color) return normalizeHex(value.color);
+    if (value.type === "solid" && value.color) return normalizeHex(value.color, fallback);
     if (value.type === "theme" && value.slot) {
-      return normalizeHex(colorScheme[value.slot] ?? colorScheme.light1 ?? "#FFFFFF");
+      return normalizeHex(colorScheme[value.slot] ?? colorScheme.light1 ?? "#FFFFFF", fallback);
     }
-    if (value.backgroundColor) return normalizeHex(value.backgroundColor);
+    if (value.backgroundColor) return normalizeHex(value.backgroundColor, fallback);
   }
-  return normalizeHex(colorScheme.background ?? colorScheme.light1 ?? "#FFFFFF");
+  return normalizeHex(colorScheme.background ?? colorScheme.light1 ?? "#FFFFFF", fallback);
 }
 
 function resolveFonts(fontScheme) {
@@ -1697,8 +1713,8 @@ function readableTextColor(background, colorScheme) {
     : normalizeHex(colorScheme.text ?? colorScheme.dark1 ?? "#0F172A");
 }
 
-function normalizeHex(value) {
-  if (typeof value !== "string") return "000000";
+function normalizeHex(value, fallback = "000000") {
+  if (typeof value !== "string") return fallback.replace(/^#/, "").toUpperCase().slice(0, 6);
   const raw = value.trim().replace(/^#/, "");
   if (/^[0-9a-fA-F]{3}$/.test(raw)) {
     return raw.split("").map((char) => char + char).join("").toUpperCase();
@@ -1706,7 +1722,7 @@ function normalizeHex(value) {
   if (/^[0-9a-fA-F]{6,8}$/.test(raw)) {
     return raw.slice(0, 6).toUpperCase();
   }
-  return raw.toUpperCase();
+  return fallback.replace(/^#/, "").toUpperCase().slice(0, 6);
 }
 
 function isDarkHex(value) {
@@ -1895,7 +1911,9 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
               for (const [edge, native] of [['left','lnL'],['right','lnR'],['top','lnT'],['bottom','lnB']]) {
                 const border = style.borders?.[edge];
                 if (!border) continue;
-                const fill = border.width === 0 ? '<a:noFill/>' : nativeBackgroundFill({type:'solid',color:border.color},{width:1,height:1});
+                const borderHex = exportColor(border.color, context, context.colors.border);
+                const borderOpacity = borderHex.length === 8 ? parseInt(borderHex.slice(6), 16) / 255 : 1;
+                const fill = border.width === 0 ? '<a:noFill/>' : nativeBackgroundFill({type:'solid',color:'#' + borderHex.slice(0, 6), opacity: borderOpacity},{width:1,height:1}, context.colors.border);
                 const dash = {solid:'solid',dash:'dash',dot:'sysDot'}[border.dash ?? 'solid'];
                 const line = `<a:${native} w="${Math.round(border.width * table.scale * 9525)}" cap="flat" cmpd="sng" algn="ctr">${fill}<a:prstDash val="${dash}"/></a:${native}>`;
                 const existing = new RegExp(`<a:${native}\\b[^>]*>[\\s\\S]*?<\\/a:${native}>`);

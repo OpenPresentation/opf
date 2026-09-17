@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Resolve content ColorRef values (hex, effective color-scheme slots and roles, and `var:<id>` variables) to sRGB hex before PptxGenJS export for styled table fill/text/borders and rich text runs. Unrecognized run colors still validate and fall back to the theme text color (`color:'invalid'` contract). Design backgrounds and gradients are unchanged; native `schemeClr` and theme `clrScheme` fidelity remain follow-up work after visual parity. Requires coordinated `@openpresentation/opf` reference-layer schema (opf `4761091` / pending npm `0.11.x` pin).
+
 ## 0.8.0
 
 - Remove content-type declarations for nonexistent generated slide masters, retaining every actual part and relationship. Add the audited package-integrity regression; notes-master ordering is unchanged.
