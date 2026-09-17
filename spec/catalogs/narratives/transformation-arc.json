@@ -44,7 +44,7 @@
       "id": "ask",
       "name": "Ask",
       "description": "Close with the single low-friction action that starts the audience across the bridge. Make it small enough to act on now and meaningful enough to count as commitment.",
-      "layoutHint": "title-left"
+      "layoutHint": "title"
     }
   ]
 }

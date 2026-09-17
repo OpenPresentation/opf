@@ -22,14 +22,15 @@ time this file was updated.
 
 | Package | Version | Depends on |
 | --- | --- | --- |
-| `@openpresentation/opf` | 0.10.1 | — |
-| `@openpresentation/cli` | 0.8.1 | Bundles core 0.10.1; registry metadata has no runtime `dependencies` |
-| `@openpresentation/opf-render` | 0.8.1 | `@openpresentation/opf@^0.10.1` |
+| `@openpresentation/opf` | 0.11.0 | — |
+| `@openpresentation/cli` | 0.9.0 | Bundles core 0.11.0; registry metadata has no runtime `dependencies` |
+| `@openpresentation/opf-render` | 0.8.1 | `@openpresentation/opf@^0.10.1` (0.11.x compatible for schema/validation; ColorRef paint needs a renderer release) |
 | `@openpresentation/opf-editor` | 0.7.1 | `@openpresentation/opf@^0.10.1`; peer `@openpresentation/opf-render@^0.8.1` |
 | `@openpresentation/opf-pptx` | 0.8.1 | `@openpresentation/opf@^0.10.1`; peer `@openpresentation/opf-render@^0.8.1` |
 
 Install that whole set together. Mixing an older renderer or editor with core
-0.10.1 is unsupported.
+0.11.0 is unsupported for preview/export fidelity until those packages ship
+ColorRef resolution.
 
 Shared header/footer geometry (`furniture-flow-v2`) shipped in this set (core
 composition plus renderer 0.8.x / editor 0.7.x / PPTX 0.8.x consumers). It is

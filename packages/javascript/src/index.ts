@@ -104,6 +104,13 @@ export type { RichTextRun, RichTextFragment, RichTextLine, RichTextFit, RichText
 
 export {fitList} from './composition.js';
 export type {ListText,ListValue,ListEntryLayout,ListFit} from './composition.js';
-export {colorContrast, textColorForFill, chartColorForFill} from './color.js';
+export {
+  chartColorForFill,
+  colorContrast,
+  normalizeHexColor,
+  resolveColorRef,
+  textColorForFill,
+} from './color.js';
+export type { ResolveColorRefOptions, ResolveColorRefRoles } from './color.js';
 export {measureTextOutline,placeTextLines} from './composition.js';
 export type {TextLineInk,TextPlacementLine,TextPlacement} from './composition.js';

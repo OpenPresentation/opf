@@ -228,6 +228,30 @@ async function checkCompanionSchemaParity(opfSchema) {
 
 // (c) Preview index <-> on-disk HTML parity, exact byte-length check, no
 // orphan HTML files.
+// (e) Narrative beat layoutHint values must resolve to a bundled layout id.
+async function checkNarrativeLayoutHints() {
+  const layoutDir = path.join(catalogsRoot, "layouts");
+  const layoutFiles = await listJsonRecordFiles(layoutDir);
+  const layoutIds = new Set(layoutFiles.map((file) => file.replace(/\.json$/, "")));
+
+  const narrativeDir = path.join(catalogsRoot, "narratives");
+  const narrativeFiles = await listJsonRecordFiles(narrativeDir);
+  for (const file of narrativeFiles) {
+    const recordPath = path.join(narrativeDir, file);
+    const record = await readJson(recordPath);
+    if (!Array.isArray(record.beats)) continue;
+    for (let index = 0; index < record.beats.length; index++) {
+      const beat = record.beats[index];
+      if (!beat || typeof beat.layoutHint !== "string") continue;
+      if (!layoutIds.has(beat.layoutHint)) {
+        fail(
+          `[e] ${displayPath(recordPath)} beats[${index}].layoutHint '${beat.layoutHint}' is not a bundled layout id`,
+        );
+      }
+    }
+  }
+}
+
 async function checkPreviewIndex() {
   const indexPath = path.join(previewsDir, "index.json");
   const index = await readJson(indexPath);
@@ -291,6 +315,7 @@ async function main() {
 
   await checkCatalogRecordParity();
   await checkCompanionSchemaParity(opfSchema);
+  await checkNarrativeLayoutHints();
   await checkPreviewIndex();
   await checkIndexSchemaUris();
 

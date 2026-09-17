@@ -131,8 +131,10 @@ console.log(JSON.stringify({
   const cli = path.join(projectDir, 'node_modules', '@openpresentation', 'cli', 'dist', 'index.js');
   const version = await run(process.execPath, [cli, '--version'], {cwd: projectDir});
   const versionReport = JSON.parse(version.stdout);
-  assert.equal(versionReport.cli, '0.8.1');
-  assert.equal(versionReport.opf, '0.10.1');
+  const opfVersion = plan.packages.find((item) => item.name === '@openpresentation/opf')?.version;
+  const cliVersion = plan.packages.find((item) => item.name === '@openpresentation/cli')?.version;
+  assert.equal(versionReport.cli, cliVersion);
+  assert.equal(versionReport.opf, opfVersion);
   const validated = await run(process.execPath, [cli, 'validate', 'deck.opf.json'], {cwd: projectDir});
   assert.equal(JSON.parse(validated.stdout).valid, true);
   const linted = await run(process.execPath, [cli, 'lint', 'deck.opf.json'], {cwd: projectDir});

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.9.0
+
+- Rebuild with core 0.11.0, including the reference layer (`variables`, `ColorRef`, payload/slide `id`/`extensions`, `bundlePresentation` / `opf bundle`) and corrected stock narrative `layoutHint` values.
+
 ## 0.8.1
 
 - Rebuild with core 0.10.1 catalogs and schema, including metric/quote/timeline layout placeholders and the corrected text-bullet contract.

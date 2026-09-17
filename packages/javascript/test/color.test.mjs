@@ -1,6 +1,10 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
-import {colorContrast,textColorForFill,chartColorForFill} from '../dist/index.js';
+import {readFile} from 'node:fs/promises';
+import {colorContrast,textColorForFill,chartColorForFill,resolveColorRef,normalizeHexColor} from '../dist/index.js';
+import {colorSchemes} from '../dist/index.js';
+
+const forestGreen = colorSchemes.find((scheme) => scheme.id === 'forest-green');
 
 test('opaque contrast follows unrounded sRGB luminance thresholds',()=>{
   assert.equal(colorContrast('#fff','#000'),21);
@@ -24,6 +28,38 @@ test('chart marks retain passing colors and brighten/darken failing opaque palet
   }
   for(const [fill,preferred]of [['#FFFFFF80','#2874A6'],['red','#fff'],['#FFFFFF','#12345680']])assert.equal(chartColorForFill(fill,preferred),preferred);
 });
+test('resolveColorRef resolves hex, slots, roles, variables, and falls back', () => {
+  assert.equal(normalizeHexColor('#abc'), '#AABBCC');
+  const scheme = forestGreen;
+  const fallback = '#111827';
+  assert.equal(resolveColorRef('#0f172a', { colorScheme: scheme, fallback }), '#0F172A');
+  assert.equal(resolveColorRef('accent2', { colorScheme: scheme, fallback }), '#68B0AB');
+  assert.equal(resolveColorRef('surface', { colorScheme: scheme, fallback }), '#EEF5F0');
+  assert.equal(resolveColorRef('var:risk', { colorScheme: scheme, variables: { risk: '#B42318' }, fallback }), '#B42318');
+  assert.equal(resolveColorRef('var:risk', {
+    colorScheme: scheme,
+    variables: { risk: { type: 'color', value: '#B42318' } },
+    fallback,
+  }), '#B42318');
+  assert.equal(resolveColorRef('var:missing', { colorScheme: scheme, fallback }), fallback);
+  assert.equal(resolveColorRef('invalid', { colorScheme: scheme, fallback }), fallback);
+  assert.equal(resolveColorRef('textSecondary', {
+    colorScheme: scheme,
+    roles: { textSecondary: '#475569' },
+    fallback,
+  }), '#475569');
+});
+
+test('resolveColorRef matches the color-references docs fixture', async () => {
+  const fixture = JSON.parse(await readFile(new URL('../../../docs/fixtures/color-references.opf.json', import.meta.url), 'utf8'));
+  const scheme = colorSchemes.find((entry) => entry.id === fixture.design.colorScheme);
+  const fallback = '#0F172A';
+  assert.equal(resolveColorRef('accent2', { colorScheme: scheme, fallback }), '#68B0AB');
+  assert.equal(resolveColorRef('var:risk', { colorScheme: scheme, variables: fixture.variables, fallback }), '#B42318');
+  assert.equal(resolveColorRef('var:highlight', { colorScheme: scheme, variables: fixture.variables, fallback }), '#0F4C81');
+  assert.equal(resolveColorRef('surface', { colorScheme: scheme, fallback }), '#EEF5F0');
+});
+
 test('bright and dark fills select readable inherited text without guessing alpha backdrops',()=>{
   assert.equal(textColorForFill('#F8FAFC','#FFFFFF'),'#000000');
   assert.equal(textColorForFill('#0F172A','#000000'),'#FFFFFF');
