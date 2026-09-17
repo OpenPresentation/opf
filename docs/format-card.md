@@ -40,7 +40,7 @@ Every content color field (`TextRun.color`, table cell `style.fill` / `style.col
 - A color-scheme name, resolved through the effective scheme: slots `accent1`–`accent6`, `dark1`, `dark2`, `light1`, `light2`, `hyperlink`, `followedHyperlink`, or roles `primary`, `secondary`, `accent`, `background`, `surface`, `text`, `textSecondary`.
 - A variable reference `var:<id>` into the top-level map: `"variables": { "risk": "#B42318" }` (or `{ "type": "color", "value": "#B42318", "description": "..." }`).
 
-Prefer names and variables over hex — they survive re-theming. Unknown `var:` ids warn, never error.
+Prefer names and variables over hex — they survive re-theming. Unknown `var:` ids warn, never error. The styled cell and border color fields enforce the three forms at the schema level; run colors tolerate any string (unrecognized values warn and renderers fall back to the theme), so imported decks keep validating.
 
 ## Ids and extensions
 

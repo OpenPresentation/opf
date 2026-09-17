@@ -17,11 +17,37 @@ describe("content color references", () => {
     assert.equal(withVar.valid, true, JSON.stringify(withVar.errors));
   });
 
-  test("TextRun.color rejects strings that are neither hex, name, nor var reference", () => {
+  test("TextRun.color warns on strings that are neither hex, name, nor var reference", () => {
+    // Run colors stay open strings so imported decks keep validating —
+    // coordinated exporters fall back to the theme color for these.
     for (const color of ["reddish", "rgb(1,2,3)", "var:Bad_Id", "accent7", "#12345"]) {
       const result = validatePresentation(deck({ slides: [run(color)] }));
-      assert.equal(result.valid, false, `${color} should be rejected`);
+      assert.equal(result.valid, true, `${color}: ${JSON.stringify(result.errors)}`);
+      const fallbacks = result.warnings.filter((warning) => warning.message.includes("renderers fall back"));
+      assert.equal(fallbacks.length, 1, `${color}: ${JSON.stringify(result.warnings)}`);
+      assert.equal(fallbacks[0].params.color, color);
     }
+  });
+
+  test("the pinned exporter contract: invalid run colors validate and only warn", () => {
+    // Mirrors opf-pptx's rich-table fixture, which asserts a deck containing
+    // color:'invalid' validates and renders with the theme fallback.
+    const result = validatePresentation(deck({
+      slides: [{
+        table: {
+          rows: [[[
+            { text: "Alpha", color: "#12345680" },
+            { text: "Short", color: "#abc" },
+            { text: "Fallback", color: "invalid" },
+          ]]],
+        },
+      }],
+    }));
+    assert.equal(result.valid, true, JSON.stringify(result.errors));
+    assert.deepEqual(
+      result.warnings.filter((warning) => warning.message.includes("renderers fall back")).map((warning) => warning.params.color),
+      ["invalid"],
+    );
   });
 
   test("styled table cells and borders accept color references", () => {
@@ -164,13 +190,14 @@ describe("color reference positions", () => {
     assert.deepEqual(variableWarnings(result), []);
   });
 
-  test("a var reference the schema rejects warns about nothing", () => {
-    // The id could not be declared in the variables map either, so the schema
-    // error is the whole story; a warning would only dead-end.
+  test("a malformed var reference in a run warns as a fallback color, not a variable", () => {
+    // The id could not be declared in the variables map, so an
+    // unknown-variable warning would dead-end; the fallback warning applies.
     for (const color of ["var:Risk", "var:", "var:risk_id", "var:-risk"]) {
       const result = validatePresentation(deck({ slides: [{ text: [{ text: "x", color }] }] }));
-      assert.equal(result.valid, false, color);
+      assert.equal(result.valid, true, color);
       assert.deepEqual(variableWarnings(result), [], color);
+      assert.equal(result.warnings.filter((warning) => warning.message.includes("renderers fall back")).length, 1, color);
     }
   });
 

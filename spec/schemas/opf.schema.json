@@ -1243,7 +1243,7 @@
           "pattern": "^var:[a-z][a-z0-9-]*$"
         }
       ],
-      "description": "A color value or reference accepted by content color fields. Three forms:\n- Literal hex: '#RGB', '#RRGGBB', or '#RRGGBBAA'.\n- Color-scheme name, resolved through the effective color scheme after design resolution: an OOXML slot ('accent1'-'accent6', 'dark1', 'dark2', 'light1', 'light2', 'hyperlink', 'followedHyperlink') or an abstract role ('primary', 'secondary', 'accent', 'background', 'surface', 'text', 'textSecondary'). Roles resolve through the same role-to-slot mapping engines already apply to color schemes.\n- Variable reference: 'var:<id>' into the top-level variables map.\n\nNames keep content theme-portable: re-theming the deck updates every named reference, where a literal hex stays frozen. Unknown 'var:' ids produce a validation warning, never an error, and engines fall back to their default text color.",
+      "description": "A color value or reference, enforced on styled table cell fill and text colors and on cell border colors. Three forms:\n- Literal hex: '#RGB', '#RRGGBB', or '#RRGGBBAA'.\n- Color-scheme name, resolved through the effective color scheme after design resolution: an OOXML slot ('accent1'-'accent6', 'dark1', 'dark2', 'light1', 'light2', 'hyperlink', 'followedHyperlink') or an abstract role ('primary', 'secondary', 'accent', 'background', 'surface', 'text', 'textSecondary'). Roles resolve through the same role-to-slot mapping engines already apply to color schemes.\n- Variable reference: 'var:<id>' into the top-level variables map.\n\nNames keep content theme-portable: re-theming the deck updates every named reference, where a literal hex stays frozen. Unknown 'var:' ids produce a validation warning, never an error, and engines fall back to their default text color. TextRun.color documents the same three forms but remains an open string so imported decks with unrecognized run colors stay valid; validators warn there instead of erroring.",
       "examples": ["#0F4C81", "accent2", "text", "var:risk"]
     },
     "Variables": {
@@ -2500,8 +2500,8 @@
               "description": "Whether the run is rendered with a strikethrough line."
             },
             "color": {
-              "$ref": "#/$defs/ColorRef",
-              "description": "Run text color: a hex string, a color-scheme slot or role name resolved through the effective color scheme, or a 'var:<id>' variable reference. Prefer names over hex so runs survive re-theming.",
+              "type": "string",
+              "description": "Run text color. Documented forms: a hex string ('#RGB', '#RRGGBB', '#RRGGBBAA'), a color-scheme slot or role name resolved through the effective color scheme ('accent2', 'text'), or a 'var:<id>' reference into the top-level variables map. Prefer names over hex so runs survive re-theming. Any other string stays schema-valid so imported decks keep validating: validators warn and renderers fall back to the theme text color.",
               "examples": ["#0F172A", "accent2", "var:risk"]
             },
             "fontSize": {

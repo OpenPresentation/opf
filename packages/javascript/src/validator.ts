@@ -603,6 +603,16 @@ const cellBorderEdges = ["top", "right", "bottom", "left"] as const;
 // names of the variables map: the one id an author could actually declare.
 const variableIdPattern = /^[a-z][a-z0-9-]*$/;
 
+// The forms TextRun.color documents. The schema keeps run colors open strings
+// so imported decks with unrecognized colors stay valid (coordinated
+// exporters fall back to the theme); the validator warns instead.
+const hexColorPattern = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/;
+const schemeColorNames = new Set([
+  "accent1", "accent2", "accent3", "accent4", "accent5", "accent6",
+  "dark1", "dark2", "light1", "light2", "hyperlink", "followedHyperlink",
+  "primary", "secondary", "accent", "background", "surface", "text", "textSecondary",
+]);
+
 // Visit exactly the schema's ColorRef positions. A key-name walk would also
 // reach 'color' keys the engine never resolves as a ColorRef — background and
 // gradient colors, chart series colors — and 'extensions' passthrough data,
@@ -623,11 +633,26 @@ function variableReferenceWarnings(value: Record<string, unknown>): ValidationIs
     if (!variableIdPattern.test(id) || hasOwn(variables, id)) return;
     issues.push(semanticIssue(path, `unknown variable '${id}'; declare it in the top-level variables map`, { id }));
   };
+  // Run colors are open strings: warn on anything that is none of the
+  // documented forms, since renderers will fall back to the theme color.
+  const runColor = (entry: unknown, path: string): void => {
+    if (typeof entry !== "string") return;
+    if (hexColorPattern.test(entry) || schemeColorNames.has(entry)) return;
+    if (entry.startsWith("var:") && variableIdPattern.test(entry.slice("var:".length))) {
+      colorRef(entry, path);
+      return;
+    }
+    issues.push(semanticIssue(
+      path,
+      `run color '${entry}' is not a hex color, a color-scheme name, or a 'var:' reference; renderers fall back to the theme color`,
+      { color: entry },
+    ));
+  };
   // string | TextRun[]: only the object run form carries a color.
   const richText = (entry: unknown, path: string): void => {
     if (!Array.isArray(entry)) return;
     entry.forEach((run, index) => {
-      if (isRecord(run)) colorRef(run.color, `${path}/${index}/color`);
+      if (isRecord(run)) runColor(run.color, `${path}/${index}/color`);
     });
   };
   const cellStyle = (style: unknown, path: string): void => {

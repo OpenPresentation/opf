@@ -308,7 +308,7 @@ The beat ids (`objectives`, `performance-headline`, `risks`, `asks`) come from t
 Two layers, with a deliberate split:
 
 - **Schema errors** for structural problems: wrong types, overlapping region keys, payloads mixing incompatible content kinds, a region payload missing concrete content, duplicate slide or payload ids.
-- **Warnings** for advisory drift: unknown catalog ids, unknown `var:` variable references, narrative/slide mismatches. These never make a document invalid.
+- **Warnings** for advisory drift: unknown catalog ids, unknown `var:` variable references and unrecognized run colors, narrative/slide mismatches. These never make a document invalid.
 
 `validatePresentation` from `@openpresentation/opf` applies both layers locally.
 
