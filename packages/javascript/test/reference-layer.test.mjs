@@ -47,6 +47,20 @@ describe("content color references", () => {
     assert.equal(result.valid, true, JSON.stringify(result.errors));
   });
 
+  test("styled cell fills, text colors, and border colors reject non-ColorRef strings", () => {
+    const styled = (style) => deck({ slides: [{ table: { rows: [[{ value: "At risk", style }]] } }] });
+    for (const style of [
+      { fill: "acent2" },
+      { fill: "#12345" },
+      { color: "reddish" },
+      { color: "var:Bad_Id" },
+      { borders: { top: { color: "rgb(1,2,3)", width: 1 } } },
+      { borders: { bottom: { color: "accent7", width: 1 } } },
+    ]) {
+      assert.equal(validatePresentation(styled(style)).valid, false, JSON.stringify(style));
+    }
+  });
+
   test("unknown var references warn without invalidating the document", () => {
     const result = validatePresentation(deck({ slides: [run("var:missing")] }));
     assert.equal(result.valid, true, JSON.stringify(result.errors));
@@ -73,6 +87,137 @@ describe("content color references", () => {
     }));
     assert.equal(result.valid, true);
     assert.equal(result.warnings.filter((warning) => warning.message.includes("unknown variable 'ghost'")).length, 2);
+  });
+});
+
+const colorRefSlide = {
+  blocks: [
+    { text: ["Lead ", { text: "run", color: "var:text-run" }] },
+    {
+      items: [
+        ["Lead ", { text: "run", color: "var:item-run" }],
+        {
+          text: [{ text: "wrapped", color: "var:item-text" }],
+          description: [{ text: "detail", color: "var:item-description" }],
+        },
+      ],
+    },
+    {
+      bullets: [
+        ["Lead ", { text: "run", color: "var:bullet-run" }],
+        { text: [{ text: "wrapped", color: "var:bullet-text" }] },
+      ],
+    },
+    {
+      table: {
+        columns: [
+          ["Stage ", { text: "label", color: "var:column-run" }],
+          { value: "Status", style: { fill: "var:header-fill" } },
+        ],
+        rows: [[
+          {
+            value: [{ text: "At risk", color: "var:cell-run" }],
+            style: {
+              color: "var:cell-color",
+              borders: { bottom: { color: "var:border-color", width: 1 } },
+            },
+          },
+          "Shipped",
+        ]],
+      },
+    },
+  ],
+};
+
+// Every ColorRef position the schema defines, in traversal order.
+const colorRefPositions = [
+  ["/slides/0/blocks/0/text/1/color", "text-run"],
+  ["/slides/0/blocks/1/items/0/1/color", "item-run"],
+  ["/slides/0/blocks/1/items/1/text/0/color", "item-text"],
+  ["/slides/0/blocks/1/items/1/description/0/color", "item-description"],
+  ["/slides/0/blocks/2/bullets/0/1/color", "bullet-run"],
+  ["/slides/0/blocks/2/bullets/1/text/0/color", "bullet-text"],
+  ["/slides/0/blocks/3/table/columns/0/1/color", "column-run"],
+  ["/slides/0/blocks/3/table/columns/1/style/fill", "header-fill"],
+  ["/slides/0/blocks/3/table/rows/0/0/value/0/color", "cell-run"],
+  ["/slides/0/blocks/3/table/rows/0/0/style/color", "cell-color"],
+  ["/slides/0/blocks/3/table/rows/0/0/style/borders/bottom/color", "border-color"],
+];
+
+const variableWarnings = (result) =>
+  result.warnings.filter((warning) => warning.message.includes("variable"));
+
+describe("color reference positions", () => {
+  test("unknown var references warn once per ColorRef position, with an exact path", () => {
+    const result = validatePresentation(deck({ slides: [colorRefSlide] }));
+    assert.equal(result.valid, true, JSON.stringify(result.errors));
+    assert.deepEqual(
+      variableWarnings(result).map((warning) => [warning.path, warning.params.id]),
+      colorRefPositions,
+    );
+  });
+
+  test("declared variables silence every ColorRef position", () => {
+    const variables = Object.fromEntries(colorRefPositions.map(([, id]) => [id, "#B42318"]));
+    const result = validatePresentation(deck({ variables, slides: [colorRefSlide] }));
+    assert.equal(result.valid, true, JSON.stringify(result.errors));
+    assert.deepEqual(variableWarnings(result), []);
+  });
+
+  test("a var reference the schema rejects warns about nothing", () => {
+    // The id could not be declared in the variables map either, so the schema
+    // error is the whole story; a warning would only dead-end.
+    for (const color of ["var:Risk", "var:", "var:risk_id", "var:-risk"]) {
+      const result = validatePresentation(deck({ slides: [{ text: [{ text: "x", color }] }] }));
+      assert.equal(result.valid, false, color);
+      assert.deepEqual(variableWarnings(result), [], color);
+    }
+  });
+
+  test("slide root payloads are checked like any other payload", () => {
+    const result = validatePresentation(deck({
+      slides: [{ text: [{ text: "root", color: "var:ghost" }] }],
+    }));
+    assert.deepEqual(
+      variableWarnings(result).map((warning) => warning.path),
+      ["/slides/0/text/0/color"],
+    );
+  });
+
+  test("extensions passthrough is never read as a color reference", () => {
+    const result = validatePresentation(deck({
+      slides: [{
+        title: "Passthrough",
+        extensions: { review: { color: "var:ghost", palette: [{ fill: "var:x" }] } },
+        left: { text: "Body", extensions: { gen: { fill: "var:x", nested: { color: "var:ghost" } } } },
+      }],
+    }));
+    assert.equal(result.valid, true, JSON.stringify(result.errors));
+    assert.deepEqual(variableWarnings(result), []);
+  });
+
+  test("deeply nested extensions data never exhausts the stack", () => {
+    let nested = { color: "var:ghost" };
+    for (let depth = 0; depth < 50_000; depth += 1) nested = { child: [nested] };
+    const result = validatePresentation(deck({
+      slides: [{ title: "Deep", extensions: { data: nested } }],
+    }));
+    assert.equal(result.valid, true, JSON.stringify(result.errors.slice(0, 1)));
+    assert.deepEqual(variableWarnings(result), []);
+  });
+
+  test("background and gradient colors are not color reference positions", () => {
+    const result = validatePresentation(deck({
+      design: {
+        background: {
+          type: "gradient",
+          gradient: { angle: 90, stops: [{ color: "var:brand", position: 0 }, { color: "#0F172A", position: 1 }] },
+        },
+      },
+      slides: [{ title: "Backdrop", design: { background: { type: "solid", color: "var:brand" } } }],
+    }));
+    assert.equal(result.valid, true, JSON.stringify(result.errors));
+    assert.deepEqual(variableWarnings(result), []);
   });
 });
 
@@ -137,5 +282,68 @@ describe("ids and extensions below slide level", () => {
       slides: [{ id: "one", title: "A" }, { id: "two", left: { id: "three", text: "x" } }],
     }));
     assert.equal(result.valid, true, JSON.stringify(result.errors));
+  });
+
+  test("each duplicate id names the collision it actually found", () => {
+    const cases = [
+      {
+        label: "slide vs slide",
+        slides: [{ id: "ask", title: "a" }, { id: "ask", title: "b" }],
+        path: "/slides/1/id",
+        message: "slide ids must be unique within a presentation",
+      },
+      {
+        label: "payload vs payload",
+        slides: [{ left: { id: "ask", text: "a" } }, { left: { id: "ask", text: "b" } }],
+        path: "/slides/1/left/id",
+        message: "content payload ids must be unique among slide and payload ids within a presentation",
+      },
+      {
+        label: "payload vs earlier slide",
+        slides: [{ id: "ask", title: "a" }, { title: "b", blocks: [{ id: "ask", text: "x" }] }],
+        path: "/slides/1/blocks/0/id",
+        message: "content payload ids must be unique among slide and payload ids within a presentation",
+      },
+      {
+        label: "slide vs earlier payload",
+        slides: [{ title: "a", left: { id: "ask", text: "x" } }, { id: "ask", title: "b" }],
+        path: "/slides/1/id",
+        message: "slide id duplicates a content payload id; ids must be unique among slide and payload ids within a presentation",
+      },
+    ];
+
+    for (const { label, slides, path, message } of cases) {
+      const result = validatePresentation(deck({ slides }));
+      assert.equal(result.valid, false, label);
+      assert.deepEqual(
+        result.errors.map((error) => [error.path, error.message, error.params.id]),
+        [[path, message, "ask"]],
+        label,
+      );
+    }
+  });
+});
+
+describe("catalog sources", () => {
+  test("a custom source suppresses unknown-id warnings as a string or a search path", () => {
+    const unknownId = "house-narrative-arc";
+    const bare = validatePresentation(deck({ narrative: unknownId }));
+    assert.ok(
+      bare.warnings.some((warning) => warning.message.includes(`unknown narratives catalog id '${unknownId}'`)),
+      JSON.stringify(bare.warnings),
+    );
+
+    for (const source of ["https://a.example/x", ["https://a.example/x"], ["https://a.example/x", "pkg:@acme/decks"]]) {
+      const result = validatePresentation(deck({
+        catalogs: { narratives: { source } },
+        narrative: unknownId,
+      }));
+      assert.equal(result.valid, true, JSON.stringify(result.errors));
+      assert.deepEqual(
+        result.warnings.filter((warning) => warning.message.includes("narratives catalog id")),
+        [],
+        JSON.stringify(source),
+      );
+    }
   });
 });

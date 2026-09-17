@@ -1,6 +1,7 @@
 import {tableRowBoundaries} from './table.js';
 import { catalogs } from "./catalogs.js";
 import { resolveFontFamilies, resolveCanvasDimensions, composeSlide, type ComposeSlideOptions, type LayoutDiagnostic, type TextMeasurement } from './composition.js';
+import { visitContentPayloads } from './content-walk.js';
 import { assertValidPresentation } from './validator.js';
 
 export interface PaginationOptions extends ComposeSlideOptions {
@@ -8,7 +9,7 @@ export interface PaginationOptions extends ComposeSlideOptions {
   minFontSize?: number;
   /** All-or-nothing resource limit. Defaults to 100 output slides. */
   maxSlides?: number;
-  /** Existing deck IDs to avoid when generating continuation IDs. */
+  /** Existing slide and content payload IDs to avoid when generating continuation IDs. */
   reservedIds?: string[];
 }
 export interface PaginationMapping {
@@ -34,6 +35,12 @@ const contentFields = new Set(['text','items','bullets','image','video','chart',
 const headingFields = new Set(['title','subtitle','tag']);
 const isRecord = (v: unknown): v is Record<string, any> => !!v && typeof v === 'object' && !Array.isArray(v);
 const clone = <T>(value: T): T => structuredClone(value);
+/** Every id a slide contributes to the document namespace: its own and its payloads'. */
+const slideIds = (slide: Record<string, unknown>): string[] => {
+  const ids = typeof slide.id === 'string' ? [slide.id] : [];
+  visitContentPayloads(slide, '', payload => { if (typeof payload.id === 'string') ids.push(payload.id); });
+  return ids;
+};
 const textOf = (value: any): string => typeof value === 'string' ? value : Array.isArray(value) ? value.map(textOf).join('') : value?.text ?? '';
 const graphemes = new Intl.Segmenter('und', { granularity: 'grapheme' });
 
@@ -124,7 +131,22 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
   const slides: Record<string, any>[] = [], pages: PaginatedPage[] = [];
   let selected = new Map<string,Portion>();
   const reservedIds = new Set(options.reservedIds ?? []);
-  if (typeof source.id === 'string') reservedIds.add(source.id);
+  for (const id of slideIds(source)) reservedIds.add(id);
+  // Slide and payload ids share one document namespace, so a projected page
+  // keeps an id the first time it emits it and takes a unique '--N' suffix for
+  // every repeat. Otherwise a continuation page would clone the ids of page 1.
+  const emittedIds = new Set<string>();
+  const pageId = (base: string, pageIndex: number): string => {
+    if (!emittedIds.has(base)) { emittedIds.add(base); return base; }
+    let suffix = pageIndex+1, id = `${base}--${suffix}`;
+    while (reservedIds.has(id)) id = `${base}--${++suffix}`;
+    reservedIds.add(id); emittedIds.add(id); return id;
+  };
+  const assignPageIds = (slide: Record<string,unknown>, pageIndex: number) => {
+    const assign = (node: Record<string,unknown>) => { if (typeof node.id === 'string') node.id = pageId(node.id,pageIndex); };
+    assign(slide);
+    visitContentPayloads(slide,'',assign);
+  };
 
   // Prune absent leaves, compact block arrays, and preserve every enclosing group.
   const project = (portions: Map<string,Portion>, pageIndex: number) => {
@@ -165,11 +187,7 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
     const {slide,mappings} = project(selected,slides.length);
     const issues = geometry(slide,slides.length).diagnostics;
     if (issues.length) throw new OPFPaginationError('A continuation page does not fit at its final page number. No partial result was returned.',issues);
-    if (slides.length && typeof source.id === 'string') {
-      let suffix = slides.length+1, id = `${source.id}--${suffix}`;
-      while (reservedIds.has(id)) id = `${source.id}--${++suffix}`;
-      slide.id = id; reservedIds.add(id);
-    }
+    assignPageIds(slide,slides.length);
     assertValidPresentation({slides:[slide]});
     slides.push(slide); pages.push({slideIndex:sourceIndex+slides.length-1,mappings,...(initial.furniture?{repeatedMappings:repeatedMappings(slides.length-1)}:{})});
     selected = new Map();
@@ -237,7 +255,9 @@ export function paginatePresentation(input: unknown, options: PresentationPagina
   const maxSlides = options.maxSlides ?? 100;
   if (!Number.isInteger(maxSlides) || maxSlides < 1 || maxSlides > 10000) throw new RangeError('maxSlides must be an integer between 1 and 10000.');
   const output: Record<string, any>[] = [], pages: PresentationPaginationResult['pages'] = [];
-  const reservedIds = presentation.slides.map((slide: any)=>slide.id).filter(Boolean);
+  // Reserve every id already in the document — slide and payload alike — so a
+  // generated continuation id can never collide with one an author chose.
+  const reservedIds: string[] = presentation.slides.flatMap((slide: Record<string,unknown>)=>slideIds(slide));
   const resolve = (kind: 'layouts' | 'themes' | 'fontSchemes', id: string) => presentation.catalogs?.[kind]?.records?.find((record: any)=>record.id===id) ?? catalogs[kind].find(record=>record.id===id);
   presentation.slides.forEach((slide: Record<string,any>, index: number) => {
     const overrides = options.slideOptions?.(slide,index) ?? {};
@@ -258,7 +278,7 @@ export function paginatePresentation(input: unknown, options: PresentationPagina
       pages.push({sourceSlideIndex:index,slideIndex:outputStart+pageIndex,mappings:page.mappings.map(remap),...(page.repeatedMappings?{repeatedMappings:page.repeatedMappings.map(remap)}:{})});
     });
     output.push(...result.slides);
-    reservedIds.push(...result.slides.map(slide=>slide.id).filter(Boolean));
+    reservedIds.push(...result.slides.flatMap(slide=>slideIds(slide)));
   });
   presentation.slides=output;
   assertValidPresentation(presentation);
