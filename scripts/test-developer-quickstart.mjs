@@ -14,7 +14,7 @@ const plan = JSON.parse(await readFile(path.join(root, 'release-plan.json'), 'ut
 const deckSource = path.join(root, 'docs/quickstart/developer-quickstart.opf.json');
 assert.ok(
   !path.relative(root, deckSource).split(path.sep).includes('examples'),
-  'Quickstart fixture must stay outside examples/ so the published 126-deck catalog and renderer golden corpus stay unchanged',
+  'Quickstart fixture must stay outside examples/ so the published examples catalog and renderer golden corpus stay unchanged',
 );
 
 assert.ok(

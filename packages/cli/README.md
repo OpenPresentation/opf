@@ -1,6 +1,6 @@
 # @openpresentation/cli
 
-A local CLI for agents and people working with `.opf.json` presentations. Create documents, validate them, apply precise edits, paginate content, and inspect the bundled schemas and catalogs. Node 24 on macOS, Linux, or Windows is required.
+A local CLI for agents and people working with `.opf.json` presentations. Create documents, validate them, apply precise edits, paginate content, bundle catalog references for offline use, and inspect the bundled schemas and catalogs. Node 24 on macOS, Linux, or Windows is required.
 
 The CLI bundles its OPF schema, catalogs, and validator. It needs no separate core package, API key, or network connection at runtime. `opf --version` reports the CLI and bundled core versions. It does not render slides; successful validation is not visual verification.
 
@@ -110,6 +110,12 @@ opf paginate decision.opf.json paginated.opf.json
 ```
 
 Pagination emits ordinary OPF slides and a page mapping. Preview the result with the renderer to assess wrapping and visual fidelity.
+
+```sh
+opf bundle decision.opf.json bundled.opf.json
+```
+
+Bundle inlines every bundled catalog record the document references — including transitive references such as a theme's color and font schemes — into `catalogs.<kind>.records`, so the file renders identically offline. Kinds that declare a custom `source` are left untouched, and the report lists added, already-inline, and unresolved ids. Bundling twice is a no-op.
 
 ## Agent output contract
 

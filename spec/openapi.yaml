@@ -723,6 +723,7 @@ components:
           type: string
         color:
           type: string
+          description: Hex color, color-scheme slot/role name, or `var:<id>` variable reference (ColorRef in the canonical schema).
         alignment:
           type: string
 
