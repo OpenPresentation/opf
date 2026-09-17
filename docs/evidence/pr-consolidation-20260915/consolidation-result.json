@@ -1,0 +1,272 @@
+[
+  {
+    "repo": "OpenPresentation/opf",
+    "baseRefName": "codex/shared-furniture-20260914",
+    "headRefOid": "225b7cb5a4234a2c7ff1ae9cdb79ec5d55cbb6b0",
+    "isDraft": true,
+    "mergeCommit": null,
+    "mergedAt": null,
+    "number": 83,
+    "state": "OPEN",
+    "title": "Preserve rich-text shaping, source spans and tab advances",
+    "url": "https://github.com/OpenPresentation/opf/pull/83"
+  },
+  {
+    "repo": "OpenPresentation/opf",
+    "baseRefName": "main",
+    "headRefOid": "a0faba89bea1d340dac0c1685814d1055639b174",
+    "isDraft": false,
+    "mergeCommit": {
+      "oid": "d0c884170b592b29535ab07faa71ffa15bb32f71"
+    },
+    "mergedAt": "2026-09-15T20:10:23Z",
+    "number": 79,
+    "state": "MERGED",
+    "title": "Share measured header/footer layout and pagination",
+    "url": "https://github.com/OpenPresentation/opf/pull/79"
+  },
+  {
+    "repo": "OpenPresentation/opf",
+    "baseRefName": "main",
+    "headRefOid": "04580fc77b4c79043348011839a0706db2f83f69",
+    "isDraft": false,
+    "mergeCommit": {
+      "oid": "36705d0843c3d00babb90e44fe0dd7fd4c4f2a35"
+    },
+    "mergedAt": "2026-09-15T19:35:36Z",
+    "number": 78,
+    "state": "MERGED",
+    "title": "build(deps-dev): bump @biomejs/biome from 2.5.12 to 2.5.13 in the npm-minor-patch group",
+    "url": "https://github.com/OpenPresentation/opf/pull/78"
+  },
+  {
+    "repo": "OpenPresentation/opf-render",
+    "baseRefName": "codex/shared-furniture-20260914",
+    "headRefOid": "9764ad8f9a7fd497ca2fcea190669cf74d2e2503",
+    "isDraft": true,
+    "mergeCommit": null,
+    "mergedAt": null,
+    "number": 21,
+    "state": "OPEN",
+    "title": "Add prepared font shaping and SVG glyph painting",
+    "url": "https://github.com/OpenPresentation/opf-render/pull/21"
+  },
+  {
+    "repo": "OpenPresentation/opf-render",
+    "baseRefName": "main",
+    "headRefOid": "1c7904cee02908e052c267aa832eb49f919e22da",
+    "isDraft": false,
+    "mergeCommit": {
+      "oid": "130a2fa68954bd8f28c0c147cca1204f8b18561a"
+    },
+    "mergedAt": "2026-09-15T20:10:28Z",
+    "number": 20,
+    "state": "MERGED",
+    "title": "Render headers and footers from shared geometry",
+    "url": "https://github.com/OpenPresentation/opf-render/pull/20"
+  },
+  {
+    "repo": "OpenPresentation/opf-editor",
+    "baseRefName": "codex/shared-furniture-20260914",
+    "headRefOid": "b9c3d2e4e205d93d74c9263f00222f9dea5a9aae",
+    "isDraft": true,
+    "mergeCommit": null,
+    "mergedAt": null,
+    "number": 21,
+    "state": "OPEN",
+    "title": "Align canvas carets and selection with shaped text",
+    "url": "https://github.com/OpenPresentation/opf-editor/pull/21"
+  },
+  {
+    "repo": "OpenPresentation/opf-editor",
+    "baseRefName": "main",
+    "headRefOid": "fa386eee84d767eea1798e55ee6cd4bde0df715e",
+    "isDraft": false,
+    "mergeCommit": {
+      "oid": "cfdeae6627a42aa438c3d0bea5ea4155eb1688c4"
+    },
+    "mergedAt": "2026-09-15T20:10:33Z",
+    "number": 17,
+    "state": "MERGED",
+    "title": "Enable source-aware header/footer editing and undo",
+    "url": "https://github.com/OpenPresentation/opf-editor/pull/17"
+  },
+  {
+    "repo": "OpenPresentation/opf-pptx",
+    "baseRefName": "codex/shared-furniture-20260914",
+    "headRefOid": "8a53c7545aa854b6498f17dabb529c6b91ed2c01",
+    "isDraft": true,
+    "mergeCommit": null,
+    "mergedAt": null,
+    "number": 35,
+    "state": "OPEN",
+    "title": "Preserve native rich runs and shared tab stops",
+    "url": "https://github.com/OpenPresentation/opf-pptx/pull/35"
+  },
+  {
+    "repo": "OpenPresentation/opf-pptx",
+    "baseRefName": "main",
+    "headRefOid": "7b3ea9d679926bd9c55d91f5628334eeb21e81c0",
+    "isDraft": false,
+    "mergeCommit": {
+      "oid": "c077b7a426f6ebb04ae53102400d488fc2278f2b"
+    },
+    "mergedAt": "2026-09-15T20:10:38Z",
+    "number": 34,
+    "state": "MERGED",
+    "title": "Preserve editable PPTX headers, footers and provenance",
+    "url": "https://github.com/OpenPresentation/opf-pptx/pull/34"
+  },
+  {
+    "repo": "OpenPresentation/opf-pptx",
+    "baseRefName": "main",
+    "headRefOid": "9e491b0fd21e595a9d31717e8cb44393a80e1ade",
+    "isDraft": false,
+    "mergeCommit": {
+      "oid": "3b95066d5333c6a2d1378e7e25068d26cdfe694f"
+    },
+    "mergedAt": "2026-09-15T19:35:42Z",
+    "number": 33,
+    "state": "MERGED",
+    "title": "build(deps): bump jszip from 3.10.1 to 3.10.2 in the npm-minor-patch group across 1 directory",
+    "url": "https://github.com/OpenPresentation/opf-pptx/pull/33"
+  },
+  {
+    "repo": "Data-Advantage/pptx-dev",
+    "baseRefName": "master",
+    "headRefOid": "71b7eb0d02de7bfdf6320098e3cb9a81b4004be7",
+    "isDraft": false,
+    "mergeCommit": {
+      "oid": "079928f43f2433cd40911d45d3e92f355aeacc92"
+    },
+    "mergedAt": "2026-09-15T19:25:15Z",
+    "number": 40,
+    "state": "MERGED",
+    "title": "build(deps): bump the compatible-dependencies group across 1 directory with 11 updates",
+    "url": "https://github.com/Data-Advantage/pptx-dev/pull/40"
+  },
+  {
+    "repo": "Data-Advantage/pptx-dev",
+    "baseRefName": "master",
+    "headRefOid": "ed87e371e443a32c9a7e42184d67844ba645d5ed",
+    "isDraft": false,
+    "mergeCommit": {
+      "oid": "29e7dff8598b6b67ebaaeebdee53b3c9b8802a7a"
+    },
+    "mergedAt": "2026-09-15T19:37:33Z",
+    "number": 38,
+    "state": "MERGED",
+    "title": "build(deps-dev): bump vitest from 4.1.11 to 5.0.0",
+    "url": "https://github.com/Data-Advantage/pptx-dev/pull/38"
+  },
+  {
+    "repo": "Data-Advantage/pptx-dev",
+    "baseRefName": "master",
+    "headRefOid": "eeaa8707ede46bbba956b76c71e7dedaebca31f6",
+    "isDraft": false,
+    "mergeCommit": {
+      "oid": "c67d7deea47d60d7c241b4b150e14d9b210b52f6"
+    },
+    "mergedAt": "2026-09-15T19:48:43Z",
+    "number": 37,
+    "state": "MERGED",
+    "title": "fix: complete the Zod 4 migration for Author and MCP tools",
+    "url": "https://github.com/Data-Advantage/pptx-dev/pull/37"
+  },
+  {
+    "repo": "Data-Advantage/pptx-dev",
+    "baseRefName": "master",
+    "headRefOid": "3c5236a2734517c78df5d0b74603f98b26a33af7",
+    "isDraft": false,
+    "mergeCommit": {
+      "oid": "3b17ff5366f7a556cf02aae320e6baf87fdf3678"
+    },
+    "mergedAt": "2026-09-15T20:05:14Z",
+    "number": 35,
+    "state": "MERGED",
+    "title": "build: update Python action and wait for shared-deck test readiness",
+    "url": "https://github.com/Data-Advantage/pptx-dev/pull/35"
+  },
+  {
+    "repo": "Data-Advantage/pptx-dev",
+    "baseRefName": "master",
+    "headRefOid": "3b6ec23acd6724b91229e2e2043047a5b13acc16",
+    "isDraft": false,
+    "mergeCommit": {
+      "oid": "a981c03faca7fb815588414d06eff7b4631f7cf3"
+    },
+    "mergedAt": "2026-09-15T19:35:59Z",
+    "number": 34,
+    "state": "MERGED",
+    "title": "build(deps): bump softprops/action-gh-release from 2 to 3",
+    "url": "https://github.com/Data-Advantage/pptx-dev/pull/34"
+  },
+  {
+    "repo": "Data-Advantage/pptx-gallery",
+    "baseRefName": "main",
+    "headRefOid": "838afb309d592456e5dcf74494342bd4a565ef39",
+    "isDraft": false,
+    "mergeCommit": {
+      "oid": "fe395e4e7187cdb85c2b8a4041ef2801fd81f72d"
+    },
+    "mergedAt": "2026-09-15T19:48:50Z",
+    "number": 29,
+    "state": "MERGED",
+    "title": "build(deps-dev): bump typescript from 5.9.3 to 7.0.2",
+    "url": "https://github.com/Data-Advantage/pptx-gallery/pull/29"
+  },
+  {
+    "repo": "Data-Advantage/pptx-gallery",
+    "baseRefName": "main",
+    "headRefOid": "5f4099a240106ffe6f13561cbcde87ae54eccc8c",
+    "isDraft": false,
+    "mergeCommit": {
+      "oid": "2d99455826911186df4b3c77aa0e825bf69cb4ec"
+    },
+    "mergedAt": "2026-09-15T19:35:52Z",
+    "number": 28,
+    "state": "MERGED",
+    "title": "build(deps-dev): bump vitest from 4.1.11 to 5.0.0",
+    "url": "https://github.com/Data-Advantage/pptx-gallery/pull/28"
+  },
+  {
+    "repo": "Data-Advantage/openpresentation-site",
+    "baseRefName": "main",
+    "headRefOid": "7b60657e9c35fb2d5d7f695513c198741ab2520b",
+    "isDraft": false,
+    "mergeCommit": null,
+    "mergedAt": null,
+    "number": 28,
+    "state": "CLOSED",
+    "title": "build(deps-dev): bump @types/node from 24.13.4 to 26.5.1",
+    "url": "https://github.com/Data-Advantage/openpresentation-site/pull/28"
+  },
+  {
+    "repo": "Data-Advantage/openpresentation-site",
+    "baseRefName": "main",
+    "headRefOid": "42bf4a9be81563acf2f914d7e750a1d32479650a",
+    "isDraft": false,
+    "mergeCommit": {
+      "oid": "bb6b006e5fa18f565779781ad347a839fea4ec83"
+    },
+    "mergedAt": "2026-09-15T19:46:44Z",
+    "number": 27,
+    "state": "MERGED",
+    "title": "build(deps): bump @vercel/analytics from 1.6.1 to 2.0.1",
+    "url": "https://github.com/Data-Advantage/openpresentation-site/pull/27"
+  },
+  {
+    "repo": "Data-Advantage/openpresentation-site",
+    "baseRefName": "main",
+    "headRefOid": "071b4e5124c5986d7ce9626602ffd6730d2821c3",
+    "isDraft": false,
+    "mergeCommit": {
+      "oid": "31869de14bfd2a05a422cc9049cd854fd30df3ed"
+    },
+    "mergedAt": "2026-09-15T19:35:47Z",
+    "number": 25,
+    "state": "MERGED",
+    "title": "build(deps): bump actions/checkout from 4.3.1 to 7.0.1",
+    "url": "https://github.com/Data-Advantage/openpresentation-site/pull/25"
+  }
+]

@@ -1,0 +1,109 @@
+{
+  "source": {
+    "slides": [
+      {
+        "timeline": [
+          {
+            "when": " Q1 ",
+            "what": "Pilot",
+            "description": "First\r\n\r\nLast "
+          },
+          {
+            "what": "Next"
+          }
+        ]
+      }
+    ]
+  },
+  "imported": {
+    "$schema": "https://openpresentation.org/schema/opf/v1",
+    "name": "OPF Presentation",
+    "slides": [
+      {
+        "design": {
+          "background": {
+            "type": "solid",
+            "color": "#011842"
+          }
+        },
+        "blocks": [
+          {
+            "type": "text",
+            "text": " Q1 "
+          },
+          {
+            "type": "text",
+            "text": "Pilot"
+          },
+          {
+            "type": "text",
+            "text": "First"
+          },
+          {
+            "type": "text",
+            "text": "PowerPoint shape: OPF text slides.0.timeline.0.description line 1"
+          },
+          {
+            "type": "text",
+            "text": "Last "
+          },
+          {
+            "type": "text",
+            "text": "PowerPoint shape: Shape 1"
+          },
+          {
+            "type": "text",
+            "text": "PowerPoint shape: Shape 2"
+          },
+          {
+            "type": "text",
+            "text": "PowerPoint shape: Shape 0"
+          },
+          {
+            "type": "text",
+            "text": "Next"
+          }
+        ]
+      }
+    ],
+    "author": "OpenPresentation",
+    "design": {
+      "dimensions": {
+        "widthInches": 13.333333333333334,
+        "heightInches": 7.5
+      }
+    }
+  },
+  "diagnostics": [
+    {
+      "code": "invalid-text-provenance",
+      "message": "Invalid plain text tags; ordinary import retains current native text.",
+      "path": "slides.0"
+    },
+    {
+      "code": "invalid-text-provenance",
+      "message": "Invalid plain text tags; ordinary import retains current native text.",
+      "path": "slides.0"
+    },
+    {
+      "code": "invalid-text-provenance",
+      "message": "Invalid plain text tags; ordinary import retains current native text.",
+      "path": "slides.0"
+    },
+    {
+      "code": "invalid-text-provenance",
+      "message": "Invalid plain text tags; ordinary import retains current native text.",
+      "path": "slides.0"
+    },
+    {
+      "code": "invalid-text-provenance",
+      "message": "Invalid plain text tags; ordinary import retains current native text.",
+      "path": "slides.0"
+    },
+    {
+      "code": "invalid-text-provenance",
+      "message": "Invalid plain text tags; ordinary import retains current native text.",
+      "path": "slides.0"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+
+> @openpresentation/opf-render@0.7.0 test:styled-table
+> node test/styled-table.mjs
+
+Styled table renderer passed: spans, fills/alpha, shared border precedence and suppression, scalar/rich vertical alignment, editable paths, run overrides and rasterization.

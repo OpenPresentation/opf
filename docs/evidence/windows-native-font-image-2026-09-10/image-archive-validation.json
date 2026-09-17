@@ -1,0 +1,50 @@
+{
+  "archives": [
+    {
+      "file": "raw/images-native-node24-01/images-fit.pptx",
+      "sha256": "cb0f5d5a808c53cac0a1039bdb366f76795b775a922fabe43db3ccef3143fdf3",
+      "xmlPartsParsed": 52,
+      "internalRelationshipsResolved": 67,
+      "zipCrcPassed": true
+    },
+    {
+      "file": "raw/images-native-node24-02/images-fit.pptx",
+      "sha256": "228931dee8e441c5af5cbafed14568ad9b5028278d067bea0d9fa763e97d976d",
+      "xmlPartsParsed": 52,
+      "internalRelationshipsResolved": 67,
+      "zipCrcPassed": true
+    },
+    {
+      "file": "raw/image-open-opf-png/source.pptx",
+      "sha256": "1e9ebff352fdb3d99aa23f304ddbb4ef3e94398ee727e3c67a5cbf3c859b67e1",
+      "xmlPartsParsed": 20,
+      "internalRelationshipsResolved": 19,
+      "zipCrcPassed": true
+    },
+    {
+      "file": "raw/image-open-vendor-png/source.pptx",
+      "sha256": "38ed7f65cdd5299fc742474faf4df9009a59d0a7d46392fe4c9aece7d891a262",
+      "xmlPartsParsed": 20,
+      "internalRelationshipsResolved": 19,
+      "zipCrcPassed": true
+    }
+  ],
+  "sourcePngs": [
+    {
+      "name": "wide.png",
+      "chunks": 3,
+      "crcPassed": true
+    },
+    {
+      "name": "tall.png",
+      "chunks": 3,
+      "crcPassed": true
+    },
+    {
+      "name": "square.png",
+      "chunks": 3,
+      "crcPassed": true
+    }
+  ],
+  "scope": "Structural checks do not establish Office acceptance or internal failure cause."
+}

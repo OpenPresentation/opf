@@ -1,0 +1,35 @@
+[
+  {
+    "projectId": "prj_MnL89d86UvFUMWP1MAamRR3VE9IC",
+    "name": "openpresentation-site",
+    "gitComments": {
+      "onCommit": false,
+      "onPullRequest": false
+    },
+    "gitProviderOptions": {
+      "createDeployments": "enabled"
+    }
+  },
+  {
+    "projectId": "prj_jaAjOxlbGlBOfbKs6h4usu3mRR5G",
+    "name": "pptx-gallery",
+    "gitComments": {
+      "onCommit": false,
+      "onPullRequest": false
+    },
+    "gitProviderOptions": {
+      "createDeployments": "enabled"
+    }
+  },
+  {
+    "projectId": "prj_v8NIINr5fgzK9yoAQRy0CNoDPqC8",
+    "name": "pptx-dev",
+    "gitComments": {
+      "onCommit": false,
+      "onPullRequest": false
+    },
+    "gitProviderOptions": {
+      "createDeployments": "enabled"
+    }
+  }
+]

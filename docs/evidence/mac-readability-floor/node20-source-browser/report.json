@@ -1,0 +1,3997 @@
+{
+  "node": "v20.20.2",
+  "browser": "153.0.8010.12",
+  "installed": false,
+  "verifierSha256": "876b6273842ce95f979de6dd37268b5feae38f6e696289ab632ef2e527a50d2d",
+  "results": [
+    {
+      "measured": false,
+      "width": 1280,
+      "height": 720,
+      "floor": 16,
+      "fixture": 0,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Short plain text retains its words.",
+          "path": "slides.0.text",
+          "size": 25,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 12
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "Short plain text retains its words.",
+          "points": 18.75
+        }
+      ],
+      "svgSha256": "647aa377ba79c2bd6fe75dab1ae31a233f8263ef5ae1c9a44cd1664df6b82c31",
+      "pptxSha256": "02796fba4df65c70494312c292fb744e28ec396414faebcdfd819e18aabec0c4"
+    },
+    {
+      "measured": false,
+      "width": 1280,
+      "height": 720,
+      "floor": 16,
+      "fixture": 1,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Visible ",
+          "path": "slides.0.text",
+          "size": 33.333,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "small requested run",
+          "path": "slides.0.text",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": " and x",
+          "path": "slides.0.text",
+          "size": 33.333,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "2",
+          "path": "slides.0.text",
+          "size": 23.333,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 12
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "Visible ",
+          "points": 25
+        },
+        {
+          "text": "small requested run",
+          "points": 12
+        },
+        {
+          "text": " and x",
+          "points": 25
+        },
+        {
+          "text": "2",
+          "points": 17.5
+        }
+      ],
+      "svgSha256": "5868c22876da643c1314ada15a0c05bcf924a0848121d1e0810b1b5281c084a9",
+      "pptxSha256": "f227f96e38b637340690546f0791af1bd467163fc35747fc70d307e380ae1165"
+    },
+    {
+      "measured": false,
+      "width": 1280,
+      "height": 720,
+      "floor": 16,
+      "fixture": 2,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "•",
+          "path": "slides.0.items",
+          "size": 33.333,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "First idea",
+          "path": "slides.0.items.0.text",
+          "size": 33.333,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Supporting detail.",
+          "path": "slides.0.items.0.description",
+          "size": 27.333,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "•",
+          "path": "slides.0.items",
+          "size": 33.333,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Second idea",
+          "path": "slides.0.items.1.text",
+          "size": 33.333,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Small request",
+          "path": "slides.0.items.1.description",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 12
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "First idea",
+          "points": 25
+        },
+        {
+          "text": "Supporting detail.",
+          "points": 20.5
+        },
+        {
+          "text": "Second idea",
+          "points": 25
+        },
+        {
+          "text": "Small request",
+          "points": 12
+        }
+      ],
+      "svgSha256": "95b7a76ce90eb49007d1323c74198709d983e9a5fae0176e3c0cbd3f9cca7cf3",
+      "pptxSha256": "e061c51242af3a726cd855e91520b9f3d0505074eb7f05650828a75c30385010"
+    },
+    {
+      "measured": false,
+      "width": 1280,
+      "height": 720,
+      "floor": 16,
+      "fixture": 3,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Item",
+          "path": "slides.0.table.columns.0",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Value",
+          "path": "slides.0.table.columns.1",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Plain cell",
+          "path": "slides.0.table.rows.0.0",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Visible ",
+          "path": "slides.0.table.rows.0.1",
+          "size": 22.857,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "small requested run",
+          "path": "slides.0.table.rows.0.1",
+          "size": 17.143,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": " and x",
+          "path": "slides.0.table.rows.0.1",
+          "size": 22.857,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "2",
+          "path": "slides.0.table.rows.0.1",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Second row",
+          "path": "slides.0.table.rows.1.0",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable data",
+          "path": "slides.0.table.rows.1.1",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 12
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "Item",
+          "points": 12
+        },
+        {
+          "text": "Value",
+          "points": 12
+        },
+        {
+          "text": "Plain cell",
+          "points": 12
+        },
+        {
+          "text": "Visible ",
+          "points": 17.14
+        },
+        {
+          "text": "small requested run",
+          "points": 12.86
+        },
+        {
+          "text": " and x",
+          "points": 17.14
+        },
+        {
+          "text": "2",
+          "points": 12
+        },
+        {
+          "text": "Second row",
+          "points": 12
+        },
+        {
+          "text": "Readable data",
+          "points": 12
+        }
+      ],
+      "svgSha256": "63f7cf88192b8494040006c74cba296d18dd4376259d240b913ff0189f63ef7a",
+      "pptxSha256": "4ac7924072747d2609357aa354c786ba2431d1b7d790d7d9892716795d9403aa"
+    },
+    {
+      "measured": false,
+      "width": 1280,
+      "height": 720,
+      "floor": 24,
+      "fixture": 0,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Short plain text retains its words.",
+          "path": "slides.0.text",
+          "size": 25,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 18
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "Short plain text retains its words.",
+          "points": 18.75
+        }
+      ],
+      "svgSha256": "b36807501bc8e37c9fedc7cbd52d51bbc66e286c849ad494e49fe9e7a69ce7b6",
+      "pptxSha256": "c5fd1cf4c648f7e08ad50650cbbc9e09828297117e631326063d44a9e9c2540f"
+    },
+    {
+      "measured": false,
+      "width": 1280,
+      "height": 720,
+      "floor": 24,
+      "fixture": 1,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Visible ",
+          "path": "slides.0.text",
+          "size": 50,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "small requested run",
+          "path": "slides.0.text",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": " and x",
+          "path": "slides.0.text",
+          "size": 50,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "2",
+          "path": "slides.0.text",
+          "size": 35,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 18
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "Visible ",
+          "points": 37.5
+        },
+        {
+          "text": "small requested run",
+          "points": 18
+        },
+        {
+          "text": " and x",
+          "points": 37.5
+        },
+        {
+          "text": "2",
+          "points": 26.25
+        }
+      ],
+      "svgSha256": "f174025a025ec40d19a2301a11ed38eca18685d6e6c6f74a0423602935009ac0",
+      "pptxSha256": "a7f8e46d9f4d44e7ae45ae4c245f66ebe4f618a40df5e450b5f41348d66142a8"
+    },
+    {
+      "measured": false,
+      "width": 1280,
+      "height": 720,
+      "floor": 24,
+      "fixture": 2,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "•",
+          "path": "slides.0.items",
+          "size": 50,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "First idea",
+          "path": "slides.0.items.0.text",
+          "size": 50,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Supporting detail.",
+          "path": "slides.0.items.0.description",
+          "size": 41,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "•",
+          "path": "slides.0.items",
+          "size": 50,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Second idea",
+          "path": "slides.0.items.1.text",
+          "size": 50,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Small request",
+          "path": "slides.0.items.1.description",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 18
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "First idea",
+          "points": 37.5
+        },
+        {
+          "text": "Supporting detail.",
+          "points": 30.75
+        },
+        {
+          "text": "Second idea",
+          "points": 37.5
+        },
+        {
+          "text": "Small request",
+          "points": 18
+        }
+      ],
+      "svgSha256": "0ed30c0be4e39baa02c2159507130e3e2fd142b92d5245530cfb3d54a3bfb817",
+      "pptxSha256": "b243b238206bbbd5d24af83d1ba2e9145973597490ac6a8b6431f87f3986603e"
+    },
+    {
+      "measured": false,
+      "width": 1280,
+      "height": 720,
+      "floor": 24,
+      "fixture": 3,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Item",
+          "path": "slides.0.table.columns.0",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Value",
+          "path": "slides.0.table.columns.1",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Plain cell",
+          "path": "slides.0.table.rows.0.0",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Visible ",
+          "path": "slides.0.table.rows.0.1",
+          "size": 48,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "small requested run",
+          "path": "slides.0.table.rows.0.1",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": " and ",
+          "path": "slides.0.table.rows.0.1",
+          "size": 48,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "x",
+          "path": "slides.0.table.rows.0.1",
+          "size": 48,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "2",
+          "path": "slides.0.table.rows.0.1",
+          "size": 33.6,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Second row",
+          "path": "slides.0.table.rows.1.0",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable data",
+          "path": "slides.0.table.rows.1.1",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 18
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "Item",
+          "points": 18
+        },
+        {
+          "text": "Value",
+          "points": 18
+        },
+        {
+          "text": "Plain cell",
+          "points": 18
+        },
+        {
+          "text": "Visible ",
+          "points": 36
+        },
+        {
+          "text": "small requested run",
+          "points": 18
+        },
+        {
+          "text": " and x",
+          "points": 36
+        },
+        {
+          "text": "2",
+          "points": 25.2
+        },
+        {
+          "text": "Second row",
+          "points": 18
+        },
+        {
+          "text": "Readable data",
+          "points": 18
+        }
+      ],
+      "svgSha256": "128d0eeaede9e5a2f52f4c62a085eaffe4df63f783cc6da5d5662a2f10877714",
+      "pptxSha256": "eb36f3f193e69d357d9c1c250fcd722874914e1bd3e3d65ea680f41d21d7ba3b"
+    },
+    {
+      "measured": false,
+      "width": 1280,
+      "height": 720,
+      "floor": 32,
+      "fixture": 0,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Short plain text retains its words.",
+          "path": "slides.0.text",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 24
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "Short plain text retains its words.",
+          "points": 24
+        }
+      ],
+      "svgSha256": "c07eafd373a15d0cecf87291612b1c2a1ef4eaa37edf79d7e54e447cb23fea97",
+      "pptxSha256": "c9819a684dbe880fedce2470f05b0e53184a7d0b16aed97b82f965ea90e7848b"
+    },
+    {
+      "measured": false,
+      "width": 1280,
+      "height": 720,
+      "floor": 32,
+      "fixture": 1,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Visible ",
+          "path": "slides.0.text",
+          "size": 66.667,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "small requested run",
+          "path": "slides.0.text",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": " and x",
+          "path": "slides.0.text",
+          "size": 66.667,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "2",
+          "path": "slides.0.text",
+          "size": 46.667,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 24
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "Visible ",
+          "points": 50
+        },
+        {
+          "text": "small requested run",
+          "points": 24
+        },
+        {
+          "text": " and x",
+          "points": 50
+        },
+        {
+          "text": "2",
+          "points": 35
+        }
+      ],
+      "svgSha256": "e68a048a5ae02923479363ad56b6e05879f58af73ac28a51cee71a4a8ee9bec1",
+      "pptxSha256": "e848d1371a970c3bbf7651d4a9bbca056651f518fa9e96007d0149ccda8eb9ab"
+    },
+    {
+      "measured": false,
+      "width": 1280,
+      "height": 720,
+      "floor": 32,
+      "fixture": 2,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "•",
+          "path": "slides.0.items",
+          "size": 66.667,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "First idea",
+          "path": "slides.0.items.0.text",
+          "size": 66.667,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Supporting detail.",
+          "path": "slides.0.items.0.description",
+          "size": 54.667,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "•",
+          "path": "slides.0.items",
+          "size": 66.667,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Second idea",
+          "path": "slides.0.items.1.text",
+          "size": 66.667,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Small request",
+          "path": "slides.0.items.1.description",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 24
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "First idea",
+          "points": 50
+        },
+        {
+          "text": "Supporting detail.",
+          "points": 41
+        },
+        {
+          "text": "Second idea",
+          "points": 50
+        },
+        {
+          "text": "Small request",
+          "points": 24
+        }
+      ],
+      "svgSha256": "bd24c54e670fd490d43444b015aaa3b8535e9acc087cb13ab32d4964dcb8ecd3",
+      "pptxSha256": "d168adc55a3acfb58baf5d2c93c44c160597fcec7c88f527e13cc6be15df6732"
+    },
+    {
+      "measured": false,
+      "width": 1280,
+      "height": 720,
+      "floor": 32,
+      "fixture": 3,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Item",
+          "path": "slides.0.table.columns.0",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Value",
+          "path": "slides.0.table.columns.1",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Plain cell",
+          "path": "slides.0.table.rows.0.0",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Visible ",
+          "path": "slides.0.table.rows.0.1",
+          "size": 85.333,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "small ",
+          "path": "slides.0.table.rows.0.1",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "requested run",
+          "path": "slides.0.table.rows.0.1",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": " and x",
+          "path": "slides.0.table.rows.0.1",
+          "size": 85.333,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "2",
+          "path": "slides.0.table.rows.0.1",
+          "size": 59.733,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Second row",
+          "path": "slides.0.table.rows.1.0",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable data",
+          "path": "slides.0.table.rows.1.1",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 24
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "Item",
+          "points": 24
+        },
+        {
+          "text": "Value",
+          "points": 24
+        },
+        {
+          "text": "Plain cell",
+          "points": 24
+        },
+        {
+          "text": "Visible ",
+          "points": 64
+        },
+        {
+          "text": "small requested run",
+          "points": 24
+        },
+        {
+          "text": " and x",
+          "points": 64
+        },
+        {
+          "text": "2",
+          "points": 44.8
+        },
+        {
+          "text": "Second row",
+          "points": 24
+        },
+        {
+          "text": "Readable data",
+          "points": 24
+        }
+      ],
+      "svgSha256": "f425606d941bc5e698493156bd5419ab8d30132b8aced583458bc8375842bb21",
+      "pptxSha256": "1f681aeae9f150c1af4572d2747840cac3eec0a101bd73568114fc0d718c779a"
+    },
+    {
+      "measured": false,
+      "width": 720,
+      "height": 1280,
+      "floor": 16,
+      "fixture": 0,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Short plain text retains its words.",
+          "path": "slides.0.text",
+          "size": 25,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 12
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "Short plain text retains its words.",
+          "points": 18.75
+        }
+      ],
+      "svgSha256": "f5809a384cc3104486501d929803c7e3cfa6edea0dfa797d6197c7a13f62e4ac",
+      "pptxSha256": "ab837edc205027c72054e5f4c0629cba975548d1e5d695673d5442d966d67b5b"
+    },
+    {
+      "measured": false,
+      "width": 720,
+      "height": 1280,
+      "floor": 16,
+      "fixture": 1,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Visible ",
+          "path": "slides.0.text",
+          "size": 33.333,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "small requested run",
+          "path": "slides.0.text",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": " and x",
+          "path": "slides.0.text",
+          "size": 33.333,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "2",
+          "path": "slides.0.text",
+          "size": 23.333,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 12
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "Visible ",
+          "points": 25
+        },
+        {
+          "text": "small requested run",
+          "points": 12
+        },
+        {
+          "text": " and x",
+          "points": 25
+        },
+        {
+          "text": "2",
+          "points": 17.5
+        }
+      ],
+      "svgSha256": "1ef78299b3567323d4d58d0f205309dd2038a04d2eec62471c25829edb540c03",
+      "pptxSha256": "8f8801e01c197bc0485382fd9e0b14853695f5169b52435bd4d850726cb8c4b9"
+    },
+    {
+      "measured": false,
+      "width": 720,
+      "height": 1280,
+      "floor": 16,
+      "fixture": 2,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "•",
+          "path": "slides.0.items",
+          "size": 33.333,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "First idea",
+          "path": "slides.0.items.0.text",
+          "size": 33.333,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Supporting detail.",
+          "path": "slides.0.items.0.description",
+          "size": 27.333,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "•",
+          "path": "slides.0.items",
+          "size": 33.333,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Second idea",
+          "path": "slides.0.items.1.text",
+          "size": 33.333,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Small request",
+          "path": "slides.0.items.1.description",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 12
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "First idea",
+          "points": 25
+        },
+        {
+          "text": "Supporting detail.",
+          "points": 20.5
+        },
+        {
+          "text": "Second idea",
+          "points": 25
+        },
+        {
+          "text": "Small request",
+          "points": 12
+        }
+      ],
+      "svgSha256": "1f527cedb59ae209e663bd9e2b3c045883ad4a55c63a7164aa6cc4c973856ea0",
+      "pptxSha256": "a9540fdb82721132e3b073febf91646a7e780fd04db051642bc4bcbf5f462b56"
+    },
+    {
+      "measured": false,
+      "width": 720,
+      "height": 1280,
+      "floor": 16,
+      "fixture": 3,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Item",
+          "path": "slides.0.table.columns.0",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Value",
+          "path": "slides.0.table.columns.1",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Plain cell",
+          "path": "slides.0.table.rows.0.0",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Visible ",
+          "path": "slides.0.table.rows.0.1",
+          "size": 22.857,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "small requested run",
+          "path": "slides.0.table.rows.0.1",
+          "size": 17.143,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": " ",
+          "path": "slides.0.table.rows.0.1",
+          "size": 22.857,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "and x",
+          "path": "slides.0.table.rows.0.1",
+          "size": 22.857,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "2",
+          "path": "slides.0.table.rows.0.1",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Second row",
+          "path": "slides.0.table.rows.1.0",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable data",
+          "path": "slides.0.table.rows.1.1",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 12
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "Item",
+          "points": 12
+        },
+        {
+          "text": "Value",
+          "points": 12
+        },
+        {
+          "text": "Plain cell",
+          "points": 12
+        },
+        {
+          "text": "Visible ",
+          "points": 17.14
+        },
+        {
+          "text": "small requested run",
+          "points": 12.86
+        },
+        {
+          "text": " and x",
+          "points": 17.14
+        },
+        {
+          "text": "2",
+          "points": 12
+        },
+        {
+          "text": "Second row",
+          "points": 12
+        },
+        {
+          "text": "Readable data",
+          "points": 12
+        }
+      ],
+      "svgSha256": "21e07cd935995124dab58b642f9a1c8af95f2583592509bcf42430680741a5c8",
+      "pptxSha256": "5f1d344288c2a9ba664f9551ddd73cbf6dca94bcd140fd5d97fb7c351b7a745d"
+    },
+    {
+      "measured": false,
+      "width": 720,
+      "height": 1280,
+      "floor": 24,
+      "fixture": 0,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Short plain text retains its words.",
+          "path": "slides.0.text",
+          "size": 25,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 18
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "Short plain text retains its words.",
+          "points": 18.75
+        }
+      ],
+      "svgSha256": "70d947c4f823b86280f37dcd1d6dc291fedcdba5af91231c89fd00655c847926",
+      "pptxSha256": "8a5be74fdfc321ffd1c8bba02e9a8d89fa454187ade33cfb5f48134dfc705c88"
+    },
+    {
+      "measured": false,
+      "width": 720,
+      "height": 1280,
+      "floor": 24,
+      "fixture": 1,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Visible ",
+          "path": "slides.0.text",
+          "size": 50,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "small requested run",
+          "path": "slides.0.text",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": " and ",
+          "path": "slides.0.text",
+          "size": 50,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "x",
+          "path": "slides.0.text",
+          "size": 50,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "2",
+          "path": "slides.0.text",
+          "size": 35,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 18
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "Visible ",
+          "points": 37.5
+        },
+        {
+          "text": "small requested run",
+          "points": 18
+        },
+        {
+          "text": " and ",
+          "points": 37.5
+        },
+        {
+          "text": "x",
+          "points": 37.5
+        },
+        {
+          "text": "2",
+          "points": 26.25
+        }
+      ],
+      "svgSha256": "eaeed7e95292e5cd5f55fe9c10a8a1b93d7290d41474a8fa63fea9ad6b0befab",
+      "pptxSha256": "1483cdc6b5560abd5a742ba1b14796613a6e4392214ab9b4119a5c2f21616b8b"
+    },
+    {
+      "measured": false,
+      "width": 720,
+      "height": 1280,
+      "floor": 24,
+      "fixture": 2,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "•",
+          "path": "slides.0.items",
+          "size": 50,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "First idea",
+          "path": "slides.0.items.0.text",
+          "size": 50,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Supporting detail.",
+          "path": "slides.0.items.0.description",
+          "size": 41,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "•",
+          "path": "slides.0.items",
+          "size": 50,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Second idea",
+          "path": "slides.0.items.1.text",
+          "size": 50,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Small request",
+          "path": "slides.0.items.1.description",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 18
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "First idea",
+          "points": 37.5
+        },
+        {
+          "text": "Supporting detail.",
+          "points": 30.75
+        },
+        {
+          "text": "Second idea",
+          "points": 37.5
+        },
+        {
+          "text": "Small request",
+          "points": 18
+        }
+      ],
+      "svgSha256": "53cffc3f09667efe29e39b5a10b863cd92e903c1bbc97865573bcecde6b7a2b8",
+      "pptxSha256": "80a5e0ccba4b7fe52214480df1b74ba259c348e261e21a5fe969e0bf85e95b83"
+    },
+    {
+      "measured": false,
+      "width": 720,
+      "height": 1280,
+      "floor": 24,
+      "fixture": 3,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Item",
+          "path": "slides.0.table.columns.0",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Value",
+          "path": "slides.0.table.columns.1",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Plain cell",
+          "path": "slides.0.table.rows.0.0",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Visible ",
+          "path": "slides.0.table.rows.0.1",
+          "size": 48,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "small ",
+          "path": "slides.0.table.rows.0.1",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "requested run",
+          "path": "slides.0.table.rows.0.1",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": " and ",
+          "path": "slides.0.table.rows.0.1",
+          "size": 48,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "x",
+          "path": "slides.0.table.rows.0.1",
+          "size": 48,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "2",
+          "path": "slides.0.table.rows.0.1",
+          "size": 33.6,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Second row",
+          "path": "slides.0.table.rows.1.0",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable data",
+          "path": "slides.0.table.rows.1.1",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 18
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "Item",
+          "points": 18
+        },
+        {
+          "text": "Value",
+          "points": 18
+        },
+        {
+          "text": "Plain cell",
+          "points": 18
+        },
+        {
+          "text": "Visible ",
+          "points": 36
+        },
+        {
+          "text": "small requested run",
+          "points": 18
+        },
+        {
+          "text": " and x",
+          "points": 36
+        },
+        {
+          "text": "2",
+          "points": 25.2
+        },
+        {
+          "text": "Second row",
+          "points": 18
+        },
+        {
+          "text": "Readable data",
+          "points": 18
+        }
+      ],
+      "svgSha256": "c3635249b082465b7793c19258931e49cf04822d1db1d4734c1ebb7b77068113",
+      "pptxSha256": "3ffef1476bf2b146ba71e1461f7013feefcc8a2ba2a875cd8e2403d020d2a5e7"
+    },
+    {
+      "measured": false,
+      "width": 720,
+      "height": 1280,
+      "floor": 32,
+      "fixture": 0,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Short plain text retains its words.",
+          "path": "slides.0.text",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 24
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "Short plain text retains its words.",
+          "points": 24
+        }
+      ],
+      "svgSha256": "eff367b73c6ded5cf172d6c1bca8d5a78bcfe6136e8aa8c83b8c6e4717ed46e0",
+      "pptxSha256": "416ef04b4761d8a8d4489c208182ea8fd395e3e01deb04df1a593736d9bcee46"
+    },
+    {
+      "measured": false,
+      "width": 720,
+      "height": 1280,
+      "floor": 32,
+      "fixture": 1,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Visible ",
+          "path": "slides.0.text",
+          "size": 66.667,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "small requested run",
+          "path": "slides.0.text",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": " and x",
+          "path": "slides.0.text",
+          "size": 66.667,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "2",
+          "path": "slides.0.text",
+          "size": 46.667,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 24
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "Visible ",
+          "points": 50
+        },
+        {
+          "text": "small requested run",
+          "points": 24
+        },
+        {
+          "text": " and x",
+          "points": 50
+        },
+        {
+          "text": "2",
+          "points": 35
+        }
+      ],
+      "svgSha256": "c0ce1752eeeff65e047c6902d2dd7b041b6733f9bf63250009d1122eaa6078cd",
+      "pptxSha256": "a32f2e8ca7acf17df1ba8e204a3950c07f07d12977c8ad2d242bfed22f0eb72f"
+    },
+    {
+      "measured": false,
+      "width": 720,
+      "height": 1280,
+      "floor": 32,
+      "fixture": 2,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "•",
+          "path": "slides.0.items",
+          "size": 66.667,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "First idea",
+          "path": "slides.0.items.0.text",
+          "size": 66.667,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Supporting detail.",
+          "path": "slides.0.items.0.description",
+          "size": 54.667,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "•",
+          "path": "slides.0.items",
+          "size": 66.667,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Second idea",
+          "path": "slides.0.items.1.text",
+          "size": 66.667,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Small request",
+          "path": "slides.0.items.1.description",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 24
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "First idea",
+          "points": 50
+        },
+        {
+          "text": "Supporting detail.",
+          "points": 41
+        },
+        {
+          "text": "Second idea",
+          "points": 50
+        },
+        {
+          "text": "Small request",
+          "points": 24
+        }
+      ],
+      "svgSha256": "6c498121163f8fdf2e0efaba248047dd4275aabc0fe9214c44fe5a63766c90a5",
+      "pptxSha256": "33d5440dee711c305f183aaeceb5a80aca66f57cf19184d61fa2ac34bd44ccf8"
+    },
+    {
+      "measured": false,
+      "width": 720,
+      "height": 1280,
+      "floor": 32,
+      "fixture": 3,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Item",
+          "path": "slides.0.table.columns.0",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Value",
+          "path": "slides.0.table.columns.1",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Plain cell",
+          "path": "slides.0.table.rows.0.0",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Visib",
+          "path": "slides.0.table.rows.0.1",
+          "size": 85.333,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "le ",
+          "path": "slides.0.table.rows.0.1",
+          "size": 85.333,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "small ",
+          "path": "slides.0.table.rows.0.1",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "requested run",
+          "path": "slides.0.table.rows.0.1",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": " ",
+          "path": "slides.0.table.rows.0.1",
+          "size": 85.333,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "and x",
+          "path": "slides.0.table.rows.0.1",
+          "size": 85.333,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "2",
+          "path": "slides.0.table.rows.0.1",
+          "size": 59.733,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Second row",
+          "path": "slides.0.table.rows.1.0",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable data",
+          "path": "slides.0.table.rows.1.1",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 24
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "Item",
+          "points": 24
+        },
+        {
+          "text": "Value",
+          "points": 24
+        },
+        {
+          "text": "Plain cell",
+          "points": 24
+        },
+        {
+          "text": "Visible ",
+          "points": 64
+        },
+        {
+          "text": "small requested run",
+          "points": 24
+        },
+        {
+          "text": " and x",
+          "points": 64
+        },
+        {
+          "text": "2",
+          "points": 44.8
+        },
+        {
+          "text": "Second row",
+          "points": 24
+        },
+        {
+          "text": "Readable data",
+          "points": 24
+        }
+      ],
+      "svgSha256": "404fb3b15cf0e86d8dc70a7fa2685411f01644396dc63c749148269490829d8d",
+      "pptxSha256": "1c02215a5ef5bf152a085982eb13e255349cf71d8a6bd993dbbd1e0ba4fe8636"
+    },
+    {
+      "measured": true,
+      "width": 1280,
+      "height": 720,
+      "floor": 16,
+      "fixture": 0,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Short plain text retains its words.",
+          "path": "slides.0.text",
+          "size": 25,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 12
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "Short plain text retains its words.",
+          "points": 18.75
+        }
+      ],
+      "svgSha256": "ff013eff2e4f5c04908165da924e3c4183867d1c19c6ef9950868556ed54cee0",
+      "pptxSha256": "ff9e79d9e2ded4bb10c55bf6644784a4fcfa3ddd619b71ac6381555a6f7806ec"
+    },
+    {
+      "measured": true,
+      "width": 1280,
+      "height": 720,
+      "floor": 16,
+      "fixture": 1,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Visible ",
+          "path": "slides.0.text",
+          "size": 33.333,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "small requested run",
+          "path": "slides.0.text",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": " and x",
+          "path": "slides.0.text",
+          "size": 33.333,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "2",
+          "path": "slides.0.text",
+          "size": 23.333,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 12
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "Visible ",
+          "points": 25
+        },
+        {
+          "text": "small requested run",
+          "points": 12
+        },
+        {
+          "text": " and x",
+          "points": 25
+        },
+        {
+          "text": "2",
+          "points": 17.5
+        }
+      ],
+      "svgSha256": "081189d1688bc5bb27917efeac7fa5dd74d90cf9affd7395b24827967147fb9a",
+      "pptxSha256": "6c140537ac0056180e03c07d89c4b7d2cd4c5564c9f84ad1590f68e8b80a3308"
+    },
+    {
+      "measured": true,
+      "width": 1280,
+      "height": 720,
+      "floor": 16,
+      "fixture": 2,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "•",
+          "path": "slides.0.items",
+          "size": 33.333,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "First idea",
+          "path": "slides.0.items.0.text",
+          "size": 33.333,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Supporting detail.",
+          "path": "slides.0.items.0.description",
+          "size": 27.333,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "•",
+          "path": "slides.0.items",
+          "size": 33.333,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Second idea",
+          "path": "slides.0.items.1.text",
+          "size": 33.333,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Small request",
+          "path": "slides.0.items.1.description",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 12
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "First idea",
+          "points": 25
+        },
+        {
+          "text": "Supporting detail.",
+          "points": 20.5
+        },
+        {
+          "text": "Second idea",
+          "points": 25
+        },
+        {
+          "text": "Small request",
+          "points": 12
+        }
+      ],
+      "svgSha256": "a0c1cfa26ade3a2e8beb062d10c16e1efe8ce6c1b7f9e21a65a2de56bdaebcea",
+      "pptxSha256": "e061c51242af3a726cd855e91520b9f3d0505074eb7f05650828a75c30385010"
+    },
+    {
+      "measured": true,
+      "width": 1280,
+      "height": 720,
+      "floor": 16,
+      "fixture": 3,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Item",
+          "path": "slides.0.table.columns.0",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Value",
+          "path": "slides.0.table.columns.1",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Plain cell",
+          "path": "slides.0.table.rows.0.0",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Visible ",
+          "path": "slides.0.table.rows.0.1",
+          "size": 22.857,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "small requested run",
+          "path": "slides.0.table.rows.0.1",
+          "size": 17.143,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": " and x",
+          "path": "slides.0.table.rows.0.1",
+          "size": 22.857,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "2",
+          "path": "slides.0.table.rows.0.1",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Second row",
+          "path": "slides.0.table.rows.1.0",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable data",
+          "path": "slides.0.table.rows.1.1",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 12
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "Item",
+          "points": 12
+        },
+        {
+          "text": "Value",
+          "points": 12
+        },
+        {
+          "text": "Plain cell",
+          "points": 12
+        },
+        {
+          "text": "Visible ",
+          "points": 17.14
+        },
+        {
+          "text": "small requested run",
+          "points": 12.86
+        },
+        {
+          "text": " and x",
+          "points": 17.14
+        },
+        {
+          "text": "2",
+          "points": 12
+        },
+        {
+          "text": "Second row",
+          "points": 12
+        },
+        {
+          "text": "Readable data",
+          "points": 12
+        }
+      ],
+      "svgSha256": "f6d729b7962431307fb6564bcb6198fee3d5cff49db36730c3959551f92d8e5d",
+      "pptxSha256": "4ac7924072747d2609357aa354c786ba2431d1b7d790d7d9892716795d9403aa"
+    },
+    {
+      "measured": true,
+      "width": 1280,
+      "height": 720,
+      "floor": 24,
+      "fixture": 0,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Short plain text retains its words.",
+          "path": "slides.0.text",
+          "size": 25,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 18
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "Short plain text retains its words.",
+          "points": 18.75
+        }
+      ],
+      "svgSha256": "f56b32c352e0a13990a6a58aa72bcd323504f6736fa0595d4286b85a2f538c94",
+      "pptxSha256": "8cae4baaf47b75f73a2ce0cf769dd8ad6f60b42f4aa70bdf328e385f40af8916"
+    },
+    {
+      "measured": true,
+      "width": 1280,
+      "height": 720,
+      "floor": 24,
+      "fixture": 1,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Visible ",
+          "path": "slides.0.text",
+          "size": 50,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "small requested run",
+          "path": "slides.0.text",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": " and x",
+          "path": "slides.0.text",
+          "size": 50,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "2",
+          "path": "slides.0.text",
+          "size": 35,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 18
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "Visible ",
+          "points": 37.5
+        },
+        {
+          "text": "small requested run",
+          "points": 18
+        },
+        {
+          "text": " and x",
+          "points": 37.5
+        },
+        {
+          "text": "2",
+          "points": 26.25
+        }
+      ],
+      "svgSha256": "06460803e75c3751b04bc19f3dabd8d85e10cdd1d7f91deba6da566c7c201f26",
+      "pptxSha256": "07d5d272aa9d57567b2223e83b7287ae56bde4db8febf1b16a8f5c2f54fa333a"
+    },
+    {
+      "measured": true,
+      "width": 1280,
+      "height": 720,
+      "floor": 24,
+      "fixture": 2,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "•",
+          "path": "slides.0.items",
+          "size": 50,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "First idea",
+          "path": "slides.0.items.0.text",
+          "size": 50,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Supporting detail.",
+          "path": "slides.0.items.0.description",
+          "size": 41,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "•",
+          "path": "slides.0.items",
+          "size": 50,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Second idea",
+          "path": "slides.0.items.1.text",
+          "size": 50,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Small request",
+          "path": "slides.0.items.1.description",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 18
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "First idea",
+          "points": 37.5
+        },
+        {
+          "text": "Supporting detail.",
+          "points": 30.75
+        },
+        {
+          "text": "Second idea",
+          "points": 37.5
+        },
+        {
+          "text": "Small request",
+          "points": 18
+        }
+      ],
+      "svgSha256": "b76d953eec078584c2dc8b6d8efa9de0180fcd1700f2d7068057f060bb46bf63",
+      "pptxSha256": "b243b238206bbbd5d24af83d1ba2e9145973597490ac6a8b6431f87f3986603e"
+    },
+    {
+      "measured": true,
+      "width": 1280,
+      "height": 720,
+      "floor": 24,
+      "fixture": 3,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Item",
+          "path": "slides.0.table.columns.0",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Value",
+          "path": "slides.0.table.columns.1",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Plain cell",
+          "path": "slides.0.table.rows.0.0",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Visible ",
+          "path": "slides.0.table.rows.0.1",
+          "size": 48,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "small requested run",
+          "path": "slides.0.table.rows.0.1",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": " and x",
+          "path": "slides.0.table.rows.0.1",
+          "size": 48,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "2",
+          "path": "slides.0.table.rows.0.1",
+          "size": 33.6,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Second row",
+          "path": "slides.0.table.rows.1.0",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable data",
+          "path": "slides.0.table.rows.1.1",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 18
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "Item",
+          "points": 18
+        },
+        {
+          "text": "Value",
+          "points": 18
+        },
+        {
+          "text": "Plain cell",
+          "points": 18
+        },
+        {
+          "text": "Visible ",
+          "points": 36
+        },
+        {
+          "text": "small requested run",
+          "points": 18
+        },
+        {
+          "text": " and x",
+          "points": 36
+        },
+        {
+          "text": "2",
+          "points": 25.2
+        },
+        {
+          "text": "Second row",
+          "points": 18
+        },
+        {
+          "text": "Readable data",
+          "points": 18
+        }
+      ],
+      "svgSha256": "b0f3094969f79a1c112d95e1b00fcd27854c8af65bac1d6faf38924a7c03b6f9",
+      "pptxSha256": "d0934416f69f594c3693df2a5a4a77d15a6174868e736e5b899c08374c400168"
+    },
+    {
+      "measured": true,
+      "width": 1280,
+      "height": 720,
+      "floor": 32,
+      "fixture": 0,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Short plain text retains its words.",
+          "path": "slides.0.text",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 24
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "Short plain text retains its words.",
+          "points": 24
+        }
+      ],
+      "svgSha256": "e6444536a45a8a50ea1801351e6df22cc1086ed5bda52b64da94316cce8b6020",
+      "pptxSha256": "c9819a684dbe880fedce2470f05b0e53184a7d0b16aed97b82f965ea90e7848b"
+    },
+    {
+      "measured": true,
+      "width": 1280,
+      "height": 720,
+      "floor": 32,
+      "fixture": 1,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Visible ",
+          "path": "slides.0.text",
+          "size": 66.667,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "small requested run",
+          "path": "slides.0.text",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": " and x",
+          "path": "slides.0.text",
+          "size": 66.667,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "2",
+          "path": "slides.0.text",
+          "size": 46.667,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 24
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "Visible ",
+          "points": 50
+        },
+        {
+          "text": "small requested run",
+          "points": 24
+        },
+        {
+          "text": " and x",
+          "points": 50
+        },
+        {
+          "text": "2",
+          "points": 35
+        }
+      ],
+      "svgSha256": "5d91cf8f6cc63cfe2db94cb32c642a34887262bea8cb2e32261fb791c8948894",
+      "pptxSha256": "af9c99f150b8c7d4f2771bb8e597fae6d140f528491e4f940464bd21f51660e5"
+    },
+    {
+      "measured": true,
+      "width": 1280,
+      "height": 720,
+      "floor": 32,
+      "fixture": 2,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "•",
+          "path": "slides.0.items",
+          "size": 66.667,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "First idea",
+          "path": "slides.0.items.0.text",
+          "size": 66.667,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Supporting detail.",
+          "path": "slides.0.items.0.description",
+          "size": 54.667,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "•",
+          "path": "slides.0.items",
+          "size": 66.667,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Second idea",
+          "path": "slides.0.items.1.text",
+          "size": 66.667,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Small request",
+          "path": "slides.0.items.1.description",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 24
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "First idea",
+          "points": 50
+        },
+        {
+          "text": "Supporting detail.",
+          "points": 41
+        },
+        {
+          "text": "Second idea",
+          "points": 50
+        },
+        {
+          "text": "Small request",
+          "points": 24
+        }
+      ],
+      "svgSha256": "7ec0b7c2f9da93ea3d716a0ea8841fe35fbc5459524b88b8b395e35f1a930307",
+      "pptxSha256": "d168adc55a3acfb58baf5d2c93c44c160597fcec7c88f527e13cc6be15df6732"
+    },
+    {
+      "measured": true,
+      "width": 1280,
+      "height": 720,
+      "floor": 32,
+      "fixture": 3,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Item",
+          "path": "slides.0.table.columns.0",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Value",
+          "path": "slides.0.table.columns.1",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Plain cell",
+          "path": "slides.0.table.rows.0.0",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Visible ",
+          "path": "slides.0.table.rows.0.1",
+          "size": 85.333,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "small requested run",
+          "path": "slides.0.table.rows.0.1",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": " and x",
+          "path": "slides.0.table.rows.0.1",
+          "size": 85.333,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "2",
+          "path": "slides.0.table.rows.0.1",
+          "size": 59.733,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Second row",
+          "path": "slides.0.table.rows.1.0",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable data",
+          "path": "slides.0.table.rows.1.1",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 24
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "Item",
+          "points": 24
+        },
+        {
+          "text": "Value",
+          "points": 24
+        },
+        {
+          "text": "Plain cell",
+          "points": 24
+        },
+        {
+          "text": "Visible ",
+          "points": 64
+        },
+        {
+          "text": "small requested run",
+          "points": 24
+        },
+        {
+          "text": " and x",
+          "points": 64
+        },
+        {
+          "text": "2",
+          "points": 44.8
+        },
+        {
+          "text": "Second row",
+          "points": 24
+        },
+        {
+          "text": "Readable data",
+          "points": 24
+        }
+      ],
+      "svgSha256": "01ef9e47fe722d8073815519eebe9f47eb8c123940ec30a6b6604284eb35d85b",
+      "pptxSha256": "1f681aeae9f150c1af4572d2747840cac3eec0a101bd73568114fc0d718c779a"
+    },
+    {
+      "measured": true,
+      "width": 720,
+      "height": 1280,
+      "floor": 16,
+      "fixture": 0,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Short plain text retains its words.",
+          "path": "slides.0.text",
+          "size": 25,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 12
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "Short plain text retains its words.",
+          "points": 18.75
+        }
+      ],
+      "svgSha256": "5cebe251d7db1c77627865c1ab100d4fe69f640c6ef595a6c437501c8323827c",
+      "pptxSha256": "2f690815d4499ad7234e90fcb5ce00e951f1aff4876b223a0380ca2b092f6d68"
+    },
+    {
+      "measured": true,
+      "width": 720,
+      "height": 1280,
+      "floor": 16,
+      "fixture": 1,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Visible ",
+          "path": "slides.0.text",
+          "size": 33.333,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "small requested run",
+          "path": "slides.0.text",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": " and x",
+          "path": "slides.0.text",
+          "size": 33.333,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "2",
+          "path": "slides.0.text",
+          "size": 23.333,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 12
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "Visible ",
+          "points": 25
+        },
+        {
+          "text": "small requested run",
+          "points": 12
+        },
+        {
+          "text": " and x",
+          "points": 25
+        },
+        {
+          "text": "2",
+          "points": 17.5
+        }
+      ],
+      "svgSha256": "2ce658404be9c3587d1cae76c777e73977a57c0e7482d8b0bd7ca3b7c88bb46c",
+      "pptxSha256": "a01afd1afe421a15584dac52db2b3c4b68b96e5a2a61780acf73d17857e3cb72"
+    },
+    {
+      "measured": true,
+      "width": 720,
+      "height": 1280,
+      "floor": 16,
+      "fixture": 2,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "•",
+          "path": "slides.0.items",
+          "size": 33.333,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "First idea",
+          "path": "slides.0.items.0.text",
+          "size": 33.333,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Supporting detail.",
+          "path": "slides.0.items.0.description",
+          "size": 27.333,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "•",
+          "path": "slides.0.items",
+          "size": 33.333,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Second idea",
+          "path": "slides.0.items.1.text",
+          "size": 33.333,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Small request",
+          "path": "slides.0.items.1.description",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 12
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "First idea",
+          "points": 25
+        },
+        {
+          "text": "Supporting detail.",
+          "points": 20.5
+        },
+        {
+          "text": "Second idea",
+          "points": 25
+        },
+        {
+          "text": "Small request",
+          "points": 12
+        }
+      ],
+      "svgSha256": "2a01f5933cb591dde0c6ced88bc70c2b054a85206429ffb6d766457f684df149",
+      "pptxSha256": "a9540fdb82721132e3b073febf91646a7e780fd04db051642bc4bcbf5f462b56"
+    },
+    {
+      "measured": true,
+      "width": 720,
+      "height": 1280,
+      "floor": 16,
+      "fixture": 3,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Item",
+          "path": "slides.0.table.columns.0",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Value",
+          "path": "slides.0.table.columns.1",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Plain cell",
+          "path": "slides.0.table.rows.0.0",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Visible ",
+          "path": "slides.0.table.rows.0.1",
+          "size": 22.857,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "small requested run",
+          "path": "slides.0.table.rows.0.1",
+          "size": 17.143,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": " and ",
+          "path": "slides.0.table.rows.0.1",
+          "size": 22.857,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "x",
+          "path": "slides.0.table.rows.0.1",
+          "size": 22.857,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "2",
+          "path": "slides.0.table.rows.0.1",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Second row",
+          "path": "slides.0.table.rows.1.0",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable data",
+          "path": "slides.0.table.rows.1.1",
+          "size": 16,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 12
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "Item",
+          "points": 12
+        },
+        {
+          "text": "Value",
+          "points": 12
+        },
+        {
+          "text": "Plain cell",
+          "points": 12
+        },
+        {
+          "text": "Visible ",
+          "points": 17.14
+        },
+        {
+          "text": "small requested run",
+          "points": 12.86
+        },
+        {
+          "text": " and x",
+          "points": 17.14
+        },
+        {
+          "text": "2",
+          "points": 12
+        },
+        {
+          "text": "Second row",
+          "points": 12
+        },
+        {
+          "text": "Readable data",
+          "points": 12
+        }
+      ],
+      "svgSha256": "7033b0921e0321b111b0bffc6941a51998dc53c048fb3787ebd9295ed5be6d1f",
+      "pptxSha256": "5f1d344288c2a9ba664f9551ddd73cbf6dca94bcd140fd5d97fb7c351b7a745d"
+    },
+    {
+      "measured": true,
+      "width": 720,
+      "height": 1280,
+      "floor": 24,
+      "fixture": 0,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Short plain text retains its words.",
+          "path": "slides.0.text",
+          "size": 25,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 18
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "Short plain text retains its words.",
+          "points": 18.75
+        }
+      ],
+      "svgSha256": "ba956a35727aa571c28806e4bb9c3a5990e0d7fae0cc85bfbd929f43724dc113",
+      "pptxSha256": "065220b29cc46752e37f3fed880d6506eaf1c4adb8baebbdce9e6a947dab7470"
+    },
+    {
+      "measured": true,
+      "width": 720,
+      "height": 1280,
+      "floor": 24,
+      "fixture": 1,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Visible ",
+          "path": "slides.0.text",
+          "size": 50,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "small requested run",
+          "path": "slides.0.text",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": " and x",
+          "path": "slides.0.text",
+          "size": 50,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "2",
+          "path": "slides.0.text",
+          "size": 35,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 18
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "Visible ",
+          "points": 37.5
+        },
+        {
+          "text": "small requested run",
+          "points": 18
+        },
+        {
+          "text": " and x",
+          "points": 37.5
+        },
+        {
+          "text": "2",
+          "points": 26.25
+        }
+      ],
+      "svgSha256": "afcb709709cb2d3bf170a4139f19c5b89d66db0c5f8f788c05392c3888fe88b9",
+      "pptxSha256": "96322c569d84ca7f658ee458cac67426ed1d6e9079636853dede35de69a27468"
+    },
+    {
+      "measured": true,
+      "width": 720,
+      "height": 1280,
+      "floor": 24,
+      "fixture": 2,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "•",
+          "path": "slides.0.items",
+          "size": 50,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "First idea",
+          "path": "slides.0.items.0.text",
+          "size": 50,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Supporting detail.",
+          "path": "slides.0.items.0.description",
+          "size": 41,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "•",
+          "path": "slides.0.items",
+          "size": 50,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Second idea",
+          "path": "slides.0.items.1.text",
+          "size": 50,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Small request",
+          "path": "slides.0.items.1.description",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 18
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "First idea",
+          "points": 37.5
+        },
+        {
+          "text": "Supporting detail.",
+          "points": 30.75
+        },
+        {
+          "text": "Second idea",
+          "points": 37.5
+        },
+        {
+          "text": "Small request",
+          "points": 18
+        }
+      ],
+      "svgSha256": "89142ab929f8da8ffd91fb72e3862e5d631be8614e6688adb8cfc12066b2d5ae",
+      "pptxSha256": "80a5e0ccba4b7fe52214480df1b74ba259c348e261e21a5fe969e0bf85e95b83"
+    },
+    {
+      "measured": true,
+      "width": 720,
+      "height": 1280,
+      "floor": 24,
+      "fixture": 3,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Item",
+          "path": "slides.0.table.columns.0",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Value",
+          "path": "slides.0.table.columns.1",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Plain cell",
+          "path": "slides.0.table.rows.0.0",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Visible ",
+          "path": "slides.0.table.rows.0.1",
+          "size": 48,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "small ",
+          "path": "slides.0.table.rows.0.1",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "requested run",
+          "path": "slides.0.table.rows.0.1",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": " and ",
+          "path": "slides.0.table.rows.0.1",
+          "size": 48,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "x",
+          "path": "slides.0.table.rows.0.1",
+          "size": 48,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "2",
+          "path": "slides.0.table.rows.0.1",
+          "size": 33.6,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Second row",
+          "path": "slides.0.table.rows.1.0",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable data",
+          "path": "slides.0.table.rows.1.1",
+          "size": 24,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 18
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "Item",
+          "points": 18
+        },
+        {
+          "text": "Value",
+          "points": 18
+        },
+        {
+          "text": "Plain cell",
+          "points": 18
+        },
+        {
+          "text": "Visible ",
+          "points": 36
+        },
+        {
+          "text": "small requested run",
+          "points": 18
+        },
+        {
+          "text": " and x",
+          "points": 36
+        },
+        {
+          "text": "2",
+          "points": 25.2
+        },
+        {
+          "text": "Second row",
+          "points": 18
+        },
+        {
+          "text": "Readable data",
+          "points": 18
+        }
+      ],
+      "svgSha256": "facd331b02cc47b8d60726c167399fa0512f26cfeaa61a1c50a3123bdf3efc61",
+      "pptxSha256": "3ffef1476bf2b146ba71e1461f7013feefcc8a2ba2a875cd8e2403d020d2a5e7"
+    },
+    {
+      "measured": true,
+      "width": 720,
+      "height": 1280,
+      "floor": 32,
+      "fixture": 0,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Short plain text retains its words.",
+          "path": "slides.0.text",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 24
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "Short plain text retains its words.",
+          "points": 24
+        }
+      ],
+      "svgSha256": "d9a790e4c55f7d65d3867339ffdba3e7c53033363608690dbad2fa32c9f4a17d",
+      "pptxSha256": "416ef04b4761d8a8d4489c208182ea8fd395e3e01deb04df1a593736d9bcee46"
+    },
+    {
+      "measured": true,
+      "width": 720,
+      "height": 1280,
+      "floor": 32,
+      "fixture": 1,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Visible ",
+          "path": "slides.0.text",
+          "size": 66.667,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "small requested run",
+          "path": "slides.0.text",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": " ",
+          "path": "slides.0.text",
+          "size": 66.667,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "and x",
+          "path": "slides.0.text",
+          "size": 66.667,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "2",
+          "path": "slides.0.text",
+          "size": 46.667,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 24
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "Visible ",
+          "points": 50
+        },
+        {
+          "text": "small requested run",
+          "points": 24
+        },
+        {
+          "text": " ",
+          "points": 50
+        },
+        {
+          "text": "and x",
+          "points": 50
+        },
+        {
+          "text": "2",
+          "points": 35
+        }
+      ],
+      "svgSha256": "9d4b0035f06cfaf1a29b24ce7c487f0690cbc4e4bc395a6249d74dcb6dd145cc",
+      "pptxSha256": "2d13a9cbd6684dd65418a7a19e6ace8fbdb7ebf7c5afd6e409afcea6ee98f928"
+    },
+    {
+      "measured": true,
+      "width": 720,
+      "height": 1280,
+      "floor": 32,
+      "fixture": 2,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "•",
+          "path": "slides.0.items",
+          "size": 66.667,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "First idea",
+          "path": "slides.0.items.0.text",
+          "size": 66.667,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Supporting detail.",
+          "path": "slides.0.items.0.description",
+          "size": 54.667,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "•",
+          "path": "slides.0.items",
+          "size": 66.667,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Second idea",
+          "path": "slides.0.items.1.text",
+          "size": 66.667,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Small request",
+          "path": "slides.0.items.1.description",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 24
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "First idea",
+          "points": 50
+        },
+        {
+          "text": "Supporting detail.",
+          "points": 41
+        },
+        {
+          "text": "Second idea",
+          "points": 50
+        },
+        {
+          "text": "Small request",
+          "points": 24
+        }
+      ],
+      "svgSha256": "bbaeee878e9a7156b68bd67e7bb087e82a0cf25d6b3d70abb7e13486603a177b",
+      "pptxSha256": "33d5440dee711c305f183aaeceb5a80aca66f57cf19184d61fa2ac34bd44ccf8"
+    },
+    {
+      "measured": true,
+      "width": 720,
+      "height": 1280,
+      "floor": 32,
+      "fixture": 3,
+      "glyphs": [
+        {
+          "text": "Floor test",
+          "path": "slides.0.tag",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable source",
+          "path": "slides.0.title",
+          "size": 54,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Item",
+          "path": "slides.0.table.columns.0",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Value",
+          "path": "slides.0.table.columns.1",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Plain cell",
+          "path": "slides.0.table.rows.0.0",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Visible ",
+          "path": "slides.0.table.rows.0.1",
+          "size": 85.333,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "small requested ",
+          "path": "slides.0.table.rows.0.1",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "run",
+          "path": "slides.0.table.rows.0.1",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": " and ",
+          "path": "slides.0.table.rows.0.1",
+          "size": 85.333,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "x",
+          "path": "slides.0.table.rows.0.1",
+          "size": 85.333,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "2",
+          "path": "slides.0.table.rows.0.1",
+          "size": 59.733,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Second row",
+          "path": "slides.0.table.rows.1.0",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        },
+        {
+          "text": "Readable data",
+          "path": "slides.0.table.rows.1.1",
+          "size": 32,
+          "family": "Roboto, sans-serif"
+        }
+      ],
+      "native": [
+        {
+          "text": "Floor test",
+          "points": 24
+        },
+        {
+          "text": "Readable source",
+          "points": 40.5
+        },
+        {
+          "text": "Item",
+          "points": 24
+        },
+        {
+          "text": "Value",
+          "points": 24
+        },
+        {
+          "text": "Plain cell",
+          "points": 24
+        },
+        {
+          "text": "Visible ",
+          "points": 64
+        },
+        {
+          "text": "small requested run",
+          "points": 24
+        },
+        {
+          "text": " and x",
+          "points": 64
+        },
+        {
+          "text": "2",
+          "points": 44.8
+        },
+        {
+          "text": "Second row",
+          "points": 24
+        },
+        {
+          "text": "Readable data",
+          "points": 24
+        }
+      ],
+      "svgSha256": "6c7ce4af313eaaed44426a50de84a81f38e58e2ce235cfe1fd381f425f29b0f3",
+      "pptxSha256": "1c02215a5ef5bf152a085982eb13e255349cf71d8a6bd993dbbd1e0ba4fe8636"
+    }
+  ],
+  "errors": [],
+  "requests": [],
+  "scope": "48 offline measured/estimated wide/portrait browser cases at selected floors 16/24/32; actual SVG glyph font sizes and separately parsed editable native run sizes. Source metadata stays exact. Browser sizes allow 0.0001px serialization precision and native sizes allow half a 0.01pt unit. No native Office execution, raster equivalence or general layout-quality certification."
+}

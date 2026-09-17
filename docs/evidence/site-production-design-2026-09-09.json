@@ -1,0 +1,118 @@
+{
+  "checkedAt": "2026-09-09T20:16:20.159Z",
+  "origin": "https://www.openpresentation.org",
+  "repository": "Data-Advantage/openpresentation-site",
+  "sourceCommit": "31c84759c044480045a07f1e150149ecb2a423d3",
+  "deployment": {
+    "id": "dpl_9q2ihhJXVxnWzcjizev6M2GSVMDS",
+    "state": "READY",
+    "target": "production",
+    "aliases": [
+      "openpresentation.org",
+      "www.openpresentation.org"
+    ],
+    "observedThrough": "Authenticated Vercel deployment lookup for the production alias"
+  },
+  "registryReleases": "All five current package versions and every core publication date verified against the live npm registry by scripts/verify-releases.mjs --registry",
+  "toolchain": {
+    "source": "npm",
+    "packages": [
+      {
+        "name": "@openpresentation/opf",
+        "version": "0.7.0",
+        "tarball": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.7.0.tgz",
+        "integrity": "sha512-ZYODnLgMSG1129eujM4CDGpkcF5CLoKr3bkZ713L04Gvh8VTHOudfPM4ICqngMBpRtcRXyoGaVSllLq2djIo1Q=="
+      },
+      {
+        "name": "@openpresentation/opf-render",
+        "version": "0.5.1",
+        "tarball": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.5.1.tgz",
+        "integrity": "sha512-rV3rMmSG/3Fl/75k4or+G4/OPZMkVj2ByOCg30ERGXQMhSxZ6o09pdTkhOVxbd2O7kpEuplZrQnSO6XWfW038w=="
+      },
+      {
+        "name": "@openpresentation/opf-editor",
+        "version": "0.4.0",
+        "tarball": "https://registry.npmjs.org/@openpresentation/opf-editor/-/opf-editor-0.4.0.tgz",
+        "integrity": "sha512-5KhsDeLQdjWy2flkrrQMSEi57Z1XoCmNujpL9KOjt5+zDDtVXUHu1ospyh7SCKuoPwp3/mv+hWJuXkHOWCNrHA=="
+      },
+      {
+        "name": "@openpresentation/opf-pptx",
+        "version": "0.5.2",
+        "tarball": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.5.2.tgz",
+        "integrity": "sha512-I0Amtam9QxwUP7J739NU+FxOconhF5eRYJZWEA0HYAakDnsbKAVSIRvY0A+K3l7CIEkhPFWk/ZMNKFfJtIsQaw=="
+      },
+      {
+        "name": "@openpresentation/cli",
+        "version": "0.5.0",
+        "tarball": "https://registry.npmjs.org/@openpresentation/cli/-/cli-0.5.0.tgz",
+        "integrity": "sha512-zStGUvtciPZcRz7U9bwV5vYaF0BpoXY8De2sCATHBWXNEtbozakBzi0JmT3hseyv08e4yYx4rlJqMRn6e1LzMw=="
+      }
+    ]
+  },
+  "showcaseManifestSha256": "d07f2fcdf6d820c5fe17e55b12dfcc158804192d9c8fa373f3cf585899b5997b",
+  "showcaseManifestMatchesSource": true,
+  "assets": [
+    {
+      "file": "example.opf.json",
+      "bytes": 826,
+      "sha256": "902d6bd9de957598a123e5919ae0dd602e0241d27bdfc406c936c7c43a3d0dbd"
+    },
+    {
+      "file": "example.svg",
+      "bytes": 431751,
+      "sha256": "de84138f9a1bb04e77468754fc56622d161d56507c5f6eb923737b08f2a63e93"
+    },
+    {
+      "file": "example.pptx",
+      "bytes": 15113,
+      "sha256": "5cd591c6a01c644f618667865d94ae95cbf603f573e80419f88eef602490ec5f"
+    }
+  ],
+  "skillsManifestSha256": "58257f86d81dd5eb2bd63c36b656afd0a23fb1af0e521a53accdc34a99d90d80",
+  "skills": [
+    {
+      "name": "opf-author",
+      "fileCount": 4
+    },
+    {
+      "name": "opf-edit",
+      "fileCount": 3
+    },
+    {
+      "name": "opf-export",
+      "fileCount": 3
+    },
+    {
+      "name": "opf-inspect",
+      "fileCount": 3
+    },
+    {
+      "name": "opf-layout",
+      "fileCount": 3
+    },
+    {
+      "name": "opf-presets",
+      "fileCount": 3
+    }
+  ],
+  "publicBrowser": {
+    "browser": "Edge 152.0.4191.66",
+    "node": "24.20.0",
+    "tests": 6,
+    "seconds": 16.9,
+    "status": "passed",
+    "sourceFiles": [
+      "tests/e2e/published-site.spec.ts",
+      "tests/e2e/reference-playground.spec.ts"
+    ],
+    "workflows": [
+      "Six complete skills and clipboard installer command",
+      "Published release links, dates and anchor navigation",
+      "Mobile changelog containment",
+      "Exact OPF/SVG/PPTX download bytes",
+      "Offline valid/advisory/invalid/malformed JSON recovery",
+      "Complete Markdown copy, reference anchors and LLM exports"
+    ]
+  },
+  "boundary": "Reverification of an independently merged design update. No deployment or package changed here. The three showcase artifacts match the registry release manifest; arbitrary compiled frontend JavaScript was not rebuilt for byte-equivalence. No new native raster evidence."
+}

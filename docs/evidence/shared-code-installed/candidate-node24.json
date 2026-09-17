@@ -1,0 +1,2419 @@
+{
+  "node": "v24.20.0",
+  "mode": "candidate-tarballs",
+  "consumer": "artifacts/npm/consumer",
+  "lockSha256": "88656c9a611b9515cd872c0a0d22a5db5d32a8eab75b658754b21c6261b85e3e",
+  "packages": [
+    {
+      "name": "@openpresentation/opf",
+      "version": "0.4.0-preview.11",
+      "file": "openpresentation-opf-0.4.0-preview.11.tgz",
+      "sha256": "5f4be4912d642065fad6b2595cd6607c748e6c5c6c29962c863e96aa9caeaa28",
+      "bytes": 636239,
+      "installedVersion": "0.4.0-preview.11",
+      "integrity": "sha512-nBLDP4HRzmscgrriHC4h5mwlSxIB7R2vDA9fT1wKAtgYSposm1c1lQv87/2qBEKDq38QUBphxgkco9gxrLpE3w=="
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "version": "0.1.0-preview.11",
+      "file": "openpresentation-opf-render-0.1.0-preview.11.tgz",
+      "sha256": "f92d6e5bb52407db1d9baebb9cd5261f9c413812bda1b3108f8259e8057e2a90",
+      "bytes": 33250,
+      "installedVersion": "0.1.0-preview.11",
+      "integrity": "sha512-yeKAl9DaCqIqaBaZcZfCsLLCTSxY6Ql6thbELUVFQpNb5JZN3YirbRZB4jGpf6l9+wXTQGHQRkSOu1jIRsGtWQ=="
+    },
+    {
+      "name": "@openpresentation/opf-editor",
+      "version": "0.1.0-preview.11",
+      "file": "openpresentation-opf-editor-0.1.0-preview.11.tgz",
+      "sha256": "dde1b1821f36701e9f13c640ca9e96ddacced1b1c848db07b9524b207fb33ef0",
+      "bytes": 55714,
+      "installedVersion": "0.1.0-preview.11",
+      "integrity": "sha512-LpwBeGibc5Jmf+P36VFnYMCc7r5dQtUmrmQ7jsoX1B2prObZM+gPmYPQCbWjl6b6nob3bH2uPt+n5I4CCpUVAg=="
+    },
+    {
+      "name": "@openpresentation/opf-pptx",
+      "version": "0.1.0-preview.11",
+      "file": "openpresentation-opf-pptx-0.1.0-preview.11.tgz",
+      "sha256": "2b8cd1404d71a2f2efac8ec3d0a2cf4da8e50561fb1ab36e6973e757ac05d42d",
+      "bytes": 197750,
+      "installedVersion": "0.1.0-preview.11",
+      "integrity": "sha512-uav/TpdwLVA3Qctutk2eFvZUXMrlL5idAtTsXnl1p7ZJJrTNL670wXkyEfKh64sUK2eYR/VEUfIUQ1ZInyFVSQ=="
+    }
+  ],
+  "runtime": {
+    "@openpresentation/opf/dist/catalogs.js": "6d74d7b051844728b2622acdb5268472a043544c8b2ca04eb904b1cdf74ec739",
+    "@openpresentation/opf/dist/chunk-3GPZMY2W.js": "b68a9153ca83f169ad7c7692005cab0696cbba0a698afa06457615f64d0b6b87",
+    "@openpresentation/opf/dist/chunk-GQSK3T7X.js": "34f518c29c9757bc252b5c13eb5d7db8ada4b477496e6289d8149fb4fdc7cd45",
+    "@openpresentation/opf/dist/chunk-JA5W5TVA.js": "9617ee45fd259a0b060831f019f19672e1f5d860a3728b5a126019d6f7cad51c",
+    "@openpresentation/opf/dist/chunk-OZULJBSG.js": "9e3ce45dc68d39c646449baf4ec9aad7b92d3f69b85a3dfe37540d13820d0d1e",
+    "@openpresentation/opf/dist/chunk-PIQXLBBJ.js": "818578357a214f76a743db8cf63c0903825923e1ba970abf68c21912e59893ba",
+    "@openpresentation/opf/dist/chunk-SOSOBKQ2.js": "b2bcaf1f0e8725c9a8f3fff9b5c996c4e7e63c6bb8dd4d13c2d7609105b02915",
+    "@openpresentation/opf/dist/chunk-TWMRZ43O.js": "0d35cec97ec7ddaa67fb9f096bc672c927eb68ed5fae5ac27d4dff70d68313f4",
+    "@openpresentation/opf/dist/chunk-ZGV6I23P.js": "a6ecf201e1543162d2ac22ef731cfaf7239160c696455679126ad7883ff0011b",
+    "@openpresentation/opf/dist/composition.js": "6c77b9883ea592f6e67a6fac262e8c1dbd81968e6bd8b13d80cc7fe9f16f073e",
+    "@openpresentation/opf/dist/data.js": "ae68ff3088ddcea772573952c572a3c58b8815086c9f81e57939d45848c64b95",
+    "@openpresentation/opf/dist/docs.js": "eec0bff6918696ca74419f3eda051540cc7f9482fcc0b9928d61c757b0abe128",
+    "@openpresentation/opf/dist/examples.js": "29a65e209b6daf91e20f73deccde2af09e1265a0dfe3c113ba7debd0b4bed02b",
+    "@openpresentation/opf/dist/index.js": "45e949094614de7bee9bbd3b523c0e7db24863074a984ed86ca5aa1e2db4b97f",
+    "@openpresentation/opf/dist/pagination.js": "09d5144d900b2dcad6f5097d91d597215e5d4c6367333c4a4a2181f1a080b44a",
+    "@openpresentation/opf/dist/previews.js": "043037d2d5dfec4d69072415032818d6a6c5e686938fcd644a4f103286033950",
+    "@openpresentation/opf/dist/repo-readme.js": "a8177f828c853554ce636a0ca702efb63d79f96175f5440f35c32e6834ac215a",
+    "@openpresentation/opf/dist/schemas.js": "52f40eb788685649099577a9241adb75c5f18b4a5c8cf1e55215b6fa3f52105c",
+    "@openpresentation/opf/dist/spec-files.js": "8302d015b9368a585ee6aea946a18b2f0036396acb963e273baee48a0c4ac817",
+    "@openpresentation/opf/dist/types.js": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "@openpresentation/opf/dist/validator.js": "b6b8a02e1ee7f3b3c83382a2cd95bf03976165171c31f68583ee5cadc663db47",
+    "@openpresentation/opf-render/dist/font-compatibility.js": "a50ee71748e81cd12ed3aeb6eee92506ebf91ef05021c6ca3f5a100665d03dac",
+    "@openpresentation/opf-render/dist/fonts-browser.js": "d0543d838b2f22a8c70bdc60100d72d3c69e3f8033d5ccedd3523ee63c66b8d4",
+    "@openpresentation/opf-render/dist/fonts-node.js": "0e65abd7438f3a21fd0cb6ea64120d9e866ef3308510910d11b7b863399f8d8b",
+    "@openpresentation/opf-render/dist/fonts.js": "549932e2d013f1f623cd83973b40cbed68c63d52535adb2de6fd921d16bf400c",
+    "@openpresentation/opf-render/dist/index.js": "39c8f2b279ce10873f00289349b84cf9cab7e12c56e9e0d87447bd2406777234",
+    "@openpresentation/opf-render/dist/raster-images.js": "304cffe5e77553ac1ab590fc5805714dde34e6f69df5dc55e35dbc8df602753c",
+    "@openpresentation/opf-render/dist/raster.js": "6ea807bfd43ddaabea95c1137bc1bcf7d656f2ae9c6d87a7e6d2f867df86ea99",
+    "@openpresentation/opf-render/dist/svg.js": "c1874ee6111ae51471b1e1108d3990a0f423a72c6fab97500f361502102c0a82",
+    "@openpresentation/opf-editor/dist/block-controls.js": "21f68e59d44f67069f78b19a2dfa355c0f424973cc138bd6e3b0021b0117702c",
+    "@openpresentation/opf-editor/dist/blocks.js": "f9926a4cb8c2b0380ffbe67055a428d01089873141af401edb72d8ebe6e7cdaf",
+    "@openpresentation/opf-editor/dist/canvas-fields.js": "04694e60e3369de9f6eb438e2e38a719cb79948b4207d9e43bc800703af5bd19",
+    "@openpresentation/opf-editor/dist/canvas.js": "7b5f4e8410596960143c97cdddd1fb4893fac1469551fb54155f6228f1e321ad",
+    "@openpresentation/opf-editor/dist/data.js": "32d3d8d7ca017a574ac791541ab1a2bb024dcff386ff1e5c5c1ac845b33d3dff",
+    "@openpresentation/opf-editor/dist/galleries.js": "239539250f0bfa1ff02e5a717213bd6f40305221b43a78ff707df3c683208ada",
+    "@openpresentation/opf-editor/dist/index.js": "4731feaff16f5bfd285e8cf8799a5016fad3ec5a1f736acfba9fa6f73ef8f30b",
+    "@openpresentation/opf-editor/dist/layout-handles.js": "e9f9d4197cae2fe07825abc894fd6243ea35c3d70974762d1a9021bd23781414",
+    "@openpresentation/opf-editor/dist/layout.js": "de8dc48f08a7c4ed6c99fcbcfa3e4508930d7b306827fc2cd29865c190141df8",
+    "@openpresentation/opf-editor/dist/react.js": "df35ad472e11395a75549281d398171e1b1d345d2631a9f5f16c2f701c53b4f0",
+    "@openpresentation/opf-editor/dist/rich-text-input.js": "b29c64566988aaaa541e8e8a38d3ad350dc579e6f03728a03ccc256227293167",
+    "@openpresentation/opf-editor/dist/rich-text-toolbar.js": "9faf7b196f10b7e729768b586eb42bf6dd67c128c88fe62c33098d61b4916deb",
+    "@openpresentation/opf-editor/dist/rich-text.js": "0479bc3315dcfbffd8463222db265864ee3e4938f8a7e9df5fc7e2a4540d9c28",
+    "@openpresentation/opf-editor/dist/schema-inspector.js": "b61ac5c0574edd2f91c6cccb8f8b15d4ee518e354087e260bd649ddd5e943d3e",
+    "@openpresentation/opf-editor/dist/schema.js": "d6882c45665318b8e311a3bd83ed76f87b784f24e8ef5f80566eebae4b0dd765",
+    "@openpresentation/opf-editor/dist/svelte.js": "ee6582606f927aeeb2947134e28c234c31a63035c2aef35d009dec5a83450cd4",
+    "@openpresentation/opf-editor/dist/transfer.js": "5b87f9a36b2a22ed690e21cacb69ce340cc735443758c98143530032b1c46abc",
+    "@openpresentation/opf-pptx/dist/background-import.js": "684f9b38cff01e596774b8120c979c3dbbfada273890f785f7a4e3db88cdcb22",
+    "@openpresentation/opf-pptx/dist/background.js": "081fb685677ca656341cdce89275331749174ffecd60e71451f26b9f896cca1c",
+    "@openpresentation/opf-pptx/dist/code-provenance.js": "1c7af17306cd58bcec1cb72c4333edaebc4b5a5f41a439763e1617c0b8f2d0bf",
+    "@openpresentation/opf-pptx/dist/image-fallback-browser.js": "3c7f81d5677dd9a78a0a13fe5a94bbb14cef465031caaeda2c87e8451e9ff491",
+    "@openpresentation/opf-pptx/dist/image-fallback-node.js": "5ee323d3320420664b5d2c1714e246b04dd0806f459164f9696668552df87565",
+    "@openpresentation/opf-pptx/dist/image-geometry.js": "e083973a98c2bdf7d7dfce9ef1f6bef252f09ce0d69d987105ee0b73cc13d62e",
+    "@openpresentation/opf-pptx/dist/image-import.js": "cffccecc223e27d62b6e1aba0cdbe2c1c9aa94874ef898f76906b22e001bbd41",
+    "@openpresentation/opf-pptx/dist/index.js": "5e253cafbc99dc0acb1c27c9e6fb7d9657a83b98bc3fc1e51ee98416841da446",
+    "@openpresentation/opf-pptx/dist/table-border-import.js": "16678e0d93e63474d39daac268016a59517cc36d85dbd8751131f143db01ace5",
+    "@openpresentation/opf-pptx/dist/table-cell-import.js": "fa17507763a2240564401d7977f4f39bc180e3e6da9d4aa9c36202908e9126d1",
+    "@openpresentation/opf-pptx/dist/table-import.js": "9ae40bb38dd34c9fc0ae4a3f5a257068ae92bb651ed5d96641c2629ef7106cf1",
+    "@openpresentation/opf-pptx/vendor/pptxgenjs/pptxgen.es.js": "05844c5625e2cda3b449eb967c2246dd57ca57341886a7c28eeebca263b29bd4"
+  },
+  "harnesses": [
+    {
+      "repo": "opf",
+      "sourceFile": "packages/javascript/test/code-layout.test.mjs",
+      "destination": "code-layout.test.mjs",
+      "sourceSha256": "7b4f35c45a613df0b5de50d11650665e2c5e7bd060ad2358ea2636381d9b1022",
+      "executedSha256": "255b64461bc13754e07a647d11798a293e520d31b239491dc3b7e4cd81296e75"
+    },
+    {
+      "repo": "opf",
+      "sourceFile": "packages/javascript/test/code-composition.test.mjs",
+      "destination": "code-composition.test.mjs",
+      "sourceSha256": "de124fbb8901b610813065de518c57fc0b3d36820676ca23aa6d6106d7cecc97",
+      "executedSha256": "3881730bae7967e5d7c6bcc55435db797eae758a1de1513cc01b0a5f4f808660"
+    },
+    {
+      "repo": "opf-pptx",
+      "sourceFile": "test/shared-code.mjs",
+      "destination": "pptx-shared-code.mjs",
+      "sourceSha256": "0f62f7c253072b0074795fdb649c59dab1694dc39650d33e2f654075aca74042",
+      "executedSha256": "2f92f0e9a5134804d004a11d5bdbe9c32ca70307321044287fb05e2c7f47dd86"
+    },
+    {
+      "repo": "opf-pptx",
+      "sourceFile": "test/code-provenance.mjs",
+      "destination": "pptx-code-provenance.mjs",
+      "sourceSha256": "ce16842b321e1eb33558be6f5e4e526cde645635028ae369df24d1c63b421cda",
+      "executedSha256": "f551e475119672a211dcaa8806bfcc1be300210ac0c140b49e9f964708bfe172"
+    },
+    {
+      "repo": "opf-render",
+      "sourceFile": "test/shared-code.mjs",
+      "destination": "renderer-code.mjs",
+      "sourceSha256": "f7e6bee3513e0492783bb5642f8ad4422c3822bc7caa12b0cbd22bb08d917f91",
+      "executedSha256": "42d0fe1020274cc617ee276b339dd11a4051cbac23981282e77484480fb8bb5f"
+    },
+    {
+      "repo": "opf-render",
+      "sourceFile": "test/shared-code-browser.mjs",
+      "destination": "opf-render-installed-code-browser.mjs",
+      "sourceSha256": "18ece6e96e5df5fb9750c85e00087b5efebd415134a662c95cc4a8e641fe1b27",
+      "executedSha256": "59bf14adc3733157cbc52d9e92f39ddc819ae1eecbab77034e861dfbe1765545"
+    },
+    {
+      "repo": "opf-editor",
+      "sourceFile": "test/code-browser.mjs",
+      "destination": "opf-editor-installed-code-browser.mjs",
+      "sourceSha256": "75b5b74676edea774d69bacbf3b33cd4b447c3a89c46663699478c3198ddcf86",
+      "executedSha256": "85bad87a3a15c1625787c1894e3b5cb55ff76b0bdc41bd56d84c020a363c98be"
+    }
+  ],
+  "browserReports": [
+    {
+      "file": "opf-render-installed-code-browser.json",
+      "sha256": "cc13c304520bb715e481fb3a29e89b0deb797f3180fa793edd9ad14684171ac3",
+      "report": {
+        "browser": "152.0.4191.66",
+        "platform": "win32",
+        "verifierSha256": "59bf14adc3733157cbc52d9e92f39ddc819ae1eecbab77034e861dfbe1765545",
+        "rendererSha256": "c1874ee6111ae51471b1e1108d3990a0f423a72c6fab97500f361502102c0a82",
+        "fontHashes": [
+          {
+            "family": "Cousine",
+            "weight": 400,
+            "sha256": "ca2264d6750d6c47df703be4486361a37ab943d42de6ea2bf794b7c7af767799"
+          },
+          {
+            "family": "Cousine",
+            "weight": 700,
+            "sha256": "f03c46c4bc5c0a3af4a1f4fbe5e3e16954581cced05cea20b3bffe12740d99d3"
+          }
+        ],
+        "results": [
+          {
+            "id": "shorthand-1280",
+            "svgSha256": "1628fd3e0f03c6025d1b156c874abe57816d3d9ab67397374ad5f7e963a53bb2",
+            "parts": [
+              {
+                "role": "language",
+                "sourcePreserved": true,
+                "box": {
+                  "x": 75.6,
+                  "y": 75.6,
+                  "width": 1128.8,
+                  "height": 29.28
+                },
+                "lines": [
+                  {
+                    "expectedWidth": 57.609375,
+                    "actualAdvance": 57.609375,
+                    "advanceDifference": 0,
+                    "bbox": {
+                      "x": 75.5999984741211,
+                      "y": 79.5999984741211,
+                      "width": 57.60938262939453,
+                      "height": 27
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 75.6,
+                        "start": 75.5999984741211,
+                        "expectedWidth": 57.609375,
+                        "actualAdvance": 57.609375
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "role": "body",
+                "sourcePreserved": true,
+                "box": {
+                  "x": 75.6,
+                  "y": 116.88,
+                  "width": 1128.8,
+                  "height": 527.52
+                },
+                "lines": [
+                  {
+                    "expectedWidth": 489.6796875,
+                    "actualAdvance": 489.6871337890625,
+                    "advanceDifference": 0.0074462890625,
+                    "bbox": {
+                      "x": 75.5999984741211,
+                      "y": 120.8800048828125,
+                      "width": 489.6871032714844,
+                      "height": 27
+                    },
+                    "segments": [
+                      {
+                        "kind": "tab",
+                        "expectedX": 75.6,
+                        "start": 75.5999984741211,
+                        "expectedWidth": 57.609375,
+                        "actualAdvance": 57.60900115966797
+                      },
+                      {
+                        "kind": "text",
+                        "expectedX": 133.209375,
+                        "start": 133.20899963378906,
+                        "expectedWidth": 432.0703125,
+                        "actualAdvance": 432.078125
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 0,
+                    "actualAdvance": 0,
+                    "advanceDifference": 0,
+                    "bbox": {
+                      "x": 0,
+                      "y": 0,
+                      "width": 0,
+                      "height": 0
+                    },
+                    "segments": []
+                  },
+                  {
+                    "expectedWidth": 57.609375,
+                    "actualAdvance": 57.609375,
+                    "advanceDifference": 0,
+                    "bbox": {
+                      "x": 75.5999984741211,
+                      "y": 179.44000244140625,
+                      "width": 57.60938262939453,
+                      "height": 27
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 75.6,
+                        "start": 75.5999984741211,
+                        "expectedWidth": 57.609375,
+                        "actualAdvance": 57.609375
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 0,
+                    "actualAdvance": 0,
+                    "advanceDifference": 0,
+                    "bbox": {
+                      "x": 0,
+                      "y": 0,
+                      "width": 0,
+                      "height": 0
+                    },
+                    "segments": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "metadata-1280",
+            "svgSha256": "4b65f33951493264e72e272be3e4c4149638b757e8ee4b6d956f247fe7758b6e",
+            "parts": [
+              {
+                "role": "filename",
+                "sourcePreserved": true,
+                "box": {
+                  "x": 75.6,
+                  "y": 75.6,
+                  "width": 1128.8,
+                  "height": 29.28
+                },
+                "lines": [
+                  {
+                    "expectedWidth": 288.046875,
+                    "actualAdvance": 288.0582580566406,
+                    "advanceDifference": 0.011383056640625,
+                    "bbox": {
+                      "x": 75.5999984741211,
+                      "y": 79.5999984741211,
+                      "width": 288.0464782714844,
+                      "height": 27
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 75.6,
+                        "start": 75.5999984741211,
+                        "expectedWidth": 43.20703125,
+                        "actualAdvance": 43.21875
+                      },
+                      {
+                        "kind": "tab",
+                        "expectedX": 118.80703125,
+                        "start": 118.80699920654297,
+                        "expectedWidth": 14.40234375,
+                        "actualAdvance": 14.402000427246094
+                      },
+                      {
+                        "kind": "text",
+                        "expectedX": 133.209375,
+                        "start": 133.20899963378906,
+                        "expectedWidth": 230.4375,
+                        "actualAdvance": 230.4375
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "role": "language",
+                "sourcePreserved": true,
+                "box": {
+                  "x": 75.6,
+                  "y": 112.88,
+                  "width": 1128.8,
+                  "height": 29.28
+                },
+                "lines": [
+                  {
+                    "expectedWidth": 144.0234375,
+                    "actualAdvance": 144.03125,
+                    "advanceDifference": 0.0078125,
+                    "bbox": {
+                      "x": 75.5999984741211,
+                      "y": 116.8800048828125,
+                      "width": 144.03125,
+                      "height": 27
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 75.6,
+                        "start": 75.5999984741211,
+                        "expectedWidth": 144.0234375,
+                        "actualAdvance": 144.03125
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "role": "body",
+                "sourcePreserved": true,
+                "box": {
+                  "x": 75.6,
+                  "y": 154.16,
+                  "width": 1128.8,
+                  "height": 490.24
+                },
+                "lines": [
+                  {
+                    "expectedWidth": 72.01171875,
+                    "actualAdvance": 72.01950073242188,
+                    "advanceDifference": 0.007781982421875,
+                    "bbox": {
+                      "x": 75.5999984741211,
+                      "y": 158.16000366210938,
+                      "width": 72.01525115966797,
+                      "height": 27
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 75.6,
+                        "start": 75.5999984741211,
+                        "expectedWidth": 14.40234375,
+                        "actualAdvance": 14.40625
+                      },
+                      {
+                        "kind": "tab",
+                        "expectedX": 90.00234375,
+                        "start": 90.00199890136719,
+                        "expectedWidth": 43.20703125,
+                        "actualAdvance": 43.207000732421875
+                      },
+                      {
+                        "kind": "text",
+                        "expectedX": 133.209375,
+                        "start": 133.20899963378906,
+                        "expectedWidth": 14.40234375,
+                        "actualAdvance": 14.40625
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 129.62109375,
+                    "actualAdvance": 129.6246337890625,
+                    "advanceDifference": 0.0035400390625,
+                    "bbox": {
+                      "x": 75.5999984741211,
+                      "y": 187.44000244140625,
+                      "width": 129.625244140625,
+                      "height": 27
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 75.6,
+                        "start": 75.5999984741211,
+                        "expectedWidth": 57.609375,
+                        "actualAdvance": 57.609375
+                      },
+                      {
+                        "kind": "tab",
+                        "expectedX": 133.209375,
+                        "start": 133.20899963378906,
+                        "expectedWidth": 57.609375,
+                        "actualAdvance": 57.60900115966797
+                      },
+                      {
+                        "kind": "text",
+                        "expectedX": 190.81875,
+                        "start": 190.81900024414062,
+                        "expectedWidth": 14.40234375,
+                        "actualAdvance": 14.40625
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 115.21875,
+                    "actualAdvance": 115.21800231933594,
+                    "advanceDifference": -0.0007476806640625,
+                    "bbox": {
+                      "x": 75.5999984741211,
+                      "y": 216.72000122070312,
+                      "width": 115.2179946899414,
+                      "height": 27
+                    },
+                    "segments": [
+                      {
+                        "kind": "tab",
+                        "expectedX": 75.6,
+                        "start": 75.5999984741211,
+                        "expectedWidth": 57.609375,
+                        "actualAdvance": 57.60900115966797
+                      },
+                      {
+                        "kind": "tab",
+                        "expectedX": 133.209375,
+                        "start": 133.20899963378906,
+                        "expectedWidth": 57.609375,
+                        "actualAdvance": 57.60900115966797
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 201.6328125,
+                    "actualAdvance": 201.64837646484375,
+                    "advanceDifference": 0.01556396484375,
+                    "bbox": {
+                      "x": 75.5999984741211,
+                      "y": 246,
+                      "width": 201.640869140625,
+                      "height": 27
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 75.6,
+                        "start": 75.5999984741211,
+                        "expectedWidth": 14.40234375,
+                        "actualAdvance": 14.40625
+                      },
+                      {
+                        "kind": "tab",
+                        "expectedX": 90.00234375,
+                        "start": 90.00199890136719,
+                        "expectedWidth": 43.20703125,
+                        "actualAdvance": 43.207000732421875
+                      },
+                      {
+                        "kind": "text",
+                        "expectedX": 133.209375,
+                        "start": 133.20899963378906,
+                        "expectedWidth": 14.40234375,
+                        "actualAdvance": 14.40625
+                      },
+                      {
+                        "kind": "tab",
+                        "expectedX": 147.61171875,
+                        "start": 147.61199951171875,
+                        "expectedWidth": 43.20703125,
+                        "actualAdvance": 43.207000732421875
+                      },
+                      {
+                        "kind": "text",
+                        "expectedX": 190.81875,
+                        "start": 190.81900024414062,
+                        "expectedWidth": 86.4140625,
+                        "actualAdvance": 86.421875
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "language-1280",
+            "svgSha256": "5e8557202da71a51b1964fc7e00fbf2ef08bff86c8b8ceabd751ccc03b6dc7d1",
+            "parts": [
+              {
+                "role": "language",
+                "sourcePreserved": true,
+                "box": {
+                  "x": 75.6,
+                  "y": 75.6,
+                  "width": 1128.8,
+                  "height": 175.68
+                },
+                "lines": [
+                  {
+                    "expectedWidth": 1123.3828125,
+                    "actualAdvance": 1123.390625,
+                    "advanceDifference": 0.0078125,
+                    "bbox": {
+                      "x": 75.5999984741211,
+                      "y": 79.5999984741211,
+                      "width": 1123.390625,
+                      "height": 27
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 75.6,
+                        "start": 75.5999984741211,
+                        "expectedWidth": 1123.3828125,
+                        "actualAdvance": 1123.390625
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 1123.3828125,
+                    "actualAdvance": 1123.390625,
+                    "advanceDifference": 0.0078125,
+                    "bbox": {
+                      "x": 75.5999984741211,
+                      "y": 108.8800048828125,
+                      "width": 1123.98046875,
+                      "height": 27
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 75.6,
+                        "start": 75.5999984741211,
+                        "expectedWidth": 1123.3828125,
+                        "actualAdvance": 1123.390625
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 1123.3828125,
+                    "actualAdvance": 1123.390625,
+                    "advanceDifference": 0.0078125,
+                    "bbox": {
+                      "x": 75.5999984741211,
+                      "y": 138.16000366210938,
+                      "width": 1123.390625,
+                      "height": 27
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 75.6,
+                        "start": 75.5999984741211,
+                        "expectedWidth": 1123.3828125,
+                        "actualAdvance": 1123.390625
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 1123.3828125,
+                    "actualAdvance": 1123.390625,
+                    "advanceDifference": 0.0078125,
+                    "bbox": {
+                      "x": 75.5999984741211,
+                      "y": 167.44000244140625,
+                      "width": 1123.390625,
+                      "height": 27
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 75.6,
+                        "start": 75.5999984741211,
+                        "expectedWidth": 1123.3828125,
+                        "actualAdvance": 1123.390625
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 1123.3828125,
+                    "actualAdvance": 1123.390625,
+                    "advanceDifference": 0.0078125,
+                    "bbox": {
+                      "x": 75.5999984741211,
+                      "y": 196.72000122070312,
+                      "width": 1123.390625,
+                      "height": 27
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 75.6,
+                        "start": 75.5999984741211,
+                        "expectedWidth": 1123.3828125,
+                        "actualAdvance": 1123.390625
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 144.0234375,
+                    "actualAdvance": 144.03125,
+                    "advanceDifference": 0.0078125,
+                    "bbox": {
+                      "x": 75.5999984741211,
+                      "y": 226,
+                      "width": 144.03125,
+                      "height": 27
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 75.6,
+                        "start": 75.5999984741211,
+                        "expectedWidth": 144.0234375,
+                        "actualAdvance": 144.03125
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "role": "body",
+                "sourcePreserved": true,
+                "box": {
+                  "x": 75.6,
+                  "y": 263.28,
+                  "width": 1128.8,
+                  "height": 381.12
+                },
+                "lines": [
+                  {
+                    "expectedWidth": 129.62109375,
+                    "actualAdvance": 129.625,
+                    "advanceDifference": 0.00390625,
+                    "bbox": {
+                      "x": 75.5999984741211,
+                      "y": 267.2799987792969,
+                      "width": 129.625,
+                      "height": 27
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 75.6,
+                        "start": 75.5999984741211,
+                        "expectedWidth": 129.62109375,
+                        "actualAdvance": 129.625
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "filename-1280",
+            "svgSha256": "9be0513867242bc82ee7a7634181aa2e583eeb2a5e5e9a61816860c0353e352d",
+            "parts": [
+              {
+                "role": "filename",
+                "sourcePreserved": true,
+                "box": {
+                  "x": 75.6,
+                  "y": 75.6,
+                  "width": 1128.8,
+                  "height": 117.12
+                },
+                "lines": [
+                  {
+                    "expectedWidth": 1123.3828125,
+                    "actualAdvance": 1123.390625,
+                    "advanceDifference": 0.0078125,
+                    "bbox": {
+                      "x": 75.5999984741211,
+                      "y": 79.5999984741211,
+                      "width": 1123.390625,
+                      "height": 27
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 75.6,
+                        "start": 75.5999984741211,
+                        "expectedWidth": 1123.3828125,
+                        "actualAdvance": 1123.390625
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 1123.3828125,
+                    "actualAdvance": 1123.390625,
+                    "advanceDifference": 0.0078125,
+                    "bbox": {
+                      "x": 75.5999984741211,
+                      "y": 108.8800048828125,
+                      "width": 1123.390625,
+                      "height": 27
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 75.6,
+                        "start": 75.5999984741211,
+                        "expectedWidth": 1123.3828125,
+                        "actualAdvance": 1123.390625
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 1123.3828125,
+                    "actualAdvance": 1123.390625,
+                    "advanceDifference": 0.0078125,
+                    "bbox": {
+                      "x": 75.5999984741211,
+                      "y": 138.16000366210938,
+                      "width": 1123.390625,
+                      "height": 27
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 75.6,
+                        "start": 75.5999984741211,
+                        "expectedWidth": 1123.3828125,
+                        "actualAdvance": 1123.390625
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 302.44921875,
+                    "actualAdvance": 302.453125,
+                    "advanceDifference": 0.00390625,
+                    "bbox": {
+                      "x": 75.5999984741211,
+                      "y": 167.44000244140625,
+                      "width": 302.453125,
+                      "height": 27
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 75.6,
+                        "start": 75.5999984741211,
+                        "expectedWidth": 302.44921875,
+                        "actualAdvance": 302.453125
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "role": "body",
+                "sourcePreserved": true,
+                "box": {
+                  "x": 75.6,
+                  "y": 204.72,
+                  "width": 1128.8,
+                  "height": 439.67999999999995
+                },
+                "lines": [
+                  {
+                    "expectedWidth": 244.83984375,
+                    "actualAdvance": 244.84375,
+                    "advanceDifference": 0.00390625,
+                    "bbox": {
+                      "x": 75.5999984741211,
+                      "y": 208.72000122070312,
+                      "width": 244.84375,
+                      "height": 27
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 75.6,
+                        "start": 75.5999984741211,
+                        "expectedWidth": 244.83984375,
+                        "actualAdvance": 244.84375
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "wrapped-1280",
+            "svgSha256": "b90200464c6d4458547cb3d3cf0c741a295eafbd2c6e5dcf1a75c2365d3b9578",
+            "parts": [
+              {
+                "role": "language",
+                "sourcePreserved": true,
+                "box": {
+                  "x": 75.6,
+                  "y": 75.6,
+                  "width": 1128.8,
+                  "height": 29.28
+                },
+                "lines": [
+                  {
+                    "expectedWidth": 28.8046875,
+                    "actualAdvance": 28.8125,
+                    "advanceDifference": 0.0078125,
+                    "bbox": {
+                      "x": 75.5999984741211,
+                      "y": 79.5999984741211,
+                      "width": 28.8125,
+                      "height": 27
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 75.6,
+                        "start": 75.5999984741211,
+                        "expectedWidth": 28.8046875,
+                        "actualAdvance": 28.8125
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "role": "body",
+                "sourcePreserved": true,
+                "box": {
+                  "x": 75.6,
+                  "y": 116.88,
+                  "width": 1128.8,
+                  "height": 527.52
+                },
+                "lines": [
+                  {
+                    "expectedWidth": 360.05859375,
+                    "actualAdvance": 360.0625,
+                    "advanceDifference": 0.00390625,
+                    "bbox": {
+                      "x": 75.5999984741211,
+                      "y": 120.8800048828125,
+                      "width": 360.0625,
+                      "height": 27
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 75.6,
+                        "start": 75.5999984741211,
+                        "expectedWidth": 360.05859375,
+                        "actualAdvance": 360.0625
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 1123.3828125,
+                    "actualAdvance": 1123.390625,
+                    "advanceDifference": 0.0078125,
+                    "bbox": {
+                      "x": 75.5999984741211,
+                      "y": 150.16000366210938,
+                      "width": 1123.390625,
+                      "height": 27
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 75.6,
+                        "start": 75.5999984741211,
+                        "expectedWidth": 1123.3828125,
+                        "actualAdvance": 1123.390625
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 1123.3828125,
+                    "actualAdvance": 1123.390625,
+                    "advanceDifference": 0.0078125,
+                    "bbox": {
+                      "x": 75.5999984741211,
+                      "y": 179.44000244140625,
+                      "width": 1123.390625,
+                      "height": 27
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 75.6,
+                        "start": 75.5999984741211,
+                        "expectedWidth": 1123.3828125,
+                        "actualAdvance": 1123.390625
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 1123.3828125,
+                    "actualAdvance": 1123.390625,
+                    "advanceDifference": 0.0078125,
+                    "bbox": {
+                      "x": 75.5999984741211,
+                      "y": 208.72000122070312,
+                      "width": 1123.390625,
+                      "height": 27
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 75.6,
+                        "start": 75.5999984741211,
+                        "expectedWidth": 1123.3828125,
+                        "actualAdvance": 1123.390625
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 518.484375,
+                    "actualAdvance": 518.484375,
+                    "advanceDifference": 0,
+                    "bbox": {
+                      "x": 75.5999984741211,
+                      "y": 238,
+                      "width": 518.484375,
+                      "height": 27
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 75.6,
+                        "start": 75.5999984741211,
+                        "expectedWidth": 518.484375,
+                        "actualAdvance": 518.484375
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 273.64453125,
+                    "actualAdvance": 273.6558837890625,
+                    "advanceDifference": 0.0113525390625,
+                    "bbox": {
+                      "x": 75.5999984741211,
+                      "y": 267.2799987792969,
+                      "width": 273.6558532714844,
+                      "height": 27
+                    },
+                    "segments": [
+                      {
+                        "kind": "tab",
+                        "expectedX": 75.6,
+                        "start": 75.5999984741211,
+                        "expectedWidth": 57.609375,
+                        "actualAdvance": 57.60900115966797
+                      },
+                      {
+                        "kind": "text",
+                        "expectedX": 133.209375,
+                        "start": 133.20899963378906,
+                        "expectedWidth": 216.03515625,
+                        "actualAdvance": 216.046875
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 0,
+                    "actualAdvance": 0,
+                    "advanceDifference": 0,
+                    "bbox": {
+                      "x": 0,
+                      "y": 0,
+                      "width": 0,
+                      "height": 0
+                    },
+                    "segments": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "shorthand-540",
+            "svgSha256": "93d5ac084f0fdb5e2b55b952f273209f7bc0ae5ae7a58e834a444a9e3f641f81",
+            "parts": [
+              {
+                "role": "language",
+                "sourcePreserved": true,
+                "box": {
+                  "x": 61.2,
+                  "y": 61.2,
+                  "width": 417.6,
+                  "height": 21.96
+                },
+                "lines": [
+                  {
+                    "expectedWidth": 43.20703125,
+                    "actualAdvance": 43.21875,
+                    "advanceDifference": 0.01171875,
+                    "bbox": {
+                      "x": 61.20000076293945,
+                      "y": 64.19999694824219,
+                      "width": 43.405269622802734,
+                      "height": 20
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 61.2,
+                        "start": 61.20000076293945,
+                        "expectedWidth": 43.20703125,
+                        "actualAdvance": 43.21875
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "role": "body",
+                "sourcePreserved": true,
+                "box": {
+                  "x": 61.2,
+                  "y": 95.16,
+                  "width": 417.6,
+                  "height": 803.6400000000001
+                },
+                "lines": [
+                  {
+                    "expectedWidth": 367.259765625,
+                    "actualAdvance": 367.2695007324219,
+                    "advanceDifference": 0.009735107421875,
+                    "bbox": {
+                      "x": 61.20000076293945,
+                      "y": 98.16000366210938,
+                      "width": 367.26947021484375,
+                      "height": 20
+                    },
+                    "segments": [
+                      {
+                        "kind": "tab",
+                        "expectedX": 61.2,
+                        "start": 61.19999313354492,
+                        "expectedWidth": 43.20703125,
+                        "actualAdvance": 43.207000732421875
+                      },
+                      {
+                        "kind": "text",
+                        "expectedX": 104.40703125,
+                        "start": 104.40699768066406,
+                        "expectedWidth": 324.052734375,
+                        "actualAdvance": 324.0625
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 0,
+                    "actualAdvance": 0,
+                    "advanceDifference": 0,
+                    "bbox": {
+                      "x": 0,
+                      "y": 0,
+                      "width": 0,
+                      "height": 0
+                    },
+                    "segments": []
+                  },
+                  {
+                    "expectedWidth": 43.20703125,
+                    "actualAdvance": 43.21875,
+                    "advanceDifference": 0.01171875,
+                    "bbox": {
+                      "x": 61.20000076293945,
+                      "y": 142.0800018310547,
+                      "width": 43.218746185302734,
+                      "height": 20
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 61.2,
+                        "start": 61.20000076293945,
+                        "expectedWidth": 43.20703125,
+                        "actualAdvance": 43.21875
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 0,
+                    "actualAdvance": 0,
+                    "advanceDifference": 0,
+                    "bbox": {
+                      "x": 0,
+                      "y": 0,
+                      "width": 0,
+                      "height": 0
+                    },
+                    "segments": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "metadata-540",
+            "svgSha256": "dd7251d141c1d35e4abaf260ba41935ed3b6dba81dfe1acf1cf591bf92006a90",
+            "parts": [
+              {
+                "role": "filename",
+                "sourcePreserved": true,
+                "box": {
+                  "x": 61.2,
+                  "y": 61.2,
+                  "width": 417.6,
+                  "height": 21.96
+                },
+                "lines": [
+                  {
+                    "expectedWidth": 216.03515625,
+                    "actualAdvance": 216.036376953125,
+                    "advanceDifference": 0.001220703125,
+                    "bbox": {
+                      "x": 61.20000076293945,
+                      "y": 64.19999694824219,
+                      "width": 216.0351104736328,
+                      "height": 20
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 61.2,
+                        "start": 61.20000076293945,
+                        "expectedWidth": 32.4052734375,
+                        "actualAdvance": 32.40625
+                      },
+                      {
+                        "kind": "tab",
+                        "expectedX": 93.6052734375,
+                        "start": 93.6050033569336,
+                        "expectedWidth": 10.8017578125,
+                        "actualAdvance": 10.802000045776367
+                      },
+                      {
+                        "kind": "text",
+                        "expectedX": 104.40703125,
+                        "start": 104.40699768066406,
+                        "expectedWidth": 172.828125,
+                        "actualAdvance": 172.828125
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "role": "language",
+                "sourcePreserved": true,
+                "box": {
+                  "x": 61.2,
+                  "y": 91.16,
+                  "width": 417.6,
+                  "height": 21.96
+                },
+                "lines": [
+                  {
+                    "expectedWidth": 108.017578125,
+                    "actualAdvance": 108.03125,
+                    "advanceDifference": 0.013671875,
+                    "bbox": {
+                      "x": 61.20000076293945,
+                      "y": 94.16000366210938,
+                      "width": 108.03125,
+                      "height": 20
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 61.2,
+                        "start": 61.20000076293945,
+                        "expectedWidth": 108.017578125,
+                        "actualAdvance": 108.03125
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "role": "body",
+                "sourcePreserved": true,
+                "box": {
+                  "x": 61.2,
+                  "y": 125.12,
+                  "width": 417.6,
+                  "height": 773.6800000000001
+                },
+                "lines": [
+                  {
+                    "expectedWidth": 54.0087890625,
+                    "actualAdvance": 54.029998779296875,
+                    "advanceDifference": 0.021209716796875,
+                    "bbox": {
+                      "x": 61.20000076293945,
+                      "y": 128.1199951171875,
+                      "width": 54.01949691772461,
+                      "height": 20
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 61.2,
+                        "start": 61.20000076293945,
+                        "expectedWidth": 10.8017578125,
+                        "actualAdvance": 10.8125
+                      },
+                      {
+                        "kind": "tab",
+                        "expectedX": 72.0017578125,
+                        "start": 72.00199127197266,
+                        "expectedWidth": 32.4052734375,
+                        "actualAdvance": 32.404998779296875
+                      },
+                      {
+                        "kind": "text",
+                        "expectedX": 104.40703125,
+                        "start": 104.40699768066406,
+                        "expectedWidth": 10.8017578125,
+                        "actualAdvance": 10.8125
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 97.2158203125,
+                    "actualAdvance": 97.23825073242188,
+                    "advanceDifference": 0.022430419921875,
+                    "bbox": {
+                      "x": 61.20000076293945,
+                      "y": 150.0800018310547,
+                      "width": 97.22650146484375,
+                      "height": 20
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 61.2,
+                        "start": 61.20000076293945,
+                        "expectedWidth": 43.20703125,
+                        "actualAdvance": 43.21875
+                      },
+                      {
+                        "kind": "tab",
+                        "expectedX": 104.40703125,
+                        "start": 104.40699768066406,
+                        "expectedWidth": 43.20703125,
+                        "actualAdvance": 43.207000732421875
+                      },
+                      {
+                        "kind": "text",
+                        "expectedX": 147.6140625,
+                        "start": 147.61399841308594,
+                        "expectedWidth": 10.8017578125,
+                        "actualAdvance": 10.8125
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 86.4140625,
+                    "actualAdvance": 86.41400146484375,
+                    "advanceDifference": -0.00006103515625,
+                    "bbox": {
+                      "x": 61.20000076293945,
+                      "y": 172.0399932861328,
+                      "width": 86.41400146484375,
+                      "height": 20
+                    },
+                    "segments": [
+                      {
+                        "kind": "tab",
+                        "expectedX": 61.2,
+                        "start": 61.19999313354492,
+                        "expectedWidth": 43.20703125,
+                        "actualAdvance": 43.207000732421875
+                      },
+                      {
+                        "kind": "tab",
+                        "expectedX": 104.40703125,
+                        "start": 104.40699768066406,
+                        "expectedWidth": 43.20703125,
+                        "actualAdvance": 43.207000732421875
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 151.224609375,
+                    "actualAdvance": 151.24749755859375,
+                    "advanceDifference": 0.02288818359375,
+                    "bbox": {
+                      "x": 61.20000076293945,
+                      "y": 194,
+                      "width": 151.22650146484375,
+                      "height": 20
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 61.2,
+                        "start": 61.20000076293945,
+                        "expectedWidth": 10.8017578125,
+                        "actualAdvance": 10.8125
+                      },
+                      {
+                        "kind": "tab",
+                        "expectedX": 72.0017578125,
+                        "start": 72.00199127197266,
+                        "expectedWidth": 32.4052734375,
+                        "actualAdvance": 32.404998779296875
+                      },
+                      {
+                        "kind": "text",
+                        "expectedX": 104.40703125,
+                        "start": 104.40699768066406,
+                        "expectedWidth": 10.8017578125,
+                        "actualAdvance": 10.8125
+                      },
+                      {
+                        "kind": "tab",
+                        "expectedX": 115.2087890625,
+                        "start": 115.20901489257812,
+                        "expectedWidth": 32.4052734375,
+                        "actualAdvance": 32.404998779296875
+                      },
+                      {
+                        "kind": "text",
+                        "expectedX": 147.6140625,
+                        "start": 147.61399841308594,
+                        "expectedWidth": 64.810546875,
+                        "actualAdvance": 64.8125
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "language-540",
+            "svgSha256": "90390d4f13fac8d3db3d6eb8bde58e5e605b04976072dc3597d68324df0783d7",
+            "parts": [
+              {
+                "role": "language",
+                "sourcePreserved": true,
+                "box": {
+                  "x": 61.2,
+                  "y": 61.2,
+                  "width": 417.6,
+                  "height": 241.56
+                },
+                "lines": [
+                  {
+                    "expectedWidth": 410.466796875,
+                    "actualAdvance": 410.46875,
+                    "advanceDifference": 0.001953125,
+                    "bbox": {
+                      "x": 61.20000076293945,
+                      "y": 64.19999694824219,
+                      "width": 410.6650390625,
+                      "height": 20
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 61.2,
+                        "start": 61.20000076293945,
+                        "expectedWidth": 410.466796875,
+                        "actualAdvance": 410.46875
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 410.466796875,
+                    "actualAdvance": 410.46875,
+                    "advanceDifference": 0.001953125,
+                    "bbox": {
+                      "x": 61.20000076293945,
+                      "y": 86.16000366210938,
+                      "width": 410.6650390625,
+                      "height": 20
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 61.2,
+                        "start": 61.20000076293945,
+                        "expectedWidth": 410.466796875,
+                        "actualAdvance": 410.46875
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 410.466796875,
+                    "actualAdvance": 410.46875,
+                    "advanceDifference": 0.001953125,
+                    "bbox": {
+                      "x": 61.20000076293945,
+                      "y": 108.12000274658203,
+                      "width": 410.46875,
+                      "height": 19.99999237060547
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 61.2,
+                        "start": 61.20000076293945,
+                        "expectedWidth": 410.466796875,
+                        "actualAdvance": 410.46875
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 410.466796875,
+                    "actualAdvance": 410.46875,
+                    "advanceDifference": 0.001953125,
+                    "bbox": {
+                      "x": 61.20000076293945,
+                      "y": 130.0800018310547,
+                      "width": 410.6650390625,
+                      "height": 20
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 61.2,
+                        "start": 61.20000076293945,
+                        "expectedWidth": 410.466796875,
+                        "actualAdvance": 410.46875
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 410.466796875,
+                    "actualAdvance": 410.46875,
+                    "advanceDifference": 0.001953125,
+                    "bbox": {
+                      "x": 61.20000076293945,
+                      "y": 152.0399932861328,
+                      "width": 410.46875,
+                      "height": 20
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 61.2,
+                        "start": 61.20000076293945,
+                        "expectedWidth": 410.466796875,
+                        "actualAdvance": 410.46875
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 410.466796875,
+                    "actualAdvance": 410.46875,
+                    "advanceDifference": 0.001953125,
+                    "bbox": {
+                      "x": 61.20000076293945,
+                      "y": 174,
+                      "width": 410.46875,
+                      "height": 20
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 61.2,
+                        "start": 61.20000076293945,
+                        "expectedWidth": 410.466796875,
+                        "actualAdvance": 410.46875
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 410.466796875,
+                    "actualAdvance": 410.46875,
+                    "advanceDifference": 0.001953125,
+                    "bbox": {
+                      "x": 61.20000076293945,
+                      "y": 195.9600067138672,
+                      "width": 410.6650390625,
+                      "height": 20
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 61.2,
+                        "start": 61.20000076293945,
+                        "expectedWidth": 410.466796875,
+                        "actualAdvance": 410.46875
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 410.466796875,
+                    "actualAdvance": 410.46875,
+                    "advanceDifference": 0.001953125,
+                    "bbox": {
+                      "x": 61.20000076293945,
+                      "y": 217.9199981689453,
+                      "width": 410.6650390625,
+                      "height": 20
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 61.2,
+                        "start": 61.20000076293945,
+                        "expectedWidth": 410.466796875,
+                        "actualAdvance": 410.46875
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 410.466796875,
+                    "actualAdvance": 410.46875,
+                    "advanceDifference": 0.001953125,
+                    "bbox": {
+                      "x": 61.20000076293945,
+                      "y": 239.8800048828125,
+                      "width": 410.6650390625,
+                      "height": 20
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 61.2,
+                        "start": 61.20000076293945,
+                        "expectedWidth": 410.466796875,
+                        "actualAdvance": 410.46875
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 410.466796875,
+                    "actualAdvance": 410.46875,
+                    "advanceDifference": 0.001953125,
+                    "bbox": {
+                      "x": 61.20000076293945,
+                      "y": 261.8399963378906,
+                      "width": 410.46875,
+                      "height": 20
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 61.2,
+                        "start": 61.20000076293945,
+                        "expectedWidth": 410.466796875,
+                        "actualAdvance": 410.46875
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 216.03515625,
+                    "actualAdvance": 216.046875,
+                    "advanceDifference": 0.01171875,
+                    "bbox": {
+                      "x": 61.20000076293945,
+                      "y": 283.79998779296875,
+                      "width": 216.04689025878906,
+                      "height": 20
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 61.2,
+                        "start": 61.20000076293945,
+                        "expectedWidth": 216.03515625,
+                        "actualAdvance": 216.046875
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "role": "body",
+                "sourcePreserved": true,
+                "box": {
+                  "x": 61.2,
+                  "y": 314.76,
+                  "width": 417.6,
+                  "height": 584.0400000000001
+                },
+                "lines": [
+                  {
+                    "expectedWidth": 97.2158203125,
+                    "actualAdvance": 97.21875,
+                    "advanceDifference": 0.0029296875,
+                    "bbox": {
+                      "x": 61.20000076293945,
+                      "y": 317.760009765625,
+                      "width": 97.4140625,
+                      "height": 20
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 61.2,
+                        "start": 61.20000076293945,
+                        "expectedWidth": 97.2158203125,
+                        "actualAdvance": 97.21875
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "filename-540",
+            "svgSha256": "947759f21f15d3e3d00a1f31a51eb9ee0abdbba63d10d9b915cb31cf6683e289",
+            "parts": [
+              {
+                "role": "filename",
+                "sourcePreserved": true,
+                "box": {
+                  "x": 61.2,
+                  "y": 61.2,
+                  "width": 417.6,
+                  "height": 153.72
+                },
+                "lines": [
+                  {
+                    "expectedWidth": 410.466796875,
+                    "actualAdvance": 410.46875,
+                    "advanceDifference": 0.001953125,
+                    "bbox": {
+                      "x": 61.20000076293945,
+                      "y": 64.19999694824219,
+                      "width": 410.6650390625,
+                      "height": 20
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 61.2,
+                        "start": 61.20000076293945,
+                        "expectedWidth": 410.466796875,
+                        "actualAdvance": 410.46875
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 410.466796875,
+                    "actualAdvance": 410.46875,
+                    "advanceDifference": 0.001953125,
+                    "bbox": {
+                      "x": 61.20000076293945,
+                      "y": 86.16000366210938,
+                      "width": 410.6650390625,
+                      "height": 20
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 61.2,
+                        "start": 61.20000076293945,
+                        "expectedWidth": 410.466796875,
+                        "actualAdvance": 410.46875
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 410.466796875,
+                    "actualAdvance": 410.46875,
+                    "advanceDifference": 0.001953125,
+                    "bbox": {
+                      "x": 61.20000076293945,
+                      "y": 108.12000274658203,
+                      "width": 410.46875,
+                      "height": 19.99999237060547
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 61.2,
+                        "start": 61.20000076293945,
+                        "expectedWidth": 410.466796875,
+                        "actualAdvance": 410.46875
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 410.466796875,
+                    "actualAdvance": 410.46875,
+                    "advanceDifference": 0.001953125,
+                    "bbox": {
+                      "x": 61.20000076293945,
+                      "y": 130.0800018310547,
+                      "width": 410.46875,
+                      "height": 20
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 61.2,
+                        "start": 61.20000076293945,
+                        "expectedWidth": 410.466796875,
+                        "actualAdvance": 410.46875
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 410.466796875,
+                    "actualAdvance": 410.46875,
+                    "advanceDifference": 0.001953125,
+                    "bbox": {
+                      "x": 61.20000076293945,
+                      "y": 152.0399932861328,
+                      "width": 410.6650390625,
+                      "height": 20
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 61.2,
+                        "start": 61.20000076293945,
+                        "expectedWidth": 410.466796875,
+                        "actualAdvance": 410.46875
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 410.466796875,
+                    "actualAdvance": 410.46875,
+                    "advanceDifference": 0.001953125,
+                    "bbox": {
+                      "x": 61.20000076293945,
+                      "y": 174,
+                      "width": 410.46875,
+                      "height": 20
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 61.2,
+                        "start": 61.20000076293945,
+                        "expectedWidth": 410.466796875,
+                        "actualAdvance": 410.46875
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 291.6474609375,
+                    "actualAdvance": 291.65625,
+                    "advanceDifference": 0.0087890625,
+                    "bbox": {
+                      "x": 61.20000076293945,
+                      "y": 195.9600067138672,
+                      "width": 291.845703125,
+                      "height": 20
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 61.2,
+                        "start": 61.20000076293945,
+                        "expectedWidth": 291.6474609375,
+                        "actualAdvance": 291.65625
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "role": "body",
+                "sourcePreserved": true,
+                "box": {
+                  "x": 61.2,
+                  "y": 226.92000000000002,
+                  "width": 417.6,
+                  "height": 671.8800000000001
+                },
+                "lines": [
+                  {
+                    "expectedWidth": 183.6298828125,
+                    "actualAdvance": 183.640625,
+                    "advanceDifference": 0.0107421875,
+                    "bbox": {
+                      "x": 61.20000076293945,
+                      "y": 229.9199981689453,
+                      "width": 183.640625,
+                      "height": 20
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 61.2,
+                        "start": 61.20000076293945,
+                        "expectedWidth": 183.6298828125,
+                        "actualAdvance": 183.640625
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "wrapped-540",
+            "svgSha256": "9bc6d15d420298020713d997753070bb0f8f99ee858008d262c1673818e82755",
+            "parts": [
+              {
+                "role": "language",
+                "sourcePreserved": true,
+                "box": {
+                  "x": 61.2,
+                  "y": 61.2,
+                  "width": 417.6,
+                  "height": 21.96
+                },
+                "lines": [
+                  {
+                    "expectedWidth": 21.603515625,
+                    "actualAdvance": 21.609375,
+                    "advanceDifference": 0.005859375,
+                    "bbox": {
+                      "x": 61.20000076293945,
+                      "y": 64.19999694824219,
+                      "width": 21.609371185302734,
+                      "height": 20
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 61.2,
+                        "start": 61.20000076293945,
+                        "expectedWidth": 21.603515625,
+                        "actualAdvance": 21.609375
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "role": "body",
+                "sourcePreserved": true,
+                "box": {
+                  "x": 61.2,
+                  "y": 95.16,
+                  "width": 417.6,
+                  "height": 803.6400000000001
+                },
+                "lines": [
+                  {
+                    "expectedWidth": 270.0439453125,
+                    "actualAdvance": 270.046875,
+                    "advanceDifference": 0.0029296875,
+                    "bbox": {
+                      "x": 61.20000076293945,
+                      "y": 98.16000366210938,
+                      "width": 270.046875,
+                      "height": 20
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 61.2,
+                        "start": 61.20000076293945,
+                        "expectedWidth": 270.0439453125,
+                        "actualAdvance": 270.046875
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 410.466796875,
+                    "actualAdvance": 410.46875,
+                    "advanceDifference": 0.001953125,
+                    "bbox": {
+                      "x": 61.20000076293945,
+                      "y": 120.1199951171875,
+                      "width": 410.46875,
+                      "height": 20
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 61.2,
+                        "start": 61.20000076293945,
+                        "expectedWidth": 410.466796875,
+                        "actualAdvance": 410.46875
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 410.466796875,
+                    "actualAdvance": 410.46875,
+                    "advanceDifference": 0.001953125,
+                    "bbox": {
+                      "x": 61.20000076293945,
+                      "y": 142.0800018310547,
+                      "width": 410.46875,
+                      "height": 20
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 61.2,
+                        "start": 61.20000076293945,
+                        "expectedWidth": 410.466796875,
+                        "actualAdvance": 410.46875
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 410.466796875,
+                    "actualAdvance": 410.46875,
+                    "advanceDifference": 0.001953125,
+                    "bbox": {
+                      "x": 61.20000076293945,
+                      "y": 164.0399932861328,
+                      "width": 410.46875,
+                      "height": 20
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 61.2,
+                        "start": 61.20000076293945,
+                        "expectedWidth": 410.466796875,
+                        "actualAdvance": 410.46875
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 410.466796875,
+                    "actualAdvance": 410.46875,
+                    "advanceDifference": 0.001953125,
+                    "bbox": {
+                      "x": 61.20000076293945,
+                      "y": 186,
+                      "width": 410.46875,
+                      "height": 20
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 61.2,
+                        "start": 61.20000076293945,
+                        "expectedWidth": 410.466796875,
+                        "actualAdvance": 410.46875
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 410.466796875,
+                    "actualAdvance": 410.46875,
+                    "advanceDifference": 0.001953125,
+                    "bbox": {
+                      "x": 61.20000076293945,
+                      "y": 207.9600067138672,
+                      "width": 410.6650390625,
+                      "height": 20
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 61.2,
+                        "start": 61.20000076293945,
+                        "expectedWidth": 410.466796875,
+                        "actualAdvance": 410.46875
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 410.466796875,
+                    "actualAdvance": 410.46875,
+                    "advanceDifference": 0.001953125,
+                    "bbox": {
+                      "x": 61.20000076293945,
+                      "y": 229.9199981689453,
+                      "width": 410.46875,
+                      "height": 20
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 61.2,
+                        "start": 61.20000076293945,
+                        "expectedWidth": 410.466796875,
+                        "actualAdvance": 410.46875
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 410.466796875,
+                    "actualAdvance": 410.46875,
+                    "advanceDifference": 0.001953125,
+                    "bbox": {
+                      "x": 61.20000076293945,
+                      "y": 251.8800048828125,
+                      "width": 410.46875,
+                      "height": 20
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 61.2,
+                        "start": 61.20000076293945,
+                        "expectedWidth": 410.466796875,
+                        "actualAdvance": 410.46875
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 43.20703125,
+                    "actualAdvance": 43.21875,
+                    "advanceDifference": 0.01171875,
+                    "bbox": {
+                      "x": 61.20000076293945,
+                      "y": 273.8399963378906,
+                      "width": 43.218746185302734,
+                      "height": 20
+                    },
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "expectedX": 61.2,
+                        "start": 61.20000076293945,
+                        "expectedWidth": 43.20703125,
+                        "actualAdvance": 43.21875
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 205.2333984375,
+                    "actualAdvance": 205.23825073242188,
+                    "advanceDifference": 0.004852294921875,
+                    "bbox": {
+                      "x": 61.20000076293945,
+                      "y": 295.79998779296875,
+                      "width": 205.2382354736328,
+                      "height": 20
+                    },
+                    "segments": [
+                      {
+                        "kind": "tab",
+                        "expectedX": 61.2,
+                        "start": 61.19999313354492,
+                        "expectedWidth": 43.20703125,
+                        "actualAdvance": 43.207000732421875
+                      },
+                      {
+                        "kind": "text",
+                        "expectedX": 104.40703125,
+                        "start": 104.40699768066406,
+                        "expectedWidth": 162.0263671875,
+                        "actualAdvance": 162.03125
+                      }
+                    ]
+                  },
+                  {
+                    "expectedWidth": 0,
+                    "actualAdvance": 0,
+                    "advanceDifference": 0,
+                    "bbox": {
+                      "x": 0,
+                      "y": 0,
+                      "width": 0,
+                      "height": 0
+                    },
+                    "segments": []
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "errors": [],
+        "externalRequests": [],
+        "scope": "Ten actual SVG outputs with exact Cousine regular/bold bytes: source/offset preservation, accepted segment starts within 0.1 reference pixel, glyph cell containment and separate metadata/body glyphs. Natural browser advance differences are recorded. This is not native export, shaping/bidi conformance or raster equivalence."
+      }
+    },
+    {
+      "file": "opf-editor-installed-code-browser.json",
+      "sha256": "b6c63675666d38e7b1c609fd91fb5f3f01f2a5df55db832fa8999b0d9866ae91",
+      "report": {
+        "installedBundleInputs": {
+          "node_modules/@openpresentation/opf/dist/chunk-JA5W5TVA.js": "9617ee45fd259a0b060831f019f19672e1f5d860a3728b5a126019d6f7cad51c",
+          "node_modules/@openpresentation/opf/dist/chunk-GQSK3T7X.js": "34f518c29c9757bc252b5c13eb5d7db8ada4b477496e6289d8149fb4fdc7cd45",
+          "node_modules/@openpresentation/opf/dist/chunk-TWMRZ43O.js": "0d35cec97ec7ddaa67fb9f096bc672c927eb68ed5fae5ac27d4dff70d68313f4",
+          "node_modules/ajv/dist/compile/codegen/code.js": "1287153722f1fc3c5342647de7ae1d7b6fb68bdb3378a0776a937d273fc97e0d",
+          "node_modules/ajv/dist/compile/codegen/scope.js": "d2a0a97af2faa2cad88702314fe421e235ab17f11e0d62883d58d8d4dc734286",
+          "node_modules/ajv/dist/compile/codegen/index.js": "f03b2b72597ef86878d1d4030580c2d0964046efad4867f3d05aa91065ba034c",
+          "node_modules/ajv/dist/compile/util.js": "fa911f5631f29d4d6420adfe086cb693b94b08de2719475c78c54bcb82f831a5",
+          "node_modules/ajv/dist/compile/names.js": "3cab37a2240b996b9bed92fe7a041d91689cfe3ad2e9ae4c0ab99e4146408493",
+          "node_modules/ajv/dist/compile/errors.js": "53990f8f2cc05922bba410ae68231d3f869de4f8343277ede5b4834fa564c6c2",
+          "node_modules/ajv/dist/compile/validate/boolSchema.js": "c08abdbdbd3d8b1dcc0552a20fbc7d837ed44f4ca6abb2e464985590ac94377f",
+          "node_modules/ajv/dist/compile/rules.js": "ec1d86500f497aa8e20f9f0c1695951159d9a909669d00a261ce1bb22b3cf0a9",
+          "node_modules/ajv/dist/compile/validate/applicability.js": "50c5cba5894a7fb9874b3432355b46ec71b73c9368dafb1323ded8567cca8fc0",
+          "node_modules/ajv/dist/compile/validate/dataType.js": "697bd7005361ec7066a23c18830a10b0ef28aec1a33138b4e3098bf78c4fae52",
+          "node_modules/ajv/dist/compile/validate/defaults.js": "05721971df94faa57b09c8cfd60c2eef81b6d14910a7dea5f539d693a029c428",
+          "node_modules/ajv/dist/vocabularies/code.js": "9212ddf8bd0a4c3b1c4b44cdadd141183b2b36f561b91d13df53c83911e3bf63",
+          "node_modules/ajv/dist/compile/validate/keyword.js": "ab8f070c75c25eee9be5c837f364748909b58f5db66149a2beccbd2f66afeb76",
+          "node_modules/ajv/dist/compile/validate/subschema.js": "ca783d6052af91e65ebb59a5b48b47fb459a2241d37ca6a042f767d4ce451bdc",
+          "node_modules/fast-deep-equal/index.js": "eb469e206280321a3878f2335ec98aa2104a155079d8ed83a23029098dccd215",
+          "node_modules/json-schema-traverse/index.js": "024191b747afac01b28ff11d744e9f82720bbad5f716163ba5c962eb62aa2350",
+          "node_modules/ajv/dist/compile/resolve.js": "df75af0e0cf03fa1c6452e8dc61019f5aec645a8a5f6f494dc4e13cb5502d2d9",
+          "node_modules/ajv/dist/compile/validate/index.js": "cb2103e5f890e04592c10d24b45857dad91155bae9f9460138a2459bdaaea2cd",
+          "node_modules/ajv/dist/runtime/validation_error.js": "11bf5b4affc8114e5e7cdf65b93006c2d997ab60ada1152c22e136f9b828b815",
+          "node_modules/ajv/dist/compile/ref_error.js": "81c98fdf34c3037c91bfcc02277ec32156c71e34048f36cfe4e084416e916cb7",
+          "node_modules/ajv/dist/compile/index.js": "05b34da22814f3787bfa3ac68dad59c9047f56e55a607e0a20719ebf5afe69ac",
+          "node_modules/ajv/dist/refs/data.json": "d24ab8a97c18b3f5afdde7d7024a0e0ac1df0614a16a41cb88f81379edcc2db3",
+          "node_modules/fast-uri/lib/utils.js": "610a6cfa7b1c9d5689443b3a3d14af4c24afed51ef5852495ae1489ae455a9f4",
+          "node_modules/fast-uri/lib/schemes.js": "c2c61d3fd0bc63a587100928a399e75be8c420d210c439d75f7346da4aa4f3c3",
+          "node_modules/fast-uri/index.js": "e82d3e55d954483e4927f9740bc3113a24d19ef5a73c7962d8a93c499fc982ff",
+          "node_modules/ajv/dist/runtime/uri.js": "d1d61baf97ed87d7310df847a78ed73d19c8cc003207bf5aaec977500bdb1578",
+          "node_modules/ajv/dist/core.js": "51be29c7ed7288622f755c0f1bebd3da4a9907d77aa2c33b0f2a0a5b6b339603",
+          "node_modules/ajv/dist/vocabularies/core/id.js": "49c8eff694ce4371450c1f9986e934fcbf4bd143311caef5332113f29175bc11",
+          "node_modules/ajv/dist/vocabularies/core/ref.js": "1422c1454b3621d890066042048f37746fe1cf213088307099816199889bbfd1",
+          "node_modules/ajv/dist/vocabularies/core/index.js": "f420e1011b95e27b54c58323a7ed4ffbd0a88cdb4496f771bb6782c2aa22d23e",
+          "node_modules/ajv/dist/vocabularies/validation/limitNumber.js": "3dd4bd41dbfc76c522078ff54b6479683485c4e97faa04cfcfaf2d8cb0fb8e65",
+          "node_modules/ajv/dist/vocabularies/validation/multipleOf.js": "df128c2a6ca74ae57c65fbfe3aea8a101447a3ae8c41fd53cfc5693fa23cc8bd",
+          "node_modules/ajv/dist/runtime/ucs2length.js": "1df012dd3d23fced07255a7204798004509687cb1f431ae0ab976db436bbd890",
+          "node_modules/ajv/dist/vocabularies/validation/limitLength.js": "379c28317faaf7784680b6049c3562692d3df6d65cce33f48e6c6c723beeeec2",
+          "node_modules/ajv/dist/vocabularies/validation/pattern.js": "86e84206bfc6a66ef18bf1fe43fbc56ebe7f7f4d57841197b6d044c529e0c195",
+          "node_modules/ajv/dist/vocabularies/validation/limitProperties.js": "8523a3f7b36c34882ca32b0ec71a2157d7930907cb86b778a97c1514fa6258ac",
+          "node_modules/ajv/dist/vocabularies/validation/required.js": "b953bc18d94274bd73374dd5b4282d7a21159cec8c0e7a357e1eaf3f326b9054",
+          "node_modules/ajv/dist/vocabularies/validation/limitItems.js": "49f0427d29b38aef2fa8aead26e68bda12deb9a2da22f7a7804ba0fed44e1fec",
+          "node_modules/ajv/dist/runtime/equal.js": "c94467da09ee94e5d194483a7ab821b9bb3bf1c04397270f2ab53dea9de59274",
+          "node_modules/ajv/dist/vocabularies/validation/uniqueItems.js": "666d1a2aa25c0dfe3cf41312d0f9d40e9f99eb2c19be7469134ad89005aadd52",
+          "node_modules/ajv/dist/vocabularies/validation/const.js": "ace994e9ab97a70899a9484794794f4be5ee03bfb3cf32242d3f091d77f0329a",
+          "node_modules/ajv/dist/vocabularies/validation/enum.js": "61062b318a40eb52fc5a8283e7f4781db98349841744961ef4fe04a4722ebf22",
+          "node_modules/ajv/dist/vocabularies/validation/index.js": "4a1839832de5f10ff423c1c0c6cb232b5b6e1b34980a28862cf56b2763136de4",
+          "node_modules/ajv/dist/vocabularies/applicator/additionalItems.js": "7beb0fbda5e349907067c8398bb8cc3260a6267b6e5dff9793a5ab2171934099",
+          "node_modules/ajv/dist/vocabularies/applicator/items.js": "fa87f74adc3aac1f1b5e3e7dddf73294e6850e1dd49ed131fca4352e9645c54e",
+          "node_modules/ajv/dist/vocabularies/applicator/prefixItems.js": "16264f7b3233a6dcb98b48700643efbd3ebc4d11e27b3eacffc83ccb5f44fb23",
+          "node_modules/ajv/dist/vocabularies/applicator/items2020.js": "c449ef64aec16263c7935293ed450cfc2da3ba66f6df5f99c3198c05f169838f",
+          "node_modules/ajv/dist/vocabularies/applicator/contains.js": "56165dc93cd8b0b4611db50a97f1e7d7f9af6c5ffe95a7a5b054d6eeaa7f6a8c",
+          "node_modules/ajv/dist/vocabularies/applicator/dependencies.js": "c1a83bf484b6fde4d268935f079ddba5e74a2f589dfc6d15ca2e20ba4d06ee5b",
+          "node_modules/ajv/dist/vocabularies/applicator/propertyNames.js": "b3411cfeaff8efd5e6de12971bb5dc339e64b61fbe62d3b950794c077315c2e7",
+          "node_modules/ajv/dist/vocabularies/applicator/additionalProperties.js": "e237cb180cd2e3f2e676feb714d7dcc6a42116640f9db2ad830cd20d9dfc540a",
+          "node_modules/ajv/dist/vocabularies/applicator/properties.js": "c896873ae7251093a2c8880545b69b6e8cb55c44817a53ec830a49818d74104f",
+          "node_modules/ajv/dist/vocabularies/applicator/patternProperties.js": "0d43da49a82452c439ba990de7372ad5cedb663717918a5f6dae07025abff655",
+          "node_modules/ajv/dist/vocabularies/applicator/not.js": "ab2f2758d4ea97ac8763fe5540dd0f4d877859676fe5d6c750a18deca387f718",
+          "node_modules/ajv/dist/vocabularies/applicator/anyOf.js": "8d7368d4aebad0514b713191b934993b4f0bf570e1bab93b07dc69712db2cec5",
+          "node_modules/ajv/dist/vocabularies/applicator/oneOf.js": "e2aeb6c22d49fd5f348bedcf7f5c4d7b31f5a05dd7ff1a0c531374c6968792a2",
+          "node_modules/ajv/dist/vocabularies/applicator/allOf.js": "98f46a6434ebe5f851b406480e18b776dd7f1bcc275e28c16a13bfef3cc067c7",
+          "node_modules/ajv/dist/vocabularies/applicator/if.js": "42374ee5dc681433579cc689b0c4ae5343f5bf78d4d6a561722b9277c5335ec4",
+          "node_modules/ajv/dist/vocabularies/applicator/thenElse.js": "9bc42eb8699d57188a7ec2a710d3f38052f92bd78c5d4d0442cf98cf2ebbe22d",
+          "node_modules/ajv/dist/vocabularies/applicator/index.js": "5a61978f6d81bbabfa8b9ccb71d7de816ed6dd1fd7de5c72657439a76c2a7cb3",
+          "node_modules/ajv/dist/vocabularies/dynamic/dynamicAnchor.js": "78222a5b42bab186253d880f9af4b012394ae5988bfab78e79f2510caed0ccf7",
+          "node_modules/ajv/dist/vocabularies/dynamic/dynamicRef.js": "acc2913c91d11ff57150dde1751cdd5d9f486a0cb156037870ede203273af917",
+          "node_modules/ajv/dist/vocabularies/dynamic/recursiveAnchor.js": "9f6cb7e509f9deada1b884010f08c52876f8eace32dcf0e7da28f6d0d91f3f76",
+          "node_modules/ajv/dist/vocabularies/dynamic/recursiveRef.js": "7b0c651e2c5b5218639cd3ad7e5162f1e226fc9814107a85f4c3e47f5138670d",
+          "node_modules/ajv/dist/vocabularies/dynamic/index.js": "8c05d09948653957427f351d9c6172965b932a5663f7dcb63014a491a533cc0b",
+          "node_modules/ajv/dist/vocabularies/validation/dependentRequired.js": "cd69a90089328b24d2232c12edae57858c14f66aaa56923c12929eb3d673e8fa",
+          "node_modules/ajv/dist/vocabularies/applicator/dependentSchemas.js": "d17d23755b0cf8699c180dd98b8b7270b688d2e4fe5a4c4fcc53ffdcc18ee58e",
+          "node_modules/ajv/dist/vocabularies/validation/limitContains.js": "0ea6f2e43359add298e1ed9306fe5020c62e086392f2915f10226b01394b200d",
+          "node_modules/ajv/dist/vocabularies/next.js": "491c4d9738e50a6c22b3090cb1df49911b4bb7c3b7dcafc2f2dd4c074c4d82e7",
+          "node_modules/ajv/dist/vocabularies/unevaluated/unevaluatedProperties.js": "665029a99612ec32e9bef99c9c4b09a4dc0be6c71d7b920594d414d404806ebe",
+          "node_modules/ajv/dist/vocabularies/unevaluated/unevaluatedItems.js": "4d7010c39f1b7af4a2fe1a62e5b65c8f763d4e58ac3d710099d367659f5e4fda",
+          "node_modules/ajv/dist/vocabularies/unevaluated/index.js": "4e7936d1a55051e70e2ebbbfc8de94fbe7f1e7b055252df5a984481ea7c156a4",
+          "node_modules/ajv/dist/vocabularies/format/format.js": "6fae0d5124fd821b1a9959492f7d6d7b528bee8830d49a7a4759fc9a9ab81d5f",
+          "node_modules/ajv/dist/vocabularies/format/index.js": "d5dad5f95c9c5f48f8ca956cdbb927aafc7b56baabfca8c0b0403d92c5ebeb67",
+          "node_modules/ajv/dist/vocabularies/metadata.js": "45c178744a7ec57e20c85ceeaea8d9f36b5663636ab7e495ea2c3c1bf4a58609",
+          "node_modules/ajv/dist/vocabularies/draft2020.js": "2d0dc3a14abd48a45ad1407a97f23a0f943fa5244923037f86e95a7de04a7445",
+          "node_modules/ajv/dist/vocabularies/discriminator/types.js": "2365341d1f30dc72cece7703e908e47aacb8f904b9f66ec4019fe889ae1e57fa",
+          "node_modules/ajv/dist/vocabularies/discriminator/index.js": "b58b58025d2dbe5a6967376faec9295b860a338664c47037e9a1035c1e8fb88e",
+          "node_modules/ajv/dist/refs/json-schema-2020-12/schema.json": "5333c7df76bceee098e865881d0808238dea836126c6c60b49299ec85c6c7a56",
+          "node_modules/ajv/dist/refs/json-schema-2020-12/meta/applicator.json": "f1e465ff0c0cc86bee5c0cc4b51d2734c532e6ea12c75b60a2ac093a4577b2d4",
+          "node_modules/ajv/dist/refs/json-schema-2020-12/meta/unevaluated.json": "8f7f75f4274745faa32e4abdba12de99f49b21df225f52f723b5c62043b0edca",
+          "node_modules/ajv/dist/refs/json-schema-2020-12/meta/content.json": "7ede86f2c48d646202bf1332aefaf46db268c943d59752727db7247dc2920516",
+          "node_modules/ajv/dist/refs/json-schema-2020-12/meta/core.json": "c3a5947992d4fe67c95cda7910911207376bbae41c0a124ec9e7e699172e7a49",
+          "node_modules/ajv/dist/refs/json-schema-2020-12/meta/format-annotation.json": "1e31131b1ed21f98c007f04deb501343b8c4dd77f1c5a8494a9c2085f68d769d",
+          "node_modules/ajv/dist/refs/json-schema-2020-12/meta/meta-data.json": "eb008c756b29bdaa237c1f06d32ea4a21f6ef22148b03c6372cea5e4c0782273",
+          "node_modules/ajv/dist/refs/json-schema-2020-12/meta/validation.json": "3cae7069843679429e4ada7df261bb8961fa34cac15be89296026e69af312092",
+          "node_modules/ajv/dist/refs/json-schema-2020-12/index.js": "2e39089b0aaa14efa7901ecf5384622ec3d5897b206e1d589d2420f17b9fa6e1",
+          "node_modules/ajv/dist/2020.js": "908e9670b478b2ba126802a221b7e47006f50cf467e2c5dd7935d3dbef10a20a",
+          "node_modules/ajv-formats/dist/formats.js": "b61693a26869970a92cc1fe832c931ccd3afe8b6d66802b19c48306349e84880",
+          "node_modules/ajv/dist/vocabularies/draft7.js": "8c62022c6c3aa302c3ea6f6709a697fc9eb6385d243fa7c2156dbe9f02228170",
+          "node_modules/ajv/dist/refs/json-schema-draft-07.json": "f7e8b13cad4fecff9771f3626fef33e20e59027b90938a28fd9d2f6c17cd0773",
+          "node_modules/ajv/dist/ajv.js": "edaed56fc546f5551b0d6dc2ff2a9cc25c2d6c83318a086eaa8c3ad0b2479297",
+          "node_modules/ajv-formats/dist/limit.js": "ffc374031a55c3f6e39dc3fe69e663f8251b9d9d7ddb8f513a6807c985c18bb8",
+          "node_modules/ajv-formats/dist/index.js": "3f3014150293846086d11058bb8bf43e669e354a98b37adcf10281454d5e753b",
+          "node_modules/@openpresentation/opf/dist/chunk-ZGV6I23P.js": "a6ecf201e1543162d2ac22ef731cfaf7239160c696455679126ad7883ff0011b",
+          "node_modules/@openpresentation/opf/dist/chunk-3GPZMY2W.js": "b68a9153ca83f169ad7c7692005cab0696cbba0a698afa06457615f64d0b6b87",
+          "node_modules/@openpresentation/opf/dist/pagination.js": "09d5144d900b2dcad6f5097d91d597215e5d4c6367333c4a4a2181f1a080b44a",
+          "node_modules/@openpresentation/opf/dist/composition.js": "6c77b9883ea592f6e67a6fac262e8c1dbd81968e6bd8b13d80cc7fe9f16f073e",
+          "node_modules/@openpresentation/opf/dist/chunk-OZULJBSG.js": "9e3ce45dc68d39c646449baf4ec9aad7b92d3f69b85a3dfe37540d13820d0d1e",
+          "node_modules/@openpresentation/opf/dist/chunk-PIQXLBBJ.js": "818578357a214f76a743db8cf63c0903825923e1ba970abf68c21912e59893ba",
+          "node_modules/@openpresentation/opf/dist/chunk-SOSOBKQ2.js": "b2bcaf1f0e8725c9a8f3fff9b5c996c4e7e63c6bb8dd4d13c2d7609105b02915",
+          "node_modules/@openpresentation/opf/dist/index.js": "45e949094614de7bee9bbd3b523c0e7db24863074a984ed86ca5aa1e2db4b97f",
+          "node_modules/@openpresentation/opf-editor/dist/index.js": "4731feaff16f5bfd285e8cf8799a5016fad3ec5a1f736acfba9fa6f73ef8f30b",
+          "node_modules/@openpresentation/opf-render/dist/svg.js": "c1874ee6111ae51471b1e1108d3990a0f423a72c6fab97500f361502102c0a82",
+          "node_modules/@openpresentation/opf-editor/dist/canvas-fields.js": "04694e60e3369de9f6eb438e2e38a719cb79948b4207d9e43bc800703af5bd19",
+          "node_modules/@openpresentation/opf-editor/dist/blocks.js": "f9926a4cb8c2b0380ffbe67055a428d01089873141af401edb72d8ebe6e7cdaf",
+          "node_modules/@openpresentation/opf-editor/dist/block-controls.js": "21f68e59d44f67069f78b19a2dfa355c0f424973cc138bd6e3b0021b0117702c",
+          "node_modules/@openpresentation/opf-editor/dist/layout.js": "de8dc48f08a7c4ed6c99fcbcfa3e4508930d7b306827fc2cd29865c190141df8",
+          "node_modules/@openpresentation/opf-editor/dist/layout-handles.js": "e9f9d4197cae2fe07825abc894fd6243ea35c3d70974762d1a9021bd23781414",
+          "node_modules/@openpresentation/opf-editor/dist/rich-text.js": "0479bc3315dcfbffd8463222db265864ee3e4938f8a7e9df5fc7e2a4540d9c28",
+          "node_modules/@openpresentation/opf-editor/dist/rich-text-input.js": "b29c64566988aaaa541e8e8a38d3ad350dc579e6f03728a03ccc256227293167",
+          "node_modules/@openpresentation/opf-editor/dist/rich-text-toolbar.js": "9faf7b196f10b7e729768b586eb42bf6dd67c128c88fe62c33098d61b4916deb",
+          "node_modules/@openpresentation/opf-editor/dist/canvas.js": "7b5f4e8410596960143c97cdddd1fb4893fac1469551fb54155f6228f1e321ad",
+          "node_modules/restructure/src/DecodeStream.js": "db7375e0355e4fe7d2e5e2c1847c5008f920ad923812d04f92f2fdb630737fae",
+          "node_modules/restructure/src/EncodeStream.js": "dc26be38cecc46ef2f72c2212aa68fb32d56a2c3fd7e743232d3c41aaef8d2f6",
+          "node_modules/restructure/src/Base.js": "9078b6bfe12f9683b9b870c0aa2e6256b016162141dbdc2d7da8a821c563f9ca",
+          "node_modules/restructure/src/Number.js": "b7ed7a239bf61f19a400274dbed572c2d0d3605b02cca66e704ee1d4d328bcd4",
+          "node_modules/restructure/src/utils.js": "08097b546226a78ea66ca6f9df9653d1d84111972443f57c1e344f2c0a1631a7",
+          "node_modules/restructure/src/Array.js": "75359c9a58ef3da4835738d44dc5112a3c6c5e6e3e921ed9eceb80d8071ce4fe",
+          "node_modules/restructure/src/LazyArray.js": "4956bfd5eba201bbd88a85218cfbeb26d1d82d1a32354ff6ac86e67388773010",
+          "node_modules/restructure/src/Bitfield.js": "62476af83511401e91d56a54514e563009d33169e360b44db7c4b43607d9243a",
+          "node_modules/restructure/src/Boolean.js": "d3c05f25d22d9d9575509468d15d068519eeba2a9da38de00ef32be22fae94be",
+          "node_modules/restructure/src/Buffer.js": "b615b4a3afddde7dc3188cd1b7ec4603dbcd3ea5df604406cfb13e658d492a3b",
+          "node_modules/restructure/src/Enum.js": "5da405880796277d87a0d14ccda25cdb25f8400c4cb54cbf62406186b44d4537",
+          "node_modules/restructure/src/Optional.js": "be65364119f2afb12d7f314922733d58b29b874e94db3b4e784a18f74d8ed71a",
+          "node_modules/restructure/src/Reserved.js": "8e4a860ab61154ac3311edff32ed7d67d0f0803f6727906e0c0360696a6d8f87",
+          "node_modules/restructure/src/String.js": "5582ad7e7d1cb02a9174d9ba99771fbcf171fc643133c40a2a0ca5ec1e4f4297",
+          "node_modules/restructure/src/Struct.js": "364117e34a8dad0c596eb7f1f7d82bb745d1cc819b9f625c6d77c442a357f57f",
+          "node_modules/restructure/src/VersionedStruct.js": "6b3a2cb2aaac605baf9946c407e619db7b209e9b08333264d780b905f2561166",
+          "node_modules/restructure/src/Pointer.js": "4dbe247fae66adf3656e79d616d11e972382411070410f0f4f094b60cdc9d676",
+          "node_modules/restructure/index.js": "5bb1d7925af6c38233057df9a02925e5109bd956908cf8f17eb5fd9ec43c1a3a",
+          "node_modules/@swc/helpers/esm/_define_property.js": "8a1b51b07d0f45dcebfb93d1010f0b824ffea124cefa84efc3a15c1479dc6a93",
+          "node_modules/tslib/tslib.es6.mjs": "0929993220938091ede542d688b0fdb87dad99a7e77678e1983c32d18a503339",
+          "node_modules/@swc/helpers/esm/_ts_decorate.js": "91e21cc1dac2e92b1f32c55e6542abc6043dd923cec73e4ce7aa06c23be68823",
+          "node_modules/base64-js/index.js": "829eadd8a1a441d25be0cb93b00e16a0d0c20fd294db95d8f2ed87e6954b7182",
+          "node_modules/tiny-inflate/index.js": "203ccaa89e30ec4d6f9467a91758b0f55597424a817ea2107510bbadaab1b90d",
+          "node_modules/unicode-trie/swap.js": "396e7304db6c698496668e7e872a6a68e5ce4bcaeef3c8af818dedb6bb4bb76c",
+          "node_modules/unicode-trie/index.js": "f91bee244cdd4622152ab582210b7586f1552e12c3b53d2c7d4240af4f161e99",
+          "node_modules/unicode-properties/dist/module.mjs": "8dfea433ad53c406cead875b11fcb5ed6966677d550c4dcb91fac723f539ec64",
+          "node_modules/dfa/index.js": "1781af74f714561763b2f405b6764d4141876acc167fb0c0aa7160374f97f5ab",
+          "node_modules/clone/clone.js": "438bf6f1450e15555659cd67e6a63c25f04539ef73cdca98f736a7363ec017e7",
+          "node_modules/brotli/dec/streams.js": "90e23fca221adbfafd4cda38934920648781f4bb65d993fd6187fb7b270513ea",
+          "node_modules/brotli/dec/bit_reader.js": "1c7488ebdbcb2dba8a61965f5458452fe8cac38c06c3db0cc5184408a5aacf77",
+          "node_modules/brotli/dec/dictionary.bin.js": "ac06c0a4b369ac16cb604b3dbacf0d5c739579e9324fffbb4388a7478a03c06c",
+          "node_modules/brotli/dec/dictionary-browser.js": "97ed5f277433f6888753ee5ed6c7a091ac66b68a7d09088f6fa4d1960dedf7fc",
+          "node_modules/brotli/dec/dictionary.js": "f7bd7462acad204047edc609009dfeb28239f14fe6f06ca42661f1d751382946",
+          "node_modules/brotli/dec/huffman.js": "69cb67902c20896c89ae679d7c71b1f2274b34c51d4b235865396187f6d7e572",
+          "node_modules/brotli/dec/context.js": "5cd72c7ce643693ff902cd9c1ada003b45f70b4daec1bfb1a6a4a842efca811e",
+          "node_modules/brotli/dec/prefix.js": "e65fb2183d6fc1058020ba55939ea08334d39ae33bf4832d952d9acab5db2d8a",
+          "node_modules/brotli/dec/transform.js": "56c0ebea0ce70b4d7afa7225eca2e5c9e0046dbdc9a4d6b568c5d5f4b47f170b",
+          "node_modules/brotli/dec/decode.js": "f66d1fd1ea9e54c843b7f5f4bc02cf028f28fed69404f279f86869b097dace5e",
+          "node_modules/brotli/decompress.js": "a8aa73fda6d64d69ddc097d75b309322c190d1c733a2d4321c053b79c4a9cc9b",
+          "node_modules/fontkit/dist/browser-module.mjs": "f2bcd6bda6be2032d14f0256bef9a90d4c5a0eed6fb569d2216ff0710a688315",
+          "node_modules/@openpresentation/opf-render/dist/font-compatibility.js": "a50ee71748e81cd12ed3aeb6eee92506ebf91ef05021c6ca3f5a100665d03dac",
+          "node_modules/@openpresentation/opf-render/dist/fonts.js": "549932e2d013f1f623cd83973b40cbed68c63d52535adb2de6fd921d16bf400c",
+          "node_modules/@openpresentation/opf-render/dist/fonts-browser.js": "d0543d838b2f22a8c70bdc60100d72d3c69e3f8033d5ccedd3523ee63c66b8d4",
+          "node_modules/fast-xml-parser/src/util.js": "870ccd88a5d51e35ef8cbc59e7f2a35d31defc87aded9c06023ae57838851901",
+          "node_modules/fast-xml-parser/src/validator.js": "e818788b069429443a97756a4c458999d6751461c4ef41c7bfe1cc58bd70dde4",
+          "node_modules/@nodable/entities/src/entities.js": "96ec5d127a4e8cd77bdc678422f0d57c8ff9e37bcec999983da71a7b72ce9a0e",
+          "node_modules/@nodable/entities/src/EntityDecoder.js": "a56cf2bf8174e0adf94970d70e003afcfc3923a53d0cf973f92d374cfe684544",
+          "node_modules/@nodable/entities/src/all-entities.js": "2f1340ab32dce314f41638b7ee6d0368b974e3302983154b815a6d49a6dfb63b",
+          "node_modules/@nodable/entities/src/entityTries.js": "fa2838d141fba0e8ee5bd2197956c3f6b1d23668be2c8841a585614ea7051f99",
+          "node_modules/@nodable/entities/src/EntityEncoder.js": "812a2077e073564d6470b8fda8ac0d20ecaaf75ddb1594d55d28acc2da8a1a71",
+          "node_modules/@nodable/entities/src/index.js": "79a65ddeda08664d00b7b82f5a903ea437de1dff54a02ed469e9cb1067cb568b",
+          "node_modules/fast-xml-parser/src/xmlparser/OptionsBuilder.js": "4f177e43f1ac36dc25b2b6a44970c97918091416bd15722b65ac938256bda687",
+          "node_modules/fast-xml-parser/src/xmlparser/xmlNode.js": "758d7a8b80ea22d19872b5219c874b4039ea2725e7af5ef0afe2a3e295b779e7",
+          "node_modules/xml-naming/src/index.js": "1a5d9fd32360e2cec4adbee9e56221fb26def66bb9d122e0b5745cebc963d92e",
+          "node_modules/fast-xml-parser/src/xmlparser/DocTypeReader.js": "e693e1e1b6b972aa641bd2d3f7e18b653088a1f4af2c89d05b6f1f9897f4d7b8",
+          "node_modules/anynum/digitTable.js": "c649d39c53ebe6817c71407de8105b6d8cbc2326867f90d59f49ab02d9271b44",
+          "node_modules/anynum/anynum.js": "f8c6a9b031489dfc1573e7a669e4860223ddeedc0007db5dbf5878a14249776d",
+          "node_modules/strnum/strnum.js": "2d8d2377f8c39b0805c9badf048cb22ffb52033f6db0d50a9576fa8bbd5c3dd0",
+          "node_modules/fast-xml-parser/src/ignoreAttributes.js": "40bdf3ab37f544b9f8ea7e474114f489a77ed3247e0be597b9e83e01688e8c80",
+          "node_modules/path-expression-matcher/src/Expression.js": "c24531320e7f2a69708fa8127b660bfb0efaa3a26636e6f56209f8cf4e984b9a",
+          "node_modules/path-expression-matcher/src/ExpressionSet.js": "a6250aa83ce7f238614fb7421f31e541c63c415a295e3764687693464918f3c4",
+          "node_modules/path-expression-matcher/src/Matcher.js": "d3b6ddfa1e9a07d6db63939e55106f4df3e8f2e48119c81e372f60f157914d66",
+          "node_modules/path-expression-matcher/src/index.js": "ebbf22c6979f6b2b05c580922e7dd197f4f4a246d504d4c0cc8e64778f12d4ed",
+          "node_modules/is-unsafe/src/contexts/html.js": "5f378567e5be461b0850876c91b8f1c8ffdc8d29201d87edd7aa666eecabb9f3",
+          "node_modules/is-unsafe/src/contexts/xml.js": "2ae9cb95ada7140a80c1ad378f2c4c5f7360bc3f3f6480a96247712df8d8ab16",
+          "node_modules/is-unsafe/src/contexts/svg.js": "eb9e106e81226ab9547882079e7fd6a9d885d2c71ba78784f7edaa7db61bb941",
+          "node_modules/is-unsafe/src/contexts/sql.js": "4de8a60302e6ab22ef5607ee88ab6dd6559221fb8620780fb874a1dcf3000d06",
+          "node_modules/is-unsafe/src/contexts/shell.js": "c26834ef2c968e8a4223a89b2d0e5653952bbf6f3eed95e5ba45465e1870eb65",
+          "node_modules/is-unsafe/src/contexts/redos.js": "59ceb09d3fd2402e81ed7e5992245f2b398c7ceeb80141138f4eab5da0244586",
+          "node_modules/is-unsafe/src/contexts/nosql.js": "e20a132033f105a29db1cfdb3d85bbadbb7206b9a7e3336bcb030a63d66b4ab2",
+          "node_modules/is-unsafe/src/contexts/log.js": "fe1678ab1c98db7387bea6892ec10a90a06a8e2ed01efb1ee577c3d155e4a395",
+          "node_modules/is-unsafe/src/contexts/sql-strict.js": "16d6522ee4ecf4a91c4d29357ebc874844c266f2ae89ef2a92ec2d391f3762e9",
+          "node_modules/is-unsafe/src/index.js": "24f5eb575e633b68771328cc12fa6fde751ecc5f2700a6f52ea325938dc94342",
+          "node_modules/fast-xml-parser/src/xmlparser/OrderedObjParser.js": "d1d5d64ecfb3df9b07ba3bd5ee020d166eaecbf569ebce67be692aa5892a21b5",
+          "node_modules/fast-xml-parser/src/xmlparser/node2json.js": "cce0e8a8876bd1d3305a666e70cd556fd1ae57560fbca9f4ff0577d91178a0b1",
+          "node_modules/fast-xml-parser/src/xmlparser/XMLParser.js": "286c659a8f940c313077afe8a00c0dc128d4a138edf6d9a4519f29538b58c94f",
+          "node_modules/fast-xml-builder/src/util.js": "f585f26c6fa18af890c32d00fbb00fbfd05b9c7217419b6fe8675bdcee264140",
+          "node_modules/fast-xml-builder/src/orderedJs2Xml.js": "4d5b4d0e3a8b3bfa4535e85a2182446f05f32e179dffba00e07422da84cbdb69",
+          "node_modules/fast-xml-builder/src/ignoreAttributes.js": "40bdf3ab37f544b9f8ea7e474114f489a77ed3247e0be597b9e83e01688e8c80",
+          "node_modules/fast-xml-builder/src/fxb.js": "44d54aa1500d8b179b56c47003530ade9220c0daec31caeeeb1a59760eca6d88",
+          "node_modules/fast-xml-parser/src/xmlbuilder/json2xml.js": "bcc5325758b3b940384c7bf2a7132874421989c2561a59dc49c4ef0b88c352dc",
+          "node_modules/fast-xml-parser/src/fxp.js": "587bee5d27b6dbc99d24f472ea93028659610c3496be7d667e72483483c3f3ba",
+          "node_modules/@openpresentation/opf-pptx/dist/background.js": "081fb685677ca656341cdce89275331749174ffecd60e71451f26b9f896cca1c",
+          "node_modules/@openpresentation/opf-pptx/dist/background-import.js": "684f9b38cff01e596774b8120c979c3dbbfada273890f785f7a4e3db88cdcb22",
+          "node_modules/@openpresentation/opf-pptx/dist/table-cell-import.js": "fa17507763a2240564401d7977f4f39bc180e3e6da9d4aa9c36202908e9126d1",
+          "node_modules/@openpresentation/opf-pptx/dist/table-border-import.js": "16678e0d93e63474d39daac268016a59517cc36d85dbd8751131f143db01ace5",
+          "node_modules/@openpresentation/opf-pptx/dist/table-import.js": "9ae40bb38dd34c9fc0ae4a3f5a257068ae92bb651ed5d96641c2629ef7106cf1",
+          "node_modules/@openpresentation/opf-pptx/dist/code-provenance.js": "1c7af17306cd58bcec1cb72c4333edaebc4b5a5f41a439763e1617c0b8f2d0bf",
+          "node_modules/@openpresentation/opf-pptx/dist/image-geometry.js": "e083973a98c2bdf7d7dfce9ef1f6bef252f09ce0d69d987105ee0b73cc13d62e",
+          "node_modules/@openpresentation/opf-pptx/dist/image-import.js": "cffccecc223e27d62b6e1aba0cdbe2c1c9aa94874ef898f76906b22e001bbd41",
+          "node_modules/@openpresentation/opf-pptx/dist/image-fallback-browser.js": "3c7f81d5677dd9a78a0a13fe5a94bbb14cef465031caaeda2c87e8451e9ff491",
+          "node_modules/jszip/dist/jszip.min.js": "acc7e41455a80765b5fd9c7ee1b8078a6d160bbbca455aeae854de65c947d59e",
+          "(disabled):node:fs": {
+            "disabled": true,
+            "bytes": 0
+          },
+          "(disabled):node:https": {
+            "disabled": true,
+            "bytes": 0
+          },
+          "node_modules/@openpresentation/opf-pptx/vendor/pptxgenjs/pptxgen.es.js": "05844c5625e2cda3b449eb967c2246dd57ca57341886a7c28eeebca263b29bd4",
+          "node_modules/fflate/esm/browser.js": "b7ca4450b19559a1d50eb381adcee94b82449674be4cd17789d9beba7e6122a1",
+          "node_modules/@openpresentation/opf-pptx/dist/index.js": "5e253cafbc99dc0acb1c27c9e6fb7d9657a83b98bc3fc1e51ee98416841da446"
+        },
+        "browser": "152.0.4191.66",
+        "platform": "win32",
+        "bundleSha256": "7eb90df43e0905feaa3828b69f178d5fc246c0a133c688c456303b7656d60167",
+        "verifierSha256": "85bad87a3a15c1625787c1894e3b5cb55ff76b0bdc41bd56d84c020a363c98be",
+        "results": [
+          {
+            "dimensions": {
+              "width": 1280,
+              "height": 720
+            },
+            "exportSha256": "5d47b563974ef155ef39e7d218b10d94914de69d4e59495d3d77d184175e52a4",
+            "exportBytes": 17725,
+            "acceptedLines": 6,
+            "exactCodeRoundTrip": true,
+            "substitutions": [
+              {
+                "requestedFamily": "Aptos Display",
+                "sourceFamily": "Aptos Display",
+                "resolvedFamily": "Roboto",
+                "requestedWeight": 700,
+                "resolvedWeight": 700,
+                "italic": false,
+                "compatibility": "generic"
+              },
+              {
+                "requestedFamily": "Aptos",
+                "sourceFamily": "Aptos",
+                "resolvedFamily": "Roboto",
+                "requestedWeight": 400,
+                "resolvedWeight": 400,
+                "italic": false,
+                "compatibility": "generic"
+              }
+            ]
+          },
+          {
+            "dimensions": {
+              "width": 540,
+              "height": 960
+            },
+            "exportSha256": "08e65dd3fcf218e0bd4573485a38ce6495338738dfd063bbfe895e621a47c4ad",
+            "exportBytes": 17726,
+            "acceptedLines": 6,
+            "exactCodeRoundTrip": true,
+            "substitutions": [
+              {
+                "requestedFamily": "Aptos Display",
+                "sourceFamily": "Aptos Display",
+                "resolvedFamily": "Roboto",
+                "requestedWeight": 700,
+                "resolvedWeight": 700,
+                "italic": false,
+                "compatibility": "generic"
+              },
+              {
+                "requestedFamily": "Aptos",
+                "sourceFamily": "Aptos",
+                "resolvedFamily": "Roboto",
+                "requestedWeight": 400,
+                "resolvedWeight": 400,
+                "italic": false,
+                "compatibility": "generic"
+              }
+            ]
+          }
+        ],
+        "errors": [],
+        "externalRequests": [],
+        "scope": "Offline candidate canvas: real pointer/keyboard code and filename edits, CRLF no-op/preservation, tab insertion/cancel, undo/redo, one-page pagination/readability undo, browser native export and undoable exact code/metadata/source-boundary reimport. Native formatting, positioning and font scheme are not reconstructed; font fallback uses the existing playground policy and is recorded. No native PowerPoint or raster equivalence claim."
+      }
+    }
+  ],
+  "scope": "Fresh candidate installation: core code/compose/pagination tests, actual converter source/metadata/guard tests, renderer source/measurement checks and executed font-loaded offline editor/SVG browser workflows. No source aliases or bundled runtime outside installed node_modules. This is separate from registry publication and native PowerPoint evidence."
+}

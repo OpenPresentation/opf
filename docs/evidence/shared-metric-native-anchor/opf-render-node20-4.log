@@ -1,0 +1,5 @@
+
+> @openpresentation/opf-render@0.7.0 test:metric
+> node test/shared-metric.mjs
+
+Shared metric SVG: 36 accepted aligned layouts, exact zero/source/trace/line origins, no repeated measurement, strict rejection and 198 XML boundary cases.

@@ -1,0 +1,19 @@
+
+> @openpresentation/opf-editor@0.6.0 test
+> npm run build && node test/smoke.mjs && node test/component-smoke.mjs && node test/canvas-fields.mjs && node test/transfer.mjs && node test/schema.mjs && node test/rich-text.mjs && node test/layout.mjs && node test/blocks.mjs && node test/styled-table.mjs
+
+
+> @openpresentation/opf-editor@0.6.0 build
+> node scripts/build.mjs
+
+opf-editor smoke passed
+opf-editor component smoke passed
+Canvas fields: escaped keys, types, immutable drafts, validation and undo passed.
+Transfer: clipboard formats, code fences, fragments, collision-safe insertion, design/assets, undo and explicit gallery fetches passed.
+Schema controls: 625 documented fields, nested paths, catalog records, background forms, required defaults passed.
+Rich range editing passed: cross-run preservation, replacement, style removal, script exclusivity, grapheme safety, validation and atomic undo.
+Native rich input passed: style/link preservation, repeated-character affinity, graphemes and bounded run growth.
+Layout resizing passed: exact track geometry, row/column/nested/grid behavior, auto freeze, weight bounds, metadata preservation, stale guards and undo.
+Block moves passed: sibling order, shifted group destinations, nested/ancestor/cross-slide moves, formatting/data preservation, no-op, cycle/empty rejection, guards and undo.
+Block creation passed: presets, implicit normalization, groups/regions, duplication, empty ancestor pruning, guards, metadata and undo.
+Styled table editor model passed: value-path typing/formatting, styles/spans, empty cells, properties, guarded structural edits and atomic undo.

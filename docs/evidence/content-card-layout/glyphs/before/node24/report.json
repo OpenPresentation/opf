@@ -1,0 +1,3652 @@
+{
+  "node": "v24.20.0",
+  "browser": "152.0.4191.66",
+  "os": {
+    "platform": "win32",
+    "release": "10.0.26200",
+    "version": "Windows 11 Home"
+  },
+  "auditSha256": "3464f51b2e90dd1a964c23652fa2fe94dbde061d5b70e878b033bf7763e4731a",
+  "harnessSha256": "54018b402cdaec9765c19fb95e58a0007651dbb48b040b931e463beb669ee758",
+  "runtime": {
+    "opf/dist/catalogs.js": "6d74d7b051844728b2622acdb5268472a043544c8b2ca04eb904b1cdf74ec739",
+    "opf/dist/chunk-4BN2N6PI.js": "741715220a7d0a40b9250b50574541e82ca0ef17f4ccd51b8400ec4d5e314030",
+    "opf/dist/chunk-ADNKJUWZ.js": "e1941d711c7e75f8d56fd8a442d3e24abdb160e27ac0b6c3d04647bbcbfa7407",
+    "opf/dist/chunk-GQSK3T7X.js": "34f518c29c9757bc252b5c13eb5d7db8ada4b477496e6289d8149fb4fdc7cd45",
+    "opf/dist/chunk-OZULJBSG.js": "9e3ce45dc68d39c646449baf4ec9aad7b92d3f69b85a3dfe37540d13820d0d1e",
+    "opf/dist/chunk-PIQXLBBJ.js": "818578357a214f76a743db8cf63c0903825923e1ba970abf68c21912e59893ba",
+    "opf/dist/chunk-SOSOBKQ2.js": "b2bcaf1f0e8725c9a8f3fff9b5c996c4e7e63c6bb8dd4d13c2d7609105b02915",
+    "opf/dist/chunk-TBGRNGEE.js": "473207ce58d71dc6fa55f9bf80d7c3b9482d6fb4d82684019d19eb21f6816ee9",
+    "opf/dist/chunk-TWMRZ43O.js": "0d35cec97ec7ddaa67fb9f096bc672c927eb68ed5fae5ac27d4dff70d68313f4",
+    "opf/dist/composition.js": "97dca0bb8b6101019be21f85c4787dc3c192eacf82854ccb2a1ab597de129260",
+    "opf/dist/data.js": "ae68ff3088ddcea772573952c572a3c58b8815086c9f81e57939d45848c64b95",
+    "opf/dist/docs.js": "c305e2b84c8b6abb9e95dd92e819abd1a7790818fa4c1a3d94959ab826673c93",
+    "opf/dist/examples.js": "c69ccdcfaa0c4157f27174a3814ac3b6a1874440029b02d27a7fc971fc05fe1a",
+    "opf/dist/index.js": "9f4e158d365a6a62e34339145f9bc519b0937a14bc6c8c66f0d879813de0ec3f",
+    "opf/dist/pagination.js": "265ee40055703902eafdd1b4ca8dde2d6d850cff1b8ea90c876eeb63cd56e447",
+    "opf/dist/previews.js": "043037d2d5dfec4d69072415032818d6a6c5e686938fcd644a4f103286033950",
+    "opf/dist/repo-readme.js": "a8177f828c853554ce636a0ca702efb63d79f96175f5440f35c32e6834ac215a",
+    "opf/dist/schemas.js": "52f40eb788685649099577a9241adb75c5f18b4a5c8cf1e55215b6fa3f52105c",
+    "opf/dist/spec-files.js": "8302d015b9368a585ee6aea946a18b2f0036396acb963e273baee48a0c4ac817",
+    "opf/dist/types.js": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "opf/dist/validator.js": "4ba56751918bad9b4302bc6771d4a1ee4681ab564eac2a1df4624bb6276143e3",
+    "opf-render/dist/font-compatibility.js": "a50ee71748e81cd12ed3aeb6eee92506ebf91ef05021c6ca3f5a100665d03dac",
+    "opf-render/dist/fonts-browser.js": "d0543d838b2f22a8c70bdc60100d72d3c69e3f8033d5ccedd3523ee63c66b8d4",
+    "opf-render/dist/fonts-node.js": "0e65abd7438f3a21fd0cb6ea64120d9e866ef3308510910d11b7b863399f8d8b",
+    "opf-render/dist/fonts.js": "549932e2d013f1f623cd83973b40cbed68c63d52535adb2de6fd921d16bf400c",
+    "opf-render/dist/index.js": "39c8f2b279ce10873f00289349b84cf9cab7e12c56e9e0d87447bd2406777234",
+    "opf-render/dist/raster-images.js": "304cffe5e77553ac1ab590fc5805714dde34e6f69df5dc55e35dbc8df602753c",
+    "opf-render/dist/raster.js": "6ea807bfd43ddaabea95c1137bc1bcf7d656f2ae9c6d87a7e6d2f867df86ea99",
+    "opf-render/dist/svg.js": "a032b9b5d3aa02330e3a40eadcbca2b00bf01489a6bc7f3741d362fb9e11f748"
+  },
+  "fontHashes": [
+    {
+      "family": "Roboto",
+      "weight": 400,
+      "italic": false,
+      "sha256": "15256405ecb0d880678833a582760efad538ab2932318b52c8105b267d159459"
+    },
+    {
+      "family": "Roboto Medium",
+      "weight": 500,
+      "italic": false,
+      "sha256": "79343dc641a2e8d48a703a4667b71fc8dc6565cc8ce47dfc34fc52c12aadbf38"
+    },
+    {
+      "family": "Roboto SemiBold",
+      "weight": 600,
+      "italic": false,
+      "sha256": "32fe2086b0e54eca85a68eb74e3d89bb16a7ffe59085d6dc7d079f5b3c26d6ab"
+    },
+    {
+      "family": "Roboto",
+      "weight": 700,
+      "italic": false,
+      "sha256": "4aaf8c5b661a386998c2e70cf2b87e2440f5404e0b8fd81164f0413fb3435ec6"
+    },
+    {
+      "family": "Roboto ExtraBold",
+      "weight": 800,
+      "italic": false,
+      "sha256": "43d5ce98c58336045220fa1dac2bd22281b1aab3eca66785cb34eb3ad1dfe1a5"
+    },
+    {
+      "family": "Roboto",
+      "weight": 400,
+      "italic": true,
+      "sha256": "6a372c348dc20c246b92d60b9bda3c0a9ffedc129790ed3f31faf89daa99d793"
+    },
+    {
+      "family": "Roboto",
+      "weight": 700,
+      "italic": true,
+      "sha256": "c6a5e7c224d3bf6698e5d3c124f0f0220cad20d5d413920447a96f033a0292ee"
+    },
+    {
+      "family": "Roboto Mono",
+      "weight": 400,
+      "italic": false,
+      "sha256": "e4bf45837847d4abfa5a502b807a83393aa138727bdb9ea9c93fb17d53208d95"
+    },
+    {
+      "family": "Roboto Mono",
+      "weight": 700,
+      "italic": false,
+      "sha256": "92649d819cc4c20480b23a47aaa111769924eb31c66b6ecdcf6f573662558c83"
+    }
+  ],
+  "controls": [
+    {
+      "id": "control-black-on-white",
+      "measured": {
+        "path": "slides.0.text",
+        "text": "Visible glyph support even when source text disappears",
+        "fill": "rgb(0, 0, 0)",
+        "fontFamily": "Roboto, sans-serif",
+        "fontSize": 25,
+        "fontWeight": 400,
+        "fontStyle": "normal",
+        "box": {
+          "x": 57.599998474121094,
+          "y": 58.599998474121094,
+          "width": 616.0625,
+          "height": 30
+        },
+        "chain": [
+          {
+            "tag": "text",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "svg",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          }
+        ]
+      },
+      "threshold": 3,
+      "rectangleMinimum": null,
+      "glyphMinimum": 21,
+      "supportPixels": 5139,
+      "visiblePixels": 5027,
+      "pixelsBelowThreshold": 0,
+      "unsupportedPaint": 0,
+      "outsideTextDifferences": [],
+      "inkBounds": {
+        "left": 57,
+        "top": 64,
+        "right": 672,
+        "bottom": 87
+      },
+      "worst": {
+        "x": 99,
+        "y": 64,
+        "background": [
+          255,
+          255,
+          255
+        ],
+        "maskCoverage": 0.45098039215686275
+      },
+      "auditedMinimumTouchesInk": null,
+      "passed": true,
+      "artifacts": [
+        {
+          "file": "control-black-on-white-full.png",
+          "bytes": 12168,
+          "sha256": "fce87c7e556b3115815a25f4aa54deaa56f1756bfa4e4dd2e70fe7ba83184d07"
+        },
+        {
+          "file": "control-black-on-white-background.png",
+          "bytes": 4254,
+          "sha256": "3878570f4a62a0d65f57cf1754e0269e56ec797f4e36e26b44c172eb6e800401"
+        },
+        {
+          "file": "control-black-on-white-isolated.png",
+          "bytes": 12168,
+          "sha256": "fce87c7e556b3115815a25f4aa54deaa56f1756bfa4e4dd2e70fe7ba83184d07"
+        },
+        {
+          "file": "control-black-on-white-mask.png",
+          "bytes": 12037,
+          "sha256": "ce32f8eb564e36d387745dd6d9bd90845c21356e28a0541b7e25f75ad79ed274"
+        },
+        {
+          "file": "control-black-on-white-inverseMask.png",
+          "bytes": 12168,
+          "sha256": "fce87c7e556b3115815a25f4aa54deaa56f1756bfa4e4dd2e70fe7ba83184d07"
+        }
+      ]
+    },
+    {
+      "id": "control-invisible-white",
+      "measured": {
+        "path": "slides.0.text",
+        "text": "Visible glyph support even when source text disappears",
+        "fill": "rgb(255, 255, 255)",
+        "fontFamily": "Roboto, sans-serif",
+        "fontSize": 25,
+        "fontWeight": 400,
+        "fontStyle": "normal",
+        "box": {
+          "x": 57.599998474121094,
+          "y": 58.599998474121094,
+          "width": 616.0625,
+          "height": 30
+        },
+        "chain": [
+          {
+            "tag": "text",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "svg",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          }
+        ]
+      },
+      "threshold": 3,
+      "rectangleMinimum": null,
+      "glyphMinimum": 1,
+      "supportPixels": 5139,
+      "visiblePixels": 0,
+      "pixelsBelowThreshold": 5139,
+      "unsupportedPaint": 0,
+      "outsideTextDifferences": [],
+      "inkBounds": {
+        "left": 57,
+        "top": 64,
+        "right": 672,
+        "bottom": 87
+      },
+      "worst": {
+        "x": 99,
+        "y": 64,
+        "background": [
+          255,
+          255,
+          255
+        ],
+        "maskCoverage": 0.45098039215686275
+      },
+      "auditedMinimumTouchesInk": null,
+      "passed": false,
+      "artifacts": [
+        {
+          "file": "control-invisible-white-full.png",
+          "bytes": 4254,
+          "sha256": "3878570f4a62a0d65f57cf1754e0269e56ec797f4e36e26b44c172eb6e800401"
+        },
+        {
+          "file": "control-invisible-white-background.png",
+          "bytes": 4254,
+          "sha256": "3878570f4a62a0d65f57cf1754e0269e56ec797f4e36e26b44c172eb6e800401"
+        },
+        {
+          "file": "control-invisible-white-isolated.png",
+          "bytes": 4254,
+          "sha256": "3878570f4a62a0d65f57cf1754e0269e56ec797f4e36e26b44c172eb6e800401"
+        },
+        {
+          "file": "control-invisible-white-mask.png",
+          "bytes": 12037,
+          "sha256": "ce32f8eb564e36d387745dd6d9bd90845c21356e28a0541b7e25f75ad79ed274"
+        },
+        {
+          "file": "control-invisible-white-inverseMask.png",
+          "bytes": 12168,
+          "sha256": "fce87c7e556b3115815a25f4aa54deaa56f1756bfa4e4dd2e70fe7ba83184d07"
+        }
+      ]
+    },
+    {
+      "id": "control-invisible-black",
+      "measured": {
+        "path": "slides.0.text",
+        "text": "Visible glyph support even when source text disappears",
+        "fill": "rgb(0, 0, 0)",
+        "fontFamily": "Roboto, sans-serif",
+        "fontSize": 25,
+        "fontWeight": 400,
+        "fontStyle": "normal",
+        "box": {
+          "x": 57.599998474121094,
+          "y": 58.599998474121094,
+          "width": 616.0625,
+          "height": 30
+        },
+        "chain": [
+          {
+            "tag": "text",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "svg",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          }
+        ]
+      },
+      "threshold": 3,
+      "rectangleMinimum": null,
+      "glyphMinimum": 1,
+      "supportPixels": 5139,
+      "visiblePixels": 0,
+      "pixelsBelowThreshold": 5139,
+      "unsupportedPaint": 0,
+      "outsideTextDifferences": [],
+      "inkBounds": {
+        "left": 57,
+        "top": 64,
+        "right": 672,
+        "bottom": 87
+      },
+      "worst": {
+        "x": 99,
+        "y": 64,
+        "background": [
+          0,
+          0,
+          0
+        ],
+        "maskCoverage": 0.45098039215686275
+      },
+      "auditedMinimumTouchesInk": null,
+      "passed": false,
+      "artifacts": [
+        {
+          "file": "control-invisible-black-full.png",
+          "bytes": 4250,
+          "sha256": "7a5175f59992a07616d58b06a310b2a3909c43df6d406a736ef54995563a09ed"
+        },
+        {
+          "file": "control-invisible-black-background.png",
+          "bytes": 4250,
+          "sha256": "7a5175f59992a07616d58b06a310b2a3909c43df6d406a736ef54995563a09ed"
+        },
+        {
+          "file": "control-invisible-black-isolated.png",
+          "bytes": 4250,
+          "sha256": "7a5175f59992a07616d58b06a310b2a3909c43df6d406a736ef54995563a09ed"
+        },
+        {
+          "file": "control-invisible-black-mask.png",
+          "bytes": 12037,
+          "sha256": "ce32f8eb564e36d387745dd6d9bd90845c21356e28a0541b7e25f75ad79ed274"
+        },
+        {
+          "file": "control-invisible-black-inverseMask.png",
+          "bytes": 12168,
+          "sha256": "fce87c7e556b3115815a25f4aa54deaa56f1756bfa4e4dd2e70fe7ba83184d07"
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "id": "finding-00",
+      "measured": {
+        "path": "slides.5.top:left.metric.value",
+        "text": "18%",
+        "fill": "rgb(27, 73, 203)",
+        "fontFamily": "\"Aptos Display\", sans-serif",
+        "fontSize": 37.579,
+        "fontWeight": 800,
+        "fontStyle": "normal",
+        "box": {
+          "x": 210.28799438476562,
+          "y": 144.0590057373047,
+          "width": 87.703125,
+          "height": 53
+        },
+        "chain": [
+          {
+            "tag": "tspan",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "text",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "svg",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          }
+        ]
+      },
+      "threshold": 3,
+      "rectangleMinimum": 1.5882186056141032,
+      "glyphMinimum": 7.013045399923033,
+      "supportPixels": 1375,
+      "visiblePixels": 1365,
+      "pixelsBelowThreshold": 0,
+      "unsupportedPaint": 0,
+      "outsideTextDifferences": [],
+      "inkBounds": {
+        "left": 213,
+        "top": 157,
+        "right": 296,
+        "bottom": 184
+      },
+      "worst": {
+        "x": 222,
+        "y": 157,
+        "background": [
+          248,
+          250,
+          252
+        ],
+        "maskCoverage": 0.9058823529411765
+      },
+      "auditedMinimumTouchesInk": false,
+      "passed": true,
+      "artifacts": [
+        {
+          "file": "finding-00-full.png",
+          "bytes": 83398,
+          "sha256": "311fb6e366207f8aa1579c028474ad682299b8b180d7a775b241c45221043cce"
+        },
+        {
+          "file": "finding-00-background.png",
+          "bytes": 8197,
+          "sha256": "e351650043e30430b9df85ceef61d092c457a8db1649bcf2c483c1b34827b162"
+        },
+        {
+          "file": "finding-00-isolated.png",
+          "bytes": 10520,
+          "sha256": "0f12815c2b4161b820c50e04d8ee9afc7b5d5a3ebf21b89d0c92a03d851973e3"
+        },
+        {
+          "file": "finding-00-mask.png",
+          "bytes": 6478,
+          "sha256": "a72b257f83444559a599318e0e42b9ebffecc69388c92b7ec42132d3d1c99d26"
+        },
+        {
+          "file": "finding-00-inverseMask.png",
+          "bytes": 6511,
+          "sha256": "15112b9ccb7835a997624cf9373d2b5e65a96a21ac8412b7f4b0766548034fd1"
+        }
+      ],
+      "file": "examples/gallery/business-functions/compliance-readiness-review.opf.json",
+      "slide": 5,
+      "path": "slides.5.top:left.metric.value",
+      "text": "18%",
+      "sourceSha256": "b0df7d9583579f11f9f9a83372b0d270008c9c59fc4bac865fabdc8a7d6654de",
+      "svgSha256": "c7e3f61e3897c1191ecc19ed070529679d76ca1e3b64d0f3d69584771dfc58d6"
+    },
+    {
+      "id": "finding-01",
+      "measured": {
+        "path": "slides.6.blocks.2.metric.value",
+        "text": "11",
+        "fill": "rgb(27, 73, 203)",
+        "fontFamily": "\"Aptos Display\", sans-serif",
+        "fontSize": 76,
+        "fontWeight": 800,
+        "fontStyle": "normal",
+        "box": {
+          "x": 960.3070068359375,
+          "y": 139.47999572753906,
+          "width": 101.390625,
+          "height": 108
+        },
+        "chain": [
+          {
+            "tag": "tspan",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "text",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "svg",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          }
+        ]
+      },
+      "threshold": 3,
+      "rectangleMinimum": 1.5882186056141032,
+      "glyphMinimum": 7.013045399923033,
+      "supportPixels": 2257,
+      "visiblePixels": 2257,
+      "pixelsBelowThreshold": 0,
+      "unsupportedPaint": 0,
+      "outsideTextDifferences": [],
+      "inkBounds": {
+        "left": 966,
+        "top": 168,
+        "right": 1048,
+        "bottom": 222
+      },
+      "worst": {
+        "x": 984,
+        "y": 168,
+        "background": [
+          248,
+          250,
+          252
+        ],
+        "maskCoverage": 0.43137254901960786
+      },
+      "auditedMinimumTouchesInk": false,
+      "passed": true,
+      "artifacts": [
+        {
+          "file": "finding-01-full.png",
+          "bytes": 46156,
+          "sha256": "de94fca84a8c1d4eeadb3c55a396f9f79788b20f726ef6a15ef7df415555fda1"
+        },
+        {
+          "file": "finding-01-background.png",
+          "bytes": 8679,
+          "sha256": "7cd323ac4be7e726e94c755d95c87eea65de446b43fb1301dc5b5ed2b5072af5"
+        },
+        {
+          "file": "finding-01-isolated.png",
+          "bytes": 9410,
+          "sha256": "9516925252d62ae23f5b2dde1b15bb66a5821ad89b1995816c673f3aa855e54e"
+        },
+        {
+          "file": "finding-01-mask.png",
+          "bytes": 5094,
+          "sha256": "d8512f769587de040d9c81cc151e23bb606a91dd36396b0ac01dcdb45ebf9f67"
+        },
+        {
+          "file": "finding-01-inverseMask.png",
+          "bytes": 5071,
+          "sha256": "123b8b76405489c6f8da00891cf397d8e9f1a207572890d3c48d58e6685a2d46"
+        }
+      ],
+      "file": "examples/gallery/business-functions/compliance-readiness-review.opf.json",
+      "slide": 6,
+      "path": "slides.6.blocks.2.metric.value",
+      "text": "11",
+      "sourceSha256": "b0df7d9583579f11f9f9a83372b0d270008c9c59fc4bac865fabdc8a7d6654de",
+      "svgSha256": "a1a08d04150ec2c7d351e7ee6ab6a92c3956f801928ecf54d155e7c55b87aa17"
+    },
+    {
+      "id": "finding-02",
+      "measured": {
+        "path": "slides.1.text",
+        "text": "Sable Systems should focus the next cycle on ",
+        "fill": "rgb(255, 255, 255)",
+        "fontFamily": "Aptos, serif",
+        "fontSize": 20.833,
+        "fontWeight": 400,
+        "fontStyle": "normal",
+        "box": {
+          "x": 50.20800018310547,
+          "y": 124.73300170898438,
+          "width": 384.140625,
+          "height": 24
+        },
+        "chain": [
+          {
+            "tag": "text",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "svg",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          }
+        ]
+      },
+      "threshold": 4.5,
+      "rectangleMinimum": 1.3235424914075549,
+      "glyphMinimum": 10.35474573184942,
+      "supportPixels": 2647,
+      "visiblePixels": 2647,
+      "pixelsBelowThreshold": 0,
+      "unsupportedPaint": 0,
+      "outsideTextDifferences": [],
+      "inkBounds": {
+        "left": 51,
+        "top": 129,
+        "right": 429,
+        "bottom": 147
+      },
+      "worst": {
+        "x": 71,
+        "y": 129,
+        "background": [
+          51,
+          65,
+          85
+        ],
+        "maskCoverage": 0.45098039215686275
+      },
+      "auditedMinimumTouchesInk": false,
+      "passed": true,
+      "artifacts": [
+        {
+          "file": "finding-02-full.png",
+          "bytes": 35701,
+          "sha256": "02764a173d7a851cae137b38c7004ac772adb7be89833bfad2534709ac9c76b9"
+        },
+        {
+          "file": "finding-02-background.png",
+          "bytes": 4646,
+          "sha256": "8ff2ccb3db331783dc3d2f3db9a015af1f29da65521c5d2c3ff74100f3a608e9"
+        },
+        {
+          "file": "finding-02-isolated.png",
+          "bytes": 11180,
+          "sha256": "d42454d4c10d01d4f00faa3b91f40f98ec1459daa98b6048a2ce36eac9df1ab1"
+        },
+        {
+          "file": "finding-02-mask.png",
+          "bytes": 9050,
+          "sha256": "ee42fcc60b9dc4c659ef35f2d809741136d80a58abaa7706ab7a5bda2967a469"
+        },
+        {
+          "file": "finding-02-inverseMask.png",
+          "bytes": 9058,
+          "sha256": "da37770ef69dcf0f75bba53bfd7fa023ca5fb5c4f3ff5322bd241b52374b8664"
+        }
+      ],
+      "file": "examples/gallery/business-functions/identity-incident-executive-brief.opf.json",
+      "slide": 1,
+      "path": "slides.1.text",
+      "text": "Sable Systems should focus the next cycle on ",
+      "sourceSha256": "53e99861578be9203368239670d8d2c6646e9128d4392d47b5767c052b063238",
+      "svgSha256": "f396a29d13defe6813ac5ee81ea2e204e894f295a0d6c436999660755994ab6f"
+    },
+    {
+      "id": "finding-03",
+      "measured": {
+        "path": "slides.5.bullets",
+        "text": "•",
+        "fill": "rgb(255, 255, 255)",
+        "fontFamily": "Aptos, serif",
+        "fontSize": 20.833,
+        "fontWeight": 400,
+        "fontStyle": "normal",
+        "box": {
+          "x": 48,
+          "y": 124.73300170898438,
+          "width": 7.296875,
+          "height": 24
+        },
+        "chain": [
+          {
+            "tag": "text",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "svg",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          }
+        ]
+      },
+      "threshold": 4.5,
+      "rectangleMinimum": 1.2521693866260188,
+      "glyphMinimum": 2.9742918472712527,
+      "supportPixels": 31,
+      "visiblePixels": 31,
+      "pixelsBelowThreshold": 3,
+      "unsupportedPaint": 0,
+      "outsideTextDifferences": [],
+      "inkBounds": {
+        "left": 48,
+        "top": 134,
+        "right": 54,
+        "bottom": 138
+      },
+      "worst": {
+        "x": 48,
+        "y": 135,
+        "background": [
+          139,
+          151,
+          164
+        ],
+        "maskCoverage": 0.12941176470588237
+      },
+      "auditedMinimumTouchesInk": false,
+      "passed": false,
+      "artifacts": [
+        {
+          "file": "finding-03-full.png",
+          "bytes": 40284,
+          "sha256": "78c8d45da1ebc0c3cbc022773bb5c0a4732ac42d59b270ca62e12fd89f730dc0"
+        },
+        {
+          "file": "finding-03-background.png",
+          "bytes": 6692,
+          "sha256": "6179398a716bbc235159411e414247c70a8a9651d0d0f8a8314f80e9ed877186"
+        },
+        {
+          "file": "finding-03-isolated.png",
+          "bytes": 6799,
+          "sha256": "30e49583e7d4065d78107d039acbd654bad4ef87e50072041dd5103db9dd8696"
+        },
+        {
+          "file": "finding-03-mask.png",
+          "bytes": 3154,
+          "sha256": "18a30c69ace7273f3f24ddd041a861bd929990054049485fadd8f327be10d9a0"
+        },
+        {
+          "file": "finding-03-inverseMask.png",
+          "bytes": 3141,
+          "sha256": "991653636ee5ba609d62ae4285e898ec2f347cb5b317cb2a25e6dc91c8e9fce3"
+        }
+      ],
+      "file": "examples/gallery/business-functions/identity-incident-executive-brief.opf.json",
+      "slide": 5,
+      "path": "slides.5.bullets",
+      "text": "•",
+      "sourceSha256": "53e99861578be9203368239670d8d2c6646e9128d4392d47b5767c052b063238",
+      "svgSha256": "61dd5772a897d611d9650582f4a288ad16037ff63a98c538ebb91c5eb3ad8427"
+    },
+    {
+      "id": "finding-04",
+      "measured": {
+        "path": "slides.5.bullets",
+        "text": "•",
+        "fill": "rgb(255, 255, 255)",
+        "fontFamily": "Aptos, serif",
+        "fontSize": 20.833,
+        "fontWeight": 400,
+        "fontStyle": "normal",
+        "box": {
+          "x": 48,
+          "y": 257.6499938964844,
+          "width": 7.296875,
+          "height": 24
+        },
+        "chain": [
+          {
+            "tag": "text",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "svg",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          }
+        ]
+      },
+      "threshold": 4.5,
+      "rectangleMinimum": 3.0015439763481186,
+      "glyphMinimum": 2.9742918472712527,
+      "supportPixels": 31,
+      "visiblePixels": 31,
+      "pixelsBelowThreshold": 3,
+      "unsupportedPaint": 0,
+      "outsideTextDifferences": [],
+      "inkBounds": {
+        "left": 48,
+        "top": 267,
+        "right": 54,
+        "bottom": 271
+      },
+      "worst": {
+        "x": 48,
+        "y": 268,
+        "background": [
+          139,
+          151,
+          164
+        ],
+        "maskCoverage": 0.12941176470588237
+      },
+      "auditedMinimumTouchesInk": false,
+      "passed": false,
+      "artifacts": [
+        {
+          "file": "finding-04-full.png",
+          "bytes": 40284,
+          "sha256": "78c8d45da1ebc0c3cbc022773bb5c0a4732ac42d59b270ca62e12fd89f730dc0"
+        },
+        {
+          "file": "finding-04-background.png",
+          "bytes": 6692,
+          "sha256": "6179398a716bbc235159411e414247c70a8a9651d0d0f8a8314f80e9ed877186"
+        },
+        {
+          "file": "finding-04-isolated.png",
+          "bytes": 6800,
+          "sha256": "7b036c199ae3403df5fc33b803bbfc411d5abec23fca83fe6fe2689f9d5967ad"
+        },
+        {
+          "file": "finding-04-mask.png",
+          "bytes": 3154,
+          "sha256": "195047ed6416041d5101f290e25fde48546a0fa73d433e0ffe32793205ad2f47"
+        },
+        {
+          "file": "finding-04-inverseMask.png",
+          "bytes": 3141,
+          "sha256": "10baec3c2a5e4ca8b531b85e42efac615ebfdfc3b74447d25fb655ff5eae5e1f"
+        }
+      ],
+      "file": "examples/gallery/business-functions/identity-incident-executive-brief.opf.json",
+      "slide": 5,
+      "path": "slides.5.bullets",
+      "text": "•",
+      "sourceSha256": "53e99861578be9203368239670d8d2c6646e9128d4392d47b5767c052b063238",
+      "svgSha256": "61dd5772a897d611d9650582f4a288ad16037ff63a98c538ebb91c5eb3ad8427"
+    },
+    {
+      "id": "finding-05",
+      "measured": {
+        "path": "slides.5.bullets",
+        "text": "•",
+        "fill": "rgb(255, 255, 255)",
+        "fontFamily": "Aptos, serif",
+        "fontSize": 20.833,
+        "fontWeight": 400,
+        "fontStyle": "normal",
+        "box": {
+          "x": 48,
+          "y": 339.7330017089844,
+          "width": 7.296875,
+          "height": 24
+        },
+        "chain": [
+          {
+            "tag": "text",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "svg",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          }
+        ]
+      },
+      "threshold": 4.5,
+      "rectangleMinimum": 3.0015439763481186,
+      "glyphMinimum": 2.9742918472712527,
+      "supportPixels": 31,
+      "visiblePixels": 31,
+      "pixelsBelowThreshold": 3,
+      "unsupportedPaint": 0,
+      "outsideTextDifferences": [],
+      "inkBounds": {
+        "left": 48,
+        "top": 349,
+        "right": 54,
+        "bottom": 353
+      },
+      "worst": {
+        "x": 48,
+        "y": 350,
+        "background": [
+          139,
+          151,
+          164
+        ],
+        "maskCoverage": 0.12941176470588237
+      },
+      "auditedMinimumTouchesInk": false,
+      "passed": false,
+      "artifacts": [
+        {
+          "file": "finding-05-full.png",
+          "bytes": 40284,
+          "sha256": "78c8d45da1ebc0c3cbc022773bb5c0a4732ac42d59b270ca62e12fd89f730dc0"
+        },
+        {
+          "file": "finding-05-background.png",
+          "bytes": 6692,
+          "sha256": "6179398a716bbc235159411e414247c70a8a9651d0d0f8a8314f80e9ed877186"
+        },
+        {
+          "file": "finding-05-isolated.png",
+          "bytes": 6798,
+          "sha256": "7b2cec61ed502ab700339766863eb7ea37285b7874fea1af1390d7b2b3d63fe3"
+        },
+        {
+          "file": "finding-05-mask.png",
+          "bytes": 3154,
+          "sha256": "c54e77a58d263b749a78d02457b7a905ee99c8467ca505f14ea7a7e01203fab6"
+        },
+        {
+          "file": "finding-05-inverseMask.png",
+          "bytes": 3141,
+          "sha256": "59ae31bd2680da849d53369305d8c4bd76e43b1f1f72a26138a4546ade6eef05"
+        }
+      ],
+      "file": "examples/gallery/business-functions/identity-incident-executive-brief.opf.json",
+      "slide": 5,
+      "path": "slides.5.bullets",
+      "text": "•",
+      "sourceSha256": "53e99861578be9203368239670d8d2c6646e9128d4392d47b5767c052b063238",
+      "svgSha256": "61dd5772a897d611d9650582f4a288ad16037ff63a98c538ebb91c5eb3ad8427"
+    },
+    {
+      "id": "finding-06",
+      "measured": {
+        "path": "slides.5.top:left.metric.value",
+        "text": "2.4x",
+        "fill": "rgb(171, 16, 54)",
+        "fontFamily": "\"Aptos Display\", sans-serif",
+        "fontSize": 43.975,
+        "fontWeight": 800,
+        "fontStyle": "normal",
+        "box": {
+          "x": 196.0938262939453,
+          "y": 159.83203125,
+          "width": 103.29570007324219,
+          "height": 61.99884033203125
+        },
+        "chain": [
+          {
+            "tag": "tspan",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "text",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "svg",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          }
+        ]
+      },
+      "threshold": 3,
+      "rectangleMinimum": 1.874720986070952,
+      "glyphMinimum": 7.020426385107775,
+      "supportPixels": 1777,
+      "visiblePixels": 1759,
+      "pixelsBelowThreshold": 0,
+      "unsupportedPaint": 0,
+      "outsideTextDifferences": [],
+      "inkBounds": {
+        "left": 196,
+        "top": 175,
+        "right": 298,
+        "bottom": 207
+      },
+      "worst": {
+        "x": 203,
+        "y": 175,
+        "background": [
+          248,
+          250,
+          252
+        ],
+        "maskCoverage": 0.12941176470588237
+      },
+      "auditedMinimumTouchesInk": false,
+      "passed": true,
+      "artifacts": [
+        {
+          "file": "finding-06-full.png",
+          "bytes": 96636,
+          "sha256": "901e50412bfb0112bb88e3a855605db03113fb8090be87c6c2b14aee3b2938be"
+        },
+        {
+          "file": "finding-06-background.png",
+          "bytes": 9207,
+          "sha256": "f11e5ad7d083c40b02dfa9dbaed6667d0e14510619b7bc318cefefdf82f0958b"
+        },
+        {
+          "file": "finding-06-isolated.png",
+          "bytes": 10960,
+          "sha256": "91898a8a677469096fb9ec2bf34fb4ff8666c057a63df466d4998eec0f04a441"
+        },
+        {
+          "file": "finding-06-mask.png",
+          "bytes": 6450,
+          "sha256": "ca410c8989957d7be92d8ff705685fabbed97f072ae9308aa340537e8c14a4fd"
+        },
+        {
+          "file": "finding-06-inverseMask.png",
+          "bytes": 6475,
+          "sha256": "aa61bd5781cce0a729b37d49f41b06433ce0f663f5d32152e107e6450e1535ed"
+        }
+      ],
+      "file": "examples/gallery/business-functions/product-roadmap-decision-review.opf.json",
+      "slide": 5,
+      "path": "slides.5.top:left.metric.value",
+      "text": "2.4x",
+      "sourceSha256": "8815a44579acb74796aff75228e43c24a15c0e27ccc849dd4d4b9c5a202925e6",
+      "svgSha256": "3764117ecc3a7913098c19420f2b9915909cdde0a5d602af16189937bdbd65ec"
+    },
+    {
+      "id": "finding-07",
+      "measured": {
+        "path": "slides.6.blocks.2.metric.value",
+        "text": "42",
+        "fill": "rgb(171, 16, 54)",
+        "fontFamily": "\"Aptos Display\", sans-serif",
+        "fontSize": 84.441,
+        "fontWeight": 800,
+        "fontStyle": "normal",
+        "box": {
+          "x": 955.3536987304688,
+          "y": 155.29811096191406,
+          "width": 112.65411376953125,
+          "height": 118.99778747558594
+        },
+        "chain": [
+          {
+            "tag": "tspan",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "text",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "svg",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          }
+        ]
+      },
+      "threshold": 3,
+      "rectangleMinimum": 1.874720986070952,
+      "glyphMinimum": 7.020426385107775,
+      "supportPixels": 4059,
+      "visiblePixels": 4059,
+      "pixelsBelowThreshold": 0,
+      "unsupportedPaint": 0,
+      "outsideTextDifferences": [],
+      "inkBounds": {
+        "left": 956,
+        "top": 187,
+        "right": 1064,
+        "bottom": 247
+      },
+      "worst": {
+        "x": 986,
+        "y": 187,
+        "background": [
+          248,
+          250,
+          252
+        ],
+        "maskCoverage": 0.28627450980392155
+      },
+      "auditedMinimumTouchesInk": false,
+      "passed": true,
+      "artifacts": [
+        {
+          "file": "finding-07-full.png",
+          "bytes": 50169,
+          "sha256": "bc5f572dac1f6e072b515286a41d06703f8f01c6fed5bc3047bcd24aa6757f6c"
+        },
+        {
+          "file": "finding-07-background.png",
+          "bytes": 7773,
+          "sha256": "74807172d0d32a42f6d428167349870a71a6d6e7ba302e3026b2ed1a52fb5c54"
+        },
+        {
+          "file": "finding-07-isolated.png",
+          "bytes": 9956,
+          "sha256": "f3e147402b1c3c6f37c3fd725653277b3ff7dec7b9c16002527912e6cf4da43f"
+        },
+        {
+          "file": "finding-07-mask.png",
+          "bytes": 7054,
+          "sha256": "3330be45f08d4d2d610bbcac17e526dc25369a5ef99918b06e9ae8567486458a"
+        },
+        {
+          "file": "finding-07-inverseMask.png",
+          "bytes": 7022,
+          "sha256": "7a963ba074a604c37ce69f54d1d4a5c3e9bbb122b1b01df48a003b10fc434fe6"
+        }
+      ],
+      "file": "examples/gallery/business-functions/product-roadmap-decision-review.opf.json",
+      "slide": 6,
+      "path": "slides.6.blocks.2.metric.value",
+      "text": "42",
+      "sourceSha256": "8815a44579acb74796aff75228e43c24a15c0e27ccc849dd4d4b9c5a202925e6",
+      "svgSha256": "3941f112ce66c61a4c48b370ba59891703f621b1aa3c30c6bfe888f7cc386130"
+    },
+    {
+      "id": "finding-08",
+      "measured": {
+        "path": "slides.5.top:left.metric.trend",
+        "text": "up",
+        "fill": "rgb(15, 23, 42)",
+        "fontFamily": "Aptos, serif",
+        "fontSize": 17.777,
+        "fontWeight": 500,
+        "fontStyle": "normal",
+        "box": {
+          "x": 236.50506591796875,
+          "y": 316.81011962890625,
+          "width": 18.8846435546875,
+          "height": 19.9996337890625
+        },
+        "chain": [
+          {
+            "tag": "tspan",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "text",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "svg",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          }
+        ]
+      },
+      "threshold": 4.5,
+      "rectangleMinimum": 4.377466909138923,
+      "glyphMinimum": 4.801079433716645,
+      "supportPixels": 129,
+      "visiblePixels": 127,
+      "pixelsBelowThreshold": 0,
+      "unsupportedPaint": 0,
+      "outsideTextDifferences": [],
+      "inkBounds": {
+        "left": 237,
+        "top": 325,
+        "right": 255,
+        "bottom": 336
+      },
+      "worst": {
+        "x": 246,
+        "y": 336,
+        "background": [
+          82,
+          139,
+          172
+        ],
+        "maskCoverage": 0.8392156862745098
+      },
+      "auditedMinimumTouchesInk": false,
+      "passed": true,
+      "artifacts": [
+        {
+          "file": "finding-08-full.png",
+          "bytes": 97144,
+          "sha256": "28424978b6e3e5d55abf4e78a9025e82e0c59278bad7f0f98bcae108da19b293"
+        },
+        {
+          "file": "finding-08-background.png",
+          "bytes": 9302,
+          "sha256": "654ce910cc29c5658c75d3d235e89dbf47042755bfcc944ccc26170dd55d2e1e"
+        },
+        {
+          "file": "finding-08-isolated.png",
+          "bytes": 9655,
+          "sha256": "2f88a2d06671c3f993ea7f9517d20a7a83725e76b1023fe8b89692296a31c695"
+        },
+        {
+          "file": "finding-08-mask.png",
+          "bytes": 5188,
+          "sha256": "d00d134aef0796b5cf7bc968382dc3552d64a22d19c6260a06b202b81054c0b9"
+        },
+        {
+          "file": "finding-08-inverseMask.png",
+          "bytes": 5198,
+          "sha256": "260130431dae99c51dea3be03e2db009494e29c67c9334474c958654da83ca02"
+        }
+      ],
+      "file": "examples/gallery/business-functions/supplier-risk-heatmap.opf.json",
+      "slide": 5,
+      "path": "slides.5.top:left.metric.trend",
+      "text": "up",
+      "sourceSha256": "702281579766e0f91809f149d561ea753859b2d2b7fce9d87e4cbc838e7bf104",
+      "svgSha256": "1f1d40d812caea09ff8e6c06c8ec9f8d72a789d7502f92c82879c91e421a1884"
+    },
+    {
+      "id": "finding-09",
+      "measured": {
+        "path": "slides.1.text",
+        "text": "Northgate Museum should focus the next cycle on ",
+        "fill": "rgb(15, 23, 42)",
+        "fontFamily": "Aptos, serif",
+        "fontSize": 27.777,
+        "fontWeight": 400,
+        "fontStyle": "normal",
+        "box": {
+          "x": 65.9542236328125,
+          "y": 166.6334228515625,
+          "width": 567.078125,
+          "height": 31
+        },
+        "chain": [
+          {
+            "tag": "text",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "svg",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          }
+        ]
+      },
+      "threshold": 3,
+      "rectangleMinimum": 2.289190215322011,
+      "glyphMinimum": 17.062933971317335,
+      "supportPixels": 4562,
+      "visiblePixels": 4436,
+      "pixelsBelowThreshold": 0,
+      "unsupportedPaint": 0,
+      "outsideTextDifferences": [],
+      "inkBounds": {
+        "left": 66,
+        "top": 172,
+        "right": 626,
+        "bottom": 197
+      },
+      "worst": {
+        "x": 119,
+        "y": 172,
+        "background": [
+          248,
+          250,
+          252
+        ],
+        "maskCoverage": 0.45098039215686275
+      },
+      "auditedMinimumTouchesInk": false,
+      "passed": true,
+      "artifacts": [
+        {
+          "file": "finding-09-full.png",
+          "bytes": 50117,
+          "sha256": "c0a33037cfa34699edd3a6c470ffd4035b3d32b9683f9d7d2ea41573b70196f6"
+        },
+        {
+          "file": "finding-09-background.png",
+          "bytes": 6839,
+          "sha256": "9af87cbba396f526d8d90321ecde9aa4a248a904bd7a5e67b1d30441488ad29c"
+        },
+        {
+          "file": "finding-09-isolated.png",
+          "bytes": 15349,
+          "sha256": "e81d845172fee441421066ac9626dd22648e4264a3b454f09f31a7b67c71db6b"
+        },
+        {
+          "file": "finding-09-mask.png",
+          "bytes": 12804,
+          "sha256": "a5d3177fc61f7bc7911751d6b0bd6d5c7f7e2c2d5d4538b3ab3b5aae810bfae3"
+        },
+        {
+          "file": "finding-09-inverseMask.png",
+          "bytes": 12979,
+          "sha256": "965386af92e3d95ed3c65cbf95f16e2f57683cde5c270c6d0fdf9c2db193e397"
+        }
+      ],
+      "file": "examples/gallery/design-and-media/kiosk-orientation-deck.opf.json",
+      "slide": 1,
+      "path": "slides.1.text",
+      "text": "Northgate Museum should focus the next cycle on ",
+      "sourceSha256": "3f7354f7eb5e85d7af97c4913e071869e3989bfaf3b0c997780caa65ca8ab9f4",
+      "svgSha256": "5ac542a97b819827ffe0fb0fbe343680de9c176539f6cf517b1f241403ca14f6"
+    },
+    {
+      "id": "finding-10",
+      "measured": {
+        "path": "slides.5.top:left.metric.trend",
+        "text": "up",
+        "fill": "rgb(15, 23, 42)",
+        "fontFamily": "Aptos, serif",
+        "fontSize": 17.777,
+        "fontWeight": 500,
+        "fontStyle": "normal",
+        "box": {
+          "x": 236.50506591796875,
+          "y": 316.81011962890625,
+          "width": 18.8846435546875,
+          "height": 19.9996337890625
+        },
+        "chain": [
+          {
+            "tag": "tspan",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "text",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "svg",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          }
+        ]
+      },
+      "threshold": 4.5,
+      "rectangleMinimum": 3.67269519300426,
+      "glyphMinimum": 4.046068032470196,
+      "supportPixels": 129,
+      "visiblePixels": 127,
+      "pixelsBelowThreshold": 5,
+      "unsupportedPaint": 0,
+      "outsideTextDifferences": [],
+      "inkBounds": {
+        "left": 237,
+        "top": 325,
+        "right": 255,
+        "bottom": 336
+      },
+      "worst": {
+        "x": 246,
+        "y": 336,
+        "background": [
+          106,
+          120,
+          153
+        ],
+        "maskCoverage": 0.8392156862745098
+      },
+      "auditedMinimumTouchesInk": false,
+      "passed": false,
+      "artifacts": [
+        {
+          "file": "finding-10-full.png",
+          "bytes": 100733,
+          "sha256": "2b3418e68836d688b15b6d27c798f47d647ef28a531cb280d36b6b7d55e6dcd9"
+        },
+        {
+          "file": "finding-10-background.png",
+          "bytes": 9447,
+          "sha256": "ff9b54b72a72d1c5e8ffcf14bfa600efeadf0c0b8e80866188b8ee5f5bf8ad4f"
+        },
+        {
+          "file": "finding-10-isolated.png",
+          "bytes": 9794,
+          "sha256": "6eee22e0cd3b5ba1a27ebbd14fb0918b136d26ea44b7d3f36007d45190267bdc"
+        },
+        {
+          "file": "finding-10-mask.png",
+          "bytes": 5188,
+          "sha256": "d00d134aef0796b5cf7bc968382dc3552d64a22d19c6260a06b202b81054c0b9"
+        },
+        {
+          "file": "finding-10-inverseMask.png",
+          "bytes": 5198,
+          "sha256": "260130431dae99c51dea3be03e2db009494e29c67c9334474c958654da83ca02"
+        }
+      ],
+      "file": "examples/gallery/design-and-media/kiosk-orientation-deck.opf.json",
+      "slide": 5,
+      "path": "slides.5.top:left.metric.trend",
+      "text": "up",
+      "sourceSha256": "3f7354f7eb5e85d7af97c4913e071869e3989bfaf3b0c997780caa65ca8ab9f4",
+      "svgSha256": "1b14e75879afb1b747e09421262061199ab928d5e5e173e01e46ef8e45d428f3"
+    },
+    {
+      "id": "finding-11",
+      "measured": {
+        "path": "slides.9.items",
+        "text": "•",
+        "fill": "rgb(15, 23, 42)",
+        "fontFamily": "Aptos, serif",
+        "fontSize": 27.777,
+        "fontWeight": 400,
+        "fontStyle": "normal",
+        "box": {
+          "x": 64.00027465820312,
+          "y": 166.6334228515625,
+          "width": 9.734382629394531,
+          "height": 31
+        },
+        "chain": [
+          {
+            "tag": "text",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "svg",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          }
+        ]
+      },
+      "threshold": 3,
+      "rectangleMinimum": 2.289190215322011,
+      "glyphMinimum": 17.062933971317335,
+      "supportPixels": 52,
+      "visiblePixels": 52,
+      "pixelsBelowThreshold": 0,
+      "unsupportedPaint": 0,
+      "outsideTextDifferences": [],
+      "inkBounds": {
+        "left": 65,
+        "top": 179,
+        "right": 72,
+        "bottom": 185
+      },
+      "worst": {
+        "x": 66,
+        "y": 179,
+        "background": [
+          248,
+          250,
+          252
+        ],
+        "maskCoverage": 0.5490196078431373
+      },
+      "auditedMinimumTouchesInk": false,
+      "passed": true,
+      "artifacts": [
+        {
+          "file": "finding-11-full.png",
+          "bytes": 66904,
+          "sha256": "cab83792465d7475c8776881ec1c4617554ef920849a99d3547814aa5e392eb0"
+        },
+        {
+          "file": "finding-11-background.png",
+          "bytes": 6839,
+          "sha256": "9af87cbba396f526d8d90321ecde9aa4a248a904bd7a5e67b1d30441488ad29c"
+        },
+        {
+          "file": "finding-11-isolated.png",
+          "bytes": 6982,
+          "sha256": "ae67b522aba0920ac6231dee9eedc93ea37130c00db6fab40a67175f1b59cd1f"
+        },
+        {
+          "file": "finding-11-mask.png",
+          "bytes": 4974,
+          "sha256": "f52ec2ced0d88adbde4c4fe038eaa8cba73f4ee75b9179fbec99d7a23ff1caa3"
+        },
+        {
+          "file": "finding-11-inverseMask.png",
+          "bytes": 4984,
+          "sha256": "29f6fc34e57b88cd48af2d54d393f35689dffeeb503c837b64434407fd669ca9"
+        }
+      ],
+      "file": "examples/gallery/design-and-media/kiosk-orientation-deck.opf.json",
+      "slide": 9,
+      "path": "slides.9.items",
+      "text": "•",
+      "sourceSha256": "3f7354f7eb5e85d7af97c4913e071869e3989bfaf3b0c997780caa65ca8ab9f4",
+      "svgSha256": "89f116e0c9e2fa096fa0e070d2115728c19e18300731b3e29af379ce09a7fae4"
+    },
+    {
+      "id": "finding-12",
+      "measured": {
+        "path": "slides.1.text",
+        "text": "combine video proof and business case in a compact ",
+        "fill": "rgb(27, 73, 203)",
+        "fontFamily": "Aptos, sans-serif",
+        "fontSize": 25,
+        "fontWeight": 700,
+        "fontStyle": "normal",
+        "box": {
+          "x": 580,
+          "y": 149.47999572753906,
+          "width": 641.84375,
+          "height": 28
+        },
+        "chain": [
+          {
+            "tag": "text",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "svg",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          }
+        ]
+      },
+      "threshold": 3,
+      "rectangleMinimum": 2.5489022126979113,
+      "glyphMinimum": 7.013045399923033,
+      "supportPixels": 6153,
+      "visiblePixels": 6099,
+      "pixelsBelowThreshold": 0,
+      "unsupportedPaint": 0,
+      "outsideTextDifferences": [],
+      "inkBounds": {
+        "left": 580,
+        "top": 154,
+        "right": 1215,
+        "bottom": 176
+      },
+      "worst": {
+        "x": 632,
+        "y": 154,
+        "background": [
+          248,
+          250,
+          252
+        ],
+        "maskCoverage": 0.45098039215686275
+      },
+      "auditedMinimumTouchesInk": false,
+      "passed": true,
+      "artifacts": [
+        {
+          "file": "finding-12-full.png",
+          "bytes": 41473,
+          "sha256": "8cb49872e75dbf6c467045f4cc22b0761366e737c0437c6c042e091bd2b58bf2"
+        },
+        {
+          "file": "finding-12-background.png",
+          "bytes": 6076,
+          "sha256": "12f827de45432ffd0f739320039563470125d4568b1a9b836a9405a1fe94c3b3"
+        },
+        {
+          "file": "finding-12-isolated.png",
+          "bytes": 13821,
+          "sha256": "99430320ba3322e5eda6f2bf9bac62a73e818d1723733249352240aafc57756b"
+        },
+        {
+          "file": "finding-12-mask.png",
+          "bytes": 11369,
+          "sha256": "cb087b0a50870886e8376a5af27b3589fa2683c4b6b02049069b8f8b37358380"
+        },
+        {
+          "file": "finding-12-inverseMask.png",
+          "bytes": 11465,
+          "sha256": "3a17db4eacd56a14f9a2f191d551606a086cc6ce99c9e6e6981705e6478f7e31"
+        }
+      ],
+      "file": "examples/gallery/design-and-media/video-demo-sales-narrative.opf.json",
+      "slide": 1,
+      "path": "slides.1.text",
+      "text": "combine video proof and business case in a compact ",
+      "sourceSha256": "1f56d9fec550fba83f0a2f61f3f256feca8fbf28be9eb09fc6874a72707eaa1a",
+      "svgSha256": "4437addbeb7ddcda64dfb727b305dbce3e9a1e888461a8a6d343eeada578d740"
+    },
+    {
+      "id": "finding-13",
+      "measured": {
+        "path": "slides.5.top:center+right.text",
+        "text": "combine video proof",
+        "fill": "rgb(27, 73, 203)",
+        "fontFamily": "Aptos, sans-serif",
+        "fontSize": 25,
+        "fontWeight": 700,
+        "fontStyle": "normal",
+        "box": {
+          "x": 974.8829956054688,
+          "y": 149.47999572753906,
+          "width": 247.52447509765625,
+          "height": 28
+        },
+        "chain": [
+          {
+            "tag": "text",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "svg",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          }
+        ]
+      },
+      "threshold": 3,
+      "rectangleMinimum": 2.5489022126979113,
+      "glyphMinimum": 6.0112813439577675,
+      "supportPixels": 2469,
+      "visiblePixels": 2452,
+      "pixelsBelowThreshold": 0,
+      "unsupportedPaint": 0,
+      "outsideTextDifferences": [],
+      "inkBounds": {
+        "left": 975,
+        "top": 154,
+        "right": 1221,
+        "bottom": 176
+      },
+      "worst": {
+        "x": 1221,
+        "y": 154,
+        "background": [
+          221,
+          235,
+          239
+        ],
+        "maskCoverage": 0.8705882352941177
+      },
+      "auditedMinimumTouchesInk": false,
+      "passed": true,
+      "artifacts": [
+        {
+          "file": "finding-13-full.png",
+          "bytes": 82545,
+          "sha256": "b3c2c35711da2c93c8e3d3abf342f092e157d320c5426604ab883dce1b93ecaa"
+        },
+        {
+          "file": "finding-13-background.png",
+          "bytes": 8166,
+          "sha256": "8b8fa31eb69a035265f36a83637e4ccfc573909be0befe3dc8d9da89e4edc9ab"
+        },
+        {
+          "file": "finding-13-isolated.png",
+          "bytes": 11534,
+          "sha256": "c0e91e4f0489ce99cf39efecec0122cff6cd8a54c25dcf549807a21c3043b7ab"
+        },
+        {
+          "file": "finding-13-mask.png",
+          "bytes": 7352,
+          "sha256": "b137d15d53f70525b0c1909b08b61d39ba9708f84b67691af7ea4c6563b9c9a0"
+        },
+        {
+          "file": "finding-13-inverseMask.png",
+          "bytes": 7415,
+          "sha256": "fae57855e1843be26e37b3eb62fe41251ff3df35b9d41b6db673286de7505e7a"
+        }
+      ],
+      "file": "examples/gallery/design-and-media/video-demo-sales-narrative.opf.json",
+      "slide": 5,
+      "path": "slides.5.top:center+right.text",
+      "text": "combine video proof",
+      "sourceSha256": "1f56d9fec550fba83f0a2f61f3f256feca8fbf28be9eb09fc6874a72707eaa1a",
+      "svgSha256": "f39895ccc03aafbb0100d996fa9c544d78449a71e549169f594f2f6d81bb0eea"
+    },
+    {
+      "id": "finding-14",
+      "measured": {
+        "path": "slides.5.top:left.metric.value",
+        "text": "18%",
+        "fill": "rgb(27, 73, 203)",
+        "fontFamily": "\"Aptos Display\", sans-serif",
+        "fontSize": 37.579,
+        "fontWeight": 800,
+        "fontStyle": "normal",
+        "box": {
+          "x": 210.28799438476562,
+          "y": 144.0590057373047,
+          "width": 87.703125,
+          "height": 53
+        },
+        "chain": [
+          {
+            "tag": "tspan",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "text",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "svg",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          }
+        ]
+      },
+      "threshold": 3,
+      "rectangleMinimum": 2.5901790273555494,
+      "glyphMinimum": 7.013045399923033,
+      "supportPixels": 1375,
+      "visiblePixels": 1365,
+      "pixelsBelowThreshold": 0,
+      "unsupportedPaint": 0,
+      "outsideTextDifferences": [],
+      "inkBounds": {
+        "left": 213,
+        "top": 157,
+        "right": 296,
+        "bottom": 184
+      },
+      "worst": {
+        "x": 222,
+        "y": 157,
+        "background": [
+          248,
+          250,
+          252
+        ],
+        "maskCoverage": 0.9058823529411765
+      },
+      "auditedMinimumTouchesInk": false,
+      "passed": true,
+      "artifacts": [
+        {
+          "file": "finding-14-full.png",
+          "bytes": 82545,
+          "sha256": "b3c2c35711da2c93c8e3d3abf342f092e157d320c5426604ab883dce1b93ecaa"
+        },
+        {
+          "file": "finding-14-background.png",
+          "bytes": 8166,
+          "sha256": "8b8fa31eb69a035265f36a83637e4ccfc573909be0befe3dc8d9da89e4edc9ab"
+        },
+        {
+          "file": "finding-14-isolated.png",
+          "bytes": 10497,
+          "sha256": "b79996cba9438a666ac7cb6a0282f4fe48bd03bc121865e4db5898c63616590f"
+        },
+        {
+          "file": "finding-14-mask.png",
+          "bytes": 6478,
+          "sha256": "a72b257f83444559a599318e0e42b9ebffecc69388c92b7ec42132d3d1c99d26"
+        },
+        {
+          "file": "finding-14-inverseMask.png",
+          "bytes": 6511,
+          "sha256": "15112b9ccb7835a997624cf9373d2b5e65a96a21ac8412b7f4b0766548034fd1"
+        }
+      ],
+      "file": "examples/gallery/design-and-media/video-demo-sales-narrative.opf.json",
+      "slide": 5,
+      "path": "slides.5.top:left.metric.value",
+      "text": "18%",
+      "sourceSha256": "1f56d9fec550fba83f0a2f61f3f256feca8fbf28be9eb09fc6874a72707eaa1a",
+      "svgSha256": "f39895ccc03aafbb0100d996fa9c544d78449a71e549169f594f2f6d81bb0eea"
+    },
+    {
+      "id": "finding-15",
+      "measured": {
+        "path": "slides.6.blocks.2.metric.value",
+        "text": "11",
+        "fill": "rgb(27, 73, 203)",
+        "fontFamily": "\"Aptos Display\", sans-serif",
+        "fontSize": 76,
+        "fontWeight": 800,
+        "fontStyle": "normal",
+        "box": {
+          "x": 960.3070068359375,
+          "y": 139.47999572753906,
+          "width": 101.390625,
+          "height": 108
+        },
+        "chain": [
+          {
+            "tag": "tspan",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "text",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "svg",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          }
+        ]
+      },
+      "threshold": 3,
+      "rectangleMinimum": 2.5901790273555494,
+      "glyphMinimum": 7.013045399923033,
+      "supportPixels": 2257,
+      "visiblePixels": 2257,
+      "pixelsBelowThreshold": 0,
+      "unsupportedPaint": 0,
+      "outsideTextDifferences": [],
+      "inkBounds": {
+        "left": 966,
+        "top": 168,
+        "right": 1048,
+        "bottom": 222
+      },
+      "worst": {
+        "x": 984,
+        "y": 168,
+        "background": [
+          248,
+          250,
+          252
+        ],
+        "maskCoverage": 0.43137254901960786
+      },
+      "auditedMinimumTouchesInk": false,
+      "passed": true,
+      "artifacts": [
+        {
+          "file": "finding-15-full.png",
+          "bytes": 44035,
+          "sha256": "7b43ac79d4f72a2ea89a907d491f4b0243b55c66a968630b03805200ef8fa76c"
+        },
+        {
+          "file": "finding-15-background.png",
+          "bytes": 7016,
+          "sha256": "3c20b730f66d127b1aedcd0fa6c3deb33487515010dc79ee0af54f8c20f070b9"
+        },
+        {
+          "file": "finding-15-isolated.png",
+          "bytes": 7766,
+          "sha256": "6a63ff4f6dd664d21ecc3a0e09a8dfc7218bd73943d3249f8e60a0e10828019e"
+        },
+        {
+          "file": "finding-15-mask.png",
+          "bytes": 5094,
+          "sha256": "d8512f769587de040d9c81cc151e23bb606a91dd36396b0ac01dcdb45ebf9f67"
+        },
+        {
+          "file": "finding-15-inverseMask.png",
+          "bytes": 5071,
+          "sha256": "123b8b76405489c6f8da00891cf397d8e9f1a207572890d3c48d58e6685a2d46"
+        }
+      ],
+      "file": "examples/gallery/design-and-media/video-demo-sales-narrative.opf.json",
+      "slide": 6,
+      "path": "slides.6.blocks.2.metric.value",
+      "text": "11",
+      "sourceSha256": "1f56d9fec550fba83f0a2f61f3f256feca8fbf28be9eb09fc6874a72707eaa1a",
+      "svgSha256": "1213b7757b72d0869445b484254ae27db833f8d37cb70d80bba98d657898f9a2"
+    },
+    {
+      "id": "finding-16",
+      "measured": {
+        "path": "slides.3.items",
+        "text": "•",
+        "fill": "rgb(0, 0, 0)",
+        "fontFamily": "\"Noto Sans Kannada\", sans-serif",
+        "fontSize": 20.833,
+        "fontWeight": 400,
+        "fontStyle": "normal",
+        "box": {
+          "x": 48,
+          "y": 124.73300170898438,
+          "width": 7.296875,
+          "height": 23
+        },
+        "chain": [
+          {
+            "tag": "text",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "svg",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          }
+        ]
+      },
+      "threshold": 4.5,
+      "rectangleMinimum": 3.7535729808442997,
+      "glyphMinimum": 8.985563904877655,
+      "supportPixels": 31,
+      "visiblePixels": 29,
+      "pixelsBelowThreshold": 0,
+      "unsupportedPaint": 0,
+      "outsideTextDifferences": [],
+      "inkBounds": {
+        "left": 48,
+        "top": 134,
+        "right": 54,
+        "bottom": 138
+      },
+      "worst": {
+        "x": 48,
+        "y": 135,
+        "background": [
+          157,
+          172,
+          179
+        ],
+        "maskCoverage": 0.12941176470588237
+      },
+      "auditedMinimumTouchesInk": false,
+      "passed": true,
+      "artifacts": [
+        {
+          "file": "finding-16-full.png",
+          "bytes": 23116,
+          "sha256": "3d48b5197e4cbb5955c1a3109dbc037a1c6f69c2d98188739a0c5c8f7acb3782"
+        },
+        {
+          "file": "finding-16-background.png",
+          "bytes": 3580,
+          "sha256": "7b492880453014a7ceaeb9bab68bc760b6c077756d4f08bd3666c59111f5f4d0"
+        },
+        {
+          "file": "finding-16-isolated.png",
+          "bytes": 3696,
+          "sha256": "b5b5a851164b00e15e122c8aa8a07245b6370464145a4bb6c287a59ed1317dcc"
+        },
+        {
+          "file": "finding-16-mask.png",
+          "bytes": 3147,
+          "sha256": "3e8ed5697d62b5ad866829a78b10aca09a8c060cae5c50b095e30e3134c86f79"
+        },
+        {
+          "file": "finding-16-inverseMask.png",
+          "bytes": 3143,
+          "sha256": "0a5c96fbed1584712d48bbc83fb70241a8a68fe1220f4f1d4b88fa42b6f1027c"
+        }
+      ],
+      "file": "examples/gallery/education/stem-lab-funding-proposal.opf.json",
+      "slide": 3,
+      "path": "slides.3.items",
+      "text": "•",
+      "sourceSha256": "26ebbce28c9b37354f4d02531f8585d4d47cd5a031f245280478407d0e04bda9",
+      "svgSha256": "ea3d1123a057d45f979a20f6591836f03fe30bfb1ffc428853c09c127cad2b94"
+    },
+    {
+      "id": "finding-17",
+      "measured": {
+        "path": "slides.5.top:left.metric.value",
+        "text": "11 days",
+        "fill": "rgb(51, 65, 85)",
+        "fontFamily": "\"Aptos Display\", sans-serif",
+        "fontSize": 37.579,
+        "fontWeight": 800,
+        "fontStyle": "normal",
+        "box": {
+          "x": 173.83599853515625,
+          "y": 144.0590057373047,
+          "width": 158.7142333984375,
+          "height": 53
+        },
+        "chain": [
+          {
+            "tag": "tspan",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "text",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "svg",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          }
+        ]
+      },
+      "threshold": 3,
+      "rectangleMinimum": 2.524121639589728,
+      "glyphMinimum": 9.896764973632585,
+      "supportPixels": 2263,
+      "visiblePixels": 2237,
+      "pixelsBelowThreshold": 0,
+      "unsupportedPaint": 0,
+      "outsideTextDifferences": [],
+      "inkBounds": {
+        "left": 176,
+        "top": 157,
+        "right": 331,
+        "bottom": 193
+      },
+      "worst": {
+        "x": 185,
+        "y": 157,
+        "background": [
+          248,
+          250,
+          252
+        ],
+        "maskCoverage": 0.5803921568627451
+      },
+      "auditedMinimumTouchesInk": false,
+      "passed": true,
+      "artifacts": [
+        {
+          "file": "finding-17-full.png",
+          "bytes": 84904,
+          "sha256": "aa0a6d6830d80c0f8eee282fc910b9dc927bb0e2d6c5225cf6f652dec3bd088e"
+        },
+        {
+          "file": "finding-17-background.png",
+          "bytes": 8469,
+          "sha256": "d34a20f17f0c3107f9947d1252a27dcfd8d416dd6aa27f67ab12190d1da2defb"
+        },
+        {
+          "file": "finding-17-isolated.png",
+          "bytes": 11386,
+          "sha256": "3ed59a14710cfcb260721a7ba688f22269223d5ff06139c0a0e4a2f043dc1fb2"
+        },
+        {
+          "file": "finding-17-mask.png",
+          "bytes": 7011,
+          "sha256": "3a322727fe5b5d8f84c7d4ca61ad9dc30842e51fc7a18658f47f5f830a2d7191"
+        },
+        {
+          "file": "finding-17-inverseMask.png",
+          "bytes": 7021,
+          "sha256": "3c09a9632a8e6a7993faf9ed344b1231b168776ec95a5e7924374e3491970a6e"
+        }
+      ],
+      "file": "examples/gallery/government/housing-zoning-council-brief.opf.json",
+      "slide": 5,
+      "path": "slides.5.top:left.metric.value",
+      "text": "11 days",
+      "sourceSha256": "d1dbef20a850fe657ff2332a24ba19635348393305cc1c8882d1201db94c92e7",
+      "svgSha256": "d0d2a2cb648f7ed42837a25dd25c816161a7c5b1af0309ad71c00c12b36c5834"
+    },
+    {
+      "id": "finding-18",
+      "measured": {
+        "path": "slides.5.top:left.metric.value",
+        "text": "$820K",
+        "fill": "rgb(51, 65, 85)",
+        "fontFamily": "\"Aptos Display\", sans-serif",
+        "fontSize": 43.579,
+        "fontWeight": 800,
+        "fontStyle": "normal",
+        "box": {
+          "x": 177.9290008544922,
+          "y": 143.0590057373047,
+          "width": 153.2433624267578,
+          "height": 61
+        },
+        "chain": [
+          {
+            "tag": "tspan",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "text",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "svg",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          }
+        ]
+      },
+      "threshold": 3,
+      "rectangleMinimum": 1.5658312972909383,
+      "glyphMinimum": 9.896764973632585,
+      "supportPixels": 3588,
+      "visiblePixels": 3544,
+      "pixelsBelowThreshold": 0,
+      "unsupportedPaint": 0,
+      "outsideTextDifferences": [],
+      "inkBounds": {
+        "left": 178,
+        "top": 156,
+        "right": 331,
+        "bottom": 195
+      },
+      "worst": {
+        "x": 190,
+        "y": 156,
+        "background": [
+          248,
+          250,
+          252
+        ],
+        "maskCoverage": 0.611764705882353
+      },
+      "auditedMinimumTouchesInk": false,
+      "passed": true,
+      "artifacts": [
+        {
+          "file": "finding-18-full.png",
+          "bytes": 91696,
+          "sha256": "017d161dfdbba0eacfe27526fca9891ca1aed5f8775182d0c4446d61dc245ffa"
+        },
+        {
+          "file": "finding-18-background.png",
+          "bytes": 15241,
+          "sha256": "9bcc6a18dfaf9597a7828446fae2705f8ba74c8d2b1b18ae49aca7f798014a7c"
+        },
+        {
+          "file": "finding-18-isolated.png",
+          "bytes": 19357,
+          "sha256": "76ddeb8bcd44f458970b7fdb5dd5dbdca219e52a591d48ed4efe03398ad90e84"
+        },
+        {
+          "file": "finding-18-mask.png",
+          "bytes": 7975,
+          "sha256": "4f03cc826446c18a8ac8d0ece85a9489a877ab15fceed884b4e960b4dc4c2603"
+        },
+        {
+          "file": "finding-18-inverseMask.png",
+          "bytes": 7949,
+          "sha256": "092e3787800db5cb04c3fb4c3347afb02eb944a4bd155c2eb9852a3c3cda546f"
+        }
+      ],
+      "file": "examples/gallery/government/tax-portal-modernization.opf.json",
+      "slide": 5,
+      "path": "slides.5.top:left.metric.value",
+      "text": "$820K",
+      "sourceSha256": "bd65140e6c6b0944375257ede5d9f2619d62a2511ec625b1ca95a6a9dc19a6fd",
+      "svgSha256": "91b900678802975489cd9025b7344a16f0365478284d7c5fc2af08ca17d839bb"
+    },
+    {
+      "id": "finding-19",
+      "measured": {
+        "path": "slides.9.items",
+        "text": "•",
+        "fill": "rgb(15, 23, 42)",
+        "fontFamily": "Aptos, sans-serif",
+        "fontSize": 25,
+        "fontWeight": 400,
+        "fontStyle": "normal",
+        "box": {
+          "x": 57.599998474121094,
+          "y": 149.47999572753906,
+          "width": 8.765625,
+          "height": 28
+        },
+        "chain": [
+          {
+            "tag": "text",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "svg",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          }
+        ]
+      },
+      "threshold": 3,
+      "rectangleMinimum": 2.66106567991427,
+      "glyphMinimum": 14.716478025947065,
+      "supportPixels": 44,
+      "visiblePixels": 42,
+      "pixelsBelowThreshold": 0,
+      "unsupportedPaint": 0,
+      "outsideTextDifferences": [],
+      "inkBounds": {
+        "left": 58,
+        "top": 160,
+        "right": 65,
+        "bottom": 165
+      },
+      "worst": {
+        "x": 58,
+        "y": 161,
+        "background": [
+          224,
+          235,
+          240
+        ],
+        "maskCoverage": 0.38823529411764707
+      },
+      "auditedMinimumTouchesInk": false,
+      "passed": true,
+      "artifacts": [
+        {
+          "file": "finding-19-full.png",
+          "bytes": 78644,
+          "sha256": "8a1fcdc166d42fce35d37b99cf8fb0a28466f1881a5c3db5af88a75ebd28ebdd"
+        },
+        {
+          "file": "finding-19-background.png",
+          "bytes": 20734,
+          "sha256": "63d411aa8c6c92fdf11aa49fbd373ddf28f6c9a7f1ff1f6df6dd043227f76d77"
+        },
+        {
+          "file": "finding-19-isolated.png",
+          "bytes": 20894,
+          "sha256": "e1b06a2e7ff9aca3df706084b39d6a99425f1c98015f162e225bf4a68fd8e142"
+        },
+        {
+          "file": "finding-19-mask.png",
+          "bytes": 4480,
+          "sha256": "cf8aa40a5a83a432e1a6b818af1e4a2da7497fad870ec45937f85b1d4edc34bc"
+        },
+        {
+          "file": "finding-19-inverseMask.png",
+          "bytes": 4480,
+          "sha256": "6b68e84c62de58d4cfd946c5b1c8c9b541e43a869b3e77cd1282672735fa3c9a"
+        }
+      ],
+      "file": "examples/gallery/government/tax-portal-modernization.opf.json",
+      "slide": 9,
+      "path": "slides.9.items",
+      "text": "•",
+      "sourceSha256": "bd65140e6c6b0944375257ede5d9f2619d62a2511ec625b1ca95a6a9dc19a6fd",
+      "svgSha256": "9d3b97586b5f33842b0c067ef54abc8a9a85ecd495ddc07f04d671a8996136e9"
+    },
+    {
+      "id": "finding-20",
+      "measured": {
+        "path": "slides.5.top:left.metric.value",
+        "text": "42 pts",
+        "fill": "rgb(120, 77, 5)",
+        "fontFamily": "\"Aptos Display\", sans-serif",
+        "fontSize": 31.316,
+        "fontWeight": 800,
+        "fontStyle": "normal",
+        "box": {
+          "x": 135.54100036621094,
+          "y": 120.21600341796875,
+          "width": 106.125,
+          "height": 44
+        },
+        "chain": [
+          {
+            "tag": "tspan",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "text",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "svg",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          }
+        ]
+      },
+      "threshold": 3,
+      "rectangleMinimum": 2.365015577907072,
+      "glyphMinimum": 7.012121365427844,
+      "supportPixels": 1403,
+      "visiblePixels": 1389,
+      "pixelsBelowThreshold": 0,
+      "unsupportedPaint": 0,
+      "outsideTextDifferences": [
+        {
+          "x": 638,
+          "y": 254,
+          "background": [
+            241,
+            241,
+            243
+          ],
+          "isolated": [
+            242,
+            241,
+            243
+          ]
+        }
+      ],
+      "inkBounds": {
+        "left": 135,
+        "top": 131,
+        "right": 240,
+        "bottom": 159
+      },
+      "worst": {
+        "x": 146,
+        "y": 131,
+        "background": [
+          248,
+          250,
+          252
+        ],
+        "maskCoverage": 0.611764705882353
+      },
+      "auditedMinimumTouchesInk": false,
+      "passed": true,
+      "artifacts": [
+        {
+          "file": "finding-20-full.png",
+          "bytes": 125610,
+          "sha256": "4dff015069168a546cb8267e115410097acd2dc134a01f5415ca5f22091ce335"
+        },
+        {
+          "file": "finding-20-background.png",
+          "bytes": 55179,
+          "sha256": "9791c35be94f30923767f303a6a10718d85109ac5624e1af88c6efc93d9870dc"
+        },
+        {
+          "file": "finding-20-isolated.png",
+          "bytes": 57408,
+          "sha256": "f816c7061e55907b29ef7c33e5ef885247e4c148d80482df7dcc5e4d2a0246fe"
+        },
+        {
+          "file": "finding-20-mask.png",
+          "bytes": 4877,
+          "sha256": "a4610ac20814f9157c7e19bd9b70885c4f8ad4f406d0d56968e8864d4b928bcc"
+        },
+        {
+          "file": "finding-20-inverseMask.png",
+          "bytes": 4871,
+          "sha256": "b47f1eb9367391fd8f6797bbc8a1c4404db090feb471884af9b0204de5d66850"
+        }
+      ],
+      "file": "examples/gallery/government/water-utility-capital-plan.opf.json",
+      "slide": 5,
+      "path": "slides.5.top:left.metric.value",
+      "text": "42 pts",
+      "sourceSha256": "7530d607f991d7d3ed9a9c04aa717239b8d342fd7d16d74a1cc18ec24c454e4c",
+      "svgSha256": "dec84c80df6b69417eb76c064b7b553313f43ee25fa13126ee67f5fa3a50ac70"
+    },
+    {
+      "id": "finding-21",
+      "measured": {
+        "path": "slides.5.top:left.metric.trend",
+        "text": "up",
+        "fill": "rgb(15, 23, 42)",
+        "fontFamily": "Aptos, sans-serif",
+        "fontSize": 13.333,
+        "fontWeight": 500,
+        "fontStyle": "normal",
+        "box": {
+          "x": 178.13299560546875,
+          "y": 237.6219940185547,
+          "width": 15.413497924804688,
+          "height": 15
+        },
+        "chain": [
+          {
+            "tag": "tspan",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "text",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "svg",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          }
+        ]
+      },
+      "threshold": 4.5,
+      "rectangleMinimum": 3.5682180283196954,
+      "glyphMinimum": 3.591808703166983,
+      "supportPixels": 84,
+      "visiblePixels": 85,
+      "pixelsBelowThreshold": 2,
+      "unsupportedPaint": 0,
+      "outsideTextDifferences": [
+        {
+          "x": 638,
+          "y": 254,
+          "background": [
+            241,
+            241,
+            243
+          ],
+          "isolated": [
+            242,
+            241,
+            243
+          ]
+        }
+      ],
+      "inkBounds": {
+        "left": 178,
+        "top": 243,
+        "right": 192,
+        "bottom": 252
+      },
+      "worst": {
+        "x": 186,
+        "y": 252,
+        "background": [
+          167,
+          49,
+          230
+        ],
+        "maskCoverage": 1
+      },
+      "auditedMinimumTouchesInk": false,
+      "passed": false,
+      "artifacts": [
+        {
+          "file": "finding-21-full.png",
+          "bytes": 125610,
+          "sha256": "4dff015069168a546cb8267e115410097acd2dc134a01f5415ca5f22091ce335"
+        },
+        {
+          "file": "finding-21-background.png",
+          "bytes": 55179,
+          "sha256": "9791c35be94f30923767f303a6a10718d85109ac5624e1af88c6efc93d9870dc"
+        },
+        {
+          "file": "finding-21-isolated.png",
+          "bytes": 55397,
+          "sha256": "cfc99c0e8f3e064cc0fbebca9b0eeb86612b485d9949af0bc21e9a8c96277efa"
+        },
+        {
+          "file": "finding-21-mask.png",
+          "bytes": 3218,
+          "sha256": "3e245052d9fbb09911eac69527ea7b9284caf40c5b56d0be30bc4d5b6bb8a232"
+        },
+        {
+          "file": "finding-21-inverseMask.png",
+          "bytes": 3226,
+          "sha256": "6f38a3686a017328bbd1acba92ccd984b9e8fd3a67ab8509e1b4409feef5c4a4"
+        }
+      ],
+      "file": "examples/gallery/government/water-utility-capital-plan.opf.json",
+      "slide": 5,
+      "path": "slides.5.top:left.metric.trend",
+      "text": "up",
+      "sourceSha256": "7530d607f991d7d3ed9a9c04aa717239b8d342fd7d16d74a1cc18ec24c454e4c",
+      "svgSha256": "dec84c80df6b69417eb76c064b7b553313f43ee25fa13126ee67f5fa3a50ac70"
+    },
+    {
+      "id": "finding-22",
+      "measured": {
+        "path": "slides.6.blocks.2.metric.value",
+        "text": "31",
+        "fill": "rgb(120, 77, 5)",
+        "fontFamily": "\"Aptos Display\", sans-serif",
+        "fontSize": 57.274,
+        "fontWeight": 800,
+        "fontStyle": "normal",
+        "box": {
+          "x": 214.98199462890625,
+          "y": 341.7239990234375,
+          "width": 76.40625,
+          "height": 81
+        },
+        "chain": [
+          {
+            "tag": "tspan",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "text",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "svg",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          }
+        ]
+      },
+      "threshold": 3,
+      "rectangleMinimum": 1.394742985930851,
+      "glyphMinimum": 7.012121365427844,
+      "supportPixels": 1614,
+      "visiblePixels": 1614,
+      "pixelsBelowThreshold": 0,
+      "unsupportedPaint": 0,
+      "outsideTextDifferences": [],
+      "inkBounds": {
+        "left": 216,
+        "top": 363,
+        "right": 281,
+        "bottom": 405
+      },
+      "worst": {
+        "x": 226,
+        "y": 363,
+        "background": [
+          248,
+          250,
+          252
+        ],
+        "maskCoverage": 0.25882352941176473
+      },
+      "auditedMinimumTouchesInk": false,
+      "passed": true,
+      "artifacts": [
+        {
+          "file": "finding-22-full.png",
+          "bytes": 119571,
+          "sha256": "003e5510f6df66cfed9a75e33ff0204aac8b5a1750f9dbc5213387096d373309"
+        },
+        {
+          "file": "finding-22-background.png",
+          "bytes": 81407,
+          "sha256": "22faf1011252278942b0f7e56fb34a03782d4404a637250b344aa53ac48845e9"
+        },
+        {
+          "file": "finding-22-isolated.png",
+          "bytes": 83557,
+          "sha256": "59010e0408ef0207b3d6d32bfe0306480797da91780a9d7a9904f26d0599c109"
+        },
+        {
+          "file": "finding-22-mask.png",
+          "bytes": 4729,
+          "sha256": "0403053b7285f1cde4acfabb10b160d54fee2757f2f66d529f41c4ee46633ff5"
+        },
+        {
+          "file": "finding-22-inverseMask.png",
+          "bytes": 4702,
+          "sha256": "6d0e910a7dd94f8d38f1bea884538fa81a38d5446e22f093b77fd973f82e0c5a"
+        }
+      ],
+      "file": "examples/gallery/government/water-utility-capital-plan.opf.json",
+      "slide": 6,
+      "path": "slides.6.blocks.2.metric.value",
+      "text": "31",
+      "sourceSha256": "7530d607f991d7d3ed9a9c04aa717239b8d342fd7d16d74a1cc18ec24c454e4c",
+      "svgSha256": "20df0faabb7fa365938f180cd09c6a89e0e9a58f575d5ef3dc33c2479b265fab"
+    },
+    {
+      "id": "finding-23",
+      "measured": {
+        "path": "slides.9.items",
+        "text": "•",
+        "fill": "rgb(15, 23, 42)",
+        "fontFamily": "Aptos, sans-serif",
+        "fontSize": 20.833,
+        "fontWeight": 400,
+        "fontStyle": "normal",
+        "box": {
+          "x": 48,
+          "y": 124.73300170898438,
+          "width": 7.296875,
+          "height": 23
+        },
+        "chain": [
+          {
+            "tag": "text",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "svg",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          }
+        ]
+      },
+      "threshold": 4.5,
+      "rectangleMinimum": 3.248828655878595,
+      "glyphMinimum": 7.169023491716896,
+      "supportPixels": 31,
+      "visiblePixels": 29,
+      "pixelsBelowThreshold": 0,
+      "unsupportedPaint": 0,
+      "outsideTextDifferences": [],
+      "inkBounds": {
+        "left": 48,
+        "top": 134,
+        "right": 54,
+        "bottom": 138
+      },
+      "worst": {
+        "x": 48,
+        "y": 135,
+        "background": [
+          203,
+          138,
+          240
+        ],
+        "maskCoverage": 0.12941176470588237
+      },
+      "auditedMinimumTouchesInk": false,
+      "passed": true,
+      "artifacts": [
+        {
+          "file": "finding-23-full.png",
+          "bytes": 92813,
+          "sha256": "4fcf2dcae75383bac31d314fd1356c96a4ec73658ec3a8957c15a5e74805586e"
+        },
+        {
+          "file": "finding-23-background.png",
+          "bytes": 45632,
+          "sha256": "bec0e042494ad87588557fa1f958db5503ad9e43e983d077e896551bd1020f75"
+        },
+        {
+          "file": "finding-23-isolated.png",
+          "bytes": 45787,
+          "sha256": "32540b9d7e5548e29e9e1e692256ccba828a0e10e5ad8b3502917a988e0f9456"
+        },
+        {
+          "file": "finding-23-mask.png",
+          "bytes": 3147,
+          "sha256": "3e8ed5697d62b5ad866829a78b10aca09a8c060cae5c50b095e30e3134c86f79"
+        },
+        {
+          "file": "finding-23-inverseMask.png",
+          "bytes": 3143,
+          "sha256": "0a5c96fbed1584712d48bbc83fb70241a8a68fe1220f4f1d4b88fa42b6f1027c"
+        }
+      ],
+      "file": "examples/gallery/government/water-utility-capital-plan.opf.json",
+      "slide": 9,
+      "path": "slides.9.items",
+      "text": "•",
+      "sourceSha256": "7530d607f991d7d3ed9a9c04aa717239b8d342fd7d16d74a1cc18ec24c454e4c",
+      "svgSha256": "29fff1468567ede2c6e9905bffdc2397be2968149f0f278ae44a79a50ccc0ff4"
+    },
+    {
+      "id": "finding-24",
+      "measured": {
+        "path": "slides.1.text",
+        "text": "with staffing and menu simplification",
+        "fill": "rgb(171, 16, 54)",
+        "fontFamily": "Aptos, serif",
+        "fontSize": 20.833,
+        "fontWeight": 700,
+        "fontStyle": "normal",
+        "box": {
+          "x": 48.58300018310547,
+          "y": 150.14999389648438,
+          "width": 333.5762023925781,
+          "height": 24
+        },
+        "chain": [
+          {
+            "tag": "text",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "svg",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          }
+        ]
+      },
+      "threshold": 3,
+      "rectangleMinimum": 2.77055935065646,
+      "glyphMinimum": 7.020426385107775,
+      "supportPixels": 2808,
+      "visiblePixels": 2782,
+      "pixelsBelowThreshold": 0,
+      "unsupportedPaint": 0,
+      "outsideTextDifferences": [],
+      "inkBounds": {
+        "left": 49,
+        "top": 155,
+        "right": 381,
+        "bottom": 172
+      },
+      "worst": {
+        "x": 66,
+        "y": 155,
+        "background": [
+          248,
+          250,
+          252
+        ],
+        "maskCoverage": 0.8392156862745098
+      },
+      "auditedMinimumTouchesInk": false,
+      "passed": true,
+      "artifacts": [
+        {
+          "file": "finding-24-full.png",
+          "bytes": 41213,
+          "sha256": "21f47417d9cdc8f7f2898c756317c0953c51591fb08c6f5ab32e78a207be1d80"
+        },
+        {
+          "file": "finding-24-background.png",
+          "bytes": 5870,
+          "sha256": "c655e1861dd04b1922c340bd670886da900ace2f050a1818b9f7661448b37250"
+        },
+        {
+          "file": "finding-24-isolated.png",
+          "bytes": 10664,
+          "sha256": "f9060c5a6ef129d0d7a869093281c888bac9c019a77bb138a42594ddd995c4b9"
+        },
+        {
+          "file": "finding-24-mask.png",
+          "bytes": 7041,
+          "sha256": "3d9b160161fb932094a6ad0c2dbf4e86a1d8c1f9b172d93755e8aa1e7f053fc2"
+        },
+        {
+          "file": "finding-24-inverseMask.png",
+          "bytes": 7105,
+          "sha256": "9faa9e8c383612d1103edf4f62d7bed8914852c82d967bc414b161a9aeec6240"
+        }
+      ],
+      "file": "examples/gallery/industries/drive-thru-throughput-playbook.opf.json",
+      "slide": 1,
+      "path": "slides.1.text",
+      "text": "with staffing and menu simplification",
+      "sourceSha256": "08401b7b70ebfac04fe5174a2f192ecc2a63b84d11daf797bf673bca8fd3d189",
+      "svgSha256": "007aa2e43a80ab68ad14cb75e0d5e410c73e5fefe02a07482a9ae26de129db7f"
+    },
+    {
+      "id": "finding-25",
+      "measured": {
+        "path": "slides.5.bullets",
+        "text": "•",
+        "fill": "rgb(15, 23, 42)",
+        "fontFamily": "Aptos, serif",
+        "fontSize": 20.833,
+        "fontWeight": 400,
+        "fontStyle": "normal",
+        "box": {
+          "x": 48,
+          "y": 124.73300170898438,
+          "width": 7.296875,
+          "height": 24
+        },
+        "chain": [
+          {
+            "tag": "text",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "svg",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          }
+        ]
+      },
+      "threshold": 4.5,
+      "rectangleMinimum": 1.9898526794492464,
+      "glyphMinimum": 6.7337606963798775,
+      "supportPixels": 31,
+      "visiblePixels": 29,
+      "pixelsBelowThreshold": 0,
+      "unsupportedPaint": 0,
+      "outsideTextDifferences": [],
+      "inkBounds": {
+        "left": 48,
+        "top": 134,
+        "right": 54,
+        "bottom": 138
+      },
+      "worst": {
+        "x": 48,
+        "y": 135,
+        "background": [
+          149,
+          159,
+          183
+        ],
+        "maskCoverage": 0.12941176470588237
+      },
+      "auditedMinimumTouchesInk": false,
+      "passed": true,
+      "artifacts": [
+        {
+          "file": "finding-25-full.png",
+          "bytes": 45844,
+          "sha256": "5d14845c25e3851512b5ab4cf8c459a3a87850eaf08660e474716e1ddaed82d2"
+        },
+        {
+          "file": "finding-25-background.png",
+          "bytes": 10985,
+          "sha256": "e01202f69009a9653fc051e1761672e66c767c24ef19f8436b0ea463e46e1211"
+        },
+        {
+          "file": "finding-25-isolated.png",
+          "bytes": 11113,
+          "sha256": "df9e74cabfdc468449249b1e5ae13e44c5e6afa45ad5660ab8ce220384f79eff"
+        },
+        {
+          "file": "finding-25-mask.png",
+          "bytes": 3154,
+          "sha256": "18a30c69ace7273f3f24ddd041a861bd929990054049485fadd8f327be10d9a0"
+        },
+        {
+          "file": "finding-25-inverseMask.png",
+          "bytes": 3141,
+          "sha256": "991653636ee5ba609d62ae4285e898ec2f347cb5b317cb2a25e6dc91c8e9fce3"
+        }
+      ],
+      "file": "examples/gallery/industries/drive-thru-throughput-playbook.opf.json",
+      "slide": 5,
+      "path": "slides.5.bullets",
+      "text": "•",
+      "sourceSha256": "08401b7b70ebfac04fe5174a2f192ecc2a63b84d11daf797bf673bca8fd3d189",
+      "svgSha256": "5a84d87d3c9680db701cdbaa7b2e0ad9d2cd02966634c8ae8d57e5834efdfadd"
+    },
+    {
+      "id": "finding-26",
+      "measured": {
+        "path": "slides.1.text",
+        "text": "move anchor tenants from ",
+        "fill": "rgb(245, 158, 11)",
+        "fontFamily": "Aptos, monospace",
+        "fontSize": 27.777,
+        "fontWeight": 700,
+        "fontStyle": "normal",
+        "box": {
+          "x": 832.4649658203125,
+          "y": 165.6334228515625,
+          "width": 381.7030029296875,
+          "height": 33
+        },
+        "chain": [
+          {
+            "tag": "text",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "svg",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          }
+        ]
+      },
+      "threshold": 3,
+      "rectangleMinimum": 2.9330389043320184,
+      "glyphMinimum": 4.821402248858131,
+      "supportPixels": 3108,
+      "visiblePixels": 3092,
+      "pixelsBelowThreshold": 0,
+      "unsupportedPaint": 0,
+      "outsideTextDifferences": [],
+      "inkBounds": {
+        "left": 833,
+        "top": 173,
+        "right": 1198,
+        "bottom": 191
+      },
+      "worst": {
+        "x": 956,
+        "y": 173,
+        "background": [
+          51,
+          65,
+          85
+        ],
+        "maskCoverage": 0.9372549019607843
+      },
+      "auditedMinimumTouchesInk": false,
+      "passed": true,
+      "artifacts": [
+        {
+          "file": "finding-26-full.png",
+          "bytes": 48525,
+          "sha256": "0e4f30e2d47a248f0815aea1b68d8b0844b7f97c9bf1bb67b766bf2a13230655"
+        },
+        {
+          "file": "finding-26-background.png",
+          "bytes": 6774,
+          "sha256": "10e7c888e2f91fed122d1eadda9e6ff3069897401491324a555de1cc3bd69810"
+        },
+        {
+          "file": "finding-26-isolated.png",
+          "bytes": 11585,
+          "sha256": "48189f123156cd10a2ff10ca747bb4cd0ac49bcb85f2f90679eb57bb6d4a979e"
+        },
+        {
+          "file": "finding-26-mask.png",
+          "bytes": 8942,
+          "sha256": "9cbad3043466826967f9d189599ad24dc8320065ef5cb462ba38743ebb1918a1"
+        },
+        {
+          "file": "finding-26-inverseMask.png",
+          "bytes": 8971,
+          "sha256": "d40ab2af675a2eba9b0607309f7475b28f2646fd8d5e60fd94a59f8a2ed85566"
+        }
+      ],
+      "file": "examples/gallery/industries/mixed-use-leasing-pipeline-review.opf.json",
+      "slide": 1,
+      "path": "slides.1.text",
+      "text": "move anchor tenants from ",
+      "sourceSha256": "1f771cd5545eed0ef15be22a5f57d41d578d25ccf03e89507d0c94f75d337348",
+      "svgSha256": "7f35c422efc800d2782af1ad99ac0dd62adbaf4035cffd8fcf507c3d0b454415"
+    },
+    {
+      "id": "finding-27",
+      "measured": {
+        "path": "slides.5.bullets",
+        "text": "•",
+        "fill": "rgb(15, 23, 42)",
+        "fontFamily": "Aptos, sans-serif",
+        "fontSize": 20.833,
+        "fontWeight": 400,
+        "fontStyle": "normal",
+        "box": {
+          "x": 48,
+          "y": 124.73300170898438,
+          "width": 7.296875,
+          "height": 23
+        },
+        "chain": [
+          {
+            "tag": "text",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "svg",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          }
+        ]
+      },
+      "threshold": 4.5,
+      "rectangleMinimum": 3.190990136984701,
+      "glyphMinimum": 8.080249571374402,
+      "supportPixels": 31,
+      "visiblePixels": 30,
+      "pixelsBelowThreshold": 0,
+      "unsupportedPaint": 0,
+      "outsideTextDifferences": [
+        {
+          "x": 638,
+          "y": 254,
+          "background": [
+            241,
+            241,
+            243
+          ],
+          "isolated": [
+            242,
+            241,
+            243
+          ]
+        }
+      ],
+      "inkBounds": {
+        "left": 48,
+        "top": 134,
+        "right": 54,
+        "bottom": 138
+      },
+      "worst": {
+        "x": 48,
+        "y": 135,
+        "background": [
+          161,
+          177,
+          185
+        ],
+        "maskCoverage": 0.12941176470588237
+      },
+      "auditedMinimumTouchesInk": false,
+      "passed": true,
+      "artifacts": [
+        {
+          "file": "finding-27-full.png",
+          "bytes": 178756,
+          "sha256": "3eea9bbf1df6ce9ca7eae0f85fd2d649a0f2de5f0f45848d50d3383c4206a924"
+        },
+        {
+          "file": "finding-27-background.png",
+          "bytes": 133888,
+          "sha256": "f083b85df3021a1c014dd9536eb2a42daed3a1921734152a469fa89837e6f02e"
+        },
+        {
+          "file": "finding-27-isolated.png",
+          "bytes": 133962,
+          "sha256": "f4ecb2b6b0720e3a4431781cf5f6804981c581ec20f5ceb26cf7c6423260e55e"
+        },
+        {
+          "file": "finding-27-mask.png",
+          "bytes": 3147,
+          "sha256": "3e8ed5697d62b5ad866829a78b10aca09a8c060cae5c50b095e30e3134c86f79"
+        },
+        {
+          "file": "finding-27-inverseMask.png",
+          "bytes": 3143,
+          "sha256": "0a5c96fbed1584712d48bbc83fb70241a8a68fe1220f4f1d4b88fa42b6f1027c"
+        }
+      ],
+      "file": "examples/gallery/international/german-works-council-update.opf.json",
+      "slide": 5,
+      "path": "slides.5.bullets",
+      "text": "•",
+      "sourceSha256": "139f8a98b0bded1a2f7f9b17e905ebd9ce8c0e9b4bd7090feb4a149d8c18b7c9",
+      "svgSha256": "dcda2c80413db80c766fd11caf7f89a52bf596f70cc170cb25dad6a22d949828"
+    }
+  ],
+  "errors": [],
+  "requests": [],
+  "scope": "All findings from the exact recorded SVG/browser/font audit, each isolated at its exact leaf/path/text/bounds. The union of white-on-black and black-on-white glyph-only masks retains polarity-dependent antialiasing and fully invisible source text, verified by two failing invisible controls and one passing control. Every isolated visible pixel within the measured text geometry plus a one-pixel guard must fall within that independent union. Redraw differences outside both the complete text geometry and its glyph masks are reported separately; they do not become text support. Contrast uses declared opaque sRGB foreground and actual background at every mask pixel, including antialiased-edge support. Other text is hidden while backgrounds, region borders and image geometry stay intact. Reports do not alter source, certify glyph coverage/system fallback, screen-reader access, other rasterizers or native output. Original rectangle findings remain recorded; only this finite audited set is refined."
+}

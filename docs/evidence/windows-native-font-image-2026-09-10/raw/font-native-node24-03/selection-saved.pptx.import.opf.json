@@ -1,0 +1,227 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "OPF Presentation",
+  "slides": [
+    {
+      "design": {
+        "background": {
+          "type": "solid",
+          "color": "#011842"
+        }
+      },
+      "tag": "Tag",
+      "title": "Heading",
+      "subtitle": "Subtitle",
+      "blocks": [
+        {
+          "type": "text",
+          "text": "Scalar text stays editable."
+        }
+      ]
+    },
+    {
+      "design": {
+        "background": {
+          "type": "solid",
+          "color": "#011842"
+        }
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text": "Regular bold italic both"
+        }
+      ]
+    },
+    {
+      "design": {
+        "background": {
+          "type": "solid",
+          "color": "#011842"
+        }
+      },
+      "blocks": [
+        {
+          "type": "table",
+          "table": {
+            "columns": [
+              {
+                "value": [
+                  {
+                    "text": "Header ",
+                    "bold": true,
+                    "fontSize": 11.25,
+                    "fontFamily": "Roboto",
+                    "color": "#FFFFFF"
+                  },
+                  {
+                    "text": "normal",
+                    "bold": false,
+                    "fontSize": 11.25,
+                    "fontFamily": "Roboto",
+                    "color": "#FFFFFF"
+                  }
+                ],
+                "style": {
+                  "fill": "#2874A6",
+                  "align": "left",
+                  "verticalAlign": "top",
+                  "padding": {
+                    "top": 8,
+                    "right": 10,
+                    "bottom": 4,
+                    "left": 10
+                  },
+                  "borders": {
+                    "left": {
+                      "color": "#3AC67A",
+                      "width": 1
+                    },
+                    "right": {
+                      "color": "#3AC67A",
+                      "width": 1
+                    },
+                    "top": {
+                      "color": "#3AC67A",
+                      "width": 1
+                    },
+                    "bottom": {
+                      "color": "#3AC67A",
+                      "width": 1
+                    }
+                  }
+                }
+              }
+            ],
+            "rows": [
+              [
+                {
+                  "value": [
+                    {
+                      "text": "Cell ",
+                      "fontSize": 11.25,
+                      "fontFamily": "Roboto",
+                      "color": "#FFFFFF"
+                    },
+                    {
+                      "text": "emphasis",
+                      "italic": true,
+                      "fontSize": 11.25,
+                      "fontFamily": "Roboto",
+                      "color": "#FFFFFF"
+                    }
+                  ],
+                  "style": {
+                    "fill": "#011842",
+                    "align": "left",
+                    "verticalAlign": "top",
+                    "padding": {
+                      "top": 8,
+                      "right": 10,
+                      "bottom": 4,
+                      "left": 10
+                    },
+                    "borders": {
+                      "left": {
+                        "color": "#3AC67A",
+                        "width": 1
+                      },
+                      "right": {
+                        "color": "#3AC67A",
+                        "width": 1
+                      },
+                      "top": {
+                        "color": "#3AC67A",
+                        "width": 1
+                      },
+                      "bottom": {
+                        "color": "#3AC67A",
+                        "width": 1
+                      }
+                    }
+                  }
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "design": {
+        "background": {
+          "type": "solid",
+          "color": "#011842"
+        }
+      },
+      "title": "\"Quote body\"",
+      "blocks": [
+        {
+          "type": "text",
+          "text": "Quote author - Original source"
+        }
+      ]
+    },
+    {
+      "design": {
+        "background": {
+          "type": "solid",
+          "color": "#011842"
+        }
+      },
+      "blocks": [
+        {
+          "type": "code",
+          "code": {
+            "filename": "example.js",
+            "language": "JavaScript",
+            "source": "const count = 123;"
+          }
+        }
+      ]
+    },
+    {
+      "design": {
+        "background": {
+          "type": "solid",
+          "color": "#011842"
+        }
+      },
+      "blocks": [
+        {
+          "type": "metric",
+          "metric": {
+            "value": 123,
+            "label": "Weight 500 label",
+            "description": "Regular description",
+            "delta": "+2"
+          }
+        }
+      ]
+    },
+    {
+      "design": {
+        "background": {
+          "type": "solid",
+          "color": "#011842"
+        }
+      },
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "List bold",
+            "Second item"
+          ]
+        }
+      ]
+    }
+  ],
+  "author": "OpenPresentation",
+  "design": {
+    "dimensions": {
+      "widthInches": 13.333333333333334,
+      "heightInches": 7.5
+    }
+  }
+}

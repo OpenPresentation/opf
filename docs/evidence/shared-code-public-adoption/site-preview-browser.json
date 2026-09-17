@@ -1,0 +1,58 @@
+{
+  "deployment": {
+    "key": "site",
+    "mode": "preview",
+    "id": "dpl_24JsNyAWzLH7sx6LXgci2TKAwwMN",
+    "sha": "2aa5432e670fafb108e5c3bcb7f0b2d9a57bf97f",
+    "url": "https://openpresentation-site-gscm1bor9-dataadvantage.vercel.app",
+    "projectId": "prj_MnL89d86UvFUMWP1MAamRR3VE9IC",
+    "state": "READY",
+    "source": "git",
+    "target": null,
+    "aliases": [
+      "openpresentation-site-git-codex-shared-cod-2d2f93-dataadvantage.vercel.app"
+    ]
+  },
+  "browser": "Microsoft Edge 152.0.4191.66",
+  "stats": {
+    "startTime": "2026-09-10T08:28:32.255Z",
+    "duration": 21821.904,
+    "expected": 6,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "cases": [
+    {
+      "file": "published-site.spec.ts",
+      "title": "agent quickstart copies the published installation command and serves all six complete skills",
+      "durationMs": 4090
+    },
+    {
+      "file": "published-site.spec.ts",
+      "title": "published history, package links and anchor navigation",
+      "durationMs": 1002
+    },
+    {
+      "file": "published-site.spec.ts",
+      "title": "mobile changelog keeps horizontal overflow inside its table",
+      "durationMs": 543
+    },
+    {
+      "file": "published-site.spec.ts",
+      "title": "home-page downloads match the verified registry showcase",
+      "durationMs": 1254
+    },
+    {
+      "file": "reference-playground.spec.ts",
+      "title": "local validator handles valid, advisory, invalid and malformed decks offline",
+      "durationMs": 3319
+    },
+    {
+      "file": "reference-playground.spec.ts",
+      "title": "reference copy preserves raw titles and headings, links and LLM exports use the current snapshot",
+      "durationMs": 10922
+    }
+  ],
+  "scope": "Actual remote app with essential authoring/editor operations performed offline after required local assets load. No native raster equivalence inferred."
+}

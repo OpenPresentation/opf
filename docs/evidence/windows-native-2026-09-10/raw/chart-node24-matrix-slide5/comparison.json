@@ -1,0 +1,147 @@
+{
+  "node": "v24.20.0",
+  "nativeSha256": "31200f06edeb758135348bcb5b162a4907a63c00632fd449b32b15d1d6e83026",
+  "imports": 24,
+  "independentCacheComparisons": 24,
+  "slides": 8,
+  "editedSlides": [
+    5
+  ],
+  "liveEditedSeries": true,
+  "unavailableObservations": [
+    {
+      "phase": "original",
+      "slide": 2,
+      "series": 1,
+      "property": "Series.XValues",
+      "observed": [
+        null,
+        null
+      ],
+      "reason": "Pie category getter returned null elements after loading. Native-created control reproduces this; live edited categories and independently parsed saved caches are required separately."
+    },
+    {
+      "phase": "original",
+      "slide": 4,
+      "series": 1,
+      "property": "Series.XValues",
+      "observed": [
+        null,
+        null
+      ],
+      "reason": "Pie category getter returned null elements after loading. Native-created control reproduces this; live edited categories and independently parsed saved caches are required separately."
+    },
+    {
+      "phase": "original",
+      "slide": 6,
+      "series": 1,
+      "property": "Series.XValues",
+      "observed": [
+        null,
+        null
+      ],
+      "reason": "Pie category getter returned null elements after loading. Native-created control reproduces this; live edited categories and independently parsed saved caches are required separately."
+    },
+    {
+      "phase": "original",
+      "slide": 8,
+      "series": 1,
+      "property": "Series.XValues",
+      "observed": [
+        null,
+        null
+      ],
+      "reason": "Pie category getter returned null elements after loading. Native-created control reproduces this; live edited categories and independently parsed saved caches are required separately."
+    },
+    {
+      "phase": "reopened",
+      "slide": 2,
+      "series": 1,
+      "property": "Series.XValues",
+      "observed": [
+        null,
+        null
+      ],
+      "reason": "Pie category getter returned null elements after loading. Native-created control reproduces this; live edited categories and independently parsed saved caches are required separately."
+    },
+    {
+      "phase": "reopened",
+      "slide": 4,
+      "series": 1,
+      "property": "Series.XValues",
+      "observed": [
+        null,
+        null
+      ],
+      "reason": "Pie category getter returned null elements after loading. Native-created control reproduces this; live edited categories and independently parsed saved caches are required separately."
+    },
+    {
+      "phase": "reopened",
+      "slide": 6,
+      "series": 1,
+      "property": "Series.XValues",
+      "observed": [
+        null,
+        null
+      ],
+      "reason": "Pie category getter returned null elements after loading. Native-created control reproduces this; live edited categories and independently parsed saved caches are required separately."
+    },
+    {
+      "phase": "reopened",
+      "slide": 8,
+      "series": 1,
+      "property": "Series.XValues",
+      "observed": [
+        null,
+        null
+      ],
+      "reason": "Pie category getter returned null elements after loading. Native-created control reproduces this; live edited categories and independently parsed saved caches are required separately."
+    },
+    {
+      "phase": "edited",
+      "slide": 2,
+      "series": 1,
+      "property": "Series.XValues",
+      "observed": [
+        null,
+        null
+      ],
+      "reason": "Pie category getter returned null elements after loading. Native-created control reproduces this; live edited categories and independently parsed saved caches are required separately."
+    },
+    {
+      "phase": "edited",
+      "slide": 4,
+      "series": 1,
+      "property": "Series.XValues",
+      "observed": [
+        null,
+        null
+      ],
+      "reason": "Pie category getter returned null elements after loading. Native-created control reproduces this; live edited categories and independently parsed saved caches are required separately."
+    },
+    {
+      "phase": "edited",
+      "slide": 6,
+      "series": 1,
+      "property": "Series.XValues",
+      "observed": [
+        null,
+        null
+      ],
+      "reason": "Pie category getter returned null elements after loading. Native-created control reproduces this; live edited categories and independently parsed saved caches are required separately."
+    },
+    {
+      "phase": "edited",
+      "slide": 8,
+      "series": 1,
+      "property": "Series.XValues",
+      "observed": [
+        null,
+        null
+      ],
+      "reason": "Pie category getter returned null elements after loading. Native-created control reproduces this; live edited categories and independently parsed saved caches are required separately."
+    }
+  ],
+  "passed": true,
+  "scope": "Native editable chart panel/axis/legend colors and alpha across eight slides; original/saved/edited imports and independent chart-cache reads preserve series, categories and values; one selected actual embedded Excel workbook edit additionally preserves the header and is observed live through COM before closing its data. Pie Series.XValues after loading is unavailable on this Office build, also reproduced by an Office-created control; nulls are recorded rather than called matching categories. Exact live categories and persisted native caches remain required. Full edit coverage requires separate successful runs for slides 1 through 8. No browser/native raster, per-glyph font or advanced chart-layout parity claim."
+}

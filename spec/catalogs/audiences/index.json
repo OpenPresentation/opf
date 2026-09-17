@@ -1,5 +1,5 @@
 {
-  "$schema": "https://openpresentation.org/schema/opf-audience-index/v1",
+  "$schema": "https://openpresentation.org/schema/opf-catalog-index/v1",
   "version": "1",
   "description": "Catalog of presentation audiences available in the openpresentation.org catalog. Each entry is a lightweight summary; full audience records (seniority, technical fluency, decision power, attention budget, recommended narratives and tones) live in the per-id JSON files alongside this index. Audiences are referenced from OPF documents via audience.",
   "records": [

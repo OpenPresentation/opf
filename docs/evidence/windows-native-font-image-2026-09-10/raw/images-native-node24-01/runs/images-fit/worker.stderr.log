@@ -1,0 +1,7 @@
+PowerPoint could not open the file.
+At C:\Users\micha\.codex\worktrees\fd3f\opf\artifacts\windows-candidate\opf-pptx\test\native-images.ps1:18 char:199
++ ... rship not established'}};return $app.Presentations.Open($File,0,0,0)}
++                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (:) [], COMException
+    + FullyQualifiedErrorId : System.Runtime.InteropServices.COMException
+ 

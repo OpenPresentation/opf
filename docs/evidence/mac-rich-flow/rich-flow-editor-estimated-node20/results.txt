@@ -1,0 +1,48 @@
+PASS rich fragments expose source offsets
+PASS fragment trace matches source text
+PASS fragment trace matches source text
+PASS fragment trace matches source text
+PASS fragment trace matches source text
+PASS native SVG selection opens formatting controls
+PASS selection formatting splits the selected run
+PASS formatting preserves the other linked run
+PASS selection restored after the shared renderer reflows
+PASS unrelated metadata preserved
+PASS repeated style changes retain the same range
+PASS one undo removes one formatting action
+PASS undo restores original run boundaries
+PASS reverse cross-run selection colors only the range
+PASS point size applies to all selected runs
+PASS unsafe link entry rejected
+PASS safe hyperlink stored
+PASS selected text replacement preserves the suffix
+PASS superscript uses exclusive script state
+PASS subscript clears superscript
+PASS reset removes selected overrides
+PASS keyboard entry opens native rich typing
+PASS structured run editor remains accessible
+PASS external edits invalidate stale formatting selection
+PASS plain text exposes the formatting entry
+PASS plain text can become formatted runs on the canvas
+PASS scalar-only title does not offer an invalid rich conversion
+PASS rich typing remains an isolated draft
+PASS rich typing renders a live draft
+PASS collapsed native selection has an SVG-aligned caret
+PASS draft undo restores text before typing
+PASS draft redo restores typed text
+PASS rich typing commits with an unrelated concurrent edit
+PASS typing preserves mixed styles
+PASS one session undo restores rich text and preserves unrelated edits
+PASS cancel discards rich typing
+PASS same-field concurrent edit cancels rich typing
+PASS IME composition cannot commit midway
+PASS composition commits intact after completion
+PASS empty rich text keeps a visible insertion caret
+PASS trailing blank lines place the caret on their measured line
+PASS deleting and retyping all text preserves insertion style
+PASS formatting notifies canvas commit callbacks
+PASS successful edits clear prior formatting errors
+PASS no unexpected canvas errors
+PASS destroy cleans up canvas and toolbar
+
+46 checks passed

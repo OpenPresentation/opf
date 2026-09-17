@@ -1,0 +1,4 @@
+*.json -text whitespace=cr-at-eol
+*.log -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol
+*.mjs -text
+*.html -text

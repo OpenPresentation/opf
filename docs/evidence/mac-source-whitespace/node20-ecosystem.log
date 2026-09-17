@@ -1,0 +1,5 @@
+
+> openpresentation-workspace@ test:ecosystem /Users/michael/.codex/worktrees/c193/opf
+> node --import ./scripts/register-local-opf.mjs scripts/test-ecosystem.mjs
+
+Ecosystem checks passed. Artifacts: /var/folders/zj/5tv5dvds3793_qhx2jyxs0000000gn/T/opf-ecosystem-29J8R8

@@ -1,0 +1,154 @@
+[
+  {
+    "count": 2,
+    "width": 1280,
+    "height": 720,
+    "minimum": 16,
+    "coreDiagnostics": [],
+    "render": "passed"
+  },
+  {
+    "count": 2,
+    "width": 1280,
+    "height": 720,
+    "minimum": 32,
+    "coreDiagnostics": [],
+    "render": "passed"
+  },
+  {
+    "count": 2,
+    "width": 720,
+    "height": 1280,
+    "minimum": 16,
+    "coreDiagnostics": [],
+    "render": "passed"
+  },
+  {
+    "count": 2,
+    "width": 720,
+    "height": 1280,
+    "minimum": 32,
+    "coreDiagnostics": [],
+    "render": "passed"
+  },
+  {
+    "count": 4,
+    "width": 1280,
+    "height": 720,
+    "minimum": 16,
+    "coreDiagnostics": [],
+    "render": "passed"
+  },
+  {
+    "count": 4,
+    "width": 1280,
+    "height": 720,
+    "minimum": 32,
+    "coreDiagnostics": [],
+    "render": "passed"
+  },
+  {
+    "count": 4,
+    "width": 720,
+    "height": 1280,
+    "minimum": 16,
+    "coreDiagnostics": [],
+    "render": "passed"
+  },
+  {
+    "count": 4,
+    "width": 720,
+    "height": 1280,
+    "minimum": 32,
+    "coreDiagnostics": [],
+    "render": "passed"
+  },
+  {
+    "count": 8,
+    "width": 1280,
+    "height": 720,
+    "minimum": 16,
+    "coreDiagnostics": [],
+    "render": "passed"
+  },
+  {
+    "count": 8,
+    "width": 1280,
+    "height": 720,
+    "minimum": 32,
+    "coreError": {
+      "message": "Slide content does not fit its composition.",
+      "code": "layout-overflow"
+    },
+    "renderError": {
+      "message": "Slide content does not fit its composition.",
+      "code": "layout-overflow"
+    }
+  },
+  {
+    "count": 8,
+    "width": 720,
+    "height": 1280,
+    "minimum": 16,
+    "coreDiagnostics": [],
+    "render": "passed"
+  },
+  {
+    "count": 8,
+    "width": 720,
+    "height": 1280,
+    "minimum": 32,
+    "coreError": {
+      "message": "Slide content does not fit its composition.",
+      "code": "layout-overflow"
+    },
+    "renderError": {
+      "message": "Slide content does not fit its composition.",
+      "code": "layout-overflow"
+    }
+  },
+  {
+    "count": 12,
+    "width": 1280,
+    "height": 720,
+    "minimum": 16,
+    "coreDiagnostics": [],
+    "render": "passed"
+  },
+  {
+    "count": 12,
+    "width": 1280,
+    "height": 720,
+    "minimum": 32,
+    "coreError": {
+      "message": "Slide content does not fit its composition.",
+      "code": "layout-overflow"
+    },
+    "renderError": {
+      "message": "Slide content does not fit its composition.",
+      "code": "layout-overflow"
+    }
+  },
+  {
+    "count": 12,
+    "width": 720,
+    "height": 1280,
+    "minimum": 16,
+    "coreDiagnostics": [],
+    "render": "passed"
+  },
+  {
+    "count": 12,
+    "width": 720,
+    "height": 1280,
+    "minimum": 32,
+    "coreError": {
+      "message": "Slide content does not fit its composition.",
+      "code": "layout-overflow"
+    },
+    "renderError": {
+      "message": "Slide content does not fit its composition.",
+      "code": "layout-overflow"
+    }
+  }
+]

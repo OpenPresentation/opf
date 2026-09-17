@@ -1,0 +1,829 @@
+{
+  "checkedAt": "2026-09-10T01:33:46.219Z",
+  "coreCandidate": "e63524942abb3cecbadaba3ed2d50e924b0fff0d",
+  "verificationRefs": {
+    "cli": "4dc292fa93bee52320bafa3fd0f5b05a2dc0a283",
+    "opf": "4dc292fa93bee52320bafa3fd0f5b05a2dc0a283",
+    "opf-render": "7fe9905ad2d8a224efeef51b4a22d0aff0c413fe",
+    "opf-pptx": "898e3c27919a2488e1e3d384168d6b25aae4bd5c",
+    "opf-editor": "dba5fe5e5580a4172c052132c4db5851d1decc4c"
+  },
+  "runs": [
+    {
+      "node": "v20.20.2",
+      "logs": {
+        "build": {
+          "passed": true,
+          "sha256": "c68c0793a7f16583d9197873f81b696c9cd3b2cb42dd5d50856270ffcf346fe4"
+        },
+        "link": {
+          "passed": true,
+          "sha256": "f4d0e9c7d7428340f165349b01ac332b046ffa87f6155844e43c76349e1a9e42"
+        },
+        "source": {
+          "passed": true,
+          "sha256": "534337d310de3c7edc60508a87ecda5fa4ab284bc442dedea4e21b018419ab1c"
+        },
+        "tarball-browser": {
+          "passed": true,
+          "sha256": "5c0610f10006025b34cd9fb096148803be30fafeb517342c4cf2cf7629dacc63"
+        },
+        "registry": {
+          "passed": true,
+          "sha256": "e856d36e272f5e414106d78441a2900f7bd7a38759add3c20611db826f0a13fc"
+        },
+        "registry-browser": {
+          "passed": true,
+          "sha256": "d6872c059e4fdbe9c9bad8bceef4abbe5c83d5a03f47dd710cdf4dc018a3395b"
+        },
+        "guards": {
+          "passed": true,
+          "sha256": "43490d059163088c4c8e2e9968ae603c51480407b0f7e03e7b5dc799ed40de74"
+        },
+        "registry-fidelity": {
+          "passed": true,
+          "sha256": "78a879a54c20d2763e9dc757596f47cbc163bcf05f68857dcb34d1f41149e5df"
+        },
+        "quote-geometry": {
+          "passed": true,
+          "sha256": "415e0e8c55d510f81861bb032a0d385987557906f296c417843a13b1168985ec"
+        },
+        "cli": {
+          "passed": true,
+          "sha256": "98854cfef3a0799acaeeb312b0ed36162b90a3d1d7fb78526469cbcc8e309089"
+        },
+        "native-bridge": {
+          "passed": true,
+          "sha256": "6213023b6746702a63236ad8da601c104c0bd2c2f5cbccdba3b455c7ddebce44"
+        }
+      },
+      "knownVulnerabilities": 0,
+      "signatureVerification": "audited 64 packages in 0s\r\n\r\n64 packages have verified registry signatures\r\n\r\n15 packages have verified attestations\r\n(use --json --include-attestations to view attestation details)",
+      "browsers": [
+        {
+          "checkedAt": "2026-09-10T01:30:34.069Z",
+          "mode": "packed",
+          "browser": "152.0.4191.66",
+          "reportSha256": "44b315336119faab9159838426e010412070e31c63d23daa51f694b95ef1d56b",
+          "manifest": {
+            "mode": "packed",
+            "consumer": "artifacts/npm/consumer",
+            "browserBuildId": "8cc37676-86c7-484c-bf26-4bd8adcd8301",
+            "lockSha256": "4fa909f0dfb979bf944df8187619e99a85f466116f9cd2b35038d33d781292e8",
+            "packages": {
+              "@openpresentation/opf": "0.4.0-preview.11",
+              "@openpresentation/opf-render": "0.1.0-preview.11",
+              "@openpresentation/opf-editor": "0.1.0-preview.11",
+              "@openpresentation/opf-pptx": "0.1.0-preview.11"
+            },
+            "suites": [
+              "canvas",
+              "rich-text",
+              "layout",
+              "block",
+              "list",
+              "create",
+              "styled-table"
+            ],
+            "files": {
+              "fonts.json": "c697f3979d65cb65482400d163604a8b4ac299e788702b8d3a502cce3f284c8d",
+              "packed-canvas-tests.html": "eabf718451f5b776946f68b7a65fde4df9f194b1b5013b0924ce3aa90b94ff92",
+              "packed-canvas-tests.js": "4ce59ce50d85e0396bd274b94018f8433cb76fcdf272bb551a9a9a5713612559",
+              "packed-rich-text-tests.html": "da4f8ebf7e8521d5d3361bf983559ad9dc598c0f2cd0586893b3944bb6dd41f9",
+              "packed-rich-text-tests.js": "5d7a38771d59dac72e3f61d0cc3ec76fa17dde95bde6290b61825d3c4182641f",
+              "packed-layout-tests.html": "2fe1eef3d16f6d7e5affe656821b1b063909f66e848599d4840625e36a97d2bf",
+              "packed-layout-tests.js": "0867117b28b617cbd04a99011f5ee24c8b7d652a13bb87f3243f29b4b11ba633",
+              "packed-block-tests.html": "56fb85286b8440a10dae1216acfec0f87a19fb2107989f12df075328f5a5747b",
+              "packed-block-tests.js": "6c2ad6a1d5bfa811c9c73eb9fa6199ef04109d8fd14f6a8257ad99882dfe767a",
+              "packed-list-tests.html": "5073bcc579d7a5919eeaf078a6f57474562e5ff14c56815bcd460f02c9844852",
+              "packed-list-tests.js": "a51870ae333867b05a32f4882ff8379b6ee82e27a1ed1c957b3caab81cf25e4a",
+              "packed-create-tests.html": "ce7ac5392d1c139aa9152a2e475f455a1ab1271fda7e9b9b8f3469fa9e436a94",
+              "packed-create-tests.js": "b21c23ebebabea9b9e402ece67b8fb52fb9c17f22c50217d664dd9a0681675f3",
+              "packed-styled-table-tests.html": "08d17f84d2ffcb057bba8355129e9453c279388fdfff23a39c5dad2b4be6acfa",
+              "packed-styled-table-tests.js": "49115008766ff31048da9ab3acf88ba95bec4a489859407b71b755323f61c512"
+            }
+          },
+          "suites": [
+            {
+              "suite": "canvas",
+              "assertions": 34,
+              "interactions": [],
+              "pageErrors": [],
+              "blockedRequests": []
+            },
+            {
+              "suite": "rich-text",
+              "assertions": 46,
+              "interactions": [],
+              "pageErrors": [],
+              "blockedRequests": []
+            },
+            {
+              "suite": "layout",
+              "assertions": 26,
+              "interactions": [
+                "trusted divider drag: normal",
+                "trusted divider drag: cancel",
+                "trusted divider drag: conflict",
+                "trusted divider drag: independent"
+              ],
+              "pageErrors": [],
+              "blockedRequests": []
+            },
+            {
+              "suite": "block",
+              "assertions": 21,
+              "interactions": [
+                "trusted block reorder and one-step undo"
+              ],
+              "pageErrors": [],
+              "blockedRequests": []
+            },
+            {
+              "suite": "list",
+              "assertions": 19,
+              "interactions": [],
+              "pageErrors": [],
+              "blockedRequests": []
+            },
+            {
+              "suite": "create",
+              "assertions": 40,
+              "interactions": [],
+              "pageErrors": [],
+              "blockedRequests": []
+            },
+            {
+              "suite": "styled-table",
+              "assertions": 44,
+              "interactions": [
+                "trusted merged rich-cell typing, redo and undo",
+                "trusted scalar-to-rich conversion and bold formatting, each with its own undo",
+                "trusted empty-cell typing and undo"
+              ],
+              "pageErrors": [],
+              "blockedRequests": []
+            }
+          ]
+        },
+        {
+          "checkedAt": "2026-09-10T01:30:51.419Z",
+          "mode": "registry",
+          "browser": "152.0.4191.66",
+          "reportSha256": "ece7bc1488dc574649c2e05fc33c86fefcbd46e4c0a53137d2e1cdd31c0f14ad",
+          "manifest": {
+            "mode": "registry",
+            "consumer": "artifacts/npm/registry-consumer",
+            "browserBuildId": "30e2ed50-9bb2-4742-a407-c14a0eee6d9b",
+            "lockSha256": "8665d61922f0afa5d3c981b122e2f93a069c603194493f3b96ed5841e40647df",
+            "packages": {
+              "@openpresentation/opf": "0.8.0",
+              "@openpresentation/opf-render": "0.6.0",
+              "@openpresentation/opf-editor": "0.5.0",
+              "@openpresentation/opf-pptx": "0.6.0",
+              "@openpresentation/cli": "0.6.0"
+            },
+            "suites": [
+              "canvas",
+              "rich-text",
+              "layout",
+              "block",
+              "list",
+              "create",
+              "styled-table"
+            ],
+            "files": {
+              "fonts.json": "c697f3979d65cb65482400d163604a8b4ac299e788702b8d3a502cce3f284c8d",
+              "packed-canvas-tests.html": "eabf718451f5b776946f68b7a65fde4df9f194b1b5013b0924ce3aa90b94ff92",
+              "packed-canvas-tests.js": "794f7ff14365124de0400f762cc2076864432b6bd7fc37192e0d997e491806ae",
+              "packed-rich-text-tests.html": "da4f8ebf7e8521d5d3361bf983559ad9dc598c0f2cd0586893b3944bb6dd41f9",
+              "packed-rich-text-tests.js": "389399e37d13fd25d0eaa1d88a661b54f444438524de7c16ce36e34d2ea40daa",
+              "packed-layout-tests.html": "2fe1eef3d16f6d7e5affe656821b1b063909f66e848599d4840625e36a97d2bf",
+              "packed-layout-tests.js": "024b9a8f14d79a6a0f617d56fe2ddf4125bb7f639e67af6dce5924faa046b4d8",
+              "packed-block-tests.html": "56fb85286b8440a10dae1216acfec0f87a19fb2107989f12df075328f5a5747b",
+              "packed-block-tests.js": "b3368ad82849c4e2fe7006bbeaa5647cc653e8fe6b88055ad777a6a88863e993",
+              "packed-list-tests.html": "5073bcc579d7a5919eeaf078a6f57474562e5ff14c56815bcd460f02c9844852",
+              "packed-list-tests.js": "077492e38ceb06e5ad4992568ef1959cf4c0810b055d8a5d193b65a6737c07cf",
+              "packed-create-tests.html": "ce7ac5392d1c139aa9152a2e475f455a1ab1271fda7e9b9b8f3469fa9e436a94",
+              "packed-create-tests.js": "fc925a8d7f381ced736b612b03230e77faca389a8f0db3e85294bb16807cb01d",
+              "packed-styled-table-tests.html": "08d17f84d2ffcb057bba8355129e9453c279388fdfff23a39c5dad2b4be6acfa",
+              "packed-styled-table-tests.js": "1213eeb19ab6a0f71fadf2ad1ea2a58b456b8c221e3772a204cdc5cd15cc6ea4"
+            }
+          },
+          "suites": [
+            {
+              "suite": "canvas",
+              "assertions": 34,
+              "interactions": [],
+              "pageErrors": [],
+              "blockedRequests": []
+            },
+            {
+              "suite": "rich-text",
+              "assertions": 46,
+              "interactions": [],
+              "pageErrors": [],
+              "blockedRequests": []
+            },
+            {
+              "suite": "layout",
+              "assertions": 26,
+              "interactions": [
+                "trusted divider drag: normal",
+                "trusted divider drag: cancel",
+                "trusted divider drag: conflict",
+                "trusted divider drag: independent"
+              ],
+              "pageErrors": [],
+              "blockedRequests": []
+            },
+            {
+              "suite": "block",
+              "assertions": 21,
+              "interactions": [
+                "trusted block reorder and one-step undo"
+              ],
+              "pageErrors": [],
+              "blockedRequests": []
+            },
+            {
+              "suite": "list",
+              "assertions": 19,
+              "interactions": [],
+              "pageErrors": [],
+              "blockedRequests": []
+            },
+            {
+              "suite": "create",
+              "assertions": 40,
+              "interactions": [],
+              "pageErrors": [],
+              "blockedRequests": []
+            },
+            {
+              "suite": "styled-table",
+              "assertions": 44,
+              "interactions": [
+                "trusted merged rich-cell typing, redo and undo",
+                "trusted scalar-to-rich conversion and bold formatting, each with its own undo",
+                "trusted empty-cell typing and undo"
+              ],
+              "pageErrors": [],
+              "blockedRequests": []
+            }
+          ]
+        }
+      ],
+      "fidelity": {
+        "scope": "Pinned tests and fixtures, installed registry dist files; no source package overrides",
+        "packages": [
+          {
+            "name": "@openpresentation/opf",
+            "version": "0.8.0"
+          },
+          {
+            "name": "@openpresentation/opf-render",
+            "version": "0.6.0"
+          },
+          {
+            "name": "@openpresentation/opf-editor",
+            "version": "0.5.0"
+          },
+          {
+            "name": "@openpresentation/opf-pptx",
+            "version": "0.6.0"
+          },
+          {
+            "name": "@openpresentation/cli",
+            "version": "0.6.0"
+          }
+        ],
+        "results": [
+          {
+            "repo": "opf-render",
+            "ref": "7fe9905ad2d8a224efeef51b4a22d0aff0c413fe",
+            "test": "webp.mjs",
+            "passed": true
+          },
+          {
+            "repo": "opf-render",
+            "ref": "7fe9905ad2d8a224efeef51b4a22d0aff0c413fe",
+            "test": "jpeg-orientation.mjs",
+            "passed": true
+          },
+          {
+            "repo": "opf-render",
+            "ref": "7fe9905ad2d8a224efeef51b4a22d0aff0c413fe",
+            "test": "rich-table.mjs",
+            "passed": true
+          },
+          {
+            "repo": "opf-render",
+            "ref": "7fe9905ad2d8a224efeef51b4a22d0aff0c413fe",
+            "test": "golden.mjs",
+            "passed": true
+          },
+          {
+            "repo": "opf-render",
+            "ref": "7fe9905ad2d8a224efeef51b4a22d0aff0c413fe",
+            "test": "styled-table.mjs",
+            "passed": true
+          },
+          {
+            "repo": "opf-render",
+            "ref": "7fe9905ad2d8a224efeef51b4a22d0aff0c413fe",
+            "test": "quote-footer.mjs",
+            "passed": true
+          },
+          {
+            "repo": "opf-render",
+            "ref": "7fe9905ad2d8a224efeef51b4a22d0aff0c413fe",
+            "test": "shared-quote.mjs",
+            "passed": true
+          },
+          {
+            "repo": "opf-pptx",
+            "ref": "898e3c27919a2488e1e3d384168d6b25aae4bd5c",
+            "test": "dependency-boundary.mjs",
+            "passed": true
+          },
+          {
+            "repo": "opf-pptx",
+            "ref": "898e3c27919a2488e1e3d384168d6b25aae4bd5c",
+            "test": "styled-table.mjs",
+            "passed": true
+          },
+          {
+            "repo": "opf-pptx",
+            "ref": "898e3c27919a2488e1e3d384168d6b25aae4bd5c",
+            "test": "styled-table-import.mjs",
+            "passed": true
+          },
+          {
+            "repo": "opf-pptx",
+            "ref": "898e3c27919a2488e1e3d384168d6b25aae4bd5c",
+            "test": "content-layout.mjs",
+            "passed": true
+          },
+          {
+            "repo": "opf-pptx",
+            "ref": "898e3c27919a2488e1e3d384168d6b25aae4bd5c",
+            "test": "shared-quote.mjs",
+            "passed": true
+          }
+        ]
+      },
+      "nativeBridge": {
+        "reportSha256": "8c9cc616561e0de75f71d71700cf88cdd916ec8880a399f0009ddb76038ffb39",
+        "packages": [
+          {
+            "name": "@openpresentation/opf",
+            "version": "0.8.0",
+            "integrity": "sha512-1ubeINQsuD8pFNr542eFYPfzkhcECAcj/mM2pWNN+keFnVoWxePCsFTUtjuSSsvCtpm7QkgxBYRJYtEUmrlkkg=="
+          },
+          {
+            "name": "@openpresentation/opf-render",
+            "version": "0.6.0",
+            "integrity": "sha512-rYHS0qetT8FpDqkB8E9KMtwrh6NiB6UzxAeqaCwnMwrIDIEvejKC++Hw2Us4512ZIHRHdwuG42aq6QJodBJOPA=="
+          },
+          {
+            "name": "@openpresentation/opf-pptx",
+            "version": "0.6.0",
+            "integrity": "sha512-60giL1UxBU21AAPF+TtA3h8mMbzsGVU7WyPLt9GuQg4ZvPBpG6YRR6jw8hGjEsG6v/X7ohJXbh0LWM2zDHjQwA=="
+          }
+        ],
+        "fontHashes": {
+          "calibri.ttf": "57e93ff143572bcc092c1f56202d43ddc07bb119aa104c6d7af163470fb551f6",
+          "calibrib.ttf": "0a8296747536ead27d5f48f67e911cc3b207742b3f704e66995251d12fd422e5",
+          "calibrii.ttf": "7f150e9eabe5db3e1b0f9469dca5c96176bc2fbb306dc9d48b7029dc69c52763",
+          "calibriz.ttf": "760539bfedbe24e7853ca8a621d9cb1f3de52036c116e81aae36b33c4ab60a7c"
+        },
+        "decks": [
+          {
+            "id": "quote-1280",
+            "slides": 6,
+            "sourceSha256": "61615ecb09b832051dcac55402ce781857994e0be40027518ec7ebd7936f8a6e",
+            "validImports": 3
+          },
+          {
+            "id": "quote-540",
+            "slides": 6,
+            "sourceSha256": "1f9aaf8d1385de2b12b67ff841c54329a51ee066fd7d328fac2bb08e2e1329cb",
+            "validImports": 3
+          }
+        ],
+        "scope": "Actual registry exports are byte-identical to 12 native-tested quote slides. Native glyph separation/save/reopen and six registry reimports verify. All accepted body/footer lines survive in order with exact multiplicity. This does not assert general raster equivalence or OPF quote semantic reconstruction.",
+        "nativeEvidence": "pptx-060-publication-2026-09-09.json"
+      }
+    },
+    {
+      "node": "v24.20.0",
+      "logs": {
+        "build": {
+          "passed": true,
+          "sha256": "2cd17a88bec5e202a7ade30a287c8edc8b7b9e224d44750c9a92fe34b5437cc7"
+        },
+        "link": {
+          "passed": true,
+          "sha256": "f4d0e9c7d7428340f165349b01ac332b046ffa87f6155844e43c76349e1a9e42"
+        },
+        "source": {
+          "passed": true,
+          "sha256": "7947dae09ed7cf6e24f2777b3d1fca92c48628eb2888041df54874aab8338ff1"
+        },
+        "tarball-browser": {
+          "passed": true,
+          "sha256": "5c0610f10006025b34cd9fb096148803be30fafeb517342c4cf2cf7629dacc63"
+        },
+        "registry": {
+          "passed": true,
+          "sha256": "72294c91087effc42f9347b52c3c8ee7a6330528bcd53b0a3cf464ade274f870"
+        },
+        "registry-browser": {
+          "passed": true,
+          "sha256": "d6872c059e4fdbe9c9bad8bceef4abbe5c83d5a03f47dd710cdf4dc018a3395b"
+        },
+        "guards": {
+          "passed": true,
+          "sha256": "43490d059163088c4c8e2e9968ae603c51480407b0f7e03e7b5dc799ed40de74"
+        },
+        "registry-fidelity": {
+          "passed": true,
+          "sha256": "78a879a54c20d2763e9dc757596f47cbc163bcf05f68857dcb34d1f41149e5df"
+        },
+        "quote-geometry": {
+          "passed": true,
+          "sha256": "415e0e8c55d510f81861bb032a0d385987557906f296c417843a13b1168985ec"
+        },
+        "cli": {
+          "passed": true,
+          "sha256": "98854cfef3a0799acaeeb312b0ed36162b90a3d1d7fb78526469cbcc8e309089"
+        },
+        "native-bridge": {
+          "passed": true,
+          "sha256": "6213023b6746702a63236ad8da601c104c0bd2c2f5cbccdba3b455c7ddebce44"
+        }
+      },
+      "knownVulnerabilities": 0,
+      "signatureVerification": "audited 64 packages in 0s\r\n\r\n64 packages have verified registry signatures\r\n\r\n15 packages have verified attestations\r\n(use --json --include-attestations to view attestation details)",
+      "browsers": [
+        {
+          "checkedAt": "2026-09-10T01:27:01.218Z",
+          "mode": "packed",
+          "browser": "152.0.4191.66",
+          "reportSha256": "8419c24283646e450b814d0c4e3753fe68642ac948fbf1c421a64d64e956f088",
+          "manifest": {
+            "mode": "packed",
+            "consumer": "artifacts/npm/consumer",
+            "browserBuildId": "ed8227a1-cbf2-4812-9d17-160db67462eb",
+            "lockSha256": "4fa909f0dfb979bf944df8187619e99a85f466116f9cd2b35038d33d781292e8",
+            "packages": {
+              "@openpresentation/opf": "0.4.0-preview.11",
+              "@openpresentation/opf-render": "0.1.0-preview.11",
+              "@openpresentation/opf-editor": "0.1.0-preview.11",
+              "@openpresentation/opf-pptx": "0.1.0-preview.11"
+            },
+            "suites": [
+              "canvas",
+              "rich-text",
+              "layout",
+              "block",
+              "list",
+              "create",
+              "styled-table"
+            ],
+            "files": {
+              "fonts.json": "c697f3979d65cb65482400d163604a8b4ac299e788702b8d3a502cce3f284c8d",
+              "packed-canvas-tests.html": "eabf718451f5b776946f68b7a65fde4df9f194b1b5013b0924ce3aa90b94ff92",
+              "packed-canvas-tests.js": "4ce59ce50d85e0396bd274b94018f8433cb76fcdf272bb551a9a9a5713612559",
+              "packed-rich-text-tests.html": "da4f8ebf7e8521d5d3361bf983559ad9dc598c0f2cd0586893b3944bb6dd41f9",
+              "packed-rich-text-tests.js": "5d7a38771d59dac72e3f61d0cc3ec76fa17dde95bde6290b61825d3c4182641f",
+              "packed-layout-tests.html": "2fe1eef3d16f6d7e5affe656821b1b063909f66e848599d4840625e36a97d2bf",
+              "packed-layout-tests.js": "0867117b28b617cbd04a99011f5ee24c8b7d652a13bb87f3243f29b4b11ba633",
+              "packed-block-tests.html": "56fb85286b8440a10dae1216acfec0f87a19fb2107989f12df075328f5a5747b",
+              "packed-block-tests.js": "6c2ad6a1d5bfa811c9c73eb9fa6199ef04109d8fd14f6a8257ad99882dfe767a",
+              "packed-list-tests.html": "5073bcc579d7a5919eeaf078a6f57474562e5ff14c56815bcd460f02c9844852",
+              "packed-list-tests.js": "a51870ae333867b05a32f4882ff8379b6ee82e27a1ed1c957b3caab81cf25e4a",
+              "packed-create-tests.html": "ce7ac5392d1c139aa9152a2e475f455a1ab1271fda7e9b9b8f3469fa9e436a94",
+              "packed-create-tests.js": "b21c23ebebabea9b9e402ece67b8fb52fb9c17f22c50217d664dd9a0681675f3",
+              "packed-styled-table-tests.html": "08d17f84d2ffcb057bba8355129e9453c279388fdfff23a39c5dad2b4be6acfa",
+              "packed-styled-table-tests.js": "49115008766ff31048da9ab3acf88ba95bec4a489859407b71b755323f61c512"
+            }
+          },
+          "suites": [
+            {
+              "suite": "canvas",
+              "assertions": 34,
+              "interactions": [],
+              "pageErrors": [],
+              "blockedRequests": []
+            },
+            {
+              "suite": "rich-text",
+              "assertions": 46,
+              "interactions": [],
+              "pageErrors": [],
+              "blockedRequests": []
+            },
+            {
+              "suite": "layout",
+              "assertions": 26,
+              "interactions": [
+                "trusted divider drag: normal",
+                "trusted divider drag: cancel",
+                "trusted divider drag: conflict",
+                "trusted divider drag: independent"
+              ],
+              "pageErrors": [],
+              "blockedRequests": []
+            },
+            {
+              "suite": "block",
+              "assertions": 21,
+              "interactions": [
+                "trusted block reorder and one-step undo"
+              ],
+              "pageErrors": [],
+              "blockedRequests": []
+            },
+            {
+              "suite": "list",
+              "assertions": 19,
+              "interactions": [],
+              "pageErrors": [],
+              "blockedRequests": []
+            },
+            {
+              "suite": "create",
+              "assertions": 40,
+              "interactions": [],
+              "pageErrors": [],
+              "blockedRequests": []
+            },
+            {
+              "suite": "styled-table",
+              "assertions": 44,
+              "interactions": [
+                "trusted merged rich-cell typing, redo and undo",
+                "trusted scalar-to-rich conversion and bold formatting, each with its own undo",
+                "trusted empty-cell typing and undo"
+              ],
+              "pageErrors": [],
+              "blockedRequests": []
+            }
+          ]
+        },
+        {
+          "checkedAt": "2026-09-10T01:27:17.768Z",
+          "mode": "registry",
+          "browser": "152.0.4191.66",
+          "reportSha256": "12cadfe9765bc707ad9a3eeedf2b0b2ae8a6e301f324bdec2c090c040fe18030",
+          "manifest": {
+            "mode": "registry",
+            "consumer": "artifacts/npm/registry-consumer",
+            "browserBuildId": "22f723e2-2823-4a90-8680-b7c940571dea",
+            "lockSha256": "8665d61922f0afa5d3c981b122e2f93a069c603194493f3b96ed5841e40647df",
+            "packages": {
+              "@openpresentation/opf": "0.8.0",
+              "@openpresentation/opf-render": "0.6.0",
+              "@openpresentation/opf-editor": "0.5.0",
+              "@openpresentation/opf-pptx": "0.6.0",
+              "@openpresentation/cli": "0.6.0"
+            },
+            "suites": [
+              "canvas",
+              "rich-text",
+              "layout",
+              "block",
+              "list",
+              "create",
+              "styled-table"
+            ],
+            "files": {
+              "fonts.json": "c697f3979d65cb65482400d163604a8b4ac299e788702b8d3a502cce3f284c8d",
+              "packed-canvas-tests.html": "eabf718451f5b776946f68b7a65fde4df9f194b1b5013b0924ce3aa90b94ff92",
+              "packed-canvas-tests.js": "794f7ff14365124de0400f762cc2076864432b6bd7fc37192e0d997e491806ae",
+              "packed-rich-text-tests.html": "da4f8ebf7e8521d5d3361bf983559ad9dc598c0f2cd0586893b3944bb6dd41f9",
+              "packed-rich-text-tests.js": "389399e37d13fd25d0eaa1d88a661b54f444438524de7c16ce36e34d2ea40daa",
+              "packed-layout-tests.html": "2fe1eef3d16f6d7e5affe656821b1b063909f66e848599d4840625e36a97d2bf",
+              "packed-layout-tests.js": "024b9a8f14d79a6a0f617d56fe2ddf4125bb7f639e67af6dce5924faa046b4d8",
+              "packed-block-tests.html": "56fb85286b8440a10dae1216acfec0f87a19fb2107989f12df075328f5a5747b",
+              "packed-block-tests.js": "b3368ad82849c4e2fe7006bbeaa5647cc653e8fe6b88055ad777a6a88863e993",
+              "packed-list-tests.html": "5073bcc579d7a5919eeaf078a6f57474562e5ff14c56815bcd460f02c9844852",
+              "packed-list-tests.js": "077492e38ceb06e5ad4992568ef1959cf4c0810b055d8a5d193b65a6737c07cf",
+              "packed-create-tests.html": "ce7ac5392d1c139aa9152a2e475f455a1ab1271fda7e9b9b8f3469fa9e436a94",
+              "packed-create-tests.js": "fc925a8d7f381ced736b612b03230e77faca389a8f0db3e85294bb16807cb01d",
+              "packed-styled-table-tests.html": "08d17f84d2ffcb057bba8355129e9453c279388fdfff23a39c5dad2b4be6acfa",
+              "packed-styled-table-tests.js": "1213eeb19ab6a0f71fadf2ad1ea2a58b456b8c221e3772a204cdc5cd15cc6ea4"
+            }
+          },
+          "suites": [
+            {
+              "suite": "canvas",
+              "assertions": 34,
+              "interactions": [],
+              "pageErrors": [],
+              "blockedRequests": []
+            },
+            {
+              "suite": "rich-text",
+              "assertions": 46,
+              "interactions": [],
+              "pageErrors": [],
+              "blockedRequests": []
+            },
+            {
+              "suite": "layout",
+              "assertions": 26,
+              "interactions": [
+                "trusted divider drag: normal",
+                "trusted divider drag: cancel",
+                "trusted divider drag: conflict",
+                "trusted divider drag: independent"
+              ],
+              "pageErrors": [],
+              "blockedRequests": []
+            },
+            {
+              "suite": "block",
+              "assertions": 21,
+              "interactions": [
+                "trusted block reorder and one-step undo"
+              ],
+              "pageErrors": [],
+              "blockedRequests": []
+            },
+            {
+              "suite": "list",
+              "assertions": 19,
+              "interactions": [],
+              "pageErrors": [],
+              "blockedRequests": []
+            },
+            {
+              "suite": "create",
+              "assertions": 40,
+              "interactions": [],
+              "pageErrors": [],
+              "blockedRequests": []
+            },
+            {
+              "suite": "styled-table",
+              "assertions": 44,
+              "interactions": [
+                "trusted merged rich-cell typing, redo and undo",
+                "trusted scalar-to-rich conversion and bold formatting, each with its own undo",
+                "trusted empty-cell typing and undo"
+              ],
+              "pageErrors": [],
+              "blockedRequests": []
+            }
+          ]
+        }
+      ],
+      "fidelity": {
+        "scope": "Pinned tests and fixtures, installed registry dist files; no source package overrides",
+        "packages": [
+          {
+            "name": "@openpresentation/opf",
+            "version": "0.8.0"
+          },
+          {
+            "name": "@openpresentation/opf-render",
+            "version": "0.6.0"
+          },
+          {
+            "name": "@openpresentation/opf-editor",
+            "version": "0.5.0"
+          },
+          {
+            "name": "@openpresentation/opf-pptx",
+            "version": "0.6.0"
+          },
+          {
+            "name": "@openpresentation/cli",
+            "version": "0.6.0"
+          }
+        ],
+        "results": [
+          {
+            "repo": "opf-render",
+            "ref": "7fe9905ad2d8a224efeef51b4a22d0aff0c413fe",
+            "test": "webp.mjs",
+            "passed": true
+          },
+          {
+            "repo": "opf-render",
+            "ref": "7fe9905ad2d8a224efeef51b4a22d0aff0c413fe",
+            "test": "jpeg-orientation.mjs",
+            "passed": true
+          },
+          {
+            "repo": "opf-render",
+            "ref": "7fe9905ad2d8a224efeef51b4a22d0aff0c413fe",
+            "test": "rich-table.mjs",
+            "passed": true
+          },
+          {
+            "repo": "opf-render",
+            "ref": "7fe9905ad2d8a224efeef51b4a22d0aff0c413fe",
+            "test": "golden.mjs",
+            "passed": true
+          },
+          {
+            "repo": "opf-render",
+            "ref": "7fe9905ad2d8a224efeef51b4a22d0aff0c413fe",
+            "test": "styled-table.mjs",
+            "passed": true
+          },
+          {
+            "repo": "opf-render",
+            "ref": "7fe9905ad2d8a224efeef51b4a22d0aff0c413fe",
+            "test": "quote-footer.mjs",
+            "passed": true
+          },
+          {
+            "repo": "opf-render",
+            "ref": "7fe9905ad2d8a224efeef51b4a22d0aff0c413fe",
+            "test": "shared-quote.mjs",
+            "passed": true
+          },
+          {
+            "repo": "opf-pptx",
+            "ref": "898e3c27919a2488e1e3d384168d6b25aae4bd5c",
+            "test": "dependency-boundary.mjs",
+            "passed": true
+          },
+          {
+            "repo": "opf-pptx",
+            "ref": "898e3c27919a2488e1e3d384168d6b25aae4bd5c",
+            "test": "styled-table.mjs",
+            "passed": true
+          },
+          {
+            "repo": "opf-pptx",
+            "ref": "898e3c27919a2488e1e3d384168d6b25aae4bd5c",
+            "test": "styled-table-import.mjs",
+            "passed": true
+          },
+          {
+            "repo": "opf-pptx",
+            "ref": "898e3c27919a2488e1e3d384168d6b25aae4bd5c",
+            "test": "content-layout.mjs",
+            "passed": true
+          },
+          {
+            "repo": "opf-pptx",
+            "ref": "898e3c27919a2488e1e3d384168d6b25aae4bd5c",
+            "test": "shared-quote.mjs",
+            "passed": true
+          }
+        ]
+      },
+      "nativeBridge": {
+        "reportSha256": "8c9cc616561e0de75f71d71700cf88cdd916ec8880a399f0009ddb76038ffb39",
+        "packages": [
+          {
+            "name": "@openpresentation/opf",
+            "version": "0.8.0",
+            "integrity": "sha512-1ubeINQsuD8pFNr542eFYPfzkhcECAcj/mM2pWNN+keFnVoWxePCsFTUtjuSSsvCtpm7QkgxBYRJYtEUmrlkkg=="
+          },
+          {
+            "name": "@openpresentation/opf-render",
+            "version": "0.6.0",
+            "integrity": "sha512-rYHS0qetT8FpDqkB8E9KMtwrh6NiB6UzxAeqaCwnMwrIDIEvejKC++Hw2Us4512ZIHRHdwuG42aq6QJodBJOPA=="
+          },
+          {
+            "name": "@openpresentation/opf-pptx",
+            "version": "0.6.0",
+            "integrity": "sha512-60giL1UxBU21AAPF+TtA3h8mMbzsGVU7WyPLt9GuQg4ZvPBpG6YRR6jw8hGjEsG6v/X7ohJXbh0LWM2zDHjQwA=="
+          }
+        ],
+        "fontHashes": {
+          "calibri.ttf": "57e93ff143572bcc092c1f56202d43ddc07bb119aa104c6d7af163470fb551f6",
+          "calibrib.ttf": "0a8296747536ead27d5f48f67e911cc3b207742b3f704e66995251d12fd422e5",
+          "calibrii.ttf": "7f150e9eabe5db3e1b0f9469dca5c96176bc2fbb306dc9d48b7029dc69c52763",
+          "calibriz.ttf": "760539bfedbe24e7853ca8a621d9cb1f3de52036c116e81aae36b33c4ab60a7c"
+        },
+        "decks": [
+          {
+            "id": "quote-1280",
+            "slides": 6,
+            "sourceSha256": "61615ecb09b832051dcac55402ce781857994e0be40027518ec7ebd7936f8a6e",
+            "validImports": 3
+          },
+          {
+            "id": "quote-540",
+            "slides": 6,
+            "sourceSha256": "1f9aaf8d1385de2b12b67ff841c54329a51ee066fd7d328fac2bb08e2e1329cb",
+            "validImports": 3
+          }
+        ],
+        "scope": "Actual registry exports are byte-identical to 12 native-tested quote slides. Native glyph separation/save/reopen and six registry reimports verify. All accepted body/footer lines survive in order with exact multiplicity. This does not assert general raster equivalence or OPF quote semantic reconstruction.",
+        "nativeEvidence": "pptx-060-publication-2026-09-09.json"
+      },
+      "note": "All verification steps passed; an artifact collector filename typo was corrected and reports copied afterward without rerunning or relabeling tests."
+    }
+  ],
+  "boundary": "Full coordinated sources and local tarballs, then actual five-package npm consumers on Node 20/24. Seven browser suites/230 assertions/eight trusted scenarios per mode; four evidence guards, TypeScript/CLI and 805-slide fidelity corpus. The native bridge binds exact registry PPTX bytes to separately recorded Windows PowerPoint observations and checks every imported heading/body/footer line in reading order with multiplicity. The auxiliary quote geometry probe uses checkout core with registry renderer fonts and is not itself an all-registry or raster-equivalence test. Public deployments and full automatic repair/font-platform objectives remain separate."
+}

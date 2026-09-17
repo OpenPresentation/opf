@@ -1,0 +1,270 @@
+{
+  "checkedAt": "2026-09-10T01:48:13.695Z",
+  "pr": 21,
+  "reviewedHead": "27dcdb25ef6db97db2342d106cf9b51bfd625f79",
+  "mergeCommit": "b0a7733cfa9a97fbb8bdb91f39bcd3075640005a",
+  "treeIdentical": true,
+  "ci": 34425812307,
+  "bugbot": "passed",
+  "preview": {
+    "deployment": "dpl_2TPrYFLJuSmrmQduYeV3SDwp8xVG",
+    "tests": 6,
+    "seconds": 20.5
+  },
+  "production": {
+    "deployment": "dpl_FXtMtDzuUddejNkmXv9R9SkAPMVg",
+    "url": "https://www.openpresentation.org",
+    "browser": "152.0.4191.66",
+    "browserTests": {
+      "passed": 6,
+      "seconds": 18.8,
+      "scope": "Skills, changelog links/mobile overflow, hash-matched downloads, offline validator, current copied reference/LLM source"
+    },
+    "screenshot": {
+      "file": "site-shared-quote-2026-09-09.png",
+      "sha256": "a16d67ac2f0400600fb13b03ebfaaf66350c71bc82f5e1c251aacd3a3a437699",
+      "visuallyInspected": true
+    }
+  },
+  "releases": {
+    "verifiedOn": "2026-09-10",
+    "current": [
+      {
+        "name": "@openpresentation/opf",
+        "version": "0.8.0",
+        "publishedAt": "2026-09-09T20:32:02.843Z",
+        "summary": "Shared measured quote body/source geometry, deterministic grid scores, optional candidate explanations and persisted pagination readability floors. Generated payload types are stricter."
+      },
+      {
+        "name": "@openpresentation/opf-render",
+        "version": "0.6.0",
+        "publishedAt": "2026-09-10T00:26:19.032Z",
+        "summary": "Render the shared accepted quote lines and source placement from core 0.8.0, with measured readability and overflow diagnostics."
+      },
+      {
+        "name": "@openpresentation/opf-pptx",
+        "version": "0.6.0",
+        "publishedAt": "2026-09-10T00:47:11.629Z",
+        "summary": "Export shared accepted quote lines and source placement as editable PowerPoint text. Native save/reopen and controlled text reimport are verified; OPF quote structure and general pixel equivalence are not preserved."
+      },
+      {
+        "name": "@openpresentation/opf-editor",
+        "version": "0.5.0",
+        "publishedAt": "2026-09-10T01:14:08.133Z",
+        "summary": "Edit quote sources and apply one-page readability policy changes with undo/redo. Offline authoring, pagination, export and text reimport use the published package set."
+      },
+      {
+        "name": "@openpresentation/cli",
+        "version": "0.6.0",
+        "publishedAt": "2026-09-09T20:39:35.937Z",
+        "summary": "Bundle core 0.8.0 and updated provider-neutral skills. Retain one-command offline installation, safe updates and status for all six OPF skills."
+      }
+    ],
+    "coreHistory": [
+      {
+        "version": "0.8.0",
+        "publishedAt": "2026-09-09T20:32:02.843Z",
+        "title": "Shared quote layout and readable pagination",
+        "items": [
+          "Measure quote body, attribution and source together, with accepted lines shared by preview and native export.",
+          "Persist selected readability floors during pagination and expose optional candidate scores and decision explanations.",
+          "Adopt deterministic grid-score-v2 and stricter generated content payload types. Full automatic layout repair remains under development."
+        ]
+      },
+      {
+        "version": "0.7.0",
+        "publishedAt": "2026-09-08T15:18:15.318Z",
+        "title": "Styled and merged tables",
+        "items": [
+          "Add table cells with value, optional style, rowSpan and colSpan while retaining scalar and rich-array cells.",
+          "Validate merge ownership and covered null positions; preserve connected vertical merges during pagination.",
+          "Share anchor geometry and editable .value paths across the coordinated renderer, editor and PPTX packages."
+        ]
+      },
+      {
+        "version": "0.6.0",
+        "publishedAt": "2026-09-08T12:49:58.014Z",
+        "title": "Content-aware table layout",
+        "items": [
+          "Share table row geometry and fitting across composition, rendering and native export.",
+          "Grow multiline rows into available space and reduce spare height before shrinking readable text.",
+          "Preserve complete rows, report real overflow and keep short-table geometry unchanged."
+        ]
+      },
+      {
+        "version": "0.5.0",
+        "publishedAt": "2026-09-08T11:07:40.264Z",
+        "title": "Rich table content",
+        "items": [
+          "Accept rich TextRun arrays in table cells and headers alongside existing scalar values.",
+          "Measure actual run styles for overflow and pagination, preserving complete rows and repeated headers.",
+          "Generated types include the additional rich-array form; exhaustive scalar-only consumers need updating."
+        ]
+      },
+      {
+        "version": "0.4.1",
+        "publishedAt": "2026-09-08T08:23:40.207Z",
+        "title": "Complete embedded image example",
+        "items": [
+          "Replace the truncated PNG in the asset-source-forms example with a complete project-authored image.",
+          "Verify the corrected example against the renderer baseline and coordinated image/export checks."
+        ]
+      },
+      {
+        "version": "0.4.0",
+        "publishedAt": "2026-09-08T03:03:39.723Z",
+        "title": "Shared composition and local tools",
+        "items": [
+          "Add nested composition, weighted tracks, measured rich text and lists, overflow diagnostics and explicit pagination.",
+          "Expose browser-safe composition, pagination and CSV/TSV/JSON data conversion APIs.",
+          "Add six portable authoring, layout, preset, editing, export and inspection skills in the repository.",
+          "Use smaller structural TypeScript schema/catalog declarations; the narrative index uses records instead of templates."
+        ]
+      },
+      {
+        "version": "0.3.0",
+        "publishedAt": "2026-06-10T18:37:29.591Z",
+        "title": "Examples, documentation and reference warnings",
+        "items": [
+          "Add non-fatal warnings for unknown catalog identifiers and broken catalog cross-links.",
+          "Ship validated example decks, reference documentation and the pinned repository README through package exports.",
+          "Document design precedence, content forms and the boundary between the open format and downstream services."
+        ]
+      },
+      {
+        "version": "0.2.2",
+        "publishedAt": "2026-05-19T18:27:18.193Z",
+        "title": "Flexible content shorthand",
+        "items": [
+          "Accept mixed slide-root payloads as implicit blocks when no explicit type, blocks or regions are present.",
+          "Allow a single audience string alongside the existing array form."
+        ]
+      },
+      {
+        "version": "0.2.1",
+        "publishedAt": "2026-05-14T19:23:26.477Z",
+        "title": "Public package and raw specification",
+        "items": [
+          "Publish raw schemas, catalogs, references and layout previews through the canonical OPF package.",
+          "Add typed spec-file manifests and provenance-enabled publication.",
+          "Correct the United Kingdom chart catalog identifier to united-kingdom. The internally prepared 0.2.0 version was never published."
+        ]
+      },
+      {
+        "version": "0.1.0",
+        "publishedAt": "2026-05-05T22:26:37.307Z",
+        "title": "Initial npm release",
+        "items": [
+          "Publish the Open Presentation Format package with schemas, catalogs, generated types and local validation.",
+          "Establish the .opf.json convention for complete presentation documents."
+        ]
+      }
+    ]
+  },
+  "showcase": {
+    "renderer": "@openpresentation/opf-render",
+    "source": "example.opf.json",
+    "preview": "example.svg",
+    "pptx": "example.pptx",
+    "sha256": "de84138f9a1bb04e77468754fc56622d161d56507c5f6eb923737b08f2a63e93",
+    "toolchain": {
+      "source": "npm",
+      "packages": [
+        {
+          "name": "@openpresentation/opf",
+          "version": "0.8.0",
+          "tarball": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.8.0.tgz",
+          "integrity": "sha512-1ubeINQsuD8pFNr542eFYPfzkhcECAcj/mM2pWNN+keFnVoWxePCsFTUtjuSSsvCtpm7QkgxBYRJYtEUmrlkkg=="
+        },
+        {
+          "name": "@openpresentation/opf-render",
+          "version": "0.6.0",
+          "tarball": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.6.0.tgz",
+          "integrity": "sha512-rYHS0qetT8FpDqkB8E9KMtwrh6NiB6UzxAeqaCwnMwrIDIEvejKC++Hw2Us4512ZIHRHdwuG42aq6QJodBJOPA=="
+        },
+        {
+          "name": "@openpresentation/opf-editor",
+          "version": "0.5.0",
+          "tarball": "https://registry.npmjs.org/@openpresentation/opf-editor/-/opf-editor-0.5.0.tgz",
+          "integrity": "sha512-+97dX6YINmU6spn/iEdTWDeq92lSk02AmuhaIzWY0eqAmWfsoWeeQChqTlGLAt9S4Vldmr8VQHynT+MxdzzNIQ=="
+        },
+        {
+          "name": "@openpresentation/opf-pptx",
+          "version": "0.6.0",
+          "tarball": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.6.0.tgz",
+          "integrity": "sha512-60giL1UxBU21AAPF+TtA3h8mMbzsGVU7WyPLt9GuQg4ZvPBpG6YRR6jw8hGjEsG6v/X7ohJXbh0LWM2zDHjQwA=="
+        },
+        {
+          "name": "@openpresentation/cli",
+          "version": "0.6.0",
+          "tarball": "https://registry.npmjs.org/@openpresentation/cli/-/cli-0.6.0.tgz",
+          "integrity": "sha512-p02xCN30VF3K9pQHbD9lTDKxSpnceKnXZK9zhLDELqEWn2IBYO5ZwgcTVe/gVmv5ab/2wpG5Nx6HtmvO9SwWSQ=="
+        }
+      ]
+    },
+    "files": {
+      "example.opf.json": "902d6bd9de957598a123e5919ae0dd602e0241d27bdfc406c936c7c43a3d0dbd",
+      "example.svg": "de84138f9a1bb04e77468754fc56622d161d56507c5f6eb923737b08f2a63e93",
+      "example.pptx": "5cd591c6a01c644f618667865d94ae95cbf603f573e80419f88eef602490ec5f"
+    }
+  },
+  "scripts": {
+    "/_next/static/immutable/chunks/0_vmbi6_eqtot.js": {
+      "bytes": 29593,
+      "sha256": "d1f779eddae3a92640f205aa25119c1d971df9dbe2970da8f0525c7ad9710860"
+    },
+    "/_next/static/immutable/chunks/0kyraqldb8047.js": {
+      "bytes": 228423,
+      "sha256": "192425cb0dff4fbd5ebb8769d0f8e26d8cc7c3a7c5462c9cb5101022e5e92a49"
+    },
+    "/_next/static/immutable/chunks/1ymyt9i-4jdms.js": {
+      "bytes": 165227,
+      "sha256": "946e6ea386a3717be20de345905df986e4a5a96e2f4f03f9bb801c5bc1447c85"
+    },
+    "/_next/static/immutable/chunks/342qwzbovs2oc.js": {
+      "bytes": 14380,
+      "sha256": "d80465113a49ff9dd6f934ea576a34425a242e11ec160b9dc1fae87f71464078"
+    },
+    "/_next/static/immutable/chunks/0q_z9szbqz59v.js": {
+      "bytes": 2011,
+      "sha256": "b9a303ee8488a048e352700a38453f09537dffa4e358c3a969878c3be510d116"
+    },
+    "/_next/static/immutable/chunks/turbopack-03vzpr2cbz8d0.js": {
+      "bytes": 10986,
+      "sha256": "29f112eb897998857be41259cb57be79aa49d9e20c79a82db547d9b5ab00ce1e"
+    },
+    "/_next/static/immutable/chunks/0in1r0cpkewc0.js": {
+      "bytes": 6556,
+      "sha256": "bebf11b619471800adfa4f42c258f5763c0748bea619bca54918ca5723440c26"
+    },
+    "/_next/static/immutable/chunks/368x1zgxru_7q.js": {
+      "bytes": 20139,
+      "sha256": "6064365f8a68f09b915432ab94cf607a74b2c361854e4764e5a7a81265b65d01"
+    },
+    "/_next/static/immutable/chunks/2s3q2cd8038nj.js": {
+      "bytes": 32045,
+      "sha256": "f1336e1753b1bba55ca923f6454faea70e8f6b6ffd97f1b54d1d3db5446a2bdd"
+    },
+    "/_next/static/immutable/chunks/10wvibvzay_14.js": {
+      "bytes": 4230,
+      "sha256": "7728e29a62f1938dda1185a6b183a1107fe20ebcbadb9973a21ee296b788839b"
+    },
+    "/_next/static/immutable/chunks/3rewd5cq9tqaf.js": {
+      "bytes": 29648,
+      "sha256": "79de60804817f0c8d692d192712b354efe6612ffb0acd1938a6562b6b2933b83"
+    },
+    "/_next/static/immutable/chunks/2z8i-hud_jt4n.js": {
+      "bytes": 3566,
+      "sha256": "c111e602467d42aa3f9e2f369da8a9cae4bddbee0d085b93d260a0ed567a2f11"
+    },
+    "/_next/static/immutable/chunks/2dzcroqcqrp1f.js": {
+      "bytes": 11327,
+      "sha256": "d488ae62cd6eeecfea7a51dc4dff0fd716b6eb59c8347e0ddfc049600dd20eba"
+    },
+    "/_next/static/immutable/chunks/2b7dmlcb-g8se.js": {
+      "bytes": 308086,
+      "sha256": "5b1fe8188c974dfee36e0510d36ec2979312cfc2bc61a47d4914c2ecbaeb19d9"
+    }
+  },
+  "boundary": "Exact production deployment commit and lockfile select core 0.8.0. Public browser tests verify the app, current documentation/skills, all release dates and hash-matched registry showcase downloads. Served JavaScript fingerprints are recorded, not asserted byte-identical to unbundled npm files. Shared quote native PowerPoint evidence is separate; no new raster-equivalence claim is made."
+}

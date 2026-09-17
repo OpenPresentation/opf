@@ -1,0 +1,2224 @@
+{
+  "opf": {
+    "root": "/Users/michael/.codex/worktrees/c193/opf",
+    "base": "origin/main",
+    "alreadyMergedHeads": 52,
+    "unmerged": [
+      {
+        "ref": "codex/shared-furniture-20260910",
+        "sha": "fc3d6344c9ad5c195dcee4bac56ca76edf1f8213",
+        "ahead": 4,
+        "uniquePatches": 4,
+        "commits": [
+          "fc3d634 Record retained raster corpus and concurrent Node 24 roadmap update",
+          "abf3e27 Retain cross-runtime furniture source evidence and outstanding acceptance gates",
+          "864b73e Measure repeated furniture before composing and paginating body content",
+          "2156093 Record merged timeline checkpoint and isolate header footer reliability gaps"
+        ],
+        "files": [
+          "docs/dynamic-composition.md",
+          "docs/evidence/mac-shared-furniture-draft/README.md",
+          "docs/evidence/mac-shared-furniture-draft/SHA256SUMS.json",
+          "docs/evidence/mac-shared-furniture-draft/browser/node20/furniture-1280-inherited.png",
+          "docs/evidence/mac-shared-furniture-draft/browser/node20/furniture-1280-local.png",
+          "docs/evidence/mac-shared-furniture-draft/browser/node20/furniture-720-inherited.png",
+          "docs/evidence/mac-shared-furniture-draft/browser/node20/furniture-720-local.png",
+          "docs/evidence/mac-shared-furniture-draft/browser/node20/report.json",
+          "docs/evidence/mac-shared-furniture-draft/browser/node24/furniture-1280-inherited.png",
+          "docs/evidence/mac-shared-furniture-draft/browser/node24/furniture-1280-local.png",
+          "docs/evidence/mac-shared-furniture-draft/browser/node24/furniture-720-inherited.png",
+          "docs/evidence/mac-shared-furniture-draft/browser/node24/furniture-720-local.png",
+          "docs/evidence/mac-shared-furniture-draft/browser/node24/report.json",
+          "docs/evidence/mac-shared-furniture-draft/corpus/candidate.json",
+          "docs/evidence/mac-shared-furniture-draft/corpus/diff.json",
+          "docs/evidence/mac-shared-furniture-draft/draft-failures/browser-invalid-organization.json",
+          "docs/evidence/mac-shared-furniture-draft/draft-failures/opf-furniture-core-suite-node24-retry.log",
+          "docs/evidence/mac-shared-furniture-draft/draft-failures/opf-furniture-core-suite-node24.log",
+          "docs/evidence/mac-shared-furniture-draft/draft-failures/opf-furniture-pagination-node24.log",
+          "docs/evidence/mac-shared-furniture-draft/draft-failures/opf-furniture-workflow-node24.log",
+          "docs/evidence/mac-shared-furniture-draft/logs/opf-furniture-core-suite-node20.log",
+          "docs/evidence/mac-shared-furniture-draft/logs/opf-furniture-core-suite-node24-final.log",
+          "docs/evidence/mac-shared-furniture-draft/logs/opf-furniture-editor-suite-node20.log",
+          "docs/evidence/mac-shared-furniture-draft/logs/opf-furniture-editor-suite-node24.log",
+          "docs/evidence/mac-shared-furniture-draft/logs/opf-furniture-export-node20.log",
+          "docs/evidence/mac-shared-furniture-draft/logs/opf-furniture-export-node24.log",
+          "docs/evidence/mac-shared-furniture-draft/logs/opf-furniture-pagination-node24-v3.log",
+          "docs/evidence/mac-shared-furniture-draft/logs/opf-furniture-pptx-suite-node20.log",
+          "docs/evidence/mac-shared-furniture-draft/logs/opf-furniture-pptx-suite-node24.log",
+          "docs/evidence/mac-shared-furniture-draft/logs/opf-furniture-render-fields-node20.log",
+          "docs/evidence/mac-shared-furniture-draft/logs/opf-furniture-render-fields-node24.log",
+          "docs/evidence/mac-shared-furniture-draft/logs/opf-furniture-render-remainder-node24.log",
+          "docs/evidence/mac-shared-furniture-draft/logs/opf-furniture-render-suite-node24.log",
+          "docs/evidence/mac-shared-furniture-draft/logs/opf-furniture-workflow-node20.log",
+          "docs/evidence/mac-shared-furniture-draft/logs/opf-furniture-workflow-node24-v2.log",
+          "docs/evidence/mac-shared-furniture-draft/pptx/node20.json",
+          "docs/evidence/mac-shared-furniture-draft/pptx/node24.json",
+          "docs/evidence/mac-shared-furniture-draft/summary.json",
+          "docs/evidence/mac-shared-furniture-predecessor/README.md",
+          "docs/evidence/mac-shared-furniture-predecessor/SHA256SUMS.json",
+          "docs/evidence/mac-shared-furniture-predecessor/node20.json",
+          "docs/evidence/mac-shared-furniture-predecessor/node20.log",
+          "docs/evidence/mac-shared-furniture-predecessor/node24.json",
+          "docs/evidence/mac-shared-furniture-predecessor/node24.log",
+          "docs/evidence/mac-shared-furniture-predecessor/verifier.mjs",
+          "docs/evidence/timeline-review-follow-up/README.md",
+          "docs/evidence/timeline-review-follow-up/SHA256SUMS.json",
+          "docs/evidence/timeline-review-follow-up/node20.json",
+          "docs/evidence/timeline-review-follow-up/node20.log",
+          "docs/evidence/timeline-review-follow-up/node24.json",
+          "docs/evidence/timeline-review-follow-up/node24.log",
+          "docs/evidence/timeline-review-follow-up/verifier.mjs",
+          "docs/handoff-mac-owner-2026-09-10.md",
+          "docs/plans/shared-furniture-layout.md",
+          "packages/javascript/src/composition.ts",
+          "packages/javascript/src/index.ts",
+          "packages/javascript/src/pagination.ts",
+          "packages/javascript/test/code-composition.test.mjs",
+          "packages/javascript/test/composition-explanation.test.mjs",
+          "packages/javascript/test/furniture-composition.test.mjs",
+          "packages/javascript/test/generated-types.test.mjs",
+          "packages/javascript/test/metric-composition.test.mjs",
+          "packages/javascript/test/quote-composition.test.mjs",
+          "packages/javascript/test/text-outlines.test.mjs",
+          "scripts/test-furniture-workflow.mjs"
+        ],
+        "pullRequests": [],
+        "disposition": "important unfinished feature; preserve, do not merge yet",
+        "reason": "Native-text/image provenance and semantic reimport are incomplete; 657 changed corpus rasters need review; update onto Node 24 and verify clean installed packages before acceptance."
+      },
+      {
+        "ref": "codex/source-whitespace-20260910",
+        "sha": "d84c38669c1b887c2ca7bd870656fa2675fb0282",
+        "ahead": 3,
+        "uniquePatches": 3,
+        "commits": [
+          "d84c386 Verify accepted native lines in coordinated ecosystem checks",
+          "7d47c78 Coordinate source whitespace browser workflows and evidence",
+          "3eeea0e Preserve scalar source whitespace and explicit tab geometry"
+        ],
+        "files": [
+          ".github/workflows/ecosystem-ci.yml",
+          "docs/evidence/mac-source-whitespace/README.md",
+          "docs/evidence/mac-source-whitespace/before-blank-target.log",
+          "docs/evidence/mac-source-whitespace/before-heading-expectation.log",
+          "docs/evidence/mac-source-whitespace/before-mixed-input.log",
+          "docs/evidence/mac-source-whitespace/before-quote-expectation.log",
+          "docs/evidence/mac-source-whitespace/before-source.json",
+          "docs/evidence/mac-source-whitespace/before-spatial-order-assumption.log",
+          "docs/evidence/mac-source-whitespace/before-stale-browser-consumer.log",
+          "docs/evidence/mac-source-whitespace/bulk-replacement-observation.json",
+          "docs/evidence/mac-source-whitespace/candidate-manifest.json",
+          "docs/evidence/mac-source-whitespace/ci-linux24-source-line-shapes.log",
+          "docs/evidence/mac-source-whitespace/manifest.json",
+          "docs/evidence/mac-source-whitespace/node20-browser-manifest.json",
+          "docs/evidence/mac-source-whitespace/node20-browser.log",
+          "docs/evidence/mac-source-whitespace/node20-coordinator.log",
+          "docs/evidence/mac-source-whitespace/node20-core-focused.log",
+          "docs/evidence/mac-source-whitespace/node20-ecosystem.log",
+          "docs/evidence/mac-source-whitespace/node20-packed-browser.json",
+          "docs/evidence/mac-source-whitespace/node20-packed.log",
+          "docs/evidence/mac-source-whitespace/node20-pptx.log",
+          "docs/evidence/mac-source-whitespace/node20-renderer.log",
+          "docs/evidence/mac-source-whitespace/node20-whitespace-installed.json",
+          "docs/evidence/mac-source-whitespace/node20-whitespace-installed.log",
+          "docs/evidence/mac-source-whitespace/node24-browser-manifest.json",
+          "docs/evidence/mac-source-whitespace/node24-browser.log",
+          "docs/evidence/mac-source-whitespace/node24-coordinator.log",
+          "docs/evidence/mac-source-whitespace/node24-core.log",
+          "docs/evidence/mac-source-whitespace/node24-ecosystem.log",
+          "docs/evidence/mac-source-whitespace/node24-editor.log",
+          "docs/evidence/mac-source-whitespace/node24-packed-browser.json",
+          "docs/evidence/mac-source-whitespace/node24-packed.log",
+          "docs/evidence/mac-source-whitespace/node24-pptx-final.log",
+          "docs/evidence/mac-source-whitespace/node24-pptx.log",
+          "docs/evidence/mac-source-whitespace/node24-whitespace-installed.json",
+          "docs/evidence/mac-source-whitespace/node24-whitespace-installed.log",
+          "docs/evidence/mac-source-whitespace/source-graph.json",
+          "docs/handoff-mac-owner-2026-09-10.md",
+          "docs/plans/font-roadmap.md",
+          "docs/plans/plain-text-whitespace.md",
+          "docs/plans/text-placement.md",
+          "packages/javascript/src/composition.ts",
+          "packages/javascript/test/plain-whitespace.test.mjs",
+          "packages/javascript/test/quote-composition.test.mjs",
+          "scripts/test-ecosystem.mjs",
+          "scripts/test-plain-whitespace-workflow.mjs"
+        ],
+        "pullRequests": [
+          {
+            "headRefName": "codex/source-whitespace-20260910",
+            "headRefOid": "d84c38669c1b887c2ca7bd870656fa2675fb0282",
+            "mergeCommit": {
+              "oid": "c51b02571eab6ee61d03560aa1f539072b2d381b"
+            },
+            "number": 73,
+            "state": "MERGED",
+            "title": "Preserve scalar source whitespace through shared layout",
+            "url": "https://github.com/OpenPresentation/opf/pull/73"
+          }
+        ],
+        "disposition": "merged PR",
+        "deltaToMerge": []
+      },
+      {
+        "ref": "origin/claude/pen-dev-format-analysis-24vs61",
+        "sha": "f0d9b71d3ba1a8eddadbc90c96a11a9c1b031e14",
+        "ahead": 1,
+        "uniquePatches": 1,
+        "commits": [
+          "f0d9b71 docs: add .pen format field study and OPF recommendations"
+        ],
+        "files": [
+          "docs/plans/pen-format-analysis.md"
+        ],
+        "pullRequests": [],
+        "disposition": "historical research; not an implementation to merge",
+        "reason": "August research has stale OPF architecture and examples and proposes unapproved schema changes. Preserve the branch; re-evaluate specific ideas against current schemas when relevant."
+      },
+      {
+        "ref": "origin/claude/release-opf-0.3.0",
+        "sha": "f4ade1411c560d4d79ba689065ab533dfdec1755",
+        "ahead": 1,
+        "uniquePatches": 0,
+        "commits": [
+          "f4ade14 Release @openpresentation/opf 0.3.0"
+        ],
+        "files": [
+          "CHANGELOG.md",
+          "packages/javascript/package.json"
+        ],
+        "pullRequests": [
+          {
+            "headRefName": "claude/release-opf-0.3.0",
+            "headRefOid": "f4ade1411c560d4d79ba689065ab533dfdec1755",
+            "mergeCommit": {
+              "oid": "51c803fce49d98fc1e07bfb97e9624f583b002aa"
+            },
+            "number": 6,
+            "state": "MERGED",
+            "title": "Release @openpresentation/opf 0.3.0",
+            "url": "https://github.com/OpenPresentation/opf/pull/6"
+          }
+        ],
+        "disposition": "patch-equivalent"
+      },
+      {
+        "ref": "origin/codex/dat-3744-legacy-cleanup",
+        "sha": "4ba220d8875921c8f232a9dc5ddd94b0cada71e5",
+        "ahead": 2,
+        "uniquePatches": 2,
+        "commits": [
+          "4ba220d Fix OPF CI package verification",
+          "1895cd5 Clean up legacy PPTX.dev sources"
+        ],
+        "files": [
+          ".github/workflows/opf-ci.yml",
+          "PRODUCT.md",
+          "README.md",
+          "legacy/README.md",
+          "legacy/cli/node/.gitignore",
+          "legacy/cli/node/CHANGELOG.md",
+          "legacy/cli/node/LICENSE",
+          "legacy/cli/node/README.md",
+          "legacy/cli/node/dist-bundle/cli.cjs",
+          "legacy/cli/node/package.json",
+          "legacy/cli/node/pnpm-lock.yaml",
+          "legacy/cli/node/src/cli.ts",
+          "legacy/cli/node/src/client.ts",
+          "legacy/cli/node/src/commands/add.ts",
+          "legacy/cli/node/src/commands/fmt.ts",
+          "legacy/cli/node/src/commands/generate.ts",
+          "legacy/cli/node/src/commands/login.ts",
+          "legacy/cli/node/src/commands/parse.ts",
+          "legacy/cli/node/src/commands/render.ts",
+          "legacy/cli/node/src/commands/validate.ts",
+          "legacy/cli/node/src/config.ts",
+          "legacy/cli/node/src/index.ts",
+          "legacy/cli/node/src/output.ts",
+          "legacy/cli/node/src/prompt.ts",
+          "legacy/cli/node/src/version.ts",
+          "legacy/cli/node/tsconfig.json",
+          "legacy/cli/node/tsup.bundle.config.ts",
+          "legacy/cli/node/tsup.config.ts",
+          "legacy/cli/python/.gitignore",
+          "legacy/cli/python/CHANGELOG.md",
+          "legacy/cli/python/LICENSE",
+          "legacy/cli/python/README.md",
+          "legacy/cli/python/dist/pptx_cli-0.1.0-py3-none-any.whl",
+          "legacy/cli/python/dist/pptx_cli-0.1.0.tar.gz",
+          "legacy/cli/python/pyproject.toml",
+          "legacy/cli/python/scripts/stage_vendor.py",
+          "legacy/cli/python/src/pptx_cli/__init__.py",
+          "legacy/cli/python/src/pptx_cli/__main__.py",
+          "legacy/cli/python/src/pptx_cli/main.py",
+          "legacy/cli/python/src/pptx_cli/vendor/.gitkeep",
+          "legacy/cli/python/src/pptx_cli/vendor/cli.cjs",
+          "legacy/cli/python/src/pptx_cli/vendor/package.json",
+          "legacy/go/README.md",
+          "legacy/go/api.go",
+          "legacy/go/client.go",
+          "legacy/go/client_test.go",
+          "legacy/go/doc.go",
+          "legacy/go/errors.go",
+          "legacy/go/go.mod",
+          "legacy/go/types.go",
+          "legacy/mcp/.gitignore",
+          "legacy/mcp/.npmignore",
+          "legacy/mcp/LICENSE",
+          "legacy/mcp/README.md",
+          "legacy/mcp/package.json",
+          "legacy/mcp/pnpm-lock.yaml",
+          "legacy/mcp/src/index.ts",
+          "legacy/mcp/src/server.ts",
+          "legacy/mcp/src/stdio.ts",
+          "legacy/mcp/tsconfig.json",
+          "legacy/mcp/tsup.config.ts",
+          "legacy/python/.gitignore",
+          "legacy/python/LICENSE",
+          "legacy/python/README.md",
+          "legacy/python/pyproject.toml",
+          "legacy/python/src/pptx_dev/__init__.py",
+          "legacy/python/src/pptx_dev/__pycache__/__init__.cpython-39.pyc",
+          "legacy/python/src/pptx_dev/__pycache__/_http.cpython-39.pyc",
+          "legacy/python/src/pptx_dev/__pycache__/async_client.cpython-39.pyc",
+          "legacy/python/src/pptx_dev/__pycache__/client.cpython-39.pyc",
+          "legacy/python/src/pptx_dev/__pycache__/errors.cpython-39.pyc",
+          "legacy/python/src/pptx_dev/__pycache__/opf.cpython-39.pyc",
+          "legacy/python/src/pptx_dev/__pycache__/types.cpython-39.pyc",
+          "legacy/python/src/pptx_dev/_http.py",
+          "legacy/python/src/pptx_dev/async_client.py",
+          "legacy/python/src/pptx_dev/client.py",
+          "legacy/python/src/pptx_dev/errors.py",
+          "legacy/python/src/pptx_dev/integrations/__init__.py",
+          "legacy/python/src/pptx_dev/integrations/langchain.py",
+          "legacy/python/src/pptx_dev/integrations/llamaindex.py",
+          "legacy/python/src/pptx_dev/opf.py",
+          "legacy/python/src/pptx_dev/py.typed",
+          "legacy/python/src/pptx_dev/types.py",
+          "legacy/python/tests/__pycache__/test_smoke.cpython-39-pytest-8.4.2.pyc",
+          "legacy/python/tests/test_smoke.py",
+          "legacy/typescript/.gitignore",
+          "legacy/typescript/.npmignore",
+          "legacy/typescript/LICENSE",
+          "legacy/typescript/README.md",
+          "legacy/typescript/package-lock.json",
+          "legacy/typescript/package.json",
+          "legacy/typescript/pnpm-lock.yaml",
+          "legacy/typescript/src/client.ts",
+          "legacy/typescript/src/errors.ts",
+          "legacy/typescript/src/index.ts",
+          "legacy/typescript/src/opf.ts",
+          "legacy/typescript/src/types.ts",
+          "legacy/typescript/tsconfig.json",
+          "legacy/typescript/tsup.config.ts",
+          "legacy/workflows/publish-cli-npm.yml",
+          "legacy/workflows/publish-cli-pypi.yml",
+          "legacy/workflows/publish-sdk-go.yml",
+          "legacy/workflows/publish-sdk-mcp.yml",
+          "legacy/workflows/publish-sdk-python.yml",
+          "legacy/workflows/publish-sdk-typescript.yml"
+        ],
+        "pullRequests": [
+          {
+            "headRefName": "codex/dat-3744-legacy-cleanup",
+            "headRefOid": "4ba220d8875921c8f232a9dc5ddd94b0cada71e5",
+            "mergeCommit": {
+              "oid": "478e12da0a06791091ed16a5b194a467d2e44374"
+            },
+            "number": 1,
+            "state": "MERGED",
+            "title": "[codex] Clean up legacy PPTX.dev sources",
+            "url": "https://github.com/OpenPresentation/opf/pull/1"
+          }
+        ],
+        "disposition": "merged PR",
+        "deltaToMerge": []
+      },
+      {
+        "ref": "origin/codex/dat-3880-packed-smoke",
+        "sha": "895d1a0ec7d12d8a8a9e52a6a9335adc5bc83c61",
+        "ahead": 1,
+        "uniquePatches": 1,
+        "commits": [
+          "895d1a0 Add packed package smoke for OPF npm tarball"
+        ],
+        "files": [
+          ".github/workflows/opf-ci.yml",
+          "packages/javascript/README.md",
+          "packages/javascript/package.json",
+          "packages/javascript/test/packed-install-smoke.mjs",
+          "packages/javascript/tsup.config.ts"
+        ],
+        "pullRequests": [
+          {
+            "headRefName": "codex/dat-3880-packed-smoke",
+            "headRefOid": "895d1a0ec7d12d8a8a9e52a6a9335adc5bc83c61",
+            "mergeCommit": null,
+            "number": 2,
+            "state": "CLOSED",
+            "title": "v0.2.0 release tracking: packed-package smoke",
+            "url": "https://github.com/OpenPresentation/opf/pull/2"
+          }
+        ],
+        "disposition": "superseded by merged PR",
+        "reason": "Closed core PR #2 explicitly superseded by #7. Old package assertion would incorrectly exclude spec/openapi.yaml.",
+        "evidence": "https://github.com/OpenPresentation/opf/pull/2#issuecomment-4948569530"
+      },
+      {
+        "ref": "origin/codex/pdf-diagram-roadmap-20260910",
+        "sha": "6f76c9e0826ae20a08b50507998c811e7f8a01bf",
+        "ahead": 1,
+        "uniquePatches": 0,
+        "commits": [
+          "6f76c9e docs: plan vector PDF and post-font Mermaid and SVG support"
+        ],
+        "files": [
+          "docs/font-fidelity.md",
+          "docs/plans/diagrams-svg.md",
+          "docs/plans/ecosystem-objective-2026-09-09.md",
+          "docs/plans/font-roadmap.md",
+          "docs/plans/pdf-export.md",
+          "docs/plans/spec-editor-coverage.md"
+        ],
+        "pullRequests": [],
+        "disposition": "patch-equivalent"
+      },
+      {
+        "ref": "origin/codex/pdf-diagram-roadmap-main-20260910",
+        "sha": "8aaa98e7d42e6caccd14e54a1e4be3a2c9d98aba",
+        "ahead": 1,
+        "uniquePatches": 0,
+        "commits": [
+          "8aaa98e docs: plan vector PDF and post-font Mermaid and SVG support"
+        ],
+        "files": [
+          "docs/font-fidelity.md",
+          "docs/plans/diagrams-svg.md",
+          "docs/plans/ecosystem-objective-2026-09-09.md",
+          "docs/plans/font-roadmap.md",
+          "docs/plans/pdf-export.md",
+          "docs/plans/spec-editor-coverage.md"
+        ],
+        "pullRequests": [
+          {
+            "headRefName": "codex/pdf-diagram-roadmap-main-20260910",
+            "headRefOid": "8aaa98e7d42e6caccd14e54a1e4be3a2c9d98aba",
+            "mergeCommit": {
+              "oid": "93f5859996b683784ccec1be89b0af9763239cdf"
+            },
+            "number": 59,
+            "state": "MERGED",
+            "title": "Plan vector PDF and Mermaid/SVG support after font reliability",
+            "url": "https://github.com/OpenPresentation/opf/pull/59"
+          }
+        ],
+        "disposition": "patch-equivalent"
+      },
+      {
+        "ref": "origin/codex/pptx-dev-workflow-checkpoint-20260909",
+        "sha": "321d1866be79c6b0a2b5ec1edc43ddea0ad5ae25",
+        "ahead": 1,
+        "uniquePatches": 0,
+        "commits": [
+          "321d186 docs: checkpoint deployed gallery and native-tested pptx.dev workflow"
+        ],
+        "files": [
+          "docs/handoff-2026-09-08.md"
+        ],
+        "pullRequests": [
+          {
+            "headRefName": "codex/pptx-dev-workflow-checkpoint-20260909",
+            "headRefOid": "321d1866be79c6b0a2b5ec1edc43ddea0ad5ae25",
+            "mergeCommit": {
+              "oid": "0bc35c24c5011af81ecb5d9a93626d901331fde2"
+            },
+            "number": 36,
+            "state": "MERGED",
+            "title": "docs: checkpoint deployed gallery and native-tested pptx.dev workflow",
+            "url": "https://github.com/OpenPresentation/opf/pull/36"
+          }
+        ],
+        "disposition": "patch-equivalent"
+      },
+      {
+        "ref": "origin/codex/pptx-security-release-checkpoint-20260909",
+        "sha": "1950afe9804d7e4f7037372d24e8b9d8b864f5fb",
+        "ahead": 2,
+        "uniquePatches": 2,
+        "commits": [
+          "1950afe fix: preserve declared runtime files in local preview packages",
+          "941b372 test: verify published PPTX 0.5.1 across registry and PowerPoint"
+        ],
+        "files": [
+          ".github/workflows/ecosystem-ci.yml",
+          "docs/evidence/pptx-0.5.1/comparison.json",
+          "docs/evidence/pptx-0.5.1/fidelity-node20.json",
+          "docs/evidence/pptx-0.5.1/fidelity-node24.json",
+          "docs/evidence/pptx-0.5.1/generation.json",
+          "docs/evidence/pptx-0.5.1/native.json",
+          "docs/handoff-2026-09-08.md",
+          "docs/security-2026-09-09.md",
+          "release-plan.json",
+          "scripts/pack-ecosystem.mjs",
+          "scripts/test-packed-ecosystem.mjs",
+          "scripts/test-registry-fidelity.mjs"
+        ],
+        "pullRequests": [
+          {
+            "headRefName": "codex/pptx-security-release-checkpoint-20260909",
+            "headRefOid": "1950afe9804d7e4f7037372d24e8b9d8b864f5fb",
+            "mergeCommit": {
+              "oid": "188c32333a903fed9058d781caaaae4cd10b3d28"
+            },
+            "number": 33,
+            "state": "MERGED",
+            "title": "test: pin verified PPTX 0.5.1 and preserve native registry evidence",
+            "url": "https://github.com/OpenPresentation/opf/pull/33"
+          }
+        ],
+        "disposition": "merged PR",
+        "deltaToMerge": []
+      },
+      {
+        "ref": "origin/codex/production-security-checkpoint-20260909",
+        "sha": "49642aecb893aa4d85a90f267a2c3a72ab228e3e",
+        "ahead": 1,
+        "uniquePatches": 0,
+        "commits": [
+          "49642ae docs: checkpoint production adoption and security policy merges"
+        ],
+        "files": [
+          "docs/handoff-2026-09-08.md",
+          "docs/security-2026-09-09.md"
+        ],
+        "pullRequests": [
+          {
+            "headRefName": "codex/production-security-checkpoint-20260909",
+            "headRefOid": "49642aecb893aa4d85a90f267a2c3a72ab228e3e",
+            "mergeCommit": {
+              "oid": "900613f14ab7ed2d57aa6246f6ce7c3519cad39d"
+            },
+            "number": 32,
+            "state": "MERGED",
+            "title": "docs: record verified production and security milestones",
+            "url": "https://github.com/OpenPresentation/opf/pull/32"
+          }
+        ],
+        "disposition": "patch-equivalent"
+      },
+      {
+        "ref": "origin/codex/shared-code-layout-20260909",
+        "sha": "f90f7c5152d4075a2c184959164df655ba05fa19",
+        "ahead": 3,
+        "uniquePatches": 3,
+        "commits": [
+          "f90f7c5 test: request fractional SVG code advances across platforms",
+          "667f177 feat: add source-preserving shared code layout primitive",
+          "7b354a9 docs: checkpoint public reference verification and code layout gaps"
+        ],
+        "files": [
+          ".github/workflows/ecosystem-ci.yml",
+          "docs/dynamic-composition.md",
+          "docs/evidence/code-layout-gap-2026-09-09.json",
+          "docs/evidence/code-layout-gap-2026-09-09.opf.json",
+          "docs/evidence/repository-adoption-audit-2026-09-09.json",
+          "docs/evidence/shared-code-browser-2026-09-09.json",
+          "docs/evidence/shared-code-layout-2026-09-09.json",
+          "docs/evidence/site-published-reference-2026-09-09.json",
+          "docs/handoff-2026-09-08.md",
+          "docs/plans/layout-repair.md",
+          "docs/plans/shared-quote-release.md",
+          "packages/javascript/src/composition.ts",
+          "packages/javascript/src/index.ts",
+          "packages/javascript/test/code-layout.test.mjs",
+          "packages/javascript/test/generated-types.test.mjs",
+          "scripts/probe-code-layout-gap.mjs",
+          "scripts/test-code-layout-browser.mjs",
+          "scripts/test-code-layout-geometry.mjs"
+        ],
+        "pullRequests": [
+          {
+            "headRefName": "codex/shared-code-layout-20260909",
+            "headRefOid": "f90f7c5152d4075a2c184959164df655ba05fa19",
+            "mergeCommit": {
+              "oid": "7c978f8b7ef0cc649d8452f8f1b829f36a5ae6e3"
+            },
+            "number": 53,
+            "state": "MERGED",
+            "title": "Add source-preserving shared code layout primitive",
+            "url": "https://github.com/OpenPresentation/opf/pull/53"
+          }
+        ],
+        "disposition": "merged PR",
+        "deltaToMerge": []
+      },
+      {
+        "ref": "origin/codex/shared-code-public-adoption-20260910",
+        "sha": "9bc0e2705e4957b4abc0683fa34ffe308c8e9b81",
+        "ahead": 1,
+        "uniquePatches": 0,
+        "commits": [
+          "9bc0e27 docs(ecosystem): record verified shared-code public adoption"
+        ],
+        "files": [
+          "docs/evidence/shared-code-public-adoption/README.md",
+          "docs/evidence/shared-code-public-adoption/dev-preview-browser.json",
+          "docs/evidence/shared-code-public-adoption/dev-production-assets.json",
+          "docs/evidence/shared-code-public-adoption/dev-production-browser.json",
+          "docs/evidence/shared-code-public-adoption/dev-production-fonts.json",
+          "docs/evidence/shared-code-public-adoption/dev-production-native.json",
+          "docs/evidence/shared-code-public-adoption/dev-production-native.png",
+          "docs/evidence/shared-code-public-adoption/gallery-preview-browser.json",
+          "docs/evidence/shared-code-public-adoption/gallery-production-assets.json",
+          "docs/evidence/shared-code-public-adoption/gallery-production-browser.json",
+          "docs/evidence/shared-code-public-adoption/repository-audit.json",
+          "docs/evidence/shared-code-public-adoption/site-preview-browser.json",
+          "docs/evidence/shared-code-public-adoption/site-production-assets.json",
+          "docs/evidence/shared-code-public-adoption/site-production-browser.json",
+          "docs/evidence/shared-code-public-adoption/site-production.png",
+          "docs/evidence/shared-code-public-adoption/summary.json",
+          "docs/handoff-2026-09-08.md",
+          "docs/plans/shared-code-release.md",
+          "release-plan.json"
+        ],
+        "pullRequests": [
+          {
+            "headRefName": "codex/shared-code-public-adoption-20260910",
+            "headRefOid": "9bc0e2705e4957b4abc0683fa34ffe308c8e9b81",
+            "mergeCommit": {
+              "oid": "115f3e915b9b36f0518e55ac6a4f8014ac7114cc"
+            },
+            "number": 57,
+            "state": "MERGED",
+            "title": "docs(ecosystem): record verified shared-code public adoption",
+            "url": "https://github.com/OpenPresentation/opf/pull/57"
+          }
+        ],
+        "disposition": "patch-equivalent"
+      },
+      {
+        "ref": "origin/codex/shared-code-publication-20260910",
+        "sha": "db285830a4c4fa0bdad22254b5eacfafd3ad2ea6",
+        "ahead": 7,
+        "uniquePatches": 7,
+        "commits": [
+          "db28583 Advance verified shared-code registry set and immutable CI refs",
+          "99015c0 Record published editor and actual registry browser evidence",
+          "620c933 Record editor selection fix and renewed release gates",
+          "dfabf75 Prepare immutable registry code workflows and native bridge",
+          "89fa6f0 Record published PPTX native verification and editor release review",
+          "32edab3 test: record renderer publication and native converter checkpoint",
+          "ff905bb test: record core and CLI registry releases and code verification gates"
+        ],
+        "files": [
+          ".github/workflows/ecosystem-ci.yml",
+          "docs/evidence/shared-code-complete/candidate-browser-node20.json",
+          "docs/evidence/shared-code-complete/candidate-browser-node24.json",
+          "docs/evidence/shared-code-complete/candidate-code-node20.json",
+          "docs/evidence/shared-code-complete/candidate-code-node24.json",
+          "docs/evidence/shared-code-complete/fidelity-node20.json",
+          "docs/evidence/shared-code-complete/fidelity-node24.json",
+          "docs/evidence/shared-code-complete/native-code-node20-comparison.json",
+          "docs/evidence/shared-code-complete/native-code-node20-generation.json",
+          "docs/evidence/shared-code-complete/native-code-node20-native.json",
+          "docs/evidence/shared-code-complete/native-code-node20-registry-evidence.json",
+          "docs/evidence/shared-code-complete/native-code-node24-comparison.json",
+          "docs/evidence/shared-code-complete/native-code-node24-generation.json",
+          "docs/evidence/shared-code-complete/native-code-node24-native.json",
+          "docs/evidence/shared-code-complete/native-code-node24-registry-evidence.json",
+          "docs/evidence/shared-code-complete/registry-browser-node20.json",
+          "docs/evidence/shared-code-complete/registry-browser-node24.json",
+          "docs/evidence/shared-code-complete/registry-code-node20.json",
+          "docs/evidence/shared-code-complete/registry-code-node24.json",
+          "docs/evidence/shared-code-complete/summary.json",
+          "docs/evidence/shared-code-publication/cli.json",
+          "docs/evidence/shared-code-publication/core-files.json",
+          "docs/evidence/shared-code-publication/core.json",
+          "docs/evidence/shared-code-publication/editor-node20.json",
+          "docs/evidence/shared-code-publication/editor-node24.json",
+          "docs/evidence/shared-code-publication/editor.json",
+          "docs/evidence/shared-code-publication/pptx-code-node20-comparison.json",
+          "docs/evidence/shared-code-publication/pptx-code-node20-generation.json",
+          "docs/evidence/shared-code-publication/pptx-code-node20-native.json",
+          "docs/evidence/shared-code-publication/pptx-code-node24-comparison.json",
+          "docs/evidence/shared-code-publication/pptx-code-node24-generation.json",
+          "docs/evidence/shared-code-publication/pptx-code-node24-native.json",
+          "docs/evidence/shared-code-publication/pptx-node20.json",
+          "docs/evidence/shared-code-publication/pptx-node24.json",
+          "docs/evidence/shared-code-publication/pptx-quote-node20-comparison.json",
+          "docs/evidence/shared-code-publication/pptx-quote-node24-comparison.json",
+          "docs/evidence/shared-code-publication/pptx.json",
+          "docs/evidence/shared-code-publication/renderer-node20.json",
+          "docs/evidence/shared-code-publication/renderer-node24.json",
+          "docs/evidence/shared-code-publication/renderer.json",
+          "docs/evidence/shared-code-publication/repository-audit.json",
+          "docs/handoff-2026-09-08.md",
+          "docs/plans/shared-code-release.md",
+          "release-plan.json",
+          "scripts/prepare-installed-code-native.mjs",
+          "scripts/test-code-layout-browser.mjs",
+          "scripts/test-code-layout-geometry.mjs",
+          "scripts/test-editor-publication.mjs",
+          "scripts/test-installed-code-guards.mjs",
+          "scripts/test-installed-code.mjs",
+          "scripts/test-packed-ecosystem.mjs",
+          "scripts/test-pptx-publication.mjs",
+          "scripts/test-registry-fidelity.mjs",
+          "scripts/test-renderer-publication.mjs"
+        ],
+        "pullRequests": [
+          {
+            "headRefName": "codex/shared-code-publication-20260910",
+            "headRefOid": "db285830a4c4fa0bdad22254b5eacfafd3ad2ea6",
+            "mergeCommit": {
+              "oid": "921fce853fefacf6d17c3572d77b1714c139a9ab"
+            },
+            "number": 56,
+            "state": "MERGED",
+            "title": "Adopt the verified shared-code releases and complete registry/native gates",
+            "url": "https://github.com/OpenPresentation/opf/pull/56"
+          }
+        ],
+        "disposition": "merged PR",
+        "deltaToMerge": []
+      },
+      {
+        "ref": "origin/codex/shared-metric-layout-20260910",
+        "sha": "d484a32a910cd9f0c729bcb9e5dc57f1e1cdfaa6",
+        "ahead": 4,
+        "uniquePatches": 4,
+        "commits": [
+          "d484a32 fix(layout): search single-line sizes for inline metric units",
+          "84ecd4f fix(layout): bound metric trials independently of floating-point drift",
+          "3278773 feat(layout): measure complete metric fields with bounded shared geometry",
+          "4ec5795 test(layout): capture published metric fit and metadata gaps"
+        ],
+        "files": [
+          ".github/workflows/ecosystem-ci.yml",
+          "docs/dynamic-composition.md",
+          "docs/evidence/metric-layout-gap-2026-09-10.fixtures.json",
+          "docs/evidence/metric-layout-gap-2026-09-10.node20.json",
+          "docs/evidence/metric-layout-gap-2026-09-10.node24.json",
+          "docs/evidence/shared-metric-browser-2026-09-10-all-metadata.png",
+          "docs/evidence/shared-metric-browser-2026-09-10-literal-whitespace.png",
+          "docs/evidence/shared-metric-browser-2026-09-10.json",
+          "docs/evidence/shared-metric-layout-2026-09-10.json",
+          "docs/handoff-2026-09-08.md",
+          "docs/plans/layout-repair.md",
+          "docs/plans/shared-metric-layout.md",
+          "packages/javascript/src/composition.ts",
+          "packages/javascript/src/index.ts",
+          "packages/javascript/test/generated-types.test.mjs",
+          "packages/javascript/test/metric-layout.test.mjs",
+          "scripts/metric-layout-fixtures.mjs",
+          "scripts/probe-metric-layout-gap.mjs",
+          "scripts/test-metric-layout-browser.mjs",
+          "scripts/test-metric-layout-geometry.mjs"
+        ],
+        "pullRequests": [
+          {
+            "headRefName": "codex/shared-metric-layout-20260910",
+            "headRefOid": "d484a32a910cd9f0c729bcb9e5dc57f1e1cdfaa6",
+            "mergeCommit": {
+              "oid": "5cfc944ee7709b54bc2d1e7192cd86b7a52d6cb7"
+            },
+            "number": 58,
+            "state": "MERGED",
+            "title": "Add complete shared metric layout primitive",
+            "url": "https://github.com/OpenPresentation/opf/pull/58"
+          }
+        ],
+        "disposition": "merged PR",
+        "deltaToMerge": []
+      },
+      {
+        "ref": "origin/codex/shared-quote-release-sync-20260909",
+        "sha": "edf0806e8d88d941f1dc6762cf41d045c383ebbe",
+        "ahead": 1,
+        "uniquePatches": 0,
+        "commits": [
+          "edf0806 Record verified core CLI and renderer publications"
+        ],
+        "files": [
+          "docs/evidence/core-cli-publication-2026-09-09.json",
+          "docs/evidence/renderer-060-publication-2026-09-09.json",
+          "docs/handoff-2026-09-08.md",
+          "docs/plans/shared-quote-release.md",
+          "packages/cli/test/packed.mjs",
+          "packages/javascript/test/packed-install-smoke.mjs",
+          "scripts/test-renderer-publication.mjs"
+        ],
+        "pullRequests": [
+          {
+            "headRefName": "codex/shared-quote-release-sync-20260909",
+            "headRefOid": "edf0806e8d88d941f1dc6762cf41d045c383ebbe",
+            "mergeCommit": {
+              "oid": "2a39a15cbdd750699bf8e3adac8f78420baa1fa9"
+            },
+            "number": 50,
+            "state": "MERGED",
+            "title": "Verify published core CLI and renderer before complete-set adoption",
+            "url": "https://github.com/OpenPresentation/opf/pull/50"
+          }
+        ],
+        "disposition": "patch-equivalent"
+      },
+      {
+        "ref": "origin/feat/package-examples-docs-readme",
+        "sha": "859b0408e993bf139c6802a013ff9d2b7cf4ebc9",
+        "ahead": 1,
+        "uniquePatches": 0,
+        "commits": [
+          "859b040 feat(opf): ship examples, docs, and upstream README in the npm package"
+        ],
+        "files": [
+          "CHANGELOG.md",
+          "packages/javascript/README.md",
+          "packages/javascript/package.json",
+          "packages/javascript/scripts/generate-content.mjs",
+          "packages/javascript/src/docs.ts",
+          "packages/javascript/src/examples.ts",
+          "packages/javascript/src/repo-readme.ts",
+          "packages/javascript/test/smoke.mjs",
+          "packages/javascript/tsup.config.ts"
+        ],
+        "pullRequests": [
+          {
+            "headRefName": "feat/package-examples-docs-readme",
+            "headRefOid": "859b0408e993bf139c6802a013ff9d2b7cf4ebc9",
+            "mergeCommit": {
+              "oid": "868899cee792ce5b414d3a4fc64977092c887525"
+            },
+            "number": 3,
+            "state": "MERGED",
+            "title": "feat(opf): ship examples, docs, and upstream README in the npm package",
+            "url": "https://github.com/OpenPresentation/opf/pull/3"
+          }
+        ],
+        "disposition": "patch-equivalent"
+      }
+    ],
+    "baseCommit": "240d2cd2e4f998d15eca0cfdd17b63fa655f342e"
+  },
+  "opf-render": {
+    "root": "/Users/michael/Source/opf-render",
+    "base": "origin/main",
+    "alreadyMergedHeads": 18,
+    "unmerged": [
+      {
+        "ref": "codex/shared-furniture-20260910",
+        "sha": "4e11b9557b589e3a9d04c7c97b4a0c66bce83d94",
+        "ahead": 1,
+        "uniquePatches": 1,
+        "commits": [
+          "4e11b95 Render accepted readable furniture and trace literal source fields"
+        ],
+        "files": [
+          "dist/svg.js",
+          "package.json",
+          "src/svg.js",
+          "test/furniture.mjs"
+        ],
+        "pullRequests": [],
+        "disposition": "important unfinished feature; preserve, do not merge yet",
+        "reason": "Native-text/image provenance and semantic reimport are incomplete; 657 changed corpus rasters need review; update onto Node 24 and verify clean installed packages before acceptance."
+      },
+      {
+        "ref": "codex/source-whitespace-20260910",
+        "sha": "96e2eb3becebc8bd5192e058092432dca6e6963f",
+        "ahead": 2,
+        "uniquePatches": 2,
+        "commits": [
+          "96e2eb3 Retain exact predecessor package files for whitespace review",
+          "d04da69 Preserve scalar whitespace and review the complete raster change"
+        ],
+        "files": [
+          ".github/workflows/ci.yml",
+          "README.md",
+          "dist/svg.js",
+          "docs/evidence/source-whitespace-corpus-review/README.md",
+          "docs/evidence/source-whitespace-corpus-review/full-0-after.png",
+          "docs/evidence/source-whitespace-corpus-review/full-0-after.svg",
+          "docs/evidence/source-whitespace-corpus-review/full-0-before.png",
+          "docs/evidence/source-whitespace-corpus-review/full-0-before.svg",
+          "docs/evidence/source-whitespace-corpus-review/full-1-after.png",
+          "docs/evidence/source-whitespace-corpus-review/full-1-after.svg",
+          "docs/evidence/source-whitespace-corpus-review/full-1-before.png",
+          "docs/evidence/source-whitespace-corpus-review/full-1-before.svg",
+          "docs/evidence/source-whitespace-corpus-review/full-2-after.png",
+          "docs/evidence/source-whitespace-corpus-review/full-2-after.svg",
+          "docs/evidence/source-whitespace-corpus-review/full-2-before.png",
+          "docs/evidence/source-whitespace-corpus-review/full-2-before.svg",
+          "docs/evidence/source-whitespace-corpus-review/full-3-after.png",
+          "docs/evidence/source-whitespace-corpus-review/full-3-after.svg",
+          "docs/evidence/source-whitespace-corpus-review/full-3-before.png",
+          "docs/evidence/source-whitespace-corpus-review/full-3-before.svg",
+          "docs/evidence/source-whitespace-corpus-review/full-4-after.png",
+          "docs/evidence/source-whitespace-corpus-review/full-4-after.svg",
+          "docs/evidence/source-whitespace-corpus-review/full-4-before.png",
+          "docs/evidence/source-whitespace-corpus-review/full-4-before.svg",
+          "docs/evidence/source-whitespace-corpus-review/full-5-after.png",
+          "docs/evidence/source-whitespace-corpus-review/full-5-after.svg",
+          "docs/evidence/source-whitespace-corpus-review/full-5-before.png",
+          "docs/evidence/source-whitespace-corpus-review/full-5-before.svg",
+          "docs/evidence/source-whitespace-corpus-review/initial-golden-failure.log",
+          "docs/evidence/source-whitespace-corpus-review/manifest.json",
+          "docs/evidence/source-whitespace-corpus-review/plain-whitespace-browser-node20/estimated-1280.png",
+          "docs/evidence/source-whitespace-corpus-review/plain-whitespace-browser-node20/estimated-1280.svg",
+          "docs/evidence/source-whitespace-corpus-review/plain-whitespace-browser-node20/estimated-720.png",
+          "docs/evidence/source-whitespace-corpus-review/plain-whitespace-browser-node20/estimated-720.svg",
+          "docs/evidence/source-whitespace-corpus-review/plain-whitespace-browser-node20/measured-1280.png",
+          "docs/evidence/source-whitespace-corpus-review/plain-whitespace-browser-node20/measured-1280.svg",
+          "docs/evidence/source-whitespace-corpus-review/plain-whitespace-browser-node20/measured-720.png",
+          "docs/evidence/source-whitespace-corpus-review/plain-whitespace-browser-node20/measured-720.svg",
+          "docs/evidence/source-whitespace-corpus-review/plain-whitespace-browser-node20/report.json",
+          "docs/evidence/source-whitespace-corpus-review/plain-whitespace-browser/estimated-1280.png",
+          "docs/evidence/source-whitespace-corpus-review/plain-whitespace-browser/estimated-1280.svg",
+          "docs/evidence/source-whitespace-corpus-review/plain-whitespace-browser/estimated-720.png",
+          "docs/evidence/source-whitespace-corpus-review/plain-whitespace-browser/estimated-720.svg",
+          "docs/evidence/source-whitespace-corpus-review/plain-whitespace-browser/measured-1280.png",
+          "docs/evidence/source-whitespace-corpus-review/plain-whitespace-browser/measured-1280.svg",
+          "docs/evidence/source-whitespace-corpus-review/plain-whitespace-browser/measured-720.png",
+          "docs/evidence/source-whitespace-corpus-review/plain-whitespace-browser/measured-720.svg",
+          "docs/evidence/source-whitespace-corpus-review/plain-whitespace-browser/report.json",
+          "docs/evidence/source-whitespace-corpus-review/predecessor-core-snapshot.tgz",
+          "docs/evidence/source-whitespace-corpus-review/predecessor.json",
+          "docs/evidence/source-whitespace-corpus-review/report.json",
+          "docs/evidence/source-whitespace-corpus-review/sheet-0.png",
+          "docs/evidence/source-whitespace-corpus-review/sheet-1.png",
+          "docs/evidence/source-whitespace-corpus-review/sheet-10.png",
+          "docs/evidence/source-whitespace-corpus-review/sheet-11.png",
+          "docs/evidence/source-whitespace-corpus-review/sheet-12.png",
+          "docs/evidence/source-whitespace-corpus-review/sheet-13.png",
+          "docs/evidence/source-whitespace-corpus-review/sheet-14.png",
+          "docs/evidence/source-whitespace-corpus-review/sheet-15.png",
+          "docs/evidence/source-whitespace-corpus-review/sheet-16.png",
+          "docs/evidence/source-whitespace-corpus-review/sheet-17.png",
+          "docs/evidence/source-whitespace-corpus-review/sheet-18.png",
+          "docs/evidence/source-whitespace-corpus-review/sheet-19.png",
+          "docs/evidence/source-whitespace-corpus-review/sheet-2.png",
+          "docs/evidence/source-whitespace-corpus-review/sheet-20.png",
+          "docs/evidence/source-whitespace-corpus-review/sheet-21.png",
+          "docs/evidence/source-whitespace-corpus-review/sheet-22.png",
+          "docs/evidence/source-whitespace-corpus-review/sheet-23.png",
+          "docs/evidence/source-whitespace-corpus-review/sheet-24.png",
+          "docs/evidence/source-whitespace-corpus-review/sheet-25.png",
+          "docs/evidence/source-whitespace-corpus-review/sheet-26.png",
+          "docs/evidence/source-whitespace-corpus-review/sheet-27.png",
+          "docs/evidence/source-whitespace-corpus-review/sheet-28.png",
+          "docs/evidence/source-whitespace-corpus-review/sheet-29.png",
+          "docs/evidence/source-whitespace-corpus-review/sheet-3.png",
+          "docs/evidence/source-whitespace-corpus-review/sheet-30.png",
+          "docs/evidence/source-whitespace-corpus-review/sheet-31.png",
+          "docs/evidence/source-whitespace-corpus-review/sheet-32.png",
+          "docs/evidence/source-whitespace-corpus-review/sheet-33.png",
+          "docs/evidence/source-whitespace-corpus-review/sheet-34.png",
+          "docs/evidence/source-whitespace-corpus-review/sheet-4.png",
+          "docs/evidence/source-whitespace-corpus-review/sheet-5.png",
+          "docs/evidence/source-whitespace-corpus-review/sheet-6.png",
+          "docs/evidence/source-whitespace-corpus-review/sheet-7.png",
+          "docs/evidence/source-whitespace-corpus-review/sheet-8.png",
+          "docs/evidence/source-whitespace-corpus-review/sheet-9.png",
+          "package.json",
+          "src/svg.js",
+          "test/golden.mjs",
+          "test/golden/opf-examples-png.source-whitespace.sha256.json",
+          "test/plain-whitespace-browser.mjs",
+          "test/source-whitespace-review-sheets.mjs"
+        ],
+        "pullRequests": [
+          {
+            "headRefName": "codex/source-whitespace-20260910",
+            "headRefOid": "96e2eb3becebc8bd5192e058092432dca6e6963f",
+            "mergeCommit": {
+              "oid": "c7a7387f6e27cc21eeeec3015492afe289ec4ce3"
+            },
+            "number": 16,
+            "state": "MERGED",
+            "title": "Preserve scalar whitespace and accepted SVG advances",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/16"
+          }
+        ],
+        "disposition": "merged PR",
+        "deltaToMerge": []
+      },
+      {
+        "ref": "origin/codex/shared-code-integration-20260909",
+        "sha": "b5a3722725338e8d964783e8b7f1f7b80ce28cd3",
+        "ahead": 2,
+        "uniquePatches": 2,
+        "commits": [
+          "b5a3722 fix: reject unrepresentable XML code text without replacement",
+          "343ffea Render accepted code source, metadata and tab geometry"
+        ],
+        "files": [
+          ".github/workflows/ci.yml",
+          "CHANGELOG.md",
+          "README.md",
+          "dist/svg.js",
+          "docs/evidence/shared-code/browser.json",
+          "docs/evidence/shared-code/raster-review.json",
+          "package.json",
+          "src/svg.js",
+          "test/golden/README.md",
+          "test/golden/opf-examples-png.sha256.json",
+          "test/golden/pre-shared-code-opf-examples-png.sha256.json",
+          "test/review-code-raster.mjs",
+          "test/shared-code-browser.mjs",
+          "test/shared-code.mjs"
+        ],
+        "pullRequests": [],
+        "disposition": "included in merged release branch"
+      },
+      {
+        "ref": "origin/codex/shared-code-release-20260909",
+        "sha": "c6b8ae18a0033dcd4c1f2893d760e76ee0bc9475",
+        "ahead": 4,
+        "uniquePatches": 4,
+        "commits": [
+          "c6b8ae1 fix: expose complete accepted code edit-target height",
+          "c374f2d release: prepare renderer 0.7.0 with verified registry core",
+          "b5a3722 fix: reject unrepresentable XML code text without replacement",
+          "343ffea Render accepted code source, metadata and tab geometry"
+        ],
+        "files": [
+          ".github/workflows/ci.yml",
+          ".github/workflows/npm-publish.yml",
+          "CHANGELOG.md",
+          "README.md",
+          "dist/svg.js",
+          "docs/evidence/shared-code-release/editor-target-node20.json",
+          "docs/evidence/shared-code-release/editor-target-node24.json",
+          "docs/evidence/shared-code-release/node20.json",
+          "docs/evidence/shared-code-release/node24.json",
+          "docs/evidence/shared-code/browser.json",
+          "docs/evidence/shared-code/raster-review.json",
+          "docs/shared-code-release.md",
+          "docs/shared-quote-release.md",
+          "package-lock.json",
+          "package.json",
+          "src/svg.js",
+          "test/golden/README.md",
+          "test/golden/opf-examples-png.sha256.json",
+          "test/golden/pre-shared-code-opf-examples-png.sha256.json",
+          "test/packed-install.mjs",
+          "test/review-code-raster.mjs",
+          "test/shared-code-browser.mjs",
+          "test/shared-code.mjs"
+        ],
+        "pullRequests": [
+          {
+            "headRefName": "codex/shared-code-release-20260909",
+            "headRefOid": "c6b8ae18a0033dcd4c1f2893d760e76ee0bc9475",
+            "mergeCommit": {
+              "oid": "f4a1b8e1324cbc182b98d43f16528594c8006f86"
+            },
+            "number": 11,
+            "state": "MERGED",
+            "title": "Release 0.7.0: shared code geometry and source-preserving SVG",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/11"
+          }
+        ],
+        "disposition": "merged PR",
+        "deltaToMerge": []
+      },
+      {
+        "ref": "origin/codex/shared-quote-integration-20260909",
+        "sha": "7f08cf9e6db1f5da58b96ca1625d9ae2614ea59b",
+        "ahead": 1,
+        "uniquePatches": 1,
+        "commits": [
+          "7f08cf9 Render accepted shared quote parts and review footer rasters"
+        ],
+        "files": [
+          "CHANGELOG.md",
+          "dist/svg.js",
+          "docs/evidence/shared-quote-raster-review.json",
+          "package.json",
+          "scripts/build-browser-check.mjs",
+          "src/svg.js",
+          "test/golden/opf-examples-png.sha256.json",
+          "test/quote-footer-browser.js",
+          "test/shared-quote.mjs"
+        ],
+        "pullRequests": [],
+        "disposition": "included in merged release branch"
+      },
+      {
+        "ref": "origin/codex/shared-quote-release-20260909",
+        "sha": "95c1eb92a8b3be0c8e63917180dcb447aed0cfb8",
+        "ahead": 3,
+        "uniquePatches": 3,
+        "commits": [
+          "95c1eb9 Verify renderer 0.6 release against published core 0.8",
+          "4d2446a Prepare shared quote release pending registry predecessors",
+          "7f08cf9 Render accepted shared quote parts and review footer rasters"
+        ],
+        "files": [
+          ".github/workflows/ci.yml",
+          ".github/workflows/npm-publish.yml",
+          "CHANGELOG.md",
+          "README.md",
+          "dist/svg.js",
+          "docs/evidence/renderer-060-packed-node20.json",
+          "docs/evidence/renderer-060-packed-node24.json",
+          "docs/evidence/shared-quote-raster-review.json",
+          "docs/shared-quote-release.md",
+          "package-lock.json",
+          "package.json",
+          "scripts/build-browser-check.mjs",
+          "src/svg.js",
+          "test/golden/opf-examples-png.sha256.json",
+          "test/packed-install.mjs",
+          "test/quote-footer-browser.js",
+          "test/shared-quote.mjs"
+        ],
+        "pullRequests": [
+          {
+            "headRefName": "codex/shared-quote-release-20260909",
+            "headRefOid": "95c1eb92a8b3be0c8e63917180dcb447aed0cfb8",
+            "mergeCommit": {
+              "oid": "7fe9905ad2d8a224efeef51b4a22d0aff0c413fe"
+            },
+            "number": 10,
+            "state": "MERGED",
+            "title": "Release renderer 0.6.0 with shared quote layout and registry checks",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/10"
+          }
+        ],
+        "disposition": "merged PR",
+        "deltaToMerge": []
+      }
+    ],
+    "baseCommit": "f2f2d51caddddc912588dd4f0f7a9586d3330475"
+  },
+  "opf-editor": {
+    "root": "/Users/michael/Source/opf-editor",
+    "base": "origin/main",
+    "alreadyMergedHeads": 14,
+    "unmerged": [
+      {
+        "ref": "codex/shared-furniture-20260910",
+        "sha": "e0c817fb372a5639f9fd1c829e85bf21fb1ba241",
+        "ahead": 1,
+        "uniquePatches": 1,
+        "commits": [
+          "e0c817f Edit literal furniture with shared geometry and metadata-aware selection"
+        ],
+        "files": [
+          "dist/canvas.js",
+          "dist/index.js",
+          "src/canvas.js",
+          "src/index.js"
+        ],
+        "pullRequests": [],
+        "disposition": "important unfinished feature; preserve, do not merge yet",
+        "reason": "Native-text/image provenance and semantic reimport are incomplete; 657 changed corpus rasters need review; update onto Node 24 and verify clean installed packages before acceptance."
+      },
+      {
+        "ref": "codex/source-whitespace-20260910",
+        "sha": "181f963af618fc3744a3625b13914bae0795c8be",
+        "ahead": 2,
+        "uniquePatches": 2,
+        "commits": [
+          "181f963 Gate scalar editing against the coordinated source workflow",
+          "d4c0af6 Keep blank scalar targets and mixed endings during editing"
+        ],
+        "files": [
+          ".github/workflows/ci.yml",
+          "dist/canvas.js",
+          "src/canvas.js"
+        ],
+        "pullRequests": [
+          {
+            "headRefName": "codex/source-whitespace-20260910",
+            "headRefOid": "181f963af618fc3744a3625b13914bae0795c8be",
+            "mergeCommit": {
+              "oid": "aea29cf6998127fda96a5cbcd6b608db4c4890e3"
+            },
+            "number": 13,
+            "state": "MERGED",
+            "title": "Preserve mixed line endings across scalar edits",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/13"
+          }
+        ],
+        "disposition": "merged PR",
+        "deltaToMerge": []
+      },
+      {
+        "ref": "origin/codex/mobile-toolbar-labels-20260910",
+        "sha": "fa4acf1c2108fd831d10ceb803fd708e908a4e17",
+        "ahead": 1,
+        "uniquePatches": 0,
+        "commits": [
+          "fa4acf1 fix(playground): preserve mobile toolbar accessible names"
+        ],
+        "files": [
+          "examples/playground.html",
+          "test/playground-pptx.mjs"
+        ],
+        "pullRequests": [
+          {
+            "headRefName": "codex/mobile-toolbar-labels-20260910",
+            "headRefOid": "fa4acf1c2108fd831d10ceb803fd708e908a4e17",
+            "mergeCommit": {
+              "oid": "1b05f8ba97f9617b25b1a9d18ac05648419318c9"
+            },
+            "number": 10,
+            "state": "MERGED",
+            "title": "fix(playground): preserve mobile toolbar accessible names",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/10"
+          }
+        ],
+        "disposition": "patch-equivalent"
+      },
+      {
+        "ref": "origin/codex/shared-code-integration-20260909",
+        "sha": "52e540b83e441892fd928e9f159bffbb29da5653",
+        "ahead": 1,
+        "uniquePatches": 1,
+        "commits": [
+          "52e540b Preserve code source editing and verify offline native round trips"
+        ],
+        "files": [
+          ".github/workflows/ci.yml",
+          "CHANGELOG.md",
+          "dist/canvas-fields.js",
+          "dist/canvas.js",
+          "dist/rich-text-toolbar.js",
+          "docs/evidence/shared-code/browser.json",
+          "package.json",
+          "src/canvas-fields.js",
+          "src/canvas.js",
+          "src/rich-text-toolbar.js",
+          "test/canvas-fields.mjs",
+          "test/code-browser.mjs"
+        ],
+        "pullRequests": [],
+        "disposition": "included in merged release branch"
+      },
+      {
+        "ref": "origin/codex/shared-code-release-20260909",
+        "sha": "02e9abc47a987e94ccd44dec38f1112753a13631",
+        "ahead": 5,
+        "uniquePatches": 5,
+        "commits": [
+          "02e9abc Keep selected code visible during inline editing",
+          "2895f18 Verify editor 0.6 release with published shared-code packages",
+          "295122a test: require installed code workflows in editor release gates",
+          "53896eb release: prepare editor 0.6.0 and blank-code target regression",
+          "52e540b Preserve code source editing and verify offline native round trips"
+        ],
+        "files": [
+          ".github/workflows/ci.yml",
+          ".github/workflows/release.yml",
+          "CHANGELOG.md",
+          "README.md",
+          "dist/canvas-fields.js",
+          "dist/canvas.js",
+          "dist/rich-text-toolbar.js",
+          "docs/evidence/shared-code-release/code-selection-1280.png",
+          "docs/evidence/shared-code-release/code-selection-540.png",
+          "docs/evidence/shared-code-release/node20.json",
+          "docs/evidence/shared-code-release/node24.json",
+          "docs/evidence/shared-code-release/summary.json",
+          "docs/evidence/shared-code/browser.json",
+          "docs/shared-code-release.md",
+          "docs/shared-quote-release.md",
+          "package-lock.json",
+          "package.json",
+          "src/canvas-fields.js",
+          "src/canvas.js",
+          "src/rich-text-toolbar.js",
+          "test/canvas-fields.mjs",
+          "test/code-browser.mjs",
+          "test/packed-install.mjs"
+        ],
+        "pullRequests": [
+          {
+            "headRefName": "codex/shared-code-release-20260909",
+            "headRefOid": "02e9abc47a987e94ccd44dec38f1112753a13631",
+            "mergeCommit": {
+              "oid": "7b6db50f42783979841674e628193b1ba2f5c0e2"
+            },
+            "number": 9,
+            "state": "MERGED",
+            "title": "Release editor 0.6.0 with shared code editing and installed browser gates",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/9"
+          }
+        ],
+        "disposition": "merged PR",
+        "deltaToMerge": []
+      },
+      {
+        "ref": "origin/codex/shared-quote-integration-20260909",
+        "sha": "a143ee7b1c06b6cb7fbca482927661ca2b208226",
+        "ahead": 1,
+        "uniquePatches": 1,
+        "commits": [
+          "a143ee7 Keep one-page pagination readability changes undoable"
+        ],
+        "files": [
+          "CHANGELOG.md",
+          "dist/index.js",
+          "src/index.js",
+          "test/playground-pptx.mjs",
+          "test/smoke.mjs"
+        ],
+        "pullRequests": [],
+        "disposition": "included in merged release branch"
+      },
+      {
+        "ref": "origin/codex/shared-quote-release-20260909",
+        "sha": "4d056532328bdfb765701880cb35ff87a0cc8829",
+        "ahead": 4,
+        "uniquePatches": 4,
+        "commits": [
+          "4d05653 Compare pagination results structurally and preserve redo history",
+          "c9168c1 Verify editor 0.5 installed offline workflow with published packages",
+          "dc3d81d Prepare shared quote release pending registry predecessors",
+          "a143ee7 Keep one-page pagination readability changes undoable"
+        ],
+        "files": [
+          ".github/workflows/ci.yml",
+          ".github/workflows/release.yml",
+          "CHANGELOG.md",
+          "README.md",
+          "dist/index.js",
+          "docs/evidence/editor-050-packed-node20.json",
+          "docs/evidence/editor-050-packed-node24.json",
+          "docs/shared-quote-release.md",
+          "package-lock.json",
+          "package.json",
+          "src/index.js",
+          "test/packed-install.mjs",
+          "test/playground-pptx.mjs",
+          "test/smoke.mjs"
+        ],
+        "pullRequests": [
+          {
+            "headRefName": "codex/shared-quote-release-20260909",
+            "headRefOid": "4d056532328bdfb765701880cb35ff87a0cc8829",
+            "mergeCommit": {
+              "oid": "dba5fe5e5580a4172c052132c4db5851d1decc4c"
+            },
+            "number": 8,
+            "state": "MERGED",
+            "title": "Release editor 0.5.0 with installed offline workflow checks",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/8"
+          }
+        ],
+        "disposition": "merged PR",
+        "deltaToMerge": []
+      }
+    ],
+    "baseCommit": "76249a18d73b12cf168152ed0be9df533a9d1069"
+  },
+  "opf-pptx": {
+    "root": "/Users/michael/Source/opf-pptx",
+    "base": "origin/main",
+    "alreadyMergedHeads": 28,
+    "unmerged": [
+      {
+        "ref": "codex/shared-furniture-20260910",
+        "sha": "d06bc9c72aef16fdbe345704309f53ed97321417",
+        "ahead": 1,
+        "uniquePatches": 1,
+        "commits": [
+          "d06bc9c Export accepted header and footer text geometry and fitted images"
+        ],
+        "files": [
+          "dist/index.js",
+          "package.json",
+          "src/index.js",
+          "test/shared-furniture.mjs"
+        ],
+        "pullRequests": [],
+        "disposition": "important unfinished feature; preserve, do not merge yet",
+        "reason": "Native-text/image provenance and semantic reimport are incomplete; 657 changed corpus rasters need review; update onto Node 24 and verify clean installed packages before acceptance."
+      },
+      {
+        "ref": "codex/source-whitespace-20260910",
+        "sha": "d7d11602889b4aed2ebb18ba20048deeabfb5ca9",
+        "ahead": 2,
+        "uniquePatches": 2,
+        "commits": [
+          "d7d1160 Verify whitespace workflow against exact coordinated sources",
+          "9dcc137 Preserve scalar source boundaries through editable PPTX lines"
+        ],
+        "files": [
+          ".github/workflows/ci.yml",
+          "README.md",
+          "dist/heading-provenance.js",
+          "dist/index.js",
+          "dist/text-provenance.js",
+          "package.json",
+          "scripts/build.mjs",
+          "src/heading-provenance.js",
+          "src/index.js",
+          "src/text-provenance.js",
+          "test/accepted-text.mjs",
+          "test/heading-provenance.mjs",
+          "test/plain-whitespace.mjs"
+        ],
+        "pullRequests": [
+          {
+            "headRefName": "codex/source-whitespace-20260910",
+            "headRefOid": "d7d11602889b4aed2ebb18ba20048deeabfb5ca9",
+            "mergeCommit": {
+              "oid": "4c75ff713a19dff072e8f3660c368499973b78ab"
+            },
+            "number": 28,
+            "state": "MERGED",
+            "title": "Preserve scalar source boundaries in editable PPTX text",
+            "url": "https://github.com/OpenPresentation/opf-pptx/pull/28"
+          }
+        ],
+        "disposition": "merged PR",
+        "deltaToMerge": []
+      },
+      {
+        "ref": "origin/codex/security-maintenance-20260909",
+        "sha": "13d404ab4a8f029622957c8afe53f339c4a6949f",
+        "ahead": 1,
+        "uniquePatches": 0,
+        "commits": [
+          "13d404a fix: remove unused image parser from PPTX installations"
+        ],
+        "files": [
+          ".gitattributes",
+          ".github/dependabot.yml",
+          ".github/workflows/ci.yml",
+          ".github/workflows/release.yml",
+          "CHANGELOG.md",
+          "DEPENDENCY-NOTES.md",
+          "README.md",
+          "dist/index.js",
+          "docs/evidence/security-0.5.1/comparison.json",
+          "docs/evidence/security-0.5.1/generation.json",
+          "docs/evidence/security-0.5.1/native.json",
+          "docs/evidence/security-0.5.1/published-comparison.json",
+          "docs/security-0.5.1.md",
+          "package-lock.json",
+          "package.json",
+          "scripts/build.mjs",
+          "scripts/vendor-pptxgenjs.mjs",
+          "scripts/verify-vendor.mjs",
+          "src/index.js",
+          "test/browser-check.mjs",
+          "test/compare-published.mjs",
+          "test/dependency-boundary.mjs",
+          "test/packed-install.mjs",
+          "test/smoke.mjs",
+          "vendor/pptxgenjs/LICENSE",
+          "vendor/pptxgenjs/UPSTREAM.json",
+          "vendor/pptxgenjs/package.json",
+          "vendor/pptxgenjs/pptxgen.es.js"
+        ],
+        "pullRequests": [
+          {
+            "headRefName": "codex/security-maintenance-20260909",
+            "headRefOid": "13d404ab4a8f029622957c8afe53f339c4a6949f",
+            "mergeCommit": {
+              "oid": "f7f30082da3568a4f911d42493ffc75c77dd4e14"
+            },
+            "number": 11,
+            "state": "MERGED",
+            "title": "fix: remove unused vulnerable image parser in PPTX 0.5.1",
+            "url": "https://github.com/OpenPresentation/opf-pptx/pull/11"
+          }
+        ],
+        "disposition": "patch-equivalent"
+      },
+      {
+        "ref": "origin/codex/shared-code-integration-20260909",
+        "sha": "b4f4645cdaa2f5eff8a883f68533875d3b63f239",
+        "ahead": 2,
+        "uniquePatches": 2,
+        "commits": [
+          "b4f4645 fix: reject unrepresentable native code text without replacement",
+          "860e947 Preserve editable code geometry and guarded native source round trips"
+        ],
+        "files": [
+          ".github/workflows/ci.yml",
+          "CHANGELOG.md",
+          "README.md",
+          "dist/code-provenance.js",
+          "dist/index.d.ts",
+          "dist/index.js",
+          "docs/code-roundtrip.md",
+          "docs/evidence/shared-code/comparison.json",
+          "docs/evidence/shared-code/generation.json",
+          "docs/evidence/shared-code/native.json",
+          "package.json",
+          "scripts/build.mjs",
+          "src/code-provenance.js",
+          "src/index.d.ts",
+          "src/index.js",
+          "test/code-provenance.mjs",
+          "test/content-layout.mjs",
+          "test/native-code.mjs",
+          "test/native-code.ps1",
+          "test/shared-code.mjs"
+        ],
+        "pullRequests": [],
+        "disposition": "included in merged release branch"
+      },
+      {
+        "ref": "origin/codex/shared-code-release-20260909",
+        "sha": "54f452097a52da8e39f1a600dfbf2ccd08f22b81",
+        "ahead": 4,
+        "uniquePatches": 4,
+        "commits": [
+          "54f4520 release: verify converter 0.7.0 with registry and native candidates",
+          "8d267ab release: prepare converter 0.7.0 pending renderer publication",
+          "b4f4645 fix: reject unrepresentable native code text without replacement",
+          "860e947 Preserve editable code geometry and guarded native source round trips"
+        ],
+        "files": [
+          ".github/workflows/ci.yml",
+          ".github/workflows/release.yml",
+          "CHANGELOG.md",
+          "README.md",
+          "dist/code-provenance.js",
+          "dist/index.d.ts",
+          "dist/index.js",
+          "docs/code-roundtrip.md",
+          "docs/evidence/shared-code-release/code-1280-native-3.png",
+          "docs/evidence/shared-code-release/code-1280-svg-3.png",
+          "docs/evidence/shared-code-release/code-540-native-4.png",
+          "docs/evidence/shared-code-release/code-540-svg-4.png",
+          "docs/evidence/shared-code-release/code-node20-comparison.json",
+          "docs/evidence/shared-code-release/code-node20-generation.json",
+          "docs/evidence/shared-code-release/code-node20-native.json",
+          "docs/evidence/shared-code-release/code-node24-comparison.json",
+          "docs/evidence/shared-code-release/code-node24-generation.json",
+          "docs/evidence/shared-code-release/code-node24-native.json",
+          "docs/evidence/shared-code-release/packed-node20.json",
+          "docs/evidence/shared-code-release/packed-node24.json",
+          "docs/evidence/shared-code-release/quote-node20-comparison.json",
+          "docs/evidence/shared-code-release/quote-node24-comparison.json",
+          "docs/evidence/shared-code-release/summary.json",
+          "docs/evidence/shared-code/comparison.json",
+          "docs/evidence/shared-code/generation.json",
+          "docs/evidence/shared-code/native.json",
+          "docs/shared-code-release.md",
+          "docs/shared-quote-release.md",
+          "package-lock.json",
+          "package.json",
+          "scripts/build.mjs",
+          "src/code-provenance.js",
+          "src/index.d.ts",
+          "src/index.js",
+          "test/code-provenance.mjs",
+          "test/content-layout.mjs",
+          "test/native-code.mjs",
+          "test/native-code.ps1",
+          "test/packed-install.mjs",
+          "test/shared-code.mjs"
+        ],
+        "pullRequests": [
+          {
+            "headRefName": "codex/shared-code-release-20260909",
+            "headRefOid": "54f452097a52da8e39f1a600dfbf2ccd08f22b81",
+            "mergeCommit": {
+              "oid": "f421c91b7b127c7eeab788acdc0c51969402e057"
+            },
+            "number": 15,
+            "state": "MERGED",
+            "title": "Release 0.7.0: editable shared code and guarded source recovery",
+            "url": "https://github.com/OpenPresentation/opf-pptx/pull/15"
+          }
+        ],
+        "disposition": "merged PR",
+        "deltaToMerge": []
+      },
+      {
+        "ref": "origin/codex/shared-quote-integration-20260909",
+        "sha": "829103b67fdc96ae977bbb05f3e94457620645cd",
+        "ahead": 1,
+        "uniquePatches": 1,
+        "commits": [
+          "829103b Export accepted quote geometry and verify native PowerPoint flow"
+        ],
+        "files": [
+          "CHANGELOG.md",
+          "dist/index.js",
+          "docs/evidence/shared-quote-integration/comparison.json",
+          "docs/evidence/shared-quote-integration/quote-1280-contact.png",
+          "docs/evidence/shared-quote-integration/quote-540-contact.png",
+          "package.json",
+          "src/index.js",
+          "test/native-quote.mjs",
+          "test/native-quote.ps1",
+          "test/shared-quote.mjs"
+        ],
+        "pullRequests": [],
+        "disposition": "included in merged release branch"
+      },
+      {
+        "ref": "origin/codex/shared-quote-release-20260909",
+        "sha": "268fcb523924c95b453acbe407d1b5359ea5f485",
+        "ahead": 3,
+        "uniquePatches": 3,
+        "commits": [
+          "268fcb5 Verify PPTX 0.6 installed candidate with native PowerPoint",
+          "bb449f9 Prepare shared quote release pending registry predecessors",
+          "829103b Export accepted quote geometry and verify native PowerPoint flow"
+        ],
+        "files": [
+          ".github/workflows/ci.yml",
+          ".github/workflows/release.yml",
+          "CHANGELOG.md",
+          "README.md",
+          "dist/index.js",
+          "docs/evidence/pptx-060-native/comparison.json",
+          "docs/evidence/pptx-060-native/quote-1280-contact.png",
+          "docs/evidence/pptx-060-native/quote-540-contact.png",
+          "docs/evidence/pptx-060-packed-node20.json",
+          "docs/evidence/pptx-060-packed-node24.json",
+          "docs/evidence/shared-quote-integration/comparison.json",
+          "docs/evidence/shared-quote-integration/quote-1280-contact.png",
+          "docs/evidence/shared-quote-integration/quote-540-contact.png",
+          "docs/shared-quote-release.md",
+          "package-lock.json",
+          "package.json",
+          "src/index.js",
+          "test/native-quote.mjs",
+          "test/native-quote.ps1",
+          "test/packed-install.mjs",
+          "test/shared-quote.mjs"
+        ],
+        "pullRequests": [
+          {
+            "headRefName": "codex/shared-quote-release-20260909",
+            "headRefOid": "268fcb523924c95b453acbe407d1b5359ea5f485",
+            "mergeCommit": {
+              "oid": "898e3c27919a2488e1e3d384168d6b25aae4bd5c"
+            },
+            "number": 14,
+            "state": "MERGED",
+            "title": "Release PPTX 0.6.0 with shared quote layout and native checks",
+            "url": "https://github.com/OpenPresentation/opf-pptx/pull/14"
+          }
+        ],
+        "disposition": "merged PR",
+        "deltaToMerge": []
+      },
+      {
+        "ref": "origin/codex/windows-native-quote-heading-20260910",
+        "sha": "c996a7601f1237c34c54edecdce36375abeeb08c",
+        "ahead": 1,
+        "uniquePatches": 1,
+        "commits": [
+          "c996a76 Preserve body roles beside validated OPF headings"
+        ],
+        "files": [
+          "README.md",
+          "dist/index.js",
+          "src/index.js",
+          "test/heading-provenance.mjs"
+        ],
+        "pullRequests": [
+          {
+            "headRefName": "codex/windows-native-quote-heading-20260910",
+            "headRefOid": "c996a7601f1237c34c54edecdce36375abeeb08c",
+            "mergeCommit": null,
+            "number": 25,
+            "state": "CLOSED",
+            "title": "Preserve quote body roles beside tagged headings",
+            "url": "https://github.com/OpenPresentation/opf-pptx/pull/25"
+          }
+        ],
+        "disposition": "superseded by merged PR",
+        "reason": "Closed PPTX PR #25 superseded by #24, which contains the heading guard and estimated-font export fix.",
+        "evidence": "https://github.com/OpenPresentation/opf-pptx/pull/25#issuecomment-5624319756"
+      }
+    ],
+    "baseCommit": "c0be09aba0e12184b4d809c1e91e8c1ac305d8c2"
+  },
+  "openpresentation-site": {
+    "root": "/Users/michael/Source/openpresentation-site",
+    "base": "origin/main",
+    "alreadyMergedHeads": 17,
+    "unmerged": [
+      {
+        "ref": "origin/codex/pptx-051-changelog-20260909",
+        "sha": "418a749319c94f24cea287148cd88da21327c9ed",
+        "ahead": 1,
+        "uniquePatches": 0,
+        "commits": [
+          "418a749 docs: publish verified PPTX 0.5.1 changelog and showcase"
+        ],
+        "files": [
+          "data/releases.json",
+          "public/showcase/manifest.json"
+        ],
+        "pullRequests": [
+          {
+            "headRefName": "codex/pptx-051-changelog-20260909",
+            "headRefOid": "418a749319c94f24cea287148cd88da21327c9ed",
+            "mergeCommit": {
+              "oid": "680be53dd69d99701f8b3f21e7e1c0f9b5f9390f"
+            },
+            "number": 16,
+            "state": "MERGED",
+            "title": "docs: show verified PPTX 0.5.1 release and registry showcase",
+            "url": "https://github.com/Data-Advantage/openpresentation-site/pull/16"
+          }
+        ],
+        "disposition": "patch-equivalent"
+      },
+      {
+        "ref": "origin/codex/shared-code-adoption-20260910",
+        "sha": "2aa5432e670fafb108e5c3bcb7f0b2d9a57bf97f",
+        "ahead": 1,
+        "uniquePatches": 0,
+        "commits": [
+          "2aa5432 feat(releases): adopt the published shared-code package set"
+        ],
+        "files": [
+          "data/releases.json",
+          "package.json",
+          "pnpm-lock.yaml",
+          "public/showcase/manifest.json",
+          "tests/e2e/reference-playground.spec.ts"
+        ],
+        "pullRequests": [
+          {
+            "headRefName": "codex/shared-code-adoption-20260910",
+            "headRefOid": "2aa5432e670fafb108e5c3bcb7f0b2d9a57bf97f",
+            "mergeCommit": {
+              "oid": "54347ac89b59658a57db95b6b26e806db8fd30f4"
+            },
+            "number": 23,
+            "state": "MERGED",
+            "title": "feat(releases): adopt the published shared-code package set",
+            "url": "https://github.com/Data-Advantage/openpresentation-site/pull/23"
+          }
+        ],
+        "disposition": "patch-equivalent"
+      }
+    ],
+    "baseCommit": "ed2cbc32577bc960a06ba7fd52593404731e7907"
+  },
+  "pptx-gallery": {
+    "root": "/Users/michael/Source/pptx-gallery",
+    "base": "origin/main",
+    "alreadyMergedHeads": 16,
+    "unmerged": [
+      {
+        "ref": "origin/codex/pptx-051-adoption-20260909",
+        "sha": "93f9a720aa6ebe3b48a981f52012f809f6f8cd40",
+        "ahead": 1,
+        "uniquePatches": 0,
+        "commits": [
+          "93f9a72 fix: refresh editor bundle from verified PPTX 0.5.1 toolchain"
+        ],
+        "files": [
+          "docs/published-ecosystem-2026-09-08.md",
+          "public/opf-editor/index.html",
+          "public/opf-editor/manifest.json",
+          "public/opf-editor/playground.js"
+        ],
+        "pullRequests": [
+          {
+            "headRefName": "codex/pptx-051-adoption-20260909",
+            "headRefOid": "93f9a720aa6ebe3b48a981f52012f809f6f8cd40",
+            "mergeCommit": {
+              "oid": "2ea8ccb75b9a6d9b64a93e6ec36d78100c044f8a"
+            },
+            "number": 21,
+            "state": "MERGED",
+            "title": "fix: refresh published editor toolchain to PPTX 0.5.1",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/21"
+          }
+        ],
+        "disposition": "patch-equivalent"
+      },
+      {
+        "ref": "origin/codex/reviewed-ci-actions-20260909",
+        "sha": "3f1d27726457baae07532c4d3ad3ae1eaadbdac1",
+        "ahead": 1,
+        "uniquePatches": 0,
+        "commits": [
+          "3f1d277 ci: consolidate and pin reviewed action upgrades"
+        ],
+        "files": [
+          ".github/workflows/validate-gallery-registry.yml",
+          "docs/ci-actions-2026-09-09.md"
+        ],
+        "pullRequests": [
+          {
+            "headRefName": "codex/reviewed-ci-actions-20260909",
+            "headRefOid": "3f1d27726457baae07532c4d3ad3ae1eaadbdac1",
+            "mergeCommit": {
+              "oid": "d01cbfc24855d5e41adc6e092841554196a3e9cb"
+            },
+            "number": 20,
+            "state": "MERGED",
+            "title": "ci: consolidate reviewed action upgrades with immutable refs",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/20"
+          }
+        ],
+        "disposition": "patch-equivalent"
+      },
+      {
+        "ref": "origin/codex/shared-code-adoption-20260910",
+        "sha": "ce133ecce42506896cd88c5850fc26f1ed38bf00",
+        "ahead": 1,
+        "uniquePatches": 0,
+        "commits": [
+          "ce133ec feat(editor): adopt shared-code packages and accessible mobile controls"
+        ],
+        "files": [
+          "package.json",
+          "pnpm-lock.yaml",
+          "public/opf-editor/gallery.json",
+          "public/opf-editor/index.html",
+          "public/opf-editor/manifest.json",
+          "public/opf-editor/playground.js",
+          "public/opf-editor/playground.js.LEGAL.txt",
+          "tests/e2e/editor.spec.ts"
+        ],
+        "pullRequests": [
+          {
+            "headRefName": "codex/shared-code-adoption-20260910",
+            "headRefOid": "ce133ecce42506896cd88c5850fc26f1ed38bf00",
+            "mergeCommit": {
+              "oid": "d048252ab3309a769c1ea9aa9d0c63deded6ad46"
+            },
+            "number": 25,
+            "state": "MERGED",
+            "title": "feat(editor): adopt shared-code packages and accessible mobile controls",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/25"
+          }
+        ],
+        "disposition": "patch-equivalent"
+      }
+    ],
+    "baseCommit": "24d242658d4f03305c3521846645c1446af4c240"
+  },
+  "pptx-dev": {
+    "root": "/Users/michael/Source/pptx-dev",
+    "base": "origin/master",
+    "alreadyMergedHeads": 14,
+    "unmerged": [
+      {
+        "ref": "origin/claude/fix-message-loss-login-7parI",
+        "sha": "ad7dd216cc51b5cf9d5eca942465898830b8a562",
+        "ahead": 5,
+        "uniquePatches": 0,
+        "commits": [
+          "ad7dd21 Narrow Author file-loss warning to actual attachments",
+          "2be3897 Surface Author file-only sign-in losses",
+          "6a47fdd Warn instead of silently dropping Author file uploads on sign-in",
+          "c6525f1 Defer Author auto-submit until thread hydration settles",
+          "8e02170 Preserve Author prompt across Clerk sign-in"
+        ],
+        "files": [
+          "components/author/author-shell.tsx",
+          "lib/author/__tests__/pending-submit.test.ts",
+          "lib/author/pending-submit.ts"
+        ],
+        "pullRequests": [
+          {
+            "headRefName": "claude/fix-message-loss-login-7parI",
+            "headRefOid": "ad7dd216cc51b5cf9d5eca942465898830b8a562",
+            "mergeCommit": {
+              "oid": "4ec218b132b93ab7f22ee538ce53f53a8a1f7eab"
+            },
+            "number": 10,
+            "state": "MERGED",
+            "title": "Persist user prompts during Clerk sign-in redirects",
+            "url": "https://github.com/Data-Advantage/pptx-dev/pull/10"
+          }
+        ],
+        "disposition": "patch-equivalent"
+      },
+      {
+        "ref": "origin/claude/upgrade-presentation-harness-DAXrM",
+        "sha": "492e94e1f39326e6410b46da8719de45121e3eba",
+        "ahead": 11,
+        "uniquePatches": 0,
+        "commits": [
+          "492e94e Always fill three deterministic follow-up chips",
+          "360ef88 Force AI follow-up chips when credentials are present",
+          "1577e09 Fix Bugbot findings on Author harness refit (round 6)",
+          "207e959 Fix Bugbot findings on Author harness refit (round 5)",
+          "cd6845f Fix Bugbot findings on Author harness refit (round 4)",
+          "e54765c Remove dead splitLines guard",
+          "5a5c29c Fix Bugbot findings on Author harness refit (round 3)",
+          "be7768b Fix Bugbot findings on Author harness refit (round 2)",
+          "c827836 Fix Bugbot findings on Author harness refit",
+          "051736d Refit Author harness: auto-decide UX + unified diff review",
+          "48f4755 Add Author intent dossier and gallery preset suggestions"
+        ],
+        "files": [
+          "app/api/v1/author/follow-ups/route.ts",
+          "components/author/author-shell.tsx",
+          "components/author/auto-apply-card.tsx",
+          "components/author/clarifying-card.tsx",
+          "components/author/diff-tab.tsx",
+          "components/author/follow-up-chips.tsx",
+          "components/author/ghost-edit-card.tsx",
+          "components/author/intent-dossier-strip.tsx",
+          "components/author/preset-applied-toast.tsx",
+          "components/author/preset-suggestion-strip.tsx",
+          "docs/author-intent-and-presets.md",
+          "lib/author/__tests__/apply-preset.test.ts",
+          "lib/author/__tests__/follow-ups.test.ts",
+          "lib/author/__tests__/intent.test.ts",
+          "lib/author/__tests__/preset-matcher.test.ts",
+          "lib/author/apply-preset.ts",
+          "lib/author/deterministic-follow-ups.ts",
+          "lib/author/follow-ups.ts",
+          "lib/author/ghost-edits.ts",
+          "lib/author/intent.ts",
+          "lib/author/preset-matcher.ts",
+          "manual-qa/author-harness-featureset-qa-2026-05-19.md"
+        ],
+        "pullRequests": [
+          {
+            "headRefName": "claude/upgrade-presentation-harness-DAXrM",
+            "headRefOid": "492e94e1f39326e6410b46da8719de45121e3eba",
+            "mergeCommit": {
+              "oid": "961be9579cef76d4bdf60dd92c753d8981d81ac8"
+            },
+            "number": 11,
+            "state": "MERGED",
+            "title": "Author harness: intent dossier + gallery preset suggestions",
+            "url": "https://github.com/Data-Advantage/pptx-dev/pull/11"
+          }
+        ],
+        "disposition": "patch-equivalent"
+      },
+      {
+        "ref": "origin/codex/action-artifact-maintenance-20260909",
+        "sha": "52a51d49f2d01ebc048d2b365d412f3bce9a0cca",
+        "ahead": 1,
+        "uniquePatches": 0,
+        "commits": [
+          "52a51d4 ci: verify modern artifact transport and retire missing MCP publisher"
+        ],
+        "files": [
+          ".github/workflows/artifact-compatibility.yml",
+          ".github/workflows/publish-cli-homebrew.yml",
+          ".github/workflows/publish-cli-pypi.yml",
+          ".github/workflows/publish-sdk-mcp.yml",
+          ".github/workflows/publish-sdk-python.yml",
+          "docs/action-maintenance-2026-09-09.md",
+          "scripts/verify-artifact-roundtrip.py"
+        ],
+        "pullRequests": [
+          {
+            "headRefName": "codex/action-artifact-maintenance-20260909",
+            "headRefOid": "52a51d49f2d01ebc048d2b365d412f3bce9a0cca",
+            "mergeCommit": {
+              "oid": "5c862d23c39f330e4fccdaa5a45bd053ae86a1dc"
+            },
+            "number": 23,
+            "state": "MERGED",
+            "title": "ci: test artifact action upgrades and retire missing MCP publisher",
+            "url": "https://github.com/Data-Advantage/pptx-dev/pull/23"
+          }
+        ],
+        "disposition": "patch-equivalent"
+      },
+      {
+        "ref": "origin/codex/dat-3930-author-copy-alignment",
+        "sha": "b4756d305dc2f56b8874d139622cf632457d70e3",
+        "ahead": 1,
+        "uniquePatches": 1,
+        "commits": [
+          "b4756d3 Align Author public copy"
+        ],
+        "files": [
+          "PRODUCT.md",
+          "README.md",
+          "VC-PITCH.md",
+          "app/author/layout.tsx",
+          "app/decoder/layout.tsx",
+          "app/docs/cli/page.tsx",
+          "app/docs/mcp/page.tsx",
+          "app/docs/opf/page.tsx",
+          "app/docs/page.tsx",
+          "app/docs/sdk/go/page.tsx",
+          "app/docs/sdk/python/page.tsx",
+          "app/docs/sdk/typescript/page.tsx",
+          "app/layout.tsx",
+          "app/llms.txt/route.ts",
+          "app/page.tsx",
+          "app/playground/layout.tsx",
+          "app/sitemap.ts",
+          "app/studio/layout.tsx",
+          "app/success/page.tsx",
+          "components/decoder/decoder-shell.tsx",
+          "components/mobile-nav.tsx",
+          "components/site-footer.tsx",
+          "components/site-header.tsx",
+          "docs/PLATFORM-PIVOT-SUMMARY.md",
+          "docs/README.md",
+          "docs/stage-5-acceptance.md",
+          "lib/author/__tests__/author-phase3-surface.test.ts"
+        ],
+        "pullRequests": [
+          {
+            "headRefName": "codex/dat-3930-author-copy-alignment",
+            "headRefOid": "b4756d305dc2f56b8874d139622cf632457d70e3",
+            "mergeCommit": null,
+            "number": 6,
+            "state": "CLOSED",
+            "title": "[codex] Align Author public copy",
+            "url": "https://github.com/Data-Advantage/pptx-dev/pull/6"
+          }
+        ],
+        "disposition": "useful copy reconciled in current PR #33; acceptance pending",
+        "reason": "All 27 old files accounted for in docs/public-copy-reconciliation.md; keep correct current routes/auth behavior and replace stale API-only or shell claims.",
+        "evidence": "https://github.com/Data-Advantage/pptx-dev/pull/33"
+      },
+      {
+        "ref": "origin/codex/migrate-cli",
+        "sha": "8c4e3228b2e17167dbf9cac96d96dcd02ef3c3cf",
+        "ahead": 1,
+        "uniquePatches": 0,
+        "commits": [
+          "8c4e322 Migrate service CLIs into pptx-dev"
+        ],
+        "files": [
+          ".github/workflows/publish-cli-npm.yml",
+          ".github/workflows/publish-cli-pypi.yml",
+          "pnpm-lock.yaml",
+          "pnpm-workspace.yaml",
+          "sdk/cli-python/.gitignore",
+          "sdk/cli-python/CHANGELOG.md",
+          "sdk/cli-python/LICENSE",
+          "sdk/cli-python/README.md",
+          "sdk/cli-python/pyproject.toml",
+          "sdk/cli-python/scripts/stage_vendor.py",
+          "sdk/cli-python/src/pptx_cli/__init__.py",
+          "sdk/cli-python/src/pptx_cli/__main__.py",
+          "sdk/cli-python/src/pptx_cli/main.py",
+          "sdk/cli-python/src/pptx_cli/vendor/.gitkeep",
+          "sdk/cli/.gitignore",
+          "sdk/cli/CHANGELOG.md",
+          "sdk/cli/LICENSE",
+          "sdk/cli/README.md",
+          "sdk/cli/package.json",
+          "sdk/cli/src/cli.ts",
+          "sdk/cli/src/client.ts",
+          "sdk/cli/src/commands/add.ts",
+          "sdk/cli/src/commands/fmt.ts",
+          "sdk/cli/src/commands/generate.ts",
+          "sdk/cli/src/commands/login.ts",
+          "sdk/cli/src/commands/parse.ts",
+          "sdk/cli/src/commands/render.ts",
+          "sdk/cli/src/commands/validate.ts",
+          "sdk/cli/src/config.ts",
+          "sdk/cli/src/index.ts",
+          "sdk/cli/src/output.ts",
+          "sdk/cli/src/prompt.ts",
+          "sdk/cli/src/version.ts",
+          "sdk/cli/tsconfig.json",
+          "sdk/cli/tsup.bundle.config.ts",
+          "sdk/cli/tsup.config.ts"
+        ],
+        "pullRequests": [
+          {
+            "headRefName": "codex/migrate-cli",
+            "headRefOid": "8c4e3228b2e17167dbf9cac96d96dcd02ef3c3cf",
+            "mergeCommit": {
+              "oid": "0a0c8896464ef9e4a3ee63be24566ff533609349"
+            },
+            "number": 5,
+            "state": "MERGED",
+            "title": "[codex] Migrate service CLIs into pptx-dev",
+            "url": "https://github.com/Data-Advantage/pptx-dev/pull/5"
+          }
+        ],
+        "disposition": "patch-equivalent"
+      },
+      {
+        "ref": "origin/codex/pptx-051-adoption-20260909",
+        "sha": "be44a1230dd17eb8ae8ca3889304aa2fb084b49c",
+        "ahead": 2,
+        "uniquePatches": 2,
+        "commits": [
+          "be44a12 test: verify public toolkit deployment without local service errors",
+          "58b7a5f fix: adopt verified OPF PPTX 0.5.1 security release"
+        ],
+        "files": [
+          "app/docs/opf-toolkit/page.tsx",
+          "app/layout.tsx",
+          "docs/pptx-0.5.1-adoption.md",
+          "lib/opf-toolkit/__tests__/consumer-proof.test.ts",
+          "package.json",
+          "pnpm-lock.yaml",
+          "pnpm-workspace.yaml",
+          "tests/e2e/toolkit.spec.ts"
+        ],
+        "pullRequests": [
+          {
+            "headRefName": "codex/pptx-051-adoption-20260909",
+            "headRefOid": "be44a1230dd17eb8ae8ca3889304aa2fb084b49c",
+            "mergeCommit": {
+              "oid": "f1f9e700ae2648467b36baf22b3393a216b78780"
+            },
+            "number": 21,
+            "state": "MERGED",
+            "title": "fix: adopt published OPF PPTX 0.5.1 security patch",
+            "url": "https://github.com/Data-Advantage/pptx-dev/pull/21"
+          }
+        ],
+        "disposition": "merged PR",
+        "deltaToMerge": []
+      },
+      {
+        "ref": "origin/codex/published-browser-workflow-20260909",
+        "sha": "c18b1fdd5d5e5e2e10b259957ba678def598a2ac",
+        "ahead": 3,
+        "uniquePatches": 2,
+        "commits": [
+          "c18b1fd Merge remote-tracking branch 'origin/master' into codex/published-browser-workflow-20260909",
+          "7edb21c fix: commit canvas drafts across actions and migrate starter catalogs",
+          "4c4e6cf feat: integrate published OPF browser editing and PowerPoint transfer"
+        ],
+        "files": [
+          ".gitignore",
+          "README.md",
+          "app/author/page.tsx",
+          "components/author/author-shell.tsx",
+          "components/author/workbench/author-preview-stack.tsx",
+          "components/author/workbench/opf-canvas-workbench.tsx",
+          "components/playground/playground-shell.tsx",
+          "components/playground/slide-canvas.tsx",
+          "components/tool-shell/document-identity-strip.tsx",
+          "docs/browser-opf-workflow.md",
+          "docs/evidence/browser-author-native.json",
+          "docs/published-ecosystem-2026-09-08.md",
+          "lib/opf-toolkit/__tests__/published-samples.test.ts",
+          "lib/opf-toolkit/browser-runtime.ts",
+          "lib/opf-toolkit/use-editor-session.ts",
+          "lib/playground/__tests__/schema-selection.test.ts",
+          "lib/samples/opf/pitch.json",
+          "lib/samples/opf/qbr.json",
+          "lib/samples/opf/sales.json",
+          "lib/samples/opf/tech-talk.json",
+          "package.json",
+          "playwright.config.ts",
+          "proxy.ts",
+          "scripts/prepare-opf-browser.mjs",
+          "scripts/test-native-author.ps1",
+          "scripts/verify-native-author.mjs",
+          "tests/e2e/author.spec.ts",
+          "tests/e2e/inspector.spec.ts",
+          "tests/e2e/svg-security.spec.ts"
+        ],
+        "pullRequests": [
+          {
+            "headRefName": "codex/published-browser-workflow-20260909",
+            "headRefOid": "c18b1fdd5d5e5e2e10b259957ba678def598a2ac",
+            "mergeCommit": {
+              "oid": "fa94477f8fceb8bb1a0d62fa23d7e0d05423e94a"
+            },
+            "number": 22,
+            "state": "MERGED",
+            "title": "feat: use published OPF tools for local browser authoring and PowerPoint transfer",
+            "url": "https://github.com/Data-Advantage/pptx-dev/pull/22"
+          }
+        ],
+        "disposition": "merged PR",
+        "deltaToMerge": []
+      },
+      {
+        "ref": "origin/codex/shared-code-adoption-20260910",
+        "sha": "f8d49a7da4175226b14e2dc086fe80b1433a68d3",
+        "ahead": 1,
+        "uniquePatches": 0,
+        "commits": [
+          "f8d49a7 feat(author): adopt published shared-code packages"
+        ],
+        "files": [
+          "package.json",
+          "pnpm-lock.yaml",
+          "scripts/sync-opf-spec.ts",
+          "tests/e2e/author.spec.ts"
+        ],
+        "pullRequests": [
+          {
+            "headRefName": "codex/shared-code-adoption-20260910",
+            "headRefOid": "f8d49a7da4175226b14e2dc086fe80b1433a68d3",
+            "mergeCommit": {
+              "oid": "0004d4ceb595fc2ed8b561d4c8d7648cab1bc8a1"
+            },
+            "number": 31,
+            "state": "MERGED",
+            "title": "feat(author): adopt published shared-code packages",
+            "url": "https://github.com/Data-Advantage/pptx-dev/pull/31"
+          }
+        ],
+        "disposition": "patch-equivalent"
+      },
+      {
+        "ref": "origin/plans/clerk-org-sync",
+        "sha": "8faa863ab8091baca1cc4567fc8d01703415315f",
+        "ahead": 1,
+        "uniquePatches": 0,
+        "commits": [
+          "8faa863 Add Clerk organization sync implementation plan"
+        ],
+        "files": [
+          "plans/2026-05-18-clerk-organization-sync.md"
+        ],
+        "pullRequests": [
+          {
+            "headRefName": "plans/clerk-org-sync",
+            "headRefOid": "8faa863ab8091baca1cc4567fc8d01703415315f",
+            "mergeCommit": {
+              "oid": "3ed1dc625e716fa571d7099f5b0cc706d2507a3f"
+            },
+            "number": 8,
+            "state": "MERGED",
+            "title": "Plan: Clerk user + organization sync",
+            "url": "https://github.com/Data-Advantage/pptx-dev/pull/8"
+          }
+        ],
+        "disposition": "patch-equivalent"
+      },
+      {
+        "ref": "origin/schema/cleanup-and-fan-out",
+        "sha": "9deea55fb9cdbc3845acd4737de31e1f4426dcd4",
+        "ahead": 1,
+        "uniquePatches": 0,
+        "commits": [
+          "9deea55 Schema cleanup: fan-out index, retention crons, creator/org fields"
+        ],
+        "files": [
+          "convex/_generated/api.d.ts",
+          "convex/authorRuns.ts",
+          "convex/cleanup.ts",
+          "convex/crons.ts",
+          "convex/opfDocuments.ts",
+          "convex/schema.ts",
+          "convex/threads.ts",
+          "convex/webhooks.ts"
+        ],
+        "pullRequests": [
+          {
+            "headRefName": "schema/cleanup-and-fan-out",
+            "headRefOid": "9deea55fb9cdbc3845acd4737de31e1f4426dcd4",
+            "mergeCommit": {
+              "oid": "e105e7ec0565daab6dd66e17c5596fa32c084bda"
+            },
+            "number": 9,
+            "state": "MERGED",
+            "title": "Schema cleanup: fan-out index, retention crons, creator/org fields",
+            "url": "https://github.com/Data-Advantage/pptx-dev/pull/9"
+          }
+        ],
+        "disposition": "patch-equivalent"
+      }
+    ],
+    "baseCommit": "55a642797f802762766d6e8d97b721ec1a4c93f8"
+  }
+}

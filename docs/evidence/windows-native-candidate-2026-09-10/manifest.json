@@ -1,0 +1,3435 @@
+{
+  "algorithm": "sha256",
+  "files": [
+    {
+      "file": ".gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "file": "README.md",
+      "bytes": 4586,
+      "sha256": "21142be0b636663a8bd71dfa341e0e063e73a31fd8fe585a90ae7eebf4b8ad12"
+    },
+    {
+      "file": "bindings.json",
+      "bytes": 380,
+      "sha256": "4c7c7bca74248fcf019518fbd9c7d6f79a984d4e57af99a0e3079126bcd79b2d"
+    },
+    {
+      "file": "metric-two-runtime-summary.json",
+      "bytes": 5149,
+      "sha256": "d39a9db7db2c68aae5ce55e3ff268ad87ff8899219e6424f89b2ff9c441b5383"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/comparison.json",
+      "bytes": 116930,
+      "sha256": "5fca4dab895aac050cb4c0855046bfa275eca08857f7234079b4e4f39266003b"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/comparison.log",
+      "bytes": 763,
+      "sha256": "ada3196353d8a13d5061a3af393299ae660f2307818ec94796fad1c554107d80"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/generation.json",
+      "bytes": 529400,
+      "sha256": "59df5cce474a7325fc15d300c93742e8ee1ed45dd4924acd6cae73b08ec98b3f"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-center-edited.pptx",
+      "bytes": 46886,
+      "sha256": "27dcc251445cf659d776a9682594bb71fe7fb1490310ed9cbb58e94254c51887"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-center-native-1-value.png",
+      "bytes": 1648,
+      "sha256": "a05f238f65f7244e39ea6601892e02b5579c0b3c391809d3df8cf52a1c70d3a8"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-center-native-1.png",
+      "bytes": 1648,
+      "sha256": "a05f238f65f7244e39ea6601892e02b5579c0b3c391809d3df8cf52a1c70d3a8"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-center-native-2-value.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-center-native-2.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-center-native-3-delta.png",
+      "bytes": 1259,
+      "sha256": "add4ae7d08119daef2fd32aa8d22afe9f78b0d610e8357ec9452689f3c4ad820"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-center-native-3-description.png",
+      "bytes": 1873,
+      "sha256": "47df126b9d7f9ea42dbc4162a588e52f38673d4927b10eb71a07b91551295f5b"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-center-native-3-label.png",
+      "bytes": 1709,
+      "sha256": "a7b341b7f73c5bb51f0ffd2da955a4a48b8b89e2dbdc0570f3f57cb1e352005d"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-center-native-3-trend.png",
+      "bytes": 1348,
+      "sha256": "3dbaf9bf67e9d98a07213caca74a1fef2b033738b2d8d04b13d813b5482927fd"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-center-native-3-unit.png",
+      "bytes": 1321,
+      "sha256": "4fe5c85846a9d299bfc76f135571ac5c7c44df9beb875041cbcd954ae7fbdd76"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-center-native-3-value.png",
+      "bytes": 1863,
+      "sha256": "a81b397cc49dd36e5feeed3827601121eec714c35db68b6d9b290fef0c04c5e1"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-center-native-3.png",
+      "bytes": 3787,
+      "sha256": "a4397e665ef8e310ab9ef6367ccd7afb4829b2d2d7afed0f9af9a15ddb42d73a"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-center-native-4-label.png",
+      "bytes": 1596,
+      "sha256": "20cad2aaa10884623bdbd09b6c11866a6bffdbe8f5df4999802388e00887b07a"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-center-native-4-unit.png",
+      "bytes": 2742,
+      "sha256": "68e3311ca8830c094e86355ab0b4762c4bc74548345f68c3bc7245e0c183a009"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-center-native-4-value.png",
+      "bytes": 2904,
+      "sha256": "e7bd2c5437cf9715d796f682da4028c3555ce8a9a4d285623a86a82bf90c59b4"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-center-native-4.png",
+      "bytes": 5180,
+      "sha256": "85c8701db9c18ddab52408ffaa0e9539a3e38f89b3f245746606f7478b8ee5a7"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-center-native-5-trend.png",
+      "bytes": 1297,
+      "sha256": "4384f842c830f35c16eb819c4dcfa9d4a5c4c537ac31a7ec08e26a1c0bd41738"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-center-native-5-value.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-center-native-5.png",
+      "bytes": 1297,
+      "sha256": "4384f842c830f35c16eb819c4dcfa9d4a5c4c537ac31a7ec08e26a1c0bd41738"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-center-native-6-label.png",
+      "bytes": 1700,
+      "sha256": "884a374d31d1df8e1002c0f29e8cf1bed5e74f05242469aa503c92db3a439d15"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-center-native-6-unit.png",
+      "bytes": 1276,
+      "sha256": "460844a18b8e03e3a634c63843c8e7d2b1817a607c3aaec5f9c16d63f1d2453e"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-center-native-6-value.png",
+      "bytes": 1361,
+      "sha256": "194902f3b8f249a1a97afb82f15aff519f39c747e040afd898e1cf2c75573ea0"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-center-native-6.png",
+      "bytes": 2201,
+      "sha256": "6d8d287d5237982529bd83ca400d4d049e2138bc70720e6fc0feefd9fcae8e4e"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-center-native-7-description.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-center-native-7-label.png",
+      "bytes": 1747,
+      "sha256": "74f611ed2000122be3f6dac9809737fec969fe1a313f5195639df90fa7d10dd4"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-center-native-7-unit.png",
+      "bytes": 1322,
+      "sha256": "14b5ff88907008b4edea2b6c0abdb0256500c97d6e22e80959463eee65b46f99"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-center-native-7-value.png",
+      "bytes": 2237,
+      "sha256": "ec1917d2be1100fa4c16438cbab03f5ebcc96ab6f9cc2a923e921d20ae1ae935"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-center-native-7.png",
+      "bytes": 3187,
+      "sha256": "e0681ae1b1e47b74c725a2b43e76c666f59a3ae46d8c99bbdf160e4c080b0284"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-center-native-8-description.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-center-native-8-label.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-center-native-8-value.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-center-native-8.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-center-saved.pptx",
+      "bytes": 46773,
+      "sha256": "31cb5020fb34bf93cd99c70e6a168219f6c8e220886e32df920ba7693d1525f8"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-center-svg-1.png",
+      "bytes": 6536,
+      "sha256": "c26f2668c3573d55949050177162fce1878e53a4755ddf33b2744624c3afe225"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-center-svg-2.png",
+      "bytes": 5215,
+      "sha256": "33b7012097462a4f634da7976610314c09d7b85840693cf0ae24f1d088dc717f"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-center-svg-3.png",
+      "bytes": 12777,
+      "sha256": "9eb9a016b829ee5aa05be9a41dfc19115e3e047afeab6b02639ae3ec8e2a4699"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-center-svg-4.png",
+      "bytes": 16971,
+      "sha256": "e0e7f61c2e7382ef51a55bbb5a4795dc63ddfa4120eaa5715f6a30ba69c1f8f3"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-center-svg-5.png",
+      "bytes": 5884,
+      "sha256": "fea864ca373d8697dc6c037e97de50e84b498370951333dd4ced678aa79704ac"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-center-svg-6.png",
+      "bytes": 8496,
+      "sha256": "c2f4e8c848857f99502da69e29036298d957e362940f32d91430691e1e7a967d"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-center-svg-7.png",
+      "bytes": 10371,
+      "sha256": "428324d1914a5baaa4692a4fe9940a5b8bfc14003352c88c160d93c983f80d22"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-center-svg-8.png",
+      "bytes": 5215,
+      "sha256": "33b7012097462a4f634da7976610314c09d7b85840693cf0ae24f1d088dc717f"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-center.pptx",
+      "bytes": 44595,
+      "sha256": "17995a93a003f230d5e887c1dcd97ca2d696a483a1b7681239f89e18cb773a53"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-left-edited.pptx",
+      "bytes": 46868,
+      "sha256": "7416d874b2346f679c0378750605b36ede74eca5bfa51a49dba28442113df833"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-left-native-1-value.png",
+      "bytes": 1657,
+      "sha256": "5857a54b430dafaf4b381bac35a2b25a35cc9012114f5f8ef7e2157ddee3296e"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-left-native-1.png",
+      "bytes": 1657,
+      "sha256": "5857a54b430dafaf4b381bac35a2b25a35cc9012114f5f8ef7e2157ddee3296e"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-left-native-2-value.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-left-native-2.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-left-native-3-delta.png",
+      "bytes": 1260,
+      "sha256": "f6604d6268f8b89e95e7b8ac12f76764044161c2a54229b377a78af2a8a9e556"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-left-native-3-description.png",
+      "bytes": 1872,
+      "sha256": "c46986ac4f08cfe9dcbf46f9eface76e398c8d4d2c1f192701b8fc944a791e82"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-left-native-3-label.png",
+      "bytes": 1709,
+      "sha256": "98406c1d4cccf0879e5a320d3d05cef8ebce27287fd8e8d4233e9009a1a92bc7"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-left-native-3-trend.png",
+      "bytes": 1348,
+      "sha256": "4020fc5c9dfefa8b7778f9565b875d882c67637e9856f8a3888ad0006ab421ac"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-left-native-3-unit.png",
+      "bytes": 1321,
+      "sha256": "5b828093343718972574827525411e0a13d32640ddebf8ab33fd0d8d85117029"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-left-native-3-value.png",
+      "bytes": 1863,
+      "sha256": "dbf2fe0a6b9edd928ae90d16f2820f9ab4746828f0a6db7bb29a1429f6146c19"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-left-native-3.png",
+      "bytes": 3786,
+      "sha256": "feb6980ca086ae3b8e7caf96fd2ac349b9950e2ee72d99eb6f796395cc3f4bb7"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-left-native-4-label.png",
+      "bytes": 1596,
+      "sha256": "31d44fcba12fe439053af6d159c015f30133219d0681fc31e36529145e5d6a6e"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-left-native-4-unit.png",
+      "bytes": 2742,
+      "sha256": "86cc8c0ed95ef1df7ed6c2fd54ee95e7cc8dde049afdb9807e930b470d8dbbe5"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-left-native-4-value.png",
+      "bytes": 2896,
+      "sha256": "1d7169e10789faadae76eed4d558be23e25e07e87e3fb412a1f77ddeca76a65c"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-left-native-4.png",
+      "bytes": 5170,
+      "sha256": "ae73ffccbea8b488a1f6820db1a473239caaa3af13181666671400f4a9024807"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-left-native-5-trend.png",
+      "bytes": 1298,
+      "sha256": "770efdfa52980e6413e082fae03f53b5da0aa95dd234a035dcec7dee4bf55b72"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-left-native-5-value.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-left-native-5.png",
+      "bytes": 1298,
+      "sha256": "770efdfa52980e6413e082fae03f53b5da0aa95dd234a035dcec7dee4bf55b72"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-left-native-6-label.png",
+      "bytes": 1699,
+      "sha256": "127f486f3ba6b7e71849bf900f3de60577ee58f79afe56666ef97393a63ee213"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-left-native-6-unit.png",
+      "bytes": 1275,
+      "sha256": "a7a20d631a7f80b59c44aab22840c831d5b9c473e646861c20bc0fd618185a7e"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-left-native-6-value.png",
+      "bytes": 1357,
+      "sha256": "32be7d4cede449e99171e6b50de1ef2b949ee6d2650c7d4ef17d51c8f3bcf3d1"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-left-native-6.png",
+      "bytes": 2193,
+      "sha256": "259b9bb20ac0b0fdc6dfafe828ea60c740580980b58f43d0946f391097028977"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-left-native-7-description.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-left-native-7-label.png",
+      "bytes": 1747,
+      "sha256": "1c55e8471ef1367a2acd73179b1557558d0ff34371e0b2e329c8e7407902d7f7"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-left-native-7-unit.png",
+      "bytes": 1321,
+      "sha256": "2ed0fd422584c31bdc394e8e7bd3d4921a93381066c149f6e3ea725a04bcf50d"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-left-native-7-value.png",
+      "bytes": 2232,
+      "sha256": "f3ca9b812713ae50252de361185afc35dc7c0b78e5442de585c6e04fecb64f1c"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-left-native-7.png",
+      "bytes": 3185,
+      "sha256": "7f271f626aceb00fdba13fd03de43d4213f03ad07e0a5fc3cdd04c0643455274"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-left-native-8-description.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-left-native-8-label.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-left-native-8-value.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-left-native-8.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-left-saved.pptx",
+      "bytes": 46750,
+      "sha256": "9af71762e679e86362e15dfd4bb7c3ebcbaee22ac15375a09990cdb580ff3d96"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-left-svg-1.png",
+      "bytes": 6564,
+      "sha256": "ab1997a701bcccb5d3059945c9d9b3e006f8fe575b6b78c330a9df180e2f573c"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-left-svg-2.png",
+      "bytes": 5215,
+      "sha256": "33b7012097462a4f634da7976610314c09d7b85840693cf0ae24f1d088dc717f"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-left-svg-3.png",
+      "bytes": 12584,
+      "sha256": "21b946a4659ac49c14583f08bdf125e8e13aade116439b396e9444d5ba525595"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-left-svg-4.png",
+      "bytes": 16700,
+      "sha256": "db087471a27a942f6ba483fb6f6b7dde3497dca31ba726cbd2ff036c32b7cdab"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-left-svg-5.png",
+      "bytes": 5920,
+      "sha256": "f4f338b2bc5251690b85314cb2827dff96324c6638b9c86fd72606b5551ce691"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-left-svg-6.png",
+      "bytes": 8444,
+      "sha256": "001ef4fe5c02abb7afba178ef4985b72c7c1b24545beed76df3e103ff042e8be"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-left-svg-7.png",
+      "bytes": 10358,
+      "sha256": "31a411b25195d68f3b7e6da8d63b6fff300a9a5a0abbd538ec27fcefcce69d3a"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-left-svg-8.png",
+      "bytes": 5215,
+      "sha256": "33b7012097462a4f634da7976610314c09d7b85840693cf0ae24f1d088dc717f"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-left.pptx",
+      "bytes": 44570,
+      "sha256": "5cb5432a5c966848ba2b252d229f3840dabf3a69f5afb047fabaf67648938259"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-right-edited.pptx",
+      "bytes": 46892,
+      "sha256": "debfed980794c568ba83b2a672b63635f34bec5b6abc12b8720571f933d11e03"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-right-native-1-value.png",
+      "bytes": 1649,
+      "sha256": "1a11ed204eb9cf93a5011320f20669f6afcf5910f9b00fda4de829f9ff7607d6"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-right-native-1.png",
+      "bytes": 1649,
+      "sha256": "1a11ed204eb9cf93a5011320f20669f6afcf5910f9b00fda4de829f9ff7607d6"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-right-native-2-value.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-right-native-2.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-right-native-3-delta.png",
+      "bytes": 1260,
+      "sha256": "99b93843b88a207192b287ea8a86c805949227c5facaee0a37863c959fa63b6e"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-right-native-3-description.png",
+      "bytes": 1873,
+      "sha256": "2832e82e748040345791b66dc160787a57a0e675f498d90ec26a10b2bcf11b78"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-right-native-3-label.png",
+      "bytes": 1709,
+      "sha256": "c5f00bb8d0537208fca443a793f5d2e4ebffcee9e52f539c12e7470d41d95bb6"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-right-native-3-trend.png",
+      "bytes": 1348,
+      "sha256": "7116a14914fa9d4a76c67ce388b43afe7d2264107c398253ff0ba4560ad167c0"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-right-native-3-unit.png",
+      "bytes": 1322,
+      "sha256": "40d3901d87c3b578103c0723b6cd7fe18f97624eeea846d0f4a09c003ca7482c"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-right-native-3-value.png",
+      "bytes": 1882,
+      "sha256": "5b3acb7af54f4f9d529675d3eadb5a79797148d8d873b7244369e23968b3f703"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-right-native-3.png",
+      "bytes": 3809,
+      "sha256": "45534f189f1772f3a0b696e1b947de0fdd6f67b62bf127f6f3597e0633080e64"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-right-native-4-label.png",
+      "bytes": 1595,
+      "sha256": "61cf12d5c2ba7552616d733675a837d5acca52d985b7c1be17cae3e50a0ac6ad"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-right-native-4-unit.png",
+      "bytes": 2742,
+      "sha256": "8f6970c888f57e1d68dc66e76455bf821d508c67961d8b83148df394923a2b7e"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-right-native-4-value.png",
+      "bytes": 2921,
+      "sha256": "25d6083060276c1206cc1a617535c8909fe7208cfc91f7fffd74b2299eaf29f1"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-right-native-4.png",
+      "bytes": 5194,
+      "sha256": "9780aa2292ae111b09895a320e6e11a3f9bda2f15038efcebedf648cec397120"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-right-native-5-trend.png",
+      "bytes": 1298,
+      "sha256": "811cb19860f9e38feb0bbe0642e9e89b7a465654143edfc268b7068575aa82f3"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-right-native-5-value.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-right-native-5.png",
+      "bytes": 1298,
+      "sha256": "811cb19860f9e38feb0bbe0642e9e89b7a465654143edfc268b7068575aa82f3"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-right-native-6-label.png",
+      "bytes": 1700,
+      "sha256": "0744d2ad1e5475594087fd6eeb2180d9d77728765469e7f4cf4c6a620d0d3b93"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-right-native-6-unit.png",
+      "bytes": 1276,
+      "sha256": "f584bfadb238ce73e58e1edc91d228c6431d05d861720a2aed04986af1614be9"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-right-native-6-value.png",
+      "bytes": 1359,
+      "sha256": "56fc15f8e000f5ab23d9ba33069840025dba801e9cd5fa91e681182f11d73163"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-right-native-6.png",
+      "bytes": 2197,
+      "sha256": "75be135aa330253b36d05b2489d8a3a0d92095a20dc8a677eb1ae07f6f37939f"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-right-native-7-description.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-right-native-7-label.png",
+      "bytes": 1747,
+      "sha256": "b9dbb411a4b039a40276db116545e393be07835ccda2ccabffd8445a416ff5ea"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-right-native-7-unit.png",
+      "bytes": 1322,
+      "sha256": "40d3901d87c3b578103c0723b6cd7fe18f97624eeea846d0f4a09c003ca7482c"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-right-native-7-value.png",
+      "bytes": 2208,
+      "sha256": "ba941269074f75233d19e6638c55a19ffa9a92b783be9250164539e8cebb94c3"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-right-native-7.png",
+      "bytes": 3157,
+      "sha256": "e5430d1756878ebe2995d6abf6793367cc86851caa647ced1bcabbfcd829c140"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-right-native-8-description.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-right-native-8-label.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-right-native-8-value.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-right-native-8.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-right-saved.pptx",
+      "bytes": 46784,
+      "sha256": "15eec9809dfe4de597da46dcda82c48b3fe1e0a380db0e409f9ceb822309d751"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-right-svg-1.png",
+      "bytes": 6629,
+      "sha256": "4c8ea833e8eab955ab7fc0cd767c4e2a065825be4c98123a18974dc7b503c23b"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-right-svg-2.png",
+      "bytes": 5215,
+      "sha256": "33b7012097462a4f634da7976610314c09d7b85840693cf0ae24f1d088dc717f"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-right-svg-3.png",
+      "bytes": 12601,
+      "sha256": "9461b590b2ad8bc11562e6da32b32bfd5cc04605031b8744ea654421cb70bec0"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-right-svg-4.png",
+      "bytes": 17100,
+      "sha256": "e723fe1187039d68d89d82e712a5c249650065f8aa501920e79df766cdfefd39"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-right-svg-5.png",
+      "bytes": 5896,
+      "sha256": "13183c378e7654ea2f85b9235bf266004c0cd6e56c36f397ed0e2ce8a06f98fc"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-right-svg-6.png",
+      "bytes": 8430,
+      "sha256": "654bd2290ff2b483584d72f0190c0eacdc82622c74d1bd91f8fa56154bd321b4"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-right-svg-7.png",
+      "bytes": 10453,
+      "sha256": "184eefc8fae7377bce2173cc8ae29b26b1b27e986a126378233a083bff401a40"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-right-svg-8.png",
+      "bytes": 5215,
+      "sha256": "33b7012097462a4f634da7976610314c09d7b85840693cf0ae24f1d088dc717f"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-1280-right.pptx",
+      "bytes": 44608,
+      "sha256": "7e2779b5cb5930e90de7572d8a4593db59798f7709c257dd1799a5eb1161c917"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-center-edited.pptx",
+      "bytes": 46897,
+      "sha256": "7ab856135a4598477b5a1448570bfce9738e09808781adefd0f6dbf2143af24d"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-center-native-1-value.png",
+      "bytes": 1137,
+      "sha256": "f75b7ead510f2fcf8eb07907306b4a27b8b36db980d711bfa35780be35457f4d"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-center-native-1.png",
+      "bytes": 1137,
+      "sha256": "f75b7ead510f2fcf8eb07907306b4a27b8b36db980d711bfa35780be35457f4d"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-center-native-2-value.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-center-native-2.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-center-native-3-delta.png",
+      "bytes": 527,
+      "sha256": "8059d29bead43ed452e487fd3b5a67f2eaf78398f75920d2ba74da4535222cfe"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-center-native-3-description.png",
+      "bytes": 1095,
+      "sha256": "80198885b112a8982c143a6511f659dfd6890f52c5e33f97b7c3cd3a5baeeabc"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-center-native-3-label.png",
+      "bytes": 1005,
+      "sha256": "f6e6d690e3c3661b5e51ea3eb36c5a2b045dd93e22c41ca71e61314f2ed2f695"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-center-native-3-trend.png",
+      "bytes": 815,
+      "sha256": "f57eddd346061514d8c7ff904cb93cac0bbecf73f1fbba741ff985d1058788cf"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-center-native-3-unit.png",
+      "bytes": 795,
+      "sha256": "7136a6b4140b34f064ca7ce6fbd44861956fea5dc4bcc428acb27695b6bab58b"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-center-native-3-value.png",
+      "bytes": 1289,
+      "sha256": "1b042895a7ac576cf6830e4fae11b852a2fa9074a610f266cc3baa440983a29d"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-center-native-3.png",
+      "bytes": 2281,
+      "sha256": "9142715513c3fe00cbef85dae3809fe0e7b3b11a7ba95bfcdd7c8d4b969d5058"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-center-native-4-label.png",
+      "bytes": 957,
+      "sha256": "cef2d88ed1ee726b6416cbd1a3ca7ebe108cb3602f9200378402836ba4df78a5"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-center-native-4-unit.png",
+      "bytes": 1634,
+      "sha256": "71f6d15b1f729f0f2a7e802af59d3af7320c19a3841019352642cda07585fb7b"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-center-native-4-value.png",
+      "bytes": 2009,
+      "sha256": "c331f4af5c3f4191f62b4a3f2348132d5747f02a82c91304afd7cd7c38461f76"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-center-native-4.png",
+      "bytes": 3283,
+      "sha256": "d5fd86ea40d46bc07ab1a8df04fded88588399cf580de9cad0434f9fbf09b62a"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-center-native-5-trend.png",
+      "bytes": 802,
+      "sha256": "678c7d38a57cb0238d94ad7700ea9fa74dbad265430d46a94f58be7fe18f2047"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-center-native-5-value.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-center-native-5.png",
+      "bytes": 802,
+      "sha256": "678c7d38a57cb0238d94ad7700ea9fa74dbad265430d46a94f58be7fe18f2047"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-center-native-6-label.png",
+      "bytes": 1015,
+      "sha256": "89269110820928ca15bfa7dd2fad2f03ea83e1cd25a37af68386d7d998a410a8"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-center-native-6-unit.png",
+      "bytes": 812,
+      "sha256": "5233d9c640ef14de7cca1d62cdf90cdfad7390f70a1da1b4a53de8fa8d6a57d5"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-center-native-6-value.png",
+      "bytes": 897,
+      "sha256": "18713bad0193fec3cc297feec4b914988f4b0a6529efebfaebf9582c122bb28b"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-center-native-6.png",
+      "bytes": 1386,
+      "sha256": "3720e4274e26b453fef1b023a5d7b346be96d8e2cb7a3b6cfe547d0c217c43c9"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-center-native-7-description.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-center-native-7-label.png",
+      "bytes": 1055,
+      "sha256": "c0867d3025dbfa56413663f38fd7873282a2f21a8976caea9247413750b4b242"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-center-native-7-unit.png",
+      "bytes": 795,
+      "sha256": "3ccf2e2ebe3d46c9cbccc8adc00d7061dc06ac04eff01fd1c9e17181d0962e30"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-center-native-7-value.png",
+      "bytes": 1533,
+      "sha256": "37b98c1efce94eb0b7d9fb531b40eef8bd9b90536331ae8de5d55d9b1f512635"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-center-native-7.png",
+      "bytes": 2055,
+      "sha256": "a55d24e99d18073cb6625b3f99f084ac55bd3863215099225599547108c2b382"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-center-native-8-description.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-center-native-8-label.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-center-native-8-value.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-center-native-8.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-center-saved.pptx",
+      "bytes": 46775,
+      "sha256": "2ca2262d107bcb6f403d0cbed1b609ecf92324a42e68b25f3798f72c9e5035f4"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-center-svg-1.png",
+      "bytes": 5090,
+      "sha256": "be465a7909c3b58464b1383d9bb2e1bf2acd0b3dbb545a879c8250ca1193c143"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-center-svg-2.png",
+      "bytes": 4046,
+      "sha256": "15c3195254c94dc16df9d7927fc1a560519f8d44e40593dd19304ed6348a16bb"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-center-svg-3.png",
+      "bytes": 9628,
+      "sha256": "fe54beae0fed0b9d7166a6797982238885fa90a0dc8f10b572fc8fef3eb8f99b"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-center-svg-4.png",
+      "bytes": 12650,
+      "sha256": "b443d36e243646d7f4c681d6d21eb2ccb3f6f79461458b582260221e6b4f89a3"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-center-svg-5.png",
+      "bytes": 4594,
+      "sha256": "d9ef2b8db2b314029f531eada7da3df309bb76221d2cc4f48ff4749be8c3574c"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-center-svg-6.png",
+      "bytes": 6631,
+      "sha256": "28acbf620a91144dc57424dcc28ebba0e26f1c6d84762bb93b8346556d55b22e"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-center-svg-7.png",
+      "bytes": 7750,
+      "sha256": "867f50e8a678eb0a6902d919c433bcaba7a8239a109a002f642ad0d442acc951"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-center-svg-8.png",
+      "bytes": 4046,
+      "sha256": "15c3195254c94dc16df9d7927fc1a560519f8d44e40593dd19304ed6348a16bb"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-center.pptx",
+      "bytes": 44592,
+      "sha256": "3f4bd23e3f88c4f86efe72089b4213c7423508a576d7cf765dffefe4f00a7369"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-left-edited.pptx",
+      "bytes": 46874,
+      "sha256": "8a07788616a6293a2408d76a69f3e1d0b2eaedeb41b615709af66aaceb88051f"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-left-native-1-value.png",
+      "bytes": 1140,
+      "sha256": "49d41f2d068331c0581382ba64f7458ea8406f7493897e7b6f420caebc77d3b8"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-left-native-1.png",
+      "bytes": 1140,
+      "sha256": "49d41f2d068331c0581382ba64f7458ea8406f7493897e7b6f420caebc77d3b8"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-left-native-2-value.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-left-native-2.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-left-native-3-delta.png",
+      "bytes": 528,
+      "sha256": "5c44a416a0f240769d45fb2db8dc9c8f7d00b12f497a77188b0816de87f13798"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-left-native-3-description.png",
+      "bytes": 1094,
+      "sha256": "610adbbd3d433639d680be7cb2c2d1e1ec24ce1ac008b37c849b7e6f16b72873"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-left-native-3-label.png",
+      "bytes": 1004,
+      "sha256": "582704288f7093effa81e9649fadbb50fcc6822c57d553c5df380acc0c8b6500"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-left-native-3-trend.png",
+      "bytes": 813,
+      "sha256": "5d05f23d6c4b151ed90e9e6a2180b5aa3280d167c85a33d32f7c4615a81ef48c"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-left-native-3-unit.png",
+      "bytes": 795,
+      "sha256": "2a545b3e5c917ba2ba911eecd661f746e0b74cde38b6f43b0ca77e9437b50a62"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-left-native-3-value.png",
+      "bytes": 1299,
+      "sha256": "f9219ec020028ac8cbd168bd4830233ca8fe76c46534f0fd35ccd967082171f1"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-left-native-3.png",
+      "bytes": 2293,
+      "sha256": "96f9957602d8931bcd4de30ccabfdf799958bec76fcf76a34d62b8ca2cf7dc2b"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-left-native-4-label.png",
+      "bytes": 957,
+      "sha256": "56fac0cb054e37d99740a213ba517032f9cda354fc9a54e0d5b444138c032235"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-left-native-4-unit.png",
+      "bytes": 1635,
+      "sha256": "a8a0734bccea1df9730e921ab0d98ee3a496d85348a54e152e95451f02666539"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-left-native-4-value.png",
+      "bytes": 2025,
+      "sha256": "b660acc78f49549bf033f0d463fab563361a140067b7bc42aa6647cd1a743689"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-left-native-4.png",
+      "bytes": 3297,
+      "sha256": "ce60af86bb5099363a22e7eeb620cc68b4bd5d040d0fef27321b45d2bc5807d0"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-left-native-5-trend.png",
+      "bytes": 801,
+      "sha256": "ba0335b2e071b812ddf4f99e6f68e59da5033bc2c3394e26f874b98265dca7e2"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-left-native-5-value.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-left-native-5.png",
+      "bytes": 801,
+      "sha256": "ba0335b2e071b812ddf4f99e6f68e59da5033bc2c3394e26f874b98265dca7e2"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-left-native-6-label.png",
+      "bytes": 1014,
+      "sha256": "9b03f9f91c65db105f9882b5c577e27d44fffbe0c0db78d5bd07c87e8f4b3490"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-left-native-6-unit.png",
+      "bytes": 812,
+      "sha256": "3c4fba9c90c6a9c5d4f7d30ed30adde69c2b24237689f82f00302637f5332044"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-left-native-6-value.png",
+      "bytes": 891,
+      "sha256": "096d54e42428857d1d5940e8c2a70b05bb3b9eccb538a7c91ff23ad5ce2aa9e3"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-left-native-6.png",
+      "bytes": 1375,
+      "sha256": "29002216a2948b4f1252f7070155351df0375bb3fca32ecef5088b26b38ecac1"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-left-native-7-description.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-left-native-7-label.png",
+      "bytes": 1053,
+      "sha256": "8f3a1f2b100061751ca609f5a026b8e9616feea6a78df1d1d2b14ad73254a973"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-left-native-7-unit.png",
+      "bytes": 795,
+      "sha256": "a01852189bced194fdb49aefe38c03b796a499eaa99aad653d2433e49f9b4558"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-left-native-7-value.png",
+      "bytes": 1542,
+      "sha256": "6b38a98c8b44090d7e5fb099bb3ba9c85f669904145ab90b96cbed52921d30fb"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-left-native-7.png",
+      "bytes": 2057,
+      "sha256": "b92cda3f1273e8b031e6ed65e5985e2ee527e06314893e110d073761f8ad6e2b"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-left-native-8-description.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-left-native-8-label.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-left-native-8-value.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-left-native-8.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-left-saved.pptx",
+      "bytes": 46753,
+      "sha256": "0af8bbe5cf1fa2c0ada45443f63beffaa8ef2f99eb80d787ed38c4cae9acd39f"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-left-svg-1.png",
+      "bytes": 5124,
+      "sha256": "80e52d020f80e0f7604c067b8eb2224b292c6236c7f87e806011438c670eeb26"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-left-svg-2.png",
+      "bytes": 4046,
+      "sha256": "15c3195254c94dc16df9d7927fc1a560519f8d44e40593dd19304ed6348a16bb"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-left-svg-3.png",
+      "bytes": 9440,
+      "sha256": "caaf0e1a2e0b0c92a42fb9ce478be0a0df6c1bb40c52bb28ca8244cc75bc4121"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-left-svg-4.png",
+      "bytes": 12446,
+      "sha256": "59ba5040874f40463f76c43de3367bad6978495c874137cc170ace6dea43a2fa"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-left-svg-5.png",
+      "bytes": 4591,
+      "sha256": "349908c50f32d39ab690a0dbbcf1c2ca0a2f249df2c48da09f5664174ebe7205"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-left-svg-6.png",
+      "bytes": 6529,
+      "sha256": "65299185a6a35cdd9294fddf2798513d7f183322f79a9d10c11d73c30ab22895"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-left-svg-7.png",
+      "bytes": 7815,
+      "sha256": "cded6d748a04a63144ec93b775f3f07c72d485be0881d9957afe2c418b54863b"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-left-svg-8.png",
+      "bytes": 4046,
+      "sha256": "15c3195254c94dc16df9d7927fc1a560519f8d44e40593dd19304ed6348a16bb"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-left.pptx",
+      "bytes": 44565,
+      "sha256": "f4f4a0d579613e217743dc93c60f32d86a2b404d3f7cd1300cbace55a1388669"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-right-edited.pptx",
+      "bytes": 46906,
+      "sha256": "e3b76e3b52a5eda9c548608dd3ae4aeb2c7a1ca8b29fe5b8fc3a0496dac1849b"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-right-native-1-value.png",
+      "bytes": 1128,
+      "sha256": "fdb9663f8ee6a49b7d260a2b9c0a218de545346a6f3151c4c20738fad9a848d3"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-right-native-1.png",
+      "bytes": 1128,
+      "sha256": "fdb9663f8ee6a49b7d260a2b9c0a218de545346a6f3151c4c20738fad9a848d3"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-right-native-2-value.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-right-native-2.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-right-native-3-delta.png",
+      "bytes": 529,
+      "sha256": "6fe06e971f6131cf17b9ab9d9781c3e95e6817a01ffe5c6ae24dd0e07718bfe4"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-right-native-3-description.png",
+      "bytes": 1093,
+      "sha256": "6ceffc74b05cd66af7f2a1afb68278e4347924b88e6d70e69e00e628028d88ae"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-right-native-3-label.png",
+      "bytes": 1004,
+      "sha256": "94d86f9ef7676f860e67ddeeb80f351ee907a5ebfb78a42c928bf522e78ad582"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-right-native-3-trend.png",
+      "bytes": 815,
+      "sha256": "e812ab6d858ae20f64ce7757529494ce586359074280f785c11f9468f1d1fd6e"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-right-native-3-unit.png",
+      "bytes": 795,
+      "sha256": "f79bb8b7b6bee48e23b5080c631566c601423003bcd05afc862aa9d749babf39"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-right-native-3-value.png",
+      "bytes": 1294,
+      "sha256": "39f03933462984c8f7d05a746ee87433dd368df3b436a0878346bfa1d25eef54"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-right-native-3.png",
+      "bytes": 2288,
+      "sha256": "907c5f5808ebc9b04bb5015af10846fd266739224611854c6ff26f29ec529d9d"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-right-native-4-label.png",
+      "bytes": 956,
+      "sha256": "608bf37fd2c4cc1ac5859c1153ea2e7f9ab1842df0b5ebac7593c0c7c3cdd30c"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-right-native-4-unit.png",
+      "bytes": 1636,
+      "sha256": "5899bf1c09881d646a6093ff0eecc06817e3d8dfb7caa3f775be13d662bf4741"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-right-native-4-value.png",
+      "bytes": 2015,
+      "sha256": "6d1fc54dc73aa1b91880b1c7f3dc9532db2144322c2274f34cf5dd5cbee707fe"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-right-native-4.png",
+      "bytes": 3292,
+      "sha256": "11b20715407c39dbd5420ab7cd7fdd052188eefaa63540cacf9426aedbf5f601"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-right-native-5-trend.png",
+      "bytes": 801,
+      "sha256": "743dd3b2ca800a6f94fcc5b2e75341868719f6b34d235dcef0c1e474336df210"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-right-native-5-value.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-right-native-5.png",
+      "bytes": 801,
+      "sha256": "743dd3b2ca800a6f94fcc5b2e75341868719f6b34d235dcef0c1e474336df210"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-right-native-6-label.png",
+      "bytes": 1014,
+      "sha256": "606d524737989f3747fbccd18e2ec6ed0048acbc8e57f8b6f51cefd776d4e7ff"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-right-native-6-unit.png",
+      "bytes": 813,
+      "sha256": "5452bc1190cd5883b0a6bd3a1a5048eea80ec80edc52bcd805fd57d3796c25e5"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-right-native-6-value.png",
+      "bytes": 892,
+      "sha256": "a105ea6b217de5cc3cd82cc8f60153faf4140e720a13605b39157ca4db52a323"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-right-native-6.png",
+      "bytes": 1377,
+      "sha256": "de81f2e76fb78c206bbac87a460582f5eea55be29190a8450c6e032bcaceafbc"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-right-native-7-description.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-right-native-7-label.png",
+      "bytes": 1052,
+      "sha256": "8947a893480b8ea850df6614b9136633fd098505320db4d5c0e5664b599cacd7"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-right-native-7-unit.png",
+      "bytes": 795,
+      "sha256": "f79bb8b7b6bee48e23b5080c631566c601423003bcd05afc862aa9d749babf39"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-right-native-7-value.png",
+      "bytes": 1522,
+      "sha256": "3a4f217176e1230a2540bb29e76a9a1950abc55a0bb4baa696b2bebfcb39d376"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-right-native-7.png",
+      "bytes": 2041,
+      "sha256": "6027835aa25fce51ecc6682bf0843960e379492ceaf90fa825bd3aae9c66ffad"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-right-native-8-description.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-right-native-8-label.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-right-native-8-value.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-right-native-8.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-right-saved.pptx",
+      "bytes": 46789,
+      "sha256": "81845b46700ef122b9217b2b1d4cdacf2ba1e9251a4d0dbece87d890a64f3b63"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-right-svg-1.png",
+      "bytes": 5052,
+      "sha256": "2a1e18d5784285dd9489e90c29dd230b13e298930fe52de3192b9c801edd48f7"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-right-svg-2.png",
+      "bytes": 4046,
+      "sha256": "15c3195254c94dc16df9d7927fc1a560519f8d44e40593dd19304ed6348a16bb"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-right-svg-3.png",
+      "bytes": 9448,
+      "sha256": "bd90bb8dbb3e6e1d77bb341876ef2f437b390c865e8fd0706ae1f5a6373fdfa6"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-right-svg-4.png",
+      "bytes": 12640,
+      "sha256": "0f0da8abdec8983e26d98cbefce36720df2f6b7ee70dd9ae1ee69fcbf4deaf64"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-right-svg-5.png",
+      "bytes": 4599,
+      "sha256": "88a163580cff6f55f8a38babbe7517166ac5b06ae9b0c1343a660085b99fa625"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-right-svg-6.png",
+      "bytes": 6433,
+      "sha256": "744d633956750ee1c36a2f12c4fb30842e2e08d2e12b4a031d7a8e82b4121b29"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-right-svg-7.png",
+      "bytes": 7758,
+      "sha256": "29c4c9d538505053cd9555f61070f952f783cfa23ddea830841eebe0d41044f5"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-right-svg-8.png",
+      "bytes": 4046,
+      "sha256": "15c3195254c94dc16df9d7927fc1a560519f8d44e40593dd19304ed6348a16bb"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/metric-540-right.pptx",
+      "bytes": 44600,
+      "sha256": "ef239e7d309c4a862483c9a1988f4b0b9f4c4e283bdc6378c7b21137cebc8649"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/runs/metric-1280-center/native.json",
+      "bytes": 54050,
+      "sha256": "29dad0821511e9a1d93e9e6f391f1a342bb8dcbfb7a8f26ce4121c2f52cf8c32"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/runs/metric-1280-center/progress.json",
+      "bytes": 95166,
+      "sha256": "a8b641f0faa51e3b3cec75de8fb0ef75e30baa965f90f5423bba8803bc0c7dbc"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/runs/metric-1280-center/worker.json",
+      "bytes": 341,
+      "sha256": "25228fc81cba90ccbac28765cbe34d33d9c751fc4d301b77ff2bdb64d498dcbf"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/runs/metric-1280-center/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/runs/metric-1280-center/worker.stdout.log",
+      "bytes": 82,
+      "sha256": "da90764422f28ba6124c6e6c7f7a7fff127077419cfc17d14a5fbc06c232f55b"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/runs/metric-1280-left/native.json",
+      "bytes": 53894,
+      "sha256": "55a95e694df0875781ed93daf41fe7644b8f558cc7d451d95f78d3f718b65797"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/runs/metric-1280-left/progress.json",
+      "bytes": 94854,
+      "sha256": "b254722a89e1997019122c2796b7332e83e99f321b7110aa144896add5fb0569"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/runs/metric-1280-left/worker.json",
+      "bytes": 341,
+      "sha256": "5d8052cecb3d980dd1f73a31889d0821bdf2d6bd059aa0d504611807da28df09"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/runs/metric-1280-left/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/runs/metric-1280-left/worker.stdout.log",
+      "bytes": 80,
+      "sha256": "84ca1f390cfde16d03251c4b269d08d8a3025e1bae4dd64e7be1d89673108b4a"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/runs/metric-1280-right/native.json",
+      "bytes": 53974,
+      "sha256": "66e21958d088f2f790d52887e8cca5da6f49d566e5dded9a764314166c249510"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/runs/metric-1280-right/progress.json",
+      "bytes": 95014,
+      "sha256": "a534be2dbdf393df95bf1512884eb71ada1b14415dd55fdff69e46975ac4954a"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/runs/metric-1280-right/worker.json",
+      "bytes": 341,
+      "sha256": "d57b9dab544bf51237690782e0cf170b50d7c4c0583db106435a355758e7d007"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/runs/metric-1280-right/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/runs/metric-1280-right/worker.stdout.log",
+      "bytes": 81,
+      "sha256": "e6a975aa86176057011498cea348a4a370248176ae696f0a5c1cb6c5ae37886e"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/runs/metric-540-center/native.json",
+      "bytes": 54067,
+      "sha256": "02023e466afbb77839f8023274cbd0f58c2c4517b9d18086c19f485170fd0ca9"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/runs/metric-540-center/progress.json",
+      "bytes": 95200,
+      "sha256": "1619f93214b54252574fcd4e59dad6cd8d2679eb73c04ba6051bc936f43ecda0"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/runs/metric-540-center/worker.json",
+      "bytes": 341,
+      "sha256": "56686c40ce57fc5d864c8f1525ba26bfc733406b2526815beb3a379d6b4b1a7f"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/runs/metric-540-center/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/runs/metric-540-center/worker.stdout.log",
+      "bytes": 81,
+      "sha256": "36bc9badbb77b74abc11378e29b7fc9eecd0935574e281bc44f3fc40a267db52"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/runs/metric-540-left/native.json",
+      "bytes": 53900,
+      "sha256": "65e786d8289c46d36dcc072258bfd2c81dcd53c46d78f62ebb0f63bd232ef5ba"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/runs/metric-540-left/progress.json",
+      "bytes": 94866,
+      "sha256": "b25fb514a5c19a3358010a760ca610a36775b5a19237df380f250f141b242cd8"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/runs/metric-540-left/worker.json",
+      "bytes": 341,
+      "sha256": "b0efda9c78cdde25bec90f6045c83b44ff0ad9df46aafdb1aa655075625cff4c"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/runs/metric-540-left/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/runs/metric-540-left/worker.stdout.log",
+      "bytes": 79,
+      "sha256": "2c1ccc4f11369d6359c6689a4115570127e1dbb802e252efa0b825a7e50ada46"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/runs/metric-540-right/native.json",
+      "bytes": 54047,
+      "sha256": "fa0be21068a2e425cbe6539451819da1650d7c52eda9a0f58a092381caf88980"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/runs/metric-540-right/progress.json",
+      "bytes": 95160,
+      "sha256": "b050322155231b407f70eb8ceae3ec0a8e09b2636adea4e2191f22d86935d9af"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/runs/metric-540-right/worker.json",
+      "bytes": 341,
+      "sha256": "71066e7a6cc56d10b4ddafb3722389a4e1017e6275282228173dcc331e033de3"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/runs/metric-540-right/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/metric-candidate-node20-01/runs/metric-540-right/worker.stdout.log",
+      "bytes": 80,
+      "sha256": "6de6e4207b60af27a95934e67bfacc9b28fe6339450dcbdc4061ea5db05bde5e"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/generation.json",
+      "bytes": 529400,
+      "sha256": "c8570fe654e111ec7ed484c611ecf170d5d1fb66cd7f254eee0317320095e0fe"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/geometry-diagnostic.json",
+      "bytes": 3713,
+      "sha256": "54ca50301840d8906ecbf257d193f62e7700f5d670f16c6944e3e79b5a87bb73"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-1280-center-svg-1.png",
+      "bytes": 6536,
+      "sha256": "c26f2668c3573d55949050177162fce1878e53a4755ddf33b2744624c3afe225"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-1280-center-svg-2.png",
+      "bytes": 5215,
+      "sha256": "33b7012097462a4f634da7976610314c09d7b85840693cf0ae24f1d088dc717f"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-1280-center-svg-3.png",
+      "bytes": 12777,
+      "sha256": "9eb9a016b829ee5aa05be9a41dfc19115e3e047afeab6b02639ae3ec8e2a4699"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-1280-center-svg-4.png",
+      "bytes": 16971,
+      "sha256": "e0e7f61c2e7382ef51a55bbb5a4795dc63ddfa4120eaa5715f6a30ba69c1f8f3"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-1280-center-svg-5.png",
+      "bytes": 5884,
+      "sha256": "fea864ca373d8697dc6c037e97de50e84b498370951333dd4ced678aa79704ac"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-1280-center-svg-6.png",
+      "bytes": 8496,
+      "sha256": "c2f4e8c848857f99502da69e29036298d957e362940f32d91430691e1e7a967d"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-1280-center-svg-7.png",
+      "bytes": 10371,
+      "sha256": "428324d1914a5baaa4692a4fe9940a5b8bfc14003352c88c160d93c983f80d22"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-1280-center-svg-8.png",
+      "bytes": 5215,
+      "sha256": "33b7012097462a4f634da7976610314c09d7b85840693cf0ae24f1d088dc717f"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-1280-center.pptx",
+      "bytes": 44595,
+      "sha256": "17995a93a003f230d5e887c1dcd97ca2d696a483a1b7681239f89e18cb773a53"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-1280-left-svg-1.png",
+      "bytes": 6564,
+      "sha256": "ab1997a701bcccb5d3059945c9d9b3e006f8fe575b6b78c330a9df180e2f573c"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-1280-left-svg-2.png",
+      "bytes": 5215,
+      "sha256": "33b7012097462a4f634da7976610314c09d7b85840693cf0ae24f1d088dc717f"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-1280-left-svg-3.png",
+      "bytes": 12584,
+      "sha256": "21b946a4659ac49c14583f08bdf125e8e13aade116439b396e9444d5ba525595"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-1280-left-svg-4.png",
+      "bytes": 16700,
+      "sha256": "db087471a27a942f6ba483fb6f6b7dde3497dca31ba726cbd2ff036c32b7cdab"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-1280-left-svg-5.png",
+      "bytes": 5920,
+      "sha256": "f4f338b2bc5251690b85314cb2827dff96324c6638b9c86fd72606b5551ce691"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-1280-left-svg-6.png",
+      "bytes": 8444,
+      "sha256": "001ef4fe5c02abb7afba178ef4985b72c7c1b24545beed76df3e103ff042e8be"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-1280-left-svg-7.png",
+      "bytes": 10358,
+      "sha256": "31a411b25195d68f3b7e6da8d63b6fff300a9a5a0abbd538ec27fcefcce69d3a"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-1280-left-svg-8.png",
+      "bytes": 5215,
+      "sha256": "33b7012097462a4f634da7976610314c09d7b85840693cf0ae24f1d088dc717f"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-1280-left.pptx",
+      "bytes": 44570,
+      "sha256": "5cb5432a5c966848ba2b252d229f3840dabf3a69f5afb047fabaf67648938259"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-1280-right-svg-1.png",
+      "bytes": 6629,
+      "sha256": "4c8ea833e8eab955ab7fc0cd767c4e2a065825be4c98123a18974dc7b503c23b"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-1280-right-svg-2.png",
+      "bytes": 5215,
+      "sha256": "33b7012097462a4f634da7976610314c09d7b85840693cf0ae24f1d088dc717f"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-1280-right-svg-3.png",
+      "bytes": 12601,
+      "sha256": "9461b590b2ad8bc11562e6da32b32bfd5cc04605031b8744ea654421cb70bec0"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-1280-right-svg-4.png",
+      "bytes": 17100,
+      "sha256": "e723fe1187039d68d89d82e712a5c249650065f8aa501920e79df766cdfefd39"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-1280-right-svg-5.png",
+      "bytes": 5896,
+      "sha256": "13183c378e7654ea2f85b9235bf266004c0cd6e56c36f397ed0e2ce8a06f98fc"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-1280-right-svg-6.png",
+      "bytes": 8430,
+      "sha256": "654bd2290ff2b483584d72f0190c0eacdc82622c74d1bd91f8fa56154bd321b4"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-1280-right-svg-7.png",
+      "bytes": 10453,
+      "sha256": "184eefc8fae7377bce2173cc8ae29b26b1b27e986a126378233a083bff401a40"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-1280-right-svg-8.png",
+      "bytes": 5215,
+      "sha256": "33b7012097462a4f634da7976610314c09d7b85840693cf0ae24f1d088dc717f"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-1280-right.pptx",
+      "bytes": 44608,
+      "sha256": "7e2779b5cb5930e90de7572d8a4593db59798f7709c257dd1799a5eb1161c917"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-540-center-svg-1.png",
+      "bytes": 5090,
+      "sha256": "be465a7909c3b58464b1383d9bb2e1bf2acd0b3dbb545a879c8250ca1193c143"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-540-center-svg-2.png",
+      "bytes": 4046,
+      "sha256": "15c3195254c94dc16df9d7927fc1a560519f8d44e40593dd19304ed6348a16bb"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-540-center-svg-3.png",
+      "bytes": 9628,
+      "sha256": "fe54beae0fed0b9d7166a6797982238885fa90a0dc8f10b572fc8fef3eb8f99b"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-540-center-svg-4.png",
+      "bytes": 12650,
+      "sha256": "b443d36e243646d7f4c681d6d21eb2ccb3f6f79461458b582260221e6b4f89a3"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-540-center-svg-5.png",
+      "bytes": 4594,
+      "sha256": "d9ef2b8db2b314029f531eada7da3df309bb76221d2cc4f48ff4749be8c3574c"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-540-center-svg-6.png",
+      "bytes": 6631,
+      "sha256": "28acbf620a91144dc57424dcc28ebba0e26f1c6d84762bb93b8346556d55b22e"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-540-center-svg-7.png",
+      "bytes": 7750,
+      "sha256": "867f50e8a678eb0a6902d919c433bcaba7a8239a109a002f642ad0d442acc951"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-540-center-svg-8.png",
+      "bytes": 4046,
+      "sha256": "15c3195254c94dc16df9d7927fc1a560519f8d44e40593dd19304ed6348a16bb"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-540-center.pptx",
+      "bytes": 44592,
+      "sha256": "3f4bd23e3f88c4f86efe72089b4213c7423508a576d7cf765dffefe4f00a7369"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-540-left-svg-1.png",
+      "bytes": 5124,
+      "sha256": "80e52d020f80e0f7604c067b8eb2224b292c6236c7f87e806011438c670eeb26"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-540-left-svg-2.png",
+      "bytes": 4046,
+      "sha256": "15c3195254c94dc16df9d7927fc1a560519f8d44e40593dd19304ed6348a16bb"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-540-left-svg-3.png",
+      "bytes": 9440,
+      "sha256": "caaf0e1a2e0b0c92a42fb9ce478be0a0df6c1bb40c52bb28ca8244cc75bc4121"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-540-left-svg-4.png",
+      "bytes": 12446,
+      "sha256": "59ba5040874f40463f76c43de3367bad6978495c874137cc170ace6dea43a2fa"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-540-left-svg-5.png",
+      "bytes": 4591,
+      "sha256": "349908c50f32d39ab690a0dbbcf1c2ca0a2f249df2c48da09f5664174ebe7205"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-540-left-svg-6.png",
+      "bytes": 6529,
+      "sha256": "65299185a6a35cdd9294fddf2798513d7f183322f79a9d10c11d73c30ab22895"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-540-left-svg-7.png",
+      "bytes": 7815,
+      "sha256": "cded6d748a04a63144ec93b775f3f07c72d485be0881d9957afe2c418b54863b"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-540-left-svg-8.png",
+      "bytes": 4046,
+      "sha256": "15c3195254c94dc16df9d7927fc1a560519f8d44e40593dd19304ed6348a16bb"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-540-left.pptx",
+      "bytes": 44565,
+      "sha256": "f4f4a0d579613e217743dc93c60f32d86a2b404d3f7cd1300cbace55a1388669"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-540-right-native-1-value.png",
+      "bytes": 1128,
+      "sha256": "fdb9663f8ee6a49b7d260a2b9c0a218de545346a6f3151c4c20738fad9a848d3"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-540-right-native-1.png",
+      "bytes": 1128,
+      "sha256": "fdb9663f8ee6a49b7d260a2b9c0a218de545346a6f3151c4c20738fad9a848d3"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-540-right-native-2-value.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-540-right-native-2.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-540-right-svg-1.png",
+      "bytes": 5052,
+      "sha256": "2a1e18d5784285dd9489e90c29dd230b13e298930fe52de3192b9c801edd48f7"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-540-right-svg-2.png",
+      "bytes": 4046,
+      "sha256": "15c3195254c94dc16df9d7927fc1a560519f8d44e40593dd19304ed6348a16bb"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-540-right-svg-3.png",
+      "bytes": 9448,
+      "sha256": "bd90bb8dbb3e6e1d77bb341876ef2f437b390c865e8fd0706ae1f5a6373fdfa6"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-540-right-svg-4.png",
+      "bytes": 12640,
+      "sha256": "0f0da8abdec8983e26d98cbefce36720df2f6b7ee70dd9ae1ee69fcbf4deaf64"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-540-right-svg-5.png",
+      "bytes": 4599,
+      "sha256": "88a163580cff6f55f8a38babbe7517166ac5b06ae9b0c1343a660085b99fa625"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-540-right-svg-6.png",
+      "bytes": 6433,
+      "sha256": "744d633956750ee1c36a2f12c4fb30842e2e08d2e12b4a031d7a8e82b4121b29"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-540-right-svg-7.png",
+      "bytes": 7758,
+      "sha256": "29c4c9d538505053cd9555f61070f952f783cfa23ddea830841eebe0d41044f5"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-540-right-svg-8.png",
+      "bytes": 4046,
+      "sha256": "15c3195254c94dc16df9d7927fc1a560519f8d44e40593dd19304ed6348a16bb"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/metric-540-right.pptx",
+      "bytes": 44600,
+      "sha256": "ef239e7d309c4a862483c9a1988f4b0b9f4c4e283bdc6378c7b21137cebc8649"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/runs/metric-540-right/failure.json",
+      "bytes": 3488,
+      "sha256": "4364102f955bba55b348d6fca4c18f7e4bc83fe58c4f3894e55777b24f5ab0f4"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/runs/metric-540-right/progress.json",
+      "bytes": 3453,
+      "sha256": "d6a9a39a0c156aec0c5ff94dae378dd7eb8309db5665c0f05bff393e16ec172d"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/runs/metric-540-right/worker.json",
+      "bytes": 341,
+      "sha256": "ee62ad3e7881113224ba3b8c6bdb8b2d7fdb11a8f8dc9726acc302a3df076718"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/runs/metric-540-right/worker.stderr.log",
+      "bytes": 525,
+      "sha256": "abc7ed0e15c6b58b22533a6a26224caaa9adeb384d16b9e6296de5275fcdf646"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/runs/metric-540-right/worker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/verifiers/native-metric.mjs",
+      "bytes": 14315,
+      "sha256": "9eb61c7a1afcdc351ade944952cd4f76c4de09909993708235c20ded7ce2524c"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/verifiers/native-metric.ps1",
+      "bytes": 12335,
+      "sha256": "1829669933b0061cad24fc38d8344c290074100bb6796825f1c145d754d0e56a"
+    },
+    {
+      "file": "raw/metric-candidate-node24-01/verifiers/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/comparison-metric-540-right.json",
+      "bytes": 24434,
+      "sha256": "a48c1b514dd297b8a2471e9e4028f1c7583cadcbfdcf6e5046cc18efac04faf7"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/comparison.json",
+      "bytes": 116930,
+      "sha256": "15908edcac66b1307641d93b6c335e11dc9248422b530b5996bf6571cc8aa0f7"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/comparison.log",
+      "bytes": 782,
+      "sha256": "fbcb94deae8b46ca6c7f411baebb553c787158da9af0dbc09d7e4631615217e5"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/generation.json",
+      "bytes": 529400,
+      "sha256": "911afc658088a0c32a22a010ffa6fe8a60e013d33868dd68988ff8504028bc12"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-center-edited.pptx",
+      "bytes": 46886,
+      "sha256": "65816810316c3ecba7213c53180be944a57ea27c43fa2d9d2dec985c88f99891"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-center-native-1-value.png",
+      "bytes": 1648,
+      "sha256": "a05f238f65f7244e39ea6601892e02b5579c0b3c391809d3df8cf52a1c70d3a8"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-center-native-1.png",
+      "bytes": 1648,
+      "sha256": "a05f238f65f7244e39ea6601892e02b5579c0b3c391809d3df8cf52a1c70d3a8"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-center-native-2-value.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-center-native-2.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-center-native-3-delta.png",
+      "bytes": 1259,
+      "sha256": "add4ae7d08119daef2fd32aa8d22afe9f78b0d610e8357ec9452689f3c4ad820"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-center-native-3-description.png",
+      "bytes": 1873,
+      "sha256": "47df126b9d7f9ea42dbc4162a588e52f38673d4927b10eb71a07b91551295f5b"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-center-native-3-label.png",
+      "bytes": 1709,
+      "sha256": "a7b341b7f73c5bb51f0ffd2da955a4a48b8b89e2dbdc0570f3f57cb1e352005d"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-center-native-3-trend.png",
+      "bytes": 1348,
+      "sha256": "3dbaf9bf67e9d98a07213caca74a1fef2b033738b2d8d04b13d813b5482927fd"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-center-native-3-unit.png",
+      "bytes": 1321,
+      "sha256": "4fe5c85846a9d299bfc76f135571ac5c7c44df9beb875041cbcd954ae7fbdd76"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-center-native-3-value.png",
+      "bytes": 1863,
+      "sha256": "a81b397cc49dd36e5feeed3827601121eec714c35db68b6d9b290fef0c04c5e1"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-center-native-3.png",
+      "bytes": 3787,
+      "sha256": "a4397e665ef8e310ab9ef6367ccd7afb4829b2d2d7afed0f9af9a15ddb42d73a"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-center-native-4-label.png",
+      "bytes": 1596,
+      "sha256": "20cad2aaa10884623bdbd09b6c11866a6bffdbe8f5df4999802388e00887b07a"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-center-native-4-unit.png",
+      "bytes": 2742,
+      "sha256": "68e3311ca8830c094e86355ab0b4762c4bc74548345f68c3bc7245e0c183a009"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-center-native-4-value.png",
+      "bytes": 2904,
+      "sha256": "e7bd2c5437cf9715d796f682da4028c3555ce8a9a4d285623a86a82bf90c59b4"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-center-native-4.png",
+      "bytes": 5180,
+      "sha256": "85c8701db9c18ddab52408ffaa0e9539a3e38f89b3f245746606f7478b8ee5a7"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-center-native-5-trend.png",
+      "bytes": 1297,
+      "sha256": "4384f842c830f35c16eb819c4dcfa9d4a5c4c537ac31a7ec08e26a1c0bd41738"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-center-native-5-value.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-center-native-5.png",
+      "bytes": 1297,
+      "sha256": "4384f842c830f35c16eb819c4dcfa9d4a5c4c537ac31a7ec08e26a1c0bd41738"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-center-native-6-label.png",
+      "bytes": 1700,
+      "sha256": "884a374d31d1df8e1002c0f29e8cf1bed5e74f05242469aa503c92db3a439d15"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-center-native-6-unit.png",
+      "bytes": 1276,
+      "sha256": "460844a18b8e03e3a634c63843c8e7d2b1817a607c3aaec5f9c16d63f1d2453e"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-center-native-6-value.png",
+      "bytes": 1361,
+      "sha256": "194902f3b8f249a1a97afb82f15aff519f39c747e040afd898e1cf2c75573ea0"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-center-native-6.png",
+      "bytes": 2201,
+      "sha256": "6d8d287d5237982529bd83ca400d4d049e2138bc70720e6fc0feefd9fcae8e4e"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-center-native-7-description.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-center-native-7-label.png",
+      "bytes": 1747,
+      "sha256": "74f611ed2000122be3f6dac9809737fec969fe1a313f5195639df90fa7d10dd4"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-center-native-7-unit.png",
+      "bytes": 1322,
+      "sha256": "14b5ff88907008b4edea2b6c0abdb0256500c97d6e22e80959463eee65b46f99"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-center-native-7-value.png",
+      "bytes": 2237,
+      "sha256": "ec1917d2be1100fa4c16438cbab03f5ebcc96ab6f9cc2a923e921d20ae1ae935"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-center-native-7.png",
+      "bytes": 3187,
+      "sha256": "e0681ae1b1e47b74c725a2b43e76c666f59a3ae46d8c99bbdf160e4c080b0284"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-center-native-8-description.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-center-native-8-label.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-center-native-8-value.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-center-native-8.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-center-saved.pptx",
+      "bytes": 46773,
+      "sha256": "98aa1176361c66e14b67580846a0008aed014b4fa0eab97af41de5cf43bb4cec"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-center-svg-1.png",
+      "bytes": 6536,
+      "sha256": "c26f2668c3573d55949050177162fce1878e53a4755ddf33b2744624c3afe225"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-center-svg-2.png",
+      "bytes": 5215,
+      "sha256": "33b7012097462a4f634da7976610314c09d7b85840693cf0ae24f1d088dc717f"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-center-svg-3.png",
+      "bytes": 12777,
+      "sha256": "9eb9a016b829ee5aa05be9a41dfc19115e3e047afeab6b02639ae3ec8e2a4699"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-center-svg-4.png",
+      "bytes": 16971,
+      "sha256": "e0e7f61c2e7382ef51a55bbb5a4795dc63ddfa4120eaa5715f6a30ba69c1f8f3"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-center-svg-5.png",
+      "bytes": 5884,
+      "sha256": "fea864ca373d8697dc6c037e97de50e84b498370951333dd4ced678aa79704ac"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-center-svg-6.png",
+      "bytes": 8496,
+      "sha256": "c2f4e8c848857f99502da69e29036298d957e362940f32d91430691e1e7a967d"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-center-svg-7.png",
+      "bytes": 10371,
+      "sha256": "428324d1914a5baaa4692a4fe9940a5b8bfc14003352c88c160d93c983f80d22"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-center-svg-8.png",
+      "bytes": 5215,
+      "sha256": "33b7012097462a4f634da7976610314c09d7b85840693cf0ae24f1d088dc717f"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-center.pptx",
+      "bytes": 44595,
+      "sha256": "17995a93a003f230d5e887c1dcd97ca2d696a483a1b7681239f89e18cb773a53"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-left-edited.pptx",
+      "bytes": 46869,
+      "sha256": "8671b28e70e6cad3a6f38d3fe40717769bf2d8f958686435f09022e840645d1c"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-left-native-1-value.png",
+      "bytes": 1657,
+      "sha256": "5857a54b430dafaf4b381bac35a2b25a35cc9012114f5f8ef7e2157ddee3296e"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-left-native-1.png",
+      "bytes": 1657,
+      "sha256": "5857a54b430dafaf4b381bac35a2b25a35cc9012114f5f8ef7e2157ddee3296e"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-left-native-2-value.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-left-native-2.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-left-native-3-delta.png",
+      "bytes": 1260,
+      "sha256": "f6604d6268f8b89e95e7b8ac12f76764044161c2a54229b377a78af2a8a9e556"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-left-native-3-description.png",
+      "bytes": 1872,
+      "sha256": "c46986ac4f08cfe9dcbf46f9eface76e398c8d4d2c1f192701b8fc944a791e82"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-left-native-3-label.png",
+      "bytes": 1709,
+      "sha256": "98406c1d4cccf0879e5a320d3d05cef8ebce27287fd8e8d4233e9009a1a92bc7"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-left-native-3-trend.png",
+      "bytes": 1348,
+      "sha256": "4020fc5c9dfefa8b7778f9565b875d882c67637e9856f8a3888ad0006ab421ac"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-left-native-3-unit.png",
+      "bytes": 1321,
+      "sha256": "5b828093343718972574827525411e0a13d32640ddebf8ab33fd0d8d85117029"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-left-native-3-value.png",
+      "bytes": 1863,
+      "sha256": "dbf2fe0a6b9edd928ae90d16f2820f9ab4746828f0a6db7bb29a1429f6146c19"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-left-native-3.png",
+      "bytes": 3786,
+      "sha256": "feb6980ca086ae3b8e7caf96fd2ac349b9950e2ee72d99eb6f796395cc3f4bb7"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-left-native-4-label.png",
+      "bytes": 1596,
+      "sha256": "31d44fcba12fe439053af6d159c015f30133219d0681fc31e36529145e5d6a6e"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-left-native-4-unit.png",
+      "bytes": 2742,
+      "sha256": "86cc8c0ed95ef1df7ed6c2fd54ee95e7cc8dde049afdb9807e930b470d8dbbe5"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-left-native-4-value.png",
+      "bytes": 2896,
+      "sha256": "1d7169e10789faadae76eed4d558be23e25e07e87e3fb412a1f77ddeca76a65c"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-left-native-4.png",
+      "bytes": 5170,
+      "sha256": "ae73ffccbea8b488a1f6820db1a473239caaa3af13181666671400f4a9024807"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-left-native-5-trend.png",
+      "bytes": 1298,
+      "sha256": "770efdfa52980e6413e082fae03f53b5da0aa95dd234a035dcec7dee4bf55b72"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-left-native-5-value.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-left-native-5.png",
+      "bytes": 1298,
+      "sha256": "770efdfa52980e6413e082fae03f53b5da0aa95dd234a035dcec7dee4bf55b72"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-left-native-6-label.png",
+      "bytes": 1699,
+      "sha256": "127f486f3ba6b7e71849bf900f3de60577ee58f79afe56666ef97393a63ee213"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-left-native-6-unit.png",
+      "bytes": 1275,
+      "sha256": "a7a20d631a7f80b59c44aab22840c831d5b9c473e646861c20bc0fd618185a7e"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-left-native-6-value.png",
+      "bytes": 1357,
+      "sha256": "32be7d4cede449e99171e6b50de1ef2b949ee6d2650c7d4ef17d51c8f3bcf3d1"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-left-native-6.png",
+      "bytes": 2193,
+      "sha256": "259b9bb20ac0b0fdc6dfafe828ea60c740580980b58f43d0946f391097028977"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-left-native-7-description.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-left-native-7-label.png",
+      "bytes": 1747,
+      "sha256": "1c55e8471ef1367a2acd73179b1557558d0ff34371e0b2e329c8e7407902d7f7"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-left-native-7-unit.png",
+      "bytes": 1321,
+      "sha256": "2ed0fd422584c31bdc394e8e7bd3d4921a93381066c149f6e3ea725a04bcf50d"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-left-native-7-value.png",
+      "bytes": 2232,
+      "sha256": "f3ca9b812713ae50252de361185afc35dc7c0b78e5442de585c6e04fecb64f1c"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-left-native-7.png",
+      "bytes": 3185,
+      "sha256": "7f271f626aceb00fdba13fd03de43d4213f03ad07e0a5fc3cdd04c0643455274"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-left-native-8-description.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-left-native-8-label.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-left-native-8-value.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-left-native-8.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-left-saved.pptx",
+      "bytes": 46751,
+      "sha256": "e951ccab92edc271669bc74f10c7aaed43477042b4ee2792324d20adf64c48f5"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-left-svg-1.png",
+      "bytes": 6564,
+      "sha256": "ab1997a701bcccb5d3059945c9d9b3e006f8fe575b6b78c330a9df180e2f573c"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-left-svg-2.png",
+      "bytes": 5215,
+      "sha256": "33b7012097462a4f634da7976610314c09d7b85840693cf0ae24f1d088dc717f"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-left-svg-3.png",
+      "bytes": 12584,
+      "sha256": "21b946a4659ac49c14583f08bdf125e8e13aade116439b396e9444d5ba525595"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-left-svg-4.png",
+      "bytes": 16700,
+      "sha256": "db087471a27a942f6ba483fb6f6b7dde3497dca31ba726cbd2ff036c32b7cdab"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-left-svg-5.png",
+      "bytes": 5920,
+      "sha256": "f4f338b2bc5251690b85314cb2827dff96324c6638b9c86fd72606b5551ce691"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-left-svg-6.png",
+      "bytes": 8444,
+      "sha256": "001ef4fe5c02abb7afba178ef4985b72c7c1b24545beed76df3e103ff042e8be"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-left-svg-7.png",
+      "bytes": 10358,
+      "sha256": "31a411b25195d68f3b7e6da8d63b6fff300a9a5a0abbd538ec27fcefcce69d3a"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-left-svg-8.png",
+      "bytes": 5215,
+      "sha256": "33b7012097462a4f634da7976610314c09d7b85840693cf0ae24f1d088dc717f"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-left.pptx",
+      "bytes": 44570,
+      "sha256": "5cb5432a5c966848ba2b252d229f3840dabf3a69f5afb047fabaf67648938259"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-right-edited.pptx",
+      "bytes": 46893,
+      "sha256": "67844fba482a493e052985b24c74549469b15b4a458034c8227fbb785a5eca40"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-right-native-1-value.png",
+      "bytes": 1649,
+      "sha256": "1a11ed204eb9cf93a5011320f20669f6afcf5910f9b00fda4de829f9ff7607d6"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-right-native-1.png",
+      "bytes": 1649,
+      "sha256": "1a11ed204eb9cf93a5011320f20669f6afcf5910f9b00fda4de829f9ff7607d6"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-right-native-2-value.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-right-native-2.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-right-native-3-delta.png",
+      "bytes": 1260,
+      "sha256": "99b93843b88a207192b287ea8a86c805949227c5facaee0a37863c959fa63b6e"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-right-native-3-description.png",
+      "bytes": 1873,
+      "sha256": "2832e82e748040345791b66dc160787a57a0e675f498d90ec26a10b2bcf11b78"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-right-native-3-label.png",
+      "bytes": 1709,
+      "sha256": "c5f00bb8d0537208fca443a793f5d2e4ebffcee9e52f539c12e7470d41d95bb6"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-right-native-3-trend.png",
+      "bytes": 1348,
+      "sha256": "7116a14914fa9d4a76c67ce388b43afe7d2264107c398253ff0ba4560ad167c0"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-right-native-3-unit.png",
+      "bytes": 1322,
+      "sha256": "40d3901d87c3b578103c0723b6cd7fe18f97624eeea846d0f4a09c003ca7482c"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-right-native-3-value.png",
+      "bytes": 1882,
+      "sha256": "5b3acb7af54f4f9d529675d3eadb5a79797148d8d873b7244369e23968b3f703"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-right-native-3.png",
+      "bytes": 3809,
+      "sha256": "45534f189f1772f3a0b696e1b947de0fdd6f67b62bf127f6f3597e0633080e64"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-right-native-4-label.png",
+      "bytes": 1595,
+      "sha256": "61cf12d5c2ba7552616d733675a837d5acca52d985b7c1be17cae3e50a0ac6ad"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-right-native-4-unit.png",
+      "bytes": 2742,
+      "sha256": "8f6970c888f57e1d68dc66e76455bf821d508c67961d8b83148df394923a2b7e"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-right-native-4-value.png",
+      "bytes": 2921,
+      "sha256": "25d6083060276c1206cc1a617535c8909fe7208cfc91f7fffd74b2299eaf29f1"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-right-native-4.png",
+      "bytes": 5194,
+      "sha256": "9780aa2292ae111b09895a320e6e11a3f9bda2f15038efcebedf648cec397120"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-right-native-5-trend.png",
+      "bytes": 1298,
+      "sha256": "811cb19860f9e38feb0bbe0642e9e89b7a465654143edfc268b7068575aa82f3"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-right-native-5-value.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-right-native-5.png",
+      "bytes": 1298,
+      "sha256": "811cb19860f9e38feb0bbe0642e9e89b7a465654143edfc268b7068575aa82f3"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-right-native-6-label.png",
+      "bytes": 1700,
+      "sha256": "0744d2ad1e5475594087fd6eeb2180d9d77728765469e7f4cf4c6a620d0d3b93"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-right-native-6-unit.png",
+      "bytes": 1276,
+      "sha256": "f584bfadb238ce73e58e1edc91d228c6431d05d861720a2aed04986af1614be9"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-right-native-6-value.png",
+      "bytes": 1359,
+      "sha256": "56fc15f8e000f5ab23d9ba33069840025dba801e9cd5fa91e681182f11d73163"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-right-native-6.png",
+      "bytes": 2197,
+      "sha256": "75be135aa330253b36d05b2489d8a3a0d92095a20dc8a677eb1ae07f6f37939f"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-right-native-7-description.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-right-native-7-label.png",
+      "bytes": 1747,
+      "sha256": "b9dbb411a4b039a40276db116545e393be07835ccda2ccabffd8445a416ff5ea"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-right-native-7-unit.png",
+      "bytes": 1322,
+      "sha256": "40d3901d87c3b578103c0723b6cd7fe18f97624eeea846d0f4a09c003ca7482c"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-right-native-7-value.png",
+      "bytes": 2208,
+      "sha256": "ba941269074f75233d19e6638c55a19ffa9a92b783be9250164539e8cebb94c3"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-right-native-7.png",
+      "bytes": 3157,
+      "sha256": "e5430d1756878ebe2995d6abf6793367cc86851caa647ced1bcabbfcd829c140"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-right-native-8-description.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-right-native-8-label.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-right-native-8-value.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-right-native-8.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-right-saved.pptx",
+      "bytes": 46785,
+      "sha256": "d7c98fdb95aa8bccc566a959b5ecb6c93aff12affe69e8ec6bbce3e6a8a69a0b"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-right-svg-1.png",
+      "bytes": 6629,
+      "sha256": "4c8ea833e8eab955ab7fc0cd767c4e2a065825be4c98123a18974dc7b503c23b"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-right-svg-2.png",
+      "bytes": 5215,
+      "sha256": "33b7012097462a4f634da7976610314c09d7b85840693cf0ae24f1d088dc717f"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-right-svg-3.png",
+      "bytes": 12601,
+      "sha256": "9461b590b2ad8bc11562e6da32b32bfd5cc04605031b8744ea654421cb70bec0"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-right-svg-4.png",
+      "bytes": 17100,
+      "sha256": "e723fe1187039d68d89d82e712a5c249650065f8aa501920e79df766cdfefd39"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-right-svg-5.png",
+      "bytes": 5896,
+      "sha256": "13183c378e7654ea2f85b9235bf266004c0cd6e56c36f397ed0e2ce8a06f98fc"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-right-svg-6.png",
+      "bytes": 8430,
+      "sha256": "654bd2290ff2b483584d72f0190c0eacdc82622c74d1bd91f8fa56154bd321b4"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-right-svg-7.png",
+      "bytes": 10453,
+      "sha256": "184eefc8fae7377bce2173cc8ae29b26b1b27e986a126378233a083bff401a40"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-right-svg-8.png",
+      "bytes": 5215,
+      "sha256": "33b7012097462a4f634da7976610314c09d7b85840693cf0ae24f1d088dc717f"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-1280-right.pptx",
+      "bytes": 44608,
+      "sha256": "7e2779b5cb5930e90de7572d8a4593db59798f7709c257dd1799a5eb1161c917"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-center-edited.pptx",
+      "bytes": 46896,
+      "sha256": "d85d60106eb98ea45361f952259db8477d1a1213da7613134e41b3d8852d4371"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-center-native-1-value.png",
+      "bytes": 1137,
+      "sha256": "f75b7ead510f2fcf8eb07907306b4a27b8b36db980d711bfa35780be35457f4d"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-center-native-1.png",
+      "bytes": 1137,
+      "sha256": "f75b7ead510f2fcf8eb07907306b4a27b8b36db980d711bfa35780be35457f4d"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-center-native-2-value.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-center-native-2.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-center-native-3-delta.png",
+      "bytes": 527,
+      "sha256": "8059d29bead43ed452e487fd3b5a67f2eaf78398f75920d2ba74da4535222cfe"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-center-native-3-description.png",
+      "bytes": 1095,
+      "sha256": "80198885b112a8982c143a6511f659dfd6890f52c5e33f97b7c3cd3a5baeeabc"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-center-native-3-label.png",
+      "bytes": 1005,
+      "sha256": "f6e6d690e3c3661b5e51ea3eb36c5a2b045dd93e22c41ca71e61314f2ed2f695"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-center-native-3-trend.png",
+      "bytes": 815,
+      "sha256": "f57eddd346061514d8c7ff904cb93cac0bbecf73f1fbba741ff985d1058788cf"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-center-native-3-unit.png",
+      "bytes": 795,
+      "sha256": "7136a6b4140b34f064ca7ce6fbd44861956fea5dc4bcc428acb27695b6bab58b"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-center-native-3-value.png",
+      "bytes": 1289,
+      "sha256": "1b042895a7ac576cf6830e4fae11b852a2fa9074a610f266cc3baa440983a29d"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-center-native-3.png",
+      "bytes": 2281,
+      "sha256": "9142715513c3fe00cbef85dae3809fe0e7b3b11a7ba95bfcdd7c8d4b969d5058"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-center-native-4-label.png",
+      "bytes": 957,
+      "sha256": "cef2d88ed1ee726b6416cbd1a3ca7ebe108cb3602f9200378402836ba4df78a5"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-center-native-4-unit.png",
+      "bytes": 1634,
+      "sha256": "71f6d15b1f729f0f2a7e802af59d3af7320c19a3841019352642cda07585fb7b"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-center-native-4-value.png",
+      "bytes": 2009,
+      "sha256": "c331f4af5c3f4191f62b4a3f2348132d5747f02a82c91304afd7cd7c38461f76"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-center-native-4.png",
+      "bytes": 3283,
+      "sha256": "d5fd86ea40d46bc07ab1a8df04fded88588399cf580de9cad0434f9fbf09b62a"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-center-native-5-trend.png",
+      "bytes": 802,
+      "sha256": "678c7d38a57cb0238d94ad7700ea9fa74dbad265430d46a94f58be7fe18f2047"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-center-native-5-value.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-center-native-5.png",
+      "bytes": 802,
+      "sha256": "678c7d38a57cb0238d94ad7700ea9fa74dbad265430d46a94f58be7fe18f2047"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-center-native-6-label.png",
+      "bytes": 1015,
+      "sha256": "89269110820928ca15bfa7dd2fad2f03ea83e1cd25a37af68386d7d998a410a8"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-center-native-6-unit.png",
+      "bytes": 812,
+      "sha256": "5233d9c640ef14de7cca1d62cdf90cdfad7390f70a1da1b4a53de8fa8d6a57d5"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-center-native-6-value.png",
+      "bytes": 897,
+      "sha256": "18713bad0193fec3cc297feec4b914988f4b0a6529efebfaebf9582c122bb28b"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-center-native-6.png",
+      "bytes": 1386,
+      "sha256": "3720e4274e26b453fef1b023a5d7b346be96d8e2cb7a3b6cfe547d0c217c43c9"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-center-native-7-description.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-center-native-7-label.png",
+      "bytes": 1055,
+      "sha256": "c0867d3025dbfa56413663f38fd7873282a2f21a8976caea9247413750b4b242"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-center-native-7-unit.png",
+      "bytes": 795,
+      "sha256": "3ccf2e2ebe3d46c9cbccc8adc00d7061dc06ac04eff01fd1c9e17181d0962e30"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-center-native-7-value.png",
+      "bytes": 1533,
+      "sha256": "37b98c1efce94eb0b7d9fb531b40eef8bd9b90536331ae8de5d55d9b1f512635"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-center-native-7.png",
+      "bytes": 2055,
+      "sha256": "a55d24e99d18073cb6625b3f99f084ac55bd3863215099225599547108c2b382"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-center-native-8-description.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-center-native-8-label.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-center-native-8-value.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-center-native-8.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-center-saved.pptx",
+      "bytes": 46774,
+      "sha256": "504a0367a381539ec34d2777a92a441d0af7961a0786c62332e86d2aa08ac15d"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-center-svg-1.png",
+      "bytes": 5090,
+      "sha256": "be465a7909c3b58464b1383d9bb2e1bf2acd0b3dbb545a879c8250ca1193c143"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-center-svg-2.png",
+      "bytes": 4046,
+      "sha256": "15c3195254c94dc16df9d7927fc1a560519f8d44e40593dd19304ed6348a16bb"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-center-svg-3.png",
+      "bytes": 9628,
+      "sha256": "fe54beae0fed0b9d7166a6797982238885fa90a0dc8f10b572fc8fef3eb8f99b"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-center-svg-4.png",
+      "bytes": 12650,
+      "sha256": "b443d36e243646d7f4c681d6d21eb2ccb3f6f79461458b582260221e6b4f89a3"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-center-svg-5.png",
+      "bytes": 4594,
+      "sha256": "d9ef2b8db2b314029f531eada7da3df309bb76221d2cc4f48ff4749be8c3574c"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-center-svg-6.png",
+      "bytes": 6631,
+      "sha256": "28acbf620a91144dc57424dcc28ebba0e26f1c6d84762bb93b8346556d55b22e"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-center-svg-7.png",
+      "bytes": 7750,
+      "sha256": "867f50e8a678eb0a6902d919c433bcaba7a8239a109a002f642ad0d442acc951"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-center-svg-8.png",
+      "bytes": 4046,
+      "sha256": "15c3195254c94dc16df9d7927fc1a560519f8d44e40593dd19304ed6348a16bb"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-center.pptx",
+      "bytes": 44592,
+      "sha256": "3f4bd23e3f88c4f86efe72089b4213c7423508a576d7cf765dffefe4f00a7369"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-left-edited.pptx",
+      "bytes": 46872,
+      "sha256": "6ee2e78e2954ff8ad21fd82adcce3b9bbeb071a4266b172d1278ddeff218d311"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-left-native-1-value.png",
+      "bytes": 1140,
+      "sha256": "49d41f2d068331c0581382ba64f7458ea8406f7493897e7b6f420caebc77d3b8"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-left-native-1.png",
+      "bytes": 1140,
+      "sha256": "49d41f2d068331c0581382ba64f7458ea8406f7493897e7b6f420caebc77d3b8"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-left-native-2-value.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-left-native-2.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-left-native-3-delta.png",
+      "bytes": 528,
+      "sha256": "5c44a416a0f240769d45fb2db8dc9c8f7d00b12f497a77188b0816de87f13798"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-left-native-3-description.png",
+      "bytes": 1094,
+      "sha256": "610adbbd3d433639d680be7cb2c2d1e1ec24ce1ac008b37c849b7e6f16b72873"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-left-native-3-label.png",
+      "bytes": 1004,
+      "sha256": "582704288f7093effa81e9649fadbb50fcc6822c57d553c5df380acc0c8b6500"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-left-native-3-trend.png",
+      "bytes": 813,
+      "sha256": "5d05f23d6c4b151ed90e9e6a2180b5aa3280d167c85a33d32f7c4615a81ef48c"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-left-native-3-unit.png",
+      "bytes": 795,
+      "sha256": "2a545b3e5c917ba2ba911eecd661f746e0b74cde38b6f43b0ca77e9437b50a62"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-left-native-3-value.png",
+      "bytes": 1299,
+      "sha256": "f9219ec020028ac8cbd168bd4830233ca8fe76c46534f0fd35ccd967082171f1"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-left-native-3.png",
+      "bytes": 2293,
+      "sha256": "96f9957602d8931bcd4de30ccabfdf799958bec76fcf76a34d62b8ca2cf7dc2b"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-left-native-4-label.png",
+      "bytes": 957,
+      "sha256": "56fac0cb054e37d99740a213ba517032f9cda354fc9a54e0d5b444138c032235"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-left-native-4-unit.png",
+      "bytes": 1635,
+      "sha256": "a8a0734bccea1df9730e921ab0d98ee3a496d85348a54e152e95451f02666539"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-left-native-4-value.png",
+      "bytes": 2025,
+      "sha256": "b660acc78f49549bf033f0d463fab563361a140067b7bc42aa6647cd1a743689"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-left-native-4.png",
+      "bytes": 3297,
+      "sha256": "ce60af86bb5099363a22e7eeb620cc68b4bd5d040d0fef27321b45d2bc5807d0"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-left-native-5-trend.png",
+      "bytes": 801,
+      "sha256": "ba0335b2e071b812ddf4f99e6f68e59da5033bc2c3394e26f874b98265dca7e2"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-left-native-5-value.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-left-native-5.png",
+      "bytes": 801,
+      "sha256": "ba0335b2e071b812ddf4f99e6f68e59da5033bc2c3394e26f874b98265dca7e2"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-left-native-6-label.png",
+      "bytes": 1014,
+      "sha256": "9b03f9f91c65db105f9882b5c577e27d44fffbe0c0db78d5bd07c87e8f4b3490"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-left-native-6-unit.png",
+      "bytes": 812,
+      "sha256": "3c4fba9c90c6a9c5d4f7d30ed30adde69c2b24237689f82f00302637f5332044"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-left-native-6-value.png",
+      "bytes": 891,
+      "sha256": "096d54e42428857d1d5940e8c2a70b05bb3b9eccb538a7c91ff23ad5ce2aa9e3"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-left-native-6.png",
+      "bytes": 1375,
+      "sha256": "29002216a2948b4f1252f7070155351df0375bb3fca32ecef5088b26b38ecac1"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-left-native-7-description.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-left-native-7-label.png",
+      "bytes": 1053,
+      "sha256": "8f3a1f2b100061751ca609f5a026b8e9616feea6a78df1d1d2b14ad73254a973"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-left-native-7-unit.png",
+      "bytes": 795,
+      "sha256": "a01852189bced194fdb49aefe38c03b796a499eaa99aad653d2433e49f9b4558"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-left-native-7-value.png",
+      "bytes": 1542,
+      "sha256": "6b38a98c8b44090d7e5fb099bb3ba9c85f669904145ab90b96cbed52921d30fb"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-left-native-7.png",
+      "bytes": 2057,
+      "sha256": "b92cda3f1273e8b031e6ed65e5985e2ee527e06314893e110d073761f8ad6e2b"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-left-native-8-description.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-left-native-8-label.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-left-native-8-value.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-left-native-8.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-left-saved.pptx",
+      "bytes": 46751,
+      "sha256": "cdeeeb6e7d47f9ee99e2607d267dad823b2e1e7ef3c3a632d4c883b80b6861ea"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-left-svg-1.png",
+      "bytes": 5124,
+      "sha256": "80e52d020f80e0f7604c067b8eb2224b292c6236c7f87e806011438c670eeb26"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-left-svg-2.png",
+      "bytes": 4046,
+      "sha256": "15c3195254c94dc16df9d7927fc1a560519f8d44e40593dd19304ed6348a16bb"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-left-svg-3.png",
+      "bytes": 9440,
+      "sha256": "caaf0e1a2e0b0c92a42fb9ce478be0a0df6c1bb40c52bb28ca8244cc75bc4121"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-left-svg-4.png",
+      "bytes": 12446,
+      "sha256": "59ba5040874f40463f76c43de3367bad6978495c874137cc170ace6dea43a2fa"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-left-svg-5.png",
+      "bytes": 4591,
+      "sha256": "349908c50f32d39ab690a0dbbcf1c2ca0a2f249df2c48da09f5664174ebe7205"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-left-svg-6.png",
+      "bytes": 6529,
+      "sha256": "65299185a6a35cdd9294fddf2798513d7f183322f79a9d10c11d73c30ab22895"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-left-svg-7.png",
+      "bytes": 7815,
+      "sha256": "cded6d748a04a63144ec93b775f3f07c72d485be0881d9957afe2c418b54863b"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-left-svg-8.png",
+      "bytes": 4046,
+      "sha256": "15c3195254c94dc16df9d7927fc1a560519f8d44e40593dd19304ed6348a16bb"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-left.pptx",
+      "bytes": 44565,
+      "sha256": "f4f4a0d579613e217743dc93c60f32d86a2b404d3f7cd1300cbace55a1388669"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-right-edited.pptx",
+      "bytes": 46907,
+      "sha256": "cc05790c7bb857695c330ffcd0fee30c4c2fc7e25e7b133ea8c992c2739d9012"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-right-native-1-value.png",
+      "bytes": 1128,
+      "sha256": "fdb9663f8ee6a49b7d260a2b9c0a218de545346a6f3151c4c20738fad9a848d3"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-right-native-1.png",
+      "bytes": 1128,
+      "sha256": "fdb9663f8ee6a49b7d260a2b9c0a218de545346a6f3151c4c20738fad9a848d3"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-right-native-2-value.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-right-native-2.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-right-native-3-delta.png",
+      "bytes": 529,
+      "sha256": "6fe06e971f6131cf17b9ab9d9781c3e95e6817a01ffe5c6ae24dd0e07718bfe4"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-right-native-3-description.png",
+      "bytes": 1093,
+      "sha256": "6ceffc74b05cd66af7f2a1afb68278e4347924b88e6d70e69e00e628028d88ae"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-right-native-3-label.png",
+      "bytes": 1004,
+      "sha256": "94d86f9ef7676f860e67ddeeb80f351ee907a5ebfb78a42c928bf522e78ad582"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-right-native-3-trend.png",
+      "bytes": 815,
+      "sha256": "e812ab6d858ae20f64ce7757529494ce586359074280f785c11f9468f1d1fd6e"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-right-native-3-unit.png",
+      "bytes": 795,
+      "sha256": "f79bb8b7b6bee48e23b5080c631566c601423003bcd05afc862aa9d749babf39"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-right-native-3-value.png",
+      "bytes": 1294,
+      "sha256": "39f03933462984c8f7d05a746ee87433dd368df3b436a0878346bfa1d25eef54"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-right-native-3.png",
+      "bytes": 2288,
+      "sha256": "907c5f5808ebc9b04bb5015af10846fd266739224611854c6ff26f29ec529d9d"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-right-native-4-label.png",
+      "bytes": 956,
+      "sha256": "608bf37fd2c4cc1ac5859c1153ea2e7f9ab1842df0b5ebac7593c0c7c3cdd30c"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-right-native-4-unit.png",
+      "bytes": 1636,
+      "sha256": "5899bf1c09881d646a6093ff0eecc06817e3d8dfb7caa3f775be13d662bf4741"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-right-native-4-value.png",
+      "bytes": 2015,
+      "sha256": "6d1fc54dc73aa1b91880b1c7f3dc9532db2144322c2274f34cf5dd5cbee707fe"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-right-native-4.png",
+      "bytes": 3292,
+      "sha256": "11b20715407c39dbd5420ab7cd7fdd052188eefaa63540cacf9426aedbf5f601"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-right-native-5-trend.png",
+      "bytes": 801,
+      "sha256": "743dd3b2ca800a6f94fcc5b2e75341868719f6b34d235dcef0c1e474336df210"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-right-native-5-value.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-right-native-5.png",
+      "bytes": 801,
+      "sha256": "743dd3b2ca800a6f94fcc5b2e75341868719f6b34d235dcef0c1e474336df210"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-right-native-6-label.png",
+      "bytes": 1014,
+      "sha256": "606d524737989f3747fbccd18e2ec6ed0048acbc8e57f8b6f51cefd776d4e7ff"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-right-native-6-unit.png",
+      "bytes": 813,
+      "sha256": "5452bc1190cd5883b0a6bd3a1a5048eea80ec80edc52bcd805fd57d3796c25e5"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-right-native-6-value.png",
+      "bytes": 892,
+      "sha256": "a105ea6b217de5cc3cd82cc8f60153faf4140e720a13605b39157ca4db52a323"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-right-native-6.png",
+      "bytes": 1377,
+      "sha256": "de81f2e76fb78c206bbac87a460582f5eea55be29190a8450c6e032bcaceafbc"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-right-native-7-description.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-right-native-7-label.png",
+      "bytes": 1052,
+      "sha256": "8947a893480b8ea850df6614b9136633fd098505320db4d5c0e5664b599cacd7"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-right-native-7-unit.png",
+      "bytes": 795,
+      "sha256": "f79bb8b7b6bee48e23b5080c631566c601423003bcd05afc862aa9d749babf39"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-right-native-7-value.png",
+      "bytes": 1522,
+      "sha256": "3a4f217176e1230a2540bb29e76a9a1950abc55a0bb4baa696b2bebfcb39d376"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-right-native-7.png",
+      "bytes": 2041,
+      "sha256": "6027835aa25fce51ecc6682bf0843960e379492ceaf90fa825bd3aae9c66ffad"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-right-native-8-description.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-right-native-8-label.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-right-native-8-value.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-right-native-8.png",
+      "bytes": 209,
+      "sha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-right-saved.pptx",
+      "bytes": 46790,
+      "sha256": "ca46af4d14cff1c374b90d2ad79a82e36c12a3e88a3e0aabb6de4cd4971fca2d"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-right-svg-1.png",
+      "bytes": 5052,
+      "sha256": "2a1e18d5784285dd9489e90c29dd230b13e298930fe52de3192b9c801edd48f7"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-right-svg-2.png",
+      "bytes": 4046,
+      "sha256": "15c3195254c94dc16df9d7927fc1a560519f8d44e40593dd19304ed6348a16bb"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-right-svg-3.png",
+      "bytes": 9448,
+      "sha256": "bd90bb8dbb3e6e1d77bb341876ef2f437b390c865e8fd0706ae1f5a6373fdfa6"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-right-svg-4.png",
+      "bytes": 12640,
+      "sha256": "0f0da8abdec8983e26d98cbefce36720df2f6b7ee70dd9ae1ee69fcbf4deaf64"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-right-svg-5.png",
+      "bytes": 4599,
+      "sha256": "88a163580cff6f55f8a38babbe7517166ac5b06ae9b0c1343a660085b99fa625"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-right-svg-6.png",
+      "bytes": 6433,
+      "sha256": "744d633956750ee1c36a2f12c4fb30842e2e08d2e12b4a031d7a8e82b4121b29"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-right-svg-7.png",
+      "bytes": 7758,
+      "sha256": "29c4c9d538505053cd9555f61070f952f783cfa23ddea830841eebe0d41044f5"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-right-svg-8.png",
+      "bytes": 4046,
+      "sha256": "15c3195254c94dc16df9d7927fc1a560519f8d44e40593dd19304ed6348a16bb"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/metric-540-right.pptx",
+      "bytes": 44600,
+      "sha256": "ef239e7d309c4a862483c9a1988f4b0b9f4c4e283bdc6378c7b21137cebc8649"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/portrait-right-comparison.log",
+      "bytes": 279,
+      "sha256": "9e6f0ce2c784e70c295fb5b9b571bde58a2e0fcb71dfd5abfc856169e329e025"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/runs/metric-1280-center/native.json",
+      "bytes": 54050,
+      "sha256": "07a5bafe3c582a2d8fb41e7e34a169d8a6e26a4fe10cf12b8756881b228d7e8a"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/runs/metric-1280-center/progress.json",
+      "bytes": 95166,
+      "sha256": "6a1373b63048eb17e0467104778c1e917d3e4eed265cf488ae6a7a6b8d0fc90d"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/runs/metric-1280-center/worker.json",
+      "bytes": 340,
+      "sha256": "2120f8a9c59fa9664bb383737164d281f34146ef409be7cf06081b0db500d155"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/runs/metric-1280-center/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/runs/metric-1280-center/worker.stdout.log",
+      "bytes": 82,
+      "sha256": "da90764422f28ba6124c6e6c7f7a7fff127077419cfc17d14a5fbc06c232f55b"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/runs/metric-1280-left/native.json",
+      "bytes": 53894,
+      "sha256": "ead1535d573febf4b3947bbc68958c7b1ba2eea95e217ccc5aa9a51b1b387500"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/runs/metric-1280-left/progress.json",
+      "bytes": 94854,
+      "sha256": "b53aed7ff55f0a2489648c31c109ae10ca3662e801a69bc55789cbc0ca76c12a"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/runs/metric-1280-left/worker.json",
+      "bytes": 340,
+      "sha256": "aa2c07db7f9ce39534d4acbcd150744e1407e2011c5a659b5de9d4b8ff5ed90e"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/runs/metric-1280-left/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/runs/metric-1280-left/worker.stdout.log",
+      "bytes": 80,
+      "sha256": "84ca1f390cfde16d03251c4b269d08d8a3025e1bae4dd64e7be1d89673108b4a"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/runs/metric-1280-right/native.json",
+      "bytes": 53974,
+      "sha256": "ba4a40bb356aba5d51953ca4e78cd0b2762a24d0ba21510ac2d37639eb0fda47"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/runs/metric-1280-right/progress.json",
+      "bytes": 95014,
+      "sha256": "e4881e1eea1cb0c4977b614078b82134afd3af6d9fd177ebe5473b93a0e81f0e"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/runs/metric-1280-right/worker.json",
+      "bytes": 340,
+      "sha256": "a2c2ed1374b759fff1269e3647ea82f68405a5680c9c02fab2fef8eed4dd1663"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/runs/metric-1280-right/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/runs/metric-1280-right/worker.stdout.log",
+      "bytes": 81,
+      "sha256": "e6a975aa86176057011498cea348a4a370248176ae696f0a5c1cb6c5ae37886e"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/runs/metric-540-center/native.json",
+      "bytes": 54067,
+      "sha256": "1505c699f66dcaeb7a0b41e00b2b3d0635abc5ca2c1d1b5ec8cfa4745feff6dc"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/runs/metric-540-center/progress.json",
+      "bytes": 95200,
+      "sha256": "b66245426a351430aad4a7c96b28c30f90bfb3fec865e167546e1d147d3637f5"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/runs/metric-540-center/worker.json",
+      "bytes": 341,
+      "sha256": "cb6d30fc25dcb45639622a874e42c52e4c1d2f12c6dec998c9c3de509d486fe9"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/runs/metric-540-center/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/runs/metric-540-center/worker.stdout.log",
+      "bytes": 81,
+      "sha256": "36bc9badbb77b74abc11378e29b7fc9eecd0935574e281bc44f3fc40a267db52"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/runs/metric-540-left/native.json",
+      "bytes": 53900,
+      "sha256": "03e996a79f32e01b144e0c6461a102b7f9aea006abec385bfeaf4f17438ca12f"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/runs/metric-540-left/progress.json",
+      "bytes": 94866,
+      "sha256": "509f4c6ebabb3a0ac861e798c0456f245c36f9b02da499b84a1044c8e2095a24"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/runs/metric-540-left/worker.json",
+      "bytes": 341,
+      "sha256": "7b60d2dfea957104175c1488c8d83726fb3faffe1c76eac0e9e66a1a918324c5"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/runs/metric-540-left/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/runs/metric-540-left/worker.stdout.log",
+      "bytes": 79,
+      "sha256": "2c1ccc4f11369d6359c6689a4115570127e1dbb802e252efa0b825a7e50ada46"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/runs/metric-540-right/native.json",
+      "bytes": 54047,
+      "sha256": "0b3be3727d6b944f656f801b992b7c9e821e9df5010f89bd1e1046de87a19abf"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/runs/metric-540-right/progress.json",
+      "bytes": 95160,
+      "sha256": "b02a374766cea97834a543feb0dfb7a10465c2435db87dd6688b9343d4ba977d"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/runs/metric-540-right/worker.json",
+      "bytes": 340,
+      "sha256": "68700bd3941b7c2a876e193718ab1663fd8b3ab0df82c6cac543fa7422137863"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/runs/metric-540-right/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/metric-candidate-node24-02/runs/metric-540-right/worker.stdout.log",
+      "bytes": 80,
+      "sha256": "6de6e4207b60af27a95934e67bfacc9b28fe6339450dcbdc4061ea5db05bde5e"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/background-import.js",
+      "bytes": 5493,
+      "sha256": "684f9b38cff01e596774b8120c979c3dbbfada273890f785f7a4e3db88cdcb22"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/background.js",
+      "bytes": 8812,
+      "sha256": "081fb685677ca656341cdce89275331749174ffecd60e71451f26b9f896cca1c"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/card-provenance.js",
+      "bytes": 3639,
+      "sha256": "ff1ca09b88500993abb4bb293162e5064f1f7fc38edfd999f8ca8eedce8b94b0"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/chart-workbook.js",
+      "bytes": 6436,
+      "sha256": "39db820e6f3a512779943a13e5e78c63ff866c2a0074e1e9c807fcfc7a9aa1e2"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/code-provenance.js",
+      "bytes": 11807,
+      "sha256": "5eb65649d1736dd5a19ff49680422cb1a097b9f6f94a3b457e649001903b9688"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/heading-provenance.js",
+      "bytes": 3269,
+      "sha256": "f10385a2a0ac7ded90d3f71786693ec8d9d302ba4acf5f5111061a6705c8fcaf"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/image-fallback-browser.js",
+      "bytes": 1646,
+      "sha256": "3c7f81d5677dd9a78a0a13fe5a94bbb14cef465031caaeda2c87e8451e9ff491"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/image-fallback-node.js",
+      "bytes": 486,
+      "sha256": "5ee323d3320420664b5d2c1714e246b04dd0806f459164f9696668552df87565"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/image-geometry.js",
+      "bytes": 6315,
+      "sha256": "e083973a98c2bdf7d7dfce9ef1f6bef252f09ce0d69d987105ee0b73cc13d62e"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/image-import.js",
+      "bytes": 5868,
+      "sha256": "cffccecc223e27d62b6e1aba0cdbe2c1c9aa94874ef898f76906b22e001bbd41"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/index.js",
+      "bytes": 92022,
+      "sha256": "d38194e82b91a6438f9ca08d080354e9189e900c229901ba9f2955819652ce14"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/metric-provenance.js",
+      "bytes": 7208,
+      "sha256": "a058bfd8e84cf393476aa64c925bff31430d11e341c32b5e2f5b0d141922f0af"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/table-border-import.js",
+      "bytes": 3702,
+      "sha256": "16678e0d93e63474d39daac268016a59517cc36d85dbd8751131f143db01ace5"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/table-cell-import.js",
+      "bytes": 9804,
+      "sha256": "fa17507763a2240564401d7977f4f39bc180e3e6da9d4aa9c36202908e9126d1"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/table-import.js",
+      "bytes": 12916,
+      "sha256": "9ae40bb38dd34c9fc0ae4a3f5a257068ae92bb651ed5d96641c2629ef7106cf1"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/package.json",
+      "bytes": 4560,
+      "sha256": "e29ba9014069c90555cdbd39cbfb86b7350eb5d4f603ca33519b287655aadc93"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-render/dist/font-compatibility.js",
+      "bytes": 4071,
+      "sha256": "a50ee71748e81cd12ed3aeb6eee92506ebf91ef05021c6ca3f5a100665d03dac"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-render/dist/font-manifest.js",
+      "bytes": 11818,
+      "sha256": "0af55027613ac952e645ed06f6b873c174e0767efbbb8e4de17e44b0158c1974"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-render/dist/fonts-browser.js",
+      "bytes": 2247,
+      "sha256": "d0543d838b2f22a8c70bdc60100d72d3c69e3f8033d5ccedd3523ee63c66b8d4"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-render/dist/fonts-node.js",
+      "bytes": 3857,
+      "sha256": "d45bd167367c1c40202b12362e52483f15e6a6d5ee67e8641b68418de3f1a8dc"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-render/dist/fonts.js",
+      "bytes": 10858,
+      "sha256": "860198e21bee950a77a2e47882395629956090eed93399557da3e9cc3b202741"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-render/dist/index.js",
+      "bytes": 75,
+      "sha256": "39c8f2b279ce10873f00289349b84cf9cab7e12c56e9e0d87447bd2406777234"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-render/dist/raster-images.js",
+      "bytes": 4233,
+      "sha256": "304cffe5e77553ac1ab590fc5805714dde34e6f69df5dc55e35dbc8df602753c"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-render/dist/raster.js",
+      "bytes": 6087,
+      "sha256": "8e98aba22982ec8c7cece31be19f8cd92fc942a7d538bf64c2e4f32bdd14fc6d"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-render/dist/svg.js",
+      "bytes": 66726,
+      "sha256": "36c6e714e5a09181b702e294621cf4a25a59601ec03525fd58e84366a00f50c2"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-render/package.json",
+      "bytes": 5005,
+      "sha256": "70b562c5f36c1ebfe5208c4fcf866cd03e9e6493f130eedc39660b47e7e83435"
+    },
+    {
+      "file": "runtime/@openpresentation/opf/dist/catalogs.js",
+      "bytes": 238,
+      "sha256": "6d74d7b051844728b2622acdb5268472a043544c8b2ca04eb904b1cdf74ec739"
+    },
+    {
+      "file": "runtime/@openpresentation/opf/dist/chunk-DA4NWAQV.js",
+      "bytes": 27807,
+      "sha256": "ac4e9b8e38a998aebb074459f0788dcba6cf13f57e5f5b3f1ace472e0161f2cb"
+    },
+    {
+      "file": "runtime/@openpresentation/opf/dist/chunk-GQSK3T7X.js",
+      "bytes": 224847,
+      "sha256": "34f518c29c9757bc252b5c13eb5d7db8ada4b477496e6289d8149fb4fdc7cd45"
+    },
+    {
+      "file": "runtime/@openpresentation/opf/dist/chunk-NT3IYAYX.js",
+      "bytes": 75535,
+      "sha256": "193a39ad7d395d4f26af96e24aa9d23617afe3f63c9f71ec8b18d2a16c68bf97"
+    },
+    {
+      "file": "runtime/@openpresentation/opf/dist/chunk-TWMRZ43O.js",
+      "bytes": 510975,
+      "sha256": "0d35cec97ec7ddaa67fb9f096bc672c927eb68ed5fae5ac27d4dff70d68313f4"
+    },
+    {
+      "file": "runtime/@openpresentation/opf/dist/composition.js",
+      "bytes": 404,
+      "sha256": "a2d69048632dd6ff5ba4db397acd86e8c9c5c16365633319a24999466ebbd586"
+    },
+    {
+      "file": "runtime/@openpresentation/opf/dist/validator.js",
+      "bytes": 267,
+      "sha256": "fc419645499641ca2e45e3bfde4dba90a951e171bbfdf45125da1057b5805b45"
+    },
+    {
+      "file": "runtime/@openpresentation/opf/package.json",
+      "bytes": 3229,
+      "sha256": "6c1dcd6b72429c2179c51827e8f97419991b1dd7057fa105d67ecb2db01529b6"
+    },
+    {
+      "file": "runtime/LICENSE.opf-pptx.txt",
+      "bytes": 1094,
+      "sha256": "e8c5cecaad448c0cab00af38f7ed8b6bb647c77ba79f3c50d20a9ea92e256cd3"
+    },
+    {
+      "file": "runtime/package-lock.json",
+      "bytes": 67269,
+      "sha256": "10edb4cb29e98fe9db00c1c361aa3126c9969ab06f2b062889915ccc76019bc7"
+    },
+    {
+      "file": "runtime/vendor/pptxgenjs/pptxgen.es.js",
+      "bytes": 516931,
+      "sha256": "05844c5625e2cda3b449eb967c2246dd57ca57341886a7c28eeebca263b29bd4"
+    },
+    {
+      "file": "sources.json",
+      "bytes": 955,
+      "sha256": "03dde4cf24cb34cc8207e85279a1d595b292329023c50ff3fae1f3185c0e8a7a"
+    },
+    {
+      "file": "verifiers/metric-anchor/native-metric.mjs",
+      "bytes": 14315,
+      "sha256": "9eb61c7a1afcdc351ade944952cd4f76c4de09909993708235c20ded7ce2524c"
+    },
+    {
+      "file": "verifiers/metric-anchor/native-metric.ps1",
+      "bytes": 12740,
+      "sha256": "de9942735aca4fe432d1bd50ee04b8689b78a5c2b4c7a85ae29b991984cc0f19"
+    },
+    {
+      "file": "verifiers/metric-anchor/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "file": "verify-evidence.mjs",
+      "bytes": 4800,
+      "sha256": "280d9b0a630603153724fab7f48fffbea316904bb45413b3281981625616e460"
+    }
+  ]
+}

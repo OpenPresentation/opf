@@ -1,0 +1,11 @@
+[WARN] The "pnpm" field in package.json is no longer read by pnpm. The following keys were ignored: "pnpm.overrides". See https://pnpm.io/settings for the new home of each setting.
+
+> openpresentation-workspace@ check:breaking /Users/michael/Source/opf
+> node scripts/test-breaking-gate.mjs && node scripts/check-breaking-changes.mjs
+
+Release gate regression passed: a tag at HEAD cannot hide removals from the prior release.
+{
+  "valid": true,
+  "tag": "opf-v0.9.0",
+  "breakingChanges": 0
+}

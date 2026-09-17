@@ -1,0 +1,7 @@
+import {createRequire} from 'node:module';
+import {writeFile} from 'node:fs/promises';
+import path from 'node:path';
+const require=createRequire(new URL('../packages/javascript/package.json',import.meta.url));
+const {build}=createRequire(require.resolve('tsup'))('esbuild');
+await build({entryPoints:['scripts/test-layout-browser.mjs'],outfile:'artifacts/editor/layout-tests.js',bundle:true,format:'esm',platform:'browser',alias:{'@openpresentation/opf-render/svg':path.resolve('../opf-render/src/svg.js')}});
+await writeFile('artifacts/editor/layout-tests.html','<!doctype html><meta charset="utf-8"><title>Layout checks</title><style>body{font:14px system-ui;margin:20px;background:#f5f4f8}#canvas{width:1000px;max-width:100%}button{padding:8px;margin:8px}#pointer-state{white-space:pre-wrap}</style><h1>Resize a dynamic layout</h1><p>Drag a purple divider. Use arrow keys for smaller adjustments. Escape cancels a drag.</p><div id="canvas"></div><label>During drag <select id="pointer-mode"><option value="normal">Normal</option><option value="cancel">Cancel draft</option><option value="conflict">Concurrent title edit</option><option value="independent">Unrelated name edit</option></select></label><button id="reset">Reset specimen</button><button id="verify">Verify pointer resize</button><button id="external">Change title externally</button><button id="independent">Change unrelated name</button><div id="pointer-state" role="status"></div><pre id="results"></pre><script type="module" src="./layout-tests.js"></script>');

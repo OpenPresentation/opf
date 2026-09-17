@@ -1,5 +1,7 @@
 # OPF Example Suite Expansion Plan
 
+> **Status:** Shipped (125 example decks now ship in the npm package as of 0.3.0).
+
 This plan tracks the expansion of `examples/` beyond the original compact technical fixtures. It is written so another agent can resume the work after context compaction without needing the live conversation.
 
 ## Goals

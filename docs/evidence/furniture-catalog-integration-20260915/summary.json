@@ -1,0 +1,71 @@
+{
+  "merged": {
+    "core": {
+      "pr": 82,
+      "head": "73d69619a7f227f70d869e4426423547b859c1b4",
+      "merge": "72f224112b984710704a10de376e686764a4e25b"
+    },
+    "renderer": {
+      "pr": 22,
+      "head": "d0e1f4a633a45256539b7c89c912dff5a617ec37",
+      "merge": "cbf058eba055ad9ea5787b35c85409d232f5725d"
+    }
+  },
+  "refs": {
+    "core": {
+      "source": "8414e83322293101b20925fd8c63d3c8c3bb9d18",
+      "testedWorkflow": "363711dbea2e1369004fe1eeb3d4cc8ffea40aaa"
+    },
+    "renderer": {
+      "source": "aaa9e6f6dfd4bdc99789da93bca6eda6885827ca",
+      "testedWorkflow": "aaa9e6f6dfd4bdc99789da93bca6eda6885827ca"
+    },
+    "editor": {
+      "source": "8d6e313b83bf5f17414013cde1b410cf629c753d",
+      "testedWorkflow": "651a5321a91f33d705c74ec5f25c335ff279e091"
+    },
+    "pptx": {
+      "source": "1363a653c8b0e80c50d970bc30db3587bcf6f14e",
+      "testedWorkflow": "891fc5fe108da88dc38c548a9cdacfcbfdbac171"
+    }
+  },
+  "node": "v24.21.0",
+  "views": [
+    {
+      "file": "furniture-1280-inherited.png",
+      "prior": "docs/evidence/furniture-json-integration-20260915/views/furniture-1280-inherited.png",
+      "sha256": "10f6e425e7a3951ca5a2640d1cbb3240e2cb8f2583198bb9e20632e80ec5ae96",
+      "unchanged": true
+    },
+    {
+      "file": "furniture-1280-local.png",
+      "prior": "docs/evidence/furniture-json-integration-20260915/views/furniture-1280-local.png",
+      "sha256": "60cf396329fa92b5dccc167a60708f4de4c6fe3d11d7a08fded16de3a8452529",
+      "unchanged": true
+    },
+    {
+      "file": "furniture-720-inherited.png",
+      "prior": "docs/evidence/furniture-json-integration-20260915/views/furniture-720-inherited.png",
+      "sha256": "10d5291310a9d1fc5d73d4598b3f42c2094593ba39976544c5f5a4a339e75d49",
+      "unchanged": true
+    },
+    {
+      "file": "furniture-720-local.png",
+      "prior": "docs/evidence/furniture-json-integration-20260915/views/furniture-720-local.png",
+      "sha256": "cd43748a0c4263649174660271a6b4608a00321633b175d3fcdb1ca6eb5de8b3",
+      "unchanged": true
+    }
+  ],
+  "masks": {
+    "count": 41,
+    "allMatchPriorBytes": true,
+    "priorDirectory": "docs/evidence/furniture-json-integration-20260915/masks"
+  },
+  "baseline": {
+    "before": "3a1ed8ad00b30863b5852197a85602263a2238c613020fb891d933f86e124c4b",
+    "after": "b95034931001cba636e3fbda6fba74c153dcb9914937aea374cab212eb21feaf",
+    "changedRasterEntries": 0
+  },
+  "published": false,
+  "boundary": "Catalog and coordinated candidate acceptance; native Office, native font compatibility, registry publication and production furniture adoption remain open."
+}

@@ -8,3 +8,6 @@ __pycache__/
 packages/javascript/src/generated
 packages/javascript/dist
 packages/cli/dist
+
+# Local review artifacts from ecosystem verification.
+artifacts/

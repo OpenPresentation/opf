@@ -1,0 +1,18 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert.ok(item.modes[1].lines.every(line=>!line.outside&&Math.abs(line.actual-line.expected)<.1))
+
+    at file:///Users/michael/Source/opf/scripts/font-shaping-probe/browser.mjs:114:49 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

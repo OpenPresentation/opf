@@ -1,0 +1,16 @@
+
+> @openpresentation/opf-render@0.7.0 build
+> node scripts/build.mjs
+
+opf-render: linked current OPF checkout
+
+> @openpresentation/opf-pptx@0.7.0 build
+> node scripts/build.mjs
+
+Vendored upstream distribution and license match recorded hashes.
+opf-pptx: linked current OPF, renderer checkout
+
+> @openpresentation/opf-editor@0.6.0 build
+> node scripts/build.mjs
+
+opf-editor: linked current OPF, renderer, converter checkout

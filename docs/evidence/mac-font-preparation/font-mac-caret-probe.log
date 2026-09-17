@@ -1,0 +1,3 @@
+Control+End { start: 0, end: 15, length: 15 }
+Meta+ArrowDown { start: 15, end: 15, length: 15 }
+ArrowRight { start: 15, end: 15, length: 15 }

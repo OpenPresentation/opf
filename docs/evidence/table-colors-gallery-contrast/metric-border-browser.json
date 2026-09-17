@@ -1,0 +1,20 @@
+{
+  "node": "v24.20.0",
+  "browser": "152.0.4191.66",
+  "harnessSha256": "e4d085815b7e04034b40d38742740fb42335c47cb60b0bb2b93e32c78c874150",
+  "auditSha256": "f92d1dd3c339820dac9a201ee75fb9942fb2e3107df70fc3f1e2390dfd023adf",
+  "file": "examples/gallery/business-functions/compliance-readiness-review.opf.json",
+  "slide": 5,
+  "path": "slides.5.top:left.metric.value",
+  "svgSha256": "20177ae3981f3ade1bb70d8b4becd6238daa30d4f4ebfe47f14857e6cd57e58f",
+  "rectangleMinimumRatio": 1.5882186056141032,
+  "glyphMaskMinimumRatio": 7.013045399923033,
+  "inkPixels": 1365,
+  "threshold": 3,
+  "reportedMinimumContainsText": false,
+  "foregroundSha256": "d6e06320661ef429374c32bdcb25ddc78d50cd498ae87c83ccc8f0b34bcae5e0",
+  "backgroundSha256": "fb82500d20bce054453ce91538f964d7403e7443d57eaddfd768ee3d9f82870a",
+  "errors": [],
+  "requests": [],
+  "scope": "One isolated metric-value rectangle: exact browser screenshots with/without text identify its ink support. Contrast uses the declared foreground and background screenshot, never anti-aliased glyph colors. Confirms this rectangle finding is caused by a panel border outside the glyphs; does not dismiss other audit findings or establish browser/native equivalence."
+}

@@ -1,0 +1,105 @@
+import assert from 'node:assert/strict';
+import { readFile, writeFile, mkdtemp } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { createRequire } from 'node:module';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { validatePresentation } from '../packages/javascript/dist/index.js';
+import { resolveCanvasDimensions } from '../packages/javascript/dist/composition.js';
+import { renderSvgDeck, resolvePresentation, svgToPng, svgToPdf, renderSvg } from '../../opf-render/dist/index.js';
+import { toPptx, fromPptx } from '../../opf-pptx/dist/index.js';
+import { createEditorSession } from '../../opf-editor/dist/index.js';
+const require = createRequire(new URL('../../opf-pptx/package.json', import.meta.url));
+const { unzipSync } = require('fflate');
+const { XMLParser } = require('fast-xml-parser');
+const parser = new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false});
+const array = value => Array.isArray(value) ? value : value ? [value] : [];
+const deck = JSON.parse(await readFile(new URL('../examples/technical/dynamic-composition.opf.json',import.meta.url),'utf8'));
+assert.equal(validatePresentation(deck).valid,true);
+const editor = createEditorSession(deck,{rejectInvalid:true});
+const original = editor.composeSlide(0);
+editor.setComposition(0,{mode:'column',weights:[2,1]});
+assert.notDeepEqual(editor.composeSlide(0).items.map(item=>item.box),original.items.map(item=>item.box));
+editor.undo(); assert.deepEqual(editor.document,deck);
+editor.redo(); assert.equal(editor.composeSlide(0).composition.mode,'column');
+editor.undo();
+assert.throws(()=>editor.setComposition(0,{mode:'invalid'}));
+assert.deepEqual(editor.document,deck);
+const nestedIndex = deck.slides.length - 1;
+const nestedBefore = editor.composeSlide(nestedIndex);
+assert.equal(nestedBefore.groups.length, 2);
+const groupPath = `slides.${nestedIndex}.blocks.0`;
+editor.setGroupComposition(groupPath, { mode: 'row' });
+assert.notDeepEqual(editor.composeSlide(nestedIndex).items.map(item => item.box), nestedBefore.items.map(item => item.box));
+editor.undo(); assert.deepEqual(editor.document, deck);
+editor.redo(); assert.equal(editor.get(`${groupPath}.composition.mode`), 'row');
+editor.undo();
+assert.throws(() => editor.setGroupComposition(`${groupPath}.blocks.0`, { mode: 'row' }));
+assert.throws(() => editor.setGroupComposition(groupPath, { mode: 'invalid' }));
+assert.deepEqual(editor.document, deck);
+const nestedText = `slides.${nestedIndex}.blocks.0.blocks.1.blocks.0.text`;
+editor.set(nestedText, 'A revised nested point.');
+assert.match(renderSvg(editor.document, {slideIndex:nestedIndex,trace:true}), /A revised nested point/);
+editor.undo(); assert.deepEqual(editor.document, deck);
+const diagnostics = [];
+const svgs = renderSvgDeck(deck,{trace:true,onDiagnostic:d=>diagnostics.push(d)});
+assert.deepEqual(svgs,renderSvgDeck(deck,{trace:true}));
+assert.equal(diagnostics.length,0,JSON.stringify(diagnostics));
+const bytes = await toPptx(deck);
+assert.deepEqual(bytes,await toPptx(deck));
+const entries = unzipSync(bytes);
+const resolved = resolvePresentation(deck);
+for (let index=0;index<deck.slides.length;index++) {
+  const xml = parser.parse(new TextDecoder().decode(entries[`ppt/slides/slide${index+1}.xml`]));
+  const shapes = array(xml['p:sld']['p:cSld']['p:spTree']['p:sp']);
+  const items = resolved.slides[index].geometry.items;
+  const lines=items.flatMap(item=>item.text.lines.map((text,line)=>({item,text,line})));
+  assert.equal(shapes.length,lines.length,'Every accepted source line stays an editable PowerPoint shape');
+  shapes.forEach((shape,i)=>{
+    const transform=shape['p:spPr']['a:xfrm'];
+    const {item,text,line}=lines[i];
+    const box={...item.box,y:item.box.y+line*item.text.lineHeight,height:item.text.lineHeight};
+    for (const [actual,expected] of [[transform['a:off'].x,box.x],[transform['a:off'].y,box.y],[transform['a:ext'].cx,box.width],[transform['a:ext'].cy,box.height]]) {
+      assert.ok(Math.abs(Number(actual)/9525-expected)<0.002,`Slide ${index}: OOXML coordinates differ from preview geometry`);
+    }
+    const current=array(shape['p:txBody']['a:p']).map(p=>array(p['a:r']).map(run=>String(run['a:t']??'')).join('')).join('\n');
+    assert.equal(current,text,'Editable native text retains every accepted source character');
+    assert.equal(shape['p:txBody']['a:bodyPr'].wrap,'none');
+    for(const auto of ['a:normAutofit','a:spAutoFit'])assert.ok(!Object.hasOwn(shape['p:txBody']['a:bodyPr'],auto),'Native text must not refit accepted lines');
+  });
+}
+const imported = await fromPptx(bytes);
+assert.equal(validatePresentation(imported).valid,true);
+assert.equal(imported.slides.length,deck.slides.length);
+for(const [index,slide]of imported.slides.entries()) {
+  const items=resolved.slides[index].geometry.items;
+  const spatialOrder=items.filter(item=>item.field==='text').sort((a,b)=>a.box.y-b.box.y||a.box.x-b.box.x);
+  assert.deepEqual(slide.blocks?.map(block=>block.text)??[],spatialOrder.map(item=>item.value),'Native line groups reconstruct exact current body source in spatial order');
+  for(const item of items.filter(item=>['title','subtitle','tag'].includes(item.field)))assert.equal(slide[item.field],item.value,'Native heading groups reconstruct exact current source');
+}
+const portrait={design:{dimensions:{widthInches:7.5,heightInches:40/3}},slides:[{title:'Portrait',text:'A custom physical canvas.'}]};
+assert.deepEqual(resolvePresentation(portrait).slides[0].design.dimensions,{width:720,height:1280});
+assert.deepEqual(resolveCanvasDimensions('letter'),{width:1056,height:816});
+const portraitZip=unzipSync(await toPptx(portrait));
+const pptxSize=parser.parse(new TextDecoder().decode(portraitZip['ppt/presentation.xml']))['p:presentation']['p:sldSz'];
+assert.equal(Number(pptxSize.cx),7.5*914400); assert.equal(Number(pptxSize.cy),(40/3)*914400);
+const tooMuch={slides:[{text:'Too much text. '.repeat(2000),composition:{overflow:'error'}}]};
+assert.throws(()=>renderSvg(tooMuch)); await assert.rejects(()=>toPptx(tooMuch));
+const overflowDiagnostics=[];
+const longSvg=renderSvg({slides:[{text:'Keep every word. '.repeat(2000)}]}, {onDiagnostic:d=>overflowDiagnostics.push(d)});
+assert.ok(longSvg.includes('data-opf-overflow="true"'));assert.ok(overflowDiagnostics.some(d=>d.code==='text-overflow'));
+const png = await svgToPng(svgs[0]);
+const embedded={assets:{proof:{src:`data:image/png;base64,${Buffer.from(png).toString('base64')}`}},slides:[{image:'asset:proof'}]};
+assert.match(renderSvg(embedded,{strictAssets:true}),/<image /);
+await toPptx(embedded,{strictAssets:true});
+assert.throws(()=>renderSvg({slides:[{image:'https://example.com/missing.png'}]},{strictAssets:true}));
+const output=await mkdtemp(path.join(tmpdir(),'opf-ecosystem-'));
+for(let i=0;i<svgs.length;i++) {
+ await writeFile(path.join(output,`slide-${i+1}.svg`),svgs[i]);
+ await writeFile(path.join(output,`slide-${i+1}.png`),await svgToPng(svgs[i]));
+}
+await writeFile(path.join(output,'dynamic-composition.pptx'),bytes);
+await writeFile(path.join(output,'dynamic-composition.pdf'),await svgToPdf(svgs));
+await writeFile(path.join(output,'dynamic-composition.opf.json'),JSON.stringify(deck,null,2));
+await writeFile(path.join(output,'report.json'),JSON.stringify({valid:true,slides:svgs.length,diagnostics,checks:['editor undo/redo','nested group edits and geometry','schema validation','deterministic SVG/PPTX','PPTX geometry parity','PPTX import','portrait dimensions','strict overflow','embedded images','PNG/PDF output']},null,2));
+console.log(`Ecosystem checks passed. Artifacts: ${output}`);

@@ -1,0 +1,61 @@
+{
+  "checkedAt": "2026-09-10T07:49:57.424Z",
+  "name": "@openpresentation/opf-editor",
+  "version": "0.6.0",
+  "publishedAt": "2026-09-10T07:47:01.265Z",
+  "gitHead": "7b6db50f42783979841674e628193b1ba2f5c0e2",
+  "reviewedHead": "02e9abc47a987e94ccd44dec38f1112753a13631",
+  "treeIdentical": true,
+  "pr": "https://github.com/OpenPresentation/opf-editor/pull/9",
+  "ci": "https://github.com/OpenPresentation/opf-editor/actions/runs/34451155459",
+  "review": "Full Node 20/24 CI and automated review passed after fixing invisible code selections. The regression reproduced the original failure, and the local matrix and installed-browser evidence were renewed.",
+  "workflow": "https://github.com/OpenPresentation/opf-editor/actions/runs/34451545452",
+  "dist": {
+    "integrity": "sha512-ySUZWdQuq8PgkOOkrT8m0xm+Ta0WGWcI8TtLZbyaNxe9lKubrX5MQRNVuqaJKr0TdWn8kvfN5PuKR0JUTbPuOQ==",
+    "shasum": "4d9a14732e5648ca4adcd18b1c3a82c64b4907d0",
+    "tarball": "https://registry.npmjs.org/@openpresentation/opf-editor/-/opf-editor-0.6.0.tgz",
+    "fileCount": 32,
+    "unpackedSize": 201573,
+    "attestations": {
+      "url": "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf-editor@0.6.0",
+      "provenance": {
+        "predicateType": "https://slsa.dev/provenance/v1"
+      }
+    },
+    "signatures": [
+      {
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+        "sig": "MEYCIQDdK0IBDsjjjaSbX94Rw1nbf/jNd5QMByjww4YS1NgCXwIhAOjddJUXU/FXNt2kYF3nt3Zo90EPAnvOFJLHQfThmodN"
+      }
+    ]
+  },
+  "reports": [
+    {
+      "node": "v20.20.2",
+      "file": "editor-node20.json",
+      "sha256": "439595e208ad64e1a8298b509249cb252a31209965ab77939795e6e2078bf3e4",
+      "modelSuites": 9,
+      "shippedFileMatches": 32,
+      "codeWorkflows": 2,
+      "blankTargets": 2,
+      "visibleSelections": 4,
+      "browser": "152.0.4191.66",
+      "signatureVerification": "audited 67 packages in 0s\n\n67 packages have verified registry signatures\n\n18 packages have verified attestations\n(use --json --include-attestations to view attestation details)",
+      "knownVulnerabilities": 0
+    },
+    {
+      "node": "v24.20.0",
+      "file": "editor-node24.json",
+      "sha256": "c67902c37af42f4f40992d8e75e9bcfa6ec887a43c6a603a2b820ce9f94a346d",
+      "modelSuites": 9,
+      "shippedFileMatches": 32,
+      "codeWorkflows": 2,
+      "blankTargets": 2,
+      "visibleSelections": 4,
+      "browser": "152.0.4191.66",
+      "signatureVerification": "audited 67 packages in 0s\n\n67 packages have verified registry signatures\n\n18 packages have verified attestations\n(use --json --include-attestations to view attestation details)",
+      "knownVulnerabilities": 0
+    }
+  ],
+  "scope": "Actual registry editor and all published predecessors on both runtimes, every editor file matched to immutable Git, nine model suites and offline playground/code browser workflows including source/metadata edits, fully selected text visibility, CRLF/no-op, literal Tab/cancel, pagination/readability, undo/redo and export/reimport. Native formatting/theme/geometry restoration and pixel equivalence are not claimed. Full complete-set and public deployment gates remain separate."
+}

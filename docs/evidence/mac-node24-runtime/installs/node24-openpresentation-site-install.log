@@ -1,0 +1,11 @@
+Lockfile is up to date, resolution step is skipped
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Packages: +6 -6
+++++++------
+Progress: resolved 6, reused 6, downloaded 0, added 6, done
+
+devDependencies:
+- @types/node 22.19.17
++ @types/node 24.13.4
+
+Done in 1s using pnpm v10.33.2

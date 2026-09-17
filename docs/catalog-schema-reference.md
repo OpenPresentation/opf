@@ -28,6 +28,35 @@ OPF documents usually reference these records with string ids such as `design.th
 | `tags` | no | `array<string>` | Free-form labels for filtering and search. |
 | `preview` | no | `object` | Visual previews of the record, used by picker UIs and inline rendering. All sub-fields are optional. |
 
+## Catalog Index
+
+- File: `spec/schemas/catalog-index.schema.json`
+- Schema id: `https://openpresentation.org/schema/opf-catalog-index/v1`
+- Type: `object`
+- Required fields: `$schema`, `version`, `description`, `records`
+- Purpose: Generic shape shared by every `spec/catalogs/<kind>/index.json` file in the OPF repo. An index is a lightweight, ordered summary of the full-record JSON files that live alongside it: each entry names the record's stable id, a human-readable name, and the record's filename, plus whatever extra summary fields are useful for picker UIs (e.g. `summary`, `tags`, `bcp47`, `durationRange`). This schema describes the repo-internal catalog index files themselves, not OPF documents or individual catalo...
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `$schema` | yes | `const:"https://openpresentation.org/schema/opf-catalog-index/v1"` |  |
+| `version` | yes | `string` | Index format version, as a string. |
+| `description` | yes | `string` | Human-readable description of what this catalog kind holds and how entries are ordered. |
+| `records` | yes | `array<ref:IndexRecord>` | Ordered list of lightweight record summaries. Order defines the catalog's canonical/display order; full record data lives in the sibling JSON file named by `file`. |
+
+### Nested Types
+
+#### IndexRecord
+
+- Type: `object`
+- Required fields: `id`, `name`, `file`
+- Purpose: Lightweight summary of one catalog record. Additional per-kind fields (e.g. `summary`, `tags`, `bcp47`, `durationRange`, `group`, `label`) are allowed and vary by catalog kind.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `id` | yes | `string` | Stable identifier, matching the `id` field inside the record file named by `file`. |
+| `name` | yes | `string` | Human-readable name shown in pickers. |
+| `file` | yes | `string` | Filename of the full record, relative to this index file's directory. |
+
 ## Chart Type
 
 - File: `spec/schemas/chart-type.schema.json`
@@ -194,6 +223,35 @@ OPF documents usually reference these records with string ids such as `design.th
 | `tags` | no | `array<string>` | Free-form labels for filtering and search. |
 | `preview` | no | `object` | Visual previews of the record, used by picker UIs and inline rendering. All sub-fields are optional; engines fall back gracefully when previews aren't available. |
 
+## Layout Preview Index
+
+- File: `spec/schemas/layout-preview-index.schema.json`
+- Schema id: `https://openpresentation.org/schema/opf-layout-preview-index/v1`
+- Type: `object`
+- Required fields: `$schema`, `version`, `description`, `records`
+- Purpose: Shape of `spec/previews/layouts/index.json`, the manifest for the vendored slide-archetype preview gallery under `spec/previews/layouts/`. Each record names a preview id, its self-contained HTML file, and the file's exact UTF-8 byte length. These preview ids are an archetype taxonomy (e.g. 'swot-analysis', 'org-chart') distinct from the structural layout catalog at spec/catalogs/layouts/ (e.g. 'title', 'chart-2x') see spec/README.md. This schema describes a repo-internal index file, not an OP...
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `$schema` | yes | `const:"https://openpresentation.org/schema/opf-layout-preview-index/v1"` |  |
+| `version` | yes | `string` | Index format version, as a string. |
+| `description` | yes | `string` | Human-readable description of the preview gallery and its rendering conventions. |
+| `records` | yes | `array<ref:PreviewRecord>` | One entry per vendored preview HTML file. |
+
+### Nested Types
+
+#### PreviewRecord
+
+- Type: `object`
+- Required fields: `id`, `file`, `bytes`
+- Purpose: Summary of one vendored preview HTML file.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `id` | yes | `string` | Slide-archetype preview id (e.g. 'swot-analysis', 'agenda', 'org-chart'). Does not correspond to a spec/catalogs/layouts/ record id. |
+| `file` | yes | `string` | HTML filename, relative to this index file's directory. |
+| `bytes` | yes | `integer` | Exact UTF-8 byte length of the referenced HTML file's contents. |
+
 ## Slide Layout
 
 - File: `spec/schemas/layout.schema.json`
@@ -209,7 +267,7 @@ OPF documents usually reference these records with string ids such as `design.th
 | `name` | yes | `string` | Human-readable layout name shown in layout pickers. |
 | `summary` | no | `string` | One-sentence positioning of the layout when to reach for it. |
 | `description` | no | `string` | Longer prose describing the layout structure and ideal use cases. |
-| `contentType` | no | `enum:Title \| Text \| List \| Image \| Number \| Chart` | Primary kind of content the layout holds. Drives pickers and AI placement decisions. |
+| `contentType` | no | `enum:Title \| Text \| List \| Image \| Number \| Metric \| Chart \| Table \| Code \| Video \| Quote \| Timeline` | Primary kind of content the layout holds. Drives pickers and AI placement decisions. Metric is the canonical numeric/KPI category; Number remains an accepted legacy label. |
 | `contentMultiple` | no | `enum:None \| 1x \| 2x \| 3x \| 4x \| 5x \| 6x` | How many parallel content blocks the layout exposes ('2x' = two-column, '3x' = three-up, etc.). |
 | `contentAlignment` | no | `enum:None \| Left \| Center` | Default horizontal alignment of the content area. |
 | `contentBox` | no | `boolean` | Whether the content area is rendered inside a visible box / card. |
@@ -227,6 +285,7 @@ OPF documents usually reference these records with string ids such as `design.th
 | `placeholders` | no | `array<ref:Placeholder>` | Ordered regions the layout exposes. The engine fills 'title', 'subtitle', and 'tag' placeholders from Slide.title, Slide.subtitle, and Slide.tag. Other placeholders are content-kind hints for renderers and pickers. Sl... |
 | `tags` | no | `array<string>` | Free-form labels for filtering and search. |
 | `preview` | no | `object` | Visual previews of the record, used by picker UIs and inline rendering. All sub-fields are optional; engines fall back gracefully when previews aren't available. |
+| `composition` | no | `ref:Composition` |  |
 
 ### Nested Types
 
@@ -238,7 +297,23 @@ OPF documents usually reference these records with string ids such as `design.th
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `type` | yes | `enum:title \| subtitle \| tag \| text \| list \| chart \| picture \| table \| media \| diagram \| code` | OPF placeholder kind. 'text' and 'list' are flexible textual content regions. The named kinds describe a specific content role used by pickers, AI generation, and engine defaulting. |
+| `type` | yes | `enum:title \| subtitle \| tag \| text \| metric \| quote \| timeline \| list \| chart \| picture \| table \| media \| diagram \| code` | OPF placeholder kind. 'text' and 'list' are flexible textual content regions. 'metric' is a numeric/KPI content region filled by a metric payload, including its optional label, description, unit, delta, and trend. The... |
+
+#### Composition
+
+- Type: `object`
+- Required fields: none
+- Purpose: Portable dynamic composition. Slide fields override the resolved layout. Nested groups arrange their children independently, inheriting only minFontSize and overflow. Explicit promoted regions retain their positions.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `mode` | no | `enum:auto \| grid \| row \| column` | auto chooses a grid from available space and content; grid uses columns; row and column use one horizontal or vertical track. |
+| `columns` | no | `integer` | Column count for grid. In auto mode this caps the number of columns. |
+| `gap` | no | `number` | Space between cells as a fraction of the container short edge (canvas at slide root). Default 0.03333333333333333. |
+| `padding` | no | `number` | Inset as a fraction of the container short edge. Default 0.08 on a slide, 0 inside a group. |
+| `weights` | no | `array<number>` | Relative track sizes: columns for row/grid/auto, rows for column. Omitted tracks have weight 1; extra weights are ignored. |
+| `minFontSize` | no | `number` | Minimum readable text size in reference pixels at a 720-pixel canvas short edge. Default 16. Overflow is diagnosed when text cannot fit at this size. |
+| `overflow` | no | `enum:warn \| error` | warn returns diagnostics for content that does not fit; error rejects layout. Content is never silently removed. Default warn. |
 
 ## Narrative Template
 
@@ -276,7 +351,7 @@ OPF documents usually reference these records with string ids such as `design.th
 | `description` | no | `string` | Curator-written prose that explains what this beat should accomplish. |
 | `instructions` | no | `string` | Short author-facing instruction for the beat typically one phrase. Complements 'description' with a concise directive. |
 | `slideCount` | no | `integer` | Optional explicit slide count for this beat. Defaults to 1 when omitted; values >1 are reserved for beats that intentionally span multiple slides. Prefer decomposing a heavy beat into multiple beats over setting a hig... |
-| `slideType` | no | `enum:text \| list \| image \| shape \| chart \| table \| video \| code \| metric \| quote \| timeline` | Default content kind for the beat's slide. Mirrors ContentPayload.type and helps engines choose a sensible layout when only the beat is specified. |
+| `slideType` | no | `enum:text \| list \| image \| shape \| chart \| table \| video \| code \| metric \| quote \| timeline` | Default content kind for the beat's slide. Uses ContentPayload.type names to help engines choose a layout. The legacy shape value is retained for compatibility and requests an image representation; it is not a native... |
 | `layoutHint` | no | `string` | Suggested layout id for the beat's opening slide, e.g. 'section-divider', 'title-slide', 'text-left'. Resolves the same way as Slide.layout against catalogs.layouts and the default catalog at https://www.pptx.gallery/... |
 | `thoughtCues` | no | `array<string>` | Optional speaker or thinking cues attached to the beat. Surfaced in presenter notes. |
 

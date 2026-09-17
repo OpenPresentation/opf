@@ -1,0 +1,68 @@
+﻿{
+    "error":  "Native metric shape differs from accepted geometry",
+    "generationSha256":  "c8570fe654e111ec7ed484c611ecf170d5d1fb66cd7f254eee0317320095e0fe",
+    "decks":  [
+
+              ],
+    "stage":  "observe-slide-3",
+    "slides":  [
+                   {
+                       "lines":  [
+                                     {
+                                         "width":  21.63,
+                                         "fontSize":  42.75,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "0",
+                                         "left":  350.9,
+                                         "tags":  1,
+                                         "role":  "value",
+                                         "height":  51.3,
+                                         "paragraphWidth":  31.25,
+                                         "top":  32.4,
+                                         "font":  "Calibri",
+                                         "characterBoundsInsideCell":  true
+                                     }
+                                 ],
+                       "rasterSha256":  "fdb9663f8ee6a49b7d260a2b9c0a218de545346a6f3151c4c20738fad9a848d3",
+                       "partRasters":  [
+                                           {
+                                               "sha256":  "fdb9663f8ee6a49b7d260a2b9c0a218de545346a6f3151c4c20738fad9a848d3",
+                                               "file":  "metric-540-right-native-1-value.png",
+                                               "role":  "value"
+                                           }
+                                       ],
+                       "slide":  1
+                   },
+                   {
+                       "lines":  [
+                                     {
+                                         "width":  9.624961,
+                                         "fontSize":  42.75,
+                                         "tabTargets":  [
+
+                                                        ],
+                                         "text":  "",
+                                         "left":  372.525024,
+                                         "tags":  1,
+                                         "role":  "value",
+                                         "height":  51.3,
+                                         "paragraphWidth":  9.624961,
+                                         "top":  32.4,
+                                         "font":  "Calibri",
+                                         "characterBoundsInsideCell":  true
+                                     }
+                                 ],
+                       "rasterSha256":  "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0",
+                       "partRasters":  [
+                                           {
+                                               "sha256":  "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0",
+                                               "file":  "metric-540-right-native-2-value.png",
+                                               "role":  "value"
+                                           }
+                                       ],
+                       "slide":  2
+                   }
+               ]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "CLI Smoke Test",
+  "author": "Test Author",
+  "slides": [
+    { "title": "Hello", "text": "World" },
+    { "title": "Second Slide", "items": ["First point", "Second point"] }
+  ]
+}

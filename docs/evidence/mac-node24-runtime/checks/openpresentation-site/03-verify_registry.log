@@ -1,0 +1,6 @@
+
+> openpresentation-site@0.1.0 verify:registry /Users/michael/Source/openpresentation-site
+> node scripts/verify-releases.mjs --registry
+
+npm verifies all five package releases and every core publication date.
+Changelog package set and showcase file hashes agree.

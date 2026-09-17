@@ -1,0 +1,22 @@
+[
+  {
+    "name": "@openpresentation/opf",
+    "latest": "0.10.0"
+  },
+  {
+    "name": "@openpresentation/opf-render",
+    "latest": "0.8.0"
+  },
+  {
+    "name": "@openpresentation/opf-editor",
+    "latest": "0.7.0"
+  },
+  {
+    "name": "@openpresentation/opf-pptx",
+    "latest": "0.8.0"
+  },
+  {
+    "name": "@openpresentation/cli",
+    "latest": "0.8.0"
+  }
+]

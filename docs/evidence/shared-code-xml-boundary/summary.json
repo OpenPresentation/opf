@@ -1,0 +1,210 @@
+{
+  "checkedAt": "2026-09-10T05:33:12.583Z",
+  "branch": "codex/shared-code-integration-20260909",
+  "coordinatorCommit": "d0000540e37b0159cb67579a294cb5ca277164c5",
+  "sourceRefs": {
+    "opf": "9980ed4ddf87359dae1542fb6284f3ba6c3688ae",
+    "coreImplementation": "8d11fd650eb14fad3473b918713d9caa95321b83",
+    "opf-render": "b5a3722725338e8d964783e8b7f1f7b80ce28cd3",
+    "opf-pptx": "b4f4645cdaa2f5eff8a883f68533875d3b63f239",
+    "opf-editor": "52e540b83e441892fd928e9f159bffbb29da5653"
+  },
+  "initialObservedDefects": {
+    "scope": "Fresh prior candidate packages at renderer 343ffea / converter 860e947; all four inputs were schema-valid.",
+    "cases": [
+      {
+        "character": "NUL",
+        "input": "a\u0000b",
+        "svgInvalidXml": true,
+        "pptxInvalidXml": true
+      },
+      {
+        "character": "vertical tab",
+        "input": "a\u000bb",
+        "svgInvalidXml": true,
+        "pptxInvalidXml": true
+      },
+      {
+        "character": "unpaired high surrogate",
+        "input": "a\ud800b",
+        "reimported": "a�b",
+        "exact": false
+      },
+      {
+        "character": "U+FFFE",
+        "input": "a￾b",
+        "svgInvalidXml": true,
+        "pptxInvalidXml": true
+      }
+    ]
+  },
+  "correction": {
+    "scope": "Code source/filename/language format boundaries only; core JSON schema unchanged.",
+    "reference": "https://www.w3.org/TR/xml/#charsets",
+    "error": "invalid-code-text",
+    "diagnostics": "OPF path and UTF-16 offset, with the original document unchanged.",
+    "negativeCasesPerEnginePerNode": 132,
+    "nodes": [
+      "20.20.2",
+      "24.20.0"
+    ],
+    "accepted": "Tabs, CR/LF/CRLF, XML escaping, legal BMP boundaries and valid supplementary Unicode, verified as serialization rather than font/glyph support."
+  },
+  "candidate": {
+    "continuousFullSourceTarballCommands": "passed on Node 20 and 24 after the correction",
+    "actualInstalledCodeBrowsers": "renderer and editor passed on both runtimes",
+    "priorInstalledBrowserSuites": 7,
+    "cliCommandChecks": 69,
+    "integrityGuards": "four rejection/restoration cases passed on both runtimes",
+    "identicalTarballsAndRuntime": true,
+    "lockSha256": "eb441f96c292fc2165d81c3d1dc21ef795fe34ccc3825a5ede395e3356c2def9",
+    "packages": [
+      {
+        "name": "@openpresentation/opf",
+        "version": "0.4.0-preview.11",
+        "file": "openpresentation-opf-0.4.0-preview.11.tgz",
+        "sha256": "5f4be4912d642065fad6b2595cd6607c748e6c5c6c29962c863e96aa9caeaa28",
+        "bytes": 636239,
+        "installedVersion": "0.4.0-preview.11",
+        "integrity": "sha512-nBLDP4HRzmscgrriHC4h5mwlSxIB7R2vDA9fT1wKAtgYSposm1c1lQv87/2qBEKDq38QUBphxgkco9gxrLpE3w=="
+      },
+      {
+        "name": "@openpresentation/opf-render",
+        "version": "0.1.0-preview.11",
+        "file": "openpresentation-opf-render-0.1.0-preview.11.tgz",
+        "sha256": "5e224257de281f971357b007d9697dc585185fc76c4b97569569e5069725e6a2",
+        "bytes": 33739,
+        "installedVersion": "0.1.0-preview.11",
+        "integrity": "sha512-cULIrP6BnURLmAypsgeBE95UO5ILBwVrXn0ENn+hL6yfWQUmGQ6eNtQZPJfsGa4JNp6t+uvMJADNZzla3rV6hw=="
+      },
+      {
+        "name": "@openpresentation/opf-editor",
+        "version": "0.1.0-preview.11",
+        "file": "openpresentation-opf-editor-0.1.0-preview.11.tgz",
+        "sha256": "dde1b1821f36701e9f13c640ca9e96ddacced1b1c848db07b9524b207fb33ef0",
+        "bytes": 55714,
+        "installedVersion": "0.1.0-preview.11",
+        "integrity": "sha512-LpwBeGibc5Jmf+P36VFnYMCc7r5dQtUmrmQ7jsoX1B2prObZM+gPmYPQCbWjl6b6nob3bH2uPt+n5I4CCpUVAg=="
+      },
+      {
+        "name": "@openpresentation/opf-pptx",
+        "version": "0.1.0-preview.11",
+        "file": "openpresentation-opf-pptx-0.1.0-preview.11.tgz",
+        "sha256": "45e50c64bc4c3fa51f02475e69fb6a0943f4cda0e123b9e7190b7d21767b3284",
+        "bytes": 198091,
+        "installedVersion": "0.1.0-preview.11",
+        "integrity": "sha512-FNCInBBGjzwBOdgtjurzN3qIhJoalX53olYTSHzoRtTW49OlT4I1mwA3cgd/VKzE2huLaQpo7JYILBTFu0qvIA=="
+      }
+    ],
+    "corpus": "Reviewed 805-slide/126-deck baseline passes unchanged by this correction.",
+    "scope": "Local preview tarballs; no registry publication or source-package aliases."
+  },
+  "native": {
+    "nodeComparisons": [
+      "24.20.0",
+      "20.20.2"
+    ],
+    "slides": 8,
+    "originalSavedEditedImports": 24,
+    "powerPoint": "16.0.20326.20132",
+    "windowsBuild": "26200.9445",
+    "tabTargets": 4,
+    "maxTabTargetErrorPoints": 0.007030487060546875,
+    "tabTargetTolerancePoints": 0.02,
+    "allEightSvgAndNativeRastersUnchanged": true,
+    "reusedRasters": {
+      "../shared-code-installed/code-1280-svg-3.png": "3c1e992f719fa526e0677e7322d5f6422eac75398ebd1a670a97fde5503ae731",
+      "../shared-code-installed/code-1280-native-3.png": "e2adc912a3fe8e21bfacdbab69e80cef58b34d2892223838945bbd334d89febd",
+      "../shared-code-installed/code-540-svg-3.png": "6e382b8ccd852e275bf6909edd34e368db502cdccc5a26a80e78e8b95ee988c8",
+      "../shared-code-installed/code-540-native-3.png": "6879997dcc2e1ece9608b8009e0a68f574b24edf599cd9aa62a17a99d29ef494"
+    },
+    "scope": "Fresh corrected package bytes. Exact native editable code/metadata, tags, save/reopen and source reimport pass; glyph appearance/baseline drift, font theme, geometry and formatting limitations remain. Reference font bytes are local only, not redistributed or embedded."
+  },
+  "registry": "Published packages and their fresh Node20/24 registry evidence remain unchanged in ../shared-code-installed/. No unreleased feature is attributed to registry.",
+  "files": {
+    "candidate-node20.json": {
+      "sha256": "0f0392f81c4d9b6607bee0510fcb04e2fb173d8f5fd99ab6db5a8f541272e348",
+      "bytes": 115108
+    },
+    "candidate-browser-node20.json": {
+      "sha256": "9ca445f317a16d5634b0fa8a5ebbee52237864a40e5bee951df8e1cd119d9db0",
+      "bytes": 17111
+    },
+    "candidate-node24.json": {
+      "sha256": "f3eff2edf32172b202814d427099b7b99dc46e31e68574f0071e2983f7e7ba6c",
+      "bytes": 115108
+    },
+    "candidate-browser-node24.json": {
+      "sha256": "42b43ab99af9483129520871d2e8e012a36deb4ff7b44735dc616463a6595d06",
+      "bytes": 17111
+    },
+    "native-preparation.json": {
+      "sha256": "e819b994682bcc1cbaebf21eafa17b93d72822bda9f93c1092d5580eba505b83",
+      "bytes": 9202
+    },
+    "native-generation.json": {
+      "sha256": "25a61dcab0efaba5a2859054b2e50bbfce3bf8696d9e659f1900f8c9afd8a99e",
+      "bytes": 67056
+    },
+    "native-powerpoint.json": {
+      "sha256": "ec10e8244cce779d0d83c3f768e966d66a3ac8b0a3064d4519e979d61489480d",
+      "bytes": 21009,
+      "sourceSha256": "2147992f01e07692166238d628e2da4f998c1c9e98cc650dc07f037579eb0195",
+      "normalization": "CRLF to LF for portable Git evidence"
+    },
+    "native-comparison.json": {
+      "sha256": "b81d551029008240148a3ff96c8dacc59166ab6235202cd8b879c9a1d71aa5cd",
+      "bytes": 11999
+    }
+  },
+  "logs": [
+    {
+      "file": "xml-coordinated-node20.log",
+      "sha256": "f1b6dcb276e709f07fd84397eefe896f01fcb862aa40157b45697e85b1dec9a0",
+      "bytes": 60747,
+      "node": 20,
+      "exitCode": 0
+    },
+    {
+      "file": "xml-browser-node20.log",
+      "sha256": "b57e4bc02a8a40c67f3949748e4ffaf4072466c48948f02a41b1aca7f110cc86",
+      "bytes": 629,
+      "node": 20,
+      "exitCode": 0
+    },
+    {
+      "file": "xml-guards-node20.log",
+      "sha256": "4b754fc4813f2a2e50f432019aac0eccd9775e5017a2e08fb8ea9ffddb4132a1",
+      "bytes": 132,
+      "node": 20,
+      "exitCode": 0
+    },
+    {
+      "file": "xml-coordinated-node24.log",
+      "sha256": "b6d9556d87a48e02e9814f120b7156170efd2b84fe6ea03649e82506a8a17cd7",
+      "bytes": 56316,
+      "node": 24,
+      "exitCode": 0
+    },
+    {
+      "file": "xml-browser-node24.log",
+      "sha256": "b57e4bc02a8a40c67f3949748e4ffaf4072466c48948f02a41b1aca7f110cc86",
+      "bytes": 629,
+      "node": 24,
+      "exitCode": 0
+    },
+    {
+      "file": "xml-guards-node24.log",
+      "sha256": "4b754fc4813f2a2e50f432019aac0eccd9775e5017a2e08fb8ea9ffddb4132a1",
+      "bytes": 132,
+      "node": 24,
+      "exitCode": 0
+    }
+  ],
+  "remaining": [
+    "Latest coordinated Linux CI/review",
+    "Dependency-ordered release and new actual-registry code/native workflows",
+    "Published plan and public adoption",
+    "Full deterministic repair, Auto arrange, remaining payloads, fonts and native platform roadmap"
+  ]
+}

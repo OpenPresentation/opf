@@ -1,0 +1,7 @@
+
+> openpresentation-workspace@ test:fonts /Users/michael/.codex/worktrees/c193/opf
+> node --import ./scripts/register-local-opf.mjs scripts/test-font-ecosystem.mjs && node --import ./scripts/register-local-opf.mjs scripts/test-office-fonts.mjs
+
+Font ecosystem passed: 3 pages with matching editor/SVG/PPTX geometry and exact measured PowerPoint line breaks.
+Browser width reference: 324.169921875
+Office fonts passed: 6 pages, matching editor/SVG geometry and resolved native PPTX families; 24 substitute faces with license notices.

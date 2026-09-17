@@ -1,0 +1,1950 @@
+{
+  "algorithm": "sha256",
+  "files": [
+    {
+      "file": ".gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "file": "README.md",
+      "bytes": 3802,
+      "sha256": "2b06b229722f313346327d5b21a1648d24094183504c523f5e9e3e9e2fcc90cd"
+    },
+    {
+      "file": "bindings.json",
+      "bytes": 840,
+      "sha256": "3bc8cca2d1723356fd905b982ff973ce7ca6dada8404734273bcc2e78e694396"
+    },
+    {
+      "file": "font-two-runtime-summary.json",
+      "bytes": 977,
+      "sha256": "80d251e77af4208d7224a0b0f4e5daba3f988e164e57503262db880243534b1a"
+    },
+    {
+      "file": "image-archive-validation.json",
+      "bytes": 1446,
+      "sha256": "3b2f38b4691af8add0e84191d5a23076767d2d4d987efc98c0a4d0545cc51866"
+    },
+    {
+      "file": "image-attempt-summary.json",
+      "bytes": 1472,
+      "sha256": "dcf55832d68e5ecbecabc26ae1b126f1af38040146a090d48c50db135cc87f5b"
+    },
+    {
+      "file": "private-pdf-cleanup.json",
+      "bytes": 1059,
+      "sha256": "b1d53acb78648d358c4802b9ea46885361d1d28f96f31c5f406fe61fca282270"
+    },
+    {
+      "file": "raw/font-native-node20-01/comparison.json",
+      "bytes": 995,
+      "sha256": "6457c2b90672b67d6a922d852537fa0254b8747ad435658ec4a34ed54ee4ef04"
+    },
+    {
+      "file": "raw/font-native-node20-01/font-registration.json",
+      "bytes": 1709,
+      "sha256": "c91198fa5425e69942560cf8e839ec322ac60128bfd3f55d249727bbef9a85af"
+    },
+    {
+      "file": "raw/font-native-node20-01/fonts/face-0.license.txt",
+      "bytes": 4394,
+      "sha256": "061402327a96aadb0bfb694a960ed289ecd38d383e396243831ab81feb109c41"
+    },
+    {
+      "file": "raw/font-native-node20-01/fonts/face-0.ttf",
+      "bytes": 159108,
+      "sha256": "15256405ecb0d880678833a582760efad538ab2932318b52c8105b267d159459"
+    },
+    {
+      "file": "raw/font-native-node20-01/fonts/face-1.license.txt",
+      "bytes": 4394,
+      "sha256": "061402327a96aadb0bfb694a960ed289ecd38d383e396243831ab81feb109c41"
+    },
+    {
+      "file": "raw/font-native-node20-01/fonts/face-1.ttf",
+      "bytes": 159296,
+      "sha256": "79343dc641a2e8d48a703a4667b71fc8dc6565cc8ce47dfc34fc52c12aadbf38"
+    },
+    {
+      "file": "raw/font-native-node20-01/fonts/face-2.license.txt",
+      "bytes": 4394,
+      "sha256": "061402327a96aadb0bfb694a960ed289ecd38d383e396243831ab81feb109c41"
+    },
+    {
+      "file": "raw/font-native-node20-01/fonts/face-2.ttf",
+      "bytes": 159876,
+      "sha256": "32fe2086b0e54eca85a68eb74e3d89bb16a7ffe59085d6dc7d079f5b3c26d6ab"
+    },
+    {
+      "file": "raw/font-native-node20-01/fonts/face-3.license.txt",
+      "bytes": 4394,
+      "sha256": "061402327a96aadb0bfb694a960ed289ecd38d383e396243831ab81feb109c41"
+    },
+    {
+      "file": "raw/font-native-node20-01/fonts/face-3.ttf",
+      "bytes": 159900,
+      "sha256": "4aaf8c5b661a386998c2e70cf2b87e2440f5404e0b8fd81164f0413fb3435ec6"
+    },
+    {
+      "file": "raw/font-native-node20-01/fonts/face-4.license.txt",
+      "bytes": 4394,
+      "sha256": "061402327a96aadb0bfb694a960ed289ecd38d383e396243831ab81feb109c41"
+    },
+    {
+      "file": "raw/font-native-node20-01/fonts/face-4.ttf",
+      "bytes": 160012,
+      "sha256": "43d5ce98c58336045220fa1dac2bd22281b1aab3eca66785cb34eb3ad1dfe1a5"
+    },
+    {
+      "file": "raw/font-native-node20-01/fonts/face-5.license.txt",
+      "bytes": 4394,
+      "sha256": "061402327a96aadb0bfb694a960ed289ecd38d383e396243831ab81feb109c41"
+    },
+    {
+      "file": "raw/font-native-node20-01/fonts/face-5.ttf",
+      "bytes": 165268,
+      "sha256": "6a372c348dc20c246b92d60b9bda3c0a9ffedc129790ed3f31faf89daa99d793"
+    },
+    {
+      "file": "raw/font-native-node20-01/fonts/face-6.license.txt",
+      "bytes": 4394,
+      "sha256": "061402327a96aadb0bfb694a960ed289ecd38d383e396243831ab81feb109c41"
+    },
+    {
+      "file": "raw/font-native-node20-01/fonts/face-6.ttf",
+      "bytes": 166256,
+      "sha256": "c6a5e7c224d3bf6698e5d3c124f0f0220cad20d5d413920447a96f033a0292ee"
+    },
+    {
+      "file": "raw/font-native-node20-01/fonts/face-7.license.txt",
+      "bytes": 4395,
+      "sha256": "50ab8dd54680d3473f649c9db86fece88434d097c7834475c1c72d2f8c429215"
+    },
+    {
+      "file": "raw/font-native-node20-01/fonts/face-7.ttf",
+      "bytes": 87540,
+      "sha256": "e4bf45837847d4abfa5a502b807a83393aa138727bdb9ea9c93fb17d53208d95"
+    },
+    {
+      "file": "raw/font-native-node20-01/fonts/face-8.license.txt",
+      "bytes": 4395,
+      "sha256": "50ab8dd54680d3473f649c9db86fece88434d097c7834475c1c72d2f8c429215"
+    },
+    {
+      "file": "raw/font-native-node20-01/fonts/face-8.ttf",
+      "bytes": 87696,
+      "sha256": "92649d819cc4c20480b23a47aaa111769924eb31c66b6ecdcf6f573662558c83"
+    },
+    {
+      "file": "raw/font-native-node20-01/generation.json",
+      "bytes": 7857,
+      "sha256": "6f2e2561e98091811a0218310dfac5cb23d810ad0ee88bd2c4a8906b4c010b6b"
+    },
+    {
+      "file": "raw/font-native-node20-01/native.json",
+      "bytes": 32116,
+      "sha256": "bdb9b2adb6106dde0ec3e147c02b875975680bac82063d23cb2c23cd778907cd"
+    },
+    {
+      "file": "raw/font-native-node20-01/original-1.png",
+      "bytes": 4820,
+      "sha256": "e624d4ea18202136bf39a4080669058fdd0ef23d6db9ff65293f33636ab6f5b8"
+    },
+    {
+      "file": "raw/font-native-node20-01/original-2.png",
+      "bytes": 2508,
+      "sha256": "eb7600b47868c1a51d8cae3946ff6bbd7fdc6f083d595ed6c66261e43647b2a2"
+    },
+    {
+      "file": "raw/font-native-node20-01/original-3.png",
+      "bytes": 2720,
+      "sha256": "42401bbd8031f7994d6f0dd95fa33880726f012e2119c044f9a7016c69c280c2"
+    },
+    {
+      "file": "raw/font-native-node20-01/original-4.png",
+      "bytes": 3063,
+      "sha256": "fe0003d92293b24fe0d7c52b9f7a51e79b91686ef44adf16a533919b56ed0ae5"
+    },
+    {
+      "file": "raw/font-native-node20-01/original-5.png",
+      "bytes": 4608,
+      "sha256": "73a12e2440965291dee5798b0419f0a8430a1672a0383b7e04846dbee253b5b1"
+    },
+    {
+      "file": "raw/font-native-node20-01/original-6.png",
+      "bytes": 4458,
+      "sha256": "0e157c330d37de9336cdd8b6a0ea662d77638e94d43ecbf74304c63103b6f779"
+    },
+    {
+      "file": "raw/font-native-node20-01/original-7.png",
+      "bytes": 2298,
+      "sha256": "6cf484e5457ee65164c89a43539260af37b6391e6fd75de7e14b369f682614e4"
+    },
+    {
+      "file": "raw/font-native-node20-01/pdf-1.png",
+      "bytes": 3215,
+      "sha256": "872c0c4a2e15bac5c3fe33c0b10e0f5751ee740db44a5958f4346a4b1ffeefaa"
+    },
+    {
+      "file": "raw/font-native-node20-01/pdf-2.png",
+      "bytes": 2355,
+      "sha256": "66033ca093e062f746db2aaa5bf17145a1f3e0436bd5f7bce917fa0204d8e467"
+    },
+    {
+      "file": "raw/font-native-node20-01/pdf-3.png",
+      "bytes": 2447,
+      "sha256": "1340902e960c0fb8ff257ac6f476c21b5c232b7beff4f066833b05fa29ec7c85"
+    },
+    {
+      "file": "raw/font-native-node20-01/pdf-4.png",
+      "bytes": 2473,
+      "sha256": "dcca44638fd7a482de998ea40727b191478437b35d0212331512b9e7da36f261"
+    },
+    {
+      "file": "raw/font-native-node20-01/pdf-5.png",
+      "bytes": 4226,
+      "sha256": "9a12987192a5330575081420c4311da463d436bd92c637966eed91402a84f265"
+    },
+    {
+      "file": "raw/font-native-node20-01/pdf-6.png",
+      "bytes": 3094,
+      "sha256": "518286fd08b3ff7c031c930a9542f1b6a5b5ac968e171d0c61de921cc9e21256"
+    },
+    {
+      "file": "raw/font-native-node20-01/pdf-7.png",
+      "bytes": 2309,
+      "sha256": "ff5cda50652e0baff9818a4a9230ff7081aea8c5e41725b10f2a1bfee904e6cc"
+    },
+    {
+      "file": "raw/font-native-node20-01/pdf-fonts.json",
+      "bytes": 4498,
+      "sha256": "e0a7484494a71db3fb7c329ec9e157315d333831bd64e438851569504949b2e7"
+    },
+    {
+      "file": "raw/font-native-node20-01/progress.json",
+      "bytes": 31509,
+      "sha256": "effd2efaba31b973877674a88e877ea29f555b1499e40c46d3a8c7cf66516340"
+    },
+    {
+      "file": "raw/font-native-node20-01/reopened-1.png",
+      "bytes": 4820,
+      "sha256": "e624d4ea18202136bf39a4080669058fdd0ef23d6db9ff65293f33636ab6f5b8"
+    },
+    {
+      "file": "raw/font-native-node20-01/reopened-2.png",
+      "bytes": 2508,
+      "sha256": "eb7600b47868c1a51d8cae3946ff6bbd7fdc6f083d595ed6c66261e43647b2a2"
+    },
+    {
+      "file": "raw/font-native-node20-01/reopened-3.png",
+      "bytes": 2720,
+      "sha256": "42401bbd8031f7994d6f0dd95fa33880726f012e2119c044f9a7016c69c280c2"
+    },
+    {
+      "file": "raw/font-native-node20-01/reopened-4.png",
+      "bytes": 3063,
+      "sha256": "fe0003d92293b24fe0d7c52b9f7a51e79b91686ef44adf16a533919b56ed0ae5"
+    },
+    {
+      "file": "raw/font-native-node20-01/reopened-5.png",
+      "bytes": 4608,
+      "sha256": "73a12e2440965291dee5798b0419f0a8430a1672a0383b7e04846dbee253b5b1"
+    },
+    {
+      "file": "raw/font-native-node20-01/reopened-6.png",
+      "bytes": 4458,
+      "sha256": "0e157c330d37de9336cdd8b6a0ea662d77638e94d43ecbf74304c63103b6f779"
+    },
+    {
+      "file": "raw/font-native-node20-01/reopened-7.png",
+      "bytes": 2298,
+      "sha256": "6cf484e5457ee65164c89a43539260af37b6391e6fd75de7e14b369f682614e4"
+    },
+    {
+      "file": "raw/font-native-node20-01/selection-saved.pptx",
+      "bytes": 36168,
+      "sha256": "c68c5ba62ecc6474181d4e939975ec56bf72a6edb531185240596fbfcc274e3b"
+    },
+    {
+      "file": "raw/font-native-node20-01/selection-saved.pptx.import.opf.json",
+      "bytes": 5438,
+      "sha256": "94b15c2fc71302d64303999f916d35a8ddd3f3fbd7f25ad6a1b4bed82dbbebad"
+    },
+    {
+      "file": "raw/font-native-node20-01/selection.json",
+      "bytes": 3300,
+      "sha256": "a310188f14aca49ff0a86656084a5658a9cbf55966585b7576c1fa8f1ab12185"
+    },
+    {
+      "file": "raw/font-native-node20-01/selection.opf.json",
+      "bytes": 1607,
+      "sha256": "7ff8229f239947390b10605d5c98710bbc3144d15820a614a5ec4633e2ac4cd5"
+    },
+    {
+      "file": "raw/font-native-node20-01/selection.pptx",
+      "bytes": 34473,
+      "sha256": "b362a03e0d5a459679ef965dbdb100cc527752db5e29e85471e81c72ef8d226a"
+    },
+    {
+      "file": "raw/font-native-node20-01/selection.pptx.import.opf.json",
+      "bytes": 5438,
+      "sha256": "94b15c2fc71302d64303999f916d35a8ddd3f3fbd7f25ad6a1b4bed82dbbebad"
+    },
+    {
+      "file": "raw/font-native-node20-01/worker.json",
+      "bytes": 341,
+      "sha256": "cf060a7e08a62fb0276e00513a631612fb5214caf56e424311f7a75b2dda6d4e"
+    },
+    {
+      "file": "raw/font-native-node20-01/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/font-native-node20-01/worker.stdout.log",
+      "bytes": 44,
+      "sha256": "c24f55c630f9422b25fe2a017dda3a0d9148e946e1bde202a4c210bb5793e750"
+    },
+    {
+      "file": "raw/font-native-node24-02/font-registration.json",
+      "bytes": 1709,
+      "sha256": "c91198fa5425e69942560cf8e839ec322ac60128bfd3f55d249727bbef9a85af"
+    },
+    {
+      "file": "raw/font-native-node24-02/fonts/face-0.license.txt",
+      "bytes": 4394,
+      "sha256": "061402327a96aadb0bfb694a960ed289ecd38d383e396243831ab81feb109c41"
+    },
+    {
+      "file": "raw/font-native-node24-02/fonts/face-0.ttf",
+      "bytes": 159108,
+      "sha256": "15256405ecb0d880678833a582760efad538ab2932318b52c8105b267d159459"
+    },
+    {
+      "file": "raw/font-native-node24-02/fonts/face-1.license.txt",
+      "bytes": 4394,
+      "sha256": "061402327a96aadb0bfb694a960ed289ecd38d383e396243831ab81feb109c41"
+    },
+    {
+      "file": "raw/font-native-node24-02/fonts/face-1.ttf",
+      "bytes": 159296,
+      "sha256": "79343dc641a2e8d48a703a4667b71fc8dc6565cc8ce47dfc34fc52c12aadbf38"
+    },
+    {
+      "file": "raw/font-native-node24-02/fonts/face-2.license.txt",
+      "bytes": 4394,
+      "sha256": "061402327a96aadb0bfb694a960ed289ecd38d383e396243831ab81feb109c41"
+    },
+    {
+      "file": "raw/font-native-node24-02/fonts/face-2.ttf",
+      "bytes": 159876,
+      "sha256": "32fe2086b0e54eca85a68eb74e3d89bb16a7ffe59085d6dc7d079f5b3c26d6ab"
+    },
+    {
+      "file": "raw/font-native-node24-02/fonts/face-3.license.txt",
+      "bytes": 4394,
+      "sha256": "061402327a96aadb0bfb694a960ed289ecd38d383e396243831ab81feb109c41"
+    },
+    {
+      "file": "raw/font-native-node24-02/fonts/face-3.ttf",
+      "bytes": 159900,
+      "sha256": "4aaf8c5b661a386998c2e70cf2b87e2440f5404e0b8fd81164f0413fb3435ec6"
+    },
+    {
+      "file": "raw/font-native-node24-02/fonts/face-4.license.txt",
+      "bytes": 4394,
+      "sha256": "061402327a96aadb0bfb694a960ed289ecd38d383e396243831ab81feb109c41"
+    },
+    {
+      "file": "raw/font-native-node24-02/fonts/face-4.ttf",
+      "bytes": 160012,
+      "sha256": "43d5ce98c58336045220fa1dac2bd22281b1aab3eca66785cb34eb3ad1dfe1a5"
+    },
+    {
+      "file": "raw/font-native-node24-02/fonts/face-5.license.txt",
+      "bytes": 4394,
+      "sha256": "061402327a96aadb0bfb694a960ed289ecd38d383e396243831ab81feb109c41"
+    },
+    {
+      "file": "raw/font-native-node24-02/fonts/face-5.ttf",
+      "bytes": 165268,
+      "sha256": "6a372c348dc20c246b92d60b9bda3c0a9ffedc129790ed3f31faf89daa99d793"
+    },
+    {
+      "file": "raw/font-native-node24-02/fonts/face-6.license.txt",
+      "bytes": 4394,
+      "sha256": "061402327a96aadb0bfb694a960ed289ecd38d383e396243831ab81feb109c41"
+    },
+    {
+      "file": "raw/font-native-node24-02/fonts/face-6.ttf",
+      "bytes": 166256,
+      "sha256": "c6a5e7c224d3bf6698e5d3c124f0f0220cad20d5d413920447a96f033a0292ee"
+    },
+    {
+      "file": "raw/font-native-node24-02/fonts/face-7.license.txt",
+      "bytes": 4395,
+      "sha256": "50ab8dd54680d3473f649c9db86fece88434d097c7834475c1c72d2f8c429215"
+    },
+    {
+      "file": "raw/font-native-node24-02/fonts/face-7.ttf",
+      "bytes": 87540,
+      "sha256": "e4bf45837847d4abfa5a502b807a83393aa138727bdb9ea9c93fb17d53208d95"
+    },
+    {
+      "file": "raw/font-native-node24-02/fonts/face-8.license.txt",
+      "bytes": 4395,
+      "sha256": "50ab8dd54680d3473f649c9db86fece88434d097c7834475c1c72d2f8c429215"
+    },
+    {
+      "file": "raw/font-native-node24-02/fonts/face-8.ttf",
+      "bytes": 87696,
+      "sha256": "92649d819cc4c20480b23a47aaa111769924eb31c66b6ecdcf6f573662558c83"
+    },
+    {
+      "file": "raw/font-native-node24-02/generation.json",
+      "bytes": 7857,
+      "sha256": "4ab430bf85033ebeeffaeb38c28ff912cfd14a0b0b5411e117ae2472ee85d5b0"
+    },
+    {
+      "file": "raw/font-native-node24-02/native.json",
+      "bytes": 32116,
+      "sha256": "b40038a88bff22e4c2b83fd4d30f5eb093512d5b4857c32e054f7dbd66300278"
+    },
+    {
+      "file": "raw/font-native-node24-02/original-1.png",
+      "bytes": 4820,
+      "sha256": "e624d4ea18202136bf39a4080669058fdd0ef23d6db9ff65293f33636ab6f5b8"
+    },
+    {
+      "file": "raw/font-native-node24-02/original-2.png",
+      "bytes": 2508,
+      "sha256": "eb7600b47868c1a51d8cae3946ff6bbd7fdc6f083d595ed6c66261e43647b2a2"
+    },
+    {
+      "file": "raw/font-native-node24-02/original-3.png",
+      "bytes": 2720,
+      "sha256": "42401bbd8031f7994d6f0dd95fa33880726f012e2119c044f9a7016c69c280c2"
+    },
+    {
+      "file": "raw/font-native-node24-02/original-4.png",
+      "bytes": 3063,
+      "sha256": "fe0003d92293b24fe0d7c52b9f7a51e79b91686ef44adf16a533919b56ed0ae5"
+    },
+    {
+      "file": "raw/font-native-node24-02/original-5.png",
+      "bytes": 4608,
+      "sha256": "73a12e2440965291dee5798b0419f0a8430a1672a0383b7e04846dbee253b5b1"
+    },
+    {
+      "file": "raw/font-native-node24-02/original-6.png",
+      "bytes": 4458,
+      "sha256": "0e157c330d37de9336cdd8b6a0ea662d77638e94d43ecbf74304c63103b6f779"
+    },
+    {
+      "file": "raw/font-native-node24-02/original-7.png",
+      "bytes": 2298,
+      "sha256": "6cf484e5457ee65164c89a43539260af37b6391e6fd75de7e14b369f682614e4"
+    },
+    {
+      "file": "raw/font-native-node24-02/pdf-1.png",
+      "bytes": 3215,
+      "sha256": "872c0c4a2e15bac5c3fe33c0b10e0f5751ee740db44a5958f4346a4b1ffeefaa"
+    },
+    {
+      "file": "raw/font-native-node24-02/pdf-2.png",
+      "bytes": 2355,
+      "sha256": "66033ca093e062f746db2aaa5bf17145a1f3e0436bd5f7bce917fa0204d8e467"
+    },
+    {
+      "file": "raw/font-native-node24-02/pdf-3.png",
+      "bytes": 2447,
+      "sha256": "1340902e960c0fb8ff257ac6f476c21b5c232b7beff4f066833b05fa29ec7c85"
+    },
+    {
+      "file": "raw/font-native-node24-02/pdf-4.png",
+      "bytes": 2473,
+      "sha256": "dcca44638fd7a482de998ea40727b191478437b35d0212331512b9e7da36f261"
+    },
+    {
+      "file": "raw/font-native-node24-02/pdf-5.png",
+      "bytes": 4226,
+      "sha256": "9a12987192a5330575081420c4311da463d436bd92c637966eed91402a84f265"
+    },
+    {
+      "file": "raw/font-native-node24-02/pdf-6.png",
+      "bytes": 3094,
+      "sha256": "518286fd08b3ff7c031c930a9542f1b6a5b5ac968e171d0c61de921cc9e21256"
+    },
+    {
+      "file": "raw/font-native-node24-02/pdf-7.png",
+      "bytes": 2309,
+      "sha256": "ff5cda50652e0baff9818a4a9230ff7081aea8c5e41725b10f2a1bfee904e6cc"
+    },
+    {
+      "file": "raw/font-native-node24-02/pdf-fonts.json",
+      "bytes": 3210,
+      "sha256": "8aefcbe0f4c26bbeb98420d0eb1e7ef36174bd680ca1083b97802aeadd156801"
+    },
+    {
+      "file": "raw/font-native-node24-02/progress.json",
+      "bytes": 31509,
+      "sha256": "effd2efaba31b973877674a88e877ea29f555b1499e40c46d3a8c7cf66516340"
+    },
+    {
+      "file": "raw/font-native-node24-02/reopened-1.png",
+      "bytes": 4820,
+      "sha256": "e624d4ea18202136bf39a4080669058fdd0ef23d6db9ff65293f33636ab6f5b8"
+    },
+    {
+      "file": "raw/font-native-node24-02/reopened-2.png",
+      "bytes": 2508,
+      "sha256": "eb7600b47868c1a51d8cae3946ff6bbd7fdc6f083d595ed6c66261e43647b2a2"
+    },
+    {
+      "file": "raw/font-native-node24-02/reopened-3.png",
+      "bytes": 2720,
+      "sha256": "42401bbd8031f7994d6f0dd95fa33880726f012e2119c044f9a7016c69c280c2"
+    },
+    {
+      "file": "raw/font-native-node24-02/reopened-4.png",
+      "bytes": 3063,
+      "sha256": "fe0003d92293b24fe0d7c52b9f7a51e79b91686ef44adf16a533919b56ed0ae5"
+    },
+    {
+      "file": "raw/font-native-node24-02/reopened-5.png",
+      "bytes": 4608,
+      "sha256": "73a12e2440965291dee5798b0419f0a8430a1672a0383b7e04846dbee253b5b1"
+    },
+    {
+      "file": "raw/font-native-node24-02/reopened-6.png",
+      "bytes": 4458,
+      "sha256": "0e157c330d37de9336cdd8b6a0ea662d77638e94d43ecbf74304c63103b6f779"
+    },
+    {
+      "file": "raw/font-native-node24-02/reopened-7.png",
+      "bytes": 2298,
+      "sha256": "6cf484e5457ee65164c89a43539260af37b6391e6fd75de7e14b369f682614e4"
+    },
+    {
+      "file": "raw/font-native-node24-02/selection-saved.pptx",
+      "bytes": 36167,
+      "sha256": "320463c159d7302cebbf88038ca871dcbaa0219674c57c788614819392c05965"
+    },
+    {
+      "file": "raw/font-native-node24-02/selection.json",
+      "bytes": 3300,
+      "sha256": "d40e39bf95c72ae6d0d3269fdd118fd738942663698f5ff02e100f947b6fce49"
+    },
+    {
+      "file": "raw/font-native-node24-02/selection.opf.json",
+      "bytes": 1607,
+      "sha256": "7ff8229f239947390b10605d5c98710bbc3144d15820a614a5ec4633e2ac4cd5"
+    },
+    {
+      "file": "raw/font-native-node24-02/selection.pptx",
+      "bytes": 34473,
+      "sha256": "b362a03e0d5a459679ef965dbdb100cc527752db5e29e85471e81c72ef8d226a"
+    },
+    {
+      "file": "raw/font-native-node24-02/verifiers/font-variants.mjs",
+      "bytes": 4896,
+      "sha256": "4def52d1dc9037a9235ab58c09ab1cc981296ec6285ae093187e72ea0859aa89"
+    },
+    {
+      "file": "raw/font-native-node24-02/verifiers/native-evidence.mjs",
+      "bytes": 1858,
+      "sha256": "110b86daeb489cdbc36f13ae29e564cf3bb215cd7ac6a85679f8b8e9d1a5bb64"
+    },
+    {
+      "file": "raw/font-native-node24-02/verifiers/native-font-pdf.py",
+      "bytes": 2223,
+      "sha256": "647962573a6c25c2d5bd2c4c3fe57c5659eb92ecebf2890aaa144a3cb3fb5e6b"
+    },
+    {
+      "file": "raw/font-native-node24-02/verifiers/native-font-selection.mjs",
+      "bytes": 4432,
+      "sha256": "9731effbd24cf691a29f4a286350b9b3c91a021ee1f510c536afe163bbd619fc"
+    },
+    {
+      "file": "raw/font-native-node24-02/verifiers/native-font-selection.ps1",
+      "bytes": 4747,
+      "sha256": "be5df0d802dff60b66e006f95fb47b596b8295af89f2bff6dc03cab93dbb5dbc"
+    },
+    {
+      "file": "raw/font-native-node24-02/verifiers/native-open-fonts.ps1",
+      "bytes": 2535,
+      "sha256": "9cff22c3afc8c4e77d457f2cd65205c260761c61c30796b376f9d5beddfc3bfc"
+    },
+    {
+      "file": "raw/font-native-node24-02/verifiers/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "file": "raw/font-native-node24-02/worker.json",
+      "bytes": 341,
+      "sha256": "d987c397646eb8f9b2229f69b451080052c0e4c4596625f2d232cf70b283db61"
+    },
+    {
+      "file": "raw/font-native-node24-02/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/font-native-node24-02/worker.stdout.log",
+      "bytes": 44,
+      "sha256": "c24f55c630f9422b25fe2a017dda3a0d9148e946e1bde202a4c210bb5793e750"
+    },
+    {
+      "file": "raw/font-native-node24-03/comparison.json",
+      "bytes": 995,
+      "sha256": "c00027eabaa94d71dfb062724aee374c59ef760c010df270681b16ec32b45028"
+    },
+    {
+      "file": "raw/font-native-node24-03/font-registration.json",
+      "bytes": 1709,
+      "sha256": "c91198fa5425e69942560cf8e839ec322ac60128bfd3f55d249727bbef9a85af"
+    },
+    {
+      "file": "raw/font-native-node24-03/fonts/face-0.license.txt",
+      "bytes": 4394,
+      "sha256": "061402327a96aadb0bfb694a960ed289ecd38d383e396243831ab81feb109c41"
+    },
+    {
+      "file": "raw/font-native-node24-03/fonts/face-0.ttf",
+      "bytes": 159108,
+      "sha256": "15256405ecb0d880678833a582760efad538ab2932318b52c8105b267d159459"
+    },
+    {
+      "file": "raw/font-native-node24-03/fonts/face-1.license.txt",
+      "bytes": 4394,
+      "sha256": "061402327a96aadb0bfb694a960ed289ecd38d383e396243831ab81feb109c41"
+    },
+    {
+      "file": "raw/font-native-node24-03/fonts/face-1.ttf",
+      "bytes": 159296,
+      "sha256": "79343dc641a2e8d48a703a4667b71fc8dc6565cc8ce47dfc34fc52c12aadbf38"
+    },
+    {
+      "file": "raw/font-native-node24-03/fonts/face-2.license.txt",
+      "bytes": 4394,
+      "sha256": "061402327a96aadb0bfb694a960ed289ecd38d383e396243831ab81feb109c41"
+    },
+    {
+      "file": "raw/font-native-node24-03/fonts/face-2.ttf",
+      "bytes": 159876,
+      "sha256": "32fe2086b0e54eca85a68eb74e3d89bb16a7ffe59085d6dc7d079f5b3c26d6ab"
+    },
+    {
+      "file": "raw/font-native-node24-03/fonts/face-3.license.txt",
+      "bytes": 4394,
+      "sha256": "061402327a96aadb0bfb694a960ed289ecd38d383e396243831ab81feb109c41"
+    },
+    {
+      "file": "raw/font-native-node24-03/fonts/face-3.ttf",
+      "bytes": 159900,
+      "sha256": "4aaf8c5b661a386998c2e70cf2b87e2440f5404e0b8fd81164f0413fb3435ec6"
+    },
+    {
+      "file": "raw/font-native-node24-03/fonts/face-4.license.txt",
+      "bytes": 4394,
+      "sha256": "061402327a96aadb0bfb694a960ed289ecd38d383e396243831ab81feb109c41"
+    },
+    {
+      "file": "raw/font-native-node24-03/fonts/face-4.ttf",
+      "bytes": 160012,
+      "sha256": "43d5ce98c58336045220fa1dac2bd22281b1aab3eca66785cb34eb3ad1dfe1a5"
+    },
+    {
+      "file": "raw/font-native-node24-03/fonts/face-5.license.txt",
+      "bytes": 4394,
+      "sha256": "061402327a96aadb0bfb694a960ed289ecd38d383e396243831ab81feb109c41"
+    },
+    {
+      "file": "raw/font-native-node24-03/fonts/face-5.ttf",
+      "bytes": 165268,
+      "sha256": "6a372c348dc20c246b92d60b9bda3c0a9ffedc129790ed3f31faf89daa99d793"
+    },
+    {
+      "file": "raw/font-native-node24-03/fonts/face-6.license.txt",
+      "bytes": 4394,
+      "sha256": "061402327a96aadb0bfb694a960ed289ecd38d383e396243831ab81feb109c41"
+    },
+    {
+      "file": "raw/font-native-node24-03/fonts/face-6.ttf",
+      "bytes": 166256,
+      "sha256": "c6a5e7c224d3bf6698e5d3c124f0f0220cad20d5d413920447a96f033a0292ee"
+    },
+    {
+      "file": "raw/font-native-node24-03/fonts/face-7.license.txt",
+      "bytes": 4395,
+      "sha256": "50ab8dd54680d3473f649c9db86fece88434d097c7834475c1c72d2f8c429215"
+    },
+    {
+      "file": "raw/font-native-node24-03/fonts/face-7.ttf",
+      "bytes": 87540,
+      "sha256": "e4bf45837847d4abfa5a502b807a83393aa138727bdb9ea9c93fb17d53208d95"
+    },
+    {
+      "file": "raw/font-native-node24-03/fonts/face-8.license.txt",
+      "bytes": 4395,
+      "sha256": "50ab8dd54680d3473f649c9db86fece88434d097c7834475c1c72d2f8c429215"
+    },
+    {
+      "file": "raw/font-native-node24-03/fonts/face-8.ttf",
+      "bytes": 87696,
+      "sha256": "92649d819cc4c20480b23a47aaa111769924eb31c66b6ecdcf6f573662558c83"
+    },
+    {
+      "file": "raw/font-native-node24-03/generation.json",
+      "bytes": 7857,
+      "sha256": "1add70b4ba9439d9731ff959236a7fd035125a559009b001a40fbd88b5612c24"
+    },
+    {
+      "file": "raw/font-native-node24-03/native.json",
+      "bytes": 32116,
+      "sha256": "79b72b9545938a6a320bd9e94bfa1d7a9931cdef9d6384c34d9e584bc2ff457a"
+    },
+    {
+      "file": "raw/font-native-node24-03/original-1.png",
+      "bytes": 4820,
+      "sha256": "e624d4ea18202136bf39a4080669058fdd0ef23d6db9ff65293f33636ab6f5b8"
+    },
+    {
+      "file": "raw/font-native-node24-03/original-2.png",
+      "bytes": 2508,
+      "sha256": "eb7600b47868c1a51d8cae3946ff6bbd7fdc6f083d595ed6c66261e43647b2a2"
+    },
+    {
+      "file": "raw/font-native-node24-03/original-3.png",
+      "bytes": 2720,
+      "sha256": "42401bbd8031f7994d6f0dd95fa33880726f012e2119c044f9a7016c69c280c2"
+    },
+    {
+      "file": "raw/font-native-node24-03/original-4.png",
+      "bytes": 3063,
+      "sha256": "fe0003d92293b24fe0d7c52b9f7a51e79b91686ef44adf16a533919b56ed0ae5"
+    },
+    {
+      "file": "raw/font-native-node24-03/original-5.png",
+      "bytes": 4608,
+      "sha256": "73a12e2440965291dee5798b0419f0a8430a1672a0383b7e04846dbee253b5b1"
+    },
+    {
+      "file": "raw/font-native-node24-03/original-6.png",
+      "bytes": 4458,
+      "sha256": "0e157c330d37de9336cdd8b6a0ea662d77638e94d43ecbf74304c63103b6f779"
+    },
+    {
+      "file": "raw/font-native-node24-03/original-7.png",
+      "bytes": 2298,
+      "sha256": "6cf484e5457ee65164c89a43539260af37b6391e6fd75de7e14b369f682614e4"
+    },
+    {
+      "file": "raw/font-native-node24-03/pdf-1.png",
+      "bytes": 3215,
+      "sha256": "872c0c4a2e15bac5c3fe33c0b10e0f5751ee740db44a5958f4346a4b1ffeefaa"
+    },
+    {
+      "file": "raw/font-native-node24-03/pdf-2.png",
+      "bytes": 2355,
+      "sha256": "66033ca093e062f746db2aaa5bf17145a1f3e0436bd5f7bce917fa0204d8e467"
+    },
+    {
+      "file": "raw/font-native-node24-03/pdf-3.png",
+      "bytes": 2447,
+      "sha256": "1340902e960c0fb8ff257ac6f476c21b5c232b7beff4f066833b05fa29ec7c85"
+    },
+    {
+      "file": "raw/font-native-node24-03/pdf-4.png",
+      "bytes": 2473,
+      "sha256": "dcca44638fd7a482de998ea40727b191478437b35d0212331512b9e7da36f261"
+    },
+    {
+      "file": "raw/font-native-node24-03/pdf-5.png",
+      "bytes": 4226,
+      "sha256": "9a12987192a5330575081420c4311da463d436bd92c637966eed91402a84f265"
+    },
+    {
+      "file": "raw/font-native-node24-03/pdf-6.png",
+      "bytes": 3094,
+      "sha256": "518286fd08b3ff7c031c930a9542f1b6a5b5ac968e171d0c61de921cc9e21256"
+    },
+    {
+      "file": "raw/font-native-node24-03/pdf-7.png",
+      "bytes": 2309,
+      "sha256": "ff5cda50652e0baff9818a4a9230ff7081aea8c5e41725b10f2a1bfee904e6cc"
+    },
+    {
+      "file": "raw/font-native-node24-03/pdf-fonts.json",
+      "bytes": 4498,
+      "sha256": "2b882c0f843a12b86e06acfd5fc4c21453efe5889db2d12687b41b315fa61635"
+    },
+    {
+      "file": "raw/font-native-node24-03/progress.json",
+      "bytes": 31509,
+      "sha256": "effd2efaba31b973877674a88e877ea29f555b1499e40c46d3a8c7cf66516340"
+    },
+    {
+      "file": "raw/font-native-node24-03/reopened-1.png",
+      "bytes": 4820,
+      "sha256": "e624d4ea18202136bf39a4080669058fdd0ef23d6db9ff65293f33636ab6f5b8"
+    },
+    {
+      "file": "raw/font-native-node24-03/reopened-2.png",
+      "bytes": 2508,
+      "sha256": "eb7600b47868c1a51d8cae3946ff6bbd7fdc6f083d595ed6c66261e43647b2a2"
+    },
+    {
+      "file": "raw/font-native-node24-03/reopened-3.png",
+      "bytes": 2720,
+      "sha256": "42401bbd8031f7994d6f0dd95fa33880726f012e2119c044f9a7016c69c280c2"
+    },
+    {
+      "file": "raw/font-native-node24-03/reopened-4.png",
+      "bytes": 3063,
+      "sha256": "fe0003d92293b24fe0d7c52b9f7a51e79b91686ef44adf16a533919b56ed0ae5"
+    },
+    {
+      "file": "raw/font-native-node24-03/reopened-5.png",
+      "bytes": 4608,
+      "sha256": "73a12e2440965291dee5798b0419f0a8430a1672a0383b7e04846dbee253b5b1"
+    },
+    {
+      "file": "raw/font-native-node24-03/reopened-6.png",
+      "bytes": 4458,
+      "sha256": "0e157c330d37de9336cdd8b6a0ea662d77638e94d43ecbf74304c63103b6f779"
+    },
+    {
+      "file": "raw/font-native-node24-03/reopened-7.png",
+      "bytes": 2298,
+      "sha256": "6cf484e5457ee65164c89a43539260af37b6391e6fd75de7e14b369f682614e4"
+    },
+    {
+      "file": "raw/font-native-node24-03/selection-saved.pptx",
+      "bytes": 36168,
+      "sha256": "9eb4cc4379204bc7f6d68d99faa710b34807eb9e36d5c46404a48a19844f5b64"
+    },
+    {
+      "file": "raw/font-native-node24-03/selection-saved.pptx.import.opf.json",
+      "bytes": 5438,
+      "sha256": "94b15c2fc71302d64303999f916d35a8ddd3f3fbd7f25ad6a1b4bed82dbbebad"
+    },
+    {
+      "file": "raw/font-native-node24-03/selection.json",
+      "bytes": 3300,
+      "sha256": "d40e39bf95c72ae6d0d3269fdd118fd738942663698f5ff02e100f947b6fce49"
+    },
+    {
+      "file": "raw/font-native-node24-03/selection.opf.json",
+      "bytes": 1607,
+      "sha256": "7ff8229f239947390b10605d5c98710bbc3144d15820a614a5ec4633e2ac4cd5"
+    },
+    {
+      "file": "raw/font-native-node24-03/selection.pptx",
+      "bytes": 34473,
+      "sha256": "b362a03e0d5a459679ef965dbdb100cc527752db5e29e85471e81c72ef8d226a"
+    },
+    {
+      "file": "raw/font-native-node24-03/selection.pptx.import.opf.json",
+      "bytes": 5438,
+      "sha256": "94b15c2fc71302d64303999f916d35a8ddd3f3fbd7f25ad6a1b4bed82dbbebad"
+    },
+    {
+      "file": "raw/font-native-node24-03/worker.json",
+      "bytes": 341,
+      "sha256": "52cd0412cccb7b61f32123f2b647f5b470a1a4db05402177ebabd334da93bdcc"
+    },
+    {
+      "file": "raw/font-native-node24-03/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/font-native-node24-03/worker.stdout.log",
+      "bytes": 44,
+      "sha256": "c24f55c630f9422b25fe2a017dda3a0d9148e946e1bde202a4c210bb5793e750"
+    },
+    {
+      "file": "raw/image-native-created-01/empty-owned.pptx",
+      "bytes": 33723,
+      "sha256": "792e0412dd697a0da7e32306520c37cf301d521a69257fcf7691371b0a17716b"
+    },
+    {
+      "file": "raw/image-native-created-01/native-picture-create-control.ps1",
+      "bytes": 1628,
+      "sha256": "c30f4ba7378d8e2a74144f52ab77b8333423b18d4d98ccce2c28a86703f7c629"
+    },
+    {
+      "file": "raw/image-native-created-01/worker.json",
+      "bytes": 341,
+      "sha256": "bbaecc8268fd0fe4032d019aeb0c3c97f93293bb1f8f6abe2bd65ea404b5d48e"
+    },
+    {
+      "file": "raw/image-native-created-01/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/image-native-created-01/worker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/image-open-opf-png/create-image-open-control.mjs",
+      "bytes": 883,
+      "sha256": "a8ea2869208698a91e40688a7e2acf71b028c06e8fa12fdb6a5eeec06afd1eb8"
+    },
+    {
+      "file": "raw/image-open-opf-png/failure.json",
+      "bytes": 85,
+      "sha256": "aa64005f9f3d543253ad667c3a7b085d0f8f3951c8a04d444db6f6f2b6abd126"
+    },
+    {
+      "file": "raw/image-open-opf-png/generation.json",
+      "bytes": 99,
+      "sha256": "8df63713734dfeecaae43052e22b008fee9c681c7c0f2837120b182d2ecf6bb3"
+    },
+    {
+      "file": "raw/image-open-opf-png/image-open-control.ps1",
+      "bytes": 1545,
+      "sha256": "851bdb267edaf9190ee01e90a43e92822f63866caa984774aff431a9367c092c"
+    },
+    {
+      "file": "raw/image-open-opf-png/source.pptx",
+      "bytes": 15165,
+      "sha256": "1e9ebff352fdb3d99aa23f304ddbb4ef3e94398ee727e3c67a5cbf3c859b67e1"
+    },
+    {
+      "file": "raw/image-open-opf-png/worker.json",
+      "bytes": 341,
+      "sha256": "d208812081e72948749b1170557b9f1a1c260f718543fc788342718b0941020d"
+    },
+    {
+      "file": "raw/image-open-opf-png/worker.stderr.log",
+      "bytes": 441,
+      "sha256": "63ca24cb082bac553c68921b5120cf477eb2bc0adbcb6125dc559688f60ed51d"
+    },
+    {
+      "file": "raw/image-open-opf-png/worker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/image-open-vendor-png/create-image-open-control.mjs",
+      "bytes": 883,
+      "sha256": "a8ea2869208698a91e40688a7e2acf71b028c06e8fa12fdb6a5eeec06afd1eb8"
+    },
+    {
+      "file": "raw/image-open-vendor-png/failure.json",
+      "bytes": 85,
+      "sha256": "aa64005f9f3d543253ad667c3a7b085d0f8f3951c8a04d444db6f6f2b6abd126"
+    },
+    {
+      "file": "raw/image-open-vendor-png/generation.json",
+      "bytes": 102,
+      "sha256": "a7f4088f2deb7875ba5e5ad5511191f0cc99b622a2fd47160b28bd2e0b396c14"
+    },
+    {
+      "file": "raw/image-open-vendor-png/image-open-control.ps1",
+      "bytes": 1545,
+      "sha256": "851bdb267edaf9190ee01e90a43e92822f63866caa984774aff431a9367c092c"
+    },
+    {
+      "file": "raw/image-open-vendor-png/source.pptx",
+      "bytes": 45323,
+      "sha256": "38ed7f65cdd5299fc742474faf4df9009a59d0a7d46392fe4c9aece7d891a262"
+    },
+    {
+      "file": "raw/image-open-vendor-png/worker.json",
+      "bytes": 341,
+      "sha256": "23d1395025ff0453c5cb099cc0751238fd0d7cf8bafcef8d8d8d225acfae6ddb"
+    },
+    {
+      "file": "raw/image-open-vendor-png/worker.stderr.log",
+      "bytes": 441,
+      "sha256": "63ca24cb082bac553c68921b5120cf477eb2bc0adbcb6125dc559688f60ed51d"
+    },
+    {
+      "file": "raw/image-open-vendor-png/worker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/images-editor-node20-only-01/editor-undo.json",
+      "bytes": 2169,
+      "sha256": "81754505cac121468ca92fd4c19f42ed30154591e655ac319fc03021eb9d7d4f"
+    },
+    {
+      "file": "raw/images-editor-node20-only-01/generation.json",
+      "bytes": 62565,
+      "sha256": "c50e632f285b01c971258d9499d8ef6405c9d0887693c7e3d4dc6a299194a954"
+    },
+    {
+      "file": "raw/images-editor-node20-only-01/images-crop-1.svg",
+      "bytes": 1085,
+      "sha256": "62b43a0af32fc2a87084d807a2084e385fdfba74a3c3741747c15fd33e664bb0"
+    },
+    {
+      "file": "raw/images-editor-node20-only-01/images-crop-2.svg",
+      "bytes": 1185,
+      "sha256": "17b16e7ba032b1d3b7ea854441b74e4f319135be940ff8b3056f5f57ce40e239"
+    },
+    {
+      "file": "raw/images-editor-node20-only-01/images-crop-3.svg",
+      "bytes": 1127,
+      "sha256": "221722ad7130c381a07ca4b22196352bcafe42c9506005820c6dea40e12db7b2"
+    },
+    {
+      "file": "raw/images-editor-node20-only-01/images-crop-4.svg",
+      "bytes": 3086,
+      "sha256": "d1a0b077abdf3db924472cd2014967e9116ee188e65ac9d7847a2b12632ef6de"
+    },
+    {
+      "file": "raw/images-editor-node20-only-01/images-crop-5.svg",
+      "bytes": 2822,
+      "sha256": "497ce71e506934fe443920bb6535ccce7398f36cc7ce379432334a21ba33681f"
+    },
+    {
+      "file": "raw/images-editor-node20-only-01/images-crop-6.svg",
+      "bytes": 1173,
+      "sha256": "8aeeac615acd667d318d803d3321489967327731cb3574b5b408c371a134dd67"
+    },
+    {
+      "file": "raw/images-editor-node20-only-01/images-crop-7.svg",
+      "bytes": 731,
+      "sha256": "64998831663f3b466a95ef8b9dc5ab7c8339c8b15210f004b101c05d26356345"
+    },
+    {
+      "file": "raw/images-editor-node20-only-01/images-crop-8.svg",
+      "bytes": 1585,
+      "sha256": "1f23ec372c8857f637b1771454f397f3fceb978a942c747cc64e014266a6382a"
+    },
+    {
+      "file": "raw/images-editor-node20-only-01/images-crop-9.svg",
+      "bytes": 1641,
+      "sha256": "75c5e3c62629498dd88f504617adc13bdaa9804059054c65e35ff5322aa9ffbf"
+    },
+    {
+      "file": "raw/images-editor-node20-only-01/images-crop.opf.json",
+      "bytes": 11562,
+      "sha256": "b6223bfeb08ba5e4d0bfc38b404695ecb78d11568d6c072e05d8e0d07486322a"
+    },
+    {
+      "file": "raw/images-editor-node20-only-01/images-crop.pptx",
+      "bytes": 45080,
+      "sha256": "6ba0272f9880b465de4a63e643fd9c953e6772d1344c9a23d06eb844b23a132e"
+    },
+    {
+      "file": "raw/images-editor-node20-only-01/images-editor-redo-1.svg",
+      "bytes": 1206,
+      "sha256": "04013e49c82cf2c3eec52f6c9f02da3bd9da7e3ee36a8e73a0c9ffd996b5d744"
+    },
+    {
+      "file": "raw/images-editor-node20-only-01/images-editor-redo-2.svg",
+      "bytes": 1184,
+      "sha256": "b5571a833bb880082de69c36b02f61e013a4ebe06d7aea621ffff981666cbe40"
+    },
+    {
+      "file": "raw/images-editor-node20-only-01/images-editor-redo-3.svg",
+      "bytes": 1126,
+      "sha256": "ee629eece0f516e2f8c1e5d44a38c310f3f5c9243aa5ceab8f7e833fd8fd8b26"
+    },
+    {
+      "file": "raw/images-editor-node20-only-01/images-editor-redo-4.svg",
+      "bytes": 3085,
+      "sha256": "0b70d6bcbe1b0548cc352f12ac0320b6fef5658d89b4354ec596f26af013a77e"
+    },
+    {
+      "file": "raw/images-editor-node20-only-01/images-editor-redo-5.svg",
+      "bytes": 2821,
+      "sha256": "040d034ae893028f1a01325bbe831a4367e2ff4cc631fe7026c4dfe1fd380028"
+    },
+    {
+      "file": "raw/images-editor-node20-only-01/images-editor-redo-6.svg",
+      "bytes": 1172,
+      "sha256": "6f1c16e9e0e770ef5de1f38da487d2529fae9fd2c7b5c695cce3ca137436ddb4"
+    },
+    {
+      "file": "raw/images-editor-node20-only-01/images-editor-redo-7.svg",
+      "bytes": 730,
+      "sha256": "4379952335406c2ea01df97aa85e24fb091d82ea2b8c661abfc546ae4becde61"
+    },
+    {
+      "file": "raw/images-editor-node20-only-01/images-editor-redo-8.svg",
+      "bytes": 1584,
+      "sha256": "9ca706da69d719cb8b9d7cc135e2bf527a56a686b287f94928c8d1ef4138c667"
+    },
+    {
+      "file": "raw/images-editor-node20-only-01/images-editor-redo-9.svg",
+      "bytes": 1640,
+      "sha256": "cbb66f7a5d62c59194cad2fc7a881b272fc1a8789a6655f2acd8e1555118722d"
+    },
+    {
+      "file": "raw/images-editor-node20-only-01/images-editor-redo.opf.json",
+      "bytes": 11683,
+      "sha256": "8ca6e6d42ec31d7ced2a7684e4e880b981785ef863d7cf4256a59aa1afb3e15d"
+    },
+    {
+      "file": "raw/images-editor-node20-only-01/images-editor-redo.pptx",
+      "bytes": 44937,
+      "sha256": "7c40db3d5820f832ae4aae1a646298ccd52503221244ed4e50ba16711b6b3893"
+    },
+    {
+      "file": "raw/images-editor-node20-only-01/images-fit-1.svg",
+      "bytes": 1084,
+      "sha256": "cb1808bc9dcf90f1598dc3e51c6b9fbb476c2c9ff165bdc5e576ee65ced4c54c"
+    },
+    {
+      "file": "raw/images-editor-node20-only-01/images-fit-2.svg",
+      "bytes": 1184,
+      "sha256": "b5571a833bb880082de69c36b02f61e013a4ebe06d7aea621ffff981666cbe40"
+    },
+    {
+      "file": "raw/images-editor-node20-only-01/images-fit-3.svg",
+      "bytes": 1126,
+      "sha256": "ee629eece0f516e2f8c1e5d44a38c310f3f5c9243aa5ceab8f7e833fd8fd8b26"
+    },
+    {
+      "file": "raw/images-editor-node20-only-01/images-fit-4.svg",
+      "bytes": 3085,
+      "sha256": "0b70d6bcbe1b0548cc352f12ac0320b6fef5658d89b4354ec596f26af013a77e"
+    },
+    {
+      "file": "raw/images-editor-node20-only-01/images-fit-5.svg",
+      "bytes": 2821,
+      "sha256": "040d034ae893028f1a01325bbe831a4367e2ff4cc631fe7026c4dfe1fd380028"
+    },
+    {
+      "file": "raw/images-editor-node20-only-01/images-fit-6.svg",
+      "bytes": 1172,
+      "sha256": "6f1c16e9e0e770ef5de1f38da487d2529fae9fd2c7b5c695cce3ca137436ddb4"
+    },
+    {
+      "file": "raw/images-editor-node20-only-01/images-fit-7.svg",
+      "bytes": 730,
+      "sha256": "4379952335406c2ea01df97aa85e24fb091d82ea2b8c661abfc546ae4becde61"
+    },
+    {
+      "file": "raw/images-editor-node20-only-01/images-fit-8.svg",
+      "bytes": 1584,
+      "sha256": "9ca706da69d719cb8b9d7cc135e2bf527a56a686b287f94928c8d1ef4138c667"
+    },
+    {
+      "file": "raw/images-editor-node20-only-01/images-fit-9.svg",
+      "bytes": 1640,
+      "sha256": "cbb66f7a5d62c59194cad2fc7a881b272fc1a8789a6655f2acd8e1555118722d"
+    },
+    {
+      "file": "raw/images-editor-node20-only-01/images-fit.opf.json",
+      "bytes": 11561,
+      "sha256": "70005947335bd212890936d12f6f4af52f59d299b15ae5f913b8f36614e9255f"
+    },
+    {
+      "file": "raw/images-editor-node20-only-01/images-fit.pptx",
+      "bytes": 44915,
+      "sha256": "228931dee8e441c5af5cbafed14568ad9b5028278d067bea0d9fa763e97d976d"
+    },
+    {
+      "file": "raw/images-native-node24-01/editor-undo.json",
+      "bytes": 2169,
+      "sha256": "4053b4fc9198ea71aa5df39e5a97bf4fd2f85f773930d45cc1e0fee0f92341ed"
+    },
+    {
+      "file": "raw/images-native-node24-01/generation.json",
+      "bytes": 58888,
+      "sha256": "449d1e99cd17837f32a49a56831e6b9eb235919a703046cd4973c8b4cf6b860d"
+    },
+    {
+      "file": "raw/images-native-node24-01/images-crop-1.svg",
+      "bytes": 1085,
+      "sha256": "62b43a0af32fc2a87084d807a2084e385fdfba74a3c3741747c15fd33e664bb0"
+    },
+    {
+      "file": "raw/images-native-node24-01/images-crop-2.svg",
+      "bytes": 1185,
+      "sha256": "17b16e7ba032b1d3b7ea854441b74e4f319135be940ff8b3056f5f57ce40e239"
+    },
+    {
+      "file": "raw/images-native-node24-01/images-crop-3.svg",
+      "bytes": 1127,
+      "sha256": "221722ad7130c381a07ca4b22196352bcafe42c9506005820c6dea40e12db7b2"
+    },
+    {
+      "file": "raw/images-native-node24-01/images-crop-4.svg",
+      "bytes": 3086,
+      "sha256": "d1a0b077abdf3db924472cd2014967e9116ee188e65ac9d7847a2b12632ef6de"
+    },
+    {
+      "file": "raw/images-native-node24-01/images-crop-5.svg",
+      "bytes": 2822,
+      "sha256": "497ce71e506934fe443920bb6535ccce7398f36cc7ce379432334a21ba33681f"
+    },
+    {
+      "file": "raw/images-native-node24-01/images-crop-6.svg",
+      "bytes": 1173,
+      "sha256": "8aeeac615acd667d318d803d3321489967327731cb3574b5b408c371a134dd67"
+    },
+    {
+      "file": "raw/images-native-node24-01/images-crop-7.svg",
+      "bytes": 731,
+      "sha256": "64998831663f3b466a95ef8b9dc5ab7c8339c8b15210f004b101c05d26356345"
+    },
+    {
+      "file": "raw/images-native-node24-01/images-crop-8.svg",
+      "bytes": 1585,
+      "sha256": "1f23ec372c8857f637b1771454f397f3fceb978a942c747cc64e014266a6382a"
+    },
+    {
+      "file": "raw/images-native-node24-01/images-crop-9.svg",
+      "bytes": 1641,
+      "sha256": "75c5e3c62629498dd88f504617adc13bdaa9804059054c65e35ff5322aa9ffbf"
+    },
+    {
+      "file": "raw/images-native-node24-01/images-crop.opf.json",
+      "bytes": 11562,
+      "sha256": "b6223bfeb08ba5e4d0bfc38b404695ecb78d11568d6c072e05d8e0d07486322a"
+    },
+    {
+      "file": "raw/images-native-node24-01/images-crop.pptx",
+      "bytes": 41016,
+      "sha256": "1f4279dd99725105c99942dfaefd7773cf42790a76a1f707121ef6755f0369b4"
+    },
+    {
+      "file": "raw/images-native-node24-01/images-editor-redo-1.svg",
+      "bytes": 1206,
+      "sha256": "04013e49c82cf2c3eec52f6c9f02da3bd9da7e3ee36a8e73a0c9ffd996b5d744"
+    },
+    {
+      "file": "raw/images-native-node24-01/images-editor-redo-2.svg",
+      "bytes": 1184,
+      "sha256": "b5571a833bb880082de69c36b02f61e013a4ebe06d7aea621ffff981666cbe40"
+    },
+    {
+      "file": "raw/images-native-node24-01/images-editor-redo-3.svg",
+      "bytes": 1126,
+      "sha256": "ee629eece0f516e2f8c1e5d44a38c310f3f5c9243aa5ceab8f7e833fd8fd8b26"
+    },
+    {
+      "file": "raw/images-native-node24-01/images-editor-redo-4.svg",
+      "bytes": 3085,
+      "sha256": "0b70d6bcbe1b0548cc352f12ac0320b6fef5658d89b4354ec596f26af013a77e"
+    },
+    {
+      "file": "raw/images-native-node24-01/images-editor-redo-5.svg",
+      "bytes": 2821,
+      "sha256": "040d034ae893028f1a01325bbe831a4367e2ff4cc631fe7026c4dfe1fd380028"
+    },
+    {
+      "file": "raw/images-native-node24-01/images-editor-redo-6.svg",
+      "bytes": 1172,
+      "sha256": "6f1c16e9e0e770ef5de1f38da487d2529fae9fd2c7b5c695cce3ca137436ddb4"
+    },
+    {
+      "file": "raw/images-native-node24-01/images-editor-redo-7.svg",
+      "bytes": 730,
+      "sha256": "4379952335406c2ea01df97aa85e24fb091d82ea2b8c661abfc546ae4becde61"
+    },
+    {
+      "file": "raw/images-native-node24-01/images-editor-redo-8.svg",
+      "bytes": 1584,
+      "sha256": "9ca706da69d719cb8b9d7cc135e2bf527a56a686b287f94928c8d1ef4138c667"
+    },
+    {
+      "file": "raw/images-native-node24-01/images-editor-redo-9.svg",
+      "bytes": 1640,
+      "sha256": "cbb66f7a5d62c59194cad2fc7a881b272fc1a8789a6655f2acd8e1555118722d"
+    },
+    {
+      "file": "raw/images-native-node24-01/images-editor-redo.opf.json",
+      "bytes": 11683,
+      "sha256": "8ca6e6d42ec31d7ced2a7684e4e880b981785ef863d7cf4256a59aa1afb3e15d"
+    },
+    {
+      "file": "raw/images-native-node24-01/images-editor-redo.pptx",
+      "bytes": 40873,
+      "sha256": "63522d0ca9b52c1d68e2d4a4ed120ee894d77329950c32766a54d9f0dcc0d6e3"
+    },
+    {
+      "file": "raw/images-native-node24-01/images-fit-1.svg",
+      "bytes": 1084,
+      "sha256": "cb1808bc9dcf90f1598dc3e51c6b9fbb476c2c9ff165bdc5e576ee65ced4c54c"
+    },
+    {
+      "file": "raw/images-native-node24-01/images-fit-2.svg",
+      "bytes": 1184,
+      "sha256": "b5571a833bb880082de69c36b02f61e013a4ebe06d7aea621ffff981666cbe40"
+    },
+    {
+      "file": "raw/images-native-node24-01/images-fit-3.svg",
+      "bytes": 1126,
+      "sha256": "ee629eece0f516e2f8c1e5d44a38c310f3f5c9243aa5ceab8f7e833fd8fd8b26"
+    },
+    {
+      "file": "raw/images-native-node24-01/images-fit-4.svg",
+      "bytes": 3085,
+      "sha256": "0b70d6bcbe1b0548cc352f12ac0320b6fef5658d89b4354ec596f26af013a77e"
+    },
+    {
+      "file": "raw/images-native-node24-01/images-fit-5.svg",
+      "bytes": 2821,
+      "sha256": "040d034ae893028f1a01325bbe831a4367e2ff4cc631fe7026c4dfe1fd380028"
+    },
+    {
+      "file": "raw/images-native-node24-01/images-fit-6.svg",
+      "bytes": 1172,
+      "sha256": "6f1c16e9e0e770ef5de1f38da487d2529fae9fd2c7b5c695cce3ca137436ddb4"
+    },
+    {
+      "file": "raw/images-native-node24-01/images-fit-7.svg",
+      "bytes": 730,
+      "sha256": "4379952335406c2ea01df97aa85e24fb091d82ea2b8c661abfc546ae4becde61"
+    },
+    {
+      "file": "raw/images-native-node24-01/images-fit-8.svg",
+      "bytes": 1584,
+      "sha256": "9ca706da69d719cb8b9d7cc135e2bf527a56a686b287f94928c8d1ef4138c667"
+    },
+    {
+      "file": "raw/images-native-node24-01/images-fit-9.svg",
+      "bytes": 1640,
+      "sha256": "cbb66f7a5d62c59194cad2fc7a881b272fc1a8789a6655f2acd8e1555118722d"
+    },
+    {
+      "file": "raw/images-native-node24-01/images-fit.opf.json",
+      "bytes": 11561,
+      "sha256": "70005947335bd212890936d12f6f4af52f59d299b15ae5f913b8f36614e9255f"
+    },
+    {
+      "file": "raw/images-native-node24-01/images-fit.pptx",
+      "bytes": 40851,
+      "sha256": "cb0f5d5a808c53cac0a1039bdb366f76795b775a922fabe43db3ccef3143fdf3"
+    },
+    {
+      "file": "raw/images-native-node24-01/runs/images-fit/failure.json",
+      "bytes": 133,
+      "sha256": "61d13a07c30a56ef069796ad319a5aed7f2cafbb014b4ef8ba2e52bbb67644d9"
+    },
+    {
+      "file": "raw/images-native-node24-01/runs/images-fit/progress.json",
+      "bytes": 79,
+      "sha256": "622ebeb88c5592b1bc27af9339dc114367765f0f360c9a8dbfc0e87b032e9389"
+    },
+    {
+      "file": "raw/images-native-node24-01/runs/images-fit/worker.json",
+      "bytes": 340,
+      "sha256": "5f5ccc0063737a7bb397c763c62949c0848c436535b7554f5f32e91c3b05da69"
+    },
+    {
+      "file": "raw/images-native-node24-01/runs/images-fit/worker.stderr.log",
+      "bytes": 455,
+      "sha256": "aa7d1a2843f3680204168c40683161a1888776a4f1cdbed6b0d7217916f059d3"
+    },
+    {
+      "file": "raw/images-native-node24-01/runs/images-fit/worker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/images-native-node24-01/verifiers/native-evidence.mjs",
+      "bytes": 1858,
+      "sha256": "110b86daeb489cdbc36f13ae29e564cf3bb215cd7ac6a85679f8b8e9d1a5bb64"
+    },
+    {
+      "file": "raw/images-native-node24-01/verifiers/native-images.mjs",
+      "bytes": 9836,
+      "sha256": "52f1867789c07edf8e5771022577b634b865791e7aadfdf62dc8dfb4fc026b7e"
+    },
+    {
+      "file": "raw/images-native-node24-01/verifiers/native-images.ps1",
+      "bytes": 4415,
+      "sha256": "6bb1854ec0d20070575da3ea3ed7bd9e8b7d71142cf972e2c04d149412326623"
+    },
+    {
+      "file": "raw/images-native-node24-01/verifiers/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "file": "raw/images-native-node24-02/editor-undo.json",
+      "bytes": 2169,
+      "sha256": "81754505cac121468ca92fd4c19f42ed30154591e655ac319fc03021eb9d7d4f"
+    },
+    {
+      "file": "raw/images-native-node24-02/generation.json",
+      "bytes": 62565,
+      "sha256": "bcfeba9157947578a44414517925375180ba64a0d09446247a8f60459382d90b"
+    },
+    {
+      "file": "raw/images-native-node24-02/images-crop-1.svg",
+      "bytes": 1085,
+      "sha256": "62b43a0af32fc2a87084d807a2084e385fdfba74a3c3741747c15fd33e664bb0"
+    },
+    {
+      "file": "raw/images-native-node24-02/images-crop-2.svg",
+      "bytes": 1185,
+      "sha256": "17b16e7ba032b1d3b7ea854441b74e4f319135be940ff8b3056f5f57ce40e239"
+    },
+    {
+      "file": "raw/images-native-node24-02/images-crop-3.svg",
+      "bytes": 1127,
+      "sha256": "221722ad7130c381a07ca4b22196352bcafe42c9506005820c6dea40e12db7b2"
+    },
+    {
+      "file": "raw/images-native-node24-02/images-crop-4.svg",
+      "bytes": 3086,
+      "sha256": "d1a0b077abdf3db924472cd2014967e9116ee188e65ac9d7847a2b12632ef6de"
+    },
+    {
+      "file": "raw/images-native-node24-02/images-crop-5.svg",
+      "bytes": 2822,
+      "sha256": "497ce71e506934fe443920bb6535ccce7398f36cc7ce379432334a21ba33681f"
+    },
+    {
+      "file": "raw/images-native-node24-02/images-crop-6.svg",
+      "bytes": 1173,
+      "sha256": "8aeeac615acd667d318d803d3321489967327731cb3574b5b408c371a134dd67"
+    },
+    {
+      "file": "raw/images-native-node24-02/images-crop-7.svg",
+      "bytes": 731,
+      "sha256": "64998831663f3b466a95ef8b9dc5ab7c8339c8b15210f004b101c05d26356345"
+    },
+    {
+      "file": "raw/images-native-node24-02/images-crop-8.svg",
+      "bytes": 1585,
+      "sha256": "1f23ec372c8857f637b1771454f397f3fceb978a942c747cc64e014266a6382a"
+    },
+    {
+      "file": "raw/images-native-node24-02/images-crop-9.svg",
+      "bytes": 1641,
+      "sha256": "75c5e3c62629498dd88f504617adc13bdaa9804059054c65e35ff5322aa9ffbf"
+    },
+    {
+      "file": "raw/images-native-node24-02/images-crop.opf.json",
+      "bytes": 11562,
+      "sha256": "b6223bfeb08ba5e4d0bfc38b404695ecb78d11568d6c072e05d8e0d07486322a"
+    },
+    {
+      "file": "raw/images-native-node24-02/images-crop.pptx",
+      "bytes": 45080,
+      "sha256": "6ba0272f9880b465de4a63e643fd9c953e6772d1344c9a23d06eb844b23a132e"
+    },
+    {
+      "file": "raw/images-native-node24-02/images-editor-redo-1.svg",
+      "bytes": 1206,
+      "sha256": "04013e49c82cf2c3eec52f6c9f02da3bd9da7e3ee36a8e73a0c9ffd996b5d744"
+    },
+    {
+      "file": "raw/images-native-node24-02/images-editor-redo-2.svg",
+      "bytes": 1184,
+      "sha256": "b5571a833bb880082de69c36b02f61e013a4ebe06d7aea621ffff981666cbe40"
+    },
+    {
+      "file": "raw/images-native-node24-02/images-editor-redo-3.svg",
+      "bytes": 1126,
+      "sha256": "ee629eece0f516e2f8c1e5d44a38c310f3f5c9243aa5ceab8f7e833fd8fd8b26"
+    },
+    {
+      "file": "raw/images-native-node24-02/images-editor-redo-4.svg",
+      "bytes": 3085,
+      "sha256": "0b70d6bcbe1b0548cc352f12ac0320b6fef5658d89b4354ec596f26af013a77e"
+    },
+    {
+      "file": "raw/images-native-node24-02/images-editor-redo-5.svg",
+      "bytes": 2821,
+      "sha256": "040d034ae893028f1a01325bbe831a4367e2ff4cc631fe7026c4dfe1fd380028"
+    },
+    {
+      "file": "raw/images-native-node24-02/images-editor-redo-6.svg",
+      "bytes": 1172,
+      "sha256": "6f1c16e9e0e770ef5de1f38da487d2529fae9fd2c7b5c695cce3ca137436ddb4"
+    },
+    {
+      "file": "raw/images-native-node24-02/images-editor-redo-7.svg",
+      "bytes": 730,
+      "sha256": "4379952335406c2ea01df97aa85e24fb091d82ea2b8c661abfc546ae4becde61"
+    },
+    {
+      "file": "raw/images-native-node24-02/images-editor-redo-8.svg",
+      "bytes": 1584,
+      "sha256": "9ca706da69d719cb8b9d7cc135e2bf527a56a686b287f94928c8d1ef4138c667"
+    },
+    {
+      "file": "raw/images-native-node24-02/images-editor-redo-9.svg",
+      "bytes": 1640,
+      "sha256": "cbb66f7a5d62c59194cad2fc7a881b272fc1a8789a6655f2acd8e1555118722d"
+    },
+    {
+      "file": "raw/images-native-node24-02/images-editor-redo.opf.json",
+      "bytes": 11683,
+      "sha256": "8ca6e6d42ec31d7ced2a7684e4e880b981785ef863d7cf4256a59aa1afb3e15d"
+    },
+    {
+      "file": "raw/images-native-node24-02/images-editor-redo.pptx",
+      "bytes": 44937,
+      "sha256": "7c40db3d5820f832ae4aae1a646298ccd52503221244ed4e50ba16711b6b3893"
+    },
+    {
+      "file": "raw/images-native-node24-02/images-fit-1.svg",
+      "bytes": 1084,
+      "sha256": "cb1808bc9dcf90f1598dc3e51c6b9fbb476c2c9ff165bdc5e576ee65ced4c54c"
+    },
+    {
+      "file": "raw/images-native-node24-02/images-fit-2.svg",
+      "bytes": 1184,
+      "sha256": "b5571a833bb880082de69c36b02f61e013a4ebe06d7aea621ffff981666cbe40"
+    },
+    {
+      "file": "raw/images-native-node24-02/images-fit-3.svg",
+      "bytes": 1126,
+      "sha256": "ee629eece0f516e2f8c1e5d44a38c310f3f5c9243aa5ceab8f7e833fd8fd8b26"
+    },
+    {
+      "file": "raw/images-native-node24-02/images-fit-4.svg",
+      "bytes": 3085,
+      "sha256": "0b70d6bcbe1b0548cc352f12ac0320b6fef5658d89b4354ec596f26af013a77e"
+    },
+    {
+      "file": "raw/images-native-node24-02/images-fit-5.svg",
+      "bytes": 2821,
+      "sha256": "040d034ae893028f1a01325bbe831a4367e2ff4cc631fe7026c4dfe1fd380028"
+    },
+    {
+      "file": "raw/images-native-node24-02/images-fit-6.svg",
+      "bytes": 1172,
+      "sha256": "6f1c16e9e0e770ef5de1f38da487d2529fae9fd2c7b5c695cce3ca137436ddb4"
+    },
+    {
+      "file": "raw/images-native-node24-02/images-fit-7.svg",
+      "bytes": 730,
+      "sha256": "4379952335406c2ea01df97aa85e24fb091d82ea2b8c661abfc546ae4becde61"
+    },
+    {
+      "file": "raw/images-native-node24-02/images-fit-8.svg",
+      "bytes": 1584,
+      "sha256": "9ca706da69d719cb8b9d7cc135e2bf527a56a686b287f94928c8d1ef4138c667"
+    },
+    {
+      "file": "raw/images-native-node24-02/images-fit-9.svg",
+      "bytes": 1640,
+      "sha256": "cbb66f7a5d62c59194cad2fc7a881b272fc1a8789a6655f2acd8e1555118722d"
+    },
+    {
+      "file": "raw/images-native-node24-02/images-fit.opf.json",
+      "bytes": 11561,
+      "sha256": "70005947335bd212890936d12f6f4af52f59d299b15ae5f913b8f36614e9255f"
+    },
+    {
+      "file": "raw/images-native-node24-02/images-fit.pptx",
+      "bytes": 44915,
+      "sha256": "228931dee8e441c5af5cbafed14568ad9b5028278d067bea0d9fa763e97d976d"
+    },
+    {
+      "file": "raw/images-native-node24-02/runs/images-fit/failure.json",
+      "bytes": 133,
+      "sha256": "61d13a07c30a56ef069796ad319a5aed7f2cafbb014b4ef8ba2e52bbb67644d9"
+    },
+    {
+      "file": "raw/images-native-node24-02/runs/images-fit/progress.json",
+      "bytes": 79,
+      "sha256": "622ebeb88c5592b1bc27af9339dc114367765f0f360c9a8dbfc0e87b032e9389"
+    },
+    {
+      "file": "raw/images-native-node24-02/runs/images-fit/worker.json",
+      "bytes": 341,
+      "sha256": "d1aa80b3643c482dea0c1f4a5dc7c9310c79540ceda6ce6be879399956031cbf"
+    },
+    {
+      "file": "raw/images-native-node24-02/runs/images-fit/worker.stderr.log",
+      "bytes": 455,
+      "sha256": "aa7d1a2843f3680204168c40683161a1888776a4f1cdbed6b0d7217916f059d3"
+    },
+    {
+      "file": "raw/images-native-node24-02/runs/images-fit/worker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/images-native-node24-02/verifiers/native-evidence.mjs",
+      "bytes": 1858,
+      "sha256": "110b86daeb489cdbc36f13ae29e564cf3bb215cd7ac6a85679f8b8e9d1a5bb64"
+    },
+    {
+      "file": "raw/images-native-node24-02/verifiers/native-images.mjs",
+      "bytes": 10688,
+      "sha256": "8cf162848b37f6c8888db370bb48dba873c23724c3cfc5d379a28b39e1af67d6"
+    },
+    {
+      "file": "raw/images-native-node24-02/verifiers/native-images.ps1",
+      "bytes": 4415,
+      "sha256": "6bb1854ec0d20070575da3ea3ed7bd9e8b7d71142cf972e2c04d149412326623"
+    },
+    {
+      "file": "raw/images-native-node24-02/verifiers/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-editor/dist/block-controls.js",
+      "bytes": 16285,
+      "sha256": "21f68e59d44f67069f78b19a2dfa355c0f424973cc138bd6e3b0021b0117702c"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-editor/dist/blocks.js",
+      "bytes": 9340,
+      "sha256": "f9926a4cb8c2b0380ffbe67055a428d01089873141af401edb72d8ebe6e7cdaf"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-editor/dist/canvas-fields.js",
+      "bytes": 2959,
+      "sha256": "0159649cf54332879cc0f125b19fa52de120a85a9e29d7ea757fea55822f6ef6"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-editor/dist/canvas.js",
+      "bytes": 31356,
+      "sha256": "9c5715df407094d52e9d38cf63248acc1158f8aa7f976539d9eb68d42fa6bf3a"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-editor/dist/data.js",
+      "bytes": 101,
+      "sha256": "32d3d8d7ca017a574ac791541ab1a2bb024dcff386ff1e5c5c1ac845b33d3dff"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-editor/dist/galleries.js",
+      "bytes": 8387,
+      "sha256": "239539250f0bfa1ff02e5a717213bd6f40305221b43a78ff707df3c683208ada"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-editor/dist/index.js",
+      "bytes": 29020,
+      "sha256": "327c6d64e854abe2edea45d4b9962263c8142534f98e691aa1c0036978a83f92"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-editor/dist/layout-handles.js",
+      "bytes": 8170,
+      "sha256": "e9f9d4197cae2fe07825abc894fd6243ea35c3d70974762d1a9021bd23781414"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-editor/dist/layout.js",
+      "bytes": 2697,
+      "sha256": "de8dc48f08a7c4ed6c99fcbcfa3e4508930d7b306827fc2cd29865c190141df8"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-editor/dist/react.js",
+      "bytes": 2998,
+      "sha256": "df35ad472e11395a75549281d398171e1b1d345d2631a9f5f16c2f701c53b4f0"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-editor/dist/rich-text-input.js",
+      "bytes": 8739,
+      "sha256": "b29c64566988aaaa541e8e8a38d3ad350dc579e6f03728a03ccc256227293167"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-editor/dist/rich-text-toolbar.js",
+      "bytes": 9338,
+      "sha256": "ca0ceaf4ccd0b5ef0171ca71394424edfe35b56e2333e07e8ca294579374bbec"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-editor/dist/rich-text.js",
+      "bytes": 6920,
+      "sha256": "0479bc3315dcfbffd8463222db265864ee3e4938f8a7e9df5fc7e2a4540d9c28"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-editor/dist/schema-inspector.js",
+      "bytes": 10708,
+      "sha256": "b61ac5c0574edd2f91c6cccb8f8b15d4ee518e354087e260bd649ddd5e943d3e"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-editor/dist/schema.js",
+      "bytes": 6518,
+      "sha256": "d6882c45665318b8e311a3bd83ed76f87b784f24e8ef5f80566eebae4b0dd765"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-editor/dist/svelte.js",
+      "bytes": 3156,
+      "sha256": "ee6582606f927aeeb2947134e28c234c31a63035c2aef35d009dec5a83450cd4"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-editor/dist/transfer.js",
+      "bytes": 9408,
+      "sha256": "5b87f9a36b2a22ed690e21cacb69ce340cc735443758c98143530032b1c46abc"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-editor/package.json",
+      "bytes": 3970,
+      "sha256": "91638545dcd75e55470348ac9271334990820615f6b1328ad99bef86b4a41585"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/background-import.js",
+      "bytes": 5493,
+      "sha256": "684f9b38cff01e596774b8120c979c3dbbfada273890f785f7a4e3db88cdcb22"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/background.js",
+      "bytes": 8812,
+      "sha256": "081fb685677ca656341cdce89275331749174ffecd60e71451f26b9f896cca1c"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/card-provenance.js",
+      "bytes": 3639,
+      "sha256": "ff1ca09b88500993abb4bb293162e5064f1f7fc38edfd999f8ca8eedce8b94b0"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/chart-workbook.js",
+      "bytes": 6436,
+      "sha256": "39db820e6f3a512779943a13e5e78c63ff866c2a0074e1e9c807fcfc7a9aa1e2"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/code-provenance.js",
+      "bytes": 11807,
+      "sha256": "5eb65649d1736dd5a19ff49680422cb1a097b9f6f94a3b457e649001903b9688"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/heading-provenance.js",
+      "bytes": 3269,
+      "sha256": "f10385a2a0ac7ded90d3f71786693ec8d9d302ba4acf5f5111061a6705c8fcaf"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/image-fallback-browser.js",
+      "bytes": 1646,
+      "sha256": "3c7f81d5677dd9a78a0a13fe5a94bbb14cef465031caaeda2c87e8451e9ff491"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/image-fallback-node.js",
+      "bytes": 486,
+      "sha256": "5ee323d3320420664b5d2c1714e246b04dd0806f459164f9696668552df87565"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/image-geometry.js",
+      "bytes": 6315,
+      "sha256": "e083973a98c2bdf7d7dfce9ef1f6bef252f09ce0d69d987105ee0b73cc13d62e"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/image-import.js",
+      "bytes": 5868,
+      "sha256": "cffccecc223e27d62b6e1aba0cdbe2c1c9aa94874ef898f76906b22e001bbd41"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/index.js",
+      "bytes": 92713,
+      "sha256": "f992b4fbae92d87ef2559a74e909d6e5434f31f9d2e72003ac152e068706ba54"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/metric-provenance.js",
+      "bytes": 7208,
+      "sha256": "a058bfd8e84cf393476aa64c925bff31430d11e341c32b5e2f5b0d141922f0af"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/table-border-import.js",
+      "bytes": 3702,
+      "sha256": "16678e0d93e63474d39daac268016a59517cc36d85dbd8751131f143db01ace5"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/table-cell-import.js",
+      "bytes": 9804,
+      "sha256": "fa17507763a2240564401d7977f4f39bc180e3e6da9d4aa9c36202908e9126d1"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/table-import.js",
+      "bytes": 12916,
+      "sha256": "9ae40bb38dd34c9fc0ae4a3f5a257068ae92bb651ed5d96641c2629ef7106cf1"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/package.json",
+      "bytes": 4560,
+      "sha256": "e29ba9014069c90555cdbd39cbfb86b7350eb5d4f603ca33519b287655aadc93"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-render/dist/font-compatibility.js",
+      "bytes": 4071,
+      "sha256": "a50ee71748e81cd12ed3aeb6eee92506ebf91ef05021c6ca3f5a100665d03dac"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-render/dist/font-manifest.js",
+      "bytes": 11818,
+      "sha256": "0af55027613ac952e645ed06f6b873c174e0767efbbb8e4de17e44b0158c1974"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-render/dist/fonts-browser.js",
+      "bytes": 2247,
+      "sha256": "d0543d838b2f22a8c70bdc60100d72d3c69e3f8033d5ccedd3523ee63c66b8d4"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-render/dist/fonts-node.js",
+      "bytes": 3857,
+      "sha256": "d45bd167367c1c40202b12362e52483f15e6a6d5ee67e8641b68418de3f1a8dc"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-render/dist/fonts.js",
+      "bytes": 10858,
+      "sha256": "860198e21bee950a77a2e47882395629956090eed93399557da3e9cc3b202741"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-render/dist/index.js",
+      "bytes": 75,
+      "sha256": "39c8f2b279ce10873f00289349b84cf9cab7e12c56e9e0d87447bd2406777234"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-render/dist/raster-images.js",
+      "bytes": 4233,
+      "sha256": "304cffe5e77553ac1ab590fc5805714dde34e6f69df5dc55e35dbc8df602753c"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-render/dist/raster.js",
+      "bytes": 6087,
+      "sha256": "8e98aba22982ec8c7cece31be19f8cd92fc942a7d538bf64c2e4f32bdd14fc6d"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-render/dist/svg.js",
+      "bytes": 66726,
+      "sha256": "36c6e714e5a09181b702e294621cf4a25a59601ec03525fd58e84366a00f50c2"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-render/package.json",
+      "bytes": 5005,
+      "sha256": "70b562c5f36c1ebfe5208c4fcf866cd03e9e6493f130eedc39660b47e7e83435"
+    },
+    {
+      "file": "runtime/@openpresentation/opf/dist/catalogs.js",
+      "bytes": 238,
+      "sha256": "6d74d7b051844728b2622acdb5268472a043544c8b2ca04eb904b1cdf74ec739"
+    },
+    {
+      "file": "runtime/@openpresentation/opf/dist/chunk-AFEV7YI7.js",
+      "bytes": 13298,
+      "sha256": "49b47b80d21d17e3e1839da05e0257db3db378ae371b6d3a8f7e729d7468104c"
+    },
+    {
+      "file": "runtime/@openpresentation/opf/dist/chunk-DA4NWAQV.js",
+      "bytes": 27807,
+      "sha256": "ac4e9b8e38a998aebb074459f0788dcba6cf13f57e5f5b3f1ace472e0161f2cb"
+    },
+    {
+      "file": "runtime/@openpresentation/opf/dist/chunk-GQSK3T7X.js",
+      "bytes": 224847,
+      "sha256": "34f518c29c9757bc252b5c13eb5d7db8ada4b477496e6289d8149fb4fdc7cd45"
+    },
+    {
+      "file": "runtime/@openpresentation/opf/dist/chunk-NT3IYAYX.js",
+      "bytes": 75535,
+      "sha256": "193a39ad7d395d4f26af96e24aa9d23617afe3f63c9f71ec8b18d2a16c68bf97"
+    },
+    {
+      "file": "runtime/@openpresentation/opf/dist/chunk-TWMRZ43O.js",
+      "bytes": 510975,
+      "sha256": "0d35cec97ec7ddaa67fb9f096bc672c927eb68ed5fae5ac27d4dff70d68313f4"
+    },
+    {
+      "file": "runtime/@openpresentation/opf/dist/composition.js",
+      "bytes": 404,
+      "sha256": "a2d69048632dd6ff5ba4db397acd86e8c9c5c16365633319a24999466ebbd586"
+    },
+    {
+      "file": "runtime/@openpresentation/opf/dist/pagination.js",
+      "bytes": 215,
+      "sha256": "5fad5aee183a2a5fda16fefa31e6b50c0491528ca111bee80081640bd60b50e4"
+    },
+    {
+      "file": "runtime/@openpresentation/opf/dist/validator.js",
+      "bytes": 267,
+      "sha256": "fc419645499641ca2e45e3bfde4dba90a951e171bbfdf45125da1057b5805b45"
+    },
+    {
+      "file": "runtime/@openpresentation/opf/package.json",
+      "bytes": 3229,
+      "sha256": "6c1dcd6b72429c2179c51827e8f97419991b1dd7057fa105d67ecb2db01529b6"
+    },
+    {
+      "file": "runtime/LICENSE.opf-pptx.txt",
+      "bytes": 1094,
+      "sha256": "e8c5cecaad448c0cab00af38f7ed8b6bb647c77ba79f3c50d20a9ea92e256cd3"
+    },
+    {
+      "file": "runtime/package-lock.json",
+      "bytes": 67269,
+      "sha256": "10edb4cb29e98fe9db00c1c361aa3126c9969ab06f2b062889915ccc76019bc7"
+    },
+    {
+      "file": "runtime/vendor/pptxgenjs/pptxgen.es.js",
+      "bytes": 516931,
+      "sha256": "05844c5625e2cda3b449eb967c2246dd57ca57341886a7c28eeebca263b29bd4"
+    },
+    {
+      "file": "sources.json",
+      "bytes": 962,
+      "sha256": "16b0dddd33cad5b99d9dcce3acc1540eb87232f32e7244615388fb7c88603f4a"
+    },
+    {
+      "file": "verifiers/font-final/font-variants.mjs",
+      "bytes": 4896,
+      "sha256": "4def52d1dc9037a9235ab58c09ab1cc981296ec6285ae093187e72ea0859aa89"
+    },
+    {
+      "file": "verifiers/font-final/native-evidence.mjs",
+      "bytes": 1858,
+      "sha256": "110b86daeb489cdbc36f13ae29e564cf3bb215cd7ac6a85679f8b8e9d1a5bb64"
+    },
+    {
+      "file": "verifiers/font-final/native-font-pdf.py",
+      "bytes": 3009,
+      "sha256": "fd022b67a974f8b50e7aab6349f3ed950a7ce2173df46298746cc42ebecd5070"
+    },
+    {
+      "file": "verifiers/font-final/native-font-selection.mjs",
+      "bytes": 4426,
+      "sha256": "151860e82085111691d6b5fd652f032d8d5850babeee92b13999cf6c39e07c08"
+    },
+    {
+      "file": "verifiers/font-final/native-font-selection.ps1",
+      "bytes": 4747,
+      "sha256": "be5df0d802dff60b66e006f95fb47b596b8295af89f2bff6dc03cab93dbb5dbc"
+    },
+    {
+      "file": "verifiers/font-final/native-open-fonts.ps1",
+      "bytes": 2535,
+      "sha256": "9cff22c3afc8c4e77d457f2cd65205c260761c61c30796b376f9d5beddfc3bfc"
+    },
+    {
+      "file": "verifiers/font-final/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "file": "verifiers/image-compatible/native-evidence.mjs",
+      "bytes": 1858,
+      "sha256": "110b86daeb489cdbc36f13ae29e564cf3bb215cd7ac6a85679f8b8e9d1a5bb64"
+    },
+    {
+      "file": "verifiers/image-compatible/native-images.mjs",
+      "bytes": 10688,
+      "sha256": "8cf162848b37f6c8888db370bb48dba873c23724c3cfc5d379a28b39e1af67d6"
+    },
+    {
+      "file": "verifiers/image-compatible/native-images.ps1",
+      "bytes": 4415,
+      "sha256": "6bb1854ec0d20070575da3ea3ed7bd9e8b7d71142cf972e2c04d149412326623"
+    },
+    {
+      "file": "verifiers/image-compatible/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "file": "verify-evidence.mjs",
+      "bytes": 4800,
+      "sha256": "280d9b0a630603153724fab7f48fffbea316904bb45413b3281981625616e460"
+    },
+    {
+      "file": "verify-font-image.mjs",
+      "bytes": 4002,
+      "sha256": "a472a18ae06edc45bb8cbc1e20be48921243dbaecb354ec77eab33eeac79b927"
+    },
+    {
+      "file": "verify-image-archives.py",
+      "bytes": 2564,
+      "sha256": "4c73d43c51a3cf14a3207dcc4bfc3fa86038092c4784a9358e3ee4abd6e87e34"
+    }
+  ]
+}

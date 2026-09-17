@@ -1,0 +1,24 @@
+{
+  "repositories": {
+    "OpenPresentation/opf": "476fdb2f5547e442d8a270047dfc8557f306bb49",
+    "OpenPresentation/opf-render": "379b1402b4d06de79b98a35360f3ef5692d3659b",
+    "OpenPresentation/opf-pptx": "c464b0d53c29fcdb87db88cc54a80e8520f084e3",
+    "OpenPresentation/opf-editor": "6e0b7d2f1b4369fc0a228391cf36e913e05188f8"
+  },
+  "harnessCommit": "6e5b938761c3ec9fa78c414aa8c4072ed0082518",
+  "pullRequests": {
+    "coreOutline": "https://github.com/OpenPresentation/opf/pull/66",
+    "nativeAnchor": "https://github.com/OpenPresentation/opf-pptx/pull/23"
+  },
+  "environment": {
+    "node": [
+      "20.20.2",
+      "24.20.0"
+    ],
+    "pnpm": "10.33.2",
+    "powerPointBuild": "16.0.20326.20132",
+    "windowsBuild": "26200.9445",
+    "nativePowerShell": "5.1.26100.9444"
+  },
+  "scope": "Hash-pinned open-source runtimes and verifiers only. Local proprietary reference fonts and Office binaries are represented by hashes, never redistributed."
+}

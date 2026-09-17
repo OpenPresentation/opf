@@ -1,0 +1,7 @@
+Object reference not set to an instance of an object.
+At C:\Users\micha\.codex\worktrees\fd3f\opf\artifacts\windows-candidate\opf-pptx\test\native-tab-control.ps1:69 char:5
++     $presentation.ExportAsFixedFormat($pdf,2,1,0,1,1,0,$null,1,'',$fa ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (:) [], NullReferenceException
+    + FullyQualifiedErrorId : System.NullReferenceException
+ 

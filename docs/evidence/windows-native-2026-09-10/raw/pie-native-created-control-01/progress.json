@@ -1,0 +1,21 @@
+﻿{
+    "observed":  [
+                     {
+                         "phase":  "created",
+                         "values":  [
+                                        8.2,
+                                        3.2,
+                                        1.4,
+                                        1.2
+                                    ],
+                         "name":  "Sales",
+                         "categories":  [
+                                            "1st Qtr",
+                                            "2nd Qtr",
+                                            "3rd Qtr",
+                                            "4th Qtr"
+                                        ]
+                     }
+                 ],
+    "stage":  "completed"
+}

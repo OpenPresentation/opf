@@ -1,0 +1,202 @@
+{
+  "generationSha256": "1add70b4ba9439d9731ff959236a7fd035125a559009b001a40fbd88b5612c24",
+  "pdfSha256": "ded146e2129a109af380cc34bf44bb425349fc0cae04b9e9cf288bcc91de1c0b",
+  "extractorSha256": "fd022b67a974f8b50e7aab6349f3ed950a7ce2173df46298746cc42ebecd5070",
+  "expectedFaces": [
+    [
+      "Roboto",
+      false,
+      false
+    ],
+    [
+      "Roboto",
+      false,
+      true
+    ],
+    [
+      "Roboto",
+      true,
+      false
+    ],
+    [
+      "Roboto",
+      true,
+      true
+    ],
+    [
+      "Roboto ExtraBold",
+      false,
+      false
+    ],
+    [
+      "Roboto Medium",
+      false,
+      false
+    ],
+    [
+      "Roboto Mono",
+      false,
+      false
+    ],
+    [
+      "Roboto Mono",
+      true,
+      false
+    ],
+    [
+      "Roboto SemiBold",
+      false,
+      false
+    ]
+  ],
+  "observedFaces": [
+    [
+      "Roboto",
+      false,
+      false
+    ],
+    [
+      "Roboto",
+      false,
+      true
+    ],
+    [
+      "Roboto",
+      true,
+      false
+    ],
+    [
+      "Roboto",
+      true,
+      true
+    ],
+    [
+      "Roboto ExtraBold",
+      false,
+      false
+    ],
+    [
+      "Roboto Medium",
+      false,
+      false
+    ],
+    [
+      "Roboto Mono",
+      false,
+      false
+    ],
+    [
+      "Roboto Mono",
+      true,
+      false
+    ],
+    [
+      "Roboto SemiBold",
+      false,
+      false
+    ]
+  ],
+  "rawPdfFontNames": [
+    "Roboto",
+    "Roboto ExtraBold",
+    "Roboto Medium",
+    "Roboto Mono",
+    "Roboto Mono,Bold",
+    "Roboto SemiBold",
+    "Roboto,Bold",
+    "Roboto,BoldItalic",
+    "Roboto,Italic"
+  ],
+  "sourcePostscriptNames": [
+    "Roboto-Regular",
+    "Roboto-Medium",
+    "Roboto-SemiBold",
+    "Roboto-Bold",
+    "Roboto-ExtraBold",
+    "Roboto-Italic",
+    "Roboto-BoldItalic",
+    "RobotoMono-Regular",
+    "RobotoMono-Bold"
+  ],
+  "passed": true,
+  "pages": [
+    {
+      "slide": 1,
+      "fontNames": [
+        "Roboto",
+        "Roboto,Bold"
+      ],
+      "text": "Tag\nHeading\nSubtitle\nScalar text stays editable.",
+      "raster": "pdf-1.png",
+      "rasterSha256": "872c0c4a2e15bac5c3fe33c0b10e0f5751ee740db44a5958f4346a4b1ffeefaa"
+    },
+    {
+      "slide": 2,
+      "fontNames": [
+        "Roboto",
+        "Roboto,Bold",
+        "Roboto,BoldItalic",
+        "Roboto,Italic"
+      ],
+      "text": "Regular bold italic both",
+      "raster": "pdf-2.png",
+      "rasterSha256": "66033ca093e062f746db2aaa5bf17145a1f3e0436bd5f7bce917fa0204d8e467"
+    },
+    {
+      "slide": 3,
+      "fontNames": [
+        "Roboto",
+        "Roboto,Bold",
+        "Roboto,Italic"
+      ],
+      "text": "Header normal\nCell emphasis",
+      "raster": "pdf-3.png",
+      "rasterSha256": "1340902e960c0fb8ff257ac6f476c21b5c232b7beff4f066833b05fa29ec7c85"
+    },
+    {
+      "slide": 4,
+      "fontNames": [
+        "Roboto Medium",
+        "Roboto SemiBold"
+      ],
+      "text": "\"Quote body\"\nQuote author - Original source",
+      "raster": "pdf-4.png",
+      "rasterSha256": "dcca44638fd7a482de998ea40727b191478437b35d0212331512b9e7da36f261"
+    },
+    {
+      "slide": 5,
+      "fontNames": [
+        "Roboto Mono",
+        "Roboto Mono,Bold"
+      ],
+      "text": "example.js\nJavaScript\nconst count = 123;",
+      "raster": "pdf-5.png",
+      "rasterSha256": "9a12987192a5330575081420c4311da463d436bd92c637966eed91402a84f265"
+    },
+    {
+      "slide": 6,
+      "fontNames": [
+        "Roboto",
+        "Roboto ExtraBold",
+        "Roboto Medium"
+      ],
+      "text": "123\nWeight 500 label\nRegular description\n+2",
+      "raster": "pdf-6.png",
+      "rasterSha256": "518286fd08b3ff7c031c930a9542f1b6a5b5ac968e171d0c61de921cc9e21256"
+    },
+    {
+      "slide": 7,
+      "fontNames": [
+        "Roboto",
+        "Roboto,Bold"
+      ],
+      "text": "\u2022 List bold\n\u2022 Second item",
+      "raster": "pdf-7.png",
+      "rasterSha256": "ff5cda50652e0baff9818a4a9230ff7081aea8c5e41725b10f2a1bfee904e6cc"
+    }
+  ],
+  "python": "3.12.14",
+  "pdfplumber": "0.11.9",
+  "pypdf": "6.10.0",
+  "scope": "Names of PDF fonts actually referenced by non-whitespace glyphs, parsed as Windows legacy-family plus optional comma Bold/Italic style. Exact family/style match with pinned open-font metadata; not PostScript-name equality, physical-file identity or browser/native raster equivalence. No font programs extracted."
+}

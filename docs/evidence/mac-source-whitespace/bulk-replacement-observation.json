@@ -1,0 +1,7 @@
+{
+  "source": "  A  B\tC D\r\n\r\ntrail  \r",
+  "replacement": "  Edited  B\tC D\r\n\r\ntrail  \r\tend  ",
+  "actual": "  Edited  B\tC D\r\n\r\ntrail  \r\n\tend  ",
+  "equal": false,
+  "scope": "A replacement spanning two disjoint edits normalizes untouched mixed endings inside the replacement envelope. Single-replacement prefix/suffix behavior is separate; not fixed in the scalar layout milestone."
+}

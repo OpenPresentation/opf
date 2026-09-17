@@ -1,0 +1,6 @@
+{
+  "TimeCreated": "2026-09-10T10:44:26.4447591-07:00",
+  "Id": 1000,
+  "ProviderName": "Application Error",
+  "Message": "Faulting application name: POWERPNT.EXE, version: 16.0.20326.20132, time stamp: 0x6a9296bd\r\nFaulting module name: chart.dll, version: 16.0.20326.20072, time stamp: 0x6a7bd524\r\nException code: 0xc0000005\r\nFault offset: 0x000000000043f429\r\nFaulting process id: 0x3094\r\nFaulting application start time: 0x1DD4120CDE79BE7\r\nFaulting application path: C:\\Program Files\\Microsoft Office\\Root\\Office16\\POWERPNT.EXE\r\nFaulting module path: C:\\Program Files\\Microsoft Office\\Root\\Office16\\chart.dll\r\nReport Id: 0e23c073-47e8-46a5-af77-b5eb7c85c3fd\r\nFaulting package full name: \r\nFaulting package-relative application ID: "
+}

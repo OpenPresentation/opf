@@ -1,0 +1,157 @@
+{
+  "node": "v20.20.2",
+  "runtime": {
+    "@openpresentation/opf/dist/composition.js": "5bb490548ed1f65d9474704452013e5e0dc1ee3a1682f6ba3a1a4bac52c29b30",
+    "@openpresentation/opf/dist/chunk-PA4UHUYO.js": "323e6ed96b7932d516d3a75518215a2231a219e1ccb7827937be369ecf1b0d0b",
+    "@openpresentation/opf/dist/validator.js": "d479ea78e65be19bc8a6f0cedd563c5dce652bf5a1460bdbd1dca7a2c304fc0e",
+    "@openpresentation/opf/dist/chunk-4BX4YX5C.js": "6acb12f539424ca7da7d8ce1a0b8583fb4e5bdccc722a456b15e720f99f32121",
+    "@openpresentation/opf/dist/chunk-GQSK3T7X.js": "34f518c29c9757bc252b5c13eb5d7db8ada4b477496e6289d8149fb4fdc7cd45",
+    "@openpresentation/opf/dist/chunk-TWMRZ43O.js": "0d35cec97ec7ddaa67fb9f096bc672c927eb68ed5fae5ac27d4dff70d68313f4",
+    "@openpresentation/opf/dist/catalogs.js": "6d74d7b051844728b2622acdb5268472a043544c8b2ca04eb904b1cdf74ec739",
+    "@openpresentation/opf/package.json": "d7a9ed943e013a51e907d707e277806c4d89ec3a8b9a26d7336f66597b4f7fdb",
+    "@openpresentation/opf-render/dist/font-compatibility.js": "a50ee71748e81cd12ed3aeb6eee92506ebf91ef05021c6ca3f5a100665d03dac",
+    "@openpresentation/opf-render/dist/fonts-browser.js": "d0543d838b2f22a8c70bdc60100d72d3c69e3f8033d5ccedd3523ee63c66b8d4",
+    "@openpresentation/opf-render/dist/fonts.js": "afa0e428d8200ebf46aca94ab323232f4163963197ba0ef998fb759eb2777a27",
+    "@openpresentation/opf-render/dist/fonts-node.js": "0e65abd7438f3a21fd0cb6ea64120d9e866ef3308510910d11b7b863399f8d8b",
+    "@openpresentation/opf-render/dist/index.js": "39c8f2b279ce10873f00289349b84cf9cab7e12c56e9e0d87447bd2406777234",
+    "@openpresentation/opf-render/dist/svg.js": "36c6e714e5a09181b702e294621cf4a25a59601ec03525fd58e84366a00f50c2",
+    "@openpresentation/opf-render/dist/raster.js": "6ea807bfd43ddaabea95c1137bc1bcf7d656f2ae9c6d87a7e6d2f867df86ea99",
+    "@openpresentation/opf-render/dist/raster-images.js": "304cffe5e77553ac1ab590fc5805714dde34e6f69df5dc55e35dbc8df602753c",
+    "@openpresentation/opf-render/package.json": "95bc4597bc54861de1fb7dfe68911a878eeaa3b8c3c00cda58ec65f1dd6e310f",
+    "@openpresentation/opf-pptx/dist/background-import.js": "684f9b38cff01e596774b8120c979c3dbbfada273890f785f7a4e3db88cdcb22",
+    "@openpresentation/opf-pptx/dist/background.js": "081fb685677ca656341cdce89275331749174ffecd60e71451f26b9f896cca1c",
+    "@openpresentation/opf-pptx/dist/card-provenance.js": "ff1ca09b88500993abb4bb293162e5064f1f7fc38edfd999f8ca8eedce8b94b0",
+    "@openpresentation/opf-pptx/dist/code-provenance.js": "5eb65649d1736dd5a19ff49680422cb1a097b9f6f94a3b457e649001903b9688",
+    "@openpresentation/opf-pptx/dist/chart-workbook.js": "39db820e6f3a512779943a13e5e78c63ff866c2a0074e1e9c807fcfc7a9aa1e2",
+    "@openpresentation/opf-pptx/dist/heading-provenance.js": "f10385a2a0ac7ded90d3f71786693ec8d9d302ba4acf5f5111061a6705c8fcaf",
+    "@openpresentation/opf-pptx/dist/image-fallback-browser.js": "3c7f81d5677dd9a78a0a13fe5a94bbb14cef465031caaeda2c87e8451e9ff491",
+    "@openpresentation/opf-pptx/dist/image-fallback-node.js": "5ee323d3320420664b5d2c1714e246b04dd0806f459164f9696668552df87565",
+    "@openpresentation/opf-pptx/dist/image-geometry.js": "e083973a98c2bdf7d7dfce9ef1f6bef252f09ce0d69d987105ee0b73cc13d62e",
+    "@openpresentation/opf-pptx/dist/image-import.js": "cffccecc223e27d62b6e1aba0cdbe2c1c9aa94874ef898f76906b22e001bbd41",
+    "@openpresentation/opf-pptx/dist/index.js": "8bc92db28de28966434ebae6135c0386514799182e183e018be1f02e23c3c4e2",
+    "@openpresentation/opf-pptx/dist/table-import.js": "9ae40bb38dd34c9fc0ae4a3f5a257068ae92bb651ed5d96641c2629ef7106cf1",
+    "@openpresentation/opf-pptx/dist/table-cell-import.js": "fa17507763a2240564401d7977f4f39bc180e3e6da9d4aa9c36202908e9126d1",
+    "@openpresentation/opf-pptx/dist/table-border-import.js": "16678e0d93e63474d39daac268016a59517cc36d85dbd8751131f143db01ace5",
+    "@openpresentation/opf-pptx/dist/metric-provenance.js": "a058bfd8e84cf393476aa64c925bff31430d11e341c32b5e2f5b0d141922f0af",
+    "@openpresentation/opf-pptx/package.json": "17136e7873b29b75a421d1ebc72c69c15452b0e806fbc0bb4444047d4669f587",
+    "test/native-text.mjs": "30d2c5c2a17881189496ea86da8c108af7dc8c0467253266a4761aef9df5ef8e",
+    "test/native-text.ps1": "0cd12455f6156cdeffdbf4b5fd9373837b6548ef17ca3077ec72e084ea9cb1d0",
+    "test/native-text-fonts.ps1": "0a1db187f846ce4c885b53df18f60016f8725aeec937d9ba70cbf56f1e844075",
+    "test/native-process.ps1": "2a4fc2963bea2baf61c98c4cda23b7ec0be0cb1edcec3f72ccc65d1fc2857d00",
+    "test/accepted-text.mjs": "25b5a50817099736405070efd440316c093eed84ab97b69a73c8c9d4ad911a7f",
+    "vendor/pptxgenjs/pptxgen.es.js": "05844c5625e2cda3b449eb967c2246dd57ca57341886a7c28eeebca263b29bd4",
+    "package-lock.json": "10edb4cb29e98fe9db00c1c361aa3126c9969ab06f2b062889915ccc76019bc7"
+  },
+  "generationSha256": "d0797519b9021529f70e5a928955bd2547788de4261a56ba55f1ac89d2e108bf",
+  "nativeRuns": [
+    {
+      "file": "runs/case-17/native.json",
+      "sha256": "144a9ec9227a87ffec6a6d32089083abd0aaacc5226b9b292facf4ceb505982c",
+      "workerSha256": "36b2195a257af9f65838aa72f7acf0e8c45bf76d6378932d3b869e42fc44c2dc",
+      "fontRegistrationSha256": "d3c8a31ef44b436ffc6ebf82f5738f01cd849312534a4945382f48137795348a"
+    }
+  ],
+  "selectedCase": 17,
+  "completeMatrix": false,
+  "imports": [
+    {
+      "file": "case-17.pptx",
+      "sha256": "85c9737ced72cc7fc7d778f824916798a1ce6c054587984984121061b5760732",
+      "headingRoles": true,
+      "visibleWords": true
+    },
+    {
+      "file": "case-17-saved.pptx",
+      "sha256": "75e99f269214109ac490c237a88e75def141d4ad0774d48ea4dd6371006ae4f2",
+      "headingRoles": true,
+      "visibleWords": true
+    },
+    {
+      "file": "case-17-edited.pptx",
+      "sha256": "9f53290c726feec7f636006ffbbc19f08753606257e830f95241bf592b7503dd",
+      "headingRoles": true,
+      "visibleWords": true
+    }
+  ],
+  "rasters": [
+    {
+      "file": "case-17-mask-0.png",
+      "path": "slides.0.tag",
+      "box": {
+        "x": 43.2,
+        "y": 43.2,
+        "width": 453.6,
+        "height": 14.64
+      },
+      "sha256": "29e62588732c5539908d0fecb1a00211ef157a680352d69511ca23f77b417cd4",
+      "pixels": 163,
+      "bounds": {
+        "left": 463,
+        "top": 46,
+        "right": 495,
+        "bottom": 53
+      },
+      "outside": []
+    },
+    {
+      "file": "case-17-mask-1.png",
+      "path": "slides.0.title",
+      "box": {
+        "x": 43.2,
+        "y": 66.84,
+        "width": 453.6,
+        "height": 148.23
+      },
+      "sha256": "9fff3bf4976d5a53322816680499ca6a3172f5ab7eb56ab8585a4b9d2874c8cb",
+      "pixels": 10230,
+      "bounds": {
+        "left": 139,
+        "top": 76,
+        "right": 496,
+        "bottom": 203
+      },
+      "outside": []
+    },
+    {
+      "file": "case-17-mask-2.png",
+      "path": "slides.0.subtitle",
+      "box": {
+        "x": 43.2,
+        "y": 224.07,
+        "width": 453.6,
+        "height": 22.875
+      },
+      "sha256": "6492a76a2284823f7c8fa16aa50fb02afb21f8345a9b344c8a7e514d0acc3e2b",
+      "pixels": 754,
+      "bounds": {
+        "left": 378,
+        "top": 229,
+        "right": 496,
+        "bottom": 244
+      },
+      "outside": []
+    },
+    {
+      "file": "case-17-mask-3.png",
+      "path": "slides.0.text",
+      "box": {
+        "x": 43.2,
+        "y": 264.945,
+        "width": 453.6,
+        "height": 651.855
+      },
+      "sha256": "45fe5d013da930b24069fdd5a90271d56d0560e955cb65dedfee6a744caa5cb6",
+      "pixels": 3247,
+      "bounds": {
+        "left": 179,
+        "top": 270,
+        "right": 495,
+        "bottom": 315
+      },
+      "outside": []
+    }
+  ],
+  "failures": [],
+  "passed": true,
+  "scope": "Actual PowerPoint editable lines, unchanged accepted anchors, current heading/body text after native edits and renamed shapes, save/reopen and original/saved/edited reimport. Isolated white-on-black native text masks include decorations; every nonzero pixel center uses the browser fixture 0.1-reference-pixel containment gate. Native font descriptors and temporary exact font registration do not prove the font file selected for every glyph or browser/native pixel equivalence."
+}

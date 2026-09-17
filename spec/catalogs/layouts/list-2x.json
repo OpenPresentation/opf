@@ -12,5 +12,8 @@
     {
       "type": "list"
     }
-  ]
+  ],
+  "composition": {
+    "mode": "row"
+  }
 }

@@ -1,0 +1,986 @@
+{
+  "checkedAt": "2026-09-10T05:43:26.850Z",
+  "pullRequest": "https://github.com/OpenPresentation/opf/pull/54",
+  "reviewedCommit": "e8b520dd2c23e559a8d9affcfcb8772c8b8079b7",
+  "mergeCommit": "8d9c9c80b788bbdc80e18ad2b6468f07b2e2321d",
+  "mergeTreeIdentical": true,
+  "checks": {
+    "coordinator": {
+      "run": 34441603873,
+      "conclusion": "success"
+    },
+    "core": {
+      "run": 34441603829,
+      "conclusion": "success"
+    },
+    "cliWindowsMacOS": {
+      "run": 34441603812,
+      "conclusion": "success"
+    },
+    "bugbot": "success; no unresolved findings"
+  },
+  "sourceRefs": {
+    "renderer": "b5a3722725338e8d964783e8b7f1f7b80ce28cd3",
+    "converter": "b4f4645cdaa2f5eff8a883f68533875d3b63f239",
+    "editor": "52e540b83e441892fd928e9f159bffbb29da5653"
+  },
+  "nodes": [
+    {
+      "node": "v20.20.2",
+      "installedReportSha256": "2eddd77e09b9fa78a7cb35271a70665398f31632a8983079370f9d21981e339f",
+      "lockSha256": "14cc5db5017ca06685a50fee3bc965fbe311032826fe6f30696602c6eaee50ad",
+      "packages": [
+        {
+          "name": "@openpresentation/opf",
+          "version": "0.4.0-preview.11",
+          "file": "openpresentation-opf-0.4.0-preview.11.tgz",
+          "sha256": "8729d7b88add71ce6fbe9d6b678272a481f7b37be79391f0d678995006eb0e3b",
+          "bytes": 638303,
+          "installedVersion": "0.4.0-preview.11",
+          "integrity": "sha512-pVsjLRom79ZPPm/EcXuoQ7BtCcub17y3cGWJPfK3b6EFJ/YWM9WyVb5QdkovOU6ApCPi8mDBk0PiTLR9+F1STQ=="
+        },
+        {
+          "name": "@openpresentation/opf-render",
+          "version": "0.1.0-preview.11",
+          "file": "openpresentation-opf-render-0.1.0-preview.11.tgz",
+          "sha256": "4f8d3e1bb93ff7c905247850c33dce1554a93f2381c54f1989dd9e4737afa8ec",
+          "bytes": 33580,
+          "installedVersion": "0.1.0-preview.11",
+          "integrity": "sha512-AWira58HHA7LHv6rsx8hTD9RL4C9onn+hvjuyGk88BnG1R5iwnCs36phKLPH8TSQ9rqnikst9Dlpdz/pTFr/fA=="
+        },
+        {
+          "name": "@openpresentation/opf-editor",
+          "version": "0.1.0-preview.11",
+          "file": "openpresentation-opf-editor-0.1.0-preview.11.tgz",
+          "sha256": "5374634134505236da10a44d545fce50e8d708e377526694fb22be31fb99cdd2",
+          "bytes": 55387,
+          "installedVersion": "0.1.0-preview.11",
+          "integrity": "sha512-HguEPUtQ1VO3rXv+Xc/DseXlRPqE9fDS0zpqLzaPN8u7kZgTmCNQB/HCIKoUbGvZVIhGnKjmc7iqRVTN34iEhQ=="
+        },
+        {
+          "name": "@openpresentation/opf-pptx",
+          "version": "0.1.0-preview.11",
+          "file": "openpresentation-opf-pptx-0.1.0-preview.11.tgz",
+          "sha256": "c73d135845d501cd9cbc2307ca848c0d1b9b446f6e9b5f6ae861061141542d02",
+          "bytes": 197737,
+          "installedVersion": "0.1.0-preview.11",
+          "integrity": "sha512-I60AJ94/3IUZZHK8tCWJKFJ7QxKHgUEkwElPMfbh9yGt8LESvHhQt6UIC2THCj+Y0Lv40JN5kQTrUxBKnYvuUg=="
+        }
+      ],
+      "runtime": {
+        "@openpresentation/opf/dist/catalogs.js": "6d74d7b051844728b2622acdb5268472a043544c8b2ca04eb904b1cdf74ec739",
+        "@openpresentation/opf/dist/chunk-3GPZMY2W.js": "b68a9153ca83f169ad7c7692005cab0696cbba0a698afa06457615f64d0b6b87",
+        "@openpresentation/opf/dist/chunk-GQSK3T7X.js": "34f518c29c9757bc252b5c13eb5d7db8ada4b477496e6289d8149fb4fdc7cd45",
+        "@openpresentation/opf/dist/chunk-JA5W5TVA.js": "9617ee45fd259a0b060831f019f19672e1f5d860a3728b5a126019d6f7cad51c",
+        "@openpresentation/opf/dist/chunk-OZULJBSG.js": "9e3ce45dc68d39c646449baf4ec9aad7b92d3f69b85a3dfe37540d13820d0d1e",
+        "@openpresentation/opf/dist/chunk-PIQXLBBJ.js": "818578357a214f76a743db8cf63c0903825923e1ba970abf68c21912e59893ba",
+        "@openpresentation/opf/dist/chunk-SOSOBKQ2.js": "b2bcaf1f0e8725c9a8f3fff9b5c996c4e7e63c6bb8dd4d13c2d7609105b02915",
+        "@openpresentation/opf/dist/chunk-TWMRZ43O.js": "0d35cec97ec7ddaa67fb9f096bc672c927eb68ed5fae5ac27d4dff70d68313f4",
+        "@openpresentation/opf/dist/chunk-ZGV6I23P.js": "a6ecf201e1543162d2ac22ef731cfaf7239160c696455679126ad7883ff0011b",
+        "@openpresentation/opf/dist/composition.js": "6c77b9883ea592f6e67a6fac262e8c1dbd81968e6bd8b13d80cc7fe9f16f073e",
+        "@openpresentation/opf/dist/data.js": "ae68ff3088ddcea772573952c572a3c58b8815086c9f81e57939d45848c64b95",
+        "@openpresentation/opf/dist/docs.js": "e7623dc2769f4eb1bd64db0e1c9b3e06bbe80a78a31c1d238723acc8fd14bf60",
+        "@openpresentation/opf/dist/examples.js": "29a65e209b6daf91e20f73deccde2af09e1265a0dfe3c113ba7debd0b4bed02b",
+        "@openpresentation/opf/dist/index.js": "45e949094614de7bee9bbd3b523c0e7db24863074a984ed86ca5aa1e2db4b97f",
+        "@openpresentation/opf/dist/pagination.js": "09d5144d900b2dcad6f5097d91d597215e5d4c6367333c4a4a2181f1a080b44a",
+        "@openpresentation/opf/dist/previews.js": "043037d2d5dfec4d69072415032818d6a6c5e686938fcd644a4f103286033950",
+        "@openpresentation/opf/dist/repo-readme.js": "a8177f828c853554ce636a0ca702efb63d79f96175f5440f35c32e6834ac215a",
+        "@openpresentation/opf/dist/schemas.js": "52f40eb788685649099577a9241adb75c5f18b4a5c8cf1e55215b6fa3f52105c",
+        "@openpresentation/opf/dist/spec-files.js": "8302d015b9368a585ee6aea946a18b2f0036396acb963e273baee48a0c4ac817",
+        "@openpresentation/opf/dist/types.js": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+        "@openpresentation/opf/dist/validator.js": "b6b8a02e1ee7f3b3c83382a2cd95bf03976165171c31f68583ee5cadc663db47",
+        "@openpresentation/opf-render/dist/font-compatibility.js": "8d689401d826bf604b1e2b0bedaed2f47d89263d17041b03fcd1f91b254b82ac",
+        "@openpresentation/opf-render/dist/fonts-browser.js": "cee4d94c13aa1dc76581e9e4f3b401278ee859b69b21bbed88ed626c77e6ece7",
+        "@openpresentation/opf-render/dist/fonts-node.js": "0f1edc1f3d55472a64efd1ce344ff95e8a320e0ee53689085ed55a77a33a8f0e",
+        "@openpresentation/opf-render/dist/fonts.js": "db78254df6efadb5cb606169feefa1d19c153a249186bd8a38078f97d9502d22",
+        "@openpresentation/opf-render/dist/index.js": "1fdb45740a09bb6f48eb5dc79def3ffe692acdf0a5c319727edf4e19c0020d78",
+        "@openpresentation/opf-render/dist/raster-images.js": "9d61faa7fd83452a98d2593431dcb29953b6d1a5f60d521aa22eadfc7d7e1843",
+        "@openpresentation/opf-render/dist/raster.js": "3b18ae6c2c3a04cc0f53c2c92c84be1c8fbdaf85eb7c1af232ef7092477bf305",
+        "@openpresentation/opf-render/dist/svg.js": "7e041ca12fd98ca5ee5ce63dccdd6f0e386a06fdff36136222a5326fc84ce287",
+        "@openpresentation/opf-editor/dist/block-controls.js": "e47850c451e316b160941d44e7b52025bd4f85fa7b5ad80ef6eb71271d323e44",
+        "@openpresentation/opf-editor/dist/blocks.js": "50d64df19203caec4864b3e731b86f73eb9b2b72f23d3c55edd6972852d63d8a",
+        "@openpresentation/opf-editor/dist/canvas-fields.js": "bc10e810899a832d3566a5e6d19a4f50c2237494a5f1a8f7e908826cbee2b1b1",
+        "@openpresentation/opf-editor/dist/canvas.js": "3302646fcdfdcdcab75030bee20eca4a6e31bb9f89c60cd7c1dd7a186bcd7f47",
+        "@openpresentation/opf-editor/dist/data.js": "cdc50b4b2aa02ab1049ab10dec3f3f0b5aa8e7d35e1d76b763ecead205ecf754",
+        "@openpresentation/opf-editor/dist/galleries.js": "7cfb910e9965c0f56e222a460d24c98a840fb976bf7fe1dd38a0d73e8cf65247",
+        "@openpresentation/opf-editor/dist/index.js": "1b710642cc8977e8e7f4a2b929df602ec9c3761ee2de5cd38800f9c7acef3571",
+        "@openpresentation/opf-editor/dist/layout-handles.js": "b78ea7a5be0ed1f5c91dd217974086800b19f6c44c75fa2e3946918e5b46edf0",
+        "@openpresentation/opf-editor/dist/layout.js": "2dc0796ec514dcd03c240782587bb62e9779ea5e3992bf503a41d2a1df6695f2",
+        "@openpresentation/opf-editor/dist/react.js": "a26b7d481505653d297e981e2a80673e2673096ef7ab62e47e9ca5089a03c3cf",
+        "@openpresentation/opf-editor/dist/rich-text-input.js": "e57efd59abe30c79711014e8c0ea200725e15d95428b8e0b630d3953dc522e2f",
+        "@openpresentation/opf-editor/dist/rich-text-toolbar.js": "dc573fcf323cdf84ed6cd1d89504667358eefa4204d6b695efe77ca767fbece3",
+        "@openpresentation/opf-editor/dist/rich-text.js": "e67700c571a31fa6a016af69a10bf541f796d80042f60dc687a7abc4225c21ef",
+        "@openpresentation/opf-editor/dist/schema-inspector.js": "c03b4d66d37ae1e098ec4248ded1986782139d2641b7faa3ed0765febd0ec488",
+        "@openpresentation/opf-editor/dist/schema.js": "b1a1b2d67a6d21c7dccc4781f22562b6127890be98d453c5cd3fa3ebeaabe5ef",
+        "@openpresentation/opf-editor/dist/svelte.js": "973e1ff64700b4090b351ca60c1a2d72db5161e2543574e88b3e2df776e2e7ae",
+        "@openpresentation/opf-editor/dist/transfer.js": "1fb5d0de5ed85f77a0f7a9ad86915e7a57b465b7f91bd4a68ee2577c955dab8c",
+        "@openpresentation/opf-pptx/dist/background-import.js": "888583bbbaae46a9a4d174f046ca276cfadee5c021a76e39ab49050a1bfefe38",
+        "@openpresentation/opf-pptx/dist/background.js": "38f97d14394058737418e7517569d5babf99468574f299cc5df25ea1188dfe56",
+        "@openpresentation/opf-pptx/dist/code-provenance.js": "1c7af17306cd58bcec1cb72c4333edaebc4b5a5f41a439763e1617c0b8f2d0bf",
+        "@openpresentation/opf-pptx/dist/image-fallback-browser.js": "b2cd7aa15c3952abf324e6474e7bbdebbd6445dde84f145e068c94c43f9c0de8",
+        "@openpresentation/opf-pptx/dist/image-fallback-node.js": "72c4efba8ef521e7fdce15b09c57ce6039ba9394ae25a8437a2cb6e26b1b420d",
+        "@openpresentation/opf-pptx/dist/image-geometry.js": "c2d3d5e7b7f81cf421bcc94437093f17e47670f458a48cf9cf9aa73535a08346",
+        "@openpresentation/opf-pptx/dist/image-import.js": "898704890944137909c5d48c7d1b3b16e4f06403bd745240d0f6b21f7c8c444a",
+        "@openpresentation/opf-pptx/dist/index.js": "9182d9259a5a822da74856f464b6bd384556775e68873d654971f67a2ac1e0a1",
+        "@openpresentation/opf-pptx/dist/table-border-import.js": "10dc23b93881d691be62bb5f171678d61cdf77675a628f86f58a58ee962e7093",
+        "@openpresentation/opf-pptx/dist/table-cell-import.js": "d268a14eecf54fe12bab31246680807cf1c90407b9807b49d32c3c71d93a643b",
+        "@openpresentation/opf-pptx/dist/table-import.js": "b545fff80415d085f76c82b88ce0c72e1bcfd6947c621a0fbedcc08e5a9ea227",
+        "@openpresentation/opf-pptx/vendor/pptxgenjs/pptxgen.es.js": "05844c5625e2cda3b449eb967c2246dd57ca57341886a7c28eeebca263b29bd4"
+      },
+      "harnesses": [
+        {
+          "repo": "opf",
+          "sourceFile": "packages/javascript/test/code-layout.test.mjs",
+          "destination": "code-layout.test.mjs",
+          "sourceSha256": "7b4f35c45a613df0b5de50d11650665e2c5e7bd060ad2358ea2636381d9b1022",
+          "executedSha256": "255b64461bc13754e07a647d11798a293e520d31b239491dc3b7e4cd81296e75"
+        },
+        {
+          "repo": "opf",
+          "sourceFile": "packages/javascript/test/code-composition.test.mjs",
+          "destination": "code-composition.test.mjs",
+          "sourceSha256": "de124fbb8901b610813065de518c57fc0b3d36820676ca23aa6d6106d7cecc97",
+          "executedSha256": "3881730bae7967e5d7c6bcc55435db797eae758a1de1513cc01b0a5f4f808660"
+        },
+        {
+          "repo": "opf-pptx",
+          "sourceFile": "test/shared-code.mjs",
+          "destination": "pptx-shared-code.mjs",
+          "sourceSha256": "75dbf2ba1c799ed82384024d5223b8adf3667c79de9c844e9dd38f48da10cc78",
+          "executedSha256": "d2f99717884f7a69e0706128fc734e35c69046fd06ae8536bcc23e246ed93a6f"
+        },
+        {
+          "repo": "opf-pptx",
+          "sourceFile": "test/code-provenance.mjs",
+          "destination": "pptx-code-provenance.mjs",
+          "sourceSha256": "ce16842b321e1eb33558be6f5e4e526cde645635028ae369df24d1c63b421cda",
+          "executedSha256": "f551e475119672a211dcaa8806bfcc1be300210ac0c140b49e9f964708bfe172"
+        },
+        {
+          "repo": "opf-render",
+          "sourceFile": "test/shared-code.mjs",
+          "destination": "renderer-code.mjs",
+          "sourceSha256": "351153175ad9a75d0faf5af317ac55f29378d67d02009711bbe6aa9855f8d18e",
+          "executedSha256": "4b7097b351ca8d32184ed4d85b67f61d42624c24574f6675b2029d24379fb561"
+        },
+        {
+          "repo": "opf-render",
+          "sourceFile": "test/shared-code-browser.mjs",
+          "destination": "opf-render-installed-code-browser.mjs",
+          "sourceSha256": "18ece6e96e5df5fb9750c85e00087b5efebd415134a662c95cc4a8e641fe1b27",
+          "executedSha256": "9713a7e9137db4043bafb1e08970cb6fcf1d6906272594924adce0f2ae351a7c"
+        },
+        {
+          "repo": "opf-editor",
+          "sourceFile": "test/code-browser.mjs",
+          "destination": "opf-editor-installed-code-browser.mjs",
+          "sourceSha256": "75b5b74676edea774d69bacbf3b33cd4b447c3a89c46663699478c3198ddcf86",
+          "executedSha256": "3b6f5d35b7874932374d19af97f6f438178624043b4bed7afb491e9c4a21378b"
+        }
+      ],
+      "codeBrowsers": [
+        {
+          "file": "opf-render-installed-code-browser.json",
+          "sha256": "4c3bf7b9faef31c38a0a9cbfb9f6e216419c9bbd83f883b266d8665d6ffdff07",
+          "browser": "153.0.8010.12",
+          "platform": "linux",
+          "verifierSha256": "9713a7e9137db4043bafb1e08970cb6fcf1d6906272594924adce0f2ae351a7c",
+          "rendererSha256": "7e041ca12fd98ca5ee5ce63dccdd6f0e386a06fdff36136222a5326fc84ce287",
+          "fontHashes": [
+            {
+              "family": "Cousine",
+              "weight": 400,
+              "sha256": "ca2264d6750d6c47df703be4486361a37ab943d42de6ea2bf794b7c7af767799"
+            },
+            {
+              "family": "Cousine",
+              "weight": 700,
+              "sha256": "f03c46c4bc5c0a3af4a1f4fbe5e3e16954581cced05cea20b3bffe12740d99d3"
+            }
+          ],
+          "errors": [],
+          "externalRequests": [],
+          "scope": "Ten actual SVG outputs with exact Cousine regular/bold bytes: source/offset preservation, accepted segment starts within 0.1 reference pixel, glyph cell containment and separate metadata/body glyphs. Natural browser advance differences are recorded. This is not native export, shaping/bidi conformance or raster equivalence.",
+          "results": [
+            {
+              "id": "shorthand-1280",
+              "svgSha256": "1628fd3e0f03c6025d1b156c874abe57816d3d9ab67397374ad5f7e963a53bb2",
+              "sourcePreserved": true,
+              "acceptedLines": 5,
+              "maxNaturalAdvanceDifferencePixels": 0.0074462890625
+            },
+            {
+              "id": "metadata-1280",
+              "svgSha256": "4b65f33951493264e72e272be3e4c4149638b757e8ee4b6d956f247fe7758b6e",
+              "sourcePreserved": true,
+              "acceptedLines": 6,
+              "maxNaturalAdvanceDifferencePixels": 0.01556396484375
+            },
+            {
+              "id": "language-1280",
+              "svgSha256": "5e8557202da71a51b1964fc7e00fbf2ef08bff86c8b8ceabd751ccc03b6dc7d1",
+              "sourcePreserved": true,
+              "acceptedLines": 7,
+              "maxNaturalAdvanceDifferencePixels": 0.0078125
+            },
+            {
+              "id": "filename-1280",
+              "svgSha256": "9be0513867242bc82ee7a7634181aa2e583eeb2a5e5e9a61816860c0353e352d",
+              "sourcePreserved": true,
+              "acceptedLines": 5,
+              "maxNaturalAdvanceDifferencePixels": 0.0078125
+            },
+            {
+              "id": "wrapped-1280",
+              "svgSha256": "b90200464c6d4458547cb3d3cf0c741a295eafbd2c6e5dcf1a75c2365d3b9578",
+              "sourcePreserved": true,
+              "acceptedLines": 8,
+              "maxNaturalAdvanceDifferencePixels": 0.0113525390625
+            },
+            {
+              "id": "shorthand-540",
+              "svgSha256": "93d5ac084f0fdb5e2b55b952f273209f7bc0ae5ae7a58e834a444a9e3f641f81",
+              "sourcePreserved": true,
+              "acceptedLines": 5,
+              "maxNaturalAdvanceDifferencePixels": 0.01171875
+            },
+            {
+              "id": "metadata-540",
+              "svgSha256": "dd7251d141c1d35e4abaf260ba41935ed3b6dba81dfe1acf1cf591bf92006a90",
+              "sourcePreserved": true,
+              "acceptedLines": 6,
+              "maxNaturalAdvanceDifferencePixels": 0.02288818359375
+            },
+            {
+              "id": "language-540",
+              "svgSha256": "90390d4f13fac8d3db3d6eb8bde58e5e605b04976072dc3597d68324df0783d7",
+              "sourcePreserved": true,
+              "acceptedLines": 12,
+              "maxNaturalAdvanceDifferencePixels": 0.01171875
+            },
+            {
+              "id": "filename-540",
+              "svgSha256": "947759f21f15d3e3d00a1f31a51eb9ee0abdbba63d10d9b915cb31cf6683e289",
+              "sourcePreserved": true,
+              "acceptedLines": 8,
+              "maxNaturalAdvanceDifferencePixels": 0.0107421875
+            },
+            {
+              "id": "wrapped-540",
+              "svgSha256": "9bc6d15d420298020713d997753070bb0f8f99ee858008d262c1673818e82755",
+              "sourcePreserved": true,
+              "acceptedLines": 12,
+              "maxNaturalAdvanceDifferencePixels": 0.01171875
+            }
+          ]
+        },
+        {
+          "file": "opf-editor-installed-code-browser.json",
+          "sha256": "bbf919d643b3096929299f327edcb7a5caa98873c4ca00a6c57c18407fad83cc",
+          "browser": "153.0.8010.12",
+          "platform": "linux",
+          "bundleSha256": "eea318b541e508a3204161013556e0f58c64a469071e2bbfb07b9f99193bef3e",
+          "verifierSha256": "3b6f5d35b7874932374d19af97f6f438178624043b4bed7afb491e9c4a21378b",
+          "errors": [],
+          "externalRequests": [],
+          "scope": "Offline candidate canvas: real pointer/keyboard code and filename edits, CRLF no-op/preservation, tab insertion/cancel, undo/redo, one-page pagination/readability undo, browser native export and undoable exact code/metadata/source-boundary reimport. Native formatting, positioning and font scheme are not reconstructed; font fallback uses the existing playground policy and is recorded. No native PowerPoint or raster equivalence claim.",
+          "installedBundleInputCount": 213,
+          "results": [
+            {
+              "dimensions": {
+                "width": 1280,
+                "height": 720
+              },
+              "exportSha256": "5d47b563974ef155ef39e7d218b10d94914de69d4e59495d3d77d184175e52a4",
+              "exportBytes": 17725,
+              "acceptedLines": 6,
+              "exactCodeRoundTrip": true,
+              "substitutions": [
+                {
+                  "requestedFamily": "Aptos Display",
+                  "sourceFamily": "Aptos Display",
+                  "resolvedFamily": "Roboto",
+                  "requestedWeight": 700,
+                  "resolvedWeight": 700,
+                  "italic": false,
+                  "compatibility": "generic"
+                },
+                {
+                  "requestedFamily": "Aptos",
+                  "sourceFamily": "Aptos",
+                  "resolvedFamily": "Roboto",
+                  "requestedWeight": 400,
+                  "resolvedWeight": 400,
+                  "italic": false,
+                  "compatibility": "generic"
+                }
+              ]
+            },
+            {
+              "dimensions": {
+                "width": 540,
+                "height": 960
+              },
+              "exportSha256": "08e65dd3fcf218e0bd4573485a38ce6495338738dfd063bbfe895e621a47c4ad",
+              "exportBytes": 17726,
+              "acceptedLines": 6,
+              "exactCodeRoundTrip": true,
+              "substitutions": [
+                {
+                  "requestedFamily": "Aptos Display",
+                  "sourceFamily": "Aptos Display",
+                  "resolvedFamily": "Roboto",
+                  "requestedWeight": 700,
+                  "resolvedWeight": 700,
+                  "italic": false,
+                  "compatibility": "generic"
+                },
+                {
+                  "requestedFamily": "Aptos",
+                  "sourceFamily": "Aptos",
+                  "resolvedFamily": "Roboto",
+                  "requestedWeight": 400,
+                  "resolvedWeight": 400,
+                  "italic": false,
+                  "compatibility": "generic"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "packed": {
+        "sha256": "842d7ae1388102cc4b9f11b9fcc1f9347ea4b36da17f532d03d3d4cc2bfdfd03",
+        "node": "v20.20.2",
+        "browser": "153.0.8010.12",
+        "mode": "packed",
+        "lockSha256": "14cc5db5017ca06685a50fee3bc965fbe311032826fe6f30696602c6eaee50ad",
+        "results": [
+          {
+            "suite": "canvas",
+            "assertions": 34,
+            "interactions": [],
+            "pageErrors": [],
+            "blockedRequests": []
+          },
+          {
+            "suite": "rich-text",
+            "assertions": 46,
+            "interactions": [],
+            "pageErrors": [],
+            "blockedRequests": []
+          },
+          {
+            "suite": "layout",
+            "assertions": 26,
+            "interactions": [
+              "trusted divider drag: normal",
+              "trusted divider drag: cancel",
+              "trusted divider drag: conflict",
+              "trusted divider drag: independent"
+            ],
+            "pageErrors": [],
+            "blockedRequests": []
+          },
+          {
+            "suite": "block",
+            "assertions": 21,
+            "interactions": [
+              "trusted block reorder and one-step undo"
+            ],
+            "pageErrors": [],
+            "blockedRequests": []
+          },
+          {
+            "suite": "list",
+            "assertions": 19,
+            "interactions": [],
+            "pageErrors": [],
+            "blockedRequests": []
+          },
+          {
+            "suite": "create",
+            "assertions": 40,
+            "interactions": [],
+            "pageErrors": [],
+            "blockedRequests": []
+          },
+          {
+            "suite": "styled-table",
+            "assertions": 44,
+            "interactions": [
+              "trusted merged rich-cell typing, redo and undo",
+              "trusted scalar-to-rich conversion and bold formatting, each with its own undo",
+              "trusted empty-cell typing and undo"
+            ],
+            "pageErrors": [],
+            "blockedRequests": []
+          }
+        ]
+      },
+      "registry": {
+        "sha256": "126b394fdc8b0693e0d9dd31bf4c505d52df6e2996182ef5482c299da144f84a",
+        "node": "v20.20.2",
+        "browser": "153.0.8010.12",
+        "mode": "registry",
+        "lockSha256": "7ebd78836e92f1b797597c7a506ab5a87662ea6e329a0752aee99a47c0e5edcd",
+        "results": [
+          {
+            "suite": "canvas",
+            "assertions": 34,
+            "interactions": [],
+            "pageErrors": [],
+            "blockedRequests": []
+          },
+          {
+            "suite": "rich-text",
+            "assertions": 46,
+            "interactions": [],
+            "pageErrors": [],
+            "blockedRequests": []
+          },
+          {
+            "suite": "layout",
+            "assertions": 26,
+            "interactions": [
+              "trusted divider drag: normal",
+              "trusted divider drag: cancel",
+              "trusted divider drag: conflict",
+              "trusted divider drag: independent"
+            ],
+            "pageErrors": [],
+            "blockedRequests": []
+          },
+          {
+            "suite": "block",
+            "assertions": 21,
+            "interactions": [
+              "trusted block reorder and one-step undo"
+            ],
+            "pageErrors": [],
+            "blockedRequests": []
+          },
+          {
+            "suite": "list",
+            "assertions": 19,
+            "interactions": [],
+            "pageErrors": [],
+            "blockedRequests": []
+          },
+          {
+            "suite": "create",
+            "assertions": 40,
+            "interactions": [],
+            "pageErrors": [],
+            "blockedRequests": []
+          },
+          {
+            "suite": "styled-table",
+            "assertions": 44,
+            "interactions": [
+              "trusted merged rich-cell typing, redo and undo",
+              "trusted scalar-to-rich conversion and bold formatting, each with its own undo",
+              "trusted empty-cell typing and undo"
+            ],
+            "pageErrors": [],
+            "blockedRequests": []
+          }
+        ]
+      },
+      "registryGuards": {
+        "sha256": "fa1460c402ebe8e57b87c22f831999f3d271d1b57e503035ed56cef19986638f",
+        "value": {
+          "mode": "registry",
+          "node": "v20.20.2",
+          "checks": [
+            "Rebuild the requested installed-package harness before testing it",
+            "Browser assets are from a stale consumer build",
+            "Installed dependency lock changed after bundling",
+            "Browser asset changed after bundling: fonts.json"
+          ],
+          "fixturesRestored": true
+        }
+      }
+    },
+    {
+      "node": "v24.20.0",
+      "installedReportSha256": "609f313273f731eca4b479fc7acb0df927ac63f7f9365d3796770d1c1216ccbc",
+      "lockSha256": "bc9271181ad02e1b1bda4edf723c6c46bd81e770592739c0b873769a1f249ef2",
+      "packages": [
+        {
+          "name": "@openpresentation/opf",
+          "version": "0.4.0-preview.11",
+          "file": "openpresentation-opf-0.4.0-preview.11.tgz",
+          "sha256": "8729d7b88add71ce6fbe9d6b678272a481f7b37be79391f0d678995006eb0e3b",
+          "bytes": 638303,
+          "installedVersion": "0.4.0-preview.11",
+          "integrity": "sha512-pVsjLRom79ZPPm/EcXuoQ7BtCcub17y3cGWJPfK3b6EFJ/YWM9WyVb5QdkovOU6ApCPi8mDBk0PiTLR9+F1STQ=="
+        },
+        {
+          "name": "@openpresentation/opf-render",
+          "version": "0.1.0-preview.11",
+          "file": "openpresentation-opf-render-0.1.0-preview.11.tgz",
+          "sha256": "4f8d3e1bb93ff7c905247850c33dce1554a93f2381c54f1989dd9e4737afa8ec",
+          "bytes": 33580,
+          "installedVersion": "0.1.0-preview.11",
+          "integrity": "sha512-AWira58HHA7LHv6rsx8hTD9RL4C9onn+hvjuyGk88BnG1R5iwnCs36phKLPH8TSQ9rqnikst9Dlpdz/pTFr/fA=="
+        },
+        {
+          "name": "@openpresentation/opf-editor",
+          "version": "0.1.0-preview.11",
+          "file": "openpresentation-opf-editor-0.1.0-preview.11.tgz",
+          "sha256": "5374634134505236da10a44d545fce50e8d708e377526694fb22be31fb99cdd2",
+          "bytes": 55387,
+          "installedVersion": "0.1.0-preview.11",
+          "integrity": "sha512-HguEPUtQ1VO3rXv+Xc/DseXlRPqE9fDS0zpqLzaPN8u7kZgTmCNQB/HCIKoUbGvZVIhGnKjmc7iqRVTN34iEhQ=="
+        },
+        {
+          "name": "@openpresentation/opf-pptx",
+          "version": "0.1.0-preview.11",
+          "file": "openpresentation-opf-pptx-0.1.0-preview.11.tgz",
+          "sha256": "c73d135845d501cd9cbc2307ca848c0d1b9b446f6e9b5f6ae861061141542d02",
+          "bytes": 197737,
+          "installedVersion": "0.1.0-preview.11",
+          "integrity": "sha512-I60AJ94/3IUZZHK8tCWJKFJ7QxKHgUEkwElPMfbh9yGt8LESvHhQt6UIC2THCj+Y0Lv40JN5kQTrUxBKnYvuUg=="
+        }
+      ],
+      "runtime": {
+        "@openpresentation/opf/dist/catalogs.js": "6d74d7b051844728b2622acdb5268472a043544c8b2ca04eb904b1cdf74ec739",
+        "@openpresentation/opf/dist/chunk-3GPZMY2W.js": "b68a9153ca83f169ad7c7692005cab0696cbba0a698afa06457615f64d0b6b87",
+        "@openpresentation/opf/dist/chunk-GQSK3T7X.js": "34f518c29c9757bc252b5c13eb5d7db8ada4b477496e6289d8149fb4fdc7cd45",
+        "@openpresentation/opf/dist/chunk-JA5W5TVA.js": "9617ee45fd259a0b060831f019f19672e1f5d860a3728b5a126019d6f7cad51c",
+        "@openpresentation/opf/dist/chunk-OZULJBSG.js": "9e3ce45dc68d39c646449baf4ec9aad7b92d3f69b85a3dfe37540d13820d0d1e",
+        "@openpresentation/opf/dist/chunk-PIQXLBBJ.js": "818578357a214f76a743db8cf63c0903825923e1ba970abf68c21912e59893ba",
+        "@openpresentation/opf/dist/chunk-SOSOBKQ2.js": "b2bcaf1f0e8725c9a8f3fff9b5c996c4e7e63c6bb8dd4d13c2d7609105b02915",
+        "@openpresentation/opf/dist/chunk-TWMRZ43O.js": "0d35cec97ec7ddaa67fb9f096bc672c927eb68ed5fae5ac27d4dff70d68313f4",
+        "@openpresentation/opf/dist/chunk-ZGV6I23P.js": "a6ecf201e1543162d2ac22ef731cfaf7239160c696455679126ad7883ff0011b",
+        "@openpresentation/opf/dist/composition.js": "6c77b9883ea592f6e67a6fac262e8c1dbd81968e6bd8b13d80cc7fe9f16f073e",
+        "@openpresentation/opf/dist/data.js": "ae68ff3088ddcea772573952c572a3c58b8815086c9f81e57939d45848c64b95",
+        "@openpresentation/opf/dist/docs.js": "e7623dc2769f4eb1bd64db0e1c9b3e06bbe80a78a31c1d238723acc8fd14bf60",
+        "@openpresentation/opf/dist/examples.js": "29a65e209b6daf91e20f73deccde2af09e1265a0dfe3c113ba7debd0b4bed02b",
+        "@openpresentation/opf/dist/index.js": "45e949094614de7bee9bbd3b523c0e7db24863074a984ed86ca5aa1e2db4b97f",
+        "@openpresentation/opf/dist/pagination.js": "09d5144d900b2dcad6f5097d91d597215e5d4c6367333c4a4a2181f1a080b44a",
+        "@openpresentation/opf/dist/previews.js": "043037d2d5dfec4d69072415032818d6a6c5e686938fcd644a4f103286033950",
+        "@openpresentation/opf/dist/repo-readme.js": "a8177f828c853554ce636a0ca702efb63d79f96175f5440f35c32e6834ac215a",
+        "@openpresentation/opf/dist/schemas.js": "52f40eb788685649099577a9241adb75c5f18b4a5c8cf1e55215b6fa3f52105c",
+        "@openpresentation/opf/dist/spec-files.js": "8302d015b9368a585ee6aea946a18b2f0036396acb963e273baee48a0c4ac817",
+        "@openpresentation/opf/dist/types.js": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+        "@openpresentation/opf/dist/validator.js": "b6b8a02e1ee7f3b3c83382a2cd95bf03976165171c31f68583ee5cadc663db47",
+        "@openpresentation/opf-render/dist/font-compatibility.js": "8d689401d826bf604b1e2b0bedaed2f47d89263d17041b03fcd1f91b254b82ac",
+        "@openpresentation/opf-render/dist/fonts-browser.js": "cee4d94c13aa1dc76581e9e4f3b401278ee859b69b21bbed88ed626c77e6ece7",
+        "@openpresentation/opf-render/dist/fonts-node.js": "0f1edc1f3d55472a64efd1ce344ff95e8a320e0ee53689085ed55a77a33a8f0e",
+        "@openpresentation/opf-render/dist/fonts.js": "db78254df6efadb5cb606169feefa1d19c153a249186bd8a38078f97d9502d22",
+        "@openpresentation/opf-render/dist/index.js": "1fdb45740a09bb6f48eb5dc79def3ffe692acdf0a5c319727edf4e19c0020d78",
+        "@openpresentation/opf-render/dist/raster-images.js": "9d61faa7fd83452a98d2593431dcb29953b6d1a5f60d521aa22eadfc7d7e1843",
+        "@openpresentation/opf-render/dist/raster.js": "3b18ae6c2c3a04cc0f53c2c92c84be1c8fbdaf85eb7c1af232ef7092477bf305",
+        "@openpresentation/opf-render/dist/svg.js": "7e041ca12fd98ca5ee5ce63dccdd6f0e386a06fdff36136222a5326fc84ce287",
+        "@openpresentation/opf-editor/dist/block-controls.js": "e47850c451e316b160941d44e7b52025bd4f85fa7b5ad80ef6eb71271d323e44",
+        "@openpresentation/opf-editor/dist/blocks.js": "50d64df19203caec4864b3e731b86f73eb9b2b72f23d3c55edd6972852d63d8a",
+        "@openpresentation/opf-editor/dist/canvas-fields.js": "bc10e810899a832d3566a5e6d19a4f50c2237494a5f1a8f7e908826cbee2b1b1",
+        "@openpresentation/opf-editor/dist/canvas.js": "3302646fcdfdcdcab75030bee20eca4a6e31bb9f89c60cd7c1dd7a186bcd7f47",
+        "@openpresentation/opf-editor/dist/data.js": "cdc50b4b2aa02ab1049ab10dec3f3f0b5aa8e7d35e1d76b763ecead205ecf754",
+        "@openpresentation/opf-editor/dist/galleries.js": "7cfb910e9965c0f56e222a460d24c98a840fb976bf7fe1dd38a0d73e8cf65247",
+        "@openpresentation/opf-editor/dist/index.js": "1b710642cc8977e8e7f4a2b929df602ec9c3761ee2de5cd38800f9c7acef3571",
+        "@openpresentation/opf-editor/dist/layout-handles.js": "b78ea7a5be0ed1f5c91dd217974086800b19f6c44c75fa2e3946918e5b46edf0",
+        "@openpresentation/opf-editor/dist/layout.js": "2dc0796ec514dcd03c240782587bb62e9779ea5e3992bf503a41d2a1df6695f2",
+        "@openpresentation/opf-editor/dist/react.js": "a26b7d481505653d297e981e2a80673e2673096ef7ab62e47e9ca5089a03c3cf",
+        "@openpresentation/opf-editor/dist/rich-text-input.js": "e57efd59abe30c79711014e8c0ea200725e15d95428b8e0b630d3953dc522e2f",
+        "@openpresentation/opf-editor/dist/rich-text-toolbar.js": "dc573fcf323cdf84ed6cd1d89504667358eefa4204d6b695efe77ca767fbece3",
+        "@openpresentation/opf-editor/dist/rich-text.js": "e67700c571a31fa6a016af69a10bf541f796d80042f60dc687a7abc4225c21ef",
+        "@openpresentation/opf-editor/dist/schema-inspector.js": "c03b4d66d37ae1e098ec4248ded1986782139d2641b7faa3ed0765febd0ec488",
+        "@openpresentation/opf-editor/dist/schema.js": "b1a1b2d67a6d21c7dccc4781f22562b6127890be98d453c5cd3fa3ebeaabe5ef",
+        "@openpresentation/opf-editor/dist/svelte.js": "973e1ff64700b4090b351ca60c1a2d72db5161e2543574e88b3e2df776e2e7ae",
+        "@openpresentation/opf-editor/dist/transfer.js": "1fb5d0de5ed85f77a0f7a9ad86915e7a57b465b7f91bd4a68ee2577c955dab8c",
+        "@openpresentation/opf-pptx/dist/background-import.js": "888583bbbaae46a9a4d174f046ca276cfadee5c021a76e39ab49050a1bfefe38",
+        "@openpresentation/opf-pptx/dist/background.js": "38f97d14394058737418e7517569d5babf99468574f299cc5df25ea1188dfe56",
+        "@openpresentation/opf-pptx/dist/code-provenance.js": "1c7af17306cd58bcec1cb72c4333edaebc4b5a5f41a439763e1617c0b8f2d0bf",
+        "@openpresentation/opf-pptx/dist/image-fallback-browser.js": "b2cd7aa15c3952abf324e6474e7bbdebbd6445dde84f145e068c94c43f9c0de8",
+        "@openpresentation/opf-pptx/dist/image-fallback-node.js": "72c4efba8ef521e7fdce15b09c57ce6039ba9394ae25a8437a2cb6e26b1b420d",
+        "@openpresentation/opf-pptx/dist/image-geometry.js": "c2d3d5e7b7f81cf421bcc94437093f17e47670f458a48cf9cf9aa73535a08346",
+        "@openpresentation/opf-pptx/dist/image-import.js": "898704890944137909c5d48c7d1b3b16e4f06403bd745240d0f6b21f7c8c444a",
+        "@openpresentation/opf-pptx/dist/index.js": "9182d9259a5a822da74856f464b6bd384556775e68873d654971f67a2ac1e0a1",
+        "@openpresentation/opf-pptx/dist/table-border-import.js": "10dc23b93881d691be62bb5f171678d61cdf77675a628f86f58a58ee962e7093",
+        "@openpresentation/opf-pptx/dist/table-cell-import.js": "d268a14eecf54fe12bab31246680807cf1c90407b9807b49d32c3c71d93a643b",
+        "@openpresentation/opf-pptx/dist/table-import.js": "b545fff80415d085f76c82b88ce0c72e1bcfd6947c621a0fbedcc08e5a9ea227",
+        "@openpresentation/opf-pptx/vendor/pptxgenjs/pptxgen.es.js": "05844c5625e2cda3b449eb967c2246dd57ca57341886a7c28eeebca263b29bd4"
+      },
+      "harnesses": [
+        {
+          "repo": "opf",
+          "sourceFile": "packages/javascript/test/code-layout.test.mjs",
+          "destination": "code-layout.test.mjs",
+          "sourceSha256": "7b4f35c45a613df0b5de50d11650665e2c5e7bd060ad2358ea2636381d9b1022",
+          "executedSha256": "255b64461bc13754e07a647d11798a293e520d31b239491dc3b7e4cd81296e75"
+        },
+        {
+          "repo": "opf",
+          "sourceFile": "packages/javascript/test/code-composition.test.mjs",
+          "destination": "code-composition.test.mjs",
+          "sourceSha256": "de124fbb8901b610813065de518c57fc0b3d36820676ca23aa6d6106d7cecc97",
+          "executedSha256": "3881730bae7967e5d7c6bcc55435db797eae758a1de1513cc01b0a5f4f808660"
+        },
+        {
+          "repo": "opf-pptx",
+          "sourceFile": "test/shared-code.mjs",
+          "destination": "pptx-shared-code.mjs",
+          "sourceSha256": "75dbf2ba1c799ed82384024d5223b8adf3667c79de9c844e9dd38f48da10cc78",
+          "executedSha256": "d2f99717884f7a69e0706128fc734e35c69046fd06ae8536bcc23e246ed93a6f"
+        },
+        {
+          "repo": "opf-pptx",
+          "sourceFile": "test/code-provenance.mjs",
+          "destination": "pptx-code-provenance.mjs",
+          "sourceSha256": "ce16842b321e1eb33558be6f5e4e526cde645635028ae369df24d1c63b421cda",
+          "executedSha256": "f551e475119672a211dcaa8806bfcc1be300210ac0c140b49e9f964708bfe172"
+        },
+        {
+          "repo": "opf-render",
+          "sourceFile": "test/shared-code.mjs",
+          "destination": "renderer-code.mjs",
+          "sourceSha256": "351153175ad9a75d0faf5af317ac55f29378d67d02009711bbe6aa9855f8d18e",
+          "executedSha256": "4b7097b351ca8d32184ed4d85b67f61d42624c24574f6675b2029d24379fb561"
+        },
+        {
+          "repo": "opf-render",
+          "sourceFile": "test/shared-code-browser.mjs",
+          "destination": "opf-render-installed-code-browser.mjs",
+          "sourceSha256": "18ece6e96e5df5fb9750c85e00087b5efebd415134a662c95cc4a8e641fe1b27",
+          "executedSha256": "9713a7e9137db4043bafb1e08970cb6fcf1d6906272594924adce0f2ae351a7c"
+        },
+        {
+          "repo": "opf-editor",
+          "sourceFile": "test/code-browser.mjs",
+          "destination": "opf-editor-installed-code-browser.mjs",
+          "sourceSha256": "75b5b74676edea774d69bacbf3b33cd4b447c3a89c46663699478c3198ddcf86",
+          "executedSha256": "3b6f5d35b7874932374d19af97f6f438178624043b4bed7afb491e9c4a21378b"
+        }
+      ],
+      "codeBrowsers": [
+        {
+          "file": "opf-render-installed-code-browser.json",
+          "sha256": "4c3bf7b9faef31c38a0a9cbfb9f6e216419c9bbd83f883b266d8665d6ffdff07",
+          "browser": "153.0.8010.12",
+          "platform": "linux",
+          "verifierSha256": "9713a7e9137db4043bafb1e08970cb6fcf1d6906272594924adce0f2ae351a7c",
+          "rendererSha256": "7e041ca12fd98ca5ee5ce63dccdd6f0e386a06fdff36136222a5326fc84ce287",
+          "fontHashes": [
+            {
+              "family": "Cousine",
+              "weight": 400,
+              "sha256": "ca2264d6750d6c47df703be4486361a37ab943d42de6ea2bf794b7c7af767799"
+            },
+            {
+              "family": "Cousine",
+              "weight": 700,
+              "sha256": "f03c46c4bc5c0a3af4a1f4fbe5e3e16954581cced05cea20b3bffe12740d99d3"
+            }
+          ],
+          "errors": [],
+          "externalRequests": [],
+          "scope": "Ten actual SVG outputs with exact Cousine regular/bold bytes: source/offset preservation, accepted segment starts within 0.1 reference pixel, glyph cell containment and separate metadata/body glyphs. Natural browser advance differences are recorded. This is not native export, shaping/bidi conformance or raster equivalence.",
+          "results": [
+            {
+              "id": "shorthand-1280",
+              "svgSha256": "1628fd3e0f03c6025d1b156c874abe57816d3d9ab67397374ad5f7e963a53bb2",
+              "sourcePreserved": true,
+              "acceptedLines": 5,
+              "maxNaturalAdvanceDifferencePixels": 0.0074462890625
+            },
+            {
+              "id": "metadata-1280",
+              "svgSha256": "4b65f33951493264e72e272be3e4c4149638b757e8ee4b6d956f247fe7758b6e",
+              "sourcePreserved": true,
+              "acceptedLines": 6,
+              "maxNaturalAdvanceDifferencePixels": 0.01556396484375
+            },
+            {
+              "id": "language-1280",
+              "svgSha256": "5e8557202da71a51b1964fc7e00fbf2ef08bff86c8b8ceabd751ccc03b6dc7d1",
+              "sourcePreserved": true,
+              "acceptedLines": 7,
+              "maxNaturalAdvanceDifferencePixels": 0.0078125
+            },
+            {
+              "id": "filename-1280",
+              "svgSha256": "9be0513867242bc82ee7a7634181aa2e583eeb2a5e5e9a61816860c0353e352d",
+              "sourcePreserved": true,
+              "acceptedLines": 5,
+              "maxNaturalAdvanceDifferencePixels": 0.0078125
+            },
+            {
+              "id": "wrapped-1280",
+              "svgSha256": "b90200464c6d4458547cb3d3cf0c741a295eafbd2c6e5dcf1a75c2365d3b9578",
+              "sourcePreserved": true,
+              "acceptedLines": 8,
+              "maxNaturalAdvanceDifferencePixels": 0.0113525390625
+            },
+            {
+              "id": "shorthand-540",
+              "svgSha256": "93d5ac084f0fdb5e2b55b952f273209f7bc0ae5ae7a58e834a444a9e3f641f81",
+              "sourcePreserved": true,
+              "acceptedLines": 5,
+              "maxNaturalAdvanceDifferencePixels": 0.01171875
+            },
+            {
+              "id": "metadata-540",
+              "svgSha256": "dd7251d141c1d35e4abaf260ba41935ed3b6dba81dfe1acf1cf591bf92006a90",
+              "sourcePreserved": true,
+              "acceptedLines": 6,
+              "maxNaturalAdvanceDifferencePixels": 0.02288818359375
+            },
+            {
+              "id": "language-540",
+              "svgSha256": "90390d4f13fac8d3db3d6eb8bde58e5e605b04976072dc3597d68324df0783d7",
+              "sourcePreserved": true,
+              "acceptedLines": 12,
+              "maxNaturalAdvanceDifferencePixels": 0.01171875
+            },
+            {
+              "id": "filename-540",
+              "svgSha256": "947759f21f15d3e3d00a1f31a51eb9ee0abdbba63d10d9b915cb31cf6683e289",
+              "sourcePreserved": true,
+              "acceptedLines": 8,
+              "maxNaturalAdvanceDifferencePixels": 0.0107421875
+            },
+            {
+              "id": "wrapped-540",
+              "svgSha256": "9bc6d15d420298020713d997753070bb0f8f99ee858008d262c1673818e82755",
+              "sourcePreserved": true,
+              "acceptedLines": 12,
+              "maxNaturalAdvanceDifferencePixels": 0.01171875
+            }
+          ]
+        },
+        {
+          "file": "opf-editor-installed-code-browser.json",
+          "sha256": "bbf919d643b3096929299f327edcb7a5caa98873c4ca00a6c57c18407fad83cc",
+          "browser": "153.0.8010.12",
+          "platform": "linux",
+          "bundleSha256": "eea318b541e508a3204161013556e0f58c64a469071e2bbfb07b9f99193bef3e",
+          "verifierSha256": "3b6f5d35b7874932374d19af97f6f438178624043b4bed7afb491e9c4a21378b",
+          "errors": [],
+          "externalRequests": [],
+          "scope": "Offline candidate canvas: real pointer/keyboard code and filename edits, CRLF no-op/preservation, tab insertion/cancel, undo/redo, one-page pagination/readability undo, browser native export and undoable exact code/metadata/source-boundary reimport. Native formatting, positioning and font scheme are not reconstructed; font fallback uses the existing playground policy and is recorded. No native PowerPoint or raster equivalence claim.",
+          "installedBundleInputCount": 213,
+          "results": [
+            {
+              "dimensions": {
+                "width": 1280,
+                "height": 720
+              },
+              "exportSha256": "5d47b563974ef155ef39e7d218b10d94914de69d4e59495d3d77d184175e52a4",
+              "exportBytes": 17725,
+              "acceptedLines": 6,
+              "exactCodeRoundTrip": true,
+              "substitutions": [
+                {
+                  "requestedFamily": "Aptos Display",
+                  "sourceFamily": "Aptos Display",
+                  "resolvedFamily": "Roboto",
+                  "requestedWeight": 700,
+                  "resolvedWeight": 700,
+                  "italic": false,
+                  "compatibility": "generic"
+                },
+                {
+                  "requestedFamily": "Aptos",
+                  "sourceFamily": "Aptos",
+                  "resolvedFamily": "Roboto",
+                  "requestedWeight": 400,
+                  "resolvedWeight": 400,
+                  "italic": false,
+                  "compatibility": "generic"
+                }
+              ]
+            },
+            {
+              "dimensions": {
+                "width": 540,
+                "height": 960
+              },
+              "exportSha256": "08e65dd3fcf218e0bd4573485a38ce6495338738dfd063bbfe895e621a47c4ad",
+              "exportBytes": 17726,
+              "acceptedLines": 6,
+              "exactCodeRoundTrip": true,
+              "substitutions": [
+                {
+                  "requestedFamily": "Aptos Display",
+                  "sourceFamily": "Aptos Display",
+                  "resolvedFamily": "Roboto",
+                  "requestedWeight": 700,
+                  "resolvedWeight": 700,
+                  "italic": false,
+                  "compatibility": "generic"
+                },
+                {
+                  "requestedFamily": "Aptos",
+                  "sourceFamily": "Aptos",
+                  "resolvedFamily": "Roboto",
+                  "requestedWeight": 400,
+                  "resolvedWeight": 400,
+                  "italic": false,
+                  "compatibility": "generic"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "packed": {
+        "sha256": "f32853c0680c5df68d55402668f2570ea2246ea570dc97a05abf81f51732853a",
+        "node": "v24.20.0",
+        "browser": "153.0.8010.12",
+        "mode": "packed",
+        "lockSha256": "bc9271181ad02e1b1bda4edf723c6c46bd81e770592739c0b873769a1f249ef2",
+        "results": [
+          {
+            "suite": "canvas",
+            "assertions": 34,
+            "interactions": [],
+            "pageErrors": [],
+            "blockedRequests": []
+          },
+          {
+            "suite": "rich-text",
+            "assertions": 46,
+            "interactions": [],
+            "pageErrors": [],
+            "blockedRequests": []
+          },
+          {
+            "suite": "layout",
+            "assertions": 26,
+            "interactions": [
+              "trusted divider drag: normal",
+              "trusted divider drag: cancel",
+              "trusted divider drag: conflict",
+              "trusted divider drag: independent"
+            ],
+            "pageErrors": [],
+            "blockedRequests": []
+          },
+          {
+            "suite": "block",
+            "assertions": 21,
+            "interactions": [
+              "trusted block reorder and one-step undo"
+            ],
+            "pageErrors": [],
+            "blockedRequests": []
+          },
+          {
+            "suite": "list",
+            "assertions": 19,
+            "interactions": [],
+            "pageErrors": [],
+            "blockedRequests": []
+          },
+          {
+            "suite": "create",
+            "assertions": 40,
+            "interactions": [],
+            "pageErrors": [],
+            "blockedRequests": []
+          },
+          {
+            "suite": "styled-table",
+            "assertions": 44,
+            "interactions": [
+              "trusted merged rich-cell typing, redo and undo",
+              "trusted scalar-to-rich conversion and bold formatting, each with its own undo",
+              "trusted empty-cell typing and undo"
+            ],
+            "pageErrors": [],
+            "blockedRequests": []
+          }
+        ]
+      },
+      "registry": {
+        "sha256": "8d9ed257c0d4cd43fcf5c3e9a73e4765b70970686b87d1441a137218754893bb",
+        "node": "v24.20.0",
+        "browser": "153.0.8010.12",
+        "mode": "registry",
+        "lockSha256": "8665d61922f0afa5d3c981b122e2f93a069c603194493f3b96ed5841e40647df",
+        "results": [
+          {
+            "suite": "canvas",
+            "assertions": 34,
+            "interactions": [],
+            "pageErrors": [],
+            "blockedRequests": []
+          },
+          {
+            "suite": "rich-text",
+            "assertions": 46,
+            "interactions": [],
+            "pageErrors": [],
+            "blockedRequests": []
+          },
+          {
+            "suite": "layout",
+            "assertions": 26,
+            "interactions": [
+              "trusted divider drag: normal",
+              "trusted divider drag: cancel",
+              "trusted divider drag: conflict",
+              "trusted divider drag: independent"
+            ],
+            "pageErrors": [],
+            "blockedRequests": []
+          },
+          {
+            "suite": "block",
+            "assertions": 21,
+            "interactions": [
+              "trusted block reorder and one-step undo"
+            ],
+            "pageErrors": [],
+            "blockedRequests": []
+          },
+          {
+            "suite": "list",
+            "assertions": 19,
+            "interactions": [],
+            "pageErrors": [],
+            "blockedRequests": []
+          },
+          {
+            "suite": "create",
+            "assertions": 40,
+            "interactions": [],
+            "pageErrors": [],
+            "blockedRequests": []
+          },
+          {
+            "suite": "styled-table",
+            "assertions": 44,
+            "interactions": [
+              "trusted merged rich-cell typing, redo and undo",
+              "trusted scalar-to-rich conversion and bold formatting, each with its own undo",
+              "trusted empty-cell typing and undo"
+            ],
+            "pageErrors": [],
+            "blockedRequests": []
+          }
+        ]
+      },
+      "registryGuards": {
+        "sha256": "212327a5eb83b265cacbacb93706706912ff3f7fe943525d6ecd245ec6851e96",
+        "value": {
+          "mode": "registry",
+          "node": "v24.20.0",
+          "checks": [
+            "Rebuild the requested installed-package harness before testing it",
+            "Browser assets are from a stale consumer build",
+            "Installed dependency lock changed after bundling",
+            "Browser asset changed after bundling: fonts.json"
+          ],
+          "fixturesRestored": true
+        }
+      }
+    }
+  ],
+  "sameTarballsAcrossNodes": true,
+  "scope": "Successful full Linux Node20/24 source, local candidate tarballs and separately pinned actual published registry packages. Installed runtime and real browser code inputs were checked by the committed verifiers. Corpus and code-character tests pass; Windows/macOS CLI portability passes. Native PowerPoint remains separate local Windows evidence; neither CI nor native source recovery establishes raster equivalence.",
+  "remaining": "New versions, exact registry code/native workflows, updated published plan and public adoption; full repair/Auto arrange/font roadmap remains open."
+}

@@ -16,4 +16,4 @@ export {
   schemaNames,
 } from "./generated/schemas.js";
 
-export type { SchemaName } from "./generated/schemas.js";
+export type { SchemaName, SchemaEntry } from "./generated/schemas.js";

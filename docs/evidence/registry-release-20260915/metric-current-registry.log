@@ -1,0 +1,3 @@
+Metric registry guards: 6 altered-evidence controls reject; original evidence restored.
+Verified 60 standalone metric layouts across three font families and wide/portrait canvases.
+Verified 50 accepted metric layouts in browser 153.0.8010.12; exact source and advances, no external requests or page errors.

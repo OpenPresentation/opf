@@ -1,0 +1,6 @@
+
+> @openpresentation/opf-pptx@0.7.0 test:metric
+> node test/shared-metric.mjs && node test/metric-provenance.mjs
+
+Shared metric PPTX: 36 exact aligned geometry/source/type round trips with editable native lines, strict rejection and 198 XML boundary cases.
+Metric provenance: numeric/literal edits, CRLF, role edits, renamed/reordered shapes, eight damaged or ambiguous groups and cross-code identity guards pass.

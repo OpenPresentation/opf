@@ -1,0 +1,94 @@
+[
+  {
+    "id": "visible-metadata",
+    "document": {
+      "design": {
+        "fontScheme": {
+          "heading": {
+            "family": "Carlito"
+          },
+          "body": {
+            "family": "Carlito"
+          },
+          "code": {
+            "family": "Cousine"
+          }
+        }
+      },
+      "slides": [
+        {
+          "metric": {
+            "value": 42,
+            "label": "Latency",
+            "unit": "ms",
+            "delta": 0,
+            "trend": "flat"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "readability-floor",
+    "document": {
+      "design": {
+        "fontScheme": {
+          "heading": {
+            "family": "Carlito"
+          },
+          "body": {
+            "family": "Carlito"
+          },
+          "code": {
+            "family": "Cousine"
+          }
+        }
+      },
+      "slides": [
+        {
+          "composition": {
+            "minFontSize": 32
+          },
+          "metric": {
+            "value": 42,
+            "label": "Latency"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "strict-long-label",
+    "document": {
+      "design": {
+        "fontScheme": {
+          "heading": {
+            "family": "Carlito"
+          },
+          "body": {
+            "family": "Carlito"
+          },
+          "code": {
+            "family": "Cousine"
+          }
+        },
+        "dimensions": {
+          "widthInches": 5.625,
+          "heightInches": 10
+        }
+      },
+      "slides": [
+        {
+          "composition": {
+            "minFontSize": 32,
+            "overflow": "error"
+          },
+          "metric": {
+            "value": 42,
+            "label": "The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. The complete supporting label must remain readable. "
+          }
+        }
+      ]
+    }
+  }
+]

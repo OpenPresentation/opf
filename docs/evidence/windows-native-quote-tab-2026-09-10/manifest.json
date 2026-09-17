@@ -1,0 +1,915 @@
+{
+  "algorithm": "sha256",
+  "files": [
+    {
+      "file": ".gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "file": "README.md",
+      "bytes": 3113,
+      "sha256": "649baed33e785c2cdface588e6ec65c987eb0f7d13ea452c5f0a70983b374b72"
+    },
+    {
+      "file": "bindings.json",
+      "bytes": 229,
+      "sha256": "f2901684af2ec749343ca81bef6a1070cb7af3da68372f84a3d709165020313b"
+    },
+    {
+      "file": "quote-two-runtime-summary.json",
+      "bytes": 1210,
+      "sha256": "2379a42a08be20f6e465d9e933e0ad4cca9f9ecdbc11cd2ef53dba918333a22e"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/comparison.json",
+      "bytes": 154264,
+      "sha256": "02dac11fc6ba5ca3a3f442ec6116e3c16ee36f7a47f9526b246d251994594e11"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/comparison.log",
+      "bytes": 263,
+      "sha256": "0232ffd5239ac4bc50b6d03d3f97c71efd58da66a0981f7ac5f5ae30d3b12e81"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/generation.json",
+      "bytes": 79647,
+      "sha256": "7d4d348c05127f8bf73cc9da1100c472bc33639511653788303c9a8ad3c6f7e2"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/quote-1280-contact.png",
+      "bytes": 948184,
+      "sha256": "d49b1d822fcbf1e954d5e4fbbee18e75cf493e2033af629a92baa607f3af2a37"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/quote-1280-native-1.png",
+      "bytes": 30328,
+      "sha256": "2a3676d14fe3a8d6b3a976d418b6d715d6abf1fd7a900df43beb1e1d7a873322"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/quote-1280-native-2.png",
+      "bytes": 38263,
+      "sha256": "ddbdfc9cbc764c8a3f645bd2c280a8fe3876aacfd6b4ad6b2ec53bcf6f323e13"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/quote-1280-native-3.png",
+      "bytes": 40959,
+      "sha256": "95f0238fef8fe08f838cf0393ef4ae0e57d74f67b71d87b6313e8973d40914e1"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/quote-1280-native-4.png",
+      "bytes": 41542,
+      "sha256": "75f5c9b2723147aa5a2ca36796022cd7633946b50484f9c1bba5d0ae801fdcbb"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/quote-1280-native-5.png",
+      "bytes": 10861,
+      "sha256": "6833887149ad7b2ddac47a328a493ddae758e9bea6e5217fd468a41794e406e5"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/quote-1280-native-6.png",
+      "bytes": 11024,
+      "sha256": "53bc9355759e514c6301223d3bc11deec242a78add7fca4ef5de318466fda15d"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/quote-1280-native-edited.pptx",
+      "bytes": 32962,
+      "sha256": "465c504be0435b1d9fbc933c4d3a6d647fa9624e995047a3064fc8f61c6efd3c"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/quote-1280-native-saved.pptx",
+      "bytes": 32935,
+      "sha256": "1c29ee3c1b3af36b0762f0f1247de889e200e7b34fe49d6d44d5780f0b170698"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/quote-1280-renderer-1.png",
+      "bytes": 111301,
+      "sha256": "ae87c241f5b07ca97bc18a6770c3d1e373d6898715001b840b8099f5afd411bf"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/quote-1280-renderer-2.png",
+      "bytes": 143887,
+      "sha256": "206644e0cebf36cf3b059c84a83ce80a1f2c1a731f92ccc7e603ab23e8189ce3"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/quote-1280-renderer-3.png",
+      "bytes": 154334,
+      "sha256": "53871b7e40659c00d13e661363ec806bb8de54654c5b28102b02180d3bd947f3"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/quote-1280-renderer-4.png",
+      "bytes": 170032,
+      "sha256": "a1b9529adc50301dd35fb669b16c0f6f12528e4e36f15e49d762a48b40dfab62"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/quote-1280-renderer-5.png",
+      "bytes": 82124,
+      "sha256": "6b544b866ba022c28e5a695231d5240e6dc749bbb60f108ed1c0d6014883c2ed"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/quote-1280-renderer-6.png",
+      "bytes": 47326,
+      "sha256": "857bc58c7256c89739211fd52e90513430516bc1a2d1d0c48107f1c058c94344"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/quote-1280.opf.json",
+      "bytes": 7489,
+      "sha256": "45fd7bbcaa6ad5bd7d1577f4cef85f5c7e13d492734015b1523911f751b245e3"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/quote-1280.pptx",
+      "bytes": 31646,
+      "sha256": "4f99a57df6c100e76d7e7852c225022bc3cfacf46c4c76bd1db3e16f84d243b0"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/quote-540-contact.png",
+      "bytes": 768629,
+      "sha256": "84e76cc1534c459e5795f36d6a202cdeec840cb42e89a6b38be74f4ad644c6c8"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/quote-540-native-1.png",
+      "bytes": 15581,
+      "sha256": "ea7d54f1013cad6ebd7433f5c9d826833a8224334268337cc198d0a819ac62f2"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/quote-540-native-2.png",
+      "bytes": 18999,
+      "sha256": "7f8c7acf56ceb02de3a6d6a0c8b8e85081102988e7c389240c2b03462dd948fd"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/quote-540-native-3.png",
+      "bytes": 21199,
+      "sha256": "a80a4f229fb3244fafb2d042fcecc38c29ab755aa6edce8949ff5630aff23c90"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/quote-540-native-4.png",
+      "bytes": 22852,
+      "sha256": "5338a227f2446cd7f7c00ce0726a1a34165835bf2adc0d8b180d20d4cfda359b"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/quote-540-native-5.png",
+      "bytes": 8127,
+      "sha256": "6d9360655f807284388368af66d58fe8bf1f91b064c136fd368673d1fe17e47b"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/quote-540-native-6.png",
+      "bytes": 6813,
+      "sha256": "3bd567acb0c2d71094c3fcc942c878bc7da6e235f82f952b3f1eddb3abf4dc47"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/quote-540-native-edited.pptx",
+      "bytes": 34237,
+      "sha256": "65944f3d2a630e22dd3a302611ac40d1ea1f8e5eadc0f8da898021bb6ba0d33f"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/quote-540-native-saved.pptx",
+      "bytes": 34204,
+      "sha256": "655dc69c842d5e4b8834e507325e5ff9e09fefc3c332afdb4f87af4efc09196c"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/quote-540-renderer-1.png",
+      "bytes": 86656,
+      "sha256": "5e91d3964352a9b88d224bb4cd147aaa2ea23dd2db25e54bc0867990fbead07d"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/quote-540-renderer-2.png",
+      "bytes": 109861,
+      "sha256": "2f8018fc3ddf0a8847553376894c470804d65e1a8523edebd5ec2638a9bedfa4"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/quote-540-renderer-3.png",
+      "bytes": 126564,
+      "sha256": "fbf9ee24589f817a130beaf1e80686c78f9618fe31ce55a4765e8211df4ba5cb"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/quote-540-renderer-4.png",
+      "bytes": 131248,
+      "sha256": "6f8ce45860fa909af9998af459aa2756424276574d9278afd3d01aa343999234"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/quote-540-renderer-5.png",
+      "bytes": 57807,
+      "sha256": "e795f3af8d8682c3af07f262853c7ebe6753688dacce37fb9c1a514c86812d91"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/quote-540-renderer-6.png",
+      "bytes": 36602,
+      "sha256": "f2b7f1d4945a827c7f20aeee329351cef17bf5492b251ca76006ec572c4becf4"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/quote-540.opf.json",
+      "bytes": 7475,
+      "sha256": "34d84ba4c0fcb44613f81681c481307f0095ca1d24036233dd6c2030579743e1"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/quote-540.pptx",
+      "bytes": 33005,
+      "sha256": "414c7ad5ec8d56c4844f6c1ece183b53683d3137ca6581720367202ea010c929"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/runs/quote-1280/native.json",
+      "bytes": 58694,
+      "sha256": "ea88c370b0930cd5304560f7d5ef869210509719b36d945d45433ccdc08c4ae0"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/runs/quote-1280/progress.json",
+      "bytes": 46061,
+      "sha256": "8fad0ab17d81397ae775ee2190d63e0d9c775590f0b1d9fb8d79265f590b07f4"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/runs/quote-1280/worker.json",
+      "bytes": 341,
+      "sha256": "21f1935e45d00ab26560bdfc0fee642864103d15a66f100c9f55f5d96a443afb"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/runs/quote-1280/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/runs/quote-1280/worker.stdout.log",
+      "bytes": 45,
+      "sha256": "c475388590108e7f8d6085b90bd7a461833fae211cb5ab5254001ed07280ec76"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/runs/quote-540/native.json",
+      "bytes": 106385,
+      "sha256": "93a9e7f889bbd2830b7a4978b6b361695f0ebdca93f11dc1a0a9988551dee6a8"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/runs/quote-540/progress.json",
+      "bytes": 82898,
+      "sha256": "20bd24454ed685104358aa21cbeaec5f91ae546fd2ce0a0ceef80b4a9b6c44e7"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/runs/quote-540/worker.json",
+      "bytes": 340,
+      "sha256": "96e7098c295c00beb640fcc3a99d5309742c4594f3aa17bd371ee3e11087a082"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/runs/quote-540/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/quote-coordinated-node20-01/runs/quote-540/worker.stdout.log",
+      "bytes": 44,
+      "sha256": "7d8fe2ddd46d241ddc473ae624b201ee01db09980844bd83bbc0efebb3859001"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/comparison.json",
+      "bytes": 154264,
+      "sha256": "8130a8359be653b3b35354b68b468709367f08d51e3b8e6d7cced6402f5349bd"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/comparison.log",
+      "bytes": 263,
+      "sha256": "0232ffd5239ac4bc50b6d03d3f97c71efd58da66a0981f7ac5f5ae30d3b12e81"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/generation.json",
+      "bytes": 79647,
+      "sha256": "efab52fcc634ddfae0b7574a97fba8947fefe330a7d91cefd684db1c72903474"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/quote-1280-contact.png",
+      "bytes": 948184,
+      "sha256": "d49b1d822fcbf1e954d5e4fbbee18e75cf493e2033af629a92baa607f3af2a37"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/quote-1280-native-1.png",
+      "bytes": 30328,
+      "sha256": "2a3676d14fe3a8d6b3a976d418b6d715d6abf1fd7a900df43beb1e1d7a873322"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/quote-1280-native-2.png",
+      "bytes": 38263,
+      "sha256": "ddbdfc9cbc764c8a3f645bd2c280a8fe3876aacfd6b4ad6b2ec53bcf6f323e13"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/quote-1280-native-3.png",
+      "bytes": 40959,
+      "sha256": "95f0238fef8fe08f838cf0393ef4ae0e57d74f67b71d87b6313e8973d40914e1"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/quote-1280-native-4.png",
+      "bytes": 41542,
+      "sha256": "75f5c9b2723147aa5a2ca36796022cd7633946b50484f9c1bba5d0ae801fdcbb"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/quote-1280-native-5.png",
+      "bytes": 10861,
+      "sha256": "6833887149ad7b2ddac47a328a493ddae758e9bea6e5217fd468a41794e406e5"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/quote-1280-native-6.png",
+      "bytes": 11024,
+      "sha256": "53bc9355759e514c6301223d3bc11deec242a78add7fca4ef5de318466fda15d"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/quote-1280-native-edited.pptx",
+      "bytes": 32962,
+      "sha256": "543107b9af69c31f9b33d4b52560a0f0186fc96a395c50c95acb571622a0eff0"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/quote-1280-native-saved.pptx",
+      "bytes": 32935,
+      "sha256": "31a32237541ce5282a9311833c78900b5f09db7c1221701ef4976a41ef2850e9"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/quote-1280-renderer-1.png",
+      "bytes": 111301,
+      "sha256": "ae87c241f5b07ca97bc18a6770c3d1e373d6898715001b840b8099f5afd411bf"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/quote-1280-renderer-2.png",
+      "bytes": 143887,
+      "sha256": "206644e0cebf36cf3b059c84a83ce80a1f2c1a731f92ccc7e603ab23e8189ce3"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/quote-1280-renderer-3.png",
+      "bytes": 154334,
+      "sha256": "53871b7e40659c00d13e661363ec806bb8de54654c5b28102b02180d3bd947f3"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/quote-1280-renderer-4.png",
+      "bytes": 170032,
+      "sha256": "a1b9529adc50301dd35fb669b16c0f6f12528e4e36f15e49d762a48b40dfab62"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/quote-1280-renderer-5.png",
+      "bytes": 82124,
+      "sha256": "6b544b866ba022c28e5a695231d5240e6dc749bbb60f108ed1c0d6014883c2ed"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/quote-1280-renderer-6.png",
+      "bytes": 47326,
+      "sha256": "857bc58c7256c89739211fd52e90513430516bc1a2d1d0c48107f1c058c94344"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/quote-1280.opf.json",
+      "bytes": 7489,
+      "sha256": "45fd7bbcaa6ad5bd7d1577f4cef85f5c7e13d492734015b1523911f751b245e3"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/quote-1280.pptx",
+      "bytes": 31646,
+      "sha256": "4f99a57df6c100e76d7e7852c225022bc3cfacf46c4c76bd1db3e16f84d243b0"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/quote-540-contact.png",
+      "bytes": 768629,
+      "sha256": "84e76cc1534c459e5795f36d6a202cdeec840cb42e89a6b38be74f4ad644c6c8"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/quote-540-native-1.png",
+      "bytes": 15581,
+      "sha256": "ea7d54f1013cad6ebd7433f5c9d826833a8224334268337cc198d0a819ac62f2"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/quote-540-native-2.png",
+      "bytes": 18999,
+      "sha256": "7f8c7acf56ceb02de3a6d6a0c8b8e85081102988e7c389240c2b03462dd948fd"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/quote-540-native-3.png",
+      "bytes": 21199,
+      "sha256": "a80a4f229fb3244fafb2d042fcecc38c29ab755aa6edce8949ff5630aff23c90"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/quote-540-native-4.png",
+      "bytes": 22852,
+      "sha256": "5338a227f2446cd7f7c00ce0726a1a34165835bf2adc0d8b180d20d4cfda359b"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/quote-540-native-5.png",
+      "bytes": 8127,
+      "sha256": "6d9360655f807284388368af66d58fe8bf1f91b064c136fd368673d1fe17e47b"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/quote-540-native-6.png",
+      "bytes": 6813,
+      "sha256": "3bd567acb0c2d71094c3fcc942c878bc7da6e235f82f952b3f1eddb3abf4dc47"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/quote-540-native-edited.pptx",
+      "bytes": 34237,
+      "sha256": "81c3f90a7520a97ad171195b8eca20552789594ecd6445634a0894c510e30e4f"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/quote-540-native-saved.pptx",
+      "bytes": 34203,
+      "sha256": "9ee57993624ece20e8283bcf4b090a47a5794dbcefbfd57a3359de7d9e24859b"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/quote-540-renderer-1.png",
+      "bytes": 86656,
+      "sha256": "5e91d3964352a9b88d224bb4cd147aaa2ea23dd2db25e54bc0867990fbead07d"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/quote-540-renderer-2.png",
+      "bytes": 109861,
+      "sha256": "2f8018fc3ddf0a8847553376894c470804d65e1a8523edebd5ec2638a9bedfa4"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/quote-540-renderer-3.png",
+      "bytes": 126564,
+      "sha256": "fbf9ee24589f817a130beaf1e80686c78f9618fe31ce55a4765e8211df4ba5cb"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/quote-540-renderer-4.png",
+      "bytes": 131248,
+      "sha256": "6f8ce45860fa909af9998af459aa2756424276574d9278afd3d01aa343999234"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/quote-540-renderer-5.png",
+      "bytes": 57807,
+      "sha256": "e795f3af8d8682c3af07f262853c7ebe6753688dacce37fb9c1a514c86812d91"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/quote-540-renderer-6.png",
+      "bytes": 36602,
+      "sha256": "f2b7f1d4945a827c7f20aeee329351cef17bf5492b251ca76006ec572c4becf4"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/quote-540.opf.json",
+      "bytes": 7475,
+      "sha256": "34d84ba4c0fcb44613f81681c481307f0095ca1d24036233dd6c2030579743e1"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/quote-540.pptx",
+      "bytes": 33005,
+      "sha256": "414c7ad5ec8d56c4844f6c1ece183b53683d3137ca6581720367202ea010c929"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/runs/quote-1280/native.json",
+      "bytes": 58694,
+      "sha256": "2ab4a1165c448b9413b0c9a5b4ea5d031f85412aea939cd65e0d8b4f323fb732"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/runs/quote-1280/progress.json",
+      "bytes": 46061,
+      "sha256": "0351df84924e4a1244db63caee7a0e984ec51a846552917a8f28a5bf03ea8e74"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/runs/quote-1280/worker.json",
+      "bytes": 341,
+      "sha256": "cf6563ee010e2195de78ca5c8dc44cb8ee57fa6fdd7fa3ed8c5c8dd2de500ea9"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/runs/quote-1280/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/runs/quote-1280/worker.stdout.log",
+      "bytes": 45,
+      "sha256": "c475388590108e7f8d6085b90bd7a461833fae211cb5ab5254001ed07280ec76"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/runs/quote-540/native.json",
+      "bytes": 106385,
+      "sha256": "efb8131c93b7c0bf9e3db60f0b1d9dda617998449ded26e6b765ebd8734c17f1"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/runs/quote-540/progress.json",
+      "bytes": 82898,
+      "sha256": "e677f45267a4960bf344a31877495ac8446e521dd06453c6ab866c3fc19515f3"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/runs/quote-540/worker.json",
+      "bytes": 341,
+      "sha256": "b2b47078ea11bf93de86b9ed470c86c6d66f4096890465a78d5a876c28c781d0"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/runs/quote-540/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/quote-coordinated-node24-01/runs/quote-540/worker.stdout.log",
+      "bytes": 44,
+      "sha256": "7d8fe2ddd46d241ddc473ae624b201ee01db09980844bd83bbc0efebb3859001"
+    },
+    {
+      "file": "raw/tab-native-created-01/control.json",
+      "bytes": 23679,
+      "sha256": "eb571b7f75ab85dc61aad315c2a398a589a2a40438030278393d591ae5dc5a40"
+    },
+    {
+      "file": "raw/tab-native-created-01/created.png",
+      "bytes": 4801,
+      "sha256": "1a1dc6038e12f782cd1da8696fcf0f8a43612167649edf9d6f3bab3993c9a2fd"
+    },
+    {
+      "file": "raw/tab-native-created-01/empty-owned.pptx",
+      "bytes": 33722,
+      "sha256": "ad53e01b8d4396d7516507ff6af9b50de33aef8cbe9bb9ac1410b9bfc5eb34cc"
+    },
+    {
+      "file": "raw/tab-native-created-01/native-created-tabs.pptx",
+      "bytes": 34117,
+      "sha256": "a9d0481cf47cd1f18403b78da542798eb47b0971e4abb671752d42d548a8ee62"
+    },
+    {
+      "file": "raw/tab-native-created-01/offsets.json",
+      "bytes": 3962,
+      "sha256": "7aa78afe5696c6f7252f1ba28eb6d5d920957de598b469cb13b4266ec7f01c07"
+    },
+    {
+      "file": "raw/tab-native-created-01/progress.json",
+      "bytes": 11519,
+      "sha256": "cc4300681f6ade08aeed9148ee97db508e9e5133769295dc8861b877ed0701ec"
+    },
+    {
+      "file": "raw/tab-native-created-01/reopened.png",
+      "bytes": 4801,
+      "sha256": "1a1dc6038e12f782cd1da8696fcf0f8a43612167649edf9d6f3bab3993c9a2fd"
+    },
+    {
+      "file": "raw/tab-native-created-01/verifiers/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "file": "raw/tab-native-created-01/verifiers/native-tab-control.ps1",
+      "bytes": 6156,
+      "sha256": "eed4f847060f5bf55b778f9dccc09b9b2d56f952a142f7808462a3a72a9aa6f4"
+    },
+    {
+      "file": "raw/tab-native-created-01/worker.json",
+      "bytes": 341,
+      "sha256": "e88f17dabf7948410b92ff87786a185b4c7cc4290eb87297161fd24fb66ccb60"
+    },
+    {
+      "file": "raw/tab-native-created-01/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/tab-native-created-01/worker.stdout.log",
+      "bytes": 56,
+      "sha256": "c4bac4f2baed5b035a7a2c6a3b5f6629f2a4dec5e2a9b2d386cc758feff50f02"
+    },
+    {
+      "file": "raw/tab-native-created-02/created.png",
+      "bytes": 4801,
+      "sha256": "1a1dc6038e12f782cd1da8696fcf0f8a43612167649edf9d6f3bab3993c9a2fd"
+    },
+    {
+      "file": "raw/tab-native-created-02/empty-owned.pptx",
+      "bytes": 33713,
+      "sha256": "d22f3573b84c0c933e88cd0d2148c47ba7003b5c776a2c8d787d57556b034385"
+    },
+    {
+      "file": "raw/tab-native-created-02/failure.json",
+      "bytes": 23024,
+      "sha256": "ce55a65f80b6d31a06713c2dfc88f3386381d1d411a1e0c51d126246717f9db5"
+    },
+    {
+      "file": "raw/tab-native-created-02/native-created-tabs.pptx",
+      "bytes": 34100,
+      "sha256": "09274a08c62c8ac342eabf0c77ed70afa45317af909a4bf568a5001d5c6b0c00"
+    },
+    {
+      "file": "raw/tab-native-created-02/progress.json",
+      "bytes": 22952,
+      "sha256": "0fdcdf1c2ed22c0cd5b04e6d2d54dbdc0f3dd130ac5cc49eb89ea27ab6ca5f01"
+    },
+    {
+      "file": "raw/tab-native-created-02/reopened.png",
+      "bytes": 4801,
+      "sha256": "1a1dc6038e12f782cd1da8696fcf0f8a43612167649edf9d6f3bab3993c9a2fd"
+    },
+    {
+      "file": "raw/tab-native-created-02/verifiers/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "file": "raw/tab-native-created-02/verifiers/native-tab-control.ps1",
+      "bytes": 6626,
+      "sha256": "c2cbf06a8554c15cf046414796783d62da967593380e04cdd1909e9d2ee01394"
+    },
+    {
+      "file": "raw/tab-native-created-02/worker.json",
+      "bytes": 340,
+      "sha256": "3b484b6e2b1193f106f261551d5d5f0ca113d15ccec84184fd3f7fc481041af1"
+    },
+    {
+      "file": "raw/tab-native-created-02/worker.stderr.log",
+      "bytes": 469,
+      "sha256": "cf2ff856b396b5d31dd7e2910e91fef045bc574f2f0d650fd9f0716edceaa6d4"
+    },
+    {
+      "file": "raw/tab-native-created-02/worker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/tab-native-created-03/control.json",
+      "bytes": 23870,
+      "sha256": "81b9c7f2aa8e8ed43756ff0e4d2f85eaab8592656b7beb6a2e89d92c0ce56644"
+    },
+    {
+      "file": "raw/tab-native-created-03/created.png",
+      "bytes": 4801,
+      "sha256": "1a1dc6038e12f782cd1da8696fcf0f8a43612167649edf9d6f3bab3993c9a2fd"
+    },
+    {
+      "file": "raw/tab-native-created-03/empty-owned.pptx",
+      "bytes": 33723,
+      "sha256": "80edb0f67d8b97fc9bbb320d6f4e1e9ad5e878c25ea8de8440f3a3cbadff6a4b"
+    },
+    {
+      "file": "raw/tab-native-created-03/native-created-tabs.pptx",
+      "bytes": 34119,
+      "sha256": "ae36e33855ba8d773950f2bb7b9077d97d5a5a438c354f89a36e17c08f616a70"
+    },
+    {
+      "file": "raw/tab-native-created-03/pdf-control-comparison.json",
+      "bytes": 4818,
+      "sha256": "d9a7bcc7371f94303c38a76b467c3f786f42dbff4cd2b40a3396af2ce534e70a"
+    },
+    {
+      "file": "raw/tab-native-created-03/pdf-observations.json",
+      "bytes": 2471,
+      "sha256": "39c484d5c53de4937647d4bfe33ceed8acfb18fdfd0784d7f026d93154651d7b"
+    },
+    {
+      "file": "raw/tab-native-created-03/pdf-render.png",
+      "bytes": 3870,
+      "sha256": "9ce63009c4c3f4a4dd55e068aeb3fcee3e89709f11a5075527bf9ba59ec2ed1a"
+    },
+    {
+      "file": "raw/tab-native-created-03/progress.json",
+      "bytes": 22952,
+      "sha256": "0fdcdf1c2ed22c0cd5b04e6d2d54dbdc0f3dd130ac5cc49eb89ea27ab6ca5f01"
+    },
+    {
+      "file": "raw/tab-native-created-03/reopened.png",
+      "bytes": 4801,
+      "sha256": "1a1dc6038e12f782cd1da8696fcf0f8a43612167649edf9d6f3bab3993c9a2fd"
+    },
+    {
+      "file": "raw/tab-native-created-03/verifiers/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "file": "raw/tab-native-created-03/verifiers/native-tab-control.ps1",
+      "bytes": 6693,
+      "sha256": "2668f4cb3c4a16677e269a9fb2812279335fe08b3fc332cbce2408c76a0b4b2d"
+    },
+    {
+      "file": "raw/tab-native-created-03/verifiers/native-tab-pdf.py",
+      "bytes": 4753,
+      "sha256": "67adaf596dc0d558e582e72798c1a1e37a021374033566958c3879ce690d53cf"
+    },
+    {
+      "file": "raw/tab-native-created-03/worker.json",
+      "bytes": 341,
+      "sha256": "88b960f35f6ad81cc217b678d2f28d980b4dc3e007a22473d15cc954d7ac7b94"
+    },
+    {
+      "file": "raw/tab-native-created-03/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/tab-native-created-03/worker.stdout.log",
+      "bytes": 56,
+      "sha256": "c4bac4f2baed5b035a7a2c6a3b5f6629f2a4dec5e2a9b2d386cc758feff50f02"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/background-import.js",
+      "bytes": 5493,
+      "sha256": "684f9b38cff01e596774b8120c979c3dbbfada273890f785f7a4e3db88cdcb22"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/background.js",
+      "bytes": 8812,
+      "sha256": "081fb685677ca656341cdce89275331749174ffecd60e71451f26b9f896cca1c"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/card-provenance.js",
+      "bytes": 3639,
+      "sha256": "ff1ca09b88500993abb4bb293162e5064f1f7fc38edfd999f8ca8eedce8b94b0"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/chart-workbook.js",
+      "bytes": 6436,
+      "sha256": "39db820e6f3a512779943a13e5e78c63ff866c2a0074e1e9c807fcfc7a9aa1e2"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/code-provenance.js",
+      "bytes": 11807,
+      "sha256": "5eb65649d1736dd5a19ff49680422cb1a097b9f6f94a3b457e649001903b9688"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/heading-provenance.js",
+      "bytes": 3269,
+      "sha256": "f10385a2a0ac7ded90d3f71786693ec8d9d302ba4acf5f5111061a6705c8fcaf"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/image-fallback-browser.js",
+      "bytes": 1646,
+      "sha256": "3c7f81d5677dd9a78a0a13fe5a94bbb14cef465031caaeda2c87e8451e9ff491"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/image-fallback-node.js",
+      "bytes": 486,
+      "sha256": "5ee323d3320420664b5d2c1714e246b04dd0806f459164f9696668552df87565"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/image-geometry.js",
+      "bytes": 6315,
+      "sha256": "e083973a98c2bdf7d7dfce9ef1f6bef252f09ce0d69d987105ee0b73cc13d62e"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/image-import.js",
+      "bytes": 5868,
+      "sha256": "cffccecc223e27d62b6e1aba0cdbe2c1c9aa94874ef898f76906b22e001bbd41"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/index.js",
+      "bytes": 92713,
+      "sha256": "f992b4fbae92d87ef2559a74e909d6e5434f31f9d2e72003ac152e068706ba54"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/metric-provenance.js",
+      "bytes": 7208,
+      "sha256": "a058bfd8e84cf393476aa64c925bff31430d11e341c32b5e2f5b0d141922f0af"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/table-border-import.js",
+      "bytes": 3702,
+      "sha256": "16678e0d93e63474d39daac268016a59517cc36d85dbd8751131f143db01ace5"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/table-cell-import.js",
+      "bytes": 9804,
+      "sha256": "fa17507763a2240564401d7977f4f39bc180e3e6da9d4aa9c36202908e9126d1"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/dist/table-import.js",
+      "bytes": 12916,
+      "sha256": "9ae40bb38dd34c9fc0ae4a3f5a257068ae92bb651ed5d96641c2629ef7106cf1"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-pptx/package.json",
+      "bytes": 4560,
+      "sha256": "e29ba9014069c90555cdbd39cbfb86b7350eb5d4f603ca33519b287655aadc93"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-render/dist/font-compatibility.js",
+      "bytes": 4071,
+      "sha256": "a50ee71748e81cd12ed3aeb6eee92506ebf91ef05021c6ca3f5a100665d03dac"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-render/dist/font-manifest.js",
+      "bytes": 11818,
+      "sha256": "0af55027613ac952e645ed06f6b873c174e0767efbbb8e4de17e44b0158c1974"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-render/dist/fonts-browser.js",
+      "bytes": 2247,
+      "sha256": "d0543d838b2f22a8c70bdc60100d72d3c69e3f8033d5ccedd3523ee63c66b8d4"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-render/dist/fonts-node.js",
+      "bytes": 3857,
+      "sha256": "d45bd167367c1c40202b12362e52483f15e6a6d5ee67e8641b68418de3f1a8dc"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-render/dist/fonts.js",
+      "bytes": 10858,
+      "sha256": "860198e21bee950a77a2e47882395629956090eed93399557da3e9cc3b202741"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-render/dist/index.js",
+      "bytes": 75,
+      "sha256": "39c8f2b279ce10873f00289349b84cf9cab7e12c56e9e0d87447bd2406777234"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-render/dist/raster-images.js",
+      "bytes": 4233,
+      "sha256": "304cffe5e77553ac1ab590fc5805714dde34e6f69df5dc55e35dbc8df602753c"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-render/dist/raster.js",
+      "bytes": 6087,
+      "sha256": "8e98aba22982ec8c7cece31be19f8cd92fc942a7d538bf64c2e4f32bdd14fc6d"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-render/dist/svg.js",
+      "bytes": 66726,
+      "sha256": "36c6e714e5a09181b702e294621cf4a25a59601ec03525fd58e84366a00f50c2"
+    },
+    {
+      "file": "runtime/@openpresentation/opf-render/package.json",
+      "bytes": 5005,
+      "sha256": "70b562c5f36c1ebfe5208c4fcf866cd03e9e6493f130eedc39660b47e7e83435"
+    },
+    {
+      "file": "runtime/@openpresentation/opf/dist/catalogs.js",
+      "bytes": 238,
+      "sha256": "6d74d7b051844728b2622acdb5268472a043544c8b2ca04eb904b1cdf74ec739"
+    },
+    {
+      "file": "runtime/@openpresentation/opf/dist/chunk-AFEV7YI7.js",
+      "bytes": 13298,
+      "sha256": "49b47b80d21d17e3e1839da05e0257db3db378ae371b6d3a8f7e729d7468104c"
+    },
+    {
+      "file": "runtime/@openpresentation/opf/dist/chunk-DA4NWAQV.js",
+      "bytes": 27807,
+      "sha256": "ac4e9b8e38a998aebb074459f0788dcba6cf13f57e5f5b3f1ace472e0161f2cb"
+    },
+    {
+      "file": "runtime/@openpresentation/opf/dist/chunk-GQSK3T7X.js",
+      "bytes": 224847,
+      "sha256": "34f518c29c9757bc252b5c13eb5d7db8ada4b477496e6289d8149fb4fdc7cd45"
+    },
+    {
+      "file": "runtime/@openpresentation/opf/dist/chunk-NT3IYAYX.js",
+      "bytes": 75535,
+      "sha256": "193a39ad7d395d4f26af96e24aa9d23617afe3f63c9f71ec8b18d2a16c68bf97"
+    },
+    {
+      "file": "runtime/@openpresentation/opf/dist/chunk-TWMRZ43O.js",
+      "bytes": 510975,
+      "sha256": "0d35cec97ec7ddaa67fb9f096bc672c927eb68ed5fae5ac27d4dff70d68313f4"
+    },
+    {
+      "file": "runtime/@openpresentation/opf/dist/composition.js",
+      "bytes": 404,
+      "sha256": "a2d69048632dd6ff5ba4db397acd86e8c9c5c16365633319a24999466ebbd586"
+    },
+    {
+      "file": "runtime/@openpresentation/opf/dist/pagination.js",
+      "bytes": 215,
+      "sha256": "5fad5aee183a2a5fda16fefa31e6b50c0491528ca111bee80081640bd60b50e4"
+    },
+    {
+      "file": "runtime/@openpresentation/opf/dist/validator.js",
+      "bytes": 267,
+      "sha256": "fc419645499641ca2e45e3bfde4dba90a951e171bbfdf45125da1057b5805b45"
+    },
+    {
+      "file": "runtime/@openpresentation/opf/package.json",
+      "bytes": 3229,
+      "sha256": "6c1dcd6b72429c2179c51827e8f97419991b1dd7057fa105d67ecb2db01529b6"
+    },
+    {
+      "file": "runtime/LICENSE.opf-pptx.txt",
+      "bytes": 1094,
+      "sha256": "e8c5cecaad448c0cab00af38f7ed8b6bb647c77ba79f3c50d20a9ea92e256cd3"
+    },
+    {
+      "file": "runtime/package-lock.json",
+      "bytes": 67269,
+      "sha256": "10edb4cb29e98fe9db00c1c361aa3126c9969ab06f2b062889915ccc76019bc7"
+    },
+    {
+      "file": "runtime/vendor/pptxgenjs/pptxgen.es.js",
+      "bytes": 516931,
+      "sha256": "05844c5625e2cda3b449eb967c2246dd57ca57341886a7c28eeebca263b29bd4"
+    },
+    {
+      "file": "sources.json",
+      "bytes": 1357,
+      "sha256": "3e203906cf34e6eed45096908da31abd0cd559a242390d8f8630870d3b32bd16"
+    },
+    {
+      "file": "verifiers/quote/native-deck.ps1",
+      "bytes": 2187,
+      "sha256": "dfcf7cb92c16d3de863386a73d152192be0874c175360f37a4ce069ddd8c16a8"
+    },
+    {
+      "file": "verifiers/quote/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "file": "verifiers/quote/native-quote.mjs",
+      "bytes": 11391,
+      "sha256": "ebdf7dc87e299e7d83ce2cb612e8cacd4374bdd1f0a78c788dee460c4002a87e"
+    },
+    {
+      "file": "verifiers/quote/native-quote.ps1",
+      "bytes": 7249,
+      "sha256": "2186d60c957cc18b4d69922df0c035b9487490c184ac18708a7b1e04539fd28e"
+    },
+    {
+      "file": "verify-evidence.mjs",
+      "bytes": 4800,
+      "sha256": "280d9b0a630603153724fab7f48fffbea316904bb45413b3281981625616e460"
+    },
+    {
+      "file": "verify-tab-control.mjs",
+      "bytes": 2875,
+      "sha256": "2d477f882868756d8fc52a90a37148bf3498bea29d80f7d0527f13b446722b2e"
+    }
+  ]
+}

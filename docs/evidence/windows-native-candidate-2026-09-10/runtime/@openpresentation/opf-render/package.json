@@ -1,0 +1,99 @@
+{
+  "name": "@openpresentation/opf-render",
+  "version": "0.7.0",
+  "description": "Deterministic local OPF renderer for SVG, PNG, and PDF output.",
+  "license": "MIT",
+  "type": "module",
+  "private": false,
+  "engines": {
+    "node": ">=20.9.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OpenPresentation/opf-render.git"
+  },
+  "bugs": {
+    "url": "https://github.com/OpenPresentation/opf-render/issues"
+  },
+  "homepage": "https://github.com/OpenPresentation/opf-render#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "exports": {
+    ".": {
+      "browser": {
+        "types": "./dist/svg.d.ts",
+        "default": "./dist/svg.js"
+      },
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json",
+    "./fonts": {
+      "types": "./dist/fonts.d.ts",
+      "default": "./dist/fonts.js"
+    },
+    "./fonts-node": {
+      "types": "./dist/fonts-node.d.ts",
+      "default": "./dist/fonts-node.js"
+    },
+    "./fonts-browser": {
+      "types": "./dist/fonts-browser.d.ts",
+      "default": "./dist/fonts-browser.js"
+    },
+    "./svg": {
+      "types": "./dist/svg.d.ts",
+      "default": "./dist/svg.js"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "typecheck": "node --check src/index.js && node --check scripts/build.mjs && node --check scripts/validate-package.mjs && node --check test/smoke.mjs && node --check test/golden.mjs && node --check src/fonts.js && node --check src/fonts-node.js && node --check src/font-compatibility.js && node --check test/office-fonts.mjs && node --check src/fonts-browser.js && node --check test/fonts-browser.mjs && node --check src/svg.js && node --check src/raster.js && node --check src/raster-images.js && node --check test/webp.mjs && node --check test/jpeg-orientation.mjs && node --check scripts/build-browser-check.mjs && node --check test/jpeg-browser.js && node --check test/rich-table.mjs && node --check test/styled-table.mjs && node --check test/chart-colors.mjs && node --check test/image-placeholders.mjs && node --check test/image-placeholders-browser.mjs && node --check test/accepted-text.mjs && node --check test/accepted-text-fixtures.mjs && node --check test/accepted-text-browser.mjs && node --check test/rich-spacing-browser.mjs",
+    "validate": "node scripts/validate-package.mjs",
+    "test": "npm run build && node test/font-outlines.mjs && node test/accepted-text.mjs && node test/image-placeholders.mjs && node test/chart-colors.mjs && node test/smoke.mjs && node test/webp.mjs && node test/jpeg-orientation.mjs && node test/fonts.mjs && node test/office-fonts.mjs && node test/timeline.mjs && node test/quote-footer.mjs && node test/shared-quote.mjs && node test/rich-trace.mjs && node test/rich-table.mjs && node test/golden-gate.mjs && node test/golden.mjs && node test/fonts-browser.mjs && node test/design-preview.mjs && npm run build:browser-check && npm run test:styled-table",
+    "test:golden": "npm run build && node test/golden.mjs",
+    "test:packed": "node test/packed-install.mjs",
+    "test:browser": "npm run build:browser-check && node test/browser-check.mjs",
+    "golden:update": "npm run build && node test/golden.mjs --update",
+    "prepack": "npm run build",
+    "build:browser-check": "node scripts/build-browser-check.mjs",
+    "test:styled-table": "node test/styled-table.mjs",
+    "test:code": "node test/shared-code.mjs",
+    "test:code-browser": "node test/shared-code-browser.mjs",
+    "test:metric": "node test/shared-metric.mjs",
+    "test:images-browser": "node test/image-placeholders-browser.mjs",
+    "test:font-preparation": "node test/font-preparation.mjs artifacts/font-preparation.json",
+    "test:font-preparation-browser": "node test/font-preparation-browser.mjs artifacts/font-preparation-browser.json",
+    "test:font-variants": "node test/font-variants.mjs",
+    "test:font-variants-browser": "node test/font-variants-browser.mjs",
+    "test:text": "node test/font-outlines.mjs && node test/accepted-text.mjs",
+    "test:text-browser": "node test/accepted-text-browser.mjs",
+    "test:rich-spacing-browser": "node test/rich-spacing-browser.mjs"
+  },
+  "dependencies": {
+    "@expo-google-fonts/arimo": "0.4.3",
+    "@expo-google-fonts/caladea": "0.4.2",
+    "@expo-google-fonts/carlito": "0.4.1",
+    "@expo-google-fonts/cousine": "0.4.3",
+    "@expo-google-fonts/gelasio": "0.4.1",
+    "@expo-google-fonts/roboto": "0.4.3",
+    "@expo-google-fonts/roboto-mono": "0.4.2",
+    "@expo-google-fonts/tinos": "0.4.2",
+    "@openpresentation/opf": "^0.9.0",
+    "@resvg/resvg-js": "^2.6.2",
+    "fontkit": "^2.0.4",
+    "pdf-lib": "^1.17.1",
+    "sharp": "0.35.4"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2",
+    "playwright": "1.63.0"
+  }
+}

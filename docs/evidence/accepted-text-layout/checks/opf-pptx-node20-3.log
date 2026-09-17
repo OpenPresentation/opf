@@ -1,0 +1,6 @@
+
+> @openpresentation/opf-pptx@0.7.0 test:code
+> node test/shared-code.mjs && node test/code-provenance.mjs
+
+Shared code PPTX: 8 decks, 37 accepted native lines, 8 tab stops, six whitespace imports, strict failures, 132 XML-boundary rejections and valid character boundaries verified.
+Code provenance: exact source/metadata, native edits, ordering, empty/Unicode values, five damaged groups and edited generated label verified.

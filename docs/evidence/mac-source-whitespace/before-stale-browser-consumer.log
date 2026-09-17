@@ -1,0 +1,25 @@
+
+> openpresentation-workspace@ test:packed-browser /Users/michael/.codex/worktrees/c193/opf
+> node scripts/test-packed-browser.mjs
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Browser assets are from a stale consumer build
++ actual - expected
+
++ '76412a22-3682-4490-a684-6c5a7b21a6f8'
+- '137236f5-2f5b-4083-b820-747d24256e4f'
+
+    at file:///Users/michael/.codex/worktrees/c193/opf/scripts/test-packed-browser.mjs:18:8 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: '76412a22-3682-4490-a684-6c5a7b21a6f8',
+  expected: '137236f5-2f5b-4083-b820-747d24256e4f',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+ ELIFECYCLE  Command failed with exit code 1.

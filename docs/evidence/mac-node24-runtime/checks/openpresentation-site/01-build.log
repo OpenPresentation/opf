@@ -1,0 +1,107 @@
+
+> openpresentation-site@0.1.0 prebuild /Users/michael/Source/openpresentation-site
+> node scripts/sync-opf-content.mjs && node scripts/test-review-regressions.mjs && node scripts/verify-releases.mjs
+
+Synced OpenPresentation/opf@921fce853fefacf6d17c3572d77b1714c139a9ab into .opf-source
+Agent resources: 6 skills, 737 raw files, source 2b3f375cf81f.
+Agent resources: 0 skills, 6 raw files, source a7619de01c96.
+Agent resources: 0 skills, 6 raw files, source 88c5d365caf8.
+Site review regressions passed: guide links, 623 unique sitemap URLs, missing/empty/legacy catalogs.
+Changelog package set and showcase file hashes agree.
+
+> openpresentation-site@0.1.0 build /Users/michael/Source/openpresentation-site
+> next build
+
+▲ Next.js 16.3.4 (Turbopack)
+✓ Running next.config.mjs took 8ms
+
+⚠ The Edge Runtime is deprecated. You can use the "nodejs" runtime instead. Learn more: https://nextjs.org/docs/messages/edge-runtime-deprecated
+  Creating an optimized production build ...
+✓ Compiled successfully in 3.9s
+  Running TypeScript ...
+  Finished TypeScript in 2.2s ...
+  Collecting page data using 9 workers ...
+⚠ Using edge runtime on a page currently disables static generation for that page
+  Generating static pages using 9 workers (0/628) ...
+  Generating static pages using 9 workers (157/628) 
+  Generating static pages using 9 workers (314/628) 
+  Generating static pages using 9 workers (471/628) 
+✓ Generating static pages using 9 workers (628/628) in 4.1s
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ○ /about
+├ ○ /agents
+├ ƒ /apple-icon
+├ ○ /catalogs
+├   /catalogs/[catalog]
+│ ├ ● /catalogs/audiences
+│ ├ ● /catalogs/chart-types
+│ ├ ● /catalogs/color-schemes
+│ └ ● [+8 more paths]
+├   /catalogs/[catalog]/[record]
+│ ├ ● /catalogs/audiences/executives
+│ ├ ● /catalogs/audiences/board
+│ ├ ● /catalogs/audiences/engineering-team
+│ └ ● [+376 more paths]
+├ ○ /changelog
+├ ○ /community
+├ ○ /docs
+├   /docs/[guide]
+│ ├ ● /docs/cli
+│ ├ ● /docs/agent-skills
+│ ├ ● /docs/open-ecosystem
+│ └ ● [+7 more paths]
+├ ○ /docs/claude-structured-output
+├ ○ /docs/comparison
+├ ○ /docs/faq
+├ ○ /docs/google-ai-studio
+├ ○ /docs/implicit-blocks
+├ ○ /docs/openai-structured-outputs
+├   /docs/reference/[slug]
+│ ├ ● /docs/reference/how-opf-works
+│ ├ ● /docs/reference/content-payloads
+│ ├ ● /docs/reference/design-resolution
+│ └ ● [+21 more paths]
+├ ○ /docs/regions
+├ ○ /docs/validate
+├ ○ /docs/vercel-ai-sdk
+├ ○ /examples
+├   /examples/gallery/[gallery]
+│ ├ ● /examples/gallery/business-functions
+│ ├ ● /examples/gallery/design-and-media
+│ ├ ● /examples/gallery/education
+│ └ ● [+4 more paths]
+├   /examples/gallery/[gallery]/[deck]
+│ ├ ● /examples/gallery/business-functions/compliance-readiness-review
+│ ├ ● /examples/gallery/business-functions/contract-cycle-time-brief
+│ ├ ● /examples/gallery/business-functions/data-platform-migration-plan
+│ └ ● [+97 more paths]
+├ ƒ /icon
+├ ƒ /opengraph-image
+├ ○ /playground
+├ ○ /privacy
+├ ○ /robots.txt
+├ ○ /schema/opf/v1
+├ ○ /sitemap.xml
+├ ○ /spec
+├ ○ /spec/objects
+├   /spec/objects/[object]
+│ ├ ● /spec/objects/asset
+│ ├ ● /spec/objects/assets
+│ ├ ● /spec/objects/audience
+│ └ ● [+53 more paths]
+├   /spec/schemas/[schema]
+│ ├ ● /spec/schemas/opf
+│ ├ ● /spec/schemas/audience
+│ ├ ● /spec/schemas/catalog-index
+│ └ ● [+11 more paths]
+└ ○ /terms
+
+
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+ƒ  (Dynamic)  server-rendered on demand
+

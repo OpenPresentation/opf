@@ -1,0 +1,75 @@
+{
+  "identicalFixturesGeometryFontHashesRuntime": true,
+  "results": [
+    {
+      "directory": "metric-node24-bounded-01",
+      "node": "v24.20.0",
+      "decks": 6,
+      "slides": 48,
+      "imports": 144,
+      "gates": {
+        "visibleInk": false,
+        "characterBounds": true,
+        "tabPositions": false,
+        "interPartInk": true,
+        "isolatedMaskCoverage": true
+      },
+      "tabOutliers": 8,
+      "maximumTabErrorPoints": 0.0673828125,
+      "rasterOutliers": [
+        {
+          "id": "metric-540-right",
+          "slide": 4,
+          "engine": "native",
+          "ink": {
+            "left": 103,
+            "top": 59,
+            "right": 497,
+            "bottom": 238
+          },
+          "cell": {
+            "x": 43.2,
+            "y": 43.2,
+            "width": 453.6,
+            "height": 873.6
+          }
+        }
+      ]
+    },
+    {
+      "directory": "metric-node20-bounded-01",
+      "node": "v20.20.2",
+      "decks": 6,
+      "slides": 48,
+      "imports": 144,
+      "gates": {
+        "visibleInk": false,
+        "characterBounds": true,
+        "tabPositions": false,
+        "interPartInk": true,
+        "isolatedMaskCoverage": true
+      },
+      "tabOutliers": 8,
+      "maximumTabErrorPoints": 0.0673828125,
+      "rasterOutliers": [
+        {
+          "id": "metric-540-right",
+          "slide": 4,
+          "engine": "native",
+          "ink": {
+            "left": 103,
+            "top": 59,
+            "right": 497,
+            "bottom": 238
+          },
+          "cell": {
+            "x": 43.2,
+            "y": 43.2,
+            "width": 453.6,
+            "height": 873.6
+          }
+        }
+      ]
+    }
+  ]
+}

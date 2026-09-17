@@ -1,0 +1,53 @@
+{
+  "deployment": {
+    "key": "gallery",
+    "mode": "preview",
+    "id": "dpl_GTRPt2TMf3Wn2BzBHkJpre6Ebq4B",
+    "sha": "ce133ecce42506896cd88c5850fc26f1ed38bf00",
+    "url": "https://pptx-gallery-jkkkvuoqw-dataadvantage.vercel.app",
+    "projectId": "prj_jaAjOxlbGlBOfbKs6h4usu3mRR5G",
+    "state": "READY",
+    "source": "git",
+    "target": null,
+    "aliases": [
+      "pptx-gallery-git-codex-shared-code-adoptio-46e8fb-dataadvantage.vercel.app"
+    ]
+  },
+  "browser": "Microsoft Edge 152.0.4191.66",
+  "stats": {
+    "startTime": "2026-09-10T08:36:36.356Z",
+    "duration": 19560.792999999998,
+    "expected": 5,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "cases": [
+    {
+      "file": "editor.spec.ts",
+      "title": "shared code source, selection, pagination and export/reimport remain editable offline at 1280x720",
+      "durationMs": 5927
+    },
+    {
+      "file": "editor.spec.ts",
+      "title": "shared code source, selection, pagination and export/reimport remain editable offline at 540x960",
+      "durationMs": 3889
+    },
+    {
+      "file": "editor.spec.ts",
+      "title": "deployed editor bundle matches the published package manifest",
+      "durationMs": 1486
+    },
+    {
+      "file": "editor.spec.ts",
+      "title": "author, preview, edit and undo, export OPF and editable PowerPoint, then reimport offline",
+      "durationMs": 4040
+    },
+    {
+      "file": "editor.spec.ts",
+      "title": "shared quote editing and readable one-page pagination survive export, reimport and undo offline",
+      "durationMs": 3522
+    }
+  ],
+  "scope": "Actual remote app with essential authoring/editor operations performed offline after required local assets load. No native raster equivalence inferred."
+}

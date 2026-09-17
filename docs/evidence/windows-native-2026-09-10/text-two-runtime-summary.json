@@ -1,0 +1,23 @@
+{
+  "identicalFixturesGeometryFontsRuntime": true,
+  "results": [
+    {
+      "directory": "text-node24-bounded-02",
+      "node": "v24.20.0",
+      "cases": 24,
+      "editableLines": 144,
+      "imports": 72,
+      "masks": 96,
+      "failures": 0
+    },
+    {
+      "directory": "text-node20-bounded-01",
+      "node": "v20.20.2",
+      "cases": 24,
+      "editableLines": 144,
+      "imports": 72,
+      "masks": 96,
+      "failures": 0
+    }
+  ]
+}

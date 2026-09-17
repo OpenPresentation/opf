@@ -1,0 +1,29 @@
+{
+  "design": {
+    "fontScheme": {
+      "heading": {
+        "family": "Carlito"
+      },
+      "body": {
+        "family": "Carlito"
+      },
+      "code": {
+        "family": "Cousine"
+      }
+    }
+  },
+  "slides": [
+    {
+      "quote": {
+        "text": "A short, readable quote.",
+        "attribution": "Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution "
+      }
+    },
+    {
+      "code": {
+        "source": "const value = 42;",
+        "language": "very-long-language-label-very-long-language-label-very-long-language-label-very-long-language-label-very-long-language-label-very-long-language-label-very-long-language-label-very-long-language-label-very-long-language-label-very-long-language-label-very-long-language-label-very-long-language-label-very-long-language-label-very-long-language-label-very-long-language-label-very-long-language-label-very-long-language-label-very-long-language-label-very-long-language-label-very-long-language-label-"
+      }
+    }
+  ]
+}

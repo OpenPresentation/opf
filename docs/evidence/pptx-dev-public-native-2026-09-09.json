@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "deployment": "https://www.pptx.dev",
+  "deploymentId": "dpl_6LKa8XQ2435ifGbwBZNmzh7gdgkK",
+  "deploymentCommit": "ccb8f496eb6974886cc6130724ada1a19e3e28dc",
+  "converterVersion": "0.5.2",
+  "scope": "One actual public browser export: native table/text edit, save/reopen, raster inspection and schema-valid reimport. Not universal raster equivalence.",
+  "powerpointVersion": "16.0",
+  "slides": 1,
+  "nativeTables": 1,
+  "editedAndReopened": true,
+  "sourceSha256": "383512f28856d1b0d86ddd378d63b5a529e9928983743d9ebac72d99200c8ac4",
+  "savedSha256": "3e5a6bcc1ab2c21d868c0a93b5ab26c1e342c629f2c29377618c3bfd3cf518be",
+  "raster": "pptx-dev-public-native-2026-09-09.png",
+  "rasterSha256": "a0e88dc4b5030659862fd5dc18f785b73bd8af5926b6b6fcf9eadb00480ef882",
+  "rasterVisuallyInspected": true,
+  "nativeSavedReimportValid": true,
+  "nativeSavedReimportTables": 1
+}

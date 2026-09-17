@@ -1,0 +1,22 @@
+{
+  "repositories": {
+    "OpenPresentation/opf": "476fdb2f5547e442d8a270047dfc8557f306bb49",
+    "OpenPresentation/opf-render": "379b1402b4d06de79b98a35360f3ef5692d3659b",
+    "OpenPresentation/opf-pptx": "26a52f34a846e4a00fd749a70b7e395efea4c034",
+    "OpenPresentation/opf-editor": "6e0b7d2f1b4369fc0a228391cf36e913e05188f8"
+  },
+  "fontHarnessCommit": "78e37cb2cc48690b4df2cf9503f0285b21c6b0c4",
+  "fontHarnessPullRequest": "https://github.com/OpenPresentation/opf-pptx/pull/27",
+  "imageHarness": "Unmerged exact verifier snapshots only; native acceptance blocked.",
+  "environment": {
+    "node": [
+      "20.20.2",
+      "24.20.0"
+    ],
+    "pnpm": "10.33.2",
+    "powerPointBuild": "16.0.20326.20132",
+    "windowsBuild": "26200.9445",
+    "nativePowerShell": "5.1.26100.9444"
+  },
+  "scope": "Only openly licensed font files and source runtimes are retained. Office binaries/proprietary reference fonts represented by hashes. Private PDFs excluded."
+}

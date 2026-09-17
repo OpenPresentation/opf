@@ -1,0 +1,189 @@
+{
+  "checkedAt": "2026-09-10T07:27:49.766Z",
+  "name": "@openpresentation/opf-pptx",
+  "version": "0.7.0",
+  "publishedAt": "2026-09-10T07:13:23.982Z",
+  "gitHead": "f421c91b7b127c7eeab788acdc0c51969402e057",
+  "reviewedHead": "54f452097a52da8e39f1a600dfbf2ccd08f22b81",
+  "treeIdentical": true,
+  "pr": "https://github.com/OpenPresentation/opf-pptx/pull/15",
+  "ci": "https://github.com/OpenPresentation/opf-pptx/actions/runs/34448046042",
+  "review": "all four Linux/Windows jobs and automated review succeeded; no findings",
+  "workflow": "https://github.com/OpenPresentation/opf-pptx/actions/runs/34448635137",
+  "dist": {
+    "shasum": "4156bfca9df212db2d80db072a93b32193079dd6",
+    "tarball": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.7.0.tgz",
+    "fileCount": 20,
+    "integrity": "sha512-U/nqxWqkMQ/ZWxyW6DP8Ut1k/BlDDuD8nvhlIHoW0UpDqMxZTwQKo//p4QcBwJUK+ZZ1uklJwrxuzRdIZ9fY/A==",
+    "signatures": [
+      {
+        "sig": "MEUCIQDAl3nPk6xkZK3PTlQQuNO5DsUatWNaqZxHoMQaEfl9wQIgN/4+nc3fsygGLzqAuL7j6HCBXz+sNAJ5R68DXMRQYzk=",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      },
+      {
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+        "sig": "MEUCIQCKzqEBRdRneiWVIiYyRz67vyFrNp8gPVGd0P21jr12sQIgKeb13hRA9MyaiqYvOW72KP8v3j5r8NhgYRtpEMYObMQ="
+      }
+    ],
+    "attestations": {
+      "url": "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf-pptx@0.7.0",
+      "provenance": {
+        "predicateType": "https://slsa.dev/provenance/v1"
+      }
+    },
+    "unpackedSize": 705517
+  },
+  "reports": [
+    {
+      "node": "v20.20.2",
+      "file": "pptx-node20.json",
+      "sha256": "f14521ae7d177659257d746eb51befb4d3b107ac37198a041d57fe56a095eb9f",
+      "nativeFiles": {
+        "pptx-code-node20-comparison.json": {
+          "sha256": "85b100e345fb6a6aa55f2b257754711965ab9305fce785c247260ccf2aeb3047",
+          "sourceSha256": "85b100e345fb6a6aa55f2b257754711965ab9305fce785c247260ccf2aeb3047"
+        },
+        "pptx-code-node20-generation.json": {
+          "sha256": "2165fa441b2eded4b01fdc2ec9284dbb5c7a69ad8acd1749c98e215185c4713a",
+          "sourceSha256": "2165fa441b2eded4b01fdc2ec9284dbb5c7a69ad8acd1749c98e215185c4713a"
+        },
+        "pptx-code-node20-native.json": {
+          "sha256": "b987758acf3a5bc7fce4f4a0a6f7fb21e944dc8ab2ce280787cea6e09058a938",
+          "sourceSha256": "20a0278061b8c57105f36045d190f4683b94f935be1141dc89a40dc2493279a6"
+        },
+        "pptx-quote-node20-comparison.json": {
+          "sha256": "2947fb797e3d07d16fb570a6d6a9a060040ab0bb38b5cca6fe8fa2ebda34ea85",
+          "sourceSha256": "2947fb797e3d07d16fb570a6d6a9a060040ab0bb38b5cca6fe8fa2ebda34ea85"
+        }
+      },
+      "signatureVerification": "audited 66 packages in 1s\n\n66 packages have verified registry signatures\n\n17 packages have verified attestations\n(use --json --include-attestations to view attestation details)",
+      "browser": "152.0.4191.66",
+      "fixtureSuites": 7,
+      "nativeQuoteCases": 12,
+      "nativeCodeCases": 8,
+      "exactCodeSlideImports": 24,
+      "environment": {
+        "windows": {
+          "revision": 9445,
+          "displayVersion": "25H2",
+          "build": "26200",
+          "product": "Windows 10 Home"
+        },
+        "culture": "en-US",
+        "uiCulture": "en-US",
+        "powerPointVersion": "16.0",
+        "executable": {
+          "fileVersion": "16.0.20326.20132",
+          "sha256": "90fa931172c507b763ba92a82b19d5bc70816e008c5bb87577e1838e8a92e9f9",
+          "productVersion": "16.0.20326.20132"
+        }
+      }
+    },
+    {
+      "node": "v24.20.0",
+      "file": "pptx-node24.json",
+      "sha256": "acab4e28852fc0ed58f5302b30305bc8303b308f67b748795039a175778702d3",
+      "nativeFiles": {
+        "pptx-code-node24-comparison.json": {
+          "sha256": "38555584deed2ce42c5d0b80aa093accfb3e6312f9e3010e1353aad4fb3a00f8",
+          "sourceSha256": "38555584deed2ce42c5d0b80aa093accfb3e6312f9e3010e1353aad4fb3a00f8"
+        },
+        "pptx-code-node24-generation.json": {
+          "sha256": "1a90c80234ca8ab1f3f312499efb960117d0c4550506c8cfe7d5da9cc3033c04",
+          "sourceSha256": "1a90c80234ca8ab1f3f312499efb960117d0c4550506c8cfe7d5da9cc3033c04"
+        },
+        "pptx-code-node24-native.json": {
+          "sha256": "92d888e4d08035f8b7ab1b62320ad894b222e61ed77a36cc4d71e9c35f2f60b3",
+          "sourceSha256": "bc6857eaf08c40387b948c94e54bdedb7ec944f00413b933e87dc852daaa1332"
+        },
+        "pptx-quote-node24-comparison.json": {
+          "sha256": "a1acaafd857aa6105c7366fbe712d0f5ea93214ce55b0d1b3bd9ef01b7a01cc5",
+          "sourceSha256": "a1acaafd857aa6105c7366fbe712d0f5ea93214ce55b0d1b3bd9ef01b7a01cc5"
+        }
+      },
+      "signatureVerification": "audited 66 packages in 0s\n\n66 packages have verified registry signatures\n\n17 packages have verified attestations\n(use --json --include-attestations to view attestation details)",
+      "browser": "152.0.4191.66",
+      "fixtureSuites": 7,
+      "nativeQuoteCases": 12,
+      "nativeCodeCases": 8,
+      "exactCodeSlideImports": 24,
+      "environment": {
+        "windows": {
+          "revision": 9445,
+          "displayVersion": "25H2",
+          "build": "26200",
+          "product": "Windows 10 Home"
+        },
+        "culture": "en-US",
+        "uiCulture": "en-US",
+        "powerPointVersion": "16.0",
+        "executable": {
+          "fileVersion": "16.0.20326.20132",
+          "sha256": "90fa931172c507b763ba92a82b19d5bc70816e008c5bb87577e1838e8a92e9f9",
+          "productVersion": "16.0.20326.20132"
+        }
+      }
+    }
+  ],
+  "tabPositions": {
+    "targetsPerRuntime": 4,
+    "maximumErrorPoints": 0.0070304870606,
+    "gatePoints": 0.02
+  },
+  "fontEmbedding": {
+    "checkedArchives": 24,
+    "embeddedFontEntries": 0,
+    "scope": "Original, native-saved and native-edited quote/code archives on both runtimes. Reference font files remain local; portable evidence contains hashes and rendered PNGs."
+  },
+  "visuals": [
+    {
+      "node": "20",
+      "file": "code-1280-svg-3.png",
+      "sha256": "3c1e992f719fa526e0677e7322d5f6422eac75398ebd1a670a97fde5503ae731",
+      "url": "https://github.com/OpenPresentation/opf-pptx/blob/f421c91b7b127c7eeab788acdc0c51969402e057/docs/evidence/shared-code-release/code-1280-svg-3.png"
+    },
+    {
+      "node": "20",
+      "file": "code-1280-native-3.png",
+      "sha256": "e2adc912a3fe8e21bfacdbab69e80cef58b34d2892223838945bbd334d89febd",
+      "url": "https://github.com/OpenPresentation/opf-pptx/blob/f421c91b7b127c7eeab788acdc0c51969402e057/docs/evidence/shared-code-release/code-1280-native-3.png"
+    },
+    {
+      "node": "20",
+      "file": "code-540-svg-4.png",
+      "sha256": "ae1d958958819e0b9a09c8ed0aa41ae87b78f7d1650804c23d755e2a787e868a",
+      "url": "https://github.com/OpenPresentation/opf-pptx/blob/f421c91b7b127c7eeab788acdc0c51969402e057/docs/evidence/shared-code-release/code-540-svg-4.png"
+    },
+    {
+      "node": "20",
+      "file": "code-540-native-4.png",
+      "sha256": "d457dd18e9bc17efc8fb3a60ca85972dbf890998bec5adfd194aeee341776b46",
+      "url": "https://github.com/OpenPresentation/opf-pptx/blob/f421c91b7b127c7eeab788acdc0c51969402e057/docs/evidence/shared-code-release/code-540-native-4.png"
+    },
+    {
+      "node": "24",
+      "file": "code-1280-svg-3.png",
+      "sha256": "3c1e992f719fa526e0677e7322d5f6422eac75398ebd1a670a97fde5503ae731",
+      "url": "https://github.com/OpenPresentation/opf-pptx/blob/f421c91b7b127c7eeab788acdc0c51969402e057/docs/evidence/shared-code-release/code-1280-svg-3.png"
+    },
+    {
+      "node": "24",
+      "file": "code-1280-native-3.png",
+      "sha256": "e2adc912a3fe8e21bfacdbab69e80cef58b34d2892223838945bbd334d89febd",
+      "url": "https://github.com/OpenPresentation/opf-pptx/blob/f421c91b7b127c7eeab788acdc0c51969402e057/docs/evidence/shared-code-release/code-1280-native-3.png"
+    },
+    {
+      "node": "24",
+      "file": "code-540-svg-4.png",
+      "sha256": "ae1d958958819e0b9a09c8ed0aa41ae87b78f7d1650804c23d755e2a787e868a",
+      "url": "https://github.com/OpenPresentation/opf-pptx/blob/f421c91b7b127c7eeab788acdc0c51969402e057/docs/evidence/shared-code-release/code-540-svg-4.png"
+    },
+    {
+      "node": "24",
+      "file": "code-540-native-4.png",
+      "sha256": "d457dd18e9bc17efc8fb3a60ca85972dbf890998bec5adfd194aeee341776b46",
+      "url": "https://github.com/OpenPresentation/opf-pptx/blob/f421c91b7b127c7eeab788acdc0c51969402e057/docs/evidence/shared-code-release/code-540-native-4.png"
+    }
+  ],
+  "scope": "Actual registry converter/core/renderer on both runtimes, all 20 converter files matched to immutable Git, full model/corpus, code/provenance and browser fixtures, controlled native PowerPoint quote/code edits and save/reopen/import, signatures and attestations, zero advisories. Representative actual registry rasters match previously inspected candidate images by hash. Native formatting/theme/geometry restoration and pixel equivalence are not claimed. Editor publication and complete-set/site adoption remain separate gates."
+}

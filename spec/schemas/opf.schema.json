@@ -1808,17 +1808,21 @@
         "hidden": {
           "type": "boolean",
           "description": "Whether the slide is hidden from the presented sequence."
+        },
+        "composition": {
+          "$ref": "#/$defs/Composition"
         }
       }
     },
     "ContentPayload": {
       "type": "object",
-      "description": "A single content payload. The optional 'type' discriminator can make intent explicit, but validators and engines infer it from fields such as text, bullets, items, image, video, chart, table, code, metric, quote, or timeline.",
+      "description": "A content leaf or recursively composed group. A group contains blocks and optional composition; it cannot mix blocks with leaf payload fields. Groups may nest up to 32 levels.",
       "additionalProperties": false,
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["text", "list", "image", "chart", "table", "video", "code", "metric", "quote", "timeline"],
+          "enum": ["text", "list", "image", "chart", "table", "video", "code", "metric", "quote", "timeline",
+            "group"],
           "description": "Optional content kind. When omitted, engines infer the kind from the fields present."
         },
         "text": {
@@ -1950,6 +1954,18 @@
               ]
             }
           ]
+        },
+        "blocks": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/ContentPayload"
+          },
+          "description": "Ordered children of a group. Each child is a leaf or another group."
+        },
+        "composition": {
+          "$ref": "#/$defs/Composition",
+          "description": "Arrangement within this group. Only minFontSize and overflow inherit from the parent; strict overflow cannot be weakened."
         }
       },
       "allOf": [
@@ -2032,6 +2048,108 @@
           },
           "then": {
             "required": ["timeline"]
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "const": "group"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "blocks"
+            ]
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "composition"
+            ]
+          },
+          "then": {
+            "required": [
+              "blocks"
+            ]
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "blocks"
+            ]
+          },
+          "then": {
+            "properties": {
+              "type": {
+                "const": "group"
+              }
+            },
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "text"
+                  ]
+                },
+                {
+                  "required": [
+                    "items"
+                  ]
+                },
+                {
+                  "required": [
+                    "bullets"
+                  ]
+                },
+                {
+                  "required": [
+                    "image"
+                  ]
+                },
+                {
+                  "required": [
+                    "video"
+                  ]
+                },
+                {
+                  "required": [
+                    "chart"
+                  ]
+                },
+                {
+                  "required": [
+                    "table"
+                  ]
+                },
+                {
+                  "required": [
+                    "code"
+                  ]
+                },
+                {
+                  "required": [
+                    "metric"
+                  ]
+                },
+                {
+                  "required": [
+                    "quote"
+                  ]
+                },
+                {
+                  "required": [
+                    "timeline"
+                  ]
+                }
+              ]
+            }
           }
         }
       ]
@@ -2314,7 +2432,8 @@
             },
             "fontSize": {
               "type": "number",
-              "description": "Run font size in points."
+              "exclusiveMinimum": 0,
+              "description": "Requested run font size in points."
             },
             "fontFamily": {
               "type": "string",
@@ -2365,22 +2484,66 @@
       "type": "object",
       "description": "Table content. Columns are optional; rows are the only required field.",
       "additionalProperties": false,
-      "required": ["rows"],
+      "required": [
+        "rows"
+      ],
       "properties": {
         "columns": {
           "type": "array",
-          "items": { "type": "string" },
-          "description": "Optional column labels rendered above table rows.",
-          "examples": [["Region", "Q3 Revenue", "Q4 Revenue", "YoY %"]]
+          "items": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/TextRun"
+                }
+              },
+              {
+                "$ref": "#/$defs/StyledTableCell"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "description": "Optional column labels. Labels may be strings, rich runs or styled cell objects. Null is an empty label or a placeholder covered by a preceding column span.",
+          "examples": [
+            [
+              "Region",
+              "Q3 Revenue",
+              "Q4 Revenue",
+              "YoY %"
+            ]
+          ]
         },
         "rows": {
           "type": "array",
           "items": {
             "type": "array",
-            "items": { "$ref": "#/$defs/TableCell" }
+            "items": {
+              "$ref": "#/$defs/TableCell"
+            }
           },
           "description": "Two-dimensional table row data; each row aligns by index with columns when columns are supplied.",
-          "examples": [[["North America", 12.4, 18.1, "46%"], ["EMEA", 8.2, 11.5, "40%"]]]
+          "examples": [
+            [
+              [
+                "North America",
+                12.4,
+                18.1,
+                "46%"
+              ],
+              [
+                "EMEA",
+                8.2,
+                11.5,
+                "40%"
+              ]
+            ]
+          ]
         }
       }
     },
@@ -2449,12 +2612,179 @@
     },
     "TableCell": {
       "oneOf": [
-        { "type": "string" },
-        { "type": "number" },
-        { "type": "boolean" },
-        { "type": "null" }
+        {
+          "$ref": "#/$defs/TableCellValue"
+        },
+        {
+          "$ref": "#/$defs/StyledTableCell"
+        }
       ],
-      "description": "A cell in table content."
+      "description": "A scalar, rich-run array, or styled/spanning cell object. Existing scalar and rich forms remain valid."
+    },
+    "TableCellValue": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TextRun"
+          }
+        }
+      ],
+      "description": "A scalar table value or canonical rich text runs, without cell decoration or geometry."
+    },
+    "StyledTableCell": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "value"
+      ],
+      "properties": {
+        "value": {
+          "$ref": "#/$defs/TableCellValue",
+          "description": "Editable cell content; styling and spans do not change its scalar type or rich runs."
+        },
+        "style": {
+          "$ref": "#/$defs/TableCellStyle"
+        },
+        "colSpan": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Number of grid columns covered, starting at this cell. Covered positions must contain null. Default 1."
+        },
+        "rowSpan": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Number of grid rows covered, starting at this cell. Covered positions must contain null. Header cells cannot span into body rows. Default 1."
+        }
+      },
+      "description": "A cell with explicit visual style or merged geometry. Its position remains its array column index; use null placeholders for every covered grid position."
+    },
+    "TableCellStyle": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "fill": {
+          "type": "string",
+          "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$",
+          "description": "Explicit RGB or RGBA color. Eight-digit colors include alpha; #00000000 is transparent."
+        },
+        "color": {
+          "type": "string",
+          "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$",
+          "description": "Default text color, overridden by individual rich run colors."
+        },
+        "align": {
+          "type": "string",
+          "enum": [
+            "left",
+            "center",
+            "right"
+          ],
+          "description": "Horizontal text alignment inside the cell."
+        },
+        "verticalAlign": {
+          "type": "string",
+          "enum": [
+            "top",
+            "middle",
+            "bottom"
+          ],
+          "description": "Vertical alignment inside the padded cell box."
+        },
+        "padding": {
+          "$ref": "#/$defs/TableCellPadding"
+        },
+        "borders": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "top": {
+              "$ref": "#/$defs/TableCellBorder"
+            },
+            "right": {
+              "$ref": "#/$defs/TableCellBorder"
+            },
+            "bottom": {
+              "$ref": "#/$defs/TableCellBorder"
+            },
+            "left": {
+              "$ref": "#/$defs/TableCellBorder"
+            }
+          },
+          "description": "Independent cell edges. Omitted edges retain the table theme border; width 0 removes an edge."
+        }
+      },
+      "description": "Cell appearance. Sizes use reference pixels at a 720-pixel canvas short edge and scale with the slide."
+    },
+    "TableCellPadding": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "top": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 200
+        },
+        "right": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 200
+        },
+        "bottom": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 200
+        },
+        "left": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 200
+        }
+      },
+      "description": "Text insets in reference pixels. Defaults: top 8, right 10, bottom 4, left 10."
+    },
+    "TableCellBorder": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "color",
+        "width"
+      ],
+      "properties": {
+        "color": {
+          "type": "string",
+          "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$",
+          "description": "Explicit RGB or RGBA color. Eight-digit colors include alpha; #00000000 is transparent."
+        },
+        "width": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 32,
+          "description": "Border width in reference pixels; 0 removes this edge."
+        },
+        "dash": {
+          "type": "string",
+          "enum": [
+            "solid",
+            "dash",
+            "dot"
+          ],
+          "description": "Default solid."
+        }
+      },
+      "description": "One explicit cell border."
     },
     "Catalogs": {
       "type": "object",
@@ -2538,6 +2868,66 @@
         "pkg:@acme/decks/narratives",
         "pkg:pptx-gallery"
       ]
+    },
+    "Composition": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Portable dynamic composition. Slide fields override the resolved layout. Nested groups arrange their children independently, inheriting only minFontSize and overflow. Explicit promoted regions retain their positions.",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "grid",
+            "row",
+            "column"
+          ],
+          "description": "auto chooses a grid from available space and content; grid uses columns; row and column use one horizontal or vertical track."
+        },
+        "columns": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 12,
+          "description": "Column count for grid. In auto mode this caps the number of columns."
+        },
+        "gap": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 0.1,
+          "description": "Space between cells as a fraction of the container short edge (canvas at slide root). Default 0.03333333333333333."
+        },
+        "padding": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 0.2,
+          "description": "Inset as a fraction of the container short edge. Default 0.08 on a slide, 0 inside a group."
+        },
+        "weights": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 12,
+          "items": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "maximum": 100
+          },
+          "description": "Relative track sizes: columns for row/grid/auto, rows for column. Omitted tracks have weight 1; extra weights are ignored."
+        },
+        "minFontSize": {
+          "type": "number",
+          "minimum": 8,
+          "maximum": 32,
+          "description": "Minimum readable text size in reference pixels at a 720-pixel canvas short edge. Default 16. Overflow is diagnosed when text cannot fit at this size."
+        },
+        "overflow": {
+          "type": "string",
+          "enum": [
+            "warn",
+            "error"
+          ],
+          "description": "warn returns diagnostics for content that does not fit; error rejects layout. Content is never silently removed. Default warn."
+        }
+      }
     }
   }
 }

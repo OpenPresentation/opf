@@ -1,0 +1,240 @@
+{
+  "checkedAt": "2026-09-10T02:26:09.671Z",
+  "origin": "https://www.pptx.dev",
+  "browser": "152.0.4191.66",
+  "dependencies": {
+    "@openpresentation/opf": "0.8.0",
+    "@openpresentation/opf-editor": "0.5.0",
+    "@openpresentation/opf-pptx": "0.6.0",
+    "@openpresentation/opf-render": "0.6.0"
+  },
+  "installedPackageProofs": [
+    "@openpresentation/opf-render",
+    "@openpresentation/opf-editor",
+    "@openpresentation/opf-pptx"
+  ],
+  "browserEditorVersion": "0.5.0",
+  "scripts": {
+    "/_next/static/immutable/chunks/0j13ko0htrqtv.js": {
+      "bytes": 28280,
+      "sha256": "9e0f7c876defd1c2744021566cbf1be9d3c588737f13888dd98a82eda926e7dc"
+    },
+    "/_next/static/immutable/chunks/2-lagrolmjz0b.js": {
+      "bytes": 829,
+      "sha256": "632a48b657ebfd16a8178fc1d0d9082a880acd517cf9a6a9e9d8ff75dba897d3"
+    },
+    "/_next/static/immutable/chunks/turbopack-3bhl784rb1z-2.js": {
+      "bytes": 11073,
+      "sha256": "9715f13ac6ad7631a9e7a8637964e35dbd31163c547915e7b871e7a22c30ff3e"
+    },
+    "/_next/static/immutable/chunks/0bypp5pxzkpm8.js": {
+      "bytes": 32165,
+      "sha256": "a41091e63e41f0a6e55f63de396be1fa6c0d815b454946aa5d6a7a66f7461156"
+    },
+    "/_next/static/immutable/chunks/1jfrnkitvod9_.js": {
+      "bytes": 41016,
+      "sha256": "3b44609c575ce4a6320c3e14bd83c5b047efc64b8582198ad1a0946fde95a89f"
+    },
+    "/_next/static/immutable/chunks/1bjy9n50tf86m.js": {
+      "bytes": 9664,
+      "sha256": "64419d06ba06d0dde2bb423315a8a4baabe50dc9d3cdc4fd98d575355477cf77"
+    },
+    "/_next/static/immutable/chunks/2-r6_23-fjf-s.js": {
+      "bytes": 37093,
+      "sha256": "2087544d4bbf30ee119dcd924e17b4125cc94297e47e94f44cae36a2e7b8b338"
+    },
+    "/_next/static/immutable/chunks/2e6hdmng1ykct.js": {
+      "bytes": 204608,
+      "sha256": "0e777e79dc13528f47c9d9b6a07aeca3bc9a9931be5764d1058bbf81db5d2e4d"
+    },
+    "/_next/static/immutable/chunks/43upj6bxwdepw.js": {
+      "bytes": 114874,
+      "sha256": "b12bb9cf52dda403c585e7abf5cf01b7d931c0030b60c06b1cbc26487dfcebcc"
+    },
+    "/_next/static/immutable/chunks/3mg56xnkwktgr.js": {
+      "bytes": 115580,
+      "sha256": "7465ba6902b252078ad5947ff7b83df6888449fa8797e994c8e5429ad7df9279"
+    },
+    "/_next/static/immutable/chunks/1pldp2pjeilkv.js": {
+      "bytes": 166409,
+      "sha256": "20eacf811c798988bad56a1657496db9e3b1115d82c3bc5040ee2e1b12594a8e"
+    },
+    "/_next/static/immutable/chunks/1o1o2feikjkd1.js": {
+      "bytes": 14227,
+      "sha256": "8ce923bec18243664e9e55e0d4c0677b8b6cad9cf1fd3b8eeb7b4309f062e45e"
+    },
+    "/_next/static/immutable/chunks/0kh0s5et-kkqk.js": {
+      "bytes": 54578,
+      "sha256": "f05849bb9bb6ae2f777e2153f0882e0b5e65df720b73022a21cb152a61c723fa"
+    },
+    "/_next/static/immutable/chunks/1dsnwd3eqimna.js": {
+      "bytes": 2516,
+      "sha256": "ab332a50dd0bed70abd7ad025c60e17cc157c9761cc88da6d06660ff22ac6b11"
+    },
+    "/_next/static/immutable/chunks/13gurenak9_rg.js": {
+      "bytes": 1261,
+      "sha256": "174ae476164be2a9892537eb3606c85155c4e1e078dd1300fd0df0ad7b67f7cd"
+    },
+    "/_next/static/immutable/chunks/0l756typ4nt_h.js": {
+      "bytes": 708,
+      "sha256": "7f00d8f63ac172557e3d89448fc77ae7ab48eec544ed0dfd01aa6a95e250cfc8"
+    },
+    "/_next/static/immutable/chunks/0_-kt8naw9vzn.js": {
+      "bytes": 27345,
+      "sha256": "199e7dea967031c788cb45b9016ee08337fe41ff795ae9be4cb4ad760778bb4d"
+    },
+    "/_next/static/immutable/chunks/1rj8l7rhv___g.js": {
+      "bytes": 37251,
+      "sha256": "4b8bc9368e2544e8dee5e0e2bebd63146a8d4852f49ac3ab5ddea0202d78294c"
+    },
+    "/_next/static/immutable/chunks/1lekf-e_uwht2.js": {
+      "bytes": 35668,
+      "sha256": "847f0946adefbe00200f35cbdb8db39d86896ae65644978cc68ca50794bd5e7c"
+    },
+    "/_next/static/immutable/chunks/3i1xi9fo27pk0.js": {
+      "bytes": 77821,
+      "sha256": "747a3e31f01f87f73c079e556f08a49651c308b3876f7501d2b926455f3ff8f6"
+    },
+    "/_next/static/immutable/chunks/3h8h02286_ele.js": {
+      "bytes": 1759,
+      "sha256": "32bc77d8cd51d273250cf0c258219c3bb82ec8c3e8108f4d2b45880935637dc5"
+    },
+    "/_next/static/immutable/chunks/37-dw913eyc9b.js": {
+      "bytes": 6103,
+      "sha256": "a850497bd65b90f7ae2d04be4fa4bc528e1a916121475396178cacc3444ababd"
+    },
+    "/_next/static/immutable/chunks/0pqs7mvm-34vq.js": {
+      "bytes": 37196,
+      "sha256": "22caa07bd52aee4c8034c4c452ab308e7214b77cdb76187d1712014a0ac1147b"
+    },
+    "/_next/static/immutable/chunks/3w4tcmg4-ew_k.js": {
+      "bytes": 41445,
+      "sha256": "e26b356662c7ac7736ea3b6c84cb9e513ffc49eb0eaba6bd44b58671a267ee22"
+    },
+    "/_next/static/immutable/chunks/111ym_e2ndcdo.js": {
+      "bytes": 32408,
+      "sha256": "127e73a71af20150242aec334973d2e38db8128ecb8017458dec1046cd198dfd"
+    },
+    "/_next/static/immutable/chunks/2asp3hza0f9xe.js": {
+      "bytes": 28761,
+      "sha256": "64e06e8c1d9fb7fb8fd40f9d2aaf655b7c2e430676d95638d1439aa8b8d4227b"
+    },
+    "/_next/static/immutable/chunks/1jv8axzc2qe4l.js": {
+      "bytes": 47194,
+      "sha256": "3645e0cf8b5e1e773d87bf9d152a67fa6bb9eccf233186fd227b174f1ef48d85"
+    },
+    "/_next/static/immutable/chunks/2738ssmf8i58e.js": {
+      "bytes": 51815,
+      "sha256": "751a0e8186ec1047dba26cb9f602f22433518839eb9d45e35ceffdadbf95d081"
+    },
+    "/_next/static/immutable/chunks/0r264a-wjl9bb.js": {
+      "bytes": 239057,
+      "sha256": "e4565cfb6973f84dfb5bbbf62336e75a6f36aa078de73ec60155a8454ac06aed"
+    },
+    "/_next/static/immutable/chunks/0i9gw28tkqv9s.js": {
+      "bytes": 33542,
+      "sha256": "eba06e965421104840aa41c7295a75f7d5f6eefed46af5be404eb3f341772bdc"
+    },
+    "/_next/static/immutable/chunks/20rmhjco8rm0-.js": {
+      "bytes": 101050,
+      "sha256": "b8fa997b5c765a80b502b90e7755ebfbb72492020696022591a63e37520bbd70"
+    },
+    "/_next/static/immutable/chunks/2h5iyuoa1sxg-.js": {
+      "bytes": 358311,
+      "sha256": "f6eb5250677500ae9cb127df98b20aa847442e18cbb66a4318ed4165ebb566f3"
+    },
+    "/_next/static/immutable/chunks/2fv8hig6prco8.js": {
+      "bytes": 263870,
+      "sha256": "05bcdd87a19bf028fc286d2a79ead5c9baba9a83d03f67a023f215354d24b8d2"
+    },
+    "/_next/static/immutable/chunks/0avmku9rmcm1x.js": {
+      "bytes": 39626,
+      "sha256": "3c530b942233dd517ca170b4393f62a744843777bb51eb123c478fb51d7549f5"
+    },
+    "/_next/static/immutable/chunks/2k3hcffdsxu8s.js": {
+      "bytes": 615881,
+      "sha256": "823263a224a901ba162718c96b730af3ea718647c55284835588d443ed5d4d40"
+    },
+    "/_next/static/immutable/chunks/39pzt_nlxx2zg.js": {
+      "bytes": 462966,
+      "sha256": "b2c1b6a0d53190e14f8801bce99c5187c00eca928335c342bdb7e9c45ed7fbb6"
+    },
+    "/_next/static/immutable/chunks/2iwem0x9i9vmv.js": {
+      "bytes": 712636,
+      "sha256": "941c611343c2beeebd4abe52cdb39b3818f1cb2fb11683855d81f6a84cdcad1a"
+    },
+    "/_next/static/immutable/chunks/25uqm7b1c4992.js": {
+      "bytes": 1272568,
+      "sha256": "2b285911e7d271512936a3a9f58f1d2bc62308122d41262d5a83f206e3d6e404"
+    },
+    "/_next/static/immutable/chunks/3d9mwsp6sidmi.js": {
+      "bytes": 1769892,
+      "sha256": "5b32e7969a02eadb36e84b67b9fb3b87c047ddbf7bff3ac818292038d6b64191"
+    },
+    "/_next/static/immutable/chunks/3qlcd3bkvphfv.js": {
+      "bytes": 110159,
+      "sha256": "cc6f43eb1d9695422050c3eb6839e783fc5867ab575d3e43598451e1c6a1270b"
+    },
+    "/_next/static/immutable/chunks/3g5yp2sxazehx.js": {
+      "bytes": 2492675,
+      "sha256": "dad45988c4b0bff50f7c0707077df563b437af75d4980cd7860143d78dbe69a9"
+    },
+    "/_next/static/immutable/chunks/3b2btjzh_01cm.js": {
+      "bytes": 47888,
+      "sha256": "613df384667616117c4201e2ff365abdd30bfe1cf041b3a23a675f5c91e4023a"
+    },
+    "/_next/static/immutable/chunks/1p4nvwyp54e0n.js": {
+      "bytes": 227,
+      "sha256": "78ebc8c8ab32c59dde1b3a551b7690ae684cb298ff9f08a3e420c4fc35ae0294"
+    },
+    "/_next/static/immutable/chunks/3b-heh9e8sclc.js": {
+      "bytes": 25484,
+      "sha256": "fc53bcad41411050baa2a0d3d8dabb29d72080af1cfda4b88db0eb86aabb3730"
+    },
+    "/_next/static/immutable/chunks/0e_ekc1i80th_.js": {
+      "bytes": 79732,
+      "sha256": "d2b71e0b8c9bf66b84b26a607092124e4eb3d574985b873f13a24bd919679202"
+    },
+    "/_next/static/immutable/chunks/432v-e5l_76ah.js": {
+      "bytes": 18579,
+      "sha256": "d83c0375ac00bdd76caa13eaf0066da26bc858c204dadf88597c539cf85fe171"
+    },
+    "/_next/static/immutable/chunks/1z_d832osmvtt.js": {
+      "bytes": 30509,
+      "sha256": "d1da0792c355ded825d2ff6a5270e2ff80da7d12a9a907ad9a26d36398e47ec2"
+    },
+    "/_next/static/immutable/chunks/1yfltksf4lu_x.js": {
+      "bytes": 521302,
+      "sha256": "e6f4889873a0d19931bf24e2a626594b2bf183b257d7cebb860e0f420054174f"
+    },
+    "/_next/static/immutable/chunks/turbopack-13rt2q77kirsj.js": {
+      "bytes": 10987,
+      "sha256": "5e2551898e1a87770f49c164c7c0c97a835796a9cace495c65feec068bbbdb8f"
+    },
+    "/_next/static/immutable/chunks/turbopack-379pf_jijwoj_.js": {
+      "bytes": 10901,
+      "sha256": "8db711d39c68c05607b860630081c629529eb0cfed32acc9e49ec243c7883e16"
+    },
+    "/_next/static/immutable/chunks/14xtrtee8fs0x.js": {
+      "bytes": 84520,
+      "sha256": "97182a1ee2b76135d5f5188b056cdea754af742982a0fd9b83f3f3597c6b1034"
+    },
+    "/_next/static/immutable/chunks/0x5b9spkl8qc9.js": {
+      "bytes": 25943,
+      "sha256": "6660ada253a615ca382db0a42c5e505c1fd61d873dd45a4254d00f19f40f421b"
+    },
+    "/_next/static/immutable/chunks/turbopack-worker-2g80pj3ycf14_.js": {
+      "bytes": 849,
+      "sha256": "861da5809b4f43b053fab88fe560f16efe31827655a06502ada9274a742852de"
+    },
+    "/_next/static/immutable/chunks/0j129-jm14ekk.js": {
+      "bytes": 43431,
+      "sha256": "ca83e96ce0eef77cad48e408c9a1c341b1abf61a56736d2069992792855d8e1f"
+    },
+    "/_next/static/immutable/chunks/13mk_w_sjt2_v.js": {
+      "bytes": 27719,
+      "sha256": "56b95fbf51a3355ebe60cceee2bf54339b1528effead5a8d3b2e166cf6dca4e3"
+    }
+  },
+  "boundary": "Actual served JavaScript bytes are fingerprinted after installed-package toolkit proofs and a loaded Author editor/JSON worker/preview. The final deployment commit and lock bind source provenance; bundled chunks are not claimed byte-identical to unbundled npm files. Offline export and native-tested download equality are recorded separately."
+}

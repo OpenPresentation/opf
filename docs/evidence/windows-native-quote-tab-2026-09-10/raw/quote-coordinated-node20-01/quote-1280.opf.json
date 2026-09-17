@@ -1,0 +1,67 @@
+{
+  "design": {
+    "dimensions": {
+      "widthInches": 13.333333333333334,
+      "heightInches": 7.5
+    },
+    "fontScheme": {
+      "id": "calibri",
+      "code": {
+        "family": "Calibri"
+      }
+    }
+  },
+  "slides": [
+    {
+      "title": "A quote and its source",
+      "quote": {
+        "text": "A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. ",
+        "attribution": "A reviewer",
+        "source": "Recorded interview"
+      }
+    },
+    {
+      "title": "A quote and its source",
+      "quote": {
+        "text": "A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. ",
+        "attribution": "A reviewer",
+        "source": "Recorded interview"
+      }
+    },
+    {
+      "title": "A quote and its source",
+      "quote": {
+        "text": "A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. ",
+        "attribution": "A reviewer",
+        "source": "Recorded interview"
+      }
+    },
+    {
+      "title": "A quote and its source",
+      "quote": {
+        "text": "A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. ",
+        "attribution": "A reviewer",
+        "source": "Recorded interview"
+      }
+    },
+    {
+      "title": "A quote and its source",
+      "quote": {
+        "text": "Keep the complete source visible.",
+        "attribution": "Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution ",
+        "source": "Recorded interview"
+      }
+    },
+    {
+      "title": "A quote and its source",
+      "quote": {
+        "text": "This source keeps the selected readability floor.",
+        "attribution": "Repeated source Repeated source Repeated source Repeated source Repeated source Repeated source Repeated source Repeated source Repeated source Repeated source Repeated source Repeated source Repeated source Repeated source Repeated source ",
+        "source": "Recorded interview"
+      },
+      "composition": {
+        "minFontSize": 24
+      }
+    }
+  ]
+}

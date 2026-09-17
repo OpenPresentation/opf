@@ -544,7 +544,7 @@ _No named properties._
 | `metric` | no | `oneOf:string / number / ref:Metric` | Full-slide metric payload. A string or number is shorthand for { "value": value }; object form carries optional label, description, unit, delta, and trend metadata. Numeric values remain numbers; renderers format them... |
 | `quote` | no | `oneOf:string / ref:Quote` | Full-slide quote payload. A string is shorthand for { "text": value }; object form carries optional attribution and source metadata. Presence of this field infers type 'quote'. |
 | `timeline` | no | `ref:Timeline` | Full-slide timeline payload. An array is shorthand for { "events": value }; object form carries optional name and description metadata. Presence of this field infers type 'timeline'. |
-| `blocks` | no | `array<ref:ContentPayload>` | Layout-agnostic content blocks rendered together as a composed payload when exact placement is unspecified. At slide root, multiple content payload kinds with no explicit type, blocks, or regions are accepted as shorthand for equivalent blocks. |
+| `blocks` | no | `array<ref:ContentPayload>` | Layout-agnostic content blocks rendered together as a composed payload when exact placement is unspecified. At slide root, multiple content payload kinds with no explicit type, blocks, or regions are accepted as short... |
 | `design` | no | `ref:Design` | Slide-level design applied on top of the deck-wide design. |
 | `left` | no | `ref:ContentPayload` |  |
 | `center` | no | `ref:ContentPayload` |  |
@@ -597,17 +597,18 @@ _No named properties._
 | `notes` | no | `string` | Speaker notes shown in presenter view. |
 | `section` | no | `string` | PowerPoint-style slide section label. Consecutive slides with the same value belong to the same section in presenter view, outlines, and PowerPoint section-aware exports. |
 | `hidden` | no | `boolean` | Whether the slide is hidden from the presented sequence. |
+| `composition` | no | `ref:Composition` |  |
 
 
 ### ContentPayload
 
-- Type: `allOf:schema + schema + schema + schema + schema + schema + schema + schema + schema`
+- Type: `allOf:schema + schema + schema + schema + schema + schema + schema + schema + schema + schema + schema + schema`
 - Required fields: none
-- Purpose: A single content payload. The optional 'type' discriminator can make intent explicit, but validators and engines infer it from fields such as text, bullets, items, image, video, chart, table, code, metric, quote, or timeline.
+- Purpose: A content leaf or recursively composed group. A group contains blocks and optional composition; it cannot mix blocks with leaf payload fields. Groups may nest up to 32 levels.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `type` | no | `enum:text \| list \| image \| chart \| table \| video \| code \| metric \| quote \| timeline` | Optional content kind. When omitted, engines infer the kind from the fields present. |
+| `type` | no | `enum:text \| list \| image \| chart \| table \| video \| code \| metric \| quote \| timeline \| group` | Optional content kind. When omitted, engines infer the kind from the fields present. |
 | `text` | no | `oneOf:string / array<ref:TextRun>` | Text payload. Use a string for plain text or TextRun[] for inline rich text. TextRun items may be plain strings or formatted run objects. |
 | `items` | no | `array<ref:ListItem>` | Generic list payload. Each item is either a plain string, a TextRun[] rich text sequence, or a ListItem object. List nesting uses item.level rather than nested content payloads. |
 | `bullets` | no | `array<ref:BulletItem>` | Text-style bullet payload. Presence of this field infers type 'text'. |
@@ -619,6 +620,8 @@ _No named properties._
 | `metric` | no | `oneOf:string / number / ref:Metric` | Metric payload. A string or number is shorthand for { "value": value }; object form carries optional label, description, unit, delta, and trend metadata. Numeric values remain numbers; renderers format them for display. |
 | `quote` | no | `oneOf:string / ref:Quote` | Quote payload. A string is shorthand for { "text": value }; object form carries optional attribution and source metadata. |
 | `timeline` | no | `ref:Timeline` | Timeline payload ordered by narrative or chronology. |
+| `blocks` | no | `array<ref:ContentPayload>` | Ordered children of a group. Each child is a leaf or another group. |
+| `composition` | no | `ref:Composition` | Arrangement within this group. Only minFontSize and overflow inherit from the parent; strict overflow cannot be weakened. |
 
 
 ### Quote
@@ -732,7 +735,7 @@ _No named properties._
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `columns` | no | `array<string>` | Optional column labels rendered above table rows. |
+| `columns` | no | `array<oneOf:string / array<ref:TextRun> / ref:StyledTableCell / null>` | Optional column labels. Labels may be strings, rich runs or styled cell objects. Null is an empty label or a placeholder covered by a preceding column span. |
 | `rows` | yes | `array<array<ref:TableCell>>` | Two-dimensional table row data; each row aligns by index with columns when columns are supplied. |
 
 
@@ -773,11 +776,77 @@ _No named properties._
 
 ### TableCell
 
-- Type: `oneOf:string / number / boolean / null`
+- Type: `oneOf:ref:TableCellValue / ref:StyledTableCell`
 - Required fields: none
-- Purpose: A cell in table content.
+- Purpose: A scalar, rich-run array, or styled/spanning cell object. Existing scalar and rich forms remain valid.
 
 _No named properties._
+
+
+### TableCellValue
+
+- Type: `oneOf:string / number / boolean / null / array<ref:TextRun>`
+- Required fields: none
+- Purpose: A scalar table value or canonical rich text runs, without cell decoration or geometry.
+
+_No named properties._
+
+
+### StyledTableCell
+
+- Type: `object`
+- Required fields: `value`
+- Purpose: A cell with explicit visual style or merged geometry. Its position remains its array column index; use null placeholders for every covered grid position.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `value` | yes | `ref:TableCellValue` | Editable cell content; styling and spans do not change its scalar type or rich runs. |
+| `style` | no | `ref:TableCellStyle` |  |
+| `colSpan` | no | `integer` | Number of grid columns covered, starting at this cell. Covered positions must contain null. Default 1. |
+| `rowSpan` | no | `integer` | Number of grid rows covered, starting at this cell. Covered positions must contain null. Header cells cannot span into body rows. Default 1. |
+
+
+### TableCellStyle
+
+- Type: `object`
+- Required fields: none
+- Purpose: Cell appearance. Sizes use reference pixels at a 720-pixel canvas short edge and scale with the slide.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `fill` | no | `string` | Explicit RGB or RGBA color. Eight-digit colors include alpha; #00000000 is transparent. |
+| `color` | no | `string` | Default text color, overridden by individual rich run colors. |
+| `align` | no | `enum:left \| center \| right` | Horizontal text alignment inside the cell. |
+| `verticalAlign` | no | `enum:top \| middle \| bottom` | Vertical alignment inside the padded cell box. |
+| `padding` | no | `ref:TableCellPadding` |  |
+| `borders` | no | `object` | Independent cell edges. Omitted edges retain the table theme border; width 0 removes an edge. |
+
+
+### TableCellPadding
+
+- Type: `object`
+- Required fields: none
+- Purpose: Text insets in reference pixels. Defaults: top 8, right 10, bottom 4, left 10.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `top` | no | `number` |  |
+| `right` | no | `number` |  |
+| `bottom` | no | `number` |  |
+| `left` | no | `number` |  |
+
+
+### TableCellBorder
+
+- Type: `object`
+- Required fields: `color`, `width`
+- Purpose: One explicit cell border.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `color` | yes | `string` | Explicit RGB or RGBA color. Eight-digit colors include alpha; #00000000 is transparent. |
+| `width` | yes | `number` | Border width in reference pixels; 0 removes this edge. |
+| `dash` | no | `enum:solid \| dash \| dot` | Default solid. |
 
 
 ### Catalogs
@@ -820,3 +889,20 @@ _No named properties._
 - Purpose: Catalog source location. Accepts: - A bare URL pointing at a catalog directory (e.g. 'https://acme.com/decks/narratives'); record ids resolve to '<base>/<id>.json'. - A URL pointing at an index file (e.g. 'https://acme.com/decks/narratives/index.json'); records are resolved relative to the index file's directory and the index entries describe what's available. - A package reference of the form 'pkg:<package>[/<subpath>]'; resolved through a locally-installed package on the engine's package path.
 
 _No named properties._
+
+
+### Composition
+
+- Type: `object`
+- Required fields: none
+- Purpose: Portable dynamic composition. Slide fields override the resolved layout. Nested groups arrange their children independently, inheriting only minFontSize and overflow. Explicit promoted regions retain their positions.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `mode` | no | `enum:auto \| grid \| row \| column` | auto chooses a grid from available space and content; grid uses columns; row and column use one horizontal or vertical track. |
+| `columns` | no | `integer` | Column count for grid. In auto mode this caps the number of columns. |
+| `gap` | no | `number` | Space between cells as a fraction of the container short edge (canvas at slide root). Default 0.03333333333333333. |
+| `padding` | no | `number` | Inset as a fraction of the container short edge. Default 0.08 on a slide, 0 inside a group. |
+| `weights` | no | `array<number>` | Relative track sizes: columns for row/grid/auto, rows for column. Omitted tracks have weight 1; extra weights are ignored. |
+| `minFontSize` | no | `number` | Minimum readable text size in reference pixels at a 720-pixel canvas short edge. Default 16. Overflow is diagnosed when text cannot fit at this size. |
+| `overflow` | no | `enum:warn \| error` | warn returns diagnostics for content that does not fit; error rejects layout. Content is never silently removed. Default warn. |

@@ -1,0 +1,8 @@
+
+> openpresentation-workspace@ check:examples /Users/michael/.codex/worktrees/c193/opf
+> node scripts/validate-examples.mjs
+
+{
+  "valid": true,
+  "files": 126
+}

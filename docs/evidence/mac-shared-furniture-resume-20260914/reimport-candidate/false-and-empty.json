@@ -1,0 +1,152 @@
+{
+  "id": "false-and-empty",
+  "source": {
+    "design": {
+      "fontScheme": "roboto",
+      "header": {
+        "left": {
+          "text": "Inherited"
+        }
+      }
+    },
+    "slides": [
+      {
+        "title": "Disabled",
+        "text": "Body",
+        "design": {
+          "header": false
+        }
+      },
+      {
+        "title": "Empty",
+        "text": "Body",
+        "design": {
+          "header": {}
+        }
+      },
+      {
+        "title": "Inherited",
+        "text": "Body"
+      }
+    ]
+  },
+  "imported": {
+    "$schema": "https://openpresentation.org/schema/opf/v1",
+    "name": "OPF Presentation",
+    "slides": [
+      {
+        "design": {
+          "background": {
+            "type": "solid",
+            "color": "#011842"
+          },
+          "header": false
+        },
+        "title": "Disabled",
+        "blocks": [
+          {
+            "type": "text",
+            "text": "Body"
+          }
+        ]
+      },
+      {
+        "design": {
+          "background": {
+            "type": "solid",
+            "color": "#011842"
+          },
+          "header": {}
+        },
+        "title": "Empty",
+        "blocks": [
+          {
+            "type": "text",
+            "text": "Body"
+          }
+        ]
+      },
+      {
+        "design": {
+          "background": {
+            "type": "solid",
+            "color": "#011842"
+          }
+        },
+        "title": "Inherited",
+        "blocks": [
+          {
+            "type": "text",
+            "text": "Body"
+          }
+        ]
+      }
+    ],
+    "author": "OpenPresentation",
+    "design": {
+      "dimensions": {
+        "widthInches": 13.333333333333334,
+        "heightInches": 7.5
+      },
+      "header": {
+        "left": {
+          "text": "Inherited"
+        }
+      }
+    }
+  },
+  "checks": {
+    "explicitFalse": true,
+    "explicitEmpty": true,
+    "inheritedLiteral": true
+  },
+  "failures": [],
+  "diagnostics": [
+    {
+      "code": "furniture-import-reflow",
+      "path": "slides.0.design",
+      "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+    },
+    {
+      "code": "furniture-import-reflow",
+      "path": "slides.1.design",
+      "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+    },
+    {
+      "code": "furniture-import-reflow",
+      "path": "slides.2.design",
+      "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+    },
+    {
+      "code": "heading-import-reflow",
+      "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed.",
+      "path": "slides.0"
+    },
+    {
+      "code": "text-import-reflow",
+      "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.",
+      "path": "slides.0"
+    },
+    {
+      "code": "heading-import-reflow",
+      "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed.",
+      "path": "slides.1"
+    },
+    {
+      "code": "text-import-reflow",
+      "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.",
+      "path": "slides.1"
+    },
+    {
+      "code": "heading-import-reflow",
+      "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed.",
+      "path": "slides.2"
+    },
+    {
+      "code": "text-import-reflow",
+      "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.",
+      "path": "slides.2"
+    }
+  ],
+  "pptxSha256": "d8433a7cc956d795639c217f5f4326b1e61cccf9f1d76058dd1f31e0aeca8dad"
+}

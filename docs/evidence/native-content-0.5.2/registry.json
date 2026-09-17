@@ -1,0 +1,67 @@
+[
+  {
+    "name": "@openpresentation/opf",
+    "version": "0.7.0",
+    "publishedAt": "2026-09-08T15:18:15.318Z",
+    "gitHead": "21e4cfca617ddfebeee85f79b09c35b2e82637e1",
+    "integrity": "sha512-ZYODnLgMSG1129eujM4CDGpkcF5CLoKr3bkZ713L04Gvh8VTHOudfPM4ICqngMBpRtcRXyoGaVSllLq2djIo1Q==",
+    "attestations": {
+      "url": "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf@0.7.0",
+      "provenance": {
+        "predicateType": "https://slsa.dev/provenance/v1"
+      }
+    }
+  },
+  {
+    "name": "@openpresentation/opf-render",
+    "version": "0.5.1",
+    "publishedAt": "2026-09-09T07:14:52.658Z",
+    "gitHead": "335ed01b2efbbb872894949f2ac0519e35651474",
+    "integrity": "sha512-rV3rMmSG/3Fl/75k4or+G4/OPZMkVj2ByOCg30ERGXQMhSxZ6o09pdTkhOVxbd2O7kpEuplZrQnSO6XWfW038w==",
+    "attestations": {
+      "url": "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf-render@0.5.1",
+      "provenance": {
+        "predicateType": "https://slsa.dev/provenance/v1"
+      }
+    }
+  },
+  {
+    "name": "@openpresentation/opf-editor",
+    "version": "0.4.0",
+    "publishedAt": "2026-09-08T17:11:21.409Z",
+    "gitHead": "e8bdedf7f80e2eab0ff7d869b9436cd2050e426d",
+    "integrity": "sha512-5KhsDeLQdjWy2flkrrQMSEi57Z1XoCmNujpL9KOjt5+zDDtVXUHu1ospyh7SCKuoPwp3/mv+hWJuXkHOWCNrHA==",
+    "attestations": {
+      "url": "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf-editor@0.4.0",
+      "provenance": {
+        "predicateType": "https://slsa.dev/provenance/v1"
+      }
+    }
+  },
+  {
+    "name": "@openpresentation/opf-pptx",
+    "version": "0.5.2",
+    "publishedAt": "2026-09-09T15:31:43.997Z",
+    "gitHead": "383666b366b8c9b8ed8e7e72934d1d3fd0fb634d",
+    "integrity": "sha512-I0Amtam9QxwUP7J739NU+FxOconhF5eRYJZWEA0HYAakDnsbKAVSIRvY0A+K3l7CIEkhPFWk/ZMNKFfJtIsQaw==",
+    "attestations": {
+      "url": "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf-pptx@0.5.2",
+      "provenance": {
+        "predicateType": "https://slsa.dev/provenance/v1"
+      }
+    }
+  },
+  {
+    "name": "@openpresentation/cli",
+    "version": "0.5.0",
+    "publishedAt": "2026-09-08T18:13:25.078Z",
+    "gitHead": "7a2845f45bd7c6f48312b07100851c0ee29a9d1c",
+    "integrity": "sha512-zStGUvtciPZcRz7U9bwV5vYaF0BpoXY8De2sCATHBWXNEtbozakBzi0JmT3hseyv08e4yYx4rlJqMRn6e1LzMw==",
+    "attestations": {
+      "url": "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fcli@0.5.0",
+      "provenance": {
+        "predicateType": "https://slsa.dev/provenance/v1"
+      }
+    }
+  }
+]

@@ -1,0 +1,18 @@
+{
+  "node": "v24.21.0",
+  "core": "d1660790a7a60e7083b533075230f193058a4e50",
+  "source": "  A  B\tC D\r\n\r\ntrail  \r",
+  "fit": {
+    "lines": [
+      "A B C D",
+      "",
+      "trail",
+      ""
+    ],
+    "fontSize": 25,
+    "lineHeight": 30.5,
+    "overflow": false
+  },
+  "reconstruction": "A B C D\n\ntrail\n",
+  "preservesSpaces": false
+}

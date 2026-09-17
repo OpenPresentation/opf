@@ -7,16 +7,20 @@
       "type": "title"
     },
     {
-      "type": "text"
+      "type": "metric"
     },
     {
-      "type": "text"
+      "type": "metric"
     },
     {
-      "type": "text"
+      "type": "metric"
     },
     {
-      "type": "text"
+      "type": "metric"
     }
-  ]
+  ],
+  "composition": {
+    "mode": "grid",
+    "columns": 2
+  }
 }

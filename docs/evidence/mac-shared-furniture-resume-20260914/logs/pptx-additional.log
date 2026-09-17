@@ -1,0 +1,17 @@
+
+> @openpresentation/opf-pptx@0.7.0 test:code
+> node test/shared-code.mjs && node test/code-provenance.mjs
+
+Shared code PPTX: 8 decks, 37 accepted native lines, 8 tab stops, six whitespace imports, strict failures, 132 XML-boundary rejections and valid character boundaries verified.
+Code provenance: exact source/metadata, native edits, ordering, empty/Unicode values, five damaged groups and edited generated label verified.
+
+> @openpresentation/opf-pptx@0.7.0 test:metric
+> node test/shared-metric.mjs && node test/metric-provenance.mjs
+
+Shared metric PPTX: 36 exact aligned geometry/source/type round trips with editable native lines, strict rejection and 198 XML boundary cases.
+Metric provenance: numeric/literal edits, CRLF, role edits, renamed/reordered shapes, eight damaged or ambiguous groups and cross-code identity guards pass.
+
+> @openpresentation/opf-pptx@0.7.0 test:font-variants
+> node test/font-variants.mjs
+
+7 payload slides use all nine real physical font styles; deterministic output, source, reimport and provider controls pass.

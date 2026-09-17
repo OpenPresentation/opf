@@ -1,0 +1,675 @@
+﻿{
+    "decks":  [
+
+              ],
+    "generationSha256":  "138074af1f26abe1cfb80015a16b1804a4fad98094a214ff09726a1302cc4ecb",
+    "stage":  "open-quote-1280-native-edited.pptx",
+    "slides":  [
+                   {
+                       "nativeLines":  10,
+                       "rasterSha256":  "2a3676d14fe3a8d6b3a976d418b6d715d6abf1fd7a900df43beb1e1d7a873322",
+                       "bodyLines":  9,
+                       "glyphsInsideCell":  true,
+                       "bodyBottom":  354.2700080871582,
+                       "units":  "points, PowerPoint TextRange2 bounds",
+                       "footerTop":  453.29998779296875,
+                       "lineBounds":  [
+                                          {
+                                              "text":  "\"A shared layout keeps the evidence readable when the words change. A shared layout keeps the",
+                                              "width":  851.215,
+                                              "top":  124.11,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  25.2
+                                          },
+                                          {
+                                              "text":  "evidence readable when the words change. A shared layout keeps the evidence readable when",
+                                              "width":  830.145,
+                                              "top":  149.73,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  25.2
+                                          },
+                                          {
+                                              "text":  "the words change. A shared layout keeps the evidence readable when the words change. A",
+                                              "width":  794.33,
+                                              "top":  175.35,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  25.2
+                                          },
+                                          {
+                                              "text":  "shared layout keeps the evidence readable when the words change. A shared layout keeps the",
+                                              "width":  824.465,
+                                              "top":  200.97,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  25.2
+                                          },
+                                          {
+                                              "text":  "evidence readable when the words change. A shared layout keeps the evidence readable when",
+                                              "width":  830.145,
+                                              "top":  226.59,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  25.2
+                                          },
+                                          {
+                                              "text":  "the words change. A shared layout keeps the evidence readable when the words change. A",
+                                              "width":  794.33,
+                                              "top":  252.21,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  25.2
+                                          },
+                                          {
+                                              "text":  "shared layout keeps the evidence readable when the words change. A shared layout keeps the",
+                                              "width":  824.465,
+                                              "top":  277.83,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  25.2
+                                          },
+                                          {
+                                              "text":  "evidence readable when the words change. A shared layout keeps the evidence readable when",
+                                              "width":  830.145,
+                                              "top":  303.45,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  25.2
+                                          },
+                                          {
+                                              "text":  "the words change. A shared layout keeps the evidence readable when the words change. \"",
+                                              "width":  790.83,
+                                              "top":  329.07,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  25.2
+                                          },
+                                          {
+                                              "text":  "A reviewer - Recorded interview",
+                                              "width":  169.02504,
+                                              "top":  453.3,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "footer",
+                                              "height":  15.3
+                                          }
+                                      ],
+                       "slide":  1
+                   },
+                   {
+                       "nativeLines":  13,
+                       "rasterSha256":  "ddbdfc9cbc764c8a3f645bd2c280a8fe3876aacfd6b4ad6b2ec53bcf6f323e13",
+                       "bodyLines":  12,
+                       "glyphsInsideCell":  true,
+                       "bodyBottom":  431.1299934387207,
+                       "units":  "points, PowerPoint TextRange2 bounds",
+                       "footerTop":  453.29998779296875,
+                       "lineBounds":  [
+                                          {
+                                              "text":  "\"A shared layout keeps the evidence readable when the words change. A shared layout keeps the",
+                                              "width":  851.215,
+                                              "top":  124.11,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  25.2
+                                          },
+                                          {
+                                              "text":  "evidence readable when the words change. A shared layout keeps the evidence readable when",
+                                              "width":  830.145,
+                                              "top":  149.73,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  25.2
+                                          },
+                                          {
+                                              "text":  "the words change. A shared layout keeps the evidence readable when the words change. A",
+                                              "width":  794.33,
+                                              "top":  175.35,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  25.2
+                                          },
+                                          {
+                                              "text":  "shared layout keeps the evidence readable when the words change. A shared layout keeps the",
+                                              "width":  824.465,
+                                              "top":  200.97,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  25.2
+                                          },
+                                          {
+                                              "text":  "evidence readable when the words change. A shared layout keeps the evidence readable when",
+                                              "width":  830.145,
+                                              "top":  226.59,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  25.2
+                                          },
+                                          {
+                                              "text":  "the words change. A shared layout keeps the evidence readable when the words change. A",
+                                              "width":  794.33,
+                                              "top":  252.21,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  25.2
+                                          },
+                                          {
+                                              "text":  "shared layout keeps the evidence readable when the words change. A shared layout keeps the",
+                                              "width":  824.465,
+                                              "top":  277.83,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  25.2
+                                          },
+                                          {
+                                              "text":  "evidence readable when the words change. A shared layout keeps the evidence readable when",
+                                              "width":  830.145,
+                                              "top":  303.45,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  25.2
+                                          },
+                                          {
+                                              "text":  "the words change. A shared layout keeps the evidence readable when the words change. A",
+                                              "width":  794.33,
+                                              "top":  329.07,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  25.2
+                                          },
+                                          {
+                                              "text":  "shared layout keeps the evidence readable when the words change. A shared layout keeps the",
+                                              "width":  824.465,
+                                              "top":  354.69,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  25.2
+                                          },
+                                          {
+                                              "text":  "evidence readable when the words change. A shared layout keeps the evidence readable when",
+                                              "width":  830.145,
+                                              "top":  380.31,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  25.2
+                                          },
+                                          {
+                                              "text":  "the words change. A shared layout keeps the evidence readable when the words change. \"",
+                                              "width":  790.83,
+                                              "top":  405.93,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  25.2
+                                          },
+                                          {
+                                              "text":  "A reviewer - Recorded interview",
+                                              "width":  169.02504,
+                                              "top":  453.3,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "footer",
+                                              "height":  15.3
+                                          }
+                                      ],
+                       "slide":  2
+                   },
+                   {
+                       "nativeLines":  15,
+                       "rasterSha256":  "95f0238fef8fe08f838cf0393ef4ae0e57d74f67b71d87b6313e8973d40914e1",
+                       "bodyLines":  14,
+                       "glyphsInsideCell":  true,
+                       "bodyBottom":  443.98504638671875,
+                       "units":  "points, PowerPoint TextRange2 bounds",
+                       "footerTop":  467.74502563476563,
+                       "lineBounds":  [
+                                          {
+                                              "text":  "\"A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence",
+                                              "width":  833.815063,
+                                              "top":  124.11,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  22.5
+                                          },
+                                          {
+                                              "text":  "readable when the words change. A shared layout keeps the evidence readable when the words change. A",
+                                              "width":  829.59,
+                                              "top":  146.985046,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  22.5
+                                          },
+                                          {
+                                              "text":  "shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence",
+                                              "width":  809.94,
+                                              "top":  169.86,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  22.5
+                                          },
+                                          {
+                                              "text":  "readable when the words change. A shared layout keeps the evidence readable when the words change. A",
+                                              "width":  829.59,
+                                              "top":  192.735046,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  22.5
+                                          },
+                                          {
+                                              "text":  "shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence",
+                                              "width":  809.94,
+                                              "top":  215.61,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  22.5
+                                          },
+                                          {
+                                              "text":  "readable when the words change. A shared layout keeps the evidence readable when the words change. A",
+                                              "width":  829.59,
+                                              "top":  238.485046,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  22.5
+                                          },
+                                          {
+                                              "text":  "shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence",
+                                              "width":  809.94,
+                                              "top":  261.36,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  22.5
+                                          },
+                                          {
+                                              "text":  "readable when the words change. A shared layout keeps the evidence readable when the words change. A",
+                                              "width":  829.59,
+                                              "top":  284.235046,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  22.5
+                                          },
+                                          {
+                                              "text":  "shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence",
+                                              "width":  809.94,
+                                              "top":  307.11,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  22.5
+                                          },
+                                          {
+                                              "text":  "readable when the words change. A shared layout keeps the evidence readable when the words change. A",
+                                              "width":  829.59,
+                                              "top":  329.985046,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  22.5
+                                          },
+                                          {
+                                              "text":  "shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence",
+                                              "width":  809.94,
+                                              "top":  352.86,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  22.5
+                                          },
+                                          {
+                                              "text":  "readable when the words change. A shared layout keeps the evidence readable when the words change. A",
+                                              "width":  829.59,
+                                              "top":  375.735046,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  22.5
+                                          },
+                                          {
+                                              "text":  "shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence",
+                                              "width":  809.94,
+                                              "top":  398.61,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  22.5
+                                          },
+                                          {
+                                              "text":  "readable when the words change. \"",
+                                              "width":  279.955048,
+                                              "top":  421.485046,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  22.5
+                                          },
+                                          {
+                                              "text":  "A reviewer - Recorded interview",
+                                              "width":  169.02504,
+                                              "top":  467.745026,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "footer",
+                                              "height":  15.3
+                                          }
+                                      ],
+                       "slide":  3
+                   },
+                   {
+                       "nativeLines":  16,
+                       "rasterSha256":  "75f5c9b2723147aa5a2ca36796022cd7633946b50484f9c1bba5d0ae801fdcbb",
+                       "bodyLines":  15,
+                       "glyphsInsideCell":  true,
+                       "bodyBottom":  439.43999099731445,
+                       "units":  "points, PowerPoint TextRange2 bounds",
+                       "footerTop":  467.74502563476563,
+                       "lineBounds":  [
+                                          {
+                                              "text":  "\"A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable",
+                                              "width":  831.91,
+                                              "top":  124.11,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  20.7
+                                          },
+                                          {
+                                              "text":  "when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps",
+                                              "width":  840.775,
+                                              "top":  145.155045,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  20.7
+                                          },
+                                          {
+                                              "text":  "the evidence readable when the words change. A shared layout keeps the evidence readable when the words change.",
+                                              "width":  842.74,
+                                              "top":  166.2,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  20.7
+                                          },
+                                          {
+                                              "text":  "A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable",
+                                              "width":  824.285034,
+                                              "top":  187.244965,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  20.7
+                                          },
+                                          {
+                                              "text":  "when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps",
+                                              "width":  840.775,
+                                              "top":  208.29,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  20.7
+                                          },
+                                          {
+                                              "text":  "the evidence readable when the words change. A shared layout keeps the evidence readable when the words change.",
+                                              "width":  842.74,
+                                              "top":  229.335037,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  20.7
+                                          },
+                                          {
+                                              "text":  "A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable",
+                                              "width":  824.285034,
+                                              "top":  250.38,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  20.7
+                                          },
+                                          {
+                                              "text":  "when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps",
+                                              "width":  840.775,
+                                              "top":  271.425049,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  20.7
+                                          },
+                                          {
+                                              "text":  "the evidence readable when the words change. A shared layout keeps the evidence readable when the words change.",
+                                              "width":  842.74,
+                                              "top":  292.47,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  20.7
+                                          },
+                                          {
+                                              "text":  "A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable",
+                                              "width":  824.285034,
+                                              "top":  313.515045,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  20.7
+                                          },
+                                          {
+                                              "text":  "when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps",
+                                              "width":  840.775,
+                                              "top":  334.56,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  20.7
+                                          },
+                                          {
+                                              "text":  "the evidence readable when the words change. A shared layout keeps the evidence readable when the words change.",
+                                              "width":  842.74,
+                                              "top":  355.605042,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  20.7
+                                          },
+                                          {
+                                              "text":  "A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable",
+                                              "width":  824.285034,
+                                              "top":  376.65,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  20.7
+                                          },
+                                          {
+                                              "text":  "when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps",
+                                              "width":  840.775,
+                                              "top":  397.695038,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  20.7
+                                          },
+                                          {
+                                              "text":  "the evidence readable when the words change. \"",
+                                              "width":  352.68,
+                                              "top":  418.74,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  20.7
+                                          },
+                                          {
+                                              "text":  "A reviewer - Recorded interview",
+                                              "width":  169.02504,
+                                              "top":  467.745026,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "footer",
+                                              "height":  15.3
+                                          }
+                                      ],
+                       "slide":  4
+                   },
+                   {
+                       "nativeLines":  8,
+                       "rasterSha256":  "6833887149ad7b2ddac47a328a493ddae758e9bea6e5217fd468a41794e406e5",
+                       "bodyLines":  1,
+                       "glyphsInsideCell":  true,
+                       "bodyBottom":  149.31000137329102,
+                       "units":  "points, PowerPoint TextRange2 bounds",
+                       "footerTop":  374.4150390625,
+                       "lineBounds":  [
+                                          {
+                                              "text":  "\"Keep the complete source visible.\"",
+                                              "width":  315.07,
+                                              "top":  124.11,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  25.2
+                                          },
+                                          {
+                                              "text":  "Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long",
+                                              "width":  805.8,
+                                              "top":  374.415039,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "footer",
+                                              "height":  15.3
+                                          },
+                                          {
+                                              "text":  "attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution",
+                                              "width":  836.75,
+                                              "top":  389.97,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "footer",
+                                              "height":  15.3
+                                          },
+                                          {
+                                              "text":  "Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long",
+                                              "width":  805.8,
+                                              "top":  405.525024,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "footer",
+                                              "height":  15.3
+                                          },
+                                          {
+                                              "text":  "attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution",
+                                              "width":  836.75,
+                                              "top":  421.08,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "footer",
+                                              "height":  15.3
+                                          },
+                                          {
+                                              "text":  "Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long",
+                                              "width":  805.8,
+                                              "top":  436.63504,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "footer",
+                                              "height":  15.3
+                                          },
+                                          {
+                                              "text":  "attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution",
+                                              "width":  836.75,
+                                              "top":  452.19,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "footer",
+                                              "height":  15.3
+                                          },
+                                          {
+                                              "text":  "Long attribution Long attribution Long attribution - Recorded interview",
+                                              "width":  369.775024,
+                                              "top":  467.745026,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "footer",
+                                              "height":  15.3
+                                          }
+                                      ],
+                       "slide":  5
+                   },
+                   {
+                       "nativeLines":  4,
+                       "rasterSha256":  "53bc9355759e514c6301223d3bc11deec242a78add7fca4ef5de318466fda15d",
+                       "bodyLines":  1,
+                       "glyphsInsideCell":  true,
+                       "bodyBottom":  149.31000137329102,
+                       "units":  "points, PowerPoint TextRange2 bounds",
+                       "footerTop":  417.42001342773438,
+                       "lineBounds":  [
+                                          {
+                                              "text":  "\"This source keeps the selected readability floor.\"",
+                                              "width":  435.44,
+                                              "top":  124.11,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "body",
+                                              "height":  25.2
+                                          },
+                                          {
+                                              "text":  "Repeated source Repeated source Repeated source Repeated source Repeated source Repeated source Repeated",
+                                              "width":  833.185059,
+                                              "top":  417.42,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "footer",
+                                              "height":  21.6
+                                          },
+                                          {
+                                              "text":  "source Repeated source Repeated source Repeated source Repeated source Repeated source Repeated source",
+                                              "width":  812.095032,
+                                              "top":  439.38,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "footer",
+                                              "height":  21.6
+                                          },
+                                          {
+                                              "text":  "Repeated source Repeated source - Recorded interview",
+                                              "width":  409.125031,
+                                              "top":  461.34,
+                                              "glyphsInsideCell":  true,
+                                              "left":  56.7,
+                                              "role":  "footer",
+                                              "height":  21.6
+                                          }
+                                      ],
+                       "slide":  6
+                   }
+               ]
+}

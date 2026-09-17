@@ -1,0 +1,1364 @@
+{
+  "scope": "Unreleased standalone code-flow-v1 core API with the release-plan registry renderer used only to supply existing outer boxes and open-font advances. Exact text/line boundaries, measured tabs, filename/language and a 24-reference-pixel floor are checked. This probe does not verify composition selection, renderer/converter integration, browser glyph bounds or native raster equivalence.",
+  "fixtureSha256": "933b47848528870f83b67c45949b9ebb93b930731e2b1fd2e3ce69440f653dfb",
+  "sourceHashes": [
+    {
+      "file": "packages/javascript/src/composition.ts",
+      "sha256": "3a689143aa5d2a5ab73dc5f7887f33005a3b1030d85b723f6bf4275e89dc3c13"
+    },
+    {
+      "file": "packages/javascript/src/index.ts",
+      "sha256": "3dd0044933f76288b001598876d1cce5c5a8a876f52c1aab404b4a6139b7f6ee"
+    },
+    {
+      "file": "scripts/test-code-layout-geometry.mjs",
+      "sha256": "bb43b39ce047cc2352e1050d9d6361fca37f92d0120931f08cd15390bad9e1ae"
+    }
+  ],
+  "runtimeHashes": [
+    {
+      "file": "packages/javascript/dist/composition.js",
+      "sha256": "eafc627819e92b6b14a1c78161c783e3334464c412d2b5926669969ee61aba8d"
+    },
+    {
+      "file": "packages/javascript/dist/chunk-6QR2RMRH.js",
+      "sha256": "7c05b30351c920f96cbe3b9a4e53656b92a5b6352960cf407f6b892aa429b8d0"
+    }
+  ],
+  "fontHashes": [
+    {
+      "file": "@expo-google-fonts/carlito/400Regular/Carlito_400Regular.ttf",
+      "sha256": "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89"
+    },
+    {
+      "file": "@expo-google-fonts/carlito/400Regular_Italic/Carlito_400Regular_Italic.ttf",
+      "sha256": "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5"
+    },
+    {
+      "file": "@expo-google-fonts/carlito/700Bold/Carlito_700Bold.ttf",
+      "sha256": "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0"
+    },
+    {
+      "file": "@expo-google-fonts/carlito/700Bold_Italic/Carlito_700Bold_Italic.ttf",
+      "sha256": "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691"
+    },
+    {
+      "file": "@expo-google-fonts/caladea/400Regular/Caladea_400Regular.ttf",
+      "sha256": "59faf27a90dee5c1b7813b12b26c725ea88adc1bfe37b0ac8e0b8b32a5732c2a"
+    },
+    {
+      "file": "@expo-google-fonts/caladea/400Regular_Italic/Caladea_400Regular_Italic.ttf",
+      "sha256": "669e65b265d40899b59d7f3531ca136b7e0fda80a3d1b5d47bbe7825be81fbe3"
+    },
+    {
+      "file": "@expo-google-fonts/caladea/700Bold/Caladea_700Bold.ttf",
+      "sha256": "11d1e1dc461d1e491b6a396d91934c3bb09d06a77cc3d21ad0b10346c39c3ec2"
+    },
+    {
+      "file": "@expo-google-fonts/caladea/700Bold_Italic/Caladea_700Bold_Italic.ttf",
+      "sha256": "93d7c2003fe3fd8381cbd518af6cc2f4b510a37c7741c49a95893b6da8edbbc7"
+    },
+    {
+      "file": "@expo-google-fonts/arimo/400Regular/Arimo_400Regular.ttf",
+      "sha256": "88cc899855d30f9c779b73c3319d0e077b098f927187aafce11ca029add707a6"
+    },
+    {
+      "file": "@expo-google-fonts/arimo/400Regular_Italic/Arimo_400Regular_Italic.ttf",
+      "sha256": "6bd2c6a6fa87f4566cf0a92c5834884597acbd7be9719e550837865ac4167a42"
+    },
+    {
+      "file": "@expo-google-fonts/arimo/700Bold/Arimo_700Bold.ttf",
+      "sha256": "ec96ac9fdd94766f66f6140c1375bf011577558f88d43f76b3b59307d2a6bca3"
+    },
+    {
+      "file": "@expo-google-fonts/arimo/700Bold_Italic/Arimo_700Bold_Italic.ttf",
+      "sha256": "b42b19c10bf5d526f00068303a643282c3df55a79c6fa2eea80b4a078a4a705a"
+    },
+    {
+      "file": "@expo-google-fonts/tinos/400Regular/Tinos_400Regular.ttf",
+      "sha256": "924ef269e73da94c1803ff68877f5d998dd16605c5ffad82ee181034f8a1fffe"
+    },
+    {
+      "file": "@expo-google-fonts/tinos/400Regular_Italic/Tinos_400Regular_Italic.ttf",
+      "sha256": "4a52de5bcf70e37bd71949f8a85302b75795a1943aedffbbee4f2db7744e1c81"
+    },
+    {
+      "file": "@expo-google-fonts/tinos/700Bold/Tinos_700Bold.ttf",
+      "sha256": "576a19b5dc026cafe6ae8fde4c849588dae6475cf5d912cebdf2827388c43ad9"
+    },
+    {
+      "file": "@expo-google-fonts/tinos/700Bold_Italic/Tinos_700Bold_Italic.ttf",
+      "sha256": "10c90ef7896d758923c06a1485d7824cdb457466da0bf7d42f81c5228931281b"
+    },
+    {
+      "file": "@expo-google-fonts/cousine/400Regular/Cousine_400Regular.ttf",
+      "sha256": "ca2264d6750d6c47df703be4486361a37ab943d42de6ea2bf794b7c7af767799"
+    },
+    {
+      "file": "@expo-google-fonts/cousine/400Regular_Italic/Cousine_400Regular_Italic.ttf",
+      "sha256": "f1626b7287db36af8ba2ff88840c82f121f4cbda8971fe3f717f975e9fd782a8"
+    },
+    {
+      "file": "@expo-google-fonts/cousine/700Bold/Cousine_700Bold.ttf",
+      "sha256": "f03c46c4bc5c0a3af4a1f4fbe5e3e16954581cced05cea20b3bffe12740d99d3"
+    },
+    {
+      "file": "@expo-google-fonts/cousine/700Bold_Italic/Cousine_700Bold_Italic.ttf",
+      "sha256": "acb798f3629cda0041fbd6234237cf549a1b932792f2a71b0986eb3e1382ed37"
+    },
+    {
+      "file": "@expo-google-fonts/gelasio/400Regular/Gelasio_400Regular.ttf",
+      "sha256": "44aae47442ad39e623788930f38f1e702febcf094c284c5058bf49f7da23de9a"
+    },
+    {
+      "file": "@expo-google-fonts/gelasio/400Regular_Italic/Gelasio_400Regular_Italic.ttf",
+      "sha256": "2b24b3d41c06d030a31db6610454595775e572a2992d73171cab783407d202a8"
+    },
+    {
+      "file": "@expo-google-fonts/gelasio/700Bold/Gelasio_700Bold.ttf",
+      "sha256": "fade86eca52203e2ccaf9aee494aa4b0335589879738c47e9d92a53630696d10"
+    },
+    {
+      "file": "@expo-google-fonts/gelasio/700Bold_Italic/Gelasio_700Bold_Italic.ttf",
+      "sha256": "24f1cb5cf5f765acc5d744a54a6c5dfe34723e58842f5b1b696716497e032852"
+    },
+    {
+      "file": "@expo-google-fonts/roboto/400Regular/Roboto_400Regular.ttf",
+      "sha256": "15256405ecb0d880678833a582760efad538ab2932318b52c8105b267d159459"
+    },
+    {
+      "file": "@expo-google-fonts/roboto/500Medium/Roboto_500Medium.ttf",
+      "sha256": "79343dc641a2e8d48a703a4667b71fc8dc6565cc8ce47dfc34fc52c12aadbf38"
+    },
+    {
+      "file": "@expo-google-fonts/roboto/600SemiBold/Roboto_600SemiBold.ttf",
+      "sha256": "32fe2086b0e54eca85a68eb74e3d89bb16a7ffe59085d6dc7d079f5b3c26d6ab"
+    },
+    {
+      "file": "@expo-google-fonts/roboto/700Bold/Roboto_700Bold.ttf",
+      "sha256": "4aaf8c5b661a386998c2e70cf2b87e2440f5404e0b8fd81164f0413fb3435ec6"
+    },
+    {
+      "file": "@expo-google-fonts/roboto/800ExtraBold/Roboto_800ExtraBold.ttf",
+      "sha256": "43d5ce98c58336045220fa1dac2bd22281b1aab3eca66785cb34eb3ad1dfe1a5"
+    },
+    {
+      "file": "@expo-google-fonts/roboto/400Regular_Italic/Roboto_400Regular_Italic.ttf",
+      "sha256": "6a372c348dc20c246b92d60b9bda3c0a9ffedc129790ed3f31faf89daa99d793"
+    },
+    {
+      "file": "@expo-google-fonts/roboto/700Bold_Italic/Roboto_700Bold_Italic.ttf",
+      "sha256": "c6a5e7c224d3bf6698e5d3c124f0f0220cad20d5d413920447a96f033a0292ee"
+    },
+    {
+      "file": "@expo-google-fonts/roboto-mono/400Regular/RobotoMono_400Regular.ttf",
+      "sha256": "e4bf45837847d4abfa5a502b807a83393aa138727bdb9ea9c93fb17d53208d95"
+    },
+    {
+      "file": "@expo-google-fonts/roboto-mono/700Bold/RobotoMono_700Bold.ttf",
+      "sha256": "92649d819cc4c20480b23a47aaa111769924eb31c66b6ecdcf6f573662558c83"
+    }
+  ],
+  "packages": [
+    {
+      "name": "@openpresentation/opf",
+      "version": "0.8.0",
+      "integrity": "sha512-1ubeINQsuD8pFNr542eFYPfzkhcECAcj/mM2pWNN+keFnVoWxePCsFTUtjuSSsvCtpm7QkgxBYRJYtEUmrlkkg=="
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "version": "0.6.0",
+      "integrity": "sha512-rYHS0qetT8FpDqkB8E9KMtwrh6NiB6UzxAeqaCwnMwrIDIEvejKC++Hw2Us4512ZIHRHdwuG42aq6QJodBJOPA=="
+    },
+    {
+      "name": "@expo-google-fonts/carlito",
+      "version": "0.4.1",
+      "integrity": "sha512-S4vhxWiS1mKp6AAx44VvNt7edQhnoXJU3obKcBZRjMkvQn0MJlm+Sz3O2bhcXy3h01CMi/soREOjDcZYFDzL/Q=="
+    },
+    {
+      "name": "@expo-google-fonts/caladea",
+      "version": "0.4.2",
+      "integrity": "sha512-b6hpisI+XjFuzRpkBXaEVY27c5j6wnCZFhCyOJUiDWqoRD1jzvICrl0vPZyKrQvR8yQWpsgXxaWOk9hbuH4RRg=="
+    },
+    {
+      "name": "@expo-google-fonts/arimo",
+      "version": "0.4.3",
+      "integrity": "sha512-kXMUJ303nJgKjJFr8yuiAY9dgIoAoj9HccKkaSw0J63/T4MSdxFejzfDUVLzUz+ohpQWinifV99QOAUQLcGKDg=="
+    },
+    {
+      "name": "@expo-google-fonts/tinos",
+      "version": "0.4.2",
+      "integrity": "sha512-MQkfvUO1Aw7UP3jRtWLcjda+udanoL8ecrbkjbc3ZdhSI1iW/Uil4uD8O0eOiIxU2v/FeAT2XjGNiz5oYUlucg=="
+    },
+    {
+      "name": "@expo-google-fonts/cousine",
+      "version": "0.4.3",
+      "integrity": "sha512-rSl8RXKqxwz8xJvedqdiKtPghSwRAl5c+lMecDyZ1L+V+IQEx6mavMnYkO0KuKgNcHekJXwXZsbmv7zJWggmAw=="
+    },
+    {
+      "name": "@expo-google-fonts/gelasio",
+      "version": "0.4.1",
+      "integrity": "sha512-mqSxj6OCIHnyRxqYYd3HSgDyWw9bI+DBWdyQRw9sNrqoceEh+3f43mY6yTrCKrBXqq0a1q9z76IvAp3HKHZQBw=="
+    },
+    {
+      "name": "@expo-google-fonts/roboto",
+      "version": "0.4.3",
+      "integrity": "sha512-kX3wmpmu06fN1yOwYWMdjYJWNUYW6xUiAGeHbvPzzSEb3A3j23JelQ3tAgwQNKgEKRq6wtMmzixy2r7y9c8dsA=="
+    },
+    {
+      "name": "@expo-google-fonts/roboto-mono",
+      "version": "0.4.2",
+      "integrity": "sha512-TkWqMKicHKbWclt3dZuzHgBXE4OZgenz+Bp8XT26/wKcWvUXnzGvS7C140QYCsq+CKZsa+0JTZppq2Wfyx0SCQ=="
+    }
+  ],
+  "results": [
+    {
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
+      "scenario": "long-language",
+      "overflowing": false,
+      "algorithm": "code-flow-v1",
+      "textMeasurement": "provided",
+      "diagnostics": [],
+      "parts": [
+        {
+          "role": "language",
+          "path": "slides.0.code.language",
+          "textSha256": "05d20261719d249a59b079f504a1ed5c12a810d097986e05c5d7ab1b58a78800",
+          "sourceLength": 500,
+          "sources": [
+            {
+              "path": "slides.0.code.language",
+              "start": 0,
+              "end": 500
+            }
+          ],
+          "generated": false,
+          "box": {
+            "x": 75.6,
+            "y": 75.6,
+            "width": 1128.8,
+            "height": 204.96
+          },
+          "requestedFontSize": 24,
+          "minFontSize": 24,
+          "requestedStyle": {
+            "fontFamily": "Cousine",
+            "fontWeight": 700,
+            "italic": false,
+            "path": "slides.0.code.language"
+          },
+          "style": {
+            "fontFamily": "Cousine",
+            "fontWeight": 700,
+            "italic": false,
+            "path": "slides.0.code.language"
+          },
+          "fit": {
+            "fontSize": 24,
+            "lineHeight": 29.28,
+            "lineCount": 7,
+            "maximumLineWidth": 1123.3828125,
+            "tabSize": 4,
+            "tabWidth": 57.609375,
+            "tabSegments": 0,
+            "sourceReconstructedExactly": true,
+            "overflow": false
+          }
+        },
+        {
+          "role": "body",
+          "path": "slides.0.code.source",
+          "textSha256": "d226b9b1c70e62d2a4a48a660be7b8cddf5e14a372e966a35542f3dc5cc1bbc6",
+          "sourceLength": 17,
+          "text": "const value = 42;",
+          "sources": [
+            {
+              "path": "slides.0.code.source",
+              "start": 0,
+              "end": 17
+            }
+          ],
+          "generated": false,
+          "box": {
+            "x": 75.6,
+            "y": 292.56,
+            "width": 1128.8,
+            "height": 351.84
+          },
+          "requestedFontSize": 24,
+          "minFontSize": 24,
+          "requestedStyle": {
+            "fontFamily": "Cousine",
+            "fontWeight": 400,
+            "italic": false,
+            "path": "slides.0.code.source"
+          },
+          "style": {
+            "fontFamily": "Cousine",
+            "fontWeight": 400,
+            "italic": false,
+            "path": "slides.0.code.source"
+          },
+          "fit": {
+            "fontSize": 24,
+            "lineHeight": 29.28,
+            "lineCount": 1,
+            "maximumLineWidth": 244.83984375,
+            "tabSize": 4,
+            "tabWidth": 57.609375,
+            "tabSegments": 0,
+            "sourceReconstructedExactly": true,
+            "overflow": false
+          }
+        }
+      ]
+    },
+    {
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
+      "scenario": "whitespace-filename",
+      "overflowing": false,
+      "algorithm": "code-flow-v1",
+      "textMeasurement": "provided",
+      "diagnostics": [],
+      "parts": [
+        {
+          "role": "filename",
+          "path": "slides.0.code.filename",
+          "textSha256": "f7562ea8b04c091e876cbdf1f316c43de611d084f3ad6f660907f539ef4c9899",
+          "sourceLength": 12,
+          "text": "src/check.py",
+          "sources": [
+            {
+              "path": "slides.0.code.filename",
+              "start": 0,
+              "end": 12
+            }
+          ],
+          "generated": false,
+          "box": {
+            "x": 75.6,
+            "y": 75.6,
+            "width": 1128.8,
+            "height": 29.28
+          },
+          "requestedFontSize": 24,
+          "minFontSize": 24,
+          "requestedStyle": {
+            "fontFamily": "Cousine",
+            "fontWeight": 700,
+            "italic": false,
+            "path": "slides.0.code.filename"
+          },
+          "style": {
+            "fontFamily": "Cousine",
+            "fontWeight": 700,
+            "italic": false,
+            "path": "slides.0.code.filename"
+          },
+          "fit": {
+            "fontSize": 24,
+            "lineHeight": 29.28,
+            "lineCount": 1,
+            "maximumLineWidth": 172.828125,
+            "tabSize": 4,
+            "tabWidth": 57.609375,
+            "tabSegments": 0,
+            "sourceReconstructedExactly": true,
+            "overflow": false
+          }
+        },
+        {
+          "role": "language",
+          "path": "slides.0.code.language",
+          "textSha256": "11a4a60b518bf24989d481468076e5d5982884626aed9faeb35b8576fcd223e1",
+          "sourceLength": 6,
+          "text": "python",
+          "sources": [
+            {
+              "path": "slides.0.code.language",
+              "start": 0,
+              "end": 6
+            }
+          ],
+          "generated": false,
+          "box": {
+            "x": 75.6,
+            "y": 112.88,
+            "width": 1128.8,
+            "height": 29.28
+          },
+          "requestedFontSize": 24,
+          "minFontSize": 24,
+          "requestedStyle": {
+            "fontFamily": "Cousine",
+            "fontWeight": 700,
+            "italic": false,
+            "path": "slides.0.code.language"
+          },
+          "style": {
+            "fontFamily": "Cousine",
+            "fontWeight": 700,
+            "italic": false,
+            "path": "slides.0.code.language"
+          },
+          "fit": {
+            "fontSize": 24,
+            "lineHeight": 29.28,
+            "lineCount": 1,
+            "maximumLineWidth": 86.4140625,
+            "tabSize": 4,
+            "tabWidth": 57.609375,
+            "tabSegments": 0,
+            "sourceReconstructedExactly": true,
+            "overflow": false
+          }
+        },
+        {
+          "role": "body",
+          "path": "slides.0.code.source",
+          "textSha256": "69f14c0a692d245bde4c78dd0a9bc91fbfc3f50c6e1cd0f95a5cf3368590fc2a",
+          "sourceLength": 61,
+          "text": "def check():\r\n    value = \"two  spaces\"\r\n    return value  \r\n",
+          "sources": [
+            {
+              "path": "slides.0.code.source",
+              "start": 0,
+              "end": 61
+            }
+          ],
+          "generated": false,
+          "box": {
+            "x": 75.6,
+            "y": 154.16,
+            "width": 1128.8,
+            "height": 490.24
+          },
+          "requestedFontSize": 24,
+          "minFontSize": 24,
+          "requestedStyle": {
+            "fontFamily": "Cousine",
+            "fontWeight": 400,
+            "italic": false,
+            "path": "slides.0.code.source"
+          },
+          "style": {
+            "fontFamily": "Cousine",
+            "fontWeight": 400,
+            "italic": false,
+            "path": "slides.0.code.source"
+          },
+          "fit": {
+            "fontSize": 24,
+            "lineHeight": 29.28,
+            "lineCount": 4,
+            "maximumLineWidth": 360.05859375,
+            "tabSize": 4,
+            "tabWidth": 57.609375,
+            "tabSegments": 0,
+            "sourceReconstructedExactly": true,
+            "overflow": false
+          }
+        }
+      ]
+    },
+    {
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
+      "scenario": "tabs",
+      "overflowing": false,
+      "algorithm": "code-flow-v1",
+      "textMeasurement": "provided",
+      "diagnostics": [],
+      "parts": [
+        {
+          "role": "filename",
+          "path": "slides.0.code.filename",
+          "textSha256": "ad39c285b46d75e2fc3e4673089d1a36f30c8f85ade049e064be9c0862a8ef4f",
+          "sourceLength": 20,
+          "text": "src/CaseSensitive.js",
+          "sources": [
+            {
+              "path": "slides.0.code.filename",
+              "start": 0,
+              "end": 20
+            }
+          ],
+          "generated": false,
+          "box": {
+            "x": 75.6,
+            "y": 75.6,
+            "width": 1128.8,
+            "height": 29.28
+          },
+          "requestedFontSize": 24,
+          "minFontSize": 24,
+          "requestedStyle": {
+            "fontFamily": "Cousine",
+            "fontWeight": 700,
+            "italic": false,
+            "path": "slides.0.code.filename"
+          },
+          "style": {
+            "fontFamily": "Cousine",
+            "fontWeight": 700,
+            "italic": false,
+            "path": "slides.0.code.filename"
+          },
+          "fit": {
+            "fontSize": 24,
+            "lineHeight": 29.28,
+            "lineCount": 1,
+            "maximumLineWidth": 288.046875,
+            "tabSize": 4,
+            "tabWidth": 57.609375,
+            "tabSegments": 0,
+            "sourceReconstructedExactly": true,
+            "overflow": false
+          }
+        },
+        {
+          "role": "language",
+          "path": "slides.0.code.language",
+          "textSha256": "b27ad06d123c6145fba7e9217a4cfbf2488b4743810ed8c8ff14ad01a5bbe515",
+          "sourceLength": 10,
+          "text": "JavaScript",
+          "sources": [
+            {
+              "path": "slides.0.code.language",
+              "start": 0,
+              "end": 10
+            }
+          ],
+          "generated": false,
+          "box": {
+            "x": 75.6,
+            "y": 112.88,
+            "width": 1128.8,
+            "height": 29.28
+          },
+          "requestedFontSize": 24,
+          "minFontSize": 24,
+          "requestedStyle": {
+            "fontFamily": "Cousine",
+            "fontWeight": 700,
+            "italic": false,
+            "path": "slides.0.code.language"
+          },
+          "style": {
+            "fontFamily": "Cousine",
+            "fontWeight": 700,
+            "italic": false,
+            "path": "slides.0.code.language"
+          },
+          "fit": {
+            "fontSize": 24,
+            "lineHeight": 29.28,
+            "lineCount": 1,
+            "maximumLineWidth": 144.0234375,
+            "tabSize": 4,
+            "tabWidth": 57.609375,
+            "tabSegments": 0,
+            "sourceReconstructedExactly": true,
+            "overflow": false
+          }
+        },
+        {
+          "role": "body",
+          "path": "slides.0.code.source",
+          "textSha256": "b3efc9a56b02ad4e49467d2892ac6f5a291cc02cffc534a272c3a2c37fd6d8c7",
+          "sourceLength": 47,
+          "text": "\tconst value = \"two  spaces\";\r\n\t\treturn value;\n",
+          "sources": [
+            {
+              "path": "slides.0.code.source",
+              "start": 0,
+              "end": 47
+            }
+          ],
+          "generated": false,
+          "box": {
+            "x": 75.6,
+            "y": 154.16,
+            "width": 1128.8,
+            "height": 490.24
+          },
+          "requestedFontSize": 24,
+          "minFontSize": 24,
+          "requestedStyle": {
+            "fontFamily": "Cousine",
+            "fontWeight": 400,
+            "italic": false,
+            "path": "slides.0.code.source"
+          },
+          "style": {
+            "fontFamily": "Cousine",
+            "fontWeight": 400,
+            "italic": false,
+            "path": "slides.0.code.source"
+          },
+          "fit": {
+            "fontSize": 24,
+            "lineHeight": 29.28,
+            "lineCount": 3,
+            "maximumLineWidth": 460.875,
+            "tabSize": 4,
+            "tabWidth": 57.609375,
+            "tabSegments": 3,
+            "sourceReconstructedExactly": true,
+            "overflow": false
+          }
+        }
+      ]
+    },
+    {
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
+      "scenario": "irreducible",
+      "overflowing": true,
+      "algorithm": "code-flow-v1",
+      "textMeasurement": "provided",
+      "diagnostics": [
+        {
+          "code": "text-overflow",
+          "reason": "part-outside-cell",
+          "path": "slides.0.code.filename",
+          "parts": [
+            "filename"
+          ],
+          "message": "Code filename extends outside its cell; increase the cell or change the arrangement."
+        },
+        {
+          "code": "text-overflow",
+          "reason": "part-outside-cell",
+          "path": "slides.0.code.language",
+          "parts": [
+            "language"
+          ],
+          "message": "Code language extends outside its cell; increase the cell or change the arrangement."
+        },
+        {
+          "code": "text-overflow",
+          "reason": "invalid-part-box",
+          "path": "slides.0.code.source",
+          "parts": [
+            "body"
+          ],
+          "message": "Code body has no usable space after metadata and insets; increase the cell or change the arrangement."
+        }
+      ],
+      "parts": [
+        {
+          "role": "filename",
+          "path": "slides.0.code.filename",
+          "textSha256": "103611cfbcdcdebdb6c4437c76f7c39638bad1976a7e8e9f78c0fa9b5f9a3b1e",
+          "sourceLength": 15000,
+          "sources": [
+            {
+              "path": "slides.0.code.filename",
+              "start": 0,
+              "end": 15000
+            }
+          ],
+          "generated": false,
+          "box": {
+            "x": 75.6,
+            "y": 75.6,
+            "width": 1128.8,
+            "height": 5651.04
+          },
+          "requestedFontSize": 24,
+          "minFontSize": 24,
+          "requestedStyle": {
+            "fontFamily": "Cousine",
+            "fontWeight": 700,
+            "italic": false,
+            "path": "slides.0.code.filename"
+          },
+          "style": {
+            "fontFamily": "Cousine",
+            "fontWeight": 700,
+            "italic": false,
+            "path": "slides.0.code.filename"
+          },
+          "fit": {
+            "fontSize": 24,
+            "lineHeight": 29.28,
+            "lineCount": 193,
+            "maximumLineWidth": 1123.3828125,
+            "tabSize": 4,
+            "tabWidth": 57.609375,
+            "tabSegments": 0,
+            "sourceReconstructedExactly": true,
+            "overflow": false
+          }
+        },
+        {
+          "role": "language",
+          "path": "slides.0.code.language",
+          "textSha256": "44ad63f60af0f6db6fdde6d5186ef78176367df261fa06be3079b6c80c8adba4",
+          "sourceLength": 2,
+          "text": "ts",
+          "sources": [
+            {
+              "path": "slides.0.code.language",
+              "start": 0,
+              "end": 2
+            }
+          ],
+          "generated": false,
+          "box": {
+            "x": 75.6,
+            "y": 5734.64,
+            "width": 1128.8,
+            "height": 29.28
+          },
+          "requestedFontSize": 24,
+          "minFontSize": 24,
+          "requestedStyle": {
+            "fontFamily": "Cousine",
+            "fontWeight": 700,
+            "italic": false,
+            "path": "slides.0.code.language"
+          },
+          "style": {
+            "fontFamily": "Cousine",
+            "fontWeight": 700,
+            "italic": false,
+            "path": "slides.0.code.language"
+          },
+          "fit": {
+            "fontSize": 24,
+            "lineHeight": 29.28,
+            "lineCount": 1,
+            "maximumLineWidth": 28.8046875,
+            "tabSize": 4,
+            "tabWidth": 57.609375,
+            "tabSegments": 0,
+            "sourceReconstructedExactly": true,
+            "overflow": false
+          }
+        },
+        {
+          "role": "body",
+          "path": "slides.0.code.source",
+          "textSha256": "5684b1dfe751ab0f8939208006a9e9f2a3897fbc72a6aeff1cd35a49e04c2b58",
+          "sourceLength": 31,
+          "text": "Every source character remains.",
+          "sources": [
+            {
+              "path": "slides.0.code.source",
+              "start": 0,
+              "end": 31
+            }
+          ],
+          "generated": false,
+          "box": {
+            "x": 75.6,
+            "y": 5775.92,
+            "width": 1128.8,
+            "height": -5131.52
+          },
+          "requestedFontSize": 24,
+          "minFontSize": 24,
+          "requestedStyle": {
+            "fontFamily": "Cousine",
+            "fontWeight": 400,
+            "italic": false,
+            "path": "slides.0.code.source"
+          },
+          "style": {
+            "fontFamily": "Cousine",
+            "fontWeight": 400,
+            "italic": false,
+            "path": "slides.0.code.source"
+          },
+          "fit": null
+        }
+      ]
+    },
+    {
+      "dimensions": {
+        "width": 540,
+        "height": 960
+      },
+      "scenario": "long-language",
+      "overflowing": false,
+      "algorithm": "code-flow-v1",
+      "textMeasurement": "provided",
+      "diagnostics": [],
+      "parts": [
+        {
+          "role": "language",
+          "path": "slides.0.code.language",
+          "textSha256": "05d20261719d249a59b079f504a1ed5c12a810d097986e05c5d7ab1b58a78800",
+          "sourceLength": 500,
+          "sources": [
+            {
+              "path": "slides.0.code.language",
+              "start": 0,
+              "end": 500
+            }
+          ],
+          "generated": false,
+          "box": {
+            "x": 61.2,
+            "y": 61.2,
+            "width": 417.6,
+            "height": 307.44
+          },
+          "requestedFontSize": 18,
+          "minFontSize": 18,
+          "requestedStyle": {
+            "fontFamily": "Cousine",
+            "fontWeight": 700,
+            "italic": false,
+            "path": "slides.0.code.language"
+          },
+          "style": {
+            "fontFamily": "Cousine",
+            "fontWeight": 700,
+            "italic": false,
+            "path": "slides.0.code.language"
+          },
+          "fit": {
+            "fontSize": 18,
+            "lineHeight": 21.96,
+            "lineCount": 14,
+            "maximumLineWidth": 410.466796875,
+            "tabSize": 4,
+            "tabWidth": 43.20703125,
+            "tabSegments": 0,
+            "sourceReconstructedExactly": true,
+            "overflow": false
+          }
+        },
+        {
+          "role": "body",
+          "path": "slides.0.code.source",
+          "textSha256": "d226b9b1c70e62d2a4a48a660be7b8cddf5e14a372e966a35542f3dc5cc1bbc6",
+          "sourceLength": 17,
+          "text": "const value = 42;",
+          "sources": [
+            {
+              "path": "slides.0.code.source",
+              "start": 0,
+              "end": 17
+            }
+          ],
+          "generated": false,
+          "box": {
+            "x": 61.2,
+            "y": 380.64,
+            "width": 417.6,
+            "height": 518.1600000000001
+          },
+          "requestedFontSize": 18,
+          "minFontSize": 18,
+          "requestedStyle": {
+            "fontFamily": "Cousine",
+            "fontWeight": 400,
+            "italic": false,
+            "path": "slides.0.code.source"
+          },
+          "style": {
+            "fontFamily": "Cousine",
+            "fontWeight": 400,
+            "italic": false,
+            "path": "slides.0.code.source"
+          },
+          "fit": {
+            "fontSize": 18,
+            "lineHeight": 21.96,
+            "lineCount": 1,
+            "maximumLineWidth": 183.6298828125,
+            "tabSize": 4,
+            "tabWidth": 43.20703125,
+            "tabSegments": 0,
+            "sourceReconstructedExactly": true,
+            "overflow": false
+          }
+        }
+      ]
+    },
+    {
+      "dimensions": {
+        "width": 540,
+        "height": 960
+      },
+      "scenario": "whitespace-filename",
+      "overflowing": false,
+      "algorithm": "code-flow-v1",
+      "textMeasurement": "provided",
+      "diagnostics": [],
+      "parts": [
+        {
+          "role": "filename",
+          "path": "slides.0.code.filename",
+          "textSha256": "f7562ea8b04c091e876cbdf1f316c43de611d084f3ad6f660907f539ef4c9899",
+          "sourceLength": 12,
+          "text": "src/check.py",
+          "sources": [
+            {
+              "path": "slides.0.code.filename",
+              "start": 0,
+              "end": 12
+            }
+          ],
+          "generated": false,
+          "box": {
+            "x": 61.2,
+            "y": 61.2,
+            "width": 417.6,
+            "height": 21.96
+          },
+          "requestedFontSize": 18,
+          "minFontSize": 18,
+          "requestedStyle": {
+            "fontFamily": "Cousine",
+            "fontWeight": 700,
+            "italic": false,
+            "path": "slides.0.code.filename"
+          },
+          "style": {
+            "fontFamily": "Cousine",
+            "fontWeight": 700,
+            "italic": false,
+            "path": "slides.0.code.filename"
+          },
+          "fit": {
+            "fontSize": 18,
+            "lineHeight": 21.96,
+            "lineCount": 1,
+            "maximumLineWidth": 129.62109375,
+            "tabSize": 4,
+            "tabWidth": 43.20703125,
+            "tabSegments": 0,
+            "sourceReconstructedExactly": true,
+            "overflow": false
+          }
+        },
+        {
+          "role": "language",
+          "path": "slides.0.code.language",
+          "textSha256": "11a4a60b518bf24989d481468076e5d5982884626aed9faeb35b8576fcd223e1",
+          "sourceLength": 6,
+          "text": "python",
+          "sources": [
+            {
+              "path": "slides.0.code.language",
+              "start": 0,
+              "end": 6
+            }
+          ],
+          "generated": false,
+          "box": {
+            "x": 61.2,
+            "y": 91.16,
+            "width": 417.6,
+            "height": 21.96
+          },
+          "requestedFontSize": 18,
+          "minFontSize": 18,
+          "requestedStyle": {
+            "fontFamily": "Cousine",
+            "fontWeight": 700,
+            "italic": false,
+            "path": "slides.0.code.language"
+          },
+          "style": {
+            "fontFamily": "Cousine",
+            "fontWeight": 700,
+            "italic": false,
+            "path": "slides.0.code.language"
+          },
+          "fit": {
+            "fontSize": 18,
+            "lineHeight": 21.96,
+            "lineCount": 1,
+            "maximumLineWidth": 64.810546875,
+            "tabSize": 4,
+            "tabWidth": 43.20703125,
+            "tabSegments": 0,
+            "sourceReconstructedExactly": true,
+            "overflow": false
+          }
+        },
+        {
+          "role": "body",
+          "path": "slides.0.code.source",
+          "textSha256": "69f14c0a692d245bde4c78dd0a9bc91fbfc3f50c6e1cd0f95a5cf3368590fc2a",
+          "sourceLength": 61,
+          "text": "def check():\r\n    value = \"two  spaces\"\r\n    return value  \r\n",
+          "sources": [
+            {
+              "path": "slides.0.code.source",
+              "start": 0,
+              "end": 61
+            }
+          ],
+          "generated": false,
+          "box": {
+            "x": 61.2,
+            "y": 125.12,
+            "width": 417.6,
+            "height": 773.6800000000001
+          },
+          "requestedFontSize": 18,
+          "minFontSize": 18,
+          "requestedStyle": {
+            "fontFamily": "Cousine",
+            "fontWeight": 400,
+            "italic": false,
+            "path": "slides.0.code.source"
+          },
+          "style": {
+            "fontFamily": "Cousine",
+            "fontWeight": 400,
+            "italic": false,
+            "path": "slides.0.code.source"
+          },
+          "fit": {
+            "fontSize": 18,
+            "lineHeight": 21.96,
+            "lineCount": 4,
+            "maximumLineWidth": 270.0439453125,
+            "tabSize": 4,
+            "tabWidth": 43.20703125,
+            "tabSegments": 0,
+            "sourceReconstructedExactly": true,
+            "overflow": false
+          }
+        }
+      ]
+    },
+    {
+      "dimensions": {
+        "width": 540,
+        "height": 960
+      },
+      "scenario": "tabs",
+      "overflowing": false,
+      "algorithm": "code-flow-v1",
+      "textMeasurement": "provided",
+      "diagnostics": [],
+      "parts": [
+        {
+          "role": "filename",
+          "path": "slides.0.code.filename",
+          "textSha256": "ad39c285b46d75e2fc3e4673089d1a36f30c8f85ade049e064be9c0862a8ef4f",
+          "sourceLength": 20,
+          "text": "src/CaseSensitive.js",
+          "sources": [
+            {
+              "path": "slides.0.code.filename",
+              "start": 0,
+              "end": 20
+            }
+          ],
+          "generated": false,
+          "box": {
+            "x": 61.2,
+            "y": 61.2,
+            "width": 417.6,
+            "height": 21.96
+          },
+          "requestedFontSize": 18,
+          "minFontSize": 18,
+          "requestedStyle": {
+            "fontFamily": "Cousine",
+            "fontWeight": 700,
+            "italic": false,
+            "path": "slides.0.code.filename"
+          },
+          "style": {
+            "fontFamily": "Cousine",
+            "fontWeight": 700,
+            "italic": false,
+            "path": "slides.0.code.filename"
+          },
+          "fit": {
+            "fontSize": 18,
+            "lineHeight": 21.96,
+            "lineCount": 1,
+            "maximumLineWidth": 216.03515625,
+            "tabSize": 4,
+            "tabWidth": 43.20703125,
+            "tabSegments": 0,
+            "sourceReconstructedExactly": true,
+            "overflow": false
+          }
+        },
+        {
+          "role": "language",
+          "path": "slides.0.code.language",
+          "textSha256": "b27ad06d123c6145fba7e9217a4cfbf2488b4743810ed8c8ff14ad01a5bbe515",
+          "sourceLength": 10,
+          "text": "JavaScript",
+          "sources": [
+            {
+              "path": "slides.0.code.language",
+              "start": 0,
+              "end": 10
+            }
+          ],
+          "generated": false,
+          "box": {
+            "x": 61.2,
+            "y": 91.16,
+            "width": 417.6,
+            "height": 21.96
+          },
+          "requestedFontSize": 18,
+          "minFontSize": 18,
+          "requestedStyle": {
+            "fontFamily": "Cousine",
+            "fontWeight": 700,
+            "italic": false,
+            "path": "slides.0.code.language"
+          },
+          "style": {
+            "fontFamily": "Cousine",
+            "fontWeight": 700,
+            "italic": false,
+            "path": "slides.0.code.language"
+          },
+          "fit": {
+            "fontSize": 18,
+            "lineHeight": 21.96,
+            "lineCount": 1,
+            "maximumLineWidth": 108.017578125,
+            "tabSize": 4,
+            "tabWidth": 43.20703125,
+            "tabSegments": 0,
+            "sourceReconstructedExactly": true,
+            "overflow": false
+          }
+        },
+        {
+          "role": "body",
+          "path": "slides.0.code.source",
+          "textSha256": "b3efc9a56b02ad4e49467d2892ac6f5a291cc02cffc534a272c3a2c37fd6d8c7",
+          "sourceLength": 47,
+          "text": "\tconst value = \"two  spaces\";\r\n\t\treturn value;\n",
+          "sources": [
+            {
+              "path": "slides.0.code.source",
+              "start": 0,
+              "end": 47
+            }
+          ],
+          "generated": false,
+          "box": {
+            "x": 61.2,
+            "y": 125.12,
+            "width": 417.6,
+            "height": 773.6800000000001
+          },
+          "requestedFontSize": 18,
+          "minFontSize": 18,
+          "requestedStyle": {
+            "fontFamily": "Cousine",
+            "fontWeight": 400,
+            "italic": false,
+            "path": "slides.0.code.source"
+          },
+          "style": {
+            "fontFamily": "Cousine",
+            "fontWeight": 400,
+            "italic": false,
+            "path": "slides.0.code.source"
+          },
+          "fit": {
+            "fontSize": 18,
+            "lineHeight": 21.96,
+            "lineCount": 3,
+            "maximumLineWidth": 345.65625,
+            "tabSize": 4,
+            "tabWidth": 43.20703125,
+            "tabSegments": 3,
+            "sourceReconstructedExactly": true,
+            "overflow": false
+          }
+        }
+      ]
+    },
+    {
+      "dimensions": {
+        "width": 540,
+        "height": 960
+      },
+      "scenario": "irreducible",
+      "overflowing": true,
+      "algorithm": "code-flow-v1",
+      "textMeasurement": "provided",
+      "diagnostics": [
+        {
+          "code": "text-overflow",
+          "reason": "part-outside-cell",
+          "path": "slides.0.code.filename",
+          "parts": [
+            "filename"
+          ],
+          "message": "Code filename extends outside its cell; increase the cell or change the arrangement."
+        },
+        {
+          "code": "text-overflow",
+          "reason": "part-outside-cell",
+          "path": "slides.0.code.language",
+          "parts": [
+            "language"
+          ],
+          "message": "Code language extends outside its cell; increase the cell or change the arrangement."
+        },
+        {
+          "code": "text-overflow",
+          "reason": "invalid-part-box",
+          "path": "slides.0.code.source",
+          "parts": [
+            "body"
+          ],
+          "message": "Code body has no usable space after metadata and insets; increase the cell or change the arrangement."
+        }
+      ],
+      "parts": [
+        {
+          "role": "filename",
+          "path": "slides.0.code.filename",
+          "textSha256": "103611cfbcdcdebdb6c4437c76f7c39638bad1976a7e8e9f78c0fa9b5f9a3b1e",
+          "sourceLength": 15000,
+          "sources": [
+            {
+              "path": "slides.0.code.filename",
+              "start": 0,
+              "end": 15000
+            }
+          ],
+          "generated": false,
+          "box": {
+            "x": 61.2,
+            "y": 61.2,
+            "width": 417.6,
+            "height": 8674.2
+          },
+          "requestedFontSize": 18,
+          "minFontSize": 18,
+          "requestedStyle": {
+            "fontFamily": "Cousine",
+            "fontWeight": 700,
+            "italic": false,
+            "path": "slides.0.code.filename"
+          },
+          "style": {
+            "fontFamily": "Cousine",
+            "fontWeight": 700,
+            "italic": false,
+            "path": "slides.0.code.filename"
+          },
+          "fit": {
+            "fontSize": 18,
+            "lineHeight": 21.96,
+            "lineCount": 395,
+            "maximumLineWidth": 410.466796875,
+            "tabSize": 4,
+            "tabWidth": 43.20703125,
+            "tabSegments": 0,
+            "sourceReconstructedExactly": true,
+            "overflow": false
+          }
+        },
+        {
+          "role": "language",
+          "path": "slides.0.code.language",
+          "textSha256": "44ad63f60af0f6db6fdde6d5186ef78176367df261fa06be3079b6c80c8adba4",
+          "sourceLength": 2,
+          "text": "ts",
+          "sources": [
+            {
+              "path": "slides.0.code.language",
+              "start": 0,
+              "end": 2
+            }
+          ],
+          "generated": false,
+          "box": {
+            "x": 61.2,
+            "y": 8743.400000000001,
+            "width": 417.6,
+            "height": 21.96
+          },
+          "requestedFontSize": 18,
+          "minFontSize": 18,
+          "requestedStyle": {
+            "fontFamily": "Cousine",
+            "fontWeight": 700,
+            "italic": false,
+            "path": "slides.0.code.language"
+          },
+          "style": {
+            "fontFamily": "Cousine",
+            "fontWeight": 700,
+            "italic": false,
+            "path": "slides.0.code.language"
+          },
+          "fit": {
+            "fontSize": 18,
+            "lineHeight": 21.96,
+            "lineCount": 1,
+            "maximumLineWidth": 21.603515625,
+            "tabSize": 4,
+            "tabWidth": 43.20703125,
+            "tabSegments": 0,
+            "sourceReconstructedExactly": true,
+            "overflow": false
+          }
+        },
+        {
+          "role": "body",
+          "path": "slides.0.code.source",
+          "textSha256": "5684b1dfe751ab0f8939208006a9e9f2a3897fbc72a6aeff1cd35a49e04c2b58",
+          "sourceLength": 31,
+          "text": "Every source character remains.",
+          "sources": [
+            {
+              "path": "slides.0.code.source",
+              "start": 0,
+              "end": 31
+            }
+          ],
+          "generated": false,
+          "box": {
+            "x": 61.2,
+            "y": 8777.36,
+            "width": 417.6,
+            "height": -7878.56
+          },
+          "requestedFontSize": 18,
+          "minFontSize": 18,
+          "requestedStyle": {
+            "fontFamily": "Cousine",
+            "fontWeight": 400,
+            "italic": false,
+            "path": "slides.0.code.source"
+          },
+          "style": {
+            "fontFamily": "Cousine",
+            "fontWeight": 400,
+            "italic": false,
+            "path": "slides.0.code.source"
+          },
+          "fit": null
+        }
+      ]
+    }
+  ]
+}

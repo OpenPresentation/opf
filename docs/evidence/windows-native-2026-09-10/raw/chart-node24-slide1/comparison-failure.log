@@ -1,0 +1,42 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: edited slide 1
++ actual - expected
+
+  {
+    columns: [
+      'Native quarter Ω',
++     'Current',
+-     'Native Current',
+      'Baseline'
+    ],
+    rows: [
+      [
++       'Q1',
++       2,
+-       'Edited Q1',
+-       42,
+        1
+      ],
+      [
+        'Q2',
+        3,
+
+    at file:///C:/Users/micha/.codex/worktrees/fd3f/opf/artifacts/windows-native/opf-pptx/test/native-chart-colors.mjs:41:11 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: {
+    columns: [ 'Native quarter Ω', 'Current', 'Baseline' ],
+    rows: [ [ 'Q1', 2, 1 ], [ 'Q2', 3, 2 ] ]
+  },
+  expected: {
+    columns: [ 'Native quarter Ω', 'Native Current', 'Baseline' ],
+    rows: [ [ 'Edited Q1', 42, 1 ], [ 'Q2', 3, 2 ] ]
+  },
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.20.0

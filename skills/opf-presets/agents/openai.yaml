@@ -1,0 +1,4 @@
+interface:
+  display_name: "OPF Presets and Design"
+  short_description: "Choose catalog presets, design options, and fonts"
+  default_prompt: "Use $opf-presets to help with this OPF task using the current project schema and packages."

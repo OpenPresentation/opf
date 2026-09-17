@@ -1,0 +1,365 @@
+
+> openpresentation-workspace@ lint C:\Users\micha\Source\opf\artifacts\shared-metric-integration\opf
+> biome check .
+
+The number of diagnostics exceeds the limit allowed. Use --max-diagnostics to increase it.
+Diagnostics not shown: 249.
+Checked 140 files in 92ms. No fixes applied.
+Found 106 warnings.
+Found 163 infos.
+packages\cli\src\index.ts:44:34 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  i Template literals are preferred over string concatenation.
+  
+    42 │   constructor(message: string, readonly code = 2, readonly details?: unknown) { super(message); }
+    43 │ }
+  > 44 │ const json = (value: unknown) => JSON.stringify(value, null, 2) + "\n";
+       │                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    45 │ const print = (value: unknown) => process.stdout.write(json(value));
+    46 │ const hash = (text: string) => createHash("sha256").update(text).digest("hex");
+  
+  i Unsafe fix: Use a template literal.
+  
+     42  42 │     constructor(message: string, readonly code = 2, readonly details?: unknown) { super(message); }
+     43  43 │   }
+     44     │ - const·json·=·(value:·unknown)·=>·JSON.stringify(value,·null,·2)·+·"\n";
+         44 │ + const·json·=·(value:·unknown)·=>·`${JSON.stringify(value,·null,·2)}\n`;
+     45  45 │   const print = (value: unknown) => process.stdout.write(json(value));
+     46  46 │   const hash = (text: string) => createHash("sha256").update(text).digest("hex");
+  
+
+packages\cli\test\cli.mjs:22:63 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  i Template literals are preferred over string concatenation.
+  
+    20 │   run(['create','deck.opf.json'],{status:1});assert.equal(await readFile(path.join(temp,'deck.opf.json'),'utf8'),original);
+    21 │   assert.equal(run(['create','-','--title','Piped']).json.slides[0].title,'Piped');
+  > 22 │   assert.equal(run(['create','copy.json','--from','-'],{input:'\uFEFF'+original}).json.valid,true);
+       │                                                               ^^^^^^^^^^^^^^^^^
+    23 │   run(['create','never.json','--from','-'],{input:'{"slides":"bad"}',status:1});
+    24 │   const validated=run(['validate','deck.opf.json']).json;assert.equal(validated.valid,true);assert.equal(validated.sha256.length,64);
+  
+  i Unsafe fix: Use a template literal.
+  
+     20  20 │     run(['create','deck.opf.json'],{status:1});assert.equal(await readFile(path.join(temp,'deck.opf.json'),'utf8'),original);
+     21  21 │     assert.equal(run(['create','-','--title','Piped']).json.slides[0].title,'Piped');
+     22     │ - ··assert.equal(run(['create','copy.json','--from','-'],{input:'\uFEFF'+original}).json.valid,true);
+         22 │ + ··assert.equal(run(['create','copy.json','--from','-'],{input:`\uFEFF${original}`}).json.valid,true);
+     23  23 │     run(['create','never.json','--from','-'],{input:'{"slides":"bad"}',status:1});
+     24  24 │     const validated=run(['validate','deck.opf.json']).json;assert.equal(validated.valid,true);assert.equal(validated.sha256.length,64);
+  
+
+packages\javascript\src\data.ts:63:81 lint/complexity/noUselessEscapeInRegex  FIXABLE  ━━━━━━━━━━━━━
+
+  i The character doesn't need to be escaped.
+  
+    61 │ export function parseTabularData(input: unknown, options: DataImportOptions = {}): TabularData {
+    62 │   let value: unknown = input;
+  > 63 │   const format = options.format ?? (typeof input === 'string' && !/^[\s\uFEFF]*[\[{]/.test(input) ? 'csv' : 'json');
+       │                                                                                 ^^
+    64 │   if (!['csv','tsv','json'].includes(format)) fail(`Unsupported data format: ${format}`);
+    65 │   let data: TabularData;
+  
+  i The character should only be escaped if it is outside a character class or under the `v` flag.
+  
+  i Safe fix: Unescape the character.
+  
+    63 │ ··const·format·=·options.format·??·(typeof·input·===·'string'·&&·!/^[\s\uFEFF]*[\[{]/.test(input)·?·'csv'·:·'json');
+       │                                                                                 -                                   
+
+packages\javascript\src\table.ts:40:193 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  i Template literals are preferred over string concatenation.
+  
+    38 │       issues.push({path:cellPath,message:'Cell spans must be positive integers within the table grid and cannot cross from headers into body rows.'});continue;
+    39 │     }
+  > 40 │     const cell:TableGridCell={input,value:styled?object.value:input,style:styled?record(object.style):{},row:r,column:c,rowSpan,colSpan,header:hasHeaders&&r===0,path:cellPath,valuePath:styled?cellPath+'.value':cellPath};
+       │                                                                                                                                                                                                 ^^^^^^^^^^^^^^^^^
+    41 │     rows[r]!.push(cell);
+    42 │     for(let y=r;y<r+rowSpan;y++) for(let x=c;x<c+colSpan;x++) {
+  
+  i Unsafe fix: Use a template literal.
+  
+    38 38 │         issues.push({path:cellPath,message:'Cell spans must be positive integers within the table grid and cannot cross from headers into body rows.'});continue;
+    39 39 │       }
+    40    │ - ····const·cell:TableGridCell={input,value:styled?object.value:input,style:styled?record(object.style):{},row:r,column:c,rowSpan,colSpan,header:hasHeaders&&r===0,path:cellPath,valuePath:styled?cellPath+'.value':cellPath};
+       40 │ + ····const·cell:TableGridCell={input,value:styled?object.value:input,style:styled?record(object.style):{},row:r,column:c,rowSpan,colSpan,header:hasHeaders&&r===0,path:cellPath,valuePath:styled?`${cellPath}.value`:cellPath};
+    41 41 │       rows[r]!.push(cell);
+    42 42 │       for(let y=r;y<r+rowSpan;y++) for(let x=c;x<c+colSpan;x++) {
+  
+
+packages\javascript\test\code-composition.test.mjs:60:22 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━
+
+  i Template literals are preferred over string concatenation.
+  
+    59 │ test('pagination preserves exact code bytes, metadata, ranges and floors across wide and portrait slides',()=>{
+  > 60 │   const code={source:'\tconst value = "two  spaces";  \r\n\r\n'.repeat(30)+'final\n',filename:'src/CaseSensitive.ts',language:'TypeScript'};
+       │                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    61 │   for (const dimensions of [{width:1280,height:720},{width:540,height:960}]) {
+    62 │     const slide={id:'code-pages',notes:'Original notes',code},before=structuredClone(slide);
+  
+  i Unsafe fix: Use a template literal.
+  
+    58 58 │   
+    59 59 │   test('pagination preserves exact code bytes, metadata, ranges and floors across wide and portrait slides',()=>{
+    60    │ - ··const·code={source:'\tconst·value·=·"two··spaces";··\r\n\r\n'.repeat(30)+'final\n',filename:'src/CaseSensitive.ts',language:'TypeScript'};
+       60 │ + ··const·code={source:`${'\tconst·value·=·"two··spaces";··\r\n\r\n'.repeat(30)}final\n`,filename:'src/CaseSensitive.ts',language:'TypeScript'};
+    61 61 │     for (const dimensions of [{width:1280,height:720},{width:540,height:960}]) {
+    62 62 │       const slide={id:'code-pages',notes:'Original notes',code},before=structuredClone(slide);
+  
+
+scripts\verify-deployed-browser-fonts.mjs:43:51 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━━━━━━━━━━
+
+  i Template literals are preferred over string concatenation.
+  
+    41 │ }));
+    42 │ const report = { passed: true, deployment: origin.origin, source: deployed.source, fontFaces: faces.length, faces };
+  > 43 │ if (output) await writeFile(path.resolve(output), JSON.stringify(report, null, 2) + '\n');
+       │                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    44 │ console.log(`Verified ${faces.length} deployed font files and licenses against installed ${deployed.source}.`);
+    45 │ 
+  
+  i Unsafe fix: Use a template literal.
+  
+    41 41 │   }));
+    42 42 │   const report = { passed: true, deployment: origin.origin, source: deployed.source, fontFaces: faces.length, faces };
+    43    │ - if·(output)·await·writeFile(path.resolve(output),·JSON.stringify(report,·null,·2)·+·'\n');
+       43 │ + if·(output)·await·writeFile(path.resolve(output),·`${JSON.stringify(report,·null,·2)}\n`);
+    44 44 │   console.log(`Verified ${faces.length} deployed font files and licenses against installed ${deployed.source}.`);
+    45 45 │   
+  
+
+packages\cli\src\patch.ts:38:62 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+  
+    36 │ function change(document: unknown, parts: string[], mode: "add" | "replace" | "remove", value?: unknown): unknown {
+    37 │   if (!parts.length) return mode === "remove" ? undefined : structuredClone(value);
+  > 38 │   const parent = lookup(document, parts.slice(0, -1)), key = parts.at(-1)!;
+       │                                                              ^^^^^^^^^^^^^
+    39 │   if (!parent || typeof parent !== "object") throw new PatchError("Target parent must be an object or array.");
+    40 │   if (Array.isArray(parent)) {
+  
+
+packages\cli\src\patch.ts:9:45 lint/suspicious/noPrototypeBuiltins  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Do not access Object.prototype method 'hasOwnProperty' from target object.
+  
+     7 │   return Object.keys(left).length === Object.keys(right).length && Object.keys(left).every(key => own(right, key) && equal(left[key], right[key]));
+     8 │ }
+   > 9 │ const own = (value: object, key: string) => Object.prototype.hasOwnProperty.call(value, key);
+       │                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    10 │ 
+    11 │ export function tokens(pointer: unknown): string[] {
+  
+  i It's recommended using Object.hasOwn() instead of using Object.hasOwnProperty().
+  
+  i See MDN web docs for more details.
+  
+  i Safe fix: Use 'Object.hasOwn()' instead.
+  
+     7  7 │     return Object.keys(left).length === Object.keys(right).length && Object.keys(left).every(key => own(right, key) && equal(left[key], right[key]));
+     8  8 │   }
+     9    │ - const·own·=·(value:·object,·key:·string)·=>·Object.prototype.hasOwnProperty.call(value,·key);
+        9 │ + const·own·=·(value:·object,·key:·string)·=>·Object.hasOwn(value,·key);
+    10 10 │   
+    11 11 │   export function tokens(pointer: unknown): string[] {
+  
+
+packages\javascript\src\data.ts:52:35 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+  
+    50 │   if (!input.length || !input.every(Array.isArray)) return fail('Expected a nonempty array of rows.');
+    51 │   const rows = input as unknown[][];
+  > 52 │   const columns = header ? labels(rows[0]!) : labels(rows[0]!.map((_, i) => `Column ${i + 1}`));
+       │                                   ^^^^^^^^
+    53 │   return rectangular(columns, header ? rows.slice(1) : rows);
+    54 │ }
+  
+
+packages\javascript\src\data.ts:52:54 lint/style/noNonNullAssertion  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+  
+    50 │   if (!input.length || !input.every(Array.isArray)) return fail('Expected a nonempty array of rows.');
+    51 │   const rows = input as unknown[][];
+  > 52 │   const columns = header ? labels(rows[0]!) : labels(rows[0]!.map((_, i) => `Column ${i + 1}`));
+       │                                                      ^^^^^^^^
+    53 │   return rectangular(columns, header ? rows.slice(1) : rows);
+    54 │ }
+  
+  i Unsafe fix: Replace with optional chain operator ?. This operator includes runtime checks, so it is safer than the compile-only non-null assertion operator
+  
+     50  50 │     if (!input.length || !input.every(Array.isArray)) return fail('Expected a nonempty array of rows.');
+     51  51 │     const rows = input as unknown[][];
+     52     │ - ··const·columns·=·header·?·labels(rows[0]!)·:·labels(rows[0]!.map((_,·i)·=>·`Column·${i·+·1}`));
+         52 │ + ··const·columns·=·header·?·labels(rows[0]!)·:·labels(rows[0]?.map((_,·i)·=>·`Column·${i·+·1}`));
+     53  53 │     return rectangular(columns, header ? rows.slice(1) : rows);
+     54  54 │   }
+  
+
+packages\javascript\src\data.ts:87:76 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+  
+    85 │       const index = data.columns.indexOf(name); if (index < 0) fail(`Unknown column: ${name}`); return index;
+    86 │     });
+  > 87 │     data = {columns: selected, rows: data.rows.map(row => indices.map(i => row[i]!))};
+       │                                                                            ^^^^^^^
+    88 │   }
+    89 │   return data;
+  
+
+packages\javascript\src\data.ts:104:40 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+  
+    102 │   if (options.as === 'table') return { table: data };
+    103 │   if (options.as !== 'chart') return fail('Choose table or chart.');
+  > 104 │   const category = options.category ?? data.columns[0]!;
+        │                                        ^^^^^^^^^^^^^^^^
+    105 │   const series = options.series ?? data.columns.filter(name => name !== category);
+    106 │   if (!series.length || !data.rows.length) return fail('Charts need at least one category, numeric series, and data row.');
+  
+
+packages\javascript\src\data.ts:113:19 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+  
+    111 │   if (circular && series.length !== 1) return fail('Pie and donut charts require exactly one numeric series.');
+    112 │   const rows = data.rows.map((row, i) => indices.map((index, j) => {
+  > 113 │     const value = row[index]!;
+        │                   ^^^^^^^^^^^
+    114 │     if (!j) {
+    115 │       if (value === null || value === '') fail(`Row ${i + 1}: missing category ${category}.`);
+  
+
+packages\javascript\src\data.ts:20:45 lint/suspicious/noPrototypeBuiltins  FIXABLE  ━━━━━━━━━━━━━━━━
+
+  ! Do not access Object.prototype method 'hasOwnProperty' from target object.
+  
+    18 │ }
+    19 │ const fail = (message: string): never => { throw new OPFDataImportError(message); };
+  > 20 │ const own = (value: object, key: string) => Object.prototype.hasOwnProperty.call(value, key);
+       │                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    21 │ function cell(value: unknown, location: string): DataCell {
+    22 │   if (value === null || typeof value === 'string' || typeof value === 'boolean' || (typeof value === 'number' && Number.isFinite(value))) return value;
+  
+  i It's recommended using Object.hasOwn() instead of using Object.hasOwnProperty().
+  
+  i See MDN web docs for more details.
+  
+  i Safe fix: Use 'Object.hasOwn()' instead.
+  
+     18  18 │   }
+     19  19 │   const fail = (message: string): never => { throw new OPFDataImportError(message); };
+     20     │ - const·own·=·(value:·object,·key:·string)·=>·Object.prototype.hasOwnProperty.call(value,·key);
+         20 │ + const·own·=·(value:·object,·key:·string)·=>·Object.hasOwn(value,·key);
+     21  21 │   function cell(value: unknown, location: string): DataCell {
+     22  22 │     if (value === null || typeof value === 'string' || typeof value === 'boolean' || (typeof value === 'number' && Number.isFinite(value))) return value;
+  
+
+packages\javascript\src\table.ts:21:46 lint/suspicious/noExplicitAny ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Unexpected any. Specify a different type.
+  
+    19 │   issues: TableGridIssue[];
+    20 │ }
+  > 21 │ const record = (value:unknown):Record<string,any> => value && typeof value==='object'&&!Array.isArray(value)?value as Record<string,any>:{};
+       │                                              ^^^
+    22 │ export function tableGrid(value:unknown,path='table'):TableGrid {
+    23 │   const table=record(value),hasHeaders=Array.isArray(table.columns)&&table.columns.length>0;
+  
+  i any disables many type checking rules. Its use should be avoided.
+  
+
+packages\javascript\src\table.ts:21:133 lint/suspicious/noExplicitAny ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Unexpected any. Specify a different type.
+  
+    19 │   issues: TableGridIssue[];
+    20 │ }
+  > 21 │ const record = (value:unknown):Record<string,any> => value && typeof value==='object'&&!Array.isArray(value)?value as Record<string,any>:{};
+       │                                                                                                                                     ^^^
+    22 │ export function tableGrid(value:unknown,path='table'):TableGrid {
+    23 │   const table=record(value),hasHeaders=Array.isArray(table.columns)&&table.columns.length>0;
+  
+  i any disables many type checking rules. Its use should be avoided.
+  
+
+packages\javascript\src\table.ts:30:64 lint/style/noNonNullAssertion  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+  
+    28 │   const location=(r:number,c:number)=>`${path}.${hasHeaders&&r===0?'columns':`rows.${r-Number(hasHeaders)}`}.${c}`;
+    29 │   for(let r=0;r<rowCount;r++) for(let c=0;c<columnCount;c++) {
+  > 30 │     const input=values[r]?.[c],cellPath=location(r,c),existing=owners[r]![c];
+       │                                                                ^^^^^^^^^^
+    31 │     if(existing) {
+    32 │       if(input!==null) issues.push({path:cellPath,message:'A position covered by a spanning cell must explicitly contain null; content cannot be hidden.'});
+  
+  i Unsafe fix: Replace with optional chain operator ?. This operator includes runtime checks, so it is safer than the compile-only non-null assertion operator
+  
+    28 28 │     const location=(r:number,c:number)=>`${path}.${hasHeaders&&r===0?'columns':`rows.${r-Number(hasHeaders)}`}.${c}`;
+    29 29 │     for(let r=0;r<rowCount;r++) for(let c=0;c<columnCount;c++) {
+    30    │ - ····const·input=values[r]?.[c],cellPath=location(r,c),existing=owners[r]![c];
+       30 │ + ····const·input=values[r]?.[c],cellPath=location(r,c),existing=owners[r]?.[c];
+    31 31 │       if(existing) {
+    32 32 │         if(input!==null) issues.push({path:cellPath,message:'A position covered by a spanning cell must explicitly contain null; content cannot be hidden.'});
+  
+
+packages\javascript\src\table.ts:41:5 lint/style/noNonNullAssertion  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+  
+    39 │     }
+    40 │     const cell:TableGridCell={input,value:styled?object.value:input,style:styled?record(object.style):{},row:r,column:c,rowSpan,colSpan,header:hasHeaders&&r===0,path:cellPath,valuePath:styled?cellPath+'.value':cellPath};
+  > 41 │     rows[r]!.push(cell);
+       │     ^^^^^^^^
+    42 │     for(let y=r;y<r+rowSpan;y++) for(let x=c;x<c+colSpan;x++) {
+    43 │       if(owners[y]![x])issues.push({path:cellPath,message:'Cell spans cannot overlap another spanning cell.'});
+  
+  i Unsafe fix: Replace with optional chain operator ?. This operator includes runtime checks, so it is safer than the compile-only non-null assertion operator
+  
+    39 39 │       }
+    40 40 │       const cell:TableGridCell={input,value:styled?object.value:input,style:styled?record(object.style):{},row:r,column:c,rowSpan,colSpan,header:hasHeaders&&r===0,path:cellPath,valuePath:styled?cellPath+'.value':cellPath};
+    41    │ - ····rows[r]!.push(cell);
+       41 │ + ····rows[r]?.push(cell);
+    42 42 │       for(let y=r;y<r+rowSpan;y++) for(let x=c;x<c+colSpan;x++) {
+    43 43 │         if(owners[y]![x])issues.push({path:cellPath,message:'Cell spans cannot overlap another spanning cell.'});
+  
+
+packages\javascript\src\table.ts:43:10 lint/style/noNonNullAssertion  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+  
+    41 │     rows[r]!.push(cell);
+    42 │     for(let y=r;y<r+rowSpan;y++) for(let x=c;x<c+colSpan;x++) {
+  > 43 │       if(owners[y]![x])issues.push({path:cellPath,message:'Cell spans cannot overlap another spanning cell.'});
+       │          ^^^^^^^^^^
+    44 │       else owners[y]![x]=cell;
+    45 │     }
+  
+  i Unsafe fix: Replace with optional chain operator ?. This operator includes runtime checks, so it is safer than the compile-only non-null assertion operator
+  
+    41 41 │       rows[r]!.push(cell);
+    42 42 │       for(let y=r;y<r+rowSpan;y++) for(let x=c;x<c+colSpan;x++) {
+    43    │ - ······if(owners[y]![x])issues.push({path:cellPath,message:'Cell·spans·cannot·overlap·another·spanning·cell.'});
+       43 │ + ······if(owners[y]?.[x])issues.push({path:cellPath,message:'Cell·spans·cannot·overlap·another·spanning·cell.'});
+    44 44 │         else owners[y]![x]=cell;
+    45 45 │       }
+  
+
+packages\javascript\src\table.ts:44:12 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+  
+    42 │     for(let y=r;y<r+rowSpan;y++) for(let x=c;x<c+colSpan;x++) {
+    43 │       if(owners[y]![x])issues.push({path:cellPath,message:'Cell spans cannot overlap another spanning cell.'});
+  > 44 │       else owners[y]![x]=cell;
+       │            ^^^^^^^^^^
+    45 │     }
+    46 │   }
+  
+

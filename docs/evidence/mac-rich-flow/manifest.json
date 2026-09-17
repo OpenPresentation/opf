@@ -1,0 +1,200 @@
+{
+  "algorithm": "sha256",
+  "files": [
+    {
+      "file": "README.md",
+      "bytes": 5944,
+      "sha256": "df2f78eb00e4e1d33004cf56f055597378031ed23e445fee40bf0ace398c667c"
+    },
+    {
+      "file": "candidate-manifest.json",
+      "bytes": 1099,
+      "sha256": "6a5b99f6d58fefe7d06525af216908afb580ccc06588a46a35750922d7928b97"
+    },
+    {
+      "file": "followup/code-guard-after.log",
+      "bytes": 2418,
+      "sha256": "b4bdbe96e801adb05027f56848ed8cc34f533cfbd1408ae685d467f1ff8cb386"
+    },
+    {
+      "file": "followup/code-guard-before.log",
+      "bytes": 2692,
+      "sha256": "540c498338a0b07caac81d80c4f916480fdeb24c67f62f8a153366b61eeba10a"
+    },
+    {
+      "file": "followup/linux-node20-packed-browser.json",
+      "bytes": 20231,
+      "sha256": "c5398c81e993d53ecc95e9e67b1e8e04cd7a46bde5309ef91588161374171961"
+    },
+    {
+      "file": "followup/linux-node20-rich-flow-browser.json",
+      "bytes": 41592,
+      "sha256": "7cd002281f265ef76d98ff18edf860fa65c299508cf0dc8c2bd53dbf445e44bf"
+    },
+    {
+      "file": "followup/linux-node20-rich-spacing-browser.json",
+      "bytes": 23617,
+      "sha256": "eeee408cfb35a2e814f3c6e2dee40d5291a226cd73740d09ecbb8021047433df"
+    },
+    {
+      "file": "followup/linux-node24-packed-browser.json",
+      "bytes": 20231,
+      "sha256": "b4cc9c8c9d4f1552c212b55ac9ce2bf4db4519d5450027e7f8b48911b09f70e4"
+    },
+    {
+      "file": "followup/linux-node24-rich-flow-browser.json",
+      "bytes": 41592,
+      "sha256": "3524e305a33595e79ec381e134de8e36ad5bdfb84d5760c08f91c45a678e8aed"
+    },
+    {
+      "file": "followup/linux-node24-rich-spacing-browser.json",
+      "bytes": 23617,
+      "sha256": "3c49bea493b2baecb74df07a972d52e9215a85079f07ced1be01913277d31617"
+    },
+    {
+      "file": "followup/mac-node24-candidate-manifest.json",
+      "bytes": 1099,
+      "sha256": "c0adb4e23816196f7ec76f9b929a6806d94b20ff6a9f07a32fa364f43026db20"
+    },
+    {
+      "file": "followup/mac-node24-packed-browser-manifest.json",
+      "bytes": 2316,
+      "sha256": "0c4d059af7786714f05114c7e9b119ce2a6471476ae5bba302fef6d4f74f4779"
+    },
+    {
+      "file": "followup/mac-node24-packed-browser.json",
+      "bytes": 20231,
+      "sha256": "646cfd38091047e68c0c8c476f0dcc441d336b3948a3d928a090042c0a8769a4"
+    },
+    {
+      "file": "followup/mac-node24-packed-browser.log",
+      "bytes": 687,
+      "sha256": "c4d7359a4e08c198537514dcbc6f45ea72d1633ee66623b90fe7775aab167469"
+    },
+    {
+      "file": "followup/mac-node24-packed.log",
+      "bytes": 7662,
+      "sha256": "7b339d59fe3203c778223d6e01f3a26da66c4a458e62500dd146016698d3a17a"
+    },
+    {
+      "file": "followup/native-font-node20.json",
+      "bytes": 1435,
+      "sha256": "7834e037b0b2f4e139e5aaf57d9d8c3a0d3eed9bb5a5f19a60b06e5b9c22f2c7"
+    },
+    {
+      "file": "followup/native-font-node24.json",
+      "bytes": 1435,
+      "sha256": "452b145ff80b3686025d35eafca163bc352559353785c13068d44cd57901b70d"
+    },
+    {
+      "file": "native-quote-node20.json",
+      "bytes": 742,
+      "sha256": "6ce512c8b86cee2378a66c962cfcc9e2921c1e845637586fc4bd5b4691dcccb7"
+    },
+    {
+      "file": "native-quote-node24.json",
+      "bytes": 742,
+      "sha256": "cb9718945cdd768dc0e66c5c67b9ed04d29dbf2639f5249df536b4257790132d"
+    },
+    {
+      "file": "node20-packed-browser-manifest.json",
+      "bytes": 2316,
+      "sha256": "24c3b41b6bdce94abb5ff80e72a2cc58644014041b688456f2e9f025de408ab9"
+    },
+    {
+      "file": "node20-packed-browser-packed-node20-report.json",
+      "bytes": 20231,
+      "sha256": "64f2b37fac1e83bf051ac958c2e5f456491ebface1201227b648274b1afca31c"
+    },
+    {
+      "file": "node24-packed-browser-manifest.json",
+      "bytes": 2316,
+      "sha256": "11505f86887152d62a6c7d75b321608427608eed39ee35df8d785ec4687f4a24"
+    },
+    {
+      "file": "node24-packed-browser-packed-node24-report.json",
+      "bytes": 20231,
+      "sha256": "863f23b611fd37dd513ccfcc94ba6f1f95fb8c70a549f21a5a6a21df53a56be7"
+    },
+    {
+      "file": "packed-browser-node20.log",
+      "bytes": 687,
+      "sha256": "c4d7359a4e08c198537514dcbc6f45ea72d1633ee66623b90fe7775aab167469"
+    },
+    {
+      "file": "packed-browser-node24.log",
+      "bytes": 687,
+      "sha256": "c4d7359a4e08c198537514dcbc6f45ea72d1633ee66623b90fe7775aab167469"
+    },
+    {
+      "file": "packed-node20.log",
+      "bytes": 11943,
+      "sha256": "e79a9067168dbc2cd59e0c09ff74133eaecb8adb4360a7f3d340908b57c3b7d3"
+    },
+    {
+      "file": "packed-node24.log",
+      "bytes": 7656,
+      "sha256": "2ddb9e4a9c9d8f53288c91647aaf27e52700432b701e9fb4b7f7b2416d1bf1d8"
+    },
+    {
+      "file": "rich-flow-editor-estimated/report.json",
+      "bytes": 24769,
+      "sha256": "eb8e8397a6d3058d232cd4e504b55bfe079f9662f1d036458d24fe3e7ebeddd3"
+    },
+    {
+      "file": "rich-flow-editor-estimated/results.txt",
+      "bytes": 2156,
+      "sha256": "97fe245517af0210a95e227e9aeef4a5764de9e797030e6a01d3728b7c457632"
+    },
+    {
+      "file": "rich-flow-editor-estimated/rich-canvas.png",
+      "bytes": 110679,
+      "sha256": "0bf8a15d0ea2dda573ab286aff71c6d580f104b56c526577c39ec3f47cc4e790"
+    },
+    {
+      "file": "rich-flow-editor-estimated-node20/report.json",
+      "bytes": 24769,
+      "sha256": "12bcf624b6c140c079d05ecf7260e03ff78cf21300408f9c27a879ddadad80f7"
+    },
+    {
+      "file": "rich-flow-editor-estimated-node20/results.txt",
+      "bytes": 2156,
+      "sha256": "97fe245517af0210a95e227e9aeef4a5764de9e797030e6a01d3728b7c457632"
+    },
+    {
+      "file": "rich-flow-editor-estimated-node20/rich-canvas.png",
+      "bytes": 110679,
+      "sha256": "0bf8a15d0ea2dda573ab286aff71c6d580f104b56c526577c39ec3f47cc4e790"
+    },
+    {
+      "file": "rich-flow-editor-measured/report.json",
+      "bytes": 24768,
+      "sha256": "2af9938aa17b14af2dddb85df7f3716c8490ee7283f5a8b21be0c70fdf95ecd8"
+    },
+    {
+      "file": "rich-flow-editor-measured/results.txt",
+      "bytes": 2169,
+      "sha256": "95df3f69b9b7bd2a6a0b236793b94a4a50f07cf1e3780efd5b5df5605211e302"
+    },
+    {
+      "file": "rich-flow-editor-measured/rich-canvas.png",
+      "bytes": 110652,
+      "sha256": "7c0b62abb995bc51a5c8546f928dfd85e596447ed20f969a7a3d26da31160ac4"
+    },
+    {
+      "file": "rich-flow-editor-measured-node20/report.json",
+      "bytes": 24768,
+      "sha256": "e5152bc64a86ef188ca8f2fee1bc73ae1214feee58e64d72ef2499321c7d6d3d"
+    },
+    {
+      "file": "rich-flow-editor-measured-node20/results.txt",
+      "bytes": 2169,
+      "sha256": "95df3f69b9b7bd2a6a0b236793b94a4a50f07cf1e3780efd5b5df5605211e302"
+    },
+    {
+      "file": "rich-flow-editor-measured-node20/rich-canvas.png",
+      "bytes": 110652,
+      "sha256": "7c0b62abb995bc51a5c8546f928dfd85e596447ed20f969a7a3d26da31160ac4"
+    }
+  ]
+}

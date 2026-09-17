@@ -1,5 +1,7 @@
 # Collapsing the OPF layout taxonomy
 
+> **Status:** Shipped (April 2026, before the first npm release, so no published version ever carried the old 400-record catalog). Kept for historical context; details below may not match the final shipped schema.
+
 Plan for collapsing the 400 layout records in [`spec/catalogs/layouts/`](../../spec/catalogs/layouts/) to roughly 23 canonical layouts and removing the old master-derived records from the public catalog. Visual variations (`-left`, `-box`, `-slideimage`, `-vertical`, etc.) become design overrides rather than separate layout records.
 
 This plan is the long-deferred follow-on to [`layout-placeholders.md`](layout-placeholders.md) (open question §4.4 / Phase 5 there). The placeholder plan should land first as scaffolding; this plan reuses its `placeholders` field and binding rules unchanged.

@@ -1,0 +1,109 @@
+﻿{
+    "records":  [
+                    {
+                        "editedSha256":  "4d753787dc68bae5f51da00dfa73bb11b4841d8f4e7a99857efd6d52b74ad380",
+                        "lines":  [
+                                      {
+                                          "width":  873.6,
+                                          "height":  14.64,
+                                          "path":  "slides.0.tag",
+                                          "text":  "Source",
+                                          "left":  43.6277161,
+                                          "tags":  1,
+                                          "line":  0,
+                                          "fonts":  [
+                                                        "Carlito"
+                                                    ],
+                                          "top":  43.2
+                                      },
+                                      {
+                                          "width":  873.6,
+                                          "height":  49.41,
+                                          "path":  "slides.0.title",
+                                          "text":  "A measured title that wraps when space is narrow",
+                                          "left":  43.8708649,
+                                          "tags":  1,
+                                          "line":  0,
+                                          "fonts":  [
+                                                        "Carlito"
+                                                    ],
+                                          "top":  66.84
+                                      },
+                                      {
+                                          "width":  873.6,
+                                          "height":  22.87504,
+                                          "path":  "slides.0.subtitle",
+                                          "text":  "Supporting text",
+                                          "left":  43.4464569,
+                                          "tags":  1,
+                                          "line":  0,
+                                          "fonts":  [
+                                                        "Carlito"
+                                                    ],
+                                          "top":  125.25
+                                      },
+                                      {
+                                          "width":  855.6,
+                                          "height":  22.87504,
+                                          "path":  "slides.0.text",
+                                          "text":  "Full source",
+                                          "left":  52.2,
+                                          "tags":  0,
+                                          "line":  0,
+                                          "fonts":  [
+                                                        "Carlito"
+                                                    ],
+                                          "top":  175.125046
+                                      },
+                                      {
+                                          "width":  855.6,
+                                          "height":  22.87504,
+                                          "path":  "slides.0.text",
+                                          "text":  "Second paragraph.",
+                                          "left":  52.4464569,
+                                          "tags":  0,
+                                          "line":  1,
+                                          "fonts":  [
+                                                        "Carlito"
+                                                    ],
+                                          "top":  198
+                                      }
+                                  ],
+                        "savedSha256":  "48808d7197fea3a396906ea777367a2d7178381addbee7126ea641b58cedd361",
+                        "masks":  [
+                                      {
+                                          "path":  "slides.0.tag",
+                                          "sha256":  "9d24507e9b532959b0b16e56f4460c68b7d5aaf06e284ed6a2bd6e18eab3b72c",
+                                          "file":  "case-06-mask-0.png"
+                                      },
+                                      {
+                                          "path":  "slides.0.title",
+                                          "sha256":  "7dd40f03921ff87af242ad2d17da5d5df19b00fff662f2517e75ada2c7071130",
+                                          "file":  "case-06-mask-1.png"
+                                      },
+                                      {
+                                          "path":  "slides.0.subtitle",
+                                          "sha256":  "d81982b01b5c4117a3d9fa358eb4d69628465b2d1937d33b7d31fad43b59a6ad",
+                                          "file":  "case-06-mask-2.png"
+                                      },
+                                      {
+                                          "path":  "slides.0.text",
+                                          "sha256":  "60d38e1b9ed9a049c915a8e8879a0a9c7185c13ac5a375db25986ddcb079d0c2",
+                                          "file":  "case-06-mask-3.png"
+                                      }
+                                  ],
+                        "reopened":  {
+                                         "sha256":  "236cc907ce1305f8aa334a45cfed4ac24d4db64ae51785c9cdb3e699d8443d77",
+                                         "file":  "case-06-reopened.png"
+                                     },
+                        "original":  {
+                                         "sha256":  "236cc907ce1305f8aa334a45cfed4ac24d4db64ae51785c9cdb3e699d8443d77",
+                                         "file":  "case-06-original.png"
+                                     },
+                        "file":  "case-06.pptx"
+                    }
+                ],
+    "case":  6,
+    "generationSha256":  "b37602cd0e825b03d74d5c19cfb702659650497297b94943a457170ad0de3d66",
+    "stage":  "completed"
+}

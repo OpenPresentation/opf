@@ -1,0 +1,78 @@
+{
+  "name": "@openpresentation/opf-pptx",
+  "version": "0.7.0",
+  "description": "Pure local OPF to PPTX export and PPTX to OPF import tooling.",
+  "license": "MIT",
+  "type": "module",
+  "private": false,
+  "engines": {
+    "node": ">=20.9.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OpenPresentation/opf-pptx.git"
+  },
+  "bugs": {
+    "url": "https://github.com/OpenPresentation/opf-pptx/issues"
+  },
+  "homepage": "https://github.com/OpenPresentation/opf-pptx#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "vendor",
+    "DEPENDENCY-NOTES.md",
+    "README.md",
+    "LICENSE"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "typecheck": "node --check src/index.js && node --check scripts/build.mjs && node --check scripts/validate-package.mjs && node --check test/smoke.mjs && node --check src/image-geometry.js && node --check test/image-fit.mjs && node --check test/image-orientation.mjs && node --check test/table-layout.mjs && node --check test/table-import.mjs && node --check test/object-ids.mjs && node --check test/export-corpus.mjs && node --check test/image-media-type.mjs && node --check src/image-fallback-node.js && node --check src/image-fallback-browser.js && node --check test/webp-fallback.mjs && node --check scripts/build-browser-check.mjs && node --check test/webp-fallback-browser.js && node --check test/image-fallback-boundary.mjs && node --check src/background.js && node --check test/background.mjs && node --check src/image-import.js && node --check test/image-import.mjs && node --check test/native-background.mjs && node --check src/background-import.js && node --check test/background-inheritance.mjs && node --check test/rich-table.mjs && node --check src/table-import.js && node --check test/rich-table-import.mjs && node --check test/rich-table-import-browser.js && node --check test/table-row-sizing.mjs && node --check test/table-styles.mjs && node --check test/table-styles-browser.js && node --check test/styled-table.mjs && node --check src/table-cell-import.js && node --check test/styled-table-import.mjs && node --check test/styled-table-import-browser.js && node --check src/table-border-import.js && node --check test/table-border-styles.mjs && node --check src/card-provenance.js && node --check test/content-cards.mjs && node --check src/chart-workbook.js && node --check test/chart-colors.mjs && node --check test/chart-workbook.mjs && node --check test/native-chart-colors.mjs && node --check src/heading-provenance.js && node --check test/accepted-text.mjs && node --check test/heading-provenance.mjs",
+    "test": "npm run build && node test/accepted-text.mjs && node test/heading-provenance.mjs && node test/chart-colors.mjs && node test/content-cards.mjs && node test/chart-workbook.mjs && node test/dependency-boundary.mjs && npm run build:browser-check && npm run test:styled-table && node test/content-layout.mjs && node test/shared-quote.mjs",
+    "validate": "node scripts/validate-package.mjs",
+    "test:packed": "node test/packed-install.mjs",
+    "test:compare-published": "node test/compare-published.mjs",
+    "test:browser": "npm run build:browser-check && node test/browser-check.mjs",
+    "prepack": "npm run build",
+    "build:browser-check": "node scripts/build-browser-check.mjs",
+    "test:styled-table": "node test/styled-table.mjs && node test/styled-table-import.mjs",
+    "test:code": "node test/shared-code.mjs && node test/code-provenance.mjs",
+    "test:metric": "node test/shared-metric.mjs && node test/metric-provenance.mjs"
+  },
+  "dependencies": {
+    "@openpresentation/opf": "^0.9.0",
+    "fast-xml-parser": "^5.8.0",
+    "fflate": "^0.8.3",
+    "jszip": "3.10.1",
+    "sharp": "0.35.4"
+  },
+  "peerDependencies": {
+    "@openpresentation/opf-render": "^0.7.0"
+  },
+  "peerDependenciesMeta": {
+    "@openpresentation/opf-render": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@openpresentation/opf-render": "0.7.0",
+    "esbuild": "0.28.2",
+    "playwright": "1.63.0"
+  },
+  "imports": {
+    "#image-fallback": {
+      "browser": "./dist/image-fallback-browser.js",
+      "default": "./dist/image-fallback-node.js"
+    }
+  }
+}

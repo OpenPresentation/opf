@@ -1,0 +1,11 @@
+{
+  "node": "v24.20.0",
+  "nativeSha256": "1557d7a32eef874dd061d9f50a23566d69a34eaf5eca8c03a3ad4518444e8b0d",
+  "imports": 24,
+  "slides": 8,
+  "editedSlides": [
+    1
+  ],
+  "passed": true,
+  "scope": "Native editable chart panel/axis/legend colors and alpha across eight slides; original/saved data and one selected actual embedded Excel workbook edit preserve header, series names, categories and values. Full edit coverage requires separate successful runs for slides 1 through 8. No browser/native raster or advanced chart-layout parity claim."
+}

@@ -1,0 +1,25 @@
+{
+  "node": "v20.20.2",
+  "minimum": 32,
+  "plain": 25,
+  "rich": 25,
+  "list": 25,
+  "table": 15,
+  "composed": [
+    {
+      "path": "slides.0.tag",
+      "size": 16,
+      "overflow": false
+    },
+    {
+      "path": "slides.0.title",
+      "size": 54,
+      "overflow": false
+    },
+    {
+      "path": "slides.0.text",
+      "size": 25,
+      "overflow": false
+    }
+  ]
+}

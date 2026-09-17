@@ -18,5 +18,9 @@
     {
       "type": "list"
     }
-  ]
+  ],
+  "composition": {
+    "mode": "grid",
+    "columns": 2
+  }
 }

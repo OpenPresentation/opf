@@ -1,0 +1,95 @@
+{
+  "checkedAt": "2026-09-10T06:21:07.969Z",
+  "name": "@openpresentation/opf",
+  "version": "0.9.0",
+  "gitHead": "685733976a665d0190bdb9922b9a174ef94153d9",
+  "publishedAt": "2026-09-10T06:12:58.243Z",
+  "workflow": "https://github.com/OpenPresentation/opf/actions/runs/34444106008",
+  "release": "https://github.com/OpenPresentation/opf/releases/tag/opf-v0.9.0",
+  "dist": {
+    "integrity": "sha512-AnduMR/bPFKJv2fYT+cYEINLkiZmN0xuVBETcNzkU6IC7GdgTyb+x5fCiODHcowfrLIJJEjZ8jZzZJGBrxnX5A==",
+    "shasum": "115419a58945b7cce7bc2a4777541028280e89c6",
+    "tarball": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.9.0.tgz",
+    "fileCount": 519,
+    "unpackedSize": 3911552,
+    "attestations": {
+      "url": "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf@0.9.0",
+      "provenance": {
+        "predicateType": "https://slsa.dev/provenance/v1"
+      }
+    },
+    "signatures": [
+      {
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+        "sig": "MEUCIQCUYuEnqfZTOIzmyhyGjmsYc+b8Pe8Ifh2qspGYLfc/5QIgFmGtLwRbSI0BBNk8huEWnLaJ4Q88hWXm0FsYtcLjM7w="
+      }
+    ]
+  },
+  "files": {
+    "path": "core-files.json",
+    "sha256": "2873f275b248a41383c668d55ed1ab69c16f26d7a796ce7949944f09aa96443c"
+  },
+  "reports": [
+    {
+      "node": "20.20.2",
+      "tests": 28,
+      "entries": 519,
+      "tarballBytes": 639141,
+      "tarballSha256": "ffe0fe940d8cd00f058b13cf7dc99ea0fcca98ecab5fd4978acc56a382d54701",
+      "logSha256": "e1906477d186647d18816c4f6d52792d69e76cf11336dff4127c1b0ab545f337",
+      "fixtures": {
+        "quote-layout.test.mjs": {
+          "sourceSha256": "20510eac7b7ddce0b52ae24e4d98445db412838288d09f2b3449ffc87f70e916",
+          "adaptedSha256": "c80cd18fc57340eabaa4eeff61840162f01c6c7179bade8a2ee217d4c0368951"
+        },
+        "quote-composition.test.mjs": {
+          "sourceSha256": "218a8e2ad20e8e29b885779bdc2d19cd22753bdf74469c2228103fdb7daae1a7",
+          "adaptedSha256": "a2fc9b35c2960d62898f56d786d750e27a3055b83b439e311de024936968a6a9"
+        },
+        "code-layout.test.mjs": {
+          "sourceSha256": "7b4f35c45a613df0b5de50d11650665e2c5e7bd060ad2358ea2636381d9b1022",
+          "adaptedSha256": "255b64461bc13754e07a647d11798a293e520d31b239491dc3b7e4cd81296e75"
+        },
+        "code-composition.test.mjs": {
+          "sourceSha256": "de124fbb8901b610813065de518c57fc0b3d36820676ca23aa6d6106d7cecc97",
+          "adaptedSha256": "3881730bae7967e5d7c6bcc55435db797eae758a1de1513cc01b0a5f4f808660"
+        }
+      },
+      "signatureVerification": {
+        "packages": 7,
+        "attestations": 1
+      }
+    },
+    {
+      "node": "24.20.0",
+      "tests": 28,
+      "entries": 519,
+      "tarballBytes": 639141,
+      "tarballSha256": "ffe0fe940d8cd00f058b13cf7dc99ea0fcca98ecab5fd4978acc56a382d54701",
+      "logSha256": "62e16567fd9ad75f5666d4f6d72d2e97dcd234cebc82e099b3183e9100727cea",
+      "fixtures": {
+        "quote-layout.test.mjs": {
+          "sourceSha256": "20510eac7b7ddce0b52ae24e4d98445db412838288d09f2b3449ffc87f70e916",
+          "adaptedSha256": "c80cd18fc57340eabaa4eeff61840162f01c6c7179bade8a2ee217d4c0368951"
+        },
+        "quote-composition.test.mjs": {
+          "sourceSha256": "218a8e2ad20e8e29b885779bdc2d19cd22753bdf74469c2228103fdb7daae1a7",
+          "adaptedSha256": "a2fc9b35c2960d62898f56d786d750e27a3055b83b439e311de024936968a6a9"
+        },
+        "code-layout.test.mjs": {
+          "sourceSha256": "7b4f35c45a613df0b5de50d11650665e2c5e7bd060ad2358ea2636381d9b1022",
+          "adaptedSha256": "255b64461bc13754e07a647d11798a293e520d31b239491dc3b7e4cd81296e75"
+        },
+        "code-composition.test.mjs": {
+          "sourceSha256": "de124fbb8901b610813065de518c57fc0b3d36820676ca23aa6d6106d7cecc97",
+          "adaptedSha256": "3881730bae7967e5d7c6bcc55435db797eae758a1de1513cc01b0a5f4f808660"
+        }
+      },
+      "signatureVerification": {
+        "packages": 7,
+        "attestations": 1
+      }
+    }
+  ],
+  "scope": "Fresh npm core installations on both runtimes, 28 immutable quote/code public-API fixtures and schema/catalog/pagination entrypoint smoke. All 519 installed files match the registry archive, and both installations match each other. npm verifies registry signatures and publication attestation. This does not establish downstream package adoption, browser or native export fidelity."
+}

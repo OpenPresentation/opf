@@ -1,0 +1,29 @@
+[
+  {
+    "generation": "raw/font-native-node24-02/generation.json",
+    "verifiers": "raw/font-native-node24-02/verifiers",
+    "fixture": "selection.pptx"
+  },
+  {
+    "generation": "raw/font-native-node24-03/generation.json",
+    "verifiers": "verifiers/font-final",
+    "fixture": "selection.pptx"
+  },
+  {
+    "generation": "raw/font-native-node20-01/generation.json",
+    "verifiers": "verifiers/font-final",
+    "fixture": "selection.pptx"
+  },
+  {
+    "generation": "raw/images-native-node24-01/generation.json",
+    "verifiers": "raw/images-native-node24-01/verifiers"
+  },
+  {
+    "generation": "raw/images-native-node24-02/generation.json",
+    "verifiers": "raw/images-native-node24-02/verifiers"
+  },
+  {
+    "generation": "raw/images-editor-node20-only-01/generation.json",
+    "verifiers": "verifiers/image-compatible"
+  }
+]

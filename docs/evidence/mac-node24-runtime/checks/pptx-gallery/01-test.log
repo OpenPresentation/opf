@@ -1,0 +1,13 @@
+
+> pptx-gallery@0.1.0 test /Users/michael/Source/pptx-gallery
+> vitest run
+
+
+ RUN  v4.1.11 /Users/michael/Source/pptx-gallery
+
+
+ Test Files  7 passed (7)
+      Tests  106 passed (106)
+   Start at  17:22:44
+   Duration  1.05s (transform 1.51s, setup 0ms, import 4.57s, tests 235ms, environment 1ms)
+

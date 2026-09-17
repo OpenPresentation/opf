@@ -1,0 +1,210 @@
+{
+  "checkedAt": "2026-09-10T02:26:20.061Z",
+  "gallery": {
+    "pr": 24,
+    "reviewedHead": "8ed70324635c2e5fb69db5479cf13755d6635a0b",
+    "mergeCommit": "1403916aea3f50c7d39c965ec7136da6e4b7af32",
+    "treeIdentical": true,
+    "ci": 34427426307,
+    "bugbot": "passed",
+    "preview": {
+      "deployment": "dpl_FQeBye61kSPa1GzcmVBszorPi1CB",
+      "tests": 3,
+      "seconds": 13.3
+    },
+    "production": {
+      "deployment": "dpl_ENk7dmxQ22Czhq18hKZujmcJaN9s",
+      "url": "https://www.pptx.gallery",
+      "tests": 3,
+      "seconds": 10.4,
+      "browser": "152.0.4191.66"
+    },
+    "manifest": {
+      "source": "npm",
+      "packages": [
+        {
+          "name": "@openpresentation/opf",
+          "version": "0.8.0",
+          "tarball": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.8.0.tgz",
+          "integrity": "sha512-1ubeINQsuD8pFNr542eFYPfzkhcECAcj/mM2pWNN+keFnVoWxePCsFTUtjuSSsvCtpm7QkgxBYRJYtEUmrlkkg=="
+        },
+        {
+          "name": "@openpresentation/opf-render",
+          "version": "0.6.0",
+          "tarball": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.6.0.tgz",
+          "integrity": "sha512-rYHS0qetT8FpDqkB8E9KMtwrh6NiB6UzxAeqaCwnMwrIDIEvejKC++Hw2Us4512ZIHRHdwuG42aq6QJodBJOPA=="
+        },
+        {
+          "name": "@openpresentation/opf-editor",
+          "version": "0.5.0",
+          "tarball": "https://registry.npmjs.org/@openpresentation/opf-editor/-/opf-editor-0.5.0.tgz",
+          "integrity": "sha512-+97dX6YINmU6spn/iEdTWDeq92lSk02AmuhaIzWY0eqAmWfsoWeeQChqTlGLAt9S4Vldmr8VQHynT+MxdzzNIQ=="
+        },
+        {
+          "name": "@openpresentation/opf-pptx",
+          "version": "0.6.0",
+          "tarball": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.6.0.tgz",
+          "integrity": "sha512-60giL1UxBU21AAPF+TtA3h8mMbzsGVU7WyPLt9GuQg4ZvPBpG6YRR6jw8hGjEsG6v/X7ohJXbh0LWM2zDHjQwA=="
+        },
+        {
+          "name": "@openpresentation/cli",
+          "version": "0.6.0",
+          "tarball": "https://registry.npmjs.org/@openpresentation/cli/-/cli-0.6.0.tgz",
+          "integrity": "sha512-p02xCN30VF3K9pQHbD9lTDKxSpnceKnXZK9zhLDELqEWn2IBYO5ZwgcTVe/gVmv5ab/2wpG5Nx6HtmvO9SwWSQ=="
+        }
+      ],
+      "editorExamples": {
+        "commit": "dba5fe5e5580a4172c052132c4db5851d1decc4c",
+        "files": {
+          "playground.js": "e8f0bc6af34cff26f1ad92af55a47f4e8ba28a890e823940ed2828e567b20414",
+          "data-controls.js": "75a8a380eb8dbf88a2333b31c777c07e3da27374c6e76c01623cf24bf79dc523",
+          "transfer-controls.js": "c709c07bb0818ccac58dcf0452a399dd0d7dcfdb82891e7fe1758f6b20d83c4e",
+          "pptx-controls.js": "9ac27802a5eb64b5470b7bab4a50f2315e131e10e5b9c2fe0bd56335a42f92d2",
+          "playground.html": "72ff4a7ab07ead5e8c38f9f30bfbe2260de8610fddd429415214ceae17a63cc7",
+          "playground.css": "369f7d0ca6249e1fee44f58351be986de3d4f0f6bd8396fd1ffb927eb22ec183",
+          "galleries.json": "58f9f58c7473843b5e76459b1d83dbece829e6095e6ff364d9ecd36c96dcc743"
+        }
+      },
+      "galleryDocuments": 854,
+      "files": {
+        "index.html": "6b3c47232f3ecbc810a1341adee0d5fed877f54cba65c2f7a9c7b7965a94f8f6",
+        "playground.js": "fdc7a4105c491c457a911f00f5cd29dc011be15bd7074d58e958998309a2c07d",
+        "playground.js.LEGAL.txt": "108adc0e56f6a8072855f51278ae1a9dec2926a88f10739ab2882f94038bc689",
+        "playground.css": "369f7d0ca6249e1fee44f58351be986de3d4f0f6bd8396fd1ffb927eb22ec183",
+        "fonts.json": "c697f3979d65cb65482400d163604a8b4ac299e788702b8d3a502cce3f284c8d",
+        "galleries.json": "58f9f58c7473843b5e76459b1d83dbece829e6095e6ff364d9ecd36c96dcc743",
+        "gallery.json": "a4af8eca4443044f6052ea85eac19025b9bbc4fa11b52d4672f121111f50aae7",
+        "opf-spec.json": "d90eb126c47bef5bc2f7c3d7d6b0dc279082c980db8d1c8e1e426c0996d401dd"
+      }
+    },
+    "scope": "Eight exact public bundle/font/license/example hashes agree with actual registry provenance. Three offline workflows cover source import, measured preview, inline edits/undo, table export/reimport and shared quote source/readability policy undo/reimport. All 854 gallery examples and stable catalog slugs remain."
+  },
+  "application": {
+    "pr": 29,
+    "reviewedHead": "ea89253de9a0e1400c297b75f295807f4a0b7239",
+    "mergeCommit": "482f769d4676b65ac16fe3fb4660aeaa03a77a44",
+    "treeIdentical": true,
+    "ci": 34427524816,
+    "bugbot": "passed",
+    "preview": {
+      "deployment": "dpl_EmEeDk9WMngA3fb62hLkyQ7xmA9S",
+      "tests": 8,
+      "seconds": 28.7
+    },
+    "production": {
+      "deployment": "dpl_F1LgvvbZ8QwcvCy8ZRnZ2WaunVDe",
+      "commit": "b9eefaac764c4a3ec009b17d363663f0c6cfe146",
+      "url": "https://www.pptx.dev",
+      "tests": 8,
+      "seconds": 29.4,
+      "browser": "152.0.4191.66"
+    },
+    "dependencies": {
+      "@openpresentation/opf": "0.8.0",
+      "@openpresentation/opf-editor": "0.5.0",
+      "@openpresentation/opf-pptx": "0.6.0",
+      "@openpresentation/opf-render": "0.6.0"
+    },
+    "fonts": "pptx-dev-shared-quote-fonts-2026-09-09.json",
+    "nativePublicDownloadBridge": {
+      "sourceSha256": "383512f28856d1b0d86ddd378d63b5a529e9928983743d9ebac72d99200c8ac4",
+      "byteIdenticalToNativeTestedBrowserDownload": true,
+      "nativeEvidence": {
+        "checkedAt": "2026-09-10T01:57:10.983Z",
+        "packages": [
+          {
+            "name": "@openpresentation/opf",
+            "version": "0.8.0"
+          },
+          {
+            "name": "@openpresentation/opf-render",
+            "version": "0.6.0"
+          },
+          {
+            "name": "@openpresentation/opf-editor",
+            "version": "0.5.0"
+          },
+          {
+            "name": "@openpresentation/opf-pptx",
+            "version": "0.6.0"
+          }
+        ],
+        "lockSha256": "0e3b68e9cb0bc5d4938ed2a29fe4e8e33637b4d557962bf94350a6c31861a43a",
+        "environment": {
+          "powerPointVersion": "16.0",
+          "uiCulture": "en-US",
+          "windows": {
+            "product": "Windows 10 Home",
+            "revision": 9445,
+            "displayVersion": "25H2",
+            "build": "26200"
+          },
+          "executable": {
+            "fileVersion": "16.0.20326.20132",
+            "productVersion": "16.0.20326.20132",
+            "sha256": "90fa931172c507b763ba92a82b19d5bc70816e008c5bb87577e1838e8a92e9f9"
+          },
+          "culture": "en-US"
+        },
+        "report": {
+          "passed": true,
+          "powerpointVersion": "16.0",
+          "slides": 1,
+          "nativeTables": 1,
+          "editedAndReopened": true,
+          "sourceSha256": "383512f28856d1b0d86ddd378d63b5a529e9928983743d9ebac72d99200c8ac4",
+          "savedSha256": "aec64a540299591404ae8a1d2ea1be6cd3d5d09efa213333ed35ad8eea11677f",
+          "raster": "author-native.png",
+          "nativeSavedReimportValid": true,
+          "nativeSavedReimportTables": 1
+        },
+        "raster": {
+          "file": "browser-author-native-shared-quote.png",
+          "sha256": "a0e88dc4b5030659862fd5dc18f785b73bd8af5926b6b6fcf9eadb00480ef882",
+          "visuallyInspected": true
+        },
+        "boundary": "Actual download from the new local production build, opened/edited/saved/reopened in real Windows PowerPoint and reimported with registry PPTX 0.6.0. One editable table/title fixture with unchanged source bytes from the earlier adoption. This is not new quote raster coverage or broad pixel-equivalence evidence; the public deployment/download bridge remains a separate gate."
+      },
+      "immutableEvidenceUrl": "https://github.com/Data-Advantage/pptx-dev/blob/482f769d4676b65ac16fe3fb4660aeaa03a77a44/docs/evidence/browser-author-native-shared-quote.json"
+    },
+    "scope": "Eight public browser workflows plus all 33 font/license byte matches. The downloaded Author PPTX exactly matches the local and preview bytes edited/saved/reopened in the recorded native environment. Hosted accounts and AI generation are separate from these anonymous/local operations.",
+    "firstProductionAttempt": {
+      "deployment": "dpl_6avWXN5F4L7WuqiWJG713M26oa9f",
+      "commit": "482f769d4676b65ac16fe3fb4660aeaa03a77a44",
+      "passed": 7,
+      "failed": 1,
+      "seconds": 31.1,
+      "failure": "Author switched offline before the lazy Monaco JSON worker finished loading; importScripts failed. Final page-error assertions correctly rejected the run.",
+      "sameRuntimeReadinessProof": {
+        "passed": 1,
+        "seconds": 7.6,
+        "scope": "A real schema diagnostic before going offline passed against the unchanged production runtime."
+      }
+    },
+    "readinessFollowup": {
+      "pr": 30,
+      "reviewedHead": "636da78c4b18f732530881cb09da3e5554bdcdd9",
+      "mergeCommit": "b9eefaac764c4a3ec009b17d363663f0c6cfe146",
+      "treeIdentical": true,
+      "ci": 34428833533,
+      "bugbot": "passed",
+      "local": {
+        "tests": 8,
+        "seconds": 19
+      },
+      "preview": {
+        "deployment": "dpl_F3pVBaHmy4dGDX5AwR1C4RPyvUy5",
+        "tests": 8,
+        "seconds": 26.1
+      },
+      "change": "Require a real JSON-schema diagnostic before the Author test goes offline; preserve all errors/interaction assertions. Derive the browser editor marker from the installed manifest."
+    },
+    "bundleFingerprints": {
+      "evidence": "pptx-dev-shared-quote-bundles-2026-09-09.json",
+      "scripts": 55,
+      "browserEditorVersion": "0.5.0",
+      "scope": "Actual served JavaScript bytes are fingerprinted after installed-package toolkit proofs and a loaded Author editor/JSON worker/preview. The final deployment commit and lock bind source provenance; bundled chunks are not claimed byte-identical to unbundled npm files. Offline export and native-tested download equality are recorded separately."
+    }
+  },
+  "boundary": "All public adoptions use the published shared quote package set. Browser behavior, schema validity, regression raster stability, measured glyph separation, native editability and pixel equivalence remain distinct. These checks do not complete automatic repair/Auto arrange, shared non-quote payload measurement, broad font/script compatibility or current macOS/Keynote evidence."
+}

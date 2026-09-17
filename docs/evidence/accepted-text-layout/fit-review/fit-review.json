@@ -1,0 +1,3827 @@
+{
+  "node": "v24.20.0",
+  "previousRef": "053edb1797fd367ae401885fc1d2a8667f212e2d",
+  "previousSourceSha256": "7dce4fce73f41ef3f2df00509d53b906288ace8db9cdba2bf664d3b41e5aeb1e",
+  "currentSourceSha256": "8eb16de679dd894c517950b7cab5c5e07a3e330a49fef39f6e4d6c5bf9ad6f2b",
+  "verifierSha256": "8723c3391bbea830d89150b794574c45f219a047a4f0beeb04d73c63187dd510",
+  "source": {
+    "repository": "OpenPresentation/opf",
+    "path": "examples",
+    "sha256": "3a1ed8ad00b30863b5852197a85602263a2238c613020fb891d933f86e124c4b",
+    "decks": 126
+  },
+  "results": [
+    {
+      "key": "gallery/business-functions/field-enablement-certification.opf.json#0",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 63.99744,
+            "y": 99.018261,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Field Enablement Certification",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "158.016",
+              "attrs": " data-opf-path=\"slides.0.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"158.016\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Field Enablement Certification",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "159.016",
+              "attrs": " data-opf-path=\"slides.0.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"159.016\""
+            }
+          ]
+        },
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 63.99744,
+            "y": 185.548133,
+            "width": 1151.97312,
+            "height": 33.887533
+          },
+          "acceptedSize": 27.77666666666667,
+          "before": [
+            {
+              "text": "NimbleOps Training and enablement",
+              "size": 26.777,
+              "x": "639.984",
+              "y": "212.325",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#0F172A\" font-family=\"Aptos, sans-serif\" font-size=\"26.777\" font-weight=\"400\" text-anchor=\"middle\" x=\"639.984\" y=\"212.325\""
+            }
+          ],
+          "after": [
+            {
+              "text": "NimbleOps Training and enablement",
+              "size": 27.777,
+              "x": "639.984",
+              "y": "213.325",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#0F172A\" font-family=\"Aptos, sans-serif\" font-size=\"27.777\" font-weight=\"400\" text-anchor=\"middle\" x=\"639.984\" y=\"213.325\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/field-enablement-certification.opf.json#1",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.1.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Why This Matters",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.1.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Why This Matters",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.1.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/field-enablement-certification.opf.json#2",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.2.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Signal Trend",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.2.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Signal Trend",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.2.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/field-enablement-certification.opf.json#3",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.3.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Decision Options",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.3.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Decision Options",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.3.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/field-enablement-certification.opf.json#4",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.4.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Execution Timeline",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.4.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Execution Timeline",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.4.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/field-enablement-certification.opf.json#5",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.5.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "The Ask",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.5.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "The Ask",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.5.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/partner-ecosystem-launch-kit.opf.json#0",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 63.5136,
+            "y": 184.145333,
+            "width": 995.2128,
+            "height": 33.631333
+          },
+          "acceptedSize": 27.566666666666666,
+          "before": [
+            {
+              "text": "Meridian Cloud Partnerships",
+              "size": 26.567,
+              "x": "63.514",
+              "y": "210.712",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#FFFFFF\" font-family=\"Noto Naskh Arabic, sans-serif\" font-size=\"26.567\" font-weight=\"400\" text-anchor=\"start\" x=\"63.514\" y=\"210.712\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Meridian Cloud Partnerships",
+              "size": 27.567,
+              "x": "63.514",
+              "y": "211.712",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#FFFFFF\" font-family=\"Noto Naskh Arabic, sans-serif\" font-size=\"27.567\" font-weight=\"400\" text-anchor=\"start\" x=\"63.514\" y=\"211.712\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/pricing-and-packaging-decision.opf.json#0",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 63.5136,
+            "y": 184.145333,
+            "width": 995.2128,
+            "height": 33.631333
+          },
+          "acceptedSize": 27.566666666666666,
+          "before": [
+            {
+              "text": "Northbeam Software Pricing",
+              "size": 26.567,
+              "x": "63.514",
+              "y": "210.712",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#0F172A\" font-family=\"Aptos, sans-serif\" font-size=\"26.567\" font-weight=\"400\" text-anchor=\"start\" x=\"63.514\" y=\"210.712\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Northbeam Software Pricing",
+              "size": 27.567,
+              "x": "63.514",
+              "y": "211.712",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#0F172A\" font-family=\"Aptos, sans-serif\" font-size=\"27.567\" font-weight=\"400\" text-anchor=\"start\" x=\"63.514\" y=\"211.712\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/product-roadmap-decision-review.opf.json#0",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 63.99744,
+            "y": 99.018261,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Product Roadmap Decision Review",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "158.016",
+              "attrs": " data-opf-path=\"slides.0.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"158.016\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Product Roadmap Decision Review",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "159.016",
+              "attrs": " data-opf-path=\"slides.0.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"159.016\""
+            }
+          ]
+        },
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 63.99744,
+            "y": 185.548133,
+            "width": 1151.97312,
+            "height": 33.887533
+          },
+          "acceptedSize": 27.77666666666667,
+          "before": [
+            {
+              "text": "LatticeLane Product",
+              "size": 26.777,
+              "x": "639.984",
+              "y": "212.325",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#0F172A\" font-family=\"Aptos, sans-serif\" font-size=\"26.777\" font-weight=\"400\" text-anchor=\"middle\" x=\"639.984\" y=\"212.325\""
+            }
+          ],
+          "after": [
+            {
+              "text": "LatticeLane Product",
+              "size": 27.777,
+              "x": "639.984",
+              "y": "213.325",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#0F172A\" font-family=\"Aptos, sans-serif\" font-size=\"27.777\" font-weight=\"400\" text-anchor=\"middle\" x=\"639.984\" y=\"213.325\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/product-roadmap-decision-review.opf.json#1",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.1.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Why This Matters",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.1.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Why This Matters",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.1.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/product-roadmap-decision-review.opf.json#2",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.2.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Signal Trend",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.2.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Signal Trend",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.2.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/product-roadmap-decision-review.opf.json#3",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.3.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Decision Options",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.3.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Decision Options",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.3.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/product-roadmap-decision-review.opf.json#4",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.4.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Execution Timeline",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.4.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Execution Timeline",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.4.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/product-roadmap-decision-review.opf.json#5",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.5.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Operating Model",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.5.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Operating Model",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.5.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/product-roadmap-decision-review.opf.json#6",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.6.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Evidence Pack",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.6.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Evidence Pack",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.6.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/product-roadmap-decision-review.opf.json#7",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.7.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Demo Moment",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.7.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Demo Moment",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.7.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/product-roadmap-decision-review.opf.json#8",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.8.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Decision Rule",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.8.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Decision Rule",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.8.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/product-roadmap-decision-review.opf.json#9",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.9.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Decision and Follow Through",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.9.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Decision and Follow Through",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.9.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/renewal-save-plan.opf.json#0",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 63.5136,
+            "y": 184.145333,
+            "width": 995.2128,
+            "height": 33.631333
+          },
+          "acceptedSize": 27.566666666666666,
+          "before": [
+            {
+              "text": "Evergreen CRM Customer success",
+              "size": 26.567,
+              "x": "63.514",
+              "y": "210.712",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#0F172A\" font-family=\"Aptos, sans-serif\" font-size=\"26.567\" font-weight=\"400\" text-anchor=\"start\" x=\"63.514\" y=\"210.712\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Evergreen CRM Customer success",
+              "size": 27.567,
+              "x": "63.514",
+              "y": "211.712",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#0F172A\" font-family=\"Aptos, sans-serif\" font-size=\"27.567\" font-weight=\"400\" text-anchor=\"start\" x=\"63.514\" y=\"211.712\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/s-and-op-exception-review.opf.json#0",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 63.5136,
+            "y": 184.145333,
+            "width": 995.2128,
+            "height": 33.631333
+          },
+          "acceptedSize": 27.566666666666666,
+          "before": [
+            {
+              "text": "Cobalt Supply Operations",
+              "size": 26.567,
+              "x": "63.514",
+              "y": "210.712",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#0F172A\" font-family=\"Aptos, sans-serif\" font-size=\"26.567\" font-weight=\"400\" text-anchor=\"start\" x=\"63.514\" y=\"210.712\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Cobalt Supply Operations",
+              "size": 27.567,
+              "x": "63.514",
+              "y": "211.712",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#0F172A\" font-family=\"Aptos, sans-serif\" font-size=\"27.567\" font-weight=\"400\" text-anchor=\"start\" x=\"63.514\" y=\"211.712\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/supplier-risk-heatmap.opf.json#0",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 63.99744,
+            "y": 99.018261,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Supplier Risk Heatmap",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "158.016",
+              "attrs": " data-opf-path=\"slides.0.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"158.016\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Supplier Risk Heatmap",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "159.016",
+              "attrs": " data-opf-path=\"slides.0.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"159.016\""
+            }
+          ]
+        },
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 63.99744,
+            "y": 185.548133,
+            "width": 1151.97312,
+            "height": 33.887533
+          },
+          "acceptedSize": 27.77666666666667,
+          "before": [
+            {
+              "text": "Ironwood Devices Procurement",
+              "size": 26.777,
+              "x": "639.984",
+              "y": "212.325",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#0F172A\" font-family=\"Aptos, serif\" font-size=\"26.777\" font-weight=\"400\" text-anchor=\"middle\" x=\"639.984\" y=\"212.325\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Ironwood Devices Procurement",
+              "size": 27.777,
+              "x": "639.984",
+              "y": "213.325",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#0F172A\" font-family=\"Aptos, serif\" font-size=\"27.777\" font-weight=\"400\" text-anchor=\"middle\" x=\"639.984\" y=\"213.325\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/supplier-risk-heatmap.opf.json#1",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.1.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Why This Matters",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.1.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Why This Matters",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.1.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/supplier-risk-heatmap.opf.json#2",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.2.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Signal Trend",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.2.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Signal Trend",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.2.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/supplier-risk-heatmap.opf.json#3",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.3.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Decision Options",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.3.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Decision Options",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.3.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/supplier-risk-heatmap.opf.json#4",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.4.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Execution Timeline",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.4.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Execution Timeline",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.4.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/supplier-risk-heatmap.opf.json#5",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.5.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Operating Model",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.5.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Operating Model",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.5.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/supplier-risk-heatmap.opf.json#6",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.6.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Evidence Pack",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.6.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Evidence Pack",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.6.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/supplier-risk-heatmap.opf.json#7",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.7.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Field Context",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.7.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Field Context",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.7.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/supplier-risk-heatmap.opf.json#8",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.8.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Decision Rule",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.8.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Decision Rule",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.8.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/supplier-risk-heatmap.opf.json#9",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.9.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Decision and Follow Through",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.9.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Decision and Follow Through",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.9.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/design-and-media/kiosk-orientation-deck.opf.json#0",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 63.99744,
+            "y": 99.018261,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Kiosk Orientation Deck",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "158.016",
+              "attrs": " data-opf-path=\"slides.0.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"158.016\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Kiosk Orientation Deck",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "159.016",
+              "attrs": " data-opf-path=\"slides.0.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"159.016\""
+            }
+          ]
+        },
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 63.99744,
+            "y": 185.548133,
+            "width": 1151.97312,
+            "height": 33.887533
+          },
+          "acceptedSize": 27.77666666666667,
+          "before": [
+            {
+              "text": "Northgate Museum Visitor orientation",
+              "size": 26.777,
+              "x": "639.984",
+              "y": "212.325",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#0F172A\" font-family=\"Aptos, serif\" font-size=\"26.777\" font-weight=\"400\" text-anchor=\"middle\" x=\"639.984\" y=\"212.325\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Northgate Museum Visitor orientation",
+              "size": 27.777,
+              "x": "639.984",
+              "y": "213.325",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#0F172A\" font-family=\"Aptos, serif\" font-size=\"27.777\" font-weight=\"400\" text-anchor=\"middle\" x=\"639.984\" y=\"213.325\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/design-and-media/kiosk-orientation-deck.opf.json#1",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.1.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Why This Matters",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.1.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Why This Matters",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.1.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/design-and-media/kiosk-orientation-deck.opf.json#2",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.2.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Signal Trend",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.2.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Signal Trend",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.2.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/design-and-media/kiosk-orientation-deck.opf.json#3",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.3.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Decision Options",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.3.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Decision Options",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.3.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/design-and-media/kiosk-orientation-deck.opf.json#4",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.4.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Execution Timeline",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.4.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Execution Timeline",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.4.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/design-and-media/kiosk-orientation-deck.opf.json#5",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.5.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Operating Model",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.5.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Operating Model",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.5.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/design-and-media/kiosk-orientation-deck.opf.json#6",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.6.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Evidence Pack",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.6.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Evidence Pack",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.6.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/design-and-media/kiosk-orientation-deck.opf.json#7",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.7.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Demo Moment",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.7.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Demo Moment",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.7.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/design-and-media/kiosk-orientation-deck.opf.json#8",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.8.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Decision Rule",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.8.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Decision Rule",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.8.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/design-and-media/kiosk-orientation-deck.opf.json#9",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.9.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Decision and Follow Through",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.9.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Decision and Follow Through",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.9.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/design-and-media/visual-brand-system-sampler.opf.json#0",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 63.5136,
+            "y": 184.145333,
+            "width": 995.2128,
+            "height": 33.631333
+          },
+          "acceptedSize": 27.566666666666666,
+          "before": [
+            {
+              "text": "Framewell Studio Design system",
+              "size": 26.567,
+              "x": "63.514",
+              "y": "210.712",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#0F172A\" font-family=\"Aptos, serif\" font-size=\"26.567\" font-weight=\"400\" text-anchor=\"start\" x=\"63.514\" y=\"210.712\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Framewell Studio Design system",
+              "size": 27.567,
+              "x": "63.514",
+              "y": "211.712",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#0F172A\" font-family=\"Aptos, serif\" font-size=\"27.567\" font-weight=\"400\" text-anchor=\"start\" x=\"63.514\" y=\"211.712\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/education/advising-retention-review.opf.json#0",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 63.99744,
+            "y": 99.018261,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Advising Retention Review",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "158.016",
+              "attrs": " data-opf-path=\"slides.0.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"158.016\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Advising Retention Review",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "159.016",
+              "attrs": " data-opf-path=\"slides.0.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"159.016\""
+            }
+          ]
+        },
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 63.99744,
+            "y": 185.548133,
+            "width": 1151.97312,
+            "height": 33.887533
+          },
+          "acceptedSize": 27.77666666666667,
+          "before": [
+            {
+              "text": "North Valley State Student success",
+              "size": 26.777,
+              "x": "639.984",
+              "y": "212.325",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#0F172A\" font-family=\"Aptos, sans-serif\" font-size=\"26.777\" font-weight=\"400\" text-anchor=\"middle\" x=\"639.984\" y=\"212.325\""
+            }
+          ],
+          "after": [
+            {
+              "text": "North Valley State Student success",
+              "size": 27.777,
+              "x": "639.984",
+              "y": "213.325",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#0F172A\" font-family=\"Aptos, sans-serif\" font-size=\"27.777\" font-weight=\"400\" text-anchor=\"middle\" x=\"639.984\" y=\"213.325\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/education/advising-retention-review.opf.json#1",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.1.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Why This Matters",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.1.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Why This Matters",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.1.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/education/advising-retention-review.opf.json#2",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.2.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Signal Trend",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.2.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Signal Trend",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.2.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/education/advising-retention-review.opf.json#3",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.3.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Decision Options",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.3.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Decision Options",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.3.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/education/advising-retention-review.opf.json#4",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.4.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Execution Timeline",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.4.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Execution Timeline",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.4.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/education/advising-retention-review.opf.json#5",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.5.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "The Ask",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.5.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "The Ask",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.5.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/education/curriculum-approval-brief.opf.json#0",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 63.5136,
+            "y": 184.145333,
+            "width": 995.2128,
+            "height": 33.631333
+          },
+          "acceptedSize": 27.566666666666666,
+          "before": [
+            {
+              "text": "Oakbridge Faculty Senate Academic governance",
+              "size": 26.567,
+              "x": "63.514",
+              "y": "210.712",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#0F172A\" font-family=\"Aptos, sans-serif\" font-size=\"26.567\" font-weight=\"400\" text-anchor=\"start\" x=\"63.514\" y=\"210.712\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Oakbridge Faculty Senate Academic governance",
+              "size": 27.567,
+              "x": "63.514",
+              "y": "211.712",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#0F172A\" font-family=\"Aptos, sans-serif\" font-size=\"27.567\" font-weight=\"400\" text-anchor=\"start\" x=\"63.514\" y=\"211.712\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/education/online-program-launch-plan.opf.json#0",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 63.5136,
+            "y": 184.145333,
+            "width": 995.2128,
+            "height": 33.631333
+          },
+          "acceptedSize": 27.566666666666666,
+          "before": [
+            {
+              "text": "Western Coast College Higher education",
+              "size": 26.567,
+              "x": "63.514",
+              "y": "210.712",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#0F172A\" font-family=\"Aptos, sans-serif\" font-size=\"26.567\" font-weight=\"400\" text-anchor=\"start\" x=\"63.514\" y=\"210.712\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Western Coast College Higher education",
+              "size": 27.567,
+              "x": "63.514",
+              "y": "211.712",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#0F172A\" font-family=\"Aptos, sans-serif\" font-size=\"27.567\" font-weight=\"400\" text-anchor=\"start\" x=\"63.514\" y=\"211.712\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/education/student-mental-health-capacity-review.opf.json#0",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 63.99744,
+            "y": 99.018261,
+            "width": 1151.97312,
+            "height": 146.394144
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Student Mental Health Capacity Review",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "158.016",
+              "attrs": " data-opf-path=\"slides.0.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"158.016\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Student Mental Health Capacity",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "159.016",
+              "attrs": " data-opf-path=\"slides.0.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"159.016\""
+            },
+            {
+              "text": "Review",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "232.213",
+              "attrs": " data-opf-path=\"slides.0.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"232.213\""
+            }
+          ]
+        },
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 63.99744,
+            "y": 258.745205,
+            "width": 1151.97312,
+            "height": 33.887533
+          },
+          "acceptedSize": 27.77666666666667,
+          "before": [
+            {
+              "text": "Harbor City University Student affairs",
+              "size": 26.777,
+              "x": "639.984",
+              "y": "285.522",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#0F172A\" font-family=\"Aptos, sans-serif\" font-size=\"26.777\" font-weight=\"400\" text-anchor=\"middle\" x=\"639.984\" y=\"285.522\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Harbor City University Student affairs",
+              "size": 27.777,
+              "x": "639.984",
+              "y": "286.522",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#0F172A\" font-family=\"Aptos, sans-serif\" font-size=\"27.777\" font-weight=\"400\" text-anchor=\"middle\" x=\"639.984\" y=\"286.522\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/education/student-mental-health-capacity-review.opf.json#1",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.1.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Why This Matters",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.1.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Why This Matters",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.1.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/education/student-mental-health-capacity-review.opf.json#2",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.2.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Signal Trend",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.2.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Signal Trend",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.2.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/education/student-mental-health-capacity-review.opf.json#3",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.3.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Decision Options",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.3.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Decision Options",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.3.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/education/student-mental-health-capacity-review.opf.json#4",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.4.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Execution Timeline",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.4.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Execution Timeline",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.4.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/education/student-mental-health-capacity-review.opf.json#5",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.5.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "The Ask",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.5.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "The Ask",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.5.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/government/grant-equity-review.opf.json#0",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 63.5136,
+            "y": 184.145333,
+            "width": 995.2128,
+            "height": 33.631333
+          },
+          "acceptedSize": 27.566666666666666,
+          "before": [
+            {
+              "text": "Civic Arts Commission Grantmaking",
+              "size": 26.567,
+              "x": "63.514",
+              "y": "210.712",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#FFFFFF\" font-family=\"Sakkal Majalla, sans-serif\" font-size=\"26.567\" font-weight=\"400\" text-anchor=\"start\" x=\"63.514\" y=\"210.712\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Civic Arts Commission Grantmaking",
+              "size": 27.567,
+              "x": "63.514",
+              "y": "211.712",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#FFFFFF\" font-family=\"Sakkal Majalla, sans-serif\" font-size=\"27.567\" font-weight=\"400\" text-anchor=\"start\" x=\"63.514\" y=\"211.712\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/government/regulatory-risk-brief.opf.json#0",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 63.99744,
+            "y": 99.018261,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Regulatory Risk Brief",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "158.016",
+              "attrs": " data-opf-path=\"slides.0.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"158.016\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Regulatory Risk Brief",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "159.016",
+              "attrs": " data-opf-path=\"slides.0.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"159.016\""
+            }
+          ]
+        },
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 63.99744,
+            "y": 185.548133,
+            "width": 1151.97312,
+            "height": 33.887533
+          },
+          "acceptedSize": 27.77666666666667,
+          "before": [
+            {
+              "text": "Regional Clean Air Board Regulators",
+              "size": 26.777,
+              "x": "639.984",
+              "y": "212.325",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#0F172A\" font-family=\"Aptos, sans-serif\" font-size=\"26.777\" font-weight=\"400\" text-anchor=\"middle\" x=\"639.984\" y=\"212.325\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Regional Clean Air Board Regulators",
+              "size": 27.777,
+              "x": "639.984",
+              "y": "213.325",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#0F172A\" font-family=\"Aptos, sans-serif\" font-size=\"27.777\" font-weight=\"400\" text-anchor=\"middle\" x=\"639.984\" y=\"213.325\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/government/regulatory-risk-brief.opf.json#1",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.1.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Why This Matters",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.1.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Why This Matters",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.1.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/government/regulatory-risk-brief.opf.json#2",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.2.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Signal Trend",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.2.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Signal Trend",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.2.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/government/regulatory-risk-brief.opf.json#3",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.3.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Decision Options",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.3.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Decision Options",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.3.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/government/regulatory-risk-brief.opf.json#4",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.4.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Execution Timeline",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.4.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Execution Timeline",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.4.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/government/regulatory-risk-brief.opf.json#5",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.5.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "The Ask",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.5.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "The Ask",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.5.title\" fill=\"#0F172A\" font-family=\"Aptos Display, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/government/vaccination-outreach-briefing.opf.json#0",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 63.5136,
+            "y": 184.145333,
+            "width": 995.2128,
+            "height": 33.631333
+          },
+          "acceptedSize": 27.566666666666666,
+          "before": [
+            {
+              "text": "County Health Alliance Public health",
+              "size": 26.567,
+              "x": "63.514",
+              "y": "210.712",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#FFFFFF\" font-family=\"Aptos, sans-serif\" font-size=\"26.567\" font-weight=\"400\" text-anchor=\"start\" x=\"63.514\" y=\"210.712\""
+            }
+          ],
+          "after": [
+            {
+              "text": "County Health Alliance Public health",
+              "size": 27.567,
+              "x": "63.514",
+              "y": "211.712",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#FFFFFF\" font-family=\"Aptos, sans-serif\" font-size=\"27.567\" font-weight=\"400\" text-anchor=\"start\" x=\"63.514\" y=\"211.712\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/government/workforce-reskilling-initiative.opf.json#0",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 63.5136,
+            "y": 184.145333,
+            "width": 995.2128,
+            "height": 33.631333
+          },
+          "acceptedSize": 27.566666666666666,
+          "before": [
+            {
+              "text": "State Workforce Board Workforce development",
+              "size": 26.567,
+              "x": "63.514",
+              "y": "210.712",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#0F172A\" font-family=\"Aptos, serif\" font-size=\"26.567\" font-weight=\"400\" text-anchor=\"start\" x=\"63.514\" y=\"210.712\""
+            }
+          ],
+          "after": [
+            {
+              "text": "State Workforce Board Workforce development",
+              "size": 27.567,
+              "x": "63.514",
+              "y": "211.712",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#0F172A\" font-family=\"Aptos, serif\" font-size=\"27.567\" font-weight=\"400\" text-anchor=\"start\" x=\"63.514\" y=\"211.712\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/airline-disruption-recovery-review.opf.json#0",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 63.99744,
+            "y": 99.018261,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Airline Disruption Recovery Review",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "158.016",
+              "attrs": " data-opf-path=\"slides.0.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"158.016\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Airline Disruption Recovery Review",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "159.016",
+              "attrs": " data-opf-path=\"slides.0.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"159.016\""
+            }
+          ]
+        },
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 63.99744,
+            "y": 185.548133,
+            "width": 1151.97312,
+            "height": 33.887533
+          },
+          "acceptedSize": 27.77666666666667,
+          "before": [
+            {
+              "text": "AeroVista Airlines Air travel",
+              "size": 26.777,
+              "x": "639.984",
+              "y": "212.325",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#0F172A\" font-family=\"Aptos, serif\" font-size=\"26.777\" font-weight=\"400\" text-anchor=\"middle\" x=\"639.984\" y=\"212.325\""
+            }
+          ],
+          "after": [
+            {
+              "text": "AeroVista Airlines Air travel",
+              "size": 27.777,
+              "x": "639.984",
+              "y": "213.325",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#0F172A\" font-family=\"Aptos, serif\" font-size=\"27.777\" font-weight=\"400\" text-anchor=\"middle\" x=\"639.984\" y=\"213.325\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/airline-disruption-recovery-review.opf.json#1",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.1.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Why This Matters",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.1.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Why This Matters",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.1.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/airline-disruption-recovery-review.opf.json#2",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.2.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Signal Trend",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.2.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Signal Trend",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.2.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/airline-disruption-recovery-review.opf.json#3",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.3.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Decision Options",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.3.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Decision Options",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.3.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/airline-disruption-recovery-review.opf.json#4",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.4.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Execution Timeline",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.4.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Execution Timeline",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.4.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/airline-disruption-recovery-review.opf.json#5",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.5.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Operating Model",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.5.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Operating Model",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.5.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/airline-disruption-recovery-review.opf.json#6",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.6.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Evidence Pack",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.6.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Evidence Pack",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.6.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/airline-disruption-recovery-review.opf.json#7",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.7.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Field Context",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.7.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Field Context",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.7.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/airline-disruption-recovery-review.opf.json#8",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.8.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Decision Rule",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.8.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Decision Rule",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.8.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/airline-disruption-recovery-review.opf.json#9",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.9.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Decision and Follow Through",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.9.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Decision and Follow Through",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.9.title\" fill=\"#0F172A\" font-family=\"Aptos Display, serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/ambulatory-access-recovery-plan.opf.json#0",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 63.99744,
+            "y": 99.018261,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Ambulatory Access Recovery Plan",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "158.016",
+              "attrs": " data-opf-path=\"slides.0.title\" fill=\"#000000\" font-family=\"Angsana New, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"158.016\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Ambulatory Access Recovery Plan",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "159.016",
+              "attrs": " data-opf-path=\"slides.0.title\" fill=\"#000000\" font-family=\"Angsana New, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"159.016\""
+            }
+          ]
+        },
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 63.99744,
+            "y": 185.548133,
+            "width": 1151.97312,
+            "height": 33.887533
+          },
+          "acceptedSize": 27.77666666666667,
+          "before": [
+            {
+              "text": "Northstar Care Network Healthcare operations",
+              "size": 26.777,
+              "x": "639.984",
+              "y": "212.325",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#000000\" font-family=\"Angsana New, sans-serif\" font-size=\"26.777\" font-weight=\"400\" text-anchor=\"middle\" x=\"639.984\" y=\"212.325\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Northstar Care Network Healthcare operations",
+              "size": 27.777,
+              "x": "639.984",
+              "y": "213.325",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#000000\" font-family=\"Angsana New, sans-serif\" font-size=\"27.777\" font-weight=\"400\" text-anchor=\"middle\" x=\"639.984\" y=\"213.325\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/ambulatory-access-recovery-plan.opf.json#1",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.1.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Why This Matters",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.1.title\" fill=\"#000000\" font-family=\"Angsana New, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Why This Matters",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.1.title\" fill=\"#000000\" font-family=\"Angsana New, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/ambulatory-access-recovery-plan.opf.json#2",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.2.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Signal Trend",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.2.title\" fill=\"#000000\" font-family=\"Angsana New, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Signal Trend",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.2.title\" fill=\"#000000\" font-family=\"Angsana New, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/ambulatory-access-recovery-plan.opf.json#3",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.3.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Next Steps",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.3.title\" fill=\"#000000\" font-family=\"Angsana New, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Next Steps",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.3.title\" fill=\"#000000\" font-family=\"Angsana New, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/claims-triage-operating-model.opf.json#0",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 63.5136,
+            "y": 184.145333,
+            "width": 995.2128,
+            "height": 33.631333
+          },
+          "acceptedSize": 27.566666666666666,
+          "before": [
+            {
+              "text": "Pinnacle Mutual Insurance",
+              "size": 26.567,
+              "x": "63.514",
+              "y": "210.712",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#FFFFFF\" font-family=\"Courier New, monospace\" font-size=\"26.567\" font-weight=\"400\" text-anchor=\"start\" x=\"63.514\" y=\"210.712\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Pinnacle Mutual Insurance",
+              "size": 27.567,
+              "x": "63.514",
+              "y": "211.712",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#FFFFFF\" font-family=\"Courier New, monospace\" font-size=\"27.567\" font-weight=\"400\" text-anchor=\"start\" x=\"63.514\" y=\"211.712\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/construction-safety-stand-down.opf.json#0",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 63.5136,
+            "y": 184.145333,
+            "width": 995.2128,
+            "height": 33.631333
+          },
+          "acceptedSize": 27.566666666666666,
+          "before": [
+            {
+              "text": "Keystone Build Partners Construction",
+              "size": 26.567,
+              "x": "63.514",
+              "y": "210.712",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#FFFFFF\" font-family=\"Aptos, sans-serif\" font-size=\"26.567\" font-weight=\"400\" text-anchor=\"start\" x=\"63.514\" y=\"210.712\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Keystone Build Partners Construction",
+              "size": 27.567,
+              "x": "63.514",
+              "y": "211.712",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#FFFFFF\" font-family=\"Aptos, sans-serif\" font-size=\"27.567\" font-weight=\"400\" text-anchor=\"start\" x=\"63.514\" y=\"211.712\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/fan-experience-operations-brief.opf.json#0",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 63.5136,
+            "y": 184.145333,
+            "width": 995.2128,
+            "height": 33.631333
+          },
+          "acceptedSize": 27.566666666666666,
+          "before": [
+            {
+              "text": "Summit Park Arena Sports venues",
+              "size": 26.567,
+              "x": "63.514",
+              "y": "210.712",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#0F172A\" font-family=\"Aptos, sans-serif\" font-size=\"26.567\" font-weight=\"400\" text-anchor=\"start\" x=\"63.514\" y=\"210.712\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Summit Park Arena Sports venues",
+              "size": 27.567,
+              "x": "63.514",
+              "y": "211.712",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#0F172A\" font-family=\"Aptos, sans-serif\" font-size=\"27.567\" font-weight=\"400\" text-anchor=\"start\" x=\"63.514\" y=\"211.712\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#0",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 63.99744,
+            "y": 99.018261,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Mixed Use Leasing Pipeline Review",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "158.016",
+              "attrs": " data-opf-path=\"slides.0.title\" fill=\"#FFFFFF\" font-family=\"Aptos Display, monospace\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"158.016\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Mixed Use Leasing Pipeline Review",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "159.016",
+              "attrs": " data-opf-path=\"slides.0.title\" fill=\"#FFFFFF\" font-family=\"Aptos Display, monospace\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"159.016\""
+            }
+          ]
+        },
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 63.99744,
+            "y": 185.548133,
+            "width": 1151.97312,
+            "height": 33.887533
+          },
+          "acceptedSize": 27.77666666666667,
+          "before": [
+            {
+              "text": "Cedarwell Properties Commercial real estate",
+              "size": 26.777,
+              "x": "639.984",
+              "y": "212.325",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#FFFFFF\" font-family=\"Aptos, monospace\" font-size=\"26.777\" font-weight=\"400\" text-anchor=\"middle\" x=\"639.984\" y=\"212.325\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Cedarwell Properties Commercial real estate",
+              "size": 27.777,
+              "x": "639.984",
+              "y": "213.325",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#FFFFFF\" font-family=\"Aptos, monospace\" font-size=\"27.777\" font-weight=\"400\" text-anchor=\"middle\" x=\"639.984\" y=\"213.325\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#1",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.1.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Why This Matters",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.1.title\" fill=\"#FFFFFF\" font-family=\"Aptos Display, monospace\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Why This Matters",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.1.title\" fill=\"#FFFFFF\" font-family=\"Aptos Display, monospace\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#2",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.2.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Signal Trend",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.2.title\" fill=\"#FFFFFF\" font-family=\"Aptos Display, monospace\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Signal Trend",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.2.title\" fill=\"#FFFFFF\" font-family=\"Aptos Display, monospace\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#3",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.3.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Decision Options",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.3.title\" fill=\"#FFFFFF\" font-family=\"Aptos Display, monospace\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Decision Options",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.3.title\" fill=\"#FFFFFF\" font-family=\"Aptos Display, monospace\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#4",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.4.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Execution Timeline",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.4.title\" fill=\"#FFFFFF\" font-family=\"Aptos Display, monospace\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Execution Timeline",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.4.title\" fill=\"#FFFFFF\" font-family=\"Aptos Display, monospace\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#5",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.5.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Operating Model",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.5.title\" fill=\"#FFFFFF\" font-family=\"Aptos Display, monospace\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Operating Model",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.5.title\" fill=\"#FFFFFF\" font-family=\"Aptos Display, monospace\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#6",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.6.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Evidence Pack",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.6.title\" fill=\"#FFFFFF\" font-family=\"Aptos Display, monospace\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Evidence Pack",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.6.title\" fill=\"#FFFFFF\" font-family=\"Aptos Display, monospace\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#7",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.7.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Demo Moment",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.7.title\" fill=\"#FFFFFF\" font-family=\"Aptos Display, monospace\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Demo Moment",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.7.title\" fill=\"#FFFFFF\" font-family=\"Aptos Display, monospace\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#8",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.8.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Decision Rule",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.8.title\" fill=\"#FFFFFF\" font-family=\"Aptos Display, monospace\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Decision Rule",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.8.title\" fill=\"#FFFFFF\" font-family=\"Aptos Display, monospace\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#9",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.9.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Decision and Follow Through",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.9.title\" fill=\"#FFFFFF\" font-family=\"Aptos Display, monospace\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Decision and Follow Through",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.9.title\" fill=\"#FFFFFF\" font-family=\"Aptos Display, monospace\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/streaming-churn-winback-strategy.opf.json#0",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 63.5136,
+            "y": 256.789013,
+            "width": 995.2128,
+            "height": 33.631333
+          },
+          "acceptedSize": 27.566666666666666,
+          "before": [
+            {
+              "text": "Signalhouse Media Media and entertainment",
+              "size": 26.567,
+              "x": "63.514",
+              "y": "283.356",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#0F172A\" font-family=\"Aptos, serif\" font-size=\"26.567\" font-weight=\"400\" text-anchor=\"start\" x=\"63.514\" y=\"283.356\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Signalhouse Media Media and entertainment",
+              "size": 27.567,
+              "x": "63.514",
+              "y": "284.356",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#0F172A\" font-family=\"Aptos, serif\" font-size=\"27.567\" font-weight=\"400\" text-anchor=\"start\" x=\"63.514\" y=\"284.356\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/international/japan-market-entry-readout.opf.json#0",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 63.99744,
+            "y": 99.018261,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Japan Market Entry Readout",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "158.016",
+              "attrs": " data-opf-path=\"slides.0.title\" fill=\"#000000\" font-family=\"Aparajita, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"158.016\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Japan Market Entry Readout",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "159.016",
+              "attrs": " data-opf-path=\"slides.0.title\" fill=\"#000000\" font-family=\"Aparajita, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"159.016\""
+            }
+          ]
+        },
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 63.99744,
+            "y": 185.548133,
+            "width": 1151.97312,
+            "height": 33.887533
+          },
+          "acceptedSize": 27.77666666666667,
+          "before": [
+            {
+              "text": "Northstar Robotics Japan International expansion",
+              "size": 26.777,
+              "x": "639.984",
+              "y": "212.325",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#000000\" font-family=\"Aparajita, sans-serif\" font-size=\"26.777\" font-weight=\"400\" text-anchor=\"middle\" x=\"639.984\" y=\"212.325\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Northstar Robotics Japan International expansion",
+              "size": 27.777,
+              "x": "639.984",
+              "y": "213.325",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#000000\" font-family=\"Aparajita, sans-serif\" font-size=\"27.777\" font-weight=\"400\" text-anchor=\"middle\" x=\"639.984\" y=\"213.325\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/international/japan-market-entry-readout.opf.json#1",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.1.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Why This Matters",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.1.title\" fill=\"#000000\" font-family=\"Aparajita, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Why This Matters",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.1.title\" fill=\"#000000\" font-family=\"Aparajita, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/international/japan-market-entry-readout.opf.json#2",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.2.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Signal Trend",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.2.title\" fill=\"#000000\" font-family=\"Aparajita, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Signal Trend",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.2.title\" fill=\"#000000\" font-family=\"Aparajita, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/international/japan-market-entry-readout.opf.json#3",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.3.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Next Steps",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.3.title\" fill=\"#000000\" font-family=\"Aparajita, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Next Steps",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.3.title\" fill=\"#000000\" font-family=\"Aparajita, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/presentation-types/developer-conference-talk.opf.json#0",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 63.5136,
+            "y": 184.145333,
+            "width": 995.2128,
+            "height": 33.631333
+          },
+          "acceptedSize": 27.566666666666666,
+          "before": [
+            {
+              "text": "VectorTrail Conference talk",
+              "size": 26.567,
+              "x": "63.514",
+              "y": "210.712",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#0F172A\" font-family=\"Aptos, sans-serif\" font-size=\"26.567\" font-weight=\"400\" text-anchor=\"start\" x=\"63.514\" y=\"210.712\""
+            }
+          ],
+          "after": [
+            {
+              "text": "VectorTrail Conference talk",
+              "size": 27.567,
+              "x": "63.514",
+              "y": "211.712",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#0F172A\" font-family=\"Aptos, sans-serif\" font-size=\"27.567\" font-weight=\"400\" text-anchor=\"start\" x=\"63.514\" y=\"211.712\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/presentation-types/monthly-board-update.opf.json#0",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 63.99744,
+            "y": 99.018261,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Monthly Board Update",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "158.016",
+              "attrs": " data-opf-path=\"slides.0.title\" fill=\"#000000\" font-family=\"Tenorite Display, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"158.016\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Monthly Board Update",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "159.016",
+              "attrs": " data-opf-path=\"slides.0.title\" fill=\"#000000\" font-family=\"Tenorite Display, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"159.016\""
+            }
+          ]
+        },
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 63.99744,
+            "y": 185.548133,
+            "width": 1151.97312,
+            "height": 33.887533
+          },
+          "acceptedSize": 27.77666666666667,
+          "before": [
+            {
+              "text": "North Pier Health Board update",
+              "size": 26.777,
+              "x": "639.984",
+              "y": "212.325",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#000000\" font-family=\"Tenorite, sans-serif\" font-size=\"26.777\" font-weight=\"400\" text-anchor=\"middle\" x=\"639.984\" y=\"212.325\""
+            }
+          ],
+          "after": [
+            {
+              "text": "North Pier Health Board update",
+              "size": 27.777,
+              "x": "639.984",
+              "y": "213.325",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#000000\" font-family=\"Tenorite, sans-serif\" font-size=\"27.777\" font-weight=\"400\" text-anchor=\"middle\" x=\"639.984\" y=\"213.325\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/presentation-types/monthly-board-update.opf.json#1",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.1.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Why This Matters",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.1.title\" fill=\"#000000\" font-family=\"Tenorite Display, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Why This Matters",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.1.title\" fill=\"#000000\" font-family=\"Tenorite Display, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/presentation-types/monthly-board-update.opf.json#2",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.2.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Signal Trend",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.2.title\" fill=\"#000000\" font-family=\"Tenorite Display, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Signal Trend",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.2.title\" fill=\"#000000\" font-family=\"Tenorite Display, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/presentation-types/monthly-board-update.opf.json#3",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.3.title",
+          "box": {
+            "x": 63.99744,
+            "y": 63.99744,
+            "width": 1151.97312,
+            "height": 73.197072
+          },
+          "acceptedSize": 59.99760000000001,
+          "before": [
+            {
+              "text": "Next Steps",
+              "size": 58.998,
+              "x": "63.997",
+              "y": "122.995",
+              "attrs": " data-opf-path=\"slides.3.title\" fill=\"#000000\" font-family=\"Tenorite Display, sans-serif\" font-size=\"58.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"122.995\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Next Steps",
+              "size": 59.998,
+              "x": "63.997",
+              "y": "123.995",
+              "attrs": " data-opf-path=\"slides.3.title\" fill=\"#000000\" font-family=\"Tenorite Display, sans-serif\" font-size=\"59.998\" font-weight=\"700\" text-anchor=\"start\" x=\"63.997\" y=\"123.995\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/presentation-types/research-findings-report.opf.json#0",
+      "compositionUnchanged": true,
+      "changes": [
+        {
+          "path": "slides.0.subtitle",
+          "box": {
+            "x": 63.5136,
+            "y": 184.145333,
+            "width": 995.2128,
+            "height": 33.631333
+          },
+          "acceptedSize": 27.566666666666666,
+          "before": [
+            {
+              "text": "Blue Ridge Institute Research report",
+              "size": 26.567,
+              "x": "63.514",
+              "y": "210.712",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#FFFFFF\" font-family=\"Aptos, sans-serif\" font-size=\"26.567\" font-weight=\"400\" text-anchor=\"start\" x=\"63.514\" y=\"210.712\""
+            }
+          ],
+          "after": [
+            {
+              "text": "Blue Ridge Institute Research report",
+              "size": 27.567,
+              "x": "63.514",
+              "y": "211.712",
+              "attrs": " data-opf-path=\"slides.0.subtitle\" fill=\"#FFFFFF\" font-family=\"Aptos, sans-serif\" font-size=\"27.567\" font-weight=\"400\" text-anchor=\"start\" x=\"63.514\" y=\"211.712\""
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "scope": "Reproduces both historical and current default-font rasters for every changed slide. Composition is identical; changed traced text uses its accepted font size and preserves normalized words. This isolates a second fitting pass from layout changes. It does not certify estimated font widths, original whitespace, native export or visual quality."
+}

@@ -1,0 +1,263 @@
+{
+  "node": "v24.21.0",
+  "verifierSha256": "fa57c1216fb7325fadcc411d773eb7e2017f522c3a23253c33ad00a655aed9d5",
+  "results": [
+    {
+      "measured": false,
+      "width": 1280,
+      "height": 720,
+      "fixture": 0,
+      "parts": 4,
+      "shapes": 9,
+      "arrangement": "alternating",
+      "sha256": "3d302d9b2826565fc171d85b1e3d40e338375dbb609fb451f51f11dce376b503"
+    },
+    {
+      "measured": false,
+      "width": 1280,
+      "height": 720,
+      "fixture": 1,
+      "parts": 7,
+      "shapes": 10,
+      "arrangement": "alternating",
+      "sha256": "ea524d383384562093b148ee3ec41430467a03aabdea44cae877263f2863765a"
+    },
+    {
+      "measured": false,
+      "width": 1280,
+      "height": 720,
+      "fixture": 2,
+      "parts": 1,
+      "shapes": 3,
+      "arrangement": "alternating",
+      "sha256": "cc8cad9376c3176e2d24155d0809b38a3775ab3208604400600cab4f1f79338f"
+    },
+    {
+      "measured": false,
+      "width": 1280,
+      "height": 720,
+      "fixture": 3,
+      "parts": 5,
+      "shapes": 7,
+      "arrangement": "alternating",
+      "sha256": "deda831e78925aa56fadffa438c71b2e4db19d8c082e23c6e1b5156dfcb1332b"
+    },
+    {
+      "measured": false,
+      "width": 720,
+      "height": 1280,
+      "fixture": 0,
+      "parts": 4,
+      "shapes": 9,
+      "arrangement": "alternating",
+      "sha256": "779e42ea758bc6df1ad78ea27fc4de9e5080f9addc5eafbb951ae05c5b99433c"
+    },
+    {
+      "measured": false,
+      "width": 720,
+      "height": 1280,
+      "fixture": 1,
+      "parts": 7,
+      "shapes": 11,
+      "arrangement": "alternating",
+      "sha256": "dc3f1684867a2684a45e877b04e566b53f56a122fab038c10156f092951c0081"
+    },
+    {
+      "measured": false,
+      "width": 720,
+      "height": 1280,
+      "fixture": 2,
+      "parts": 1,
+      "shapes": 3,
+      "arrangement": "alternating",
+      "sha256": "c3d9b5d94498b13ff2201307ef22e105c9e398ba69fa211f7baf6423c4fe4940"
+    },
+    {
+      "measured": false,
+      "width": 720,
+      "height": 1280,
+      "fixture": 3,
+      "parts": 5,
+      "shapes": 7,
+      "arrangement": "alternating",
+      "sha256": "1a22344029a668d23b0ec166528004965351b2ac261f5a3905049e7a0b9779e9"
+    },
+    {
+      "measured": true,
+      "width": 1280,
+      "height": 720,
+      "fixture": 0,
+      "parts": 4,
+      "shapes": 9,
+      "arrangement": "alternating",
+      "sha256": "6d8e1e88aa02baaf36df2bd922873693018c7f808a696ecc1ce00a89b4aa74c0"
+    },
+    {
+      "measured": true,
+      "width": 1280,
+      "height": 720,
+      "fixture": 1,
+      "parts": 7,
+      "shapes": 10,
+      "arrangement": "alternating",
+      "sha256": "b8ab7720683b23fd18248fd456a93d07aaf752a3efdbcc60e795ee18f5874e4b"
+    },
+    {
+      "measured": true,
+      "width": 1280,
+      "height": 720,
+      "fixture": 2,
+      "parts": 1,
+      "shapes": 3,
+      "arrangement": "alternating",
+      "sha256": "75d7d4967080f100de8f4887c841953482a6cb1e0e9555e32ea55813c95cda08"
+    },
+    {
+      "measured": true,
+      "width": 1280,
+      "height": 720,
+      "fixture": 3,
+      "parts": 5,
+      "shapes": 7,
+      "arrangement": "alternating",
+      "sha256": "deda831e78925aa56fadffa438c71b2e4db19d8c082e23c6e1b5156dfcb1332b"
+    },
+    {
+      "measured": true,
+      "width": 720,
+      "height": 1280,
+      "fixture": 0,
+      "parts": 4,
+      "shapes": 9,
+      "arrangement": "alternating",
+      "sha256": "03304175ce1c099b8442618be6f6c3e09b96331690dbfdc2b2f9a860e7b64ecc"
+    },
+    {
+      "measured": true,
+      "width": 720,
+      "height": 1280,
+      "fixture": 1,
+      "parts": 7,
+      "shapes": 10,
+      "arrangement": "alternating",
+      "sha256": "332b52d29f49c01ed0f14969a2af20ee64452752beaab67c68742383470c5f01"
+    },
+    {
+      "measured": true,
+      "width": 720,
+      "height": 1280,
+      "fixture": 2,
+      "parts": 1,
+      "shapes": 3,
+      "arrangement": "alternating",
+      "sha256": "0c5c6296ef2b48722d3fc49c839be02b5719ac7377c5bf37126c3ca25e2dbddc"
+    },
+    {
+      "measured": true,
+      "width": 720,
+      "height": 1280,
+      "fixture": 3,
+      "parts": 5,
+      "shapes": 7,
+      "arrangement": "alternating",
+      "sha256": "1a22344029a668d23b0ec166528004965351b2ac261f5a3905049e7a0b9779e9"
+    }
+  ],
+  "failures": [
+    {
+      "name": "missing-field",
+      "diagnostics": [
+        {
+          "code": "heading-import-reflow",
+          "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed.",
+          "path": "slides.0"
+        },
+        {
+          "code": "invalid-timeline-provenance",
+          "message": "Incomplete or duplicated timeline elements. Ordinary import retains current native text without restoring old source words.",
+          "path": "slides.0"
+        }
+      ]
+    },
+    {
+      "name": "duplicate-field",
+      "diagnostics": [
+        {
+          "code": "heading-import-reflow",
+          "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed.",
+          "path": "slides.0"
+        },
+        {
+          "code": "invalid-timeline-provenance",
+          "message": "Incomplete or duplicated timeline elements. Ordinary import retains current native text without restoring old source words.",
+          "path": "slides.0"
+        }
+      ]
+    },
+    {
+      "name": "missing-marker",
+      "diagnostics": [
+        {
+          "code": "heading-import-reflow",
+          "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed.",
+          "path": "slides.0"
+        },
+        {
+          "code": "invalid-timeline-provenance",
+          "message": "Incomplete or duplicated timeline elements. Ordinary import retains current native text without restoring old source words.",
+          "path": "slides.0"
+        }
+      ]
+    },
+    {
+      "name": "changed-marker",
+      "diagnostics": [
+        {
+          "code": "heading-import-reflow",
+          "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed.",
+          "path": "slides.0"
+        },
+        {
+          "code": "invalid-timeline-provenance",
+          "message": "Timeline graphic now contains different geometry or native text. Ordinary import retains current native text without restoring old source words.",
+          "path": "slides.0"
+        }
+      ]
+    },
+    {
+      "name": "marker-text",
+      "diagnostics": [
+        {
+          "code": "heading-import-reflow",
+          "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed.",
+          "path": "slides.0"
+        },
+        {
+          "code": "invalid-timeline-provenance",
+          "message": "Timeline graphic now contains different geometry or native text. Ordinary import retains current native text without restoring old source words.",
+          "path": "slides.0"
+        }
+      ]
+    },
+    {
+      "name": "native-bullet",
+      "diagnostics": [
+        {
+          "code": "heading-import-reflow",
+          "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed.",
+          "path": "slides.0"
+        },
+        {
+          "code": "invalid-timeline-provenance",
+          "message": "Tagged plain text now has native bullets. Ordinary import retains current native text without restoring old source words.",
+          "path": "slides.0"
+        }
+      ]
+    }
+  ],
+  "overflowControls": {
+    "strict": 2,
+    "warn": 2
+  },
+  "scope": "Editable XML structure and controlled native-text mutations only; no native Office execution. Current field values, array/object form and source boundaries survive complete tags. Damaged tags retain ordinary native text."
+}

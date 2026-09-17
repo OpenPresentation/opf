@@ -1,0 +1,93 @@
+{
+  "design": {
+    "fontScheme": "roboto"
+  },
+  "slides": [
+    {
+      "title": "Heading",
+      "subtitle": "Subtitle",
+      "tag": "Tag",
+      "text": "Scalar text stays editable."
+    },
+    {
+      "text": [
+        "Regular ",
+        {
+          "text": "bold ",
+          "bold": true
+        },
+        {
+          "text": "italic ",
+          "italic": true
+        },
+        {
+          "text": "both",
+          "bold": true,
+          "italic": true
+        }
+      ]
+    },
+    {
+      "table": {
+        "columns": [
+          [
+            "Header ",
+            {
+              "text": "normal",
+              "bold": false
+            }
+          ]
+        ],
+        "rows": [
+          [
+            [
+              "Cell ",
+              {
+                "text": "emphasis",
+                "italic": true
+              }
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "quote": {
+        "text": "Quote body",
+        "attribution": "Quote author",
+        "source": "Original source"
+      }
+    },
+    {
+      "code": {
+        "filename": "example.js",
+        "language": "JavaScript",
+        "source": "const count = 123;"
+      }
+    },
+    {
+      "metric": {
+        "value": 123,
+        "label": "Weight 500 label",
+        "description": "Regular description",
+        "delta": "+2"
+      }
+    },
+    {
+      "items": [
+        {
+          "text": [
+            "List ",
+            {
+              "text": "bold",
+              "bold": true
+            }
+          ]
+        },
+        {
+          "text": "Second item"
+        }
+      ]
+    }
+  ]
+}

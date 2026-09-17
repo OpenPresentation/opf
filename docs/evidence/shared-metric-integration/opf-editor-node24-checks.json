@@ -1,0 +1,58 @@
+{
+  "mode": "linked-source",
+  "results": [
+    {
+      "node": "v24.20.0",
+      "repo": "opf-editor",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "status": 0,
+      "log": "opf-editor-node24-0.log"
+    },
+    {
+      "node": "v24.20.0",
+      "repo": "opf-editor",
+      "command": [
+        "npm",
+        "run",
+        "validate"
+      ],
+      "status": 0,
+      "log": "opf-editor-node24-1.log"
+    },
+    {
+      "node": "v24.20.0",
+      "repo": "opf-editor",
+      "command": [
+        "npm",
+        "test"
+      ],
+      "status": 0,
+      "log": "opf-editor-node24-2.log"
+    },
+    {
+      "node": "v24.20.0",
+      "repo": "opf-editor",
+      "command": [
+        "node",
+        "test/code-browser.mjs"
+      ],
+      "status": 0,
+      "log": "opf-editor-node24-3.log"
+    },
+    {
+      "node": "v24.20.0",
+      "repo": "opf-editor",
+      "command": [
+        "node",
+        "test/metric-browser.mjs",
+        "../metric-browser-node24.json"
+      ],
+      "status": 0,
+      "log": "opf-editor-node24-4.log"
+    }
+  ]
+}

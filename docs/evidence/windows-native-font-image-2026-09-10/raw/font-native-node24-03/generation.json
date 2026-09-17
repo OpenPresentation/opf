@@ -1,0 +1,128 @@
+{
+  "node": "v24.20.0",
+  "runtime": {
+    "test/font-variants.mjs": "4def52d1dc9037a9235ab58c09ab1cc981296ec6285ae093187e72ea0859aa89",
+    "test/native-font-selection.mjs": "151860e82085111691d6b5fd652f032d8d5850babeee92b13999cf6c39e07c08",
+    "test/native-font-selection.ps1": "be5df0d802dff60b66e006f95fb47b596b8295af89f2bff6dc03cab93dbb5dbc",
+    "test/native-font-pdf.py": "fd022b67a974f8b50e7aab6349f3ed950a7ce2173df46298746cc42ebecd5070",
+    "test/native-open-fonts.ps1": "9cff22c3afc8c4e77d457f2cd65205c260761c61c30796b376f9d5beddfc3bfc",
+    "test/native-evidence.mjs": "110b86daeb489cdbc36f13ae29e564cf3bb215cd7ac6a85679f8b8e9d1a5bb64",
+    "test/native-process.ps1": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+    "vendor/pptxgenjs/pptxgen.es.js": "05844c5625e2cda3b449eb967c2246dd57ca57341886a7c28eeebca263b29bd4",
+    "package-lock.json": "10edb4cb29e98fe9db00c1c361aa3126c9969ab06f2b062889915ccc76019bc7",
+    "@openpresentation/opf/package.json": "6c1dcd6b72429c2179c51827e8f97419991b1dd7057fa105d67ecb2db01529b6",
+    "@openpresentation/opf/dist/composition.js": "a2d69048632dd6ff5ba4db397acd86e8c9c5c16365633319a24999466ebbd586",
+    "@openpresentation/opf/dist/chunk-NT3IYAYX.js": "193a39ad7d395d4f26af96e24aa9d23617afe3f63c9f71ec8b18d2a16c68bf97",
+    "@openpresentation/opf/dist/pagination.js": "5fad5aee183a2a5fda16fefa31e6b50c0491528ca111bee80081640bd60b50e4",
+    "@openpresentation/opf/dist/chunk-AFEV7YI7.js": "49b47b80d21d17e3e1839da05e0257db3db378ae371b6d3a8f7e729d7468104c",
+    "@openpresentation/opf/dist/chunk-DA4NWAQV.js": "ac4e9b8e38a998aebb074459f0788dcba6cf13f57e5f5b3f1ace472e0161f2cb",
+    "@openpresentation/opf/dist/chunk-GQSK3T7X.js": "34f518c29c9757bc252b5c13eb5d7db8ada4b477496e6289d8149fb4fdc7cd45",
+    "@openpresentation/opf/dist/chunk-TWMRZ43O.js": "0d35cec97ec7ddaa67fb9f096bc672c927eb68ed5fae5ac27d4dff70d68313f4",
+    "@openpresentation/opf/dist/validator.js": "fc419645499641ca2e45e3bfde4dba90a951e171bbfdf45125da1057b5805b45",
+    "@openpresentation/opf/dist/catalogs.js": "6d74d7b051844728b2622acdb5268472a043544c8b2ca04eb904b1cdf74ec739",
+    "@openpresentation/opf-render/package.json": "70b562c5f36c1ebfe5208c4fcf866cd03e9e6493f130eedc39660b47e7e83435",
+    "@openpresentation/opf-render/dist/font-compatibility.js": "a50ee71748e81cd12ed3aeb6eee92506ebf91ef05021c6ca3f5a100665d03dac",
+    "@openpresentation/opf-render/dist/font-manifest.js": "0af55027613ac952e645ed06f6b873c174e0767efbbb8e4de17e44b0158c1974",
+    "@openpresentation/opf-render/dist/fonts-browser.js": "d0543d838b2f22a8c70bdc60100d72d3c69e3f8033d5ccedd3523ee63c66b8d4",
+    "@openpresentation/opf-render/dist/fonts.js": "860198e21bee950a77a2e47882395629956090eed93399557da3e9cc3b202741",
+    "@openpresentation/opf-render/dist/fonts-node.js": "d45bd167367c1c40202b12362e52483f15e6a6d5ee67e8641b68418de3f1a8dc",
+    "@openpresentation/opf-render/dist/index.js": "39c8f2b279ce10873f00289349b84cf9cab7e12c56e9e0d87447bd2406777234",
+    "@openpresentation/opf-render/dist/svg.js": "36c6e714e5a09181b702e294621cf4a25a59601ec03525fd58e84366a00f50c2",
+    "@openpresentation/opf-render/dist/raster.js": "8e98aba22982ec8c7cece31be19f8cd92fc942a7d538bf64c2e4f32bdd14fc6d",
+    "@openpresentation/opf-render/dist/raster-images.js": "304cffe5e77553ac1ab590fc5805714dde34e6f69df5dc55e35dbc8df602753c",
+    "@openpresentation/opf-pptx/package.json": "e29ba9014069c90555cdbd39cbfb86b7350eb5d4f603ca33519b287655aadc93",
+    "@openpresentation/opf-pptx/dist/background-import.js": "684f9b38cff01e596774b8120c979c3dbbfada273890f785f7a4e3db88cdcb22",
+    "@openpresentation/opf-pptx/dist/background.js": "081fb685677ca656341cdce89275331749174ffecd60e71451f26b9f896cca1c",
+    "@openpresentation/opf-pptx/dist/card-provenance.js": "ff1ca09b88500993abb4bb293162e5064f1f7fc38edfd999f8ca8eedce8b94b0",
+    "@openpresentation/opf-pptx/dist/code-provenance.js": "5eb65649d1736dd5a19ff49680422cb1a097b9f6f94a3b457e649001903b9688",
+    "@openpresentation/opf-pptx/dist/chart-workbook.js": "39db820e6f3a512779943a13e5e78c63ff866c2a0074e1e9c807fcfc7a9aa1e2",
+    "@openpresentation/opf-pptx/dist/heading-provenance.js": "f10385a2a0ac7ded90d3f71786693ec8d9d302ba4acf5f5111061a6705c8fcaf",
+    "@openpresentation/opf-pptx/dist/image-fallback-browser.js": "3c7f81d5677dd9a78a0a13fe5a94bbb14cef465031caaeda2c87e8451e9ff491",
+    "@openpresentation/opf-pptx/dist/image-fallback-node.js": "5ee323d3320420664b5d2c1714e246b04dd0806f459164f9696668552df87565",
+    "@openpresentation/opf-pptx/dist/image-geometry.js": "e083973a98c2bdf7d7dfce9ef1f6bef252f09ce0d69d987105ee0b73cc13d62e",
+    "@openpresentation/opf-pptx/dist/image-import.js": "cffccecc223e27d62b6e1aba0cdbe2c1c9aa94874ef898f76906b22e001bbd41",
+    "@openpresentation/opf-pptx/dist/index.js": "f992b4fbae92d87ef2559a74e909d6e5434f31f9d2e72003ac152e068706ba54",
+    "@openpresentation/opf-pptx/dist/table-import.js": "9ae40bb38dd34c9fc0ae4a3f5a257068ae92bb651ed5d96641c2629ef7106cf1",
+    "@openpresentation/opf-pptx/dist/table-cell-import.js": "fa17507763a2240564401d7977f4f39bc180e3e6da9d4aa9c36202908e9126d1",
+    "@openpresentation/opf-pptx/dist/table-border-import.js": "16678e0d93e63474d39daac268016a59517cc36d85dbd8751131f143db01ace5",
+    "@openpresentation/opf-pptx/dist/metric-provenance.js": "a058bfd8e84cf393476aa64c925bff31430d11e341c32b5e2f5b0d141922f0af"
+  },
+  "fonts": [
+    {
+      "file": "fonts/face-0.ttf",
+      "sha256": "15256405ecb0d880678833a582760efad538ab2932318b52c8105b267d159459",
+      "family": "Roboto",
+      "bold": false,
+      "italic": false,
+      "postscriptName": "Roboto-Regular"
+    },
+    {
+      "file": "fonts/face-1.ttf",
+      "sha256": "79343dc641a2e8d48a703a4667b71fc8dc6565cc8ce47dfc34fc52c12aadbf38",
+      "family": "Roboto Medium",
+      "bold": false,
+      "italic": false,
+      "postscriptName": "Roboto-Medium"
+    },
+    {
+      "file": "fonts/face-2.ttf",
+      "sha256": "32fe2086b0e54eca85a68eb74e3d89bb16a7ffe59085d6dc7d079f5b3c26d6ab",
+      "family": "Roboto SemiBold",
+      "bold": false,
+      "italic": false,
+      "postscriptName": "Roboto-SemiBold"
+    },
+    {
+      "file": "fonts/face-3.ttf",
+      "sha256": "4aaf8c5b661a386998c2e70cf2b87e2440f5404e0b8fd81164f0413fb3435ec6",
+      "family": "Roboto",
+      "bold": true,
+      "italic": false,
+      "postscriptName": "Roboto-Bold"
+    },
+    {
+      "file": "fonts/face-4.ttf",
+      "sha256": "43d5ce98c58336045220fa1dac2bd22281b1aab3eca66785cb34eb3ad1dfe1a5",
+      "family": "Roboto ExtraBold",
+      "bold": false,
+      "italic": false,
+      "postscriptName": "Roboto-ExtraBold"
+    },
+    {
+      "file": "fonts/face-5.ttf",
+      "sha256": "6a372c348dc20c246b92d60b9bda3c0a9ffedc129790ed3f31faf89daa99d793",
+      "family": "Roboto",
+      "bold": false,
+      "italic": true,
+      "postscriptName": "Roboto-Italic"
+    },
+    {
+      "file": "fonts/face-6.ttf",
+      "sha256": "c6a5e7c224d3bf6698e5d3c124f0f0220cad20d5d413920447a96f033a0292ee",
+      "family": "Roboto",
+      "bold": true,
+      "italic": true,
+      "postscriptName": "Roboto-BoldItalic"
+    },
+    {
+      "file": "fonts/face-7.ttf",
+      "sha256": "e4bf45837847d4abfa5a502b807a83393aa138727bdb9ea9c93fb17d53208d95",
+      "family": "Roboto Mono",
+      "bold": false,
+      "italic": false,
+      "postscriptName": "RobotoMono-Regular"
+    },
+    {
+      "file": "fonts/face-8.ttf",
+      "sha256": "92649d819cc4c20480b23a47aaa111769924eb31c66b6ecdcf6f573662558c83",
+      "family": "Roboto Mono",
+      "bold": true,
+      "italic": false,
+      "postscriptName": "RobotoMono-Bold"
+    }
+  ],
+  "pptxSha256": "b362a03e0d5a459679ef965dbdb100cc527752db5e29e85471e81c72ef8d226a",
+  "sourceSha256": "7ff8229f239947390b10605d5c98710bbc3144d15820a614a5ec4633e2ac4cd5",
+  "selectionSha256": "d40e39bf95c72ae6d0d3269fdd118fd738942663698f5ff02e100f947b6fce49",
+  "slides": 7
+}

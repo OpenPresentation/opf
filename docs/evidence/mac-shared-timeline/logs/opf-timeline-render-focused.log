@@ -1,0 +1,2 @@
+Timelines passed: 1/2/4/8 events, wide and portrait slides, measured text and marker containment.
+Accepted text: 48 wide/portrait/card/alignment/scalar/rich cases consume exact accepted fits and styles; overflow diagnostics and strict rejection pass.

@@ -1,0 +1,1067 @@
+{
+  "node": "v20.20.2",
+  "browser": "153.0.8010.12",
+  "auditSha256": "40c34bd9de3eee32130f22bbce5f489684e2d3bf0bdfe9f54b08e8dc6d23f17d",
+  "reviewerSha256": "f20b24c1c64c83e347c44334858d0b232f5de10561acdd3bae447cd70cfe92af",
+  "observed": [
+    {
+      "file": "Akasia-Black.ttf",
+      "name": "latin",
+      "text": "AVATAR Toffee office affine 0123456789",
+      "resolved": {
+        "fontFamily": "Akasia Black",
+        "fontWeight": 900,
+        "italic": false,
+        "fontFace": {
+          "family": "Akasia Black",
+          "bold": false,
+          "italic": false
+        }
+      },
+      "expected": 596.0625,
+      "actual": 596.0625
+    },
+    {
+      "file": "Akasia-Black.ttf",
+      "name": "greek",
+      "text": "Καλημέρα κόσμε Ελληνικά",
+      "resolved": {
+        "fontFamily": "Akasia Black",
+        "fontWeight": 900,
+        "italic": false,
+        "fontFace": {
+          "family": "Akasia Black",
+          "bold": false,
+          "italic": false
+        }
+      },
+      "expected": 396.5,
+      "actual": 396.5
+    },
+    {
+      "file": "Akasia-Black.ttf",
+      "name": "cyrillic",
+      "text": "Привет мир Кириллица",
+      "resolved": {
+        "fontFamily": "Akasia Black",
+        "fontWeight": 900,
+        "italic": false,
+        "fontFace": {
+          "family": "Akasia Black",
+          "bold": false,
+          "italic": false
+        }
+      },
+      "expected": 366.8125,
+      "actual": 366.8125
+    },
+    {
+      "file": "Akasia-Black.ttf",
+      "name": "combining",
+      "text": "Á ä ố ñ",
+      "resolved": {
+        "fontFamily": "Akasia Black",
+        "fontWeight": 900,
+        "italic": false,
+        "fontFace": {
+          "family": "Akasia Black",
+          "bold": false,
+          "italic": false
+        }
+      },
+      "expected": 95.96875,
+      "actual": 95.96875
+    },
+    {
+      "file": "Akasia-Black.ttf",
+      "name": "math",
+      "text": "∑ √ ∞ ≠ ≤ ≥",
+      "resolved": {
+        "fontFamily": "Akasia Black",
+        "fontWeight": 900,
+        "italic": false,
+        "fontFace": {
+          "family": "Akasia Black",
+          "bold": false,
+          "italic": false
+        }
+      },
+      "expected": 154.90625,
+      "actual": 154.90625
+    },
+    {
+      "file": "Akasia-BlackItalic.ttf",
+      "name": "latin",
+      "text": "AVATAR Toffee office affine 0123456789",
+      "resolved": {
+        "fontFamily": "Akasia Black",
+        "fontWeight": 900,
+        "italic": true,
+        "fontFace": {
+          "family": "Akasia Black",
+          "bold": false,
+          "italic": true
+        }
+      },
+      "expected": 600.34375,
+      "actual": 600.34375
+    },
+    {
+      "file": "Akasia-BlackItalic.ttf",
+      "name": "greek",
+      "text": "Καλημέρα κόσμε Ελληνικά",
+      "resolved": {
+        "fontFamily": "Akasia Black",
+        "fontWeight": 900,
+        "italic": true,
+        "fontFace": {
+          "family": "Akasia Black",
+          "bold": false,
+          "italic": true
+        }
+      },
+      "expected": 397.21875,
+      "actual": 397.21875
+    },
+    {
+      "file": "Akasia-BlackItalic.ttf",
+      "name": "cyrillic",
+      "text": "Привет мир Кириллица",
+      "resolved": {
+        "fontFamily": "Akasia Black",
+        "fontWeight": 900,
+        "italic": true,
+        "fontFace": {
+          "family": "Akasia Black",
+          "bold": false,
+          "italic": true
+        }
+      },
+      "expected": 378.71875,
+      "actual": 378.71875
+    },
+    {
+      "file": "Akasia-BlackItalic.ttf",
+      "name": "combining",
+      "text": "Á ä ố ñ",
+      "resolved": {
+        "fontFamily": "Akasia Black",
+        "fontWeight": 900,
+        "italic": true,
+        "fontFace": {
+          "family": "Akasia Black",
+          "bold": false,
+          "italic": true
+        }
+      },
+      "expected": 96.734375,
+      "actual": 97.15625
+    },
+    {
+      "file": "Akasia-BlackItalic.ttf",
+      "name": "math",
+      "text": "∑ √ ∞ ≠ ≤ ≥",
+      "resolved": {
+        "fontFamily": "Akasia Black",
+        "fontWeight": 900,
+        "italic": true,
+        "fontFace": {
+          "family": "Akasia Black",
+          "bold": false,
+          "italic": true
+        }
+      },
+      "expected": 157.078125,
+      "actual": 157.078125
+    },
+    {
+      "file": "Akasia-Bold.ttf",
+      "name": "latin",
+      "text": "AVATAR Toffee office affine 0123456789",
+      "resolved": {
+        "fontFamily": "Akasia",
+        "fontWeight": 700,
+        "italic": false,
+        "fontFace": {
+          "family": "Akasia",
+          "bold": true,
+          "italic": false
+        }
+      },
+      "expected": 563.625,
+      "actual": 563.625
+    },
+    {
+      "file": "Akasia-Bold.ttf",
+      "name": "greek",
+      "text": "Καλημέρα κόσμε Ελληνικά",
+      "resolved": {
+        "fontFamily": "Akasia",
+        "fontWeight": 700,
+        "italic": false,
+        "fontFace": {
+          "family": "Akasia",
+          "bold": true,
+          "italic": false
+        }
+      },
+      "expected": 377.421875,
+      "actual": 377.421875
+    },
+    {
+      "file": "Akasia-Bold.ttf",
+      "name": "cyrillic",
+      "text": "Привет мир Кириллица",
+      "resolved": {
+        "fontFamily": "Akasia",
+        "fontWeight": 700,
+        "italic": false,
+        "fontFace": {
+          "family": "Akasia",
+          "bold": true,
+          "italic": false
+        }
+      },
+      "expected": 353.5625,
+      "actual": 353.5625
+    },
+    {
+      "file": "Akasia-Bold.ttf",
+      "name": "combining",
+      "text": "Á ä ố ñ",
+      "resolved": {
+        "fontFamily": "Akasia",
+        "fontWeight": 700,
+        "italic": false,
+        "fontFace": {
+          "family": "Akasia",
+          "bold": true,
+          "italic": false
+        }
+      },
+      "expected": 93.875,
+      "actual": 93.875
+    },
+    {
+      "file": "Akasia-Bold.ttf",
+      "name": "math",
+      "text": "∑ √ ∞ ≠ ≤ ≥",
+      "resolved": {
+        "fontFamily": "Akasia",
+        "fontWeight": 700,
+        "italic": false,
+        "fontFace": {
+          "family": "Akasia",
+          "bold": true,
+          "italic": false
+        }
+      },
+      "expected": 147.796875,
+      "actual": 147.796875
+    },
+    {
+      "file": "Akasia-BoldItalic.ttf",
+      "name": "latin",
+      "text": "AVATAR Toffee office affine 0123456789",
+      "resolved": {
+        "fontFamily": "Akasia",
+        "fontWeight": 700,
+        "italic": true,
+        "fontFace": {
+          "family": "Akasia",
+          "bold": true,
+          "italic": true
+        }
+      },
+      "expected": 562.21875,
+      "actual": 562.21875
+    },
+    {
+      "file": "Akasia-BoldItalic.ttf",
+      "name": "greek",
+      "text": "Καλημέρα κόσμε Ελληνικά",
+      "resolved": {
+        "fontFamily": "Akasia",
+        "fontWeight": 700,
+        "italic": true,
+        "fontFace": {
+          "family": "Akasia",
+          "bold": true,
+          "italic": true
+        }
+      },
+      "expected": 376.78125,
+      "actual": 376.78125
+    },
+    {
+      "file": "Akasia-BoldItalic.ttf",
+      "name": "cyrillic",
+      "text": "Привет мир Кириллица",
+      "resolved": {
+        "fontFamily": "Akasia",
+        "fontWeight": 700,
+        "italic": true,
+        "fontFace": {
+          "family": "Akasia",
+          "bold": true,
+          "italic": true
+        }
+      },
+      "expected": 364.265625,
+      "actual": 364.265625
+    },
+    {
+      "file": "Akasia-BoldItalic.ttf",
+      "name": "combining",
+      "text": "Á ä ố ñ",
+      "resolved": {
+        "fontFamily": "Akasia",
+        "fontWeight": 700,
+        "italic": true,
+        "fontFace": {
+          "family": "Akasia",
+          "bold": true,
+          "italic": true
+        }
+      },
+      "expected": 94.046875,
+      "actual": 94.046875
+    },
+    {
+      "file": "Akasia-BoldItalic.ttf",
+      "name": "math",
+      "text": "∑ √ ∞ ≠ ≤ ≥",
+      "resolved": {
+        "fontFamily": "Akasia",
+        "fontWeight": 700,
+        "italic": true,
+        "fontFace": {
+          "family": "Akasia",
+          "bold": true,
+          "italic": true
+        }
+      },
+      "expected": 150.015625,
+      "actual": 150.015625
+    },
+    {
+      "file": "Akasia-ExtraBold.ttf",
+      "name": "latin",
+      "text": "AVATAR Toffee office affine 0123456789",
+      "resolved": {
+        "fontFamily": "Akasia ExtraBold",
+        "fontWeight": 800,
+        "italic": false,
+        "fontFace": {
+          "family": "Akasia ExtraBold",
+          "bold": false,
+          "italic": false
+        }
+      },
+      "expected": 572.375,
+      "actual": 572.375
+    },
+    {
+      "file": "Akasia-ExtraBold.ttf",
+      "name": "greek",
+      "text": "Καλημέρα κόσμε Ελληνικά",
+      "resolved": {
+        "fontFamily": "Akasia ExtraBold",
+        "fontWeight": 800,
+        "italic": false,
+        "fontFace": {
+          "family": "Akasia ExtraBold",
+          "bold": false,
+          "italic": false
+        }
+      },
+      "expected": 386.109375,
+      "actual": 386.109375
+    },
+    {
+      "file": "Akasia-ExtraBold.ttf",
+      "name": "cyrillic",
+      "text": "Привет мир Кириллица",
+      "resolved": {
+        "fontFamily": "Akasia ExtraBold",
+        "fontWeight": 800,
+        "italic": false,
+        "fontFace": {
+          "family": "Akasia ExtraBold",
+          "bold": false,
+          "italic": false
+        }
+      },
+      "expected": 360.796875,
+      "actual": 360.796875
+    },
+    {
+      "file": "Akasia-ExtraBold.ttf",
+      "name": "combining",
+      "text": "Á ä ố ñ",
+      "resolved": {
+        "fontFamily": "Akasia ExtraBold",
+        "fontWeight": 800,
+        "italic": false,
+        "fontFace": {
+          "family": "Akasia ExtraBold",
+          "bold": false,
+          "italic": false
+        }
+      },
+      "expected": 95.171875,
+      "actual": 95.171875
+    },
+    {
+      "file": "Akasia-ExtraBold.ttf",
+      "name": "math",
+      "text": "∑ √ ∞ ≠ ≤ ≥",
+      "resolved": {
+        "fontFamily": "Akasia ExtraBold",
+        "fontWeight": 800,
+        "italic": false,
+        "fontFace": {
+          "family": "Akasia ExtraBold",
+          "bold": false,
+          "italic": false
+        }
+      },
+      "expected": 148.84375,
+      "actual": 148.84375
+    },
+    {
+      "file": "Akasia-ExtraBoldItalic.ttf",
+      "name": "latin",
+      "text": "AVATAR Toffee office affine 0123456789",
+      "resolved": {
+        "fontFamily": "Akasia ExtraBold",
+        "fontWeight": 800,
+        "italic": true,
+        "fontFace": {
+          "family": "Akasia ExtraBold",
+          "bold": false,
+          "italic": true
+        }
+      },
+      "expected": 572,
+      "actual": 572
+    },
+    {
+      "file": "Akasia-ExtraBoldItalic.ttf",
+      "name": "greek",
+      "text": "Καλημέρα κόσμε Ελληνικά",
+      "resolved": {
+        "fontFamily": "Akasia ExtraBold",
+        "fontWeight": 800,
+        "italic": true,
+        "fontFace": {
+          "family": "Akasia ExtraBold",
+          "bold": false,
+          "italic": true
+        }
+      },
+      "expected": 385.28125,
+      "actual": 385.28125
+    },
+    {
+      "file": "Akasia-ExtraBoldItalic.ttf",
+      "name": "cyrillic",
+      "text": "Привет мир Кириллица",
+      "resolved": {
+        "fontFamily": "Akasia ExtraBold",
+        "fontWeight": 800,
+        "italic": true,
+        "fontFace": {
+          "family": "Akasia ExtraBold",
+          "bold": false,
+          "italic": true
+        }
+      },
+      "expected": 371.515625,
+      "actual": 371.515625
+    },
+    {
+      "file": "Akasia-ExtraBoldItalic.ttf",
+      "name": "combining",
+      "text": "Á ä ố ñ",
+      "resolved": {
+        "fontFamily": "Akasia ExtraBold",
+        "fontWeight": 800,
+        "italic": true,
+        "fontFace": {
+          "family": "Akasia ExtraBold",
+          "bold": false,
+          "italic": true
+        }
+      },
+      "expected": 95.390625,
+      "actual": 95.390625
+    },
+    {
+      "file": "Akasia-ExtraBoldItalic.ttf",
+      "name": "math",
+      "text": "∑ √ ∞ ≠ ≤ ≥",
+      "resolved": {
+        "fontFamily": "Akasia ExtraBold",
+        "fontWeight": 800,
+        "italic": true,
+        "fontFace": {
+          "family": "Akasia ExtraBold",
+          "bold": false,
+          "italic": true
+        }
+      },
+      "expected": 151,
+      "actual": 151
+    },
+    {
+      "file": "Akasia-Italic.ttf",
+      "name": "latin",
+      "text": "AVATAR Toffee office affine 0123456789",
+      "resolved": {
+        "fontFamily": "Akasia",
+        "fontWeight": 400,
+        "italic": true,
+        "fontFace": {
+          "family": "Akasia",
+          "bold": false,
+          "italic": true
+        }
+      },
+      "expected": 537.640625,
+      "actual": 537.640625
+    },
+    {
+      "file": "Akasia-Italic.ttf",
+      "name": "greek",
+      "text": "Καλημέρα κόσμε Ελληνικά",
+      "resolved": {
+        "fontFamily": "Akasia",
+        "fontWeight": 400,
+        "italic": true,
+        "fontFace": {
+          "family": "Akasia",
+          "bold": false,
+          "italic": true
+        }
+      },
+      "expected": 355.5625,
+      "actual": 355.5625
+    },
+    {
+      "file": "Akasia-Italic.ttf",
+      "name": "cyrillic",
+      "text": "Привет мир Кириллица",
+      "resolved": {
+        "fontFamily": "Akasia",
+        "fontWeight": 400,
+        "italic": true,
+        "fontFace": {
+          "family": "Akasia",
+          "bold": false,
+          "italic": true
+        }
+      },
+      "expected": 346.125,
+      "actual": 346.125
+    },
+    {
+      "file": "Akasia-Italic.ttf",
+      "name": "combining",
+      "text": "Á ä ố ñ",
+      "resolved": {
+        "fontFamily": "Akasia",
+        "fontWeight": 400,
+        "italic": true,
+        "fontFace": {
+          "family": "Akasia",
+          "bold": false,
+          "italic": true
+        }
+      },
+      "expected": 90.671875,
+      "actual": 90.671875
+    },
+    {
+      "file": "Akasia-Italic.ttf",
+      "name": "math",
+      "text": "∑ √ ∞ ≠ ≤ ≥",
+      "resolved": {
+        "fontFamily": "Akasia",
+        "fontWeight": 400,
+        "italic": true,
+        "fontFace": {
+          "family": "Akasia",
+          "bold": false,
+          "italic": true
+        }
+      },
+      "expected": 147.5,
+      "actual": 147.5
+    },
+    {
+      "file": "Akasia-Light.ttf",
+      "name": "latin",
+      "text": "AVATAR Toffee office affine 0123456789",
+      "resolved": {
+        "fontFamily": "Akasia Light",
+        "fontWeight": 300,
+        "italic": false,
+        "fontFace": {
+          "family": "Akasia Light",
+          "bold": false,
+          "italic": false
+        }
+      },
+      "expected": 530.671875,
+      "actual": 530.671875
+    },
+    {
+      "file": "Akasia-Light.ttf",
+      "name": "greek",
+      "text": "Καλημέρα κόσμε Ελληνικά",
+      "resolved": {
+        "fontFamily": "Akasia Light",
+        "fontWeight": 300,
+        "italic": false,
+        "fontFace": {
+          "family": "Akasia Light",
+          "bold": false,
+          "italic": false
+        }
+      },
+      "expected": 344.921875,
+      "actual": 344.921875
+    },
+    {
+      "file": "Akasia-Light.ttf",
+      "name": "cyrillic",
+      "text": "Привет мир Кириллица",
+      "resolved": {
+        "fontFamily": "Akasia Light",
+        "fontWeight": 300,
+        "italic": false,
+        "fontFace": {
+          "family": "Akasia Light",
+          "bold": false,
+          "italic": false
+        }
+      },
+      "expected": 326.34375,
+      "actual": 326.34375
+    },
+    {
+      "file": "Akasia-Light.ttf",
+      "name": "combining",
+      "text": "Á ä ố ñ",
+      "resolved": {
+        "fontFamily": "Akasia Light",
+        "fontWeight": 300,
+        "italic": false,
+        "fontFace": {
+          "family": "Akasia Light",
+          "bold": false,
+          "italic": false
+        }
+      },
+      "expected": 89.046875,
+      "actual": 89.046875
+    },
+    {
+      "file": "Akasia-Light.ttf",
+      "name": "math",
+      "text": "∑ √ ∞ ≠ ≤ ≥",
+      "resolved": {
+        "fontFamily": "Akasia Light",
+        "fontWeight": 300,
+        "italic": false,
+        "fontFace": {
+          "family": "Akasia Light",
+          "bold": false,
+          "italic": false
+        }
+      },
+      "expected": 143.8125,
+      "actual": 143.8125
+    },
+    {
+      "file": "Akasia-LightItalic.ttf",
+      "name": "latin",
+      "text": "AVATAR Toffee office affine 0123456789",
+      "resolved": {
+        "fontFamily": "Akasia Light",
+        "fontWeight": 300,
+        "italic": true,
+        "fontFace": {
+          "family": "Akasia Light",
+          "bold": false,
+          "italic": true
+        }
+      },
+      "expected": 525.390625,
+      "actual": 525.390625
+    },
+    {
+      "file": "Akasia-LightItalic.ttf",
+      "name": "greek",
+      "text": "Καλημέρα κόσμε Ελληνικά",
+      "resolved": {
+        "fontFamily": "Akasia Light",
+        "fontWeight": 300,
+        "italic": true,
+        "fontFace": {
+          "family": "Akasia Light",
+          "bold": false,
+          "italic": true
+        }
+      },
+      "expected": 344.875,
+      "actual": 344.875
+    },
+    {
+      "file": "Akasia-LightItalic.ttf",
+      "name": "cyrillic",
+      "text": "Привет мир Кириллица",
+      "resolved": {
+        "fontFamily": "Akasia Light",
+        "fontWeight": 300,
+        "italic": true,
+        "fontFace": {
+          "family": "Akasia Light",
+          "bold": false,
+          "italic": true
+        }
+      },
+      "expected": 337.046875,
+      "actual": 337.046875
+    },
+    {
+      "file": "Akasia-LightItalic.ttf",
+      "name": "combining",
+      "text": "Á ä ố ñ",
+      "resolved": {
+        "fontFamily": "Akasia Light",
+        "fontWeight": 300,
+        "italic": true,
+        "fontFace": {
+          "family": "Akasia Light",
+          "bold": false,
+          "italic": true
+        }
+      },
+      "expected": 88.984375,
+      "actual": 88.984375
+    },
+    {
+      "file": "Akasia-LightItalic.ttf",
+      "name": "math",
+      "text": "∑ √ ∞ ≠ ≤ ≥",
+      "resolved": {
+        "fontFamily": "Akasia Light",
+        "fontWeight": 300,
+        "italic": true,
+        "fontFace": {
+          "family": "Akasia Light",
+          "bold": false,
+          "italic": true
+        }
+      },
+      "expected": 146.234375,
+      "actual": 146.234375
+    },
+    {
+      "file": "Akasia-Regular.ttf",
+      "name": "latin",
+      "text": "AVATAR Toffee office affine 0123456789",
+      "resolved": {
+        "fontFamily": "Akasia",
+        "fontWeight": 400,
+        "italic": false,
+        "fontFace": {
+          "family": "Akasia",
+          "bold": false,
+          "italic": false
+        }
+      },
+      "expected": 541.671875,
+      "actual": 541.671875
+    },
+    {
+      "file": "Akasia-Regular.ttf",
+      "name": "greek",
+      "text": "Καλημέρα κόσμε Ελληνικά",
+      "resolved": {
+        "fontFamily": "Akasia",
+        "fontWeight": 400,
+        "italic": false,
+        "fontFace": {
+          "family": "Akasia",
+          "bold": false,
+          "italic": false
+        }
+      },
+      "expected": 355.78125,
+      "actual": 355.78125
+    },
+    {
+      "file": "Akasia-Regular.ttf",
+      "name": "cyrillic",
+      "text": "Привет мир Кириллица",
+      "resolved": {
+        "fontFamily": "Akasia",
+        "fontWeight": 400,
+        "italic": false,
+        "fontFace": {
+          "family": "Akasia",
+          "bold": false,
+          "italic": false
+        }
+      },
+      "expected": 335.40625,
+      "actual": 335.40625
+    },
+    {
+      "file": "Akasia-Regular.ttf",
+      "name": "combining",
+      "text": "Á ä ố ñ",
+      "resolved": {
+        "fontFamily": "Akasia",
+        "fontWeight": 400,
+        "italic": false,
+        "fontFace": {
+          "family": "Akasia",
+          "bold": false,
+          "italic": false
+        }
+      },
+      "expected": 90.65625,
+      "actual": 90.65625
+    },
+    {
+      "file": "Akasia-Regular.ttf",
+      "name": "math",
+      "text": "∑ √ ∞ ≠ ≤ ≥",
+      "resolved": {
+        "fontFamily": "Akasia",
+        "fontWeight": 400,
+        "italic": false,
+        "fontFace": {
+          "family": "Akasia",
+          "bold": false,
+          "italic": false
+        }
+      },
+      "expected": 145.140625,
+      "actual": 145.140625
+    },
+    {
+      "file": "Akasia-SemiBold.ttf",
+      "name": "latin",
+      "text": "AVATAR Toffee office affine 0123456789",
+      "resolved": {
+        "fontFamily": "Akasia SemiBold",
+        "fontWeight": 600,
+        "italic": false,
+        "fontFace": {
+          "family": "Akasia SemiBold",
+          "bold": false,
+          "italic": false
+        }
+      },
+      "expected": 552.59375,
+      "actual": 552.59375
+    },
+    {
+      "file": "Akasia-SemiBold.ttf",
+      "name": "greek",
+      "text": "Καλημέρα κόσμε Ελληνικά",
+      "resolved": {
+        "fontFamily": "Akasia SemiBold",
+        "fontWeight": 600,
+        "italic": false,
+        "fontFace": {
+          "family": "Akasia SemiBold",
+          "bold": false,
+          "italic": false
+        }
+      },
+      "expected": 366.5625,
+      "actual": 366.5625
+    },
+    {
+      "file": "Akasia-SemiBold.ttf",
+      "name": "cyrillic",
+      "text": "Привет мир Кириллица",
+      "resolved": {
+        "fontFamily": "Akasia SemiBold",
+        "fontWeight": 600,
+        "italic": false,
+        "fontFace": {
+          "family": "Akasia SemiBold",
+          "bold": false,
+          "italic": false
+        }
+      },
+      "expected": 344.515625,
+      "actual": 344.515625
+    },
+    {
+      "file": "Akasia-SemiBold.ttf",
+      "name": "combining",
+      "text": "Á ä ố ñ",
+      "resolved": {
+        "fontFamily": "Akasia SemiBold",
+        "fontWeight": 600,
+        "italic": false,
+        "fontFace": {
+          "family": "Akasia SemiBold",
+          "bold": false,
+          "italic": false
+        }
+      },
+      "expected": 92.265625,
+      "actual": 92.265625
+    },
+    {
+      "file": "Akasia-SemiBold.ttf",
+      "name": "math",
+      "text": "∑ √ ∞ ≠ ≤ ≥",
+      "resolved": {
+        "fontFamily": "Akasia SemiBold",
+        "fontWeight": 600,
+        "italic": false,
+        "fontFace": {
+          "family": "Akasia SemiBold",
+          "bold": false,
+          "italic": false
+        }
+      },
+      "expected": 146.46875,
+      "actual": 146.46875
+    },
+    {
+      "file": "Akasia-SemiBoldItalic.ttf",
+      "name": "latin",
+      "text": "AVATAR Toffee office affine 0123456789",
+      "resolved": {
+        "fontFamily": "Akasia SemiBold",
+        "fontWeight": 600,
+        "italic": true,
+        "fontFace": {
+          "family": "Akasia SemiBold",
+          "bold": false,
+          "italic": true
+        }
+      },
+      "expected": 549.90625,
+      "actual": 549.90625
+    },
+    {
+      "file": "Akasia-SemiBoldItalic.ttf",
+      "name": "greek",
+      "text": "Καλημέρα κόσμε Ελληνικά",
+      "resolved": {
+        "fontFamily": "Akasia SemiBold",
+        "fontWeight": 600,
+        "italic": true,
+        "fontFace": {
+          "family": "Akasia SemiBold",
+          "bold": false,
+          "italic": true
+        }
+      },
+      "expected": 366.140625,
+      "actual": 366.140625
+    },
+    {
+      "file": "Akasia-SemiBoldItalic.ttf",
+      "name": "cyrillic",
+      "text": "Привет мир Кириллица",
+      "resolved": {
+        "fontFamily": "Akasia SemiBold",
+        "fontWeight": 600,
+        "italic": true,
+        "fontFace": {
+          "family": "Akasia SemiBold",
+          "bold": false,
+          "italic": true
+        }
+      },
+      "expected": 355.203125,
+      "actual": 355.203125
+    },
+    {
+      "file": "Akasia-SemiBoldItalic.ttf",
+      "name": "combining",
+      "text": "Á ä ố ñ",
+      "resolved": {
+        "fontFamily": "Akasia SemiBold",
+        "fontWeight": 600,
+        "italic": true,
+        "fontFace": {
+          "family": "Akasia SemiBold",
+          "bold": false,
+          "italic": true
+        }
+      },
+      "expected": 92.359375,
+      "actual": 92.359375
+    },
+    {
+      "file": "Akasia-SemiBoldItalic.ttf",
+      "name": "math",
+      "text": "∑ √ ∞ ≠ ≤ ≥",
+      "resolved": {
+        "fontFamily": "Akasia SemiBold",
+        "fontWeight": 600,
+        "italic": true,
+        "fontFace": {
+          "family": "Akasia SemiBold",
+          "bold": false,
+          "italic": true
+        }
+      },
+      "expected": 148.75,
+      "actual": 148.75
+    }
+  ],
+  "outliers": [
+    {
+      "file": "Akasia-BlackItalic.ttf",
+      "name": "combining",
+      "text": "Á ä ố ñ",
+      "resolved": {
+        "fontFamily": "Akasia Black",
+        "fontWeight": 900,
+        "italic": true,
+        "fontFace": {
+          "family": "Akasia Black",
+          "bold": false,
+          "italic": true
+        }
+      },
+      "expected": 96.734375,
+      "actual": 97.15625
+    }
+  ],
+  "errors": [],
+  "requests": [],
+  "screenshots": [
+    {
+      "file": "slide-1.png",
+      "sha256": "7fc4a4077e00c3df7acdaf88f6ba171ecdeeacde3bb71b8b18b4b4978652d458"
+    },
+    {
+      "file": "slide-2.png",
+      "sha256": "d3970b7e3b366ef2c4eeadd4221d4dc4c25aafc590877ced0adca8d3056c0052"
+    },
+    {
+      "file": "slide-3.png",
+      "sha256": "35c40fe9e98b078532e6336839fc80c16d6a340cf7832122be058e00d5c0198d"
+    }
+  ],
+  "pptxSha256": "ea8b1689185e95b8f83418447cfffa9a4937db3eeaf6eeb3cbeefadad04a6d03",
+  "sourceUnchanged": true,
+  "titlesReimported": true,
+  "scope": "Actual offline browser advances for 60 supported script/style specimens and three complete slides using exact Akasia bytes. The three PPTX files slides remain editable with title recovery. No independent Aptos, complete language, native Office font selection or raster-equivalence claim."
+}

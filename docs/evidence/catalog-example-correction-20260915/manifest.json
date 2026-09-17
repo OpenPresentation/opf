@@ -1,0 +1,32 @@
+{
+  "files": {
+    "README.md": "0c6ef5694bb28a2c909251fccd4f76a6a8f4f69ef262b6782139241e8ef0214f",
+    "after.json": "c2d6b757e4c125511530725d88e20ef74d9d5778ab0bf787f1d0f5243addf576",
+    "before.json": "6a1caba47279ef9343ad55d6eb9f152f97dba256f666e12a43276a38599fe43e",
+    "candidate-packages.json": "d9749c83f3d6e661a1ecf966f6cf2e5a2856652d265eb6ab634197593f344a03",
+    "changes.json": "4bc0b8dbb249a69c0ebd796a9a100550549c86eb830e0289f12ceba8eb46ebfd",
+    "consumer-lock.json": "42bb08559345746204bd6bfcfb5af10614c346cc789c32609e8d5c537a4b6c3b",
+    "coordinated-packages.log": "8a96972a53fc614fabd86a866ab629700c29f532e3fa2ad482cbfd765b23bba8",
+    "core-tests.log": "cb3c04cc68195537d9c78e61d4379a7aa3b93ff273624446ff0669d869d5117c",
+    "examples-check.log": "c6d90fe213de0805a9431a80216206a7bd85ccbcc0ae791e28821826feedf91e",
+    "furniture-candidate-packages.json": "5291836ad23d919671f98958e782fb69539ba6b6692c79ff0b5466699acf943e",
+    "furniture-raster/baseline-before.json": "aad1e4e0a7f302944aa150c92770a7270a9df38174d67d1742b1c27c403835e3",
+    "furniture-raster/candidate.json": "4b0eb33ba5c13d80dc9b5bee6dddbc9629e73fca6b31c13b998db0bab6a03896",
+    "furniture-raster/diff.json": "e765d60ee96c0eac9305c083c2ba4df3a0405a2b05c56e705b28b5335f5e1ed2",
+    "furniture-raster-source-gate.log": "eece70e6c9686d5cd212494e241d9b17811fe026310ea2bd718b641cf22e82ad",
+    "generator-after.json": "616908ea7ce88410572adcdd2d5f3d00fba9818b28934b1b022652d51fd5a947",
+    "generator-before.json": "174f1a51338c2531cdaf5be9dd115f65dc6448a7ef7e606028b7d2473f9ddbb0",
+    "installed-choices.json": "bd831676ab8f000dea9b5cebaa5dcedf09a4bf38dc174b358aa19d1f49e2ad02",
+    "installed-choices.log": "5b311f39423afc35b2f9c45148bdbef3cc028fe638099509adfa43fcf9e33c66",
+    "main-raster/baseline-after.json": "6704ecc3375f153bef84835426c113d968187d5e3a3b106399cf74fc5129b574",
+    "main-raster/baseline-before.json": "1a8cf6465737b265b58e7bdf25c853b7c308e4470eff71eb8a3c4bdad535c0af",
+    "main-raster/candidate.json": "6704ecc3375f153bef84835426c113d968187d5e3a3b106399cf74fc5129b574",
+    "main-raster/diff.json": "e765d60ee96c0eac9305c083c2ba4df3a0405a2b05c56e705b28b5335f5e1ed2",
+    "main-raster-accepted.log": "2643ef5808456a3570634529b4b126d4f99a2a7eea532eacc407d3b49e72b001",
+    "main-raster-source-gate.log": "7aaf5df791218ee02397cd553556f688cd7bbd8fc0db98bab3feeede11c6dc97",
+    "source-preservation.json": "70804694d9e809caf88f7c466049b3c5ec3912433ae097b69842bb38a4e7f795",
+    "text-integrity.log": "984e11b27baff31f457a843ca5e12ac40d23527f66eac047e0d49d777ab82335",
+    "verify-installed-choices.mjs": "2b438f25130ee9be39e54cc9a0d28c8f4318889058b319b8cbb88b9f62c3c2a8",
+    "verify.mjs": "b4c84d603fe57cf82fd23421da67a4080c5f65fdb1dc0385613028caaf055659"
+  }
+}

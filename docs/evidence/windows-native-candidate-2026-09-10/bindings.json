@@ -1,0 +1,14 @@
+[
+  {
+    "generation": "raw/metric-candidate-node24-01/generation.json",
+    "verifiers": "raw/metric-candidate-node24-01/verifiers"
+  },
+  {
+    "generation": "raw/metric-candidate-node24-02/generation.json",
+    "verifiers": "verifiers/metric-anchor"
+  },
+  {
+    "generation": "raw/metric-candidate-node20-01/generation.json",
+    "verifiers": "verifiers/metric-anchor"
+  }
+]

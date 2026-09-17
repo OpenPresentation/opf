@@ -1,0 +1,26 @@
+[
+  {
+    "repo": "OpenPresentation/opf",
+    "archiveBranch": "codex/archive-shaping-20260915",
+    "archiveCommit": "36ff66b3d62b39d7d27dcda022b7e79e541bd603",
+    "validatedMain": "d0c884170b592b29535ab07faa71ffa15bb32f71"
+  },
+  {
+    "repo": "OpenPresentation/opf-render",
+    "archiveBranch": "codex/archive-shaping-20260915",
+    "archiveCommit": "343fb84223f4383ffe546157c6989ccc505c0acb",
+    "validatedMain": "130a2fa68954bd8f28c0c147cca1204f8b18561a"
+  },
+  {
+    "repo": "OpenPresentation/opf-editor",
+    "archiveBranch": "codex/archive-shaping-20260915",
+    "archiveCommit": "ae4cc6426b04c7ca428c1b4acacea2e11d99fa84",
+    "validatedMain": "cfdeae6627a42aa438c3d0bea5ea4155eb1688c4"
+  },
+  {
+    "repo": "OpenPresentation/opf-pptx",
+    "archiveBranch": "codex/archive-shaping-20260915",
+    "archiveCommit": "fbe9a73d012dbd51d65a39251e405e488651a70b",
+    "validatedMain": "c077b7a426f6ebb04ae53102400d488fc2278f2b"
+  }
+]

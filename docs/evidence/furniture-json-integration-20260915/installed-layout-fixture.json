@@ -1,0 +1,7 @@
+{
+  "source": "opf-editor/test/layout.mjs",
+  "sourceSha256": "42de5e1085ef94a8b8fb33659e3bec87d0410699d660aa96d1ce1496a8693666",
+  "adaptation": "Only the two relative editor imports are replaced with the installed public package entrypoints. Every assertion, including frameBox preservation before and after pagination, remains unchanged.",
+  "adaptedSha256": "4e692134521f56fdefac64d5c73034c36c8c3938ec2bdff2cbca65359c90c084",
+  "consumer": "artifacts/npm/consumer"
+}

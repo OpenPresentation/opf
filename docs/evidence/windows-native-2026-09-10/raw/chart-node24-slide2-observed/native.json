@@ -1,0 +1,845 @@
+﻿{
+    "editedSlides":  [
+                         2
+                     ],
+    "windowsBuild":  "26200.9445",
+    "edited":  [
+                   {
+                       "series":  2,
+                       "panelColor":  "#334155",
+                       "categoryColor":  "#FFFFFF",
+                       "png":  "edited-1.png",
+                       "panelTransparency":  0,
+                       "pointColors":  [
+                                           "#5591B8",
+                                           "#5591B8",
+                                           "#6E8FA5",
+                                           "#6E8FA5"
+                                       ],
+                       "legendColor":  "#FFFFFF",
+                       "seriesData":  [
+                                          {
+                                              "categories":  [
+                                                                 "Q1",
+                                                                 "Q2"
+                                                             ],
+                                              "values":  [
+                                                             2,
+                                                             3
+                                                         ],
+                                              "name":  "Current"
+                                          },
+                                          {
+                                              "categories":  [
+                                                                 "Q1",
+                                                                 "Q2"
+                                                             ],
+                                              "values":  [
+                                                             1,
+                                                             2
+                                                         ],
+                                              "name":  "Baseline"
+                                          }
+                                      ],
+                       "plotFillVisible":  0,
+                       "valueColor":  "#FFFFFF",
+                       "pngSha256":  "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926",
+                       "slide":  1
+                   },
+                   {
+                       "series":  1,
+                       "panelColor":  "#334155",
+                       "png":  "edited-2.png",
+                       "panelTransparency":  0,
+                       "pointColors":  [
+                                           "#5591B8",
+                                           "#6E8FA5"
+                                       ],
+                       "legendColor":  "#FFFFFF",
+                       "seriesData":  [
+                                          {
+                                              "categories":  [
+                                                                 null,
+                                                                 null
+                                                             ],
+                                              "values":  [
+                                                             42,
+                                                             3
+                                                         ],
+                                              "name":  "Native Current"
+                                          }
+                                      ],
+                       "plotFillVisible":  0,
+                       "pngSha256":  "064be8d93de80523a0908681973ccb682f86fcdd94c752e361c9177b66b37060",
+                       "slide":  2
+                   },
+                   {
+                       "series":  2,
+                       "panelColor":  "#F8FAFC",
+                       "categoryColor":  "#000000",
+                       "png":  "edited-3.png",
+                       "panelTransparency":  0,
+                       "pointColors":  [
+                                           "#2874A6",
+                                           "#2874A6",
+                                           "#1B4F72",
+                                           "#1B4F72"
+                                       ],
+                       "legendColor":  "#000000",
+                       "seriesData":  [
+                                          {
+                                              "categories":  [
+                                                                 "Q1",
+                                                                 "Q2"
+                                                             ],
+                                              "values":  [
+                                                             2,
+                                                             3
+                                                         ],
+                                              "name":  "Current"
+                                          },
+                                          {
+                                              "categories":  [
+                                                                 "Q1",
+                                                                 "Q2"
+                                                             ],
+                                              "values":  [
+                                                             1,
+                                                             2
+                                                         ],
+                                              "name":  "Baseline"
+                                          }
+                                      ],
+                       "plotFillVisible":  0,
+                       "valueColor":  "#000000",
+                       "pngSha256":  "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8",
+                       "slide":  3
+                   },
+                   {
+                       "series":  1,
+                       "panelColor":  "#F8FAFC",
+                       "png":  "edited-4.png",
+                       "panelTransparency":  0,
+                       "pointColors":  [
+                                           "#2874A6",
+                                           "#1B4F72"
+                                       ],
+                       "legendColor":  "#000000",
+                       "seriesData":  [
+                                          {
+                                              "categories":  [
+                                                                 null,
+                                                                 null
+                                                             ],
+                                              "values":  [
+                                                             2,
+                                                             3
+                                                         ],
+                                              "name":  "Current"
+                                          }
+                                      ],
+                       "plotFillVisible":  0,
+                       "pngSha256":  "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da",
+                       "slide":  4
+                   },
+                   {
+                       "series":  2,
+                       "panelColor":  "#0F172A",
+                       "categoryColor":  "#FFFFFF",
+                       "png":  "edited-5.png",
+                       "panelTransparency":  0,
+                       "pointColors":  [
+                                           "#2874A6",
+                                           "#2874A6",
+                                           "#3C6986",
+                                           "#3C6986"
+                                       ],
+                       "legendColor":  "#FFFFFF",
+                       "seriesData":  [
+                                          {
+                                              "categories":  [
+                                                                 "Q1",
+                                                                 "Q2"
+                                                             ],
+                                              "values":  [
+                                                             2,
+                                                             3
+                                                         ],
+                                              "name":  "Current"
+                                          },
+                                          {
+                                              "categories":  [
+                                                                 "Q1",
+                                                                 "Q2"
+                                                             ],
+                                              "values":  [
+                                                             1,
+                                                             2
+                                                         ],
+                                              "name":  "Baseline"
+                                          }
+                                      ],
+                       "plotFillVisible":  0,
+                       "valueColor":  "#FFFFFF",
+                       "pngSha256":  "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373",
+                       "slide":  5
+                   },
+                   {
+                       "series":  1,
+                       "panelColor":  "#0F172A",
+                       "png":  "edited-6.png",
+                       "panelTransparency":  0,
+                       "pointColors":  [
+                                           "#2874A6",
+                                           "#3C6986"
+                                       ],
+                       "legendColor":  "#FFFFFF",
+                       "seriesData":  [
+                                          {
+                                              "categories":  [
+                                                                 null,
+                                                                 null
+                                                             ],
+                                              "values":  [
+                                                             2,
+                                                             3
+                                                         ],
+                                              "name":  "Current"
+                                          }
+                                      ],
+                       "plotFillVisible":  0,
+                       "pngSha256":  "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317",
+                       "slide":  6
+                   },
+                   {
+                       "series":  2,
+                       "panelColor":  "#FFFFFF",
+                       "categoryColor":  "#FFFFFF",
+                       "png":  "edited-7.png",
+                       "panelTransparency":  0.49804002,
+                       "pointColors":  [
+                                           "#2874A6",
+                                           "#2874A6",
+                                           "#1B4F72",
+                                           "#1B4F72"
+                                       ],
+                       "legendColor":  "#FFFFFF",
+                       "seriesData":  [
+                                          {
+                                              "categories":  [
+                                                                 "Q1",
+                                                                 "Q2"
+                                                             ],
+                                              "values":  [
+                                                             2,
+                                                             3
+                                                         ],
+                                              "name":  "Current"
+                                          },
+                                          {
+                                              "categories":  [
+                                                                 "Q1",
+                                                                 "Q2"
+                                                             ],
+                                              "values":  [
+                                                             1,
+                                                             2
+                                                         ],
+                                              "name":  "Baseline"
+                                          }
+                                      ],
+                       "plotFillVisible":  0,
+                       "valueColor":  "#FFFFFF",
+                       "pngSha256":  "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7",
+                       "slide":  7
+                   },
+                   {
+                       "series":  1,
+                       "panelColor":  "#FFFFFF",
+                       "png":  "edited-8.png",
+                       "panelTransparency":  0.49804002,
+                       "pointColors":  [
+                                           "#2874A6",
+                                           "#1B4F72"
+                                       ],
+                       "legendColor":  "#FFFFFF",
+                       "seriesData":  [
+                                          {
+                                              "categories":  [
+                                                                 null,
+                                                                 null
+                                                             ],
+                                              "values":  [
+                                                             2,
+                                                             3
+                                                         ],
+                                              "name":  "Current"
+                                          }
+                                      ],
+                       "plotFillVisible":  0,
+                       "pngSha256":  "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a",
+                       "slide":  8
+                   }
+               ],
+    "original":  [
+                     {
+                         "series":  2,
+                         "panelColor":  "#334155",
+                         "categoryColor":  "#FFFFFF",
+                         "png":  "original-1.png",
+                         "panelTransparency":  0,
+                         "pointColors":  [
+                                             "#5591B8",
+                                             "#5591B8",
+                                             "#6E8FA5",
+                                             "#6E8FA5"
+                                         ],
+                         "legendColor":  "#FFFFFF",
+                         "seriesData":  [
+                                            {
+                                                "categories":  [
+                                                                   "Q1",
+                                                                   "Q2"
+                                                               ],
+                                                "values":  [
+                                                               2,
+                                                               3
+                                                           ],
+                                                "name":  "Current"
+                                            },
+                                            {
+                                                "categories":  [
+                                                                   "Q1",
+                                                                   "Q2"
+                                                               ],
+                                                "values":  [
+                                                               1,
+                                                               2
+                                                           ],
+                                                "name":  "Baseline"
+                                            }
+                                        ],
+                         "plotFillVisible":  0,
+                         "valueColor":  "#FFFFFF",
+                         "pngSha256":  "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926",
+                         "slide":  1
+                     },
+                     {
+                         "series":  1,
+                         "panelColor":  "#334155",
+                         "png":  "original-2.png",
+                         "panelTransparency":  0,
+                         "pointColors":  [
+                                             "#5591B8",
+                                             "#6E8FA5"
+                                         ],
+                         "legendColor":  "#FFFFFF",
+                         "seriesData":  [
+                                            {
+                                                "categories":  [
+                                                                   null,
+                                                                   null
+                                                               ],
+                                                "values":  [
+                                                               2,
+                                                               3
+                                                           ],
+                                                "name":  "Current"
+                                            }
+                                        ],
+                         "plotFillVisible":  0,
+                         "pngSha256":  "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd",
+                         "slide":  2
+                     },
+                     {
+                         "series":  2,
+                         "panelColor":  "#F8FAFC",
+                         "categoryColor":  "#000000",
+                         "png":  "original-3.png",
+                         "panelTransparency":  0,
+                         "pointColors":  [
+                                             "#2874A6",
+                                             "#2874A6",
+                                             "#1B4F72",
+                                             "#1B4F72"
+                                         ],
+                         "legendColor":  "#000000",
+                         "seriesData":  [
+                                            {
+                                                "categories":  [
+                                                                   "Q1",
+                                                                   "Q2"
+                                                               ],
+                                                "values":  [
+                                                               2,
+                                                               3
+                                                           ],
+                                                "name":  "Current"
+                                            },
+                                            {
+                                                "categories":  [
+                                                                   "Q1",
+                                                                   "Q2"
+                                                               ],
+                                                "values":  [
+                                                               1,
+                                                               2
+                                                           ],
+                                                "name":  "Baseline"
+                                            }
+                                        ],
+                         "plotFillVisible":  0,
+                         "valueColor":  "#000000",
+                         "pngSha256":  "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8",
+                         "slide":  3
+                     },
+                     {
+                         "series":  1,
+                         "panelColor":  "#F8FAFC",
+                         "png":  "original-4.png",
+                         "panelTransparency":  0,
+                         "pointColors":  [
+                                             "#2874A6",
+                                             "#1B4F72"
+                                         ],
+                         "legendColor":  "#000000",
+                         "seriesData":  [
+                                            {
+                                                "categories":  [
+                                                                   null,
+                                                                   null
+                                                               ],
+                                                "values":  [
+                                                               2,
+                                                               3
+                                                           ],
+                                                "name":  "Current"
+                                            }
+                                        ],
+                         "plotFillVisible":  0,
+                         "pngSha256":  "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da",
+                         "slide":  4
+                     },
+                     {
+                         "series":  2,
+                         "panelColor":  "#0F172A",
+                         "categoryColor":  "#FFFFFF",
+                         "png":  "original-5.png",
+                         "panelTransparency":  0,
+                         "pointColors":  [
+                                             "#2874A6",
+                                             "#2874A6",
+                                             "#3C6986",
+                                             "#3C6986"
+                                         ],
+                         "legendColor":  "#FFFFFF",
+                         "seriesData":  [
+                                            {
+                                                "categories":  [
+                                                                   "Q1",
+                                                                   "Q2"
+                                                               ],
+                                                "values":  [
+                                                               2,
+                                                               3
+                                                           ],
+                                                "name":  "Current"
+                                            },
+                                            {
+                                                "categories":  [
+                                                                   "Q1",
+                                                                   "Q2"
+                                                               ],
+                                                "values":  [
+                                                               1,
+                                                               2
+                                                           ],
+                                                "name":  "Baseline"
+                                            }
+                                        ],
+                         "plotFillVisible":  0,
+                         "valueColor":  "#FFFFFF",
+                         "pngSha256":  "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373",
+                         "slide":  5
+                     },
+                     {
+                         "series":  1,
+                         "panelColor":  "#0F172A",
+                         "png":  "original-6.png",
+                         "panelTransparency":  0,
+                         "pointColors":  [
+                                             "#2874A6",
+                                             "#3C6986"
+                                         ],
+                         "legendColor":  "#FFFFFF",
+                         "seriesData":  [
+                                            {
+                                                "categories":  [
+                                                                   null,
+                                                                   null
+                                                               ],
+                                                "values":  [
+                                                               2,
+                                                               3
+                                                           ],
+                                                "name":  "Current"
+                                            }
+                                        ],
+                         "plotFillVisible":  0,
+                         "pngSha256":  "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317",
+                         "slide":  6
+                     },
+                     {
+                         "series":  2,
+                         "panelColor":  "#FFFFFF",
+                         "categoryColor":  "#FFFFFF",
+                         "png":  "original-7.png",
+                         "panelTransparency":  0.49804002,
+                         "pointColors":  [
+                                             "#2874A6",
+                                             "#2874A6",
+                                             "#1B4F72",
+                                             "#1B4F72"
+                                         ],
+                         "legendColor":  "#FFFFFF",
+                         "seriesData":  [
+                                            {
+                                                "categories":  [
+                                                                   "Q1",
+                                                                   "Q2"
+                                                               ],
+                                                "values":  [
+                                                               2,
+                                                               3
+                                                           ],
+                                                "name":  "Current"
+                                            },
+                                            {
+                                                "categories":  [
+                                                                   "Q1",
+                                                                   "Q2"
+                                                               ],
+                                                "values":  [
+                                                               1,
+                                                               2
+                                                           ],
+                                                "name":  "Baseline"
+                                            }
+                                        ],
+                         "plotFillVisible":  0,
+                         "valueColor":  "#FFFFFF",
+                         "pngSha256":  "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7",
+                         "slide":  7
+                     },
+                     {
+                         "series":  1,
+                         "panelColor":  "#FFFFFF",
+                         "png":  "original-8.png",
+                         "panelTransparency":  0.49804002,
+                         "pointColors":  [
+                                             "#2874A6",
+                                             "#1B4F72"
+                                         ],
+                         "legendColor":  "#FFFFFF",
+                         "seriesData":  [
+                                            {
+                                                "categories":  [
+                                                                   null,
+                                                                   null
+                                                               ],
+                                                "values":  [
+                                                               2,
+                                                               3
+                                                           ],
+                                                "name":  "Current"
+                                            }
+                                        ],
+                         "plotFillVisible":  0,
+                         "pngSha256":  "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a",
+                         "slide":  8
+                     }
+                 ],
+    "executableSha256":  "90fa931172c507b763ba92a82b19d5bc70816e008c5bb87577e1838e8a92e9f9",
+    "reopened":  [
+                     {
+                         "series":  2,
+                         "panelColor":  "#334155",
+                         "categoryColor":  "#FFFFFF",
+                         "png":  "reopened-1.png",
+                         "panelTransparency":  0,
+                         "pointColors":  [
+                                             "#5591B8",
+                                             "#5591B8",
+                                             "#6E8FA5",
+                                             "#6E8FA5"
+                                         ],
+                         "legendColor":  "#FFFFFF",
+                         "seriesData":  [
+                                            {
+                                                "categories":  [
+                                                                   "Q1",
+                                                                   "Q2"
+                                                               ],
+                                                "values":  [
+                                                               2,
+                                                               3
+                                                           ],
+                                                "name":  "Current"
+                                            },
+                                            {
+                                                "categories":  [
+                                                                   "Q1",
+                                                                   "Q2"
+                                                               ],
+                                                "values":  [
+                                                               1,
+                                                               2
+                                                           ],
+                                                "name":  "Baseline"
+                                            }
+                                        ],
+                         "plotFillVisible":  0,
+                         "valueColor":  "#FFFFFF",
+                         "pngSha256":  "3709c903d6985ba535ca5b7914c50d6d2ab81f1b201e72a16e5c02ae2d737926",
+                         "slide":  1
+                     },
+                     {
+                         "series":  1,
+                         "panelColor":  "#334155",
+                         "png":  "reopened-2.png",
+                         "panelTransparency":  0,
+                         "pointColors":  [
+                                             "#5591B8",
+                                             "#6E8FA5"
+                                         ],
+                         "legendColor":  "#FFFFFF",
+                         "seriesData":  [
+                                            {
+                                                "categories":  [
+                                                                   null,
+                                                                   null
+                                                               ],
+                                                "values":  [
+                                                               2,
+                                                               3
+                                                           ],
+                                                "name":  "Current"
+                                            }
+                                        ],
+                         "plotFillVisible":  0,
+                         "pngSha256":  "824e9f876a9b6f61a28b53873dc1710c2576592a5fd994cd66928e29d2c385bd",
+                         "slide":  2
+                     },
+                     {
+                         "series":  2,
+                         "panelColor":  "#F8FAFC",
+                         "categoryColor":  "#000000",
+                         "png":  "reopened-3.png",
+                         "panelTransparency":  0,
+                         "pointColors":  [
+                                             "#2874A6",
+                                             "#2874A6",
+                                             "#1B4F72",
+                                             "#1B4F72"
+                                         ],
+                         "legendColor":  "#000000",
+                         "seriesData":  [
+                                            {
+                                                "categories":  [
+                                                                   "Q1",
+                                                                   "Q2"
+                                                               ],
+                                                "values":  [
+                                                               2,
+                                                               3
+                                                           ],
+                                                "name":  "Current"
+                                            },
+                                            {
+                                                "categories":  [
+                                                                   "Q1",
+                                                                   "Q2"
+                                                               ],
+                                                "values":  [
+                                                               1,
+                                                               2
+                                                           ],
+                                                "name":  "Baseline"
+                                            }
+                                        ],
+                         "plotFillVisible":  0,
+                         "valueColor":  "#000000",
+                         "pngSha256":  "54d29ed368aa5fa83d110307fd4e970cf9bc76f3ca7b39d206198109cf0ad7a8",
+                         "slide":  3
+                     },
+                     {
+                         "series":  1,
+                         "panelColor":  "#F8FAFC",
+                         "png":  "reopened-4.png",
+                         "panelTransparency":  0,
+                         "pointColors":  [
+                                             "#2874A6",
+                                             "#1B4F72"
+                                         ],
+                         "legendColor":  "#000000",
+                         "seriesData":  [
+                                            {
+                                                "categories":  [
+                                                                   null,
+                                                                   null
+                                                               ],
+                                                "values":  [
+                                                               2,
+                                                               3
+                                                           ],
+                                                "name":  "Current"
+                                            }
+                                        ],
+                         "plotFillVisible":  0,
+                         "pngSha256":  "649db02e28b85dfcc19a1b1145085ecbb94baa98fc8d4ad7b64850eee3e7c1da",
+                         "slide":  4
+                     },
+                     {
+                         "series":  2,
+                         "panelColor":  "#0F172A",
+                         "categoryColor":  "#FFFFFF",
+                         "png":  "reopened-5.png",
+                         "panelTransparency":  0,
+                         "pointColors":  [
+                                             "#2874A6",
+                                             "#2874A6",
+                                             "#3C6986",
+                                             "#3C6986"
+                                         ],
+                         "legendColor":  "#FFFFFF",
+                         "seriesData":  [
+                                            {
+                                                "categories":  [
+                                                                   "Q1",
+                                                                   "Q2"
+                                                               ],
+                                                "values":  [
+                                                               2,
+                                                               3
+                                                           ],
+                                                "name":  "Current"
+                                            },
+                                            {
+                                                "categories":  [
+                                                                   "Q1",
+                                                                   "Q2"
+                                                               ],
+                                                "values":  [
+                                                               1,
+                                                               2
+                                                           ],
+                                                "name":  "Baseline"
+                                            }
+                                        ],
+                         "plotFillVisible":  0,
+                         "valueColor":  "#FFFFFF",
+                         "pngSha256":  "90be2b5e660d5e811a3faaf8511e028c21c016e5f2b9e30ca498d79f5ffe6373",
+                         "slide":  5
+                     },
+                     {
+                         "series":  1,
+                         "panelColor":  "#0F172A",
+                         "png":  "reopened-6.png",
+                         "panelTransparency":  0,
+                         "pointColors":  [
+                                             "#2874A6",
+                                             "#3C6986"
+                                         ],
+                         "legendColor":  "#FFFFFF",
+                         "seriesData":  [
+                                            {
+                                                "categories":  [
+                                                                   null,
+                                                                   null
+                                                               ],
+                                                "values":  [
+                                                               2,
+                                                               3
+                                                           ],
+                                                "name":  "Current"
+                                            }
+                                        ],
+                         "plotFillVisible":  0,
+                         "pngSha256":  "f505cfeb6d0db04a93df48549cdb9d3957f73dcb86243012b0ec38f6b2bed317",
+                         "slide":  6
+                     },
+                     {
+                         "series":  2,
+                         "panelColor":  "#FFFFFF",
+                         "categoryColor":  "#FFFFFF",
+                         "png":  "reopened-7.png",
+                         "panelTransparency":  0.49804002,
+                         "pointColors":  [
+                                             "#2874A6",
+                                             "#2874A6",
+                                             "#1B4F72",
+                                             "#1B4F72"
+                                         ],
+                         "legendColor":  "#FFFFFF",
+                         "seriesData":  [
+                                            {
+                                                "categories":  [
+                                                                   "Q1",
+                                                                   "Q2"
+                                                               ],
+                                                "values":  [
+                                                               2,
+                                                               3
+                                                           ],
+                                                "name":  "Current"
+                                            },
+                                            {
+                                                "categories":  [
+                                                                   "Q1",
+                                                                   "Q2"
+                                                               ],
+                                                "values":  [
+                                                               1,
+                                                               2
+                                                           ],
+                                                "name":  "Baseline"
+                                            }
+                                        ],
+                         "plotFillVisible":  0,
+                         "valueColor":  "#FFFFFF",
+                         "pngSha256":  "c86a6b7c2c04827cf8ac7895cc4e44580c8fb29b34d3895989d0075da2a896b7",
+                         "slide":  7
+                     },
+                     {
+                         "series":  1,
+                         "panelColor":  "#FFFFFF",
+                         "png":  "reopened-8.png",
+                         "panelTransparency":  0.49804002,
+                         "pointColors":  [
+                                             "#2874A6",
+                                             "#1B4F72"
+                                         ],
+                         "legendColor":  "#FFFFFF",
+                         "seriesData":  [
+                                            {
+                                                "categories":  [
+                                                                   null,
+                                                                   null
+                                                               ],
+                                                "values":  [
+                                                               2,
+                                                               3
+                                                           ],
+                                                "name":  "Current"
+                                            }
+                                        ],
+                         "plotFillVisible":  0,
+                         "pngSha256":  "2ad54cc2ca093f89e7f03809a3ba3a7b2221344c4c436ed1339c89b30dcb603a",
+                         "slide":  8
+                     }
+                 ],
+    "editedSha256":  "9451afe65ed88edf0d30d4922547146ea79babd98b9de6f94c584e3d4916b13d",
+    "generationSha256":  "48af6c235601f435e23191f1ef5ac7115497b7c7cba80089139ada8b178da8c8",
+    "powerPointVersion":  "16.0.20326.20132",
+    "savedSha256":  "5a284bb021c4154098c5cd23aedc9de0caecc3af4584a366cacc221899ab034c"
+}

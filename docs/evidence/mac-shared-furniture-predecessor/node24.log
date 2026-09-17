@@ -1,0 +1,34 @@
+[
+  {
+    width: 1280,
+    height: 720,
+    floor: 16,
+    sizes: [ 13, 13, 13 ],
+    nativeHasHeader: false,
+    nativeHasFooter: false
+  },
+  {
+    width: 1280,
+    height: 720,
+    floor: 32,
+    sizes: [ 13, 13, 13 ],
+    nativeHasHeader: false,
+    nativeHasFooter: false
+  },
+  {
+    width: 720,
+    height: 1280,
+    floor: 16,
+    sizes: [ 13, 13, 13 ],
+    nativeHasHeader: false,
+    nativeHasFooter: false
+  },
+  {
+    width: 720,
+    height: 1280,
+    floor: 32,
+    sizes: [ 13, 13, 13 ],
+    nativeHasHeader: false,
+    nativeHasFooter: false
+  }
+]

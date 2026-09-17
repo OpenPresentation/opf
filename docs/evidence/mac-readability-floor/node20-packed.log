@@ -1,0 +1,248 @@
+
+added 64 packages in 2s
+Installed candidate font preparation passed layout, edit/undo, SVG/PNG, editable PPTX export and heading reimport.
+Nine exact grouped faces preserve measured bytes and physical style links; overrides, aliases, duplicates and approximation controls pass.
+7 payload slides use all nine real physical font styles; deterministic output, source, reimport and provider controls pass.
+Packed consumer: core, editor, SVG, measured fonts and PPTX passed.
+TAP version 13
+# Subtest: complete code parts preserve exact filename, language, body, whitespace and hard line boundaries
+ok 1 - complete code parts preserve exact filename, language, body, whitespace and hard line boundaries
+  ---
+  duration_ms: 8.4965
+  ...
+# Subtest: shorthand, empty source and absent metadata retain their source and generated-label distinction
+ok 2 - shorthand, empty source and absent metadata retain their source and generated-label distinction
+  ---
+  duration_ms: 0.537708
+  ...
+# Subtest: long language labels and filenames are measured within their cell before allocating the body
+ok 3 - long language labels and filenames are measured within their cell before allocating the body
+  ---
+  duration_ms: 5.670708
+  ...
+# Subtest: wrapped whitespace and graphemes retain contiguous source offsets, including CRLF and blank final lines
+ok 4 - wrapped whitespace and graphemes retain contiguous source offsets, including CRLF and blank final lines
+  ---
+  duration_ms: 1.67575
+  ...
+# Subtest: tabs use measured space stops and never send control tabs to the font-width provider
+ok 5 - tabs use measured space stops and never send control tabs to the font-width provider
+  ---
+  duration_ms: 1.070792
+  ...
+# Subtest: readability floors scale once and body shrinking preserves all code content
+ok 6 - readability floors scale once and body shrinking preserves all code content
+  ---
+  duration_ms: 0.723292
+  ...
+# Subtest: irreducible body and metadata failures remain explicit; strict mode does not return partial output
+ok 7 - irreducible body and metadata failures remain explicit; strict mode does not return partial output
+  ---
+  duration_ms: 11.281
+  ...
+# Subtest: invalid inner boxes never become invented one-pixel fits; malformed options reject
+ok 8 - invalid inner boxes never become invented one-pixel fits; malformed options reject
+  ---
+  duration_ms: 0.500417
+  ...
+# Subtest: font trials stay bounded independently of canvas scale
+ok 9 - font trials stay bounded independently of canvas scale
+  ---
+  duration_ms: 19.496875
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 184.519584
+TAP version 13
+# Subtest: accepted code uses rounded cells and preserves body compatibility without repeated explanation measurements
+ok 1 - accepted code uses rounded cells and preserves body compatibility without repeated explanation measurements
+  ---
+  duration_ms: 3.319083
+  ...
+# Subtest: candidate penalties include complete code metadata and charge overflowing leaves once
+ok 2 - candidate penalties include complete code metadata and charge overflowing leaves once
+  ---
+  duration_ms: 13.233375
+  ...
+# Subtest: strict ancestors reject code metadata paths and cannot be weakened by descendants
+ok 3 - strict ancestors reject code metadata paths and cannot be weakened by descendants
+  ---
+  duration_ms: 282.777708
+  ...
+# Subtest: explicit code placement and weights remain authoritative even when metadata overflows
+ok 4 - explicit code placement and weights remain authoritative even when metadata overflows
+  ---
+  duration_ms: 19.3255
+  ...
+# Subtest: pagination preserves exact code bytes, metadata, ranges and floors across wide and portrait slides
+ok 5 - pagination preserves exact code bytes, metadata, ranges and floors across wide and portrait slides
+  ---
+  duration_ms: 386.009375
+  ...
+# Subtest: irreducible code metadata rejects pagination even after earlier content or with an empty body
+ok 6 - irreducible code metadata rejects pagination even after earlier content or with an empty body
+  ---
+  duration_ms: 322.773375
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1202.866875
+Shared code PPTX: 8 decks, 37 accepted native lines, 8 tab stops, six whitespace imports, strict failures, 132 XML-boundary rejections and valid character boundaries verified.
+Code provenance: exact source/metadata, native edits, ordering, empty/Unicode values, five damaged groups and edited generated label verified.
+Shared code SVG: 10 accepted layouts, source/whitespace/trace preservation, no extra measurement, strict/tiny-cell rejection, 132 XML-boundary rejections and valid character boundaries.
+Actual shared code browser: 12 wide/portrait cases with source preservation, accepted tab positions and contained glyphs.
+Code canvas: wide/portrait source editing, metadata, CRLF, tabs, pagination, undo, offline export and bounded reimport checks pass.
+Installed code: candidate source, pagination, metadata guards and actual offline browser workflows passed.
+TAP version 13
+# Subtest: complete quote layout preserves source ranges, requested/resolved styles and legacy readable geometry
+ok 1 - complete quote layout preserves source ranges, requested/resolved styles and legacy readable geometry
+  ---
+  duration_ms: 2.006041
+  ...
+# Subtest: shorthand and empty metadata preserve schema paths without an invented footer
+ok 2 - shorthand and empty metadata preserve schema paths without an invented footer
+  ---
+  duration_ms: 0.315584
+  ...
+# Subtest: body and footer share available space before shrinking text or changing the outer arrangement
+ok 3 - body and footer share available space before shrinking text or changing the outer arrangement
+  ---
+  duration_ms: 10.406834
+  ...
+# Subtest: long footer, body/footer collision and strict rejection remain explicit without source truncation
+ok 4 - long footer, body/footer collision and strict rejection remain explicit without source truncation
+  ---
+  duration_ms: 108.635834
+  ...
+# Subtest: tiny cells retain invalid available dimensions and never measure an invented fitting box
+ok 5 - tiny cells retain invalid available dimensions and never measure an invented fitting box
+  ---
+  duration_ms: 0.188708
+  ...
+# Subtest: explicit readability floors are respected after scaling, including above nominal footer size
+ok 6 - explicit readability floors are respected after scaling, including above nominal footer size
+  ---
+  duration_ms: 0.461958
+  ...
+# Subtest: invalid content, geometry, scales and policies fail before reporting a usable layout
+ok 7 - invalid content, geometry, scales and policies fail before reporting a usable layout
+  ---
+  duration_ms: 0.147792
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 203.771167
+TAP version 13
+# Subtest: accepted quote geometry includes all parts without changing source or re-measuring for explanations
+ok 1 - accepted quote geometry includes all parts without changing source or re-measuring for explanations
+  ---
+  duration_ms: 4.216333
+  ...
+# Subtest: automatic candidates account for footer fit and choose the arrangement that keeps it readable
+ok 2 - automatic candidates account for footer fit and choose the arrangement that keeps it readable
+  ---
+  duration_ms: 10.00275
+  ...
+# Subtest: strict ancestors reject a quote body diagnostic below the leaf path
+ok 3 - strict ancestors reject a quote body diagnostic below the leaf path
+  ---
+  duration_ms: 239.847
+  ...
+# Subtest: strict path matching respects component boundaries rather than numeric prefixes
+ok 4 - strict path matching respects component boundaries rather than numeric prefixes
+  ---
+  duration_ms: 195.538584
+  ...
+# Subtest: pagination preserves quote body, repeated metadata, ranges and the accepted readability floor
+ok 5 - pagination preserves quote body, repeated metadata, ranges and the accepted readability floor
+  ---
+  duration_ms: 1524.632167
+  ...
+# Subtest: irreducible footer overflow rejects pagination without mutating or returning partial content
+ok 6 - irreducible footer overflow rejects pagination without mutating or returning partial content
+  ---
+  duration_ms: 61.134334
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2180.202041
+Shared quote SVG: 4 exact accepted layouts/styles with no extra measurement, reasoned overflow, strict rejection and no tiny-cell omission.
+Shared quote PPTX: 4 wide/portrait decks and 6 native lines match accepted geometry/styles without re-fitting; reimport and strict/unusable-space rejection pass.
+Packed quote editor passed: accepted one-page policy, source preservation, actual fonts, SVG/PPTX, undo/redo and editable native text reimport. Quote semantics are not reconstructed on import.
+Styled native table export passed: merged grid, unique text, full covered rows, colors/alpha, border dashes, zero/fractional padding, alignment, scaled row geometry and determinism.
+Native merge perimeter regression passed: continuation and neighbor edges, transparent dashes, dotted top, hidden bottom and scaling.
+Styled native table import passed: direct fills/alpha, borders, margins, alignment, dense merges, repeated conversion, header crossing and text-preserving malformed-merge diagnostics.
+Native conditional table borders passed: outer frame/interior grid, bands/edges/corners, partial/direct overrides, theme lines/alpha, missing-reference masking, repeated conversion and diagnostics.
+TAP version 13
+# Subtest: short table rows preserve baseline geometry and missing cells
+ok 1 - short table rows preserve baseline geometry and missing cells
+  ---
+  duration_ms: 3.926625
+  ...
+# Subtest: wrapped and rich multiline rows grow into available space
+ok 2 - wrapped and rich multiline rows grow into available space
+  ---
+  duration_ms: 6.286625
+  ...
+# Subtest: constrained tables consume spare row height before reporting real overflow
+ok 3 - constrained tables consume spare row height before reporting real overflow
+  ---
+  duration_ms: 0.408917
+  ...
+# Subtest: readability settings and mixed-font metrics govern row fitting
+ok 4 - readability settings and mixed-font metrics govern row fitting
+  ---
+  duration_ms: 0.227917
+  ...
+# Subtest: pagination retains complete multiline rows and repeated headers
+ok 5 - pagination retains complete multiline rows and repeated headers
+  ---
+  duration_ms: 169.6355
+  ...
+# Subtest: mixed-size table paragraphs reserve the native uniform line spacing
+ok 6 - mixed-size table paragraphs reserve the native uniform line spacing
+  ---
+  duration_ms: 0.495792
+  ...
+# Subtest: spare height in short rows is removed before any font shrinking
+ok 7 - spare height in short rows is removed before any font shrinking
+  ---
+  duration_ms: 0.389291
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 319.903583
+Packed consumer: TypeScript declarations and browser bundle passed.
+Packed browser harness built: artifacts/editor/packed-canvas-tests.html (serve alongside demo fonts.json).
+Installed styled-table browser harness built: artifacts/editor/packed-styled-table-tests.html. Open it to verify real pointer/keyboard interaction.
+Local tarball consumer passed; this is not a registry verification.

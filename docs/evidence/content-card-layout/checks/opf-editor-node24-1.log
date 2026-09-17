@@ -1,0 +1,5 @@
+
+> @openpresentation/opf-editor@0.6.0 validate
+> node scripts/validate-package.mjs
+
+@openpresentation/opf-editor metadata is release-lane ready.

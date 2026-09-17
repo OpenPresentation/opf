@@ -1,0 +1,60 @@
+verify (ubuntu-latest)	Run pnpm test:e2e	﻿2026-09-11T04:29:16.7295281Z ##[group]Run pnpm test:e2e
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:29:16.7295628Z ^[[36;1mpnpm test:e2e^[[0m
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:29:16.7295985Z shell: sh -e {0}
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:29:16.7296223Z env:
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:29:16.7296498Z   PNPM_HOME: /github/home/setup-pnpm/node_modules/.bin
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:29:16.7296829Z ##[endgroup]
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:29:17.1723720Z $ playwright test
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:29:18.6060189Z [WebServer] $ next start --hostname 127.0.0.1 --port 4325
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:29:18.9251670Z [WebServer] ⚠ "next start" does not work with "output: standalone" configuration. Use "node .next/standalone/server.js" instead.
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:29:19.5576924Z 
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:29:19.5577953Z Running 10 tests using 1 worker
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:29:19.5578682Z 
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:29:30.3472719Z   ✓   1 tests/e2e/author.spec.ts:26:80 › anonymous code editing preserves source and visible selection through offline export/reimport at 1280x720 (9.3s)
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:29:38.4518070Z   ✓   2 tests/e2e/author.spec.ts:26:80 › anonymous code editing preserves source and visible selection through offline export/reimport at 540x960 (8.1s)
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:29:48.0024164Z   ✓   3 tests/e2e/author.spec.ts:55:5 › anonymous Author canvas edits survive tab changes, offline PowerPoint export and undoable reimport (9.5s)
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:29:52.7220810Z   ✓   4 tests/e2e/inspector.spec.ts:9:5 › published long quotes retain their footer in actual wide/portrait previews and PowerPoint downloads (4.7s)
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:29:56.9931134Z   ✓   5 tests/e2e/inspector.spec.ts:63:5 › shared navigation clears format errors and proposals from the previous deck (4.3s)
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:02.0605857Z   ✓   6 tests/e2e/inspector.spec.ts:105:5 › anonymous JSON authoring, preview, undo/redo, download and shared reimport (5.0s)
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:07.8137196Z   ✓   7 tests/e2e/monaco.spec.ts:3:5 › bundled JSON worker provides schema diagnostics, completion and recovery offline (5.7s)
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:14.0087146Z   ✓   8 tests/e2e/svg-security.spec.ts:31:5 › published SVG renderer keeps hostile shared and imported document strings inert (6.2s)
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:14.4250936Z   ✓   9 tests/e2e/toolkit.spec.ts:4:5 › public toolkit shows the deployed package set with working render, edit and export proofs (400ms)
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:22.4450683Z   ✘  10 tests/e2e/yaml.spec.ts:4:5 › YAML and Markdown editing preserve OPF values and recover from malformed YAML offline (7.3s)
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:22.5887030Z 
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:22.5893612Z 
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:22.5903801Z   1) tests/e2e/yaml.spec.ts:4:5 › YAML and Markdown editing preserve OPF values and recover from malformed YAML offline 
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:22.5905662Z 
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:22.5906401Z     Error: expect(received).toEqual(expected) // deep equality
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:22.5907200Z 
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:22.5907671Z     - Expected  - 1
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:22.5908231Z     + Received  + 4
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:22.5908636Z 
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:22.5908980Z     - Array []
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:22.5909515Z     + Array [
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:22.5910052Z     +   "ErrorEvent",
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:22.5911346Z     +   "Failed to execute 'importScripts' on 'WorkerGlobalScope': The script at 'http://127.0.0.1:4325/_next/static/chunks/turbopack-1dyxcevybfv7b.js' failed to load.",
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:22.5916860Z     + ]
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:22.5917383Z 
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:22.5918050Z       45 |  expect(await download.failure()).toBeNull();
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:22.5919956Z       46 |  expect(JSON.parse(await readFile((await download.path())!,'utf8'))).toEqual({slides:[{title:'Retained body',text:'Some content.'}]});
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:22.5921102Z     > 47 |  expect(errors).toEqual([]);
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:22.5921675Z          |                 ^
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:22.5922362Z       48 | });
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:22.5922819Z       49 |
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:22.5923423Z         at /__w/pptx-dev/pptx-dev/tests/e2e/yaml.spec.ts:47:17
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:22.5923928Z 
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:22.5924878Z     Error Context: test-results/yaml-YAML-and-Markdown-edi-18ed4-from-malformed-YAML-offline/error-context.md
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:22.5925783Z 
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:22.5926787Z     attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:22.5928134Z     test-results/yaml-YAML-and-Markdown-edi-18ed4-from-malformed-YAML-offline/trace.zip
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:22.5928915Z     Usage:
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:22.5929241Z 
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:22.5930010Z         pnpm exec playwright show-trace test-results/yaml-YAML-and-Markdown-edi-18ed4-from-malformed-YAML-offline/trace.zip
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:22.5930793Z 
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:22.5931416Z     ────────────────────────────────────────────────────────────────────────────────────────────────
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:22.5931883Z 
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:22.5932208Z   1 failed
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:22.5933159Z     tests/e2e/yaml.spec.ts:4:5 › YAML and Markdown editing preserve OPF values and recover from malformed YAML offline 
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:22.5933980Z   9 passed (1.1m)
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:22.6279698Z [ELIFECYCLE] Command failed with exit code 1.
+verify (ubuntu-latest)	Run pnpm test:e2e	2026-09-11T04:30:22.7772750Z ##[error]Process completed with exit code 1.

@@ -1,0 +1,8 @@
+{
+  "original": [],
+  "generationSha256": "5512fcae4e00faf855e8556979a68a9b6ebe8c25bbc3835a723ac4e25a2716cb",
+  "stage": "open-original",
+  "error": "Object reference not set to an instance of an object.",
+  "passed": false,
+  "reopened": []
+}

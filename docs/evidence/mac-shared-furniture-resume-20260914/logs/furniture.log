@@ -1,0 +1,3 @@
+Pagination ecosystem passed: 2 source slides -> 9 pages; all text and 55 table rows preserved.
+Furniture renderer passed: shared readable fields, combined image/text, generated metadata, fit images, local disabling and unresolved-content rejection.
+16 furniture exports match accepted editable text boxes, fonts, source lines and images; explicit disabling and strict overflow controls pass.

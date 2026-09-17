@@ -1,0 +1,55 @@
+{
+  "activeCase": {
+    "measured": true,
+    "width": 1280,
+    "height": 720,
+    "floor": 16,
+    "local": false,
+    "deck": {
+      "organization": {
+        "id": "openpresentation",
+        "name": "OpenPresentation"
+      },
+      "design": {
+        "fontScheme": "roboto",
+        "dimensions": {
+          "widthInches": 13.333333333333334,
+          "heightInches": 7.5
+        },
+        "header": {
+          "left": {
+            "text": "  A  B\tC D\r\n\r\ntrail  \r"
+          },
+          "center": {
+            "organization": true
+          },
+          "right": {
+            "section": true
+          }
+        },
+        "footer": {
+          "left": {
+            "date": " 2026-09-10 "
+          },
+          "right": {
+            "slideNumber": true
+          }
+        }
+      },
+      "slides": [
+        {
+          "title": "Shared furniture",
+          "section": "Review",
+          "text": "Body content keeps its own space.",
+          "composition": {
+            "minFontSize": 16,
+            "overflow": "error"
+          }
+        }
+      ]
+    }
+  },
+  "message": "{\"activeCase\":{\"measured\":true,\"width\":1280,\"height\":720,\"floor\":16,\"local\":false,\"deck\":{\"organization\":{\"id\":\"openpresentation\",\"name\":\"OpenPresentation\"},\"design\":{\"fontScheme\":\"roboto\",\"dimensions\":{\"widthInches\":13.333333333333334,\"heightInches\":7.5},\"header\":{\"left\":{\"text\":\"  A  B\\tC D\\r\\n\\r\\ntrail  \\r\"},\"center\":{\"organization\":true},\"right\":{\"section\":true}},\"footer\":{\"left\":{\"date\":\" 2026-09-10 \"},\"right\":{\"slideNumber\":true}}},\"slides\":[{\"title\":\"Shared furniture\",\"section\":\"Review\",\"text\":\"Body content keeps its own space.\",\"composition\":{\"minFontSize\":16,\"overflow\":\"error\"}}]}},\"path\":\"design.header.left.text\",\"line\":{\"text\":\"trail  \",\"size\":16,\"ink\":[{\"x\":89.52998921348315,\"y\":61.040000000000006,\"width\":26.93779056179775,\"height\":12}],\"start\":14,\"end\":21},\"box\":{\"x\":89.60000000000001,\"y\":18,\"width\":332.8,\"height\":78.08}}",
+  "errors": [],
+  "requests": []
+}

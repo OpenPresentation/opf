@@ -1,0 +1,5030 @@
+{
+  "node": "v20.20.2",
+  "browser": "152.0.4191.66",
+  "os": {
+    "platform": "win32",
+    "release": "10.0.26200",
+    "version": "Windows 11 Home"
+  },
+  "runtime": {
+    "opf/dist/catalogs.js": "6d74d7b051844728b2622acdb5268472a043544c8b2ca04eb904b1cdf74ec739",
+    "opf/dist/chunk-33AFTZZQ.js": "42307235ffdd11e143268e1297e6817cd9f512c0d6b05757e958db7b445cbd02",
+    "opf/dist/chunk-GQSK3T7X.js": "34f518c29c9757bc252b5c13eb5d7db8ada4b477496e6289d8149fb4fdc7cd45",
+    "opf/dist/chunk-K7QQGUOH.js": "1500a9fe8da0063f098d2672293c3cbce76eabdd9cecdb2eca7b442cd13124aa",
+    "opf/dist/chunk-OZULJBSG.js": "9e3ce45dc68d39c646449baf4ec9aad7b92d3f69b85a3dfe37540d13820d0d1e",
+    "opf/dist/chunk-PIQXLBBJ.js": "818578357a214f76a743db8cf63c0903825923e1ba970abf68c21912e59893ba",
+    "opf/dist/chunk-SOSOBKQ2.js": "b2bcaf1f0e8725c9a8f3fff9b5c996c4e7e63c6bb8dd4d13c2d7609105b02915",
+    "opf/dist/chunk-TFZ7E3FK.js": "ea043c053afc80eac04f7b83a0b12939cf65a0c9672b0689deda51dd03335540",
+    "opf/dist/chunk-TWMRZ43O.js": "0d35cec97ec7ddaa67fb9f096bc672c927eb68ed5fae5ac27d4dff70d68313f4",
+    "opf/dist/composition.js": "ca85a22faebaf3d49982c67bccda1284e720cf61848d7cf58b6aaba30964b674",
+    "opf/dist/data.js": "ae68ff3088ddcea772573952c572a3c58b8815086c9f81e57939d45848c64b95",
+    "opf/dist/docs.js": "aa8492354721752814a70527518fa8e2eefb16731b35a3905365e4dd6a7683f1",
+    "opf/dist/examples.js": "c69ccdcfaa0c4157f27174a3814ac3b6a1874440029b02d27a7fc971fc05fe1a",
+    "opf/dist/index.js": "cbecbbbdfb7c23e630ff3ef609cb91d1ed7064af721ddcafb684f4d75b83d05b",
+    "opf/dist/pagination.js": "51324ca6002ade8c416470ffecb095f055de9455e64e0daad28a3ce082420f90",
+    "opf/dist/previews.js": "043037d2d5dfec4d69072415032818d6a6c5e686938fcd644a4f103286033950",
+    "opf/dist/repo-readme.js": "a8177f828c853554ce636a0ca702efb63d79f96175f5440f35c32e6834ac215a",
+    "opf/dist/schemas.js": "52f40eb788685649099577a9241adb75c5f18b4a5c8cf1e55215b6fa3f52105c",
+    "opf/dist/spec-files.js": "8302d015b9368a585ee6aea946a18b2f0036396acb963e273baee48a0c4ac817",
+    "opf/dist/types.js": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "opf/dist/validator.js": "cd010718d51aa25fbc3862347ce5cf1cbd02e5ffb3ddc2683717011b4aa91c1c",
+    "opf/package.json": "d7a9ed943e013a51e907d707e277806c4d89ec3a8b9a26d7336f66597b4f7fdb",
+    "opf-render/dist/font-compatibility.js": "a50ee71748e81cd12ed3aeb6eee92506ebf91ef05021c6ca3f5a100665d03dac",
+    "opf-render/dist/fonts-browser.js": "d0543d838b2f22a8c70bdc60100d72d3c69e3f8033d5ccedd3523ee63c66b8d4",
+    "opf-render/dist/fonts-node.js": "0e65abd7438f3a21fd0cb6ea64120d9e866ef3308510910d11b7b863399f8d8b",
+    "opf-render/dist/fonts.js": "549932e2d013f1f623cd83973b40cbed68c63d52535adb2de6fd921d16bf400c",
+    "opf-render/dist/index.js": "39c8f2b279ce10873f00289349b84cf9cab7e12c56e9e0d87447bd2406777234",
+    "opf-render/dist/raster-images.js": "304cffe5e77553ac1ab590fc5805714dde34e6f69df5dc55e35dbc8df602753c",
+    "opf-render/dist/raster.js": "6ea807bfd43ddaabea95c1137bc1bcf7d656f2ae9c6d87a7e6d2f867df86ea99",
+    "opf-render/dist/svg.js": "2df17dc0b7aeecad5738a5a8beb948638f20dc3334610f7a735f2f348beef007",
+    "opf-render/package.json": "8d4d1d7ac08a0c128ac8660832f44b1a0affb8f7d7ef899fba113fcbaea0d30f"
+  },
+  "installedFonts": [
+    {
+      "family": "Roboto",
+      "weight": 400,
+      "italic": false,
+      "sha256": "15256405ecb0d880678833a582760efad538ab2932318b52c8105b267d159459"
+    },
+    {
+      "family": "Roboto Medium",
+      "weight": 500,
+      "italic": false,
+      "sha256": "79343dc641a2e8d48a703a4667b71fc8dc6565cc8ce47dfc34fc52c12aadbf38"
+    },
+    {
+      "family": "Roboto SemiBold",
+      "weight": 600,
+      "italic": false,
+      "sha256": "32fe2086b0e54eca85a68eb74e3d89bb16a7ffe59085d6dc7d079f5b3c26d6ab"
+    },
+    {
+      "family": "Roboto",
+      "weight": 700,
+      "italic": false,
+      "sha256": "4aaf8c5b661a386998c2e70cf2b87e2440f5404e0b8fd81164f0413fb3435ec6"
+    },
+    {
+      "family": "Roboto ExtraBold",
+      "weight": 800,
+      "italic": false,
+      "sha256": "43d5ce98c58336045220fa1dac2bd22281b1aab3eca66785cb34eb3ad1dfe1a5"
+    },
+    {
+      "family": "Roboto",
+      "weight": 400,
+      "italic": true,
+      "sha256": "6a372c348dc20c246b92d60b9bda3c0a9ffedc129790ed3f31faf89daa99d793"
+    },
+    {
+      "family": "Roboto",
+      "weight": 700,
+      "italic": true,
+      "sha256": "c6a5e7c224d3bf6698e5d3c124f0f0220cad20d5d413920447a96f033a0292ee"
+    },
+    {
+      "family": "Roboto Mono",
+      "weight": 400,
+      "italic": false,
+      "sha256": "e4bf45837847d4abfa5a502b807a83393aa138727bdb9ea9c93fb17d53208d95"
+    },
+    {
+      "family": "Roboto Mono",
+      "weight": 700,
+      "italic": false,
+      "sha256": "92649d819cc4c20480b23a47aaa111769924eb31c66b6ecdcf6f573662558c83"
+    }
+  ],
+  "fontPolicy": "Default SVG layout and requested CSS font stacks. Bundled faces are loaded, but available system fonts and browser fallback may resolve other requests; per-glyph font files are not certified. This environment-specific rectangle audit is separate from the system-font-disabled PNG corpus.",
+  "harnessSha256": "d3b76d5209f824ffc169f939ced929fab889e126761ec8031c4d12f36eca9197",
+  "decks": [
+    {
+      "file": "examples/gallery/business-functions/compliance-readiness-review.opf.json",
+      "sourceSha256": "b47b3edcb38f53cde1e5709d52450122171d6bda94dcdcb6385a013197b8dd43",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "12df1339f06dee3b5c6736473cd8d63c53bd87eee81b6c56d460a6f0981e223c",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "cd33bc5a5fab0d42d09f9264eb31576ccb1a70ca1a837ddfbd575afdd53d07d9",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "d13b4f8e39089b7ba72749ed78a2b670c614126b08a6563ecdece37d2ea95b50",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "379f434ad68190e891d8c47d6f2efbe350663f760fd65acadf4d71a762cf1f35",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "88ddfe74dba0a62fc9c991347210a3fc070398c36fa82e1c40b5c1c03fed1638",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "1ef4a7bfdf39ac8852e4abff6bd21dc798e16302dfffa4b92e8ca8b60a9b9f41",
+          "textRuns": 41,
+          "failures": 0
+        },
+        {
+          "slide": 6,
+          "svgSha256": "50f7379dbd8c017145bb1a4f27b558195173fcf30f44d8806cd281e98836c6c6",
+          "textRuns": 18,
+          "failures": 0
+        },
+        {
+          "slide": 7,
+          "svgSha256": "cd44ceb8e909b30f82ba8af3e7906f2ccfd051bce5d9544ecaac7d674bc32cd3",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 8,
+          "svgSha256": "6ee5bc632b278edd3a81df7b8374c354cc0be6c678cf972666703e22ffccd83d",
+          "textRuns": 13,
+          "failures": 0
+        },
+        {
+          "slide": 9,
+          "svgSha256": "74a24ba5f4c76031ec7085e0305d3f119ad605835227f2c79902ac12a47f676c",
+          "textRuns": 19,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/contract-cycle-time-brief.opf.json",
+      "sourceSha256": "78577622162c5cf1884e845ee42a0277f7f840001b469686645b4e44b728b368",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "6339561f5c8dc5abc0718f3db28db1728c8bbbbaa29315b1e1d4bd247c2ed081",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "da022af613f27814cbdba0d7f104d60ff7a521f5c4ec790346d418f8fc2d87c7",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "e28ff9e0c43f9d3270406ad81998989cc73f27427abe0a0ca0f20dc153606b51",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "ccddf02d5e832e54575e6042c1f21d41684aea7ff1079d616111650eeb17079b",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "fdf72087ad5291701f3762969e895a78f11f0f1a63f25c385fbbbb85c6a0b8f3",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "488a45672bad0c7c8748d996f4d1def2767b6c0c8000918aa3460bec0891f764",
+          "textRuns": 21,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/data-platform-migration-plan.opf.json",
+      "sourceSha256": "38943adaee30890ea3ea42a9f4a1aa27bc3026d755cf664ad4093df6fb19808a",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "f54cbbe64324d92d15fb8696415bce5089a05c25b7efdfa94735e95c698008c9",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "ceca012203beae6895b437341af77e1164eb7592531e9df4b4f7f30aa41c6e97",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "5535dfa46f09d0103bd63e969c82ebf611f31aa172573cee6965e9c4a1d56082",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "eb33efc9f3a5763a0fd1f9c2d375b4a0f54bc23b94b7e2f0e0734cbf28b5d148",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "1b656186b310041fbc3d361b3efc0111696baf40b279997e13696f30decb8fca",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "bd50c9677edcac6c525ee44bfa41c24d7b4340c0866460e902193048ecdc2ff1",
+          "textRuns": 42,
+          "failures": 0
+        },
+        {
+          "slide": 6,
+          "svgSha256": "049cae1b3a433a9a4e11cfb8687cf8c5172815424a5dac9b664005473e545b37",
+          "textRuns": 19,
+          "failures": 0
+        },
+        {
+          "slide": 7,
+          "svgSha256": "4c81453fa5dee024bc604a9dac4c244ecfd827676defb389ac32bcdaf1bbbbe3",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 8,
+          "svgSha256": "76c94221750a341d2dafde6ea36fab4c329e4eb14d0c68aca7181f159db83fcc",
+          "textRuns": 13,
+          "failures": 0
+        },
+        {
+          "slide": 9,
+          "svgSha256": "6edcd27a5dd74f4b3d63197fb02121eab7e7f7d0be1451729806f2fb24a5ecce",
+          "textRuns": 17,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/defect-escape-reduction-review.opf.json",
+      "sourceSha256": "9e37993448694e1fa03cf9d559cbfdfd8bf7b27a497c9401e5f0a465dcc48bad",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "a19bf68a403d8b68c6dd655b26b6ed3d7ad225da18b60984b0b6cb8e4739eb13",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "613220a1060c248e72836382022e0275e320e1ceef8759c5fac657241981389c",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "13dabc770effbeeaf70a904a6e68533f42175c4291bafe804fe4397f24af714a",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "949b0b4a691a5c931ff5d99e1aa8b316b045c5f564a919499e4de5baf4e4a3dd",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "d0e59e600c4b65e95abc7defe3c6628dd49217b419d562546c192ee6baaf6e38",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "eb417066d4adf34a3acb401743e8f21e54d09ff0271c1bf0b28122c100f8f817",
+          "textRuns": 12,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/demand-generation-campaign-brief.opf.json",
+      "sourceSha256": "e00c8a994d8f86dcf8115e5d83cf827b81162cc3f740be2dd0ee289fe8cdbc09",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "26f2af593d7c34a72d98a515a8faf879e05477c1a597b2d23c3e43a3d4ea027c",
+          "textRuns": 8,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "78c2eaec66e8ff4d0e41dcf6a4b074230b293098ffc9db9ba75c6b04dff68e47",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "a2b0b6b7ceac4883db7766add297de98ed9b940fe80a38a20e0514f0f3c6be30",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "94e30baad0c9a84d8d752f6f10b57f306532f30c0b6c6bc073a8c7d4b84dda54",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "37340b9e258ed81e2fbc36480837903f3baa4b2b315689bf4a354d12e279de8d",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "158891c60c0f577c6f180eafe5aa3747563377380224881c202fd9897717dc72",
+          "textRuns": 44,
+          "failures": 0
+        },
+        {
+          "slide": 6,
+          "svgSha256": "3cb4c78eb45244dda57fe56841ffae68846381ccad02827afaa63f88e3670386",
+          "textRuns": 16,
+          "failures": 0
+        },
+        {
+          "slide": 7,
+          "svgSha256": "d77bd46d7b0ae617a560a5c3fb11d6d59ff8029942652712f92726f72b17b4a3",
+          "textRuns": 8,
+          "failures": 0
+        },
+        {
+          "slide": 8,
+          "svgSha256": "3737fbfd48d06f4f5578e19d3b72c67261b46e82bce1de97b5b771f7037f91b5",
+          "textRuns": 13,
+          "failures": 0
+        },
+        {
+          "slide": 9,
+          "svgSha256": "18af826ec8c0ec7a4df2b35273cc8196e111cb321332761233bef0f3ecdd1e6b",
+          "textRuns": 28,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/employee-town-hall-run-of-show.opf.json",
+      "sourceSha256": "c594db7d40f9e1df25f0f33bfb21295d6d38b81bf02e9a288fb780c37a2a79f7",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "de574984242d7210d0bc30ab5494e6199772f27d5e5c1a4cd1924550779bdccc",
+          "textRuns": 4,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "798f7a88fb2da61dd79377c3848d2384a05f29815f4b3a74f4551f3bd10cf7ac",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "af275f795c297b928389a846203d4c834be49990e7d4d653ddc90b33184f217e",
+          "textRuns": 12,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "094a4ed3b8c1ed37815d55a0d8b750bbccbd149479bf881bf7174e45839df9c6",
+          "textRuns": 13,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/engineering-capacity-planning.opf.json",
+      "sourceSha256": "6dd96f63737a7f388629487067e37bb8d71e63e096cb8e095b33191370f11da7",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "3d5433283c2a898f04d65f3b9d695f6163dfca4221926b1ba943f7b7a0939d02",
+          "textRuns": 8,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "1a34ddeca4d6aea165100a4f2118a49e0c20a6111ef1298f7ca82276e2ea9472",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "b22c60489f5b84e165b78e792561a10c0239b87f614003613abf20df0b677da7",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "46b72c8d057a4ea480b02e41ca86e927f1650d6758a313fb51bde0920f59ce05",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "a8590476bcb2d2aa3ca7b37ab4bfdb3cab7ef13f48e36bebd1a9a38bbf34b5fb",
+          "textRuns": 23,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "a7699bb7d22595d314c281010f96cb9b75d5be9904479428843b1ead558d7f5c",
+          "textRuns": 44,
+          "failures": 0
+        },
+        {
+          "slide": 6,
+          "svgSha256": "474c069960cc4ca90b984a76edec86b2418abdb635cec80d1ab804c576d61b2f",
+          "textRuns": 15,
+          "failures": 0
+        },
+        {
+          "slide": 7,
+          "svgSha256": "7b2a2ff2b01ebab25d86370f6a5c6869d91554fa3a9259aa472ba803ed4041a9",
+          "textRuns": 8,
+          "failures": 0
+        },
+        {
+          "slide": 8,
+          "svgSha256": "301bc748f00e89cb3055e51381a540bf3a41a249db753a74f99cf3834cddd4e8",
+          "textRuns": 13,
+          "failures": 0
+        },
+        {
+          "slide": 9,
+          "svgSha256": "2b08a6a0cd7cb9251e12f40498b12855d424f95d0527a04a990a7962353c00fd",
+          "textRuns": 19,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/enterprise-account-expansion-plan.opf.json",
+      "sourceSha256": "0817d08960aa2422e651c92f67d4266e3f97c80626f882305ba3409343dab32a",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "6b844bac8989ebc747fe75cd4ba867ae0803a7bb122a16edcecf1a4babbcff0d",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "487773cf4d61e2216b5e6c05a6951366d5584e9b31b4d5641db88ba6b66af9db",
+          "textRuns": 8,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "1ce48250f0cf5612dcc44f21be4d5e48ff8de0b1a4611f29ab7dc477758ed994",
+          "textRuns": 5,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "bd5a7bc0352d67c93f5ec53faecf416f949620ecb1230e3548b8f32367d5e192",
+          "textRuns": 20,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "0a2132d2cea16a06d0cf3b8f22219bb63fb13bf6a833ae908a0d5ca3306891b9",
+          "textRuns": 20,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "49cc341fb8d49d3466ae4407fce9d309b6429eed548a566f4dd55234ff2466f6",
+          "textRuns": 14,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/field-enablement-certification.opf.json",
+      "sourceSha256": "432b7b66fe152cd7804dfec38fcbc6a926ef9bc9ee6ba36bdd675b13713eed44",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "6668e271053818efe9b74d7fc0fa249747b4ea52a28b5b712e4335209c37c464",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "1bade6b9d287dcdd2249b02cb3d479eca2fd477bd96faabe6678a88ad72dec55",
+          "textRuns": 9,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "4f73966499b2e41a6c7f1de1860259ccd5e8edb7af63abd60d663ceccc77a1dc",
+          "textRuns": 5,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "b8bf7cb4811c4cbd912a58842344e257af8ce97b947a640e8b9b5936e343faa5",
+          "textRuns": 20,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "c7242d18b95b29cd6499578e92e1d65294cf0210d22c508c86a6c237950eae09",
+          "textRuns": 20,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "1a0bf1716c16f4d549ddcf355f6da34d53322ff01e146fa63d9f71e7aa137774",
+          "textRuns": 18,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/fy27-budget-tradeoff-deck.opf.json",
+      "sourceSha256": "ad8044965b45f12bd64f2ca3dff0fada7b2d3fae210f6dfa449344b61ffa1c1d",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "bbe621d5da19a92a90b531b0e4d4c940e7802c0063d20fc2320e3a06784b0ea1",
+          "textRuns": 3,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "b0d0dad5ea8fdb3fd774def5decd4df3b0194f7feda4b188eb99cdd1781f11c9",
+          "textRuns": 5,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "657f500c78b7652cd0212b298b3f5a0753536648a8911da1f36f766aebd23b99",
+          "textRuns": 2,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "ab8349f4f28fb8d3b8717b3ebff6553c4500737921b86588bb0c1de1df3b6ca4",
+          "textRuns": 7,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/identity-incident-executive-brief.opf.json",
+      "sourceSha256": "3070a2b60bf9d1e3ca9e66420b2af1a74040240a67b42f69af9a70cb5e06f5f4",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "345250806da445ab63a19db7736e800187b5f0cc2da261364a525d8df3592b33",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "2428532f760cc973461d0e0892ba135cbc4b6d1cba8be61f24e2f978c0f23985",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "2d7929334783575c2bd5e705de49e5c2b6972fcc39342d5e3ae206bc91a3b438",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "610e7474ca0efb396588f65a4a1df575610aaca4115161114203296875c44a60",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "eee907b0a034d3a94241311305b74680b6c4f238dc602de77cea14244260de57",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "370f2e97b3a7f8586418f6e4607fdb74711640f30bfb49c0c7ba5c2cb6fc0696",
+          "textRuns": 19,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/investor-relations-update.opf.json",
+      "sourceSha256": "8561e30e561971b20cd5c37d7fb93222dc7367980079ead7573c4367fcb3a007",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "0f84d759b959aa14c69ea04fb6957b13549d23729a65dd2e613f0fc410701f04",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "23dd3f8acaa4308f6cd0c877db7f00117d958493c6cc6ba08a948c92d1837216",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "f74d39492ba057ce4ad8935aed127516e09f4d86d6106cf0be4c8f660f87f5b5",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "e8475c561491811f2edf52b24ad26e9048d01f5e15fa456dc9087be1761b3abf",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "88dcf55babeda815b384a17920987411a1326b5eb4c788a0de21a00b484fb376",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "07e97f914c9823f35e39c28d238287d02ae28e657638d2b77e19855e0d38b631",
+          "textRuns": 40,
+          "failures": 0
+        },
+        {
+          "slide": 6,
+          "svgSha256": "428e70dad508b525a1758399a50aab1f47074c8589b2cc8727330073c478b3b1",
+          "textRuns": 15,
+          "failures": 0
+        },
+        {
+          "slide": 7,
+          "svgSha256": "101acd6799e924057589fdc5c620e550df097a94229896c3dd66ea5cc06a1e81",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 8,
+          "svgSha256": "b8e9d436d467fe534947151782541cb7514addd7350b0edb5cb86941a2a4a386",
+          "textRuns": 13,
+          "failures": 0
+        },
+        {
+          "slide": 9,
+          "svgSha256": "f24fed91fdeec85c48cc56e7504abceffe33e0301e8ca4e410facac8c8bdd6d7",
+          "textRuns": 25,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/model-governance-review.opf.json",
+      "sourceSha256": "725e32d852caf4de63328d75c0c48c255f48434a5cf708c95d8426b26aebea92",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "d3a21d196c8551a6ac351da1f8b80d642965a36699b12c49a3a0184b4977bc6a",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "92f1cc15784a1cf3457dbbb19aea0538d07ebb1e5b803957dd2c5b8c57a0f7e7",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "5d56ef8655f1f7a4ab129ffdaaf2b1968c951b35fd6f17a158ba520a624d85c6",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "36206c8fffd7704f9b9d883748514c2cd1055fdb27d4eb34fd98a67134bb68e1",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "cdd556160c2ae0d10f690ceb00edbc1e8b574d98853246a7c885efc3ccba1e73",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "b12ebb6cfc3bfb96c10124a613ff242cf60a817f320cda232921b4259a6830a0",
+          "textRuns": 45,
+          "failures": 0
+        },
+        {
+          "slide": 6,
+          "svgSha256": "1a80d7eceb51c59ea002e60cdb919194777aecc7508ba851fc99bafd3d42bf13",
+          "textRuns": 16,
+          "failures": 0
+        },
+        {
+          "slide": 7,
+          "svgSha256": "ff6b74e08bc2bb5f9d098d976f6acc224cba6428c0715f0f651cebf880c6a285",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 8,
+          "svgSha256": "64e6bdf213c3cbe468e89254c178a3c2cae0127c83d3716b88a2041b547e691b",
+          "textRuns": 13,
+          "failures": 0
+        },
+        {
+          "slide": 9,
+          "svgSha256": "83e70a9a62c6282c7fb9a43a0dc36ece7426083aa093f1ef738d8bd6f6860851",
+          "textRuns": 28,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/onboarding-experience-redesign.opf.json",
+      "sourceSha256": "0254b256e8868aad1feb1102101b5e4a3b5464b1b77fbd90a222e8ba13ef0969",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "b8b4ee58ff67a07eb14873fe6d0d1ce96741dce47be8b26855195db160202db4",
+          "textRuns": 3,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "3991aa377ab3c447bab2f14642ebc34dcc3156fde3a63a723f7c6a6ca4c57acc",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "2b47a510168edc5860951124522b5792845a6b3a79b167a3f18136319eb823ce",
+          "textRuns": 2,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "02f359565351fb9130063f805ad16684876429ebc4706a07f249a0a5d214065f",
+          "textRuns": 7,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/partner-ecosystem-launch-kit.opf.json",
+      "sourceSha256": "94650c5a17eb3f3bccae1832a7be84bcc7bf355209062ab07e9eedc406fbb865",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "c0b430b1a415018adc30727a034306ff85da7f7b21a3982dd405a7240893942c",
+          "textRuns": 3,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "dd37f704557f89f343aa7af18c7e3a467cf7982f84bf79dfbbff31412106016a",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "b6c60cc9594c0bf09aaa4e4358831abdede29cfa07154b86103764ee05422758",
+          "textRuns": 2,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "86457b32bdfc1dd2f09bc359c899826479657387b2b97060c9c8ecb169e893d5",
+          "textRuns": 11,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/pricing-and-packaging-decision.opf.json",
+      "sourceSha256": "1663afafbb8485add608fa95c17232392d97f85d6b9b718e47a278e7694140f0",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "d7a1a93f2d2495960e7c03994b127e21c00c33f3664fdc1e64f555a37629efff",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "01551cc030cf19dd1673abbac1962eeff2ec1cc89996859e56048926f994fa2b",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "06e5be139566072c6e66977e187bd0022134ce92945864e908d3d9e8913f6d66",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "cb394be060cf9c3fc1d940ef43720de1e6e67ae027d1f5fe86b120461064135e",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "28cbe127bf792a05bea0ceec8275304f243aaac3c4494e2326ca2f44327cc8ef",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "3718b850855b286d08b4e58306c63d922fe582eccdb40e877128fba6ae40c619",
+          "textRuns": 44,
+          "failures": 0
+        },
+        {
+          "slide": 6,
+          "svgSha256": "a6db24cb46e999a32bbea352b57c9880e0dbcb5c2050a15bebbdbe765729999c",
+          "textRuns": 19,
+          "failures": 0
+        },
+        {
+          "slide": 7,
+          "svgSha256": "385e404ee7f37d93d892af24ecbc4649d11a57d31ccf62ccbb41a3a875d1725d",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 8,
+          "svgSha256": "c1ce8c50d1ab13ca2c51c39edf2da613f4167053040a52091183570aeb8e9f4f",
+          "textRuns": 13,
+          "failures": 0
+        },
+        {
+          "slide": 9,
+          "svgSha256": "644ec8fe1d1783285f6e9cd60cefa2170dd38b6c6a618f60fd74a7bc4bc62f6d",
+          "textRuns": 18,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/product-roadmap-decision-review.opf.json",
+      "sourceSha256": "f8c5a1f2f52007e4488502e7b470abdd590054b36f236f3abe52e9ee4d9dc363",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "3f0b8dd8d5e9b1cf40b5a7f301a05787da3db69a47150245acdf1131a52ef415",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "e6073095322ce2bf5bfa337830dd8a8527fcfb4cf9f41d816f6934b70d44e4e4",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "bcf61754cf3ef8ab8a6436aad1e3563c425a3e46f406f7ef89ccb58b480ac89b",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "6036809ec7d3cc83059ae91a24b76b5a265f65aa695896b6e441773f99b2867f",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "934384c158555966c42200645166eac67d9bfc3a71c16622f6c75093d80bd3cc",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "6045b586e840d9dad1820bd4dec706fa703fd6883dd202436351d6e98b79de1f",
+          "textRuns": 41,
+          "failures": 0
+        },
+        {
+          "slide": 6,
+          "svgSha256": "badd75baf08f97951d463dc52a44cdc26f00c1a1a97b2fe1c977a838fff88acd",
+          "textRuns": 19,
+          "failures": 0
+        },
+        {
+          "slide": 7,
+          "svgSha256": "519eb34ef6b09373e4bf71143e88187d1b1bece5703c30831489b746f7bc1743",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 8,
+          "svgSha256": "ec791a47367ef2c70dfd1ccf8bc2c91c2962da66b7a425a2a654456417be0e48",
+          "textRuns": 13,
+          "failures": 0
+        },
+        {
+          "slide": 9,
+          "svgSha256": "6cca23702c553eeb3f076e29ad454cd720ddf17746168963f3b37e92728fff99",
+          "textRuns": 17,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/renewal-save-plan.opf.json",
+      "sourceSha256": "afe0f86f87d97c0dc610754c1fb6f427db4f5b67fde689f8f64778a9344150f8",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "577ac5eb6325afcbd53b070170b0d49416ac0512607230d1c9fedf273840dcee",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "acae8f7d4156630d8d5f78b8429874bf4368bdb18badf162fb6a5a46f404810d",
+          "textRuns": 9,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "cc18f216332d6b8b512d00d1d4ed4dc799021fc84a29c41f8eb21c1af9823aad",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "0ff235307a97c4bbc22bfc78178bf0a0739170a90f9f55fb5e53348159933bc0",
+          "textRuns": 20,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "dfbbb628f07ca5c552832789cd8f3ad4a3d18b56e98e56f38efe91c0d2e9f433",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "bfbb13852d7a705b12d042a05011cad1bbbac37f1ab5dc246e5a1e1f8701e92e",
+          "textRuns": 11,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/revenue-forecast-inspection.opf.json",
+      "sourceSha256": "ac3927ac82211ec50fe03f91435fd25ce4d2d412025ee7d011cbf6908b1f0c97",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "ef72c71b6985f9588723c61b1d5ebe47e412b1ddc3dc0872bd96c86254a97625",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "744b956a53f6f791ac9947618eb9317c53e8db8b34acb0002bc6998b3731cd19",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "477a46a76a166acf87394a61820d34938519fdde9eb7d3c968d9f6f680118d22",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "4cf876005583e8d00bf2055ffe030a18c62f6437fc44e175297b79a76f7db9c2",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "1d3b180ac4c6956ed2f88eb4124052d55d619deafde50ee6249b9cd7a21f74bf",
+          "textRuns": 23,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "299fc08b7e838309cfe8e5aa64f57e7e669a48e090e5ff17089a5e8c7f1c48fb",
+          "textRuns": 46,
+          "failures": 0
+        },
+        {
+          "slide": 6,
+          "svgSha256": "964b864c4566bd053dfca469532b010623d9f34aef6280b3ccf4957e2d6bbc55",
+          "textRuns": 16,
+          "failures": 0
+        },
+        {
+          "slide": 7,
+          "svgSha256": "08f53abf5660045974cd4bbed1c8afd4189a7206f1aa1c21c6e5a946be8f7d6e",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 8,
+          "svgSha256": "7a402b4488d69c1c7c464f8809a40920aab9e920d85f823323f36d530e0bca8d",
+          "textRuns": 13,
+          "failures": 0
+        },
+        {
+          "slide": 9,
+          "svgSha256": "8bf0eeb00d3a50a8f49c6211d3c4f3a7e76485c7471b153fee62d39dfa772f01",
+          "textRuns": 19,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/s-and-op-exception-review.opf.json",
+      "sourceSha256": "b458d368a9e2bbda0e7312eea338b735a6664c3fc20f8d2cb640b415ef1ea7f6",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "d93d6a7207b61d8dbae41b9172fee54a256094bf46dab9ea81499e5810af901b",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "58dfb891c53744300b0111a269d8db30bc5bb5528edaa3ed906f983abce0fb5a",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "34d65f76e166d7b85d8d25cd47f61ce2a58d767e6edaf8e47c085ba8ae0740f9",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "f24cbe88337e641a2f2c37f6ab6421d6a82b175c9b73c5fe31f28bb8a877fa91",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "99fe8c4a1f056dbb396387e237c1f9a2eaa68c757d36110499ba0aa254faccea",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "613dc262e3557e53fec2a272e1c29f37ced036c73dfb452375df2a782cec251f",
+          "textRuns": 43,
+          "failures": 0
+        },
+        {
+          "slide": 6,
+          "svgSha256": "982fda4ab0cd3b1f62dbc988cae1df49007115e6b42991bdd53de1036800c0b5",
+          "textRuns": 16,
+          "failures": 0
+        },
+        {
+          "slide": 7,
+          "svgSha256": "30c9ef6ba7d44b9bff4b7c4ea6ba851517c28453a9da3cb21a3c70ab4265c771",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 8,
+          "svgSha256": "56c87ac28a4b20d1e845faba490536a047546969e42b874819597e251929512f",
+          "textRuns": 13,
+          "failures": 0
+        },
+        {
+          "slide": 9,
+          "svgSha256": "c3becda5d7a8067c0e7b7838ffc97710b805783b40a6b09a4b571872b2fc3f7b",
+          "textRuns": 18,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/scope-3-reporting-readiness.opf.json",
+      "sourceSha256": "43bad05556763c5ee72bd98fb85a59996a1c4edea360975fdf3604393fd55dd2",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "bb9f43f93d1f93b30add2389c30c4e6be77aca2bf04ef29c3376629245b47e82",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "c78ee23381756bb359d5d996c1118ecd884804a53a94c6b12e6d629a1a4bf521",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "f1446aa6754b2bdbce1eb539ad85b6f956851eccb14017daf77452d09ebb3c8e",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "3dc91964c6c241faf0e27ad25560b3786252c1ee1c758ddd16647ad322742c5c",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "2a86c192d6c6d1acc8637bfebeefcba6d49d9ab1e626490c7b2dab72081470dd",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "d061dc18a520a1cfb1718c3e3c6abdfb4ad2182fe07990c57a7dda796b7c3318",
+          "textRuns": 21,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/strategy-offsite-pre-read.opf.json",
+      "sourceSha256": "73a8cddaf50e3bde4441c672205b442db1661c94a2305f68d9325499703655e9",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "bee1166c4486d115fbd3eabe107b49cc9d2f2b02ec2727db69ea5e7b04c2e6b9",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "fc629b7457a9844d5532d4fa064cb18fe4224fc2b5daa36a110bc9507e129e60",
+          "textRuns": 9,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "8afd410a38a87b149b0b3551bc0ec4c25e8a01cf7f080521aa2298c8c6bb62a8",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "f40f5916b7cf5f19b3e4996c7d4bc66d897f38aa3df866682e66c78945ef5858",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "69de15ee3614c74551631f3475404bbfe48c9239dfdf74134e116352f42aae5c",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "4a7d32c650ac9a244284dc8fa9920972006ac2d9ba8e89a2c281c8cb17781f28",
+          "textRuns": 40,
+          "failures": 0
+        },
+        {
+          "slide": 6,
+          "svgSha256": "7ab2b64fd8688202afa48a73ebad9532b3b88b5031667c1ca9000d162a980662",
+          "textRuns": 15,
+          "failures": 0
+        },
+        {
+          "slide": 7,
+          "svgSha256": "4b93518fc492c990c53a7b3084cc99e605c4dd292ed91bdea294feb3d823877a",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 8,
+          "svgSha256": "c86aff5ef689e22086cc6deab767798bb359b59d0846010475d6a8b27f5c8a00",
+          "textRuns": 13,
+          "failures": 0
+        },
+        {
+          "slide": 9,
+          "svgSha256": "21db15080972677be729f3fdc2d30750585cab5c9c6bcebee9aabc839090141e",
+          "textRuns": 25,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/supplier-risk-heatmap.opf.json",
+      "sourceSha256": "beb9773f55fe630e3fab9a3654058eade0fedd275e9f77ed24916d13fcac018b",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "293710bbb9c263d5c96e69a064cafa8941112c4c0228a5a76b53c55dab78f216",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "efa1775f8ac1694edd51d4497981b35ad894d33128b2736b8b5aef1c71cdf792",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "56581e4e951afd02ab9578ef3f0bf336eb0ab5222d39a5192f7b916e77667bb7",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "1322314edc0bc680da33232d11e78cd1997647ac791a5b7fba838294f2f98995",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "277ebf43ec07abce22ea8c4e173dd98759dd1e810124fe5cd5dd9cf8e49b7033",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "9fdc319feef43474a490c9ca6c7297970b5062877b5447d1cba5aad89064c31d",
+          "textRuns": 40,
+          "failures": 0
+        },
+        {
+          "slide": 6,
+          "svgSha256": "1cff43721c40861248e7d601a58b70a7b8496fa134638f46275e9d20d96a76d0",
+          "textRuns": 18,
+          "failures": 0
+        },
+        {
+          "slide": 7,
+          "svgSha256": "d1fbf3907671839ee29edb396bb1c20cac2002a10e8a8379ba2af2b79aec49db",
+          "textRuns": 8,
+          "failures": 0
+        },
+        {
+          "slide": 8,
+          "svgSha256": "aca651b37c4320c3fafc6d93831e01545009337c4abfab50a7138bb1a647fc39",
+          "textRuns": 13,
+          "failures": 0
+        },
+        {
+          "slide": 9,
+          "svgSha256": "ced1839b794b376c1a8c401599171902bdf1ad478eac7240bafafe6d55b41bb9",
+          "textRuns": 20,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/support-deflection-program.opf.json",
+      "sourceSha256": "ca74c9b7fa94440aa9c6c089d5a72aef8a83e2df8f3df1b9dc16016a5fa48cae",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "6dbf82d71e6afc02cf1a5e12635ee538056ea7cd00905e97aa55b34a4482dbe8",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "7ca9488038e9192c8bdcbe01869ba9a5c44119f7882faf6ab9132e6af0c6cf72",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "80578d7c0b116a2ec0ae0225948acee7d101f36b24d6468fbd059a49baf2a880",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "b01a61cf7e5d8c5119210972d3ceb41f396b0500fde063375c2b8c1b3b2676b1",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "c9cd8f3cc6901dae27549a024fb69c2259c907cb5330fae4ca5a4787254eead6",
+          "textRuns": 23,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "5976824f8db018569f59665b3fad227b1b9fa7389f6e71e9236bebc728556e47",
+          "textRuns": 12,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/business-functions/workplace-occupancy-reset.opf.json",
+      "sourceSha256": "20e93f391940887fcb72281bc3f5d5460b3ed075f48d9d9989dc73e8b7cdc2b1",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "b8ee1af36a4c919f0f6e7553f1260aaf58bd4cbc88d5603befb5d012a5dd137d",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "435050b3594775cb883014d822ad0cbe05ad6a456b83aaea547dff5cdec21c6a",
+          "textRuns": 9,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "424387700fc9be1fe932722e942eb219b7f8fb97baf7240454fd334dfc537f9f",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "820599dd1b9591cca0cba78b44f9a42927747a9dbb0d54b816295623ce36cb33",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "1c9222ec4ceb673c8a7702294026596b49730253c25996e81bddd7eb60326af6",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "c23b7ba8cd50363c9046e879832b7355fd0a9bfb2833ab620d4e00dfb8ab6ada",
+          "textRuns": 15,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/design-and-media/data-storytelling-atlas.opf.json",
+      "sourceSha256": "659aee8a3408fadbc73ed34272e74b03dbc4625e80c9f9a81ed5b888b2b87ae4",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "a70dc9787d16b4e524715c555c903d9cd8764fced95fae5991d89b4f22418a95",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "fe9a7631267cfdfed68049d8c9e9fc851d6c9c6cc67765a3117793a28d2fc6e2",
+          "textRuns": 11,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "1eb5ddb05851fb971f249dbb74299505e2f7814f017c00ad283a22e1c316ca34",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "f6cc8d8ffc2f78753de3dd75b6b6f4d153af1ebf52d20f7e0108f67dd9f0da67",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "2d4c06342e5634350b2a429d513578147d3ae9c98f7102d68bb01215360f1c63",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "5de0032b26709545735be9d03a3259b8ce3064c12ff968ba1ea332ff71e7ce5b",
+          "textRuns": 47,
+          "failures": 0
+        },
+        {
+          "slide": 6,
+          "svgSha256": "e3791a85ac7114c4007587d48bcb0c317de973902ab9f5457f13b0e09e2239a5",
+          "textRuns": 16,
+          "failures": 0
+        },
+        {
+          "slide": 7,
+          "svgSha256": "7c93d9317b1e1a388552c25d65c80888545825d7d6901b1204dcef22088fb8f3",
+          "textRuns": 8,
+          "failures": 0
+        },
+        {
+          "slide": 8,
+          "svgSha256": "5bb8ece65b3d8dc9e983bd5cd643fc3275baa5b013926800eb261499e31d0095",
+          "textRuns": 13,
+          "failures": 0
+        },
+        {
+          "slide": 9,
+          "svgSha256": "6c5d51c062cbca98c0dc41410edab1c01a20119804b1bbe412aec8209836faab",
+          "textRuns": 28,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/design-and-media/kiosk-orientation-deck.opf.json",
+      "sourceSha256": "39dc09a23dc64aa8f0e156e2de331f4b4c32d3a3281f79360242aea9529ead5e",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "f9e6471a41837eb1683ec75caa555d5d6206df4c89937727e0a7d157c885e4bf",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "52dccea4f050dccc82fdd7afc20edf8418772fd9a54212df12be690ae2bbbd45",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "301a42510dbf84033207cd771a8268495944a4b685534bbc6b3eeadada006271",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "b01774e2ba5cf1240abcfa7f145f92fbb25c66a8ee9e3302ec04f4b3bf09e7cd",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "4df0b49b67b0124fec2042274a327132fffa2d85eb1b936ddb619bff5a567138",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "5f771884de359586076ec75f936a7731084178c2073f7c01ddee2182ebfa71ab",
+          "textRuns": 41,
+          "failures": 0
+        },
+        {
+          "slide": 6,
+          "svgSha256": "ffb6053d9a60e9bf7413d2d5641c569dbd6e409494f9a16855dfec7ce66ad65c",
+          "textRuns": 19,
+          "failures": 0
+        },
+        {
+          "slide": 7,
+          "svgSha256": "0815e187764401e5937bec795e2f15b43df00979256b9a5196bd365962a450fb",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 8,
+          "svgSha256": "7773d0f0220c59dff91d27d6bc1f0aa482e533055c231618607fd701bdbe4839",
+          "textRuns": 13,
+          "failures": 0
+        },
+        {
+          "slide": 9,
+          "svgSha256": "c97fe2f30d96a34f72d4f3f176447666b5aace553d88d9b6b08baab2de94cc8c",
+          "textRuns": 17,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/design-and-media/photo-essay-portfolio.opf.json",
+      "sourceSha256": "5404a480578aa7eeb48f7b97456dfee0047f161fa49c71537d94918b91a51e3a",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "ed7334ced972fbe83206f77d15811fed16ae8d7a9e5bdecba812668e30185f9a",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "e3f9ec1951b3f72f7b16c43873be6571ad6137b7bf7f8d7948728672c17809f4",
+          "textRuns": 9,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "69bfab9494512278cc64275e20a44cf260ff05f93f91801314952fdcc46c769b",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "9efd2e0aaa94f409cb0d6090749020468636878802bfafe2e98a9ba6e4fe2db8",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "84c6883729328c5ada5dfb77ddec705690687a02fb7283b1a3d62736dc05d4b9",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "400e4091ded244578c66ab9115ddb2c6d14ba09de9c9a6781eb8fe8c60425e6b",
+          "textRuns": 40,
+          "failures": 0
+        },
+        {
+          "slide": 6,
+          "svgSha256": "ef6dfd4e06bc8919bea87f852ce99f79e0de56e8ed28d8da31e11a8159bb6a4d",
+          "textRuns": 15,
+          "failures": 0
+        },
+        {
+          "slide": 7,
+          "svgSha256": "c9c8abf036d6943b676dc4174a868fe8445744f4387aa464626ec8d56750435b",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 8,
+          "svgSha256": "b8a8514cf59589969873e461d06a46ba5dff673da527ac561ab124c40909fead",
+          "textRuns": 13,
+          "failures": 0
+        },
+        {
+          "slide": 9,
+          "svgSha256": "ae7c44bbd77f8f9d3626dbb673f32557041761f16e6cee29b394e62f766351c2",
+          "textRuns": 25,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/design-and-media/video-demo-sales-narrative.opf.json",
+      "sourceSha256": "6d5af8dccd09f6e119d540799836bea38bd9151301562757cc0a361a20e31767",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "1498543a4d2d0647844f3a46c293585f500ac74ceaf63b2e5c2ac74e37afb47a",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "d71af218b6a8778d319674e5aec16d35ce2d496420d700cee791738cfda37f98",
+          "textRuns": 9,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "d4c7b57a71d33075f2f6b9f5a452b074d47c979bb385117b17e64137363b6865",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "3a00fc142377fa2e44356edbc6963ac47afce0b1e5300e263cc6ee681ab9e77a",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "e70dbb055f425fb35a57b30e3e83dc6bbe5f1be667b9a6e223dcf46f91d8287b",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "e1887329e5fd03b201aaaff961bbdab6628ecf02b370cdf3fb424972f4499f27",
+          "textRuns": 41,
+          "failures": 0
+        },
+        {
+          "slide": 6,
+          "svgSha256": "56692012028bbb06e7412981d16f2d026757ac003a87e6766258735b2208184c",
+          "textRuns": 18,
+          "failures": 0
+        },
+        {
+          "slide": 7,
+          "svgSha256": "7c11c4a4dac38e4eb19801e4c9ab416d59179a36a0712a7e9c2c47631a5178eb",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 8,
+          "svgSha256": "f1ada8ba65a1379e7660c15c64728ad1ed0af7cf29f9a37138f8258f96c18cd5",
+          "textRuns": 13,
+          "failures": 0
+        },
+        {
+          "slide": 9,
+          "svgSha256": "eda2e3ac89d87bc1b5da817048a2726fea03a97156de7f7e8f1fd6c8956d4015",
+          "textRuns": 19,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/design-and-media/visual-brand-system-sampler.opf.json",
+      "sourceSha256": "8cff17079930132ca1864410c52d46183da76981d60e226dec78715439549d23",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "10dd709a66fe430b790085a061c818cae4b9a5869c75deb154b46299b87ab668",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "7934ac7b1146bf86b49043b3e7ed9f4e0ce715fb38e0b66d336fb6a372f254df",
+          "textRuns": 9,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "f6d041f4b54ff633c6b6c79b703d93ace61637809a6b9565afc9bc72bdb850ad",
+          "textRuns": 5,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "9e45c38763a5f4c8e32899cef01f5edddaacacbcfca814fad35311499616a4ef",
+          "textRuns": 20,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "b12cacbfded2c31dfcdde33fb849c32da30dc586a5fb09a11d94946e1db0d8cf",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "f662d34e7c929826c0f1a67b84e457a120d4648c9ad02f707ca99067e8687eb4",
+          "textRuns": 11,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/education/advising-retention-review.opf.json",
+      "sourceSha256": "cca9482f1022830d7fb353781aac1f707b6187344be729312ecb9e2b5898b6fd",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "1e74cf95fb8cb900cd5f4c95f2554d98c684e892374ab228f827284849926035",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "b581e4b3e41236537bf71aea383016343b83a26b32a94e731c02a67a575c15d3",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "99e44a30cc385b53038755cd5dc6eb1efb4d63db7f61147a4ef0f3cffc7130be",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "704c4c6e593282aa270ee0456a7c78730d53bdcf5d31b0342679b43814a1f6f8",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "50f6594956ccf9cf63630323d5f9c5d7e26bdf11b500870488517ef070cd9fc2",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "26d4f458ee5aed84f12fdccff64eeb31082908d877311fc4aebf7323af301101",
+          "textRuns": 12,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/education/alumni-giving-campaign.opf.json",
+      "sourceSha256": "526e76d5fb7958df7559c477bcafbbd7957764b8b5ad05abf063dd18d8ba8e99",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "f157a43ad92c17fe6977338abcaf5fff6181493683f49635cb897a1a4bd295c0",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "790dc19ad1c548eb6d7ce434d7c0f7ce7c5ea6c90f5fd1b8fcdd82af10197be6",
+          "textRuns": 9,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "0eddf4a5c57a955378a5973f69361c01db41ab9ad631ebda4b6ccd058512d37d",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "f87b8fceddaa6a9b814eb233e05539167bb18a838c78a70453ce92348bef66d7",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "3ee2d3550843e35117a609d0fa578f3118d5a5bb4378a51eebab06fb9d05ec9d",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "9480548ee95056afbf2793086e775b2a173131404d88556b403b02f7b0bd3351",
+          "textRuns": 22,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/education/apprenticeship-partnership-deck.opf.json",
+      "sourceSha256": "50d606e52f48d1dbc1bc6a221fbaff7058acbdd732edd19a0d25072f4f455ec4",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "968158f99294560cb4bce1a56c2e52a24a334eb8a895a86ccee3b1d941f57f68",
+          "textRuns": 8,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "372d93d849281c6685736f56e4dc247a72cdb3a0827518cc49cacd4006c4c32f",
+          "textRuns": 11,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "78a48fdf382064d85a93fad8d7b10eb41ea14bbf43da21138ec14a62dc3d1b4a",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "64f18fe349a8bef68a9796d5a7dd512078ac1ab3060ca6f0c2390d16da30d21e",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "3e99edf69559c8db975cf7f772a8bd1f6721526d80ac7dbb9c9d865cbe3f6150",
+          "textRuns": 23,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "2685908743c6b78e79893d04d47e9f28bfb4335c51a618321c87a74c3585bb15",
+          "textRuns": 12,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/education/athletics-budget-review.opf.json",
+      "sourceSha256": "a31343e9e0f97442779033c3d94182eacbbc7f9c0d45c58e9cb58688713a6045",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "50c378eb4ba4247c4d89bbd0a8d9bff369e865a5d935ac99b8cdf32ae5d43828",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "8e2c1f66583b1d9e23e29155e351b2a423178a885a265d8adca4948728cd4692",
+          "textRuns": 11,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "9c5f8778b78dc00af256f671cf4c340be9ddde4ce0b4f6e34f13c97b8bb623da",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "11764c70d74fd5766550b23e15f7e76e9ab02824c92f958bfa5ebae0004b73a3",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "5e4e14bb85c4d0b3997210b68034afe6338f943cdf93ce9231ec017fcd93db6c",
+          "textRuns": 23,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "bad9647a9fa494078406a4222fd3a103e4bae3a9d287837fd9a9f75d213de409",
+          "textRuns": 46,
+          "failures": 0
+        },
+        {
+          "slide": 6,
+          "svgSha256": "b2e8a10eace30a2f9e0d58c1dc4c8ba3c089c89fe1d3c53216d6b2ac3e0d2c3d",
+          "textRuns": 16,
+          "failures": 0
+        },
+        {
+          "slide": 7,
+          "svgSha256": "42ede1c357411e387bb6b9fe5bda7a870823f349a50b344c3b49344f3cdd02d1",
+          "textRuns": 8,
+          "failures": 0
+        },
+        {
+          "slide": 8,
+          "svgSha256": "ca318666b5b0012977ff4c61a91642acbd6a956849c6dd4dac93d23082b7c9c9",
+          "textRuns": 13,
+          "failures": 0
+        },
+        {
+          "slide": 9,
+          "svgSha256": "69de0581c3adf6e9453e2b06bd710d8efb26adf76755499c5c92d56a681dae38",
+          "textRuns": 19,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/education/campus-energy-action-brief.opf.json",
+      "sourceSha256": "4218f4443d8841a16a08c3dd2968a71ce40565c09943d9e3d3fab058cdc5a861",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "86fc0e1c319ba2a204cc7f741ee31fb1ec7ea46a6be1a97640ae7df3d637e159",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "7e926718b3955158161c010f2969090e26f8274ac7d5805adb714c38f8db995f",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "3adca260689e05e97a4fe182f7dd96e0717bb8988f9dd7b756386798060f8517",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "a46d8987a9a96d7ec10f3e3ccc475b44bb33f1ea5452fb349dfdbcf563ede285",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "8be0e26ffde22af3f64575a1dd6714dc6d38669058f25c66875eed7bb179894f",
+          "textRuns": 23,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "34a70c1ee91f61f7c4497b1fd205e59ad37bddd48c1d8cf7c53059813bcb115a",
+          "textRuns": 12,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/education/curriculum-approval-brief.opf.json",
+      "sourceSha256": "f5817c59331216b2518bd95ecf198daf9a1bd7e2085772bbe8c7cfae2cace0e9",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "5d1fa3af3b8f47c69d28a91a9f2b9fce6bdc39528faeeedc571f778edb4845fe",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "8c8bcf9358a4645439e0bcc649d2218a024474823a66a042a8ea7c7660f34099",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "8f9cee2953826b1151ec577bedaf042d1d873d67c5aa276211f2a2feba670515",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "1ef196c6537cd6e5314491a726d6cb9166d2ffaf3e1c90898f40f14ad20df6e5",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "f4b95a66d67f92c39cdcda6ac24b40dccf858bf0c29031e4f034c5b7107fbcee",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "89f2f55fe226f1492e7d37556e7a91ff266a755260567b27484b12747cef803b",
+          "textRuns": 46,
+          "failures": 0
+        },
+        {
+          "slide": 6,
+          "svgSha256": "9f0e06fb29ebaa3178fb9dd9fbd8901df1ca19d09eedc20134a455e0ee7a2278",
+          "textRuns": 20,
+          "failures": 0
+        },
+        {
+          "slide": 7,
+          "svgSha256": "cfcb37140663599bde9add2b99bf8f9f4a193b7d5a24109c36d9fa929af4b06e",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 8,
+          "svgSha256": "966eae751483227b0baeb01f0a8d42fc93a7ee9a06ef0fa6302160d76ec91f81",
+          "textRuns": 13,
+          "failures": 0
+        },
+        {
+          "slide": 9,
+          "svgSha256": "fad6908fb7cd52d7db4733b7e339b62032116848d72ed31cf6ffcd2b85678ef9",
+          "textRuns": 17,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/education/district-literacy-acceleration-plan.opf.json",
+      "sourceSha256": "e5aef8071c0b3ebdd3f6e2b073ddd7c4f6764fd628b9b38226940bdfe1059e9f",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "444a079c553a1c902ab77247e5d0c31990ba6fee96f71db51eb325d1e8c47b70",
+          "textRuns": 4,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "17b016457ad05090abe3856398361070803c3c1e440ef5ea51f30f5a7d7069ba",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "3b3271954e6a2fe9c64aa9daf9f637a3d29de9115863565233037c86c05e293e",
+          "textRuns": 2,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "7d5be547b68208ec381e9a1269bbf2587dacfb916fdd2369b274d3e5a12a5b1a",
+          "textRuns": 7,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/education/library-modernization-roadmap.opf.json",
+      "sourceSha256": "dcd830be39e38ef8d8dbed132c19c20383d6237c5bae311496e27b022b26054f",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "ef01cb70df163adabf808b22fb9b5d1315438ad3d90da7c7225358c4c36e6b62",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "1e993285968ed4f7a03d95a44ba494e33efb3ecff61509c7942d6811a3c7c64c",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "ce5a5b72954da87b8fb1db3fa3f84de877a660a86af588b14406cd12dd413e0b",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "95aca77a2275275637071f1fc76f5d7f22f2d0609ea3ddd22fd77b21ebd759f1",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "92e11dad38e7e88a7976b008fbf2bbae73ffca3526aaec603bb222fb25b2bb3a",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "8b4a0c58b5a89fcf3cdea69998d9c50864ce1b3ed740660ffce37be1a580c46f",
+          "textRuns": 42,
+          "failures": 0
+        },
+        {
+          "slide": 6,
+          "svgSha256": "e8755fc0a7ad564ab681d2b1fdfd7a3234bef03a6070e5117f3c03f7c72ed85f",
+          "textRuns": 15,
+          "failures": 0
+        },
+        {
+          "slide": 7,
+          "svgSha256": "310b986298776f024296be0708f7cd46646d04b80263aafae3d9e253ece5b53c",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 8,
+          "svgSha256": "4a3c53f15f09f74aec8011a39f81ae265f2b9f03519ea0d41ab40854ca855db5",
+          "textRuns": 13,
+          "failures": 0
+        },
+        {
+          "slide": 9,
+          "svgSha256": "415869d521af6620aaa02f3ce961e4b71c9ffcf769bbed66d8d3b481af82b1c6",
+          "textRuns": 17,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/education/online-program-launch-plan.opf.json",
+      "sourceSha256": "3affb3f0de7781da599e036b11c56f73d8764e35c3facd9b7cf39e0eb37e9283",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "57993948e37490d46aeb1a31fa617207e3fef05a2c44b1d5af2f394dd73c7dcc",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "a8c483c58248671dd41c463e5ede5e38e2fae36393bac6d9223272f1b0d776e7",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "6801fdef64ce5d2b56f0d2eb59d3438fa58ea08718cf8819cf1b612a8400843e",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "d4cfc18523119d6ca3f1a92b1241c77eb684e75aa86bb059392568c6de9389d6",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "2f6c62f41292e18bb8284f87672a7dd2fd52ee77ac5153822c5c615ecb299474",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "999ee0aea3571bbfa830bcbd3761949d0bacdfc20ca20b77c4805f0c0448489a",
+          "textRuns": 12,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/education/research-grant-pitch.opf.json",
+      "sourceSha256": "18016067d19c3dc86128b58f506e249f8b675378ce31b8d697c7b594c43e1f68",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "9720fd07e3624781b6c4a05a1fe56a69313e13c5b61c353667b7aa2684bfaed9",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "b2192ebbccf43c64622242349594d5e95b181c9188bffcd43405535947bef1f4",
+          "textRuns": 9,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "7d5faea73bb94b52cf09e3cee803745af6afbdcdfef9319b3b068c125a83cc9a",
+          "textRuns": 5,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "77dea6857dd60db7797d6ee09e183d423b5062af0f5bf88dca8f0998864a483e",
+          "textRuns": 20,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "7c91431798b571c808abc814443ee63c2fbdaeefec685b4e7597c0e55b50f379",
+          "textRuns": 20,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "e34de2f4b21b25cced883b6e57482b88d8e4d3039b20619ac4014bcc2ac4e3b6",
+          "textRuns": 14,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/education/school-safety-preparedness-brief.opf.json",
+      "sourceSha256": "0a43acdc02125605c6b643a187a74141a5384fdc39082e29d3f8eb292e9c68e9",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "528c77d275b7b42e519998d8b85602b2884029f1675f2679c18dbb3c187796e9",
+          "textRuns": 3,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "e71cd49bd44766f69366d4ae3e9caab69d2ec0c6caa034d8ab1442a75ff7a7e3",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "2d08afe8405694383b2eae727c9531bd3aa4eb0935469469efa55aae9331a2ee",
+          "textRuns": 2,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "280af7279744151ba9a08de59b56b99f1cadbea0429a933b84c1f3deb36b5554",
+          "textRuns": 7,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/education/special-education-services-plan.opf.json",
+      "sourceSha256": "c71a0463497743c28a4e750ca8fc9bcbe704990b467c5e8896de10d26fbdc3fb",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "313dc77da7f5fdc9ec6519dc3e43c634225a53a46eb2c89760c161985ad67fb8",
+          "textRuns": 3,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "fa1092637d56c4be5b188f5f5451c698523bdf4d808c11bcbf92b90a21498987",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "57e4e0a1df68976b97cfdfd2aad022a68accaf64132f94ac3e834d65358c36a2",
+          "textRuns": 2,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "55e96074ead4648e51331dfa9bdd01583803ecbf27c2a9359c6e63a968c2ad10",
+          "textRuns": 7,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/education/stem-lab-funding-proposal.opf.json",
+      "sourceSha256": "49808e9fb91b19bfd6ca1dbabd03a112e3a4057184280c974df603838062d930",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "6dd0dcd5fd136924321c901e083db533cd122d141f72247c09591031a827b9d4",
+          "textRuns": 3,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "60f2d77110a4ed076e8bcd10839af9ba9e18fe2fb350bd56aca1f4304e9f1eb9",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "7e089cc90b9e6ba5cdfbf86dcbcf1fe09eeb52ab301a835cf9cc763a0f227525",
+          "textRuns": 2,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "c353c052f36642af2d68b8de9ae995cfbea454b271af943b5d718f3a03dc4e6d",
+          "textRuns": 9,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/education/student-mental-health-capacity-review.opf.json",
+      "sourceSha256": "f06c3b498570d5a5fcbad3923169269b7f8bc2c48f01b70787a4071c8b871fc2",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "08522dcd59076940ee98fa07a4a88c36b4868572d0f46734b0a5e52464156912",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "85e3dc0decf8c3ebb35d2de53af3a69d9094be6173e160a59af79c522acedea9",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "5acf6839c0e92f3add1a447671b714352413de00f2512f6d7db769a5bff084bd",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "a6931252ca24faa00490bdeff14dfb203b022e870be6000966764a0a5c6fd1cd",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "44d7ff1eada2b9e840a47dab8bde5df1f29ef4627c1c5be0d97e77484df24abf",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "918fac1bc374df2bd764efc175c2e94ba9b24437d395b41ff702a069e7bf62b6",
+          "textRuns": 19,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/education/workforce-pathway-partnership.opf.json",
+      "sourceSha256": "59450d966ca40d112079018a64b50443680811d9c890a44ec833cde3890868c7",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "100d060f6bd43381c4772f8a059d1ea4dd9bfddeaa9a7d9b8b25fae725285d48",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "bced0a74b7d80ec9b4047a4737ef83e49807ed566dc0aecdd8111355b280f292",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "cd3601e4f8ecc85d40cc9c68278f15e819f0ae70883df7f0fade1394c686eab6",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "0c2604199b34d69f37b10486c3b9ab72348c8010bdd6d1897219c97012dcc254",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "7b2f87cd215838ea479af79b67d5d015b815df82e98b39665909be7a022482aa",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "f0584e0655ad1b99ac171104a6439f4faf4117fa740e19e65a6f9813500a4370",
+          "textRuns": 46,
+          "failures": 0
+        },
+        {
+          "slide": 6,
+          "svgSha256": "5140400a7f2ca86407bdb62bda03c4a047bb39f474dfa1f268a6878921fc1832",
+          "textRuns": 16,
+          "failures": 0
+        },
+        {
+          "slide": 7,
+          "svgSha256": "1528e71de4d3a23fd666a429dca04a00cf8c305b48fea44a7a6f38410b0f0eb4",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 8,
+          "svgSha256": "b6d911841fc3c9d45cf0afa345d4ae7f2c63e660f87722b1ebeedffda791ae4c",
+          "textRuns": 13,
+          "failures": 0
+        },
+        {
+          "slide": 9,
+          "svgSha256": "086e71755361e5c09afbfd0797520490469f9e2a0095c0d161cd393759fa5708",
+          "textRuns": 28,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/government/broadband-public-hearing-deck.opf.json",
+      "sourceSha256": "6c1a015a139044b17843a2d0001fbc1e056e3308b1cd023c2c54f1032c9a01d3",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "fd15337bab197a2a3289d414479bc9772bbe1ac4c296444927b7a67f0e2c6a08",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "c4da278be3f9a0d959ad26554aa2b4c2553538bb223df1db22477cd9f5c654e6",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "f1c419a437e5b7a36e7987667d88b15d6694542aaf1166af481744a51defb8c4",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "a81013db98e96e0b4ccd61036ed3f5aa4a180459dab6218942bc7537e69c02c7",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "4a05b70f2407ea15e55ec88be5b733d783959cac6ba57c35a28f1193437e9c3b",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "acb23c9326e92c3b949d0e31f027051d906083afae715efbda469d37d69f575e",
+          "textRuns": 39,
+          "failures": 0
+        },
+        {
+          "slide": 6,
+          "svgSha256": "7307361ff7bca5ed61214b2d6d8d37406dfa3537ddba72eee8aad24b353182f3",
+          "textRuns": 16,
+          "failures": 0
+        },
+        {
+          "slide": 7,
+          "svgSha256": "8ef9a377ffe0206addfa183ca60918243f06ac83ed0181220a1afa8659eb1dfe",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 8,
+          "svgSha256": "95cef3b2e59d0d3a32d30a8b3fd9c11093f79436bf9fa6f3f53b7b05f5b586ba",
+          "textRuns": 13,
+          "failures": 0
+        },
+        {
+          "slide": 9,
+          "svgSha256": "6269626a51ce9044fd9a835c50cb23e2bee2f141d85add9e983f65e242629937",
+          "textRuns": 25,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/government/court-backlog-reduction-plan.opf.json",
+      "sourceSha256": "205a96465982512f06ce5a482b19a7ce6d630810915496218b47eed89eef0974",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "9c3eb54c34c8b6c425c13a4cb6f78b11d1ba1df60da1ae67d08d75598a430811",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "8fd4f4ca1bbef01dd7ee6a661e2862975a41aaaad8ac7e3e9759099dba8b5f58",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "c7f5546286df1d8dd82ae8bc0ffa641e6a5997c33449957ec06aae702a840aea",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "69140116d34088eee7124dc0725995f9a66cdea318cbc166a010e567ce6a0e4b",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "1c73a9ce3b1de0d6094e89e3df75ba64e3149933bda0d63b4be80f01c24c8d09",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "5f96f0bf240bbecd0d1c7716b49bcd3add91e162056855e624efa0c2c3255dcf",
+          "textRuns": 14,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/government/digital-services-modernization.opf.json",
+      "sourceSha256": "45bcdac0a7e3bda4f67b68163ef5a5bc5a0753041e45976e19991575997eb334",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "612b82584dfad571ccf55371c7d304b7f67ef02b3836ce9aa7875a02f529aece",
+          "textRuns": 4,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "1d5767a7ed7c5d5b0b9ac92c1d11908ade91a714f18b50b8dce8a96c75572a74",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "bbde445a564099197478286d03a8858ce0eedeaa7e3b531d712bfef8d1b82cf8",
+          "textRuns": 2,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "67dfea293cc9797536c042b6d2b4998b149289e9e09ef8b0b26b9578869455d5",
+          "textRuns": 13,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/government/grant-equity-review.opf.json",
+      "sourceSha256": "15dd1a712430225425bac9fe99389e7b89c1b20a7b1c6e73318c8f6c257f7a4c",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "e58b2e262c3b4874d22b13f269c1e5eb3cf4b233143513f33f1cf68abfd4a709",
+          "textRuns": 3,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "ee735a2bf89afbf9344ee5c4bbf1b823aa924ae9443d983eaad9538ffa9dadb3",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "cd9fc6b287db8a02a30075c7953d238ca5e3962745661752a3dda68aae5e6691",
+          "textRuns": 2,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "30eaab0970f2e0626b5d6038d6d41eddef813f84602cd6a44314315c30b21f70",
+          "textRuns": 11,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/government/housing-zoning-council-brief.opf.json",
+      "sourceSha256": "70bd8b4c44fe5c9cf0bd7f7eedab0b6d7013bc5d9bd7c1410d1347b47a0c330a",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "d46853c2ef72707f0926b9673020c7e23f5e1506b869c6906460ee73a8900101",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "d4574b1479944a7f1f8697c91615aeafa889e8026dec3328a193a4ebc809292b",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "742e59fe73e6761e741eb3fe62b0a6515a97d24d8a9a577ba58180e64822e7ea",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "abcfdcfcb08699719480f1b275287e412d42a1a886ac15019297643b7149be3f",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "d805e1c180091905e111dc6bff414db08f3bf804f5154686a7e472b43c604a38",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "865ddcf675975ab7f852c0bfa99970384f99c16d96b3493d9825d90ec2ded290",
+          "textRuns": 39,
+          "failures": 0
+        },
+        {
+          "slide": 6,
+          "svgSha256": "5ad97d1911cf9b79fbe1c33e1e91d532679b9ce45ae1dd5d6b93f26d0bbec2cd",
+          "textRuns": 15,
+          "failures": 0
+        },
+        {
+          "slide": 7,
+          "svgSha256": "b22f692d4789caed60253f232894c8200f3566899e6898242673c3f08b8a8411",
+          "textRuns": 8,
+          "failures": 0
+        },
+        {
+          "slide": 8,
+          "svgSha256": "f11ccace4211019c81661904c41fe68c5085bcdadac97061e6e878b59b0651ab",
+          "textRuns": 13,
+          "failures": 0
+        },
+        {
+          "slide": 9,
+          "svgSha256": "925b4af9bf33b1fbdfa155bce95d4aaf2476e99fda17d4f1764b8f8f8a888f10",
+          "textRuns": 19,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/government/parks-master-plan-workshop.opf.json",
+      "sourceSha256": "95ba489c2b5b6b7ebe1bd0462a51438fea73da2a58efceba225c58c1a45ba806",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "0f720adc549f6172a0e0e004da75f5b16a21b9757a44a8fda761ae48f4636f06",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "c720558adea56fbf769b3af06e900937733414fbf3dbc3c6c7c797e824225ad8",
+          "textRuns": 9,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "7edd452f0706db4086d37eeb0d0b4a0e8d8ff1c504a28c71975cee5602282653",
+          "textRuns": 5,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "c1706c69e6bdc299e1eae21f3bdee7b67d86d201c6f4abe689f8669226c3baab",
+          "textRuns": 20,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "8411e5cb0864507ea019a7bf23d6b17116d0135aac56333cbbae1b3e02785b73",
+          "textRuns": 20,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "5781d20bff95b27787e7de3c2d0148adc7d8d90c1465f7e4ff5bdf7226e1362f",
+          "textRuns": 18,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/government/police-training-program-update.opf.json",
+      "sourceSha256": "fb81ace4d1190d120e2c292882dd2432b2c97924ad10e24ae94831bc478a9d8c",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "c44ad5bde14f4ff9a308dea3e42d1df6a6aa84ff78b72193f237999a909d9847",
+          "textRuns": 8,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "1ec8fec52fdaab355f44b47ced5bc0fa5425fdfdce9860d16ff9f806fc0fbd62",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "3b71b911040e82aead2ab56ecf0f5b06ad243ff5050c35b38823af216d6e695a",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "8344f589198b184225f12b3fa1249a356214754fc49baec826be02c89518b8c6",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "b9f9f540e8d599bd34424722bb4650bdefaf1500d9fc0432b0a7bcb9698aa559",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "b80cd8c1fdb0e943ea3a81fbc2015a6eb525efe9a40b8fc8f573b062207e3f9a",
+          "textRuns": 21,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/government/recycling-participation-campaign.opf.json",
+      "sourceSha256": "9d0c78e0f6bd58a4fda50a7a0f81697da68f898e90ceaebe35380fbac85962c6",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "e48cc6e999473d6a3bbb37248ae7f36c2a195e368d0a69d2728a0e1152657bf2",
+          "textRuns": 8,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "6be2c6f5f04593e86e4283bdcc87f8104f0f5438ddffb1c0dde34ac92d4ac972",
+          "textRuns": 11,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "e883e475018fc6d0bf054a6e9317d7c5dca1f1108a780ab0892b3d4bed42c4f2",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "7e8848daaf337578751ad1045fb31f3dca4dce627734e4373e0fa98e3e12c2f2",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "d981bc98d1ac8cc0d4708cf90dba7d4ef0a4326362a86c82334dc4c3421c4274",
+          "textRuns": 23,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "07555f0b478af6232d25d228e488b1e041f9d9199bacd9b418d92cf61c2b2e34",
+          "textRuns": 45,
+          "failures": 0
+        },
+        {
+          "slide": 6,
+          "svgSha256": "a281526982543e9df8184578971801c60df618bff056ec1f942ec03f9bdc38c1",
+          "textRuns": 15,
+          "failures": 0
+        },
+        {
+          "slide": 7,
+          "svgSha256": "f349e43064d9da4c54a8e53db3270ba13725d954ddaa36a762fcac1363c6c3de",
+          "textRuns": 9,
+          "failures": 0
+        },
+        {
+          "slide": 8,
+          "svgSha256": "e73736d199fa3c45502589e99b06b56f43b82cdd1741536a737430a5ecb4cfb7",
+          "textRuns": 13,
+          "failures": 0
+        },
+        {
+          "slide": 9,
+          "svgSha256": "25a8785bd95292f1a411b380abfd29b028f495c2211f46ebc0569df2421e1d7c",
+          "textRuns": 19,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/government/regulatory-risk-brief.opf.json",
+      "sourceSha256": "a35a622cfba494438d0b01e35b1b68a3e648a69184be9e64b58f4e3f78863990",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "65e55629658acc173f634ef48c16d3882b88f04614027343160100300dc9b18c",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "fd0fa1c8fecb7cfaf132069fe32a56bfebe56673f7ca528966ad82ed6f18e8e3",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "1a832fb1dec2cb474b1416c1bb45f2fc0100c998f8937357afef1a617cbf148b",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "e5a6eef0a4883b42be0e23fa3562a9f36bcde795f80f3eeb3d3245dc7ac42c3f",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "568064dc7b4c28fabeb801e60e5a8a7499d22b98166bec6c3818c4b1f21cf2d3",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "06df88356c04b964fb8843905d29cacf29782eaba002f3d321ffe1667c98359d",
+          "textRuns": 12,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/government/tax-portal-modernization.opf.json",
+      "sourceSha256": "2edac1f3ecb171b48c9c1110a600513c8bc44224998c73facd054155a78821e9",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "8a7956919e6fd899c686fe0994f4ce78c4c3fa40d5b89356141009c3f63af79c",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "f17e8aaec7706d32b2cce9611c862c80df00ab940a2e7d8bc625ec4019c54f06",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "2d822ca86289accefec4161029b80ceaca55ee944184ce3f0a3d0b5d0d36e599",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "47b202d9ca14c3ad9d7fe76bca24d97e375297703d675b28eaf0b37afa6a18dd",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "7c123c3a8239c0794f36ff19580913521bf9343956fde5090ec81f86705a7252",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "6c6541b2383fac0036064f55fbda97505692967b4fec865794e79f5647eedc51",
+          "textRuns": 40,
+          "failures": 0
+        },
+        {
+          "slide": 6,
+          "svgSha256": "a81fd2a54a82810e13cf39be608766fb2d872297a8cc50446c6882724f3107c4",
+          "textRuns": 15,
+          "failures": 0
+        },
+        {
+          "slide": 7,
+          "svgSha256": "e499ba97fc0318b347da413aea8cf7dc6eb0bdfe7ba1a98286e81f6d406b02ce",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 8,
+          "svgSha256": "7a0a4a777b1a9b1fa416e4e1e158071e8763ec280e03e9cb04b00ad08af5c398",
+          "textRuns": 13,
+          "failures": 0
+        },
+        {
+          "slide": 9,
+          "svgSha256": "2a7b9d480a57f6c31d0eba938d8557e90a027aa3e0c2af651225e213ee33c3e9",
+          "textRuns": 19,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/government/transit-corridor-alternatives.opf.json",
+      "sourceSha256": "2dec4d7225744370dd642bb3c9e2310e52b17ac4b258376ec18847665224f198",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "5215612c571507052984a7eab5a524443b921970ffed0fd9c029092419fa8616",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "f6d7423688503a9657bb4eb8b7009b805ae127b722d34e138b3e7f6e0f6c9019",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "732e6649e63fd14cec3305f9f89252522ae6f882d54d6d19d17fcee18e56d2ec",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "bf804faf93dfff071b40d1075bf38b9c46cb6a4a64133dd4ad6810f4682945bb",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "8b8071870310fc8b50cb60367c5f3e77fa22c49e26abaa35e18c3f52976be7b1",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "d73c563e40c92027bc0a55d75f49167bc62abcd050ed773d5603330c796b0ce5",
+          "textRuns": 38,
+          "failures": 0
+        },
+        {
+          "slide": 6,
+          "svgSha256": "10b6031af07b660bfed657ce271d48905a8b6b463f347a0659542312aa544baf",
+          "textRuns": 17,
+          "failures": 0
+        },
+        {
+          "slide": 7,
+          "svgSha256": "616f03631f35856c561a6f091ebd84225beb72e63c4eb048718c3cab330b5e88",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 8,
+          "svgSha256": "9a2c52eb51e2cdf2b1250cfd688fc363dc40d1aef605dc560e16cb19a9153623",
+          "textRuns": 13,
+          "failures": 0
+        },
+        {
+          "slide": 9,
+          "svgSha256": "b655fa717ca538b5bf2f714db7fd0769dee3e33adc131e36cdf73f0ca56e3996",
+          "textRuns": 25,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/government/vaccination-outreach-briefing.opf.json",
+      "sourceSha256": "4b0a3e92d9d2a95115bbfdf4a3136c4a8c66673e16970fd6ced2aa61b062e891",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "08dff1fbd4a0576baac2d8360308ce1789e733f5938cfdfad7412da742b644b0",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "ca6a6b64fc7f1a341688746159cce90d2694f9f42f514ac5f5ce9cd16a14ebf7",
+          "textRuns": 9,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "705691cbde7f553a34ebcd1a471fd82fa5bf633d3d2c148a4bd91ac8818d5571",
+          "textRuns": 5,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "611aee7096894d27ff4cee2542bfcd153d4b637154d0e7853e365bacfc4e96ce",
+          "textRuns": 20,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "17c04c446ae077f5fb337e0ecb3bc53f33a44bc462bd2fb5dd5f725f8a384cd7",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "b4d0c3bbef99a7d282b2effdff5c8c8d9e05b8ba7b195959a9c2dd7a8d30514c",
+          "textRuns": 11,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/government/water-utility-capital-plan.opf.json",
+      "sourceSha256": "c33890d9eef2db97766c3e2a5bae0a757ad978aa6f509fa02b410cbb491354f4",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "8efd22f40da1861cebcf78a17f6c0e8c258f8f3bfeb3b4d202f8c23f08b22103",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "c0f984803bd9da7c60afd62201815e5987bbfb97d452811c1e8c5dae70920f12",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "cc556450d9f4cddfb1ed532cd2d20f8e0cdf63bf4d84927d29979860029d4536",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "2d7eef2c01fb122280fd6a549cfff20c9d77dcd0f2a7f959e5e52f99d253a0a6",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "70476dd6358f9d2f9755b9adf3cee41419b16ba4cd2a010a23da5dc0d7c880da",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "4eb18a4c5b209f2e3dd99a77a38bf23bb7333899499adcf9605eb9f3d2d4eea4",
+          "textRuns": 42,
+          "failures": 0
+        },
+        {
+          "slide": 6,
+          "svgSha256": "27d5c7062e2860fb0a57f611dcdf379de022997023ca348e6730314f1c994322",
+          "textRuns": 15,
+          "failures": 0
+        },
+        {
+          "slide": 7,
+          "svgSha256": "29e5508831ec48667d6c165457749078a1c057c4159abc72a2509283ddcfcc7d",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 8,
+          "svgSha256": "7fdeff8fccae6686e51bc464cb72a61ec4ac6b5e613bb5a1c6427970c9565317",
+          "textRuns": 13,
+          "failures": 0
+        },
+        {
+          "slide": 9,
+          "svgSha256": "776f4782e531c05f624bf983dfcd976aa74827e6df26f9f29adce18c30e450cb",
+          "textRuns": 17,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/government/wildfire-evacuation-preparedness.opf.json",
+      "sourceSha256": "3ecceebcf857ed29d45bbd13543aa82ee7e3ba545084b0941279299ee022957f",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "0ece39b27dbc293cecbdfe4d48c670561bca5a617e012c5eb2a10d64ebb3ff96",
+          "textRuns": 8,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "5395bd994b285836709f63d146ff88421098722e75895db88968b9e9cf57af03",
+          "textRuns": 9,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "9c2b90d2c72bd7fb529c1610b4dbae7a5b0810903e9aa952c4835f97c0604ed6",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "b27b992972fc9ede44ee84a9dd4c3ebc917582264ed4d1071ea5b22a83f23e6f",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "51c3e8731cac563c2625ee9ffb0dfe1d89f1ca47771cf4664a9968b92a08ac3c",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "b590534274a189d2d3e0de89e6d558ecfc964f24f144e44eff9f7d82e697d150",
+          "textRuns": 46,
+          "failures": 0
+        },
+        {
+          "slide": 6,
+          "svgSha256": "abf0ddac023b901f6b1de86f89b049e9695c067fb9f2fa4b22e68e475c32459a",
+          "textRuns": 15,
+          "failures": 0
+        },
+        {
+          "slide": 7,
+          "svgSha256": "ec030ccbd66512dc1866f8c3f2bb038b2e2ed99f51b87dbcf9edf0ca452ee04b",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 8,
+          "svgSha256": "95d01756c8b917002e1505958774e0dbda6a1cbdf8164df70cc69f3939688189",
+          "textRuns": 13,
+          "failures": 0
+        },
+        {
+          "slide": 9,
+          "svgSha256": "0d5d0c1958693012ab1d320fea9726d1b60fa18821e7dd45e41f97684def9413",
+          "textRuns": 27,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/government/workforce-reskilling-initiative.opf.json",
+      "sourceSha256": "bec19b19887e77d7a180b7aedbed6e8d63041ef2cc7d2b813784cd677e6ff15e",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "e3eefd86f053edfe5b5cbe7cfb2c50f731cb93e54ac1e80f008ec1287795d6d0",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "6e2b5b8efa2b7e95635f05013be5f93838422de4168450b38bf65ee1d66466a1",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "8a2e5334155faf05b9152dad734f20f63b92518cae464534f719a2d762e9bd09",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "1d94bf93497b4ed3bbe13ab7c0bc51745f058694f6159e988a47e3822721f165",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "6271680a7f4024df6e062a8a659dbbc97eeec375eb777da41f7231f984711791",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "0767c7ae6463ccbd6decb7eec0e950a5d1b2f4aac40ed69e6af12ddacad14c84",
+          "textRuns": 46,
+          "failures": 0
+        },
+        {
+          "slide": 6,
+          "svgSha256": "6109d323d24db022487445d2ee2a6b577b32a16148b31bb7559a84779d48dccf",
+          "textRuns": 16,
+          "failures": 0
+        },
+        {
+          "slide": 7,
+          "svgSha256": "adf6d3fea7a42db2ecdd514d53011a11bc64750bb198dce54b4b6755a7283128",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 8,
+          "svgSha256": "08c38be9c5839e35728bffe0b097c0155847d35f7f2d0a5840c6016a5ea8b8da",
+          "textRuns": 13,
+          "failures": 0
+        },
+        {
+          "slide": 9,
+          "svgSha256": "6cd00f9730952852e75d404b7c2bcee55a2bfc597e7074f628a444801f7d6e3a",
+          "textRuns": 17,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/airline-disruption-recovery-review.opf.json",
+      "sourceSha256": "ac42d6a4863d1d174432860171ccb5619cb425e8d1bc40c9405b20dd999e1553",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "1fac96f87548142c0dae0e743a74c09793c469ebb7c3ca61e1ddeea285239666",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "23ab07cfbd1ded02e9ee6fb51c4651d9eada7fafd0facdfaab0b6156281bd7ca",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "d2cd3d92dfeff912ec7751c4a52fb2c08558d8c99b32700970160a6ab0c53008",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "9ccf60908ef2da7f23871e87cb139e347cefdb9fb7c53bbb055c7dfa508987e3",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "9516c135705c7d725c86d465aac3a36c850a01da96e312e5b54dc42177d7091c",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "6f4e99647abd030448f8b5e6d08720afe76c6776b1d7b04ff12bfc075ee0dda1",
+          "textRuns": 40,
+          "failures": 0
+        },
+        {
+          "slide": 6,
+          "svgSha256": "e18a4eea933f7630670073c1267eee8a151c7e1084efbe33e911539b8af88e2f",
+          "textRuns": 15,
+          "failures": 0
+        },
+        {
+          "slide": 7,
+          "svgSha256": "cacbf2c47980f8a7da9242bfdf992564e5b7e548423b411abf53c5c4015f7262",
+          "textRuns": 8,
+          "failures": 0
+        },
+        {
+          "slide": 8,
+          "svgSha256": "bb87a5c11dea93370e0152543129c394a135a7eecdb0fbe6b8aacdf84637cfad",
+          "textRuns": 13,
+          "failures": 0
+        },
+        {
+          "slide": 9,
+          "svgSha256": "e944eca0f05e2f1adc2b7c1ff21b076ccb244de524a9fb38d1795d9b350ba925",
+          "textRuns": 21,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/ambulatory-access-recovery-plan.opf.json",
+      "sourceSha256": "8f57c937c2b99842bad9bb40e5369f3a9ae75ddb250af83f5fb06ba42ee1519c",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "57a97a0919e7a50a5a8d1b75efa5f6312e06f4bd9ae78d92e3a216e3328d8284",
+          "textRuns": 3,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "9f867c4cbfab4bccf7c50b589a32c97ea32c45d65abce664b243d7f69041a3e3",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "18876885ca208a26344c02a7d3c66cce774ea93015a9635270f0d543c5b348ff",
+          "textRuns": 2,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "0a8123038acc036417dc066f82f26b457363c986dc49b9e3cc35d56186fd0061",
+          "textRuns": 7,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/battery-line-supplier-readiness.opf.json",
+      "sourceSha256": "8012550fd6c8675e296c8bac443884c31181675b54495e4632685a13dea61739",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "e5591b7b0e98bc481923de32d5e50d5cf73d54865f706db04b7a833b60110b3b",
+          "textRuns": 8,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "38285cecdbcdb8db3cc7e6364c3cec9c3962b005bddefc640845b4768a77b676",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "3de377b181632e3495aea63014dd8f76a2ebdc524aa24de1b3bc4d95f5bdd233",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "ed336eadcea74355e2d9010f5fcd424ebdb04c5779609c5428d3f4a2918be5dd",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "1594114da358cfe280631fab5f2a3bccba9ccab7ab74e3aa8926112d777b6bb4",
+          "textRuns": 23,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "dbc7452e6e366b7f6dd1642a644af092b9d16fbdd4554347caaf6af2955fb993",
+          "textRuns": 46,
+          "failures": 0
+        },
+        {
+          "slide": 6,
+          "svgSha256": "c99cfd9294be8af2965f32246e459d8d30ab9656425e04971e606285e2d1a433",
+          "textRuns": 16,
+          "failures": 0
+        },
+        {
+          "slide": 7,
+          "svgSha256": "d697a3ff6a33c3fc4998bdc9c69748f0b355cb96913d3f85f5c2d0dc60a2b4a9",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 8,
+          "svgSha256": "97c57a81cb6029f2626b85aa7a5e2c62d52ca6a14bcf734464f8d82b483eb9f8",
+          "textRuns": 13,
+          "failures": 0
+        },
+        {
+          "slide": 9,
+          "svgSha256": "ef5276a7e5933c5740252ffff18af7d10eb0aee023817ec6f458e465a89c7572",
+          "textRuns": 19,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/boutique-hotel-revenue-recovery.opf.json",
+      "sourceSha256": "62d7fc8a8dd28211955efa5e2b9cae742beea01dc0a3a0cf9577b04dc49098b0",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "e823d0d13fadd9e10a06909d799ac7a25fbc25ff10d634f019c32f2ee67feea2",
+          "textRuns": 8,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "5e9876c0020bf6f35ad9a0615aea95c9c868857a1eca893e7ff19349def66055",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "4ea5df56bd62b611c9f62fcaf50319886211c464b58f07265b41450638b278bc",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "9bc2ad50437da15d7aaeb40e2cbb9a232a1a5b23347f268e1f69cf970acbe965",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "f6213a54830fa0cec813131bfa2b568c15d0b83c90bd1018aa9c8537a20f55ac",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "3b2d42bacb984ed8cc6e80b071b0dd58e7a5d5c3d95f0a4e669eec1d485d202b",
+          "textRuns": 45,
+          "failures": 0
+        },
+        {
+          "slide": 6,
+          "svgSha256": "fa3957ad2a357ffdfd73cd8d29b6c016a550954a7fe0fa3c653fe7fec2bd8957",
+          "textRuns": 16,
+          "failures": 0
+        },
+        {
+          "slide": 7,
+          "svgSha256": "aac0b5e40b08f866b7068514e69c79806ee06781448f74e8527546f137dcad62",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 8,
+          "svgSha256": "770589b242b4d20a6abb483fb40eaf0ad2a6f4b7b3c6213e3948f40d6e66b945",
+          "textRuns": 13,
+          "failures": 0
+        },
+        {
+          "slide": 9,
+          "svgSha256": "30412cbd1f04096ea53a86524202dd40848869d4ad57c42b32d4913a3e84ed21",
+          "textRuns": 28,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/branch-modernization-investment-case.opf.json",
+      "sourceSha256": "4352cffc5daaa02259b64c27520bf1c9eff39d8d165c3148c72f30829b6bb673",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "7dc1b1541d774f3f2aab9695703e2abda6f0d7b5ddbc14dcebcb94313db45ba7",
+          "textRuns": 3,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "8bf1bf183676b8da255a14bd57bbff05fcb4f2a51b2fc8bb54d295e2177a61f5",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "94d4dfea32aabddea88904c9535be16cff62c00b75c34af5f606ad487a5804d9",
+          "textRuns": 2,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "f0f554e513d3cfb9926393984b4a73b863b992a06bcf4a6121a32e5c728ff13f",
+          "textRuns": 7,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/claims-triage-operating-model.opf.json",
+      "sourceSha256": "b270327e321f372c67a50a4c92d4659a322303836ae968fe6fe169d712c3154e",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "a679624d5fa80e31e941ea60d2636b905225470238a2a5750cc99e5138be51da",
+          "textRuns": 3,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "8dea24d1f66ebdf29791123ae04724c0588b5f4e50dd76df9aab6595a9d10ae8",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "e038437e878e810c3f3701c95e07bb087548549e97750d1bef2ca6423c1328db",
+          "textRuns": 2,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "4cbf46a6492e124e0ad2a9b869d8681e97f2efb5972188123fc2682998f816f8",
+          "textRuns": 11,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/cold-chain-waste-reduction-review.opf.json",
+      "sourceSha256": "86214dc344278d4bc806dac4fe11808746741196998202107468d7374c9a3e46",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "df00341722d86229635e60fa2f6c448ec9f75e5a1aef68e8f39f99dbab28415d",
+          "textRuns": 8,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "2cd6e63a01e5a003c93623a239e35139437781260075672df31a84b83da83660",
+          "textRuns": 11,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "ce7cb00f21c97df75d6052a9102d256c62aa97807968ff893abb18e111f9dd8b",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "0d87fa6ed4cd0f034698dc1086d1c760fbed7a1f94e63d2094afab6ebcb30b82",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "bcf9bd177f8e4ece405bedd42e600ee5e2cf64738b0ad2b633983528cbd069d4",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "a029ec225e119504196d0380abaa57a1bb1bf90bb2ba532f63d97758f1ff0a2f",
+          "textRuns": 22,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/construction-safety-stand-down.opf.json",
+      "sourceSha256": "f77fb4e659e0b4977072ce7df0749edf50f623e3a4133c0625951c36c4b950e5",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "f8d834a241d293d3353d729b35080fdc07117a2e4209068fd6faf40d5036ef39",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "bcda6bc9f178b306d4bc3496f9d0cf2c0ebb7aca71779b7275dffd7d6b00f0cf",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "7e56975acc514fbb598acbe81e67fb2e08eea78855dac452fbe708dfa0fd75ea",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "9d5d340407029781c9f90edc73e4a5e2181c0dc4ecb2f454635e9de02e63729b",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "f930464e3b2db73e12d9767d7fa1003fdbff2fd06887f8941ebb0b8c39a78111",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "dd25c2affab0be21108f8be6b2c49d8d9f451e88a299b291561fb6411e38deb9",
+          "textRuns": 44,
+          "failures": 0
+        },
+        {
+          "slide": 6,
+          "svgSha256": "18ae7019874d4b117b32ce3caae8cd874efc2adf5bfa3fa607f011ca8f7acb2d",
+          "textRuns": 16,
+          "failures": 0
+        },
+        {
+          "slide": 7,
+          "svgSha256": "3cda72da75864c3d38cfdbb6ee77d72592992bb0570a9533efa85a115af18fa4",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 8,
+          "svgSha256": "d6101c007d4313a2636d3879ee2d549e7f0c864bf1e5205202891bbc6461ab3f",
+          "textRuns": 13,
+          "failures": 0
+        },
+        {
+          "slide": 9,
+          "svgSha256": "1967710941975f880e7dcc4466235f5936b5d57b847b38eb371f0f13984ec43d",
+          "textRuns": 18,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/consulting-margin-recovery-plan.opf.json",
+      "sourceSha256": "2371797c70d7b13c9cabda74467378327071d8042682f576753833af87904f62",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "c6cb021fcd512088f976d8f4acb55607052751553e2be4b3db0838b7f25ea74b",
+          "textRuns": 8,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "403917ea9da52a3cd41c4bb91a1b76ca12c1a9582c213a834ef3d76f41bfd4c9",
+          "textRuns": 11,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "94044aa304ef53f090d307d476b03eda5207d5ae6f4d9aa9521c48d6f9eef2db",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "7b8f08b03a784e7f807f918807c8a52c882d13d7734441d82565038d59afc721",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "1e2e640f02504ffbf7eab689919feb59a103da86951051d742eb7a93a72435aa",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "79c69d0e0d099c82b38620a9dd2d06584834b3c349dc9d1ab1da299fa04c735f",
+          "textRuns": 21,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/drive-thru-throughput-playbook.opf.json",
+      "sourceSha256": "5b489e170e18b2a4e91c86973b66c6a50c10c558c3aaa8560f30e85b9c690f97",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "830803eea85813561672453b68080684a0c1ab9f76aef0ef5677825d246ff607",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "4f4fcf10bfaf53c5bef6d14af1110644916824150332bfcf1f324c7e5f5eb190",
+          "textRuns": 9,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "d986164a4d4c194738ef6601b5c9ebaf12b9a625a02c51241ab6d23416631500",
+          "textRuns": 15,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "4c8a828eeaff77c9816a41082734760ef3e5f8c570a5fa45ffe4d94bd7b413be",
+          "textRuns": 20,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "e77b03dfc289ffc023b03c985374545fe9b99eed6ecb1540652267142fc252b3",
+          "textRuns": 20,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "59a13dd8d64de7b084cc4c21748decaec1d9809955ee75bef5b7d5b3ede4b46f",
+          "textRuns": 19,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/fan-experience-operations-brief.opf.json",
+      "sourceSha256": "e29c7721cfb1709041a997e9930778d96fc273a213439f722573b8a962ff7122",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "0cce13e1a006a891753f59717db55d47b238c1059ff72eb18b5faaf194a35657",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "253fdbc2f8a0a78db939dc20a31b48e677c9e3dbd55bddefcb20ea16fa91c315",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "9a83adf2452cd4767a58996bfb56fdca3d73305c86e8bec849e0f6fae5296fd5",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "52aeaaedf19905b2e9b56d03c933f4969f3311bb9cbf8ba7cc415223d754d147",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "4f95fc163d3e48607db420d04c86d4f97980b099f9f63b9f759f8b54b1765a7a",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "65481a2f7905c71a653cec64686568d538befdadd472fe256656aa2f4dc487f1",
+          "textRuns": 12,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/food-bank-distribution-capacity-plan.opf.json",
+      "sourceSha256": "9b57e5f54a9cc0965a582f2b7b59590f7491bad837dc9ccebf769666be86d9a7",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "f4c97fa1c79e3937045dfd9adedc14a61ff91ba80f20e50af4de0be24b612a1a",
+          "textRuns": 4,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "1b5444aaaf054f2fc160b80d11fda0a57cafd223a6c819e4ab578523a71c137f",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "975a0fbc95f04af3ed8fb8243448a7bf2c73d60ea5da90ec3215980620dc5e57",
+          "textRuns": 2,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "e722df2ec1666b466275cd22fc63fcaac408a9c7604ac68af62c38ae6849abc1",
+          "textRuns": 7,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/grid-resilience-capital-plan.opf.json",
+      "sourceSha256": "8e2b27bed50c8e26bf46f7b22dcfc97d15cb948be6cdf6330b96baabf4f676c6",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "ce8e5e86dc2ff3c4aa9a725f633a690020be8f8a68f970d529f2ad0ee966136e",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "354e75c54091f30a1c08fdf3d775ff4cb490a8ec25fefd8dafc34a744cbbe8d8",
+          "textRuns": 11,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "b302d47817b25969de7d2c7973d2e415babf71cd7f46b4ef8047753893fbb127",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "10d3eeaf6ab5836be42a7ee7513bf28ab482ff87aa12c332fd6184c7c5bc8215",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "5c9c860f66937d46a47ac89557770ded5988b2f83a83830a53869e55f20c21cb",
+          "textRuns": 23,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "1175f77c79e010bafca2deba1bbc6c743bc2321f24d059c816bc2a3dc91a3574",
+          "textRuns": 12,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/managed-detection-market-update.opf.json",
+      "sourceSha256": "bed3159ede72893075159b8a94926a681a4860ef09cd17230c1498204b690c6f",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "7ff483a11b00c850f60010bf206b27472728eae4650fe81b7e733b5dc7cef0e4",
+          "textRuns": 3,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "a04368f6daa3fcc66495d5c1fd4eb361f7c7cefe000f17f19e9ce30543723942",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "ae430ddcfb9ec2dc010cc58b8851c2de6209854e986ae3650d953499b1131e9b",
+          "textRuns": 2,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "75894c563e94db7c884e575f6c72ef9c6dab12cbf627c534f201e180c6d6d6fd",
+          "textRuns": 9,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/mixed-use-leasing-pipeline-review.opf.json",
+      "sourceSha256": "1268dbffee30bea609c572d748e8bc839175bbc943414f5a0a220180f8214860",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "3006bb9d3a3f89dbcc209b7365d5768acbf821d3274e7ee7887c17b3d8060367",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "8b2598297c3f28831a1526f32c236bf450469b25744e21161eaacd22bbdb194a",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "e1d5584115b286e98b286451ddb73687682b419bd0c36aa8d626a15039bbd75a",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "fa7c98dd67e8ac335563be6c41cfc909208b59210d16c44ecff098cc2f902758",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "20c200caedf60844ccb06b9291883a9f1ee955d862a81f97b4c1fb0c98d9314c",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "be5bbcfdbabaf3bc79c324c267bc8d3e905c366b2bf7f43efa1cb7881c5046bc",
+          "textRuns": 41,
+          "failures": 0
+        },
+        {
+          "slide": 6,
+          "svgSha256": "7cebbbfbfcc262061003129b5e38d6714bdcdc441a0d806fa9f272ed83bac1f1",
+          "textRuns": 15,
+          "failures": 0
+        },
+        {
+          "slide": 7,
+          "svgSha256": "c9b624558924f066279a1946993d56bd8b1a2d4bcc6e9a9618e77685d2700c56",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 8,
+          "svgSha256": "992f7f108b048ee7a09ac078ccfcf723b6269e2afb9b7f289929a79ea7b01404",
+          "textRuns": 13,
+          "failures": 0
+        },
+        {
+          "slide": 9,
+          "svgSha256": "45cf776acb82ff1b19e96ea3ef0c1df1fe9e5db1b3b9f634cf6e25f420c66d90",
+          "textRuns": 17,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/port-dwell-time-improvement-plan.opf.json",
+      "sourceSha256": "53fe829645552f002e7c505e595f012720f4124c95990e7ea94f2b619092c1bb",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "7b3024aed9ea25d9351cae9820ad7a071cac3120300e87e891d709930e802544",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "ee00b851027f8d057f02bc3146d81cde957497b5431e973cf8270c8522a17aaf",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "c8d5a8a78252fa529481e8d40b074174efe6285bf69f86ba7a3cc6caada77d73",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "d6e84ec79caba59182fd02ee313706a74bd52e0a1771937c95e5060c3ed25776",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "0063ba9db5bfecba6c0f0b2554da70901dac792cc12d6b71c409a3889f8fc1cf",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "16cda8e9c9f355c3d3a457dcd93844c91cb6d592dc0181de2549ffba56643c49",
+          "textRuns": 41,
+          "failures": 0
+        },
+        {
+          "slide": 6,
+          "svgSha256": "85396f546aaef94eb0d12508227715b72aa19057ddb1c9d0fbf5a046da1db2a1",
+          "textRuns": 25,
+          "failures": 0
+        },
+        {
+          "slide": 7,
+          "svgSha256": "72e15e3f169a701e619438e7f5f1b8870dab15ff8a76d066b61669b84328173a",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 8,
+          "svgSha256": "10f84696b0ebb27e490b2c7189f8e6fb2a221f040616099d1070b7fb95d201c4",
+          "textRuns": 13,
+          "failures": 0
+        },
+        {
+          "slide": 9,
+          "svgSha256": "2bcbe321ef0506a989fcfc5ba91ba7c5d8d97ddd7902dba5caf833e0742273ea",
+          "textRuns": 19,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/retail-launch-readiness-deck.opf.json",
+      "sourceSha256": "ec55512a675fc2b129af0e0522c2a5499c89da4c998340233f37d92d55fa0cb3",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "c26238034469de5d0c17752d7348b4951519d4e2c255eee66b3297c16049e589",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "cc96e40d8d06795eabf96a055110d13c5db72d3a944d391b6045e4eca0c142e2",
+          "textRuns": 9,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "0b96a9d4b4d3bc4e24b128f2171a88fe6d3bea716acaa3eed99700180cf44ee9",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "90593107f660423ebfb0ca3e218d1f4839eb0edd1d29f32daf1c5aba0d3f5758",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "1fbe1a8722f996cf7023b1966b9706495a1228eaa27c553d3b695c5b1f6a0416",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "dddd87cc92c605d8b85078ab5c7924e99ba4a0d93639b3e2a0f76179c693e3f6",
+          "textRuns": 11,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/robotics-quality-escape-briefing.opf.json",
+      "sourceSha256": "e132951ad54be0637684620319e8cd5c541680f85416c4464db9e791d2cf70da",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "48bf2cff2c6b256a7e02f8e755fb0ea49cffb9cdf44ca26f04337cecdee47e30",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "018758ea2d353652f4c832cc7e3d768f97c103e49389e939698118ff022bcf51",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "48956f6331e1bbdbce08570c889a9a980256d35207f8ee2de020f8b3c067df0f",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "3e4292dadc3d68ef88f97f2fd3d4348c191d26b574d1d6d0dd1cdb11221ad273",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "ae6d84831b434eaf225ca49ebbd18982fac39206d47bd36f00ffab26e4d49449",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "888a7683bff3fe696ed8a84c262af50edc9e703a7900923caf503b76dc3b12b5",
+          "textRuns": 20,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/rural-broadband-expansion-proposal.opf.json",
+      "sourceSha256": "c168c5695e35e7087f4daa5ab36f9c5b905f4e8a5e676694b265858e1a1d1454",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "c15389e4c3e7d4d34401bf49bd2318bfe7b7f69a98f30019aef4632c09682f00",
+          "textRuns": 4,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "35e848f3776d59aeeaf33cbe4933254a3875089a9b641a6493faef4d58e85845",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "2480b7aae761c7571207333fc1e669e96273c90f51f49a52f51149d381e436ff",
+          "textRuns": 2,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "3bff17279d875a40117cfe9798a318dac4c2ded0aefa7b4dd481bd0d4ea5490f",
+          "textRuns": 14,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/satellite-maintenance-readiness-review.opf.json",
+      "sourceSha256": "2d948d7ab9991e0ddfd93c4bb88235dd6e797cd70ec22728a68d17a5d59fa1dd",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "9f8a79628fcd113e794d528ba238cff8af7130ce570e1178fe2a15ec1e13bdb1",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "6ef1435fa7dddf5c9534e86ab2dc3fd2060635bf1f8467222fb7bcbf83d16f40",
+          "textRuns": 9,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "0665ef6f9820b57866d633f94e5d694819eccd12e3773b156ddec01af3b76814",
+          "textRuns": 16,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "6cbec89b2764aa2d9ca15117b4bcda89ecd46bffd32d480ced713f4c5b6d54b7",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "6a7611abd4c808ea75c6ad4b482566a649c5c05309b5b0172567d5dee2e07c49",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "89c073219b745fd85fa3f8eb63ea426bf04c6014dc57e8d8e91dacf0c53ce5fa",
+          "textRuns": 15,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/streaming-churn-winback-strategy.opf.json",
+      "sourceSha256": "ce09337efec7899823d8260daa044ce2a7753dd49c919f3bd56efc6eeae85cff",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "1a0d3257a03709260b7fe0a59043cfcc21b9f1e76d426ebad35032315202cd4b",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "dcf61288e1a505a1952247e8c510b6ab8b6ff4b2ef150555c478575a1a546561",
+          "textRuns": 9,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "3b381d47d23b69310725f9e7ad53b1d233fc7f9b32b9818c1bd067f2d3b3b7d3",
+          "textRuns": 5,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "766f9efd4214c39b0d12b58ca070e0d1d89695e5924420b013cdb1702078f40a",
+          "textRuns": 20,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "6b7b01a385cce119a6921e47306468d24dc77e2ce351e91a20520dc9b103e207",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "1e5002f876dcd7b668175944d9432de3ea46ef59a2833f8e78d2a24c453a7a4a",
+          "textRuns": 11,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/tailings-monitoring-investment-brief.opf.json",
+      "sourceSha256": "15d4c9b523e1d7dd6e43cbcfbc9a14df1ee17e39875f8c8589f364ca9bd271c7",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "6afe8ec2fd7655d4f2d2f14d1e1ddef645dd1c49a7ff08fed053ed1a04b3b377",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "21d21d5e90b9c05098e09807e2b33bb0d81adb3a58b18608c96f071e3464d6e0",
+          "textRuns": 9,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "be9f6da308f9700c739068a7effc0e45d1a1a7656b5d3cae5cb053ff1b36399e",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "71757052df7b01bbc7c8a556e6c48d056179140581e2afe7f36feb42a6893ccf",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "d36fd04f1d533e44908aabba0edef1845959503adb4fbbdf645e1fbc4ffeb8bd",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "d3a0e378812c9c1c369b75f6498396d234bef3cfe5ce967e6a6a2843eeaf57b3",
+          "textRuns": 40,
+          "failures": 0
+        },
+        {
+          "slide": 6,
+          "svgSha256": "ed55f7767fa5eaa8f58bfbdfc4b5a86845cdf7d47d7811a8b4958f740c5aafd1",
+          "textRuns": 27,
+          "failures": 0
+        },
+        {
+          "slide": 7,
+          "svgSha256": "4aa1da33e4e87b16d769b05a5998a15006817aa2148540eb515a342e218f931f",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 8,
+          "svgSha256": "3b2bcbe62e85f170fcb27ab40d215199174ea601a8ff70e2b72c7664d7697ffe",
+          "textRuns": 13,
+          "failures": 0
+        },
+        {
+          "slide": 9,
+          "svgSha256": "2618bc95952f71b72cf96ece2232f8cf1f936c00ddfcf5a3c4424de8af45e37d",
+          "textRuns": 26,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/trial-enrollment-rescue-plan.opf.json",
+      "sourceSha256": "14eefcda38415c355ea7f7b2603d95e43c9c4d35b961e125c57bf20490265c06",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "385665cadc46a565fc6ed4cd833ce98acb69f82883bf2cc3532411872b79d569",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "bc042efe007f74b9a20b29c1b1d59f33a6b90a7fb2e1f7aedf98e8e7070b21d8",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "d5e37523c99577d6a693141f4c276dc1f9a8b1911bb9f212d5cbbb910710a888",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "8fbe54fb91c018a831853a5848015928fdea6b652fe39e5f8fa60f9b27cb1a97",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "dc774562ce60ec9d50c48041de8ebeab8869c856647fe3d3883087bf04db68b8",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "a57e40f41ba942134e580fda0d25ed459d1ab6bb8e60f6eb28671af8218be04a",
+          "textRuns": 12,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/veterinary-staffing-stabilization.opf.json",
+      "sourceSha256": "cd47d5effaa89bfaa3312702c84bdad6107afff896d77beb25ca675c87f2f877",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "96d8d3ccfdf189aa74fdafb75ed050b4bb1727f1bf31c432b212c0262221360b",
+          "textRuns": 8,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "7e04febd1f3e8720a6b8afa66cbbfc2860dc1142eddf64dd9734feb1b856133f",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "3270a77ed96856ce8c74dbfc77921c0e3832a58dd9668f41eb98d60507d33d37",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "0208988cae89950d35bb162ce5695d6a1ab5a05e5c28abdd1aeac79a6991c7ec",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "5983a9ea63b1cc8f970ae2216452ed23413c1d0002cfd8e4d03dfc2a5130e7f0",
+          "textRuns": 23,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "94923c329035e65205500008faf3417bc52b31dfa046f275524db586accbe619",
+          "textRuns": 12,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/industries/water-stewardship-grower-brief.opf.json",
+      "sourceSha256": "2cb8b0b1d46b197d6f9ddff37e8211eee0fc4079e9ea532cb052ee90fb331569",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "c5ce07f6eb48843575c1b2dd133d21801a5c73217fa83c759ce4e5e9d5cde9f4",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "5d6a55d24222dec5978394ad97aa813fa20acecbaaf917825088699ea3e33b9a",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "75b7ebe9680965e4bafc69014950a3526dad0e6e513c820d084fc80d887e011b",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "3162d5fb3d68d5a5963c7fb07b3482bbc055ecb23b3c2378bc1e764b482ec9bd",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "d5412e996c6a0000a40c852899d0e03769bd5c14dbffc4dc6c767571d76947a0",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "b65a23cb8cf19e9699b876e99f13fc1e36d4cc8d7c123199886029a6119d66ee",
+          "textRuns": 40,
+          "failures": 0
+        },
+        {
+          "slide": 6,
+          "svgSha256": "da78dceee8bdf0bcfbd9044767f5acc836cc0445db5fec5edd22e7289d8a8559",
+          "textRuns": 16,
+          "failures": 0
+        },
+        {
+          "slide": 7,
+          "svgSha256": "e7b25ea4d942b6c36a9459eb78f02486ff77ff996d62d3476a48acd27d5ca0b0",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 8,
+          "svgSha256": "ec2729a437f991370c51b29b71dd5fc6d366f20f531d6d5b2b0b62fff9e363f8",
+          "textRuns": 13,
+          "failures": 0
+        },
+        {
+          "slide": 9,
+          "svgSha256": "07924692b1c46ef3807080151eeab01e489325e6b5be1e159a2165d0876832a1",
+          "textRuns": 25,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/international/arabic-digital-services-brief.opf.json",
+      "sourceSha256": "cf38447f1fe47feae07686bdcd85c08102ea11733fdde1f2fecfabd005875901",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "f34dafe207ae27dca2ca02c386822bc52aa458fd383ae18b76fc2c9643489328",
+          "textRuns": 8,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "0b9d2512a12e8fd8688adf08ffa1d0e05c7efbb0fdb26dca96d4187db30c8889",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "268cba27dfd5425ac0d70a9bfbb0d73dcdf1d82fe99c3d6aabadf44d411a2a0a",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "8b872e42e8b77fe8c27209e9a7254e0e4846f9f697acb439721ed5d3425f0cbe",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "6f769cb8d298a1052316d7093b7b494d1961056488386533444440ac67565544",
+          "textRuns": 23,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "a0e6fea3681c8c4ddc663a2f05f55fb0cb695f2c48dc7628b92439a37cfc6be4",
+          "textRuns": 12,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/international/brazil-climate-adaptation-brief.opf.json",
+      "sourceSha256": "14a1a12590c6a4aaa8171dcef41fea199ea1d31bb272f08240023ec21105b190",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "20057fd1581fac3eee574630cfc72c5f13369ed0d512cf2e90c19dc57ab87c46",
+          "textRuns": 8,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "4c1e6e6c5e216929491515ae493d578e6fb08d14aa04872c8e25414d1cf41427",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "5316dedb7cde62a97ab3fb82d5b699d637609d8d9ef124fa1009d079c0a6097c",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "2d0723d9af5d9e885d522c85fc2a717253eeb671c98c1a00802f0cafd42c9680",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "be51ac16a022462862b7044fb51ec019cf4c70320d682330de7d3403dcae521d",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "2e12a5deed0c8aec38686059e1bbf4e86f462a4aa16fdbba11749bb48699dd49",
+          "textRuns": 21,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/international/german-works-council-update.opf.json",
+      "sourceSha256": "56c1f6cf562f71f638c6e46287c3a8f2d1f55c4a4dba02c2ab55a2c75a8d3463",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "a54d1cd6bb5896dd25c97143c28f2e6af8cf03445fad454aae159977fb7f0406",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "8847ed6d61ebf7da1009a51cd5e1c50840d94c1f001a60c16f54ad8666c77deb",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "64ac02fb4ac5ba92bc6bc5ee836e6c8b12a504b2c9d5accf747390580cad911a",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "f828a7aba07f0b9f93ca96775c2156ecc8f56a8383edbf0333e669fce23b1c24",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "2e633ea478b901ed9645751e3e09c07f340a789638e1e89aa26789ee2d645403",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "fafa268a3b9c558089a709cb4f4e3926cce3b7c38f98b1e80c98bc81a46c40dc",
+          "textRuns": 19,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/international/india-rural-payments-pilot.opf.json",
+      "sourceSha256": "ad09f5323f1f468bff0d8945de851e21ae8b887cc731ae919408d5ee84f56881",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "ec7adc0e65b1a199eefb2e5cb11263b9d7a4b06af4a34df5338b96a1c423634a",
+          "textRuns": 3,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "daca94ead98b1bf27b201165660bc21720a3b0bf913d9c04503870a49bc68567",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "95162e60eacca4d394539ceff09725c46aabb7ed13c7ccd57a65dad92fe26fa9",
+          "textRuns": 12,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "a2c7b0811e1ad7871fd1f0c23831c5ee85034c8a1fec0e1cc07b326e41bda0a0",
+          "textRuns": 7,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/international/japan-market-entry-readout.opf.json",
+      "sourceSha256": "53567dc33849685770aa5921444447bc61fdfdd02d113b25774971790a8195d9",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "f1e725e41757da129035eca556416e86bdb5b02181cfbc112a0974ebdb2fdb6a",
+          "textRuns": 3,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "a306642986db59f64311eaedfe1505010c80266e67a2ae994ef4d70464571f21",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "c05ed39d8fe79600b484fc8c0a5725d572b1a7ecb44d6facbed1f707a68669b6",
+          "textRuns": 2,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "9db1f46705dad0356154d53e150e8dc47f2577f97b19c1bbd53d772c2cd67c92",
+          "textRuns": 7,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/presentation-types/customer-qbr-renewal-deck.opf.json",
+      "sourceSha256": "6f54564c260e5e6772790f86dce464c35a22353d073f91e105e68a0fe758831a",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "5e993a206dae77b069e818bfcaf00b7e3dd7c30641c70dd3cd1490a357bf0809",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "05a9d22fce548cf97051ddaae2c885c75ca2defb822c179690240961247c6885",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "3c2f286799949093d3eb2a98f757320e49156eff21d627111b522ba063fdc83f",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "13f9845619e4104122fa082268ddc3ba68136ec1a175b1d7e50984fcf8030355",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "51c57e601304b1f02110d9ed134df7b89ee45364a2b9a799aab7a51ee36d0fde",
+          "textRuns": 23,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "467233b19a05803ae66b0a0521047e06bc8fc32be36c46bb1bbfcfb2052b355c",
+          "textRuns": 12,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/presentation-types/data-incident-postmortem.opf.json",
+      "sourceSha256": "59471b1b780dfb0d103f76d2b09988eaa57f7e5381f0098dcbde0300817119b3",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "3ecc9ed0ef7b54d5270936e7008bfa11f12cc5dca1f90c80c2c8170802a69e63",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "aed6396369bec4ae9bfd357f7fcedd0affb6afc9cfbec15932bbfa30f4da87d6",
+          "textRuns": 8,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "570877353ae39128f339aa8f5d70c209bb57c52335260422210f8b8cbe932d26",
+          "textRuns": 5,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "a8b73464d823dc5f112edfe5d2634412c3883cd390333a74214b919905a455f3",
+          "textRuns": 20,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "811de9762226cf2e8d20b0b38fc6375490b9f3007821c923652019258efce38a",
+          "textRuns": 20,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "55aae60a758ddfa6a5c8f07de4a5577b8682b2b8cb6fbcd0ddae416bf26e03eb",
+          "textRuns": 14,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/presentation-types/developer-conference-talk.opf.json",
+      "sourceSha256": "b0fcb5025045aeb5b2aed1443bf7c6a63243ee0b78704bab0862916aca3af593",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "137ff47ff9d1a3c4794864eb95afd0ecd15c7195a355d654beebcb0a1c5762b5",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "312f5c59ca2cf10a0418b74723b304a51297d5fdd70717b4b792cbbd923fabdd",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "d338d766e5eb6334769715ceb2aa890cf66c81f005cb25180721118fb0e8cce0",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "0eb59394d7ec6d82204be5cbd95c7c5e20105aa835b5004a8f5d3cd34e0ee765",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "1aa89376590f3cd0dfa11f9fdb5838e2c35251d1c748de17e614e34568dbaa10",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "7c12ed20dd79a415dbc863e0b99445aa8bca367bcf5d0fb5f6cd61f071b58e24",
+          "textRuns": 12,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/presentation-types/executive-workshop-facilitation.opf.json",
+      "sourceSha256": "e683cf38c34ae63b8e97d2637d832cd16706bfeab3f0d6472199b4f33d97dbcf",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "145686858355a677f896534c513d1310b9ec70e3140f4be162fe520ba86f5bff",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "4d99cc1efe720b84740ae32f9f0242a207615eb79fb6f745273805f7f1f5c9a4",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "e8fe89d5da1bec70b964be95bebb870c190a908646a1b9dd107ba60bdf0767ae",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "627dca6c36d0c20c5a13f6e1878b5e8370823a8ace50aebb14faf63fd57ba65b",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "c27950502cb3a41cfcdadba1d92d6b76ee77dc28e450fb1f4c3a4ec4fc866803",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "07d9d78728f342bc8505a399c680f63fbf93f34eb8cf95c21a48be4a8c486882",
+          "textRuns": 12,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/presentation-types/manager-training-deck.opf.json",
+      "sourceSha256": "ddd4392432db2120c0194ee2a11608d6bf0def310bad4f86940e9e6d1ff8bf7d",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "cdad8bae07206f35ec46b871fcb717e30166bd70071379819eabc1dbfc187cef",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "6050da579615a5a56a3a7a4c1bd45f651915c9bbbf7a322836ef89f4147d5b0a",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "1f89e26165f95af65853a4e0231f8f26b9f726d89ab9de255668d1644cc8469e",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "7c5ea2a995ed803a79c567cd9d4e9c2163812fe37ca7983a38dd5fa1758e81e3",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "eb32002f965391cd4384681fea28cf7a84d6b07b7357778fdda2a10daea751be",
+          "textRuns": 23,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "dee6263ca59f2e0dd0f31a3c1bbc04dbb81ec20b239f3605f98ba56481effd0d",
+          "textRuns": 44,
+          "failures": 0
+        },
+        {
+          "slide": 6,
+          "svgSha256": "dfa2dd7a49f8db6d59145c8b3c8a427e25fca19ff5679c3b4faaa53729e53eab",
+          "textRuns": 16,
+          "failures": 0
+        },
+        {
+          "slide": 7,
+          "svgSha256": "90698c19b53fa1889c358fe12e95c1f9024385f5e118e63021da89d7eea0bdd8",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 8,
+          "svgSha256": "2175d791569609e6c4674a55888e475a92acb79537d3de87ff88933047fda669",
+          "textRuns": 13,
+          "failures": 0
+        },
+        {
+          "slide": 9,
+          "svgSha256": "c74d2667933ff1afca123aa6df9837293c244a53815a7c79ccc3b034e1630668",
+          "textRuns": 19,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/presentation-types/monthly-board-update.opf.json",
+      "sourceSha256": "47b2b9e74362eaf39da8483eab1f633dfdc313efb455eaeb055a89257acac451",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "5dce7b981152818f9462f4da15d35e7d345eccd48ad40efe8b6e8e6aaf4cc128",
+          "textRuns": 3,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "f56d7b1e1b6af36ee6a0eac6c9dbacaa344c91204977ab5d269e214f1dc560fb",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "1cc259cad250e6981c4f035bb8220b21ab9ac69551f55f428caa2c767d3d826d",
+          "textRuns": 2,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "bbdb2b72008d161456775fd9ab7c12dedcbbaef0ae87c6f610191fd7529da103",
+          "textRuns": 9,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/presentation-types/policy-briefing-for-advisors.opf.json",
+      "sourceSha256": "821cface9c601be1d7a3ab80cef6757fa330c60a5952606ac5f75c17796d3378",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "6f75173ef237f40c0fa46d917ad90424fad81b54491368a9916a44847071860a",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "b658af17fa2a32f6291ef065c3d7e04263ff03d90ca9ba999c1b584957ce2cab",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "f221de4a3672af5b9f9af6988809e1c4c85e1f4107764994adc4e550176045ab",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "91237d80c690b83a9450f3dbb5dadc8170023c1b955bb72eb24e5e2fd0efd1a9",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "dadbb70ab805d43db20567af5a890ec2fe914e5b60d6aeef24090d197dcb1110",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "98be4ca50a242d41c52a4f036044c9d47120db0017b793d3398d1843a866d9c2",
+          "textRuns": 40,
+          "failures": 0
+        },
+        {
+          "slide": 6,
+          "svgSha256": "187cbf920ee50d58202b8b40cece5c99e57c07f0196696dc063874d71a448571",
+          "textRuns": 19,
+          "failures": 0
+        },
+        {
+          "slide": 7,
+          "svgSha256": "6fac6b9524d186f16294cf36ff82cf6f3ab56ae46e68186210b7435f057caf06",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 8,
+          "svgSha256": "815774de216a3e957619cbcd601ca83cbd4585ec0d860230ffcf8ed1afe19088",
+          "textRuns": 13,
+          "failures": 0
+        },
+        {
+          "slide": 9,
+          "svgSha256": "f741ceeca666da7f2da71743eea948a0f927a82be3270ab009a0469a2a192068",
+          "textRuns": 17,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/presentation-types/product-launch-narrative.opf.json",
+      "sourceSha256": "ee2c7d40efbd832dbc714601a145b83015ee83b0b466502f61aa94f3e44c0254",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "66b81eb9c85a27827009b77afc9a411ac3c79e4203c05ba69d7df2bdf3d748d8",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "13de4cde9b3974c4a47fe3fb528888007326eef9144ab8e20c4bc12c836016f5",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "4878d55ac6d43d80b03b1f4d952b9918f81433366d2f6e41ad2ade891a0bf9f9",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "54a5e3cb847aa3dc07e9f6a81a35efc83d913f12e05b5d1c556b22caffb69ffe",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "83170f36f8c043103d76b54deb9946ac1967783914505f581b7a8ff21587ea0e",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "82de01b9bf692dfbffbef25a4ebb2da199f920d86256fb2772978b0c9830aa2a",
+          "textRuns": 44,
+          "failures": 0
+        },
+        {
+          "slide": 6,
+          "svgSha256": "dc5c34b8949357556ab41a5540256239a9e1afa21af5a8725806d352d490b051",
+          "textRuns": 16,
+          "failures": 0
+        },
+        {
+          "slide": 7,
+          "svgSha256": "0d22d7e759be233f89d1f71c12a539a5f7d4c7472c21de9d9f1846b3e8ed5252",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 8,
+          "svgSha256": "a6647e6c09413a2cf9c2a73cd9dda8d9279ecd2f399670597e5e999e230e0e6b",
+          "textRuns": 13,
+          "failures": 0
+        },
+        {
+          "slide": 9,
+          "svgSha256": "cedfee620a47cdd34af25aea2bc184cd53b9e664dbb81ab3d4e2dd1475556bee",
+          "textRuns": 28,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/presentation-types/research-findings-report.opf.json",
+      "sourceSha256": "49ad1a78bac53514e2005bd7066890eefc6b17fe0454c90bccee45b5c1e82e8d",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "24857021e6ec69b05dcae02a620b2e03dd0bdef26fcab9ea2b9a8af58b1f5f61",
+          "textRuns": 7,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "aa9aef28a3a9dda7db4e20c2bf2078b8e0286408e29416570950fec18ca483c7",
+          "textRuns": 10,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "a80dbb4de2bda66beb496f9aec206cdcec2123163ddd9f0f5e9bde10c8c9ec21",
+          "textRuns": 16,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "9b1b2da93a0a9fde89c9790142c4283b969fc350ed55e3d9ca93a54e35b597c0",
+          "textRuns": 21,
+          "failures": 0
+        },
+        {
+          "slide": 4,
+          "svgSha256": "acabcd28e41b13b47cd3071bd240c06cea061ad21829d653b15e6864b70ce2da",
+          "textRuns": 22,
+          "failures": 0
+        },
+        {
+          "slide": 5,
+          "svgSha256": "07a5e7be63ac54e986da8a7ada45990610c998a3928e551e51b53a4136ae770a",
+          "textRuns": 45,
+          "failures": 0
+        },
+        {
+          "slide": 6,
+          "svgSha256": "c85f81c4e28267269dfc5835c45fd5a17b3846313e6edcb449e7d03729bf887c",
+          "textRuns": 16,
+          "failures": 0
+        },
+        {
+          "slide": 7,
+          "svgSha256": "d5738c1af652b8276caea5ff38cce37bc4a487490e822da92116e2b0cbbc1c57",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 8,
+          "svgSha256": "7c42db2afa157fdc1567b692bebe18ef05dc4dff12fd39650c17386a77f4312c",
+          "textRuns": 13,
+          "failures": 0
+        },
+        {
+          "slide": 9,
+          "svgSha256": "4c67de7df5ae333b987c3400e7cc83fda331565fc9e0f8f31f19587cd446b8cf",
+          "textRuns": 17,
+          "failures": 0
+        }
+      ]
+    },
+    {
+      "file": "examples/gallery/presentation-types/seed-pitch-for-climate-risk-api.opf.json",
+      "sourceSha256": "80942a1002cde01bae414f2a2e7f22c08f4b3f61984015e158532700036928ba",
+      "slides": [
+        {
+          "slide": 0,
+          "svgSha256": "5505506d9078db30aa4f299fc5ff2f5f99aa2ed80e264157413d295fc351f8fe",
+          "textRuns": 4,
+          "failures": 0
+        },
+        {
+          "slide": 1,
+          "svgSha256": "0e307e93a3d00d5ff0eefe51eb82309d4cddbda06bc935ad97e1d0388617d7ad",
+          "textRuns": 6,
+          "failures": 0
+        },
+        {
+          "slide": 2,
+          "svgSha256": "d290528ef11834e8ed5b2c9a36e1eeb41b98f64f72ea4baed08fd219d975df6f",
+          "textRuns": 2,
+          "failures": 0
+        },
+        {
+          "slide": 3,
+          "svgSha256": "cac39cb645c236e40afa5fddbee6d3ccd1874e21ddfa83520cab250a851c89ca",
+          "textRuns": 7,
+          "failures": 0
+        }
+      ]
+    }
+  ],
+  "slides": 720,
+  "textRuns": 10313,
+  "failures": [],
+  "unmeasured": [],
+  "externalRequests": [],
+  "errors": [],
+  "criterion": "https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html",
+  "scope": "Conservative text-rectangle background sampling of rendered SVG on a white viewer matte. Uses declared foreground/opacity and sampled backgrounds; no anti-aliased text colors enter the ratio. 3:1 for displayed >=24px or bold >=18.6667px, otherwise 4.5:1, without rounding. Rectangles include spaces and font ascenders/descenders, so unrelated border pixels can trigger findings. Opacity shared with other painted elements is approximate. Unknown filters/blending are unmeasured, not passing. Does not certify WCAG, exact glyph/background intersection, glyph coverage, reading order, screen-reader access, native PowerPoint, other viewer mattes, responsive scaling or text contrast outside these rendered examples. No document colors are changed."
+}

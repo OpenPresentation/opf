@@ -1,0 +1,137 @@
+﻿{
+    "powerPointVersion":  "16.0.20326.20132",
+    "hostVersion":  "5.1.26100.9444",
+    "records":  [
+                    {
+                        "editedSha256":  "1d2c15aaf4fc604db22875f93b3a112e99c45321162e6f0d8868b51c58edf3c5",
+                        "lines":  [
+                                      {
+                                          "width":  340.2,
+                                          "height":  10.98,
+                                          "path":  "slides.0.tag",
+                                          "text":  "Source",
+                                          "left":  32.1626778,
+                                          "tags":  1,
+                                          "line":  0,
+                                          "fonts":  [
+                                                        "Carlito"
+                                                    ],
+                                          "top":  32.4
+                                      },
+                                      {
+                                          "width":  340.2,
+                                          "height":  37.05748,
+                                          "path":  "slides.0.title",
+                                          "text":  "A measured title that",
+                                          "left":  32.28244,
+                                          "tags":  1,
+                                          "line":  0,
+                                          "fonts":  [
+                                                        "Carlito"
+                                                    ],
+                                          "top":  50.13
+                                      },
+                                      {
+                                          "width":  340.2,
+                                          "height":  37.05748,
+                                          "path":  "slides.0.title",
+                                          "text":  "wraps when space is",
+                                          "left":  32.4,
+                                          "tags":  1,
+                                          "line":  1,
+                                          "fonts":  [
+                                                        "Carlito"
+                                                    ],
+                                          "top":  87.18748
+                                      },
+                                      {
+                                          "width":  340.2,
+                                          "height":  37.05748,
+                                          "path":  "slides.0.title",
+                                          "text":  "narrow",
+                                          "left":  31.94134,
+                                          "tags":  1,
+                                          "line":  2,
+                                          "fonts":  [
+                                                        "Carlito"
+                                                    ],
+                                          "top":  124.245041
+                                      },
+                                      {
+                                          "width":  340.2,
+                                          "height":  17.1562214,
+                                          "path":  "slides.0.subtitle",
+                                          "text":  "Supporting text",
+                                          "left":  32.0847244,
+                                          "tags":  1,
+                                          "line":  0,
+                                          "fonts":  [
+                                                        "Carlito"
+                                                    ],
+                                          "top":  168.052521
+                                      },
+                                      {
+                                          "width":  340.2,
+                                          "height":  17.1562214,
+                                          "path":  "slides.0.text",
+                                          "text":  "Full source",
+                                          "left":  32.34559,
+                                          "tags":  0,
+                                          "line":  0,
+                                          "fonts":  [
+                                                        "Carlito"
+                                                    ],
+                                          "top":  198.70874
+                                      },
+                                      {
+                                          "width":  340.2,
+                                          "height":  17.1562214,
+                                          "path":  "slides.0.text",
+                                          "text":  "Second paragraph.",
+                                          "left":  32.4,
+                                          "tags":  0,
+                                          "line":  1,
+                                          "fonts":  [
+                                                        "Carlito"
+                                                    ],
+                                          "top":  215.865036
+                                      }
+                                  ],
+                        "savedSha256":  "b832bf1268c7e5205af0322d7d3bb557fa82e449a646f47f5fd246fbd6ab0b0d",
+                        "masks":  [
+                                      {
+                                          "path":  "slides.0.tag",
+                                          "sha256":  "29e62588732c5539908d0fecb1a00211ef157a680352d69511ca23f77b417cd4",
+                                          "file":  "case-16-mask-0.png"
+                                      },
+                                      {
+                                          "path":  "slides.0.title",
+                                          "sha256":  "9fff3bf4976d5a53322816680499ca6a3172f5ab7eb56ab8585a4b9d2874c8cb",
+                                          "file":  "case-16-mask-1.png"
+                                      },
+                                      {
+                                          "path":  "slides.0.subtitle",
+                                          "sha256":  "6492a76a2284823f7c8fa16aa50fb02afb21f8345a9b344c8a7e514d0acc3e2b",
+                                          "file":  "case-16-mask-2.png"
+                                      },
+                                      {
+                                          "path":  "slides.0.text",
+                                          "sha256":  "cea52ba342318ece2447ac954a1c68dfe835f6b10f8b51a77ac3e26454ec60be",
+                                          "file":  "case-16-mask-3.png"
+                                      }
+                                  ],
+                        "reopened":  {
+                                         "sha256":  "c73c6575a00532d3d7528f604e1118d384ebfc5ea0adf74fa9222e6c8a31e6c1",
+                                         "file":  "case-16-reopened.png"
+                                     },
+                        "original":  {
+                                         "sha256":  "c73c6575a00532d3d7528f604e1118d384ebfc5ea0adf74fa9222e6c8a31e6c1",
+                                         "file":  "case-16-original.png"
+                                     },
+                        "file":  "case-16.pptx"
+                    }
+                ],
+    "executableSha256":  "90fa931172c507b763ba92a82b19d5bc70816e008c5bb87577e1838e8a92e9f9",
+    "windowsBuild":  "26200.9445",
+    "generationSha256":  "b37602cd0e825b03d74d5c19cfb702659650497297b94943a457170ad0de3d66"
+}

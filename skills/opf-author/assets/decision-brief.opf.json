@@ -1,0 +1,22 @@
+{
+  "name": "Decision brief — example",
+  "description": "Illustrative starter; replace example statements with the user's supported content.",
+  "design": {"theme": "classic", "fontScheme": "roboto"},
+  "slides": [
+    {
+      "id": "recommendation",
+      "title": "Start with a small pilot",
+      "composition": {"mode": "row", "weights": [2, 1]},
+      "blocks": [
+        {"items": ["State the decision to make.", "Show the supporting evidence.", "Name the next checkpoint."]},
+        {"text": "Define the pilot's success criteria before expanding."}
+      ],
+      "notes": "Replace this example with sourced facts and the actual decision owner."
+    },
+    {
+      "id": "next-steps",
+      "title": "Make the next step explicit",
+      "timeline": [{"when": "First", "what": "Agree on scope"}, {"when": "Then", "what": "Run and review the pilot"}]
+    }
+  ]
+}

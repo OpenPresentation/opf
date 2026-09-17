@@ -1,6 +1,6 @@
 {
   "name": "@openpresentation/opf",
-  "version": "0.3.0",
+  "version": "0.10.1",
   "description": "Canonical Open Presentation Format schemas, catalogs, TypeScript types, and local validation.",
   "license": "MIT",
   "author": "Open Presentation",
@@ -71,7 +71,23 @@
       "import": "./dist/repo-readme.js"
     },
     "./spec/*": "./dist/spec/*",
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./composition": {
+      "types": "./dist/composition.d.ts",
+      "import": "./dist/composition.js"
+    },
+    "./pagination": {
+      "types": "./dist/pagination.d.ts",
+      "import": "./dist/pagination.js"
+    },
+    "./data": {
+      "types": "./dist/data.d.ts",
+      "import": "./dist/data.js"
+    },
+    "./lint": {
+      "types": "./dist/lint.d.ts",
+      "import": "./dist/lint.js"
+    }
   },
   "files": [
     "dist",
@@ -80,25 +96,26 @@
     "package.json"
   ],
   "engines": {
-    "node": ">=20"
+    "node": "24.x"
   },
   "scripts": {
     "clean": "rm -rf dist src/generated",
     "generate": "node scripts/generate.mjs && node scripts/generate-previews.mjs && node scripts/generate-content.mjs",
     "build": "pnpm run generate && tsup && node scripts/copy-spec.mjs",
-    "typecheck": "pnpm run generate && tsc --noEmit",
-    "test": "pnpm run build && node test/smoke.mjs",
+    "typecheck": "pnpm run generate && node ../../scripts/typecheck.mjs --noEmit",
+    "test": "pnpm run build && node ../../scripts/run-node-tests.mjs && node test/composition.mjs && node test/pagination.mjs && node test/data.mjs && node test/rich-text.mjs && node test/lists.mjs",
     "test:packed": "node test/packed-install-smoke.mjs",
     "pack:dry-run": "pnpm run build && npm pack --dry-run --cache /tmp/opf-npm-cache"
   },
   "dependencies": {
     "ajv": "^8.17.1",
-    "ajv-formats": "^3.0.1"
+    "ajv-formats": "^3.0.1",
+    "jsonc-parser": "3.3.1"
   },
   "devDependencies": {
-    "@types/node": "^20.19.0",
-    "json-schema-to-typescript": "^15.0.4",
+    "@types/node": "^24.13.4",
+    "json-schema-to-typescript": "^16.0.0",
     "tsup": "^8.5.1",
-    "typescript": "^5.9.3"
+    "typescript": "~5.9.3"
   }
 }

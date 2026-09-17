@@ -1,0 +1,65 @@
+{
+  "sources": {
+    "core": {
+      "commit": "fb56cd247091f45a739eb3e752126db9e69fbe4d",
+      "runtime": {
+        "catalogs.js": "6d74d7b051844728b2622acdb5268472a043544c8b2ca04eb904b1cdf74ec739",
+        "chunk-AFEV7YI7.js": "49b47b80d21d17e3e1839da05e0257db3db378ae371b6d3a8f7e729d7468104c",
+        "chunk-DA4NWAQV.js": "ac4e9b8e38a998aebb074459f0788dcba6cf13f57e5f5b3f1ace472e0161f2cb",
+        "chunk-GQSK3T7X.js": "34f518c29c9757bc252b5c13eb5d7db8ada4b477496e6289d8149fb4fdc7cd45",
+        "chunk-NT3IYAYX.js": "193a39ad7d395d4f26af96e24aa9d23617afe3f63c9f71ec8b18d2a16c68bf97",
+        "chunk-OZULJBSG.js": "9e3ce45dc68d39c646449baf4ec9aad7b92d3f69b85a3dfe37540d13820d0d1e",
+        "chunk-PIQXLBBJ.js": "818578357a214f76a743db8cf63c0903825923e1ba970abf68c21912e59893ba",
+        "chunk-SOSOBKQ2.js": "b2bcaf1f0e8725c9a8f3fff9b5c996c4e7e63c6bb8dd4d13c2d7609105b02915",
+        "chunk-TWMRZ43O.js": "0d35cec97ec7ddaa67fb9f096bc672c927eb68ed5fae5ac27d4dff70d68313f4",
+        "composition.js": "a2d69048632dd6ff5ba4db397acd86e8c9c5c16365633319a24999466ebbd586",
+        "data.js": "ae68ff3088ddcea772573952c572a3c58b8815086c9f81e57939d45848c64b95",
+        "docs.js": "24c0314d54ca4e55d5962957b5bf84ed1a095312528b0c87773e89e8f7c04f32",
+        "examples.js": "c69ccdcfaa0c4157f27174a3814ac3b6a1874440029b02d27a7fc971fc05fe1a",
+        "index.js": "258b7b2b6d564158f82fd4a45848dc53b8b506d74b64c96140e2ff23d357160c",
+        "pagination.js": "5fad5aee183a2a5fda16fefa31e6b50c0491528ca111bee80081640bd60b50e4",
+        "previews.js": "043037d2d5dfec4d69072415032818d6a6c5e686938fcd644a4f103286033950",
+        "repo-readme.js": "a8177f828c853554ce636a0ca702efb63d79f96175f5440f35c32e6834ac215a",
+        "schemas.js": "52f40eb788685649099577a9241adb75c5f18b4a5c8cf1e55215b6fa3f52105c",
+        "spec-files.js": "8302d015b9368a585ee6aea946a18b2f0036396acb963e273baee48a0c4ac817",
+        "types.js": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+        "validator.js": "fc419645499641ca2e45e3bfde4dba90a951e171bbfdf45125da1057b5805b45"
+      }
+    },
+    "renderer": {
+      "commit": "44ff76fe19ae9de80d2aaa962aa7e43fabce02bc",
+      "runtime": {
+        "font-compatibility.js": "8d689401d826bf604b1e2b0bedaed2f47d89263d17041b03fcd1f91b254b82ac",
+        "font-manifest.js": "f8bccf58acaf49e1aa87c5bedf981fce55001045f4b1f0a2d03056c0ac071521",
+        "fonts-browser.js": "cee4d94c13aa1dc76581e9e4f3b401278ee859b69b21bbed88ed626c77e6ece7",
+        "fonts-node.js": "ee18b74cf0c083e6635cacbad764746084c4856e3048c2d62df0343482215671",
+        "fonts.js": "4bd31191fd99f5283f249a8c69093abef95da6522b57bf13e24bf2322b6a73d5",
+        "index.js": "1fdb45740a09bb6f48eb5dc79def3ffe692acdf0a5c319727edf4e19c0020d78",
+        "raster-images.js": "9d61faa7fd83452a98d2593431dcb29953b6d1a5f60d521aa22eadfc7d7e1843",
+        "raster.js": "4a2a43a0da85d2add909d028834e71f5e33445eb6bffa7b5b77e7fa38cdb13eb",
+        "svg.js": "339b6d34000dcca9108e0f3a4f205eba7f8b8cd97ec4e802469895795a1ce582"
+      }
+    },
+    "pptx": {
+      "commit": "8bf8aab4a69e2f89b489ff64cde2ae6b7c46de7e",
+      "runtime": {
+        "background-import.js": "888583bbbaae46a9a4d174f046ca276cfadee5c021a76e39ab49050a1bfefe38",
+        "background.js": "38f97d14394058737418e7517569d5babf99468574f299cc5df25ea1188dfe56",
+        "card-provenance.js": "41b78472f0d8363b98341d9d66529c48f9f821d39bc110b8e43b610205d535fb",
+        "chart-workbook.js": "92dedb19ef41f02a221057c3a0d5e9e7992bbc2d373f02a32326a6741d4630dc",
+        "code-provenance.js": "28e8e68ad54002d840ca87fd4613abaea8878e1af48023af1da4e352e639a61c",
+        "heading-provenance.js": "c75b219b647ec2296513b78840430da98dae46feb077bf163b73761145eaec64",
+        "image-fallback-browser.js": "b2cd7aa15c3952abf324e6474e7bbdebbd6445dde84f145e068c94c43f9c0de8",
+        "image-fallback-node.js": "72c4efba8ef521e7fdce15b09c57ce6039ba9394ae25a8437a2cb6e26b1b420d",
+        "image-geometry.js": "c2d3d5e7b7f81cf421bcc94437093f17e47670f458a48cf9cf9aa73535a08346",
+        "image-import.js": "898704890944137909c5d48c7d1b3b16e4f06403bd745240d0f6b21f7c8c444a",
+        "index.js": "f75e684288b7124289d48bb907d42297491cf7ed9ddab301039b76f3d16e3809",
+        "metric-provenance.js": "a330abb76e5bb6723a37e64f1e809e4832a8a768402af64fb56155fdb3f194e0",
+        "table-border-import.js": "10dc23b93881d691be62bb5f171678d61cdf77675a628f86f58a58ee962e7093",
+        "table-cell-import.js": "d268a14eecf54fe12bab31246680807cf1c90407b9807b49d32c3c71d93a643b",
+        "table-import.js": "b545fff80415d085f76c82b88ce0c72e1bcfd6947c621a0fbedcc08e5a9ea227"
+      }
+    }
+  },
+  "note": "Runtime hashes identify the actual local builds used by this assessment; no proprietary reference fonts were loaded."
+}

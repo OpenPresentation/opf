@@ -1,0 +1,11 @@
+[WARN] The "pnpm" field in package.json is no longer read by pnpm. The following keys were ignored: "pnpm.overrides". See https://pnpm.io/settings for the new home of each setting.
+
+> openpresentation-workspace@ test:cli:packed /Users/michael/Source/opf
+> pnpm --filter @openpresentation/cli test:packed
+
+
+> @openpresentation/cli@0.7.0 test:packed /Users/michael/Source/opf/packages/cli
+> node test/packed.mjs
+
+CLI passed 80 command checks: file preservation, patch operations, validation, lint diagnostics/contracts, pipes, schema lookup, pagination.
+Standalone global and npx-style installation passed (local pack). Integrity: sha512-rTxYHwYZFcuU88aRMYUEAOyy4wSetJf7WBvAy2IIYbL2iHUJjxB/RHFZjQMo4reQZGfBnPxL3XzPOuhB29b3fw==. Tarball: /Users/michael/Source/opf/artifacts/cli/openpresentation-cli-0.7.0.tgz

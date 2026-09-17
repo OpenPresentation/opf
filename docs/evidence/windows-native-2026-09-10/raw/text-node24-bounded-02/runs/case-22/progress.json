@@ -1,0 +1,135 @@
+﻿{
+    "records":  [
+                    {
+                        "editedSha256":  "17ec8532031e6090814c6f8bce4f55da8f25f46e765fcf278e87244a4ff7dcba",
+                        "lines":  [
+                                      {
+                                          "width":  340.2,
+                                          "height":  10.98,
+                                          "path":  "slides.0.tag",
+                                          "text":  "Source",
+                                          "left":  32.1626778,
+                                          "tags":  1,
+                                          "line":  0,
+                                          "fonts":  [
+                                                        "Carlito"
+                                                    ],
+                                          "top":  32.4
+                                      },
+                                      {
+                                          "width":  340.2,
+                                          "height":  37.05748,
+                                          "path":  "slides.0.title",
+                                          "text":  "A measured title that",
+                                          "left":  32.28244,
+                                          "tags":  1,
+                                          "line":  0,
+                                          "fonts":  [
+                                                        "Carlito"
+                                                    ],
+                                          "top":  50.13
+                                      },
+                                      {
+                                          "width":  340.2,
+                                          "height":  37.05748,
+                                          "path":  "slides.0.title",
+                                          "text":  "wraps when space is",
+                                          "left":  32.4,
+                                          "tags":  1,
+                                          "line":  1,
+                                          "fonts":  [
+                                                        "Carlito"
+                                                    ],
+                                          "top":  87.18748
+                                      },
+                                      {
+                                          "width":  340.2,
+                                          "height":  37.05748,
+                                          "path":  "slides.0.title",
+                                          "text":  "narrow",
+                                          "left":  31.94134,
+                                          "tags":  1,
+                                          "line":  2,
+                                          "fonts":  [
+                                                        "Carlito"
+                                                    ],
+                                          "top":  124.245041
+                                      },
+                                      {
+                                          "width":  340.2,
+                                          "height":  17.1562214,
+                                          "path":  "slides.0.subtitle",
+                                          "text":  "Supporting text",
+                                          "left":  32.0847244,
+                                          "tags":  1,
+                                          "line":  0,
+                                          "fonts":  [
+                                                        "Carlito"
+                                                    ],
+                                          "top":  168.052521
+                                      },
+                                      {
+                                          "width":  326.7,
+                                          "height":  17.1562214,
+                                          "path":  "slides.0.text",
+                                          "text":  "Full source",
+                                          "left":  39.09559,
+                                          "tags":  0,
+                                          "line":  0,
+                                          "fonts":  [
+                                                        "Carlito"
+                                                    ],
+                                          "top":  205.45874
+                                      },
+                                      {
+                                          "width":  326.7,
+                                          "height":  17.1562214,
+                                          "path":  "slides.0.text",
+                                          "text":  "Second paragraph.",
+                                          "left":  39.15,
+                                          "tags":  0,
+                                          "line":  1,
+                                          "fonts":  [
+                                                        "Carlito"
+                                                    ],
+                                          "top":  222.615036
+                                      }
+                                  ],
+                        "savedSha256":  "5769cb545cc569910294d004339951c7d3623127d6a2ab328970c639fcd3e111",
+                        "masks":  [
+                                      {
+                                          "path":  "slides.0.tag",
+                                          "sha256":  "29e62588732c5539908d0fecb1a00211ef157a680352d69511ca23f77b417cd4",
+                                          "file":  "case-22-mask-0.png"
+                                      },
+                                      {
+                                          "path":  "slides.0.title",
+                                          "sha256":  "9fff3bf4976d5a53322816680499ca6a3172f5ab7eb56ab8585a4b9d2874c8cb",
+                                          "file":  "case-22-mask-1.png"
+                                      },
+                                      {
+                                          "path":  "slides.0.subtitle",
+                                          "sha256":  "6492a76a2284823f7c8fa16aa50fb02afb21f8345a9b344c8a7e514d0acc3e2b",
+                                          "file":  "case-22-mask-2.png"
+                                      },
+                                      {
+                                          "path":  "slides.0.text",
+                                          "sha256":  "5f7890c337af8b619f856fa12976591ea4bedfa699ffaab8c2be51fb924e56ff",
+                                          "file":  "case-22-mask-3.png"
+                                      }
+                                  ],
+                        "reopened":  {
+                                         "sha256":  "6cb28666de401506919dcebdeccbbb5f435723e97102ad2a8f213379155d786c",
+                                         "file":  "case-22-reopened.png"
+                                     },
+                        "original":  {
+                                         "sha256":  "6cb28666de401506919dcebdeccbbb5f435723e97102ad2a8f213379155d786c",
+                                         "file":  "case-22-original.png"
+                                     },
+                        "file":  "case-22.pptx"
+                    }
+                ],
+    "case":  22,
+    "generationSha256":  "b37602cd0e825b03d74d5c19cfb702659650497297b94943a457170ad0de3d66",
+    "stage":  "completed"
+}

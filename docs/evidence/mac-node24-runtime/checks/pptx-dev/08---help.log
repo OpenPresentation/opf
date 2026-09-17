@@ -1,0 +1,27 @@
+Usage: pptx [options] [command]
+
+Official CLI for pptx.dev — generate, parse, validate, and render OPF
+presentations.
+
+Options:
+  -V, --version               output the version number
+  --api-key <key>             Override the API key for this call
+  --base-url <url>            Override the API base URL
+  -h, --help                  display help for command
+
+Commands:
+  login [options]             Save a pptx.dev API key to ~/.pptx/config.json
+                              (0600)
+  logout                      Remove saved pptx.dev credentials
+  generate [options] <input>  Generate a presentation from an OPF JSON file or
+                              a prompt
+  validate [options] <file>   Validate an OPF JSON document against the
+                              canonical schema
+  parse [options] <file>      Parse a .pptx file into OPF JSON via the pptx.dev
+                              API
+  render [options] <file>     Render an OPF JSON document to a target format
+  fmt [options] <file>        Format/normalize an OPF JSON document (local, no
+                              API call)
+  add [options] <component>   Scaffold OPF component snippets (slide types,
+                              themes)
+  help [command]              display help for command

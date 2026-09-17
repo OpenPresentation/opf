@@ -1,0 +1,170 @@
+{
+  "mode": "linked-source-checkpoint",
+  "consumerRefs": {
+    "opf-render": "647368a481d316c390671fe4d33803cd08b933a6",
+    "opf-pptx": "8723f0c16a1e4ffd0f592a881c71a79067e5e989",
+    "opf-editor": "b30c25c5af426590857f1a84c54b775056fee5ca"
+  },
+  "coreBranch": "codex/shared-metric-integration-20260910",
+  "coreSourceRef": "09ab32fa4899b32ee55bdd2b1bfea32c4de7d674",
+  "coreBase": "5cfc944ee7709b54bc2d1e7192cd86b7a52d6cb7",
+  "coreTests": {
+    "node20": 466,
+    "node24": 466
+  },
+  "browser": {
+    "casesPerRuntime": 6,
+    "scalarBlankPerRuntime": 8,
+    "rejectedEditsPerRuntime": 2,
+    "browser": "152.0.4191.66",
+    "byteIdenticalBundlesAndRuntime": true
+  },
+  "native": {
+    "node": "v24.20.0",
+    "powerPoint": "16.0.20326.20132",
+    "windows": "26200.9445",
+    "slides": 36,
+    "imports": 108,
+    "exactSourceRecoveryPassed": true,
+    "visibleInkGatePassed": false,
+    "rasterOutliers": [
+      {
+        "id": "metric-540-right",
+        "slide": 4,
+        "engine": "native",
+        "ink": {
+          "left": 104,
+          "top": 59,
+          "right": 497,
+          "bottom": 238
+        },
+        "cell": {
+          "x": 43.2,
+          "y": 43.2,
+          "width": 453.6,
+          "height": 873.6
+        }
+      }
+    ],
+    "advanceOutliers": 9,
+    "maxAdvanceOverhangPoints": 0.708660000000009
+  },
+  "rendererGolden": {
+    "decks": 126,
+    "slides": 805,
+    "changedSlides": 85,
+    "sourceMatches": true,
+    "baselinePromoted": false
+  },
+  "files": {
+    "browser-node20.json": {
+      "sha256": "a33abaee5aeaf289c82f1cebf715d97b03d1fec74b1f53d3f15627ddaa1fff91",
+      "bytes": 38388
+    },
+    "opf-render-node20-checks.json": {
+      "sha256": "0582936e2170afca7ee022edbcc2ca92d39331a02a7c2abed2faeb6746257637",
+      "bytes": 1253
+    },
+    "opf-pptx-node20-checks.json": {
+      "sha256": "330fb18ebc8a4742f865aa311edc3aefdf7aec3ff9505e16869b8719e1b38a3f",
+      "bytes": 1025
+    },
+    "opf-editor-node20-checks.json": {
+      "sha256": "8cdecddb740fab0756eb10f018a9148dc544e3df358db86641d25e0f1561a52d",
+      "bytes": 1082
+    },
+    "core-node20.log": {
+      "sha256": "1e6574fae7ff6092f34a897651671d31dbe4e91ddfd14eb65fb2ac2788300e88",
+      "bytes": 103306
+    },
+    "opf-render-metric-node20.log": {
+      "sha256": "2d6b57d5164adff0cce4b9671129528f802016b7be62436d224b1cea5eadf310",
+      "bytes": 237
+    },
+    "opf-pptx-metric-node20.log": {
+      "sha256": "0c510db2808fa3faa0a51e8d6d399a379afb1d95fa7ddc691823c6545ab9dd5f",
+      "bytes": 414
+    },
+    "browser-node24.json": {
+      "sha256": "ce7d1c067aa06e28ec965198a9688c585589e5e204639845c147b10a9814b99f",
+      "bytes": 38388
+    },
+    "opf-render-node24-checks.json": {
+      "sha256": "cb8346ddaad2d8804e4787df63e7b00ff94dd8d4001c10fc5e3629d68de462fc",
+      "bytes": 1253
+    },
+    "opf-pptx-node24-checks.json": {
+      "sha256": "e7518652df6415f01e4a4f42c1c9003cd00796569651e2966a7f78757b9e49ae",
+      "bytes": 1025
+    },
+    "opf-editor-node24-checks.json": {
+      "sha256": "3a1bb37d88d4e10053cf90e4c4ec777ce4ae08c4184744e44e3f0cf5d19424e3",
+      "bytes": 1082
+    },
+    "core-node24.log": {
+      "sha256": "45c0ecdbb2579673402492494ea32fe9066826ea1af176f48ab9a15563168fee",
+      "bytes": 44550
+    },
+    "opf-render-metric-node24.log": {
+      "sha256": "2d6b57d5164adff0cce4b9671129528f802016b7be62436d224b1cea5eadf310",
+      "bytes": 237
+    },
+    "opf-pptx-metric-node24.log": {
+      "sha256": "0c510db2808fa3faa0a51e8d6d399a379afb1d95fa7ddc691823c6545ab9dd5f",
+      "bytes": 414
+    },
+    "native-generation.json": {
+      "sha256": "a9b76fd0fc5bf096caf896db102ece0def1de593b037fa40094fb24fb94b28be",
+      "bytes": 279431
+    },
+    "native-native.json": {
+      "sha256": "74604eb18383d015c69a64a4e55b2f4070ee68fec9b0f7378caad5443b30988d",
+      "bytes": 59305
+    },
+    "native-comparison.json": {
+      "sha256": "c47f338570a329272c5f8241e42bf81c611c1c7d95b6882b9a716dc679208dfa",
+      "bytes": 59575
+    },
+    "native-compare.log": {
+      "sha256": "caf4aed27538f6c811680765e007eb6d58e8bc66c93e7b90b9d4e087d4464ec5",
+      "bytes": 610
+    },
+    "golden-diff.json": {
+      "sha256": "7b16274fa8d9f0e32b5928fc144f651b180fb0ffe585ee2973dde16078e5e6b5",
+      "bytes": 5845
+    },
+    "browser-1280-selection.png": {
+      "sha256": "277640b8426788c489448837220e81bf8f53f12452a9fe5d01ae5b02fa0d2be0",
+      "bytes": 6295
+    },
+    "browser-1280-accepted.png": {
+      "sha256": "a6aa02f0572d36a0be2b4d3da3acf1b47ba5b744ecd4f74812f22d970314552b",
+      "bytes": 7933
+    },
+    "browser-540-selection.png": {
+      "sha256": "451bdf1c5221fd36bfab2824360a5a27ebe263b159f8b77d8861e5ff38ae2537",
+      "bytes": 14937
+    },
+    "browser-540-accepted.png": {
+      "sha256": "890dd2c040e0ff21be405182fc4dca5df43540be20dc363094b126530e288f26",
+      "bytes": 18191
+    },
+    "metric-1280-left-native-3.png": {
+      "sha256": "ee0e35ea11d47be2d777671075c49e907c64c332b3db9e1a44679e977d75e6c9",
+      "bytes": 3784
+    },
+    "metric-1280-left-svg-3.png": {
+      "sha256": "0a18615719ced5dcf1a7ae51f3d4c7d82d24b499dbe1618ea7f27d0eead774e7",
+      "bytes": 12549
+    },
+    "metric-540-right-native-4.png": {
+      "sha256": "342cdddcc66726bd9c9fbd5ed6226594e96680e6513d35ffe47bcdf1e47bc130",
+      "bytes": 3293
+    },
+    "metric-540-right-svg-4.png": {
+      "sha256": "1875f961a97c7c1ff988f05b5f634c46bd2e289c3cb873c16608471b13ed121a",
+      "bytes": 12543
+    }
+  },
+  "scope": "Unreleased linked-source milestone, not candidate tarballs or registry/public adoption. Tests and explicit failures are preserved. Native source recovery does not establish native advance, baseline, glyph collision or pixel equivalence. Full renderer/CI/review/candidate and native raster gates remain open."
+}

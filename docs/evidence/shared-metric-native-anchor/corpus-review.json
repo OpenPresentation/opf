@@ -1,0 +1,1451 @@
+{
+  "verifiedPriorRegistryFiles": 535,
+  "priorSource": {
+    "repository": "OpenPresentation/opf",
+    "path": "examples",
+    "sha256": "cbd0d2c7cfdaa01ec6312494179c68fe59ee95206d3b8a2e07f8b69f19ce29bd",
+    "decks": 126
+  },
+  "currentSource": {
+    "repository": "OpenPresentation/opf",
+    "path": "examples",
+    "sha256": "e3c7194f1fc4ee452570d27a24633a9baa413ea1bbfe117668e3434d01686f50",
+    "decks": 126
+  },
+  "changedSlides": 85,
+  "authoredMetricChanges": 40,
+  "allChangesContainMetrics": true,
+  "baselinePromoted": false,
+  "results": [
+    {
+      "key": "gallery/business-functions/compliance-readiness-review.opf.json#5",
+      "metricCount": 1,
+      "prefix": "000",
+      "beforeSha256": "0635c4f90b0d8d5eac1ae92190b974bd67c91662e79b3806469a07c6629a68aa",
+      "afterSha256": "643d8d84da3a4e0303eef8a26e423a279eb87e44ef58dde3187be9105d317fa5",
+      "authoredChanges": []
+    },
+    {
+      "key": "gallery/business-functions/compliance-readiness-review.opf.json#6",
+      "metricCount": 1,
+      "prefix": "001",
+      "beforeSha256": "18aaeeca7377f8e97fd2df6f7f087fc0658f6e21cfdb479308d1442198591bc2",
+      "afterSha256": "b523f7606fb71df64c890220895d83536bfd7c7b25842538ff8c2525eec830c2",
+      "authoredChanges": [
+        {
+          "path": "slide.blocks.2.metric",
+          "before": {
+            "value": "11 days",
+            "label": "Expected improvement",
+            "unit": "%",
+            "delta": "+6 pts",
+            "trend": "up"
+          },
+          "after": {
+            "value": 11,
+            "unit": "days",
+            "delta": "-3 days",
+            "trend": "down",
+            "label": "Illustrative result"
+          }
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/data-platform-migration-plan.opf.json#5",
+      "metricCount": 1,
+      "prefix": "002",
+      "beforeSha256": "387d861760a171847ec41d9cc57160ccd8767996d881f268ffc29e982b9eed1b",
+      "afterSha256": "24e1727fb99060da1e503998c9848994669fadefee4e12f6dfa69fa527c44411",
+      "authoredChanges": []
+    },
+    {
+      "key": "gallery/business-functions/data-platform-migration-plan.opf.json#6",
+      "metricCount": 1,
+      "prefix": "003",
+      "beforeSha256": "093558ead7d58da1d2684807e313dcc730bfe0bdcadf9801cab876270af3bd6f",
+      "afterSha256": "fe102803c8878020ea1278484a859cc7a203db9ef7a6f238584ab30e3ea49f5e",
+      "authoredChanges": [
+        {
+          "path": "slide.blocks.2.metric",
+          "before": {
+            "value": "$4.8M",
+            "label": "Expected improvement",
+            "unit": "days",
+            "delta": "-3 days",
+            "trend": "down"
+          },
+          "after": {
+            "value": "$4.8M",
+            "delta": "+$0.3M",
+            "trend": "up",
+            "label": "Illustrative result"
+          }
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/demand-generation-campaign-brief.opf.json#5",
+      "metricCount": 1,
+      "prefix": "004",
+      "beforeSha256": "3c7934d4f84b4ff883a673c5b223ef13a7338d39674dfd9b3b4af15847a30dae",
+      "afterSha256": "919805b4f72f1cddc2618024730748361b08411c309969cc1bb7b4123f59d314",
+      "authoredChanges": []
+    },
+    {
+      "key": "gallery/business-functions/demand-generation-campaign-brief.opf.json#6",
+      "metricCount": 1,
+      "prefix": "005",
+      "beforeSha256": "78b46e771057c616260cb6bdbd69eeed153e0f2bae819ee2486554709d43821c",
+      "afterSha256": "edff6523986dc735007df2b4a5987b9ff0ddeedbd4737b8aad8b153fcdbddeb5",
+      "authoredChanges": [
+        {
+          "path": "slide.blocks.2.metric",
+          "before": {
+            "value": "91%",
+            "label": "Expected improvement",
+            "unit": "%",
+            "delta": "+6 pts",
+            "trend": "up"
+          },
+          "after": {
+            "value": 91,
+            "unit": "%",
+            "delta": "+6 pts",
+            "trend": "up",
+            "label": "Illustrative result"
+          }
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/engineering-capacity-planning.opf.json#5",
+      "metricCount": 1,
+      "prefix": "006",
+      "beforeSha256": "883eef1bdc387df6ded3db265c36578da7e7afe1666e6955fb7caf0707659cef",
+      "afterSha256": "e933d229fc7d5a31ae9c1745dfdb2c8f8d731eb5fc86987aee3d475245277b00",
+      "authoredChanges": []
+    },
+    {
+      "key": "gallery/business-functions/engineering-capacity-planning.opf.json#6",
+      "metricCount": 1,
+      "prefix": "007",
+      "beforeSha256": "c96294e4867a7d811b829a94ea05b4ef83e30f1830563089ec96b0a404e9198b",
+      "afterSha256": "5465a925cc0586ff9b8937678389e8fa2e996874e8e8d769ae1815a5f236a23c",
+      "authoredChanges": [
+        {
+          "path": "slide.blocks.2.metric",
+          "before": {
+            "value": "$820K",
+            "label": "Expected improvement",
+            "unit": "%",
+            "delta": "+6 pts",
+            "trend": "up"
+          },
+          "after": {
+            "value": "$820K",
+            "delta": "+$20K",
+            "trend": "up",
+            "label": "Illustrative result"
+          }
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/investor-relations-update.opf.json#5",
+      "metricCount": 1,
+      "prefix": "008",
+      "beforeSha256": "776cfdb085794a755b28a996b7d0f782538fd0000e8c3628065daf6b56426fa1",
+      "afterSha256": "016ec5d03909fb8305ade0aeede31e19f91ba74fb5aae38048d965fa8d59eeea",
+      "authoredChanges": []
+    },
+    {
+      "key": "gallery/business-functions/investor-relations-update.opf.json#6",
+      "metricCount": 1,
+      "prefix": "009",
+      "beforeSha256": "409d26caface3c2a81af1d5a974921f3397727e6210adbf149f455ce2243bf3f",
+      "afterSha256": "25032c3747fa603bb8e40f1a42a861782650e4d05d8e81f684fec1214b980389",
+      "authoredChanges": [
+        {
+          "path": "slide.blocks.2.metric",
+          "before": {
+            "value": "2.4x",
+            "label": "Expected improvement",
+            "unit": "days",
+            "delta": "-3 days",
+            "trend": "down"
+          },
+          "after": {
+            "value": 2.4,
+            "unit": "x",
+            "delta": "+0.3x",
+            "trend": "up",
+            "label": "Illustrative result"
+          }
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/model-governance-review.opf.json#5",
+      "metricCount": 1,
+      "prefix": "010",
+      "beforeSha256": "f93f34336c6f8ee870339664be077e16d6cfaa4f40c2138e5c8cb82e9f1dc7b4",
+      "afterSha256": "eee5d15e329c383dd0097bf980687ef9eadfb954df29679b9ec40bfb7c40a7c2",
+      "authoredChanges": []
+    },
+    {
+      "key": "gallery/business-functions/model-governance-review.opf.json#6",
+      "metricCount": 1,
+      "prefix": "011",
+      "beforeSha256": "cce8ea73e3fa27f2fa0a60551e628ef833e084291be3400572592987e04709b0",
+      "afterSha256": "a1b53c6c95059cd7a7b3bded643c40b1b751c30ac3739c236f246b961d8aa49b",
+      "authoredChanges": [
+        {
+          "path": "slide.blocks.2.metric",
+          "before": {
+            "value": "18%",
+            "label": "Expected improvement",
+            "unit": "%",
+            "delta": "+6 pts",
+            "trend": "up"
+          },
+          "after": {
+            "value": 18,
+            "unit": "%",
+            "delta": "+6 pts",
+            "trend": "up",
+            "label": "Illustrative result"
+          }
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/pricing-and-packaging-decision.opf.json#5",
+      "metricCount": 1,
+      "prefix": "012",
+      "beforeSha256": "972bea861750024a7b2a467833602de7481986810dfa3de164b119feac2f162a",
+      "afterSha256": "7df430ff16fea96dc5b000765b676c3b6e1ef3a6eba3f53b3a5157302453b455",
+      "authoredChanges": []
+    },
+    {
+      "key": "gallery/business-functions/pricing-and-packaging-decision.opf.json#6",
+      "metricCount": 1,
+      "prefix": "013",
+      "beforeSha256": "965826b344b5ad8e2b2316876fd1953c592b4d8f1206aea44565a6ff6caf57d7",
+      "afterSha256": "d0c8cce052e723e1ddc3c0cc64fa719fcd51254fbb6051008f71ba37ce891e62",
+      "authoredChanges": [
+        {
+          "path": "slide.blocks.2.metric",
+          "before": {
+            "value": "$4.8M",
+            "label": "Expected improvement",
+            "unit": "days",
+            "delta": "-3 days",
+            "trend": "down"
+          },
+          "after": {
+            "value": "$4.8M",
+            "delta": "+$0.3M",
+            "trend": "up",
+            "label": "Illustrative result"
+          }
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/product-roadmap-decision-review.opf.json#5",
+      "metricCount": 1,
+      "prefix": "014",
+      "beforeSha256": "51eba3c905b3e604cb0968401a32b72048c43435caed3cd724a805bf74c251c1",
+      "afterSha256": "7c0a657b1fe150f2591a1000cbccd26cebb0877d1618339908590fae040a5f9e",
+      "authoredChanges": []
+    },
+    {
+      "key": "gallery/business-functions/product-roadmap-decision-review.opf.json#6",
+      "metricCount": 1,
+      "prefix": "015",
+      "beforeSha256": "1e84246fc129266c15a898be6c4094f8b3d4e898d25dc2d0afdfc9900aeb9026",
+      "afterSha256": "823dd7e4c6c28b969e8f7b17a95f65e5963411867a2a1ebce2a4946dda5fdc11",
+      "authoredChanges": [
+        {
+          "path": "slide.blocks.2.metric",
+          "before": {
+            "value": "42 pts",
+            "label": "Expected improvement",
+            "unit": "days",
+            "delta": "-3 days",
+            "trend": "down"
+          },
+          "after": {
+            "value": 42,
+            "unit": "pts",
+            "delta": "+6 pts",
+            "trend": "up",
+            "label": "Illustrative result"
+          }
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/revenue-forecast-inspection.opf.json#5",
+      "metricCount": 1,
+      "prefix": "016",
+      "beforeSha256": "7b2181f9c0f3f49e150ff9303fb52bd6c32a18f72a5a3869e0f38a74b0e5c432",
+      "afterSha256": "dccec962125447d149ea582fbf94bddc29d61165da3c352e1f6247d2e93374a1",
+      "authoredChanges": []
+    },
+    {
+      "key": "gallery/business-functions/revenue-forecast-inspection.opf.json#6",
+      "metricCount": 1,
+      "prefix": "017",
+      "beforeSha256": "138efd17888ee968fab6765adf1cdd95238eadfa99d8bac8164e34433e5aec21",
+      "afterSha256": "37f32bf359d0146d960dab175b858a1d4ebdd6a7943a72179ffe068f6bdded68",
+      "authoredChanges": [
+        {
+          "path": "slide.blocks.2.metric",
+          "before": {
+            "value": "18%",
+            "label": "Expected improvement",
+            "unit": "%",
+            "delta": "+6 pts",
+            "trend": "up"
+          },
+          "after": {
+            "value": 18,
+            "unit": "%",
+            "delta": "+6 pts",
+            "trend": "up",
+            "label": "Illustrative result"
+          }
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/s-and-op-exception-review.opf.json#5",
+      "metricCount": 1,
+      "prefix": "018",
+      "beforeSha256": "07e6b4b8d744e9c0deb3c704f6e24448e808fa58f10aa52b6ff8de32d7bac9be",
+      "afterSha256": "122b4f9aca68db29d8be2a1647c57145af01a73f92fb2ba5da1d2ce4bd801393",
+      "authoredChanges": []
+    },
+    {
+      "key": "gallery/business-functions/s-and-op-exception-review.opf.json#6",
+      "metricCount": 1,
+      "prefix": "019",
+      "beforeSha256": "ee1d4577f681302fa0a66b088d37e0426d5b2d2580a27cf8d034e4684e29a148",
+      "afterSha256": "b21dc1e364b9b397ac747b14b7a8cef7101500f83cf28f58cfaf86e0b1b0762d",
+      "authoredChanges": [
+        {
+          "path": "slide.blocks.2.metric",
+          "before": {
+            "value": "31%",
+            "label": "Expected improvement",
+            "unit": "days",
+            "delta": "-3 days",
+            "trend": "down"
+          },
+          "after": {
+            "value": 31,
+            "unit": "%",
+            "delta": "+6 pts",
+            "trend": "up",
+            "label": "Illustrative result"
+          }
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/strategy-offsite-pre-read.opf.json#5",
+      "metricCount": 1,
+      "prefix": "020",
+      "beforeSha256": "e642577bd6b6e0d81a5380f5f87123a2501fb050ab5651f992f93316ca72e27f",
+      "afterSha256": "a9927e68aec162644b0fa2a4bc61661fd5bd3125cfcb88fb894ae02aa9472660",
+      "authoredChanges": []
+    },
+    {
+      "key": "gallery/business-functions/strategy-offsite-pre-read.opf.json#6",
+      "metricCount": 1,
+      "prefix": "021",
+      "beforeSha256": "3cd8b29632c66d61419c60fd319abe99cefb138f48ba8227ba6274780905ce36",
+      "afterSha256": "47360d674906d98a7f21fa35b536702003df2402fa5c7a81ad15baae60e4a52b",
+      "authoredChanges": [
+        {
+          "path": "slide.blocks.2.metric",
+          "before": {
+            "value": "31%",
+            "label": "Expected improvement",
+            "unit": "days",
+            "delta": "-3 days",
+            "trend": "down"
+          },
+          "after": {
+            "value": 31,
+            "unit": "%",
+            "delta": "+6 pts",
+            "trend": "up",
+            "label": "Illustrative result"
+          }
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/supplier-risk-heatmap.opf.json#5",
+      "metricCount": 1,
+      "prefix": "022",
+      "beforeSha256": "e9ee097b78fd32b482b783c5208392809ac5697574a84da6d738b3e68ae4314b",
+      "afterSha256": "2510113d6e4ecf235e7c51756eec377f4a93c75edc2d0066d71048a291c13186",
+      "authoredChanges": []
+    },
+    {
+      "key": "gallery/business-functions/supplier-risk-heatmap.opf.json#6",
+      "metricCount": 1,
+      "prefix": "023",
+      "beforeSha256": "5871b66872463fe52649842f399c6b53477c9a2ddad2dc1963b090e656264d61",
+      "afterSha256": "19afde9dafc20d6ac76f819bffd0f2c005f1b754337710fc188c00ebedacf755",
+      "authoredChanges": [
+        {
+          "path": "slide.blocks.2.metric",
+          "before": {
+            "value": "$820K",
+            "label": "Expected improvement",
+            "unit": "%",
+            "delta": "+6 pts",
+            "trend": "up"
+          },
+          "after": {
+            "value": "$820K",
+            "delta": "+$20K",
+            "trend": "up",
+            "label": "Illustrative result"
+          }
+        }
+      ]
+    },
+    {
+      "key": "gallery/design-and-media/data-storytelling-atlas.opf.json#5",
+      "metricCount": 1,
+      "prefix": "024",
+      "beforeSha256": "93386aabc4994691bc4c83565e447e8e743492c3365cc6b5efec5def7158f40f",
+      "afterSha256": "9cd1299350e4a7008fae0039e2a8b97e58e3c026fc9a1e7ea561dd4917845bfa",
+      "authoredChanges": []
+    },
+    {
+      "key": "gallery/design-and-media/data-storytelling-atlas.opf.json#6",
+      "metricCount": 1,
+      "prefix": "025",
+      "beforeSha256": "5dcd1c272e225aeeed65d1335d268746978c1037ab38a1ec267cb04b63002ffb",
+      "afterSha256": "cb86643afd98640a93c4b0ce6760cfb92d88566554ffe86abccdfe981a44689d",
+      "authoredChanges": [
+        {
+          "path": "slide.blocks.2.metric",
+          "before": {
+            "value": "91%",
+            "label": "Expected improvement",
+            "unit": "%",
+            "delta": "+6 pts",
+            "trend": "up"
+          },
+          "after": {
+            "value": 91,
+            "unit": "%",
+            "delta": "+6 pts",
+            "trend": "up",
+            "label": "Illustrative result"
+          }
+        }
+      ]
+    },
+    {
+      "key": "gallery/design-and-media/kiosk-orientation-deck.opf.json#5",
+      "metricCount": 1,
+      "prefix": "026",
+      "beforeSha256": "24dc74fed9ca054d0d5583ea9b70ab49bb83a68f2405e587e00eb5f0995bac7e",
+      "afterSha256": "21c6a5a7eadb004a31770afd7585f16f6c72e396685ba9e3823450cc64a7f14f",
+      "authoredChanges": []
+    },
+    {
+      "key": "gallery/design-and-media/kiosk-orientation-deck.opf.json#6",
+      "metricCount": 1,
+      "prefix": "027",
+      "beforeSha256": "da84f67257efb9edbd22a45918460e4841b04248b606593908c0628464e16a8e",
+      "afterSha256": "370c1299001c020fe1f491e7e5755c989c91c1eded2a708b3a63d172019563f2",
+      "authoredChanges": [
+        {
+          "path": "slide.blocks.2.metric",
+          "before": {
+            "value": "42 pts",
+            "label": "Expected improvement",
+            "unit": "days",
+            "delta": "-3 days",
+            "trend": "down"
+          },
+          "after": {
+            "value": 42,
+            "unit": "pts",
+            "delta": "+6 pts",
+            "trend": "up",
+            "label": "Illustrative result"
+          }
+        }
+      ]
+    },
+    {
+      "key": "gallery/design-and-media/photo-essay-portfolio.opf.json#5",
+      "metricCount": 1,
+      "prefix": "028",
+      "beforeSha256": "c758c349dfea25fb9146bb678de9ddcc3cd5dde80423942c90d1e90b5b47570e",
+      "afterSha256": "57901fe88ceb23e6763796847de21dbbff770ebee43dc69217398c66f4cc23b8",
+      "authoredChanges": []
+    },
+    {
+      "key": "gallery/design-and-media/photo-essay-portfolio.opf.json#6",
+      "metricCount": 1,
+      "prefix": "029",
+      "beforeSha256": "0d0116578e026339708265082849ac0fd75922054a14b328f20ca61967a3b3bd",
+      "afterSha256": "b74bfa71b0c84e3dd0306537c09f5a1e1e0faddc32cc96c43aa007aa91bb06d8",
+      "authoredChanges": [
+        {
+          "path": "slide.blocks.2.metric",
+          "before": {
+            "value": "2.4x",
+            "label": "Expected improvement",
+            "unit": "days",
+            "delta": "-3 days",
+            "trend": "down"
+          },
+          "after": {
+            "value": 2.4,
+            "unit": "x",
+            "delta": "+0.3x",
+            "trend": "up",
+            "label": "Illustrative result"
+          }
+        }
+      ]
+    },
+    {
+      "key": "gallery/design-and-media/video-demo-sales-narrative.opf.json#5",
+      "metricCount": 1,
+      "prefix": "030",
+      "beforeSha256": "7a9ae5488f738f96bffdb106d98488c12ed2bf5d8e15ccd17ad0f72c2fab60ac",
+      "afterSha256": "d62717e5a7deb429195ad36dbba549aa5fc04209f085bdaca16dcb4aacba26fb",
+      "authoredChanges": []
+    },
+    {
+      "key": "gallery/design-and-media/video-demo-sales-narrative.opf.json#6",
+      "metricCount": 1,
+      "prefix": "031",
+      "beforeSha256": "7178ef2a9f84f99b17ddfdd2503d0aa7470239bb24a4ac62f2e4d95765cef288",
+      "afterSha256": "75e7eb528d1ff7da02be63e99ccd4a5ccfe101443688829b1cdee8a22474846d",
+      "authoredChanges": [
+        {
+          "path": "slide.blocks.2.metric",
+          "before": {
+            "value": "11 days",
+            "label": "Expected improvement",
+            "unit": "%",
+            "delta": "+6 pts",
+            "trend": "up"
+          },
+          "after": {
+            "value": 11,
+            "unit": "days",
+            "delta": "-3 days",
+            "trend": "down",
+            "label": "Illustrative result"
+          }
+        }
+      ]
+    },
+    {
+      "key": "gallery/education/athletics-budget-review.opf.json#5",
+      "metricCount": 1,
+      "prefix": "032",
+      "beforeSha256": "02d7ec7aaed99a9ce1a3995b20a7e622a377f4ba96ae8d8f1b697b7f96c3d93d",
+      "afterSha256": "34485e23f0c41903b0b60b6759ea8a08587b4a987d0f116e4a0afee1cee34c1b",
+      "authoredChanges": []
+    },
+    {
+      "key": "gallery/education/athletics-budget-review.opf.json#6",
+      "metricCount": 1,
+      "prefix": "033",
+      "beforeSha256": "1e47cf90c518f384f7bcf068ff62e83481584f212477199d6296818b3b2ece3a",
+      "afterSha256": "beac9cceff2760d46b91ade2b4823292a36011d3a385ed997c09a2d9bcbe853e",
+      "authoredChanges": [
+        {
+          "path": "slide.blocks.2.metric",
+          "before": {
+            "value": "91%",
+            "label": "Expected improvement",
+            "unit": "%",
+            "delta": "+6 pts",
+            "trend": "up"
+          },
+          "after": {
+            "value": 91,
+            "unit": "%",
+            "delta": "+6 pts",
+            "trend": "up",
+            "label": "Illustrative result"
+          }
+        }
+      ]
+    },
+    {
+      "key": "gallery/education/curriculum-approval-brief.opf.json#5",
+      "metricCount": 1,
+      "prefix": "034",
+      "beforeSha256": "a787e2d88cd994f94503f0f4239b6aef68372c1224c79f4ddebc3e28973bd48a",
+      "afterSha256": "714e15410e6ddd064b796807615024de103d0ca2164fe47471de8b67176f0c81",
+      "authoredChanges": []
+    },
+    {
+      "key": "gallery/education/curriculum-approval-brief.opf.json#6",
+      "metricCount": 1,
+      "prefix": "035",
+      "beforeSha256": "d8c291108ca1a374e8c5878963cdf5e73fbc04d993589dc7ba896e5fc41c943c",
+      "afterSha256": "74959848e0003d2e9d59b95e0abb494e71e0bd2a669c28e4d8bb2b31cf3324c5",
+      "authoredChanges": [
+        {
+          "path": "slide.blocks.2.metric",
+          "before": {
+            "value": "42 pts",
+            "label": "Expected improvement",
+            "unit": "days",
+            "delta": "-3 days",
+            "trend": "down"
+          },
+          "after": {
+            "value": 42,
+            "unit": "pts",
+            "delta": "+6 pts",
+            "trend": "up",
+            "label": "Illustrative result"
+          }
+        }
+      ]
+    },
+    {
+      "key": "gallery/education/library-modernization-roadmap.opf.json#5",
+      "metricCount": 1,
+      "prefix": "036",
+      "beforeSha256": "02865bf3e7e405ec7cb5d58ce6812aee8454e3d3075049e95fc3992570fc1ac2",
+      "afterSha256": "8c3bd10645b0a65a0cec450cd1857f12ff041e1e7af5875e84895e85e4caa0c1",
+      "authoredChanges": []
+    },
+    {
+      "key": "gallery/education/library-modernization-roadmap.opf.json#6",
+      "metricCount": 1,
+      "prefix": "037",
+      "beforeSha256": "23ba5b9de3d6362f4b5581801854fdd8c0338800cf9f5bac4330885f3bd81eec",
+      "afterSha256": "144c5c6ce614ab723f354a32a6cabd97c2fcddb99d44898c010d29ae359e2b63",
+      "authoredChanges": [
+        {
+          "path": "slide.blocks.2.metric",
+          "before": {
+            "value": "2.4x",
+            "label": "Expected improvement",
+            "unit": "days",
+            "delta": "-3 days",
+            "trend": "down"
+          },
+          "after": {
+            "value": 2.4,
+            "unit": "x",
+            "delta": "+0.3x",
+            "trend": "up",
+            "label": "Illustrative result"
+          }
+        }
+      ]
+    },
+    {
+      "key": "gallery/education/workforce-pathway-partnership.opf.json#5",
+      "metricCount": 1,
+      "prefix": "038",
+      "beforeSha256": "3104ebbc2860c08dd3c760a15260a44379a280ee1b12d1818480c132d9251e3a",
+      "afterSha256": "b6b0cde9a939acc35a128b9f368ae7adc15082013187f0b203cef0b04cf00665",
+      "authoredChanges": []
+    },
+    {
+      "key": "gallery/education/workforce-pathway-partnership.opf.json#6",
+      "metricCount": 1,
+      "prefix": "039",
+      "beforeSha256": "ec8070200c64c79bc8b8e18eec3ad4daf5be01bff0352ef9885d754aee7965ac",
+      "afterSha256": "9f390b8bf896a14896caeb08091e58fa450ccbdd578c694b038878d84bf70e0f",
+      "authoredChanges": [
+        {
+          "path": "slide.blocks.2.metric",
+          "before": {
+            "value": "11 days",
+            "label": "Expected improvement",
+            "unit": "%",
+            "delta": "+6 pts",
+            "trend": "up"
+          },
+          "after": {
+            "value": 11,
+            "unit": "days",
+            "delta": "-3 days",
+            "trend": "down",
+            "label": "Illustrative result"
+          }
+        }
+      ]
+    },
+    {
+      "key": "gallery/government/broadband-public-hearing-deck.opf.json#5",
+      "metricCount": 1,
+      "prefix": "040",
+      "beforeSha256": "f62d1a16885b0188ef651d5d6e5a0405a748ea1683c5d4149a769b802a523927",
+      "afterSha256": "270542912ad19803964e5b67c8b88c7788935cd7f9cecbac7222eb04b7307c8b",
+      "authoredChanges": []
+    },
+    {
+      "key": "gallery/government/broadband-public-hearing-deck.opf.json#6",
+      "metricCount": 1,
+      "prefix": "041",
+      "beforeSha256": "8729b35a2ff832c0f92dafb8bb3c4e61552aa0ed52ed90090b1a63b54eb337cf",
+      "afterSha256": "ad6d522599a8aa592e658e531344294feb4ff53140de545896658bc0137317e4",
+      "authoredChanges": [
+        {
+          "path": "slide.blocks.2.metric",
+          "before": {
+            "value": "$4.8M",
+            "label": "Expected improvement",
+            "unit": "days",
+            "delta": "-3 days",
+            "trend": "down"
+          },
+          "after": {
+            "value": "$4.8M",
+            "delta": "+$0.3M",
+            "trend": "up",
+            "label": "Illustrative result"
+          }
+        }
+      ]
+    },
+    {
+      "key": "gallery/government/housing-zoning-council-brief.opf.json#5",
+      "metricCount": 1,
+      "prefix": "042",
+      "beforeSha256": "9fd5ecb39c0f623a247505ebe8846964f8198bcc3d08b4794bd818d594ed8562",
+      "afterSha256": "0239133f4c279fb79fe5943cfb28c47dbcb03f563f77e2e98a3c5aff165af344",
+      "authoredChanges": []
+    },
+    {
+      "key": "gallery/government/housing-zoning-council-brief.opf.json#6",
+      "metricCount": 1,
+      "prefix": "043",
+      "beforeSha256": "506c830683ea7986e00d0562a9ca111b726e380fbe59ae87c2377c4f63f66893",
+      "afterSha256": "61d2630d126e094244d9be28601b4577a74f3efe0c87c6eb965db12f3480c9a0",
+      "authoredChanges": [
+        {
+          "path": "slide.blocks.2.metric",
+          "before": {
+            "value": "91%",
+            "label": "Expected improvement",
+            "unit": "%",
+            "delta": "+6 pts",
+            "trend": "up"
+          },
+          "after": {
+            "value": 91,
+            "unit": "%",
+            "delta": "+6 pts",
+            "trend": "up",
+            "label": "Illustrative result"
+          }
+        }
+      ]
+    },
+    {
+      "key": "gallery/government/recycling-participation-campaign.opf.json#5",
+      "metricCount": 1,
+      "prefix": "044",
+      "beforeSha256": "e2c531238cdc67bb4c4cff75c4e3f297684e14918cf8dddc3045002e54340136",
+      "afterSha256": "c4341e24ee470857211b207788c9d21b405d19b20737d101ead97851ab29287a",
+      "authoredChanges": []
+    },
+    {
+      "key": "gallery/government/recycling-participation-campaign.opf.json#6",
+      "metricCount": 1,
+      "prefix": "045",
+      "beforeSha256": "9b3347fa3575fa0218a1489fb5ec901a2416dc3be7a8abf124304da1a364e2f1",
+      "afterSha256": "35c27a957e5ee197965fbd37f11eda2d92d4f4eaf777dd9868137c613f73639e",
+      "authoredChanges": [
+        {
+          "path": "slide.blocks.2.metric",
+          "before": {
+            "value": "$820K",
+            "label": "Expected improvement",
+            "unit": "%",
+            "delta": "+6 pts",
+            "trend": "up"
+          },
+          "after": {
+            "value": "$820K",
+            "delta": "+$20K",
+            "trend": "up",
+            "label": "Illustrative result"
+          }
+        }
+      ]
+    },
+    {
+      "key": "gallery/government/tax-portal-modernization.opf.json#5",
+      "metricCount": 1,
+      "prefix": "046",
+      "beforeSha256": "39c7874a8d408d1e2132f5fb732799c6c86ebb5d59a0393274dbc394bb3a026b",
+      "afterSha256": "628e7fd768643e5664912c89c4bfd2c3e900cd2a5fe4573db9c70c83cb3bd550",
+      "authoredChanges": []
+    },
+    {
+      "key": "gallery/government/tax-portal-modernization.opf.json#6",
+      "metricCount": 1,
+      "prefix": "047",
+      "beforeSha256": "fbc8a6df03db7678d6488fb5b1711d5a933e24ffb8862c6e4edb0f42bfc24cdb",
+      "afterSha256": "2985c84f0c0fc815f50b1729490066c9fbd14dec31f1751cdad1a5f53089931d",
+      "authoredChanges": [
+        {
+          "path": "slide.blocks.2.metric",
+          "before": {
+            "value": "18%",
+            "label": "Expected improvement",
+            "unit": "%",
+            "delta": "+6 pts",
+            "trend": "up"
+          },
+          "after": {
+            "value": 18,
+            "unit": "%",
+            "delta": "+6 pts",
+            "trend": "up",
+            "label": "Illustrative result"
+          }
+        }
+      ]
+    },
+    {
+      "key": "gallery/government/transit-corridor-alternatives.opf.json#5",
+      "metricCount": 1,
+      "prefix": "048",
+      "beforeSha256": "b9a08a53e08d6950d6a6c211af371ce41b832746f8b32e81d18faabba4fa2812",
+      "afterSha256": "ca345801e82a8dd5c7fc91084544b554633e7ce3f3965a9ef28122ffea571e5e",
+      "authoredChanges": []
+    },
+    {
+      "key": "gallery/government/transit-corridor-alternatives.opf.json#6",
+      "metricCount": 1,
+      "prefix": "049",
+      "beforeSha256": "e38acf3494e7d9a48158d1a249393b1cc3ed263d0f71241802393e75216bb073",
+      "afterSha256": "159d0a78a39d60946c000da6d765df5dfa6437b5736713fb289a4052cdf141b4",
+      "authoredChanges": [
+        {
+          "path": "slide.blocks.2.metric",
+          "before": {
+            "value": "42 pts",
+            "label": "Expected improvement",
+            "unit": "days",
+            "delta": "-3 days",
+            "trend": "down"
+          },
+          "after": {
+            "value": 42,
+            "unit": "pts",
+            "delta": "+6 pts",
+            "trend": "up",
+            "label": "Illustrative result"
+          }
+        }
+      ]
+    },
+    {
+      "key": "gallery/government/water-utility-capital-plan.opf.json#5",
+      "metricCount": 1,
+      "prefix": "050",
+      "beforeSha256": "afc34a6d3445b676428ed9949effdc76f47aba3d718817615722274f4b129046",
+      "afterSha256": "5b1ba962f11f3db860b70470f7e9b442ef2dde8c2083b6577a193054e9a2bc1b",
+      "authoredChanges": []
+    },
+    {
+      "key": "gallery/government/water-utility-capital-plan.opf.json#6",
+      "metricCount": 1,
+      "prefix": "051",
+      "beforeSha256": "aefa8664bd3080ffb11b36b483919895338e9ff2efe3fdc2f5fd72f6d7319a56",
+      "afterSha256": "d93edd7078bc14de92119056a58b922a631a32b8d08420dc7e91cb8092c1dfc6",
+      "authoredChanges": [
+        {
+          "path": "slide.blocks.2.metric",
+          "before": {
+            "value": "31%",
+            "label": "Expected improvement",
+            "unit": "days",
+            "delta": "-3 days",
+            "trend": "down"
+          },
+          "after": {
+            "value": 31,
+            "unit": "%",
+            "delta": "+6 pts",
+            "trend": "up",
+            "label": "Illustrative result"
+          }
+        }
+      ]
+    },
+    {
+      "key": "gallery/government/wildfire-evacuation-preparedness.opf.json#5",
+      "metricCount": 1,
+      "prefix": "052",
+      "beforeSha256": "f9a6da25be1167969c326c561436a08d016edc2cfbc3e3471fcfaeeb767746ef",
+      "afterSha256": "3359382ffa704bf0e25a54450bb69abc9b43db04f4064884681047b403bf1751",
+      "authoredChanges": []
+    },
+    {
+      "key": "gallery/government/wildfire-evacuation-preparedness.opf.json#6",
+      "metricCount": 1,
+      "prefix": "053",
+      "beforeSha256": "756765ca62ffc0fe7ef83562089c95053b858ca6ec73d14073956cf0ddf732fb",
+      "afterSha256": "69fd56fab5ec3e46daa4cc3969053108a71cdf14cb279ba295bf0070ee769345",
+      "authoredChanges": [
+        {
+          "path": "slide.blocks.2.metric",
+          "before": {
+            "value": "$820K",
+            "label": "Expected improvement",
+            "unit": "%",
+            "delta": "+6 pts",
+            "trend": "up"
+          },
+          "after": {
+            "value": "$820K",
+            "delta": "+$20K",
+            "trend": "up",
+            "label": "Illustrative result"
+          }
+        }
+      ]
+    },
+    {
+      "key": "gallery/government/workforce-reskilling-initiative.opf.json#5",
+      "metricCount": 1,
+      "prefix": "054",
+      "beforeSha256": "19932afd2b04ae5545c668b1e739c7e74d7cbd4d74d6d4a1f057f7e8d8d97d9a",
+      "afterSha256": "0d98ef218942727058b6681233fd24218e424176104415eb481484b5cdc2fdd4",
+      "authoredChanges": []
+    },
+    {
+      "key": "gallery/government/workforce-reskilling-initiative.opf.json#6",
+      "metricCount": 1,
+      "prefix": "055",
+      "beforeSha256": "745d77d7d0e9eb4ea2fc5ffdc8a790a0342b5eccfe92498c25f18426a468337d",
+      "afterSha256": "7662f93c09117ff8e7087a2dd27400227d1c95a74b1ae49f11f66fffcf3dfafa",
+      "authoredChanges": [
+        {
+          "path": "slide.blocks.2.metric",
+          "before": {
+            "value": "31%",
+            "label": "Expected improvement",
+            "unit": "days",
+            "delta": "-3 days",
+            "trend": "down"
+          },
+          "after": {
+            "value": 31,
+            "unit": "%",
+            "delta": "+6 pts",
+            "trend": "up",
+            "label": "Illustrative result"
+          }
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/airline-disruption-recovery-review.opf.json#5",
+      "metricCount": 1,
+      "prefix": "056",
+      "beforeSha256": "e3c948df7b6dc742c0a2ac48f390f76d57557f28b61b6c837e307fa8389b05c1",
+      "afterSha256": "674f78d9c26920232b91bcbd8df798501bba38cfb1af1b0807e9e392cc489a51",
+      "authoredChanges": []
+    },
+    {
+      "key": "gallery/industries/airline-disruption-recovery-review.opf.json#6",
+      "metricCount": 1,
+      "prefix": "057",
+      "beforeSha256": "254853c8bbf21c6ea37a2eefc2b79b9d27b0298f6a871592c2597f783fdc1806",
+      "afterSha256": "58724834705ef3ef619b83a35c11c34ed2c676d7b5140590ab64ff497d02bd95",
+      "authoredChanges": [
+        {
+          "path": "slide.blocks.2.metric",
+          "before": {
+            "value": "91%",
+            "label": "Expected improvement",
+            "unit": "%",
+            "delta": "+6 pts",
+            "trend": "up"
+          },
+          "after": {
+            "value": 91,
+            "unit": "%",
+            "delta": "+6 pts",
+            "trend": "up",
+            "label": "Illustrative result"
+          }
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/battery-line-supplier-readiness.opf.json#5",
+      "metricCount": 1,
+      "prefix": "058",
+      "beforeSha256": "70e94eac8f31ae62246b6f628123056824a1aa32cc91fb8412c528e131084513",
+      "afterSha256": "efd701ae596cd3538782e68085f0f91e1347d64f38f02ee28d64b30d908a3b43",
+      "authoredChanges": []
+    },
+    {
+      "key": "gallery/industries/battery-line-supplier-readiness.opf.json#6",
+      "metricCount": 1,
+      "prefix": "059",
+      "beforeSha256": "8ec21ef1e910545b03c8fddb264fa28b455c39776fdf08f05dbe2ace516b56d2",
+      "afterSha256": "16c92a87e36837f3d30c1060fd9f38ebe2efd655f877d099329da9fab6d3cf9c",
+      "authoredChanges": [
+        {
+          "path": "slide.blocks.2.metric",
+          "before": {
+            "value": "11 days",
+            "label": "Expected improvement",
+            "unit": "%",
+            "delta": "+6 pts",
+            "trend": "up"
+          },
+          "after": {
+            "value": 11,
+            "unit": "days",
+            "delta": "-3 days",
+            "trend": "down",
+            "label": "Illustrative result"
+          }
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/boutique-hotel-revenue-recovery.opf.json#5",
+      "metricCount": 1,
+      "prefix": "060",
+      "beforeSha256": "1cbe86df382e5578e24da188958438f17a6c0c376d6cdadd3c0599da2f00067b",
+      "afterSha256": "feee9f0cdb3abf9e89b980a32d7fa5199b77449310e408b8a05ff9ac1e233756",
+      "authoredChanges": []
+    },
+    {
+      "key": "gallery/industries/boutique-hotel-revenue-recovery.opf.json#6",
+      "metricCount": 1,
+      "prefix": "061",
+      "beforeSha256": "d26b54f60f614806271c3683c1a0f2ce2d0716e7a8c543d11c6080518df6cff6",
+      "afterSha256": "4f708eef67dd39d801e1f12dd49d1f0b4868be055f597a5d5ab9344ceb4a0960",
+      "authoredChanges": [
+        {
+          "path": "slide.blocks.2.metric",
+          "before": {
+            "value": "11 days",
+            "label": "Expected improvement",
+            "unit": "%",
+            "delta": "+6 pts",
+            "trend": "up"
+          },
+          "after": {
+            "value": 11,
+            "unit": "days",
+            "delta": "-3 days",
+            "trend": "down",
+            "label": "Illustrative result"
+          }
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/construction-safety-stand-down.opf.json#5",
+      "metricCount": 1,
+      "prefix": "062",
+      "beforeSha256": "f0ca9a8188ae81144f03f007d990a3d47341b883584f14d69cc0109a127d903c",
+      "afterSha256": "a6be513742889a982a3b3147f817519fb75832021ab9492c4c2d310942b94300",
+      "authoredChanges": []
+    },
+    {
+      "key": "gallery/industries/construction-safety-stand-down.opf.json#6",
+      "metricCount": 1,
+      "prefix": "063",
+      "beforeSha256": "3ce3913e702a816628eaa987fc24d0df83c7c3cc0bb0ac3b9479f318e9141656",
+      "afterSha256": "d2612b74efe0450544a0391c9aef85f779f81c4e577464a4295dbc54ec52e6d4",
+      "authoredChanges": [
+        {
+          "path": "slide.blocks.2.metric",
+          "before": {
+            "value": "2.4x",
+            "label": "Expected improvement",
+            "unit": "days",
+            "delta": "-3 days",
+            "trend": "down"
+          },
+          "after": {
+            "value": 2.4,
+            "unit": "x",
+            "delta": "+0.3x",
+            "trend": "up",
+            "label": "Illustrative result"
+          }
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#5",
+      "metricCount": 1,
+      "prefix": "064",
+      "beforeSha256": "8ab19d7a5883a966bab9c88b29aa9a173c418d38af911cbeb01f6f6cce33a9c7",
+      "afterSha256": "2fbc46111381ba18024a1de8b3a24c49cf8b0637c5ee497c3d365d126ec72e13",
+      "authoredChanges": []
+    },
+    {
+      "key": "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#6",
+      "metricCount": 1,
+      "prefix": "065",
+      "beforeSha256": "b903a2fb46df34dbf1097af2d0894555eb8245832ffb4047346fcafef690a4e8",
+      "afterSha256": "0b5dec6f9cd7d658304356787fe65fc0455114775a47f1567ef296e92d5f83e4",
+      "authoredChanges": [
+        {
+          "path": "slide.blocks.2.metric",
+          "before": {
+            "value": "2.4x",
+            "label": "Expected improvement",
+            "unit": "days",
+            "delta": "-3 days",
+            "trend": "down"
+          },
+          "after": {
+            "value": 2.4,
+            "unit": "x",
+            "delta": "+0.3x",
+            "trend": "up",
+            "label": "Illustrative result"
+          }
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/port-dwell-time-improvement-plan.opf.json#5",
+      "metricCount": 1,
+      "prefix": "066",
+      "beforeSha256": "37173242119c4872b5254ca0b917b075c5bea4d70498dacd0a0fbd6a16f8a8ed",
+      "afterSha256": "a32559948e8e6a950cea10a7b23296838305c41f33f8cad468e48af768e50021",
+      "authoredChanges": []
+    },
+    {
+      "key": "gallery/industries/port-dwell-time-improvement-plan.opf.json#6",
+      "metricCount": 1,
+      "prefix": "067",
+      "beforeSha256": "ba11529a873815144401f68472dcc0903438d29ffcdc0b517f279042e4c07ad5",
+      "afterSha256": "66f812b14667eb3f4a29ae726b51766a165369356d329a3b9efae8358c27b0ae",
+      "authoredChanges": [
+        {
+          "path": "slide.blocks.2.metric",
+          "before": {
+            "value": "18%",
+            "label": "Expected improvement",
+            "unit": "%",
+            "delta": "+6 pts",
+            "trend": "up"
+          },
+          "after": {
+            "value": 18,
+            "unit": "%",
+            "delta": "+6 pts",
+            "trend": "up",
+            "label": "Illustrative result"
+          }
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/tailings-monitoring-investment-brief.opf.json#5",
+      "metricCount": 1,
+      "prefix": "068",
+      "beforeSha256": "d165154e5a42b20f565a7c523147b1bca3fa86a09f345b8a014a80cae4631a8c",
+      "afterSha256": "c2adb62929612d3d7381c27c95c15c613ce6f3df306104d5a555beef8b1c74b9",
+      "authoredChanges": []
+    },
+    {
+      "key": "gallery/industries/tailings-monitoring-investment-brief.opf.json#6",
+      "metricCount": 1,
+      "prefix": "069",
+      "beforeSha256": "2bfa212af0b969f8c5941bf2a5cc2faec4e8734f89f0a11f4eabff31737066db",
+      "afterSha256": "7aa2117331bf638b144861244226d493d6469bd88ebbaf0daab5994289362e6e",
+      "authoredChanges": [
+        {
+          "path": "slide.blocks.2.metric",
+          "before": {
+            "value": "42 pts",
+            "label": "Expected improvement",
+            "unit": "days",
+            "delta": "-3 days",
+            "trend": "down"
+          },
+          "after": {
+            "value": 42,
+            "unit": "pts",
+            "delta": "+6 pts",
+            "trend": "up",
+            "label": "Illustrative result"
+          }
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/water-stewardship-grower-brief.opf.json#5",
+      "metricCount": 1,
+      "prefix": "070",
+      "beforeSha256": "8c2a6723f8aa39f60fb34056585a16295fee910f34e723a215576d550b1d6e03",
+      "afterSha256": "75a0d95d40615a20ac3e9d7bad6c3edbd95de0e48ebe260fd138d97d72c6b587",
+      "authoredChanges": []
+    },
+    {
+      "key": "gallery/industries/water-stewardship-grower-brief.opf.json#6",
+      "metricCount": 1,
+      "prefix": "071",
+      "beforeSha256": "ba9a0614f6f5e4bf4a442d6b828c0708eeaa50fda50c6025fe83b4e0b4971c08",
+      "afterSha256": "5fca28ff08cee4060ea7ff406fa4bd19b40f96ecbdac0b368ac231d01d5cf175",
+      "authoredChanges": [
+        {
+          "path": "slide.blocks.2.metric",
+          "before": {
+            "value": "$4.8M",
+            "label": "Expected improvement",
+            "unit": "days",
+            "delta": "-3 days",
+            "trend": "down"
+          },
+          "after": {
+            "value": "$4.8M",
+            "delta": "+$0.3M",
+            "trend": "up",
+            "label": "Illustrative result"
+          }
+        }
+      ]
+    },
+    {
+      "key": "gallery/presentation-types/manager-training-deck.opf.json#5",
+      "metricCount": 1,
+      "prefix": "072",
+      "beforeSha256": "4ba0d44ce199db8ee928efe5251208f2e4e25c403e61ea6f8573968ee54a4d8e",
+      "afterSha256": "698ff7df9d375ab85a27594e96b0d015663528813efeaab0453e7f0de99d4bcd",
+      "authoredChanges": []
+    },
+    {
+      "key": "gallery/presentation-types/manager-training-deck.opf.json#6",
+      "metricCount": 1,
+      "prefix": "073",
+      "beforeSha256": "6cc3f4e6201e21fa25e5a756a0ccdc79b1c2da1343e2510c8f335d31daf5a68e",
+      "afterSha256": "c5244b93782af402b1d0229a4afd5acfdfd4f1cef59d96e599d7d0885dd25ced",
+      "authoredChanges": [
+        {
+          "path": "slide.blocks.2.metric",
+          "before": {
+            "value": "11 days",
+            "label": "Expected improvement",
+            "unit": "%",
+            "delta": "+6 pts",
+            "trend": "up"
+          },
+          "after": {
+            "value": 11,
+            "unit": "days",
+            "delta": "-3 days",
+            "trend": "down",
+            "label": "Illustrative result"
+          }
+        }
+      ]
+    },
+    {
+      "key": "gallery/presentation-types/policy-briefing-for-advisors.opf.json#5",
+      "metricCount": 1,
+      "prefix": "074",
+      "beforeSha256": "fb4fcf67b7ff578cd7315cb3e01c9df3d0c994bba14dbe8eb948dc0dd0c93701",
+      "afterSha256": "e04aff5afbe17d78af7cb1ce2327535798a707e4f87f356b7769f77eb6ec0b6c",
+      "authoredChanges": []
+    },
+    {
+      "key": "gallery/presentation-types/policy-briefing-for-advisors.opf.json#6",
+      "metricCount": 1,
+      "prefix": "075",
+      "beforeSha256": "c1f753ddcc1b8df9a1c03b7245de40a6750851d95468c3990e6cedc615ec1fd6",
+      "afterSha256": "74391de7603fe2b851c5fbfc67366917fb3bfd923236f2dbd4d2bdc1f3f59f01",
+      "authoredChanges": [
+        {
+          "path": "slide.blocks.2.metric",
+          "before": {
+            "value": "$4.8M",
+            "label": "Expected improvement",
+            "unit": "days",
+            "delta": "-3 days",
+            "trend": "down"
+          },
+          "after": {
+            "value": "$4.8M",
+            "delta": "+$0.3M",
+            "trend": "up",
+            "label": "Illustrative result"
+          }
+        }
+      ]
+    },
+    {
+      "key": "gallery/presentation-types/product-launch-narrative.opf.json#5",
+      "metricCount": 1,
+      "prefix": "076",
+      "beforeSha256": "c07159cc5e41e342d61ff466811017d4ecb5a4490417e89a67e8a851e1157d66",
+      "afterSha256": "d5680aa985ae39f8a674d5e884dd43838c54b167f1f5ec3d375223b7fb080972",
+      "authoredChanges": []
+    },
+    {
+      "key": "gallery/presentation-types/product-launch-narrative.opf.json#6",
+      "metricCount": 1,
+      "prefix": "077",
+      "beforeSha256": "cb8f3dce9446d07932a32999afcc88d1c95888d64c8ca472268b636b1aaa2af6",
+      "afterSha256": "0706619e3ae373c6240c64378c2b0da4b820049d3553f8d4d1f86f476144fd05",
+      "authoredChanges": [
+        {
+          "path": "slide.blocks.2.metric",
+          "before": {
+            "value": "18%",
+            "label": "Expected improvement",
+            "unit": "%",
+            "delta": "+6 pts",
+            "trend": "up"
+          },
+          "after": {
+            "value": 18,
+            "unit": "%",
+            "delta": "+6 pts",
+            "trend": "up",
+            "label": "Illustrative result"
+          }
+        }
+      ]
+    },
+    {
+      "key": "gallery/presentation-types/research-findings-report.opf.json#5",
+      "metricCount": 1,
+      "prefix": "078",
+      "beforeSha256": "4689682fd0558821c8eb26dc5ac872a83ab22d20fc3dd1ea05478a888e3aea29",
+      "afterSha256": "d1c590c766f18ec67b89931d960d84e0fa877bc089d997390c3571f91cc26830",
+      "authoredChanges": []
+    },
+    {
+      "key": "gallery/presentation-types/research-findings-report.opf.json#6",
+      "metricCount": 1,
+      "prefix": "079",
+      "beforeSha256": "2ef8d93308a28515fa1659075c8f77a0e1b98463539e6d25070f7cd9691dcc49",
+      "afterSha256": "d7cca3aceb4df9dbca8ed26a0c35fad0dfbbd7c059c37c8b5e68d48655dd45c6",
+      "authoredChanges": [
+        {
+          "path": "slide.blocks.2.metric",
+          "before": {
+            "value": "2.4x",
+            "label": "Expected improvement",
+            "unit": "days",
+            "delta": "-3 days",
+            "trend": "down"
+          },
+          "after": {
+            "value": 2.4,
+            "unit": "x",
+            "delta": "+0.3x",
+            "trend": "up",
+            "label": "Illustrative result"
+          }
+        }
+      ]
+    },
+    {
+      "key": "technical/block-composition.opf.json#0",
+      "metricCount": 1,
+      "prefix": "080",
+      "beforeSha256": "0c9369342620b475184b08e76f09b7ac6f8c16a80f3040e132ee60b1abfc34d3",
+      "afterSha256": "240b25bdadaaa8b1afdfa253b8690d86a4d800d52b70ae44e98c41814aa91883",
+      "authoredChanges": []
+    },
+    {
+      "key": "technical/content-payload-matrix.opf.json#8",
+      "metricCount": 1,
+      "prefix": "081",
+      "beforeSha256": "b12ac0b5c8c42a0248f485c94ce871d1895733eaddf511e305324488fca6f149",
+      "afterSha256": "2b14f9b2d18180856045a2ff942770538248de75b41b7d46b41f8394a0050c11",
+      "authoredChanges": []
+    },
+    {
+      "key": "technical/full-feature-tour.opf.json#2",
+      "metricCount": 1,
+      "prefix": "082",
+      "beforeSha256": "b7d96fd1e5903caa2e0660b032361ff6152dfad0f1b9b7c995e38023b081a78b",
+      "afterSha256": "dccb2cb6c8966d7ab9f3c0c3686a777a22ec8c64c78d4728261b682bf0140b3b",
+      "authoredChanges": []
+    },
+    {
+      "key": "technical/metrics-quotes-timeline.opf.json#0",
+      "metricCount": 1,
+      "prefix": "083",
+      "beforeSha256": "e0206547da8d51b167b056576522da2f45b92a3396f0312fb5ed625a20f02282",
+      "afterSha256": "df9aacf77e87a5e80394347bf81497d0a38dfde86093e732dd9885d9e17318da",
+      "authoredChanges": []
+    },
+    {
+      "key": "technical/promoted-region-grid.opf.json#2",
+      "metricCount": 3,
+      "prefix": "084",
+      "beforeSha256": "1c21ad9c5ffc28dc388fd79b72b818560a45b4049feaba872114c9185145e0d5",
+      "afterSha256": "7e1c88a1206c9e55b1c3954953f5543bca69c5a54bbc57c06c9ba43c93d5c16b",
+      "authoredChanges": []
+    }
+  ],
+  "sheets": [
+    {
+      "file": "sheet-0.png",
+      "sha256": "4301d4dc6fdb64c4d6c587a1e7302d9b2bad6a6a46edd800a77464cbc704154f"
+    },
+    {
+      "file": "sheet-1.png",
+      "sha256": "1a37c0df05653da1d0cbb897927d79a9c40d1855c459ece10d40fc0da8ef74f1"
+    },
+    {
+      "file": "sheet-2.png",
+      "sha256": "42d9d9e813ed60135b96242d7912fa8f0fc815f800a0644929984caee0e7a86f"
+    },
+    {
+      "file": "sheet-3.png",
+      "sha256": "95ef9de84fce716c807d1350050a483e7137b622559f2c9d0b155959247d5cb7"
+    },
+    {
+      "file": "sheet-4.png",
+      "sha256": "e1b6a391f0dc5efe45e8f4e914aebb567c0012745dfcb7c00fccd2530ba8117e"
+    },
+    {
+      "file": "sheet-5.png",
+      "sha256": "4cbeeaeba09b32103b3def53578c016f10a03c785e1b04bb8bf419d73bdb1d3b"
+    },
+    {
+      "file": "sheet-6.png",
+      "sha256": "8db003cffa13e37fc50ebf499e93df77c1bbffb4593e346cde7b66fbc8c7dc97"
+    },
+    {
+      "file": "sheet-7.png",
+      "sha256": "85171899c21b8a8d014d72c9cba08aeb3ee6f5c70d239fc066cba8638118e0d4"
+    },
+    {
+      "file": "sheet-8.png",
+      "sha256": "df2e6989074a533cf7de7cd9892fae14bfb1acc44387ba6c8c82e84c6d408398"
+    }
+  ],
+  "scope": "All prior and current changed rasters reproduce their respective manifests using their respective source corpora. Each changed slide contains metric content; any authored changes to those slides are confined to recorded metric payloads. Visual review must still evaluate arrangement and readability. No baseline is promoted by this helper."
+}

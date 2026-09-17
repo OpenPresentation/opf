@@ -1,0 +1,8 @@
+Slides.Item : Integer out of range. 1 is not in Index's valid range of 1 to 0.
+At C:\Users\micha\.codex\worktrees\fd3f\opf\artifacts\windows-native\opf-pptx\artifacts\native-pie-control.ps1:33 
+char:5
++     $series=$presentation.Slides.Item(1).Shapes.Item(1).Chart.SeriesC ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (:) [], COMException
+    + FullyQualifiedErrorId : System.Runtime.InteropServices.COMException
+ 

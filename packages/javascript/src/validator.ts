@@ -2,9 +2,12 @@ import Ajv2020, { type ErrorObject, type ValidateFunction } from "ajv/dist/2020.
 import addFormats from "ajv-formats";
 
 import { catalogSchemaNames, type CatalogKind } from "./catalogs.js";
+import { MAX_COMPOSITION_DEPTH } from "./composition.js";
+import {tableGrid} from "./table.js";
 import { catalogIds } from "./generated/catalog-ids.js";
 import type { JsonSchema } from "./json.js";
 import { schemas, type SchemaName } from "./schemas.js";
+import { rememberValidationDefinition } from './validation-definitions.js';
 import type { Presentation } from "./types.js";
 
 export interface ValidationIssue {
@@ -200,6 +203,7 @@ function getAjv(): Ajv2020 {
 
   const instance = new Ajv2020({
     allErrors: true,
+    verbose: true,
     strict: false,
     allowUnionTypes: true,
   });
@@ -252,13 +256,15 @@ function resolveValidator(schemaOrKind: SchemaOrKind): {
 }
 
 function toIssue(error: ErrorObject): ValidationIssue {
-  return {
+  const issue: ValidationIssue = {
     path: error.instancePath || "/",
     message: error.message ?? "failed validation",
     keyword: error.keyword,
     schemaPath: error.schemaPath,
     params: error.params as Record<string, unknown>,
   };
+  rememberValidationDefinition(issue, error.parentSchema, error.keyword);
+  return issue;
 }
 
 function semanticIssue(path: string, message: string, params: Record<string, unknown> = {}): ValidationIssue {
@@ -276,7 +282,7 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 }
 
 function hasOwn(value: Record<string, unknown>, key: string): boolean {
-  return Object.prototype.hasOwnProperty.call(value, key);
+  return Object.hasOwn(value, key);
 }
 
 function isEnUkTag(value: unknown): boolean {
@@ -315,9 +321,9 @@ function inferredKinds(value: Record<string, unknown>): ContentKind[] {
 function isImplicitBlocksComposition(
   value: Record<string, unknown>,
   inferred: readonly ContentKind[],
-  options: { allowBlocks?: boolean },
+  options: { slideRoot?: boolean },
 ): boolean {
-  if (options.allowBlocks !== true || hasOwn(value, "blocks")) {
+  if (options.slideRoot !== true || hasOwn(value, "blocks")) {
     return false;
   }
 
@@ -327,12 +333,23 @@ function isImplicitBlocksComposition(
 function validateContentPayload(
   value: Record<string, unknown>,
   path: string,
-  options: { allowBlocks?: boolean } = {},
+  options: { slideRoot?: boolean } = {},
 ): ValidationIssue[] {
   const issues: ValidationIssue[] = [];
   const explicitType = value.type;
   const payloadFields = presentFields(value, rootPayloadFields);
-  const hasBlocks = options.allowBlocks === true && hasOwn(value, "blocks");
+  const hasBlocks = hasOwn(value, "blocks");
+  if (hasBlocks || explicitType === "group") {
+    if (explicitType !== undefined && explicitType !== "group") issues.push(semanticIssue(path, "a group must use type 'group' or omit type"));
+    const incompatible = payloadFields.filter(field => field !== "blocks" && field !== "type");
+    if (incompatible.length) issues.push(semanticIssue(path, "blocks cannot be mixed with leaf payload fields", { fields: incompatible }));
+    if (!Array.isArray(value.blocks) || (value.blocks.length === 0 && !options.slideRoot)) issues.push(semanticIssue(pathFor(path, "blocks"), "a group requires at least one block"));
+    if (Array.isArray(value.blocks)) value.blocks.forEach((block, index) => {
+      if (isRecord(block)) issues.push(...validateContentPayload(block, `${pathFor(path, "blocks")}/${index}`));
+    });
+    return issues;
+  }
+  if (hasOwn(value, "composition") && !options.slideRoot) issues.push(semanticIssue(pathFor(path, "composition"), "composition is only valid on a group containing blocks"));
 
   if (explicitType !== undefined && !isContentKind(explicitType)) {
     return issues;
@@ -342,17 +359,10 @@ function validateContentPayload(
   const inferred = kind ? [kind] : inferredKinds(value);
 
   if (!kind && inferred.length === 0) {
-    if (!hasBlocks && (payloadFields.length > 0 || path !== "/")) {
+    if (payloadFields.length > 0 || path !== "/") {
       issues.push(semanticIssue(path, "content payload must include concrete content fields", {
         fields: payloadFields,
       }));
-    }
-    if (hasBlocks && Array.isArray(value.blocks)) {
-      value.blocks.forEach((block, index) => {
-        if (isRecord(block)) {
-          issues.push(...validateContentPayload(block, `${pathFor(path, "blocks")}/${index}`));
-        }
-      });
     }
     return issues;
   }
@@ -371,11 +381,6 @@ function validateContentPayload(
   const resolvedKind = inferred[0];
   if (!resolvedKind) {
     return issues;
-  }
-  if (hasBlocks) {
-    issues.push(semanticIssue(path, "blocks cannot be mixed with root content payload fields", {
-      fields: payloadFields.filter((field) => field !== "blocks"),
-    }));
   }
   const spec = contentKindSpecs[resolvedKind];
   const allowedFields = new Set<string>([
@@ -405,14 +410,6 @@ function validateContentPayload(
       type: resolvedKind,
       incompatible,
     }));
-  }
-
-  if (options.allowBlocks && Array.isArray(value.blocks)) {
-    value.blocks.forEach((block, index) => {
-      if (isRecord(block)) {
-        issues.push(...validateContentPayload(block, `${pathFor(path, "blocks")}/${index}`));
-      }
-    });
   }
 
   return issues;
@@ -466,7 +463,7 @@ function validateSlideRegions(slide: Record<string, unknown>, slidePath: string)
   }
 
   if (regionKeys.length === 0 && rootFields.length > 0) {
-    issues.push(...validateContentPayload(slide, slidePath, { allowBlocks: true }));
+    issues.push(...validateContentPayload(slide, slidePath, { slideRoot: true }));
   }
 
   for (const key of regionKeys) {
@@ -516,9 +513,20 @@ function validatePresentationSemantics(value: unknown): ValidationIssue[] {
     }));
   }
 
+  const slideIds = new Set<string>();
   value.slides.forEach((slide, index) => {
     if (isRecord(slide)) {
+      if (typeof slide.id === "string") {
+        if (slideIds.has(slide.id)) issues.push(semanticIssue(`/slides/${index}/id`, "slide ids must be unique within a presentation", { id: slide.id }));
+        slideIds.add(slide.id);
+      }
       issues.push(...validateSlideRegions(slide, `/slides/${index}`));
+      const visitTables = (node:Record<string,unknown>,path:string) => {
+        if (isRecord(node.table)) for(const issue of tableGrid(node.table).issues) issues.push(semanticIssue(pathFor(path,'table')+issue.path.slice(5).replaceAll('.','/'),issue.message));
+        if(Array.isArray(node.blocks)) node.blocks.forEach((block,i)=>{if(isRecord(block))visitTables(block,`${path}/blocks/${i}`);});
+        for(const key of promotedRegionKeys) if(isRecord(node[key]))visitTables(node[key] as Record<string,unknown>,pathFor(path,key));
+      };
+      visitTables(slide,`/slides/${index}`);
     }
   });
 
@@ -708,8 +716,31 @@ function validateLanguageSemantics(value: unknown): ValidationIssue[] {
   return [];
 }
 
+// Guard recursive payloads before AJV or recursive semantic/reference traversal.
+function contentDepthIssues(value: unknown): ValidationIssue[] {
+  if (!isRecord(value) || !Array.isArray(value.slides)) return [];
+  const stack: { value: unknown; path: string; depth: number; ancestors: unknown[] }[] = [];
+  value.slides.forEach((slide, index) => {
+    if (!isRecord(slide)) return;
+    if (Array.isArray(slide.blocks)) slide.blocks.forEach((block, i) => { stack.push({ value: block, path: `/slides/${index}/blocks/${i}`, depth: 0, ancestors: [] }); });
+    for (const key of promotedRegionKeys) if (hasOwn(slide, key)) stack.push({ value: slide[key], path: `/slides/${index}/${key}`, depth: 0, ancestors: [] });
+  });
+  while (stack.length) {
+    const entry = stack.pop()!;
+    if (!isRecord(entry.value) || !Array.isArray(entry.value.blocks)) continue;
+    if (entry.ancestors.includes(entry.value) || entry.depth >= MAX_COMPOSITION_DEPTH) return [semanticIssue(entry.path, `content groups must be acyclic and nest at most ${MAX_COMPOSITION_DEPTH} levels`)];
+    const ancestors = [...entry.ancestors, entry.value];
+    entry.value.blocks.forEach((block, i) => { stack.push({ value: block, path: `${entry.path}/blocks/${i}`, depth: entry.depth + 1, ancestors }); });
+  }
+  return [];
+}
+
 export function validate(value: unknown, schemaOrKind: SchemaOrKind = "presentation"): ValidationResult {
   const resolved = resolveValidator(schemaOrKind);
+  if (resolved.schemaName === "presentation") {
+    const errors = contentDepthIssues(value);
+    if (errors.length) return { valid: false, errors, warnings: [], schemaName: resolved.schemaName };
+  }
   const valid = resolved.validate(value) === true;
   const errors = valid ? [] : (resolved.validate.errors ?? []).map(toIssue);
   const warnings: ValidationIssue[] = [];

@@ -1,0 +1,67 @@
+{
+  "node": "v20.20.2",
+  "generationSha256": "ae387f26cc73e1013933302d53b80ff4bc28f9a16258ddf79de97f19560eb7da",
+  "nativeSha256": "07dabfcd16d66913a1067f6d7c7301a36b5f221251c6d165197386cd480540bd",
+  "slides": 6,
+  "phases": 3,
+  "cells": 72,
+  "characterColorObservations": 978,
+  "imports": [
+    {
+      "phase": "original",
+      "cycle": 0,
+      "slides": 6,
+      "currentCellText": true
+    },
+    {
+      "phase": "original",
+      "cycle": 1,
+      "slides": 6,
+      "currentCellText": true
+    },
+    {
+      "phase": "original",
+      "cycle": 2,
+      "slides": 6,
+      "currentCellText": true
+    },
+    {
+      "phase": "saved",
+      "cycle": 0,
+      "slides": 6,
+      "currentCellText": true
+    },
+    {
+      "phase": "saved",
+      "cycle": 1,
+      "slides": 6,
+      "currentCellText": true
+    },
+    {
+      "phase": "saved",
+      "cycle": 2,
+      "slides": 6,
+      "currentCellText": true
+    },
+    {
+      "phase": "edited",
+      "cycle": 0,
+      "slides": 6,
+      "currentCellText": true
+    },
+    {
+      "phase": "edited",
+      "cycle": 1,
+      "slides": 6,
+      "currentCellText": true
+    },
+    {
+      "phase": "edited",
+      "cycle": 2,
+      "slides": 6,
+      "currentCellText": true
+    }
+  ],
+  "passed": true,
+  "scope": "Actual editable table text/character colors and six cell edits survive native save/reopen. Two additional export/import cycles preserve current cell text, without a formatting/geometry or native-raster claim for those reexports. Explicit low-contrast colors and translucent fills remain intentional counterexamples. Original/reopened native rasters match; no browser equivalence claim."
+}

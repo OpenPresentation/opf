@@ -1,0 +1,22 @@
+﻿{
+    "observed":  [
+                     {
+                         "phase":  "created",
+                         "values":  [
+                                        8.2,
+                                        3.2,
+                                        1.4,
+                                        1.2
+                                    ],
+                         "name":  "Sales",
+                         "categories":  [
+                                            "1st Qtr",
+                                            "2nd Qtr",
+                                            "3rd Qtr",
+                                            "4th Qtr"
+                                        ]
+                     }
+                 ],
+    "error":  "Slides.Item : Integer out of range. 1 is not in Index\u0027s valid range of 1 to 0.",
+    "stage":  "observe-reopened-native-pie"
+}

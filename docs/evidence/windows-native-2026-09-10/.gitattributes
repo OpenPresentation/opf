@@ -1,0 +1,2 @@
+# Preserve the exact verifier, log, JSON, PPTX and font bytes hashed by each run.
+* -text

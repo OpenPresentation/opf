@@ -1,0 +1,21 @@
+
+> openpresentation-site@0.1.0 test:e2e /Users/michael/Source/openpresentation-site
+> playwright test
+
+[WebServer] (node:71944) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:71957) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 6 tests using 1 worker
+
+(node:71964) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/e2e/published-site.spec.ts:7:5 › agent quickstart copies the published installation command and serves all six complete skills (720ms)
+  ✓  2 tests/e2e/published-site.spec.ts:31:5 › published history, package links and anchor navigation (282ms)
+  ✓  3 tests/e2e/published-site.spec.ts:48:5 › mobile changelog keeps horizontal overflow inside its table (158ms)
+  ✓  4 tests/e2e/published-site.spec.ts:55:5 › home-page downloads match the verified registry showcase (448ms)
+  ✓  5 tests/e2e/reference-playground.spec.ts:4:5 › local validator handles valid, advisory, invalid and malformed decks offline (2.2s)
+  ✓  6 tests/e2e/reference-playground.spec.ts:26:5 › reference copy preserves raw titles and headings, links and LLM exports use the current snapshot (1.8s)
+
+  6 passed (7.3s)

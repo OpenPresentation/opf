@@ -1,0 +1,29 @@
+$ pnpm run clean && pnpm run build
+$ node -e "require('node:fs').rmSync('dist', { recursive: true, force: true })"
+$ tsup
+CLI Building entry: {"index":"src/index.ts","opf":"src/opf.ts"}
+CLI Using tsconfig: tsconfig.json
+CLI tsup v8.5.1
+CLI Using tsup config: /Users/michael/Source/pptx-dev/sdk/typescript/tsup.config.ts
+CLI Target: es2022
+CLI Cleaning output folder
+ESM Build start
+CJS Build start
+Generated an empty chunk: "opf".
+Generated an empty chunk: "opf".
+ESM dist/index.js     11.94 KB
+ESM dist/opf.js       64.00 B
+ESM dist/opf.js.map   67.00 B
+ESM dist/index.js.map 31.15 KB
+ESM ⚡️ Build success in 54ms
+CJS dist/index.cjs     12.12 KB
+CJS dist/opf.cjs       80.00 B
+CJS dist/opf.cjs.map   68.00 B
+CJS dist/index.cjs.map 31.15 KB
+CJS ⚡️ Build success in 54ms
+DTS Build start
+DTS ⚡️ Build success in 568ms
+DTS dist/index.d.ts  9.00 KB
+DTS dist/opf.d.ts    23.58 KB
+DTS dist/index.d.cts 9.00 KB
+DTS dist/opf.d.cts   23.58 KB

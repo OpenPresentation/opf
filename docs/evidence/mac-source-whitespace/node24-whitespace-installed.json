@@ -1,0 +1,181 @@
+{
+  "node": "v24.21.0",
+  "browser": "153.0.8010.12",
+  "installed": true,
+  "lockSha256": "f89455ed183533d39b1187735f34e9d0c75925cf7749589b6034498f29fdd730",
+  "verifierSha256": "7c7efe0b5683431f2a49d257534a8ae2beef793d3feb195586a9935a1f6ec775",
+  "bundleSha256": "f667135e2a4d132a8a8b867834978d7d5600c49365b5890aa84b4b227c0d2e86",
+  "results": [
+    {
+      "measured": false,
+      "width": 1280,
+      "height": 720,
+      "original": "  A  B\tC D\r\n\r\ntrail  \r",
+      "accepted": "  Edited  B\tC D\r\n\r\ntrail  \r",
+      "selection": {
+        "x": 53.60000228881836,
+        "y": 145.7244415283203,
+        "width": 110.86666870117188,
+        "height": 97.44444274902344
+      },
+      "exportSha256": "997fe96b55e48936c49bab6abc5af1311a73afd95a34cced351ba432c80be08d"
+    },
+    {
+      "measured": false,
+      "width": 1280,
+      "height": 720,
+      "original": "\r\n\r\n",
+      "accepted": "\tend  \r\n\r\n",
+      "selection": {
+        "x": 53.6,
+        "y": 143.48,
+        "width": 1172.8,
+        "height": 522.92
+      },
+      "exportSha256": "7e7952763dcba574437d42c95579bc87dbea3f3fa90d922fe244fcea5405a705"
+    },
+    {
+      "measured": false,
+      "width": 1280,
+      "height": 720,
+      "original": "",
+      "accepted": "  New\ttext  \n",
+      "selection": {
+        "x": 53.6,
+        "y": 143.48,
+        "width": 1172.8,
+        "height": 522.92
+      },
+      "exportSha256": "065c6ca8f1d9623a8468ada299c6b1d79c4c813b8e85910bc32070d6f02fc9b5"
+    },
+    {
+      "measured": false,
+      "width": 720,
+      "height": 1280,
+      "original": "  A  B\tC D\r\n\r\ntrail  \r",
+      "accepted": "  Edited  B\tC D\r\n\r\ntrail  \r",
+      "selection": {
+        "x": 53.60000228881836,
+        "y": 145.27999877929688,
+        "width": 110.88749694824219,
+        "height": 98.60002136230469
+      },
+      "exportSha256": "2968c19aaacab62be2bc5529aa812e3e8a43c69ed21ede71402ec9731630d737"
+    },
+    {
+      "measured": false,
+      "width": 720,
+      "height": 1280,
+      "original": "\r\n\r\n",
+      "accepted": "\tend  \r\n\r\n",
+      "selection": {
+        "x": 53.6,
+        "y": 143.48,
+        "width": 612.8,
+        "height": 1082.92
+      },
+      "exportSha256": "cb6af70ceedcbc011d4598f46d26631a4c6ec703083a94201148b422a404d45f"
+    },
+    {
+      "measured": false,
+      "width": 720,
+      "height": 1280,
+      "original": "",
+      "accepted": "  New\ttext  \n",
+      "selection": {
+        "x": 53.6,
+        "y": 143.48,
+        "width": 612.8,
+        "height": 1082.92
+      },
+      "exportSha256": "84b029c0094ac70850cf3fb9193534017afc9f631c83a02e0641bdbcd67ed0aa"
+    },
+    {
+      "measured": true,
+      "width": 1280,
+      "height": 720,
+      "original": "  A  B\tC D\r\n\r\ntrail  \r",
+      "accepted": "  Edited  B\tC D\r\n\r\ntrail  \r",
+      "selection": {
+        "x": 53.599998474121094,
+        "y": 145.83200073242188,
+        "width": 121.29300689697266,
+        "height": 98
+      },
+      "exportSha256": "92ec942f0078f79880d26d159a89d77a4760d6495f62db0199a944eaf57f7814"
+    },
+    {
+      "measured": true,
+      "width": 1280,
+      "height": 720,
+      "original": "\r\n\r\n",
+      "accepted": "\tend  \r\n\r\n",
+      "selection": {
+        "x": 53.6,
+        "y": 143.832422,
+        "width": 1172.8,
+        "height": 522.567578
+      },
+      "exportSha256": "2bdb45ded787b1a40bb8e7911c8ca3c6ffab7bc2b906964328ef888ae5c31077"
+    },
+    {
+      "measured": true,
+      "width": 1280,
+      "height": 720,
+      "original": "",
+      "accepted": "  New\ttext  \n",
+      "selection": {
+        "x": 53.6,
+        "y": 143.832422,
+        "width": 1172.8,
+        "height": 522.567578
+      },
+      "exportSha256": "14489925e4d24d34f771c27ff237d08886718a6c4d4a0b8f605e62f9dddb5821"
+    },
+    {
+      "measured": true,
+      "width": 720,
+      "height": 1280,
+      "original": "  A  B\tC D\r\n\r\ntrail  \r",
+      "accepted": "  Edited  B\tC D\r\n\r\ntrail  \r",
+      "selection": {
+        "x": 53.599998474121094,
+        "y": 145.83200073242188,
+        "width": 121.29300689697266,
+        "height": 98
+      },
+      "exportSha256": "20bb537c713d12f11849537126c6324fb9370d20bc7e5d17e08c7a4435ea7358"
+    },
+    {
+      "measured": true,
+      "width": 720,
+      "height": 1280,
+      "original": "\r\n\r\n",
+      "accepted": "\tend  \r\n\r\n",
+      "selection": {
+        "x": 53.6,
+        "y": 143.832422,
+        "width": 612.8,
+        "height": 1082.567578
+      },
+      "exportSha256": "ca56c73c42f241004478140c3b519c8c95a55e910085ef00c0db1e1cf84d9fbe"
+    },
+    {
+      "measured": true,
+      "width": 720,
+      "height": 1280,
+      "original": "",
+      "accepted": "  New\ttext  \n",
+      "selection": {
+        "x": 53.6,
+        "y": 143.832422,
+        "width": 612.8,
+        "height": 1082.567578
+      },
+      "exportSha256": "de7b331757c23b339059f59c780a4d7e71eaba5b8efa6de60ebe6908221f88fb"
+    }
+  ],
+  "errors": [],
+  "requests": [],
+  "scope": "12 actual offline browser workflows: source-preserving no-op, scalar edit, undo/redo, blank source targeting and PPTX reimport; four additional separate-keyboard-edit controls retain untouched mixed endings. Trusted pointer/keyboard actions use Playwright; fill supplies normalized textarea text. Wholesale replacement uses the existing newline policy inside its replacement range. No native Office execution."
+}

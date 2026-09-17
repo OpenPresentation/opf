@@ -1,0 +1,8 @@
+{
+  "core": "3eeea0ef83fc57a5a15f9563fb0d9c7d2cf30a49",
+  "renderer": "d04da692a579b2256ad27ee8de216105806b48d2",
+  "pptx": "9dcc137387f50192ea5a0b2d00045b10fd476f6b",
+  "editor": "d4c0af69dd96acba70430e31c4b7057b70891e49",
+  "published": false,
+  "note": "Exact product commits; later branch changes coordinate CI, verification harnesses and retained evidence."
+}

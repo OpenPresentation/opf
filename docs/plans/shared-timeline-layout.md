@@ -1,0 +1,11 @@
+# Shared timeline layout candidate
+
+The readability-floor predecessor accepts all 16 measured timeline cases without core diagnostics, while renderer rejects four dense floor-32 cases. Both Mac Node 20 and 24 reproduce the gap. Timeline label fit currently happens separately in the renderer and converter, after composition has selected a layout. Existing pagination knows event boundaries but cannot respond to unmeasured internals. Shorthand array paths are also exported with a synthetic `.events` component rather than the actual source index.
+
+Implement a shared `layoutTimeline` API and accepted `ComposedItem.timelineLayout` with source-preserving parts for timeline metadata and each event field. Preserve schema order and exact field strings, including empty/blank values and whitespace; derive source paths from array/object form. Carry resolved font styles, source-line ranges, actual placements, markers and connector coordinates. Use supplied outline bounds when present and label estimated measurements honestly.
+
+Try a bounded set of horizontal alternating and vertical arrangements. Prefer the legacy arrangement when it fits; switch only when another accepted arrangement improves an overflow. Preserve selected minima, allocate metadata before events and report actionable path-specific failures when no readable arrangement fits. Score the accepted internals during core arrangement and use the same diagnostics in explicit pagination. Keep atomic events intact while preserving returned source mappings and metadata.
+
+Renderer, editor and editable PPTX should consume accepted geometry without fitting it again. Add focused source/geometry controls, complete offline browser slides, editing/undo, parsed PPTX primitives and exact source-content controls. Review changed 805-slide raster cases against the distinct readability checkpoint, retain the failing predecessor and verify clean installed candidates on Node 20/24. Real native acceptance remains a separate Windows handoff after Office recovery.
+
+Do not change published versions or release plans in this implementation checkpoint. This does not close chart internals, footers, missing glyph coverage, full Auto arrange, font compatibility or native Office gates.

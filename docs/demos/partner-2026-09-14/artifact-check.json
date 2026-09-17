@@ -1,0 +1,91 @@
+{
+  "checkedAt": "2026-09-15T01:17:09.623Z",
+  "node": "v24.21.0",
+  "packages": {
+    "core": "0.9.0",
+    "pptx": "0.7.0"
+  },
+  "validation": {
+    "valid": true,
+    "errors": [],
+    "warnings": [],
+    "schemaName": "presentation"
+  },
+  "exports": [
+    {
+      "file": "partner-demo.pptx",
+      "bytes": 34979,
+      "slides": 5,
+      "titlesPreserved": true
+    },
+    {
+      "file": "author-edited.pptx",
+      "bytes": 34971,
+      "slides": 5,
+      "titlesPreserved": true
+    }
+  ],
+  "offlinePreview": {
+    "slides": 5,
+    "embeddedImagesMatch": true
+  },
+  "visualReview": "All five retained 1280x720 slide images inspected; text and sample table/chart are readable.",
+  "nativePowerPointChecked": false,
+  "assets": [
+    {
+      "file": "START-HERE.md",
+      "bytes": 3726,
+      "sha256": "5492e38263c5b33575dc0b28af5e4c63df036014942022eba76f698f3b783290"
+    },
+    {
+      "file": "author-edited.pptx",
+      "bytes": 34971,
+      "sha256": "a342a12797221d3f4420f8662f6608f16d40ac1b68982683db9e9f3677e56e4d"
+    },
+    {
+      "file": "offline-demo.html",
+      "bytes": 242911,
+      "sha256": "54714e1899d80234eb5aafb891ac38b49a905399fdf8eab365576b8b1850513a"
+    },
+    {
+      "file": "partner-demo.opf.json",
+      "bytes": 3973,
+      "sha256": "23f5fa264d7d4ba7ac2678c5199269ff63150042070d8656c71860f5d9ce2ec9"
+    },
+    {
+      "file": "partner-demo.pptx",
+      "bytes": 34979,
+      "sha256": "be5f5b716774fb3eba5278763540dc776972449d9c23baf215e0a2be56f786d2"
+    },
+    {
+      "file": "slide-1.png",
+      "bytes": 28216,
+      "sha256": "1e798c0e3c93becc75deae3609dc96eb1aad7c1a63c17d22eb399be4c18466fd"
+    },
+    {
+      "file": "slide-2.png",
+      "bytes": 39050,
+      "sha256": "2d4cb73b7efc87753a751710f03be0aa23e3880f55ed25b692606a53bd41bdef"
+    },
+    {
+      "file": "slide-3.png",
+      "bytes": 37388,
+      "sha256": "03aba8cf8e7a4d75adbb82fe2cac152b1888ecfdc9491811652150e57fb9e7db"
+    },
+    {
+      "file": "slide-4.png",
+      "bytes": 32862,
+      "sha256": "e57bf0384580d48e84aaf1a2e745db9ee4689429bcb81a0f33b5635820e7a3d5"
+    },
+    {
+      "file": "slide-5.png",
+      "bytes": 43895,
+      "sha256": "f47a2aa1e61b539a9c00727914299a8c007dc1c601d99cd0333ef07f27ce6c5d"
+    },
+    {
+      "file": "verification.json",
+      "bytes": 352,
+      "sha256": "ba33ef54088014c8e4cc2af85aa2ffff686778beb8884c26871f2dc0b6c97035"
+    }
+  ]
+}

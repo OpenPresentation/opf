@@ -1,0 +1,27 @@
+
+> openpresentation-workspace@ test:packed-ecosystem /Users/michael/.codex/worktrees/c193/opf
+> node scripts/test-packed-ecosystem.mjs
+
+npm warn Unknown env config "npm-globalconfig". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "verify-deps-before-run". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "_jsr-registry". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+added 64 packages in 2s
+file:///Users/michael/.codex/worktrees/c193/opf/artifacts/npm/consumer/check-font-preparation.mjs:19
+assert.equal(imported.presentation.slides[0].title,source.slides[0].title);
+                                   ^
+
+TypeError: Cannot read properties of undefined (reading 'slides')
+    at file:///Users/michael/.codex/worktrees/c193/opf/artifacts/npm/consumer/check-font-preparation.mjs:19:36
+
+Node.js v24.21.0
+file:///Users/michael/.codex/worktrees/c193/opf/scripts/test-packed-ecosystem.mjs:78
+    throw new Error(`${command} exited ${result.status}`);
+          ^
+
+Error: /private/tmp/opf-mac-tools-20260910/node_modules/node/bin/node exited 1
+    at run (file:///Users/michael/.codex/worktrees/c193/opf/scripts/test-packed-ecosystem.mjs:78:11)
+    at file:///Users/michael/.codex/worktrees/c193/opf/scripts/test-packed-ecosystem.mjs:114:3
+
+Node.js v24.21.0
+ ELIFECYCLE  Command failed with exit code 1.

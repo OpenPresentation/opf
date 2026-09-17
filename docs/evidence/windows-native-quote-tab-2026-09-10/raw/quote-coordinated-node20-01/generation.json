@@ -1,0 +1,1781 @@
+{
+  "node": "v20.20.2",
+  "runtime": {
+    "@openpresentation/opf-pptx/package.json": "e29ba9014069c90555cdbd39cbfb86b7350eb5d4f603ca33519b287655aadc93",
+    "@openpresentation/opf-pptx/dist/background-import.js": "684f9b38cff01e596774b8120c979c3dbbfada273890f785f7a4e3db88cdcb22",
+    "@openpresentation/opf-pptx/dist/background.js": "081fb685677ca656341cdce89275331749174ffecd60e71451f26b9f896cca1c",
+    "@openpresentation/opf-pptx/dist/card-provenance.js": "ff1ca09b88500993abb4bb293162e5064f1f7fc38edfd999f8ca8eedce8b94b0",
+    "@openpresentation/opf-pptx/dist/chart-workbook.js": "39db820e6f3a512779943a13e5e78c63ff866c2a0074e1e9c807fcfc7a9aa1e2",
+    "@openpresentation/opf-pptx/dist/code-provenance.js": "5eb65649d1736dd5a19ff49680422cb1a097b9f6f94a3b457e649001903b9688",
+    "@openpresentation/opf-pptx/dist/heading-provenance.js": "f10385a2a0ac7ded90d3f71786693ec8d9d302ba4acf5f5111061a6705c8fcaf",
+    "@openpresentation/opf-pptx/dist/image-fallback-browser.js": "3c7f81d5677dd9a78a0a13fe5a94bbb14cef465031caaeda2c87e8451e9ff491",
+    "@openpresentation/opf-pptx/dist/image-fallback-node.js": "5ee323d3320420664b5d2c1714e246b04dd0806f459164f9696668552df87565",
+    "@openpresentation/opf-pptx/dist/image-geometry.js": "e083973a98c2bdf7d7dfce9ef1f6bef252f09ce0d69d987105ee0b73cc13d62e",
+    "@openpresentation/opf-pptx/dist/image-import.js": "cffccecc223e27d62b6e1aba0cdbe2c1c9aa94874ef898f76906b22e001bbd41",
+    "@openpresentation/opf-pptx/dist/index.js": "f992b4fbae92d87ef2559a74e909d6e5434f31f9d2e72003ac152e068706ba54",
+    "@openpresentation/opf-pptx/dist/metric-provenance.js": "a058bfd8e84cf393476aa64c925bff31430d11e341c32b5e2f5b0d141922f0af",
+    "@openpresentation/opf-pptx/dist/table-border-import.js": "16678e0d93e63474d39daac268016a59517cc36d85dbd8751131f143db01ace5",
+    "@openpresentation/opf-pptx/dist/table-cell-import.js": "fa17507763a2240564401d7977f4f39bc180e3e6da9d4aa9c36202908e9126d1",
+    "@openpresentation/opf-pptx/dist/table-import.js": "9ae40bb38dd34c9fc0ae4a3f5a257068ae92bb651ed5d96641c2629ef7106cf1",
+    "test/native-quote.mjs": "ebdf7dc87e299e7d83ce2cb612e8cacd4374bdd1f0a78c788dee460c4002a87e",
+    "test/native-quote.ps1": "2186d60c957cc18b4d69922df0c035b9487490c184ac18708a7b1e04539fd28e",
+    "test/native-deck.ps1": "dfcf7cb92c16d3de863386a73d152192be0874c175360f37a4ce069ddd8c16a8",
+    "test/native-process.ps1": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+    "vendor/pptxgenjs/pptxgen.es.js": "05844c5625e2cda3b449eb967c2246dd57ca57341886a7c28eeebca263b29bd4",
+    "package-lock.json": "10edb4cb29e98fe9db00c1c361aa3126c9969ab06f2b062889915ccc76019bc7",
+    "@openpresentation/opf/package.json": "6c1dcd6b72429c2179c51827e8f97419991b1dd7057fa105d67ecb2db01529b6",
+    "@openpresentation/opf/dist/composition.js": "a2d69048632dd6ff5ba4db397acd86e8c9c5c16365633319a24999466ebbd586",
+    "@openpresentation/opf/dist/chunk-NT3IYAYX.js": "193a39ad7d395d4f26af96e24aa9d23617afe3f63c9f71ec8b18d2a16c68bf97",
+    "@openpresentation/opf/dist/pagination.js": "5fad5aee183a2a5fda16fefa31e6b50c0491528ca111bee80081640bd60b50e4",
+    "@openpresentation/opf/dist/chunk-AFEV7YI7.js": "49b47b80d21d17e3e1839da05e0257db3db378ae371b6d3a8f7e729d7468104c",
+    "@openpresentation/opf/dist/chunk-DA4NWAQV.js": "ac4e9b8e38a998aebb074459f0788dcba6cf13f57e5f5b3f1ace472e0161f2cb",
+    "@openpresentation/opf/dist/chunk-GQSK3T7X.js": "34f518c29c9757bc252b5c13eb5d7db8ada4b477496e6289d8149fb4fdc7cd45",
+    "@openpresentation/opf/dist/chunk-TWMRZ43O.js": "0d35cec97ec7ddaa67fb9f096bc672c927eb68ed5fae5ac27d4dff70d68313f4",
+    "@openpresentation/opf/dist/validator.js": "fc419645499641ca2e45e3bfde4dba90a951e171bbfdf45125da1057b5805b45",
+    "@openpresentation/opf/dist/catalogs.js": "6d74d7b051844728b2622acdb5268472a043544c8b2ca04eb904b1cdf74ec739",
+    "@openpresentation/opf-render/package.json": "70b562c5f36c1ebfe5208c4fcf866cd03e9e6493f130eedc39660b47e7e83435",
+    "@openpresentation/opf-render/dist/font-compatibility.js": "a50ee71748e81cd12ed3aeb6eee92506ebf91ef05021c6ca3f5a100665d03dac",
+    "@openpresentation/opf-render/dist/font-manifest.js": "0af55027613ac952e645ed06f6b873c174e0767efbbb8e4de17e44b0158c1974",
+    "@openpresentation/opf-render/dist/fonts-browser.js": "d0543d838b2f22a8c70bdc60100d72d3c69e3f8033d5ccedd3523ee63c66b8d4",
+    "@openpresentation/opf-render/dist/fonts.js": "860198e21bee950a77a2e47882395629956090eed93399557da3e9cc3b202741",
+    "@openpresentation/opf-render/dist/fonts-node.js": "d45bd167367c1c40202b12362e52483f15e6a6d5ee67e8641b68418de3f1a8dc",
+    "@openpresentation/opf-render/dist/index.js": "39c8f2b279ce10873f00289349b84cf9cab7e12c56e9e0d87447bd2406777234",
+    "@openpresentation/opf-render/dist/svg.js": "36c6e714e5a09181b702e294621cf4a25a59601ec03525fd58e84366a00f50c2",
+    "@openpresentation/opf-render/dist/raster.js": "8e98aba22982ec8c7cece31be19f8cd92fc942a7d538bf64c2e4f32bdd14fc6d",
+    "@openpresentation/opf-render/dist/raster-images.js": "304cffe5e77553ac1ab590fc5805714dde34e6f69df5dc55e35dbc8df602753c"
+  },
+  "fontHashes": {
+    "calibri.ttf": "57e93ff143572bcc092c1f56202d43ddc07bb119aa104c6d7af163470fb551f6",
+    "calibrib.ttf": "0a8296747536ead27d5f48f67e911cc3b207742b3f704e66995251d12fd422e5",
+    "calibrii.ttf": "7f150e9eabe5db3e1b0f9469dca5c96176bc2fbb306dc9d48b7029dc69c52763",
+    "calibriz.ttf": "760539bfedbe24e7853ca8a621d9cb1f3de52036c116e81aae36b33c4ab60a7c"
+  },
+  "fontSubstitutions": [
+    {
+      "requestedFamily": "Calibri",
+      "sourceFamily": "Calibri",
+      "resolvedFamily": "Calibri",
+      "requestedWeight": 600,
+      "resolvedWeight": 700,
+      "italic": false,
+      "compatibility": "visual",
+      "fontFace": {
+        "family": "Calibri",
+        "bold": true,
+        "italic": false
+      },
+      "path": "slides.0.quote.text"
+    },
+    {
+      "requestedFamily": "Calibri",
+      "sourceFamily": "Calibri",
+      "resolvedFamily": "Calibri",
+      "requestedWeight": 500,
+      "resolvedWeight": 400,
+      "italic": false,
+      "compatibility": "visual",
+      "fontFace": {
+        "family": "Calibri",
+        "bold": false,
+        "italic": false
+      },
+      "path": "slides.0.quote"
+    },
+    {
+      "requestedFamily": "Calibri",
+      "sourceFamily": "Calibri",
+      "resolvedFamily": "Calibri",
+      "requestedWeight": 600,
+      "resolvedWeight": 700,
+      "italic": false,
+      "compatibility": "visual",
+      "fontFace": {
+        "family": "Calibri",
+        "bold": true,
+        "italic": false
+      },
+      "path": "slides.1.quote.text"
+    },
+    {
+      "requestedFamily": "Calibri",
+      "sourceFamily": "Calibri",
+      "resolvedFamily": "Calibri",
+      "requestedWeight": 500,
+      "resolvedWeight": 400,
+      "italic": false,
+      "compatibility": "visual",
+      "fontFace": {
+        "family": "Calibri",
+        "bold": false,
+        "italic": false
+      },
+      "path": "slides.1.quote"
+    },
+    {
+      "requestedFamily": "Calibri",
+      "sourceFamily": "Calibri",
+      "resolvedFamily": "Calibri",
+      "requestedWeight": 600,
+      "resolvedWeight": 700,
+      "italic": false,
+      "compatibility": "visual",
+      "fontFace": {
+        "family": "Calibri",
+        "bold": true,
+        "italic": false
+      },
+      "path": "slides.2.quote.text"
+    },
+    {
+      "requestedFamily": "Calibri",
+      "sourceFamily": "Calibri",
+      "resolvedFamily": "Calibri",
+      "requestedWeight": 500,
+      "resolvedWeight": 400,
+      "italic": false,
+      "compatibility": "visual",
+      "fontFace": {
+        "family": "Calibri",
+        "bold": false,
+        "italic": false
+      },
+      "path": "slides.2.quote"
+    },
+    {
+      "requestedFamily": "Calibri",
+      "sourceFamily": "Calibri",
+      "resolvedFamily": "Calibri",
+      "requestedWeight": 600,
+      "resolvedWeight": 700,
+      "italic": false,
+      "compatibility": "visual",
+      "fontFace": {
+        "family": "Calibri",
+        "bold": true,
+        "italic": false
+      },
+      "path": "slides.3.quote.text"
+    },
+    {
+      "requestedFamily": "Calibri",
+      "sourceFamily": "Calibri",
+      "resolvedFamily": "Calibri",
+      "requestedWeight": 500,
+      "resolvedWeight": 400,
+      "italic": false,
+      "compatibility": "visual",
+      "fontFace": {
+        "family": "Calibri",
+        "bold": false,
+        "italic": false
+      },
+      "path": "slides.3.quote"
+    },
+    {
+      "requestedFamily": "Calibri",
+      "sourceFamily": "Calibri",
+      "resolvedFamily": "Calibri",
+      "requestedWeight": 600,
+      "resolvedWeight": 700,
+      "italic": false,
+      "compatibility": "visual",
+      "fontFace": {
+        "family": "Calibri",
+        "bold": true,
+        "italic": false
+      },
+      "path": "slides.4.quote.text"
+    },
+    {
+      "requestedFamily": "Calibri",
+      "sourceFamily": "Calibri",
+      "resolvedFamily": "Calibri",
+      "requestedWeight": 500,
+      "resolvedWeight": 400,
+      "italic": false,
+      "compatibility": "visual",
+      "fontFace": {
+        "family": "Calibri",
+        "bold": false,
+        "italic": false
+      },
+      "path": "slides.4.quote"
+    },
+    {
+      "requestedFamily": "Calibri",
+      "sourceFamily": "Calibri",
+      "resolvedFamily": "Calibri",
+      "requestedWeight": 600,
+      "resolvedWeight": 700,
+      "italic": false,
+      "compatibility": "visual",
+      "fontFace": {
+        "family": "Calibri",
+        "bold": true,
+        "italic": false
+      },
+      "path": "slides.5.quote.text"
+    },
+    {
+      "requestedFamily": "Calibri",
+      "sourceFamily": "Calibri",
+      "resolvedFamily": "Calibri",
+      "requestedWeight": 500,
+      "resolvedWeight": 400,
+      "italic": false,
+      "compatibility": "visual",
+      "fontFace": {
+        "family": "Calibri",
+        "bold": false,
+        "italic": false
+      },
+      "path": "slides.5.quote"
+    }
+  ],
+  "decks": [
+    {
+      "id": "quote-1280",
+      "width": 1280,
+      "height": 720,
+      "slides": 6,
+      "hashes": {
+        "quote-1280.pptx": "4f99a57df6c100e76d7e7852c225022bc3cfacf46c4c76bd1db3e16f84d243b0",
+        "quote-1280.opf.json": "45fd7bbcaa6ad5bd7d1577f4cef85f5c7e13d492734015b1523911f751b245e3",
+        "quote-1280-renderer-1.png": "ae87c241f5b07ca97bc18a6770c3d1e373d6898715001b840b8099f5afd411bf",
+        "quote-1280-renderer-2.png": "206644e0cebf36cf3b059c84a83ce80a1f2c1a731f92ccc7e603ab23e8189ce3",
+        "quote-1280-renderer-3.png": "53871b7e40659c00d13e661363ec806bb8de54654c5b28102b02180d3bd947f3",
+        "quote-1280-renderer-4.png": "a1b9529adc50301dd35fb669b16c0f6f12528e4e36f15e49d762a48b40dfab62",
+        "quote-1280-renderer-5.png": "6b544b866ba022c28e5a695231d5240e6dc749bbb60f108ed1c0d6014883c2ed",
+        "quote-1280-renderer-6.png": "857bc58c7256c89739211fd52e90513430516bc1a2d1d0c48107f1c058c94344"
+      },
+      "layouts": [
+        {
+          "cell": {
+            "x": 57.6,
+            "y": 147.48,
+            "width": 1164.8,
+            "height": 514.92
+          },
+          "parts": [
+            {
+              "role": "body",
+              "path": "slides.0.quote.text",
+              "text": "\"A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. \"",
+              "sources": [
+                {
+                  "path": "slides.0.quote.text",
+                  "start": 0,
+                  "end": 804,
+                  "outputStart": 1,
+                  "outputEnd": 805
+                }
+              ],
+              "box": {
+                "x": 75.6,
+                "y": 165.48,
+                "width": 1128.8,
+                "height": 420.91999999999996
+              },
+              "requestedFontSize": 28,
+              "minFontSize": 16,
+              "requestedStyle": {
+                "fontFamily": "Calibri",
+                "fontWeight": 600,
+                "italic": false,
+                "path": "slides.0.quote.text"
+              },
+              "style": {
+                "fontFamily": "Calibri",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.0.quote.text",
+                "fontFace": {
+                  "family": "Calibri",
+                  "bold": true,
+                  "italic": false
+                }
+              },
+              "fit": {
+                "lines": [
+                  "\"A shared layout keeps the evidence readable when the words change. A shared layout keeps the",
+                  "evidence readable when the words change. A shared layout keeps the evidence readable when",
+                  "the words change. A shared layout keeps the evidence readable when the words change. A",
+                  "shared layout keeps the evidence readable when the words change. A shared layout keeps the",
+                  "evidence readable when the words change. A shared layout keeps the evidence readable when",
+                  "the words change. A shared layout keeps the evidence readable when the words change. A",
+                  "shared layout keeps the evidence readable when the words change. A shared layout keeps the",
+                  "evidence readable when the words change. A shared layout keeps the evidence readable when",
+                  "the words change. A shared layout keeps the evidence readable when the words change. \""
+                ],
+                "fontSize": 28,
+                "lineHeight": 34.16,
+                "overflow": false
+              }
+            },
+            {
+              "role": "footer",
+              "path": "slides.0.quote",
+              "text": "A reviewer - Recorded interview",
+              "sources": [
+                {
+                  "path": "slides.0.quote.attribution",
+                  "start": 0,
+                  "end": 10,
+                  "outputStart": 0,
+                  "outputEnd": 10
+                },
+                {
+                  "path": "slides.0.quote.source",
+                  "start": 0,
+                  "end": 18,
+                  "outputStart": 13,
+                  "outputEnd": 31
+                }
+              ],
+              "box": {
+                "x": 75.6,
+                "y": 604.4,
+                "width": 1128.8,
+                "height": 40
+              },
+              "requestedFontSize": 17,
+              "minFontSize": 16,
+              "requestedStyle": {
+                "fontFamily": "Calibri",
+                "fontWeight": 500,
+                "italic": false,
+                "path": "slides.0.quote"
+              },
+              "style": {
+                "fontFamily": "Calibri",
+                "fontWeight": 400,
+                "italic": false,
+                "path": "slides.0.quote",
+                "fontFace": {
+                  "family": "Calibri",
+                  "bold": false,
+                  "italic": false
+                }
+              },
+              "fit": {
+                "lines": [
+                  "A reviewer - Recorded interview"
+                ],
+                "fontSize": 17,
+                "lineHeight": 20.74,
+                "overflow": false
+              }
+            }
+          ]
+        },
+        {
+          "cell": {
+            "x": 57.6,
+            "y": 147.48,
+            "width": 1164.8,
+            "height": 514.92
+          },
+          "parts": [
+            {
+              "role": "body",
+              "path": "slides.1.quote.text",
+              "text": "\"A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. \"",
+              "sources": [
+                {
+                  "path": "slides.1.quote.text",
+                  "start": 0,
+                  "end": 1072,
+                  "outputStart": 1,
+                  "outputEnd": 1073
+                }
+              ],
+              "box": {
+                "x": 75.6,
+                "y": 165.48,
+                "width": 1128.8,
+                "height": 420.91999999999996
+              },
+              "requestedFontSize": 28,
+              "minFontSize": 16,
+              "requestedStyle": {
+                "fontFamily": "Calibri",
+                "fontWeight": 600,
+                "italic": false,
+                "path": "slides.1.quote.text"
+              },
+              "style": {
+                "fontFamily": "Calibri",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.1.quote.text",
+                "fontFace": {
+                  "family": "Calibri",
+                  "bold": true,
+                  "italic": false
+                }
+              },
+              "fit": {
+                "lines": [
+                  "\"A shared layout keeps the evidence readable when the words change. A shared layout keeps the",
+                  "evidence readable when the words change. A shared layout keeps the evidence readable when",
+                  "the words change. A shared layout keeps the evidence readable when the words change. A",
+                  "shared layout keeps the evidence readable when the words change. A shared layout keeps the",
+                  "evidence readable when the words change. A shared layout keeps the evidence readable when",
+                  "the words change. A shared layout keeps the evidence readable when the words change. A",
+                  "shared layout keeps the evidence readable when the words change. A shared layout keeps the",
+                  "evidence readable when the words change. A shared layout keeps the evidence readable when",
+                  "the words change. A shared layout keeps the evidence readable when the words change. A",
+                  "shared layout keeps the evidence readable when the words change. A shared layout keeps the",
+                  "evidence readable when the words change. A shared layout keeps the evidence readable when",
+                  "the words change. A shared layout keeps the evidence readable when the words change. \""
+                ],
+                "fontSize": 28,
+                "lineHeight": 34.16,
+                "overflow": false
+              }
+            },
+            {
+              "role": "footer",
+              "path": "slides.1.quote",
+              "text": "A reviewer - Recorded interview",
+              "sources": [
+                {
+                  "path": "slides.1.quote.attribution",
+                  "start": 0,
+                  "end": 10,
+                  "outputStart": 0,
+                  "outputEnd": 10
+                },
+                {
+                  "path": "slides.1.quote.source",
+                  "start": 0,
+                  "end": 18,
+                  "outputStart": 13,
+                  "outputEnd": 31
+                }
+              ],
+              "box": {
+                "x": 75.6,
+                "y": 604.4,
+                "width": 1128.8,
+                "height": 40
+              },
+              "requestedFontSize": 17,
+              "minFontSize": 16,
+              "requestedStyle": {
+                "fontFamily": "Calibri",
+                "fontWeight": 500,
+                "italic": false,
+                "path": "slides.1.quote"
+              },
+              "style": {
+                "fontFamily": "Calibri",
+                "fontWeight": 400,
+                "italic": false,
+                "path": "slides.1.quote",
+                "fontFace": {
+                  "family": "Calibri",
+                  "bold": false,
+                  "italic": false
+                }
+              },
+              "fit": {
+                "lines": [
+                  "A reviewer - Recorded interview"
+                ],
+                "fontSize": 17,
+                "lineHeight": 20.74,
+                "overflow": false
+              }
+            }
+          ]
+        },
+        {
+          "cell": {
+            "x": 57.6,
+            "y": 147.48,
+            "width": 1164.8,
+            "height": 514.92
+          },
+          "parts": [
+            {
+              "role": "body",
+              "path": "slides.2.quote.text",
+              "text": "\"A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. \"",
+              "sources": [
+                {
+                  "path": "slides.2.quote.text",
+                  "start": 0,
+                  "end": 1340,
+                  "outputStart": 1,
+                  "outputEnd": 1341
+                }
+              ],
+              "box": {
+                "x": 75.6,
+                "y": 165.48,
+                "width": 1128.8,
+                "height": 440.17999999999995
+              },
+              "requestedFontSize": 28,
+              "minFontSize": 16,
+              "requestedStyle": {
+                "fontFamily": "Calibri",
+                "fontWeight": 600,
+                "italic": false,
+                "path": "slides.2.quote.text"
+              },
+              "style": {
+                "fontFamily": "Calibri",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.2.quote.text",
+                "fontFace": {
+                  "family": "Calibri",
+                  "bold": true,
+                  "italic": false
+                }
+              },
+              "fit": {
+                "lines": [
+                  "\"A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence",
+                  "readable when the words change. A shared layout keeps the evidence readable when the words change. A",
+                  "shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence",
+                  "readable when the words change. A shared layout keeps the evidence readable when the words change. A",
+                  "shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence",
+                  "readable when the words change. A shared layout keeps the evidence readable when the words change. A",
+                  "shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence",
+                  "readable when the words change. A shared layout keeps the evidence readable when the words change. A",
+                  "shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence",
+                  "readable when the words change. A shared layout keeps the evidence readable when the words change. A",
+                  "shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence",
+                  "readable when the words change. A shared layout keeps the evidence readable when the words change. A",
+                  "shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence",
+                  "readable when the words change. \""
+                ],
+                "fontSize": 25,
+                "lineHeight": 30.5,
+                "overflow": false
+              }
+            },
+            {
+              "role": "footer",
+              "path": "slides.2.quote",
+              "text": "A reviewer - Recorded interview",
+              "sources": [
+                {
+                  "path": "slides.2.quote.attribution",
+                  "start": 0,
+                  "end": 10,
+                  "outputStart": 0,
+                  "outputEnd": 10
+                },
+                {
+                  "path": "slides.2.quote.source",
+                  "start": 0,
+                  "end": 18,
+                  "outputStart": 13,
+                  "outputEnd": 31
+                }
+              ],
+              "box": {
+                "x": 75.6,
+                "y": 623.66,
+                "width": 1128.8,
+                "height": 20.74
+              },
+              "requestedFontSize": 17,
+              "minFontSize": 16,
+              "requestedStyle": {
+                "fontFamily": "Calibri",
+                "fontWeight": 500,
+                "italic": false,
+                "path": "slides.2.quote"
+              },
+              "style": {
+                "fontFamily": "Calibri",
+                "fontWeight": 400,
+                "italic": false,
+                "path": "slides.2.quote",
+                "fontFace": {
+                  "family": "Calibri",
+                  "bold": false,
+                  "italic": false
+                }
+              },
+              "fit": {
+                "lines": [
+                  "A reviewer - Recorded interview"
+                ],
+                "fontSize": 17,
+                "lineHeight": 20.74,
+                "overflow": false
+              }
+            }
+          ]
+        },
+        {
+          "cell": {
+            "x": 57.6,
+            "y": 147.48,
+            "width": 1164.8,
+            "height": 514.92
+          },
+          "parts": [
+            {
+              "role": "body",
+              "path": "slides.3.quote.text",
+              "text": "\"A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. \"",
+              "sources": [
+                {
+                  "path": "slides.3.quote.text",
+                  "start": 0,
+                  "end": 1608,
+                  "outputStart": 1,
+                  "outputEnd": 1609
+                }
+              ],
+              "box": {
+                "x": 75.6,
+                "y": 165.48,
+                "width": 1128.8,
+                "height": 440.17999999999995
+              },
+              "requestedFontSize": 28,
+              "minFontSize": 16,
+              "requestedStyle": {
+                "fontFamily": "Calibri",
+                "fontWeight": 600,
+                "italic": false,
+                "path": "slides.3.quote.text"
+              },
+              "style": {
+                "fontFamily": "Calibri",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.3.quote.text",
+                "fontFace": {
+                  "family": "Calibri",
+                  "bold": true,
+                  "italic": false
+                }
+              },
+              "fit": {
+                "lines": [
+                  "\"A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable",
+                  "when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps",
+                  "the evidence readable when the words change. A shared layout keeps the evidence readable when the words change.",
+                  "A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable",
+                  "when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps",
+                  "the evidence readable when the words change. A shared layout keeps the evidence readable when the words change.",
+                  "A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable",
+                  "when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps",
+                  "the evidence readable when the words change. A shared layout keeps the evidence readable when the words change.",
+                  "A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable",
+                  "when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps",
+                  "the evidence readable when the words change. A shared layout keeps the evidence readable when the words change.",
+                  "A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable",
+                  "when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps",
+                  "the evidence readable when the words change. \""
+                ],
+                "fontSize": 23,
+                "lineHeight": 28.06,
+                "overflow": false
+              }
+            },
+            {
+              "role": "footer",
+              "path": "slides.3.quote",
+              "text": "A reviewer - Recorded interview",
+              "sources": [
+                {
+                  "path": "slides.3.quote.attribution",
+                  "start": 0,
+                  "end": 10,
+                  "outputStart": 0,
+                  "outputEnd": 10
+                },
+                {
+                  "path": "slides.3.quote.source",
+                  "start": 0,
+                  "end": 18,
+                  "outputStart": 13,
+                  "outputEnd": 31
+                }
+              ],
+              "box": {
+                "x": 75.6,
+                "y": 623.66,
+                "width": 1128.8,
+                "height": 20.74
+              },
+              "requestedFontSize": 17,
+              "minFontSize": 16,
+              "requestedStyle": {
+                "fontFamily": "Calibri",
+                "fontWeight": 500,
+                "italic": false,
+                "path": "slides.3.quote"
+              },
+              "style": {
+                "fontFamily": "Calibri",
+                "fontWeight": 400,
+                "italic": false,
+                "path": "slides.3.quote",
+                "fontFace": {
+                  "family": "Calibri",
+                  "bold": false,
+                  "italic": false
+                }
+              },
+              "fit": {
+                "lines": [
+                  "A reviewer - Recorded interview"
+                ],
+                "fontSize": 17,
+                "lineHeight": 20.74,
+                "overflow": false
+              }
+            }
+          ]
+        },
+        {
+          "cell": {
+            "x": 57.6,
+            "y": 147.48,
+            "width": 1164.8,
+            "height": 514.92
+          },
+          "parts": [
+            {
+              "role": "body",
+              "path": "slides.4.quote.text",
+              "text": "\"Keep the complete source visible.\"",
+              "sources": [
+                {
+                  "path": "slides.4.quote.text",
+                  "start": 0,
+                  "end": 33,
+                  "outputStart": 1,
+                  "outputEnd": 34
+                }
+              ],
+              "box": {
+                "x": 75.6,
+                "y": 165.48,
+                "width": 1128.8,
+                "height": 315.74
+              },
+              "requestedFontSize": 28,
+              "minFontSize": 16,
+              "requestedStyle": {
+                "fontFamily": "Calibri",
+                "fontWeight": 600,
+                "italic": false,
+                "path": "slides.4.quote.text"
+              },
+              "style": {
+                "fontFamily": "Calibri",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.4.quote.text",
+                "fontFace": {
+                  "family": "Calibri",
+                  "bold": true,
+                  "italic": false
+                }
+              },
+              "fit": {
+                "lines": [
+                  "\"Keep the complete source visible.\""
+                ],
+                "fontSize": 28,
+                "lineHeight": 34.16,
+                "overflow": false
+              }
+            },
+            {
+              "role": "footer",
+              "path": "slides.4.quote",
+              "text": "Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution  - Recorded interview",
+              "sources": [
+                {
+                  "path": "slides.4.quote.attribution",
+                  "start": 0,
+                  "end": 1020,
+                  "outputStart": 0,
+                  "outputEnd": 1020
+                },
+                {
+                  "path": "slides.4.quote.source",
+                  "start": 0,
+                  "end": 18,
+                  "outputStart": 1023,
+                  "outputEnd": 1041
+                }
+              ],
+              "box": {
+                "x": 75.6,
+                "y": 499.22,
+                "width": 1128.8,
+                "height": 145.17999999999998
+              },
+              "requestedFontSize": 17,
+              "minFontSize": 16,
+              "requestedStyle": {
+                "fontFamily": "Calibri",
+                "fontWeight": 500,
+                "italic": false,
+                "path": "slides.4.quote"
+              },
+              "style": {
+                "fontFamily": "Calibri",
+                "fontWeight": 400,
+                "italic": false,
+                "path": "slides.4.quote",
+                "fontFace": {
+                  "family": "Calibri",
+                  "bold": false,
+                  "italic": false
+                }
+              },
+              "fit": {
+                "lines": [
+                  "Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long",
+                  "attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution",
+                  "Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long",
+                  "attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution",
+                  "Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long",
+                  "attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution",
+                  "Long attribution Long attribution Long attribution - Recorded interview"
+                ],
+                "fontSize": 17,
+                "lineHeight": 20.74,
+                "overflow": false
+              }
+            }
+          ]
+        },
+        {
+          "cell": {
+            "x": 57.6,
+            "y": 147.48,
+            "width": 1164.8,
+            "height": 514.92
+          },
+          "parts": [
+            {
+              "role": "body",
+              "path": "slides.5.quote.text",
+              "text": "\"This source keeps the selected readability floor.\"",
+              "sources": [
+                {
+                  "path": "slides.5.quote.text",
+                  "start": 0,
+                  "end": 49,
+                  "outputStart": 1,
+                  "outputEnd": 50
+                }
+              ],
+              "box": {
+                "x": 75.6,
+                "y": 165.48,
+                "width": 1128.8,
+                "height": 373.0799999999999
+              },
+              "requestedFontSize": 28,
+              "minFontSize": 24,
+              "requestedStyle": {
+                "fontFamily": "Calibri",
+                "fontWeight": 600,
+                "italic": false,
+                "path": "slides.5.quote.text"
+              },
+              "style": {
+                "fontFamily": "Calibri",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.5.quote.text",
+                "fontFace": {
+                  "family": "Calibri",
+                  "bold": true,
+                  "italic": false
+                }
+              },
+              "fit": {
+                "lines": [
+                  "\"This source keeps the selected readability floor.\""
+                ],
+                "fontSize": 28,
+                "lineHeight": 34.16,
+                "overflow": false
+              }
+            },
+            {
+              "role": "footer",
+              "path": "slides.5.quote",
+              "text": "Repeated source Repeated source Repeated source Repeated source Repeated source Repeated source Repeated source Repeated source Repeated source Repeated source Repeated source Repeated source Repeated source Repeated source Repeated source  - Recorded interview",
+              "sources": [
+                {
+                  "path": "slides.5.quote.attribution",
+                  "start": 0,
+                  "end": 240,
+                  "outputStart": 0,
+                  "outputEnd": 240
+                },
+                {
+                  "path": "slides.5.quote.source",
+                  "start": 0,
+                  "end": 18,
+                  "outputStart": 243,
+                  "outputEnd": 261
+                }
+              ],
+              "box": {
+                "x": 75.6,
+                "y": 556.56,
+                "width": 1128.8,
+                "height": 87.84
+              },
+              "requestedFontSize": 24,
+              "minFontSize": 24,
+              "requestedStyle": {
+                "fontFamily": "Calibri",
+                "fontWeight": 500,
+                "italic": false,
+                "path": "slides.5.quote"
+              },
+              "style": {
+                "fontFamily": "Calibri",
+                "fontWeight": 400,
+                "italic": false,
+                "path": "slides.5.quote",
+                "fontFace": {
+                  "family": "Calibri",
+                  "bold": false,
+                  "italic": false
+                }
+              },
+              "fit": {
+                "lines": [
+                  "Repeated source Repeated source Repeated source Repeated source Repeated source Repeated source Repeated",
+                  "source Repeated source Repeated source Repeated source Repeated source Repeated source Repeated source",
+                  "Repeated source Repeated source - Recorded interview"
+                ],
+                "fontSize": 24,
+                "lineHeight": 29.28,
+                "overflow": false
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "quote-540",
+      "width": 540,
+      "height": 960,
+      "slides": 6,
+      "hashes": {
+        "quote-540.pptx": "414c7ad5ec8d56c4844f6c1ece183b53683d3137ca6581720367202ea010c929",
+        "quote-540.opf.json": "34d84ba4c0fcb44613f81681c481307f0095ca1d24036233dd6c2030579743e1",
+        "quote-540-renderer-1.png": "5e91d3964352a9b88d224bb4cd147aaa2ea23dd2db25e54bc0867990fbead07d",
+        "quote-540-renderer-2.png": "2f8018fc3ddf0a8847553376894c470804d65e1a8523edebd5ec2638a9bedfa4",
+        "quote-540-renderer-3.png": "fbf9ee24589f817a130beaf1e80686c78f9618fe31ce55a4765e8211df4ba5cb",
+        "quote-540-renderer-4.png": "6f8ce45860fa909af9998af459aa2756424276574d9278afd3d01aa343999234",
+        "quote-540-renderer-5.png": "e795f3af8d8682c3af07f262853c7ebe6753688dacce37fb9c1a514c86812d91",
+        "quote-540-renderer-6.png": "f2b7f1d4945a827c7f20aeee329351cef17bf5492b251ca76006ec572c4becf4"
+      },
+      "layouts": [
+        {
+          "cell": {
+            "x": 43.2,
+            "y": 110.61,
+            "width": 453.6,
+            "height": 806.19
+          },
+          "parts": [
+            {
+              "role": "body",
+              "path": "slides.0.quote.text",
+              "text": "\"A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. \"",
+              "sources": [
+                {
+                  "path": "slides.0.quote.text",
+                  "start": 0,
+                  "end": 804,
+                  "outputStart": 1,
+                  "outputEnd": 805
+                }
+              ],
+              "box": {
+                "x": 61.2,
+                "y": 128.61,
+                "width": 417.6,
+                "height": 712.19
+              },
+              "requestedFontSize": 21,
+              "minFontSize": 12,
+              "requestedStyle": {
+                "fontFamily": "Calibri",
+                "fontWeight": 600,
+                "italic": false,
+                "path": "slides.0.quote.text"
+              },
+              "style": {
+                "fontFamily": "Calibri",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.0.quote.text",
+                "fontFace": {
+                  "family": "Calibri",
+                  "bold": true,
+                  "italic": false
+                }
+              },
+              "fit": {
+                "lines": [
+                  "\"A shared layout keeps the evidence readable",
+                  "when the words change. A shared layout keeps",
+                  "the evidence readable when the words change.",
+                  "A shared layout keeps the evidence readable",
+                  "when the words change. A shared layout keeps",
+                  "the evidence readable when the words change.",
+                  "A shared layout keeps the evidence readable",
+                  "when the words change. A shared layout keeps",
+                  "the evidence readable when the words change.",
+                  "A shared layout keeps the evidence readable",
+                  "when the words change. A shared layout keeps",
+                  "the evidence readable when the words change.",
+                  "A shared layout keeps the evidence readable",
+                  "when the words change. A shared layout keeps",
+                  "the evidence readable when the words change.",
+                  "A shared layout keeps the evidence readable",
+                  "when the words change. A shared layout keeps",
+                  "the evidence readable when the words change.",
+                  "\""
+                ],
+                "fontSize": 21,
+                "lineHeight": 25.62,
+                "overflow": false
+              }
+            },
+            {
+              "role": "footer",
+              "path": "slides.0.quote",
+              "text": "A reviewer - Recorded interview",
+              "sources": [
+                {
+                  "path": "slides.0.quote.attribution",
+                  "start": 0,
+                  "end": 10,
+                  "outputStart": 0,
+                  "outputEnd": 10
+                },
+                {
+                  "path": "slides.0.quote.source",
+                  "start": 0,
+                  "end": 18,
+                  "outputStart": 13,
+                  "outputEnd": 31
+                }
+              ],
+              "box": {
+                "x": 61.2,
+                "y": 858.8000000000001,
+                "width": 417.6,
+                "height": 40
+              },
+              "requestedFontSize": 12.75,
+              "minFontSize": 12,
+              "requestedStyle": {
+                "fontFamily": "Calibri",
+                "fontWeight": 500,
+                "italic": false,
+                "path": "slides.0.quote"
+              },
+              "style": {
+                "fontFamily": "Calibri",
+                "fontWeight": 400,
+                "italic": false,
+                "path": "slides.0.quote",
+                "fontFace": {
+                  "family": "Calibri",
+                  "bold": false,
+                  "italic": false
+                }
+              },
+              "fit": {
+                "lines": [
+                  "A reviewer - Recorded interview"
+                ],
+                "fontSize": 12.75,
+                "lineHeight": 15.555,
+                "overflow": false
+              }
+            }
+          ]
+        },
+        {
+          "cell": {
+            "x": 43.2,
+            "y": 110.61,
+            "width": 453.6,
+            "height": 806.19
+          },
+          "parts": [
+            {
+              "role": "body",
+              "path": "slides.1.quote.text",
+              "text": "\"A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. \"",
+              "sources": [
+                {
+                  "path": "slides.1.quote.text",
+                  "start": 0,
+                  "end": 1072,
+                  "outputStart": 1,
+                  "outputEnd": 1073
+                }
+              ],
+              "box": {
+                "x": 61.2,
+                "y": 128.61,
+                "width": 417.6,
+                "height": 712.19
+              },
+              "requestedFontSize": 21,
+              "minFontSize": 12,
+              "requestedStyle": {
+                "fontFamily": "Calibri",
+                "fontWeight": 600,
+                "italic": false,
+                "path": "slides.1.quote.text"
+              },
+              "style": {
+                "fontFamily": "Calibri",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.1.quote.text",
+                "fontFace": {
+                  "family": "Calibri",
+                  "bold": true,
+                  "italic": false
+                }
+              },
+              "fit": {
+                "lines": [
+                  "\"A shared layout keeps the evidence readable",
+                  "when the words change. A shared layout keeps",
+                  "the evidence readable when the words change.",
+                  "A shared layout keeps the evidence readable",
+                  "when the words change. A shared layout keeps",
+                  "the evidence readable when the words change.",
+                  "A shared layout keeps the evidence readable",
+                  "when the words change. A shared layout keeps",
+                  "the evidence readable when the words change.",
+                  "A shared layout keeps the evidence readable",
+                  "when the words change. A shared layout keeps",
+                  "the evidence readable when the words change.",
+                  "A shared layout keeps the evidence readable",
+                  "when the words change. A shared layout keeps",
+                  "the evidence readable when the words change.",
+                  "A shared layout keeps the evidence readable",
+                  "when the words change. A shared layout keeps",
+                  "the evidence readable when the words change.",
+                  "A shared layout keeps the evidence readable",
+                  "when the words change. A shared layout keeps",
+                  "the evidence readable when the words change.",
+                  "A shared layout keeps the evidence readable",
+                  "when the words change. A shared layout keeps",
+                  "the evidence readable when the words change.",
+                  "\""
+                ],
+                "fontSize": 21,
+                "lineHeight": 25.62,
+                "overflow": false
+              }
+            },
+            {
+              "role": "footer",
+              "path": "slides.1.quote",
+              "text": "A reviewer - Recorded interview",
+              "sources": [
+                {
+                  "path": "slides.1.quote.attribution",
+                  "start": 0,
+                  "end": 10,
+                  "outputStart": 0,
+                  "outputEnd": 10
+                },
+                {
+                  "path": "slides.1.quote.source",
+                  "start": 0,
+                  "end": 18,
+                  "outputStart": 13,
+                  "outputEnd": 31
+                }
+              ],
+              "box": {
+                "x": 61.2,
+                "y": 858.8000000000001,
+                "width": 417.6,
+                "height": 40
+              },
+              "requestedFontSize": 12.75,
+              "minFontSize": 12,
+              "requestedStyle": {
+                "fontFamily": "Calibri",
+                "fontWeight": 500,
+                "italic": false,
+                "path": "slides.1.quote"
+              },
+              "style": {
+                "fontFamily": "Calibri",
+                "fontWeight": 400,
+                "italic": false,
+                "path": "slides.1.quote",
+                "fontFace": {
+                  "family": "Calibri",
+                  "bold": false,
+                  "italic": false
+                }
+              },
+              "fit": {
+                "lines": [
+                  "A reviewer - Recorded interview"
+                ],
+                "fontSize": 12.75,
+                "lineHeight": 15.555,
+                "overflow": false
+              }
+            }
+          ]
+        },
+        {
+          "cell": {
+            "x": 43.2,
+            "y": 110.61,
+            "width": 453.6,
+            "height": 806.19
+          },
+          "parts": [
+            {
+              "role": "body",
+              "path": "slides.2.quote.text",
+              "text": "\"A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. \"",
+              "sources": [
+                {
+                  "path": "slides.2.quote.text",
+                  "start": 0,
+                  "end": 1340,
+                  "outputStart": 1,
+                  "outputEnd": 1341
+                }
+              ],
+              "box": {
+                "x": 61.2,
+                "y": 128.61,
+                "width": 417.6,
+                "height": 736.6350000000001
+              },
+              "requestedFontSize": 21,
+              "minFontSize": 12,
+              "requestedStyle": {
+                "fontFamily": "Calibri",
+                "fontWeight": 600,
+                "italic": false,
+                "path": "slides.2.quote.text"
+              },
+              "style": {
+                "fontFamily": "Calibri",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.2.quote.text",
+                "fontFace": {
+                  "family": "Calibri",
+                  "bold": true,
+                  "italic": false
+                }
+              },
+              "fit": {
+                "lines": [
+                  "\"A shared layout keeps the evidence readable",
+                  "when the words change. A shared layout keeps",
+                  "the evidence readable when the words change. A",
+                  "shared layout keeps the evidence readable when",
+                  "the words change. A shared layout keeps the",
+                  "evidence readable when the words change. A",
+                  "shared layout keeps the evidence readable when",
+                  "the words change. A shared layout keeps the",
+                  "evidence readable when the words change. A",
+                  "shared layout keeps the evidence readable when",
+                  "the words change. A shared layout keeps the",
+                  "evidence readable when the words change. A",
+                  "shared layout keeps the evidence readable when",
+                  "the words change. A shared layout keeps the",
+                  "evidence readable when the words change. A",
+                  "shared layout keeps the evidence readable when",
+                  "the words change. A shared layout keeps the",
+                  "evidence readable when the words change. A",
+                  "shared layout keeps the evidence readable when",
+                  "the words change. A shared layout keeps the",
+                  "evidence readable when the words change. A",
+                  "shared layout keeps the evidence readable when",
+                  "the words change. A shared layout keeps the",
+                  "evidence readable when the words change. A",
+                  "shared layout keeps the evidence readable when",
+                  "the words change. A shared layout keeps the",
+                  "evidence readable when the words change. A",
+                  "shared layout keeps the evidence readable when",
+                  "the words change. A shared layout keeps the",
+                  "evidence readable when the words change. \""
+                ],
+                "fontSize": 20,
+                "lineHeight": 24.4,
+                "overflow": false
+              }
+            },
+            {
+              "role": "footer",
+              "path": "slides.2.quote",
+              "text": "A reviewer - Recorded interview",
+              "sources": [
+                {
+                  "path": "slides.2.quote.attribution",
+                  "start": 0,
+                  "end": 10,
+                  "outputStart": 0,
+                  "outputEnd": 10
+                },
+                {
+                  "path": "slides.2.quote.source",
+                  "start": 0,
+                  "end": 18,
+                  "outputStart": 13,
+                  "outputEnd": 31
+                }
+              ],
+              "box": {
+                "x": 61.2,
+                "y": 883.2450000000001,
+                "width": 417.6,
+                "height": 15.555
+              },
+              "requestedFontSize": 12.75,
+              "minFontSize": 12,
+              "requestedStyle": {
+                "fontFamily": "Calibri",
+                "fontWeight": 500,
+                "italic": false,
+                "path": "slides.2.quote"
+              },
+              "style": {
+                "fontFamily": "Calibri",
+                "fontWeight": 400,
+                "italic": false,
+                "path": "slides.2.quote",
+                "fontFace": {
+                  "family": "Calibri",
+                  "bold": false,
+                  "italic": false
+                }
+              },
+              "fit": {
+                "lines": [
+                  "A reviewer - Recorded interview"
+                ],
+                "fontSize": 12.75,
+                "lineHeight": 15.555,
+                "overflow": false
+              }
+            }
+          ]
+        },
+        {
+          "cell": {
+            "x": 43.2,
+            "y": 110.61,
+            "width": 453.6,
+            "height": 806.19
+          },
+          "parts": [
+            {
+              "role": "body",
+              "path": "slides.3.quote.text",
+              "text": "\"A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. A shared layout keeps the evidence readable when the words change. \"",
+              "sources": [
+                {
+                  "path": "slides.3.quote.text",
+                  "start": 0,
+                  "end": 1608,
+                  "outputStart": 1,
+                  "outputEnd": 1609
+                }
+              ],
+              "box": {
+                "x": 61.2,
+                "y": 128.61,
+                "width": 417.6,
+                "height": 736.6350000000001
+              },
+              "requestedFontSize": 21,
+              "minFontSize": 12,
+              "requestedStyle": {
+                "fontFamily": "Calibri",
+                "fontWeight": 600,
+                "italic": false,
+                "path": "slides.3.quote.text"
+              },
+              "style": {
+                "fontFamily": "Calibri",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.3.quote.text",
+                "fontFace": {
+                  "family": "Calibri",
+                  "bold": true,
+                  "italic": false
+                }
+              },
+              "fit": {
+                "lines": [
+                  "\"A shared layout keeps the evidence readable when the",
+                  "words change. A shared layout keeps the evidence",
+                  "readable when the words change. A shared layout",
+                  "keeps the evidence readable when the words change. A",
+                  "shared layout keeps the evidence readable when the",
+                  "words change. A shared layout keeps the evidence",
+                  "readable when the words change. A shared layout",
+                  "keeps the evidence readable when the words change. A",
+                  "shared layout keeps the evidence readable when the",
+                  "words change. A shared layout keeps the evidence",
+                  "readable when the words change. A shared layout",
+                  "keeps the evidence readable when the words change. A",
+                  "shared layout keeps the evidence readable when the",
+                  "words change. A shared layout keeps the evidence",
+                  "readable when the words change. A shared layout",
+                  "keeps the evidence readable when the words change. A",
+                  "shared layout keeps the evidence readable when the",
+                  "words change. A shared layout keeps the evidence",
+                  "readable when the words change. A shared layout",
+                  "keeps the evidence readable when the words change. A",
+                  "shared layout keeps the evidence readable when the",
+                  "words change. A shared layout keeps the evidence",
+                  "readable when the words change. A shared layout",
+                  "keeps the evidence readable when the words change. A",
+                  "shared layout keeps the evidence readable when the",
+                  "words change. A shared layout keeps the evidence",
+                  "readable when the words change. A shared layout",
+                  "keeps the evidence readable when the words change. A",
+                  "shared layout keeps the evidence readable when the",
+                  "words change. A shared layout keeps the evidence",
+                  "readable when the words change. A shared layout",
+                  "keeps the evidence readable when the words change. \""
+                ],
+                "fontSize": 18,
+                "lineHeight": 21.96,
+                "overflow": false
+              }
+            },
+            {
+              "role": "footer",
+              "path": "slides.3.quote",
+              "text": "A reviewer - Recorded interview",
+              "sources": [
+                {
+                  "path": "slides.3.quote.attribution",
+                  "start": 0,
+                  "end": 10,
+                  "outputStart": 0,
+                  "outputEnd": 10
+                },
+                {
+                  "path": "slides.3.quote.source",
+                  "start": 0,
+                  "end": 18,
+                  "outputStart": 13,
+                  "outputEnd": 31
+                }
+              ],
+              "box": {
+                "x": 61.2,
+                "y": 883.2450000000001,
+                "width": 417.6,
+                "height": 15.555
+              },
+              "requestedFontSize": 12.75,
+              "minFontSize": 12,
+              "requestedStyle": {
+                "fontFamily": "Calibri",
+                "fontWeight": 500,
+                "italic": false,
+                "path": "slides.3.quote"
+              },
+              "style": {
+                "fontFamily": "Calibri",
+                "fontWeight": 400,
+                "italic": false,
+                "path": "slides.3.quote",
+                "fontFace": {
+                  "family": "Calibri",
+                  "bold": false,
+                  "italic": false
+                }
+              },
+              "fit": {
+                "lines": [
+                  "A reviewer - Recorded interview"
+                ],
+                "fontSize": 12.75,
+                "lineHeight": 15.555,
+                "overflow": false
+              }
+            }
+          ]
+        },
+        {
+          "cell": {
+            "x": 43.2,
+            "y": 110.61,
+            "width": 453.6,
+            "height": 806.19
+          },
+          "parts": [
+            {
+              "role": "body",
+              "path": "slides.4.quote.text",
+              "text": "\"Keep the complete source visible.\"",
+              "sources": [
+                {
+                  "path": "slides.4.quote.text",
+                  "start": 0,
+                  "end": 33,
+                  "outputStart": 1,
+                  "outputEnd": 34
+                }
+              ],
+              "box": {
+                "x": 61.2,
+                "y": 128.61,
+                "width": 417.6,
+                "height": 534.4200000000001
+              },
+              "requestedFontSize": 21,
+              "minFontSize": 12,
+              "requestedStyle": {
+                "fontFamily": "Calibri",
+                "fontWeight": 600,
+                "italic": false,
+                "path": "slides.4.quote.text"
+              },
+              "style": {
+                "fontFamily": "Calibri",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.4.quote.text",
+                "fontFace": {
+                  "family": "Calibri",
+                  "bold": true,
+                  "italic": false
+                }
+              },
+              "fit": {
+                "lines": [
+                  "\"Keep the complete source visible.\""
+                ],
+                "fontSize": 21,
+                "lineHeight": 25.62,
+                "overflow": false
+              }
+            },
+            {
+              "role": "footer",
+              "path": "slides.4.quote",
+              "text": "Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution Long attribution  - Recorded interview",
+              "sources": [
+                {
+                  "path": "slides.4.quote.attribution",
+                  "start": 0,
+                  "end": 1020,
+                  "outputStart": 0,
+                  "outputEnd": 1020
+                },
+                {
+                  "path": "slides.4.quote.source",
+                  "start": 0,
+                  "end": 18,
+                  "outputStart": 1023,
+                  "outputEnd": 1041
+                }
+              ],
+              "box": {
+                "x": 61.2,
+                "y": 681.0300000000001,
+                "width": 417.6,
+                "height": 217.76999999999998
+              },
+              "requestedFontSize": 12.75,
+              "minFontSize": 12,
+              "requestedStyle": {
+                "fontFamily": "Calibri",
+                "fontWeight": 500,
+                "italic": false,
+                "path": "slides.4.quote"
+              },
+              "style": {
+                "fontFamily": "Calibri",
+                "fontWeight": 400,
+                "italic": false,
+                "path": "slides.4.quote",
+                "fontFace": {
+                  "family": "Calibri",
+                  "bold": false,
+                  "italic": false
+                }
+              },
+              "fit": {
+                "lines": [
+                  "Long attribution Long attribution Long attribution Long attribution Long",
+                  "attribution Long attribution Long attribution Long attribution Long attribution",
+                  "Long attribution Long attribution Long attribution Long attribution Long",
+                  "attribution Long attribution Long attribution Long attribution Long attribution",
+                  "Long attribution Long attribution Long attribution Long attribution Long",
+                  "attribution Long attribution Long attribution Long attribution Long attribution",
+                  "Long attribution Long attribution Long attribution Long attribution Long",
+                  "attribution Long attribution Long attribution Long attribution Long attribution",
+                  "Long attribution Long attribution Long attribution Long attribution Long",
+                  "attribution Long attribution Long attribution Long attribution Long attribution",
+                  "Long attribution Long attribution Long attribution Long attribution Long",
+                  "attribution Long attribution Long attribution Long attribution Long attribution",
+                  "Long attribution Long attribution Long attribution Long attribution Long",
+                  "attribution Long attribution - Recorded interview"
+                ],
+                "fontSize": 12.75,
+                "lineHeight": 15.555,
+                "overflow": false
+              }
+            }
+          ]
+        },
+        {
+          "cell": {
+            "x": 43.2,
+            "y": 110.61,
+            "width": 453.6,
+            "height": 806.19
+          },
+          "parts": [
+            {
+              "role": "body",
+              "path": "slides.5.quote.text",
+              "text": "\"This source keeps the selected readability floor.\"",
+              "sources": [
+                {
+                  "path": "slides.5.quote.text",
+                  "start": 0,
+                  "end": 49,
+                  "outputStart": 1,
+                  "outputEnd": 50
+                }
+              ],
+              "box": {
+                "x": 61.2,
+                "y": 128.61,
+                "width": 417.6,
+                "height": 620.4300000000001
+              },
+              "requestedFontSize": 21,
+              "minFontSize": 18,
+              "requestedStyle": {
+                "fontFamily": "Calibri",
+                "fontWeight": 600,
+                "italic": false,
+                "path": "slides.5.quote.text"
+              },
+              "style": {
+                "fontFamily": "Calibri",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.5.quote.text",
+                "fontFace": {
+                  "family": "Calibri",
+                  "bold": true,
+                  "italic": false
+                }
+              },
+              "fit": {
+                "lines": [
+                  "\"This source keeps the selected readability",
+                  "floor.\""
+                ],
+                "fontSize": 21,
+                "lineHeight": 25.62,
+                "overflow": false
+              }
+            },
+            {
+              "role": "footer",
+              "path": "slides.5.quote",
+              "text": "Repeated source Repeated source Repeated source Repeated source Repeated source Repeated source Repeated source Repeated source Repeated source Repeated source Repeated source Repeated source Repeated source Repeated source Repeated source  - Recorded interview",
+              "sources": [
+                {
+                  "path": "slides.5.quote.attribution",
+                  "start": 0,
+                  "end": 240,
+                  "outputStart": 0,
+                  "outputEnd": 240
+                },
+                {
+                  "path": "slides.5.quote.source",
+                  "start": 0,
+                  "end": 18,
+                  "outputStart": 243,
+                  "outputEnd": 261
+                }
+              ],
+              "box": {
+                "x": 61.2,
+                "y": 767.0400000000001,
+                "width": 417.6,
+                "height": 131.76
+              },
+              "requestedFontSize": 18,
+              "minFontSize": 18,
+              "requestedStyle": {
+                "fontFamily": "Calibri",
+                "fontWeight": 500,
+                "italic": false,
+                "path": "slides.5.quote"
+              },
+              "style": {
+                "fontFamily": "Calibri",
+                "fontWeight": 400,
+                "italic": false,
+                "path": "slides.5.quote",
+                "fontFace": {
+                  "family": "Calibri",
+                  "bold": false,
+                  "italic": false
+                }
+              },
+              "fit": {
+                "lines": [
+                  "Repeated source Repeated source Repeated source",
+                  "Repeated source Repeated source Repeated source",
+                  "Repeated source Repeated source Repeated source",
+                  "Repeated source Repeated source Repeated source",
+                  "Repeated source Repeated source Repeated source -",
+                  "Recorded interview"
+                ],
+                "fontSize": 18,
+                "lineHeight": 21.96,
+                "overflow": false
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "scope": "Local Calibri; twelve wide/portrait quotes: eight long bodies, two expanded sources, two persisted pagination readability floors. Intermediate weights resolve to regular/bold faces. Native character bounds and editable save/reimport are separate from pixel-containment/raster-equivalence claims."
+}

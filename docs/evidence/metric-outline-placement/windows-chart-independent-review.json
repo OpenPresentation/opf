@@ -1,0 +1,168 @@
+{
+  "evidenceCommit": "a4e7e9b9b5810144b1f116d45a92bc71e1484c78",
+  "reviewNode": "v24.21.0",
+  "converterRuntimeSha256": "e433b8ae141a8beb08a375ddbed86bf5f7d351d6926446ed7311fe2fa97a97d1",
+  "results": [
+    {
+      "directory": "chart-node20-matrix02-slide1",
+      "node": "v20.20.2",
+      "selectedSlide": 1,
+      "actualImports": 24,
+      "independentCacheParses": 24,
+      "unavailableLoadedPieCategoryObservations": 12,
+      "liveEditedSeries": true,
+      "saveReopenAndSelectedEditRasters": true
+    },
+    {
+      "directory": "chart-node20-matrix02-slide2",
+      "node": "v20.20.2",
+      "selectedSlide": 2,
+      "actualImports": 24,
+      "independentCacheParses": 24,
+      "unavailableLoadedPieCategoryObservations": 12,
+      "liveEditedSeries": true,
+      "saveReopenAndSelectedEditRasters": true
+    },
+    {
+      "directory": "chart-node20-matrix02-slide3",
+      "node": "v20.20.2",
+      "selectedSlide": 3,
+      "actualImports": 24,
+      "independentCacheParses": 24,
+      "unavailableLoadedPieCategoryObservations": 12,
+      "liveEditedSeries": true,
+      "saveReopenAndSelectedEditRasters": true
+    },
+    {
+      "directory": "chart-node20-matrix02-slide4",
+      "node": "v20.20.2",
+      "selectedSlide": 4,
+      "actualImports": 24,
+      "independentCacheParses": 24,
+      "unavailableLoadedPieCategoryObservations": 12,
+      "liveEditedSeries": true,
+      "saveReopenAndSelectedEditRasters": true
+    },
+    {
+      "directory": "chart-node20-matrix02-slide5",
+      "node": "v20.20.2",
+      "selectedSlide": 5,
+      "actualImports": 24,
+      "independentCacheParses": 24,
+      "unavailableLoadedPieCategoryObservations": 12,
+      "liveEditedSeries": true,
+      "saveReopenAndSelectedEditRasters": true
+    },
+    {
+      "directory": "chart-node20-matrix02-slide6",
+      "node": "v20.20.2",
+      "selectedSlide": 6,
+      "actualImports": 24,
+      "independentCacheParses": 24,
+      "unavailableLoadedPieCategoryObservations": 12,
+      "liveEditedSeries": true,
+      "saveReopenAndSelectedEditRasters": true
+    },
+    {
+      "directory": "chart-node20-matrix02-slide7",
+      "node": "v20.20.2",
+      "selectedSlide": 7,
+      "actualImports": 24,
+      "independentCacheParses": 24,
+      "unavailableLoadedPieCategoryObservations": 12,
+      "liveEditedSeries": true,
+      "saveReopenAndSelectedEditRasters": true
+    },
+    {
+      "directory": "chart-node20-matrix02-slide8",
+      "node": "v20.20.2",
+      "selectedSlide": 8,
+      "actualImports": 24,
+      "independentCacheParses": 24,
+      "unavailableLoadedPieCategoryObservations": 12,
+      "liveEditedSeries": true,
+      "saveReopenAndSelectedEditRasters": true
+    },
+    {
+      "directory": "chart-node24-matrix-slide1",
+      "node": "v24.20.0",
+      "selectedSlide": 1,
+      "actualImports": 24,
+      "independentCacheParses": 24,
+      "unavailableLoadedPieCategoryObservations": 12,
+      "liveEditedSeries": true,
+      "saveReopenAndSelectedEditRasters": true
+    },
+    {
+      "directory": "chart-node24-matrix-slide2",
+      "node": "v24.20.0",
+      "selectedSlide": 2,
+      "actualImports": 24,
+      "independentCacheParses": 24,
+      "unavailableLoadedPieCategoryObservations": 12,
+      "liveEditedSeries": true,
+      "saveReopenAndSelectedEditRasters": true
+    },
+    {
+      "directory": "chart-node24-matrix-slide3",
+      "node": "v24.20.0",
+      "selectedSlide": 3,
+      "actualImports": 24,
+      "independentCacheParses": 24,
+      "unavailableLoadedPieCategoryObservations": 12,
+      "liveEditedSeries": true,
+      "saveReopenAndSelectedEditRasters": true
+    },
+    {
+      "directory": "chart-node24-matrix-slide4",
+      "node": "v24.20.0",
+      "selectedSlide": 4,
+      "actualImports": 24,
+      "independentCacheParses": 24,
+      "unavailableLoadedPieCategoryObservations": 12,
+      "liveEditedSeries": true,
+      "saveReopenAndSelectedEditRasters": true
+    },
+    {
+      "directory": "chart-node24-matrix-slide5",
+      "node": "v24.20.0",
+      "selectedSlide": 5,
+      "actualImports": 24,
+      "independentCacheParses": 24,
+      "unavailableLoadedPieCategoryObservations": 12,
+      "liveEditedSeries": true,
+      "saveReopenAndSelectedEditRasters": true
+    },
+    {
+      "directory": "chart-node24-matrix-slide6",
+      "node": "v24.20.0",
+      "selectedSlide": 6,
+      "actualImports": 24,
+      "independentCacheParses": 24,
+      "unavailableLoadedPieCategoryObservations": 12,
+      "liveEditedSeries": true,
+      "saveReopenAndSelectedEditRasters": true
+    },
+    {
+      "directory": "chart-node24-matrix-slide7",
+      "node": "v24.20.0",
+      "selectedSlide": 7,
+      "actualImports": 24,
+      "independentCacheParses": 24,
+      "unavailableLoadedPieCategoryObservations": 12,
+      "liveEditedSeries": true,
+      "saveReopenAndSelectedEditRasters": true
+    },
+    {
+      "directory": "chart-node24-matrix-slide8",
+      "node": "v24.20.0",
+      "selectedSlide": 8,
+      "actualImports": 24,
+      "independentCacheParses": 24,
+      "unavailableLoadedPieCategoryObservations": 12,
+      "liveEditedSeries": true,
+      "saveReopenAndSelectedEditRasters": true
+    }
+  ],
+  "scope": "Independently executed current converter imports and reviewed separate chart-cache parser across all retained native files, plus raw native series/PNG checks. No new Office execution; missing loaded-pie category getter observations remain unavailable."
+}

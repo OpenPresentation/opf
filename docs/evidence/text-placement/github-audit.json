@@ -1,0 +1,40 @@
+{
+  "repositories": [
+    {
+      "openSecurityAlerts": 0,
+      "prs": [],
+      "repository": "OpenPresentation/opf"
+    },
+    {
+      "openSecurityAlerts": 0,
+      "prs": [],
+      "repository": "OpenPresentation/opf-render"
+    },
+    {
+      "openSecurityAlerts": 0,
+      "prs": [],
+      "repository": "OpenPresentation/opf-pptx"
+    },
+    {
+      "openSecurityAlerts": 0,
+      "prs": [],
+      "repository": "OpenPresentation/opf-editor"
+    },
+    {
+      "openSecurityAlerts": 0,
+      "prs": [],
+      "repository": "Data-Advantage/openpresentation-site"
+    },
+    {
+      "openSecurityAlerts": 0,
+      "prs": [],
+      "repository": "Data-Advantage/pptx-gallery"
+    },
+    {
+      "openSecurityAlerts": 0,
+      "prs": [],
+      "repository": "Data-Advantage/pptx-dev"
+    }
+  ],
+  "observedAt": "2026-09-10T08:58:46.9024360-07:00"
+}

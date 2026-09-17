@@ -1,0 +1,219 @@
+{
+  "base": "http://127.0.0.1:4325",
+  "node": "v24.21.0",
+  "viewports": [
+    {
+      "width": 1440,
+      "links": [
+        {
+          "text": "Ppptx.dev",
+          "href": "/"
+        },
+        {
+          "text": "Author",
+          "href": "/author"
+        },
+        {
+          "text": "Inspector",
+          "href": "/inspector"
+        },
+        {
+          "text": "Decoder",
+          "href": "/decoder"
+        },
+        {
+          "text": "Docs",
+          "href": "/docs"
+        },
+        {
+          "text": "API",
+          "href": "/docs/api"
+        },
+        {
+          "text": "OPF",
+          "href": "/docs/opf"
+        },
+        {
+          "text": "pptx.gallery",
+          "href": "https://pptx.gallery"
+        },
+        {
+          "text": "Get Started",
+          "href": "/sign-up"
+        }
+      ],
+      "overflow": false
+    },
+    {
+      "width": 1024,
+      "links": [
+        {
+          "text": "Ppptx.dev",
+          "href": "/"
+        },
+        {
+          "text": "Author",
+          "href": "/author"
+        },
+        {
+          "text": "Inspector",
+          "href": "/inspector"
+        },
+        {
+          "text": "Decoder",
+          "href": "/decoder"
+        },
+        {
+          "text": "Docs",
+          "href": "/docs"
+        },
+        {
+          "text": "API",
+          "href": "/docs/api"
+        },
+        {
+          "text": "OPF",
+          "href": "/docs/opf"
+        },
+        {
+          "text": "pptx.gallery",
+          "href": "https://pptx.gallery"
+        },
+        {
+          "text": "Get Started",
+          "href": "/sign-up"
+        }
+      ],
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "links": [
+        {
+          "text": "Ppptx.dev",
+          "href": "/"
+        },
+        {
+          "text": "Author",
+          "href": "/author"
+        },
+        {
+          "text": "Inspector",
+          "href": "/inspector"
+        },
+        {
+          "text": "Decoder",
+          "href": "/decoder"
+        },
+        {
+          "text": "Docs",
+          "href": "/docs"
+        },
+        {
+          "text": "API",
+          "href": "/docs/api"
+        },
+        {
+          "text": "OPF",
+          "href": "/docs/opf"
+        },
+        {
+          "text": "pptx.gallery",
+          "href": "https://pptx.gallery"
+        },
+        {
+          "text": "Get Started",
+          "href": "/sign-up"
+        }
+      ],
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "links": [
+        {
+          "text": "Ppptx.dev",
+          "href": "/"
+        },
+        {
+          "text": "Author",
+          "href": "/author"
+        },
+        {
+          "text": "Inspector",
+          "href": "/inspector"
+        },
+        {
+          "text": "Decoder",
+          "href": "/decoder"
+        },
+        {
+          "text": "Docs",
+          "href": "/docs"
+        },
+        {
+          "text": "API",
+          "href": "/docs/api"
+        },
+        {
+          "text": "OPF",
+          "href": "/docs/opf"
+        },
+        {
+          "text": "pptx.gallery",
+          "href": "https://pptx.gallery"
+        },
+        {
+          "text": "Get Started",
+          "href": "/sign-up"
+        }
+      ],
+      "overflow": false
+    }
+  ],
+  "links": [
+    {
+      "href": "/",
+      "status": 200
+    },
+    {
+      "href": "/author",
+      "status": 200
+    },
+    {
+      "href": "/inspector",
+      "status": 200
+    }
+  ],
+  "routes": [
+    {
+      "route": "/author",
+      "canonical": "https://www.pptx.dev/author"
+    },
+    {
+      "route": "/inspector",
+      "canonical": "https://www.pptx.dev/inspector"
+    },
+    {
+      "from": "/playground",
+      "to": "/inspector",
+      "status": 308
+    },
+    {
+      "from": "/studio",
+      "to": "/author",
+      "status": 308
+    }
+  ],
+  "deferredUntilConfiguredPreview": [
+    "/decoder",
+    "/docs",
+    "/docs/api",
+    "/docs/opf",
+    "/docs#changelog",
+    "/privacy",
+    "/terms"
+  ],
+  "errors": [],
+  "passed": true
+}

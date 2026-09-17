@@ -1,0 +1,15 @@
+CHECK test-pagination-ecosystem.mjs
+Pagination ecosystem passed: 2 source slides -> 8 pages; all text and 55 table rows preserved.
+CHECK test-layout-ecosystem.mjs
+Track resize ecosystem passed: root and nested weights, block moves/creation/duplication/deletion, measured SVG/native PPTX geometry, editable shapes and undo.
+CHECK test-list-ecosystem.mjs
+List ecosystem passed: 7 native bullets, 10 measured lines, rich runs, descriptions and SVG/PPTX indent coordinates.
+CHECK test-rich-text-ecosystem.mjs
+Rich text ecosystem passed: measured SVG styles, native PPTX formatting, scripts and hyperlinks.
+CHECK test-data-ecosystem.mjs
+Data ecosystem passed: all series, signed measures, numeric categories, pie/donut, and PPTX export/import.
+CHECK test-font-ecosystem.mjs
+Font ecosystem passed: 3 pages with matching editor/SVG/PPTX geometry and exact measured PowerPoint line breaks.
+Browser width reference: 324.169921875
+CHECK test-office-fonts.mjs
+Office fonts passed: 6 pages, matching editor/SVG geometry and resolved native PPTX families; 24 substitute faces with license notices.

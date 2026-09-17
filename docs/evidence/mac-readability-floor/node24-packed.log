@@ -1,0 +1,98 @@
+
+added 64 packages in 5s
+Installed candidate font preparation passed layout, edit/undo, SVG/PNG, editable PPTX export and heading reimport.
+Nine exact grouped faces preserve measured bytes and physical style links; overrides, aliases, duplicates and approximation controls pass.
+7 payload slides use all nine real physical font styles; deterministic output, source, reimport and provider controls pass.
+Packed consumer: core, editor, SVG, measured fonts and PPTX passed.
+✔ complete code parts preserve exact filename, language, body, whitespace and hard line boundaries (1.697166ms)
+✔ shorthand, empty source and absent metadata retain their source and generated-label distinction (0.235292ms)
+✔ long language labels and filenames are measured within their cell before allocating the body (2.268709ms)
+✔ wrapped whitespace and graphemes retain contiguous source offsets, including CRLF and blank final lines (0.422292ms)
+✔ tabs use measured space stops and never send control tabs to the font-width provider (0.335917ms)
+✔ readability floors scale once and body shrinking preserves all code content (0.209459ms)
+✔ irreducible body and metadata failures remain explicit; strict mode does not return partial output (3.661458ms)
+✔ invalid inner boxes never become invented one-pixel fits; malformed options reject (0.169917ms)
+✔ font trials stay bounded independently of canvas scale (4.061917ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 76.279083
+✔ accepted code uses rounded cells and preserves body compatibility without repeated explanation measurements (2.753458ms)
+✔ candidate penalties include complete code metadata and charge overflowing leaves once (4.727208ms)
+✔ strict ancestors reject code metadata paths and cannot be weakened by descendants (91.053917ms)
+✔ explicit code placement and weights remain authoritative even when metadata overflows (5.172ms)
+✔ pagination preserves exact code bytes, metadata, ranges and floors across wide and portrait slides (80.860292ms)
+✔ irreducible code metadata rejects pagination even after earlier content or with an empty body (74.565167ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 318.43525
+Shared code PPTX: 8 decks, 37 accepted native lines, 8 tab stops, six whitespace imports, strict failures, 132 XML-boundary rejections and valid character boundaries verified.
+Code provenance: exact source/metadata, native edits, ordering, empty/Unicode values, five damaged groups and edited generated label verified.
+Shared code SVG: 10 accepted layouts, source/whitespace/trace preservation, no extra measurement, strict/tiny-cell rejection, 132 XML-boundary rejections and valid character boundaries.
+Actual shared code browser: 12 wide/portrait cases with source preservation, accepted tab positions and contained glyphs.
+Code canvas: wide/portrait source editing, metadata, CRLF, tabs, pagination, undo, offline export and bounded reimport checks pass.
+Installed code: candidate source, pagination, metadata guards and actual offline browser workflows passed.
+✔ complete quote layout preserves source ranges, requested/resolved styles and legacy readable geometry (1.3055ms)
+✔ shorthand and empty metadata preserve schema paths without an invented footer (0.218916ms)
+✔ body and footer share available space before shrinking text or changing the outer arrangement (3.618792ms)
+✔ long footer, body/footer collision and strict rejection remain explicit without source truncation (41.25625ms)
+✔ tiny cells retain invalid available dimensions and never measure an invented fitting box (0.104583ms)
+✔ explicit readability floors are respected after scaling, including above nominal footer size (0.101542ms)
+✔ invalid content, geometry, scales and policies fail before reporting a usable layout (0.119209ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 86.386833
+✔ accepted quote geometry includes all parts without changing source or re-measuring for explanations (2.123792ms)
+✔ automatic candidates account for footer fit and choose the arrangement that keeps it readable (3.538541ms)
+✔ strict ancestors reject a quote body diagnostic below the leaf path (94.652792ms)
+✔ strict path matching respects component boundaries rather than numeric prefixes (75.501667ms)
+✔ pagination preserves quote body, repeated metadata, ranges and the accepted readability floor (644.469542ms)
+✔ irreducible footer overflow rejects pagination without mutating or returning partial content (13.227959ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 891.051792
+Shared quote SVG: 4 exact accepted layouts/styles with no extra measurement, reasoned overflow, strict rejection and no tiny-cell omission.
+Shared quote PPTX: 4 wide/portrait decks and 6 native lines match accepted geometry/styles without re-fitting; reimport and strict/unusable-space rejection pass.
+Packed quote editor passed: accepted one-page policy, source preservation, actual fonts, SVG/PPTX, undo/redo and editable native text reimport. Quote semantics are not reconstructed on import.
+Styled native table export passed: merged grid, unique text, full covered rows, colors/alpha, border dashes, zero/fractional padding, alignment, scaled row geometry and determinism.
+Native merge perimeter regression passed: continuation and neighbor edges, transparent dashes, dotted top, hidden bottom and scaling.
+Styled native table import passed: direct fills/alpha, borders, margins, alignment, dense merges, repeated conversion, header crossing and text-preserving malformed-merge diagnostics.
+Native conditional table borders passed: outer frame/interior grid, bands/edges/corners, partial/direct overrides, theme lines/alpha, missing-reference masking, repeated conversion and diagnostics.
+✔ short table rows preserve baseline geometry and missing cells (1.232959ms)
+✔ wrapped and rich multiline rows grow into available space (2.132666ms)
+✔ constrained tables consume spare row height before reporting real overflow (0.304833ms)
+✔ readability settings and mixed-font metrics govern row fitting (0.186458ms)
+✔ pagination retains complete multiline rows and repeated headers (67.0045ms)
+✔ mixed-size table paragraphs reserve the native uniform line spacing (0.151167ms)
+✔ spare height in short rows is removed before any font shrinking (0.106875ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 125.983334
+Packed consumer: TypeScript declarations and browser bundle passed.
+Packed browser harness built: artifacts/editor/packed-canvas-tests.html (serve alongside demo fonts.json).
+Installed styled-table browser harness built: artifacts/editor/packed-styled-table-tests.html. Open it to verify real pointer/keyboard interaction.
+Local tarball consumer passed; this is not a registry verification.

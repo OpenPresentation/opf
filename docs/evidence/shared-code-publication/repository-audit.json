@@ -1,0 +1,48 @@
+{
+  "checkedAt": "2026-09-10T06:40:19.6500611Z",
+  "repositories": [
+    {
+      "repository": "OpenPresentation/opf",
+      "openPullRequests": [],
+      "openSecurityAlerts": 0
+    },
+    {
+      "repository": "OpenPresentation/opf-render",
+      "openPullRequests": [
+        {
+          "headRefName": "codex/shared-code-release-20260909",
+          "isDraft": false,
+          "number": 11,
+          "title": "Release 0.7.0: shared code geometry and source-preserving SVG",
+          "url": "https://github.com/OpenPresentation/opf-render/pull/11"
+        }
+      ],
+      "openSecurityAlerts": 0
+    },
+    {
+      "repository": "OpenPresentation/opf-pptx",
+      "openPullRequests": [],
+      "openSecurityAlerts": 0
+    },
+    {
+      "repository": "OpenPresentation/opf-editor",
+      "openPullRequests": [],
+      "openSecurityAlerts": 0
+    },
+    {
+      "repository": "Data-Advantage/openpresentation-site",
+      "openPullRequests": [],
+      "openSecurityAlerts": 0
+    },
+    {
+      "repository": "Data-Advantage/pptx-gallery",
+      "openPullRequests": [],
+      "openSecurityAlerts": 0
+    },
+    {
+      "repository": "Data-Advantage/pptx-dev",
+      "openPullRequests": [],
+      "openSecurityAlerts": 0
+    }
+  ]
+}

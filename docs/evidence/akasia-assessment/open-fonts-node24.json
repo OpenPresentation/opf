@@ -1,0 +1,2916 @@
+{
+  "node": "v24.21.0",
+  "reviewerSha256": "06e5cb357c3c9618f0a381e634c5a93ad3195e93d6d4b78400725c183cbc40ab",
+  "fontkitVersion": "2.0.4",
+  "release": "v0.0.2",
+  "releaseCommit": "18009a0d8cce4417dae9ca1253f57d9f55c033ce",
+  "releaseZipSha256": "ab87e75a4534c21d6d8e44d4299205f4f0863fccd2c6a8bb23049abac3949d7f",
+  "licenseSha256": "706bc26a57a6ea7334668c0160b4001dbb37363f7fe18ab39237e4698230ac12",
+  "records": [
+    {
+      "file": "Akasia-Black.ttf",
+      "sha256": "4c7f86ad9a129a3e1d469a3b18ef39c21c9040f1a945992b452452b061b12a91",
+      "bytes": 317252,
+      "upstreamMetricSha256": "e09e61f8429391e14b3f902ec8350e54f9f2cb9f9adc9cb8c806f426abbabf14",
+      "family": "Akasia Black",
+      "preferredFamily": "Akasia",
+      "subfamily": "Regular",
+      "postscript": "Akasia-Black",
+      "weight": 900,
+      "italic": false,
+      "unitsPerEm": 2048,
+      "ascent": 1923,
+      "descent": -577,
+      "lineGap": 0,
+      "embeddingFlags": {
+        "noEmbedding": false,
+        "viewOnly": false,
+        "editable": false,
+        "noSubsetting": false,
+        "bitmapOnly": false
+      },
+      "features": [
+        "aalt",
+        "c2sc",
+        "case",
+        "ccmp",
+        "cv01",
+        "cv02",
+        "cv03",
+        "cv04",
+        "cv05",
+        "cv06",
+        "cv07",
+        "cv08",
+        "cv09",
+        "cv10",
+        "cv11",
+        "cv12",
+        "cv13",
+        "cv14",
+        "cv15",
+        "cv16",
+        "cv17",
+        "cv18",
+        "cv19",
+        "dlig",
+        "dnom",
+        "frac",
+        "hlig",
+        "liga",
+        "numr",
+        "onum",
+        "ordn",
+        "pnum",
+        "salt",
+        "sinf",
+        "smcp",
+        "ss01",
+        "ss02",
+        "ss03",
+        "ss04",
+        "ss05",
+        "ss06",
+        "ss07",
+        "ss08",
+        "ss09",
+        "ss10",
+        "subs",
+        "sups",
+        "titl",
+        "zero",
+        "kern",
+        "mark",
+        "mkmk",
+        "size"
+      ],
+      "coverage": {
+        "reportedEntries": 1073,
+        "uniqueCodepoints": 1073,
+        "upstreamCodepoints": 1086,
+        "missing": [
+          1423,
+          1547,
+          2546,
+          2547,
+          2801,
+          3065,
+          3647,
+          6107,
+          8383,
+          8384,
+          10086,
+          11197,
+          11198,
+          65020
+        ],
+        "extra": [
+          65535
+        ]
+      },
+      "advancesChecked": 1072,
+      "advanceDeltas": [],
+      "pairsChecked": 16669,
+      "pairsMissing": 0,
+      "pairDeltas": [],
+      "ligatures": [
+        {
+          "codepoints": [
+            102,
+            102
+          ],
+          "glyphs": 1,
+          "actualEm": 0.74609375,
+          "upstreamEm": 0.74609375
+        },
+        {
+          "codepoints": [
+            102,
+            105
+          ],
+          "glyphs": 1,
+          "actualEm": 0.6640625,
+          "upstreamEm": 0.6640625
+        },
+        {
+          "codepoints": [
+            102,
+            108
+          ],
+          "glyphs": 1,
+          "actualEm": 0.708984375,
+          "upstreamEm": 0.708984375
+        }
+      ],
+      "registryResolution": {
+        "requestedFamily": "Akasia",
+        "sourceFamily": "Akasia",
+        "resolvedFamily": "Akasia Black",
+        "requestedWeight": 900,
+        "resolvedWeight": 900,
+        "italic": false,
+        "compatibility": "exact",
+        "fontFace": {
+          "family": "Akasia Black",
+          "bold": false,
+          "italic": false
+        }
+      },
+      "samples": [
+        {
+          "name": "latin",
+          "text": "AVATAR Toffee office affine 0123456789",
+          "widthAt32": 596.0625,
+          "outlineAt32": {
+            "x": 0.28125,
+            "y": -23.78125,
+            "width": 594.3125,
+            "height": 24.21875
+          }
+        },
+        {
+          "name": "greek",
+          "text": "Καλημέρα κόσμε Ελληνικά",
+          "widthAt32": 396.5,
+          "outlineAt32": {
+            "x": 2.421875,
+            "y": -25.5625,
+            "width": 393.984375,
+            "height": 31.15625
+          }
+        },
+        {
+          "name": "cyrillic",
+          "text": "Привет мир Кириллица",
+          "widthAt32": 366.8125,
+          "outlineAt32": {
+            "x": 3.125,
+            "y": -21.15625,
+            "width": 361.671875,
+            "height": 26.65625
+          }
+        },
+        {
+          "name": "combining",
+          "text": "Á ä ố ñ",
+          "widthAt32": 95.96875,
+          "outlineAt32": {
+            "x": 0.28125,
+            "y": -27.640625,
+            "width": 93.9375,
+            "height": 28.03125
+          }
+        },
+        {
+          "name": "currency",
+          "text": "€ £ ¥ $ ₹ ₿",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia Black",
+            "character": "₿"
+          }
+        },
+        {
+          "name": "arabic",
+          "text": "مرحبا بالعالم",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia Black",
+            "character": "م"
+          }
+        },
+        {
+          "name": "hebrew",
+          "text": "שלום עולם",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia Black",
+            "character": "ש"
+          }
+        },
+        {
+          "name": "cjk",
+          "text": "世界你好",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia Black",
+            "character": "世"
+          }
+        },
+        {
+          "name": "math",
+          "text": "∑ √ ∞ ≠ ≤ ≥",
+          "widthAt32": 154.90625,
+          "outlineAt32": {
+            "x": 0.53125,
+            "y": -26.234375,
+            "width": 152.671875,
+            "height": 30.078125
+          }
+        }
+      ]
+    },
+    {
+      "file": "Akasia-BlackItalic.ttf",
+      "sha256": "8d75ecd19b3bcc968af9c1bd22e44fdcbf2839a08ace0906e17360bc869f4a79",
+      "bytes": 282216,
+      "upstreamMetricSha256": "70895c77569318d080940d014f037a6b766e20d0980ecbaefe1716cf427b5763",
+      "family": "Akasia Black",
+      "preferredFamily": "Akasia",
+      "subfamily": "Italic",
+      "postscript": "Akasia-BlackItalic",
+      "weight": 900,
+      "italic": true,
+      "unitsPerEm": 2048,
+      "ascent": 1923,
+      "descent": -577,
+      "lineGap": 0,
+      "embeddingFlags": {
+        "noEmbedding": false,
+        "viewOnly": false,
+        "editable": false,
+        "noSubsetting": false,
+        "bitmapOnly": false
+      },
+      "features": [
+        "aalt",
+        "case",
+        "ccmp",
+        "cv01",
+        "cv02",
+        "cv03",
+        "cv04",
+        "cv05",
+        "cv06",
+        "cv07",
+        "cv08",
+        "cv09",
+        "cv10",
+        "cv11",
+        "cv12",
+        "cv13",
+        "cv14",
+        "cv15",
+        "cv16",
+        "cv17",
+        "cv18",
+        "cv19",
+        "dlig",
+        "dnom",
+        "frac",
+        "hlig",
+        "liga",
+        "numr",
+        "onum",
+        "ordn",
+        "pnum",
+        "salt",
+        "sinf",
+        "ss01",
+        "ss02",
+        "ss03",
+        "ss04",
+        "ss05",
+        "ss06",
+        "ss07",
+        "ss08",
+        "ss09",
+        "ss10",
+        "subs",
+        "sups",
+        "titl",
+        "zero",
+        "kern",
+        "mark",
+        "mkmk",
+        "size"
+      ],
+      "coverage": {
+        "reportedEntries": 1073,
+        "uniqueCodepoints": 1073,
+        "upstreamCodepoints": 1086,
+        "missing": [
+          1423,
+          1547,
+          2546,
+          2547,
+          2801,
+          3065,
+          3647,
+          6107,
+          8383,
+          8384,
+          10086,
+          11197,
+          11198,
+          65020
+        ],
+        "extra": [
+          65535
+        ]
+      },
+      "advancesChecked": 1072,
+      "advanceDeltas": [],
+      "pairsChecked": 15521,
+      "pairsMissing": 0,
+      "pairDeltas": [],
+      "ligatures": [
+        {
+          "codepoints": [
+            102,
+            102
+          ],
+          "glyphs": 1,
+          "actualEm": 0.74365234375,
+          "upstreamEm": 0.74365234375
+        },
+        {
+          "codepoints": [
+            102,
+            105
+          ],
+          "glyphs": 1,
+          "actualEm": 0.6591796875,
+          "upstreamEm": 0.6591796875
+        },
+        {
+          "codepoints": [
+            102,
+            108
+          ],
+          "glyphs": 1,
+          "actualEm": 0.6962890625,
+          "upstreamEm": 0.6962890625
+        }
+      ],
+      "registryResolution": {
+        "requestedFamily": "Akasia",
+        "sourceFamily": "Akasia",
+        "resolvedFamily": "Akasia Black",
+        "requestedWeight": 900,
+        "resolvedWeight": 900,
+        "italic": true,
+        "compatibility": "exact",
+        "fontFace": {
+          "family": "Akasia Black",
+          "bold": false,
+          "italic": true
+        }
+      },
+      "samples": [
+        {
+          "name": "latin",
+          "text": "AVATAR Toffee office affine 0123456789",
+          "widthAt32": 600.34375,
+          "outlineAt32": {
+            "x": -1.1875,
+            "y": -23.78125,
+            "width": 601.0337837837837,
+            "height": 24.171875
+          }
+        },
+        {
+          "name": "greek",
+          "text": "Καλημέρα κόσμε Ελληνικά",
+          "widthAt32": 397.21875,
+          "outlineAt32": {
+            "x": 1.515625,
+            "y": -25.890625,
+            "width": 395.5,
+            "height": 31.484375
+          }
+        },
+        {
+          "name": "cyrillic",
+          "text": "Привет мир Кириллица",
+          "widthAt32": 378.71875,
+          "outlineAt32": {
+            "x": 1.609375,
+            "y": -21.125,
+            "width": 376.328125,
+            "height": 26.625
+          }
+        },
+        {
+          "name": "combining",
+          "text": "Á ä ố ñ",
+          "widthAt32": 96.734375,
+          "outlineAt32": {
+            "x": -1.1875,
+            "y": -27.75,
+            "width": 98.109375,
+            "height": 28.140625
+          }
+        },
+        {
+          "name": "currency",
+          "text": "€ £ ¥ $ ₹ ₿",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia Black",
+            "character": "₿"
+          }
+        },
+        {
+          "name": "arabic",
+          "text": "مرحبا بالعالم",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia Black",
+            "character": "م"
+          }
+        },
+        {
+          "name": "hebrew",
+          "text": "שלום עולם",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia Black",
+            "character": "ש"
+          }
+        },
+        {
+          "name": "cjk",
+          "text": "世界你好",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia Black",
+            "character": "世"
+          }
+        },
+        {
+          "name": "math",
+          "text": "∑ √ ∞ ≠ ≤ ≥",
+          "widthAt32": 157.078125,
+          "outlineAt32": {
+            "x": 2.296875,
+            "y": -26.234375,
+            "width": 153.40625,
+            "height": 30.078125
+          }
+        }
+      ]
+    },
+    {
+      "file": "Akasia-Bold.ttf",
+      "sha256": "e342fdc06e29575eb53aac85b85442e2fcffb6cc16d82d0a692651029ba54baf",
+      "bytes": 317012,
+      "upstreamMetricSha256": "e998d7747db7537b309d468002f3f1bac921ff16aca2e3d9ad03eddfe57ccb94",
+      "family": "Akasia",
+      "preferredFamily": "Akasia",
+      "subfamily": "Bold",
+      "postscript": "Akasia-Bold",
+      "weight": 700,
+      "italic": false,
+      "unitsPerEm": 2048,
+      "ascent": 1923,
+      "descent": -577,
+      "lineGap": 0,
+      "embeddingFlags": {
+        "noEmbedding": false,
+        "viewOnly": false,
+        "editable": false,
+        "noSubsetting": false,
+        "bitmapOnly": false
+      },
+      "features": [
+        "aalt",
+        "c2sc",
+        "case",
+        "ccmp",
+        "cv01",
+        "cv02",
+        "cv03",
+        "cv04",
+        "cv05",
+        "cv06",
+        "cv07",
+        "cv08",
+        "cv09",
+        "cv10",
+        "cv11",
+        "cv12",
+        "cv13",
+        "cv14",
+        "cv15",
+        "cv16",
+        "cv17",
+        "cv18",
+        "cv19",
+        "dlig",
+        "dnom",
+        "frac",
+        "hlig",
+        "liga",
+        "numr",
+        "onum",
+        "ordn",
+        "pnum",
+        "salt",
+        "sinf",
+        "smcp",
+        "ss01",
+        "ss02",
+        "ss03",
+        "ss04",
+        "ss05",
+        "ss06",
+        "ss07",
+        "ss08",
+        "ss09",
+        "ss10",
+        "subs",
+        "sups",
+        "titl",
+        "zero",
+        "kern",
+        "mark",
+        "mkmk",
+        "size"
+      ],
+      "coverage": {
+        "reportedEntries": 1073,
+        "uniqueCodepoints": 1073,
+        "upstreamCodepoints": 1086,
+        "missing": [
+          1423,
+          1547,
+          2546,
+          2547,
+          2801,
+          3065,
+          3647,
+          6107,
+          8383,
+          8384,
+          10086,
+          11197,
+          11198,
+          65020
+        ],
+        "extra": [
+          65535
+        ]
+      },
+      "advancesChecked": 1072,
+      "advanceDeltas": [],
+      "pairsChecked": 17929,
+      "pairsMissing": 0,
+      "pairDeltas": [],
+      "ligatures": [
+        {
+          "codepoints": [
+            102,
+            102
+          ],
+          "glyphs": 1,
+          "actualEm": 0.67041015625,
+          "upstreamEm": 0.67041015625
+        },
+        {
+          "codepoints": [
+            102,
+            105
+          ],
+          "glyphs": 1,
+          "actualEm": 0.60302734375,
+          "upstreamEm": 0.60302734375
+        },
+        {
+          "codepoints": [
+            102,
+            108
+          ],
+          "glyphs": 1,
+          "actualEm": 0.63134765625,
+          "upstreamEm": 0.63134765625
+        }
+      ],
+      "registryResolution": {
+        "requestedFamily": "Akasia",
+        "sourceFamily": "Akasia",
+        "resolvedFamily": "Akasia",
+        "requestedWeight": 700,
+        "resolvedWeight": 700,
+        "italic": false,
+        "compatibility": "exact",
+        "fontFace": {
+          "family": "Akasia",
+          "bold": true,
+          "italic": false
+        }
+      },
+      "samples": [
+        {
+          "name": "latin",
+          "text": "AVATAR Toffee office affine 0123456789",
+          "widthAt32": 563.625,
+          "outlineAt32": {
+            "x": 0.6875,
+            "y": -22.984375,
+            "width": 561.515625,
+            "height": 23.375
+          }
+        },
+        {
+          "name": "greek",
+          "text": "Καλημέρα κόσμε Ελληνικά",
+          "widthAt32": 377.421875,
+          "outlineAt32": {
+            "x": 2.625,
+            "y": -24.796875,
+            "width": 374.609375,
+            "height": 30.453125
+          }
+        },
+        {
+          "name": "cyrillic",
+          "text": "Привет мир Кириллица",
+          "widthAt32": 353.5625,
+          "outlineAt32": {
+            "x": 3.484375,
+            "y": -21.234375,
+            "width": 347.65625,
+            "height": 27.234375
+          }
+        },
+        {
+          "name": "combining",
+          "text": "Á ä ố ñ",
+          "widthAt32": 93.875,
+          "outlineAt32": {
+            "x": 0.6875,
+            "y": -27.28125,
+            "width": 91,
+            "height": 27.671875
+          }
+        },
+        {
+          "name": "currency",
+          "text": "€ £ ¥ $ ₹ ₿",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia",
+            "character": "₿"
+          }
+        },
+        {
+          "name": "arabic",
+          "text": "مرحبا بالعالم",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia",
+            "character": "م"
+          }
+        },
+        {
+          "name": "hebrew",
+          "text": "שלום עולם",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia",
+            "character": "ש"
+          }
+        },
+        {
+          "name": "cjk",
+          "text": "世界你好",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia",
+            "character": "世"
+          }
+        },
+        {
+          "name": "math",
+          "text": "∑ √ ∞ ≠ ≤ ≥",
+          "widthAt32": 147.796875,
+          "outlineAt32": {
+            "x": 0.515625,
+            "y": -26.234375,
+            "width": 145.75,
+            "height": 30.078125
+          }
+        }
+      ]
+    },
+    {
+      "file": "Akasia-BoldItalic.ttf",
+      "sha256": "528a249515ef1490da8b839ce2d5adb879c5ed55ac704bed910a55716239baff",
+      "bytes": 280384,
+      "upstreamMetricSha256": "877e95a39562632622c2d8c5ecfab9f8a8f0ca981770ddddd8c2702544e5e209",
+      "family": "Akasia",
+      "preferredFamily": "Akasia",
+      "subfamily": "Bold Italic",
+      "postscript": "Akasia-BoldItalic",
+      "weight": 700,
+      "italic": true,
+      "unitsPerEm": 2048,
+      "ascent": 1923,
+      "descent": -577,
+      "lineGap": 0,
+      "embeddingFlags": {
+        "noEmbedding": false,
+        "viewOnly": false,
+        "editable": false,
+        "noSubsetting": false,
+        "bitmapOnly": false
+      },
+      "features": [
+        "aalt",
+        "case",
+        "ccmp",
+        "cv01",
+        "cv02",
+        "cv03",
+        "cv04",
+        "cv05",
+        "cv06",
+        "cv07",
+        "cv08",
+        "cv09",
+        "cv10",
+        "cv11",
+        "cv12",
+        "cv13",
+        "cv14",
+        "cv15",
+        "cv16",
+        "cv17",
+        "cv18",
+        "cv19",
+        "dlig",
+        "dnom",
+        "frac",
+        "hlig",
+        "liga",
+        "numr",
+        "onum",
+        "ordn",
+        "pnum",
+        "salt",
+        "sinf",
+        "ss01",
+        "ss02",
+        "ss03",
+        "ss04",
+        "ss05",
+        "ss06",
+        "ss07",
+        "ss08",
+        "ss09",
+        "ss10",
+        "subs",
+        "sups",
+        "titl",
+        "zero",
+        "kern",
+        "mark",
+        "mkmk",
+        "size"
+      ],
+      "coverage": {
+        "reportedEntries": 1073,
+        "uniqueCodepoints": 1073,
+        "upstreamCodepoints": 1086,
+        "missing": [
+          1423,
+          1547,
+          2546,
+          2547,
+          2801,
+          3065,
+          3647,
+          6107,
+          8383,
+          8384,
+          10086,
+          11197,
+          11198,
+          65020
+        ],
+        "extra": [
+          65535
+        ]
+      },
+      "advancesChecked": 1072,
+      "advanceDeltas": [],
+      "pairsChecked": 15485,
+      "pairsMissing": 0,
+      "pairDeltas": [],
+      "ligatures": [
+        {
+          "codepoints": [
+            102,
+            102
+          ],
+          "glyphs": 1,
+          "actualEm": 0.64990234375,
+          "upstreamEm": 0.64990234375
+        },
+        {
+          "codepoints": [
+            102,
+            105
+          ],
+          "glyphs": 1,
+          "actualEm": 0.5908203125,
+          "upstreamEm": 0.5908203125
+        },
+        {
+          "codepoints": [
+            102,
+            108
+          ],
+          "glyphs": 1,
+          "actualEm": 0.62060546875,
+          "upstreamEm": 0.62060546875
+        }
+      ],
+      "registryResolution": {
+        "requestedFamily": "Akasia",
+        "sourceFamily": "Akasia",
+        "resolvedFamily": "Akasia",
+        "requestedWeight": 700,
+        "resolvedWeight": 700,
+        "italic": true,
+        "compatibility": "exact",
+        "fontFace": {
+          "family": "Akasia",
+          "bold": true,
+          "italic": true
+        }
+      },
+      "samples": [
+        {
+          "name": "latin",
+          "text": "AVATAR Toffee office affine 0123456789",
+          "widthAt32": 562.21875,
+          "outlineAt32": {
+            "x": -0.890625,
+            "y": -22.96875,
+            "width": 562.7044005102041,
+            "height": 23.359375
+          }
+        },
+        {
+          "name": "greek",
+          "text": "Καλημέρα κόσμε Ελληνικά",
+          "widthAt32": 376.78125,
+          "outlineAt32": {
+            "x": 1.53125,
+            "y": -25.046875,
+            "width": 374.828125,
+            "height": 30.703125
+          }
+        },
+        {
+          "name": "cyrillic",
+          "text": "Привет мир Кириллица",
+          "widthAt32": 364.265625,
+          "outlineAt32": {
+            "x": 2,
+            "y": -21.234375,
+            "width": 361.171875,
+            "height": 27.125
+          }
+        },
+        {
+          "name": "combining",
+          "text": "Á ä ố ñ",
+          "widthAt32": 94.046875,
+          "outlineAt32": {
+            "x": -0.890625,
+            "y": -27.359375,
+            "width": 95.21875,
+            "height": 27.75
+          }
+        },
+        {
+          "name": "currency",
+          "text": "€ £ ¥ $ ₹ ₿",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia",
+            "character": "₿"
+          }
+        },
+        {
+          "name": "arabic",
+          "text": "مرحبا بالعالم",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia",
+            "character": "م"
+          }
+        },
+        {
+          "name": "hebrew",
+          "text": "שלום עולם",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia",
+            "character": "ש"
+          }
+        },
+        {
+          "name": "cjk",
+          "text": "世界你好",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia",
+            "character": "世"
+          }
+        },
+        {
+          "name": "math",
+          "text": "∑ √ ∞ ≠ ≤ ≥",
+          "widthAt32": 150.015625,
+          "outlineAt32": {
+            "x": 2.265625,
+            "y": -26.234375,
+            "width": 146.8125,
+            "height": 30.078125
+          }
+        }
+      ]
+    },
+    {
+      "file": "Akasia-ExtraBold.ttf",
+      "sha256": "c60d3081cfcc0536e44e132298c8c87e0c8df09d398873e84800ff1435247718",
+      "bytes": 318084,
+      "upstreamMetricSha256": "2c199c830913c5ed8dd1fe86ca4809e2040a53be3be8bcdd88272c8c73b4733a",
+      "family": "Akasia ExtraBold",
+      "preferredFamily": "Akasia",
+      "subfamily": "Regular",
+      "postscript": "Akasia-ExtraBold",
+      "weight": 800,
+      "italic": false,
+      "unitsPerEm": 2048,
+      "ascent": 1923,
+      "descent": -577,
+      "lineGap": 0,
+      "embeddingFlags": {
+        "noEmbedding": false,
+        "viewOnly": false,
+        "editable": false,
+        "noSubsetting": false,
+        "bitmapOnly": false
+      },
+      "features": [
+        "aalt",
+        "c2sc",
+        "case",
+        "ccmp",
+        "cv01",
+        "cv02",
+        "cv03",
+        "cv04",
+        "cv05",
+        "cv06",
+        "cv07",
+        "cv08",
+        "cv09",
+        "cv10",
+        "cv11",
+        "cv12",
+        "cv13",
+        "cv14",
+        "cv15",
+        "cv16",
+        "cv17",
+        "cv18",
+        "cv19",
+        "dlig",
+        "dnom",
+        "frac",
+        "hlig",
+        "liga",
+        "numr",
+        "onum",
+        "ordn",
+        "pnum",
+        "salt",
+        "sinf",
+        "smcp",
+        "ss01",
+        "ss02",
+        "ss03",
+        "ss04",
+        "ss05",
+        "ss06",
+        "ss07",
+        "ss08",
+        "ss09",
+        "ss10",
+        "subs",
+        "sups",
+        "titl",
+        "zero",
+        "kern",
+        "mark",
+        "mkmk",
+        "size"
+      ],
+      "coverage": {
+        "reportedEntries": 1073,
+        "uniqueCodepoints": 1073,
+        "upstreamCodepoints": 1086,
+        "missing": [
+          1423,
+          1547,
+          2546,
+          2547,
+          2801,
+          3065,
+          3647,
+          6107,
+          8383,
+          8384,
+          10086,
+          11197,
+          11198,
+          65020
+        ],
+        "extra": [
+          65535
+        ]
+      },
+      "advancesChecked": 1072,
+      "advanceDeltas": [],
+      "pairsChecked": 17929,
+      "pairsMissing": 0,
+      "pairDeltas": [],
+      "ligatures": [
+        {
+          "codepoints": [
+            102,
+            102
+          ],
+          "glyphs": 1,
+          "actualEm": 0.697265625,
+          "upstreamEm": 0.697265625
+        },
+        {
+          "codepoints": [
+            102,
+            105
+          ],
+          "glyphs": 1,
+          "actualEm": 0.62841796875,
+          "upstreamEm": 0.62841796875
+        },
+        {
+          "codepoints": [
+            102,
+            108
+          ],
+          "glyphs": 1,
+          "actualEm": 0.6591796875,
+          "upstreamEm": 0.6591796875
+        }
+      ],
+      "registryResolution": {
+        "requestedFamily": "Akasia",
+        "sourceFamily": "Akasia",
+        "resolvedFamily": "Akasia ExtraBold",
+        "requestedWeight": 800,
+        "resolvedWeight": 800,
+        "italic": false,
+        "compatibility": "exact",
+        "fontFace": {
+          "family": "Akasia ExtraBold",
+          "bold": false,
+          "italic": false
+        }
+      },
+      "samples": [
+        {
+          "name": "latin",
+          "text": "AVATAR Toffee office affine 0123456789",
+          "widthAt32": 572.375,
+          "outlineAt32": {
+            "x": 0.65625,
+            "y": -23.265625,
+            "width": 570.484375,
+            "height": 23.65625
+          }
+        },
+        {
+          "name": "greek",
+          "text": "Καλημέρα κόσμε Ελληνικά",
+          "widthAt32": 386.109375,
+          "outlineAt32": {
+            "x": 2.625,
+            "y": -25.0625,
+            "width": 383.328125,
+            "height": 30.703125
+          }
+        },
+        {
+          "name": "cyrillic",
+          "text": "Привет мир Кириллица",
+          "widthAt32": 360.796875,
+          "outlineAt32": {
+            "x": 3.421875,
+            "y": -21.203125,
+            "width": 355.046875,
+            "height": 27
+          }
+        },
+        {
+          "name": "combining",
+          "text": "Á ä ố ñ",
+          "widthAt32": 95.171875,
+          "outlineAt32": {
+            "x": 0.65625,
+            "y": -27.40625,
+            "width": 92.421875,
+            "height": 27.796875
+          }
+        },
+        {
+          "name": "currency",
+          "text": "€ £ ¥ $ ₹ ₿",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia ExtraBold",
+            "character": "₿"
+          }
+        },
+        {
+          "name": "arabic",
+          "text": "مرحبا بالعالم",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia ExtraBold",
+            "character": "م"
+          }
+        },
+        {
+          "name": "hebrew",
+          "text": "שלום עולם",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia ExtraBold",
+            "character": "ש"
+          }
+        },
+        {
+          "name": "cjk",
+          "text": "世界你好",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia ExtraBold",
+            "character": "世"
+          }
+        },
+        {
+          "name": "math",
+          "text": "∑ √ ∞ ≠ ≤ ≥",
+          "widthAt32": 148.84375,
+          "outlineAt32": {
+            "x": 0.59375,
+            "y": -26.234375,
+            "width": 147.046875,
+            "height": 30.078125
+          }
+        }
+      ]
+    },
+    {
+      "file": "Akasia-ExtraBoldItalic.ttf",
+      "sha256": "1dbfbeba162bfd53482cdae5d55e458c7924c3d26651c6d3f1360e8bdef871b0",
+      "bytes": 280992,
+      "upstreamMetricSha256": "caffd815b27134071b6395b06711b010d97abc5f493ea57448878ed7644ed5a8",
+      "family": "Akasia ExtraBold",
+      "preferredFamily": "Akasia",
+      "subfamily": "Italic",
+      "postscript": "Akasia-ExtraBoldItalic",
+      "weight": 800,
+      "italic": true,
+      "unitsPerEm": 2048,
+      "ascent": 1923,
+      "descent": -577,
+      "lineGap": 0,
+      "embeddingFlags": {
+        "noEmbedding": false,
+        "viewOnly": false,
+        "editable": false,
+        "noSubsetting": false,
+        "bitmapOnly": false
+      },
+      "features": [
+        "aalt",
+        "case",
+        "ccmp",
+        "cv01",
+        "cv02",
+        "cv03",
+        "cv04",
+        "cv05",
+        "cv06",
+        "cv07",
+        "cv08",
+        "cv09",
+        "cv10",
+        "cv11",
+        "cv12",
+        "cv13",
+        "cv14",
+        "cv15",
+        "cv16",
+        "cv17",
+        "cv18",
+        "cv19",
+        "dlig",
+        "dnom",
+        "frac",
+        "hlig",
+        "liga",
+        "numr",
+        "onum",
+        "ordn",
+        "pnum",
+        "salt",
+        "sinf",
+        "ss01",
+        "ss02",
+        "ss03",
+        "ss04",
+        "ss05",
+        "ss06",
+        "ss07",
+        "ss08",
+        "ss09",
+        "ss10",
+        "subs",
+        "sups",
+        "titl",
+        "zero",
+        "kern",
+        "mark",
+        "mkmk",
+        "size"
+      ],
+      "coverage": {
+        "reportedEntries": 1073,
+        "uniqueCodepoints": 1073,
+        "upstreamCodepoints": 1086,
+        "missing": [
+          1423,
+          1547,
+          2546,
+          2547,
+          2801,
+          3065,
+          3647,
+          6107,
+          8383,
+          8384,
+          10086,
+          11197,
+          11198,
+          65020
+        ],
+        "extra": [
+          65535
+        ]
+      },
+      "advancesChecked": 1072,
+      "advanceDeltas": [],
+      "pairsChecked": 15485,
+      "pairsMissing": 0,
+      "pairDeltas": [],
+      "ligatures": [
+        {
+          "codepoints": [
+            102,
+            102
+          ],
+          "glyphs": 1,
+          "actualEm": 0.67919921875,
+          "upstreamEm": 0.67919921875
+        },
+        {
+          "codepoints": [
+            102,
+            105
+          ],
+          "glyphs": 1,
+          "actualEm": 0.619140625,
+          "upstreamEm": 0.619140625
+        },
+        {
+          "codepoints": [
+            102,
+            108
+          ],
+          "glyphs": 1,
+          "actualEm": 0.64990234375,
+          "upstreamEm": 0.64990234375
+        }
+      ],
+      "registryResolution": {
+        "requestedFamily": "Akasia",
+        "sourceFamily": "Akasia",
+        "resolvedFamily": "Akasia ExtraBold",
+        "requestedWeight": 800,
+        "resolvedWeight": 800,
+        "italic": true,
+        "compatibility": "exact",
+        "fontFace": {
+          "family": "Akasia ExtraBold",
+          "bold": false,
+          "italic": true
+        }
+      },
+      "samples": [
+        {
+          "name": "latin",
+          "text": "AVATAR Toffee office affine 0123456789",
+          "widthAt32": 572,
+          "outlineAt32": {
+            "x": -1,
+            "y": -23.25,
+            "width": 572.798100490196,
+            "height": 23.640625
+          }
+        },
+        {
+          "name": "greek",
+          "text": "Καλημέρα κόσμε Ελληνικά",
+          "widthAt32": 385.28125,
+          "outlineAt32": {
+            "x": 1.59375,
+            "y": -25.359375,
+            "width": 383.34375,
+            "height": 31
+          }
+        },
+        {
+          "name": "cyrillic",
+          "text": "Привет мир Кириллица",
+          "widthAt32": 371.515625,
+          "outlineAt32": {
+            "x": 1.921875,
+            "y": -21.1875,
+            "width": 368.59375,
+            "height": 26.84375
+          }
+        },
+        {
+          "name": "combining",
+          "text": "Á ä ố ñ",
+          "widthAt32": 95.390625,
+          "outlineAt32": {
+            "x": -1,
+            "y": -27.5,
+            "width": 96.65625,
+            "height": 27.890625
+          }
+        },
+        {
+          "name": "currency",
+          "text": "€ £ ¥ $ ₹ ₿",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia ExtraBold",
+            "character": "₿"
+          }
+        },
+        {
+          "name": "arabic",
+          "text": "مرحبا بالعالم",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia ExtraBold",
+            "character": "م"
+          }
+        },
+        {
+          "name": "hebrew",
+          "text": "שלום עולם",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia ExtraBold",
+            "character": "ש"
+          }
+        },
+        {
+          "name": "cjk",
+          "text": "世界你好",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia ExtraBold",
+            "character": "世"
+          }
+        },
+        {
+          "name": "math",
+          "text": "∑ √ ∞ ≠ ≤ ≥",
+          "widthAt32": 151,
+          "outlineAt32": {
+            "x": 2.28125,
+            "y": -26.234375,
+            "width": 148.03125,
+            "height": 30.078125
+          }
+        }
+      ]
+    },
+    {
+      "file": "Akasia-Italic.ttf",
+      "sha256": "03568e7af56c9ba37993c36bc0f6cb63ba94d8a801a1746595108e4b29583c67",
+      "bytes": 279000,
+      "upstreamMetricSha256": "ed9a91aad4ef69b3ccf8aff11d8b2af6bd7b8c68fb0f7a9a0b6809e6e750f470",
+      "family": "Akasia",
+      "preferredFamily": "Akasia",
+      "subfamily": "Italic",
+      "postscript": "Akasia-Italic",
+      "weight": 400,
+      "italic": true,
+      "unitsPerEm": 2048,
+      "ascent": 1923,
+      "descent": -577,
+      "lineGap": 0,
+      "embeddingFlags": {
+        "noEmbedding": false,
+        "viewOnly": false,
+        "editable": false,
+        "noSubsetting": false,
+        "bitmapOnly": false
+      },
+      "features": [
+        "aalt",
+        "case",
+        "ccmp",
+        "cv01",
+        "cv02",
+        "cv03",
+        "cv04",
+        "cv05",
+        "cv06",
+        "cv07",
+        "cv08",
+        "cv09",
+        "cv10",
+        "cv11",
+        "cv12",
+        "cv13",
+        "cv14",
+        "cv15",
+        "cv16",
+        "cv17",
+        "cv18",
+        "cv19",
+        "dlig",
+        "dnom",
+        "frac",
+        "hlig",
+        "liga",
+        "numr",
+        "onum",
+        "ordn",
+        "pnum",
+        "salt",
+        "sinf",
+        "ss01",
+        "ss02",
+        "ss03",
+        "ss04",
+        "ss05",
+        "ss06",
+        "ss07",
+        "ss08",
+        "ss09",
+        "ss10",
+        "subs",
+        "sups",
+        "titl",
+        "zero",
+        "kern",
+        "mark",
+        "mkmk",
+        "size"
+      ],
+      "coverage": {
+        "reportedEntries": 1073,
+        "uniqueCodepoints": 1073,
+        "upstreamCodepoints": 1086,
+        "missing": [
+          1423,
+          1547,
+          2546,
+          2547,
+          2801,
+          3065,
+          3647,
+          6107,
+          8383,
+          8384,
+          10086,
+          11197,
+          11198,
+          65020
+        ],
+        "extra": [
+          65535
+        ]
+      },
+      "advancesChecked": 1072,
+      "advanceDeltas": [],
+      "pairsChecked": 15466,
+      "pairsMissing": 0,
+      "pairDeltas": [],
+      "ligatures": [
+        {
+          "codepoints": [
+            102,
+            102
+          ],
+          "glyphs": 1,
+          "actualEm": 0.57666015625,
+          "upstreamEm": 0.57666015625
+        },
+        {
+          "codepoints": [
+            102,
+            105
+          ],
+          "glyphs": 1,
+          "actualEm": 0.51953125,
+          "upstreamEm": 0.51953125
+        },
+        {
+          "codepoints": [
+            102,
+            108
+          ],
+          "glyphs": 1,
+          "actualEm": 0.54833984375,
+          "upstreamEm": 0.54833984375
+        }
+      ],
+      "registryResolution": {
+        "requestedFamily": "Akasia",
+        "sourceFamily": "Akasia",
+        "resolvedFamily": "Akasia",
+        "requestedWeight": 400,
+        "resolvedWeight": 400,
+        "italic": true,
+        "compatibility": "exact",
+        "fontFace": {
+          "family": "Akasia",
+          "bold": false,
+          "italic": true
+        }
+      },
+      "samples": [
+        {
+          "name": "latin",
+          "text": "AVATAR Toffee office affine 0123456789",
+          "widthAt32": 537.640625,
+          "outlineAt32": {
+            "x": -0.609375,
+            "y": -23.125,
+            "width": 537.313904494382,
+            "height": 23.515625
+          }
+        },
+        {
+          "name": "greek",
+          "text": "Καλημέρα κόσμε Ελληνικά",
+          "widthAt32": 355.5625,
+          "outlineAt32": {
+            "x": 1.375,
+            "y": -24.265625,
+            "width": 353.5625,
+            "height": 29.96875
+          }
+        },
+        {
+          "name": "cyrillic",
+          "text": "Привет мир Кириллица",
+          "widthAt32": 346.125,
+          "outlineAt32": {
+            "x": 2.1875,
+            "y": -21.359375,
+            "width": 342.671875,
+            "height": 27.8125
+          }
+        },
+        {
+          "name": "combining",
+          "text": "Á ä ố ñ",
+          "widthAt32": 90.671875,
+          "outlineAt32": {
+            "x": -0.609375,
+            "y": -26.984375,
+            "width": 91.640625,
+            "height": 27.375
+          }
+        },
+        {
+          "name": "currency",
+          "text": "€ £ ¥ $ ₹ ₿",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia",
+            "character": "₿"
+          }
+        },
+        {
+          "name": "arabic",
+          "text": "مرحبا بالعالم",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia",
+            "character": "م"
+          }
+        },
+        {
+          "name": "hebrew",
+          "text": "שלום עולם",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia",
+            "character": "ש"
+          }
+        },
+        {
+          "name": "cjk",
+          "text": "世界你好",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia",
+            "character": "世"
+          }
+        },
+        {
+          "name": "math",
+          "text": "∑ √ ∞ ≠ ≤ ≥",
+          "widthAt32": 147.5,
+          "outlineAt32": {
+            "x": 2.234375,
+            "y": -26.234375,
+            "width": 143.71875,
+            "height": 30.078125
+          }
+        }
+      ]
+    },
+    {
+      "file": "Akasia-Light.ttf",
+      "sha256": "d72c354d9bc96818b33159d8b97b8445db92f6cdcc88392d34ed2ec959f36f3f",
+      "bytes": 313176,
+      "upstreamMetricSha256": "76e7fc04626eb9bd23fbb11e02fd857626dc62633fba97a8bc26b1017efbc7a9",
+      "family": "Akasia Light",
+      "preferredFamily": "Akasia",
+      "subfamily": "Regular",
+      "postscript": "Akasia-Light",
+      "weight": 300,
+      "italic": false,
+      "unitsPerEm": 2048,
+      "ascent": 1923,
+      "descent": -577,
+      "lineGap": 0,
+      "embeddingFlags": {
+        "noEmbedding": false,
+        "viewOnly": false,
+        "editable": false,
+        "noSubsetting": false,
+        "bitmapOnly": false
+      },
+      "features": [
+        "aalt",
+        "c2sc",
+        "case",
+        "ccmp",
+        "cv01",
+        "cv02",
+        "cv03",
+        "cv04",
+        "cv05",
+        "cv06",
+        "cv07",
+        "cv08",
+        "cv09",
+        "cv10",
+        "cv11",
+        "cv12",
+        "cv13",
+        "cv14",
+        "cv15",
+        "cv16",
+        "cv17",
+        "cv18",
+        "cv19",
+        "dlig",
+        "dnom",
+        "frac",
+        "hlig",
+        "liga",
+        "numr",
+        "onum",
+        "ordn",
+        "pnum",
+        "salt",
+        "sinf",
+        "smcp",
+        "ss01",
+        "ss02",
+        "ss03",
+        "ss04",
+        "ss05",
+        "ss06",
+        "ss07",
+        "ss08",
+        "ss09",
+        "ss10",
+        "subs",
+        "sups",
+        "titl",
+        "zero",
+        "kern",
+        "mark",
+        "mkmk",
+        "size"
+      ],
+      "coverage": {
+        "reportedEntries": 1073,
+        "uniqueCodepoints": 1073,
+        "upstreamCodepoints": 1086,
+        "missing": [
+          1423,
+          1547,
+          2546,
+          2547,
+          2801,
+          3065,
+          3647,
+          6107,
+          8383,
+          8384,
+          10086,
+          11197,
+          11198,
+          65020
+        ],
+        "extra": [
+          65535
+        ]
+      },
+      "advancesChecked": 1072,
+      "advanceDeltas": [],
+      "pairsChecked": 16112,
+      "pairsMissing": 0,
+      "pairDeltas": [],
+      "ligatures": [
+        {
+          "codepoints": [
+            102,
+            102
+          ],
+          "glyphs": 1,
+          "actualEm": 0.568359375,
+          "upstreamEm": 0.568359375
+        },
+        {
+          "codepoints": [
+            102,
+            105
+          ],
+          "glyphs": 1,
+          "actualEm": 0.50830078125,
+          "upstreamEm": 0.50830078125
+        },
+        {
+          "codepoints": [
+            102,
+            108
+          ],
+          "glyphs": 1,
+          "actualEm": 0.5263671875,
+          "upstreamEm": 0.5263671875
+        }
+      ],
+      "registryResolution": {
+        "requestedFamily": "Akasia",
+        "sourceFamily": "Akasia",
+        "resolvedFamily": "Akasia Light",
+        "requestedWeight": 300,
+        "resolvedWeight": 300,
+        "italic": false,
+        "compatibility": "exact",
+        "fontFace": {
+          "family": "Akasia Light",
+          "bold": false,
+          "italic": false
+        }
+      },
+      "samples": [
+        {
+          "name": "latin",
+          "text": "AVATAR Toffee office affine 0123456789",
+          "widthAt32": 530.671875,
+          "outlineAt32": {
+            "x": 0.8125,
+            "y": -23.296875,
+            "width": 527.6875,
+            "height": 23.6875
+          }
+        },
+        {
+          "name": "greek",
+          "text": "Καλημέρα κόσμε Ελληνικά",
+          "widthAt32": 344.921875,
+          "outlineAt32": {
+            "x": 2.625,
+            "y": -23.78125,
+            "width": 341.984375,
+            "height": 29.515625
+          }
+        },
+        {
+          "name": "cyrillic",
+          "text": "Привет мир Кириллица",
+          "widthAt32": 326.34375,
+          "outlineAt32": {
+            "x": 3.75,
+            "y": -21.328125,
+            "width": 319.765625,
+            "height": 28.109375
+          }
+        },
+        {
+          "name": "combining",
+          "text": "Á ä ố ñ",
+          "widthAt32": 89.046875,
+          "outlineAt32": {
+            "x": 0.8125,
+            "y": -26.765625,
+            "width": 85.640625,
+            "height": 27.15625
+          }
+        },
+        {
+          "name": "currency",
+          "text": "€ £ ¥ $ ₹ ₿",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia Light",
+            "character": "₿"
+          }
+        },
+        {
+          "name": "arabic",
+          "text": "مرحبا بالعالم",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia Light",
+            "character": "م"
+          }
+        },
+        {
+          "name": "hebrew",
+          "text": "שלום עולם",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia Light",
+            "character": "ש"
+          }
+        },
+        {
+          "name": "cjk",
+          "text": "世界你好",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia Light",
+            "character": "世"
+          }
+        },
+        {
+          "name": "math",
+          "text": "∑ √ ∞ ≠ ≤ ≥",
+          "widthAt32": 143.8125,
+          "outlineAt32": {
+            "x": 0.203125,
+            "y": -26.234375,
+            "width": 140.890625,
+            "height": 30.078125
+          }
+        }
+      ]
+    },
+    {
+      "file": "Akasia-LightItalic.ttf",
+      "sha256": "4b45886a81577cbf5e52cd40c7260aa9ce4ff500190f8e35b8c1901dd1170808",
+      "bytes": 277220,
+      "upstreamMetricSha256": "14d098c90e435455957b2ada3b3d6231f5b9ce7e437c376f9aeba280214e0ad0",
+      "family": "Akasia Light",
+      "preferredFamily": "Akasia",
+      "subfamily": "Italic",
+      "postscript": "Akasia-LightItalic",
+      "weight": 300,
+      "italic": true,
+      "unitsPerEm": 2048,
+      "ascent": 1923,
+      "descent": -577,
+      "lineGap": 0,
+      "embeddingFlags": {
+        "noEmbedding": false,
+        "viewOnly": false,
+        "editable": false,
+        "noSubsetting": false,
+        "bitmapOnly": false
+      },
+      "features": [
+        "aalt",
+        "case",
+        "ccmp",
+        "cv01",
+        "cv02",
+        "cv03",
+        "cv04",
+        "cv05",
+        "cv06",
+        "cv07",
+        "cv08",
+        "cv09",
+        "cv10",
+        "cv11",
+        "cv12",
+        "cv13",
+        "cv14",
+        "cv15",
+        "cv16",
+        "cv17",
+        "cv18",
+        "cv19",
+        "dlig",
+        "dnom",
+        "frac",
+        "hlig",
+        "liga",
+        "numr",
+        "onum",
+        "ordn",
+        "pnum",
+        "salt",
+        "sinf",
+        "ss01",
+        "ss02",
+        "ss03",
+        "ss04",
+        "ss05",
+        "ss06",
+        "ss07",
+        "ss08",
+        "ss09",
+        "ss10",
+        "subs",
+        "sups",
+        "titl",
+        "zero",
+        "kern",
+        "mark",
+        "mkmk",
+        "size"
+      ],
+      "coverage": {
+        "reportedEntries": 1073,
+        "uniqueCodepoints": 1073,
+        "upstreamCodepoints": 1086,
+        "missing": [
+          1423,
+          1547,
+          2546,
+          2547,
+          2801,
+          3065,
+          3647,
+          6107,
+          8383,
+          8384,
+          10086,
+          11197,
+          11198,
+          65020
+        ],
+        "extra": [
+          65535
+        ]
+      },
+      "advancesChecked": 1072,
+      "advanceDeltas": [],
+      "pairsChecked": 13796,
+      "pairsMissing": 0,
+      "pairDeltas": [],
+      "ligatures": [
+        {
+          "codepoints": [
+            102,
+            102
+          ],
+          "glyphs": 1,
+          "actualEm": 0.5400390625,
+          "upstreamEm": 0.5400390625
+        },
+        {
+          "codepoints": [
+            102,
+            105
+          ],
+          "glyphs": 1,
+          "actualEm": 0.48388671875,
+          "upstreamEm": 0.48388671875
+        },
+        {
+          "codepoints": [
+            102,
+            108
+          ],
+          "glyphs": 1,
+          "actualEm": 0.51220703125,
+          "upstreamEm": 0.51220703125
+        }
+      ],
+      "registryResolution": {
+        "requestedFamily": "Akasia",
+        "sourceFamily": "Akasia",
+        "resolvedFamily": "Akasia Light",
+        "requestedWeight": 300,
+        "resolvedWeight": 300,
+        "italic": true,
+        "compatibility": "exact",
+        "fontFace": {
+          "family": "Akasia Light",
+          "bold": false,
+          "italic": true
+        }
+      },
+      "samples": [
+        {
+          "name": "latin",
+          "text": "AVATAR Toffee office affine 0123456789",
+          "widthAt32": 525.390625,
+          "outlineAt32": {
+            "x": -0.484375,
+            "y": -23.28125,
+            "width": 524.6594827586207,
+            "height": 23.671875
+          }
+        },
+        {
+          "name": "greek",
+          "text": "Καλημέρα κόσμε Ελληνικά",
+          "widthAt32": 344.875,
+          "outlineAt32": {
+            "x": 1.296875,
+            "y": -23.875,
+            "width": 342.859375,
+            "height": 29.609375
+          }
+        },
+        {
+          "name": "cyrillic",
+          "text": "Привет мир Кириллица",
+          "widthAt32": 337.046875,
+          "outlineAt32": {
+            "x": 2.296875,
+            "y": -21.421875,
+            "width": 333.40625,
+            "height": 28.15625
+          }
+        },
+        {
+          "name": "combining",
+          "text": "Á ä ố ñ",
+          "widthAt32": 88.984375,
+          "outlineAt32": {
+            "x": -0.484375,
+            "y": -26.796875,
+            "width": 89.859375,
+            "height": 27.1875
+          }
+        },
+        {
+          "name": "currency",
+          "text": "€ £ ¥ $ ₹ ₿",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia Light",
+            "character": "₿"
+          }
+        },
+        {
+          "name": "arabic",
+          "text": "مرحبا بالعالم",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia Light",
+            "character": "م"
+          }
+        },
+        {
+          "name": "hebrew",
+          "text": "שלום עולם",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia Light",
+            "character": "ש"
+          }
+        },
+        {
+          "name": "cjk",
+          "text": "世界你好",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia Light",
+            "character": "世"
+          }
+        },
+        {
+          "name": "math",
+          "text": "∑ √ ∞ ≠ ≤ ≥",
+          "widthAt32": 146.234375,
+          "outlineAt32": {
+            "x": 2.21875,
+            "y": -26.234375,
+            "width": 142.171875,
+            "height": 30.078125
+          }
+        }
+      ]
+    },
+    {
+      "file": "Akasia-Regular.ttf",
+      "sha256": "b81ddc5a801bf6417c6df870ee1f5857a97807e35df7476f7ae0f7d251aa85cd",
+      "bytes": 315244,
+      "upstreamMetricSha256": "487d15a199f7cda945d750b138be1fe854aa34c49b5b96b3716a0f6e3c54d60a",
+      "family": "Akasia",
+      "preferredFamily": "Akasia",
+      "subfamily": "Regular",
+      "postscript": "Akasia-Regular",
+      "weight": 400,
+      "italic": false,
+      "unitsPerEm": 2048,
+      "ascent": 1923,
+      "descent": -577,
+      "lineGap": 0,
+      "embeddingFlags": {
+        "noEmbedding": false,
+        "viewOnly": false,
+        "editable": false,
+        "noSubsetting": false,
+        "bitmapOnly": false
+      },
+      "features": [
+        "aalt",
+        "c2sc",
+        "case",
+        "ccmp",
+        "cv01",
+        "cv02",
+        "cv03",
+        "cv04",
+        "cv05",
+        "cv06",
+        "cv07",
+        "cv08",
+        "cv09",
+        "cv10",
+        "cv11",
+        "cv12",
+        "cv13",
+        "cv14",
+        "cv15",
+        "cv16",
+        "cv17",
+        "cv18",
+        "cv19",
+        "dlig",
+        "dnom",
+        "frac",
+        "hlig",
+        "liga",
+        "numr",
+        "onum",
+        "ordn",
+        "pnum",
+        "salt",
+        "sinf",
+        "smcp",
+        "ss01",
+        "ss02",
+        "ss03",
+        "ss04",
+        "ss05",
+        "ss06",
+        "ss07",
+        "ss08",
+        "ss09",
+        "ss10",
+        "subs",
+        "sups",
+        "titl",
+        "zero",
+        "kern",
+        "mark",
+        "mkmk",
+        "size"
+      ],
+      "coverage": {
+        "reportedEntries": 1073,
+        "uniqueCodepoints": 1073,
+        "upstreamCodepoints": 1086,
+        "missing": [
+          1423,
+          1547,
+          2546,
+          2547,
+          2801,
+          3065,
+          3647,
+          6107,
+          8383,
+          8384,
+          10086,
+          11197,
+          11198,
+          65020
+        ],
+        "extra": [
+          65535
+        ]
+      },
+      "advancesChecked": 1072,
+      "advanceDeltas": [],
+      "pairsChecked": 17910,
+      "pairsMissing": 0,
+      "pairDeltas": [],
+      "ligatures": [
+        {
+          "codepoints": [
+            102,
+            102
+          ],
+          "glyphs": 1,
+          "actualEm": 0.6025390625,
+          "upstreamEm": 0.6025390625
+        },
+        {
+          "codepoints": [
+            102,
+            105
+          ],
+          "glyphs": 1,
+          "actualEm": 0.5400390625,
+          "upstreamEm": 0.5400390625
+        },
+        {
+          "codepoints": [
+            102,
+            108
+          ],
+          "glyphs": 1,
+          "actualEm": 0.5615234375,
+          "upstreamEm": 0.5615234375
+        }
+      ],
+      "registryResolution": {
+        "requestedFamily": "Akasia",
+        "sourceFamily": "Akasia",
+        "resolvedFamily": "Akasia",
+        "requestedWeight": 400,
+        "resolvedWeight": 400,
+        "italic": false,
+        "compatibility": "exact",
+        "fontFace": {
+          "family": "Akasia",
+          "bold": false,
+          "italic": false
+        }
+      },
+      "samples": [
+        {
+          "name": "latin",
+          "text": "AVATAR Toffee office affine 0123456789",
+          "widthAt32": 541.671875,
+          "outlineAt32": {
+            "x": 0.765625,
+            "y": -23.15625,
+            "width": 539,
+            "height": 23.546875
+          }
+        },
+        {
+          "name": "greek",
+          "text": "Καλημέρα κόσμε Ελληνικά",
+          "widthAt32": 355.78125,
+          "outlineAt32": {
+            "x": 2.625,
+            "y": -24.125,
+            "width": 352.90625,
+            "height": 29.828125
+          }
+        },
+        {
+          "name": "cyrillic",
+          "text": "Привет мир Кириллица",
+          "widthAt32": 335.40625,
+          "outlineAt32": {
+            "x": 3.65625,
+            "y": -21.296875,
+            "width": 329.046875,
+            "height": 27.8125
+          }
+        },
+        {
+          "name": "combining",
+          "text": "Á ä ố ñ",
+          "widthAt32": 90.65625,
+          "outlineAt32": {
+            "x": 0.765625,
+            "y": -26.9375,
+            "width": 87.4375,
+            "height": 27.328125
+          }
+        },
+        {
+          "name": "currency",
+          "text": "€ £ ¥ $ ₹ ₿",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia",
+            "character": "₿"
+          }
+        },
+        {
+          "name": "arabic",
+          "text": "مرحبا بالعالم",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia",
+            "character": "م"
+          }
+        },
+        {
+          "name": "hebrew",
+          "text": "שלום עולם",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia",
+            "character": "ש"
+          }
+        },
+        {
+          "name": "cjk",
+          "text": "世界你好",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia",
+            "character": "世"
+          }
+        },
+        {
+          "name": "math",
+          "text": "∑ √ ∞ ≠ ≤ ≥",
+          "widthAt32": 145.140625,
+          "outlineAt32": {
+            "x": 0.3125,
+            "y": -26.234375,
+            "width": 142.5,
+            "height": 30.078125
+          }
+        }
+      ]
+    },
+    {
+      "file": "Akasia-SemiBold.ttf",
+      "sha256": "12de77b853fa2658b70a05e50307e6eac594a756949136fd1f935bc39b91e1d6",
+      "bytes": 315372,
+      "upstreamMetricSha256": "31f12c7b5596a69466ad37847c098720cc2288dcdae0e8d6d7fa533683301dc0",
+      "family": "Akasia SemiBold",
+      "preferredFamily": "Akasia",
+      "subfamily": "Regular",
+      "postscript": "Akasia-SemiBold",
+      "weight": 600,
+      "italic": false,
+      "unitsPerEm": 2048,
+      "ascent": 1923,
+      "descent": -577,
+      "lineGap": 0,
+      "embeddingFlags": {
+        "noEmbedding": false,
+        "viewOnly": false,
+        "editable": false,
+        "noSubsetting": false,
+        "bitmapOnly": false
+      },
+      "features": [
+        "aalt",
+        "c2sc",
+        "case",
+        "ccmp",
+        "cv01",
+        "cv02",
+        "cv03",
+        "cv04",
+        "cv05",
+        "cv06",
+        "cv07",
+        "cv08",
+        "cv09",
+        "cv10",
+        "cv11",
+        "cv12",
+        "cv13",
+        "cv14",
+        "cv15",
+        "cv16",
+        "cv17",
+        "cv18",
+        "cv19",
+        "dlig",
+        "dnom",
+        "frac",
+        "hlig",
+        "liga",
+        "numr",
+        "onum",
+        "ordn",
+        "pnum",
+        "salt",
+        "sinf",
+        "smcp",
+        "ss01",
+        "ss02",
+        "ss03",
+        "ss04",
+        "ss05",
+        "ss06",
+        "ss07",
+        "ss08",
+        "ss09",
+        "ss10",
+        "subs",
+        "sups",
+        "titl",
+        "zero",
+        "kern",
+        "mark",
+        "mkmk",
+        "size"
+      ],
+      "coverage": {
+        "reportedEntries": 1073,
+        "uniqueCodepoints": 1073,
+        "upstreamCodepoints": 1086,
+        "missing": [
+          1423,
+          1547,
+          2546,
+          2547,
+          2801,
+          3065,
+          3647,
+          6107,
+          8383,
+          8384,
+          10086,
+          11197,
+          11198,
+          65020
+        ],
+        "extra": [
+          65535
+        ]
+      },
+      "advancesChecked": 1072,
+      "advanceDeltas": [],
+      "pairsChecked": 17908,
+      "pairsMissing": 0,
+      "pairDeltas": [],
+      "ligatures": [
+        {
+          "codepoints": [
+            102,
+            102
+          ],
+          "glyphs": 1,
+          "actualEm": 0.63623046875,
+          "upstreamEm": 0.63623046875
+        },
+        {
+          "codepoints": [
+            102,
+            105
+          ],
+          "glyphs": 1,
+          "actualEm": 0.57177734375,
+          "upstreamEm": 0.57177734375
+        },
+        {
+          "codepoints": [
+            102,
+            108
+          ],
+          "glyphs": 1,
+          "actualEm": 0.59619140625,
+          "upstreamEm": 0.59619140625
+        }
+      ],
+      "registryResolution": {
+        "requestedFamily": "Akasia",
+        "sourceFamily": "Akasia",
+        "resolvedFamily": "Akasia SemiBold",
+        "requestedWeight": 600,
+        "resolvedWeight": 600,
+        "italic": false,
+        "compatibility": "exact",
+        "fontFace": {
+          "family": "Akasia SemiBold",
+          "bold": false,
+          "italic": false
+        }
+      },
+      "samples": [
+        {
+          "name": "latin",
+          "text": "AVATAR Toffee office affine 0123456789",
+          "widthAt32": 552.59375,
+          "outlineAt32": {
+            "x": 0.734375,
+            "y": -23.015625,
+            "width": 550.1875,
+            "height": 23.40625
+          }
+        },
+        {
+          "name": "greek",
+          "text": "Καλημέρα κόσμε Ελληνικά",
+          "widthAt32": 366.5625,
+          "outlineAt32": {
+            "x": 2.625,
+            "y": -24.46875,
+            "width": 363.71875,
+            "height": 30.15625
+          }
+        },
+        {
+          "name": "cyrillic",
+          "text": "Привет мир Кириллица",
+          "widthAt32": 344.515625,
+          "outlineAt32": {
+            "x": 3.578125,
+            "y": -21.265625,
+            "width": 338.375,
+            "height": 27.53125
+          }
+        },
+        {
+          "name": "combining",
+          "text": "Á ä ố ñ",
+          "widthAt32": 92.265625,
+          "outlineAt32": {
+            "x": 0.734375,
+            "y": -27.109375,
+            "width": 89.21875,
+            "height": 27.5
+          }
+        },
+        {
+          "name": "currency",
+          "text": "€ £ ¥ $ ₹ ₿",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia SemiBold",
+            "character": "₿"
+          }
+        },
+        {
+          "name": "arabic",
+          "text": "مرحبا بالعالم",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia SemiBold",
+            "character": "م"
+          }
+        },
+        {
+          "name": "hebrew",
+          "text": "שלום עולם",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia SemiBold",
+            "character": "ש"
+          }
+        },
+        {
+          "name": "cjk",
+          "text": "世界你好",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia SemiBold",
+            "character": "世"
+          }
+        },
+        {
+          "name": "math",
+          "text": "∑ √ ∞ ≠ ≤ ≥",
+          "widthAt32": 146.46875,
+          "outlineAt32": {
+            "x": 0.421875,
+            "y": -26.234375,
+            "width": 144.125,
+            "height": 30.078125
+          }
+        }
+      ]
+    },
+    {
+      "file": "Akasia-SemiBoldItalic.ttf",
+      "sha256": "6244344998c257c3df3db11ee785403922da33417b2dbbad72f97fb3d6e1189c",
+      "bytes": 279428,
+      "upstreamMetricSha256": "d6866a11c37c3d1ccc3b63c49b997652aee6fe9fde5c88755368605aa4b92823",
+      "family": "Akasia SemiBold",
+      "preferredFamily": "Akasia",
+      "subfamily": "Italic",
+      "postscript": "Akasia-SemiBoldItalic",
+      "weight": 600,
+      "italic": true,
+      "unitsPerEm": 2048,
+      "ascent": 1923,
+      "descent": -577,
+      "lineGap": 0,
+      "embeddingFlags": {
+        "noEmbedding": false,
+        "viewOnly": false,
+        "editable": false,
+        "noSubsetting": false,
+        "bitmapOnly": false
+      },
+      "features": [
+        "aalt",
+        "case",
+        "ccmp",
+        "cv01",
+        "cv02",
+        "cv03",
+        "cv04",
+        "cv05",
+        "cv06",
+        "cv07",
+        "cv08",
+        "cv09",
+        "cv10",
+        "cv11",
+        "cv12",
+        "cv13",
+        "cv14",
+        "cv15",
+        "cv16",
+        "cv17",
+        "cv18",
+        "cv19",
+        "dlig",
+        "dnom",
+        "frac",
+        "hlig",
+        "liga",
+        "numr",
+        "onum",
+        "ordn",
+        "pnum",
+        "salt",
+        "sinf",
+        "ss01",
+        "ss02",
+        "ss03",
+        "ss04",
+        "ss05",
+        "ss06",
+        "ss07",
+        "ss08",
+        "ss09",
+        "ss10",
+        "subs",
+        "sups",
+        "titl",
+        "zero",
+        "kern",
+        "mark",
+        "mkmk",
+        "size"
+      ],
+      "coverage": {
+        "reportedEntries": 1073,
+        "uniqueCodepoints": 1073,
+        "upstreamCodepoints": 1086,
+        "missing": [
+          1423,
+          1547,
+          2546,
+          2547,
+          2801,
+          3065,
+          3647,
+          6107,
+          8383,
+          8384,
+          10086,
+          11197,
+          11198,
+          65020
+        ],
+        "extra": [
+          65535
+        ]
+      },
+      "advancesChecked": 1072,
+      "advanceDeltas": [],
+      "pairsChecked": 15443,
+      "pairsMissing": 0,
+      "pairDeltas": [],
+      "ligatures": [
+        {
+          "codepoints": [
+            102,
+            102
+          ],
+          "glyphs": 1,
+          "actualEm": 0.61328125,
+          "upstreamEm": 0.61328125
+        },
+        {
+          "codepoints": [
+            102,
+            105
+          ],
+          "glyphs": 1,
+          "actualEm": 0.55517578125,
+          "upstreamEm": 0.55517578125
+        },
+        {
+          "codepoints": [
+            102,
+            108
+          ],
+          "glyphs": 1,
+          "actualEm": 0.58447265625,
+          "upstreamEm": 0.58447265625
+        }
+      ],
+      "registryResolution": {
+        "requestedFamily": "Akasia",
+        "sourceFamily": "Akasia",
+        "resolvedFamily": "Akasia SemiBold",
+        "requestedWeight": 600,
+        "resolvedWeight": 600,
+        "italic": true,
+        "compatibility": "exact",
+        "fontFace": {
+          "family": "Akasia SemiBold",
+          "bold": false,
+          "italic": true
+        }
+      },
+      "samples": [
+        {
+          "name": "latin",
+          "text": "AVATAR Toffee office affine 0123456789",
+          "widthAt32": 549.90625,
+          "outlineAt32": {
+            "x": -0.734375,
+            "y": -22.953125,
+            "width": 549.9700940860215,
+            "height": 23.34375
+          }
+        },
+        {
+          "name": "greek",
+          "text": "Καλημέρα κόσμε Ελληνικά",
+          "widthAt32": 366.140625,
+          "outlineAt32": {
+            "x": 1.453125,
+            "y": -24.65625,
+            "width": 364.171875,
+            "height": 30.328125
+          }
+        },
+        {
+          "name": "cyrillic",
+          "text": "Привет мир Кириллица",
+          "widthAt32": 355.203125,
+          "outlineAt32": {
+            "x": 2.078125,
+            "y": -21.296875,
+            "width": 351.953125,
+            "height": 27.46875
+          }
+        },
+        {
+          "name": "combining",
+          "text": "Á ä ố ñ",
+          "widthAt32": 92.359375,
+          "outlineAt32": {
+            "x": -0.734375,
+            "y": -27.171875,
+            "width": 93.421875,
+            "height": 27.5625
+          }
+        },
+        {
+          "name": "currency",
+          "text": "€ £ ¥ $ ₹ ₿",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia SemiBold",
+            "character": "₿"
+          }
+        },
+        {
+          "name": "arabic",
+          "text": "مرحبا بالعالم",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia SemiBold",
+            "character": "م"
+          }
+        },
+        {
+          "name": "hebrew",
+          "text": "שלום עולם",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia SemiBold",
+            "character": "ש"
+          }
+        },
+        {
+          "name": "cjk",
+          "text": "世界你好",
+          "errorCode": "missing-glyph",
+          "details": {
+            "fontFamily": "Akasia SemiBold",
+            "character": "世"
+          }
+        },
+        {
+          "name": "math",
+          "text": "∑ √ ∞ ≠ ≤ ≥",
+          "widthAt32": 148.75,
+          "outlineAt32": {
+            "x": 2.25,
+            "y": -26.234375,
+            "width": 145.265625,
+            "height": 30.078125
+          }
+        }
+      ]
+    }
+  ],
+  "scope": "Actual openly licensed Akasia files versus public upstream metric JSON at the release commit. This is not an independent comparison with Aptos font binaries and does not establish native Office selection, full-script shaping, visual similarity, line wrapping or complete-slide equivalence."
+}

@@ -1,0 +1,27 @@
+$ pnpm run clean && pnpm run build
+$ node -e "for (const dir of ['dist', 'dist-bundle']) require('node:fs').rmSync(dir, { recursive: true, force: true })"
+$ tsup
+CLI Building entry: {"index":"src/index.ts","cli":"src/cli.ts"}
+CLI Using tsconfig: tsconfig.json
+CLI tsup v8.5.1
+CLI Using tsup config: /Users/michael/Source/pptx-dev/sdk/cli/tsup.config.ts
+CLI Target: node24
+CLI Cleaning output folder
+ESM Build start
+CJS Build start
+"mkdirSync", "unlinkSync" and "writeFileSync" are imported from external module "fs" but never used in "dist/index.js".
+"mkdirSync", "unlinkSync" and "writeFileSync" are imported from external module "fs" but never used in "dist/index.cjs".
+CJS dist/index.cjs     14.20 KB
+CJS dist/cli.cjs       28.86 KB
+CJS dist/index.cjs.map 36.81 KB
+CJS dist/cli.cjs.map   74.41 KB
+CJS ⚡️ Build success in 93ms
+ESM dist/cli.js       28.38 KB
+ESM dist/index.js     13.82 KB
+ESM dist/index.js.map 36.78 KB
+ESM dist/cli.js.map   74.30 KB
+ESM ⚡️ Build success in 93ms
+DTS Build start
+DTS ⚡️ Build success in 288ms
+DTS dist/index.d.ts  405.00 B
+DTS dist/index.d.cts 405.00 B

@@ -1,0 +1,147 @@
+
+> openpresentation-workspace@ test:registry-ecosystem /private/tmp/opf-publish-ready-20260915.kFIiNe/opf
+> node scripts/test-packed-ecosystem.mjs --registry
+
+npm warn Unknown env config "npm-globalconfig". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "verify-deps-before-run". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "_jsr-registry". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+added 82 packages in 3s
+Installed font preparation passed layout, edit/undo, SVG/PNG, editable PPTX export and heading reimport.
+Nine exact grouped faces preserve measured bytes and physical style links; overrides, aliases, duplicates and approximation controls pass.
+7 payload slides use all nine real physical font styles; deterministic output, source, reimport and provider controls pass.
+Packed consumer: core, editor, SVG, measured fonts and PPTX passed.
+npm warn Unknown env config "npm-globalconfig". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "verify-deps-before-run". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "_jsr-registry". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "npm-globalconfig". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "verify-deps-before-run". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "_jsr-registry". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "npm-globalconfig". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "verify-deps-before-run". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "_jsr-registry". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "npm-globalconfig". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "verify-deps-before-run". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "_jsr-registry". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "npm-globalconfig". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "verify-deps-before-run". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "_jsr-registry". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "npm-globalconfig". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "verify-deps-before-run". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "_jsr-registry". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "npm-globalconfig". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "verify-deps-before-run". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "_jsr-registry". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "npm-globalconfig". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "verify-deps-before-run". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "_jsr-registry". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+✔ complete code parts preserve exact filename, language, body, whitespace and hard line boundaries (6.718792ms)
+✔ shorthand, empty source and absent metadata retain their source and generated-label distinction (1.533ms)
+✔ long language labels and filenames are measured within their cell before allocating the body (9.139542ms)
+✔ wrapped whitespace and graphemes retain contiguous source offsets, including CRLF and blank final lines (2.654791ms)
+✔ tabs use measured space stops and never send control tabs to the font-width provider (3.04225ms)
+✔ readability floors scale once and body shrinking preserves all code content (0.712208ms)
+✔ irreducible body and metadata failures remain explicit; strict mode does not return partial output (10.691ms)
+✔ invalid inner boxes never become invented one-pixel fits; malformed options reject (0.948375ms)
+✔ font trials stay bounded independently of canvas scale (12.686125ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 294.204083
+✔ accepted code uses rounded cells and preserves body compatibility without repeated explanation measurements (8.794167ms)
+✔ candidate penalties include complete code metadata and charge overflowing leaves once (20.687792ms)
+✔ strict ancestors reject code metadata paths and cannot be weakened by descendants (237.260417ms)
+✔ explicit code placement and weights remain authoritative even when metadata overflows (13.151458ms)
+✔ pagination preserves exact code bytes, metadata, ranges and floors across wide and portrait slides (400.094208ms)
+✔ irreducible code metadata rejects pagination even after earlier content or with an empty body (191.497792ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1133.190875
+Shared code PPTX: 8 decks, 37 accepted native lines, 8 tab stops, six whitespace imports, strict failures, 132 XML-boundary rejections and valid character boundaries verified.
+Code provenance: exact source/metadata, native edits, ordering, empty/Unicode values, five damaged groups and edited generated label verified.
+Shared code SVG: 10 accepted layouts, source/whitespace/trace preservation, no extra measurement, strict/tiny-cell rejection, 132 XML-boundary rejections and valid character boundaries.
+Actual shared code browser: 12 wide/portrait cases with source preservation, accepted tab positions and contained glyphs.
+Code canvas: wide/portrait source editing, metadata, CRLF, tabs, pagination, undo, offline export and bounded reimport checks pass.
+Installed code: registry source, pagination, metadata guards and actual offline browser workflows passed.
+✔ complete quote layout preserves source ranges, requested/resolved styles and legacy readable geometry (1.673542ms)
+✔ shorthand and empty metadata preserve schema paths without an invented footer (0.408875ms)
+✔ body and footer share available space before shrinking text or changing the outer arrangement (8.047625ms)
+✔ long footer, body/footer collision and strict rejection remain explicit without source truncation (65.416917ms)
+✔ tiny cells retain invalid available dimensions and never measure an invented fitting box (0.219625ms)
+✔ explicit readability floors are respected after scaling, including above nominal footer size (0.169292ms)
+✔ invalid content, geometry, scales and policies fail before reporting a usable layout (0.170334ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 142.458333
+✔ accepted quote geometry includes all parts without changing source or re-measuring for explanations (3.096958ms)
+✔ automatic candidates account for footer fit and choose the arrangement that keeps it readable (5.243ms)
+✔ strict ancestors reject a quote body diagnostic below the leaf path (120.98225ms)
+✔ strict path matching respects component boundaries rather than numeric prefixes (105.233708ms)
+✔ pagination preserves quote body, repeated metadata, ranges and the accepted readability floor (805.08575ms)
+✔ irreducible footer overflow rejects pagination without mutating or returning partial content (19.053416ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1160.224625
+Shared quote SVG: 4 exact accepted layouts/styles with no extra measurement, reasoned overflow, strict rejection and no tiny-cell omission.
+Shared quote PPTX: 4 wide/portrait decks and 6 native lines match accepted geometry/styles without re-fitting; reimport and strict/unusable-space rejection pass.
+Packed quote editor passed: accepted one-page policy, source preservation, actual fonts, SVG/PPTX, undo/redo and editable native text reimport. Quote semantics are not reconstructed on import.
+Styled native table export passed: merged grid, unique text, full covered rows, colors/alpha, border dashes, zero/fractional padding, alignment, scaled row geometry and determinism.
+Native merge perimeter regression passed: continuation and neighbor edges, transparent dashes, dotted top, hidden bottom and scaling.
+Styled native table import passed: direct fills/alpha, borders, margins, alignment, dense merges, repeated conversion, header crossing and text-preserving malformed-merge diagnostics.
+Native conditional table borders passed: outer frame/interior grid, bands/edges/corners, partial/direct overrides, theme lines/alpha, missing-reference masking, repeated conversion and diagnostics.
+✔ short table rows preserve baseline geometry and missing cells (2.476125ms)
+✔ wrapped and rich multiline rows grow into available space (2.792625ms)
+✔ constrained tables consume spare row height before reporting real overflow (0.819333ms)
+✔ readability settings and mixed-font metrics govern row fitting (0.678542ms)
+✔ pagination retains complete multiline rows and repeated headers (146.494917ms)
+✔ mixed-size table paragraphs reserve the native uniform line spacing (0.274583ms)
+✔ spare height in short rows is removed before any font shrinking (0.165ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 255.013791
+{
+  "cli": "0.8.0",
+  "opf": "0.10.0"
+}
+{
+  "valid": true,
+  "output": "/private/tmp/opf-publish-ready-20260915.kFIiNe/opf/artifacts/npm/registry-consumer/registry.opf.json",
+  "sha256": "18ab7ddf9fbcda239b8d3f1317bb37758d080c8d8ea85a1021af9be52ce29d6a",
+  "warnings": [],
+  "agentSkills": "npx @openpresentation/cli@latest skills install"
+}
+{
+  "valid": true,
+  "errors": [],
+  "warnings": [],
+  "schemaName": "presentation",
+  "sha256": "18ab7ddf9fbcda239b8d3f1317bb37758d080c8d8ea85a1021af9be52ce29d6a"
+}
+Packed consumer: TypeScript declarations and browser bundle passed.
+Packed browser harness built: artifacts/editor/packed-canvas-tests.html (serve alongside demo fonts.json).
+Installed styled-table browser harness built: artifacts/editor/packed-styled-table-tests.html. Open it to verify real pointer/keyboard interaction.
+Registry consumer passed for all five exact release-plan versions (no local package overrides).

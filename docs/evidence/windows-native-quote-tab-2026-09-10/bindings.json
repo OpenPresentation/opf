@@ -1,0 +1,10 @@
+[
+  {
+    "generation": "raw/quote-coordinated-node24-01/generation.json",
+    "verifiers": "verifiers/quote"
+  },
+  {
+    "generation": "raw/quote-coordinated-node20-01/generation.json",
+    "verifiers": "verifiers/quote"
+  }
+]

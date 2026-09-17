@@ -1,0 +1,162 @@
+{
+  "runs": [
+    {
+      "directory": "raw/metric-candidate-node24-02",
+      "node": "v24.20.0",
+      "generationSha256": "911afc658088a0c32a22a010ffa6fe8a60e013d33868dd68988ff8504028bc12",
+      "comparisonSha256": "15908edcac66b1307641d93b6c335e11dc9248422b530b5996bf6571cc8aa0f7",
+      "imports": 144,
+      "gates": {
+        "visibleInk": true,
+        "characterBounds": true,
+        "tabPositions": false,
+        "interPartInk": true,
+        "isolatedMaskCoverage": true
+      },
+      "tabOutliers": [
+        {
+          "id": "metric-1280-left",
+          "slide": 7,
+          "role": "label",
+          "text": "\tBefore\tAfter  ",
+          "errorPoints": 0.0226554870605,
+          "actualOffsetPoints": 16.299999237060547,
+          "expectedOffsetPoints": 16.27734375,
+          "sourceStart": 1
+        },
+        {
+          "id": "metric-1280-left",
+          "slide": 8,
+          "role": "label",
+          "text": "\t  ",
+          "errorPoints": 0.0226554870605,
+          "actualOffsetPoints": 16.299999237060547,
+          "expectedOffsetPoints": 16.27734375,
+          "sourceStart": 1
+        },
+        {
+          "id": "metric-1280-center",
+          "slide": 7,
+          "role": "label",
+          "text": "\tBefore\tAfter  ",
+          "errorPoints": 0.0226745605469,
+          "actualOffsetPoints": 16.300018310546875,
+          "expectedOffsetPoints": 16.27734375,
+          "sourceStart": 1
+        },
+        {
+          "id": "metric-1280-center",
+          "slide": 8,
+          "role": "label",
+          "text": "\t  ",
+          "errorPoints": 0.0226440429688,
+          "actualOffsetPoints": 16.29998779296875,
+          "expectedOffsetPoints": 16.27734375,
+          "sourceStart": 1
+        },
+        {
+          "id": "metric-1280-right",
+          "slide": 7,
+          "role": "label",
+          "text": "\tBefore\tAfter  ",
+          "errorPoints": 0.0226440429688,
+          "actualOffsetPoints": 16.29998779296875,
+          "expectedOffsetPoints": 16.27734375,
+          "sourceStart": 1
+        },
+        {
+          "id": "metric-1280-right",
+          "slide": 8,
+          "role": "label",
+          "text": "\t  ",
+          "errorPoints": 0.0226440429688,
+          "actualOffsetPoints": 16.29998779296875,
+          "expectedOffsetPoints": 16.27734375,
+          "sourceStart": 1
+        }
+      ],
+      "maximumTabErrorPoints": 0.0226745605469,
+      "rasterOutliers": []
+    },
+    {
+      "directory": "raw/metric-candidate-node20-01",
+      "node": "v20.20.2",
+      "generationSha256": "59df5cce474a7325fc15d300c93742e8ee1ed45dd4924acd6cae73b08ec98b3f",
+      "comparisonSha256": "5fca4dab895aac050cb4c0855046bfa275eca08857f7234079b4e4f39266003b",
+      "imports": 144,
+      "gates": {
+        "visibleInk": true,
+        "characterBounds": true,
+        "tabPositions": false,
+        "interPartInk": true,
+        "isolatedMaskCoverage": true
+      },
+      "tabOutliers": [
+        {
+          "id": "metric-1280-left",
+          "slide": 7,
+          "role": "label",
+          "text": "\tBefore\tAfter  ",
+          "errorPoints": 0.0226554870605,
+          "actualOffsetPoints": 16.299999237060547,
+          "expectedOffsetPoints": 16.27734375,
+          "sourceStart": 1
+        },
+        {
+          "id": "metric-1280-left",
+          "slide": 8,
+          "role": "label",
+          "text": "\t  ",
+          "errorPoints": 0.0226554870605,
+          "actualOffsetPoints": 16.299999237060547,
+          "expectedOffsetPoints": 16.27734375,
+          "sourceStart": 1
+        },
+        {
+          "id": "metric-1280-center",
+          "slide": 7,
+          "role": "label",
+          "text": "\tBefore\tAfter  ",
+          "errorPoints": 0.0226745605469,
+          "actualOffsetPoints": 16.300018310546875,
+          "expectedOffsetPoints": 16.27734375,
+          "sourceStart": 1
+        },
+        {
+          "id": "metric-1280-center",
+          "slide": 8,
+          "role": "label",
+          "text": "\t  ",
+          "errorPoints": 0.0226440429688,
+          "actualOffsetPoints": 16.29998779296875,
+          "expectedOffsetPoints": 16.27734375,
+          "sourceStart": 1
+        },
+        {
+          "id": "metric-1280-right",
+          "slide": 7,
+          "role": "label",
+          "text": "\tBefore\tAfter  ",
+          "errorPoints": 0.0226440429688,
+          "actualOffsetPoints": 16.29998779296875,
+          "expectedOffsetPoints": 16.27734375,
+          "sourceStart": 1
+        },
+        {
+          "id": "metric-1280-right",
+          "slide": 8,
+          "role": "label",
+          "text": "\t  ",
+          "errorPoints": 0.0226440429688,
+          "actualOffsetPoints": 16.29998779296875,
+          "expectedOffsetPoints": 16.27734375,
+          "sourceStart": 1
+        }
+      ],
+      "maximumTabErrorPoints": 0.0226745605469,
+      "rasterOutliers": []
+    }
+  ],
+  "fixtureAndRuntimeBytesIdentical": true,
+  "scope": "The new coordinated outline/font graph clears the retained native ink overflow. Six tab-position outliers remain, so full fidelity fails. Initial original-baseline evidence remains separately immutable."
+}

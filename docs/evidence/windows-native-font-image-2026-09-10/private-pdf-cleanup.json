@@ -1,0 +1,26 @@
+[
+  {
+    "sha256": "7fa57d9f924a43bf43c78c7d3cedd219d7659da5a39cea938006b59e9fe7154e",
+    "file": "tab-native-created-03/private-native-proof.pdf",
+    "scope": "Owned temporary PDF only; extracted measurements and rasters retained",
+    "deleted": true
+  },
+  {
+    "sha256": "14bc2c9ff14f9c3dd2845fa856b5380931b3f0d15cb0e78f7fe1f8bab9b81d20",
+    "file": "font-native-node24-02/private-font-proof.pdf",
+    "scope": "Owned temporary PDF only; extracted measurements and rasters retained",
+    "deleted": true
+  },
+  {
+    "sha256": "ded146e2129a109af380cc34bf44bb425349fc0cae04b9e9cf288bcc91de1c0b",
+    "file": "font-native-node24-03/private-font-proof.pdf",
+    "scope": "Owned temporary PDF only; extracted measurements and rasters retained",
+    "deleted": true
+  },
+  {
+    "sha256": "b22b01f5394f84a84254bc8e8420523d2e07050c0082dc953e49fe138166532f",
+    "file": "font-native-node20-01/private-font-proof.pdf",
+    "scope": "Owned temporary PDF only; extracted measurements and rasters retained",
+    "deleted": true
+  }
+]

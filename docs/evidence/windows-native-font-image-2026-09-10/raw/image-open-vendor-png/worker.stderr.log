@@ -1,0 +1,8 @@
+PowerPoint could not open the file.
+At C:\Users\micha\.codex\worktrees\fd3f\opf\artifacts\windows-candidate\opf-pptx\artifacts\image-open-control.ps1:13 
+char:16
++  $stage='open';$owned=$app.Presentations.Open($source,0,0,0)
++                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (:) [], COMException
+    + FullyQualifiedErrorId : System.Runtime.InteropServices.COMException
+ 

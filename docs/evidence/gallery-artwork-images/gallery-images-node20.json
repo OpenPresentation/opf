@@ -1,0 +1,5215 @@
+{
+  "node": "v20.20.2",
+  "browser": "152.0.4191.66",
+  "verifierSha256": "25a8f1f0087c616ac8d4cb50b554352bd9e91f669dfac76c57dbbf157c1cbc1c",
+  "runtime": {
+    "../packages/javascript/dist/examples.js": "c69ccdcfaa0c4157f27174a3814ac3b6a1874440029b02d27a7fc971fc05fe1a",
+    "../../opf-render/dist/svg.js": "a032b9b5d3aa02330e3a40eadcbca2b00bf01489a6bc7f3741d362fb9e11f748",
+    "../../opf-pptx/dist/index.js": "f63583de7e5c3d80b4020871ff129086f9a2f68b6eca51a66fb9617bf94ee8a7"
+  },
+  "results": [
+    {
+      "file": "examples/gallery/business-functions/compliance-readiness-review.opf.json",
+      "sourceSha256": "b47b3edcb38f53cde1e5709d52450122171d6bda94dcdcb6385a013197b8dd43",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Tandem BioSystems logo",
+          "svgSha256": "11c3a610cbfe0ea323b786940add1b35fc143e4aa64d69a644783757b86903ca"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Tandem BioSystems light logo",
+          "svgSha256": "63def7d74d8ada69cb26b50a8f8cf9627c2498741d8c9f3c66e8e15517270af3"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Tandem BioSystems icon",
+          "svgSha256": "1d42972c484368a10cd080f3ca113db6ef0684beddd5c706fc21a632da9018a7"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Compliance background image",
+          "svgSha256": "8327af8dae067a618170c9fd6243549bb6f631d8196a6a5728202fdafd3aea48"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Tandem BioSystems watermark",
+          "svgSha256": "c3b72935df63935c158601bbe4648e39edb21a523fe4536f1531ba45f3be490b"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "d9efe59590e78f2a9ef8ef255a207bf77cf485b8c133df6bbefc4de42572c195"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "7e9aa22a61f9034abd0de5176f3d0d906d99449510b020a1903ec5eb9e08f008"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "483d0c1cce1bd72fb2ca30629321b47154c6b792aaf388b34dd6f65d9c972e2c"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "7b214a426a410087d5cbbef7ad2d044428f578b1af60040abf5b33926c21a5f4"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "793e29bda913bc3ab247efdf4f135129e3cf459a3e94d31fc793f7fb6416b06d"
+        }
+      ],
+      "pptxSha256": "9dee1b6d08cdb3d37d29703092d18ad5a778cc25968ad2c1e46bf7f6c67b47e4",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/business-functions/contract-cycle-time-brief.opf.json",
+      "sourceSha256": "78577622162c5cf1884e845ee42a0277f7f840001b469686645b4e44b728b368",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Juniper Legal logo",
+          "svgSha256": "3c7b7c608b856da139ff85c50445f601113083be4652eb718abcdd5db820b56c"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Juniper Legal light logo",
+          "svgSha256": "a1f1fb46f948612213766d21a3df490c4c35992d72cca374efa5ad613a40aa20"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Juniper Legal icon",
+          "svgSha256": "587d647e5867850d47d6059caf8b544aecf6d1914f02b3255138e287cd02b18b"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Legal operations background image",
+          "svgSha256": "2b13ec3270a3f767fff2ffc74b15dc11377992ff0cda9bb0179bb98b119fafbe"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Juniper Legal watermark",
+          "svgSha256": "4f8f5ac3ac5822e075bfca12a127f080a469a7a6e1fb08fb5dce9ef1d1d2b5fd"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "2d2cf74811b3e6997e2f5bda690b4da6395508919e59f7c0ea73b3c9b1744456"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "4aadd2d20cf467104717a9d230385892f0679ad4528d114890e9120f8e08cbf4"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "357e05d4ba4eacaa8d4cd5af031f1c20e58127131122b0a3760f686da0f9ee18"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "7deab8b22ef124d2e69c3e171ab8d112860c75de7e093c16c1a797cfbdb367fe"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "b2652cf8e8c7480a7de1992fe73649805dfd26e9f8a693044fac807040c22342"
+        }
+      ],
+      "pptxSha256": "5bbaef5c83834b1259e8905c563649184aef1a554f0d6ff586ae5f10b5eea49f",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/business-functions/data-platform-migration-plan.opf.json",
+      "sourceSha256": "38943adaee30890ea3ea42a9f4a1aa27bc3026d755cf664ad4093df6fb19808a",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Fathom Retail logo",
+          "svgSha256": "c016c183ca8600933ac41e8e0b8facc7299243e3a972d9ac360c742d33272265"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Fathom Retail light logo",
+          "svgSha256": "22562e24e4d17729cdd69ba236d43bfc3ad4053806225ef986aa92a3bcef9793"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Fathom Retail icon",
+          "svgSha256": "358a7b27e7db10c032d55bb5825ee3aa79ae9eaef099406719c1ddb2394db631"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Data engineering background image",
+          "svgSha256": "bbd1138b2ccd18ae3b60a5972655ce05c9663432a4ecd8883aa4fb8756c5fd0a"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Fathom Retail watermark",
+          "svgSha256": "2fbeeb4c4cf49187a66d38ae935c88ffc8f5dec093caa65b2c5fefff50bb66e3"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "06468d4cff6b8b6d2a7c536097431ba1c5ee46e4d23dea886bcdcd74b0f1c41e"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "d387aa3c23f43abe7b6e74d806358f8a76db28f1a1c444cb6fed2a379f7e66e9"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "4abdff1b227aede3081f60026370580b7977036a9f81546aca8c4c04b13ca889"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "b965047fbaee9e8cb719670bd84135946050df37bee791b764a34c90fca692af"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "39a974d89f6d64b5bebfbe36a5fb32a96807d679ab24ba883bfc7aa9f47219a4"
+        }
+      ],
+      "pptxSha256": "22934278e16310c62bc75ecca8e3250667b38b71e341e1eb044b5aa18400ea1f",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/business-functions/defect-escape-reduction-review.opf.json",
+      "sourceSha256": "9e37993448694e1fa03cf9d559cbfdfd8bf7b27a497c9401e5f0a465dcc48bad",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Pioneer Instruments logo",
+          "svgSha256": "50c90868521b015d1f7a65fea0d058531fe0f9b4ca699138ddda30120182890c"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Pioneer Instruments light logo",
+          "svgSha256": "c7f71f590762536ade17111ba7fc7aa20de12bf46ab707e883bcc4a0da783fa2"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Pioneer Instruments icon",
+          "svgSha256": "1fd88f5442e82f20888a7f8955fef756d55d5ac4ed2c35b8df00e6478649b5c8"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Quality assurance background image",
+          "svgSha256": "9e9b946def9dae521f99f1cb0b84f9ceb29fce05e0abebb683bfed588e48c217"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Pioneer Instruments watermark",
+          "svgSha256": "a4dbc67a7b6458887db8fa4e8da168bc4ecc1acd808191632da5bfbdfc61a2e9"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "4a694209709d3646dcd49985a0f2b4a4ea937d8ede220338bc00e04b9d6f437d"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "0f694d58009386c7b2bbe42629346ef953dcaa4fa60e83c70bab560d136068be"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "e0bf7e864e9b4925ea2cd68f17c17eae9dba5d1d7bd8b71634f3cf6671d1f96c"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "0bac281100f1f4689ed271fb8bab191070a78548e88e35c209fb599239f1d1f7"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "9274a0ad5a78de3f76e52ec589d095502194ef70cdb85b72d8a139269c050190"
+        }
+      ],
+      "pptxSha256": "43d15360add75f65ffac3a1423c9f637bc5549251482cd4965e468ca4933c802",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/business-functions/demand-generation-campaign-brief.opf.json",
+      "sourceSha256": "e00c8a994d8f86dcf8115e5d83cf827b81162cc3f740be2dd0ee289fe8cdbc09",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Brightpath Analytics logo",
+          "svgSha256": "27030627ebf9c487b793d7249cc56d82e92184a43d6fd8ac729a7eac174790e6"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Brightpath Analytics light logo",
+          "svgSha256": "c0255ff985df0bcfaa7fc2601535f1fd35f5eb2d0c80f6f8f83a52cfef773dd3"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Brightpath Analytics icon",
+          "svgSha256": "8961ae683f49e6b0416dcf94781425650ce79171ddafb749e3bd8a61be184bb8"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Marketing background image",
+          "svgSha256": "634dc675d8dd8b4863dfdc94914205ea66bd3a360e7a9cafa7139e4b9cac372d"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Brightpath Analytics watermark",
+          "svgSha256": "0b7fa91c3ba124649495a4e252baf34ceda786d0f544a63e1c29e72bc66ea80a"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "2d2cf74811b3e6997e2f5bda690b4da6395508919e59f7c0ea73b3c9b1744456"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "4aadd2d20cf467104717a9d230385892f0679ad4528d114890e9120f8e08cbf4"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "357e05d4ba4eacaa8d4cd5af031f1c20e58127131122b0a3760f686da0f9ee18"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "7deab8b22ef124d2e69c3e171ab8d112860c75de7e093c16c1a797cfbdb367fe"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "b2652cf8e8c7480a7de1992fe73649805dfd26e9f8a693044fac807040c22342"
+        }
+      ],
+      "pptxSha256": "f90928c0dd6b8dccea3dc286b9b6c94561094017bcf302ccf20dcf4404f1dd47",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/business-functions/engineering-capacity-planning.opf.json",
+      "sourceSha256": "6dd96f63737a7f388629487067e37bb8d71e63e096cb8e095b33191370f11da7",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Relay Cloud logo",
+          "svgSha256": "e26455b1acddf4d4f395196064272e64dfa760842cf06e5eaf562abe5e3bfab8"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Relay Cloud light logo",
+          "svgSha256": "e3d469b720025f4fb069a6d214517a37318de854bc0d6123c9db65c4a5b42e37"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Relay Cloud icon",
+          "svgSha256": "c48dcea0b7b150008ec87c773932b93e05306a3e3af831587c6b4bb4eaad2dc2"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Engineering background image",
+          "svgSha256": "242419cb7f8ec2581292946f89b54763dff1368382fb9fe53ef0e9e7d9a3bafb"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Relay Cloud watermark",
+          "svgSha256": "111562734a11073a384646ef808512820c896e8aa96a5946ee036ada8d0b8b42"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "cc22f1136336f88456b9647ba4180de544d86263f7d97732d69e7774fd8972ff"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "6f03ccf702ebe053efde28a21b8adf8b2568c028f44a12b28d50125813bae2b2"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "ddb2e031b59fe7ca7d62ae70872d2d4933aee539b887170d842066aa973ebf9a"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "bf4850aed8478fbcbb537dcd8378bb1d13bdfc65324212e22d401b1a5e892b32"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "f1a8ba45a0828beaf20fd36845ba84da1dc79485570ae1e0b378eebb53a96d86"
+        }
+      ],
+      "pptxSha256": "c9a808d86376d4dea5ae673364c983022ef67e0476b78dd41381fee6a3d713a2",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/business-functions/enterprise-account-expansion-plan.opf.json",
+      "sourceSha256": "0817d08960aa2422e651c92f67d4266e3f97c80626f882305ba3409343dab32a",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "AtlasWorks logo",
+          "svgSha256": "1c7d29dafa5ffa9556a8f163a36fcba89c95f7ee37eedd7f97412456512297f8"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "AtlasWorks light logo",
+          "svgSha256": "739fb4bb3dec5e2fd960fefe6621b1ecbf9c91a95c57070c7dbd76a8a0e2b1b7"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "AtlasWorks icon",
+          "svgSha256": "d2f5aa94519c3b726b531a00ad75ad5f8dfc8546034bae93af6444c33a6740d7"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Sales background image",
+          "svgSha256": "f449dc3c9bd99d7a777b30b96df3a75792e464176a197f80105e29d2f5b81fc0"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "AtlasWorks watermark",
+          "svgSha256": "506e52cd0e09c2f4246ca48fdff1714431f732200106cdf3b6bcba51509130ec"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "cdafb07e9567fd0badf1b788c2343d4444272780eca7415a82fb924a95e2c5c5"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "1c7d0e067336379975e726a48384c370667e216dcde1d7ade5bfef89b76b00df"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "29282b2b4db70ee8690a89cbb4371a86038137a855ba6bc7b775bd444676b058"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "80a233630f6b005872c5b16690e649726706007e4739dd4752e22b0ac926ee98"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "d6fd79775acce073852a924c9d6d3cf781a63432c50102e941cb366e422f02c1"
+        }
+      ],
+      "pptxSha256": "d418eb6e7f463b23328b2ef39a6a10e5493b36afdea3e4a4423a17b467764157",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/business-functions/field-enablement-certification.opf.json",
+      "sourceSha256": "432b7b66fe152cd7804dfec38fcbc6a926ef9bc9ee6ba36bdd675b13713eed44",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "NimbleOps logo",
+          "svgSha256": "e82b6c80183002e41a5a76c9565e84f7c70bed57b8344660a5056d7bbc586a75"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "NimbleOps light logo",
+          "svgSha256": "728266853a3ab12eddbb814768bc4e57e48cf2ac429815488a55f9112fc30fba"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "NimbleOps icon",
+          "svgSha256": "0eedd1fa50f31f7b1d3449bf023152a98b631d3be8156e1ccf460b160c645f75"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Training and enablement background image",
+          "svgSha256": "50dc8104444371101e9ac91fd97d20bff4bbaa599610a263d9613131998d8cc3"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "NimbleOps watermark",
+          "svgSha256": "8badccba5c8bcf40dce3ef50178d9f066bd5d7c425a5ff87c24d501d3610804b"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "2f4d8d05b56d025c6ffc702589fe5c591880779c4509257e4f35fcc7bf5f5705"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "8535c1756550884f7d5edde8e80bae83a1cb486c77de77c905ef68fe60ebdb4f"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "8c8487275a6cfd135506876d70fd2c996eb3c2238d40541c10f4131b0d79d2ff"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "a4733ba19acb52dcb02a907165935f4c97500a483ec7808ccd1ec6ea4b0c1018"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "d5691f2095717486c450407512af2201208af07af5f39db59c00cae5e46cf6a2"
+        }
+      ],
+      "pptxSha256": "75ae5dbc1701d6b41c9af833919dcaf96c56d2dbe9baedeea9cc98e5bb6347ac",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/business-functions/identity-incident-executive-brief.opf.json",
+      "sourceSha256": "3070a2b60bf9d1e3ca9e66420b2af1a74040240a67b42f69af9a70cb5e06f5f4",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Sable Systems logo",
+          "svgSha256": "796b277f35eb0714a86d717f74c0f98455fc72c31ec875348f70f05091ca8b6e"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Sable Systems light logo",
+          "svgSha256": "0065240e1fedb947d212f56e0d9c13fc02516ae0afe19f35a75cb6b64210780a"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Sable Systems icon",
+          "svgSha256": "d8bd01a584ec107ef70e23d995a648605c8950af0147d6753a40ecf42021ac07"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Security background image",
+          "svgSha256": "26f7c2bff715ec3850c552356100cd7e3a188314a4811f9b9e89ada081a1b608"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Sable Systems watermark",
+          "svgSha256": "509a2aee0048f09d5988d8c30574f3713a43bc594d7c3330dcbf5d44cab6cdcd"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "6c1f38e6781be39e06176f3857acc928f6c449538a8e77c0a57a55d050d42eb4"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "53238b44cf69c3687304a23577e9ae6549582ba582dca57b821f310701837d5a"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "8d8b8bb381759ec74b260e8cb714f80ddb2b9868d8ad1d954efff94f6d4d7dd9"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "0bf9506f4fade02a5e431df866cb5d8d463a75c1554ada55f1775d4d44b6b584"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "56a5bd1402aa1cfa8a4821fecc3272e53f5ce5d6a43973430cd56a001e47f9ab"
+        }
+      ],
+      "pptxSha256": "104b823c141a33a24e291f0d9f2f33715227794fd220dc2feefe99038b402864",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/business-functions/investor-relations-update.opf.json",
+      "sourceSha256": "8561e30e561971b20cd5c37d7fb93222dc7367980079ead7573c4367fcb3a007",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Asteria Robotics logo",
+          "svgSha256": "0aa059f69cf139dad3ba9c3690b6ccd9f6cabca1508d1d778691417d04116540"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Asteria Robotics light logo",
+          "svgSha256": "48fb98ded151b1e23a6c8bbd29298a3a27592ef99ec65dc6542594af4649bbde"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Asteria Robotics icon",
+          "svgSha256": "2a11fdf0527fcbb59302013820339e6a51ea189daa0003164d47219bfbc05e4f"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Investor relations background image",
+          "svgSha256": "9876422f965ee154f133b79dd9d89a07dba2864d6d43673f2cbaef6b9976b449"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Asteria Robotics watermark",
+          "svgSha256": "ea1cb216078e67dbaefc60d80291b05db7bc93b85e73622c07c18eccb705ea81"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "608cf5190b4ce06180486e3108e19c564977f836fd531116ebb9baf2c3706e94"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "bc9c55febd73dfddef08fdf99eeede1e47a6efaa844a407f1e2aa9a6bc846f1a"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "02c89e72e72db4870f3c7dc6069091e59fedccc44a5b074da2b17f981ec1a86b"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "b95a9663ad06cd467a0f6b0d4d7437cdaffa261fe0acc67ba926459aabe04c81"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "7e241a53498d0f16318319a41097b35c599404828d99c7d681f28219afbd5191"
+        }
+      ],
+      "pptxSha256": "9fed38326abf21bcaf4e0018160ac95bae0aa64bfeba9738fb613e54035150f8",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/business-functions/model-governance-review.opf.json",
+      "sourceSha256": "725e32d852caf4de63328d75c0c48c255f48434a5cf708c95d8426b26aebea92",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "ClearLake Data logo",
+          "svgSha256": "753680bee7d7a3c307bf04f5fa770af372d16582ce91c152453a656b3656d491"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "ClearLake Data light logo",
+          "svgSha256": "5961a275cc28ce4eea63416d65424741e0d4158c5a3fbc43af3c190a0e71b5b1"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "ClearLake Data icon",
+          "svgSha256": "a336f80143c57206ed0f3d1962d70287700d91b5bac628c4c5573e66a4164dca"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Analytics background image",
+          "svgSha256": "cb2c73f5b0feba55576943447f2b8565a3af671c614990cb364aa41d929a9246"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "ClearLake Data watermark",
+          "svgSha256": "c73c1b2ca0f88806b048017384c2a85ac73ebbc4f7e8d92e3fdc580850e4232a"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "8384f92f0f657b5cb28bbfad74bdaa5a7c7f88e6b52c82b6f8d09062a2b81e72"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "1c7d0e067336379975e726a48384c370667e216dcde1d7ade5bfef89b76b00df"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "fcc653df33567ccad975b04c1e3a1eba44b6f01db60028a31387c6fbd04982f9"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "1d609047ea01ff364be4eff1892381f69ffca12d3098ee5db14a079ed0d5c247"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "f24ebe0d1ce2d815a2cb93bb497dddc6cbd1ee7c94c2b0b76a67588bbcefbc71"
+        }
+      ],
+      "pptxSha256": "6c393e7dff0c9d53b6998bd9e9abb047ec9bd51402f695b57f2e1fd5638cd548",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/business-functions/pricing-and-packaging-decision.opf.json",
+      "sourceSha256": "1663afafbb8485add608fa95c17232392d97f85d6b9b718e47a278e7694140f0",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Northbeam Software logo",
+          "svgSha256": "74315de08cadb365bcdfe2ff7dbbc428824d7bae649a664012674ad9c4a27063"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Northbeam Software light logo",
+          "svgSha256": "0c335ff3f0341227a8a023796dc5ce8ba432da810ff907d7b1c88dd30118a059"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Northbeam Software icon",
+          "svgSha256": "4bc22dadd3478f8768bef54e4b5a4478348c4182e070fd8032b87d2372fa7b4a"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Pricing background image",
+          "svgSha256": "a8afa861710b9cf8895393f0cbefd6b09b9d7c284730959e78589949d6f37afd"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Northbeam Software watermark",
+          "svgSha256": "6e6d46ece69870e9f52f4164d4e424d4317a45ab864beae78aa4623c1f066a8b"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "1ae2229e4c259a910e3e0bcfbb6711991005902e86437a9fd4792df6eb9a5fd5"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "9df0674531bcf445e6a462c900131174601021ed52ad37910f50e2425ff848ba"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "f3a02c3e3a5a1f0684a0a16a3bd24d15126cf6780ecfde86d82ffdffd863931a"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "ba7b853be08009e8b3c7fb27ebeb0bb8b3f21c690a6cd95cfe31cf6ffea548cd"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "15967e0c0f4f03a795bca2c32d744e6beeba7052be77b526f4422d7ed8d0a612"
+        }
+      ],
+      "pptxSha256": "493e19b832393870e553d56a506d59447a7bd12394525eed66599f39f38bbd3d",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/business-functions/product-roadmap-decision-review.opf.json",
+      "sourceSha256": "f8c5a1f2f52007e4488502e7b470abdd590054b36f236f3abe52e9ee4d9dc363",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "LatticeLane logo",
+          "svgSha256": "47031678b0c842eef6a99413bebcc2eb0415c60254e70d7429608b5cc618e224"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "LatticeLane light logo",
+          "svgSha256": "908082770c62ac9799f4324f9221e69b25b4587fbab0dd993834c450a7922e22"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "LatticeLane icon",
+          "svgSha256": "8c0809223b3638d50ec929848a9490d721ae7b4d33b90f990692f0a018e81700"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Product background image",
+          "svgSha256": "91f25c2c1c4d17fd16a808779a968bf5d5ca1ac02e752d2ac8a2bb80cb9536e5"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "LatticeLane watermark",
+          "svgSha256": "95ce2c6b50df82086e7e06ac1acf527ae82766f283d89dfc444aed5fc871499e"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "26a2970c891595d00c1d4e33b0c9e57825aef8fa1eb1175e2fff5ce040ad8515"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "9df0674531bcf445e6a462c900131174601021ed52ad37910f50e2425ff848ba"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "36a9fca062665da6c71dd3ca6ae15d4d255dcd5baf89714d0d8f46e8ebe49a13"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "efa5f2a871643748aa9658c1798cf16e7e46e57941a88ad48e051ac6f2578d85"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "15967e0c0f4f03a795bca2c32d744e6beeba7052be77b526f4422d7ed8d0a612"
+        }
+      ],
+      "pptxSha256": "9468bf5dde5e3ce290e73a60023dd8d6a50cfe3c80d80b4f55035153c55be7be",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/business-functions/renewal-save-plan.opf.json",
+      "sourceSha256": "afe0f86f87d97c0dc610754c1fb6f427db4f5b67fde689f8f64778a9344150f8",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Evergreen CRM logo",
+          "svgSha256": "0af650d0671fa1111835a571e850cde3e35d2e31b02fa4a04ce6e4ec123cf92a"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Evergreen CRM light logo",
+          "svgSha256": "5634cc0e5b7660ef4237f83557305251fc88342f1a0a1ab6401a658d42903e8d"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Evergreen CRM icon",
+          "svgSha256": "e3336635d427c136088b0e78e17e42e900aa8ed7ac2ef2064794d3301b1dcd0d"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Customer success background image",
+          "svgSha256": "d8552862e9774a9e91b70eb541f44870464c551af726c1dbc54cb7b446451938"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Evergreen CRM watermark",
+          "svgSha256": "7a7b3bcd2eed54d69faf0541b53522ff52da6db4c212b0db7eb96b1ae6b45cea"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "ed760c1357147396d0f60f3fcb0251da1aa5c6ab90a609b716891ca46c48ac24"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "c77e813e04cc275fe5e9928a59ba570300bdcfb495af8141a8cb4375330f71b2"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "8e8909a7f4a6a9ce97d9c5add3ce997f11017de2efa262a7644301db75075304"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "5c691feb99b69cffdf4a22d29fa268204baf6e58f42901f544453a116b73cd8f"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "3970f82a49885e0a8a83310cb07a98e7fb928f75577c82fa1a957136f1d8525b"
+        }
+      ],
+      "pptxSha256": "49411054e0457ad93b7dd78858820d6fd2c9730f673053de73fc89f50b224e9e",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/business-functions/revenue-forecast-inspection.opf.json",
+      "sourceSha256": "ac3927ac82211ec50fe03f91435fd25ce4d2d412025ee7d011cbf6908b1f0c97",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "FoundryGrid logo",
+          "svgSha256": "4d3e05515f526fea31ba513744d727d6faf36ddc5890036149905d53599dff2b"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "FoundryGrid light logo",
+          "svgSha256": "be0b93148bc2fd4ca75c46bb2fad118de4f18fc0aeb71024b4ca7f4d7082cc13"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "FoundryGrid icon",
+          "svgSha256": "962b2711a23441cf033aa007778c50c63a59fd02080993a86b6cd2eacd643591"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Revenue operations background image",
+          "svgSha256": "3705d9283662db631f3ff580a32470d5015c6e4dbd18ab35b1ef2ab8e37ab5da"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "FoundryGrid watermark",
+          "svgSha256": "f435f2d496d26d87c6be18a0e7ef762496a8c5aa0f953478ceda99f3ec2343b0"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "503e907f2d7f6c0159882555769288552c21bccdd8bcfe7c4870e6fe4c2aeee6"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "0f694d58009386c7b2bbe42629346ef953dcaa4fa60e83c70bab560d136068be"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "4fd1358bd38dd958c2c8fd99f3abe40a022b3cc15ce5d8e25a52576714256a93"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "ba8d307c99b8e493296dbaf8a6d31d6031fbfaa12dc8522a7e52e476eddb5351"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "9274a0ad5a78de3f76e52ec589d095502194ef70cdb85b72d8a139269c050190"
+        }
+      ],
+      "pptxSha256": "476e1eebaf7e01d8c47d374ef3244c4cb9dcd63709e202dacc1f2458b8308f64",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/business-functions/s-and-op-exception-review.opf.json",
+      "sourceSha256": "b458d368a9e2bbda0e7312eea338b735a6664c3fc20f8d2cb640b415ef1ea7f6",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Cobalt Supply logo",
+          "svgSha256": "a95f83f1f868b7dd375a8c4f1f8aa41fb767b59c38505af9b5c6d91694ddd019"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Cobalt Supply light logo",
+          "svgSha256": "dc4ada047f87e2ec11e03829bd51bb058e31c4f72c2dd3ea16778e3aaf5adc9f"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Cobalt Supply icon",
+          "svgSha256": "291065a337c8a2e666cf2d77987766626aadf763f2b42b655d1cc859b3879c62"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Operations background image",
+          "svgSha256": "636c7435ea13ec9de265629395383391260572b39309654fdf4913749767fa05"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Cobalt Supply watermark",
+          "svgSha256": "76c403749a8c23a071523072ca67760e96bc6d42eb3d5256b360e130099cef96"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "f38d97ee5ece65160c555b1450a1bd415d05e6d7ad84626d216271c96c462d83"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "1c7d0e067336379975e726a48384c370667e216dcde1d7ade5bfef89b76b00df"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "ef730f5313bf8695e82ee95d6c59e5dcd46ca92d788ad0e3c483be05c20cc28f"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "d88273c4a003c31893f42bdfb9b690fa950ac4ba4344e7884cf699990bc41862"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "f24ebe0d1ce2d815a2cb93bb497dddc6cbd1ee7c94c2b0b76a67588bbcefbc71"
+        }
+      ],
+      "pptxSha256": "36d94034e5ff68381d2d0fd4c12d22217d0c7804b0bc99d3bb3a8a9c89bf5493",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/business-functions/scope-3-reporting-readiness.opf.json",
+      "sourceSha256": "43bad05556763c5ee72bd98fb85a59996a1c4edea360975fdf3604393fd55dd2",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Lumina Foods logo",
+          "svgSha256": "654c599c6b9fedcb567a0795d6c5fe4d93204bfd531dd9b30d41c11694fd7384"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Lumina Foods light logo",
+          "svgSha256": "9231a3e7e09531b08b3ef5300228fdee88eff2493e51138157ebc238911c4660"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Lumina Foods icon",
+          "svgSha256": "d86c6c06bac18f3457cb8304ca9e65499cfd3b43a1784653ce8db35fe6966eed"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Sustainability background image",
+          "svgSha256": "086e1f0da94bb673676aa3ba1686192324c86f9153c90b021861cd020f52be85"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Lumina Foods watermark",
+          "svgSha256": "20c0d91cdf7fe99a1174d22cf062f95883765885243661072db7728002f323f7"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "8384f92f0f657b5cb28bbfad74bdaa5a7c7f88e6b52c82b6f8d09062a2b81e72"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "1c7d0e067336379975e726a48384c370667e216dcde1d7ade5bfef89b76b00df"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "fcc653df33567ccad975b04c1e3a1eba44b6f01db60028a31387c6fbd04982f9"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "1d609047ea01ff364be4eff1892381f69ffca12d3098ee5db14a079ed0d5c247"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "f24ebe0d1ce2d815a2cb93bb497dddc6cbd1ee7c94c2b0b76a67588bbcefbc71"
+        }
+      ],
+      "pptxSha256": "06bbc5ca9fc899347f290150e238fafd835d46271089c42176fdf907a630b66d",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/business-functions/strategy-offsite-pre-read.opf.json",
+      "sourceSha256": "73a8cddaf50e3bde4441c672205b442db1661c94a2305f68d9325499703655e9",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Northstar Studio logo",
+          "svgSha256": "601682a02cb8ce5fc37186a67ea78bf00d3fedd84c5e15a384c3d3b3c405f34c"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Northstar Studio light logo",
+          "svgSha256": "5f4d39b9f3425c39022588a050fc8e5e45d7b97b36ef181d2b3339281bd890dd"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Northstar Studio icon",
+          "svgSha256": "b11d643f1fad0a55e4028b8fbe0c7aaeebce3c71df75ecb6fca98376b693c7bd"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Corporate strategy background image",
+          "svgSha256": "f430a3fa6ccd99dc602abb7bbf64f8c2400a27a0d85eb54c1a8dc307e4ee5e63"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Northstar Studio watermark",
+          "svgSha256": "e69a27304c14bf552091d68ffaf23f72562075343d5d95d9ea88f4a4d56f6d37"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "50ebb82b0d90f77b784aca1d68616a61e062afd57c16d1e3ea62a759ad46c415"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "c77e813e04cc275fe5e9928a59ba570300bdcfb495af8141a8cb4375330f71b2"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "5f8fdd42a9a1d6aee05986b52b997a4cccc457cbac0ca923e1a07196350aab9c"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "84fd3fb869978f050ae44336c89d5ad932e6d7d43e5504a8c056b61a6a0e4670"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "3970f82a49885e0a8a83310cb07a98e7fb928f75577c82fa1a957136f1d8525b"
+        }
+      ],
+      "pptxSha256": "b17972cb0f7d60df0f8de0ded86bea4c19d516c77a9e07346c75abdf824f6012",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/business-functions/supplier-risk-heatmap.opf.json",
+      "sourceSha256": "beb9773f55fe630e3fab9a3654058eade0fedd275e9f77ed24916d13fcac018b",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Ironwood Devices logo",
+          "svgSha256": "5c63b1597b267431ec4c4c56756df8626e95f6d20bddf8894684c3840902125d"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Ironwood Devices light logo",
+          "svgSha256": "1168629ce9b6449e5e306504e14c0b89503edbb9faf254bc20798e53ebc559c5"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Ironwood Devices icon",
+          "svgSha256": "a69270ebedccb62d4686f60a21b898c44dccf7587926854eb926a50b4af815d8"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Procurement background image",
+          "svgSha256": "348d68fcd94d45d5f046398132f977eddf53a47a87dd15035b951be32e785031"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Ironwood Devices watermark",
+          "svgSha256": "734117596883f12d0f740bffd89cdaabaa03a896d7a7d7d3ab8191c2299e0dda"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "d9efe59590e78f2a9ef8ef255a207bf77cf485b8c133df6bbefc4de42572c195"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "7e9aa22a61f9034abd0de5176f3d0d906d99449510b020a1903ec5eb9e08f008"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "483d0c1cce1bd72fb2ca30629321b47154c6b792aaf388b34dd6f65d9c972e2c"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "7b214a426a410087d5cbbef7ad2d044428f578b1af60040abf5b33926c21a5f4"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "793e29bda913bc3ab247efdf4f135129e3cf459a3e94d31fc793f7fb6416b06d"
+        }
+      ],
+      "pptxSha256": "88d0b3efec640b6c7c7ea19bc51489d6c284413b3f6f11bc8bf1f3d00ec180b0",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/business-functions/support-deflection-program.opf.json",
+      "sourceSha256": "ca74c9b7fa94440aa9c6c089d5a72aef8a83e2df8f3df1b9dc16016a5fa48cae",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Waypoint Apps logo",
+          "svgSha256": "978c3d691f1b3eda28065ac53dd73a40663582ad8fdcbd7b5ddf4a52c9896ad3"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Waypoint Apps light logo",
+          "svgSha256": "dc56fb6d88ddb8c91d9966c8924054162f8599de72190b9ddbbdaa3d63cea8d6"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Waypoint Apps icon",
+          "svgSha256": "2f30b38c989f41e500be341606044ae35293428a56ec78d9413a436e30eb3c71"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Customer support background image",
+          "svgSha256": "ce687f1d411e4134811e68d8b3925db5b51fab4b1947c960a97b9cd2a9b903dd"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Waypoint Apps watermark",
+          "svgSha256": "6b236d62832e8a209c4aecd5c4a71139048b7e9f393bf21c16fa6b540f06a785"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "e4061114802b165c8e60dac548e77219a3d5537a88e7385648ae761292c65b6c"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "1c7d0e067336379975e726a48384c370667e216dcde1d7ade5bfef89b76b00df"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "0d9547edcfdf5a34759b97de4a99653f57831dbb920ecdce3161e4c695190bab"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "c04685d73ac78c6cb603f72c0ada7fb0d7705acd0b76e50e09105d52c7f7fcd1"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "f24ebe0d1ce2d815a2cb93bb497dddc6cbd1ee7c94c2b0b76a67588bbcefbc71"
+        }
+      ],
+      "pptxSha256": "e89e912bbdc46a91e002b620709c9507a6d61f04c086de5f89df23be75914a14",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/business-functions/workplace-occupancy-reset.opf.json",
+      "sourceSha256": "20e93f391940887fcb72281bc3f5d5460b3ed075f48d9d9989dc73e8b7cdc2b1",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "SilverOak Group logo",
+          "svgSha256": "3eba3213be6e331765daf8114e2c3d244745b5feb7c5ff9ea68e7922920ef817"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "SilverOak Group light logo",
+          "svgSha256": "de73d965c1f4d46a5509993b64bd2d5e82daa4e5736a30c2d363a903206b2e8f"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "SilverOak Group icon",
+          "svgSha256": "832adb76ebb1d11c80de17d7dd34176779651d6385463a79a67c97ac6308654f"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Facilities background image",
+          "svgSha256": "4c6c7eb46738ec890ac64e4bbb189006338b9b5a09c4c0e4a8b4c60aa0ecf9f8"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "SilverOak Group watermark",
+          "svgSha256": "fbf72ec7884620edb7a09c9fd6ecc177098c7e5c4079aec7d564453873f01771"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "b2d3a24cf2951087bac10184cd218d8f974d39cc973a636398e97fad23cd3f9b"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "68c2a07e60414d8f4c68da07b6fd979258a9d3c0f885c1ea7205bd9b92996e49"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "4d7a3ef09e8a9aeebc7facd49117bc122d7270d5f879f4a1930b21cbf99f2db5"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "43671cc0a4d4932cb06c195efb1c65fb90a9e0c7ac3932856b95c3e704941b1d"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "1ccd526e8c5895ed4a65c4c0a3a3786165ff37e2e0179bee832341c97903923f"
+        }
+      ],
+      "pptxSha256": "18487e24b44bbb0e435c9d7c007cf0bb18db5684b33e17c2549b211345ea248a",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/design-and-media/data-storytelling-atlas.opf.json",
+      "sourceSha256": "659aee8a3408fadbc73ed34272e74b03dbc4625e80c9f9a81ed5b888b2b87ae4",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Civic Data Lab logo",
+          "svgSha256": "906d4c18408cdf118874c7ed9fdd731eea5bd7dc156402fb80db62c4367bec3c"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Civic Data Lab light logo",
+          "svgSha256": "26cda2a0c351241307f6365bccada86446594e7fbc856a2c0b0f9fd179293abf"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Civic Data Lab icon",
+          "svgSha256": "1c1e2e9fa2224283c1b5932bd7972a2715d516885ad4680947966f3e4c6a8d15"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Data storytelling background image",
+          "svgSha256": "ea33635d8e9a53ce47e9f876e2065d60c2c4d935239c5050ba703bb8b2f6f20c"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Civic Data Lab watermark",
+          "svgSha256": "c2a7c46bf93f6f0da6c9372dfa1b27c349c93d66d85e219bf5df19404cb26997"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "e4a86634190cd463879d965c91876b7ffd9f2476a7dbde0fcfed9a3e0771448d"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "6f03ccf702ebe053efde28a21b8adf8b2568c028f44a12b28d50125813bae2b2"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "9dceb17542567d4ddbbf6a8bd739a9f8cbb3fcc4f5275a35ef86cc120f4bbbfa"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "aad4e80c8e2701e50d48c0d65b02c7c2fd4981ae8f1e0bbd9b3ba9fe74038f83"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "f1a8ba45a0828beaf20fd36845ba84da1dc79485570ae1e0b378eebb53a96d86"
+        }
+      ],
+      "pptxSha256": "f5da65dadd749651f13a1a3cb3f6e08a4adeda0b98d8325f24a271b3a7426826",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/design-and-media/kiosk-orientation-deck.opf.json",
+      "sourceSha256": "39dc09a23dc64aa8f0e156e2de331f4b4c32d3a3281f79360242aea9529ead5e",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Northgate Museum logo",
+          "svgSha256": "e39ae0252f7476581d8822c4b6dbbb3c04daa9688838c526604999cc7bb1e504"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Northgate Museum light logo",
+          "svgSha256": "3438b45ca506890939d8d70011da52414e6298da7dcaa539a374c29c3c52d465"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Northgate Museum icon",
+          "svgSha256": "0c23623d618b1fa842cb9a9e44850dee791c53ed38bc9f0cfd9d1d520bfa29a2"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Visitor orientation background image",
+          "svgSha256": "1abf9c45db0ef06930176ee16ba38dd94146b8c78d25a7fbd6be6187c618d945"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Northgate Museum watermark",
+          "svgSha256": "110a48d279c0158e002ecc7189523354b64fb29a047c114ef299d83213126ea6"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "d2ecbcb399b79ceecf447e683c19134129b2563200aef2cbc58e1c286887914b"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "c77e813e04cc275fe5e9928a59ba570300bdcfb495af8141a8cb4375330f71b2"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "5a7baee4cc8e8195b938f428b30334404b38b3a057a6da1a2904bd815f8c8ff8"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "ae17873b5a3019b59fe2b04a4de40e7c5c6b8b671e88c0f94de8e51b02fa3625"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "3970f82a49885e0a8a83310cb07a98e7fb928f75577c82fa1a957136f1d8525b"
+        }
+      ],
+      "pptxSha256": "cf4959363f741a3869f3aa09d32ed71228f0f4a0f93de0657e7aa929ceff5f0c",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/design-and-media/photo-essay-portfolio.opf.json",
+      "sourceSha256": "5404a480578aa7eeb48f7b97456dfee0047f161fa49c71537d94918b91a51e3a",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Urban Lens Collective logo",
+          "svgSha256": "a1ece9f4432de0352326c5da6f86877814efd01b8dbd87fcbe56d15b75a4268e"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Urban Lens Collective light logo",
+          "svgSha256": "eb60b0ee41444fc6053dcf5d05986de97d5d19bddd779c31a3fe9fa01eeb89b9"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Urban Lens Collective icon",
+          "svgSha256": "b95bfc3f2453ac962984b1252be3f1a606efc7d7c51243163dda8b859a848c36"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Portfolio background image",
+          "svgSha256": "3465046d0fc73d79b87f82bea861e3888fc0c972aec2dce6f1117096d9438676"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Urban Lens Collective watermark",
+          "svgSha256": "876c4aaadaa8a4e1c1790e083d50e8ebe2ace9894671d5cc0f39de05dbb951a3"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "6ed28eb4da093c53091460f6aeea4bbf4ad303dba12b6bde8805f3635756bee3"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "d387aa3c23f43abe7b6e74d806358f8a76db28f1a1c444cb6fed2a379f7e66e9"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "42e6722a5b8ea39f934380dce49913e2b7be492dec247a2cb4e02ed09ccd1621"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "43fc525229dfbfae95bfbc3d137092b5ee230757c7a4ab43144fbcd2b3526d9f"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "e8a6731086385086d649a60db91c2f164a9c2333c5e6852340a0cce2c3874525"
+        }
+      ],
+      "pptxSha256": "9462085287b5d12751ed17065ccc7589629cd504e818a6e93714f52234a29aef",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/design-and-media/video-demo-sales-narrative.opf.json",
+      "sourceSha256": "6d5af8dccd09f6e119d540799836bea38bd9151301562757cc0a361a20e31767",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "SignalKit logo",
+          "svgSha256": "5bba1150b4e47d951612676d550dca46627266825129479c78511d0db26c4b37"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "SignalKit light logo",
+          "svgSha256": "5bb021beaf40cd55764520f5fd417c4bd563073edf1b38e9f2d3b6ef08cabb56"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "SignalKit icon",
+          "svgSha256": "23c81b9bff5772ed0d13e0d99c8737a81819e47aad13a9cf8fa8e403d197ebcd"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Sales demo background image",
+          "svgSha256": "0904aff48dcbb3b54e0b6c8b62f4c8ddaae4e0ac525a74aea7d36bbeee08fd78"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "SignalKit watermark",
+          "svgSha256": "71064dc9d88bd1b1cdc0f4c785d12449d6429bee2b8fe794d617e3671ebb642c"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "395a8691d32203a76e86d8b598d8435b7256374b6b5c491bccaa8679031bac50"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "02b013982d56a77969b599984c52ca6513192cf8035cb93eba880da707f8f234"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "f9cf0b99768c96a61a7d7c32dc6cd9c8dd84d354ffe6ba8985db5dd887fc6e55"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "da16443ca9ca47cabfa26bf36cc0383383fb419a7cb3c63509fa3ad2b87bd63f"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "8376c6bf2580460806c1295a526827cf16ebf683b278752a92acf2a6472765e4"
+        }
+      ],
+      "pptxSha256": "5b7dd8fb8d4f46411544b3f2b2096ac1028e307f74b6c9c6ae93100e40a28bcf",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/design-and-media/visual-brand-system-sampler.opf.json",
+      "sourceSha256": "8cff17079930132ca1864410c52d46183da76981d60e226dec78715439549d23",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Framewell Studio logo",
+          "svgSha256": "3e90cc11d52ae6de3ee9bb78c33872525638f38f6e6f5158dd2449109cd6f759"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Framewell Studio light logo",
+          "svgSha256": "7b9861a0931088e895bd391f0fb19dcab814c76e3c4c325d5cd2c7f1c9a2dcd0"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Framewell Studio icon",
+          "svgSha256": "88986367a7b959beece93372b518ba6724e566e111dc069825cbc46aa943a001"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Design system background image",
+          "svgSha256": "a8c89c602243ac605d4aa93018152b4c256a15741601fd992ec3237368e734e3"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Framewell Studio watermark",
+          "svgSha256": "bc00016c4875ae4fe9cfb3a6c9fe375698402fbd93f14e59321424faa1298ffb"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "dc1b332de4f320ecdfec46bdd834dd7d27401fdc52890402e90e37a4b1c1e5f0"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "4aadd2d20cf467104717a9d230385892f0679ad4528d114890e9120f8e08cbf4"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "5c543b413e5b8120e9ed36b17d32c735c23841498287f2263ee66ad9bb41b75d"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "ccd9ac137679b04479f8dd81cae235ff75b1df63ac7d498c26edea6e38626a49"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "b2652cf8e8c7480a7de1992fe73649805dfd26e9f8a693044fac807040c22342"
+        }
+      ],
+      "pptxSha256": "37461f375fadec9af29b470d332dfbd54a716c89ecd7324c235f3aba58a260e5",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/education/advising-retention-review.opf.json",
+      "sourceSha256": "cca9482f1022830d7fb353781aac1f707b6187344be729312ecb9e2b5898b6fd",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "North Valley State logo",
+          "svgSha256": "42ffb8f98602d290bf33c95718f83c02f99ef28b86e90f18ab0c8e49e3072f04"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "North Valley State light logo",
+          "svgSha256": "f8071398fd9c6292aa07dae9c8d0a12c0ceb7f8692d35cfeb8d023abb9d97a5b"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "North Valley State icon",
+          "svgSha256": "4044afeccaaa92d4ab3d0f82bd3e7b6034b3d545e5c16d6b43653c830a0ce9bb"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Student success background image",
+          "svgSha256": "7d678b2ffd8e83fd89642fa3f3e6aba9cb893794255da693c97b987e9c484489"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "North Valley State watermark",
+          "svgSha256": "cb5102401ec98f4c2e297f30bd26e18b72c201987b88743dc2dff21912d09549"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "d8b4120d2c55ab7ef6e3f8f9d291218fc0c7ad27ce1821e334ea26dca58e8364"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "4aadd2d20cf467104717a9d230385892f0679ad4528d114890e9120f8e08cbf4"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "453935d48f82e9f6ade56e02b0787898ec9a7c048c75c2a6736c5d27eeed4691"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "441fe958ade77f73d6fef04804444c5778d9d8985ba20eef00d9096c8fea0ec8"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "b2652cf8e8c7480a7de1992fe73649805dfd26e9f8a693044fac807040c22342"
+        }
+      ],
+      "pptxSha256": "129da8ee8bf00356eca794072c042dad23f7aa62ba3abb501dc69f154b3185bb",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/education/alumni-giving-campaign.opf.json",
+      "sourceSha256": "526e76d5fb7958df7559c477bcafbbd7957764b8b5ad05abf063dd18d8ba8e99",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Redwood College Foundation logo",
+          "svgSha256": "0c52be86f59bc2e59af7e522a8a0927f9ca08f2b0bf9ee8f005d5b6cd92005fe"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Redwood College Foundation light logo",
+          "svgSha256": "d37781a377965de99e5e9286d6524ef09b18b974259cb18b5e2855b620fe6fba"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Redwood College Foundation icon",
+          "svgSha256": "ea63f93d350ad1719386dc1c5b9ee9e8605bc60b07e9e182458d227c1d526cd4"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Advancement background image",
+          "svgSha256": "e1bde12cb98763be4981b2f4877f0e6ae8e9079b2dcd44a057cbfb1bc0047cac"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Redwood College Foundation watermark",
+          "svgSha256": "b0ed60c343906881fa231b0e050c71efc3ce8663bacc8006c6a311683f9dc67b"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "63ab4407f25ebb9c664ddacf86e9e8421b3ca661ff1d404714679110c01220ed"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "9df0674531bcf445e6a462c900131174601021ed52ad37910f50e2425ff848ba"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "e5dd86d6069ea883f04931252ef614158a02d034475a045646bf83f1cc2a1a85"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "2f90ea64423323e4d38ad08514f72e98d0077986872855eb51b573014d720abd"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "15967e0c0f4f03a795bca2c32d744e6beeba7052be77b526f4422d7ed8d0a612"
+        }
+      ],
+      "pptxSha256": "c8ff59a23a9f955d407979399ed9756ac377f894f5a7fe07c725694df64013e9",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/education/apprenticeship-partnership-deck.opf.json",
+      "sourceSha256": "50d606e52f48d1dbc1bc6a221fbaff7058acbdd732edd19a0d25072f4f455ec4",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Lakeview Tech Institute logo",
+          "svgSha256": "58c8f8eaa82ed8516db604e264313f4505fbef8b01f994e755fca74f109da584"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Lakeview Tech Institute light logo",
+          "svgSha256": "077aedbb673d7cd71809da29908af63d39af4647e78b280b189aeee9c619def0"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Lakeview Tech Institute icon",
+          "svgSha256": "780fd1e82c09f3bfbcbf20eb006b07185cb3fb608a0d918558e4944b3ec3a603"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Workforce education background image",
+          "svgSha256": "5eb60f4025b00bea82b08f0d65a6801f18cfae55ed24979c9cd5e1347752958a"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Lakeview Tech Institute watermark",
+          "svgSha256": "ab835855dc753ea35ba756525121ab3b29d149c5b82a9d39296017b247275ca5"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "e4061114802b165c8e60dac548e77219a3d5537a88e7385648ae761292c65b6c"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "1c7d0e067336379975e726a48384c370667e216dcde1d7ade5bfef89b76b00df"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "0d9547edcfdf5a34759b97de4a99653f57831dbb920ecdce3161e4c695190bab"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "c04685d73ac78c6cb603f72c0ada7fb0d7705acd0b76e50e09105d52c7f7fcd1"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "f24ebe0d1ce2d815a2cb93bb497dddc6cbd1ee7c94c2b0b76a67588bbcefbc71"
+        }
+      ],
+      "pptxSha256": "def899e15a9bd12abcb4a310d084c16835d1906f123a08502d24feacfeb42581",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/education/athletics-budget-review.opf.json",
+      "sourceSha256": "a31343e9e0f97442779033c3d94182eacbbc7f9c0d45c58e9cb58688713a6045",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Summit State Athletics logo",
+          "svgSha256": "8593b8506b0366cc0e340064519f7742aabf48dbe7186f37fdbc084ba1ee3a52"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Summit State Athletics light logo",
+          "svgSha256": "78a8858a077f4d1c61faf6c0683b16a13ce44b32bab4e33e17ac34bc8d3d74a9"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Summit State Athletics icon",
+          "svgSha256": "f347805dc2dfa3e1f75bfa71311ebf7a95a655cf5070021731514825a35b0989"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "College athletics background image",
+          "svgSha256": "d65e1628329b1042c01e96ebeadfec93ef56ab70b69654dd748973799bb7377a"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Summit State Athletics watermark",
+          "svgSha256": "fe6db91444a2e68a1e20e10e1a74b6c014f43752431fab2cbc4ed84b488d4aa8"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "629a976f7c9f0617e302ef9de49b15c1eed4cc496e5e68dc391fdbcd068843c6"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "68c2a07e60414d8f4c68da07b6fd979258a9d3c0f885c1ea7205bd9b92996e49"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "4b1c178ed950e82c266c7758f7ec51d7da1303ab8d56ace14ca245b81a1532f8"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "07216d1e5c06519619aceb88a18f597643b18c7b3188011a22ed250f866ad7b8"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "1ccd526e8c5895ed4a65c4c0a3a3786165ff37e2e0179bee832341c97903923f"
+        }
+      ],
+      "pptxSha256": "c23da9048a585b189eae1543c210de407a0c3ebfc1d02fa23315f9b21b514a2d",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/education/campus-energy-action-brief.opf.json",
+      "sourceSha256": "4218f4443d8841a16a08c3dd2968a71ce40565c09943d9e3d3fab058cdc5a861",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Lakeside University logo",
+          "svgSha256": "95ae1014934dc3f8a6951974267cc465dca3530f84b2b2e007369766519c48a4"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Lakeside University light logo",
+          "svgSha256": "116bc2f07e1dce7b24eaa2aec7f956d9532af90d56cf64fa04c7aa09ed19e5bc"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Lakeside University icon",
+          "svgSha256": "ec502158c029b883def05acfcc96f9adda6f942a286160075da8bf933779af98"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Higher education background image",
+          "svgSha256": "2c63f4ad561370a42f6595f3269c7ab5ba4c6ce572bcaef2bfb0a67e32ed1bb6"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Lakeside University watermark",
+          "svgSha256": "861249e9db83e7c3f34d9ed4620dd1a0204f019daa87cc70fc131bacde7c474c"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "6319e57deb754e96fcbddaa655e4286abf7063a07a4710087c2af0648d4e7230"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "7e9aa22a61f9034abd0de5176f3d0d906d99449510b020a1903ec5eb9e08f008"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "709902bbc9f006a39e65045ce47a34cc6a2276aab9ad5474d40d4157a76f3449"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "ac0687919a2c4d20058f5d9083bd314f2c109b805a4c4152e9e74df207ffc62d"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "793e29bda913bc3ab247efdf4f135129e3cf459a3e94d31fc793f7fb6416b06d"
+        }
+      ],
+      "pptxSha256": "ef55628865ef7280e40dff59e88bf8b2c97c214abecff337574da1459b8cd75e",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/education/curriculum-approval-brief.opf.json",
+      "sourceSha256": "f5817c59331216b2518bd95ecf198daf9a1bd7e2085772bbe8c7cfae2cace0e9",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Oakbridge Faculty Senate logo",
+          "svgSha256": "42d1167866dcdb1cde0444475a9b6600da827b3fb3ca9075fb4698e1d42e85d6"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Oakbridge Faculty Senate light logo",
+          "svgSha256": "253ec844273d7e9963604f6d3f3ff9bd1c47d6a20a65b7aadcdb043edc8f0314"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Oakbridge Faculty Senate icon",
+          "svgSha256": "7692419845411fec4f6b9f90b38229eb374164be4c37b6f522d5fda495a2a72c"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Academic governance background image",
+          "svgSha256": "68ce4fe080fdc8f2e2028e2b6df89f35b45ab284dc56f26976e19e601fb3cb82"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Oakbridge Faculty Senate watermark",
+          "svgSha256": "34f862292a89f37f9172229ec1604cc488f7bb1a2189480bdc0fa29f833fd72a"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "84c3888c3c500adc3fa0b657fb8cb22910d5dea4d763f1af5da0fd5e58f97d3a"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "68c2a07e60414d8f4c68da07b6fd979258a9d3c0f885c1ea7205bd9b92996e49"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "c498dc9b8a9bffbd991f0783cf78f6fd127d064d55ae537c57823043c5ad151c"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "dffef0ed161d54c579da73a8b4df1aae15e35a0ca5e029a05fe0874076bb25d8"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "1ccd526e8c5895ed4a65c4c0a3a3786165ff37e2e0179bee832341c97903923f"
+        }
+      ],
+      "pptxSha256": "eb78fbec55cfcaea8b28a9fc2a715ac28a7fd3e3aacaed739343d91da9e5b4c4",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/education/library-modernization-roadmap.opf.json",
+      "sourceSha256": "dcd830be39e38ef8d8dbed132c19c20383d6237c5bae311496e27b022b26054f",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Easton University Library logo",
+          "svgSha256": "52df0161aeaa0a0cf0cfb0ad6d4ef1545b46d2c5d92d7b28bfba34edb136054d"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Easton University Library light logo",
+          "svgSha256": "2ba32e1723e483426250acf7b29011faf295de4cac9e4ee5cc049c7d226c8f9e"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Easton University Library icon",
+          "svgSha256": "4a91c2db88455f7c6140ce42759eb2b6db7781dc22a51a9fcb2e51ff5e322fe4"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Academic library background image",
+          "svgSha256": "e79d78e0bf485f96d41e49762a854f909501f624230ed88b51239aa16928e828"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Easton University Library watermark",
+          "svgSha256": "93931fe92547377df6ad5723ce5a198e3258f7b4d9718f429b4ec5f493fec150"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "bc34d532d8ba2880855376b07bfa5265d0e2d234601ca0ec946504b7c6515893"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "68c2a07e60414d8f4c68da07b6fd979258a9d3c0f885c1ea7205bd9b92996e49"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "8643f21fa2e7b9f0f59fa983217268b5dca53721e32919fb0f6ffce31e7b6476"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "9c8c02265e73737592e6ba5a2bf5ec6c08e2d6f85f346a498b0a17590a691519"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "21f790258d6b7ebb14e4b90534139dd1adebd8da26acee8951e717a2bef32039"
+        }
+      ],
+      "pptxSha256": "99f52adaa982b852df4548582b94620be35c2c46839fab16cb5f109a29eb6165",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/education/online-program-launch-plan.opf.json",
+      "sourceSha256": "3affb3f0de7781da599e036b11c56f73d8764e35c3facd9b7cf39e0eb37e9283",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Western Coast College logo",
+          "svgSha256": "bf4fcc705a19fb6ea85fc64ff901b8eaba4b255fa47269487b36bf29f6934905"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Western Coast College light logo",
+          "svgSha256": "94570b9cf4519de1231efbc3abe4554148f026f0aea4a6dbbd6fcdcc90c9238b"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Western Coast College icon",
+          "svgSha256": "87fe2784c7626194307c5dae80a1d8e44b8eb9da7bb8d5995df48b59fe8db589"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Higher education background image",
+          "svgSha256": "01ba1bd719937f21b26f77d9c1bc9603bc3c5cdc4c05e8799e34a6265d569e5c"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Western Coast College watermark",
+          "svgSha256": "b1fb53c90c3f3d40e4910ce5ae2b84777c938fbc5accd9a485dc696269e5dff1"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "5960b81d2c8b4b8469d38931668beffcf15fb41b498d428293c8a56d981e351f"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "6f03ccf702ebe053efde28a21b8adf8b2568c028f44a12b28d50125813bae2b2"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "11813369e7c0ab74a7d2582b48f89fb6bb958860c5b72ce854765888f0b4456b"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "da8ee9f8b242852ba69107d24a134c140719dfd9897546deba5b5a6b8191316b"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "f1a8ba45a0828beaf20fd36845ba84da1dc79485570ae1e0b378eebb53a96d86"
+        }
+      ],
+      "pptxSha256": "f12a8746ff235280c94a6fbab24b6e6a17710d7f94d3820532e4621716fc386f",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/education/research-grant-pitch.opf.json",
+      "sourceSha256": "18016067d19c3dc86128b58f506e249f8b675378ce31b8d697c7b594c43e1f68",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Center for Urban Oceans logo",
+          "svgSha256": "0963626678d7ed4d0b0130d0cef7b4af0d51641b689870e48b5527a9f0a37cff"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Center for Urban Oceans light logo",
+          "svgSha256": "129298b1f9e8ebf086da2b1fdd28f92648250de0f1956413380656fc4d445c09"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Center for Urban Oceans icon",
+          "svgSha256": "dfd204c9d5bf9c2277091328d053cf03e6d8facbedc7c8a0376d0091394f66d5"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Research background image",
+          "svgSha256": "072049b1b507ffe9374d254563e7c0487b6bb78a8dcd3d8614906ec464e62d89"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Center for Urban Oceans watermark",
+          "svgSha256": "8eeec583165d044206497ab91dbb6e7a518a2136baa85b15f8c85614bc4e9c6a"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "6ed28eb4da093c53091460f6aeea4bbf4ad303dba12b6bde8805f3635756bee3"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "d387aa3c23f43abe7b6e74d806358f8a76db28f1a1c444cb6fed2a379f7e66e9"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "42e6722a5b8ea39f934380dce49913e2b7be492dec247a2cb4e02ed09ccd1621"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "43fc525229dfbfae95bfbc3d137092b5ee230757c7a4ab43144fbcd2b3526d9f"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "39a974d89f6d64b5bebfbe36a5fb32a96807d679ab24ba883bfc7aa9f47219a4"
+        }
+      ],
+      "pptxSha256": "8368fd03c3f74e2dc85f2eac82cc431bcc411a34532b806621199bb63bb88ab2",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/education/student-mental-health-capacity-review.opf.json",
+      "sourceSha256": "f06c3b498570d5a5fcbad3923169269b7f8bc2c48f01b70787a4071c8b871fc2",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Harbor City University logo",
+          "svgSha256": "880bfd35158a4d3646584249a0ff39370d9c79cba187a603a8593701be5424b3"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Harbor City University light logo",
+          "svgSha256": "329876514d62e44279e517f31241a5bfa57787ab60ad1aaf47be2dd176a94908"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Harbor City University icon",
+          "svgSha256": "93de4db47af6d61eb15b8c1af95e544963cdf12b26470d322ebd7c08d4e8528f"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Student affairs background image",
+          "svgSha256": "a835db2b084fe22acd47dd635e4f9dd2e913acc1e9d31ab0ed1a50c2ee21f833"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Harbor City University watermark",
+          "svgSha256": "8291b6ffa9403e6f811131830dc49a71b9e2fe91607dc7cb71561a06fd3c2573"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "d2ecbcb399b79ceecf447e683c19134129b2563200aef2cbc58e1c286887914b"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "c77e813e04cc275fe5e9928a59ba570300bdcfb495af8141a8cb4375330f71b2"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "5a7baee4cc8e8195b938f428b30334404b38b3a057a6da1a2904bd815f8c8ff8"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "ae17873b5a3019b59fe2b04a4de40e7c5c6b8b671e88c0f94de8e51b02fa3625"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "3970f82a49885e0a8a83310cb07a98e7fb928f75577c82fa1a957136f1d8525b"
+        }
+      ],
+      "pptxSha256": "ddc82b64bc59818619970f18ecaf41adab54c49b42221f2907802f71e52000bf",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/education/workforce-pathway-partnership.opf.json",
+      "sourceSha256": "59450d966ca40d112079018a64b50443680811d9c890a44ec833cde3890868c7",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Metro Technical College logo",
+          "svgSha256": "3b9b291477a8b9eacdcc022ce805f5ab7bbda70a0ad6e1cec59648ef522b714b"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Metro Technical College light logo",
+          "svgSha256": "f45a393c9396c1b9947e730d41244be9c5351c8277168b67a43131e3e6695d60"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Metro Technical College icon",
+          "svgSha256": "bc19644bb6191ce974e56552c2dc698344861306e1ab77f22e345524523c8cba"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Community college background image",
+          "svgSha256": "1523e61967683bbf7ee87ac7965fb4ac5b576f38b81df5a742cec0543f0d0bd2"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Metro Technical College watermark",
+          "svgSha256": "46f82f94644b1dd9114e1190a033d7fd4eb92816fbf14f2e49faba1d1c490ca8"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "53e8cddc1a7d7b3f8dabd23dd1c7b9a5269d2f8ac24b6322a3b7e0a38a015464"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "a39e7f4ab89b3bb47c1fd63db0e5d85eaefc6d1162dc30064148189f678d77ea"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "1a2a289988eef8cd1b4816b1b70e46f3caade9c4d3e31c8c583c2ecc925e5c03"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "5dc7e67073eb8e44dac83a1b5ddced12b952d1f99858f063bc77dacc32aac8d7"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "a5507d4637fbe58aa25082d7831d1d06950be9359764c42d6bfe8d91317b8eb3"
+        }
+      ],
+      "pptxSha256": "7ce0f39cfe306571d737d1f300dd3a811063b142446fdac16b859a6451ff87ea",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/government/broadband-public-hearing-deck.opf.json",
+      "sourceSha256": "6c1a015a139044b17843a2d0001fbc1e056e3308b1cd023c2c54f1032c9a01d3",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Rural Connectivity Office logo",
+          "svgSha256": "802681e840095a2009329e45c6287267c12916910fd14b9729538281d4a7454f"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Rural Connectivity Office light logo",
+          "svgSha256": "0450e6d2bb13e23abe388bf2b69c0529a0b56f83243ae2ee5d34a2c5e899f546"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Rural Connectivity Office icon",
+          "svgSha256": "8c11a2602092eba3677b2ce4ad9ff43f3733bf6424aea487e081356f17acceb1"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Public engagement background image",
+          "svgSha256": "49f2d6e9bdd147d062336300b65a5e5399ae3f1e110a785874741b939c1d735c"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Rural Connectivity Office watermark",
+          "svgSha256": "c90dbed61177026dcfa4893eebf84459364a3afbf82b0bd18b5657e76edc66b1"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "71114e9b1f7c191937e917d106db272065b2eecf74bbbcdb723272360721eada"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "7e9aa22a61f9034abd0de5176f3d0d906d99449510b020a1903ec5eb9e08f008"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "b55be8d7f650415044003c3673f88e30542bbe11018ab8a3a9c749708d1147a8"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "6686a64a3cc2914d4bdcc86bc41c7e4ff1b240546c3e53ebcc245fe3bdcd4ec7"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "793e29bda913bc3ab247efdf4f135129e3cf459a3e94d31fc793f7fb6416b06d"
+        }
+      ],
+      "pptxSha256": "989d04777fa6ce29b4465c7dc338c710ec9b261cde847fdaf76a9683e4115b6b",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/government/court-backlog-reduction-plan.opf.json",
+      "sourceSha256": "205a96465982512f06ce5a482b19a7ce6d630810915496218b47eed89eef0974",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "County Court Administration logo",
+          "svgSha256": "ddb9eb89a2c81c93af10bb954ba641e7074ee5c837bf2161c89cf299fbbe0f16"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "County Court Administration light logo",
+          "svgSha256": "cb03bf9d9fdd603ebbe50688366b4e155c10c5b14f5ddeda5b67376bf37c0a8a"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "County Court Administration icon",
+          "svgSha256": "3a8daabe6e99849de8fb3d901e44a2fbaf42c29a29c2bcd5cd101802f5280282"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Justice administration background image",
+          "svgSha256": "958c07f6bd03c4f58866c7dc54126cb43778d76bcbd0de56567f8c837df77265"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "County Court Administration watermark",
+          "svgSha256": "96e548aba257da6d37b20786ce5109cb1e669380eaa6cf455047fc3ba072cdc8"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "7b644ce5f10736d940e128932661f52761dc97078e04eed54b96b6054f762b47"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "a39e7f4ab89b3bb47c1fd63db0e5d85eaefc6d1162dc30064148189f678d77ea"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "08e29bbb04dc02e827305d897f46031a4111c690ca60cce6307319a0482c25a3"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "08a224003ddca754f5e359ca3bb5a9e5e9c1a9f74665e70b40c79a8746719ba4"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "26559e20b2fcccb02e17463cd2a39deb8f4696134c042d21afbae0927e9068c2"
+        }
+      ],
+      "pptxSha256": "4fddb21bbb2c9efaeca0b436a3adec11b0ba50cebbc6000c986dfa62b290332c",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/government/housing-zoning-council-brief.opf.json",
+      "sourceSha256": "70bd8b4c44fe5c9cf0bd7f7eedab0b6d7013bc5d9bd7c1410d1347b47a0c330a",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "City of Redwood Falls logo",
+          "svgSha256": "77335f28ad896fb303f9702606a209643e8b116795f6f40fc49aeff4f68f5cff"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "City of Redwood Falls light logo",
+          "svgSha256": "30c4a480d979e02c020c13404afa80f768ec15ef9b03ef044bac70daf0c99f2f"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "City of Redwood Falls icon",
+          "svgSha256": "6b7eec009c39b5ca235a0b4f5b5fbee970c9a504288681017936f6581f324d50"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "City government background image",
+          "svgSha256": "382256029c6abdf0ff03df4ba1d006472d43fad99cabc24436f2895d9eaa25c4"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "City of Redwood Falls watermark",
+          "svgSha256": "134a62a5af4338f8074139e06820d40bf137bd7279a5e37129b6345c1e0ac16d"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "ee718770ab14db9562cdb9464b88345ee4fcc00cd7410021b9f27211f292b041"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "8535c1756550884f7d5edde8e80bae83a1cb486c77de77c905ef68fe60ebdb4f"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "563e9100eb491df45808add0edb0d826434badb6af26408c562e34387e9a147a"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "c3a524d0f3f5780f44cfd3dde37677c96d13c3c1c033fb10fc2036c8722e11ff"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "d5691f2095717486c450407512af2201208af07af5f39db59c00cae5e46cf6a2"
+        }
+      ],
+      "pptxSha256": "057a639121b092ad17baa73609f163b978e33dd2042598bfec89fb54d238d7fc",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/government/parks-master-plan-workshop.opf.json",
+      "sourceSha256": "95ba489c2b5b6b7ebe1bd0462a51438fea73da2a58efceba225c58c1a45ba806",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Greenway Parks Department logo",
+          "svgSha256": "9c8b5afb60e1e832f38b46f0d1f6222419c0dcacd111884efd382d2c7310571a"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Greenway Parks Department light logo",
+          "svgSha256": "4a6254a9e523b3b7f6a52ba0429c4902cdd7c338d1ede524b4844b578eed46d7"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Greenway Parks Department icon",
+          "svgSha256": "c3c852d601d669acb7128c677721d1a43915f6141958c28f061af397fc96a7c5"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Parks and recreation background image",
+          "svgSha256": "5ee495bf8366546e5729998e92081bc0b3c34dda7433b7b5e7c1784ff9d8ead1"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Greenway Parks Department watermark",
+          "svgSha256": "2cf7f4f7550bbebaf64af4c635785b23e7dbd1ac798627e9e4657efb4b916849"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "079e59cd2d1cc16b199968a79a07f24c88a01139e8934797b5cd0c16776c46b8"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "6f03ccf702ebe053efde28a21b8adf8b2568c028f44a12b28d50125813bae2b2"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "45e8a94613899ca2c656e488186bb4f31090162d4ec1a5ceacbdf0865c664497"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "925de2ade2c847ef67db86f7ae52e3eb8db1ae15d43206731e86191a17c8dc7f"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "f1a8ba45a0828beaf20fd36845ba84da1dc79485570ae1e0b378eebb53a96d86"
+        }
+      ],
+      "pptxSha256": "cf8d93905ed994e7aaf93d37b5477ade5e6b182a19368e848a0b77e7da48b2af",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/government/police-training-program-update.opf.json",
+      "sourceSha256": "fb81ace4d1190d120e2c292882dd2432b2c97924ad10e24ae94831bc478a9d8c",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "North Metro Police Academy logo",
+          "svgSha256": "eef9a060e90c786da40d2f05d144f20d14eff5daa2cd6f483c0fa2cd8f52f160"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "North Metro Police Academy light logo",
+          "svgSha256": "39f356595c939bb67c7008c7914079542fd4755c6243c5f65765f706af14db61"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "North Metro Police Academy icon",
+          "svgSha256": "c9fec83e5f02e2a3de92efaa85b5fffd1f9521192c002d4101152a47abc1fc1d"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Public safety background image",
+          "svgSha256": "cb293411abfddda9e1371ab5f75ba4f777cf9d90f92e4fd556d9d6dcbad631e9"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "North Metro Police Academy watermark",
+          "svgSha256": "789c9335c9b0958dedb2699cd11abf8233bc4a9063c9856649888187420d3bc4"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "53e8cddc1a7d7b3f8dabd23dd1c7b9a5269d2f8ac24b6322a3b7e0a38a015464"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "a39e7f4ab89b3bb47c1fd63db0e5d85eaefc6d1162dc30064148189f678d77ea"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "1a2a289988eef8cd1b4816b1b70e46f3caade9c4d3e31c8c583c2ecc925e5c03"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "5dc7e67073eb8e44dac83a1b5ddced12b952d1f99858f063bc77dacc32aac8d7"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "a5507d4637fbe58aa25082d7831d1d06950be9359764c42d6bfe8d91317b8eb3"
+        }
+      ],
+      "pptxSha256": "225821935c83170a3974c43f234b8ff147aec9cc193aa4c89f116893a47bba82",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/government/recycling-participation-campaign.opf.json",
+      "sourceSha256": "9d0c78e0f6bd58a4fda50a7a0f81697da68f898e90ceaebe35380fbac85962c6",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "City Sanitation Bureau logo",
+          "svgSha256": "65e6c6b1838626b82574aeb962adeb5c333971ea4a4647fda10c71f0d5852af7"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "City Sanitation Bureau light logo",
+          "svgSha256": "c7039b154ede660ac4e9872c46cd7b9040658918ed4625976789de021a788791"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "City Sanitation Bureau icon",
+          "svgSha256": "5b031072d0e86a0b46efe7bfecdeb8757f095d398d46a9b09154133460ff3159"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Sanitation background image",
+          "svgSha256": "f5c283a74c1dbee4e1cc51f990f4cad2a387b41ee3b56d50ebb94474ac0e98d8"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "City Sanitation Bureau watermark",
+          "svgSha256": "deea45cd34d9f57454ba11257b2b3aae346597849245466b8e50542139726708"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "abdb27e48c3535468f7e4a73195c5b3c2f40519b2ec483213f1ceb40098c3fa5"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "9df0674531bcf445e6a462c900131174601021ed52ad37910f50e2425ff848ba"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "fd5a2634c16f0e410b4ecc2652a89b8bcbe399cc06eb706307500667c700b386"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "c689b492dc70987b10e960f305b4432b4e30690e41e4916c7291bb23644e7c33"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "15967e0c0f4f03a795bca2c32d744e6beeba7052be77b526f4422d7ed8d0a612"
+        }
+      ],
+      "pptxSha256": "6c40c6c15780f72c8c32affb528afec5388d7bdd512ffea4942515f49074f746",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/government/regulatory-risk-brief.opf.json",
+      "sourceSha256": "a35a622cfba494438d0b01e35b1b68a3e648a69184be9e64b58f4e3f78863990",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Regional Clean Air Board logo",
+          "svgSha256": "93dfbd53fea8b2948f63622f73e1fcdd232cc86d02a4ffc5ec0af1ddfc6dfa11"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Regional Clean Air Board light logo",
+          "svgSha256": "58f61a9a96c3d9311a4af4807cce0ef3c78aa989f4c99100d5a99b73690d27d4"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Regional Clean Air Board icon",
+          "svgSha256": "76cc3f76a4a3bc798c8b980cf615da4907173ec6f23670c93a5edfb3676aa42f"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Regulators background image",
+          "svgSha256": "2ecfa0ef271e257ad2acfd92d1162f0d80c1ae7cace109cba5a2d8f58487234c"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Regional Clean Air Board watermark",
+          "svgSha256": "5401082d031634e25f9d836957c809d775b3f88ecae1350fdc0706cc7755a232"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "a9dceb1a88619169e08bae60267cc8cb4c75467ac1a35daa19429c4c16a4fca1"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "d387aa3c23f43abe7b6e74d806358f8a76db28f1a1c444cb6fed2a379f7e66e9"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "d100be0993d8acc42cc7957d512ccc65767e7e39a276876f082fbee999d8146c"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "a97f94994f1c87be35a320b26cfd9a4d0ea88ee58451f7b253b0a8cf3d062f88"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "39a974d89f6d64b5bebfbe36a5fb32a96807d679ab24ba883bfc7aa9f47219a4"
+        }
+      ],
+      "pptxSha256": "0ef3498251d6e37885ccb3acb1323cad71d106a33a34199484560a4cb8633e7a",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/government/tax-portal-modernization.opf.json",
+      "sourceSha256": "2edac1f3ecb171b48c9c1110a600513c8bc44224998c73facd054155a78821e9",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Department of Revenue Services logo",
+          "svgSha256": "4be7fb7302a777a046a164e5f16c91a11e9c3238b0370b86aa3f5085963ee90a"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Department of Revenue Services light logo",
+          "svgSha256": "c2b15d452e3c024ab9303284c16200fcaae4374e9a51d251c96356f30b612254"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Department of Revenue Services icon",
+          "svgSha256": "8023324f636233ff2632283545e608dba5fc850c1c97002cfffab04744d0b9ae"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Tax administration background image",
+          "svgSha256": "bb74e9ecb81d360882ddafbbfd60ef0a4445b13469750f3aaf64e8967a95d994"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Department of Revenue Services watermark",
+          "svgSha256": "9c475b0817edb6140c84bfcd649b9843242464e175d532ff78f893a9293e49d2"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "2c1a98b2a724ab734f08934f24ed625160976b0c279dc6d37443811aa0862239"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "5372a5309ae8ca934bf2299eac651965e233eafeaca4fc5bd8e3f9bb7e30f163"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "346c20d5b09936a864d51dc7af157461a0a39b5a799833cfff9f196bddb6380a"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "080f6f15f15706a9a4787e5f4158c149acd34966f38c643f89b667a004771576"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "47fcdc260f004c077cfdfa4328c6787e70f9eb02610f0bff22382575af0dfc6a"
+        }
+      ],
+      "pptxSha256": "45e366ec05715e6a6922a07c61ff1bb415c9f5ee406c879f5cb8af56280f27f7",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/government/transit-corridor-alternatives.opf.json",
+      "sourceSha256": "2dec4d7225744370dd642bb3c9e2310e52b17ac4b258376ec18847665224f198",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Metro Transit Authority logo",
+          "svgSha256": "40aa8fa684c400cd0c0c6d995a1309caf02e2b7cdea738d57361407abc73fc81"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Metro Transit Authority light logo",
+          "svgSha256": "37adb982670983219b4fe751e457b2c5ee492f707a347833e69e87a8749c9c5f"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Metro Transit Authority icon",
+          "svgSha256": "01c6495c1a58f7191918702b0fc3c3ba9e264a271213add5fcb1f6a4d636b80c"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Transportation background image",
+          "svgSha256": "fe1146094fe303053601294adb790c8ca95de51b057424f4960c10db5b338749"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Metro Transit Authority watermark",
+          "svgSha256": "10fac26a17a70f58e5f49a2894cd74af87a44329c9fbb0c3a793c7064553c44e"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "a4d82f421060f9f7125d27f2bd84a1fa0b78983f47741f6d4a0b37a785222f12"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "4aadd2d20cf467104717a9d230385892f0679ad4528d114890e9120f8e08cbf4"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "41a1b625669bc94245e6d86757e1585f4e1e4e4980bfc335919b2a6d5eb6e001"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "947c28ad60d82be15e34228a9e729e0eff5a34f98743c5287ad0e999efcd2afc"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "b2652cf8e8c7480a7de1992fe73649805dfd26e9f8a693044fac807040c22342"
+        }
+      ],
+      "pptxSha256": "c76a6e1ff38217fbfc0e8be900be482e9f0ce5027ab0c7c0d6fb422568a4e7d4",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/government/vaccination-outreach-briefing.opf.json",
+      "sourceSha256": "4b0a3e92d9d2a95115bbfdf4a3136c4a8c66673e16970fd6ced2aa61b062e891",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "County Health Alliance logo",
+          "svgSha256": "e51e8b1840c6de3598233eec61f7aeec11ae48fdf20fb7c4ed1620d5fd7e1a67"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "County Health Alliance light logo",
+          "svgSha256": "2ab58a09c004a91db3ce752235e399abbb2d2cf4d31fbfeb8e255fcab0253d34"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "County Health Alliance icon",
+          "svgSha256": "55acdd10167b6b30a487e9d44c4be4eb017fbce43490aa568e5d67947138d2d2"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Public health background image",
+          "svgSha256": "b7eb0f1c3e269c4b2bae2be067d530aae706106a4c96d17506c30539cf686d63"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "County Health Alliance watermark",
+          "svgSha256": "cdf9c7ed145299f9dd0f9436529c9ff3e18331ae73d8991aa941a8b9f0581343"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "1ae2229e4c259a910e3e0bcfbb6711991005902e86437a9fd4792df6eb9a5fd5"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "9df0674531bcf445e6a462c900131174601021ed52ad37910f50e2425ff848ba"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "f3a02c3e3a5a1f0684a0a16a3bd24d15126cf6780ecfde86d82ffdffd863931a"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "ba7b853be08009e8b3c7fb27ebeb0bb8b3f21c690a6cd95cfe31cf6ffea548cd"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "c1d839b1ce33dd6476574fe533a0063417731d2b40b1fe4e87f84f700ab06d60"
+        }
+      ],
+      "pptxSha256": "f94368c307e9a4eb5b2a6292fcf42dbf67173e39cb829191d42c808f2b986a84",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/government/water-utility-capital-plan.opf.json",
+      "sourceSha256": "c33890d9eef2db97766c3e2a5bae0a757ad978aa6f509fa02b410cbb491354f4",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Lakehaven Water District logo",
+          "svgSha256": "a6b9bf8344f403dd0229bf52703f7fb803f64f514fb12353c3cb4d4be619b2ba"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Lakehaven Water District light logo",
+          "svgSha256": "3f9560c99a8aac85517502983361c7bc0a726792d71bde99ad87b7a3fce16301"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Lakehaven Water District icon",
+          "svgSha256": "10712994bd4b89d5942634d907d03b64f4dbc11ce146b79b28746ecb9d42b258"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Public utilities background image",
+          "svgSha256": "fa74de426b789a39f338fa127540896547a56036ad2e9b6edc19ae79ed45aa75"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Lakehaven Water District watermark",
+          "svgSha256": "89cfd3ec297c38f79332a5b1697b4e3301103b85c632ad245da7bfa20d847543"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "6870c44ca6b48a478f3e6fbec47d645bb8937d99fcf2ab89b2028fec8488c8dc"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "4aadd2d20cf467104717a9d230385892f0679ad4528d114890e9120f8e08cbf4"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "dbc39fd16ced737360787723db7810fb1d9c471a1fc81018ad0a91d32375112c"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "6eb310861400b35a1e39c6961c2fdb58c426a519714592c726f247fd33a24c27"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "b2652cf8e8c7480a7de1992fe73649805dfd26e9f8a693044fac807040c22342"
+        }
+      ],
+      "pptxSha256": "ee79f11409a072d11efa9a4bfead9f370aca8656d03616af9dd4f616630b5d08",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/government/wildfire-evacuation-preparedness.opf.json",
+      "sourceSha256": "3ecceebcf857ed29d45bbd13543aa82ee7e3ba545084b0941279299ee022957f",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Pine County Emergency Management logo",
+          "svgSha256": "3eb09b29dc428603dc2b367f86e4dd4eb52e1ece8cf7593315beff6ad1d95be4"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Pine County Emergency Management light logo",
+          "svgSha256": "4389bfc600474483163b30c5cf6078234e31e65ac06564dcdaa097a392427272"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Pine County Emergency Management icon",
+          "svgSha256": "473911ed925823ca3d395564ebd442fa7ad6ba6c389343d2f098e515fa89e503"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Emergency management background image",
+          "svgSha256": "d1df7b29827818c251545a3eca3cff797bf38969b4465d0b764928cf119e822f"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Pine County Emergency Management watermark",
+          "svgSha256": "dfbde3dd49f2aa1d966504bc092f48a1bb3b79cd9542e315aeaf6a11c4e61cf5"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "133fd6c1cadc57174375f6d5ef03c5eafcb50873e017cf4a88f965613938b5eb"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "5372a5309ae8ca934bf2299eac651965e233eafeaca4fc5bd8e3f9bb7e30f163"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "55b94cbeb0820a9355f1c75246992867319532a9b58440e151d4e7411e499f61"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "c2e5bbfa6984201c0580a450769d9174cb8019f68dfcef2445b121a37c3d752c"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "47fcdc260f004c077cfdfa4328c6787e70f9eb02610f0bff22382575af0dfc6a"
+        }
+      ],
+      "pptxSha256": "30b1f7ab479db6e385d126d79583ce81c1eb610702e57473cf6f5f3c213ea06f",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/government/workforce-reskilling-initiative.opf.json",
+      "sourceSha256": "bec19b19887e77d7a180b7aedbed6e8d63041ef2cc7d2b813784cd677e6ff15e",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "State Workforce Board logo",
+          "svgSha256": "9e601224d5bea17444203d65e0577d6a5d9ca9d613e372e1bf4109eafc62fc17"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "State Workforce Board light logo",
+          "svgSha256": "a381d6be52308f0d042f0ed69afa667d358a96d1071612173bf3910ea7e48a80"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "State Workforce Board icon",
+          "svgSha256": "bf63212c491c9642c8a949504faa9576212845d13a788c36e1440c477eb659aa"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Workforce development background image",
+          "svgSha256": "3d09e5fb6013f46490f6a7d3bcca64764e324f68d9043138e7faa2def0ecbe4a"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "State Workforce Board watermark",
+          "svgSha256": "deb9e87410b651d3e48e26ba4fb6b12122c1e342af5d01123b53ee62f1d8cdd0"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "84c3888c3c500adc3fa0b657fb8cb22910d5dea4d763f1af5da0fd5e58f97d3a"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "68c2a07e60414d8f4c68da07b6fd979258a9d3c0f885c1ea7205bd9b92996e49"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "c498dc9b8a9bffbd991f0783cf78f6fd127d064d55ae537c57823043c5ad151c"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "dffef0ed161d54c579da73a8b4df1aae15e35a0ca5e029a05fe0874076bb25d8"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "1ccd526e8c5895ed4a65c4c0a3a3786165ff37e2e0179bee832341c97903923f"
+        }
+      ],
+      "pptxSha256": "c5ecaa8ce6d175088fc409dcff4537147813522e68b71ef1263dd4cd39914d3e",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/industries/airline-disruption-recovery-review.opf.json",
+      "sourceSha256": "ac42d6a4863d1d174432860171ccb5619cb425e8d1bc40c9405b20dd999e1553",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "AeroVista Airlines logo",
+          "svgSha256": "da2b7ae42fee5d0d7ceea1a13e599f851dc565b0cddcf1fb3066374654b04639"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "AeroVista Airlines light logo",
+          "svgSha256": "997e0bd6f5591cf246270f961e8043c6bd96109d44032db865f1dbb36355d54e"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "AeroVista Airlines icon",
+          "svgSha256": "4e50216c04728018f812e384a1638332cb0d3e8a331fbf87742069d6203a99c1"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Air travel background image",
+          "svgSha256": "e92dfe6629e72dce511d6daa1d26e9cba58ac1b197e8ede001978293085e25da"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "AeroVista Airlines watermark",
+          "svgSha256": "27b0369a5a3147208c917fde2532ec82cf8f31c754cf080852945a9928da9b60"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "074b3abbf44ee69cc8561e1619af107ef773ee7abe55f75c8577f6ddd6ee9a65"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "a39e7f4ab89b3bb47c1fd63db0e5d85eaefc6d1162dc30064148189f678d77ea"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "9147bfe11dcefcea7158acbb438d1f90c36a041b45b60355cfc4f25195de21bd"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "20d7a3d58b94ce3848d99e40b7a60dcc10bc5dc6fc3f8f191908c7582025198a"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "a5507d4637fbe58aa25082d7831d1d06950be9359764c42d6bfe8d91317b8eb3"
+        }
+      ],
+      "pptxSha256": "5cfb56b8226ea5b91d06fc9874d2ce1d95f4729745512941302cca0f828bf4cb",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/industries/battery-line-supplier-readiness.opf.json",
+      "sourceSha256": "8012550fd6c8675e296c8bac443884c31181675b54495e4632685a13dea61739",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Voltcrest Components logo",
+          "svgSha256": "b7e5e4141d7c483dd90b68e91bbc27276a96fb4278fe6054c5855718ab310139"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Voltcrest Components light logo",
+          "svgSha256": "36cdc8e62867499cfd8236a52bd21822d524604fc93c382d6aa4479a5e3a7b54"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Voltcrest Components icon",
+          "svgSha256": "64137fe933b83bd62cc93b6a508865087bda5b720cdb7849bacab496ec2fdb50"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Automotive supply background image",
+          "svgSha256": "0faa562ba48637365e738a7eaffa980e0e733c48bb44ee7bcee6fc31ba7ccb4c"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Voltcrest Components watermark",
+          "svgSha256": "0532a834072a6e28b8b7c30526c8c0398e6f8d77d3bd5fe77e65d7e1c02f5478"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "be42f80f38f29e884c781f4b036bdb9b2e96e1d7291eb496a09ecae3f226d245"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "8535c1756550884f7d5edde8e80bae83a1cb486c77de77c905ef68fe60ebdb4f"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "211029182822afa1d445deb694eb582703103eabb42efd01de260e36d7418b09"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "ca2349b94ffe09b39ce6217ec87c200934576a3625030b1637074f18812d7362"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "d5691f2095717486c450407512af2201208af07af5f39db59c00cae5e46cf6a2"
+        }
+      ],
+      "pptxSha256": "77d5bfb061f9834434594c1d639aca42b30f5fae247902043b5cb89f3f834095",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/industries/boutique-hotel-revenue-recovery.opf.json",
+      "sourceSha256": "62d7fc8a8dd28211955efa5e2b9cae742beea01dc0a3a0cf9577b04dc49098b0",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Harbor & Loom Hotels logo",
+          "svgSha256": "4031a9ffbc2334899f601e30bc04d999a0c4c7297d9d9e4d6d32c2e94fcdec24"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Harbor & Loom Hotels light logo",
+          "svgSha256": "ab517ed857495bb7fc8be4a58d39f5ec7455ea2fe164bb109335063636b6ff90"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Harbor & Loom Hotels icon",
+          "svgSha256": "6e4fb1964fd535fdcac1d2af423266342a4b6a56349daede530b22f9a28c0388"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Hospitality background image",
+          "svgSha256": "64728f394d3afc40b8ad1d478c736ec212da54a68774164aacfdcb219a04a397"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Harbor & Loom Hotels watermark",
+          "svgSha256": "ca6d300d23030d7c30ec5b51ca4d16c59213b8ef67f5725291e05d1614469bca"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "62d7df92bd5ca6b6abea9f911269bd3a9d8b1d1b9edf8d883952e07c3fb7efa3"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "49e3443a9b05f6f8e4df668a8c97f70e3fad5fe9aec59814bfb02f93bd0a4125"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "98439b94a312c816911be70964d52eae27a05b00b1dcd406f9de34e4d5ed3ba3"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "a8a9d95456ea2c0f9c2550ee4a097a76b61599c12aae5c7b8a0459379b57fb1d"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "a66ccc5d8d9d0ecd0ae166bf85fcea0caffb0de12758f48c0d0ed50c34ae5b85"
+        }
+      ],
+      "pptxSha256": "7a6eeb1829a999e54f1c9306861d06be3ba65e2fd7e4530e21995160ac66e123",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/industries/cold-chain-waste-reduction-review.opf.json",
+      "sourceSha256": "86214dc344278d4bc806dac4fe11808746741196998202107468d7374c9a3e46",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Greenbasket Markets logo",
+          "svgSha256": "1c78dde23378d93833320516cd7356453d8477ca4caa92a75b65a869d6b0f033"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Greenbasket Markets light logo",
+          "svgSha256": "cb73e7ea81f6b35c1c0fccdc9fcf7c9675d311323497adc7a8d2736d907ee7c2"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Greenbasket Markets icon",
+          "svgSha256": "b52f7a7efef5ec4a5f79895602efbd5dac6d6b382864094d572a2c76fd8785f3"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Retail grocery background image",
+          "svgSha256": "3431b09357fdbde2e58306ec4cc15a4bef5faf8fd35f4247c5064f4606e68749"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Greenbasket Markets watermark",
+          "svgSha256": "fd2b14a732fc05aa11276d4e98603e36257041288741fe70578a6d2ad17afc5c"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "2d2cf74811b3e6997e2f5bda690b4da6395508919e59f7c0ea73b3c9b1744456"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "4aadd2d20cf467104717a9d230385892f0679ad4528d114890e9120f8e08cbf4"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "357e05d4ba4eacaa8d4cd5af031f1c20e58127131122b0a3760f686da0f9ee18"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "7deab8b22ef124d2e69c3e171ab8d112860c75de7e093c16c1a797cfbdb367fe"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "b2652cf8e8c7480a7de1992fe73649805dfd26e9f8a693044fac807040c22342"
+        }
+      ],
+      "pptxSha256": "7f2d456f9b7be0348b9a7480c238f9cd786fa214a807dd327e09db4abf436bcf",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/industries/construction-safety-stand-down.opf.json",
+      "sourceSha256": "f77fb4e659e0b4977072ce7df0749edf50f623e3a4133c0625951c36c4b950e5",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Keystone Build Partners logo",
+          "svgSha256": "57ff93c30d3e432bcf19b077976ba43eec2ff992d2185d43914ded05c9231295"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Keystone Build Partners light logo",
+          "svgSha256": "3aae2aa15ae6efb3ecf93fa189fc823892a9c5b8563ecb00a3b91907a4b5858d"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Keystone Build Partners icon",
+          "svgSha256": "2ff73eb0199e94c4145104aba5867a819676c60efc2da24cf7acb70c4bbe48e5"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Construction background image",
+          "svgSha256": "991bb3bfb7ae1e84fd7879e1a0871b09b8a09151589a927fb171ca7a6cfba13b"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Keystone Build Partners watermark",
+          "svgSha256": "dd6fb04b5d4c92e7c6ec50f947d78b477541be460926047841e28c6037222e8e"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "c43948966d221251e83f27eb5bbcbcf5f9652505971b8e486eb2fbe5cc3a83b7"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "53238b44cf69c3687304a23577e9ae6549582ba582dca57b821f310701837d5a"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "a07207633d16ac5d60665eb8a03e13574c20aa24db3404a98a8d7c775cd32340"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "f704ab4116a3ca1ad3918636839963a0460f47edfdb97d6a89ac251c59f0c177"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "56a5bd1402aa1cfa8a4821fecc3272e53f5ce5d6a43973430cd56a001e47f9ab"
+        }
+      ],
+      "pptxSha256": "9a0244062d305918fd4a982f92d107799490bce0d1c36d8f92a092077d58c239",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/industries/consulting-margin-recovery-plan.opf.json",
+      "sourceSha256": "2371797c70d7b13c9cabda74467378327071d8042682f576753833af87904f62",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "North Pier Advisory logo",
+          "svgSha256": "f6008ae7d8787f50acf36b0cccc2f53e8eb4e39723cb179b0b64f30dafcd4d58"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "North Pier Advisory light logo",
+          "svgSha256": "e551b4356074bcd0fe28ec0527c5f468947528a4ea21b08a8227d69c0efead13"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "North Pier Advisory icon",
+          "svgSha256": "38eae0e2e4dd8d2096ae3560fe7156de63c4e25e545af21d822d14eae80ba3c6"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Professional services background image",
+          "svgSha256": "18ca8fa847d6c95e7a01f3b6761db051ff589006d15b50696e85906391adc395"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "North Pier Advisory watermark",
+          "svgSha256": "9a410fd7197c4afc0e6602273098fa9952d0439c47d6b519de940f7a95e26894"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "63ab4407f25ebb9c664ddacf86e9e8421b3ca661ff1d404714679110c01220ed"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "9df0674531bcf445e6a462c900131174601021ed52ad37910f50e2425ff848ba"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "e5dd86d6069ea883f04931252ef614158a02d034475a045646bf83f1cc2a1a85"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "2f90ea64423323e4d38ad08514f72e98d0077986872855eb51b573014d720abd"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "15967e0c0f4f03a795bca2c32d744e6beeba7052be77b526f4422d7ed8d0a612"
+        }
+      ],
+      "pptxSha256": "7cced7eb84fcbc11d2e47879a543c4788c144bd899e9be96beea9393a4559d71",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/industries/drive-thru-throughput-playbook.opf.json",
+      "sourceSha256": "5b489e170e18b2a4e91c86973b66c6a50c10c558c3aaa8560f30e85b9c690f97",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Tempo Burger Group logo",
+          "svgSha256": "b22848b5d8d4b1f6ef01b9e59bab0ba274f92e8a1fa988ac67efb089bae5cc9e"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Tempo Burger Group light logo",
+          "svgSha256": "4a6ae2ccc8c547162838b1eb8d7978809867a8dacf56c02da49f53bd6ca865d1"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Tempo Burger Group icon",
+          "svgSha256": "3514b66094b6ce3e72f801de66b8c00d5ada7f6a1bc9823951163f1a5f5764d2"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Quick service restaurants background image",
+          "svgSha256": "7c5b4630d59b63a8c1baada9358bfba04e342108545b6b2323467f06ef5019a0"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Tempo Burger Group watermark",
+          "svgSha256": "9dc60c80decea84f2d8dd3f4d4aebde02aeef4062ca6fa4642b0f7fcbad34702"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "6870c44ca6b48a478f3e6fbec47d645bb8937d99fcf2ab89b2028fec8488c8dc"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "4aadd2d20cf467104717a9d230385892f0679ad4528d114890e9120f8e08cbf4"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "dbc39fd16ced737360787723db7810fb1d9c471a1fc81018ad0a91d32375112c"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "6eb310861400b35a1e39c6961c2fdb58c426a519714592c726f247fd33a24c27"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "b2652cf8e8c7480a7de1992fe73649805dfd26e9f8a693044fac807040c22342"
+        }
+      ],
+      "pptxSha256": "57b19d2940055e08dedf447c337aa69d19f1fa6742d2161c48c4d0b37405e2ed",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/industries/fan-experience-operations-brief.opf.json",
+      "sourceSha256": "e29c7721cfb1709041a997e9930778d96fc273a213439f722573b8a962ff7122",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Summit Park Arena logo",
+          "svgSha256": "b073fa4ae18978c63c857161dbc2adce734b7686c7ba3473eead819654de0882"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Summit Park Arena light logo",
+          "svgSha256": "83bacc3a8cd7b317bdb8892aa21cbc0fcc615825b102ec8269fa5237e7260396"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Summit Park Arena icon",
+          "svgSha256": "328b899b531938f1509138f6eb3683e743a6f19a4412ecbe82a9d9e7cfef0acb"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Sports venues background image",
+          "svgSha256": "2ffcf6de051b5b2dfb147acb11bdd1a208df9ad6d3d91a3745b8a6d266db30c8"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Summit Park Arena watermark",
+          "svgSha256": "7f57e48d0e37d74a17591a3ea5f6bc05c6e81d7b82709869f00b69cd1371e79a"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "77698083273831766b4c780304c93b8f1bb5870ec52e39579ff9f6839c46657b"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "8535c1756550884f7d5edde8e80bae83a1cb486c77de77c905ef68fe60ebdb4f"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "721ddddc35c98cf6b32285ca0de092250d45dfc6ed595be3822e773e3a15fc52"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "79ad90e25b2d4246ddcd8588ffaa7df668ee9d598a55e590f371057202a86085"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "d5691f2095717486c450407512af2201208af07af5f39db59c00cae5e46cf6a2"
+        }
+      ],
+      "pptxSha256": "5d4a922910a02b40ac60af5a9e3b2b9b51abf33e185f9bc759430765d9942aa9",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/industries/grid-resilience-capital-plan.opf.json",
+      "sourceSha256": "8e2b27bed50c8e26bf46f7b22dcfc97d15cb948be6cdf6330b96baabf4f676c6",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "HelioGrid Utilities logo",
+          "svgSha256": "31b513b055e353c34a63ea68f4c0845594632e0bfdba21401e879f333dcb876c"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "HelioGrid Utilities light logo",
+          "svgSha256": "0e6557cb1199c60b0e6ae358f6983d1266bf4fdeea10b34b6dc0b7b6111b7c91"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "HelioGrid Utilities icon",
+          "svgSha256": "7eaed38cdd07e6f6928459b81ec1b379d3d660ed1a03a1e2b1e2a024261fee5c"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Energy utilities background image",
+          "svgSha256": "ac98123b6f6f04bc53bc9f4a061e10216076b61537592e40ff4aaf39e9f5eac3"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "HelioGrid Utilities watermark",
+          "svgSha256": "aee11ba9f7bd9b9e3053aa85ebd84a7c28818d35a8b2a4b2efee399ae919cff5"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "cc22f1136336f88456b9647ba4180de544d86263f7d97732d69e7774fd8972ff"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "6f03ccf702ebe053efde28a21b8adf8b2568c028f44a12b28d50125813bae2b2"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "ddb2e031b59fe7ca7d62ae70872d2d4933aee539b887170d842066aa973ebf9a"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "bf4850aed8478fbcbb537dcd8378bb1d13bdfc65324212e22d401b1a5e892b32"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "f1a8ba45a0828beaf20fd36845ba84da1dc79485570ae1e0b378eebb53a96d86"
+        }
+      ],
+      "pptxSha256": "ca06f5b4c9f669a63a447378c4ebc64b8f6615b0b68e25027021cd6f8a019838",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/industries/mixed-use-leasing-pipeline-review.opf.json",
+      "sourceSha256": "1268dbffee30bea609c572d748e8bc839175bbc943414f5a0a220180f8214860",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Cedarwell Properties logo",
+          "svgSha256": "254febd0387fefa839a1acf7581fe909e0240d7bee1f4f8158f509789da08f56"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Cedarwell Properties light logo",
+          "svgSha256": "f2250e3188fa8b746a09b9c25f60b7ccbbfe8c97e4746355ff315a2d9e9aeda6"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Cedarwell Properties icon",
+          "svgSha256": "0e3cb674160af38963e170460159878445b22296c8fb4bdee5c9f78c0005ad0d"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Commercial real estate background image",
+          "svgSha256": "ba247cc788289cea82693c765ef0ba1da55e168bcf16c4f40107c52cb2426cd2"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Cedarwell Properties watermark",
+          "svgSha256": "1a9c5ce23fec616e1e42c26fca122e6923bb12195e8e9443bbdb8b278d214abf"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "bc34d532d8ba2880855376b07bfa5265d0e2d234601ca0ec946504b7c6515893"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "68c2a07e60414d8f4c68da07b6fd979258a9d3c0f885c1ea7205bd9b92996e49"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "8643f21fa2e7b9f0f59fa983217268b5dca53721e32919fb0f6ffce31e7b6476"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "9c8c02265e73737592e6ba5a2bf5ec6c08e2d6f85f346a498b0a17590a691519"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "21f790258d6b7ebb14e4b90534139dd1adebd8da26acee8951e717a2bef32039"
+        }
+      ],
+      "pptxSha256": "3f9cabc2318f6ace27c320f77fa8e30a86af0a4d265601cdb29208cd7c8accaa",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/industries/port-dwell-time-improvement-plan.opf.json",
+      "sourceSha256": "53fe829645552f002e7c505e595f012720f4124c95990e7ea94f2b619092c1bb",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Bluewater Logistics logo",
+          "svgSha256": "af3404cc0907742c40191234b676fbceb0846db96efa8acbeffc3d7a627e0912"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Bluewater Logistics light logo",
+          "svgSha256": "68898a0252524e31c6167a1df956ed3f417236e257770eb91ed7e7b1e4bd2504"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Bluewater Logistics icon",
+          "svgSha256": "27f1f811018bc9e9dd1c3645d4f8a304d42edca7d1f88339ba9d73823452fcdb"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Ports and logistics background image",
+          "svgSha256": "d31f0d284dada964b4e64e8d3b05f812be34c873f50c19e9cbafabe72a2ad4a6"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Bluewater Logistics watermark",
+          "svgSha256": "acac90ab8799c7c0241cb1f2de31d4e6c79125bf61fc4a4cba8661b0f04d1d00"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "a9dceb1a88619169e08bae60267cc8cb4c75467ac1a35daa19429c4c16a4fca1"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "d387aa3c23f43abe7b6e74d806358f8a76db28f1a1c444cb6fed2a379f7e66e9"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "d100be0993d8acc42cc7957d512ccc65767e7e39a276876f082fbee999d8146c"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "a97f94994f1c87be35a320b26cfd9a4d0ea88ee58451f7b253b0a8cf3d062f88"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "39a974d89f6d64b5bebfbe36a5fb32a96807d679ab24ba883bfc7aa9f47219a4"
+        }
+      ],
+      "pptxSha256": "bef299e0e1caaa6abc6b788cfd8e16fe8b88e32bf7a8f4c2071771d9a3ec2553",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/industries/retail-launch-readiness-deck.opf.json",
+      "sourceSha256": "ec55512a675fc2b129af0e0522c2a5499c89da4c998340233f37d92d55fa0cb3",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Bloom & Anchor Beauty logo",
+          "svgSha256": "cac6dc956f1c6dc36fe5eceecb757258df89983d523aa9b04d3562bb7c552c65"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Bloom & Anchor Beauty light logo",
+          "svgSha256": "9a2c2f919377b81ea81a515bb39e9bb069eaa85ba810b6285e1e1fa59a9553a9"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Bloom & Anchor Beauty icon",
+          "svgSha256": "c375daf127896d9bfde03a2d9ad07f46df563d55043487b9c54cc7ca39172a2d"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Beauty retail background image",
+          "svgSha256": "7f462a2caf6d6ac30dff251f432dbdfa10043d3fcb378ee4a8e224557fbf670d"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Bloom & Anchor Beauty watermark",
+          "svgSha256": "79fbe7aeaba6b17b47e2542252557412c6dfd34f86b234579dccb17393a350b1"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "a1b6abd594d59c4e376fe8168271ddce2b4e784a048a7883ac0842094f67479d"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "68c2a07e60414d8f4c68da07b6fd979258a9d3c0f885c1ea7205bd9b92996e49"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "6fc7bf2c9737a11a3b52626197bc2fc8fb56225ac3a4a71f555dad58b9caab96"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "b79a920df44acb21d961c58b0256616524ef1f14d0234d36029bdd328576b6e4"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "1ccd526e8c5895ed4a65c4c0a3a3786165ff37e2e0179bee832341c97903923f"
+        }
+      ],
+      "pptxSha256": "a0da94ce74d3ede51707b584ae0c56c58ce150bfaaa0eb1d99c62e88600d27a5",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/industries/robotics-quality-escape-briefing.opf.json",
+      "sourceSha256": "e132951ad54be0637684620319e8cd5c541680f85416c4464db9e791d2cf70da",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Axis Forge Robotics logo",
+          "svgSha256": "11236b3792f890e1805441b1baced157082f54f5c5e9b69d2a42793ea84a0c93"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Axis Forge Robotics light logo",
+          "svgSha256": "6a194cff76600581b4a55987ddac47886a0b6a67c0fddb0997b0f3a94f6d81cb"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Axis Forge Robotics icon",
+          "svgSha256": "80330845cc6ca96f30347e114e84dc58a415dd3c9def05098a1589075557ac7c"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Advanced manufacturing background image",
+          "svgSha256": "8bb75fbf1dc9a18ef6fc7c5fa34df484069f0979d5cb5337d43ab5c816ab4e35"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Axis Forge Robotics watermark",
+          "svgSha256": "a19b2e3c7427cffd0d79dcf26cdebecc937420d783ab8c1da67a7d0ee68802c9"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "6c1f38e6781be39e06176f3857acc928f6c449538a8e77c0a57a55d050d42eb4"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "53238b44cf69c3687304a23577e9ae6549582ba582dca57b821f310701837d5a"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "8d8b8bb381759ec74b260e8cb714f80ddb2b9868d8ad1d954efff94f6d4d7dd9"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "0bf9506f4fade02a5e431df866cb5d8d463a75c1554ada55f1775d4d44b6b584"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "b8b2331d8cbf07f38f5b6f94b53d1b93e2199f2b271528fcab9653c7ca8fe9a2"
+        }
+      ],
+      "pptxSha256": "cdb1833ef9715e54ac28b98f21bb42278a1d0d6266153bd373053a4706e53145",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/industries/satellite-maintenance-readiness-review.opf.json",
+      "sourceSha256": "2d948d7ab9991e0ddfd93c4bb88235dd6e797cd70ec22728a68d17a5d59fa1dd",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Orbital Ridge Systems logo",
+          "svgSha256": "c6a53ac45f82e86070c8ca1e7a657a37ba5ca8d9108f3f05ef0472c7c81691f5"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Orbital Ridge Systems light logo",
+          "svgSha256": "5eeb6983c7d7163c62fcdb4e2856c56afa527f358392d8db6a4103825b99bb39"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Orbital Ridge Systems icon",
+          "svgSha256": "7d26564134b3ce551995fe4764afe8d8b0089e1e30aab98612fb4459a07d10d3"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Aerospace background image",
+          "svgSha256": "4941ca85cf43afe760e4188cf66f4ccaf6a129ca3b2a11298b3e142e69b6baf4"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Orbital Ridge Systems watermark",
+          "svgSha256": "fd4631cd7c7c8837b654857eca87ed8c1f1ce41a4738447c46a7fe240f4badc4"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "8713b15f14f5e825026b83ae87c6d1592033661a0946550d4e55547087c6c98e"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "0f694d58009386c7b2bbe42629346ef953dcaa4fa60e83c70bab560d136068be"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "d1bbc890b035e541b5f28029d2d1a672c91e14138f9440df275ca55918c539c5"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "a8c4e4aee4a66ab969665a05d5f75b38078e4e408e63a02809f27ede097003ed"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "9274a0ad5a78de3f76e52ec589d095502194ef70cdb85b72d8a139269c050190"
+        }
+      ],
+      "pptxSha256": "daa71f114432edb1be3f7a2efd3ea1ce7e64a070640ec530a925f94628f16a89",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/industries/streaming-churn-winback-strategy.opf.json",
+      "sourceSha256": "ce09337efec7899823d8260daa044ce2a7753dd49c919f3bd56efc6eeae85cff",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Signalhouse Media logo",
+          "svgSha256": "7fdc334f0bfc0b582f7ecec93a09aac72903180f04c0a0c76edb368cfaac9c20"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Signalhouse Media light logo",
+          "svgSha256": "dc3a200a391b0ffbe50a21a787027548edf2818e22ed7e3e07cec7477afa2f5c"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Signalhouse Media icon",
+          "svgSha256": "c5ff938360070f87215562adf595bf83d47f17b183aaaa1f6c3fb41c21e201a3"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Media and entertainment background image",
+          "svgSha256": "07defdc4485974a2c34e5ff1d0630c39b87689e62d0ece691792552f54925f88"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Signalhouse Media watermark",
+          "svgSha256": "f262a9a073db15ea989a6876202ce3e7ca1814509d7fe9d432cf74e9e3be9f3d"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "f38d97ee5ece65160c555b1450a1bd415d05e6d7ad84626d216271c96c462d83"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "1c7d0e067336379975e726a48384c370667e216dcde1d7ade5bfef89b76b00df"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "ef730f5313bf8695e82ee95d6c59e5dcd46ca92d788ad0e3c483be05c20cc28f"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "d88273c4a003c31893f42bdfb9b690fa950ac4ba4344e7884cf699990bc41862"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "f24ebe0d1ce2d815a2cb93bb497dddc6cbd1ee7c94c2b0b76a67588bbcefbc71"
+        }
+      ],
+      "pptxSha256": "c2780c3d14cb1267e1fca89ce20c120417da35c7602a81081136a37fc3fdb7ff",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/industries/tailings-monitoring-investment-brief.opf.json",
+      "sourceSha256": "15d4c9b523e1d7dd6e43cbcfbc9a14df1ee17e39875f8c8589f364ca9bd271c7",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Copper Mesa Mining logo",
+          "svgSha256": "b29f273657e8aeca9459e4990c89b0b97151fc0af5c3ce1f6f936298add3f3f2"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Copper Mesa Mining light logo",
+          "svgSha256": "f6d1e16ce93f1007254d59cb02023b34b96a30c05b9598131ccefbe56ee880e6"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Copper Mesa Mining icon",
+          "svgSha256": "2c692680eac3ebece4ba755d3fc70854af90956070eaf4a7ddf03d4c382e9adf"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Mining background image",
+          "svgSha256": "f5a5b57d91111fa3d5fdaad67b536b9d1d58ec32407db7fa73bf6087820a2fe7"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Copper Mesa Mining watermark",
+          "svgSha256": "bd0f842dff6eda8cabd173558dac27f6bcafc0530a62c3680ca04287d95196be"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "b2d3a24cf2951087bac10184cd218d8f974d39cc973a636398e97fad23cd3f9b"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "68c2a07e60414d8f4c68da07b6fd979258a9d3c0f885c1ea7205bd9b92996e49"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "4d7a3ef09e8a9aeebc7facd49117bc122d7270d5f879f4a1930b21cbf99f2db5"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "43671cc0a4d4932cb06c195efb1c65fb90a9e0c7ac3932856b95c3e704941b1d"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "1ccd526e8c5895ed4a65c4c0a3a3786165ff37e2e0179bee832341c97903923f"
+        }
+      ],
+      "pptxSha256": "ecefdd00645294ba6068f99acf99b09da1931a291f2e6e46a006530bce7a20e4",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/industries/trial-enrollment-rescue-plan.opf.json",
+      "sourceSha256": "14eefcda38415c355ea7f7b2603d95e43c9c4d35b961e125c57bf20490265c06",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Novara Therapeutics logo",
+          "svgSha256": "af79465f7a00dadb72571ba0f705e42bad573b1760f49aa96dd75d603df11082"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Novara Therapeutics light logo",
+          "svgSha256": "5c2bfe1c1e2ee803ef8fea9f4971f37ec6749870fad75fde4e43dda5a8e88118"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Novara Therapeutics icon",
+          "svgSha256": "5dff41d15694d53f6f01864f39c370e830856fd31ee9926d28d6655e9a380a38"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Pharmaceuticals background image",
+          "svgSha256": "a0183ad63d5c20533a6ba3d3df201825bab9712daf4e8362764ad14bb5517dfd"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Novara Therapeutics watermark",
+          "svgSha256": "bebfdc3a632f25af28c258d9b92be980e2fb515e09e1e84b4df9cd319fe481c6"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "ee718770ab14db9562cdb9464b88345ee4fcc00cd7410021b9f27211f292b041"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "8535c1756550884f7d5edde8e80bae83a1cb486c77de77c905ef68fe60ebdb4f"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "563e9100eb491df45808add0edb0d826434badb6af26408c562e34387e9a147a"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "c3a524d0f3f5780f44cfd3dde37677c96d13c3c1c033fb10fc2036c8722e11ff"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "d5691f2095717486c450407512af2201208af07af5f39db59c00cae5e46cf6a2"
+        }
+      ],
+      "pptxSha256": "68f4086c481fbe69a812ca0c01c1d42bede47db91b6fb0044a82db9a6aa6fd64",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/industries/veterinary-staffing-stabilization.opf.json",
+      "sourceSha256": "cd47d5effaa89bfaa3312702c84bdad6107afff896d77beb25ca675c87f2f877",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Oaktrail Animal Health logo",
+          "svgSha256": "a5a45225cd86265cbe91bb3e66fee61243f99e2d8070482f51ada09e5279089a"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Oaktrail Animal Health light logo",
+          "svgSha256": "691150fc11102f883617b78b95e67889994bd84183e6bc6e1f4c14c01d5d0971"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Oaktrail Animal Health icon",
+          "svgSha256": "0fdc70ea3a72996810244729739346b1f0a582cffcd0bfdf87a288cc71e2183d"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Veterinary care background image",
+          "svgSha256": "699dff1326e57eeec2a8ef739112dc4a11e917a5263a1052b68192b097afbe43"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Oaktrail Animal Health watermark",
+          "svgSha256": "d686abf43b09b7d97675cf643152ee553f58f6be153a05f8505735fd678b6e22"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "eba47f8f6f0de27d2303362147e1d1aae0b9e46824ab00bd94bc4350de600a93"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "a39e7f4ab89b3bb47c1fd63db0e5d85eaefc6d1162dc30064148189f678d77ea"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "41e79d4a26d00ab0359ba1a9305929d37a704ceb8458a3e293cdd5fccad54ded"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "7f908982fdbc0f647a8f2c3597db708e03edbff59afb2f0c16c544f535bf1a8e"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "a5507d4637fbe58aa25082d7831d1d06950be9359764c42d6bfe8d91317b8eb3"
+        }
+      ],
+      "pptxSha256": "a82d9c7d43919fa0a65fd34854ae09bc86ac59bd8d6300ca83130a0e9cb0057c",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/industries/water-stewardship-grower-brief.opf.json",
+      "sourceSha256": "2cb8b0b1d46b197d6f9ddff37e8211eee0fc4079e9ea532cb052ee90fb331569",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Sunfield Cooperative logo",
+          "svgSha256": "00b700250794541b65f229649b8973449af9aed14316973816d78eb1c7be28c8"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Sunfield Cooperative light logo",
+          "svgSha256": "d6ed1267836d27f65ca18f1e6efd73cc44a0e9872029cc53e5707da98ac526a6"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Sunfield Cooperative icon",
+          "svgSha256": "f8c85a478ceada5cc3f324b828001ca8c384b7f8b81618944656e19c3ef8ea9d"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Agriculture background image",
+          "svgSha256": "ee3aa66f28a858032c00ed7ed478e886ebc12f288aec9938a89c96b17e0c42fa"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Sunfield Cooperative watermark",
+          "svgSha256": "f9b9fef69f0a27796d60b20f901a9e6c6620053ea985e4668d6c80a301ee711a"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "7b644ce5f10736d940e128932661f52761dc97078e04eed54b96b6054f762b47"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "a39e7f4ab89b3bb47c1fd63db0e5d85eaefc6d1162dc30064148189f678d77ea"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "08e29bbb04dc02e827305d897f46031a4111c690ca60cce6307319a0482c25a3"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "08a224003ddca754f5e359ca3bb5a9e5e9c1a9f74665e70b40c79a8746719ba4"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "a5507d4637fbe58aa25082d7831d1d06950be9359764c42d6bfe8d91317b8eb3"
+        }
+      ],
+      "pptxSha256": "ea1dbc5ca34f41c45d05c6fb18889a7e04a09d3b939ac2bfc5fc59df415f0c3d",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/international/arabic-digital-services-brief.opf.json",
+      "sourceSha256": "cf38447f1fe47feae07686bdcd85c08102ea11733fdde1f2fecfabd005875901",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Crescent Public Services logo",
+          "svgSha256": "fc157720864d957e2fc6ca44ca80424980a6f42e09b4f092057128699f0645b3"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Crescent Public Services light logo",
+          "svgSha256": "4b8fe976f6d992be5bc5fc8c1bd322a26ee16d4b01163215105f5a41aebbc8b9"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Crescent Public Services icon",
+          "svgSha256": "09cb31da2365f1aa44d5c58b8a261850e31e8df383a8a5b2cdebbc977555d1a6"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Public services background image",
+          "svgSha256": "3db78ba0a890e41ee5e39c4521adf8010962f39adce2850da2133a8976702558"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Crescent Public Services watermark",
+          "svgSha256": "d955c28e7187297a85eda8a21cbd4ea47fa4ee23eb3e656e72196d97aa7720b0"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "eba47f8f6f0de27d2303362147e1d1aae0b9e46824ab00bd94bc4350de600a93"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "a39e7f4ab89b3bb47c1fd63db0e5d85eaefc6d1162dc30064148189f678d77ea"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "41e79d4a26d00ab0359ba1a9305929d37a704ceb8458a3e293cdd5fccad54ded"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "7f908982fdbc0f647a8f2c3597db708e03edbff59afb2f0c16c544f535bf1a8e"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "a5507d4637fbe58aa25082d7831d1d06950be9359764c42d6bfe8d91317b8eb3"
+        }
+      ],
+      "pptxSha256": "345b5deae87cb1fafdcda7afa4ba7eaa387e6a307ebfe022db78a3754689a33d",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/international/brazil-climate-adaptation-brief.opf.json",
+      "sourceSha256": "14a1a12590c6a4aaa8171dcef41fea199ea1d31bb272f08240023ec21105b190",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Instituto Verde Norte logo",
+          "svgSha256": "249c0f16fd93afd54769e554ccc724495e0f04571503ed318f31cdd1eb684ef3"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Instituto Verde Norte light logo",
+          "svgSha256": "2ef2fab0d39c4bc77e724a9bb551a64732e3ceb4d30c0b941c0fc63e32ce7266"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Instituto Verde Norte icon",
+          "svgSha256": "8e18ce903e974799d80bcd84ae0011fcafccbfeaf187d67829f4031b90268826"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Climate adaptation background image",
+          "svgSha256": "228a5adc59a43308605adc49cb8815048822b4656d5c79fb6410c0dc0851d1c1"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Instituto Verde Norte watermark",
+          "svgSha256": "b577b62e321d2a647b9d84b8d4502a0eafd46ced021519bdffa836067b570d94"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "1276fa9a0eebc6355d025647131e38150ec1ecf9182be21a7639da32f51b4cb6"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "7e9aa22a61f9034abd0de5176f3d0d906d99449510b020a1903ec5eb9e08f008"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "a7d0350e9550be88ba6d891d8fbd0536b28fa1478cf74487bb1cb4a7f5c606c3"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "7feb813aa81844fa3420ab846bccf88baca7e2e4fadd6f84aedf7b3267e740c0"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "793e29bda913bc3ab247efdf4f135129e3cf459a3e94d31fc793f7fb6416b06d"
+        }
+      ],
+      "pptxSha256": "f8fb314c37f013a162b36900398df424756274314e38b297400fb7f798b9b056",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/international/german-works-council-update.opf.json",
+      "sourceSha256": "56c1f6cf562f71f638c6e46287c3a8f2d1f55c4a4dba02c2ab55a2c75a8d3463",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "RheinWorks Mobility logo",
+          "svgSha256": "a1c756ce85f90eb8f7088d2b543bd9620a9f7893e9f6152d5dc77c95d627782f"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "RheinWorks Mobility light logo",
+          "svgSha256": "88a5555e8c08a04f0ac698bf558abbf39a6544093c8b7b361d84940f028b15b7"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "RheinWorks Mobility icon",
+          "svgSha256": "59c75a8b3c24963074d1e8df95cb4e230aa596c2878f91fb28f7c05bbeb4bd52"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Labor relations background image",
+          "svgSha256": "b3546698efad9f27befc6eccbb40937f2f1270998be939bc4e786849588931be"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "RheinWorks Mobility watermark",
+          "svgSha256": "6406fbc6a454db8f75bcc85d8ffcc36ad4d3effe68376470c552e1a14c25bf68"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "98cffbe3f84a784a70f7913c45db87895d1c44a5e633f39fcec2e0a375d220d7"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "1c7d0e067336379975e726a48384c370667e216dcde1d7ade5bfef89b76b00df"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "ffe28e4ca7179ae32568109fe8b17985fc4f87132b95105d80f8d86d7a6de217"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "57a6a43c01ac04bf67acc3441a2e128f56723c9000ed5f19ec0b4082a269b33a"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "f24ebe0d1ce2d815a2cb93bb497dddc6cbd1ee7c94c2b0b76a67588bbcefbc71"
+        }
+      ],
+      "pptxSha256": "75d250273ee79c2b4407c390360b888265460155261cc184fa46f316662bbc70",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/presentation-types/customer-qbr-renewal-deck.opf.json",
+      "sourceSha256": "6f54564c260e5e6772790f86dce464c35a22353d073f91e105e68a0fe758831a",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Apex Support Cloud logo",
+          "svgSha256": "0e1aee1af75577f91f4b4c8c20dd1278a5b76d6891a32bfb1c8e451e91d4caf6"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Apex Support Cloud light logo",
+          "svgSha256": "4b7cb0f60edffb997fa0a121629cb337e348f410fbaa64e169a08e300e54bff9"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Apex Support Cloud icon",
+          "svgSha256": "d359c26b8a61e743644c609cc6a09a7b9f3343eb5583830cf97cc95d7d6cd762"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "QBR background image",
+          "svgSha256": "41a2f746df99581b06fd24cf89b55e0a806cc5d85da32ca240574718b00cc819"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Apex Support Cloud watermark",
+          "svgSha256": "e2df702b7b24f67716647e75f689e6d5ccfc007c1c76cb4a6d8bec33dc45ebb7"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "2c9ec5b02b4f5014d3ad64d3488d798c8de618c46fab421461cdcb21af5ca776"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "49e3443a9b05f6f8e4df668a8c97f70e3fad5fe9aec59814bfb02f93bd0a4125"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "390fd3099d33c182debee535b407f13c99c6e1ee15f0afae6af40d2d0c3d3fa4"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "57ba886c1506dd4e880d20829520e6f31efc8390ca8a93ed5f3808f0bc98e7da"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "a66ccc5d8d9d0ecd0ae166bf85fcea0caffb0de12758f48c0d0ed50c34ae5b85"
+        }
+      ],
+      "pptxSha256": "179d437302ca0bb8dd88c6d0c5b396101509901ba1399703ace69833a4a53a47",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/presentation-types/data-incident-postmortem.opf.json",
+      "sourceSha256": "59471b1b780dfb0d103f76d2b09988eaa57f7e5381f0098dcbde0300817119b3",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Granite ID logo",
+          "svgSha256": "ad37907cca540dc930852478f78d25b523d86fa74699b71a9a0866ec900ce1da"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Granite ID light logo",
+          "svgSha256": "3d03d921053caf122a253bcc31055bf7eddbe4b2aec25d834f1be86b8272b3e0"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Granite ID icon",
+          "svgSha256": "21932e8f66c013970d57ec0803b130de45f1767d42dcb7c216913f29459cdf15"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Incident review background image",
+          "svgSha256": "35ab235b1e93d1a15a41c803111a281bf0e66989d7da4ef623c795891b36f117"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Granite ID watermark",
+          "svgSha256": "94e9df91d8f400ae33c3095900fe3f2e5193914b54f602cba32993d213dea41c"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "629c431e87c96da944873ff3bc9f13cf3e3f4dbc494150fc800221965388d2a5"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "49e3443a9b05f6f8e4df668a8c97f70e3fad5fe9aec59814bfb02f93bd0a4125"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "e153ba22200568e97ba4171ac8946fd9a535ae11f3044c6d492a07428579ec73"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "eebd4ac643f8603eccfa0ae18a72ac19148d53101582689a1358b7eb424e6b12"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "a66ccc5d8d9d0ecd0ae166bf85fcea0caffb0de12758f48c0d0ed50c34ae5b85"
+        }
+      ],
+      "pptxSha256": "6a61ea88f298af6b47abbfcf30c2b466d0546c016d868f3a801048f1d94baa68",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/presentation-types/developer-conference-talk.opf.json",
+      "sourceSha256": "b0fcb5025045aeb5b2aed1443bf7c6a63243ee0b78704bab0862916aca3af593",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "VectorTrail logo",
+          "svgSha256": "ede886c5d2a0d99a875559761b0afaaf66d8677fe192fc8ffd4a7a0e23c49249"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "VectorTrail light logo",
+          "svgSha256": "47527e6104414d0f3b6b4cf514ec3be1c0c684dc6ced75cb8641aa899d8f48d8"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "VectorTrail icon",
+          "svgSha256": "ceabdb4ff15fb2fc83d6e41b1deee624279b492674a4f473d4d290cfe7a92190"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Conference talk background image",
+          "svgSha256": "d3ae3bc328967c202f113721d43b60dbea4aa96f89209fe38fbb02b379191d9f"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "VectorTrail watermark",
+          "svgSha256": "b5b06aa2150c6ecf63babb984a54ec805dd98181f934926aae019f6ae51ce32e"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "5960b81d2c8b4b8469d38931668beffcf15fb41b498d428293c8a56d981e351f"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "6f03ccf702ebe053efde28a21b8adf8b2568c028f44a12b28d50125813bae2b2"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "11813369e7c0ab74a7d2582b48f89fb6bb958860c5b72ce854765888f0b4456b"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "da8ee9f8b242852ba69107d24a134c140719dfd9897546deba5b5a6b8191316b"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "f1a8ba45a0828beaf20fd36845ba84da1dc79485570ae1e0b378eebb53a96d86"
+        }
+      ],
+      "pptxSha256": "bc40d4800c8083aeb232e4834b0fd25b77aa2412f8517ea64e8844c45dbbccbc",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/presentation-types/executive-workshop-facilitation.opf.json",
+      "sourceSha256": "e683cf38c34ae63b8e97d2637d832cd16706bfeab3f0d6472199b4f33d97dbcf",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Mosaic Strategy logo",
+          "svgSha256": "e78e0e3119c2d79d2915d1e848dcd6a5183582db1e6e28014c2185e51972eb6c"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Mosaic Strategy light logo",
+          "svgSha256": "2abc3522af25ce70733296116ca24200f4741463894eeba0e2d7c68c11427f36"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Mosaic Strategy icon",
+          "svgSha256": "40db2c17d31f6ba7683c7799f122c62fe1903435edac05bb19ea3b636cfc98e0"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Workshop background image",
+          "svgSha256": "0e3e6a187417dd6e23477b3e5490e492972977559a008060bda1ba061b84a342"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Mosaic Strategy watermark",
+          "svgSha256": "13c49ae7a24ed79a2e0151d745331c860ac903f19a5b6a8352841bf5cb645de0"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "ee718770ab14db9562cdb9464b88345ee4fcc00cd7410021b9f27211f292b041"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "8535c1756550884f7d5edde8e80bae83a1cb486c77de77c905ef68fe60ebdb4f"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "563e9100eb491df45808add0edb0d826434badb6af26408c562e34387e9a147a"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "c3a524d0f3f5780f44cfd3dde37677c96d13c3c1c033fb10fc2036c8722e11ff"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "d5691f2095717486c450407512af2201208af07af5f39db59c00cae5e46cf6a2"
+        }
+      ],
+      "pptxSha256": "4a2ca0b67966dc47aa8ca91ae2c0da879711689fcda64ee4c0fc35a779163a3d",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/presentation-types/manager-training-deck.opf.json",
+      "sourceSha256": "ddd4392432db2120c0194ee2a11608d6bf0def310bad4f86940e9e6d1ff8bf7d",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "PeopleCraft logo",
+          "svgSha256": "6e549e8cf8f49f845726f59c7f43667cd64ada85a56c2dd9e9cabe58fd0d8c0f"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "PeopleCraft light logo",
+          "svgSha256": "11b325716d598044c76e1a3c4c9cd1f57bb68645d6e354fe40792023b3f79e5f"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "PeopleCraft icon",
+          "svgSha256": "ed9e420005ade5a990f4ce8badf43c918e0a16e00f24fc4da0b2a24fc3f9acb0"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Training background image",
+          "svgSha256": "cac216dec49b9b4b504238bdeacd4ddbea32c95e1060c9b30132760a433c8c60"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "PeopleCraft watermark",
+          "svgSha256": "dd6f16b86cdd6efd712e9cb313c436f2aab1f41819437fbb40c1b150692e3be0"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "e9b66239630c4bd42b2b8a40f9b9afb2b6e6b3858a30d022b3f055bc7c9c1efe"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "c77e813e04cc275fe5e9928a59ba570300bdcfb495af8141a8cb4375330f71b2"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "328e0f6be97faedd6e624a5f2836e029c9acd510bae17d6960313556e9a0d829"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "5c71eb111b035d3f6c19a4e2c79108465a1fd1284ad04e6a4c17129a589d556d"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "3970f82a49885e0a8a83310cb07a98e7fb928f75577c82fa1a957136f1d8525b"
+        }
+      ],
+      "pptxSha256": "6e100c433b24f64b5429e4b679bd6fae3da3a5dc648744f46fe5ec471f62cdc4",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/presentation-types/policy-briefing-for-advisors.opf.json",
+      "sourceSha256": "821cface9c601be1d7a3ab80cef6757fa330c60a5952606ac5f75c17796d3378",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Civic Futures Lab logo",
+          "svgSha256": "0a47e2c73e84ecc6b443cc9cd9b6a4e47179d14219446a9dd433777a8316be19"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Civic Futures Lab light logo",
+          "svgSha256": "0236fcd75b1d6336aa67f03fe433c1baeb36c43646634c693f7772f080d25078"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Civic Futures Lab icon",
+          "svgSha256": "511e6084aad0dd7035425d34d394302518b8ee0cbe09cc229693397da418c2e9"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Policy briefing background image",
+          "svgSha256": "0d413adbbf2bff118bd45ad0e4c062378ecf090c85a25af48a77f7084fa8caf7"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Civic Futures Lab watermark",
+          "svgSha256": "9cd1fa813f7321911764e468c7bbf81f381b8821de9a544181c50ae8cdbacec1"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "6c1f38e6781be39e06176f3857acc928f6c449538a8e77c0a57a55d050d42eb4"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "53238b44cf69c3687304a23577e9ae6549582ba582dca57b821f310701837d5a"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "8d8b8bb381759ec74b260e8cb714f80ddb2b9868d8ad1d954efff94f6d4d7dd9"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "0bf9506f4fade02a5e431df866cb5d8d463a75c1554ada55f1775d4d44b6b584"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "b8b2331d8cbf07f38f5b6f94b53d1b93e2199f2b271528fcab9653c7ca8fe9a2"
+        }
+      ],
+      "pptxSha256": "bafd97500addccdf2d347b2c47cf38d4d2136945674b62a946bb5c5c0a6ffc92",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/presentation-types/product-launch-narrative.opf.json",
+      "sourceSha256": "ee2c7d40efbd832dbc714601a145b83015ee83b0b466502f61aa94f3e44c0254",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Kiteframe logo",
+          "svgSha256": "6ffa935056547bc40b72c347cf5c93305053659ef3f0beb9b78fe4d5e530f20d"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Kiteframe light logo",
+          "svgSha256": "bb540a8955c0a49c44420078c6c6bd87a332265fa0f487ab2a71973bfd37703f"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Kiteframe icon",
+          "svgSha256": "024e9d9014d9bae32cb769534cff8ce53b4306a20cab9313b94d7779db654b19"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Product launch background image",
+          "svgSha256": "91f994b568a31d12a8621450a7939891512dfd0ad9e95548937c42d3a65a7078"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Kiteframe watermark",
+          "svgSha256": "4dfafe33ba2d88751deba454269a1b65e83325a924efe71423c6a492919c3b37"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "2d2cf74811b3e6997e2f5bda690b4da6395508919e59f7c0ea73b3c9b1744456"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "4aadd2d20cf467104717a9d230385892f0679ad4528d114890e9120f8e08cbf4"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "357e05d4ba4eacaa8d4cd5af031f1c20e58127131122b0a3760f686da0f9ee18"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "7deab8b22ef124d2e69c3e171ab8d112860c75de7e093c16c1a797cfbdb367fe"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "b2652cf8e8c7480a7de1992fe73649805dfd26e9f8a693044fac807040c22342"
+        }
+      ],
+      "pptxSha256": "243734253244e7f5b3974a561263c86a655332ad3df264fb3d901c360f7007f9",
+      "sourcePreserved": true
+    },
+    {
+      "file": "examples/gallery/presentation-types/research-findings-report.opf.json",
+      "sourceSha256": "49ad1a78bac53514e2005bd7066890eefc6b17fe0454c90bccee45b5c1e82e8d",
+      "images": [
+        {
+          "name": "brand-logo",
+          "width": 320,
+          "height": 96,
+          "description": "Blue Ridge Institute logo",
+          "svgSha256": "6802b39c202bbfb869fa97176243abe91dc9eb930635a13991a93247f1434885"
+        },
+        {
+          "name": "brand-logo-light",
+          "width": 320,
+          "height": 96,
+          "description": "Blue Ridge Institute light logo",
+          "svgSha256": "0e5584e0b420471ed6674b2a49412fb8f2337e6faa3d2ba078085a494a7672da"
+        },
+        {
+          "name": "brand-icon",
+          "width": 128,
+          "height": 128,
+          "description": "Blue Ridge Institute icon",
+          "svgSha256": "bb5e3ad7365097a2bcf9285a690a8c28120f855e0d1153e4da2e95a654ae13d6"
+        },
+        {
+          "name": "cover-bg",
+          "width": 640,
+          "height": 360,
+          "description": "Research report background image",
+          "svgSha256": "fb45ba1e6718fc2dcd62d7bb09889de7eb4818b06ddcef6919d4fc78496393aa"
+        },
+        {
+          "name": "watermark",
+          "width": 256,
+          "height": 256,
+          "description": "Blue Ridge Institute watermark",
+          "svgSha256": "f6677bc0c2e51d984399dd7676acc02bdd8568b58c9e2d240962fe7d29353f71"
+        }
+      ],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "84c3888c3c500adc3fa0b657fb8cb22910d5dea4d763f1af5da0fd5e58f97d3a"
+        },
+        {
+          "name": "ppt/media/image-2-1.png",
+          "sha256": "68c2a07e60414d8f4c68da07b6fd979258a9d3c0f885c1ea7205bd9b92996e49"
+        },
+        {
+          "name": "ppt/media/image-3-1.png",
+          "sha256": "c498dc9b8a9bffbd991f0783cf78f6fd127d064d55ae537c57823043c5ad151c"
+        },
+        {
+          "name": "ppt/media/image-4-1.png",
+          "sha256": "dffef0ed161d54c579da73a8b4df1aae15e35a0ca5e029a05fe0874076bb25d8"
+        },
+        {
+          "name": "ppt/media/image-5-1.png",
+          "sha256": "21f790258d6b7ebb14e4b90534139dd1adebd8da26acee8951e717a2bef32039"
+        }
+      ],
+      "pptxSha256": "b3dc441f432260e02b2d64c8492f163522452aae4e8b5f76d1d4f984938c811b",
+      "sourcePreserved": true
+    }
+  ],
+  "errors": [],
+  "externalRequests": [],
+  "scope": "Each of the 400 embedded gallery artwork assets is isolated on a slide. Actual offline browser SVG decodes the exact image with its description; PPTX export embeds exact PNG bytes and imports them back on the corresponding slide. No imageResolver, local-file fallback or synthetic replacement is used. This does not verify native PowerPoint rendering, native edits, inherited regions/opacity, or complete galleries with unfinished photo/video/data resources."
+}

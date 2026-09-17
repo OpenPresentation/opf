@@ -1,0 +1,339 @@
+{
+  "node": "v24.20.0",
+  "browser": "152.0.4191.66",
+  "verifierSha256": "538e5720254cbde127d6f726deb8bba7b485b4fce7aa2be9bb0684c8468290a4",
+  "rendererSha256": "473222ae52bfbd35d6c8b202833ba446564f7f160b85d9b8f904b54f80486613",
+  "fonts": [
+    {
+      "family": "Carlito",
+      "weight": 400,
+      "italic": false,
+      "sha256": "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89"
+    },
+    {
+      "family": "Carlito",
+      "weight": 400,
+      "italic": true,
+      "sha256": "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5"
+    },
+    {
+      "family": "Carlito",
+      "weight": 700,
+      "italic": false,
+      "sha256": "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0"
+    },
+    {
+      "family": "Carlito",
+      "weight": 700,
+      "italic": true,
+      "sha256": "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691"
+    }
+  ],
+  "results": [
+    {
+      "name": "compliance-readiness-review",
+      "mode": "estimated",
+      "sourceSha256": "b47b3edcb38f53cde1e5709d52450122171d6bda94dcdcb6385a013197b8dd43",
+      "svgSha256": "1ef4a7bfdf39ac8852e4abff6bd21dc798e16302dfffa4b92e8ca8b60a9b9f41",
+      "parts": [
+        {
+          "path": "slides.5.top:center+right.text",
+          "fragments": [
+            {
+              "lineIndex": 0,
+              "text": "Tandem BioSystems should focus the next cycle on ",
+              "start": 0,
+              "end": 49,
+              "expectedWidth": 623.4999999999995,
+              "actualWidth": 517.609375,
+              "widthDifference": -105.89062499999955,
+              "gapAfterPreviousFragment": null,
+              "fontFamily": "Aptos, sans-serif"
+            },
+            {
+              "lineIndex": 0,
+              "text": "close ",
+              "start": 49,
+              "end": 55,
+              "expectedWidth": 75.5,
+              "actualWidth": 58.265625,
+              "widthDifference": -17.234375,
+              "gapAfterPreviousFragment": 105.89068603515625,
+              "fontFamily": "Aptos, sans-serif"
+            },
+            {
+              "lineIndex": 1,
+              "text": "audit evidence gaps before external assessment",
+              "start": 55,
+              "end": 101,
+              "expectedWidth": 593.4999999999994,
+              "actualWidth": 495.15625,
+              "widthDifference": -98.34374999999943,
+              "gapAfterPreviousFragment": null,
+              "fontFamily": "Aptos, sans-serif"
+            },
+            {
+              "lineIndex": 1,
+              "text": " while ",
+              "start": 101,
+              "end": 108,
+              "expectedWidth": 83.50000000000001,
+              "actualWidth": 66.234375,
+              "widthDifference": -17.265625000000014,
+              "gapAfterPreviousFragment": 98.34381103515625,
+              "fontFamily": "Aptos, sans-serif"
+            },
+            {
+              "lineIndex": 2,
+              "text": "making the operating tradeoffs clear to compliance ",
+              "start": 108,
+              "end": 159,
+              "expectedWidth": 649.9999999999994,
+              "actualWidth": 523.34375,
+              "widthDifference": -126.65624999999943,
+              "gapAfterPreviousFragment": null,
+              "fontFamily": "Aptos, sans-serif"
+            },
+            {
+              "lineIndex": 3,
+              "text": "stakeholders.",
+              "start": 159,
+              "end": 172,
+              "expectedWidth": 175.5,
+              "actualWidth": 134.546875,
+              "widthDifference": -40.953125,
+              "gapAfterPreviousFragment": null,
+              "fontFamily": "Aptos, sans-serif"
+            }
+          ]
+        }
+      ],
+      "maxAdvanceDifference": 126.65624999999943,
+      "maxBoundaryGap": 105.89068603515625
+    },
+    {
+      "name": "compliance-readiness-review",
+      "mode": "measured",
+      "sourceSha256": "b47b3edcb38f53cde1e5709d52450122171d6bda94dcdcb6385a013197b8dd43",
+      "svgSha256": "a9904f91133ae35fb57b5b88c1e5553938cd271e1bbfb624f6ddb461eb72e0cb",
+      "parts": [
+        {
+          "path": "slides.5.top:center+right.text",
+          "fragments": [
+            {
+              "lineIndex": 0,
+              "text": "Tandem BioSystems should focus the next cycle on ",
+              "start": 0,
+              "end": 49,
+              "expectedWidth": 517.6025390625,
+              "actualWidth": 517.609375,
+              "widthDifference": 0.0068359375,
+              "gapAfterPreviousFragment": null,
+              "fontFamily": "Carlito, sans-serif"
+            },
+            {
+              "lineIndex": 0,
+              "text": "close audit evidence ",
+              "start": 49,
+              "end": 70,
+              "expectedWidth": 216.4306640625,
+              "actualWidth": 216.4375,
+              "widthDifference": 0.0068359375,
+              "gapAfterPreviousFragment": -0.00738525390625,
+              "fontFamily": "Carlito, sans-serif"
+            },
+            {
+              "lineIndex": 1,
+              "text": "gaps before external assessment",
+              "start": 70,
+              "end": 101,
+              "expectedWidth": 336.97509765625,
+              "actualWidth": 336.984375,
+              "widthDifference": 0.00927734375,
+              "gapAfterPreviousFragment": null,
+              "fontFamily": "Carlito, sans-serif"
+            },
+            {
+              "lineIndex": 1,
+              "text": " while making the operating tradeoffs ",
+              "start": 101,
+              "end": 139,
+              "expectedWidth": 385.60791015625,
+              "actualWidth": 385.609375,
+              "widthDifference": 0.00146484375,
+              "gapAfterPreviousFragment": -0.009368896484375,
+              "fontFamily": "Carlito, sans-serif"
+            },
+            {
+              "lineIndex": 2,
+              "text": "clear to compliance stakeholders.",
+              "start": 139,
+              "end": 172,
+              "expectedWidth": 338.5009765625,
+              "actualWidth": 338.515625,
+              "widthDifference": 0.0146484375,
+              "gapAfterPreviousFragment": null,
+              "fontFamily": "Carlito, sans-serif"
+            }
+          ]
+        }
+      ],
+      "maxAdvanceDifference": 0.0146484375,
+      "maxBoundaryGap": 0.009368896484375
+    },
+    {
+      "name": "water-utility-capital-plan",
+      "mode": "estimated",
+      "sourceSha256": "c33890d9eef2db97766c3e2a5bae0a757ad978aa6f509fa02b410cbb491354f4",
+      "svgSha256": "4eb18a4c5b209f2e3dd99a77a38bf23bb7333899499adcf9605eb9f3d2d4eea4",
+      "parts": [
+        {
+          "path": "slides.5.top:center+right.text",
+          "fragments": [
+            {
+              "lineIndex": 0,
+              "text": "Lakehaven Water District should focus the next ",
+              "start": 0,
+              "end": 47,
+              "expectedWidth": 501.66666666666634,
+              "actualWidth": 401.125,
+              "widthDifference": -100.54166666666634,
+              "gapAfterPreviousFragment": null,
+              "fontFamily": "Aptos, sans-serif"
+            },
+            {
+              "lineIndex": 1,
+              "text": "cycle on ",
+              "start": 47,
+              "end": 56,
+              "expectedWidth": 92.08333333333334,
+              "actualWidth": 73.28125,
+              "widthDifference": -18.802083333333343,
+              "gapAfterPreviousFragment": null,
+              "fontFamily": "Aptos, sans-serif"
+            },
+            {
+              "lineIndex": 1,
+              "text": "approve staged replacement of high-risk ",
+              "start": 56,
+              "end": 96,
+              "expectedWidth": 427.0833333333331,
+              "actualWidth": 352.734375,
+              "widthDifference": -74.34895833333309,
+              "gapAfterPreviousFragment": 18.8017578125,
+              "fontFamily": "Aptos, sans-serif"
+            },
+            {
+              "lineIndex": 2,
+              "text": "mains",
+              "start": 96,
+              "end": 101,
+              "expectedWidth": 56.25000000000001,
+              "actualWidth": 51.84375,
+              "widthDifference": -4.406250000000007,
+              "gapAfterPreviousFragment": null,
+              "fontFamily": "Aptos, sans-serif"
+            },
+            {
+              "lineIndex": 2,
+              "text": " while making the operating tradeoffs clear to ",
+              "start": 101,
+              "end": 148,
+              "expectedWidth": 492.083333333333,
+              "actualWidth": 389.671875,
+              "widthDifference": -102.41145833333297,
+              "gapAfterPreviousFragment": 4.40625,
+              "fontFamily": "Aptos, sans-serif"
+            },
+            {
+              "lineIndex": 3,
+              "text": "public utilities stakeholders.",
+              "start": 148,
+              "end": 178,
+              "expectedWidth": 328.3333333333332,
+              "actualWidth": 234.953125,
+              "widthDifference": -93.3802083333332,
+              "gapAfterPreviousFragment": null,
+              "fontFamily": "Aptos, sans-serif"
+            }
+          ]
+        }
+      ],
+      "maxAdvanceDifference": 102.41145833333297,
+      "maxBoundaryGap": 18.8017578125
+    },
+    {
+      "name": "water-utility-capital-plan",
+      "mode": "measured",
+      "sourceSha256": "c33890d9eef2db97766c3e2a5bae0a757ad978aa6f509fa02b410cbb491354f4",
+      "svgSha256": "4a9e1cc071510dda5a1f620f4533ef551eb1ec9f13574e001cec4f8377560c1b",
+      "parts": [
+        {
+          "path": "slides.5.top:center+right.text",
+          "fragments": [
+            {
+              "lineIndex": 0,
+              "text": "Lakehaven Water District should focus the next cycle on ",
+              "start": 0,
+              "end": 56,
+              "expectedWidth": 474.46695963541674,
+              "actualWidth": 474.390625,
+              "widthDifference": -0.07633463541674246,
+              "gapAfterPreviousFragment": null,
+              "fontFamily": "Carlito, sans-serif"
+            },
+            {
+              "lineIndex": 0,
+              "text": "approve",
+              "start": 56,
+              "end": 63,
+              "expectedWidth": 71.08561197916667,
+              "actualWidth": 71.078125,
+              "widthDifference": -0.007486979166671404,
+              "gapAfterPreviousFragment": 0.07635498046875,
+              "fontFamily": "Carlito, sans-serif"
+            },
+            {
+              "lineIndex": 1,
+              "text": " staged replacement of high-risk mains",
+              "start": 63,
+              "end": 101,
+              "expectedWidth": 333.5367838541667,
+              "actualWidth": 333.484375,
+              "widthDifference": -0.052408854166685614,
+              "gapAfterPreviousFragment": null,
+              "fontFamily": "Carlito, sans-serif"
+            },
+            {
+              "lineIndex": 1,
+              "text": " while making the ",
+              "start": 101,
+              "end": 119,
+              "expectedWidth": 154.52067057291669,
+              "actualWidth": 154.5,
+              "widthDifference": -0.020670572916685614,
+              "gapAfterPreviousFragment": 0.0516357421875,
+              "fontFamily": "Carlito, sans-serif"
+            },
+            {
+              "lineIndex": 2,
+              "text": "operating tradeoffs clear to public utilities stakeholders.",
+              "start": 119,
+              "end": 178,
+              "expectedWidth": 470.18432617187506,
+              "actualWidth": 470.109375,
+              "widthDifference": -0.07495117187505684,
+              "gapAfterPreviousFragment": null,
+              "fontFamily": "Carlito, sans-serif"
+            }
+          ]
+        }
+      ],
+      "maxAdvanceDifference": 0.07633463541674246,
+      "maxBoundaryGap": 0.07635498046875
+    }
+  ],
+  "errors": [],
+  "requests": [],
+  "scope": "Two unchanged gallery slides with exact Carlito bytes in both modes; estimated control registers those bytes under the authored Aptos names to isolate measurement differences. Measured mode explicitly resolves Aptos to Carlito as a visual substitute. Rich source mapping, advances and fragment spacing are checked, not font compatibility, all-slide visual quality, native export or pixel equivalence."
+}

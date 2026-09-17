@@ -1,0 +1,1132 @@
+{
+  "node": "v24.20.0",
+  "platform": "linux",
+  "browser": "153.0.8010.12",
+  "activeCase": {
+    "measured": true,
+    "width": 1280,
+    "height": 720,
+    "floor": 16,
+    "local": false,
+    "deck": {
+      "organization": {
+        "id": "openpresentation",
+        "name": "OpenPresentation"
+      },
+      "design": {
+        "fontScheme": "roboto",
+        "dimensions": {
+          "widthInches": 13.333333333333334,
+          "heightInches": 7.5
+        },
+        "header": {
+          "left": {
+            "text": "  A  B\tC D\r\n\r\ntrail  \r"
+          },
+          "center": {
+            "organization": true
+          },
+          "right": {
+            "section": true
+          }
+        },
+        "footer": {
+          "left": {
+            "date": " 2026-09-10 "
+          },
+          "right": {
+            "slideNumber": true
+          }
+        }
+      },
+      "slides": [
+        {
+          "title": "Shared furniture",
+          "section": "Review",
+          "text": "Body content keeps its own space.",
+          "composition": {
+            "minFontSize": 16,
+            "overflow": "error"
+          }
+        }
+      ]
+    }
+  },
+  "message": "{\"activeCase\":{\"measured\":true,\"width\":1280,\"height\":720,\"floor\":16,\"local\":false,\"deck\":{\"organization\":{\"id\":\"openpresentation\",\"name\":\"OpenPresentation\"},\"design\":{\"fontScheme\":\"roboto\",\"dimensions\":{\"widthInches\":13.333333333333334,\"heightInches\":7.5},\"header\":{\"left\":{\"text\":\"  A  B\\tC D\\r\\n\\r\\ntrail  \\r\"},\"center\":{\"organization\":true},\"right\":{\"section\":true}},\"footer\":{\"left\":{\"date\":\" 2026-09-10 \"},\"right\":{\"slideNumber\":true}}},\"slides\":[{\"title\":\"Shared furniture\",\"section\":\"Review\",\"text\":\"Body content keeps its own space.\",\"composition\":{\"minFontSize\":16,\"overflow\":\"error\"}}]}},\"path\":\"design.header.left.text\",\"paint\":{\"path\":\"design.header.left.text\",\"box\":{\"x\":89.60000000000001,\"y\":18,\"width\":332.8,\"height\":78.08},\"file\":\"1280-16-inherited-header-left-text.mask.png\",\"shiftX\":0,\"pixels\":625,\"outsideCount\":2,\"outside\":[{\"x\":89,\"y\":64,\"coverage\":7},{\"x\":89,\"y\":65,\"coverage\":7}],\"sha256\":\"0df0407795cc139eca0715966225d076a0e5ac090cd4390f68df278349a35f7d\",\"svgSha256\":\"707af06586cae3d68f0f2ae55531ce1b2f5db702407cab8cdd067f196aaf715f\"}}\n\n2 !== 0\n",
+  "errors": [],
+  "requests": [],
+  "geometry": {
+    "width": 1280,
+    "height": 720,
+    "contentBox": {
+      "x": 57.6,
+      "y": 197.95999999999998,
+      "width": 1164.8,
+      "height": 461.7200000000001
+    },
+    "items": [
+      {
+        "path": "slides.0.title",
+        "field": "title",
+        "type": "text",
+        "value": "Shared furniture",
+        "payload": {
+          "text": "Shared furniture"
+        },
+        "box": {
+          "x": 57.6,
+          "y": 108.08,
+          "width": 1164.8,
+          "height": 65.88
+        },
+        "text": {
+          "lines": [
+            "Shared furniture"
+          ],
+          "sourceLines": [
+            {
+              "start": 0,
+              "end": 16,
+              "nextStart": 16,
+              "boundary": "end",
+              "width": 395.5078125,
+              "segments": [
+                {
+                  "kind": "text",
+                  "start": 0,
+                  "end": 16,
+                  "x": 0,
+                  "width": 395.5078125
+                }
+              ]
+            }
+          ],
+          "fontSize": 54,
+          "lineHeight": 65.88,
+          "tabSize": 4,
+          "tabWidth": 53.68359375,
+          "overflow": false,
+          "placement": {
+            "alignment": "left",
+            "rasterPadding": 1,
+            "lines": [
+              {
+                "x": 57.6,
+                "y": 108.08,
+                "baseline": 162.07999999999998,
+                "height": 65.88,
+                "width": 395.5078125,
+                "outline": {
+                  "x": 59.4193359375,
+                  "y": 121.02628906249998,
+                  "width": 392.3173828125,
+                  "height": 41.5810546875
+                }
+              }
+            ],
+            "height": 65.87999999999998,
+            "overflow": false
+          }
+        },
+        "textStyle": {
+          "fontFamily": "Roboto",
+          "fontWeight": 700,
+          "path": "slides.0.title",
+          "italic": false,
+          "fontFace": {
+            "family": "Roboto",
+            "bold": true,
+            "italic": false
+          }
+        },
+        "composition": {
+          "minFontSize": 16,
+          "overflow": "error"
+        }
+      },
+      {
+        "path": "slides.0.text",
+        "field": "text",
+        "type": "text",
+        "value": "Body content keeps its own space.",
+        "payload": {
+          "type": "text",
+          "text": "Body content keeps its own space."
+        },
+        "box": {
+          "x": 57.6,
+          "y": 197.96,
+          "width": 1164.8,
+          "height": 461.72
+        },
+        "text": {
+          "lines": [
+            "Body content keeps its own space."
+          ],
+          "sourceLines": [
+            {
+              "start": 0,
+              "end": 33,
+              "nextStart": 33,
+              "boundary": "end",
+              "width": 384.70458984375,
+              "segments": [
+                {
+                  "kind": "text",
+                  "start": 0,
+                  "end": 33,
+                  "x": 0,
+                  "width": 384.70458984375
+                }
+              ]
+            }
+          ],
+          "fontSize": 25,
+          "lineHeight": 30.5,
+          "tabSize": 4,
+          "tabWidth": 24.8046875,
+          "overflow": false,
+          "placement": {
+            "alignment": "left",
+            "rasterPadding": 1,
+            "lines": [
+              {
+                "x": 57.6,
+                "y": 197.95999999999998,
+                "baseline": 222.95999999999998,
+                "height": 30.5,
+                "width": 384.70458984375,
+                "outline": {
+                  "x": 59.66298828125,
+                  "y": 204.20999999999998,
+                  "width": 380.615234375,
+                  "height": 24.08447265625
+                }
+              }
+            ],
+            "height": 31.33447265625,
+            "overflow": false
+          }
+        },
+        "textStyle": {
+          "fontFamily": "Roboto",
+          "fontWeight": 400,
+          "path": "slides.0.text",
+          "italic": false,
+          "fontFace": {
+            "family": "Roboto",
+            "bold": false,
+            "italic": false
+          }
+        },
+        "composition": {
+          "minFontSize": 16,
+          "overflow": "error",
+          "mode": "auto"
+        }
+      }
+    ],
+    "groups": [],
+    "flows": [
+      {
+        "path": "slides.0",
+        "box": {
+          "x": 57.6,
+          "y": 197.95999999999998,
+          "width": 1164.8,
+          "height": 461.7200000000001
+        },
+        "composition": {
+          "minFontSize": 16,
+          "overflow": "error",
+          "mode": "auto"
+        },
+        "columns": [
+          {
+            "offset": 0,
+            "size": 1164.8
+          }
+        ],
+        "rows": [
+          {
+            "offset": 0,
+            "size": 461.7200000000001
+          }
+        ],
+        "gap": 24,
+        "itemCount": 1,
+        "slotCount": 1
+      }
+    ],
+    "diagnostics": [],
+    "composition": {
+      "minFontSize": 16,
+      "overflow": "error"
+    },
+    "furniture": {
+      "algorithm": "furniture-flow-v1",
+      "configured": true,
+      "textMeasurement": "provided",
+      "textOutlines": "provided",
+      "parts": [
+        {
+          "type": "text",
+          "kind": "header",
+          "zone": "left",
+          "field": "text",
+          "path": "design.header.left.text",
+          "sourcePath": "design.header.left.text",
+          "generated": false,
+          "text": "  A  B\tC D\r\n\r\ntrail  \r",
+          "style": {
+            "fontFamily": "Roboto",
+            "fontWeight": 400,
+            "italic": false,
+            "path": "design.header.left.text",
+            "fontFace": {
+              "family": "Roboto",
+              "bold": false,
+              "italic": false
+            }
+          },
+          "requestedFontSize": 13,
+          "minFontSize": 16,
+          "box": {
+            "x": 89.60000000000001,
+            "y": 18,
+            "width": 332.8,
+            "height": 78.08
+          },
+          "alignment": "left",
+          "fit": {
+            "lines": [
+              "  A  B\tC D",
+              "",
+              "trail  ",
+              ""
+            ],
+            "sourceLines": [
+              {
+                "start": 0,
+                "end": 10,
+                "nextStart": 12,
+                "boundary": "hard",
+                "width": 72.5078125,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 0,
+                    "end": 6,
+                    "x": 0,
+                    "width": 36.28125
+                  },
+                  {
+                    "kind": "tab",
+                    "start": 6,
+                    "end": 7,
+                    "x": 36.28125,
+                    "width": 11.34375
+                  },
+                  {
+                    "kind": "text",
+                    "start": 7,
+                    "end": 10,
+                    "x": 47.625,
+                    "width": 24.8828125
+                  }
+                ]
+              },
+              {
+                "start": 12,
+                "end": 12,
+                "nextStart": 14,
+                "boundary": "hard",
+                "width": 0,
+                "segments": []
+              },
+              {
+                "start": 14,
+                "end": 21,
+                "nextStart": 22,
+                "boundary": "hard",
+                "width": 34.765625,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 14,
+                    "end": 21,
+                    "x": 0,
+                    "width": 34.765625
+                  }
+                ]
+              },
+              {
+                "start": 22,
+                "end": 22,
+                "nextStart": 22,
+                "boundary": "end",
+                "width": 0,
+                "segments": []
+              }
+            ],
+            "fontSize": 16,
+            "lineHeight": 19.52,
+            "tabSize": 4,
+            "tabWidth": 15.875,
+            "overflow": false,
+            "placement": {
+              "alignment": "left",
+              "rasterPadding": 1,
+              "lines": [
+                {
+                  "x": 89.60000000000001,
+                  "y": 18,
+                  "baseline": 34,
+                  "height": 19.52,
+                  "width": 72.5078125,
+                  "outline": {
+                    "x": 97.76406250000001,
+                    "y": 22.46875,
+                    "width": 63.3984375,
+                    "height": 11.6875
+                  }
+                },
+                {
+                  "x": 89.60000000000001,
+                  "y": 37.519999999999996,
+                  "baseline": 53.519999999999996,
+                  "height": 19.52,
+                  "width": 0,
+                  "outline": null
+                },
+                {
+                  "x": 90.52968750000001,
+                  "y": 57.04,
+                  "baseline": 73.03999999999999,
+                  "height": 19.52,
+                  "width": 34.765625,
+                  "outline": {
+                    "x": 90.60000000000001,
+                    "y": 61.04,
+                    "width": 25.5390625,
+                    "height": 12.15625
+                  }
+                },
+                {
+                  "x": 89.60000000000001,
+                  "y": 76.56,
+                  "baseline": 92.56,
+                  "height": 19.52,
+                  "width": 0,
+                  "outline": null
+                }
+              ],
+              "height": 78.08,
+              "overflow": false
+            }
+          }
+        },
+        {
+          "type": "text",
+          "kind": "header",
+          "zone": "center",
+          "field": "organization",
+          "path": "design.header.center.organization",
+          "sourcePath": "organization.name",
+          "generated": true,
+          "text": "OpenPresentation",
+          "style": {
+            "fontFamily": "Roboto",
+            "fontWeight": 400,
+            "italic": false,
+            "path": "design.header.center.organization",
+            "fontFace": {
+              "family": "Roboto",
+              "bold": false,
+              "italic": false
+            }
+          },
+          "requestedFontSize": 13,
+          "minFontSize": 16,
+          "box": {
+            "x": 473.6,
+            "y": 18,
+            "width": 332.8,
+            "height": 20.25
+          },
+          "alignment": "center",
+          "fit": {
+            "lines": [
+              "OpenPresentation"
+            ],
+            "sourceLines": [
+              {
+                "start": 0,
+                "end": 16,
+                "nextStart": 16,
+                "boundary": "end",
+                "width": 127.765625,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 0,
+                    "end": 16,
+                    "x": 0,
+                    "width": 127.765625
+                  }
+                ]
+              }
+            ],
+            "fontSize": 16,
+            "lineHeight": 19.52,
+            "tabSize": 4,
+            "tabWidth": 15.875,
+            "overflow": false,
+            "placement": {
+              "alignment": "center",
+              "rasterPadding": 1,
+              "lines": [
+                {
+                  "x": 576.1171875,
+                  "y": 18,
+                  "baseline": 34,
+                  "height": 19.52,
+                  "width": 127.765625,
+                  "outline": {
+                    "x": 577.046875,
+                    "y": 22.46875,
+                    "width": 125.75,
+                    "height": 14.78125
+                  }
+                }
+              ],
+              "height": 20.25,
+              "overflow": false
+            }
+          }
+        },
+        {
+          "type": "text",
+          "kind": "header",
+          "zone": "right",
+          "field": "section",
+          "path": "design.header.right.section",
+          "sourcePath": "slides.0.section",
+          "generated": true,
+          "text": "Review",
+          "style": {
+            "fontFamily": "Roboto",
+            "fontWeight": 400,
+            "italic": false,
+            "path": "design.header.right.section",
+            "fontFace": {
+              "family": "Roboto",
+              "bold": false,
+              "italic": false
+            }
+          },
+          "requestedFontSize": 13,
+          "minFontSize": 16,
+          "box": {
+            "x": 857.5999999999999,
+            "y": 18,
+            "width": 332.8,
+            "height": 19.52
+          },
+          "alignment": "right",
+          "fit": {
+            "lines": [
+              "Review"
+            ],
+            "sourceLines": [
+              {
+                "start": 0,
+                "end": 6,
+                "nextStart": 6,
+                "boundary": "end",
+                "width": 50.390625,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 0,
+                    "end": 6,
+                    "x": 0,
+                    "width": 50.390625
+                  }
+                ]
+              }
+            ],
+            "fontSize": 16,
+            "lineHeight": 19.52,
+            "tabSize": 4,
+            "tabWidth": 15.875,
+            "overflow": false,
+            "placement": {
+              "alignment": "right",
+              "rasterPadding": 1,
+              "lines": [
+                {
+                  "x": 1139.3843749999999,
+                  "y": 18,
+                  "baseline": 34,
+                  "height": 19.52,
+                  "width": 50.390625,
+                  "outline": {
+                    "x": 1140.7046874999999,
+                    "y": 22.46875,
+                    "width": 48.6953125,
+                    "height": 11.6875
+                  }
+                }
+              ],
+              "height": 19.52,
+              "overflow": false
+            }
+          }
+        },
+        {
+          "type": "text",
+          "kind": "footer",
+          "zone": "left",
+          "field": "date",
+          "path": "design.footer.left.date",
+          "sourcePath": "design.footer.left.date",
+          "generated": false,
+          "text": " 2026-09-10 ",
+          "style": {
+            "fontFamily": "Roboto",
+            "fontWeight": 400,
+            "italic": false,
+            "path": "design.footer.left.date",
+            "fontFace": {
+              "family": "Roboto",
+              "bold": false,
+              "italic": false
+            }
+          },
+          "requestedFontSize": 13,
+          "minFontSize": 16,
+          "box": {
+            "x": 89.60000000000001,
+            "y": 671.6800000000001,
+            "width": 332.8,
+            "height": 19.52
+          },
+          "alignment": "left",
+          "fit": {
+            "lines": [
+              " 2026-09-10 "
+            ],
+            "sourceLines": [
+              {
+                "start": 0,
+                "end": 12,
+                "nextStart": 12,
+                "boundary": "end",
+                "width": 88.71875,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 0,
+                    "end": 12,
+                    "x": 0,
+                    "width": 88.71875
+                  }
+                ]
+              }
+            ],
+            "fontSize": 16,
+            "lineHeight": 19.52,
+            "tabSize": 4,
+            "tabWidth": 15.875,
+            "overflow": false,
+            "placement": {
+              "alignment": "left",
+              "rasterPadding": 1,
+              "lines": [
+                {
+                  "x": 89.60000000000001,
+                  "y": 671.6800000000001,
+                  "baseline": 687.6800000000001,
+                  "height": 19.52,
+                  "width": 88.71875,
+                  "outline": {
+                    "x": 94.30312500000001,
+                    "y": 676.1487500000001,
+                    "width": 79.140625,
+                    "height": 11.6875
+                  }
+                }
+              ],
+              "height": 19.52,
+              "overflow": false
+            }
+          }
+        },
+        {
+          "type": "text",
+          "kind": "footer",
+          "zone": "right",
+          "field": "slideNumber",
+          "path": "design.footer.right.slideNumber",
+          "generated": true,
+          "text": "1",
+          "style": {
+            "fontFamily": "Roboto",
+            "fontWeight": 400,
+            "italic": false,
+            "path": "design.footer.right.slideNumber",
+            "fontFace": {
+              "family": "Roboto",
+              "bold": false,
+              "italic": false
+            }
+          },
+          "requestedFontSize": 13,
+          "minFontSize": 16,
+          "box": {
+            "x": 857.5999999999999,
+            "y": 671.6800000000001,
+            "width": 332.8,
+            "height": 19.52
+          },
+          "alignment": "right",
+          "fit": {
+            "lines": [
+              "1"
+            ],
+            "sourceLines": [
+              {
+                "start": 0,
+                "end": 1,
+                "nextStart": 1,
+                "boundary": "end",
+                "width": 8.9921875,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 0,
+                    "end": 1,
+                    "x": 0,
+                    "width": 8.9921875
+                  }
+                ]
+              }
+            ],
+            "fontSize": 16,
+            "lineHeight": 19.52,
+            "tabSize": 4,
+            "tabWidth": 15.875,
+            "overflow": false,
+            "placement": {
+              "alignment": "right",
+              "rasterPadding": 1,
+              "lines": [
+                {
+                  "x": 1181.4078124999999,
+                  "y": 671.6800000000001,
+                  "baseline": 687.6800000000001,
+                  "height": 19.52,
+                  "width": 8.9921875,
+                  "outline": {
+                    "x": 1182.7437499999999,
+                    "y": 676.2425000000001,
+                    "width": 4.359375,
+                    "height": 11.4375
+                  }
+                }
+              ],
+              "height": 19.52,
+              "overflow": false
+            }
+          }
+        }
+      ],
+      "headerBottom": 96.08,
+      "footerTop": 671.6800000000001,
+      "diagnostics": [],
+      "overflow": false
+    },
+    "actual": [
+      {
+        "path": "design.header.left.text",
+        "selectable": true,
+        "lines": [
+          {
+            "text": "  A  B\tC D",
+            "size": 16,
+            "font": "16px Roboto, sans-serif",
+            "svgAdvance": 72.50799560546875,
+            "svgBox": {
+              "x": 89.5999984741211,
+              "y": 19,
+              "width": 72.50800323486328,
+              "height": 19
+            },
+            "segments": [
+              {
+                "text": "  A  B",
+                "x": "89.6",
+                "textLength": "36.281",
+                "advance": 36,
+                "left": -8,
+                "right": 36,
+                "ascent": 12,
+                "descent": 0
+              },
+              {
+                "text": "\t",
+                "x": "125.881",
+                "textLength": "11.344",
+                "advance": 4,
+                "left": 0,
+                "right": 0,
+                "ascent": 0,
+                "descent": 0
+              },
+              {
+                "text": "C D",
+                "x": "137.225",
+                "textLength": "24.883",
+                "advance": 25,
+                "left": 0,
+                "right": 24,
+                "ascent": 12,
+                "descent": 0
+              }
+            ],
+            "ink": [
+              {
+                "x": 97.66244444444445,
+                "y": 22,
+                "width": 28.218555555555557,
+                "height": 12
+              },
+              {
+                "x": 137.225,
+                "y": 22,
+                "width": 23.88768,
+                "height": 12
+              }
+            ],
+            "start": 0,
+            "end": 10,
+            "canvasBoundsOutside": []
+          },
+          {
+            "text": "",
+            "size": 16,
+            "font": "16px Roboto, sans-serif",
+            "svgAdvance": 0,
+            "svgBox": {
+              "x": 0,
+              "y": 0,
+              "width": 0,
+              "height": 0
+            },
+            "segments": [
+              {
+                "text": "",
+                "x": "89.6",
+                "textLength": null,
+                "advance": 0,
+                "left": 0,
+                "right": 0,
+                "ascent": 0,
+                "descent": 0
+              }
+            ],
+            "ink": [],
+            "start": 12,
+            "end": 12,
+            "canvasBoundsOutside": []
+          },
+          {
+            "text": "trail  ",
+            "size": 16,
+            "font": "16px Roboto, sans-serif",
+            "svgAdvance": 34.76599884033203,
+            "svgBox": {
+              "x": 90.52999877929688,
+              "y": 58.040000915527344,
+              "width": 34.76599884033203,
+              "height": 19
+            },
+            "segments": [
+              {
+                "text": "trail  ",
+                "x": "90.53",
+                "textLength": "34.766",
+                "advance": 35,
+                "left": 0,
+                "right": 26,
+                "ascent": 12,
+                "descent": 0
+              }
+            ],
+            "ink": [
+              {
+                "x": 90.53,
+                "y": 61.040000000000006,
+                "width": 25.826171428571428,
+                "height": 12
+              }
+            ],
+            "start": 14,
+            "end": 21,
+            "canvasBoundsOutside": []
+          },
+          {
+            "text": "",
+            "size": 16,
+            "font": "16px Roboto, sans-serif",
+            "svgAdvance": 0,
+            "svgBox": {
+              "x": 0,
+              "y": 0,
+              "width": 0,
+              "height": 0
+            },
+            "segments": [
+              {
+                "text": "",
+                "x": "89.6",
+                "textLength": null,
+                "advance": 0,
+                "left": 0,
+                "right": 0,
+                "ascent": 0,
+                "descent": 0
+              }
+            ],
+            "ink": [],
+            "start": 22,
+            "end": 22,
+            "canvasBoundsOutside": []
+          }
+        ]
+      },
+      {
+        "path": "design.header.center.organization",
+        "selectable": false,
+        "lines": [
+          {
+            "text": "OpenPresentation",
+            "size": 16,
+            "font": "16px Roboto, sans-serif",
+            "svgAdvance": 127.76600646972656,
+            "svgBox": {
+              "x": 576.1170043945312,
+              "y": 19,
+              "width": 127.7659912109375,
+              "height": 19
+            },
+            "segments": [
+              {
+                "text": "OpenPresentation",
+                "x": "640",
+                "textLength": "127.766",
+                "advance": 126,
+                "left": 0,
+                "right": 125,
+                "ascent": 12,
+                "descent": 3
+              }
+            ],
+            "ink": [
+              {
+                "x": 576.117,
+                "y": 22,
+                "width": 126.75198412698413,
+                "height": 15
+              }
+            ],
+            "start": 0,
+            "end": 16,
+            "canvasBoundsOutside": []
+          }
+        ]
+      },
+      {
+        "path": "design.header.right.section",
+        "selectable": false,
+        "lines": [
+          {
+            "text": "Review",
+            "size": 16,
+            "font": "16px Roboto, sans-serif",
+            "svgAdvance": 50.39099884033203,
+            "svgBox": {
+              "x": 1139.384033203125,
+              "y": 19,
+              "width": 50.3909912109375,
+              "height": 19
+            },
+            "segments": [
+              {
+                "text": "Review",
+                "x": "1189.775",
+                "textLength": "50.391",
+                "advance": 50,
+                "left": -1,
+                "right": 50,
+                "ascent": 12,
+                "descent": 0
+              }
+            ],
+            "ink": [
+              {
+                "x": 1140.39182,
+                "y": 22,
+                "width": 49.383179999999996,
+                "height": 12
+              }
+            ],
+            "start": 0,
+            "end": 6,
+            "canvasBoundsOutside": []
+          }
+        ]
+      },
+      {
+        "path": "design.footer.left.date",
+        "selectable": true,
+        "lines": [
+          {
+            "text": " 2026-09-10 ",
+            "size": 16,
+            "font": "16px Roboto, sans-serif",
+            "svgAdvance": 88.71900177001953,
+            "svgBox": {
+              "x": 89.5999984741211,
+              "y": 672.6799926757812,
+              "width": 88.71900177001953,
+              "height": 19
+            },
+            "segments": [
+              {
+                "text": " 2026-09-10 ",
+                "x": "89.6",
+                "textLength": "88.719",
+                "advance": 88,
+                "left": -4,
+                "right": 84,
+                "ascent": 12,
+                "descent": 0
+              }
+            ],
+            "ink": [
+              {
+                "x": 93.63268181818181,
+                "y": 675.68,
+                "width": 80.65363636363635,
+                "height": 12
+              }
+            ],
+            "start": 0,
+            "end": 12,
+            "canvasBoundsOutside": []
+          }
+        ]
+      },
+      {
+        "path": "design.footer.right.slideNumber",
+        "selectable": false,
+        "lines": [
+          {
+            "text": "1",
+            "size": 16,
+            "font": "16px Roboto, sans-serif",
+            "svgAdvance": 8.991999626159668,
+            "svgBox": {
+              "x": 1181.4080810546875,
+              "y": 672.6799926757812,
+              "width": 8.991943359375,
+              "height": 19
+            },
+            "segments": [
+              {
+                "text": "1",
+                "x": "1190.4",
+                "textLength": "8.992",
+                "advance": 9,
+                "left": -1,
+                "right": 6,
+                "ascent": 12,
+                "descent": 0
+              }
+            ],
+            "ink": [
+              {
+                "x": 1182.4071111111111,
+                "y": 675.68,
+                "width": 4.995555555555556,
+                "height": 12
+              }
+            ],
+            "start": 0,
+            "end": 1,
+            "canvasBoundsOutside": []
+          }
+        ]
+      }
+    ]
+  },
+  "fonts": [
+    {
+      "family": "Roboto",
+      "weight": 400,
+      "italic": false,
+      "sha256": "15256405ecb0d880678833a582760efad538ab2932318b52c8105b267d159459"
+    },
+    {
+      "family": "Roboto Medium",
+      "weight": 500,
+      "italic": false,
+      "sha256": "79343dc641a2e8d48a703a4667b71fc8dc6565cc8ce47dfc34fc52c12aadbf38"
+    },
+    {
+      "family": "Roboto SemiBold",
+      "weight": 600,
+      "italic": false,
+      "sha256": "32fe2086b0e54eca85a68eb74e3d89bb16a7ffe59085d6dc7d079f5b3c26d6ab"
+    },
+    {
+      "family": "Roboto",
+      "weight": 700,
+      "italic": false,
+      "sha256": "4aaf8c5b661a386998c2e70cf2b87e2440f5404e0b8fd81164f0413fb3435ec6"
+    },
+    {
+      "family": "Roboto ExtraBold",
+      "weight": 800,
+      "italic": false,
+      "sha256": "43d5ce98c58336045220fa1dac2bd22281b1aab3eca66785cb34eb3ad1dfe1a5"
+    },
+    {
+      "family": "Roboto",
+      "weight": 400,
+      "italic": true,
+      "sha256": "6a372c348dc20c246b92d60b9bda3c0a9ffedc129790ed3f31faf89daa99d793"
+    },
+    {
+      "family": "Roboto",
+      "weight": 700,
+      "italic": true,
+      "sha256": "c6a5e7c224d3bf6698e5d3c124f0f0220cad20d5d413920447a96f033a0292ee"
+    },
+    {
+      "family": "Roboto Mono",
+      "weight": 400,
+      "italic": false,
+      "sha256": "e4bf45837847d4abfa5a502b807a83393aa138727bdb9ea9c93fb17d53208d95"
+    },
+    {
+      "family": "Roboto Mono",
+      "weight": 700,
+      "italic": false,
+      "sha256": "92649d819cc4c20480b23a47aaa111769924eb31c66b6ecdcf6f573662558c83"
+    }
+  ],
+  "paintInspectionError": "Unexpected non-whitespace character after JSON at position 1061 (line 3 column 1)"
+}

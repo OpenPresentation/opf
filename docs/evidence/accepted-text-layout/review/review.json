@@ -1,0 +1,908 @@
+{
+  "source": {
+    "repository": "OpenPresentation/opf",
+    "path": "examples",
+    "sha256": "3a1ed8ad00b30863b5852197a85602263a2238c613020fb891d933f86e124c4b",
+    "decks": 126
+  },
+  "verifierSha256": "6dbff2ff76d30314175b7faa32bf6caf2e69ade416f0589101c93ac3510a8050",
+  "verifiedImages": 2415,
+  "changed": [
+    {
+      "index": 62,
+      "key": "gallery/business-functions/field-enablement-certification.opf.json#0",
+      "file": "0062.png",
+      "before": "cbc7e46d9c2bb6159b45e5445dc426e4e9e02f3ae06e9964a9532c8bde5fc3b2",
+      "after": "868ced4b62a316070c730fe107bfdde997a71d010675aed3cc54b6bbeca9f24f"
+    },
+    {
+      "index": 63,
+      "key": "gallery/business-functions/field-enablement-certification.opf.json#1",
+      "file": "0063.png",
+      "before": "878f0f587ea0a773d9dfa4794375ab83fed699b711a7ed547c0bf3ab9b5e05f9",
+      "after": "fdfce51f1fb5f5833f2baad4d02bf6b8225b3bf8739e3960a9f0ccab8c410268"
+    },
+    {
+      "index": 64,
+      "key": "gallery/business-functions/field-enablement-certification.opf.json#2",
+      "file": "0064.png",
+      "before": "0278a89b3c02f8f3b38f9bfae8488a5246a379ccc0191b490906c7d910a70070",
+      "after": "ce8718c5e4136d3288d5012f2dc307c97649c99a1a6fc8df87b7e850eac6ae00"
+    },
+    {
+      "index": 65,
+      "key": "gallery/business-functions/field-enablement-certification.opf.json#3",
+      "file": "0065.png",
+      "before": "18fd67fadb9e17b0faa237a06474fae210972f8c72e36a42a37d4eef26828812",
+      "after": "5ffeb39a3cd21cf2f40889bdf938ba4e335d2bbe8067d29c74e31974aec71227"
+    },
+    {
+      "index": 66,
+      "key": "gallery/business-functions/field-enablement-certification.opf.json#4",
+      "file": "0066.png",
+      "before": "5c06501ae31f4ece113c7dc2c3f157a151676850515fb0f9e1b55b7198515879",
+      "after": "7f41050ac5887d9a89546bae20546d67b1a62d79aa63f1106dff99bd8b1b01a9"
+    },
+    {
+      "index": 67,
+      "key": "gallery/business-functions/field-enablement-certification.opf.json#5",
+      "file": "0067.png",
+      "before": "158766d9593fbbe0a7e2ec2704795ac0359e92fd6ae540560444efb8c42d53f9",
+      "after": "acb7928bfedd1db46ead088367ea994e718e8a2d2ccd49ab051f3c8c6145c271"
+    },
+    {
+      "index": 102,
+      "key": "gallery/business-functions/partner-ecosystem-launch-kit.opf.json#0",
+      "file": "0102.png",
+      "before": "f5ee0b45301dff1f9596e2b44839450d6728a086c047bf3cd854fd526ce15a1a",
+      "after": "50352bba1be1f7d5cfcf7b0ded23f9c04f0b1f28248bebaefcfff7dcc6bff462"
+    },
+    {
+      "index": 106,
+      "key": "gallery/business-functions/pricing-and-packaging-decision.opf.json#0",
+      "file": "0106.png",
+      "before": "40902144a8412682342ca3046e7b78788c5664ac232cf36fa5027003cc79237e",
+      "after": "be8cce038d41578f9cefa106ddb00f146d0f50f60eadf7d85fc560ec6cc47598"
+    },
+    {
+      "index": 116,
+      "key": "gallery/business-functions/product-roadmap-decision-review.opf.json#0",
+      "file": "0116.png",
+      "before": "a57d4ac844b820ba9b44bfc5d55a569a4e13413216b8fc9df6c68fd815773547",
+      "after": "f6d49e41216109c564444f6d75e3ef5ff602e933ef170e9e4654d7284958be70"
+    },
+    {
+      "index": 117,
+      "key": "gallery/business-functions/product-roadmap-decision-review.opf.json#1",
+      "file": "0117.png",
+      "before": "73ba68a4318545b67e8cae7f480f7e5ac8b1fa6524ee70e25f846906cc8ac60f",
+      "after": "040f1c38552632844bea9ecfcd804fd61c0d8f372e0f71ab7b16b6351086de2c"
+    },
+    {
+      "index": 118,
+      "key": "gallery/business-functions/product-roadmap-decision-review.opf.json#2",
+      "file": "0118.png",
+      "before": "d9a3e00f7ca098ebf1100b0efc139bc82b0c8d6f88e87f6658358277268f8e77",
+      "after": "5e2a683971a4ffb16edbae9ab4bf1308434dbc013bea63807e12894b05ed116c"
+    },
+    {
+      "index": 119,
+      "key": "gallery/business-functions/product-roadmap-decision-review.opf.json#3",
+      "file": "0119.png",
+      "before": "abc1872c57da943a48d6f80d3c0d00280c541af15921b4e975d71b5f269869d1",
+      "after": "1559ee0a4a36d7bdeef5b3e2568b5177ba0e7e1e63aeb1a48d2ed20b17eee747"
+    },
+    {
+      "index": 120,
+      "key": "gallery/business-functions/product-roadmap-decision-review.opf.json#4",
+      "file": "0120.png",
+      "before": "72e90b275563963cdc8e6c150ff7ba6c557a3264c2997bcb3a07bc40f6433af8",
+      "after": "ec95c495154fb6c434237dc3209dbe4c5332b992c2066cd4157bfa64d8b9d273"
+    },
+    {
+      "index": 121,
+      "key": "gallery/business-functions/product-roadmap-decision-review.opf.json#5",
+      "file": "0121.png",
+      "before": "62cb912bba684e7917cda877e19acc05e11e2229a41d9fae99f0185947bb03bc",
+      "after": "8a0e8f1050be651f42e99279833348cc426ad5cff4ce183e6dbcefee29f814f2"
+    },
+    {
+      "index": 122,
+      "key": "gallery/business-functions/product-roadmap-decision-review.opf.json#6",
+      "file": "0122.png",
+      "before": "cd07b51a744a809667b3eff0c4c98d09f88ca2640f66a557d170844036f99b91",
+      "after": "f04e84592aa475b41b9f03d22872c7830086df43135c792310e2cac1f055cf5e"
+    },
+    {
+      "index": 123,
+      "key": "gallery/business-functions/product-roadmap-decision-review.opf.json#7",
+      "file": "0123.png",
+      "before": "a9bafb97d9ed4f1a03e4a699ccf9e779af9d769f18f2f55fd3ab64369c8e5403",
+      "after": "1ac85470d2a5e32301406fafe0f8f1a28e094a6a81a391524a59e6d1f3ad8b74"
+    },
+    {
+      "index": 124,
+      "key": "gallery/business-functions/product-roadmap-decision-review.opf.json#8",
+      "file": "0124.png",
+      "before": "df05e3abc3fad45b11d7305a2be90a0bef4ecc10395f2533c0bac61ffa6bb9f8",
+      "after": "d41c9053c3294c4240f5d2446bbadd997f83c3370fdbcf0c64769bef7e75fed3"
+    },
+    {
+      "index": 125,
+      "key": "gallery/business-functions/product-roadmap-decision-review.opf.json#9",
+      "file": "0125.png",
+      "before": "0dc3eabef69b7230b654d35d502ea32938e0ffc1360103536727ff652173ab4a",
+      "after": "07095db0f19cc8031256c9babbda63d0a8501428288f98c9a5ecb72cc095c1de"
+    },
+    {
+      "index": 126,
+      "key": "gallery/business-functions/renewal-save-plan.opf.json#0",
+      "file": "0126.png",
+      "before": "bc6a09a1649128654062a05cf79b7a93eca7f2e059faa753da0e5876ea7ec3c0",
+      "after": "fb1327226725012e171eef94ffd82f9ce1af46df89cdd44f225e6c8f0b5747a5"
+    },
+    {
+      "index": 142,
+      "key": "gallery/business-functions/s-and-op-exception-review.opf.json#0",
+      "file": "0142.png",
+      "before": "242bbf99a9cd18fe99c0a05dd392535cef43bbbf172e05fc9b314c931474c835",
+      "after": "0ebb61e500e081d715f56391a18e9779da29948db853cea30c14841add6a6b76"
+    },
+    {
+      "index": 168,
+      "key": "gallery/business-functions/supplier-risk-heatmap.opf.json#0",
+      "file": "0168.png",
+      "before": "14b8eb50a39233445a9c536a3a7fdb26116159cf9925bb035daaf4aeb9da10d0",
+      "after": "fc44613a4c4ec4040e21766b144df4120dd6ddb00c9ba45c27c880da8542ea29"
+    },
+    {
+      "index": 169,
+      "key": "gallery/business-functions/supplier-risk-heatmap.opf.json#1",
+      "file": "0169.png",
+      "before": "12e6f1bf06e295363cd2ccee38539ebc51ff3c8f3eae80edbc55409ba55b369d",
+      "after": "1f646e4451490d7704cadd3655e2f88a2549047c0de4cbcf75f9ec18d2a7703e"
+    },
+    {
+      "index": 170,
+      "key": "gallery/business-functions/supplier-risk-heatmap.opf.json#2",
+      "file": "0170.png",
+      "before": "fcd9a024f7319e6c9e55bf80dcd79ededc993688a842398fcc04832e1424e0f3",
+      "after": "d211a03b4c8dab3324f62dc8b8512933e69514b3bb2c55ad36eeb2f59f68e625"
+    },
+    {
+      "index": 171,
+      "key": "gallery/business-functions/supplier-risk-heatmap.opf.json#3",
+      "file": "0171.png",
+      "before": "aaa366b764a0877c993ac2f177533776f7a28dda67cf988800c03162365cd364",
+      "after": "6b164ed2ddeed3f611e1509ca91d16491a45d68b9913fcf5d003b1403508a7ea"
+    },
+    {
+      "index": 172,
+      "key": "gallery/business-functions/supplier-risk-heatmap.opf.json#4",
+      "file": "0172.png",
+      "before": "fdd8e025a441e04f3198d2f10d911b8ea37b74038975e0bd5c8b9573fe8a5c7e",
+      "after": "fb986d70457da831c705d6f025ff539189ba7848261f376ce819d1be3d8bce67"
+    },
+    {
+      "index": 173,
+      "key": "gallery/business-functions/supplier-risk-heatmap.opf.json#5",
+      "file": "0173.png",
+      "before": "315a57f6bdec965994f9679dfd740144c14ca43dc1567389244893993e9bc86a",
+      "after": "717b532fe97e02278430edf8ef2c16766e3ec6d9f062c5c253f078c7fd8843b0"
+    },
+    {
+      "index": 174,
+      "key": "gallery/business-functions/supplier-risk-heatmap.opf.json#6",
+      "file": "0174.png",
+      "before": "fb24cb8926ee7b3c4ef3d3452e62c419fe1b158bcd56e4b983b512c4d871fd47",
+      "after": "40b6b8a04fd3a1ae100579e56794e53576c495d5c807a9fadc388055b02543e9"
+    },
+    {
+      "index": 175,
+      "key": "gallery/business-functions/supplier-risk-heatmap.opf.json#7",
+      "file": "0175.png",
+      "before": "5072bb49075c2f14792e4615b1f9599b8786afd6a0dd13a0b0cd929fc46bfbb7",
+      "after": "e7c2f1d83ac3dc729319a8f152cabf25fa5c494e4b408dfa06c8549d3671d3f8"
+    },
+    {
+      "index": 176,
+      "key": "gallery/business-functions/supplier-risk-heatmap.opf.json#8",
+      "file": "0176.png",
+      "before": "3d52cff8d7b6c4b11d98e039cb281ba810c2eaa78c25c0b02dd3abb903ba67c8",
+      "after": "b9d822b5649aa9d7a91ecf49736a75194d3ec51fb33d72e29ead12a81e948df3"
+    },
+    {
+      "index": 177,
+      "key": "gallery/business-functions/supplier-risk-heatmap.opf.json#9",
+      "file": "0177.png",
+      "before": "e3d8700f2181badc6153e15699a91fcbe8b018c689819bc7f1571b785177970f",
+      "after": "8bc17c572d59354c9b67ab8517d4f6e6023faa8c1bae74840ab621e3ca1ca93b"
+    },
+    {
+      "index": 200,
+      "key": "gallery/design-and-media/kiosk-orientation-deck.opf.json#0",
+      "file": "0200.png",
+      "before": "2673dbc143c5b1019cbdd42d6f91877e54898007e0a458b077ac829bd6c63298",
+      "after": "4b87411c795c3e91859ad3eba345b4b5ad83b5ad4c49c3da8730ad35e77215e5"
+    },
+    {
+      "index": 201,
+      "key": "gallery/design-and-media/kiosk-orientation-deck.opf.json#1",
+      "file": "0201.png",
+      "before": "5e3a59e6d0f3798606a56c9af1f16c1cfd18db68705d715f57eba7041ae61daa",
+      "after": "4005d03690c105ef077f4cf75a4a18270f0966ae6c90a8698ec318ebc509b02a"
+    },
+    {
+      "index": 202,
+      "key": "gallery/design-and-media/kiosk-orientation-deck.opf.json#2",
+      "file": "0202.png",
+      "before": "fbeb0940c62be0c30f6cd7082be1ba591b67ec720c98da952318eda60cb720aa",
+      "after": "f16e1d07b15ea7ccd42b0195c815d009bdfa57e2fe2498288f4fbd14ceab2d70"
+    },
+    {
+      "index": 203,
+      "key": "gallery/design-and-media/kiosk-orientation-deck.opf.json#3",
+      "file": "0203.png",
+      "before": "75cc9d74d2008f24787b3258f547519d864d34fd8c1c0b1c50b878c3563e8026",
+      "after": "1285e370504c14856a970825a08faab69dba8787116f99847a009cc1083f9502"
+    },
+    {
+      "index": 204,
+      "key": "gallery/design-and-media/kiosk-orientation-deck.opf.json#4",
+      "file": "0204.png",
+      "before": "c5c0a1eaf2d970b57cced507ee41c9321697edab452ea0fd133a3c7d7769d66d",
+      "after": "13e0288f73bbcdfd9a492f7882df50711a68125e892c128a43ac109f86a305ab"
+    },
+    {
+      "index": 205,
+      "key": "gallery/design-and-media/kiosk-orientation-deck.opf.json#5",
+      "file": "0205.png",
+      "before": "2a751ba9016509fca9e5c236d4228645240d96903528359204350caef663bf48",
+      "after": "16044b1fd9df428a1993ae58d11003ecd2d540d929ec111250a2d81f178a330f"
+    },
+    {
+      "index": 206,
+      "key": "gallery/design-and-media/kiosk-orientation-deck.opf.json#6",
+      "file": "0206.png",
+      "before": "f0b574d1a4b2d4be27f0b887f29b37798bfb5812ac52d535a12ca1ad7163dcd3",
+      "after": "95bbf0ea5ed23107e31483051cc56049c5aa1b4d6afddd7e6d6c49286b59111d"
+    },
+    {
+      "index": 207,
+      "key": "gallery/design-and-media/kiosk-orientation-deck.opf.json#7",
+      "file": "0207.png",
+      "before": "8600eecb8fe2e4dcb1f0a168f6c3e53236befea86e27af86e4d47db8251d4a80",
+      "after": "ed54bb04e3333c3d20d17434d613f1211357e842443af4414e282338f2d970ad"
+    },
+    {
+      "index": 208,
+      "key": "gallery/design-and-media/kiosk-orientation-deck.opf.json#8",
+      "file": "0208.png",
+      "before": "a4551fd2d4dcd823fbb17524c4bfa4f19d55136678242562afd3f95fa7356181",
+      "after": "c48066ab848c23f0f83c87036c0802b0b1c79648814ce76341658b820b8c2e16"
+    },
+    {
+      "index": 209,
+      "key": "gallery/design-and-media/kiosk-orientation-deck.opf.json#9",
+      "file": "0209.png",
+      "before": "b9286235cd8490a5be19bc9107adf90110683d93bdf2b1d303a6f918db9a06e8",
+      "after": "ca4378f04ee267decc0eca66c5b457f4af5fc7de8e0296a76e7c61c67245c9d3"
+    },
+    {
+      "index": 230,
+      "key": "gallery/design-and-media/visual-brand-system-sampler.opf.json#0",
+      "file": "0230.png",
+      "before": "a71c2aa781fe6646e86c5d125ee6e27353c4ca80adceec8f693fb0d07928a5a4",
+      "after": "7b760be26f7469a446a749ced2d58c86e2744df1f4fa5c72b99456d8d1647d05"
+    },
+    {
+      "index": 236,
+      "key": "gallery/education/advising-retention-review.opf.json#0",
+      "file": "0236.png",
+      "before": "8eaa3b259d755cf1e8b13e6375abea7b643a7d6b8e3069e2b70ae6f38e813bbd",
+      "after": "1f12f02a429e5c16382f8ba867ae570477fb9135420a13db9f8e983809c05541"
+    },
+    {
+      "index": 237,
+      "key": "gallery/education/advising-retention-review.opf.json#1",
+      "file": "0237.png",
+      "before": "79131add7a91bb012514c180ce772aac852f9cdd7b9740dfce53d1cf1b2d38bd",
+      "after": "b9459cf4a579568e5b885c08ee654a28c9a07361e52c3f6d01c6918520fde17b"
+    },
+    {
+      "index": 238,
+      "key": "gallery/education/advising-retention-review.opf.json#2",
+      "file": "0238.png",
+      "before": "b0cfd4416c75888db456a9c4ef3d1680b1ecfd5138080ded7d695d60ef252107",
+      "after": "1ef3e1457d2dba8beebca651f05f26e7fb64b2e5618346491d442792b40ed836"
+    },
+    {
+      "index": 239,
+      "key": "gallery/education/advising-retention-review.opf.json#3",
+      "file": "0239.png",
+      "before": "97d92510c41300c6aff260e9a954a7fecd8db17743c6810d4300fe9330911479",
+      "after": "9cd74f13625d6ce9930bbf80fd9cf860e099b45615dca0d7d72520eed5648254"
+    },
+    {
+      "index": 240,
+      "key": "gallery/education/advising-retention-review.opf.json#4",
+      "file": "0240.png",
+      "before": "a4df8f48c048e69450c1417d80e1caa799579429c78748f86fd8c825fcdd2d95",
+      "after": "61034b207692a52ef2c5b56af12fec8f28077aef1ef5f22c0c21971c197ef489"
+    },
+    {
+      "index": 241,
+      "key": "gallery/education/advising-retention-review.opf.json#5",
+      "file": "0241.png",
+      "before": "4d4e4aef42d7c0810cd622715f31ae9c363ec59860022239667544c0d9586238",
+      "after": "4c3fff450e0a298c8bdee685137114dfa3e8ffe97ca0f4fe1bfe0ceaf4db3a1b"
+    },
+    {
+      "index": 270,
+      "key": "gallery/education/curriculum-approval-brief.opf.json#0",
+      "file": "0270.png",
+      "before": "39eee2e9a073f89180b800193bd75b45057497c5faf5fc8855a26f3cc6bef7f4",
+      "after": "8c328f3041e944a9bf10468918a0bcb0c6224e04e1a180e19ba5524e32381ca4"
+    },
+    {
+      "index": 294,
+      "key": "gallery/education/online-program-launch-plan.opf.json#0",
+      "file": "0294.png",
+      "before": "24427082f7cb61fc42ce6cb815e5296c540249096d26a606b3a7b89c802ae4e5",
+      "after": "55f4cc6682aa64059231cf64d72bab98f02d76791e8f41c117caf07b0dba3c1c"
+    },
+    {
+      "index": 318,
+      "key": "gallery/education/student-mental-health-capacity-review.opf.json#0",
+      "file": "0318.png",
+      "before": "72655d1ccaa2d1c23e7bce813ed7bc26bbbdca190419e8d50ef325699427e6d3",
+      "after": "b927915bbc737a800c1b47eacc7543ffffad882a2ac5d4ba7bb8b8543e2a3796"
+    },
+    {
+      "index": 319,
+      "key": "gallery/education/student-mental-health-capacity-review.opf.json#1",
+      "file": "0319.png",
+      "before": "a0d49812369f0dea88d43ef5938b65c8a4f937fc5089497fb822a7aca1dbe697",
+      "after": "11b50e8ac78cd47db9cfcfa103febbc3ffed0ed7f75a4995309cdbad8c5317ec"
+    },
+    {
+      "index": 320,
+      "key": "gallery/education/student-mental-health-capacity-review.opf.json#2",
+      "file": "0320.png",
+      "before": "804121093b7dc32b3f777fa1dc130275f38e99de2b047c143649c361fd53f7fe",
+      "after": "da557945d56a589407de7c06e080895451cd06a5360f14d8ff236a3f39212b65"
+    },
+    {
+      "index": 321,
+      "key": "gallery/education/student-mental-health-capacity-review.opf.json#3",
+      "file": "0321.png",
+      "before": "2d30c708ff6f6c0a96e92321b0533dcbe878e85822c4b72d0aa28943caa56424",
+      "after": "b477cf5ba08f2b414614c0b2ee3ea6c794eb83b6e5b3b324d78b8951df09b8f4"
+    },
+    {
+      "index": 322,
+      "key": "gallery/education/student-mental-health-capacity-review.opf.json#4",
+      "file": "0322.png",
+      "before": "59cecb051ec987c5df025009c00ed73a71916819c28ee1c8499cc3d9cbe96e08",
+      "after": "9c97639dfbf513b396ece4fab0b12b19787d14f88ccc8c328aa4650514c6a736"
+    },
+    {
+      "index": 323,
+      "key": "gallery/education/student-mental-health-capacity-review.opf.json#5",
+      "file": "0323.png",
+      "before": "59407ed04c154c81380479ce403e22417279a32b2a0d72afee201d6f5a7554fe",
+      "after": "ce7ea8aadcfb162a08aef2dc05fd49cb33465bf22d06523bd5743084b7b36704"
+    },
+    {
+      "index": 354,
+      "key": "gallery/government/grant-equity-review.opf.json#0",
+      "file": "0354.png",
+      "before": "ab780d4a52468b6b18a39e91b96eaf950338a9110374eec8bbe01473364aa281",
+      "after": "bf72d59a8727b1afe6e76c443cd9c8bf33255a0a1dab36046ff644b167a5a33d"
+    },
+    {
+      "index": 390,
+      "key": "gallery/government/regulatory-risk-brief.opf.json#0",
+      "file": "0390.png",
+      "before": "7a6c498588963ad78a8e13a6e795ee23001a4328decdbb4b14df824445f3b271",
+      "after": "274f54a366e5f97037fd8df4cf30d9404416eac498539421a4785ce8194bff2a"
+    },
+    {
+      "index": 391,
+      "key": "gallery/government/regulatory-risk-brief.opf.json#1",
+      "file": "0391.png",
+      "before": "c44eb5d9fcec651ece084452e47aa7fc6dc86d536bcbcf719ea50ae4b438ad9b",
+      "after": "843a31f7a9b0996c6ae44579a6f7e8797cd5ee8d08fe5344fd6f141552b8aaf4"
+    },
+    {
+      "index": 392,
+      "key": "gallery/government/regulatory-risk-brief.opf.json#2",
+      "file": "0392.png",
+      "before": "6e35de384f0442b6b5dc1eb54219b451228ce1ee742acdc059ea66faac477830",
+      "after": "b12d96e7cf44972ca35d87b224b951a42496e1571e01b4c735e1e99dc5d80c44"
+    },
+    {
+      "index": 393,
+      "key": "gallery/government/regulatory-risk-brief.opf.json#3",
+      "file": "0393.png",
+      "before": "c325f1262ef92a6b8a7125a802abc6046bdf7975e82c328bfb65606080e1e4da",
+      "after": "597fbd6a654d760b9d5d1bd84359f318f03d60f9f62bc4093a6bb2181f062040"
+    },
+    {
+      "index": 394,
+      "key": "gallery/government/regulatory-risk-brief.opf.json#4",
+      "file": "0394.png",
+      "before": "6825f1843f2cde60e2b53c5e43fbd31b96a0ba548de5f1f7d328522da3cdd9f9",
+      "after": "45cef02e0cf991df3f439ede15e0d022e5a4b82f479555f23e9dddb79c9ba8d5"
+    },
+    {
+      "index": 395,
+      "key": "gallery/government/regulatory-risk-brief.opf.json#5",
+      "file": "0395.png",
+      "before": "c771cb73d79343c8ab8c02c285ccb190f1acadd845d8c1e1a0f80b3e2b4d2bf2",
+      "after": "12c69c947236b532194e15379ce3f5a2fa61d3e6f3d5d373d5de66c2881e1459"
+    },
+    {
+      "index": 416,
+      "key": "gallery/government/vaccination-outreach-briefing.opf.json#0",
+      "file": "0416.png",
+      "before": "ba393743ce71825885dbb901799ab087eff981391b2718bbbe9df8471429b5a5",
+      "after": "0ee2ee7fe246880a6f613325dbd5a3c80cd55dea843f91ccbee9f081cf0e3502"
+    },
+    {
+      "index": 442,
+      "key": "gallery/government/workforce-reskilling-initiative.opf.json#0",
+      "file": "0442.png",
+      "before": "11274a1b0c5c2e3309f6d0547c51bab7629c81aed776002b93567ffe479f26a7",
+      "after": "a96ab26e0a3af5557e830c576d1d80ea0bb3ebf7051d10004f9c352ad69be526"
+    },
+    {
+      "index": 452,
+      "key": "gallery/industries/airline-disruption-recovery-review.opf.json#0",
+      "file": "0452.png",
+      "before": "0b713b5e7ce844229b2cad215104800a925110967f7043781e02238c2a2b82d5",
+      "after": "35720e80c3114d591fa29e5c0ac9665e77f76006ada078c3f1e77e26caed218e"
+    },
+    {
+      "index": 453,
+      "key": "gallery/industries/airline-disruption-recovery-review.opf.json#1",
+      "file": "0453.png",
+      "before": "ccbdf34ccd3647231230c8e33d4579a39c989bbf22b5d327df3c06e1e81d7c44",
+      "after": "45f7aaf9cf24389bfa9f3679fa98312badb9f143092c4d4e2977deb6dedf856e"
+    },
+    {
+      "index": 454,
+      "key": "gallery/industries/airline-disruption-recovery-review.opf.json#2",
+      "file": "0454.png",
+      "before": "4f72d3b192d94517ab792c5359f111019ba96374b8cd548fce85473efb7e7541",
+      "after": "20d4edf0e3fc4940b1f433034a216943ea8baf29c643e0e434e49643960f5f84"
+    },
+    {
+      "index": 455,
+      "key": "gallery/industries/airline-disruption-recovery-review.opf.json#3",
+      "file": "0455.png",
+      "before": "2d0abe39c984fc1034dcb518f9d461415d1254cf02ee0a24da251f8fc889b4ca",
+      "after": "7c97a1af39db824d0404e5e5e99f9ffffb4febcb8fcdc013a54b6faa5b4f3e5a"
+    },
+    {
+      "index": 456,
+      "key": "gallery/industries/airline-disruption-recovery-review.opf.json#4",
+      "file": "0456.png",
+      "before": "cec830edb8b088ffbdcaa37ab03b11d04b04840ad782e9b0c0b3964277b5a4e2",
+      "after": "8b130e4198d88b62499e5bb9f544a1c7eb804866fb531667d217c8f0329a423a"
+    },
+    {
+      "index": 457,
+      "key": "gallery/industries/airline-disruption-recovery-review.opf.json#5",
+      "file": "0457.png",
+      "before": "6c3f2afb01cf19abcec390adf43162a26a09bc6858e16fd11b7caf4eadf309c8",
+      "after": "381864bc92b6b6de8fa6ba28cbfd174920036188df5a43d289ee84a983797561"
+    },
+    {
+      "index": 458,
+      "key": "gallery/industries/airline-disruption-recovery-review.opf.json#6",
+      "file": "0458.png",
+      "before": "a1ace769b6b0aed250699814aeebc6f6da463756f5ba3019d57df93b5fb94772",
+      "after": "e5bb15d8a440252bcad441be72f6dd3ef0ac70c33393e256b9f2af194be5baf6"
+    },
+    {
+      "index": 459,
+      "key": "gallery/industries/airline-disruption-recovery-review.opf.json#7",
+      "file": "0459.png",
+      "before": "d6a58620c5dae2f3c4bb555b9035b1c5144059d1fede4638391d5a658c241619",
+      "after": "6fc2beb6957b9b8b949c3e310a2e575623eb218616d3942d45161dcf5bc6791b"
+    },
+    {
+      "index": 460,
+      "key": "gallery/industries/airline-disruption-recovery-review.opf.json#8",
+      "file": "0460.png",
+      "before": "4d71b11c2802c40c127090f540f88f747519f47cc37c1906cf950d2428448c32",
+      "after": "86b2549b9ed38dc8e428e125538dfb2fd215023890f0277fe22ed6612f9faab5"
+    },
+    {
+      "index": 461,
+      "key": "gallery/industries/airline-disruption-recovery-review.opf.json#9",
+      "file": "0461.png",
+      "before": "02ac3a6efce8ee41697f2c821b16866d1bff2fd5bfcd1980b0a28d566581d1e5",
+      "after": "de9ddf3757e9fda39e72bc0086b6e599e289281be1b8ba951893cef2dbb79f42"
+    },
+    {
+      "index": 462,
+      "key": "gallery/industries/ambulatory-access-recovery-plan.opf.json#0",
+      "file": "0462.png",
+      "before": "8c7f51f20f919096fe500bd8f77ba4ae2969a0b8991d017ab604c83630883e75",
+      "after": "f61f76061bd535870e491348f62d9b402e831d0adc42deca9779f52d743798ac"
+    },
+    {
+      "index": 463,
+      "key": "gallery/industries/ambulatory-access-recovery-plan.opf.json#1",
+      "file": "0463.png",
+      "before": "a7d00aefd1fabe344ff9a0192e628a4708ee402a67c94f8dfe18334439c4cac5",
+      "after": "0dcea920438652a3e120d8cde5590111ddafee5b849649cd1e48dab34db971e2"
+    },
+    {
+      "index": 464,
+      "key": "gallery/industries/ambulatory-access-recovery-plan.opf.json#2",
+      "file": "0464.png",
+      "before": "57e5f264b232a67e751d683d9ce2968f7418b672ec5d69b3cba6b9e9e92e07a9",
+      "after": "fe2547783ca00da6a844ff5e71827dd3dd8f5c9396d0e57947eaa01b8571a53f"
+    },
+    {
+      "index": 465,
+      "key": "gallery/industries/ambulatory-access-recovery-plan.opf.json#3",
+      "file": "0465.png",
+      "before": "d41a3c4922ea4144710ff4ec85c2065ddfdde1bbff2ad3afd0ae7558a67b4373",
+      "after": "30e2b6cc5dcb161425c135939e02f1258c5eecbe43c29d3c4fb16f688d24f9e1"
+    },
+    {
+      "index": 490,
+      "key": "gallery/industries/claims-triage-operating-model.opf.json#0",
+      "file": "0490.png",
+      "before": "38497fe12f0426e8ecdf8c3607fb644886749638835a28ac44550a6d03b4c7e6",
+      "after": "ff590958388109e8edfcda93e977eb8243667a315be5603d6c278e1f86ec44fa"
+    },
+    {
+      "index": 500,
+      "key": "gallery/industries/construction-safety-stand-down.opf.json#0",
+      "file": "0500.png",
+      "before": "dd3c4f568c8f54dfbb1251fed87cb3d66d6a65af65cfc3b93a910c7fd08db981",
+      "after": "617b59c58e6621d11a92e463fd8f530ed56555b2437e0a3acf1fe197fa74fe43"
+    },
+    {
+      "index": 522,
+      "key": "gallery/industries/fan-experience-operations-brief.opf.json#0",
+      "file": "0522.png",
+      "before": "829dfa6c7967ab809172089f436e8899fa20e4a365464520f7f04d79e581f26d",
+      "after": "eec768e9028ae08b7445703dd9a3edae53cef5adfaea607728406298a4e3302b"
+    },
+    {
+      "index": 542,
+      "key": "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#0",
+      "file": "0542.png",
+      "before": "479d5fa1d28a1c95ce2ccc41adbaa43ee4fb004a5011b59c05aaedaf24a3e3af",
+      "after": "7941c7000b185b86ac820748be5beb23cef1bc0f14e812552f7029799f088826"
+    },
+    {
+      "index": 543,
+      "key": "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#1",
+      "file": "0543.png",
+      "before": "d6a8bbdb6e31dfae08a5487b1e569981a81dfdcc68e8d16c1dd6d037a7a1b64e",
+      "after": "919f115e6b98d03081d16af7eea10fa2b01a4b1bdeaa68a27854e9739e4a2878"
+    },
+    {
+      "index": 544,
+      "key": "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#2",
+      "file": "0544.png",
+      "before": "42f7c78bf7a3a000978298c85c57348a283956b6b27f16dbd8a8d976b7b82851",
+      "after": "0d2555c4ffd7ec1e023a9f9b468de23625e10c7da36cc3568f55e6bad00323dd"
+    },
+    {
+      "index": 545,
+      "key": "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#3",
+      "file": "0545.png",
+      "before": "2488475d7445d7c1d7f1256ddb8c8687736ec66a48dd00b1035404a12f519a7b",
+      "after": "b0a6c7e3a0cfdeb4daf32701931303c1331e729b04aff2bc4bb49542d9ca52b0"
+    },
+    {
+      "index": 546,
+      "key": "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#4",
+      "file": "0546.png",
+      "before": "c1f110433aaa96fe014ee168d562566e46c463cb670c2850a295b2a0426cdcd5",
+      "after": "d3c52e542bc1501febc70720ae4c628f1d59e7e4f7499015fc08b475e8b94609"
+    },
+    {
+      "index": 547,
+      "key": "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#5",
+      "file": "0547.png",
+      "before": "fb715989b927ca0636666b47e93b95a478a58f1bc44120c9572383fc62ce7063",
+      "after": "8420db7d2dd25fb4403eb45e34fb0d640387eb862e20c0c7fa3e54a66fe32501"
+    },
+    {
+      "index": 548,
+      "key": "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#6",
+      "file": "0548.png",
+      "before": "cbfd146189c34cbd6a8e514a132a2a81085f1b5592718b8a990fd4f5f8ede8fe",
+      "after": "be5e059395954a134dfd116905a4a982cbc88eace8fad5e55e570a6f14b2abeb"
+    },
+    {
+      "index": 549,
+      "key": "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#7",
+      "file": "0549.png",
+      "before": "618b8befc8b422b97f19af7253f7df6b269fc867202627036ba2205a03013b2e",
+      "after": "69612a14a67a30ea4b46d22ac82033686b1f0f98dca8bc73ced760a52654ff2a"
+    },
+    {
+      "index": 550,
+      "key": "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#8",
+      "file": "0550.png",
+      "before": "f9e16b35df3dbeda9eac83c3e00a5a0b49d476d8ef04781451c647bc3f713f86",
+      "after": "e15638ad949ec6936fdc9a2bbf55b7e37f529e4b993b8f517cb5f1896168202a"
+    },
+    {
+      "index": 551,
+      "key": "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#9",
+      "file": "0551.png",
+      "before": "721520ddf37b3ffcb9621d0f47f43066395887caba2b1a0daa99f67d0cb5eeb0",
+      "after": "d68e2c082138771487f6e50fbe4f3c2b1d030e890c1727b82e7f69f2ef2559bb"
+    },
+    {
+      "index": 584,
+      "key": "gallery/industries/streaming-churn-winback-strategy.opf.json#0",
+      "file": "0584.png",
+      "before": "aa8c7d190a608ba9ec10ece7df5ebbc0fb584c764ec337e4204fd0562ddc67d4",
+      "after": "770f89804ef1bf83af752f056101da331a45f24c251341fb363dc9f2fd8b13d8"
+    },
+    {
+      "index": 644,
+      "key": "gallery/international/japan-market-entry-readout.opf.json#0",
+      "file": "0644.png",
+      "before": "93094b597c36bbda5bc89067374a2f610b4e4b33264054e40a441ed0ac29fbe5",
+      "after": "2cfac87083b26ed53894deb5ccfd8a63d0959bb50280efee882b71ecb1b9cbc3"
+    },
+    {
+      "index": 645,
+      "key": "gallery/international/japan-market-entry-readout.opf.json#1",
+      "file": "0645.png",
+      "before": "900f4c9949c2797945e10b2f62056686f4cef878f306e203a35a298c96d6de26",
+      "after": "ecbd4f9b1d9d7566920226a6d4ebab2e5611ecc3356d78349d3ff7cf0667c0c0"
+    },
+    {
+      "index": 646,
+      "key": "gallery/international/japan-market-entry-readout.opf.json#2",
+      "file": "0646.png",
+      "before": "dae4ff1d73f5fc9de76390c59959450e37f6ce0a8d5dbbf2fe2413c05a7fa89b",
+      "after": "ea9b56606d59e7371216f77fb8c22ddc302713e93e5181c72519415df853dbf7"
+    },
+    {
+      "index": 647,
+      "key": "gallery/international/japan-market-entry-readout.opf.json#3",
+      "file": "0647.png",
+      "before": "4224e420a9919468057707eca99ccdd133323a4dd99dc9901f6e8a702344f5f0",
+      "after": "ed22bcd9d40c4d11c30d8c88208bdb36c780b7c9f82edf866b39732ec41d018e"
+    },
+    {
+      "index": 660,
+      "key": "gallery/presentation-types/developer-conference-talk.opf.json#0",
+      "file": "0660.png",
+      "before": "4855dad627e560bd7e579c2d79552e325ff2232d2542b2058f70032cda32c9f7",
+      "after": "6cdcaa4f80b2230e31492e8b3d64e757b9c6a179bb8e85d717df9113d5aeb2d0"
+    },
+    {
+      "index": 682,
+      "key": "gallery/presentation-types/monthly-board-update.opf.json#0",
+      "file": "0682.png",
+      "before": "f2d91e3929cec1316595b1ee0dd5398ec4c5840f8c86de5e86be34159d28cfb6",
+      "after": "130e5a7a5a2f702a25f188b47697dd02ecfb7b00ab2e1e151d8b16b4d757a746"
+    },
+    {
+      "index": 683,
+      "key": "gallery/presentation-types/monthly-board-update.opf.json#1",
+      "file": "0683.png",
+      "before": "6a08c9fc317757145b456feb23e46cbf227cb1292051523a2231662822a30579",
+      "after": "2653bcd3245537422c0cd410629cb7523a3066bf63a5598e7dd97dac1b06e8d3"
+    },
+    {
+      "index": 684,
+      "key": "gallery/presentation-types/monthly-board-update.opf.json#2",
+      "file": "0684.png",
+      "before": "ec4ba72db210cb29ea6f844f8c466b1ab8dea9580dcb469b8e6e9470e4f5d065",
+      "after": "09f6f029d74b5033511d88e55f9cf80a842f6d0656b331a4257cb52a0459e9ed"
+    },
+    {
+      "index": 685,
+      "key": "gallery/presentation-types/monthly-board-update.opf.json#3",
+      "file": "0685.png",
+      "before": "a3931be632452bbd5592c9d4a85e05a576fea5e65d0693eee7e1bdf3b1dd1e74",
+      "after": "a7a2cae69a61463afa1744adc24fe1de068e926d640fc771a9bb9966c4e500d9"
+    },
+    {
+      "index": 706,
+      "key": "gallery/presentation-types/research-findings-report.opf.json#0",
+      "file": "0706.png",
+      "before": "b1cc3f0a99faeb5a6806c545e20df12f2169fe7471be7208531756448eebf4df",
+      "after": "acf5d54ef45469b3375ca3dbbb98aa40aa307c2403a6dd0fae223d56a0c96afa"
+    }
+  ],
+  "unchanged": 703,
+  "sheets": [
+    {
+      "file": "pairs-0.png",
+      "sha256": "9dc0d9ce08da51bf7b15ffe5033f2d5fc5a2e003926734345ec2d3ac4f88ebf3",
+      "indices": [
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        102,
+        106,
+        116,
+        117,
+        118,
+        119,
+        120,
+        121,
+        122,
+        123,
+        124,
+        125,
+        126,
+        142,
+        168,
+        169,
+        170,
+        171
+      ]
+    },
+    {
+      "file": "pairs-1.png",
+      "sha256": "f7f5d79d5a2883ab3a86dd22432356f271f09f653d836e4c81f84a62df9440d0",
+      "indices": [
+        172,
+        173,
+        174,
+        175,
+        176,
+        177,
+        200,
+        201,
+        202,
+        203,
+        204,
+        205,
+        206,
+        207,
+        208,
+        209,
+        230,
+        236,
+        237,
+        238,
+        239,
+        240,
+        241,
+        270
+      ]
+    },
+    {
+      "file": "pairs-2.png",
+      "sha256": "d55ea7c078ffea9aa7e0af34fb28354559336d5b338f27254f682b95e08e6539",
+      "indices": [
+        294,
+        318,
+        319,
+        320,
+        321,
+        322,
+        323,
+        354,
+        390,
+        391,
+        392,
+        393,
+        394,
+        395,
+        416,
+        442,
+        452,
+        453,
+        454,
+        455,
+        456,
+        457,
+        458,
+        459
+      ]
+    },
+    {
+      "file": "pairs-3.png",
+      "sha256": "f6fe58606fdb4aa6af830d552aec796a85f6c2b3cffff6dd9c07721fb5636383",
+      "indices": [
+        460,
+        461,
+        462,
+        463,
+        464,
+        465,
+        490,
+        500,
+        522,
+        542,
+        543,
+        544,
+        545,
+        546,
+        547,
+        548,
+        549,
+        550,
+        551,
+        584,
+        644,
+        645,
+        646,
+        647
+      ]
+    },
+    {
+      "file": "pairs-4.png",
+      "sha256": "7c0bb7c238db6e8112c01ae68c8ac2f44c00bb510dea7dab17424b9827a7e57c",
+      "indices": [
+        660,
+        682,
+        683,
+        684,
+        685,
+        706
+      ]
+    }
+  ],
+  "selected": [
+    {
+      "index": 121,
+      "key": "gallery/business-functions/product-roadmap-decision-review.opf.json#5",
+      "file": "0121.png",
+      "before": "62cb912bba684e7917cda877e19acc05e11e2229a41d9fae99f0185947bb03bc",
+      "after": "8a0e8f1050be651f42e99279833348cc426ad5cff4ce183e6dbcefee29f814f2",
+      "type": "quote",
+      "full": "full-121.png",
+      "fullSha256": "27dd9b04189d0f93cc901c53de312bb3e4a6b321d8a87444a73db8e8183330d5",
+      "svgSha256": "56c1f7594dbd82b37377edd4164ea486aa8febc5bab24748a221662bd194f747"
+    },
+    {
+      "index": 124,
+      "key": "gallery/business-functions/product-roadmap-decision-review.opf.json#8",
+      "file": "0124.png",
+      "before": "df05e3abc3fad45b11d7305a2be90a0bef4ecc10395f2533c0bac61ffa6bb9f8",
+      "after": "d41c9053c3294c4240f5d2446bbadd997f83c3370fdbcf0c64769bef7e75fed3",
+      "type": "code",
+      "full": "full-124.png",
+      "fullSha256": "abe4a37e8f715a5273bb52fa12088c01645454fc34c817035489523c051b720e",
+      "svgSha256": "d0b8e259e5b5e55c761c9edffa7290097a486943002e591d5e90e065a4d33a2b"
+    },
+    {
+      "index": 65,
+      "key": "gallery/business-functions/field-enablement-certification.opf.json#3",
+      "file": "0065.png",
+      "before": "18fd67fadb9e17b0faa237a06474fae210972f8c72e36a42a37d4eef26828812",
+      "after": "5ffeb39a3cd21cf2f40889bdf938ba4e335d2bbe8067d29c74e31974aec71227",
+      "type": "table",
+      "full": "full-65.png",
+      "fullSha256": "d65ce38fb4b33ed01b80fb5b14ad8763553a3ddab8860995ae0f857833dca6be",
+      "svgSha256": "15e72ae42da1972e1ee2182ae2e875a1f25f1f5542b0aa290758d83bd7861dfe"
+    },
+    {
+      "index": 64,
+      "key": "gallery/business-functions/field-enablement-certification.opf.json#2",
+      "file": "0064.png",
+      "before": "0278a89b3c02f8f3b38f9bfae8488a5246a379ccc0191b490906c7d910a70070",
+      "after": "ce8718c5e4136d3288d5012f2dc307c97649c99a1a6fc8df87b7e850eac6ae00",
+      "type": "chart",
+      "full": "full-64.png",
+      "fullSha256": "ee0e25b21055cfddcddfbfb4988b5eddf1b60c1cde6b18f28e2f5eca98ab421b",
+      "svgSha256": "e9078a5878132d89f3c5a08763ab461bed429a481574c30e870f384ef58a16ef"
+    }
+  ],
+  "scope": "The authored corpus digest is unchanged. All previous/current Node24/current Node20 hashes verify and both current manifests agree exactly. Pair sheets show every changed raster; selected full-size images support payload inspection. This does not approve a golden baseline or certify glyph containment, readability, native fidelity or arbitrary content."
+}

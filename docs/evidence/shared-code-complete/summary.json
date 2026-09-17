@@ -1,0 +1,225 @@
+{
+  "checkedAt": "2026-09-10T07:58:24.339Z",
+  "verificationCheckpoint": "dfabf7504ee54fe1ba0b3b73cd80afd503c4d661",
+  "releasePlan": {
+    "packages": [
+      {
+        "name": "@openpresentation/opf",
+        "version": "0.9.0"
+      },
+      {
+        "name": "@openpresentation/opf-render",
+        "version": "0.7.0"
+      },
+      {
+        "name": "@openpresentation/opf-editor",
+        "version": "0.6.0"
+      },
+      {
+        "name": "@openpresentation/opf-pptx",
+        "version": "0.7.0"
+      },
+      {
+        "name": "@openpresentation/cli",
+        "version": "0.7.0"
+      }
+    ],
+    "exampleRefs": {
+      "opf-editor": "7b6db50f42783979841674e628193b1ba2f5c0e2"
+    },
+    "verificationRefs": {
+      "cli": "685733976a665d0190bdb9922b9a174ef94153d9",
+      "opf": "685733976a665d0190bdb9922b9a174ef94153d9",
+      "opf-render": "f4a1b8e1324cbc182b98d43f16528594c8006f86",
+      "opf-pptx": "f421c91b7b127c7eeab788acdc0c51969402e057",
+      "opf-editor": "7b6db50f42783979841674e628193b1ba2f5c0e2"
+    }
+  },
+  "releasePlanSha256": "d02f48daaa98cf84cea5d58848601528995d0cc25368d29711ec5cd0476c7c83",
+  "reports": [
+    {
+      "node": "20.20.2",
+      "files": [
+        {
+          "file": "candidate-code-node20.json",
+          "sha256": "f20ba0796364a3fc76c034e9a4a2c0266adb691b3e7662837bad7aacd6ee7885",
+          "sourceSha256": "f20ba0796364a3fc76c034e9a4a2c0266adb691b3e7662837bad7aacd6ee7885"
+        },
+        {
+          "file": "candidate-browser-node20.json",
+          "sha256": "4a48b8138fda1836593159e21d319aec80c57a1dc027a9e7c8e45e82892eb3cb",
+          "sourceSha256": "4a48b8138fda1836593159e21d319aec80c57a1dc027a9e7c8e45e82892eb3cb"
+        },
+        {
+          "file": "registry-code-node20.json",
+          "sha256": "f0c3953c5ab2e168b05e1546b132c34090c9dc22e54467b4871dfe7ca831879e",
+          "sourceSha256": "f0c3953c5ab2e168b05e1546b132c34090c9dc22e54467b4871dfe7ca831879e"
+        },
+        {
+          "file": "registry-browser-node20.json",
+          "sha256": "8737cfad0e0e60ed66f63b9d7fb651ab2f8b7183b061fb2b3e808edf94c1a6b9",
+          "sourceSha256": "8737cfad0e0e60ed66f63b9d7fb651ab2f8b7183b061fb2b3e808edf94c1a6b9"
+        },
+        {
+          "file": "fidelity-node20.json",
+          "sha256": "2e6386403a52c68e77893b5f14076ddc424b614db9ce96c2f3f6a9879bb8061f",
+          "sourceSha256": "2e6386403a52c68e77893b5f14076ddc424b614db9ce96c2f3f6a9879bb8061f"
+        },
+        {
+          "file": "native-code-node20-registry-evidence.json",
+          "sha256": "9872e710e4386126b1b13f300665971a7c3cba458c0444fa79596b02003b0b6e",
+          "sourceSha256": "9872e710e4386126b1b13f300665971a7c3cba458c0444fa79596b02003b0b6e"
+        },
+        {
+          "file": "native-code-node20-generation.json",
+          "sha256": "f5f7be51a78a04dfb56d7db4c0891fed4ed37ed82c3594ec257aae4aebdb6e10",
+          "sourceSha256": "f5f7be51a78a04dfb56d7db4c0891fed4ed37ed82c3594ec257aae4aebdb6e10"
+        },
+        {
+          "file": "native-code-node20-native.json",
+          "sha256": "3775379b019b78f66f6d26f08b0da9991112f1f686041b84e5e38c228bf9ba7d",
+          "sourceSha256": "feb6a5504bec0935a014986f26e56d92bc449b438b87e18ff30745a673f30e52"
+        },
+        {
+          "file": "native-code-node20-comparison.json",
+          "sha256": "155dcf9b0694eb1b28240f396bd5e5c7c18fbfa0566ba581800ac95f4be51f89",
+          "sourceSha256": "155dcf9b0694eb1b28240f396bd5e5c7c18fbfa0566ba581800ac95f4be51f89"
+        }
+      ],
+      "logs": {
+        "coordinator-node20-stage0.log": "80dc364312156a7e1eacd81ecee3810c5901079f55ccc9a4a188d876a97b2be5",
+        "coordinator-node20-stage1.log": "94361844147cf0aafe2e4e4e65e025677395d269f7557f618a0df58bf90ab06c",
+        "coordinator-node20-stage2.log": "c668155d2e89be89f9faddcb7be446a43dc71738e25d127d710526860555513a",
+        "coordinator-node20-stage3.log": "025a1d7126e56266e33eae1baeaeff69a9680339d9754d49c7ec972210ae7b05",
+        "coordinator-node20-stage4.log": "4b754fc4813f2a2e50f432019aac0eccd9775e5017a2e08fb8ea9ffddb4132a1",
+        "registry-node20-stage0.log": "a782ff64efb183f2c77dee60e7f244aa1f7593ca6105cb3e4b5279e8eeb5cd56",
+        "registry-node20-stage1.log": "9bb662d9c5b613c0435ca39f1ee3835babac2cabf8d8f4ab597b05d9156f758a",
+        "registry-node20-stage2.log": "3bfe2da52c246c20649cbc1e20b40d7a63f358eadee9ee7a147b61ef60e56370",
+        "registry-node20-stage3.log": "4b754fc4813f2a2e50f432019aac0eccd9775e5017a2e08fb8ea9ffddb4132a1",
+        "registry-node20-stage4.log": "2438cbfe4e6d239db0c49eadeb8e83d29d51eb92935fd77e2b4c65a529d8fa57",
+        "registry-node20-stage5.log": "a1c483a4e4c06fa5f3ade878abc3bde061ab54cce7b8a4e30df38b4622266f4c",
+        "registry-node20-stage6.log": "a1200c4798953e6baac307b5b8b5584000095d7efecfa0faf51ad152cdf93bcc",
+        "registry-node20-stage7.log": "9dabdb67498fe292aa36eeff914322d7be3928d631745843934cf6dd82784a96"
+      },
+      "nativeVisuals": [
+        {
+          "file": "code-1280-svg-3.png",
+          "sha256": "3c1e992f719fa526e0677e7322d5f6422eac75398ebd1a670a97fde5503ae731",
+          "url": "https://github.com/OpenPresentation/opf-pptx/blob/f421c91b7b127c7eeab788acdc0c51969402e057/docs/evidence/shared-code-release/code-1280-svg-3.png"
+        },
+        {
+          "file": "code-1280-native-3.png",
+          "sha256": "e2adc912a3fe8e21bfacdbab69e80cef58b34d2892223838945bbd334d89febd",
+          "url": "https://github.com/OpenPresentation/opf-pptx/blob/f421c91b7b127c7eeab788acdc0c51969402e057/docs/evidence/shared-code-release/code-1280-native-3.png"
+        },
+        {
+          "file": "code-540-svg-4.png",
+          "sha256": "ae1d958958819e0b9a09c8ed0aa41ae87b78f7d1650804c23d755e2a787e868a",
+          "url": "https://github.com/OpenPresentation/opf-pptx/blob/f421c91b7b127c7eeab788acdc0c51969402e057/docs/evidence/shared-code-release/code-540-svg-4.png"
+        },
+        {
+          "file": "code-540-native-4.png",
+          "sha256": "d457dd18e9bc17efc8fb3a60ca85972dbf890998bec5adfd194aeee341776b46",
+          "url": "https://github.com/OpenPresentation/opf-pptx/blob/f421c91b7b127c7eeab788acdc0c51969402e057/docs/evidence/shared-code-release/code-540-native-4.png"
+        }
+      ]
+    },
+    {
+      "node": "24.20.0",
+      "files": [
+        {
+          "file": "candidate-code-node24.json",
+          "sha256": "9069901f8398e049488cc850cce5246e23ed3db2af55bd08ffbc6b6c93a388a0",
+          "sourceSha256": "9069901f8398e049488cc850cce5246e23ed3db2af55bd08ffbc6b6c93a388a0"
+        },
+        {
+          "file": "candidate-browser-node24.json",
+          "sha256": "d3d4c5fb0bb2efabe1ce5fdb79f39a7ba4c3a706f4ef3c25587e4b0a09569afb",
+          "sourceSha256": "d3d4c5fb0bb2efabe1ce5fdb79f39a7ba4c3a706f4ef3c25587e4b0a09569afb"
+        },
+        {
+          "file": "registry-code-node24.json",
+          "sha256": "3f98a79aca06b1f42c438e0c427afb9fe3d6fe0576380960db7861989f85eec0",
+          "sourceSha256": "3f98a79aca06b1f42c438e0c427afb9fe3d6fe0576380960db7861989f85eec0"
+        },
+        {
+          "file": "registry-browser-node24.json",
+          "sha256": "1aa40551a45002e17d35256c8e57a8b0f3fbe8b3e5bae490bf0067982404f1b2",
+          "sourceSha256": "1aa40551a45002e17d35256c8e57a8b0f3fbe8b3e5bae490bf0067982404f1b2"
+        },
+        {
+          "file": "fidelity-node24.json",
+          "sha256": "2e6386403a52c68e77893b5f14076ddc424b614db9ce96c2f3f6a9879bb8061f",
+          "sourceSha256": "2e6386403a52c68e77893b5f14076ddc424b614db9ce96c2f3f6a9879bb8061f"
+        },
+        {
+          "file": "native-code-node24-registry-evidence.json",
+          "sha256": "60fc892caff1c219f04a0ac13379e7663a4d833b8c706ccd5d65ac16bddab7e0",
+          "sourceSha256": "60fc892caff1c219f04a0ac13379e7663a4d833b8c706ccd5d65ac16bddab7e0"
+        },
+        {
+          "file": "native-code-node24-generation.json",
+          "sha256": "9f2ff697d755bd5364380d677afbba0b99ed0994d6ee16c148b8cb18ce3b3641",
+          "sourceSha256": "9f2ff697d755bd5364380d677afbba0b99ed0994d6ee16c148b8cb18ce3b3641"
+        },
+        {
+          "file": "native-code-node24-native.json",
+          "sha256": "d1769a91e1acb2dca50dd4134b120fbfa61bda4967c2fc3538365e463432c1f8",
+          "sourceSha256": "1ddb2ffc166ec8c6046297ad65c2150ea6cbd1c72584a7c713c63f3749aecbe5"
+        },
+        {
+          "file": "native-code-node24-comparison.json",
+          "sha256": "697749a6e32813655b76348c8708da9f9d8f0c89cb2b5c76e104fd3b1a8b4f78",
+          "sourceSha256": "697749a6e32813655b76348c8708da9f9d8f0c89cb2b5c76e104fd3b1a8b4f78"
+        }
+      ],
+      "logs": {
+        "coordinator-node24-stage0.log": "efffa54d0405dcfb492f56280bf2c73d4832a418ff1407067b3f8b6904e310f7",
+        "coordinator-node24-stage1.log": "94361844147cf0aafe2e4e4e65e025677395d269f7557f618a0df58bf90ab06c",
+        "coordinator-node24-stage2.log": "bf71fa7e1df8e01078f33985c7f209846f7e7dc56499466476e44da2e8e0cf5a",
+        "coordinator-node24-stage3.log": "025a1d7126e56266e33eae1baeaeff69a9680339d9754d49c7ec972210ae7b05",
+        "coordinator-node24-stage4.log": "4b754fc4813f2a2e50f432019aac0eccd9775e5017a2e08fb8ea9ffddb4132a1",
+        "registry-node24-stage0.log": "37541d91395d1c8ebbce2593606c07191dc71fb8800d9296b2975e57d2213a63",
+        "registry-node24-stage1.log": "9bb662d9c5b613c0435ca39f1ee3835babac2cabf8d8f4ab597b05d9156f758a",
+        "registry-node24-stage2.log": "3bfe2da52c246c20649cbc1e20b40d7a63f358eadee9ee7a147b61ef60e56370",
+        "registry-node24-stage3.log": "4b754fc4813f2a2e50f432019aac0eccd9775e5017a2e08fb8ea9ffddb4132a1",
+        "registry-node24-stage4.log": "2438cbfe4e6d239db0c49eadeb8e83d29d51eb92935fd77e2b4c65a529d8fa57",
+        "registry-node24-stage5.log": "a1c483a4e4c06fa5f3ade878abc3bde061ab54cce7b8a4e30df38b4622266f4c",
+        "registry-node24-stage6.log": "a1200c4798953e6baac307b5b8b5584000095d7efecfa0faf51ad152cdf93bcc",
+        "registry-node24-stage7.log": "9dabdb67498fe292aa36eeff914322d7be3928d631745843934cf6dd82784a96"
+      },
+      "nativeVisuals": [
+        {
+          "file": "code-1280-svg-3.png",
+          "sha256": "3c1e992f719fa526e0677e7322d5f6422eac75398ebd1a670a97fde5503ae731",
+          "url": "https://github.com/OpenPresentation/opf-pptx/blob/f421c91b7b127c7eeab788acdc0c51969402e057/docs/evidence/shared-code-release/code-1280-svg-3.png"
+        },
+        {
+          "file": "code-1280-native-3.png",
+          "sha256": "e2adc912a3fe8e21bfacdbab69e80cef58b34d2892223838945bbd334d89febd",
+          "url": "https://github.com/OpenPresentation/opf-pptx/blob/f421c91b7b127c7eeab788acdc0c51969402e057/docs/evidence/shared-code-release/code-1280-native-3.png"
+        },
+        {
+          "file": "code-540-svg-4.png",
+          "sha256": "ae1d958958819e0b9a09c8ed0aa41ae87b78f7d1650804c23d755e2a787e868a",
+          "url": "https://github.com/OpenPresentation/opf-pptx/blob/f421c91b7b127c7eeab788acdc0c51969402e057/docs/evidence/shared-code-release/code-540-svg-4.png"
+        },
+        {
+          "file": "code-540-native-4.png",
+          "sha256": "d457dd18e9bc17efc8fb3a60ca85972dbf890998bec5adfd194aeee341776b46",
+          "url": "https://github.com/OpenPresentation/opf-pptx/blob/f421c91b7b127c7eeab788acdc0c51969402e057/docs/evidence/shared-code-release/code-540-native-4.png"
+        }
+      ]
+    }
+  ],
+  "tabPositions": {
+    "targetsPerRuntime": 4,
+    "maximumErrorPoints": 0.0070304870606,
+    "gatePoints": 0.02
+  },
+  "fontEmbedding": {
+    "checkedCodeArchives": 12,
+    "embeddedFontEntries": 0
+  },
+  "scope": "Both complete source/candidate and actual registry matrices pass on Node 20/24. Seven browser suites (230 assertions/eight trusted scenarios), additional font-loaded code/source/blank/selection workflows, fifteen pinned fidelity suites, 126 decks/805 rasters, CLI six-skill install and negative integrity/runtime/link/loader guards pass. The immutable native bridge executes the complete registry bytes in real Windows PowerPoint: eight code cases and 24 exact original/saved/edited imports per runtime. Four representative SVG/native PNGs per runtime match previously inspected converter images by hash. Native pixel equivalence, arbitrary document lossless reimport and public adoption are not claimed. Final coordinated CI/review and public deployments remain gates."
+}

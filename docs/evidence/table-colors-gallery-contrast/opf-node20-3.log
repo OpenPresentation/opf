@@ -1,0 +1,8 @@
+
+> openpresentation-workspace@ check:examples C:\Users\micha\Source\opf\artifacts\shared-metric-integration\opf
+> node scripts/validate-examples.mjs
+
+{
+  "valid": true,
+  "files": 126
+}

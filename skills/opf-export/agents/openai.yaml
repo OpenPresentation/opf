@@ -1,0 +1,4 @@
+interface:
+  display_name: "OPF Preview and Export"
+  short_description: "Render OPF previews and produce editable PPTX"
+  default_prompt: "Use $opf-export to help with this OPF task using the current project schema and packages."

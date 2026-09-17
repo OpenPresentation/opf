@@ -1,0 +1,117 @@
+{
+  "scope": "Pinned tests and fixtures, installed registry dist files; no source package overrides",
+  "packages": [
+    {
+      "name": "@openpresentation/opf",
+      "version": "0.9.0"
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "version": "0.7.0"
+    },
+    {
+      "name": "@openpresentation/opf-editor",
+      "version": "0.6.0"
+    },
+    {
+      "name": "@openpresentation/opf-pptx",
+      "version": "0.7.0"
+    },
+    {
+      "name": "@openpresentation/cli",
+      "version": "0.7.0"
+    }
+  ],
+  "results": [
+    {
+      "repo": "opf-render",
+      "ref": "f4a1b8e1324cbc182b98d43f16528594c8006f86",
+      "test": "webp.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-render",
+      "ref": "f4a1b8e1324cbc182b98d43f16528594c8006f86",
+      "test": "jpeg-orientation.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-render",
+      "ref": "f4a1b8e1324cbc182b98d43f16528594c8006f86",
+      "test": "rich-table.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-render",
+      "ref": "f4a1b8e1324cbc182b98d43f16528594c8006f86",
+      "test": "golden.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-render",
+      "ref": "f4a1b8e1324cbc182b98d43f16528594c8006f86",
+      "test": "styled-table.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-render",
+      "ref": "f4a1b8e1324cbc182b98d43f16528594c8006f86",
+      "test": "quote-footer.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-render",
+      "ref": "f4a1b8e1324cbc182b98d43f16528594c8006f86",
+      "test": "shared-quote.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-render",
+      "ref": "f4a1b8e1324cbc182b98d43f16528594c8006f86",
+      "test": "shared-code.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-pptx",
+      "ref": "f421c91b7b127c7eeab788acdc0c51969402e057",
+      "test": "dependency-boundary.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-pptx",
+      "ref": "f421c91b7b127c7eeab788acdc0c51969402e057",
+      "test": "styled-table.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-pptx",
+      "ref": "f421c91b7b127c7eeab788acdc0c51969402e057",
+      "test": "styled-table-import.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-pptx",
+      "ref": "f421c91b7b127c7eeab788acdc0c51969402e057",
+      "test": "content-layout.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-pptx",
+      "ref": "f421c91b7b127c7eeab788acdc0c51969402e057",
+      "test": "shared-quote.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-pptx",
+      "ref": "f421c91b7b127c7eeab788acdc0c51969402e057",
+      "test": "shared-code.mjs",
+      "passed": true
+    },
+    {
+      "repo": "opf-pptx",
+      "ref": "f421c91b7b127c7eeab788acdc0c51969402e057",
+      "test": "code-provenance.mjs",
+      "passed": true
+    }
+  ]
+}

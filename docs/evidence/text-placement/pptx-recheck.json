@@ -1,0 +1,17 @@
+{
+  "reason": "Content-card test still expected full-cell native text boxes; assertions now use accepted per-line boxes while frame assertions remain unchanged.",
+  "commands": [
+    {
+      "command": "npm test",
+      "node": "v24.20.0",
+      "log": "opf-pptx-node24-recheck.log",
+      "status": 0
+    },
+    {
+      "command": "npm test",
+      "node": "v20.20.2",
+      "log": "opf-pptx-node20-recheck.log",
+      "status": 0
+    }
+  ]
+}

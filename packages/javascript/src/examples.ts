@@ -2,7 +2,8 @@
 //
 // Source-of-truth: ../../../examples/**/*.opf.json. The build step
 // (`pnpm build`) inlines each deck into this module so consumers can import
-// the gallery without doing any filesystem work at runtime.
+// the gallery without doing any filesystem work at runtime. Docs-only
+// fixtures such as docs/quickstart/*.opf.json are intentionally excluded.
 //
 // Each example's `deck` field is the parsed JSON for an `.opf.json` file —
 // the same content you would `JSON.parse(fs.readFileSync(file))`.

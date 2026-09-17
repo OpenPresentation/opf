@@ -1,0 +1,62 @@
+{
+  "node": "v24.21.0",
+  "repo": "opf-browser",
+  "startedAt": "2026-09-11T00:25:30.222805+00:00",
+  "commands": [
+    {
+      "argv": [
+        "pnpm",
+        "test:packed-browser"
+      ],
+      "exitCode": 0,
+      "log": "01-test_packed-browser.log"
+    },
+    {
+      "argv": [
+        "node",
+        "scripts/test-installed-code-guards.mjs"
+      ],
+      "exitCode": 0,
+      "log": "02-scripts_test-installed-code-guards.mjs.log"
+    },
+    {
+      "argv": [
+        "node",
+        "scripts/test-plain-whitespace-workflow.mjs",
+        "artifacts/node24-runtime/plain-whitespace",
+        "installed"
+      ],
+      "exitCode": 0,
+      "log": "03-installed.log"
+    },
+    {
+      "argv": [
+        "node",
+        "scripts/test-readability-browser.mjs",
+        "artifacts/node24-runtime/readability",
+        "installed"
+      ],
+      "exitCode": 0,
+      "log": "04-installed.log"
+    },
+    {
+      "argv": [
+        "node",
+        "scripts/test-timeline-workflow.mjs",
+        "artifacts/node24-runtime/timeline",
+        "installed"
+      ],
+      "exitCode": 0,
+      "log": "05-installed.log"
+    },
+    {
+      "argv": [
+        "node",
+        "scripts/test-timeline-acceptance.mjs",
+        "artifacts/node24-runtime/timeline-acceptance.json"
+      ],
+      "exitCode": 0,
+      "log": "06-artifacts_node24-runtime_timeline-acceptance.json.log"
+    }
+  ]
+}

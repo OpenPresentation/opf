@@ -1,5 +1,88 @@
 # Changelog
 
+## Unreleased
+
+- Document the independently installable [developer quickstart](docs/quickstart.md) and a truthful [compatibility matrix](docs/compatibility-matrix.md) for the published 0.10.1 / 0.8.1 / 0.7.1 set. Add `docs/quickstart/developer-quickstart.opf.json` and `pnpm test:developer-quickstart`, which installs those versions from the npm registry. The fixture is not part of the published examples catalog.
+
+## 0.10.1
+
+- Declare metric placeholders for number layouts and add native quote and timeline layouts. Extend layout classification to match supported content kinds while retaining the legacy Number label.
+- Preserve text-style bullets as text in composed payloads so returned payloads remain valid OPF. Clarify legacy diagram and narrative shape representations.
+- Correct the layout regeneration index schema and rebuild CLI 0.8.1 with the updated catalog and schema.
+
+## 0.10.0
+
+- Add offline OPF lint with exact source locations, schema and catalog context, asset diagnostics, explicit design contracts and actionable alternatives. Expose the same read-only diagnostics through CLI 0.8.0 without fetching catalogs or modifying source.
+- Share vector-aware text/metric placement, content-card interiors and timeline field geometry across composition and pagination. Preserve scalar source whitespace, selected readability floors and explicit human layout choices. The public explanation identifier advances to `grid-score-v8`; coordinated consumers must support the updated geometry.
+- Carry resolved physical font selections in text styles, validate inline example catalogs and retain reviewed source/browser evidence. Native font identity, Office rendering and general reimport fidelity remain separately documented compatibility boundaries.
+
+- Require Node 24 (`24.x`) for core, CLI and coordinated development. Node 20 and 22 users must upgrade before installing the next releases. Retain browser and operating-system coverage while retiring duplicate Node 20 jobs. See [migration instructions](docs/migrations/node24.md); earlier published packages and historical evidence are unchanged.
+
+## 0.9.0
+
+- Add shared code filename/language/body layout with exact source ranges, tab segments, metadata case, whitespace and original line boundaries. Composition and pagination consume the complete accepted code geometry, expose `item.codeLayout` and identify the updated candidate scoring as `grid-score-v3`. Strict ancestor failures and irreducible metadata cannot be hidden by an empty body.
+- Pin coordinated source verification to the new renderer/PPTX/editor code integration. Fresh candidate tarball tests cover code semantics, metadata guards and actual offline browser editing/export/reimport; published registry tests retain their immutable historical fixtures. Source/native evidence and remaining release/fidelity gates are recorded in `docs/plans/shared-code-integration.md`.
+- The public explanation identifier changes from `grid-score-v2` to `grid-score-v3`; callers matching that literal must handle the new algorithm version. Schema-valid documents remain unchanged. Renderer/PPTX 0.7.0 and editor 0.6.0 are the coordinated targets for shared preview, native source recovery and editing; see `docs/plans/shared-code-release.md` for publication gates.
+- Bundle core 0.9.0 and updated portable layout guidance in CLI 0.7.0. The safe offline six-skill installer and existing authoring/validation/editing/pagination commands remain supported. Native formatting, font theme and raster equivalence remain separate fidelity limitations.
+
+## 0.8.0
+
+- Compose quote bodies and sources through shared `layoutQuote` geometry, resolved styles, UTF-16 source ranges, readability floors and explicit internal overflow. `quote-flow-v1` allocates footer space before reducing fonts or changing the outer grid. Renderer/PPTX 0.6.0 consume accepted parts without re-fitting; use the coordinated published set in `release-plan.json`.
+- Version automatic scoring as `grid-score-v2`: measure both quote parts, charge their combined font reduction and one overflow penalty per quote, and recognize descendant strict-fit diagnostics.
+- Persist pagination's readability policy in returned slides, including a fitting one-page result. Preserve exact quote body fragments and repeated sources; reject irreducible empty-body quotes instead of dropping them after an earlier page. The coordinated editor treats a one-page policy change as an undoable edit.
+- Correct incomplete-payload reporting to include code: its language label and internal insets are not yet shared with composition fitting. This coverage correction does not alter geometry or claim to repair overflow.
+- Add opt-in composition explanations with versioned candidate costs, selection reasons, measurement scope and unmeasured payload paths. Explanations preserve existing geometry and measurement calls, including explicit modes, weights and promoted regions, and remain available on strict overflow errors. This exposes the current bounded grid search; it does not certify visual quality or add automatic repairs.
+- Upgrade the schema declaration generator to 16.0.0. Payloads reached through `Presentation['slides'][number]['blocks']` now reject extra object-literal properties and arbitrary string-key indexing, matching the existing closed JSON Schema. Schema-valid fields, runtime validation and serialized documents are unchanged. Consumers using the old accidental index signature must narrow to a known field or validate external data before use. This minor release acknowledges that public TypeScript tightening.
+- Publish CLI 0.6.0 with bundled core 0.8.0 and updated portable skills. Quote composition and persisted pagination floors use the coordinated published renderer 0.6.0, PPTX 0.6.0 and editor 0.5.0 set for shared browser/export behavior. Fresh registry and native evidence remains separate from source checks; see `docs/plans/shared-quote-release.md`.
+
+## 0.7.0
+
+- Add an object form for table cells: `value`, optional `style`, `colSpan` and `rowSpan`. Existing scalar and rich-array cells remain valid. Styles cover fills, text colors, alignment, padding and individual borders.
+- Validate covered positions explicitly as `null`, reject overlapping or out-of-bounds merges, and preserve vertical merge groups during pagination. Shared table geometry emits each anchor once and retains editable content paths through `.value`.
+- Exercise styled creation, validation, edits and merge-aware pagination through the standalone CLI, including atomic span/row edits and file preservation on invalid changes.
+- Rebuild CLI 0.4.0 with bundled core 0.7.0. The coordinated renderer/editor/PPTX rollout is required for styled previews, editing and conversion; the older core 0.6.0 package set does not accept this syntax. See `docs/plans/styled-table-cells.md` for verification and remaining native fidelity limits.
+
+## 0.6.0
+
+- Add shared `layoutTable` geometry and fitting to the composition API. Wrapped and multiline rows grow into available space; constrained tables reduce spare row height before readable text, preserve complete cells and report real overflow. Short rows keep their existing preferred height.
+- Add optional uniform rich-text line advances for native table spacing. The coordinated renderer and PPTX exporter consume the same row and text geometry. No schema change is required.
+- Rebuild CLI 0.3.0 with bundled core 0.6.0. Shared variable-row geometry is available in renderer/PPTX 0.4.0 and editor 0.3.0; PPTX 0.4.0 also imports supported native rich table text.
+
+## 0.5.0
+
+- Accept canonical `TextRun[]` values in table cells and column headers, alongside existing scalar cells and string headers. Measure rich cells with their actual font and run styles for overflow detection and pagination; preserve complete rows and repeated headers without mutating the document.
+- Rebuild the standalone CLI as 0.2.0 with bundled OPF 0.5.0. The generated table types now include rich arrays, so consumers that exhaustively handle scalar cells or string-only headers must handle the additional form.
+- Rich table rendering, editor interactions and editable PPTX export are available in renderer 0.3.0, editor 0.2.0 and PPTX 0.3.0. Older core 0.4.1 does not accept this syntax; native PPTX import still flattens table text.
+
+## 0.4.1
+
+- Replace the truncated PNG in the asset-source-forms example with a complete project-authored image so the inline asset can render and export.
+
+- Rebuild the standalone CLI as 0.1.1 with bundled OPF 0.4.1.
+- Verify the corrected example corpus against the reviewed renderer baseline and coordinated image/PPTX fidelity commits.
+
+## 0.4.0
+
+Published to npm on 2026-09-08 (UTC): [`@openpresentation/opf@0.4.0`](https://www.npmjs.com/package/@openpresentation/opf/v/0.4.0). See the [tagged release](https://github.com/OpenPresentation/opf/releases/tag/opf-v0.4.0) for the exact source snapshot.
+
+### Added
+
+- Shared composition, nested groups, weighted tracks, measured rich text and lists, overflow diagnostics, and explicit content-preserving pagination.
+- CSV/TSV/JSON conversion for native table and chart content, with browser-safe `./composition`, `./pagination`, and `./data` package exports.
+- Six portable agent skills for authoring, layout, presets, editing, export, and inspection, with shared APIs for validating and paginating OPF presentations.
+- Coordinated source and packed-consumer verification across the open renderer, editor, and PPTX packages.
+
+### Changed
+
+- Smaller structural schema/catalog declarations and shared build chunks, retaining typed named schema definitions. Consumers that relied on inferred deeply nested literal types should use the schema values as JSON data or generated presentation types.
+- Catalog index schemas and narrative index consistency, accurate preview byte counts, spec-integrity checks, and Node 20/24 test discovery.
+
+### Compatibility and verification
+
+The JSON format keeps its existing catalog IDs and adds nested composition. The raw narrative catalog index uses `records` instead of `templates`. This minor version acknowledges the structural TypeScript declaration changes. Renderer, editor and PPTX package releases must require this core version before their new composition features support standalone installation. Schema acceptance does not establish visual fidelity; advanced editing, media, fonts and native PowerPoint comparisons remain documented work.
+
+The release source also prepares a standalone, bundled `@openpresentation/cli@0.1.0`. It is a separate package and was not published with this core release.
+
 ## 0.3.0
 
 ### Added
@@ -27,23 +110,42 @@
 - Allowed a single string shorthand for `audience` in addition to the existing array form.
 - Documented the mixed slide-root payload shorthand in schema and content payload references.
 
-## 0.2.0 - Pending npm publish approval
+## 0.2.1
+
+_Prepared internally as `0.2.0` (see [`docs/migrations/0.2.0.md`](./docs/migrations/0.2.0.md) for the breaking catalog change drafted under that name), but the version was bumped straight to `0.2.1` before ever being published — `0.2.0` has no npm release or git tag. The changes below are what actually shipped, as `0.2.1`, the first release after `0.1.0`._
 
 ### Breaking Changes
 
 - Corrected the United Kingdom chart catalog ID from the removed misspelled slug to `united-kingdom`. See [`docs/migrations/0.2.0.md`](./docs/migrations/0.2.0.md).
 
+### Added
+
+- Added typed raw spec file manifest exports at `@openpresentation/opf/spec-files`.
+- Added a GitHub Actions npm publish workflow for semver tags with npm provenance.
+- Added layout preview generation (`generate-previews.mjs`, `render-layout-previews.mjs`) and a `previews.ts` module exporting an HTML preview per canonical layout record.
+
 ### Changed
 
-- Marked `@openpresentation/opf` as a public npm package at version `0.2.0`.
+- Marked `@openpresentation/opf` as a public npm package.
 - Kept the canonical spec npm artifact on the existing `@openpresentation/opf` package instead of adding a separate `@openpresentation/opf-spec` package.
 - Removed Xano-hosted chart preview URL objects from the bundled chart-type catalog records and chart-type index.
 - Kept the JavaScript package boundary local and format-level: schemas, catalogs, generated TypeScript types, and local validation only.
 - Included the full raw `spec/` tree in the packed JavaScript package, including the optional downstream-service reference `spec/openapi.yaml`, schemas, catalogs, reference files, and catalog indexes.
-- Added typed raw spec file manifest exports at `@openpresentation/opf/spec-files`.
-- Added a GitHub Actions npm publish workflow for semver tags with npm provenance.
-- Clarified that the OPF CLI remains local-only and is not published as part of `@openpresentation/opf` v0.2.0.
+- Clarified that the OPF CLI remains local-only and is not published as part of `@openpresentation/opf`.
 
 ### Not Included
 
 - No hosted rendering, parsing, generation, remote catalog fetching, or hosted-service client behavior is included in this release-prep change.
+
+## 0.1.0
+
+First published release of `@openpresentation/opf` to npm.
+
+### Added
+
+- Published `@openpresentation/opf` to npm, dropping `private: true` and bumping the package version from `0.0.0` to `0.1.0`.
+
+### Changed
+
+- Updated the package README to lead with `pnpm add @openpresentation/opf` instead of workspace build instructions, and reframed the top-level README around installing the published package.
+- Noted that the schema is pre-stable (0.x) and may include breaking changes between minor versions before a 1.0 release.

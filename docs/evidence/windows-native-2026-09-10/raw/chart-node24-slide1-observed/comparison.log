@@ -1,0 +1,30 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: original slide 2: actual native series data
++ actual - expected
+
+  [
+    {
+      categories: [
++       null,
++       null
+-       'Q1',
+-       'Q2'
+      ],
+      name: 'Current',
+      values: [
+        2,
+        3
+
+    at file:///C:/Users/micha/.codex/worktrees/fd3f/opf/artifacts/windows-native/opf-pptx/test/native-chart-colors.mjs:47:10 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: [ { categories: [ null, null ], values: [ 2, 3 ], name: 'Current' } ],
+  expected: [ { name: 'Current', categories: [ 'Q1', 'Q2' ], values: [ 2, 3 ] } ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.20.0

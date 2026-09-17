@@ -1,0 +1,190 @@
+{
+  "_id": "@openpresentation/opf-editor@0.7.0",
+  "_rev": "10-1e53e43cc7fae6ad18a556608dae0c65",
+  "name": "@openpresentation/opf-editor",
+  "dist-tags": {
+    "latest": "0.7.0"
+  },
+  "versions": [
+    "0.0.1",
+    "0.1.0",
+    "0.1.1",
+    "0.1.2",
+    "0.2.0",
+    "0.3.0",
+    "0.4.0",
+    "0.5.0",
+    "0.6.0",
+    "0.7.0"
+  ],
+  "time": {
+    "created": "2026-05-27T02:38:28.854Z",
+    "modified": "2026-09-15T18:32:47.377Z",
+    "0.0.1": "2026-05-27T02:38:29.186Z",
+    "0.1.0": "2026-09-08T03:29:55.730Z",
+    "0.1.1": "2026-09-08T03:50:21.466Z",
+    "0.1.2": "2026-09-08T08:38:51.265Z",
+    "0.2.0": "2026-09-08T11:33:23.685Z",
+    "0.3.0": "2026-09-08T13:13:27.525Z",
+    "0.4.0": "2026-09-08T17:11:21.409Z",
+    "0.5.0": "2026-09-10T01:14:08.133Z",
+    "0.6.0": "2026-09-10T07:47:01.265Z",
+    "0.7.0": "2026-09-15T18:32:47.061Z"
+  },
+  "bugs": {
+    "url": "https://github.com/OpenPresentation/opf-editor/issues"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/OpenPresentation/opf-editor#readme",
+  "repository": {
+    "url": "git+https://github.com/OpenPresentation/opf-editor.git",
+    "type": "git"
+  },
+  "description": "Embeddable local OPF editor primitives built on the deterministic renderer.",
+  "maintainers": [
+    "grimmmichaelj <developer@buildadataadvantage.com>"
+  ],
+  "readmeFilename": "README.md",
+  "_contentLength": 63754,
+  "dist": {
+    "shasum": "95bb631635de39590f16131b0603b02f24f4fd66",
+    "tarball": "https://registry.npmjs.org/@openpresentation/opf-editor/-/opf-editor-0.7.0.tgz",
+    "fileCount": 39,
+    "integrity": "sha512-r2CG2+Nnn9xf5REVqqLi5MkBtgOdUQk4cdh+ZFJ6+/zGHK0NV2sMaBj90XT/8plbXTCtIdXlcJ81LUE2Z1O50g==",
+    "signatures": [
+      {
+        "sig": "MEYCIQDifntpkYPP4jaclWeInvg40OhrT7jmWSPg+9UKijTIEgIhAKZ/f1wRDgr/UbMNznNGhjHFrXDtwRqbKL5P/m1ZE6jW",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      },
+      {
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+        "sig": "MEYCIQDyxGMng8aLH+ICbOd7bK0mEahGr5BetkD2E5X/YlYeBQIhAPoPReEl3dITSjsUTFQrCdxYyqZlhRk7+5wYOo/VeJsD"
+      }
+    ],
+    "attestations": {
+      "url": "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf-editor@0.7.0",
+      "provenance": {
+        "predicateType": "https://slsa.dev/provenance/v1"
+      }
+    },
+    "unpackedSize": 247831
+  },
+  "type": "module",
+  "types": "./dist/index.d.ts",
+  "engines": {
+    "node": "24.x"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./data": {
+      "types": "./dist/data.d.ts",
+      "default": "./dist/data.js"
+    },
+    "./react": {
+      "types": "./dist/react.d.ts",
+      "default": "./dist/react.js"
+    },
+    "./canvas": {
+      "types": "./dist/canvas.d.ts",
+      "default": "./dist/canvas.js"
+    },
+    "./layout": {
+      "types": "./dist/layout.d.ts",
+      "default": "./dist/layout.js"
+    },
+    "./schema": {
+      "types": "./dist/schema.d.ts",
+      "default": "./dist/schema.js"
+    },
+    "./svelte": {
+      "types": "./dist/svelte.d.ts",
+      "default": "./dist/svelte.js"
+    },
+    "./transfer": {
+      "types": "./dist/transfer.d.ts",
+      "default": "./dist/transfer.js"
+    },
+    "./galleries": {
+      "types": "./dist/galleries.d.ts",
+      "default": "./dist/galleries.js"
+    },
+    "./rich-text": {
+      "types": "./dist/rich-text.d.ts",
+      "default": "./dist/rich-text.js"
+    },
+    "./json-editor": {
+      "types": "./dist/json-editor.d.ts",
+      "default": "./dist/json-editor.js"
+    },
+    "./json-options": {
+      "types": "./dist/json-options.d.ts",
+      "default": "./dist/json-options.js"
+    },
+    "./package.json": "./package.json",
+    "./schema-inspector": {
+      "types": "./dist/schema-inspector.d.ts",
+      "default": "./dist/schema-inspector.js"
+    }
+  },
+  "gitHead": "71c6a90a5d0531991f999baf8ac800f0e322a7ad",
+  "private": false,
+  "scripts": {
+    "test": "npm run build && node test/accepted-text.mjs && node test/smoke.mjs && node test/component-smoke.mjs && node test/canvas-fields.mjs && node test/transfer.mjs && node test/schema.mjs && node test/rich-text.mjs && node test/layout.mjs && node test/blocks.mjs && node test/styled-table.mjs && node test/json-source.mjs && node test/json-options.mjs",
+    "build": "node scripts/build.mjs",
+    "prepack": "npm run build",
+    "validate": "node scripts/validate-package.mjs",
+    "test:json": "npm run build && node test/json-source.mjs && node test/json-options.mjs",
+    "typecheck": "node --check src/index.js && node --check src/react.js && node --check src/svelte.js && node --check scripts/build.mjs && node --check scripts/validate-package.mjs && node --check test/smoke.mjs && node --check test/component-smoke.mjs && node --check src/canvas.js && node --check src/canvas-fields.js && node --check test/canvas-fields.mjs && node --check test/browser-canvas.mjs && node --check src/transfer.js && node --check src/galleries.js && node --check examples/transfer-controls.js && node --check src/schema.js && node --check src/schema-inspector.js && node --check test/rich-table-browser.mjs && node --check test/styled-table.mjs && node --check test/styled-table-browser.mjs && node --check examples/pptx-controls.js && node --check scripts/build-playground.mjs && node --check test/playground-pptx.mjs && node --check src/text-input.js && node --check src/rich-text.js && node --check src/rich-text-input.js && node --check test/rich-text.mjs && node --check test/rich-input-browser.mjs && node --check src/json-editor.js && node --check src/json-menu.js && node --check src/json-options.js && node --check src/json-source.js",
+    "test:packed": "node test/packed-install.mjs",
+    "test:playground": "npm run build:playground && node test/playground-pptx.mjs",
+    "build:playground": "node scripts/build-playground.mjs",
+    "test:code-browser": "node test/code-browser.mjs",
+    "test:json-browser": "node test/json-editor-browser.mjs",
+    "test:metric-browser": "node test/metric-browser.mjs",
+    "test:rich-input-browser": "node test/rich-input-browser.mjs"
+  },
+  "version": "0.7.0",
+  "_npmUser": "GitHub Actions <npm-oidc-no-reply@github.com>",
+  "_npmVersion": "11.16.0",
+  "directories": {},
+  "sideEffects": false,
+  "_nodeVersion": "24.20.0",
+  "dependencies": {
+    "jsonc-parser": "3.3.1",
+    "@codemirror/lint": "6.9.7",
+    "@codemirror/view": "6.43.11",
+    "@lezer/highlight": "1.2.3",
+    "@codemirror/state": "6.7.4",
+    "@codemirror/search": "6.7.2",
+    "@codemirror/commands": "6.11.0",
+    "@codemirror/language": "6.12.4",
+    "@codemirror/lang-json": "6.0.2",
+    "@openpresentation/opf": "^0.10.0",
+    "@codemirror/autocomplete": "6.20.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "_hasShrinkwrap": false,
+  "devDependencies": {
+    "esbuild": "0.28.2",
+    "playwright": "1.63.0",
+    "@openpresentation/opf-pptx": "0.8.0",
+    "@openpresentation/opf-render": "0.8.0"
+  },
+  "peerDependencies": {
+    "@openpresentation/opf-render": "^0.8.0"
+  },
+  "peerDependenciesMeta": {
+    "@openpresentation/opf-render": {
+      "optional": true
+    }
+  },
+  "_npmOperationalInternal": {
+    "host": "s3://npm-registry-packages-npm-production",
+    "tmp": "tmp/opf-editor_0.7.0_1789497166947_0.8166422986289184"
+  }
+}

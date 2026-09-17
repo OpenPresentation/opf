@@ -1,0 +1,34 @@
+
+> openpresentation-workspace@ pack:ecosystem /Users/michael/.codex/worktrees/c193/opf
+> node scripts/pack-ecosystem.mjs
+
+[
+  {
+    "name": "@openpresentation/opf",
+    "version": "0.4.0-preview.11",
+    "file": "openpresentation-opf-0.4.0-preview.11.tgz",
+    "sha256": "3b1fc925d3b0cea2a4093578641c396b0527456d75b4fa771d6be69ad630e81f",
+    "bytes": 2336960
+  },
+  {
+    "name": "@openpresentation/opf-render",
+    "version": "0.1.0-preview.11",
+    "file": "openpresentation-opf-render-0.1.0-preview.11.tgz",
+    "sha256": "099a3a13de354174a7cf684a84716be75cdb0ce23c88a79734a3e9c7d595cf80",
+    "bytes": 41409
+  },
+  {
+    "name": "@openpresentation/opf-editor",
+    "version": "0.1.0-preview.11",
+    "file": "openpresentation-opf-editor-0.1.0-preview.11.tgz",
+    "sha256": "2d56e4b3dde301ec7f25d8c55c4156f0869a53c130cd7446afb0f81b8ce002ec",
+    "bytes": 55907
+  },
+  {
+    "name": "@openpresentation/opf-pptx",
+    "version": "0.1.0-preview.11",
+    "file": "openpresentation-opf-pptx-0.1.0-preview.11.tgz",
+    "sha256": "5b39dc6a3d41caaee330d46887ddec0aa1176c19afd2351c0f0da75bdb358ff0",
+    "bytes": 207259
+  }
+]

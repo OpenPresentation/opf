@@ -1,0 +1,32 @@
+{
+  "patches": [
+    {
+      "op": "test",
+      "path": "/slides/0/id",
+      "value": "image-0"
+    },
+    {
+      "op": "test",
+      "path": "/slides/0/image/src",
+      "value": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAA8CAIAAAAiz+n/AAABnElEQVR4nO3Yv0rDUBTH8ZNLXqHBB9CA4O4ibi4+gYuTm/g8bk6CL9HBOaOrCO46O0e0eomxLam5/vo7N7/vVJo/hA+H09Di8fDEvHV6cGfeCtt+gKkkaFCCBiVoUIIGJWhQggYlaFCCBiVoUIIGJWhQggYlaFCl+alu5l+fmln8cvfi1TxUevJd1tPNzIV46Yi4bdvf5xRF0RWn5Q78yu13S0/rHY0DzlbgV7ZhkVsHWuV29RSvKl5CaB1ole2vcVoHRy8Ym0ZlzQW9aMw4p7pDztD16KXBvECIoPNO0BODrpPuDcLtwQKdfYIGVR5d7RlDTco36F4PZ8e27TTRoAQNStATg65uL7v/4idpcbe3+b4RxAKdfYKeHnSVdHtQ7Q0u6Nh467S7PkPo6nOoU8UzznTQlmKBsC0NUmjrWG/KHS9hUyaFts4OGW4dzyRU5oW2n9Zrprt3lFP54znT/v78Ry/n10NOoyV2A71enNzXJXTseefevMW7ozNL0KAEDUrQoAQNStCgBA1K0KAEDUrQoAQNStCgBG2Y3gEQ3Irssa4fzwAAAABJRU5ErkJggg=="
+    },
+    {
+      "op": "replace",
+      "path": "/slides/0/image/src",
+      "value": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAB4CAIAAAAhVwZfAAAB50lEQVR4nOXWsU5UQRhH8TMn+woQHgBJTOxtDB2NT0BjRWd8HjsrEl+CwprS1pDQY731NSr3uihs9s7MCv/lVxH2zuTky7cXyrfXJ2zH21eft3SzBJJAEkgCSSAJJIEkkASSQBJIAkkgCSSBJJAEkkASSAJJIAkkgSSQBJJAEkgCSSAJJIEkkASSQBJIAkkgCSSBJJAEkkASSAItut94dHlx+9Pl3vTLw7PvTzH6T+t9rj7tdaxfdM8dhuHfZ0opq/WN6fYqHkb3Pjbc/XQa/CNErxZveGTo0W1j8ZrpPmQYj1R321hcd5zxbF233V8Uc13N765fj5YxN97g/1+M9iWJ/DMuOx991HU3qjfkGUz6iVi8+fBixuNd39B/+Xp6zA5PWgLJzkfvn79f/Y++i/LrtuXFy82PPINJp0bvd92QMn83mibd3l1qb6iJ/j3sXpYzx1w/6fYlKVWL0boeU/fc9DIeqStufXtMe7J5dxmfrC7u8Mpb7V4z9XL305bin7f1+lbdvPu4yWPLttzO0evrlz1atxg9uT74sqWbJZAEkkASSAJJIAkkgSSQBJJAEkgCSSAJJIEkkASSQBJIAkkgCSSBJJAEkkASSAJJIAkkgSSQBJJAEkgCSSAJJIEkkATysQNq/ADSb4tkHnk3oAAAAABJRU5ErkJggg=="
+    },
+    {
+      "op": "replace",
+      "path": "/slides/0/image/alt",
+      "value": "Editor replaced wide with tall"
+    }
+  ],
+  "passed": true,
+  "atomicUndoDepth": 1,
+  "sourceUnchanged": true,
+  "undoRestoresDocumentAndPptx": true,
+  "redoRestoresDocumentAndPptx": true,
+  "staleGuardRejected": true,
+  "originalPptxSha256": "cb0f5d5a808c53cac0a1039bdb366f76795b775a922fabe43db3ccef3143fdf3",
+  "editedPptxSha256": "63522d0ca9b52c1d68e2d4a4ed120ee894d77329950c32766a54d9f0dcc0d6e3"
+}

@@ -1,0 +1,247 @@
+{
+  "node": "v20.20.2",
+  "core": "cc4b5245ba1c197746a2c307b78ff58f45df02cc",
+  "renderer": "1e5cd95a76e356c09ae5da0c8604809a202b1f40",
+  "results": [
+    {
+      "count": 2,
+      "width": 1280,
+      "height": 720,
+      "minimum": 16,
+      "sourceSha256": "07f2f5ed274ee9ec1176541cf88aff4276beeaa4ab22d17968e812a67fab3f81",
+      "coreDiagnostics": [],
+      "box": {
+        "x": 57.6,
+        "y": 147.56875,
+        "width": 1164.8,
+        "height": 514.83125
+      },
+      "render": "passed"
+    },
+    {
+      "count": 2,
+      "width": 1280,
+      "height": 720,
+      "minimum": 32,
+      "sourceSha256": "4d700a160253c30a05e0f60499fa0533e805e1365eb0d6e0c071c12de10e2f25",
+      "coreDiagnostics": [],
+      "box": {
+        "x": 57.6,
+        "y": 147.56875,
+        "width": 1164.8,
+        "height": 514.83125
+      },
+      "render": "passed"
+    },
+    {
+      "count": 2,
+      "width": 720,
+      "height": 1280,
+      "minimum": 16,
+      "sourceSha256": "6f0013d9fd4a6c4c706c5d9cc4f88c904d7114a62525ea0684c689588db9814d",
+      "coreDiagnostics": [],
+      "box": {
+        "x": 57.6,
+        "y": 147.56875,
+        "width": 604.8,
+        "height": 1074.83125
+      },
+      "render": "passed"
+    },
+    {
+      "count": 2,
+      "width": 720,
+      "height": 1280,
+      "minimum": 32,
+      "sourceSha256": "212a3e363ba5d35d985cb881afbd5998fce28ecc666ac66ee803c2b5fdb7529a",
+      "coreDiagnostics": [],
+      "box": {
+        "x": 57.6,
+        "y": 147.56875,
+        "width": 604.8,
+        "height": 1074.83125
+      },
+      "render": "passed"
+    },
+    {
+      "count": 4,
+      "width": 1280,
+      "height": 720,
+      "minimum": 16,
+      "sourceSha256": "f0d71d61aad35164a02fe17b0328f597308c581cfc085aeb0b1cf2dcd7226cd0",
+      "coreDiagnostics": [],
+      "box": {
+        "x": 57.6,
+        "y": 147.56875,
+        "width": 1164.8,
+        "height": 514.83125
+      },
+      "render": "passed"
+    },
+    {
+      "count": 4,
+      "width": 1280,
+      "height": 720,
+      "minimum": 32,
+      "sourceSha256": "807df4428c6b8bf6ca936f8b268d2182ef59199109eb1b27d8f9c8eddbc4a263",
+      "coreDiagnostics": [],
+      "box": {
+        "x": 57.6,
+        "y": 147.56875,
+        "width": 1164.8,
+        "height": 514.83125
+      },
+      "render": "passed"
+    },
+    {
+      "count": 4,
+      "width": 720,
+      "height": 1280,
+      "minimum": 16,
+      "sourceSha256": "de2a88daaba308e0bc3688ae5c191492d019efda7b9d88fadcaf0a7eb2c96d9e",
+      "coreDiagnostics": [],
+      "box": {
+        "x": 57.6,
+        "y": 147.56875,
+        "width": 604.8,
+        "height": 1074.83125
+      },
+      "render": "passed"
+    },
+    {
+      "count": 4,
+      "width": 720,
+      "height": 1280,
+      "minimum": 32,
+      "sourceSha256": "0303bcd1f691d5147a506b12366df77b41f25201551bfc74b63fb21cd80587f7",
+      "coreDiagnostics": [],
+      "box": {
+        "x": 57.6,
+        "y": 147.56875,
+        "width": 604.8,
+        "height": 1074.83125
+      },
+      "render": "passed"
+    },
+    {
+      "count": 8,
+      "width": 1280,
+      "height": 720,
+      "minimum": 16,
+      "sourceSha256": "e41c75c69d17e483fde0eff33926c22fcbc39404120cdd20823f5de4731d9f50",
+      "coreDiagnostics": [],
+      "box": {
+        "x": 57.6,
+        "y": 147.56875,
+        "width": 1164.8,
+        "height": 514.83125
+      },
+      "render": "passed"
+    },
+    {
+      "count": 8,
+      "width": 1280,
+      "height": 720,
+      "minimum": 32,
+      "sourceSha256": "7d66ffae7b41185d3239369d679bceddadf55f828de36de5a43b323421bfad96",
+      "coreError": {
+        "message": "Slide content does not fit its composition.",
+        "code": "layout-overflow"
+      },
+      "renderError": {
+        "message": "Slide content does not fit its composition.",
+        "code": "layout-overflow"
+      }
+    },
+    {
+      "count": 8,
+      "width": 720,
+      "height": 1280,
+      "minimum": 16,
+      "sourceSha256": "9d31cd01b132bf63d238907eddaba33571d15a01f3bc79daf139636bb21b8870",
+      "coreDiagnostics": [],
+      "box": {
+        "x": 57.6,
+        "y": 147.56875,
+        "width": 604.8,
+        "height": 1074.83125
+      },
+      "render": "passed"
+    },
+    {
+      "count": 8,
+      "width": 720,
+      "height": 1280,
+      "minimum": 32,
+      "sourceSha256": "a96b1175bfa3d001e2bd5aeae41c138d51ec59800f87581184bb6b9761b00216",
+      "coreError": {
+        "message": "Slide content does not fit its composition.",
+        "code": "layout-overflow"
+      },
+      "renderError": {
+        "message": "Slide content does not fit its composition.",
+        "code": "layout-overflow"
+      }
+    },
+    {
+      "count": 12,
+      "width": 1280,
+      "height": 720,
+      "minimum": 16,
+      "sourceSha256": "2906f0d344b39700d5507e236baacdbfc4e7a1f8567bbf53b64433a6798a3b6d",
+      "coreDiagnostics": [],
+      "box": {
+        "x": 57.6,
+        "y": 147.56875,
+        "width": 1164.8,
+        "height": 514.83125
+      },
+      "render": "passed"
+    },
+    {
+      "count": 12,
+      "width": 1280,
+      "height": 720,
+      "minimum": 32,
+      "sourceSha256": "f63dd660d3b824ca9279e470f08da04542dc431befcb14a1d8a004e438bc7f62",
+      "coreError": {
+        "message": "Slide content does not fit its composition.",
+        "code": "layout-overflow"
+      },
+      "renderError": {
+        "message": "Slide content does not fit its composition.",
+        "code": "layout-overflow"
+      }
+    },
+    {
+      "count": 12,
+      "width": 720,
+      "height": 1280,
+      "minimum": 16,
+      "sourceSha256": "8f5342bceef8b38185447ca4534720d5dd6cdc19009766ecddd91b150c6c01f4",
+      "coreDiagnostics": [],
+      "box": {
+        "x": 57.6,
+        "y": 147.56875,
+        "width": 604.8,
+        "height": 1074.83125
+      },
+      "render": "passed"
+    },
+    {
+      "count": 12,
+      "width": 720,
+      "height": 1280,
+      "minimum": 32,
+      "sourceSha256": "fdb944a620ac396d76d58edee43cb4e159f182fddb13c59d169e59a15823d079",
+      "coreError": {
+        "message": "Slide content does not fit its composition.",
+        "code": "layout-overflow"
+      },
+      "renderError": {
+        "message": "Slide content does not fit its composition.",
+        "code": "layout-overflow"
+      }
+    }
+  ]
+}

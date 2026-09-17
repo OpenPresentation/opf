@@ -1,0 +1,26 @@
+{
+  "runs": [
+    {
+      "directory": "raw/font-native-node24-03",
+      "node": "v24.20.0",
+      "comparisonSha256": "c00027eabaa94d71dfb062724aee374c59ef760c010df270681b16ec32b45028",
+      "nativeFaces": 9,
+      "identicalSaveReopenPngPairs": 7,
+      "currentContentSlideImports": 14,
+      "temporaryRegistrationsRemoved": 9
+    },
+    {
+      "directory": "raw/font-native-node20-01",
+      "node": "v20.20.2",
+      "comparisonSha256": "6457c2b90672b67d6a922d852537fa0254b8747ad435658ec4a34ed54ee4ef04",
+      "nativeFaces": 9,
+      "identicalSaveReopenPngPairs": 7,
+      "currentContentSlideImports": 14,
+      "temporaryRegistrationsRemoved": 9
+    }
+  ],
+  "fixtureAndRuntimeBytesIdentical": true,
+  "pdfRastersIdenticalBetweenRuntimes": true,
+  "initialFailure": "raw/font-native-node24-02/pdf-fonts.json",
+  "scope": "Native output family/style names, not per-glyph physical file identity. Source PostScript and Windows PDF naming dialects remain distinct."
+}

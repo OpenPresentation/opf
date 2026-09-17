@@ -1,0 +1,1899 @@
+{
+  "executableSha256": "90fa931172c507b763ba92a82b19d5bc70816e008c5bb87577e1838e8a92e9f9",
+  "windowsBuild": "26200.9445",
+  "generationSha256": "a9b76fd0fc5bf096caf896db102ece0def1de593b037fa40094fb24fb94b28be",
+  "decks": [
+    {
+      "slides": [
+        {
+          "slide": 1,
+          "lines": [
+            {
+              "width": 28.88,
+              "tags": 1,
+              "left": 43.2,
+              "height": 68.4,
+              "fontSize": 57.0,
+              "top": 43.2,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 41.75,
+              "role": "value",
+              "text": "0",
+              "tabTargets": []
+            }
+          ],
+          "rasterSha256": "5857a54b430dafaf4b381bac35a2b25a35cc9012114f5f8ef7e2157ddee3296e"
+        },
+        {
+          "slide": 2,
+          "lines": [
+            {
+              "width": 12.875039,
+              "tags": 1,
+              "left": 43.2,
+              "height": 68.4,
+              "fontSize": 57.0,
+              "top": 43.2,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 12.875039,
+              "role": "value",
+              "text": "",
+              "tabTargets": []
+            }
+          ],
+          "rasterSha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+        },
+        {
+          "slide": 3,
+          "lines": [
+            {
+              "width": 57.75504,
+              "tags": 1,
+              "left": 43.2,
+              "height": 68.4,
+              "fontSize": 57.0,
+              "top": 43.2,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 70.62504,
+              "role": "value",
+              "text": "42",
+              "tabTargets": []
+            },
+            {
+              "width": 21.38,
+              "tags": 1,
+              "left": 106.979294,
+              "height": 21.6,
+              "fontSize": 18.0,
+              "top": 82.2,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 25.5,
+              "role": "unit",
+              "text": "ms",
+              "tabTargets": []
+            },
+            {
+              "width": 78.51504,
+              "tags": 1,
+              "left": 43.2,
+              "height": 21.6,
+              "fontSize": 18.0,
+              "top": 121.74,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 82.63504,
+              "role": "label",
+              "text": "Left\tRight  ",
+              "tabTargets": [
+                {
+                  "errorPoints": 0.004688262939453125,
+                  "sourceStart": 5
+                }
+              ]
+            },
+            {
+              "width": 38.43,
+              "tags": 1,
+              "left": 43.2,
+              "height": 21.6,
+              "fontSize": 18.0,
+              "top": 149.7,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 42.55,
+              "role": "description",
+              "text": "Exact",
+              "tabTargets": []
+            },
+            {
+              "width": 4.1250396,
+              "tags": 1,
+              "left": 43.2,
+              "height": 21.6,
+              "fontSize": 18.0,
+              "top": 171.66,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 4.1250396,
+              "role": "description",
+              "text": "",
+              "tabTargets": []
+            },
+            {
+              "width": 54.65504,
+              "tags": 1,
+              "left": 43.2,
+              "height": 21.6,
+              "fontSize": 18.0,
+              "top": 193.62,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 58.77504,
+              "role": "description",
+              "text": "context",
+              "tabTargets": []
+            },
+            {
+              "width": 9.13,
+              "tags": 1,
+              "left": 43.2,
+              "height": 21.6,
+              "fontSize": 18.0,
+              "top": 221.58,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 13.25,
+              "role": "delta",
+              "text": "0",
+              "tabTargets": []
+            },
+            {
+              "width": 24.09,
+              "tags": 1,
+              "left": 43.2,
+              "height": 21.6,
+              "fontSize": 18.0,
+              "top": 249.54,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 28.21,
+              "role": "trend",
+              "text": "flat",
+              "tabTargets": []
+            }
+          ],
+          "rasterSha256": "ee0e35ea11d47be2d777671075c49e907c64c332b3db9e1a44679e977d75e6c9"
+        },
+        {
+          "slide": 4,
+          "lines": [
+            {
+              "width": 57.75504,
+              "tags": 1,
+              "left": 43.2,
+              "height": 68.4,
+              "fontSize": 57.0,
+              "top": 43.2,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 70.62504,
+              "role": "value",
+              "text": "42",
+              "tabTargets": []
+            },
+            {
+              "width": 90.50504,
+              "tags": 1,
+              "left": 43.2,
+              "height": 68.4,
+              "fontSize": 57.0,
+              "top": 112.74,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 103.37504,
+              "role": "value",
+              "text": "-0.5",
+              "tabTargets": []
+            },
+            {
+              "width": 394.77502,
+              "tags": 1,
+              "left": 43.2,
+              "height": 21.6,
+              "fontSize": 18.0,
+              "top": 191.28,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 398.89505,
+              "role": "unit",
+              "text": "milliseconds across all completed production requests",
+              "tabTargets": []
+            },
+            {
+              "width": 56.14504,
+              "tags": 1,
+              "left": 43.2,
+              "height": 21.6,
+              "fontSize": 18.0,
+              "top": 219.24,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 60.265038,
+              "role": "label",
+              "text": "Latency",
+              "tabTargets": []
+            }
+          ],
+          "rasterSha256": "ae73ffccbea8b488a1f6820db1a473239caaa3af13181666671400f4a9024807"
+        },
+        {
+          "slide": 5,
+          "lines": [
+            {
+              "width": 12.875039,
+              "tags": 1,
+              "left": 43.2,
+              "height": 68.4,
+              "fontSize": 57.0,
+              "top": 43.2,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 12.875039,
+              "role": "value",
+              "text": "",
+              "tabTargets": []
+            },
+            {
+              "width": 19.00504,
+              "tags": 1,
+              "left": 43.2,
+              "height": 21.6,
+              "fontSize": 18.0,
+              "top": 121.74,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 23.12504,
+              "role": "trend",
+              "text": "up",
+              "tabTargets": []
+            }
+          ],
+          "rasterSha256": "770efdfa52980e6413e082fae03f53b5da0aa95dd234a035dcec7dee4bf55b72"
+        },
+        {
+          "slide": 6,
+          "lines": [
+            {
+              "width": 28.88,
+              "tags": 1,
+              "left": 43.2,
+              "height": 68.4,
+              "fontSize": 57.0,
+              "top": 43.2,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 41.75,
+              "role": "value",
+              "text": "1",
+              "tabTargets": []
+            },
+            {
+              "width": 12.88,
+              "tags": 1,
+              "left": 78.08968,
+              "height": 21.6,
+              "fontSize": 18.0,
+              "top": 82.2,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 17.0,
+              "role": "unit",
+              "text": "%",
+              "tabTargets": []
+            },
+            {
+              "width": 85.16,
+              "tags": 1,
+              "left": 43.2,
+              "height": 21.6,
+              "fontSize": 18.0,
+              "top": 121.74,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 89.28,
+              "role": "label",
+              "text": "Completion",
+              "tabTargets": []
+            }
+          ],
+          "rasterSha256": "97a2a29407a69cb6c39c2f2d57a97c90c07a868f6fa9a625143ecb2c88207123"
+        }
+      ],
+      "id": "metric-1280-left",
+      "editedSha256": "d86f1791ef4c35f12dd79997575cb7775f54acbd258c2c96a0bcffeef509f18d",
+      "editsReopened": 16,
+      "savedSha256": "0997e4edbedfb413e93b24fa985d1a22b691105726bb76f9730f82245f2923cb"
+    },
+    {
+      "slides": [
+        {
+          "slide": 1,
+          "lines": [
+            {
+              "width": 28.88,
+              "tags": 1,
+              "left": 465.5552,
+              "height": 68.4,
+              "fontSize": 57.0,
+              "top": 43.2,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 41.75,
+              "role": "value",
+              "text": "0",
+              "tabTargets": []
+            }
+          ],
+          "rasterSha256": "ba5f39a8d9ddb1f09490162580501d16be004cbe7a0d3d2f7381adf45c3f6ecb"
+        },
+        {
+          "slide": 2,
+          "lines": [
+            {
+              "width": 12.875039,
+              "tags": 1,
+              "left": 479.99747,
+              "height": 68.4,
+              "fontSize": 57.0,
+              "top": 43.2,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 12.875039,
+              "role": "value",
+              "text": "",
+              "tabTargets": []
+            }
+          ],
+          "rasterSha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+        },
+        {
+          "slide": 3,
+          "lines": [
+            {
+              "width": 57.75504,
+              "tags": 1,
+              "left": 437.40088,
+              "height": 68.4,
+              "fontSize": 57.0,
+              "top": 43.2,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 70.62504,
+              "role": "value",
+              "text": "42",
+              "tabTargets": []
+            },
+            {
+              "width": 21.38,
+              "tags": 1,
+              "left": 501.18015,
+              "height": 21.6,
+              "fontSize": 18.0,
+              "top": 82.2,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 25.5,
+              "role": "unit",
+              "text": "ms",
+              "tabTargets": []
+            },
+            {
+              "width": 78.51504,
+              "tags": 1,
+              "left": 440.8052,
+              "height": 21.6,
+              "fontSize": 18.0,
+              "top": 121.74,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 82.63504,
+              "role": "label",
+              "text": "Left\tRight  ",
+              "tabTargets": [
+                {
+                  "errorPoints": 0.00469970703125,
+                  "sourceStart": 5
+                }
+              ]
+            },
+            {
+              "width": 38.43,
+              "tags": 1,
+              "left": 460.73874,
+              "height": 21.6,
+              "fontSize": 18.0,
+              "top": 149.7,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 42.55,
+              "role": "description",
+              "text": "Exact",
+              "tabTargets": []
+            },
+            {
+              "width": 4.1250396,
+              "tags": 1,
+              "left": 479.99747,
+              "height": 21.6,
+              "fontSize": 18.0,
+              "top": 171.66,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 4.1250396,
+              "role": "description",
+              "text": "",
+              "tabTargets": []
+            },
+            {
+              "width": 54.65504,
+              "tags": 1,
+              "left": 452.6792,
+              "height": 21.6,
+              "fontSize": 18.0,
+              "top": 193.62,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 58.77504,
+              "role": "description",
+              "text": "context",
+              "tabTargets": []
+            },
+            {
+              "width": 9.13,
+              "tags": 1,
+              "left": 475.4385,
+              "height": 21.6,
+              "fontSize": 18.0,
+              "top": 221.58,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 13.25,
+              "role": "delta",
+              "text": "0",
+              "tabTargets": []
+            },
+            {
+              "width": 24.09,
+              "tags": 1,
+              "left": 467.99417,
+              "height": 21.6,
+              "fontSize": 18.0,
+              "top": 249.54,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 28.21,
+              "role": "trend",
+              "text": "flat",
+              "tabTargets": []
+            }
+          ],
+          "rasterSha256": "49c5c2e7465b56c8d7c12c61d9730c33cbfb83a30a4a4a0fc0d38c57bb88ac42"
+        },
+        {
+          "slide": 4,
+          "lines": [
+            {
+              "width": 57.75504,
+              "tags": 1,
+              "left": 451.11032,
+              "height": 68.4,
+              "fontSize": 57.0,
+              "top": 43.2,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 70.62504,
+              "role": "value",
+              "text": "42",
+              "tabTargets": []
+            },
+            {
+              "width": 90.50504,
+              "tags": 1,
+              "left": 434.77292,
+              "height": 68.4,
+              "fontSize": 57.0,
+              "top": 112.74,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 103.37504,
+              "role": "value",
+              "text": "-0.5",
+              "tabTargets": []
+            },
+            {
+              "width": 394.77502,
+              "tags": 1,
+              "left": 282.96677,
+              "height": 21.6,
+              "fontSize": 18.0,
+              "top": 191.28,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 398.89505,
+              "role": "unit",
+              "text": "milliseconds across all completed production requests",
+              "tabTargets": []
+            },
+            {
+              "width": 56.14504,
+              "tags": 1,
+              "left": 451.9849,
+              "height": 21.6,
+              "fontSize": 18.0,
+              "top": 219.24,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 60.265038,
+              "role": "label",
+              "text": "Latency",
+              "tabTargets": []
+            }
+          ],
+          "rasterSha256": "42db6e7a3a1e2159befd035a7cbb56c3ac0b7153345cac03c0bdb31c47e854dc"
+        },
+        {
+          "slide": 5,
+          "lines": [
+            {
+              "width": 12.875039,
+              "tags": 1,
+              "left": 479.99747,
+              "height": 68.4,
+              "fontSize": 57.0,
+              "top": 43.2,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 12.875039,
+              "role": "value",
+              "text": "",
+              "tabTargets": []
+            },
+            {
+              "width": 19.00504,
+              "tags": 1,
+              "left": 470.543,
+              "height": 21.6,
+              "fontSize": 18.0,
+              "top": 121.74,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 23.12504,
+              "role": "trend",
+              "text": "up",
+              "tabTargets": []
+            }
+          ],
+          "rasterSha256": "4384f842c830f35c16eb819c4dcfa9d4a5c4c537ac31a7ec08e26a1c0bd41738"
+        },
+        {
+          "slide": 6,
+          "lines": [
+            {
+              "width": 28.88,
+              "tags": 1,
+              "left": 456.12158,
+              "height": 68.4,
+              "fontSize": 57.0,
+              "top": 43.2,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 41.75,
+              "role": "value",
+              "text": "1",
+              "tabTargets": []
+            },
+            {
+              "width": 12.88,
+              "tags": 1,
+              "left": 491.01126,
+              "height": 21.6,
+              "fontSize": 18.0,
+              "top": 82.2,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 17.0,
+              "role": "unit",
+              "text": "%",
+              "tabTargets": []
+            },
+            {
+              "width": 85.16,
+              "tags": 1,
+              "left": 437.55322,
+              "height": 21.6,
+              "fontSize": 18.0,
+              "top": 121.74,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 89.28,
+              "role": "label",
+              "text": "Completion",
+              "tabTargets": []
+            }
+          ],
+          "rasterSha256": "0323009d3590acf8b7e81fc77216598a6cf1d633a915ec42ff518b263943e78f"
+        }
+      ],
+      "id": "metric-1280-center",
+      "editedSha256": "de975c88ce8d672779f412510b588362ac4b908b2d41dca86a1af7e850c9a78b",
+      "editsReopened": 16,
+      "savedSha256": "ac8fe8f6733a89bfc6674d001096d5298da38cb1b288645f6c13d5cdbcaca2ce"
+    },
+    {
+      "slides": [
+        {
+          "slide": 1,
+          "lines": [
+            {
+              "width": 28.88,
+              "tags": 1,
+              "left": 887.91034,
+              "height": 68.4,
+              "fontSize": 57.0,
+              "top": 43.2,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 41.75,
+              "role": "value",
+              "text": "0",
+              "tabTargets": []
+            }
+          ],
+          "rasterSha256": "5c5d702819c104a4060fb9c041932e7d555d35f86c8e3b42810f98d431dd55a4"
+        },
+        {
+          "slide": 2,
+          "lines": [
+            {
+              "width": 12.875039,
+              "tags": 1,
+              "left": 916.7,
+              "height": 68.4,
+              "fontSize": 57.0,
+              "top": 43.2,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 12.875039,
+              "role": "value",
+              "text": "",
+              "tabTargets": []
+            }
+          ],
+          "rasterSha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+        },
+        {
+          "slide": 3,
+          "lines": [
+            {
+              "width": 57.75504,
+              "tags": 1,
+              "left": 831.60175,
+              "height": 68.4,
+              "fontSize": 57.0,
+              "top": 43.2,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 70.62504,
+              "role": "value",
+              "text": "42",
+              "tabTargets": []
+            },
+            {
+              "width": 21.38,
+              "tags": 1,
+              "left": 895.38104,
+              "height": 21.6,
+              "fontSize": 18.0,
+              "top": 82.2,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 25.5,
+              "role": "unit",
+              "text": "ms",
+              "tabTargets": []
+            },
+            {
+              "width": 78.51504,
+              "tags": 1,
+              "left": 838.41034,
+              "height": 21.6,
+              "fontSize": 18.0,
+              "top": 121.74,
+              "font": "Calibri",
+              "characterBoundsInsideCell": false,
+              "paragraphWidth": 82.63504,
+              "role": "label",
+              "text": "Left\tRight  ",
+              "tabTargets": [
+                {
+                  "errorPoints": 0.00469970703125,
+                  "sourceStart": 5
+                }
+              ]
+            },
+            {
+              "width": 38.43,
+              "tags": 1,
+              "left": 878.2776,
+              "height": 21.6,
+              "fontSize": 18.0,
+              "top": 149.7,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 42.55,
+              "role": "description",
+              "text": "Exact",
+              "tabTargets": []
+            },
+            {
+              "width": 4.1250396,
+              "tags": 1,
+              "left": 916.7,
+              "height": 21.6,
+              "fontSize": 18.0,
+              "top": 171.66,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 4.1250396,
+              "role": "description",
+              "text": "",
+              "tabTargets": []
+            },
+            {
+              "width": 54.65504,
+              "tags": 1,
+              "left": 862.15845,
+              "height": 21.6,
+              "fontSize": 18.0,
+              "top": 193.62,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 58.77504,
+              "role": "description",
+              "text": "context",
+              "tabTargets": []
+            },
+            {
+              "width": 9.13,
+              "tags": 1,
+              "left": 907.67694,
+              "height": 21.6,
+              "fontSize": 18.0,
+              "top": 221.58,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 13.25,
+              "role": "delta",
+              "text": "0",
+              "tabTargets": []
+            },
+            {
+              "width": 24.09,
+              "tags": 1,
+              "left": 892.78827,
+              "height": 21.6,
+              "fontSize": 18.0,
+              "top": 249.54,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 28.21,
+              "role": "trend",
+              "text": "flat",
+              "tabTargets": []
+            }
+          ],
+          "rasterSha256": "c1e5a7eee04f128d890cd59f8c9a8321042cc696f0b7f21d5f7f8fc97d09d893"
+        },
+        {
+          "slide": 4,
+          "lines": [
+            {
+              "width": 57.75504,
+              "tags": 1,
+              "left": 859.0207,
+              "height": 68.4,
+              "fontSize": 57.0,
+              "top": 43.2,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 70.62504,
+              "role": "value",
+              "text": "42",
+              "tabTargets": []
+            },
+            {
+              "width": 90.50504,
+              "tags": 1,
+              "left": 826.3459,
+              "height": 68.4,
+              "fontSize": 57.0,
+              "top": 112.74,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 103.37504,
+              "role": "value",
+              "text": "-0.5",
+              "tabTargets": []
+            },
+            {
+              "width": 394.77502,
+              "tags": 1,
+              "left": 522.73364,
+              "height": 21.6,
+              "fontSize": 18.0,
+              "top": 191.28,
+              "font": "Calibri",
+              "characterBoundsInsideCell": false,
+              "paragraphWidth": 398.89505,
+              "role": "unit",
+              "text": "milliseconds across all completed production requests",
+              "tabTargets": []
+            },
+            {
+              "width": 56.14504,
+              "tags": 1,
+              "left": 860.7698,
+              "height": 21.6,
+              "fontSize": 18.0,
+              "top": 219.24,
+              "font": "Calibri",
+              "characterBoundsInsideCell": false,
+              "paragraphWidth": 60.265038,
+              "role": "label",
+              "text": "Latency",
+              "tabTargets": []
+            }
+          ],
+          "rasterSha256": "eed62c27fcc923f57657e33fea7654d69abb5ad44ad0a11adb3a96448159ecfa"
+        },
+        {
+          "slide": 5,
+          "lines": [
+            {
+              "width": 12.875039,
+              "tags": 1,
+              "left": 916.7,
+              "height": 68.4,
+              "fontSize": 57.0,
+              "top": 43.2,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 12.875039,
+              "role": "value",
+              "text": "",
+              "tabTargets": []
+            },
+            {
+              "width": 19.00504,
+              "tags": 1,
+              "left": 897.8859,
+              "height": 21.6,
+              "fontSize": 18.0,
+              "top": 121.74,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 23.12504,
+              "role": "trend",
+              "text": "up",
+              "tabTargets": []
+            }
+          ],
+          "rasterSha256": "811cb19860f9e38feb0bbe0642e9e89b7a465654143edfc268b7068575aa82f3"
+        },
+        {
+          "slide": 6,
+          "lines": [
+            {
+              "width": 28.88,
+              "tags": 1,
+              "left": 869.04315,
+              "height": 68.4,
+              "fontSize": 57.0,
+              "top": 43.2,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 41.75,
+              "role": "value",
+              "text": "1",
+              "tabTargets": []
+            },
+            {
+              "width": 12.88,
+              "tags": 1,
+              "left": 903.93286,
+              "height": 21.6,
+              "fontSize": 18.0,
+              "top": 82.2,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 17.0,
+              "role": "unit",
+              "text": "%",
+              "tabTargets": []
+            },
+            {
+              "width": 85.16,
+              "tags": 1,
+              "left": 831.90643,
+              "height": 21.6,
+              "fontSize": 18.0,
+              "top": 121.74,
+              "font": "Calibri",
+              "characterBoundsInsideCell": false,
+              "paragraphWidth": 89.28,
+              "role": "label",
+              "text": "Completion",
+              "tabTargets": []
+            }
+          ],
+          "rasterSha256": "b4c2dc6282382800ee51e952a05a9eb717cdf34eca855e3c773bebb6fdf81960"
+        }
+      ],
+      "id": "metric-1280-right",
+      "editedSha256": "5b51dd35574cb21d6b25e9f5517cddb079fa2dfbfe5bae020cfcdd21f5591837",
+      "editsReopened": 16,
+      "savedSha256": "3582ca2d4789d2c64b1a9394c4b61dfc9aca8d567aa56b60c91bd657b4a4d457"
+    },
+    {
+      "slides": [
+        {
+          "slide": 1,
+          "lines": [
+            {
+              "width": 21.63,
+              "tags": 1,
+              "left": 32.4,
+              "height": 51.3,
+              "fontSize": 42.75,
+              "top": 32.4,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 31.25,
+              "role": "value",
+              "text": "0",
+              "tabTargets": []
+            }
+          ],
+          "rasterSha256": "49d41f2d068331c0581382ba64f7458ea8406f7493897e7b6f420caebc77d3b8"
+        },
+        {
+          "slide": 2,
+          "lines": [
+            {
+              "width": 9.625039,
+              "tags": 1,
+              "left": 32.4,
+              "height": 51.3,
+              "fontSize": 42.75,
+              "top": 32.4,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 9.625039,
+              "role": "value",
+              "text": "",
+              "tabTargets": []
+            }
+          ],
+          "rasterSha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+        },
+        {
+          "slide": 3,
+          "lines": [
+            {
+              "width": 43.25504,
+              "tags": 1,
+              "left": 32.4,
+              "height": 51.3,
+              "fontSize": 42.75,
+              "top": 32.4,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 52.87504,
+              "role": "value",
+              "text": "42",
+              "tabTargets": []
+            },
+            {
+              "width": 16.00504,
+              "tags": 1,
+              "left": 80.23449,
+              "height": 16.2,
+              "fontSize": 13.5,
+              "top": 61.65,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 19.0,
+              "role": "unit",
+              "text": "ms",
+              "tabTargets": []
+            },
+            {
+              "width": 58.78,
+              "tags": 1,
+              "left": 32.4,
+              "height": 16.2,
+              "fontSize": 13.5,
+              "top": 91.30504,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 61.77504,
+              "role": "label",
+              "text": "Left\tRight  ",
+              "tabTargets": [
+                {
+                  "errorPoints": 0.016017913818359375,
+                  "sourceStart": 5
+                }
+              ]
+            },
+            {
+              "width": 29.01,
+              "tags": 1,
+              "left": 32.4,
+              "height": 16.2,
+              "fontSize": 13.5,
+              "top": 112.27504,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 32.00504,
+              "role": "description",
+              "text": "Exact",
+              "tabTargets": []
+            },
+            {
+              "width": 3.0,
+              "tags": 1,
+              "left": 32.4,
+              "height": 16.2,
+              "fontSize": 13.5,
+              "top": 128.74504,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 3.0,
+              "role": "description",
+              "text": "",
+              "tabTargets": []
+            },
+            {
+              "width": 41.08504,
+              "tags": 1,
+              "left": 32.4,
+              "height": 16.2,
+              "fontSize": 13.5,
+              "top": 145.21504,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 44.08,
+              "role": "description",
+              "text": "context",
+              "tabTargets": []
+            },
+            {
+              "width": 6.88,
+              "tags": 1,
+              "left": 32.4,
+              "height": 16.2,
+              "fontSize": 13.5,
+              "top": 166.18504,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 9.875039,
+              "role": "delta",
+              "text": "0",
+              "tabTargets": []
+            },
+            {
+              "width": 18.13,
+              "tags": 1,
+              "left": 32.4,
+              "height": 16.2,
+              "fontSize": 13.5,
+              "top": 187.15504,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 21.12504,
+              "role": "trend",
+              "text": "flat",
+              "tabTargets": []
+            }
+          ],
+          "rasterSha256": "9083dde3ec4fe393cb2326a41731ecb480300dd12ec6e6bfdb9a859e1b0f620f"
+        },
+        {
+          "slide": 4,
+          "lines": [
+            {
+              "width": 43.25504,
+              "tags": 1,
+              "left": 32.4,
+              "height": 51.3,
+              "fontSize": 42.75,
+              "top": 32.4,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 52.87504,
+              "role": "value",
+              "text": "42",
+              "tabTargets": []
+            },
+            {
+              "width": 67.75504,
+              "tags": 1,
+              "left": 32.4,
+              "height": 51.3,
+              "fontSize": 42.75,
+              "top": 84.55504,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 77.37504,
+              "role": "value",
+              "text": "-0.5",
+              "tabTargets": []
+            },
+            {
+              "width": 296.17,
+              "tags": 1,
+              "left": 32.4,
+              "height": 16.2,
+              "fontSize": 13.5,
+              "top": 143.46,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 299.16504,
+              "role": "unit",
+              "text": "milliseconds across all completed production requests",
+              "tabTargets": []
+            },
+            {
+              "width": 42.11,
+              "tags": 1,
+              "left": 32.4,
+              "height": 16.2,
+              "fontSize": 13.5,
+              "top": 164.43,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 45.105038,
+              "role": "label",
+              "text": "Latency",
+              "tabTargets": []
+            }
+          ],
+          "rasterSha256": "ce60af86bb5099363a22e7eeb620cc68b4bd5d040d0fef27321b45d2bc5807d0"
+        },
+        {
+          "slide": 5,
+          "lines": [
+            {
+              "width": 9.625039,
+              "tags": 1,
+              "left": 32.4,
+              "height": 51.3,
+              "fontSize": 42.75,
+              "top": 32.4,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 9.625039,
+              "role": "value",
+              "text": "",
+              "tabTargets": []
+            },
+            {
+              "width": 14.255039,
+              "tags": 1,
+              "left": 32.4,
+              "height": 16.2,
+              "fontSize": 13.5,
+              "top": 91.30504,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 17.25,
+              "role": "trend",
+              "text": "up",
+              "tabTargets": []
+            }
+          ],
+          "rasterSha256": "ba0335b2e071b812ddf4f99e6f68e59da5033bc2c3394e26f874b98265dca7e2"
+        },
+        {
+          "slide": 6,
+          "lines": [
+            {
+              "width": 21.63,
+              "tags": 1,
+              "left": 32.4,
+              "height": 51.3,
+              "fontSize": 42.75,
+              "top": 32.4,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 31.25,
+              "role": "value",
+              "text": "1",
+              "tabTargets": []
+            },
+            {
+              "width": 9.63,
+              "tags": 1,
+              "left": 58.567245,
+              "height": 16.2,
+              "fontSize": 13.5,
+              "top": 61.65,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 12.625039,
+              "role": "unit",
+              "text": "%",
+              "tabTargets": []
+            },
+            {
+              "width": 63.93,
+              "tags": 1,
+              "left": 32.4,
+              "height": 16.2,
+              "fontSize": 13.5,
+              "top": 91.30504,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 66.92504,
+              "role": "label",
+              "text": "Completion",
+              "tabTargets": []
+            }
+          ],
+          "rasterSha256": "c7b2c35f3b26d795a2301d68b50cd64712b807ec7c2aea941860c37f42f38aaf"
+        }
+      ],
+      "id": "metric-540-left",
+      "editedSha256": "a861284f689aec65cd6539b8afc0b064761693de21b687f719c275a312d59f7c",
+      "editsReopened": 16,
+      "savedSha256": "de1dc936adff50575aa406e9a11f3bd3ef3c073450733d7b4b7a5474c363d6b9"
+    },
+    {
+      "slides": [
+        {
+          "slide": 1,
+          "lines": [
+            {
+              "width": 21.63,
+              "tags": 1,
+              "left": 191.66638,
+              "height": 51.3,
+              "fontSize": 42.75,
+              "top": 32.4,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 31.25,
+              "role": "value",
+              "text": "0",
+              "tabTargets": []
+            }
+          ],
+          "rasterSha256": "0a3d05b2b80d49b0327053752415e7398507e25d8cefa7c9d3b7707ebefb399d"
+        },
+        {
+          "slide": 2,
+          "lines": [
+            {
+              "width": 9.625039,
+              "tags": 1,
+              "left": 202.49748,
+              "height": 51.3,
+              "fontSize": 42.75,
+              "top": 32.4,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 9.625039,
+              "role": "value",
+              "text": "",
+              "tabTargets": []
+            }
+          ],
+          "rasterSha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+        },
+        {
+          "slide": 3,
+          "lines": [
+            {
+              "width": 43.25504,
+              "tags": 1,
+              "left": 170.55063,
+              "height": 51.3,
+              "fontSize": 42.75,
+              "top": 32.4,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 52.87504,
+              "role": "value",
+              "text": "42",
+              "tabTargets": []
+            },
+            {
+              "width": 16.00504,
+              "tags": 1,
+              "left": 218.38512,
+              "height": 16.2,
+              "fontSize": 13.5,
+              "top": 61.65,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 19.0,
+              "role": "unit",
+              "text": "ms",
+              "tabTargets": []
+            },
+            {
+              "width": 58.78,
+              "tags": 1,
+              "left": 173.10385,
+              "height": 16.2,
+              "fontSize": 13.5,
+              "top": 91.30504,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 61.77504,
+              "role": "label",
+              "text": "Left\tRight  ",
+              "tabTargets": [
+                {
+                  "errorPoints": 0.0160064697265625,
+                  "sourceStart": 5
+                }
+              ]
+            },
+            {
+              "width": 29.01,
+              "tags": 1,
+              "left": 188.0541,
+              "height": 16.2,
+              "fontSize": 13.5,
+              "top": 112.27504,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 32.00504,
+              "role": "description",
+              "text": "Exact",
+              "tabTargets": []
+            },
+            {
+              "width": 3.0,
+              "tags": 1,
+              "left": 202.49748,
+              "height": 16.2,
+              "fontSize": 13.5,
+              "top": 128.74504,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 3.0,
+              "role": "description",
+              "text": "",
+              "tabTargets": []
+            },
+            {
+              "width": 41.08504,
+              "tags": 1,
+              "left": 182.00937,
+              "height": 16.2,
+              "fontSize": 13.5,
+              "top": 145.21504,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 44.08,
+              "role": "description",
+              "text": "context",
+              "tabTargets": []
+            },
+            {
+              "width": 6.88,
+              "tags": 1,
+              "left": 199.07881,
+              "height": 16.2,
+              "fontSize": 13.5,
+              "top": 166.18504,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 9.875039,
+              "role": "delta",
+              "text": "0",
+              "tabTargets": []
+            },
+            {
+              "width": 18.13,
+              "tags": 1,
+              "left": 193.49559,
+              "height": 16.2,
+              "fontSize": 13.5,
+              "top": 187.15504,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 21.12504,
+              "role": "trend",
+              "text": "flat",
+              "tabTargets": []
+            }
+          ],
+          "rasterSha256": "985b969d41d843f0a9caaba70fd28f17a8e73d1b2fadc5f999e3a53b19c223f8"
+        },
+        {
+          "slide": 4,
+          "lines": [
+            {
+              "width": 43.25504,
+              "tags": 1,
+              "left": 180.83275,
+              "height": 51.3,
+              "fontSize": 42.75,
+              "top": 32.4,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 52.87504,
+              "role": "value",
+              "text": "42",
+              "tabTargets": []
+            },
+            {
+              "width": 67.75504,
+              "tags": 1,
+              "left": 168.57968,
+              "height": 51.3,
+              "fontSize": 42.75,
+              "top": 84.55504,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 77.37504,
+              "role": "value",
+              "text": "-0.5",
+              "tabTargets": []
+            },
+            {
+              "width": 296.17,
+              "tags": 1,
+              "left": 54.725117,
+              "height": 16.2,
+              "fontSize": 13.5,
+              "top": 143.46,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 299.16504,
+              "role": "unit",
+              "text": "milliseconds across all completed production requests",
+              "tabTargets": []
+            },
+            {
+              "width": 42.11,
+              "tags": 1,
+              "left": 181.48866,
+              "height": 16.2,
+              "fontSize": 13.5,
+              "top": 164.43,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 45.105038,
+              "role": "label",
+              "text": "Latency",
+              "tabTargets": []
+            }
+          ],
+          "rasterSha256": "27c7f9b68c94e1129e1c9fcb1f3e5103d43a2751a43bb351090cb708bcdff444"
+        },
+        {
+          "slide": 5,
+          "lines": [
+            {
+              "width": 9.625039,
+              "tags": 1,
+              "left": 202.49748,
+              "height": 51.3,
+              "fontSize": 42.75,
+              "top": 32.4,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 9.625039,
+              "role": "value",
+              "text": "",
+              "tabTargets": []
+            },
+            {
+              "width": 14.255039,
+              "tags": 1,
+              "left": 195.40724,
+              "height": 16.2,
+              "fontSize": 13.5,
+              "top": 91.30504,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 17.25,
+              "role": "trend",
+              "text": "up",
+              "tabTargets": []
+            }
+          ],
+          "rasterSha256": "678c7d38a57cb0238d94ad7700ea9fa74dbad265430d46a94f58be7fe18f2047"
+        },
+        {
+          "slide": 6,
+          "lines": [
+            {
+              "width": 21.63,
+              "tags": 1,
+              "left": 184.59119,
+              "height": 51.3,
+              "fontSize": 42.75,
+              "top": 32.4,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 31.25,
+              "role": "value",
+              "text": "1",
+              "tabTargets": []
+            },
+            {
+              "width": 9.63,
+              "tags": 1,
+              "left": 210.75842,
+              "height": 16.2,
+              "fontSize": 13.5,
+              "top": 61.65,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 12.625039,
+              "role": "unit",
+              "text": "%",
+              "tabTargets": []
+            },
+            {
+              "width": 63.93,
+              "tags": 1,
+              "left": 170.66489,
+              "height": 16.2,
+              "fontSize": 13.5,
+              "top": 91.30504,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 66.92504,
+              "role": "label",
+              "text": "Completion",
+              "tabTargets": []
+            }
+          ],
+          "rasterSha256": "73940a6f20c11f73333232725b09608a26dcc88edbaa52c957d28e485b9e5421"
+        }
+      ],
+      "id": "metric-540-center",
+      "editedSha256": "3c19a38ac51849868829d35276ffcfb3afbc2d3df402a3ac71f1cb0cccf08f75",
+      "editsReopened": 16,
+      "savedSha256": "15e11bea9d1174896526dec1be7ad83ca50bbfe0cd9b11024a208e612901053f"
+    },
+    {
+      "slides": [
+        {
+          "slide": 1,
+          "lines": [
+            {
+              "width": 21.63,
+              "tags": 1,
+              "left": 350.93277,
+              "height": 51.3,
+              "fontSize": 42.75,
+              "top": 32.4,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 31.25,
+              "role": "value",
+              "text": "0",
+              "tabTargets": []
+            }
+          ],
+          "rasterSha256": "b4be0b6808f3319bb305ace374d7a7a5e3731e2784eaa5c62fb7bf76e337a67b"
+        },
+        {
+          "slide": 2,
+          "lines": [
+            {
+              "width": 9.624961,
+              "tags": 1,
+              "left": 372.52502,
+              "height": 51.3,
+              "fontSize": 42.75,
+              "top": 32.4,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 9.624961,
+              "role": "value",
+              "text": "",
+              "tabTargets": []
+            }
+          ],
+          "rasterSha256": "5a8aea57b715755179eeaa48139718b76b6509b612d8cd4e1b83c18f624607b0"
+        },
+        {
+          "slide": 3,
+          "lines": [
+            {
+              "width": 43.25504,
+              "tags": 1,
+              "left": 308.70132,
+              "height": 51.3,
+              "fontSize": 42.75,
+              "top": 32.4,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 52.87504,
+              "role": "value",
+              "text": "42",
+              "tabTargets": []
+            },
+            {
+              "width": 16.00504,
+              "tags": 1,
+              "left": 356.53583,
+              "height": 16.2,
+              "fontSize": 13.5,
+              "top": 61.65,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 19.0,
+              "role": "unit",
+              "text": "ms",
+              "tabTargets": []
+            },
+            {
+              "width": 58.78,
+              "tags": 1,
+              "left": 313.8078,
+              "height": 16.2,
+              "fontSize": 13.5,
+              "top": 91.30504,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 61.77504,
+              "role": "label",
+              "text": "Left\tRight  ",
+              "tabTargets": [
+                {
+                  "errorPoints": 0.016021728515625,
+                  "sourceStart": 5
+                }
+              ]
+            },
+            {
+              "width": 29.01,
+              "tags": 1,
+              "left": 343.7082,
+              "height": 16.2,
+              "fontSize": 13.5,
+              "top": 112.27504,
+              "font": "Calibri",
+              "characterBoundsInsideCell": false,
+              "paragraphWidth": 32.00504,
+              "role": "description",
+              "text": "Exact",
+              "tabTargets": []
+            },
+            {
+              "width": 3.0,
+              "tags": 1,
+              "left": 372.52502,
+              "height": 16.2,
+              "fontSize": 13.5,
+              "top": 128.74504,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 3.0,
+              "role": "description",
+              "text": "",
+              "tabTargets": []
+            },
+            {
+              "width": 41.08504,
+              "tags": 1,
+              "left": 331.6188,
+              "height": 16.2,
+              "fontSize": 13.5,
+              "top": 145.21504,
+              "font": "Calibri",
+              "characterBoundsInsideCell": false,
+              "paragraphWidth": 44.08,
+              "role": "description",
+              "text": "context",
+              "tabTargets": []
+            },
+            {
+              "width": 6.88,
+              "tags": 1,
+              "left": 365.75772,
+              "height": 16.2,
+              "fontSize": 13.5,
+              "top": 166.18504,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 9.875039,
+              "role": "delta",
+              "text": "0",
+              "tabTargets": []
+            },
+            {
+              "width": 18.13,
+              "tags": 1,
+              "left": 354.5912,
+              "height": 16.2,
+              "fontSize": 13.5,
+              "top": 187.15504,
+              "font": "Calibri",
+              "characterBoundsInsideCell": false,
+              "paragraphWidth": 21.12504,
+              "role": "trend",
+              "text": "flat",
+              "tabTargets": []
+            }
+          ],
+          "rasterSha256": "b86a7346a1c72347d8d364190d6776ac514e7699a9f145d7c6847ec2c0611dd2"
+        },
+        {
+          "slide": 4,
+          "lines": [
+            {
+              "width": 43.25504,
+              "tags": 1,
+              "left": 329.2655,
+              "height": 51.3,
+              "fontSize": 42.75,
+              "top": 32.4,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 52.87504,
+              "role": "value",
+              "text": "42",
+              "tabTargets": []
+            },
+            {
+              "width": 67.75504,
+              "tags": 1,
+              "left": 304.75946,
+              "height": 51.3,
+              "fontSize": 42.75,
+              "top": 84.55504,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 77.37504,
+              "role": "value",
+              "text": "-0.5",
+              "tabTargets": []
+            },
+            {
+              "width": 296.17,
+              "tags": 1,
+              "left": 77.050156,
+              "height": 16.2,
+              "fontSize": 13.5,
+              "top": 143.46,
+              "font": "Calibri",
+              "characterBoundsInsideCell": false,
+              "paragraphWidth": 299.16504,
+              "role": "unit",
+              "text": "milliseconds across all completed production requests",
+              "tabTargets": []
+            },
+            {
+              "width": 42.11,
+              "tags": 1,
+              "left": 330.57733,
+              "height": 16.2,
+              "fontSize": 13.5,
+              "top": 164.43,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 45.105038,
+              "role": "label",
+              "text": "Latency",
+              "tabTargets": []
+            }
+          ],
+          "rasterSha256": "342cdddcc66726bd9c9fbd5ed6226594e96680e6513d35ffe47bcdf1e47bc130"
+        },
+        {
+          "slide": 5,
+          "lines": [
+            {
+              "width": 9.624961,
+              "tags": 1,
+              "left": 372.52502,
+              "height": 51.3,
+              "fontSize": 42.75,
+              "top": 32.4,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 9.624961,
+              "role": "value",
+              "text": "",
+              "tabTargets": []
+            },
+            {
+              "width": 14.255039,
+              "tags": 1,
+              "left": 358.4145,
+              "height": 16.2,
+              "fontSize": 13.5,
+              "top": 91.30504,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 17.25,
+              "role": "trend",
+              "text": "up",
+              "tabTargets": []
+            }
+          ],
+          "rasterSha256": "743dd3b2ca800a6f94fcc5b2e75341868719f6b34d235dcef0c1e474336df210"
+        },
+        {
+          "slide": 6,
+          "lines": [
+            {
+              "width": 21.63,
+              "tags": 1,
+              "left": 336.78235,
+              "height": 51.3,
+              "fontSize": 42.75,
+              "top": 32.4,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 31.25,
+              "role": "value",
+              "text": "1",
+              "tabTargets": []
+            },
+            {
+              "width": 9.63,
+              "tags": 1,
+              "left": 362.94962,
+              "height": 16.2,
+              "fontSize": 13.5,
+              "top": 61.65,
+              "font": "Calibri",
+              "characterBoundsInsideCell": true,
+              "paragraphWidth": 12.625039,
+              "role": "unit",
+              "text": "%",
+              "tabTargets": []
+            },
+            {
+              "width": 63.93,
+              "tags": 1,
+              "left": 308.92984,
+              "height": 16.2,
+              "fontSize": 13.5,
+              "top": 91.30504,
+              "font": "Calibri",
+              "characterBoundsInsideCell": false,
+              "paragraphWidth": 66.92504,
+              "role": "label",
+              "text": "Completion",
+              "tabTargets": []
+            }
+          ],
+          "rasterSha256": "e0b33d44b19dd4d1b37a826f5b8d37bdc217ab45aca8e8c4e86624911bd1c67c"
+        }
+      ],
+      "id": "metric-540-right",
+      "editedSha256": "0e5d0edeee80ffe9bf2cee5a1df4bf51f074430ca33029b33377f22d9019b4d8",
+      "editsReopened": 16,
+      "savedSha256": "deee53387d4e1b8267b2883cc5d59832b60820f3537df0cdc1a4f4e92758d6ec"
+    }
+  ],
+  "executableVersion": "16.0.20326.20132",
+  "powerPointVersion": "16.0"
+}

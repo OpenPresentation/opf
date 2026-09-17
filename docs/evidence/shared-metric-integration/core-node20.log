@@ -1,0 +1,2550 @@
+
+> @openpresentation/opf@0.9.0 test C:\Users\micha\Source\opf\artifacts\shared-metric-integration\opf\packages\javascript
+> pnpm run build && node ../../scripts/run-node-tests.mjs && node test/composition.mjs && node test/pagination.mjs && node test/data.mjs && node test/rich-text.mjs && node test/lists.mjs
+
+
+> @openpresentation/opf@0.9.0 build C:\Users\micha\Source\opf\artifacts\shared-metric-integration\opf\packages\javascript
+> pnpm run generate && tsup && node scripts/copy-spec.mjs
+
+
+> @openpresentation/opf@0.9.0 generate C:\Users\micha\Source\opf\artifacts\shared-metric-integration\opf\packages\javascript
+> node scripts/generate.mjs && node scripts/generate-previews.mjs && node scripts/generate-content.mjs
+
+Generated src/generated/previews.ts (70 previews)
+Generated src/generated/examples.ts (126 examples, 7 galleries)
+Generated src/generated/docs.ts (24 docs)
+Generated src/generated/repo-readme.ts (11388 bytes)
+CLI Building entry: {"data":"src/data.ts","pagination":"src/pagination.ts","composition":"src/composition.ts","index":"src/index.ts","schemas":"src/schemas.ts","catalogs":"src/catalogs.ts","validator":"src/validator.ts","types":"src/types.ts","spec-files":"src/spec-files.ts","previews":"src/previews.ts","examples":"src/examples.ts","docs":"src/docs.ts","repo-readme":"src/repo-readme.ts"}
+CLI Using tsconfig: tsconfig.json
+CLI tsup v8.5.1
+CLI Using tsup config: C:\Users\micha\Source\opf\artifacts\shared-metric-integration\opf\packages\javascript\tsup.config.ts
+CLI Target: es2022
+CLI Cleaning output folder
+ESM Build start
+Generated an empty chunk: "types".
+DTS Build start
+ESM dist\spec-files.js     85.00 B
+ESM dist\previews.js       130.00 B
+ESM dist\pagination.js     215.00 B
+ESM dist\data.js           95.00 B
+ESM dist\composition.js    316.00 B
+ESM dist\repo-readme.js    11.47 KB
+ESM dist\chunk-PIQXLBBJ.js 108.89 KB
+ESM dist\index.js          1.26 KB
+ESM dist\chunk-OZULJBSG.js 117.86 KB
+ESM dist\schemas.js        202.00 B
+ESM dist\chunk-SOSOBKQ2.js 6.52 KB
+ESM dist\catalogs.js       238.00 B
+ESM dist\chunk-65WJCY5B.js 62.78 KB
+ESM dist\chunk-NQWP2CKN.js 12.87 KB
+ESM dist\chunk-4BYTIVKO.js 27.16 KB
+ESM dist\validator.js      267.00 B
+ESM dist\types.js          1.00 B
+ESM dist\docs.js           448.03 KB
+ESM dist\chunk-GQSK3T7X.js 219.58 KB
+ESM dist\chunk-TWMRZ43O.js 499.00 KB
+ESM dist\examples.js       1.28 MB
+ESM ⚡️ Build success in 326ms
+DTS ⚡️ Build success in 3112ms
+DTS dist\index.d.ts                 2.79 KB
+DTS dist\data.d.ts                  1005.00 B
+DTS dist\pagination.d.ts            2.15 KB
+DTS dist\previews.d.ts              1.71 KB
+DTS dist\repo-readme.d.ts           139.00 B
+DTS dist\composition.d.ts           17.27 KB
+DTS dist\examples.d.ts              2.09 KB
+DTS dist\docs.d.ts                  671.00 B
+DTS dist\validator.d.ts             1.54 KB
+DTS dist\spec-files.d.ts            19.57 KB
+DTS dist\schemas.d.ts               314.00 B
+DTS dist\catalogs.d.ts              454.00 B
+DTS dist\types.d.ts                 416.00 B
+DTS dist\presentation-BMTdX6O1.d.ts 113.38 KB
+DTS dist\schemas--QRVBhU1.d.ts      8.84 KB
+DTS dist\catalogs-BnnkUX9O.d.ts     46.31 KB
+TAP version 13
+# Subtest: accepted code uses rounded cells and preserves body compatibility without repeated explanation measurements
+ok 1 - accepted code uses rounded cells and preserves body compatibility without repeated explanation measurements
+  ---
+  duration_ms: 12.6943
+  ...
+# Subtest: candidate penalties include complete code metadata and charge overflowing leaves once
+ok 2 - candidate penalties include complete code metadata and charge overflowing leaves once
+  ---
+  duration_ms: 16.3588
+  ...
+# Subtest: strict ancestors reject code metadata paths and cannot be weakened by descendants
+ok 3 - strict ancestors reject code metadata paths and cannot be weakened by descendants
+  ---
+  duration_ms: 283.6318
+  ...
+# Subtest: explicit code placement and weights remain authoritative even when metadata overflows
+ok 4 - explicit code placement and weights remain authoritative even when metadata overflows
+  ---
+  duration_ms: 17.7495
+  ...
+# Subtest: pagination preserves exact code bytes, metadata, ranges and floors across wide and portrait slides
+ok 5 - pagination preserves exact code bytes, metadata, ranges and floors across wide and portrait slides
+  ---
+  duration_ms: 287.9694
+  ...
+# Subtest: irreducible code metadata rejects pagination even after earlier content or with an empty body
+ok 6 - irreducible code metadata rejects pagination even after earlier content or with an empty body
+  ---
+  duration_ms: 160.1301
+  ...
+# Subtest: complete code parts preserve exact filename, language, body, whitespace and hard line boundaries
+ok 7 - complete code parts preserve exact filename, language, body, whitespace and hard line boundaries
+  ---
+  duration_ms: 4.9713
+  ...
+# Subtest: shorthand, empty source and absent metadata retain their source and generated-label distinction
+ok 8 - shorthand, empty source and absent metadata retain their source and generated-label distinction
+  ---
+  duration_ms: 0.8232
+  ...
+# Subtest: long language labels and filenames are measured within their cell before allocating the body
+ok 9 - long language labels and filenames are measured within their cell before allocating the body
+  ---
+  duration_ms: 8.3519
+  ...
+# Subtest: wrapped whitespace and graphemes retain contiguous source offsets, including CRLF and blank final lines
+ok 10 - wrapped whitespace and graphemes retain contiguous source offsets, including CRLF and blank final lines
+  ---
+  duration_ms: 1.2343
+  ...
+# Subtest: tabs use measured space stops and never send control tabs to the font-width provider
+ok 11 - tabs use measured space stops and never send control tabs to the font-width provider
+  ---
+  duration_ms: 0.9339
+  ...
+# Subtest: readability floors scale once and body shrinking preserves all code content
+ok 12 - readability floors scale once and body shrinking preserves all code content
+  ---
+  duration_ms: 0.5557
+  ...
+# Subtest: irreducible body and metadata failures remain explicit; strict mode does not return partial output
+ok 13 - irreducible body and metadata failures remain explicit; strict mode does not return partial output
+  ---
+  duration_ms: 11.5277
+  ...
+# Subtest: invalid inner boxes never become invented one-pixel fits; malformed options reject
+ok 14 - invalid inner boxes never become invented one-pixel fits; malformed options reject
+  ---
+  duration_ms: 0.5182
+  ...
+# Subtest: font trials stay bounded independently of canvas scale
+ok 15 - font trials stay bounded independently of canvas scale
+  ---
+  duration_ms: 15.4646
+  ...
+# Subtest: explanation preserves geometry, source values and measurement calls
+ok 16 - explanation preserves geometry, source values and measurement calls
+  ---
+  duration_ms: 17.568
+  ...
+# Subtest: candidate penalties account for the score and report the selected flow
+ok 17 - candidate penalties account for the score and report the selected flow
+  ---
+  duration_ms: 16.2824
+  ...
+# Subtest: fixed modes and promoted regions retain placement with no invented search
+ok 18 - fixed modes and promoted regions retain placement with no invented search
+  ---
+  duration_ms: 0.9659
+  ...
+# Subtest: reserved slots, candidate caps and empty slides are explicit
+ok 19 - reserved slots, candidate caps and empty slides are explicit
+  ---
+  duration_ms: 102.8931
+  ...
+# Subtest: equal scores retain the first, lower-column candidate
+ok 20 - equal scores retain the first, lower-column candidate
+  ---
+  duration_ms: 0.4488
+  ...
+# Subtest: unsupported internal fit stays visible and strict failures retain their explanation
+ok 21 - unsupported internal fit stays visible and strict failures retain their explanation
+  ---
+  duration_ms: 651.0267
+  ...
+# Subtest: example catalog sanity
+    # Subtest: has at least one example
+    ok 1 - has at least one example
+      ---
+      duration_ms: 1.0314
+      ...
+    # Subtest: has at least one gallery
+    ok 2 - has at least one gallery
+      ---
+      duration_ms: 0.2148
+      ...
+    # Subtest: example categories include 'gallery'
+    ok 3 - example categories include 'gallery'
+      ---
+      duration_ms: 0.2643
+      ...
+    1..3
+ok 22 - example catalog sanity
+  ---
+  duration_ms: 2.9636
+  type: 'suite'
+  ...
+# Subtest: every bundled example validates cleanly
+    # Subtest: example 'compliance-readiness-review' has the expected shape and validates without warnings
+    ok 1 - example 'compliance-readiness-review' has the expected shape and validates without warnings
+      ---
+      duration_ms: 326.2565
+      ...
+    # Subtest: example 'contract-cycle-time-brief' has the expected shape and validates without warnings
+    ok 2 - example 'contract-cycle-time-brief' has the expected shape and validates without warnings
+      ---
+      duration_ms: 1.9616
+      ...
+    # Subtest: example 'data-platform-migration-plan' has the expected shape and validates without warnings
+    ok 3 - example 'data-platform-migration-plan' has the expected shape and validates without warnings
+      ---
+      duration_ms: 1.8958
+      ...
+    # Subtest: example 'defect-escape-reduction-review' has the expected shape and validates without warnings
+    ok 4 - example 'defect-escape-reduction-review' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.6314
+      ...
+    # Subtest: example 'demand-generation-campaign-brief' has the expected shape and validates without warnings
+    ok 5 - example 'demand-generation-campaign-brief' has the expected shape and validates without warnings
+      ---
+      duration_ms: 1.3206
+      ...
+    # Subtest: example 'employee-town-hall-run-of-show' has the expected shape and validates without warnings
+    ok 6 - example 'employee-town-hall-run-of-show' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.3948
+      ...
+    # Subtest: example 'engineering-capacity-planning' has the expected shape and validates without warnings
+    ok 7 - example 'engineering-capacity-planning' has the expected shape and validates without warnings
+      ---
+      duration_ms: 1.1009
+      ...
+    # Subtest: example 'enterprise-account-expansion-plan' has the expected shape and validates without warnings
+    ok 8 - example 'enterprise-account-expansion-plan' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.5002
+      ...
+    # Subtest: example 'field-enablement-certification' has the expected shape and validates without warnings
+    ok 9 - example 'field-enablement-certification' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.5596
+      ...
+    # Subtest: example 'fy27-budget-tradeoff-deck' has the expected shape and validates without warnings
+    ok 10 - example 'fy27-budget-tradeoff-deck' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.323
+      ...
+    # Subtest: example 'identity-incident-executive-brief' has the expected shape and validates without warnings
+    ok 11 - example 'identity-incident-executive-brief' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.5153
+      ...
+    # Subtest: example 'investor-relations-update' has the expected shape and validates without warnings
+    ok 12 - example 'investor-relations-update' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.8231
+      ...
+    # Subtest: example 'model-governance-review' has the expected shape and validates without warnings
+    ok 13 - example 'model-governance-review' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.8287
+      ...
+    # Subtest: example 'onboarding-experience-redesign' has the expected shape and validates without warnings
+    ok 14 - example 'onboarding-experience-redesign' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.2519
+      ...
+    # Subtest: example 'partner-ecosystem-launch-kit' has the expected shape and validates without warnings
+    ok 15 - example 'partner-ecosystem-launch-kit' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.6855
+      ...
+    # Subtest: example 'pricing-and-packaging-decision' has the expected shape and validates without warnings
+    ok 16 - example 'pricing-and-packaging-decision' has the expected shape and validates without warnings
+      ---
+      duration_ms: 4.2555
+      ...
+    # Subtest: example 'product-roadmap-decision-review' has the expected shape and validates without warnings
+    ok 17 - example 'product-roadmap-decision-review' has the expected shape and validates without warnings
+      ---
+      duration_ms: 2.3268
+      ...
+    # Subtest: example 'renewal-save-plan' has the expected shape and validates without warnings
+    ok 18 - example 'renewal-save-plan' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.7365
+      ...
+    # Subtest: example 'revenue-forecast-inspection' has the expected shape and validates without warnings
+    ok 19 - example 'revenue-forecast-inspection' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.8415
+      ...
+    # Subtest: example 's-and-op-exception-review' has the expected shape and validates without warnings
+    ok 20 - example 's-and-op-exception-review' has the expected shape and validates without warnings
+      ---
+      duration_ms: 1.0597
+      ...
+    # Subtest: example 'scope-3-reporting-readiness' has the expected shape and validates without warnings
+    ok 21 - example 'scope-3-reporting-readiness' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.5559
+      ...
+    # Subtest: example 'strategy-offsite-pre-read' has the expected shape and validates without warnings
+    ok 22 - example 'strategy-offsite-pre-read' has the expected shape and validates without warnings
+      ---
+      duration_ms: 2.8281
+      ...
+    # Subtest: example 'supplier-risk-heatmap' has the expected shape and validates without warnings
+    ok 23 - example 'supplier-risk-heatmap' has the expected shape and validates without warnings
+      ---
+      duration_ms: 1.4752
+      ...
+    # Subtest: example 'support-deflection-program' has the expected shape and validates without warnings
+    ok 24 - example 'support-deflection-program' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.7725
+      ...
+    # Subtest: example 'workplace-occupancy-reset' has the expected shape and validates without warnings
+    ok 25 - example 'workplace-occupancy-reset' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.3876
+      ...
+    # Subtest: example 'data-storytelling-atlas' has the expected shape and validates without warnings
+    ok 26 - example 'data-storytelling-atlas' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.5602
+      ...
+    # Subtest: example 'kiosk-orientation-deck' has the expected shape and validates without warnings
+    ok 27 - example 'kiosk-orientation-deck' has the expected shape and validates without warnings
+      ---
+      duration_ms: 11.3121
+      ...
+    # Subtest: example 'photo-essay-portfolio' has the expected shape and validates without warnings
+    ok 28 - example 'photo-essay-portfolio' has the expected shape and validates without warnings
+      ---
+      duration_ms: 2.0496
+      ...
+    # Subtest: example 'video-demo-sales-narrative' has the expected shape and validates without warnings
+    ok 29 - example 'video-demo-sales-narrative' has the expected shape and validates without warnings
+      ---
+      duration_ms: 1.105
+      ...
+    # Subtest: example 'visual-brand-system-sampler' has the expected shape and validates without warnings
+    ok 30 - example 'visual-brand-system-sampler' has the expected shape and validates without warnings
+      ---
+      duration_ms: 1.1964
+      ...
+    # Subtest: example 'advising-retention-review' has the expected shape and validates without warnings
+    ok 31 - example 'advising-retention-review' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.6377
+      ...
+    # Subtest: example 'alumni-giving-campaign' has the expected shape and validates without warnings
+    ok 32 - example 'alumni-giving-campaign' has the expected shape and validates without warnings
+      ---
+      duration_ms: 7.3736
+      ...
+    # Subtest: example 'apprenticeship-partnership-deck' has the expected shape and validates without warnings
+    ok 33 - example 'apprenticeship-partnership-deck' has the expected shape and validates without warnings
+      ---
+      duration_ms: 1.1824
+      ...
+    # Subtest: example 'athletics-budget-review' has the expected shape and validates without warnings
+    ok 34 - example 'athletics-budget-review' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.7666
+      ...
+    # Subtest: example 'campus-energy-action-brief' has the expected shape and validates without warnings
+    ok 35 - example 'campus-energy-action-brief' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.5869
+      ...
+    # Subtest: example 'curriculum-approval-brief' has the expected shape and validates without warnings
+    ok 36 - example 'curriculum-approval-brief' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.6449
+      ...
+    # Subtest: example 'district-literacy-acceleration-plan' has the expected shape and validates without warnings
+    ok 37 - example 'district-literacy-acceleration-plan' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.2635
+      ...
+    # Subtest: example 'library-modernization-roadmap' has the expected shape and validates without warnings
+    ok 38 - example 'library-modernization-roadmap' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.5685
+      ...
+    # Subtest: example 'online-program-launch-plan' has the expected shape and validates without warnings
+    ok 39 - example 'online-program-launch-plan' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.5882
+      ...
+    # Subtest: example 'research-grant-pitch' has the expected shape and validates without warnings
+    ok 40 - example 'research-grant-pitch' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.3881
+      ...
+    # Subtest: example 'school-safety-preparedness-brief' has the expected shape and validates without warnings
+    ok 41 - example 'school-safety-preparedness-brief' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.4823
+      ...
+    # Subtest: example 'special-education-services-plan' has the expected shape and validates without warnings
+    ok 42 - example 'special-education-services-plan' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.1713
+      ...
+    # Subtest: example 'stem-lab-funding-proposal' has the expected shape and validates without warnings
+    ok 43 - example 'stem-lab-funding-proposal' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.1301
+      ...
+    # Subtest: example 'student-mental-health-capacity-review' has the expected shape and validates without warnings
+    ok 44 - example 'student-mental-health-capacity-review' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.3428
+      ...
+    # Subtest: example 'workforce-pathway-partnership' has the expected shape and validates without warnings
+    ok 45 - example 'workforce-pathway-partnership' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.5503
+      ...
+    # Subtest: example 'broadband-public-hearing-deck' has the expected shape and validates without warnings
+    ok 46 - example 'broadband-public-hearing-deck' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.5449
+      ...
+    # Subtest: example 'court-backlog-reduction-plan' has the expected shape and validates without warnings
+    ok 47 - example 'court-backlog-reduction-plan' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.3073
+      ...
+    # Subtest: example 'digital-services-modernization' has the expected shape and validates without warnings
+    ok 48 - example 'digital-services-modernization' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.1629
+      ...
+    # Subtest: example 'grant-equity-review' has the expected shape and validates without warnings
+    ok 49 - example 'grant-equity-review' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.1487
+      ...
+    # Subtest: example 'housing-zoning-council-brief' has the expected shape and validates without warnings
+    ok 50 - example 'housing-zoning-council-brief' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.469
+      ...
+    # Subtest: example 'parks-master-plan-workshop' has the expected shape and validates without warnings
+    ok 51 - example 'parks-master-plan-workshop' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.4999
+      ...
+    # Subtest: example 'police-training-program-update' has the expected shape and validates without warnings
+    ok 52 - example 'police-training-program-update' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.2897
+      ...
+    # Subtest: example 'recycling-participation-campaign' has the expected shape and validates without warnings
+    ok 53 - example 'recycling-participation-campaign' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.6352
+      ...
+    # Subtest: example 'regulatory-risk-brief' has the expected shape and validates without warnings
+    ok 54 - example 'regulatory-risk-brief' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.6335
+      ...
+    # Subtest: example 'tax-portal-modernization' has the expected shape and validates without warnings
+    ok 55 - example 'tax-portal-modernization' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.5647
+      ...
+    # Subtest: example 'transit-corridor-alternatives' has the expected shape and validates without warnings
+    ok 56 - example 'transit-corridor-alternatives' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.7278
+      ...
+    # Subtest: example 'vaccination-outreach-briefing' has the expected shape and validates without warnings
+    ok 57 - example 'vaccination-outreach-briefing' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.3634
+      ...
+    # Subtest: example 'water-utility-capital-plan' has the expected shape and validates without warnings
+    ok 58 - example 'water-utility-capital-plan' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.5295
+      ...
+    # Subtest: example 'wildfire-evacuation-preparedness' has the expected shape and validates without warnings
+    ok 59 - example 'wildfire-evacuation-preparedness' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.6068
+      ...
+    # Subtest: example 'workforce-reskilling-initiative' has the expected shape and validates without warnings
+    ok 60 - example 'workforce-reskilling-initiative' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.5069
+      ...
+    # Subtest: example 'airline-disruption-recovery-review' has the expected shape and validates without warnings
+    ok 61 - example 'airline-disruption-recovery-review' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.4772
+      ...
+    # Subtest: example 'ambulatory-access-recovery-plan' has the expected shape and validates without warnings
+    ok 62 - example 'ambulatory-access-recovery-plan' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.1641
+      ...
+    # Subtest: example 'battery-line-supplier-readiness' has the expected shape and validates without warnings
+    ok 63 - example 'battery-line-supplier-readiness' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.6205
+      ...
+    # Subtest: example 'boutique-hotel-revenue-recovery' has the expected shape and validates without warnings
+    ok 64 - example 'boutique-hotel-revenue-recovery' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.461
+      ...
+    # Subtest: example 'branch-modernization-investment-case' has the expected shape and validates without warnings
+    ok 65 - example 'branch-modernization-investment-case' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.1646
+      ...
+    # Subtest: example 'claims-triage-operating-model' has the expected shape and validates without warnings
+    ok 66 - example 'claims-triage-operating-model' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.1557
+      ...
+    # Subtest: example 'cold-chain-waste-reduction-review' has the expected shape and validates without warnings
+    ok 67 - example 'cold-chain-waste-reduction-review' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.3209
+      ...
+    # Subtest: example 'construction-safety-stand-down' has the expected shape and validates without warnings
+    ok 68 - example 'construction-safety-stand-down' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.4768
+      ...
+    # Subtest: example 'consulting-margin-recovery-plan' has the expected shape and validates without warnings
+    ok 69 - example 'consulting-margin-recovery-plan' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.3219
+      ...
+    # Subtest: example 'drive-thru-throughput-playbook' has the expected shape and validates without warnings
+    ok 70 - example 'drive-thru-throughput-playbook' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.3402
+      ...
+    # Subtest: example 'fan-experience-operations-brief' has the expected shape and validates without warnings
+    ok 71 - example 'fan-experience-operations-brief' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.2819
+      ...
+    # Subtest: example 'food-bank-distribution-capacity-plan' has the expected shape and validates without warnings
+    ok 72 - example 'food-bank-distribution-capacity-plan' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.143
+      ...
+    # Subtest: example 'grid-resilience-capital-plan' has the expected shape and validates without warnings
+    ok 73 - example 'grid-resilience-capital-plan' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.3063
+      ...
+    # Subtest: example 'managed-detection-market-update' has the expected shape and validates without warnings
+    ok 74 - example 'managed-detection-market-update' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.136
+      ...
+    # Subtest: example 'mixed-use-leasing-pipeline-review' has the expected shape and validates without warnings
+    ok 75 - example 'mixed-use-leasing-pipeline-review' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.5272
+      ...
+    # Subtest: example 'port-dwell-time-improvement-plan' has the expected shape and validates without warnings
+    ok 76 - example 'port-dwell-time-improvement-plan' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.4934
+      ...
+    # Subtest: example 'retail-launch-readiness-deck' has the expected shape and validates without warnings
+    ok 77 - example 'retail-launch-readiness-deck' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.5146
+      ...
+    # Subtest: example 'robotics-quality-escape-briefing' has the expected shape and validates without warnings
+    ok 78 - example 'robotics-quality-escape-briefing' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.3164
+      ...
+    # Subtest: example 'rural-broadband-expansion-proposal' has the expected shape and validates without warnings
+    ok 79 - example 'rural-broadband-expansion-proposal' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.1597
+      ...
+    # Subtest: example 'satellite-maintenance-readiness-review' has the expected shape and validates without warnings
+    ok 80 - example 'satellite-maintenance-readiness-review' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.2786
+      ...
+    # Subtest: example 'streaming-churn-winback-strategy' has the expected shape and validates without warnings
+    ok 81 - example 'streaming-churn-winback-strategy' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.2655
+      ...
+    # Subtest: example 'tailings-monitoring-investment-brief' has the expected shape and validates without warnings
+    ok 82 - example 'tailings-monitoring-investment-brief' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.5428
+      ...
+    # Subtest: example 'trial-enrollment-rescue-plan' has the expected shape and validates without warnings
+    ok 83 - example 'trial-enrollment-rescue-plan' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.3628
+      ...
+    # Subtest: example 'veterinary-staffing-stabilization' has the expected shape and validates without warnings
+    ok 84 - example 'veterinary-staffing-stabilization' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.3128
+      ...
+    # Subtest: example 'water-stewardship-grower-brief' has the expected shape and validates without warnings
+    ok 85 - example 'water-stewardship-grower-brief' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.5311
+      ...
+    # Subtest: example 'arabic-digital-services-brief' has the expected shape and validates without warnings
+    ok 86 - example 'arabic-digital-services-brief' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.5087
+      ...
+    # Subtest: example 'brazil-climate-adaptation-brief' has the expected shape and validates without warnings
+    ok 87 - example 'brazil-climate-adaptation-brief' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.3476
+      ...
+    # Subtest: example 'german-works-council-update' has the expected shape and validates without warnings
+    ok 88 - example 'german-works-council-update' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.305
+      ...
+    # Subtest: example 'india-rural-payments-pilot' has the expected shape and validates without warnings
+    ok 89 - example 'india-rural-payments-pilot' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.1496
+      ...
+    # Subtest: example 'japan-market-entry-readout' has the expected shape and validates without warnings
+    ok 90 - example 'japan-market-entry-readout' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.122
+      ...
+    # Subtest: example 'customer-qbr-renewal-deck' has the expected shape and validates without warnings
+    ok 91 - example 'customer-qbr-renewal-deck' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.2722
+      ...
+    # Subtest: example 'data-incident-postmortem' has the expected shape and validates without warnings
+    ok 92 - example 'data-incident-postmortem' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.2156
+      ...
+    # Subtest: example 'developer-conference-talk' has the expected shape and validates without warnings
+    ok 93 - example 'developer-conference-talk' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.2355
+      ...
+    # Subtest: example 'executive-workshop-facilitation' has the expected shape and validates without warnings
+    ok 94 - example 'executive-workshop-facilitation' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.2895
+      ...
+    # Subtest: example 'manager-training-deck' has the expected shape and validates without warnings
+    ok 95 - example 'manager-training-deck' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.5434
+      ...
+    # Subtest: example 'monthly-board-update' has the expected shape and validates without warnings
+    ok 96 - example 'monthly-board-update' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.181
+      ...
+    # Subtest: example 'policy-briefing-for-advisors' has the expected shape and validates without warnings
+    ok 97 - example 'policy-briefing-for-advisors' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.5326
+      ...
+    # Subtest: example 'product-launch-narrative' has the expected shape and validates without warnings
+    ok 98 - example 'product-launch-narrative' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.4757
+      ...
+    # Subtest: example 'research-findings-report' has the expected shape and validates without warnings
+    ok 99 - example 'research-findings-report' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.5826
+      ...
+    # Subtest: example 'seed-pitch-for-climate-risk-api' has the expected shape and validates without warnings
+    ok 100 - example 'seed-pitch-for-climate-risk-api' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.2212
+      ...
+    # Subtest: example 'asset-source-forms' has the expected shape and validates without warnings
+    ok 101 - example 'asset-source-forms' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.3395
+      ...
+    # Subtest: example 'block-composition' has the expected shape and validates without warnings
+    ok 102 - example 'block-composition' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.2458
+      ...
+    # Subtest: example 'catalog-overrides' has the expected shape and validates without warnings
+    ok 103 - example 'catalog-overrides' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.3913
+      ...
+    # Subtest: example 'chart-data-sources' has the expected shape and validates without warnings
+    ok 104 - example 'chart-data-sources' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.1186
+      ...
+    # Subtest: example 'chart-type-sampler' has the expected shape and validates without warnings
+    ok 105 - example 'chart-type-sampler' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.2193
+      ...
+    # Subtest: example 'columns' has the expected shape and validates without warnings
+    ok 106 - example 'columns' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.2148
+      ...
+    # Subtest: example 'content-payload-matrix' has the expected shape and validates without warnings
+    ok 107 - example 'content-payload-matrix' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.7425
+      ...
+    # Subtest: example 'design-backgrounds' has the expected shape and validates without warnings
+    ok 108 - example 'design-backgrounds' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.3412
+      ...
+    # Subtest: example 'dynamic-composition' has the expected shape and validates without warnings
+    ok 109 - example 'dynamic-composition' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.4898
+      ...
+    # Subtest: example 'full-feature-tour' has the expected shape and validates without warnings
+    ok 110 - example 'full-feature-tour' has the expected shape and validates without warnings
+      ---
+      duration_ms: 1.1609
+      ...
+    # Subtest: example 'grid-spans' has the expected shape and validates without warnings
+    ok 111 - example 'grid-spans' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.2698
+      ...
+    # Subtest: example 'header-footer-logo-set' has the expected shape and validates without warnings
+    ok 112 - example 'header-footer-logo-set' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.2474
+      ...
+    # Subtest: example 'language-and-writing' has the expected shape and validates without warnings
+    ok 113 - example 'language-and-writing' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.1208
+      ...
+    # Subtest: example 'media-and-follow-up' has the expected shape and validates without warnings
+    ok 114 - example 'media-and-follow-up' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.1866
+      ...
+    # Subtest: example 'metadata-array-forms' has the expected shape and validates without warnings
+    ok 115 - example 'metadata-array-forms' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.1817
+      ...
+    # Subtest: example 'metrics-quotes-timeline' has the expected shape and validates without warnings
+    ok 116 - example 'metrics-quotes-timeline' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.1725
+      ...
+    # Subtest: example 'minimal' has the expected shape and validates without warnings
+    ok 117 - example 'minimal' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.15
+      ...
+    # Subtest: example 'narrative-beats' has the expected shape and validates without warnings
+    ok 118 - example 'narrative-beats' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.1552
+      ...
+    # Subtest: example 'promoted-region-grid' has the expected shape and validates without warnings
+    ok 119 - example 'promoted-region-grid' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.3261
+      ...
+    # Subtest: example 'rich-text-runs' has the expected shape and validates without warnings
+    ok 120 - example 'rich-text-runs' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.2612
+      ...
+    # Subtest: example 'root-content' has the expected shape and validates without warnings
+    ok 121 - example 'root-content' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.1118
+      ...
+    # Subtest: example 'rows-chart' has the expected shape and validates without warnings
+    ok 122 - example 'rows-chart' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.2028
+      ...
+    # Subtest: example 'slide-design-overrides' has the expected shape and validates without warnings
+    ok 123 - example 'slide-design-overrides' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.2295
+      ...
+    # Subtest: example 'slide-sections' has the expected shape and validates without warnings
+    ok 124 - example 'slide-sections' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.2231
+      ...
+    # Subtest: example 'table-and-code' has the expected shape and validates without warnings
+    ok 125 - example 'table-and-code' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.4087
+      ...
+    # Subtest: example 'table-cell-types' has the expected shape and validates without warnings
+    ok 126 - example 'table-cell-types' has the expected shape and validates without warnings
+      ---
+      duration_ms: 0.2123
+      ...
+    1..126
+ok 23 - every bundled example validates cleanly
+  ---
+  duration_ms: 418.8974
+  type: 'suite'
+  ...
+# Subtest: galleries
+    # Subtest: gallery 'business-functions' is well-formed
+    ok 1 - gallery 'business-functions' is well-formed
+      ---
+      duration_ms: 0.1661
+      ...
+    # Subtest: gallery 'design-and-media' is well-formed
+    ok 2 - gallery 'design-and-media' is well-formed
+      ---
+      duration_ms: 0.0474
+      ...
+    # Subtest: gallery 'education' is well-formed
+    ok 3 - gallery 'education' is well-formed
+      ---
+      duration_ms: 0.0436
+      ...
+    # Subtest: gallery 'government' is well-formed
+    ok 4 - gallery 'government' is well-formed
+      ---
+      duration_ms: 0.0378
+      ...
+    # Subtest: gallery 'industries' is well-formed
+    ok 5 - gallery 'industries' is well-formed
+      ---
+      duration_ms: 0.0353
+      ...
+    # Subtest: gallery 'international' is well-formed
+    ok 6 - gallery 'international' is well-formed
+      ---
+      duration_ms: 0.0371
+      ...
+    # Subtest: gallery 'presentation-types' is well-formed
+    ok 7 - gallery 'presentation-types' is well-formed
+      ---
+      duration_ms: 0.0351
+      ...
+    # Subtest: getExamplesByGallery matches gallery.examples length for the first gallery
+    ok 8 - getExamplesByGallery matches gallery.examples length for the first gallery
+      ---
+      duration_ms: 0.1205
+      ...
+    # Subtest: getGallery resolves a known slug and returns undefined for a bogus one
+    ok 9 - getGallery resolves a known slug and returns undefined for a bogus one
+      ---
+      duration_ms: 0.0932
+      ...
+    1..9
+ok 24 - galleries
+  ---
+  duration_ms: 0.8411
+  type: 'suite'
+  ...
+# Subtest: getExample resolves a known slug
+ok 25 - getExample resolves a known slug
+  ---
+  duration_ms: 0.1081
+  ...
+# Subtest: getExamplesByCategory returns results for a known category
+ok 26 - getExamplesByCategory returns results for a known category
+  ---
+  duration_ms: 0.0931
+  ...
+# Subtest: bundled docs
+    # Subtest: has at least one doc
+    ok 1 - has at least one doc
+      ---
+      duration_ms: 0.2216
+      ...
+    # Subtest: doc 'agent-skills' has required fields
+    ok 2 - doc 'agent-skills' has required fields
+      ---
+      duration_ms: 0.0744
+      ...
+    # Subtest: doc 'catalog-schema-reference' has required fields
+    ok 3 - doc 'catalog-schema-reference' has required fields
+      ---
+      duration_ms: 0.0406
+      ...
+    # Subtest: doc 'content-item-design-overrides' has required fields
+    ok 4 - doc 'content-item-design-overrides' has required fields
+      ---
+      duration_ms: 0.0434
+      ...
+    # Subtest: doc 'content-payloads' has required fields
+    ok 5 - doc 'content-payloads' has required fields
+      ---
+      duration_ms: 0.0363
+      ...
+    # Subtest: doc 'data-import' has required fields
+    ok 6 - doc 'data-import' has required fields
+      ---
+      duration_ms: 0.0646
+      ...
+    # Subtest: doc 'design-resolution' has required fields
+    ok 7 - doc 'design-resolution' has required fields
+      ---
+      duration_ms: 0.077
+      ...
+    # Subtest: doc 'dynamic-composition' has required fields
+    ok 8 - doc 'dynamic-composition' has required fields
+      ---
+      duration_ms: 0.0726
+      ...
+    # Subtest: doc 'ecosystem-development' has required fields
+    ok 9 - doc 'ecosystem-development' has required fields
+      ---
+      duration_ms: 0.0562
+      ...
+    # Subtest: doc 'evidence-2026-09-08-windows' has required fields
+    ok 10 - doc 'evidence-2026-09-08-windows' has required fields
+      ---
+      duration_ms: 0.0681
+      ...
+    # Subtest: doc 'examples' has required fields
+    ok 11 - doc 'examples' has required fields
+      ---
+      duration_ms: 0.0491
+      ...
+    # Subtest: doc 'font-fidelity' has required fields
+    ok 12 - doc 'font-fidelity' has required fields
+      ---
+      duration_ms: 0.0404
+      ...
+    # Subtest: doc 'handoff-2026-09-08' has required fields
+    ok 13 - doc 'handoff-2026-09-08' has required fields
+      ---
+      duration_ms: 0.0479
+      ...
+    # Subtest: doc 'handoff' has required fields
+    ok 14 - doc 'handoff' has required fields
+      ---
+      duration_ms: 0.0986
+      ...
+    # Subtest: doc 'how-opf-works' has required fields
+    ok 15 - doc 'how-opf-works' has required fields
+      ---
+      duration_ms: 0.0429
+      ...
+    # Subtest: doc 'live-editor' has required fields
+    ok 16 - doc 'live-editor' has required fields
+      ---
+      duration_ms: 0.0403
+      ...
+    # Subtest: doc 'llm-authoring' has required fields
+    ok 17 - doc 'llm-authoring' has required fields
+      ---
+      duration_ms: 0.0402
+      ...
+    # Subtest: doc 'native-content-release-2026-09-09' has required fields
+    ok 18 - doc 'native-content-release-2026-09-09' has required fields
+      ---
+      duration_ms: 0.0396
+      ...
+    # Subtest: doc 'native-feature-matrix-2026-09-09' has required fields
+    ok 19 - doc 'native-feature-matrix-2026-09-09' has required fields
+      ---
+      duration_ms: 0.1256
+      ...
+    # Subtest: doc 'open-ecosystem' has required fields
+    ok 20 - doc 'open-ecosystem' has required fields
+      ---
+      duration_ms: 0.0597
+      ...
+    # Subtest: doc 'pr-backlog-2026-09-09' has required fields
+    ok 21 - doc 'pr-backlog-2026-09-09' has required fields
+      ---
+      duration_ms: 0.1061
+      ...
+    # Subtest: doc 'release-process' has required fields
+    ok 22 - doc 'release-process' has required fields
+      ---
+      duration_ms: 0.0558
+      ...
+    # Subtest: doc 'rich-text' has required fields
+    ok 23 - doc 'rich-text' has required fields
+      ---
+      duration_ms: 0.0564
+      ...
+    # Subtest: doc 'schema-reference' has required fields
+    ok 24 - doc 'schema-reference' has required fields
+      ---
+      duration_ms: 0.0483
+      ...
+    # Subtest: doc 'security-2026-09-09' has required fields
+    ok 25 - doc 'security-2026-09-09' has required fields
+      ---
+      duration_ms: 0.0394
+      ...
+    # Subtest: doc slugs include 'schema-reference' and getDoc resolves known/unknown slugs
+    ok 26 - doc slugs include 'schema-reference' and getDoc resolves known/unknown slugs
+      ---
+      duration_ms: 0.2193
+      ...
+    1..26
+ok 27 - bundled docs
+  ---
+  duration_ms: 2.5223
+  type: 'suite'
+  ...
+# Subtest: fenced JSON presentation examples embedded in docs
+    # Subtest: doc 'design-resolution' fenced JSON example \#0 validates cleanly
+    ok 1 - doc 'design-resolution' fenced JSON example \#0 validates cleanly
+      ---
+      duration_ms: 0.5351
+      ...
+    # Subtest: doc 'design-resolution' fenced JSON example \#1 validates cleanly
+    ok 2 - doc 'design-resolution' fenced JSON example \#1 validates cleanly
+      ---
+      duration_ms: 0.2605
+      ...
+    # Subtest: doc 'dynamic-composition' fenced JSON example \#0 validates cleanly
+    ok 3 - doc 'dynamic-composition' fenced JSON example \#0 validates cleanly
+      ---
+      duration_ms: 0.1416
+      ...
+    # Subtest: doc 'how-opf-works' fenced JSON example \#0 validates cleanly
+    ok 4 - doc 'how-opf-works' fenced JSON example \#0 validates cleanly
+      ---
+      duration_ms: 0.0816
+      ...
+    # Subtest: doc 'how-opf-works' fenced JSON example \#1 validates cleanly
+    ok 5 - doc 'how-opf-works' fenced JSON example \#1 validates cleanly
+      ---
+      duration_ms: 0.177
+      ...
+    # Subtest: doc 'how-opf-works' fenced JSON example \#2 validates cleanly
+    ok 6 - doc 'how-opf-works' fenced JSON example \#2 validates cleanly
+      ---
+      duration_ms: 0.189
+      ...
+    # Subtest: doc 'how-opf-works' fenced JSON example \#3 validates cleanly
+    ok 7 - doc 'how-opf-works' fenced JSON example \#3 validates cleanly
+      ---
+      duration_ms: 0.3501
+      ...
+    # Subtest: doc 'llm-authoring' fenced JSON example \#0 validates cleanly
+    ok 8 - doc 'llm-authoring' fenced JSON example \#0 validates cleanly
+      ---
+      duration_ms: 0.3468
+      ...
+    # Subtest: at least 5 presentation examples are validated across docs
+    ok 9 - at least 5 presentation examples are validated across docs
+      ---
+      duration_ms: 0.1226
+      ...
+    1..9
+ok 28 - fenced JSON presentation examples embedded in docs
+  ---
+  duration_ms: 2.8253
+  type: 'suite'
+  ...
+# Subtest: schema $ids
+    # Subtest: presentation schema has the canonical $id
+    ok 1 - presentation schema has the canonical $id
+      ---
+      duration_ms: 0.7776
+      ...
+    # Subtest: audience schema has the canonical $id
+    ok 2 - audience schema has the canonical $id
+      ---
+      duration_ms: 0.181
+      ...
+    # Subtest: socialPlatform schema has the canonical $id
+    ok 3 - socialPlatform schema has the canonical $id
+      ---
+      duration_ms: 0.0924
+      ...
+    1..3
+ok 29 - schema $ids
+  ---
+  duration_ms: 1.9486
+  type: 'suite'
+  ...
+# Subtest: catalog export shapes
+    # Subtest: audiences catalog is non-empty
+    ok 1 - audiences catalog is non-empty
+      ---
+      duration_ms: 0.2748
+      ...
+    # Subtest: tones catalog is non-empty
+    ok 2 - tones catalog is non-empty
+      ---
+      duration_ms: 0.0868
+      ...
+    # Subtest: socialPlatforms catalog is non-empty
+    ok 3 - socialPlatforms catalog is non-empty
+      ---
+      duration_ms: 0.0636
+      ...
+    # Subtest: catalogs.audiences matches the audiences export length
+    ok 4 - catalogs.audiences matches the audiences export length
+      ---
+      duration_ms: 0.0767
+      ...
+    # Subtest: catalogs.socialPlatforms matches the socialPlatforms export length
+    ok 5 - catalogs.socialPlatforms matches the socialPlatforms export length
+      ---
+      duration_ms: 0.1989
+      ...
+    # Subtest: catalogs.chartTypes is non-empty
+    ok 6 - catalogs.chartTypes is non-empty
+      ---
+      duration_ms: 0.1566
+      ...
+    # Subtest: chartTypes catalog keeps 'united-kingdom' and drops the removed typo id
+    ok 7 - chartTypes catalog keeps 'united-kingdom' and drops the removed typo id
+      ---
+      duration_ms: 0.1663
+      ...
+    # Subtest: chartTypes catalogEntries entry has the expected schemaName and files
+    ok 8 - chartTypes catalogEntries entry has the expected schemaName and files
+      ---
+      duration_ms: 0.1255
+      ...
+    # Subtest: socialPlatforms catalogEntries entry has the expected schemaName
+    ok 9 - socialPlatforms catalogEntries entry has the expected schemaName
+      ---
+      duration_ms: 0.1921
+      ...
+    # Subtest: purposes catalog is non-empty
+    ok 10 - purposes catalog is non-empty
+      ---
+      duration_ms: 0.0853
+      ...
+    # Subtest: languages catalog includes English (US) and English (GB) with correct bcp47 tags
+    ok 11 - languages catalog includes English (US) and English (GB) with correct bcp47 tags
+      ---
+      duration_ms: 0.1908
+      ...
+    1..11
+ok 30 - catalog export shapes
+  ---
+  duration_ms: 2.0353
+  type: 'suite'
+  ...
+# Subtest: catalog entries validate
+    # Subtest: catalog 'audiences' has records and its first record validates
+    ok 1 - catalog 'audiences' has records and its first record validates
+      ---
+      duration_ms: 75.1683
+      ...
+    # Subtest: catalog 'purposes' has records and its first record validates
+    ok 2 - catalog 'purposes' has records and its first record validates
+      ---
+      duration_ms: 4.9274
+      ...
+    # Subtest: catalog 'tones' has records and its first record validates
+    ok 3 - catalog 'tones' has records and its first record validates
+      ---
+      duration_ms: 3.4026
+      ...
+    # Subtest: catalog 'themes' has records and its first record validates
+    ok 4 - catalog 'themes' has records and its first record validates
+      ---
+      duration_ms: 3.8947
+      ...
+    # Subtest: catalog 'layouts' has records and its first record validates
+    ok 5 - catalog 'layouts' has records and its first record validates
+      ---
+      duration_ms: 13.5691
+      ...
+    # Subtest: catalog 'chartTypes' has records and its first record validates
+    ok 6 - catalog 'chartTypes' has records and its first record validates
+      ---
+      duration_ms: 17.3513
+      ...
+    # Subtest: catalog 'narratives' has records and its first record validates
+    ok 7 - catalog 'narratives' has records and its first record validates
+      ---
+      duration_ms: 8.5445
+      ...
+    # Subtest: catalog 'socialPlatforms' has records and its first record validates
+    ok 8 - catalog 'socialPlatforms' has records and its first record validates
+      ---
+      duration_ms: 7.2256
+      ...
+    # Subtest: catalog 'languages' has records and its first record validates
+    ok 9 - catalog 'languages' has records and its first record validates
+      ---
+      duration_ms: 7.8244
+      ...
+    # Subtest: catalog 'colorSchemes' has records and its first record validates
+    ok 10 - catalog 'colorSchemes' has records and its first record validates
+      ---
+      duration_ms: 8.2705
+      ...
+    # Subtest: catalog 'fontSchemes' has records and its first record validates
+    ok 11 - catalog 'fontSchemes' has records and its first record validates
+      ---
+      duration_ms: 3.7512
+      ...
+    1..11
+ok 31 - catalog entries validate
+  ---
+  duration_ms: 154.7257
+  type: 'suite'
+  ...
+# Subtest: catalog cross-links resolve
+    # Subtest: audiences/executives has no broken cross-links
+    ok 1 - audiences/executives has no broken cross-links
+      ---
+      duration_ms: 0.529
+      ...
+    # Subtest: audiences/board has no broken cross-links
+    ok 2 - audiences/board has no broken cross-links
+      ---
+      duration_ms: 0.29
+      ...
+    # Subtest: audiences/engineering-team has no broken cross-links
+    ok 3 - audiences/engineering-team has no broken cross-links
+      ---
+      duration_ms: 0.15
+      ...
+    # Subtest: audiences/investors has no broken cross-links
+    ok 4 - audiences/investors has no broken cross-links
+      ---
+      duration_ms: 0.1966
+      ...
+    # Subtest: audiences/customers has no broken cross-links
+    ok 5 - audiences/customers has no broken cross-links
+      ---
+      duration_ms: 0.0947
+      ...
+    # Subtest: audiences/sales-team has no broken cross-links
+    ok 6 - audiences/sales-team has no broken cross-links
+      ---
+      duration_ms: 0.1048
+      ...
+    # Subtest: audiences/marketing-team has no broken cross-links
+    ok 7 - audiences/marketing-team has no broken cross-links
+      ---
+      duration_ms: 0.0653
+      ...
+    # Subtest: audiences/all-hands has no broken cross-links
+    ok 8 - audiences/all-hands has no broken cross-links
+      ---
+      duration_ms: 0.2113
+      ...
+    # Subtest: audiences/candidates has no broken cross-links
+    ok 9 - audiences/candidates has no broken cross-links
+      ---
+      duration_ms: 0.1261
+      ...
+    # Subtest: audiences/regulators has no broken cross-links
+    ok 10 - audiences/regulators has no broken cross-links
+      ---
+      duration_ms: 0.0754
+      ...
+    # Subtest: purposes/inform has no broken cross-links
+    ok 11 - purposes/inform has no broken cross-links
+      ---
+      duration_ms: 0.0696
+      ...
+    # Subtest: purposes/decide has no broken cross-links
+    ok 12 - purposes/decide has no broken cross-links
+      ---
+      duration_ms: 0.0549
+      ...
+    # Subtest: purposes/align has no broken cross-links
+    ok 13 - purposes/align has no broken cross-links
+      ---
+      duration_ms: 0.0504
+      ...
+    # Subtest: purposes/persuade has no broken cross-links
+    ok 14 - purposes/persuade has no broken cross-links
+      ---
+      duration_ms: 0.0537
+      ...
+    # Subtest: purposes/educate has no broken cross-links
+    ok 15 - purposes/educate has no broken cross-links
+      ---
+      duration_ms: 0.0481
+      ...
+    # Subtest: purposes/report has no broken cross-links
+    ok 16 - purposes/report has no broken cross-links
+      ---
+      duration_ms: 0.0489
+      ...
+    # Subtest: purposes/pitch has no broken cross-links
+    ok 17 - purposes/pitch has no broken cross-links
+      ---
+      duration_ms: 0.0461
+      ...
+    # Subtest: purposes/sell has no broken cross-links
+    ok 18 - purposes/sell has no broken cross-links
+      ---
+      duration_ms: 0.0508
+      ...
+    # Subtest: purposes/plan has no broken cross-links
+    ok 19 - purposes/plan has no broken cross-links
+      ---
+      duration_ms: 0.0567
+      ...
+    # Subtest: tones/formal has no broken cross-links
+    ok 20 - tones/formal has no broken cross-links
+      ---
+      duration_ms: 0.0562
+      ...
+    # Subtest: tones/casual has no broken cross-links
+    ok 21 - tones/casual has no broken cross-links
+      ---
+      duration_ms: 0.0523
+      ...
+    # Subtest: tones/inspirational has no broken cross-links
+    ok 22 - tones/inspirational has no broken cross-links
+      ---
+      duration_ms: 0.0496
+      ...
+    # Subtest: tones/technical has no broken cross-links
+    ok 23 - tones/technical has no broken cross-links
+      ---
+      duration_ms: 0.0476
+      ...
+    # Subtest: tones/persuasive has no broken cross-links
+    ok 24 - tones/persuasive has no broken cross-links
+      ---
+      duration_ms: 0.0473
+      ...
+    # Subtest: tones/authoritative has no broken cross-links
+    ok 25 - tones/authoritative has no broken cross-links
+      ---
+      duration_ms: 0.0469
+      ...
+    # Subtest: tones/conversational has no broken cross-links
+    ok 26 - tones/conversational has no broken cross-links
+      ---
+      duration_ms: 0.0492
+      ...
+    # Subtest: invalid en-UK language catalog record is rejected with a helpful message
+    ok 27 - invalid en-UK language catalog record is rejected with a helpful message
+      ---
+      duration_ms: 0.1864
+      ...
+    # Subtest: broken cross-links in a catalog record warn, never error
+    ok 28 - broken cross-links in a catalog record warn, never error
+      ---
+      duration_ms: 0.1379
+      ...
+    1..28
+ok 32 - catalog cross-links resolve
+  ---
+  duration_ms: 3.6007
+  type: 'suite'
+  ...
+# Subtest: repo readme export
+    # Subtest: repoReadme ships as a non-trivial string mentioning the format name
+    ok 1 - repoReadme ships as a non-trivial string mentioning the format name
+      ---
+      duration_ms: 0.2257
+      ...
+    1..1
+ok 33 - repo readme export
+  ---
+  duration_ms: 0.2857
+  type: 'suite'
+  ...
+# Subtest: public generated payload declarations agree with closed schema fields
+ok 34 - public generated payload declarations agree with closed schema fields
+  ---
+  duration_ms: 826.8874
+  ...
+# Subtest: composition accepts complete metric geometry against its rounded cell and aliases the value fit
+ok 35 - composition accepts complete metric geometry against its rounded cell and aliases the value fit
+  ---
+  duration_ms: 9.31
+  ...
+# Subtest: metric scoring includes long metadata and charges each failing leaf once
+ok 36 - metric scoring includes long metadata and charges each failing leaf once
+  ---
+  duration_ms: 8.2328
+  ...
+# Subtest: slide alignment overrides host alignment for complete metric parts
+ok 37 - slide alignment overrides host alignment for complete metric parts
+  ---
+  duration_ms: 0.6723
+  ...
+# Subtest: strict ancestors reject complete metric field paths without changing source
+ok 38 - strict ancestors reject complete metric field paths without changing source
+  ---
+  duration_ms: 1000.1235
+  ...
+# Subtest: explicit metric placement and weights remain authoritative despite overflowing metadata
+ok 39 - explicit metric placement and weights remain authoritative despite overflowing metadata
+  ---
+  duration_ms: 40.0963
+  ...
+# Subtest: atomic metric pagination preserves scalar/metadata types and persists its readable floor
+ok 40 - atomic metric pagination preserves scalar/metadata types and persists its readable floor
+  ---
+  duration_ms: 120.3706
+  ...
+# Subtest: irreducible atomic metrics reject all pagination output including empty values after earlier content
+ok 41 - irreducible atomic metrics reject all pagination output including empty values after earlier content
+  ---
+  duration_ms: 101.5008
+  ...
+# Subtest: metric value, unit, labels, zero delta and trend retain their own editable source paths
+ok 42 - metric value, unit, labels, zero delta and trend retain their own editable source paths
+  ---
+  duration_ms: 7.9716
+  ...
+# Subtest: short units stay next to the value on the same baseline; long units and values stack
+ok 43 - short units stay next to the value on the same baseline; long units and values stack
+  ---
+  duration_ms: 55.9542
+  ...
+# Subtest: inline fitting tries a smaller single-line value before rejecting a compact readable metric
+ok 44 - inline fitting tries a smaller single-line value before rejecting a compact readable metric
+  ---
+  duration_ms: 2.2894
+  ...
+# Subtest: metric alignment positions the inline pair together and records exact origins for every source line
+ok 45 - metric alignment positions the inline pair together and records exact origins for every source line
+  ---
+  duration_ms: 0.9316
+  ...
+# Subtest: metadata borrows spare primary space before reducing type and exposes resolved style paths
+ok 46 - metadata borrows spare primary space before reducing type and exposes resolved style paths
+  ---
+  duration_ms: 0.6206
+  ...
+# Subtest: explicit readability floors raise nominal labels and remain invariant across canvas scales
+ok 47 - explicit readability floors raise nominal labels and remain invariant across canvas scales
+  ---
+  duration_ms: 1.0927
+  ...
+# Subtest: irreducible metadata retains all source and strict rejection reports its actual path
+ok 48 - irreducible metadata retains all source and strict rejection reports its actual path
+  ---
+  duration_ms: 4.3148
+  ...
+# Subtest: empty optional fields retain source without blank spacing and an empty value stays targetable
+ok 49 - empty optional fields retain source without blank spacing and an empty value stays targetable
+  ---
+  duration_ms: 0.5763
+  ...
+# Subtest: metric whitespace, tabs and Unicode retain exact line and segment boundaries
+ok 50 - metric whitespace, tabs and Unicode retain exact line and segment boundaries
+  ---
+  duration_ms: 2.1832
+  ...
+# Subtest: invalid input, failed measurement and non-finite geometry reject without plausible substitute fits
+ok 51 - invalid input, failed measurement and non-finite geometry reject without plausible substitute fits
+  ---
+  duration_ms: 1.2315
+  ...
+# Subtest: difficult metrics use a bounded deterministic candidate search independent of canvas scale
+ok 52 - difficult metrics use a bounded deterministic candidate search independent of canvas scale
+  ---
+  duration_ms: 360.9072
+  ...
+# Subtest: layoutPreviews export
+    # Subtest: is a non-empty record of HTML strings
+    ok 1 - is a non-empty record of HTML strings
+      ---
+      duration_ms: 1.1087
+      ...
+    1..1
+ok 53 - layoutPreviews export
+  ---
+  duration_ms: 2.5565
+  type: 'suite'
+  ...
+# Subtest: layoutPreviewIndex export
+    # Subtest: records match Object.keys(layoutPreviews) exactly
+    ok 1 - records match Object.keys(layoutPreviews) exactly
+      ---
+      duration_ms: 2.013
+      ...
+    # Subtest: preview record 'action-plan' bytes match its source file's UTF-8 byte length
+    ok 2 - preview record 'action-plan' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 2.9585
+      ...
+    # Subtest: preview record 'agenda' bytes match its source file's UTF-8 byte length
+    ok 3 - preview record 'agenda' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.3484
+      ...
+    # Subtest: preview record 'appendix-index' bytes match its source file's UTF-8 byte length
+    ok 4 - preview record 'appendix-index' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 1.4098
+      ...
+    # Subtest: preview record 'architecture-stack' bytes match its source file's UTF-8 byte length
+    ok 5 - preview record 'architecture-stack' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.3616
+      ...
+    # Subtest: preview record 'assumptions-dependencies' bytes match its source file's UTF-8 byte length
+    ok 6 - preview record 'assumptions-dependencies' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.2215
+      ...
+    # Subtest: preview record 'before-after' bytes match its source file's UTF-8 byte length
+    ok 7 - preview record 'before-after' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.2602
+      ...
+    # Subtest: preview record 'benchmark-target-table' bytes match its source file's UTF-8 byte length
+    ok 8 - preview record 'benchmark-target-table' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.3758
+      ...
+    # Subtest: preview record 'bullet-list' bytes match its source file's UTF-8 byte length
+    ok 9 - preview record 'bullet-list' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.3627
+      ...
+    # Subtest: preview record 'business-model-canvas' bytes match its source file's UTF-8 byte length
+    ok 10 - preview record 'business-model-canvas' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.3497
+      ...
+    # Subtest: preview record 'capability-map' bytes match its source file's UTF-8 byte length
+    ok 11 - preview record 'capability-map' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.4016
+      ...
+    # Subtest: preview record 'case-study' bytes match its source file's UTF-8 byte length
+    ok 12 - preview record 'case-study' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.2403
+      ...
+    # Subtest: preview record 'chapter-recap' bytes match its source file's UTF-8 byte length
+    ok 13 - preview record 'chapter-recap' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.3208
+      ...
+    # Subtest: preview record 'circular-lifecycle' bytes match its source file's UTF-8 byte length
+    ok 14 - preview record 'circular-lifecycle' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.2617
+      ...
+    # Subtest: preview record 'comparison' bytes match its source file's UTF-8 byte length
+    ok 15 - preview record 'comparison' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.2357
+      ...
+    # Subtest: preview record 'competitive-landscape' bytes match its source file's UTF-8 byte length
+    ok 16 - preview record 'competitive-landscape' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.2127
+      ...
+    # Subtest: preview record 'customer-journey' bytes match its source file's UTF-8 byte length
+    ok 17 - preview record 'customer-journey' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.3142
+      ...
+    # Subtest: preview record 'customer-logos' bytes match its source file's UTF-8 byte length
+    ok 18 - preview record 'customer-logos' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.2828
+      ...
+    # Subtest: preview record 'dashboard' bytes match its source file's UTF-8 byte length
+    ok 19 - preview record 'dashboard' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.2008
+      ...
+    # Subtest: preview record 'data-visualization' bytes match its source file's UTF-8 byte length
+    ok 20 - preview record 'data-visualization' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.3574
+      ...
+    # Subtest: preview record 'decision-tree' bytes match its source file's UTF-8 byte length
+    ok 21 - preview record 'decision-tree' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.2758
+      ...
+    # Subtest: preview record 'detailed-data-table' bytes match its source file's UTF-8 byte length
+    ok 22 - preview record 'detailed-data-table' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.1972
+      ...
+    # Subtest: preview record 'ecosystem-map' bytes match its source file's UTF-8 byte length
+    ok 23 - preview record 'ecosystem-map' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.1773
+      ...
+    # Subtest: preview record 'executive-decision' bytes match its source file's UTF-8 byte length
+    ok 24 - preview record 'executive-decision' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.937
+      ...
+    # Subtest: preview record 'executive-summary' bytes match its source file's UTF-8 byte length
+    ok 25 - preview record 'executive-summary' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.2497
+      ...
+    # Subtest: preview record 'faq' bytes match its source file's UTF-8 byte length
+    ok 26 - preview record 'faq' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.2458
+      ...
+    # Subtest: preview record 'feature-comparison-matrix' bytes match its source file's UTF-8 byte length
+    ok 27 - preview record 'feature-comparison-matrix' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.2126
+      ...
+    # Subtest: preview record 'forecast-scenario' bytes match its source file's UTF-8 byte length
+    ok 28 - preview record 'forecast-scenario' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.2356
+      ...
+    # Subtest: preview record 'funnel-pyramid' bytes match its source file's UTF-8 byte length
+    ok 29 - preview record 'funnel-pyramid' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.2662
+      ...
+    # Subtest: preview record 'gantt-project-plan' bytes match its source file's UTF-8 byte length
+    ok 30 - preview record 'gantt-project-plan' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.2309
+      ...
+    # Subtest: preview record 'geographic-map' bytes match its source file's UTF-8 byte length
+    ok 31 - preview record 'geographic-map' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.3348
+      ...
+    # Subtest: preview record 'heatmap-cohort' bytes match its source file's UTF-8 byte length
+    ok 32 - preview record 'heatmap-cohort' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.2859
+      ...
+    # Subtest: preview record 'hub-and-spoke' bytes match its source file's UTF-8 byte length
+    ok 33 - preview record 'hub-and-spoke' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.208
+      ...
+    # Subtest: preview record 'icon-grid' bytes match its source file's UTF-8 byte length
+    ok 34 - preview record 'icon-grid' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.1709
+      ...
+    # Subtest: preview record 'image-focus' bytes match its source file's UTF-8 byte length
+    ok 35 - preview record 'image-focus' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.146
+      ...
+    # Subtest: preview record 'key-takeaway' bytes match its source file's UTF-8 byte length
+    ok 36 - preview record 'key-takeaway' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.1578
+      ...
+    # Subtest: preview record 'kpi-scorecard' bytes match its source file's UTF-8 byte length
+    ok 37 - preview record 'kpi-scorecard' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.1361
+      ...
+    # Subtest: preview record 'logic-tree' bytes match its source file's UTF-8 byte length
+    ok 38 - preview record 'logic-tree' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.288
+      ...
+    # Subtest: preview record 'market-size' bytes match its source file's UTF-8 byte length
+    ok 39 - preview record 'market-size' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.2245
+      ...
+    # Subtest: preview record 'matrix-quadrant' bytes match its source file's UTF-8 byte length
+    ok 40 - preview record 'matrix-quadrant' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.2373
+      ...
+    # Subtest: preview record 'network-dependency-map' bytes match its source file's UTF-8 byte length
+    ok 41 - preview record 'network-dependency-map' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.1997
+      ...
+    # Subtest: preview record 'one-column-explainer' bytes match its source file's UTF-8 byte length
+    ok 42 - preview record 'one-column-explainer' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.2183
+      ...
+    # Subtest: preview record 'org-chart' bytes match its source file's UTF-8 byte length
+    ok 43 - preview record 'org-chart' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.1986
+      ...
+    # Subtest: preview record 'persona-grid' bytes match its source file's UTF-8 byte length
+    ok 44 - preview record 'persona-grid' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.2015
+      ...
+    # Subtest: preview record 'photo-grid' bytes match its source file's UTF-8 byte length
+    ok 45 - preview record 'photo-grid' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.2151
+      ...
+    # Subtest: preview record 'pricing-table' bytes match its source file's UTF-8 byte length
+    ok 46 - preview record 'pricing-table' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.2215
+      ...
+    # Subtest: preview record 'process-flow' bytes match its source file's UTF-8 byte length
+    ok 47 - preview record 'process-flow' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.2514
+      ...
+    # Subtest: preview record 'product-feature' bytes match its source file's UTF-8 byte length
+    ok 48 - preview record 'product-feature' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.2006
+      ...
+    # Subtest: preview record 'pros-cons' bytes match its source file's UTF-8 byte length
+    ok 49 - preview record 'pros-cons' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.1663
+      ...
+    # Subtest: preview record 'qa-discussion' bytes match its source file's UTF-8 byte length
+    ok 50 - preview record 'qa-discussion' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.1525
+      ...
+    # Subtest: preview record 'quote-highlight' bytes match its source file's UTF-8 byte length
+    ok 51 - preview record 'quote-highlight' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.1609
+      ...
+    # Subtest: preview record 'raci-matrix' bytes match its source file's UTF-8 byte length
+    ok 52 - preview record 'raci-matrix' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.1409
+      ...
+    # Subtest: preview record 'risk-heatmap' bytes match its source file's UTF-8 byte length
+    ok 53 - preview record 'risk-heatmap' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.1835
+      ...
+    # Subtest: preview record 'roadmap' bytes match its source file's UTF-8 byte length
+    ok 54 - preview record 'roadmap' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.1489
+      ...
+    # Subtest: preview record 'screenshot-walkthrough' bytes match its source file's UTF-8 byte length
+    ok 55 - preview record 'screenshot-walkthrough' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.1564
+      ...
+    # Subtest: preview record 'section-divider' bytes match its source file's UTF-8 byte length
+    ok 56 - preview record 'section-divider' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.1532
+      ...
+    # Subtest: preview record 'single-message-statement' bytes match its source file's UTF-8 byte length
+    ok 57 - preview record 'single-message-statement' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.1489
+      ...
+    # Subtest: preview record 'stats-metrics' bytes match its source file's UTF-8 byte length
+    ok 58 - preview record 'stats-metrics' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.1726
+      ...
+    # Subtest: preview record 'status-rag' bytes match its source file's UTF-8 byte length
+    ok 59 - preview record 'status-rag' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.1629
+      ...
+    # Subtest: preview record 'swimlane-process' bytes match its source file's UTF-8 byte length
+    ok 60 - preview record 'swimlane-process' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.269
+      ...
+    # Subtest: preview record 'swot-analysis' bytes match its source file's UTF-8 byte length
+    ok 61 - preview record 'swot-analysis' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.1745
+      ...
+    # Subtest: preview record 'team-bio' bytes match its source file's UTF-8 byte length
+    ok 62 - preview record 'team-bio' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.127
+      ...
+    # Subtest: preview record 'testimonial-grid' bytes match its source file's UTF-8 byte length
+    ok 63 - preview record 'testimonial-grid' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.1228
+      ...
+    # Subtest: preview record 'thank-you-cta' bytes match its source file's UTF-8 byte length
+    ok 64 - preview record 'thank-you-cta' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.113
+      ...
+    # Subtest: preview record 'three-column' bytes match its source file's UTF-8 byte length
+    ok 65 - preview record 'three-column' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.177
+      ...
+    # Subtest: preview record 'timeline' bytes match its source file's UTF-8 byte length
+    ok 66 - preview record 'timeline' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.9534
+      ...
+    # Subtest: preview record 'title-slide' bytes match its source file's UTF-8 byte length
+    ok 67 - preview record 'title-slide' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.2055
+      ...
+    # Subtest: preview record 'two-column' bytes match its source file's UTF-8 byte length
+    ok 68 - preview record 'two-column' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.1616
+      ...
+    # Subtest: preview record 'venn-overlap' bytes match its source file's UTF-8 byte length
+    ok 69 - preview record 'venn-overlap' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.383
+      ...
+    # Subtest: preview record 'waterfall-bridge' bytes match its source file's UTF-8 byte length
+    ok 70 - preview record 'waterfall-bridge' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.2716
+      ...
+    # Subtest: preview record 'wheel-radial' bytes match its source file's UTF-8 byte length
+    ok 71 - preview record 'wheel-radial' bytes match its source file's UTF-8 byte length
+      ---
+      duration_ms: 0.1602
+      ...
+    1..71
+ok 54 - layoutPreviewIndex export
+  ---
+  duration_ms: 26.5239
+  type: 'suite'
+  ...
+# Subtest: getLayoutPreview
+    # Subtest: returns the HTML for a known slug
+    ok 1 - returns the HTML for a known slug
+      ---
+      duration_ms: 0.1406
+      ...
+    # Subtest: returns undefined for a bogus slug
+    ok 2 - returns undefined for a bogus slug
+      ---
+      duration_ms: 0.0776
+      ...
+    1..2
+ok 55 - getLayoutPreview
+  ---
+  duration_ms: 0.3251
+  type: 'suite'
+  ...
+# Subtest: hasLayoutPreview
+    # Subtest: returns true for a known slug
+    ok 1 - returns true for a known slug
+      ---
+      duration_ms: 0.1268
+      ...
+    # Subtest: returns false for a bogus slug
+    ok 2 - returns false for a bogus slug
+      ---
+      duration_ms: 0.0686
+      ...
+    1..2
+ok 56 - hasLayoutPreview
+  ---
+  duration_ms: 0.2677
+  type: 'suite'
+  ...
+# Subtest: accepted quote geometry includes all parts without changing source or re-measuring for explanations
+ok 57 - accepted quote geometry includes all parts without changing source or re-measuring for explanations
+  ---
+  duration_ms: 20.5631
+  ...
+# Subtest: automatic candidates account for footer fit and choose the arrangement that keeps it readable
+ok 58 - automatic candidates account for footer fit and choose the arrangement that keeps it readable
+  ---
+  duration_ms: 6.0885
+  ...
+# Subtest: strict ancestors reject a quote body diagnostic below the leaf path
+ok 59 - strict ancestors reject a quote body diagnostic below the leaf path
+  ---
+  duration_ms: 198.106
+  ...
+# Subtest: strict path matching respects component boundaries rather than numeric prefixes
+ok 60 - strict path matching respects component boundaries rather than numeric prefixes
+  ---
+  duration_ms: 160.1654
+  ...
+# Subtest: pagination preserves quote body, repeated metadata, ranges and the accepted readability floor
+ok 61 - pagination preserves quote body, repeated metadata, ranges and the accepted readability floor
+  ---
+  duration_ms: 692.1084
+  ...
+# Subtest: irreducible footer overflow rejects pagination without mutating or returning partial content
+ok 62 - irreducible footer overflow rejects pagination without mutating or returning partial content
+  ---
+  duration_ms: 15.2812
+  ...
+# Subtest: complete quote layout preserves source ranges, requested/resolved styles and legacy readable geometry
+ok 63 - complete quote layout preserves source ranges, requested/resolved styles and legacy readable geometry
+  ---
+  duration_ms: 3.4696
+  ...
+# Subtest: shorthand and empty metadata preserve schema paths without an invented footer
+ok 64 - shorthand and empty metadata preserve schema paths without an invented footer
+  ---
+  duration_ms: 0.6414
+  ...
+# Subtest: body and footer share available space before shrinking text or changing the outer arrangement
+ok 65 - body and footer share available space before shrinking text or changing the outer arrangement
+  ---
+  duration_ms: 8.5801
+  ...
+# Subtest: long footer, body/footer collision and strict rejection remain explicit without source truncation
+ok 66 - long footer, body/footer collision and strict rejection remain explicit without source truncation
+  ---
+  duration_ms: 65.3086
+  ...
+# Subtest: tiny cells retain invalid available dimensions and never measure an invented fitting box
+ok 67 - tiny cells retain invalid available dimensions and never measure an invented fitting box
+  ---
+  duration_ms: 0.2977
+  ...
+# Subtest: explicit readability floors are respected after scaling, including above nominal footer size
+ok 68 - explicit readability floors are respected after scaling, including above nominal footer size
+  ---
+  duration_ms: 0.6054
+  ...
+# Subtest: invalid content, geometry, scales and policies fail before reporting a usable layout
+ok 69 - invalid content, geometry, scales and policies fail before reporting a usable layout
+  ---
+  duration_ms: 0.3262
+  ...
+# Subtest: rich table cells and headers use canonical runs while scalar values remain valid
+ok 70 - rich table cells and headers use canonical runs while scalar values remain valid
+  ---
+  duration_ms: 260.3048
+  ...
+# Subtest: table overflow uses run metrics and pagination preserves whole rich cells
+ok 71 - table overflow uses run metrics and pagination preserves whole rich cells
+  ---
+  duration_ms: 61.533
+  ...
+# Subtest: spec file manifest
+    # Subtest: spec-files subpath export matches the main index's specFileEntries
+    ok 1 - spec-files subpath export matches the main index's specFileEntries
+      ---
+      duration_ms: 0.6679
+      ...
+    # Subtest: specFilePaths includes the expected canonical paths
+    ok 2 - specFilePaths includes the expected canonical paths
+      ---
+      duration_ms: 0.2131
+      ...
+    # Subtest: openapi.yaml manifest entry has the expected kind, mediaType, and packagePath
+    ok 3 - openapi.yaml manifest entry has the expected kind, mediaType, and packagePath
+      ---
+      duration_ms: 0.1613
+      ...
+    1..3
+ok 72 - spec file manifest
+  ---
+  duration_ms: 2.0889
+  type: 'suite'
+  ...
+# Subtest: dist/spec assets
+    # Subtest: dist/spec ships openapi.yaml, the presentation schema, and the layouts catalog index
+    ok 1 - dist/spec ships openapi.yaml, the presentation schema, and the layouts catalog index
+      ---
+      duration_ms: 0.7221
+      ...
+    # Subtest: dist/spec/openapi.yaml starts with an 'openapi:' declaration
+    ok 2 - dist/spec/openapi.yaml starts with an 'openapi:' declaration
+      ---
+      duration_ms: 0.4507
+      ...
+    # Subtest: dist/spec/schemas/opf.schema.json $id matches the exported presentation schema's $id
+    ok 3 - dist/spec/schemas/opf.schema.json $id matches the exported presentation schema's $id
+      ---
+      duration_ms: 4.4763
+      ...
+    1..3
+ok 73 - dist/spec assets
+  ---
+  duration_ms: 5.9884
+  type: 'suite'
+  ...
+# Subtest: styled values coexist with scalar, rich, empty and merged header cells
+ok 74 - styled values coexist with scalar, rich, empty and merged header cells
+  ---
+  duration_ms: 240.1376
+  ...
+# Subtest: schema rejects ambiguous values and unsupported style properties
+ok 75 - schema rejects ambiguous values and unsupported style properties
+  ---
+  duration_ms: 1.2339
+  ...
+# Subtest: spans reject hidden content, missing covered positions, overlap and header crossing
+ok 76 - spans reject hidden content, missing covered positions, overlap and header crossing
+  ---
+  duration_ms: 4.8543
+  ...
+# Subtest: span rectangles preserve dense column indexes and editable value paths
+ok 77 - span rectangles preserve dense column indexes and editable value paths
+  ---
+  duration_ms: 3.6517
+  ...
+# Subtest: vertical alignment and padding use the full merged rectangle
+ok 78 - vertical alignment and padding use the full merged rectangle
+  ---
+  duration_ms: 1.5101
+  ...
+# Subtest: staggered vertical merges reserve enough space for every anchor
+ok 79 - staggered vertical merges reserve enough space for every anchor
+  ---
+  duration_ms: 8.5659
+  ...
+# Subtest: pagination preserves vertical merge groups, rich styles, headers and source ranges
+ok 80 - pagination preserves vertical merge groups, rich styles, headers and source ranges
+  ---
+  duration_ms: 21.5909
+  ...
+# Subtest: overlapping merge groups are atomic, and oversized groups fail without partial output
+ok 81 - overlapping merge groups are atomic, and oversized groups fail without partial output
+  ---
+  duration_ms: 1.3286
+  ...
+# Subtest: short table rows preserve baseline geometry and missing cells
+ok 82 - short table rows preserve baseline geometry and missing cells
+  ---
+  duration_ms: 3.4134
+  ...
+# Subtest: wrapped and rich multiline rows grow into available space
+ok 83 - wrapped and rich multiline rows grow into available space
+  ---
+  duration_ms: 4.547
+  ...
+# Subtest: constrained tables consume spare row height before reporting real overflow
+ok 84 - constrained tables consume spare row height before reporting real overflow
+  ---
+  duration_ms: 0.637
+  ...
+# Subtest: readability settings and mixed-font metrics govern row fitting
+ok 85 - readability settings and mixed-font metrics govern row fitting
+  ---
+  duration_ms: 1.2681
+  ...
+# Subtest: pagination retains complete multiline rows and repeated headers
+ok 86 - pagination retains complete multiline rows and repeated headers
+  ---
+  duration_ms: 274.5011
+  ...
+# Subtest: mixed-size table paragraphs reserve the native uniform line spacing
+ok 87 - mixed-size table paragraphs reserve the native uniform line spacing
+  ---
+  duration_ms: 0.3986
+  ...
+# Subtest: spare height in short rows is removed before any font shrinking
+ok 88 - spare height in short rows is removed before any font shrinking
+  ---
+  duration_ms: 0.4706
+  ...
+# Subtest: basic presentation validation entry points
+    # Subtest: well-formed presentation validates via validatePresentation
+    ok 1 - well-formed presentation validates via validatePresentation
+      ---
+      duration_ms: 225.6659
+      ...
+    # Subtest: well-formed presentation validates via validate(doc, 'presentation')
+    ok 2 - well-formed presentation validates via validate(doc, 'presentation')
+      ---
+      duration_ms: 0.3559
+      ...
+    # Subtest: well-formed presentation passes assertValid without throwing
+    ok 3 - well-formed presentation passes assertValid without throwing
+      ---
+      duration_ms: 0.349
+      ...
+    1..3
+ok 89 - basic presentation validation entry points
+  ---
+  duration_ms: 227.2407
+  type: 'suite'
+  ...
+# Subtest: presentation shapes that must validate
+    # Subtest: Root Payload
+    ok 1 - Root Payload
+      ---
+      duration_ms: 0.4738
+      ...
+    # Subtest: Array Metadata
+    ok 2 - Array Metadata
+      ---
+      duration_ms: 0.2614
+      ...
+    # Subtest: Slide Design
+    ok 3 - Slide Design
+      ---
+      duration_ms: 3.2701
+      ...
+    # Subtest: Inline Language
+    ok 4 - Inline Language
+      ---
+      duration_ms: 0.3711
+      ...
+    # Subtest: Inline Audience Purpose Tone
+    ok 5 - Inline Audience Purpose Tone
+      ---
+      duration_ms: 0.365
+      ...
+    # Subtest: Columns
+    ok 6 - Columns
+      ---
+      duration_ms: 3.2956
+      ...
+    # Subtest: Rows
+    ok 7 - Rows
+      ---
+      duration_ms: 0.9197
+      ...
+    # Subtest: Chart And Table Objects
+    ok 8 - Chart And Table Objects
+      ---
+      duration_ms: 1.2165
+      ...
+    # Subtest: Chart Data Source
+    ok 9 - Chart Data Source
+      ---
+      duration_ms: 0.6305
+      ...
+    # Subtest: Grid
+    ok 10 - Grid
+      ---
+      duration_ms: 0.3885
+      ...
+    # Subtest: Blocks
+    ok 11 - Blocks
+      ---
+      duration_ms: 0.6184
+      ...
+    # Subtest: Rich Text
+    ok 12 - Rich Text
+      ---
+      duration_ms: 0.1665
+      ...
+    # Subtest: Bullets
+    ok 13 - Bullets
+      ---
+      duration_ms: 0.8716
+      ...
+    # Subtest: Media Source String Forms
+    ok 14 - Media Source String Forms
+      ---
+      duration_ms: 1.9999
+      ...
+    # Subtest: Code Block
+    ok 15 - Code Block
+      ---
+      duration_ms: 0.3723
+      ...
+    # Subtest: Metric Quote Timeline
+    ok 16 - Metric Quote Timeline
+      ---
+      duration_ms: 1.1343
+      ...
+    # Subtest: Implicit Text List Blocks
+    ok 17 - Implicit Text List Blocks
+      ---
+      duration_ms: 0.2071
+      ...
+    # Subtest: Implicit Text Bullets List Blocks
+    ok 18 - Implicit Text Bullets List Blocks
+      ---
+      duration_ms: 0.1948
+      ...
+    # Subtest: Implicit Mixed Content Blocks
+    ok 19 - Implicit Mixed Content Blocks
+      ---
+      duration_ms: 0.3116
+      ...
+    # Subtest: Singular Audience Text
+    ok 20 - Singular Audience Text
+      ---
+      duration_ms: 0.18
+      ...
+    1..20
+ok 90 - presentation shapes that must validate
+  ---
+  duration_ms: 18.0769
+  type: 'suite'
+  ...
+# Subtest: presentation shapes that must be rejected
+    # Subtest: Overlap
+    ok 1 - Overlap
+      ---
+      duration_ms: 0.7842
+      ...
+    # Subtest: Bad Span
+    ok 2 - Bad Span
+      ---
+      duration_ms: 0.1771
+      ...
+    # Subtest: Root Title (root-level "title" field is rejected)
+    ok 3 - Root Title (root-level "title" field is rejected)
+      ---
+      duration_ms: 0.2266
+      ...
+    # Subtest: Unknown Slide Field
+    ok 4 - Unknown Slide Field
+      ---
+      duration_ms: 0.2623
+      ...
+    # Subtest: Mixed Root And Regions
+    ok 5 - Mixed Root And Regions
+      ---
+      duration_ms: 0.5272
+      ...
+    # Subtest: Missing List Items
+    ok 6 - Missing List Items
+      ---
+      duration_ms: 0.2934
+      ...
+    # Subtest: Missing Image Source
+    ok 7 - Missing Image Source
+      ---
+      duration_ms: 0.336
+      ...
+    # Subtest: Missing Video Source
+    ok 8 - Missing Video Source
+      ---
+      duration_ms: 0.1993
+      ...
+    # Subtest: Missing Chart Payload
+    ok 9 - Missing Chart Payload
+      ---
+      duration_ms: 0.1761
+      ...
+    # Subtest: Missing Chart Data
+    ok 10 - Missing Chart Data
+      ---
+      duration_ms: 0.1601
+      ...
+    # Subtest: Old Chart Data Shape Rejected
+    ok 11 - Old Chart Data Shape Rejected
+      ---
+      duration_ms: 0.1841
+      ...
+    # Subtest: Missing Table Payload
+    ok 12 - Missing Table Payload
+      ---
+      duration_ms: 0.1128
+      ...
+    # Subtest: Removed Loose Chart Fields
+    ok 13 - Removed Loose Chart Fields
+      ---
+      duration_ms: 0.1221
+      ...
+    # Subtest: Removed Loose Table Fields
+    ok 14 - Removed Loose Table Fields
+      ---
+      duration_ms: 0.161
+      ...
+    # Subtest: Removed Table Headers Field
+    ok 15 - Removed Table Headers Field
+      ---
+      duration_ms: 0.2069
+      ...
+    # Subtest: Removed Chart Data Asset Field
+    ok 16 - Removed Chart Data Asset Field
+      ---
+      duration_ms: 0.173
+      ...
+    # Subtest: Image Array Rejected
+    ok 17 - Image Array Rejected
+      ---
+      duration_ms: 0.1214
+      ...
+    # Subtest: Video Array Rejected
+    ok 18 - Video Array Rejected
+      ---
+      duration_ms: 0.1907
+      ...
+    # Subtest: Missing Asset Src
+    ok 19 - Missing Asset Src
+      ---
+      duration_ms: 0.1435
+      ...
+    # Subtest: Removed Asset Type Field
+    ok 20 - Removed Asset Type Field
+      ---
+      duration_ms: 0.1326
+      ...
+    # Subtest: Missing List Item Text
+    ok 21 - Missing List Item Text
+      ---
+      duration_ms: 0.1439
+      ...
+    # Subtest: Bullet Description Rejected
+    ok 22 - Bullet Description Rejected
+      ---
+      duration_ms: 0.1272
+      ...
+    # Subtest: Removed Runs Field
+    ok 23 - Removed Runs Field
+      ---
+      duration_ms: 0.1179
+      ...
+    # Subtest: Removed Src Field
+    ok 24 - Removed Src Field
+      ---
+      duration_ms: 0.1718
+      ...
+    # Subtest: Renamed Design Overrides
+    ok 25 - Renamed Design Overrides
+      ---
+      duration_ms: 0.1116
+      ...
+    # Subtest: Removed Loose Code Language Field
+    ok 26 - Removed Loose Code Language Field
+      ---
+      duration_ms: 0.1113
+      ...
+    # Subtest: Missing Code Source
+    ok 27 - Missing Code Source
+      ---
+      duration_ms: 0.1095
+      ...
+    # Subtest: Missing Metric Payload
+    ok 28 - Missing Metric Payload
+      ---
+      duration_ms: 0.1406
+      ...
+    # Subtest: Missing Metric Value
+    ok 29 - Missing Metric Value
+      ---
+      duration_ms: 0.2644
+      ...
+    # Subtest: Removed Loose Metric Fields
+    ok 30 - Removed Loose Metric Fields
+      ---
+      duration_ms: 0.1324
+      ...
+    # Subtest: Missing Quote Payload
+    ok 31 - Missing Quote Payload
+      ---
+      duration_ms: 0.0719
+      ...
+    # Subtest: Missing Quote Text
+    ok 32 - Missing Quote Text
+      ---
+      duration_ms: 0.0888
+      ...
+    # Subtest: Removed Loose Quote Fields
+    ok 33 - Removed Loose Quote Fields
+      ---
+      duration_ms: 0.1128
+      ...
+    # Subtest: Missing Timeline Payload
+    ok 34 - Missing Timeline Payload
+      ---
+      duration_ms: 0.0836
+      ...
+    # Subtest: Missing Timeline Event What
+    ok 35 - Missing Timeline Event What
+      ---
+      duration_ms: 0.1111
+      ...
+    # Subtest: Removed Loose Events Field
+    ok 36 - Removed Loose Events Field
+      ---
+      duration_ms: 0.1275
+      ...
+    # Subtest: Removed Placeholder Type
+    ok 37 - Removed Placeholder Type
+      ---
+      duration_ms: 0.0875
+      ...
+    # Subtest: Removed Prompt Field
+    ok 38 - Removed Prompt Field
+      ---
+      duration_ms: 0.1615
+      ...
+    # Subtest: Removed Expected Type Field
+    ok 39 - Removed Expected Type Field
+      ---
+      duration_ms: 0.1018
+      ...
+    # Subtest: Removed Group Type
+    ok 40 - Removed Group Type
+      ---
+      duration_ms: 0.2533
+      ...
+    # Subtest: Removed Children Field
+    ok 41 - Removed Children Field
+      ---
+      duration_ms: 0.3192
+      ...
+    # Subtest: Nested Blocks Field
+    ok 42 - Nested Blocks Field
+      ---
+      duration_ms: 0.3393
+      ...
+    # Subtest: Removed Shape Type
+    ok 43 - Removed Shape Type
+      ---
+      duration_ms: 0.1616
+      ...
+    # Subtest: Removed Shape Field
+    ok 44 - Removed Shape Field
+      ---
+      duration_ms: 0.1123
+      ...
+    # Subtest: Explicit Type Mixed Payload Kinds
+    ok 45 - Explicit Type Mixed Payload Kinds
+      ---
+      duration_ms: 0.1462
+      ...
+    # Subtest: Region Mixed Payload Kinds
+    ok 46 - Region Mixed Payload Kinds
+      ---
+      duration_ms: 0.284
+      ...
+    # Subtest: Incomplete Language
+    ok 47 - Incomplete Language
+      ---
+      duration_ms: 0.1644
+      ...
+    # Subtest: Incomplete Audience
+    ok 48 - Incomplete Audience
+      ---
+      duration_ms: 0.1618
+      ...
+    # Subtest: Incomplete Purpose
+    ok 49 - Incomplete Purpose
+      ---
+      duration_ms: 0.174
+      ...
+    # Subtest: Incomplete Tone
+    ok 50 - Incomplete Tone
+      ---
+      duration_ms: 0.1495
+      ...
+    # Subtest: Invalid UK English Tag
+    ok 51 - Invalid UK English Tag
+      ---
+      duration_ms: 0.1019
+      ...
+    # Subtest: Fractional Duration
+    ok 52 - Fractional Duration
+      ---
+      duration_ms: 0.0964
+      ...
+    1..52
+ok 91 - presentation shapes that must be rejected
+  ---
+  duration_ms: 10.6625
+  type: 'suite'
+  ...
+# Subtest: catalog-id warning behavior
+    # Subtest: unknown narrative id warns but does not invalidate
+    ok 1 - unknown narrative id warns but does not invalidate
+      ---
+      duration_ms: 1.1066
+      ...
+    # Subtest: known narrative id produces no warnings
+    ok 2 - known narrative id produces no warnings
+      ---
+      duration_ms: 0.1119
+      ...
+    # Subtest: object-form narrative with unknown id is a custom inline narrative, not a broken reference
+    ok 3 - object-form narrative with unknown id is a custom inline narrative, not a broken reference
+      ---
+      duration_ms: 0.1042
+      ...
+    # Subtest: unknown design references warn at their respective paths
+    ok 4 - unknown design references warn at their respective paths
+      ---
+      duration_ms: 1.3451
+      ...
+    # Subtest: unknown chart type id warns at the chart type path
+    ok 5 - unknown chart type id warns at the chart type path
+      ---
+      duration_ms: 0.2542
+      ...
+    # Subtest: inline catalog record legitimizes an id the bundled catalogs don't know
+    ok 6 - inline catalog record legitimizes an id the bundled catalogs don't know
+      ---
+      duration_ms: 0.4235
+      ...
+    # Subtest: custom catalog source legitimizes an id the bundled catalogs don't know
+    ok 7 - custom catalog source legitimizes an id the bundled catalogs don't know
+      ---
+      duration_ms: 0.3425
+      ...
+    1..7
+ok 92 - catalog-id warning behavior
+  ---
+  duration_ms: 3.8904
+  type: 'suite'
+  ...
+# Subtest: Windows package invocation preserves literal arguments and ignores the other manager
+ok 93 - Windows package invocation preserves literal arguments and ignores the other manager
+  ---
+  duration_ms: 225.0249
+  ...
+# Subtest: local package links build through real npm and can replace existing junctions
+ok 94 - local package links build through real npm and can replace existing junctions
+  ---
+  duration_ms: 1642.4407
+  ...
+# Subtest: local linking refuses a node_modules parent that resolves outside its checkout
+ok 95 - local linking refuses a node_modules parent that resolves outside its checkout
+  ---
+  duration_ms: 48.2544
+  ...
+1..95
+# tests 466
+# suites 20
+# pass 466
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2315.3639
+Composition: geometry, preservation, responsive grids, weights, regions, diagnostics and schemas passed.
+Nested groups: containment, source paths, region composition, inheritance, strict overflow and depth guards passed.
+Pagination: exact text/rich-run preservation, groups, lists, tables, regions, mappings, IDs, limits and fit passed.
+Data import passed 40 parsing, preservation, mapping, and error checks.
+Rich text passed 15 shared-layout checks.
+Lists passed: rich runs, descriptions, nesting, hanging indents, consistent shrink, source paths, Unicode, overflow and exact pagination.

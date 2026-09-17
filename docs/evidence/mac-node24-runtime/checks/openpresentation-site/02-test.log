@@ -1,0 +1,8 @@
+
+> openpresentation-site@0.1.0 test /Users/michael/Source/openpresentation-site
+> node scripts/test-review-regressions.mjs && node scripts/verify-releases.mjs
+
+Agent resources: 0 skills, 6 raw files, source a7619de01c96.
+Agent resources: 0 skills, 6 raw files, source 88c5d365caf8.
+Site review regressions passed: guide links, 623 unique sitemap URLs, missing/empty/legacy catalogs.
+Changelog package set and showcase file hashes agree.

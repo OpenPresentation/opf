@@ -1,0 +1,5 @@
+{
+  "officeActivated": false,
+  "error": "Used unsupported -Directory parameter instead of -EvidenceDirectory; default evidence path did not exist. Generation succeeded; no Office worker started.",
+  "stage": "parent-argument-resolution"
+}

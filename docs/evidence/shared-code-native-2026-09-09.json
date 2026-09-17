@@ -1,0 +1,907 @@
+{
+  "scope": "Controlled native code/tab feasibility and actual published-import observations, not integrated OPF export. Runtime paths are rebased to <registry-consumer> for portability; original report byte hashes are retained. Recreate using the committed probe scripts with the recorded package set and exact local reference fonts.",
+  "comparisonRuntimes": [
+    "20.20.2",
+    "24.20.0"
+  ],
+  "fileHashes": {
+    "generation.json": "d254d2885be2416fbf5a41ef05f570947083060001c5f3c5c215fe794cff8adc",
+    "native.json": "efbdc2e868ae7f10103c2df719b861fff3e2f36a8d4e04f868fa04b390dc4437",
+    "comparison.json": "1cd5807250ec7229b7235a98ed0d1ba82174cb683984fe82e5af7256e9b6d094"
+  },
+  "generation": {
+    "node": "v24.20.0",
+    "fontHashes": [
+      {
+        "file": "cour.ttf",
+        "weight": 400,
+        "sha256": "e4a66a0259718d0c8f4b6e14319b4803ced45afbddf3abba8b8c3e2006856206"
+      },
+      {
+        "file": "courbd.ttf",
+        "weight": 700,
+        "sha256": "11e629cef937cd08f942aa1bd994a71302dbe2819c72c6d4c183a623acbb421a"
+      }
+    ],
+    "packages": [
+      {
+        "name": "@openpresentation/opf-render",
+        "version": "0.6.0",
+        "integrity": "sha512-rYHS0qetT8FpDqkB8E9KMtwrh6NiB6UzxAeqaCwnMwrIDIEvejKC++Hw2Us4512ZIHRHdwuG42aq6QJodBJOPA=="
+      },
+      {
+        "name": "@openpresentation/opf-pptx",
+        "version": "0.6.0",
+        "integrity": "sha512-60giL1UxBU21AAPF+TtA3h8mMbzsGVU7WyPLt9GuQg4ZvPBpG6YRR6jw8hGjEsG6v/X7ohJXbh0LWM2zDHjQwA=="
+      },
+      {
+        "name": "@openpresentation/opf",
+        "version": "0.8.0",
+        "integrity": "sha512-1ubeINQsuD8pFNr542eFYPfzkhcECAcj/mM2pWNN+keFnVoWxePCsFTUtjuSSsvCtpm7QkgxBYRJYtEUmrlkkg=="
+      },
+      {
+        "name": "jszip",
+        "version": "3.10.1",
+        "integrity": "sha512-xXDvecyTpGLrqFrvkrUSoxxfJI5AH7U8zxxtVclpsUtMCq4JQ290LY8AW5c7Ggnr/Y/oK+bQMbqK2qmtk3pN4g=="
+      },
+      {
+        "name": "fontkit",
+        "version": "2.0.4",
+        "integrity": "sha512-syetQadaUEDNdxdugga9CpEYVaQIxOwk7GlwZWWZ19//qW4zE5bknOKeMBDYAASwnpaSHKJITRLMF9m1fp3s6g=="
+      }
+    ],
+    "sourceHashes": [
+      {
+        "file": "scripts/probe-code-native.mjs",
+        "sha256": "fff34cb12409b8947dd568d34072e8e07c11bbca13d018c673e787b8096fca91"
+      },
+      {
+        "file": "scripts/probe-code-native.ps1",
+        "sha256": "fdd3cb5a2c7dfb457dbb24377c3f25f20422f118a9effab62c356872464d48aa"
+      },
+      {
+        "file": "packages/javascript/src/composition.ts",
+        "sha256": "3bccb9310acfc24acf7a5b0d7550aad7bdebca90798c5e552a4655630ce05941"
+      }
+    ],
+    "runtimeHashes": [
+      {
+        "file": "<registry-consumer>/node_modules/@openpresentation/opf-render/dist/fonts.js",
+        "sha256": "db78254df6efadb5cb606169feefa1d19c153a249186bd8a38078f97d9502d22"
+      },
+      {
+        "file": "<registry-consumer>/node_modules/@openpresentation/opf-render/dist/font-compatibility.js",
+        "sha256": "8d689401d826bf604b1e2b0bedaed2f47d89263d17041b03fcd1f91b254b82ac"
+      },
+      {
+        "file": "<registry-consumer>/node_modules/@openpresentation/opf-pptx/dist/index.js",
+        "sha256": "c6e27193f0d091df550c1c0b3fafb4369058f46e3ca1a7db370474e43f765967"
+      },
+      {
+        "file": "<registry-consumer>/node_modules/@openpresentation/opf-pptx/dist/table-import.js",
+        "sha256": "b545fff80415d085f76c82b88ce0c72e1bcfd6947c621a0fbedcc08e5a9ea227"
+      },
+      {
+        "file": "<registry-consumer>/node_modules/@openpresentation/opf-pptx/dist/background-import.js",
+        "sha256": "888583bbbaae46a9a4d174f046ca276cfadee5c021a76e39ab49050a1bfefe38"
+      },
+      {
+        "file": "<registry-consumer>/node_modules/@openpresentation/opf-pptx/dist/background.js",
+        "sha256": "38f97d14394058737418e7517569d5babf99468574f299cc5df25ea1188dfe56"
+      },
+      {
+        "file": "<registry-consumer>/node_modules/@openpresentation/opf-pptx/dist/table-cell-import.js",
+        "sha256": "d268a14eecf54fe12bab31246680807cf1c90407b9807b49d32c3c71d93a643b"
+      },
+      {
+        "file": "<registry-consumer>/node_modules/@openpresentation/opf-pptx/dist/table-border-import.js",
+        "sha256": "10dc23b93881d691be62bb5f171678d61cdf77675a628f86f58a58ee962e7093"
+      },
+      {
+        "file": "<registry-consumer>/node_modules/@openpresentation/opf-pptx/dist/image-import.js",
+        "sha256": "898704890944137909c5d48c7d1b3b16e4f06403bd745240d0f6b21f7c8c444a"
+      },
+      {
+        "file": "<registry-consumer>/node_modules/@openpresentation/opf-pptx/dist/image-geometry.js",
+        "sha256": "c2d3d5e7b7f81cf421bcc94437093f17e47670f458a48cf9cf9aa73535a08346"
+      },
+      {
+        "file": "<registry-consumer>/node_modules/@openpresentation/opf-pptx/vendor/pptxgenjs/pptxgen.es.js",
+        "sha256": "05844c5625e2cda3b449eb967c2246dd57ca57341886a7c28eeebca263b29bd4"
+      },
+      {
+        "file": "<registry-consumer>/node_modules/@openpresentation/opf/dist/validator.js",
+        "sha256": "f793434f91863ba1d0f9b7e08c6f1cec01f8b9e1595d1e0dbce7a07f098da09e"
+      },
+      {
+        "file": "<registry-consumer>/node_modules/@openpresentation/opf/dist/chunk-HIY26FJV.js",
+        "sha256": "326769726cc0f2485e04e7414d2cb6adfb851c7b4ba38db597cde43bc26ce35d"
+      },
+      {
+        "file": "<registry-consumer>/node_modules/@openpresentation/opf/dist/chunk-NEQAPMS2.js",
+        "sha256": "4df6cb681b8bb87d6b09b025912e15c42f874172fd2510c729a92e61adbcb648"
+      },
+      {
+        "file": "<registry-consumer>/node_modules/@openpresentation/opf/dist/chunk-GQSK3T7X.js",
+        "sha256": "34f518c29c9757bc252b5c13eb5d7db8ada4b477496e6289d8149fb4fdc7cd45"
+      },
+      {
+        "file": "<registry-consumer>/node_modules/@openpresentation/opf/dist/chunk-TWMRZ43O.js",
+        "sha256": "0d35cec97ec7ddaa67fb9f096bc672c927eb68ed5fae5ac27d4dff70d68313f4"
+      },
+      {
+        "file": "packages/javascript/dist/composition.js",
+        "sha256": "6c77b9883ea592f6e67a6fac262e8c1dbd81968e6bd8b13d80cc7fe9f16f073e"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-JA5W5TVA.js",
+        "sha256": "9617ee45fd259a0b060831f019f19672e1f5d860a3728b5a126019d6f7cad51c"
+      }
+    ],
+    "pptxSha256": "f4564aeb43e98041dec936d5fec27c71b9d9aa2178b2d478b0043cdc4ed075f5",
+    "cases": [
+      {
+        "source": "a\tb",
+        "role": "body",
+        "fontSize": 18,
+        "style": {
+          "fontFamily": "Courier New",
+          "fontWeight": 400,
+          "italic": false,
+          "path": "code"
+        },
+        "line": {
+          "start": 0,
+          "end": 3,
+          "nextStart": 3,
+          "boundary": "end",
+          "width": 54.0087890625,
+          "segments": [
+            {
+              "kind": "text",
+              "start": 0,
+              "end": 1,
+              "x": 0,
+              "width": 10.8017578125
+            },
+            {
+              "kind": "tab",
+              "start": 1,
+              "end": 2,
+              "x": 10.8017578125,
+              "width": 32.4052734375
+            },
+            {
+              "kind": "text",
+              "start": 2,
+              "end": 3,
+              "x": 43.20703125,
+              "width": 10.8017578125
+            }
+          ]
+        },
+        "tabStops": [
+          {
+            "position": 0.4500732421875,
+            "alignment": "l"
+          }
+        ]
+      },
+      {
+        "source": "aaaa\tb",
+        "role": "body",
+        "fontSize": 18,
+        "style": {
+          "fontFamily": "Courier New",
+          "fontWeight": 400,
+          "italic": false,
+          "path": "code"
+        },
+        "line": {
+          "start": 0,
+          "end": 6,
+          "nextStart": 6,
+          "boundary": "end",
+          "width": 97.2158203125,
+          "segments": [
+            {
+              "kind": "text",
+              "start": 0,
+              "end": 4,
+              "x": 0,
+              "width": 43.20703125
+            },
+            {
+              "kind": "tab",
+              "start": 4,
+              "end": 5,
+              "x": 43.20703125,
+              "width": 43.20703125
+            },
+            {
+              "kind": "text",
+              "start": 5,
+              "end": 6,
+              "x": 86.4140625,
+              "width": 10.8017578125
+            }
+          ]
+        },
+        "tabStops": [
+          {
+            "position": 0.900146484375,
+            "alignment": "l"
+          }
+        ]
+      },
+      {
+        "source": "\tconst value = \"two  spaces\";",
+        "role": "body",
+        "fontSize": 18,
+        "style": {
+          "fontFamily": "Courier New",
+          "fontWeight": 400,
+          "italic": false,
+          "path": "code"
+        },
+        "line": {
+          "start": 0,
+          "end": 29,
+          "nextStart": 29,
+          "boundary": "end",
+          "width": 345.65625,
+          "segments": [
+            {
+              "kind": "tab",
+              "start": 0,
+              "end": 1,
+              "x": 0,
+              "width": 43.20703125
+            },
+            {
+              "kind": "text",
+              "start": 1,
+              "end": 29,
+              "x": 43.20703125,
+              "width": 302.44921875
+            }
+          ]
+        },
+        "tabStops": [
+          {
+            "position": 0.4500732421875,
+            "alignment": "l"
+          }
+        ]
+      },
+      {
+        "source": "  indentation  ",
+        "role": "body",
+        "fontSize": 18,
+        "style": {
+          "fontFamily": "Courier New",
+          "fontWeight": 400,
+          "italic": false,
+          "path": "code"
+        },
+        "line": {
+          "start": 0,
+          "end": 15,
+          "nextStart": 15,
+          "boundary": "end",
+          "width": 162.0263671875,
+          "segments": [
+            {
+              "kind": "text",
+              "start": 0,
+              "end": 15,
+              "x": 0,
+              "width": 162.0263671875
+            }
+          ]
+        },
+        "tabStops": []
+      },
+      {
+        "source": "a\t",
+        "role": "body",
+        "fontSize": 18,
+        "style": {
+          "fontFamily": "Courier New",
+          "fontWeight": 400,
+          "italic": false,
+          "path": "code"
+        },
+        "line": {
+          "start": 0,
+          "end": 2,
+          "nextStart": 2,
+          "boundary": "end",
+          "width": 43.20703125,
+          "segments": [
+            {
+              "kind": "text",
+              "start": 0,
+              "end": 1,
+              "x": 0,
+              "width": 10.8017578125
+            },
+            {
+              "kind": "tab",
+              "start": 1,
+              "end": 2,
+              "x": 10.8017578125,
+              "width": 32.4052734375
+            }
+          ]
+        },
+        "tabStops": [
+          {
+            "position": 0.4500732421875,
+            "alignment": "l"
+          }
+        ]
+      },
+      {
+        "source": "\t\t",
+        "role": "body",
+        "fontSize": 18,
+        "style": {
+          "fontFamily": "Courier New",
+          "fontWeight": 400,
+          "italic": false,
+          "path": "code"
+        },
+        "line": {
+          "start": 0,
+          "end": 2,
+          "nextStart": 2,
+          "boundary": "end",
+          "width": 86.4140625,
+          "segments": [
+            {
+              "kind": "tab",
+              "start": 0,
+              "end": 1,
+              "x": 0,
+              "width": 43.20703125
+            },
+            {
+              "kind": "tab",
+              "start": 1,
+              "end": 2,
+              "x": 43.20703125,
+              "width": 43.20703125
+            }
+          ]
+        },
+        "tabStops": [
+          {
+            "position": 0.4500732421875,
+            "alignment": "l"
+          },
+          {
+            "position": 0.900146484375,
+            "alignment": "l"
+          }
+        ]
+      },
+      {
+        "source": " \t \tkeep  ",
+        "role": "body",
+        "fontSize": 18,
+        "style": {
+          "fontFamily": "Courier New",
+          "fontWeight": 400,
+          "italic": false,
+          "path": "code"
+        },
+        "line": {
+          "start": 0,
+          "end": 10,
+          "nextStart": 10,
+          "boundary": "end",
+          "width": 151.224609375,
+          "segments": [
+            {
+              "kind": "text",
+              "start": 0,
+              "end": 1,
+              "x": 0,
+              "width": 10.8017578125
+            },
+            {
+              "kind": "tab",
+              "start": 1,
+              "end": 2,
+              "x": 10.8017578125,
+              "width": 32.4052734375
+            },
+            {
+              "kind": "text",
+              "start": 2,
+              "end": 3,
+              "x": 43.20703125,
+              "width": 10.8017578125
+            },
+            {
+              "kind": "tab",
+              "start": 3,
+              "end": 4,
+              "x": 54.0087890625,
+              "width": 32.4052734375
+            },
+            {
+              "kind": "text",
+              "start": 4,
+              "end": 10,
+              "x": 86.4140625,
+              "width": 64.810546875
+            }
+          ]
+        },
+        "tabStops": [
+          {
+            "position": 0.4500732421875,
+            "alignment": "l"
+          },
+          {
+            "position": 0.900146484375,
+            "alignment": "l"
+          }
+        ]
+      },
+      {
+        "source": "src\tCaseSensitive.ts",
+        "role": "filename",
+        "fontSize": 16,
+        "style": {
+          "fontFamily": "Courier New",
+          "fontWeight": 700,
+          "italic": false,
+          "path": "code.filename"
+        },
+        "line": {
+          "start": 0,
+          "end": 20,
+          "nextStart": 20,
+          "boundary": "end",
+          "width": 192.03125,
+          "segments": [
+            {
+              "kind": "text",
+              "start": 0,
+              "end": 3,
+              "x": 0,
+              "width": 28.8046875
+            },
+            {
+              "kind": "tab",
+              "start": 3,
+              "end": 4,
+              "x": 28.8046875,
+              "width": 9.6015625
+            },
+            {
+              "kind": "text",
+              "start": 4,
+              "end": 20,
+              "x": 38.40625,
+              "width": 153.625
+            }
+          ]
+        },
+        "tabStops": [
+          {
+            "position": 0.4000651041666667,
+            "alignment": "l"
+          }
+        ]
+      }
+    ],
+    "scope": "Controlled native tab-stop feasibility using the candidate core layoutCode API, local Courier New and the registry converter's vendored PptxGenJS. This is not integrated OPF export, substitute-font equivalence, glyph-bound equivalence or a raster comparison. No proprietary font bytes are copied or embedded."
+  },
+  "native": {
+    "powerPointVersion": "16.0.20326.20132",
+    "reopenedText": [
+      "a\tb",
+      "aaaa\tb",
+      "\tconst value = \"two  spaces\";",
+      "  indentation  ",
+      "a\t",
+      "\t\t",
+      " \t \tkeep  ",
+      "src\tCaseSensitive.ts"
+    ],
+    "powerPointExeSha256": "90fa931172c507b763ba92a82b19d5bc70816e008c5bb87577e1838e8a92e9f9",
+    "displayVersion": "25H2",
+    "savedSha256": "ac9f5f6b41476f9e6aa8c10d39db63ab9b7f8ff249b805f50680e42cf80bcd67",
+    "editedText": [
+      "a\tb edited",
+      "aaaa\tb edited",
+      "\tconst value = \"two  spaces\"; edited",
+      "  indentation   edited",
+      "a\t edited",
+      "\t\t edited",
+      " \t \tkeep   edited",
+      "src\tCaseSensitive.ts edited"
+    ],
+    "windowsBuild": "26200.9445",
+    "generationSha256": "d254d2885be2416fbf5a41ef05f570947083060001c5f3c5c215fe794cff8adc",
+    "editedSha256": "968f4fc1c0d92ce182fe74ff36fb78ce1a8ef8aa14aa8dd767fb3894cc90ad7b",
+    "reports": [
+      {
+        "segments": [
+          {
+            "width": 8.13,
+            "text": "a",
+            "left": 0,
+            "expectedX": 0,
+            "expectedWidth": 8.101318359375,
+            "kind": "text"
+          },
+          {
+            "width": 24.28,
+            "text": "\t",
+            "left": 8.125038146972656,
+            "expectedX": 8.101318359375,
+            "expectedWidth": 24.303955078125,
+            "kind": "tab"
+          },
+          {
+            "width": 8.13,
+            "text": "b",
+            "left": 32.400001525878906,
+            "expectedX": 32.4052734375,
+            "expectedWidth": 8.101318359375,
+            "kind": "text"
+          }
+        ],
+        "text": "a\tb",
+        "slide": 1,
+        "source": "a\tb",
+        "fontSize": 13.5,
+        "font": "Courier New"
+      },
+      {
+        "segments": [
+          {
+            "width": 32.50504,
+            "text": "aaaa",
+            "left": 0,
+            "expectedX": 0,
+            "expectedWidth": 32.4052734375,
+            "kind": "text"
+          },
+          {
+            "width": 32.30504,
+            "text": "\t",
+            "left": 32.5,
+            "expectedX": 32.4052734375,
+            "expectedWidth": 32.4052734375,
+            "kind": "tab"
+          },
+          {
+            "width": 8.13,
+            "text": "b",
+            "left": 64.80000305175781,
+            "expectedX": 64.810546875,
+            "expectedWidth": 8.101318359375,
+            "kind": "text"
+          }
+        ],
+        "text": "aaaa\tb",
+        "slide": 2,
+        "source": "aaaa\tb",
+        "fontSize": 13.5,
+        "font": "Courier New"
+      },
+      {
+        "segments": [
+          {
+            "width": 32.40504,
+            "text": "\t",
+            "left": 0,
+            "expectedX": 0,
+            "expectedWidth": 32.4052734375,
+            "kind": "tab"
+          },
+          {
+            "width": 227.50504,
+            "text": "const value = \"two  spaces\";",
+            "left": 32.400001525878906,
+            "expectedX": 32.4052734375,
+            "expectedWidth": 226.8369140625,
+            "kind": "text"
+          }
+        ],
+        "text": "\tconst value = \"two  spaces\";",
+        "slide": 3,
+        "source": "\tconst value = \"two  spaces\";",
+        "fontSize": 13.5,
+        "font": "Courier New"
+      },
+      {
+        "segments": [
+          {
+            "width": 121.88,
+            "text": "  indentation  ",
+            "left": 0,
+            "expectedX": 0,
+            "expectedWidth": 121.519775390625,
+            "kind": "text"
+          }
+        ],
+        "text": "  indentation  ",
+        "slide": 4,
+        "source": "  indentation  ",
+        "fontSize": 13.5,
+        "font": "Courier New"
+      },
+      {
+        "segments": [
+          {
+            "width": 8.13,
+            "text": "a",
+            "left": 0,
+            "expectedX": 0,
+            "expectedWidth": 8.101318359375,
+            "kind": "text"
+          },
+          {
+            "width": 24.28,
+            "text": "\t",
+            "left": 8.125038146972656,
+            "expectedX": 8.101318359375,
+            "expectedWidth": 24.303955078125,
+            "kind": "tab"
+          }
+        ],
+        "text": "a\t",
+        "slide": 5,
+        "source": "a\t",
+        "fontSize": 13.5,
+        "font": "Courier New"
+      },
+      {
+        "segments": [
+          {
+            "width": 32.40504,
+            "text": "\t",
+            "left": 0,
+            "expectedX": 0,
+            "expectedWidth": 32.4052734375,
+            "kind": "tab"
+          },
+          {
+            "width": 32.40504,
+            "text": "\t",
+            "left": 32.400001525878906,
+            "expectedX": 32.4052734375,
+            "expectedWidth": 32.4052734375,
+            "kind": "tab"
+          }
+        ],
+        "text": "\t\t",
+        "slide": 6,
+        "source": "\t\t",
+        "fontSize": 13.5,
+        "font": "Courier New"
+      },
+      {
+        "segments": [
+          {
+            "width": 8.13,
+            "text": " ",
+            "left": 0,
+            "expectedX": 0,
+            "expectedWidth": 8.101318359375,
+            "kind": "text"
+          },
+          {
+            "width": 24.28,
+            "text": "\t",
+            "left": 8.125038146972656,
+            "expectedX": 8.101318359375,
+            "expectedWidth": 24.303955078125,
+            "kind": "tab"
+          },
+          {
+            "width": 8.13,
+            "text": " ",
+            "left": 32.400001525878906,
+            "expectedX": 32.4052734375,
+            "expectedWidth": 8.101318359375,
+            "kind": "text"
+          },
+          {
+            "width": 24.28,
+            "text": "\t",
+            "left": 40.52503967285156,
+            "expectedX": 40.506591796875,
+            "expectedWidth": 24.303955078125,
+            "kind": "tab"
+          },
+          {
+            "width": 48.75504,
+            "text": "keep  ",
+            "left": 64.80000305175781,
+            "expectedX": 64.810546875,
+            "expectedWidth": 48.60791015625,
+            "kind": "text"
+          }
+        ],
+        "text": " \t \tkeep  ",
+        "slide": 7,
+        "source": " \t \tkeep  ",
+        "fontSize": 13.5,
+        "font": "Courier New"
+      },
+      {
+        "segments": [
+          {
+            "width": 21.75504,
+            "text": "src",
+            "left": 0,
+            "expectedX": 0,
+            "expectedWidth": 21.603515625,
+            "kind": "text"
+          },
+          {
+            "width": 7.0550394,
+            "text": "\t",
+            "left": 21.75,
+            "expectedX": 21.603515625,
+            "expectedWidth": 7.201171875,
+            "kind": "tab"
+          },
+          {
+            "width": 116.00504,
+            "text": "CaseSensitive.ts",
+            "left": 28.800003051757812,
+            "expectedX": 28.8046875,
+            "expectedWidth": 115.21875,
+            "kind": "text"
+          }
+        ],
+        "text": "src\tCaseSensitive.ts",
+        "slide": 8,
+        "source": "src\tCaseSensitive.ts",
+        "fontSize": 12,
+        "font": "Courier New"
+      }
+    ]
+  },
+  "comparison": {
+    "generationSha256": "d254d2885be2416fbf5a41ef05f570947083060001c5f3c5c215fe794cff8adc",
+    "nativeSha256": "efbdc2e868ae7f10103c2df719b861fff3e2f36a8d4e04f868fa04b390dc4437",
+    "nativeTextPreserved": true,
+    "editsReopened": 8,
+    "maximumTabTargetErrorPoints": 0.0105438232421875,
+    "tabTargetTolerancePoints": 0.02,
+    "maximumTextWidthDifferencePoints": 0.7862899999999939,
+    "imports": [
+      {
+        "file": "tabs.pptx",
+        "sha256": "f4564aeb43e98041dec936d5fec27c71b9d9aa2178b2d478b0043cdc4ed075f5",
+        "schemaValid": true,
+        "exactText": false,
+        "observed": [
+          {
+            "expected": "a\tb",
+            "actual": "a\tb"
+          },
+          {
+            "expected": "aaaa\tb",
+            "actual": "aaaa\tb"
+          },
+          {
+            "expected": "\tconst value = \"two  spaces\";",
+            "actual": "const value = \"two  spaces\";"
+          },
+          {
+            "expected": "  indentation  ",
+            "actual": "indentation"
+          },
+          {
+            "expected": "a\t",
+            "actual": "a"
+          },
+          {
+            "expected": "\t\t",
+            "actual": "PowerPoint shape: code-probe"
+          },
+          {
+            "expected": " \t \tkeep  ",
+            "actual": "keep"
+          },
+          {
+            "expected": "src\tCaseSensitive.ts",
+            "actual": "src\tCaseSensitive.ts"
+          }
+        ]
+      },
+      {
+        "file": "tabs-saved.pptx",
+        "sha256": "ac9f5f6b41476f9e6aa8c10d39db63ab9b7f8ff249b805f50680e42cf80bcd67",
+        "schemaValid": true,
+        "exactText": false,
+        "observed": [
+          {
+            "expected": "a\tb",
+            "actual": "a\tb"
+          },
+          {
+            "expected": "aaaa\tb",
+            "actual": "aaaa\tb"
+          },
+          {
+            "expected": "\tconst value = \"two  spaces\";",
+            "actual": "const value = \"two  spaces\";"
+          },
+          {
+            "expected": "  indentation  ",
+            "actual": "indentation"
+          },
+          {
+            "expected": "a\t",
+            "actual": "a"
+          },
+          {
+            "expected": "\t\t",
+            "actual": "PowerPoint shape: code-probe"
+          },
+          {
+            "expected": " \t \tkeep  ",
+            "actual": "keep"
+          },
+          {
+            "expected": "src\tCaseSensitive.ts",
+            "actual": "src\tCaseSensitive.ts"
+          }
+        ]
+      },
+      {
+        "file": "tabs-edited.pptx",
+        "sha256": "968f4fc1c0d92ce182fe74ff36fb78ce1a8ef8aa14aa8dd767fb3894cc90ad7b",
+        "schemaValid": true,
+        "exactText": false,
+        "observed": [
+          {
+            "expected": "a\tb edited",
+            "actual": "a\tb edited"
+          },
+          {
+            "expected": "aaaa\tb edited",
+            "actual": "aaaa\tb edited"
+          },
+          {
+            "expected": "\tconst value = \"two  spaces\"; edited",
+            "actual": "const value = \"two  spaces\"; edited"
+          },
+          {
+            "expected": "  indentation   edited",
+            "actual": "indentation   edited"
+          },
+          {
+            "expected": "a\t edited",
+            "actual": "a\t edited"
+          },
+          {
+            "expected": "\t\t edited",
+            "actual": "edited"
+          },
+          {
+            "expected": " \t \tkeep   edited",
+            "actual": "keep   edited"
+          },
+          {
+            "expected": "src\tCaseSensitive.ts edited",
+            "actual": "src\tCaseSensitive.ts edited"
+          }
+        ]
+      }
+    ],
+    "scope": "Native text/whitespace and edits survive save/reopen, and text after tabs begins at accepted stops within the stated tolerance. Text-width differences and published reimport loss are observations, not success gates or pixel-equivalence claims. OPF code semantics, multi-line source reconstruction and integrated preview/export remain unverified."
+  }
+}

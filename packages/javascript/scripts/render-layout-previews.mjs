@@ -57,8 +57,8 @@ await fs.mkdir(outDir, { recursive: true });
 const records = [];
 for (const slug of slugs) {
   const element = layoutPreviewElements[slug];
-  const html = ReactDOMServer.renderToStaticMarkup(element);
-  await fs.writeFile(path.join(outDir, `${slug}.html`), `${html}\n`, "utf8");
+  const html = `${ReactDOMServer.renderToStaticMarkup(element)}\n`;
+  await fs.writeFile(path.join(outDir, `${slug}.html`), html, "utf8");
   records.push({
     id: slug,
     file: `${slug}.html`,
@@ -71,7 +71,7 @@ const index = {
   $schema: "https://openpresentation.org/schema/opf-layout-preview-index/v1",
   version: "1",
   description:
-    "Catalog of static HTML previews for slide layouts. Each preview is a self-contained Tailwind-styled snippet sized to fill a 16:9 thumbnail. Consumers should provide the standard pptx.gallery CSS variables (--background, --foreground, --card, --muted, --muted-foreground, --accent, --border) on a parent element.",
+    "Vendored gallery of static HTML previews for slide archetypes (e.g. 'swot-analysis', 'agenda', 'org-chart') — a subject-matter taxonomy for picker thumbnails, distinct from and non-overlapping with the structural layout catalog at spec/catalogs/layouts/ (e.g. 'title', 'chart-2x'); preview ids here do not correspond to layout catalog ids. Each preview is a self-contained Tailwind-styled snippet sized to fill a 16:9 thumbnail. Consumers should provide the standard pptx.gallery CSS variables (--background, --foreground, --card, --muted, --muted-foreground, --accent, --border) on a parent element. Generated from the sibling pptx-gallery repo via packages/javascript/scripts/render-layout-previews.mjs; treat the HTML files here as committed, read-only build output.",
   records,
 };
 await fs.writeFile(indexPath, JSON.stringify(index, null, 2) + "\n", "utf8");

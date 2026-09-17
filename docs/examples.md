@@ -1,14 +1,13 @@
 # OPF Examples Guide
 
-The `examples/` directory has three layers:
+The `examples/` directory has two shipped layers, plus a docs fixture kept outside the catalog:
 
 - `examples/technical/` contains compact fixtures that isolate one or two schema behaviors.
 - `examples/gallery/` contains scenario-oriented decks that show OPF working across industries, functions, education, government, international, presentation-type, and design/media use cases.
+- The representative deck for [the published-package quickstart](quickstart.md) lives at [`docs/quickstart/developer-quickstart.opf.json`](quickstart/developer-quickstart.opf.json) so `@openpresentation/opf/examples` and the renderer golden corpus stay at 126 decks.
 - The examples root is kept as an organizing directory rather than a home for standalone OPF files.
 
 ## Technical Fixtures
-
-Start with [`examples/technical/full-feature-tour.opf.json`](../examples/technical/full-feature-tour.opf.json), one deck that touches every major schema surface — useful as a copy-paste source and as a single fixture for renderer smoke tests.
 
 Use `examples/technical/` when you want a small file that exercises a specific schema surface:
 

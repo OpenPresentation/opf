@@ -46,7 +46,7 @@ export const layoutPreviewSlugs: readonly string[] = Object.freeze(
 
 /** Whether an HTML preview exists for the given slug. */
 export function hasLayoutPreview(slug: string): boolean {
-  return Object.prototype.hasOwnProperty.call(layoutPreviewsRaw, slug);
+  return Object.hasOwn(layoutPreviewsRaw, slug);
 }
 
 /**

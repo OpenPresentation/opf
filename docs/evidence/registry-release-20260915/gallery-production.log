@@ -1,0 +1,21 @@
+
+> pptx-gallery@0.1.0 verify:deployed-editor /private/tmp/opf-publish-ready-20260915.kFIiNe/pptx-gallery
+> node scripts/verify-published-editor.mjs --registry --deployed
+
+Published editor verified: @openpresentation/opf@0.10.0, @openpresentation/opf-render@0.8.0, @openpresentation/opf-editor@0.7.0, @openpresentation/opf-pptx@0.8.0, @openpresentation/cli@0.8.0; 8 exact file hashes.
+
+> pptx-gallery@0.1.0 test:e2e /private/tmp/opf-publish-ready-20260915.kFIiNe/pptx-gallery
+> playwright test
+
+
+Running 5 tests using 1 worker
+
+(node:57559) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/e2e/editor.spec.ts:22:79 › shared code source, selection, pagination and export/reimport remain editable offline at 1280x720 (9.0s)
+  ✓  2 tests/e2e/editor.spec.ts:22:79 › shared code source, selection, pagination and export/reimport remain editable offline at 540x960 (8.1s)
+  ✓  3 tests/e2e/editor.spec.ts:54:5 › deployed editor bundle matches the published package manifest (547ms)
+  ✓  4 tests/e2e/editor.spec.ts:64:5 › author, preview, edit and undo, export OPF and editable PowerPoint, then reimport offline (8.5s)
+  ✓  5 tests/e2e/editor.spec.ts:148:5 › shared quote editing and readable one-page pagination survive export, reimport and undo offline (8.3s)
+
+  5 passed (35.1s)

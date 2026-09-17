@@ -1,0 +1,3 @@
+# Keep generated package text and indexed preview byte counts reproducible on
+# Windows as well as Unix. Binary files retain their original bytes.
+* text=auto eol=lf

@@ -1,0 +1,182 @@
+[
+  {
+    "count": 2,
+    "width": 1280,
+    "height": 720,
+    "minimum": 16,
+    "coreDiagnostics": [],
+    "render": "passed"
+  },
+  {
+    "count": 2,
+    "width": 1280,
+    "height": 720,
+    "minimum": 32,
+    "coreDiagnostics": [],
+    "render": "passed"
+  },
+  {
+    "count": 2,
+    "width": 720,
+    "height": 1280,
+    "minimum": 16,
+    "coreDiagnostics": [],
+    "render": "passed"
+  },
+  {
+    "count": 2,
+    "width": 720,
+    "height": 1280,
+    "minimum": 32,
+    "coreDiagnostics": [],
+    "render": "passed"
+  },
+  {
+    "count": 4,
+    "width": 1280,
+    "height": 720,
+    "minimum": 16,
+    "coreDiagnostics": [],
+    "render": "passed"
+  },
+  {
+    "count": 4,
+    "width": 1280,
+    "height": 720,
+    "minimum": 32,
+    "coreDiagnostics": [],
+    "render": "passed"
+  },
+  {
+    "count": 4,
+    "width": 720,
+    "height": 1280,
+    "minimum": 16,
+    "coreDiagnostics": [],
+    "render": "passed"
+  },
+  {
+    "count": 4,
+    "width": 720,
+    "height": 1280,
+    "minimum": 32,
+    "coreDiagnostics": [],
+    "render": "passed"
+  },
+  {
+    "count": 8,
+    "width": 1280,
+    "height": 720,
+    "minimum": 16,
+    "coreDiagnostics": [],
+    "render": "passed"
+  },
+  {
+    "count": 8,
+    "width": 1280,
+    "height": 720,
+    "minimum": 32,
+    "coreDiagnostics": [],
+    "renderError": {
+      "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide.",
+      "code": "layout-overflow",
+      "details": {
+        "path": "slides.0.timeline.events.0",
+        "issues": [
+          {
+            "code": "text-overflow",
+            "path": "slides.0.timeline.events.0",
+            "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "count": 8,
+    "width": 720,
+    "height": 1280,
+    "minimum": 16,
+    "coreDiagnostics": [],
+    "render": "passed"
+  },
+  {
+    "count": 8,
+    "width": 720,
+    "height": 1280,
+    "minimum": 32,
+    "coreDiagnostics": [],
+    "renderError": {
+      "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide.",
+      "code": "layout-overflow",
+      "details": {
+        "path": "slides.0.timeline.events.0",
+        "issues": [
+          {
+            "code": "text-overflow",
+            "path": "slides.0.timeline.events.0",
+            "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "count": 12,
+    "width": 1280,
+    "height": 720,
+    "minimum": 16,
+    "coreDiagnostics": [],
+    "render": "passed"
+  },
+  {
+    "count": 12,
+    "width": 1280,
+    "height": 720,
+    "minimum": 32,
+    "coreDiagnostics": [],
+    "renderError": {
+      "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide.",
+      "code": "layout-overflow",
+      "details": {
+        "path": "slides.0.timeline.events.0",
+        "issues": [
+          {
+            "code": "text-overflow",
+            "path": "slides.0.timeline.events.0",
+            "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "count": 12,
+    "width": 720,
+    "height": 1280,
+    "minimum": 16,
+    "coreDiagnostics": [],
+    "render": "passed"
+  },
+  {
+    "count": 12,
+    "width": 720,
+    "height": 1280,
+    "minimum": 32,
+    "coreDiagnostics": [],
+    "renderError": {
+      "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide.",
+      "code": "layout-overflow",
+      "details": {
+        "path": "slides.0.timeline.events.0",
+        "issues": [
+          {
+            "code": "text-overflow",
+            "path": "slides.0.timeline.events.0",
+            "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+          }
+        ]
+      }
+    }
+  }
+]

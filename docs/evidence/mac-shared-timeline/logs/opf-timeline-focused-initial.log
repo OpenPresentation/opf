@@ -1,0 +1,54 @@
+✖ timeline parts keep exact array/object source paths, whitespace, selected floors and outlined ink (5.5265ms)
+✔ timeline tries a vertical arrangement before accepting unreadable narrow labels (0.386208ms)
+✔ timeline rejects irreducible fields and invalid inputs with bounded attempts and source diagnostics (3.414333ms)
+✖ composition measures nested timelines and pagination preserves atomic event order and metadata (70.548459ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 2
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 133.234084
+
+✖ failing tests:
+
+test at packages/javascript/test/timeline-composition.test.mjs:13:1
+✖ timeline parts keep exact array/object source paths, whitespace, selected floors and outlined ink (5.5265ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(inside({x:line.x+line.outline.x,y:line.baseline+line.outline.y,width:line.outline.width,height:line.outline.height},part.box))
+  
+      at TestContext.<anonymous> (file:///Users/michael/.codex/worktrees/c193/opf/packages/javascript/test/timeline-composition.test.mjs:24:78)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at packages/javascript/test/timeline-composition.test.mjs:49:1
+✖ composition measures nested timelines and pagination preserves atomic event order and metadata (70.548459ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  8 !== 32
+  
+      at TestContext.<anonymous> (file:///Users/michael/.codex/worktrees/c193/opf/packages/javascript/test/timeline-composition.test.mjs:61:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 8,
+    expected: 32,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

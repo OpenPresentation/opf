@@ -1,0 +1,106 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Dynamic composition",
+  "slides": [
+    {
+      "title": "Give the main idea more room",
+      "subtitle": "Weighted tracks preserve intent as the content changes.",
+      "composition": {
+        "mode": "row",
+        "weights": [
+          2,
+          1
+        ],
+        "overflow": "error"
+      },
+      "blocks": [
+        {
+          "text": "A shared layout contract gives the editor, preview, and PowerPoint export the same content geometry. The narrative stays in JSON and remains easy to revise."
+        },
+        {
+          "text": "Change the words. Keep the structure. Review the result."
+        }
+      ]
+    },
+    {
+      "title": "Let a growing set of ideas reflow",
+      "composition": {
+        "mode": "auto",
+        "columns": 3
+      },
+      "blocks": [
+        {
+          "text": "Describe the decision."
+        },
+        {
+          "text": "Support it with evidence and context that the audience can understand."
+        },
+        {
+          "text": "Explain the tradeoffs."
+        },
+        {
+          "text": "Name the next step and the person responsible for it."
+        },
+        {
+          "text": "Measure the result."
+        }
+      ]
+    },
+    {
+      "title": "Promoted rows have distinct positions",
+      "top": {
+        "text": "First: state the situation."
+      },
+      "middle": {
+        "text": "Then: explain the change."
+      },
+      "bottom": {
+        "text": "Finally: make the recommendation."
+      }
+    },
+    {
+      "title": "Arrange each idea and its supporting details",
+      "composition": {
+        "mode": "row",
+        "weights": [
+          2,
+          1
+        ],
+        "overflow": "error"
+      },
+      "blocks": [
+        {
+          "composition": {
+            "mode": "column",
+            "weights": [
+              1,
+              2
+            ],
+            "padding": 0.02
+          },
+          "blocks": [
+            {
+              "text": "Keep the recommendation and its evidence together."
+            },
+            {
+              "composition": {
+                "mode": "row"
+              },
+              "blocks": [
+                {
+                  "text": "Evidence: share the same geometry across previews and exports."
+                },
+                {
+                  "text": "Action: revise one group without rearranging the whole slide."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "text": "A separate column holds the supporting context."
+        }
+      ]
+    }
+  ]
+}

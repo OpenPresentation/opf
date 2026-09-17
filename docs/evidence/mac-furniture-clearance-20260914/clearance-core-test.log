@@ -1,0 +1,16 @@
+✔ furniture preserves inherited/local sources, whitespace and generated metadata at both floors (4.905709ms)
+✔ furniture clearance scales with the canvas and respects explicit host padding (0.34675ms)
+✔ whole local overrides and explicit false preserve furniture-free body geometry (0.161666ms)
+✔ images and every authored/generated field coexist without deleting text (0.088917ms)
+✔ missing generated values diagnose controlling paths and strict composition/pagination reject them (59.88025ms)
+✔ irreducible furniture and provided ink cannot be hidden by body pagination (2.171125ms)
+✔ pagination repeats furniture and retains exact body source and mappings (34.856666ms)
+✔ a continuation whose wider number cannot fit fails atomically (13.156917ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 172.480916

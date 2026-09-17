@@ -1,0 +1,429 @@
+{
+  "node": "v24.21.0",
+  "browser": "153.0.8010.12",
+  "fontSha256": "8d75ecd19b3bcc968af9c1bd22e44fdcbf2839a08ace0906e17360bc869f4a79",
+  "reviewerSha256": "ec3d785cd834f85cdb98eb0369a073ad8761fc382d6479698834afec7ae5eaa4",
+  "observed": [
+    {
+      "source": "Á",
+      "text": "Á",
+      "normalization": "source",
+      "fontkitAt32": 20.921875,
+      "glyphs": [
+        {
+          "id": 2,
+          "name": "A"
+        },
+        {
+          "id": 1300,
+          "name": "uni0301.c"
+        }
+      ],
+      "positions": [
+        {
+          "xAdvance": 1339,
+          "yAdvance": 0,
+          "xOffset": 0,
+          "yOffset": 0
+        },
+        {
+          "xAdvance": 0,
+          "yAdvance": 0,
+          "xOffset": -776,
+          "yOffset": 0
+        }
+      ],
+      "browserAt32": 20.921875,
+      "domText": "Á"
+    },
+    {
+      "source": "Á",
+      "text": "Á",
+      "normalization": "NFC",
+      "fontkitAt32": 20.921875,
+      "glyphs": [
+        {
+          "id": 55,
+          "name": "Aacute"
+        }
+      ],
+      "positions": [
+        {
+          "xAdvance": 1339,
+          "yAdvance": 0,
+          "xOffset": 0,
+          "yOffset": 0
+        }
+      ],
+      "browserAt32": 20.921875,
+      "domText": "Á"
+    },
+    {
+      "source": "ä",
+      "text": "ä",
+      "normalization": "source",
+      "fontkitAt32": 18.421875,
+      "glyphs": [
+        {
+          "id": 28,
+          "name": "a"
+        },
+        {
+          "id": 1314,
+          "name": "uni0308"
+        }
+      ],
+      "positions": [
+        {
+          "xAdvance": 1179,
+          "yAdvance": 0,
+          "xOffset": 0,
+          "yOffset": 0
+        },
+        {
+          "xAdvance": 0,
+          "yAdvance": 0,
+          "xOffset": -488,
+          "yOffset": 0
+        }
+      ],
+      "browserAt32": 18.421875,
+      "domText": "ä"
+    },
+    {
+      "source": "ä",
+      "text": "ä",
+      "normalization": "NFC",
+      "fontkitAt32": 18.421875,
+      "glyphs": [
+        {
+          "id": 234,
+          "name": "adieresis"
+        }
+      ],
+      "positions": [
+        {
+          "xAdvance": 1179,
+          "yAdvance": 0,
+          "xOffset": 0,
+          "yOffset": 0
+        }
+      ],
+      "browserAt32": 18.421875,
+      "domText": "ä"
+    },
+    {
+      "source": "ố",
+      "text": "ố",
+      "normalization": "source",
+      "fontkitAt32": 18.6875,
+      "glyphs": [
+        {
+          "id": 42,
+          "name": "o"
+        },
+        {
+          "id": 1340,
+          "name": "uni03020301"
+        }
+      ],
+      "positions": [
+        {
+          "xAdvance": 1196,
+          "yAdvance": 0,
+          "xOffset": 0,
+          "yOffset": 0
+        },
+        {
+          "xAdvance": 0,
+          "yAdvance": 0,
+          "xOffset": -716,
+          "yOffset": 0
+        }
+      ],
+      "browserAt32": 19.109375,
+      "domText": "ố"
+    },
+    {
+      "source": "ố",
+      "text": "ố",
+      "normalization": "NFC",
+      "fontkitAt32": 19.109375,
+      "glyphs": [
+        {
+          "id": 329,
+          "name": "uni1ED1"
+        }
+      ],
+      "positions": [
+        {
+          "xAdvance": 1223,
+          "yAdvance": 0,
+          "xOffset": 0,
+          "yOffset": 0
+        }
+      ],
+      "browserAt32": 19.109375,
+      "domText": "ố"
+    },
+    {
+      "source": "ñ",
+      "text": "ñ",
+      "normalization": "source",
+      "fontkitAt32": 19.203125,
+      "glyphs": [
+        {
+          "id": 41,
+          "name": "n"
+        },
+        {
+          "id": 1304,
+          "name": "uni0303"
+        }
+      ],
+      "positions": [
+        {
+          "xAdvance": 1229,
+          "yAdvance": 0,
+          "xOffset": 0,
+          "yOffset": 0
+        },
+        {
+          "xAdvance": 0,
+          "yAdvance": 0,
+          "xOffset": -438,
+          "yOffset": 0
+        }
+      ],
+      "browserAt32": 19.203125,
+      "domText": "ñ"
+    },
+    {
+      "source": "ñ",
+      "text": "ñ",
+      "normalization": "NFC",
+      "fontkitAt32": 19.203125,
+      "glyphs": [
+        {
+          "id": 314,
+          "name": "ntilde"
+        }
+      ],
+      "positions": [
+        {
+          "xAdvance": 1229,
+          "yAdvance": 0,
+          "xOffset": 0,
+          "yOffset": 0
+        }
+      ],
+      "browserAt32": 19.203125,
+      "domText": "ñ"
+    },
+    {
+      "source": "Á ä ố ñ",
+      "text": "Á ä ố ñ",
+      "normalization": "source",
+      "fontkitAt32": 96.734375,
+      "glyphs": [
+        {
+          "id": 2,
+          "name": "A"
+        },
+        {
+          "id": 1300,
+          "name": "uni0301.c"
+        },
+        {
+          "id": 1,
+          "name": "space"
+        },
+        {
+          "id": 28,
+          "name": "a"
+        },
+        {
+          "id": 1314,
+          "name": "uni0308"
+        },
+        {
+          "id": 1,
+          "name": "space"
+        },
+        {
+          "id": 42,
+          "name": "o"
+        },
+        {
+          "id": 1340,
+          "name": "uni03020301"
+        },
+        {
+          "id": 1,
+          "name": "space"
+        },
+        {
+          "id": 41,
+          "name": "n"
+        },
+        {
+          "id": 1304,
+          "name": "uni0303"
+        }
+      ],
+      "positions": [
+        {
+          "xAdvance": 1339,
+          "yAdvance": 0,
+          "xOffset": 0,
+          "yOffset": 0
+        },
+        {
+          "xAdvance": 0,
+          "yAdvance": 0,
+          "xOffset": -776,
+          "yOffset": 0
+        },
+        {
+          "xAdvance": 416,
+          "yAdvance": 0,
+          "xOffset": 0,
+          "yOffset": 0
+        },
+        {
+          "xAdvance": 1179,
+          "yAdvance": 0,
+          "xOffset": 0,
+          "yOffset": 0
+        },
+        {
+          "xAdvance": 0,
+          "yAdvance": 0,
+          "xOffset": -488,
+          "yOffset": 0
+        },
+        {
+          "xAdvance": 416,
+          "yAdvance": 0,
+          "xOffset": 0,
+          "yOffset": 0
+        },
+        {
+          "xAdvance": 1196,
+          "yAdvance": 0,
+          "xOffset": 0,
+          "yOffset": 0
+        },
+        {
+          "xAdvance": 0,
+          "yAdvance": 0,
+          "xOffset": -716,
+          "yOffset": 0
+        },
+        {
+          "xAdvance": 416,
+          "yAdvance": 0,
+          "xOffset": 0,
+          "yOffset": 0
+        },
+        {
+          "xAdvance": 1229,
+          "yAdvance": 0,
+          "xOffset": 0,
+          "yOffset": 0
+        },
+        {
+          "xAdvance": 0,
+          "yAdvance": 0,
+          "xOffset": -438,
+          "yOffset": 0
+        }
+      ],
+      "browserAt32": 97.15625,
+      "domText": "Á ä ố ñ"
+    },
+    {
+      "source": "Á ä ố ñ",
+      "text": "Á ä ố ñ",
+      "normalization": "NFC",
+      "fontkitAt32": 97.15625,
+      "glyphs": [
+        {
+          "id": 55,
+          "name": "Aacute"
+        },
+        {
+          "id": 1,
+          "name": "space"
+        },
+        {
+          "id": 234,
+          "name": "adieresis"
+        },
+        {
+          "id": 1,
+          "name": "space"
+        },
+        {
+          "id": 329,
+          "name": "uni1ED1"
+        },
+        {
+          "id": 1,
+          "name": "space"
+        },
+        {
+          "id": 314,
+          "name": "ntilde"
+        }
+      ],
+      "positions": [
+        {
+          "xAdvance": 1339,
+          "yAdvance": 0,
+          "xOffset": 0,
+          "yOffset": 0
+        },
+        {
+          "xAdvance": 416,
+          "yAdvance": 0,
+          "xOffset": 0,
+          "yOffset": 0
+        },
+        {
+          "xAdvance": 1179,
+          "yAdvance": 0,
+          "xOffset": 0,
+          "yOffset": 0
+        },
+        {
+          "xAdvance": 416,
+          "yAdvance": 0,
+          "xOffset": 0,
+          "yOffset": 0
+        },
+        {
+          "xAdvance": 1223,
+          "yAdvance": 0,
+          "xOffset": 0,
+          "yOffset": 0
+        },
+        {
+          "xAdvance": 416,
+          "yAdvance": 0,
+          "xOffset": 0,
+          "yOffset": 0
+        },
+        {
+          "xAdvance": 1229,
+          "yAdvance": 0,
+          "xOffset": 0,
+          "yOffset": 0
+        }
+      ],
+      "browserAt32": 97.15625,
+      "domText": "Á ä ố ñ"
+    }
+  ],
+  "scope": "Diagnostic control comparing literal decomposed source and NFC specimens in Fontkit and offline Chromium with one exact Akasia Black Italic file. Normalization is applied only to the explicitly labeled control strings; no product source or measurement behavior changes."
+}

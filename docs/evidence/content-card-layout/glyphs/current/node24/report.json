@@ -1,0 +1,1008 @@
+{
+  "node": "v24.20.0",
+  "browser": "152.0.4191.66",
+  "os": {
+    "platform": "win32",
+    "release": "10.0.26200",
+    "version": "Windows 11 Home"
+  },
+  "auditSha256": "3464f51b2e90dd1a964c23652fa2fe94dbde061d5b70e878b033bf7763e4731a",
+  "harnessSha256": "c33080fcef9dbe62ee09d383e05197685bfab6efa573f2d46216e42d993cf147",
+  "runtime": {
+    "opf/dist/catalogs.js": "6d74d7b051844728b2622acdb5268472a043544c8b2ca04eb904b1cdf74ec739",
+    "opf/dist/chunk-33AFTZZQ.js": "42307235ffdd11e143268e1297e6817cd9f512c0d6b05757e958db7b445cbd02",
+    "opf/dist/chunk-GQSK3T7X.js": "34f518c29c9757bc252b5c13eb5d7db8ada4b477496e6289d8149fb4fdc7cd45",
+    "opf/dist/chunk-K7QQGUOH.js": "1500a9fe8da0063f098d2672293c3cbce76eabdd9cecdb2eca7b442cd13124aa",
+    "opf/dist/chunk-OZULJBSG.js": "9e3ce45dc68d39c646449baf4ec9aad7b92d3f69b85a3dfe37540d13820d0d1e",
+    "opf/dist/chunk-PIQXLBBJ.js": "818578357a214f76a743db8cf63c0903825923e1ba970abf68c21912e59893ba",
+    "opf/dist/chunk-SOSOBKQ2.js": "b2bcaf1f0e8725c9a8f3fff9b5c996c4e7e63c6bb8dd4d13c2d7609105b02915",
+    "opf/dist/chunk-TFZ7E3FK.js": "ea043c053afc80eac04f7b83a0b12939cf65a0c9672b0689deda51dd03335540",
+    "opf/dist/chunk-TWMRZ43O.js": "0d35cec97ec7ddaa67fb9f096bc672c927eb68ed5fae5ac27d4dff70d68313f4",
+    "opf/dist/composition.js": "ca85a22faebaf3d49982c67bccda1284e720cf61848d7cf58b6aaba30964b674",
+    "opf/dist/data.js": "ae68ff3088ddcea772573952c572a3c58b8815086c9f81e57939d45848c64b95",
+    "opf/dist/docs.js": "aa8492354721752814a70527518fa8e2eefb16731b35a3905365e4dd6a7683f1",
+    "opf/dist/examples.js": "c69ccdcfaa0c4157f27174a3814ac3b6a1874440029b02d27a7fc971fc05fe1a",
+    "opf/dist/index.js": "cbecbbbdfb7c23e630ff3ef609cb91d1ed7064af721ddcafb684f4d75b83d05b",
+    "opf/dist/pagination.js": "51324ca6002ade8c416470ffecb095f055de9455e64e0daad28a3ce082420f90",
+    "opf/dist/previews.js": "043037d2d5dfec4d69072415032818d6a6c5e686938fcd644a4f103286033950",
+    "opf/dist/repo-readme.js": "a8177f828c853554ce636a0ca702efb63d79f96175f5440f35c32e6834ac215a",
+    "opf/dist/schemas.js": "52f40eb788685649099577a9241adb75c5f18b4a5c8cf1e55215b6fa3f52105c",
+    "opf/dist/spec-files.js": "8302d015b9368a585ee6aea946a18b2f0036396acb963e273baee48a0c4ac817",
+    "opf/dist/types.js": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "opf/dist/validator.js": "cd010718d51aa25fbc3862347ce5cf1cbd02e5ffb3ddc2683717011b4aa91c1c",
+    "opf-render/dist/font-compatibility.js": "a50ee71748e81cd12ed3aeb6eee92506ebf91ef05021c6ca3f5a100665d03dac",
+    "opf-render/dist/fonts-browser.js": "d0543d838b2f22a8c70bdc60100d72d3c69e3f8033d5ccedd3523ee63c66b8d4",
+    "opf-render/dist/fonts-node.js": "0e65abd7438f3a21fd0cb6ea64120d9e866ef3308510910d11b7b863399f8d8b",
+    "opf-render/dist/fonts.js": "549932e2d013f1f623cd83973b40cbed68c63d52535adb2de6fd921d16bf400c",
+    "opf-render/dist/index.js": "39c8f2b279ce10873f00289349b84cf9cab7e12c56e9e0d87447bd2406777234",
+    "opf-render/dist/raster-images.js": "304cffe5e77553ac1ab590fc5805714dde34e6f69df5dc55e35dbc8df602753c",
+    "opf-render/dist/raster.js": "6ea807bfd43ddaabea95c1137bc1bcf7d656f2ae9c6d87a7e6d2f867df86ea99",
+    "opf-render/dist/svg.js": "2df17dc0b7aeecad5738a5a8beb948638f20dc3334610f7a735f2f348beef007"
+  },
+  "fontHashes": [
+    {
+      "family": "Roboto",
+      "weight": 400,
+      "italic": false,
+      "sha256": "15256405ecb0d880678833a582760efad538ab2932318b52c8105b267d159459"
+    },
+    {
+      "family": "Roboto Medium",
+      "weight": 500,
+      "italic": false,
+      "sha256": "79343dc641a2e8d48a703a4667b71fc8dc6565cc8ce47dfc34fc52c12aadbf38"
+    },
+    {
+      "family": "Roboto SemiBold",
+      "weight": 600,
+      "italic": false,
+      "sha256": "32fe2086b0e54eca85a68eb74e3d89bb16a7ffe59085d6dc7d079f5b3c26d6ab"
+    },
+    {
+      "family": "Roboto",
+      "weight": 700,
+      "italic": false,
+      "sha256": "4aaf8c5b661a386998c2e70cf2b87e2440f5404e0b8fd81164f0413fb3435ec6"
+    },
+    {
+      "family": "Roboto ExtraBold",
+      "weight": 800,
+      "italic": false,
+      "sha256": "43d5ce98c58336045220fa1dac2bd22281b1aab3eca66785cb34eb3ad1dfe1a5"
+    },
+    {
+      "family": "Roboto",
+      "weight": 400,
+      "italic": true,
+      "sha256": "6a372c348dc20c246b92d60b9bda3c0a9ffedc129790ed3f31faf89daa99d793"
+    },
+    {
+      "family": "Roboto",
+      "weight": 700,
+      "italic": true,
+      "sha256": "c6a5e7c224d3bf6698e5d3c124f0f0220cad20d5d413920447a96f033a0292ee"
+    },
+    {
+      "family": "Roboto Mono",
+      "weight": 400,
+      "italic": false,
+      "sha256": "e4bf45837847d4abfa5a502b807a83393aa138727bdb9ea9c93fb17d53208d95"
+    },
+    {
+      "family": "Roboto Mono",
+      "weight": 700,
+      "italic": false,
+      "sha256": "92649d819cc4c20480b23a47aaa111769924eb31c66b6ecdcf6f573662558c83"
+    }
+  ],
+  "controls": [
+    {
+      "id": "control-black-on-white",
+      "measured": {
+        "path": "slides.0.text",
+        "text": "Visible glyph support even when source text disappears",
+        "fill": "rgb(0, 0, 0)",
+        "fontFamily": "Roboto, sans-serif",
+        "fontSize": 25,
+        "fontWeight": 400,
+        "fontStyle": "normal",
+        "box": {
+          "x": 57.599998474121094,
+          "y": 58.599998474121094,
+          "width": 616.0625,
+          "height": 30
+        },
+        "chain": [
+          {
+            "tag": "text",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "svg",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          }
+        ]
+      },
+      "threshold": 3,
+      "rectangleMinimum": null,
+      "glyphMinimum": 21,
+      "supportPixels": 5139,
+      "visiblePixels": 5027,
+      "pixelsBelowThreshold": 0,
+      "unsupportedPaint": 0,
+      "outsideTextDifferences": [],
+      "inkBounds": {
+        "left": 57,
+        "top": 64,
+        "right": 672,
+        "bottom": 87
+      },
+      "worst": {
+        "x": 99,
+        "y": 64,
+        "background": [
+          255,
+          255,
+          255
+        ],
+        "maskCoverage": 0.45098039215686275
+      },
+      "auditedMinimumTouchesInk": null,
+      "passed": true,
+      "artifacts": [
+        {
+          "file": "control-black-on-white-full.png",
+          "bytes": 12168,
+          "sha256": "fce87c7e556b3115815a25f4aa54deaa56f1756bfa4e4dd2e70fe7ba83184d07"
+        },
+        {
+          "file": "control-black-on-white-background.png",
+          "bytes": 4254,
+          "sha256": "3878570f4a62a0d65f57cf1754e0269e56ec797f4e36e26b44c172eb6e800401"
+        },
+        {
+          "file": "control-black-on-white-isolated.png",
+          "bytes": 12168,
+          "sha256": "fce87c7e556b3115815a25f4aa54deaa56f1756bfa4e4dd2e70fe7ba83184d07"
+        },
+        {
+          "file": "control-black-on-white-mask.png",
+          "bytes": 12037,
+          "sha256": "ce32f8eb564e36d387745dd6d9bd90845c21356e28a0541b7e25f75ad79ed274"
+        },
+        {
+          "file": "control-black-on-white-inverseMask.png",
+          "bytes": 12168,
+          "sha256": "fce87c7e556b3115815a25f4aa54deaa56f1756bfa4e4dd2e70fe7ba83184d07"
+        }
+      ]
+    },
+    {
+      "id": "control-invisible-white",
+      "measured": {
+        "path": "slides.0.text",
+        "text": "Visible glyph support even when source text disappears",
+        "fill": "rgb(255, 255, 255)",
+        "fontFamily": "Roboto, sans-serif",
+        "fontSize": 25,
+        "fontWeight": 400,
+        "fontStyle": "normal",
+        "box": {
+          "x": 57.599998474121094,
+          "y": 58.599998474121094,
+          "width": 616.0625,
+          "height": 30
+        },
+        "chain": [
+          {
+            "tag": "text",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "svg",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          }
+        ]
+      },
+      "threshold": 3,
+      "rectangleMinimum": null,
+      "glyphMinimum": 1,
+      "supportPixels": 5139,
+      "visiblePixels": 0,
+      "pixelsBelowThreshold": 5139,
+      "unsupportedPaint": 0,
+      "outsideTextDifferences": [],
+      "inkBounds": {
+        "left": 57,
+        "top": 64,
+        "right": 672,
+        "bottom": 87
+      },
+      "worst": {
+        "x": 99,
+        "y": 64,
+        "background": [
+          255,
+          255,
+          255
+        ],
+        "maskCoverage": 0.45098039215686275
+      },
+      "auditedMinimumTouchesInk": null,
+      "passed": false,
+      "artifacts": [
+        {
+          "file": "control-invisible-white-full.png",
+          "bytes": 4254,
+          "sha256": "3878570f4a62a0d65f57cf1754e0269e56ec797f4e36e26b44c172eb6e800401"
+        },
+        {
+          "file": "control-invisible-white-background.png",
+          "bytes": 4254,
+          "sha256": "3878570f4a62a0d65f57cf1754e0269e56ec797f4e36e26b44c172eb6e800401"
+        },
+        {
+          "file": "control-invisible-white-isolated.png",
+          "bytes": 4254,
+          "sha256": "3878570f4a62a0d65f57cf1754e0269e56ec797f4e36e26b44c172eb6e800401"
+        },
+        {
+          "file": "control-invisible-white-mask.png",
+          "bytes": 12037,
+          "sha256": "ce32f8eb564e36d387745dd6d9bd90845c21356e28a0541b7e25f75ad79ed274"
+        },
+        {
+          "file": "control-invisible-white-inverseMask.png",
+          "bytes": 12168,
+          "sha256": "fce87c7e556b3115815a25f4aa54deaa56f1756bfa4e4dd2e70fe7ba83184d07"
+        }
+      ]
+    },
+    {
+      "id": "control-invisible-black",
+      "measured": {
+        "path": "slides.0.text",
+        "text": "Visible glyph support even when source text disappears",
+        "fill": "rgb(0, 0, 0)",
+        "fontFamily": "Roboto, sans-serif",
+        "fontSize": 25,
+        "fontWeight": 400,
+        "fontStyle": "normal",
+        "box": {
+          "x": 57.599998474121094,
+          "y": 58.599998474121094,
+          "width": 616.0625,
+          "height": 30
+        },
+        "chain": [
+          {
+            "tag": "text",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "svg",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          }
+        ]
+      },
+      "threshold": 3,
+      "rectangleMinimum": null,
+      "glyphMinimum": 1,
+      "supportPixels": 5139,
+      "visiblePixels": 0,
+      "pixelsBelowThreshold": 5139,
+      "unsupportedPaint": 0,
+      "outsideTextDifferences": [],
+      "inkBounds": {
+        "left": 57,
+        "top": 64,
+        "right": 672,
+        "bottom": 87
+      },
+      "worst": {
+        "x": 99,
+        "y": 64,
+        "background": [
+          0,
+          0,
+          0
+        ],
+        "maskCoverage": 0.45098039215686275
+      },
+      "auditedMinimumTouchesInk": null,
+      "passed": false,
+      "artifacts": [
+        {
+          "file": "control-invisible-black-full.png",
+          "bytes": 4250,
+          "sha256": "7a5175f59992a07616d58b06a310b2a3909c43df6d406a736ef54995563a09ed"
+        },
+        {
+          "file": "control-invisible-black-background.png",
+          "bytes": 4250,
+          "sha256": "7a5175f59992a07616d58b06a310b2a3909c43df6d406a736ef54995563a09ed"
+        },
+        {
+          "file": "control-invisible-black-isolated.png",
+          "bytes": 4250,
+          "sha256": "7a5175f59992a07616d58b06a310b2a3909c43df6d406a736ef54995563a09ed"
+        },
+        {
+          "file": "control-invisible-black-mask.png",
+          "bytes": 12037,
+          "sha256": "ce32f8eb564e36d387745dd6d9bd90845c21356e28a0541b7e25f75ad79ed274"
+        },
+        {
+          "file": "control-invisible-black-inverseMask.png",
+          "bytes": 12168,
+          "sha256": "fce87c7e556b3115815a25f4aa54deaa56f1756bfa4e4dd2e70fe7ba83184d07"
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "id": "finding-03-leaf-0",
+      "measured": {
+        "path": "slides.5.bullets",
+        "text": "•",
+        "fill": "rgb(255, 255, 255)",
+        "fontFamily": "Aptos, serif",
+        "fontSize": 20.833,
+        "fontWeight": 400,
+        "fontStyle": "normal",
+        "box": {
+          "x": 58,
+          "y": 134.73300170898438,
+          "width": 7.296875,
+          "height": 24
+        },
+        "chain": [
+          {
+            "tag": "text",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "svg",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          }
+        ]
+      },
+      "threshold": 4.5,
+      "rectangleMinimum": 1.2521693866260188,
+      "glyphMinimum": 10.35474573184942,
+      "supportPixels": 31,
+      "visiblePixels": 31,
+      "pixelsBelowThreshold": 0,
+      "unsupportedPaint": 0,
+      "outsideTextDifferences": [],
+      "inkBounds": {
+        "left": 58,
+        "top": 144,
+        "right": 64,
+        "bottom": 148
+      },
+      "worst": {
+        "x": 59,
+        "y": 144,
+        "background": [
+          51,
+          65,
+          85
+        ],
+        "maskCoverage": 0.4823529411764706
+      },
+      "auditedMinimumTouchesInk": null,
+      "passed": true,
+      "artifacts": [
+        {
+          "file": "finding-03-leaf-0-full.png",
+          "bytes": 40098,
+          "sha256": "8d59958533ab67a82463f9f27669fb0b3bbf4d9a929eda1383f5d880ae0e565f"
+        },
+        {
+          "file": "finding-03-leaf-0-background.png",
+          "bytes": 6637,
+          "sha256": "f310e7188c3f6b774df80bd19ed6efdb8079d5084609c023d8c6f3730a4e9166"
+        },
+        {
+          "file": "finding-03-leaf-0-isolated.png",
+          "bytes": 6743,
+          "sha256": "6452149aa7ada26523884d2d4bdf4e1bd709f49641bd3b12834c10ae70c322e3"
+        },
+        {
+          "file": "finding-03-leaf-0-mask.png",
+          "bytes": 3157,
+          "sha256": "86eeaf61a4dcfade21b6915f6b6ed4bf81b72506e187969c0bcd3447408d1052"
+        },
+        {
+          "file": "finding-03-leaf-0-inverseMask.png",
+          "bytes": 3145,
+          "sha256": "700dcc494255b1e0be59d53c72bd92c39aeaf555320bd3e5cdf2f6e15252bb01"
+        }
+      ],
+      "previousFindingIndices": [
+        3,
+        4,
+        5
+      ],
+      "file": "examples/gallery/business-functions/identity-incident-executive-brief.opf.json",
+      "slide": 5,
+      "path": "slides.5.bullets",
+      "text": "•",
+      "sourceSha256": "53e99861578be9203368239670d8d2c6646e9128d4392d47b5767c052b063238",
+      "svgSha256": "370f2e97b3a7f8586418f6e4607fdb74711640f30bfb49c0c7ba5c2cb6fc0696"
+    },
+    {
+      "id": "finding-03-leaf-1",
+      "measured": {
+        "path": "slides.5.bullets",
+        "text": "•",
+        "fill": "rgb(255, 255, 255)",
+        "fontFamily": "Aptos, serif",
+        "fontSize": 20.833,
+        "fontWeight": 400,
+        "fontStyle": "normal",
+        "box": {
+          "x": 58,
+          "y": 267.6499938964844,
+          "width": 7.296875,
+          "height": 24
+        },
+        "chain": [
+          {
+            "tag": "text",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "svg",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          }
+        ]
+      },
+      "threshold": 4.5,
+      "rectangleMinimum": 1.2521693866260188,
+      "glyphMinimum": 10.35474573184942,
+      "supportPixels": 31,
+      "visiblePixels": 31,
+      "pixelsBelowThreshold": 0,
+      "unsupportedPaint": 0,
+      "outsideTextDifferences": [],
+      "inkBounds": {
+        "left": 58,
+        "top": 277,
+        "right": 64,
+        "bottom": 281
+      },
+      "worst": {
+        "x": 59,
+        "y": 277,
+        "background": [
+          51,
+          65,
+          85
+        ],
+        "maskCoverage": 0.4823529411764706
+      },
+      "auditedMinimumTouchesInk": null,
+      "passed": true,
+      "artifacts": [
+        {
+          "file": "finding-03-leaf-1-full.png",
+          "bytes": 40098,
+          "sha256": "8d59958533ab67a82463f9f27669fb0b3bbf4d9a929eda1383f5d880ae0e565f"
+        },
+        {
+          "file": "finding-03-leaf-1-background.png",
+          "bytes": 6637,
+          "sha256": "f310e7188c3f6b774df80bd19ed6efdb8079d5084609c023d8c6f3730a4e9166"
+        },
+        {
+          "file": "finding-03-leaf-1-isolated.png",
+          "bytes": 6759,
+          "sha256": "985254070ff96af79ce2349e626c2f6ce8692aa8a290ea51171defecdb7538f2"
+        },
+        {
+          "file": "finding-03-leaf-1-mask.png",
+          "bytes": 3157,
+          "sha256": "ba27cbe05402c03440ab1be91b5b4f3934302afe5151e71fe194b05f8dea706f"
+        },
+        {
+          "file": "finding-03-leaf-1-inverseMask.png",
+          "bytes": 3145,
+          "sha256": "fc12fe235f3b9b2e78b885ea85e14547c1af2fc9efe8d6756e9858bf12844137"
+        }
+      ],
+      "previousFindingIndices": [
+        3,
+        4,
+        5
+      ],
+      "file": "examples/gallery/business-functions/identity-incident-executive-brief.opf.json",
+      "slide": 5,
+      "path": "slides.5.bullets",
+      "text": "•",
+      "sourceSha256": "53e99861578be9203368239670d8d2c6646e9128d4392d47b5767c052b063238",
+      "svgSha256": "370f2e97b3a7f8586418f6e4607fdb74711640f30bfb49c0c7ba5c2cb6fc0696"
+    },
+    {
+      "id": "finding-03-leaf-2",
+      "measured": {
+        "path": "slides.5.bullets",
+        "text": "•",
+        "fill": "rgb(255, 255, 255)",
+        "fontFamily": "Aptos, serif",
+        "fontSize": 20.833,
+        "fontWeight": 400,
+        "fontStyle": "normal",
+        "box": {
+          "x": 58,
+          "y": 349.7330017089844,
+          "width": 7.296875,
+          "height": 24
+        },
+        "chain": [
+          {
+            "tag": "text",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "svg",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          }
+        ]
+      },
+      "threshold": 4.5,
+      "rectangleMinimum": 1.2521693866260188,
+      "glyphMinimum": 10.35474573184942,
+      "supportPixels": 31,
+      "visiblePixels": 31,
+      "pixelsBelowThreshold": 0,
+      "unsupportedPaint": 0,
+      "outsideTextDifferences": [],
+      "inkBounds": {
+        "left": 58,
+        "top": 359,
+        "right": 64,
+        "bottom": 363
+      },
+      "worst": {
+        "x": 59,
+        "y": 359,
+        "background": [
+          51,
+          65,
+          85
+        ],
+        "maskCoverage": 0.4823529411764706
+      },
+      "auditedMinimumTouchesInk": null,
+      "passed": true,
+      "artifacts": [
+        {
+          "file": "finding-03-leaf-2-full.png",
+          "bytes": 40098,
+          "sha256": "8d59958533ab67a82463f9f27669fb0b3bbf4d9a929eda1383f5d880ae0e565f"
+        },
+        {
+          "file": "finding-03-leaf-2-background.png",
+          "bytes": 6637,
+          "sha256": "f310e7188c3f6b774df80bd19ed6efdb8079d5084609c023d8c6f3730a4e9166"
+        },
+        {
+          "file": "finding-03-leaf-2-isolated.png",
+          "bytes": 6743,
+          "sha256": "0881e7dd6095930baf69e4757aef0030c22ee71424b4ac7982d131c0faaca269"
+        },
+        {
+          "file": "finding-03-leaf-2-mask.png",
+          "bytes": 3157,
+          "sha256": "99cee7e5b7ce81ce41f9a6739deb9cf2019a8ddd75393a35217a3b11ac38a1c3"
+        },
+        {
+          "file": "finding-03-leaf-2-inverseMask.png",
+          "bytes": 3145,
+          "sha256": "71604fbca7a95670d8a646ef340cdd8986a883532f7ccd70a2aa7e11c2759852"
+        }
+      ],
+      "previousFindingIndices": [
+        3,
+        4,
+        5
+      ],
+      "file": "examples/gallery/business-functions/identity-incident-executive-brief.opf.json",
+      "slide": 5,
+      "path": "slides.5.bullets",
+      "text": "•",
+      "sourceSha256": "53e99861578be9203368239670d8d2c6646e9128d4392d47b5767c052b063238",
+      "svgSha256": "370f2e97b3a7f8586418f6e4607fdb74711640f30bfb49c0c7ba5c2cb6fc0696"
+    },
+    {
+      "id": "finding-10-leaf-0",
+      "measured": {
+        "path": "slides.5.top:left.metric.trend",
+        "text": "up",
+        "fill": "rgb(15, 23, 42)",
+        "fontFamily": "Aptos, serif",
+        "fontSize": 17.777,
+        "fontWeight": 500,
+        "fontStyle": "normal",
+        "box": {
+          "x": 236.50506591796875,
+          "y": 303.4133605957031,
+          "width": 18.8846435546875,
+          "height": 19.9996337890625
+        },
+        "chain": [
+          {
+            "tag": "tspan",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "text",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "svg",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          }
+        ]
+      },
+      "threshold": 4.5,
+      "rectangleMinimum": 3.67269519300426,
+      "glyphMinimum": 17.062933971317335,
+      "supportPixels": 129,
+      "visiblePixels": 127,
+      "pixelsBelowThreshold": 0,
+      "unsupportedPaint": 0,
+      "outsideTextDifferences": [],
+      "inkBounds": {
+        "left": 237,
+        "top": 311,
+        "right": 255,
+        "bottom": 322
+      },
+      "worst": {
+        "x": 237,
+        "y": 311,
+        "background": [
+          248,
+          250,
+          252
+        ],
+        "maskCoverage": 0.8392156862745098
+      },
+      "auditedMinimumTouchesInk": null,
+      "passed": true,
+      "artifacts": [
+        {
+          "file": "finding-10-leaf-0-full.png",
+          "bytes": 100213,
+          "sha256": "947f94ae3081401964c89379c02de8d63c1d68243562915032e1034141f6f3a7"
+        },
+        {
+          "file": "finding-10-leaf-0-background.png",
+          "bytes": 9894,
+          "sha256": "dbf2c6d8c58197808d43a314e7d2e4fb1139ee1b7595509dfa68242c95c6ac6f"
+        },
+        {
+          "file": "finding-10-leaf-0-isolated.png",
+          "bytes": 10256,
+          "sha256": "48056ff300b34b6d00347c638a5aed1cece26405a60dda7bbbd3acc64b110f69"
+        },
+        {
+          "file": "finding-10-leaf-0-mask.png",
+          "bytes": 5188,
+          "sha256": "baad827dc69828514432608c68515a17ddad393d0149c042ced67efb839fcd34"
+        },
+        {
+          "file": "finding-10-leaf-0-inverseMask.png",
+          "bytes": 5198,
+          "sha256": "aab47110ffbe33f50031df0ea861a347efd1c50072564354459ae30de98a26e3"
+        }
+      ],
+      "previousFindingIndices": [
+        10
+      ],
+      "file": "examples/gallery/design-and-media/kiosk-orientation-deck.opf.json",
+      "slide": 5,
+      "path": "slides.5.top:left.metric.trend",
+      "text": "up",
+      "sourceSha256": "3f7354f7eb5e85d7af97c4913e071869e3989bfaf3b0c997780caa65ca8ab9f4",
+      "svgSha256": "5f771884de359586076ec75f936a7731084178c2073f7c01ddee2182ebfa71ab"
+    },
+    {
+      "id": "finding-21-leaf-0",
+      "measured": {
+        "path": "slides.5.top:left.metric.trend",
+        "text": "up",
+        "fill": "rgb(15, 23, 42)",
+        "fontFamily": "Aptos, sans-serif",
+        "fontSize": 13.333,
+        "fontWeight": 500,
+        "fontStyle": "normal",
+        "box": {
+          "x": 178.13299560546875,
+          "y": 227.57400512695312,
+          "width": 15.413497924804688,
+          "height": 15
+        },
+        "chain": [
+          {
+            "tag": "tspan",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "text",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "g",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          },
+          {
+            "tag": "svg",
+            "opacity": 1,
+            "fillOpacity": 1,
+            "filter": "none",
+            "mixBlendMode": "normal",
+            "clipPath": "none",
+            "mask": "none"
+          }
+        ]
+      },
+      "threshold": 4.5,
+      "rectangleMinimum": 3.5682180283196954,
+      "glyphMinimum": 17.062933971317335,
+      "supportPixels": 84,
+      "visiblePixels": 85,
+      "pixelsBelowThreshold": 0,
+      "unsupportedPaint": 0,
+      "outsideTextDifferences": [
+        {
+          "x": 638,
+          "y": 254,
+          "background": [
+            241,
+            241,
+            243
+          ],
+          "isolated": [
+            242,
+            241,
+            243
+          ]
+        }
+      ],
+      "inkBounds": {
+        "left": 178,
+        "top": 233,
+        "right": 192,
+        "bottom": 242
+      },
+      "worst": {
+        "x": 178,
+        "y": 233,
+        "background": [
+          248,
+          250,
+          252
+        ],
+        "maskCoverage": 0.45098039215686275
+      },
+      "auditedMinimumTouchesInk": null,
+      "passed": true,
+      "artifacts": [
+        {
+          "file": "finding-21-leaf-0-full.png",
+          "bytes": 125552,
+          "sha256": "ec7abf37a2769abfbe196421c45556e120ce69db3d92158c59164db791411806"
+        },
+        {
+          "file": "finding-21-leaf-0-background.png",
+          "bytes": 55136,
+          "sha256": "b0075f4bcb6d584919afbbffc4cc48363c32b76dfcef33af5fd88210775071c2"
+        },
+        {
+          "file": "finding-21-leaf-0-isolated.png",
+          "bytes": 55372,
+          "sha256": "9ebb6ef65f9de23adfdd5fca4a9acb52ee11eea047693af432a9ce1af4732bb3"
+        },
+        {
+          "file": "finding-21-leaf-0-mask.png",
+          "bytes": 3218,
+          "sha256": "f4a3f14c652c755cc2b9a8b9585cb3db1f3d9ba5536b1ca99e3654c23be89872"
+        },
+        {
+          "file": "finding-21-leaf-0-inverseMask.png",
+          "bytes": 3226,
+          "sha256": "2bba3640eac7ef5c022d230795688a3b01c6d5cb4c16f83b714ecb42367c6b93"
+        }
+      ],
+      "previousFindingIndices": [
+        21
+      ],
+      "file": "examples/gallery/government/water-utility-capital-plan.opf.json",
+      "slide": 5,
+      "path": "slides.5.top:left.metric.trend",
+      "text": "up",
+      "sourceSha256": "7530d607f991d7d3ed9a9c04aa717239b8d342fd7d16d74a1cc18ec24c454e4c",
+      "svgSha256": "4eb18a4c5b209f2e3dd99a77a38bf23bb7333899499adcf9605eb9f3d2d4eea4"
+    }
+  ],
+  "errors": [],
+  "requests": [],
+  "scope": "Targeted updated-layout regression of every actual glyph failure from the prior glyph report, preserving exact source bytes and path/text cohorts. Every currently matching leaf is tested when duplicates prevent a unique old/new mapping; the current count may not fall below the prior failing count. Current geometry, SVG and font size are measured again. Prior glyph passes and other current text require separate audit evidence. The union of white-on-black and black-on-white glyph-only masks retains polarity-dependent antialiasing and fully invisible source text, verified by two failing invisible controls and one passing control. Every isolated visible pixel within the measured text geometry plus a one-pixel guard must fall within that independent union. Redraw differences outside both the complete text geometry and its glyph masks are reported separately; they do not become text support. Contrast uses declared opaque sRGB foreground and actual background at every mask pixel, including antialiased-edge support. Other text is hidden while backgrounds, region borders and image geometry stay intact. Reports do not alter source, certify glyph coverage/system fallback, screen-reader access, other rasterizers or native output. Original rectangle findings remain recorded; only this finite audited set is refined.",
+  "previousGlyphReportSha256": "44453e837ae10cd821e7964cb767d6ad80fe5c835e71cca1c7bcb4a8a5b50e0c"
+}

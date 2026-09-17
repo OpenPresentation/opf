@@ -1,0 +1,4 @@
+interface:
+  display_name: "OPF Inspection and Validation"
+  short_description: "Inspect schemas, catalog IDs, and validation errors"
+  default_prompt: "Use $opf-inspect to help with this OPF task using the current project schema and packages."

@@ -1,0 +1,69 @@
+{
+  "mode": "linked-source",
+  "results": [
+    {
+      "node": "v24.20.0",
+      "repo": "opf-render",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "status": 0,
+      "log": "opf-render-node24-0.log"
+    },
+    {
+      "node": "v24.20.0",
+      "repo": "opf-render",
+      "command": [
+        "npm",
+        "run",
+        "validate"
+      ],
+      "status": 0,
+      "log": "opf-render-node24-1.log"
+    },
+    {
+      "node": "v24.20.0",
+      "repo": "opf-render",
+      "command": [
+        "npm",
+        "test"
+      ],
+      "status": 1,
+      "log": "opf-render-node24-2.log"
+    },
+    {
+      "node": "v24.20.0",
+      "repo": "opf-render",
+      "command": [
+        "npm",
+        "run",
+        "test:code"
+      ],
+      "status": 0,
+      "log": "opf-render-node24-3.log"
+    },
+    {
+      "node": "v24.20.0",
+      "repo": "opf-render",
+      "command": [
+        "npm",
+        "run",
+        "test:metric"
+      ],
+      "status": 0,
+      "log": "opf-render-node24-4.log"
+    },
+    {
+      "node": "v24.20.0",
+      "repo": "opf-render",
+      "command": [
+        "node",
+        "test/shared-code-browser.mjs"
+      ],
+      "status": 0,
+      "log": "opf-render-node24-5.log"
+    }
+  ]
+}

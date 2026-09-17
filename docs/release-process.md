@@ -1,5 +1,9 @@
 # OPF Release Process
 
+Use Node 24 (`24.x`) for all future source, candidate and registry verification.
+The next releases must document the [Node 24 migration](migrations/node24.md)
+and use new versions. Historical dual-runtime release records remain unchanged.
+
 This document is the release runbook for the public JavaScript package,
 [`@openpresentation/opf`](https://www.npmjs.com/package/@openpresentation/opf).
 
@@ -8,7 +12,7 @@ The canonical release path is:
 1. Merge the release commit to `main`.
 2. Push a semver tag whose name matches the package version.
 3. Let GitHub Actions publish to npm through npm trusted publishing.
-4. Verify npm and create GitHub release notes.
+4. Verify npm and the automatically generated GitHub release notes.
 
 ## Release Preconditions
 
@@ -109,8 +113,7 @@ The expected result is one warning about an unknown narratives catalog id.
 
 ## GitHub Release Notes
 
-The tag flow publishes npm but does not automatically create a GitHub Release.
-After npm is verified, create a release for the existing tag:
+The core tag workflow creates a GitHub Release from the matching changelog section after publishing. Verify that release after npm is verified. If release creation failed, create the missing release for the existing tag:
 
 ```sh
 gh release create opf-vX.Y.Z \

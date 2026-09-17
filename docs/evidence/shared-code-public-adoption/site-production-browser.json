@@ -1,0 +1,62 @@
+{
+  "deployment": {
+    "key": "site",
+    "mode": "production",
+    "id": "dpl_DWCgLrVof7cjwGoauJSfKiLv3wcv",
+    "sha": "54347ac89b59658a57db95b6b26e806db8fd30f4",
+    "url": "https://openpresentation-site-bmzryy6be-dataadvantage.vercel.app",
+    "projectId": "prj_MnL89d86UvFUMWP1MAamRR3VE9IC",
+    "state": "READY",
+    "source": "git",
+    "target": "production",
+    "aliases": [
+      "openpresentation.org",
+      "www.openpresentation.org",
+      "openpresentation-site.vercel.app",
+      "openpresentation-site-dataadvantage.vercel.app",
+      "openpresentation-site-git-main-dataadvantage.vercel.app"
+    ]
+  },
+  "browser": "Microsoft Edge 152.0.4191.66",
+  "stats": {
+    "startTime": "2026-09-10T08:33:42.488Z",
+    "duration": 21253.761,
+    "expected": 6,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "cases": [
+    {
+      "file": "published-site.spec.ts",
+      "title": "agent quickstart copies the published installation command and serves all six complete skills",
+      "durationMs": 5153
+    },
+    {
+      "file": "published-site.spec.ts",
+      "title": "published history, package links and anchor navigation",
+      "durationMs": 490
+    },
+    {
+      "file": "published-site.spec.ts",
+      "title": "mobile changelog keeps horizontal overflow inside its table",
+      "durationMs": 304
+    },
+    {
+      "file": "published-site.spec.ts",
+      "title": "home-page downloads match the verified registry showcase",
+      "durationMs": 1285
+    },
+    {
+      "file": "reference-playground.spec.ts",
+      "title": "local validator handles valid, advisory, invalid and malformed decks offline",
+      "durationMs": 2921
+    },
+    {
+      "file": "reference-playground.spec.ts",
+      "title": "reference copy preserves raw titles and headings, links and LLM exports use the current snapshot",
+      "durationMs": 10316
+    }
+  ],
+  "scope": "Actual remote app with essential authoring/editor operations performed offline after required local assets load. No native raster equivalence inferred."
+}

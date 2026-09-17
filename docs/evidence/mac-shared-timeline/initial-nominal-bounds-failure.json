@@ -1,0 +1,39 @@
+{
+  "activeCase": {
+    "measured": true,
+    "width": 1280,
+    "height": 720,
+    "fixture": 0,
+    "deck": {
+      "design": {
+        "fontScheme": "roboto",
+        "dimensions": {
+          "widthInches": 13.333333333333334,
+          "heightInches": 7.5
+        }
+      },
+      "slides": [
+        {
+          "title": "Timeline editing",
+          "timeline": [
+            {
+              "when": " Q1 ",
+              "what": "  A  B\tC D\r\n\r\ntrail  \r",
+              "description": "Keep this context."
+            },
+            {
+              "what": "Next milestone"
+            }
+          ],
+          "composition": {
+            "minFontSize": 24,
+            "overflow": "error"
+          }
+        }
+      ]
+    }
+  },
+  "message": "{\"measured\":true,\"width\":1280,\"height\":720,\"fixture\":0,\"path\":\"slides.0.timeline.0.when\",\"line\":{\"text\":\" Q1 \",\"size\":24,\"x\":327.74749755859375,\"y\":149.83200073242188,\"width\":42.105010986328125,\"height\":28,\"start\":0,\"end\":4},\"box\":{\"x\":57.60000000000002,\"y\":147.832422,\"width\":582.4,\"height\":29.28}}",
+  "errors": [],
+  "requests": []
+}

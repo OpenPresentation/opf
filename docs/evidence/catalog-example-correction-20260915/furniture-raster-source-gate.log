@@ -1,0 +1,35 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Golden corpus changed; inspect candidate and review the new corpus.
++ actual - expected
+
+  {
+    decks: 126,
+    path: 'examples',
+    repository: 'OpenPresentation/opf',
++   sha256: 'b95034931001cba636e3fbda6fba74c153dcb9914937aea374cab212eb21feaf'
+-   sha256: '3a1ed8ad00b30863b5852197a85602263a2238c613020fb891d933f86e124c4b'
+  }
+
+    at file:///Users/michael/Source/opf/artifacts/npm/consumer/catalog-correction-golden.mjs:65:10 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: {
+    repository: 'OpenPresentation/opf',
+    path: 'examples',
+    sha256: 'b95034931001cba636e3fbda6fba74c153dcb9914937aea374cab212eb21feaf',
+    decks: 126
+  },
+  expected: {
+    repository: 'OpenPresentation/opf',
+    path: 'examples',
+    sha256: '3a1ed8ad00b30863b5852197a85602263a2238c613020fb891d933f86e124c4b',
+    decks: 126
+  },
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

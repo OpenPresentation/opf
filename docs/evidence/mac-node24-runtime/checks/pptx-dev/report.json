@@ -1,0 +1,98 @@
+{
+  "node": "v24.21.0",
+  "repo": "pptx-dev",
+  "startedAt": "2026-09-11T00:23:27.002936+00:00",
+  "commands": [
+    {
+      "argv": [
+        "pnpm",
+        "test"
+      ],
+      "exitCode": 0,
+      "log": "01-test.log"
+    },
+    {
+      "argv": [
+        "pnpm",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "log": "02-typecheck.log"
+    },
+    {
+      "argv": [
+        "pnpm",
+        "--filter",
+        "@pptx/sdk",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "log": "03-typecheck.log"
+    },
+    {
+      "argv": [
+        "pnpm",
+        "--filter",
+        "@pptx/sdk",
+        "prepublishOnly"
+      ],
+      "exitCode": 0,
+      "log": "04-prepublishOnly.log"
+    },
+    {
+      "argv": [
+        "pnpm",
+        "--filter",
+        "@pptx/cli",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "log": "05-typecheck.log"
+    },
+    {
+      "argv": [
+        "pnpm",
+        "--filter",
+        "@pptx/cli",
+        "prepublishOnly"
+      ],
+      "exitCode": 0,
+      "log": "06-prepublishOnly.log"
+    },
+    {
+      "argv": [
+        "pnpm",
+        "--filter",
+        "@pptx/cli",
+        "build:bundle"
+      ],
+      "exitCode": 0,
+      "log": "07-build_bundle.log"
+    },
+    {
+      "argv": [
+        "node",
+        "sdk/cli/dist/cli.js",
+        "--help"
+      ],
+      "exitCode": 0,
+      "log": "08---help.log"
+    },
+    {
+      "argv": [
+        "pnpm",
+        "build"
+      ],
+      "exitCode": 0,
+      "log": "09-build.log"
+    },
+    {
+      "argv": [
+        "pnpm",
+        "audit"
+      ],
+      "exitCode": 0,
+      "log": "10-audit.log"
+    }
+  ]
+}

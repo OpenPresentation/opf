@@ -17,4 +17,10 @@ export {
   catalogKinds,
 } from "./generated/catalogs.js";
 
-export type { CatalogKind } from "./generated/catalogs.js";
+export type {
+  CatalogKind,
+  CatalogEntry,
+  CatalogIndex,
+  CatalogIndexRecord,
+  CatalogRecord,
+} from "./generated/catalogs.js";

@@ -1,0 +1,72 @@
+{
+  "node": "v24.21.0",
+  "platform": "darwin",
+  "refs": {
+    "opf": {
+      "source": "4694815349170bcffd52efc4c99748c4c8079738",
+      "testedWorkflow": "86c856ba4bc33e0781f92b14bf1aa50b26d0c939",
+      "changesFromSource": [
+        ".github/workflows/ecosystem-ci.yml"
+      ]
+    },
+    "opf-editor": {
+      "source": "8d6e313b83bf5f17414013cde1b410cf629c753d",
+      "testedWorkflow": "8d6e313b83bf5f17414013cde1b410cf629c753d",
+      "changesFromSource": []
+    },
+    "opf-render": {
+      "source": "3d4fa8ce8172c2a6b38bf217d5f8d0ce5a1b62af",
+      "testedWorkflow": "02fc71e1600a8bcd4ffe1702b2b18e7cb83eab60",
+      "changesFromSource": [
+        ".github/workflows/ci.yml"
+      ]
+    },
+    "opf-pptx": {
+      "source": "1363a653c8b0e80c50d970bc30db3587bcf6f14e",
+      "testedWorkflow": "1486dc78d17b9f0fd61a8fd2b8f03294cf50940f",
+      "changesFromSource": [
+        ".github/workflows/ci.yml"
+      ]
+    }
+  },
+  "results": {
+    "coreTests": 523,
+    "cliTests": 11,
+    "textCheckerTests": 4,
+    "cliCommands": 81,
+    "furnitureWorkflows": 16,
+    "fieldMasks": 40,
+    "displacedControlOutsidePixels": 297,
+    "packedBrowserSuites": 8,
+    "jsonSourceWorkflows": 7,
+    "jsonInstalledWorkflows": 7,
+    "installedLayoutRegression": "passed unchanged assertions against public installed imports"
+  },
+  "views": [
+    {
+      "file": "views/furniture-1280-inherited.png",
+      "sha256": "10f6e425e7a3951ca5a2640d1cbb3240e2cb8f2583198bb9e20632e80ec5ae96",
+      "prior": "docs/evidence/mac-furniture-clearance-20260914/views-after/furniture-1280-inherited.png",
+      "unchanged": true
+    },
+    {
+      "file": "views/furniture-1280-local.png",
+      "sha256": "60cf396329fa92b5dccc167a60708f4de4c6fe3d11d7a08fded16de3a8452529",
+      "prior": "docs/evidence/mac-furniture-clearance-20260914/views-after/furniture-1280-local.png",
+      "unchanged": true
+    },
+    {
+      "file": "views/furniture-720-inherited.png",
+      "sha256": "10d5291310a9d1fc5d73d4598b3f42c2094593ba39976544c5f5a4a339e75d49",
+      "prior": "docs/evidence/mac-furniture-clearance-20260914/views-after/furniture-720-inherited.png",
+      "unchanged": true
+    },
+    {
+      "file": "views/furniture-720-local.png",
+      "sha256": "cd43748a0c4263649174660271a6b4608a00321633b175d3fcdb1ca6eb5de8b3",
+      "prior": "docs/evidence/mac-furniture-clearance-20260914/views-after/furniture-720-local.png",
+      "unchanged": true
+    }
+  ],
+  "boundary": "Coordinated local source and candidate tarballs only. Published registry predecessors, native Office recovery, native tabs/images/provenance, font shaping, release versions and public-site furniture adoption remain separate and unresolved."
+}

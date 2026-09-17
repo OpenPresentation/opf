@@ -1,0 +1,802 @@
+[
+  {
+    "file": "README.md",
+    "bytes": 4735,
+    "sha256": "ec9365b55ba6e5697a52db7a634f592f04e060dc288e1d40a86ca7ec3dec4993"
+  },
+  {
+    "file": "candidate-packages.json",
+    "bytes": 1099,
+    "sha256": "a8f45441f7e8e163fc9654b534a91906a1c6e78b3f2a5b8deb2753e61753b517"
+  },
+  {
+    "file": "clearance-build.log",
+    "bytes": 6045,
+    "sha256": "9e6b0bc7ebe462ff6309107debafd6d3cb9a4e02cc2f2898ed0d4f6820076c13"
+  },
+  {
+    "file": "clearance-core-test.log",
+    "bytes": 882,
+    "sha256": "d51fa112a76bc694ee0067e18196ac12d8c847c9ee52437cfddafe069f65bc10"
+  },
+  {
+    "file": "clearance-installed.log",
+    "bytes": 7888,
+    "sha256": "37c272b6c5931a3a6f3b09c1f2ce3a0494dcc5f2e01c51ddad30bc0f137bfb0f"
+  },
+  {
+    "file": "clearance-mac-installed.log",
+    "bytes": 149,
+    "sha256": "e7bcba38a893838d362adcf4167ebe4f2c98530793e34ca5ce696a5aac78441b"
+  },
+  {
+    "file": "clearance-mac-source.log",
+    "bytes": 1962,
+    "sha256": "0f8217439fa91b5d93e61ccf3a98d350f307fbefdf221bf061c8f3c5f8be5fec"
+  },
+  {
+    "file": "clearance-pack.log",
+    "bytes": 1107,
+    "sha256": "695ee9bcd58a5c9da5bd7561d8ad1ba1045461bb99cd9de6196f53fa40e2a592"
+  },
+  {
+    "file": "clearance-pptx-boxes.log",
+    "bytes": 143,
+    "sha256": "0a03f59b244952abeeb47ffc6fc2ff5a1f7d13b4f3b0a58f7fcf8281fb26c808"
+  },
+  {
+    "file": "final-core-cli.json",
+    "bytes": 6247,
+    "sha256": "f503012f0fde60fb97025a49522aec93c57d157adb623d5a9a2e3ea2df690958"
+  },
+  {
+    "file": "final-core-cli.log",
+    "bytes": 392528,
+    "sha256": "ac0744fdcafe26e2df3341eeffed1fdd7ba5ac4c5232c5e0e9555e387604f486"
+  },
+  {
+    "file": "final-core-ecosystem.json",
+    "bytes": 5825,
+    "sha256": "1a3ab3b105e2c1e9c50fe10a1dd0f3fd669dd3b4f0875fd6fd9b78841289e677"
+  },
+  {
+    "file": "final-core-ecosystem.log",
+    "bytes": 403057,
+    "sha256": "e711c842157ab618ef6343478d7ac9cf2c47726c9363a39b6f340509dd30a03d"
+  },
+  {
+    "file": "final-core-verify.json",
+    "bytes": 3451,
+    "sha256": "62a03b3ca2a916a5300f774a3d3f149b2b8e79872a66ae51a55c36656d87e1a4"
+  },
+  {
+    "file": "final-core-verify.log",
+    "bytes": 312742,
+    "sha256": "6badb32d110aefbb97ef7880ed48681e0db4b138eb71a882b54a00276849d845"
+  },
+  {
+    "file": "final-editor.json",
+    "bytes": 5578,
+    "sha256": "5b5cdcf190b448e274d33422cd17087ff6fae3670120f750c4dbec00a7debf0a"
+  },
+  {
+    "file": "final-editor.log",
+    "bytes": 233030,
+    "sha256": "aaea63ec5b4d93b9dd1c9952a1d67ab84bb2d446d19ba2962da5f07c289122a8"
+  },
+  {
+    "file": "final-pptx.json",
+    "bytes": 11299,
+    "sha256": "d3e07fd562aa155ae0bab52cb61bd4b984983f5926dc05466a88a4dba4088125"
+  },
+  {
+    "file": "final-pptx.log",
+    "bytes": 539097,
+    "sha256": "fd752b157dd1f12362be1468b9ca3d5a24a2da30077e7ffdcbc8268da1763de4"
+  },
+  {
+    "file": "final-renderer.json",
+    "bytes": 6970,
+    "sha256": "35639c7deec4aeb1f82e1834f5631602ee2cdc02d39243c574173e36d0866f23"
+  },
+  {
+    "file": "final-renderer.log",
+    "bytes": 257609,
+    "sha256": "3fd5a54c2407c96178b746f0d3dd4cee9748963367f5bdf0097167ba33eb19e0"
+  },
+  {
+    "file": "verify.mjs",
+    "bytes": 3130,
+    "sha256": "1fb56d46ead39d0a87a5ef527836f569681101c8176549d78a161ed20dd9661b"
+  },
+  {
+    "file": "linux-installed/1280-16-inherited-footer-left-date.mask.png",
+    "bytes": 6165,
+    "sha256": "00c6b171e69b63d01b2b60d94ea77a4fd7678e81d29fcf34b8a6eb371ab9c11a"
+  },
+  {
+    "file": "linux-installed/1280-16-inherited-footer-right-slideNumber.mask.png",
+    "bytes": 4447,
+    "sha256": "1b97538050543f96afb6e27d6b12e62412fff4554d164dbdb47a013b266ed239"
+  },
+  {
+    "file": "linux-installed/1280-16-inherited-header-center-organization.mask.png",
+    "bytes": 6914,
+    "sha256": "102ac2d0d59314fe8145fa972137742d9d8d01f12238819c6999106163ccbb36"
+  },
+  {
+    "file": "linux-installed/1280-16-inherited-header-left-text.mask.png",
+    "bytes": 5897,
+    "sha256": "2522759ede1ee77a2f34b54d0702d1f4b72934a55e3168ff32cfc973e077de8f"
+  },
+  {
+    "file": "linux-installed/1280-16-inherited-header-right-section.mask.png",
+    "bytes": 5460,
+    "sha256": "42e51414ed6ff03535b00c1e0b04a7e011671d1045283f07e81698ed6e6f06b5"
+  },
+  {
+    "file": "linux-installed/1280-16-local-footer-left-date.mask.png",
+    "bytes": 6165,
+    "sha256": "00c6b171e69b63d01b2b60d94ea77a4fd7678e81d29fcf34b8a6eb371ab9c11a"
+  },
+  {
+    "file": "linux-installed/1280-16-local-footer-right-slideNumber.mask.png",
+    "bytes": 4447,
+    "sha256": "1b97538050543f96afb6e27d6b12e62412fff4554d164dbdb47a013b266ed239"
+  },
+  {
+    "file": "linux-installed/1280-16-local-header-center-organization.mask.png",
+    "bytes": 6914,
+    "sha256": "102ac2d0d59314fe8145fa972137742d9d8d01f12238819c6999106163ccbb36"
+  },
+  {
+    "file": "linux-installed/1280-16-local-header-left-text.mask.png",
+    "bytes": 4250,
+    "sha256": "7a5175f59992a07616d58b06a310b2a3909c43df6d406a736ef54995563a09ed"
+  },
+  {
+    "file": "linux-installed/1280-16-local-header-right-section.mask.png",
+    "bytes": 5460,
+    "sha256": "42e51414ed6ff03535b00c1e0b04a7e011671d1045283f07e81698ed6e6f06b5"
+  },
+  {
+    "file": "linux-installed/1280-32-inherited-footer-left-date.mask.png",
+    "bytes": 7874,
+    "sha256": "ca4337712cb97d0283e4719f159a60690efa841d9b6526aa1f9911db3ce069af"
+  },
+  {
+    "file": "linux-installed/1280-32-inherited-footer-right-slideNumber.mask.png",
+    "bytes": 4494,
+    "sha256": "49545766c8e6cb31ecc64ce310ffb1925ebf4a126f8e66601008345a2182e583"
+  },
+  {
+    "file": "linux-installed/1280-32-inherited-header-center-organization.mask.png",
+    "bytes": 9382,
+    "sha256": "147fbeb0daf522891300236714e4369cfa314fd92e41edd01936d0b8e3a72f48"
+  },
+  {
+    "file": "linux-installed/1280-32-inherited-header-left-text.mask.png",
+    "bytes": 7411,
+    "sha256": "6369fcdcb227a014952d5a39413fa68b3457e153733c260594d9db9aeeafdf04"
+  },
+  {
+    "file": "linux-installed/1280-32-inherited-header-right-section.mask.png",
+    "bytes": 6499,
+    "sha256": "0dfc4fae396b51559f834a1eea2e85af2105178f060df0ed3d3ed189061c70a1"
+  },
+  {
+    "file": "linux-installed/1280-32-local-footer-left-date.mask.png",
+    "bytes": 7874,
+    "sha256": "ca4337712cb97d0283e4719f159a60690efa841d9b6526aa1f9911db3ce069af"
+  },
+  {
+    "file": "linux-installed/1280-32-local-footer-right-slideNumber.mask.png",
+    "bytes": 4494,
+    "sha256": "49545766c8e6cb31ecc64ce310ffb1925ebf4a126f8e66601008345a2182e583"
+  },
+  {
+    "file": "linux-installed/1280-32-local-header-center-organization.mask.png",
+    "bytes": 9382,
+    "sha256": "147fbeb0daf522891300236714e4369cfa314fd92e41edd01936d0b8e3a72f48"
+  },
+  {
+    "file": "linux-installed/1280-32-local-header-left-text.mask.png",
+    "bytes": 4250,
+    "sha256": "7a5175f59992a07616d58b06a310b2a3909c43df6d406a736ef54995563a09ed"
+  },
+  {
+    "file": "linux-installed/1280-32-local-header-right-section.mask.png",
+    "bytes": 6499,
+    "sha256": "0dfc4fae396b51559f834a1eea2e85af2105178f060df0ed3d3ed189061c70a1"
+  },
+  {
+    "file": "linux-installed/720-16-inherited-footer-left-date.mask.png",
+    "bytes": 7202,
+    "sha256": "0d3c506a70926590edcd0d3169d2ad36076bf7ff3f19b8e838f283ab7b124510"
+  },
+  {
+    "file": "linux-installed/720-16-inherited-footer-right-slideNumber.mask.png",
+    "bytes": 5660,
+    "sha256": "9ed56e6d7849ff6b1d3e62e065fe3586b613bfc74b661110a79e03cf8904717c"
+  },
+  {
+    "file": "linux-installed/720-16-inherited-header-center-organization.mask.png",
+    "bytes": 8190,
+    "sha256": "342e3f8916f15bc92f4e53a19254c50a1b00f09d65aa29371a1a70f5a41e2340"
+  },
+  {
+    "file": "linux-installed/720-16-inherited-header-left-text.mask.png",
+    "bytes": 7131,
+    "sha256": "7dcb3f45d2c3c53b609015a3d3b2e279899f8188c6ea4cc1fab5c5bceb0fa714"
+  },
+  {
+    "file": "linux-installed/720-16-inherited-header-right-section.mask.png",
+    "bytes": 6608,
+    "sha256": "226b762c2a3f39f1029af1dcad2bd93b45ce2156e242bbd8eb1a2de4c2293ef0"
+  },
+  {
+    "file": "linux-installed/720-16-local-footer-left-date.mask.png",
+    "bytes": 7202,
+    "sha256": "0d3c506a70926590edcd0d3169d2ad36076bf7ff3f19b8e838f283ab7b124510"
+  },
+  {
+    "file": "linux-installed/720-16-local-footer-right-slideNumber.mask.png",
+    "bytes": 5660,
+    "sha256": "9ed56e6d7849ff6b1d3e62e065fe3586b613bfc74b661110a79e03cf8904717c"
+  },
+  {
+    "file": "linux-installed/720-16-local-header-center-organization.mask.png",
+    "bytes": 8190,
+    "sha256": "342e3f8916f15bc92f4e53a19254c50a1b00f09d65aa29371a1a70f5a41e2340"
+  },
+  {
+    "file": "linux-installed/720-16-local-header-left-text.mask.png",
+    "bytes": 5391,
+    "sha256": "6904f42f3f1ff4338185c4ed77035e99c84fe64e585ec3aa2e1177d58ecd7d90"
+  },
+  {
+    "file": "linux-installed/720-16-local-header-right-section.mask.png",
+    "bytes": 6608,
+    "sha256": "226b762c2a3f39f1029af1dcad2bd93b45ce2156e242bbd8eb1a2de4c2293ef0"
+  },
+  {
+    "file": "linux-installed/720-32-inherited-footer-left-date.mask.png",
+    "bytes": 8757,
+    "sha256": "d984d0a73762d2e4f4d1abe22e37b8888b6d6edb9d1f94114f3d87a1495f1cca"
+  },
+  {
+    "file": "linux-installed/720-32-inherited-footer-right-slideNumber.mask.png",
+    "bytes": 5705,
+    "sha256": "fd4a08b9d11d7f83981774445f0c38e68accc2e53dc973ccae511755b150ad53"
+  },
+  {
+    "file": "linux-installed/720-32-inherited-header-center-organization.mask.png",
+    "bytes": 11074,
+    "sha256": "6f797f77ce0f8a9ceedd2a1cd6680513d09f8a66d416dc62379eb0da53695d67"
+  },
+  {
+    "file": "linux-installed/720-32-inherited-header-left-text.mask.png",
+    "bytes": 8693,
+    "sha256": "87cd04529c332bff94f1b19a4a84a920ff8d926964a5a20a3b7839533360a702"
+  },
+  {
+    "file": "linux-installed/720-32-inherited-header-right-section.mask.png",
+    "bytes": 7672,
+    "sha256": "672e0020558754c0129036926e7e38499467b13d17e8d990eeac5ae2e1a39fc5"
+  },
+  {
+    "file": "linux-installed/720-32-local-footer-left-date.mask.png",
+    "bytes": 8757,
+    "sha256": "d984d0a73762d2e4f4d1abe22e37b8888b6d6edb9d1f94114f3d87a1495f1cca"
+  },
+  {
+    "file": "linux-installed/720-32-local-footer-right-slideNumber.mask.png",
+    "bytes": 5705,
+    "sha256": "fd4a08b9d11d7f83981774445f0c38e68accc2e53dc973ccae511755b150ad53"
+  },
+  {
+    "file": "linux-installed/720-32-local-header-center-organization.mask.png",
+    "bytes": 11074,
+    "sha256": "6f797f77ce0f8a9ceedd2a1cd6680513d09f8a66d416dc62379eb0da53695d67"
+  },
+  {
+    "file": "linux-installed/720-32-local-header-left-text.mask.png",
+    "bytes": 5391,
+    "sha256": "6904f42f3f1ff4338185c4ed77035e99c84fe64e585ec3aa2e1177d58ecd7d90"
+  },
+  {
+    "file": "linux-installed/720-32-local-header-right-section.mask.png",
+    "bytes": 7672,
+    "sha256": "672e0020558754c0129036926e7e38499467b13d17e8d990eeac5ae2e1a39fc5"
+  },
+  {
+    "file": "linux-installed/displaced-text-control.mask.png",
+    "bytes": 5910,
+    "sha256": "50b1f0e4a77fd9603f72986d7aa2579eb3b4930446595502c16215529fc6a3eb"
+  },
+  {
+    "file": "linux-installed/report.json",
+    "bytes": 495351,
+    "sha256": "ea4719a225436716a108a08920659a8c436189afab801298122a0fbabe5c953a"
+  },
+  {
+    "file": "linux-predecessor/1280-16-inherited-header-left-text.mask.png",
+    "bytes": 5896,
+    "sha256": "0df0407795cc139eca0715966225d076a0e5ac090cd4390f68df278349a35f7d"
+  },
+  {
+    "file": "linux-predecessor/failure-page.png",
+    "bytes": 24018,
+    "sha256": "9c68cfd95a347e6fdf0fe9a0f480f15c24f4bba89ea22c8e780c16419591f051"
+  },
+  {
+    "file": "linux-predecessor/failure.json",
+    "bytes": 31539,
+    "sha256": "c02b8fadee97f9e8ff6cafb87c1f4fe2930d21f6a3ed342c7673fe6ef317d3cc"
+  },
+  {
+    "file": "mac-installed/report.json",
+    "bytes": 499483,
+    "sha256": "edb7b56ed0a91692212641824ccfb04b017ad2929860c733e2611c7a90b8140d"
+  },
+  {
+    "file": "mac-source/1280-16-inherited-footer-left-date.mask.png",
+    "bytes": 6157,
+    "sha256": "0ddc115f04013d8f958ee6da16ad556ba850b0d036963f9f58567f8693934e66"
+  },
+  {
+    "file": "mac-source/1280-16-inherited-footer-right-slideNumber.mask.png",
+    "bytes": 4428,
+    "sha256": "89d30b807debeceecdb95218f42cd2e57046dee7cac599d6e5b3dfed84535c16"
+  },
+  {
+    "file": "mac-source/1280-16-inherited-header-center-organization.mask.png",
+    "bytes": 6897,
+    "sha256": "edd739908ed6b40a5cf3b769382db4d9510a3b92881fc0ca32bbfc95e69ca64b"
+  },
+  {
+    "file": "mac-source/1280-16-inherited-header-left-text.mask.png",
+    "bytes": 5984,
+    "sha256": "b654c0a240786b5482f42b58c3ede983bb5b16f80f0eab4006e63e08b9d1fc43"
+  },
+  {
+    "file": "mac-source/1280-16-inherited-header-right-section.mask.png",
+    "bytes": 5455,
+    "sha256": "8714d9aeed78c193735f58e619df82bdeeb0499c86c329c3a5b9933c2e72aece"
+  },
+  {
+    "file": "mac-source/1280-16-local-footer-left-date.mask.png",
+    "bytes": 6157,
+    "sha256": "0ddc115f04013d8f958ee6da16ad556ba850b0d036963f9f58567f8693934e66"
+  },
+  {
+    "file": "mac-source/1280-16-local-footer-right-slideNumber.mask.png",
+    "bytes": 4428,
+    "sha256": "89d30b807debeceecdb95218f42cd2e57046dee7cac599d6e5b3dfed84535c16"
+  },
+  {
+    "file": "mac-source/1280-16-local-header-center-organization.mask.png",
+    "bytes": 6897,
+    "sha256": "edd739908ed6b40a5cf3b769382db4d9510a3b92881fc0ca32bbfc95e69ca64b"
+  },
+  {
+    "file": "mac-source/1280-16-local-header-left-text.mask.png",
+    "bytes": 4250,
+    "sha256": "7a5175f59992a07616d58b06a310b2a3909c43df6d406a736ef54995563a09ed"
+  },
+  {
+    "file": "mac-source/1280-16-local-header-right-section.mask.png",
+    "bytes": 5455,
+    "sha256": "8714d9aeed78c193735f58e619df82bdeeb0499c86c329c3a5b9933c2e72aece"
+  },
+  {
+    "file": "mac-source/1280-32-inherited-footer-left-date.mask.png",
+    "bytes": 8102,
+    "sha256": "96dbe06be980cf8ca576ecf419f0dac64e78118d5a5b17813e373a8e5c4f9413"
+  },
+  {
+    "file": "mac-source/1280-32-inherited-footer-right-slideNumber.mask.png",
+    "bytes": 4492,
+    "sha256": "f68acf2f3c06a0101de2936f8949027b600acaf9e6ebb335708d322122f6c218"
+  },
+  {
+    "file": "mac-source/1280-32-inherited-header-center-organization.mask.png",
+    "bytes": 9635,
+    "sha256": "fc676cdef72a9b244631a492781921e1afc5eb9f54630fe88a4f37a4e12f1215"
+  },
+  {
+    "file": "mac-source/1280-32-inherited-header-left-text.mask.png",
+    "bytes": 7744,
+    "sha256": "96d411193ab8f766795fd5d822d9c309c24c7a414de6dd691cabf03dcb49a46b"
+  },
+  {
+    "file": "mac-source/1280-32-inherited-header-right-section.mask.png",
+    "bytes": 6655,
+    "sha256": "905ac8f32543dc0b06a88a1a28980691eec4bda80904a524445b7b90d2181b87"
+  },
+  {
+    "file": "mac-source/1280-32-local-footer-left-date.mask.png",
+    "bytes": 8102,
+    "sha256": "96dbe06be980cf8ca576ecf419f0dac64e78118d5a5b17813e373a8e5c4f9413"
+  },
+  {
+    "file": "mac-source/1280-32-local-footer-right-slideNumber.mask.png",
+    "bytes": 4492,
+    "sha256": "f68acf2f3c06a0101de2936f8949027b600acaf9e6ebb335708d322122f6c218"
+  },
+  {
+    "file": "mac-source/1280-32-local-header-center-organization.mask.png",
+    "bytes": 9635,
+    "sha256": "fc676cdef72a9b244631a492781921e1afc5eb9f54630fe88a4f37a4e12f1215"
+  },
+  {
+    "file": "mac-source/1280-32-local-header-left-text.mask.png",
+    "bytes": 4250,
+    "sha256": "7a5175f59992a07616d58b06a310b2a3909c43df6d406a736ef54995563a09ed"
+  },
+  {
+    "file": "mac-source/1280-32-local-header-right-section.mask.png",
+    "bytes": 6655,
+    "sha256": "905ac8f32543dc0b06a88a1a28980691eec4bda80904a524445b7b90d2181b87"
+  },
+  {
+    "file": "mac-source/720-16-inherited-footer-left-date.mask.png",
+    "bytes": 7181,
+    "sha256": "9e4f3d68330944d226ab4e1354f1ac37559783715dcc397cbd05668de301eba1"
+  },
+  {
+    "file": "mac-source/720-16-inherited-footer-right-slideNumber.mask.png",
+    "bytes": 5638,
+    "sha256": "a511a0b95cdca876c44b41776369063278629727a7842b7a74d1762b7af6c11e"
+  },
+  {
+    "file": "mac-source/720-16-inherited-header-center-organization.mask.png",
+    "bytes": 8090,
+    "sha256": "297096b89473770933eebf6493b5eafe5defa032ba96f30d5ddf543b9d51112d"
+  },
+  {
+    "file": "mac-source/720-16-inherited-header-left-text.mask.png",
+    "bytes": 7246,
+    "sha256": "48f9f68990e48750872fa8a8489bed2d01bf7bc4186419899b2c6a285b6020b2"
+  },
+  {
+    "file": "mac-source/720-16-inherited-header-right-section.mask.png",
+    "bytes": 6616,
+    "sha256": "40d63fa8c6649921f1d51f924c06fab9b52c53ff9f576d494baaccd8d7edc8b3"
+  },
+  {
+    "file": "mac-source/720-16-local-footer-left-date.mask.png",
+    "bytes": 7181,
+    "sha256": "9e4f3d68330944d226ab4e1354f1ac37559783715dcc397cbd05668de301eba1"
+  },
+  {
+    "file": "mac-source/720-16-local-footer-right-slideNumber.mask.png",
+    "bytes": 5638,
+    "sha256": "a511a0b95cdca876c44b41776369063278629727a7842b7a74d1762b7af6c11e"
+  },
+  {
+    "file": "mac-source/720-16-local-header-center-organization.mask.png",
+    "bytes": 8090,
+    "sha256": "297096b89473770933eebf6493b5eafe5defa032ba96f30d5ddf543b9d51112d"
+  },
+  {
+    "file": "mac-source/720-16-local-header-left-text.mask.png",
+    "bytes": 5391,
+    "sha256": "6904f42f3f1ff4338185c4ed77035e99c84fe64e585ec3aa2e1177d58ecd7d90"
+  },
+  {
+    "file": "mac-source/720-16-local-header-right-section.mask.png",
+    "bytes": 6616,
+    "sha256": "40d63fa8c6649921f1d51f924c06fab9b52c53ff9f576d494baaccd8d7edc8b3"
+  },
+  {
+    "file": "mac-source/720-32-inherited-footer-left-date.mask.png",
+    "bytes": 8947,
+    "sha256": "c0a5d790d81e2b5e2d14e2be88e0a1f9a1f8e0422e6384022ae20a2841e42ca5"
+  },
+  {
+    "file": "mac-source/720-32-inherited-footer-right-slideNumber.mask.png",
+    "bytes": 5699,
+    "sha256": "8293f1ec774dd24dae006d3e785fd5ce38d0a3de6cc6f7241f36426afb4b3cb1"
+  },
+  {
+    "file": "mac-source/720-32-inherited-header-center-organization.mask.png",
+    "bytes": 11329,
+    "sha256": "98c1a37e8c45c2be56073c5a64238c6e373e4a63dd6f9f78776ffe2854ac80c9"
+  },
+  {
+    "file": "mac-source/720-32-inherited-header-left-text.mask.png",
+    "bytes": 8945,
+    "sha256": "ce74e13d2981ce8c77f237bc292bcd78584db026def728066c55ccb99ad4e602"
+  },
+  {
+    "file": "mac-source/720-32-inherited-header-right-section.mask.png",
+    "bytes": 7929,
+    "sha256": "5cc057f7412dfb8928970ec0698d41e1c47eddf4628a246fcb8e5d66d1b3afd2"
+  },
+  {
+    "file": "mac-source/720-32-local-footer-left-date.mask.png",
+    "bytes": 8947,
+    "sha256": "c0a5d790d81e2b5e2d14e2be88e0a1f9a1f8e0422e6384022ae20a2841e42ca5"
+  },
+  {
+    "file": "mac-source/720-32-local-footer-right-slideNumber.mask.png",
+    "bytes": 5699,
+    "sha256": "8293f1ec774dd24dae006d3e785fd5ce38d0a3de6cc6f7241f36426afb4b3cb1"
+  },
+  {
+    "file": "mac-source/720-32-local-header-center-organization.mask.png",
+    "bytes": 11329,
+    "sha256": "98c1a37e8c45c2be56073c5a64238c6e373e4a63dd6f9f78776ffe2854ac80c9"
+  },
+  {
+    "file": "mac-source/720-32-local-header-left-text.mask.png",
+    "bytes": 5391,
+    "sha256": "6904f42f3f1ff4338185c4ed77035e99c84fe64e585ec3aa2e1177d58ecd7d90"
+  },
+  {
+    "file": "mac-source/720-32-local-header-right-section.mask.png",
+    "bytes": 7929,
+    "sha256": "5cc057f7412dfb8928970ec0698d41e1c47eddf4628a246fcb8e5d66d1b3afd2"
+  },
+  {
+    "file": "mac-source/displaced-text-control.mask.png",
+    "bytes": 6003,
+    "sha256": "93ce7f858dff86a9703255affd1e788a8da510c4a26bdb7b8fd24198ca9ea59e"
+  },
+  {
+    "file": "mac-source/report.json",
+    "bytes": 466837,
+    "sha256": "c741df6cf0c47c8a149886fe3db2e9fc1b314e2445cbe8571329f4c94b6684be"
+  },
+  {
+    "file": "views-after/furniture-1280-inherited.png",
+    "bytes": 31700,
+    "sha256": "10f6e425e7a3951ca5a2640d1cbb3240e2cb8f2583198bb9e20632e80ec5ae96"
+  },
+  {
+    "file": "views-after/furniture-1280-local.png",
+    "bytes": 29811,
+    "sha256": "60cf396329fa92b5dccc167a60708f4de4c6fe3d11d7a08fded16de3a8452529"
+  },
+  {
+    "file": "views-after/furniture-720-inherited.png",
+    "bytes": 53662,
+    "sha256": "10d5291310a9d1fc5d73d4598b3f42c2094593ba39976544c5f5a4a339e75d49"
+  },
+  {
+    "file": "views-after/furniture-720-local.png",
+    "bytes": 51476,
+    "sha256": "cd43748a0c4263649174660271a6b4608a00321633b175d3fcdb1ca6eb5de8b3"
+  },
+  {
+    "file": "views-before/furniture-1280-inherited.png",
+    "bytes": 31679,
+    "sha256": "e3cf706eeab969ed32131a1922d976d5bc15fbcac02420df3ca04e7d839220d5"
+  },
+  {
+    "file": "views-before/furniture-1280-local.png",
+    "bytes": 30180,
+    "sha256": "cd91478fec09558030987493e5b706b854c8a8bd8ff9c78fc6b8edaa414c5659"
+  },
+  {
+    "file": "views-before/furniture-720-inherited.png",
+    "bytes": 53990,
+    "sha256": "418fd5ea6e9fb009b7f5b7811d79cd569848913b6d1b299e2b09f7e8b5116e88"
+  },
+  {
+    "file": "views-before/furniture-720-local.png",
+    "bytes": 51359,
+    "sha256": "b98e5b96e8da8e6d0e8b934febf94b1a4d801d87b3ab15d7dc4c379a53116451"
+  },
+  {
+    "file": "windows-installed/1280-16-inherited-footer-left-date.mask.png",
+    "bytes": 5638,
+    "sha256": "491c2d956d515fd7af8b7d81a36b2b820b3d349953de797e709713c983265e8b"
+  },
+  {
+    "file": "windows-installed/1280-16-inherited-footer-right-slideNumber.mask.png",
+    "bytes": 4426,
+    "sha256": "fd10e60b8e9367e7c6ce106021eee2da5e0d5260aa084270dd6edc2ee0ab775f"
+  },
+  {
+    "file": "windows-installed/1280-16-inherited-header-center-organization.mask.png",
+    "bytes": 6165,
+    "sha256": "5c495f63ae400c22b60b287cebd941e66282058951a135ae0435a52010604a3e"
+  },
+  {
+    "file": "windows-installed/1280-16-inherited-header-left-text.mask.png",
+    "bytes": 5578,
+    "sha256": "4c2098238456bb1ac6658dacc795fd533e0f69dc5632c3f5945c9e49a71eb31d"
+  },
+  {
+    "file": "windows-installed/1280-16-inherited-header-right-section.mask.png",
+    "bytes": 5219,
+    "sha256": "c27b26c2df6ce558bc3e1f6467ec52f5b4f401ea3dacb2f8f4e15c8aaa7065c4"
+  },
+  {
+    "file": "windows-installed/1280-16-local-footer-left-date.mask.png",
+    "bytes": 5638,
+    "sha256": "491c2d956d515fd7af8b7d81a36b2b820b3d349953de797e709713c983265e8b"
+  },
+  {
+    "file": "windows-installed/1280-16-local-footer-right-slideNumber.mask.png",
+    "bytes": 4426,
+    "sha256": "fd10e60b8e9367e7c6ce106021eee2da5e0d5260aa084270dd6edc2ee0ab775f"
+  },
+  {
+    "file": "windows-installed/1280-16-local-header-center-organization.mask.png",
+    "bytes": 6165,
+    "sha256": "5c495f63ae400c22b60b287cebd941e66282058951a135ae0435a52010604a3e"
+  },
+  {
+    "file": "windows-installed/1280-16-local-header-left-text.mask.png",
+    "bytes": 4250,
+    "sha256": "7a5175f59992a07616d58b06a310b2a3909c43df6d406a736ef54995563a09ed"
+  },
+  {
+    "file": "windows-installed/1280-16-local-header-right-section.mask.png",
+    "bytes": 5219,
+    "sha256": "c27b26c2df6ce558bc3e1f6467ec52f5b4f401ea3dacb2f8f4e15c8aaa7065c4"
+  },
+  {
+    "file": "windows-installed/1280-32-inherited-footer-left-date.mask.png",
+    "bytes": 6770,
+    "sha256": "1804cc5a2f67de86090f4f1f1dc87f7a8d760d5fec27197445defb52d470c7aa"
+  },
+  {
+    "file": "windows-installed/1280-32-inherited-footer-right-slideNumber.mask.png",
+    "bytes": 4472,
+    "sha256": "4a4513bf9441846c3a13cf24ba799ccd5c2bf17bbf0e00b4238033febf00b3e6"
+  },
+  {
+    "file": "windows-installed/1280-32-inherited-header-center-organization.mask.png",
+    "bytes": 7768,
+    "sha256": "cdec9d50edc97d1896cc83ea64414176b311737c90e6bd75cf0307b371500d28"
+  },
+  {
+    "file": "windows-installed/1280-32-inherited-header-left-text.mask.png",
+    "bytes": 6828,
+    "sha256": "028acd0fa467e47bbbaa660f3499174206e7d4f4b6f55e78e2374c30eadfa44e"
+  },
+  {
+    "file": "windows-installed/1280-32-inherited-header-right-section.mask.png",
+    "bytes": 6144,
+    "sha256": "a4ce13b2c949bd637505bab85d7682e118cbd1dc6fe510e0a05a47141244e1a9"
+  },
+  {
+    "file": "windows-installed/1280-32-local-footer-left-date.mask.png",
+    "bytes": 6770,
+    "sha256": "1804cc5a2f67de86090f4f1f1dc87f7a8d760d5fec27197445defb52d470c7aa"
+  },
+  {
+    "file": "windows-installed/1280-32-local-footer-right-slideNumber.mask.png",
+    "bytes": 4472,
+    "sha256": "4a4513bf9441846c3a13cf24ba799ccd5c2bf17bbf0e00b4238033febf00b3e6"
+  },
+  {
+    "file": "windows-installed/1280-32-local-header-center-organization.mask.png",
+    "bytes": 7768,
+    "sha256": "cdec9d50edc97d1896cc83ea64414176b311737c90e6bd75cf0307b371500d28"
+  },
+  {
+    "file": "windows-installed/1280-32-local-header-left-text.mask.png",
+    "bytes": 4250,
+    "sha256": "7a5175f59992a07616d58b06a310b2a3909c43df6d406a736ef54995563a09ed"
+  },
+  {
+    "file": "windows-installed/1280-32-local-header-right-section.mask.png",
+    "bytes": 6144,
+    "sha256": "a4ce13b2c949bd637505bab85d7682e118cbd1dc6fe510e0a05a47141244e1a9"
+  },
+  {
+    "file": "windows-installed/720-16-inherited-footer-left-date.mask.png",
+    "bytes": 6859,
+    "sha256": "a19c411d498fb6e9ab36e87810ce610c596acc1ddb7f8e3f9a8a3ebbc9a30fdf"
+  },
+  {
+    "file": "windows-installed/720-16-inherited-footer-right-slideNumber.mask.png",
+    "bytes": 5636,
+    "sha256": "f2fc3079dff1890e68f848cc5f48cb7426f4160528aff5fecaa2cf82a3345aad"
+  },
+  {
+    "file": "windows-installed/720-16-inherited-header-center-organization.mask.png",
+    "bytes": 7385,
+    "sha256": "02189a96fd9e39ced61f84ff627e8d86620ac9fb62ce4140abe654ae80f3d0c6"
+  },
+  {
+    "file": "windows-installed/720-16-inherited-header-left-text.mask.png",
+    "bytes": 6740,
+    "sha256": "3ecd4ce91fa2577a042cc2d2938f98ad625c7334a3e98301ae179516c265e3e4"
+  },
+  {
+    "file": "windows-installed/720-16-inherited-header-right-section.mask.png",
+    "bytes": 6439,
+    "sha256": "932509bc33a1a2ed9f706006c2605ac6dd54b6b87789f0d485ac9cb25846f184"
+  },
+  {
+    "file": "windows-installed/720-16-local-footer-left-date.mask.png",
+    "bytes": 6859,
+    "sha256": "a19c411d498fb6e9ab36e87810ce610c596acc1ddb7f8e3f9a8a3ebbc9a30fdf"
+  },
+  {
+    "file": "windows-installed/720-16-local-footer-right-slideNumber.mask.png",
+    "bytes": 5636,
+    "sha256": "f2fc3079dff1890e68f848cc5f48cb7426f4160528aff5fecaa2cf82a3345aad"
+  },
+  {
+    "file": "windows-installed/720-16-local-header-center-organization.mask.png",
+    "bytes": 7385,
+    "sha256": "02189a96fd9e39ced61f84ff627e8d86620ac9fb62ce4140abe654ae80f3d0c6"
+  },
+  {
+    "file": "windows-installed/720-16-local-header-left-text.mask.png",
+    "bytes": 5391,
+    "sha256": "6904f42f3f1ff4338185c4ed77035e99c84fe64e585ec3aa2e1177d58ecd7d90"
+  },
+  {
+    "file": "windows-installed/720-16-local-header-right-section.mask.png",
+    "bytes": 6439,
+    "sha256": "932509bc33a1a2ed9f706006c2605ac6dd54b6b87789f0d485ac9cb25846f184"
+  },
+  {
+    "file": "windows-installed/720-32-inherited-footer-left-date.mask.png",
+    "bytes": 7732,
+    "sha256": "0ccf2b963c2240ac50aeb48b2219668987d0c61f61eba8d05d1db73c88120778"
+  },
+  {
+    "file": "windows-installed/720-32-inherited-footer-right-slideNumber.mask.png",
+    "bytes": 5681,
+    "sha256": "21099c6bacf51a6bedaa4e115f9030219933e92c1a10e2cd72b37c07c9acf651"
+  },
+  {
+    "file": "windows-installed/720-32-inherited-header-center-organization.mask.png",
+    "bytes": 9421,
+    "sha256": "4c0c83fa0ee1f02a01e1901c8568f1dbcf57c830a6a59ab1bdf0d115ee22331d"
+  },
+  {
+    "file": "windows-installed/720-32-inherited-header-left-text.mask.png",
+    "bytes": 8028,
+    "sha256": "525f413f873dd58058e8cf22fd9db1df2098e74c63d2dabdb174ff24c2046c20"
+  },
+  {
+    "file": "windows-installed/720-32-inherited-header-right-section.mask.png",
+    "bytes": 7350,
+    "sha256": "0ebda3370b7acea95a6f13eecabeda106620a9fc9491614a5e827ef10be22cc7"
+  },
+  {
+    "file": "windows-installed/720-32-local-footer-left-date.mask.png",
+    "bytes": 7732,
+    "sha256": "0ccf2b963c2240ac50aeb48b2219668987d0c61f61eba8d05d1db73c88120778"
+  },
+  {
+    "file": "windows-installed/720-32-local-footer-right-slideNumber.mask.png",
+    "bytes": 5681,
+    "sha256": "21099c6bacf51a6bedaa4e115f9030219933e92c1a10e2cd72b37c07c9acf651"
+  },
+  {
+    "file": "windows-installed/720-32-local-header-center-organization.mask.png",
+    "bytes": 9421,
+    "sha256": "4c0c83fa0ee1f02a01e1901c8568f1dbcf57c830a6a59ab1bdf0d115ee22331d"
+  },
+  {
+    "file": "windows-installed/720-32-local-header-left-text.mask.png",
+    "bytes": 5391,
+    "sha256": "6904f42f3f1ff4338185c4ed77035e99c84fe64e585ec3aa2e1177d58ecd7d90"
+  },
+  {
+    "file": "windows-installed/720-32-local-header-right-section.mask.png",
+    "bytes": 7350,
+    "sha256": "0ebda3370b7acea95a6f13eecabeda106620a9fc9491614a5e827ef10be22cc7"
+  },
+  {
+    "file": "windows-installed/displaced-text-control.mask.png",
+    "bytes": 5587,
+    "sha256": "3e9a4b7cb5e23a2aad93ffd890c4cd8a783799c18048ea7f0343109f2db8362d"
+  },
+  {
+    "file": "windows-installed/report.json",
+    "bytes": 497250,
+    "sha256": "a1c20883acdb58b8cdcdcb088bf493b44c3f6e2c775e71ec702d04231f88bbd1"
+  }
+]

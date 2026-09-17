@@ -1,0 +1,680 @@
+{
+  "pr": 10,
+  "reviewedHead": "95c1eb92a8b3be0c8e63917180dcb447aed0cfb8",
+  "mergeCommit": "7fe9905ad2d8a224efeef51b4a22d0aff0c413fe",
+  "treeIdentical": true,
+  "ci": 34420837605,
+  "bugbot": "passed",
+  "publishWorkflow": 34421186727,
+  "npmPublishedAt": "2026-09-10T00:26:19.032Z",
+  "runs": [
+    {
+      "checkedAt": "2026-09-10T00:29:30.807Z",
+      "node": "v20.20.2",
+      "name": "@openpresentation/opf-render",
+      "version": "0.6.0",
+      "gitHead": "7fe9905ad2d8a224efeef51b4a22d0aff0c413fe",
+      "integrity": "sha512-rYHS0qetT8FpDqkB8E9KMtwrh6NiB6UzxAeqaCwnMwrIDIEvejKC++Hw2Us4512ZIHRHdwuG42aq6QJodBJOPA==",
+      "attestations": {
+        "url": "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf-render@0.6.0",
+        "provenance": {
+          "predicateType": "https://slsa.dev/provenance/v1"
+        }
+      },
+      "core": {
+        "version": "0.8.0",
+        "integrity": "sha512-1ubeINQsuD8pFNr542eFYPfzkhcECAcj/mM2pWNN+keFnVoWxePCsFTUtjuSSsvCtpm7QkgxBYRJYtEUmrlkkg=="
+      },
+      "files": {
+        "LICENSE": "c977d11e7e9de5bd31ab787b9a302475c0487837c66f665c174d9f92b18937d2",
+        "dist/font-compatibility.js": "8d689401d826bf604b1e2b0bedaed2f47d89263d17041b03fcd1f91b254b82ac",
+        "dist/fonts-browser.js": "cee4d94c13aa1dc76581e9e4f3b401278ee859b69b21bbed88ed626c77e6ece7",
+        "dist/fonts-node.js": "0f1edc1f3d55472a64efd1ce344ff95e8a320e0ee53689085ed55a77a33a8f0e",
+        "dist/fonts.js": "db78254df6efadb5cb606169feefa1d19c153a249186bd8a38078f97d9502d22",
+        "dist/index.js": "1fdb45740a09bb6f48eb5dc79def3ffe692acdf0a5c319727edf4e19c0020d78",
+        "dist/raster-images.js": "9d61faa7fd83452a98d2593431dcb29953b6d1a5f60d521aa22eadfc7d7e1843",
+        "dist/raster.js": "3b18ae6c2c3a04cc0f53c2c92c84be1c8fbdaf85eb7c1af232ef7092477bf305",
+        "dist/svg.js": "743f66010afe95fae6c7deb1a3d19f9e8b69889710cdf3a1a72cc2479b2038fd",
+        "package.json": "1767d03016cde5691716bbeea4c3ac0de4ea8b8678b774c5cb192a7e534823cc",
+        "README.md": "32363488c98f23c1b39e0a77bca4f9f625a9d7edfcd3c4378312140d785b6b25",
+        "dist/fonts-browser.d.ts": "ec29b763373f334d2dfeab26fd57ad7a6b7b36bf88bdd47877ae6479e7990b81",
+        "dist/fonts-node.d.ts": "4cf52acd3ef57c30baf0356b6b7cd256a2f7fcd3e8c482e46788188f98834bb0",
+        "dist/fonts.d.ts": "f7106ff38996dbcf271932a445ffcd5a2cb365b18ac4c4677d4246930a1e17cd",
+        "dist/index.d.ts": "1d5a4001497129ef922066fbcd928ee70af66e0b2e5464dc93332d9108941694",
+        "dist/svg.d.ts": "e8809f4e6b5b349d4645299c04639d0e733136b3c52c0be35298cc13994ab1b1"
+      },
+      "knownVulnerabilities": 0,
+      "signatureVerification": "audited 44 packages in 0s\n\n44 packages have verified registry signatures\n\n12 packages have verified attestations\n(use --json --include-attestations to view attestation details)",
+      "tests": [
+        {
+          "test": "webp.mjs",
+          "output": "WebP raster passed: 23 PNG/PDF and fit/crop cases; independent pixels, PDF image streams, alpha/EXIF/first frame, SVG input forms, errors and unchanged source SVG."
+        },
+        {
+          "test": "jpeg-orientation.mjs",
+          "output": "JPEG orientation passed: 24 raster/PDF and fit/crop cases across all eight orientations; independent Pillow pixels (max channel difference 2), original orientation-1 bytes and path-specific errors."
+        },
+        {
+          "test": "rich-table.mjs",
+          "output": "Rich table renderer passed: formatted cell/header runs, trace paths, links, empty rich cells, PNG output and strict overflow."
+        },
+        {
+          "test": "styled-table.mjs",
+          "output": "Styled table renderer passed: spans, fills/alpha, shared border precedence and suppression, scalar/rich vertical alignment, editable paths, run overrides and rasterization."
+        },
+        {
+          "test": "quote-footer.mjs",
+          "output": "Quote footer passed: 8 fitted long quotes retain separation, 2 oversized cases diagnose/reject in strict mode across wide and portrait canvases."
+        },
+        {
+          "test": "shared-quote.mjs",
+          "output": "Shared quote SVG: 4 exact accepted layouts/styles with no extra measurement, reasoned overflow, strict rejection and no tiny-cell omission."
+        },
+        {
+          "test": "golden.mjs",
+          "output": "Golden passed: 805 slides, 126 decks; no skipped corpus."
+        }
+      ],
+      "browser": {
+        "browser": "152.0.4191.66",
+        "suites": [
+          {
+            "name": "jpeg",
+            "passed": true,
+            "cases": 16,
+            "maxDifference": 49,
+            "controlMean": 56.419711642795136,
+            "measurements": [
+              {
+                "orientation": 1,
+                "imageFill": "fit",
+                "max": 49,
+                "mean": 0.3241276041666667,
+                "largePercent": 0.672119140625
+              },
+              {
+                "orientation": 1,
+                "imageFill": "crop",
+                "max": 49,
+                "mean": 0.3426852756076389,
+                "largePercent": 0.697021484375
+              },
+              {
+                "orientation": 2,
+                "imageFill": "fit",
+                "max": 49,
+                "mean": 0.32415174696180554,
+                "largePercent": 0.6720106336805556
+              },
+              {
+                "orientation": 2,
+                "imageFill": "crop",
+                "max": 49,
+                "mean": 0.34280029296875,
+                "largePercent": 0.6969672309027778
+              },
+              {
+                "orientation": 3,
+                "imageFill": "fit",
+                "max": 49,
+                "mean": 0.3241379123263889,
+                "largePercent": 0.6719835069444444
+              },
+              {
+                "orientation": 3,
+                "imageFill": "crop",
+                "max": 49,
+                "mean": 0.3427826605902778,
+                "largePercent": 0.696994357638889
+              },
+              {
+                "orientation": 4,
+                "imageFill": "fit",
+                "max": 49,
+                "mean": 0.3241552734375,
+                "largePercent": 0.672092013888889
+              },
+              {
+                "orientation": 4,
+                "imageFill": "crop",
+                "max": 49,
+                "mean": 0.3427205403645833,
+                "largePercent": 0.6970486111111112
+              },
+              {
+                "orientation": 5,
+                "imageFill": "fit",
+                "max": 45,
+                "mean": 0.08678656684027777,
+                "largePercent": 0.1814507378472222
+              },
+              {
+                "orientation": 5,
+                "imageFill": "crop",
+                "max": 39,
+                "mean": 0.6215879991319444,
+                "largePercent": 1.1771104600694444
+              },
+              {
+                "orientation": 6,
+                "imageFill": "fit",
+                "max": 45,
+                "mean": 0.08679904513888889,
+                "largePercent": 0.1814507378472222
+              },
+              {
+                "orientation": 6,
+                "imageFill": "crop",
+                "max": 39,
+                "mean": 0.6217607964409723,
+                "largePercent": 1.1771375868055556
+              },
+              {
+                "orientation": 7,
+                "imageFill": "fit",
+                "max": 45,
+                "mean": 0.0868017578125,
+                "largePercent": 0.181396484375
+              },
+              {
+                "orientation": 7,
+                "imageFill": "crop",
+                "max": 39,
+                "mean": 0.6217537434895833,
+                "largePercent": 1.17724609375
+              },
+              {
+                "orientation": 8,
+                "imageFill": "fit",
+                "max": 45,
+                "mean": 0.08679578993055556,
+                "largePercent": 0.181396484375
+              },
+              {
+                "orientation": 8,
+                "imageFill": "crop",
+                "max": 39,
+                "mean": 0.6217363823784722,
+                "largePercent": 1.177300347222222
+              }
+            ],
+            "checks": "Browser-rendered OPF SVG JPEG orientation and fit/crop against independent Pillow PNGs"
+          },
+          {
+            "name": "quote-footer",
+            "passed": true,
+            "cases": 10,
+            "checks": 80,
+            "fonts": 4,
+            "lineBoxOverhangs": [
+              {
+                "id": "1280-12",
+                "part": "footer",
+                "left": 1.0000015258789006,
+                "right": 0,
+                "top": 0,
+                "bottom": 0
+              },
+              {
+                "id": "1280-16",
+                "part": "body",
+                "left": 1.0000015258789006,
+                "right": 0,
+                "top": 0,
+                "bottom": 0
+              },
+              {
+                "id": "1280-16",
+                "part": "footer",
+                "left": 1.0000015258789006,
+                "right": 0,
+                "top": 0,
+                "bottom": 0.2599731445312834
+              },
+              {
+                "id": "1280-20",
+                "part": "footer",
+                "left": 1.0000015258789006,
+                "right": 0,
+                "top": 0,
+                "bottom": 0.2599731445312834
+              },
+              {
+                "id": "1280-24",
+                "part": "body",
+                "left": 1.0000015258789006,
+                "right": 0,
+                "top": 0,
+                "bottom": 0
+              },
+              {
+                "id": "1280-24",
+                "part": "footer",
+                "left": 1.0000015258789006,
+                "right": 0,
+                "top": 0,
+                "bottom": 0.2599731445312834
+              },
+              {
+                "id": "1280-expanded-footer",
+                "part": "footer",
+                "left": 0.0000015258789005656581,
+                "right": 0,
+                "top": 0,
+                "bottom": 0.2599731445312443
+              },
+              {
+                "id": "540-12",
+                "part": "body",
+                "left": 0.9999992370605497,
+                "right": 0,
+                "top": 0,
+                "bottom": 0
+              },
+              {
+                "id": "540-12",
+                "part": "footer",
+                "left": 0.9999992370605497,
+                "right": 0,
+                "top": 0,
+                "bottom": 0
+              },
+              {
+                "id": "540-16",
+                "part": "body",
+                "left": 0.9999992370605497,
+                "right": 0,
+                "top": 0,
+                "bottom": 0
+              },
+              {
+                "id": "540-16",
+                "part": "footer",
+                "left": 0.9999992370605497,
+                "right": 0,
+                "top": 0,
+                "bottom": 0
+              },
+              {
+                "id": "540-20",
+                "part": "body",
+                "left": 0.9999992370605497,
+                "right": 0,
+                "top": 0,
+                "bottom": 0
+              },
+              {
+                "id": "540-20",
+                "part": "footer",
+                "left": 0.9999992370605497,
+                "right": 0,
+                "top": 0,
+                "bottom": 0.19499511718738205
+              },
+              {
+                "id": "540-24",
+                "part": "body",
+                "left": 0.9999992370605497,
+                "right": 0,
+                "top": 0,
+                "bottom": 0
+              },
+              {
+                "id": "540-24",
+                "part": "footer",
+                "left": 0.9999992370605497,
+                "right": 0,
+                "top": 0,
+                "bottom": 0.19499511718738205
+              },
+              {
+                "id": "540-expanded-footer",
+                "part": "footer",
+                "left": 0,
+                "right": 0,
+                "top": 0,
+                "bottom": 0.1949951171874318
+              }
+            ],
+            "scope": "Actual browser SVG glyph containment in quote cells and body/footer separation with matching bundled font bytes. Part line boxes are not glyph outlines; overhangs into the inset are reported."
+          }
+        ]
+      },
+      "boundary": "Actual npm renderer and core, shipped bytes matched to the immutable release commit, pinned source fixtures, loaded-font browser execution and reviewed raster baseline. No source renderer rebuild, native PowerPoint equivalence or complete-set adoption claim."
+    },
+    {
+      "checkedAt": "2026-09-10T00:27:52.157Z",
+      "node": "v24.20.0",
+      "name": "@openpresentation/opf-render",
+      "version": "0.6.0",
+      "gitHead": "7fe9905ad2d8a224efeef51b4a22d0aff0c413fe",
+      "integrity": "sha512-rYHS0qetT8FpDqkB8E9KMtwrh6NiB6UzxAeqaCwnMwrIDIEvejKC++Hw2Us4512ZIHRHdwuG42aq6QJodBJOPA==",
+      "attestations": {
+        "url": "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf-render@0.6.0",
+        "provenance": {
+          "predicateType": "https://slsa.dev/provenance/v1"
+        }
+      },
+      "core": {
+        "version": "0.8.0",
+        "integrity": "sha512-1ubeINQsuD8pFNr542eFYPfzkhcECAcj/mM2pWNN+keFnVoWxePCsFTUtjuSSsvCtpm7QkgxBYRJYtEUmrlkkg=="
+      },
+      "files": {
+        "LICENSE": "c977d11e7e9de5bd31ab787b9a302475c0487837c66f665c174d9f92b18937d2",
+        "dist/font-compatibility.js": "8d689401d826bf604b1e2b0bedaed2f47d89263d17041b03fcd1f91b254b82ac",
+        "dist/fonts-browser.js": "cee4d94c13aa1dc76581e9e4f3b401278ee859b69b21bbed88ed626c77e6ece7",
+        "dist/fonts-node.js": "0f1edc1f3d55472a64efd1ce344ff95e8a320e0ee53689085ed55a77a33a8f0e",
+        "dist/fonts.js": "db78254df6efadb5cb606169feefa1d19c153a249186bd8a38078f97d9502d22",
+        "dist/index.js": "1fdb45740a09bb6f48eb5dc79def3ffe692acdf0a5c319727edf4e19c0020d78",
+        "dist/raster-images.js": "9d61faa7fd83452a98d2593431dcb29953b6d1a5f60d521aa22eadfc7d7e1843",
+        "dist/raster.js": "3b18ae6c2c3a04cc0f53c2c92c84be1c8fbdaf85eb7c1af232ef7092477bf305",
+        "dist/svg.js": "743f66010afe95fae6c7deb1a3d19f9e8b69889710cdf3a1a72cc2479b2038fd",
+        "package.json": "1767d03016cde5691716bbeea4c3ac0de4ea8b8678b774c5cb192a7e534823cc",
+        "README.md": "32363488c98f23c1b39e0a77bca4f9f625a9d7edfcd3c4378312140d785b6b25",
+        "dist/fonts-browser.d.ts": "ec29b763373f334d2dfeab26fd57ad7a6b7b36bf88bdd47877ae6479e7990b81",
+        "dist/fonts-node.d.ts": "4cf52acd3ef57c30baf0356b6b7cd256a2f7fcd3e8c482e46788188f98834bb0",
+        "dist/fonts.d.ts": "f7106ff38996dbcf271932a445ffcd5a2cb365b18ac4c4677d4246930a1e17cd",
+        "dist/index.d.ts": "1d5a4001497129ef922066fbcd928ee70af66e0b2e5464dc93332d9108941694",
+        "dist/svg.d.ts": "e8809f4e6b5b349d4645299c04639d0e733136b3c52c0be35298cc13994ab1b1"
+      },
+      "knownVulnerabilities": 0,
+      "signatureVerification": "audited 44 packages in 0s\n\n44 packages have verified registry signatures\n\n12 packages have verified attestations\n(use --json --include-attestations to view attestation details)",
+      "tests": [
+        {
+          "test": "webp.mjs",
+          "output": "WebP raster passed: 23 PNG/PDF and fit/crop cases; independent pixels, PDF image streams, alpha/EXIF/first frame, SVG input forms, errors and unchanged source SVG."
+        },
+        {
+          "test": "jpeg-orientation.mjs",
+          "output": "JPEG orientation passed: 24 raster/PDF and fit/crop cases across all eight orientations; independent Pillow pixels (max channel difference 2), original orientation-1 bytes and path-specific errors."
+        },
+        {
+          "test": "rich-table.mjs",
+          "output": "Rich table renderer passed: formatted cell/header runs, trace paths, links, empty rich cells, PNG output and strict overflow."
+        },
+        {
+          "test": "styled-table.mjs",
+          "output": "Styled table renderer passed: spans, fills/alpha, shared border precedence and suppression, scalar/rich vertical alignment, editable paths, run overrides and rasterization."
+        },
+        {
+          "test": "quote-footer.mjs",
+          "output": "Quote footer passed: 8 fitted long quotes retain separation, 2 oversized cases diagnose/reject in strict mode across wide and portrait canvases."
+        },
+        {
+          "test": "shared-quote.mjs",
+          "output": "Shared quote SVG: 4 exact accepted layouts/styles with no extra measurement, reasoned overflow, strict rejection and no tiny-cell omission."
+        },
+        {
+          "test": "golden.mjs",
+          "output": "Golden passed: 805 slides, 126 decks; no skipped corpus."
+        }
+      ],
+      "browser": {
+        "browser": "152.0.4191.66",
+        "suites": [
+          {
+            "name": "jpeg",
+            "passed": true,
+            "cases": 16,
+            "maxDifference": 49,
+            "controlMean": 56.419711642795136,
+            "measurements": [
+              {
+                "orientation": 1,
+                "imageFill": "fit",
+                "max": 49,
+                "mean": 0.3241276041666667,
+                "largePercent": 0.672119140625
+              },
+              {
+                "orientation": 1,
+                "imageFill": "crop",
+                "max": 49,
+                "mean": 0.3426852756076389,
+                "largePercent": 0.697021484375
+              },
+              {
+                "orientation": 2,
+                "imageFill": "fit",
+                "max": 49,
+                "mean": 0.32415174696180554,
+                "largePercent": 0.6720106336805556
+              },
+              {
+                "orientation": 2,
+                "imageFill": "crop",
+                "max": 49,
+                "mean": 0.34280029296875,
+                "largePercent": 0.6969672309027778
+              },
+              {
+                "orientation": 3,
+                "imageFill": "fit",
+                "max": 49,
+                "mean": 0.3241379123263889,
+                "largePercent": 0.6719835069444444
+              },
+              {
+                "orientation": 3,
+                "imageFill": "crop",
+                "max": 49,
+                "mean": 0.3427826605902778,
+                "largePercent": 0.696994357638889
+              },
+              {
+                "orientation": 4,
+                "imageFill": "fit",
+                "max": 49,
+                "mean": 0.3241552734375,
+                "largePercent": 0.672092013888889
+              },
+              {
+                "orientation": 4,
+                "imageFill": "crop",
+                "max": 49,
+                "mean": 0.3427205403645833,
+                "largePercent": 0.6970486111111112
+              },
+              {
+                "orientation": 5,
+                "imageFill": "fit",
+                "max": 45,
+                "mean": 0.08678656684027777,
+                "largePercent": 0.1814507378472222
+              },
+              {
+                "orientation": 5,
+                "imageFill": "crop",
+                "max": 39,
+                "mean": 0.6215879991319444,
+                "largePercent": 1.1771104600694444
+              },
+              {
+                "orientation": 6,
+                "imageFill": "fit",
+                "max": 45,
+                "mean": 0.08679904513888889,
+                "largePercent": 0.1814507378472222
+              },
+              {
+                "orientation": 6,
+                "imageFill": "crop",
+                "max": 39,
+                "mean": 0.6217607964409723,
+                "largePercent": 1.1771375868055556
+              },
+              {
+                "orientation": 7,
+                "imageFill": "fit",
+                "max": 45,
+                "mean": 0.0868017578125,
+                "largePercent": 0.181396484375
+              },
+              {
+                "orientation": 7,
+                "imageFill": "crop",
+                "max": 39,
+                "mean": 0.6217537434895833,
+                "largePercent": 1.17724609375
+              },
+              {
+                "orientation": 8,
+                "imageFill": "fit",
+                "max": 45,
+                "mean": 0.08679578993055556,
+                "largePercent": 0.181396484375
+              },
+              {
+                "orientation": 8,
+                "imageFill": "crop",
+                "max": 39,
+                "mean": 0.6217363823784722,
+                "largePercent": 1.177300347222222
+              }
+            ],
+            "checks": "Browser-rendered OPF SVG JPEG orientation and fit/crop against independent Pillow PNGs"
+          },
+          {
+            "name": "quote-footer",
+            "passed": true,
+            "cases": 10,
+            "checks": 80,
+            "fonts": 4,
+            "lineBoxOverhangs": [
+              {
+                "id": "1280-12",
+                "part": "footer",
+                "left": 1.0000015258789006,
+                "right": 0,
+                "top": 0,
+                "bottom": 0
+              },
+              {
+                "id": "1280-16",
+                "part": "body",
+                "left": 1.0000015258789006,
+                "right": 0,
+                "top": 0,
+                "bottom": 0
+              },
+              {
+                "id": "1280-16",
+                "part": "footer",
+                "left": 1.0000015258789006,
+                "right": 0,
+                "top": 0,
+                "bottom": 0.2599731445312834
+              },
+              {
+                "id": "1280-20",
+                "part": "footer",
+                "left": 1.0000015258789006,
+                "right": 0,
+                "top": 0,
+                "bottom": 0.2599731445312834
+              },
+              {
+                "id": "1280-24",
+                "part": "body",
+                "left": 1.0000015258789006,
+                "right": 0,
+                "top": 0,
+                "bottom": 0
+              },
+              {
+                "id": "1280-24",
+                "part": "footer",
+                "left": 1.0000015258789006,
+                "right": 0,
+                "top": 0,
+                "bottom": 0.2599731445312834
+              },
+              {
+                "id": "1280-expanded-footer",
+                "part": "footer",
+                "left": 0.0000015258789005656581,
+                "right": 0,
+                "top": 0,
+                "bottom": 0.2599731445312443
+              },
+              {
+                "id": "540-12",
+                "part": "body",
+                "left": 0.9999992370605497,
+                "right": 0,
+                "top": 0,
+                "bottom": 0
+              },
+              {
+                "id": "540-12",
+                "part": "footer",
+                "left": 0.9999992370605497,
+                "right": 0,
+                "top": 0,
+                "bottom": 0
+              },
+              {
+                "id": "540-16",
+                "part": "body",
+                "left": 0.9999992370605497,
+                "right": 0,
+                "top": 0,
+                "bottom": 0
+              },
+              {
+                "id": "540-16",
+                "part": "footer",
+                "left": 0.9999992370605497,
+                "right": 0,
+                "top": 0,
+                "bottom": 0
+              },
+              {
+                "id": "540-20",
+                "part": "body",
+                "left": 0.9999992370605497,
+                "right": 0,
+                "top": 0,
+                "bottom": 0
+              },
+              {
+                "id": "540-20",
+                "part": "footer",
+                "left": 0.9999992370605497,
+                "right": 0,
+                "top": 0,
+                "bottom": 0.19499511718738205
+              },
+              {
+                "id": "540-24",
+                "part": "body",
+                "left": 0.9999992370605497,
+                "right": 0,
+                "top": 0,
+                "bottom": 0
+              },
+              {
+                "id": "540-24",
+                "part": "footer",
+                "left": 0.9999992370605497,
+                "right": 0,
+                "top": 0,
+                "bottom": 0.19499511718738205
+              },
+              {
+                "id": "540-expanded-footer",
+                "part": "footer",
+                "left": 0,
+                "right": 0,
+                "top": 0,
+                "bottom": 0.1949951171874318
+              }
+            ],
+            "scope": "Actual browser SVG glyph containment in quote cells and body/footer separation with matching bundled font bytes. Part line boxes are not glyph outlines; overhangs into the inset are reported."
+          }
+        ]
+      },
+      "boundary": "Actual npm renderer and core, shipped bytes matched to the immutable release commit, pinned source fixtures, loaded-font browser execution and reviewed raster baseline. No source renderer rebuild, native PowerPoint equivalence or complete-set adoption claim."
+    }
+  ]
+}

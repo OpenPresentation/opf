@@ -1,0 +1,12 @@
+{
+  "checkedAt": "2026-09-10T16:39:54.7449141Z",
+  "windowsBuild": "26200.9445",
+  "powerPoint": {
+    "processStartedAt": "2026-09-10T05:35:04.0249831-07:00",
+    "processId": 12436,
+    "executableVersion": "16.0.20326.20132",
+    "executableSha256": "90fa931172c507b763ba92a82b19d5bc70816e008c5bb87577e1838e8a92e9f9"
+  },
+  "powershell": "7.6.5",
+  "scope": "Read-only host/process observation after the partial native run; the interrupted worker did not produce its final native environment report."
+}
