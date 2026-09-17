@@ -1,16 +1,19 @@
-// Hex resolution for OPF ColorRef / TextRun.color export. Mirrors opf validator
-// semantics (packages/javascript/src/validator.ts) until core exports resolveColorRef().
+// Export ColorRef through published core resolveColorRef(). Keep 8-digit hex
+// alpha locally: normalizeHexColor() strips the AA byte, which PptxGenJS needs.
 
-const schemeSlots = new Set([
-  "accent1", "accent2", "accent3", "accent4", "accent5", "accent6",
-  "dark1", "dark2", "light1", "light2", "hyperlink", "followedHyperlink",
-]);
+import { resolveColorRef as resolveCoreColorRef } from "@openpresentation/opf";
 
-const variableIdPattern = /^[a-z][a-z0-9-]*$/;
-const hexPattern = /^#(?:[0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})$/i;
+const UNRESOLVED = "";
 
 function isPlainObject(value) {
   return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
+function withHash(value) {
+  if (typeof value !== "string") return undefined;
+  const trimmed = value.trim();
+  if (!trimmed) return undefined;
+  return trimmed.startsWith("#") ? trimmed : `#${trimmed}`;
 }
 
 function expandShorthand(hex) {
@@ -19,44 +22,40 @@ function expandShorthand(hex) {
   return raw;
 }
 
-/** Resolve document variables to hex strings for export. */
+/** Literal #RGB / #RRGGBB / #RRGGBBAA, including pptx-internal hex without '#'. */
+function literalExportHex(entry) {
+  if (typeof entry !== "string") return undefined;
+  const hashed = withHash(entry.trim());
+  if (!hashed) return undefined;
+  if (/^#(?:[0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(hashed)) {
+    return `#${expandShorthand(hashed).toUpperCase()}`;
+  }
+  return undefined;
+}
+
+/** Pass document variables through; core accepts hex shorthand or `{ type: "color", value }`. */
 export function resolveVariableColors(variables) {
-  if (!isPlainObject(variables)) return {};
-  const resolved = {};
-  for (const [id, entry] of Object.entries(variables)) {
-    if (typeof entry === "string") resolved[id] = entry;
-    else if (isPlainObject(entry) && entry.type === "color" && typeof entry.value === "string") {
-      resolved[id] = entry.value;
-    }
-  }
-  return resolved;
+  return isPlainObject(variables) ? variables : {};
 }
 
-function schemeHex(scheme, slot) {
-  const value = scheme?.[slot];
-  return typeof value === "string" && value.startsWith("#") ? value : undefined;
+function coreRoles(ctx) {
+  const colors = ctx.colors ?? {};
+  return {
+    background: withHash(colors.background),
+    surface: withHash(colors.surface),
+    text: withHash(colors.text),
+    textSecondary: withHash(colors.mutedText),
+    accent: withHash(colors.accent),
+  };
 }
 
-function roleHex(name, ctx) {
-  const scheme = ctx.colorScheme ?? {};
-  switch (name) {
-    case "background":
-      return ctx.colors?.background ? `#${ctx.colors.background}` : schemeHex(scheme, "background");
-    case "surface":
-      return ctx.colors?.surface ? `#${ctx.colors.surface}` : schemeHex(scheme, "surface");
-    case "text":
-      return ctx.colors?.text ? `#${ctx.colors.text}` : schemeHex(scheme, "text");
-    case "textSecondary":
-      return ctx.colors?.mutedText ? `#${ctx.colors.mutedText}` : schemeHex(scheme, "textSecondary");
-    case "primary":
-      return schemeHex(scheme, "primary") ?? (ctx.colors?.accent ? `#${ctx.colors.accent}` : undefined);
-    case "secondary":
-      return schemeHex(scheme, "secondary") ?? schemeHex(scheme, "accent2");
-    case "accent":
-      return schemeHex(scheme, "accent") ?? (ctx.colors?.accent ? `#${ctx.colors.accent}` : undefined);
-    default:
-      return undefined;
-  }
+function coreOptions(ctx, fallback = UNRESOLVED) {
+  return {
+    colorScheme: ctx.colorScheme ?? {},
+    roles: coreRoles(ctx),
+    variables: ctx.variables ?? {},
+    fallback,
+  };
 }
 
 /**
@@ -67,31 +66,10 @@ export function resolveColorRefValue(entry, ctx) {
   if (entry === undefined || entry === null || entry === "") return undefined;
   if (typeof entry !== "string") return undefined;
   const trimmed = entry.trim();
-  if (hexPattern.test(trimmed)) return `#${expandShorthand(trimmed).toUpperCase()}`;
-
-  if (trimmed.startsWith("var:")) {
-    const id = trimmed.slice("var:".length);
-    if (!variableIdPattern.test(id)) return undefined;
-    const variable = ctx.variables?.[id];
-    if (typeof variable === "string" && hexPattern.test(variable)) {
-      return `#${expandShorthand(variable).toUpperCase()}`;
-    }
-    return undefined;
-  }
-
-  const scheme = ctx.colorScheme ?? {};
-  const fromScheme = schemeHex(scheme, trimmed);
-  if (fromScheme) return `#${expandShorthand(fromScheme).toUpperCase()}`;
-
-  if (schemeSlots.has(trimmed)) {
-    const slot = schemeHex(scheme, trimmed);
-    if (slot) return `#${expandShorthand(slot).toUpperCase()}`;
-  }
-
-  const fromRole = roleHex(trimmed, ctx);
-  if (fromRole) return `#${expandShorthand(fromRole).toUpperCase()}`;
-
-  return undefined;
+  const literal = literalExportHex(trimmed);
+  if (literal) return literal;
+  const resolved = resolveCoreColorRef(trimmed, coreOptions(ctx, UNRESOLVED));
+  return resolved || undefined;
 }
 
 export function colorContext(context, fallback) {
@@ -107,7 +85,8 @@ export function colorContext(context, fallback) {
 export function resolveExportColor(entry, ctx) {
   const fallback = ctx.fallback ?? ctx.colors?.text ?? "000000";
   const resolved = resolveColorRefValue(entry, ctx);
-  const raw = expandShorthand((resolved ?? `#${fallback.replace(/^#/, "")}`).replace(/^#/, ""));
+  const hex = resolved ?? withHash(fallback) ?? "#000000";
+  const raw = expandShorthand(hex.replace(/^#/, ""));
   if (/^[0-9A-F]{6}([0-9A-F]{2})?$/i.test(raw)) return raw.toUpperCase();
   return fallback.replace(/^#/, "").toUpperCase().slice(0, 6);
 }

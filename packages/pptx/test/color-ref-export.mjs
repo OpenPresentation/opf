@@ -3,7 +3,7 @@ import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { unzipSync } from "fflate";
 import { XMLParser } from "fast-xml-parser";
-import { catalogs } from "@openpresentation/opf";
+import { catalogs, normalizeHexColor, resolveColorRef } from "@openpresentation/opf";
 import { resolveColorRefValue, resolveExportColor, colorContext } from "../dist/color-ref.js";
 import { toPptx } from "../dist/index.js";
 
@@ -23,13 +23,27 @@ const ctx = colorContext({
   variables: { risk: "#B42318", highlight: "#0F4C81" },
 });
 
-assert.equal(resolveColorRefValue("accent2", ctx), `#${forest.accent2.replace(/^#/, "").toUpperCase()}`);
-assert.equal(resolveColorRefValue("textSecondary", ctx), "#475569");
-assert.equal(resolveColorRefValue("surface", ctx), "#F8FAFC");
-assert.equal(resolveColorRefValue("var:risk", ctx), "#B42318");
+const coreOpts = {
+  colorScheme: forest,
+  roles: {
+    background: "#FFFFFF",
+    text: "#0F172A",
+    textSecondary: "#475569",
+    accent: "#2874A6",
+    surface: "#F8FAFC",
+  },
+  variables: { risk: "#B42318", highlight: "#0F4C81" },
+  fallback: "#0F172A",
+};
+assert.equal(resolveColorRefValue("accent2", ctx), resolveColorRef("accent2", coreOpts));
+assert.equal(resolveColorRefValue("textSecondary", ctx), resolveColorRef("textSecondary", coreOpts));
+assert.equal(resolveColorRefValue("surface", ctx), resolveColorRef("surface", coreOpts));
+assert.equal(resolveColorRefValue("var:risk", ctx), resolveColorRef("var:risk", coreOpts));
 assert.equal(resolveColorRefValue("var:missing", ctx), undefined);
 assert.equal(resolveExportColor("invalid", ctx, ctx.colors.text), ctx.colors.text);
 assert.equal(resolveExportColor("#abc", ctx, ctx.colors.text), "AABBCC");
+assert.equal(normalizeHexColor("#12345680"), "#123456");
+assert.equal(resolveExportColor("#12345680", ctx), "12345680");
 
 const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: "", parseTagValue: false });
 const find = (value, key) => !value || typeof value !== "object" ? [] : Array.isArray(value)

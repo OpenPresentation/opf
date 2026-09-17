@@ -2,7 +2,7 @@
 
 ## Coordinated `@openpresentation/opf` pin
 
-Published npm remains `@openpresentation/opf@0.10.1`. Reference-layer ColorRef, document `variables`, and the expanded styled-table color schema land on opf `main` at [`4761091`](https://github.com/OpenPresentation/opf/commit/4761091e9e8c801fcc8fd8d8475402b4b79ff0b2). CI checks out that commit and links the sibling OPF package before running tests. Pin `@openpresentation/opf` to `0.11.x` in `package.json` in the same release train once npm publishes; core does not yet export shared `resolveColorRef()`, so export resolution lives in `src/color-ref.js` until it does.
+PPTX 0.9.0 depends on published [`@openpresentation/opf@^0.11.0`](https://www.npmjs.com/package/@openpresentation/opf) (reference layer: ColorRef, document `variables`, exported `resolveColorRef()`). CI checks out OPF [`b8a1faf`](https://github.com/OpenPresentation/opf/commit/b8a1faf24203635bd36b09ea19f44bcd53781f16) (`opf-v0.11.0`) for coordinated source linking. Named content colors resolve through core `resolveColorRef()`; eight-digit hex alpha stays a local export concern because core `normalizeHexColor` drops the alpha byte. Native `schemeClr` / theme `clrScheme` writes remain follow-up work.
 
 OPF PPTX 0.5.1 ships the exact, unmodified PptxGenJS 4.0.1 ESM distribution in `vendor/pptxgenjs`, with its MIT license, upstream archive integrity and per-file SHA-256 hashes. Its actual JSZip dependency is declared directly. Ordinary npm installations therefore omit the unused image-size parser without requiring consumer overrides. This removes the affected dependency; it does not patch the parser. Published OPF PPTX 0.5.0 retains the older graph.
 

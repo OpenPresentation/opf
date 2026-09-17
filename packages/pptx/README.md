@@ -1,6 +1,6 @@
 # OPF PPTX
 
-Version 0.8.1 requires core 0.10.1, including metric, quote and timeline layout placeholders and the corrected text-bullet contract. It retains the existing PowerPoint export APIs.
+Version 0.9.0 requires core 0.11.0, including ColorRef / `variables` on content colors. It hex-resolves named colors through core `resolveColorRef()` before PptxGenJS `srgbClr` export. Unrecognized run colors such as `color:'invalid'` still validate and fall back to the theme text color. Native DrawingML `schemeClr` and theme `clrScheme` writes, and native `p:hf` headers/footers, are not in this release. Import still flattens theme colors to hex. Metric, quote and timeline layout placeholders and the corrected text-bullet contract from 0.8.1 are retained.
 
 Unfinished prepared shaping work is preserved in the [September 15 roadmap](docs/roadmap-shaping-20260915.md); it is not part of the published runtime.
 
@@ -72,7 +72,7 @@ The first exporter keeps the public API stable while using `pptxgenjs` internall
 
 - `Slide.title`, `Slide.subtitle`, and `Slide.tag` become editable text boxes, not PowerPoint master placeholders.
 - Root payloads, `blocks[]`, and promoted region keys become editable slide objects in deterministic regions. Promoted keys use the OPF 3x3 region vocabulary (`top`, `middle`, `bottom`, `left`, `center`, `right`).
-- Text, lists, metrics, quotes, timelines, code, tables, and inline-data charts are emitted as editable PowerPoint text, table, and chart objects.
+- Text, lists, metrics, quotes, timelines, code, tables, and inline-data charts are emitted as editable PowerPoint text, table, and chart objects. Content ColorRef values (hex, scheme slots/roles, and `var:<id>`) flatten to `a:srgbClr` via core `resolveColorRef()`; this is hex-resolve, not native `schemeClr` / theme write.
 - Image assets are embedded only when supplied as data URIs, local paths, or host-resolved bytes/paths. Remote asset URLs are never fetched by the runtime path.
 - ZIP entries, generated chart/workbook part names, core-property timestamps, and nested chart workbook timestamps are normalized for reproducible bytes.
 
