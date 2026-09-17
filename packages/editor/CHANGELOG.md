@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Reserve the full slide and content-payload id namespace for pagination and transfer insert (OPF reference layer after #95). Forward validation warnings to the schema inspector; accept documented ColorRef forms in the rich-text toolbar. Canvas named-color fidelity still depends on a coordinated `@openpresentation/opf-render` bump — do not pin `@openpresentation/opf` past published npm until opf → render → pptx ship together.
+
 ## 0.7.0
 
 - Add reusable browser-safe JSON editor and contextual options entrypoints. Preserve exact source line endings through editing, indentation, paired quotes/brackets, array-item continuation, search, folding, formatting and undo/redo; expose catalog/schema choices from already loaded context.

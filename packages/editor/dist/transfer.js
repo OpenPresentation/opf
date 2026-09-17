@@ -5,6 +5,7 @@ import {
   validateOpfDocument,
 } from "./index.js";
 import { catalogs } from "@openpresentation/opf";
+import { collectReservedPresentationIds, remapSlideTreeIds } from "./presentation-ids.js";
 export const MAX_OPF_BYTES = 20 * 1024 * 1024;
 const clone = (value) => structuredClone(value);
 export function assertOpf(document) {
@@ -241,14 +242,8 @@ export function prepareOpfImport(
           ? `asset:${assetMap.get(asset.slice(6))}`
           : asset;
   }
-  const ids = new Set(document.slides.map((slide) => slide.id).filter(Boolean));
-  for (const slide of rewritten.slides)
-    if (slide.id) {
-      const base = slide.id;
-      let n = 2;
-      while (ids.has(slide.id)) slide.id = `${base}-${n++}`;
-      ids.add(slide.id);
-    }
+  const ids = new Set(collectReservedPresentationIds(document));
+  for (const slide of rewritten.slides) remapSlideTreeIds(slide, ids);
   const index = Math.max(0, Math.min(document.slides.length, slideIndex + 1));
   document.slides.splice(index, 0, ...rewritten.slides);
   assertOpf(document);

@@ -26,6 +26,7 @@ export type JsonPatchOperation =
 export interface OPFValidationSummary {
   valid: boolean;
   errors: unknown[];
+  warnings: unknown[];
   result: unknown;
 }
 

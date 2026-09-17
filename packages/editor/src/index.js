@@ -1,4 +1,5 @@
 import { paginateSlide } from "@openpresentation/opf/pagination";
+import { collectReservedPresentationIds } from "./presentation-ids.js";
 import { composeSlide, resolveCanvasDimensions, resolveFontFamilies } from "@openpresentation/opf/composition";
 import {
   catalogKinds,
@@ -142,6 +143,7 @@ export function validateOpfDocument(document, validator = validatePresentation) 
   return {
     valid,
     errors: Array.isArray(result?.errors) ? result.errors : [],
+    warnings: Array.isArray(result?.warnings) ? result.warnings : [],
     result
   };
 }
@@ -243,7 +245,10 @@ export function createEditorSession(input, options = {}) {
     },
     paginateSlide(slideIndex, options = {}, meta = {}) {
       const resolved = resolveCompositionOptions(document, slideIndex, options);
-      const pagination = paginateSlide(document.slides[slideIndex], { ...resolved, reservedIds: document.slides.map(slide => slide.id).filter(Boolean) });
+      const pagination = paginateSlide(document.slides[slideIndex], {
+        ...resolved,
+        reservedIds: collectReservedPresentationIds(document),
+      });
       // Pagination can persist a readability policy without adding a page. Commit
       // that change too, so preview/export use the same minimum that was evaluated.
       if (pagination.slides.length === 1 && jsonEqual(pagination.slides[0], document.slides[slideIndex])) return { change: null, pagination };

@@ -17,8 +17,10 @@ export function createSchemaInspector(container, {editor,path='',onDraft,onCommi
   function check(){
     const validation=validateOpfDocument(draft);
     apply.disabled=!dirty||!validation.valid;
-    status.textContent=dirty?'Draft changes · apply to save':'No pending changes';
-    showError(validation.valid?'':validation.errors.slice(0,3).map(error=>`${error.path||'/'}: ${error.message}`).join('\n'));
+    const warningNote=validation.warnings?.length?` · ${validation.warnings.length} warning${validation.warnings.length===1?'':'s'}`:'';
+    status.textContent=dirty?`Draft changes · apply to save${warningNote}`:`No pending changes${warningNote}`;
+    const issues=[...(validation.valid?[]:validation.errors.slice(0,3).map(error=>`${error.path||'/'}: ${error.message}`)),...(validation.warnings?.slice(0,2).map(warning=>`${warning.path||'/'}: ${warning.message}`)??[])];
+    showError(issues.join('\n'));
     if(validation.valid)try{onDraft?.({document:structuredClone(draft),path:selected,dirty});}catch(error){showError(`Preview: ${error.message}`);onError?.(error);}
   }
   function mutate(operations,redraw=true){draft=applyJsonPatch(draft,operations);dirty=JSON.stringify(draft)!==base;if(redraw)render();check();}

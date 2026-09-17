@@ -1,4 +1,5 @@
 import {richTextContent, formatRichTextRange, replaceRichTextRange} from './rich-text.js';
+import { isAuthoringColorRef } from './color-authoring.js';
 
 /** Native SVG selection stays on the exact rendered glyphs; no HTML reflow. */
 export function createRichTextToolbar(root, {editor, report, beforeChange, onProperties, onTyping, validateChange, onChange}) {
@@ -80,7 +81,7 @@ export function createRichTextToolbar(root, {editor, report, beforeChange, onPro
     toolbar.append(input);return input;
   }
   const color=field('Text color');
-  color.onchange=()=>{try {if(color.value&&!/^#(?:[\da-f]{3}|[\da-f]{6}|[\da-f]{8})$/i.test(color.value))throw new Error('Use a hex text color, such as #2563eb.');apply({color:color.value||null});}catch(error){report(error);}};
+  color.onchange=()=>{try {if(color.value&&!isAuthoringColorRef(color.value))throw new Error('Use a hex color, scheme slot or role, or var:<id> (for example #2563eb, accent2, text, or var:risk).');apply({color:color.value||null});}catch(error){report(error);}};
   const size=field('Font size (pt)','number');size.min='0.1';size.step='0.5';size.style.width='80px';
   size.onchange=()=>{try{apply({fontSize:size.value?Number(size.value):null});}catch(error){report(error);}};
   const family=field('Font family');family.onchange=()=>{try{apply({fontFamily:family.value||null});}catch(error){report(error);}};
