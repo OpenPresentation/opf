@@ -97,6 +97,22 @@ export function placeTextLines(lines: readonly TextLineInk[], box: LayoutBox, al
   }
   return {alignment,rasterPadding,lines:placed,height,overflow};
 }
+/** Keep accepted outline origins aligned when a heading box is recentered. */
+function translateTextFit<T extends {placement?: TextPlacement}>(fit: T, dy: number): T {
+  if (!dy || !fit.placement) return fit;
+  return {
+    ...fit,
+    placement: {
+      ...fit.placement,
+      lines: fit.placement.lines.map(line => ({
+        ...line,
+        y: line.y + dy,
+        baseline: line.baseline + dy,
+        outline: line.outline ? {...line.outline, y: line.outline.y + dy} : line.outline,
+      })),
+    },
+  };
+}
 export interface ComposedItem {
   path: string;
   field: string;
@@ -212,6 +228,12 @@ export class OPFCompositionError extends Error {
 }
 const fields = ["text", "items", "bullets", "image", "video", "chart", "table", "code", "metric", "quote", "timeline"];
 const headings = new Set(["title", "subtitle", "tag"]);
+const COVER_LAYOUT_IDS = new Set(["title", "title-subtitle"]);
+/** Content slides reserve this many title line-heights at the requested title size so typical 1- and 2-line titles share a body origin. */
+const TITLE_BAND_LINES = 2;
+/** Minimum inner height for stacked metric value, label, wrapped description and trend at scale 1. */
+const METRIC_STACK_MIN = 130;
+const CONTENT_CARD_PAD = 12;
 const rows = ["top", "middle", "bottom"];
 const columns = ["left", "center", "right"];
 const record = (value: unknown): Record<string, any> => value && typeof value === "object" && !Array.isArray(value) ? value : {};
@@ -1410,7 +1432,15 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const furniture=measuredFurniture.configured||measuredFurniture.diagnostics.length?measuredFurniture:undefined;
   if(furniture)diagnostics.push(...furniture.diagnostics);
   const bodyBottom=Math.min(height-padding,furniture&&furniture.footerTop<height?furniture.footerTop-gap*.5:height-padding);
-  let y = Math.max(padding,furniture?.headerBottom?furniture.headerBottom+gap*.5:padding);
+  const headingTop = Math.max(padding,furniture?.headerBottom?furniture.headerBottom+gap*.5:padding);
+  const layoutPlaceholders = Array.isArray(layout.placeholders) ? layout.placeholders as {type?: string}[] : [];
+  const contentPlaceholders = layoutPlaceholders.filter(placeholder => !headings.has(placeholder.type ?? ""));
+  const headingOnlyLayout = COVER_LAYOUT_IDS.has(String(layout.id ?? "")) || (layoutPlaceholders.length > 0 && layoutPlaceholders.every(placeholder => headings.has(placeholder.type ?? "")));
+  const regions = Object.keys(slide).filter(key => regionParts(key)).sort();
+  const hasBodyPayload = regions.length > 0 || Array.isArray(slide.blocks) || fields.some(field => slide[field] !== undefined);
+  const isCover = !hasBodyPayload && (headingOnlyLayout || (!layout.id && contentPlaceholders.length === 0));
+  let y = headingTop;
+  const headingItems: ComposedItem[] = [];
   for (const field of ["tag", "title", "subtitle"]) {
     if (!slide[field]) continue;
     const requested = (field === "title" ? 54 : field === "tag" ? 16 : 25) * scale;
@@ -1419,10 +1449,40 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const text = fitPlacedText(field,slide[field],String(slide[field]),box,requested,minSize,`${path}.${field}`);
     box.height = Math.min(maxHeight, Math.max(text.lines.length * text.lineHeight,text.placement?.height??0));
     if(furniture&&box.y+box.height>bodyBottom+.01)diagnostics.push({code:'text-overflow',path:`${path}.${field}`,message:'Repeated furniture leaves too little room for this heading. Change the header/footer or slide design.'});
-    items.push({ path: `${path}.${field}`, field, type: "text", value: slide[field], payload: { text: slide[field] }, box, text, textStyle: styleFor(field,`${path}.${field}`), composition });
+    const item: ComposedItem = { path: `${path}.${field}`, field, type: "text", value: slide[field], payload: { text: slide[field] }, box, text, textStyle: styleFor(field,`${path}.${field}`), composition };
+    headingItems.push(item);
+    items.push(item);
     y += box.height + gap * 0.5;
   }
-  if (items.length) y += gap * 0.5;
+  if (headingItems.length) {
+    if (isCover) {
+      const last = headingItems[headingItems.length - 1]!;
+      const groupHeight = last.box.y + last.box.height - headingTop;
+      const shift = Math.max(0, (bodyBottom - headingTop - groupHeight) / 2);
+      if (shift) for (const item of headingItems) {
+        item.box.y += shift;
+        if (item.text) item.text = translateTextFit(item.text, shift);
+      }
+      y = last.box.y + last.box.height + gap;
+    } else {
+      const titleItem = headingItems.find(item => item.field === "title");
+      if (titleItem) {
+        const titleBand = TITLE_BAND_LINES * 54 * scale * 1.22;
+        const spare = Math.max(0, titleBand - titleItem.box.height);
+        const trailingGap = gap * 0.5;
+        let allowed = Math.max(0, bodyBottom - y - scale);
+        if (regions.length) {
+          // 3×3 region tracks. Unused title space cannot shrink a one-row cell
+          // below stacked metric metadata after the content-card inset.
+          const minTrack = (METRIC_STACK_MIN + 2 * CONTENT_CARD_PAD) * scale;
+          const minBody = 3 * minTrack + 2 * gap;
+          allowed = Math.min(allowed, Math.max(0, bodyBottom - (y + trailingGap) - minBody));
+        }
+        y += Math.min(spare, allowed);
+      }
+      y += gap * 0.5;
+    }
+  }
   const contentBox = { x: padding, y, width: width - padding * 2, height: Math.max(scale, bodyBottom - y) };
   type Pending = { field: string; type: string; value: unknown; path: string; payload: Record<string, unknown>; children?: Pending[]; composition?: Composition; region?: [number[], number[]] };
   const collect = (host: Record<string, any>, basePath: string, depth = 0, ancestors: unknown[] = []): Pending[] => {
@@ -1436,7 +1496,6 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     return fields.filter(field => host[field] !== undefined).map(field => ({ field, type: host.type ?? kind(field), value: host[field], path: `${basePath}.${field}`, payload: { type: host.type ?? kind(field), [field]: host[field] } }));
   };
   // Valid documents choose exactly one of regions, blocks, or root payloads.
-  const regions = Object.keys(slide).filter(key => regionParts(key)).sort();
   const pending: Pending[] = regions.length
     ? regions.flatMap(key => collect(record(slide[key]), `${path}.${key}`).map(item => ({ ...item, region: regionParts(key) })))
     : Array.isArray(slide.blocks) ? slide.blocks.flatMap((block: unknown, index: number) => collect(record(block), `${path}.blocks.${index}`)) : collect(slide, path);
@@ -1563,7 +1622,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
       }
     });
   };
-  const placeholders = Array.isArray(layout.placeholders) ? layout.placeholders.filter((p: any) => !headings.has(p.type)) : [];
+  const placeholders = contentPlaceholders;
   const rootSettings: Composition = { ...composition, mode: composition.mode ?? (layout.slideLayoutDirection === "Vertical" ? "column" : layout.slideLayoutDirection === "Horizontal" ? "row" : "auto") };
   arrange(pending, contentBox, rootSettings, composition.mode ? 0 : placeholders.length);
 
