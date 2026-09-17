@@ -2,7 +2,9 @@
 
 ## Unreleased
 
-- Reserve the full slide and content-payload id namespace for pagination and transfer insert (OPF reference layer after #95). Forward validation warnings to the schema inspector; accept documented ColorRef forms in the rich-text toolbar. Canvas named-color fidelity still depends on a coordinated `@openpresentation/opf-render` bump — do not pin `@openpresentation/opf` past published npm until opf → render → pptx ship together.
+## 0.8.0
+
+- Require `@openpresentation/opf` ^0.11.0, `@openpresentation/opf-render` ^0.9.0, and `@openpresentation/opf-pptx` ^0.9.0 (lockfile 0.9.1, render peer ^0.9.0). Reserve the full slide and content-payload id namespace for pagination and transfer insert. Forward validation warnings to the schema inspector; accept documented ColorRef forms in the rich-text toolbar. Canvas named-color paint uses published render 0.9.0; PPTX export hex-resolves through pptx 0.9.1. Native `schemeClr`, theme write, and `p:hf` remain out of scope.
 
 ## 0.7.0
 
