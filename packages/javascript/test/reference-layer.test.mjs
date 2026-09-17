@@ -347,3 +347,14 @@ describe("catalog sources", () => {
     }
   });
 });
+
+describe("color references docs fixture", () => {
+  test("docs/fixtures/color-references.opf.json validates without warnings", async () => {
+    const { readFile } = await import("node:fs/promises");
+    const url = new URL("../../../docs/fixtures/color-references.opf.json", import.meta.url);
+    const fixture = JSON.parse(await readFile(url, "utf8"));
+    const result = validatePresentation(fixture);
+    assert.equal(result.valid, true, JSON.stringify(result.errors));
+    assert.deepEqual(result.warnings, []);
+  });
+});

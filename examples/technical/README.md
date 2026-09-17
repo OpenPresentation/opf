@@ -12,7 +12,6 @@ Start with [`full-feature-tour.opf.json`](./full-feature-tour.opf.json): a singl
 - `blocks` composition.
 - Promoted region keys and span combinations.
 - Rich text runs in text, bullet, and list payloads.
-- Color references: scheme slot and role names, document variables (`var:<id>`), and payload-level ids and extensions.
 - Asset shorthand and object forms.
 - Inline and asset-backed chart data.
 - Design backgrounds, logo sets, headers, footers, watermarks, and slide-level overrides.
