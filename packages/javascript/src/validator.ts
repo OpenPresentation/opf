@@ -3,6 +3,7 @@ import addFormats from "ajv-formats";
 
 import { catalogSchemaNames, type CatalogKind } from "./catalogs.js";
 import { MAX_COMPOSITION_DEPTH } from "./composition.js";
+import { bareIdPattern, isRecord, pathFor, promotedRegionKeys, visitContentPayloads } from "./content-walk.js";
 import {tableGrid} from "./table.js";
 import { catalogIds } from "./generated/catalog-ids.js";
 import type { JsonSchema } from "./json.js";
@@ -47,56 +48,7 @@ const schemaNameByCatalogKind = catalogSchemaNames as Record<CatalogKind, Schema
 let ajv: Ajv2020 | undefined;
 const dynamicSchemaCache = new WeakMap<JsonSchema, ValidateFunction>();
 
-const promotedRegionKeys = [
-  "left",
-  "center",
-  "right",
-  "left+center",
-  "center+right",
-  "left+center+right",
-  "top",
-  "middle",
-  "bottom",
-  "top+middle",
-  "middle+bottom",
-  "top+middle+bottom",
-  "top:left",
-  "top:center",
-  "top:right",
-  "top:left+center",
-  "top:center+right",
-  "top:left+center+right",
-  "middle:left",
-  "middle:center",
-  "middle:right",
-  "middle:left+center",
-  "middle:center+right",
-  "middle:left+center+right",
-  "bottom:left",
-  "bottom:center",
-  "bottom:right",
-  "bottom:left+center",
-  "bottom:center+right",
-  "bottom:left+center+right",
-  "top+middle:left",
-  "top+middle:center",
-  "top+middle:right",
-  "top+middle:left+center",
-  "top+middle:center+right",
-  "top+middle:left+center+right",
-  "middle+bottom:left",
-  "middle+bottom:center",
-  "middle+bottom:right",
-  "middle+bottom:left+center",
-  "middle+bottom:center+right",
-  "middle+bottom:left+center+right",
-  "top+middle+bottom:left",
-  "top+middle+bottom:center",
-  "top+middle+bottom:right",
-  "top+middle+bottom:left+center",
-  "top+middle+bottom:center+right",
-  "top+middle+bottom:left+center+right",
-] as const;
+export { promotedRegionKeys } from "./content-walk.js";
 
 const promotedRegionKeySet = new Set<string>(promotedRegionKeys);
 
@@ -277,20 +229,12 @@ function semanticIssue(path: string, message: string, params: Record<string, unk
   };
 }
 
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
-}
-
 function hasOwn(value: Record<string, unknown>, key: string): boolean {
   return Object.hasOwn(value, key);
 }
 
 function isEnUkTag(value: unknown): boolean {
   return typeof value === "string" && value.toLowerCase() === "en-uk";
-}
-
-function pathFor(parentPath: string, key: string): string {
-  return parentPath === "/" ? `/${key}` : `${parentPath}/${key.replaceAll("~", "~0").replaceAll("/", "~1")}`;
 }
 
 function presentFields(value: Record<string, unknown>, fields: readonly string[]): string[] {
@@ -513,27 +457,35 @@ function validatePresentationSemantics(value: unknown): ValidationIssue[] {
     }));
   }
 
-  const slideIds = new Set<string>();
+  // Slide and payload ids share one namespace, so the origin of the id already
+  // seen decides which message describes the collision truthfully.
+  const documentIds = new Map<string, "slide" | "payload">();
   value.slides.forEach((slide, index) => {
     if (isRecord(slide)) {
+      const slidePath = `/slides/${index}`;
       if (typeof slide.id === "string") {
-        if (slideIds.has(slide.id)) issues.push(semanticIssue(`/slides/${index}/id`, "slide ids must be unique within a presentation", { id: slide.id }));
-        slideIds.add(slide.id);
+        const seen = documentIds.get(slide.id);
+        if (seen === "slide") issues.push(semanticIssue(`${slidePath}/id`, "slide ids must be unique within a presentation", { id: slide.id }));
+        else if (seen === "payload") issues.push(semanticIssue(`${slidePath}/id`, "slide id duplicates a content payload id; ids must be unique among slide and payload ids within a presentation", { id: slide.id }));
+        else documentIds.set(slide.id, "slide");
       }
-      issues.push(...validateSlideRegions(slide, `/slides/${index}`));
-      const visitTables = (node:Record<string,unknown>,path:string) => {
-        if (isRecord(node.table)) for(const issue of tableGrid(node.table).issues) issues.push(semanticIssue(pathFor(path,'table')+issue.path.slice(5).replaceAll('.','/'),issue.message));
-        if(Array.isArray(node.blocks)) node.blocks.forEach((block,i)=>{if(isRecord(block))visitTables(block,`${path}/blocks/${i}`);});
-        for(const key of promotedRegionKeys) if(isRecord(node[key]))visitTables(node[key] as Record<string,unknown>,pathFor(path,key));
+      visitContentPayloads(slide, slidePath, (payload, path) => {
+        if (typeof payload.id === "string") {
+          if (documentIds.has(payload.id)) issues.push(semanticIssue(`${path}/id`, "content payload ids must be unique among slide and payload ids within a presentation", { id: payload.id }));
+          else documentIds.set(payload.id, "payload");
+        }
+      });
+      issues.push(...validateSlideRegions(slide, slidePath));
+      const payloadTableIssues = (payload: Record<string, unknown>, path: string): void => {
+        if (isRecord(payload.table)) for(const issue of tableGrid(payload.table).issues) issues.push(semanticIssue(pathFor(path,'table')+issue.path.slice(5).replaceAll('.','/'),issue.message));
       };
-      visitTables(slide,`/slides/${index}`);
+      payloadTableIssues(slide, slidePath);
+      visitContentPayloads(slide, slidePath, payloadTableIssues);
     }
   });
 
   return issues;
 }
-
-const bareIdPattern = /^[a-z0-9][a-z0-9-]*$/;
 
 interface CatalogReferenceContext {
   document: Record<string, unknown>;
@@ -565,8 +517,9 @@ function unknownIdWarning(
         && entry.records.some((record) => isRecord(record) && record.id === value)) {
         return undefined;
       }
-      if (typeof entry.source === "string") {
-        // A custom catalog source may define ids the bundled catalogs don't know about.
+      // A custom catalog source may define ids the bundled catalogs don't know
+      // about. 'source' is a single source or an ordered search path of them.
+      if (typeof entry.source === "string" || (Array.isArray(entry.source) && entry.source.length > 0)) {
         return undefined;
       }
     }
@@ -644,6 +597,130 @@ function chartTypeWarnings(
   return issues;
 }
 
+const cellBorderEdges = ["top", "right", "bottom", "left"] as const;
+
+// Mirrors the id shape shared by ColorRef's 'var:<id>' form and the property
+// names of the variables map: the one id an author could actually declare.
+const variableIdPattern = /^[a-z][a-z0-9-]*$/;
+
+// The forms TextRun.color documents. The schema keeps run colors open strings
+// so imported decks with unrecognized colors stay valid (coordinated
+// exporters fall back to the theme); the validator warns instead.
+const hexColorPattern = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/;
+const schemeColorNames = new Set([
+  "accent1", "accent2", "accent3", "accent4", "accent5", "accent6",
+  "dark1", "dark2", "light1", "light2", "hyperlink", "followedHyperlink",
+  "primary", "secondary", "accent", "background", "surface", "text", "textSecondary",
+]);
+
+// Visit exactly the schema's ColorRef positions. A key-name walk would also
+// reach 'color' keys the engine never resolves as a ColorRef — background and
+// gradient colors, chart series colors — and 'extensions' passthrough data,
+// whose shape and depth are the author's business, not the validator's.
+function variableReferenceWarnings(value: Record<string, unknown>): ValidationIssue[] {
+  if (!Array.isArray(value.slides)) {
+    return [];
+  }
+
+  const variables = isRecord(value.variables) ? value.variables : {};
+  const issues: ValidationIssue[] = [];
+
+  const colorRef = (entry: unknown, path: string): void => {
+    if (typeof entry !== "string" || !entry.startsWith("var:")) return;
+    const id = entry.slice("var:".length);
+    // A reference the schema rejects already reports an error; advising the
+    // author to declare an id the variables map cannot hold would dead-end.
+    if (!variableIdPattern.test(id) || hasOwn(variables, id)) return;
+    issues.push(semanticIssue(path, `unknown variable '${id}'; declare it in the top-level variables map`, { id }));
+  };
+  // Run colors are open strings: warn on anything that is none of the
+  // documented forms, since renderers will fall back to the theme color.
+  const runColor = (entry: unknown, path: string): void => {
+    if (typeof entry !== "string") return;
+    if (hexColorPattern.test(entry) || schemeColorNames.has(entry)) return;
+    if (entry.startsWith("var:") && variableIdPattern.test(entry.slice("var:".length))) {
+      colorRef(entry, path);
+      return;
+    }
+    issues.push(semanticIssue(
+      path,
+      `run color '${entry}' is not a hex color, a color-scheme name, or a 'var:' reference; renderers fall back to the theme color`,
+      { color: entry },
+    ));
+  };
+  // string | TextRun[]: only the object run form carries a color.
+  const richText = (entry: unknown, path: string): void => {
+    if (!Array.isArray(entry)) return;
+    entry.forEach((run, index) => {
+      if (isRecord(run)) runColor(run.color, `${path}/${index}/color`);
+    });
+  };
+  const cellStyle = (style: unknown, path: string): void => {
+    if (!isRecord(style)) return;
+    colorRef(style.fill, pathFor(path, "fill"));
+    colorRef(style.color, pathFor(path, "color"));
+    if (!isRecord(style.borders)) return;
+    const bordersPath = pathFor(path, "borders");
+    for (const edge of cellBorderEdges) {
+      const border = style.borders[edge];
+      if (isRecord(border)) colorRef(border.color, `${pathFor(bordersPath, edge)}/color`);
+    }
+  };
+  // TableCell/column label: scalar, TextRun[], or a StyledTableCell object.
+  const tableCell = (cell: unknown, path: string): void => {
+    if (Array.isArray(cell)) {
+      richText(cell, path);
+      return;
+    }
+    if (!isRecord(cell)) return;
+    richText(cell.value, pathFor(path, "value"));
+    cellStyle(cell.style, pathFor(path, "style"));
+  };
+  const table = (node: unknown, path: string): void => {
+    if (!isRecord(node)) return;
+    if (Array.isArray(node.columns)) {
+      const columnsPath = pathFor(path, "columns");
+      node.columns.forEach((column, index) => { tableCell(column, `${columnsPath}/${index}`); });
+    }
+    if (Array.isArray(node.rows)) {
+      const rowsPath = pathFor(path, "rows");
+      node.rows.forEach((row, rowIndex) => {
+        if (!Array.isArray(row)) return;
+        row.forEach((cell, cellIndex) => { tableCell(cell, `${rowsPath}/${rowIndex}/${cellIndex}`); });
+      });
+    }
+  };
+  // ListItem/BulletItem: string, TextRun[], or an object whose text and
+  // (list items only) description may themselves be TextRun[].
+  const textEntries = (entries: unknown, path: string): void => {
+    if (!Array.isArray(entries)) return;
+    entries.forEach((entry, index) => {
+      const entryPath = `${path}/${index}`;
+      if (Array.isArray(entry)) {
+        richText(entry, entryPath);
+        return;
+      }
+      if (!isRecord(entry)) return;
+      richText(entry.text, pathFor(entryPath, "text"));
+      richText(entry.description, pathFor(entryPath, "description"));
+    });
+  };
+  const payload = (node: Record<string, unknown>, path: string): void => {
+    richText(node.text, pathFor(path, "text"));
+    textEntries(node.items, pathFor(path, "items"));
+    textEntries(node.bullets, pathFor(path, "bullets"));
+    table(node.table, pathFor(path, "table"));
+  };
+
+  value.slides.forEach((slide, index) => {
+    if (!isRecord(slide)) return;
+    const slidePath = `/slides/${index}`;
+    payload(slide, slidePath);
+    visitContentPayloads(slide, slidePath, payload);
+  });
+  return issues;
+}
+
 function presentationReferenceWarnings(value: unknown): ValidationIssue[] {
   if (!isRecord(value) || !Array.isArray(value.slides)) {
     return [];
@@ -659,6 +736,7 @@ function presentationReferenceWarnings(value: unknown): ValidationIssue[] {
   }
 
   issues.push(...designReferenceWarnings(value.design, "/design", context));
+  issues.push(...variableReferenceWarnings(value));
 
   value.slides.forEach((slide, index) => {
     if (!isRecord(slide)) {

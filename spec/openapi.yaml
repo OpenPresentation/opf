@@ -493,6 +493,10 @@ components:
           type: object
           additionalProperties: true
           description: Optional design system (theme, colorScheme, fontScheme, dimensions, background, logo, header, footer, etc).
+        variables:
+          type: object
+          additionalProperties: true
+          description: Optional named color variables referenced from content color fields as `var:<id>` strings.
         assets:
           type: object
           additionalProperties: true
@@ -719,6 +723,7 @@ components:
           type: string
         color:
           type: string
+          description: Hex color, color-scheme slot/role name, or `var:<id>` variable reference (ColorRef in the canonical schema).
         alignment:
           type: string
 

@@ -1,0 +1,20 @@
+{
+  "name": "Bundle Fixture",
+  "narrative": "classic-story",
+  "tone": "formal",
+  "design": { "theme": "classic" },
+  "variables": { "risk": "#B42318" },
+  "slides": [
+    {
+      "id": "trend",
+      "layout": "chart-1x",
+      "title": "Trend",
+      "chart": { "type": "line", "data": { "columns": ["Month", "Value"], "rows": [["Jan", 1]] } }
+    },
+    {
+      "id": "risks",
+      "title": "Risks",
+      "items": [["Two regions at ", { "text": "85% utilization", "color": "var:risk", "bold": true }]]
+    }
+  ]
+}

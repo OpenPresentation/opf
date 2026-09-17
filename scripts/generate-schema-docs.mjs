@@ -173,14 +173,30 @@ async function writeCatalogReference() {
   await writeFile(path.join(docsRoot, "catalog-schema-reference.md"), `${lines.join("\n").trimEnd()}\n`, "utf8");
 }
 
+async function countExampleDecks() {
+  const examplesRoot = path.join(repoRoot, "examples");
+  let count = 0;
+  async function walk(dir) {
+    for (const entry of await readdir(dir, { withFileTypes: true })) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) await walk(full);
+      else if (entry.isFile() && entry.name.endsWith(".opf.json")) count += 1;
+    }
+  }
+  await walk(examplesRoot);
+  return count;
+}
+
 async function writeExamplesGuide() {
+  const deckCount = await countExampleDecks();
   const lines = [
     "# OPF Examples Guide",
     "",
-    "The `examples/` directory has three layers:",
+    "The `examples/` directory has two shipped layers, plus a docs fixture kept outside the catalog:",
     "",
     "- `examples/technical/` contains compact fixtures that isolate one or two schema behaviors.",
     "- `examples/gallery/` contains scenario-oriented decks that show OPF working across industries, functions, education, government, international, presentation-type, and design/media use cases.",
+    `- The representative deck for [the published-package quickstart](quickstart.md) lives at [\`docs/quickstart/developer-quickstart.opf.json\`](quickstart/developer-quickstart.opf.json), outside the catalog, so \`@openpresentation/opf/examples\` stays at the published example count (currently ${deckCount} decks); the renderer golden corpus tracks that catalog on its own release cadence.`,
     "- The examples root is kept as an organizing directory rather than a home for standalone OPF files.",
     "",
     "## Technical Fixtures",
