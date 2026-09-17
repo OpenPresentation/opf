@@ -115,7 +115,7 @@ Pagination emits ordinary OPF slides and a page mapping. Preview the result with
 opf bundle decision.opf.json bundled.opf.json
 ```
 
-Bundle inlines every bundled catalog record the document references — including transitive references such as a theme's color and font schemes — into `catalogs.<kind>.records`, so the file renders identically offline. Kinds that declare a custom `source` are left untouched, and the report lists added, already-inline, and unresolved ids. Bundling twice is a no-op.
+Bundle inlines every bundled catalog record the document references — including transitive references such as a theme's color and font schemes — into `catalogs.<kind>.records`, so the file resolves every catalog reference offline. Kinds that declare a custom `source` are left untouched, and the report lists added, already-inline, and unresolved ids. Remote media and data assets (`https:` images, chart `data.src` URLs) are not inlined. Bundling twice is a no-op.
 
 ## Agent output contract
 

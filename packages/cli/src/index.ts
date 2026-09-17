@@ -36,7 +36,8 @@ result, and save atomically. --dry-run emits the result without saving.
 Exit codes: 0 success, 1 invalid document/patch/conflict, 2 usage/JSON/I/O error.
 Validation checks structure and references, not visual fidelity.
 Bundle inlines the bundled catalog records a document references (kinds with a
-custom source are left untouched) so the file renders identically offline.
+custom source are left untouched) so the file resolves every catalog reference
+offline. Remote media and data assets are not inlined.
 Lint adds source locations, contextual suggestions and explicit host contracts.
 Lint syntax/schema/policy errors exit 1; --strict also rejects warnings.
 

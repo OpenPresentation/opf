@@ -48,7 +48,7 @@ Prefer names and variables over hex — they survive re-theming. Unknown `var:` 
 
 ## Catalog references
 
-Reusable vocabulary lives in catalogs; references are kebab-case ids: `narrative`, `tone`, `purpose`, `audience`, `language`, `design.theme`, `design.colorScheme`, `design.fontScheme`, `Slide.layout`, `Chart.type`, socials keys. Resolution: inline `catalogs.<kind>.records[]` → `catalogs.<kind>.source` → bundled default catalog (browsable at https://pptx.gallery). Object form overrides a record per key: `{ "id": "cool-horizon", "accent1": "#0F4C81" }`. Unknown ids warn, never error. `opf bundle <in> <out>` inlines every record a document uses so it renders identically offline.
+Reusable vocabulary lives in catalogs; references are kebab-case ids: `narrative`, `tone`, `purpose`, `audience`, `language`, `design.theme`, `design.colorScheme`, `design.fontScheme`, `Slide.layout`, `Chart.type`, socials keys. Resolution: inline `catalogs.<kind>.records[]` → `catalogs.<kind>.source` → bundled default catalog (browsable at https://pptx.gallery). Object form overrides a record per key: `{ "id": "cool-horizon", "accent1": "#0F4C81" }`. Unknown ids warn, never error. `opf bundle <in> <out>` inlines every record a document uses so it needs no catalog lookups beyond itself (remote media and data assets are separate).
 
 ## Design in three lines
 
