@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Resolve content ColorRef values (hex, color-scheme slots and roles, and `var:<id>` document variables) for styled table fills, text colors, and border strokes before SVG paint. Rich text runs keep warn-and-fallback semantics for unrecognized colors such as `invalid`. Vendored `test/fixtures/color-references.opf.json` covers the OPF reference-layer fixture without expanding the 126-deck examples golden until `@openpresentation/opf` 0.11.x publishes.
+
 ## 0.8.0
 
 - Require core 0.10.0 and render accepted metric, timeline, content-card and vector-aware text geometry. Preserve selected readability floors and scalar source whitespace; keep estimated rich text flowing with native SVG advances.

@@ -14,17 +14,17 @@ const before = structuredClone(document);
 const svg = renderSvg(document, {trace:true});
 assert.equal((svg.match(/>Styled <\/tspan>/g) ?? []).length, 1);
 assert.equal((svg.match(/>red<\/tspan>/g) ?? []).length, 1);
-assert.ok(/<tspan(?=[^>]*fill="#00ff00")[^>]*>Styled <\/tspan>/.test(svg));
-assert.ok(/<tspan(?=[^>]*fill="#ff0000")[^>]*>red<\/tspan>/.test(svg));
+assert.ok(/<tspan(?=[^>]*fill="#00ff00")[^>]*>Styled <\/tspan>/i.test(svg));
+assert.ok(/<tspan(?=[^>]*fill="#ff0000")[^>]*>red<\/tspan>/i.test(svg));
 assert.ok(/<text(?=[^>]*fill="#123456")(?=[^>]*text-anchor="middle")[^>]*>Scalar<\/text>/.test(svg));
 assert.match(svg, /data-opf-path="slides\.0\.table\.rows\.0\.0\.value"/);
 assert.doesNotMatch(svg, /data-opf-path="slides\.0\.table\.rows\.(0\.1|1\.[01])"/);
-assert.ok(/<rect(?=[^>]*fill="#12345680")(?=[^>]*data-opf-path="slides\.0\.table\.rows\.0\.0")[^>]*>/.test(svg));
-assert.ok(/<line(?=[^>]*stroke="#fedcba80")(?=[^>]*stroke-width="4")(?=[^>]*stroke-dasharray="16 12")[^>]*>/.test(svg));
-assert.ok(/<line(?=[^>]*stroke="#aa00aa")(?=[^>]*stroke-width="2")(?=[^>]*stroke-dasharray="2 4")[^>]*>/.test(svg));
+assert.ok(/<rect(?=[^>]*fill="#12345680")(?=[^>]*data-opf-path="slides\.0\.table\.rows\.0\.0")[^>]*>/i.test(svg));
+assert.ok(/<line(?=[^>]*stroke="#fedcba80")(?=[^>]*stroke-width="4")(?=[^>]*stroke-dasharray="16 12")[^>]*>/i.test(svg));
+assert.ok(/<line(?=[^>]*stroke="#aa00aa")(?=[^>]*stroke-width="2")(?=[^>]*stroke-dasharray="2 4")[^>]*>/i.test(svg));
 assert.doesNotMatch(svg, /data-opf-path="slides\.0\.table\.rows\.0\.0\.style\.borders\.bottom"/);
 // A custom edge must remain visible after neighboring cells are filled.
-assert.ok(svg.indexOf('stroke="#fedcba80"') > svg.lastIndexOf('<rect'));
+assert.ok(svg.search(/stroke="#fedcba80"/i) > svg.lastIndexOf('<rect'));
 const geometry = composeSlide(document.slides[0]);
 const item = geometry.items.find(item => item.field === 'table');
 const merged = layoutTable(table, item.box).rows[0].cells[0];
@@ -74,7 +74,7 @@ const edgeTable = {rows:[
   [null,{value:'C',style:{borders:{bottom:{color:'#111111',width:1}}}}]
 ]};
 const edgeSvg = renderSvg({slides:[{table:edgeTable}]},{trace:true});
-const custom = lines(edgeSvg).find(line => line.stroke === '#a100a1');
+const custom = lines(edgeSvg).find(line => line.stroke?.toLowerCase() === '#a100a1');
 assert.ok(custom);
 const shared = lines(edgeSvg).filter(line => line.x1 === custom.x1 && line.x2 === custom.x2);
 assert.equal(shared.length,1,'neighbor defaults leave dotted gaps empty');
@@ -89,6 +89,6 @@ for (const width of [0,2]) {
   const mergeEdges = lines(split).filter(line => line['data-opf-path'] === 'slides.0.table.rows.0.0.style.borders.right');
   assert.equal(mergeEdges.length,2,'long implicit edge split above and below explicit neighbor');
   assert.equal(Number(mergeEdges[1].y1)-Number(mergeEdges[0].y2),54);
-  assert.equal(lines(split).filter(line => line.stroke === '#a100a1').length,width ? 1 : 0);
+  assert.equal(lines(split).filter(line => line.stroke?.toLowerCase() === '#a100a1').length,width ? 1 : 0);
 }
 console.log('Styled table renderer passed: spans, fills/alpha, shared border precedence and suppression, scalar/rich vertical alignment, editable paths, run overrides and rasterization.');

@@ -52,6 +52,7 @@ export interface RenderSvgOptions {
   strictAssets?: boolean;
   imageResolver?: (src: string | undefined, context: { asset: unknown; path: string }) => string | null | undefined;
   onDiagnostic?: (diagnostic: RenderDiagnostic) => void;
+  validate?: boolean;
   slideIndex?: number;
   trace?: boolean;
   catalogs?: Record<string, { records?: unknown[] } | unknown[]>;

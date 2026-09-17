@@ -291,6 +291,56 @@ function normalizeColor(value, fallback) {
   return fallback;
 }
 
+const COLOR_SCHEME_SLOTS = new Set([
+  "dark1", "dark2", "light1", "light2",
+  "accent1", "accent2", "accent3", "accent4", "accent5", "accent6",
+  "hyperlink", "followedHyperlink"
+]);
+const COLOR_SCHEME_ROLES = new Set([
+  "primary", "secondary", "accent", "background", "surface", "text", "textSecondary"
+]);
+
+function resolveVariableColor(id, variables) {
+  if (!variables || typeof id !== "string" || !id) return null;
+  const entry = variables[id];
+  if (typeof entry === "string") return normalizeColor(entry, null);
+  if (isPlainObject(entry) && entry.type === "color" && typeof entry.value === "string") {
+    return normalizeColor(entry.value, null);
+  }
+  return null;
+}
+
+/** Resolve content ColorRef until core exports resolveColorRef(). */
+function resolveColorRef(value, bound, fallback) {
+  if (value == null || value === "") return fallback;
+  if (typeof value !== "string") return fallback;
+  const trimmed = value.trim();
+  if (trimmed.startsWith("#")) {
+    if (/^#[0-9a-fA-F]{3}$/.test(trimmed)) return normalizeColor(trimmed, fallback);
+    if (/^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$/.test(trimmed)) return trimmed;
+    return normalizeColor(trimmed, fallback);
+  }
+  if (trimmed.startsWith("var:")) {
+    const resolved = resolveVariableColor(trimmed.slice(4), bound.design.variables);
+    return resolved ?? fallback;
+  }
+  const scheme = bound.design.colorScheme;
+  const colors = bound.design.colors;
+  if (COLOR_SCHEME_ROLES.has(trimmed)) {
+    if (trimmed === "textSecondary") return colors.mutedText ?? fallback;
+    if (trimmed === "text") return colors.text ?? fallback;
+    if (trimmed === "background") return colors.background ?? fallback;
+    if (trimmed === "surface") return colors.surface ?? fallback;
+    if (trimmed === "primary") return colors.primary ?? fallback;
+    if (trimmed === "secondary") return colors.secondary ?? fallback;
+    if (trimmed === "accent") return colors.accent ?? fallback;
+  }
+  if (COLOR_SCHEME_SLOTS.has(trimmed) || (scheme && trimmed in scheme)) {
+    return colorFromScheme(scheme, trimmed, fallback);
+  }
+  return fallback;
+}
+
 function resolveBackground(background, colorScheme) {
   if (!background) return colorFromScheme(colorScheme, "light1", "#FFFFFF");
   if (typeof background === "string") return colorFromScheme(colorScheme, background, "#FFFFFF");
@@ -346,6 +396,7 @@ function resolveDesign(presentation, slide, context) {
     colorScheme,
     fontScheme,
     dimensions,
+    variables: presentation.variables ?? {},
     background: backgroundDefinition,
     backgroundColor,
     colors: {
@@ -502,7 +553,9 @@ function bindSlide(presentation, slide, layout, index, context) {
 
 export function resolvePresentation(input, options = {}) {
   const presentation = parseInput(input);
-  assertValidBoundary(presentation);
+  if (options.validate !== false) {
+    assertValidBoundary(presentation);
+  }
 
   const context = { presentation, options };
   const slides = presentation.slides.map((slide, index) => {
@@ -903,7 +956,14 @@ function renderTable(item, box, bound, options) {
   const defaultEdges = [], explicitEdges = [];
   for (const row of layout.rows) for (const cell of row.cells) {
     const style = cell.style ?? {};
-    const fill = style.fill ?? (cell.header ? bound.design.colors.primary : bound.design.colors.surface);
+    const defaultFill = cell.header ? bound.design.colors.primary : bound.design.colors.surface;
+    const fill = style.fill == null
+      ? defaultFill
+      : resolveColorRef(style.fill, bound, defaultFill);
+    const defaultText = textColorForFill(fill, cell.header ? "#FFFFFF" : bound.design.colors.text);
+    const textFill = style.color == null
+      ? defaultText
+      : resolveColorRef(style.color, bound, defaultText);
     children.push(tag("rect", {
       x: stableNumber(cell.box.x), y: stableNumber(cell.box.y),
       width: stableNumber(cell.box.width), height: stableNumber(cell.box.height),
@@ -923,17 +983,18 @@ function renderTable(item, box, bound, options) {
     children.push((cell.rich ? renderRichTextBox : renderTextBox)(cell.rich ? cell.value : flattenText(cell.value ?? ""), cell.textBox, bound, {
       path:cell.path, fontSize:15, fontFamily:bound.design.fonts.body,
       fontWeight:cell.header ? 700 : 400, textStyle:cell.textStyle, fit:cell.fit,
-      fill:style.color ?? textColorForFill(fill, cell.header ? "#FFFFFF" : bound.design.colors.text), align:style.align, options
+      fill:textFill, align:style.align, options
     }));
   }
 
-  return tag("g", traceAttrs(options, item.path), [...children, ...renderTableBorders(defaultEdges, explicitEdges, scale, bound.design.colors.border, options)].join("\n"));
+  return tag("g", traceAttrs(options, item.path), [...children, ...renderTableBorders(defaultEdges, explicitEdges, scale, bound, options)].join("\n"));
 }
 
 // Explicit edges own their shared segment, including invisible/zero-width edges.
 // Split implicit neighbors at merge boundaries so they cannot fill dashed gaps,
 // cover alpha strokes, or reintroduce a border the author removed.
-function renderTableBorders(defaultEdges, explicitEdges, scale, defaultColor, options) {
+function renderTableBorders(defaultEdges, explicitEdges, scale, bound, options) {
+  const defaultColor = bound.design.colors.border;
   const epsilon = 1e-7;
   const segment = ({coordinates:[x1,y1,x2,y2]}) => y1 === y2
     ? {horizontal:true, fixed:y1, start:x1, end:x2}
@@ -955,9 +1016,12 @@ function renderTableBorders(defaultEdges, explicitEdges, scale, defaultColor, op
   return [...defaults,...explicitEdges].flatMap(({coordinates:[x1,y1,x2,y2],border,path}) => {
     const width = border ? border.width * scale : 1;
     if (width === 0) return [];
+    const stroke = border?.color == null
+      ? defaultColor
+      : resolveColorRef(border.color, bound, defaultColor);
     return [tag('line', {
       x1:stableNumber(x1), y1:stableNumber(y1), x2:stableNumber(x2), y2:stableNumber(y2),
-      stroke:border?.color ?? defaultColor, 'stroke-width':stableNumber(width),
+      stroke, 'stroke-width':stableNumber(width),
       'stroke-dasharray':border?.dash === 'dash' ? `${width*4} ${width*3}` : border?.dash === 'dot' ? `${width} ${width*2}` : undefined,
       ...traceAttrs(options,path)
     })];
@@ -1197,7 +1261,10 @@ function renderRichLines(value,fit,box,bound,config) {
     // avoids hinted browser advances; textLength also removes fractional-size
     // quantization drift. Height and baseline retain the selected font size.
     const position=flow?{'baseline-shift':fragment.baselineShift?stableNumber(-fragment.baselineShift):undefined}:{x:stableNumber((placed?.x??box.x+offset)+fragment.x),y:stableNumber((placed?.baseline??box.y+line.baseline)+fragment.baselineShift)};
-    const rendered=tag(flow?'tspan':'text',{...(config.options.trace?{'data-opf-text-start':runOffsets[fragment.runIndex]+fragment.start,'data-opf-text-end':runOffsets[fragment.runIndex]+fragment.end}:{}),...position,'xml:space':'preserve','text-rendering':flow?undefined:'geometricPrecision',textLength:placed&&fragment.width>0?stableNumber(fragment.width):undefined,lengthAdjust:placed&&fragment.width>0?'spacingAndGlyphs':undefined,'font-family':fontStack(fragment.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(fragment.fontSize),'font-weight':fragment.style.fontWeight,'font-style':fragment.style.italic?'italic':flow?'normal':undefined,'text-decoration':[run.underline?'underline':'',run.strikethrough?'line-through':''].filter(Boolean).join(' ')||undefined,fill:/^#(?:[0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(run.color??'')?run.color:config.fill},escapeText(fragment.text));
+    const runFill = run.color == null
+      ? config.fill
+      : resolveColorRef(run.color, bound, config.fill);
+    const rendered=tag(flow?'tspan':'text',{...(config.options.trace?{'data-opf-text-start':runOffsets[fragment.runIndex]+fragment.start,'data-opf-text-end':runOffsets[fragment.runIndex]+fragment.end}:{}),...position,'xml:space':'preserve','text-rendering':flow?undefined:'geometricPrecision',textLength:placed&&fragment.width>0?stableNumber(fragment.width):undefined,lengthAdjust:placed&&fragment.width>0?'spacingAndGlyphs':undefined,'font-family':fontStack(fragment.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(fragment.fontSize),'font-weight':fragment.style.fontWeight,'font-style':fragment.style.italic?'italic':flow?'normal':undefined,'text-decoration':[run.underline?'underline':'',run.strikethrough?'line-through':''].filter(Boolean).join(' ')||undefined,fill:runFill},escapeText(fragment.text));
     if(run.link&&/^(https?:|mailto:)/i.test(run.link))return tag('a',{href:run.link,target:'_blank',rel:'noopener noreferrer'},rendered);
     return rendered;
     });
