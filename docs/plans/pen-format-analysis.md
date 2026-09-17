@@ -15,7 +15,19 @@ Method note: `docs.pen.dev` / `docs.pencil.dev` are blocked from this environmen
 
 3. **Recommendation: adopt four additive changes** — (1) theme-color references in content, (2) document-level `variables` + `variants` axes, (3) optional `id` and `extensions` below slide level, (4) a flat `components` registry for content payloads. All four are optional surfaces; every existing OPF document remains valid. Details, worked example, and costs in §5–§7.
 
-4. **Explicitly rejected:** the uniform recursive node model, flexbox layout vocabulary, absolute positioning/vector primitives, and mandatory ids. Reasons in §6.
+4. **Explicitly rejected:** the uniform recursive node model, flexbox layout vocabulary, absolute positioning/vector primitives, and mandatory ids. Reasons in §4.
+
+## Update — spec drift check (September 17, 2026)
+
+The study above was written against main as of August 15, 2026. Re-checked against main at core 0.10.1, with every verifiable claim re-run against the current `validatePresentation`. What changed, and what it does to the verdicts:
+
+- **Bounded recursion and `Composition` landed.** `ContentPayload` now admits `type: "group"` payloads whose `blocks` nest to a 32-level cap, and slides, groups, and layout records carry `composition` (`mode: auto|grid|row|column`, `columns`, fractional `gap`/`padding`, relative `weights`, `minFontSize`, `overflow: warn|error`; see `docs/dynamic-composition.md`). Three verdicts shift:
+  - §3's "deliberately flat" contrast becomes "bounded semantic nesting." The altitude argument survives intact — groups contain semantic payloads with fractional, engine-mediated arrangement, not .pen's single geometry primitive at arbitrary x/y — but the flatness wording in §3 and §4.11 is updated below.
+  - **4.8 (defer: sizing/emphasis hints) resolved itself:** `composition.weights` expresses "sidebar narrow, main wide" as relative track sizes. Regions stay ratio-free; groups carry the ratios. The defer is closed.
+  - **4.12 (reject: flexbox vocabulary) is half-confirmed, half-overtaken:** OPF adopted the *familiar names* (row/column/grid, `gap`, `padding`, weights) in a bounded, fraction-of-canvas, engine-owned form — the "borrowed vocabulary without the geometry" middle road §2.3 pointed at. The reject stands for free-form flexbox and absolute positioning.
+- **Styled table cells shipped raw-hex-only.** `StyledTableCell.style.fill`/`color` (new in 0.10) carry a `^#…$` pattern that actively rejects anything but hex — `"fill": "accent2"` fails validation (verified). This is the first styling surface where the un-tokenized-styling risk (4.5) is enforced by schema, not just documented. 4.1/4.5 upgrade from important to urgent: every release that ships hex-locked styling raises the later migration cost, and relaxing the pattern is cheapest while the surface is new.
+- **Still absent, so the reference-layer recommendation stands as written:** no `id` or `extensions` below the document root (slide-level `extensions` and payload `id` still rejected — verified), no variables/variants, no components. `TextRun.color` remains unconstrained (a bare `"accent2"` still validates as undefined behavior).
+- **A new `opf lint` CLI exists** — the natural home for 4.1's unknown-color-name warnings and 4.3's id-uniqueness checks.
 
 ---
 
@@ -86,7 +98,7 @@ Everything in the file is one primitive: a node with `id`, `type` (`frame`, `rec
 | Who decides placement | The author, absolutely | The engine, guided by hints |
 | Narrative/audience/purpose | Absent | First-class intent layer |
 | Round-trip target | Code (React/CSS) | OOXML/PowerPoint slots |
-| Nesting | Unbounded recursion | Deliberately flat (blocks are not recursive; list depth via `level`) |
+| Nesting | Unbounded recursion of one geometry primitive | Bounded semantic nesting — `group` payloads to a 32-level cap; arrangement stays fractional and engine-mediated (list depth via `level`) |
 
 The two formats answer different questions: .pen answers *"what does it look like?"*; OPF answers *"what does it say, to whom, and why?"*. For OPF's job — decks that agents draft, humans revise, engines restyle — the flat, semantic, engine-decides model is the stronger design, and it is also what keeps LLM authoring reliable (bounded shapes, no deep nesting to get lost in). Several .pen strengths are already OPF strengths in different clothes: shorthand ladders (§2.7), resolve-then-override merging (§2.6), schema-as-source-of-truth, git-native plain JSON.
 
@@ -102,7 +114,7 @@ Every idea the study surfaced, including the rejected ones. Verdicts: **adopt**,
 
 **Today in OPF:** `TextRun.color` is a raw hex string. A deck with one branded word in a title hardcodes a color that silently stops matching when `colorScheme` changes — the "two-line diff to re-theme" pitch breaks at the first colored run. Meanwhile the format *already* has a color vocabulary (scheme slots `accent1`–`accent6`, `dark1/2`, `light1/2`; roles `primary`, `text`, `surface`, …) and already lets one string field accept slot names (`BackgroundShortcut` takes `"light1"` as shorthand).
 
-**Change:** everywhere content accepts a color (today: `TextRun.color`; later: payload design overrides), accept `#hex` **or a scheme slot/role name**, resolved through the effective color scheme exactly as backgrounds already resolve. (Verified while writing this: the schema places no pattern constraint on `TextRun.color`, so `"color": "accent2"` already *validates* today — it is simply undefined behavior. The change is to specify the resolution rather than leave those strings meaningless, which makes it a docs-and-engines change more than a schema change.)
+**Change:** everywhere content accepts a color (today: `TextRun.color` and `TableCellStyle.fill`/`color`; later: payload design overrides), accept `#hex` **or a scheme slot/role name**, resolved through the effective color scheme exactly as backgrounds already resolve. (Verified while writing this: the schema places no pattern constraint on `TextRun.color`, so `"color": "accent2"` already *validates* today — it is simply undefined behavior. The change is to specify the resolution rather than leave those strings meaningless. **Sep 2026 update:** the styled table cells shipped in 0.10 are the counter-example — `TableCellStyle.fill`/`color` are pattern-locked to hex and actively reject `"accent2"` (verified), so for that surface this *is* a schema change, and it is cheapest now while the surface is new.)
 
 ```json
 { "text": [
@@ -172,7 +184,7 @@ Every idea the study surfaced, including the rejected ones. Verdicts: **adopt**,
 
 ### 4.5 — Adapt: payload design overrides should be token-first when they land
 
-OPF deliberately parked per-payload styling (`content-item-design-overrides.md`), and the parking decision is sound. The .pen lesson is about the *shape* it should take when it returns: colors in that surface must accept 4.1's names and 4.2's `var:` refs from day one. If payload styling ships as raw hex, every styled deck re-freezes its palette and the design system stops cascading — .pen without variables had exactly this problem, which is why variables exist. (Amend the parking-lot note now so the requirement is recorded; costs nothing today.)
+OPF deliberately parked per-payload styling (`content-item-design-overrides.md`), and the parking decision is sound. The .pen lesson is about the *shape* it should take when it returns: colors in that surface must accept 4.1's names and 4.2's `var:` refs from day one. If payload styling ships as raw hex, every styled deck re-freezes its palette and the design system stops cascading — .pen without variables had exactly this problem, which is why variables exist. **Sep 2026 update: this has started happening.** Styled table cells (0.10) are the first unparked styling surface, and they shipped with hex-pattern-locked `fill`/`color` — the exact failure mode this idea warns about, now enforced by schema. Amend the parking-lot note, and relax the table-cell pattern to admit scheme names (and later `var:` refs) before more surfaces copy it.
 
 ### 4.6 — Adapt: self-containment as a one-command guarantee
 
@@ -182,9 +194,9 @@ A `.pen` file is always self-contained; an OPF document that references URL or `
 
 The .pen docs end with the complete TypeScript schema, explicitly so it can travel into a model's context window. OPF's `llms.txt` is link-based — good for browsing agents, weak for context injection. Ship a single-file condensed authoring card (top-level shape, payload inference table, region grammar, catalog resolution, 3–4 canonical examples — a few KB) in the repo, the npm package, and `llms.txt`. No schema change; measurable win for authoring reliability on models without fetch access.
 
-### 4.8 — Defer: sizing/emphasis hints on regions
+### 4.8 — Defer: sizing/emphasis hints on regions — *closed by `Composition` (Sep 2026)*
 
-.pen's `fill_container`/`hug_content` and weights solve real layout problems — for a canvas. OPF regions currently have no way to say "sidebar narrow, main wide" beyond span counts (`left` vs `center+right` is already 1:2), and adding ratios or size keywords starts the slide toward geometry. Engines own this today and should keep owning it until `opf-render` produces concrete demand. Revisit with rendering experience in hand.
+.pen's `fill_container`/`hug_content` and weights solve real layout problems — for a canvas. When this study was written, OPF regions had no way to say "sidebar narrow, main wide" beyond span counts, and this idea was deferred to avoid geometry creep. Main has since answered it the right way: `composition.weights` on slides and groups expresses relative track sizes (fractional, capped, engine-mediated), while promoted regions stay ratio-free. Nothing left to adopt from .pen here.
 
 ### 4.9 — Defer: standardized authoring annotations
 
@@ -196,11 +208,11 @@ Generalizing light/dark variants from `LogoSet` to arbitrary assets (background 
 
 ### 4.11 — Reject: the uniform recursive node model
 
-One recursive primitive is what makes .pen expressive and what makes it meaningless to restyle. OPF's fixed payload kinds and deliberately flat composition (blocks non-recursive, list nesting by `level`) are the properties that let engines re-theme, re-layout, and reason about decks — and that keep LLM output reliable (bounded shapes, shallow structure). This is the core of OPF's identity; the study's strongest finding is how much value .pen gives up by not having it.
+One recursive primitive is what makes .pen expressive and what makes it meaningless to restyle. OPF's fixed payload kinds and bounded composition are the properties that let engines re-theme, re-layout, and reason about decks — and that keep LLM output reliable (bounded shapes, capped depth). The 0.10 `group` payloads do not change this verdict: a group is a *semantic* container of typed payloads with fractional, engine-owned arrangement and a hard 32-level cap — categorically different from .pen's single geometry primitive recursing without limit at author-owned coordinates. This is the core of OPF's identity; the study's strongest finding is how much value .pen gives up by not having it.
 
-### 4.12 — Reject: flexbox layout vocabulary for slides
+### 4.12 — Reject: flexbox layout vocabulary for slides — *superseded in the right way (Sep 2026)*
 
-Tempting because of the training-data prior (§2.3), but the 3×3 region grammar is the better slide-level abstraction: bounded, overlap-validatable, layout-hint compatible, and honest about the fact that engines place content. Flexbox on slides invites unbounded nesting and turns every deck into a bespoke layout program. (Non-format note: the 46 enumerated region keys make the *schema* bulky, but the author-facing surface — two axes, `+`, `:` — is small and composable; not worth churning.)
+Tempting because of the training-data prior (§2.3), but free-form flexbox on slides invites unbounded nesting and turns every deck into a bespoke layout program. Main has since landed `Composition`, which takes exactly the middle road this study argued for: the *familiar names* (`row`, `column`, `grid`, `gap`, `padding`, weights) with none of the geometry — values are fractions of the canvas short edge with schema-capped ranges, engines own placement, and promoted regions keep their meaning. The reject stands for what .pen actually does (author-owned pixel flexbox plus absolute positioning); the vocabulary lesson is now implemented. (Non-format note: the 46 enumerated region keys make the *schema* bulky, but the author-facing surface — two axes, `+`, `:` — is small and composable; not worth churning.)
 
 ### 4.13 — Reject: absolute positioning, vector primitives, effects, scripts
 
@@ -277,7 +289,7 @@ The same deck without the proposal: three copy-pasted metric payloads, two hardc
 | 4.2 `variables` + `variants` | One file → dark/light/print/brand variants; retires bespoke variant surfaces (LogoSet pattern) | Largest: new resolution layer in spec + all engines; token-noise risk needs authoring guidance | Variant needs met by file forking — the exact failure mode OPF exists to end |
 | 4.3 sub-slide `id` + `extensions` | Patch-style agent edits; durable anchors for comments/review/provenance; prerequisite for 4.4 and `opf-editor` | Near zero (optional fields, uniqueness check) | Agent edits stay whole-document rewrites; external state anchors to array indexes that break on reorder |
 | 4.4 `components` | Single-source repeated content; delta-only instances; reuses existing merge semantics | Reference expansion in engines; unresolved-`use` validation; genuine complexity step | Copy-paste drift in real decks; agents regenerate inconsistent variants of the same card |
-| 4.5–4.7 (adapt tier) | Future-proofs styling; reproducibility guarantee; agent authoring reliability | Docs/CLI/tooling only — no schema change | Styling ships un-tokenized someday and re-theming dies then; offline fidelity stays informal |
+| 4.5–4.7 (adapt tier) | Future-proofs styling; reproducibility guarantee; agent authoring reliability | Docs/CLI/tooling only — no schema change | Already materializing: 0.10's styled table cells shipped hex-locked (4.5); each surface that copies them raises migration cost |
 
 Cross-cutting cost, stated plainly: all four adopt-tier changes grow the spec surface right at the v1 freeze, and each adds a "second way" to say something (hex or name; literal or token; inline or component). That tax is real for LLM authoring and is paid down the same way OPF already pays it — shorthand ladders with documented inference, warnings instead of errors, and the format card (4.7) telling agents which form to prefer. Because every change is additive and optional, no existing document breaks and the minimal deck stays two lines.
 
