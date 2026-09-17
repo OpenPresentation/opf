@@ -47,7 +47,7 @@ const schemaNameByCatalogKind = catalogSchemaNames as Record<CatalogKind, Schema
 let ajv: Ajv2020 | undefined;
 const dynamicSchemaCache = new WeakMap<JsonSchema, ValidateFunction>();
 
-const promotedRegionKeys = [
+export const promotedRegionKeys = [
   "left",
   "center",
   "right",
@@ -513,13 +513,22 @@ function validatePresentationSemantics(value: unknown): ValidationIssue[] {
     }));
   }
 
-  const slideIds = new Set<string>();
+  const documentIds = new Set<string>();
   value.slides.forEach((slide, index) => {
     if (isRecord(slide)) {
       if (typeof slide.id === "string") {
-        if (slideIds.has(slide.id)) issues.push(semanticIssue(`/slides/${index}/id`, "slide ids must be unique within a presentation", { id: slide.id }));
-        slideIds.add(slide.id);
+        if (documentIds.has(slide.id)) issues.push(semanticIssue(`/slides/${index}/id`, "slide ids must be unique within a presentation", { id: slide.id }));
+        documentIds.add(slide.id);
       }
+      const visitPayloadIds = (node: Record<string, unknown>, path: string): void => {
+        if (typeof node.id === "string") {
+          if (documentIds.has(node.id)) issues.push(semanticIssue(`${path}/id`, "content payload ids must be unique among slide and payload ids within a presentation", { id: node.id }));
+          documentIds.add(node.id);
+        }
+        if (Array.isArray(node.blocks)) node.blocks.forEach((block, i) => { if (isRecord(block)) visitPayloadIds(block, `${path}/blocks/${i}`); });
+      };
+      if (Array.isArray(slide.blocks)) slide.blocks.forEach((block, i) => { if (isRecord(block)) visitPayloadIds(block, `/slides/${index}/blocks/${i}`); });
+      for (const key of promotedRegionKeys) if (isRecord(slide[key])) visitPayloadIds(slide[key] as Record<string, unknown>, pathFor(`/slides/${index}`, key));
       issues.push(...validateSlideRegions(slide, `/slides/${index}`));
       const visitTables = (node:Record<string,unknown>,path:string) => {
         if (isRecord(node.table)) for(const issue of tableGrid(node.table).issues) issues.push(semanticIssue(pathFor(path,'table')+issue.path.slice(5).replaceAll('.','/'),issue.message));
@@ -644,6 +653,32 @@ function chartTypeWarnings(
   return issues;
 }
 
+function variableReferenceWarnings(value: Record<string, unknown>): ValidationIssue[] {
+  const variables = isRecord(value.variables) ? value.variables : {};
+  const issues: ValidationIssue[] = [];
+  const visit = (node: unknown, path: string): void => {
+    if (Array.isArray(node)) {
+      node.forEach((entry, index) => {
+        visit(entry, `${path}/${index}`);
+      });
+      return;
+    }
+    if (!isRecord(node)) return;
+    for (const [key, entry] of Object.entries(node)) {
+      if ((key === "color" || key === "fill") && typeof entry === "string" && entry.startsWith("var:")) {
+        const id = entry.slice("var:".length);
+        if (!hasOwn(variables, id)) {
+          issues.push(semanticIssue(pathFor(path, key), `unknown variable '${id}'; declare it in the top-level variables map`, { id }));
+        }
+        continue;
+      }
+      visit(entry, pathFor(path, key));
+    }
+  };
+  visit(value.slides, "/slides");
+  return issues;
+}
+
 function presentationReferenceWarnings(value: unknown): ValidationIssue[] {
   if (!isRecord(value) || !Array.isArray(value.slides)) {
     return [];
@@ -659,6 +694,7 @@ function presentationReferenceWarnings(value: unknown): ValidationIssue[] {
   }
 
   issues.push(...designReferenceWarnings(value.design, "/design", context));
+  issues.push(...variableReferenceWarnings(value));
 
   value.slides.forEach((slide, index) => {
     if (!isRecord(slide)) {

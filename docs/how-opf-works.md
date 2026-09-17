@@ -21,6 +21,7 @@ Presentation
 │                           blocks[]       (ordered payloads, placement inferred)
 │                           region keys    (3x3 placement grid)
 ├── design ........ theme, colorScheme, fontScheme, background, logo, header, footer
+├── variables ..... named colors, referenced from content as "var:<id>"
 ├── assets ........ named media sources, referenced as "asset:<id>"
 └── catalogs ...... per-kind overrides: inline records and/or custom sources
 ```
@@ -226,7 +227,7 @@ A document can carry its own records or point at a private registry, which also 
 
 ## Design in one paragraph
 
-`design` selects a `theme` (which bundles default color scheme, font scheme, background, and dimensions) and may override any of those directly; `Slide.design` overrides the deck design per slide. More specific always wins, field by field. Color schemes and font schemes each support two mixable models — OOXML slots/pairs that round-trip to PowerPoint, and abstract roles (`primary`, `heading`, `code`, …) that engines map onto slots. The full precedence chain with worked examples is in [`design-resolution.md`](./design-resolution.md).
+`design` selects a `theme` (which bundles default color scheme, font scheme, background, and dimensions) and may override any of those directly; `Slide.design` overrides the deck design per slide. More specific always wins, field by field. Color schemes and font schemes each support two mixable models — OOXML slots/pairs that round-trip to PowerPoint, and abstract roles (`primary`, `heading`, `code`, …) that engines map onto slots. Content color fields (rich-text runs, styled table cells) reference the design system by name — a scheme slot (`accent2`), a role (`text`), or a `var:<id>` entry from the top-level `variables` map — so styled content follows a re-theme instead of freezing hex values. The full precedence chain with worked examples is in [`design-resolution.md`](./design-resolution.md).
 
 ## Assets
 
@@ -306,8 +307,8 @@ The beat ids (`objectives`, `performance-headline`, `risks`, `asks`) come from t
 
 Two layers, with a deliberate split:
 
-- **Schema errors** for structural problems: wrong types, overlapping region keys, payloads mixing incompatible content kinds, a region payload missing concrete content.
-- **Warnings** for advisory drift: unknown catalog ids, narrative/slide mismatches. These never make a document invalid.
+- **Schema errors** for structural problems: wrong types, overlapping region keys, payloads mixing incompatible content kinds, a region payload missing concrete content, duplicate slide or payload ids.
+- **Warnings** for advisory drift: unknown catalog ids, unknown `var:` variable references, narrative/slide mismatches. These never make a document invalid.
 
 `validatePresentation` from `@openpresentation/opf` applies both layers locally.
 

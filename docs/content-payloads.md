@@ -18,6 +18,31 @@ The optional payload `type` can make intent explicit, but OPF should usually inf
 | `quote` | `quote` | String shorthand or `Quote` object with `text`, `attribution`, and `source`. |
 | `timeline` | `timeline` | Array shorthand or `Timeline` object with `name`, `description`, and `events`. |
 
+## Color references
+
+Every content color field — `TextRun.color`, styled table cell `style.fill` and `style.color`, and table cell border `color` — accepts three forms:
+
+- A literal hex color: `"#0F172A"`, `"#B42318CC"`.
+- A color-scheme slot or role name, resolved through the effective color scheme after design resolution: slots `accent1`–`accent6`, `dark1`, `dark2`, `light1`, `light2`, `hyperlink`, `followedHyperlink`; roles `primary`, `secondary`, `accent`, `background`, `surface`, `text`, `textSecondary`.
+- A variable reference `var:<id>` into the top-level `variables` map.
+
+```json
+{
+  "variables": { "risk": "#B42318" },
+  "slides": [
+    {
+      "title": "What Could Go Wrong",
+      "items": [
+        ["Two regions at ", { "text": "85% utilization", "color": "var:risk", "bold": true }],
+        ["Mitigations ship in ", { "text": "November", "color": "accent2" }]
+      ]
+    }
+  ]
+}
+```
+
+Prefer names and variables over literal hex: re-theming the deck updates every named reference, while a hex value stays frozen at authoring time. An unknown `var:` id is a validation warning, never an error; engines fall back to their default text color. See [`design-resolution.md`](./design-resolution.md) for the resolution rules.
+
 ## Blocks
 
 Use slide-level `blocks` when a slide contains multiple content payloads, but exact placement should be inferred by the renderer. Blocks may contain a concrete content payload or a nested group with its own `blocks` and optional `composition`. Groups cannot mix child blocks with leaf payload fields. See [dynamic composition](dynamic-composition.md) for nesting and inheritance rules.

@@ -493,6 +493,10 @@ components:
           type: object
           additionalProperties: true
           description: Optional design system (theme, colorScheme, fontScheme, dimensions, background, logo, header, footer, etc).
+        variables:
+          type: object
+          additionalProperties: true
+          description: Optional named color variables referenced from content color fields as `var:<id>` strings.
         assets:
           type: object
           additionalProperties: true

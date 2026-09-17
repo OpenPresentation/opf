@@ -93,6 +93,9 @@ export type { TextStyle, FontFamilies, TextMeasurement, MeasureTextWidth, Compos
 export { paginatePresentation, paginateSlide, OPFPaginationError } from './pagination.js';
 export type { PresentationPaginationOptions, PresentationPaginationResult, PaginationOptions, PaginationResult, PaginatedPage, PaginationMapping } from './pagination.js';
 
+export { bundlePresentation } from './bundle.js';
+export type { BundleReport, BundleResult } from './bundle.js';
+
 export { parseTabularData, createDataContent, OPFDataImportError } from './data.js';
 export type { DataCell, TabularData, DataImportOptions, DataContentOptions } from './data.js';
 

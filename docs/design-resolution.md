@@ -125,6 +125,23 @@ There is no ambiguity between "override" and "reference": every scheme value *is
 
 The `aptos` record supplies the OOXML pair (`major`/`minor`). The `code` role is an OPF-specific addition with no OOXML slot, so it layers on top without disturbing the pair. When serializing to PowerPoint, engines write `major`/`minor` to `majorFont`/`minorFont` and map abstract roles (`heading`, `body`) onto those slots; roles like `accent` and `code` are renderer concerns. The same slot-versus-role split applies to color schemes: OOXML slots (`accent1`–`accent6`, `dark1/2`, `light1/2`) round-trip directly, abstract roles (`primary`, `text`, `surface`, …) are mapped onto slots by the engine.
 
+## Color references in content
+
+Content color fields (`TextRun.color`, styled table cell `style.fill` / `style.color`, table cell border `color`) accept references as well as literal hex, and those references resolve through the same chain above:
+
+```
+  "color": "accent2"          slot name  -> effective color scheme slot
+  "color": "text"             role name  -> role-to-slot mapping, then the slot
+  "color": "var:risk"         variable   -> top-level variables map
+  "color": "#B42318"          literal    -> used as-is (frozen at authoring time)
+```
+
+- **Slot names** (`accent1`–`accent6`, `dark1`, `dark2`, `light1`, `light2`, `hyperlink`, `followedHyperlink`) read the named slot from the *effective* color scheme — the one produced by the slide → deck → theme → engine-default precedence at the top of this page. A slide-level `design.colorScheme` override therefore recolors that slide's named runs too.
+- **Role names** (`primary`, `secondary`, `accent`, `background`, `surface`, `text`, `textSecondary`) resolve through the same role handling engines already apply to color schemes: a role defined on the effective scheme is used directly; otherwise the engine maps the role onto a slot exactly as it does when serializing schemes.
+- **Variable references** (`var:<id>`) resolve against the document's top-level `variables` map, independent of the scheme. Variables are deck-scoped named colors — use them for values that have meaning (`var:risk`) or repeat across slides. An unknown id is a validation warning, never an error, and engines fall back to their default text color.
+
+The schema enforces the reference forms (a typo like `"acent2"` is a schema error because it is neither hex, a known name, nor a `var:` reference), while unknown `var:` ids stay warnings, matching how unknown catalog ids behave.
+
 ## What is *not* part of this chain
 
-Content payloads carry no design controls in v1 — `position`, `fontSize`, per-payload colors and the like were deliberately kept out while the content model stabilizes (see [`content-item-design-overrides.md`](./content-item-design-overrides.md)). The design system above, plus layout hints (`titleAlignment`, `contentBox`, `chartPrimary`, …), is the entire styling surface of an OPF document.
+Beyond the color references above, content payloads carry no design controls in v1 — `position`, `fontSize` overrides at payload level, and the like were deliberately kept out while the content model stabilizes (see [`content-item-design-overrides.md`](./content-item-design-overrides.md); styled table cells and rich-text runs carry the only per-content styling, and their color fields take the reference forms above). The design system, plus layout hints (`titleAlignment`, `contentBox`, `chartPrimary`, ...) and dynamic composition, is the styling surface of an OPF document.

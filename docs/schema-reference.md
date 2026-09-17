@@ -27,6 +27,7 @@ This reference documents the author-facing shape of a complete `*.opf.json` pres
 | `duration` | no | `integer` | Target presentation duration, as an integer number of minutes. Used by AI to set pace and depth, and to compare against the resolved narrative's durationRange. |
 | `tags` | no | `array<string>` | Free-form labels used for categorization, search, and filtering. Lowercase kebab-case is recommended for consistency across a deck library. |
 | `design` | no | `ref:Design` | Optional design system covering theme, color scheme, font scheme, dimensions, background, logo, watermark, header, and footer applied to the deck. When omitted, engines use their default design configuration. |
+| `variables` | no | `ref:Variables` | Optional named color variables for values the deck uses in more than one place or wants to name for intent (e.g. a risk red, a brand highlight). Content color fields reference entries as 'var:<id>' strings. Variables... |
 | `narrative` | no | `oneOf:string / ref:Narrative` | Structured storyline describing the deck's arc and beats. Resolves to the 'id' of a 'narratives' catalog record. Accepts two forms: - String shorthand for the common case: 'narrative = "classic-story"'. Accepts a bare... |
 | `slides` | yes | `array<ref:Slide>` | Ordered array of slides that make up the presentation. |
 | `assets` | no | `ref:Assets` | Optional reusable asset registry for images, data files, videos, documents, fonts, and other resources referenced elsewhere in the deck via 'asset:<id>' strings. |
@@ -373,6 +374,33 @@ _No named properties._
 _No named properties._
 
 
+### ColorRef
+
+- Type: `anyOf:ref:HexColor / enum:accent1 | accent2 | accent3 | accent4 | accent5 | accent6 | dark1 | dark2 | light1 | light2 | hyperlink | followedHyperlink | primary | secondary | accent | background | surface | text | textSecondary / string`
+- Required fields: none
+- Purpose: A color value or reference accepted by content color fields. Three forms: - Literal hex: '#RGB', '#RRGGBB', or '#RRGGBBAA'. - Color-scheme name, resolved through the effective color scheme after design resolution: an OOXML slot ('accent1'-'accent6', 'dark1', 'dark2', 'light1', 'light2', 'hyperlink', 'followedHyperlink') or an abstract role ('primary', 'secondary', 'accent', 'background', 'surface', 'text', 'textSecondary'). Roles resolve through the same role-to-slot mapping engines already a...
+
+_No named properties._
+
+
+### Variables
+
+- Type: `object`
+- Required fields: none
+- Purpose: Named color variables, keyed by stable kebab-case id. Content color fields reference entries as 'var:<id>' strings. Each value is a hex string shorthand or a Variable object.
+
+_No named properties._
+
+
+### Variable
+
+- Type: `oneOf:ref:HexColor / object`
+- Required fields: none
+- Purpose: A single named variable. A hex string is shorthand for { "type": "color", "value": value }.
+
+_No named properties._
+
+
 ### BackgroundShortcut
 
 - Type: `oneOf:ref:ThemeBackgroundSlot / ref:HexColor`
@@ -598,6 +626,7 @@ _No named properties._
 | `section` | no | `string` | PowerPoint-style slide section label. Consecutive slides with the same value belong to the same section in presenter view, outlines, and PowerPoint section-aware exports. |
 | `hidden` | no | `boolean` | Whether the slide is hidden from the presented sequence. |
 | `composition` | no | `ref:Composition` |  |
+| `extensions` | no | `object` | Custom data passthrough for agent workflows at slide scope; ignored by the engine but preserved across read/write round-trips. Use for review state, generation provenance, or authoring conventions such as { "authoring... |
 
 
 ### ContentPayload
@@ -608,6 +637,8 @@ _No named properties._
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
+| `id` | no | `string` | Optional stable identifier for this payload, unique among slide and payload ids in the document. Use when another system needs to address the payload across edits patch-style agent edits, comments, review state, or ge... |
+| `extensions` | no | `object` | Custom data passthrough for agent workflows at payload scope; ignored by the engine but preserved across read/write round-trips. |
 | `type` | no | `enum:text \| list \| image \| chart \| table \| video \| code \| metric \| quote \| timeline \| group` | Optional content kind. When omitted, engines infer the kind from the fields present. |
 | `text` | no | `oneOf:string / array<ref:TextRun>` | Text payload. Use a string for plain text or TextRun[] for inline rich text. TextRun items may be plain strings or formatted run objects. |
 | `items` | no | `array<ref:ListItem>` | Generic list payload. Each item is either a plain string, a TextRun[] rich text sequence, or a ListItem object. List nesting uses item.level rather than nested content payloads. |
@@ -814,8 +845,8 @@ _No named properties._
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `fill` | no | `string` | Explicit RGB or RGBA color. Eight-digit colors include alpha; #00000000 is transparent. |
-| `color` | no | `string` | Default text color, overridden by individual rich run colors. |
+| `fill` | no | `ref:ColorRef` | Cell background: a hex color, a color-scheme slot or role name, or a 'var:<id>' variable reference. Eight-digit hex colors include alpha; #00000000 is transparent. |
+| `color` | no | `ref:ColorRef` | Default text color, overridden by individual rich run colors. Accepts a hex color, a color-scheme slot or role name, or a 'var:<id>' variable reference. |
 | `align` | no | `enum:left \| center \| right` | Horizontal text alignment inside the cell. |
 | `verticalAlign` | no | `enum:top \| middle \| bottom` | Vertical alignment inside the padded cell box. |
 | `padding` | no | `ref:TableCellPadding` |  |
@@ -844,7 +875,7 @@ _No named properties._
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `color` | yes | `string` | Explicit RGB or RGBA color. Eight-digit colors include alpha; #00000000 is transparent. |
+| `color` | yes | `ref:ColorRef` | Border color: a hex color, a color-scheme slot or role name, or a 'var:<id>' variable reference. Eight-digit hex colors include alpha; #00000000 is transparent. |
 | `width` | yes | `number` | Border width in reference pixels; 0 removes this edge. |
 | `dash` | no | `enum:solid \| dash \| dot` | Default solid. |
 
