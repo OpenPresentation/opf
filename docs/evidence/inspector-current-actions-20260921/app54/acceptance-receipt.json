@@ -1,0 +1,103 @@
+{
+  "checkedAt": "2026-09-21T19:25:59.679108+00:00",
+  "candidateBase": "60c91f6b97c75636f533202f4112e09dc01144e4",
+  "uncommitted": true,
+  "sourceManifest": "combined-source-browser2.json",
+  "sourceInputsVerifiedUnchanged": 305,
+  "buildId": "YHtRA_uZ2M_erUJ6CZSXs",
+  "runtime": {
+    "playwright": "1.63.0",
+    "chromiumExecutable": "/Users/michael/Library/Caches/ms-playwright/chromium-1243/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing",
+    "node": "v24.21.0",
+    "platform": "darwin",
+    "arch": "arm64"
+  },
+  "pnpm": "11.1.3",
+  "baseURL": "http://127.0.0.1:4333",
+  "config": {
+    "workers": 1,
+    "testTimeoutMs": 45000,
+    "assertionTimeoutMs": 5000,
+    "retries": 0,
+    "trace": "on",
+    "reporter": [
+      "json",
+      "list"
+    ]
+  },
+  "browserCommand": "node node_modules/@playwright/test/cli.js test [tests/e2e/inspector-actions.spec.ts for focused] --retries=0 --trace=on --reporter=json,list --output=<saved run folder>",
+  "reports": {
+    "negative-control": {
+      "file": "negative-control-report.json",
+      "sha256": "03760e33268fb8d6b98023a06b81ae2f0537d436e17534624174531085f63252",
+      "stats": {
+        "startTime": "2026-09-21T19:10:51.543Z",
+        "duration": 1817.532,
+        "expected": 0,
+        "skipped": 0,
+        "unexpected": 1,
+        "flaky": 0
+      }
+    },
+    "focused-browser": {
+      "file": "focused-browser-report.json",
+      "sha256": "c715558b241226709efc94516559159cbf93073ef1e227cec94f83145b74b558",
+      "stats": {
+        "startTime": "2026-09-21T19:19:07.053Z",
+        "duration": 22072.599000000002,
+        "expected": 7,
+        "skipped": 0,
+        "unexpected": 1,
+        "flaky": 0
+      }
+    },
+    "focused2-browser": {
+      "file": "focused2-browser-report.json",
+      "sha256": "20ff8ce701e23032f377494cd6dedc7a713a1307e1c5c67f50c5cab8db562a18",
+      "stats": {
+        "startTime": "2026-09-21T19:21:44.564Z",
+        "duration": 16971.101000000002,
+        "expected": 8,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    },
+    "full-browser": {
+      "file": "full-browser-report.json",
+      "sha256": "e4cc577f3ae05d9365bc347bac8460e8020a70bc6b935ccbad2d1104c0cf3edb",
+      "stats": {
+        "startTime": "2026-09-21T19:22:23.387Z",
+        "duration": 113565.407,
+        "expected": 39,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    }
+  },
+  "unit": {
+    "tests": 692,
+    "files": 68,
+    "passed": true,
+    "log": "combined-unit-final.log"
+  },
+  "startupNodeControls": {
+    "tests": 7,
+    "passed": true,
+    "log": "root-startup-tests.log"
+  },
+  "typecheck": {
+    "command": "node node_modules/typescript/bin/tsc --noEmit --incremental false",
+    "exitCode": 0,
+    "log": "final-typecheck.log"
+  },
+  "lint": "lint-comparison.json",
+  "packagePins": {
+    "@openpresentation/opf": "0.11.0",
+    "@openpresentation/opf-editor": "0.8.0",
+    "@openpresentation/opf-pptx": "0.9.1",
+    "@openpresentation/opf-render": "0.9.0"
+  },
+  "noCommitsPushOrDeployment": true
+}

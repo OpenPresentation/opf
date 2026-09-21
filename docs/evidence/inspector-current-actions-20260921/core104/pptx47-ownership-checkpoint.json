@@ -1,0 +1,40 @@
+{
+  "observedAt": "2026-09-21T19:17:25.197511+00:00",
+  "source": "Read-only GitHub API; no Office session or branch mutation",
+  "pr": "https://github.com/OpenPresentation/opf-pptx/pull/47",
+  "reviewedHead": "08850fc372e32cb41ea63e50d418cd3a17b497a8",
+  "accepted": "8c7908e7eb02cb4dda52d2fac951c919c60841a5",
+  "mergedAt": "2026-09-21T18:56:47Z",
+  "state": "MERGED",
+  "premergeRun": 35640710197,
+  "premergeJobs": [
+    {
+      "name": "package (ubuntu-latest)",
+      "result": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf-pptx/actions/runs/35640710197/job/106469051546"
+    },
+    {
+      "name": "package (windows-latest)",
+      "result": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf-pptx/actions/runs/35640710197/job/106469051808"
+    }
+  ],
+  "postmergeRun": 35641678935,
+  "postmergeAttempt": 1,
+  "postmergeConclusion": "success",
+  "postmergeJobs": [
+    {
+      "id": 106472235475,
+      "name": "package (windows-latest)",
+      "conclusion": "success",
+      "completedAt": "2026-09-21T19:04:01Z"
+    },
+    {
+      "id": 106472235587,
+      "name": "package (ubuntu-latest)",
+      "conclusion": "success",
+      "completedAt": "2026-09-21T19:00:53Z"
+    }
+  ],
+  "scope": "Factual package-CI checkpoint only; does not independently accept native Office visuals, tabs, physical-font compatibility or ongoing supervisor findings. Windows supervisor remains sole Office owner. Core104 earlier snapshot remains unchanged."
+}

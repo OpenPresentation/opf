@@ -1,0 +1,28 @@
+{
+  "linux": {
+    "typecheckErrors": [
+      "2026-09-21T19:35:10.1152092Z ##[error]docs/evidence/inspector-action-snapshots-20260921/final-inspector-actions.spec.ts(4,40): error TS2307: Cannot find module './helpers/clipboard' or its corresponding type declarations.",
+      "2026-09-21T19:35:10.1165344Z ##[error]docs/evidence/inspector-action-snapshots-20260921/initial-focused/inspector-actions.spec.ts(4,40): error TS2307: Cannot find module './helpers/clipboard' or its corresponding type declarations."
+    ],
+    "testAndRuntimeLines": [
+      "2026-09-21T19:33:37.3128090Z node: v24.20.0",
+      "2026-09-21T19:34:48.6974271Z  Test Files  68 passed (68)",
+      "2026-09-21T19:34:48.6992108Z       Tests  692 passed (692)",
+      "2026-09-21T19:34:49.4163488Z \u2139 tests 7",
+      "2026-09-21T19:34:49.4171036Z \u2139 pass 7"
+    ]
+  },
+  "windows": {
+    "typecheckErrors": [
+      "2026-09-21T19:34:55.5635640Z ##[error]docs/evidence/inspector-action-snapshots-20260921/final-inspector-actions.spec.ts(4,40): error TS2307: Cannot find module './helpers/clipboard' or its corresponding type declarations.",
+      "2026-09-21T19:34:55.5642150Z ##[error]docs/evidence/inspector-action-snapshots-20260921/initial-focused/inspector-actions.spec.ts(4,40): error TS2307: Cannot find module './helpers/clipboard' or its corresponding type declarations."
+    ],
+    "testAndRuntimeLines": [
+      "2026-09-21T19:33:10.9781859Z node: v24.20.0",
+      "2026-09-21T19:34:42.1071253Z  Test Files  68 passed (68)",
+      "2026-09-21T19:34:42.1071911Z       Tests  692 passed (692)",
+      "2026-09-21T19:34:42.6882418Z \u2139 tests 7",
+      "2026-09-21T19:34:42.6884441Z \u2139 pass 7"
+    ]
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "checkedAt": "2026-09-21T20:12:29.079471+00:00",
+  "command": "python3 docs/evidence/windows-native-tabs-fonts-20260921/verify.py",
+  "cwd": "/private/tmp/opf-inspector-current-actions-handoff-20260921/opf",
+  "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+  "exitCode": 0,
+  "verifierSha256": "b7969382989cbe796e05338466c1bf462232aab040933fddd1b1c3edb657f13d",
+  "manifestSha256": "2f262ddf99ef83a12644181fc249639faebe3dc6520fe6470fd6ab8d2a607638",
+  "logSha256": "cb3bec6bc8e9c592dc6484e396a6254efbb7ecc46529d7bfda30ddcacb72ed95",
+  "result": {
+    "passed": true,
+    "hashedFiles": 162,
+    "children": {
+      "tabs": {
+        "passed": true,
+        "schema": "opf-pptx-native-tab-evidence-manifest",
+        "hashedFiles": 74,
+        "jsonFiles": 36,
+        "jsonlRows": 9372,
+        "pptxCrcXmlFontChecks": 5,
+        "workerLifecyclePassedRun04": true,
+        "nativeTolerancePoint02GatePassed": false,
+        "mixedSizeTableStatus": "open",
+        "officeCalls": 0
+      },
+      "fonts": {
+        "passed": true,
+        "schema": "opf-pptx-native-font-evidence-manifest",
+        "hashedFiles": 83,
+        "jsonFiles": 41,
+        "jsonlRows": 654,
+        "pptxCrcXmlNoEmbeddedFontChecks": 5,
+        "nativeStylesPassed": 4,
+        "maximumPersistenceDeltaPoints": 0,
+        "ownedPresentationCloses": 2,
+        "nativeFontRemovals": 4,
+        "combinedOwnedFontAddRemovePairs": 12,
+        "fontProgramsCopied": 0,
+        "officeCalls": 0
+      }
+    },
+    "nativeCompatibilityComplete": false,
+    "officeCalls": 0
+  },
+  "scope": "Pure offline portable integrity/lineage check; no Office, font registration, network or native/visual re-execution."
+}

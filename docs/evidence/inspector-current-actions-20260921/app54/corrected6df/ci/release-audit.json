@@ -1,0 +1,152 @@
+{
+  "recordedAt": "2026-09-21T19:52:06.711199+00:00",
+  "head": "6dfc2584698c1306505929a2bc3e427996d66563",
+  "tree": "f3279495f7685945b7541c90d24f7239407639a0",
+  "pr": "https://github.com/Data-Advantage/pptx-dev/pull/54",
+  "state": "held: Windows production server startup failure",
+  "run": {
+    "id": 35646213757,
+    "html_url": "https://github.com/Data-Advantage/pptx-dev/actions/runs/35646213757",
+    "head_sha": "6dfc2584698c1306505929a2bc3e427996d66563",
+    "run_attempt": 1,
+    "status": "completed",
+    "conclusion": "failure",
+    "created_at": "2026-09-21T19:39:43Z",
+    "updated_at": "2026-09-21T19:48:34Z"
+  },
+  "jobs": [
+    {
+      "id": 106487202266,
+      "name": "verify (windows-latest)",
+      "html_url": "https://github.com/Data-Advantage/pptx-dev/actions/runs/35646213757/job/106487202266",
+      "status": "completed",
+      "conclusion": "failure",
+      "started_at": "2026-09-21T19:39:46Z",
+      "completed_at": "2026-09-21T19:45:15Z",
+      "node": "24.20.0",
+      "unitPassed": 692,
+      "standaloneControlsPassed": 7,
+      "frozenInstallAuditTypecheckSdkTypecheckBuild": "passed",
+      "browserExecuted": 0,
+      "browserPassed": 0,
+      "browserOutcome": "not started: webServer failed with EPERM stat of standalone React dependency link",
+      "failedSteps": [
+        {
+          "name": "Run pnpm test:e2e",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 12,
+          "started_at": "2026-09-21T19:45:04Z",
+          "completed_at": "2026-09-21T19:45:09Z"
+        }
+      ]
+    },
+    {
+      "id": 106487202579,
+      "name": "verify (ubuntu-latest)",
+      "html_url": "https://github.com/Data-Advantage/pptx-dev/actions/runs/35646213757/job/106487202579",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-09-21T19:39:46Z",
+      "completed_at": "2026-09-21T19:48:34Z",
+      "node": "24.20.0",
+      "unitPassed": 692,
+      "standaloneControlsPassed": 7,
+      "frozenInstallAuditTypecheckSdkTypecheckBuild": "passed",
+      "browserExecuted": 39,
+      "browserPassed": 39,
+      "browserOutcome": "passed",
+      "failedSteps": []
+    }
+  ],
+  "artifacts": {
+    "total_count": 0,
+    "artifacts": []
+  },
+  "preview": {
+    "id": "dpl_CDcgpgLm4UYSahkzFAiY9qwocRCR",
+    "url": "pptx-h53j25a7q-dataadvantage.vercel.app",
+    "state": "READY",
+    "readyState": "READY",
+    "createdAt": 1790019581566,
+    "buildingAt": 1790019582757,
+    "ready": 1790019656014,
+    "target": null,
+    "meta": {
+      "githubCommitRef": "codex/inspector-share-guard-20260921",
+      "githubCommitSha": "6dfc2584698c1306505929a2bc3e427996d66563",
+      "githubCommitMessage": "Keep archived browser source outside TypeScript inputs",
+      "githubRepo": "pptx-dev",
+      "githubOrg": "Data-Advantage"
+    },
+    "alias": [
+      "pptx-dev-git-codex-inspector-share-guard-20260921-dataadvantage.vercel.app"
+    ],
+    "scope": "Preview metadata only; not production or browser acceptance."
+  },
+  "automatedReview": {
+    "exactHeadCheckRuns": [
+      {
+        "id": 106487202579,
+        "name": "verify (ubuntu-latest)",
+        "conclusion": "success"
+      },
+      {
+        "id": 106487202266,
+        "name": "verify (windows-latest)",
+        "conclusion": "failure"
+      }
+    ],
+    "pullRequestReviews": 0,
+    "exactHeadReviews": [],
+    "limitation": "No Bugbot check or submitted PR review was observed for the corrected head. Prior-head neutral usage-limit status is not a current review."
+  },
+  "sourceEvidence": {
+    "observedAt": "2026-09-21T19:43:34.758781+00:00",
+    "head": "6dfc2584698c1306505929a2bc3e427996d66563",
+    "tree": "f3279495f7685945b7541c90d24f7239407639a0",
+    "clean": true,
+    "changesSince60cVerified": 119,
+    "sourceInputsUnchangedFrom57AndLocalAcceptance": 305,
+    "archiveRenamesByteExact": [
+      {
+        "old": "final-inspector-actions.spec.ts",
+        "new": "final-inspector-actions.spec.ts.txt",
+        "bytes": 17537,
+        "sha256": "c6096f4c62f642138dc127e55911647d00489d684f2794a978834aa54f4757fd"
+      },
+      {
+        "old": "initial-focused/inspector-actions.spec.ts",
+        "new": "initial-focused/inspector-actions.spec.ts.txt",
+        "bytes": 17190,
+        "sha256": "b664b65d4eb52e1f6e17f3081d19f5762ae2172f696ee2734540dbc864a4ff38"
+      }
+    ],
+    "executableArchivedTypeScriptRemaining": [],
+    "bundleManifestEntries": 105,
+    "bundleFilesIncludingManifest": 106,
+    "bundleManifestSha256": "e4399e2d0344f38d01b93ebcda6a2cda46bcb722c0eed810776255a9334da6c2",
+    "exactPrivateCopiesVerified": 100,
+    "sourceCopiesReadFromTraceZipEntries": 1,
+    "frozenFailed57AuditFiles": 21,
+    "frozenFailed57ManifestSha256": "2521b5fb9f1bfd56f8356a02a3641d261064eacb3cd9d2c68ff1d935fbf7b87c",
+    "artifactWorkflow": {
+      "matchingChangedPaths": [],
+      "applicable": false,
+      "workflowDispatchPresent": false,
+      "scope": "Python wheel/source-distribution artifact round-trip; not triggered/not applicable, not a fresh pass."
+    }
+  },
+  "historicalAuditPreserved": {
+    "files": 21,
+    "manifestSha256": "2521b5fb9f1bfd56f8356a02a3641d261064eacb3cd9d2c68ff1d935fbf7b87c"
+  },
+  "boundaries": [
+    "No workflow reruns, browser runs, source edits, merges, deployments, Office actions or credential access were performed for this audit.",
+    "Windows browser tests did not start; report zero executed, not 39 failed.",
+    "No test-result artifact exists, so no ZIP/hash/CRC or timing inspection can be produced.",
+    "READY preview metadata is not browser or production acceptance.",
+    "The EPERM startup failure is separate from the original 60c Windows resource-delay timeout; no causal claim is made about that earlier delay.",
+    "Python artifact compatibility workflow did not match changed paths and was not triggered; this is not a fresh pass."
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "observedAt": "2026-09-21T20:19:26.914215+00:00",
+  "acceptedMain": "9e8a38198519b4d4a18d163928833f2509550687",
+  "publishedPptxVersion": "0.9.1",
+  "scope": "Read-only remote source/harness and CI status. No local Windows branch, Office, font installation, package publication or deployment action. These statuses do not expand accepted native behavior beyond core106 evidence.",
+  "pullRequests": [
+    {
+      "number": 48,
+      "title": "test: bound native tab checks and isolate notes ordering",
+      "url": "https://github.com/OpenPresentation/opf-pptx/pull/48",
+      "state": "closed",
+      "merged": true,
+      "mergedAt": "2026-09-21T19:23:48Z",
+      "accepted": "897b89624b57def84b903a5d64061c4f670640bd",
+      "reviewedHead": "4b5d756fcaa570b1331bad1aa3f4b60330dc88b6",
+      "base": "8c7908e7eb02cb4dda52d2fac951c919c60841a5",
+      "ci": [
+        {
+          "phase": "premerge",
+          "id": 35643328427,
+          "name": "CI",
+          "head_sha": "4b5d756fcaa570b1331bad1aa3f4b60330dc88b6",
+          "run_attempt": 1,
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/OpenPresentation/opf-pptx/actions/runs/35643328427",
+          "updated_at": "2026-09-21T19:18:47Z"
+        },
+        {
+          "phase": "postmerge",
+          "id": 35644546078,
+          "name": "CI",
+          "head_sha": "897b89624b57def84b903a5d64061c4f670640bd",
+          "run_attempt": 1,
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/OpenPresentation/opf-pptx/actions/runs/35644546078",
+          "updated_at": "2026-09-21T19:32:35Z"
+        }
+      ]
+    },
+    {
+      "number": 49,
+      "title": "test: add bounded native font edits with owned cleanup",
+      "url": "https://github.com/OpenPresentation/opf-pptx/pull/49",
+      "state": "closed",
+      "merged": true,
+      "mergedAt": "2026-09-21T19:49:35Z",
+      "accepted": "9e8a38198519b4d4a18d163928833f2509550687",
+      "reviewedHead": "7538e4b20f22471aa8a56fc31a9156fd5eaf6257",
+      "base": "897b89624b57def84b903a5d64061c4f670640bd",
+      "ci": [
+        {
+          "phase": "premerge",
+          "id": 35646503494,
+          "name": "CI",
+          "head_sha": "7538e4b20f22471aa8a56fc31a9156fd5eaf6257",
+          "run_attempt": 1,
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/OpenPresentation/opf-pptx/actions/runs/35646503494",
+          "updated_at": "2026-09-21T19:49:01Z"
+        },
+        {
+          "phase": "postmerge",
+          "id": 35647241748,
+          "name": "CI",
+          "head_sha": "9e8a38198519b4d4a18d163928833f2509550687",
+          "run_attempt": 1,
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/OpenPresentation/opf-pptx/actions/runs/35647241748",
+          "updated_at": "2026-09-21T19:56:17Z"
+        }
+      ]
+    }
+  ]
+}

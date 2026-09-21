@@ -38,20 +38,24 @@ editable slide shapes tagged `OPF_FURNITURE_V1` with provenance for controlled
 reimport. These are not native Office Header/Footer objects (`p:hf` / notes
 master). Native Header/Footer work remains [issue 87](https://github.com/OpenPresentation/opf/issues/87).
 
-The separate [Windows native-picture checkpoint](evidence/windows-native-picture-20260921/README.md)
-passes two minimal picture open/save/close/reopen controls on an owner-confirmed
-recovered host, including current image/alt-text reimport, expected geometry and
-reviewed byte-identical original/reopened native PNGs. Harness PR46 and evidence
-PR103 are merged; the published train is unchanged. The [native edit evidence](evidence/windows-native-edits-20260921/README.md)
-records actual picture and furniture edits, current-content/provenance reimport,
-and production-versus-reordered notes controls. Semantic results do not certify
-crop, fit or reflow: longer edited furniture text clips and Change Picture changes
-geometry. The [tab and font checkpoint](evidence/windows-native-tabs-fonts-20260921/README.md)
-records a plain native tab error of 0.022655487060546875pt against the unchanged
-0.02pt gate, plus one Carlito edit/save/reopen control with zero observed bounds
-drift and confirmed owned font cleanup. Mixed-size tables, physical glyph-font
-identity and actual embedding remain open. The Windows supervisor retains sole
-Office control.
+The [Windows native-picture checkpoint](evidence/windows-native-picture-20260921/README.md)
+and accepted [native B/C bundle](evidence/windows-native-edits-20260921/README.md)
+record finite picture/furniture edits, current-content provenance reimport and
+safe fallback, production notes packaging and two controlled reordered-file
+refusals. Core105 publishes that evidence; PPTX47 adds the tested harness, with
+no new package version. UI image replacement changes geometry, longer header
+text clips, and duplicated tagged headers overlap. Refused workers retain their
+failed cleanup state separately from later empty-workspace observations.
+This is not general native layout/reflow fidelity.
+
+Accepted core106's [tab and font checkpoint](evidence/windows-native-tabs-fonts-20260921/README.md)
+records plain native tab target error **0.022655487060546875pt** and tab/literal
+difference **0.022678375244140625pt**, both above the unchanged **0.02pt** gate.
+Its bounded four-face Carlito edit/save/reopen control passes exact text/style
+persistence, zero observed bounds drift, matching rasters and owned font cleanup.
+Mixed-size table fidelity, physical glyph-font identity, fallback/synthesis and actual embedding remain
+open; embedding was disabled for this control. The Windows supervisor retains sole
+Office control. This documentation task reads evidence and makes no Office calls.
 
 ## Supported in this set
 
@@ -78,7 +82,8 @@ Office control.
 ## Public sites
 
 The current source, CI and canonical production results are recorded in the
-[Inspector publication checkpoint](evidence/inspector-share-acceptance-20260921/README.md),
+[current Inspector actions checkpoint](evidence/inspector-current-actions-20260921/README.md),
+[earlier publication checkpoint](evidence/inspector-share-acceptance-20260921/README.md),
 [source-preservation checkpoint](evidence/author-source-acceptance-20260921/README.md),
 [completion checkpoint](evidence/completion-acceptance-20260921/README.md),
 [earlier acceptance ledger](evidence/issue88-final-20260921/README.md) and
@@ -102,6 +107,14 @@ pin this documentation checkpoint without changing the site's older accepted
 documentation snapshot. The site's complete guides and raw resources match
 the reviewed source; binary evidence remains linked and downloadable without
 being decoded into the AI-facing guide.
+Core104 `3d301f1` preserves exact postmerge OPF success and coordinated cancellation;
+it is not a complete green postmerge gate. Accepted descendant core105
+`84e914710520a7b0e777fce30e5758ee64a64924` preserves all 60 core104 evidence blobs
+and passes both exact-head workflows on their first attempts. [Compact receipts](evidence/inspector-current-actions-20260921/README.md#core-source-and-ci)
+keep descendant acceptance separate from the canceled predecessor run.
+Accepted core106 `3847f712ccb2379952bcc8ab7c9fdbaedfd0a4ce` also passes both
+pre/postmerge workflows on their first attempts. Its [compact receipt](evidence/inspector-current-actions-20260921/core106/acceptance-receipt.json)
+binds the bounded native evidence above without completing general compatibility.
 
 [App47](https://github.com/Data-Advantage/pptx-dev/pull/47) corrects the pre-app47
 completion adapter's rejected layout choices while preserving unchanged source
@@ -132,42 +145,70 @@ only Author timings survived; the Inspector pagehide snapshot is missing. This
 does not explain or fix the old readiness delay. Phase4
 captured no post-fix stale-context overlap, so causal stress is inconclusive.
 The existing suggestion-details pane remains clipped; visibility is not legibility.
-The [postmerge trace diagnosis](evidence/author-source-acceptance-20260921/inspector-share-diagnosis/REPORT.md) also proves wrong-document automatic share-hash publication during import; [App54](https://github.com/Data-Advantage/pptx-dev/pull/54) is the unreleased
-correction at `60c91f6b97c75636f533202f4112e09dc01144e4`, tree
-`b317179a899e97740003b4195b7172f7d3d6d8b2`. Automatic publication validates the
-current source/format before and after encoding, retains navigation/load guards,
-and removes the obsolete reserved import query so refresh uses the new fragment.
-URL transfer preserves document semantics, not original whitespace or spelling.
-Fresh local checks pass **659 unit tests**, focused **3/3** browser cases and
-full **31/31** in **97.035744 seconds**, zero retries, with independent source and
-screenshot review. Browser transitions permit the preceding accepted document
-until the new publication; held-promise controls cover the narrower asynchronous
-source race. Security assertions and timeout budgets remain unchanged.
-First-attempt application CI **35638158483 failed**: Linux **31/31**, Windows
-**30/31**, with **659 unit tests** passing on each platform under Node24.20.0.
-Both new share-publication cases passed on both platforms. The original
-45-second SVG-security deadline expired waiting for Author Preview after
-31.400 seconds of Author navigation; a 1,490-byte decoded local script took
-30.026 seconds. The [frozen diagnosis](evidence/inspector-share-acceptance-20260921/app54/windows-timeout/REPORT.md)
-records bounded delivery observations, not an established scheduling cause.
-Inspector security checks passed before navigation; late Author assertions do
-not count as an in-budget pass. App54 is held and unmerged. Artifact compatibility
-was not applicable or triggered, not a fresh pass.
-Exact-head preview `dpl_Atu9SsSsLY8hPAZJ6RPNx91pKA31` is READY with target null and
-has no browser acceptance. Production deployment/acceptance and post-merge CI
-remain pending behind the failed application gate. See the
-[current App54 ledger](evidence/inspector-share-acceptance-20260921/README.md)
-and its immutable application evidence. Explicit toolbar Share, export and
-Author handoff freshness remain outside this automatic-publication correction.
+The [postmerge trace diagnosis](evidence/author-source-acceptance-20260921/inspector-share-diagnosis/REPORT.md)
+proves wrong-document automatic share-hash publication during import. Unmerged
+[App54](https://github.com/Data-Advantage/pptx-dev/pull/54) first corrected automatic
+publication at `60c91f6`: authoritative source/format is checked before and after
+encoding, load/navigation guards remain, and obsolete `import=hash:` is removed.
+URL transfer preserves semantics, not raw spelling. Local 659-unit/31-browser
+acceptance does not replace original first-attempt CI **35638158483**, which
+passed Linux **31/31** but failed Windows **30/31** at the unchanged 45-second
+Author readiness deadline. Both publication cases passed. The [frozen diagnosis](evidence/inspector-share-acceptance-20260921/app54/windows-timeout/REPORT.md)
+retains bounded slow-delivery observations with unknown cause. Late assertions
+are not an in-budget pass. Browser History tests permit prior accepted content
+until first new publication; held-promise controls establish the narrower race guard.
+
+The product correction was added at `57e5e59fddbc94346f142dc12d86a916228bf2ae`, tree
+`d9c3aab543c6a886a85c6ec07dd55e5ab22590cd`. It guards current snapshots for
+explicit Copy/JSON/Share/PPTX/PDF/Author/Deckchat actions. Pending public canvas
+drafts commit before capture, pointer-blur rejection survives session recovery,
+and newer source/load/navigation/unmount/action invalidates late results. Raw
+Copy and accepted same-format JSON bytes are preserved; handoffs remain semantic.
+Already-started clipboard/download effects cannot be retroactively canceled.
+The integrated portable standalone startup verifies packaged runtime assets,
+fonts and traced schema inputs without changing dependencies or published pins.
+
+Local runtime checks pass **692 unit tests**, **7 standalone controls**, focused
+**8/8** and full **39/39** browser cases, zero retries, with visual review. The
+[immutable 93-file app bundle](https://github.com/Data-Advantage/pptx-dev/tree/57e5e59fddbc94346f142dc12d86a916228bf2ae/docs/evidence/inspector-action-snapshots-20260921)
+retains stale-draft negative evidence and the initial candidate **7/8** result.
+The latter did not establish accepted pasted source before releasing mocked PDF 401;
+final visible-code preconditions change no product bytes or budgets. PDF/Deckchat
+are locally mocked. CRLF ingress normalized 279 to 274 LF bytes; subsequent exact
+actions preserve the accepted buffer, not that ingress boundary.
+
+**App54 release acceptance remains held.** First-attempt CI **35645493900** failed Linux and
+Windows typecheck on archived `.spec.ts` evidence copies after each platform
+passed 692 units and 7 standalone controls. The exact-head preview failed with
+`module_not_found`; precise Vercel compiler logs were unavailable. [The first-attempt receipt](evidence/inspector-current-actions-20260921/app54/first57-ci/REPORT.md)
+records skipped build/browser steps and no uploaded artifacts. The passing runtime build
+predates those copies. A byte-identical `.ts.txt` archive correction produced captured App54 head
+`6dfc2584698c1306505929a2bc3e427996d66563`, tree
+`f3279495f7685945b7541c90d24f7239407639a0`. Its final-tree local typecheck passes
+with all 305 product/test inputs unchanged. [The corrected receipt](evidence/inspector-current-actions-20260921/app54/corrected6df/commit-receipt.json)
+binds its 106-file evidence bundle. [Exact-head CI 35646213757](evidence/inspector-current-actions-20260921/app54/corrected6df/ci/REPORT.md)
+passes 692 units, seven standalone controls, typechecks and build on both platforms;
+Linux passes **39/39** browsers. Windows executes **zero browser tests** because
+standalone startup fails with `EPERM` while statting its packaged React dependency
+link. No timing or test-result artifacts were uploaded. The exact-head preview
+is READY, which is metadata only; at this checkpoint App54 remains unmerged and undeployed to production.
+The [current ledger](evidence/inspector-current-actions-20260921/README.md)
+retains the separate 60c readiness, 57e packaging and 6df startup failures. Production remains App53 `e40c287`, with its original
+failed Linux postmerge gate preserved separately from canonical **29/29**.
+The unreleased [startup-link correction at 4338e57](https://github.com/Data-Advantage/pptx-dev/blob/4338e57b951c469d5c5f239b78a303fbad3c745e/docs/evidence/standalone-windows-links-20260921/README.md)
+is undergoing fresh platform verification; the
+separate suggestion-details candidate remains local, uncommitted and unreleased.
+Neither supplies native or production acceptance.
 
 Separate local negative controls confirm that preset Undo all discards New run
 and imported replacement documents; ordinary-edit Undo remains untested after a
-raw-buffer precondition failure. Local author/filename/gallery/preset writers
+raw-buffer precondition failure. The proposed guarded preset correction remains
+unapplied pending its separately requested approval. Local author/filename/gallery/preset writers
 still serialize source. These unresolved local findings and raw imported-file/account/agent/metadata boundaries remain outside
 App53 and App54. See the [App53 ledger](evidence/author-source-acceptance-20260921/README.md)
 and its immutable application evidence links. Issue88 remains OPEN. Native/font
-compatibility, required repair, geometry and release gates remain separate; the
-unimplemented worker candidate remains in the [handoff](handoff-2026-09-21.md).
+compatibility, required repair and release gates remain separate; geometry is
+deferred as the coordinated set below. The unimplemented worker candidate remains in the [handoff](handoff-2026-09-21.md).
 
 The five coordinated geometry drafts (core94, renderer27, editor25, PPTX42,
 site40) remain unmerged. In particular, site40 is not independently shipped.
@@ -177,7 +218,7 @@ site40) remain unmerged. In particular, site40 is not independently shipped.
 | Topic | Tracker | Do not describe as done |
 | --- | --- | --- |
 | Linux vs Chromium native-width residual at the 0.1px gate | [opf-render#24](https://github.com/OpenPresentation/opf-render/issues/24) | Rounding that fixes Linux but breaks macOS is rejected |
-| Native PowerPoint open/edit/save/reopen, provenance, tabs, notes-master, font embedding, real Office Header/Footer objects (`p:hf`) | [opf#87](https://github.com/OpenPresentation/opf/issues/87) | Self-import and `toPptx` tagged-shape furniture are not Office acceptance |
+| General native PowerPoint fidelity and real Office Header/Footer objects (`p:hf`) | [opf#87](https://github.com/OpenPresentation/opf/issues/87) | Finite B/C and bounded Carlito edit controls above are accepted evidence. Tab tolerance, mixed-size tables, physical glyph identity/fallback/synthesis, embedding and general layout/reflow fidelity remain open; self-import and tagged furniture do not certify arbitrary Office behavior |
 | Public-surface acceptance checklist | [opf#88](https://github.com/OpenPresentation/opf/issues/88) | Shipping features does not establish every acceptance item; use the checklist and deployment receipts |
 | HarfBuzz / prepared-glyph shaping | Archive branches `codex/archive-shaping-20260915` | Prototypes are preserved, not in npm |
 | Selectable vector PDF | [pdf plan](plans/pdf-export.md) | Follows font reliability |

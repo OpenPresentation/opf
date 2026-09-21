@@ -1,0 +1,11 @@
+{
+  "observedAt": "2026-09-21T19:36:41.487434+00:00",
+  "head": "57e5e59fddbc94346f142dc12d86a916228bf2ae",
+  "command": "fnm exec --using=24 node node_modules/typescript/bin/tsc --noEmit --incremental false",
+  "exitCode": 2,
+  "errors": [
+    "docs/evidence/inspector-action-snapshots-20260921/final-inspector-actions.spec.ts(4,40): error TS2307: Cannot find module './helpers/clipboard' or its corresponding type declarations.",
+    "docs/evidence/inspector-action-snapshots-20260921/initial-focused/inspector-actions.spec.ts(4,40): error TS2307: Cannot find module './helpers/clipboard' or its corresponding type declarations."
+  ],
+  "cause": "Evidence source snapshots use executable .ts extensions included by the existing tsconfig glob. Local product acceptance build preceded evidence assembly; final-tree typecheck correctly fails."
+}

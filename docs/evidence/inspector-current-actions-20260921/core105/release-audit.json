@@ -1,0 +1,72 @@
+{
+  "head": "84e914710520a7b0e777fce30e5758ee64a64924",
+  "tree": "0317915dcb7b1e4a29eb8a3503b7be4ed7bb6d00",
+  "workflows": [
+    {
+      "name": "OPF CI",
+      "run": 35644048902,
+      "attempt": 1,
+      "head": "84e914710520a7b0e777fce30e5758ee64a64924",
+      "outcome": "success",
+      "nodeVersionsObserved": [
+        "v24.20.0"
+      ],
+      "jobs": [
+        {
+          "id": 106480049291,
+          "outcome": "success",
+          "completedAt": "2026-09-21T19:22:07Z"
+        }
+      ]
+    },
+    {
+      "name": "Coordinated public packages",
+      "run": 35644048907,
+      "attempt": 1,
+      "head": "84e914710520a7b0e777fce30e5758ee64a64924",
+      "outcome": "success",
+      "nodeVersionsObserved": [
+        "v24.20.0"
+      ],
+      "jobs": [
+        {
+          "id": 106480501429,
+          "outcome": "success",
+          "completedAt": "2026-09-21T19:31:05Z"
+        }
+      ]
+    }
+  ],
+  "core104BlobsUnchanged": 60,
+  "nativeEvidenceFilesMatchGit": 517,
+  "offlineVerificationExit": 0,
+  "offlineVerificationResult": {
+    "passed": true,
+    "hashedFiles": 516,
+    "pptxCrcXmlFontChecks": 56,
+    "officeCalls": 0
+  },
+  "frozenEarlierAuditsVerified": [
+    {
+      "directory": "ci",
+      "filesVerified": 43,
+      "manifestSha256": "fd97c1ab7b4f28e39e15d32e0141b22e5a9292212326b6ed9e93f53b0447f9bd"
+    },
+    {
+      "directory": "ci-postmerge",
+      "filesVerified": 33,
+      "manifestSha256": "03e5ba95f31d1a79f92d6e99c04b18106ac048356cce16b0effd02de7133d45d"
+    }
+  ],
+  "primaryHead": "84e914710520a7b0e777fce30e5758ee64a64924",
+  "primaryStatus": "",
+  "remoteMain": {
+    "parents": [
+      "3d301f1bef2c5d55e7e2a58f1aa53632d9ec8ab1",
+      "212627f9d3d5a923af7e0d59517ea44224f6f23f"
+    ],
+    "sha": "84e914710520a7b0e777fce30e5758ee64a64924",
+    "tree": "0317915dcb7b1e4a29eb8a3503b7be4ed7bb6d00"
+  },
+  "scope": "Successful descendant integration at core105; exact core104 coordinated postmerge remains canceled. No Office, native visual re-review, browser rerun, publication or deployment."
+}

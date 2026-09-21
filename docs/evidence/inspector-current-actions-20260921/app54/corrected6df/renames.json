@@ -1,0 +1,14 @@
+[
+  {
+    "old": "final-inspector-actions.spec.ts",
+    "new": "final-inspector-actions.spec.ts.txt",
+    "bytes": 17537,
+    "sha256": "c6096f4c62f642138dc127e55911647d00489d684f2794a978834aa54f4757fd"
+  },
+  {
+    "old": "initial-focused/inspector-actions.spec.ts",
+    "new": "initial-focused/inspector-actions.spec.ts.txt",
+    "bytes": 17190,
+    "sha256": "b664b65d4eb52e1f6e17f3081d19f5762ae2172f696ee2734540dbc864a4ff38"
+  }
+]

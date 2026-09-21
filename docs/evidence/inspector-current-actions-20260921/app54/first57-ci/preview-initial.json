@@ -1,0 +1,24 @@
+{
+  "id": "dpl_Edr9JQjLjtzXXHTeuvuVjkqaLrPG",
+  "url": "pptx-d91i6mv36-dataadvantage.vercel.app",
+  "state": "ERROR",
+  "readyState": "ERROR",
+  "createdAt": 1790019170264,
+  "buildingAt": 1790019171382,
+  "ready": 1790019217755,
+  "target": null,
+  "meta": {
+    "githubCommitRef": "codex/inspector-share-guard-20260921",
+    "githubCommitSha": "57e5e59fddbc94346f142dc12d86a916228bf2ae",
+    "githubCommitMessage": "Use current Inspector drafts for output and package standalone startup",
+    "githubRepo": "pptx-dev",
+    "githubOrg": "Data-Advantage"
+  },
+  "alias": [
+    "pptx-dev-git-codex-inspector-share-guard-20260921-dataadvantage.vercel.app"
+  ],
+  "errorCode": "module_not_found",
+  "errorMessage": "Command \"pnpm exec convex deploy --cmd 'pnpm run build'\" exited with 1",
+  "errorStep": "buildStep",
+  "scope": "Preview metadata only; no browser acceptance, redeployment or production change."
+}

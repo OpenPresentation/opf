@@ -1,0 +1,32 @@
+{
+  "reviewedAt": "2026-09-21T19:25:00.761071+00:00",
+  "scope": "Root visually inspected the four final full-run screenshots at1440x1000 after the39/39 zero-retry113.565407s browser run. This is local browser visual review, not remote CI or production acceptance.",
+  "findings": [
+    "Copy/JSON and Share/PPTX screenshots show matching current raw source title and selected preview title; source formatting remains visible. Existing toolbar, schema rail and preview placement remain coherent.",
+    "Pending inline Author title is visible before action while raw buffer still contains old title, demonstrating the tested commit boundary.",
+    "Author handoff shows committed title, extension metadata and rich-text values. The handoff is semantic and its pretty-printed source is not a claim of exact original spelling.",
+    "No new visual-layout blocker found in this bounded four-frame review. Suggestion-details clipping belongs to separate work."
+  ],
+  "files": [
+    {
+      "path": "full-browser-results/inspector-actions-Inspecto-07c93-and-unchanged-draft-history/copy-json-current-source.png",
+      "bytes": 192556,
+      "sha256": "5d00b9530d51dbe3d4622d9915a3c1b704179919d0a7bb894e40650729b4d17f"
+    },
+    {
+      "path": "full-browser-results/inspector-actions-Inspecto-36d82-hing-payloads-and-filenames/share-pptx-current-source.png",
+      "bytes": 192383,
+      "sha256": "cc2e3b100c06e77b0ee3a56b56c03abf5fe185c5015fe9bceb3d8fe756e71fbc"
+    },
+    {
+      "path": "full-browser-results/inspector-actions-Inspecto-ddffb-urrent-draft-before-handoff/author-current-handoff.png",
+      "bytes": 120611,
+      "sha256": "77597225c652400100c34b942694f06d32bfd426b0c845ec74111caf4858ee9b"
+    },
+    {
+      "path": "full-browser-results/inspector-actions-Inspecto-ddffb-urrent-draft-before-handoff/inspector-pending-action.png",
+      "bytes": 186148,
+      "sha256": "e80d09c8895ba98d1171c4d9e1ec1fd2ab9650b23750052d3ebb8147bc7f5ee0"
+    }
+  ]
+}

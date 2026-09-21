@@ -1,0 +1,60 @@
+Run pnpm test:e2e
+2026-09-21T19:45:04.0237553Z pnpm test:e2e
+2026-09-21T19:45:04.0316586Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-09-21T19:45:04.0316981Z env:
+2026-09-21T19:45:04.0317265Z   PNPM_HOME: C:\Users\runneradmin\setup-pnpm\node_modules\.bin
+2026-09-21T19:45:04.0317621Z ##[endgroup]
+2026-09-21T19:45:05.0846743Z $ playwright test
+2026-09-21T19:45:08.3887345Z [WebServer] $ node scripts/start-standalone.mjs "--hostname" "127.0.0.1" "--port" "4325"
+2026-09-21T19:45:08.7124419Z [WebServer] Cannot start the standalone server: EPERM: operation not permitted, stat 'D:\a\pptx-dev\pptx-dev\.next\standalone\node_modules\.pnpm\next@16.3.5_@babel+core@7.2_620aa7aa2232a0f82d57635d189e7ba9\node_modules\react'
+2026-09-21T19:45:08.7139284Z [WebServer] Run pnpm build without VERCEL=1 to create the portable production package.
+2026-09-21T19:45:08.8028266Z Error: Process from config.webServer was not able to start. Exit code: 1
+2026-09-21T19:45:08.8042601Z 
+2026-09-21T19:45:08.8429946Z [ELIFECYCLE] Command failed with exit code 1.
+2026-09-21T19:45:09.0067961Z ##[error]Process completed with exit code 1.
+2026-09-21T19:45:09.0323894Z ##[group]Run actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+2026-09-21T19:45:09.0324446Z with:
+2026-09-21T19:45:09.0324662Z   name: browser-failures-windows-latest
+2026-09-21T19:45:09.0324944Z   path: test-results/
+2026-09-21T19:45:09.0325157Z   retention-days: 7
+2026-09-21T19:45:09.0325366Z   if-no-files-found: ignore
+2026-09-21T19:45:09.0325593Z   compression-level: 6
+2026-09-21T19:45:09.0325810Z   overwrite: false
+2026-09-21T19:45:09.0326009Z   include-hidden-files: false
+2026-09-21T19:45:09.0326229Z   archive: true
+2026-09-21T19:45:09.0326405Z env:
+2026-09-21T19:45:09.0326655Z   PNPM_HOME: C:\Users\runneradmin\setup-pnpm\node_modules\.bin
+2026-09-21T19:45:09.0327000Z ##[endgroup]
+2026-09-21T19:45:09.7531053Z No files were found with the provided path: test-results/. No artifacts will be uploaded.
+2026-09-21T19:45:09.7916029Z ##[group]Run actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+2026-09-21T19:45:09.7916511Z with:
+2026-09-21T19:45:09.7916731Z   name: windows-readiness-windows-latest
+2026-09-21T19:45:09.7917070Z   path: test-results/**/windows-readiness-timings.json
+2026-09-21T19:45:09.7917377Z   retention-days: 7
+2026-09-21T19:45:09.7917577Z   if-no-files-found: ignore
+2026-09-21T19:45:09.7917798Z   compression-level: 6
+2026-09-21T19:45:09.7918008Z   overwrite: false
+2026-09-21T19:45:09.7918217Z   include-hidden-files: false
+2026-09-21T19:45:09.7918439Z   archive: true
+2026-09-21T19:45:09.7918610Z env:
+2026-09-21T19:45:09.7918856Z   PNPM_HOME: C:\Users\runneradmin\setup-pnpm\node_modules\.bin
+2026-09-21T19:45:09.7919181Z ##[endgroup]
+2026-09-21T19:45:09.9942266Z No files were found with the provided path: test-results/**/windows-readiness-timings.json. No artifacts will be uploaded.
+2026-09-21T19:45:10.0368768Z Post job cleanup.
+2026-09-21T19:45:10.3583349Z Pruning is unnecessary.
+2026-09-21T19:45:10.4049924Z Post job cleanup.
+2026-09-21T19:45:10.6675087Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-09-21T19:45:10.7002850Z git version 2.55.0.windows.5
+2026-09-21T19:45:10.7115084Z Temporarily overriding HOME='D:\a\_temp\d21a9452-137f-4067-9c30-a8fef80517bd' before making global git config changes
+2026-09-21T19:45:10.7116577Z Adding repository directory to the temporary git global config as a safe directory
+2026-09-21T19:45:10.7126786Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\pptx-dev\pptx-dev
+2026-09-21T19:45:10.7759804Z Removing SSH command configuration
+2026-09-21T19:45:10.7779471Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-09-21T19:45:10.7995369Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-09-21T19:45:11.5279046Z Removing HTTP extra header
+2026-09-21T19:45:11.5297580Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-09-21T19:45:11.5740115Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-09-21T19:45:12.2722099Z Removing includeIf entries pointing to credentials config files
+2026-09-21T19:45:12.2737525Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-09-21T19:45:12.3142245Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-09-21T19:45:13.0007471Z Cleaning up orphan processes

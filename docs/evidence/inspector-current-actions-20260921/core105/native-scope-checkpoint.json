@@ -1,0 +1,24 @@
+{
+  "observedAt": "2026-09-21T19:25:25.151283+00:00",
+  "commit": "84e914710520a7b0e777fce30e5758ee64a64924",
+  "bundle": "docs/evidence/windows-native-edits-20260921",
+  "scopeFromBundle": "Bounded B native picture/furniture and C notes packaging; D/E excluded.",
+  "semanticAuditReportedPassed": true,
+  "semanticAuditGeneratedAt": "2026-09-21T18:41:48.782Z",
+  "semanticAuditScope": "Offline current-registry semantic reimport of completed, cleanup-confirmed native furniture lifecycle reports. No Office, COM, UI, or native edit is performed.",
+  "semanticAuditSha256": "fbab517268896b23e6e81f010019b64050dafa5bd9e0081af0b1fc014b26584a",
+  "readmeReportedApplicableRuns": 9,
+  "visualReviewRecordedScope": "Finite visual observations only. No preview pixel-identity, general reflow, font-file identity, or universal layout acceptance.",
+  "visualReviewImageCount": 21,
+  "limitations": [
+    "UI Change Picture narrowed/repositioned geometry independently of correct current bytes/provenance.",
+    "Longer current native header clips words; duplicated tagged header overlaps adjacent text.",
+    "Production notes lifecycle passes; reordered variants refuse open and failed worker cleanup remains unconfirmed despite separate empty-workspace observation.",
+    "This audit checks evidence bytes/structure and reads recorded results; it does not repeat Office behavior, semantic reimport or visual review.",
+    "Native tab0.02265625pt exceeds unchanged0.02pt gate; permitted-font/native acceptance remains separate."
+  ],
+  "ownership": "User Windows supervisor retains sole Office control. No native branches or Office used.",
+  "visualReviewReferencedImageHashesVerified": 21,
+  "semanticAuditRecordedCases": 9,
+  "visualInspectionPerformedByThisAudit": false
+}
