@@ -1,0 +1,9 @@
+{
+  "kind": "environment-failure-before-output",
+  "node": "v24.21.0",
+  "operation": "public ESM package-resolution spawnSync",
+  "error": "EPERM under workspace sandbox",
+  "officeCalls": 0,
+  "fontCalls": 0,
+  "resolution": "same reviewed generator succeeded under approved escalation before any Office call"
+}

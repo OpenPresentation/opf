@@ -1,0 +1,48 @@
+{
+    "passed":  true,
+    "officeOrComCalls":  0,
+    "requestedName":  "selftest-shape-name",
+    "observedName":  "selftest-shape-name",
+    "requestedTextCodePoints":  [
+                                    9,
+                                    66,
+                                    101,
+                                    102,
+                                    111,
+                                    114,
+                                    101
+                                ],
+    "observedTextCodePoints":  [
+                                   9,
+                                   66,
+                                   101,
+                                   102,
+                                   111,
+                                   114,
+                                   101
+                               ],
+    "wrapperStages":  54,
+    "metricsTolerancePoints":  0.02,
+    "metricsRegression":  [
+                              {
+                                  "representation":  "PSCustomObject",
+                                  "recordType":  "System.Management.Automation.PSCustomObject",
+                                  "exactTargetGatePassed":  true,
+                                  "phaseError03Rejected":  true,
+                                  "persistenceDrift01Accepted":  true,
+                                  "persistenceDrift03Rejected":  true,
+                                  "validContentAccepted":  true,
+                                  "changedTextRejected":  true
+                              },
+                              {
+                                  "representation":  "OrderedDictionary",
+                                  "recordType":  "System.Collections.Specialized.OrderedDictionary",
+                                  "exactTargetGatePassed":  true,
+                                  "phaseError03Rejected":  true,
+                                  "persistenceDrift01Accepted":  true,
+                                  "persistenceDrift03Rejected":  true,
+                                  "validContentAccepted":  true,
+                                  "changedTextRejected":  true
+                              }
+                          ]
+}

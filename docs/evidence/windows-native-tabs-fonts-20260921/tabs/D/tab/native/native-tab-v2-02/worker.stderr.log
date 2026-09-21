@@ -1,0 +1,7 @@
+Measure-Object : The property "tabErrorPoints" cannot be found in the input for any objects.
+At C:\Users\micha\.codex\worktrees\fd3f\opf\artifacts\windows-resume-20260921\sources\opf-pptx\test\native-tab-control-
+v2.ps1:406 char:34
++ ... =($records | Measure-Object -Property tabErrorPoints -Maximum).Maximu ...
++                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidArgument: (:) [Measure-Object], PSArgumentException
+    + FullyQualifiedErrorId : GenericMeasurePropertyNotFound,Microsoft.PowerShell.Commands.MeasureObjectCommand

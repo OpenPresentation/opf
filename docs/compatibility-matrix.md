@@ -46,10 +46,16 @@ refusals. Core105 publishes that evidence; PPTX47 adds the tested harness, with
 no new package version. UI image replacement changes geometry, longer header
 text clips, and duplicated tagged headers overlap. Refused workers retain their
 failed cleanup state separately from later empty-workspace observations.
-This is not general native layout/reflow fidelity. D/E remain open: native tabs
-fail the unchanged 0.02pt gate and permitted physical-font acceptance is unresolved.
-The Windows supervisor retains sole Office control. The current docs checkpoint
-reads evidence and makes no Office calls.
+This is not general native layout/reflow fidelity.
+
+Accepted core106's [tab and font checkpoint](evidence/windows-native-tabs-fonts-20260921/README.md)
+records plain native tab target error **0.022655487060546875pt** and tab/literal
+difference **0.022678375244140625pt**, both above the unchanged **0.02pt** gate.
+Its bounded four-face Carlito edit/save/reopen control passes exact text/style
+persistence, zero observed bounds drift, matching rasters and owned font cleanup.
+Mixed-size table fidelity, physical glyph-font identity, fallback/synthesis and actual embedding remain
+open; embedding was disabled for this control. The Windows supervisor retains sole
+Office control. This documentation task reads evidence and makes no Office calls.
 
 ## Supported in this set
 
@@ -106,6 +112,9 @@ it is not a complete green postmerge gate. Accepted descendant core105
 `84e914710520a7b0e777fce30e5758ee64a64924` preserves all 60 core104 evidence blobs
 and passes both exact-head workflows on their first attempts. [Compact receipts](evidence/inspector-current-actions-20260921/README.md#core-source-and-ci)
 keep descendant acceptance separate from the canceled predecessor run.
+Accepted core106 `3847f712ccb2379952bcc8ab7c9fdbaedfd0a4ce` also passes both
+pre/postmerge workflows on their first attempts. Its [compact receipt](evidence/inspector-current-actions-20260921/core106/acceptance-receipt.json)
+binds the bounded native evidence above without completing general compatibility.
 
 [App47](https://github.com/Data-Advantage/pptx-dev/pull/47) corrects the pre-app47
 completion adapter's rejected layout choices while preserving unchanged source
@@ -186,7 +195,8 @@ is READY, which is metadata only; at this checkpoint App54 remains unmerged and 
 The [current ledger](evidence/inspector-current-actions-20260921/README.md)
 retains the separate 60c readiness, 57e packaging and 6df startup failures. Production remains App53 `e40c287`, with its original
 failed Linux postmerge gate preserved separately from canonical **29/29**.
-A separate local startup-link correction is undergoing fresh verification; the
+The unreleased [startup-link correction at 4338e57](https://github.com/Data-Advantage/pptx-dev/blob/4338e57b951c469d5c5f239b78a303fbad3c745e/docs/evidence/standalone-windows-links-20260921/README.md)
+is undergoing fresh platform verification; the
 separate suggestion-details candidate remains local, uncommitted and unreleased.
 Neither supplies native or production acceptance.
 
@@ -208,7 +218,7 @@ site40) remain unmerged. In particular, site40 is not independently shipped.
 | Topic | Tracker | Do not describe as done |
 | --- | --- | --- |
 | Linux vs Chromium native-width residual at the 0.1px gate | [opf-render#24](https://github.com/OpenPresentation/opf-render/issues/24) | Rounding that fixes Linux but breaks macOS is rejected |
-| General native PowerPoint fidelity; remaining tabs, fonts, notes-master and real Office Header/Footer objects (`p:hf`) | [opf#87](https://github.com/OpenPresentation/opf/issues/87) | Finite B/C controls above are accepted evidence; self-import and tagged furniture do not establish arbitrary Office fidelity or D/E completion |
+| General native PowerPoint fidelity and real Office Header/Footer objects (`p:hf`) | [opf#87](https://github.com/OpenPresentation/opf/issues/87) | Finite B/C and bounded Carlito edit controls above are accepted evidence. Tab tolerance, mixed-size tables, physical glyph identity/fallback/synthesis, embedding and general layout/reflow fidelity remain open; self-import and tagged furniture do not certify arbitrary Office behavior |
 | Public-surface acceptance checklist | [opf#88](https://github.com/OpenPresentation/opf/issues/88) | Shipping features does not establish every acceptance item; use the checklist and deployment receipts |
 | HarfBuzz / prepared-glyph shaping | Archive branches `codex/archive-shaping-20260915` | Prototypes are preserved, not in npm |
 | Selectable vector PDF | [pdf plan](plans/pdf-export.md) | Follows font reliability |

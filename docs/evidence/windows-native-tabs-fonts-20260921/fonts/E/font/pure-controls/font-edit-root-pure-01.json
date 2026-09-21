@@ -1,0 +1,10 @@
+{
+    "passed":  true,
+    "officeOrComCalls":  0,
+    "text":  "Regular 18 | Bold 20 | Italic 22 | BoldItalic 24",
+    "runCount":  4,
+    "wrapperStages":  60,
+    "orderedDictionaryMetricsPassed":  true,
+    "negativeMutationsRejected":  true,
+    "parentGateLogicPassed":  true
+}

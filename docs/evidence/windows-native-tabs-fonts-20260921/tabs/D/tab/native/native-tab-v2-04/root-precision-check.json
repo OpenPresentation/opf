@@ -1,0 +1,5 @@
+{
+  "pythonBinaryDoubleMetricsExactlyMatch": true,
+  "differences": [],
+  "powershellReplayNote": "ConvertFrom-Json Decimal to Double conversion introduces approximately 1e-14 pt differences for index8; retained separately. Native captured Double records reproduce native metrics exactly in Python."
+}

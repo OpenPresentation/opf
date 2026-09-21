@@ -1,0 +1,41 @@
+﻿{
+    "targets":  [
+                    16.25,
+                    16.26,
+                    16.27,
+                    16.27734375,
+                    16.28,
+                    16.29,
+                    16.3,
+                    16.31,
+                    77.3173828125
+                ],
+    "literals":  {
+                     "tabText":  "\tBefore",
+                     "leadingCodePoint":  9,
+                     "beforeText":  "Before"
+                 },
+    "font":  {
+                 "name":  "Calibri",
+                 "size":  13.5,
+                 "path":  "C:\\windows\\Fonts\\calibri.ttf",
+                 "sha256":  "57e93ff143572bcc092c1f56202d43ddc07bb119aa104c6d7af163470fb551f6"
+             },
+    "tolerancePoints":  0.02,
+    "verifier":  {
+                     "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\sources\\opf-pptx\\test\\native-tab-control-v2.ps1",
+                     "sha256":  "3f40452fcd7d01779fea797264a57ada7fc9f1eb4f6eb9696cb32c64e2e0515c",
+                     "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-tab-v2-02\\inputs\\native-tab-control-v2.ps1",
+                     "snapshotSha256":  "3f40452fcd7d01779fea797264a57ada7fc9f1eb4f6eb9696cb32c64e2e0515c"
+                 },
+    "processHelper":  {
+                          "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\sources\\opf-pptx\\test\\native-process.ps1",
+                          "sha256":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+                          "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-tab-v2-02\\inputs\\native-process.ps1",
+                          "snapshotSha256":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+                      },
+    "host":  {
+                 "path":  "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+                 "sha256":  "8bb6fa8c283b4d92120b1ef249a9b311b0f804d4cabbe9981159976c8be76a5e"
+             }
+}

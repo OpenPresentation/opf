@@ -7,8 +7,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 7774,
-      "sha256": "fa0bbd79f11ebe484a9b4de5fe4e3a7e55aeeb2801c97f0849c66633a1892883"
+      "bytes": 9423,
+      "sha256": "97a85747c3bef6cc05297b2947d5057e006f178f69112aa6e94dac4e625250fe"
     },
     {
       "path": "app54/acceptance-receipt.json",
@@ -371,9 +371,44 @@
       "sha256": "92c8735956ac5d1d20770434be322961ec3f92e98e762048d6e227d9f6f87f26"
     },
     {
+      "path": "core106/acceptance-receipt.json",
+      "bytes": 18882,
+      "sha256": "875001e53b77789db81d1d98c2a5ef3bd5d639a7b5b5b23cf5e5fca7c98b25c1"
+    },
+    {
+      "path": "core106/offline-verification.json",
+      "bytes": 1729,
+      "sha256": "d4300b378d028874a8f7b614a7f3b5e042d7164677630c147d99ac7a40f9c5eb"
+    },
+    {
+      "path": "core106/offline-verify.log",
+      "bytes": 763,
+      "sha256": "cb3bec6bc8e9c592dc6484e396a6254efbb7ecc46529d7bfda30ddcacb72ed95"
+    },
+    {
+      "path": "core106/pptx48-49-ownership-checkpoint.json",
+      "bytes": 2992,
+      "sha256": "25a12578e88427f31ef64de5a3cd776247576895fa9610111d5f358d6ec5b2a0"
+    },
+    {
+      "path": "core106/pr107-first-publication-audit.json",
+      "bytes": 22440,
+      "sha256": "70e44a576534b31980eba0370136834b2df86721fc80fea990da251ef5a4c89e"
+    },
+    {
+      "path": "core106/source-verification.json",
+      "bytes": 47801,
+      "sha256": "9b7c6e457e4d9862a6e142ba9c5da8c04b9291cace3fa1cef13614bbebd69abf"
+    },
+    {
+      "path": "merge-text-integrity.log",
+      "bytes": 132,
+      "sha256": "6176a5ea0199fd8b74ae43c3b6ec65d44cc6112621dd2cb4565d4a4091223fd3"
+    },
+    {
       "path": "provenance.json",
-      "bytes": 20658,
-      "sha256": "5865b124a073bf60b8ca34977457d572a50755a1de5980d15323dd7eeba64090"
+      "bytes": 22611,
+      "sha256": "948a9ba9023b8b76226f703555c2eea48628141cc5b22918494c616c656a02d2"
     },
     {
       "path": "text-integrity.log",
@@ -382,8 +417,8 @@
     },
     {
       "path": "verification.json",
-      "bytes": 3311,
-      "sha256": "d7c0e663066f6d0327d5ac258ea3a2196df813a6cb68b05876bc9192d6d065c4"
+      "bytes": 13291,
+      "sha256": "820cd090cb0b4663e511ffdb23cb785a093b32f957ecaeeda502a1a74db74a9f"
     }
   ],
   "scope": "All files here except this manifest; nested original manifests are covered unchanged."

@@ -1,0 +1,1224 @@
+{
+  "schemaVersion": 1,
+  "scope": "Independent Python-stdlib audit of retained native-tab-v2-04 bytes. No Office, COM, UI, or source mutation.",
+  "createdAt": "2026-09-21T19:20:07.599034+00:00",
+  "auditScript": {
+    "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\tab-independent-audit-04\\audit-tab-v2.py",
+    "sha256": "581cd08a5cfcd3349add5b8587dc495f3050dba4eee9b7405fa78b38d4f29ace"
+  },
+  "inputs": {
+    "runDirectory": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-tab-v2-04",
+    "report": {
+      "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-tab-v2-04\\report.json",
+      "sha256": "dd2dc51ec6714c864479b93791eefe9807ab9f8c649f7a3c7bcabaca61b5a71c"
+    },
+    "request": {
+      "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-tab-v2-04\\request.json",
+      "sha256": "d0ff2521fa1be0319caffd969aad4cb6eb852d2ebd727d954d0f9ad3a70e8ca1"
+    },
+    "worker": {
+      "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-tab-v2-04\\worker.json",
+      "sha256": "519fc3e957b9f18ae4deecdfa0929801e6908168e48d0a283a062cfdad7fbe56"
+    },
+    "supervisor": {
+      "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-tab-v2-04\\supervisor.json",
+      "sha256": "049ed96259ec37c0dbe092a4b5bfaeb9c09249cacd567e23ef58ee20348a8720"
+    },
+    "stages": {
+      "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-tab-v2-04\\stages.jsonl",
+      "sha256": "b28bc2f5afc4d33dcb72e0ab7335799555ac73cb95dc4459138b84214d7a9a47"
+    },
+    "powershellReplay": {
+      "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-tab-v2-04\\metrics.root-replay.json",
+      "sha256": "c81593acc91325444153d37c59990cda934a211942b281ee3faf03c96a42ba58"
+    },
+    "rootPrecisionCheck": {
+      "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-tab-v2-04\\root-precision-check.json",
+      "sha256": "c8da7de41672aef4d6aa7f4763b30ad9abee625d6c8868289892393f0c6c3a57"
+    },
+    "sourceInputs": {
+      "verifier": {
+        "snapshotPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-tab-v2-04\\inputs\\native-tab-control-v2.ps1",
+        "snapshotSha256": "6a0f8f33e1072cf373e7b6c744d248ae89ec66901e7b8a3be6c89a32cce660dd",
+        "snapshotMatchesRequest": true,
+        "snapshotMatchesReport": true,
+        "livePath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\sources\\opf-pptx\\test\\native-tab-control-v2.ps1",
+        "liveSha256": "6a0f8f33e1072cf373e7b6c744d248ae89ec66901e7b8a3be6c89a32cce660dd",
+        "liveMatchesRecorded": true
+      },
+      "processHelper": {
+        "snapshotPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-tab-v2-04\\inputs\\native-process.ps1",
+        "snapshotSha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+        "snapshotMatchesRequest": true,
+        "snapshotMatchesReport": true,
+        "livePath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\sources\\opf-pptx\\test\\native-process.ps1",
+        "liveSha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+        "liveMatchesRecorded": true
+      }
+    }
+  },
+  "nativeLifecycle": {
+    "passed": true,
+    "worker": {
+      "exitCode": 0,
+      "scope": "Owned verifier process only. A timeout does not prove cleanup completed; Office processes are never terminated.",
+      "timedOut": false,
+      "processId": 2628,
+      "timeoutSeconds": 45,
+      "startedAt": "2026-09-21T19:09:13.6429435Z",
+      "finishedAt": "2026-09-21T19:09:21.0917911Z"
+    },
+    "supervisor": {
+      "timestamp": "2026-09-21T19:09:21.1133235Z",
+      "timedOut": false,
+      "exitCode": 0,
+      "cleanupConfirmed": true,
+      "lastDurableStage": "worker.complete",
+      "lastDurableStatus": "success"
+    },
+    "reportTerminal": {
+      "cleanupConfirmed": true,
+      "officeOperationsStopped": false,
+      "lastStage": "worker.complete",
+      "lastStatus": "success",
+      "error": null
+    },
+    "stages": {
+      "passed": true,
+      "rowCount": 2752,
+      "beginCount": 1374,
+      "successCount": 1378,
+      "sequenceContiguous": true,
+      "unclosedBeginStages": [],
+      "pairingErrors": [],
+      "errorEvents": [],
+      "standaloneTerminalEvents": [
+        {
+          "sequence": 1,
+          "stage": "worker.initialize",
+          "status": "success"
+        },
+        {
+          "sequence": 1922,
+          "stage": "original.presentation.cleanup",
+          "status": "success"
+        },
+        {
+          "sequence": 2751,
+          "stage": "reopened.presentation.cleanup",
+          "status": "success"
+        },
+        {
+          "sequence": 2752,
+          "stage": "worker.complete",
+          "status": "success"
+        }
+      ],
+      "expectedStandaloneStages": [
+        "worker.initialize",
+        "original.presentation.cleanup",
+        "reopened.presentation.cleanup",
+        "worker.complete"
+      ],
+      "criticalLifecycle": {
+        "application.create": {
+          "begin": 1,
+          "success": 1
+        },
+        "create.presentation.add": {
+          "begin": 1,
+          "success": 1
+        },
+        "create.presentation.saveAs": {
+          "begin": 1,
+          "success": 1
+        },
+        "original.export.png": {
+          "begin": 1,
+          "success": 1
+        },
+        "original.presentation.close": {
+          "begin": 1,
+          "success": 1
+        },
+        "reopen.presentation.open-readonly": {
+          "begin": 1,
+          "success": 1
+        },
+        "reopened.export.png": {
+          "begin": 1,
+          "success": 1
+        },
+        "reopened.presentation.close": {
+          "begin": 1,
+          "success": 1
+        }
+      },
+      "criticalLifecyclePassed": true,
+      "progressMatchesLastStage": true,
+      "lastStage": {
+        "sequence": 2752,
+        "timestamp": "2026-09-21T19:09:21.0515898Z",
+        "stage": "worker.complete",
+        "status": "success",
+        "error": "",
+        "cleanupConfirmed": true,
+        "officeOperationsStopped": false,
+        "ownedPresentationPath": null
+      }
+    }
+  },
+  "observations": {
+    "original": {
+      "passed": true,
+      "recordCount": 9,
+      "records": [
+        {
+          "index": 0,
+          "targetPoints": 16.25,
+          "checks": {
+            "indexExact": true,
+            "targetExact": true,
+            "tabStopWithinTolerance": true,
+            "namesExact": true,
+            "textsExact": true,
+            "oneTabStop": true,
+            "fontsExact": true,
+            "fontSizesExact": true,
+            "allNumericValuesFinite": true
+          }
+        },
+        {
+          "index": 1,
+          "targetPoints": 16.26,
+          "checks": {
+            "indexExact": true,
+            "targetExact": true,
+            "tabStopWithinTolerance": true,
+            "namesExact": true,
+            "textsExact": true,
+            "oneTabStop": true,
+            "fontsExact": true,
+            "fontSizesExact": true,
+            "allNumericValuesFinite": true
+          }
+        },
+        {
+          "index": 2,
+          "targetPoints": 16.27,
+          "checks": {
+            "indexExact": true,
+            "targetExact": true,
+            "tabStopWithinTolerance": true,
+            "namesExact": true,
+            "textsExact": true,
+            "oneTabStop": true,
+            "fontsExact": true,
+            "fontSizesExact": true,
+            "allNumericValuesFinite": true
+          }
+        },
+        {
+          "index": 3,
+          "targetPoints": 16.27734375,
+          "checks": {
+            "indexExact": true,
+            "targetExact": true,
+            "tabStopWithinTolerance": true,
+            "namesExact": true,
+            "textsExact": true,
+            "oneTabStop": true,
+            "fontsExact": true,
+            "fontSizesExact": true,
+            "allNumericValuesFinite": true
+          }
+        },
+        {
+          "index": 4,
+          "targetPoints": 16.28,
+          "checks": {
+            "indexExact": true,
+            "targetExact": true,
+            "tabStopWithinTolerance": true,
+            "namesExact": true,
+            "textsExact": true,
+            "oneTabStop": true,
+            "fontsExact": true,
+            "fontSizesExact": true,
+            "allNumericValuesFinite": true
+          }
+        },
+        {
+          "index": 5,
+          "targetPoints": 16.29,
+          "checks": {
+            "indexExact": true,
+            "targetExact": true,
+            "tabStopWithinTolerance": true,
+            "namesExact": true,
+            "textsExact": true,
+            "oneTabStop": true,
+            "fontsExact": true,
+            "fontSizesExact": true,
+            "allNumericValuesFinite": true
+          }
+        },
+        {
+          "index": 6,
+          "targetPoints": 16.3,
+          "checks": {
+            "indexExact": true,
+            "targetExact": true,
+            "tabStopWithinTolerance": true,
+            "namesExact": true,
+            "textsExact": true,
+            "oneTabStop": true,
+            "fontsExact": true,
+            "fontSizesExact": true,
+            "allNumericValuesFinite": true
+          }
+        },
+        {
+          "index": 7,
+          "targetPoints": 16.31,
+          "checks": {
+            "indexExact": true,
+            "targetExact": true,
+            "tabStopWithinTolerance": true,
+            "namesExact": true,
+            "textsExact": true,
+            "oneTabStop": true,
+            "fontsExact": true,
+            "fontSizesExact": true,
+            "allNumericValuesFinite": true
+          }
+        },
+        {
+          "index": 8,
+          "targetPoints": 77.3173828125,
+          "checks": {
+            "indexExact": true,
+            "targetExact": true,
+            "tabStopWithinTolerance": true,
+            "namesExact": true,
+            "textsExact": true,
+            "oneTabStop": true,
+            "fontsExact": true,
+            "fontSizesExact": true,
+            "allNumericValuesFinite": true
+          }
+        }
+      ],
+      "failures": []
+    },
+    "reopened": {
+      "passed": true,
+      "recordCount": 9,
+      "records": [
+        {
+          "index": 0,
+          "targetPoints": 16.25,
+          "checks": {
+            "indexExact": true,
+            "targetExact": true,
+            "tabStopWithinTolerance": true,
+            "namesExact": true,
+            "textsExact": true,
+            "oneTabStop": true,
+            "fontsExact": true,
+            "fontSizesExact": true,
+            "allNumericValuesFinite": true
+          }
+        },
+        {
+          "index": 1,
+          "targetPoints": 16.26,
+          "checks": {
+            "indexExact": true,
+            "targetExact": true,
+            "tabStopWithinTolerance": true,
+            "namesExact": true,
+            "textsExact": true,
+            "oneTabStop": true,
+            "fontsExact": true,
+            "fontSizesExact": true,
+            "allNumericValuesFinite": true
+          }
+        },
+        {
+          "index": 2,
+          "targetPoints": 16.27,
+          "checks": {
+            "indexExact": true,
+            "targetExact": true,
+            "tabStopWithinTolerance": true,
+            "namesExact": true,
+            "textsExact": true,
+            "oneTabStop": true,
+            "fontsExact": true,
+            "fontSizesExact": true,
+            "allNumericValuesFinite": true
+          }
+        },
+        {
+          "index": 3,
+          "targetPoints": 16.27734375,
+          "checks": {
+            "indexExact": true,
+            "targetExact": true,
+            "tabStopWithinTolerance": true,
+            "namesExact": true,
+            "textsExact": true,
+            "oneTabStop": true,
+            "fontsExact": true,
+            "fontSizesExact": true,
+            "allNumericValuesFinite": true
+          }
+        },
+        {
+          "index": 4,
+          "targetPoints": 16.28,
+          "checks": {
+            "indexExact": true,
+            "targetExact": true,
+            "tabStopWithinTolerance": true,
+            "namesExact": true,
+            "textsExact": true,
+            "oneTabStop": true,
+            "fontsExact": true,
+            "fontSizesExact": true,
+            "allNumericValuesFinite": true
+          }
+        },
+        {
+          "index": 5,
+          "targetPoints": 16.29,
+          "checks": {
+            "indexExact": true,
+            "targetExact": true,
+            "tabStopWithinTolerance": true,
+            "namesExact": true,
+            "textsExact": true,
+            "oneTabStop": true,
+            "fontsExact": true,
+            "fontSizesExact": true,
+            "allNumericValuesFinite": true
+          }
+        },
+        {
+          "index": 6,
+          "targetPoints": 16.3,
+          "checks": {
+            "indexExact": true,
+            "targetExact": true,
+            "tabStopWithinTolerance": true,
+            "namesExact": true,
+            "textsExact": true,
+            "oneTabStop": true,
+            "fontsExact": true,
+            "fontSizesExact": true,
+            "allNumericValuesFinite": true
+          }
+        },
+        {
+          "index": 7,
+          "targetPoints": 16.31,
+          "checks": {
+            "indexExact": true,
+            "targetExact": true,
+            "tabStopWithinTolerance": true,
+            "namesExact": true,
+            "textsExact": true,
+            "oneTabStop": true,
+            "fontsExact": true,
+            "fontSizesExact": true,
+            "allNumericValuesFinite": true
+          }
+        },
+        {
+          "index": 8,
+          "targetPoints": 77.3173828125,
+          "checks": {
+            "indexExact": true,
+            "targetExact": true,
+            "tabStopWithinTolerance": true,
+            "namesExact": true,
+            "textsExact": true,
+            "oneTabStop": true,
+            "fontsExact": true,
+            "fontSizesExact": true,
+            "allNumericValuesFinite": true
+          }
+        }
+      ],
+      "failures": []
+    },
+    "exactPersistence": {
+      "passed": true,
+      "failures": []
+    }
+  },
+  "metricPrecision": {
+    "storedMetricsExactlyRecomputed": true,
+    "exactDifferences": [],
+    "recomputed": {
+      "tolerancePoints": 0.02,
+      "original": {
+        "phase": "original",
+        "tolerancePoints": 0.02,
+        "tabGatePassed": false,
+        "literalGatePassed": true,
+        "pairAgreementGatePassed": false,
+        "maximumTabErrorPoints": 0.022655487060546875,
+        "maximumLiteralErrorPoints": 2.288818359375e-05,
+        "maximumPairDeltaPoints": 0.022678375244140625,
+        "records": [
+          {
+            "index": 0,
+            "targetPoints": 16.25,
+            "actualTabOffsetPoints": 16.25,
+            "actualLiteralOffsetPoints": 16.25,
+            "tabErrorPoints": 0.0,
+            "literalErrorPoints": 0.0,
+            "tabMinusLiteralPoints": 0.0,
+            "tabGatePassed": true,
+            "literalGatePassed": true,
+            "pairAgreementGatePassed": true
+          },
+          {
+            "index": 1,
+            "targetPoints": 16.26,
+            "actualTabOffsetPoints": 16.25,
+            "actualLiteralOffsetPoints": 16.259998321533203,
+            "tabErrorPoints": 0.010000000000001563,
+            "literalErrorPoints": 1.678466798438194e-06,
+            "tabMinusLiteralPoints": -0.009998321533203125,
+            "tabGatePassed": true,
+            "literalGatePassed": true,
+            "pairAgreementGatePassed": true
+          },
+          {
+            "index": 2,
+            "targetPoints": 16.27,
+            "actualTabOffsetPoints": 16.25,
+            "actualLiteralOffsetPoints": 16.269996643066406,
+            "tabErrorPoints": 0.019999999999999574,
+            "literalErrorPoints": 3.3569335933236744e-06,
+            "tabMinusLiteralPoints": -0.01999664306640625,
+            "tabGatePassed": true,
+            "literalGatePassed": true,
+            "pairAgreementGatePassed": true
+          },
+          {
+            "index": 3,
+            "targetPoints": 16.27734375,
+            "actualTabOffsetPoints": 16.299999237060547,
+            "actualLiteralOffsetPoints": 16.277320861816406,
+            "tabErrorPoints": 0.022655487060546875,
+            "literalErrorPoints": 2.288818359375e-05,
+            "tabMinusLiteralPoints": 0.022678375244140625,
+            "tabGatePassed": false,
+            "literalGatePassed": true,
+            "pairAgreementGatePassed": false
+          },
+          {
+            "index": 4,
+            "targetPoints": 16.28,
+            "actualTabOffsetPoints": 16.299999237060547,
+            "actualLiteralOffsetPoints": 16.279998779296875,
+            "tabErrorPoints": 0.019999237060545738,
+            "literalErrorPoints": 1.2207031261368684e-06,
+            "tabMinusLiteralPoints": 0.020000457763671875,
+            "tabGatePassed": true,
+            "literalGatePassed": true,
+            "pairAgreementGatePassed": false
+          },
+          {
+            "index": 5,
+            "targetPoints": 16.29,
+            "actualTabOffsetPoints": 16.299999237060547,
+            "actualLiteralOffsetPoints": 16.289997100830078,
+            "tabErrorPoints": 0.009999237060547728,
+            "literalErrorPoints": 2.8991699210223487e-06,
+            "tabMinusLiteralPoints": 0.01000213623046875,
+            "tabGatePassed": true,
+            "literalGatePassed": true,
+            "pairAgreementGatePassed": true
+          },
+          {
+            "index": 6,
+            "targetPoints": 16.3,
+            "actualTabOffsetPoints": 16.299999237060547,
+            "actualLiteralOffsetPoints": 16.299999237060547,
+            "tabErrorPoints": 7.629394538355427e-07,
+            "literalErrorPoints": 7.629394538355427e-07,
+            "tabMinusLiteralPoints": 0.0,
+            "tabGatePassed": true,
+            "literalGatePassed": true,
+            "pairAgreementGatePassed": true
+          },
+          {
+            "index": 7,
+            "targetPoints": 16.31,
+            "actualTabOffsetPoints": 16.299999237060547,
+            "actualLiteralOffsetPoints": 16.30999755859375,
+            "tabErrorPoints": 0.010000762939451846,
+            "literalErrorPoints": 2.441406248721023e-06,
+            "tabMinusLiteralPoints": -0.009998321533203125,
+            "tabGatePassed": true,
+            "literalGatePassed": true,
+            "pairAgreementGatePassed": true
+          },
+          {
+            "index": 8,
+            "targetPoints": 77.3173828125,
+            "actualTabOffsetPoints": 77.29999542236328,
+            "actualLiteralOffsetPoints": 77.31739807128906,
+            "tabErrorPoints": 0.01738739013671875,
+            "literalErrorPoints": 1.52587890625e-05,
+            "tabMinusLiteralPoints": -0.01740264892578125,
+            "tabGatePassed": true,
+            "literalGatePassed": true,
+            "pairAgreementGatePassed": true
+          }
+        ]
+      },
+      "reopened": {
+        "phase": "reopened",
+        "tolerancePoints": 0.02,
+        "tabGatePassed": false,
+        "literalGatePassed": true,
+        "pairAgreementGatePassed": false,
+        "maximumTabErrorPoints": 0.022655487060546875,
+        "maximumLiteralErrorPoints": 2.288818359375e-05,
+        "maximumPairDeltaPoints": 0.022678375244140625,
+        "records": [
+          {
+            "index": 0,
+            "targetPoints": 16.25,
+            "actualTabOffsetPoints": 16.25,
+            "actualLiteralOffsetPoints": 16.25,
+            "tabErrorPoints": 0.0,
+            "literalErrorPoints": 0.0,
+            "tabMinusLiteralPoints": 0.0,
+            "tabGatePassed": true,
+            "literalGatePassed": true,
+            "pairAgreementGatePassed": true
+          },
+          {
+            "index": 1,
+            "targetPoints": 16.26,
+            "actualTabOffsetPoints": 16.25,
+            "actualLiteralOffsetPoints": 16.259998321533203,
+            "tabErrorPoints": 0.010000000000001563,
+            "literalErrorPoints": 1.678466798438194e-06,
+            "tabMinusLiteralPoints": -0.009998321533203125,
+            "tabGatePassed": true,
+            "literalGatePassed": true,
+            "pairAgreementGatePassed": true
+          },
+          {
+            "index": 2,
+            "targetPoints": 16.27,
+            "actualTabOffsetPoints": 16.25,
+            "actualLiteralOffsetPoints": 16.269996643066406,
+            "tabErrorPoints": 0.019999999999999574,
+            "literalErrorPoints": 3.3569335933236744e-06,
+            "tabMinusLiteralPoints": -0.01999664306640625,
+            "tabGatePassed": true,
+            "literalGatePassed": true,
+            "pairAgreementGatePassed": true
+          },
+          {
+            "index": 3,
+            "targetPoints": 16.27734375,
+            "actualTabOffsetPoints": 16.299999237060547,
+            "actualLiteralOffsetPoints": 16.277320861816406,
+            "tabErrorPoints": 0.022655487060546875,
+            "literalErrorPoints": 2.288818359375e-05,
+            "tabMinusLiteralPoints": 0.022678375244140625,
+            "tabGatePassed": false,
+            "literalGatePassed": true,
+            "pairAgreementGatePassed": false
+          },
+          {
+            "index": 4,
+            "targetPoints": 16.28,
+            "actualTabOffsetPoints": 16.299999237060547,
+            "actualLiteralOffsetPoints": 16.279998779296875,
+            "tabErrorPoints": 0.019999237060545738,
+            "literalErrorPoints": 1.2207031261368684e-06,
+            "tabMinusLiteralPoints": 0.020000457763671875,
+            "tabGatePassed": true,
+            "literalGatePassed": true,
+            "pairAgreementGatePassed": false
+          },
+          {
+            "index": 5,
+            "targetPoints": 16.29,
+            "actualTabOffsetPoints": 16.299999237060547,
+            "actualLiteralOffsetPoints": 16.289997100830078,
+            "tabErrorPoints": 0.009999237060547728,
+            "literalErrorPoints": 2.8991699210223487e-06,
+            "tabMinusLiteralPoints": 0.01000213623046875,
+            "tabGatePassed": true,
+            "literalGatePassed": true,
+            "pairAgreementGatePassed": true
+          },
+          {
+            "index": 6,
+            "targetPoints": 16.3,
+            "actualTabOffsetPoints": 16.299999237060547,
+            "actualLiteralOffsetPoints": 16.299999237060547,
+            "tabErrorPoints": 7.629394538355427e-07,
+            "literalErrorPoints": 7.629394538355427e-07,
+            "tabMinusLiteralPoints": 0.0,
+            "tabGatePassed": true,
+            "literalGatePassed": true,
+            "pairAgreementGatePassed": true
+          },
+          {
+            "index": 7,
+            "targetPoints": 16.31,
+            "actualTabOffsetPoints": 16.299999237060547,
+            "actualLiteralOffsetPoints": 16.30999755859375,
+            "tabErrorPoints": 0.010000762939451846,
+            "literalErrorPoints": 2.441406248721023e-06,
+            "tabMinusLiteralPoints": -0.009998321533203125,
+            "tabGatePassed": true,
+            "literalGatePassed": true,
+            "pairAgreementGatePassed": true
+          },
+          {
+            "index": 8,
+            "targetPoints": 77.3173828125,
+            "actualTabOffsetPoints": 77.29999542236328,
+            "actualLiteralOffsetPoints": 77.31739807128906,
+            "tabErrorPoints": 0.01738739013671875,
+            "literalErrorPoints": 1.52587890625e-05,
+            "tabMinusLiteralPoints": -0.01740264892578125,
+            "tabGatePassed": true,
+            "literalGatePassed": true,
+            "pairAgreementGatePassed": true
+          }
+        ]
+      },
+      "persistence": {
+        "tolerancePoints": 0.02,
+        "gatePassed": true,
+        "maximumDeltaPoints": 0.0,
+        "records": [
+          {
+            "index": 0,
+            "maximumDeltaPoints": 0.0,
+            "deltas": {
+              "tabStopPoints": 0.0,
+              "tabShapeLeft": 0.0,
+              "tabShapeTop": 0.0,
+              "literalShapeLeft": 0.0,
+              "literalShapeTop": 0.0,
+              "leadingTabBoundLeft": 0.0,
+              "leadingTabBoundTop": 0.0,
+              "leadingTabBoundWidth": 0.0,
+              "leadingTabBoundHeight": 0.0,
+              "tabTextBoundLeft": 0.0,
+              "tabTextBoundTop": 0.0,
+              "tabTextBoundWidth": 0.0,
+              "tabTextBoundHeight": 0.0,
+              "literalTextBoundLeft": 0.0,
+              "literalTextBoundTop": 0.0,
+              "literalTextBoundWidth": 0.0,
+              "literalTextBoundHeight": 0.0,
+              "leadingTabFontSize": 0.0,
+              "tabTextFontSize": 0.0,
+              "literalTextFontSize": 0.0
+            }
+          },
+          {
+            "index": 1,
+            "maximumDeltaPoints": 0.0,
+            "deltas": {
+              "tabStopPoints": 0.0,
+              "tabShapeLeft": 0.0,
+              "tabShapeTop": 0.0,
+              "literalShapeLeft": 0.0,
+              "literalShapeTop": 0.0,
+              "leadingTabBoundLeft": 0.0,
+              "leadingTabBoundTop": 0.0,
+              "leadingTabBoundWidth": 0.0,
+              "leadingTabBoundHeight": 0.0,
+              "tabTextBoundLeft": 0.0,
+              "tabTextBoundTop": 0.0,
+              "tabTextBoundWidth": 0.0,
+              "tabTextBoundHeight": 0.0,
+              "literalTextBoundLeft": 0.0,
+              "literalTextBoundTop": 0.0,
+              "literalTextBoundWidth": 0.0,
+              "literalTextBoundHeight": 0.0,
+              "leadingTabFontSize": 0.0,
+              "tabTextFontSize": 0.0,
+              "literalTextFontSize": 0.0
+            }
+          },
+          {
+            "index": 2,
+            "maximumDeltaPoints": 0.0,
+            "deltas": {
+              "tabStopPoints": 0.0,
+              "tabShapeLeft": 0.0,
+              "tabShapeTop": 0.0,
+              "literalShapeLeft": 0.0,
+              "literalShapeTop": 0.0,
+              "leadingTabBoundLeft": 0.0,
+              "leadingTabBoundTop": 0.0,
+              "leadingTabBoundWidth": 0.0,
+              "leadingTabBoundHeight": 0.0,
+              "tabTextBoundLeft": 0.0,
+              "tabTextBoundTop": 0.0,
+              "tabTextBoundWidth": 0.0,
+              "tabTextBoundHeight": 0.0,
+              "literalTextBoundLeft": 0.0,
+              "literalTextBoundTop": 0.0,
+              "literalTextBoundWidth": 0.0,
+              "literalTextBoundHeight": 0.0,
+              "leadingTabFontSize": 0.0,
+              "tabTextFontSize": 0.0,
+              "literalTextFontSize": 0.0
+            }
+          },
+          {
+            "index": 3,
+            "maximumDeltaPoints": 0.0,
+            "deltas": {
+              "tabStopPoints": 0.0,
+              "tabShapeLeft": 0.0,
+              "tabShapeTop": 0.0,
+              "literalShapeLeft": 0.0,
+              "literalShapeTop": 0.0,
+              "leadingTabBoundLeft": 0.0,
+              "leadingTabBoundTop": 0.0,
+              "leadingTabBoundWidth": 0.0,
+              "leadingTabBoundHeight": 0.0,
+              "tabTextBoundLeft": 0.0,
+              "tabTextBoundTop": 0.0,
+              "tabTextBoundWidth": 0.0,
+              "tabTextBoundHeight": 0.0,
+              "literalTextBoundLeft": 0.0,
+              "literalTextBoundTop": 0.0,
+              "literalTextBoundWidth": 0.0,
+              "literalTextBoundHeight": 0.0,
+              "leadingTabFontSize": 0.0,
+              "tabTextFontSize": 0.0,
+              "literalTextFontSize": 0.0
+            }
+          },
+          {
+            "index": 4,
+            "maximumDeltaPoints": 0.0,
+            "deltas": {
+              "tabStopPoints": 0.0,
+              "tabShapeLeft": 0.0,
+              "tabShapeTop": 0.0,
+              "literalShapeLeft": 0.0,
+              "literalShapeTop": 0.0,
+              "leadingTabBoundLeft": 0.0,
+              "leadingTabBoundTop": 0.0,
+              "leadingTabBoundWidth": 0.0,
+              "leadingTabBoundHeight": 0.0,
+              "tabTextBoundLeft": 0.0,
+              "tabTextBoundTop": 0.0,
+              "tabTextBoundWidth": 0.0,
+              "tabTextBoundHeight": 0.0,
+              "literalTextBoundLeft": 0.0,
+              "literalTextBoundTop": 0.0,
+              "literalTextBoundWidth": 0.0,
+              "literalTextBoundHeight": 0.0,
+              "leadingTabFontSize": 0.0,
+              "tabTextFontSize": 0.0,
+              "literalTextFontSize": 0.0
+            }
+          },
+          {
+            "index": 5,
+            "maximumDeltaPoints": 0.0,
+            "deltas": {
+              "tabStopPoints": 0.0,
+              "tabShapeLeft": 0.0,
+              "tabShapeTop": 0.0,
+              "literalShapeLeft": 0.0,
+              "literalShapeTop": 0.0,
+              "leadingTabBoundLeft": 0.0,
+              "leadingTabBoundTop": 0.0,
+              "leadingTabBoundWidth": 0.0,
+              "leadingTabBoundHeight": 0.0,
+              "tabTextBoundLeft": 0.0,
+              "tabTextBoundTop": 0.0,
+              "tabTextBoundWidth": 0.0,
+              "tabTextBoundHeight": 0.0,
+              "literalTextBoundLeft": 0.0,
+              "literalTextBoundTop": 0.0,
+              "literalTextBoundWidth": 0.0,
+              "literalTextBoundHeight": 0.0,
+              "leadingTabFontSize": 0.0,
+              "tabTextFontSize": 0.0,
+              "literalTextFontSize": 0.0
+            }
+          },
+          {
+            "index": 6,
+            "maximumDeltaPoints": 0.0,
+            "deltas": {
+              "tabStopPoints": 0.0,
+              "tabShapeLeft": 0.0,
+              "tabShapeTop": 0.0,
+              "literalShapeLeft": 0.0,
+              "literalShapeTop": 0.0,
+              "leadingTabBoundLeft": 0.0,
+              "leadingTabBoundTop": 0.0,
+              "leadingTabBoundWidth": 0.0,
+              "leadingTabBoundHeight": 0.0,
+              "tabTextBoundLeft": 0.0,
+              "tabTextBoundTop": 0.0,
+              "tabTextBoundWidth": 0.0,
+              "tabTextBoundHeight": 0.0,
+              "literalTextBoundLeft": 0.0,
+              "literalTextBoundTop": 0.0,
+              "literalTextBoundWidth": 0.0,
+              "literalTextBoundHeight": 0.0,
+              "leadingTabFontSize": 0.0,
+              "tabTextFontSize": 0.0,
+              "literalTextFontSize": 0.0
+            }
+          },
+          {
+            "index": 7,
+            "maximumDeltaPoints": 0.0,
+            "deltas": {
+              "tabStopPoints": 0.0,
+              "tabShapeLeft": 0.0,
+              "tabShapeTop": 0.0,
+              "literalShapeLeft": 0.0,
+              "literalShapeTop": 0.0,
+              "leadingTabBoundLeft": 0.0,
+              "leadingTabBoundTop": 0.0,
+              "leadingTabBoundWidth": 0.0,
+              "leadingTabBoundHeight": 0.0,
+              "tabTextBoundLeft": 0.0,
+              "tabTextBoundTop": 0.0,
+              "tabTextBoundWidth": 0.0,
+              "tabTextBoundHeight": 0.0,
+              "literalTextBoundLeft": 0.0,
+              "literalTextBoundTop": 0.0,
+              "literalTextBoundWidth": 0.0,
+              "literalTextBoundHeight": 0.0,
+              "leadingTabFontSize": 0.0,
+              "tabTextFontSize": 0.0,
+              "literalTextFontSize": 0.0
+            }
+          },
+          {
+            "index": 8,
+            "maximumDeltaPoints": 0.0,
+            "deltas": {
+              "tabStopPoints": 0.0,
+              "tabShapeLeft": 0.0,
+              "tabShapeTop": 0.0,
+              "literalShapeLeft": 0.0,
+              "literalShapeTop": 0.0,
+              "leadingTabBoundLeft": 0.0,
+              "leadingTabBoundTop": 0.0,
+              "leadingTabBoundWidth": 0.0,
+              "leadingTabBoundHeight": 0.0,
+              "tabTextBoundLeft": 0.0,
+              "tabTextBoundTop": 0.0,
+              "tabTextBoundWidth": 0.0,
+              "tabTextBoundHeight": 0.0,
+              "literalTextBoundLeft": 0.0,
+              "literalTextBoundTop": 0.0,
+              "literalTextBoundWidth": 0.0,
+              "literalTextBoundHeight": 0.0,
+              "leadingTabFontSize": 0.0,
+              "tabTextFontSize": 0.0,
+              "literalTextFontSize": 0.0
+            }
+          }
+        ]
+      },
+      "content": {
+        "passed": true,
+        "failures": []
+      },
+      "rasterStable": true,
+      "sourceStable": true
+    },
+    "nativeTolerancePoint02GatePassed": false,
+    "interpretation": "The worker and owned lifecycle passed. The observed native tab-target and pair-agreement results fail the separate 0.02-point gates in both phases; this is fidelity evidence, not a worker failure.",
+    "powershellReplay": {
+      "phaseNumericDifferences": {
+        "original": [
+          {
+            "path": "records[8].actualTabOffsetPoints",
+            "deltaPoints": 1.4210854715202004e-14
+          },
+          {
+            "path": "records[8].actualLiteralOffsetPoints",
+            "deltaPoints": -1.4210854715202004e-14
+          },
+          {
+            "path": "records[8].tabErrorPoints",
+            "deltaPoints": -1.4210854715202004e-14
+          },
+          {
+            "path": "records[8].literalErrorPoints",
+            "deltaPoints": -1.4210854715202004e-14
+          },
+          {
+            "path": "records[8].tabMinusLiteralPoints",
+            "deltaPoints": 2.842170943040401e-14
+          }
+        ],
+        "reopened": [
+          {
+            "path": "records[8].actualTabOffsetPoints",
+            "deltaPoints": 1.4210854715202004e-14
+          },
+          {
+            "path": "records[8].actualLiteralOffsetPoints",
+            "deltaPoints": -1.4210854715202004e-14
+          },
+          {
+            "path": "records[8].tabErrorPoints",
+            "deltaPoints": -1.4210854715202004e-14
+          },
+          {
+            "path": "records[8].literalErrorPoints",
+            "deltaPoints": -1.4210854715202004e-14
+          },
+          {
+            "path": "records[8].tabMinusLiteralPoints",
+            "deltaPoints": 2.842170943040401e-14
+          }
+        ]
+      },
+      "maximumAbsoluteDifferencePoints": 2.842170943040401e-14,
+      "phaseGatesUnchanged": true,
+      "note": "Windows PowerShell 5.1 ConvertFrom-Json materializes JSON numbers as Decimal before the verifier casts them to Double. Index 8 offsets therefore differ by roughly 1.4e-14 points from direct binary-double JSON replay, and their subtraction differs by roughly 2.8e-14 points; maxima and gates are unchanged."
+    }
+  },
+  "presentation": {
+    "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-tab-v2-04\\native-tab-control-v2.pptx",
+    "sha256": "73f271c2e360ba47b00894ca577a3c12fc5ebb006aca4d8dacd907a1b2d0d6f1",
+    "hashMatchesSavedAndReopened": true,
+    "package": {
+      "passed": true,
+      "zipCrcPassed": true,
+      "badZipMember": null,
+      "memberCount": 37,
+      "requiredMembersPresent": true,
+      "xmlRelationshipMemberCount": 36,
+      "malformedXml": [],
+      "slideCount": 1,
+      "shapeInventoryExact": true,
+      "shapeChecks": [
+        {
+          "index": 0,
+          "tabShapePresent": true,
+          "literalShapePresent": true,
+          "tabTextExact": true,
+          "literalTextExact": true,
+          "oneTabStopWithinTolerance": true,
+          "tabStopPoints": [
+            16.25
+          ],
+          "tabFontExact": true,
+          "literalFontExact": true,
+          "fontSizesExact": true
+        },
+        {
+          "index": 1,
+          "tabShapePresent": true,
+          "literalShapePresent": true,
+          "tabTextExact": true,
+          "literalTextExact": true,
+          "oneTabStopWithinTolerance": true,
+          "tabStopPoints": [
+            16.26
+          ],
+          "tabFontExact": true,
+          "literalFontExact": true,
+          "fontSizesExact": true
+        },
+        {
+          "index": 2,
+          "tabShapePresent": true,
+          "literalShapePresent": true,
+          "tabTextExact": true,
+          "literalTextExact": true,
+          "oneTabStopWithinTolerance": true,
+          "tabStopPoints": [
+            16.27
+          ],
+          "tabFontExact": true,
+          "literalFontExact": true,
+          "fontSizesExact": true
+        },
+        {
+          "index": 3,
+          "tabShapePresent": true,
+          "literalShapePresent": true,
+          "tabTextExact": true,
+          "literalTextExact": true,
+          "oneTabStopWithinTolerance": true,
+          "tabStopPoints": [
+            16.27732283464567
+          ],
+          "tabFontExact": true,
+          "literalFontExact": true,
+          "fontSizesExact": true
+        },
+        {
+          "index": 4,
+          "tabShapePresent": true,
+          "literalShapePresent": true,
+          "tabTextExact": true,
+          "literalTextExact": true,
+          "oneTabStopWithinTolerance": true,
+          "tabStopPoints": [
+            16.28
+          ],
+          "tabFontExact": true,
+          "literalFontExact": true,
+          "fontSizesExact": true
+        },
+        {
+          "index": 5,
+          "tabShapePresent": true,
+          "literalShapePresent": true,
+          "tabTextExact": true,
+          "literalTextExact": true,
+          "oneTabStopWithinTolerance": true,
+          "tabStopPoints": [
+            16.29
+          ],
+          "tabFontExact": true,
+          "literalFontExact": true,
+          "fontSizesExact": true
+        },
+        {
+          "index": 6,
+          "tabShapePresent": true,
+          "literalShapePresent": true,
+          "tabTextExact": true,
+          "literalTextExact": true,
+          "oneTabStopWithinTolerance": true,
+          "tabStopPoints": [
+            16.3
+          ],
+          "tabFontExact": true,
+          "literalFontExact": true,
+          "fontSizesExact": true
+        },
+        {
+          "index": 7,
+          "tabShapePresent": true,
+          "literalShapePresent": true,
+          "tabTextExact": true,
+          "literalTextExact": true,
+          "oneTabStopWithinTolerance": true,
+          "tabStopPoints": [
+            16.31
+          ],
+          "tabFontExact": true,
+          "literalFontExact": true,
+          "fontSizesExact": true
+        },
+        {
+          "index": 8,
+          "tabShapePresent": true,
+          "literalShapePresent": true,
+          "tabTextExact": true,
+          "literalTextExact": true,
+          "oneTabStopWithinTolerance": true,
+          "tabStopPoints": [
+            77.31740157480316
+          ],
+          "tabFontExact": true,
+          "literalFontExact": true,
+          "fontSizesExact": true
+        }
+      ],
+      "embeddedFontMembers": [],
+      "macroMembers": []
+    }
+  },
+  "rasters": {
+    "byteIdentical": true,
+    "original": {
+      "passed": true,
+      "bytes": 4801,
+      "sha256": "1a1dc6038e12f782cd1da8696fcf0f8a43612167649edf9d6f3bab3993c9a2fd",
+      "width": 1280,
+      "height": 720,
+      "chunks": [
+        "IHDR",
+        "sRGB",
+        "gAMA",
+        "PLTE",
+        "pHYs",
+        "IDAT",
+        "IEND"
+      ],
+      "crcFailures": []
+    },
+    "reopened": {
+      "passed": true,
+      "bytes": 4801,
+      "sha256": "1a1dc6038e12f782cd1da8696fcf0f8a43612167649edf9d6f3bab3993c9a2fd",
+      "width": 1280,
+      "height": 720,
+      "chunks": [
+        "IHDR",
+        "sRGB",
+        "gAMA",
+        "PLTE",
+        "pHYs",
+        "IDAT",
+        "IEND"
+      ],
+      "crcFailures": []
+    }
+  },
+  "environmentHashes": {
+    "host": "8bb6fa8c283b4d92120b1ef249a9b311b0f804d4cabbe9981159976c8be76a5e",
+    "font": "57e93ff143572bcc092c1f56202d43ddc07bb119aa104c6d7af163470fb551f6",
+    "powerPointExecutable": "07cbe68cde7596058a6890c471389a7a70a090ee42f01975d72ea6d643f82021"
+  },
+  "checks": {
+    "workerLifecyclePassed": true,
+    "durableStagesPassed": true,
+    "requestAndReportAlign": true,
+    "allNineOriginalObservationsValid": true,
+    "allNineReopenedObservationsValid": true,
+    "exactFieldsPersistedAcrossReopen": true,
+    "storedMetricsExactlyRecomputedFromFullPrecisionObservations": true,
+    "storedPhaseMetricsCoverAllNineRecords": true,
+    "storedPersistenceExactlyRecomputed": true,
+    "storedContentExactlyRecomputed": true,
+    "contentAndFontsPassed": true,
+    "expectedNativePoint02FailureCapturedSeparately": true,
+    "presentationHashStable": true,
+    "presentationZipCrcXmlAndDrawingMlPassed": true,
+    "pngHashesBytesAndStructurePassed": true,
+    "snapshotHashesMatchRecorded": true,
+    "hostFontAndOfficeHashesMatchRecorded": true,
+    "rootPrecisionCheckConfirmsPythonExactReplay": true,
+    "powershellReplayRepresentationDifferenceIsBoundedAndGateStable": true
+  },
+  "auditIntegrityPassed": true,
+  "nativeTolerancePoint02GatePassed": false,
+  "limitations": [
+    "This audit validates retained bytes and observations; it does not repeat the native Office calls.",
+    "Raster byte stability verifies save/reopen persistence for this run, not universal pixel equivalence.",
+    "The PowerShell replay's Decimal-to-Double conversion is reported separately from the exact Python binary-double replay of the JSON observations."
+  ]
+}

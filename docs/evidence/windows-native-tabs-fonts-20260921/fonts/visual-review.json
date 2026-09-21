@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "reviewer": "root supervising agent",
+  "reviewDate": "2026-09-21",
+  "method": "Direct full-slide inspection of all three native exported rasters during this task; recorded after review.",
+  "noFitClippingObserved": true,
+  "scope": "Finite control only; no per-glyph font identity, general text-fit, or pixel-equivalence acceptance.",
+  "images": [
+    {
+      "path": "E/font/native-font-edit-01/original.png",
+      "sha256": "5a0b493e06f3c622ccc7044b6713f240c71b68501571814b7e8a35397e4469bf",
+      "finding": "Complete original slide reviewed; no text-fit clipping observed in this bounded control."
+    },
+    {
+      "path": "E/font/native-font-edit-01/edited.png",
+      "sha256": "477ce16d5e425dfbc4f190c7a7813910613367b7c7e9b4403e303022d56ed59f",
+      "finding": "Complete edited slide reviewed; no text-fit clipping observed in this bounded control."
+    },
+    {
+      "path": "E/font/native-font-edit-01/reopened.png",
+      "sha256": "477ce16d5e425dfbc4f190c7a7813910613367b7c7e9b4403e303022d56ed59f",
+      "finding": "Complete reopened slide reviewed; no text-fit clipping observed in this bounded control."
+    }
+  ]
+}

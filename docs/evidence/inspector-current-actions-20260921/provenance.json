@@ -1,6 +1,6 @@
 {
   "createdAt": "2026-09-21T19:36:17.447276+00:00",
-  "scope": "Compact exact receipts, including the frozen corrected6df first-attempt CI audit; native bundle already accepted in this checkout. Large immutable app browser evidence and original failed traces remain linked at application commits57e5e59/6dfc258. No Office or browser execution by this documentation task.",
+  "scope": "Exact historical CI/source receipts plus bounded accepted-core106 and additive-merge validation receipts. Native evidence is preserved from accepted main; app browser evidence remains linked at immutable commits. No Office or browser execution by this documentation task.",
   "copies": [
     {
       "source": "/private/tmp/opf-inspector-share-handoff-20260921/ci-postmerge/REPORT.md",
@@ -439,6 +439,48 @@
       "path": "text-integrity.log",
       "bytes": 132,
       "sha256": "59c0c2eb31acea0cf1136acc6d81bc1005fde87bef162eb9f9603911063a578a"
+    },
+    {
+      "source": "/private/tmp/opf-inspector-current-actions-handoff-20260921/ci/core106-acceptance-receipt.json",
+      "path": "core106/acceptance-receipt.json",
+      "bytes": 18882,
+      "sha256": "875001e53b77789db81d1d98c2a5ef3bd5d639a7b5b5b23cf5e5fca7c98b25c1"
+    },
+    {
+      "source": "/private/tmp/opf-inspector-current-actions-handoff-20260921/ci/core106-source-verification.json",
+      "path": "core106/source-verification.json",
+      "bytes": 47801,
+      "sha256": "9b7c6e457e4d9862a6e142ba9c5da8c04b9291cace3fa1cef13614bbebd69abf"
+    },
+    {
+      "source": "/private/tmp/opf-inspector-current-actions-handoff-20260921/ci/core106-offline-verification.json",
+      "path": "core106/offline-verification.json",
+      "bytes": 1729,
+      "sha256": "d4300b378d028874a8f7b614a7f3b5e042d7164677630c147d99ac7a40f9c5eb"
+    },
+    {
+      "source": "/private/tmp/opf-inspector-current-actions-handoff-20260921/ci/core106-native-offline-verify.log",
+      "path": "core106/offline-verify.log",
+      "bytes": 763,
+      "sha256": "cb3bec6bc8e9c592dc6484e396a6254efbb7ecc46529d7bfda30ddcacb72ed95"
+    },
+    {
+      "source": "/private/tmp/opf-inspector-current-actions-handoff-20260921/ci/e565-committed-source-audit.json",
+      "path": "core106/pr107-first-publication-audit.json",
+      "bytes": 22440,
+      "sha256": "70e44a576534b31980eba0370136834b2df86721fc80fea990da251ef5a4c89e"
+    },
+    {
+      "source": "/private/tmp/opf-inspector-current-actions-handoff-20260921/finalization/merge-text-integrity.log",
+      "path": "merge-text-integrity.log",
+      "bytes": 132,
+      "sha256": "6176a5ea0199fd8b74ae43c3b6ec65d44cc6112621dd2cb4565d4a4091223fd3"
+    },
+    {
+      "source": "/private/tmp/opf-inspector-current-actions-handoff-20260921/ci/pptx48-49-ownership-checkpoint.json",
+      "path": "core106/pptx48-49-ownership-checkpoint.json",
+      "bytes": 2992,
+      "sha256": "25a12578e88427f31ef64de5a3cd776247576895fa9610111d5f358d6ec5b2a0"
     }
   ],
   "correctedCiAuditManifestSha256": "a53863cca5a543c8637faf80c3b343f6b4ba1fcadbdfd0ba19fc1a102342f463"
