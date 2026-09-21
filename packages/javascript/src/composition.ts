@@ -1043,6 +1043,8 @@ export interface RichTextRun {
   color?: string; fontSize?: number; fontFamily?: string; link?: string; superscript?: boolean; subscript?: boolean;
 }
 export interface RichTextFragment {
+  /** Tabs are source-preserving layout controls with a fixed advance, not glyph text. */
+  kind?: 'tab';
   text: string; runIndex: number; start: number; end: number;
   x: number; width: number; fontSize: number; baselineShift: number;
   style: TextStyle; run: RichTextRun;
@@ -1092,8 +1094,22 @@ function richTextLayouter(input: readonly (string | RichTextRun)[], box: LayoutB
         const text=whole.slice(a,b),normalSize=(entry.run.fontSize!==undefined?entry.run.fontSize*4/3:requestedSize)*ratio;
         const script=entry.run.superscript||entry.run.subscript;
         const size=normalSize*(script?0.7:1),baselineShift=entry.run.superscript?-normalSize*.35:entry.run.subscript?normalSize*.2:0;
-        const width=textWidthMeasurer(entry.style,options.textMeasurement)(text,size);
-        result.push({text,runIndex:entry.runIndex,start:a-entry.start,end:b-entry.start,x,width,fontSize:size,baselineShift,style:entry.style,run:entry.run});x+=width;
+        const measure=textWidthMeasurer(entry.style,options.textMeasurement);
+        let cursor=0;
+        for(const [index,segment] of text.split('\t').entries()) {
+          if(index) {
+            const tabStart=a+cursor,tabWidth=measure(' ',size)*4;
+            if(!Number.isFinite(tabWidth)||tabWidth<=0)throw new RangeError('Rich text tabs require a positive finite measured space advance.');
+            const next=(Math.floor(x/tabWidth+1e-9)+1)*tabWidth;
+            result.push({kind:'tab',text:'\t',runIndex:entry.runIndex,start:tabStart-entry.start,end:tabStart-entry.start+1,x,width:next-x,fontSize:size,baselineShift,style:entry.style,run:entry.run});
+            x=next;cursor++;
+          }
+          if(segment) {
+            const width=measure(segment,size),segmentStart=a+cursor;
+            result.push({text:segment,runIndex:entry.runIndex,start:segmentStart-entry.start,end:segmentStart-entry.start+segment.length,x,width,fontSize:size,baselineShift,style:entry.style,run:entry.run});
+            x+=width;cursor+=segment.length;
+          }
+        }
       }return result;
     };
     const width=(start:number,end:number)=>fragments(start,end).reduce((sum,fragment)=>sum+fragment.width,0);
@@ -1378,6 +1394,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
       const lines:TextLineInk[]=richLines?richLines.map(line=>{
         let outline:LayoutBox|null=null;
         for(const fragment of line.fragments) {
+          if(fragment.kind==='tab')continue;
           const bounds=measureTextOutline(fragment.text,fragment.fontSize,fragment.style,options.textMeasurement);
           if(!bounds)continue;
           const next={...bounds,x:fragment.x+bounds.x,y:fragment.baselineShift+bounds.y};
