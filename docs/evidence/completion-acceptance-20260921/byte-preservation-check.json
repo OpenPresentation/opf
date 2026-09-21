@@ -1,0 +1,24 @@
+{
+  "checks": [
+    {
+      "path": "source-preservation-audit/LF-original.json",
+      "bytes": 325,
+      "crlf": 0,
+      "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec",
+      "rawGitBlob": "176de320476b4bf44afce2a0ea80874dfee09cb9",
+      "filteredGitBlob": "176de320476b4bf44afce2a0ea80874dfee09cb9",
+      "unchanged": true,
+      "textAttribute": "docs/evidence/completion-acceptance-20260921/source-preservation-audit/LF-original.json: text: unset"
+    },
+    {
+      "path": "source-preservation-audit/CRLF-original.json",
+      "bytes": 332,
+      "crlf": 7,
+      "sha256": "c40c5080ca23fb28e12398e7a35d3dac7859e7cc659b32a24133559119722608",
+      "rawGitBlob": "28029b6a28dcf1547000fbc4679bf77a5b87db87",
+      "filteredGitBlob": "28029b6a28dcf1547000fbc4679bf77a5b87db87",
+      "unchanged": true,
+      "textAttribute": "docs/evidence/completion-acceptance-20260921/source-preservation-audit/CRLF-original.json: text: unset"
+    }
+  ]
+}

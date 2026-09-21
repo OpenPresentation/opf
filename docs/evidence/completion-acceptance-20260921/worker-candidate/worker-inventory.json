@@ -1,0 +1,194 @@
+{
+  "node": "v24.21.0",
+  "scope": "Read-only static source audit; compression sizes are local estimates, not network observations",
+  "root": "/private/tmp/opf-completion-fix-20260921/pptx-dev",
+  "monacoRoot": "/private/tmp/opf-completion-fix-20260921/pptx-dev/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor",
+  "monacoVersion": "0.56.0",
+  "vscodeCommitId": "f487add297079a02eb836810185b165e50cadabc",
+  "monacoCommitId": "13f0c872dcf352815cc28d92dfff496c9839ea5c",
+  "provenance": [
+    {
+      "file": "package.json",
+      "bytes": 4364,
+      "sha256": "3555e3e0bc0d5f8c22be8f26164c11778dff0feabf564c67185726636f4b15c7"
+    },
+    {
+      "file": "LICENSE",
+      "bytes": 1098,
+      "sha256": "33e4ff1a06ef62ba21788ea162564ee8165269a24a9ce6ef301837447eab0ac6"
+    },
+    {
+      "file": "ThirdPartyNotices.txt",
+      "bytes": 63064,
+      "sha256": "790537262fc78a764e121e6b92b959bcd3f5c310b47d9d9b9e92e17fe0af5336"
+    }
+  ],
+  "externalDiffInstalled": false,
+  "files": [
+    {
+      "path": "min/vs/assets/editor.worker-lj3bdIIn.js",
+      "bytes": 272787,
+      "sha256": "4670fc1d1386c9c0e205a54326c1035b35b3b4c12f5994638aac39d532f08352",
+      "gzipBytes": 82340,
+      "brotliBytes": 67572,
+      "dependencies": [
+        {
+          "type": "dynamic",
+          "expression": "`${Go(\"@vscode/diff\",\"dist/index.js\")}`"
+        }
+      ],
+      "calls": {
+        "fetch": 0,
+        "importScripts": 0,
+        "require": 0,
+        "define": 0
+      },
+      "sourceMapReferences": 0,
+      "hasInlineCopyright": false
+    },
+    {
+      "path": "min/vs/assets/json.worker-CoJx_OPf.js",
+      "bytes": 404061,
+      "sha256": "b56c369286f069b4451a41f31b28c8883ef9d631fcdc14a9b0611f4ecad6d2be",
+      "gzipBytes": 120305,
+      "brotliBytes": 98580,
+      "dependencies": [
+        {
+          "type": "dynamic",
+          "expression": "`${Gc(\"@vscode/diff\",\"dist/index.js\")}`"
+        }
+      ],
+      "calls": {
+        "fetch": 1,
+        "importScripts": 0,
+        "require": 0,
+        "define": 0
+      },
+      "sourceMapReferences": 0,
+      "hasInlineCopyright": false
+    },
+    {
+      "path": "min/vs/language/json/json.worker.js",
+      "bytes": 85590,
+      "sha256": "a426aef56001f25e50e249a1a26c65825eae01dba1dfec2a85a6390156b4277f",
+      "gzipBytes": 23830,
+      "brotliBytes": 21049,
+      "dependencies": [
+        {
+          "type": "AMD",
+          "expression": "[\"../../initialize-DL0l1TGY\",\"../../main-BEx-Fmlo\",\"../../main-DsK8pnKg\",\"../../index-049xrXrp\"]"
+        }
+      ],
+      "calls": {
+        "fetch": 1,
+        "importScripts": 0,
+        "require": 0,
+        "define": 1
+      },
+      "sourceMapReferences": 0,
+      "hasInlineCopyright": false
+    },
+    {
+      "path": "min/vs/editor/editor.worker.js",
+      "bytes": 253,
+      "sha256": "b5d04c107914e7652f6ee354fe037c40c83ed44bcffb7cd5ae2f35399a69ec82",
+      "gzipBytes": 214,
+      "brotliBytes": 165,
+      "dependencies": [
+        {
+          "type": "AMD",
+          "expression": "[\"exports\",\"../initialize-DL0l1TGY\"]"
+        }
+      ],
+      "calls": {
+        "fetch": 0,
+        "importScripts": 0,
+        "require": 0,
+        "define": 1
+      },
+      "sourceMapReferences": 0,
+      "hasInlineCopyright": false
+    },
+    {
+      "path": "esm/vs/languages/features/json/json.worker.js",
+      "bytes": 230,
+      "sha256": "99701906248637e92da3cf3c5ebec2f9e7bb4d0e7f7c19dfd995e07e81bf447b",
+      "gzipBytes": 164,
+      "brotliBytes": 132,
+      "dependencies": [
+        {
+          "type": "static",
+          "expression": "'../../../internal/common/initialize.js'"
+        },
+        {
+          "type": "static",
+          "expression": "'./jsonWorker.js'"
+        }
+      ],
+      "calls": {
+        "fetch": 0,
+        "importScripts": 0,
+        "require": 0,
+        "define": 0
+      },
+      "sourceMapReferences": 0,
+      "hasInlineCopyright": false
+    },
+    {
+      "path": "esm/vs/editor/editor.worker.js",
+      "bytes": 293,
+      "sha256": "6fbf56462b7fce38d9fb42ae660679d29b686d0b5b096622c5fdbf8eb5ab02bc",
+      "gzipBytes": 173,
+      "brotliBytes": 149,
+      "dependencies": [
+        {
+          "type": "static",
+          "expression": "'../internal/common/initialize.js'"
+        },
+        {
+          "type": "static",
+          "expression": "'../internal/common/initialize.js'"
+        },
+        {
+          "type": "static",
+          "expression": "'./editor.worker.start.js'"
+        }
+      ],
+      "calls": {
+        "fetch": 0,
+        "importScripts": 0,
+        "require": 0,
+        "define": 0
+      },
+      "sourceMapReferences": 0,
+      "hasInlineCopyright": false
+    }
+  ],
+  "inputs": [
+    {
+      "file": "scripts/prepare-opf-browser.mjs",
+      "bytes": 1614,
+      "sha256": "e84c23c72f6aafe2bf2e149b20f3e75af4b6afcf8a9aa1f59129801f93b42928"
+    },
+    {
+      "file": "next.config.ts",
+      "bytes": 2882,
+      "sha256": "41eaf714ee88e1c3b74e6d069a56dcf457c34f4f8ee46648fc59b9389472f6bd"
+    },
+    {
+      "file": "package.json",
+      "bytes": 2682,
+      "sha256": "e9ac58846cd1f59a2bdee422b0fc4e9d63e51e62e7e86205fc419bd7b0ec5540"
+    },
+    {
+      "file": "pnpm-lock.yaml",
+      "bytes": 427824,
+      "sha256": "f362abf89c57fe9e93197a54520fa5fc712e85bf78b2e011285456f37283b76f"
+    },
+    {
+      "file": "components/playground/opf-editor.tsx",
+      "bytes": 18242,
+      "sha256": "51bc8e7624000320b14027b39b67c8b1cc7f912dda4a6aceccbd5ed14968b41c"
+    }
+  ]
+}

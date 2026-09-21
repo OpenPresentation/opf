@@ -1,0 +1,121 @@
+{
+  "screenshotCount": 15,
+  "uniqueScreenshotCount": 13,
+  "images": [
+    {
+      "originalPath": "results/author-json-options-Author-cda0b-exact-CRLF-source-undo-redo/author-json-options.png",
+      "bytes": 175776,
+      "sha256": "3e602f80e811b7d232c9ca9073799b1990109c4387aee8aa4d5334fa1d23f52f",
+      "visualReview": "Reviewed original screenshot; identical screenshot variants share byte identity.",
+      "durablePath": "screenshots/author-json-options-Author-cda0b-exact-CRLF-source-undo-redo/author-json-options.png"
+    },
+    {
+      "originalPath": "results/author-json-options-Author-cda0b-exact-CRLF-source-undo-redo/author-layout-options.png",
+      "bytes": 188683,
+      "sha256": "1f3530a77ad5bd91191a0c3a5cc7c0c26cbd4c23d86be3eed2b9577a16665b0f",
+      "visualReview": "Reviewed original screenshot; identical screenshot variants share byte identity.",
+      "durablePath": "screenshots/author-json-options-Author-cda0b-exact-CRLF-source-undo-redo/author-layout-options.png"
+    },
+    {
+      "originalPath": "results/author-json-options-Author-cda0b-exact-CRLF-source-undo-redo/author-theme-options.png",
+      "bytes": 184121,
+      "sha256": "1b5b6207eb90f811577ebf4a308b1a73c7182d3c1ae14704c7af40bcd2ded297",
+      "visualReview": "Reviewed original screenshot; identical screenshot variants share byte identity.",
+      "durablePath": "screenshots/author-json-options-Author-cda0b-exact-CRLF-source-undo-redo/author-theme-options.png"
+    },
+    {
+      "originalPath": "results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/author-layout-options.png",
+      "bytes": 188683,
+      "sha256": "1f3530a77ad5bd91191a0c3a5cc7c0c26cbd4c23d86be3eed2b9577a16665b0f",
+      "visualReview": "Reviewed original screenshot; identical screenshot variants share byte identity.",
+      "identicalTo": "screenshots/author-json-options-Author-cda0b-exact-CRLF-source-undo-redo/author-layout-options.png"
+    },
+    {
+      "originalPath": "results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/author-theme-options.png",
+      "bytes": 184121,
+      "sha256": "1b5b6207eb90f811577ebf4a308b1a73c7182d3c1ae14704c7af40bcd2ded297",
+      "visualReview": "Reviewed original screenshot; identical screenshot variants share byte identity.",
+      "identicalTo": "screenshots/author-json-options-Author-cda0b-exact-CRLF-source-undo-redo/author-theme-options.png"
+    },
+    {
+      "originalPath": "results/completion-preservation-Au-807ee-act-source-in-one-undo-step/structural-choice.png",
+      "bytes": 171597,
+      "sha256": "8904e8e452be004d6e54047402fb65dbb03b21830427d025a6861c6f6c097c55",
+      "visualReview": "Reviewed original screenshot; identical screenshot variants share byte identity.",
+      "durablePath": "screenshots/completion-preservation-Au-807ee-act-source-in-one-undo-step/structural-choice.png"
+    },
+    {
+      "originalPath": "results/inspector-recovery-font-su-beb5b--Inspector-canvas-is-active/inspector-font-notes.png",
+      "bytes": 179405,
+      "sha256": "5d50975036517fa55b4c8daaf1ea6586c5d73db692608b307d5963db1447e89c",
+      "visualReview": "Reviewed original screenshot; identical screenshot variants share byte identity.",
+      "durablePath": "screenshots/inspector-recovery-font-su-beb5b--Inspector-canvas-is-active/inspector-font-notes.png"
+    },
+    {
+      "originalPath": "results/inspector-editing-all-Insp-a78d3-ffline-undo-export-at-540px/inspector-later-slide.png",
+      "bytes": 64124,
+      "sha256": "ed94e7b5ad7c694b3491ad329ab0e46e2d9662cb98f689b655b709bcac866b68",
+      "visualReview": "Reviewed original screenshot; identical screenshot variants share byte identity.",
+      "durablePath": "screenshots/inspector-editing-all-Insp-a78d3-ffline-undo-export-at-540px/inspector-later-slide.png"
+    },
+    {
+      "originalPath": "results/completion-preservation-Au-96e4e-act-source-in-one-undo-step/structural-choice.png",
+      "bytes": 167074,
+      "sha256": "bd8cceb3d4d7e888d5ebbd26106400e6c3a8cee310b46a9c789d49ed1cb78159",
+      "visualReview": "Reviewed original screenshot; identical screenshot variants share byte identity.",
+      "durablePath": "screenshots/completion-preservation-Au-96e4e-act-source-in-one-undo-step/structural-choice.png"
+    },
+    {
+      "originalPath": "results/author-anonymous-Author-ca-d560b-xport-and-undoable-reimport/author.png",
+      "bytes": 110640,
+      "sha256": "46a4a60877b492c030f6579f4f2022d04b6571a111dd976f47706ad5750054ea",
+      "visualReview": "Reviewed original screenshot; identical screenshot variants share byte identity.",
+      "durablePath": "screenshots/author-anonymous-Author-ca-d560b-xport-and-undoable-reimport/author.png"
+    },
+    {
+      "originalPath": "results/inspector-editing-all-Insp-15273-fline-undo-export-at-1440px/inspector-later-slide.png",
+      "bytes": 208255,
+      "sha256": "dc1f1b1826528aa93c205c9e83627b65f6fc60c18cc80d15b0b2367c8e224499",
+      "visualReview": "Reviewed original screenshot; identical screenshot variants share byte identity.",
+      "durablePath": "screenshots/inspector-editing-all-Insp-15273-fline-undo-export-at-1440px/inspector-later-slide.png"
+    },
+    {
+      "originalPath": "results/inspector-anonymous-JSON-a-151ab-ownload-and-shared-reimport/inspector.png",
+      "bytes": 178110,
+      "sha256": "8fa8df4cb1dd646178bf6d68077a6bbdff9fb8e9b2979bd89695037514ba312d",
+      "visualReview": "Reviewed original screenshot; identical screenshot variants share byte identity.",
+      "durablePath": "screenshots/inspector-anonymous-JSON-a-151ab-ownload-and-shared-reimport/inspector.png"
+    },
+    {
+      "originalPath": "results/completion-preservation-Au-b9e03-s-prior-undo-history-intact/escaped-current-alternatives.png",
+      "bytes": 178499,
+      "sha256": "ce9126a5dd98885d66a3123d2039e3fdddc7a18e1cd1a57eb1a2e7592e48ee30",
+      "visualReview": "Reviewed original screenshot; identical screenshot variants share byte identity.",
+      "durablePath": "screenshots/completion-preservation-Au-b9e03-s-prior-undo-history-intact/escaped-current-alternatives.png"
+    },
+    {
+      "originalPath": "results/inspector-recovery-schema--76507-ers-after-source-correction/inspector-render-recovered.png",
+      "bytes": 185160,
+      "sha256": "3da7836d3e5f1d5ae07ef0ad654120aaed0734dc062e3857c527d5f5856e6cd6",
+      "visualReview": "Reviewed original screenshot; identical screenshot variants share byte identity.",
+      "durablePath": "screenshots/inspector-recovery-schema--76507-ers-after-source-correction/inspector-render-recovered.png"
+    },
+    {
+      "originalPath": "results/inspector-recovery-schema--76507-ers-after-source-correction/inspector-strict-overflow.png",
+      "bytes": 293738,
+      "sha256": "c5488fc5da3c29ab3d9507addb36c033de8b3f9330dc0c7d5dc3c856e82cf62f",
+      "visualReview": "Reviewed original screenshot; identical screenshot variants share byte identity.",
+      "durablePath": "screenshots/inspector-recovery-schema--76507-ers-after-source-correction/inspector-strict-overflow.png"
+    }
+  ],
+  "failureFrame": "review/lf-final-popup-missing.jpeg",
+  "observations": [
+    "LF final failure frame displays valid source with document-layout selected, reported cursor 11:18, and no completion popup.",
+    "Earlier LF screenshots display Dark and document/loaded layout choices; CRLF final screenshot displays the loaded-layout result.",
+    "Both compact structural cases show visible choices without reformatting authored surrounding source; escaped current value screenshot shows alternatives. Exact preservation and undo rely on test assertions, not screenshots alone.",
+    "Inspector wide/narrow later-slide screenshots show selected third title and shared header; strict overflow screenshot shows honest preview-unavailable state, and recovery screenshot shows editable replacement.",
+    "Font substitution note Aptos to Carlito is visible; this is browser UI verification, not native/font compatibility acceptance.",
+    "Author preview shows edited title, rich editable table, local PowerPoint export notice and undo control; it does not establish general source byte preservation."
+  ],
+  "limitations": "Visual review covers captured states only. It is not golden comparison, full screenshot coverage, native PPTX rendering or proof of font equivalence."
+}

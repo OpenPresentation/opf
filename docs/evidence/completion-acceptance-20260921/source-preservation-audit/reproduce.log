@@ -1,0 +1,59 @@
+{
+  "node": "v24.21.0",
+  "cases": [
+    {
+      "eol": "LF",
+      "original": {
+        "bytes": 325,
+        "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec",
+        "crlf": 0,
+        "tabs": 5
+      },
+      "serialized": {
+        "bytes": 473,
+        "sha256": "c2b6b67a09773f5139b13777793e6461ba1e6fbf27d9270b1eab8a2f62324961",
+        "crlf": 0,
+        "tabs": 0
+      },
+      "assertions": {
+        "codeTabJsonDownloadExact": true,
+        "untouchedCanvasReadExact": false,
+        "inspectorJsonDownloadExact": false,
+        "authorCanvasEditMinimal": false,
+        "authorCanvasUndoExact": false,
+        "authorCanvasRedoExact": false,
+        "authorCanvasUndoSemantic": true,
+        "bridgeEditMinimal": true,
+        "bridgeUndoExact": true,
+        "bridgeRedoExact": true
+      }
+    },
+    {
+      "eol": "CRLF",
+      "original": {
+        "bytes": 332,
+        "sha256": "c40c5080ca23fb28e12398e7a35d3dac7859e7cc659b32a24133559119722608",
+        "crlf": 7,
+        "tabs": 5
+      },
+      "serialized": {
+        "bytes": 473,
+        "sha256": "c2b6b67a09773f5139b13777793e6461ba1e6fbf27d9270b1eab8a2f62324961",
+        "crlf": 0,
+        "tabs": 0
+      },
+      "assertions": {
+        "codeTabJsonDownloadExact": true,
+        "untouchedCanvasReadExact": false,
+        "inspectorJsonDownloadExact": false,
+        "authorCanvasEditMinimal": false,
+        "authorCanvasUndoExact": false,
+        "authorCanvasRedoExact": false,
+        "authorCanvasUndoSemantic": true,
+        "bridgeEditMinimal": true,
+        "bridgeUndoExact": true,
+        "bridgeRedoExact": true
+      }
+    }
+  ]
+}

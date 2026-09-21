@@ -1,0 +1,16 @@
+HTTP/2 200 
+access-control-allow-origin: *
+age: 382964
+cache-control: public,max-age=31536000,immutable
+content-disposition: inline; filename="14xtrtee8fs0x.js"
+content-encoding: gzip
+content-type: application/javascript; charset=utf-8
+date: Mon, 21 Sep 2026 15:20:04 GMT
+etag: W/"_next/static/immutable/chunks/14xtrtee8fs0x.js"
+last-modified: Thu, 17 Sep 2026 04:57:20 GMT
+server: Vercel
+strict-transport-security: max-age=63072000
+x-matched-path: /_next/static/immutable/chunks/14xtrtee8fs0x.js
+x-vercel-cache: HIT
+x-vercel-id: pdx1::bnm2x-1790004004725-579d5a3bb29a
+

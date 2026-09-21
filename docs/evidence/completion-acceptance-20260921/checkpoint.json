@@ -1,0 +1,99 @@
+{
+  "preparedAt": "2026-09-21T16:02:52.751919Z",
+  "app47": {
+    "pr": "https://github.com/Data-Advantage/pptx-dev/pull/47",
+    "reviewedHead": "a5201c88a219262b21a6c7fd4ef49a01a5bbe0a3",
+    "reviewedTree": "203bdab509d05911f04f234d996f9c91f2b5e4f2",
+    "local": {
+      "unitPassed": 627,
+      "browserPassed": 24,
+      "browserRetries": 0,
+      "monacoAlternatives": 1829,
+      "monacoCursorPositions": 59
+    },
+    "ci": {
+      "runId": 35620611535,
+      "status": "success",
+      "platforms": [
+        "windows-latest",
+        "ubuntu-latest"
+      ]
+    },
+    "preview": {
+      "receipt": "app47-preview.json",
+      "state": "READY",
+      "protected": true,
+      "browserAccepted": false
+    },
+    "merge": {
+      "commit": "0f35352a1445f56ad4bb7c9f4c5609e01f2dd9ae",
+      "mergedAt": "2026-09-21T15:51:01Z",
+      "tree": "203bdab509d05911f04f234d996f9c91f2b5e4f2",
+      "matchesReviewedTree": true
+    },
+    "canonicalAcceptance": {
+      "passed": 23,
+      "total": 24,
+      "newCompletionPassed": 5,
+      "newCompletionTotal": 5,
+      "result": "failed",
+      "failure": "Existing LF Author categorical third popup missing at unchanged 5-second assertion; CRLF counterpart passes",
+      "deploymentUnchanged": true,
+      "receipt": "canonical/REPORT.md",
+      "durationMs": 85156,
+      "recordedRequestCount": 115,
+      "networkPendingAtFailedTrigger": false,
+      "rootCause": "Unresolved; no pending network or focus cause established"
+    },
+    "postmergeCI": {
+      "runId": 35621722214,
+      "status": "success",
+      "platforms": [
+        "verify (windows-latest)",
+        "verify (ubuntu-latest)"
+      ]
+    },
+    "productionDeployment": {
+      "id": "dpl_5zdunyqiun7MgJNRJZ33CMHTrmmN",
+      "commit": "0f35352a1445f56ad4bb7c9f4c5609e01f2dd9ae",
+      "state": "READY",
+      "receipt": "app47-deployment.json"
+    },
+    "primaryCheckout": {
+      "commit": "0f35352a1445f56ad4bb7c9f4c5609e01f2dd9ae",
+      "clean": true
+    }
+  },
+  "previousCanonical": {
+    "source": "c558dcc3a2e362bc238eb433a2db97fa682dfcc8",
+    "app46Passed": 11,
+    "app46Total": 19,
+    "app45Passed": 14,
+    "app45Total": 18,
+    "failedResultsRetained": true
+  },
+  "core99": {
+    "acceptedCommit": "ef0444bff688b3d9c9d7b040603a5f0a98741a2f",
+    "preMerge": "green",
+    "postMerge": "green",
+    "postMergeRunIds": [
+      35617647321,
+      35617647362
+    ]
+  },
+  "issue88": {
+    "state": "OPEN",
+    "accidentalClose": "2026-09-21T14:50:21Z",
+    "reopened": "2026-09-21T15:18:18Z",
+    "bodyCorrected": true
+  },
+  "separateGates": {
+    "overallGoal": "open",
+    "nativeHostOwnerRecoveryReply": "missing",
+    "windowsComAttempted": false,
+    "rendererTolerancePx": 0.1,
+    "geometryDrafts": "untouched",
+    "workerPlan": "candidate only; unimplemented",
+    "sourceSerializationCorrection": "source-only audit; unimplemented"
+  }
+}

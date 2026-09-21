@@ -1,0 +1,26 @@
+Listing tests:
+  author-json-options.spec.ts:72:5 › Author categorical choices include built-in, document and loaded catalogs with exact LF source undo/redo
+  author-json-options.spec.ts:72:5 › Author categorical choices include built-in, document and loaded catalogs with exact CRLF source undo/redo
+  author.spec.ts:26:80 › anonymous code editing preserves source and visible selection through offline export/reimport at 1280x720
+  author.spec.ts:26:80 › anonymous code editing preserves source and visible selection through offline export/reimport at 540x960
+  author.spec.ts:55:5 › anonymous Author canvas edits survive tab changes, offline PowerPoint export and undoable reimport
+  completion-preservation.spec.ts:113:7 › Author Title Subtitle completion preserves LF compact source in one undo step
+  completion-preservation.spec.ts:113:7 › Author Text 2x completion preserves CRLF compact source in one undo step
+  completion-preservation.spec.ts:149:5 › Author escaped current value is not offered as an edit and leaves prior undo history intact
+  completion-preservation.spec.ts:178:5 › Author newer and invalid source dismiss stale choices and refresh inline catalogs
+  completion-preservation.spec.ts:219:5 › Author format and document changes cancel the open completion without applying it
+  inspector-editing.spec.ts:40:7 › all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 1440px
+  inspector-editing.spec.ts:40:7 › all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 540px
+  inspector-editing.spec.ts:99:5 › invalid source keeps a renderer fallback and source recovery uses the current slide order
+  inspector-editing.spec.ts:116:5 › shared navigation discards an ID-less draft even when the replacement title is identical
+  inspector-recovery.spec.ts:18:5 › schema-valid strict overflow cancels an active draft and the same slide recovers after source correction
+  inspector-recovery.spec.ts:85:5 › font substitution notes remain accessible and operable while the Inspector canvas is active
+  inspector.spec.ts:20:5 › published long quotes retain their footer in actual wide/portrait previews and PowerPoint downloads
+  inspector.spec.ts:76:5 › shared navigation clears format errors and proposals from the previous deck
+  inspector.spec.ts:118:5 › anonymous JSON authoring, preview, undo/redo, download and shared reimport
+  json-paste-formatting.spec.ts:53:5 › warm JSON worker leaves pasted source untouched while explicit Format Document remains undoable
+  monaco.spec.ts:3:5 › bundled JSON worker provides schema diagnostics, completion and recovery offline
+  svg-security.spec.ts:41:5 › published SVG renderer keeps hostile shared and imported document strings inert
+  toolkit.spec.ts:4:5 › public toolkit shows the deployed package set with working render, edit and export proofs
+  yaml.spec.ts:4:5 › YAML and Markdown editing preserve OPF values and recover from malformed YAML offline
+Total: 24 tests in 11 files
