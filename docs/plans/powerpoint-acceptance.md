@@ -29,6 +29,15 @@ reviewed images. Distinguish XML validity, semantic reimport, native editability
 and pixel agreement in the result. Native findings do not invalidate separately
 passing portable workflows, and portable results do not close native findings.
 
+The [offline tab-coordinate analysis](../evidence/windows-native-tab-analysis-20260921/REPORT.md)
+recomputes the nine retained plain-tab pairs from their exact JSON and saved
+DrawingML. Saved coordinates and their COM projections retain finer positions
+than the observed tabbed-character starts, which match a 0.05pt-compatible
+pattern for these inputs. The tested base lies on that grid, so relative and
+absolute snapping remain indistinguishable; no engine cause or compensation is
+established. The 0.02pt native gate still fails, and the separate 0.1px browser
+gate is unchanged and unevaluated by this analysis.
+
 The broader [font roadmap](font-roadmap.md) and
 [ecosystem objective](ecosystem-objective-2026-09-09.md) remain open. This split
 does not change the default shaping backend or claim general Office parity.

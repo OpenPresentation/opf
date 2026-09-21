@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "kind": "opf-native-tab-quantization-portable-analysis",
+  "scope": "Offline exact-arithmetic analysis of merged core106 native-tab-v2-04 observations and saved DrawingML. No Office, UI, font, renderer, Git, or network action.",
+  "gates": {
+    "nativeTabAndPersistence": "0.02 point; recorded run-04 outcomes retained unchanged",
+    "broaderNativeCharacterBounds": "0.1 point; unchanged and not evaluated here",
+    "rendererIssue24": "0.1 reference pixel; unchanged and not evaluated here"
+  },
+  "files": 9,
+  "bytes": 202468,
+  "artifacts": [
+    {
+      "path": ".gitattributes",
+      "bytes": 9,
+      "sha256": "48747480eddba024928d03be9bf83dc579e5515768647507a767e8187a85c9ab",
+      "role": "byte-preservation policy"
+    },
+    {
+      "path": "REPORT.md",
+      "bytes": 7120,
+      "sha256": "004ce283e2aedb0a2c1d067feea4f9d1cf8e48642f7bc2e025de74ef0618ca9e",
+      "role": "analysis report and limits"
+    },
+    {
+      "path": "analyze.py",
+      "bytes": 15953,
+      "sha256": "9eb665581da2e0c4cc8c2615f19ff7c0cf58726121d45e291fb93ffdc7c5b817",
+      "role": "stdlib exact-arithmetic replay"
+    },
+    {
+      "path": "input-inventory-review.json",
+      "bytes": 1982,
+      "sha256": "d95912d00df15b812f2a005311da42323122980fa90e813d2669cb2394899ade",
+      "role": "privacy and necessity review"
+    },
+    {
+      "path": "inputs/native-tab-v2-04-report.json",
+      "bytes": 103361,
+      "sha256": "dd2dc51ec6714c864479b93791eefe9807ab9f8c649f7a3c7bcabaca61b5a71c",
+      "role": "exact-byte retained native report"
+    },
+    {
+      "path": "inputs/native-tab-v2-04-slide1.xml",
+      "bytes": 16259,
+      "sha256": "b7bf2146362d7147d3b840d381dc339a3cf37f0cb51ea141909a9819dfe40117",
+      "role": "exact saved DrawingML ZIP-member bytes"
+    },
+    {
+      "path": "provenance.json",
+      "bytes": 2480,
+      "sha256": "7aee8407b2651b8b2459f22f21e213f74af3bd551538b65679244cde871001f2",
+      "role": "merged core and raw-input provenance"
+    },
+    {
+      "path": "supporting-data.json",
+      "bytes": 45059,
+      "sha256": "35a383cc50cd0e291b173befdd101f866d6b78564bd4a317d8e05282b6f00a16",
+      "role": "reproducible exact arithmetic and per-row results"
+    },
+    {
+      "path": "verify.py",
+      "bytes": 10245,
+      "sha256": "901621213978288757ba60aaf3b9b03e619b8fac108ac96dcc2d88cd8c38d7af",
+      "role": "stdlib bundle verifier"
+    }
+  ],
+  "verification": "python verify.py",
+  "manifestExcludesItself": true
+}
