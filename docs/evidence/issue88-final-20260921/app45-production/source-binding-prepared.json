@@ -1,0 +1,11 @@
+{
+  "status": "awaiting canonical deployment READY from parent",
+  "target": "https://www.pptx.dev",
+  "mergedCommit": "e37e0da19671178da482bbe52cfd642419b670b5",
+  "testWorktreeCommit": "3f364cb5cec681e9d802a2caeee4ebc10e4ad39b",
+  "testWorktreeTree": "91445756a094168b13ee13dadb7fae55cc7da74f",
+  "parentReportedMergedTree": "91445756a094168b13ee13dadb7fae55cc7da74f",
+  "parentReportedCI": "Final3f364cb Linux+Windows both passed",
+  "testCount": 18,
+  "preparedAt": "2026-09-21T14:21:09.670862+00:00"
+}

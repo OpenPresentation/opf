@@ -1,0 +1,25 @@
+{
+  "capturedAt": "2026-09-21T14:21:31.211Z",
+  "id": "dpl_BcdbKFRoReTjKbQnMQ2e4NZSVask",
+  "url": "pptx-qatukvzgb-dataadvantage.vercel.app",
+  "state": "READY",
+  "readyState": "READY",
+  "target": "production",
+  "alias": [
+    "api.pptx.dev",
+    "mcp.pptx.dev",
+    "www.pptx.dev",
+    "pptx-dev.vercel.app",
+    "pptx.dev",
+    "pptx-dev-dataadvantage.vercel.app",
+    "pptx-dev-git-master-dataadvantage.vercel.app"
+  ],
+  "meta": {
+    "githubCommitRef": "master",
+    "githubCommitSha": "e37e0da19671178da482bbe52cfd642419b670b5",
+    "githubCommitMessage": "fix(inspector): preserve authored source across every slide (#45)\n\n* fix(inspector): preserve authored source across every slide\n\n* test(browser): distinguish source bytes from clipboard transport\n\n* test: respect Monaco suggestion roles on Windows\n\n* test: wait for the intended Inspector preview",
+    "githubRepo": "pptx-dev",
+    "githubOrg": "Data-Advantage"
+  },
+  "ready": 1790000470243
+}

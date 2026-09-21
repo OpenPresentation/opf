@@ -1,0 +1,15 @@
+{
+  "capturedAt": "2026-09-21T14:22:52.921Z",
+  "node": "v24.21.0",
+  "platform": "darwin",
+  "browser": "chromium",
+  "version": "153.0.8010.12",
+  "executable": "/Users/michael/Library/Caches/ms-playwright/chromium-1243/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing",
+  "executableSha256": "8319963f6625accf51c0dd4f55091ceaf9f09ed39e7a52fed4fae12b2a6b668a",
+  "executableObservation": "chromium.executablePath() reports the default headed binary; this is not asserted as the actual acceptance process executable.",
+  "configuredHeadlessExecutable": {
+    "path": "/Users/michael/Library/Caches/ms-playwright/chromium_headless_shell-1243/chrome-headless-shell-mac-arm64/chrome-headless-shell",
+    "sha256": "a0bfe7b4da4787b66058477d696cd1d09065d25f06a548947722b9af77ee8282",
+    "basis": "Inferred from installed Playwright 1.63.0 Chromium getExecutableName: no channel + headless default chooses chromium-headless-shell. Actual acceptance process PID was not retained."
+  }
+}

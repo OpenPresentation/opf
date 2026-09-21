@@ -1,0 +1,69 @@
+{
+  "capturedAt": "2026-09-21T14:37:45.671039+00:00",
+  "passed": true,
+  "canonicalOrigin": "https://www.openpresentation.org",
+  "deployment": {
+    "id": "dpl_5nqS4CDckXoBzBf2Zsti6whMyxEY",
+    "siteSha": "a85bcc77d899ce9ba1df659548be564142c16120",
+    "documentationSource": "120a770041b3f7d3c04ced1ac87675ed0d18292b"
+  },
+  "siteTreeIdentity": {
+    "testedHead": "dbe7448c40761a50418279da420d725f184f9685",
+    "acceptedHead": "a85bcc77d899ce9ba1df659548be564142c16120",
+    "matchingTree": "f3622daa40fa7abdb8ed76291ce02d53a4c73ed5"
+  },
+  "node": "v24.21.0",
+  "pnpm": "10.33.2",
+  "browser": "153.0.8010.12",
+  "guideVerification": {
+    "checks": 321,
+    "pages": 11,
+    "rawResources": 18,
+    "pageErrors": 0,
+    "manifest": {
+      "files": 10827,
+      "sourceDigest": "e22c0da15587a73ff42a183d476196896c7383f575683e726cbcc4a5606bad55",
+      "sha256": "5231535eeb00ea8078c58d95786d76f060774b5d86436f16b62e870d9699eaad"
+    },
+    "guides": {
+      "inlineMarkdown": 75,
+      "inlineSkills": 6,
+      "evidenceLinks": 61,
+      "indexBytes": 24904,
+      "indexSha256": "d2ceef4249ef0d0006cdbfb16b40782c3e6e7995b09566a177dd7549f110a7ae",
+      "fullBytes": 1214339,
+      "fullSha256": "b4dc34b6fc6863690c08721b5cf52f3bd86cb94f5ecf0910960adbfb30401e18"
+    }
+  },
+  "additionalBrowserTests": {
+    "result": "2 passed",
+    "tests": [
+      "Agent quickstart clipboard, published guide pin navigation and all six skills complete bytes/hashes",
+      "Actual homepage OPF JSON, SVG and editable PPTX downloads match the verified registry showcase; downloaded OPF validates"
+    ],
+    "downloadSha256": {
+      "example.opf.json": "902d6bd9de957598a123e5919ae0dd602e0241d27bdfc406c936c7c43a3d0dbd",
+      "example.svg": "33b743eeb38e7ca6ee2fd5e8f263acd2eb0d88423d80f6812e45db911fd720de",
+      "example.pptx": "55c68127f28c66994f23347b43830176a92641db8bd33fb5aa05e5ca4bba10a6"
+    }
+  },
+  "visualReview": {
+    "reviewed": true,
+    "files": [
+      "docs-agent-skills.png",
+      "docs-live-editor.png",
+      "docs-reference-quickstart.png"
+    ],
+    "observations": [
+      "Published CLI 0.9.0 and Node24 instructions are visible with the repeatable install command.",
+      "Live editor guide shows editor0.8.0 and the coordinated published train, retaining the scoped fidelity wording.",
+      "Quickstart shows all five current published pins and separates the supported workflow from universal Office parity.",
+      "Navigation, sidebars, body typography and code containers retain their existing layout; no visible overlap or missing content in the reviewed views."
+    ]
+  },
+  "scopeLimits": [
+    "Browser/documentation acceptance does not establish native Office rendering or font compatibility.",
+    "No package publication, native Header/Footer converter, placeholder geometry activation or automatic repair implementation is claimed."
+  ],
+  "sourceChanges": false
+}

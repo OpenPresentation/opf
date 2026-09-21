@@ -1,0 +1,13 @@
+{
+  "verifiedAt": "2026-09-21T14:52:43.301003+00:00",
+  "target": "https://www.pptx.dev",
+  "deploymentId": "dpl_AGzL3mmPqZ5giiQWzh9EqyDPF8SX",
+  "mergedCommit": "c558dcc3a2e362bc238eb433a2db97fa682dfcc8",
+  "testWorktreeCommit": "59e888580c38ca5cfbf5105b2ec09c2bfc956ca1",
+  "testWorktreeTree": "21a27c9fa459f04db24dc2759acc1bb6d9ed93b8",
+  "clean": true,
+  "testInputHashesVerified": true,
+  "parentVerifiedAcceptedTree": "21a27c9fa459f04db24dc2759acc1bb6d9ed93b8",
+  "parentReportedCI": "Linux and Windows run 35613807353 SUCCESS",
+  "prior14of18ResultRetained": true
+}

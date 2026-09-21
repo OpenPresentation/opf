@@ -1,0 +1,43 @@
+{
+  "name"  :   "Categorical choices preserve source",
+  "author": "Browser reviewer",
+  "design": {
+    "theme": "dark",
+    "fontScheme": "roboto"
+  },
+  "slides": [
+    {
+      "title": "A local decision",
+      "layout": "document-layout",
+      "text": [
+        {
+          "text": "Two  spaces stay.",
+          "bold": true
+        },
+        {
+          "text": "\nAnd a second line.",
+          "italic": true
+        }
+      ],
+      "notes": "Keep these notes\n\tand their whitespace."
+    }
+  ],
+  "catalogs": {
+    "layouts": {
+      "records": [
+        {
+          "id": "document-layout",
+          "name": "AAA Document Layout",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

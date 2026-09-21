@@ -1,0 +1,17 @@
+{
+  "core93": "937047ff9f65d936126c577d3c6b7c5f9a61e364",
+  "core97": "847b36978dfa0be48be187ab237389d9bbd72898",
+  "core98": "b1ff81db6f8714b0db1a98bde482ed8a64d0ccc9",
+  "site44": "a85bcc77d899ce9ba1df659548be564142c16120",
+  "app45": "e37e0da19671178da482bbe52cfd642419b670b5",
+  "app46ReviewedHead": "59e888580c38ca5cfbf5105b2ec09c2bfc956ca1",
+  "app46ReviewedTree": "21a27c9fa459f04db24dc2759acc1bb6d9ed93b8",
+  "gallery36": "f17e9ae5869669d5fbac3720f285652d0c37551c",
+  "issue88State": "OPEN",
+  "goalState": "active",
+  "nativePowerPointGate": "unresolved; no owner-confirmed host recovery",
+  "renderer24TolerancePx": 0.1,
+  "app46Accepted": "c558dcc3a2e362bc238eb433a2db97fa682dfcc8",
+  "app46Tree": "21a27c9fa459f04db24dc2759acc1bb6d9ed93b8",
+  "app46Production": "READY dpl_AGzL3mmPqZ5giiQWzh9EqyDPF8SX; 11/19 browser workflows passed, full acceptance failed"
+}

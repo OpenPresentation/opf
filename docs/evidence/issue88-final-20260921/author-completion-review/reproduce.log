@@ -1,0 +1,17 @@
+(node:30103) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+{
+  "total": 32,
+  "rejected": 28,
+  "prototypeCases": 256,
+  "prototypeExactReconstructionCases": 256,
+  "escapedCurrentValuePreservedByProposal": true,
+  "publicResolution": {
+    "jsonOptions": "/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/node_modules/.pnpm/@openpresentation+opf-editor@0.8.0_@openpresentation+opf-render@0.9.0_@types+node@24.13.4_/node_modules/@openpresentation/opf-editor/dist/json-options.js",
+    "jsonOptionsSha256": "7465fb5095531cead4bb883347e8db479483cc2ee236cb393451680d91fd11b8",
+    "monacoSuggest": "/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/suggest/browser/suggest.js",
+    "monacoSuggestSha256": "dab21a4971cb51332b5ebdd48ce267b5968dc416289a614d4acf1de5958954aa",
+    "editorVersion": "0.8.0",
+    "monacoVersion": "0.56.0"
+  }
+}

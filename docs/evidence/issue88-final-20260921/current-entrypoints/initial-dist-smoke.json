@@ -1,0 +1,27 @@
+{
+  "status": "passed",
+  "node": "v24.21.0",
+  "versions": {
+    "opf": "0.11.0",
+    "opf-render": "0.9.0",
+    "opf-editor": "0.8.0",
+    "opf-pptx": "0.9.1",
+    "cli": "0.9.0"
+  },
+  "consumer": "/private/tmp/opf-registry-20260921/consumer",
+  "skillsDirectory": "/private/tmp/opf-current-skills-PLWU5V",
+  "checks": [
+    "published canvas/schema exports",
+    "block insert/duplicate/remove guards",
+    "rich content and metadata preservation",
+    "undo/redo",
+    "stale patch rejection",
+    "opaque contrast/translucent fallback",
+    "CLI version/create/validate",
+    "six installed skills/status/idempotent reinstall"
+  ],
+  "version": "{\n  \"cli\": \"0.9.0\",\n  \"opf\": \"0.11.0\"\n}\n",
+  "install": "{\n  \"version\": \"0.9.0\",\n  \"directory\": \"/private/tmp/opf-current-skills-PLWU5V/.agents/skills\",\n  \"changed\": [\n    \"opf-author\",\n    \"opf-edit\",\n    \"opf-export\",\n    \"opf-inspect\",\n    \"opf-layout\",\n    \"opf-presets\"\n  ],\n  \"unchanged\": [],\n  \"backups\": []\n}\n",
+  "statusOutput": "{\n  \"version\": \"0.9.0\",\n  \"directory\": \"/private/tmp/opf-current-skills-PLWU5V/.agents/skills\",\n  \"skills\": [\n    {\n      \"name\": \"opf-author\",\n      \"status\": \"managed\",\n      \"installedVersion\": \"0.9.0\",\n      \"updateAvailable\": false\n    },\n    {\n      \"name\": \"opf-edit\",\n      \"status\": \"managed\",\n      \"installedVersion\": \"0.9.0\",\n      \"updateAvailable\": false\n    },\n    {\n      \"name\": \"opf-export\",\n      \"status\": \"managed\",\n      \"installedVersion\": \"0.9.0\",\n      \"updateAvailable\": false\n    },\n    {\n      \"name\": \"opf-inspect\",\n      \"status\": \"managed\",\n      \"installedVersion\": \"0.9.0\",\n      \"updateAvailable\": false\n    },\n    {\n      \"name\": \"opf-layout\",\n      \"status\": \"managed\",\n      \"installedVersion\": \"0.9.0\",\n      \"updateAvailable\": false\n    },\n    {\n      \"name\": \"opf-presets\",\n      \"status\": \"managed\",\n      \"installedVersion\": \"0.9.0\",\n      \"updateAvailable\": false\n    }\n  ]\n}\n",
+  "repeat": "{\n  \"version\": \"0.9.0\",\n  \"directory\": \"/private/tmp/opf-current-skills-PLWU5V/.agents/skills\",\n  \"changed\": [],\n  \"unchanged\": [\n    \"opf-author\",\n    \"opf-edit\",\n    \"opf-export\",\n    \"opf-inspect\",\n    \"opf-layout\",\n    \"opf-presets\"\n  ]\n}\n"
+}

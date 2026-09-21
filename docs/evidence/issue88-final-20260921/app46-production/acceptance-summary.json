@@ -1,0 +1,331 @@
+{
+  "stats": {
+    "startTime": "2026-09-21T14:52:43.494Z",
+    "duration": 183556.19700000001,
+    "expected": 11,
+    "skipped": 0,
+    "unexpected": 8,
+    "flaky": 0
+  },
+  "tests": [
+    {
+      "file": "author-json-options.spec.ts",
+      "title": "Author categorical choices include built-in, document and loaded catalogs with exact LF source undo/redo",
+      "status": "unexpected",
+      "results": [
+        {
+          "status": "failed",
+          "duration": 14831,
+          "retry": 0,
+          "errors": [
+            {
+              "location": {
+                "file": "/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/author-json-options.spec.ts",
+                "column": 23,
+                "line": 111
+              },
+              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.suggest-widget.visible').getByRole('option', { name: 'AAA Document Layout, Enum Member', exact: true })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('.suggest-widget.visible').getByRole('option', { name: 'AAA Document Layout, Enum Member', exact: true }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.suggest-widget.visible').getByRole('option', { name: 'AAA Document Layout, Enum Member', exact: true })\u001b[22m\n\n\n  109 |   const layouts = await openChoices(page, themed, 'layout', 'text-1x');\n  110 |   const local = categoricalChoice(layouts, 'AAA Document Layout');\n> 111 |   await expect(local).toBeVisible();\n      |                       ^\n  112 |   await expect(categoricalChoice(layouts, 'AAB Loaded Layout')).toBeVisible();\n  113 |   await page.screenshot({ path: test.info().outputPath('author-layout-options.png'), fullPage: true });\n  114 |   await local.click();\n    at /private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/author-json-options.spec.ts:111:23"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "author-json-options.spec.ts",
+      "title": "Author categorical choices include built-in, document and loaded catalogs with exact CRLF source undo/redo",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 13081,
+          "retry": 0,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "author.spec.ts",
+      "title": "anonymous code editing preserves source and visible selection through offline export/reimport at 1280x720",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 8758,
+          "retry": 0,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "author.spec.ts",
+      "title": "anonymous code editing preserves source and visible selection through offline export/reimport at 540x960",
+      "status": "unexpected",
+      "results": [
+        {
+          "status": "failed",
+          "duration": 11641,
+          "retry": 0,
+          "errors": [
+            {
+              "location": {
+                "file": "/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/author.spec.ts",
+                "column": 102,
+                "line": 34
+              },
+              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning')\nExpected: not \u001b[32m0\u001b[39m\nReceived: \u001b[31m0\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"not toHaveCount\" locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning')\u001b[22m\n\u001b[2m    14 \u00d7 locator resolved to 0 elements\u001b[22m\n\u001b[2m       - unexpected value \"0\"\u001b[22m\n\n\n  32 |   const input=page.getByRole('textbox',{name:'Editor content'});await expect(input).toBeVisible();\n  33 |   await input.focus();await page.keyboard.press('ControlOrMeta+a');await page.evaluate(text=>navigator.clipboard.writeText(text),'{\"name\":42,\"slides\":[]}');await page.keyboard.press('ControlOrMeta+v');\n> 34 |   await expect(page.locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning')).not.toHaveCount(0);\n     |                                                                                                      ^\n  35 |   await input.focus();await page.keyboard.press('ControlOrMeta+a');await page.evaluate(text=>navigator.clipboard.writeText(text),JSON.stringify(original,null,2));await page.keyboard.press('ControlOrMeta+v');await expect.poll(()=>source(page)).toEqual(original);\n  36 |   await page.getByRole('tablist',{name:'Document view'}).getByRole('tab',{name:/^preview/}).click();\n  37 |   const canvas=page.locator(`[data-opf-editor=\"${manifest.dependencies['@openpresentation/opf-editor']}\"]`);await expect(canvas.getByRole('button',{name:'Import file',exact:true})).toBeEnabled();await expect(canvas).toContainText('src/Example.ts');\n    at /private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/author.spec.ts:34:102"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "author.spec.ts",
+      "title": "anonymous Author canvas edits survive tab changes, offline PowerPoint export and undoable reimport",
+      "status": "unexpected",
+      "results": [
+        {
+          "status": "failed",
+          "duration": 11099,
+          "retry": 0,
+          "errors": [
+            {
+              "location": {
+                "file": "/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/author.spec.ts",
+                "column": 102,
+                "line": 70
+              },
+              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning')\nExpected: not \u001b[32m0\u001b[39m\nReceived: \u001b[31m0\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"not toHaveCount\" locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning')\u001b[22m\n\u001b[2m    14 \u00d7 locator resolved to 0 elements\u001b[22m\n\u001b[2m       - unexpected value \"0\"\u001b[22m\n\n\n  68 |   await page.evaluate(text => navigator.clipboard.writeText(text), '{\"name\":42,\"slides\":[]}');\n  69 |   await page.keyboard.press('ControlOrMeta+v');\n> 70 |   await expect(page.locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning')).not.toHaveCount(0);\n     |                                                                                                      ^\n  71 |   await input.focus();\n  72 |   await page.keyboard.press('ControlOrMeta+a');\n  73 |   await page.evaluate(text => navigator.clipboard.writeText(text), JSON.stringify(deck, null, 2));\n    at /private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/author.spec.ts:70:102"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "inspector-editing.spec.ts",
+      "title": "all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 1440px",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 8704,
+          "retry": 0,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "inspector-editing.spec.ts",
+      "title": "all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 540px",
+      "status": "unexpected",
+      "results": [
+        {
+          "status": "failed",
+          "duration": 11944,
+          "retry": 0,
+          "errors": [
+            {
+              "location": {
+                "file": "/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/inspector-editing.spec.ts",
+                "column": 104,
+                "line": 51
+              },
+              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning')\nExpected: not \u001b[32m0\u001b[39m\nReceived: \u001b[31m0\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"not toHaveCount\" locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning')\u001b[22m\n\u001b[2m    14 \u00d7 locator resolved to 0 elements\u001b[22m\n\u001b[2m       - unexpected value \"0\"\u001b[22m\n\n\n  49 |     // Let Monaco's schema worker finish loading before the offline workflow.\n  50 |     await replaceSource(page, '{\"name\":42,\"slides\":[]}');\n> 51 |     await expect(page.locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning')).not.toHaveCount(0);\n     |                                                                                                        ^\n  52 |     await replaceSource(page, original);\n  53 |     await expect(page.getByTestId('inspector-canvas-overlay')).toHaveCount(3);\n  54 |     for (let index = 0; index < 3; index++) await expect(canvas(page, index)).toBeVisible();\n    at /private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/inspector-editing.spec.ts:51:104"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "inspector-editing.spec.ts",
+      "title": "invalid source keeps a renderer fallback and source recovery uses the current slide order",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 5086,
+          "retry": 0,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "inspector-editing.spec.ts",
+      "title": "shared navigation discards an ID-less draft even when the replacement title is identical",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 9628,
+          "retry": 0,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "inspector-recovery.spec.ts",
+      "title": "schema-valid strict overflow cancels an active draft and the same slide recovers after source correction",
+      "status": "unexpected",
+      "results": [
+        {
+          "status": "failed",
+          "duration": 9997,
+          "retry": 0,
+          "errors": [
+            {
+              "location": {
+                "file": "/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/inspector-recovery.spec.ts",
+                "column": 24,
+                "line": 46
+              },
+              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-testid=\"inspector-canvas-overlay\"][data-opf-slide-id=\"retained-slide\"]').locator('[data-canvas-target][data-opf-path=\"slides.0.title\"]')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('[data-testid=\"inspector-canvas-overlay\"][data-opf-slide-id=\"retained-slide\"]').locator('[data-canvas-target][data-opf-path=\"slides.0.title\"]') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"inspector-canvas-overlay\"][data-opf-slide-id=\"retained-slide\"]').locator('[data-canvas-target][data-opf-path=\"slides.0.title\"]')\u001b[22m\n\n\n  44 |   await page.goto('/inspector#' + hashFor(initial));\n  45 |   const target = canvas(page).locator('[data-canvas-target][data-opf-path=\"slides.0.title\"]');\n> 46 |   await expect(target).toBeVisible();\n     |                        ^\n  47 |   await target.dblclick();\n  48 |   const input = page.getByRole('textbox', { name: 'Edit title inline', exact: true });\n  49 |   await input.fill('Stale draft must not reach the replacement');\n    at /private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/inspector-recovery.spec.ts:46:24"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "inspector-recovery.spec.ts",
+      "title": "font substitution notes remain accessible and operable while the Inspector canvas is active",
+      "status": "unexpected",
+      "results": [
+        {
+          "status": "failed",
+          "duration": 7324,
+          "retry": 0,
+          "errors": [
+            {
+              "location": {
+                "file": "/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/inspector-recovery.spec.ts",
+                "column": 30,
+                "line": 97
+              },
+              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('[data-testid=\"inspector-canvas-overlay\"][data-opf-slide-id=\"retained-slide\"]')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('[data-testid=\"inspector-canvas-overlay\"][data-opf-slide-id=\"retained-slide\"]') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"inspector-canvas-overlay\"][data-opf-slide-id=\"retained-slide\"]')\u001b[22m\n\u001b[2m    6 \u00d7 locator resolved to <div role=\"group\" data-opf-slide-index=\"0\" data-opf-slide-id=\"retained-slide\" data-testid=\"inspector-canvas-overlay\" aria-label=\"Slide 1: Disclose the font choice\" class=\"[&>svg]:block [&>svg]:h-auto [&>svg]:w-full\"></div>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n\n   95 |   page.on('pageerror', error => errors.push(error.message));\n   96 |   await page.goto('/inspector#' + hashFor(document));\n>  97 |   await expect(canvas(page)).toBeVisible();\n      |                              ^\n   98 |   const notes = page.locator('[data-opf-renderer] details');\n   99 |   const summary = notes.locator('summary');\n  100 |   await expect(summary).toHaveText(/^Preview notes \\([1-9]\\d*\\)$/);\n    at /private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/inspector-recovery.spec.ts:97:30"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "inspector.spec.ts",
+      "title": "published long quotes retain their footer in actual wide/portrait previews and PowerPoint downloads",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 12093,
+          "retry": 0,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "inspector.spec.ts",
+      "title": "shared navigation clears format errors and proposals from the previous deck",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 9573,
+          "retry": 0,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "inspector.spec.ts",
+      "title": "anonymous JSON authoring, preview, undo/redo, download and shared reimport",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 8494,
+          "retry": 0,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "json-paste-formatting.spec.ts",
+      "title": "warm JSON worker leaves pasted source untouched while explicit Format Document remains undoable",
+      "status": "unexpected",
+      "results": [
+        {
+          "status": "failed",
+          "duration": 8726,
+          "retry": 0,
+          "errors": [
+            {
+              "location": {
+                "file": "/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/json-paste-formatting.spec.ts",
+                "column": 101,
+                "line": 97
+              },
+              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate\n\n   95 |   await expect(lines).toContainText('\"name\":');\n   96 |   await expect.poll(() => page.evaluate(() => window.__opfFormatWorkerRequests\n>  97 |     .filter(request => request.method === 'format' && request.complete && !request.failed).length)).toBeGreaterThan(0);\n      |                                                                                                     ^\n   98 |   const formatted = await copySource(page);\n   99 |   expect(formatted).not.toBe(unformatted);\n  100 |   expect(JSON.parse(formatted)).toEqual(JSON.parse(unformatted));\n    at /private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/json-paste-formatting.spec.ts:97:101"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "monaco.spec.ts",
+      "title": "bundled JSON worker provides schema diagnostics, completion and recovery offline",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 7971,
+          "retry": 0,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "svg-security.spec.ts",
+      "title": "published SVG renderer keeps hostile shared and imported document strings inert",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 9315,
+          "retry": 0,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "toolkit.spec.ts",
+      "title": "public toolkit shows the deployed package set with working render, edit and export proofs",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 2143,
+          "retry": 0,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "yaml.spec.ts",
+      "title": "YAML and Markdown editing preserve OPF values and recover from malformed YAML offline",
+      "status": "unexpected",
+      "results": [
+        {
+          "status": "failed",
+          "duration": 9879,
+          "retry": 0,
+          "errors": [
+            {
+              "location": {
+                "file": "/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/yaml.spec.ts",
+                "column": 32,
+                "line": 17
+              },
+              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.monaco-editor').first().locator('.squiggly-error, .squiggly-warning')\nExpected: not \u001b[32m0\u001b[39m\nReceived: \u001b[31m0\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"not toHaveCount\" locator('.monaco-editor').first().locator('.squiggly-error, .squiggly-warning') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.monaco-editor').first().locator('.squiggly-error, .squiggly-warning')\u001b[22m\n\u001b[2m    14 \u00d7 locator resolved to 0 elements\u001b[22m\n\u001b[2m       - unexpected value \"0\"\u001b[22m\n\n\n  15 |  const diagnostics=page.locator('.monaco-editor').first().locator('.squiggly-error, .squiggly-warning');\n  16 |  await replace('{\"name\":42,\"slides\":[]}');\n> 17 |  await expect(diagnostics).not.toHaveCount(0);\n     |                                ^\n  18 |  await replace(JSON.stringify(doc));\n  19 |  await expect(diagnostics).toHaveCount(0);\n  20 |  // Serialization must preserve scripts that the selected default font cannot\n    at /private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/yaml.spec.ts:17:32"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

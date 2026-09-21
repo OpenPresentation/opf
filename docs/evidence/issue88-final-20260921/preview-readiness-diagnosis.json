@@ -1,0 +1,51 @@
+{
+  "run": 35609087103,
+  "sourceCommit": "9ea7ece4e3ecc88e33157970f475d32423e9edf6",
+  "linux": {
+    "passed": 17,
+    "failed": 1
+  },
+  "windows": {
+    "passed": 18,
+    "failed": 0
+  },
+  "networkEntries": 81,
+  "networkFailures": [],
+  "failedApiCalls": [
+    {
+      "callId": "call@1802",
+      "elapsedMs": 92.49700000000303,
+      "call": {
+        "type": "before",
+        "callId": "call@1802",
+        "startTime": 105177.296,
+        "title": "Expect \"toBeVisible\"",
+        "class": "Frame",
+        "method": "expect",
+        "params": {
+          "selector": "[data-opf-renderer=\"0.9.0\"] div[role=\"img\"] svg",
+          "expression": "to.be.visible",
+          "expectedValue": {
+            "value": {
+              "v": "undefined"
+            },
+            "handles": []
+          },
+          "isNot": false,
+          "timeout": 5000
+        },
+        "stepId": "expect@40"
+      },
+      "result": {
+        "type": "after",
+        "callId": "call@1802",
+        "endTime": 105269.793,
+        "error": {
+          "message": "Expect failed",
+          "stack": "ExpectError: Expect failed\n    at _Frame.expect (/__w/pptx-dev/pptx-dev/node_modules/.pnpm/playwright-core@1.63.0/node_modules/playwright-core/lib/coreBundle.js:24312:17)\n    at _FrameDispatcher.expect (/__w/pptx-dev/pptx-dev/node_modules/.pnpm/playwright-core@1.63.0/node_modules/playwright-core/lib/coreBundle.js:54886:11)\n    at _ProgressController.run (/__w/pptx-dev/pptx-dev/node_modules/.pnpm/playwright-core@1.63.0/node_modules/playwright-core/lib/coreBundle.js:12374:27)\n    at DispatcherConnection.dispatch (/__w/pptx-dev/pptx-dev/node_modules/.pnpm/playwright-core@1.63.0/node_modules/playwright-core/lib/coreBundle.js:19135:27)",
+          "name": "ExpectError"
+        }
+      }
+    }
+  ]
+}
