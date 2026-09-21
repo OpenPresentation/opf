@@ -1,0 +1,5 @@
+{
+  "scope": "No Office calls; standalone PS5.1 control checker failed during parameter default binding",
+  "error": "Join-Path: Cannot bind argument to parameter Path because it is an empty string. PSScriptRoot in the parameter default was empty.",
+  "exitCode": 1
+}

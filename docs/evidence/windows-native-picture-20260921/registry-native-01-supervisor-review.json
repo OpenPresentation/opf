@@ -1,0 +1,9 @@
+{
+  "timestampUtc": "2026-09-21T17:46:53.7154066Z",
+  "supervisor": "root",
+  "prerequisite": "native-created-01 completed; exact expected geometry/alt and identical full-slide PNGs reviewed",
+  "approvedScope": "One published-package PNG presentation snapshot, original observation/raster, save/close/reopen/observe/export/close owned presentation only",
+  "verifierSha256": "e3ae357f0e2cd45a72c83a0ac545d42d8698d84d81498a8bffd9dba8c761017a",
+  "timeoutSeconds": 45,
+  "noAutomaticRetries": true
+}

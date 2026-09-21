@@ -1,0 +1,2146 @@
+{
+  "schemaVersion": 1,
+  "scope": "Offline comparator negative controls over synthetic copies of completed registry-native evidence. No Office or UI execution occurred.",
+  "createdAt": "2026-09-21T18:00:57.309Z",
+  "root": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921",
+  "nodeExecutable": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\toolchain\\node_modules\\node\\bin\\node.exe",
+  "nodeVersion": "v24.21.0",
+  "comparatorSource": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\sources\\opf-pptx\\test\\compare-native-picture.mjs",
+  "comparatorSourceSha256": "1e2cd017ea16f8475fc3cf9fd8c0df46255dc8e01b1d37a80c3a07f26f4844e9",
+  "comparatorSnapshot": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\comparator-snapshot.mjs",
+  "comparatorSnapshotSha256": "1e2cd017ea16f8475fc3cf9fd8c0df46255dc8e01b1d37a80c3a07f26f4844e9",
+  "harness": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\run-controls.mjs",
+  "harnessSha256": "a924a650dfdb21a09fff468700354641e8a680998f5a10153b071c9bd50d55b1",
+  "sourceEvidenceSha256": {
+    "report": "282845b237dfadd6a4dbdfb53120013c11cc591c9129ba6cebc72cf359e3b274",
+    "worker": "b0c8d8bddfda827f10008537959fc8c47eca15f74299f33e1649a62ccb9f55d1",
+    "generation": "dabfa6b34d07ea01ffdec0a4da6376df3ce470c36ea53c5f3d2ee0b3a4522238",
+    "comparator": "1e2cd017ea16f8475fc3cf9fd8c0df46255dc8e01b1d37a80c3a07f26f4844e9",
+    "sourcePresentation": "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937",
+    "savedPresentation": "636256e030cc3cd007d0ef6102540ee08abe4842869fcfee18a691e001bec533",
+    "originalRaster": "f773035c4cfc0e2203e1ecc66de2a348ee328fd2cc58f79389593aa3f11b4455",
+    "reopenedRaster": "f773035c4cfc0e2203e1ecc66de2a348ee328fd2cc58f79389593aa3f11b4455",
+    "inputSnapshot": "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937",
+    "verifierSnapshot": "e3ae357f0e2cd45a72c83a0ac545d42d8698d84d81498a8bffd9dba8c761017a",
+    "processHelperSnapshot": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+  },
+  "syntheticFixtureHashes": {
+    "missing-generation-argument": {
+      "report.json": "b1babef083119535464ea45e8108e7de182b40353add6847d0101eec9da70274",
+      "worker.json": "541823b910ef36a219b66535931b83f0f4660e7dc3736babf7b117b2a5dab28e",
+      "source.pptx": "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937",
+      "saved.pptx": "636256e030cc3cd007d0ef6102540ee08abe4842869fcfee18a691e001bec533",
+      "original.png": "f773035c4cfc0e2203e1ecc66de2a348ee328fd2cc58f79389593aa3f11b4455",
+      "reopened.png": "f773035c4cfc0e2203e1ecc66de2a348ee328fd2cc58f79389593aa3f11b4455",
+      "inputs/input.pptx": "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937",
+      "inputs/native-picture-control.ps1": "e3ae357f0e2cd45a72c83a0ac545d42d8698d84d81498a8bffd9dba8c761017a",
+      "inputs/native-process.ps1": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+      "generation/generation.json": "dabfa6b34d07ea01ffdec0a4da6376df3ce470c36ea53c5f3d2ee0b3a4522238",
+      "fixture.json": "9db5874b560c2568f2a6a92619bb5615b2f56d68b3fd85a4bd24e78d8d2cd4e3"
+    },
+    "missing-raster-file": {
+      "report.json": "c8bfbf3a8239a85857bcc00a9431b5f1a97c79c9c4a556be2a068d148d5dc75c",
+      "worker.json": "541823b910ef36a219b66535931b83f0f4660e7dc3736babf7b117b2a5dab28e",
+      "source.pptx": "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937",
+      "saved.pptx": "636256e030cc3cd007d0ef6102540ee08abe4842869fcfee18a691e001bec533",
+      "original.png": "f773035c4cfc0e2203e1ecc66de2a348ee328fd2cc58f79389593aa3f11b4455",
+      "reopened.png": "f773035c4cfc0e2203e1ecc66de2a348ee328fd2cc58f79389593aa3f11b4455",
+      "inputs/input.pptx": "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937",
+      "inputs/native-picture-control.ps1": "e3ae357f0e2cd45a72c83a0ac545d42d8698d84d81498a8bffd9dba8c761017a",
+      "inputs/native-process.ps1": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+      "generation/generation.json": "dabfa6b34d07ea01ffdec0a4da6376df3ce470c36ea53c5f3d2ee0b3a4522238",
+      "fixture.json": "ad99a344fe142f82fa66d417326f42527426a045cfb5c3d2771f55668b5dcc43"
+    },
+    "tampered-source-snapshot": {
+      "report.json": "316c23a27d638ca29e23c6362f529ca89538f25bac80741a1c3fcb99eb7f556d",
+      "worker.json": "541823b910ef36a219b66535931b83f0f4660e7dc3736babf7b117b2a5dab28e",
+      "source.pptx": "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937",
+      "saved.pptx": "636256e030cc3cd007d0ef6102540ee08abe4842869fcfee18a691e001bec533",
+      "original.png": "f773035c4cfc0e2203e1ecc66de2a348ee328fd2cc58f79389593aa3f11b4455",
+      "reopened.png": "f773035c4cfc0e2203e1ecc66de2a348ee328fd2cc58f79389593aa3f11b4455",
+      "inputs/input.pptx": "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937",
+      "inputs/native-picture-control.ps1": "e3ae357f0e2cd45a72c83a0ac545d42d8698d84d81498a8bffd9dba8c761017a",
+      "inputs/native-process.ps1": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+      "generation/generation.json": "dabfa6b34d07ea01ffdec0a4da6376df3ce470c36ea53c5f3d2ee0b3a4522238",
+      "fixture.json": "ada02b9834645322de0acd25d212a8f39f72b38490bba36d2bb94353c9d853b1"
+    },
+    "out-of-run-raster-path": {
+      "report.json": "56c2336bcdbb2dd4a795a0dc681a9e25597d5e56da3cec21d51411585436d273",
+      "worker.json": "541823b910ef36a219b66535931b83f0f4660e7dc3736babf7b117b2a5dab28e",
+      "source.pptx": "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937",
+      "saved.pptx": "636256e030cc3cd007d0ef6102540ee08abe4842869fcfee18a691e001bec533",
+      "original.png": "f773035c4cfc0e2203e1ecc66de2a348ee328fd2cc58f79389593aa3f11b4455",
+      "reopened.png": "f773035c4cfc0e2203e1ecc66de2a348ee328fd2cc58f79389593aa3f11b4455",
+      "inputs/input.pptx": "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937",
+      "inputs/native-picture-control.ps1": "e3ae357f0e2cd45a72c83a0ac545d42d8698d84d81498a8bffd9dba8c761017a",
+      "inputs/native-process.ps1": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+      "generation/generation.json": "dabfa6b34d07ea01ffdec0a4da6376df3ce470c36ea53c5f3d2ee0b3a4522238",
+      "fixture.json": "678866c7c166894438adc8183341ff1c9e44d400bd93236f83f5bc159b94ecf9"
+    },
+    "geometry-beyond-tolerance": {
+      "report.json": "4a1f9b92b5bbeaaeec3753be90753ae32432d733fad1fb8b44bda784feca4f2c",
+      "worker.json": "541823b910ef36a219b66535931b83f0f4660e7dc3736babf7b117b2a5dab28e",
+      "source.pptx": "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937",
+      "saved.pptx": "636256e030cc3cd007d0ef6102540ee08abe4842869fcfee18a691e001bec533",
+      "original.png": "f773035c4cfc0e2203e1ecc66de2a348ee328fd2cc58f79389593aa3f11b4455",
+      "reopened.png": "f773035c4cfc0e2203e1ecc66de2a348ee328fd2cc58f79389593aa3f11b4455",
+      "inputs/input.pptx": "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937",
+      "inputs/native-picture-control.ps1": "e3ae357f0e2cd45a72c83a0ac545d42d8698d84d81498a8bffd9dba8c761017a",
+      "inputs/native-process.ps1": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+      "generation/generation.json": "dabfa6b34d07ea01ffdec0a4da6376df3ce470c36ea53c5f3d2ee0b3a4522238",
+      "fixture.json": "c1bef68ffb8ef6aae29190211413ad1c0f5fe0553d49c8f798b096ca3c35eb9e"
+    },
+    "bad-worker-result": {
+      "report.json": "dcf0c562be431051914b589e4c136e571c4685a3feed500a8d621ddfc5b4d539",
+      "worker.json": "541823b910ef36a219b66535931b83f0f4660e7dc3736babf7b117b2a5dab28e",
+      "source.pptx": "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937",
+      "saved.pptx": "636256e030cc3cd007d0ef6102540ee08abe4842869fcfee18a691e001bec533",
+      "original.png": "f773035c4cfc0e2203e1ecc66de2a348ee328fd2cc58f79389593aa3f11b4455",
+      "reopened.png": "f773035c4cfc0e2203e1ecc66de2a348ee328fd2cc58f79389593aa3f11b4455",
+      "inputs/input.pptx": "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937",
+      "inputs/native-picture-control.ps1": "e3ae357f0e2cd45a72c83a0ac545d42d8698d84d81498a8bffd9dba8c761017a",
+      "inputs/native-process.ps1": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+      "generation/generation.json": "dabfa6b34d07ea01ffdec0a4da6376df3ce470c36ea53c5f3d2ee0b3a4522238",
+      "fixture.json": "a480b130d96eb2b64adfcad2d9b03658d2c5b54da9f70b0d39603c3b1d2c89d7"
+    },
+    "missing-worker-result": {
+      "report.json": "f7ba8ed40d98427c73a8e2ba90c7a7878e317abdeac26a2cf775680dd583086b",
+      "worker.json": "541823b910ef36a219b66535931b83f0f4660e7dc3736babf7b117b2a5dab28e",
+      "source.pptx": "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937",
+      "saved.pptx": "636256e030cc3cd007d0ef6102540ee08abe4842869fcfee18a691e001bec533",
+      "original.png": "f773035c4cfc0e2203e1ecc66de2a348ee328fd2cc58f79389593aa3f11b4455",
+      "reopened.png": "f773035c4cfc0e2203e1ecc66de2a348ee328fd2cc58f79389593aa3f11b4455",
+      "inputs/input.pptx": "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937",
+      "inputs/native-picture-control.ps1": "e3ae357f0e2cd45a72c83a0ac545d42d8698d84d81498a8bffd9dba8c761017a",
+      "inputs/native-process.ps1": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+      "generation/generation.json": "dabfa6b34d07ea01ffdec0a4da6376df3ce470c36ea53c5f3d2ee0b3a4522238",
+      "fixture.json": "effdcae19e5bd8d7f711a4304cfc3243dde571bd1a8a788eae8205d38c89fca7"
+    },
+    "existing-comparison-preserved": {
+      "report.json": "774983cbf8f750dcd30a19f9abeb71e571af5c42fc11301d286c135bed2bf82b",
+      "worker.json": "541823b910ef36a219b66535931b83f0f4660e7dc3736babf7b117b2a5dab28e",
+      "source.pptx": "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937",
+      "saved.pptx": "636256e030cc3cd007d0ef6102540ee08abe4842869fcfee18a691e001bec533",
+      "original.png": "f773035c4cfc0e2203e1ecc66de2a348ee328fd2cc58f79389593aa3f11b4455",
+      "reopened.png": "f773035c4cfc0e2203e1ecc66de2a348ee328fd2cc58f79389593aa3f11b4455",
+      "inputs/input.pptx": "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937",
+      "inputs/native-picture-control.ps1": "e3ae357f0e2cd45a72c83a0ac545d42d8698d84d81498a8bffd9dba8c761017a",
+      "inputs/native-process.ps1": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+      "generation/generation.json": "dabfa6b34d07ea01ffdec0a4da6376df3ce470c36ea53c5f3d2ee0b3a4522238",
+      "fixture.json": "5d21d275ac358457f443eead9253c0609b2e429f3988b9d301307e5d6c86d551"
+    }
+  },
+  "checks": [
+    {
+      "name": "missing-generation-argument",
+      "passed": true,
+      "exitCode": 1,
+      "comparisonSha256": "6d6e908543cedefaf89f9120ab0b9a770a70c8859e7f12b33f5d1c87555d3530"
+    },
+    {
+      "name": "missing-raster-file",
+      "passed": true,
+      "exitCode": 1,
+      "comparisonSha256": "ec1561754b86ad900dbb638d09f38d0abe0d2b1b0d7ecec7d7886c7c3cacd179"
+    },
+    {
+      "name": "tampered-source-snapshot",
+      "passed": true,
+      "exitCode": 1,
+      "comparisonSha256": "d53e4c1e139c677b536d5b0f70389a68c85d0a961d68f6bd719b7550c0227ab4"
+    },
+    {
+      "name": "out-of-run-raster-path",
+      "passed": true,
+      "exitCode": 1,
+      "comparisonSha256": "f606d4b66064b5bcfe148374c270ee1925cf6331708b5dbbb6f2a9b4721d807c"
+    },
+    {
+      "name": "geometry-beyond-tolerance",
+      "passed": true,
+      "exitCode": 1,
+      "comparisonSha256": "fc8b18b523cee5ec8fc67d71ebbb61544f24bbaed219352e24b9ce0c27526905"
+    },
+    {
+      "name": "bad-worker-result",
+      "passed": true,
+      "exitCode": 1,
+      "comparisonSha256": "5eea9de4056a9da7c4bca9bc4edd3c86d24d93cea4c3a0e936375dab3f56eb56"
+    },
+    {
+      "name": "missing-worker-result",
+      "passed": true,
+      "exitCode": 1,
+      "comparisonSha256": "bebd902dba2510418c3fc41e1873fb932d67220f75a393250444fb774fd75740"
+    },
+    {
+      "name": "existing-comparison-preserved",
+      "passed": true,
+      "firstRunExitCode": 0,
+      "primaryComparisonPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\existing-comparison-preserved\\comparison.json",
+      "primaryComparisonSha256": "033967a8643575b843d3dbd6e854ff189006130f5f4e66a49afc3b15f2c43dce",
+      "primaryComparisonPreserved": true,
+      "repeatExitCode": 1,
+      "repeatComparisonSha256": "83d7e4a178df87d99af35401eaaa435f8d2a6e914be181976392c187519c11ce",
+      "repeat": {
+        "name": "existing-comparison-preserved",
+        "label": "repeat",
+        "exitCode": 1,
+        "signal": null,
+        "spawnError": null,
+        "stdout": "{\"passed\":false,\"mode\":\"supplied-presentation\",\"checks\":35,\"failures\":[{\"name\":\"write imported OPF evidence without overwriting\",\"message\":\"EEXIST: file already exists, open 'C:\\\\Users\\\\micha\\\\.codex\\\\worktrees\\\\fd3f\\\\opf\\\\artifacts\\\\windows-resume-20260921\\\\comparator-controls-01\\\\existing-comparison-preserved\\\\saved-import.opf.json'\"}],\"outputPath\":\"C:\\\\Users\\\\micha\\\\.codex\\\\worktrees\\\\fd3f\\\\opf\\\\artifacts\\\\windows-resume-20260921\\\\comparator-controls-01\\\\existing-comparison-preserved\\\\comparison-2026-09-21T18-00-57-293Z.json\"}\n",
+        "stderr": "",
+        "stdoutSha256": "c8c457e982dd3130cf186a61c1a034893ea18a80e334bfc38220ca79d5da4f79",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdoutLog": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\existing-comparison-preserved\\repeat.stdout.log",
+        "stderrLog": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\existing-comparison-preserved\\repeat.stderr.log",
+        "comparisonPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\existing-comparison-preserved\\comparison-2026-09-21T18-00-57-293Z.json",
+        "comparisonSha256": "83d7e4a178df87d99af35401eaaa435f8d2a6e914be181976392c187519c11ce",
+        "comparison": {
+          "passed": false,
+          "mode": "supplied-presentation",
+          "scope": "Supplied registry presentation lifecycle, source snapshot identity, native geometry/alt text and current-image reimport. Runtime binding covers only the four recorded OpenPresentation package manifests, complete dist trees, the PPTX vendor tree, and consumer lockfile; it does not prove transitive dependency bytes.",
+          "node": "v24.21.0",
+          "verifierSha256": "1e2cd017ea16f8475fc3cf9fd8c0df46255dc8e01b1d37a80c3a07f26f4844e9",
+          "reportSha256": "774983cbf8f750dcd30a19f9abeb71e571af5c42fc11301d286c135bed2bf82b",
+          "checks": [
+            {
+              "name": "Node 24 supported",
+              "passed": true
+            },
+            {
+              "name": "native report readable",
+              "passed": true
+            },
+            {
+              "name": "worker report readable",
+              "passed": true
+            },
+            {
+              "name": "supplied-presentation mode requires generation argument",
+              "passed": true
+            },
+            {
+              "name": "registry generation report readable",
+              "passed": true
+            },
+            {
+              "name": "owned presentations closed",
+              "passed": true
+            },
+            {
+              "name": "native control reached completion",
+              "passed": true
+            },
+            {
+              "name": "worker completed within its deadline",
+              "passed": true
+            },
+            {
+              "name": "verifier source matches owned input snapshot",
+              "passed": true
+            },
+            {
+              "name": "processHelper source matches owned input snapshot",
+              "passed": true
+            },
+            {
+              "name": "presentation source matches owned input snapshot",
+              "passed": true
+            },
+            {
+              "name": "opened source matches owned input snapshot",
+              "passed": true
+            },
+            {
+              "name": "saved presentation file identity",
+              "passed": true
+            },
+            {
+              "name": "reopened presentation file identity",
+              "passed": true
+            },
+            {
+              "name": "original raster file identity",
+              "passed": true
+            },
+            {
+              "name": "reopened raster file identity",
+              "passed": true
+            },
+            {
+              "name": "saved and reopened presentation identities agree",
+              "passed": true
+            },
+            {
+              "name": "save/reopen raster is identical",
+              "passed": true
+            },
+            {
+              "name": "original contains one embedded native picture",
+              "passed": true
+            },
+            {
+              "name": "reopened contains one embedded native picture",
+              "passed": true
+            },
+            {
+              "name": "original left within unchanged 0.02pt gate",
+              "passed": true
+            },
+            {
+              "name": "original top within unchanged 0.02pt gate",
+              "passed": true
+            },
+            {
+              "name": "original width within unchanged 0.02pt gate",
+              "passed": true
+            },
+            {
+              "name": "original height within unchanged 0.02pt gate",
+              "passed": true
+            },
+            {
+              "name": "original native alt",
+              "passed": true
+            },
+            {
+              "name": "reopened left within unchanged 0.02pt gate",
+              "passed": true
+            },
+            {
+              "name": "reopened top within unchanged 0.02pt gate",
+              "passed": true
+            },
+            {
+              "name": "reopened width within unchanged 0.02pt gate",
+              "passed": true
+            },
+            {
+              "name": "reopened height within unchanged 0.02pt gate",
+              "passed": true
+            },
+            {
+              "name": "reopened native alt",
+              "passed": true
+            },
+            {
+              "name": "registry package and lock bindings unchanged",
+              "passed": true
+            },
+            {
+              "name": "opened supplied registry presentation",
+              "passed": true
+            },
+            {
+              "name": "current picture reimport",
+              "passed": true
+            },
+            {
+              "name": "write imported OPF evidence without overwriting",
+              "passed": false
+            },
+            {
+              "name": "comparator source hash available",
+              "passed": true
+            }
+          ],
+          "failures": [
+            {
+              "name": "write imported OPF evidence without overwriting",
+              "message": "EEXIST: file already exists, open 'C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\existing-comparison-preserved\\saved-import.opf.json'"
+            }
+          ],
+          "outputNote": "comparison.json already existed and was preserved; this result was written to a unique filename.",
+          "outputPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\existing-comparison-preserved\\comparison-2026-09-21T18-00-57-293Z.json"
+        },
+        "stdoutSummary": {
+          "passed": false,
+          "mode": "supplied-presentation",
+          "checks": 35,
+          "failures": [
+            {
+              "name": "write imported OPF evidence without overwriting",
+              "message": "EEXIST: file already exists, open 'C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\existing-comparison-preserved\\saved-import.opf.json'"
+            }
+          ],
+          "outputPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\existing-comparison-preserved\\comparison-2026-09-21T18-00-57-293Z.json"
+        },
+        "fixtureSha256": {
+          "comparison-2026-09-21T18-00-57-293Z.json": "83d7e4a178df87d99af35401eaaa435f8d2a6e914be181976392c187519c11ce",
+          "comparison.json": "033967a8643575b843d3dbd6e854ff189006130f5f4e66a49afc3b15f2c43dce",
+          "first.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "first.stdout.log": "0c076346d4e45dbe6a2527a6873e03568d2ad1887f15c33f66c2946265891298",
+          "fixture.json": "5d21d275ac358457f443eead9253c0609b2e429f3988b9d301307e5d6c86d551",
+          "generation/generation.json": "dabfa6b34d07ea01ffdec0a4da6376df3ce470c36ea53c5f3d2ee0b3a4522238",
+          "inputs/input.pptx": "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937",
+          "inputs/native-picture-control.ps1": "e3ae357f0e2cd45a72c83a0ac545d42d8698d84d81498a8bffd9dba8c761017a",
+          "inputs/native-process.ps1": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+          "original.png": "f773035c4cfc0e2203e1ecc66de2a348ee328fd2cc58f79389593aa3f11b4455",
+          "reopened.png": "f773035c4cfc0e2203e1ecc66de2a348ee328fd2cc58f79389593aa3f11b4455",
+          "repeat.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "repeat.stdout.log": "c8c457e982dd3130cf186a61c1a034893ea18a80e334bfc38220ca79d5da4f79",
+          "report.json": "774983cbf8f750dcd30a19f9abeb71e571af5c42fc11301d286c135bed2bf82b",
+          "saved-import.opf.json": "1efe86e05f8a591b7550ff08d35536f60f37d06b7898645264086e9eb462a529",
+          "saved.pptx": "636256e030cc3cd007d0ef6102540ee08abe4842869fcfee18a691e001bec533",
+          "source.pptx": "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937",
+          "worker.json": "541823b910ef36a219b66535931b83f0f4660e7dc3736babf7b117b2a5dab28e"
+        }
+      },
+      "repeatComparisonPassed": false,
+      "repeatFailedOnlyForSavedImportCollision": true
+    }
+  ],
+  "passed": true,
+  "runs": [
+    {
+      "name": "missing-generation-argument",
+      "label": "run",
+      "exitCode": 1,
+      "signal": null,
+      "spawnError": null,
+      "stdout": "{\"passed\":false,\"mode\":\"supplied-presentation\",\"checks\":21,\"failures\":[{\"name\":\"supplied-presentation mode requires generation argument\",\"message\":\"Pass the matching registry generation directory.\"},{\"name\":\"registry generation metadata available\",\"message\":\"Geometry and reimport checks require the supplied registry generation report.\"}],\"outputPath\":\"C:\\\\Users\\\\micha\\\\.codex\\\\worktrees\\\\fd3f\\\\opf\\\\artifacts\\\\windows-resume-20260921\\\\comparator-controls-01\\\\missing-generation-argument\\\\comparison.json\"}\n",
+      "stderr": "",
+      "stdoutSha256": "692461f868f3315e044781e33201cf713aae4b0df901bc4b66f7ee2cb7dfb5be",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutLog": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\missing-generation-argument\\run.stdout.log",
+      "stderrLog": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\missing-generation-argument\\run.stderr.log",
+      "comparisonPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\missing-generation-argument\\comparison.json",
+      "comparisonSha256": "6d6e908543cedefaf89f9120ab0b9a770a70c8859e7f12b33f5d1c87555d3530",
+      "comparison": {
+        "passed": false,
+        "mode": "supplied-presentation",
+        "scope": "Supplied registry presentation lifecycle, source snapshot identity, native geometry/alt text and current-image reimport. Runtime binding covers only the four recorded OpenPresentation package manifests, complete dist trees, the PPTX vendor tree, and consumer lockfile; it does not prove transitive dependency bytes.",
+        "node": "v24.21.0",
+        "verifierSha256": "1e2cd017ea16f8475fc3cf9fd8c0df46255dc8e01b1d37a80c3a07f26f4844e9",
+        "reportSha256": "b1babef083119535464ea45e8108e7de182b40353add6847d0101eec9da70274",
+        "checks": [
+          {
+            "name": "Node 24 supported",
+            "passed": true
+          },
+          {
+            "name": "native report readable",
+            "passed": true
+          },
+          {
+            "name": "worker report readable",
+            "passed": true
+          },
+          {
+            "name": "supplied-presentation mode requires generation argument",
+            "passed": false
+          },
+          {
+            "name": "owned presentations closed",
+            "passed": true
+          },
+          {
+            "name": "native control reached completion",
+            "passed": true
+          },
+          {
+            "name": "worker completed within its deadline",
+            "passed": true
+          },
+          {
+            "name": "verifier source matches owned input snapshot",
+            "passed": true
+          },
+          {
+            "name": "processHelper source matches owned input snapshot",
+            "passed": true
+          },
+          {
+            "name": "presentation source matches owned input snapshot",
+            "passed": true
+          },
+          {
+            "name": "opened source matches owned input snapshot",
+            "passed": true
+          },
+          {
+            "name": "saved presentation file identity",
+            "passed": true
+          },
+          {
+            "name": "reopened presentation file identity",
+            "passed": true
+          },
+          {
+            "name": "original raster file identity",
+            "passed": true
+          },
+          {
+            "name": "reopened raster file identity",
+            "passed": true
+          },
+          {
+            "name": "saved and reopened presentation identities agree",
+            "passed": true
+          },
+          {
+            "name": "save/reopen raster is identical",
+            "passed": true
+          },
+          {
+            "name": "original contains one embedded native picture",
+            "passed": true
+          },
+          {
+            "name": "reopened contains one embedded native picture",
+            "passed": true
+          },
+          {
+            "name": "registry generation metadata available",
+            "passed": false
+          },
+          {
+            "name": "comparator source hash available",
+            "passed": true
+          }
+        ],
+        "failures": [
+          {
+            "name": "supplied-presentation mode requires generation argument",
+            "message": "Pass the matching registry generation directory."
+          },
+          {
+            "name": "registry generation metadata available",
+            "message": "Geometry and reimport checks require the supplied registry generation report."
+          }
+        ],
+        "outputPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\missing-generation-argument\\comparison.json"
+      },
+      "stdoutSummary": {
+        "passed": false,
+        "mode": "supplied-presentation",
+        "checks": 21,
+        "failures": [
+          {
+            "name": "supplied-presentation mode requires generation argument",
+            "message": "Pass the matching registry generation directory."
+          },
+          {
+            "name": "registry generation metadata available",
+            "message": "Geometry and reimport checks require the supplied registry generation report."
+          }
+        ],
+        "outputPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\missing-generation-argument\\comparison.json"
+      },
+      "fixtureSha256": {
+        "fixture.json": "9db5874b560c2568f2a6a92619bb5615b2f56d68b3fd85a4bd24e78d8d2cd4e3",
+        "generation/generation.json": "dabfa6b34d07ea01ffdec0a4da6376df3ce470c36ea53c5f3d2ee0b3a4522238",
+        "inputs/input.pptx": "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937",
+        "inputs/native-picture-control.ps1": "e3ae357f0e2cd45a72c83a0ac545d42d8698d84d81498a8bffd9dba8c761017a",
+        "inputs/native-process.ps1": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+        "original.png": "f773035c4cfc0e2203e1ecc66de2a348ee328fd2cc58f79389593aa3f11b4455",
+        "reopened.png": "f773035c4cfc0e2203e1ecc66de2a348ee328fd2cc58f79389593aa3f11b4455",
+        "report.json": "b1babef083119535464ea45e8108e7de182b40353add6847d0101eec9da70274",
+        "saved.pptx": "636256e030cc3cd007d0ef6102540ee08abe4842869fcfee18a691e001bec533",
+        "source.pptx": "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937",
+        "worker.json": "541823b910ef36a219b66535931b83f0f4660e7dc3736babf7b117b2a5dab28e"
+      }
+    },
+    {
+      "name": "missing-raster-file",
+      "label": "run",
+      "exitCode": 1,
+      "signal": null,
+      "spawnError": null,
+      "stdout": "{\"passed\":false,\"mode\":\"supplied-presentation\",\"checks\":35,\"failures\":[{\"name\":\"reopened raster file identity\",\"message\":\"ENOENT: no such file or directory, realpath 'C:\\\\Users\\\\micha\\\\.codex\\\\worktrees\\\\fd3f\\\\opf\\\\artifacts\\\\windows-resume-20260921\\\\comparator-controls-01\\\\missing-raster-file\\\\reopened.png'\"}],\"outputPath\":\"C:\\\\Users\\\\micha\\\\.codex\\\\worktrees\\\\fd3f\\\\opf\\\\artifacts\\\\windows-resume-20260921\\\\comparator-controls-01\\\\missing-raster-file\\\\comparison.json\"}\n",
+      "stderr": "",
+      "stdoutSha256": "4c7048a874921878ff7dc0b29198340a84a1650052650131e0d64d55b193da66",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutLog": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\missing-raster-file\\run.stdout.log",
+      "stderrLog": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\missing-raster-file\\run.stderr.log",
+      "comparisonPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\missing-raster-file\\comparison.json",
+      "comparisonSha256": "ec1561754b86ad900dbb638d09f38d0abe0d2b1b0d7ecec7d7886c7c3cacd179",
+      "comparison": {
+        "passed": false,
+        "mode": "supplied-presentation",
+        "scope": "Supplied registry presentation lifecycle, source snapshot identity, native geometry/alt text and current-image reimport. Runtime binding covers only the four recorded OpenPresentation package manifests, complete dist trees, the PPTX vendor tree, and consumer lockfile; it does not prove transitive dependency bytes.",
+        "node": "v24.21.0",
+        "verifierSha256": "1e2cd017ea16f8475fc3cf9fd8c0df46255dc8e01b1d37a80c3a07f26f4844e9",
+        "reportSha256": "c8bfbf3a8239a85857bcc00a9431b5f1a97c79c9c4a556be2a068d148d5dc75c",
+        "checks": [
+          {
+            "name": "Node 24 supported",
+            "passed": true
+          },
+          {
+            "name": "native report readable",
+            "passed": true
+          },
+          {
+            "name": "worker report readable",
+            "passed": true
+          },
+          {
+            "name": "supplied-presentation mode requires generation argument",
+            "passed": true
+          },
+          {
+            "name": "registry generation report readable",
+            "passed": true
+          },
+          {
+            "name": "owned presentations closed",
+            "passed": true
+          },
+          {
+            "name": "native control reached completion",
+            "passed": true
+          },
+          {
+            "name": "worker completed within its deadline",
+            "passed": true
+          },
+          {
+            "name": "verifier source matches owned input snapshot",
+            "passed": true
+          },
+          {
+            "name": "processHelper source matches owned input snapshot",
+            "passed": true
+          },
+          {
+            "name": "presentation source matches owned input snapshot",
+            "passed": true
+          },
+          {
+            "name": "opened source matches owned input snapshot",
+            "passed": true
+          },
+          {
+            "name": "saved presentation file identity",
+            "passed": true
+          },
+          {
+            "name": "reopened presentation file identity",
+            "passed": true
+          },
+          {
+            "name": "original raster file identity",
+            "passed": true
+          },
+          {
+            "name": "reopened raster file identity",
+            "passed": false
+          },
+          {
+            "name": "saved and reopened presentation identities agree",
+            "passed": true
+          },
+          {
+            "name": "save/reopen raster is identical",
+            "passed": true
+          },
+          {
+            "name": "original contains one embedded native picture",
+            "passed": true
+          },
+          {
+            "name": "reopened contains one embedded native picture",
+            "passed": true
+          },
+          {
+            "name": "original left within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "original top within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "original width within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "original height within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "original native alt",
+            "passed": true
+          },
+          {
+            "name": "reopened left within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "reopened top within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "reopened width within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "reopened height within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "reopened native alt",
+            "passed": true
+          },
+          {
+            "name": "registry package and lock bindings unchanged",
+            "passed": true
+          },
+          {
+            "name": "opened supplied registry presentation",
+            "passed": true
+          },
+          {
+            "name": "current picture reimport",
+            "passed": true
+          },
+          {
+            "name": "write imported OPF evidence without overwriting",
+            "passed": true
+          },
+          {
+            "name": "comparator source hash available",
+            "passed": true
+          }
+        ],
+        "failures": [
+          {
+            "name": "reopened raster file identity",
+            "message": "ENOENT: no such file or directory, realpath 'C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\missing-raster-file\\reopened.png'"
+          }
+        ],
+        "outputPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\missing-raster-file\\comparison.json"
+      },
+      "stdoutSummary": {
+        "passed": false,
+        "mode": "supplied-presentation",
+        "checks": 35,
+        "failures": [
+          {
+            "name": "reopened raster file identity",
+            "message": "ENOENT: no such file or directory, realpath 'C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\missing-raster-file\\reopened.png'"
+          }
+        ],
+        "outputPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\missing-raster-file\\comparison.json"
+      },
+      "fixtureSha256": {
+        "fixture.json": "ad99a344fe142f82fa66d417326f42527426a045cfb5c3d2771f55668b5dcc43",
+        "generation/generation.json": "dabfa6b34d07ea01ffdec0a4da6376df3ce470c36ea53c5f3d2ee0b3a4522238",
+        "inputs/input.pptx": "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937",
+        "inputs/native-picture-control.ps1": "e3ae357f0e2cd45a72c83a0ac545d42d8698d84d81498a8bffd9dba8c761017a",
+        "inputs/native-process.ps1": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+        "original.png": "f773035c4cfc0e2203e1ecc66de2a348ee328fd2cc58f79389593aa3f11b4455",
+        "report.json": "c8bfbf3a8239a85857bcc00a9431b5f1a97c79c9c4a556be2a068d148d5dc75c",
+        "saved.pptx": "636256e030cc3cd007d0ef6102540ee08abe4842869fcfee18a691e001bec533",
+        "source.pptx": "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937",
+        "worker.json": "541823b910ef36a219b66535931b83f0f4660e7dc3736babf7b117b2a5dab28e"
+      }
+    },
+    {
+      "name": "tampered-source-snapshot",
+      "label": "run",
+      "exitCode": 1,
+      "signal": null,
+      "spawnError": null,
+      "stdout": "{\"passed\":false,\"mode\":\"supplied-presentation\",\"checks\":35,\"failures\":[{\"name\":\"presentation source matches owned input snapshot\",\"message\":\"Owned input snapshot bytes changed.\\n+ actual - expected\\n\\n+ '35c03a8e0b6d73b91c72ed89ce09b45d0b3a491def1681ee30c108825f90bbaa'\\n- '9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937'\\n\"},{\"name\":\"opened source matches owned input snapshot\",\"message\":\"Missing owned presentation snapshot.\"},{\"name\":\"opened supplied registry presentation\",\"message\":\"Opened presentation bytes differ from the generated registry PPTX.\\n+ actual - expected\\n\\n+ null\\n- '9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937'\\n\"}],\"outputPath\":\"C:\\\\Users\\\\micha\\\\.codex\\\\worktrees\\\\fd3f\\\\opf\\\\artifacts\\\\windows-resume-20260921\\\\comparator-controls-01\\\\tampered-source-snapshot\\\\comparison.json\"}\n",
+      "stderr": "",
+      "stdoutSha256": "d2a9b243a63047a8b306514de7ad9f664c0857dd75739cbcc1f6b067f5925c93",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutLog": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\tampered-source-snapshot\\run.stdout.log",
+      "stderrLog": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\tampered-source-snapshot\\run.stderr.log",
+      "comparisonPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\tampered-source-snapshot\\comparison.json",
+      "comparisonSha256": "d53e4c1e139c677b536d5b0f70389a68c85d0a961d68f6bd719b7550c0227ab4",
+      "comparison": {
+        "passed": false,
+        "mode": "supplied-presentation",
+        "scope": "Supplied registry presentation lifecycle, source snapshot identity, native geometry/alt text and current-image reimport. Runtime binding covers only the four recorded OpenPresentation package manifests, complete dist trees, the PPTX vendor tree, and consumer lockfile; it does not prove transitive dependency bytes.",
+        "node": "v24.21.0",
+        "verifierSha256": "1e2cd017ea16f8475fc3cf9fd8c0df46255dc8e01b1d37a80c3a07f26f4844e9",
+        "reportSha256": "316c23a27d638ca29e23c6362f529ca89538f25bac80741a1c3fcb99eb7f556d",
+        "checks": [
+          {
+            "name": "Node 24 supported",
+            "passed": true
+          },
+          {
+            "name": "native report readable",
+            "passed": true
+          },
+          {
+            "name": "worker report readable",
+            "passed": true
+          },
+          {
+            "name": "supplied-presentation mode requires generation argument",
+            "passed": true
+          },
+          {
+            "name": "registry generation report readable",
+            "passed": true
+          },
+          {
+            "name": "owned presentations closed",
+            "passed": true
+          },
+          {
+            "name": "native control reached completion",
+            "passed": true
+          },
+          {
+            "name": "worker completed within its deadline",
+            "passed": true
+          },
+          {
+            "name": "verifier source matches owned input snapshot",
+            "passed": true
+          },
+          {
+            "name": "processHelper source matches owned input snapshot",
+            "passed": true
+          },
+          {
+            "name": "presentation source matches owned input snapshot",
+            "passed": false
+          },
+          {
+            "name": "opened source matches owned input snapshot",
+            "passed": false
+          },
+          {
+            "name": "saved presentation file identity",
+            "passed": true
+          },
+          {
+            "name": "reopened presentation file identity",
+            "passed": true
+          },
+          {
+            "name": "original raster file identity",
+            "passed": true
+          },
+          {
+            "name": "reopened raster file identity",
+            "passed": true
+          },
+          {
+            "name": "saved and reopened presentation identities agree",
+            "passed": true
+          },
+          {
+            "name": "save/reopen raster is identical",
+            "passed": true
+          },
+          {
+            "name": "original contains one embedded native picture",
+            "passed": true
+          },
+          {
+            "name": "reopened contains one embedded native picture",
+            "passed": true
+          },
+          {
+            "name": "original left within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "original top within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "original width within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "original height within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "original native alt",
+            "passed": true
+          },
+          {
+            "name": "reopened left within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "reopened top within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "reopened width within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "reopened height within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "reopened native alt",
+            "passed": true
+          },
+          {
+            "name": "registry package and lock bindings unchanged",
+            "passed": true
+          },
+          {
+            "name": "opened supplied registry presentation",
+            "passed": false
+          },
+          {
+            "name": "current picture reimport",
+            "passed": true
+          },
+          {
+            "name": "write imported OPF evidence without overwriting",
+            "passed": true
+          },
+          {
+            "name": "comparator source hash available",
+            "passed": true
+          }
+        ],
+        "failures": [
+          {
+            "name": "presentation source matches owned input snapshot",
+            "message": "Owned input snapshot bytes changed.\n+ actual - expected\n\n+ '35c03a8e0b6d73b91c72ed89ce09b45d0b3a491def1681ee30c108825f90bbaa'\n- '9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937'\n"
+          },
+          {
+            "name": "opened source matches owned input snapshot",
+            "message": "Missing owned presentation snapshot."
+          },
+          {
+            "name": "opened supplied registry presentation",
+            "message": "Opened presentation bytes differ from the generated registry PPTX.\n+ actual - expected\n\n+ null\n- '9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937'\n"
+          }
+        ],
+        "outputPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\tampered-source-snapshot\\comparison.json"
+      },
+      "stdoutSummary": {
+        "passed": false,
+        "mode": "supplied-presentation",
+        "checks": 35,
+        "failures": [
+          {
+            "name": "presentation source matches owned input snapshot",
+            "message": "Owned input snapshot bytes changed.\n+ actual - expected\n\n+ '35c03a8e0b6d73b91c72ed89ce09b45d0b3a491def1681ee30c108825f90bbaa'\n- '9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937'\n"
+          },
+          {
+            "name": "opened source matches owned input snapshot",
+            "message": "Missing owned presentation snapshot."
+          },
+          {
+            "name": "opened supplied registry presentation",
+            "message": "Opened presentation bytes differ from the generated registry PPTX.\n+ actual - expected\n\n+ null\n- '9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937'\n"
+          }
+        ],
+        "outputPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\tampered-source-snapshot\\comparison.json"
+      },
+      "fixtureSha256": {
+        "fixture.json": "ada02b9834645322de0acd25d212a8f39f72b38490bba36d2bb94353c9d853b1",
+        "generation/generation.json": "dabfa6b34d07ea01ffdec0a4da6376df3ce470c36ea53c5f3d2ee0b3a4522238",
+        "inputs/input.pptx": "35c03a8e0b6d73b91c72ed89ce09b45d0b3a491def1681ee30c108825f90bbaa",
+        "inputs/native-picture-control.ps1": "e3ae357f0e2cd45a72c83a0ac545d42d8698d84d81498a8bffd9dba8c761017a",
+        "inputs/native-process.ps1": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+        "original.png": "f773035c4cfc0e2203e1ecc66de2a348ee328fd2cc58f79389593aa3f11b4455",
+        "reopened.png": "f773035c4cfc0e2203e1ecc66de2a348ee328fd2cc58f79389593aa3f11b4455",
+        "report.json": "316c23a27d638ca29e23c6362f529ca89538f25bac80741a1c3fcb99eb7f556d",
+        "saved.pptx": "636256e030cc3cd007d0ef6102540ee08abe4842869fcfee18a691e001bec533",
+        "source.pptx": "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937",
+        "worker.json": "541823b910ef36a219b66535931b83f0f4660e7dc3736babf7b117b2a5dab28e"
+      }
+    },
+    {
+      "name": "out-of-run-raster-path",
+      "label": "run",
+      "exitCode": 1,
+      "signal": null,
+      "spawnError": null,
+      "stdout": "{\"passed\":false,\"mode\":\"supplied-presentation\",\"checks\":35,\"failures\":[{\"name\":\"reopened raster file identity\",\"message\":\"reopened raster resolves outside its allowed directory: C:\\\\Users\\\\micha\\\\.codex\\\\worktrees\\\\fd3f\\\\opf\\\\artifacts\\\\windows-resume-20260921\\\\registry-native-01\\\\reopened.png\"}],\"outputPath\":\"C:\\\\Users\\\\micha\\\\.codex\\\\worktrees\\\\fd3f\\\\opf\\\\artifacts\\\\windows-resume-20260921\\\\comparator-controls-01\\\\out-of-run-raster-path\\\\comparison.json\"}\n",
+      "stderr": "",
+      "stdoutSha256": "0ee2aefa9901559950386f75bc4023017a2beebd07480509df84d3b40140ebe3",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutLog": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\out-of-run-raster-path\\run.stdout.log",
+      "stderrLog": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\out-of-run-raster-path\\run.stderr.log",
+      "comparisonPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\out-of-run-raster-path\\comparison.json",
+      "comparisonSha256": "f606d4b66064b5bcfe148374c270ee1925cf6331708b5dbbb6f2a9b4721d807c",
+      "comparison": {
+        "passed": false,
+        "mode": "supplied-presentation",
+        "scope": "Supplied registry presentation lifecycle, source snapshot identity, native geometry/alt text and current-image reimport. Runtime binding covers only the four recorded OpenPresentation package manifests, complete dist trees, the PPTX vendor tree, and consumer lockfile; it does not prove transitive dependency bytes.",
+        "node": "v24.21.0",
+        "verifierSha256": "1e2cd017ea16f8475fc3cf9fd8c0df46255dc8e01b1d37a80c3a07f26f4844e9",
+        "reportSha256": "03e6b204727be9893763cdb3a18018491b2b591f5da08e4324176dbd11cd3415",
+        "checks": [
+          {
+            "name": "Node 24 supported",
+            "passed": true
+          },
+          {
+            "name": "native report readable",
+            "passed": true
+          },
+          {
+            "name": "worker report readable",
+            "passed": true
+          },
+          {
+            "name": "supplied-presentation mode requires generation argument",
+            "passed": true
+          },
+          {
+            "name": "registry generation report readable",
+            "passed": true
+          },
+          {
+            "name": "owned presentations closed",
+            "passed": true
+          },
+          {
+            "name": "native control reached completion",
+            "passed": true
+          },
+          {
+            "name": "worker completed within its deadline",
+            "passed": true
+          },
+          {
+            "name": "verifier source matches owned input snapshot",
+            "passed": true
+          },
+          {
+            "name": "processHelper source matches owned input snapshot",
+            "passed": true
+          },
+          {
+            "name": "presentation source matches owned input snapshot",
+            "passed": true
+          },
+          {
+            "name": "opened source matches owned input snapshot",
+            "passed": true
+          },
+          {
+            "name": "saved presentation file identity",
+            "passed": true
+          },
+          {
+            "name": "reopened presentation file identity",
+            "passed": true
+          },
+          {
+            "name": "original raster file identity",
+            "passed": true
+          },
+          {
+            "name": "reopened raster file identity",
+            "passed": false
+          },
+          {
+            "name": "saved and reopened presentation identities agree",
+            "passed": true
+          },
+          {
+            "name": "save/reopen raster is identical",
+            "passed": true
+          },
+          {
+            "name": "original contains one embedded native picture",
+            "passed": true
+          },
+          {
+            "name": "reopened contains one embedded native picture",
+            "passed": true
+          },
+          {
+            "name": "original left within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "original top within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "original width within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "original height within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "original native alt",
+            "passed": true
+          },
+          {
+            "name": "reopened left within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "reopened top within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "reopened width within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "reopened height within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "reopened native alt",
+            "passed": true
+          },
+          {
+            "name": "registry package and lock bindings unchanged",
+            "passed": true
+          },
+          {
+            "name": "opened supplied registry presentation",
+            "passed": true
+          },
+          {
+            "name": "current picture reimport",
+            "passed": true
+          },
+          {
+            "name": "write imported OPF evidence without overwriting",
+            "passed": true
+          },
+          {
+            "name": "comparator source hash available",
+            "passed": true
+          }
+        ],
+        "failures": [
+          {
+            "name": "reopened raster file identity",
+            "message": "reopened raster resolves outside its allowed directory: C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-native-01\\reopened.png"
+          }
+        ],
+        "outputPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\out-of-run-raster-path\\comparison.json"
+      },
+      "stdoutSummary": {
+        "passed": false,
+        "mode": "supplied-presentation",
+        "checks": 35,
+        "failures": [
+          {
+            "name": "reopened raster file identity",
+            "message": "reopened raster resolves outside its allowed directory: C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-native-01\\reopened.png"
+          }
+        ],
+        "outputPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\out-of-run-raster-path\\comparison.json"
+      },
+      "fixtureSha256": {
+        "fixture.json": "678866c7c166894438adc8183341ff1c9e44d400bd93236f83f5bc159b94ecf9",
+        "generation/generation.json": "dabfa6b34d07ea01ffdec0a4da6376df3ce470c36ea53c5f3d2ee0b3a4522238",
+        "inputs/input.pptx": "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937",
+        "inputs/native-picture-control.ps1": "e3ae357f0e2cd45a72c83a0ac545d42d8698d84d81498a8bffd9dba8c761017a",
+        "inputs/native-process.ps1": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+        "original.png": "f773035c4cfc0e2203e1ecc66de2a348ee328fd2cc58f79389593aa3f11b4455",
+        "reopened.png": "f773035c4cfc0e2203e1ecc66de2a348ee328fd2cc58f79389593aa3f11b4455",
+        "report.json": "03e6b204727be9893763cdb3a18018491b2b591f5da08e4324176dbd11cd3415",
+        "saved.pptx": "636256e030cc3cd007d0ef6102540ee08abe4842869fcfee18a691e001bec533",
+        "source.pptx": "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937",
+        "worker.json": "541823b910ef36a219b66535931b83f0f4660e7dc3736babf7b117b2a5dab28e"
+      }
+    },
+    {
+      "name": "geometry-beyond-tolerance",
+      "label": "run",
+      "exitCode": 1,
+      "signal": null,
+      "spawnError": null,
+      "stdout": "{\"passed\":false,\"mode\":\"supplied-presentation\",\"checks\":35,\"failures\":[{\"name\":\"original width within unchanged 0.02pt gate\",\"message\":\"873.621 vs 873.6 pt\"}],\"outputPath\":\"C:\\\\Users\\\\micha\\\\.codex\\\\worktrees\\\\fd3f\\\\opf\\\\artifacts\\\\windows-resume-20260921\\\\comparator-controls-01\\\\geometry-beyond-tolerance\\\\comparison.json\"}\n",
+      "stderr": "",
+      "stdoutSha256": "cc98562e6a29f243df0dc2685fbdfb4c2dabb2150d649e871cd8d5c7e9ebc5a0",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutLog": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\geometry-beyond-tolerance\\run.stdout.log",
+      "stderrLog": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\geometry-beyond-tolerance\\run.stderr.log",
+      "comparisonPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\geometry-beyond-tolerance\\comparison.json",
+      "comparisonSha256": "fc8b18b523cee5ec8fc67d71ebbb61544f24bbaed219352e24b9ce0c27526905",
+      "comparison": {
+        "passed": false,
+        "mode": "supplied-presentation",
+        "scope": "Supplied registry presentation lifecycle, source snapshot identity, native geometry/alt text and current-image reimport. Runtime binding covers only the four recorded OpenPresentation package manifests, complete dist trees, the PPTX vendor tree, and consumer lockfile; it does not prove transitive dependency bytes.",
+        "node": "v24.21.0",
+        "verifierSha256": "1e2cd017ea16f8475fc3cf9fd8c0df46255dc8e01b1d37a80c3a07f26f4844e9",
+        "reportSha256": "ded927dd97e444a8283a5192ebcd6f8f4cd8b1a235908c64455dd13cf1fb58e2",
+        "checks": [
+          {
+            "name": "Node 24 supported",
+            "passed": true
+          },
+          {
+            "name": "native report readable",
+            "passed": true
+          },
+          {
+            "name": "worker report readable",
+            "passed": true
+          },
+          {
+            "name": "supplied-presentation mode requires generation argument",
+            "passed": true
+          },
+          {
+            "name": "registry generation report readable",
+            "passed": true
+          },
+          {
+            "name": "owned presentations closed",
+            "passed": true
+          },
+          {
+            "name": "native control reached completion",
+            "passed": true
+          },
+          {
+            "name": "worker completed within its deadline",
+            "passed": true
+          },
+          {
+            "name": "verifier source matches owned input snapshot",
+            "passed": true
+          },
+          {
+            "name": "processHelper source matches owned input snapshot",
+            "passed": true
+          },
+          {
+            "name": "presentation source matches owned input snapshot",
+            "passed": true
+          },
+          {
+            "name": "opened source matches owned input snapshot",
+            "passed": true
+          },
+          {
+            "name": "saved presentation file identity",
+            "passed": true
+          },
+          {
+            "name": "reopened presentation file identity",
+            "passed": true
+          },
+          {
+            "name": "original raster file identity",
+            "passed": true
+          },
+          {
+            "name": "reopened raster file identity",
+            "passed": true
+          },
+          {
+            "name": "saved and reopened presentation identities agree",
+            "passed": true
+          },
+          {
+            "name": "save/reopen raster is identical",
+            "passed": true
+          },
+          {
+            "name": "original contains one embedded native picture",
+            "passed": true
+          },
+          {
+            "name": "reopened contains one embedded native picture",
+            "passed": true
+          },
+          {
+            "name": "original left within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "original top within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "original width within unchanged 0.02pt gate",
+            "passed": false
+          },
+          {
+            "name": "original height within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "original native alt",
+            "passed": true
+          },
+          {
+            "name": "reopened left within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "reopened top within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "reopened width within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "reopened height within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "reopened native alt",
+            "passed": true
+          },
+          {
+            "name": "registry package and lock bindings unchanged",
+            "passed": true
+          },
+          {
+            "name": "opened supplied registry presentation",
+            "passed": true
+          },
+          {
+            "name": "current picture reimport",
+            "passed": true
+          },
+          {
+            "name": "write imported OPF evidence without overwriting",
+            "passed": true
+          },
+          {
+            "name": "comparator source hash available",
+            "passed": true
+          }
+        ],
+        "failures": [
+          {
+            "name": "original width within unchanged 0.02pt gate",
+            "message": "873.621 vs 873.6 pt"
+          }
+        ],
+        "outputPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\geometry-beyond-tolerance\\comparison.json"
+      },
+      "stdoutSummary": {
+        "passed": false,
+        "mode": "supplied-presentation",
+        "checks": 35,
+        "failures": [
+          {
+            "name": "original width within unchanged 0.02pt gate",
+            "message": "873.621 vs 873.6 pt"
+          }
+        ],
+        "outputPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\geometry-beyond-tolerance\\comparison.json"
+      },
+      "fixtureSha256": {
+        "fixture.json": "c1bef68ffb8ef6aae29190211413ad1c0f5fe0553d49c8f798b096ca3c35eb9e",
+        "generation/generation.json": "dabfa6b34d07ea01ffdec0a4da6376df3ce470c36ea53c5f3d2ee0b3a4522238",
+        "inputs/input.pptx": "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937",
+        "inputs/native-picture-control.ps1": "e3ae357f0e2cd45a72c83a0ac545d42d8698d84d81498a8bffd9dba8c761017a",
+        "inputs/native-process.ps1": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+        "original.png": "f773035c4cfc0e2203e1ecc66de2a348ee328fd2cc58f79389593aa3f11b4455",
+        "reopened.png": "f773035c4cfc0e2203e1ecc66de2a348ee328fd2cc58f79389593aa3f11b4455",
+        "report.json": "ded927dd97e444a8283a5192ebcd6f8f4cd8b1a235908c64455dd13cf1fb58e2",
+        "saved.pptx": "636256e030cc3cd007d0ef6102540ee08abe4842869fcfee18a691e001bec533",
+        "source.pptx": "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937",
+        "worker.json": "541823b910ef36a219b66535931b83f0f4660e7dc3736babf7b117b2a5dab28e"
+      }
+    },
+    {
+      "name": "bad-worker-result",
+      "label": "run",
+      "exitCode": 1,
+      "signal": null,
+      "spawnError": null,
+      "stdout": "{\"passed\":false,\"mode\":\"supplied-presentation\",\"checks\":35,\"failures\":[{\"name\":\"worker completed within its deadline\",\"message\":\"Expected values to be strictly equal:\\n\\n1 !== 0\\n\"}],\"outputPath\":\"C:\\\\Users\\\\micha\\\\.codex\\\\worktrees\\\\fd3f\\\\opf\\\\artifacts\\\\windows-resume-20260921\\\\comparator-controls-01\\\\bad-worker-result\\\\comparison.json\"}\n",
+      "stderr": "",
+      "stdoutSha256": "47c65ebf8cc60a45a3604d57f7000031d4abc434fff72def43ee04b6eb3bb8ca",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutLog": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\bad-worker-result\\run.stdout.log",
+      "stderrLog": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\bad-worker-result\\run.stderr.log",
+      "comparisonPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\bad-worker-result\\comparison.json",
+      "comparisonSha256": "5eea9de4056a9da7c4bca9bc4edd3c86d24d93cea4c3a0e936375dab3f56eb56",
+      "comparison": {
+        "passed": false,
+        "mode": "supplied-presentation",
+        "scope": "Supplied registry presentation lifecycle, source snapshot identity, native geometry/alt text and current-image reimport. Runtime binding covers only the four recorded OpenPresentation package manifests, complete dist trees, the PPTX vendor tree, and consumer lockfile; it does not prove transitive dependency bytes.",
+        "node": "v24.21.0",
+        "verifierSha256": "1e2cd017ea16f8475fc3cf9fd8c0df46255dc8e01b1d37a80c3a07f26f4844e9",
+        "reportSha256": "dcf0c562be431051914b589e4c136e571c4685a3feed500a8d621ddfc5b4d539",
+        "checks": [
+          {
+            "name": "Node 24 supported",
+            "passed": true
+          },
+          {
+            "name": "native report readable",
+            "passed": true
+          },
+          {
+            "name": "worker report readable",
+            "passed": true
+          },
+          {
+            "name": "supplied-presentation mode requires generation argument",
+            "passed": true
+          },
+          {
+            "name": "registry generation report readable",
+            "passed": true
+          },
+          {
+            "name": "owned presentations closed",
+            "passed": true
+          },
+          {
+            "name": "native control reached completion",
+            "passed": true
+          },
+          {
+            "name": "worker completed within its deadline",
+            "passed": false
+          },
+          {
+            "name": "verifier source matches owned input snapshot",
+            "passed": true
+          },
+          {
+            "name": "processHelper source matches owned input snapshot",
+            "passed": true
+          },
+          {
+            "name": "presentation source matches owned input snapshot",
+            "passed": true
+          },
+          {
+            "name": "opened source matches owned input snapshot",
+            "passed": true
+          },
+          {
+            "name": "saved presentation file identity",
+            "passed": true
+          },
+          {
+            "name": "reopened presentation file identity",
+            "passed": true
+          },
+          {
+            "name": "original raster file identity",
+            "passed": true
+          },
+          {
+            "name": "reopened raster file identity",
+            "passed": true
+          },
+          {
+            "name": "saved and reopened presentation identities agree",
+            "passed": true
+          },
+          {
+            "name": "save/reopen raster is identical",
+            "passed": true
+          },
+          {
+            "name": "original contains one embedded native picture",
+            "passed": true
+          },
+          {
+            "name": "reopened contains one embedded native picture",
+            "passed": true
+          },
+          {
+            "name": "original left within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "original top within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "original width within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "original height within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "original native alt",
+            "passed": true
+          },
+          {
+            "name": "reopened left within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "reopened top within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "reopened width within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "reopened height within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "reopened native alt",
+            "passed": true
+          },
+          {
+            "name": "registry package and lock bindings unchanged",
+            "passed": true
+          },
+          {
+            "name": "opened supplied registry presentation",
+            "passed": true
+          },
+          {
+            "name": "current picture reimport",
+            "passed": true
+          },
+          {
+            "name": "write imported OPF evidence without overwriting",
+            "passed": true
+          },
+          {
+            "name": "comparator source hash available",
+            "passed": true
+          }
+        ],
+        "failures": [
+          {
+            "name": "worker completed within its deadline",
+            "message": "Expected values to be strictly equal:\n\n1 !== 0\n"
+          }
+        ],
+        "outputPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\bad-worker-result\\comparison.json"
+      },
+      "stdoutSummary": {
+        "passed": false,
+        "mode": "supplied-presentation",
+        "checks": 35,
+        "failures": [
+          {
+            "name": "worker completed within its deadline",
+            "message": "Expected values to be strictly equal:\n\n1 !== 0\n"
+          }
+        ],
+        "outputPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\bad-worker-result\\comparison.json"
+      },
+      "fixtureSha256": {
+        "fixture.json": "a480b130d96eb2b64adfcad2d9b03658d2c5b54da9f70b0d39603c3b1d2c89d7",
+        "generation/generation.json": "dabfa6b34d07ea01ffdec0a4da6376df3ce470c36ea53c5f3d2ee0b3a4522238",
+        "inputs/input.pptx": "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937",
+        "inputs/native-picture-control.ps1": "e3ae357f0e2cd45a72c83a0ac545d42d8698d84d81498a8bffd9dba8c761017a",
+        "inputs/native-process.ps1": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+        "original.png": "f773035c4cfc0e2203e1ecc66de2a348ee328fd2cc58f79389593aa3f11b4455",
+        "reopened.png": "f773035c4cfc0e2203e1ecc66de2a348ee328fd2cc58f79389593aa3f11b4455",
+        "report.json": "dcf0c562be431051914b589e4c136e571c4685a3feed500a8d621ddfc5b4d539",
+        "saved.pptx": "636256e030cc3cd007d0ef6102540ee08abe4842869fcfee18a691e001bec533",
+        "source.pptx": "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937",
+        "worker.json": "1a72788a19a51e098bd93543b62519f3db758c169c185168992a39cf7d5b6407"
+      }
+    },
+    {
+      "name": "missing-worker-result",
+      "label": "run",
+      "exitCode": 1,
+      "signal": null,
+      "spawnError": null,
+      "stdout": "{\"passed\":false,\"mode\":\"supplied-presentation\",\"checks\":35,\"failures\":[{\"name\":\"worker report readable\",\"message\":\"ENOENT: no such file or directory, open 'C:\\\\Users\\\\micha\\\\.codex\\\\worktrees\\\\fd3f\\\\opf\\\\artifacts\\\\windows-resume-20260921\\\\comparator-controls-01\\\\missing-worker-result\\\\worker.json'\"},{\"name\":\"worker completed within its deadline\",\"message\":\"Expected values to be strictly equal:\\n+ actual - expected\\n\\n+ undefined\\n- false\\n\"}],\"outputPath\":\"C:\\\\Users\\\\micha\\\\.codex\\\\worktrees\\\\fd3f\\\\opf\\\\artifacts\\\\windows-resume-20260921\\\\comparator-controls-01\\\\missing-worker-result\\\\comparison.json\"}\n",
+      "stderr": "",
+      "stdoutSha256": "ed7e4a035475c080510a7cedb2a3bcd332082f55843dad153151ab6216f8f87f",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutLog": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\missing-worker-result\\run.stdout.log",
+      "stderrLog": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\missing-worker-result\\run.stderr.log",
+      "comparisonPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\missing-worker-result\\comparison.json",
+      "comparisonSha256": "bebd902dba2510418c3fc41e1873fb932d67220f75a393250444fb774fd75740",
+      "comparison": {
+        "passed": false,
+        "mode": "supplied-presentation",
+        "scope": "Supplied registry presentation lifecycle, source snapshot identity, native geometry/alt text and current-image reimport. Runtime binding covers only the four recorded OpenPresentation package manifests, complete dist trees, the PPTX vendor tree, and consumer lockfile; it does not prove transitive dependency bytes.",
+        "node": "v24.21.0",
+        "verifierSha256": "1e2cd017ea16f8475fc3cf9fd8c0df46255dc8e01b1d37a80c3a07f26f4844e9",
+        "reportSha256": "f7ba8ed40d98427c73a8e2ba90c7a7878e317abdeac26a2cf775680dd583086b",
+        "checks": [
+          {
+            "name": "Node 24 supported",
+            "passed": true
+          },
+          {
+            "name": "native report readable",
+            "passed": true
+          },
+          {
+            "name": "worker report readable",
+            "passed": false
+          },
+          {
+            "name": "supplied-presentation mode requires generation argument",
+            "passed": true
+          },
+          {
+            "name": "registry generation report readable",
+            "passed": true
+          },
+          {
+            "name": "owned presentations closed",
+            "passed": true
+          },
+          {
+            "name": "native control reached completion",
+            "passed": true
+          },
+          {
+            "name": "worker completed within its deadline",
+            "passed": false
+          },
+          {
+            "name": "verifier source matches owned input snapshot",
+            "passed": true
+          },
+          {
+            "name": "processHelper source matches owned input snapshot",
+            "passed": true
+          },
+          {
+            "name": "presentation source matches owned input snapshot",
+            "passed": true
+          },
+          {
+            "name": "opened source matches owned input snapshot",
+            "passed": true
+          },
+          {
+            "name": "saved presentation file identity",
+            "passed": true
+          },
+          {
+            "name": "reopened presentation file identity",
+            "passed": true
+          },
+          {
+            "name": "original raster file identity",
+            "passed": true
+          },
+          {
+            "name": "reopened raster file identity",
+            "passed": true
+          },
+          {
+            "name": "saved and reopened presentation identities agree",
+            "passed": true
+          },
+          {
+            "name": "save/reopen raster is identical",
+            "passed": true
+          },
+          {
+            "name": "original contains one embedded native picture",
+            "passed": true
+          },
+          {
+            "name": "reopened contains one embedded native picture",
+            "passed": true
+          },
+          {
+            "name": "original left within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "original top within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "original width within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "original height within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "original native alt",
+            "passed": true
+          },
+          {
+            "name": "reopened left within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "reopened top within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "reopened width within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "reopened height within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "reopened native alt",
+            "passed": true
+          },
+          {
+            "name": "registry package and lock bindings unchanged",
+            "passed": true
+          },
+          {
+            "name": "opened supplied registry presentation",
+            "passed": true
+          },
+          {
+            "name": "current picture reimport",
+            "passed": true
+          },
+          {
+            "name": "write imported OPF evidence without overwriting",
+            "passed": true
+          },
+          {
+            "name": "comparator source hash available",
+            "passed": true
+          }
+        ],
+        "failures": [
+          {
+            "name": "worker report readable",
+            "message": "ENOENT: no such file or directory, open 'C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\missing-worker-result\\worker.json'"
+          },
+          {
+            "name": "worker completed within its deadline",
+            "message": "Expected values to be strictly equal:\n+ actual - expected\n\n+ undefined\n- false\n"
+          }
+        ],
+        "outputPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\missing-worker-result\\comparison.json"
+      },
+      "stdoutSummary": {
+        "passed": false,
+        "mode": "supplied-presentation",
+        "checks": 35,
+        "failures": [
+          {
+            "name": "worker report readable",
+            "message": "ENOENT: no such file or directory, open 'C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\missing-worker-result\\worker.json'"
+          },
+          {
+            "name": "worker completed within its deadline",
+            "message": "Expected values to be strictly equal:\n+ actual - expected\n\n+ undefined\n- false\n"
+          }
+        ],
+        "outputPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\missing-worker-result\\comparison.json"
+      },
+      "fixtureSha256": {
+        "fixture.json": "effdcae19e5bd8d7f711a4304cfc3243dde571bd1a8a788eae8205d38c89fca7",
+        "generation/generation.json": "dabfa6b34d07ea01ffdec0a4da6376df3ce470c36ea53c5f3d2ee0b3a4522238",
+        "inputs/input.pptx": "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937",
+        "inputs/native-picture-control.ps1": "e3ae357f0e2cd45a72c83a0ac545d42d8698d84d81498a8bffd9dba8c761017a",
+        "inputs/native-process.ps1": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+        "original.png": "f773035c4cfc0e2203e1ecc66de2a348ee328fd2cc58f79389593aa3f11b4455",
+        "reopened.png": "f773035c4cfc0e2203e1ecc66de2a348ee328fd2cc58f79389593aa3f11b4455",
+        "report.json": "f7ba8ed40d98427c73a8e2ba90c7a7878e317abdeac26a2cf775680dd583086b",
+        "saved.pptx": "636256e030cc3cd007d0ef6102540ee08abe4842869fcfee18a691e001bec533",
+        "source.pptx": "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937"
+      }
+    },
+    {
+      "name": "existing-comparison-preserved",
+      "label": "first",
+      "exitCode": 0,
+      "signal": null,
+      "spawnError": null,
+      "stdout": "{\"passed\":true,\"mode\":\"supplied-presentation\",\"checks\":35,\"failures\":[],\"outputPath\":\"C:\\\\Users\\\\micha\\\\.codex\\\\worktrees\\\\fd3f\\\\opf\\\\artifacts\\\\windows-resume-20260921\\\\comparator-controls-01\\\\existing-comparison-preserved\\\\comparison.json\"}\n",
+      "stderr": "",
+      "stdoutSha256": "0c076346d4e45dbe6a2527a6873e03568d2ad1887f15c33f66c2946265891298",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutLog": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\existing-comparison-preserved\\first.stdout.log",
+      "stderrLog": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\existing-comparison-preserved\\first.stderr.log",
+      "comparisonPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\existing-comparison-preserved\\comparison.json",
+      "comparisonSha256": "033967a8643575b843d3dbd6e854ff189006130f5f4e66a49afc3b15f2c43dce",
+      "comparison": {
+        "passed": true,
+        "mode": "supplied-presentation",
+        "scope": "Supplied registry presentation lifecycle, source snapshot identity, native geometry/alt text and current-image reimport. Runtime binding covers only the four recorded OpenPresentation package manifests, complete dist trees, the PPTX vendor tree, and consumer lockfile; it does not prove transitive dependency bytes.",
+        "node": "v24.21.0",
+        "verifierSha256": "1e2cd017ea16f8475fc3cf9fd8c0df46255dc8e01b1d37a80c3a07f26f4844e9",
+        "reportSha256": "774983cbf8f750dcd30a19f9abeb71e571af5c42fc11301d286c135bed2bf82b",
+        "checks": [
+          {
+            "name": "Node 24 supported",
+            "passed": true
+          },
+          {
+            "name": "native report readable",
+            "passed": true
+          },
+          {
+            "name": "worker report readable",
+            "passed": true
+          },
+          {
+            "name": "supplied-presentation mode requires generation argument",
+            "passed": true
+          },
+          {
+            "name": "registry generation report readable",
+            "passed": true
+          },
+          {
+            "name": "owned presentations closed",
+            "passed": true
+          },
+          {
+            "name": "native control reached completion",
+            "passed": true
+          },
+          {
+            "name": "worker completed within its deadline",
+            "passed": true
+          },
+          {
+            "name": "verifier source matches owned input snapshot",
+            "passed": true
+          },
+          {
+            "name": "processHelper source matches owned input snapshot",
+            "passed": true
+          },
+          {
+            "name": "presentation source matches owned input snapshot",
+            "passed": true
+          },
+          {
+            "name": "opened source matches owned input snapshot",
+            "passed": true
+          },
+          {
+            "name": "saved presentation file identity",
+            "passed": true
+          },
+          {
+            "name": "reopened presentation file identity",
+            "passed": true
+          },
+          {
+            "name": "original raster file identity",
+            "passed": true
+          },
+          {
+            "name": "reopened raster file identity",
+            "passed": true
+          },
+          {
+            "name": "saved and reopened presentation identities agree",
+            "passed": true
+          },
+          {
+            "name": "save/reopen raster is identical",
+            "passed": true
+          },
+          {
+            "name": "original contains one embedded native picture",
+            "passed": true
+          },
+          {
+            "name": "reopened contains one embedded native picture",
+            "passed": true
+          },
+          {
+            "name": "original left within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "original top within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "original width within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "original height within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "original native alt",
+            "passed": true
+          },
+          {
+            "name": "reopened left within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "reopened top within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "reopened width within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "reopened height within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "reopened native alt",
+            "passed": true
+          },
+          {
+            "name": "registry package and lock bindings unchanged",
+            "passed": true
+          },
+          {
+            "name": "opened supplied registry presentation",
+            "passed": true
+          },
+          {
+            "name": "current picture reimport",
+            "passed": true
+          },
+          {
+            "name": "write imported OPF evidence without overwriting",
+            "passed": true
+          },
+          {
+            "name": "comparator source hash available",
+            "passed": true
+          }
+        ],
+        "failures": [],
+        "outputPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\existing-comparison-preserved\\comparison.json"
+      },
+      "stdoutSummary": {
+        "passed": true,
+        "mode": "supplied-presentation",
+        "checks": 35,
+        "failures": [],
+        "outputPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\existing-comparison-preserved\\comparison.json"
+      },
+      "fixtureSha256": {
+        "comparison.json": "033967a8643575b843d3dbd6e854ff189006130f5f4e66a49afc3b15f2c43dce",
+        "first.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "first.stdout.log": "0c076346d4e45dbe6a2527a6873e03568d2ad1887f15c33f66c2946265891298",
+        "fixture.json": "5d21d275ac358457f443eead9253c0609b2e429f3988b9d301307e5d6c86d551",
+        "generation/generation.json": "dabfa6b34d07ea01ffdec0a4da6376df3ce470c36ea53c5f3d2ee0b3a4522238",
+        "inputs/input.pptx": "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937",
+        "inputs/native-picture-control.ps1": "e3ae357f0e2cd45a72c83a0ac545d42d8698d84d81498a8bffd9dba8c761017a",
+        "inputs/native-process.ps1": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+        "original.png": "f773035c4cfc0e2203e1ecc66de2a348ee328fd2cc58f79389593aa3f11b4455",
+        "reopened.png": "f773035c4cfc0e2203e1ecc66de2a348ee328fd2cc58f79389593aa3f11b4455",
+        "report.json": "774983cbf8f750dcd30a19f9abeb71e571af5c42fc11301d286c135bed2bf82b",
+        "saved-import.opf.json": "1efe86e05f8a591b7550ff08d35536f60f37d06b7898645264086e9eb462a529",
+        "saved.pptx": "636256e030cc3cd007d0ef6102540ee08abe4842869fcfee18a691e001bec533",
+        "source.pptx": "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937",
+        "worker.json": "541823b910ef36a219b66535931b83f0f4660e7dc3736babf7b117b2a5dab28e"
+      }
+    },
+    {
+      "name": "existing-comparison-preserved",
+      "label": "repeat",
+      "exitCode": 1,
+      "signal": null,
+      "spawnError": null,
+      "stdout": "{\"passed\":false,\"mode\":\"supplied-presentation\",\"checks\":35,\"failures\":[{\"name\":\"write imported OPF evidence without overwriting\",\"message\":\"EEXIST: file already exists, open 'C:\\\\Users\\\\micha\\\\.codex\\\\worktrees\\\\fd3f\\\\opf\\\\artifacts\\\\windows-resume-20260921\\\\comparator-controls-01\\\\existing-comparison-preserved\\\\saved-import.opf.json'\"}],\"outputPath\":\"C:\\\\Users\\\\micha\\\\.codex\\\\worktrees\\\\fd3f\\\\opf\\\\artifacts\\\\windows-resume-20260921\\\\comparator-controls-01\\\\existing-comparison-preserved\\\\comparison-2026-09-21T18-00-57-293Z.json\"}\n",
+      "stderr": "",
+      "stdoutSha256": "c8c457e982dd3130cf186a61c1a034893ea18a80e334bfc38220ca79d5da4f79",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutLog": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\existing-comparison-preserved\\repeat.stdout.log",
+      "stderrLog": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\existing-comparison-preserved\\repeat.stderr.log",
+      "comparisonPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\existing-comparison-preserved\\comparison-2026-09-21T18-00-57-293Z.json",
+      "comparisonSha256": "83d7e4a178df87d99af35401eaaa435f8d2a6e914be181976392c187519c11ce",
+      "comparison": {
+        "passed": false,
+        "mode": "supplied-presentation",
+        "scope": "Supplied registry presentation lifecycle, source snapshot identity, native geometry/alt text and current-image reimport. Runtime binding covers only the four recorded OpenPresentation package manifests, complete dist trees, the PPTX vendor tree, and consumer lockfile; it does not prove transitive dependency bytes.",
+        "node": "v24.21.0",
+        "verifierSha256": "1e2cd017ea16f8475fc3cf9fd8c0df46255dc8e01b1d37a80c3a07f26f4844e9",
+        "reportSha256": "774983cbf8f750dcd30a19f9abeb71e571af5c42fc11301d286c135bed2bf82b",
+        "checks": [
+          {
+            "name": "Node 24 supported",
+            "passed": true
+          },
+          {
+            "name": "native report readable",
+            "passed": true
+          },
+          {
+            "name": "worker report readable",
+            "passed": true
+          },
+          {
+            "name": "supplied-presentation mode requires generation argument",
+            "passed": true
+          },
+          {
+            "name": "registry generation report readable",
+            "passed": true
+          },
+          {
+            "name": "owned presentations closed",
+            "passed": true
+          },
+          {
+            "name": "native control reached completion",
+            "passed": true
+          },
+          {
+            "name": "worker completed within its deadline",
+            "passed": true
+          },
+          {
+            "name": "verifier source matches owned input snapshot",
+            "passed": true
+          },
+          {
+            "name": "processHelper source matches owned input snapshot",
+            "passed": true
+          },
+          {
+            "name": "presentation source matches owned input snapshot",
+            "passed": true
+          },
+          {
+            "name": "opened source matches owned input snapshot",
+            "passed": true
+          },
+          {
+            "name": "saved presentation file identity",
+            "passed": true
+          },
+          {
+            "name": "reopened presentation file identity",
+            "passed": true
+          },
+          {
+            "name": "original raster file identity",
+            "passed": true
+          },
+          {
+            "name": "reopened raster file identity",
+            "passed": true
+          },
+          {
+            "name": "saved and reopened presentation identities agree",
+            "passed": true
+          },
+          {
+            "name": "save/reopen raster is identical",
+            "passed": true
+          },
+          {
+            "name": "original contains one embedded native picture",
+            "passed": true
+          },
+          {
+            "name": "reopened contains one embedded native picture",
+            "passed": true
+          },
+          {
+            "name": "original left within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "original top within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "original width within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "original height within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "original native alt",
+            "passed": true
+          },
+          {
+            "name": "reopened left within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "reopened top within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "reopened width within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "reopened height within unchanged 0.02pt gate",
+            "passed": true
+          },
+          {
+            "name": "reopened native alt",
+            "passed": true
+          },
+          {
+            "name": "registry package and lock bindings unchanged",
+            "passed": true
+          },
+          {
+            "name": "opened supplied registry presentation",
+            "passed": true
+          },
+          {
+            "name": "current picture reimport",
+            "passed": true
+          },
+          {
+            "name": "write imported OPF evidence without overwriting",
+            "passed": false
+          },
+          {
+            "name": "comparator source hash available",
+            "passed": true
+          }
+        ],
+        "failures": [
+          {
+            "name": "write imported OPF evidence without overwriting",
+            "message": "EEXIST: file already exists, open 'C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\existing-comparison-preserved\\saved-import.opf.json'"
+          }
+        ],
+        "outputNote": "comparison.json already existed and was preserved; this result was written to a unique filename.",
+        "outputPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\existing-comparison-preserved\\comparison-2026-09-21T18-00-57-293Z.json"
+      },
+      "stdoutSummary": {
+        "passed": false,
+        "mode": "supplied-presentation",
+        "checks": 35,
+        "failures": [
+          {
+            "name": "write imported OPF evidence without overwriting",
+            "message": "EEXIST: file already exists, open 'C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\existing-comparison-preserved\\saved-import.opf.json'"
+          }
+        ],
+        "outputPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\existing-comparison-preserved\\comparison-2026-09-21T18-00-57-293Z.json"
+      },
+      "fixtureSha256": {
+        "comparison-2026-09-21T18-00-57-293Z.json": "83d7e4a178df87d99af35401eaaa435f8d2a6e914be181976392c187519c11ce",
+        "comparison.json": "033967a8643575b843d3dbd6e854ff189006130f5f4e66a49afc3b15f2c43dce",
+        "first.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "first.stdout.log": "0c076346d4e45dbe6a2527a6873e03568d2ad1887f15c33f66c2946265891298",
+        "fixture.json": "5d21d275ac358457f443eead9253c0609b2e429f3988b9d301307e5d6c86d551",
+        "generation/generation.json": "dabfa6b34d07ea01ffdec0a4da6376df3ce470c36ea53c5f3d2ee0b3a4522238",
+        "inputs/input.pptx": "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937",
+        "inputs/native-picture-control.ps1": "e3ae357f0e2cd45a72c83a0ac545d42d8698d84d81498a8bffd9dba8c761017a",
+        "inputs/native-process.ps1": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+        "original.png": "f773035c4cfc0e2203e1ecc66de2a348ee328fd2cc58f79389593aa3f11b4455",
+        "reopened.png": "f773035c4cfc0e2203e1ecc66de2a348ee328fd2cc58f79389593aa3f11b4455",
+        "repeat.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "repeat.stdout.log": "c8c457e982dd3130cf186a61c1a034893ea18a80e334bfc38220ca79d5da4f79",
+        "report.json": "774983cbf8f750dcd30a19f9abeb71e571af5c42fc11301d286c135bed2bf82b",
+        "saved-import.opf.json": "1efe86e05f8a591b7550ff08d35536f60f37d06b7898645264086e9eb462a529",
+        "saved.pptx": "636256e030cc3cd007d0ef6102540ee08abe4842869fcfee18a691e001bec533",
+        "source.pptx": "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937",
+        "worker.json": "541823b910ef36a219b66535931b83f0f4660e7dc3736babf7b117b2a5dab28e"
+      }
+    }
+  ]
+}

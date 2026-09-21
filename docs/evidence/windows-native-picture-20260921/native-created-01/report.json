@@ -1,0 +1,117 @@
+﻿{
+    "schemaVersion":  1,
+    "mode":  "native-created",
+    "source":  {
+                   "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\sources\\opf-pptx\\test\\fixtures\\images\\wide.png",
+                   "sha256":  "2608d745f3d1dddc963dafe9b517bc7af9e983e7318bf59bd520415589c36905",
+                   "openedPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-created-01\\inputs\\wide.png",
+                   "openedSha256":  "2608d745f3d1dddc963dafe9b517bc7af9e983e7318bf59bd520415589c36905"
+               },
+    "saved":  {
+                  "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-created-01\\native-picture-control.pptx",
+                  "sha256":  "4702a6cef0635e47b5ae29ea237f623d8d3c6d896f185f0f8e98267b82ec45f9"
+              },
+    "reopened":  {
+                     "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-created-01\\native-picture-control.pptx",
+                     "sha256":  "4702a6cef0635e47b5ae29ea237f623d8d3c6d896f185f0f8e98267b82ec45f9",
+                     "observation":  {
+                                         "slideCount":  1,
+                                         "slideWidth":  960,
+                                         "slideHeight":  540,
+                                         "shapeCount":  1,
+                                         "pictureCount":  1,
+                                         "linkedPictureCount":  0,
+                                         "pictures":  [
+                                                          {
+                                                              "index":  1,
+                                                              "name":  "native-picture-control",
+                                                              "alternativeText":  "Four quadrants and a circle",
+                                                              "type":  13,
+                                                              "left":  180,
+                                                              "top":  120,
+                                                              "width":  600,
+                                                              "height":  300,
+                                                              "rotation":  0,
+                                                              "lockAspectRatio":  0,
+                                                              "cropLeft":  0,
+                                                              "cropTop":  0,
+                                                              "cropRight":  0,
+                                                              "cropBottom":  0
+                                                          }
+                                                      ]
+                                     },
+                     "raster":  {
+                                    "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-created-01\\reopened.png",
+                                    "sha256":  "465ef449c7776df237bdac5a3ddd3a610d7fa783c61c76498eb2ae0184d752c2"
+                                }
+                 },
+    "original":  {
+                     "observation":  {
+                                         "slideCount":  1,
+                                         "slideWidth":  960,
+                                         "slideHeight":  540,
+                                         "shapeCount":  1,
+                                         "pictureCount":  1,
+                                         "linkedPictureCount":  0,
+                                         "pictures":  [
+                                                          {
+                                                              "index":  1,
+                                                              "name":  "native-picture-control",
+                                                              "alternativeText":  "Four quadrants and a circle",
+                                                              "type":  13,
+                                                              "left":  180,
+                                                              "top":  120,
+                                                              "width":  600,
+                                                              "height":  300,
+                                                              "rotation":  0,
+                                                              "lockAspectRatio":  0,
+                                                              "cropLeft":  0,
+                                                              "cropTop":  0,
+                                                              "cropRight":  0,
+                                                              "cropBottom":  0
+                                                          }
+                                                      ]
+                                     },
+                     "raster":  {
+                                    "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-created-01\\original.png",
+                                    "sha256":  "465ef449c7776df237bdac5a3ddd3a610d7fa783c61c76498eb2ae0184d752c2"
+                                }
+                 },
+    "inputs":  {
+                   "verifier":  {
+                                    "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\sources\\opf-pptx\\test\\native-picture-control.ps1",
+                                    "sha256":  "e3ae357f0e2cd45a72c83a0ac545d42d8698d84d81498a8bffd9dba8c761017a",
+                                    "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-created-01\\inputs\\native-picture-control.ps1",
+                                    "snapshotSha256":  "e3ae357f0e2cd45a72c83a0ac545d42d8698d84d81498a8bffd9dba8c761017a"
+                                },
+                   "processHelper":  {
+                                         "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\sources\\opf-pptx\\test\\native-process.ps1",
+                                         "sha256":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+                                         "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-created-01\\inputs\\native-process.ps1",
+                                         "snapshotSha256":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+                                     },
+                   "image":  {
+                                 "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\sources\\opf-pptx\\test\\fixtures\\images\\wide.png",
+                                 "sha256":  "2608d745f3d1dddc963dafe9b517bc7af9e983e7318bf59bd520415589c36905",
+                                 "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-created-01\\inputs\\wide.png",
+                                 "snapshotSha256":  "2608d745f3d1dddc963dafe9b517bc7af9e983e7318bf59bd520415589c36905"
+                             },
+                   "presentation":  null
+               },
+    "environment":  {
+                        "hostVersion":  "5.1.26100.9444",
+                        "windowsProductName":  "Windows 10 Home",
+                        "windowsDisplayVersion":  "25H2",
+                        "windowsBuild":  "26200.9457",
+                        "powerPointVersion":  "16.0",
+                        "powerPointExecutable":  "C:\\Program Files\\Microsoft Office\\root\\Office16\\POWERPNT.EXE",
+                        "powerPointBuild":  "16.0.20326.20158",
+                        "powerPointExecutableSha256":  "07cbe68cde7596058a6890c471389a7a70a090ee42f01975d72ea6d643f82021"
+                    },
+    "cleanupConfirmed":  true,
+    "officeOperationsStopped":  false,
+    "lastStage":  "worker.complete",
+    "lastStatus":  "success",
+    "error":  null,
+    "scope":  "One explicit native-created PNG picture control or one explicitly supplied PPTX. The worker never quits or kills Office, changes security, retries, or closes unrelated presentations."
+}
