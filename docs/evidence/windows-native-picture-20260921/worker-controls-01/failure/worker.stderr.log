@@ -1,0 +1,5 @@
+C:\Users\micha\.codex\worktrees\fd3f\opf\artifacts\windows-resume-20260921\worker-controls-01\failure\owned worker 
+with spaces.ps1 : Controlled verifier failure
+    + CategoryInfo          : NotSpecified: (:) [Write-Error], WriteErrorException
+    + FullyQualifiedErrorId : Microsoft.PowerShell.Commands.WriteErrorException,owned worker with spaces.ps1
+ 

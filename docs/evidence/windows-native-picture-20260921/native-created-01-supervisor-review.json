@@ -1,0 +1,10 @@
+{
+  "timestampUtc": "2026-09-21T17:45:21.6705809Z",
+  "supervisor": "root",
+  "approvedScope": "One native-created PNG picture; create/save/close/reopen/observe/export/close owned presentation only",
+  "verifierSha256": "e3ae357f0e2cd45a72c83a0ac545d42d8698d84d81498a8bffd9dba8c761017a",
+  "timeoutSeconds": 45,
+  "recoveryConfirmation": "office-recovery-confirmation.json",
+  "independentControls": "picture-harness-controls-01.json",
+  "noAutomaticRetries": true
+}

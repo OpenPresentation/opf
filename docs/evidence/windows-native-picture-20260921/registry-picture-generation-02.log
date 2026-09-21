@@ -1,0 +1,18 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: spawnSync C:\Users\micha\.codex\worktrees\fd3f\opf\artifacts\windows-resume-20260921\toolchain\node_modules\node\bin\node.exe EPERM
+
+null !== 0
+
+    at file:///C:/Users/micha/.codex/worktrees/fd3f/opf/artifacts/windows-resume-20260921/sources/opf-pptx/test/native-picture.mjs:26:8 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: null,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

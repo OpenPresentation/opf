@@ -1,0 +1,31 @@
+{
+  "version": "1.0.0",
+  "name": "registry-consumer",
+  "dependencies": {
+    "@openpresentation/cli": {
+      "version": "0.9.0",
+      "resolved": "https://registry.npmjs.org/@openpresentation/cli/-/cli-0.9.0.tgz",
+      "overridden": false
+    },
+    "@openpresentation/opf-editor": {
+      "version": "0.8.0",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf-editor/-/opf-editor-0.8.0.tgz",
+      "overridden": false
+    },
+    "@openpresentation/opf-pptx": {
+      "version": "0.9.1",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.9.1.tgz",
+      "overridden": false
+    },
+    "@openpresentation/opf-render": {
+      "version": "0.9.0",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.9.0.tgz",
+      "overridden": false
+    },
+    "@openpresentation/opf": {
+      "version": "0.11.0",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.11.0.tgz",
+      "overridden": false
+    }
+  }
+}

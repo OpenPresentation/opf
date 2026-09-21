@@ -1,0 +1,7 @@
+{
+  "verificationRef": "b8a1faf24203635bd36b09ea19f44bcd53781f16",
+  "sourceHead": "ef0444bff688b3d9c9d7b040603a5f0a98741a2f",
+  "verificationRefIsAncestor": true,
+  "packageAndLockChangedPaths": [],
+  "scope": "Git ancestry and package/lock path comparison only; registry and source evidence remain separately identified"
+}

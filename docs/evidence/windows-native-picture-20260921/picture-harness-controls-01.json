@@ -1,0 +1,15 @@
+﻿{
+    "passed":  true,
+    "scope":  "PowerShell parse, collection identity and fail-closed stage wrapper. No Office object was constructed.",
+    "events":  [
+                   "empty:begin",
+                   "empty:success",
+                   "populated:begin",
+                   "populated:success",
+                   "controlled-error:begin",
+                   "controlled-error:error"
+               ],
+    "powershell":  "5.1.26100.9444",
+    "verifierSha256":  "e3ae357f0e2cd45a72c83a0ac545d42d8698d84d81498a8bffd9dba8c761017a",
+    "checkerSha256":  "aa5ea1e8b46e5d9dc7facc7030072459e8a4f0d01a3c8b58d85c31a1c299ffb1"
+}
