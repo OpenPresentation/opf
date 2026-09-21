@@ -66,9 +66,14 @@ The owner verified the 17 September production release on the canonical
 sites with this package train. Feature implementation and package adoption
 are distinct from completing every acceptance item in
 [issue 88](https://github.com/OpenPresentation/opf/issues/88). Fresh checks pass the homepage/playground baseline and gallery config handoff.
-Inspector later-slide editing, raw JSON formatting on canvas commit, stale
-public agent guidance and complete Author choice/apply/undo browser acceptance
-remain open. See [production evidence](evidence/shipped-train-20260921/production/REPORT.md).
+The original [production audit](evidence/shipped-train-20260921/production/REPORT.md)
+identified Inspector later-slide and raw-source gaps. [pptx-dev PR45](https://github.com/Data-Advantage/pptx-dev/pull/45)
+contains the corrective implementation and fresh local browser evidence; exact
+PR CI and canonical deployment acceptance determine shipping status. Author
+catalog-choice apply/undo now passes on canonical production. Site43 and
+gallery35 correct the public agent pins and ColorRef guidance. The remaining
+website docs snapshot/exporter and gallery36 follow-ups are tracked in the
+[acceptance ledger](evidence/issue88-followup-20260921/README.md) and issue88.
 The latest
 [handoff](handoff-2026-09-21.md) records exact source commits and outstanding work.
 
@@ -87,7 +92,7 @@ site40) remain unmerged. In particular, site40 is not independently shipped.
 | --- | --- | --- |
 | Linux vs Chromium native-width residual at the 0.1px gate | [opf-render#24](https://github.com/OpenPresentation/opf-render/issues/24) | Rounding that fixes Linux but breaks macOS is rejected |
 | Native PowerPoint open/edit/save/reopen, provenance, tabs, notes-master, font embedding, real Office Header/Footer objects (`p:hf`) | [opf#87](https://github.com/OpenPresentation/opf/issues/87) | Self-import and `toPptx` tagged-shape furniture are not Office acceptance |
-| Remaining issue88 acceptance checklist | [opf#88](https://github.com/OpenPresentation/opf/issues/88) | The three production features above are live; do not treat the issue as closed |
+| Public-surface acceptance checklist | [opf#88](https://github.com/OpenPresentation/opf/issues/88) | Shipping features does not establish every acceptance item; use the checklist and deployment receipts |
 | HarfBuzz / prepared-glyph shaping | Archive branches `codex/archive-shaping-20260915` | Prototypes are preserved, not in npm |
 | Selectable vector PDF | [pdf plan](plans/pdf-export.md) | Follows font reliability |
 | General SVG diagrams / Mermaid | [diagrams plan](plans/diagrams-svg.md) | Embedded SVG ≠ native editable primitives |

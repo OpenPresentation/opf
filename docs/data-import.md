@@ -20,7 +20,7 @@ The browser preview supports imported column, bar, line, area, pie, and donut ch
 
 ## CLI
 
-Use the [installable CLI preview](../packages/cli/README.md):
+Use the published [CLI 0.9.0](../packages/cli/README.md) on Node 24:
 
 ```sh
 opf import-data revenue.csv --as table --output table.opf.json
@@ -50,7 +50,9 @@ const data = parseTabularData(csv); // {columns, rows}, with CSV strings preserv
 
 The functions also accept already-parsed JSON and are re-exported by `@openpresentation/opf-editor/data`. They are synchronous and browser-safe. Hosts read files with `File.text()` or Node's file APIs and pass their contents in. Neither function fetches URLs, resolves asset references, or reads files automatically.
 
-This is an embedded data snapshot, not a live file link. OPF's existing `ChartDataSource` can declare a source reference, but source loading/refresh is a separate host responsibility. Tables use inline `columns`/`rows`; there is no new unsupported `table.src` field. Re-import after a source changes. These APIs are in the local coordinated preview packages; check package versions before using a previously published release.
+This is an embedded data snapshot, not a live file link. OPF's existing `ChartDataSource` can declare a source reference, but source loading/refresh is a separate host responsibility. Tables use inline `columns`/`rows`; there is no new unsupported `table.src` field. Re-import after a source changes.
+
+These APIs are published in core 0.11.0 and re-exported by editor 0.8.0; CLI 0.9.0 includes `import-data`. Use the coordinated Node 24 train with renderer 0.9.0 and PPTX 0.9.1 for preview/export. Exact pins and compatibility boundaries are in the [compatibility matrix](compatibility-matrix.md) and [release plan](../release-plan.json).
 
 ## Verification
 

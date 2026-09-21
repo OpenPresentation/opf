@@ -1,0 +1,472 @@
+verify (windows-latest)	Run pnpm test:e2e	﻿2026-09-21T13:36:09.2036045Z ##[group]Run pnpm test:e2e
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:36:09.2036451Z ^[[36;1mpnpm test:e2e^[[0m
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:36:09.2107969Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:36:09.2108354Z env:
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:36:09.2108641Z   PNPM_HOME: C:\Users\runneradmin\setup-pnpm\node_modules\.bin
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:36:09.2108976Z ##[endgroup]
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:36:10.1230665Z $ playwright test
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:36:13.0273860Z [WebServer] $ next start "--hostname" "127.0.0.1" "--port" "4325"
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:36:13.4727523Z [WebServer] ⚠ "next start" does not work with "output: standalone" configuration. Use "node .next/standalone/server.js" instead.
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:36:14.5925129Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:36:14.5926075Z Running 17 tests using 1 worker
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:36:14.5926753Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:36:28.3958984Z   x   1 tests\e2e\author-json-options.spec.ts:66:5 › Author categorical choices include built-in, document and loaded catalogs with exact source undo/redo (11.6s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:36:42.7144026Z   ok  2 tests\e2e\author.spec.ts:26:80 › anonymous code editing preserves source and visible selection through offline export/reimport at 1280x720 (11.5s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:36:49.6041869Z   ok  3 tests\e2e\author.spec.ts:26:80 › anonymous code editing preserves source and visible selection through offline export/reimport at 540x960 (8.7s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:37:02.7541303Z   ok  4 tests\e2e\author.spec.ts:55:5 › anonymous Author canvas edits survive tab changes, offline PowerPoint export and undoable reimport (13.1s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:37:14.4115856Z   x   5 tests\e2e\inspector-editing.spec.ts:42:7 › all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 1440px (10.7s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:37:27.5942799Z   x   6 tests\e2e\inspector-editing.spec.ts:42:7 › all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 540px (11.3s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:37:41.7455550Z   x   7 tests\e2e\inspector-editing.spec.ts:101:5 › invalid source keeps a renderer fallback and source recovery uses the current slide order (12.2s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:37:49.6736869Z   ok  8 tests\e2e\inspector-editing.spec.ts:118:5 › shared navigation discards an ID-less draft even when the replacement title is identical (7.0s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:37:58.7312913Z   ok  9 tests\e2e\inspector-recovery.spec.ts:18:5 › schema-valid strict overflow cancels an active draft and the same slide recovers after source correction (9.0s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:04.5950888Z   ok 10 tests\e2e\inspector-recovery.spec.ts:85:5 › font substitution notes remain accessible and operable while the Inspector canvas is active (5.8s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:13.9986903Z   ok 11 tests\e2e\inspector.spec.ts:11:5 › published long quotes retain their footer in actual wide/portrait previews and PowerPoint downloads (9.4s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:19.7006018Z   ok 12 tests\e2e\inspector.spec.ts:65:5 › shared navigation clears format errors and proposals from the previous deck (5.7s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:27.5979123Z   ok 13 tests\e2e\inspector.spec.ts:107:5 › anonymous JSON authoring, preview, undo/redo, download and shared reimport (7.9s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:34.2543288Z   ok 14 tests\e2e\monaco.spec.ts:3:5 › bundled JSON worker provides schema diagnostics, completion and recovery offline (6.6s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:43.1052720Z   ok 15 tests\e2e\svg-security.spec.ts:41:5 › published SVG renderer keeps hostile shared and imported document strings inert (8.8s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:43.8531520Z   ok 16 tests\e2e\toolkit.spec.ts:4:5 › public toolkit shows the deployed package set with working render, edit and export proofs (723ms)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:54.8139603Z   ok 17 tests\e2e\yaml.spec.ts:4:5 › YAML and Markdown editing preserve OPF values and recover from malformed YAML offline (10.9s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3211228Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3219350Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3221679Z   1) tests\e2e\author-json-options.spec.ts:66:5 › Author categorical choices include built-in, document and loaded catalogs with exact source undo/redo 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3222860Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3223253Z     Error: expect(received).toBe(expected) // Object.is equality
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3227086Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3227316Z     - Expected  - 43
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3227771Z     + Received  + 43
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3228047Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3228178Z     - {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3228497Z     + {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3228844Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3229355Z     -   "name"  :   "Categorical choices preserve source",
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3230026Z     +   "name"  :   "Categorical choices preserve source",
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3230503Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3230924Z     -   "author": "Browser reviewer",
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3231496Z     +   "author": "Browser reviewer",
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3231948Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3232352Z     -   "design": {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3232766Z     +   "design": {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3233152Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3234747Z     -     "theme": "minimal",
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3235299Z     +     "theme": "minimal",
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3235741Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3236163Z     -     "fontScheme": "roboto"
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3237057Z     +     "fontScheme": "roboto"
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3238959Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3239359Z     -   },
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3239699Z     +   },
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3240019Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3241467Z     -   "slides": [
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3241917Z     +   "slides": [
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3242327Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3242737Z     -     {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3243379Z     +     {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3243856Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3244277Z     -       "title": "A local decision",
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3244814Z     +       "title": "A local decision",
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3245440Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3246148Z     -       "layout": "text-1x",
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3246774Z     +       "layout": "text-1x",
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3247187Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3247543Z     -       "text": [
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3247949Z     +       "text": [
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3248328Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3248613Z     -         {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3248914Z     +         {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3249639Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3250253Z     -           "text": "Two  spaces stay.",
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3251358Z     +           "text": "Two  spaces stay.",
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3251881Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3252255Z     -           "bold": true
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3252757Z     +           "bold": true
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3253172Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3253542Z     -         },
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3253964Z     +         },
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3254258Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3254513Z     -         {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3254868Z     +         {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3255251Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3255694Z     -           "text": "\nAnd a second line.",
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3256252Z     +           "text": "\nAnd a second line.",
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3256670Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3257676Z     -           "italic": true
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3266397Z     +           "italic": true
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3266889Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3267276Z     -         }
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3267701Z     +         }
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3268051Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3268408Z     -       ],
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3268941Z     +       ],
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3269315Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3269762Z     -       "notes": "Keep these notes\n\tand their whitespace."
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3270470Z     +       "notes": "Keep these notes\n\tand their whitespace."
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3270955Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3271295Z     -     }
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3271606Z     +     }
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3271933Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3272258Z     -   ],
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3272612Z     +   ],
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3272955Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3273341Z     -   "catalogs": {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3273749Z     +   "catalogs": {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3274126Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3274465Z     -     "layouts": {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3274869Z     +     "layouts": {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3275253Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3275587Z     -       "records": [
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3276863Z     +       "records": [
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3277262Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3277544Z     -         {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3277914Z     +         {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3278233Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3278628Z     -           "id": "document-layout",
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3279174Z     +           "id": "document-layout",
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3279639Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3280085Z     -           "name": "AAA Document Layout",
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3280647Z     +           "name": "AAA Document Layout",
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3281134Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3281515Z     -           "placeholders": [
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3282009Z     +           "placeholders": [
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3282440Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3282747Z     -             {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3283128Z     +             {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3283474Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3283818Z     -               "type": "title"
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3284288Z     +               "type": "title"
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3285502Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3285847Z     -             },
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3286481Z     +             },
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3286878Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3287211Z     -             {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3287532Z     +             {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3287837Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3288164Z     -               "type": "text"
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3288630Z     +               "type": "text"
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3289046Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3289367Z     -             }
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3289761Z     +             }
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3290104Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3290428Z     -           ]
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3290768Z     +           ]
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3291101Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3291407Z     -         }
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3291679Z     +         }
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3291946Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3292176Z     -       ]
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3292434Z     +       ]
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3292678Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3292924Z     -     }
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3293200Z     +     }
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3293455Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3293707Z     -   }
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3293978Z     +   }
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3294263Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3294530Z     - }
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3294803Z     + }
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3295064Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3295481Z       ↵
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3295633Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3295767Z     Call Log:
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3296227Z     - Timeout 5000ms exceeded while waiting on the predicate
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3296628Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3296812Z       88 |   await page.goto('/author');
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3297629Z       89 |   await expect(page.getByRole('textbox', { name: 'Editor content', exact: true })).toBeVisible();
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3298579Z     > 90 |   await expect.poll(() => copySource(page)).toBe(original);
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3299192Z          |                                             ^
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3299628Z       91 |
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3300139Z       92 |   const themes = await openChoices(page, original, 'theme', 'minimal');
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3300947Z       93 |   // Distinguish the shared catalog provider's labelled Enum Member from the
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3301775Z         at D:\a\pptx-dev\pptx-dev\tests\e2e\author-json-options.spec.ts:90:45
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3302193Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3302785Z     Error Context: test-results\author-json-options-Author-27050-with-exact-source-undo-redo\error-context.md
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3303454Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3304095Z     attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3305074Z     test-results\author-json-options-Author-27050-with-exact-source-undo-redo\trace.zip
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3305746Z     Usage:
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3305888Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3306817Z         pnpm exec playwright show-trace test-results\author-json-options-Author-27050-with-exact-source-undo-redo\trace.zip
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3307551Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3308387Z     ────────────────────────────────────────────────────────────────────────────────────────────────
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3308822Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3309726Z   2) tests\e2e\inspector-editing.spec.ts:42:7 › all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 1440px 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3310558Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3311121Z     Error: expect(received).toBe(expected) // Object.is equality
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3311526Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3311653Z     - Expected  - 10
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3312146Z     + Received  + 10
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3312339Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3312475Z     - {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3312742Z     + {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3313000Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3313334Z     -   "name" : "Keep\u0020authored",
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3313772Z     +   "name" : "Keep\u0020authored",
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3314134Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3314532Z     -   "extensions": {"review": {"amount": 1e2, "path":"a\/b"}},
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3315382Z     +   "extensions": {"review": {"amount": 1e2, "path":"a\/b"}},
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3317208Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3318600Z     -   "design": {"fontScheme":"roboto", "header":{"left":{"text":"Shared header"}}},
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3319707Z     +   "design": {"fontScheme":"roboto", "header":{"left":{"text":"Shared header"}}},
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3320755Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3321034Z     -   "slides" : [
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3321701Z     +   "slides" : [
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3321987Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3322616Z     -     {"id":"first", "title":"First slide", "text":[{"text":"Rich  text", "bold":true}], "notes":"Keep notes"},
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3323646Z     +     {"id":"first", "title":"First slide", "text":[{"text":"Rich  text", "bold":true}], "notes":"Keep notes"},
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3324280Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3324738Z     -     {"id":"second", "title" : "Second\u0020slide", "text":"Second body"},
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3325456Z     +     {"id":"second", "title" : "Second\u0020slide", "text":"Second body"},
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3325998Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3326423Z     -     {"id":"third", "title":"Third slide", "text":"Third body"}
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3327078Z     +     {"id":"third", "title":"Third slide", "text":"Third body"}
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3327513Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3327767Z     -   ]
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3328042Z     +   ]
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3328284Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3328539Z     - }
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3328973Z     + }
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3329243Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3329577Z       ↵
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3329724Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3329851Z     Call Log:
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3330278Z     - Timeout 5000ms exceeded while waiting on the predicate
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3330661Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3331080Z       55 |     await expect(page.getByTestId('inspector-canvas-overlay')).toHaveCount(3);
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3332054Z       56 |     for (let index = 0; index < 3; index++) await expect(canvas(page, index)).toBeVisible();
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3332910Z     > 57 |     await expect.poll(() => copySource(page)).toBe(original);
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3333497Z          |                                               ^
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3334281Z       58 |     page.on('request', request => { if (request.method() === 'POST') writes.push(request.url()); });
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3335056Z       59 |     await page.context().setOffline(true);
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3335488Z       60 |
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3335978Z         at D:\a\pptx-dev\pptx-dev\tests\e2e\inspector-editing.spec.ts:57:47
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3336408Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3337051Z     Error Context: test-results\inspector-editing-all-Insp-15273-fline-undo-export-at-1440px\error-context.md
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3337764Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3338378Z     attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3339401Z     test-results\inspector-editing-all-Insp-15273-fline-undo-export-at-1440px\trace.zip
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3340438Z     Usage:
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3340592Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3341291Z         pnpm exec playwright show-trace test-results\inspector-editing-all-Insp-15273-fline-undo-export-at-1440px\trace.zip
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3342338Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3342855Z     ────────────────────────────────────────────────────────────────────────────────────────────────
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3343308Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3344279Z   3) tests\e2e\inspector-editing.spec.ts:42:7 › all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 540px 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3345111Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3345412Z     Error: expect(received).toBe(expected) // Object.is equality
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3345814Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3345937Z     - Expected  - 10
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3346248Z     + Received  + 10
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3346445Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3346582Z     - {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3346856Z     + {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3347112Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3347439Z     -   "name" : "Keep\u0020authored",
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3347919Z     +   "name" : "Keep\u0020authored",
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3348251Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3348641Z     -   "extensions": {"review": {"amount": 1e2, "path":"a\/b"}},
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3349291Z     +   "extensions": {"review": {"amount": 1e2, "path":"a\/b"}},
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3349780Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3350312Z     -   "design": {"fontScheme":"roboto", "header":{"left":{"text":"Shared header"}}},
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3351185Z     +   "design": {"fontScheme":"roboto", "header":{"left":{"text":"Shared header"}}},
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3351776Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3352053Z     -   "slides" : [
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3352366Z     +   "slides" : [
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3352654Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3353292Z     -     {"id":"first", "title":"First slide", "text":[{"text":"Rich  text", "bold":true}], "notes":"Keep notes"},
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3354308Z     +     {"id":"first", "title":"First slide", "text":[{"text":"Rich  text", "bold":true}], "notes":"Keep notes"},
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3354977Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3355435Z     -     {"id":"second", "title" : "Second\u0020slide", "text":"Second body"},
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3356175Z     +     {"id":"second", "title" : "Second\u0020slide", "text":"Second body"},
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3356667Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3357069Z     -     {"id":"third", "title":"Third slide", "text":"Third body"}
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3357701Z     +     {"id":"third", "title":"Third slide", "text":"Third body"}
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3358164Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3358423Z     -   ]
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3358696Z     +   ]
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3358943Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3359193Z     - }
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3359454Z     + }
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3359696Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3360003Z       ↵
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3360155Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3360267Z     Call Log:
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3360759Z     - Timeout 5000ms exceeded while waiting on the predicate
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3361130Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3361861Z       55 |     await expect(page.getByTestId('inspector-canvas-overlay')).toHaveCount(3);
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3362836Z       56 |     for (let index = 0; index < 3; index++) await expect(canvas(page, index)).toBeVisible();
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3363656Z     > 57 |     await expect.poll(() => copySource(page)).toBe(original);
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3364216Z          |                                               ^
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3364997Z       58 |     page.on('request', request => { if (request.method() === 'POST') writes.push(request.url()); });
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3365799Z       59 |     await page.context().setOffline(true);
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3366206Z       60 |
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3366704Z         at D:\a\pptx-dev\pptx-dev\tests\e2e\inspector-editing.spec.ts:57:47
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3367159Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3367800Z     Error Context: test-results\inspector-editing-all-Insp-a78d3-ffline-undo-export-at-540px\error-context.md
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3368507Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3370094Z     attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3371140Z     test-results\inspector-editing-all-Insp-a78d3-ffline-undo-export-at-540px\trace.zip
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3371847Z     Usage:
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3372016Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3372736Z         pnpm exec playwright show-trace test-results\inspector-editing-all-Insp-a78d3-ffline-undo-export-at-540px\trace.zip
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3373526Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3374050Z     ────────────────────────────────────────────────────────────────────────────────────────────────
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3374503Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3375430Z   4) tests\e2e\inspector-editing.spec.ts:101:5 › invalid source keeps a renderer fallback and source recovery uses the current slide order 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3376259Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3376567Z     Error: expect(received).toBe(expected) // Object.is equality
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3376995Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3377138Z     - Expected  - 40
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3377508Z     + Received  + 40
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3377700Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3377829Z     - {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3378094Z     + {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3378352Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3378667Z     -    "name": "Keep authored",
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3379092Z     +    "name": "Keep authored",
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3379734Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3380019Z     -    "extensions": {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3380363Z     +    "extensions": {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3380679Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3380946Z     -       "review": {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3381270Z     +       "review": {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3381580Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3381852Z     -          "amount": 100,
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3382230Z     +          "amount": 100,
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3382560Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3382835Z     -          "path": "a/b"
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3383188Z     +          "path": "a/b"
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3383513Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3383774Z     -       }
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3384076Z     +       }
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3384345Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3384605Z     -    },
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3384870Z     +    },
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3385124Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3385384Z     -    "design": {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3385697Z     +    "design": {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3385985Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3386318Z     -       "fontScheme": "roboto",
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3386750Z     +       "fontScheme": "roboto",
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3387090Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3387349Z     -       "header": {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3387674Z     +       "header": {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3387972Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3388237Z     -          "left": {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3388573Z     +          "left": {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3388870Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3389180Z     -             "text": "Shared header"
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3389633Z     +             "text": "Shared header"
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3390010Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3390273Z     -          }
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3390575Z     +          }
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3390868Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3391121Z     -       }
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3391404Z     +       }
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3391676Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3391935Z     -    },
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3392210Z     +    },
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3392469Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3392737Z     -    "slides": [
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3393065Z     +    "slides": [
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3393349Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3393594Z     -       {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3393873Z     +       {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3394137Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3394409Z     -          "id": "third",
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3394772Z     +          "id": "third",
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3395118Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3395425Z     -          "title": "Third slide",
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3395870Z     +          "title": "Third slide",
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3396247Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3396555Z     -          "text": "Third body"
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3396972Z     +          "text": "Third body"
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3397597Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3397860Z     -       },
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3398159Z     +       },
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3398436Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3398697Z     -       {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3398977Z     +       {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3399246Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3399775Z     -          "id": "second",
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3400158Z     +          "id": "second",
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3400505Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3400823Z     -          "title": "Second slide",
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3401275Z     +          "title": "Second slide",
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3401654Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3401959Z     -          "text": "Second body"
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3402403Z     +          "text": "Second body"
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3402774Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3403036Z     -       },
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3403329Z     +       },
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3403588Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3403832Z     -       {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3404098Z     +       {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3404380Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3404647Z     -          "id": "first",
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3404975Z     +          "id": "first",
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3405313Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3405745Z     -          "title": "First slide at its new index",
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3406388Z     +          "title": "First slide at its new index",
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3406857Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3407222Z     -          "text": [
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3407624Z     +          "text": [
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3408001Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3408378Z     -             {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3408758Z     +             {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3409118Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3409515Z     -                "text": "Rich  text",
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3410051Z     +                "text": "Rich  text",
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3410498Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3410885Z     -                "bold": true
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3411410Z     +                "bold": true
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3411850Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3412202Z     -             }
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3412585Z     +             }
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3412957Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3413307Z     -          ],
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3413674Z     +          ],
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3414075Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3414460Z     -          "notes": "Keep notes"
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3414909Z     +          "notes": "Keep notes"
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3415287Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3415631Z     -       }
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3416002Z     +       }
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3416377Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3416724Z     -    ]
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3417128Z     +    ]
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3417468Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3417798Z     - }
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3418154Z     + }
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3418476Z     
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3418872Z       ↵
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3419078Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3419228Z     Call Log:
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3420098Z     - Timeout 5000ms exceeded while waiting on the predicate
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3420494Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3420984Z       113 |   await expect(canvas(page, 2)).toHaveAttribute('data-opf-slide-id', 'first');
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3421889Z       114 |   await editTitle(page, 2, 'First slide at its new index');
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3423015Z     > 115 |   await expect.poll(() => copySource(page)).toBe(source.replace('"First slide"', '"First slide at its new index"'));
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3424024Z           |                                             ^
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3424512Z       116 | });
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3424892Z       117 |
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3425860Z       118 | test('shared navigation discards an ID-less draft even when the replacement title is identical', async ({ page }) => {
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3427025Z         at D:\a\pptx-dev\pptx-dev\tests\e2e\inspector-editing.spec.ts:115:45
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3427540Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3428238Z     Error Context: test-results\inspector-editing-invalid--4da31-ses-the-current-slide-order\error-context.md
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3428988Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3429818Z     attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3431020Z     test-results\inspector-editing-invalid--4da31-ses-the-current-slide-order\trace.zip
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3431791Z     Usage:
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3432009Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3432768Z         pnpm exec playwright show-trace test-results\inspector-editing-invalid--4da31-ses-the-current-slide-order\trace.zip
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3433563Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3434128Z     ────────────────────────────────────────────────────────────────────────────────────────────────
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3434624Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3434752Z   4 failed
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3435975Z     tests\e2e\author-json-options.spec.ts:66:5 › Author categorical choices include built-in, document and loaded catalogs with exact source undo/redo 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3437835Z     tests\e2e\inspector-editing.spec.ts:42:7 › all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 1440px 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3439567Z     tests\e2e\inspector-editing.spec.ts:42:7 › all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 540px 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3441473Z     tests\e2e\inspector-editing.spec.ts:101:5 › invalid source keeps a renderer fallback and source recovery uses the current slide order 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3442450Z   13 passed (2.7m)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.3748547Z [ELIFECYCLE] Command failed with exit code 1.
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T13:38:55.5120472Z ##[error]Process completed with exit code 1.

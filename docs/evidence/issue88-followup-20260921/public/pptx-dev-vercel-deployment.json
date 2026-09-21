@@ -1,0 +1,43 @@
+{
+  "capturedAt": "2026-09-21T13:29:05.920Z",
+  "id": "dpl_Hrdtt7jbYRmM1kb6daHu4bFJWiZv",
+  "name": "pptx-dev",
+  "url": "pptx-oyvunwx98-dataadvantage.vercel.app",
+  "type": "LAMBDAS",
+  "state": "READY",
+  "createdAt": 1789676794387,
+  "creator": {
+    "uid": "ZQU4suDtrsvvtRutONCd3J0H",
+    "username": "grimmmichaelj"
+  },
+  "project": {
+    "id": "prj_v8NIINr5fgzK9yoAQRy0CNoDPqC8",
+    "name": "pptx-dev",
+    "framework": "nextjs"
+  },
+  "meta": {
+    "githubCommitRef": "master",
+    "githubCommitSha": "761885b98092657fbbd05ffa529316d8b635539a",
+    "githubCommitMessage": "chore(opf): pin reference layer to ColorRef npm train (0.11.0)\n\nLock @openpresentation/opf, opf-render, opf-pptx, and opf-editor to the\npublished ColorRef release; sync spec via pnpm sync:opf-spec. Enable\nstrict color-references validation for validateOPF and /api/v1/validate.\n\nCo-authored-by: Cu...",
+    "githubRepo": "pptx-dev",
+    "githubOrg": "Data-Advantage"
+  },
+  "alias": [
+    "api.pptx.dev",
+    "mcp.pptx.dev",
+    "www.pptx.dev",
+    "pptx-dev.vercel.app",
+    "pptx.dev",
+    "pptx-dev-dataadvantage.vercel.app",
+    "pptx-dev-git-master-dataadvantage.vercel.app"
+  ],
+  "target": "production",
+  "regions": [
+    "iad1"
+  ],
+  "buildingAt": 1789676795533,
+  "ready": 1789676878061,
+  "readyState": "READY",
+  "source": "git",
+  "aliasError": null
+}

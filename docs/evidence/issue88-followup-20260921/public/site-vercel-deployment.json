@@ -1,0 +1,41 @@
+{
+  "capturedAt": "2026-09-21T13:25:44.665Z",
+  "id": "dpl_AeiHR47yjZUZ2DUv98o95QRoGSqC",
+  "name": "openpresentation-site",
+  "url": "openpresentation-site-cu6f8uifu-dataadvantage.vercel.app",
+  "type": "LAMBDAS",
+  "state": "READY",
+  "createdAt": 1789996777955,
+  "creator": {
+    "uid": "ZQU4suDtrsvvtRutONCd3J0H",
+    "username": "grimmmichaelj"
+  },
+  "project": {
+    "id": "prj_MnL89d86UvFUMWP1MAamRR3VE9IC",
+    "name": "openpresentation-site",
+    "framework": "nextjs"
+  },
+  "meta": {
+    "githubCommitRef": "main",
+    "githubCommitSha": "ffe3fca43b0baf1476a0dce61d0d5d545a8c00bc",
+    "githubCommitMessage": "fix(docs): keep the agent CLI pin aligned with releases (#43)\n\nRead the repeatable CLI version from data/releases.json so the agent\nquickstart follows the published train instead of retaining 0.8.1.\n\nRelated to OpenPresentation/opf#88.",
+    "githubRepo": "openpresentation-site",
+    "githubOrg": "Data-Advantage"
+  },
+  "alias": [
+    "openpresentation.org",
+    "www.openpresentation.org",
+    "openpresentation-site.vercel.app",
+    "openpresentation-site-dataadvantage.vercel.app",
+    "openpresentation-site-git-main-dataadvantage.vercel.app"
+  ],
+  "target": "production",
+  "regions": [
+    "iad1"
+  ],
+  "buildingAt": 1789996779863,
+  "ready": 1789997050427,
+  "readyState": "READY",
+  "source": "git",
+  "aliasError": null
+}

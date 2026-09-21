@@ -1,0 +1,15 @@
+{
+  "capturedAt": "2026-09-21T13:39:59.009Z",
+  "browser": "153.0.8010.12",
+  "deploymentId": "dpl_AWEZrwBDa7sSQWbkd8j44CzuzCtZ",
+  "sourceSha": "f17e9ae5869669d5fbac3720f285652d0c37551c",
+  "docsUrl": "https://www.pptx.gallery/docs",
+  "docsStatus": 200,
+  "docsTextSha256": "f781b1d621bed20fab6ab02a49af690ff254fe6d3136be38dfc459d7befeb7ad",
+  "editorUrl": "https://www.pptx.gallery/editor",
+  "editorLoaded": true,
+  "previewSvgLoaded": true,
+  "saveOpfVisible": true,
+  "powerPointVisible": true,
+  "pageErrors": []
+}
