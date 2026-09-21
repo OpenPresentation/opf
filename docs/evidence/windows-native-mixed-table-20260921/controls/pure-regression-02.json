@@ -1,0 +1,13 @@
+{
+    "passed":  true,
+    "officeOrComCalls":  0,
+    "wrapperSuccessPathPassed":  true,
+    "wrapperLatchPassed":  true,
+    "orderedDictionaryMetricsPassed":  true,
+    "negativeMutationsRejected":  true,
+    "parentGateLogicPassed":  true,
+    "fontCleanupLogicPassed":  true,
+    "expectedLength":  245,
+    "runCount":  5,
+    "characterProbeCount":  7
+}

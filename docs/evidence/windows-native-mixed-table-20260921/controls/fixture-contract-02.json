@@ -1,0 +1,13 @@
+{
+    "passed":  true,
+    "officeCalls":  0,
+    "fontRegistrationCalls":  0,
+    "hostVersion":  "5.1.26100.9444",
+    "workerSha256":  "ad21e9037ed5d091a2c11e4041155067030e0d8705d27321d3148748e0744ffa",
+    "tableFiles":  7,
+    "sourceRunCount":  5,
+    "sourceTextLength":  245,
+    "fontFaceCount":  4,
+    "sourceSha256":  "f92c5d5565afa1d03fc6df0cdc8d482771d5ebd5a5403f7a888f75e2ad020a51",
+    "fontGenerationSha256":  "8ac9743832e6c63bab58a999802979dcdcb91139599f502e90bc697141cf5422"
+}

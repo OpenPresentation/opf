@@ -1,0 +1,608 @@
+{
+  "schemaVersion": 1,
+  "kind": "opf-pptx-mixed-table-independent-native-audit",
+  "createdBy": "independent read-only stdlib audit",
+  "scope": "Raw native-mixed-table-01 evidence, source/snapshot hashes, stages, registration records, exact character probe styles, source-derived geometry tolerances, line ranges, and source PPTX ZIP/XML. No Office/COM, font registration, UI, source edit, or Git operation was performed by this audit.",
+  "auditScript": {
+    "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\mixed-table-independent-audit-01\\audit-v2.py",
+    "sha256": "c1e45d7da087a1cbe78acd62cba2f1f0a72757e44eb69a9439f9ba524c6bbf52"
+  },
+  "run": {
+    "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-mixed-table-01",
+    "workerSha256": "ad21e9037ed5d091a2c11e4041155067030e0d8705d27321d3148748e0744ffa",
+    "sourceSha256": "f92c5d5565afa1d03fc6df0cdc8d482771d5ebd5a5403f7a888f75e2ad020a51",
+    "reportSha256": "aa877b478f1046230b6371d6da3825f6c4ef74765d8f33b82765ac05877e3f06",
+    "requestSha256": "848d29c1cb2235fe6565564862fc51f1d7ddb74a6fa284f21510bb42984fda52",
+    "supervisorSha256": "79d721d3697b8b8a63e9a40b1611ef2455a804b27cbc2569c9b84f5b8d0bf273",
+    "stagesSha256": "f9b84279acfacb9659b5cb90e651b7d7eb13f80b5c5644f225da467c13d3bbcd",
+    "fontRegistrationSha256": "d3c8a31ef44b436ffc6ebf82f5738f01cd849312534a4945382f48137795348a"
+  },
+  "summary": {
+    "passed": true,
+    "checkCount": 9,
+    "passedChecks": 9,
+    "failedChecks": []
+  },
+  "checks": [
+    {
+      "name": "34 external-and-snapshot input hashes match",
+      "passed": true,
+      "evidence": {
+        "hashCheckRows": 34,
+        "allMatch": true,
+        "mismatches": [],
+        "sourceSha256": "f92c5d5565afa1d03fc6df0cdc8d482771d5ebd5a5403f7a888f75e2ad020a51",
+        "snapshotSha256": "f92c5d5565afa1d03fc6df0cdc8d482771d5ebd5a5403f7a888f75e2ad020a51",
+        "sourceExpectedSha256": "f92c5d5565afa1d03fc6df0cdc8d482771d5ebd5a5403f7a888f75e2ad020a51",
+        "snapshotExpectedSha256": "f92c5d5565afa1d03fc6df0cdc8d482771d5ebd5a5403f7a888f75e2ad020a51"
+      }
+    },
+    {
+      "name": "successful read-only lifecycle closes only the owned source snapshot once",
+      "passed": true,
+      "evidence": {
+        "workerExitCode": 0,
+        "timedOut": false,
+        "lastStage": "worker.complete",
+        "cleanupConfirmed": true,
+        "officeOperationsStopped": false,
+        "ownedPresentationCloseBeginCount": 1,
+        "ownedPresentationCloseSuccessCount": 1,
+        "closedPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-mixed-table-01\\inputs\\table-fixture\\source.pptx",
+        "parent": {
+          "officeLifecycleComplete": true,
+          "metricsGatePassed": true,
+          "officeCleanupConfirmed": true,
+          "fontCleanupConfirmed": true
+        },
+        "scope": "Read-only observation of one reviewed one-slide/one-table/one-row/one-cell source snapshot. No edit, save, reopen, PDF, or embedded-font output. Seven individual character probes are bounded around the tab and estimated offline wrap boundaries."
+      }
+    },
+    {
+      "name": "durable stage sequence and COM begin/success pairing",
+      "passed": true,
+      "evidence": {
+        "stageRows": 523,
+        "statusCounts": {
+          "begin": 260,
+          "success": 263,
+          "error": 0
+        },
+        "comBeginSuccessPairs": 260,
+        "unpairedLifecycleSuccesses": [
+          "worker.initialize",
+          "observation.presentation.cleanup",
+          "worker.complete"
+        ],
+        "sequenceContinuous": true,
+        "errorRows": 0,
+        "badPairs": [],
+        "lastStage": "worker.complete",
+        "lastDurableStage": "worker.complete"
+      }
+    },
+    {
+      "name": "whole-cell text, five exact native runs, seven character text/starts/styles, one paragraph/tab",
+      "passed": true,
+      "evidence": {
+        "wholeStart": 1,
+        "wholeLength": 245,
+        "pythonTextLength": 245,
+        "tabCount": 1,
+        "hardBreakCount": 0,
+        "runs": [
+          {
+            "start": 1,
+            "length": 5,
+            "text": "Lead\t",
+            "size": 18,
+            "sizeDeltaPoints": 0.0,
+            "bold": 0,
+            "italic": 0,
+            "font": "Carlito",
+            "passed": true
+          },
+          {
+            "start": 6,
+            "length": 22,
+            "text": "Large evidence phrase ",
+            "size": 30,
+            "sizeDeltaPoints": 0.0,
+            "bold": -1,
+            "italic": 0,
+            "font": "Carlito",
+            "passed": true
+          },
+          {
+            "start": 28,
+            "length": 154,
+            "text": "continues in smaller text across the same editable table cell so natural layout must wrap this sentence without authored line breaks or inserted offsets. ",
+            "size": 18,
+            "sizeDeltaPoints": 0.0,
+            "bold": 0,
+            "italic": 0,
+            "font": "Carlito",
+            "passed": true
+          },
+          {
+            "start": 182,
+            "length": 20,
+            "text": "Second large phrase ",
+            "size": 30,
+            "sizeDeltaPoints": 0.0,
+            "bold": 0,
+            "italic": 0,
+            "font": "Carlito",
+            "passed": true
+          },
+          {
+            "start": 202,
+            "length": 44,
+            "text": "finishes the control with exact source runs.",
+            "size": 18,
+            "sizeDeltaPoints": 0.0,
+            "bold": 0,
+            "italic": 0,
+            "font": "Carlito",
+            "passed": true
+          }
+        ],
+        "characterProbes": [
+          {
+            "requestedPosition": 4,
+            "reportedPosition": 4,
+            "actualStart": 4,
+            "length": 1,
+            "text": "d",
+            "purpose": "before-tab",
+            "containingExpectedRunStart": 1,
+            "observedFont": {
+              "name": "Carlito",
+              "size": 18,
+              "bold": 0,
+              "italic": 0
+            },
+            "expectedFont": {
+              "name": "Carlito",
+              "size": 18,
+              "bold": 0,
+              "italic": 0
+            },
+            "stylePassed": true,
+            "passed": true
+          },
+          {
+            "requestedPosition": 5,
+            "reportedPosition": 5,
+            "actualStart": 5,
+            "length": 1,
+            "text": "\t",
+            "purpose": "tab",
+            "containingExpectedRunStart": 1,
+            "observedFont": {
+              "name": "Carlito",
+              "size": 18,
+              "bold": 0,
+              "italic": 0
+            },
+            "expectedFont": {
+              "name": "Carlito",
+              "size": 18,
+              "bold": 0,
+              "italic": 0
+            },
+            "stylePassed": true,
+            "passed": true
+          },
+          {
+            "requestedPosition": 6,
+            "reportedPosition": 6,
+            "actualStart": 6,
+            "length": 1,
+            "text": "L",
+            "purpose": "after-tab",
+            "containingExpectedRunStart": 6,
+            "observedFont": {
+              "name": "Carlito",
+              "size": 30,
+              "bold": -1,
+              "italic": 0
+            },
+            "expectedFont": {
+              "name": "Carlito",
+              "size": 30,
+              "bold": -1,
+              "italic": 0
+            },
+            "stylePassed": true,
+            "passed": true
+          },
+          {
+            "requestedPosition": 78,
+            "reportedPosition": 78,
+            "actualStart": 78,
+            "length": 1,
+            "text": " ",
+            "purpose": "estimated-line-1-end-probe-only",
+            "containingExpectedRunStart": 28,
+            "observedFont": {
+              "name": "Carlito",
+              "size": 18,
+              "bold": 0,
+              "italic": 0
+            },
+            "expectedFont": {
+              "name": "Carlito",
+              "size": 18,
+              "bold": 0,
+              "italic": 0
+            },
+            "stylePassed": true,
+            "passed": true
+          },
+          {
+            "requestedPosition": 79,
+            "reportedPosition": 79,
+            "actualStart": 79,
+            "length": 1,
+            "text": "t",
+            "purpose": "estimated-line-2-start-probe-only",
+            "containingExpectedRunStart": 28,
+            "observedFont": {
+              "name": "Carlito",
+              "size": 18,
+              "bold": 0,
+              "italic": 0
+            },
+            "expectedFont": {
+              "name": "Carlito",
+              "size": 18,
+              "bold": 0,
+              "italic": 0
+            },
+            "stylePassed": true,
+            "passed": true
+          },
+          {
+            "requestedPosition": 172,
+            "reportedPosition": 172,
+            "actualStart": 172,
+            "length": 1,
+            "text": " ",
+            "purpose": "estimated-line-2-end-probe-only",
+            "containingExpectedRunStart": 28,
+            "observedFont": {
+              "name": "Carlito",
+              "size": 18,
+              "bold": 0,
+              "italic": 0
+            },
+            "expectedFont": {
+              "name": "Carlito",
+              "size": 18,
+              "bold": 0,
+              "italic": 0
+            },
+            "stylePassed": true,
+            "passed": true
+          },
+          {
+            "requestedPosition": 173,
+            "reportedPosition": 173,
+            "actualStart": 173,
+            "length": 1,
+            "text": "o",
+            "purpose": "estimated-line-3-start-probe-only",
+            "containingExpectedRunStart": 28,
+            "observedFont": {
+              "name": "Carlito",
+              "size": 18,
+              "bold": 0,
+              "italic": 0
+            },
+            "expectedFont": {
+              "name": "Carlito",
+              "size": 18,
+              "bold": 0,
+              "italic": 0
+            },
+            "stylePassed": true,
+            "passed": true
+          }
+        ],
+        "paragraphCount": 1,
+        "explicitTabStopCount": 0
+      }
+    },
+    {
+      "name": "native TextRange2 lines reconstruct 245 characters without hard breaks",
+      "passed": true,
+      "evidence": {
+        "nativeHalfOpenOffsets0": [
+          [
+            0,
+            92
+          ],
+          [
+            92,
+            194
+          ],
+          [
+            194,
+            245
+          ]
+        ],
+        "expectedNativeOffsets0": [
+          [
+            0,
+            92
+          ],
+          [
+            92,
+            194
+          ],
+          [
+            194,
+            245
+          ]
+        ],
+        "estimatedHalfOpenOffsets0": [
+          [
+            0,
+            78
+          ],
+          [
+            78,
+            172
+          ],
+          [
+            172,
+            245
+          ]
+        ],
+        "nativeDiffersFromEstimated": true,
+        "reconstructedLength": 245,
+        "reconstructedEqualsWholeCell": true,
+        "lines": [
+          {
+            "startInclusive0": 0,
+            "endExclusive0": 92,
+            "startOneBased": 1,
+            "length": 92,
+            "text": "Lead\tLarge evidence phrase continues in smaller text across the same editable table cell so "
+          },
+          {
+            "startInclusive0": 92,
+            "endExclusive0": 194,
+            "startOneBased": 93,
+            "length": 102,
+            "text": "natural layout must wrap this sentence without authored line breaks or inserted offsets. Second large "
+          },
+          {
+            "startInclusive0": 194,
+            "endExclusive0": 245,
+            "startOneBased": 195,
+            "length": 51,
+            "text": "phrase finishes the control with exact source runs."
+          }
+        ],
+        "estimatedOffsetsAreNonbindingProbes": {
+          "source": "offline estimated trace; probe positions are not asserted native line boundaries",
+          "boundaries": [
+            78,
+            172
+          ]
+        }
+      }
+    },
+    {
+      "name": "native shape/cell bounds, table extents, and frame margins match source XML within 0.02 pt",
+      "passed": true,
+      "evidence": {
+        "geometryTolerancePoints": 0.02,
+        "sourceSlideXmlGeometryPoints": {
+          "left": 43.2,
+          "top": 43.2,
+          "width": 873.6,
+          "height": 118.8
+        },
+        "sourceSlideXmlFrameMarginsPoints": {
+          "marginLeft": 7.5,
+          "marginRight": 7.5,
+          "marginTop": 6.0,
+          "marginBottom": 3.0
+        },
+        "observedTableShapeGeometryPoints": {
+          "left": 43.20000076293945,
+          "top": 43.20000076293945,
+          "width": 873.5999755859375,
+          "height": 118.80000305175781
+        },
+        "observedCellGeometryPoints": {
+          "left": 43.20000076293945,
+          "top": 43.20000076293945,
+          "width": 873.5999755859375,
+          "height": 118.80000305175781
+        },
+        "observedTableRowHeightAndColumnWidth": {
+          "rowHeight": 118.80000305175781,
+          "columnWidth": 873.5999755859375
+        },
+        "observedCellFrame": {
+          "marginLeft": 7.5,
+          "marginRight": 7.5,
+          "marginTop": 6,
+          "marginBottom": 3,
+          "wordWrap": -1,
+          "autoSize": 0,
+          "verticalAnchor": 1
+        },
+        "absoluteDeltasPoints": {
+          "shape.left": 7.629394502828291e-07,
+          "shape.top": 7.629394502828291e-07,
+          "shape.width": 2.4414062522737368e-05,
+          "shape.height": 3.051757815342171e-06,
+          "cell.left": 7.629394502828291e-07,
+          "cell.top": 7.629394502828291e-07,
+          "cell.width": 2.4414062522737368e-05,
+          "cell.height": 3.051757815342171e-06,
+          "frame.marginLeft": 0.0,
+          "frame.marginRight": 0.0,
+          "frame.marginTop": 0.0,
+          "frame.marginBottom": 0.0,
+          "table.rowHeight": 3.051757815342171e-06,
+          "table.columnWidth": 2.4414062522737368e-05
+        },
+        "maximumAbsoluteDeltaPoints": 2.4414062522737368e-05,
+        "paragraph": {
+          "count": 1,
+          "lineRuleWithin": 0,
+          "spaceWithin": 36.599998474121094,
+          "spaceBefore": 0,
+          "spaceAfter": 0,
+          "explicitTabStopCount": 0,
+          "defaultTabSpacing": 72
+        },
+        "tabProbeGeometry": {
+          "explicitTabStopCount": 0,
+          "defaultSpacingPoints": 72,
+          "tabCharacterStart": 5,
+          "afterTabCharacterStart": 6,
+          "wholeTextRangeOriginLeftPoints": 7.5,
+          "afterTabCharacterBoundLeftPoints": 79.5,
+          "afterTabOffsetFromTextRangeOriginPoints": 72.0
+        },
+        "limitation": "Cell bounds are compared with the enclosing graphic-frame extents; source XML has no separate cell coordinate box. TextRange2 bounds are recorded without inferring coordinate origin or engine cause."
+      }
+    },
+    {
+      "name": "four unique session font additions were removed",
+      "passed": true,
+      "evidence": {
+        "registrationRecords": [
+          {
+            "sha256": "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89",
+            "added": 1,
+            "file": "fonts/Carlito-400-normal.ttf",
+            "removed": true
+          },
+          {
+            "sha256": "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5",
+            "added": 1,
+            "file": "fonts/Carlito-400-italic.ttf",
+            "removed": true
+          },
+          {
+            "sha256": "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0",
+            "added": 1,
+            "file": "fonts/Carlito-700-normal.ttf",
+            "removed": true
+          },
+          {
+            "sha256": "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691",
+            "added": 1,
+            "file": "fonts/Carlito-700-italic.ttf",
+            "removed": true
+          }
+        ],
+        "uniqueExpectedFontHashes": 4,
+        "allAddedOnceAndRemoved": true
+      }
+    },
+    {
+      "name": "unchanged source PPTX CRC/XML and source table content; no embedded font program",
+      "passed": true,
+      "evidence": {
+        "sourceSha256": "f92c5d5565afa1d03fc6df0cdc8d482771d5ebd5a5403f7a888f75e2ad020a51",
+        "snapshotSha256": "f92c5d5565afa1d03fc6df0cdc8d482771d5ebd5a5403f7a888f75e2ad020a51",
+        "expectedSha256": "f92c5d5565afa1d03fc6df0cdc8d482771d5ebd5a5403f7a888f75e2ad020a51",
+        "sourceAndSnapshotByteIdentical": true,
+        "zipMembers": 39,
+        "zipCrcError": null,
+        "xmlAndRelsParsed": 20,
+        "tableShapeCount": 1,
+        "rows": 1,
+        "cells": 1,
+        "tableXmlTextLength": 245,
+        "tableXmlTextMatchesNative": true,
+        "sourceXmlHardBreakCount": 0,
+        "embeddedFontXmlTags": [],
+        "fontProgramOrFontsDirectoryMembers": []
+      }
+    },
+    {
+      "name": "native observation PNG hash and dimensions",
+      "passed": true,
+      "evidence": {
+        "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-mixed-table-01\\native-observation.png",
+        "sha256": "ceed1e7089510f9acaa0413674fb36ee76cb343a39638bb13fba53380c64602d",
+        "reportedSha256": "ceed1e7089510f9acaa0413674fb36ee76cb343a39638bb13fba53380c64602d",
+        "dimensions": [
+          1280,
+          720
+        ],
+        "visualReview": "Not performed by this offline audit; root separately reviewed the full raster."
+      }
+    }
+  ],
+  "nativeLineHalfOpenOffsets0": [
+    [
+      0,
+      92
+    ],
+    [
+      92,
+      194
+    ],
+    [
+      194,
+      245
+    ]
+  ],
+  "nativeGeometry": {
+    "tableShape": {
+      "left": 43.20000076293945,
+      "top": 43.20000076293945,
+      "width": 873.5999755859375,
+      "height": 118.80000305175781
+    },
+    "cellShape": {
+      "left": 43.20000076293945,
+      "top": 43.20000076293945,
+      "width": 873.5999755859375,
+      "height": 118.80000305175781
+    },
+    "wholeTextRange": {
+      "left": 7.5,
+      "top": 6,
+      "width": 817.1250610351562,
+      "height": 109.66999816894531
+    },
+    "paragraph": {
+      "count": 1,
+      "lineRuleWithin": 0,
+      "spaceWithin": 36.599998474121094,
+      "spaceBefore": 0,
+      "spaceAfter": 0,
+      "explicitTabStopCount": 0,
+      "defaultTabSpacing": 72
+    },
+    "tab": {
+      "explicitTabStopCount": 0,
+      "defaultSpacingPoints": 72,
+      "tabCharacterStart": 5,
+      "afterTabCharacterStart": 6,
+      "wholeTextRangeOriginLeftPoints": 7.5,
+      "afterTabCharacterBoundLeftPoints": 79.5,
+      "afterTabOffsetFromTextRangeOriginPoints": 72.0
+    }
+  },
+  "limitations": [
+    "The native run is a read-only observation; it does not test edit/save/reopen persistence.",
+    "The source PPTX is unchanged. This report makes no engine-cause claim about native line wrapping, tab positions, text-range bounds, or the differences from the estimated offline boundaries.",
+    "Character style checks compare the seven observed probe records with their containing expected text runs; they do not establish physical per-glyph font identity.",
+    "Geometry checks compare observed shape/cell bounds, table row/column extents, and cell margins with saved DrawingML within 0.02 point; the cell uses its enclosing graphic-frame extent because the source XML has no separate cell-coordinate box.",
+    "Reported Carlito family/style properties and successful session registration do not identify the physical font used for every glyph.",
+    "The root supervisor separately reviewed the full raster. This auditor parsed its hash and dimensions but did not visually inspect it or certify browser/native fidelity."
+  ]
+}
