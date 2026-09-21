@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Align the developer quickstart, compatibility matrix, handoff and immutable verification references with the shipped ColorRef train: core 0.11.0, CLI/renderer 0.9.0, editor 0.8.0 and PPTX 0.9.1. Record production feature adoption separately from remaining browser, font and native Office acceptance. Include shipped furniture and ColorRef in the fresh-registry verifier, retain production findings, and correct stale agent-skill guidance. No package version or rendering baseline changes.
+
 ## 0.11.0
 
 - Add content color references: rich-text run colors and styled table cell `fill`/`color` and border colors accept a color-scheme slot name (`accent1`–`accent6`, `dark1/2`, `light1/2`, `hyperlink`, `followedHyperlink`), an abstract role name (`primary`, `secondary`, `accent`, `background`, `surface`, `text`, `textSecondary`), or a `var:<id>` reference, in addition to literal hex. The styled-cell fields enforce the forms through the shared `ColorRef` definition (widened from hex-only — a pure widening); `TextRun.color` stays an open string so imported decks with unrecognized run colors keep validating, matching the coordinated exporters' fallback contract — validators warn and renderers fall back to the theme color. Prefer names over hex so styled content survives re-theming.

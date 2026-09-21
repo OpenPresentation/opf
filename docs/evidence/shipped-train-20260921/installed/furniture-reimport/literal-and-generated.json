@@ -1,0 +1,138 @@
+{
+  "id": "literal-and-generated",
+  "source": {
+    "design": {
+      "fontScheme": "roboto",
+      "header": {
+        "left": {
+          "text": "  Header\twords\r\nsecond  \r\n"
+        },
+        "right": {
+          "section": true
+        }
+      },
+      "footer": {
+        "left": {
+          "date": " 2026-09-14 "
+        },
+        "right": {
+          "slideNumber": true
+        }
+      }
+    },
+    "slides": [
+      {
+        "title": "First",
+        "section": "Overview",
+        "text": "First body"
+      },
+      {
+        "title": "Second",
+        "section": "Details",
+        "text": "Second body"
+      }
+    ]
+  },
+  "imported": {
+    "$schema": "https://openpresentation.org/schema/opf/v1",
+    "name": "OPF Presentation",
+    "slides": [
+      {
+        "design": {
+          "background": {
+            "type": "solid",
+            "color": "#011842"
+          }
+        },
+        "section": "Overview",
+        "title": "First",
+        "blocks": [
+          {
+            "type": "text",
+            "text": "First body"
+          }
+        ]
+      },
+      {
+        "design": {
+          "background": {
+            "type": "solid",
+            "color": "#011842"
+          }
+        },
+        "section": "Details",
+        "title": "Second",
+        "blocks": [
+          {
+            "type": "text",
+            "text": "Second body"
+          }
+        ]
+      }
+    ],
+    "author": "OpenPresentation",
+    "design": {
+      "dimensions": {
+        "widthInches": 13.333333333333334,
+        "heightInches": 7.5
+      },
+      "header": {
+        "left": {
+          "text": "  Header\twords\r\nsecond  \r\n"
+        },
+        "right": {
+          "section": true
+        }
+      },
+      "footer": {
+        "left": {
+          "date": " 2026-09-14 "
+        },
+        "right": {
+          "slideNumber": true
+        }
+      }
+    }
+  },
+  "checks": {
+    "literalWhitespace": true,
+    "literalDate": true,
+    "generatedNumberIntent": true,
+    "sectionIntent": true,
+    "currentSectionMetadata": true
+  },
+  "failures": [],
+  "diagnostics": [
+    {
+      "code": "furniture-import-reflow",
+      "path": "slides.0.design",
+      "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+    },
+    {
+      "code": "furniture-import-reflow",
+      "path": "slides.1.design",
+      "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+    },
+    {
+      "code": "heading-import-reflow",
+      "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed.",
+      "path": "slides.0"
+    },
+    {
+      "code": "text-import-reflow",
+      "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.",
+      "path": "slides.0"
+    },
+    {
+      "code": "heading-import-reflow",
+      "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed.",
+      "path": "slides.1"
+    },
+    {
+      "code": "text-import-reflow",
+      "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.",
+      "path": "slides.1"
+    }
+  ],
+  "pptxSha256": "d3055dde5a05e75231ac8dbcb366e610b7313b508e77800dd830a99cc6250fd0"
+}

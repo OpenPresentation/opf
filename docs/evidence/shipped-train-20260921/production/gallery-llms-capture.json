@@ -1,0 +1,11 @@
+{
+  "url": "https://www.pptx.gallery/llms.txt",
+  "capturedAt": "2026-09-21",
+  "fullCaptureSha256": "b13bcd1651ebc3e110eaf68aa79b1be3648ea4f223b89a2c8dfddce1f6fad0fc",
+  "excerptLines": [
+    1,
+    100
+  ],
+  "excerptSha256": "8803b05bd2a51f55cb00aee1388a05105ae439fb11d7972589da466e355633d7",
+  "note": "Only the exact first 100 lines needed for the stale-version finding are committed. The full local capture includes an unrelated legacy chart slug rejected by the existing source integrity gate. The gate is unchanged."
+}

@@ -1,0 +1,36 @@
+{
+  "packages": [
+    {
+      "name": "@openpresentation/opf",
+      "version": "0.11.0",
+      "gitHead": "b8a1faf24203635bd36b09ea19f44bcd53781f16",
+      "files": 525
+    },
+    {
+      "name": "@openpresentation/cli",
+      "version": "0.9.0",
+      "gitHead": "b8a1faf24203635bd36b09ea19f44bcd53781f16",
+      "files": 5
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "version": "0.9.0",
+      "gitHead": "114bf596e9034c0b80a8c92df6a956a04ef18bef",
+      "files": 17
+    },
+    {
+      "name": "@openpresentation/opf-pptx",
+      "version": "0.9.1",
+      "gitHead": "fcc006a6887c549a96a3bc8bbdb957cc54fe67dd",
+      "files": 28
+    },
+    {
+      "name": "@openpresentation/opf-editor",
+      "version": "0.8.0",
+      "gitHead": "476191e28e6f5f5ec32146aeb416f5286b4d0570",
+      "files": 42
+    }
+  ],
+  "harnesses": 18,
+  "fixtures": 6
+}

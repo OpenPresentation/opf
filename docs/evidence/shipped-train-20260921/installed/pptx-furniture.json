@@ -1,0 +1,183 @@
+{
+  "node": "v24.21.0",
+  "verifierSha256": "7228a83ec074ac3b09b54a11f9bf38782b8c650c88a86a05905f98f82d2e9333",
+  "results": [
+    {
+      "measured": false,
+      "width": 1280,
+      "height": 720,
+      "floor": 16,
+      "local": false,
+      "parts": 5,
+      "textShapes": 8,
+      "pictures": 0,
+      "sha256": "d5fc7aaf69254720880b5a1bd357f01473b499ca05c8c535a9c9ff218b61f6e2"
+    },
+    {
+      "measured": false,
+      "width": 1280,
+      "height": 720,
+      "floor": 16,
+      "local": true,
+      "parts": 5,
+      "textShapes": 4,
+      "pictures": 1,
+      "sha256": "76e7010006490eed6f57c4fa03344505309b11dd2fdcca506039ca2f73278c7f"
+    },
+    {
+      "measured": false,
+      "width": 1280,
+      "height": 720,
+      "floor": 32,
+      "local": false,
+      "parts": 5,
+      "textShapes": 8,
+      "pictures": 0,
+      "sha256": "7f4d00bcec4b0c0262d889e78637b26fa49ae9b60e4ea8f8e287f8333f18da31"
+    },
+    {
+      "measured": false,
+      "width": 1280,
+      "height": 720,
+      "floor": 32,
+      "local": true,
+      "parts": 5,
+      "textShapes": 4,
+      "pictures": 1,
+      "sha256": "c824ccb3f47ab411709001fe85120abe9c42ac2c6b55909047abfdab34fe38d1"
+    },
+    {
+      "measured": false,
+      "width": 720,
+      "height": 1280,
+      "floor": 16,
+      "local": false,
+      "parts": 5,
+      "textShapes": 8,
+      "pictures": 0,
+      "sha256": "1944e7c6570b533aa18c779e54bf7deac3c49180eb50471f57d3ca72603de48a"
+    },
+    {
+      "measured": false,
+      "width": 720,
+      "height": 1280,
+      "floor": 16,
+      "local": true,
+      "parts": 5,
+      "textShapes": 4,
+      "pictures": 1,
+      "sha256": "e5b3f8b7c484bbdc9c8a6cd0e4cd6941f6ca1c0a4f54c373428b499f87a00adc"
+    },
+    {
+      "measured": false,
+      "width": 720,
+      "height": 1280,
+      "floor": 32,
+      "local": false,
+      "parts": 5,
+      "textShapes": 11,
+      "pictures": 0,
+      "sha256": "ff31363063b9422e0cdc9532f7bc517df0263ce3420fbba789ea80e89f5ff04a"
+    },
+    {
+      "measured": false,
+      "width": 720,
+      "height": 1280,
+      "floor": 32,
+      "local": true,
+      "parts": 5,
+      "textShapes": 5,
+      "pictures": 1,
+      "sha256": "d087e80db1cde331355074c89be8c871c715712f32e83c907b266068ce1edc20"
+    },
+    {
+      "measured": true,
+      "width": 1280,
+      "height": 720,
+      "floor": 16,
+      "local": false,
+      "parts": 5,
+      "textShapes": 8,
+      "pictures": 0,
+      "sha256": "2c1755d676ce9285ae2bafa98174ddcf9f728c645fd51d36fdeb3d194d13d931"
+    },
+    {
+      "measured": true,
+      "width": 1280,
+      "height": 720,
+      "floor": 16,
+      "local": true,
+      "parts": 5,
+      "textShapes": 4,
+      "pictures": 1,
+      "sha256": "aa53845a8178e4f64177f0e4dd37fbd5d11ca869266ebf8f6b09757ec72c9ef1"
+    },
+    {
+      "measured": true,
+      "width": 1280,
+      "height": 720,
+      "floor": 32,
+      "local": false,
+      "parts": 5,
+      "textShapes": 8,
+      "pictures": 0,
+      "sha256": "ffc93ef860383ba0647d9b3585ed188e15a5b11497859e2b49710eb829bf5409"
+    },
+    {
+      "measured": true,
+      "width": 1280,
+      "height": 720,
+      "floor": 32,
+      "local": true,
+      "parts": 5,
+      "textShapes": 4,
+      "pictures": 1,
+      "sha256": "c824ccb3f47ab411709001fe85120abe9c42ac2c6b55909047abfdab34fe38d1"
+    },
+    {
+      "measured": true,
+      "width": 720,
+      "height": 1280,
+      "floor": 16,
+      "local": false,
+      "parts": 5,
+      "textShapes": 8,
+      "pictures": 0,
+      "sha256": "520454b092f44892c24e5f069e5fcc17b9d71a66351d04f50199e1a8653581ac"
+    },
+    {
+      "measured": true,
+      "width": 720,
+      "height": 1280,
+      "floor": 16,
+      "local": true,
+      "parts": 5,
+      "textShapes": 4,
+      "pictures": 1,
+      "sha256": "63fdc23c86b993a4d5b62a0d78bfe8b70e122e52763592ceb93e31de5a6071ee"
+    },
+    {
+      "measured": true,
+      "width": 720,
+      "height": 1280,
+      "floor": 32,
+      "local": false,
+      "parts": 5,
+      "textShapes": 9,
+      "pictures": 0,
+      "sha256": "f9d4a2b09e6bebb2c9b10d12613dded17a6a7585b5edbe91b1cedbb444b26317"
+    },
+    {
+      "measured": true,
+      "width": 720,
+      "height": 1280,
+      "floor": 32,
+      "local": true,
+      "parts": 5,
+      "textShapes": 4,
+      "pictures": 1,
+      "sha256": "5fde188220f96947858456dd8c36d0285d82c3d786e340ddc30ff9258307332d"
+    }
+  ],
+  "scope": "16 deterministic PPTX exports match accepted core furniture text, fonts, tab source, boxes and fitted images. No semantic reimport or native Office claim; provenance remains separate pending work."
+}

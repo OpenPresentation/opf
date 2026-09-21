@@ -1,0 +1,192 @@
+{
+  "_id": "@openpresentation/opf@0.11.0",
+  "_rev": "14-fbf962cefeee27a2dc444dffc1aa3bf2",
+  "name": "@openpresentation/opf",
+  "dist-tags": {
+    "latest": "0.11.0"
+  },
+  "versions": [
+    "0.1.0",
+    "0.2.1",
+    "0.2.2",
+    "0.3.0",
+    "0.4.0",
+    "0.4.1",
+    "0.5.0",
+    "0.6.0",
+    "0.7.0",
+    "0.8.0",
+    "0.9.0",
+    "0.10.0",
+    "0.10.1",
+    "0.11.0"
+  ],
+  "time": {
+    "created": "2026-05-05T22:26:36.950Z",
+    "modified": "2026-09-17T19:13:56.097Z",
+    "0.1.0": "2026-05-05T22:26:37.307Z",
+    "0.2.1": "2026-05-14T19:23:26.477Z",
+    "0.2.2": "2026-05-19T18:27:18.193Z",
+    "0.3.0": "2026-06-10T18:37:29.591Z",
+    "0.4.0": "2026-09-08T03:03:39.723Z",
+    "0.4.1": "2026-09-08T08:23:40.207Z",
+    "0.5.0": "2026-09-08T11:07:40.264Z",
+    "0.6.0": "2026-09-08T12:49:58.014Z",
+    "0.7.0": "2026-09-08T15:18:15.318Z",
+    "0.8.0": "2026-09-09T20:32:02.843Z",
+    "0.9.0": "2026-09-10T06:12:58.243Z",
+    "0.10.0": "2026-09-15T15:39:41.935Z",
+    "0.10.1": "2026-09-15T23:18:53.899Z",
+    "0.11.0": "2026-09-17T19:13:55.775Z"
+  },
+  "bugs": {
+    "url": "https://github.com/OpenPresentation/opf/issues"
+  },
+  "author": "Open Presentation",
+  "license": "MIT",
+  "homepage": "https://openpresentation.org",
+  "keywords": [
+    "opf",
+    "open-presentation-format",
+    "presentation",
+    "schema",
+    "json-schema",
+    "catalogs",
+    "slides"
+  ],
+  "repository": {
+    "url": "git+https://github.com/OpenPresentation/opf.git",
+    "type": "git",
+    "directory": "packages/javascript"
+  },
+  "description": "Canonical Open Presentation Format schemas, catalogs, TypeScript types, and local validation.",
+  "maintainers": [
+    "grimmmichaelj <developer@buildadataadvantage.com>"
+  ],
+  "readmeFilename": "README.md",
+  "_contentLength": 59253,
+  "dist": {
+    "shasum": "300d7fc700273e033a35984791ac5aca35367d67",
+    "tarball": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.11.0.tgz",
+    "fileCount": 525,
+    "integrity": "sha512-7Gm/FSyiGngHRkDG0SPL8V6FEC5nC8UpoffNWf8CqkyjXsqQ2BUIzVAEwHwKjEsEZ04FR2DT+Ohh8PJofNPFiw==",
+    "signatures": [
+      {
+        "sig": "MEQCIEyEY278Dzymx7fi2U5/W2ge1eZ2TqIzxSEDbdfEHl3HAiAUQXD2e3lpmCQJMAaYq27dDYRGpoITKCd8eCb9ieQHPg==",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      },
+      {
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+        "sig": "MEQCICqpkop2pQNZEwFgq3TwOhSvl4mvNpcdPJN7TIp9p42gAiAJexg/LjMcesxOpYVHV0vvuDTZ2+5toKJZmGqJc6Jq4Q=="
+      }
+    ],
+    "attestations": {
+      "url": "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf@0.11.0",
+      "provenance": {
+        "predicateType": "https://slsa.dev/provenance/v1"
+      }
+    },
+    "unpackedSize": 6515599
+  },
+  "main": "./dist/index.js",
+  "type": "module",
+  "types": "./dist/index.d.ts",
+  "engines": {
+    "node": "24.x"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./data": {
+      "types": "./dist/data.d.ts",
+      "import": "./dist/data.js"
+    },
+    "./docs": {
+      "types": "./dist/docs.d.ts",
+      "import": "./dist/docs.js"
+    },
+    "./lint": {
+      "types": "./dist/lint.d.ts",
+      "import": "./dist/lint.js"
+    },
+    "./types": {
+      "types": "./dist/types.d.ts",
+      "import": "./dist/types.js"
+    },
+    "./spec/*": "./dist/spec/*",
+    "./schemas": {
+      "types": "./dist/schemas.d.ts",
+      "import": "./dist/schemas.js"
+    },
+    "./catalogs": {
+      "types": "./dist/catalogs.d.ts",
+      "import": "./dist/catalogs.js"
+    },
+    "./examples": {
+      "types": "./dist/examples.d.ts",
+      "import": "./dist/examples.js"
+    },
+    "./previews": {
+      "types": "./dist/previews.d.ts",
+      "import": "./dist/previews.js"
+    },
+    "./validator": {
+      "types": "./dist/validator.d.ts",
+      "import": "./dist/validator.js"
+    },
+    "./pagination": {
+      "types": "./dist/pagination.d.ts",
+      "import": "./dist/pagination.js"
+    },
+    "./spec-files": {
+      "types": "./dist/spec-files.d.ts",
+      "import": "./dist/spec-files.js"
+    },
+    "./composition": {
+      "types": "./dist/composition.d.ts",
+      "import": "./dist/composition.js"
+    },
+    "./repo-readme": {
+      "types": "./dist/repo-readme.d.ts",
+      "import": "./dist/repo-readme.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "gitHead": "b8a1faf24203635bd36b09ea19f44bcd53781f16",
+  "scripts": {
+    "test": "pnpm run build && node ../../scripts/run-node-tests.mjs && node test/composition.mjs && node test/pagination.mjs && node test/data.mjs && node test/rich-text.mjs && node test/lists.mjs",
+    "build": "pnpm run generate && tsup && node scripts/copy-spec.mjs",
+    "clean": "rm -rf dist src/generated",
+    "generate": "node scripts/generate.mjs && node scripts/generate-previews.mjs && node scripts/generate-content.mjs",
+    "typecheck": "pnpm run generate && node ../../scripts/typecheck.mjs --noEmit",
+    "test:packed": "node test/packed-install-smoke.mjs",
+    "pack:dry-run": "pnpm run build && npm pack --dry-run --cache /tmp/opf-npm-cache"
+  },
+  "version": "0.11.0",
+  "_npmUser": "GitHub Actions <npm-oidc-no-reply@github.com>",
+  "_npmVersion": "11.16.0",
+  "directories": {},
+  "sideEffects": false,
+  "_nodeVersion": "24.20.0",
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "jsonc-parser": "3.3.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "_hasShrinkwrap": false,
+  "devDependencies": {
+    "tsup": "^8.5.1",
+    "typescript": "~5.9.3",
+    "@types/node": "^24.13.4",
+    "json-schema-to-typescript": "^16.0.0"
+  },
+  "_npmOperationalInternal": {
+    "host": "s3://npm-registry-packages-npm-production",
+    "tmp": "tmp/opf_0.11.0_1789672435615_0.4037983448342535"
+  }
+}

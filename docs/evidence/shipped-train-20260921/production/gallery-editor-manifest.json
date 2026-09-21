@@ -1,0 +1,58 @@
+{
+  "source": "npm",
+  "packages": [
+    {
+      "name": "@openpresentation/opf",
+      "version": "0.11.0",
+      "tarball": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.11.0.tgz",
+      "integrity": "sha512-7Gm/FSyiGngHRkDG0SPL8V6FEC5nC8UpoffNWf8CqkyjXsqQ2BUIzVAEwHwKjEsEZ04FR2DT+Ohh8PJofNPFiw=="
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "version": "0.9.0",
+      "tarball": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.9.0.tgz",
+      "integrity": "sha512-uHWABof7cuLmTAglctvcjuV5dRyIa2qmeGdwONIuKCAnNQXjAOQKXido9OcyGtk6xFjzBFtLtvD3sZOwPEJIJA=="
+    },
+    {
+      "name": "@openpresentation/opf-editor",
+      "version": "0.8.0",
+      "tarball": "https://registry.npmjs.org/@openpresentation/opf-editor/-/opf-editor-0.8.0.tgz",
+      "integrity": "sha512-cSx6DkfK4N95Zk3lvCBxhQePWIIgBDvON4hcKLvELulpbKiYnvmoAb07LJE4pbXGE0npUdmU/r25TShdtOcR4A=="
+    },
+    {
+      "name": "@openpresentation/opf-pptx",
+      "version": "0.9.1",
+      "tarball": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.9.1.tgz",
+      "integrity": "sha512-krzDAKjDByP2zsoR4VeyyIwU7uhcVbxpeBYEIw7vlkoRWWiFq170rhQzQZx5lbMD7u2magYEkdUt3rUgByCKjw=="
+    },
+    {
+      "name": "@openpresentation/cli",
+      "version": "0.9.0",
+      "tarball": "https://registry.npmjs.org/@openpresentation/cli/-/cli-0.9.0.tgz",
+      "integrity": "sha512-YR0zhGe0fpcKp617Aqjz6ZIql0fsNrMVcSW84tEkMBc/9DLxLFAyxJLkExorOrfFYanhvWmhoRG94x3AuMTvpQ=="
+    }
+  ],
+  "editorExamples": {
+    "commit": "476191e28e6f5f5ec32146aeb416f5286b4d0570",
+    "files": {
+      "playground.js": "e8f0bc6af34cff26f1ad92af55a47f4e8ba28a890e823940ed2828e567b20414",
+      "data-controls.js": "75a8a380eb8dbf88a2333b31c777c07e3da27374c6e76c01623cf24bf79dc523",
+      "transfer-controls.js": "c709c07bb0818ccac58dcf0452a399dd0d7dcfdb82891e7fe1758f6b20d83c4e",
+      "pptx-controls.js": "9ac27802a5eb64b5470b7bab4a50f2315e131e10e5b9c2fe0bd56335a42f92d2",
+      "playground.html": "6508a2f4d06208ba916c809a0a4ff9bb666817d5fdc934cbb86bf06e866fa99c",
+      "playground.css": "369f7d0ca6249e1fee44f58351be986de3d4f0f6bd8396fd1ffb927eb22ec183",
+      "galleries.json": "58f9f58c7473843b5e76459b1d83dbece829e6095e6ff364d9ecd36c96dcc743"
+    }
+  },
+  "galleryDocuments": 869,
+  "files": {
+    "index.html": "a5652f441ab05db1371b6d15ca57199d740e28fb8c6d56d2f77b6cb2f800f3c3",
+    "playground.js": "cb2c77f5cfaa7bfda093e61ba152eb086df640ad2242e8a7bce75aa0712588ef",
+    "playground.js.LEGAL.txt": "5d8014d92651e8187d9a6a47dfc03c483e1e2e55bb5780dbddbfa3c3288d76c2",
+    "playground.css": "369f7d0ca6249e1fee44f58351be986de3d4f0f6bd8396fd1ffb927eb22ec183",
+    "fonts.json": "c697f3979d65cb65482400d163604a8b4ac299e788702b8d3a502cce3f284c8d",
+    "galleries.json": "58f9f58c7473843b5e76459b1d83dbece829e6095e6ff364d9ecd36c96dcc743",
+    "gallery.json": "74aabfe3d1a63e47433e72c26c0269573c179057eebb307e82a0f596571c4796",
+    "opf-spec.json": "fcb054ffc099666796de06394d156aa9be55a815b241cebfd4e9ec7b47ca4f59"
+  }
+}

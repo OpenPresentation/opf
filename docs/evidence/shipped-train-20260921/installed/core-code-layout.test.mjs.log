@@ -1,0 +1,17 @@
+✔ complete code parts preserve exact filename, language, body, whitespace and hard line boundaries (1.516459ms)
+✔ shorthand, empty source and absent metadata retain their source and generated-label distinction (0.206833ms)
+✔ long language labels and filenames are measured within their cell before allocating the body (2.343167ms)
+✔ wrapped whitespace and graphemes retain contiguous source offsets, including CRLF and blank final lines (0.477583ms)
+✔ tabs use measured space stops and never send control tabs to the font-width provider (0.495625ms)
+✔ readability floors scale once and body shrinking preserves all code content (0.2025ms)
+✔ irreducible body and metadata failures remain explicit; strict mode does not return partial output (3.139291ms)
+✔ invalid inner boxes never become invented one-pixel fits; malformed options reject (0.169708ms)
+✔ font trials stay bounded independently of canvas scale (3.95ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 73.405833

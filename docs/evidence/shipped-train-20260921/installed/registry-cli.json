@@ -1,0 +1,109 @@
+{
+  "_id": "@openpresentation/cli@0.9.0",
+  "_rev": "11-7e10104b5ea7031be185633c287512b6",
+  "name": "@openpresentation/cli",
+  "dist-tags": {
+    "latest": "0.9.0"
+  },
+  "versions": [
+    "0.1.0",
+    "0.1.1",
+    "0.2.0",
+    "0.3.0",
+    "0.4.0",
+    "0.5.0",
+    "0.6.0",
+    "0.7.0",
+    "0.8.0",
+    "0.8.1",
+    "0.9.0"
+  ],
+  "time": {
+    "created": "2026-09-08T03:29:58.385Z",
+    "modified": "2026-09-17T19:13:59.236Z",
+    "0.1.0": "2026-09-08T03:29:58.739Z",
+    "0.1.1": "2026-09-08T08:23:53.958Z",
+    "0.2.0": "2026-09-08T11:10:31.959Z",
+    "0.3.0": "2026-09-08T12:54:20.030Z",
+    "0.4.0": "2026-09-08T15:22:19.138Z",
+    "0.5.0": "2026-09-08T18:13:25.078Z",
+    "0.6.0": "2026-09-09T20:39:35.937Z",
+    "0.7.0": "2026-09-10T06:19:33.786Z",
+    "0.8.0": "2026-09-15T15:40:16.421Z",
+    "0.8.1": "2026-09-15T23:16:15.524Z",
+    "0.9.0": "2026-09-17T19:13:58.908Z"
+  },
+  "bugs": {
+    "url": "https://github.com/OpenPresentation/opf/issues"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/OpenPresentation/opf#readme",
+  "repository": {
+    "url": "git+https://github.com/OpenPresentation/opf.git",
+    "type": "git",
+    "directory": "packages/cli"
+  },
+  "description": "Local OPF CLI for agents: create, validate, edit, paginate, and inspect presentation JSON.",
+  "maintainers": [
+    "grimmmichaelj <developer@buildadataadvantage.com>"
+  ],
+  "readmeFilename": "README.md",
+  "bin": {
+    "opf": "dist/index.js"
+  },
+  "dist": {
+    "shasum": "41246fec0bd6d0785a9ce5c352e946c7df2f5f72",
+    "tarball": "https://registry.npmjs.org/@openpresentation/cli/-/cli-0.9.0.tgz",
+    "fileCount": 5,
+    "integrity": "sha512-YR0zhGe0fpcKp617Aqjz6ZIql0fsNrMVcSW84tEkMBc/9DLxLFAyxJLkExorOrfFYanhvWmhoRG94x3AuMTvpQ==",
+    "signatures": [
+      {
+        "sig": "MEQCIHkkmDqakIM3WMo0JFhqHxG2KDz2tGmy92BKuOXAujS8AiBuHZjHCEo5GWEyxPxb0VGRNlfDTvnD9dkxZPWOmyt4lg==",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      },
+      {
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+        "sig": "MEUCICjnayv4pdCbkJZ2Lw3Sbn8dTY2ZPG47B0iRVu2RcebCAiEA8YmBjDsvCh5V6mkzYUVkj3PI5/J4PhOxhGmK8D6pShw="
+      }
+    ],
+    "attestations": {
+      "url": "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fcli@0.9.0",
+      "provenance": {
+        "predicateType": "https://slsa.dev/provenance/v1"
+      }
+    },
+    "unpackedSize": 3550941
+  },
+  "type": "module",
+  "engines": {
+    "node": "24.x"
+  },
+  "gitHead": "b8a1faf24203635bd36b09ea19f44bcd53781f16",
+  "scripts": {
+    "test": "pnpm build && node ../../scripts/run-node-tests.mjs && node test/cli.mjs",
+    "build": "pnpm --filter @openpresentation/opf build && tsup",
+    "clean": "rm -rf dist",
+    "prepack": "pnpm build",
+    "typecheck": "pnpm --filter @openpresentation/opf build && node ../../scripts/typecheck.mjs --noEmit",
+    "test:packed": "node test/packed.mjs"
+  },
+  "version": "0.9.0",
+  "_npmUser": "GitHub Actions <npm-oidc-no-reply@github.com>",
+  "_npmVersion": "11.16.0",
+  "directories": {},
+  "_nodeVersion": "24.20.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "_hasShrinkwrap": false,
+  "devDependencies": {
+    "tsup": "^8.5.1",
+    "typescript": "~5.9.3",
+    "@types/node": "^24.13.4",
+    "@openpresentation/opf": "workspace:*"
+  },
+  "_npmOperationalInternal": {
+    "host": "s3://npm-registry-packages-npm-production",
+    "tmp": "tmp/cli_0.9.0_1789672438801_0.0007878442826387833"
+  }
+}

@@ -1,0 +1,100 @@
+# PPTX.gallery
+
+## OPF specification and editor
+- /spec — Search every presentation and catalog property definition.
+- /api/opf-spec.json — Full schemas and property index with SHA-256 digest.
+- /editor — Visual editor and all-properties inspector. Editing coverage does not imply complete rendering fidelity.
+- Color scheme pages teach ColorRef: content may use scheme slot/role names and, on OPF 0.11+, document `variables` with `var:<id>` in runs and styled table cells. Canonical prose: https://www.openpresentation.org/docs/reference/format-card
+- Portable multi-file decks: `opf bundle` (ships with `@openpresentation/opf` 0.11+). Gallery editor bundle upgrades when npm pins move past 0.10.1.
+
+## Dynamic composition
+- [Composition rules and complete examples](https://www.pptx.gallery/api/composition.json): auto, grid, row, column, weights, and overflow diagnostics. Layout detail pages include an interactive text preview.
+- [Pagination rules and a complete before/after example](https://www.pptx.gallery/api/pagination.json): preserve text and groups while producing ordinary OPF slides.
+
+> Public reference catalog for OPF design choices, built for AI agents, developers, designers, and presenters.
+
+## Sections
+
+- [Layouts](https://www.pptx.gallery/layouts) - Slide layout templates: content zones, placeholders, and spatial arrangement patterns. Items: 485. JSON: [GET /api/layouts.json](https://www.pptx.gallery/api/layouts.json); Registry descriptors: `/registry/layouts/{slug}.json`; OPF schema: [Slide.layout](https://pptx.dev/schema/opf/v1#/$defs/Slide/properties/layout).
+- [Color Schemes](https://www.pptx.gallery/colors) - Presentation color schemes: primary, secondary, accent, background, and supporting tones. Items: 14. JSON: [GET /api/color-schemes.json](https://www.pptx.gallery/api/color-schemes.json); Registry descriptors: `/registry/color-schemes/{slug}.json`; OPF schema: [design.colors.scheme](https://pptx.dev/schema/opf/v1#/$defs/ColorScheme/properties/scheme).
+- [Font Schemes](https://www.pptx.gallery/font-schemes) - Heading and body type pairings that OPF documents can reference by scheme name. Items: 89. JSON: [GET /api/font-schemes.json](https://www.pptx.gallery/api/font-schemes.json); Registry descriptors: `/registry/font-schemes/{slug}.json`; OPF schema: [design.fonts.scheme](https://pptx.dev/schema/opf/v1#/$defs/FontScheme/properties/scheme).
+- [Backgrounds](https://www.pptx.gallery/backgrounds) - Slide background styles including solid, gradient, geometric, photographic, abstract, and textured treatments. Items: 6. JSON: [GET /api/backgrounds.json](https://www.pptx.gallery/api/backgrounds.json); Registry descriptors: `/registry/backgrounds/{slug}.json`; OPF schema: [design.background](https://pptx.dev/schema/opf/v1#/$defs/Background).
+- [Narratives](https://www.pptx.gallery/narratives) - Story structures and frameworks for sequencing slides around a persuasive arc. Items: 10. JSON: [GET /api/narratives.json](https://www.pptx.gallery/api/narratives.json); Registry descriptors: `/registry/narratives/{slug}.json`; OPF schema: [narrative](https://pptx.dev/schema/opf-narrative/v1).
+- [Charts](https://www.pptx.gallery/charts) - Chart type definitions, data requirements, OPF base-type coverage, and usage guidance for presentation data stories. Items: 76. JSON: [GET /api/charts.json](https://www.pptx.gallery/api/charts.json); Registry descriptors: `/registry/charts/{slug}.json`; OPF schema: [OPF Chart Preset](https://pptx.dev/schema/opf-chart/v1).
+- [Themes](https://www.pptx.gallery/themes) - Complete OPF design themes that bundle color, font, background, and default layout references. Items: 4. JSON: [GET /api/themes.json](https://www.pptx.gallery/api/themes.json); Registry descriptors: `/registry/themes/{slug}.json`; OPF schema: [design.theme](https://pptx.dev/schema/opf/v1#/$defs/Design/properties/theme).
+- [Audiences](https://www.pptx.gallery/audiences) - Audience profiles that guide OPF generation hints, recommended tones, density, narrative, color, and layout choices. Items: 14. JSON: [GET /api/audiences.json](https://www.pptx.gallery/api/audiences.json); OPF schema: [audience](https://pptx.dev/schema/opf/v1#/$defs/Audience).
+- [Tones](https://www.pptx.gallery/tones) - Presentation voice profiles that shape OPF generation cues, anti-patterns, sample phrasing, and narrative fit. Items: 7. JSON: [GET /api/tones.json](https://www.pptx.gallery/api/tones.json); OPF schema: [tone](https://openpresentation.org/schema/opf-tone/v1).
+- [Languages](https://www.pptx.gallery/languages) - Presentation language records that resolve OPF language ids into BCP-47 tags and default font-scheme hints. Items: 93. JSON: [GET /api/languages.json](https://www.pptx.gallery/api/languages.json); OPF schema: [language](https://openpresentation.org/schema/opf-language/v1).
+- [Socials](https://www.pptx.gallery/socials) - Social platform records that resolve OPF Organization.socials and Speaker.socials keys into brand colors, handle prefixes, and URL patterns. Items: 10. JSON: [GET /api/socials.json](https://www.pptx.gallery/api/socials.json); OPF schema: [catalogs.socialPlatforms](https://openpresentation.org/schema/opf-social-platform/v1).
+- [Headers & Footers](https://www.pptx.gallery/headers-footers) - Header and footer configurations for slide numbers, dates, logos, legal lines, and classification markers. Items: 10. JSON: [GET /api/headers-footers.json](https://www.pptx.gallery/api/headers-footers.json); OPF schema: [design.header / design.footer](https://pptx.dev/schema/opf/v1#/$defs/HeaderFooter).
+- [Content Blocks](https://www.pptx.gallery/blocks) - Pre-composed OPF slide sections such as pitch intros, KPI dashboards, comparisons, timelines, quote slides, and closing CTAs. Items: 32. JSON: [GET /api/blocks.json](https://www.pptx.gallery/api/blocks.json); OPF schema: [Presentation.slides[]](https://pptx.dev/schema/opf/v1#/$defs/Slide).
+- [Image Treatments](https://www.pptx.gallery/image-treatments) - Image placement, crop, overlay, mask, caption, and filter patterns for OPF slides. Items: 15. JSON: [GET /api/image-treatments.json](https://www.pptx.gallery/api/image-treatments.json); OPF schema: [Slide.image / design.slideImage](https://pptx.dev/schema/opf/v1#/$defs/Slide/properties/image).
+
+## Quick Links
+
+- Home: https://www.pptx.gallery
+- How it works: https://www.pptx.gallery/docs
+- API & registry reference: https://www.pptx.gallery/docs/api
+- Search index (all items + articles): https://www.pptx.gallery/api/search-index.json
+- How-to articles: https://www.pptx.gallery/how-to
+- OPF registry: https://www.pptx.gallery/registry.json
+- OPF schema: https://pptx.dev/schema/opf/v1
+- OPF Playground: https://pptx.dev/playground
+- PPTX.dev REST API: https://api.pptx.dev/v1
+
+## DAT-2258 QA (registry smoke)
+
+- Manifest (gallery URL → PNG filename): [GET /qa/dat-2258-manifest.json](https://www.pptx.gallery/qa/dat-2258-manifest.json)
+- Desktop captures: `/qa/dat-2258-*.png` on this host — same nine prod detail URLs as CI registry web smoke (includes `/color-schemes/*` and `/typography/*` alias routes).
+
+## OPF Registry
+
+The canonical registry index is [GET /registry.json](https://www.pptx.gallery/registry.json). It lists every registry item with `name`, `type`, `registry_url`, `dependencies`, and `opf_version`.
+
+- opf_version: 1.0
+- Descriptor pattern: `/registry/{category}/{slug}.json`
+- Layouts: category `layouts`, 485 descriptors
+- Color Schemes: category `color-schemes`, 14 descriptors
+- Font Schemes: category `font-schemes`, 89 descriptors
+- Backgrounds: category `backgrounds`, 6 descriptors
+- Narratives: category `narratives`, 10 descriptors
+- Charts: category `charts`, 76 descriptors
+- Themes: category `themes`, 4 descriptors
+
+## JSON API
+
+Each live gallery dimension exposes an OpenAPI-compatible JSON envelope with `version`, `dimension`, and `items` at minimum. Registry descriptors expose copyable OPF snippets and per-item metadata.
+
+- [/api/layouts.json](https://www.pptx.gallery/api/layouts.json) - Layouts items for Slide.layout.
+- [/api/color-schemes.json](https://www.pptx.gallery/api/color-schemes.json) - Color Schemes items for design.colors.scheme.
+- [/api/font-schemes.json](https://www.pptx.gallery/api/font-schemes.json) - Font Schemes items for design.fonts.scheme.
+- [/api/backgrounds.json](https://www.pptx.gallery/api/backgrounds.json) - Backgrounds items for design.background.
+- [/api/narratives.json](https://www.pptx.gallery/api/narratives.json) - Narratives items for narrative.
+- [/api/charts.json](https://www.pptx.gallery/api/charts.json) - Charts items for OPF Chart Preset.
+- [/api/themes.json](https://www.pptx.gallery/api/themes.json) - Themes items for design.theme.
+- [/api/audiences.json](https://www.pptx.gallery/api/audiences.json) - Audiences items for audience.
+- [/api/tones.json](https://www.pptx.gallery/api/tones.json) - Tones items for tone.
+- [/api/languages.json](https://www.pptx.gallery/api/languages.json) - Languages items for language.
+- [/api/socials.json](https://www.pptx.gallery/api/socials.json) - Socials items for catalogs.socialPlatforms.
+- [/api/headers-footers.json](https://www.pptx.gallery/api/headers-footers.json) - Headers & Footers items for design.header / design.footer.
+- [/api/blocks.json](https://www.pptx.gallery/api/blocks.json) - Content Blocks items for Presentation.slides[].
+- [/api/image-treatments.json](https://www.pptx.gallery/api/image-treatments.json) - Image Treatments items for Slide.image / design.slideImage.
+
+## Catalog Items
+
+### Layouts
+
+- [Title Slide](https://www.pptx.gallery/layouts/title-slide) - id: `title-slide` registry: [descriptor](https://www.pptx.gallery/registry/layouts/title-slide.json)
+- [Two Column](https://www.pptx.gallery/layouts/two-column) - id: `two-column` registry: [descriptor](https://www.pptx.gallery/registry/layouts/two-column.json)
+- [Image Focus](https://www.pptx.gallery/layouts/image-focus) - id: `image-focus` registry: [descriptor](https://www.pptx.gallery/registry/layouts/image-focus.json)
+- [Data Visualization](https://www.pptx.gallery/layouts/data-visualization) - id: `data-visualization` registry: [descriptor](https://www.pptx.gallery/registry/layouts/data-visualization.json)
+- [Quote Highlight](https://www.pptx.gallery/layouts/quote-highlight) - id: `quote-highlight` registry: [descriptor](https://www.pptx.gallery/registry/layouts/quote-highlight.json)
+- [Section Divider](https://www.pptx.gallery/layouts/section-divider) - id: `section-divider` registry: [descriptor](https://www.pptx.gallery/registry/layouts/section-divider.json)
+- [Agenda](https://www.pptx.gallery/layouts/agenda) - id: `agenda` registry: [descriptor](https://www.pptx.gallery/registry/layouts/agenda.json)
+- [Thank You & CTA](https://www.pptx.gallery/layouts/thank-you-cta) - id: `thank-you-cta` registry: [descriptor](https://www.pptx.gallery/registry/layouts/thank-you-cta.json)
+- [Bullet List](https://www.pptx.gallery/layouts/bullet-list) - id: `bullet-list` registry: [descriptor](https://www.pptx.gallery/registry/layouts/bullet-list.json)
+- [Three Column](https://www.pptx.gallery/layouts/three-column) - id: `three-column` registry: [descriptor](https://www.pptx.gallery/registry/layouts/three-column.json)
+- [Icon Grid](https://www.pptx.gallery/layouts/icon-grid) - id: `icon-grid` registry: [descriptor](https://www.pptx.gallery/registry/layouts/icon-grid.json)
+- [FAQ](https://www.pptx.gallery/layouts/faq) - id: `faq` registry: [descriptor](https://www.pptx.gallery/registry/layouts/faq.json)
+- [Stats & Metrics](https://www.pptx.gallery/layouts/stats-metrics) - id: `stats-metrics` registry: [descriptor](https://www.pptx.gallery/registry/layouts/stats-metrics.json)
+- [Comparison](https://www.pptx.gallery/layouts/comparison) - id: `comparison` registry: [descriptor](https://www.pptx.gallery/registry/layouts/comparison.json)

@@ -1,0 +1,123 @@
+{
+  "timestamp": "2026-09-21T12:45:55.052Z",
+  "runtime": "v24.21.0",
+  "results": [
+    {
+      "name": "author-all-context-options-and-document-choice",
+      "status": "test-error",
+      "error": "expect(locator).toContainText(expected) failed\n\nLocator: locator('.suggest-widget.visible')\nExpected substring: \"Minimal\"\nReceived string:    \"Loading...\\\"https://openpresentation.org/schema/opf/v1\\\"Insert (⏎)Show More (⌃Space)\"\nTimeout: 5000ms\n\nCall log:\n  - Expect \"toContainText\" locator('.suggest-widget.visible') with timeout 5000ms\n  - waiting for locator('.suggest-widget.visible')\n    3 × locator resolved to <div monaco-visible-content-widget=\"true\" widgetid=\"editor.widget.suggestWidget\" class=\"editor-widget suggest-widget message visible\">…</div>\n      - unexpected value \"Loading...Select (↓)\"\n    8 × locator resolved to <div monaco-visible-content-widget=\"true\" widgetid=\"editor.widget.suggestWidget\" class=\"editor-widget suggest-widget visible\">…</div>\n      - unexpected value \"Loading...\"https://openpresentation.org/schema/opf/v1\"Insert (⏎)Show More (⌃Space)\"\n"
+    },
+    {
+      "name": "gallery-config-editor-iframe",
+      "status": "observed",
+      "detail": {
+        "document": {
+          "$schema": "https://openpresentation.org/schema/opf/v1",
+          "name": "PPTX.gallery — layouts/title-slide",
+          "tags": [
+            "gallery:layouts/title-slide"
+          ],
+          "slides": [
+            {
+              "id": "gallery-preview-1",
+              "layout": "title-slide",
+              "title": "Title Slide",
+              "subtitle": "A clear message with supporting context.",
+              "design": {
+                "contentBox": false,
+                "contentAlignment": "center",
+                "titleAlignment": "center"
+              }
+            }
+          ],
+          "catalogs": {
+            "layouts": {
+              "records": [
+                {
+                  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+                  "id": "title-slide",
+                  "name": "Title_Slide",
+                  "label": "Title Slide",
+                  "summary": "Bold, centered typography with minimal elements. Perfect for opening your presentation with impact.",
+                  "description": "Bold, centered typography with minimal elements. Perfect for opening your presentation with impact.",
+                  "tags": [
+                    "Opening",
+                    "Impact",
+                    "Minimal"
+                  ],
+                  "master": "Gallery",
+                  "masterSlideIndex": 0,
+                  "groupHash": "ddf3a920a68b7a0316802c6a646bb4bb481c6f5a288d236ab3021b4b990d25c2",
+                  "groupDefault": true,
+                  "contentType": "Title",
+                  "contentMultiple": "None",
+                  "contentAlignment": "Center",
+                  "contentBox": false,
+                  "contentTypeChartPrimary": "None",
+                  "contentTypeImageFill": "None",
+                  "contentTypeListBullet": "None",
+                  "contentTypeListHeading": false,
+                  "slideTitle": true,
+                  "slideTitleAlignment": "Center",
+                  "slideImage": false,
+                  "slideImageAlignment": "None",
+                  "slideLayoutDirection": "None",
+                  "zones": [
+                    {
+                      "role": "title",
+                      "placeholder": "title"
+                    },
+                    {
+                      "role": "subtitle",
+                      "placeholder": "subtitle"
+                    }
+                  ],
+                  "preview": {},
+                  "details": "Bold, centered typography with minimal elements. Perfect for opening your presentation with impact. OPF placeholders: title, subtitle.",
+                  "category": "opening-closing",
+                  "spatialCategory": "hero",
+                  "contentTypeTags": [
+                    "mixed",
+                    "title"
+                  ],
+                  "placeholders": [
+                    {
+                      "type": "title"
+                    },
+                    {
+                      "type": "subtitle"
+                    }
+                  ],
+                  "slideSubtitle": true
+                }
+              ]
+            }
+          }
+        },
+        "frameUrl": "https://www.pptx.gallery/opf-editor/index.html"
+      }
+    },
+    {
+      "name": "home-and-playground-screenshots",
+      "status": "observed",
+      "detail": {
+        "buttonLabels": [
+          "",
+          "Minimal deck",
+          "Conference talk",
+          "Full feature tour",
+          "Header & footer",
+          "Broken deck (see errors)",
+          "Format",
+          "Copy",
+          "",
+          "",
+          "",
+          "",
+          "Minimal OPF Deck"
+        ]
+      }
+    }
+  ],
+  "errors": []
+}
