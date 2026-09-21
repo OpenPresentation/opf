@@ -1,0 +1,2961 @@
+{
+  "schemaVersion": 1,
+  "kind": "opf-carlito-embedding-candidate-fixture",
+  "scope": "Offline candidate generation only. No font registration, Office/COM, UI, embedding save, PDF, renderer call, font copy, or native acceptance.",
+  "runtime": {
+    "nodeVersion": "v24.21.0",
+    "executable": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\toolchain\\node_modules\\node\\bin\\node.exe",
+    "executableSha256": "ba4e6d110e8c1592a1ecd390f6b05f3da124b13871a5be62b341a07a853c6c32"
+  },
+  "registryConsumer": {
+    "realpath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer",
+    "packageJsonSha256": "eeb0129d0b300ac7a73041888006a2e1ff31438064392964289b28108d9ff9ff",
+    "lockfilePath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\package-lock.json",
+    "lockfileSha256": "4868f13254e3e681566164da8427d3716ceaa025435e4606e5e15fc8a87bc305",
+    "lockfileVersion": 3,
+    "bindingScope": "Five direct OPF registry packages plus two XML/ZIP helpers are bound by lock entry version/resolved URL/integrity, package manifest hash, and resolved public ESM entry hash. This does not bind every transitive installed byte.",
+    "packages": {
+      "@openpresentation/opf": {
+        "version": "0.11.0",
+        "packageRoot": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf",
+        "installPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf",
+        "installPathIsSymbolicLink": false,
+        "manifestPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf\\package.json",
+        "manifestSha256": "86364f07f30f5106539a936b4eb84cf5a00c53524599b222f823b2460efb3a0f",
+        "entrypointKind": "public ESM root entry",
+        "publicEsmEntryUrl": "file:///C:/Users/micha/.codex/worktrees/fd3f/opf/artifacts/windows-resume-20260921/registry-consumer/node_modules/@openpresentation/opf/dist/index.js",
+        "entrypointRealpath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf\\dist\\index.js",
+        "entrypointSha256": "568ca647007962a3046094bb3d8e6d2dcfed0c9f463c91e4a9839c86a81b381f",
+        "lockResolved": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.11.0.tgz",
+        "lockIntegrity": "sha512-7Gm/FSyiGngHRkDG0SPL8V6FEC5nC8UpoffNWf8CqkyjXsqQ2BUIzVAEwHwKjEsEZ04FR2DT+Ohh8PJofNPFiw==",
+        "lockLink": false
+      },
+      "@openpresentation/opf-pptx": {
+        "version": "0.9.1",
+        "packageRoot": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-pptx",
+        "installPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-pptx",
+        "installPathIsSymbolicLink": false,
+        "manifestPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-pptx\\package.json",
+        "manifestSha256": "be4944ae7405ff4d92238118eafebb93af433c53519145785553eecc3a4ef8bd",
+        "entrypointKind": "public ESM root entry",
+        "publicEsmEntryUrl": "file:///C:/Users/micha/.codex/worktrees/fd3f/opf/artifacts/windows-resume-20260921/registry-consumer/node_modules/@openpresentation/opf-pptx/dist/index.js",
+        "entrypointRealpath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-pptx\\dist\\index.js",
+        "entrypointSha256": "ba8fa87cebb32db9675f71bec91cc257e8d02a9d0977ca133666c6257eb07716",
+        "lockResolved": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.9.1.tgz",
+        "lockIntegrity": "sha512-krzDAKjDByP2zsoR4VeyyIwU7uhcVbxpeBYEIw7vlkoRWWiFq170rhQzQZx5lbMD7u2magYEkdUt3rUgByCKjw==",
+        "lockLink": false
+      },
+      "@openpresentation/opf-render": {
+        "version": "0.9.0",
+        "packageRoot": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-render",
+        "installPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-render",
+        "installPathIsSymbolicLink": false,
+        "manifestPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-render\\package.json",
+        "manifestSha256": "ab5cac6fc9588b3ba694fd17a0d1bde952ebabb60977a13089626b2ec146d84f",
+        "entrypointKind": "public ESM root entry",
+        "publicEsmEntryUrl": "file:///C:/Users/micha/.codex/worktrees/fd3f/opf/artifacts/windows-resume-20260921/registry-consumer/node_modules/@openpresentation/opf-render/dist/index.js",
+        "entrypointRealpath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-render\\dist\\index.js",
+        "entrypointSha256": "1fdb45740a09bb6f48eb5dc79def3ffe692acdf0a5c319727edf4e19c0020d78",
+        "lockResolved": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.9.0.tgz",
+        "lockIntegrity": "sha512-uHWABof7cuLmTAglctvcjuV5dRyIa2qmeGdwONIuKCAnNQXjAOQKXido9OcyGtk6xFjzBFtLtvD3sZOwPEJIJA==",
+        "lockLink": false
+      },
+      "@openpresentation/opf-editor": {
+        "version": "0.8.0",
+        "packageRoot": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-editor",
+        "installPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-editor",
+        "installPathIsSymbolicLink": false,
+        "manifestPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-editor\\package.json",
+        "manifestSha256": "c91341504f64b9100dcd12bddee35cf8eadb0e14acee72d9798f93ca0a549818",
+        "entrypointKind": "public ESM root entry",
+        "publicEsmEntryUrl": "file:///C:/Users/micha/.codex/worktrees/fd3f/opf/artifacts/windows-resume-20260921/registry-consumer/node_modules/@openpresentation/opf-editor/dist/index.js",
+        "entrypointRealpath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-editor\\dist\\index.js",
+        "entrypointSha256": "ffa2dd3043ff87f6da3e7d6acd818b8041d99979aa6707a1828c558f03afb753",
+        "lockResolved": "https://registry.npmjs.org/@openpresentation/opf-editor/-/opf-editor-0.8.0.tgz",
+        "lockIntegrity": "sha512-cSx6DkfK4N95Zk3lvCBxhQePWIIgBDvON4hcKLvELulpbKiYnvmoAb07LJE4pbXGE0npUdmU/r25TShdtOcR4A==",
+        "lockLink": false
+      },
+      "@openpresentation/cli": {
+        "version": "0.9.0",
+        "packageRoot": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\cli",
+        "installPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\cli",
+        "installPathIsSymbolicLink": false,
+        "manifestPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\cli\\package.json",
+        "manifestSha256": "0c4e3a41ae1460ce28dcc14f57125961a6f3eb9418dbab6ba4de497ebe2b12b0",
+        "entrypointKind": "manifest-declared CLI binary (CLI package has no ESM root export)",
+        "publicEsmEntryUrl": null,
+        "entrypointRealpath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\cli\\dist\\index.js",
+        "entrypointSha256": "96c46b9b0d531042686b1f8e9c89d8c5038ed45a3cb0742c1b4869857c3b184a",
+        "lockResolved": "https://registry.npmjs.org/@openpresentation/cli/-/cli-0.9.0.tgz",
+        "lockIntegrity": "sha512-YR0zhGe0fpcKp617Aqjz6ZIql0fsNrMVcSW84tEkMBc/9DLxLFAyxJLkExorOrfFYanhvWmhoRG94x3AuMTvpQ==",
+        "lockLink": false
+      },
+      "fflate": {
+        "version": "0.8.3",
+        "packageRoot": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\fflate",
+        "installPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\fflate",
+        "installPathIsSymbolicLink": false,
+        "manifestPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\fflate\\package.json",
+        "manifestSha256": "5922d8150b307bc0e4e441491c779c45379e9913d348848fca8d5cf02db4d134",
+        "entrypointKind": "public ESM root entry",
+        "publicEsmEntryUrl": "file:///C:/Users/micha/.codex/worktrees/fd3f/opf/artifacts/windows-resume-20260921/registry-consumer/node_modules/fflate/esm/index.mjs",
+        "entrypointRealpath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\fflate\\esm\\index.mjs",
+        "entrypointSha256": "8d75534a30a0580608e1271c13d70943ed4cd3589fddff7b1197748036a5116e",
+        "lockResolved": "https://registry.npmjs.org/fflate/-/fflate-0.8.3.tgz",
+        "lockIntegrity": "sha512-tbZNuJrLwGUp3zshBtdy4W+ORxZuIh8a5ilyIEQDC5rY1f3U20JMry0Ll3WBzU58EZKsEuJFXhb5gwv8CsPvgA==",
+        "lockLink": false
+      },
+      "fast-xml-parser": {
+        "version": "5.11.1",
+        "packageRoot": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\fast-xml-parser",
+        "installPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\fast-xml-parser",
+        "installPathIsSymbolicLink": false,
+        "manifestPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\fast-xml-parser\\package.json",
+        "manifestSha256": "41c5f7f2ed20d6ab2b54d3f42730246444685a838cf381d5bf3e1eb93e2fa4cb",
+        "entrypointKind": "public ESM root entry",
+        "publicEsmEntryUrl": "file:///C:/Users/micha/.codex/worktrees/fd3f/opf/artifacts/windows-resume-20260921/registry-consumer/node_modules/fast-xml-parser/src/fxp.js",
+        "entrypointRealpath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\fast-xml-parser\\src\\fxp.js",
+        "entrypointSha256": "587bee5d27b6dbc99d24f472ea93028659610c3496be7d667e72483483c3f3ba",
+        "lockResolved": "https://registry.npmjs.org/fast-xml-parser/-/fast-xml-parser-5.11.1.tgz",
+        "lockIntegrity": "sha512-TBw6K/fxoQGGjCmZDw9w/ZwP3uDcnTM4YH/g+PFRWr8sbe5idXtxNN6vITh4+1ruCZaho6uBFurElsA7F0zzgw==",
+        "lockLink": false
+      }
+    }
+  },
+  "permittedCarlitoInventoryReference": {
+    "sourceGenerationPath": "font-edit-fixture-01/generation.json",
+    "sourceGenerationSha256": "8ac9743832e6c63bab58a999802979dcdcb91139599f502e90bc697141cf5422",
+    "package": {
+      "name": "@expo-google-fonts/carlito",
+      "version": "0.4.1",
+      "manifestSha256": "cada00d32e296a97db384203c837750567583d16dd3e66b6f7337bd8e6bb80d6"
+    },
+    "license": {
+      "file": "LICENSE_FONT",
+      "spdx": "OFL-1.1",
+      "sha256": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00"
+    },
+    "fontManifest": {
+      "sha256": "f8bccf58acaf49e1aa87c5bedf981fce55001045f4b1f0a2d03056c0ac071521",
+      "package": "@openpresentation/opf-render",
+      "version": "0.9.0"
+    },
+    "exactPermittedFaces": [
+      {
+        "file": "fonts/Carlito-400-normal.ttf",
+        "sha256": "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89"
+      },
+      {
+        "file": "fonts/Carlito-400-italic.ttf",
+        "sha256": "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5"
+      },
+      {
+        "file": "fonts/Carlito-700-normal.ttf",
+        "sha256": "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0"
+      },
+      {
+        "file": "fonts/Carlito-700-italic.ttf",
+        "sha256": "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691"
+      }
+    ],
+    "fontProgramBytesReadOrCopied": false
+  },
+  "generator": {
+    "path": "generate.mjs",
+    "sha256": "7e3400edbad7f980a074c5cbc5fd68453611c6b3f9fa7fae912660afc53fe36f"
+  },
+  "source": {
+    "file": "source.opf.json",
+    "sha256": "702a80d1d2d4f04a19050a3463da32ac18e87a4e31266a22b5871ddc2e240a3c",
+    "presentationSha256": "79cee1342bf6815fffdb9b0f2b95b23d6dfb7ec5f232fd0584aaf1ef149af2eb",
+    "slideCount": 1,
+    "expectedText": "Regular Bold Italic BoldItalic",
+    "sourceFontSchemeFamilies": {
+      "major": "Carlito",
+      "minor": "Carlito",
+      "type": "sans-serif",
+      "heading": {
+        "family": "Carlito"
+      },
+      "body": {
+        "family": "Carlito"
+      },
+      "accent": {
+        "family": "Carlito"
+      },
+      "code": {
+        "family": "Carlito"
+      }
+    }
+  },
+  "exporter": {
+    "publicFunction": "@openpresentation/opf-pptx.toPptx",
+    "strictAssets": true,
+    "sourceMutationFree": true
+  },
+  "inventoryVerification": {
+    "mode": "offline deterministic regeneration and byte comparison; no exporter output was written",
+    "supersedesReport": "generation.json",
+    "supersededReportSha256": "d579b635a5ef91d86b029365a05a01cb8357cabf9e9024418082a97a7c6ee02f",
+    "supersededGeneratorSha256": "27a2e62cd2319984ca7793467c0427e133e03033de8644ce5f3ab1d3c1ed170c",
+    "generatedSourceAndPptxBytesMatchedPreservedFiles": true
+  },
+  "reimport": {
+    "publicFunction": "@openpresentation/opf-pptx.fromPptx",
+    "passed": true,
+    "validation": {
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "schemaName": "presentation"
+    },
+    "diagnostics": [],
+    "semanticText": "Regular Bold Italic BoldItalic",
+    "classification": "single text box inferred into slide.title by public importer geometry heuristic",
+    "importedTextRuns": [],
+    "expectedRuns": [
+      {
+        "text": "Regular ",
+        "fontFamily": "Carlito",
+        "fontSize": 18,
+        "bold": false,
+        "italic": false
+      },
+      {
+        "text": "Bold ",
+        "fontFamily": "Carlito",
+        "fontSize": 20,
+        "bold": true,
+        "italic": false
+      },
+      {
+        "text": "Italic ",
+        "fontFamily": "Carlito",
+        "fontSize": 22,
+        "bold": false,
+        "italic": true
+      },
+      {
+        "text": "BoldItalic",
+        "fontFamily": "Carlito",
+        "fontSize": 24,
+        "bold": true,
+        "italic": true
+      }
+    ],
+    "richRunStylingPreservedByImporter": false,
+    "limitation": "The public importer recovers the exact text and validates the OPF, but this one-box import classifies it as a title and does not preserve rich-run styles. All four styles are independently checked in the saved slide XML."
+  },
+  "packageInspection": {
+    "zipMemberCount": 39,
+    "xmlRelPartCount": 20,
+    "xmlParts": [
+      {
+        "member": "[Content_Types].xml",
+        "bytes": 2463,
+        "sha256": "8588e3422e845a1aac5f6a29c8db4564a70c3d183fa6c4f12cac69fc180fb8cc",
+        "valid": true
+      },
+      {
+        "member": "_rels/.rels",
+        "bytes": 605,
+        "sha256": "a73dc65f1cb1959ca09044852c3697385e6124853bf5a0fa3f0215f608e86b47",
+        "valid": true
+      },
+      {
+        "member": "docProps/app.xml",
+        "bytes": 1368,
+        "sha256": "e94689c1ad908efa8052354ee3f9a38d04d8d03cee23ea1b5fef43226bd8a4f3",
+        "valid": true
+      },
+      {
+        "member": "docProps/core.xml",
+        "bytes": 738,
+        "sha256": "17140d99a72a213cd3ec5498ece6ee774652c8164dda48e8b5296cec582c7804",
+        "valid": true
+      },
+      {
+        "member": "ppt/_rels/presentation.xml.rels",
+        "bytes": 1127,
+        "sha256": "e2117ec87aff7c513da0a36181e57816777473446f284b8b564ace2725a81e9e",
+        "valid": true
+      },
+      {
+        "member": "ppt/notesMasters/_rels/notesMaster1.xml.rels",
+        "bytes": 298,
+        "sha256": "92eb9005ae03705d1db0f1da37f89e4c77f61b2026efa66bdbf610d01116f2b9",
+        "valid": true
+      },
+      {
+        "member": "ppt/notesMasters/notesMaster1.xml",
+        "bytes": 7508,
+        "sha256": "c2c0255a24d45ef3ad633078fd8a2dca43fc6db1b3eb36244a934eb0b9d97c57",
+        "valid": true
+      },
+      {
+        "member": "ppt/notesSlides/_rels/notesSlide1.xml.rels",
+        "bytes": 459,
+        "sha256": "4e7f04378558285258df490583e9ed0e8039b27df83bcdc2e5b4992cf47090f2",
+        "valid": true
+      },
+      {
+        "member": "ppt/notesSlides/notesSlide1.xml",
+        "bytes": 1680,
+        "sha256": "a559bf003438191a2723e887544acb00d550c7a9d8a4fd36a41bd877d46e2be6",
+        "valid": true
+      },
+      {
+        "member": "ppt/presProps.xml",
+        "bytes": 287,
+        "sha256": "4446069208ff4cd22879cccdfb0a2a302cb7e572e2c48d00b64066d25f026df1",
+        "valid": true
+      },
+      {
+        "member": "ppt/presentation.xml",
+        "bytes": 3265,
+        "sha256": "fa6e1f507fb0e0cb37bb66ed94f1dc84898406f03d32ac3f2e00eb3bc72efafd",
+        "valid": true
+      },
+      {
+        "member": "ppt/slideLayouts/_rels/slideLayout1.xml.rels",
+        "bytes": 311,
+        "sha256": "8246d333bf3764cd35563e3df1828c26bbc28890815a2987caf3e592791ba60d",
+        "valid": true
+      },
+      {
+        "member": "ppt/slideLayouts/slideLayout1.xml",
+        "bytes": 687,
+        "sha256": "5015c0989d7672a610fc41c3f7f4a468fc0da42198f06e6c5f20a0921090e1c9",
+        "valid": true
+      },
+      {
+        "member": "ppt/slideMasters/_rels/slideMaster1.xml.rels",
+        "bytes": 446,
+        "sha256": "066fd8f2e94608804160631c736d82e4c0b0784a1646489030092cc04888839a",
+        "valid": true
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "bytes": 7831,
+        "sha256": "ebd49ca7c690fabf8b16c077711e80f2aa970b1aa2a31090407b2af58cab77c3",
+        "valid": true
+      },
+      {
+        "member": "ppt/slides/_rels/slide1.xml.rels",
+        "bytes": 462,
+        "sha256": "f78f296579095a9d8296d23b5afb91380b7ddb6ec944113187bbd6deffd1b1d0",
+        "valid": true
+      },
+      {
+        "member": "ppt/slides/slide1.xml",
+        "bytes": 2496,
+        "sha256": "ba04eebde1de3ab864bf5a26022c25ef5cf657f8009e4f896b16ecc37e0e1eb2",
+        "valid": true
+      },
+      {
+        "member": "ppt/tableStyles.xml",
+        "bytes": 182,
+        "sha256": "0e7ac03251337ecbaf6c8ca13619db1caeda5c90c4e3210d45d6c3f5df4de103",
+        "valid": true
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "bytes": 8331,
+        "sha256": "ee94e6cf5afe02edb1599deb16b25da89b5229b398f3366f6cb1ebf50b5b106e",
+        "valid": true
+      },
+      {
+        "member": "ppt/viewProps.xml",
+        "bytes": 816,
+        "sha256": "4cc12863620049069daeb39b14b4aba98a5e3048318be16a5af5879f6e4b2ac8",
+        "valid": true
+      }
+    ],
+    "slideStats": [
+      {
+        "member": "ppt/slides/slide1.xml",
+        "shapeCount": 1,
+        "placeholderCount": 0,
+        "tableCount": 0,
+        "hardBreakCount": 0,
+        "slideTextTabCount": 0
+      }
+    ],
+    "slideRunRecords": [
+      {
+        "member": "ppt/slides/slide1.xml",
+        "path": "p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r[0]",
+        "text": "Regular ",
+        "fontSizeHundredthsPoint": "1800",
+        "bold": false,
+        "italic": false,
+        "typefaces": {
+          "latin": "Carlito",
+          "ea": "Carlito",
+          "cs": "Carlito"
+        }
+      },
+      {
+        "member": "ppt/slides/slide1.xml",
+        "path": "p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r[1]",
+        "text": "Bold ",
+        "fontSizeHundredthsPoint": "2000",
+        "bold": true,
+        "italic": false,
+        "typefaces": {
+          "latin": "Carlito",
+          "ea": "Carlito",
+          "cs": "Carlito"
+        }
+      },
+      {
+        "member": "ppt/slides/slide1.xml",
+        "path": "p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r[2]",
+        "text": "Italic ",
+        "fontSizeHundredthsPoint": "2200",
+        "bold": false,
+        "italic": true,
+        "typefaces": {
+          "latin": "Carlito",
+          "ea": "Carlito",
+          "cs": "Carlito"
+        }
+      },
+      {
+        "member": "ppt/slides/slide1.xml",
+        "path": "p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r[3]",
+        "text": "BoldItalic",
+        "fontSizeHundredthsPoint": "2400",
+        "bold": true,
+        "italic": true,
+        "typefaces": {
+          "latin": "Carlito",
+          "ea": "Carlito",
+          "cs": "Carlito"
+        }
+      }
+    ],
+    "fontDeclarations": [
+      {
+        "member": "ppt/notesMasters/notesMaster1.xml",
+        "path": "p:notesMaster/p:notesStyle/a:lvl1pPr/a:defRPr/a:latin",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "latin",
+        "typeface": "+mn-lt",
+        "script": null
+      },
+      {
+        "member": "ppt/notesMasters/notesMaster1.xml",
+        "path": "p:notesMaster/p:notesStyle/a:lvl1pPr/a:defRPr/a:ea",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "ea",
+        "typeface": "+mn-ea",
+        "script": null
+      },
+      {
+        "member": "ppt/notesMasters/notesMaster1.xml",
+        "path": "p:notesMaster/p:notesStyle/a:lvl1pPr/a:defRPr/a:cs",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "cs",
+        "typeface": "+mn-cs",
+        "script": null
+      },
+      {
+        "member": "ppt/notesMasters/notesMaster1.xml",
+        "path": "p:notesMaster/p:notesStyle/a:lvl2pPr/a:defRPr/a:latin",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "latin",
+        "typeface": "+mn-lt",
+        "script": null
+      },
+      {
+        "member": "ppt/notesMasters/notesMaster1.xml",
+        "path": "p:notesMaster/p:notesStyle/a:lvl2pPr/a:defRPr/a:ea",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "ea",
+        "typeface": "+mn-ea",
+        "script": null
+      },
+      {
+        "member": "ppt/notesMasters/notesMaster1.xml",
+        "path": "p:notesMaster/p:notesStyle/a:lvl2pPr/a:defRPr/a:cs",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "cs",
+        "typeface": "+mn-cs",
+        "script": null
+      },
+      {
+        "member": "ppt/notesMasters/notesMaster1.xml",
+        "path": "p:notesMaster/p:notesStyle/a:lvl3pPr/a:defRPr/a:latin",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "latin",
+        "typeface": "+mn-lt",
+        "script": null
+      },
+      {
+        "member": "ppt/notesMasters/notesMaster1.xml",
+        "path": "p:notesMaster/p:notesStyle/a:lvl3pPr/a:defRPr/a:ea",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "ea",
+        "typeface": "+mn-ea",
+        "script": null
+      },
+      {
+        "member": "ppt/notesMasters/notesMaster1.xml",
+        "path": "p:notesMaster/p:notesStyle/a:lvl3pPr/a:defRPr/a:cs",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "cs",
+        "typeface": "+mn-cs",
+        "script": null
+      },
+      {
+        "member": "ppt/notesMasters/notesMaster1.xml",
+        "path": "p:notesMaster/p:notesStyle/a:lvl4pPr/a:defRPr/a:latin",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "latin",
+        "typeface": "+mn-lt",
+        "script": null
+      },
+      {
+        "member": "ppt/notesMasters/notesMaster1.xml",
+        "path": "p:notesMaster/p:notesStyle/a:lvl4pPr/a:defRPr/a:ea",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "ea",
+        "typeface": "+mn-ea",
+        "script": null
+      },
+      {
+        "member": "ppt/notesMasters/notesMaster1.xml",
+        "path": "p:notesMaster/p:notesStyle/a:lvl4pPr/a:defRPr/a:cs",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "cs",
+        "typeface": "+mn-cs",
+        "script": null
+      },
+      {
+        "member": "ppt/notesMasters/notesMaster1.xml",
+        "path": "p:notesMaster/p:notesStyle/a:lvl5pPr/a:defRPr/a:latin",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "latin",
+        "typeface": "+mn-lt",
+        "script": null
+      },
+      {
+        "member": "ppt/notesMasters/notesMaster1.xml",
+        "path": "p:notesMaster/p:notesStyle/a:lvl5pPr/a:defRPr/a:ea",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "ea",
+        "typeface": "+mn-ea",
+        "script": null
+      },
+      {
+        "member": "ppt/notesMasters/notesMaster1.xml",
+        "path": "p:notesMaster/p:notesStyle/a:lvl5pPr/a:defRPr/a:cs",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "cs",
+        "typeface": "+mn-cs",
+        "script": null
+      },
+      {
+        "member": "ppt/notesMasters/notesMaster1.xml",
+        "path": "p:notesMaster/p:notesStyle/a:lvl6pPr/a:defRPr/a:latin",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "latin",
+        "typeface": "+mn-lt",
+        "script": null
+      },
+      {
+        "member": "ppt/notesMasters/notesMaster1.xml",
+        "path": "p:notesMaster/p:notesStyle/a:lvl6pPr/a:defRPr/a:ea",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "ea",
+        "typeface": "+mn-ea",
+        "script": null
+      },
+      {
+        "member": "ppt/notesMasters/notesMaster1.xml",
+        "path": "p:notesMaster/p:notesStyle/a:lvl6pPr/a:defRPr/a:cs",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "cs",
+        "typeface": "+mn-cs",
+        "script": null
+      },
+      {
+        "member": "ppt/notesMasters/notesMaster1.xml",
+        "path": "p:notesMaster/p:notesStyle/a:lvl7pPr/a:defRPr/a:latin",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "latin",
+        "typeface": "+mn-lt",
+        "script": null
+      },
+      {
+        "member": "ppt/notesMasters/notesMaster1.xml",
+        "path": "p:notesMaster/p:notesStyle/a:lvl7pPr/a:defRPr/a:ea",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "ea",
+        "typeface": "+mn-ea",
+        "script": null
+      },
+      {
+        "member": "ppt/notesMasters/notesMaster1.xml",
+        "path": "p:notesMaster/p:notesStyle/a:lvl7pPr/a:defRPr/a:cs",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "cs",
+        "typeface": "+mn-cs",
+        "script": null
+      },
+      {
+        "member": "ppt/notesMasters/notesMaster1.xml",
+        "path": "p:notesMaster/p:notesStyle/a:lvl8pPr/a:defRPr/a:latin",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "latin",
+        "typeface": "+mn-lt",
+        "script": null
+      },
+      {
+        "member": "ppt/notesMasters/notesMaster1.xml",
+        "path": "p:notesMaster/p:notesStyle/a:lvl8pPr/a:defRPr/a:ea",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "ea",
+        "typeface": "+mn-ea",
+        "script": null
+      },
+      {
+        "member": "ppt/notesMasters/notesMaster1.xml",
+        "path": "p:notesMaster/p:notesStyle/a:lvl8pPr/a:defRPr/a:cs",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "cs",
+        "typeface": "+mn-cs",
+        "script": null
+      },
+      {
+        "member": "ppt/notesMasters/notesMaster1.xml",
+        "path": "p:notesMaster/p:notesStyle/a:lvl9pPr/a:defRPr/a:latin",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "latin",
+        "typeface": "+mn-lt",
+        "script": null
+      },
+      {
+        "member": "ppt/notesMasters/notesMaster1.xml",
+        "path": "p:notesMaster/p:notesStyle/a:lvl9pPr/a:defRPr/a:ea",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "ea",
+        "typeface": "+mn-ea",
+        "script": null
+      },
+      {
+        "member": "ppt/notesMasters/notesMaster1.xml",
+        "path": "p:notesMaster/p:notesStyle/a:lvl9pPr/a:defRPr/a:cs",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "cs",
+        "typeface": "+mn-cs",
+        "script": null
+      },
+      {
+        "member": "ppt/presentation.xml",
+        "path": "p:presentation/p:defaultTextStyle/a:lvl1pPr/a:defRPr/a:latin",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "latin",
+        "typeface": "+mn-lt",
+        "script": null
+      },
+      {
+        "member": "ppt/presentation.xml",
+        "path": "p:presentation/p:defaultTextStyle/a:lvl1pPr/a:defRPr/a:ea",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "ea",
+        "typeface": "+mn-ea",
+        "script": null
+      },
+      {
+        "member": "ppt/presentation.xml",
+        "path": "p:presentation/p:defaultTextStyle/a:lvl1pPr/a:defRPr/a:cs",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "cs",
+        "typeface": "+mn-cs",
+        "script": null
+      },
+      {
+        "member": "ppt/presentation.xml",
+        "path": "p:presentation/p:defaultTextStyle/a:lvl2pPr/a:defRPr/a:latin",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "latin",
+        "typeface": "+mn-lt",
+        "script": null
+      },
+      {
+        "member": "ppt/presentation.xml",
+        "path": "p:presentation/p:defaultTextStyle/a:lvl2pPr/a:defRPr/a:ea",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "ea",
+        "typeface": "+mn-ea",
+        "script": null
+      },
+      {
+        "member": "ppt/presentation.xml",
+        "path": "p:presentation/p:defaultTextStyle/a:lvl2pPr/a:defRPr/a:cs",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "cs",
+        "typeface": "+mn-cs",
+        "script": null
+      },
+      {
+        "member": "ppt/presentation.xml",
+        "path": "p:presentation/p:defaultTextStyle/a:lvl3pPr/a:defRPr/a:latin",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "latin",
+        "typeface": "+mn-lt",
+        "script": null
+      },
+      {
+        "member": "ppt/presentation.xml",
+        "path": "p:presentation/p:defaultTextStyle/a:lvl3pPr/a:defRPr/a:ea",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "ea",
+        "typeface": "+mn-ea",
+        "script": null
+      },
+      {
+        "member": "ppt/presentation.xml",
+        "path": "p:presentation/p:defaultTextStyle/a:lvl3pPr/a:defRPr/a:cs",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "cs",
+        "typeface": "+mn-cs",
+        "script": null
+      },
+      {
+        "member": "ppt/presentation.xml",
+        "path": "p:presentation/p:defaultTextStyle/a:lvl4pPr/a:defRPr/a:latin",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "latin",
+        "typeface": "+mn-lt",
+        "script": null
+      },
+      {
+        "member": "ppt/presentation.xml",
+        "path": "p:presentation/p:defaultTextStyle/a:lvl4pPr/a:defRPr/a:ea",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "ea",
+        "typeface": "+mn-ea",
+        "script": null
+      },
+      {
+        "member": "ppt/presentation.xml",
+        "path": "p:presentation/p:defaultTextStyle/a:lvl4pPr/a:defRPr/a:cs",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "cs",
+        "typeface": "+mn-cs",
+        "script": null
+      },
+      {
+        "member": "ppt/presentation.xml",
+        "path": "p:presentation/p:defaultTextStyle/a:lvl5pPr/a:defRPr/a:latin",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "latin",
+        "typeface": "+mn-lt",
+        "script": null
+      },
+      {
+        "member": "ppt/presentation.xml",
+        "path": "p:presentation/p:defaultTextStyle/a:lvl5pPr/a:defRPr/a:ea",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "ea",
+        "typeface": "+mn-ea",
+        "script": null
+      },
+      {
+        "member": "ppt/presentation.xml",
+        "path": "p:presentation/p:defaultTextStyle/a:lvl5pPr/a:defRPr/a:cs",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "cs",
+        "typeface": "+mn-cs",
+        "script": null
+      },
+      {
+        "member": "ppt/presentation.xml",
+        "path": "p:presentation/p:defaultTextStyle/a:lvl6pPr/a:defRPr/a:latin",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "latin",
+        "typeface": "+mn-lt",
+        "script": null
+      },
+      {
+        "member": "ppt/presentation.xml",
+        "path": "p:presentation/p:defaultTextStyle/a:lvl6pPr/a:defRPr/a:ea",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "ea",
+        "typeface": "+mn-ea",
+        "script": null
+      },
+      {
+        "member": "ppt/presentation.xml",
+        "path": "p:presentation/p:defaultTextStyle/a:lvl6pPr/a:defRPr/a:cs",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "cs",
+        "typeface": "+mn-cs",
+        "script": null
+      },
+      {
+        "member": "ppt/presentation.xml",
+        "path": "p:presentation/p:defaultTextStyle/a:lvl7pPr/a:defRPr/a:latin",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "latin",
+        "typeface": "+mn-lt",
+        "script": null
+      },
+      {
+        "member": "ppt/presentation.xml",
+        "path": "p:presentation/p:defaultTextStyle/a:lvl7pPr/a:defRPr/a:ea",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "ea",
+        "typeface": "+mn-ea",
+        "script": null
+      },
+      {
+        "member": "ppt/presentation.xml",
+        "path": "p:presentation/p:defaultTextStyle/a:lvl7pPr/a:defRPr/a:cs",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "cs",
+        "typeface": "+mn-cs",
+        "script": null
+      },
+      {
+        "member": "ppt/presentation.xml",
+        "path": "p:presentation/p:defaultTextStyle/a:lvl8pPr/a:defRPr/a:latin",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "latin",
+        "typeface": "+mn-lt",
+        "script": null
+      },
+      {
+        "member": "ppt/presentation.xml",
+        "path": "p:presentation/p:defaultTextStyle/a:lvl8pPr/a:defRPr/a:ea",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "ea",
+        "typeface": "+mn-ea",
+        "script": null
+      },
+      {
+        "member": "ppt/presentation.xml",
+        "path": "p:presentation/p:defaultTextStyle/a:lvl8pPr/a:defRPr/a:cs",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "cs",
+        "typeface": "+mn-cs",
+        "script": null
+      },
+      {
+        "member": "ppt/presentation.xml",
+        "path": "p:presentation/p:defaultTextStyle/a:lvl9pPr/a:defRPr/a:latin",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "latin",
+        "typeface": "+mn-lt",
+        "script": null
+      },
+      {
+        "member": "ppt/presentation.xml",
+        "path": "p:presentation/p:defaultTextStyle/a:lvl9pPr/a:defRPr/a:ea",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "ea",
+        "typeface": "+mn-ea",
+        "script": null
+      },
+      {
+        "member": "ppt/presentation.xml",
+        "path": "p:presentation/p:defaultTextStyle/a:lvl9pPr/a:defRPr/a:cs",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "cs",
+        "typeface": "+mn-cs",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:titleStyle/a:lvl1pPr/a:defRPr/a:latin",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "latin",
+        "typeface": "+mj-lt",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:titleStyle/a:lvl1pPr/a:defRPr/a:ea",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "ea",
+        "typeface": "+mj-ea",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:titleStyle/a:lvl1pPr/a:defRPr/a:cs",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "cs",
+        "typeface": "+mj-cs",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:bodyStyle/a:lvl1pPr/a:defRPr/a:latin",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "latin",
+        "typeface": "+mn-lt",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:bodyStyle/a:lvl1pPr/a:defRPr/a:ea",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "ea",
+        "typeface": "+mn-ea",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:bodyStyle/a:lvl1pPr/a:defRPr/a:cs",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "cs",
+        "typeface": "+mn-cs",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:bodyStyle/a:lvl2pPr/a:defRPr/a:latin",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "latin",
+        "typeface": "+mn-lt",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:bodyStyle/a:lvl2pPr/a:defRPr/a:ea",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "ea",
+        "typeface": "+mn-ea",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:bodyStyle/a:lvl2pPr/a:defRPr/a:cs",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "cs",
+        "typeface": "+mn-cs",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:bodyStyle/a:lvl3pPr/a:defRPr/a:latin",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "latin",
+        "typeface": "+mn-lt",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:bodyStyle/a:lvl3pPr/a:defRPr/a:ea",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "ea",
+        "typeface": "+mn-ea",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:bodyStyle/a:lvl3pPr/a:defRPr/a:cs",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "cs",
+        "typeface": "+mn-cs",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:bodyStyle/a:lvl4pPr/a:defRPr/a:latin",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "latin",
+        "typeface": "+mn-lt",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:bodyStyle/a:lvl4pPr/a:defRPr/a:ea",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "ea",
+        "typeface": "+mn-ea",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:bodyStyle/a:lvl4pPr/a:defRPr/a:cs",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "cs",
+        "typeface": "+mn-cs",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:bodyStyle/a:lvl5pPr/a:defRPr/a:latin",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "latin",
+        "typeface": "+mn-lt",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:bodyStyle/a:lvl5pPr/a:defRPr/a:ea",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "ea",
+        "typeface": "+mn-ea",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:bodyStyle/a:lvl5pPr/a:defRPr/a:cs",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "cs",
+        "typeface": "+mn-cs",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:bodyStyle/a:lvl6pPr/a:defRPr/a:latin",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "latin",
+        "typeface": "+mn-lt",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:bodyStyle/a:lvl6pPr/a:defRPr/a:ea",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "ea",
+        "typeface": "+mn-ea",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:bodyStyle/a:lvl6pPr/a:defRPr/a:cs",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "cs",
+        "typeface": "+mn-cs",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:bodyStyle/a:lvl7pPr/a:defRPr/a:latin",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "latin",
+        "typeface": "+mn-lt",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:bodyStyle/a:lvl7pPr/a:defRPr/a:ea",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "ea",
+        "typeface": "+mn-ea",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:bodyStyle/a:lvl7pPr/a:defRPr/a:cs",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "cs",
+        "typeface": "+mn-cs",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:bodyStyle/a:lvl8pPr/a:defRPr/a:latin",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "latin",
+        "typeface": "+mn-lt",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:bodyStyle/a:lvl8pPr/a:defRPr/a:ea",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "ea",
+        "typeface": "+mn-ea",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:bodyStyle/a:lvl8pPr/a:defRPr/a:cs",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "cs",
+        "typeface": "+mn-cs",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:bodyStyle/a:lvl9pPr/a:defRPr/a:latin",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "latin",
+        "typeface": "+mn-lt",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:bodyStyle/a:lvl9pPr/a:defRPr/a:ea",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "ea",
+        "typeface": "+mn-ea",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:bodyStyle/a:lvl9pPr/a:defRPr/a:cs",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "cs",
+        "typeface": "+mn-cs",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:otherStyle/a:lvl1pPr/a:defRPr/a:latin",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "latin",
+        "typeface": "+mn-lt",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:otherStyle/a:lvl1pPr/a:defRPr/a:ea",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "ea",
+        "typeface": "+mn-ea",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:otherStyle/a:lvl1pPr/a:defRPr/a:cs",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "cs",
+        "typeface": "+mn-cs",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:otherStyle/a:lvl2pPr/a:defRPr/a:latin",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "latin",
+        "typeface": "+mn-lt",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:otherStyle/a:lvl2pPr/a:defRPr/a:ea",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "ea",
+        "typeface": "+mn-ea",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:otherStyle/a:lvl2pPr/a:defRPr/a:cs",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "cs",
+        "typeface": "+mn-cs",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:otherStyle/a:lvl3pPr/a:defRPr/a:latin",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "latin",
+        "typeface": "+mn-lt",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:otherStyle/a:lvl3pPr/a:defRPr/a:ea",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "ea",
+        "typeface": "+mn-ea",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:otherStyle/a:lvl3pPr/a:defRPr/a:cs",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "cs",
+        "typeface": "+mn-cs",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:otherStyle/a:lvl4pPr/a:defRPr/a:latin",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "latin",
+        "typeface": "+mn-lt",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:otherStyle/a:lvl4pPr/a:defRPr/a:ea",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "ea",
+        "typeface": "+mn-ea",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:otherStyle/a:lvl4pPr/a:defRPr/a:cs",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "cs",
+        "typeface": "+mn-cs",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:otherStyle/a:lvl5pPr/a:defRPr/a:latin",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "latin",
+        "typeface": "+mn-lt",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:otherStyle/a:lvl5pPr/a:defRPr/a:ea",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "ea",
+        "typeface": "+mn-ea",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:otherStyle/a:lvl5pPr/a:defRPr/a:cs",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "cs",
+        "typeface": "+mn-cs",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:otherStyle/a:lvl6pPr/a:defRPr/a:latin",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "latin",
+        "typeface": "+mn-lt",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:otherStyle/a:lvl6pPr/a:defRPr/a:ea",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "ea",
+        "typeface": "+mn-ea",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:otherStyle/a:lvl6pPr/a:defRPr/a:cs",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "cs",
+        "typeface": "+mn-cs",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:otherStyle/a:lvl7pPr/a:defRPr/a:latin",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "latin",
+        "typeface": "+mn-lt",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:otherStyle/a:lvl7pPr/a:defRPr/a:ea",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "ea",
+        "typeface": "+mn-ea",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:otherStyle/a:lvl7pPr/a:defRPr/a:cs",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "cs",
+        "typeface": "+mn-cs",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:otherStyle/a:lvl8pPr/a:defRPr/a:latin",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "latin",
+        "typeface": "+mn-lt",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:otherStyle/a:lvl8pPr/a:defRPr/a:ea",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "ea",
+        "typeface": "+mn-ea",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:otherStyle/a:lvl8pPr/a:defRPr/a:cs",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "cs",
+        "typeface": "+mn-cs",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:otherStyle/a:lvl9pPr/a:defRPr/a:latin",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "latin",
+        "typeface": "+mn-lt",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:otherStyle/a:lvl9pPr/a:defRPr/a:ea",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "ea",
+        "typeface": "+mn-ea",
+        "script": null
+      },
+      {
+        "member": "ppt/slideMasters/slideMaster1.xml",
+        "path": "p:sldMaster/p:txStyles/p:otherStyle/a:lvl9pPr/a:defRPr/a:cs",
+        "category": "theme-token-inherited",
+        "slot": null,
+        "element": "cs",
+        "typeface": "+mn-cs",
+        "script": null
+      },
+      {
+        "member": "ppt/slides/slide1.xml",
+        "path": "p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r[0]/a:rPr/a:latin",
+        "category": "character-run-property",
+        "slot": null,
+        "element": "latin",
+        "typeface": "Carlito",
+        "script": null
+      },
+      {
+        "member": "ppt/slides/slide1.xml",
+        "path": "p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r[0]/a:rPr/a:ea",
+        "category": "character-run-property",
+        "slot": null,
+        "element": "ea",
+        "typeface": "Carlito",
+        "script": null
+      },
+      {
+        "member": "ppt/slides/slide1.xml",
+        "path": "p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r[0]/a:rPr/a:cs",
+        "category": "character-run-property",
+        "slot": null,
+        "element": "cs",
+        "typeface": "Carlito",
+        "script": null
+      },
+      {
+        "member": "ppt/slides/slide1.xml",
+        "path": "p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r[1]/a:rPr/a:latin",
+        "category": "character-run-property",
+        "slot": null,
+        "element": "latin",
+        "typeface": "Carlito",
+        "script": null
+      },
+      {
+        "member": "ppt/slides/slide1.xml",
+        "path": "p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r[1]/a:rPr/a:ea",
+        "category": "character-run-property",
+        "slot": null,
+        "element": "ea",
+        "typeface": "Carlito",
+        "script": null
+      },
+      {
+        "member": "ppt/slides/slide1.xml",
+        "path": "p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r[1]/a:rPr/a:cs",
+        "category": "character-run-property",
+        "slot": null,
+        "element": "cs",
+        "typeface": "Carlito",
+        "script": null
+      },
+      {
+        "member": "ppt/slides/slide1.xml",
+        "path": "p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r[2]/a:rPr/a:latin",
+        "category": "character-run-property",
+        "slot": null,
+        "element": "latin",
+        "typeface": "Carlito",
+        "script": null
+      },
+      {
+        "member": "ppt/slides/slide1.xml",
+        "path": "p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r[2]/a:rPr/a:ea",
+        "category": "character-run-property",
+        "slot": null,
+        "element": "ea",
+        "typeface": "Carlito",
+        "script": null
+      },
+      {
+        "member": "ppt/slides/slide1.xml",
+        "path": "p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r[2]/a:rPr/a:cs",
+        "category": "character-run-property",
+        "slot": null,
+        "element": "cs",
+        "typeface": "Carlito",
+        "script": null
+      },
+      {
+        "member": "ppt/slides/slide1.xml",
+        "path": "p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r[3]/a:rPr/a:latin",
+        "category": "character-run-property",
+        "slot": null,
+        "element": "latin",
+        "typeface": "Carlito",
+        "script": null
+      },
+      {
+        "member": "ppt/slides/slide1.xml",
+        "path": "p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r[3]/a:rPr/a:ea",
+        "category": "character-run-property",
+        "slot": null,
+        "element": "ea",
+        "typeface": "Carlito",
+        "script": null
+      },
+      {
+        "member": "ppt/slides/slide1.xml",
+        "path": "p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r[3]/a:rPr/a:cs",
+        "category": "character-run-property",
+        "slot": null,
+        "element": "cs",
+        "typeface": "Carlito",
+        "script": null
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:latin",
+        "category": "theme-primary",
+        "slot": "majorFont",
+        "element": "latin",
+        "typeface": "Carlito",
+        "script": null
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:ea",
+        "category": "theme-primary",
+        "slot": "majorFont",
+        "element": "ea",
+        "typeface": "",
+        "script": null
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:cs",
+        "category": "theme-primary",
+        "slot": "majorFont",
+        "element": "cs",
+        "typeface": "",
+        "script": null
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[0]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "游ゴシック Light",
+        "script": "Jpan"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[1]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "맑은 고딕",
+        "script": "Hang"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[2]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "等线 Light",
+        "script": "Hans"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[3]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "新細明體",
+        "script": "Hant"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[4]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "Times New Roman",
+        "script": "Arab"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[5]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "Times New Roman",
+        "script": "Hebr"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[6]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "Angsana New",
+        "script": "Thai"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[7]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "Nyala",
+        "script": "Ethi"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[8]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "Vrinda",
+        "script": "Beng"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[9]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "Shruti",
+        "script": "Gujr"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[10]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "MoolBoran",
+        "script": "Khmr"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[11]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "Tunga",
+        "script": "Knda"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[12]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "Raavi",
+        "script": "Guru"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[13]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "Euphemia",
+        "script": "Cans"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[14]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "Plantagenet Cherokee",
+        "script": "Cher"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[15]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "Microsoft Yi Baiti",
+        "script": "Yiii"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[16]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "Microsoft Himalaya",
+        "script": "Tibt"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[17]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "MV Boli",
+        "script": "Thaa"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[18]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "Mangal",
+        "script": "Deva"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[19]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "Gautami",
+        "script": "Telu"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[20]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "Latha",
+        "script": "Taml"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[21]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "Estrangelo Edessa",
+        "script": "Syrc"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[22]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "Kalinga",
+        "script": "Orya"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[23]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "Kartika",
+        "script": "Mlym"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[24]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "DokChampa",
+        "script": "Laoo"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[25]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "Iskoola Pota",
+        "script": "Sinh"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[26]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "Mongolian Baiti",
+        "script": "Mong"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[27]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "Times New Roman",
+        "script": "Viet"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[28]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "Microsoft Uighur",
+        "script": "Uigh"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[29]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "Sylfaen",
+        "script": "Geor"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[30]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "Arial",
+        "script": "Armn"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[31]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "Leelawadee UI",
+        "script": "Bugi"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[32]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "Microsoft JhengHei",
+        "script": "Bopo"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[33]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "Javanese Text",
+        "script": "Java"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[34]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "Segoe UI",
+        "script": "Lisu"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[35]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "Myanmar Text",
+        "script": "Mymr"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[36]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "Ebrima",
+        "script": "Nkoo"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[37]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "Nirmala UI",
+        "script": "Olck"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[38]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "Ebrima",
+        "script": "Osma"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[39]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "Phagspa",
+        "script": "Phag"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[40]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "Estrangelo Edessa",
+        "script": "Syrn"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[41]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "Estrangelo Edessa",
+        "script": "Syrj"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[42]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "Estrangelo Edessa",
+        "script": "Syre"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[43]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "Nirmala UI",
+        "script": "Sora"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[44]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "Microsoft Tai Le",
+        "script": "Tale"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[45]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "Microsoft New Tai Lue",
+        "script": "Talu"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:majorFont/a:font[46]",
+        "category": "theme-script-fallback",
+        "slot": "majorFont",
+        "element": "font",
+        "typeface": "Ebrima",
+        "script": "Tfng"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:latin",
+        "category": "theme-primary",
+        "slot": "minorFont",
+        "element": "latin",
+        "typeface": "Carlito",
+        "script": null
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:ea",
+        "category": "theme-primary",
+        "slot": "minorFont",
+        "element": "ea",
+        "typeface": "",
+        "script": null
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:cs",
+        "category": "theme-primary",
+        "slot": "minorFont",
+        "element": "cs",
+        "typeface": "",
+        "script": null
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[0]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "游ゴシック",
+        "script": "Jpan"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[1]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "맑은 고딕",
+        "script": "Hang"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[2]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "等线",
+        "script": "Hans"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[3]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "新細明體",
+        "script": "Hant"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[4]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "Arial",
+        "script": "Arab"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[5]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "Arial",
+        "script": "Hebr"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[6]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "Cordia New",
+        "script": "Thai"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[7]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "Nyala",
+        "script": "Ethi"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[8]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "Vrinda",
+        "script": "Beng"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[9]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "Shruti",
+        "script": "Gujr"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[10]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "DaunPenh",
+        "script": "Khmr"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[11]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "Tunga",
+        "script": "Knda"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[12]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "Raavi",
+        "script": "Guru"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[13]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "Euphemia",
+        "script": "Cans"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[14]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "Plantagenet Cherokee",
+        "script": "Cher"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[15]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "Microsoft Yi Baiti",
+        "script": "Yiii"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[16]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "Microsoft Himalaya",
+        "script": "Tibt"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[17]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "MV Boli",
+        "script": "Thaa"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[18]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "Mangal",
+        "script": "Deva"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[19]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "Gautami",
+        "script": "Telu"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[20]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "Latha",
+        "script": "Taml"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[21]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "Estrangelo Edessa",
+        "script": "Syrc"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[22]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "Kalinga",
+        "script": "Orya"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[23]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "Kartika",
+        "script": "Mlym"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[24]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "DokChampa",
+        "script": "Laoo"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[25]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "Iskoola Pota",
+        "script": "Sinh"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[26]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "Mongolian Baiti",
+        "script": "Mong"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[27]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "Arial",
+        "script": "Viet"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[28]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "Microsoft Uighur",
+        "script": "Uigh"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[29]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "Sylfaen",
+        "script": "Geor"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[30]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "Arial",
+        "script": "Armn"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[31]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "Leelawadee UI",
+        "script": "Bugi"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[32]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "Microsoft JhengHei",
+        "script": "Bopo"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[33]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "Javanese Text",
+        "script": "Java"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[34]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "Segoe UI",
+        "script": "Lisu"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[35]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "Myanmar Text",
+        "script": "Mymr"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[36]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "Ebrima",
+        "script": "Nkoo"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[37]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "Nirmala UI",
+        "script": "Olck"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[38]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "Ebrima",
+        "script": "Osma"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[39]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "Phagspa",
+        "script": "Phag"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[40]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "Estrangelo Edessa",
+        "script": "Syrn"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[41]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "Estrangelo Edessa",
+        "script": "Syrj"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[42]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "Estrangelo Edessa",
+        "script": "Syre"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[43]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "Nirmala UI",
+        "script": "Sora"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[44]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "Microsoft Tai Le",
+        "script": "Tale"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[45]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "Microsoft New Tai Lue",
+        "script": "Talu"
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "path": "a:theme/a:themeElements/a:fontScheme/a:minorFont/a:font[46]",
+        "category": "theme-script-fallback",
+        "slot": "minorFont",
+        "element": "font",
+        "typeface": "Ebrima",
+        "script": "Tfng"
+      }
+    ],
+    "themeFontSlots": [
+      {
+        "member": "ppt/theme/theme1.xml",
+        "slot": "majorFont",
+        "latin": "Carlito",
+        "eastAsian": "",
+        "complexScript": "",
+        "supplementalScriptFaces": [
+          {
+            "script": "Jpan",
+            "typeface": "游ゴシック Light"
+          },
+          {
+            "script": "Hang",
+            "typeface": "맑은 고딕"
+          },
+          {
+            "script": "Hans",
+            "typeface": "等线 Light"
+          },
+          {
+            "script": "Hant",
+            "typeface": "新細明體"
+          },
+          {
+            "script": "Arab",
+            "typeface": "Times New Roman"
+          },
+          {
+            "script": "Hebr",
+            "typeface": "Times New Roman"
+          },
+          {
+            "script": "Thai",
+            "typeface": "Angsana New"
+          },
+          {
+            "script": "Ethi",
+            "typeface": "Nyala"
+          },
+          {
+            "script": "Beng",
+            "typeface": "Vrinda"
+          },
+          {
+            "script": "Gujr",
+            "typeface": "Shruti"
+          },
+          {
+            "script": "Khmr",
+            "typeface": "MoolBoran"
+          },
+          {
+            "script": "Knda",
+            "typeface": "Tunga"
+          },
+          {
+            "script": "Guru",
+            "typeface": "Raavi"
+          },
+          {
+            "script": "Cans",
+            "typeface": "Euphemia"
+          },
+          {
+            "script": "Cher",
+            "typeface": "Plantagenet Cherokee"
+          },
+          {
+            "script": "Yiii",
+            "typeface": "Microsoft Yi Baiti"
+          },
+          {
+            "script": "Tibt",
+            "typeface": "Microsoft Himalaya"
+          },
+          {
+            "script": "Thaa",
+            "typeface": "MV Boli"
+          },
+          {
+            "script": "Deva",
+            "typeface": "Mangal"
+          },
+          {
+            "script": "Telu",
+            "typeface": "Gautami"
+          },
+          {
+            "script": "Taml",
+            "typeface": "Latha"
+          },
+          {
+            "script": "Syrc",
+            "typeface": "Estrangelo Edessa"
+          },
+          {
+            "script": "Orya",
+            "typeface": "Kalinga"
+          },
+          {
+            "script": "Mlym",
+            "typeface": "Kartika"
+          },
+          {
+            "script": "Laoo",
+            "typeface": "DokChampa"
+          },
+          {
+            "script": "Sinh",
+            "typeface": "Iskoola Pota"
+          },
+          {
+            "script": "Mong",
+            "typeface": "Mongolian Baiti"
+          },
+          {
+            "script": "Viet",
+            "typeface": "Times New Roman"
+          },
+          {
+            "script": "Uigh",
+            "typeface": "Microsoft Uighur"
+          },
+          {
+            "script": "Geor",
+            "typeface": "Sylfaen"
+          },
+          {
+            "script": "Armn",
+            "typeface": "Arial"
+          },
+          {
+            "script": "Bugi",
+            "typeface": "Leelawadee UI"
+          },
+          {
+            "script": "Bopo",
+            "typeface": "Microsoft JhengHei"
+          },
+          {
+            "script": "Java",
+            "typeface": "Javanese Text"
+          },
+          {
+            "script": "Lisu",
+            "typeface": "Segoe UI"
+          },
+          {
+            "script": "Mymr",
+            "typeface": "Myanmar Text"
+          },
+          {
+            "script": "Nkoo",
+            "typeface": "Ebrima"
+          },
+          {
+            "script": "Olck",
+            "typeface": "Nirmala UI"
+          },
+          {
+            "script": "Osma",
+            "typeface": "Ebrima"
+          },
+          {
+            "script": "Phag",
+            "typeface": "Phagspa"
+          },
+          {
+            "script": "Syrn",
+            "typeface": "Estrangelo Edessa"
+          },
+          {
+            "script": "Syrj",
+            "typeface": "Estrangelo Edessa"
+          },
+          {
+            "script": "Syre",
+            "typeface": "Estrangelo Edessa"
+          },
+          {
+            "script": "Sora",
+            "typeface": "Nirmala UI"
+          },
+          {
+            "script": "Tale",
+            "typeface": "Microsoft Tai Le"
+          },
+          {
+            "script": "Talu",
+            "typeface": "Microsoft New Tai Lue"
+          },
+          {
+            "script": "Tfng",
+            "typeface": "Ebrima"
+          }
+        ]
+      },
+      {
+        "member": "ppt/theme/theme1.xml",
+        "slot": "minorFont",
+        "latin": "Carlito",
+        "eastAsian": "",
+        "complexScript": "",
+        "supplementalScriptFaces": [
+          {
+            "script": "Jpan",
+            "typeface": "游ゴシック"
+          },
+          {
+            "script": "Hang",
+            "typeface": "맑은 고딕"
+          },
+          {
+            "script": "Hans",
+            "typeface": "等线"
+          },
+          {
+            "script": "Hant",
+            "typeface": "新細明體"
+          },
+          {
+            "script": "Arab",
+            "typeface": "Arial"
+          },
+          {
+            "script": "Hebr",
+            "typeface": "Arial"
+          },
+          {
+            "script": "Thai",
+            "typeface": "Cordia New"
+          },
+          {
+            "script": "Ethi",
+            "typeface": "Nyala"
+          },
+          {
+            "script": "Beng",
+            "typeface": "Vrinda"
+          },
+          {
+            "script": "Gujr",
+            "typeface": "Shruti"
+          },
+          {
+            "script": "Khmr",
+            "typeface": "DaunPenh"
+          },
+          {
+            "script": "Knda",
+            "typeface": "Tunga"
+          },
+          {
+            "script": "Guru",
+            "typeface": "Raavi"
+          },
+          {
+            "script": "Cans",
+            "typeface": "Euphemia"
+          },
+          {
+            "script": "Cher",
+            "typeface": "Plantagenet Cherokee"
+          },
+          {
+            "script": "Yiii",
+            "typeface": "Microsoft Yi Baiti"
+          },
+          {
+            "script": "Tibt",
+            "typeface": "Microsoft Himalaya"
+          },
+          {
+            "script": "Thaa",
+            "typeface": "MV Boli"
+          },
+          {
+            "script": "Deva",
+            "typeface": "Mangal"
+          },
+          {
+            "script": "Telu",
+            "typeface": "Gautami"
+          },
+          {
+            "script": "Taml",
+            "typeface": "Latha"
+          },
+          {
+            "script": "Syrc",
+            "typeface": "Estrangelo Edessa"
+          },
+          {
+            "script": "Orya",
+            "typeface": "Kalinga"
+          },
+          {
+            "script": "Mlym",
+            "typeface": "Kartika"
+          },
+          {
+            "script": "Laoo",
+            "typeface": "DokChampa"
+          },
+          {
+            "script": "Sinh",
+            "typeface": "Iskoola Pota"
+          },
+          {
+            "script": "Mong",
+            "typeface": "Mongolian Baiti"
+          },
+          {
+            "script": "Viet",
+            "typeface": "Arial"
+          },
+          {
+            "script": "Uigh",
+            "typeface": "Microsoft Uighur"
+          },
+          {
+            "script": "Geor",
+            "typeface": "Sylfaen"
+          },
+          {
+            "script": "Armn",
+            "typeface": "Arial"
+          },
+          {
+            "script": "Bugi",
+            "typeface": "Leelawadee UI"
+          },
+          {
+            "script": "Bopo",
+            "typeface": "Microsoft JhengHei"
+          },
+          {
+            "script": "Java",
+            "typeface": "Javanese Text"
+          },
+          {
+            "script": "Lisu",
+            "typeface": "Segoe UI"
+          },
+          {
+            "script": "Mymr",
+            "typeface": "Myanmar Text"
+          },
+          {
+            "script": "Nkoo",
+            "typeface": "Ebrima"
+          },
+          {
+            "script": "Olck",
+            "typeface": "Nirmala UI"
+          },
+          {
+            "script": "Osma",
+            "typeface": "Ebrima"
+          },
+          {
+            "script": "Phag",
+            "typeface": "Phagspa"
+          },
+          {
+            "script": "Syrn",
+            "typeface": "Estrangelo Edessa"
+          },
+          {
+            "script": "Syrj",
+            "typeface": "Estrangelo Edessa"
+          },
+          {
+            "script": "Syre",
+            "typeface": "Estrangelo Edessa"
+          },
+          {
+            "script": "Sora",
+            "typeface": "Nirmala UI"
+          },
+          {
+            "script": "Tale",
+            "typeface": "Microsoft Tai Le"
+          },
+          {
+            "script": "Talu",
+            "typeface": "Microsoft New Tai Lue"
+          },
+          {
+            "script": "Tfng",
+            "typeface": "Ebrima"
+          }
+        ]
+      }
+    ],
+    "unresolvedThemeFontReferences": [],
+    "allConcreteTypefaces": [
+      "Angsana New",
+      "Arial",
+      "Carlito",
+      "Cordia New",
+      "DaunPenh",
+      "DokChampa",
+      "Ebrima",
+      "Estrangelo Edessa",
+      "Euphemia",
+      "Gautami",
+      "Iskoola Pota",
+      "Javanese Text",
+      "Kalinga",
+      "Kartika",
+      "Latha",
+      "Leelawadee UI",
+      "MV Boli",
+      "Mangal",
+      "Microsoft Himalaya",
+      "Microsoft JhengHei",
+      "Microsoft New Tai Lue",
+      "Microsoft Tai Le",
+      "Microsoft Uighur",
+      "Microsoft Yi Baiti",
+      "Mongolian Baiti",
+      "MoolBoran",
+      "Myanmar Text",
+      "Nirmala UI",
+      "Nyala",
+      "Phagspa",
+      "Plantagenet Cherokee",
+      "Raavi",
+      "Segoe UI",
+      "Shruti",
+      "Sylfaen",
+      "Times New Roman",
+      "Tunga",
+      "Vrinda",
+      "新細明體",
+      "游ゴシック",
+      "游ゴシック Light",
+      "等线",
+      "等线 Light",
+      "맑은 고딕"
+    ],
+    "concreteNonCarlitoTypefaces": [
+      "Angsana New",
+      "Arial",
+      "Cordia New",
+      "DaunPenh",
+      "DokChampa",
+      "Ebrima",
+      "Estrangelo Edessa",
+      "Euphemia",
+      "Gautami",
+      "Iskoola Pota",
+      "Javanese Text",
+      "Kalinga",
+      "Kartika",
+      "Latha",
+      "Leelawadee UI",
+      "MV Boli",
+      "Mangal",
+      "Microsoft Himalaya",
+      "Microsoft JhengHei",
+      "Microsoft New Tai Lue",
+      "Microsoft Tai Le",
+      "Microsoft Uighur",
+      "Microsoft Yi Baiti",
+      "Mongolian Baiti",
+      "MoolBoran",
+      "Myanmar Text",
+      "Nirmala UI",
+      "Nyala",
+      "Phagspa",
+      "Plantagenet Cherokee",
+      "Raavi",
+      "Segoe UI",
+      "Shruti",
+      "Sylfaen",
+      "Times New Roman",
+      "Tunga",
+      "Vrinda",
+      "新細明體",
+      "游ゴシック",
+      "游ゴシック Light",
+      "等线",
+      "等线 Light",
+      "맑은 고딕"
+    ],
+    "notesSlideParts": [
+      "ppt/notesSlides/notesSlide1.xml"
+    ],
+    "notesMasterParts": [
+      "ppt/notesMasters/notesMaster1.xml"
+    ],
+    "slideMasterParts": [
+      "ppt/slideMasters/slideMaster1.xml"
+    ],
+    "slideLayoutParts": [
+      "ppt/slideLayouts/slideLayout1.xml"
+    ],
+    "fontProgramMembers": [],
+    "svgMembers": [],
+    "fontBearingSvgMembers": [],
+    "contentTypeFontMentions": false
+  },
+  "nativeFontsGate": {
+    "status": "pending",
+    "requiredObservation": "A separately reviewed bounded read-only native PowerPoint Presentation.Fonts inventory must show only the permitted Carlito family/style inventory. Font Name, Bold, and Italic properties do not prove exact physical font-file identity. XML declarations do not prove which theme fallback faces PowerPoint enumerates or uses."
+  },
+  "limitations": [
+    "Declared OOXML families and theme script fallback references are not a native PowerPoint Presentation.Fonts collection observation.",
+    "This generation records package font declarations only; it does not identify the physical font used for any glyph.",
+    "No embedding was requested and the fixture contains no font programs; embedded-font parsing or persistence is not tested."
+  ]
+}

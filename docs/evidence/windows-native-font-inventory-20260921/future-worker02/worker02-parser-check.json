@@ -1,0 +1,12 @@
+﻿{
+    "kind":  "worker02-registration-parser-delta-check",
+    "hostVersion":  "5.1.26100.9444",
+    "officeOrFontCalls":  0,
+    "workerSha256":  "fd279c971ba9447770931c8972cc5a4d2b21df9d77c40d90135e571db7ce85ed",
+    "actualRawRowCount":  4,
+    "actualRawCleanupPassed":  true,
+    "fewerRejected":  true,
+    "emptyRejected":  true,
+    "failedRemovalRejected":  true,
+    "zeroAdditionRejected":  true
+}

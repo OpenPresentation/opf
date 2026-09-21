@@ -1,0 +1,12 @@
+﻿{
+    "kind":  "powershell-5.1-root-array-pipeline-reproduction",
+    "hostVersion":  "5.1.26100.9444",
+    "officeOrFontCalls":  0,
+    "pipelineWrappedCount":  1,
+    "pipelineWrappedFirstType":  "System.Object[]",
+    "pipelineWrappedFirstCount":  4,
+    "directType":  "System.Object[]",
+    "directCount":  4,
+    "fixedCount":  4,
+    "rawRowsAllRemoved":  true
+}

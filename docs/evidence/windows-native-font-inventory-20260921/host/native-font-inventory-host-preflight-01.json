@@ -1,0 +1,11 @@
+{
+  "observedAtUtc": "2026-09-21T21:33:52.7423210Z",
+  "method": "Supported @oai/sky list_windows/get_window_state; no UI input or COM",
+  "powerPointWindowId": 135208,
+  "powerPointTitle": "PowerPoint",
+  "observation": "One returned PowerPoint window, empty gray workspace, document commands disabled; no visible modal or recovery prompt.",
+  "personalWorkspaceScreenshotPersisted": false,
+  "workerSha256": "eaab68ca458b28f6d2cf61fc7fda6ce4e6f22d55c9c5be3eca5ee7ff8bb3450e",
+  "sourcePptxSha256": "79cee1342bf6815fffdb9b0f2b95b23d6dfb7ec5f232fd0584aaf1ef149af2eb",
+  "executionStatus": "Awaiting independent final-byte review"
+}

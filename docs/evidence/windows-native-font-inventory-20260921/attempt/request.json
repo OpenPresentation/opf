@@ -1,0 +1,309 @@
+﻿{
+    "schemaVersion":  1,
+    "source":  {
+                   "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\embedding-fixture-candidate-01\\source.pptx",
+                   "sha256":  "79cee1342bf6815fffdb9b0f2b95b23d6dfb7ec5f232fd0584aaf1ef149af2eb",
+                   "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-inventory-01\\inputs\\source.pptx",
+                   "snapshotSha256":  "79cee1342bf6815fffdb9b0f2b95b23d6dfb7ec5f232fd0584aaf1ef149af2eb"
+               },
+    "candidate":  {
+                      "generationPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\embedding-fixture-candidate-01\\generation-corrected.json",
+                      "generationSha256":  "3838613523e4a55ec69db076cce62f13c483f6f571d6c7072e81c2edd877cccd",
+                      "generationSnapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-inventory-01\\inputs\\generation-corrected.json",
+                      "generatorPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\embedding-fixture-candidate-01\\generate.mjs",
+                      "generatorSha256":  "7e3400edbad7f980a074c5cbc5fd68453611c6b3f9fa7fae912660afc53fe36f",
+                      "generatorSnapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-inventory-01\\inputs\\generate.mjs",
+                      "sourceJsonPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\embedding-fixture-candidate-01\\source.opf.json",
+                      "sourceJsonSha256":  "702a80d1d2d4f04a19050a3463da32ac18e87a4e31266a22b5871ddc2e240a3c",
+                      "sourceJsonSnapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-inventory-01\\inputs\\source.opf.json"
+                  },
+    "registryBindings":  {
+                             "consumer":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer",
+                             "packageJsonSha256":  "eeb0129d0b300ac7a73041888006a2e1ff31438064392964289b28108d9ff9ff",
+                             "lockfilePath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\package-lock.json",
+                             "lockfileSha256":  "4868f13254e3e681566164da8427d3716ceaa025435e4606e5e15fc8a87bc305",
+                             "bindingScope":  "Five direct OPF registry packages plus two XML/ZIP helpers are bound by lock entry version/resolved URL/integrity, package manifest hash, and resolved public ESM entry hash. This does not bind every transitive installed byte.",
+                             "packages":  [
+                                              {
+                                                  "name":  "@openpresentation/cli",
+                                                  "version":  "0.9.0",
+                                                  "lockKey":  "node_modules/@openpresentation/cli",
+                                                  "manifestPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\cli\\package.json",
+                                                  "entrypointRealpath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\cli\\dist\\index.js",
+                                                  "manifestSha256":  "0c4e3a41ae1460ce28dcc14f57125961a6f3eb9418dbab6ba4de497ebe2b12b0",
+                                                  "entrypointSha256":  "96c46b9b0d531042686b1f8e9c89d8c5038ed45a3cb0742c1b4869857c3b184a",
+                                                  "installPathIsSymbolicLink":  false,
+                                                  "lockLink":  false
+                                              },
+                                              {
+                                                  "name":  "@openpresentation/opf",
+                                                  "version":  "0.11.0",
+                                                  "lockKey":  "node_modules/@openpresentation/opf",
+                                                  "manifestPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf\\package.json",
+                                                  "entrypointRealpath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf\\dist\\index.js",
+                                                  "manifestSha256":  "86364f07f30f5106539a936b4eb84cf5a00c53524599b222f823b2460efb3a0f",
+                                                  "entrypointSha256":  "568ca647007962a3046094bb3d8e6d2dcfed0c9f463c91e4a9839c86a81b381f",
+                                                  "installPathIsSymbolicLink":  false,
+                                                  "lockLink":  false
+                                              },
+                                              {
+                                                  "name":  "@openpresentation/opf-editor",
+                                                  "version":  "0.8.0",
+                                                  "lockKey":  "node_modules/@openpresentation/opf-editor",
+                                                  "manifestPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-editor\\package.json",
+                                                  "entrypointRealpath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-editor\\dist\\index.js",
+                                                  "manifestSha256":  "c91341504f64b9100dcd12bddee35cf8eadb0e14acee72d9798f93ca0a549818",
+                                                  "entrypointSha256":  "ffa2dd3043ff87f6da3e7d6acd818b8041d99979aa6707a1828c558f03afb753",
+                                                  "installPathIsSymbolicLink":  false,
+                                                  "lockLink":  false
+                                              },
+                                              {
+                                                  "name":  "@openpresentation/opf-pptx",
+                                                  "version":  "0.9.1",
+                                                  "lockKey":  "node_modules/@openpresentation/opf-pptx",
+                                                  "manifestPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-pptx\\package.json",
+                                                  "entrypointRealpath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-pptx\\dist\\index.js",
+                                                  "manifestSha256":  "be4944ae7405ff4d92238118eafebb93af433c53519145785553eecc3a4ef8bd",
+                                                  "entrypointSha256":  "ba8fa87cebb32db9675f71bec91cc257e8d02a9d0977ca133666c6257eb07716",
+                                                  "installPathIsSymbolicLink":  false,
+                                                  "lockLink":  false
+                                              },
+                                              {
+                                                  "name":  "@openpresentation/opf-render",
+                                                  "version":  "0.9.0",
+                                                  "lockKey":  "node_modules/@openpresentation/opf-render",
+                                                  "manifestPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-render\\package.json",
+                                                  "entrypointRealpath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-render\\dist\\index.js",
+                                                  "manifestSha256":  "ab5cac6fc9588b3ba694fd17a0d1bde952ebabb60977a13089626b2ec146d84f",
+                                                  "entrypointSha256":  "1fdb45740a09bb6f48eb5dc79def3ffe692acdf0a5c319727edf4e19c0020d78",
+                                                  "installPathIsSymbolicLink":  false,
+                                                  "lockLink":  false
+                                              },
+                                              {
+                                                  "name":  "fast-xml-parser",
+                                                  "version":  "5.11.1",
+                                                  "lockKey":  "node_modules/fast-xml-parser",
+                                                  "manifestPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\fast-xml-parser\\package.json",
+                                                  "entrypointRealpath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\fast-xml-parser\\src\\fxp.js",
+                                                  "manifestSha256":  "41c5f7f2ed20d6ab2b54d3f42730246444685a838cf381d5bf3e1eb93e2fa4cb",
+                                                  "entrypointSha256":  "587bee5d27b6dbc99d24f472ea93028659610c3496be7d667e72483483c3f3ba",
+                                                  "installPathIsSymbolicLink":  false,
+                                                  "lockLink":  false
+                                              },
+                                              {
+                                                  "name":  "fflate",
+                                                  "version":  "0.8.3",
+                                                  "lockKey":  "node_modules/fflate",
+                                                  "manifestPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\fflate\\package.json",
+                                                  "entrypointRealpath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\fflate\\esm\\index.mjs",
+                                                  "manifestSha256":  "5922d8150b307bc0e4e441491c779c45379e9913d348848fca8d5cf02db4d134",
+                                                  "entrypointSha256":  "8d75534a30a0580608e1271c13d70943ed4cd3589fddff7b1197748036a5116e",
+                                                  "installPathIsSymbolicLink":  false,
+                                                  "lockLink":  false
+                                              }
+                                          ]
+                         },
+    "fontFixture":  {
+                        "root":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\font-edit-fixture-01",
+                        "generationPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\font-edit-fixture-01\\generation.json",
+                        "generationSha256":  "8ac9743832e6c63bab58a999802979dcdcb91139599f502e90bc697141cf5422",
+                        "generationSnapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-inventory-01\\inputs\\font-fixture\\generation.json",
+                        "licensePath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\font-edit-fixture-01\\LICENSE_FONT",
+                        "licenseSha256":  "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00",
+                        "licenseSnapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-inventory-01\\inputs\\font-fixture\\LICENSE_FONT",
+                        "fonts":  [
+                                      {
+                                          "file":  "fonts/Carlito-400-normal.ttf",
+                                          "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\font-edit-fixture-01\\fonts\\Carlito-400-normal.ttf",
+                                          "sha256":  "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89",
+                                          "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-inventory-01\\inputs\\font-fixture\\fonts\\Carlito-400-normal.ttf",
+                                          "snapshotSha256":  "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89"
+                                      },
+                                      {
+                                          "file":  "fonts/Carlito-400-italic.ttf",
+                                          "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\font-edit-fixture-01\\fonts\\Carlito-400-italic.ttf",
+                                          "sha256":  "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5",
+                                          "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-inventory-01\\inputs\\font-fixture\\fonts\\Carlito-400-italic.ttf",
+                                          "snapshotSha256":  "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5"
+                                      },
+                                      {
+                                          "file":  "fonts/Carlito-700-normal.ttf",
+                                          "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\font-edit-fixture-01\\fonts\\Carlito-700-normal.ttf",
+                                          "sha256":  "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0",
+                                          "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-inventory-01\\inputs\\font-fixture\\fonts\\Carlito-700-normal.ttf",
+                                          "snapshotSha256":  "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0"
+                                      },
+                                      {
+                                          "file":  "fonts/Carlito-700-italic.ttf",
+                                          "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\font-edit-fixture-01\\fonts\\Carlito-700-italic.ttf",
+                                          "sha256":  "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691",
+                                          "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-inventory-01\\inputs\\font-fixture\\fonts\\Carlito-700-italic.ttf",
+                                          "snapshotSha256":  "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691"
+                                      }
+                                  ],
+                        "registrationFlags":  0,
+                        "package":  {
+                                        "name":  "@expo-google-fonts/carlito",
+                                        "version":  "0.4.1",
+                                        "manifestSha256":  "cada00d32e296a97db384203c837750567583d16dd3e66b6f7337bd8e6bb80d6"
+                                    },
+                        "license":  {
+                                        "file":  "LICENSE_FONT",
+                                        "spdx":  "OFL-1.1",
+                                        "sha256":  "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00"
+                                    }
+                    },
+    "verifier":  {
+                     "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-inventory-worker-01\\native-font-inventory.ps1",
+                     "sha256":  "eaab68ca458b28f6d2cf61fc7fda6ce4e6f22d55c9c5be3eca5ee7ff8bb3450e",
+                     "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-inventory-01\\inputs\\native-font-inventory.ps1",
+                     "snapshotSha256":  "eaab68ca458b28f6d2cf61fc7fda6ce4e6f22d55c9c5be3eca5ee7ff8bb3450e"
+                 },
+    "processHelper":  {
+                          "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\sources\\opf-pptx\\test\\native-process.ps1",
+                          "sha256":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+                          "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-inventory-01\\inputs\\native-process.ps1",
+                          "snapshotSha256":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+                      },
+    "fontHelper":  {
+                       "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\sources\\opf-pptx\\test\\native-text-fonts.ps1",
+                       "sha256":  "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+                       "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-inventory-01\\inputs\\native-text-fonts.ps1",
+                       "snapshotSha256":  "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6"
+                   },
+    "expectations":  {
+                         "text":  "Regular Bold Italic BoldItalic",
+                         "runs":  [
+                                      {
+                                          "index":  0,
+                                          "start":  1,
+                                          "length":  8,
+                                          "text":  "Regular ",
+                                          "size":  18,
+                                          "bold":  false,
+                                          "italic":  false
+                                      },
+                                      {
+                                          "index":  1,
+                                          "start":  9,
+                                          "length":  5,
+                                          "text":  "Bold ",
+                                          "size":  20,
+                                          "bold":  true,
+                                          "italic":  false
+                                      },
+                                      {
+                                          "index":  2,
+                                          "start":  14,
+                                          "length":  7,
+                                          "text":  "Italic ",
+                                          "size":  22,
+                                          "bold":  false,
+                                          "italic":  true
+                                      },
+                                      {
+                                          "index":  3,
+                                          "start":  21,
+                                          "length":  10,
+                                          "text":  "BoldItalic",
+                                          "size":  24,
+                                          "bold":  true,
+                                          "italic":  true
+                                      }
+                                  ],
+                         "permittedReportedFontNames":  [
+                                                            "Carlito",
+                                                            "Carlito Bold",
+                                                            "Carlito Italic",
+                                                            "Carlito Bold Italic"
+                                                        ],
+                         "maxFontEntries":  64
+                     },
+    "inputs":  [
+                   {
+                       "role":  "candidate PPTX",
+                       "sourcePath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\embedding-fixture-candidate-01\\source.pptx",
+                       "sha256":  "79cee1342bf6815fffdb9b0f2b95b23d6dfb7ec5f232fd0584aaf1ef149af2eb",
+                       "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-inventory-01\\inputs\\source.pptx"
+                   },
+                   {
+                       "role":  "candidate OPF source",
+                       "sourcePath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\embedding-fixture-candidate-01\\source.opf.json",
+                       "sha256":  "702a80d1d2d4f04a19050a3463da32ac18e87a4e31266a22b5871ddc2e240a3c",
+                       "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-inventory-01\\inputs\\source.opf.json"
+                   },
+                   {
+                       "role":  "corrected generation report",
+                       "sourcePath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\embedding-fixture-candidate-01\\generation-corrected.json",
+                       "sha256":  "3838613523e4a55ec69db076cce62f13c483f6f571d6c7072e81c2edd877cccd",
+                       "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-inventory-01\\inputs\\generation-corrected.json"
+                   },
+                   {
+                       "role":  "candidate generator",
+                       "sourcePath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\embedding-fixture-candidate-01\\generate.mjs",
+                       "sha256":  "7e3400edbad7f980a074c5cbc5fd68453611c6b3f9fa7fae912660afc53fe36f",
+                       "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-inventory-01\\inputs\\generate.mjs"
+                   },
+                   {
+                       "role":  "consumer lockfile",
+                       "sourcePath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\package-lock.json",
+                       "sha256":  "4868f13254e3e681566164da8427d3716ceaa025435e4606e5e15fc8a87bc305",
+                       "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-inventory-01\\inputs\\registry-package-lock.json"
+                   },
+                   {
+                       "role":  "licensed Carlito generation",
+                       "sourcePath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\font-edit-fixture-01\\generation.json",
+                       "sha256":  "8ac9743832e6c63bab58a999802979dcdcb91139599f502e90bc697141cf5422",
+                       "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-inventory-01\\inputs\\font-fixture\\generation.json"
+                   },
+                   {
+                       "role":  "Carlito license",
+                       "sourcePath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\font-edit-fixture-01\\LICENSE_FONT",
+                       "sha256":  "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00",
+                       "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-inventory-01\\inputs\\font-fixture\\LICENSE_FONT"
+                   },
+                   {
+                       "role":  "worker verifier",
+                       "sourcePath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-inventory-worker-01\\native-font-inventory.ps1",
+                       "sha256":  "eaab68ca458b28f6d2cf61fc7fda6ce4e6f22d55c9c5be3eca5ee7ff8bb3450e",
+                       "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-inventory-01\\inputs\\native-font-inventory.ps1"
+                   },
+                   {
+                       "role":  "owned worker process helper",
+                       "sourcePath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\sources\\opf-pptx\\test\\native-process.ps1",
+                       "sha256":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+                       "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-inventory-01\\inputs\\native-process.ps1"
+                   },
+                   {
+                       "role":  "owned font registration helper",
+                       "sourcePath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\sources\\opf-pptx\\test\\native-text-fonts.ps1",
+                       "sha256":  "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+                       "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-inventory-01\\inputs\\native-text-fonts.ps1"
+                   },
+                   {
+                       "role":  "Carlito face fonts/Carlito-400-normal.ttf",
+                       "sourcePath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\font-edit-fixture-01\\fonts\\Carlito-400-normal.ttf",
+                       "sha256":  "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89",
+                       "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-inventory-01\\inputs\\font-fixture\\fonts\\Carlito-400-normal.ttf"
+                   },
+                   {
+                       "role":  "Carlito face fonts/Carlito-400-italic.ttf",
+                       "sourcePath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\font-edit-fixture-01\\fonts\\Carlito-400-italic.ttf",
+                       "sha256":  "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5",
+                       "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-inventory-01\\inputs\\font-fixture\\fonts\\Carlito-400-italic.ttf"
+                   },
+                   {
+                       "role":  "Carlito face fonts/Carlito-700-normal.ttf",
+                       "sourcePath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\font-edit-fixture-01\\fonts\\Carlito-700-normal.ttf",
+                       "sha256":  "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0",
+                       "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-inventory-01\\inputs\\font-fixture\\fonts\\Carlito-700-normal.ttf"
+                   },
+                   {
+                       "role":  "Carlito face fonts/Carlito-700-italic.ttf",
+                       "sourcePath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\font-edit-fixture-01\\fonts\\Carlito-700-italic.ttf",
+                       "sha256":  "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691",
+                       "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-inventory-01\\inputs\\font-fixture\\fonts\\Carlito-700-italic.ttf"
+                   }
+               ],
+    "scope":  "Read-only registry candidate, exact source snapshots, and temporary parent-owned Carlito session registration. This binds package manifest/entrypoint/lock records, not every transitive installed byte."
+}

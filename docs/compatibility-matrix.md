@@ -57,6 +57,15 @@ Mixed-size table fidelity, physical glyph-font identity, fallback/synthesis and 
 open; embedding was disabled for this control. The Windows supervisor retains sole
 Office control. This documentation task reads evidence and makes no Office calls.
 
+The later [read-only font inventory](evidence/windows-native-font-inventory-20260921/README.md)
+retains the four Carlito text styles but reports both Carlito and unexpected
+Aptos in `Presentation.Fonts`. The native font allowlist fails, and no embedding
+was attempted. The original parent report incorrectly fails cleanup because of
+a Windows PowerShell 5.1 JSON-array parsing defect; raw stages and registration
+rows establish one owned close and four removals in a separately labeled offline
+audit. The raw failure remains intact. Collection names and flags do not identify
+the physical font used for each glyph.
+
 The [read-only mixed-table observation](evidence/windows-native-mixed-table-20260921/README.md)
 retains all 245 characters, one literal tab and five authored runs, with outer
 geometry within 0.02pt and confirmed owned close/font cleanup. Native soft-line

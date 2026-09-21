@@ -1,0 +1,54 @@
+{
+  "design": {
+    "theme": "classic",
+    "fontScheme": {
+      "major": "Carlito",
+      "minor": "Carlito",
+      "type": "sans-serif",
+      "heading": {
+        "family": "Carlito"
+      },
+      "body": {
+        "family": "Carlito"
+      },
+      "accent": {
+        "family": "Carlito"
+      },
+      "code": {
+        "family": "Carlito"
+      }
+    }
+  },
+  "slides": [
+    {
+      "type": "text",
+      "layout": "blank",
+      "text": [
+        {
+          "text": "Regular ",
+          "fontFamily": "Carlito",
+          "fontSize": 18
+        },
+        {
+          "text": "Bold ",
+          "fontFamily": "Carlito",
+          "fontSize": 20,
+          "bold": true
+        },
+        {
+          "text": "Italic ",
+          "fontFamily": "Carlito",
+          "fontSize": 22,
+          "italic": true
+        },
+        {
+          "text": "BoldItalic",
+          "fontFamily": "Carlito",
+          "fontSize": 24,
+          "bold": true,
+          "italic": true
+        }
+      ]
+    }
+  ]
+}

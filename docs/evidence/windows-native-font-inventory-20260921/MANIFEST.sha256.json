@@ -1,0 +1,186 @@
+{
+  "schemaVersion": 1,
+  "algorithm": "sha256",
+  "entries": [
+    {
+      "path": ".gitattributes",
+      "bytes": 9,
+      "sha256": "48747480eddba024928d03be9bf83dc579e5515768647507a767e8187a85c9ab"
+    },
+    {
+      "path": "attempt/font-registration.json",
+      "bytes": 812,
+      "sha256": "d3c8a31ef44b436ffc6ebf82f5738f01cd849312534a4945382f48137795348a"
+    },
+    {
+      "path": "attempt/inputs/font-fixture/generation.json",
+      "bytes": 2616,
+      "sha256": "8ac9743832e6c63bab58a999802979dcdcb91139599f502e90bc697141cf5422"
+    },
+    {
+      "path": "attempt/inputs/font-fixture/LICENSE_FONT",
+      "bytes": 4424,
+      "sha256": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00"
+    },
+    {
+      "path": "attempt/inputs/generate.mjs",
+      "bytes": 25429,
+      "sha256": "7e3400edbad7f980a074c5cbc5fd68453611c6b3f9fa7fae912660afc53fe36f"
+    },
+    {
+      "path": "attempt/inputs/generation-corrected.json",
+      "bytes": 99362,
+      "sha256": "3838613523e4a55ec69db076cce62f13c483f6f571d6c7072e81c2edd877cccd"
+    },
+    {
+      "path": "attempt/inputs/native-font-inventory.ps1",
+      "bytes": 57588,
+      "sha256": "eaab68ca458b28f6d2cf61fc7fda6ce4e6f22d55c9c5be3eca5ee7ff8bb3450e"
+    },
+    {
+      "path": "attempt/inputs/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "path": "attempt/inputs/native-text-fonts.ps1",
+      "bytes": 2446,
+      "sha256": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6"
+    },
+    {
+      "path": "attempt/inputs/registry-package-lock.json",
+      "bytes": 57378,
+      "sha256": "4868f13254e3e681566164da8427d3716ceaa025435e4606e5e15fc8a87bc305"
+    },
+    {
+      "path": "attempt/inputs/source.opf.json",
+      "bytes": 1011,
+      "sha256": "702a80d1d2d4f04a19050a3463da32ac18e87a4e31266a22b5871ddc2e240a3c"
+    },
+    {
+      "path": "attempt/inputs/source.pptx",
+      "bytes": 14737,
+      "sha256": "79cee1342bf6815fffdb9b0f2b95b23d6dfb7ec5f232fd0584aaf1ef149af2eb"
+    },
+    {
+      "path": "attempt/progress.json",
+      "bytes": 271,
+      "sha256": "8e9e9c606155725666ad2470406b1acc99045813eb1b922b68ed9451010ffeb0"
+    },
+    {
+      "path": "attempt/report.json",
+      "bytes": 45995,
+      "sha256": "16141f9b390ca3142177e9cc288e17ed8635bf3ca80105afcfc1fa546c42e9f2"
+    },
+    {
+      "path": "attempt/request.json",
+      "bytes": 29856,
+      "sha256": "7cc71c069498fbe1ab93d78c291c151c9898f25101d3ee0f979cafb6c3ebe8f9"
+    },
+    {
+      "path": "attempt/stages.jsonl",
+      "bytes": 46916,
+      "sha256": "c0369c5e92267769ebe0b5f28dc5c12bebd730521c502356575d658360952ffe"
+    },
+    {
+      "path": "attempt/supervisor.json",
+      "bytes": 25671,
+      "sha256": "4942c8acce616db0dea418e1ef0014332dad12d76ef310c406475443cd8d1a02"
+    },
+    {
+      "path": "attempt/worker.json",
+      "bytes": 341,
+      "sha256": "48cbeb28060400db43bf93e64c793c90891daabeb053779dd462c17e60979cc2"
+    },
+    {
+      "path": "attempt/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "attempt/worker.stdout.log",
+      "bytes": 101,
+      "sha256": "913923783fc8b9770104bf2299783e7e6849ba65bacd9e010028b28914b38d53"
+    },
+    {
+      "path": "audit/audit.py",
+      "bytes": 9654,
+      "sha256": "26ab15bbcade93b0c34870f2a7296413c2555c69345007565486fbebaf04a81e"
+    },
+    {
+      "path": "audit/diagnose-inventory-registration-array.ps1",
+      "bytes": 1346,
+      "sha256": "9459de9987f7ba8c0324ab6b74122fdb08f70abb597bcd41ed414562d3c422dd"
+    },
+    {
+      "path": "audit/inventory-registration-array-diagnosis.json",
+      "bytes": 2193,
+      "sha256": "931f8e11efb96f30065db8c496c349e48e16c71d20bc8a48ce696df475b76eb7"
+    },
+    {
+      "path": "audit/parser-repro.json",
+      "bytes": 385,
+      "sha256": "f41a2614b1fde65675ec075b5fbede1560a9a0921514de657dc37e09d814ea37"
+    },
+    {
+      "path": "audit/ps5-parser-repro.ps1",
+      "bytes": 1409,
+      "sha256": "8dddd8537e927e76ec92cc208f6f8f801818f3f176a347ffe270e205ee374210"
+    },
+    {
+      "path": "audit/report-v2.json",
+      "bytes": 23402,
+      "sha256": "eaa72f6c3af3c449bb97a0cd077eebcd3432b0340503c44b42aad5c706a698d3"
+    },
+    {
+      "path": "future-worker02/native-font-inventory.ps1",
+      "bytes": 59065,
+      "sha256": "fd279c971ba9447770931c8972cc5a4d2b21df9d77c40d90135e571db7ce85ed"
+    },
+    {
+      "path": "future-worker02/PLAN.md",
+      "bytes": 1504,
+      "sha256": "bc9060b1e1426ffff723262bd6675ca3747218e24a68021c04b4c96d72a8f7c4"
+    },
+    {
+      "path": "future-worker02/root-pure.json",
+      "bytes": 470,
+      "sha256": "8d905eb9136f33397c9a47c623241db3d581f07a40382be4679a013b55386951"
+    },
+    {
+      "path": "future-worker02/worker02-parser-check.json",
+      "bytes": 424,
+      "sha256": "7071ebe6f2df789add3dbf88f3f6918464a9491b5d44be99929f3148672d3466"
+    },
+    {
+      "path": "future-worker02/worker02-parser-check.ps1",
+      "bytes": 2337,
+      "sha256": "81fa24af8c134e67aa6a3dde56c18e9c3df51d9dd157bd7d338459cbb4dda578"
+    },
+    {
+      "path": "host/native-font-inventory-host-postflight-01.json",
+      "bytes": 368,
+      "sha256": "4c50ac909af3d6a041cc2c16f0ad7268f7c219a19b09636ad4755579ea7bbd0e"
+    },
+    {
+      "path": "host/native-font-inventory-host-preflight-01.json",
+      "bytes": 643,
+      "sha256": "8252130f2cb0d2f7ef54315fad6f1d0b0025b92d28b270c681ec9b4cb091d3d0"
+    },
+    {
+      "path": "OMITTED.json",
+      "bytes": 1155,
+      "sha256": "e241f6f4194809f268aa21836283a0bbe2f3a6ddf11d57c03bfd4e97531120c0"
+    },
+    {
+      "path": "README.md",
+      "bytes": 3332,
+      "sha256": "b473ae251aee12a438079b2377e5142f6be31a5cf89a5c5fc63d787e7b7011a9"
+    },
+    {
+      "path": "verify.py",
+      "bytes": 10348,
+      "sha256": "f019cb698992f09dfe6d3b797c5d670749660e51eb4c08ae4f30a8e69dbb0015"
+    }
+  ]
+}
