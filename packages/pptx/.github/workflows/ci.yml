@@ -87,6 +87,10 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Native process controls failed' }
           & "$env:WINDIR/System32/WindowsPowerShell/v1.0/powershell.exe" -NoProfile -NonInteractive -File test/native-picture-harness-check.ps1 -ReportPath artifacts/native-picture-harness/check.json
           if ($LASTEXITCODE -ne 0) { throw 'Native picture harness controls failed' }
+          & "$env:WINDIR/System32/WindowsPowerShell/v1.0/powershell.exe" -NoProfile -NonInteractive -File test/native-picture-edit-harness-check.ps1 -ReportPath artifacts/native-picture-harness/edit-check.json
+          if ($LASTEXITCODE -ne 0) { throw 'Native picture edit harness controls failed' }
+          & "$env:WINDIR/System32/WindowsPowerShell/v1.0/powershell.exe" -NoProfile -NonInteractive -File test/native-furniture-harness-check.ps1 -ReportPath artifacts/native-picture-harness/furniture-check.json
+          if ($LASTEXITCODE -ne 0) { throw 'Native furniture harness controls failed' }
       - run: npm run validate
       - run: npm test
       - run: npm run test:font-variants
