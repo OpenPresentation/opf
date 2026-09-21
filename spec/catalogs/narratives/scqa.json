@@ -39,7 +39,7 @@
       "id": "answer",
       "name": "Answer",
       "description": "Deliver the recommendation in a single sentence, up front. No arguments yet, no caveats — just the conclusion the rest of the deck will defend. This is the apex of the Minto pyramid; everything that follows supports it.",
-      "layoutHint": "title-left"
+      "layoutHint": "title"
     },
     {
       "id": "key-arguments",

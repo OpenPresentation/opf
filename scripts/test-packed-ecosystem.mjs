@@ -24,15 +24,21 @@ const verifySharedCode = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] >
 const rendererVersion = releasePlan?.packages.find(item => item.name === '@openpresentation/opf-render')?.version.split('.').map(Number);
 const verifyFontPreparation = !registry || rendererVersion?.[0] > 0 || rendererVersion?.[1] >= 8;
 const verifyEstimatedRichText = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] >= 10;
+// Furniture shipped in the coordinated core 0.10.1 train; older plans stay testable.
+const verifyFurniture = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] > 10 || (coreVersion?.[1] === 10 && coreVersion?.[2] >= 1);
+const verifyColorRefs = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] >= 11;
 
-async function readHarness(repo, file) {
+async function readHarnessBytes(repo, file) {
   const directory = repo === 'opf' ? root : path.resolve(root, '..', repo);
-  if (!registry) return readFile(path.join(directory, file), 'utf8');
+  if (!registry) return readFile(path.join(directory, file));
   const ref = releasePlan.verificationRefs?.[repo];
   if (!/^[a-f0-9]{40}$/.test(ref ?? '')) throw new Error(`Missing immutable registry verification ref for ${repo}`);
-  const result = spawnSync('git', ['show', `${ref}:${file}`], {cwd:directory, encoding:'utf8'});
+  const result = spawnSync('git', ['show', `${ref}:${file}`], {cwd:directory});
   if (result.status !== 0) throw new Error(`Cannot read ${repo} release harness ${file}: ${result.stderr}`);
   return result.stdout;
+}
+async function readHarness(repo, file) {
+  return (await readHarnessBytes(repo, file)).toString('utf8');
 }
 const consumer = path.join(out, librariesOnly ? "registry-libraries-consumer" : registry ? "registry-consumer" : "consumer");
 const manifest = registry
@@ -91,6 +97,24 @@ run("npm", [
   "--cache",
   path.join(out,'cache'),
 ]);
+if (verifyColorRefs) {
+  await mkdir(path.join(consumer, 'fixtures'), {recursive: true});
+  await writeFile(path.join(consumer, 'fixtures/color-references.opf.json'),
+    await readHarness('opf-render', 'test/fixtures/color-references.opf.json'));
+  await writeFile(path.join(consumer, 'color-references.mjs'),
+    (await readHarness('opf-render', 'test/color-references.mjs'))
+      .replaceAll("'../dist/index.js'", "'@openpresentation/opf-render'"));
+  run(process.execPath, ['color-references.mjs']);
+  await writeFile(path.join(consumer, 'fixtures/core-color-references.opf.json'),
+    await readHarness('opf', 'docs/fixtures/color-references.opf.json'));
+  await writeFile(path.join(consumer, 'color-ref-export.mjs'),
+    (await readHarness('opf-pptx', 'test/color-ref-export.mjs'))
+      .replaceAll('"../dist/index.js"', '"@openpresentation/opf-pptx"')
+      .replaceAll('"../dist/color-ref.js"', '"./node_modules/@openpresentation/opf-pptx/dist/color-ref.js"')
+      .replaceAll('"../../opf/docs/fixtures/color-references.opf.json"', '"fixtures/core-color-references.opf.json"')
+      .replaceAll('  fixture = null;', '  throw new Error("Pinned ColorRef fixture must load; fallback is not registry acceptance");'));
+  run(process.execPath, ['color-ref-export.mjs']);
+}
 if (verifyFontPreparation) {
   await writeFile(path.join(consumer,'check-font-preparation.mjs'), `
 import assert from 'node:assert/strict';
@@ -116,16 +140,13 @@ assert.equal(registry.embeddedFonts.length,33);
 console.log('Installed font preparation passed layout, edit/undo, SVG/PNG, editable PPTX export and heading reimport.');
 `);
   run(process.execPath,['check-font-preparation.mjs']);
-  // Furniture is an unpublished coordinated API. Its mutation guards apply to
-  // candidate tarballs; the pinned registry release predates this harness/API.
-  // Add its released-version gate alongside the others when publishing it.
-  if (!registry) {
+  if (verifyFurniture) {
     const furnitureHarness = (await readHarness('opf-pptx', 'test/furniture-provenance.mjs'))
       .replaceAll("'../dist/index.js'", "'@openpresentation/opf-pptx'")
       .replaceAll("'../vendor/pptxgenjs/pptxgen.es.js'", "'./node_modules/@openpresentation/opf-pptx/vendor/pptxgenjs/pptxgen.es.js'");
     await mkdir(path.join(consumer, 'fixtures/images'), {recursive: true});
     for (const name of ['wide.png', 'tall.png']) await writeFile(path.join(consumer, 'fixtures/images', name),
-      await readFile(path.resolve(root, '../opf-pptx/test/fixtures/images', name)));
+      await readHarnessBytes('opf-pptx', `test/fixtures/images/${name}`));
     await writeFile(path.join(consumer, 'furniture-provenance.mjs'), furnitureHarness);
     run(process.execPath, ['furniture-provenance.mjs']);
   }

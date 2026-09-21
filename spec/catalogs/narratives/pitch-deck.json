@@ -24,7 +24,7 @@
       "id": "opening",
       "name": "Opening",
       "description": "Open with the company name, logo, and a one-line tagline that doubles as a positioning statement. Set the visual tone for the deck. Keep it confident and uncluttered — this is the cover.",
-      "layoutHint": "title-left"
+      "layoutHint": "title"
     },
     {
       "id": "purpose",
@@ -95,13 +95,13 @@
       "id": "ask",
       "name": "The Ask",
       "description": "State the round size, intended use of funds, and what milestones the capital takes you to. Be specific — investors should leave knowing exactly what you want and what they get.",
-      "layoutHint": "title-left"
+      "layoutHint": "title"
     },
     {
       "id": "closing",
       "name": "Closing",
       "description": "Close on a strong final image: logo, contact info, and the one line you most want the investor to remember. Leave space for the conversation that follows.",
-      "layoutHint": "title-left"
+      "layoutHint": "title"
     }
   ]
 }

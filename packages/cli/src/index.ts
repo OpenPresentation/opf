@@ -1,7 +1,7 @@
 import { readFile, writeFile, lstat, link, rename, unlink } from "node:fs/promises";
 import { createHash, randomUUID } from "node:crypto";
 import path from "node:path";
-import { createDataContent, OPFDataImportError, paginatePresentation, catalogEntries, schemaEntries, validatePresentation, lintSource, type LintOptions } from "@openpresentation/opf";
+import { createDataContent, OPFDataImportError, paginatePresentation, bundlePresentation, catalogEntries, schemaEntries, validatePresentation, lintSource, type LintOptions } from "@openpresentation/opf";
 import { applyPatch, lookup, tokens, PatchError } from "./patch.js";
 import {manageSkills, SkillsError, type SkillBundle} from './skills.js';
 
@@ -20,6 +20,7 @@ const usage = `OPF — local presentation files for agents (Node 24)
            [--chart-type <id>] [--no-header] [--delimiter <character>] [--title <text>]
            [--force] [--strict]
   opf paginate <input|-> <output|-> [--force] [--strict]
+  opf bundle <input|-> <output|-> [--force] [--strict]
   opf schemas
   opf schema [name] [JSON-Pointer]
   opf catalogs
@@ -34,6 +35,9 @@ Edits apply JSON Patch (add/remove/replace/move/copy/test), validate the whole
 result, and save atomically. --dry-run emits the result without saving.
 Exit codes: 0 success, 1 invalid document/patch/conflict, 2 usage/JSON/I/O error.
 Validation checks structure and references, not visual fidelity.
+Bundle inlines the bundled catalog records a document references (kinds with a
+custom source are left untouched) so the file resolves every catalog reference
+offline. Remote media and data assets are not inlined.
 Lint adds source locations, contextual suggestions and explicit host contracts.
 Lint syntax/schema/policy errors exit 1; --strict also rejects warnings.
 
@@ -205,6 +209,12 @@ async function main(argv: string[]) {
     const source = await readJson(positional[0]); checked(source.value, !!options.strict);
     const result = paginatePresentation(source.value);
     await emit(result.presentation, positional[1], options, undefined, { pages: result.pages }); return;
+  }
+  if (command === "bundle") {
+    const { positional, options } = parse(args, ["force", "strict"]); arity(positional, 2);
+    const source = await readJson(positional[0]); checked(source.value, !!options.strict);
+    const result = bundlePresentation(source.value);
+    await emit(result.presentation, positional[1], options, undefined, { bundle: result.report }); return;
   }
   if (command === "schemas") { arity(args, 0); print(schemaEntries.map(entry => ({ name: entry.name, file: entry.file, id: entry.schema.$id }))); return; }
   if (command === "catalogs") { arity(args, 0); print(catalogEntries.map(entry => ({ kind: entry.kind, count: entry.records.length }))); return; }

@@ -1,0 +1,3157 @@
+[
+  {
+    "id": "@openpresentation/opf@0.11.0",
+    "name": "@openpresentation/opf",
+    "version": "0.11.0",
+    "size": 2395557,
+    "unpackedSize": 6515599,
+    "shasum": "300d7fc700273e033a35984791ac5aca35367d67",
+    "integrity": "sha512-7Gm/FSyiGngHRkDG0SPL8V6FEC5nC8UpoffNWf8CqkyjXsqQ2BUIzVAEwHwKjEsEZ04FR2DT+Ohh8PJofNPFiw==",
+    "filename": "openpresentation-opf-0.11.0.tgz",
+    "files": [
+      {
+        "path": "LICENSE",
+        "size": 1086,
+        "mode": 420
+      },
+      {
+        "path": "README.md",
+        "size": 8137,
+        "mode": 420
+      },
+      {
+        "path": "dist/catalogs-atkOF4Vy.d.ts",
+        "size": 48044,
+        "mode": 420
+      },
+      {
+        "path": "dist/catalogs.d.ts",
+        "size": 454,
+        "mode": 420
+      },
+      {
+        "path": "dist/catalogs.js",
+        "size": 238,
+        "mode": 420
+      },
+      {
+        "path": "dist/chunk-6FU2KICU.js",
+        "size": 510212,
+        "mode": 420
+      },
+      {
+        "path": "dist/chunk-CHKJ4QHQ.js",
+        "size": 34853,
+        "mode": 420
+      },
+      {
+        "path": "dist/chunk-EQHZ3ZO4.js",
+        "size": 25106,
+        "mode": 420
+      },
+      {
+        "path": "dist/chunk-FTWNWFIV.js",
+        "size": 98519,
+        "mode": 420
+      },
+      {
+        "path": "dist/chunk-FWA5XB45.js",
+        "size": 15193,
+        "mode": 420
+      },
+      {
+        "path": "dist/chunk-GN52EE3P.js",
+        "size": 231331,
+        "mode": 420
+      },
+      {
+        "path": "dist/chunk-PIQXLBBJ.js",
+        "size": 111499,
+        "mode": 420
+      },
+      {
+        "path": "dist/chunk-RS5GZ5RW.js",
+        "size": 121171,
+        "mode": 420
+      },
+      {
+        "path": "dist/chunk-SOSOBKQ2.js",
+        "size": 6680,
+        "mode": 420
+      },
+      {
+        "path": "dist/composition-Tv9Wm3Oh.d.ts",
+        "size": 27247,
+        "mode": 420
+      },
+      {
+        "path": "dist/composition.d.ts",
+        "size": 2199,
+        "mode": 420
+      },
+      {
+        "path": "dist/composition.js",
+        "size": 437,
+        "mode": 420
+      },
+      {
+        "path": "dist/data.d.ts",
+        "size": 1005,
+        "mode": 420
+      },
+      {
+        "path": "dist/data.js",
+        "size": 95,
+        "mode": 420
+      },
+      {
+        "path": "dist/docs.d.ts",
+        "size": 671,
+        "mode": 420
+      },
+      {
+        "path": "dist/docs.js",
+        "size": 599818,
+        "mode": 420
+      },
+      {
+        "path": "dist/examples.d.ts",
+        "size": 2141,
+        "mode": 420
+      },
+      {
+        "path": "dist/examples.js",
+        "size": 3656210,
+        "mode": 420
+      },
+      {
+        "path": "dist/index.d.ts",
+        "size": 6904,
+        "mode": 420
+      },
+      {
+        "path": "dist/index.js",
+        "size": 9671,
+        "mode": 420
+      },
+      {
+        "path": "dist/lint.d.ts",
+        "size": 2655,
+        "mode": 420
+      },
+      {
+        "path": "dist/lint.js",
+        "size": 188,
+        "mode": 420
+      },
+      {
+        "path": "dist/pagination.d.ts",
+        "size": 2501,
+        "mode": 420
+      },
+      {
+        "path": "dist/pagination.js",
+        "size": 215,
+        "mode": 420
+      },
+      {
+        "path": "dist/presentation-Ct42Mitb.d.ts",
+        "size": 119669,
+        "mode": 420
+      },
+      {
+        "path": "dist/previews.d.ts",
+        "size": 1761,
+        "mode": 420
+      },
+      {
+        "path": "dist/previews.js",
+        "size": 130,
+        "mode": 420
+      },
+      {
+        "path": "dist/repo-readme.d.ts",
+        "size": 139,
+        "mode": 420
+      },
+      {
+        "path": "dist/repo-readme.js",
+        "size": 12134,
+        "mode": 420
+      },
+      {
+        "path": "dist/schemas-CiVmUT2p.d.ts",
+        "size": 9340,
+        "mode": 420
+      },
+      {
+        "path": "dist/schemas.d.ts",
+        "size": 314,
+        "mode": 420
+      },
+      {
+        "path": "dist/schemas.js",
+        "size": 202,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec-files.d.ts",
+        "size": 20109,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec-files.js",
+        "size": 85,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/audiences/all-hands.json",
+        "size": 880,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/audiences/board.json",
+        "size": 919,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/audiences/candidates.json",
+        "size": 826,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/audiences/customers.json",
+        "size": 895,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/audiences/engineering-team.json",
+        "size": 937,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/audiences/executives.json",
+        "size": 874,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/audiences/index.json",
+        "size": 2488,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/audiences/investors.json",
+        "size": 950,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/audiences/marketing-team.json",
+        "size": 847,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/audiences/regulators.json",
+        "size": 867,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/audiences/sales-team.json",
+        "size": 874,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/100pct-bullet-bar-2x.json",
+        "size": 1635,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/100pct-bullet-bar-3x.json",
+        "size": 1822,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/100pct-bullet-bar.json",
+        "size": 1441,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/100pct-bullet-column-2x.json",
+        "size": 1665,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/100pct-bullet-column-3x.json",
+        "size": 1869,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/100pct-bullet-column.json",
+        "size": 1462,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/100pct-progress-bar.json",
+        "size": 1677,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/100pct-stacked-area-2x.json",
+        "size": 1693,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/100pct-stacked-area-3x.json",
+        "size": 2039,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/100pct-stacked-bar-2x.json",
+        "size": 1428,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/100pct-stacked-bar-3x.json",
+        "size": 1684,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/100pct-stacked-column-2x.json",
+        "size": 1533,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/100pct-stacked-column-3x.json",
+        "size": 1819,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/area.json",
+        "size": 1253,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/australia.json",
+        "size": 1249,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/bar.json",
+        "size": 1109,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/box-and-whisker-2x.json",
+        "size": 2182,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/box-and-whisker-3x.json",
+        "size": 2678,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/box-and-whisker.json",
+        "size": 1677,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/bullet-bar-2x.json",
+        "size": 1584,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/bullet-bar-3x.json",
+        "size": 1771,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/bullet-bar.json",
+        "size": 1390,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/bullet-column-2x.json",
+        "size": 1614,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/bullet-column-3x.json",
+        "size": 1817,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/bullet-column.json",
+        "size": 1410,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/canada.json",
+        "size": 1388,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/clustered-bar-2x.json",
+        "size": 1410,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/clustered-column.json",
+        "size": 1506,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/column.json",
+        "size": 1184,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/dot-plot-2x.json",
+        "size": 1701,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/dot-plot-3x.json",
+        "size": 2121,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/dot-plot-4x.json",
+        "size": 2541,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/dot-plot-5x.json",
+        "size": 2962,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/dot-plot-6x.json",
+        "size": 3384,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/dot-plot.json",
+        "size": 1272,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/doughnut.json",
+        "size": 950,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/dumbbell.json",
+        "size": 2156,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/filled-radar.json",
+        "size": 1180,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/funnel.json",
+        "size": 1134,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/histogram.json",
+        "size": 2365,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/index.json",
+        "size": 13051,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/line-2x.json",
+        "size": 1614,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/line-3x.json",
+        "size": 1960,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/line-with-high-low-and-markers.json",
+        "size": 2394,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/line-with-high-low.json",
+        "size": 2359,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/line-with-markers-2x.json",
+        "size": 1675,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/line-with-markers-3x.json",
+        "size": 2021,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/line-with-markers.json",
+        "size": 1314,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/line.json",
+        "size": 1252,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/pareto.json",
+        "size": 2721,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/pie.json",
+        "size": 933,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/radar-with-markers.json",
+        "size": 1198,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/radar.json",
+        "size": 1161,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/scatter.json",
+        "size": 1521,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/sparkline-2x.json",
+        "size": 2487,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/sparkline-3x.json",
+        "size": 3178,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/sparkline-4x.json",
+        "size": 3870,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/sparkline-5x.json",
+        "size": 4562,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/sparkline-6x.json",
+        "size": 5254,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/sparkline.json",
+        "size": 1789,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/stacked-area-2x.json",
+        "size": 1667,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/stacked-area-3x.json",
+        "size": 2013,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/stacked-bar-2x.json",
+        "size": 1402,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/stacked-bar-3x.json",
+        "size": 1658,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/stacked-column-2x.json",
+        "size": 1507,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/stacked-column-3x.json",
+        "size": 1793,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/stacked-line-2x.json",
+        "size": 1667,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/stacked-line-3x.json",
+        "size": 2013,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/stacked-line-with-markers-2x.json",
+        "size": 1728,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/stacked-line-with-markers-3x.json",
+        "size": 2074,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/treemap-2x.json",
+        "size": 1594,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/treemap-3x.json",
+        "size": 1919,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/treemap.json",
+        "size": 1165,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/united-kingdom.json",
+        "size": 1106,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/united-states.json",
+        "size": 1328,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/waterfall.json",
+        "size": 1242,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/chart-types/world.json",
+        "size": 1383,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/color-schemes/black-and-white.json",
+        "size": 423,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/color-schemes/bold-red.json",
+        "size": 411,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/color-schemes/boost.json",
+        "size": 405,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/color-schemes/burnt-orange.json",
+        "size": 419,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/color-schemes/cool-horizon.json",
+        "size": 419,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/color-schemes/corporate-blue.json",
+        "size": 423,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/color-schemes/deep-purple.json",
+        "size": 417,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/color-schemes/forest-green.json",
+        "size": 419,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/color-schemes/golden-yellow.json",
+        "size": 421,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/color-schemes/index.json",
+        "size": 1713,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/color-schemes/luxury.json",
+        "size": 407,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/color-schemes/pastel-red.json",
+        "size": 415,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/color-schemes/slate-gray.json",
+        "size": 415,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/color-schemes/steel-blue.json",
+        "size": 415,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/color-schemes/vibes.json",
+        "size": 405,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/angsana-new.json",
+        "size": 339,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/aparajita.json",
+        "size": 345,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/aptos.json",
+        "size": 292,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/arabic-typesetting.json",
+        "size": 379,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/arial.json",
+        "size": 287,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/batang.json",
+        "size": 325,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/bookman.json",
+        "size": 307,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/calibri.json",
+        "size": 297,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/century-schoolbook.json",
+        "size": 338,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/consolas.json",
+        "size": 291,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/constantia.json",
+        "size": 300,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/courier-new.json",
+        "size": 305,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/daunpenh.json",
+        "size": 361,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/david.json",
+        "size": 304,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/dilleniaupc.json",
+        "size": 342,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/fangsong.json",
+        "size": 326,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/garamond.json",
+        "size": 290,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/gautami.json",
+        "size": 370,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/georgia.json",
+        "size": 286,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/gisha.json",
+        "size": 325,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/grandview.json",
+        "size": 303,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/gungsuh.json",
+        "size": 329,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/impact.json",
+        "size": 292,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/index.json",
+        "size": 9292,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/kalinga.json",
+        "size": 359,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/kartika.json",
+        "size": 397,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/khmer-ui.json",
+        "size": 361,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/latha.json",
+        "size": 385,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/lucida-sans.json",
+        "size": 308,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/malgun-gothic.json",
+        "size": 362,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/mangal.json",
+        "size": 404,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/meiryo.json",
+        "size": 341,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/microsoft-jhenghei.json",
+        "size": 375,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/microsoft-yahei.json",
+        "size": 424,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/mingliu.json",
+        "size": 326,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/miriam.json",
+        "size": 315,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/montserrat.json",
+        "size": 305,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/ms-mincho.json",
+        "size": 344,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/nirmala-ui.json",
+        "size": 397,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/noto-naksh-arabic.json",
+        "size": 350,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/noto-nastaliq-urdu.json",
+        "size": 382,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/noto-sans-arabic.json",
+        "size": 390,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/noto-sans-armenian.json",
+        "size": 357,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/noto-sans-bengali.json",
+        "size": 385,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/noto-sans-devangari.json",
+        "size": 388,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/noto-sans-ethiopic.json",
+        "size": 383,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/noto-sans-georgian.json",
+        "size": 388,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/noto-sans-gujarati.json",
+        "size": 377,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/noto-sans-gurmukhi.json",
+        "size": 387,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/noto-sans-hebrew.json",
+        "size": 347,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/noto-sans-jp.json",
+        "size": 335,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/noto-sans-kannada.json",
+        "size": 374,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/noto-sans-khmer.json",
+        "size": 392,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/noto-sans-kr.json",
+        "size": 331,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/noto-sans-malayalam.json",
+        "size": 377,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/noto-sans-mongolian.json",
+        "size": 366,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/noto-sans-oriya.json",
+        "size": 360,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/noto-sans-sc.json",
+        "size": 397,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/noto-sans-tamil.json",
+        "size": 376,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/noto-sans-tc.json",
+        "size": 336,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/noto-sans-telugu.json",
+        "size": 359,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/noto-sans-thai.json",
+        "size": 351,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/noto-sans.json",
+        "size": 373,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/nyala.json",
+        "size": 328,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/open-sans.json",
+        "size": 300,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/pmingliu.json",
+        "size": 336,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/poppins.json",
+        "size": 294,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/pt-serif.json",
+        "size": 300,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/raavi.json",
+        "size": 357,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/raleway.json",
+        "size": 294,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/roboto.json",
+        "size": 288,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/rockwell.json",
+        "size": 288,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/sakkal-majalla.json",
+        "size": 365,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/seaford.json",
+        "size": 301,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/segoe-ui-light.json",
+        "size": 320,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/segoe-ui.json",
+        "size": 307,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/shonar-bangla.json",
+        "size": 369,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/shruti.json",
+        "size": 357,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/simsun.json",
+        "size": 318,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/skeena.json",
+        "size": 304,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/sylfaen.json",
+        "size": 339,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/tahoma.json",
+        "size": 286,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/tenorite.json",
+        "size": 304,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/times-new-roman.json",
+        "size": 322,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/traditional-arabic.json",
+        "size": 384,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/trebuchet-ms.json",
+        "size": 309,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/tunga.json",
+        "size": 366,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/verdana.json",
+        "size": 291,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/vrinda.json",
+        "size": 368,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/font-schemes/yu-gothic.json",
+        "size": 356,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/afrikaans.json",
+        "size": 206,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/albanian.json",
+        "size": 204,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/amharic.json",
+        "size": 214,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/arabic.json",
+        "size": 223,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/armenian.json",
+        "size": 218,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/aymara.json",
+        "size": 200,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/azerbaijani.json",
+        "size": 210,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/bengali.json",
+        "size": 221,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/berber-latin.json",
+        "size": 220,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/bosnian-latin.json",
+        "size": 221,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/bulgarian.json",
+        "size": 209,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/catalan.json",
+        "size": 202,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/cebuano.json",
+        "size": 203,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/chinese-simplified.json",
+        "size": 247,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/chinese-traditional.json",
+        "size": 252,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/chittagonian.json",
+        "size": 225,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/croatian.json",
+        "size": 204,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/czech.json",
+        "size": 198,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/danish.json",
+        "size": 200,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/dutch.json",
+        "size": 198,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/english-au.json",
+        "size": 220,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/english-ca.json",
+        "size": 217,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/english-gb.json",
+        "size": 225,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/english-in.json",
+        "size": 216,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/english-us.json",
+        "size": 224,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/english.json",
+        "size": 202,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/estonian.json",
+        "size": 204,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/filipino.json",
+        "size": 205,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/finnish.json",
+        "size": 202,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/french.json",
+        "size": 200,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/fulfulde.json",
+        "size": 204,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/galician.json",
+        "size": 204,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/georgian.json",
+        "size": 218,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/german.json",
+        "size": 200,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/greek.json",
+        "size": 201,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/gujarati.json",
+        "size": 217,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/hausa.json",
+        "size": 198,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/hebrew.json",
+        "size": 210,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/hindi.json",
+        "size": 212,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/hungarian.json",
+        "size": 206,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/igbo.json",
+        "size": 196,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/index.json",
+        "size": 11099,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/indonesian.json",
+        "size": 208,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/italian.json",
+        "size": 202,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/japanese.json",
+        "size": 211,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/kannada.json",
+        "size": 213,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/kazakh.json",
+        "size": 203,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/khmer.json",
+        "size": 210,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/kinyarwanda.json",
+        "size": 210,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/korean.json",
+        "size": 214,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/kurmanji.json",
+        "size": 205,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/latvian.json",
+        "size": 202,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/lithuanian.json",
+        "size": 208,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/macedonian.json",
+        "size": 211,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/malagasy.json",
+        "size": 204,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/malay.json",
+        "size": 199,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/malayalam.json",
+        "size": 221,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/maori.json",
+        "size": 199,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/marathi.json",
+        "size": 216,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/mongolian.json",
+        "size": 219,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/nepali.json",
+        "size": 214,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/norwegian.json",
+        "size": 206,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/odia.json",
+        "size": 207,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/oromo.json",
+        "size": 198,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/pashto.json",
+        "size": 210,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/persian.json",
+        "size": 226,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/polish.json",
+        "size": 200,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/portuguese.json",
+        "size": 208,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/punjabi-gurmukhi.json",
+        "size": 239,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/punjabi-shahmukhi.json",
+        "size": 241,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/romanian.json",
+        "size": 204,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/russian.json",
+        "size": 205,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/serbian-cyrillic.json",
+        "size": 230,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/serbian-latin.json",
+        "size": 221,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/shona.json",
+        "size": 198,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/slovak.json",
+        "size": 200,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/slovenian.json",
+        "size": 206,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/somali.json",
+        "size": 200,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/spanish.json",
+        "size": 202,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/swahili.json",
+        "size": 202,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/swedish.json",
+        "size": 202,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/tagalog.json",
+        "size": 202,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/tajik.json",
+        "size": 201,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/tamil.json",
+        "size": 207,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/telugu.json",
+        "size": 212,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/thai.json",
+        "size": 210,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/turkish.json",
+        "size": 202,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/ukrainian.json",
+        "size": 209,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/urdu.json",
+        "size": 221,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/uzbek-latin.json",
+        "size": 217,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/vietnamese-quoc-ngu.json",
+        "size": 237,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/xhosa.json",
+        "size": 198,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/yoruba.json",
+        "size": 200,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/languages/zulu.json",
+        "size": 196,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/layouts/blank.json",
+        "size": 127,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/layouts/chart-1x.json",
+        "size": 281,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/layouts/chart-2x.json",
+        "size": 369,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/layouts/chart-3x.json",
+        "size": 438,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/layouts/code-1x.json",
+        "size": 278,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/layouts/extract/canonical.json",
+        "size": 8189,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/layouts/image-1x.json",
+        "size": 283,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/layouts/image-2x.json",
+        "size": 373,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/layouts/image-3x.json",
+        "size": 444,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/layouts/image-bleed.json",
+        "size": 178,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/layouts/index.json",
+        "size": 3110,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/layouts/list-1x.json",
+        "size": 202,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/layouts/list-2x.json",
+        "size": 278,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/layouts/list-3x.json",
+        "size": 312,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/layouts/list-4x.json",
+        "size": 365,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/layouts/list-5x.json",
+        "size": 399,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/layouts/list-6x.json",
+        "size": 433,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/layouts/media-1x.json",
+        "size": 281,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/layouts/number-1x.json",
+        "size": 208,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/layouts/number-2x.json",
+        "size": 286,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/layouts/number-3x.json",
+        "size": 322,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/layouts/number-4x.json",
+        "size": 377,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/layouts/number-5x.json",
+        "size": 413,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/layouts/number-6x.json",
+        "size": 449,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/layouts/quote-1x.json",
+        "size": 205,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/layouts/table-1x.json",
+        "size": 281,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/layouts/text-1x.json",
+        "size": 202,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/layouts/text-2x.json",
+        "size": 278,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/layouts/text-3x.json",
+        "size": 312,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/layouts/timeline-1x.json",
+        "size": 214,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/layouts/title-subtitle.json",
+        "size": 220,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/layouts/title.json",
+        "size": 164,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/narratives/board-meeting.json",
+        "size": 8271,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/narratives/business-narrative.json",
+        "size": 3555,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/narratives/business-review.json",
+        "size": 4737,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/narratives/capacity-planning.json",
+        "size": 3639,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/narratives/challenge-resolution.json",
+        "size": 3139,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/narratives/classic-story.json",
+        "size": 3284,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/narratives/company-intro.json",
+        "size": 3899,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/narratives/conference-talk.json",
+        "size": 2544,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/narratives/early-startup-pitch.json",
+        "size": 4979,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/narratives/educate.json",
+        "size": 4182,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/narratives/employee-review.json",
+        "size": 3404,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/narratives/failure-analysis.json",
+        "size": 4504,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/narratives/focus.json",
+        "size": 5231,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/narratives/golden-circle.json",
+        "size": 2077,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/narratives/index.json",
+        "size": 18279,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/narratives/innovation.json",
+        "size": 3795,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/narratives/justice.json",
+        "size": 4815,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/narratives/marketing-strategy.json",
+        "size": 4738,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/narratives/performance-improvement-plan.json",
+        "size": 3683,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/narratives/performance-review.json",
+        "size": 4711,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/narratives/persuade.json",
+        "size": 4419,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/narratives/persuasive-sales.json",
+        "size": 3669,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/narratives/pitch-deck.json",
+        "size": 5036,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/narratives/problem-solution.json",
+        "size": 2716,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/narratives/product-launch.json",
+        "size": 4196,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/narratives/project-proposal.json",
+        "size": 4407,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/narratives/qbr.json",
+        "size": 3897,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/narratives/rags-to-riches.json",
+        "size": 3285,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/narratives/reveal.json",
+        "size": 3753,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/narratives/scqa.json",
+        "size": 2583,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/narratives/status-update.json",
+        "size": 2678,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/narratives/strategic-advisory.json",
+        "size": 3624,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/narratives/strategic-narrative.json",
+        "size": 3138,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/narratives/survey-analysis.json",
+        "size": 4418,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/narratives/survival-story.json",
+        "size": 4131,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/narratives/transformation-arc.json",
+        "size": 2256,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/narratives/trend-analysis.json",
+        "size": 3216,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/narratives/underdog-victory.json",
+        "size": 3396,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/narratives/venture-pitch.json",
+        "size": 2514,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/narratives/weekly-progress.json",
+        "size": 4099,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/purposes/align.json",
+        "size": 816,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/purposes/decide.json",
+        "size": 823,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/purposes/educate.json",
+        "size": 776,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/purposes/index.json",
+        "size": 2092,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/purposes/inform.json",
+        "size": 827,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/purposes/persuade.json",
+        "size": 786,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/purposes/pitch.json",
+        "size": 828,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/purposes/plan.json",
+        "size": 782,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/purposes/report.json",
+        "size": 817,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/purposes/sell.json",
+        "size": 776,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/social-platforms/bluesky.json",
+        "size": 619,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/social-platforms/facebook.json",
+        "size": 436,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/social-platforms/github.json",
+        "size": 642,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/social-platforms/index.json",
+        "size": 2098,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/social-platforms/instagram.json",
+        "size": 401,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/social-platforms/linkedin.json",
+        "size": 713,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/social-platforms/mastodon.json",
+        "size": 796,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/social-platforms/threads.json",
+        "size": 416,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/social-platforms/tiktok.json",
+        "size": 514,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/social-platforms/x.json",
+        "size": 555,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/social-platforms/youtube.json",
+        "size": 539,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/themes/bold.json",
+        "size": 411,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/themes/classic.json",
+        "size": 425,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/themes/dark.json",
+        "size": 373,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/themes/index.json",
+        "size": 1251,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/themes/minimal.json",
+        "size": 407,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/tones/authoritative.json",
+        "size": 1484,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/tones/casual.json",
+        "size": 1152,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/tones/conversational.json",
+        "size": 1352,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/tones/formal.json",
+        "size": 1248,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/tones/index.json",
+        "size": 1790,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/tones/inspirational.json",
+        "size": 1316,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/tones/persuasive.json",
+        "size": 1380,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/catalogs/tones/technical.json",
+        "size": 1482,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/openapi.yaml",
+        "size": 24164,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/action-plan.html",
+        "size": 1941,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/agenda.html",
+        "size": 1197,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/appendix-index.html",
+        "size": 1679,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/architecture-stack.html",
+        "size": 1657,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/assumptions-dependencies.html",
+        "size": 1978,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/before-after.html",
+        "size": 476,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/benchmark-target-table.html",
+        "size": 1985,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/bullet-list.html",
+        "size": 1029,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/business-model-canvas.html",
+        "size": 2735,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/capability-map.html",
+        "size": 2344,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/case-study.html",
+        "size": 1477,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/chapter-recap.html",
+        "size": 1683,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/circular-lifecycle.html",
+        "size": 1797,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/comparison.html",
+        "size": 1305,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/competitive-landscape.html",
+        "size": 1378,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/customer-journey.html",
+        "size": 2025,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/customer-logos.html",
+        "size": 2223,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/dashboard.html",
+        "size": 1583,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/data-visualization.html",
+        "size": 507,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/decision-tree.html",
+        "size": 1870,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/detailed-data-table.html",
+        "size": 4159,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/ecosystem-map.html",
+        "size": 2027,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/executive-decision.html",
+        "size": 1230,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/executive-summary.html",
+        "size": 1700,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/faq.html",
+        "size": 531,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/feature-comparison-matrix.html",
+        "size": 3036,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/forecast-scenario.html",
+        "size": 998,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/funnel-pyramid.html",
+        "size": 463,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/gantt-project-plan.html",
+        "size": 1913,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/geographic-map.html",
+        "size": 1389,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/heatmap-cohort.html",
+        "size": 2764,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/hub-and-spoke.html",
+        "size": 2332,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/icon-grid.html",
+        "size": 1126,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/image-focus.html",
+        "size": 231,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/index.json",
+        "size": 7875,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/key-takeaway.html",
+        "size": 394,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/kpi-scorecard.html",
+        "size": 1634,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/logic-tree.html",
+        "size": 1532,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/market-size.html",
+        "size": 1101,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/matrix-quadrant.html",
+        "size": 645,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/network-dependency-map.html",
+        "size": 1817,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/one-column-explainer.html",
+        "size": 1264,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/org-chart.html",
+        "size": 2566,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/persona-grid.html",
+        "size": 1771,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/photo-grid.html",
+        "size": 255,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/pricing-table.html",
+        "size": 2172,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/process-flow.html",
+        "size": 1058,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/product-feature.html",
+        "size": 406,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/pros-cons.html",
+        "size": 1847,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/qa-discussion.html",
+        "size": 946,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/quote-highlight.html",
+        "size": 374,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/raci-matrix.html",
+        "size": 4855,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/risk-heatmap.html",
+        "size": 1265,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/roadmap.html",
+        "size": 820,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/screenshot-walkthrough.html",
+        "size": 1809,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/section-divider.html",
+        "size": 256,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/single-message-statement.html",
+        "size": 420,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/stats-metrics.html",
+        "size": 571,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/status-rag.html",
+        "size": 1679,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/swimlane-process.html",
+        "size": 1816,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/swot-analysis.html",
+        "size": 1113,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/team-bio.html",
+        "size": 1528,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/testimonial-grid.html",
+        "size": 1375,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/thank-you-cta.html",
+        "size": 315,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/three-column.html",
+        "size": 858,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/timeline.html",
+        "size": 1190,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/title-slide.html",
+        "size": 280,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/two-column.html",
+        "size": 601,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/venn-overlap.html",
+        "size": 944,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/waterfall-bridge.html",
+        "size": 1069,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/previews/layouts/wheel-radial.html",
+        "size": 2160,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/README.md",
+        "size": 5304,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/reference/engine-defaults.json",
+        "size": 2157,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/schemas/audience.schema.json",
+        "size": 5593,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/schemas/catalog-index.schema.json",
+        "size": 2555,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/schemas/chart-type.schema.json",
+        "size": 15207,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/schemas/color-scheme.schema.json",
+        "size": 6288,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/schemas/font-scheme.schema.json",
+        "size": 5659,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/schemas/language.schema.json",
+        "size": 5422,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/schemas/layout-preview-index.schema.json",
+        "size": 2384,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/schemas/layout.schema.json",
+        "size": 11691,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/schemas/narrative.schema.json",
+        "size": 7497,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/schemas/opf.schema.json",
+        "size": 134486,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/schemas/purpose.schema.json",
+        "size": 3398,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/schemas/social-platform.schema.json",
+        "size": 6757,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/schemas/theme.schema.json",
+        "size": 5806,
+        "mode": 420
+      },
+      {
+        "path": "dist/spec/schemas/tone.schema.json",
+        "size": 5044,
+        "mode": 420
+      },
+      {
+        "path": "dist/types.d.ts",
+        "size": 416,
+        "mode": 420
+      },
+      {
+        "path": "dist/types.js",
+        "size": 1,
+        "mode": 420
+      },
+      {
+        "path": "dist/validator.d.ts",
+        "size": 2637,
+        "mode": 420
+      },
+      {
+        "path": "dist/validator.js",
+        "size": 287,
+        "mode": 420
+      },
+      {
+        "path": "package.json",
+        "size": 3350,
+        "mode": 420
+      }
+    ],
+    "entryCount": 525,
+    "bundled": []
+  },
+  {
+    "id": "@openpresentation/cli@0.9.0",
+    "name": "@openpresentation/cli",
+    "version": "0.9.0",
+    "size": 627877,
+    "unpackedSize": 3550941,
+    "shasum": "41246fec0bd6d0785a9ce5c352e946c7df2f5f72",
+    "integrity": "sha512-YR0zhGe0fpcKp617Aqjz6ZIql0fsNrMVcSW84tEkMBc/9DLxLFAyxJLkExorOrfFYanhvWmhoRG94x3AuMTvpQ==",
+    "filename": "openpresentation-cli-0.9.0.tgz",
+    "files": [
+      {
+        "path": "LICENSE",
+        "size": 1071,
+        "mode": 420
+      },
+      {
+        "path": "README.md",
+        "size": 10041,
+        "mode": 420
+      },
+      {
+        "path": "dist/index.js",
+        "size": 1356741,
+        "mode": 493
+      },
+      {
+        "path": "dist/index.js.map",
+        "size": 2182019,
+        "mode": 420
+      },
+      {
+        "path": "package.json",
+        "size": 1069,
+        "mode": 420
+      }
+    ],
+    "entryCount": 5,
+    "bundled": []
+  },
+  {
+    "id": "@openpresentation/opf-render@0.9.0",
+    "name": "@openpresentation/opf-render",
+    "version": "0.9.0",
+    "size": 43236,
+    "unpackedSize": 150598,
+    "shasum": "62ddfc6a76a77df9e3395eef1edf49c043540789",
+    "integrity": "sha512-uHWABof7cuLmTAglctvcjuV5dRyIa2qmeGdwONIuKCAnNQXjAOQKXido9OcyGtk6xFjzBFtLtvD3sZOwPEJIJA==",
+    "filename": "openpresentation-opf-render-0.9.0.tgz",
+    "files": [
+      {
+        "path": "LICENSE",
+        "size": 1073,
+        "mode": 420
+      },
+      {
+        "path": "README.md",
+        "size": 20870,
+        "mode": 420
+      },
+      {
+        "path": "dist/font-compatibility.js",
+        "size": 4023,
+        "mode": 420
+      },
+      {
+        "path": "dist/font-manifest.js",
+        "size": 11492,
+        "mode": 420
+      },
+      {
+        "path": "dist/fonts-browser.d.ts",
+        "size": 448,
+        "mode": 420
+      },
+      {
+        "path": "dist/fonts-browser.js",
+        "size": 2186,
+        "mode": 420
+      },
+      {
+        "path": "dist/fonts-node.d.ts",
+        "size": 1247,
+        "mode": 420
+      },
+      {
+        "path": "dist/fonts-node.js",
+        "size": 3783,
+        "mode": 420
+      },
+      {
+        "path": "dist/fonts.d.ts",
+        "size": 1949,
+        "mode": 420
+      },
+      {
+        "path": "dist/fonts.js",
+        "size": 10713,
+        "mode": 420
+      },
+      {
+        "path": "dist/index.d.ts",
+        "size": 4061,
+        "mode": 420
+      },
+      {
+        "path": "dist/index.js",
+        "size": 73,
+        "mode": 420
+      },
+      {
+        "path": "dist/raster-images.js",
+        "size": 4148,
+        "mode": 420
+      },
+      {
+        "path": "dist/raster.js",
+        "size": 5907,
+        "mode": 420
+      },
+      {
+        "path": "dist/svg.d.ts",
+        "size": 4003,
+        "mode": 420
+      },
+      {
+        "path": "dist/svg.js",
+        "size": 69345,
+        "mode": 420
+      },
+      {
+        "path": "package.json",
+        "size": 5277,
+        "mode": 420
+      }
+    ],
+    "entryCount": 17,
+    "bundled": []
+  },
+  {
+    "id": "@openpresentation/opf-pptx@0.9.1",
+    "name": "@openpresentation/opf-pptx",
+    "version": "0.9.1",
+    "size": 219620,
+    "unpackedSize": 781305,
+    "shasum": "32ec7602fe08dd094ed20fb753fed763d1221406",
+    "integrity": "sha512-krzDAKjDByP2zsoR4VeyyIwU7uhcVbxpeBYEIw7vlkoRWWiFq170rhQzQZx5lbMD7u2magYEkdUt3rUgByCKjw==",
+    "filename": "openpresentation-opf-pptx-0.9.1.tgz",
+    "files": [
+      {
+        "path": "DEPENDENCY-NOTES.md",
+        "size": 5670,
+        "mode": 420
+      },
+      {
+        "path": "LICENSE",
+        "size": 1073,
+        "mode": 420
+      },
+      {
+        "path": "README.md",
+        "size": 34552,
+        "mode": 420
+      },
+      {
+        "path": "dist/background-import.js",
+        "size": 5399,
+        "mode": 420
+      },
+      {
+        "path": "dist/background.js",
+        "size": 8676,
+        "mode": 420
+      },
+      {
+        "path": "dist/card-provenance.js",
+        "size": 3588,
+        "mode": 420
+      },
+      {
+        "path": "dist/chart-workbook.js",
+        "size": 6355,
+        "mode": 420
+      },
+      {
+        "path": "dist/code-provenance.js",
+        "size": 11748,
+        "mode": 420
+      },
+      {
+        "path": "dist/color-ref.js",
+        "size": 3308,
+        "mode": 420
+      },
+      {
+        "path": "dist/furniture-provenance.js",
+        "size": 14180,
+        "mode": 420
+      },
+      {
+        "path": "dist/heading-provenance.js",
+        "size": 3396,
+        "mode": 420
+      },
+      {
+        "path": "dist/image-fallback-browser.js",
+        "size": 1613,
+        "mode": 420
+      },
+      {
+        "path": "dist/image-fallback-node.js",
+        "size": 478,
+        "mode": 420
+      },
+      {
+        "path": "dist/image-geometry.js",
+        "size": 6202,
+        "mode": 420
+      },
+      {
+        "path": "dist/image-import.js",
+        "size": 5776,
+        "mode": 420
+      },
+      {
+        "path": "dist/index.d.ts",
+        "size": 2503,
+        "mode": 420
+      },
+      {
+        "path": "dist/index.js",
+        "size": 99017,
+        "mode": 420
+      },
+      {
+        "path": "dist/metric-provenance.js",
+        "size": 7114,
+        "mode": 420
+      },
+      {
+        "path": "dist/table-border-import.js",
+        "size": 3629,
+        "mode": 420
+      },
+      {
+        "path": "dist/table-cell-import.js",
+        "size": 9666,
+        "mode": 420
+      },
+      {
+        "path": "dist/table-import.js",
+        "size": 12704,
+        "mode": 420
+      },
+      {
+        "path": "dist/text-provenance.js",
+        "size": 3960,
+        "mode": 420
+      },
+      {
+        "path": "dist/timeline-provenance.js",
+        "size": 6884,
+        "mode": 420
+      },
+      {
+        "path": "package.json",
+        "size": 5075,
+        "mode": 420
+      },
+      {
+        "path": "vendor/pptxgenjs/LICENSE",
+        "size": 1081,
+        "mode": 420
+      },
+      {
+        "path": "vendor/pptxgenjs/package.json",
+        "size": 108,
+        "mode": 420
+      },
+      {
+        "path": "vendor/pptxgenjs/pptxgen.es.js",
+        "size": 516931,
+        "mode": 420
+      },
+      {
+        "path": "vendor/pptxgenjs/UPSTREAM.json",
+        "size": 619,
+        "mode": 420
+      }
+    ],
+    "entryCount": 28,
+    "bundled": []
+  },
+  {
+    "id": "@openpresentation/opf-editor@0.8.0",
+    "name": "@openpresentation/opf-editor",
+    "version": "0.8.0",
+    "size": 73735,
+    "unpackedSize": 259836,
+    "shasum": "6093cc2bfb438488886c23c20e141c377d3071fd",
+    "integrity": "sha512-cSx6DkfK4N95Zk3lvCBxhQePWIIgBDvON4hcKLvELulpbKiYnvmoAb07LJE4pbXGE0npUdmU/r25TShdtOcR4A==",
+    "filename": "openpresentation-opf-editor-0.8.0.tgz",
+    "files": [
+      {
+        "path": "LICENSE",
+        "size": 1073,
+        "mode": 420
+      },
+      {
+        "path": "README.md",
+        "size": 23761,
+        "mode": 420
+      },
+      {
+        "path": "dist/block-controls.js",
+        "size": 16142,
+        "mode": 420
+      },
+      {
+        "path": "dist/blocks.d.ts",
+        "size": 1177,
+        "mode": 420
+      },
+      {
+        "path": "dist/blocks.js",
+        "size": 9215,
+        "mode": 420
+      },
+      {
+        "path": "dist/canvas-fields.js",
+        "size": 2113,
+        "mode": 420
+      },
+      {
+        "path": "dist/canvas.d.ts",
+        "size": 2319,
+        "mode": 420
+      },
+      {
+        "path": "dist/canvas.js",
+        "size": 31755,
+        "mode": 420
+      },
+      {
+        "path": "dist/color-authoring.js",
+        "size": 818,
+        "mode": 420
+      },
+      {
+        "path": "dist/data.d.ts",
+        "size": 200,
+        "mode": 420
+      },
+      {
+        "path": "dist/data.js",
+        "size": 100,
+        "mode": 420
+      },
+      {
+        "path": "dist/galleries.d.ts",
+        "size": 935,
+        "mode": 420
+      },
+      {
+        "path": "dist/galleries.js",
+        "size": 8150,
+        "mode": 420
+      },
+      {
+        "path": "dist/index.d.ts",
+        "size": 6663,
+        "mode": 420
+      },
+      {
+        "path": "dist/index.js",
+        "size": 28412,
+        "mode": 420
+      },
+      {
+        "path": "dist/json-editor.d.ts",
+        "size": 1634,
+        "mode": 420
+      },
+      {
+        "path": "dist/json-editor.js",
+        "size": 13026,
+        "mode": 420
+      },
+      {
+        "path": "dist/json-menu.js",
+        "size": 8980,
+        "mode": 420
+      },
+      {
+        "path": "dist/json-options.d.ts",
+        "size": 1898,
+        "mode": 420
+      },
+      {
+        "path": "dist/json-options.js",
+        "size": 11799,
+        "mode": 420
+      },
+      {
+        "path": "dist/json-source.js",
+        "size": 2501,
+        "mode": 420
+      },
+      {
+        "path": "dist/layout-handles.js",
+        "size": 8054,
+        "mode": 420
+      },
+      {
+        "path": "dist/layout-placeholders.js",
+        "size": 2901,
+        "mode": 420
+      },
+      {
+        "path": "dist/layout.d.ts",
+        "size": 655,
+        "mode": 420
+      },
+      {
+        "path": "dist/layout.js",
+        "size": 2663,
+        "mode": 420
+      },
+      {
+        "path": "dist/presentation-ids.js",
+        "size": 3030,
+        "mode": 420
+      },
+      {
+        "path": "dist/react.d.ts",
+        "size": 913,
+        "mode": 420
+      },
+      {
+        "path": "dist/react.js",
+        "size": 2904,
+        "mode": 420
+      },
+      {
+        "path": "dist/rich-text-input.js",
+        "size": 8963,
+        "mode": 420
+      },
+      {
+        "path": "dist/rich-text-toolbar.js",
+        "size": 9355,
+        "mode": 420
+      },
+      {
+        "path": "dist/rich-text.d.ts",
+        "size": 1251,
+        "mode": 420
+      },
+      {
+        "path": "dist/rich-text.js",
+        "size": 7081,
+        "mode": 420
+      },
+      {
+        "path": "dist/schema-inspector.d.ts",
+        "size": 520,
+        "mode": 420
+      },
+      {
+        "path": "dist/schema-inspector.js",
+        "size": 10904,
+        "mode": 420
+      },
+      {
+        "path": "dist/schema.d.ts",
+        "size": 861,
+        "mode": 420
+      },
+      {
+        "path": "dist/schema.js",
+        "size": 6416,
+        "mode": 420
+      },
+      {
+        "path": "dist/svelte.d.ts",
+        "size": 841,
+        "mode": 420
+      },
+      {
+        "path": "dist/svelte.js",
+        "size": 3044,
+        "mode": 420
+      },
+      {
+        "path": "dist/text-input.js",
+        "size": 1646,
+        "mode": 420
+      },
+      {
+        "path": "dist/transfer.d.ts",
+        "size": 810,
+        "mode": 420
+      },
+      {
+        "path": "dist/transfer.js",
+        "size": 9100,
+        "mode": 420
+      },
+      {
+        "path": "package.json",
+        "size": 5253,
+        "mode": 420
+      }
+    ],
+    "entryCount": 42,
+    "bundled": []
+  }
+]

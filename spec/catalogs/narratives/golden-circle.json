@@ -44,7 +44,7 @@
       "id": "invitation",
       "name": "Invitation",
       "description": "Close by inviting the audience to share the belief — to buy, build, join, or evangelize. The strongest invitations don't argue; they assume alignment and offer a way in.",
-      "layoutHint": "title-left"
+      "layoutHint": "title"
     }
   ]
 }

@@ -1,8 +1,9 @@
 # Rendering and conversion APIs
 
-## Prepared font inputs (unpublished source)
+## Prepared font inputs
 
-The coordinated renderer source adds `prepareNodeFonts` in `/fonts-node`:
+Published renderer 0.8.0 and later provides `prepareNodeFonts` in `/fonts-node`
+(current coordinated set: core 0.11.0, renderer 0.9.0, PPTX 0.9.1, editor 0.8.0):
 
 ```js
 const {registry, options} = await prepareNodeFonts({
@@ -15,7 +16,7 @@ const pptx = await toPptx(presentation, options);
 console.log(registry.substitutions);
 ```
 
-Import the named functions from the same public modules shown below. This helper verifies pinned font/notice hashes and supplies one consistent measurement/SVG/raster option set. `pack: 'base'` suits authored Roboto decks; Office visual substitutions are explicit. It leaves source content, font choices and native font installation unchanged. Renderer 0.7.0 does not include this helper; inspect the installed exports and use the existing loader recipe for published packages. Native PPTX embedding and pixel equivalence are separate gates.
+Import the named functions from the same public modules shown below. This helper verifies pinned font/notice hashes and supplies one consistent measurement/SVG/raster option set. `pack: 'base'` suits authored Roboto decks; Office visual substitutions are explicit. It leaves source content, font choices and native font installation unchanged. Renderer 0.7.0 lacks this helper; inspect installed exports before following a recipe for an older package. Native PPTX embedding and pixel equivalence are separate gates.
 
 ## Node export
 
@@ -41,7 +42,7 @@ const pptx = await toPptx(document, options);
 
 The current Node `svgToPdf` accepts one SVG or an array, creating one PDF page per slide. The Node font loader requires its installed font resources. If unavailable, supply explicitly licensed font files through the supported registry API rather than claiming the starter pack was loaded. Pass those same font files to PNG/PDF conversion; embedding fonts in SVG does not by itself configure the Node rasterizer.
 
-`loadOfficeFontRegistry()` defaults to metric substitutions. Opt into `{substitutionPolicy:'visual'}` when approximate alternatives such as Carlito for Aptos are acceptable, and inspect `fonts.substitutions`. Synchronous SVG calls without `textMeasurement` estimate widths; loading a named font only at painting time can create gaps or overlaps between rich runs. Supply the registry to both layout and drawing. Plain core fitting still normalizes whitespace; code has a separate source-preserving layout contract.
+`loadOfficeFontRegistry()` defaults to metric substitutions. Opt into `{substitutionPolicy:'visual'}` when approximate alternatives such as Carlito for Aptos are acceptable, and inspect `fonts.substitutions`. Synchronous SVG calls without `textMeasurement` estimate widths; loading a named font only at painting time can create gaps or overlaps between rich runs. Supply the registry to both layout and drawing. Current scalar and code layout preserve authored source whitespace through separate source-mapping contracts; general native rich-text round-trip remains a separate limit.
 
 A raster snapshot embedded into PPTX is not equivalent to editable native shapes. The OPF PPTX converter writes supported native content, but visual and import coverage are incomplete. Verify what the requested deck uses.
 

@@ -1,0 +1,1 @@
+{"html_url":"https://github.com/OpenPresentation/opf-editor/commit/476191e28e6f5f5ec32146aeb416f5286b4d0570","message":"feat(editor): pin ColorRef train and release 0.8.0\n\nPin opf ^0.11.0, render ^0.9.0, and pptx ^0.9.0 (lockfile 0.9.1). Payload-id and ColorRef authoring already on main via #26.","sha":"476191e28e6f5f5ec32146aeb416f5286b4d0570"}

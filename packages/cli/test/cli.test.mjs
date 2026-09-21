@@ -110,3 +110,33 @@ describe("opf schemas", () => {
     }
   });
 });
+
+describe("opf bundle", () => {
+  const BUNDLE_DECK = path.resolve(__dirname, "fixtures/bundle-deck.json");
+
+  test("inlines referenced catalog records and reports what was added", () => {
+    const result = runCli(["bundle", BUNDLE_DECK, "-"]);
+    assert.equal(result.status, 0, `stderr: ${result.stderr}`);
+    const document = JSON.parse(result.stdout);
+    const report = JSON.parse(result.stderr);
+    assert.equal(report.valid, true);
+    for (const kind of ["narratives", "tones", "themes", "layouts", "chartTypes", "colorSchemes", "fontSchemes"]) {
+      assert.ok(report.bundle.added[kind]?.length, `expected ${kind} in bundle report: ${JSON.stringify(report.bundle.added)}`);
+      assert.ok(document.catalogs[kind].records.length > 0, `expected inlined ${kind} records`);
+    }
+  });
+
+  test("bundling a deck without catalog references is a no-op", () => {
+    const result = runCli(["bundle", VALID_DECK, "-"]);
+    assert.equal(result.status, 0, `stderr: ${result.stderr}`);
+    const document = JSON.parse(result.stdout);
+    const report = JSON.parse(result.stderr);
+    assert.deepEqual(report.bundle.added, {});
+    assert.equal(document.catalogs, undefined);
+  });
+
+  test("rejects an invalid document before bundling", () => {
+    const result = runCli(["bundle", INVALID_DECK, "-"]);
+    assert.equal(result.status, 1);
+  });
+});

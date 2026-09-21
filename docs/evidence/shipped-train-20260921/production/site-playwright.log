@@ -1,0 +1,20 @@
+
+Running 13 tests using 1 worker
+
+(node:563) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/e2e/hero-editor.spec.ts:4:5 › homepage JSON edits update the current slide, preserve typing and copy the draft (3.3s)
+  ✓   2 tests/e2e/hero-editor.spec.ts:38:5 › invalid drafts keep the last valid preview and recover without losing input (1.1s)
+  ✓   3 tests/e2e/hero-editor.spec.ts:58:5 › example drafts survive switching and the editor remains usable on mobile (3.8s)
+  ✓   4 tests/e2e/json-options.spec.ts:9:5 › number layouts add blank metrics, preserve the subtitle and undo as one change (1.4s)
+  ✓   5 tests/e2e/json-options.spec.ts:39:5 › clicking the homepage layout field offers relevant choices, adds missing fields and supports undo (1.6s)
+  ✓   6 tests/e2e/json-options.spec.ts:76:5 › playground uses document catalogs before built-ins and preserves inline reference overrides offline (1.8s)
+  ✓   7 tests/e2e/json-options.spec.ts:119:5 › picker ignores prose and invalid JSON, cancels without changes and fits a mobile viewport (954ms)
+  ✓   8 tests/e2e/json-options.spec.ts:143:5 › layout selection keeps the current homepage slide and the new preview remains editable (1.2s)
+  ✓   9 tests/e2e/json-options.spec.ts:159:5 › layout groups remain keyboard navigable with catalog explanations on mobile (1.7s)
+  ✓  10 tests/e2e/preview-editing.spec.ts:4:5 › homepage preview edits preserve source formatting, typing, bullets and cancellation (4.1s)
+  ✓  11 tests/e2e/preview-editing.spec.ts:32:5 › playground canvas edits synchronize live, cancel exactly, and commit as one undo step offline (3.1s)
+  ✓  12 tests/e2e/preview-editing.spec.ts:66:5 › playground JSON edits update the selected slide, retain invalid drafts and recover on mobile (2.4s)
+  ✓  13 tests/e2e/preview-editing.spec.ts:90:5 › playground renders full-feature examples and edits a native table cell without changing metadata (2.4s)
+
+  13 passed (30.3s)

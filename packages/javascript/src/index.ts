@@ -93,6 +93,9 @@ export type { TextStyle, FontFamilies, TextMeasurement, MeasureTextWidth, Compos
 export { paginatePresentation, paginateSlide, OPFPaginationError } from './pagination.js';
 export type { PresentationPaginationOptions, PresentationPaginationResult, PaginationOptions, PaginationResult, PaginatedPage, PaginationMapping } from './pagination.js';
 
+export { bundlePresentation } from './bundle.js';
+export type { BundleReport, BundleResult } from './bundle.js';
+
 export { parseTabularData, createDataContent, OPFDataImportError } from './data.js';
 export type { DataCell, TabularData, DataImportOptions, DataContentOptions } from './data.js';
 
@@ -101,6 +104,13 @@ export type { RichTextRun, RichTextFragment, RichTextLine, RichTextFit, RichText
 
 export {fitList} from './composition.js';
 export type {ListText,ListValue,ListEntryLayout,ListFit} from './composition.js';
-export {colorContrast, textColorForFill, chartColorForFill} from './color.js';
+export {
+  chartColorForFill,
+  colorContrast,
+  normalizeHexColor,
+  resolveColorRef,
+  textColorForFill,
+} from './color.js';
+export type { ResolveColorRefOptions, ResolveColorRefRoles } from './color.js';
 export {measureTextOutline,placeTextLines} from './composition.js';
 export type {TextLineInk,TextPlacementLine,TextPlacement} from './composition.js';

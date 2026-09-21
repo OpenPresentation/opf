@@ -1,0 +1,34 @@
+workflow.mjs: 0   "pptxBytes": 49862 }
+core-furniture-composition.test.mjs: 0 ℹ todo 0 ℹ duration_ms 194.2115
+core-code-layout.test.mjs: 0 ℹ todo 0 ℹ duration_ms 73.405833
+core-code-composition.test.mjs: 0 ℹ todo 0 ℹ duration_ms 382.420334
+pptx-shared-furniture.mjs: 0 16 furniture exports match accepted editable text boxes, fonts, source lines and images; explicit disabling and strict overflow controls pass.
+pptx-furniture-provenance.mjs: 1  Node.js v24.21.0
+pptx-shared-code.mjs: 0 Shared code PPTX: 8 decks, 37 accepted native lines, 8 tab stops, six whitespace imports, strict failures, 132 XML-boundary rejections and valid character boundaries verified.
+pptx-code-provenance.mjs: 0 Code provenance: exact source/metadata, native edits, ordering, empty/Unicode values, five damaged groups and edited generated label verified.
+pptx-heading-provenance.mjs: 0 Heading provenance: native edits, shape renaming/reordering and 8 damaged/ambiguous group fallbacks preserve visible words. Heading role isolation: 16 wide/portrait quote imports, explicit native placeholders and ordinary untagged title/subtitle inference pass.
+pptx-metric-provenance.mjs: 0 Metric provenance: numeric/literal edits, CRLF, role edits, renamed/reordered shapes, eight damaged or ambiguous groups and cross-code identity guards pass.
+pptx-color-ref-export.mjs: 0 ColorRef export passed: scheme slots, roles, variables, styled cells, and invalid run soft-degrade.
+renderer-color-references.mjs: 0 Color reference renderer passed: scheme slots, roles, variables, hex, and invalid run fallback.
+renderer-furniture.mjs: 0 Furniture renderer passed: shared readable fields, combined image/text, generated metadata, fit images, local disabling and unresolved-content rejection.
+renderer-shared-code.mjs: 0 Shared code SVG: 10 accepted layouts, source/whitespace/trace preservation, no extra measurement, strict/tiny-cell rejection, 132 XML-boundary rejections and valid character boundaries.
+probe-furniture-reimport.mjs: 0   "failedChecks": [] }
+cli-version: 0
+cli-validate: 0
+cli-lint: 0
+cli-paginate: 0
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: One or more acceptance harnesses failed; see logs.
+    at file:///private/tmp/opf-registry-20260921/run-node.mjs:23:8 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

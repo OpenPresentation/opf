@@ -24,7 +24,7 @@
       "id": "hook",
       "name": "Hook",
       "description": "Open with a striking question, statistic, customer quote, or moment that earns the audience's attention. The goal is to make them want to hear what comes next, not to convey information.",
-      "layoutHint": "title-center"
+      "layoutHint": "title"
     },
     {
       "id": "problem",
@@ -55,7 +55,7 @@
       "id": "ask",
       "name": "The Ask",
       "description": "State a clear, specific call to action. What do you want the audience to do, decide, or commit to next? Make the smallest credible ask that moves things forward, and make it unambiguous.",
-      "layoutHint": "title-left"
+      "layoutHint": "title"
     }
   ]
 }

@@ -1,0 +1,29 @@
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index a8bce9a..f801a03 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -2,6 +2,11 @@
+ 
+ ## Unreleased
+ 
++## 0.8.1
++
++- Require core 0.10.1 so rendering uses the corrected metric, quote, timeline and text-bullet contracts. Public rendering APIs are unchanged.
++- Include shared header/footer furniture from accepted layout geometry (`furniture-flow-v2`). Native PowerPoint raster fidelity, the 0.1px Linux width residual and prepared shaping remain deferred.
++
+ ## 0.8.0
+ 
+ - Require core 0.10.0 and render accepted metric, timeline, content-card and vector-aware text geometry. Preserve selected readability floors and scalar source whitespace; keep estimated rich text flowing with native SVG advances.
+diff --git a/README.md b/README.md
+index b1dcb13..437fcd6 100644
+--- a/README.md
++++ b/README.md
+@@ -4,7 +4,7 @@ Version 0.8.1 requires core 0.10.1, including metric, quote and timeline layout
+ 
+ Unfinished prepared shaping work is preserved in the [September 15 roadmap](docs/roadmap-shaping-20260915.md); it is not part of the published runtime.
+ 
+-Version 0.8.0 and this checkout require Node 24 (`24.x`). Use `.nvmrc` for local development. Earlier published versions retain their original engine declarations. Browser entrypoints remain browser-safe; native application compatibility is verified separately.
++Version 0.8.1 and this checkout require Node 24 (`24.x`). Use `.nvmrc` for local development. Earlier published versions retain their original engine declarations. Browser entrypoints remain browser-safe; native application compatibility is verified separately.
+ 
+ Version 0.8.0 adds optional font-registry vector outlines and shared heading/scalar/rich line placement. Pass identical `textMeasurement` and `textRasterPadding` options to preview, pagination and export; padding defaults to one scaled reference pixel. SVG consumes accepted origins without remeasuring. See the [source contract and limits](https://github.com/OpenPresentation/opf/blob/f94125a1ff95bf0974a055fe1c081d348dad54f2/docs/plans/text-placement.md). Native raster certification remains separate.
+ 

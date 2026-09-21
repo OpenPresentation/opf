@@ -23,7 +23,7 @@
       "id": "objectives",
       "name": "Objectives",
       "description": "Open with what this review is for and what decisions you want out of it. Frame the scope and the hour ahead, so the audience knows what they're being asked to weigh in on.",
-      "layoutHint": "title-center",
+      "layoutHint": "title",
       "instructions": "Set the expectations",
       "slideType": "text"
     },
@@ -53,7 +53,7 @@
       "description": "Name the misses and headwinds honestly. What didn't work, what's still hard, what got harder. Pretending things are fine costs more credibility than acknowledging they aren't.",
       "instructions": "Address difficulties",
       "slideType": "text",
-      "layoutHint": "text-1x-left"
+      "layoutHint": "text-1x"
     },
     {
       "id": "insights",
@@ -79,7 +79,7 @@
       "id": "asks",
       "name": "Asks",
       "description": "Specific, named requests of the audience. Decisions needed, resources required, escalations to unblock. End with clarity on what happens next and who owns it.",
-      "layoutHint": "title-left"
+      "layoutHint": "title"
     }
   ]
 }

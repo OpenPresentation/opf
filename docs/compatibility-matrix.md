@@ -7,7 +7,8 @@ shipped.
 
 Verify live versions with `npm view <package> version` before treating a
 dated handoff as current. The pin set below matches `release-plan.json` at the
-time this file was updated.
+time this file was updated (21 September 2026). Immutable tag commits pin
+the verification harnesses; see [current evidence](evidence/shipped-train-20260921/README.md).
 
 ## Runtime
 
@@ -22,21 +23,20 @@ time this file was updated.
 
 | Package | Version | Depends on |
 | --- | --- | --- |
-| `@openpresentation/opf` | 0.10.1 | — |
-| `@openpresentation/cli` | 0.8.1 | Bundles core 0.10.1; registry metadata has no runtime `dependencies` |
-| `@openpresentation/opf-render` | 0.8.1 | `@openpresentation/opf@^0.10.1` |
-| `@openpresentation/opf-editor` | 0.7.1 | `@openpresentation/opf@^0.10.1`; peer `@openpresentation/opf-render@^0.8.1` |
-| `@openpresentation/opf-pptx` | 0.8.1 | `@openpresentation/opf@^0.10.1`; peer `@openpresentation/opf-render@^0.8.1` |
+| `@openpresentation/opf` | 0.11.0 | — |
+| `@openpresentation/cli` | 0.9.0 | Bundles core 0.11.0; registry metadata has no runtime `dependencies` |
+| `@openpresentation/opf-render` | 0.9.0 | `@openpresentation/opf@^0.11.0` |
+| `@openpresentation/opf-editor` | 0.8.0 | `@openpresentation/opf@^0.11.0`; optional peer `@openpresentation/opf-render@^0.9.0` |
+| `@openpresentation/opf-pptx` | 0.9.1 | `@openpresentation/opf@^0.11.0`; optional peer `@openpresentation/opf-render@^0.9.0` |
 
-Install that whole set together. Mixing an older renderer or editor with core
-0.10.1 is unsupported.
+Install the complete pinned set. A caret range starting at 0.10.1 does not
+include 0.11.0; old consumers can install a second core and do not establish
+ColorRef preview/export support. PPTX 0.9.1 corrects its renderer peer to 0.9.x.
 
-Shared header/footer geometry (`furniture-flow-v2`) shipped in this set (core
-composition plus renderer 0.8.x / editor 0.7.x / PPTX 0.8.x consumers). It is
-not a pending unpublished increment. PPTX 0.8.1 writes furniture as tagged
-slide shapes (`OPF_FURNITURE_V1`), not native Office Header/Footer objects
-(`p:hf` / notes master). Native Header/Footer compilation is
-[issue 87](https://github.com/OpenPresentation/opf/issues/87) only.
+Shared header/footer geometry (`furniture-flow-v2`) is published. PPTX exports
+editable slide shapes tagged `OPF_FURNITURE_V1` with provenance for controlled
+reimport. These are not native Office Header/Footer objects (`p:hf` / notes
+master). Native Header/Footer work remains [issue 87](https://github.com/OpenPresentation/opf/issues/87).
 
 ## Supported in this set
 
@@ -45,6 +45,8 @@ slide shapes (`OPF_FURNITURE_V1`), not native Office Header/Footer objects
 | JSON authoring | `*.opf.json` plus CLI `opf create` | Local files only |
 | Bundled examples catalog | `@openpresentation/opf/examples` | **126** decks; the quickstart JSON is a docs fixture, not a 127th catalog entry |
 | Validate | `validatePresentation` / `opf validate` | Schema and semantic checks |
+| Color references | `ColorRef`, `variables`, `resolveColorRef` | Core schema/resolution, renderer preview and PPTX resolved colors are shipped. Native `schemeClr`/theme writing and editor canvas named-color fidelity remain follow-ups. |
+| Offline catalog bundle | `bundlePresentation` / `opf bundle` | Inlines resolved catalog records; remote media/data and custom catalog sources remain explicit host concerns. |
 | Lint | `lintSource` / `opf lint` | Read-only; no network catalog fetch |
 | Offline fonts | `prepareNodeFonts` (`/fonts-node`) | Bundled Roboto pack; hashed files |
 | Composition | `composeSlide` | Includes shared headers/footers |
@@ -58,22 +60,26 @@ slide shapes (`OPF_FURNITURE_V1`), not native Office Header/Footer objects
 | Agent skills | `opf skills install` | Offline after the CLI is installed |
 | Browser canvas | `@openpresentation/opf-editor/canvas` | Host must supply font bytes |
 
-## Public sites (production, 2026-09-17)
+## Public sites
 
-These issue88 features are **live on canonical custom domains** (not Vercel
-preview hosts). GitHub [issue 88](https://github.com/OpenPresentation/opf/issues/88)
-remains **open** because its full checklist is not closed (homepage `/`
-baseline re-verify, docs/stale API audit, overlay vs stacked-SVG hit testing).
+The owner verified the 17 September production release on the canonical
+sites with this package train. Feature implementation and package adoption
+are distinct from completing every acceptance item in
+[issue 88](https://github.com/OpenPresentation/opf/issues/88). Fresh checks pass the homepage/playground baseline and gallery config handoff.
+Inspector later-slide editing, raw JSON formatting on canvas commit, stale
+public agent guidance and complete Author choice/apply/undo browser acceptance
+remain open. See [production evidence](evidence/shipped-train-20260921/production/REPORT.md).
+The latest
+[handoff](handoff-2026-09-21.md) records exact source commits and outstanding work.
 
-| Surface | Production | Live feature | Squash SHA |
-| --- | --- | --- | --- |
-| pptx.dev Inspector / Author | https://www.pptx.dev/inspector (`/playground` **308** → `/inspector`); https://www.pptx.dev/author | Overlay + preview-to-JSON; last-valid preview; Author json-options | `17de6da` ([pptx-dev#42](https://github.com/Data-Advantage/pptx-dev/pull/42); Vercel `dpl_6QHXPJ5QLTYXHNqtPoByqxHxbqHx`) |
-| pptx.gallery | https://www.pptx.gallery/layouts and `/layouts/title-slide` | Playground + Editor actions outside card `<Link>`; **0** nested anchors | `c7d3754` ([pptx-gallery#32](https://github.com/Data-Advantage/pptx-gallery/pull/32); Vercel `dpl_2SyhP4oX23ZBjsnVec7WKKaSF8xU`) |
-| openpresentation.org playground | https://www.openpresentation.org/playground (apex **308** → `www`) | **Header & footer** example pill | `ea0d032` ([openpresentation-site#39](https://github.com/Data-Advantage/openpresentation-site/pull/39); Vercel `dpl_GqqrJyxmwT5JCeQY3m9Tw2SDRN5R`) |
+| Surface | Shipped feature | Source commit |
+| --- | --- | --- |
+| [openpresentation.org](https://www.openpresentation.org) `/` and `/playground` | JSON/preview workflow, contextual choices, Header & footer example | `1e28978cb27899c3708e25b9d4baf2f2eb83d597` |
+| [pptx.dev](https://www.pptx.dev) `/inspector` and `/author` | Inspector preview-to-JSON overlay and last-valid preview; Author contextual json-options | `761885b98092657fbbd05ffa529316d8b635539a` |
+| [pptx.gallery](https://www.pptx.gallery) `/layouts` and detail pages | Playground and Editor actions | `7e50114ef4ce4fcac7843f9ff11d83d9bd7c37ee` |
 
-Do **not** describe open geometry drafts or the homepage-renderer branch as
-shipped ([opf#94](https://github.com/OpenPresentation/opf/pull/94) and siblings;
-[openpresentation-site#40](https://github.com/Data-Advantage/openpresentation-site/pull/40)).
+The five coordinated geometry drafts (core94, renderer27, editor25, PPTX42,
+site40) remain unmerged. In particular, site40 is not independently shipped.
 
 ## Explicitly not shipped
 
@@ -81,13 +87,13 @@ shipped ([opf#94](https://github.com/OpenPresentation/opf/pull/94) and siblings;
 | --- | --- | --- |
 | Linux vs Chromium native-width residual at the 0.1px gate | [opf-render#24](https://github.com/OpenPresentation/opf-render/issues/24) | Rounding that fixes Linux but breaks macOS is rejected |
 | Native PowerPoint open/edit/save/reopen, provenance, tabs, notes-master, font embedding, real Office Header/Footer objects (`p:hf`) | [opf#87](https://github.com/OpenPresentation/opf/issues/87) | Self-import and `toPptx` tagged-shape furniture are not Office acceptance |
-| Remaining issue88 checklist (GitHub issue still open) | [opf#88](https://github.com/OpenPresentation/opf/issues/88) | The three production features above are live; do not treat the issue as closed |
+| Remaining issue88 acceptance checklist | [opf#88](https://github.com/OpenPresentation/opf/issues/88) | The three production features above are live; do not treat the issue as closed |
 | HarfBuzz / prepared-glyph shaping | Archive branches `codex/archive-shaping-20260915` | Prototypes are preserved, not in npm |
 | Selectable vector PDF | [pdf plan](plans/pdf-export.md) | Follows font reliability |
 | General SVG diagrams / Mermaid | [diagrams plan](plans/diagrams-svg.md) | Embedded SVG ≠ native editable primitives |
 | Full visual editor / IME / bidi / repair loop | [developer adoption](plans/developer-adoption-20260915.md) | Schema support ≠ WYSIWYG coverage |
 
-CLI 0.8.1 does not render or export PPTX. Browser `svgToPng` / `svgToPdf` are
+CLI 0.9.0 does not render or export PPTX. Browser `svgToPng` / `svgToPdf` are
 not available; those are Node APIs.
 
 ## Predecessor notes
