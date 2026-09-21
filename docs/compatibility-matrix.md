@@ -57,6 +57,13 @@ Mixed-size table fidelity, physical glyph-font identity, fallback/synthesis and 
 open; embedding was disabled for this control. The Windows supervisor retains sole
 Office control. This documentation task reads evidence and makes no Office calls.
 
+The [read-only mixed-table observation](evidence/windows-native-mixed-table-20260921/README.md)
+retains all 245 characters, one literal tab and five authored runs, with outer
+geometry within 0.02pt and confirmed owned close/font cleanup. Native soft-line
+boundaries are 92/194 versus the estimated preview's 78/172, and native default
+tab spacing is 72pt. These finite content/style results do not pass table
+edit/save/reopen, browser/native raster agreement or physical glyph identity.
+
 ## Supported in this set
 
 | Capability | How | Notes |

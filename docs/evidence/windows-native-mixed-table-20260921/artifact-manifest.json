@@ -1,0 +1,277 @@
+{
+  "schemaVersion": 1,
+  "kind": "opf-native-mixed-table-portable-evidence",
+  "scope": "Portable exact-byte evidence for one bounded read-only native mixed-size table observation. No Office, UI, font, source, Git, or network operation is performed by the verifier.",
+  "facts": {
+    "stageRows": 523,
+    "pairedComCalls": 260,
+    "supervisorInputHashChecks": 34,
+    "ownedPresentationCloses": 1,
+    "ownedFontRemovals": 4,
+    "sourceTextLength": 245,
+    "authoredRuns": 5,
+    "characterProbes": 7,
+    "nativeLineHalfOpenOffsets0": [
+      [
+        0,
+        92
+      ],
+      [
+        92,
+        194
+      ],
+      [
+        194,
+        245
+      ]
+    ],
+    "estimatedLineHalfOpenOffsets0": [
+      [
+        0,
+        78
+      ],
+      [
+        78,
+        172
+      ],
+      [
+        172,
+        245
+      ]
+    ]
+  },
+  "files": 38,
+  "bytes": 580508,
+  "artifacts": [
+    {
+      "path": ".gitattributes",
+      "bytes": 9,
+      "sha256": "48747480eddba024928d03be9bf83dc579e5515768647507a767e8187a85c9ab",
+      "role": "byte-preservation policy"
+    },
+    {
+      "path": "README.md",
+      "bytes": 7227,
+      "sha256": "60444f7a01991169686743ac76e4167f282853ff2ec6f74043b7a33df372b644",
+      "role": "scope, outcome, limits, and portable recipe"
+    },
+    {
+      "path": "audit/audit-v2.py",
+      "bytes": 25508,
+      "sha256": "c1e45d7da087a1cbe78acd62cba2f1f0a72757e44eb69a9439f9ba524c6bbf52",
+      "role": "independent offline audit evidence"
+    },
+    {
+      "path": "audit/audit.py",
+      "bytes": 20061,
+      "sha256": "5f9199ae81e2e90146397586ca43d7304747bc29f407e600a0a54950833101c1",
+      "role": "independent offline audit evidence"
+    },
+    {
+      "path": "audit/report-v2.json",
+      "bytes": 20012,
+      "sha256": "1a7a2f8fac50502505139d44fd5895fd14ebe522d32ca4efe17cea842ca1fafc",
+      "role": "independent offline audit evidence"
+    },
+    {
+      "path": "audit/report.json",
+      "bytes": 15474,
+      "sha256": "87ef1b092e9a5d6c78678c8c79655d2a8e647eb77b0ff733743cd5fa12316906",
+      "role": "independent offline audit evidence"
+    },
+    {
+      "path": "controls/check-fixture-contract.ps1",
+      "bytes": 1943,
+      "sha256": "408dc5063fed2013a536a8025f8a74c4437bb9b9bcf2ee8c1c8c679f045cac01",
+      "role": "no-Office control evidence"
+    },
+    {
+      "path": "controls/fixture-contract-02.json",
+      "bytes": 509,
+      "sha256": "05f113e8f5b6de28344c841c6ce4c562465bc82ca8fd41e8324e2a4d70a096d6",
+      "role": "no-Office control evidence"
+    },
+    {
+      "path": "controls/pure-regression-02.json",
+      "bytes": 374,
+      "sha256": "44485ad69136fd5cd25b3cc1e8e831a1c152b6e6d2c4dd3606d0ff0e7de9f575",
+      "role": "no-Office control evidence"
+    },
+    {
+      "path": "estimated/preview.png",
+      "bytes": 37154,
+      "sha256": "ed6c82fe9f77ee1d69d8a547a9b52ece9c36fddaee6b2deb57dd0dd6c5eb6418",
+      "role": "registry estimated full-slide PNG"
+    },
+    {
+      "path": "native-run/font-registration.json",
+      "bytes": 812,
+      "sha256": "d3c8a31ef44b436ffc6ebf82f5738f01cd849312534a4945382f48137795348a",
+      "role": "exact native-run evidence"
+    },
+    {
+      "path": "native-run/inputs/LICENSE_FONT",
+      "bytes": 4424,
+      "sha256": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00",
+      "role": "exact native-run worker/helper/font-metadata snapshot"
+    },
+    {
+      "path": "native-run/inputs/generation.json",
+      "bytes": 2616,
+      "sha256": "8ac9743832e6c63bab58a999802979dcdcb91139599f502e90bc697141cf5422",
+      "role": "exact native-run worker/helper/font-metadata snapshot"
+    },
+    {
+      "path": "native-run/inputs/native-mixed-table-observe.ps1",
+      "bytes": 48818,
+      "sha256": "ad21e9037ed5d091a2c11e4041155067030e0d8705d27321d3148748e0744ffa",
+      "role": "exact native-run worker/helper/font-metadata snapshot"
+    },
+    {
+      "path": "native-run/inputs/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+      "role": "exact native-run worker/helper/font-metadata snapshot"
+    },
+    {
+      "path": "native-run/inputs/native-text-fonts.ps1",
+      "bytes": 2446,
+      "sha256": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+      "role": "exact native-run worker/helper/font-metadata snapshot"
+    },
+    {
+      "path": "native-run/inputs/table-fixture/generate.mjs",
+      "bytes": 18247,
+      "sha256": "b403c37b0725c75ef5cbdd222b29a4f8c384e5069586f5f43c195d31a49703c1",
+      "role": "exact native-run table-fixture snapshot"
+    },
+    {
+      "path": "native-run/inputs/table-fixture/generation.json",
+      "bytes": 5218,
+      "sha256": "bdf456ca92722ed4981cefc7cc1c739c3df0f1776a8a5539c33b54ecf57f7fe6",
+      "role": "exact native-run table-fixture snapshot"
+    },
+    {
+      "path": "native-run/inputs/table-fixture/inspection.json",
+      "bytes": 8067,
+      "sha256": "24b2c7ff107a664d06b9dedc0f46af5485e633e8a5a73d2a2e429e36bcf6baa5",
+      "role": "exact native-run table-fixture snapshot"
+    },
+    {
+      "path": "native-run/inputs/table-fixture/reimport.json",
+      "bytes": 2910,
+      "sha256": "abbd7cb0f46c12e98465c731246f8dfcc9f256e930a9eff36bd1d501a14889da",
+      "role": "exact native-run table-fixture snapshot"
+    },
+    {
+      "path": "native-run/inputs/table-fixture/report.md",
+      "bytes": 2374,
+      "sha256": "08b51ec794ee4e15ee1f8883a5851657999b3ae10307378043c0e471d338ed74",
+      "role": "exact native-run table-fixture snapshot"
+    },
+    {
+      "path": "native-run/inputs/table-fixture/source.json",
+      "bytes": 1444,
+      "sha256": "31488a3d51dd66d01b3a6ec3b5b79535d2681b3f41e5fbbb15a15b77f8a3fbe2",
+      "role": "exact native-run table-fixture snapshot"
+    },
+    {
+      "path": "native-run/inputs/table-fixture/source.pptx",
+      "bytes": 15194,
+      "sha256": "f92c5d5565afa1d03fc6df0cdc8d482771d5ebd5a5403f7a888f75e2ad020a51",
+      "role": "exact native-run table-fixture snapshot"
+    },
+    {
+      "path": "native-run/native-observation.png",
+      "bytes": 12316,
+      "sha256": "ceed1e7089510f9acaa0413674fb36ee76cb343a39638bb13fba53380c64602d",
+      "role": "exact native-run evidence"
+    },
+    {
+      "path": "native-run/progress.json",
+      "bytes": 271,
+      "sha256": "273c413574166582ab51b5ba279bde35af97f96f9b329e24d76bbb8cec766240",
+      "role": "exact native-run evidence"
+    },
+    {
+      "path": "native-run/report.json",
+      "bytes": 49536,
+      "sha256": "aa877b478f1046230b6371d6da3825f6c4ef74765d8f33b82765ac05877e3f06",
+      "role": "exact native-run evidence"
+    },
+    {
+      "path": "native-run/request.json",
+      "bytes": 18723,
+      "sha256": "848d29c1cb2235fe6565564862fc51f1d7ddb74a6fa284f21510bb42984fda52",
+      "role": "exact native-run evidence"
+    },
+    {
+      "path": "native-run/stages.jsonl",
+      "bytes": 188036,
+      "sha256": "f9b84279acfacb9659b5cb90e651b7d7eb13f80b5c5644f225da467c13d3bbcd",
+      "role": "exact native-run evidence"
+    },
+    {
+      "path": "native-run/supervisor.json",
+      "bytes": 18792,
+      "sha256": "79d721d3697b8b8a63e9a40b1611ef2455a804b27cbc2569c9b84f5b8d0bf273",
+      "role": "exact native-run evidence"
+    },
+    {
+      "path": "native-run/worker.json",
+      "bytes": 341,
+      "sha256": "e11b2955f175babb36ccef7f059d3729fa8e7b08af650249a59b8971f72693d9",
+      "role": "exact native-run evidence"
+    },
+    {
+      "path": "native-run/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "role": "exact native-run evidence"
+    },
+    {
+      "path": "native-run/worker.stdout.log",
+      "bytes": 99,
+      "sha256": "6ea3a1f150fcd58cfa29a97802d37ed7c5e6efb803a97afb6e520c9a414e939a",
+      "role": "exact native-run evidence"
+    },
+    {
+      "path": "omissions.json",
+      "bytes": 5029,
+      "sha256": "a1a63e1c733fb9b0002ef7d6d2d71a31bc4aecb6625994669cd3de220a8f7bdc",
+      "role": "excluded font/SVG/duplicate/private-artifact ledger"
+    },
+    {
+      "path": "plan/PLAN.md",
+      "bytes": 4903,
+      "sha256": "f51fc26a26c23e284c0d8048bb3b8e8aaa9fd033644223f999c7fa926861746c",
+      "role": "reviewed final-worker plan"
+    },
+    {
+      "path": "review/root-review.json",
+      "bytes": 1740,
+      "sha256": "c52d9ea088e7cf4957b68fa0f8681f2d0b02a18608cf2a3eec6cdccf5c0b84ad",
+      "role": "root full-slide review binding"
+    },
+    {
+      "path": "source-context.json",
+      "bytes": 8352,
+      "sha256": "61c21482198fa12ae3eded7c54440656f5fac9c2ae83e43b7e09f20ba56505b7",
+      "role": "source, registry, font, harness, runtime, and gate identities"
+    },
+    {
+      "path": "source-copy-ledger.json",
+      "bytes": 8894,
+      "sha256": "fd8268c6039e8ad86439b04e6802d95b4c022a49e8001e62ee5a82817d37d9fe",
+      "role": "exact source-to-bundle copy ledger"
+    },
+    {
+      "path": "verify.py",
+      "bytes": 20263,
+      "sha256": "6ac9360d08e9caf7cf9f637074079648435fa7d8fd5b5e35cfe8b87415cc5364",
+      "role": "stdlib portable verifier; no native execution"
+    }
+  ],
+  "verification": "python verify.py",
+  "manifestExcludesItself": true
+}

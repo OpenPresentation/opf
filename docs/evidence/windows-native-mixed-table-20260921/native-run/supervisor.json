@@ -1,0 +1,253 @@
+﻿{
+    "timestamp":  "2026-09-21T20:22:50.2243833Z",
+    "timedOut":  false,
+    "exitCode":  0,
+    "officeLifecycleComplete":  true,
+    "metricsGatePassed":  true,
+    "officeCleanupConfirmed":  true,
+    "fontCleanupConfirmed":  true,
+    "inputsUnchanged":  true,
+    "lastDurableStage":  "worker.complete",
+    "lastDurableStatus":  "success",
+    "parentError":  null,
+    "inputChecks":  [
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\R\\mixed-table-registry-01\\source.pptx",
+                            "expected":  "f92c5d5565afa1d03fc6df0cdc8d482771d5ebd5a5403f7a888f75e2ad020a51",
+                            "actual":  "f92c5d5565afa1d03fc6df0cdc8d482771d5ebd5a5403f7a888f75e2ad020a51",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-mixed-table-01\\inputs\\table-fixture\\source.pptx",
+                            "expected":  "f92c5d5565afa1d03fc6df0cdc8d482771d5ebd5a5403f7a888f75e2ad020a51",
+                            "actual":  "f92c5d5565afa1d03fc6df0cdc8d482771d5ebd5a5403f7a888f75e2ad020a51",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\R\\mixed-table-registry-01\\source.json",
+                            "expected":  "31488a3d51dd66d01b3a6ec3b5b79535d2681b3f41e5fbbb15a15b77f8a3fbe2",
+                            "actual":  "31488a3d51dd66d01b3a6ec3b5b79535d2681b3f41e5fbbb15a15b77f8a3fbe2",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-mixed-table-01\\inputs\\table-fixture\\source.json",
+                            "expected":  "31488a3d51dd66d01b3a6ec3b5b79535d2681b3f41e5fbbb15a15b77f8a3fbe2",
+                            "actual":  "31488a3d51dd66d01b3a6ec3b5b79535d2681b3f41e5fbbb15a15b77f8a3fbe2",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\R\\mixed-table-registry-01\\inspection.json",
+                            "expected":  "24b2c7ff107a664d06b9dedc0f46af5485e633e8a5a73d2a2e429e36bcf6baa5",
+                            "actual":  "24b2c7ff107a664d06b9dedc0f46af5485e633e8a5a73d2a2e429e36bcf6baa5",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-mixed-table-01\\inputs\\table-fixture\\inspection.json",
+                            "expected":  "24b2c7ff107a664d06b9dedc0f46af5485e633e8a5a73d2a2e429e36bcf6baa5",
+                            "actual":  "24b2c7ff107a664d06b9dedc0f46af5485e633e8a5a73d2a2e429e36bcf6baa5",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\R\\mixed-table-registry-01\\generation.json",
+                            "expected":  "bdf456ca92722ed4981cefc7cc1c739c3df0f1776a8a5539c33b54ecf57f7fe6",
+                            "actual":  "bdf456ca92722ed4981cefc7cc1c739c3df0f1776a8a5539c33b54ecf57f7fe6",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-mixed-table-01\\inputs\\table-fixture\\generation.json",
+                            "expected":  "bdf456ca92722ed4981cefc7cc1c739c3df0f1776a8a5539c33b54ecf57f7fe6",
+                            "actual":  "bdf456ca92722ed4981cefc7cc1c739c3df0f1776a8a5539c33b54ecf57f7fe6",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\R\\mixed-table-registry-01\\generate.mjs",
+                            "expected":  "b403c37b0725c75ef5cbdd222b29a4f8c384e5069586f5f43c195d31a49703c1",
+                            "actual":  "b403c37b0725c75ef5cbdd222b29a4f8c384e5069586f5f43c195d31a49703c1",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-mixed-table-01\\inputs\\table-fixture\\generate.mjs",
+                            "expected":  "b403c37b0725c75ef5cbdd222b29a4f8c384e5069586f5f43c195d31a49703c1",
+                            "actual":  "b403c37b0725c75ef5cbdd222b29a4f8c384e5069586f5f43c195d31a49703c1",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\R\\mixed-table-registry-01\\reimport.json",
+                            "expected":  "abbd7cb0f46c12e98465c731246f8dfcc9f256e930a9eff36bd1d501a14889da",
+                            "actual":  "abbd7cb0f46c12e98465c731246f8dfcc9f256e930a9eff36bd1d501a14889da",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-mixed-table-01\\inputs\\table-fixture\\reimport.json",
+                            "expected":  "abbd7cb0f46c12e98465c731246f8dfcc9f256e930a9eff36bd1d501a14889da",
+                            "actual":  "abbd7cb0f46c12e98465c731246f8dfcc9f256e930a9eff36bd1d501a14889da",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\R\\mixed-table-registry-01\\report.md",
+                            "expected":  "08b51ec794ee4e15ee1f8883a5851657999b3ae10307378043c0e471d338ed74",
+                            "actual":  "08b51ec794ee4e15ee1f8883a5851657999b3ae10307378043c0e471d338ed74",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-mixed-table-01\\inputs\\table-fixture\\report.md",
+                            "expected":  "08b51ec794ee4e15ee1f8883a5851657999b3ae10307378043c0e471d338ed74",
+                            "actual":  "08b51ec794ee4e15ee1f8883a5851657999b3ae10307378043c0e471d338ed74",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\font-edit-fixture-01\\fonts\\Carlito-400-normal.ttf",
+                            "expected":  "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89",
+                            "actual":  "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-mixed-table-01\\inputs\\fonts\\Carlito-400-normal.ttf",
+                            "expected":  "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89",
+                            "actual":  "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\font-edit-fixture-01\\fonts\\Carlito-400-italic.ttf",
+                            "expected":  "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5",
+                            "actual":  "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-mixed-table-01\\inputs\\fonts\\Carlito-400-italic.ttf",
+                            "expected":  "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5",
+                            "actual":  "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\font-edit-fixture-01\\fonts\\Carlito-700-normal.ttf",
+                            "expected":  "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0",
+                            "actual":  "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-mixed-table-01\\inputs\\fonts\\Carlito-700-normal.ttf",
+                            "expected":  "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0",
+                            "actual":  "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\font-edit-fixture-01\\fonts\\Carlito-700-italic.ttf",
+                            "expected":  "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691",
+                            "actual":  "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-mixed-table-01\\inputs\\fonts\\Carlito-700-italic.ttf",
+                            "expected":  "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691",
+                            "actual":  "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\R\\mixed-table-registry-01\\source.pptx",
+                            "expected":  "f92c5d5565afa1d03fc6df0cdc8d482771d5ebd5a5403f7a888f75e2ad020a51",
+                            "actual":  "f92c5d5565afa1d03fc6df0cdc8d482771d5ebd5a5403f7a888f75e2ad020a51",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-mixed-table-01\\inputs\\table-fixture\\source.pptx",
+                            "expected":  "f92c5d5565afa1d03fc6df0cdc8d482771d5ebd5a5403f7a888f75e2ad020a51",
+                            "actual":  "f92c5d5565afa1d03fc6df0cdc8d482771d5ebd5a5403f7a888f75e2ad020a51",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\font-edit-fixture-01\\generation.json",
+                            "expected":  "8ac9743832e6c63bab58a999802979dcdcb91139599f502e90bc697141cf5422",
+                            "actual":  "8ac9743832e6c63bab58a999802979dcdcb91139599f502e90bc697141cf5422",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-mixed-table-01\\inputs\\generation.json",
+                            "expected":  "8ac9743832e6c63bab58a999802979dcdcb91139599f502e90bc697141cf5422",
+                            "actual":  "8ac9743832e6c63bab58a999802979dcdcb91139599f502e90bc697141cf5422",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\font-edit-fixture-01\\LICENSE_FONT",
+                            "expected":  "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00",
+                            "actual":  "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-mixed-table-01\\inputs\\LICENSE_FONT",
+                            "expected":  "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00",
+                            "actual":  "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\mixed-table-worker-01\\native-mixed-table-observe.ps1",
+                            "expected":  "ad21e9037ed5d091a2c11e4041155067030e0d8705d27321d3148748e0744ffa",
+                            "actual":  "ad21e9037ed5d091a2c11e4041155067030e0d8705d27321d3148748e0744ffa",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-mixed-table-01\\inputs\\native-mixed-table-observe.ps1",
+                            "expected":  "ad21e9037ed5d091a2c11e4041155067030e0d8705d27321d3148748e0744ffa",
+                            "actual":  "ad21e9037ed5d091a2c11e4041155067030e0d8705d27321d3148748e0744ffa",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\sources\\opf-pptx\\test\\native-process.ps1",
+                            "expected":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+                            "actual":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-mixed-table-01\\inputs\\native-process.ps1",
+                            "expected":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+                            "actual":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\sources\\opf-pptx\\test\\native-text-fonts.ps1",
+                            "expected":  "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+                            "actual":  "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-mixed-table-01\\inputs\\native-text-fonts.ps1",
+                            "expected":  "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+                            "actual":  "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+                            "matched":  true,
+                            "error":  null
+                        }
+                    ]
+}

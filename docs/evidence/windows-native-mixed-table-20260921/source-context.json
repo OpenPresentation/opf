@@ -1,0 +1,231 @@
+{
+  "schemaVersion": 1,
+  "kind": "opf-pptx-native-mixed-table-portable-source-context",
+  "source": {
+    "kind": "mixed-size-soft-wrapped-rich-table-registry-fixture",
+    "sourcePptxSha256": "f92c5d5565afa1d03fc6df0cdc8d482771d5ebd5a5403f7a888f75e2ad020a51",
+    "sourceJsonSha256": "31488a3d51dd66d01b3a6ec3b5b79535d2681b3f41e5fbbb15a15b77f8a3fbe2",
+    "generatorSha256": "b403c37b0725c75ef5cbdd222b29a4f8c384e5069586f5f43c195d31a49703c1",
+    "generationRecordSha256": "bdf456ca92722ed4981cefc7cc1c739c3df0f1776a8a5539c33b54ecf57f7fe6",
+    "fixedGeneratedAt": "2026-09-21T00:00:00.000Z",
+    "generatedAtMeaning": "fixed reproducibility metadata, not actual wall-clock generation time"
+  },
+  "registryConsumer": {
+    "node": "v24.21.0",
+    "nodeExecutableSha256": "ba4e6d110e8c1592a1ecd390f6b05f3da124b13871a5be62b341a07a853c6c32",
+    "registryLockSha256": "4868f13254e3e681566164da8427d3716ceaa025435e4606e5e15fc8a87bc305",
+    "packages": {
+      "opf": {
+        "name": "@openpresentation/opf",
+        "version": "0.11.0",
+        "path": "registry-consumer/node_modules/@openpresentation/opf/package.json",
+        "sha256": "86364f07f30f5106539a936b4eb84cf5a00c53524599b222f823b2460efb3a0f"
+      },
+      "pptx": {
+        "name": "@openpresentation/opf-pptx",
+        "version": "0.9.1",
+        "path": "registry-consumer/node_modules/@openpresentation/opf-pptx/package.json",
+        "sha256": "be4944ae7405ff4d92238118eafebb93af433c53519145785553eecc3a4ef8bd"
+      },
+      "render": {
+        "name": "@openpresentation/opf-render",
+        "version": "0.9.0",
+        "path": "registry-consumer/node_modules/@openpresentation/opf-render/package.json",
+        "sha256": "ab5cac6fc9588b3ba694fd17a0d1bde952ebabb60977a13089626b2ec146d84f"
+      },
+      "carlito": {
+        "name": "@expo-google-fonts/carlito",
+        "version": "0.4.1",
+        "path": "registry-consumer/node_modules/@expo-google-fonts/carlito/package.json",
+        "sha256": "cada00d32e296a97db384203c837750567583d16dd3e66b6f7337bd8e6bb80d6"
+      }
+    }
+  },
+  "fonts": {
+    "copiedPrograms": 0,
+    "package": {
+      "name": "@expo-google-fonts/carlito",
+      "version": "0.4.1",
+      "manifestSha256": "cada00d32e296a97db384203c837750567583d16dd3e66b6f7337bd8e6bb80d6"
+    },
+    "license": {
+      "file": "LICENSE_FONT",
+      "spdx": "OFL-1.1",
+      "sha256": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00"
+    },
+    "fontManifest": {
+      "sha256": "f8bccf58acaf49e1aa87c5bedf981fce55001045f4b1f0a2d03056c0ac071521",
+      "package": "@openpresentation/opf-render",
+      "version": "0.9.0"
+    },
+    "registryLockSha256": "4868f13254e3e681566164da8427d3716ceaa025435e4606e5e15fc8a87bc305",
+    "registrationFlags": 0,
+    "programs": [
+      {
+        "file": "fonts/Carlito-400-normal.ttf",
+        "sha256": "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89"
+      },
+      {
+        "file": "fonts/Carlito-400-italic.ttf",
+        "sha256": "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5"
+      },
+      {
+        "file": "fonts/Carlito-700-normal.ttf",
+        "sha256": "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0"
+      },
+      {
+        "file": "fonts/Carlito-700-italic.ttf",
+        "sha256": "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691"
+      }
+    ],
+    "identityLimit": "Family/style observations and session registration do not identify the physical file used for every glyph."
+  },
+  "harness": {
+    "worker": {
+      "path": "native-run/inputs/native-mixed-table-observe.ps1",
+      "sha256": "ad21e9037ed5d091a2c11e4041155067030e0d8705d27321d3148748e0744ffa"
+    },
+    "processHelper": {
+      "path": "native-run/inputs/native-process.ps1",
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    "fontHelper": {
+      "path": "native-run/inputs/native-text-fonts.ps1",
+      "sha256": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6"
+    },
+    "fixtureChecker": {
+      "path": "controls/check-fixture-contract.ps1",
+      "sha256": "408dc5063fed2013a536a8025f8a74c4437bb9b9bcf2ee8c1c8c679f045cac01"
+    },
+    "plan": {
+      "path": "plan/PLAN.md",
+      "sha256": "f51fc26a26c23e284c0d8048bb3b8e8aaa9fd033644223f999c7fa926861746c"
+    }
+  },
+  "controls": {
+    "pureRegression": {
+      "path": "controls/pure-regression-02.json",
+      "sha256": "44485ad69136fd5cd25b3cc1e8e831a1c152b6e6d2c4dd3606d0ff0e7de9f575",
+      "passed": true
+    },
+    "fixtureContract": {
+      "path": "controls/fixture-contract-02.json",
+      "sha256": "05f113e8f5b6de28344c841c6ce4c562465bc82ca8fd41e8324e2a4d70a096d6",
+      "passed": true
+    }
+  },
+  "nativeRun": {
+    "reportSha256": "aa877b478f1046230b6371d6da3825f6c4ef74765d8f33b82765ac05877e3f06",
+    "requestSha256": "848d29c1cb2235fe6565564862fc51f1d7ddb74a6fa284f21510bb42984fda52",
+    "stagesSha256": "f9b84279acfacb9659b5cb90e651b7d7eb13f80b5c5644f225da467c13d3bbcd",
+    "workerSha256": "ad21e9037ed5d091a2c11e4041155067030e0d8705d27321d3148748e0744ffa",
+    "nativePngSha256": "ceed1e7089510f9acaa0413674fb36ee76cb343a39638bb13fba53380c64602d",
+    "stageRows": 523,
+    "pairedComCalls": 260,
+    "supervisorInputHashChecks": 34,
+    "ownedPresentationCloses": 1,
+    "ownedFontRemovals": 4,
+    "powerPointVersion": "16.0",
+    "powerPointBuild": "16.0.20326.20158",
+    "windowsBuild": "26200.9457"
+  },
+  "review": {
+    "path": "review/root-review.json",
+    "sha256": "c52d9ea088e7cf4957b68fa0f8681f2d0b02a18608cf2a3eec6cdccf5c0b84ad",
+    "reviewedAt": "2026-09-21T20:24:00Z"
+  },
+  "independentAudits": [
+    {
+      "version": 1,
+      "scriptPath": "audit/audit.py",
+      "scriptSha256": "5f9199ae81e2e90146397586ca43d7304747bc29f407e600a0a54950833101c1",
+      "reportPath": "audit/report.json",
+      "reportSha256": "87ef1b092e9a5d6c78678c8c79655d2a8e647eb77b0ff733743cd5fa12316906",
+      "passedChecks": "9/9"
+    },
+    {
+      "version": 2,
+      "scriptPath": "audit/audit-v2.py",
+      "scriptSha256": "c1e45d7da087a1cbe78acd62cba2f1f0a72757e44eb69a9439f9ba524c6bbf52",
+      "reportPath": "audit/report-v2.json",
+      "reportSha256": "1a7a2f8fac50502505139d44fd5895fd14ebe522d32ca4efe17cea842ca1fafc",
+      "passedChecks": "9/9",
+      "additionalChecks": [
+        "seven character probe styles against their containing expected runs",
+        "shape and cell geometry against the enclosing source frame, row/column, and margins within 0.02 point"
+      ]
+    }
+  ],
+  "observed": {
+    "sourceTextLength": 245,
+    "authoredRuns": 5,
+    "characterProbes": 7,
+    "nativeLineHalfOpenOffsets0": [
+      [
+        0,
+        92
+      ],
+      [
+        92,
+        194
+      ],
+      [
+        194,
+        245
+      ]
+    ],
+    "estimatedLineHalfOpenOffsets0": [
+      [
+        0,
+        78
+      ],
+      [
+        78,
+        172
+      ],
+      [
+        172,
+        245
+      ]
+    ],
+    "explicitTabStops": 0,
+    "nativeDefaultTabSpacingPoints": 72,
+    "requestedLineSpacingPoints": 36.6,
+    "nativeSpaceWithinPoints": 36.599998474121094,
+    "nativeLineTopPoints": [
+      6,
+      43,
+      80
+    ]
+  },
+  "passedFiniteGates": [
+    "read-only current content",
+    "five authored run styles",
+    "seven probe styles by containing run",
+    "outer geometry at 0.02 point",
+    "three native soft lines reconstructing all 245 characters",
+    "input hashes",
+    "raster presence",
+    "owned close and cleanup"
+  ],
+  "notTested": [
+    "browser/native raster agreement",
+    "edit/save/reopen persistence",
+    "font embedding",
+    "physical per-glyph font identity",
+    "general mixed-table layout behavior",
+    "engine cause"
+  ],
+  "portableRecipe": {
+    "worker": "native-run/inputs/native-mixed-table-observe.ps1",
+    "processHelper": "native-run/inputs/native-process.ps1",
+    "fontHelper": "native-run/inputs/native-text-fonts.ps1",
+    "sourcePptx": "native-run/inputs/table-fixture/source.pptx",
+    "tableFixtureDirectory": "native-run/inputs/table-fixture",
+    "externalFontFixtureRequired": true,
+    "externalFontFixtureMetadataSource": "native-run/inputs/generation.json",
+    "externalFontFixtureLicenseSource": "native-run/inputs/LICENSE_FONT",
+    "freshOutputDirectoryRequired": true,
+    "nativeExecutionByPortableVerifier": false
+  }
+}
