@@ -1,0 +1,54 @@
+{
+  "checkedAt": "2026-09-21T20:06:20.510134+00:00",
+  "base": "84e914710520a7b0e777fce30e5758ee64a64924",
+  "branch": "codex/inspector-current-actions-handoff-20260921",
+  "scope": "Documentation checkpoint of the first corrected6df result: Linux39 passed; Windows standalone startup failed before tests. No build/browser/Office execution, CI rerun, commit, push, PR or deployment by this finalization.",
+  "exactCopiesVerified": 73,
+  "historicalEvidenceBlobsUnchanged": 11345,
+  "priorDraftManifestSha256": "f9bb4d7b3dbf2f2ee16fa81cb6f098471463a95d77be1f9c8c796b6dd90c3aa4",
+  "relativeLinksResolved": 95,
+  "gitDiffCheck": "Tracked-doc unstaged check passed; it did not cover the then-untracked evidence. See the actual staged checks below.",
+  "trackedChanges": [
+    "docs/compatibility-matrix.md",
+    "docs/handoff-2026-09-21.md"
+  ],
+  "newFilesRestrictedTo": "docs/evidence/inspector-current-actions-20260921/",
+  "noCopiedTraceArchives": true,
+  "correctedCiAuditCopiedFiles": 29,
+  "correctedCiAuditManifestSha256": "a53863cca5a543c8637faf80c3b343f6b4ba1fcadbdfd0ba19fc1a102342f463",
+  "literalBytesGitAttribute": "docs/evidence/inspector-current-actions-20260921/app54/corrected6df/ci/windows-job.log: text: unset",
+  "sourceAppHead": "6dfc2584698c1306505929a2bc3e427996d66563",
+  "sourceAppTree": "f3279495f7685945b7541c90d24f7239407639a0",
+  "sourceAppAcceptance": "held: Windows startup EPERM; Linux39 passed; READY preview metadata only",
+  "productionApp": "e40c287b64fcbcfb85fb4a8a50641aea8e3e54a8",
+  "textIntegrity": {
+    "command": "fnm exec --using=24 node scripts/check-text-integrity.mjs",
+    "exitCode": 0,
+    "log": "text-integrity.log",
+    "result": {
+      "valid": true,
+      "files": 4725,
+      "binaryImages": 6822,
+      "binaryDocuments": 599,
+      "binaryFonts": 43,
+      "compressedText": 81
+    }
+  },
+  "captureBoundary": "Captured App54 head6df and its first-attempt outcomes; subsequent local startup-link and suggestion-details candidates are separate and provide no native or production acceptance.",
+  "priorDraftFilesUnchangedExcludingDerivedDocsAndAttributes": 43,
+  "stagedDiffCheck": {
+    "command": "git diff --cached --check",
+    "initialExitCode": 2,
+    "initialLog": "/private/tmp/opf-inspector-current-actions-handoff-20260921/finalization/staged-diff-check-before.log",
+    "initialLogSha256": "2d2e44ca5b81120b33db834103238fe505ebcd0632ee2b9e84c0110b7a2fa5e2",
+    "initialProblem": "Captured log trailing spaces and CRLF: 97 Linux log lines, 830 Windows log lines and one Windows excerpt line. No captured bytes were changed.",
+    "correction": "Scoped app54/corrected6df/ci/*.log whitespace=-blank-at-eol,cr-at-eol; all other paths retain their existing whitespace checks. ** -text continues to preserve literal evidence bytes.",
+    "finalExitCode": 0,
+    "finalLog": "/private/tmp/opf-inspector-current-actions-handoff-20260921/finalization/staged-diff-check-final.log",
+    "finalLogSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "cachedAttributes": [
+      "docs/evidence/inspector-current-actions-20260921/app54/corrected6df/ci/windows-job.log: text: unset",
+      "docs/evidence/inspector-current-actions-20260921/app54/corrected6df/ci/windows-job.log: whitespace: -blank-at-eol,cr-at-eol"
+    ]
+  }
+}

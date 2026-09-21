@@ -1,0 +1,24 @@
+{
+  "time": "2026-09-21T19:38:55.698432+00:00",
+  "priorFailedHead": "57e5e59fddbc94346f142dc12d86a916228bf2ae",
+  "manifestSha256": "e4399e2d0344f38d01b93ebcda6a2cda46bcb722c0eed810776255a9334da6c2",
+  "filesIncludingManifest": 106,
+  "byteExactCopies": 100,
+  "sourceInputsUnchanged": 305,
+  "typecheckAfter": 0,
+  "copySources": [
+    "/private/tmp/opf-inspector-action-snapshots-20260921/packaging-correction/before.json",
+    "/private/tmp/opf-inspector-action-snapshots-20260921/packaging-correction/after.json",
+    "/private/tmp/opf-inspector-action-snapshots-20260921/packaging-correction/renames.json",
+    "/private/tmp/opf-inspector-action-snapshots-20260921/packaging-correction/typecheck-after.log",
+    "/private/tmp/opf-inspector-action-snapshots-20260921/ci/application-final.json",
+    "/private/tmp/opf-inspector-action-snapshots-20260921/ci/application-jobs-final.json",
+    "/private/tmp/opf-inspector-action-snapshots-20260921/ci/first-failure-facts.json",
+    "/private/tmp/opf-inspector-action-snapshots-20260921/ci/linux-excerpt.log",
+    "/private/tmp/opf-inspector-action-snapshots-20260921/ci/windows-excerpt.log",
+    "/private/tmp/opf-inspector-action-snapshots-20260921/ci/linux-job.log",
+    "/private/tmp/opf-inspector-action-snapshots-20260921/ci/windows-job.log",
+    "/private/tmp/opf-inspector-action-snapshots-20260921/ci/preview-initial.json",
+    "/private/tmp/opf-inspector-action-snapshots-20260921/ci/preview-build-log-unavailable.json"
+  ]
+}

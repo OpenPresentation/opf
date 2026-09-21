@@ -1,0 +1,10 @@
+{
+  "time": "2026-09-21T19:39:41.163752+00:00",
+  "head": "6dfc2584698c1306505929a2bc3e427996d66563",
+  "tree": "f3279495f7685945b7541c90d24f7239407639a0",
+  "clean": true,
+  "priorFailedHead": "57e5e59fddbc94346f142dc12d86a916228bf2ae",
+  "sourceInputsUnchanged": 305,
+  "evidenceManifestSha256": "e4399e2d0344f38d01b93ebcda6a2cda46bcb722c0eed810776255a9334da6c2",
+  "scope": "Evidence-only byte-preserving source filename correction plus durable failed-CI receipts."
+}

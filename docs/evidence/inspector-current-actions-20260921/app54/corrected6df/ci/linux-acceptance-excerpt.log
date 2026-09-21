@@ -1,0 +1,53 @@
+2026-09-21T19:40:25.7270788Z node: v24.20.0
+2026-09-21T19:40:25.7492093Z ##[group]Run pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413
+2026-09-21T19:40:30.2271092Z ##[group]Run pnpm install --frozen-lockfile
+2026-09-21T19:41:02.0872336Z ##[group]Run pnpm audit
+2026-09-21T19:41:02.9725634Z ##[group]Run pnpm test
+2026-09-21T19:41:37.4634797Z       Tests  692 passed (692)
+2026-09-21T19:41:38.1585279Z ℹ tests 7
+2026-09-21T19:41:38.1586132Z ℹ pass 7
+2026-09-21T19:41:38.1607420Z ℹ fail 0
+2026-09-21T19:41:38.2019173Z ##[group]Run pnpm typecheck
+2026-09-21T19:41:58.7684346Z ##[group]Run pnpm --filter @pptx/sdk typecheck
+2026-09-21T19:42:11.9942263Z ##[group]Run pnpm build
+2026-09-21T19:43:44.8975669Z ##[group]Run pnpm test:e2e
+2026-09-21T19:43:59.2507354Z   ✓   1 tests/e2e/author-json-options.spec.ts:72:5 › Author categorical choices include built-in, document and loaded catalogs with exact LF source undo/redo (10.1s)
+2026-09-21T19:44:10.1452527Z   ✓   2 tests/e2e/author-json-options.spec.ts:72:5 › Author categorical choices include built-in, document and loaded catalogs with exact CRLF source undo/redo (10.9s)
+2026-09-21T19:44:18.0085680Z   ✓   3 tests/e2e/author.spec.ts:26:80 › anonymous code editing preserves source and visible selection through offline export/reimport at 1280x720 (7.8s)
+2026-09-21T19:44:25.1733930Z   ✓   4 tests/e2e/author.spec.ts:26:80 › anonymous code editing preserves source and visible selection through offline export/reimport at 540x960 (7.1s)
+2026-09-21T19:44:35.7929536Z   ✓   5 tests/e2e/author.spec.ts:55:5 › anonymous Author canvas edits survive tab changes, offline PowerPoint export and undoable reimport (10.6s)
+2026-09-21T19:44:43.2848203Z   ✓   6 tests/e2e/completion-keyboard.spec.ts:64:5 › Author Ctrl+Space retains popup details, exact source history and editor remount behavior (7.5s)
+2026-09-21T19:44:48.4638069Z   ✓   7 tests/e2e/completion-keyboard.spec.ts:126:5 › Author leaves Quick Input and modified Space keys with their original keyboard owners (5.2s)
+2026-09-21T19:44:54.2399845Z   ✓   8 tests/e2e/completion-preservation.spec.ts:113:7 › Author Title Subtitle completion preserves LF compact source in one undo step (5.7s)
+2026-09-21T19:45:00.2063554Z   ✓   9 tests/e2e/completion-preservation.spec.ts:113:7 › Author Text 2x completion preserves CRLF compact source in one undo step (5.9s)
+2026-09-21T19:45:07.8995780Z   ✓  10 tests/e2e/completion-preservation.spec.ts:149:5 › Author escaped current value is not offered as an edit and leaves prior undo history intact (7.7s)
+2026-09-21T19:45:15.7602220Z   ✓  11 tests/e2e/completion-preservation.spec.ts:178:5 › Author newer and invalid source dismiss stale choices and refresh inline catalogs (7.8s)
+2026-09-21T19:45:22.3389305Z   ✓  12 tests/e2e/completion-preservation.spec.ts:219:5 › Author format and document changes cancel the open completion without applying it (6.6s)
+2026-09-21T19:45:28.7798029Z   ✓  13 tests/e2e/inspector-actions.spec.ts:102:5 › Inspector Copy and JSON commit current drafts with exact source undo and unchanged-draft history (6.4s)
+2026-09-21T19:45:34.8710792Z   ✓  14 tests/e2e/inspector-actions.spec.ts:129:5 › Inspector Share and PPTX commit current drafts with matching payloads and filenames (6.1s)
+2026-09-21T19:45:43.0481561Z   ✓  15 tests/e2e/inspector-actions.spec.ts:168:5 › Inspector Open in Author commits the current draft before handoff (8.2s)
+2026-09-21T19:45:49.5123271Z   ✓  16 tests/e2e/inspector-actions.spec.ts:186:5 › Inspector raw Copy allows malformed source and rejected drafts produce no JSON output (6.4s)
+2026-09-21T19:45:55.3100025Z   ✓  17 tests/e2e/inspector-actions.spec.ts:220:5 › Inspector actions preserve the accepted raw buffer after CRLF source ingress (5.8s)
+2026-09-21T19:46:00.3044277Z   ✓  18 tests/e2e/inspector-actions.spec.ts:247:38 › Inspector suppresses stale PDF 200 delivery or navigation after a new source (5.0s)
+2026-09-21T19:46:05.6024170Z   ✓  19 tests/e2e/inspector-actions.spec.ts:247:38 › Inspector suppresses stale PDF 401 delivery or navigation after a new source (5.3s)
+2026-09-21T19:46:10.6915959Z   ✓  20 tests/e2e/inspector-actions.spec.ts:279:5 › Inspector PDF payload/filename and Deckchat URL use committed current source with local mocks (5.1s)
+2026-09-21T19:46:20.7443596Z   ✓  21 tests/e2e/inspector-editing.spec.ts:40:7 › all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 1440px (10.0s)
+2026-09-21T19:46:29.7512260Z   ✓  22 tests/e2e/inspector-editing.spec.ts:40:7 › all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 540px (9.0s)
+2026-09-21T19:46:35.5480021Z   ✓  23 tests/e2e/inspector-editing.spec.ts:99:5 › invalid source keeps a renderer fallback and source recovery uses the current slide order (5.8s)
+2026-09-21T19:46:40.0169920Z   ✓  24 tests/e2e/inspector-editing.spec.ts:116:5 › shared navigation discards an ID-less draft even when the replacement title is identical (4.4s)
+2026-09-21T19:46:47.0351050Z   ✓  25 tests/e2e/inspector-recovery.spec.ts:18:5 › schema-valid strict overflow cancels an active draft and the same slide recovers after source correction (7.0s)
+2026-09-21T19:46:51.4531860Z   ✓  26 tests/e2e/inspector-recovery.spec.ts:85:5 › font substitution notes remain accessible and operable while the Inspector canvas is active (4.4s)
+2026-09-21T19:47:02.1261591Z   ✓  27 tests/e2e/inspector-share-publication.spec.ts:58:69 › Inspector hash publication and refresh retain the accepted document (10.6s)
+2026-09-21T19:47:13.0984942Z   ✓  28 tests/e2e/inspector-share-publication.spec.ts:58:69 › Inspector legacy import query publication and refresh retain the accepted document (11.0s)
+2026-09-21T19:47:19.7959665Z   ✓  29 tests/e2e/inspector.spec.ts:20:5 › published long quotes retain their footer in actual wide/portrait previews and PowerPoint downloads (6.7s)
+2026-09-21T19:47:24.3851222Z   ✓  30 tests/e2e/inspector.spec.ts:76:5 › shared navigation clears format errors and proposals from the previous deck (4.6s)
+2026-09-21T19:47:30.1856633Z   ✓  31 tests/e2e/inspector.spec.ts:118:5 › anonymous JSON authoring, preview, undo/redo, download and shared reimport (5.8s)
+2026-09-21T19:47:39.1240066Z   ✓  32 tests/e2e/json-paste-formatting.spec.ts:53:5 › warm JSON worker leaves pasted source untouched while explicit Format Document remains undoable (8.9s)
+2026-09-21T19:47:45.7037931Z   ✓  33 tests/e2e/monaco.spec.ts:3:5 › bundled JSON worker provides schema diagnostics, completion and recovery offline (6.6s)
+2026-09-21T19:47:57.7692316Z   ✓  34 tests/e2e/source-download-preservation.spec.ts:90:7 › Author preserves exact LF source through preview copy, JSON download and canvas history (12.0s)
+2026-09-21T19:48:06.6288845Z   ✓  35 tests/e2e/source-download-preservation.spec.ts:90:7 › Author preserves exact CRLF source through preview copy, JSON download and canvas history (8.8s)
+2026-09-21T19:48:13.9536643Z   ✓  36 tests/e2e/source-download-preservation.spec.ts:218:5 › Inspector JSON files preserve exact authored LF bytes before edits and through canvas undo/redo (7.3s)
+2026-09-21T19:48:21.0806516Z   ✓  37 tests/e2e/svg-security.spec.ts:51:5 › published SVG renderer keeps hostile shared and imported document strings inert (7.1s)
+2026-09-21T19:48:21.5151286Z   ✓  38 tests/e2e/toolkit.spec.ts:4:5 › public toolkit shows the deployed package set with working render, edit and export proofs (421ms)
+2026-09-21T19:48:30.4032064Z   ✓  39 tests/e2e/yaml.spec.ts:4:5 › YAML and Markdown editing preserve OPF values and recover from malformed YAML offline (8.9s)
+2026-09-21T19:48:30.7193311Z   39 passed (4.7m)

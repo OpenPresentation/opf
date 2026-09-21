@@ -1,0 +1,21 @@
+{
+  "id": "dpl_CDcgpgLm4UYSahkzFAiY9qwocRCR",
+  "url": "pptx-h53j25a7q-dataadvantage.vercel.app",
+  "state": "READY",
+  "readyState": "READY",
+  "createdAt": 1790019581566,
+  "buildingAt": 1790019582757,
+  "ready": 1790019656014,
+  "target": null,
+  "meta": {
+    "githubCommitRef": "codex/inspector-share-guard-20260921",
+    "githubCommitSha": "6dfc2584698c1306505929a2bc3e427996d66563",
+    "githubCommitMessage": "Keep archived browser source outside TypeScript inputs",
+    "githubRepo": "pptx-dev",
+    "githubOrg": "Data-Advantage"
+  },
+  "alias": [
+    "pptx-dev-git-codex-inspector-share-guard-20260921-dataadvantage.vercel.app"
+  ],
+  "scope": "Preview metadata only; not production or browser acceptance."
+}

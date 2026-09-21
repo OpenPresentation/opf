@@ -1,0 +1,7 @@
+{
+  "time": "2026-09-21T19:38:55.676540+00:00",
+  "command": "fnm exec --using=24 node node_modules/typescript/bin/tsc --noEmit --incremental false",
+  "exitCode": 0,
+  "sourceInputsUnchanged": 305,
+  "scope": "Local final-tree typecheck after byte-identical evidence .ts.txt renames. No new CI/build/browser/production acceptance implied."
+}
