@@ -1229,22 +1229,38 @@ function renderRichLines(value,fit,box,bound,config) {
   // With no measurement provider, fragment advances are estimates. Let SVG
   // shape adjacent runs naturally inside each estimated line instead of turning
   // those estimates into visible gaps. Supplied measurements keep exact origins.
-  const flow=!config.options.textMeasurement?.measure&&!fit.placement;
+  const naturalFlow=!config.options.textMeasurement?.measure&&!fit.placement;
+  const hasTabs=fit.richLines.some(line=>line.fragments.some(fragment=>fragment.kind==='tab'));
   const content=fit.richLines.map((line,lineIndex)=>{
-    const fragments=line.fragments.map(fragment=>{
-    const run=fragment.run,offset=alignment==='right'?box.width-line.width:alignment==='center'?(box.width-line.width)/2:0;
+    const lineHasTab=line.fragments.some(fragment=>fragment.kind==='tab');
+    const flow=naturalFlow&&!lineHasTab;
+    const offset=alignment==='right'?box.width-line.width:alignment==='center'?(box.width-line.width)/2:0;
     const placed=fit.placement?.lines[lineIndex];
+    const originX=placed?.x??box.x+offset,baseline=placed?.baseline??box.y+line.baseline;
+    const renderFragment=(fragment,asFlow)=>{
+    const run=fragment.run;
     // Accepted outline placement owns the horizontal advance. Geometric precision
     // avoids hinted browser advances; textLength also removes fractional-size
     // quantization drift. Height and baseline retain the selected font size.
-    const position=flow?{'baseline-shift':fragment.baselineShift?stableNumber(-fragment.baselineShift):undefined}:{x:stableNumber((placed?.x??box.x+offset)+fragment.x),y:stableNumber((placed?.baseline??box.y+line.baseline)+fragment.baselineShift)};
+    const position=asFlow?{'baseline-shift':fragment.baselineShift?stableNumber(-fragment.baselineShift):undefined}:{x:stableNumber(originX+fragment.x),y:stableNumber(baseline+fragment.baselineShift)};
     const runFill = run.color == null
       ? config.fill
       : resolveColorRef(run.color, bound, config.fill);
-    const rendered=tag(flow?'tspan':'text',{...(config.options.trace?{'data-opf-text-start':runOffsets[fragment.runIndex]+fragment.start,'data-opf-text-end':runOffsets[fragment.runIndex]+fragment.end}:{}),...position,'xml:space':'preserve','text-rendering':flow?undefined:'geometricPrecision',textLength:placed&&fragment.width>0?stableNumber(fragment.width):undefined,lengthAdjust:placed&&fragment.width>0?'spacingAndGlyphs':undefined,'font-family':fontStack(fragment.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(fragment.fontSize),'font-weight':fragment.style.fontWeight,'font-style':fragment.style.italic?'italic':flow?'normal':undefined,'text-decoration':[run.underline?'underline':'',run.strikethrough?'line-through':''].filter(Boolean).join(' ')||undefined,fill:runFill},escapeText(fragment.text));
+    const fixedAdvance=(fragment.kind==='tab'||placed)&&fragment.width>0;
+    const rendered=tag(asFlow?'tspan':'text',{...(config.options.trace?{'data-opf-text-start':runOffsets[fragment.runIndex]+fragment.start,'data-opf-text-end':runOffsets[fragment.runIndex]+fragment.end,'data-opf-segment':fragment.kind}:{}),...position,'xml:space':'preserve','text-rendering':asFlow?undefined:'geometricPrecision',textLength:fixedAdvance?stableNumber(fragment.width):undefined,lengthAdjust:fixedAdvance?'spacingAndGlyphs':undefined,'font-family':fontStack(fragment.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(fragment.fontSize),'font-weight':fragment.style.fontWeight,'font-style':fragment.style.italic?'italic':asFlow?'normal':undefined,'text-decoration':[run.underline?'underline':'',run.strikethrough?'line-through':''].filter(Boolean).join(' ')||undefined,fill:runFill},escapeText(fragment.text));
     if(run.link&&/^(https?:|mailto:)/i.test(run.link))return tag('a',{href:run.link,target:'_blank',rel:'noopener noreferrer'},rendered);
     return rendered;
-    });
+    };
+    if(naturalFlow&&lineHasTab) {
+      const chunks=[];let textChunk=[];
+      const flush=()=>{if(!textChunk.length)return;const first=textChunk[0];chunks.push(tag('text',{x:stableNumber(originX+first.x),y:stableNumber(baseline),'xml:space':'preserve'},textChunk.map(fragment=>renderFragment(fragment,true)).join('')));textChunk=[];};
+      for(const fragment of line.fragments) {
+        if(fragment.kind==='tab'){flush();chunks.push(renderFragment(fragment,false));}
+        else textChunk.push(fragment);
+      }
+      flush();return chunks.join('\n');
+    }
+    const fragments=line.fragments.map(fragment=>renderFragment(fragment,flow));
     if(!flow)return fragments.join('\n');
     const x=alignment==='right'?box.x+box.width:alignment==='center'?box.x+box.width/2:box.x;
     const first=line.fragments[0];
@@ -1257,9 +1273,11 @@ function renderRichLines(value,fit,box,bound,config) {
     const start=cursor;cursor+=(fit.lines[index]??'').length;
     const offset=alignment==='right'?box.width-line.width:alignment==='center'?(box.width-line.width)/2:0;
     const placed=fit.placement?.lines[index];
-    return {start,end:cursor,x:placed?.x??box.x+offset,y:placed?.y??box.y+line.y,height:placed?.height??line.height};
+    return {start,end:cursor,x:placed?.x??box.x+offset,y:placed?.y??box.y+line.y,height:placed?.height??line.height,
+      ...(naturalFlow&&line.fragments.some(fragment=>fragment.kind==='tab')?{spacing:'natural-chunks-estimated-tabs'}:{})};
   }):undefined;
-  return tag('g',{...traceAttrs(config.options,config.path),...(config.options.trace?{'data-opf-box-width':box.width,'data-opf-rich-text':config.rich===false?undefined:'true','data-opf-rich-lines':JSON.stringify(lineTrace),'data-opf-rich-spacing':flow?'natural':'measured'}:{}),...(fit.overflow?{'data-opf-overflow':'true'}:{})},content.join('\n'));
+  const spacing=naturalFlow?(hasTabs?'mixed-estimated-tabs':'natural'):'measured';
+  return tag('g',{...traceAttrs(config.options,config.path),...(config.options.trace?{'data-opf-box-width':box.width,'data-opf-rich-text':config.rich===false?undefined:'true','data-opf-rich-lines':JSON.stringify(lineTrace),'data-opf-rich-spacing':spacing}:{}),...(fit.overflow?{'data-opf-overflow':'true'}:{})},content.join('\n'));
 }
 
 function renderTextBox(text, box, bound, config) {
