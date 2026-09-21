@@ -79,6 +79,14 @@ jobs:
           node scripts/link-ecosystem.mjs --packages-only
       - run: npm audit
       - run: npm run typecheck
+      - name: Verify bounded native harness without Office
+        if: runner.os == 'Windows'
+        shell: powershell
+        run: |
+          & "$env:WINDIR/System32/WindowsPowerShell/v1.0/powershell.exe" -NoProfile -NonInteractive -File test/native-process-check.ps1 -OutputDirectory artifacts/native-picture-harness/worker
+          if ($LASTEXITCODE -ne 0) { throw 'Native process controls failed' }
+          & "$env:WINDIR/System32/WindowsPowerShell/v1.0/powershell.exe" -NoProfile -NonInteractive -File test/native-picture-harness-check.ps1 -ReportPath artifacts/native-picture-harness/check.json
+          if ($LASTEXITCODE -ne 0) { throw 'Native picture harness controls failed' }
       - run: npm run validate
       - run: npm test
       - run: npm run test:font-variants
@@ -119,5 +127,6 @@ jobs:
             opf/artifacts/editor/*installed-code*.json
             opf-render/artifacts/golden/**
             opf-pptx/artifacts/packed-consumer-node24.json
+            opf-pptx/artifacts/native-picture-harness/**
           retention-days: 7
           if-no-files-found: ignore

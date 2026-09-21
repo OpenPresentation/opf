@@ -13,7 +13,7 @@ python test/native-font-pdf.py artifacts/font-native-01
 node test/native-font-selection.mjs compare artifacts/font-native-01
 ```
 
-Repeat with a fresh directory for each supported Node runtime. The Python reader requires `pdfplumber` and `pypdf`. Inspect all seven PDF raster pages. The private PDF may embed font subsets and must be excluded from portable evidence; retain its hash, extracted font names, raster images and exact verifiers instead, then remove the owned temporary PDF after inspection. Pinned open-source font bytes and their license texts are retained with the fixture.
+Use Node 24 and a fresh directory for every new attempt. The historical Node 20/24 results above remain evidence of those original runs. The Python reader requires `pdfplumber` and `pypdf`. Inspect all seven PDF raster pages. The private PDF may embed font subsets and must be excluded from portable evidence; retain its hash, extracted font names, raster images and exact verifiers instead, then remove the owned temporary PDF after inspection. Pinned open-source font bytes and their license texts are retained with the fixture.
 
 The helper has a 45-second default and 60-second maximum, creates a hidden worker and closes only fixtures whose ownership is established. The surviving parent owns the nine temporary registrations and removes them in `finally`, including if its worker fails or times out. Existing fonts are never uninstalled or overwritten. The four-face Carlito fixture and its failure/timeout controls are unchanged. Preserve failed attempts, inspect Office and never automatically retry a blocked call. A terminated helper does not establish Office cleanup.
 

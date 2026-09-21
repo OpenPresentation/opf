@@ -1,6 +1,6 @@
 # Bounded native metric checks
 
-Generate fresh fixtures with Node 20.20.2 or 24.20.0 and local Calibri reference fonts. Each directory contains six decks of eight slides: wide/portrait and left/center/right. Font bytes stay local; only reference hashes and rendered pixels are retained.
+Generate fresh fixtures with Node 24 and local Calibri reference fonts. Historical Node 20 results below describe their original runs; do not restart a dual-runtime matrix. Each directory contains six decks of eight slides: wide/portrait and left/center/right. Font bytes stay local; only reference hashes and rendered pixels are retained.
 
 ```powershell
 node test/native-metric.mjs generate artifacts/native-metric-new
