@@ -19,6 +19,18 @@ const withinConsumer = async file => {
   return resolved;
 };
 const lockPath = path.join(consumer, 'package-lock.json'), lock = await readFile(lockPath);
+const lockedPackages = json(lock).packages;
+const registryPackage = (name, version) => {
+  const locked = lockedPackages?.['node_modules/' + name];
+  assert.equal(locked?.version, version);
+  assert.ok(typeof locked.integrity === 'string' && locked.integrity.length > 0 && !locked.link);
+  assert.match(locked.resolved, /^https:\/\/registry\.npmjs\.org\//);
+  return locked;
+};
+const withinPackage = (entry, manifestPath) => {
+  const relative = path.relative(path.dirname(manifestPath), entry);
+  assert.ok(relative !== '..' && !relative.startsWith('..' + path.sep) && !path.isAbsolute(relative), `Resolved outside package root: ${entry}`);
+};
 const packageNames = ['@openpresentation/opf', '@openpresentation/opf-render', '@openpresentation/opf-pptx'];
 const probe = spawnSync(process.execPath, ['--input-type=module', '-e', `console.log(JSON.stringify(Object.fromEntries(${JSON.stringify(packageNames)}.map(name => [name, import.meta.resolve(name)]))))`], {cwd: consumer, encoding: 'utf8', timeout: 10000, windowsHide: true});
 assert.equal(probe.status, 0, probe.error?.message ?? probe.stderr);
@@ -27,16 +39,18 @@ const bindings = {};
 for (const [name, version] of [['@openpresentation/opf', '0.11.0'], ['@openpresentation/opf-render', '0.9.0'], ['@openpresentation/opf-pptx', '0.9.1']]) {
   const manifestPath = await withinConsumer(requireConsumer.resolve(name + '/package.json'));
   const manifestBytes = await readFile(manifestPath), manifest = json(manifestBytes);
+  assert.equal(manifest.name, name);
   assert.equal(manifest.version, version, `Review a newer accepted train before changing ${name}.`);
   const entry = await withinConsumer(fileURLToPath(entries[name]));
-  const locked = json(lock).packages?.['node_modules/' + name];
-  assert.equal(locked?.version, version); assert.ok(locked.integrity && !locked.link);
-  assert.match(locked.resolved, /^https:\/\/registry\.npmjs\.org\//);
+  withinPackage(entry, manifestPath);
+  const locked = registryPackage(name, version);
   bindings[name] = {version, manifestPath, manifestSha256: sha(manifestBytes), entry, entrySha256: sha(await readFile(entry)), resolved: locked.resolved, integrity: locked.integrity};
 }
 const fontRoot = path.dirname(await withinConsumer(requireConsumer.resolve('@expo-google-fonts/carlito/package.json')));
 const fontManifestBytes = await readFile(path.join(fontRoot, 'package.json'));
+assert.equal(json(fontManifestBytes).name, '@expo-google-fonts/carlito');
 assert.equal(json(fontManifestBytes).version, '0.4.1');
+const fontLock = registryPackage('@expo-google-fonts/carlito', '0.4.1');
 const license = await readFile(path.join(fontRoot, 'LICENSE_FONT'));
 assert.equal(sha(license), '58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00');
 const faces = [
@@ -47,7 +61,9 @@ const faces = [
 ];
 const fonts = [];
 for (const [relative, file, expected] of faces) {
-  const bytes = await readFile(await withinConsumer(path.join(fontRoot, relative)));
+  const filePath = await withinConsumer(path.join(fontRoot, relative));
+  withinPackage(filePath, path.join(fontRoot, 'package.json'));
+  const bytes = await readFile(filePath);
   assert.equal(sha(bytes), expected, file); fonts.push({file, sha256: expected, bytes});
 }
 const {toPptx} = await import(pathToFileURL(bindings['@openpresentation/opf-pptx'].entry).href);
@@ -67,7 +83,7 @@ const generation = {
   generatorSha256: sha(await readFile(fileURLToPath(import.meta.url))), registryLockSha256: sha(lock), bindings,
   bindingScope: 'Manifest and resolved public entry hashes plus registry lock. This does not bind every transitive installed byte.',
   source: {file: 'source.pptx', sha256: sha(presentation)},
-  package: {name: '@expo-google-fonts/carlito', version: '0.4.1', manifestSha256: sha(fontManifestBytes)},
+  package: {name: '@expo-google-fonts/carlito', version: '0.4.1', manifestSha256: sha(fontManifestBytes), resolved: fontLock.resolved, integrity: fontLock.integrity, link: false},
   license: {file: 'LICENSE_FONT', spdx: 'OFL-1.1', sha256: sha(license)},
   registration: {flags: 0, ownership: 'Surviving parent removes only its successful session additions in finally.'},
   fonts: fonts.map(({file, sha256}) => ({file, sha256})),

@@ -43,9 +43,10 @@ node test/native-font-edit-fixture.mjs artifacts/font-edit-fixture-new PATH_TO_R
 ```
 
 The generator refuses an existing output directory, resolves public ESM entries
-inside that consumer, validates the OPF source, and binds its lock, package
+inside their individual package roots in that consumer, validates the OPF source, and binds its lock, package
 manifests and resolved entry hashes. It checks the exact four Carlito 0.4.1 font
-hashes and OFL license before copying them locally. It makes no Office or font
+hashes and OFL license, and verifies Carlito's manifest identity and non-linked
+registry lock entry before copying them locally. It makes no Office or font
 registration call. Keep these font programs local; portable evidence needs their
 hashes and license, not copied TTF files. The binding does not cover every
 transitive installed byte.
