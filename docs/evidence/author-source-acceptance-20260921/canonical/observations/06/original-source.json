@@ -1,0 +1,5 @@
+{
+  "name"  : "Keyboard\u0020ownership",
+  "design": {"theme": "minimal", "fontScheme": "roboto"},
+  "slides": [{"title":"Keep  title", "text":[{"text":"Rich text","bold":true}], "notes":"Keep\nnotes"}]
+}

@@ -1,0 +1,27 @@
+{
+  "capturedAt": "2026-09-21T17:41:48.469895+00:00",
+  "head": "b33dc18e8c35803386feb80e7822f240a9671243",
+  "tree": "64a0dbd702f43c87206c8a9fe16d06fe3ac68800",
+  "clean": true,
+  "url": "https://www.pptx.dev",
+  "files": {
+    "package.json": "e9ac58846cd1f59a2bdee422b0fc4e9d63e51e62e7e86205fc419bd7b0ec5540",
+    "pnpm-lock.yaml": "f362abf89c57fe9e93197a54520fa5fc712e85bf78b2e011285456f37283b76f",
+    "playwright.config.ts": "c95c11d3cfb6fcbcbfaa0b5c353276a965d188a31f50778175a8ed8c7b895da2",
+    "tests/e2e/json-paste-formatting.spec.ts": "84b7d015613a10a8d51d0e1027b156ec38a9c6d8c912e51368dc4da77e65e065",
+    "tests/e2e/inspector-recovery.spec.ts": "acae48d48657a7308499ff67315618b595a41f3c6ddaeaa8e8e56859406911bc",
+    "tests/e2e/toolkit.spec.ts": "262603d599976178dc7ab6c60f6c5b202f5e34c0173576a12a83515aa3ea96b8",
+    "tests/e2e/monaco.spec.ts": "a0bd6e22363e9552b9482a67a8875d3e9b49f77460cc5431e4e2f382735b2a55",
+    "tests/e2e/author-json-options.spec.ts": "3f09784b2dd0b2ec34d91933939ded4ccd521ec613a56468eac10215ebbdd3bd",
+    "tests/e2e/author.spec.ts": "8332c789d3ac0ad0179d460d6849be12816f35e00004921f2c24db838481d8ed",
+    "tests/e2e/yaml.spec.ts": "b026cdf36c20be9967204cfb5482bf9d8a042c4ac44bb668b1683a16ce9f2eba",
+    "tests/e2e/completion-keyboard.spec.ts": "13c9d8d04bf08cae6eed71794e347966b6544e1cc112cd182a2863265aa96687",
+    "tests/e2e/source-download-preservation.spec.ts": "c0b1a976a420bfd4efce6d5ded35fb3234126f75e186cb77bd696617729b1c7c",
+    "tests/e2e/completion-preservation.spec.ts": "4a43174702bcfec4f7abb1937ad744c6d40a3eac250c097aa2f6e04a8e06b908",
+    "tests/e2e/svg-security.spec.ts": "00b80195d1df3707396dc3c1e83985268b30cd038b0bde1497bf483bed20acb4",
+    "tests/e2e/inspector.spec.ts": "ff5d1161bec4c07749c868b34547e34615250fb02f44957784f541308a288606",
+    "tests/e2e/inspector-editing.spec.ts": "47cea959ac1d321a0544b10891e7a1ce818cdf537b2a5ed952c50d30e7c8036f",
+    "tests/e2e/helpers/clipboard.ts": "46dc168dabaf05874eb086c8acecce43584052052abd050853267e60be79d8f7",
+    "tests/e2e/helpers/readiness-diagnostics.ts": "031351f2a03c64602b88364c99ac2783fe8d6134db346b72f9c7024108d12fb5"
+  }
+}

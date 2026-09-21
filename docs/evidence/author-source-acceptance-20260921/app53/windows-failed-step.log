@@ -1,0 +1,79 @@
+verify (windows-latest)	Run pnpm test:e2e	﻿2026-09-21T16:48:42.9460849Z ##[group]Run pnpm test:e2e
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:48:42.9461315Z ^[[36;1mpnpm test:e2e^[[0m
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:48:42.9534886Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:48:42.9535279Z env:
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:48:42.9535549Z   PNPM_HOME: C:\Users\runneradmin\setup-pnpm\node_modules\.bin
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:48:42.9535867Z ##[endgroup]
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:48:43.8517574Z $ playwright test
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:48:47.1160074Z [WebServer] $ next start "--hostname" "127.0.0.1" "--port" "4325"
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:48:47.6327182Z [WebServer] ⚠ "next start" does not work with "output: standalone" configuration. Use "node .next/standalone/server.js" instead.
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:48:49.5265625Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:48:49.5409079Z Running 27 tests using 1 worker
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:48:49.5410096Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:49:03.0966128Z   ok  1 tests\e2e\author-json-options.spec.ts:72:5 › Author categorical choices include built-in, document and loaded catalogs with exact LF source undo/redo (12.4s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:49:13.6777515Z   ok  2 tests\e2e\author-json-options.spec.ts:72:5 › Author categorical choices include built-in, document and loaded catalogs with exact CRLF source undo/redo (9.5s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:49:23.7705968Z   ok  3 tests\e2e\author.spec.ts:26:80 › anonymous code editing preserves source and visible selection through offline export/reimport at 1280x720 (11.0s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:49:32.7018846Z   ok  4 tests\e2e\author.spec.ts:26:80 › anonymous code editing preserves source and visible selection through offline export/reimport at 540x960 (8.9s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:49:46.3488768Z   ok  5 tests\e2e\author.spec.ts:55:5 › anonymous Author canvas edits survive tab changes, offline PowerPoint export and undoable reimport (13.6s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:49:52.9578639Z   ok  6 tests\e2e\completion-preservation.spec.ts:113:7 › Author Title Subtitle completion preserves LF compact source in one undo step (6.5s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:49:59.3976239Z   ok  7 tests\e2e\completion-preservation.spec.ts:113:7 › Author Text 2x completion preserves CRLF compact source in one undo step (6.4s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:50:07.4953514Z   ok  8 tests\e2e\completion-preservation.spec.ts:149:5 › Author escaped current value is not offered as an edit and leaves prior undo history intact (8.1s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:50:15.1768952Z   ok  9 tests\e2e\completion-preservation.spec.ts:178:5 › Author newer and invalid source dismiss stale choices and refresh inline catalogs (7.7s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:50:22.7078631Z   ok 10 tests\e2e\completion-preservation.spec.ts:219:5 › Author format and document changes cancel the open completion without applying it (7.5s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:50:35.6886228Z   ok 11 tests\e2e\inspector-editing.spec.ts:40:7 › all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 1440px (13.0s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:50:46.1539690Z   ok 12 tests\e2e\inspector-editing.spec.ts:40:7 › all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 540px (10.4s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:50:53.1241756Z   ok 13 tests\e2e\inspector-editing.spec.ts:99:5 › invalid source keeps a renderer fallback and source recovery uses the current slide order (7.0s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:50:58.6514326Z   ok 14 tests\e2e\inspector-editing.spec.ts:116:5 › shared navigation discards an ID-less draft even when the replacement title is identical (5.5s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:51:06.7377089Z   ok 15 tests\e2e\inspector-recovery.spec.ts:18:5 › schema-valid strict overflow cancels an active draft and the same slide recovers after source correction (8.1s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:51:12.7152239Z   ok 16 tests\e2e\inspector-recovery.spec.ts:85:5 › font substitution notes remain accessible and operable while the Inspector canvas is active (6.0s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:51:20.8101646Z   ok 17 tests\e2e\inspector.spec.ts:20:5 › published long quotes retain their footer in actual wide/portrait previews and PowerPoint downloads (8.1s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:51:26.7327219Z   ok 18 tests\e2e\inspector.spec.ts:76:5 › shared navigation clears format errors and proposals from the previous deck (5.9s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:51:34.6750783Z   ok 19 tests\e2e\inspector.spec.ts:118:5 › anonymous JSON authoring, preview, undo/redo, download and shared reimport (7.9s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:51:43.5278927Z   ok 20 tests\e2e\json-paste-formatting.spec.ts:53:5 › warm JSON worker leaves pasted source untouched while explicit Format Document remains undoable (8.9s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:51:49.8291390Z   ok 21 tests\e2e\monaco.spec.ts:3:5 › bundled JSON worker provides schema diagnostics, completion and recovery offline (6.3s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:52:06.4396822Z   ok 22 tests\e2e\source-download-preservation.spec.ts:90:7 › Author preserves exact LF source through preview copy, JSON download and canvas history (16.6s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:52:17.6468920Z   ok 23 tests\e2e\source-download-preservation.spec.ts:90:7 › Author preserves exact CRLF source through preview copy, JSON download and canvas history (11.2s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:52:30.2848275Z   ok 24 tests\e2e\source-download-preservation.spec.ts:218:5 › Inspector JSON files preserve exact authored LF bytes before edits and through canvas undo/redo (12.6s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:52:37.9873037Z   x  25 tests\e2e\svg-security.spec.ts:41:5 › published SVG renderer keeps hostile shared and imported document strings inert (6.6s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:52:44.4526811Z   ok 26 tests\e2e\toolkit.spec.ts:4:5 › public toolkit shows the deployed package set with working render, edit and export proofs (2.8s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:53:04.0512623Z   ok 27 tests\e2e\yaml.spec.ts:4:5 › YAML and Markdown editing preserve OPF values and recover from malformed YAML offline (19.6s)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:53:06.7755791Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:53:07.2526998Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:53:07.2546565Z   1) tests\e2e\svg-security.spec.ts:41:5 › published SVG renderer keeps hostile shared and imported document strings inert 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:53:07.2796087Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:53:07.2858269Z     Error: expect(locator).toBeVisible() failed
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:53:07.2941313Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:53:07.2964854Z     Locator: getByText('Loaded shared deck from URL.', { exact: true })
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:53:07.2968096Z     Expected: visible
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:53:07.2969789Z     Timeout: 5000ms
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:53:07.2999603Z     Error: element(s) not found
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:53:07.3026649Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:53:07.3028899Z     Call log:
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:53:07.3032045Z       - Expect "toBeVisible" getByText('Loaded shared deck from URL.', { exact: true }) with timeout 5000ms
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:53:07.3034431Z       - waiting for getByText('Loaded shared deck from URL.', { exact: true })
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:53:07.3049553Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:53:07.3053706Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:53:07.3054743Z       46 |   const encoded = gzipSync(JSON.stringify(hostileDeck)).toString('base64url');
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:53:07.3055835Z       47 |   await page.goto(`/inspector#opf=${encoded}`);
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:53:07.3056932Z     > 48 |   await expect(page.getByText('Loaded shared deck from URL.', { exact: true })).toBeVisible();
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:53:07.3058038Z          |                                                                                 ^
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:53:07.3059012Z       49 |   const canvas = page.getByTestId('inspector-canvas-overlay');
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:53:07.3060358Z       50 |   await expect(canvas).toBeVisible();
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:53:07.3061805Z       51 |   await verifySafePreview(page, page.locator(`[data-opf-renderer="${manifest.dependencies['@openpresentation/opf-render']}"] div[role="img"]`), false);
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:53:07.3080442Z         at D:\a\pptx-dev\pptx-dev\tests\e2e\svg-security.spec.ts:48:81
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:53:07.3081063Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:53:07.3082021Z     Error Context: test-results\svg-security-published-SVG-25408-rted-document-strings-inert\error-context.md
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:53:07.3082885Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:53:07.3084105Z     attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:53:07.3085478Z     test-results\svg-security-published-SVG-25408-rted-document-strings-inert\trace.zip
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:53:07.3086427Z     Usage:
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:53:07.3086747Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:53:07.3087594Z         pnpm exec playwright show-trace test-results\svg-security-published-SVG-25408-rted-document-strings-inert\trace.zip
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:53:07.3090003Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:53:07.3090781Z     ────────────────────────────────────────────────────────────────────────────────────────────────
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:53:07.3091377Z 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:53:07.3091647Z   1 failed
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:53:07.3092810Z     tests\e2e\svg-security.spec.ts:41:5 › published SVG renderer keeps hostile shared and imported document strings inert 
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:53:07.3093855Z   26 passed (4.4m)
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:53:07.3094626Z [ELIFECYCLE] Command failed with exit code 1.
+verify (windows-latest)	Run pnpm test:e2e	2026-09-21T16:53:07.3136915Z ##[error]Process completed with exit code 1.

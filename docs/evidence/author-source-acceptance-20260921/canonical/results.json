@@ -1,0 +1,1374 @@
+{
+  "config": {
+    "argv": [
+      "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+      "/private/tmp/opf-author-source-fix-20260921/pptx-dev/node_modules/@playwright/test/cli.js",
+      "test",
+      "--retries=0",
+      "--trace=on",
+      "--reporter=list,json",
+      "--output=/private/tmp/opf-author-source-canonical-20260921/results"
+    ],
+    "configFile": "/private/tmp/opf-author-source-fix-20260921/pptx-dev/playwright.config.ts",
+    "rootDir": "/private/tmp/opf-author-source-fix-20260921/pptx-dev/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/private/tmp/opf-author-source-canonical-20260921/results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/private/tmp/opf-author-source-fix-20260921/pptx-dev/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 45000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.63.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "author-json-options.spec.ts",
+      "file": "author-json-options.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Author categorical choices include built-in, document and loaded catalogs with exact LF source undo/redo",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6490,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T17:41:48.986Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/private/tmp/opf-author-source-canonical-20260921/results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "12125bd9844baa6a9967-e9da70d39191c7abaa52",
+          "file": "author-json-options.spec.ts",
+          "line": 72,
+          "column": 5
+        },
+        {
+          "title": "Author categorical choices include built-in, document and loaded catalogs with exact CRLF source undo/redo",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4585,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T17:41:55.852Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/private/tmp/opf-author-source-canonical-20260921/results/author-json-options-Author-cda0b-exact-CRLF-source-undo-redo/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "12125bd9844baa6a9967-fc3df520267524b4c84e",
+          "file": "author-json-options.spec.ts",
+          "line": 72,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "author.spec.ts",
+      "file": "author.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "anonymous code editing preserves source and visible selection through offline export/reimport at 1280x720",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3513,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T17:42:00.741Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/private/tmp/opf-author-source-canonical-20260921/results/author-anonymous-code-edit-12484-export-reimport-at-1280x720/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "27a0d846e5fe7596e61c-7492249324072ddca8f6",
+          "file": "author.spec.ts",
+          "line": 26,
+          "column": 80
+        },
+        {
+          "title": "anonymous code editing preserves source and visible selection through offline export/reimport at 540x960",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3512,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T17:42:04.499Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/private/tmp/opf-author-source-canonical-20260921/results/author-anonymous-code-edit-3e561--export-reimport-at-540x960/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "27a0d846e5fe7596e61c-195a044a4c00a5d32e7b",
+          "file": "author.spec.ts",
+          "line": 26,
+          "column": 80
+        },
+        {
+          "title": "anonymous Author canvas edits survive tab changes, offline PowerPoint export and undoable reimport",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4201,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T17:42:08.231Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "author-export.pptx",
+                      "contentType": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                      "curatedBodyFile": "downloads/05/author-export.pptx"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/private/tmp/opf-author-source-canonical-20260921/results/author-anonymous-Author-ca-d560b-xport-and-undoable-reimport/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "27a0d846e5fe7596e61c-2585a4e642430677e20a",
+          "file": "author.spec.ts",
+          "line": 55,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "completion-keyboard.spec.ts",
+      "file": "completion-keyboard.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Author Ctrl+Space retains popup details, exact source history and editor remount behavior",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4076,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T17:42:12.715Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/private/tmp/opf-author-source-canonical-20260921/results/completion-keyboard-Author-66da5-and-editor-remount-behavior/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1c619aa689f9e31152f7-27816ddb47cdaec635da",
+          "file": "completion-keyboard.spec.ts",
+          "line": 64,
+          "column": 5
+        },
+        {
+          "title": "Author leaves Quick Input and modified Space keys with their original keyboard owners",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2892,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T17:42:17.044Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/private/tmp/opf-author-source-canonical-20260921/results/completion-keyboard-Author-93788-ir-original-keyboard-owners/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1c619aa689f9e31152f7-6a258889e814d60174ef",
+          "file": "completion-keyboard.spec.ts",
+          "line": 126,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "completion-preservation.spec.ts",
+      "file": "completion-preservation.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Author Title Subtitle completion preserves LF compact source in one undo step",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3260,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T17:42:20.160Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/private/tmp/opf-author-source-canonical-20260921/results/completion-preservation-Au-807ee-act-source-in-one-undo-step/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "5dc4b1b382c20cae6320-c48988cd785b36c8c1bf",
+          "file": "completion-preservation.spec.ts",
+          "line": 113,
+          "column": 7
+        },
+        {
+          "title": "Author Text 2x completion preserves CRLF compact source in one undo step",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2858,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T17:42:23.658Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/private/tmp/opf-author-source-canonical-20260921/results/completion-preservation-Au-96e4e-act-source-in-one-undo-step/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "5dc4b1b382c20cae6320-96a5a63063877001e73e",
+          "file": "completion-preservation.spec.ts",
+          "line": 113,
+          "column": 7
+        },
+        {
+          "title": "Author escaped current value is not offered as an edit and leaves prior undo history intact",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3818,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T17:42:26.759Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/private/tmp/opf-author-source-canonical-20260921/results/completion-preservation-Au-b9e03-s-prior-undo-history-intact/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "5dc4b1b382c20cae6320-29b95b683a83ef1a62b4",
+          "file": "completion-preservation.spec.ts",
+          "line": 149,
+          "column": 5
+        },
+        {
+          "title": "Author newer and invalid source dismiss stale choices and refresh inline catalogs",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4603,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T17:42:30.832Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/private/tmp/opf-author-source-canonical-20260921/results/completion-preservation-Au-aab6b-and-refresh-inline-catalogs/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "5dc4b1b382c20cae6320-ede106678e07fd612822",
+          "file": "completion-preservation.spec.ts",
+          "line": 178,
+          "column": 5
+        },
+        {
+          "title": "Author format and document changes cancel the open completion without applying it",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3187,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T17:42:35.691Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/private/tmp/opf-author-source-canonical-20260921/results/completion-preservation-Au-e6715-pletion-without-applying-it/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "5dc4b1b382c20cae6320-06baa4cb56b266174e5b",
+          "file": "completion-preservation.spec.ts",
+          "line": 219,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "inspector-editing.spec.ts",
+      "file": "inspector-editing.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 1440px",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4200,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T17:42:39.136Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/private/tmp/opf-author-source-canonical-20260921/results/inspector-editing-all-Insp-15273-fline-undo-export-at-1440px/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d5f9f3acaafb6f7f32f2-089552d815e800af83eb",
+          "file": "inspector-editing.spec.ts",
+          "line": 40,
+          "column": 7
+        },
+        {
+          "title": "all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 540px",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4748,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T17:42:43.682Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/private/tmp/opf-author-source-canonical-20260921/results/inspector-editing-all-Insp-a78d3-ffline-undo-export-at-540px/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d5f9f3acaafb6f7f32f2-4beb997e5763ba95d851",
+          "file": "inspector-editing.spec.ts",
+          "line": 40,
+          "column": 7
+        },
+        {
+          "title": "invalid source keeps a renderer fallback and source recovery uses the current slide order",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3007,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T17:42:48.682Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/private/tmp/opf-author-source-canonical-20260921/results/inspector-editing-invalid--4da31-ses-the-current-slide-order/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d5f9f3acaafb6f7f32f2-28f3d29d3ad1b84446f3",
+          "file": "inspector-editing.spec.ts",
+          "line": 99,
+          "column": 5
+        },
+        {
+          "title": "shared navigation discards an ID-less draft even when the replacement title is identical",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2274,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T17:42:51.936Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/private/tmp/opf-author-source-canonical-20260921/results/inspector-editing-shared-n-98a03-lacement-title-is-identical/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d5f9f3acaafb6f7f32f2-a1eae6d5581174e6cf2d",
+          "file": "inspector-editing.spec.ts",
+          "line": 116,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "inspector-recovery.spec.ts",
+      "file": "inspector-recovery.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "schema-valid strict overflow cancels an active draft and the same slide recovers after source correction",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3307,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T17:42:54.449Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/private/tmp/opf-author-source-canonical-20260921/results/inspector-recovery-schema--76507-ers-after-source-correction/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "196ae7c35c7d592d8bab-af88711b49014ee2e9fa",
+          "file": "inspector-recovery.spec.ts",
+          "line": 18,
+          "column": 5
+        },
+        {
+          "title": "font substitution notes remain accessible and operable while the Inspector canvas is active",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2010,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T17:42:58.000Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/private/tmp/opf-author-source-canonical-20260921/results/inspector-recovery-font-su-beb5b--Inspector-canvas-is-active/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "196ae7c35c7d592d8bab-adb49ffd47c57d462739",
+          "file": "inspector-recovery.spec.ts",
+          "line": 85,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "inspector.spec.ts",
+      "file": "inspector.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "published long quotes retain their footer in actual wide/portrait previews and PowerPoint downloads",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3597,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T17:43:00.231Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/private/tmp/opf-author-source-canonical-20260921/results/inspector-published-long-q-fcc06-ws-and-PowerPoint-downloads/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a233f56b9daa8e69892b-0108f2846017464a1f8b",
+          "file": "inspector.spec.ts",
+          "line": 20,
+          "column": 5
+        },
+        {
+          "title": "shared navigation clears format errors and proposals from the previous deck",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1891,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T17:43:04.056Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/private/tmp/opf-author-source-canonical-20260921/results/inspector-shared-navigatio-46dd3-sals-from-the-previous-deck/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a233f56b9daa8e69892b-e61b3a226a7eb8c78f7f",
+          "file": "inspector.spec.ts",
+          "line": 76,
+          "column": 5
+        },
+        {
+          "title": "anonymous JSON authoring, preview, undo/redo, download and shared reimport",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2270,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T17:43:06.177Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/private/tmp/opf-author-source-canonical-20260921/results/inspector-anonymous-JSON-a-151ab-ownload-and-shared-reimport/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a233f56b9daa8e69892b-2527bd8b12468de0410f",
+          "file": "inspector.spec.ts",
+          "line": 118,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "json-paste-formatting.spec.ts",
+      "file": "json-paste-formatting.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "warm JSON worker leaves pasted source untouched while explicit Format Document remains undoable",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5074,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T17:43:08.688Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "authored-source.json",
+                      "contentType": "application/json",
+                      "path": "/private/tmp/opf-author-source-canonical-20260921/results/json-paste-formatting-warm-44312-t-Document-remains-undoable/attachments/authored-source-json-7238070ba18ca52a3e526a3f1efaa565a353d9f1.json"
+                    },
+                    {
+                      "name": "copied-source.json",
+                      "contentType": "application/json",
+                      "path": "/private/tmp/opf-author-source-canonical-20260921/results/json-paste-formatting-warm-44312-t-Document-remains-undoable/attachments/copied-source-json-a89f8aaba6269a8ec563ee3b32edfe578d14bac5.json"
+                    },
+                    {
+                      "name": "paste-worker-requests.json",
+                      "contentType": "application/json",
+                      "path": "/private/tmp/opf-author-source-canonical-20260921/results/json-paste-formatting-warm-44312-t-Document-remains-undoable/attachments/paste-worker-requests-json-6364634c53c1692afd25565e5a6c456851164819.json"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/private/tmp/opf-author-source-canonical-20260921/results/json-paste-formatting-warm-44312-t-Document-remains-undoable/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "bf168811f0cca24e8c98-9b7f4bf7a81bffc06464",
+          "file": "json-paste-formatting.spec.ts",
+          "line": 53,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "monaco.spec.ts",
+      "file": "monaco.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "bundled JSON worker provides schema diagnostics, completion and recovery offline",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2918,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T17:43:14.075Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/private/tmp/opf-author-source-canonical-20260921/results/monaco-bundled-JSON-worker-5b20e-letion-and-recovery-offline/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1d25d9be78718e2fbc41-8bcd5ba2357acc50ec16",
+          "file": "monaco.spec.ts",
+          "line": 3,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "source-download-preservation.spec.ts",
+      "file": "source-download-preservation.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Author preserves exact LF source through preview copy, JSON download and canvas history",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6659,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T17:43:17.242Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-5105f-download-and-canvas-history/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "720e0172a5c70f7c2ce7-79ab40be4ca570598dd7",
+          "file": "source-download-preservation.spec.ts",
+          "line": 90,
+          "column": 7
+        },
+        {
+          "title": "Author preserves exact CRLF source through preview copy, JSON download and canvas history",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4550,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T17:43:24.235Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-f4120-download-and-canvas-history/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "720e0172a5c70f7c2ce7-8a3b2d4d0e6e837f010d",
+          "file": "source-download-preservation.spec.ts",
+          "line": 90,
+          "column": 7
+        },
+        {
+          "title": "Inspector JSON files preserve exact authored LF bytes before edits and through canvas undo/redo",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3480,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T17:43:29.073Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-2c728-nd-through-canvas-undo-redo/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "720e0172a5c70f7c2ce7-ecacf63129a2d1c26c72",
+          "file": "source-download-preservation.spec.ts",
+          "line": 218,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "svg-security.spec.ts",
+      "file": "svg-security.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "published SVG renderer keeps hostile shared and imported document strings inert",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3627,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T17:43:32.837Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/private/tmp/opf-author-source-canonical-20260921/results/svg-security-published-SVG-25408-rted-document-strings-inert/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "58c599413df08fef558b-67ced50aee23685038d6",
+          "file": "svg-security.spec.ts",
+          "line": 51,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "toolkit.spec.ts",
+      "file": "toolkit.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "public toolkit shows the deployed package set with working render, edit and export proofs",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1518,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T17:43:36.713Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/private/tmp/opf-author-source-canonical-20260921/results/toolkit-public-toolkit-sho-6cd46-nder-edit-and-export-proofs/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e6b45ca4e5a744645a00-4507db711c745f43d7c0",
+          "file": "toolkit.spec.ts",
+          "line": 4,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "yaml.spec.ts",
+      "file": "yaml.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "YAML and Markdown editing preserve OPF values and recover from malformed YAML offline",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3532,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T17:43:38.242Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/private/tmp/opf-author-source-canonical-20260921/results/yaml-YAML-and-Markdown-edi-18ed4-from-malformed-YAML-offline/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "885fa28ec3207d77e67b-3cbaabb7f19f66ae500b",
+          "file": "yaml.spec.ts",
+          "line": 4,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-21T17:41:48.697Z",
+    "duration": 113497.55500000001,
+    "expected": 29,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "curation": {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results.json",
+    "originalSha256": "58863d25b1b710b57e7f0dcbf499ebb477d3d4eacce102053ab40b8b1b07d18c",
+    "change": "Only duplicate inline attachment body replaced with its byte-identical retained PPTX path; outcomes and configuration preserved.",
+    "removedInlineBodies": [
+      {
+        "attachmentName": "author-export.pptx",
+        "decodedBytes": 16330,
+        "sha256": "070cddbcb5a3aa9d6916531f212fd067d9ebe8033f715e98ade5b78229530696",
+        "retainedAt": "downloads/05/author-export.pptx"
+      }
+    ]
+  }
+}

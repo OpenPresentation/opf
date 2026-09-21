@@ -1,0 +1,339 @@
+{
+  "entries": [
+    {
+      "url": "http://127.0.0.1:4325/inspector",
+      "startedDateTime": "2026-09-21T16:52:30.813Z",
+      "recordMonotonicTimeMs": 227456.358,
+      "elapsedMs": 28.468,
+      "status": 200,
+      "failure": null
+    },
+    {
+      "url": "http://127.0.0.1:4325/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2",
+      "startedDateTime": "2026-09-21T16:52:30.849Z",
+      "recordMonotonicTimeMs": 227517.067,
+      "elapsedMs": 63.976,
+      "status": 200,
+      "failure": null
+    },
+    {
+      "url": "http://127.0.0.1:4325/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+      "startedDateTime": "2026-09-21T16:52:30.849Z",
+      "recordMonotonicTimeMs": 227517.244,
+      "elapsedMs": 80.385,
+      "status": 200,
+      "failure": null
+    },
+    {
+      "url": "http://127.0.0.1:4325/_next/static/media/f141b5b7abe57afc-s.p.380f-mwhk0aej.woff2",
+      "startedDateTime": "2026-09-21T16:52:30.849Z",
+      "recordMonotonicTimeMs": 227517.405,
+      "elapsedMs": 78.671,
+      "status": 200,
+      "failure": null
+    },
+    {
+      "url": "http://127.0.0.1:4325/_next/static/chunks/22gd3kxf3rpe7.css",
+      "startedDateTime": "2026-09-21T16:52:30.850Z",
+      "recordMonotonicTimeMs": 227517.56,
+      "elapsedMs": 129.654,
+      "status": 200,
+      "failure": null
+    },
+    {
+      "url": "http://127.0.0.1:4325/_next/static/chunks/0t8wtkx14z1p4.js",
+      "startedDateTime": "2026-09-21T16:52:30.850Z",
+      "recordMonotonicTimeMs": 227517.84,
+      "elapsedMs": 143.066,
+      "status": 200,
+      "failure": null
+    },
+    {
+      "url": "http://127.0.0.1:4325/_next/static/chunks/27eejhbbbbdu5.css",
+      "startedDateTime": "2026-09-21T16:52:30.850Z",
+      "recordMonotonicTimeMs": 227517.702,
+      "elapsedMs": 170.026,
+      "status": 200,
+      "failure": null
+    },
+    {
+      "url": "http://127.0.0.1:4325/_next/static/chunks/2lg71p7r83uon.js",
+      "startedDateTime": "2026-09-21T16:52:30.850Z",
+      "recordMonotonicTimeMs": 227517.976,
+      "elapsedMs": 147.872,
+      "status": 200,
+      "failure": null
+    },
+    {
+      "url": "http://127.0.0.1:4325/_next/static/chunks/1_cof9lyb3u2k.js",
+      "startedDateTime": "2026-09-21T16:52:30.850Z",
+      "recordMonotonicTimeMs": 227518.113,
+      "elapsedMs": 153.08800000000002,
+      "status": 200,
+      "failure": null
+    },
+    {
+      "url": "http://127.0.0.1:4325/_next/static/chunks/0vrm-742zrpsd.js",
+      "startedDateTime": "2026-09-21T16:52:30.850Z",
+      "recordMonotonicTimeMs": 227518.53,
+      "elapsedMs": 275.824,
+      "status": 200,
+      "failure": null
+    },
+    {
+      "url": "http://127.0.0.1:4325/_next/static/chunks/0orc0k8v1dio1.js",
+      "startedDateTime": "2026-09-21T16:52:30.850Z",
+      "recordMonotonicTimeMs": 227518.951,
+      "elapsedMs": 313.90999999999997,
+      "status": 200,
+      "failure": null
+    },
+    {
+      "url": "http://127.0.0.1:4325/_next/static/chunks/turbopack-0fpmb8jyfwm75.js",
+      "startedDateTime": "2026-09-21T16:52:30.850Z",
+      "recordMonotonicTimeMs": 227519.352,
+      "elapsedMs": 303.35400000000004,
+      "status": 200,
+      "failure": null
+    },
+    {
+      "url": "http://127.0.0.1:4325/_next/static/chunks/01069prbu8qo1.js",
+      "startedDateTime": "2026-09-21T16:52:30.850Z",
+      "recordMonotonicTimeMs": 227519.512,
+      "elapsedMs": 313.14700000000005,
+      "status": 200,
+      "failure": null
+    },
+    {
+      "url": "http://127.0.0.1:4325/_next/static/chunks/1aazrg2odntpk.js",
+      "startedDateTime": "2026-09-21T16:52:30.850Z",
+      "recordMonotonicTimeMs": 227518.286,
+      "elapsedMs": 323.043,
+      "status": 200,
+      "failure": null
+    },
+    {
+      "url": "http://127.0.0.1:4325/_next/static/chunks/1am82d9n1j2ng.js",
+      "startedDateTime": "2026-09-21T16:52:30.851Z",
+      "recordMonotonicTimeMs": 227519.652,
+      "elapsedMs": 313.306,
+      "status": 200,
+      "failure": null
+    },
+    {
+      "url": "http://127.0.0.1:4325/_next/static/chunks/4262qb24o99aq.js",
+      "startedDateTime": "2026-09-21T16:52:30.851Z",
+      "recordMonotonicTimeMs": 227519.791,
+      "elapsedMs": 323.019,
+      "status": 200,
+      "failure": null
+    },
+    {
+      "url": "http://127.0.0.1:4325/_next/static/chunks/0et5nsadbgx-y.js",
+      "startedDateTime": "2026-09-21T16:52:31.252Z",
+      "recordMonotonicTimeMs": 227580.55,
+      "elapsedMs": 470.183,
+      "status": 200,
+      "failure": null
+    },
+    {
+      "url": "http://127.0.0.1:4325/_next/static/chunks/311-vuswqo2-a.js",
+      "startedDateTime": "2026-09-21T16:52:31.252Z",
+      "recordMonotonicTimeMs": 227580.744,
+      "elapsedMs": 474.774,
+      "status": 200,
+      "failure": null
+    },
+    {
+      "url": "http://127.0.0.1:4325/_next/static/chunks/0wrvr411g1-ys.js",
+      "startedDateTime": "2026-09-21T16:52:31.253Z",
+      "recordMonotonicTimeMs": 227581.289,
+      "elapsedMs": 497.337,
+      "status": 200,
+      "failure": null
+    },
+    {
+      "url": "http://127.0.0.1:4325/_next/static/chunks/2_n114cg00r68.js",
+      "startedDateTime": "2026-09-21T16:52:31.252Z",
+      "recordMonotonicTimeMs": 227580.92,
+      "elapsedMs": 513.462,
+      "status": 200,
+      "failure": null
+    },
+    {
+      "url": "http://127.0.0.1:4325/_next/static/chunks/10jm2ezaem1kh.js",
+      "startedDateTime": "2026-09-21T16:52:31.253Z",
+      "recordMonotonicTimeMs": 227581.094,
+      "elapsedMs": 589.109,
+      "status": 200,
+      "failure": null
+    },
+    {
+      "url": "http://127.0.0.1:4325/_next/static/chunks/1mjvexydvmjd9.css",
+      "startedDateTime": "2026-09-21T16:52:31.254Z",
+      "recordMonotonicTimeMs": 227582.278,
+      "elapsedMs": 178.12199999999999,
+      "status": 200,
+      "failure": null
+    },
+    {
+      "url": "http://127.0.0.1:4325/_next/static/chunks/0z_0vp17ygh03.css",
+      "startedDateTime": "2026-09-21T16:52:31.254Z",
+      "recordMonotonicTimeMs": 227582.434,
+      "elapsedMs": 181.606,
+      "status": 200,
+      "failure": null
+    },
+    {
+      "url": "http://127.0.0.1:4325/brand/mark-favicon.svg",
+      "startedDateTime": "2026-09-21T16:52:31.339Z",
+      "recordMonotonicTimeMs": 227585.411,
+      "elapsedMs": 75.13499999999999,
+      "status": 200,
+      "failure": null
+    },
+    {
+      "url": "http://127.0.0.1:4325/_next/static/chunks/21fu92xs48_eb.css",
+      "startedDateTime": "2026-09-21T16:52:31.255Z",
+      "recordMonotonicTimeMs": 227582.759,
+      "elapsedMs": 185.409,
+      "status": 200,
+      "failure": null
+    },
+    {
+      "url": "http://127.0.0.1:4325/_next/static/chunks/2bhvda6t7e018.css",
+      "startedDateTime": "2026-09-21T16:52:31.255Z",
+      "recordMonotonicTimeMs": 227582.595,
+      "elapsedMs": 211.81300000000002,
+      "status": 200,
+      "failure": null
+    },
+    {
+      "url": "http://127.0.0.1:4325/_next/static/chunks/2iq_21zaja8ub.js",
+      "startedDateTime": "2026-09-21T16:52:31.253Z",
+      "recordMonotonicTimeMs": 227581.63,
+      "elapsedMs": 1075.0810000000001,
+      "status": 200,
+      "failure": null
+    },
+    {
+      "url": "http://127.0.0.1:4325/_next/static/chunks/437js-3agrqnr.js",
+      "startedDateTime": "2026-09-21T16:52:31.254Z",
+      "recordMonotonicTimeMs": 227582.123,
+      "elapsedMs": 1250.5729999999999,
+      "status": 200,
+      "failure": null
+    },
+    {
+      "url": "http://127.0.0.1:4325/_next/static/chunks/2n3stc75yl5x2.js",
+      "startedDateTime": "2026-09-21T16:52:31.254Z",
+      "recordMonotonicTimeMs": 227581.965,
+      "elapsedMs": 1420.574,
+      "status": 200,
+      "failure": null
+    },
+    {
+      "url": "http://127.0.0.1:4325/_next/static/chunks/3zz3nrvino7dx.js",
+      "startedDateTime": "2026-09-21T16:52:31.253Z",
+      "recordMonotonicTimeMs": 227581.801,
+      "elapsedMs": 1613.5910000000001,
+      "status": 200,
+      "failure": null
+    },
+    {
+      "url": "http://127.0.0.1:4325/_next/static/chunks/1ohzbu50qhghv.js",
+      "startedDateTime": "2026-09-21T16:52:31.253Z",
+      "recordMonotonicTimeMs": 227581.462,
+      "elapsedMs": 1834.084,
+      "status": 200,
+      "failure": null
+    },
+    {
+      "url": "http://127.0.0.1:4325/_next/static/chunks/0ve7wx2-oz5rx.js",
+      "startedDateTime": "2026-09-21T16:52:33.819Z",
+      "recordMonotonicTimeMs": 232340.293,
+      "elapsedMs": -1,
+      "status": -1,
+      "failure": null
+    },
+    {
+      "url": "http://127.0.0.1:4325/_next/static/chunks/38mijikn5je_6.js",
+      "startedDateTime": "2026-09-21T16:52:33.820Z",
+      "recordMonotonicTimeMs": 232340.597,
+      "elapsedMs": -1,
+      "status": -1,
+      "failure": null
+    },
+    {
+      "url": "http://127.0.0.1:4325/_next/static/chunks/26jkn2gdp_xr4.js",
+      "startedDateTime": "2026-09-21T16:52:33.820Z",
+      "recordMonotonicTimeMs": 232340.871,
+      "elapsedMs": -1,
+      "status": -1,
+      "failure": null
+    },
+    {
+      "url": "http://127.0.0.1:4325/_next/static/chunks/3bw4dnn868f48.js",
+      "startedDateTime": "2026-09-21T16:52:33.821Z",
+      "recordMonotonicTimeMs": 232341.137,
+      "elapsedMs": -1,
+      "status": -1,
+      "failure": null
+    },
+    {
+      "url": "http://127.0.0.1:4325/_next/static/chunks/422ksq6gx46et.js",
+      "startedDateTime": "2026-09-21T16:52:33.858Z",
+      "recordMonotonicTimeMs": 232346.021,
+      "elapsedMs": -1,
+      "status": -1,
+      "failure": null
+    },
+    {
+      "url": "http://127.0.0.1:4325/_next/static/chunks/0xy6-r0-x2ine.js",
+      "startedDateTime": "2026-09-21T16:52:33.860Z",
+      "recordMonotonicTimeMs": 232346.315,
+      "elapsedMs": -1,
+      "status": -1,
+      "failure": null
+    },
+    {
+      "url": "http://127.0.0.1:4325/_next/static/media/codicon.2b_iqd4rvjgu4.ttf",
+      "startedDateTime": "2026-09-21T16:52:35.605Z",
+      "recordMonotonicTimeMs": 232382.542,
+      "elapsedMs": -1,
+      "status": -1,
+      "failure": null
+    },
+    {
+      "url": "http://127.0.0.1:4325/_next/static/chunks/turbopack-worker-2ru9m5gbh1na6.js",
+      "startedDateTime": "2026-09-21T16:52:35.709Z",
+      "recordMonotonicTimeMs": 232383.207,
+      "elapsedMs": -1,
+      "status": -1,
+      "failure": null
+    },
+    {
+      "url": "http://127.0.0.1:4325/brand/mark-favicon.svg",
+      "startedDateTime": "2026-09-21T16:52:35.732Z",
+      "recordMonotonicTimeMs": 232383.381,
+      "elapsedMs": -1,
+      "status": -1,
+      "failure": null
+    },
+    {
+      "url": "http://127.0.0.1:4325/brand/mark-favicon.svg",
+      "startedDateTime": "2026-09-21T16:52:35.857Z",
+      "recordMonotonicTimeMs": 232384.076,
+      "elapsedMs": -1,
+      "status": -1,
+      "failure": null
+    }
+  ],
+  "counts": {
+    "total": 41,
+    "completed200": 31,
+    "unfinished": 10,
+    "recordedHttpErrors": 0
+  },
+  "note": "Trace transport records are not a CPU profile; unfinished requests at stop do not establish which dependency delayed shared import."
+}

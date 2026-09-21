@@ -1,0 +1,1027 @@
+{
+  "copies": [
+    {
+      "source": "/private/tmp/opf-checkpoint100-release-20260921/release-receipt.json",
+      "retained": "core100/release-receipt.json",
+      "bytes": 2333,
+      "sha256": "f435416674ecc61206d5719d3a9384039ce5045110fcb6f124bffc855cf48634",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-checkpoint100-release-20260921/source-identity.json",
+      "retained": "core100/source-identity.json",
+      "bytes": 449,
+      "sha256": "813549594493e3f6e90b11706856e5412e9b9c7aa0b1a2047aa02e28805b0b63",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-checkpoint100-release-20260921/pr100.json",
+      "retained": "core100/pr100.json",
+      "bytes": 1110,
+      "sha256": "b700ed5959b4c5437a4c690a7c5b76532622a2528b88bc48a9b79e5ed70e10e4",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-checkpoint100-release-20260921/post-merge-opf-ci.json",
+      "retained": "core100/post-merge-opf-ci.json",
+      "bytes": 3718,
+      "sha256": "52dfd341470e1f1dd04e71b4e14317ea3d3b4b9aeed984720b557a8173a68e05",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-checkpoint100-release-20260921/post-merge-coordinated.json",
+      "retained": "core100/post-merge-coordinated.json",
+      "bytes": 5924,
+      "sha256": "3c4a7ba32c9a3fe525eb3af4554ed4e9a8121a345861f551e8a52775db842b65",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-checkpoint100-release-20260921/issue88-final.json",
+      "retained": "core100/issue88-final.json",
+      "bytes": 207,
+      "sha256": "ded36bef6247229417cfecd1c8326f6ae1172e2773de075befec46b4abf096fc",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-browser-20260921/initial-full-failure.json",
+      "retained": "local/initial-full-failure.json",
+      "bytes": 2299,
+      "sha256": "63f644e1fc55b8bc9fed8fd1c4dcee01937266d5fc1aaf61f7804d0cb718e055",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-fix-20260921/reimport-history/source-identity.json",
+      "retained": "reimport-history/source-identity.json",
+      "bytes": 536,
+      "sha256": "39fca400c921c3be2a0dca68d7812283a588c8392bc3d9f7bb24faf4813709f5",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-fix-20260921/reimport-history/result.json",
+      "retained": "reimport-history/result.json",
+      "bytes": 1525,
+      "sha256": "152a437a0908cbe24f02c7377be10a00c77a44993c48e738ee6f0aa8c57432ba",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-fix-20260921/reimport-history/controls.json",
+      "retained": "reimport-history/controls.json",
+      "bytes": 1057,
+      "sha256": "938227e3d57226cae63aed43bc8066af64c368d678ceb7838b679d8a3b3949d5",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-handoff-20260921/app53-draft-pr.json",
+      "retained": "app53/draft-pr.json",
+      "bytes": 1404,
+      "sha256": "4c1b8349c3464629ee9bebc03c8e92ddebb0a395451eed111de459481245941f",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-release-20260921/draft-pr.json",
+      "retained": "app53/draft-pr-preview-ready.json",
+      "bytes": 1279,
+      "sha256": "1085e3e22260f293820de8f46620352368909e4713f2f02c30604a2f8e19fea3",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-release-20260921/committed-evidence.json",
+      "retained": "app53/committed-evidence.json",
+      "bytes": 190,
+      "sha256": "cec0215c9f0562ab09cf1dad2a00080477163cdbac7812a313e29c0c735368ab",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-release-20260921/preview.json",
+      "retained": "app53/preview.json",
+      "bytes": 580,
+      "sha256": "31a5150247274ff5cf1bc5d951400621b677d55917c07435bb7e1a4117acae63",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-handoff-20260921/app53-ci-latest.json",
+      "retained": "app53/ci-linux-passed-windows-pending.json",
+      "bytes": 7005,
+      "sha256": "c2e99d9fbbd3fce9383724744fde67c9ecfc0ff6c7e002895280651d29b3f3d0",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-handoff-20260921/app53-ci-observation-1655.json",
+      "retained": "app53/ci-completed-failure.json",
+      "bytes": 7150,
+      "sha256": "658723c5ba292146f34ded0adf9dcb90fd28a1c0f669b4dcefb0d0490c4a2a33",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-handoff-20260921/app53-ci-windows-failed.log",
+      "retained": "app53/windows-failed-step.log",
+      "bytes": 12461,
+      "sha256": "d0d345741982a98fb5efcb36c7b367708a1286b1e77b0825fda385a078ea21fa",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-local-writers-audit-20260921/REPORT.md",
+      "retained": "remaining-writers/REPORT.md",
+      "bytes": 11370,
+      "sha256": "9a49319da1a0c70d798b30e36148900bcefa757c67de123c9f5006b3ced6b559",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-local-writers-audit-20260921/source-identity.json",
+      "retained": "remaining-writers/source-identity.json",
+      "bytes": 3555,
+      "sha256": "b461151aeb5d391e35ff9ac57aa5741f5a3177f97ae8068d0e4304a8f67da04c",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-local-writers-audit-20260921/SHA256SUMS.json",
+      "retained": "remaining-writers/SHA256SUMS.json",
+      "bytes": 180,
+      "sha256": "4fdb2c16c4fcefd4c9214de4a7ee60e4a88b4add8e7862c5bc8afaf1c9f6091d",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-app53-windows-readiness-20260921/durable/REPORT.md",
+      "retained": "windows-readiness/REPORT.md",
+      "bytes": 4664,
+      "sha256": "9a993b0365e84d48887b23519e0dd924a3b9c12363aeb68a35044874cb12b50e",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-app53-windows-readiness-20260921/durable/source-identity.json",
+      "retained": "windows-readiness/source-identity.json",
+      "bytes": 1798,
+      "sha256": "aa0ed3528360f69940098a2dc790b5fced2a69826d47e31b7f91af3a9990ed61",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-app53-windows-readiness-20260921/durable/trace-summary.json",
+      "retained": "windows-readiness/trace-summary.json",
+      "bytes": 5232,
+      "sha256": "38fbc64a3d30b5cdda2bc654947005ceef25ee37402da85e857e2ca364b8d7dc",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-app53-windows-readiness-20260921/durable/network-summary.json",
+      "retained": "windows-readiness/network-summary.json",
+      "bytes": 10814,
+      "sha256": "089f90b01d50a9d7fbc1b07e87f172e4407b7a157f06fa9fa4557bc5f6809f80",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-release-20260921/issue88-updated.json",
+      "retained": "issue88-updated-before-keyboard-commit.json",
+      "bytes": 6357,
+      "sha256": "00ddf5638b9f45f30eb3ceb8c1f0b55957f0da18d84b8f00777f78e28542186c",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-fix-20260921/pptx-dev/docs/evidence/completion-keyboard-20260921/final-source.json",
+      "sourceCommit": "b33dc18e8c35803386feb80e7822f240a9671243",
+      "sourceRepo": "Data-Advantage/pptx-dev",
+      "retained": "app53/keyboard-final-source.json",
+      "bytes": 1596,
+      "sha256": "31b3fc26cf33c3779adce781a19a45e876e3f960de08bf96b70bd101167f6067",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-fix-20260921/pptx-dev/docs/evidence/completion-keyboard-20260921/build/receipt.json",
+      "sourceCommit": "b33dc18e8c35803386feb80e7822f240a9671243",
+      "sourceRepo": "Data-Advantage/pptx-dev",
+      "retained": "app53/keyboard-build-receipt.json",
+      "bytes": 2112,
+      "sha256": "5a247d66563d388b80c1086003f42ff666c34e9825c7a9cdf77e7821dff4bce2",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-fix-20260921/pptx-dev/docs/evidence/completion-keyboard-20260921/diagnostics/phase4/causal-summary.json",
+      "sourceCommit": "b33dc18e8c35803386feb80e7822f240a9671243",
+      "sourceRepo": "Data-Advantage/pptx-dev",
+      "retained": "app53/keyboard-phase4-summary.json",
+      "bytes": 375,
+      "sha256": "e5d12b50e3f53a718cf90bec8f4d9ca44694c4fe5365555c8e87405cda24ad8f",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-release-20260921/issue88-keyboard-updated.json",
+      "retained": "issue88-keyboard-updated.json",
+      "bytes": 7055,
+      "sha256": "0550f4915d17c2a551f7f9f1db0691b10b4b381d4e1cae0ceae2db8c9fdec802",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-release-20260921/issue88-keyboard-update.md",
+      "retained": "issue88-keyboard-update.md",
+      "bytes": 6941,
+      "sha256": "74b4831394641e876d4f2f07a35186498c01ba3296b376a3109055a604a2b985",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-release-20260921/keyboard-commit-receipt.json",
+      "retained": "app53/keyboard-commit-receipt.json",
+      "bytes": 475,
+      "sha256": "dd96b889134f1975357f6e395de9b24f8d26b9f0373e055e452734b812a3db65",
+      "copiedUnchanged": true,
+      "sourcePathLaterUpdated": true,
+      "note": "Original captured bytes and hash retained; later source-path additions are preserved separately in keyboard-commit-verified.json."
+    },
+    {
+      "source": "/private/tmp/opf-author-source-release-20260921/keyboard-preview.json",
+      "retained": "app53/keyboard-preview.json",
+      "bytes": 343,
+      "sha256": "7a6a6f6be40477539e39d4112cebcb3ef3629f35de6efa30c94cc37f4e17c3e5",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-release-20260921/keyboard-check-contexts.json",
+      "retained": "app53/keyboard-check-contexts.json",
+      "bytes": 1472,
+      "sha256": "22c2d0d7ff5a2c4b57d05cf7a2b2f5f5bcd826b7133d1221728895320e966f77",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-release-20260921/keyboard-pr.json",
+      "retained": "app53/keyboard-pr.json",
+      "bytes": 338,
+      "sha256": "7f99d22c4d0b97e0215e79abbc6d02e8f40d8c6dd18cabbbea196c7ca52b7aa5",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-release-20260921/keyboard-commit-receipt.json",
+      "retained": "app53/keyboard-commit-verified.json",
+      "bytes": 554,
+      "sha256": "f0457de6fb2ff84779c393f3d304f8c152561539f03dcbe9bae2aec7773f7a0b",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-release-20260921/keyboard-merged-pr.json",
+      "retained": "app53/keyboard-merged-pr.json",
+      "bytes": 261,
+      "sha256": "2f788f12dbdc8f191510cd029fb75bf3a631f65235fdf34e40f050343d9caf1d",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-release-20260921/keyboard-premerge-pr.json",
+      "retained": "app53/keyboard-premerge-pr.json",
+      "bytes": 1702,
+      "sha256": "e6152df91041f9f13cb193599f6cbf36a19dd6348a22a42dad2e05c6930b7b6e",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-release-20260921/keyboard-ci/release-audit.json",
+      "retained": "app53/premerge-ci/release-audit.json",
+      "bytes": 1637,
+      "sha256": "40b4c6a4a1adb909ba5b057a9e00c11da7bcb2f41707f03826dd236087780aa1",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-release-20260921/keyboard-ci/application-final.json",
+      "retained": "app53/premerge-ci/application-final.json",
+      "bytes": 367,
+      "sha256": "d09bff728467cc34a99e0f7dc68d997e915aaab3dc72190ff2c3ed1230a9c8a7",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-release-20260921/keyboard-ci/application-jobs-final.json",
+      "retained": "app53/premerge-ci/application-jobs-final.json",
+      "bytes": 7521,
+      "sha256": "bdf6d50df5b113bec5aa9c9a4729836e0e1ba9739f6e51cd1537b8dc116f3914",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-release-20260921/keyboard-ci/artifact-ci-final.json",
+      "retained": "app53/premerge-ci/artifact-ci-final.json",
+      "bytes": 367,
+      "sha256": "8f3cc3ba41c98463070442c035c634ef5dd713de5915f7268389d093329bf45a",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-release-20260921/keyboard-ci/artifacts-final.json",
+      "retained": "app53/premerge-ci/artifacts-final.json",
+      "bytes": 773,
+      "sha256": "f8beac5895329618500b388e45f5479ed3f7c721ba0e8e7f47132990ceedda6e",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-release-20260921/keyboard-ci/browser-results.json",
+      "retained": "app53/premerge-ci/browser-results.json",
+      "bytes": 14000,
+      "sha256": "ef32e30ac993e45ac2eba7fb7829a9c6235a518c865cf4adb5aa0723800149cf",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-release-20260921/keyboard-ci/windows-timing-summary.json",
+      "retained": "app53/premerge-ci/windows-timing-summary.json",
+      "bytes": 3039,
+      "sha256": "28d8d565b1eb199621d79da87341c471ab25351feac66a9bde2ac2ee88aec84d",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-local-writers-20260921/REPORT.md",
+      "retained": "preset-negative-controls/REPORT.md",
+      "bytes": 6995,
+      "sha256": "e11900ad543dbddb714e54ce4909a935f2609171f9d34c7dece1d79600e7caf4",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-local-writers-20260921/source-identity.json",
+      "retained": "preset-negative-controls/source-identity.json",
+      "bytes": 1563,
+      "sha256": "a859a31c9d6f9fbe2c5197ed62a1e3404c3957606a2b3453b6e171206aa8c62f",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-local-writers-20260921/source-after.json",
+      "retained": "preset-negative-controls/source-after.json",
+      "bytes": 1627,
+      "sha256": "0fd2d5df265245a7b80f79ed614f45b869d422c53849ff020de551d039fb3aae",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-local-writers-20260921/runtime.json",
+      "retained": "preset-negative-controls/runtime.json",
+      "bytes": 215,
+      "sha256": "edb7f62f2bdcd3275f70ef4b70ba6d9431ac6c943b30f977c6553a17a81e5610",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-local-writers-20260921/results.json",
+      "retained": "preset-negative-controls/results.json",
+      "bytes": 4811,
+      "sha256": "5f2a7a18d95fd33ef10ec5782cae1db895078cf9c5ed23633a4b448ca2b184a9",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-local-writers-20260921/negative-control.cjs",
+      "retained": "preset-negative-controls/negative-control.cjs",
+      "bytes": 9520,
+      "sha256": "8c4137385e8c57f1580b549a9354200302322d564474030457c3db5fafa7ea30",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-local-writers-20260921/SHA256SUMS",
+      "retained": "preset-negative-controls/SHA256SUMS",
+      "bytes": 3856,
+      "sha256": "44a6f1e2b88650674a39a0e07494515a31c96b699559ef70beb29d1d7bcf9c16",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/.gitattributes",
+      "retained": "canonical/.gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/REPORT.md",
+      "retained": "canonical/REPORT.md",
+      "bytes": 7549,
+      "sha256": "adb2d492bf7f3c2ee25c6369131119311475b26965f585cdf304474c49a3c8db",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/SHA256SUMS.json",
+      "retained": "canonical/SHA256SUMS.json",
+      "bytes": 7055,
+      "sha256": "d862cecd5d05339ba353d976d7296f456d3b4b69e9a633530319f7139f7f4d4d",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/archive-checks.json",
+      "retained": "canonical/archive-checks.json",
+      "bytes": 9246,
+      "sha256": "039b1cf5bceb7326f849aff31a21ccc9eccfd04c19ed78ac19910579755a33cd",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/artifact-inventory.json",
+      "retained": "canonical/artifact-inventory.json",
+      "bytes": 48883,
+      "sha256": "d0c74980353e90cbf1337fdbbd00a0fb3204dfd54316714faee550e27ba6ec1c",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/browser.log",
+      "retained": "canonical/browser.log",
+      "bytes": 4643,
+      "sha256": "a3c19681568725710e0b5f3900e1d70c9b6ab976adf0e9d9362c5b211222e988",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/copy-provenance.json",
+      "retained": "canonical/copy-provenance.json",
+      "bytes": 17156,
+      "sha256": "794d8333a0bd450cd2a4e812123a75e41d029cf5d1f0a2af33376a583220020f",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/download-checks.json",
+      "retained": "canonical/download-checks.json",
+      "bytes": 9475,
+      "sha256": "a3d5b67568b645c5adcff1818f7f740e44aa0f6cd511e60cba0845f47bfc0c48",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/downloads/05/author-export.pptx",
+      "retained": "canonical/downloads/05/author-export.pptx",
+      "bytes": 16330,
+      "sha256": "070cddbcb5a3aa9d6916531f212fd067d9ebe8033f715e98ade5b78229530696",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/downloads/24/canceled-and-unchanged.opf.json",
+      "retained": "canonical/downloads/24/canceled-and-unchanged.opf.json",
+      "bytes": 325,
+      "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/downloads/24/code-after-edit.opf.json",
+      "retained": "canonical/downloads/24/code-after-edit.opf.json",
+      "bytes": 326,
+      "sha256": "277350fc50382bead15896aef5fa53a33cd099792df57153d0b9b1b12f1fd08d",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/downloads/24/code-untouched.opf.json",
+      "retained": "canonical/downloads/24/code-untouched.opf.json",
+      "bytes": 325,
+      "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/downloads/24/edited.opf.json",
+      "retained": "canonical/downloads/24/edited.opf.json",
+      "bytes": 326,
+      "sha256": "277350fc50382bead15896aef5fa53a33cd099792df57153d0b9b1b12f1fd08d",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/downloads/24/pending-export.opf.json",
+      "retained": "canonical/downloads/24/pending-export.opf.json",
+      "bytes": 333,
+      "sha256": "fef6e27eb0502229556af2721299c078060b2a552a41c4c76e014c98e0c07209",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/downloads/24/pending-redo.opf.json",
+      "retained": "canonical/downloads/24/pending-redo.opf.json",
+      "bytes": 333,
+      "sha256": "fef6e27eb0502229556af2721299c078060b2a552a41c4c76e014c98e0c07209",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/downloads/24/pending-undo.opf.json",
+      "retained": "canonical/downloads/24/pending-undo.opf.json",
+      "bytes": 326,
+      "sha256": "277350fc50382bead15896aef5fa53a33cd099792df57153d0b9b1b12f1fd08d",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/downloads/24/pending-without-blur.opf.json",
+      "retained": "canonical/downloads/24/pending-without-blur.opf.json",
+      "bytes": 339,
+      "sha256": "10d30faeb9f230b1e9ebe0f8bf20a91e65bc428051de62b6063c56fcada1c0cd",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/downloads/24/preview-untouched.opf.json",
+      "retained": "canonical/downloads/24/preview-untouched.opf.json",
+      "bytes": 325,
+      "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/downloads/24/redo.opf.json",
+      "retained": "canonical/downloads/24/redo.opf.json",
+      "bytes": 326,
+      "sha256": "277350fc50382bead15896aef5fa53a33cd099792df57153d0b9b1b12f1fd08d",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/downloads/24/rejected-code-source.opf.json",
+      "retained": "canonical/downloads/24/rejected-code-source.opf.json",
+      "bytes": 362,
+      "sha256": "6998a9087f9827297ccedc02c7f065e94f1bb38925e8046f2ec3da146083e1ad",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/downloads/24/rejected-duplicate-key.opf.json",
+      "retained": "canonical/downloads/24/rejected-duplicate-key.opf.json",
+      "bytes": 362,
+      "sha256": "6998a9087f9827297ccedc02c7f065e94f1bb38925e8046f2ec3da146083e1ad",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/downloads/24/reordered-import-redo.opf.json",
+      "retained": "canonical/downloads/24/reordered-import-redo.opf.json",
+      "bytes": 147,
+      "sha256": "73adbc340500a894e4366bc080e49fe1bdeaacc6792cb0487e7442d6ecea652d",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/downloads/24/reordered-import-undo.opf.json",
+      "retained": "canonical/downloads/24/reordered-import-undo.opf.json",
+      "bytes": 339,
+      "sha256": "10d30faeb9f230b1e9ebe0f8bf20a91e65bc428051de62b6063c56fcada1c0cd",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/downloads/24/reordered-import.opf.json",
+      "retained": "canonical/downloads/24/reordered-import.opf.json",
+      "bytes": 147,
+      "sha256": "73adbc340500a894e4366bc080e49fe1bdeaacc6792cb0487e7442d6ecea652d",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/downloads/24/undo.opf.json",
+      "retained": "canonical/downloads/24/undo.opf.json",
+      "bytes": 325,
+      "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/downloads/25/canceled-and-unchanged.opf.json",
+      "retained": "canonical/downloads/25/canceled-and-unchanged.opf.json",
+      "bytes": 332,
+      "sha256": "c40c5080ca23fb28e12398e7a35d3dac7859e7cc659b32a24133559119722608",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/downloads/25/code-after-edit.opf.json",
+      "retained": "canonical/downloads/25/code-after-edit.opf.json",
+      "bytes": 333,
+      "sha256": "2a1735f628ea3b06436d3baadbf85ec648280994690033c35c28cbe0a5ddd9f0",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/downloads/25/code-untouched.opf.json",
+      "retained": "canonical/downloads/25/code-untouched.opf.json",
+      "bytes": 332,
+      "sha256": "c40c5080ca23fb28e12398e7a35d3dac7859e7cc659b32a24133559119722608",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/downloads/25/edited.opf.json",
+      "retained": "canonical/downloads/25/edited.opf.json",
+      "bytes": 333,
+      "sha256": "2a1735f628ea3b06436d3baadbf85ec648280994690033c35c28cbe0a5ddd9f0",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/downloads/25/pending-export.opf.json",
+      "retained": "canonical/downloads/25/pending-export.opf.json",
+      "bytes": 340,
+      "sha256": "539230d507f00c2818b0eeba38fd1cb05b4d72e05d6407d36f7657ef600a002d",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/downloads/25/pending-redo.opf.json",
+      "retained": "canonical/downloads/25/pending-redo.opf.json",
+      "bytes": 340,
+      "sha256": "539230d507f00c2818b0eeba38fd1cb05b4d72e05d6407d36f7657ef600a002d",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/downloads/25/pending-undo.opf.json",
+      "retained": "canonical/downloads/25/pending-undo.opf.json",
+      "bytes": 333,
+      "sha256": "2a1735f628ea3b06436d3baadbf85ec648280994690033c35c28cbe0a5ddd9f0",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/downloads/25/preview-untouched.opf.json",
+      "retained": "canonical/downloads/25/preview-untouched.opf.json",
+      "bytes": 332,
+      "sha256": "c40c5080ca23fb28e12398e7a35d3dac7859e7cc659b32a24133559119722608",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/downloads/25/redo.opf.json",
+      "retained": "canonical/downloads/25/redo.opf.json",
+      "bytes": 333,
+      "sha256": "2a1735f628ea3b06436d3baadbf85ec648280994690033c35c28cbe0a5ddd9f0",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/downloads/25/undo.opf.json",
+      "retained": "canonical/downloads/25/undo.opf.json",
+      "bytes": 332,
+      "sha256": "c40c5080ca23fb28e12398e7a35d3dac7859e7cc659b32a24133559119722608",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/downloads/26/edited.opf.json",
+      "retained": "canonical/downloads/26/edited.opf.json",
+      "bytes": 326,
+      "sha256": "277350fc50382bead15896aef5fa53a33cd099792df57153d0b9b1b12f1fd08d",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/downloads/26/redo.opf.json",
+      "retained": "canonical/downloads/26/redo.opf.json",
+      "bytes": 326,
+      "sha256": "277350fc50382bead15896aef5fa53a33cd099792df57153d0b9b1b12f1fd08d",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/downloads/26/undo.opf.json",
+      "retained": "canonical/downloads/26/undo.opf.json",
+      "bytes": 325,
+      "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/downloads/26/untouched.opf.json",
+      "retained": "canonical/downloads/26/untouched.opf.json",
+      "bytes": 325,
+      "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/observations/06/edited-source.json",
+      "retained": "canonical/observations/06/edited-source.json",
+      "bytes": 202,
+      "sha256": "f09f49ed355f8a3503d13e4268153e970f9c06ee986065a89d6e8be6665f4671",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/observations/06/original-source.json",
+      "retained": "canonical/observations/06/original-source.json",
+      "bytes": 205,
+      "sha256": "61d515fd443a657eb4f6c2fed93e3734182aab2f84b2fb250c1fd1aa3b8e1af6",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/observations/07/keyboard-bubbles.json",
+      "retained": "canonical/observations/07/keyboard-bubbles.json",
+      "bytes": 1652,
+      "sha256": "a1bdb25e35eda58a487c4ace86108da82c499940f90e45f754d93c9fd17484cb",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/observations/08/actual-source.json",
+      "retained": "canonical/observations/08/actual-source.json",
+      "bytes": 767,
+      "sha256": "3590b76552f6afaf7c9af8095eae05feb702333fc1a0fd10b2fad491bd285651",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/observations/08/desired-source.json",
+      "retained": "canonical/observations/08/desired-source.json",
+      "bytes": 767,
+      "sha256": "3590b76552f6afaf7c9af8095eae05feb702333fc1a0fd10b2fad491bd285651",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/observations/08/original-source.json",
+      "retained": "canonical/observations/08/original-source.json",
+      "bytes": 738,
+      "sha256": "1525be094f6dab2c58d5cdd69fc5acb86423764305f05e9515110af8f67a2636",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/observations/09/actual-source.json",
+      "retained": "canonical/observations/09/actual-source.json",
+      "bytes": 804,
+      "sha256": "302a28aff91ab1669ecfad7cbd2e2a08fa65f451efbdb81e508dc7021e15100f",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/observations/09/desired-source.json",
+      "retained": "canonical/observations/09/desired-source.json",
+      "bytes": 804,
+      "sha256": "302a28aff91ab1669ecfad7cbd2e2a08fa65f451efbdb81e508dc7021e15100f",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/observations/09/original-source.json",
+      "retained": "canonical/observations/09/original-source.json",
+      "bytes": 772,
+      "sha256": "a90c0c8927c1bd6d92c4732c94fda179f1b7ff151d61a91230f2097d55537de9",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/observations/22/authored-source.json",
+      "retained": "canonical/observations/22/authored-source.json",
+      "bytes": 302,
+      "sha256": "f4177cbb0fc6a9ad471fc3ab52f39cb14c7dc62b497ded9d840c9e0dbea21e62",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/observations/22/copied-source.json",
+      "retained": "canonical/observations/22/copied-source.json",
+      "bytes": 302,
+      "sha256": "f4177cbb0fc6a9ad471fc3ab52f39cb14c7dc62b497ded9d840c9e0dbea21e62",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/observations/22/paste-worker-requests.json",
+      "retained": "canonical/observations/22/paste-worker-requests.json",
+      "bytes": 83,
+      "sha256": "54051725e2e06fd8e83369628086d875dcd7b48b1e02b5e5435e00e6021bdfa4",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/observations/24/original-source.json",
+      "retained": "canonical/observations/24/original-source.json",
+      "bytes": 325,
+      "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/observations/25/original-source.json",
+      "retained": "canonical/observations/25/original-source.json",
+      "bytes": 332,
+      "sha256": "c40c5080ca23fb28e12398e7a35d3dac7859e7cc659b32a24133559119722608",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/observations/26/original-source.json",
+      "retained": "canonical/observations/26/original-source.json",
+      "bytes": 325,
+      "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/outcomes.json",
+      "retained": "canonical/outcomes.json",
+      "bytes": 16445,
+      "sha256": "926341abf193409cb7533e04ba340ad6c7f48ed3800580da9c1c2635694b62d9",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/production-after.json",
+      "retained": "canonical/production-after.json",
+      "bytes": 689,
+      "sha256": "64d1bf1ae1fd18226ef2755c1c6d3c37456ab03866030629cd1829c47f4872ba",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/production-before.json",
+      "retained": "canonical/production-before.json",
+      "bytes": 610,
+      "sha256": "c36fc6ad132aaa1b3da6251dae410b1391c9fc4a29bb472d629af53506957c91",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/results.json",
+      "retained": "canonical/results.json",
+      "bytes": 46686,
+      "sha256": "3823e3441e7e171e1b03b4769e3cb8bc447c98c8323dac63640b0c536fbbe0b9",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/runtime-after-run.json",
+      "retained": "canonical/runtime-after-run.json",
+      "bytes": 685,
+      "sha256": "0cdcbbffe428b6cc49c3b9c1a824101a4ce63fdb3bad0e8567287d824744c18a",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/screenshots/author-crlf-preview.png",
+      "retained": "canonical/screenshots/author-crlf-preview.png",
+      "bytes": 102039,
+      "sha256": "15aa009e3144712a1808ce4cea995f3d388fbb0cd751907e442196549cae7ea6",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/screenshots/author-lf-categorical-complete.png",
+      "retained": "canonical/screenshots/author-lf-categorical-complete.png",
+      "bytes": 175776,
+      "sha256": "3e602f80e811b7d232c9ca9073799b1990109c4387aee8aa4d5334fa1d23f52f",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/screenshots/author-lf-rejection-source.png",
+      "retained": "canonical/screenshots/author-lf-rejection-source.png",
+      "bytes": 129951,
+      "sha256": "0a0808bb4419e6940e83692e053d4e28a0bbced2a7e9ed4b120756dbd4d02aa9",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/screenshots/inspector-lf-source.png",
+      "retained": "canonical/screenshots/inspector-lf-source.png",
+      "bytes": 188321,
+      "sha256": "e7bc1d9c5a2d917b28c3c73195c4dfd9b7c02f67f73f1159f1138489bf62d97e",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/screenshots/suggestion-details-clipped.png",
+      "retained": "canonical/screenshots/suggestion-details-clipped.png",
+      "bytes": 143474,
+      "sha256": "46d1df1f3706cc240b2c59d8352bac1372a9a5092cbe5d3b03f5b5fdcc78eb32",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/source-after.json",
+      "retained": "canonical/source-after.json",
+      "bytes": 1004,
+      "sha256": "63be823d71d8cd61a91eec27c8e55fd4b0cc1b8ab71d8e5e4b859712149ee86d",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/source-before.json",
+      "retained": "canonical/source-before.json",
+      "bytes": 2139,
+      "sha256": "2ac16ecdb1b5f7ab03da011e14d4451ab52431635ee91b20bb7951c8844c5b04",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/source-comparison.json",
+      "retained": "canonical/source-comparison.json",
+      "bytes": 6775,
+      "sha256": "a0753f634b770965aa0782939dfeaa7d82c7cc9116e3afd0427af458822895ad",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-canonical-20260921/durable/trace-retention.json",
+      "retained": "canonical/trace-retention.json",
+      "bytes": 13377,
+      "sha256": "8e67fa71e1b7a19379e33d8030629dcc99cabfc83310ce38aadf631d9ee6b7df",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-release-20260921/keyboard-postmerge-ci/application-final.json",
+      "retained": "app53/postmerge-ci/application-final.json",
+      "bytes": 324,
+      "sha256": "f06dfd4b190d4d64ba9c51274143e16f5c5cf7d63d8455cba5e21d58c216bc08",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-release-20260921/keyboard-postmerge-ci/application-jobs-final.json",
+      "retained": "app53/postmerge-ci/application-jobs-final.json",
+      "bytes": 6882,
+      "sha256": "eebd57ad4db7eacce21cf7af6d6379ce51727f1b6ba954cd4a5420c54b3afcc0",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-release-20260921/keyboard-postmerge-ci/artifact-ci-final.json",
+      "retained": "app53/postmerge-ci/artifact-ci-final.json",
+      "bytes": 324,
+      "sha256": "49c3848a56ab3f2cd52558b34063bcc0b8de0490fdd946e736d5a37395aa46e4",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-release-20260921/keyboard-postmerge-ci/artifact-download-checks.json",
+      "retained": "app53/postmerge-ci/artifact-download-checks.json",
+      "bytes": 7475,
+      "sha256": "1f2919a82f837adb031873d541f9316a6a7b95fc5df570662b887768b70b7d5f",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-release-20260921/keyboard-postmerge-ci/artifact-jobs-final.json",
+      "retained": "app53/postmerge-ci/artifact-jobs-final.json",
+      "bytes": 570,
+      "sha256": "28aa52e16a600283919961a9aec2f00df68054778a616935c9359f10453e2cbe",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-release-20260921/keyboard-postmerge-ci/artifacts-final.json",
+      "retained": "app53/postmerge-ci/artifacts-final.json",
+      "bytes": 879,
+      "sha256": "ed830f83b9b9596611d6cf15dc89308a61efaae6b5fa864ad19e10f98d251ab1",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-release-20260921/keyboard-postmerge-ci/browser-results.json",
+      "retained": "app53/postmerge-ci/browser-results.json",
+      "bytes": 14052,
+      "sha256": "495ed04dd189d8dc910d4e94da6d7aa09a0499f75f68bf25865c1c2b07a0a39f",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-release-20260921/keyboard-postmerge-ci/ci-excerpt.log",
+      "retained": "app53/postmerge-ci/ci-excerpt.log",
+      "bytes": 14298,
+      "sha256": "8208e8e7aa6d2a878885155b1ebdcd02b966772cd58797e7b64e5cd67058d851",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-release-20260921/keyboard-postmerge-ci/linux-failure-facts.json",
+      "retained": "app53/postmerge-ci/linux-failure-facts.json",
+      "bytes": 3611,
+      "sha256": "b252d14101413b236ef0b8453ee9510969d6d8c5e0ec0c9bb912af0c2cb00d4f",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-release-20260921/keyboard-postmerge-ci/release-audit.json",
+      "retained": "app53/postmerge-ci/release-audit.json",
+      "bytes": 1420,
+      "sha256": "eb6679f52618daad74b4668d0935bda31c9d1896ccc27d7f4e6a3941f28d9e89",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-release-20260921/keyboard-postmerge-ci/remote-commit.json",
+      "retained": "app53/postmerge-ci/remote-commit.json",
+      "bytes": 205,
+      "sha256": "ceb609779a4ea3375076f33f789df8beb3d61e9ca844c38c82b5bf69f65fa0c4",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-release-20260921/keyboard-postmerge-ci/windows-timing-summary.json",
+      "retained": "app53/postmerge-ci/windows-timing-summary.json",
+      "bytes": 3531,
+      "sha256": "18980348dab5cc5aa7ccbf7240bd516e7ade7afa8d09677141a45ce543c82962",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-release-20260921/keyboard-postmerge-ci/SHA256SUMS.json",
+      "retained": "app53/postmerge-ci/SHA256SUMS.json",
+      "bytes": 14861,
+      "sha256": "090dcf929a561ea3d8f8ccbff43a0eabc3f0b76931821664161771673e067e6f",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-release-20260921/keyboard-postmerge-ci/windows-readiness/svg-security-published-SVG-25408-rted-document-strings-inert/windows-readiness-timings.json",
+      "retained": "app53/postmerge-ci/windows-readiness/svg-security-published-SVG-25408-rted-document-strings-inert/windows-readiness-timings.json",
+      "bytes": 66248,
+      "sha256": "2b86d3e14e58ea9c2b07df1e1dbe88040ec23b2ec15bef5b4cc0ae6e2776ab91",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-release-20260921/keyboard-postmerge-ci/REPORT.md",
+      "retained": "app53/postmerge-ci/original-private-report.txt",
+      "bytes": 5831,
+      "sha256": "b8ace2b30c904ebbfa220ff9a3e2c58ce15efca671faf7865ee08b6ca17c35e9",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-release-20260921/issue88-app53-production-update.md",
+      "retained": "issue88-app53-production-update.md",
+      "bytes": 7465,
+      "sha256": "b845234f98e0aa2f52e43ca3f6f53ef294b75affb50c3dd154e031af6e749a59",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-release-20260921/issue88-app53-production-updated.json",
+      "retained": "issue88-app53-production-updated.json",
+      "bytes": 7614,
+      "sha256": "78f9ec4064d5c97449ab97e82f25a5c1b46cf1b5eade8525bee770af58ec3b1a",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-svg-security-postmerge-diagnostic-20260921/REPORT.md",
+      "retained": "inspector-share-diagnosis/REPORT.md",
+      "bytes": 9726,
+      "sha256": "2acd7361981dce8c8db10ce88463f6cb994099ddb7f1f97e2c3734afd116c94c",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-svg-security-postmerge-diagnostic-20260921/trace-facts.json",
+      "retained": "inspector-share-diagnosis/trace-facts.json",
+      "bytes": 12772,
+      "sha256": "952f7850c64bce2e7e077dfec3c08b333fcc33b6fba7d3138d55234be987e6ef",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-svg-security-postmerge-diagnostic-20260921/hostile-url-document.json",
+      "retained": "inspector-share-diagnosis/hostile-url-document.json",
+      "bytes": 637,
+      "sha256": "cefa347790bf2d3fcbbc6c6702a1ddf3845c8e967df8e1952e74956fcfe206f3",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-svg-security-postmerge-diagnostic-20260921/starter-url-document.json",
+      "retained": "inspector-share-diagnosis/starter-url-document.json",
+      "bytes": 3864,
+      "sha256": "2f9d1e42de8e492afaa5e5f06c4dc5fab005378273deb415eea780e889646a5f",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-svg-security-postmerge-diagnostic-20260921/analyze-trace.py",
+      "retained": "inspector-share-diagnosis/analyze-trace.py",
+      "bytes": 3252,
+      "sha256": "67ece3d668cf5560fa9f9ca182242c20f7ff34c22557952d9002837004b0e76e",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-svg-security-postmerge-diagnostic-20260921/SHA256SUMS",
+      "retained": "inspector-share-diagnosis/SHA256SUMS",
+      "bytes": 611,
+      "sha256": "66516a266e2009c70659197957f6531a97f754ad11c3bb1a61914a0ef8cf2b7e",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-release-20260921/issue88-app53-diagnosis-update.md",
+      "retained": "issue88-app53-diagnosis-update.md",
+      "bytes": 8038,
+      "sha256": "59452ff27371f87609534112376f7e6827f9aff4c20bbe55fd956b18b731ba6a",
+      "copiedUnchanged": true
+    },
+    {
+      "source": "/private/tmp/opf-author-source-release-20260921/issue88-app53-diagnosis-updated.json",
+      "retained": "issue88-app53-diagnosis-updated.json",
+      "bytes": 8189,
+      "sha256": "e99cb6c317a8bf40d8f19d492bb5c5c4ebb7e955ab665a977ad1d0038ba8bd98",
+      "copiedUnchanged": true
+    }
+  ],
+  "derived": [
+    "local/final-26-of-27.json",
+    "checkpoint.json",
+    "app53/keyboard-current-head.json",
+    "app53/merge-tree-receipt.json"
+  ],
+  "omitted": "Bulk local app browser traces, images, report bodies and full controls remain linked in the immutable App53 evidence tree. Preset negative-control screenshots, traces and raw stage files remain in the original local directory identified by the copied report and original manifest; the compact copied report/results are not production acceptance."
+}

@@ -1,0 +1,12 @@
+{
+  "capturedAt": "2026-09-21T17:47:36.008Z",
+  "node": "v24.21.0",
+  "platform": "darwin",
+  "arch": "arm64",
+  "playwright": "1.63.0",
+  "configuredBrowser": "chromium",
+  "configuredChannel": null,
+  "installedChromiumExecutable": "/Users/michael/Library/Caches/ms-playwright/chromium-1243/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing",
+  "installedChromiumExecutableSha256": "8319963f6625accf51c0dd4f55091ceaf9f09ed39e7a52fed4fae12b2a6b668a",
+  "limitations": "Post-run installed executable inspection only; no browser launch or runtime browser.version() measurement. Actual run argv pins Node24.21.0 and report pins Playwright1.63.0."
+}

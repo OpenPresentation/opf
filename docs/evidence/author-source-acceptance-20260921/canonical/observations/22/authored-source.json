@@ -1,0 +1,7 @@
+{
+   "name" : "Keep\u0020authored",
+   "extensions" : {"review":{"amount":1e2,"path":"a\/b"}},
+   "design":{"fontScheme":"roboto"},
+   "slides" : [{"id":"first","title" : "First slide","notes":"Keep  notes"},
+      {"id":"second", "title":"Second slide", "text":[{"text":"Rich  text","bold":true}]}]
+}

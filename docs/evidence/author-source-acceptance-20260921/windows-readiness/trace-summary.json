@@ -1,0 +1,129 @@
+{
+  "source": "/private/tmp/opf-app53-windows-readiness-20260921/artifacts/svg-security-published-SVG-25408-rted-document-strings-inert/trace.zip",
+  "sha256": "22123c169df99cd0b5f925161347d4852e54cb3bb936e709bd00e97f1c030480",
+  "bytes": 269526,
+  "runtime": {
+    "version": 9,
+    "type": "context-options",
+    "origin": "library",
+    "browserName": "chromium",
+    "playwrightVersion": "1.63.0",
+    "options": {
+      "noDefaultViewport": false,
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "ignoreHTTPSErrors": false,
+      "javaScriptEnabled": true,
+      "bypassCSP": false,
+      "locale": "en-US",
+      "permissions": [
+        "clipboard-read",
+        "clipboard-write"
+      ],
+      "offline": false,
+      "isMobile": false,
+      "hasTouch": false,
+      "colorScheme": "light",
+      "reducedMotion": "no-preference",
+      "forcedColors": "none",
+      "acceptDownloads": "accept",
+      "contrast": "no-preference",
+      "baseURL": "http://127.0.0.1:4325",
+      "serviceWorkers": "allow",
+      "selectorEngines": [],
+      "testIdAttributeName": "data-testid"
+    },
+    "platform": "win32",
+    "wallTime": 1790009550356,
+    "monotonicTime": 226472.598,
+    "sdkLanguage": "javascript",
+    "testIdAttributeName": "data-testid",
+    "channel": "msedge",
+    "title": "svg-security.spec.ts:41 \u203a published SVG renderer keeps hostile shared and imported document strings inert"
+  },
+  "calls": [
+    {
+      "type": "before",
+      "callId": "call@3669",
+      "startTime": 226891.438,
+      "class": "Frame",
+      "method": "goto",
+      "params": {
+        "url": "/inspector#opf=H4sIAAAAAAAACpWPb2viQBDGv0qYt5drvKYeJDXC9QpqqcVWipAqZbM7xrX7J93dxFjJdy-pWqRQjns1w8wzv3meHSgiEWJ4VM6U1iHz7IoYZB7TtJSoHPhgBWdoIX7ageNOtPKepYYXrr_hiunN2fOzLpYjtUbqkCXOlNgLDgrwIROavhzusXYnDTwqS5bo7bWe4OoFfPgoMaxJRfaL-Ns30PifLO8AY8SRL6h2FLeyYOWk8P_D_Sl_2tI3mH2Br5wrbBwEWBNZCDzjqiKCs0AXy58WaWm4255y5tDv2Sr3tBKasGQO39qYQx-aRXvKJckR4h1YQ495PmaBrfIftRSXGbH4-8KfDO_O0-3VRTarS_rW4WT40KHXuroNWci23XC87VZU0mq8_rMZ_43emKR8NIjKbBCt0usOZ-eiTAdReCuiZRZeyems-5rO7jrp7D5iw5tf6XRUTfIkAR-IOKbhMvesoUntaYXGaPPPUM2iWTTvDIAKIH0CAAA",
+        "waitUntil": "load"
+      },
+      "stepId": "pw:api@33"
+    },
+    {
+      "type": "after",
+      "callId": "call@3669",
+      "endTime": 227575.894,
+      "result": {
+        "response": "<Response>"
+      }
+    },
+    {
+      "type": "before",
+      "callId": "call@3671",
+      "startTime": 227606.021,
+      "title": "Expect \"toBeVisible\"",
+      "class": "Frame",
+      "method": "expect",
+      "params": {
+        "selector": "internal:text=\"Loaded shared deck from URL.\"s",
+        "expression": "to.be.visible",
+        "expectedValue": {
+          "value": {
+            "v": "undefined"
+          },
+          "handles": []
+        },
+        "isNot": false,
+        "timeout": 5000
+      },
+      "stepId": "expect@34"
+    },
+    {
+      "type": "after",
+      "callId": "call@3671",
+      "endTime": 232619.845,
+      "error": {
+        "message": "Expect failed",
+        "stack": "ExpectError: Expect failed\n    at _Frame.expect (D:\\a\\pptx-dev\\pptx-dev\\node_modules\\.pnpm\\playwright-core@1.63.0\\node_modules\\playwright-core\\lib\\coreBundle.js:24312:17)\n    at _FrameDispatcher.expect (D:\\a\\pptx-dev\\pptx-dev\\node_modules\\.pnpm\\playwright-core@1.63.0\\node_modules\\playwright-core\\lib\\coreBundle.js:54886:11)\n    at _ProgressController.run (D:\\a\\pptx-dev\\pptx-dev\\node_modules\\.pnpm\\playwright-core@1.63.0\\node_modules\\playwright-core\\lib\\coreBundle.js:12374:27)\n    at DispatcherConnection.dispatch (D:\\a\\pptx-dev\\pptx-dev\\node_modules\\.pnpm\\playwright-core@1.63.0\\node_modules\\playwright-core\\lib\\coreBundle.js:19135:27)",
+        "name": "ExpectError"
+      }
+    }
+  ],
+  "snapshots": [
+    {
+      "timeMs": 226913.776,
+      "sharedLoadedTextPresentInSnapshotPayload": false,
+      "sharedNamePresentInSnapshotPayload": false,
+      "loadingInspectorTextPresentInSnapshotPayload": false,
+      "note": "Snapshots may use references to earlier nodes; presence is affirmative evidence, absence in delta is not complete DOM absence."
+    },
+    {
+      "timeMs": 227604.417,
+      "sharedLoadedTextPresentInSnapshotPayload": false,
+      "sharedNamePresentInSnapshotPayload": false,
+      "loadingInspectorTextPresentInSnapshotPayload": true,
+      "note": "Snapshots may use references to earlier nodes; presence is affirmative evidence, absence in delta is not complete DOM absence."
+    },
+    {
+      "timeMs": 227609.074,
+      "sharedLoadedTextPresentInSnapshotPayload": false,
+      "sharedNamePresentInSnapshotPayload": false,
+      "loadingInspectorTextPresentInSnapshotPayload": false,
+      "note": "Snapshots may use references to earlier nodes; presence is affirmative evidence, absence in delta is not complete DOM absence."
+    },
+    {
+      "timeMs": 232691.252,
+      "sharedLoadedTextPresentInSnapshotPayload": true,
+      "sharedNamePresentInSnapshotPayload": true,
+      "loadingInspectorTextPresentInSnapshotPayload": false,
+      "note": "Snapshots may use references to earlier nodes; presence is affirmative evidence, absence in delta is not complete DOM absence."
+    }
+  ]
+}

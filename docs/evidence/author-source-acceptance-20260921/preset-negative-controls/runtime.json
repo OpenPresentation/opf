@@ -1,0 +1,12 @@
+{
+  "node": "v24.21.0",
+  "browser": "153.0.8010.12",
+  "app": "http://127.0.0.1:4328",
+  "scenarios": [
+    "later-human-edit",
+    "new-run",
+    "file-import"
+  ],
+  "maxAttemptsPerScenario": 1,
+  "retries": 0
+}

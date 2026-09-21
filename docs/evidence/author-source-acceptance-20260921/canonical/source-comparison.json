@@ -1,0 +1,135 @@
+{
+  "checkedAt": "2026-09-21T17:47:05.788392+00:00",
+  "reviewedHead": "b33dc18e8c35803386feb80e7822f240a9671243",
+  "acceptedHead": "e40c287b64fcbcfb85fb4a8a50641aea8e3e54a8",
+  "tree": "64a0dbd702f43c87206c8a9fe16d06fe3ac68800",
+  "all18CapturedFilesUnchangedAndEqualAcceptedGitBlobs": true,
+  "files": [
+    {
+      "path": "package.json",
+      "beforeSha256": "e9ac58846cd1f59a2bdee422b0fc4e9d63e51e62e7e86205fc419bd7b0ec5540",
+      "afterSha256": "e9ac58846cd1f59a2bdee422b0fc4e9d63e51e62e7e86205fc419bd7b0ec5540",
+      "acceptedGitBlobSha256": "e9ac58846cd1f59a2bdee422b0fc4e9d63e51e62e7e86205fc419bd7b0ec5540",
+      "equal": true
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "beforeSha256": "f362abf89c57fe9e93197a54520fa5fc712e85bf78b2e011285456f37283b76f",
+      "afterSha256": "f362abf89c57fe9e93197a54520fa5fc712e85bf78b2e011285456f37283b76f",
+      "acceptedGitBlobSha256": "f362abf89c57fe9e93197a54520fa5fc712e85bf78b2e011285456f37283b76f",
+      "equal": true
+    },
+    {
+      "path": "playwright.config.ts",
+      "beforeSha256": "c95c11d3cfb6fcbcbfaa0b5c353276a965d188a31f50778175a8ed8c7b895da2",
+      "afterSha256": "c95c11d3cfb6fcbcbfaa0b5c353276a965d188a31f50778175a8ed8c7b895da2",
+      "acceptedGitBlobSha256": "c95c11d3cfb6fcbcbfaa0b5c353276a965d188a31f50778175a8ed8c7b895da2",
+      "equal": true
+    },
+    {
+      "path": "tests/e2e/json-paste-formatting.spec.ts",
+      "beforeSha256": "84b7d015613a10a8d51d0e1027b156ec38a9c6d8c912e51368dc4da77e65e065",
+      "afterSha256": "84b7d015613a10a8d51d0e1027b156ec38a9c6d8c912e51368dc4da77e65e065",
+      "acceptedGitBlobSha256": "84b7d015613a10a8d51d0e1027b156ec38a9c6d8c912e51368dc4da77e65e065",
+      "equal": true
+    },
+    {
+      "path": "tests/e2e/inspector-recovery.spec.ts",
+      "beforeSha256": "acae48d48657a7308499ff67315618b595a41f3c6ddaeaa8e8e56859406911bc",
+      "afterSha256": "acae48d48657a7308499ff67315618b595a41f3c6ddaeaa8e8e56859406911bc",
+      "acceptedGitBlobSha256": "acae48d48657a7308499ff67315618b595a41f3c6ddaeaa8e8e56859406911bc",
+      "equal": true
+    },
+    {
+      "path": "tests/e2e/toolkit.spec.ts",
+      "beforeSha256": "262603d599976178dc7ab6c60f6c5b202f5e34c0173576a12a83515aa3ea96b8",
+      "afterSha256": "262603d599976178dc7ab6c60f6c5b202f5e34c0173576a12a83515aa3ea96b8",
+      "acceptedGitBlobSha256": "262603d599976178dc7ab6c60f6c5b202f5e34c0173576a12a83515aa3ea96b8",
+      "equal": true
+    },
+    {
+      "path": "tests/e2e/monaco.spec.ts",
+      "beforeSha256": "a0bd6e22363e9552b9482a67a8875d3e9b49f77460cc5431e4e2f382735b2a55",
+      "afterSha256": "a0bd6e22363e9552b9482a67a8875d3e9b49f77460cc5431e4e2f382735b2a55",
+      "acceptedGitBlobSha256": "a0bd6e22363e9552b9482a67a8875d3e9b49f77460cc5431e4e2f382735b2a55",
+      "equal": true
+    },
+    {
+      "path": "tests/e2e/author-json-options.spec.ts",
+      "beforeSha256": "3f09784b2dd0b2ec34d91933939ded4ccd521ec613a56468eac10215ebbdd3bd",
+      "afterSha256": "3f09784b2dd0b2ec34d91933939ded4ccd521ec613a56468eac10215ebbdd3bd",
+      "acceptedGitBlobSha256": "3f09784b2dd0b2ec34d91933939ded4ccd521ec613a56468eac10215ebbdd3bd",
+      "equal": true
+    },
+    {
+      "path": "tests/e2e/author.spec.ts",
+      "beforeSha256": "8332c789d3ac0ad0179d460d6849be12816f35e00004921f2c24db838481d8ed",
+      "afterSha256": "8332c789d3ac0ad0179d460d6849be12816f35e00004921f2c24db838481d8ed",
+      "acceptedGitBlobSha256": "8332c789d3ac0ad0179d460d6849be12816f35e00004921f2c24db838481d8ed",
+      "equal": true
+    },
+    {
+      "path": "tests/e2e/yaml.spec.ts",
+      "beforeSha256": "b026cdf36c20be9967204cfb5482bf9d8a042c4ac44bb668b1683a16ce9f2eba",
+      "afterSha256": "b026cdf36c20be9967204cfb5482bf9d8a042c4ac44bb668b1683a16ce9f2eba",
+      "acceptedGitBlobSha256": "b026cdf36c20be9967204cfb5482bf9d8a042c4ac44bb668b1683a16ce9f2eba",
+      "equal": true
+    },
+    {
+      "path": "tests/e2e/completion-keyboard.spec.ts",
+      "beforeSha256": "13c9d8d04bf08cae6eed71794e347966b6544e1cc112cd182a2863265aa96687",
+      "afterSha256": "13c9d8d04bf08cae6eed71794e347966b6544e1cc112cd182a2863265aa96687",
+      "acceptedGitBlobSha256": "13c9d8d04bf08cae6eed71794e347966b6544e1cc112cd182a2863265aa96687",
+      "equal": true
+    },
+    {
+      "path": "tests/e2e/source-download-preservation.spec.ts",
+      "beforeSha256": "c0b1a976a420bfd4efce6d5ded35fb3234126f75e186cb77bd696617729b1c7c",
+      "afterSha256": "c0b1a976a420bfd4efce6d5ded35fb3234126f75e186cb77bd696617729b1c7c",
+      "acceptedGitBlobSha256": "c0b1a976a420bfd4efce6d5ded35fb3234126f75e186cb77bd696617729b1c7c",
+      "equal": true
+    },
+    {
+      "path": "tests/e2e/completion-preservation.spec.ts",
+      "beforeSha256": "4a43174702bcfec4f7abb1937ad744c6d40a3eac250c097aa2f6e04a8e06b908",
+      "afterSha256": "4a43174702bcfec4f7abb1937ad744c6d40a3eac250c097aa2f6e04a8e06b908",
+      "acceptedGitBlobSha256": "4a43174702bcfec4f7abb1937ad744c6d40a3eac250c097aa2f6e04a8e06b908",
+      "equal": true
+    },
+    {
+      "path": "tests/e2e/svg-security.spec.ts",
+      "beforeSha256": "00b80195d1df3707396dc3c1e83985268b30cd038b0bde1497bf483bed20acb4",
+      "afterSha256": "00b80195d1df3707396dc3c1e83985268b30cd038b0bde1497bf483bed20acb4",
+      "acceptedGitBlobSha256": "00b80195d1df3707396dc3c1e83985268b30cd038b0bde1497bf483bed20acb4",
+      "equal": true
+    },
+    {
+      "path": "tests/e2e/inspector.spec.ts",
+      "beforeSha256": "ff5d1161bec4c07749c868b34547e34615250fb02f44957784f541308a288606",
+      "afterSha256": "ff5d1161bec4c07749c868b34547e34615250fb02f44957784f541308a288606",
+      "acceptedGitBlobSha256": "ff5d1161bec4c07749c868b34547e34615250fb02f44957784f541308a288606",
+      "equal": true
+    },
+    {
+      "path": "tests/e2e/inspector-editing.spec.ts",
+      "beforeSha256": "47cea959ac1d321a0544b10891e7a1ce818cdf537b2a5ed952c50d30e7c8036f",
+      "afterSha256": "47cea959ac1d321a0544b10891e7a1ce818cdf537b2a5ed952c50d30e7c8036f",
+      "acceptedGitBlobSha256": "47cea959ac1d321a0544b10891e7a1ce818cdf537b2a5ed952c50d30e7c8036f",
+      "equal": true
+    },
+    {
+      "path": "tests/e2e/helpers/clipboard.ts",
+      "beforeSha256": "46dc168dabaf05874eb086c8acecce43584052052abd050853267e60be79d8f7",
+      "afterSha256": "46dc168dabaf05874eb086c8acecce43584052052abd050853267e60be79d8f7",
+      "acceptedGitBlobSha256": "46dc168dabaf05874eb086c8acecce43584052052abd050853267e60be79d8f7",
+      "equal": true
+    },
+    {
+      "path": "tests/e2e/helpers/readiness-diagnostics.ts",
+      "beforeSha256": "031351f2a03c64602b88364c99ac2783fe8d6134db346b72f9c7024108d12fb5",
+      "afterSha256": "031351f2a03c64602b88364c99ac2783fe8d6134db346b72f9c7024108d12fb5",
+      "acceptedGitBlobSha256": "031351f2a03c64602b88364c99ac2783fe8d6134db346b72f9c7024108d12fb5",
+      "equal": true
+    }
+  ]
+}

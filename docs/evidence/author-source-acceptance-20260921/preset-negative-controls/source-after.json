@@ -1,0 +1,23 @@
+{
+  "head": "b33dc18e8c35803386feb80e7822f240a9671243",
+  "status": "",
+  "files": {
+    "components/author/author-shell.tsx": "e91e874496ce69706391f438ceedd0c8285f6466194ead9a1ea4316f859ff9a9",
+    "components/author/preset-suggestion-strip.tsx": "365327fc607f53782846a156999dc2cdff33327c27bbedc60de5367e99b1aa6c",
+    "components/author/auto-apply-card.tsx": "a74406b61c73d237d6ce629c1c96fbd25132335adf8015c4c193bb5c683a57be",
+    "components/author/workbench/opf-canvas-workbench.tsx": "218d30153cfc0762db08d07bcf8d2c9483f41f5588fd7dada139b1067428c85b",
+    "lib/author/apply-preset.ts": "7baba829a308753f768987dac8facc7d7c8fb41e811cdafadd7402bb6a3fbca5",
+    "lib/author/preset-matcher.ts": "aef605ae919461b538000655ed8e10260da249c5d250687d6db3a5db9339efbb",
+    "lib/author/gallery-registry.ts": "b4e3f93cc1d40ca3b94f85231881b04d9e25310e91a2acbd1fe2362046edb926",
+    "lib/author/local-workspace.ts": "34aefa12de492bd0a0067e9466b20f6bd16824706d3d515a45e60713d9204d9c",
+    "lib/author/intent.ts": "23d00509fd92293cc20d01f32744203fc1a9fe661e3c6be43674051bae9f7296",
+    "lib/playground/starter-opf.ts": "181afc6421c8043f4e3d5a799eaebaa74fe80bb4fa7d272241b266430bb32bb0",
+    "package.json": "e9ac58846cd1f59a2bdee422b0fc4e9d63e51e62e7e86205fc419bd7b0ec5540",
+    "pnpm-lock.yaml": "f362abf89c57fe9e93197a54520fa5fc712e85bf78b2e011285456f37283b76f",
+    ".next/BUILD_ID": "8a7ce7c6e76288a6adcffa22c93bf73d4ca63a460ce3adc47c5b67bf3de9b447"
+  },
+  "evidenceScriptSha256": "8c4137385e8c57f1580b549a9354200302322d564474030457c3db5fafa7ea30",
+  "sourceHashesUnchanged": true,
+  "headUnchanged": true,
+  "scriptUnchanged": true
+}

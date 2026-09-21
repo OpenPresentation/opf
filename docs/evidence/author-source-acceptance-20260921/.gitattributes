@@ -1,0 +1,6 @@
+# Captured source bytes and logs retain literal whitespace and line endings.
+* -text
+*.json whitespace=cr-at-eol
+*.log whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol
+canonical/downloads/** whitespace=cr-at-eol,-blank-at-eol
+canonical/observations/** whitespace=cr-at-eol,-blank-at-eol
