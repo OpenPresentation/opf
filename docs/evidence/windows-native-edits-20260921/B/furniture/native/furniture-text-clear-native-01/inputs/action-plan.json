@@ -1,0 +1,44 @@
+[
+  {
+    "op": "set-text",
+    "slideIndex": 1,
+    "shapeName": "OPF furniture 0 part 0 line 0",
+    "text": "  Native edited header\twords"
+  },
+  {
+    "op": "set-text",
+    "slideIndex": 1,
+    "shapeName": "OPF furniture 0 part 0 line 1",
+    "text": ""
+  },
+  {
+    "op": "set-text",
+    "slideIndex": 2,
+    "shapeName": "OPF furniture 1 part 1 line 0",
+    "text": "Native local label"
+  },
+  {
+    "op": "set-alt",
+    "slideIndex": 2,
+    "shapeName": "OPF image 1",
+    "alt": ""
+  },
+  {
+    "op": "set-text",
+    "slideIndex": 3,
+    "shapeName": "OPF furniture 2 part 0 line 0",
+    "text": ""
+  },
+  {
+    "op": "set-text",
+    "slideIndex": 3,
+    "shapeName": "OPF furniture 2 part 0 line 1",
+    "text": ""
+  },
+  {
+    "op": "set-text",
+    "slideIndex": 3,
+    "shapeName": "OPF furniture 2 part 0 line 2",
+    "text": ""
+  }
+]

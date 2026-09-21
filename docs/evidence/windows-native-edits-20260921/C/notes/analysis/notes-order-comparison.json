@@ -1,0 +1,36 @@
+{
+  "passed": true,
+  "node": "v24.21.0",
+  "verifierSha256": "c55458daf1cd2611cc962dd09868df0f12d006911d8de1a5427879209ff1b778",
+  "converterModule": "file:///C:/Users/micha/.codex/worktrees/fd3f/opf/artifacts/windows-resume-20260921/registry-consumer/node_modules/@openpresentation/opf-pptx/dist/index.js",
+  "converterEntrypointSha256": "ba8fa87cebb32db9675f71bec91cc257e8d02a9d0977ca133666c6257eb07716",
+  "lockSha256": "4868f13254e3e681566164da8427d3716ceaa025435e4606e5e15fc8a87bc305",
+  "sourcePair": {
+    "id": "notes-control",
+    "originalSha256": "31cbae629b3d49ba0d6313bff95c59f645f5cafa0f0585e556fd9ebe66d4512c",
+    "reorderedSha256": "1b263edfc81ce6489179498925acf4e0ad7546288a84a33efec16900811fe6f4",
+    "changedParts": [
+      "ppt/presentation.xml"
+    ],
+    "semanticImportSha256": "87abaadda67da943754f2f9d9d8acb60cb6f397c2c770fdaa54c82d6a68d13be"
+  },
+  "changedParts": [
+    "ppt/presentation.xml"
+  ],
+  "originalOrder": "sldIdLst then notesMasterIdLst",
+  "controlledOrder": "notesMasterIdLst then sldIdLst",
+  "production": {
+    "nativeLifecycle": "pass",
+    "savedSha256": "5701d60430e227104fa81cf703077bfc6ae411067f0519cdf9d9c72c2975f8a2",
+    "currentNotesTitlesAndBody": "pass",
+    "cleanupConfirmed": true
+  },
+  "reordered": {
+    "nativeLifecycle": "refused",
+    "call": "Presentations.Open",
+    "hresult": "0x80070570",
+    "cleanupConfirmed": false,
+    "timeout": false
+  },
+  "conclusion": "Retain production ordering. Both archives parse and import identically offline, but only the current production control passed native open/save/close/reopen. Refusal is observed for this controlled file; it does not isolate all packaging versus XML-order causes or establish universal Office behavior. No retry was performed."
+}

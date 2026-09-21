@@ -1,0 +1,456 @@
+{
+  "schemaVersion": 1,
+  "passed": true,
+  "scope": "Offline current-registry semantic reimport of completed, cleanup-confirmed native furniture lifecycle reports. No Office, COM, UI, or native edit is performed.",
+  "generatedAt": "2026-09-21T18:34:49.429Z",
+  "node": {
+    "version": "v24.21.0",
+    "executable": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\toolchain\\node_modules\\node\\bin\\node.exe"
+  },
+  "audit": {
+    "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-semantic-audit-01\\audit.mjs",
+    "sha256": "2cab20b679c21d57fd13c4faa584651cd6e8ab250b7879fcbc557c8f769969ac"
+  },
+  "fixtureManifest": {
+    "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-registry-03\\manifest.json",
+    "sha256": "815e2a572e8ed283b08841fb807853bec5a17c047283ed81c5d59fb38d6e1544",
+    "generator": {
+      "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\sources\\opf-pptx\\test\\native-furniture-fixtures.mjs",
+      "sha256": "9378823b88f64b528e9a4b9f98cb28b47dcc31a02eabbe254a90a099f6367c4d"
+    }
+  },
+  "publicRegistry": {
+    "consumer": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer",
+    "lockFile": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\package-lock.json",
+    "lockSha256": "4868f13254e3e681566164da8427d3716ceaa025435e4606e5e15fc8a87bc305",
+    "packages": [
+      {
+        "name": "@openpresentation/opf",
+        "version": "0.11.0",
+        "manifestPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf\\package.json",
+        "manifestSha256": "86364f07f30f5106539a936b4eb84cf5a00c53524599b222f823b2460efb3a0f",
+        "entrypoint": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf\\dist\\index.js",
+        "entrypointSha256": "568ca647007962a3046094bb3d8e6d2dcfed0c9f463c91e4a9839c86a81b381f",
+        "resolved": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.11.0.tgz",
+        "integrity": "sha512-7Gm/FSyiGngHRkDG0SPL8V6FEC5nC8UpoffNWf8CqkyjXsqQ2BUIzVAEwHwKjEsEZ04FR2DT+Ohh8PJofNPFiw=="
+      },
+      {
+        "name": "@openpresentation/opf-pptx",
+        "version": "0.9.1",
+        "manifestPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-pptx\\package.json",
+        "manifestSha256": "be4944ae7405ff4d92238118eafebb93af433c53519145785553eecc3a4ef8bd",
+        "entrypoint": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-pptx\\dist\\index.js",
+        "entrypointSha256": "ba8fa87cebb32db9675f71bec91cc257e8d02a9d0977ca133666c6257eb07716",
+        "resolved": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.9.1.tgz",
+        "integrity": "sha512-krzDAKjDByP2zsoR4VeyyIwU7uhcVbxpeBYEIw7vlkoRWWiFq170rhQzQZx5lbMD7u2magYEkdUt3rUgByCKjw=="
+      },
+      {
+        "name": "@openpresentation/opf-render",
+        "version": "0.9.0",
+        "manifestPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-render\\package.json",
+        "manifestSha256": "ab5cac6fc9588b3ba694fd17a0d1bde952ebabb60977a13089626b2ec146d84f",
+        "entrypoint": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-render\\dist\\svg.js",
+        "entrypointSha256": "5f993b15608fc7e7444529ed0a1a7ebb530f5f5482d59bd025821a17c366dac1",
+        "resolved": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.9.0.tgz",
+        "integrity": "sha512-uHWABof7cuLmTAglctvcjuV5dRyIa2qmeGdwONIuKCAnNQXjAOQKXido9OcyGtk6xFjzBFtLtvD3sZOwPEJIJA=="
+      },
+      {
+        "name": "fflate",
+        "version": "0.8.3",
+        "manifestPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\fflate\\package.json",
+        "manifestSha256": "5922d8150b307bc0e4e441491c779c45379e9913d348848fca8d5cf02db4d134",
+        "entrypoint": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\fflate\\lib\\node.cjs",
+        "entrypointSha256": "befa44cd80a1da830179db9e57930050a2e460ca3df13f0b05f83f52b1491818",
+        "resolved": "https://registry.npmjs.org/fflate/-/fflate-0.8.3.tgz",
+        "integrity": "sha512-tbZNuJrLwGUp3zshBtdy4W+ORxZuIh8a5ilyIEQDC5rY1f3U20JMry0Ll3WBzU58EZKsEuJFXhb5gwv8CsPvgA=="
+      },
+      {
+        "name": "fast-xml-parser",
+        "version": "5.11.1",
+        "manifestPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\fast-xml-parser\\package.json",
+        "manifestSha256": "41c5f7f2ed20d6ab2b54d3f42730246444685a838cf381d5bf3e1eb93e2fa4cb",
+        "entrypoint": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\fast-xml-parser\\lib\\fxp.cjs",
+        "entrypointSha256": "c83b535419c52bb2868ea4c6a698720b9e0d56cdc6c1bbdec02b3080e5b0d2fb",
+        "resolved": "https://registry.npmjs.org/fast-xml-parser/-/fast-xml-parser-5.11.1.tgz",
+        "integrity": "sha512-TBw6K/fxoQGGjCmZDw9w/ZwP3uDcnTM4YH/g+PFRWr8sbe5idXtxNN6vITh4+1ruCZaho6uBFurElsA7F0zzgw=="
+      }
+    ],
+    "esmEntrypoints": [
+      {
+        "name": "@openpresentation/opf",
+        "url": "file:///C:/Users/micha/.codex/worktrees/fd3f/opf/artifacts/windows-resume-20260921/registry-consumer/node_modules/@openpresentation/opf/dist/index.js",
+        "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf\\dist\\index.js",
+        "sha256": "568ca647007962a3046094bb3d8e6d2dcfed0c9f463c91e4a9839c86a81b381f"
+      },
+      {
+        "name": "@openpresentation/opf-pptx",
+        "url": "file:///C:/Users/micha/.codex/worktrees/fd3f/opf/artifacts/windows-resume-20260921/registry-consumer/node_modules/@openpresentation/opf-pptx/dist/index.js",
+        "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-pptx\\dist\\index.js",
+        "sha256": "ba8fa87cebb32db9675f71bec91cc257e8d02a9d0977ca133666c6257eb07716"
+      },
+      {
+        "name": "@openpresentation/opf-render/svg",
+        "url": "file:///C:/Users/micha/.codex/worktrees/fd3f/opf/artifacts/windows-resume-20260921/registry-consumer/node_modules/@openpresentation/opf-render/dist/svg.js",
+        "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-render\\dist\\svg.js",
+        "sha256": "5f993b15608fc7e7444529ed0a1a7ebb530f5f5482d59bd025821a17c366dac1"
+      }
+    ],
+    "coreSchema": {
+      "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf\\dist\\spec\\schemas\\opf.schema.json",
+      "sha256": "dbb84e4e55a0d98bb14433d7df8682e1c7ef95af9b49e9d7a256b2b5ac334076"
+    }
+  },
+  "cases": [
+    {
+      "runDirectory": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-baseline-native-01",
+      "fixtureId": "baseline-inherited-local",
+      "passed": true,
+      "source": {
+        "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-registry-03\\decks\\baseline-inherited-local.pptx",
+        "sha256": "a655d692ba900027d6504458921f462dbec54de515ddec37c0f628d29c379e5f"
+      },
+      "nativeReport": {
+        "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-baseline-native-01\\report.json",
+        "sha256": "cde113550e5da0ad0bfaeaab470d12e6bac60da0312963595f19cfb425b686b2",
+        "savedPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-baseline-native-01\\native-furniture-control.pptx",
+        "savedSha256": "d719e02fa00d714d460d3e727308a0566003711552a35ad591c4813c8bce36a5"
+      },
+      "semanticSummary": {
+        "organization": {
+          "id": "registry_org",
+          "name": "  Registry Organization  "
+        },
+        "design": {
+          "header": {
+            "left": {
+              "text": "  Inherited header\twords\r\nsecond line  \r\n"
+            },
+            "center": {
+              "organization": true
+            },
+            "right": {
+              "section": true
+            }
+          },
+          "footer": {
+            "left": {
+              "text": "  Inherited footer  "
+            },
+            "right": {
+              "slideNumber": true
+            }
+          }
+        },
+        "slides": [
+          {
+            "title": "Inherited furniture",
+            "section": "  Alpha section  ",
+            "localDesign": {},
+            "effectiveHeader": {
+              "left": {
+                "text": "  Inherited header\twords\r\nsecond line  \r\n"
+              },
+              "center": {
+                "organization": true
+              },
+              "right": {
+                "section": true
+              }
+            },
+            "effectiveFooter": {
+              "left": {
+                "text": "  Inherited footer  "
+              },
+              "right": {
+                "slideNumber": true
+              }
+            },
+            "blocks": [
+              {
+                "type": "text",
+                "text": "Scalar body inherited — exact."
+              }
+            ]
+          },
+          {
+            "title": "Local furniture",
+            "section": "  Beta section  ",
+            "localDesign": {
+              "header": {
+                "left": {
+                  "image": {
+                    "srcSha256": "2608d745f3d1dddc963dafe9b517bc7af9e983e7318bf59bd520415589c36905",
+                    "alt": "  Registry furniture picture alt  "
+                  },
+                  "text": "  Local image label  "
+                },
+                "center": {
+                  "organization": true
+                },
+                "right": {
+                  "section": true
+                }
+              },
+              "footer": {
+                "left": {
+                  "text": "  Local footer  "
+                },
+                "right": {
+                  "slideNumber": true
+                }
+              }
+            },
+            "effectiveHeader": {
+              "left": {
+                "image": {
+                  "srcSha256": "2608d745f3d1dddc963dafe9b517bc7af9e983e7318bf59bd520415589c36905",
+                  "alt": "  Registry furniture picture alt  "
+                },
+                "text": "  Local image label  "
+              },
+              "center": {
+                "organization": true
+              },
+              "right": {
+                "section": true
+              }
+            },
+            "effectiveFooter": {
+              "left": {
+                "text": "  Local footer  "
+              },
+              "right": {
+                "slideNumber": true
+              }
+            },
+            "blocks": [
+              {
+                "type": "text",
+                "text": "Scalar body local — exact."
+              }
+            ]
+          },
+          {
+            "title": "Inherited again",
+            "section": "  Gamma section  ",
+            "localDesign": {},
+            "effectiveHeader": {
+              "left": {
+                "text": "  Inherited header\twords\r\nsecond line  \r\n"
+              },
+              "center": {
+                "organization": true
+              },
+              "right": {
+                "section": true
+              }
+            },
+            "effectiveFooter": {
+              "left": {
+                "text": "  Inherited footer  "
+              },
+              "right": {
+                "slideNumber": true
+              }
+            },
+            "blocks": [
+              {
+                "type": "text",
+                "text": "Scalar body inherited again — exact."
+              }
+            ]
+          }
+        ]
+      },
+      "diagnostics": [
+        {
+          "code": "furniture-import-reflow",
+          "path": "slides.0.design",
+          "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+        },
+        {
+          "code": "furniture-import-reflow",
+          "path": "slides.1.design",
+          "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+        },
+        {
+          "code": "furniture-import-reflow",
+          "path": "slides.2.design",
+          "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+        },
+        {
+          "code": "heading-import-reflow",
+          "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed.",
+          "path": "slides.0"
+        },
+        {
+          "code": "text-import-reflow",
+          "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.",
+          "path": "slides.0"
+        },
+        {
+          "code": "heading-import-reflow",
+          "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed.",
+          "path": "slides.1"
+        },
+        {
+          "code": "text-import-reflow",
+          "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.",
+          "path": "slides.1"
+        },
+        {
+          "code": "heading-import-reflow",
+          "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed.",
+          "path": "slides.2"
+        },
+        {
+          "code": "text-import-reflow",
+          "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.",
+          "path": "slides.2"
+        }
+      ]
+    },
+    {
+      "runDirectory": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-flags-native-01",
+      "fixtureId": "baseline-explicit-flags",
+      "passed": true,
+      "source": {
+        "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-registry-03\\decks\\baseline-explicit-flags.pptx",
+        "sha256": "a994bbc2882cbb9a2b84bc8a4e5d2099d3597871828ad203a54a2c8c1ca013b4"
+      },
+      "nativeReport": {
+        "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-flags-native-01\\report.json",
+        "sha256": "8d120c9ad48389aafefb33da521a30e2cbf4d74d6c744d6c41c8f7a3d5723deb",
+        "savedPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-flags-native-01\\native-furniture-control.pptx",
+        "savedSha256": "a661cc22b6477e803515cdd96578dd32ca41e47f9f47b3039754dcda534c28bf"
+      },
+      "semanticSummary": {
+        "design": {},
+        "slides": [
+          {
+            "title": "False and empty",
+            "localDesign": {
+              "header": false,
+              "footer": {}
+            },
+            "effectiveHeader": false,
+            "effectiveFooter": {},
+            "blocks": [
+              {
+                "type": "text",
+                "text": "Scalar body false and empty."
+              }
+            ]
+          },
+          {
+            "title": "Empty and false",
+            "localDesign": {
+              "header": {},
+              "footer": false
+            },
+            "effectiveHeader": {},
+            "effectiveFooter": false,
+            "blocks": [
+              {
+                "type": "text",
+                "text": "Scalar body empty and false."
+              }
+            ]
+          },
+          {
+            "title": "Inactive fields",
+            "localDesign": {
+              "header": {
+                "left": {
+                  "text": ""
+                },
+                "center": {
+                  "organization": false,
+                  "section": false,
+                  "slideNumber": false,
+                  "date": false
+                }
+              },
+              "footer": {
+                "right": {
+                  "slideNumber": false,
+                  "text": ""
+                }
+              }
+            },
+            "effectiveHeader": {
+              "left": {
+                "text": ""
+              },
+              "center": {
+                "organization": false,
+                "section": false,
+                "slideNumber": false,
+                "date": false
+              }
+            },
+            "effectiveFooter": {
+              "right": {
+                "slideNumber": false,
+                "text": ""
+              }
+            },
+            "blocks": [
+              {
+                "type": "text",
+                "text": "Scalar body inactive fields."
+              }
+            ]
+          }
+        ]
+      },
+      "diagnostics": [
+        {
+          "code": "furniture-import-reflow",
+          "path": "slides.0.design",
+          "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+        },
+        {
+          "code": "furniture-import-reflow",
+          "path": "slides.1.design",
+          "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+        },
+        {
+          "code": "furniture-import-reflow",
+          "path": "slides.2.design",
+          "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+        },
+        {
+          "code": "heading-import-reflow",
+          "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed.",
+          "path": "slides.0"
+        },
+        {
+          "code": "text-import-reflow",
+          "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.",
+          "path": "slides.0"
+        },
+        {
+          "code": "heading-import-reflow",
+          "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed.",
+          "path": "slides.1"
+        },
+        {
+          "code": "text-import-reflow",
+          "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.",
+          "path": "slides.1"
+        },
+        {
+          "code": "heading-import-reflow",
+          "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed.",
+          "path": "slides.2"
+        },
+        {
+          "code": "text-import-reflow",
+          "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.",
+          "path": "slides.2"
+        }
+      ]
+    }
+  ]
+}

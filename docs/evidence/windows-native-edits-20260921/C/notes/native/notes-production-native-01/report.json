@@ -1,0 +1,418 @@
+﻿{
+    "schemaVersion":  1,
+    "source":  {
+                   "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\notes-order-registry-01\\original\\notes-control.pptx",
+                   "sha256":  "31cbae629b3d49ba0d6313bff95c59f645f5cafa0f0585e556fd9ebe66d4512c",
+                   "openedPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\notes-production-native-01\\inputs\\input.pptx",
+                   "openedSha256":  "31cbae629b3d49ba0d6313bff95c59f645f5cafa0f0585e556fd9ebe66d4512c"
+               },
+    "saved":  {
+                  "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\notes-production-native-01\\native-furniture-control.pptx",
+                  "sha256":  "5701d60430e227104fa81cf703077bfc6ae411067f0519cdf9d9c72c2975f8a2"
+              },
+    "reopened":  {
+                     "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\notes-production-native-01\\native-furniture-control.pptx",
+                     "sha256":  "5701d60430e227104fa81cf703077bfc6ae411067f0519cdf9d9c72c2975f8a2"
+                 },
+    "actionPlan":  {
+                       "path":  null,
+                       "sha256":  null,
+                       "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\notes-production-native-01\\inputs\\action-plan.json",
+                       "snapshotSha256":  "84b1c14e68260082e3e79edff0a78f4ebf1942cfd6c593246044ec2149cbb87d",
+                       "actions":  [
+
+                                   ],
+                       "completed":  [
+
+                                     ]
+                   },
+    "phases":  {
+                   "original":  {
+                                    "slideCount":  2,
+                                    "slides":  [
+                                                   {
+                                                       "index":  1,
+                                                       "slideId":  256,
+                                                       "name":  "Slide 1",
+                                                       "tags":  [
+
+                                                                ],
+                                                       "shapeCount":  2,
+                                                       "shapes":  [
+                                                                      {
+                                                                          "index":  1,
+                                                                          "id":  2,
+                                                                          "name":  "OPF heading slides.0.title line 0",
+                                                                          "type":  1,
+                                                                          "left":  43.2,
+                                                                          "top":  43.2,
+                                                                          "width":  873.6,
+                                                                          "height":  49.41,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Speaker notes",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_HEADING_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A22736C696465732E302E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                                       }
+                                                                                   ]
+                                                                      },
+                                                                      {
+                                                                          "index":  2,
+                                                                          "id":  3,
+                                                                          "name":  "OPF text slides.0.text line 0",
+                                                                          "type":  1,
+                                                                          "left":  43.2,
+                                                                          "top":  110.61,
+                                                                          "width":  873.6,
+                                                                          "height":  22.87504,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "First slide",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_TEXT_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A22736C696465732E302E74657874222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                                       }
+                                                                                   ]
+                                                                      }
+                                                                  ]
+                                                   },
+                                                   {
+                                                       "index":  2,
+                                                       "slideId":  257,
+                                                       "name":  "Slide 2",
+                                                       "tags":  [
+
+                                                                ],
+                                                       "shapeCount":  2,
+                                                       "shapes":  [
+                                                                      {
+                                                                          "index":  1,
+                                                                          "id":  2,
+                                                                          "name":  "OPF heading slides.1.title line 0",
+                                                                          "type":  1,
+                                                                          "left":  43.2,
+                                                                          "top":  43.2,
+                                                                          "width":  873.6,
+                                                                          "height":  49.41,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Second slide",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_HEADING_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A22736C696465732E312E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                                       }
+                                                                                   ]
+                                                                      },
+                                                                      {
+                                                                          "index":  2,
+                                                                          "id":  3,
+                                                                          "name":  "OPF image 1",
+                                                                          "type":  13,
+                                                                          "left":  93.81,
+                                                                          "top":  110.61,
+                                                                          "width":  772.38,
+                                                                          "height":  386.19,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  0,
+                                                                          "text":  null,
+                                                                          "alternativeText":  "Header image with text",
+                                                                          "tags":  [
+
+                                                                                   ]
+                                                                      }
+                                                                  ]
+                                                   }
+                                               ],
+                                    "rasters":  [
+                                                    {
+                                                        "slideIndex":  1,
+                                                        "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\notes-production-native-01\\original-slide-01.png",
+                                                        "sha256":  "91207d33ac5accca8cf35ffe7687d52c3184fa9a942197616cbc8f6586786eb2"
+                                                    },
+                                                    {
+                                                        "slideIndex":  2,
+                                                        "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\notes-production-native-01\\original-slide-02.png",
+                                                        "sha256":  "8774b1322b386b8be7c785fcaf287c0073510780123dd7e821e987dea1e2c050"
+                                                    }
+                                                ]
+                                },
+                   "edited":  {
+                                  "slideCount":  2,
+                                  "slides":  [
+                                                 {
+                                                     "index":  1,
+                                                     "slideId":  256,
+                                                     "name":  "Slide 1",
+                                                     "tags":  [
+
+                                                              ],
+                                                     "shapeCount":  2,
+                                                     "shapes":  [
+                                                                    {
+                                                                        "index":  1,
+                                                                        "id":  2,
+                                                                        "name":  "OPF heading slides.0.title line 0",
+                                                                        "type":  1,
+                                                                        "left":  43.2,
+                                                                        "top":  43.2,
+                                                                        "width":  873.6,
+                                                                        "height":  49.41,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "Speaker notes",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+                                                                                     {
+                                                                                         "index":  1,
+                                                                                         "name":  "OPF_HEADING_V1",
+                                                                                         "value":  "7B2276223A312C2267726F7570223A22736C696465732E302E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                                     }
+                                                                                 ]
+                                                                    },
+                                                                    {
+                                                                        "index":  2,
+                                                                        "id":  3,
+                                                                        "name":  "OPF text slides.0.text line 0",
+                                                                        "type":  1,
+                                                                        "left":  43.2,
+                                                                        "top":  110.61,
+                                                                        "width":  873.6,
+                                                                        "height":  22.87504,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "First slide",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+                                                                                     {
+                                                                                         "index":  1,
+                                                                                         "name":  "OPF_TEXT_V1",
+                                                                                         "value":  "7B2276223A312C2267726F7570223A22736C696465732E302E74657874222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                                     }
+                                                                                 ]
+                                                                    }
+                                                                ]
+                                                 },
+                                                 {
+                                                     "index":  2,
+                                                     "slideId":  257,
+                                                     "name":  "Slide 2",
+                                                     "tags":  [
+
+                                                              ],
+                                                     "shapeCount":  2,
+                                                     "shapes":  [
+                                                                    {
+                                                                        "index":  1,
+                                                                        "id":  2,
+                                                                        "name":  "OPF heading slides.1.title line 0",
+                                                                        "type":  1,
+                                                                        "left":  43.2,
+                                                                        "top":  43.2,
+                                                                        "width":  873.6,
+                                                                        "height":  49.41,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "Second slide",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+                                                                                     {
+                                                                                         "index":  1,
+                                                                                         "name":  "OPF_HEADING_V1",
+                                                                                         "value":  "7B2276223A312C2267726F7570223A22736C696465732E312E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                                     }
+                                                                                 ]
+                                                                    },
+                                                                    {
+                                                                        "index":  2,
+                                                                        "id":  3,
+                                                                        "name":  "OPF image 1",
+                                                                        "type":  13,
+                                                                        "left":  93.81,
+                                                                        "top":  110.61,
+                                                                        "width":  772.38,
+                                                                        "height":  386.19,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  0,
+                                                                        "text":  null,
+                                                                        "alternativeText":  "Header image with text",
+                                                                        "tags":  [
+
+                                                                                 ]
+                                                                    }
+                                                                ]
+                                                 }
+                                             ],
+                                  "rasters":  [
+                                                  {
+                                                      "slideIndex":  1,
+                                                      "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\notes-production-native-01\\edited-slide-01.png",
+                                                      "sha256":  "91207d33ac5accca8cf35ffe7687d52c3184fa9a942197616cbc8f6586786eb2"
+                                                  },
+                                                  {
+                                                      "slideIndex":  2,
+                                                      "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\notes-production-native-01\\edited-slide-02.png",
+                                                      "sha256":  "8774b1322b386b8be7c785fcaf287c0073510780123dd7e821e987dea1e2c050"
+                                                  }
+                                              ]
+                              },
+                   "reopened":  {
+                                    "slideCount":  2,
+                                    "slides":  [
+                                                   {
+                                                       "index":  1,
+                                                       "slideId":  256,
+                                                       "name":  "Slide 1",
+                                                       "tags":  [
+
+                                                                ],
+                                                       "shapeCount":  2,
+                                                       "shapes":  [
+                                                                      {
+                                                                          "index":  1,
+                                                                          "id":  2,
+                                                                          "name":  "OPF heading slides.0.title line 0",
+                                                                          "type":  1,
+                                                                          "left":  43.2,
+                                                                          "top":  43.2,
+                                                                          "width":  873.6,
+                                                                          "height":  49.41,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Speaker notes",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_HEADING_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A22736C696465732E302E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                                       }
+                                                                                   ]
+                                                                      },
+                                                                      {
+                                                                          "index":  2,
+                                                                          "id":  3,
+                                                                          "name":  "OPF text slides.0.text line 0",
+                                                                          "type":  1,
+                                                                          "left":  43.2,
+                                                                          "top":  110.61,
+                                                                          "width":  873.6,
+                                                                          "height":  22.87504,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "First slide",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_TEXT_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A22736C696465732E302E74657874222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                                       }
+                                                                                   ]
+                                                                      }
+                                                                  ]
+                                                   },
+                                                   {
+                                                       "index":  2,
+                                                       "slideId":  257,
+                                                       "name":  "Slide 2",
+                                                       "tags":  [
+
+                                                                ],
+                                                       "shapeCount":  2,
+                                                       "shapes":  [
+                                                                      {
+                                                                          "index":  1,
+                                                                          "id":  2,
+                                                                          "name":  "OPF heading slides.1.title line 0",
+                                                                          "type":  1,
+                                                                          "left":  43.2,
+                                                                          "top":  43.2,
+                                                                          "width":  873.6,
+                                                                          "height":  49.41,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Second slide",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_HEADING_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A22736C696465732E312E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                                       }
+                                                                                   ]
+                                                                      },
+                                                                      {
+                                                                          "index":  2,
+                                                                          "id":  3,
+                                                                          "name":  "OPF image 1",
+                                                                          "type":  13,
+                                                                          "left":  93.81,
+                                                                          "top":  110.61,
+                                                                          "width":  772.38,
+                                                                          "height":  386.19,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  0,
+                                                                          "text":  null,
+                                                                          "alternativeText":  "Header image with text",
+                                                                          "tags":  [
+
+                                                                                   ]
+                                                                      }
+                                                                  ]
+                                                   }
+                                               ],
+                                    "rasters":  [
+                                                    {
+                                                        "slideIndex":  1,
+                                                        "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\notes-production-native-01\\reopened-slide-01.png",
+                                                        "sha256":  "91207d33ac5accca8cf35ffe7687d52c3184fa9a942197616cbc8f6586786eb2"
+                                                    },
+                                                    {
+                                                        "slideIndex":  2,
+                                                        "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\notes-production-native-01\\reopened-slide-02.png",
+                                                        "sha256":  "8774b1322b386b8be7c785fcaf287c0073510780123dd7e821e987dea1e2c050"
+                                                    }
+                                                ]
+                                }
+               },
+    "inputs":  {
+                   "verifier":  {
+                                    "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\sources\\opf-pptx\\test\\native-furniture-control.ps1",
+                                    "sha256":  "c85fe9f79b9c8e01feb6f0c4cfc8b84c90d7d93498f88b4cde2750630c9b2e9e",
+                                    "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\notes-production-native-01\\inputs\\native-furniture-control.ps1",
+                                    "snapshotSha256":  "c85fe9f79b9c8e01feb6f0c4cfc8b84c90d7d93498f88b4cde2750630c9b2e9e"
+                                },
+                   "processHelper":  {
+                                         "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\sources\\opf-pptx\\test\\native-process.ps1",
+                                         "sha256":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+                                         "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\notes-production-native-01\\inputs\\native-process.ps1",
+                                         "snapshotSha256":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+                                     }
+               },
+    "environment":  {
+                        "hostVersion":  "5.1.26100.9444",
+                        "windowsProductName":  "Windows 10 Home",
+                        "windowsDisplayVersion":  "25H2",
+                        "windowsBuild":  "26200.9457",
+                        "powerPointVersion":  "16.0",
+                        "powerPointExecutable":  "C:\\Program Files\\Microsoft Office\\root\\Office16\\POWERPNT.EXE",
+                        "powerPointBuild":  "16.0.20326.20158",
+                        "powerPointExecutableSha256":  "07cbe68cde7596058a6890c471389a7a70a090ee42f01975d72ea6d643f82021"
+                    },
+    "cleanupConfirmed":  true,
+    "officeOperationsStopped":  false,
+    "lastStage":  "worker.complete",
+    "lastStatus":  "success",
+    "error":  null,
+    "scope":  "One explicitly supplied presentation with at most three slides, thirty shapes per slide and twenty prevalidated actions. Original, edited and read-only reopened native states and PNGs are observations. The worker never quits or kills Office, changes security, retries, or closes unrelated presentations."
+}

@@ -1,0 +1,1309 @@
+{
+  "source": "furniture-audit-controls-01",
+  "records": [
+    {
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/auditor-stderr.txt",
+      "bundlePath": "B/furniture/synthetic-controls/cases/current-text-mismatch/auditor-stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/auditor-stdout.txt",
+      "bundlePath": "B/furniture/synthetic-controls/cases/current-text-mismatch/auditor-stdout.txt",
+      "bytes": 233,
+      "sha256": "46cd65585c2d70cd561df58c40dda5e6b57b7693a71e879d12139002784eea69",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/control-audit.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/current-text-mismatch/control-audit.json",
+      "bytes": 2840,
+      "sha256": "4e92d208d190a4d435e5f775e045a08027a95d35b0bd3f2caa10c787b7cf48a6",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/edited-slide-01.png",
+      "bundlePath": null,
+      "bytes": 7028,
+      "sha256": "7fe78a66cb005dd97f136e5a7a16b4160cf646d7ef7405cf2d9f2d407af1ea86",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/edited-slide-02.png",
+      "bundlePath": null,
+      "bytes": 14522,
+      "sha256": "dd711fa9d40eba17aa2bd3acfe9ec74ebd6155d02baea6e933eb7486868dbcaf",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/edited-slide-03.png",
+      "bundlePath": null,
+      "bytes": 6831,
+      "sha256": "ef6e8e28d9e803648c5d4e06db82f4248f15526682f325960551001d35958677",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/independent-native-audit-v2.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/current-text-mismatch/independent-native-audit-v2.json",
+      "bytes": 2719,
+      "sha256": "b5e1de6bafb85a21c43e559ff0ced1e76f441a55b99becf3e536174bc011c5a7",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/independent-native-audit.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/current-text-mismatch/independent-native-audit.json",
+      "bytes": 2402,
+      "sha256": "b5ec6f74a53c11c2d82a40b4fa7966228476cc8e0df1f755f2bd09bb5bc9d762",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/inputs/action-plan.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/current-text-mismatch/inputs/action-plan.json",
+      "bytes": 893,
+      "sha256": "16c5a40505a01b2c5eb80736de7687cd448abc0de41495fb221bc056a3209263",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/inputs/input.pptx",
+      "bundlePath": "B/furniture/synthetic-controls/cases/current-text-mismatch/inputs/input.pptx",
+      "bytes": 33613,
+      "sha256": "a655d692ba900027d6504458921f462dbec54de515ddec37c0f628d29c379e5f",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/inputs/native-furniture-control.ps1",
+      "bundlePath": "B/furniture/synthetic-controls/cases/current-text-mismatch/inputs/native-furniture-control.ps1",
+      "bytes": 27761,
+      "sha256": "c85fe9f79b9c8e01feb6f0c4cfc8b84c90d7d93498f88b4cde2750630c9b2e9e",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/inputs/native-process.ps1",
+      "bundlePath": "B/furniture/synthetic-controls/cases/current-text-mismatch/inputs/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/native-furniture-control.pptx",
+      "bundlePath": "B/furniture/synthetic-controls/cases/current-text-mismatch/native-furniture-control.pptx",
+      "bytes": 35681,
+      "sha256": "0cd4c4f846ce702e266e999ed4e46c93f740329b3dd3257b40ac0c74ac03471b",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/original-slide-01.png",
+      "bundlePath": null,
+      "bytes": 7091,
+      "sha256": "6f7f137d021418e7ad52a758b909d9366164073369bdbf47f1dc280b52e4147c",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/original-slide-02.png",
+      "bundlePath": null,
+      "bytes": 14445,
+      "sha256": "b1ef21699b348d7d708d8c9e816f9dbe41f2ea1afa741b6d6aa483b0728a57c3",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/original-slide-03.png",
+      "bundlePath": null,
+      "bytes": 7589,
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/progress.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/current-text-mismatch/progress.json",
+      "bytes": 272,
+      "sha256": "f1ea42d59083ed0dfd8197ee13c3895229c927461450a24fad16c59fdf6eaaa3",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/reopened-slide-01.png",
+      "bundlePath": null,
+      "bytes": 7028,
+      "sha256": "7fe78a66cb005dd97f136e5a7a16b4160cf646d7ef7405cf2d9f2d407af1ea86",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/reopened-slide-02.png",
+      "bundlePath": null,
+      "bytes": 14522,
+      "sha256": "dd711fa9d40eba17aa2bd3acfe9ec74ebd6155d02baea6e933eb7486868dbcaf",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/reopened-slide-03.png",
+      "bundlePath": null,
+      "bytes": 6831,
+      "sha256": "ef6e8e28d9e803648c5d4e06db82f4248f15526682f325960551001d35958677",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/report.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/current-text-mismatch/report.json",
+      "bytes": 86993,
+      "sha256": "63cd816261413f83085fa25f873fa5f8c4d4b058ec042ccb2c7cb2c9de0ca4b5",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/request.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/current-text-mismatch/request.json",
+      "bytes": 2181,
+      "sha256": "ee313820aecc45ae79b1a9f4796caef2f14263b1d3163a2a7e912cce7855cda3",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/stages.jsonl",
+      "bundlePath": "B/furniture/synthetic-controls/cases/current-text-mismatch/stages.jsonl",
+      "bytes": 1222262,
+      "sha256": "bdf0fa64b9d4adb40594d899b79ed6fbb50dfccc8d86fca0b60ea0d273f864dd",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/supervisor.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/current-text-mismatch/supervisor.json",
+      "bytes": 220,
+      "sha256": "70573e8c834eaf7d6b6536121e6870f085be7e503ddbc06fc5aa70af47ae0714",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/worker.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/current-text-mismatch/worker.json",
+      "bytes": 341,
+      "sha256": "ac808d0dd9b74d279b73f216ce46a19da3cfa316819090b6af6c77d8d37e6487",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/worker.stderr.log",
+      "bundlePath": "B/furniture/synthetic-controls/cases/current-text-mismatch/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/worker.stdout.log",
+      "bundlePath": "B/furniture/synthetic-controls/cases/current-text-mismatch/worker.stdout.log",
+      "bytes": 54,
+      "sha256": "aa7c7403ff4fda27d817ed627eee045b80562fcab5e4f9cd7a4b7a94196844a1",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/failed-worker/auditor-stderr.txt",
+      "bundlePath": "B/furniture/synthetic-controls/cases/failed-worker/auditor-stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/failed-worker/auditor-stdout.txt",
+      "bundlePath": "B/furniture/synthetic-controls/cases/failed-worker/auditor-stdout.txt",
+      "bytes": 229,
+      "sha256": "d035abf4827cd1b03aa4616758bf749f0edcd7b5bf346571056a2cf7b66f8f4f",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/failed-worker/control-audit.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/failed-worker/control-audit.json",
+      "bytes": 2759,
+      "sha256": "c54e104f0082724e405c648f33d716ae0b2c358ba8267ed70cea6d57c1890da0",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/failed-worker/edited-slide-01.png",
+      "bundlePath": null,
+      "bytes": 7091,
+      "sha256": "6f7f137d021418e7ad52a758b909d9366164073369bdbf47f1dc280b52e4147c",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/failed-worker/edited-slide-02.png",
+      "bundlePath": null,
+      "bytes": 14445,
+      "sha256": "b1ef21699b348d7d708d8c9e816f9dbe41f2ea1afa741b6d6aa483b0728a57c3",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/failed-worker/edited-slide-03.png",
+      "bundlePath": null,
+      "bytes": 7589,
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/failed-worker/independent-native-audit-v2.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/failed-worker/independent-native-audit-v2.json",
+      "bytes": 2624,
+      "sha256": "04bc6ce3fd3c990c16531881532191d2800025f451ca34cbd312fe36d7a25615",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/failed-worker/independent-native-audit.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/failed-worker/independent-native-audit.json",
+      "bytes": 2326,
+      "sha256": "abc7f201d01c7bcd20b2dcfe9717aaa2555cdb9ef78072894c771cfde8c96ab3",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/failed-worker/inputs/action-plan.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/failed-worker/inputs/action-plan.json",
+      "bytes": 11,
+      "sha256": "84b1c14e68260082e3e79edff0a78f4ebf1942cfd6c593246044ec2149cbb87d",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/failed-worker/inputs/input.pptx",
+      "bundlePath": "B/furniture/synthetic-controls/cases/failed-worker/inputs/input.pptx",
+      "bytes": 33613,
+      "sha256": "a655d692ba900027d6504458921f462dbec54de515ddec37c0f628d29c379e5f",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/failed-worker/inputs/native-furniture-control.ps1",
+      "bundlePath": "B/furniture/synthetic-controls/cases/failed-worker/inputs/native-furniture-control.ps1",
+      "bytes": 27761,
+      "sha256": "c85fe9f79b9c8e01feb6f0c4cfc8b84c90d7d93498f88b4cde2750630c9b2e9e",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/failed-worker/inputs/native-process.ps1",
+      "bundlePath": "B/furniture/synthetic-controls/cases/failed-worker/inputs/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/failed-worker/native-furniture-control.pptx",
+      "bundlePath": "B/furniture/synthetic-controls/cases/failed-worker/native-furniture-control.pptx",
+      "bytes": 35708,
+      "sha256": "d719e02fa00d714d460d3e727308a0566003711552a35ad591c4813c8bce36a5",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/failed-worker/original-slide-01.png",
+      "bundlePath": null,
+      "bytes": 7091,
+      "sha256": "6f7f137d021418e7ad52a758b909d9366164073369bdbf47f1dc280b52e4147c",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/failed-worker/original-slide-02.png",
+      "bundlePath": null,
+      "bytes": 14445,
+      "sha256": "b1ef21699b348d7d708d8c9e816f9dbe41f2ea1afa741b6d6aa483b0728a57c3",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/failed-worker/original-slide-03.png",
+      "bundlePath": null,
+      "bytes": 7589,
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/failed-worker/progress.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/failed-worker/progress.json",
+      "bytes": 272,
+      "sha256": "99ae1e52ab1b39246e83201bfc1e55041a5f8a42cda3745a7a8192427c1121fb",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/failed-worker/reopened-slide-01.png",
+      "bundlePath": null,
+      "bytes": 7091,
+      "sha256": "6f7f137d021418e7ad52a758b909d9366164073369bdbf47f1dc280b52e4147c",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/failed-worker/reopened-slide-02.png",
+      "bundlePath": null,
+      "bytes": 14445,
+      "sha256": "b1ef21699b348d7d708d8c9e816f9dbe41f2ea1afa741b6d6aa483b0728a57c3",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/failed-worker/reopened-slide-03.png",
+      "bundlePath": null,
+      "bytes": 7589,
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/failed-worker/report.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/failed-worker/report.json",
+      "bytes": 85118,
+      "sha256": "def55398057394d86c43919c968479946bd91dbece1dabe30d410dff871eecfe",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/failed-worker/request.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/failed-worker/request.json",
+      "bytes": 1970,
+      "sha256": "76db4508e53114e9144fa3fafc86059ede63c6b6695d1f81d715e155425df1a2",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/failed-worker/stages.jsonl",
+      "bundlePath": "B/furniture/synthetic-controls/cases/failed-worker/stages.jsonl",
+      "bytes": 1084448,
+      "sha256": "857e39a5560a953d77d3740c3543cdaaa631e2bcb200afa7d63f9b320a820112",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/failed-worker/supervisor.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/failed-worker/supervisor.json",
+      "bytes": 220,
+      "sha256": "1f9881913cdfdd9e54e865619bc528b6ee596b1f95164f403e1ecf56b4d52ed2",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/failed-worker/worker.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/failed-worker/worker.json",
+      "bytes": 318,
+      "sha256": "bf4f118d1c597b492a431614d4ee3d08d365439c425b80972d7fc4e3e55e4060",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/failed-worker/worker.stderr.log",
+      "bundlePath": "B/furniture/synthetic-controls/cases/failed-worker/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/failed-worker/worker.stdout.log",
+      "bundlePath": "B/furniture/synthetic-controls/cases/failed-worker/worker.stdout.log",
+      "bytes": 54,
+      "sha256": "9193db23a5ef082ce70e61698e4c9a097be6b1108bd90fcca5fe40ec041f9f46",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/auditor-stderr.txt",
+      "bundlePath": "B/furniture/synthetic-controls/cases/geometry-over-tolerance/auditor-stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/auditor-stdout.txt",
+      "bundlePath": "B/furniture/synthetic-controls/cases/geometry-over-tolerance/auditor-stdout.txt",
+      "bytes": 155,
+      "sha256": "2c75fb29bc5c67e86473aa8ea1a16bf98d9d21c7d72b6a80410bd9a86c3d0e09",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/control-audit.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/geometry-over-tolerance/control-audit.json",
+      "bytes": 2667,
+      "sha256": "e7a8dfe0d935d9b0d43677d97471f88ae3d214ac4a3e4825467fb0880db059e6",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/edited-slide-01.png",
+      "bundlePath": null,
+      "bytes": 7091,
+      "sha256": "6f7f137d021418e7ad52a758b909d9366164073369bdbf47f1dc280b52e4147c",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/edited-slide-02.png",
+      "bundlePath": null,
+      "bytes": 14445,
+      "sha256": "b1ef21699b348d7d708d8c9e816f9dbe41f2ea1afa741b6d6aa483b0728a57c3",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/edited-slide-03.png",
+      "bundlePath": null,
+      "bytes": 7589,
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/independent-native-audit-v2.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/geometry-over-tolerance/independent-native-audit-v2.json",
+      "bytes": 2624,
+      "sha256": "04bc6ce3fd3c990c16531881532191d2800025f451ca34cbd312fe36d7a25615",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/independent-native-audit.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/geometry-over-tolerance/independent-native-audit.json",
+      "bytes": 2326,
+      "sha256": "abc7f201d01c7bcd20b2dcfe9717aaa2555cdb9ef78072894c771cfde8c96ab3",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/inputs/action-plan.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/geometry-over-tolerance/inputs/action-plan.json",
+      "bytes": 11,
+      "sha256": "84b1c14e68260082e3e79edff0a78f4ebf1942cfd6c593246044ec2149cbb87d",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/inputs/input.pptx",
+      "bundlePath": "B/furniture/synthetic-controls/cases/geometry-over-tolerance/inputs/input.pptx",
+      "bytes": 33613,
+      "sha256": "a655d692ba900027d6504458921f462dbec54de515ddec37c0f628d29c379e5f",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/inputs/native-furniture-control.ps1",
+      "bundlePath": "B/furniture/synthetic-controls/cases/geometry-over-tolerance/inputs/native-furniture-control.ps1",
+      "bytes": 27761,
+      "sha256": "c85fe9f79b9c8e01feb6f0c4cfc8b84c90d7d93498f88b4cde2750630c9b2e9e",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/inputs/native-process.ps1",
+      "bundlePath": "B/furniture/synthetic-controls/cases/geometry-over-tolerance/inputs/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/native-furniture-control.pptx",
+      "bundlePath": "B/furniture/synthetic-controls/cases/geometry-over-tolerance/native-furniture-control.pptx",
+      "bytes": 35708,
+      "sha256": "d719e02fa00d714d460d3e727308a0566003711552a35ad591c4813c8bce36a5",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/original-slide-01.png",
+      "bundlePath": null,
+      "bytes": 7091,
+      "sha256": "6f7f137d021418e7ad52a758b909d9366164073369bdbf47f1dc280b52e4147c",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/original-slide-02.png",
+      "bundlePath": null,
+      "bytes": 14445,
+      "sha256": "b1ef21699b348d7d708d8c9e816f9dbe41f2ea1afa741b6d6aa483b0728a57c3",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/original-slide-03.png",
+      "bundlePath": null,
+      "bytes": 7589,
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/progress.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/geometry-over-tolerance/progress.json",
+      "bytes": 272,
+      "sha256": "99ae1e52ab1b39246e83201bfc1e55041a5f8a42cda3745a7a8192427c1121fb",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/reopened-slide-01.png",
+      "bundlePath": null,
+      "bytes": 7091,
+      "sha256": "6f7f137d021418e7ad52a758b909d9366164073369bdbf47f1dc280b52e4147c",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/reopened-slide-02.png",
+      "bundlePath": null,
+      "bytes": 14445,
+      "sha256": "b1ef21699b348d7d708d8c9e816f9dbe41f2ea1afa741b6d6aa483b0728a57c3",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/reopened-slide-03.png",
+      "bundlePath": null,
+      "bytes": 7589,
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/report.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/geometry-over-tolerance/report.json",
+      "bytes": 85229,
+      "sha256": "7e2986e2795ae340dd416e7624d6460e696fe51cd25465fb4d40dbfc5c2af3cc",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/request.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/geometry-over-tolerance/request.json",
+      "bytes": 2010,
+      "sha256": "c9c147129e5c87a4bf1c904e77c63e8519cc21d700a1ecf8061cddbfca7e3b0e",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/stages.jsonl",
+      "bundlePath": "B/furniture/synthetic-controls/cases/geometry-over-tolerance/stages.jsonl",
+      "bytes": 1084448,
+      "sha256": "857e39a5560a953d77d3740c3543cdaaa631e2bcb200afa7d63f9b320a820112",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/supervisor.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/geometry-over-tolerance/supervisor.json",
+      "bytes": 220,
+      "sha256": "1f9881913cdfdd9e54e865619bc528b6ee596b1f95164f403e1ecf56b4d52ed2",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/worker.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/geometry-over-tolerance/worker.json",
+      "bytes": 341,
+      "sha256": "fe666675e144974ee7e11d6890e3a6c05d2580a190e63eaa39d5d70b0e25fc70",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/worker.stderr.log",
+      "bundlePath": "B/furniture/synthetic-controls/cases/geometry-over-tolerance/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/worker.stdout.log",
+      "bundlePath": "B/furniture/synthetic-controls/cases/geometry-over-tolerance/worker.stdout.log",
+      "bytes": 54,
+      "sha256": "9193db23a5ef082ce70e61698e4c9a097be6b1108bd90fcca5fe40ec041f9f46",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/auditor-stderr.txt",
+      "bundlePath": "B/furniture/synthetic-controls/cases/mismatched-action-snapshot/auditor-stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/auditor-stdout.txt",
+      "bundlePath": "B/furniture/synthetic-controls/cases/mismatched-action-snapshot/auditor-stdout.txt",
+      "bytes": 406,
+      "sha256": "db0f09f8803d19eabcbdc60d55b8da32cddd8dd5f21411f4e0f9332aae3f05c8",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/control-audit.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/mismatched-action-snapshot/control-audit.json",
+      "bytes": 3017,
+      "sha256": "429bd0bb7c08f1cfdffc93c1e1339373c373c600bccc63aae10beac7e3476624",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/edited-slide-01.png",
+      "bundlePath": null,
+      "bytes": 7091,
+      "sha256": "6f7f137d021418e7ad52a758b909d9366164073369bdbf47f1dc280b52e4147c",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/edited-slide-02.png",
+      "bundlePath": null,
+      "bytes": 14445,
+      "sha256": "b1ef21699b348d7d708d8c9e816f9dbe41f2ea1afa741b6d6aa483b0728a57c3",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/edited-slide-03.png",
+      "bundlePath": null,
+      "bytes": 7589,
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/independent-native-audit-v2.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/mismatched-action-snapshot/independent-native-audit-v2.json",
+      "bytes": 2624,
+      "sha256": "04bc6ce3fd3c990c16531881532191d2800025f451ca34cbd312fe36d7a25615",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/independent-native-audit.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/mismatched-action-snapshot/independent-native-audit.json",
+      "bytes": 2326,
+      "sha256": "abc7f201d01c7bcd20b2dcfe9717aaa2555cdb9ef78072894c771cfde8c96ab3",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/inputs/action-plan.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/mismatched-action-snapshot/inputs/action-plan.json",
+      "bytes": 11,
+      "sha256": "84b1c14e68260082e3e79edff0a78f4ebf1942cfd6c593246044ec2149cbb87d",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/inputs/input.pptx",
+      "bundlePath": "B/furniture/synthetic-controls/cases/mismatched-action-snapshot/inputs/input.pptx",
+      "bytes": 33613,
+      "sha256": "a655d692ba900027d6504458921f462dbec54de515ddec37c0f628d29c379e5f",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/inputs/native-furniture-control.ps1",
+      "bundlePath": "B/furniture/synthetic-controls/cases/mismatched-action-snapshot/inputs/native-furniture-control.ps1",
+      "bytes": 27761,
+      "sha256": "c85fe9f79b9c8e01feb6f0c4cfc8b84c90d7d93498f88b4cde2750630c9b2e9e",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/inputs/native-process.ps1",
+      "bundlePath": "B/furniture/synthetic-controls/cases/mismatched-action-snapshot/inputs/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/native-furniture-control.pptx",
+      "bundlePath": "B/furniture/synthetic-controls/cases/mismatched-action-snapshot/native-furniture-control.pptx",
+      "bytes": 35708,
+      "sha256": "d719e02fa00d714d460d3e727308a0566003711552a35ad591c4813c8bce36a5",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/original-slide-01.png",
+      "bundlePath": null,
+      "bytes": 7091,
+      "sha256": "6f7f137d021418e7ad52a758b909d9366164073369bdbf47f1dc280b52e4147c",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/original-slide-02.png",
+      "bundlePath": null,
+      "bytes": 14445,
+      "sha256": "b1ef21699b348d7d708d8c9e816f9dbe41f2ea1afa741b6d6aa483b0728a57c3",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/original-slide-03.png",
+      "bundlePath": null,
+      "bytes": 7589,
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/progress.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/mismatched-action-snapshot/progress.json",
+      "bytes": 272,
+      "sha256": "99ae1e52ab1b39246e83201bfc1e55041a5f8a42cda3745a7a8192427c1121fb",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/reopened-slide-01.png",
+      "bundlePath": null,
+      "bytes": 7091,
+      "sha256": "6f7f137d021418e7ad52a758b909d9366164073369bdbf47f1dc280b52e4147c",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/reopened-slide-02.png",
+      "bundlePath": null,
+      "bytes": 14445,
+      "sha256": "b1ef21699b348d7d708d8c9e816f9dbe41f2ea1afa741b6d6aa483b0728a57c3",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/reopened-slide-03.png",
+      "bundlePath": null,
+      "bytes": 7589,
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/report.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/mismatched-action-snapshot/report.json",
+      "bytes": 85261,
+      "sha256": "7454c1105c5d011710403784e0b96a7d2be0c4db7fd8e8e0ebefd1dbd358dc0a",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/request.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/mismatched-action-snapshot/request.json",
+      "bytes": 2201,
+      "sha256": "91f6526c3aaadc456410926c8a1d441eea857f1e4f3afcf8f1c9e464c9091ace",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/stages.jsonl",
+      "bundlePath": "B/furniture/synthetic-controls/cases/mismatched-action-snapshot/stages.jsonl",
+      "bytes": 1084448,
+      "sha256": "857e39a5560a953d77d3740c3543cdaaa631e2bcb200afa7d63f9b320a820112",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/supervisor.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/mismatched-action-snapshot/supervisor.json",
+      "bytes": 220,
+      "sha256": "1f9881913cdfdd9e54e865619bc528b6ee596b1f95164f403e1ecf56b4d52ed2",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/worker.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/mismatched-action-snapshot/worker.json",
+      "bytes": 341,
+      "sha256": "fe666675e144974ee7e11d6890e3a6c05d2580a190e63eaa39d5d70b0e25fc70",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/worker.stderr.log",
+      "bundlePath": "B/furniture/synthetic-controls/cases/mismatched-action-snapshot/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/worker.stdout.log",
+      "bundlePath": "B/furniture/synthetic-controls/cases/mismatched-action-snapshot/worker.stdout.log",
+      "bytes": 54,
+      "sha256": "9193db23a5ef082ce70e61698e4c9a097be6b1108bd90fcca5fe40ec041f9f46",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/auditor-stderr.txt",
+      "bundlePath": "B/furniture/synthetic-controls/cases/missing-close-stage/auditor-stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/auditor-stdout.txt",
+      "bundlePath": "B/furniture/synthetic-controls/cases/missing-close-stage/auditor-stdout.txt",
+      "bytes": 132,
+      "sha256": "8b064994e3b5954e71cb14a9560f14ed561a898b0c8eb16c6280aafef5c08c48",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/control-audit.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/missing-close-stage/control-audit.json",
+      "bytes": 2652,
+      "sha256": "8200189c9bd7d75b13f1bd3442590d3ebc1886a8bd23c2890fe3ec782f8ecf0c",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/edited-slide-01.png",
+      "bundlePath": null,
+      "bytes": 7091,
+      "sha256": "6f7f137d021418e7ad52a758b909d9366164073369bdbf47f1dc280b52e4147c",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/edited-slide-02.png",
+      "bundlePath": null,
+      "bytes": 14445,
+      "sha256": "b1ef21699b348d7d708d8c9e816f9dbe41f2ea1afa741b6d6aa483b0728a57c3",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/edited-slide-03.png",
+      "bundlePath": null,
+      "bytes": 7589,
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/independent-native-audit-v2.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/missing-close-stage/independent-native-audit-v2.json",
+      "bytes": 2624,
+      "sha256": "04bc6ce3fd3c990c16531881532191d2800025f451ca34cbd312fe36d7a25615",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/independent-native-audit.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/missing-close-stage/independent-native-audit.json",
+      "bytes": 2326,
+      "sha256": "abc7f201d01c7bcd20b2dcfe9717aaa2555cdb9ef78072894c771cfde8c96ab3",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/inputs/action-plan.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/missing-close-stage/inputs/action-plan.json",
+      "bytes": 11,
+      "sha256": "84b1c14e68260082e3e79edff0a78f4ebf1942cfd6c593246044ec2149cbb87d",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/inputs/input.pptx",
+      "bundlePath": "B/furniture/synthetic-controls/cases/missing-close-stage/inputs/input.pptx",
+      "bytes": 33613,
+      "sha256": "a655d692ba900027d6504458921f462dbec54de515ddec37c0f628d29c379e5f",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/inputs/native-furniture-control.ps1",
+      "bundlePath": "B/furniture/synthetic-controls/cases/missing-close-stage/inputs/native-furniture-control.ps1",
+      "bytes": 27761,
+      "sha256": "c85fe9f79b9c8e01feb6f0c4cfc8b84c90d7d93498f88b4cde2750630c9b2e9e",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/inputs/native-process.ps1",
+      "bundlePath": "B/furniture/synthetic-controls/cases/missing-close-stage/inputs/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/native-furniture-control.pptx",
+      "bundlePath": "B/furniture/synthetic-controls/cases/missing-close-stage/native-furniture-control.pptx",
+      "bytes": 35708,
+      "sha256": "d719e02fa00d714d460d3e727308a0566003711552a35ad591c4813c8bce36a5",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/original-slide-01.png",
+      "bundlePath": null,
+      "bytes": 7091,
+      "sha256": "6f7f137d021418e7ad52a758b909d9366164073369bdbf47f1dc280b52e4147c",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/original-slide-02.png",
+      "bundlePath": null,
+      "bytes": 14445,
+      "sha256": "b1ef21699b348d7d708d8c9e816f9dbe41f2ea1afa741b6d6aa483b0728a57c3",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/original-slide-03.png",
+      "bundlePath": null,
+      "bytes": 7589,
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/progress.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/missing-close-stage/progress.json",
+      "bytes": 272,
+      "sha256": "99ae1e52ab1b39246e83201bfc1e55041a5f8a42cda3745a7a8192427c1121fb",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/reopened-slide-01.png",
+      "bundlePath": null,
+      "bytes": 7091,
+      "sha256": "6f7f137d021418e7ad52a758b909d9366164073369bdbf47f1dc280b52e4147c",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/reopened-slide-02.png",
+      "bundlePath": null,
+      "bytes": 14445,
+      "sha256": "b1ef21699b348d7d708d8c9e816f9dbe41f2ea1afa741b6d6aa483b0728a57c3",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/reopened-slide-03.png",
+      "bundlePath": null,
+      "bytes": 7589,
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/report.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/missing-close-stage/report.json",
+      "bytes": 85184,
+      "sha256": "1aaaa873c89e1227b6c6069e19eac7f2ce47576bd18b32ffed3052803761c095",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/request.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/missing-close-stage/request.json",
+      "bytes": 1994,
+      "sha256": "9c11edc32ddc3d5d303db23de547944e724aa07166d1671f86b0481d1a0df563",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/stages.jsonl",
+      "bundlePath": "B/furniture/synthetic-controls/cases/missing-close-stage/stages.jsonl",
+      "bytes": 1129093,
+      "sha256": "06e03ff3104005e02880f215847bac6f74adc7e53ffe2dcc4250f9e397527918",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/supervisor.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/missing-close-stage/supervisor.json",
+      "bytes": 220,
+      "sha256": "1f9881913cdfdd9e54e865619bc528b6ee596b1f95164f403e1ecf56b4d52ed2",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/worker.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/missing-close-stage/worker.json",
+      "bytes": 341,
+      "sha256": "fe666675e144974ee7e11d6890e3a6c05d2580a190e63eaa39d5d70b0e25fc70",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/worker.stderr.log",
+      "bundlePath": "B/furniture/synthetic-controls/cases/missing-close-stage/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/worker.stdout.log",
+      "bundlePath": "B/furniture/synthetic-controls/cases/missing-close-stage/worker.stdout.log",
+      "bytes": 54,
+      "sha256": "9193db23a5ef082ce70e61698e4c9a097be6b1108bd90fcca5fe40ec041f9f46",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-raster/auditor-stderr.txt",
+      "bundlePath": "B/furniture/synthetic-controls/cases/missing-raster/auditor-stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-raster/auditor-stdout.txt",
+      "bundlePath": "B/furniture/synthetic-controls/cases/missing-raster/auditor-stdout.txt",
+      "bytes": 330,
+      "sha256": "60a168a27ea758c48875b3b9caf9155a9ae358c0ba994ed2a1bfe26335994321",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-raster/control-audit.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/missing-raster/control-audit.json",
+      "bytes": 2864,
+      "sha256": "e724d0c3362d7a9eeb990e16f8f3c86ad1d7146486687ce985011dc435d16148",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-raster/edited-slide-01.png",
+      "bundlePath": null,
+      "bytes": 7091,
+      "sha256": "6f7f137d021418e7ad52a758b909d9366164073369bdbf47f1dc280b52e4147c",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-raster/edited-slide-03.png",
+      "bundlePath": null,
+      "bytes": 7589,
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-raster/independent-native-audit-v2.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/missing-raster/independent-native-audit-v2.json",
+      "bytes": 2624,
+      "sha256": "04bc6ce3fd3c990c16531881532191d2800025f451ca34cbd312fe36d7a25615",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-raster/independent-native-audit.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/missing-raster/independent-native-audit.json",
+      "bytes": 2326,
+      "sha256": "abc7f201d01c7bcd20b2dcfe9717aaa2555cdb9ef78072894c771cfde8c96ab3",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-raster/inputs/action-plan.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/missing-raster/inputs/action-plan.json",
+      "bytes": 11,
+      "sha256": "84b1c14e68260082e3e79edff0a78f4ebf1942cfd6c593246044ec2149cbb87d",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-raster/inputs/input.pptx",
+      "bundlePath": "B/furniture/synthetic-controls/cases/missing-raster/inputs/input.pptx",
+      "bytes": 33613,
+      "sha256": "a655d692ba900027d6504458921f462dbec54de515ddec37c0f628d29c379e5f",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-raster/inputs/native-furniture-control.ps1",
+      "bundlePath": "B/furniture/synthetic-controls/cases/missing-raster/inputs/native-furniture-control.ps1",
+      "bytes": 27761,
+      "sha256": "c85fe9f79b9c8e01feb6f0c4cfc8b84c90d7d93498f88b4cde2750630c9b2e9e",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-raster/inputs/native-process.ps1",
+      "bundlePath": "B/furniture/synthetic-controls/cases/missing-raster/inputs/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-raster/native-furniture-control.pptx",
+      "bundlePath": "B/furniture/synthetic-controls/cases/missing-raster/native-furniture-control.pptx",
+      "bytes": 35708,
+      "sha256": "d719e02fa00d714d460d3e727308a0566003711552a35ad591c4813c8bce36a5",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-raster/original-slide-01.png",
+      "bundlePath": null,
+      "bytes": 7091,
+      "sha256": "6f7f137d021418e7ad52a758b909d9366164073369bdbf47f1dc280b52e4147c",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-raster/original-slide-02.png",
+      "bundlePath": null,
+      "bytes": 14445,
+      "sha256": "b1ef21699b348d7d708d8c9e816f9dbe41f2ea1afa741b6d6aa483b0728a57c3",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-raster/original-slide-03.png",
+      "bundlePath": null,
+      "bytes": 7589,
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-raster/progress.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/missing-raster/progress.json",
+      "bytes": 272,
+      "sha256": "99ae1e52ab1b39246e83201bfc1e55041a5f8a42cda3745a7a8192427c1121fb",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-raster/reopened-slide-01.png",
+      "bundlePath": null,
+      "bytes": 7091,
+      "sha256": "6f7f137d021418e7ad52a758b909d9366164073369bdbf47f1dc280b52e4147c",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-raster/reopened-slide-02.png",
+      "bundlePath": null,
+      "bytes": 14445,
+      "sha256": "b1ef21699b348d7d708d8c9e816f9dbe41f2ea1afa741b6d6aa483b0728a57c3",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-raster/reopened-slide-03.png",
+      "bundlePath": null,
+      "bytes": 7589,
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7",
+      "omitted": true,
+      "omissionReason": "duplicate synthetic raster"
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-raster/report.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/missing-raster/report.json",
+      "bytes": 85129,
+      "sha256": "ef8cf5de4022e1d4463ae719d2d46e35e425186163931969562b62cb6ad929a5",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-raster/request.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/missing-raster/request.json",
+      "bytes": 1974,
+      "sha256": "cade4e871863551e24ac12230e9cc6b6606f222a560282ef58ab8ce6ac5c46da",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-raster/stages.jsonl",
+      "bundlePath": "B/furniture/synthetic-controls/cases/missing-raster/stages.jsonl",
+      "bytes": 1084448,
+      "sha256": "857e39a5560a953d77d3740c3543cdaaa631e2bcb200afa7d63f9b320a820112",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-raster/supervisor.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/missing-raster/supervisor.json",
+      "bytes": 220,
+      "sha256": "1f9881913cdfdd9e54e865619bc528b6ee596b1f95164f403e1ecf56b4d52ed2",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-raster/worker.json",
+      "bundlePath": "B/furniture/synthetic-controls/cases/missing-raster/worker.json",
+      "bytes": 341,
+      "sha256": "fe666675e144974ee7e11d6890e3a6c05d2580a190e63eaa39d5d70b0e25fc70",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-raster/worker.stderr.log",
+      "bundlePath": "B/furniture/synthetic-controls/cases/missing-raster/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/cases/missing-raster/worker.stdout.log",
+      "bundlePath": "B/furniture/synthetic-controls/cases/missing-raster/worker.stdout.log",
+      "bytes": 54,
+      "sha256": "9193db23a5ef082ce70e61698e4c9a097be6b1108bd90fcca5fe40ec041f9f46",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/control-suite.json",
+      "bundlePath": "B/furniture/synthetic-controls/control-suite.json",
+      "bytes": 10188,
+      "sha256": "db5e09550e953f39ed05a67c0fb1fee1c684eb1bac9f162c80d232f572f7348e",
+      "omitted": false,
+      "omissionReason": null
+    },
+    {
+      "source": "furniture-audit-controls-01/run-controls.py",
+      "bundlePath": "B/furniture/synthetic-controls/run-controls.py",
+      "bytes": 8031,
+      "sha256": "4d2bdbfd34478b436cc67d8298aad3b5cac13bf15f37891a341ddad4609694cd",
+      "omitted": false,
+      "omissionReason": null
+    }
+  ]
+}

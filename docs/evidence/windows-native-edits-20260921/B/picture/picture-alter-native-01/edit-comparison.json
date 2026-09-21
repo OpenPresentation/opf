@@ -1,0 +1,107 @@
+{
+  "passed": true,
+  "scope": "Bounded actual PowerPoint edit/save/reopen and current-content reimport. Replacement means deleting and adding a new native picture; it does not certify Change Picture or original shape/provenance identity. Runtime binding covers recorded four OPF package files and consumer lock, not all transitive dependency bytes.",
+  "node": "v24.21.0",
+  "executable": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\toolchain\\node_modules\\node\\bin\\node.exe",
+  "verifierSha256": "de3f01bb8d812c533adcee8ef729f5989b4c868203a65d57bc0fd5e355d85bd7",
+  "reportSha256": "1e0f61dac2341b63e8c6c97ef589c0450bf5cb763604081c286fedd1aca83ff2",
+  "generationSha256": "dabfa6b34d07ea01ffdec0a4da6376df3ce470c36ea53c5f3d2ee0b3a4522238",
+  "editMode": "alter",
+  "checks": [
+    {
+      "name": "load exact evidence and generation",
+      "passed": true
+    },
+    {
+      "name": "native worker completed and owned presentations closed",
+      "passed": true
+    },
+    {
+      "name": "generation runtime binding unchanged",
+      "passed": true
+    },
+    {
+      "name": "original registry PPTX opened from unchanged owned snapshot",
+      "passed": true
+    },
+    {
+      "name": "verifier input snapshot unchanged",
+      "passed": true
+    },
+    {
+      "name": "processHelper input snapshot unchanged",
+      "passed": true
+    },
+    {
+      "name": "presentation input snapshot unchanged",
+      "passed": true
+    },
+    {
+      "name": "saved presentation bytes match recorded hash",
+      "passed": true
+    },
+    {
+      "name": "reopened presentation bytes match recorded hash",
+      "passed": true
+    },
+    {
+      "name": "original raster bytes match recorded hash",
+      "passed": true
+    },
+    {
+      "name": "edited raster bytes match recorded hash",
+      "passed": true
+    },
+    {
+      "name": "reopened raster bytes match recorded hash",
+      "passed": true
+    },
+    {
+      "name": "edited native raster is stable after save/reopen",
+      "passed": true
+    },
+    {
+      "name": "known actual native edit mode",
+      "passed": true
+    },
+    {
+      "name": "successful native edit calls recorded before completion",
+      "passed": true
+    },
+    {
+      "name": "native source still matches one expected registry picture",
+      "passed": true
+    },
+    {
+      "name": "edited native content and edit",
+      "passed": true
+    },
+    {
+      "name": "reopened native content and edit",
+      "passed": true
+    },
+    {
+      "name": "native picture geometry and crop survive save/reopen",
+      "passed": true
+    },
+    {
+      "name": "saved current picture content reimports without resurrection",
+      "passed": true
+    },
+    {
+      "name": "retain imported current content",
+      "passed": true
+    }
+  ],
+  "failures": [],
+  "diagnostics": [
+    {
+      "code": "unsupported-image-crop",
+      "message": "Native picture crop is not represented by the imported OPF asset; the full image was retained.",
+      "path": "slides.0.pictures.0"
+    }
+  ],
+  "limitations": [
+    "PowerPoint preserves the edited crop; OPF reimport retains the full source image and reports unsupported-image-crop. Crop and absolute geometry/reflow fidelity are not accepted."
+  ]
+}

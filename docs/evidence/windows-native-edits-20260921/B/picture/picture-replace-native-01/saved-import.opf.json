@@ -1,0 +1,30 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "OPF Presentation",
+  "slides": [
+    {
+      "design": {
+        "background": {
+          "type": "solid",
+          "color": "#011842"
+        }
+      },
+      "blocks": [
+        {
+          "type": "image",
+          "image": {
+            "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAB4CAIAAAAhVwZfAAAB50lEQVR4nOXWsU5UQRhH8TMn+woQHgBJTOxtDB2NT0BjRWd8HjsrEl+CwprS1pDQY731NSr3uihs9s7MCv/lVxH2zuTky7cXyrfXJ2zH21eft3SzBJJAEkgCSSAJJIEkkASSQBJIAkkgCSSBJJAEkkASSAJJIAkkgSSQBJJAEkgCSSAJJIEkkASSQBJIAkkgCSSBJJAEkkASSAItut94dHlx+9Pl3vTLw7PvTzH6T+t9rj7tdaxfdM8dhuHfZ0opq/WN6fYqHkb3Pjbc/XQa/CNErxZveGTo0W1j8ZrpPmQYj1R321hcd5zxbF233V8Uc13N765fj5YxN97g/1+M9iWJ/DMuOx991HU3qjfkGUz6iVi8+fBixuNd39B/+Xp6zA5PWgLJzkfvn79f/Y++i/LrtuXFy82PPINJp0bvd92QMn83mibd3l1qb6iJ/j3sXpYzx1w/6fYlKVWL0boeU/fc9DIeqStufXtMe7J5dxmfrC7u8Mpb7V4z9XL305bin7f1+lbdvPu4yWPLttzO0evrlz1atxg9uT74sqWbJZAEkkASSAJJIAkkgSSQBJJAEkgCSSAJJIEkkASSQBJIAkkgCSSBJJAEkkASSAJJIAkkgSSQBJJAEkgCSSAJJIEkkATysQNq/ADSb4tkHnk3oAAAAABJRU5ErkJggg==",
+            "alt": "Replacement picture added by native-picture-edit"
+          }
+        }
+      ]
+    }
+  ],
+  "author": "OpenPresentation",
+  "design": {
+    "dimensions": {
+      "widthInches": 13.333333333333334,
+      "heightInches": 7.5
+    }
+  }
+}

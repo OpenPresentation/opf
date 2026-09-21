@@ -1,0 +1,1 @@
+{"passed": false, "checks": 26, "failures": [{"name": "native state survives save/reopen at 0.02pt", "passed": false, "error": "('  Native edited header\\twords', '  Native edited header\\twords [synthetic stale current text]')"}]}

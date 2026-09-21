@@ -1,0 +1,165 @@
+﻿{
+    "schemaVersion":  1,
+    "editMode":  "alter",
+    "source":  {
+                   "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-picture-01\\image-only.pptx",
+                   "sha256":  "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937",
+                   "openedPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\picture-alter-native-01\\inputs\\input.pptx",
+                   "openedSha256":  "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937",
+                   "unchanged":  true,
+                   "snapshotUnchanged":  true
+               },
+    "saved":  {
+                  "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\picture-alter-native-01\\native-picture-edit.pptx",
+                  "sha256":  "5b0bbd8efb6070eca9ec89331195805fec5e2f2d4d7e3450152b4dd56bc130a6"
+              },
+    "original":  {
+                     "observation":  {
+                                         "slideCount":  1,
+                                         "slideWidth":  960,
+                                         "slideHeight":  540,
+                                         "shapeCount":  1,
+                                         "pictureCount":  1,
+                                         "linkedPictureCount":  0,
+                                         "embeddedPictureCount":  1,
+                                         "pictures":  [
+                                                          {
+                                                              "index":  1,
+                                                              "name":  "OPF image 1",
+                                                              "alternativeText":  "Four quadrants and a circle",
+                                                              "type":  13,
+                                                              "left":  43.2,
+                                                              "top":  51.6,
+                                                              "width":  873.6,
+                                                              "height":  436.8,
+                                                              "rotation":  0,
+                                                              "lockAspectRatio":  -1,
+                                                              "cropLeft":  0,
+                                                              "cropTop":  0,
+                                                              "cropRight":  0,
+                                                              "cropBottom":  0
+                                                          }
+                                                      ]
+                                     },
+                     "raster":  {
+                                    "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\picture-alter-native-01\\original.png",
+                                    "sha256":  "f773035c4cfc0e2203e1ecc66de2a348ee328fd2cc58f79389593aa3f11b4455"
+                                }
+                 },
+    "edited":  {
+                   "expectation":  {
+                                       "left":  216,
+                                       "top":  132,
+                                       "width":  504,
+                                       "height":  252,
+                                       "cropLeft":  18,
+                                       "cropTop":  12,
+                                       "cropRight":  0,
+                                       "cropBottom":  0,
+                                       "alternativeText":  ""
+                                   },
+                   "observation":  {
+                                       "slideCount":  1,
+                                       "slideWidth":  960,
+                                       "slideHeight":  540,
+                                       "shapeCount":  1,
+                                       "pictureCount":  1,
+                                       "linkedPictureCount":  0,
+                                       "embeddedPictureCount":  1,
+                                       "pictures":  [
+                                                        {
+                                                            "index":  1,
+                                                            "name":  "OPF image 1",
+                                                            "alternativeText":  "",
+                                                            "type":  13,
+                                                            "left":  216,
+                                                            "top":  132,
+                                                            "width":  504,
+                                                            "height":  252,
+                                                            "rotation":  0,
+                                                            "lockAspectRatio":  0,
+                                                            "cropLeft":  18,
+                                                            "cropTop":  12.00015,
+                                                            "cropRight":  0,
+                                                            "cropBottom":  0
+                                                        }
+                                                    ]
+                                   },
+                   "raster":  {
+                                  "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\picture-alter-native-01\\edited.png",
+                                  "sha256":  "9c913f592038d2b8c9a6ed16fde7c418e86ef7169c0dd22ef008f48a886ddd7e"
+                              }
+               },
+    "reopened":  {
+                     "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\picture-alter-native-01\\native-picture-edit.pptx",
+                     "sha256":  "5b0bbd8efb6070eca9ec89331195805fec5e2f2d4d7e3450152b4dd56bc130a6",
+                     "observation":  {
+                                         "slideCount":  1,
+                                         "slideWidth":  960,
+                                         "slideHeight":  540,
+                                         "shapeCount":  1,
+                                         "pictureCount":  1,
+                                         "linkedPictureCount":  0,
+                                         "embeddedPictureCount":  1,
+                                         "pictures":  [
+                                                          {
+                                                              "index":  1,
+                                                              "name":  "OPF image 1",
+                                                              "alternativeText":  "",
+                                                              "type":  13,
+                                                              "left":  216,
+                                                              "top":  132,
+                                                              "width":  504,
+                                                              "height":  252,
+                                                              "rotation":  0,
+                                                              "lockAspectRatio":  0,
+                                                              "cropLeft":  18,
+                                                              "cropTop":  12.00015,
+                                                              "cropRight":  0,
+                                                              "cropBottom":  0
+                                                          }
+                                                      ]
+                                     },
+                     "raster":  {
+                                    "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\picture-alter-native-01\\reopened.png",
+                                    "sha256":  "9c913f592038d2b8c9a6ed16fde7c418e86ef7169c0dd22ef008f48a886ddd7e"
+                                }
+                 },
+    "inputs":  {
+                   "verifier":  {
+                                    "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\sources\\opf-pptx\\test\\native-picture-edit.ps1",
+                                    "sha256":  "0163392cdc9e0b925d1594e32d575b97b7d7f3022a45cb09b0e9b76a3ddcd0df",
+                                    "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\picture-alter-native-01\\inputs\\native-picture-edit.ps1",
+                                    "snapshotSha256":  "0163392cdc9e0b925d1594e32d575b97b7d7f3022a45cb09b0e9b76a3ddcd0df"
+                                },
+                   "processHelper":  {
+                                         "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\sources\\opf-pptx\\test\\native-process.ps1",
+                                         "sha256":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+                                         "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\picture-alter-native-01\\inputs\\native-process.ps1",
+                                         "snapshotSha256":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+                                     },
+                   "presentation":  {
+                                        "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-picture-01\\image-only.pptx",
+                                        "sha256":  "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937",
+                                        "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\picture-alter-native-01\\inputs\\input.pptx",
+                                        "snapshotSha256":  "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937"
+                                    },
+                   "replacementImage":  null
+               },
+    "environment":  {
+                        "hostVersion":  "5.1.26100.9444",
+                        "windowsProductName":  "Windows 10 Home",
+                        "windowsDisplayVersion":  "25H2",
+                        "windowsBuild":  "26200.9457",
+                        "powerPointVersion":  "16.0",
+                        "powerPointExecutable":  "C:\\Program Files\\Microsoft Office\\root\\Office16\\POWERPNT.EXE",
+                        "powerPointBuild":  "16.0.20326.20158",
+                        "powerPointExecutableSha256":  "07cbe68cde7596058a6890c471389a7a70a090ee42f01975d72ea6d643f82021"
+                    },
+    "cleanupConfirmed":  true,
+    "officeOperationsStopped":  false,
+    "lastStage":  "worker.complete",
+    "lastStatus":  "success",
+    "error":  null,
+    "scope":  "One explicitly supplied PPTX snapshot containing one slide and one embedded picture. The worker alters, replaces, or deletes only that picture; it never quits or kills Office, changes security, retries, or closes unrelated presentations."
+}
