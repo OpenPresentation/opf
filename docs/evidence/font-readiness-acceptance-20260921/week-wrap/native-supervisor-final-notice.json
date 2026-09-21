@@ -1,0 +1,20 @@
+{
+  "source": "Parent coordinator delivered Windows supervisor final status in this task; this receipt attributes that notice and does not independently poll postmerge CI or inspect Office.",
+  "core111": {
+    "merge": "3c5048522714365a41d9b5b9ba81620affae718b",
+    "postmergeRuns": [
+      35662159658,
+      35662159864
+    ],
+    "postmergeStatusAtNotice": "started, no pass claimed"
+  },
+  "renderer30": {
+    "merge": "c8d7d5ca1f67a7b39f70c7c4bd14577a865b175b",
+    "exactHeadRun": 35661051100,
+    "postmergeRun": 35661504472,
+    "reportedConclusions": "both passed"
+  },
+  "nativeBatch": "All12 PRs merged; required premerge checks passed at recorded heads.",
+  "cleanup": "Supervisor reports no owned Office presentation/helper/temporary font registration remains; delegates finished. Accepted Windows handoff contains the dated cleanup observation, which is not future host readiness.",
+  "scope": "Native/font compatibility remains incomplete. No package publication, site pin, schema, golden or tolerance change follows from these merges."
+}

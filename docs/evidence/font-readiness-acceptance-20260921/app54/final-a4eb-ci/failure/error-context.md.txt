@@ -1,0 +1,429 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: inspector-actions.spec.ts >> Inspector Open in Author commits the current draft before handoff
+- Location: tests\e2e\inspector-actions.spec.ts:168:5
+
+# Error details
+
+```
+Error: expect(page).toHaveURL(expected) failed
+
+Expected pattern: /\/author#opf=/
+Received string:  ""
+Timeout: 5000ms
+
+Call log:
+  - Expect "toHaveURL" with timeout 5000ms
+    - waiting for navigation to finish...
+
+```
+
+# Page snapshot
+
+```yaml
+- generic [active] [ref=f1e1]:
+  - main [ref=f1e3]:
+    - generic [ref=f1e5]:
+      - generic [ref=f1e6]:
+        - link "pptx.dev home" [ref=f1e7] [cursor=pointer]:
+          - /url: /
+          - generic [ref=f1e8]: P
+          - generic [ref=f1e9]: pptx.dev
+        - generic [ref=f1e11]:
+          - button "current-actions" [ref=f1e12]
+          - generic "This draft is stored in this browser." [ref=f1e19]: local browser
+        - generic "Schema valid, no warnings, 1 slide" [ref=f1e24]:
+          - generic [ref=f1e27]: valid
+          - generic [aria-hidden] [ref=f1e28]: ·
+          - generic [ref=f1e29]: 1 slide
+        - generic [ref=f1e30]:
+          - button "copy" [ref=f1e31]
+          - button "Export" [ref=f1e36]
+          - button "New run" [ref=f1e42]
+          - button "More actions" [ref=f1e46]
+      - main [ref=f1e48]:
+        - generic [ref=f1e49]:
+          - tablist "Activity" [ref=f1e50]:
+            - tab "agent" [selected] [ref=f1e51]
+            - tab "tools" [ref=f1e57]
+            - tab "schema" [ref=f1e61]
+          - log [ref=f1e66]:
+            - generic [ref=f1e70]:
+              - heading "Agent transcript" [level=3] [ref=f1e71]
+              - paragraph [ref=f1e72]: Plans, tool calls, diffs, and checkpoints will appear here as Author works.
+          - generic [ref=f1e75]:
+            - group "Author understands these inputs as" [ref=f1e76]:
+              - generic [ref=f1e77]: intent
+              - 'generic "topic: Action snapshot (high confidence from opf)" [ref=f1e78]':
+                - generic [ref=f1e80]: topic
+                - generic [ref=f1e81]: Action snapshot
+              - 'generic "slides: 1 (high confidence from opf)" [ref=f1e82]':
+                - generic [ref=f1e84]: slides
+                - generic [ref=f1e85]: ~1
+            - group "Who is this for?" [ref=f1e86]:
+              - generic [ref=f1e87]:
+                - generic [ref=f1e91]: Who is this for?
+                - generic [ref=f1e92]: missing · audience
+              - paragraph [ref=f1e93]: I can pick a tone, narrative arc, and theme once I know the audience.
+              - generic [ref=f1e94]:
+                - button "Investors" [ref=f1e95]
+                - button "Customers" [ref=f1e96]
+                - button "Executives" [ref=f1e97]
+                - button "Engineering team" [ref=f1e98]
+                - button "Board" [ref=f1e99]
+              - generic [ref=f1e100]:
+                - generic [ref=f1e101]: One question only. Skip — I'll guess and you can revert in diff.
+                - button "skip — just run" [ref=f1e102]
+            - generic [ref=f1e103]: slides[0].title
+            - form "Agent message composer" [ref=f1e106]:
+              - group [ref=f1e107]:
+                - button "Choose File" [ref=f1e108]
+                - textbox "Agent message" [ref=f1e110]:
+                  - /placeholder: Paste OPF JSON, or sign in for AI...
+                - group [ref=f1e111]:
+                  - button "Attach source files" [ref=f1e113]:
+                    - generic [ref=f1e114]: Attach
+                  - button "Submit" [ref=f1e115]:
+                    - generic [ref=f1e116]: Sign in
+            - generic [ref=f1e118]:
+              - button "try a sample" [ref=f1e119] [cursor=pointer]
+              - button "shorten" [ref=f1e120] [cursor=pointer]
+              - button "rephrase" [ref=f1e121] [cursor=pointer]
+              - button "+ add subtitle" [ref=f1e122] [cursor=pointer]
+        - separator "Resize Agent and Edit panes" [ref=f1e123]
+        - generic [ref=f1e126]:
+          - tablist "Document view" [ref=f1e127]:
+            - generic [ref=f1e128]:
+              - tab "code" [selected] [ref=f1e129]
+              - tab "preview 1" [ref=f1e136]:
+                - generic [ref=f1e139]: preview
+                - generic [ref=f1e140]: "1"
+            - tablist "Editor format" [ref=f1e142]:
+              - tab "JSON" [selected] [ref=f1e143]
+              - tab "YAML" [ref=f1e144]
+              - tab "MD" [ref=f1e145]
+          - generic [ref=f1e149]:
+            - code [ref=f1e153]:
+              - generic [ref=f1e154]:
+                - textbox "Editor content" [ref=f1e155]
+                - textbox [aria-hidden] [ref=f1e156]
+                - generic [aria-hidden] [ref=f1e158]:
+                  - generic [ref=f1e159]:
+                    - generic [ref=f1e160] [cursor=pointer]: 
+                    - generic [ref=f1e161]: "1"
+                  - generic [ref=f1e162]: "2"
+                  - generic [ref=f1e164]: "3"
+                  - generic [ref=f1e166]:
+                    - generic [ref=f1e167] [cursor=pointer]: 
+                    - generic [ref=f1e168]: "4"
+                  - generic [ref=f1e169]: "5"
+                  - generic [ref=f1e171]: "6"
+                  - generic [ref=f1e173]:
+                    - generic [ref=f1e174] [cursor=pointer]: 
+                    - generic [ref=f1e175]: "7"
+                  - generic [ref=f1e176]:
+                    - generic [ref=f1e177] [cursor=pointer]: 
+                    - generic [ref=f1e178]: "8"
+                  - generic [ref=f1e179]: "9"
+                  - generic [ref=f1e181]: "10"
+                  - generic [ref=f1e183]: "11"
+                  - generic [ref=f1e185]: "12"
+                  - generic [ref=f1e187]:
+                    - generic [ref=f1e188] [cursor=pointer]: 
+                    - generic [ref=f1e189]: "13"
+                  - generic [ref=f1e190]:
+                    - generic [ref=f1e191] [cursor=pointer]: 
+                    - generic [ref=f1e192]: "14"
+                  - generic [ref=f1e193]: "15"
+                  - generic [ref=f1e195]: "16"
+                  - generic [ref=f1e197]:
+                    - generic [ref=f1e198] [cursor=pointer]: 
+                    - generic [ref=f1e199]: "17"
+                  - generic [ref=f1e200]:
+                    - generic [ref=f1e201] [cursor=pointer]: 
+                    - generic [ref=f1e202]: "18"
+                  - generic [ref=f1e203]: "19"
+                  - generic [ref=f1e205]: "20"
+                  - generic [ref=f1e207]: "21"
+                  - generic [ref=f1e209]: "22"
+                  - generic [ref=f1e211]: "23"
+                  - generic [ref=f1e213]: "24"
+                  - generic [ref=f1e215]: "25"
+                  - generic [ref=f1e217]: "26"
+                  - generic [ref=f1e219]: "27"
+                - generic [aria-hidden] [ref=f1e308]:
+                  - generic [ref=f1e309]: "{"
+                  - generic [ref=f1e311]: "\"name\": \"Action snapshot\","
+                  - generic [ref=f1e313]: "\"filename\": \"current-actions\","
+                  - generic [ref=f1e315]: "\"design\": {"
+                  - generic [ref=f1e317]: "\"fontScheme\": \"roboto\""
+                  - generic [ref=f1e319]: "},"
+                  - generic [ref=f1e321]: "\"extensions\": {"
+                  - generic [ref=f1e323]: "\"human\": {"
+                  - generic [ref=f1e325]: "\"x\": 100,"
+                  - generic [ref=f1e327]: "\"literal\": \"a/b\""
+                  - generic [ref=f1e329]: "}"
+                  - generic [ref=f1e331]: "},"
+                  - generic [ref=f1e333]: "\"slides\": ["
+                  - generic [ref=f1e335]: "{"
+                  - generic [ref=f1e337]: "\"id\": \"action-slide\","
+                  - generic [ref=f1e339]: "\"title\": \"Author commits this draft\","
+                  - generic [ref=f1e341]: "\"text\": ["
+                  - generic [ref=f1e343]: "{"
+                  - generic [ref=f1e345]: "\"text\": \"rich text\","
+                  - generic [ref=f1e347]: "\"bold\": true"
+                  - generic [ref=f1e349]: "}"
+                  - generic [ref=f1e351]: "],"
+                  - generic [ref=f1e353]: "\"notes\": \"keep\\n\\t\""
+                  - generic [ref=f1e355]: "}"
+                  - generic [ref=f1e357]: "]"
+                  - generic [ref=f1e359]: "}"
+            - generic [ref=f1e363]: cursor 27:1
+        - separator "Resize Edit and right rail" [ref=f1e365]
+        - complementary [ref=f1e368]:
+          - generic [ref=f1e369]:
+            - tablist "Right rail" [ref=f1e370]:
+              - tab "inspector" [selected] [ref=f1e371]
+              - tab "gallery" [ref=f1e377]
+              - tab "trace" [ref=f1e384]
+            - generic [ref=f1e389]:
+              - generic [ref=f1e390]:
+                - generic [ref=f1e391]:
+                  - heading "Selection · slides[0].title" [level=2] [ref=f1e392]
+                  - paragraph [ref=f1e393]: Author commits this draft
+                - button "Pin this field as LLM context" [ref=f1e394]
+              - generic [ref=f1e397]:
+                - generic [ref=f1e398]: authored
+                - generic [ref=f1e401]: catalog
+              - generic [ref=f1e404]:
+                - generic [ref=f1e405]:
+                  - term [ref=f1e406]: authored slides[0].title
+                  - definition [ref=f1e407]: "\"Author commits this draft\""
+                - generic [ref=f1e408]:
+                  - term [ref=f1e409]: layout catalog
+                  - definition [ref=f1e410]: pptx.gallery/layouts
+                - generic [ref=f1e411]:
+                  - term [ref=f1e412]: schema minimum
+                  - definition [ref=f1e413]: 0 errors / 0 warnings
+                - generic [ref=f1e414]:
+                  - term [ref=f1e415]: document inheritance
+                  - definition [ref=f1e416]: design
+              - paragraph [ref=f1e417]: Schema-aware composer chips appear on the dock when this row is selected.
+  - alert [ref=f1e418]
+  - generic [ref=f1e419]:
+    - alert
+    - alert
+```
+
+# Test source
+
+```ts
+  76  | 
+  77  | async function draft(page: Page, title: string) {
+  78  |   await titleTarget(page).dblclick();
+  79  |   await titleInput(page).fill(title);
+  80  |   await expect(titleInput(page)).toHaveValue(title);
+  81  | }
+  82  | 
+  83  | async function jsonDownload(page: Page, expected: string, name: string, withoutBlur = false) {
+  84  |   const pending = page.waitForEvent("download");
+  85  |   const button = page.getByRole("button", { name: "json", exact: true });
+  86  |   if (withoutBlur) await clickWithoutBlur(button); else await button.click();
+  87  |   const download = await pending;
+  88  |   expect(await download.failure()).toBeNull();
+  89  |   expect(download.suggestedFilename()).toBe("current-actions.opf.json");
+  90  |   const bytes = await readFile((await download.path())!);
+  91  |   await writeFile(test.info().outputPath(`${name}.opf.json`), bytes);
+  92  |   expect(bytes).toEqual(Buffer.from(expected));
+  93  | }
+  94  | 
+  95  | async function menuAction(page: Page, name: string, withoutBlur = false) {
+  96  |   const more = page.getByRole("button", { name: "More actions", exact: true });
+  97  |   if (withoutBlur) await clickWithoutBlur(more); else await more.click();
+  98  |   const item = page.getByRole("menuitem", { name, exact: true });
+  99  |   if (withoutBlur) await clickWithoutBlur(item); else await item.click();
+  100 | }
+  101 | 
+  102 | test("Inspector Copy and JSON commit current drafts with exact source undo and unchanged-draft history", async ({ page }) => {
+  103 |   const errors: string[] = [], posts: string[] = [];
+  104 |   page.on("pageerror", error => errors.push(error.message));
+  105 |   page.on("request", request => { if (request.method() === "POST") posts.push(request.url()); });
+  106 |   await ready(page);
+  107 |   await draft(page, "Copy commits this draft");
+  108 |   expect(await clipboardAction(page, copyButton(page), true)).toBe(changedTitle("Copy commits this draft"));
+  109 |   await expect(titleInput(page)).toHaveCount(0);
+  110 | 
+  111 |   await draft(page, "JSON commits this draft");
+  112 |   const json = changedTitle("JSON commits this draft");
+  113 |   await jsonDownload(page, json, "pending-json", true);
+  114 |   await titleTarget(page).click(); await page.keyboard.press("ControlOrMeta+z");
+  115 |   expect(await clipboardAction(page, copyButton(page))).toBe(changedTitle("Copy commits this draft"));
+  116 |   await titleTarget(page).click(); await page.keyboard.press("ControlOrMeta+Shift+z");
+  117 |   expect(await clipboardAction(page, copyButton(page))).toBe(json);
+  118 |   // An unchanged inline draft must leave the real edit as the next undo step.
+  119 |   await titleTarget(page).dblclick();
+  120 |   await jsonDownload(page, json, "unchanged-draft", true);
+  121 |   await titleTarget(page).click(); await page.keyboard.press("ControlOrMeta+z");
+  122 |   expect(await clipboardAction(page, copyButton(page))).toBe(changedTitle("Copy commits this draft"));
+  123 | 
+  124 |   await page.screenshot({ path: test.info().outputPath("copy-json-current-source.png"), fullPage: true });
+  125 |   expect(posts).toEqual([]);
+  126 |   expect(errors).toEqual([]);
+  127 | });
+  128 | 
+  129 | test("Inspector Share and PPTX commit current drafts with matching payloads and filenames", async ({ page }) => {
+  130 |   const errors: string[] = [], posts: string[] = [];
+  131 |   page.on("pageerror", error => errors.push(error.message));
+  132 |   page.on("request", request => { if (request.method() === "POST") posts.push(request.url()); });
+  133 |   await ready(page);
+  134 |   await draft(page, "Share commits this draft");
+  135 |   const oldHash = gzipSync(JSON.stringify(JSON.parse(original))).toString("base64url");
+  136 |   await page.evaluate(hash => {
+  137 |     const url = new URL(location.href); url.searchParams.set("import", `hash:${hash}`);
+  138 |     history.replaceState(null, "", url);
+  139 |   }, oldHash);
+  140 |   const share = await clipboardAction(page, shareButton(page), true);
+  141 |   const expectedShare = changedTitle("Share commits this draft");
+  142 |   expect(sourceAtUrl(share)).toEqual(JSON.parse(expectedShare));
+  143 |   expect(new URL(share).searchParams.has("import")).toBe(false);
+  144 |   expect(new URL(share).searchParams.get("view")).toBe("source");
+  145 |   expect(new URL(share).pathname).toBe("/inspector");
+  146 |   await writeFile(test.info().outputPath("explicit-share-url.txt"), share);
+  147 | 
+  148 |   await draft(page, "PPTX commits this draft");
+  149 |   const pendingPptx = page.waitForEvent("download");
+  150 |   await clickWithoutBlur(page.getByRole("button", { name: "pptx", exact: true }));
+  151 |   const pptx = await pendingPptx;
+  152 |   expect(await pptx.failure()).toBeNull();
+  153 |   expect(pptx.suggestedFilename()).toBe("current-actions.pptx");
+  154 |   const bytes = await readFile((await pptx.path())!);
+  155 |   await writeFile(test.info().outputPath("pending.pptx"), bytes);
+  156 |   const { fromPptx } = await import("@openpresentation/opf-pptx");
+  157 |   const converted = await fromPptx(bytes);
+  158 |   expect(JSON.stringify(converted)).toContain("PPTX commits this draft");
+  159 |   expect(await clipboardAction(page, copyButton(page))).toBe(changedTitle("PPTX commits this draft"));
+  160 |   await titleTarget(page).click(); await page.keyboard.press("ControlOrMeta+z");
+  161 |   expect(await clipboardAction(page, copyButton(page))).toBe(expectedShare);
+  162 | 
+  163 |   await page.screenshot({ path: test.info().outputPath("share-pptx-current-source.png"), fullPage: true });
+  164 |   expect(posts).toEqual([]);
+  165 |   expect(errors).toEqual([]);
+  166 | });
+  167 | 
+  168 | test("Inspector Open in Author commits the current draft before handoff", async ({ page }) => {
+  169 |   const errors: string[] = [], posts: string[] = [];
+  170 |   page.on("pageerror", error => errors.push(error.message));
+  171 |   page.on("request", request => { if (request.method() === "POST") posts.push(request.url()); });
+  172 |   await ready(page);
+  173 |   await draft(page, "Author commits this draft");
+  174 |   await page.screenshot({ path: test.info().outputPath("inspector-pending-action.png"), fullPage: true });
+  175 |   await menuAction(page, "Open in Author", true);
+> 176 |   await expect(page).toHaveURL(/\/author#opf=/);
+      |                      ^ Error: expect(page).toHaveURL(expected) failed
+  177 |   expect(sourceAtUrl(page.url())).toEqual(JSON.parse(changedTitle("Author commits this draft")));
+  178 |   await expect(page.getByRole("button", { name: /^(copy|copied)$/i })).toBeVisible();
+  179 |   const authorSource = await clipboardAction(page, page.getByRole("button", { name: /^(copy|copied)$/i }));
+  180 |   expect(JSON.parse(authorSource)).toEqual(JSON.parse(changedTitle("Author commits this draft")));
+  181 |   await page.screenshot({ path: test.info().outputPath("author-current-handoff.png"), fullPage: true });
+  182 |   expect(posts).toEqual([]);
+  183 |   expect(errors).toEqual([]);
+  184 | });
+  185 | 
+  186 | test("Inspector raw Copy allows malformed source and rejected drafts produce no JSON output", async ({ page }) => {
+  187 |   await ready(page);
+  188 |   await paste(page, '{ "unfinished":');
+  189 |   expect(await clipboardAction(page, copyButton(page))).toBe('{ "unfinished":');
+  190 |   const downloads: string[] = [];
+  191 |   const onDownload = (download: Download) => downloads.push(download.suggestedFilename());
+  192 |   page.on("download", onDownload);
+  193 |   await page.getByRole("button", { name: "json", exact: true }).click();
+  194 |   await expect(page.getByRole("status")).toContainText(/JSON|Unexpected|Expected/);
+  195 |   expect(downloads).toEqual([]);
+  196 |   const duplicate = original.replace('"name":"Action\\u0020snapshot",', '"name":"earlier","name":"Action\\u0020snapshot",');
+  197 |   await paste(page, duplicate);
+  198 |   expect(await clipboardAction(page, copyButton(page))).toBe(duplicate);
+  199 |   await expect(titleTarget(page)).toBeVisible();
+  200 |   await draft(page, "Rejected pointer-blur title");
+  201 |   await page.getByRole("button", { name: "json", exact: true }).click();
+  202 |   await expect(page.getByRole("status")).toContainText("Remove duplicate JSON keys before editing the preview; your source was kept.");
+  203 |   await expect(titleInput(page)).toHaveCount(0);
+  204 |   await expect(canvas(page)).toContainText("A title");
+  205 |   expect(downloads).toEqual([]);
+  206 |   // A subsequent explicit retry may use the preserved source after reporting
+  207 |   // the rejection; recovery alone must not authorize the original pointer click.
+  208 |   expect(await clipboardAction(page, copyButton(page))).toBe(duplicate);
+  209 |   await draft(page, "Rejected unsafe title");
+  210 |   await clickWithoutBlur(page.getByRole("button", { name: "json", exact: true }));
+  211 |   await expect(page.getByRole("status")).toContainText("Remove duplicate JSON keys before editing the preview; your source was kept.");
+  212 |   await expect(titleInput(page)).toHaveCount(0);
+  213 |   await expect(canvas(page)).toContainText("A title");
+  214 |   expect(downloads).toEqual([]);
+  215 |   page.off("download", onDownload);
+  216 |   await jsonDownload(page, duplicate, "accepted-after-rejection");
+  217 |   expect(await clipboardAction(page, copyButton(page))).toBe(duplicate);
+  218 | });
+  219 | 
+  220 | test("Inspector actions preserve the accepted raw buffer after CRLF source ingress", async ({ page }) => {
+  221 |   await ready(page);
+  222 |   const incoming = original.replaceAll("\n", "\r\n");
+  223 |   await paste(page, incoming);
+  224 |   const accepted = await clipboardAction(page, copyButton(page));
+  225 |   // Monaco may retain the existing model's LF sequence on paste. Record that
+  226 |   // distinct ingress boundary, without claiming it was CRLF action preservation.
+  227 |   expect(accepted.replaceAll("\r\n", "\n")).toBe(original);
+  228 |   await writeFile(test.info().outputPath("crlf-input.json"), incoming);
+  229 |   await writeFile(test.info().outputPath("accepted-source.json"), accepted);
+  230 |   await writeFile(test.info().outputPath("crlf-ingress-boundary.json"), JSON.stringify({
+  231 |     inputBytes: Buffer.byteLength(incoming), acceptedBytes: Buffer.byteLength(accepted),
+  232 |     inputBytesPreserved: accepted === incoming,
+  233 |     acceptedEol: accepted.includes("\r\n") ? "CRLF" : "LF",
+  234 |     scope: "Exact toolbar action bytes use the actual accepted raw buffer. CRLF paste-to-model preservation is recorded separately.",
+  235 |   }, null, 2));
+  236 |   await expect(titleTarget(page)).toBeVisible();
+  237 |   await draft(page, "CRLF ingress action draft");
+  238 |   const edited = accepted.replace('"A\\u0020title"', '"CRLF ingress action draft"');
+  239 |   await jsonDownload(page, edited, "crlf-ingress-pending-json", true);
+  240 |   expect(await clipboardAction(page, copyButton(page))).toBe(edited);
+  241 |   await titleTarget(page).click(); await page.keyboard.press("ControlOrMeta+z");
+  242 |   await jsonDownload(page, accepted, "crlf-ingress-undo");
+  243 |   await titleTarget(page).click(); await page.keyboard.press("ControlOrMeta+Shift+z");
+  244 |   await jsonDownload(page, edited, "crlf-ingress-redo");
+  245 | });
+  246 | 
+  247 | for (const status of [200, 401]) test(`Inspector suppresses stale PDF ${status} delivery or navigation after a new source`, async ({ page }) => {
+  248 |   await ready(page);
+  249 |   let release!: () => void;
+  250 |   const held = new Promise<void>(resolve => { release = resolve; });
+  251 |   let requestSeen!: (body: unknown) => void;
+  252 |   const request = new Promise<unknown>(resolve => { requestSeen = resolve; });
+  253 |   await page.route("**/api/v1/generate?format=pdf", async route => {
+  254 |     requestSeen(route.request().postDataJSON());
+  255 |     await held;
+  256 |     await route.fulfill({ status, contentType: status === 200 ? "application/pdf" : "application/json", body: status === 200 ? "%PDF-1.4\nlocal mock\n%%EOF" : '{"message":"local mock authentication"}' });
+  257 |   });
+  258 |   const downloads: string[] = [];
+  259 |   page.on("download", value => downloads.push(value.suggestedFilename()));
+  260 |   await draft(page, "PDF click-time draft");
+  261 |   await menuAction(page, "Export PDF", true);
+  262 |   expect(await request).toEqual(JSON.parse(changedTitle("PDF click-time draft")));
+  263 |   const newer = original.replace("current-actions", "newer-file").replace("A\\u0020title", "Newer source");
+  264 |   await paste(page, newer);
+  265 |   // Keyboard paste can return before Monaco consumes the clipboard. Establish
+  266 |   // the accepted code input without invoking another action or waiting for preview.
+  267 |   const code = page.getByTestId("playground-code-frame").locator(".view-lines");
+  268 |   await expect(code).toContainText("newer-file");
+  269 |   await expect(code).toContainText("Newer source");
+  270 |   const response = page.waitForResponse(value => value.url().includes("/api/v1/generate?format=pdf"));
+  271 |   release(); await response;
+  272 |   await expect(page.getByRole("status")).toContainText("The current source changed");
+  273 |   expect(downloads).toEqual([]);
+  274 |   expect(new URL(page.url()).pathname).toBe("/inspector");
+  275 |   expect(await clipboardAction(page, copyButton(page))).toBe(newer);
+  276 |   await writeFile(test.info().outputPath(`pdf-${status}-request.json`), JSON.stringify(await request, null, 2));
+```

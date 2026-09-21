@@ -1,0 +1,41 @@
+# App54 exact-head platform audit — release held
+
+Captured head `a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb`, tree `031d893855a540fd2a4d2ec2162605817b8dde16`, parent `4338e57b951c469d5c5f239b78a303fbad3c745e`. [PR54](https://github.com/Data-Advantage/pptx-dev/pull/54) remained open and unmerged at final capture; base/master remained accepted App53 `e40c287b64fcbcfb85fb4a8a50641aea8e3e54a8`.
+
+[Application run 35654753237](https://github.com/Data-Advantage/pptx-dev/actions/runs/35654753237), original attempt 1, completed **failure**. No workflow or browser rerun was requested.
+
+| Platform | Job | Result |
+| --- | --- | --- |
+| Linux | 106515454509 | Node 24.20.0; frozen install/audit, 704 unit tests, 13 standalone controls, typechecks, SDK/CLI and production build passed; **39/39 browser cases passed** |
+| Windows | 106515455003 | Node 24.20.0; same preceding checks passed; **38/39 browser cases passed**, one failed |
+
+All 39 individual outcome lines per platform are retained in [Linux outcomes](linux-browser-outcomes.json) and [Windows outcomes](windows-browser-outcomes.json), bound to original job-log hashes. This audit did not execute tests.
+
+The Windows failure is `inspector-actions.spec.ts:168:5`, “Inspector Open in Author commits the current draft before handoff.” After the action, line 176's unchanged 5,000 ms `toHaveURL(/\/author#opf=/)` assertion reported an empty received string and “waiting for navigation to finish.” The case took 23.6 seconds. The later semantic URL source and Author Copy assertions were not reached. The [exact failure excerpt](windows-exact-failure.log), original [job log](windows-job.log), [error context](extracted/browser-failures-windows-latest/inspector-actions-Inspecto-ddffb-urrent-draft-before-handoff/error-context.md) and original trace remain retained. This assertion failure alone does not establish data loss or the navigation cause; source/trace diagnosis is a separate task. No assertion, timeout, retry or product change was made here.
+
+Historical failures remain separate: `60c91f6` Windows 30/31 failed SVG-security/Author readiness; `4338e57` Windows 38/39 failed the initial retained-slide title in `inspector-recovery.spec.ts` while “Loading slide fonts” remained visible; this `a4eb88a` run failed the Open in Author URL navigation check. Passing those earlier cases in this run does not establish their causes or erase the original failed gates.
+
+## Source and package scope
+
+[Source audit](source-audit.json) and fresh [final verification](source-final-verification.json) passed: all **262 committed changed blobs**, **260 evidence files / 259 manifest entries**, **702 tested regular input hashes** and **33 tested symlink targets** match Git and the clean worktree. The parent integration staged/commit receipts and local acceptance input snapshot are hash-bound in the audit; the evidence manifest is `0f439c1463330385d8a241b38998743892ff94101e6304c05a7e648f15041d13`. No executable archived `.ts`/`.tsx` evidence was found. These checks prove identity, not platform acceptance.
+
+The Python artifact workflow's path filters have zero matches across the entire 527-file PR delta. It was **not triggered / not applicable**, not a fresh passing check. See [scope](artifact-workflow-scope.json) and the exact [workflow](artifact-workflow.yml.txt). Published OPF package versions and native Office ownership were unchanged; this audit performed no publishing or Office actions.
+
+Cursor Bugbot check 106515494525 completed neutral with an explicit usage/spend-limit error: it did not review this head. Original [final check metadata](check-runs-final.json) retains that boundary; independent local source reviews are separate evidence.
+
+## Artifacts and capture limits
+
+Both GitHub artifacts were downloaded once and verified against advertised size and SHA256, ZIP CRC and safe member paths; see [artifact integrity](artifact-integrity.json).
+
+- `browser-failures-windows-latest`, ID 10665085104, 11,054,020 bytes, SHA256 `f490910d37179c4278441eb4d0f1d54cf2251ded72e719c4964ffafb468750ee`, 105 members.
+- `windows-readiness-windows-latest`, ID 10664905182, 6,832 bytes, SHA256 `4d7804daf6e2a94a9ac74318fa8e970eb0cc903a96300b7fbfb61430f5ee3530`, one member.
+
+Original ZIPs and extracted bytes remain in this private audit directory. Raw browser traces are retained for local diagnosis, not recommended for copying into the compact public checkpoint. This audit claims integrity and recorded outcomes; it adds no visual review or download-byte acceptance of its own.
+
+The timing artifact covers the **separate passing SVG-security case**, not the failed Open in Author case. It retained only the Author document: 98 entries (89 resource, 5 longtask, 2 navigation, 2 paint); no dropped entries/documents, observer failures or collection errors were reported. Inspector snapshot and pagehide flush were missing. The exact timing JSON matches in both artifacts. [Timing summary](windows-timing-summary.json) preserves the flags and limitations: observers/hooks have overhead; hook timeouts can affect runner results; longtasks do not identify responsible functions; resource records cover completed requests only. No passive timing record for the failed handoff exists in this artifact.
+
+## Preview boundary
+
+Exact-head preview `dpl_7h6bihzceM8cLbvgK6mehffaqhw5` / `pptx-ejce2z7b3-dataadvantage.vercel.app` remained **READY** at the [final metadata capture](preview-final.json). Target is null (preview). The unchanged root-captured [HTTP receipt](preview-http-boundary.json) records GET `/inspector` returning 302 to `https://vercel.com/sso-api` at 21:05:51 UTC; [copy provenance](preview-boundary-provenance.json) binds its original bytes. No redirect, login, bypass or preview browser acceptance was attempted. READY is deployment metadata only, not production or browser acceptance.
+
+The release remains held on the Windows failure. Canonical production and overall goal completion are not claimed. No source edits, CI reruns, merges, deployments or native compatibility actions occurred during this audit.

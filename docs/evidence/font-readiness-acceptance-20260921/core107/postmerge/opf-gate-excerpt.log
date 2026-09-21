@@ -1,0 +1,17 @@
+2026-09-21T20:38:45.9876417Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-09-21T20:38:50.4256451Z ##[group]Run pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413
+2026-09-21T20:38:58.1662555Z ##[group]Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+2026-09-21T20:39:01.4089501Z node: v24.20.0
+2026-09-21T20:39:02.9722500Z ##[group]Run pnpm install --frozen-lockfile
+2026-09-21T20:39:03.8016120Z ##[group]Run pnpm audit
+2026-09-21T20:39:04.3122002Z ##[group]Run pnpm lint
+2026-09-21T20:39:05.2493273Z ##[group]Run pnpm typecheck
+2026-09-21T20:39:18.5828661Z ##[group]Run pnpm build
+2026-09-21T20:39:39.1391105Z ##[group]Run pnpm test
+2026-09-21T20:40:38.2424205Z ##[group]Run pnpm run check:examples
+2026-09-21T20:40:48.9836510Z ##[group]Run pnpm run check:breaking
+2026-09-21T20:40:49.6119533Z ##[group]Run pnpm --filter @openpresentation/opf pack:dry-run
+2026-09-21T20:41:01.9739650Z ##[group]Run node packages/javascript/test/packed-install-smoke.mjs
+2026-09-21T20:41:20.6619948Z ##[group]Run pnpm test:cli:packed
+2026-09-21T20:41:51.0270605Z ##[group]Run pnpm test:developer-quickstart
+2026-09-21T20:41:57.6444581Z developer quickstart: published registry install passed

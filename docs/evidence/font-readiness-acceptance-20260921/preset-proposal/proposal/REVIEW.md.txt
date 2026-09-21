@@ -1,0 +1,22 @@
+# Preset source/history proposal — not applied
+
+This is a review artifact against accepted App53 `e40c287b64fcbcfb85fb4a8a50641aea8e3e54a8`. `author-shell-proposed.patch` changes only `components/author/author-shell.tsx`; the adjacent TSX file is the proposed result, not a product edit. The checkout's AuthorShell remains byte-identical to the base. The patch depends on the separate proposed `CanvasSourceOverride` bridge interface identified in `source-identity.json`.
+
+## Intended behavior and guards
+
+- A contiguous preset group holds exact initial/current source, format, actual public EditorSession and public undo/redo depths. React toast state only displays that group; synchronous refs enforce it.
+- All ordinary source and format setters invalidate the group before updating state, even for identical bytes. Every non-owned session event also invalidates it, including an identical-document `file-import`, normal canvas edits, Undo/Redo and recovery. Returning to old bytes cannot revive a group. New run, raw import, hydrate, version selection, revert and existing metadata/filename/gallery writers already pass through those setters.
+- Both handlers commit a pending inline draft first and reread current source. Undo all verifies that the group survived that commit. A valid newer edit is retained; a rejected draft blocks the action. The transaction path checks semantic session/source equality even with the canvas unmounted, and requires its subscription readiness marker.
+- Schema and source representation are preflighted before the session receives one public root patch. This includes all preset catalog changes and JSON duplicate-key rejection for real changes. A semantically identical ordinary preset does not create a toast or history entry.
+- A one-shot token identifies the exact synchronous patch callback. Its current session, source/format, semantic before/after and public history depths must match. The callback consumes the token; the caller checks its acknowledgement, rejection counter and resulting raw/semantic document, with unconditional token cleanup in `finally`. No snapshot object-identity contract is used.
+- Undo all creates one undoable revert transaction using the bridge's validated raw override. It restores original bytes even when a preset cycle returned to the original semantic value but normalized an escape token. The bridge then supplies exact ordinary Undo/Redo. If bytes already match, the group clears without a new history entry. There is no additional semantic undo stack or repeated-Undo loop.
+
+## Static verification and limits
+
+Node24.21.0 checked the complete project with a compiler-host override of only the proposed file, without emitting or editing the checkout: zero type diagnostics. ESLint checked the proposed text via `lintText` using the real file path/config: **28 errors / 12 warnings**, identical to the retained baseline, with no added or removed diagnostic signatures. This is not a clean-lint claim. The command is in `check-proposal.cjs`; `verification.json` and the lint/type receipts retain results. The generator in `prepare-proposal.py` writes only this proposal directory.
+
+No proposal code was executed as an application, built, browser-tested, committed, pushed or deployed. The token/React ordering, exact source/history cycles, catalog changes, no-op selection, duplicate keys, pending draft success/rejection, code-tab session lag, group invalidation and same-semantic imports still require the planned behavioral acceptance. Existing metadata/filename/gallery serialization and their pending-draft behavior are unchanged apart from preset-group invalidation. Cross-format edits still use the existing conversion; no general YAML/Markdown whitespace guarantee is added. This artifact does not resolve the separate failed post-merge security/readiness gate.
+
+## Approval boundary
+
+Automatic approval review rejected applying the earlier product patch twice because it treated the completed read-only review assignment as controlling and required explicit authorization for implementation. This artifact was separately requested for review. It deliberately does not apply or retry the rejected mutation. Root owns the approval request and any later product application/review.

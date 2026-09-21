@@ -1,0 +1,34 @@
+{
+  "files": [
+    {
+      "path": "REPORT.md",
+      "bytes": 4440,
+      "sha256": "2f22f6962dfd4288594919a0eac65c4a0fb88712361865890d83a0efdfc95326"
+    },
+    {
+      "path": "create-audit.py",
+      "bytes": 9412,
+      "sha256": "a1d3c2eda961e6cb49a2d59c5db2fd7805fc7d4297d65882d66adb338b357fe7"
+    },
+    {
+      "path": "failure-boundaries.json",
+      "bytes": 3818,
+      "sha256": "db93d72929731deb7f3f1d5644c59434040cb0f7d81c71406f6061c38620d9e2"
+    },
+    {
+      "path": "private-artifact-hashes.json",
+      "bytes": 4901,
+      "sha256": "5c739f5a84a21c99178547896730cca6d0cf9810d0aad679b958453135aa47cf"
+    },
+    {
+      "path": "request-metadata.json",
+      "bytes": 11329,
+      "sha256": "bd411f05337ac88b9244ed4bb9e1ff0b1cc46e2e4161aa9515346fab0fe17895"
+    },
+    {
+      "path": "source-comparison.json",
+      "bytes": 8046,
+      "sha256": "197be9dde523c77a832653ca41f115e46268d29cd0441dac3044197b549568f3"
+    }
+  ]
+}

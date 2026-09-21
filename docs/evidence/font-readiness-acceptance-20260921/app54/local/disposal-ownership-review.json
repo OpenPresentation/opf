@@ -1,0 +1,9 @@
+{
+  "reviewedAt": "2026-09-21T20:51:44.915200+00:00",
+  "source": "/private/tmp/opf-font-readiness-concurrency-20260921/pptx-dev/node_modules/@openpresentation/opf-render/dist/fonts-browser.js",
+  "sha256": "cee4d94c13aa1dc76581e9e4f3b401278ee859b69b21bbed88ed626c77e6ece7",
+  "package": "@openpresentation/opf-render@0.9.0",
+  "question": "Could cleanup of an eventually completed failed preparation remove faces owned by a later preparation?",
+  "finding": "The installed browser loader creates fresh FontFace objects, captures its own loaded array, and its dispose method deletes only those exact objects from document.fonts. It does not delete a global family-keyed registry. The candidate failure cleanup retains its own fonts promise. No cross-instance disposal blocker found.",
+  "limits": "Source inspection only; not general font fidelity or a browser acceptance result."
+}

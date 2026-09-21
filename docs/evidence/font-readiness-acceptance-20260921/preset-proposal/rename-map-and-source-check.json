@@ -1,0 +1,112 @@
+{
+  "recordedAt": "2026-09-21T21:57:16.019644+00:00",
+  "status": "APPROVAL_HELD_PROPOSAL_ONLY_NOT_APPLIED",
+  "base": "e40c287b64fcbcfb85fb4a8a50641aea8e3e54a8",
+  "originalSourceDirectory": "/private/tmp/opf-author-local-writers-20260921/proposal",
+  "sourceDirectoryFiles": 12,
+  "originalManifestEntries": 11,
+  "allOriginalManifestHashesVerified": true,
+  "files": [
+    {
+      "original": "README.md",
+      "stored": "preset-proposal/proposal/README.md.txt",
+      "bytes": 1665,
+      "sha256": "775dcb5b37fa1df6f77d022adc4eb1df9f24e932f4570f95d62aa3336c476702"
+    },
+    {
+      "original": "REVIEW.md",
+      "stored": "preset-proposal/proposal/REVIEW.md.txt",
+      "bytes": 4269,
+      "sha256": "8e950012fb269ac7ff24190d9fd3d7a3d86e41b83371974f661aaaac2b9b95ed"
+    },
+    {
+      "original": "SHA256SUMS",
+      "stored": "preset-proposal/proposal/original-SHA256SUMS",
+      "bytes": 931,
+      "sha256": "96b8a26b521f3b112ce354e08b00b338485f01ee5dff06d44411926e3e2f37ea"
+    },
+    {
+      "original": "author-shell-proposed.patch",
+      "stored": "preset-proposal/proposal/author-shell-proposed.patch.txt",
+      "bytes": 17527,
+      "sha256": "1c098f17e64ee9878446c4371f6103abc47695f681107a67022212b11c9c19bd"
+    },
+    {
+      "original": "author-shell-proposed.tsx",
+      "stored": "preset-proposal/proposal/author-shell-proposed.tsx.txt",
+      "bytes": 286486,
+      "sha256": "10f278f05bb079aa662dd23c6a8e07aafd7e3a51d931255f132a5a0cbcbac859"
+    },
+    {
+      "original": "check-proposal.cjs",
+      "stored": "preset-proposal/proposal/check-proposal.cjs.txt",
+      "bytes": 2090,
+      "sha256": "21df5ecfb3957616b4ff877276531abd07d359440fc3efbb8804088d52f46cfa"
+    },
+    {
+      "original": "lint-baseline.json",
+      "stored": "preset-proposal/proposal/lint-baseline.json",
+      "bytes": 330806,
+      "sha256": "d7fcb5aa8ac3d243cacb6f9ea44db4d53e682c74cfaeb401457f176a96e5f4c7"
+    },
+    {
+      "original": "lint-proposed.json",
+      "stored": "preset-proposal/proposal/lint-proposed.json",
+      "bytes": 343239,
+      "sha256": "1787d907189b902c3ed0ec108330593f3f43fbc833d3def772d717588822c30f"
+    },
+    {
+      "original": "prepare-proposal.py",
+      "stored": "preset-proposal/proposal/prepare-proposal.py.txt",
+      "bytes": 15085,
+      "sha256": "bf86e0a64288d56e633e4c9a645fac7384a14d8345d864e1271c19c75aa2a0aa"
+    },
+    {
+      "original": "source-identity.json",
+      "stored": "preset-proposal/proposal/source-identity.json",
+      "bytes": 680,
+      "sha256": "4e3bd206e04662aa489cd175a47f134a9cc5aa599353b39ba1e88b23cbf60aa9"
+    },
+    {
+      "original": "typecheck.json",
+      "stored": "preset-proposal/proposal/typecheck.json",
+      "bytes": 111,
+      "sha256": "139c8b75e9ae134a4016c86d9cba383b892ac296e2e98155574711af60d02c6c"
+    },
+    {
+      "original": "verification.json",
+      "stored": "preset-proposal/proposal/verification.json",
+      "bytes": 708,
+      "sha256": "cab1ba6d1211a5652eaa5b7c132b12ed4f6c6657796beb2917e93f3b084f71c2"
+    }
+  ],
+  "companions": [
+    {
+      "original": "lib/playground/canvas-source.ts",
+      "stored": "preset-proposal/companions/lib/playground/canvas-source.ts.txt",
+      "bytes": 3471,
+      "sha256": "5a31262da07026393506ff8f08927a013800e6194361722be2ad72b1ad8be269"
+    },
+    {
+      "original": "lib/playground/__tests__/canvas-source.test.ts",
+      "stored": "preset-proposal/companions/lib/playground/__tests__/canvas-source.test.ts.txt",
+      "bytes": 11370,
+      "sha256": "73918cf6ac092ccfcc2163922e0759e9244d9896b1b92ba423f0743b4ee042f8"
+    },
+    {
+      "original": "tests/e2e/author-preset-history.spec.ts",
+      "stored": "preset-proposal/companions/tests/e2e/author-preset-history.spec.ts.txt",
+      "bytes": 12631,
+      "sha256": "3a45f6866d9d8c68ce3a43c6b3f0807208db7789963f435e8b84f0ac3bc56336"
+    }
+  ],
+  "authorShell": {
+    "path": "/private/tmp/opf-author-local-writers-20260921/pptx-dev/components/author/author-shell.tsx",
+    "sha256": "e91e874496ce69706391f438ceedd0c8285f6466194ead9a1ea4316f859ff9a9",
+    "bytes": 279699,
+    "matchesAcceptedBase": true,
+    "productUnchanged": true
+  },
+  "proposalPatchSha256": "1c098f17e64ee9878446c4371f6103abc47695f681107a67022212b11c9c19bd",
+  "scope": "Copies only. No patch application, product mutation, compiler execution, build, browser, unit rerun, CI or deployment. Earlier16 bridge controls/static proposal checks are not integrated runtime acceptance."
+}

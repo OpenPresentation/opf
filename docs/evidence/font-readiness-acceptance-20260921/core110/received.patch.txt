@@ -1,0 +1,152 @@
+diff --git a/packages/javascript/package.json b/packages/javascript/package.json
+index 775e0be..4050cce 100644
+--- a/packages/javascript/package.json
++++ b/packages/javascript/package.json
+@@ -103,7 +103,7 @@
+     "generate": "node scripts/generate.mjs && node scripts/generate-previews.mjs && node scripts/generate-content.mjs",
+     "build": "pnpm run generate && tsup && node scripts/copy-spec.mjs",
+     "typecheck": "pnpm run generate && node ../../scripts/typecheck.mjs --noEmit",
+-    "test": "pnpm run build && node ../../scripts/run-node-tests.mjs && node test/composition.mjs && node test/pagination.mjs && node test/data.mjs && node test/rich-text.mjs && node test/lists.mjs",
++    "test": "pnpm run build && node ../../scripts/run-node-tests.mjs && node test/composition.mjs && node test/pagination.mjs && node test/data.mjs && node test/rich-text.mjs && node test/rich-tab.mjs && node test/lists.mjs",
+     "test:packed": "node test/packed-install-smoke.mjs",
+     "pack:dry-run": "pnpm run build && npm pack --dry-run --cache /tmp/opf-npm-cache"
+   },
+diff --git a/packages/javascript/src/composition.ts b/packages/javascript/src/composition.ts
+index ae6e84b..33217d5 100644
+--- a/packages/javascript/src/composition.ts
++++ b/packages/javascript/src/composition.ts
+@@ -1043,6 +1043,8 @@ export interface RichTextRun {
+   color?: string; fontSize?: number; fontFamily?: string; link?: string; superscript?: boolean; subscript?: boolean;
+ }
+ export interface RichTextFragment {
++  /** Tabs are source-preserving layout controls with a fixed advance, not glyph text. */
++  kind?: 'tab';
+   text: string; runIndex: number; start: number; end: number;
+   x: number; width: number; fontSize: number; baselineShift: number;
+   style: TextStyle; run: RichTextRun;
+@@ -1092,8 +1094,22 @@ function richTextLayouter(input: readonly (string | RichTextRun)[], box: LayoutB
+         const text=whole.slice(a,b),normalSize=(entry.run.fontSize!==undefined?entry.run.fontSize*4/3:requestedSize)*ratio;
+         const script=entry.run.superscript||entry.run.subscript;
+         const size=normalSize*(script?0.7:1),baselineShift=entry.run.superscript?-normalSize*.35:entry.run.subscript?normalSize*.2:0;
+-        const width=textWidthMeasurer(entry.style,options.textMeasurement)(text,size);
+-        result.push({text,runIndex:entry.runIndex,start:a-entry.start,end:b-entry.start,x,width,fontSize:size,baselineShift,style:entry.style,run:entry.run});x+=width;
++        const measure=textWidthMeasurer(entry.style,options.textMeasurement);
++        let cursor=0;
++        for(const [index,segment] of text.split('\t').entries()) {
++          if(index) {
++            const tabStart=a+cursor,tabWidth=measure(' ',size)*4;
++            if(!Number.isFinite(tabWidth)||tabWidth<=0)throw new RangeError('Rich text tabs require a positive finite measured space advance.');
++            const next=(Math.floor(x/tabWidth+1e-9)+1)*tabWidth;
++            result.push({kind:'tab',text:'\t',runIndex:entry.runIndex,start:tabStart-entry.start,end:tabStart-entry.start+1,x,width:next-x,fontSize:size,baselineShift,style:entry.style,run:entry.run});
++            x=next;cursor++;
++          }
++          if(segment) {
++            const width=measure(segment,size),segmentStart=a+cursor;
++            result.push({text:segment,runIndex:entry.runIndex,start:segmentStart-entry.start,end:segmentStart-entry.start+segment.length,x,width,fontSize:size,baselineShift,style:entry.style,run:entry.run});
++            x+=width;cursor+=segment.length;
++          }
++        }
+       }return result;
+     };
+     const width=(start:number,end:number)=>fragments(start,end).reduce((sum,fragment)=>sum+fragment.width,0);
+@@ -1378,6 +1394,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
+       const lines:TextLineInk[]=richLines?richLines.map(line=>{
+         let outline:LayoutBox|null=null;
+         for(const fragment of line.fragments) {
++          if(fragment.kind==='tab')continue;
+           const bounds=measureTextOutline(fragment.text,fragment.fontSize,fragment.style,options.textMeasurement);
+           if(!bounds)continue;
+           const next={...bounds,x:fragment.x+bounds.x,y:fragment.baselineShift+bounds.y};
+diff --git a/packages/javascript/test/rich-tab.mjs b/packages/javascript/test/rich-tab.mjs
+new file mode 100644
+index 0000000..fd35330
+--- /dev/null
++++ b/packages/javascript/test/rich-tab.mjs
+@@ -0,0 +1,87 @@
++import assert from 'node:assert/strict';
++import {fitRichText,composeSlide} from '../dist/composition.js';
++
++const calls=[];
++const measurement={
++  resolveStyle:style=>({...style}),
++  measure(text,size,style){
++    assert.ok(!/[\t\r\n]/u.test(text),`layout control reached measurement: ${JSON.stringify(text)}`);
++    calls.push({text,size,weight:style.fontWeight,italic:!!style.italic,path:style.path});
++    if(text===' ')return size*.25;
++    return Array.from(text).length*size*(style.fontWeight===700?.75:.5);
++  },
++  outlineBounds(text,size,style){
++    assert.ok(!/[\t\r\n]/u.test(text),`layout control reached outline measurement: ${JSON.stringify(text)}`);
++    return text.length?{x:0,y:-size*.8,width:measurement.measure(text,size,style),height:size}:null;
++  },
++};
++const options={style:{fontFamily:'Carlito',fontWeight:400,path:'slides.0.table.rows.0.0'},textMeasurement:measurement,uniformLineHeight:true};
++const wide={x:0,y:0,width:1000,height:500};
++
++const edgeRuns=[{text:'\tA\t\t',fontSize:18},{text:'B',fontSize:30,bold:true}];
++const edge=fitRichText(edgeRuns,wide,18,18,options);
++const edgeFragments=edge.richLines[0].fragments;
++assert.deepEqual(edgeFragments.map(({kind,text,x,width,runIndex,start,end,fontSize})=>({kind,text,x,width,runIndex,start,end,fontSize})),[
++  {kind:'tab',text:'\t',x:0,width:24,runIndex:0,start:0,end:1,fontSize:24},
++  {kind:undefined,text:'A',x:24,width:12,runIndex:0,start:1,end:2,fontSize:24},
++  {kind:'tab',text:'\t',x:36,width:12,runIndex:0,start:2,end:3,fontSize:24},
++  {kind:'tab',text:'\t',x:48,width:24,runIndex:0,start:3,end:4,fontSize:24},
++  {kind:undefined,text:'B',x:72,width:30,runIndex:1,start:0,end:1,fontSize:40},
++]);
++assert.equal(edge.lines.join(''),edgeRuns.map(run=>run.text).join(''));
++assert.equal(fitRichText([{text:'A\t',fontSize:18}],wide,18,18,options).richLines[0].fragments.at(-1).kind,'tab');
++
++const utf16=fitRichText([{text:'😀\tZ',fontSize:18}],wide,18,18,options).richLines[0].fragments;
++assert.deepEqual(utf16.map(({text,start,end})=>({text,start,end})),[
++  {text:'😀',start:0,end:2},{text:'\t',start:2,end:3},{text:'Z',start:3,end:4},
++]);
++
++const mixedScripts=[{text:'e\u0301مرحبا',fontSize:18},{text:'\t',fontSize:30},{text:'漢字😀',fontSize:18}];
++const mixedScriptFragments=fitRichText(mixedScripts,wide,18,18,options).richLines.flatMap(line=>line.fragments);
++assert.equal(mixedScriptFragments.map(fragment=>fragment.text).join(''),mixedScripts.map(run=>run.text).join(''));
++assert.deepEqual(mixedScriptFragments.filter(fragment=>fragment.kind==='tab').map(({runIndex,start,end})=>({runIndex,start,end})),[{runIndex:1,start:0,end:1}]);
++
++const scripted=fitRichText([{text:'X'},{text:'\t',superscript:true}],wide,20,14,options).richLines[0].fragments;
++assert.equal(scripted[1].kind,'tab');
++assert.equal(scripted[1].fontSize,14);
++assert.equal(scripted[1].baselineShift,-7);
++assert.equal(scripted[1].x,10);
++assert.equal(scripted[1].width,4);
++
++const fixtureRuns=[
++  {text:'Lead\t',fontSize:18},
++  {text:'Large evidence phrase ',fontSize:30,bold:true},
++  {text:'continues in smaller text across the same editable table cell so natural layout must wrap this sentence without authored line breaks or inserted offsets. ',fontSize:18},
++  {text:'Second large phrase ',fontSize:30},
++  {text:'finishes the control with exact source runs.',fontSize:18},
++];
++const fixtureText=fixtureRuns.map(run=>run.text).join('');
++const wrapped=fitRichText(fixtureRuns,{x:0,y:0,width:240,height:2000},18,18,options);
++assert.ok(wrapped.richLines.length>=2);
++assert.equal(wrapped.lines.join(''),fixtureText);
++assert.equal(wrapped.lines.some(line=>/[\r\n]/u.test(line)),false);
++assert.ok(wrapped.richLines.every(line=>line.height===wrapped.richLines[0].height));
++for(const [runIndex,run] of fixtureRuns.entries()) {
++  const observed=wrapped.richLines.flatMap(line=>line.fragments).filter(fragment=>fragment.runIndex===runIndex).map(fragment=>fragment.text).join('');
++  assert.equal(observed,run.text,`run ${runIndex} source changed`);
++}
++const fixtureTab=wrapped.richLines.flatMap(line=>line.fragments).find(fragment=>fragment.kind==='tab');
++assert.ok(fixtureTab);
++assert.equal(fixtureTab.runIndex,0);
++assert.equal(fixtureTab.start,4);
++assert.equal(fixtureTab.end,5);
++assert.equal(fixtureTab.fontSize,24);
++assert.equal(fixtureTab.style.fontWeight,400);
++
++const before=JSON.stringify(fixtureRuns);
++const composed=composeSlide({composition:{mode:'row'},blocks:[{text:fixtureRuns}]},{width:960,height:540,textMeasurement:measurement,fonts:{body:'Carlito'}});
++assert.equal(JSON.stringify(fixtureRuns),before);
++assert.ok(composed.items[0].text.richLines.flatMap(line=>line.fragments).some(fragment=>fragment.kind==='tab'));
++
++const zeroSpace={measure:(text,size)=>text===' '?0:Array.from(text).length*size*.5};
++assert.throws(()=>fitRichText(['A\tB'],wide,20,20,{style:options.style,textMeasurement:zeroSpace}),/positive finite measured space advance/);
++assert.doesNotThrow(()=>fitRichText(['AB'],wide,20,20,{style:options.style,textMeasurement:zeroSpace}));
++assert.ok(calls.some(call=>call.text===' '&&call.size===24&&call.weight===400));
++assert.ok(calls.some(call=>call.text===' '&&call.size===14&&call.weight===400));
++
++console.log(JSON.stringify({passed:true,node:process.version,officeOrFontRegistrationCalls:0,edgeFragmentCount:edgeFragments.length,wrappedLineCount:wrapped.richLines.length,fixtureLength:fixtureText.length,measurementCalls:calls.length}));

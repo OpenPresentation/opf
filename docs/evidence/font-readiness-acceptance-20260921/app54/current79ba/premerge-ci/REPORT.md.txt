@@ -1,0 +1,20 @@
+# App54 exact-head premerge CI audit
+
+**Both platforms passed** the original automatic [application run35659187971](https://github.com/Data-Advantage/pptx-dev/actions/runs/35659187971), attempt1, at exact head`79ba0157984fce8405eeb786b8ede1a4e59ba138`, tree`3639d3c14daec94d13711fa2b10f2b927df45eca`. PR/base captures precede the later merge; postmerge and production gates are separate.
+
+| Job | Outcome |
+| --- | --- |
+| Linux106530112746 | Node24.20.0; frozen install/audit,704units,13standalone controls,typechecks,SDK/CLI+production build and39/39 browsers passed (4.5m) |
+| Windows106530087106 | Same preceding checks passed;39/39 browsers passed (6.5m) |
+
+Every browser outcome is retained in [Linux](linux-browser-outcomes.json) and [Windows](windows-browser-outcomes.json), bound to the original complete job logs. Open in Author passed7.1s/9.5s respectively; these are whole-case durations, not navigation latency measurements. No rerun occurred. [Release receipt](release-audit.json) binds exact jobs/head/event/attempt.
+
+[Source audit](source-audit.json) verifies203committed changed blobs,202evidence files/201manifest entries,132exact new provenance copies,702tested regular input hashes and33symlink targets. Only the reviewed navigation-policy test differs outside evidence. The original167local-acceptance and144a4ebCI files remain byte-exact; a4eb's failed Windows result is not reclassified. Evidence manifest SHA256 is`7900ec880f213c7e6c645c3ab179573421aaf4cc276e74c55d3f7627965c468c`.
+
+The Python artifact workflow has no path match across the729-file PR delta: [not triggered/not applicable](artifact-workflow-scope.json), not a fresh pass. [Review boundary](automated-review-boundary.json): no current-head Bugbot check or GitHub PR review was observed. Prior a4eb Bugbot was neutral because of a usage/spend limit and performed no review; independent local review is separate.
+
+Sole artifact10667061681,`windows-readiness-windows-latest`,6,956bytes, SHA256`fc01fdfe04bc843e501f5af8ca71aa85e38cd85ade0f4e6b3828d747505cbff0`, matches the GitHub digest and passes ZIP CRC/safe-path checks ([integrity](artifact-integrity.json)). Its [timing record](windows-timing-summary.json) covers the separate passing SVG-security test: one Author snapshot,100entries (89resource,7longtask,2navigation,2paint), no drops/observer errors; Inspector snapshot/pagehide flush are missing. It does not measure this handoff. Observer/hook overhead and completed-resource-only limits remain.
+
+Exact preview`dpl_B1NHJsoR9cpKe1DEMq435nKgHXJ9` stayed [READY](preview-final.json). The byte-exact safe [HTTP receipt](preview-http-boundary.json) records302 to Vercel`/sso-api`, without redirect/auth/bypass. Raw headers/query were not copied. Preview readiness is metadata only; no preview-browser or production acceptance is claimed.
+
+A read-only metadata lookup with a mistyped SHA returned422; the original response and correction are retained in[metadata-query-error.json](metadata-query-error.json). This was not a CI/test retry. No source changes, commits, pushes, merges, deployments, browser runs or Office actions occurred during this audit. Overall goal completion is not claimed.

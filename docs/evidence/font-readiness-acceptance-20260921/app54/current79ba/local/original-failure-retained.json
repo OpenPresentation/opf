@@ -1,0 +1,11 @@
+{
+  "originalAuditPath": "/private/tmp/opf-font-readiness-concurrency-20260921/ci",
+  "originalHead": "a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb",
+  "originalRun": 35654753237,
+  "originalAttempt": 1,
+  "originalOutcome": "failed; Linux39/39; Windows38/39 Open in Author navigation assertion",
+  "manifestSha256": "4fba7308a7c1ad22b5fedaf84f680b0b68160ad48cb9be7a4797a098119e38d4",
+  "allOriginalFilesVerified": 144,
+  "sourceOrArtifactBytesChanged": false,
+  "scope": "New local navigation-policy run does not replace or reclassify the original failure."
+}

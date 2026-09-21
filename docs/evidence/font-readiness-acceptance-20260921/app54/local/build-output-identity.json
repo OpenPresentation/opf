@@ -1,0 +1,181 @@
+{
+  "buildId": "eDrCpu0YEZtjYRCFXNVvI",
+  "runtimeFiles": 974,
+  "dependencyLinks": 29,
+  "fontCount": 33,
+  "fontBytes": 9317044,
+  "manifestByteIdenticalToOriginal4338": true,
+  "manifestSha256": "fab44c0aa6c7e04c745b702ac059bbe634c65fef12253391eb7fedd56b2b07c6",
+  "allFontBytesUnchanged": true,
+  "fonts": [
+    {
+      "url": "/opf-fonts/Carlito-400-normal-ca019755404c.ttf",
+      "bytes": 593908,
+      "sha256": "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89"
+    },
+    {
+      "url": "/opf-fonts/Carlito-400-italic-074cd1b89d53.ttf",
+      "bytes": 580792,
+      "sha256": "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5"
+    },
+    {
+      "url": "/opf-fonts/Carlito-700-normal-51edbfa32d8a.ttf",
+      "bytes": 648128,
+      "sha256": "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0"
+    },
+    {
+      "url": "/opf-fonts/Carlito-700-italic-25f5672c1985.ttf",
+      "bytes": 745192,
+      "sha256": "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691"
+    },
+    {
+      "url": "/opf-fonts/Caladea-400-normal-59faf27a90de.ttf",
+      "bytes": 77020,
+      "sha256": "59faf27a90dee5c1b7813b12b26c725ea88adc1bfe37b0ac8e0b8b32a5732c2a"
+    },
+    {
+      "url": "/opf-fonts/Caladea-400-italic-669e65b265d4.ttf",
+      "bytes": 77336,
+      "sha256": "669e65b265d40899b59d7f3531ca136b7e0fda80a3d1b5d47bbe7825be81fbe3"
+    },
+    {
+      "url": "/opf-fonts/Caladea-700-normal-11d1e1dc461d.ttf",
+      "bytes": 79648,
+      "sha256": "11d1e1dc461d1e491b6a396d91934c3bb09d06a77cc3d21ad0b10346c39c3ec2"
+    },
+    {
+      "url": "/opf-fonts/Caladea-700-italic-93d7c2003fe3.ttf",
+      "bytes": 78792,
+      "sha256": "93d7c2003fe3fd8381cbd518af6cc2f4b510a37c7741c49a95893b6da8edbbc7"
+    },
+    {
+      "url": "/opf-fonts/Arimo-400-normal-88cc899855d3.ttf",
+      "bytes": 318320,
+      "sha256": "88cc899855d30f9c779b73c3319d0e077b098f927187aafce11ca029add707a6"
+    },
+    {
+      "url": "/opf-fonts/Arimo-400-italic-6bd2c6a6fa87.ttf",
+      "bytes": 340984,
+      "sha256": "6bd2c6a6fa87f4566cf0a92c5834884597acbd7be9719e550837865ac4167a42"
+    },
+    {
+      "url": "/opf-fonts/Arimo-700-normal-ec96ac9fdd94.ttf",
+      "bytes": 318844,
+      "sha256": "ec96ac9fdd94766f66f6140c1375bf011577558f88d43f76b3b59307d2a6bca3"
+    },
+    {
+      "url": "/opf-fonts/Arimo-700-italic-b42b19c10bf5.ttf",
+      "bytes": 342368,
+      "sha256": "b42b19c10bf5d526f00068303a643282c3df55a79c6fa2eea80b4a078a4a705a"
+    },
+    {
+      "url": "/opf-fonts/Tinos-400-normal-924ef269e73d.ttf",
+      "bytes": 508752,
+      "sha256": "924ef269e73da94c1803ff68877f5d998dd16605c5ffad82ee181034f8a1fffe"
+    },
+    {
+      "url": "/opf-fonts/Tinos-400-italic-4a52de5bcf70.ttf",
+      "bytes": 549824,
+      "sha256": "4a52de5bcf70e37bd71949f8a85302b75795a1943aedffbbee4f2db7744e1c81"
+    },
+    {
+      "url": "/opf-fonts/Tinos-700-normal-576a19b5dc02.ttf",
+      "bytes": 583484,
+      "sha256": "576a19b5dc026cafe6ae8fde4c849588dae6475cf5d912cebdf2827388c43ad9"
+    },
+    {
+      "url": "/opf-fonts/Tinos-700-italic-10c90ef7896d.ttf",
+      "bytes": 563688,
+      "sha256": "10c90ef7896d758923c06a1485d7824cdb457466da0bf7d42f81c5228931281b"
+    },
+    {
+      "url": "/opf-fonts/Cousine-400-normal-ca2264d6750d.ttf",
+      "bytes": 289556,
+      "sha256": "ca2264d6750d6c47df703be4486361a37ab943d42de6ea2bf794b7c7af767799"
+    },
+    {
+      "url": "/opf-fonts/Cousine-400-italic-f1626b7287db.ttf",
+      "bytes": 298680,
+      "sha256": "f1626b7287db36af8ba2ff88840c82f121f4cbda8971fe3f717f975e9fd782a8"
+    },
+    {
+      "url": "/opf-fonts/Cousine-700-normal-f03c46c4bc5c.ttf",
+      "bytes": 290500,
+      "sha256": "f03c46c4bc5c0a3af4a1f4fbe5e3e16954581cced05cea20b3bffe12740d99d3"
+    },
+    {
+      "url": "/opf-fonts/Cousine-700-italic-acb798f3629c.ttf",
+      "bytes": 300160,
+      "sha256": "acb798f3629cda0041fbd6234237cf549a1b932792f2a71b0986eb3e1382ed37"
+    },
+    {
+      "url": "/opf-fonts/Gelasio-400-normal-44aae47442ad.ttf",
+      "bytes": 105512,
+      "sha256": "44aae47442ad39e623788930f38f1e702febcf094c284c5058bf49f7da23de9a"
+    },
+    {
+      "url": "/opf-fonts/Gelasio-400-italic-2b24b3d41c06.ttf",
+      "bytes": 107376,
+      "sha256": "2b24b3d41c06d030a31db6610454595775e572a2992d73171cab783407d202a8"
+    },
+    {
+      "url": "/opf-fonts/Gelasio-700-normal-fade86eca522.ttf",
+      "bytes": 105776,
+      "sha256": "fade86eca52203e2ccaf9aee494aa4b0335589879738c47e9d92a53630696d10"
+    },
+    {
+      "url": "/opf-fonts/Gelasio-700-italic-24f1cb5cf5f7.ttf",
+      "bytes": 107452,
+      "sha256": "24f1cb5cf5f765acc5d744a54a6c5dfe34723e58842f5b1b696716497e032852"
+    },
+    {
+      "url": "/opf-fonts/Roboto-400-normal-15256405ecb0.ttf",
+      "bytes": 159108,
+      "sha256": "15256405ecb0d880678833a582760efad538ab2932318b52c8105b267d159459"
+    },
+    {
+      "url": "/opf-fonts/Roboto-Medium-500-normal-79343dc641a2.ttf",
+      "bytes": 159296,
+      "sha256": "79343dc641a2e8d48a703a4667b71fc8dc6565cc8ce47dfc34fc52c12aadbf38"
+    },
+    {
+      "url": "/opf-fonts/Roboto-SemiBold-600-normal-32fe2086b0e5.ttf",
+      "bytes": 159876,
+      "sha256": "32fe2086b0e54eca85a68eb74e3d89bb16a7ffe59085d6dc7d079f5b3c26d6ab"
+    },
+    {
+      "url": "/opf-fonts/Roboto-700-normal-4aaf8c5b661a.ttf",
+      "bytes": 159900,
+      "sha256": "4aaf8c5b661a386998c2e70cf2b87e2440f5404e0b8fd81164f0413fb3435ec6"
+    },
+    {
+      "url": "/opf-fonts/Roboto-ExtraBold-800-normal-43d5ce98c583.ttf",
+      "bytes": 160012,
+      "sha256": "43d5ce98c58336045220fa1dac2bd22281b1aab3eca66785cb34eb3ad1dfe1a5"
+    },
+    {
+      "url": "/opf-fonts/Roboto-400-italic-6a372c348dc2.ttf",
+      "bytes": 165268,
+      "sha256": "6a372c348dc20c246b92d60b9bda3c0a9ffedc129790ed3f31faf89daa99d793"
+    },
+    {
+      "url": "/opf-fonts/Roboto-700-italic-c6a5e7c224d3.ttf",
+      "bytes": 166256,
+      "sha256": "c6a5e7c224d3bf6698e5d3c124f0f0220cad20d5d413920447a96f033a0292ee"
+    },
+    {
+      "url": "/opf-fonts/Roboto-Mono-400-normal-e4bf45837847.ttf",
+      "bytes": 87540,
+      "sha256": "e4bf45837847d4abfa5a502b807a83393aa138727bdb9ea9c93fb17d53208d95"
+    },
+    {
+      "url": "/opf-fonts/Roboto-Mono-700-normal-92649d819cc4.ttf",
+      "bytes": 87696,
+      "sha256": "92649d819cc4c20480b23a47aaa111769924eb31c66b6ecdcf6f573662558c83"
+    }
+  ],
+  "sourceInputsUnchanged": 702,
+  "trackedSymlinksUnchanged": 33,
+  "serverSession": 26650,
+  "baseUrl": "http://127.0.0.1:4337"
+}

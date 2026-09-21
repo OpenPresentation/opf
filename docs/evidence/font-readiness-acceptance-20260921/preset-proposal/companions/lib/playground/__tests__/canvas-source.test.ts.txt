@@ -1,0 +1,215 @@
+import { describe, expect, it } from "vitest";
+import { createEditorSession, type EditorEvent } from "@openpresentation/opf-editor";
+import { createCanvasSourceBridge, updateJsonSource, type CanvasSourceOverride } from "../canvas-source";
+import { parseText, toMarkdownText, toYamlText, type Format } from "../opf-codec";
+import { resolveValidationPathToJsonLocation } from "../json-cursor-resolver";
+
+const authored = '{\r\n\t"name" : "Keep\\u0020escapes",\n\t"extensions": {"human": {"x": 1e2, "literal": "a\\/b"}},\r\n'
+  + '\t"slides" : [ { "id":"first", "title" : "A\\u0020title", "text" : [{"text":"rich  text", "bold":true, "color":"accent2"}], "notes":"keep" },\n'
+  + '\t  {"id":"second","title":"Second", "text":"body"} ]\r\n}\n';
+
+function session(source = authored, format: Format = "json") {
+  const parsed = parseText(source, format);
+  if (!parsed.ok) throw new Error(parsed.error);
+  const editor = createEditorSession(parsed.doc, { rejectInvalid: true });
+  const bridge = createCanvasSourceBridge();
+  let text = source, previous = editor.document;
+  let override: CanvasSourceOverride | undefined;
+  editor.subscribe(event => {
+    const after = event.snapshot.document;
+    text = bridge.apply({ text, format }, { before: previous, after, event }, override);
+    previous = after;
+  });
+  return { editor, text: () => text, patch(document: unknown, sourceOverride: CanvasSourceOverride) {
+    override = sourceOverride;
+    try { editor.applyPatch([{ op: "replace", path: "", value: document }]); }
+    finally { override = undefined; }
+  } };
+}
+
+function change(before: unknown, after: unknown) {
+  return { before, after, event: { type: "patch", snapshot: { undoDepth: 1 } } as EditorEvent };
+}
+
+describe("canvas source preservation", () => {
+  it("changes only the authored token and restores exact escaping/newlines through undo/redo", () => {
+    const { editor, text } = session();
+    editor.set("slides.0.title", "Edited title");
+    const edited = authored.replace('"A\\u0020title"', '"Edited title"');
+    expect(text()).toBe(edited);
+    expect(JSON.parse(text()).slides[0].text).toEqual([{ text: "rich  text", bold: true, color: "accent2" }]);
+    editor.undo(); expect(text()).toBe(authored);
+    editor.redo(); expect(text()).toBe(edited);
+    const location = resolveValidationPathToJsonLocation({ text: text(), path: "slides[0].title" });
+    expect(location.status).toBe("resolved");
+    expect(location.path).toBe("slides[0].title");
+  });
+
+  it("keeps no-op raw bytes, including token spelling and unrelated metadata", () => {
+    const { editor, text } = session();
+    editor.set("slides.0.title", "A title");
+    expect(text()).toBe(authored);
+    editor.undo(); expect(text()).toBe(authored);
+  });
+
+  it("restores a preset cycle's exact escaping as one reversible public transaction", () => {
+    const { editor, text, patch } = session();
+    editor.set("slides.0.title", "Interim title");
+    editor.set("slides.0.title", "A title");
+    const normalized = authored.replace('"A\\u0020title"', '"A title"');
+    expect(text()).toBe(normalized);
+    expect(editor.document).toEqual(JSON.parse(authored));
+    const previousDepth = editor.snapshot().undoDepth;
+    patch(JSON.parse(authored), {
+      expected: { text: normalized, format: "json" },
+      result: { text: authored, format: "json" },
+    });
+    expect(text()).toBe(authored);
+    expect(editor.snapshot().undoDepth).toBe(previousDepth + 1);
+    editor.undo(); expect(text()).toBe(normalized);
+    editor.redo(); expect(text()).toBe(authored);
+    editor.undo(); editor.undo();
+    expect(text()).toBe(authored.replace('"A\\u0020title"', '"Interim title"'));
+    editor.undo(); expect(text()).toBe(authored);
+  });
+
+  it("restores a semantic change to exact original source and retains its own undo/redo", () => {
+    const { editor, text, patch } = session();
+    editor.set("slides.0.title", "First preset");
+    editor.set("slides.1.title", "Second preset");
+    const beforeRevert = text();
+    patch(JSON.parse(authored), {
+      expected: { text: beforeRevert, format: "json" },
+      result: { text: authored, format: "json" },
+    });
+    expect(text()).toBe(authored);
+    editor.undo(); expect(text()).toBe(beforeRevert);
+    editor.redo(); expect(text()).toBe(authored);
+    editor.set("slides.1.title", "Later edit");
+    expect(text()).toBe(authored.replace('"Second"', '"Later edit"'));
+  });
+
+  it("refuses overrides with stale exact bytes, format changes, malformed source, or wrong target semantics", () => {
+    const source = { text: authored, format: "json" as const };
+    const before = JSON.parse(authored), after = structuredClone(before);
+    after.slides[0].title = "Changed";
+    const result = { text: authored.replace('"A\\u0020title"', '"Changed"'), format: "json" as const };
+    const cases: CanvasSourceOverride[] = [
+      { expected: { ...source, text: authored + " " }, result },
+      { expected: { ...source, format: "yaml" }, result },
+      { expected: source, result: { ...result, format: "yaml" } },
+      { expected: source, result: { ...result, text: "{" } },
+      { expected: source, result: source },
+    ];
+    for (const override of cases) {
+      const bridge = createCanvasSourceBridge();
+      expect(() => bridge.apply(source, change(before, after), override)).toThrow("source was kept");
+      // Rejected overrides must not be retained as the next transaction's result.
+      expect(bridge.apply(source, change(before, after))).toBe(result.text);
+    }
+  });
+
+  it("allows overrides only for patch events, even when undo/redo would be semantic no-ops", () => {
+    const source = { text: authored, format: "json" as const };
+    const document = JSON.parse(authored);
+    for (const type of ["undo", "redo"] as const) {
+      const update = change(document, document);
+      update.event.type = type;
+      expect(() => createCanvasSourceBridge().apply(source, update, { expected: source, result: source }))
+        .toThrow("source was kept");
+    }
+  });
+
+  it("keeps duplicate-key refusal for real JSON overrides without rejecting ordinary no-op source", () => {
+    const duplicate = authored.replace('"name" :', '"name":"Keep escapes", "name" :');
+    const document = JSON.parse(authored);
+    const source = { text: authored, format: "json" as const };
+    const ambiguous = { text: duplicate, format: "json" as const };
+    for (const [from, to] of [[source, ambiguous], [ambiguous, source]]) {
+      expect(() => createCanvasSourceBridge().apply(from, change(document, document), { expected: from, result: to }))
+        .toThrow("duplicate JSON keys");
+    }
+    expect(createCanvasSourceBridge().apply(ambiguous, change(document, document))).toBe(duplicate);
+  });
+
+  it("does not replay a raw-only history entry over newer whitespace", () => {
+    const bridge = createCanvasSourceBridge(), document = JSON.parse(authored);
+    const normalized = authored.replace('"A\\u0020title"', '"A title"');
+    bridge.apply({ text: normalized, format: "json" }, change(document, document), {
+      expected: { text: normalized, format: "json" }, result: { text: authored, format: "json" },
+    });
+    const newer = authored + " ";
+    const undo = change(document, document);
+    undo.event.type = "undo"; undo.event.snapshot.undoDepth = 0;
+    expect(bridge.apply({ text: newer, format: "json" }, undo)).toBe(newer);
+  });
+
+  it("preserves untouched rich runs and exactly undoes a formatting field insertion", () => {
+    const { editor, text } = session();
+    editor.set("slides.0.text.0.italic", true);
+    expect(text()).toContain('"bold":true, "color":"accent2"');
+    expect(text()).toContain('"name" : "Keep\\u0020escapes"');
+    expect(JSON.parse(text()).slides[0].text[0].italic).toBe(true);
+    editor.undo(); expect(text()).toBe(authored);
+  });
+
+  it("retains tokens for moved slides and edits only their current identity", () => {
+    const { editor, text } = session();
+    const before = editor.document as { slides: unknown[] };
+    editor.set("slides", [before.slides[1], before.slides[0]]);
+    const reordered = text();
+    expect(reordered).toContain('"title" : "A\\u0020title"');
+    expect(reordered).toContain('"x": 1e2');
+    expect(JSON.parse(reordered).slides.map((slide: {id:string}) => slide.id)).toEqual(["second", "first"]);
+    editor.set("slides.1.title", "Changed first");
+    expect(JSON.parse(text()).slides[0].title).toBe("Second");
+    expect(JSON.parse(text()).slides[1].title).toBe("Changed first");
+    editor.undo(); expect(text()).toBe(reordered);
+    editor.undo(); expect(text()).toBe(authored);
+  });
+
+  it("rejects late edits against newer content, slide order, metadata, or malformed JSON", () => {
+    const bridge = createCanvasSourceBridge(), before = JSON.parse(authored), after = structuredClone(before);
+    after.slides[0].title = "Late edit";
+    for (const source of [authored.replace("Second", "Newer second"), authored.replace('"x": 1e2', '"x": 101'), JSON.stringify({ ...before, slides: [...before.slides].reverse() })]) {
+      expect(() => bridge.apply({ text: source, format: "json" }, change(before, after))).toThrow("source changed");
+    }
+    expect(() => bridge.apply({ text: authored.slice(0, -3), format: "json" }, change(before, after))).toThrow("Fix the source");
+    expect(before.slides[0].title).toBe("A title");
+  });
+
+  it("uses newer whitespace as the base instead of returning an old whole-document snapshot", () => {
+    const before = JSON.parse(authored), after = structuredClone(before);
+    after.slides[1].title = "Second changed";
+    const reformatted = authored.replace('\t"name"', '    "name"');
+    const bridge = createCanvasSourceBridge();
+    expect(bridge.apply({ text: reformatted, format: "json" }, change(before, after)))
+      .toBe(reformatted.replace('"Second"', '"Second changed"'));
+  });
+
+  it("deletes and inserts properties without reserializing surviving source", () => {
+    const source = '{\r\n  "remove": 1, "keep" : "a\\/b", "last":true\r\n}\n';
+    const result = updateJsonSource(source, { keep: "a/b", added: { value: "new" } });
+    expect(JSON.parse(result)).toEqual({ keep: "a/b", added: { value: "new" } });
+    expect(result).toContain('"keep" : "a\\/b"');
+    expect(result.startsWith("{\r\n")).toBe(true);
+    expect(result.endsWith("\r\n}\n")).toBe(true);
+    expect(JSON.parse(updateJsonSource('{"a":1,"b":2}', { c: 3 }))).toEqual({ c: 3 });
+    expect(JSON.parse(updateJsonSource('{"a":1,"b":2}', {}))).toEqual({});
+  });
+
+  it("rejects ambiguous duplicate keys instead of silently replacing the wrong source range", () => {
+    expect(() => updateJsonSource('{"slides":[{"title":"old","title":"visible"}]}', { slides: [{ title: "edit" }] }))
+      .toThrow("duplicate JSON keys");
+  });
+
+  for (const format of ["yaml", "markdown"] as const) it(`retains ${format} conversion and exact canvas undo`, () => {
+    const document = { name: "Metadata", slides: [{ title: "Title", text: "Body" }] };
+    const original = format === "yaml" ? toYamlText(document) : toMarkdownText(document);
+    const { editor, text } = session(original, format);
+    editor.set("slides.0.title", "Edited");
+    const parsed = parseText(text(), format);
+    expect(parsed.ok && (parsed.doc as typeof document).slides[0].title).toBe("Edited");
+    editor.undo(); expect(text()).toBe(original);
+  });
+});

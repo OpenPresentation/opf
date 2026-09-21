@@ -1,0 +1,32 @@
+const fs = require('node:fs');
+const path = require('node:path');
+const { createRequire } = require('node:module');
+const repo = '/private/tmp/opf-author-local-writers-20260921/pptx-dev';
+const out = '/private/tmp/opf-author-local-writers-20260921/proposal';
+const localRequire = createRequire(path.join(repo, 'package.json'));
+const ts = localRequire('typescript');
+const { ESLint } = localRequire('eslint');
+const target = path.join(repo, 'components/author/author-shell.tsx');
+const proposed = fs.readFileSync(path.join(out, 'author-shell-proposed.tsx'), 'utf8');
+const config = ts.readConfigFile(path.join(repo, 'tsconfig.json'), ts.sys.readFile);
+const parsed = ts.parseJsonConfigFileContent(config.config, ts.sys, repo);
+const options = { ...parsed.options, noEmit: true, incremental: false };
+const host = ts.createCompilerHost(options);
+const originalGetSourceFile = host.getSourceFile;
+host.getSourceFile = (file, languageVersion, ...rest) => path.resolve(file) === target
+  ? ts.createSourceFile(file, proposed, languageVersion, true, ts.ScriptKind.TSX)
+  : originalGetSourceFile(file, languageVersion, ...rest);
+const program = ts.createProgram({ rootNames: parsed.fileNames, options, host });
+const diagnostics = ts.getPreEmitDiagnostics(program).map(d => ({
+  code: d.code, category: ts.DiagnosticCategory[d.category],
+  message: ts.flattenDiagnosticMessageText(d.messageText, '\n'),
+  file: d.file?.fileName,
+  position: d.file && d.start !== undefined ? d.file.getLineAndCharacterOfPosition(d.start) : undefined,
+}));
+fs.writeFileSync(path.join(out, 'typecheck.json'), JSON.stringify({ mode: 'In-memory compiler-host source replacement; no emit and no checkout edits', diagnostics }, null, 2)+'\n');
+(async () => {
+ const lint = new ESLint({ cwd: repo });
+ const results = await lint.lintText(proposed, { filePath: target });
+ fs.writeFileSync(path.join(out, 'lint-proposed.json'), JSON.stringify(results, null, 2)+'\n');
+ console.log(JSON.stringify({ typeDiagnostics: diagnostics.length, lint: results.map(r => ({ errors:r.errorCount, warnings:r.warningCount })) }));
+})();

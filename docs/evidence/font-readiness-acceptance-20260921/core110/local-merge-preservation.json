@@ -1,0 +1,30 @@
+{
+  "recordedAt": "2026-09-21T21:53:39.770702+00:00",
+  "acceptedCore": "4f7a4bd494f1a873319eff897423d301d1cfc9d6",
+  "reviewedCoreHead": "fc3c36e929492d22b5f5af944a6ca3a12a9784d9",
+  "localCheckpoint": "431816ad0d02b1b96464648ffe21149aa3a0ee4a",
+  "localMerge": "1fd62216d4b7079bb7b6770f7dbdc0a966fd43da",
+  "parents": [
+    "431816ad0d02b1b96464648ffe21149aa3a0ee4a",
+    "4f7a4bd494f1a873319eff897423d301d1cfc9d6"
+  ],
+  "acceptedProductFilesExact": [
+    {
+      "path": "packages/javascript/package.json",
+      "sha256": "33af23b645e3a94738bc2f64060c418c5cdcab335302e4c58de5fd234a04a194",
+      "bytes": 3376
+    },
+    {
+      "path": "packages/javascript/src/composition.ts",
+      "sha256": "da9b505c203f0b71dd34952a97574c67a0024a534565d8a2d10a61595a10acd6",
+      "bytes": 112257
+    },
+    {
+      "path": "packages/javascript/test/rich-tab.mjs",
+      "sha256": "237fe06337b06878e33c945e53e8d37ca1ee2e67af173de120471c7a10f9877c",
+      "bytes": 5404
+    }
+  ],
+  "nativeEvidenceAndRoadmap": "Prior730 exact-file preservation check remains in native108109/local-merge-preservation.json; unchanged by this merge.",
+  "scope": "Authorized local additive merge after primary-sync confirmation. No product changes/tests, external merge, push or Office actions by this task."
+}

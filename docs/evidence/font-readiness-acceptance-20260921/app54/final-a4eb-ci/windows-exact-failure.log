@@ -1,0 +1,40 @@
+2026-09-21T21:12:06.6770955Z   1) tests\e2e\inspector-actions.spec.ts:168:5 › Inspector Open in Author commits the current draft before handoff 
+2026-09-21T21:12:06.6771823Z 
+2026-09-21T21:12:06.6772367Z     Error: expect(page).toHaveURL(expected) failed
+2026-09-21T21:12:06.6775211Z 
+2026-09-21T21:12:06.6775878Z     Expected pattern: /\/author#opf=/
+2026-09-21T21:12:06.6776686Z     Received string:  ""
+2026-09-21T21:12:06.6777190Z     Timeout: 5000ms
+2026-09-21T21:12:06.6777547Z 
+2026-09-21T21:12:06.6777793Z     Call log:
+2026-09-21T21:12:06.6778911Z       - Expect "toHaveURL" with timeout 5000ms
+2026-09-21T21:12:06.6779575Z         - waiting for navigation to finish...
+2026-09-21T21:12:06.6779960Z 
+2026-09-21T21:12:06.6780328Z 
+2026-09-21T21:12:06.6781128Z       174 |   await page.screenshot({ path: test.info().outputPath("inspector-pending-action.png"), fullPage: true });
+2026-09-21T21:12:06.6782195Z       175 |   await menuAction(page, "Open in Author", true);
+2026-09-21T21:12:06.6782977Z     > 176 |   await expect(page).toHaveURL(/\/author#opf=/);
+2026-09-21T21:12:06.6783942Z           |                      ^
+2026-09-21T21:12:06.6785490Z       177 |   expect(sourceAtUrl(page.url())).toEqual(JSON.parse(changedTitle("Author commits this draft")));
+2026-09-21T21:12:06.6786757Z       178 |   await expect(page.getByRole("button", { name: /^(copy|copied)$/i })).toBeVisible();
+2026-09-21T21:12:06.6788069Z       179 |   const authorSource = await clipboardAction(page, page.getByRole("button", { name: /^(copy|copied)$/i }));
+2026-09-21T21:12:06.6789166Z         at D:\a\pptx-dev\pptx-dev\tests\e2e\inspector-actions.spec.ts:176:22
+2026-09-21T21:12:06.6789751Z 
+2026-09-21T21:12:06.6796424Z     Error Context: test-results\inspector-actions-Inspecto-ddffb-urrent-draft-before-handoff\error-context.md
+2026-09-21T21:12:06.6798226Z 
+2026-09-21T21:12:06.6799168Z     attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+2026-09-21T21:12:06.6800234Z     test-results\inspector-actions-Inspecto-ddffb-urrent-draft-before-handoff\trace.zip
+2026-09-21T21:12:06.6801024Z     Usage:
+2026-09-21T21:12:06.6801323Z 
+2026-09-21T21:12:06.6802055Z         pnpm exec playwright show-trace test-results\inspector-actions-Inspecto-ddffb-urrent-draft-before-handoff\trace.zip
+2026-09-21T21:12:06.6802871Z 
+2026-09-21T21:12:06.6803474Z     ────────────────────────────────────────────────────────────────────────────────────────────────
+2026-09-21T21:12:06.6803974Z 
+2026-09-21T21:12:06.6804315Z   1 failed
+2026-09-21T21:12:06.6805277Z     tests\e2e\inspector-actions.spec.ts:168:5 › Inspector Open in Author commits the current draft before handoff 
+2026-09-21T21:12:06.6806113Z   38 passed (5.5m)
+2026-09-21T21:12:06.7245017Z [ELIFECYCLE] Command failed with exit code 1.
+2026-09-21T21:12:06.8551055Z ##[error]Process completed with exit code 1.
+2026-09-21T21:12:06.8803018Z ##[group]Run actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+2026-09-21T21:12:06.8803552Z with:
+2026-09-21T21:12:06.8803842Z   name: browser-failures-windows-latest

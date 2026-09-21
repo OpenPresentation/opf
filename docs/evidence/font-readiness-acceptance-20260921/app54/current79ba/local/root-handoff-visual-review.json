@@ -1,0 +1,8 @@
+{
+  "reviewer": "root",
+  "reviewedAt": "2026-09-21T21:37:24.865255+00:00",
+  "image": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/inspector-actions-Inspecto-ddffb-urrent-draft-before-handoff/author-current-handoff.png",
+  "sha256": "77597225c652400100c34b942694f06d32bfd426b0c845ec74111caf4858ee9b",
+  "observation": "Completed Author UI shows current-actions filename, VALID1slide, copied status, current draft title Author commits this draft, metadata extension and rich text/notes in source; no scoped visible blocker.",
+  "boundary": "This screenshot is visual evidence only. Semantic source/clipboard/noPOST/pageerror acceptance derives from the new passing test. No retrospective acceptance of the failed a4eb run and no timing root-cause or native claim."
+}

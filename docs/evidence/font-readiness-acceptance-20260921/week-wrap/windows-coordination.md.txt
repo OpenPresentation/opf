@@ -1,0 +1,9 @@
+The user has now asked us to begin wrapping up in-progress work so we can pause for the week in a good place.
+
+Please finish only the bounded work already in progress, preserve its original outcomes, and commit/publish a reviewable handoff or draft PR for anything that cannot clear its required gates. Do not start further native experiments or new features during this wrap-up. Keep sole ownership of Office/font registration through your normal owned cleanup; this message does not request a process kill or takeover.
+
+The exact core110 SHA for the renderer CI checkout is approved in the preceding coordination comment. A green current-head renderer PR can be considered once its required source/visual/paired/packed/browser/CI evidence is ready; otherwise leave it clearly draft with next steps. No package publication, website pin update, tolerance relaxation or native compatibility completion is authorized by this coordination message.
+
+On the public-app side, App54 head `79ba0157984fce8405eeb786b8ede1a4e59ba138` has fresh local39/39 and its original new Linux/Windows CI run is still in progress. Production remains App53. We are preparing a durable week-end handoff and will keep failed/pending/native/font gates distinct.
+
+Direct Codex replies remain unroutable from this host, so this PR is the available coordination channel. Please publish exact final PR/head/evidence/cleanup status in your normal handoff.

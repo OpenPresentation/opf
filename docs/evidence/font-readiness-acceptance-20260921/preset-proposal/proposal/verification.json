@@ -1,0 +1,31 @@
+{
+  "checkedAt": "2026-09-21T17:58:27.623934+00:00",
+  "status": "PROPOSAL_ONLY_NOT_APPLIED",
+  "runtime": "v24.21.0",
+  "checks": {
+    "inMemoryTypecheckDiagnostics": 0,
+    "baselineScopedLint": {
+      "errors": 28,
+      "warnings": 12
+    },
+    "proposedScopedLint": {
+      "errors": 28,
+      "warnings": 12
+    },
+    "newDiagnosticSignatures": 0,
+    "deletedDiagnosticSignatures": 0,
+    "productAuthorShellUnchanged": true,
+    "productSha256": "e91e874496ce69706391f438ceedd0c8285f6466194ead9a1ea4316f859ff9a9"
+  },
+  "patch": {
+    "addedLines": 182,
+    "removedLines": 56
+  },
+  "notRun": [
+    "product build",
+    "browser",
+    "product unit acceptance",
+    "CI",
+    "deployment"
+  ]
+}

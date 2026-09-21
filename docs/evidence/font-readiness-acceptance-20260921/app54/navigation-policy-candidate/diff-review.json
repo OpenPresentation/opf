@@ -1,0 +1,15 @@
+{
+  "checkedAt": "2026-09-21T21:28:23.343108+00:00",
+  "base": "a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb",
+  "branch": "codex/author-navigation-acceptance-20260921",
+  "changedFiles": [
+    "tests/e2e/inspector-actions.spec.ts"
+  ],
+  "beforeSha256": "c6096f4c62f642138dc127e55911647d00489d684f2794a978834aa54f4757fd",
+  "afterSha256": "20f51040d00464344b56d260cb8c8f7f79f3c9a9102c7636f8b3a6b3d1504348",
+  "patchSha256": "f302ae24553bd8211ee767a4a213c431664678dc10bb8672a55527e9993819fb",
+  "onlyExactAuthorizedReplacement": true,
+  "allOriginalFollowingAssertionsByteExact": true,
+  "productConfigAndOtherTestsChanged": false,
+  "testsRun": false
+}

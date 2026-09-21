@@ -1,0 +1,197 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=f1e1]:
+  - main [ref=f1e3]:
+    - generic [ref=f1e5]:
+      - generic [ref=f1e6]:
+        - link "pptx.dev home" [ref=f1e7] [cursor=pointer]:
+          - /url: /
+          - generic [ref=f1e8]: P
+          - generic [ref=f1e9]: pptx.dev
+        - generic [ref=f1e11]:
+          - button "current-actions" [ref=f1e12]
+          - generic "This draft is stored in this browser." [ref=f1e19]: local browser
+        - generic "Schema valid, no warnings, 1 slide" [ref=f1e24]:
+          - generic [ref=f1e27]: valid
+          - generic [aria-hidden] [ref=f1e28]: ·
+          - generic [ref=f1e29]: 1 slide
+        - generic [ref=f1e30]:
+          - button "copy" [ref=f1e31]
+          - button "Export" [ref=f1e36]
+          - button "New run" [ref=f1e42]
+          - button "More actions" [ref=f1e46]
+      - main [ref=f1e48]:
+        - generic [ref=f1e49]:
+          - tablist "Activity" [ref=f1e50]:
+            - tab "agent" [selected] [ref=f1e51]
+            - tab "tools" [ref=f1e57]
+            - tab "schema" [ref=f1e61]
+          - log [ref=f1e66]:
+            - generic [ref=f1e70]:
+              - heading "Agent transcript" [level=3] [ref=f1e71]
+              - paragraph [ref=f1e72]: Plans, tool calls, diffs, and checkpoints will appear here as Author works.
+          - generic [ref=f1e75]:
+            - group "Author understands these inputs as" [ref=f1e76]:
+              - generic [ref=f1e77]: intent
+              - 'generic "topic: Action snapshot (high confidence from opf)" [ref=f1e78]':
+                - generic [ref=f1e80]: topic
+                - generic [ref=f1e81]: Action snapshot
+              - 'generic "slides: 1 (high confidence from opf)" [ref=f1e82]':
+                - generic [ref=f1e84]: slides
+                - generic [ref=f1e85]: ~1
+            - group "Who is this for?" [ref=f1e86]:
+              - generic [ref=f1e87]:
+                - generic [ref=f1e91]: Who is this for?
+                - generic [ref=f1e92]: missing · audience
+              - paragraph [ref=f1e93]: I can pick a tone, narrative arc, and theme once I know the audience.
+              - generic [ref=f1e94]:
+                - button "Investors" [ref=f1e95]
+                - button "Customers" [ref=f1e96]
+                - button "Executives" [ref=f1e97]
+                - button "Engineering team" [ref=f1e98]
+                - button "Board" [ref=f1e99]
+              - generic [ref=f1e100]:
+                - generic [ref=f1e101]: One question only. Skip — I'll guess and you can revert in diff.
+                - button "skip — just run" [ref=f1e102]
+            - generic [ref=f1e103]: slides[0].title
+            - form "Agent message composer" [ref=f1e106]:
+              - group [ref=f1e107]:
+                - button "Choose File" [ref=f1e108]
+                - textbox "Agent message" [ref=f1e110]:
+                  - /placeholder: Paste OPF JSON, or sign in for AI...
+                - group [ref=f1e111]:
+                  - button "Attach source files" [ref=f1e113]:
+                    - generic [ref=f1e114]: Attach
+                  - button "Submit" [ref=f1e115]:
+                    - generic [ref=f1e116]: Sign in
+            - generic [ref=f1e118]:
+              - button "try a sample" [ref=f1e119] [cursor=pointer]
+              - button "shorten" [ref=f1e120] [cursor=pointer]
+              - button "rephrase" [ref=f1e121] [cursor=pointer]
+              - button "+ add subtitle" [ref=f1e122] [cursor=pointer]
+        - separator "Resize Agent and Edit panes" [ref=f1e123]
+        - generic [ref=f1e126]:
+          - tablist "Document view" [ref=f1e127]:
+            - generic [ref=f1e128]:
+              - tab "code" [selected] [ref=f1e129]
+              - tab "preview 1" [ref=f1e136]:
+                - generic [ref=f1e139]: preview
+                - generic [ref=f1e140]: "1"
+            - tablist "Editor format" [ref=f1e142]:
+              - tab "JSON" [selected] [ref=f1e143]
+              - tab "YAML" [ref=f1e144]
+              - tab "MD" [ref=f1e145]
+          - generic [ref=f1e149]:
+            - code [ref=f1e153]:
+              - generic [ref=f1e154]:
+                - textbox "Editor content" [ref=f1e155]
+                - textbox [aria-hidden] [ref=f1e156]
+                - generic [aria-hidden] [ref=f1e158]:
+                  - generic [ref=f1e159]:
+                    - generic [ref=f1e160] [cursor=pointer]: 
+                    - generic [ref=f1e161]: "1"
+                  - generic [ref=f1e162]: "2"
+                  - generic [ref=f1e164]: "3"
+                  - generic [ref=f1e166]:
+                    - generic [ref=f1e167] [cursor=pointer]: 
+                    - generic [ref=f1e168]: "4"
+                  - generic [ref=f1e169]: "5"
+                  - generic [ref=f1e171]: "6"
+                  - generic [ref=f1e173]:
+                    - generic [ref=f1e174] [cursor=pointer]: 
+                    - generic [ref=f1e175]: "7"
+                  - generic [ref=f1e176]:
+                    - generic [ref=f1e177] [cursor=pointer]: 
+                    - generic [ref=f1e178]: "8"
+                  - generic [ref=f1e179]: "9"
+                  - generic [ref=f1e181]: "10"
+                  - generic [ref=f1e183]: "11"
+                  - generic [ref=f1e185]: "12"
+                  - generic [ref=f1e187]:
+                    - generic [ref=f1e188] [cursor=pointer]: 
+                    - generic [ref=f1e189]: "13"
+                  - generic [ref=f1e190]:
+                    - generic [ref=f1e191] [cursor=pointer]: 
+                    - generic [ref=f1e192]: "14"
+                  - generic [ref=f1e193]: "15"
+                  - generic [ref=f1e195]: "16"
+                  - generic [ref=f1e197]:
+                    - generic [ref=f1e198] [cursor=pointer]: 
+                    - generic [ref=f1e199]: "17"
+                  - generic [ref=f1e200]:
+                    - generic [ref=f1e201] [cursor=pointer]: 
+                    - generic [ref=f1e202]: "18"
+                  - generic [ref=f1e203]: "19"
+                  - generic [ref=f1e205]: "20"
+                  - generic [ref=f1e207]: "21"
+                  - generic [ref=f1e209]: "22"
+                  - generic [ref=f1e211]: "23"
+                  - generic [ref=f1e213]: "24"
+                  - generic [ref=f1e215]: "25"
+                  - generic [ref=f1e217]: "26"
+                  - generic [ref=f1e219]: "27"
+                - generic [aria-hidden] [ref=f1e308]:
+                  - generic [ref=f1e309]: "{"
+                  - generic [ref=f1e311]: "\"name\": \"Action snapshot\","
+                  - generic [ref=f1e313]: "\"filename\": \"current-actions\","
+                  - generic [ref=f1e315]: "\"design\": {"
+                  - generic [ref=f1e317]: "\"fontScheme\": \"roboto\""
+                  - generic [ref=f1e319]: "},"
+                  - generic [ref=f1e321]: "\"extensions\": {"
+                  - generic [ref=f1e323]: "\"human\": {"
+                  - generic [ref=f1e325]: "\"x\": 100,"
+                  - generic [ref=f1e327]: "\"literal\": \"a/b\""
+                  - generic [ref=f1e329]: "}"
+                  - generic [ref=f1e331]: "},"
+                  - generic [ref=f1e333]: "\"slides\": ["
+                  - generic [ref=f1e335]: "{"
+                  - generic [ref=f1e337]: "\"id\": \"action-slide\","
+                  - generic [ref=f1e339]: "\"title\": \"Author commits this draft\","
+                  - generic [ref=f1e341]: "\"text\": ["
+                  - generic [ref=f1e343]: "{"
+                  - generic [ref=f1e345]: "\"text\": \"rich text\","
+                  - generic [ref=f1e347]: "\"bold\": true"
+                  - generic [ref=f1e349]: "}"
+                  - generic [ref=f1e351]: "],"
+                  - generic [ref=f1e353]: "\"notes\": \"keep\\n\\t\""
+                  - generic [ref=f1e355]: "}"
+                  - generic [ref=f1e357]: "]"
+                  - generic [ref=f1e359]: "}"
+            - generic [ref=f1e363]: cursor 27:1
+        - separator "Resize Edit and right rail" [ref=f1e365]
+        - complementary [ref=f1e368]:
+          - generic [ref=f1e369]:
+            - tablist "Right rail" [ref=f1e370]:
+              - tab "inspector" [selected] [ref=f1e371]
+              - tab "gallery" [ref=f1e377]
+              - tab "trace" [ref=f1e384]
+            - generic [ref=f1e389]:
+              - generic [ref=f1e390]:
+                - generic [ref=f1e391]:
+                  - heading "Selection · slides[0].title" [level=2] [ref=f1e392]
+                  - paragraph [ref=f1e393]: Author commits this draft
+                - button "Pin this field as LLM context" [ref=f1e394]
+              - generic [ref=f1e397]:
+                - generic [ref=f1e398]: authored
+                - generic [ref=f1e401]: catalog
+              - generic [ref=f1e404]:
+                - generic [ref=f1e405]:
+                  - term [ref=f1e406]: authored slides[0].title
+                  - definition [ref=f1e407]: "\"Author commits this draft\""
+                - generic [ref=f1e408]:
+                  - term [ref=f1e409]: layout catalog
+                  - definition [ref=f1e410]: pptx.gallery/layouts
+                - generic [ref=f1e411]:
+                  - term [ref=f1e412]: schema minimum
+                  - definition [ref=f1e413]: 0 errors / 0 warnings
+                - generic [ref=f1e414]:
+                  - term [ref=f1e415]: document inheritance
+                  - definition [ref=f1e416]: design
+              - paragraph [ref=f1e417]: Schema-aware composer chips appear on the dock when this row is selected.
+  - alert [ref=f1e418]
+  - generic [ref=f1e419]:
+    - alert
+    - alert
+```
+

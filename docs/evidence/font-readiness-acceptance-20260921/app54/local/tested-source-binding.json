@@ -1,0 +1,16 @@
+{
+  "checkedAt": "2026-09-21T20:59:01.984292+00:00",
+  "sourceBeforeSha256": "ebad5aa08a2f1719f4c9dfc636c50d61f795b21b1f8f33ea26e5c8ea9b4f7b1c",
+  "regularFiles": 702,
+  "symlinkTargets": 33,
+  "allMatchCurrentCandidate": true,
+  "browserStats": {
+    "startTime": "2026-09-21T20:49:42.445Z",
+    "duration": 111898.96,
+    "expected": 39,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "independentReview": "Root checked current candidate bytes against the exact pre-build inventory; no browser/test rerun."
+}

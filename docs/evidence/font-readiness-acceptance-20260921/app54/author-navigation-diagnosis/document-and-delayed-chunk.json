@@ -1,0 +1,256 @@
+[
+  {
+    "startedDateTime": "2026-09-21T21:08:44.793Z",
+    "time": 22.549999999999997,
+    "_monotonicTime": 130172.529,
+    "_resourceType": "document",
+    "timings": {
+      "dns": 0,
+      "connect": 0.549,
+      "ssl": 1.549,
+      "send": 0,
+      "wait": 11.608,
+      "receive": 8.844
+    },
+    "requestUrl": "http://127.0.0.1:4325/inspector?view=source",
+    "response": {
+      "status": 200,
+      "statusText": "OK",
+      "httpVersion": "HTTP/1.1",
+      "cookies": [],
+      "headers": [
+        {
+          "name": "Cache-Control",
+          "value": "s-maxage=31536000"
+        },
+        {
+          "name": "Connection",
+          "value": "keep-alive"
+        },
+        {
+          "name": "Content-Encoding",
+          "value": "gzip"
+        },
+        {
+          "name": "Content-Type",
+          "value": "text/html; charset=utf-8"
+        },
+        {
+          "name": "Date",
+          "value": "Mon, 21 Sep 2026 21:08:44 GMT"
+        },
+        {
+          "name": "ETag",
+          "value": "\"ak6gv28uwxdqn\""
+        },
+        {
+          "name": "Keep-Alive",
+          "value": "timeout=5"
+        },
+        {
+          "name": "Transfer-Encoding",
+          "value": "chunked"
+        },
+        {
+          "name": "Vary",
+          "value": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch, Accept-Encoding"
+        },
+        {
+          "name": "X-Powered-By",
+          "value": "Next.js"
+        },
+        {
+          "name": "x-nextjs-cache",
+          "value": "HIT"
+        },
+        {
+          "name": "x-nextjs-prerender",
+          "value": "1"
+        },
+        {
+          "name": "x-nextjs-prerender",
+          "value": "1"
+        },
+        {
+          "name": "x-nextjs-stale-time",
+          "value": "300"
+        }
+      ],
+      "content": {
+        "size": 17807,
+        "mimeType": "text/html; charset=utf-8",
+        "compression": 13777,
+        "_file": "resources/2fad2bd2117bdacc98b92aeb83fb7ff9cee174d0.html"
+      },
+      "headersSize": 472,
+      "bodySize": 4030,
+      "redirectURL": "",
+      "_transferSize": 4502
+    }
+  },
+  {
+    "startedDateTime": "2026-09-21T21:08:54.609Z",
+    "time": 262.687,
+    "_monotonicTime": 139964.557,
+    "_resourceType": "document",
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 234.263,
+      "receive": 28.424
+    },
+    "requestUrl": "http://127.0.0.1:4325/author",
+    "response": {
+      "status": 200,
+      "statusText": "OK",
+      "httpVersion": "HTTP/1.1",
+      "cookies": [],
+      "headers": [
+        {
+          "name": "Cache-Control",
+          "value": "s-maxage=31536000"
+        },
+        {
+          "name": "Connection",
+          "value": "keep-alive"
+        },
+        {
+          "name": "Content-Encoding",
+          "value": "gzip"
+        },
+        {
+          "name": "Content-Type",
+          "value": "text/html; charset=utf-8"
+        },
+        {
+          "name": "Date",
+          "value": "Mon, 21 Sep 2026 21:08:54 GMT"
+        },
+        {
+          "name": "ETag",
+          "value": "\"68w9sxy3qhby1\""
+        },
+        {
+          "name": "Keep-Alive",
+          "value": "timeout=5"
+        },
+        {
+          "name": "Transfer-Encoding",
+          "value": "chunked"
+        },
+        {
+          "name": "Vary",
+          "value": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch, Accept-Encoding"
+        },
+        {
+          "name": "X-Powered-By",
+          "value": "Next.js"
+        },
+        {
+          "name": "x-nextjs-cache",
+          "value": "HIT"
+        },
+        {
+          "name": "x-nextjs-prerender",
+          "value": "1"
+        },
+        {
+          "name": "x-nextjs-prerender",
+          "value": "1"
+        },
+        {
+          "name": "x-nextjs-stale-time",
+          "value": "300"
+        }
+      ],
+      "content": {
+        "size": 15481,
+        "mimeType": "text/html; charset=utf-8",
+        "compression": 11912,
+        "_file": "resources/f4902a6edd9f49225bdbc37ebceeeb2ed05457ad.html"
+      },
+      "headersSize": 472,
+      "bodySize": 3569,
+      "redirectURL": "",
+      "_transferSize": 4041
+    }
+  },
+  {
+    "startedDateTime": "2026-09-21T21:08:54.939Z",
+    "time": 8061.943,
+    "_monotonicTime": 148106.871,
+    "_resourceType": "script",
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 8039.856,
+      "receive": 22.087
+    },
+    "requestUrl": "http://127.0.0.1:4325/_next/static/chunks/26gjk35c76d3p.js",
+    "response": {
+      "status": 200,
+      "statusText": "OK",
+      "httpVersion": "HTTP/1.1",
+      "cookies": [],
+      "headers": [
+        {
+          "name": "Accept-Ranges",
+          "value": "bytes"
+        },
+        {
+          "name": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        },
+        {
+          "name": "Connection",
+          "value": "keep-alive"
+        },
+        {
+          "name": "Content-Encoding",
+          "value": "gzip"
+        },
+        {
+          "name": "Content-Type",
+          "value": "application/javascript; charset=UTF-8"
+        },
+        {
+          "name": "Date",
+          "value": "Mon, 21 Sep 2026 21:09:02 GMT"
+        },
+        {
+          "name": "ETag",
+          "value": "W/\"5d2-1a0c5ca43d1\""
+        },
+        {
+          "name": "Keep-Alive",
+          "value": "timeout=5"
+        },
+        {
+          "name": "Last-Modified",
+          "value": "Mon, 21 Sep 2026 21:06:02 GMT"
+        },
+        {
+          "name": "Transfer-Encoding",
+          "value": "chunked"
+        },
+        {
+          "name": "Vary",
+          "value": "Accept-Encoding"
+        }
+      ],
+      "content": {
+        "size": -1,
+        "mimeType": "application/javascript; charset=UTF-8",
+        "compression": 0
+      },
+      "headersSize": 378,
+      "bodySize": 766,
+      "redirectURL": "",
+      "_transferSize": 1144
+    }
+  }
+]

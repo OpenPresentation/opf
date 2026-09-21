@@ -1,0 +1,232 @@
+import { expect, test, type Page } from '@playwright/test';
+import { writeFile } from 'node:fs/promises';
+import type { AuthorLocalWorkspaceV1 } from '../../lib/author/local-workspace';
+import { copySource, observeClipboardWrites } from './helpers/clipboard';
+
+const originalLF = '{\n'
+  + '\t"name"  : "Preset\\u0020history", "author":"Original author",\n'
+  + '\t"extensions":{"human":{"number":1e2,"literal":"a\\/b"}},\n'
+  + '\t"design" : {"theme":"min\\u0069mal", "fontScheme":"roboto"},\n'
+  + '\t"slides":[{"id":"stable-preset", "title":"Original\\u0020title",\n'
+  + '\t  "text":[{"text":"Keep two  spaces.","bold":true},{"text":"Second rich line.","italic":true}],\n'
+  + '\t  "notes":"Preserve notes\\n\\tand spacing."}]\n'
+  + '}\n';
+const prompt = 'Create a formal quarterly review for the board.';
+const input = (page: Page) => page.getByRole('textbox', { name: 'Editor content', exact: true });
+const undoAll = (page: Page) => page.getByRole('button', { name: 'undo all', exact: true });
+const canvas = (page: Page) => page.getByRole('region', { name: 'Editable OPF canvas', exact: true });
+const titleInput = (page: Page) => page.getByRole('textbox', { name: 'Edit title inline', exact: true });
+const titleTarget = (page: Page) => canvas(page).locator('[data-canvas-target][data-opf-path="slides.0.title"]');
+
+test.beforeEach(async ({ page }) => observeClipboardWrites(page));
+
+async function openAuthor(page: Page, source: string) {
+  const { validatePresentation } = await import('@openpresentation/opf');
+  expect(validatePresentation(JSON.parse(source)).errors).toEqual([]);
+  const errors: string[] = [], writes: string[] = [];
+  page.on('pageerror', error => errors.push(error.message));
+  page.on('request', request => {
+    if (!['GET', 'HEAD'].includes(request.method())) writes.push(`${request.method()} ${request.url()}`);
+  });
+  const workspace: AuthorLocalWorkspaceV1 = {
+    schemaVersion: 1, updatedAt: '2026-09-21T00:00:00.000Z', format: 'json',
+    opfDraft: source, acceptedOpfText: source, gallerySources: [], localVersions: [],
+    ui: { centerTab: 'code', pinnedPaths: [] },
+  };
+  await page.addInitScript(value => {
+    localStorage.setItem('pptx-dev:author:local-workspace:v1', JSON.stringify(value));
+  }, workspace);
+  await page.goto('/author');
+  await expect(input(page)).toBeVisible();
+  await exactSource(page, source, 'original');
+  await suggest(page);
+  return { errors, writes };
+}
+
+async function suggest(page: Page) {
+  // This prompt only computes deterministic suggestions; it is never submitted.
+  await page.getByRole('textbox', { name: 'Agent message', exact: true }).fill(prompt);
+  await expect(page.getByRole('group', { name: 'Suggested gallery presets', exact: true })).toBeVisible();
+}
+
+async function preset(page: Page, label: 'Classic' | 'Minimal') {
+  await page.getByRole('group', { name: 'Suggested gallery presets', exact: true })
+    .getByRole('button', { name: new RegExp(`^Apply ${label}\\.`) }).click();
+}
+
+async function exactSource(page: Page, expected: string, name: string) {
+  await expect.poll(() => copySource(page)).toBe(expected);
+  await writeFile(test.info().outputPath(`${name}.opf.json`), await copySource(page));
+}
+
+async function preview(page: Page) {
+  await page.getByRole('tablist', { name: 'Document view', exact: true })
+    .getByRole('tab', { name: /^preview/ }).click();
+  await expect(canvas(page).getByRole('button', { name: 'Import file', exact: true })).toBeEnabled();
+  await expect(titleTarget(page)).toBeVisible();
+}
+
+async function editTitle(page: Page, title: string, commit: boolean) {
+  await titleTarget(page).dblclick();
+  await titleInput(page).fill(title);
+  if (commit) await titleInput(page).press('Control+Enter');
+}
+
+async function paste(page: Page, source: string) {
+  await input(page).focus();
+  await input(page).press('ControlOrMeta+a');
+  await page.evaluate(value => navigator.clipboard.writeText(value), source);
+  await input(page).press('ControlOrMeta+v');
+}
+
+async function importJson(page: Page, source: string, expectedTitle: string) {
+  const chooser = page.waitForEvent('filechooser');
+  await canvas(page).getByRole('button', { name: 'Import file', exact: true }).click();
+  await (await chooser).setFiles({ name: 'replacement.opf.json', mimeType: 'application/json', buffer: Buffer.from(source) });
+  await expect(page.getByLabel('Import preview', { exact: true })).toContainText(expectedTitle);
+  await page.getByRole('button', { name: 'Open presentation', exact: true }).click();
+  await expect(page.getByLabel('Import preview', { exact: true })).not.toBeVisible();
+  await expect.poll(async () => JSON.parse(await copySource(page))).toEqual(JSON.parse(source));
+  await expect(undoAll(page)).toHaveCount(0);
+  return copySource(page);
+}
+
+async function finish(page: Page, observations: { errors: string[]; writes: string[] }, name: string) {
+  await page.screenshot({ path: test.info().outputPath(`${name}.png`), fullPage: true });
+  expect(observations.errors).toEqual([]);
+  expect(observations.writes).toEqual([]);
+}
+
+for (const eol of ['LF', 'CRLF'] as const) {
+  test(`Author ${eol} contiguous preset cycle restores exact source with atomic Undo all history`, async ({ page }) => {
+    const original = eol === 'LF' ? originalLF : originalLF.replaceAll('\n', '\r\n');
+    const observations = await openAuthor(page, original);
+    // The ranker keeps the selected theme reachable. A genuine no-op must not
+    // create a card or consume history, even with an escaped current value.
+    await preset(page, 'Minimal');
+    await exactSource(page, original, 'initial-no-op');
+    await expect(undoAll(page)).toHaveCount(0);
+    const classic = original.replace('"min\\u0069mal"', '"classic"');
+    await preset(page, 'Classic');
+    await exactSource(page, classic, 'first-preset');
+    await preset(page, 'Classic');
+    await exactSource(page, classic, 'repeated-no-op');
+    const cycle = classic.replace('"classic"', '"minimal"');
+    await preset(page, 'Minimal');
+    await exactSource(page, cycle, 'semantic-cycle');
+    expect(JSON.parse(cycle)).toEqual(JSON.parse(original));
+    expect(cycle).not.toBe(original);
+    await undoAll(page).click();
+    await expect(undoAll(page)).toHaveCount(0);
+    await exactSource(page, original, 'undo-all');
+    await preview(page);
+    await canvas(page).getByRole('button', { name: 'Undo canvas', exact: true }).click();
+    await exactSource(page, cycle, 'undo-entire-revert');
+    await canvas(page).getByRole('button', { name: 'Redo canvas', exact: true }).click();
+    await exactSource(page, original, 'redo-entire-revert');
+    // The two real presets, not the repeated current-value selections, are
+    // the earlier history entries. Undoing the cycle cannot skip or add one.
+    await canvas(page).getByRole('button', { name: 'Undo canvas', exact: true }).click();
+    await canvas(page).getByRole('button', { name: 'Undo canvas', exact: true }).click();
+    await exactSource(page, classic, 'undo-second-preset');
+    await canvas(page).getByRole('button', { name: 'Undo canvas', exact: true }).click();
+    await exactSource(page, original, 'undo-first-preset');
+    await expect(undoAll(page)).toHaveCount(0);
+    await finish(page, observations, `preset-cycle-${eol}`);
+  });
+}
+
+test('Author source edits invalidate preset Undo even after returning to identical bytes', async ({ page }) => {
+  const original = originalLF.replaceAll('\n', '\r\n');
+  const observations = await openAuthor(page, original);
+  const classic = original.replace('"min\\u0069mal"', '"classic"');
+  await preset(page, 'Classic');
+  await exactSource(page, classic, 'first-preset');
+  const edited = classic.replace('"Original\\u0020title"', '"Human source edit"');
+  await paste(page, edited);
+  await exactSource(page, edited, 'human-edit');
+  await expect(undoAll(page)).toHaveCount(0);
+  await input(page).press('ControlOrMeta+z');
+  await exactSource(page, classic, 'source-undo');
+  await expect(undoAll(page)).toHaveCount(0);
+  await preset(page, 'Minimal');
+  await exactSource(page, classic.replace('"classic"', '"minimal"'), 'new-group');
+  await undoAll(page).click();
+  await exactSource(page, classic, 'new-group-baseline');
+  await finish(page, observations, 'source-edit-invalidation');
+});
+
+test('Author committed and pending canvas edits cannot be overwritten by preset Undo all', async ({ page }) => {
+  const observations = await openAuthor(page, originalLF);
+  const classic = originalLF.replace('"min\\u0069mal"', '"classic"');
+  await preset(page, 'Classic');
+  await exactSource(page, classic, 'first-preset');
+  await preview(page);
+  await editTitle(page, 'Committed human edit', true);
+  const committed = classic.replace('"Original\\u0020title"', '"Committed human edit"');
+  await exactSource(page, committed, 'committed-edit');
+  await expect(undoAll(page)).toHaveCount(0);
+  await preset(page, 'Minimal');
+  const minimal = committed.replace('"classic"', '"minimal"');
+  await exactSource(page, minimal, 'new-group');
+  await editTitle(page, 'Pending human edit', false);
+  await expect(titleInput(page)).toHaveValue('Pending human edit');
+  await expect(undoAll(page)).toBeVisible();
+  await page.screenshot({ path: test.info().outputPath('pending-before-undo.png'), fullPage: true });
+  // A real pointer press can commit the draft and remove this button before
+  // click dispatch. Click its observed visible position once, without forcing
+  // a detached handler or retrying an action whose target correctly disappears.
+  const target = await undoAll(page).boundingBox();
+  expect(target).not.toBeNull();
+  await page.mouse.click(target!.x + target!.width / 2, target!.y + target!.height / 2);
+  await expect(titleInput(page)).toHaveCount(0);
+  await expect(undoAll(page)).toHaveCount(0);
+  await exactSource(page, minimal.replace('Committed human edit', 'Pending human edit'), 'pending-edit-retained');
+  await finish(page, observations, 'canvas-edit-invalidation');
+});
+
+test('Author New run invalidates stale presets and a later group restores the new presentation', async ({ page }) => {
+  const observations = await openAuthor(page, originalLF);
+  await preset(page, 'Classic');
+  await expect(undoAll(page)).toBeVisible();
+  await page.getByRole('button', { name: 'New run', exact: true }).click();
+  await expect(undoAll(page)).toHaveCount(0);
+  await expect.poll(async () => JSON.parse(await copySource(page)).name).toBe('Northstar Seed Pitch');
+  const replacement = await copySource(page);
+  expect(JSON.parse(replacement).slides).toHaveLength(5);
+  await writeFile(test.info().outputPath('new-run-baseline.opf.json'), replacement);
+  await suggest(page);
+  await preset(page, 'Classic');
+  await expect.poll(async () => JSON.parse(await copySource(page)).design.theme).toBe('classic');
+  await expect(undoAll(page)).toBeVisible();
+  await undoAll(page).click();
+  await exactSource(page, replacement, 'new-run-restored');
+  await finish(page, observations, 'new-run-invalidation');
+});
+
+test('Author different and same-semantic imports invalidate presets without losing replacement history', async ({ page }) => {
+  const observations = await openAuthor(page, originalLF);
+  await preset(page, 'Classic');
+  await expect(undoAll(page)).toBeVisible();
+  await preview(page);
+  const replacement = '{"name":"Imported presentation","author":"Replacement author","design":{"theme":"dark","fontScheme":"roboto"},"slides":[{"id":"replacement-only","title":"Replacement title","text":"Imported body","notes":"Keep imported notes"}]}\n';
+  const accepted = await importJson(page, replacement, 'Replacement title');
+  await writeFile(test.info().outputPath('different-import-accepted.opf.json'), accepted);
+  await preset(page, 'Classic');
+  await expect(undoAll(page)).toBeVisible();
+  await undoAll(page).click();
+  await exactSource(page, accepted, 'different-import-fresh-baseline');
+  await preset(page, 'Classic');
+  await expect(undoAll(page)).toBeVisible();
+  const beforeSameImport = await copySource(page);
+  expect(JSON.parse(beforeSameImport).design.theme).toBe('classic');
+  // Identical semantic/root import still expresses a new document boundary.
+  // Import itself remains a semantic transfer; accepted bytes are the oracle.
+  const sameAccepted = await importJson(page, beforeSameImport, 'Replacement title');
+  expect(sameAccepted).toBe(beforeSameImport);
+  await preset(page, 'Minimal');
+  await expect(undoAll(page)).toBeVisible();
+  await undoAll(page).click();
+  await exactSource(page, sameAccepted, 'same-import-fresh-baseline');
+  await finish(page, observations, 'import-invalidation');
+});

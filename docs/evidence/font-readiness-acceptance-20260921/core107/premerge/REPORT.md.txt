@@ -1,0 +1,18 @@
+# Resolved core PR107 premerge audit
+
+**Latest exact-head OPF and coordinated gates passed** for [PR107](https://github.com/OpenPresentation/opf/pull/107), head `92c1009761a83b95601b93eb8455e9351980b8a7`, tree `ffdc678beadf0808bc717d67e7fc0a9ec4790127`, base `3847f712ccb2379952bcc8ab7c9fdbaedfd0a4ce`. The checkout was clean; the additive commit retains parents `e565c063` and accepted core106 `3847f712`.
+
+| Automatic run | OPF CI / job | Coordinated / job | Outcome |
+| --- | --- | --- | --- |
+| Earlier pair, created 20:23:34 UTC | 35650767479 / 106502340433 | 35650767380 / 106502340703 | Canceled before any job steps |
+| Later pair, created 20:23:36 UTC | [35650769661](https://github.com/OpenPresentation/opf/actions/runs/35650769661) / 106502352546 | [35650769719](https://github.com/OpenPresentation/opf/actions/runs/35650769719) / 106502352789 | Both success under Node 24.20.0 |
+
+Every run above is a separate automatic `pull_request` run, **attempt 1**. No rerun was requested. The later successes are not described as the first runs. [GitHub annotations](automatic-run-sequence.json) explicitly report cancellation because a higher-priority request was waiting in `OPF CI-refs/pull/107/merge` or `ecosystem-refs/pull/107/merge`. This establishes concurrency supersession as the reason. No cancellation actor is named; trigger actor fields are not cancellation actor evidence. The original canceled check outputs, annotations, zero-step jobs and empty artifact inventories are retained.
+
+The [committed-source audit](committed-source-audit.json) verifies all **87** PR-delta Git blobs, the **84-entry** manifest including nested manifests, **80 exact provenance copies**, and all **163 accepted native evidence files plus the roadmap** unchanged. The original e565 no-workflow/conflict observation remains in the preceding `ci/` directory and is hash-bound here. The checkpoint manifest is `af6d9f8a0daddbf268f91b6a679bee42e314f5571ba3d112b12141e42f87d118`.
+
+OPF passed package/type/test/spec/example, packed installation and published-registry quickstart gates. Coordinated CI passed its model/geometry/fonts/CLI/TypeScript checks, installed tarball browser interactions, scalar whitespace/advances, physical-font selections, metric outlines/offline SVG ink, published-registry fidelity and current-checkout internal measurements. [Final jobs](coordinated-jobs-final.json) and original logs retain the precise step boundaries. These portable checks do not certify native Office fidelity or canonical application behavior.
+
+The coordinated [artifact](artifact-integrity.json) `installed-browser-node24` (ID **10661999026**) is retained as the original ZIP: **1,466,810 bytes**, SHA-256 `f239c95690207709954dcfe9c1c6724ac3958a4882a1294a81f19bb683185d03`, matching GitHub's digest. ZIP CRC checks and safe relative member names pass; **378 files**, including **33 parsed JSON members**, are inventoried. The archive was not extracted and its images were not newly visually reviewed. OPF and both canceled predecessors have zero artifacts. Artifact integrity is separate from the bounded assertions exercised by CI.
+
+[release-audit.json](release-audit.json) records exact outcomes and identities. `SHA256SUMS.json` covers every local receipt and the original artifact except itself. App54 acceptance remains a separate gate; this documentation checkpoint does not accept a release, deployment, general glyph identity, embedding, mixed-size fidelity or the failing native tab tolerance. No source mutation, merge, push, deployment, workflow rerun or Office action was performed by this audit.

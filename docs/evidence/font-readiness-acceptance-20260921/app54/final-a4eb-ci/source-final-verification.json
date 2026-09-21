@@ -1,0 +1,13 @@
+{
+  "checkedAt": "2026-09-21T21:20:33.239376+00:00",
+  "head": "a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb",
+  "tree": "031d893855a540fd2a4d2ec2162605817b8dde16",
+  "clean": true,
+  "changedGitBlobsVerified": 262,
+  "evidenceManifestEntries": 259,
+  "testedRegularGitAndDiskInputsVerified": 702,
+  "testedSymlinkGitAndDiskTargetsVerified": 33,
+  "priorSourceAudit": "source-audit.json",
+  "priorSourceAuditSha256": "b30ffa5260827b6d2542b0ffc96d054eb57569938c3474c1d15f78a112b62290",
+  "noTestOrSourceMutation": true
+}

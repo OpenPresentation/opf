@@ -1,0 +1,215 @@
+{
+  "recordedAt": "2026-09-21T21:24:01.793693+00:00",
+  "traceSha256": "c7589c634e5177b393d3697a4d9c9bb48b4809d958644973267a453c1812883a",
+  "eventTypes": {
+    "context-options": 1,
+    "before": 24,
+    "event": 1,
+    "after": 24,
+    "screencast-frame": 33,
+    "frame-snapshot": 45,
+    "log": 59,
+    "input": 5
+  },
+  "urlExpectation": [
+    {
+      "type": "before",
+      "callId": "call@2466",
+      "startTime": 139962.071,
+      "title": "Expect \"toHaveURL\"",
+      "class": "Frame",
+      "method": "expect",
+      "params": {
+        "expression": "to.have.url",
+        "expectedText": [
+          {
+            "regexSource": "\\/author#opf=",
+            "regexFlags": ""
+          }
+        ],
+        "expectedValue": {
+          "value": {
+            "v": "undefined"
+          },
+          "handles": []
+        },
+        "isNot": false,
+        "timeout": 5000
+      },
+      "stepId": "expect@59"
+    },
+    {
+      "type": "log",
+      "callId": "call@2466",
+      "time": 139964.03,
+      "message": "Expect \"toHaveURL\" with timeout 5000ms"
+    },
+    {
+      "type": "log",
+      "callId": "call@2466",
+      "time": 139964.041,
+      "message": "  waiting for navigation to finish..."
+    },
+    {
+      "type": "after",
+      "callId": "call@2466",
+      "endTime": 148098.288,
+      "error": {
+        "message": "Expect failed",
+        "stack": "ExpectError: Expect failed\n    at _Frame.expect (D:\\a\\pptx-dev\\pptx-dev\\node_modules\\.pnpm\\playwright-core@1.63.0\\node_modules\\playwright-core\\lib\\coreBundle.js:24312:17)\n    at _FrameDispatcher.expect (D:\\a\\pptx-dev\\pptx-dev\\node_modules\\.pnpm\\playwright-core@1.63.0\\node_modules\\playwright-core\\lib\\coreBundle.js:54886:11)\n    at _ProgressController.run (D:\\a\\pptx-dev\\pptx-dev\\node_modules\\.pnpm\\playwright-core@1.63.0\\node_modules\\playwright-core\\lib\\coreBundle.js:12374:27)\n    at DispatcherConnection.dispatch (D:\\a\\pptx-dev\\pptx-dev\\node_modules\\.pnpm\\playwright-core@1.63.0\\node_modules\\playwright-core\\lib\\coreBundle.js:19135:27)",
+        "name": "ExpectError"
+      }
+    }
+  ],
+  "resourceCount": 131,
+  "recordedHttpErrors": [],
+  "incompleteResources": [
+    {
+      "url": "http://127.0.0.1:4325/docs?_rsc=_XhkoWHqhrw7zgRp",
+      "method": "GET",
+      "startedDateTime": "2026-09-21T21:08:54.186Z",
+      "storedMonotonicTime": 139558.541,
+      "duration": -1,
+      "timings": {
+        "send": -1,
+        "wait": -1,
+        "receive": -1
+      },
+      "status": -1,
+      "type": "fetch",
+      "bodyBytes": -1,
+      "content": {
+        "size": -1,
+        "mimeType": "x-unknown"
+      }
+    },
+    {
+      "url": "http://127.0.0.1:4325/docs/api?_rsc=_XhkoWHqhrw7zgRp",
+      "method": "GET",
+      "startedDateTime": "2026-09-21T21:08:54.187Z",
+      "storedMonotonicTime": 139559.602,
+      "duration": -1,
+      "timings": {
+        "send": -1,
+        "wait": -1,
+        "receive": -1
+      },
+      "status": -1,
+      "type": "fetch",
+      "bodyBytes": -1,
+      "content": {
+        "size": -1,
+        "mimeType": "x-unknown"
+      }
+    },
+    {
+      "url": "http://127.0.0.1:4325/docs/opf?_rsc=_XhkoWHqhrw7zgRp",
+      "method": "GET",
+      "startedDateTime": "2026-09-21T21:08:54.187Z",
+      "storedMonotonicTime": 139559.825,
+      "duration": -1,
+      "timings": {
+        "send": -1,
+        "wait": -1,
+        "receive": -1
+      },
+      "status": -1,
+      "type": "fetch",
+      "bodyBytes": -1,
+      "content": {
+        "size": -1,
+        "mimeType": "x-unknown"
+      }
+    },
+    {
+      "url": "http://127.0.0.1:4325/dashboard?tab=keys&_rsc=_XhkoWHqhrw7zgRp",
+      "method": "GET",
+      "startedDateTime": "2026-09-21T21:08:54.187Z",
+      "storedMonotonicTime": 139560.114,
+      "duration": -1,
+      "timings": {
+        "send": -1,
+        "wait": -1,
+        "receive": -1
+      },
+      "status": -1,
+      "type": "fetch",
+      "bodyBytes": -1,
+      "content": {
+        "size": -1,
+        "mimeType": "x-unknown"
+      }
+    },
+    {
+      "url": "http://127.0.0.1:4325/_next/static/chunks/3l5r2rbf0qyo9.js",
+      "method": "GET",
+      "startedDateTime": "2026-09-21T21:09:03.013Z",
+      "storedMonotonicTime": 148463.529,
+      "duration": -1,
+      "timings": {
+        "send": -1,
+        "wait": -1,
+        "receive": -1
+      },
+      "status": -1,
+      "type": "script",
+      "bodyBytes": -1,
+      "content": {
+        "size": -1,
+        "mimeType": "x-unknown"
+      }
+    }
+  ],
+  "documentRequests": [
+    {
+      "url": "http://127.0.0.1:4325/inspector?view=source",
+      "method": "GET",
+      "startedDateTime": "2026-09-21T21:08:44.793Z",
+      "storedMonotonicTime": 130172.529,
+      "duration": 22.549999999999997,
+      "timings": {
+        "dns": 0,
+        "connect": 0.549,
+        "ssl": 1.549,
+        "send": 0,
+        "wait": 11.608,
+        "receive": 8.844
+      },
+      "status": 200,
+      "type": "document",
+      "bodyBytes": 4030,
+      "content": {
+        "size": 17807,
+        "mimeType": "text/html; charset=utf-8",
+        "compression": 13777,
+        "_file": "resources/2fad2bd2117bdacc98b92aeb83fb7ff9cee174d0.html"
+      }
+    },
+    {
+      "url": "http://127.0.0.1:4325/author",
+      "method": "GET",
+      "startedDateTime": "2026-09-21T21:08:54.609Z",
+      "storedMonotonicTime": 139964.557,
+      "duration": 262.687,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 234.263,
+        "receive": 28.424
+      },
+      "status": 200,
+      "type": "document",
+      "bodyBytes": 3569,
+      "content": {
+        "size": 15481,
+        "mimeType": "text/html; charset=utf-8",
+        "compression": 11912,
+        "_file": "resources/f4902a6edd9f49225bdbc37ebceeeb2ed05457ad.html"
+      }
+    }
+  ],
+  "clockCaution": "Some resource storedMonotonicTime fields differ materially from HAR startedDateTime ordering/duration. Preserve both raw fields; do not treat resource monotonic field as a proven wire-start timestamp or sum fields across clock domains.",
+  "scope": "Failed original Windows run only. Later Author DOM snapshot is distinct from test assertions, which did not run."
+}

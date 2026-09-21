@@ -1,0 +1,67 @@
+{
+  "frozenAt": "2026-09-21T22:18:06.794520+00:00",
+  "phase": "postmerge original automatic push",
+  "acceptedHead": "8f54228a9e38a1dcc0bf8188bcdd519795b3799a",
+  "reviewedHead": "79ba0157984fce8405eeb786b8ede1a4e59ba138",
+  "tree": "3639d3c14daec94d13711fa2b10f2b927df45eca",
+  "application": {
+    "id": 35660464578,
+    "attempt": 1,
+    "event": "push",
+    "conclusion": "failure",
+    "createdAt": "2026-09-21T22:01:31Z",
+    "updatedAt": "2026-09-21T22:13:37Z",
+    "jobs": [
+      {
+        "id": 106534214744,
+        "name": "verify (windows-latest)",
+        "head": "8f54228a9e38a1dcc0bf8188bcdd519795b3799a",
+        "conclusion": "failure",
+        "completedAt": "2026-09-21T22:13:36Z",
+        "node": "24.20.0",
+        "unitPassed": 704,
+        "standaloneControlsPassed": 13,
+        "browserPassed": 38,
+        "browserFailed": 1
+      },
+      {
+        "id": 106534215085,
+        "name": "verify (ubuntu-latest)",
+        "head": "8f54228a9e38a1dcc0bf8188bcdd519795b3799a",
+        "conclusion": "success",
+        "completedAt": "2026-09-21T22:09:41Z",
+        "node": "24.20.0",
+        "unitPassed": 704,
+        "standaloneControlsPassed": 13,
+        "browserPassed": 39,
+        "browserFailed": 0
+      }
+    ]
+  },
+  "failure": {
+    "test": "anonymous JSON authoring, preview, undo/redo, download and shared reimport",
+    "declaration": "tests/e2e/inspector.spec.ts:118:5",
+    "assertion": "tests/e2e/inspector.spec.ts:125:61",
+    "locator": "playground-gallery-rail",
+    "expectedText": "An editable presentation",
+    "observedTextIncludes": [
+      "Browser adoption check",
+      "0 errors, 0 warnings",
+      "1 slide",
+      "Loading slide fonts\u2026"
+    ],
+    "timeoutMs": 5000,
+    "caseDurationDisplay": "13.4s",
+    "laterPreviewDownloadUndoRedoSharedReimportAssertionsReached": false,
+    "causeEstablished": false
+  },
+  "navigationPolicyCase": "passed both platforms, includingWindows9.2s whole-case; this does not clear the separate failure",
+  "artifactIntegrity": "artifact-integrity.json",
+  "timingBoundary": "Separate passing SVG-security Author99entries only; Inspector snapshot missing; no timing record for failed Inspector case",
+  "sourceEquivalence": "source-equivalence.json",
+  "premergeAudit": "../ci/REPORT.md",
+  "rerunsRequested": false,
+  "newInvestigationStarted": false,
+  "productionAndCanonicalAcceptance": "Separate parent-owned evidence; not established by this report.",
+  "overallGoalComplete": false
+}

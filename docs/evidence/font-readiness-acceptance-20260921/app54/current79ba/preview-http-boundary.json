@@ -1,0 +1,14 @@
+{
+  "checkedAt": "2026-09-21T21:50:34.182349+00:00",
+  "head": "79ba0157984fce8405eeb786b8ede1a4e59ba138",
+  "deploymentId": "dpl_B1NHJsoR9cpKe1DEMq435nKgHXJ9",
+  "requestedUrl": "https://pptx-7ft4cb96o-dataadvantage.vercel.app/inspector",
+  "status": 302,
+  "redirectOrigin": "https://vercel.com",
+  "redirectPath": "/sso-api",
+  "redirectQueryOmitted": true,
+  "followedRedirects": false,
+  "browserAcceptance": false,
+  "authenticationAttempted": false,
+  "rawHeadersRetainedPrivatelySHA256": "8f13359e196fbf970ba02e941567940d15300bfdfad48ba8a35c2ea44372cc14"
+}

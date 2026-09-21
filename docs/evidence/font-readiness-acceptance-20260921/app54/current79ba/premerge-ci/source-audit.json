@@ -1,0 +1,36 @@
+{
+  "checkedAt": "2026-09-21T21:50:24.896977+00:00",
+  "head": "79ba0157984fce8405eeb786b8ede1a4e59ba138",
+  "tree": "3639d3c14daec94d13711fa2b10f2b927df45eca",
+  "parent": "a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb",
+  "baseMaster": "e40c287b64fcbcfb85fb4a8a50641aea8e3e54a8",
+  "clean": true,
+  "changedGitBlobsVerified": 203,
+  "evidenceFiles": 202,
+  "manifestEntries": 201,
+  "manifestSha256": "7900ec880f213c7e6c645c3ab179573421aaf4cc276e74c55d3f7627965c468c",
+  "exactNewProvenanceCopies": 132,
+  "testedRegularGitAndDiskInputsVerified": 702,
+  "testedSymlinkGitAndDiskTargetsVerified": 33,
+  "onlyNonEvidenceDelta": [
+    "tests/e2e/inspector-actions.spec.ts"
+  ],
+  "archiveExecutableTypeScript": [],
+  "stagedReceiptSha256": "b44560e7755fc0283dbbc651559127721fe2d40527694a2ffefd4ee1e19ceb5e",
+  "commitReceiptSha256": "ec0eb3a75d5ee2a1745390a8e898659d1b3285171e6bbff875e555e5ecb5dac4",
+  "priorFrozenAudits": [
+    {
+      "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance",
+      "manifestSha256": "d021600307c21d1f66c72c54aa549e9ac4a0aca8567a1fb61b3f3b2af1c65b41",
+      "filesVerified": 167,
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/opf-font-readiness-concurrency-20260921/ci",
+      "manifestSha256": "4fba7308a7c1ad22b5fedaf84f680b0b68160ad48cb9be7a4797a098119e38d4",
+      "filesVerified": 144,
+      "unchanged": true
+    }
+  ],
+  "scope": "Read-only identity and frozen-evidence audit; no tests or CI reruns."
+}

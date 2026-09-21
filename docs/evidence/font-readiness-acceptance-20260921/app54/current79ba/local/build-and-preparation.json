@@ -1,0 +1,167 @@
+{
+  "capturedAt": "2026-09-21T21:33:53.539781+00:00",
+  "buildExit": 0,
+  "buildId": "tL8W1j83XSdKiuTACo8zx",
+  "buildArtifacts": [
+    {
+      "path": ".next/BUILD_ID",
+      "bytes": 21,
+      "sha256": "882d81ac62ad4483dfae93d593204b1aed436a5c03c236fed67bd255998e81c4"
+    },
+    {
+      "path": ".next/standalone/server.js",
+      "bytes": 8654,
+      "sha256": "a75b7dd77f99120e75a86b7001409d4c43442b62d41f157c35b83f0a20c80b10"
+    },
+    {
+      "path": ".next/standalone/.next/server/app/author.html",
+      "bytes": 15481,
+      "sha256": "fae612ed8e2d0382b10270a5cc11c518c2d728591baf59a239442b62ae237759"
+    },
+    {
+      "path": ".next/standalone/.next/server/app/inspector.html",
+      "bytes": 17807,
+      "sha256": "76e0e100d30479380a735223a043444157b9d1c464beb5c7da6d5e9b322f4251"
+    }
+  ],
+  "generatedSpecFiles": [
+    {
+      "path": ".opf-spec/examples/technical/asset-source-forms.opf.json",
+      "bytes": 2613,
+      "sha256": "719be8c5fc90b5a107ae6f181f4841cfbf33f528a8db852bf6dc94bc78a28979"
+    },
+    {
+      "path": ".opf-spec/examples/technical/block-composition.opf.json",
+      "bytes": 1614,
+      "sha256": "ab69284bffc719bac0ea1a9571058abf8c31ad6ad6a4bc5fe4cb280368ed60fc"
+    },
+    {
+      "path": ".opf-spec/examples/technical/catalog-overrides.opf.json",
+      "bytes": 5438,
+      "sha256": "68092730eae65f94e187926ddd4406d22a15a87da3aebff8f3491dbc3d233284"
+    },
+    {
+      "path": ".opf-spec/examples/technical/chart-data-sources.opf.json",
+      "bytes": 1700,
+      "sha256": "777657bc25cd1be1d3ddf1d2757cd5fc1534a4fa788dc24076ad4ad4f5774443"
+    },
+    {
+      "path": ".opf-spec/examples/technical/chart-type-sampler.opf.json",
+      "bytes": 3365,
+      "sha256": "c50d3fa881ed30e06592fc527999cf5d446393dac5509c497c75d8b964e55722"
+    },
+    {
+      "path": ".opf-spec/examples/technical/columns.opf.json",
+      "bytes": 627,
+      "sha256": "0a45dfa2440120341c81f31829c3deff6e9a00ee1961e4f1c0ab9768d75a3cb8"
+    },
+    {
+      "path": ".opf-spec/examples/technical/content-payload-matrix.opf.json",
+      "bytes": 3792,
+      "sha256": "9b5ba575287af91f138ef2d49d8edb0c3a164a3ac3fcca6a22e003f28e1639b3"
+    },
+    {
+      "path": ".opf-spec/examples/technical/design-backgrounds.opf.json",
+      "bytes": 2728,
+      "sha256": "a395bcbb56785765bbfe024e2d91c346da04a6b1c67e75336b19a3370507aa89"
+    },
+    {
+      "path": ".opf-spec/examples/technical/grid-spans.opf.json",
+      "bytes": 788,
+      "sha256": "fa1282518c8852a06451689901f0aed09bfef296c6b4ab72241113b1ae24846c"
+    },
+    {
+      "path": ".opf-spec/examples/technical/header-footer-logo-set.opf.json",
+      "bytes": 1660,
+      "sha256": "ad5b98a78921557bb9b42224bb1c7a2d66c2fcac84400463e7aedc5cc5d59863"
+    },
+    {
+      "path": ".opf-spec/examples/technical/language-and-writing.opf.json",
+      "bytes": 729,
+      "sha256": "f54220d7a054e478bbf7f86667ab00e0f4230559ccd8acbf1968d93654628c52"
+    },
+    {
+      "path": ".opf-spec/examples/technical/media-and-follow-up.opf.json",
+      "bytes": 638,
+      "sha256": "e6079202cab83948d637b4c9721740007a4cb57d1183c71ed92e193d21473324"
+    },
+    {
+      "path": ".opf-spec/examples/technical/metadata-array-forms.opf.json",
+      "bytes": 1780,
+      "sha256": "4089f2d7de22b2e8b7eb3fd588bf161864a8ce50b14cb1cd49baa72b831267fa"
+    },
+    {
+      "path": ".opf-spec/examples/technical/metrics-quotes-timeline.opf.json",
+      "bytes": 1272,
+      "sha256": "7cfda743528fe55a1e666b82fc6c1a846cbc1764e80f9b590330402b0af51c9b"
+    },
+    {
+      "path": ".opf-spec/examples/technical/minimal.opf.json",
+      "bytes": 356,
+      "sha256": "11cc28ea74c0e34facbd94634b5caac97e456a649c84e647cb88605970880659"
+    },
+    {
+      "path": ".opf-spec/examples/technical/narrative-beats.opf.json",
+      "bytes": 1690,
+      "sha256": "9d9342a56ec005c2c2844a3c113195a7aad679a5975f75e90cd225057197d8f2"
+    },
+    {
+      "path": ".opf-spec/examples/technical/promoted-region-grid.opf.json",
+      "bytes": 1754,
+      "sha256": "c9004c66606b9f16d918c211159cd05c3f77850cbb69e24018e57d6d8d31c831"
+    },
+    {
+      "path": ".opf-spec/examples/technical/rich-text-runs.opf.json",
+      "bytes": 1830,
+      "sha256": "e84f81176cb91277be1292c44318c942e8ecc03e5157715c13955aae91429ca3"
+    },
+    {
+      "path": ".opf-spec/examples/technical/root-content.opf.json",
+      "bytes": 761,
+      "sha256": "0262e849ac5b18eb4d0549bc242c32b407959a8a27e7f1c28d0dfea98648edcc"
+    },
+    {
+      "path": ".opf-spec/examples/technical/rows-chart.opf.json",
+      "bytes": 1044,
+      "sha256": "d4e492c90ac13e97d274eea9cf73b6005d6951c7a0753836adb3a280d7413e1b"
+    },
+    {
+      "path": ".opf-spec/examples/technical/slide-design-overrides.opf.json",
+      "bytes": 1962,
+      "sha256": "533130933698389cfec89435d3834c10a27c870dd07fced1b74b8ecfcba74c8b"
+    },
+    {
+      "path": ".opf-spec/examples/technical/slide-sections.opf.json",
+      "bytes": 903,
+      "sha256": "7f46675a9f669c09895b152af2c5db619eaa8c68dc8afab365a182d06161ab6f"
+    },
+    {
+      "path": ".opf-spec/examples/technical/table-and-code.opf.json",
+      "bytes": 1183,
+      "sha256": "29a4df6caf6f93f8473c65aa51564ee865da8d5f200e08c8d98f43055bca542f"
+    },
+    {
+      "path": ".opf-spec/examples/technical/table-cell-types.opf.json",
+      "bytes": 827,
+      "sha256": "6e3151022c69ca82f2fa589da3ed1a34eb95864602a601c4665d802d88384334"
+    },
+    {
+      "path": ".opf-spec/openapi.yaml",
+      "bytes": 24164,
+      "sha256": "4c6a73cdba544868365a95df2cb233a92147516227c53800af615be528436c54"
+    },
+    {
+      "path": ".opf-spec/opf.schema.json",
+      "bytes": 134486,
+      "sha256": "dbb84e4e55a0d98bb14433d7df8682e1c7ef95af9b49e9d7a256b2b5ac334076"
+    }
+  ],
+  "generator": "Existing package build runs prepare:opf-browser then sync:opf-spec then next build then prepare-standalone.mjs. sync:opf-spec reads exact installed @openpresentation/opf0.11.0 public package paths and examples.",
+  "originalPrebuildTypecheck": {
+    "exit": 2,
+    "log": "typecheck.log",
+    "cause": "Generated .opf-spec/opf.schema.json absent before the first build; no product/type error repair or source change."
+  },
+  "all702SourceFilesAnd33SymlinkTargetsUnchangedAfterBuild": true,
+  "postBuildStatus": " M tests/e2e/inspector-actions.spec.ts\n"
+}

@@ -1,0 +1,21 @@
+{
+  "observedAt": "2026-09-21T21:18:49.898Z",
+  "id": "dpl_7h6bihzceM8cLbvgK6mehffaqhw5",
+  "url": "pptx-ejce2z7b3-dataadvantage.vercel.app",
+  "state": "READY",
+  "readyState": "READY",
+  "target": null,
+  "createdAt": 1790024525792,
+  "buildingAt": 1790024527129,
+  "ready": 1790024586055,
+  "alias": [
+    "pptx-dev-git-codex-inspector-share-guard-20260921-dataadvantage.vercel.app"
+  ],
+  "meta": {
+    "githubCommitRef": "codex/inspector-share-guard-20260921",
+    "githubCommitSha": "a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb",
+    "githubCommitMessage": "fix: prepare browser fonts alongside converter",
+    "githubRepo": "pptx-dev",
+    "githubOrg": "Data-Advantage"
+  }
+}

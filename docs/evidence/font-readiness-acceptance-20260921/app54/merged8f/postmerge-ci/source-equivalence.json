@@ -1,0 +1,22 @@
+{
+  "checkedAt": "2026-09-21T22:04:52.146225+00:00",
+  "accepted": "8f54228a9e38a1dcc0bf8188bcdd519795b3799a",
+  "reviewed": "79ba0157984fce8405eeb786b8ede1a4e59ba138",
+  "base": "e40c287b64fcbcfb85fb4a8a50641aea8e3e54a8",
+  "acceptedTree": "3639d3c14daec94d13711fa2b10f2b927df45eca",
+  "reviewedTree": "3639d3c14daec94d13711fa2b10f2b927df45eca",
+  "identicalFullTrees": true,
+  "all203ReviewedChangedBlobsVerified": 203,
+  "acceptedCommitParent": "e40c287b64fcbcfb85fb4a8a50641aea8e3e54a8",
+  "acceptedPrSource": "/private/tmp/opf-author-navigation-acceptance-20260921/integration/pr54-merged.json",
+  "acceptedPrByteExactCopySha256": "a0604b354cc97e8b172c039965edbd5491d26e6e623ccc2d8507bef7aa55c251",
+  "premergeAudit": {
+    "path": "/private/tmp/opf-author-navigation-acceptance-20260921/ci",
+    "manifestSha256": "05ea0e9645bcbf72d3530f1297777a4f8bcb0aaf7a506d9183d43c556ed39caf",
+    "unchangedFilesVerified": 42
+  },
+  "fullMergeDeltaFiles": 729,
+  "pythonArtifactWorkflowMatchingPaths": [],
+  "artifactWorkflowGate": "not triggered/not applicable, not a fresh pass",
+  "scope": "Read-only accepted-tree and immutable prior-evidence equivalence; no postmerge acceptance result or deployment is inferred."
+}

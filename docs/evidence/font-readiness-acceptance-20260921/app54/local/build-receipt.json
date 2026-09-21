@@ -1,0 +1,14 @@
+{
+  "command": [
+    "fnm",
+    "exec",
+    "--using=24",
+    "node",
+    "/Users/michael/.npm/_npx/e06aaa83a075c17a/node_modules/pnpm/bin/pnpm.cjs",
+    "build"
+  ],
+  "startedAt": "2026-09-21T20:48:22.327091+00:00",
+  "finishedAt": "2026-09-21T20:48:42.197469+00:00",
+  "durationSeconds": 19.87022575,
+  "exitCode": 0
+}

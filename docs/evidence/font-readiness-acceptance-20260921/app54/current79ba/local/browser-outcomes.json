@@ -1,0 +1,894 @@
+{
+  "stats": {
+    "startTime": "2026-09-21T21:35:01.605Z",
+    "duration": 112780.048,
+    "expected": 39,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "cases": [
+    {
+      "file": "author-json-options.spec.ts",
+      "line": 72,
+      "title": "Author categorical choices include built-in, document and loaded catalogs with exact LF source undo/redo",
+      "ok": true,
+      "status": "expected",
+      "testTimeoutMs": 45000,
+      "result": {
+        "status": "passed",
+        "duration": 4281,
+        "retry": 0,
+        "startTime": "2026-09-21T21:35:01.984Z",
+        "errors": []
+      },
+      "attachments": [
+        {
+          "name": "trace",
+          "contentType": "application/zip",
+          "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/trace.zip"
+        }
+      ]
+    },
+    {
+      "file": "author-json-options.spec.ts",
+      "line": 72,
+      "title": "Author categorical choices include built-in, document and loaded catalogs with exact CRLF source undo/redo",
+      "ok": true,
+      "status": "expected",
+      "testTimeoutMs": 45000,
+      "result": {
+        "status": "passed",
+        "duration": 3835,
+        "retry": 0,
+        "startTime": "2026-09-21T21:35:06.827Z",
+        "errors": []
+      },
+      "attachments": [
+        {
+          "name": "trace",
+          "contentType": "application/zip",
+          "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/author-json-options-Author-cda0b-exact-CRLF-source-undo-redo/trace.zip"
+        }
+      ]
+    },
+    {
+      "file": "author.spec.ts",
+      "line": 26,
+      "title": "anonymous code editing preserves source and visible selection through offline export/reimport at 1280x720",
+      "ok": true,
+      "status": "expected",
+      "testTimeoutMs": 45000,
+      "result": {
+        "status": "passed",
+        "duration": 2960,
+        "retry": 0,
+        "startTime": "2026-09-21T21:35:10.950Z",
+        "errors": []
+      },
+      "attachments": [
+        {
+          "name": "trace",
+          "contentType": "application/zip",
+          "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/author-anonymous-code-edit-12484-export-reimport-at-1280x720/trace.zip"
+        }
+      ]
+    },
+    {
+      "file": "author.spec.ts",
+      "line": 26,
+      "title": "anonymous code editing preserves source and visible selection through offline export/reimport at 540x960",
+      "ok": true,
+      "status": "expected",
+      "testTimeoutMs": 45000,
+      "result": {
+        "status": "passed",
+        "duration": 2919,
+        "retry": 0,
+        "startTime": "2026-09-21T21:35:14.159Z",
+        "errors": []
+      },
+      "attachments": [
+        {
+          "name": "trace",
+          "contentType": "application/zip",
+          "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/author-anonymous-code-edit-3e561--export-reimport-at-540x960/trace.zip"
+        }
+      ]
+    },
+    {
+      "file": "author.spec.ts",
+      "line": 55,
+      "title": "anonymous Author canvas edits survive tab changes, offline PowerPoint export and undoable reimport",
+      "ok": true,
+      "status": "expected",
+      "testTimeoutMs": 45000,
+      "result": {
+        "status": "passed",
+        "duration": 3790,
+        "retry": 0,
+        "startTime": "2026-09-21T21:35:17.298Z",
+        "errors": []
+      },
+      "attachments": [
+        {
+          "name": "author-export.pptx",
+          "contentType": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+          "body": "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"
+        },
+        {
+          "name": "trace",
+          "contentType": "application/zip",
+          "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/author-anonymous-Author-ca-d560b-xport-and-undoable-reimport/trace.zip"
+        }
+      ]
+    },
+    {
+      "file": "completion-keyboard.spec.ts",
+      "line": 64,
+      "title": "Author Ctrl+Space retains popup details, exact source history and editor remount behavior",
+      "ok": true,
+      "status": "expected",
+      "testTimeoutMs": 45000,
+      "result": {
+        "status": "passed",
+        "duration": 2900,
+        "retry": 0,
+        "startTime": "2026-09-21T21:35:21.365Z",
+        "errors": []
+      },
+      "attachments": [
+        {
+          "name": "trace",
+          "contentType": "application/zip",
+          "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/completion-keyboard-Author-66da5-and-editor-remount-behavior/trace.zip"
+        }
+      ]
+    },
+    {
+      "file": "completion-keyboard.spec.ts",
+      "line": 126,
+      "title": "Author leaves Quick Input and modified Space keys with their original keyboard owners",
+      "ok": true,
+      "status": "expected",
+      "testTimeoutMs": 45000,
+      "result": {
+        "status": "passed",
+        "duration": 1829,
+        "retry": 0,
+        "startTime": "2026-09-21T21:35:24.504Z",
+        "errors": []
+      },
+      "attachments": [
+        {
+          "name": "trace",
+          "contentType": "application/zip",
+          "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/completion-keyboard-Author-93788-ir-original-keyboard-owners/trace.zip"
+        }
+      ]
+    },
+    {
+      "file": "completion-preservation.spec.ts",
+      "line": 113,
+      "title": "Author Title Subtitle completion preserves LF compact source in one undo step",
+      "ok": true,
+      "status": "expected",
+      "testTimeoutMs": 45000,
+      "result": {
+        "status": "passed",
+        "duration": 2322,
+        "retry": 0,
+        "startTime": "2026-09-21T21:35:26.550Z",
+        "errors": []
+      },
+      "attachments": [
+        {
+          "name": "trace",
+          "contentType": "application/zip",
+          "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/completion-preservation-Au-807ee-act-source-in-one-undo-step/trace.zip"
+        }
+      ]
+    },
+    {
+      "file": "completion-preservation.spec.ts",
+      "line": 113,
+      "title": "Author Text 2x completion preserves CRLF compact source in one undo step",
+      "ok": true,
+      "status": "expected",
+      "testTimeoutMs": 45000,
+      "result": {
+        "status": "passed",
+        "duration": 2338,
+        "retry": 0,
+        "startTime": "2026-09-21T21:35:29.107Z",
+        "errors": []
+      },
+      "attachments": [
+        {
+          "name": "trace",
+          "contentType": "application/zip",
+          "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/completion-preservation-Au-96e4e-act-source-in-one-undo-step/trace.zip"
+        }
+      ]
+    },
+    {
+      "file": "completion-preservation.spec.ts",
+      "line": 149,
+      "title": "Author escaped current value is not offered as an edit and leaves prior undo history intact",
+      "ok": true,
+      "status": "expected",
+      "testTimeoutMs": 45000,
+      "result": {
+        "status": "passed",
+        "duration": 2820,
+        "retry": 0,
+        "startTime": "2026-09-21T21:35:31.669Z",
+        "errors": []
+      },
+      "attachments": [
+        {
+          "name": "trace",
+          "contentType": "application/zip",
+          "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/completion-preservation-Au-b9e03-s-prior-undo-history-intact/trace.zip"
+        }
+      ]
+    },
+    {
+      "file": "completion-preservation.spec.ts",
+      "line": 178,
+      "title": "Author newer and invalid source dismiss stale choices and refresh inline catalogs",
+      "ok": true,
+      "status": "expected",
+      "testTimeoutMs": 45000,
+      "result": {
+        "status": "passed",
+        "duration": 3596,
+        "retry": 0,
+        "startTime": "2026-09-21T21:35:34.749Z",
+        "errors": []
+      },
+      "attachments": [
+        {
+          "name": "trace",
+          "contentType": "application/zip",
+          "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/completion-preservation-Au-aab6b-and-refresh-inline-catalogs/trace.zip"
+        }
+      ]
+    },
+    {
+      "file": "completion-preservation.spec.ts",
+      "line": 219,
+      "title": "Author format and document changes cancel the open completion without applying it",
+      "ok": true,
+      "status": "expected",
+      "testTimeoutMs": 45000,
+      "result": {
+        "status": "passed",
+        "duration": 2609,
+        "retry": 0,
+        "startTime": "2026-09-21T21:35:38.592Z",
+        "errors": []
+      },
+      "attachments": [
+        {
+          "name": "trace",
+          "contentType": "application/zip",
+          "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/completion-preservation-Au-e6715-pletion-without-applying-it/trace.zip"
+        }
+      ]
+    },
+    {
+      "file": "inspector-actions.spec.ts",
+      "line": 102,
+      "title": "Inspector Copy and JSON commit current drafts with exact source undo and unchanged-draft history",
+      "ok": true,
+      "status": "expected",
+      "testTimeoutMs": 45000,
+      "result": {
+        "status": "passed",
+        "duration": 2000,
+        "retry": 0,
+        "startTime": "2026-09-21T21:35:41.449Z",
+        "errors": []
+      },
+      "attachments": [
+        {
+          "name": "trace",
+          "contentType": "application/zip",
+          "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/inspector-actions-Inspecto-07c93-and-unchanged-draft-history/trace.zip"
+        }
+      ]
+    },
+    {
+      "file": "inspector-actions.spec.ts",
+      "line": 129,
+      "title": "Inspector Share and PPTX commit current drafts with matching payloads and filenames",
+      "ok": true,
+      "status": "expected",
+      "testTimeoutMs": 45000,
+      "result": {
+        "status": "passed",
+        "duration": 1837,
+        "retry": 0,
+        "startTime": "2026-09-21T21:35:43.698Z",
+        "errors": []
+      },
+      "attachments": [
+        {
+          "name": "trace",
+          "contentType": "application/zip",
+          "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/inspector-actions-Inspecto-36d82-hing-payloads-and-filenames/trace.zip"
+        }
+      ]
+    },
+    {
+      "file": "inspector-actions.spec.ts",
+      "line": 168,
+      "title": "Inspector Open in Author commits the current draft before handoff",
+      "ok": true,
+      "status": "expected",
+      "testTimeoutMs": 45000,
+      "result": {
+        "status": "passed",
+        "duration": 2066,
+        "retry": 0,
+        "startTime": "2026-09-21T21:35:45.784Z",
+        "errors": []
+      },
+      "attachments": [
+        {
+          "name": "trace",
+          "contentType": "application/zip",
+          "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/inspector-actions-Inspecto-ddffb-urrent-draft-before-handoff/trace.zip"
+        }
+      ]
+    },
+    {
+      "file": "inspector-actions.spec.ts",
+      "line": 191,
+      "title": "Inspector raw Copy allows malformed source and rejected drafts produce no JSON output",
+      "ok": true,
+      "status": "expected",
+      "testTimeoutMs": 45000,
+      "result": {
+        "status": "passed",
+        "duration": 1888,
+        "retry": 0,
+        "startTime": "2026-09-21T21:35:48.085Z",
+        "errors": []
+      },
+      "attachments": [
+        {
+          "name": "trace",
+          "contentType": "application/zip",
+          "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/inspector-actions-Inspecto-93924-afts-produce-no-JSON-output/trace.zip"
+        }
+      ]
+    },
+    {
+      "file": "inspector-actions.spec.ts",
+      "line": 225,
+      "title": "Inspector actions preserve the accepted raw buffer after CRLF source ingress",
+      "ok": true,
+      "status": "expected",
+      "testTimeoutMs": 45000,
+      "result": {
+        "status": "passed",
+        "duration": 1711,
+        "retry": 0,
+        "startTime": "2026-09-21T21:35:50.230Z",
+        "errors": []
+      },
+      "attachments": [
+        {
+          "name": "trace",
+          "contentType": "application/zip",
+          "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/inspector-actions-Inspecto-c6cfc-r-after-CRLF-source-ingress/trace.zip"
+        }
+      ]
+    },
+    {
+      "file": "inspector-actions.spec.ts",
+      "line": 252,
+      "title": "Inspector suppresses stale PDF 200 delivery or navigation after a new source",
+      "ok": true,
+      "status": "expected",
+      "testTimeoutMs": 45000,
+      "result": {
+        "status": "passed",
+        "duration": 1433,
+        "retry": 0,
+        "startTime": "2026-09-21T21:35:52.177Z",
+        "errors": []
+      },
+      "attachments": [
+        {
+          "name": "trace",
+          "contentType": "application/zip",
+          "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/inspector-actions-Inspecto-fb8b1-vigation-after-a-new-source/trace.zip"
+        }
+      ]
+    },
+    {
+      "file": "inspector-actions.spec.ts",
+      "line": 252,
+      "title": "Inspector suppresses stale PDF 401 delivery or navigation after a new source",
+      "ok": true,
+      "status": "expected",
+      "testTimeoutMs": 45000,
+      "result": {
+        "status": "passed",
+        "duration": 1420,
+        "retry": 0,
+        "startTime": "2026-09-21T21:35:53.830Z",
+        "errors": []
+      },
+      "attachments": [
+        {
+          "name": "trace",
+          "contentType": "application/zip",
+          "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/inspector-actions-Inspecto-667f5-vigation-after-a-new-source/trace.zip"
+        }
+      ]
+    },
+    {
+      "file": "inspector-actions.spec.ts",
+      "line": 284,
+      "title": "Inspector PDF payload/filename and Deckchat URL use committed current source with local mocks",
+      "ok": true,
+      "status": "expected",
+      "testTimeoutMs": 45000,
+      "result": {
+        "status": "passed",
+        "duration": 1275,
+        "retry": 0,
+        "startTime": "2026-09-21T21:35:55.475Z",
+        "errors": []
+      },
+      "attachments": [
+        {
+          "name": "trace",
+          "contentType": "application/zip",
+          "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/inspector-actions-Inspecto-13850-ent-source-with-local-mocks/trace.zip"
+        }
+      ]
+    },
+    {
+      "file": "inspector-editing.spec.ts",
+      "line": 40,
+      "title": "all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 1440px",
+      "ok": true,
+      "status": "expected",
+      "testTimeoutMs": 45000,
+      "result": {
+        "status": "passed",
+        "duration": 4061,
+        "retry": 0,
+        "startTime": "2026-09-21T21:35:56.973Z",
+        "errors": []
+      },
+      "attachments": [
+        {
+          "name": "trace",
+          "contentType": "application/zip",
+          "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/inspector-editing-all-Insp-15273-fline-undo-export-at-1440px/trace.zip"
+        }
+      ]
+    },
+    {
+      "file": "inspector-editing.spec.ts",
+      "line": 40,
+      "title": "all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 540px",
+      "ok": true,
+      "status": "expected",
+      "testTimeoutMs": 45000,
+      "result": {
+        "status": "passed",
+        "duration": 3926,
+        "retry": 0,
+        "startTime": "2026-09-21T21:36:01.372Z",
+        "errors": []
+      },
+      "attachments": [
+        {
+          "name": "trace",
+          "contentType": "application/zip",
+          "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/inspector-editing-all-Insp-a78d3-ffline-undo-export-at-540px/trace.zip"
+        }
+      ]
+    },
+    {
+      "file": "inspector-editing.spec.ts",
+      "line": 99,
+      "title": "invalid source keeps a renderer fallback and source recovery uses the current slide order",
+      "ok": true,
+      "status": "expected",
+      "testTimeoutMs": 45000,
+      "result": {
+        "status": "passed",
+        "duration": 1500,
+        "retry": 0,
+        "startTime": "2026-09-21T21:36:05.549Z",
+        "errors": []
+      },
+      "attachments": [
+        {
+          "name": "trace",
+          "contentType": "application/zip",
+          "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/inspector-editing-invalid--4da31-ses-the-current-slide-order/trace.zip"
+        }
+      ]
+    },
+    {
+      "file": "inspector-editing.spec.ts",
+      "line": 116,
+      "title": "shared navigation discards an ID-less draft even when the replacement title is identical",
+      "ok": true,
+      "status": "expected",
+      "testTimeoutMs": 45000,
+      "result": {
+        "status": "passed",
+        "duration": 1811,
+        "retry": 0,
+        "startTime": "2026-09-21T21:36:07.282Z",
+        "errors": []
+      },
+      "attachments": [
+        {
+          "name": "trace",
+          "contentType": "application/zip",
+          "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/inspector-editing-shared-n-98a03-lacement-title-is-identical/trace.zip"
+        }
+      ]
+    },
+    {
+      "file": "inspector-recovery.spec.ts",
+      "line": 18,
+      "title": "schema-valid strict overflow cancels an active draft and the same slide recovers after source correction",
+      "ok": true,
+      "status": "expected",
+      "testTimeoutMs": 45000,
+      "result": {
+        "status": "passed",
+        "duration": 1722,
+        "retry": 0,
+        "startTime": "2026-09-21T21:36:09.326Z",
+        "errors": []
+      },
+      "attachments": [
+        {
+          "name": "trace",
+          "contentType": "application/zip",
+          "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/inspector-recovery-schema--76507-ers-after-source-correction/trace.zip"
+        }
+      ]
+    },
+    {
+      "file": "inspector-recovery.spec.ts",
+      "line": 85,
+      "title": "font substitution notes remain accessible and operable while the Inspector canvas is active",
+      "ok": true,
+      "status": "expected",
+      "testTimeoutMs": 45000,
+      "result": {
+        "status": "passed",
+        "duration": 1222,
+        "retry": 0,
+        "startTime": "2026-09-21T21:36:11.291Z",
+        "errors": []
+      },
+      "attachments": [
+        {
+          "name": "trace",
+          "contentType": "application/zip",
+          "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/inspector-recovery-font-su-beb5b--Inspector-canvas-is-active/trace.zip"
+        }
+      ]
+    },
+    {
+      "file": "inspector-share-publication.spec.ts",
+      "line": 58,
+      "title": "Inspector hash publication and refresh retain the accepted document",
+      "ok": true,
+      "status": "expected",
+      "testTimeoutMs": 45000,
+      "result": {
+        "status": "passed",
+        "duration": 4283,
+        "retry": 0,
+        "startTime": "2026-09-21T21:36:12.726Z",
+        "errors": []
+      },
+      "attachments": [
+        {
+          "name": "trace",
+          "contentType": "application/zip",
+          "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/inspector-share-publicatio-33578-etain-the-accepted-document/trace.zip"
+        }
+      ]
+    },
+    {
+      "file": "inspector-share-publication.spec.ts",
+      "line": 58,
+      "title": "Inspector legacy import query publication and refresh retain the accepted document",
+      "ok": true,
+      "status": "expected",
+      "testTimeoutMs": 45000,
+      "result": {
+        "status": "passed",
+        "duration": 4400,
+        "retry": 0,
+        "startTime": "2026-09-21T21:36:17.280Z",
+        "errors": []
+      },
+      "attachments": [
+        {
+          "name": "trace",
+          "contentType": "application/zip",
+          "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/inspector-share-publicatio-2236b-etain-the-accepted-document/trace.zip"
+        }
+      ]
+    },
+    {
+      "file": "inspector.spec.ts",
+      "line": 20,
+      "title": "published long quotes retain their footer in actual wide/portrait previews and PowerPoint downloads",
+      "ok": true,
+      "status": "expected",
+      "testTimeoutMs": 45000,
+      "result": {
+        "status": "passed",
+        "duration": 2349,
+        "retry": 0,
+        "startTime": "2026-09-21T21:36:21.950Z",
+        "errors": []
+      },
+      "attachments": [
+        {
+          "name": "trace",
+          "contentType": "application/zip",
+          "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/inspector-published-long-q-fcc06-ws-and-PowerPoint-downloads/trace.zip"
+        }
+      ]
+    },
+    {
+      "file": "inspector.spec.ts",
+      "line": 76,
+      "title": "shared navigation clears format errors and proposals from the previous deck",
+      "ok": true,
+      "status": "expected",
+      "testTimeoutMs": 45000,
+      "result": {
+        "status": "passed",
+        "duration": 1170,
+        "retry": 0,
+        "startTime": "2026-09-21T21:36:24.529Z",
+        "errors": []
+      },
+      "attachments": [
+        {
+          "name": "trace",
+          "contentType": "application/zip",
+          "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/inspector-shared-navigatio-46dd3-sals-from-the-previous-deck/trace.zip"
+        }
+      ]
+    },
+    {
+      "file": "inspector.spec.ts",
+      "line": 118,
+      "title": "anonymous JSON authoring, preview, undo/redo, download and shared reimport",
+      "ok": true,
+      "status": "expected",
+      "testTimeoutMs": 45000,
+      "result": {
+        "status": "passed",
+        "duration": 1525,
+        "retry": 0,
+        "startTime": "2026-09-21T21:36:25.922Z",
+        "errors": []
+      },
+      "attachments": [
+        {
+          "name": "trace",
+          "contentType": "application/zip",
+          "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/inspector-anonymous-JSON-a-151ab-ownload-and-shared-reimport/trace.zip"
+        }
+      ]
+    },
+    {
+      "file": "json-paste-formatting.spec.ts",
+      "line": 53,
+      "title": "warm JSON worker leaves pasted source untouched while explicit Format Document remains undoable",
+      "ok": true,
+      "status": "expected",
+      "testTimeoutMs": 45000,
+      "result": {
+        "status": "passed",
+        "duration": 4058,
+        "retry": 0,
+        "startTime": "2026-09-21T21:36:27.687Z",
+        "errors": []
+      },
+      "attachments": [
+        {
+          "name": "authored-source.json",
+          "contentType": "application/json",
+          "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/json-paste-formatting-warm-44312-t-Document-remains-undoable/attachments/authored-source-json-0dc55fca9be904f709d76b0cf457000e6fc36539.json"
+        },
+        {
+          "name": "copied-source.json",
+          "contentType": "application/json",
+          "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/json-paste-formatting-warm-44312-t-Document-remains-undoable/attachments/copied-source-json-e07c319be3497c9e1497a55e288342ea8a1dec85.json"
+        },
+        {
+          "name": "paste-worker-requests.json",
+          "contentType": "application/json",
+          "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/json-paste-formatting-warm-44312-t-Document-remains-undoable/attachments/paste-worker-requests-json-fefbe745d332d1be5c94faeeaac00dc6c51e1bb1.json"
+        },
+        {
+          "name": "trace",
+          "contentType": "application/zip",
+          "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/json-paste-formatting-warm-44312-t-Document-remains-undoable/trace.zip"
+        }
+      ]
+    },
+    {
+      "file": "monaco.spec.ts",
+      "line": 3,
+      "title": "bundled JSON worker provides schema diagnostics, completion and recovery offline",
+      "ok": true,
+      "status": "expected",
+      "testTimeoutMs": 45000,
+      "result": {
+        "status": "passed",
+        "duration": 2109,
+        "retry": 0,
+        "startTime": "2026-09-21T21:36:32.055Z",
+        "errors": []
+      },
+      "attachments": [
+        {
+          "name": "trace",
+          "contentType": "application/zip",
+          "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/monaco-bundled-JSON-worker-5b20e-letion-and-recovery-offline/trace.zip"
+        }
+      ]
+    },
+    {
+      "file": "source-download-preservation.spec.ts",
+      "line": 90,
+      "title": "Author preserves exact LF source through preview copy, JSON download and canvas history",
+      "ok": true,
+      "status": "expected",
+      "testTimeoutMs": 45000,
+      "result": {
+        "status": "passed",
+        "duration": 5804,
+        "retry": 0,
+        "startTime": "2026-09-21T21:36:34.403Z",
+        "errors": []
+      },
+      "attachments": [
+        {
+          "name": "trace",
+          "contentType": "application/zip",
+          "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/source-download-preservati-5105f-download-and-canvas-history/trace.zip"
+        }
+      ]
+    },
+    {
+      "file": "source-download-preservation.spec.ts",
+      "line": 90,
+      "title": "Author preserves exact CRLF source through preview copy, JSON download and canvas history",
+      "ok": true,
+      "status": "expected",
+      "testTimeoutMs": 45000,
+      "result": {
+        "status": "passed",
+        "duration": 4157,
+        "retry": 0,
+        "startTime": "2026-09-21T21:36:40.541Z",
+        "errors": []
+      },
+      "attachments": [
+        {
+          "name": "trace",
+          "contentType": "application/zip",
+          "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/source-download-preservati-f4120-download-and-canvas-history/trace.zip"
+        }
+      ]
+    },
+    {
+      "file": "source-download-preservation.spec.ts",
+      "line": 218,
+      "title": "Inspector JSON files preserve exact authored LF bytes before edits and through canvas undo/redo",
+      "ok": true,
+      "status": "expected",
+      "testTimeoutMs": 45000,
+      "result": {
+        "status": "passed",
+        "duration": 3049,
+        "retry": 0,
+        "startTime": "2026-09-21T21:36:44.979Z",
+        "errors": []
+      },
+      "attachments": [
+        {
+          "name": "trace",
+          "contentType": "application/zip",
+          "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/source-download-preservati-2c728-nd-through-canvas-undo-redo/trace.zip"
+        }
+      ]
+    },
+    {
+      "file": "svg-security.spec.ts",
+      "line": 51,
+      "title": "published SVG renderer keeps hostile shared and imported document strings inert",
+      "ok": true,
+      "status": "expected",
+      "testTimeoutMs": 45000,
+      "result": {
+        "status": "passed",
+        "duration": 1881,
+        "retry": 0,
+        "startTime": "2026-09-21T21:36:48.319Z",
+        "errors": []
+      },
+      "attachments": [
+        {
+          "name": "trace",
+          "contentType": "application/zip",
+          "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/svg-security-published-SVG-25408-rted-document-strings-inert/trace.zip"
+        }
+      ]
+    },
+    {
+      "file": "toolkit.spec.ts",
+      "line": 4,
+      "title": "public toolkit shows the deployed package set with working render, edit and export proofs",
+      "ok": true,
+      "status": "expected",
+      "testTimeoutMs": 45000,
+      "result": {
+        "status": "passed",
+        "duration": 109,
+        "retry": 0,
+        "startTime": "2026-09-21T21:36:50.424Z",
+        "errors": []
+      },
+      "attachments": [
+        {
+          "name": "trace",
+          "contentType": "application/zip",
+          "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/toolkit-public-toolkit-sho-6cd46-nder-edit-and-export-proofs/trace.zip"
+        }
+      ]
+    },
+    {
+      "file": "yaml.spec.ts",
+      "line": 4,
+      "title": "YAML and Markdown editing preserve OPF values and recover from malformed YAML offline",
+      "ok": true,
+      "status": "expected",
+      "testTimeoutMs": 45000,
+      "result": {
+        "status": "passed",
+        "duration": 3473,
+        "retry": 0,
+        "startTime": "2026-09-21T21:36:50.543Z",
+        "errors": []
+      },
+      "attachments": [
+        {
+          "name": "trace",
+          "contentType": "application/zip",
+          "path": "/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results/yaml-YAML-and-Markdown-edi-18ed4-from-malformed-YAML-offline/trace.zip"
+        }
+      ]
+    }
+  ],
+  "exit": 0,
+  "allOriginalSemanticAndClipboardAssertionsPreserved": true,
+  "prospectiveNavigationPolicy": "Full-document navigation wait load in unchanged45s test; original5s content assertions remain.",
+  "scope": "Local macOS configured Chromium run only; original a4ebWindows failure remains failed and fresh platformCI remains required."
+}

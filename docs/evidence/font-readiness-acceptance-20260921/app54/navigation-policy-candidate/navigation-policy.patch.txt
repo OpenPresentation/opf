@@ -1,0 +1,18 @@
+diff --git a/tests/e2e/inspector-actions.spec.ts b/tests/e2e/inspector-actions.spec.ts
+index c2da705..ce603af 100644
+--- a/tests/e2e/inspector-actions.spec.ts
++++ b/tests/e2e/inspector-actions.spec.ts
+@@ -172,7 +172,12 @@ test("Inspector Open in Author commits the current draft before handoff", async
+   await ready(page);
+   await draft(page, "Author commits this draft");
+   await page.screenshot({ path: test.info().outputPath("inspector-pending-action.png"), fullPage: true });
+-  await menuAction(page, "Open in Author", true);
++  // Full-document navigation uses the same load wait as page.goto, within the
++  // unchanged 45s test budget; content assertions retain their default 5s limit.
++  await Promise.all([
++    page.waitForURL(/\/author#opf=/, { waitUntil: "load" }),
++    menuAction(page, "Open in Author", true),
++  ]);
+   await expect(page).toHaveURL(/\/author#opf=/);
+   expect(sourceAtUrl(page.url())).toEqual(JSON.parse(changedTitle("Author commits this draft")));
+   await expect(page.getByRole("button", { name: /^(copy|copied)$/i })).toBeVisible();

@@ -1,0 +1,31 @@
+# Canonical App54 write-boundary audit
+
+The original canonical run remains **34/39 passed, 5 failed, zero flaky outcomes**. All five failures are the strict network-write assertions. This audit does not turn that failed gate into acceptance.
+
+The five saved traces record ten write-method requests, all POSTs to the Clerk host `trusted-weevil-84.clerk.accounts.dev`, path `/v1/environment`. Nine have HTTP 200 responses and recorded request `Content-Length: 0`; one is an incomplete record with status −1 and no captured content length. Status −1 is not an HTTP error. No request has captured `postData`, and no application API write appears among these requests.
+
+No authored fixture name, filename, title, slide ID, text or notes needle matched the captured request fields, their URL-decoded form, or decodable JWT payloads. Nine requests therefore have affirmative evidence of empty request bodies; the incomplete request has weaker visibility. This bounded scan cannot prove what uncaptured or opaque data contains. Cookie headers were present on the nine completed requests. Every query value, token, cookie value, header value and response body is excluded from the derived artifacts.
+
+## Assertion boundaries
+
+| Failed case | Checks reached and passed before the write assertion | Not reached |
+| --- | --- | --- |
+| Copy / JSON | Current-draft exact source, filename, Undo/Redo and unchanged-draft history | Final page-error assertion, line 126 |
+| Share / PPTX | Current Share payload, legacy import removal, query retention, current PPTX filename and edited title on reimport, Copy and Undo | Final page-error assertion, line 165 |
+| Open in Author | Navigation, current URL payload, visible Author Copy and semantic clipboard equality | Final page-error assertion, line 188 |
+| Hash publication / refresh | Initial, edited and replacement document publication, two refreshes, semantic equality, page-error assertion | Final screenshot, line 116 |
+| Legacy import publication / refresh | Same semantic checks plus obsolete import removal and query retention, page-error assertion | Final screenshot, line 116 |
+
+The three action tests collect all POST URLs; the share tests collect all methods other than GET/HEAD. Their failed lines are respectively 125, 164, 187 and 115 in the two share cases. Earlier transient checks inside `expect.poll` are not additional final failures. Exact source paths and boundaries are retained in `failure-boundaries.json`.
+
+## Source comparison and decision limits
+
+Comparing previous app commit `e40c287b64fcbcfb85fb4a8a50641aea8e3e54a8` with accepted App54 `8f54228a9e38a1dcc0bf8188bcdd519795b3799a`, 28 of 29 scoped authentication/provider/layout/config/lock files are byte-identical. Only `package.json` changes, and only its build/start/test scripts. Runtime and development dependencies and the lockfile are unchanged. This includes the Clerk providers, proxy, Author route and Author shell. Full hashes and scope are in `source-comparison.json`.
+
+These observations provide no evidence of an introduced authored-content upload regression requiring rollback. They do not prove that the previous production deployment made the same requests, establish identical runtime configuration or SDK/backend behavior, identify causality, or approve a relaxation of the no-write policy. Release acceptance remains open. Three cases also lack their final page-error assertion; this audit does not claim that assertion passed.
+
+## Provenance and privacy
+
+This is a read-only analysis of the original saved run under `/private/tmp/opf-inspector-actions-canonical-20260921/navigation-policy`. No browser, network probe, test rerun, product change or request replay was performed. Original trace ZIP CRC checks passed, and all 14 inspected original files retained their original hashes after analysis.
+
+`private-artifact-hashes.json` identifies the original five traces, five error contexts, browser log, reporter, deployment-before receipt and source-before inventory by absolute private path, byte count and SHA-256. Raw traces, logs, error contexts and the reporter remain private and are not copied into this bundle or any repository. `request-metadata.json` retains only endpoint host/path, query names, safe transport metadata and boolean/label scan results. `create-audit.py` records the bounded analysis without retaining captured request values. The bundle manifest binds all derived artifacts.
