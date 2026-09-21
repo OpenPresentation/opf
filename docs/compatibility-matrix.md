@@ -63,6 +63,7 @@ master). Native Header/Footer work remains [issue 87](https://github.com/OpenPre
 ## Public sites
 
 The current source, CI and canonical production results are recorded in the
+[Inspector publication checkpoint](evidence/inspector-share-acceptance-20260921/README.md),
 [source-preservation checkpoint](evidence/author-source-acceptance-20260921/README.md),
 [completion checkpoint](evidence/completion-acceptance-20260921/README.md),
 [earlier acceptance ledger](evidence/issue88-final-20260921/README.md) and
@@ -77,9 +78,13 @@ acceptance are separate claims.
 | [pptx.gallery](https://www.pptx.gallery) `/docs`, `/editor` and gallery pages | Published ColorRef/bundle guidance, Playground and Editor actions, and the canonical docs-to-editor flow are verified. | `f17e9ae5869669d5fbac3720f285652d0c37551c` |
 
 The site uses documentation source `120a770`, whose tree matches accepted core
-PR98 commit `b1ff81db6f8714b0db1a98bde482ed8a64d0ccc9`. Core PR93/97/98/99/100 passed
-pre-merge and post-merge CI; the [core100 receipt](evidence/author-source-acceptance-20260921/core100/release-receipt.json)
-pins the accepted documentation checkpoint. The site's complete guides and raw resources match
+PR98 commit `b1ff81db6f8714b0db1a98bde482ed8a64d0ccc9`. Core PR93/97/98/99/100/102 passed
+pre-merge and post-merge CI. Accepted core102 is
+`578bcc6e0894129b00059258bd4ad1994a414baa`; its reviewed and accepted trees match,
+and all four required pre/post-merge runs passed on their first attempts. The
+[core102 receipts](evidence/inspector-share-acceptance-20260921/README.md#accepted-core102)
+pin this documentation checkpoint without changing the site's older accepted
+documentation snapshot. The site's complete guides and raw resources match
 the reviewed source; binary evidence remains linked and downloadable without
 being decoded into the AI-facing guide.
 
@@ -112,11 +117,39 @@ only Author timings survived; the Inspector pagehide snapshot is missing. This
 does not explain or fix the old readiness delay. Phase4
 captured no post-fix stale-context overlap, so causal stress is inconclusive.
 The existing suggestion-details pane remains clipped; visibility is not legibility.
-The [postmerge trace diagnosis](evidence/author-source-acceptance-20260921/inspector-share-diagnosis/REPORT.md) also proves wrong-document automatic share-hash publication during import; a separate source-bound guard is not yet released. Separate local negative controls confirm that preset Undo all discards New run
+The [postmerge trace diagnosis](evidence/author-source-acceptance-20260921/inspector-share-diagnosis/REPORT.md) also proves wrong-document automatic share-hash publication during import; [App54](https://github.com/Data-Advantage/pptx-dev/pull/54) is the unreleased
+correction at `60c91f6b97c75636f533202f4112e09dc01144e4`, tree
+`b317179a899e97740003b4195b7172f7d3d6d8b2`. Automatic publication validates the
+current source/format before and after encoding, retains navigation/load guards,
+and removes the obsolete reserved import query so refresh uses the new fragment.
+URL transfer preserves document semantics, not original whitespace or spelling.
+Fresh local checks pass **659 unit tests**, focused **3/3** browser cases and
+full **31/31** in **97.035744 seconds**, zero retries, with independent source and
+screenshot review. Browser transitions permit the preceding accepted document
+until the new publication; held-promise controls cover the narrower asynchronous
+source race. Security assertions and timeout budgets remain unchanged.
+First-attempt application CI **35638158483 failed**: Linux **31/31**, Windows
+**30/31**, with **659 unit tests** passing on each platform under Node24.20.0.
+Both new share-publication cases passed on both platforms. The original
+45-second SVG-security deadline expired waiting for Author Preview after
+31.400 seconds of Author navigation; a 1,490-byte decoded local script took
+30.026 seconds. The [frozen diagnosis](evidence/inspector-share-acceptance-20260921/app54/windows-timeout/REPORT.md)
+records bounded delivery observations, not an established scheduling cause.
+Inspector security checks passed before navigation; late Author assertions do
+not count as an in-budget pass. App54 is held and unmerged. Artifact compatibility
+was not applicable or triggered, not a fresh pass.
+Exact-head preview `dpl_Atu9SsSsLY8hPAZJ6RPNx91pKA31` is READY with target null and
+has no browser acceptance. Production deployment/acceptance and post-merge CI
+remain pending behind the failed application gate. See the
+[current App54 ledger](evidence/inspector-share-acceptance-20260921/README.md)
+and its immutable application evidence. Explicit toolbar Share, export and
+Author handoff freshness remain outside this automatic-publication correction.
+
+Separate local negative controls confirm that preset Undo all discards New run
 and imported replacement documents; ordinary-edit Undo remains untested after a
 raw-buffer precondition failure. Local author/filename/gallery/preset writers
 still serialize source. These unresolved local findings and raw imported-file/account/agent/metadata boundaries remain outside
-App53. See the [current ledger](evidence/author-source-acceptance-20260921/README.md)
+App53 and App54. See the [App53 ledger](evidence/author-source-acceptance-20260921/README.md)
 and its immutable application evidence links. Issue88 remains OPEN. Native/font
 compatibility, required repair, geometry and release gates remain separate; the
 unimplemented worker candidate remains in the [handoff](handoff-2026-09-21.md).

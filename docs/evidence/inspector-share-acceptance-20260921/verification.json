@@ -1,0 +1,26 @@
+{
+  "verifiedAt": "2026-09-21T18:48:35.964328+00:00",
+  "baseCommit": "578bcc6e0894129b00059258bd4ad1994a414baa",
+  "branch": "codex/inspector-share-handoff-20260921",
+  "scope": "Uncommitted prepared documentation checkpoint; no product or historical-evidence mutation.",
+  "exactCopiesVerified": 46,
+  "priorEvidenceFilesUnchanged": 10562,
+  "priorEvidenceMethod": "Recompute Git blob object SHA-1 from exact file bytes and compare to git ls-tree -r HEAD docs/evidence.",
+  "textIntegrity": {
+    "command": "Node24.21.0 scripts/check-text-integrity.mjs",
+    "passed": true,
+    "textFilesAtCheck": 4130,
+    "binaryImages": 6692,
+    "binaryDocuments": 515,
+    "binaryFonts": 43,
+    "compressedText": 81
+  },
+  "whitespaceCheck": "git diff --check and each new file passed; sole copied PR-body exception preserves generated blockquote trailing spaces.",
+  "obviousCredentialPatternScan": "No GitHub token, bearer token or private-key markers in newly copied/derived text. This is a bounded pattern review, not a credential guarantee.",
+  "app54ReleaseGates": "Application CI35638158483 failed attempt1; Linux31/31 and Windows30/31, 659unit each. Held/unmerged. No rerun, production request or external mutation by this task.",
+  "unchangedInputs": "Package pins, release plan, runtime files, tests, examples, goldens and previous evidence unchanged.",
+  "relativeMarkdownLinksChecked": 96,
+  "nestedDiagnosisFilesVerified": 10,
+  "newEvidenceTextAttribute": "unset for every file; literal bytes retained",
+  "externalStatus": "PR54 OPEN at reviewed60c91f6; issue88 OPEN. Exact parent status receipts copied; no external mutation by this task."
+}

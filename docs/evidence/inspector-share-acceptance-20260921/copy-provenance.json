@@ -1,0 +1,401 @@
+{
+  "createdAt": "2026-09-21T18:31:45.422391+00:00",
+  "scope": "Compact documentation checkpoint. Exact copies retain original observation times. App54 first-attempt CI receipts supersede its earlier running snapshot. All ten frozen Windows diagnostic files are copied byte-for-byte; raw private ZIPs/traces, full CI logs, screenshots and redundant inventories remain at recorded provenance paths.",
+  "copied": [
+    {
+      "source": "/private/tmp/opf-author-source-handoff-20260921/merge-receipt.json",
+      "destination": "core102/merge-receipt.json",
+      "bytes": 391,
+      "sha256": "e0128ff5696ae0508d086376a0cdfeb9a85fa8d7b7b9ba0dbfc5239993deef95",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-author-source-handoff-20260921/merged-pr102.json",
+      "destination": "core102/merged-pr102.json",
+      "bytes": 244,
+      "sha256": "1bb064d28c437f953b5bac46cce235ff3540e757cf1b682d9fb7004f87617f6d",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-author-source-handoff-20260921/ci/release-audit.json",
+      "destination": "core102/premerge/release-audit.json",
+      "bytes": 2025,
+      "sha256": "a998771935157eb88b06286b07ba8b74e51c988fffcd2f499da9d60fb730f0c0",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-author-source-handoff-20260921/ci/opf-final.json",
+      "destination": "core102/premerge/opf-final.json",
+      "bytes": 375,
+      "sha256": "da23fe6ffbb9ff78e23292691e2f05e496c73008be3ff71d3ab33ee747cb2076",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-author-source-handoff-20260921/ci/coordinated-final.json",
+      "destination": "core102/premerge/coordinated-final.json",
+      "bytes": 396,
+      "sha256": "ac38efce10f032715281cfb99ef4c353ed659aeab6c66c2cde901a90f4aa90b2",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-author-source-handoff-20260921/ci/opf-jobs-final.json",
+      "destination": "core102/premerge/opf-jobs-final.json",
+      "bytes": 3246,
+      "sha256": "94856cab59d7cbee605064b8440d8deecadee9386a8ff8bb148f74add304ab6c",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-author-source-handoff-20260921/ci/coordinated-jobs-final.json",
+      "destination": "core102/premerge/coordinated-jobs-final.json",
+      "bytes": 5351,
+      "sha256": "afee32dc5f16d3df9fa667af948bf5a00802913f6e5a740cf164192b6fc8fb0a",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-author-source-handoff-20260921/ci-postmerge/release-audit.json",
+      "destination": "core102/postmerge/release-audit.json",
+      "bytes": 1756,
+      "sha256": "50f04e7f27e72f567bf8de416c4e8a8bb3c85df537e0c1032ea564c03b2c2b3d",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-author-source-handoff-20260921/ci-postmerge/opf-final.json",
+      "destination": "core102/postmerge/opf-final.json",
+      "bytes": 335,
+      "sha256": "4b5f5910b6ee255635262c804b9282fac21bd704626315032cb6f1b95eae6470",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-author-source-handoff-20260921/ci-postmerge/coordinated-final.json",
+      "destination": "core102/postmerge/coordinated-final.json",
+      "bytes": 356,
+      "sha256": "9b7d55c449959fdc13a62177cde0793a5cfec3e4fc58174126a7b8a0f3df13b3",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-author-source-handoff-20260921/ci-postmerge/opf-jobs-final.json",
+      "destination": "core102/postmerge/opf-jobs-final.json",
+      "bytes": 3246,
+      "sha256": "72c32629a0c095f5b8a6203f5b4cbc190eafc1223ceef650ae924f6266f9071b",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-author-source-handoff-20260921/ci-postmerge/coordinated-jobs-final.json",
+      "destination": "core102/postmerge/coordinated-jobs-final.json",
+      "bytes": 5351,
+      "sha256": "844342e888bad55d56e72a126bc89f0405cc0575e70f06f8cf4b811ae8a41d36",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-inspector-share-guard-20260921/pr54.json",
+      "destination": "app54/pr54.json",
+      "bytes": 1318,
+      "sha256": "22c7f52add2e2ea059fd2a2fc0fdf94cd9a51599d3c405602714d32cb1fdf8ad",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-inspector-share-guard-20260921/preview.json",
+      "destination": "app54/preview.json",
+      "bytes": 410,
+      "sha256": "7cc6fada1ed280ee0e51149729888c4edaa80268e14084e88de123032d515764",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-inspector-share-guard-20260921/commit-receipt.json",
+      "destination": "app54/commit-receipt.json",
+      "bytes": 290,
+      "sha256": "28f3492be23b48eec0f2f5ad94101fac896ceeeb4d92e5fbcaa215ca533a6268",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-inspector-share-guard-20260921/validation-summary.json",
+      "destination": "app54/validation-summary.json",
+      "bytes": 494,
+      "sha256": "aa22d366d573680be438b7314101539f1c250e3ff33f06e94fc25913817e07f4",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-inspector-share-guard-20260921/pptx-dev/docs/evidence/inspector-share-publication-20260921/product/lint-comparison-reviewed.json",
+      "destination": "app54/lint-comparison-reviewed.json",
+      "bytes": 643,
+      "sha256": "f90c01fef34ffcf13673fee0a7e7212105ca2cf628b3d9dd0129c8a14addd557",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-inspector-share-guard-20260921/ci/release-audit.json",
+      "destination": "app54/ci/release-audit.json",
+      "bytes": 1820,
+      "sha256": "fac69eedbd8d9dd522a14fb9f64d263931c268ee452eafa5997bfa81e2ffe567",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-inspector-share-guard-20260921/ci/application-final.json",
+      "destination": "app54/ci/application-final.json",
+      "bytes": 397,
+      "sha256": "54db45e289031b087e28c88a84b6bcd7bffec3080e69f3925570e750faad2844",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-inspector-share-guard-20260921/ci/application-jobs-final.json",
+      "destination": "app54/ci/application-jobs-final.json",
+      "bytes": 6882,
+      "sha256": "3fd5f2e6325cd9ff7a54a876a00c382d62e355d5f50bc31475f2188055fb12ec",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-inspector-share-guard-20260921/ci/browser-results.json",
+      "destination": "app54/ci/browser-results.json",
+      "bytes": 14983,
+      "sha256": "70a8f9b87d6d790a2dc102ebe3328232b1ce12667b9f069a536df2c4e68275f8",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-inspector-share-guard-20260921/ci/artifact-download-checks.json",
+      "destination": "app54/ci/artifact-download-checks.json",
+      "bytes": 9114,
+      "sha256": "bbfe09cd5e7605e7e0478a2370a9655c25c14ac8ab7f56080abbe1cae24818d1",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-inspector-share-guard-20260921/ci/artifacts-final.json",
+      "destination": "app54/ci/artifacts-final.json",
+      "bytes": 940,
+      "sha256": "71cf0ababcae81f2f542cd3aedfc8b756b956630167a7f1936bf70ef605f32b2",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-inspector-share-guard-20260921/ci/windows-failure-facts.json",
+      "destination": "app54/ci/windows-failure-facts.json",
+      "bytes": 892,
+      "sha256": "c4fd23adbf9782a22434165730901412430a26a821f7fd4899e74ebcf6ccd957",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-inspector-share-guard-20260921/ci/windows-timing-summary.json",
+      "destination": "app54/ci/windows-timing-summary.json",
+      "bytes": 3083,
+      "sha256": "a966d6c8c36a32dbe29a70a95e4c21fdd7892bae67d311025aa9313d019d1136",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-inspector-share-guard-20260921/ci/pr-final.json",
+      "destination": "app54/ci/pr-final.json",
+      "bytes": 1340,
+      "sha256": "cbf2d5c80ca7392d90c565a3f5a79949aa9a9eb4b99f358d8520d0c2f0a176d0",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-inspector-share-guard-20260921/ci/remote-head.json",
+      "destination": "app54/ci/remote-head.json",
+      "bytes": 156,
+      "sha256": "cafd40487d018b8a2f1d2ac6328151ac4a56a8c76b6e2c98b0c0d17eda34867e",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-inspector-share-guard-20260921/ci/runs-final.json",
+      "destination": "app54/ci/runs-final.json",
+      "bytes": 380,
+      "sha256": "4acaeba76acaaa7779f564f677856efd569804729743f15a9da9afe5cac90b51",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-inspector-share-guard-20260921/ci/automated-review.json",
+      "destination": "app54/ci/automated-review.json",
+      "bytes": 395,
+      "sha256": "2c703bc0bba0f7b85cea7b546ae6ee64dbe321b7ab63cd45162b23856570c609",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-inspector-share-guard-20260921/ci/artifact-workflow.yml.txt",
+      "destination": "app54/ci/artifact-workflow.yml.txt",
+      "bytes": 1665,
+      "sha256": "2736d7f87a5ae3fdb5b994d6a750d1c369f140e47b869a041c8671d62209b789",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-inspector-share-guard-20260921/ci/committed-source-audit.json",
+      "destination": "app54/ci/committed-source-audit.json",
+      "bytes": 11100,
+      "sha256": "78817c168a10c78693675e2d43ec4b11713c71a7e9fbba7bef2a1691e66be588",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-inspector-share-guard-20260921/ci/ci-excerpt.log",
+      "destination": "app54/ci/ci-excerpt.log",
+      "bytes": 11886,
+      "sha256": "dcf10e2fd5587ff0c481553989b9af250fffba25be9e2dffcc632a994d400685",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-app54-windows-timeout-20260921/REPORT.md",
+      "destination": "app54/windows-timeout/REPORT.md",
+      "bytes": 8287,
+      "sha256": "196d1bb4c4f197e17d1554afea983a76938c96d412b7130a91c4d0b8015871a5",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-app54-windows-timeout-20260921/SHA256SUMS.json",
+      "destination": "app54/windows-timeout/SHA256SUMS.json",
+      "bytes": 1572,
+      "sha256": "a8b42d495db7f231bb1b6d6d8d27b7d44fa5c8767c97e40186b2bc5548172943",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-app54-windows-timeout-20260921/error-context.md",
+      "destination": "app54/windows-timeout/error-context.md",
+      "bytes": 8538,
+      "sha256": "669c9d26e636e60ef5ce881afd924cf3df304ee0fc541c48c77a36126b15ba5e",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-app54-windows-timeout-20260921/extract.py",
+      "destination": "app54/windows-timeout/extract.py",
+      "bytes": 3727,
+      "sha256": "06f3a1292033924216498784b80a9365b2f26682fd2c9b4690b8a56f74448cd1",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-app54-windows-timeout-20260921/identities.json",
+      "destination": "app54/windows-timeout/identities.json",
+      "bytes": 3215,
+      "sha256": "d3beeae99a28ebe301a21bc4660eb3e7082fa0a54dd5c1216fc505fca423eaaa",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-app54-windows-timeout-20260921/preview-click-and-hook-events.json",
+      "destination": "app54/windows-timeout/preview-click-and-hook-events.json",
+      "bytes": 290271,
+      "sha256": "d9358a3f9d24619b9dcb17a282b806ebceab0b283e7d744303d1d298681ce8e6",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-app54-windows-timeout-20260921/selected-network-records.json",
+      "destination": "app54/windows-timeout/selected-network-records.json",
+      "bytes": 8737,
+      "sha256": "71b4c2b1402b41877da61fe35c20c1df52a186fc2efde505163ce56445671295",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-app54-windows-timeout-20260921/test-timeline.json",
+      "destination": "app54/windows-timeout/test-timeline.json",
+      "bytes": 32646,
+      "sha256": "866693d0fd15cf0274646cb42588285f6a0b398917b144aee80f683d4bf31e07",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-app54-windows-timeout-20260921/timing-summary.json",
+      "destination": "app54/windows-timeout/timing-summary.json",
+      "bytes": 8278,
+      "sha256": "8f35565faed06368f78405f4b436d2a2faa7b0c4dacc337c681efa08a386939f",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-app54-windows-timeout-20260921/windows-readiness-timings.json",
+      "destination": "app54/windows-timeout/windows-readiness-timings.json",
+      "bytes": 65248,
+      "sha256": "12326969c50722e36d2000b297c6b17077459435298368c3b279749ecd6bde3b",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-inspector-share-guard-20260921/pr54-held-description.md",
+      "destination": "app54/status/pr54-held-description.md",
+      "bytes": 4587,
+      "sha256": "5941b71c6303906cf4696846d127656f9ab8162c09660ea02e1c15e862dea260",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-inspector-share-guard-20260921/pr54-held-description.json",
+      "destination": "app54/status/pr54-held-description.json",
+      "bytes": 4770,
+      "sha256": "cd92633ba0cb11a286ead03f314469691e1607f2eb090fc713eaf36b099703bb",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-inspector-share-guard-20260921/issue88-app54-held-update.md",
+      "destination": "app54/status/issue88-app54-held-update.md",
+      "bytes": 9352,
+      "sha256": "a4bcb5182c026b6f45ee85f592da8199ad177bd031c7c0449a0a0e6b456df5c5",
+      "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-inspector-share-guard-20260921/issue88-app54-held-updated.json",
+      "destination": "app54/status/issue88-app54-held-updated.json",
+      "bytes": 9468,
+      "sha256": "ed36a627286792d220aeccd89774bb5dc7f91a901c91a77bdef65cf7568f1cc4",
+      "method": "byte-for-byte copy"
+    }
+  ],
+  "referencedWithoutCopy": [
+    {
+      "source": "/private/tmp/opf-author-source-handoff-20260921/ci/REPORT.md",
+      "bytes": 3484,
+      "sha256": "3ac15cf8dfd67753e6744ed49668bea4a4ba4c2683fdd56b6faa83b420bba3e3",
+      "copied": false,
+      "immutableApplicationUrl": null
+    },
+    {
+      "source": "/private/tmp/opf-author-source-handoff-20260921/ci-postmerge/REPORT.md",
+      "bytes": 3233,
+      "sha256": "5ad2fb975790f2444c7d963080f5dae52ecb6ca05a73799d19165d80c2cb3f5a",
+      "copied": false,
+      "immutableApplicationUrl": null
+    },
+    {
+      "source": "/private/tmp/opf-author-source-handoff-20260921/ci/committed-evidence-verification.json",
+      "bytes": 42225,
+      "sha256": "8cd1e220d170a7c3a450b41a0d39b6e06db38c0def8c804cc08961801d8eee56",
+      "copied": false,
+      "immutableApplicationUrl": null
+    },
+    {
+      "source": "/private/tmp/opf-author-source-handoff-20260921/ci-postmerge/accepted-source-verification.json",
+      "bytes": 37616,
+      "sha256": "04182b9156b6298003cdee8a479087cc474ef484ee9444f092bc4c1d75321258",
+      "copied": false,
+      "immutableApplicationUrl": null
+    },
+    {
+      "source": "/private/tmp/opf-inspector-share-guard-20260921/browser-review/REVIEW.md",
+      "bytes": 4394,
+      "sha256": "7855d8137e5b024a78a9ed361c055f8d1cc75f9d0c7df69fa23406fee4575ddb",
+      "copied": false,
+      "immutableApplicationUrl": "https://github.com/Data-Advantage/pptx-dev/blob/60c91f6b97c75636f533202f4112e09dc01144e4/docs/evidence/inspector-share-publication-20260921/browser-review/REVIEW.md"
+    },
+    {
+      "source": "/private/tmp/opf-inspector-share-guard-20260921/browser-review/outcomes.json",
+      "bytes": 32865,
+      "sha256": "3976a2c49cee72a68af79109269deaeb0b99378fc4bccce9b932a680a4ac05dd",
+      "copied": false,
+      "immutableApplicationUrl": "https://github.com/Data-Advantage/pptx-dev/blob/60c91f6b97c75636f533202f4112e09dc01144e4/docs/evidence/inspector-share-publication-20260921/browser-review/outcomes.json"
+    },
+    {
+      "source": "/private/tmp/opf-inspector-share-guard-20260921/browser-review/SHA256SUMS",
+      "bytes": 599,
+      "sha256": "5a7023e920c11c37333de89fe0263261c04981a5f3689a1f85016b1e3a63b143",
+      "copied": false,
+      "immutableApplicationUrl": "https://github.com/Data-Advantage/pptx-dev/blob/60c91f6b97c75636f533202f4112e09dc01144e4/docs/evidence/inspector-share-publication-20260921/browser-review/SHA256SUMS"
+    },
+    {
+      "source": "/private/tmp/opf-inspector-share-guard-20260921/pptx-dev/docs/evidence/inspector-share-publication-20260921/SHA256SUMS.json",
+      "bytes": 15668,
+      "sha256": "66dfcea2b2afa74ca6505138f5e494fe79e3e2caa1fc444b7050febdadfd1599",
+      "copied": false,
+      "immutableApplicationUrl": "https://github.com/Data-Advantage/pptx-dev/blob/60c91f6b97c75636f533202f4112e09dc01144e4/docs/evidence/inspector-share-publication-20260921/SHA256SUMS.json"
+    },
+    {
+      "source": "/private/tmp/opf-inspector-share-guard-20260921/ci/REPORT.md",
+      "bytes": 5759,
+      "sha256": "d51ba28c5a23c7bfcf8dd4e75734ec4092b5ee91e14810037d552490b1e76443",
+      "copied": false,
+      "immutableApplicationUrl": null
+    },
+    {
+      "source": "/private/tmp/opf-inspector-share-guard-20260921/ci/SHA256SUMS.json",
+      "bytes": 18489,
+      "sha256": "607c5e48067414c0604f917d8671077573f22c27ed4fcfabfa4f924584c20560",
+      "copied": false,
+      "immutableApplicationUrl": null
+    }
+  ],
+  "updatedAt": "2026-09-21T18:47:31.793842+00:00"
+}

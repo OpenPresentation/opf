@@ -1,0 +1,107 @@
+{
+  "core": {
+    "pr": 102,
+    "acceptedHead": "578bcc6e0894129b00059258bd4ad1994a414baa",
+    "reviewedHead": "e746dee147ec4d3d0eef69e22e7e1d3f48b6346a",
+    "tree": "2de778c56a9d4afcc686830a39b881d147a1f4ee",
+    "reviewedTreeEqual": true,
+    "premerge": "passed first attempt",
+    "postmerge": "passed first attempt",
+    "packagePublication": false
+  },
+  "application": {
+    "pr": 54,
+    "head": "60c91f6b97c75636f533202f4112e09dc01144e4",
+    "tree": "b317179a899e97740003b4195b7172f7d3d6d8b2",
+    "base": "e40c287b64fcbcfb85fb4a8a50641aea8e3e54a8",
+    "local": {
+      "node": "24.21.0",
+      "unitPassed": 659,
+      "unitFiles": 67,
+      "focusedBrowserPassed": 3,
+      "fullBrowserPassed": 31,
+      "fullBrowserTotal": 31,
+      "fullBrowserSeconds": 97.035744,
+      "browserRetries": 0,
+      "buildId": "MF1HO5LFdi8Y1hNVDCGF2"
+    },
+    "applicationCi": {
+      "runId": 35638158483,
+      "attempt": 1,
+      "statusAtCheckpoint": "completed",
+      "conclusion": "failure",
+      "linux": {
+        "unitPassed": 659,
+        "browserPassed": 31,
+        "browserTotal": 31
+      },
+      "windows": {
+        "unitPassed": 659,
+        "browserPassed": 30,
+        "browserTotal": 31
+      },
+      "node": "24.20.0",
+      "failure": "Original SVG-security test exhausted unchanged overall 45000 ms deadline while waiting for Author Preview tab; largest observed delay was Author document/asset delivery. Cause unresolved.",
+      "newSharePublicationCases": "Both passed on Linux and Windows",
+      "artifactCompatibility": "Not triggered / not applicable to unchanged Python wheel/distribution workflow; no fresh pass claimed."
+    },
+    "preview": {
+      "id": "dpl_Atu9SsSsLY8hPAZJ6RPNx91pKA31",
+      "state": "READY",
+      "target": null,
+      "browserAccepted": false
+    },
+    "merge": null,
+    "productionDeployment": null,
+    "canonicalAcceptance": null,
+    "postmergeCi": null,
+    "disposition": "Held and unmerged; failed application merge gate. No CI rerun or production acceptance.",
+    "windowsTimeoutDiagnosis": {
+      "report": "app54/windows-timeout/REPORT.md",
+      "testDeadlineMs": 45000,
+      "authorGotoMs": 31399.852,
+      "selectedLocalScriptDurationMs": 30026,
+      "selectedLocalScriptDecodedBytes": 1490,
+      "cause": "unknown",
+      "afterEach": "Started after timeout recorded; cannot explain origin of deadline failure, but observer/setup counterfactual cost is not excluded.",
+      "timingLimit": "Only Author timings survived; Inspector/pagehide missing. Completed ResourceTiming entries and bounded trace network facts do not establish a scheduling cause.",
+      "lateAssertions": "Not counted as successful in-budget acceptance."
+    }
+  },
+  "independentReview": {
+    "sourceFilesUnchangedAcrossValidation": 22,
+    "observedPassedBrowserResults": 34,
+    "publicationRecordsVerified": 34,
+    "stageFilesVerified": 20,
+    "fullRunShareScreenshotSha256": "177f6d4f10c13cbe97e03c71dd17a459ac890108575ffcd8fd4d57c8883e12a4",
+    "reviewUrl": "https://github.com/Data-Advantage/pptx-dev/blob/60c91f6b97c75636f533202f4112e09dc01144e4/docs/evidence/inspector-share-publication-20260921/browser-review/REVIEW.md",
+    "limits": [
+      "Browser transition checks permit the preceding accepted document until first new publication; deterministic held-promise tests establish the narrower pending-encode source guard.",
+      "Screenshots show source and visible preview, not whole-slide or native/font acceptance.",
+      "URL handoff preserves semantics, not raw source whitespace or spelling."
+    ]
+  },
+  "historicalApp53": {
+    "acceptedHead": "e40c287b64fcbcfb85fb4a8a50641aea8e3e54a8",
+    "canonical": "29/29 passed",
+    "postmergeLinux": "28/29 failed",
+    "postmergeWindows": "29/29 passed",
+    "wrongDocumentAutomaticPublication": "observed in original Linux trace; not erased by candidate local passes"
+  },
+  "remaining": [
+    "App54 failed Windows application gate, then merge, production deployment, canonical browser acceptance and postmerge CI",
+    "Explicit toolbar share/export/Author handoff freshness",
+    "Preset Undo all and broader source writer preservation",
+    "Suggestion details clipping and incomplete Inspector timing",
+    "Required native Office, physical-font and repair gates; coordinated geometry drafts deferred and unmerged",
+    "Issue88 and overall goal remain open"
+  ],
+  "externalStatus": {
+    "pr54State": "OPEN",
+    "pr54Head": "60c91f6b97c75636f533202f4112e09dc01144e4",
+    "issue88State": "OPEN",
+    "prReceipt": "app54/status/pr54-held-description.json",
+    "issueReceipt": "app54/status/issue88-app54-held-updated.json",
+    "mutatedByThisDocumentationTask": false
+  }
+}

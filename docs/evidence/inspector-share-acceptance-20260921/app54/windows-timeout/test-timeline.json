@@ -1,0 +1,1281 @@
+{
+  "source": "/private/tmp/opf-inspector-share-guard-20260921/ci/windows-failure/svg-security-published-SVG-25408-rted-document-strings-inert/trace.zip",
+  "member": "test.trace",
+  "clock": "Original Playwright monotonic milliseconds; error event itself has no timestamp, bounded by adjacent calls.",
+  "rows": [
+    {
+      "callId": "hook@1",
+      "startTime": 277718.805,
+      "title": "Before Hooks",
+      "stack": [],
+      "params": {},
+      "endTime": 278758.049,
+      "durationMs": 1039.244
+    },
+    {
+      "callId": "hook@2",
+      "startTime": 277718.951,
+      "title": "beforeEach hook",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 7,
+          "column": 6
+        }
+      ],
+      "params": {},
+      "endTime": 278757.94,
+      "durationMs": 1038.989
+    },
+    {
+      "callId": "fixture@21",
+      "startTime": 277725.162,
+      "title": "Fixture \"storageState\"",
+      "stack": [
+        {
+          "file": "project#",
+          "line": 1,
+          "column": 1
+        }
+      ],
+      "params": {},
+      "endTime": 277725.201,
+      "durationMs": 0.039
+    },
+    {
+      "callId": "fixture@29",
+      "startTime": 277729.351,
+      "title": "Fixture \"context\"",
+      "stack": [],
+      "params": {},
+      "endTime": 277879.046,
+      "durationMs": 149.695
+    },
+    {
+      "callId": "pw:api@30",
+      "startTime": 277731.076,
+      "title": "Create context",
+      "stack": [],
+      "params": {},
+      "endTime": 277874.502,
+      "durationMs": 143.426
+    },
+    {
+      "callId": "fixture@31",
+      "startTime": 277879.431,
+      "title": "Fixture \"page\"",
+      "stack": [],
+      "params": {},
+      "endTime": 278387.066,
+      "durationMs": 507.635
+    },
+    {
+      "callId": "pw:api@32",
+      "startTime": 277880.571,
+      "title": "Create page",
+      "stack": [],
+      "params": {},
+      "endTime": 278387.028,
+      "durationMs": 506.457
+    },
+    {
+      "callId": "pw:api@33",
+      "startTime": 278390.043,
+      "title": "Expose binding",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\helpers\\readiness-diagnostics.ts",
+          "line": 68,
+          "column": 16,
+          "function": "startReadinessDiagnostics"
+        }
+      ],
+      "params": {},
+      "endTime": 278752.873,
+      "durationMs": 362.83
+    },
+    {
+      "callId": "pw:api@34",
+      "startTime": 278753.47,
+      "title": "Add init script",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\helpers\\readiness-diagnostics.ts",
+          "line": 69,
+          "column": 5,
+          "function": "startReadinessDiagnostics"
+        }
+      ],
+      "params": {},
+      "endTime": 278757.877,
+      "durationMs": 4.407
+    },
+    {
+      "callId": "expect@35",
+      "startTime": 278760.597,
+      "title": "Expect \"toEqual\"",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 53,
+          "column": 52
+        }
+      ],
+      "params": {
+        "expected": "[]"
+      },
+      "endTime": 278760.654,
+      "durationMs": 0.057
+    },
+    {
+      "callId": "pw:api@36",
+      "startTime": 278763.77,
+      "title": "Navigate",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 57,
+          "column": 14
+        }
+      ],
+      "params": {
+        "url": "/inspector#opf=H4sIAAAAAAAACpWPb2viQBDGv0qYt5drvKYeJDXC9QpqqcVWipAqZbM7xrX7J93dxFjJdy-pWqRQjns1w8wzv3meHSgiEWJ4VM6U1iHz7IoYZB7TtJSoHPhgBWdoIX7ageNOtPKepYYXrr_hiunN2fOzLpYjtUbqkCXOlNgLDgrwIROavhzusXYnD\u2026"
+      },
+      "endTime": 280083.145,
+      "durationMs": 1319.375
+    },
+    {
+      "callId": "expect@37",
+      "startTime": 280083.935,
+      "title": "Expect \"toBeVisible\"",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 58,
+          "column": 81
+        }
+      ],
+      "params": {
+        "locator": "getByText('Loaded shared deck from URL.', { exact: true })"
+      },
+      "endTime": 283594.792,
+      "durationMs": 3510.857
+    },
+    {
+      "callId": "expect@38",
+      "startTime": 283595.485,
+      "title": "Expect \"toHaveCount\"",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 60,
+          "column": 24
+        }
+      ],
+      "params": {
+        "locator": "getByTestId('inspector-canvas-overlay')",
+        "expected": "1"
+      },
+      "endTime": 283626.713,
+      "durationMs": 31.228
+    },
+    {
+      "callId": "expect@39",
+      "startTime": 283627.157,
+      "title": "Expect \"toHaveAttribute\"",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 61,
+          "column": 24
+        }
+      ],
+      "params": {
+        "locator": "getByTestId('inspector-canvas-overlay')",
+        "expected": "aria-label"
+      },
+      "endTime": 283653.24,
+      "durationMs": 26.083
+    },
+    {
+      "callId": "expect@40",
+      "startTime": 283653.687,
+      "title": "Expect \"toBeVisible\"",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 62,
+          "column": 24
+        }
+      ],
+      "params": {
+        "locator": "getByTestId('inspector-canvas-overlay')"
+      },
+      "endTime": 288187.483,
+      "durationMs": 4533.796
+    },
+    {
+      "callId": "expect@41",
+      "startTime": 288190.381,
+      "title": "Expect \"toHaveCount\"",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 64,
+          "column": 26
+        }
+      ],
+      "params": {
+        "locator": "locator('[data-opf-renderer=\"0.9.0\"] div[role=\"img\"]')",
+        "expected": "1"
+      },
+      "endTime": 288304.248,
+      "durationMs": 113.867
+    },
+    {
+      "callId": "expect@42",
+      "startTime": 288305.405,
+      "title": "Expect \"toHaveAttribute\"",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 65,
+          "column": 26
+        }
+      ],
+      "params": {
+        "locator": "locator('[data-opf-renderer=\"0.9.0\"] div[role=\"img\"]')",
+        "expected": "aria-label"
+      },
+      "endTime": 288333.836,
+      "durationMs": 28.431
+    },
+    {
+      "callId": "expect@43",
+      "startTime": 288334.66,
+      "title": "Expect \"toHaveCount\"",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 34,
+          "column": 25,
+          "function": "verifySafePreview"
+        }
+      ],
+      "params": {
+        "locator": "locator('[data-opf-renderer=\"0.9.0\"] div[role=\"img\"]')",
+        "expected": "1"
+      },
+      "endTime": 288362.418,
+      "durationMs": 27.758
+    },
+    {
+      "callId": "expect@44",
+      "startTime": 288363.813,
+      "title": "Expect \"toBeVisible\"",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 35,
+          "column": 25,
+          "function": "verifySafePreview"
+        }
+      ],
+      "params": {
+        "locator": "locator('[data-opf-renderer=\"0.9.0\"] div[role=\"img\"]')"
+      },
+      "endTime": 288458.763,
+      "durationMs": 94.95
+    },
+    {
+      "callId": "expect@45",
+      "startTime": 288460.335,
+      "title": "Expect \"toBeVisible\"",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 36,
+          "column": 48,
+          "function": "verifySafePreview"
+        }
+      ],
+      "params": {
+        "locator": "locator('[data-opf-renderer=\"0.9.0\"] div[role=\"img\"]').locator('svg').first()"
+      },
+      "endTime": 288488.654,
+      "durationMs": 28.319
+    },
+    {
+      "callId": "expect@46",
+      "startTime": 288489.4,
+      "title": "Expect \"toHaveCount\"",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 37,
+          "column": 92,
+          "function": "verifySafePreview"
+        }
+      ],
+      "params": {
+        "locator": "locator('[data-opf-renderer=\"0.9.0\"] div[role=\"img\"]').locator('script, foreignObject, iframe, img, [onload], [onerror]')"
+      },
+      "endTime": 288551.918,
+      "durationMs": 62.518
+    },
+    {
+      "callId": "pw:api@47",
+      "startTime": 288552.973,
+      "title": "Evaluate",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 38,
+          "column": 44,
+          "function": "verifySafePreview"
+        }
+      ],
+      "params": {
+        "locator": "locator('[data-opf-renderer=\"0.9.0\"] div[role=\"img\"]').locator('a')"
+      },
+      "endTime": 288602.969,
+      "durationMs": 49.996
+    },
+    {
+      "callId": "expect@48",
+      "startTime": 288603.479,
+      "title": "Expect \"toBeGreaterThan\"",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 39,
+          "column": 24,
+          "function": "verifySafePreview"
+        }
+      ],
+      "params": {},
+      "endTime": 288603.655,
+      "durationMs": 0.176
+    },
+    {
+      "callId": "expect@49",
+      "startTime": 288604.031,
+      "title": "Expect \"toBe\"",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 40,
+          "column": 80,
+          "function": "verifySafePreview"
+        }
+      ],
+      "params": {
+        "expected": "true"
+      },
+      "endTime": 288604.068,
+      "durationMs": 0.037
+    },
+    {
+      "callId": "pw:api@50",
+      "startTime": 288604.695,
+      "title": "Evaluate",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 46,
+          "column": 26,
+          "function": "verifySafePreview"
+        }
+      ],
+      "params": {
+        "locator": "locator('[data-opf-renderer=\"0.9.0\"] div[role=\"img\"]')",
+        "state": "attached"
+      },
+      "endTime": 288635.469,
+      "durationMs": 30.774
+    },
+    {
+      "callId": "expect@51",
+      "startTime": 288635.876,
+      "title": "Expect \"toBe\"",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 46,
+          "column": 78,
+          "function": "verifySafePreview"
+        }
+      ],
+      "params": {
+        "expected": "true"
+      },
+      "endTime": 288635.91,
+      "durationMs": 0.034
+    },
+    {
+      "callId": "pw:api@52",
+      "startTime": 288636.314,
+      "title": "Evaluate",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 48,
+          "column": 21,
+          "function": "verifySafePreview"
+        }
+      ],
+      "params": {},
+      "endTime": 288655.64,
+      "durationMs": 19.326
+    },
+    {
+      "callId": "expect@53",
+      "startTime": 288655.993,
+      "title": "Expect \"toBeUndefined\"",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 48,
+          "column": 103,
+          "function": "verifySafePreview"
+        }
+      ],
+      "params": {},
+      "endTime": 288656.118,
+      "durationMs": 0.125
+    },
+    {
+      "callId": "expect@54",
+      "startTime": 288656.508,
+      "title": "Expect \"toHaveCount\"",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 34,
+          "column": 25,
+          "function": "verifySafePreview"
+        }
+      ],
+      "params": {
+        "locator": "getByTestId('inspector-canvas-overlay')",
+        "expected": "1"
+      },
+      "endTime": 288682.121,
+      "durationMs": 25.613
+    },
+    {
+      "callId": "expect@55",
+      "startTime": 288682.544,
+      "title": "Expect \"toBeVisible\"",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 35,
+          "column": 25,
+          "function": "verifySafePreview"
+        }
+      ],
+      "params": {
+        "locator": "getByTestId('inspector-canvas-overlay')"
+      },
+      "endTime": 288708.631,
+      "durationMs": 26.087
+    },
+    {
+      "callId": "expect@56",
+      "startTime": 288709.16,
+      "title": "Expect \"toBeVisible\"",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 36,
+          "column": 48,
+          "function": "verifySafePreview"
+        }
+      ],
+      "params": {
+        "locator": "getByTestId('inspector-canvas-overlay').locator('svg').first()"
+      },
+      "endTime": 288736.445,
+      "durationMs": 27.285
+    },
+    {
+      "callId": "expect@57",
+      "startTime": 288737.033,
+      "title": "Expect \"toHaveCount\"",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 37,
+          "column": 92,
+          "function": "verifySafePreview"
+        }
+      ],
+      "params": {
+        "locator": "getByTestId('inspector-canvas-overlay').locator('script, foreignObject, iframe, img, [onload], [onerror]')"
+      },
+      "endTime": 288764.036,
+      "durationMs": 27.003
+    },
+    {
+      "callId": "pw:api@58",
+      "startTime": 288764.664,
+      "title": "Evaluate",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 38,
+          "column": 44,
+          "function": "verifySafePreview"
+        }
+      ],
+      "params": {
+        "locator": "getByTestId('inspector-canvas-overlay').locator('a')"
+      },
+      "endTime": 288789.342,
+      "durationMs": 24.678
+    },
+    {
+      "callId": "expect@59",
+      "startTime": 288789.78,
+      "title": "Expect \"toBeGreaterThan\"",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 39,
+          "column": 24,
+          "function": "verifySafePreview"
+        }
+      ],
+      "params": {},
+      "endTime": 288791.79,
+      "durationMs": 2.01
+    },
+    {
+      "callId": "expect@60",
+      "startTime": 288792.143,
+      "title": "Expect \"toBe\"",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 40,
+          "column": 80,
+          "function": "verifySafePreview"
+        }
+      ],
+      "params": {
+        "expected": "true"
+      },
+      "endTime": 288792.178,
+      "durationMs": 0.035
+    },
+    {
+      "callId": "pw:api@61",
+      "startTime": 288792.8,
+      "title": "Click",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 44,
+          "column": 68,
+          "function": "verifySafePreview"
+        }
+      ],
+      "params": {
+        "locator": "getByTestId('inspector-canvas-overlay').getByText('Unsafe script link', { exact: true })"
+      },
+      "endTime": 289019.101,
+      "durationMs": 226.301
+    },
+    {
+      "callId": "pw:api@62",
+      "startTime": 289019.64,
+      "title": "Evaluate",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 48,
+          "column": 21,
+          "function": "verifySafePreview"
+        }
+      ],
+      "params": {},
+      "endTime": 289049.77,
+      "durationMs": 30.13
+    },
+    {
+      "callId": "expect@63",
+      "startTime": 289050.2,
+      "title": "Expect \"toBeUndefined\"",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 48,
+          "column": 103,
+          "function": "verifySafePreview"
+        }
+      ],
+      "params": {},
+      "endTime": 289050.245,
+      "durationMs": 0.045
+    },
+    {
+      "callId": "pw:api@64",
+      "startTime": 289050.893,
+      "title": "Navigate",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 68,
+          "column": 14
+        }
+      ],
+      "params": {
+        "url": "/author"
+      },
+      "endTime": 320450.745,
+      "durationMs": 31399.852
+    },
+    {
+      "callId": "pw:api@65",
+      "startTime": 320451.54,
+      "title": "Click",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 69,
+          "column": 101
+        }
+      ],
+      "params": {
+        "locator": "getByRole('tablist', { name: 'Document view' }).getByRole('tab', { name: /^preview/ })"
+      },
+      "endTime": 325078.861,
+      "durationMs": 4627.321
+    },
+    {
+      "callId": "hook@66",
+      "startTime": 322775.726,
+      "title": "After Hooks",
+      "stack": [],
+      "params": {},
+      "endTime": 326817.596,
+      "durationMs": 4041.87
+    },
+    {
+      "callId": "hook@67",
+      "startTime": 322775.999,
+      "title": "afterEach hook",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 10,
+          "column": 6
+        }
+      ],
+      "params": {},
+      "endTime": 325033.841,
+      "durationMs": 2257.842
+    },
+    {
+      "callId": "pw:api@68",
+      "startTime": 323535.297,
+      "title": "Evaluate",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\helpers\\readiness-diagnostics.ts",
+          "line": 127,
+          "column": 25,
+          "function": "_finishReadinessDiagn"
+        }
+      ],
+      "params": {},
+      "endTime": 324482.528,
+      "durationMs": 947.231
+    },
+    {
+      "callId": "test.attach@69",
+      "startTime": 324501.741,
+      "title": "Attach \"windows-readiness-timings\"",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\helpers\\readiness-diagnostics.ts",
+          "line": 147,
+          "column": 22
+        }
+      ],
+      "params": {},
+      "endTime": 325033.641,
+      "durationMs": 531.9
+    },
+    {
+      "callId": "fixture@70",
+      "startTime": 325035.201,
+      "title": "Fixture \"page\"",
+      "stack": [],
+      "params": {},
+      "endTime": 325035.338,
+      "durationMs": 0.137
+    },
+    {
+      "callId": "fixture@71",
+      "startTime": 325035.697,
+      "title": "Fixture \"context\"",
+      "stack": [],
+      "params": {},
+      "endTime": 326805.917,
+      "durationMs": 1770.22
+    },
+    {
+      "callId": "expect@72",
+      "startTime": 325079.622,
+      "title": "Expect \"toBeEnabled\"",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 70,
+          "column": 80
+        }
+      ],
+      "params": {
+        "locator": "getByRole('button', { name: 'Import file', exact: true })"
+      },
+      "endTime": 325110.618,
+      "durationMs": 30.996
+    },
+    {
+      "callId": "pw:api@73",
+      "startTime": 325111.486,
+      "title": "Set input files",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 71,
+          "column": 3
+        }
+      ],
+      "params": {
+        "locator": "getByLabel('Import OPF or PowerPoint', { exact: true })"
+      },
+      "endTime": 325248.447,
+      "durationMs": 136.961
+    },
+    {
+      "callId": "expect@74",
+      "startTime": 325248.956,
+      "title": "Expect \"toHaveCount\"",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 34,
+          "column": 25,
+          "function": "verifySafePreview"
+        }
+      ],
+      "params": {
+        "locator": "getByLabel('Import preview')",
+        "expected": "1"
+      },
+      "endTime": 325279.02,
+      "durationMs": 30.064
+    },
+    {
+      "callId": "expect@75",
+      "startTime": 325279.508,
+      "title": "Expect \"toBeVisible\"",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 35,
+          "column": 25,
+          "function": "verifySafePreview"
+        }
+      ],
+      "params": {
+        "locator": "getByLabel('Import preview')"
+      },
+      "endTime": 325292.86,
+      "durationMs": 13.352
+    },
+    {
+      "callId": "expect@76",
+      "startTime": 325293.457,
+      "title": "Expect \"toBeVisible\"",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 36,
+          "column": 48,
+          "function": "verifySafePreview"
+        }
+      ],
+      "params": {
+        "locator": "getByLabel('Import preview').locator('svg').first()"
+      },
+      "endTime": 325302.928,
+      "durationMs": 9.471
+    },
+    {
+      "callId": "expect@77",
+      "startTime": 325303.745,
+      "title": "Expect \"toHaveCount\"",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 37,
+          "column": 92,
+          "function": "verifySafePreview"
+        }
+      ],
+      "params": {
+        "locator": "getByLabel('Import preview').locator('script, foreignObject, iframe, img, [onload], [onerror]')"
+      },
+      "endTime": 325342.641,
+      "durationMs": 38.896
+    },
+    {
+      "callId": "pw:api@78",
+      "startTime": 325343.438,
+      "title": "Evaluate",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 38,
+          "column": 44,
+          "function": "verifySafePreview"
+        }
+      ],
+      "params": {
+        "locator": "getByLabel('Import preview').locator('a')"
+      },
+      "endTime": 325436.906,
+      "durationMs": 93.468
+    },
+    {
+      "callId": "expect@79",
+      "startTime": 325437.375,
+      "title": "Expect \"toBeGreaterThan\"",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 39,
+          "column": 24,
+          "function": "verifySafePreview"
+        }
+      ],
+      "params": {},
+      "endTime": 325437.512,
+      "durationMs": 0.137
+    },
+    {
+      "callId": "expect@80",
+      "startTime": 325437.929,
+      "title": "Expect \"toBe\"",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 40,
+          "column": 80,
+          "function": "verifySafePreview"
+        }
+      ],
+      "params": {
+        "expected": "true"
+      },
+      "endTime": 325438.049,
+      "durationMs": 0.12
+    },
+    {
+      "callId": "pw:api@81",
+      "startTime": 325438.575,
+      "title": "Click",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 44,
+          "column": 68,
+          "function": "verifySafePreview"
+        }
+      ],
+      "params": {
+        "locator": "getByLabel('Import preview').getByText('Unsafe script link', { exact: true })"
+      },
+      "endTime": 325497.012,
+      "durationMs": 58.437
+    },
+    {
+      "callId": "pw:api@82",
+      "startTime": 325497.562,
+      "title": "Evaluate",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 48,
+          "column": 21,
+          "function": "verifySafePreview"
+        }
+      ],
+      "params": {},
+      "endTime": 325501.642,
+      "durationMs": 4.08
+    },
+    {
+      "callId": "expect@83",
+      "startTime": 325502.056,
+      "title": "Expect \"toBeUndefined\"",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 48,
+          "column": 103,
+          "function": "verifySafePreview"
+        }
+      ],
+      "params": {},
+      "endTime": 325502.177,
+      "durationMs": 0.121
+    },
+    {
+      "callId": "pw:api@84",
+      "startTime": 325502.703,
+      "title": "Click",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 73,
+          "column": 78
+        }
+      ],
+      "params": {
+        "locator": "getByRole('button', { name: 'Open presentation', exact: true })"
+      },
+      "endTime": 325648.662,
+      "durationMs": 145.959
+    },
+    {
+      "callId": "expect@85",
+      "startTime": 325649.299,
+      "title": "Expect \"toHaveCount\"",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 34,
+          "column": 25,
+          "function": "verifySafePreview"
+        }
+      ],
+      "params": {
+        "locator": "locator('[data-opf-editor=\"0.8.0\"]')",
+        "expected": "1"
+      },
+      "endTime": 325656.77,
+      "durationMs": 7.471
+    },
+    {
+      "callId": "expect@86",
+      "startTime": 325657.307,
+      "title": "Expect \"toBeVisible\"",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 35,
+          "column": 25,
+          "function": "verifySafePreview"
+        }
+      ],
+      "params": {
+        "locator": "locator('[data-opf-editor=\"0.8.0\"]')"
+      },
+      "endTime": 325663.624,
+      "durationMs": 6.317
+    },
+    {
+      "callId": "expect@87",
+      "startTime": 325664.142,
+      "title": "Expect \"toBeVisible\"",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 36,
+          "column": 48,
+          "function": "verifySafePreview"
+        }
+      ],
+      "params": {
+        "locator": "locator('[data-opf-editor=\"0.8.0\"]').locator('svg').first()"
+      },
+      "endTime": 325670.825,
+      "durationMs": 6.683
+    },
+    {
+      "callId": "expect@88",
+      "startTime": 325671.378,
+      "title": "Expect \"toHaveCount\"",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 37,
+          "column": 92,
+          "function": "verifySafePreview"
+        }
+      ],
+      "params": {
+        "locator": "locator('[data-opf-editor=\"0.8.0\"]').locator('script, foreignObject, iframe, img, [onload], [onerror]')"
+      },
+      "endTime": 325678.425,
+      "durationMs": 7.047
+    },
+    {
+      "callId": "pw:api@89",
+      "startTime": 325679.087,
+      "title": "Evaluate",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 38,
+          "column": 44,
+          "function": "verifySafePreview"
+        }
+      ],
+      "params": {
+        "locator": "locator('[data-opf-editor=\"0.8.0\"]').locator('a')"
+      },
+      "endTime": 325689.089,
+      "durationMs": 10.002
+    },
+    {
+      "callId": "expect@90",
+      "startTime": 325689.536,
+      "title": "Expect \"toBeGreaterThan\"",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 39,
+          "column": 24,
+          "function": "verifySafePreview"
+        }
+      ],
+      "params": {},
+      "endTime": 325689.664,
+      "durationMs": 0.128
+    },
+    {
+      "callId": "expect@91",
+      "startTime": 325690.069,
+      "title": "Expect \"toBe\"",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 40,
+          "column": 80,
+          "function": "verifySafePreview"
+        }
+      ],
+      "params": {
+        "expected": "true"
+      },
+      "endTime": 325690.181,
+      "durationMs": 0.112
+    },
+    {
+      "callId": "pw:api@92",
+      "startTime": 325690.859,
+      "title": "Click",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 44,
+          "column": 68,
+          "function": "verifySafePreview"
+        }
+      ],
+      "params": {
+        "locator": "locator('[data-opf-editor=\"0.8.0\"]').getByText('Unsafe script link', { exact: true })"
+      },
+      "endTime": 325731.879,
+      "durationMs": 41.02
+    },
+    {
+      "callId": "pw:api@93",
+      "startTime": 325732.473,
+      "title": "Evaluate",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 48,
+          "column": 21,
+          "function": "verifySafePreview"
+        }
+      ],
+      "params": {},
+      "endTime": 325736.935,
+      "durationMs": 4.462
+    },
+    {
+      "callId": "expect@94",
+      "startTime": 325737.352,
+      "title": "Expect \"toBeUndefined\"",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 48,
+          "column": 103,
+          "function": "verifySafePreview"
+        }
+      ],
+      "params": {},
+      "endTime": 325737.48,
+      "durationMs": 0.128
+    },
+    {
+      "callId": "expect@95",
+      "startTime": 325737.833,
+      "title": "Expect \"toEqual\"",
+      "stack": [
+        {
+          "file": "D:\\a\\pptx-dev\\pptx-dev\\tests\\e2e\\svg-security.spec.ts",
+          "line": 75,
+          "column": 19
+        }
+      ],
+      "params": {
+        "expected": "[]"
+      },
+      "endTime": 325737.984,
+      "durationMs": 0.151
+    },
+    {
+      "callId": "pw:api@96",
+      "startTime": 326437.043,
+      "title": "Close context",
+      "stack": [],
+      "params": {},
+      "endTime": 326805.782,
+      "durationMs": 368.739
+    },
+    {
+      "callId": "attach@1ed2406845ad2ac36f737a29dd915749",
+      "startTime": 326812.459,
+      "title": "Attach \"error-context\"",
+      "stack": [],
+      "params": {},
+      "endTime": 326812.47,
+      "durationMs": 0.011
+    },
+    {
+      "callId": "fixture@105",
+      "startTime": 326813.157,
+      "title": "Fixture \"baseURL\"",
+      "stack": [
+        {
+          "file": "project#",
+          "line": 1,
+          "column": 1
+        }
+      ],
+      "params": {},
+      "endTime": 326813.17,
+      "durationMs": 0.013
+    },
+    {
+      "callId": "fixture@108",
+      "startTime": 326813.573,
+      "title": "Fixture \"viewport\"",
+      "stack": [
+        {
+          "file": "project#",
+          "line": 1,
+          "column": 1
+        }
+      ],
+      "params": {},
+      "endTime": 326813.584,
+      "durationMs": 0.011
+    },
+    {
+      "callId": "fixture@109",
+      "startTime": 326813.591,
+      "title": "Fixture \"storageState\"",
+      "stack": [
+        {
+          "file": "project#",
+          "line": 1,
+          "column": 1
+        }
+      ],
+      "params": {},
+      "endTime": 326813.601,
+      "durationMs": 0.01
+    },
+    {
+      "callId": "fixture@112",
+      "startTime": 326813.998,
+      "title": "Fixture \"permissions\"",
+      "stack": [
+        {
+          "file": "project#",
+          "line": 1,
+          "column": 1
+        }
+      ],
+      "params": {},
+      "endTime": 326814.008,
+      "durationMs": 0.01
+    },
+    {
+      "callId": "hook@130",
+      "startTime": 326817.957,
+      "title": "Worker Cleanup",
+      "stack": [],
+      "params": {},
+      "endTime": 327672.774,
+      "durationMs": 854.817
+    },
+    {
+      "callId": "fixture@135",
+      "startTime": 326820.099,
+      "title": "Fixture \"browser\"",
+      "stack": [],
+      "params": {},
+      "endTime": 327671.072,
+      "durationMs": 850.973
+    },
+    {
+      "callId": "fixture@138",
+      "startTime": 327671.645,
+      "title": "Fixture \"browserName\"",
+      "stack": [
+        {
+          "file": "project#",
+          "line": 1,
+          "column": 1
+        }
+      ],
+      "params": {},
+      "endTime": 327671.658,
+      "durationMs": 0.013
+    },
+    {
+      "callId": "fixture@141",
+      "startTime": 327672.068,
+      "title": "Fixture \"channel\"",
+      "stack": [
+        {
+          "file": "project#",
+          "line": 1,
+          "column": 1
+        }
+      ],
+      "params": {},
+      "endTime": 327672.078,
+      "durationMs": 0.01
+    }
+  ],
+  "errors": [
+    {
+      "type": "error",
+      "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m",
+      "stack": []
+    }
+  ]
+}

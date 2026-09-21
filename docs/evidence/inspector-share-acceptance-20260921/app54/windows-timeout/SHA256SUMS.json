@@ -1,0 +1,50 @@
+{
+  "files": [
+    {
+      "path": "REPORT.md",
+      "bytes": 8287,
+      "sha256": "196d1bb4c4f197e17d1554afea983a76938c96d412b7130a91c4d0b8015871a5"
+    },
+    {
+      "path": "error-context.md",
+      "bytes": 8538,
+      "sha256": "669c9d26e636e60ef5ce881afd924cf3df304ee0fc541c48c77a36126b15ba5e"
+    },
+    {
+      "path": "extract.py",
+      "bytes": 3727,
+      "sha256": "06f3a1292033924216498784b80a9365b2f26682fd2c9b4690b8a56f74448cd1"
+    },
+    {
+      "path": "identities.json",
+      "bytes": 3215,
+      "sha256": "d3beeae99a28ebe301a21bc4660eb3e7082fa0a54dd5c1216fc505fca423eaaa"
+    },
+    {
+      "path": "preview-click-and-hook-events.json",
+      "bytes": 290271,
+      "sha256": "d9358a3f9d24619b9dcb17a282b806ebceab0b283e7d744303d1d298681ce8e6"
+    },
+    {
+      "path": "selected-network-records.json",
+      "bytes": 8737,
+      "sha256": "71b4c2b1402b41877da61fe35c20c1df52a186fc2efde505163ce56445671295"
+    },
+    {
+      "path": "test-timeline.json",
+      "bytes": 32646,
+      "sha256": "866693d0fd15cf0274646cb42588285f6a0b398917b144aee80f683d4bf31e07"
+    },
+    {
+      "path": "timing-summary.json",
+      "bytes": 8278,
+      "sha256": "8f35565faed06368f78405f4b436d2a2faa7b0c4dacc337c681efa08a386939f"
+    },
+    {
+      "path": "windows-readiness-timings.json",
+      "bytes": 65248,
+      "sha256": "12326969c50722e36d2000b297c6b17077459435298368c3b279749ecd6bde3b"
+    }
+  ],
+  "scope": "All files in this diagnostic directory except this manifest; raw trace and original artifacts remain at paths recorded in identities.json."
+}
