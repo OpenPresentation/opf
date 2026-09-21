@@ -25,16 +25,24 @@ All ten PRs below are merged and passed their required CI at the recorded heads.
 ## Final wrapup deliveries
 
 [Renderer30](https://github.com/OpenPresentation/opf-render/pull/30), head
-`fec109a4e12548f5f1d3b82db0de060d353c303e`, preserves core tab advances and exact
+`a73d739c6902f3c28d9e879749321b583fe9767d`, preserves core tab advances and exact
 source spans while keeping ordinary unmeasured rich runs in naturally shaped
 chunks. Root and independent review, typecheck, validation, the full renderer
 suite (805 golden slides / 126 decks), and focused measured/estimated browser
 checks pass on Node24.21.0 and Edge153. The CI core checkout is pinned to merged
-core110; the release owner received the exact coordination change. The PR's
-GitHub checks and merge receipt are authoritative for its final merge status.
+core110. Its [first CI run](https://github.com/OpenPresentation/opf-render/actions/runs/35660404111)
+passed rendering/browser checks but failed later because the older PPTX checkout
+lacked `test/color-ref-export.mjs`. The final CI-only commit aligns PPTX/editor
+with core110's passing coordinated checkpoints, respectively
+`fcc006a6887c549a96a3bc8bbdb957cc54fe67dd` and
+`476191e28e6f5f5ec32146aeb416f5286b4d0570`, without skipping checks or changing
+rendering code. The release owner received the exact coordination changes.
+Fresh CI on this corrected head and the PR merge receipt are authoritative
+for final acceptance; the initial failed run remains preserved.
 
 The [native font inventory bundle](evidence/windows-native-font-inventory-20260921/README.md)
-and this handoff preserve the last observation and remaining work. Its 37 files
+and this handoff are published through [core111](https://github.com/OpenPresentation/opf/pull/111).
+They preserve the last observation and remaining work. Its 37 files
 pass the offline verifier; manifest SHA-256 is
 `18ca9125a22bb65c79bc1c7a788a3bf5a2ab2ff41248c81d158b1833a1f8085d`.
 The native font allowlist remains failed. The original parent failure is intact,
