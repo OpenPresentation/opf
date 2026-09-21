@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-09-21T19:22:36.4286004Z",
+  "scope": "Independent static review of native-font-edit.ps1 and native-font-edit.md plus a pure PowerShell regression. No Office/COM operation and no font registration or installation was performed.",
+  "source": {
+    "script": {
+      "path": "sources/opf-pptx/test/native-font-edit.ps1",
+      "sha256": "b18f9e2ab822a42b9204a15314ed5ef6e74b1d933ba3e5e7e4efc3a542368960"
+    },
+    "documentation": {
+      "path": "sources/opf-pptx/docs/native-font-edit.md",
+      "sha256": "efc916755cd2a9f4f1c8d961bb65291e410138af0ad8eb52b99e5d5d3af5aa27"
+    }
+  },
+  "verification": {
+    "command": "Windows PowerShell 5.1 -NoProfile -NonInteractive -File test/native-font-edit.ps1 -PureRegression",
+    "exitCode": 0,
+    "passed": true,
+    "officeOrComCalls": 0,
+    "wrapperStages": 60,
+    "orderedDictionaryMetricsPassed": true,
+    "negativeMutationsRejected": true,
+    "parentGateLogicPassed": true
+  },
+  "reviewChecks": {
+    "fourExpectedFontPathsAndDistinctPathsValidated": true,
+    "registrationFlagZeroValidated": true,
+    "parentOwnedFontCleanupWrappedInFinally": true,
+    "timeoutDefaultSeconds": 45,
+    "timeoutMaximumSeconds": 60,
+    "timeoutCleanupReportedUnconfirmed": true,
+    "postRunChecksCoverDeckFixtureAndAllThreeCodeInputs": true,
+    "parentRejectsFailedPersistedMetricsGate": true,
+    "observationsRequireOneSlideAndExactlyTwoNamedTextShapes": true,
+    "editedAndReopenedBodyRunsCheckTextLengthAndFontStyles": true,
+    "nativeCOMCallsAreLoggedAndLatchedAfterFailure": true,
+    "onlyExactOwnedPresentationPathsAreClosed": true,
+    "saveAsUsesPptxAndEmbedFontsFalse": true
+  },
+  "findings": [],
+  "limitations": [
+    "Static review and -PureRegression do not establish PowerPoint native acceptance, physical glyph-source selection, fallback behavior, or raster appearance.",
+    "Native execution and temporary font-registration runtime checks are outside this review and remain separately owned."
+  ],
+  "passed": true
+}

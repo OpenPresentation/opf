@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "kind": "opf-pptx-native-tab-source-context",
+  "origin": "New native PowerPoint presentation created by the bounded verifier; not imported from OPF.",
+  "pullRequest": {
+    "repository": "OpenPresentation/opf-pptx",
+    "number": 48,
+    "url": "https://github.com/OpenPresentation/opf-pptx/pull/48",
+    "headCommit": "4b5d756",
+    "verifierPath": "test/native-tab-control-v2.ps1",
+    "verifierSha256": "6a0f8f33e1072cf373e7b6c744d248ae89ec66901e7b8a3be6c89a32cce660dd"
+  },
+  "finalVerifierSnapshotMatchesPr48": true,
+  "runSnapshots": {
+    "native-tab-v2-01": {
+      "verifierSnapshotSha256": "f57fcdf931a48f3f927310c294fabb13c0c0790351560fb7635c2237fe039a24",
+      "powerPointVersion": "16.0",
+      "powerPointBuild": "16.0.20326.20158",
+      "windowsBuild": "26200.9457",
+      "workerSucceeded": false,
+      "cleanupConfirmed": false
+    },
+    "native-tab-v2-02": {
+      "verifierSnapshotSha256": "3f40452fcd7d01779fea797264a57ada7fc9f1eb4f6eb9696cb32c64e2e0515c",
+      "powerPointVersion": "16.0",
+      "powerPointBuild": "16.0.20326.20158",
+      "windowsBuild": "26200.9457",
+      "workerSucceeded": false,
+      "cleanupConfirmed": true
+    },
+    "native-tab-v2-03": {
+      "verifierSnapshotSha256": "29403aeb94ba5338dcb0a9227172706adc096733e09571d992c99ab97e6e0689",
+      "powerPointVersion": "16.0",
+      "powerPointBuild": "16.0.20326.20158",
+      "windowsBuild": "26200.9457",
+      "workerSucceeded": true,
+      "cleanupConfirmed": true
+    },
+    "native-tab-v2-04": {
+      "verifierSnapshotSha256": "6a0f8f33e1072cf373e7b6c744d248ae89ec66901e7b8a3be6c89a32cce660dd",
+      "powerPointVersion": "16.0",
+      "powerPointBuild": "16.0.20326.20158",
+      "windowsBuild": "26200.9457",
+      "workerSucceeded": true,
+      "cleanupConfirmed": true
+    }
+  },
+  "authority": "Each native result is interpreted using its own retained run-local verifier snapshot."
+}

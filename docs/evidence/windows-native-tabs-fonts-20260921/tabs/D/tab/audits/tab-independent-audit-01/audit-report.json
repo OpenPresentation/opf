@@ -1,0 +1,994 @@
+{
+  "schemaVersion": 1,
+  "scope": "Independent offline recomputation from raw native observations, request, lifecycle log, owned PPTX and rasters. No Office calls or source edits were made.",
+  "createdAt": "2026-09-21T18:50:48.835633+00:00",
+  "auditScript": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\tab-independent-audit-01\\audit-tab.py",
+  "auditScriptSha256": "7d72892460a7ba6fc6a3ba48bbb2b8166ee9bd05391e10b113c76eac1cb39ec6",
+  "inputs": {
+    "runDir": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-tab-v2-02",
+    "rawReportPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-tab-v2-02\\report.json",
+    "rawReportSha256": "4f9e17d7290eb4500ab81b48860418b511d73e419e0a02d8a09c7503fb9245a5",
+    "requestPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-tab-v2-02\\request.json",
+    "requestSha256": "99512cf3f7c0bb8188fc1e465a5bf664e005db155106c5f56a29254b47956d96",
+    "workerPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-tab-v2-02\\worker.json",
+    "workerSha256": "683ae1e5ebb0a39da4eea449ca3c5e23f6875be4458232f1089d77cb803eeef5",
+    "supervisorPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-tab-v2-02\\supervisor.json",
+    "supervisorSha256": "38f14a3e5aa5c2b541021290e3591477ef4ff4353ff1db6334c40eca55714197",
+    "stagesPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-tab-v2-02\\stages.jsonl",
+    "stagesSha256": "13c9c30dd6ac030043bd069c92af541e53fe5c32c91540b9aaed55a5d5a3a509",
+    "ownedPaths": {
+      "presentation": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-tab-v2-02\\native-tab-control-v2.pptx",
+      "originalRaster": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-tab-v2-02\\original.png",
+      "reopenedRaster": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-tab-v2-02\\reopened.png"
+    },
+    "ownedSha256": {
+      "pptx": "5b042c0968a484d295cc0c76be50208ff60937afd2e483ca05b3c915d8e24e69",
+      "originalRaster": "1a1dc6038e12f782cd1da8696fcf0f8a43612167649edf9d6f3bab3993c9a2fd",
+      "reopenedRaster": "1a1dc6038e12f782cd1da8696fcf0f8a43612167649edf9d6f3bab3993c9a2fd"
+    },
+    "host": {
+      "path": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+      "actualSha256": "8bb6fa8c283b4d92120b1ef249a9b311b0f804d4cabbe9981159976c8be76a5e",
+      "expectedSha256": "8bb6fa8c283b4d92120b1ef249a9b311b0f804d4cabbe9981159976c8be76a5e"
+    },
+    "font": {
+      "path": "C:\\windows\\Fonts\\calibri.ttf",
+      "actualSha256": "57e93ff143572bcc092c1f56202d43ddc07bb119aa104c6d7af163470fb551f6",
+      "expectedSha256": "57e93ff143572bcc092c1f56202d43ddc07bb119aa104c6d7af163470fb551f6"
+    },
+    "sourceInputs": {
+      "verifier": {
+        "externalPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\sources\\opf-pptx\\test\\native-tab-control-v2.ps1",
+        "externalSha256": "a49bee2d2d119277eec1f63112ab11c06b05d019926e3882a5e083b65dd0bc32",
+        "recordedSha256": "3f40452fcd7d01779fea797264a57ada7fc9f1eb4f6eb9696cb32c64e2e0515c",
+        "externalMatches": false,
+        "snapshotPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-tab-v2-02\\inputs\\native-tab-control-v2.ps1",
+        "snapshotSha256": "3f40452fcd7d01779fea797264a57ada7fc9f1eb4f6eb9696cb32c64e2e0515c",
+        "recordedSnapshotSha256": "3f40452fcd7d01779fea797264a57ada7fc9f1eb4f6eb9696cb32c64e2e0515c",
+        "snapshotMatches": true,
+        "externalAndSnapshotEqual": false
+      },
+      "processHelper": {
+        "externalPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\sources\\opf-pptx\\test\\native-process.ps1",
+        "externalSha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+        "recordedSha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+        "externalMatches": true,
+        "snapshotPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-tab-v2-02\\inputs\\native-process.ps1",
+        "snapshotSha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+        "recordedSnapshotSha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+        "snapshotMatches": true,
+        "externalAndSnapshotEqual": true
+      }
+    }
+  },
+  "nativeLifecycle": {
+    "nativeCallsSucceeded": true,
+    "cleanupConfirmed": true,
+    "officeOperationsStopped": false,
+    "stageAudit": {
+      "rowCount": 2752,
+      "sequenceContiguous": true,
+      "beginTerminalPairsBalanced": true,
+      "pairingErrors": [],
+      "unpairedSuccessEvents": [],
+      "criticalLifecycleMilestones": {
+        "application.create": {
+          "begin": 1,
+          "success": 1,
+          "error": 0
+        },
+        "create.presentation.add": {
+          "begin": 1,
+          "success": 1,
+          "error": 0
+        },
+        "create.presentation.saveAs": {
+          "begin": 1,
+          "success": 1,
+          "error": 0
+        },
+        "original.presentation.close": {
+          "begin": 1,
+          "success": 1,
+          "error": 0
+        },
+        "reopen.presentation.open-readonly": {
+          "begin": 1,
+          "success": 1,
+          "error": 0
+        },
+        "reopened.presentation.close": {
+          "begin": 1,
+          "success": 1,
+          "error": 0
+        }
+      },
+      "criticalLifecycleMilestonesPassed": true,
+      "nativeErrorEvents": [],
+      "workerFailureEvents": [
+        {
+          "sequence": 2752,
+          "timestamp": "2026-09-21T18:44:37.3199945Z",
+          "stage": "worker.failure",
+          "status": "error",
+          "error": "Cannot process argument because the value of argument \"Property\" is not valid. Change the value of the \"Property\" argument and run the operation again.",
+          "cleanupConfirmed": true,
+          "officeOperationsStopped": false,
+          "ownedPresentationPath": null
+        }
+      ],
+      "lastEvent": {
+        "sequence": 2752,
+        "stage": "worker.failure",
+        "status": "error",
+        "error": "Cannot process argument because the value of argument \"Property\" is not valid. Change the value of the \"Property\" argument and run the operation again."
+      },
+      "nativeCallsSucceeded": true
+    },
+    "worker": {
+      "exitCode": 1,
+      "timedOut": false,
+      "supervisorExitCode": 1,
+      "reportLastStage": "worker.failure",
+      "reportLastStatus": "error",
+      "reportError": "Cannot process argument because the value of argument \"Property\" is not valid. Change the value of the \"Property\" argument and run the operation again.",
+      "postprocessingFailure": true,
+      "interpretation": "Native create/save/close/open-read-only/reopen-observe/export/close calls are recorded as successful and cleanup is confirmed. Worker exit 1 is a later metrics-postprocessing failure; report.metrics is null, so independent metrics below are authoritative calculations over raw observations."
+    }
+  },
+  "observations": {
+    "requestedTargetsPoints": [
+      16.25,
+      16.26,
+      16.27,
+      16.27734375,
+      16.28,
+      16.29,
+      16.3,
+      16.31,
+      77.3173828125
+    ],
+    "tolerancePoints": 0.02,
+    "original": {
+      "invariants": {
+        "recordCount": 9,
+        "expectedRecordCount": 9,
+        "allExactTabAndFontChecksPassed": true,
+        "failures": []
+      },
+      "metrics": {
+        "phase": "original",
+        "tolerancePoints": 0.02,
+        "maxTabErrorPoints": 0.022656250000004263,
+        "maxTabErrorIndex": 3,
+        "maxLiteralErrorPoints": 2.134999999725551e-05,
+        "maxLiteralErrorIndex": 3,
+        "maxPairDeltaPoints": 0.02267760000000152,
+        "maxPairDeltaIndex": 3,
+        "tabGatePassed": false,
+        "literalGatePassed": true,
+        "pairAgreementGatePassed": false,
+        "phaseGatePassed": false,
+        "records": [
+          {
+            "index": 0,
+            "targetPoints": 16.25,
+            "actualTabOffsetPoints": 16.25,
+            "actualLiteralOffsetPoints": 16.25,
+            "tabErrorPoints": 0.0,
+            "literalErrorPoints": 0.0,
+            "tabMinusLiteralPoints": 0.0,
+            "pairDeltaPoints": 0.0,
+            "tabGatePassed": true,
+            "literalGatePassed": true,
+            "pairAgreementGatePassed": true
+          },
+          {
+            "index": 1,
+            "targetPoints": 16.26,
+            "actualTabOffsetPoints": 16.25,
+            "actualLiteralOffsetPoints": 16.259999999999998,
+            "tabErrorPoints": 0.010000000000001563,
+            "literalErrorPoints": 3.552713678800501e-15,
+            "tabMinusLiteralPoints": -0.00999999999999801,
+            "pairDeltaPoints": 0.00999999999999801,
+            "tabGatePassed": true,
+            "literalGatePassed": true,
+            "pairAgreementGatePassed": true
+          },
+          {
+            "index": 2,
+            "targetPoints": 16.27,
+            "actualTabOffsetPoints": 16.25,
+            "actualLiteralOffsetPoints": 16.270000000000003,
+            "tabErrorPoints": 0.019999999999999574,
+            "literalErrorPoints": 3.552713678800501e-15,
+            "tabMinusLiteralPoints": -0.020000000000003126,
+            "pairDeltaPoints": 0.020000000000003126,
+            "tabGatePassed": true,
+            "literalGatePassed": true,
+            "pairAgreementGatePassed": false
+          },
+          {
+            "index": 3,
+            "targetPoints": 16.27734375,
+            "actualTabOffsetPoints": 16.300000000000004,
+            "actualLiteralOffsetPoints": 16.277322400000003,
+            "tabErrorPoints": 0.022656250000004263,
+            "literalErrorPoints": 2.134999999725551e-05,
+            "tabMinusLiteralPoints": 0.02267760000000152,
+            "pairDeltaPoints": 0.02267760000000152,
+            "tabGatePassed": false,
+            "literalGatePassed": true,
+            "pairAgreementGatePassed": false
+          },
+          {
+            "index": 4,
+            "targetPoints": 16.28,
+            "actualTabOffsetPoints": 16.300000000000004,
+            "actualLiteralOffsetPoints": 16.28,
+            "tabErrorPoints": 0.020000000000003126,
+            "literalErrorPoints": 0.0,
+            "tabMinusLiteralPoints": 0.020000000000003126,
+            "pairDeltaPoints": 0.020000000000003126,
+            "tabGatePassed": false,
+            "literalGatePassed": true,
+            "pairAgreementGatePassed": false
+          },
+          {
+            "index": 5,
+            "targetPoints": 16.29,
+            "actualTabOffsetPoints": 16.300000000000004,
+            "actualLiteralOffsetPoints": 16.29,
+            "tabErrorPoints": 0.010000000000005116,
+            "literalErrorPoints": 0.0,
+            "tabMinusLiteralPoints": 0.010000000000005116,
+            "pairDeltaPoints": 0.010000000000005116,
+            "tabGatePassed": true,
+            "literalGatePassed": true,
+            "pairAgreementGatePassed": true
+          },
+          {
+            "index": 6,
+            "targetPoints": 16.3,
+            "actualTabOffsetPoints": 16.300000000000004,
+            "actualLiteralOffsetPoints": 16.300000000000004,
+            "tabErrorPoints": 3.552713678800501e-15,
+            "literalErrorPoints": 3.552713678800501e-15,
+            "tabMinusLiteralPoints": 0.0,
+            "pairDeltaPoints": 0.0,
+            "tabGatePassed": true,
+            "literalGatePassed": true,
+            "pairAgreementGatePassed": true
+          },
+          {
+            "index": 7,
+            "targetPoints": 16.31,
+            "actualTabOffsetPoints": 16.300000000000004,
+            "actualLiteralOffsetPoints": 16.310000000000002,
+            "tabErrorPoints": 0.009999999999994458,
+            "literalErrorPoints": 3.552713678800501e-15,
+            "tabMinusLiteralPoints": -0.00999999999999801,
+            "pairDeltaPoints": 0.00999999999999801,
+            "tabGatePassed": true,
+            "literalGatePassed": true,
+            "pairAgreementGatePassed": true
+          },
+          {
+            "index": 8,
+            "targetPoints": 77.3173828125,
+            "actualTabOffsetPoints": 77.30000000000001,
+            "actualLiteralOffsetPoints": 77.31739999999999,
+            "tabErrorPoints": 0.01738281249998863,
+            "literalErrorPoints": 1.718749999213287e-05,
+            "tabMinusLiteralPoints": -0.017399999999980764,
+            "pairDeltaPoints": 0.017399999999980764,
+            "tabGatePassed": true,
+            "literalGatePassed": true,
+            "pairAgreementGatePassed": true
+          }
+        ]
+      }
+    },
+    "reopened": {
+      "invariants": {
+        "recordCount": 9,
+        "expectedRecordCount": 9,
+        "allExactTabAndFontChecksPassed": true,
+        "failures": []
+      },
+      "metrics": {
+        "phase": "reopened",
+        "tolerancePoints": 0.02,
+        "maxTabErrorPoints": 0.022656250000004263,
+        "maxTabErrorIndex": 3,
+        "maxLiteralErrorPoints": 2.134999999725551e-05,
+        "maxLiteralErrorIndex": 3,
+        "maxPairDeltaPoints": 0.02267760000000152,
+        "maxPairDeltaIndex": 3,
+        "tabGatePassed": false,
+        "literalGatePassed": true,
+        "pairAgreementGatePassed": false,
+        "phaseGatePassed": false,
+        "records": [
+          {
+            "index": 0,
+            "targetPoints": 16.25,
+            "actualTabOffsetPoints": 16.25,
+            "actualLiteralOffsetPoints": 16.25,
+            "tabErrorPoints": 0.0,
+            "literalErrorPoints": 0.0,
+            "tabMinusLiteralPoints": 0.0,
+            "pairDeltaPoints": 0.0,
+            "tabGatePassed": true,
+            "literalGatePassed": true,
+            "pairAgreementGatePassed": true
+          },
+          {
+            "index": 1,
+            "targetPoints": 16.26,
+            "actualTabOffsetPoints": 16.25,
+            "actualLiteralOffsetPoints": 16.259999999999998,
+            "tabErrorPoints": 0.010000000000001563,
+            "literalErrorPoints": 3.552713678800501e-15,
+            "tabMinusLiteralPoints": -0.00999999999999801,
+            "pairDeltaPoints": 0.00999999999999801,
+            "tabGatePassed": true,
+            "literalGatePassed": true,
+            "pairAgreementGatePassed": true
+          },
+          {
+            "index": 2,
+            "targetPoints": 16.27,
+            "actualTabOffsetPoints": 16.25,
+            "actualLiteralOffsetPoints": 16.270000000000003,
+            "tabErrorPoints": 0.019999999999999574,
+            "literalErrorPoints": 3.552713678800501e-15,
+            "tabMinusLiteralPoints": -0.020000000000003126,
+            "pairDeltaPoints": 0.020000000000003126,
+            "tabGatePassed": true,
+            "literalGatePassed": true,
+            "pairAgreementGatePassed": false
+          },
+          {
+            "index": 3,
+            "targetPoints": 16.27734375,
+            "actualTabOffsetPoints": 16.300000000000004,
+            "actualLiteralOffsetPoints": 16.277322400000003,
+            "tabErrorPoints": 0.022656250000004263,
+            "literalErrorPoints": 2.134999999725551e-05,
+            "tabMinusLiteralPoints": 0.02267760000000152,
+            "pairDeltaPoints": 0.02267760000000152,
+            "tabGatePassed": false,
+            "literalGatePassed": true,
+            "pairAgreementGatePassed": false
+          },
+          {
+            "index": 4,
+            "targetPoints": 16.28,
+            "actualTabOffsetPoints": 16.300000000000004,
+            "actualLiteralOffsetPoints": 16.28,
+            "tabErrorPoints": 0.020000000000003126,
+            "literalErrorPoints": 0.0,
+            "tabMinusLiteralPoints": 0.020000000000003126,
+            "pairDeltaPoints": 0.020000000000003126,
+            "tabGatePassed": false,
+            "literalGatePassed": true,
+            "pairAgreementGatePassed": false
+          },
+          {
+            "index": 5,
+            "targetPoints": 16.29,
+            "actualTabOffsetPoints": 16.300000000000004,
+            "actualLiteralOffsetPoints": 16.29,
+            "tabErrorPoints": 0.010000000000005116,
+            "literalErrorPoints": 0.0,
+            "tabMinusLiteralPoints": 0.010000000000005116,
+            "pairDeltaPoints": 0.010000000000005116,
+            "tabGatePassed": true,
+            "literalGatePassed": true,
+            "pairAgreementGatePassed": true
+          },
+          {
+            "index": 6,
+            "targetPoints": 16.3,
+            "actualTabOffsetPoints": 16.300000000000004,
+            "actualLiteralOffsetPoints": 16.300000000000004,
+            "tabErrorPoints": 3.552713678800501e-15,
+            "literalErrorPoints": 3.552713678800501e-15,
+            "tabMinusLiteralPoints": 0.0,
+            "pairDeltaPoints": 0.0,
+            "tabGatePassed": true,
+            "literalGatePassed": true,
+            "pairAgreementGatePassed": true
+          },
+          {
+            "index": 7,
+            "targetPoints": 16.31,
+            "actualTabOffsetPoints": 16.300000000000004,
+            "actualLiteralOffsetPoints": 16.310000000000002,
+            "tabErrorPoints": 0.009999999999994458,
+            "literalErrorPoints": 3.552713678800501e-15,
+            "tabMinusLiteralPoints": -0.00999999999999801,
+            "pairDeltaPoints": 0.00999999999999801,
+            "tabGatePassed": true,
+            "literalGatePassed": true,
+            "pairAgreementGatePassed": true
+          },
+          {
+            "index": 8,
+            "targetPoints": 77.3173828125,
+            "actualTabOffsetPoints": 77.30000000000001,
+            "actualLiteralOffsetPoints": 77.31739999999999,
+            "tabErrorPoints": 0.01738281249998863,
+            "literalErrorPoints": 1.718749999213287e-05,
+            "tabMinusLiteralPoints": -0.017399999999980764,
+            "pairDeltaPoints": 0.017399999999980764,
+            "tabGatePassed": true,
+            "literalGatePassed": true,
+            "pairAgreementGatePassed": true
+          }
+        ]
+      }
+    },
+    "persistence": {
+      "passed": true,
+      "maximumDeltaPoints": 0.0,
+      "records": [
+        {
+          "index": 0,
+          "maximumNumericDeltaPoints": 0.0,
+          "deltas": {
+            "targetPoints": 0.0,
+            "tabStopPoints": 0.0,
+            "tabShapeLeft": 0.0,
+            "tabShapeTop": 0.0,
+            "literalShapeLeft": 0.0,
+            "literalShapeTop": 0.0,
+            "leadingTabBoundLeft": 0.0,
+            "leadingTabBoundTop": 0.0,
+            "leadingTabBoundWidth": 0.0,
+            "leadingTabBoundHeight": 0.0,
+            "tabTextBoundLeft": 0.0,
+            "tabTextBoundTop": 0.0,
+            "tabTextBoundWidth": 0.0,
+            "tabTextBoundHeight": 0.0,
+            "literalTextBoundLeft": 0.0,
+            "literalTextBoundTop": 0.0,
+            "literalTextBoundWidth": 0.0,
+            "literalTextBoundHeight": 0.0,
+            "leadingTabFontSize": 0.0,
+            "tabTextFontSize": 0.0,
+            "literalTextFontSize": 0.0
+          },
+          "exactFields": {
+            "tabStopCount": true,
+            "tabShapeName": true,
+            "literalShapeName": true,
+            "actualTabText": true,
+            "literalText": true,
+            "leadingTabFontName": true,
+            "tabTextFontName": true,
+            "literalTextFontName": true
+          },
+          "passed": true
+        },
+        {
+          "index": 1,
+          "maximumNumericDeltaPoints": 0.0,
+          "deltas": {
+            "targetPoints": 0.0,
+            "tabStopPoints": 0.0,
+            "tabShapeLeft": 0.0,
+            "tabShapeTop": 0.0,
+            "literalShapeLeft": 0.0,
+            "literalShapeTop": 0.0,
+            "leadingTabBoundLeft": 0.0,
+            "leadingTabBoundTop": 0.0,
+            "leadingTabBoundWidth": 0.0,
+            "leadingTabBoundHeight": 0.0,
+            "tabTextBoundLeft": 0.0,
+            "tabTextBoundTop": 0.0,
+            "tabTextBoundWidth": 0.0,
+            "tabTextBoundHeight": 0.0,
+            "literalTextBoundLeft": 0.0,
+            "literalTextBoundTop": 0.0,
+            "literalTextBoundWidth": 0.0,
+            "literalTextBoundHeight": 0.0,
+            "leadingTabFontSize": 0.0,
+            "tabTextFontSize": 0.0,
+            "literalTextFontSize": 0.0
+          },
+          "exactFields": {
+            "tabStopCount": true,
+            "tabShapeName": true,
+            "literalShapeName": true,
+            "actualTabText": true,
+            "literalText": true,
+            "leadingTabFontName": true,
+            "tabTextFontName": true,
+            "literalTextFontName": true
+          },
+          "passed": true
+        },
+        {
+          "index": 2,
+          "maximumNumericDeltaPoints": 0.0,
+          "deltas": {
+            "targetPoints": 0.0,
+            "tabStopPoints": 0.0,
+            "tabShapeLeft": 0.0,
+            "tabShapeTop": 0.0,
+            "literalShapeLeft": 0.0,
+            "literalShapeTop": 0.0,
+            "leadingTabBoundLeft": 0.0,
+            "leadingTabBoundTop": 0.0,
+            "leadingTabBoundWidth": 0.0,
+            "leadingTabBoundHeight": 0.0,
+            "tabTextBoundLeft": 0.0,
+            "tabTextBoundTop": 0.0,
+            "tabTextBoundWidth": 0.0,
+            "tabTextBoundHeight": 0.0,
+            "literalTextBoundLeft": 0.0,
+            "literalTextBoundTop": 0.0,
+            "literalTextBoundWidth": 0.0,
+            "literalTextBoundHeight": 0.0,
+            "leadingTabFontSize": 0.0,
+            "tabTextFontSize": 0.0,
+            "literalTextFontSize": 0.0
+          },
+          "exactFields": {
+            "tabStopCount": true,
+            "tabShapeName": true,
+            "literalShapeName": true,
+            "actualTabText": true,
+            "literalText": true,
+            "leadingTabFontName": true,
+            "tabTextFontName": true,
+            "literalTextFontName": true
+          },
+          "passed": true
+        },
+        {
+          "index": 3,
+          "maximumNumericDeltaPoints": 0.0,
+          "deltas": {
+            "targetPoints": 0.0,
+            "tabStopPoints": 0.0,
+            "tabShapeLeft": 0.0,
+            "tabShapeTop": 0.0,
+            "literalShapeLeft": 0.0,
+            "literalShapeTop": 0.0,
+            "leadingTabBoundLeft": 0.0,
+            "leadingTabBoundTop": 0.0,
+            "leadingTabBoundWidth": 0.0,
+            "leadingTabBoundHeight": 0.0,
+            "tabTextBoundLeft": 0.0,
+            "tabTextBoundTop": 0.0,
+            "tabTextBoundWidth": 0.0,
+            "tabTextBoundHeight": 0.0,
+            "literalTextBoundLeft": 0.0,
+            "literalTextBoundTop": 0.0,
+            "literalTextBoundWidth": 0.0,
+            "literalTextBoundHeight": 0.0,
+            "leadingTabFontSize": 0.0,
+            "tabTextFontSize": 0.0,
+            "literalTextFontSize": 0.0
+          },
+          "exactFields": {
+            "tabStopCount": true,
+            "tabShapeName": true,
+            "literalShapeName": true,
+            "actualTabText": true,
+            "literalText": true,
+            "leadingTabFontName": true,
+            "tabTextFontName": true,
+            "literalTextFontName": true
+          },
+          "passed": true
+        },
+        {
+          "index": 4,
+          "maximumNumericDeltaPoints": 0.0,
+          "deltas": {
+            "targetPoints": 0.0,
+            "tabStopPoints": 0.0,
+            "tabShapeLeft": 0.0,
+            "tabShapeTop": 0.0,
+            "literalShapeLeft": 0.0,
+            "literalShapeTop": 0.0,
+            "leadingTabBoundLeft": 0.0,
+            "leadingTabBoundTop": 0.0,
+            "leadingTabBoundWidth": 0.0,
+            "leadingTabBoundHeight": 0.0,
+            "tabTextBoundLeft": 0.0,
+            "tabTextBoundTop": 0.0,
+            "tabTextBoundWidth": 0.0,
+            "tabTextBoundHeight": 0.0,
+            "literalTextBoundLeft": 0.0,
+            "literalTextBoundTop": 0.0,
+            "literalTextBoundWidth": 0.0,
+            "literalTextBoundHeight": 0.0,
+            "leadingTabFontSize": 0.0,
+            "tabTextFontSize": 0.0,
+            "literalTextFontSize": 0.0
+          },
+          "exactFields": {
+            "tabStopCount": true,
+            "tabShapeName": true,
+            "literalShapeName": true,
+            "actualTabText": true,
+            "literalText": true,
+            "leadingTabFontName": true,
+            "tabTextFontName": true,
+            "literalTextFontName": true
+          },
+          "passed": true
+        },
+        {
+          "index": 5,
+          "maximumNumericDeltaPoints": 0.0,
+          "deltas": {
+            "targetPoints": 0.0,
+            "tabStopPoints": 0.0,
+            "tabShapeLeft": 0.0,
+            "tabShapeTop": 0.0,
+            "literalShapeLeft": 0.0,
+            "literalShapeTop": 0.0,
+            "leadingTabBoundLeft": 0.0,
+            "leadingTabBoundTop": 0.0,
+            "leadingTabBoundWidth": 0.0,
+            "leadingTabBoundHeight": 0.0,
+            "tabTextBoundLeft": 0.0,
+            "tabTextBoundTop": 0.0,
+            "tabTextBoundWidth": 0.0,
+            "tabTextBoundHeight": 0.0,
+            "literalTextBoundLeft": 0.0,
+            "literalTextBoundTop": 0.0,
+            "literalTextBoundWidth": 0.0,
+            "literalTextBoundHeight": 0.0,
+            "leadingTabFontSize": 0.0,
+            "tabTextFontSize": 0.0,
+            "literalTextFontSize": 0.0
+          },
+          "exactFields": {
+            "tabStopCount": true,
+            "tabShapeName": true,
+            "literalShapeName": true,
+            "actualTabText": true,
+            "literalText": true,
+            "leadingTabFontName": true,
+            "tabTextFontName": true,
+            "literalTextFontName": true
+          },
+          "passed": true
+        },
+        {
+          "index": 6,
+          "maximumNumericDeltaPoints": 0.0,
+          "deltas": {
+            "targetPoints": 0.0,
+            "tabStopPoints": 0.0,
+            "tabShapeLeft": 0.0,
+            "tabShapeTop": 0.0,
+            "literalShapeLeft": 0.0,
+            "literalShapeTop": 0.0,
+            "leadingTabBoundLeft": 0.0,
+            "leadingTabBoundTop": 0.0,
+            "leadingTabBoundWidth": 0.0,
+            "leadingTabBoundHeight": 0.0,
+            "tabTextBoundLeft": 0.0,
+            "tabTextBoundTop": 0.0,
+            "tabTextBoundWidth": 0.0,
+            "tabTextBoundHeight": 0.0,
+            "literalTextBoundLeft": 0.0,
+            "literalTextBoundTop": 0.0,
+            "literalTextBoundWidth": 0.0,
+            "literalTextBoundHeight": 0.0,
+            "leadingTabFontSize": 0.0,
+            "tabTextFontSize": 0.0,
+            "literalTextFontSize": 0.0
+          },
+          "exactFields": {
+            "tabStopCount": true,
+            "tabShapeName": true,
+            "literalShapeName": true,
+            "actualTabText": true,
+            "literalText": true,
+            "leadingTabFontName": true,
+            "tabTextFontName": true,
+            "literalTextFontName": true
+          },
+          "passed": true
+        },
+        {
+          "index": 7,
+          "maximumNumericDeltaPoints": 0.0,
+          "deltas": {
+            "targetPoints": 0.0,
+            "tabStopPoints": 0.0,
+            "tabShapeLeft": 0.0,
+            "tabShapeTop": 0.0,
+            "literalShapeLeft": 0.0,
+            "literalShapeTop": 0.0,
+            "leadingTabBoundLeft": 0.0,
+            "leadingTabBoundTop": 0.0,
+            "leadingTabBoundWidth": 0.0,
+            "leadingTabBoundHeight": 0.0,
+            "tabTextBoundLeft": 0.0,
+            "tabTextBoundTop": 0.0,
+            "tabTextBoundWidth": 0.0,
+            "tabTextBoundHeight": 0.0,
+            "literalTextBoundLeft": 0.0,
+            "literalTextBoundTop": 0.0,
+            "literalTextBoundWidth": 0.0,
+            "literalTextBoundHeight": 0.0,
+            "leadingTabFontSize": 0.0,
+            "tabTextFontSize": 0.0,
+            "literalTextFontSize": 0.0
+          },
+          "exactFields": {
+            "tabStopCount": true,
+            "tabShapeName": true,
+            "literalShapeName": true,
+            "actualTabText": true,
+            "literalText": true,
+            "leadingTabFontName": true,
+            "tabTextFontName": true,
+            "literalTextFontName": true
+          },
+          "passed": true
+        },
+        {
+          "index": 8,
+          "maximumNumericDeltaPoints": 0.0,
+          "deltas": {
+            "targetPoints": 0.0,
+            "tabStopPoints": 0.0,
+            "tabShapeLeft": 0.0,
+            "tabShapeTop": 0.0,
+            "literalShapeLeft": 0.0,
+            "literalShapeTop": 0.0,
+            "leadingTabBoundLeft": 0.0,
+            "leadingTabBoundTop": 0.0,
+            "leadingTabBoundWidth": 0.0,
+            "leadingTabBoundHeight": 0.0,
+            "tabTextBoundLeft": 0.0,
+            "tabTextBoundTop": 0.0,
+            "tabTextBoundWidth": 0.0,
+            "tabTextBoundHeight": 0.0,
+            "literalTextBoundLeft": 0.0,
+            "literalTextBoundTop": 0.0,
+            "literalTextBoundWidth": 0.0,
+            "literalTextBoundHeight": 0.0,
+            "leadingTabFontSize": 0.0,
+            "tabTextFontSize": 0.0,
+            "literalTextFontSize": 0.0
+          },
+          "exactFields": {
+            "tabStopCount": true,
+            "tabShapeName": true,
+            "literalShapeName": true,
+            "actualTabText": true,
+            "literalText": true,
+            "leadingTabFontName": true,
+            "tabTextFontName": true,
+            "literalTextFontName": true
+          },
+          "passed": true
+        }
+      ]
+    },
+    "storedReportMetrics": null
+  },
+  "raster": {
+    "originalSha256": "1a1dc6038e12f782cd1da8696fcf0f8a43612167649edf9d6f3bab3993c9a2fd",
+    "reopenedSha256": "1a1dc6038e12f782cd1da8696fcf0f8a43612167649edf9d6f3bab3993c9a2fd",
+    "reportHashesMatch": true,
+    "byteIdentical": true,
+    "bytes": 4801,
+    "pngDimensions": [
+      1280,
+      720
+    ]
+  },
+  "presentation": {
+    "sha256": "5b042c0968a484d295cc0c76be50208ff60937afd2e483ca05b3c915d8e24e69",
+    "matchesSavedAndReopenedReportHashes": true,
+    "zipXmlAudit": {
+      "zipCrcPassed": true,
+      "badZipMember": null,
+      "xmlMemberCount": 36,
+      "malformedXml": [],
+      "slideShapeRows": [
+        {
+          "name": "tab-0",
+          "tabStopPositionsEmu": [
+            "206375"
+          ],
+          "text": "\tBefore",
+          "latinTypefaces": [
+            "Calibri"
+          ]
+        },
+        {
+          "name": "literal-0",
+          "tabStopPositionsEmu": [],
+          "text": "Before",
+          "latinTypefaces": [
+            "Calibri"
+          ]
+        },
+        {
+          "name": "tab-1",
+          "tabStopPositionsEmu": [
+            "206502"
+          ],
+          "text": "\tBefore",
+          "latinTypefaces": [
+            "Calibri"
+          ]
+        },
+        {
+          "name": "literal-1",
+          "tabStopPositionsEmu": [],
+          "text": "Before",
+          "latinTypefaces": [
+            "Calibri"
+          ]
+        },
+        {
+          "name": "tab-2",
+          "tabStopPositionsEmu": [
+            "206629"
+          ],
+          "text": "\tBefore",
+          "latinTypefaces": [
+            "Calibri"
+          ]
+        },
+        {
+          "name": "literal-2",
+          "tabStopPositionsEmu": [],
+          "text": "Before",
+          "latinTypefaces": [
+            "Calibri"
+          ]
+        },
+        {
+          "name": "tab-3",
+          "tabStopPositionsEmu": [
+            "206722"
+          ],
+          "text": "\tBefore",
+          "latinTypefaces": [
+            "Calibri"
+          ]
+        },
+        {
+          "name": "literal-3",
+          "tabStopPositionsEmu": [],
+          "text": "Before",
+          "latinTypefaces": [
+            "Calibri"
+          ]
+        },
+        {
+          "name": "tab-4",
+          "tabStopPositionsEmu": [
+            "206756"
+          ],
+          "text": "\tBefore",
+          "latinTypefaces": [
+            "Calibri"
+          ]
+        },
+        {
+          "name": "literal-4",
+          "tabStopPositionsEmu": [],
+          "text": "Before",
+          "latinTypefaces": [
+            "Calibri"
+          ]
+        },
+        {
+          "name": "tab-5",
+          "tabStopPositionsEmu": [
+            "206883"
+          ],
+          "text": "\tBefore",
+          "latinTypefaces": [
+            "Calibri"
+          ]
+        },
+        {
+          "name": "literal-5",
+          "tabStopPositionsEmu": [],
+          "text": "Before",
+          "latinTypefaces": [
+            "Calibri"
+          ]
+        },
+        {
+          "name": "tab-6",
+          "tabStopPositionsEmu": [
+            "207010"
+          ],
+          "text": "\tBefore",
+          "latinTypefaces": [
+            "Calibri"
+          ]
+        },
+        {
+          "name": "literal-6",
+          "tabStopPositionsEmu": [],
+          "text": "Before",
+          "latinTypefaces": [
+            "Calibri"
+          ]
+        },
+        {
+          "name": "tab-7",
+          "tabStopPositionsEmu": [
+            "207137"
+          ],
+          "text": "\tBefore",
+          "latinTypefaces": [
+            "Calibri"
+          ]
+        },
+        {
+          "name": "literal-7",
+          "tabStopPositionsEmu": [],
+          "text": "Before",
+          "latinTypefaces": [
+            "Calibri"
+          ]
+        },
+        {
+          "name": "tab-8",
+          "tabStopPositionsEmu": [
+            "981931"
+          ],
+          "text": "\tBefore",
+          "latinTypefaces": [
+            "Calibri"
+          ]
+        },
+        {
+          "name": "literal-8",
+          "tabStopPositionsEmu": [],
+          "text": "Before",
+          "latinTypefaces": [
+            "Calibri"
+          ]
+        }
+      ],
+      "embeddedFontMembers": [],
+      "archiveStructurePassed": true
+    }
+  },
+  "checks": {
+    "allNineOriginalAndReopenedRecordsPresent": true,
+    "exactTabAndFontInOriginal": true,
+    "exactTabAndFontInReopened": true,
+    "phaseObservationPersistence": true,
+    "sourcePptxPathAndShaStable": true,
+    "sourceRasterPathsAndHashesMatchReport": true,
+    "rasterBytesPersistAfterReopen": true,
+    "verifierAndHelperExternalAndSnapshotsMatch": false,
+    "hostSnapshotMatches": true,
+    "fontHashMatches": true,
+    "zipCrcAndXmlValid": true,
+    "nativeLifecycleCallsSucceeded": true,
+    "nativeLifecycleCleanupConfirmed": true,
+    "workerPostprocessingFailureCaptured": true
+  },
+  "auditIntegrityPassed": false,
+  "tabOffsetGatePassed": false,
+  "limitations": [
+    "PowerPoint observations are read from the retained native-run report and ordered stage log; this audit does not repeat the Office calls.",
+    "The retained worker report has metrics:null and ends at worker.failure due to the postprocessing Measure-Object/property error; metrics here are independently recomputed from its raw observations.",
+    "A completed native lifecycle with confirmed cleanup does not imply the tab-offset gates passed; original and reopened visual tab offsets are separately reported."
+  ]
+}

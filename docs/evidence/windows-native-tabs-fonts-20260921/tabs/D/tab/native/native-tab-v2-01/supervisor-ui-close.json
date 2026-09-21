@@ -1,0 +1,8 @@
+{
+  "scope": "Separate supervisor UI cleanup after helper stopped",
+  "savedBytesUnchanged": true,
+  "action": "Ctrl+W on observed owned saved native-tab-control-v2.pptx",
+  "observed": "Empty PowerPoint workspace after close, no save or recovery prompt",
+  "sha256": "ec554b0e5cc07b89292d242b9269c64d721450585220b493625edad7297a95eb",
+  "workerCleanupRecordUnchanged": true
+}

@@ -1,0 +1,538 @@
+﻿{
+    "schemaVersion":  1,
+    "kind":  "native-tab-control-v2-offline-metrics-recovery",
+    "sourceReport":  {
+                         "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-tab-v2-02\\report.json",
+                         "sha256":  "4f9e17d7290eb4500ab81b48860418b511d73e419e0a02d8a09c7503fb9245a5",
+                         "metricsWasNull":  true,
+                         "error":  "Cannot process argument because the value of argument \"Property\" is not valid. Change the value of the \"Property\" argument and run the operation again."
+                     },
+    "nativeLifecycle":  {
+                            "cleanupConfirmed":  true,
+                            "officeOperationsStopped":  false,
+                            "lastStage":  "worker.failure",
+                            "lastStatus":  "error"
+                        },
+    "evidence":  {
+                     "presentation":  {
+                                          "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-tab-v2-02\\native-tab-control-v2.pptx",
+                                          "sha256":  "5b042c0968a484d295cc0c76be50208ff60937afd2e483ca05b3c915d8e24e69",
+                                          "matchesReport":  true
+                                      },
+                     "originalRaster":  {
+                                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-tab-v2-02\\original.png",
+                                            "sha256":  "1a1dc6038e12f782cd1da8696fcf0f8a43612167649edf9d6f3bab3993c9a2fd",
+                                            "matchesReport":  true
+                                        },
+                     "reopenedRaster":  {
+                                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-tab-v2-02\\reopened.png",
+                                            "sha256":  "1a1dc6038e12f782cd1da8696fcf0f8a43612167649edf9d6f3bab3993c9a2fd",
+                                            "matchesReport":  true
+                                        },
+                     "verifierSnapshot":  {
+                                              "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-tab-v2-02\\inputs\\native-tab-control-v2.ps1",
+                                              "sha256":  "3f40452fcd7d01779fea797264a57ada7fc9f1eb4f6eb9696cb32c64e2e0515c",
+                                              "matchesReport":  true
+                                          }
+                 },
+    "regression":  {
+                       "officeOrComCalls":  0,
+                       "exactReportObservationType":  "System.Management.Automation.PSCustomObject",
+                       "nativeStyleObservationType":  "System.Collections.Specialized.OrderedDictionary",
+                       "nativeStyleRecordType":  "System.Collections.Specialized.OrderedDictionary",
+                       "exactAndNativeStyleMetricsIdentical":  true
+                   },
+    "metrics":  {
+                    "tolerancePoints":  0.02,
+                    "original":  {
+                                     "phase":  "original",
+                                     "tolerancePoints":  0.02,
+                                     "tabGatePassed":  false,
+                                     "literalGatePassed":  true,
+                                     "pairAgreementGatePassed":  false,
+                                     "maximumTabErrorPoints":  0.022656250000004263,
+                                     "maximumLiteralErrorPoints":  2.1349999997255509E-05,
+                                     "maximumPairDeltaPoints":  0.022677600000001519,
+                                     "records":  [
+                                                     {
+                                                         "index":  0,
+                                                         "targetPoints":  16.25,
+                                                         "actualTabOffsetPoints":  16.25,
+                                                         "actualLiteralOffsetPoints":  16.25,
+                                                         "tabErrorPoints":  0,
+                                                         "literalErrorPoints":  0,
+                                                         "tabMinusLiteralPoints":  0,
+                                                         "tabGatePassed":  true,
+                                                         "literalGatePassed":  true,
+                                                         "pairAgreementGatePassed":  true
+                                                     },
+                                                     {
+                                                         "index":  1,
+                                                         "targetPoints":  16.26,
+                                                         "actualTabOffsetPoints":  16.25,
+                                                         "actualLiteralOffsetPoints":  16.259999999999998,
+                                                         "tabErrorPoints":  0.010000000000001563,
+                                                         "literalErrorPoints":  3.5527136788005009E-15,
+                                                         "tabMinusLiteralPoints":  -0.00999999999999801,
+                                                         "tabGatePassed":  true,
+                                                         "literalGatePassed":  true,
+                                                         "pairAgreementGatePassed":  true
+                                                     },
+                                                     {
+                                                         "index":  2,
+                                                         "targetPoints":  16.27,
+                                                         "actualTabOffsetPoints":  16.25,
+                                                         "actualLiteralOffsetPoints":  16.270000000000003,
+                                                         "tabErrorPoints":  0.019999999999999574,
+                                                         "literalErrorPoints":  3.5527136788005009E-15,
+                                                         "tabMinusLiteralPoints":  -0.020000000000003126,
+                                                         "tabGatePassed":  true,
+                                                         "literalGatePassed":  true,
+                                                         "pairAgreementGatePassed":  false
+                                                     },
+                                                     {
+                                                         "index":  3,
+                                                         "targetPoints":  16.27734375,
+                                                         "actualTabOffsetPoints":  16.300000000000004,
+                                                         "actualLiteralOffsetPoints":  16.277322400000003,
+                                                         "tabErrorPoints":  0.022656250000004263,
+                                                         "literalErrorPoints":  2.1349999997255509E-05,
+                                                         "tabMinusLiteralPoints":  0.022677600000001519,
+                                                         "tabGatePassed":  false,
+                                                         "literalGatePassed":  true,
+                                                         "pairAgreementGatePassed":  false
+                                                     },
+                                                     {
+                                                         "index":  4,
+                                                         "targetPoints":  16.28,
+                                                         "actualTabOffsetPoints":  16.300000000000004,
+                                                         "actualLiteralOffsetPoints":  16.28,
+                                                         "tabErrorPoints":  0.020000000000003126,
+                                                         "literalErrorPoints":  0,
+                                                         "tabMinusLiteralPoints":  0.020000000000003126,
+                                                         "tabGatePassed":  false,
+                                                         "literalGatePassed":  true,
+                                                         "pairAgreementGatePassed":  false
+                                                     },
+                                                     {
+                                                         "index":  5,
+                                                         "targetPoints":  16.29,
+                                                         "actualTabOffsetPoints":  16.300000000000004,
+                                                         "actualLiteralOffsetPoints":  16.29,
+                                                         "tabErrorPoints":  0.010000000000005116,
+                                                         "literalErrorPoints":  0,
+                                                         "tabMinusLiteralPoints":  0.010000000000005116,
+                                                         "tabGatePassed":  true,
+                                                         "literalGatePassed":  true,
+                                                         "pairAgreementGatePassed":  true
+                                                     },
+                                                     {
+                                                         "index":  6,
+                                                         "targetPoints":  16.3,
+                                                         "actualTabOffsetPoints":  16.300000000000004,
+                                                         "actualLiteralOffsetPoints":  16.300000000000004,
+                                                         "tabErrorPoints":  3.5527136788005009E-15,
+                                                         "literalErrorPoints":  3.5527136788005009E-15,
+                                                         "tabMinusLiteralPoints":  0,
+                                                         "tabGatePassed":  true,
+                                                         "literalGatePassed":  true,
+                                                         "pairAgreementGatePassed":  true
+                                                     },
+                                                     {
+                                                         "index":  7,
+                                                         "targetPoints":  16.31,
+                                                         "actualTabOffsetPoints":  16.300000000000004,
+                                                         "actualLiteralOffsetPoints":  16.310000000000002,
+                                                         "tabErrorPoints":  0.0099999999999944578,
+                                                         "literalErrorPoints":  3.5527136788005009E-15,
+                                                         "tabMinusLiteralPoints":  -0.00999999999999801,
+                                                         "tabGatePassed":  true,
+                                                         "literalGatePassed":  true,
+                                                         "pairAgreementGatePassed":  true
+                                                     },
+                                                     {
+                                                         "index":  8,
+                                                         "targetPoints":  77.3173828125,
+                                                         "actualTabOffsetPoints":  77.300000000000011,
+                                                         "actualLiteralOffsetPoints":  77.317399999999992,
+                                                         "tabErrorPoints":  0.017382812499988631,
+                                                         "literalErrorPoints":  1.7187499992132871E-05,
+                                                         "tabMinusLiteralPoints":  -0.017399999999980764,
+                                                         "tabGatePassed":  true,
+                                                         "literalGatePassed":  true,
+                                                         "pairAgreementGatePassed":  true
+                                                     }
+                                                 ]
+                                 },
+                    "reopened":  {
+                                     "phase":  "reopened",
+                                     "tolerancePoints":  0.02,
+                                     "tabGatePassed":  false,
+                                     "literalGatePassed":  true,
+                                     "pairAgreementGatePassed":  false,
+                                     "maximumTabErrorPoints":  0.022656250000004263,
+                                     "maximumLiteralErrorPoints":  2.1349999997255509E-05,
+                                     "maximumPairDeltaPoints":  0.022677600000001519,
+                                     "records":  [
+                                                     {
+                                                         "index":  0,
+                                                         "targetPoints":  16.25,
+                                                         "actualTabOffsetPoints":  16.25,
+                                                         "actualLiteralOffsetPoints":  16.25,
+                                                         "tabErrorPoints":  0,
+                                                         "literalErrorPoints":  0,
+                                                         "tabMinusLiteralPoints":  0,
+                                                         "tabGatePassed":  true,
+                                                         "literalGatePassed":  true,
+                                                         "pairAgreementGatePassed":  true
+                                                     },
+                                                     {
+                                                         "index":  1,
+                                                         "targetPoints":  16.26,
+                                                         "actualTabOffsetPoints":  16.25,
+                                                         "actualLiteralOffsetPoints":  16.259999999999998,
+                                                         "tabErrorPoints":  0.010000000000001563,
+                                                         "literalErrorPoints":  3.5527136788005009E-15,
+                                                         "tabMinusLiteralPoints":  -0.00999999999999801,
+                                                         "tabGatePassed":  true,
+                                                         "literalGatePassed":  true,
+                                                         "pairAgreementGatePassed":  true
+                                                     },
+                                                     {
+                                                         "index":  2,
+                                                         "targetPoints":  16.27,
+                                                         "actualTabOffsetPoints":  16.25,
+                                                         "actualLiteralOffsetPoints":  16.270000000000003,
+                                                         "tabErrorPoints":  0.019999999999999574,
+                                                         "literalErrorPoints":  3.5527136788005009E-15,
+                                                         "tabMinusLiteralPoints":  -0.020000000000003126,
+                                                         "tabGatePassed":  true,
+                                                         "literalGatePassed":  true,
+                                                         "pairAgreementGatePassed":  false
+                                                     },
+                                                     {
+                                                         "index":  3,
+                                                         "targetPoints":  16.27734375,
+                                                         "actualTabOffsetPoints":  16.300000000000004,
+                                                         "actualLiteralOffsetPoints":  16.277322400000003,
+                                                         "tabErrorPoints":  0.022656250000004263,
+                                                         "literalErrorPoints":  2.1349999997255509E-05,
+                                                         "tabMinusLiteralPoints":  0.022677600000001519,
+                                                         "tabGatePassed":  false,
+                                                         "literalGatePassed":  true,
+                                                         "pairAgreementGatePassed":  false
+                                                     },
+                                                     {
+                                                         "index":  4,
+                                                         "targetPoints":  16.28,
+                                                         "actualTabOffsetPoints":  16.300000000000004,
+                                                         "actualLiteralOffsetPoints":  16.28,
+                                                         "tabErrorPoints":  0.020000000000003126,
+                                                         "literalErrorPoints":  0,
+                                                         "tabMinusLiteralPoints":  0.020000000000003126,
+                                                         "tabGatePassed":  false,
+                                                         "literalGatePassed":  true,
+                                                         "pairAgreementGatePassed":  false
+                                                     },
+                                                     {
+                                                         "index":  5,
+                                                         "targetPoints":  16.29,
+                                                         "actualTabOffsetPoints":  16.300000000000004,
+                                                         "actualLiteralOffsetPoints":  16.29,
+                                                         "tabErrorPoints":  0.010000000000005116,
+                                                         "literalErrorPoints":  0,
+                                                         "tabMinusLiteralPoints":  0.010000000000005116,
+                                                         "tabGatePassed":  true,
+                                                         "literalGatePassed":  true,
+                                                         "pairAgreementGatePassed":  true
+                                                     },
+                                                     {
+                                                         "index":  6,
+                                                         "targetPoints":  16.3,
+                                                         "actualTabOffsetPoints":  16.300000000000004,
+                                                         "actualLiteralOffsetPoints":  16.300000000000004,
+                                                         "tabErrorPoints":  3.5527136788005009E-15,
+                                                         "literalErrorPoints":  3.5527136788005009E-15,
+                                                         "tabMinusLiteralPoints":  0,
+                                                         "tabGatePassed":  true,
+                                                         "literalGatePassed":  true,
+                                                         "pairAgreementGatePassed":  true
+                                                     },
+                                                     {
+                                                         "index":  7,
+                                                         "targetPoints":  16.31,
+                                                         "actualTabOffsetPoints":  16.300000000000004,
+                                                         "actualLiteralOffsetPoints":  16.310000000000002,
+                                                         "tabErrorPoints":  0.0099999999999944578,
+                                                         "literalErrorPoints":  3.5527136788005009E-15,
+                                                         "tabMinusLiteralPoints":  -0.00999999999999801,
+                                                         "tabGatePassed":  true,
+                                                         "literalGatePassed":  true,
+                                                         "pairAgreementGatePassed":  true
+                                                     },
+                                                     {
+                                                         "index":  8,
+                                                         "targetPoints":  77.3173828125,
+                                                         "actualTabOffsetPoints":  77.300000000000011,
+                                                         "actualLiteralOffsetPoints":  77.317399999999992,
+                                                         "tabErrorPoints":  0.017382812499988631,
+                                                         "literalErrorPoints":  1.7187499992132871E-05,
+                                                         "tabMinusLiteralPoints":  -0.017399999999980764,
+                                                         "tabGatePassed":  true,
+                                                         "literalGatePassed":  true,
+                                                         "pairAgreementGatePassed":  true
+                                                     }
+                                                 ]
+                                 },
+                    "persistence":  {
+                                        "tolerancePoints":  0.02,
+                                        "gatePassed":  true,
+                                        "maximumDeltaPoints":  0,
+                                        "records":  [
+                                                        {
+                                                            "index":  0,
+                                                            "maximumDeltaPoints":  0,
+                                                            "deltas":  {
+                                                                           "tabStopPoints":  0,
+                                                                           "tabShapeLeft":  0,
+                                                                           "tabShapeTop":  0,
+                                                                           "literalShapeLeft":  0,
+                                                                           "literalShapeTop":  0,
+                                                                           "leadingTabBoundLeft":  0,
+                                                                           "leadingTabBoundTop":  0,
+                                                                           "leadingTabBoundWidth":  0,
+                                                                           "leadingTabBoundHeight":  0,
+                                                                           "tabTextBoundLeft":  0,
+                                                                           "tabTextBoundTop":  0,
+                                                                           "tabTextBoundWidth":  0,
+                                                                           "tabTextBoundHeight":  0,
+                                                                           "literalTextBoundLeft":  0,
+                                                                           "literalTextBoundTop":  0,
+                                                                           "literalTextBoundWidth":  0,
+                                                                           "literalTextBoundHeight":  0,
+                                                                           "leadingTabFontSize":  0,
+                                                                           "tabTextFontSize":  0,
+                                                                           "literalTextFontSize":  0
+                                                                       }
+                                                        },
+                                                        {
+                                                            "index":  1,
+                                                            "maximumDeltaPoints":  0,
+                                                            "deltas":  {
+                                                                           "tabStopPoints":  0,
+                                                                           "tabShapeLeft":  0,
+                                                                           "tabShapeTop":  0,
+                                                                           "literalShapeLeft":  0,
+                                                                           "literalShapeTop":  0,
+                                                                           "leadingTabBoundLeft":  0,
+                                                                           "leadingTabBoundTop":  0,
+                                                                           "leadingTabBoundWidth":  0,
+                                                                           "leadingTabBoundHeight":  0,
+                                                                           "tabTextBoundLeft":  0,
+                                                                           "tabTextBoundTop":  0,
+                                                                           "tabTextBoundWidth":  0,
+                                                                           "tabTextBoundHeight":  0,
+                                                                           "literalTextBoundLeft":  0,
+                                                                           "literalTextBoundTop":  0,
+                                                                           "literalTextBoundWidth":  0,
+                                                                           "literalTextBoundHeight":  0,
+                                                                           "leadingTabFontSize":  0,
+                                                                           "tabTextFontSize":  0,
+                                                                           "literalTextFontSize":  0
+                                                                       }
+                                                        },
+                                                        {
+                                                            "index":  2,
+                                                            "maximumDeltaPoints":  0,
+                                                            "deltas":  {
+                                                                           "tabStopPoints":  0,
+                                                                           "tabShapeLeft":  0,
+                                                                           "tabShapeTop":  0,
+                                                                           "literalShapeLeft":  0,
+                                                                           "literalShapeTop":  0,
+                                                                           "leadingTabBoundLeft":  0,
+                                                                           "leadingTabBoundTop":  0,
+                                                                           "leadingTabBoundWidth":  0,
+                                                                           "leadingTabBoundHeight":  0,
+                                                                           "tabTextBoundLeft":  0,
+                                                                           "tabTextBoundTop":  0,
+                                                                           "tabTextBoundWidth":  0,
+                                                                           "tabTextBoundHeight":  0,
+                                                                           "literalTextBoundLeft":  0,
+                                                                           "literalTextBoundTop":  0,
+                                                                           "literalTextBoundWidth":  0,
+                                                                           "literalTextBoundHeight":  0,
+                                                                           "leadingTabFontSize":  0,
+                                                                           "tabTextFontSize":  0,
+                                                                           "literalTextFontSize":  0
+                                                                       }
+                                                        },
+                                                        {
+                                                            "index":  3,
+                                                            "maximumDeltaPoints":  0,
+                                                            "deltas":  {
+                                                                           "tabStopPoints":  0,
+                                                                           "tabShapeLeft":  0,
+                                                                           "tabShapeTop":  0,
+                                                                           "literalShapeLeft":  0,
+                                                                           "literalShapeTop":  0,
+                                                                           "leadingTabBoundLeft":  0,
+                                                                           "leadingTabBoundTop":  0,
+                                                                           "leadingTabBoundWidth":  0,
+                                                                           "leadingTabBoundHeight":  0,
+                                                                           "tabTextBoundLeft":  0,
+                                                                           "tabTextBoundTop":  0,
+                                                                           "tabTextBoundWidth":  0,
+                                                                           "tabTextBoundHeight":  0,
+                                                                           "literalTextBoundLeft":  0,
+                                                                           "literalTextBoundTop":  0,
+                                                                           "literalTextBoundWidth":  0,
+                                                                           "literalTextBoundHeight":  0,
+                                                                           "leadingTabFontSize":  0,
+                                                                           "tabTextFontSize":  0,
+                                                                           "literalTextFontSize":  0
+                                                                       }
+                                                        },
+                                                        {
+                                                            "index":  4,
+                                                            "maximumDeltaPoints":  0,
+                                                            "deltas":  {
+                                                                           "tabStopPoints":  0,
+                                                                           "tabShapeLeft":  0,
+                                                                           "tabShapeTop":  0,
+                                                                           "literalShapeLeft":  0,
+                                                                           "literalShapeTop":  0,
+                                                                           "leadingTabBoundLeft":  0,
+                                                                           "leadingTabBoundTop":  0,
+                                                                           "leadingTabBoundWidth":  0,
+                                                                           "leadingTabBoundHeight":  0,
+                                                                           "tabTextBoundLeft":  0,
+                                                                           "tabTextBoundTop":  0,
+                                                                           "tabTextBoundWidth":  0,
+                                                                           "tabTextBoundHeight":  0,
+                                                                           "literalTextBoundLeft":  0,
+                                                                           "literalTextBoundTop":  0,
+                                                                           "literalTextBoundWidth":  0,
+                                                                           "literalTextBoundHeight":  0,
+                                                                           "leadingTabFontSize":  0,
+                                                                           "tabTextFontSize":  0,
+                                                                           "literalTextFontSize":  0
+                                                                       }
+                                                        },
+                                                        {
+                                                            "index":  5,
+                                                            "maximumDeltaPoints":  0,
+                                                            "deltas":  {
+                                                                           "tabStopPoints":  0,
+                                                                           "tabShapeLeft":  0,
+                                                                           "tabShapeTop":  0,
+                                                                           "literalShapeLeft":  0,
+                                                                           "literalShapeTop":  0,
+                                                                           "leadingTabBoundLeft":  0,
+                                                                           "leadingTabBoundTop":  0,
+                                                                           "leadingTabBoundWidth":  0,
+                                                                           "leadingTabBoundHeight":  0,
+                                                                           "tabTextBoundLeft":  0,
+                                                                           "tabTextBoundTop":  0,
+                                                                           "tabTextBoundWidth":  0,
+                                                                           "tabTextBoundHeight":  0,
+                                                                           "literalTextBoundLeft":  0,
+                                                                           "literalTextBoundTop":  0,
+                                                                           "literalTextBoundWidth":  0,
+                                                                           "literalTextBoundHeight":  0,
+                                                                           "leadingTabFontSize":  0,
+                                                                           "tabTextFontSize":  0,
+                                                                           "literalTextFontSize":  0
+                                                                       }
+                                                        },
+                                                        {
+                                                            "index":  6,
+                                                            "maximumDeltaPoints":  0,
+                                                            "deltas":  {
+                                                                           "tabStopPoints":  0,
+                                                                           "tabShapeLeft":  0,
+                                                                           "tabShapeTop":  0,
+                                                                           "literalShapeLeft":  0,
+                                                                           "literalShapeTop":  0,
+                                                                           "leadingTabBoundLeft":  0,
+                                                                           "leadingTabBoundTop":  0,
+                                                                           "leadingTabBoundWidth":  0,
+                                                                           "leadingTabBoundHeight":  0,
+                                                                           "tabTextBoundLeft":  0,
+                                                                           "tabTextBoundTop":  0,
+                                                                           "tabTextBoundWidth":  0,
+                                                                           "tabTextBoundHeight":  0,
+                                                                           "literalTextBoundLeft":  0,
+                                                                           "literalTextBoundTop":  0,
+                                                                           "literalTextBoundWidth":  0,
+                                                                           "literalTextBoundHeight":  0,
+                                                                           "leadingTabFontSize":  0,
+                                                                           "tabTextFontSize":  0,
+                                                                           "literalTextFontSize":  0
+                                                                       }
+                                                        },
+                                                        {
+                                                            "index":  7,
+                                                            "maximumDeltaPoints":  0,
+                                                            "deltas":  {
+                                                                           "tabStopPoints":  0,
+                                                                           "tabShapeLeft":  0,
+                                                                           "tabShapeTop":  0,
+                                                                           "literalShapeLeft":  0,
+                                                                           "literalShapeTop":  0,
+                                                                           "leadingTabBoundLeft":  0,
+                                                                           "leadingTabBoundTop":  0,
+                                                                           "leadingTabBoundWidth":  0,
+                                                                           "leadingTabBoundHeight":  0,
+                                                                           "tabTextBoundLeft":  0,
+                                                                           "tabTextBoundTop":  0,
+                                                                           "tabTextBoundWidth":  0,
+                                                                           "tabTextBoundHeight":  0,
+                                                                           "literalTextBoundLeft":  0,
+                                                                           "literalTextBoundTop":  0,
+                                                                           "literalTextBoundWidth":  0,
+                                                                           "literalTextBoundHeight":  0,
+                                                                           "leadingTabFontSize":  0,
+                                                                           "tabTextFontSize":  0,
+                                                                           "literalTextFontSize":  0
+                                                                       }
+                                                        },
+                                                        {
+                                                            "index":  8,
+                                                            "maximumDeltaPoints":  0,
+                                                            "deltas":  {
+                                                                           "tabStopPoints":  0,
+                                                                           "tabShapeLeft":  0,
+                                                                           "tabShapeTop":  0,
+                                                                           "literalShapeLeft":  0,
+                                                                           "literalShapeTop":  0,
+                                                                           "leadingTabBoundLeft":  0,
+                                                                           "leadingTabBoundTop":  0,
+                                                                           "leadingTabBoundWidth":  0,
+                                                                           "leadingTabBoundHeight":  0,
+                                                                           "tabTextBoundLeft":  0,
+                                                                           "tabTextBoundTop":  0,
+                                                                           "tabTextBoundWidth":  0,
+                                                                           "tabTextBoundHeight":  0,
+                                                                           "literalTextBoundLeft":  0,
+                                                                           "literalTextBoundTop":  0,
+                                                                           "literalTextBoundWidth":  0,
+                                                                           "literalTextBoundHeight":  0,
+                                                                           "leadingTabFontSize":  0,
+                                                                           "tabTextFontSize":  0,
+                                                                           "literalTextFontSize":  0
+                                                                       }
+                                                        }
+                                                    ]
+                                    },
+                    "content":  {
+                                    "passed":  true,
+                                    "failures":  [
+
+                                                 ]
+                                },
+                    "rasterStable":  true,
+                    "sourceStable":  true
+                },
+    "limitations":  "Recovered offline from already-recorded native observations after both owned presentations closed. This does not alter or relabel the failed worker report and makes no additional Office observation."
+}

@@ -1,0 +1,90 @@
+﻿{
+    "schemaVersion":  2,
+    "source":  {
+                   "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-tab-v2-01\\native-tab-control-v2.pptx",
+                   "sha256":  null,
+                   "reopenedSha256":  null
+               },
+    "requested":  {
+                      "targets":  [
+                                      16.25,
+                                      16.26,
+                                      16.27,
+                                      16.27734375,
+                                      16.28,
+                                      16.29,
+                                      16.3,
+                                      16.31,
+                                      77.3173828125
+                                  ],
+                      "literals":  {
+                                       "tabText":  "\tBefore",
+                                       "leadingCodePoint":  9,
+                                       "beforeText":  "Before"
+                                   },
+                      "font":  {
+                                   "name":  "Calibri",
+                                   "size":  13.5
+                               },
+                      "tolerancePoints":  0.02,
+                      "slide":  {
+                                    "width":  960,
+                                    "height":  540,
+                                    "layout":  12
+                                }
+                  },
+    "original":  {
+                     "observation":  null,
+                     "raster":  {
+                                    "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-tab-v2-01\\original.png",
+                                    "sha256":  null
+                                }
+                 },
+    "reopened":  {
+                     "observation":  null,
+                     "raster":  {
+                                    "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-tab-v2-01\\reopened.png",
+                                    "sha256":  null
+                                }
+                 },
+    "metrics":  null,
+    "inputs":  {
+                   "verifier":  {
+                                    "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\sources\\opf-pptx\\test\\native-tab-control-v2.ps1",
+                                    "sha256":  "f57fcdf931a48f3f927310c294fabb13c0c0790351560fb7635c2237fe039a24",
+                                    "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-tab-v2-01\\inputs\\native-tab-control-v2.ps1",
+                                    "snapshotSha256":  "f57fcdf931a48f3f927310c294fabb13c0c0790351560fb7635c2237fe039a24",
+                                    "unchanged":  null,
+                                    "snapshotUnchanged":  null
+                                },
+                   "processHelper":  {
+                                         "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\sources\\opf-pptx\\test\\native-process.ps1",
+                                         "sha256":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+                                         "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-tab-v2-01\\inputs\\native-process.ps1",
+                                         "snapshotSha256":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+                                         "unchanged":  null,
+                                         "snapshotUnchanged":  null
+                                     }
+               },
+    "environment":  {
+                        "hostVersion":  "5.1.26100.9444",
+                        "hostExecutable":  "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+                        "hostExecutableSha256":  "8bb6fa8c283b4d92120b1ef249a9b311b0f804d4cabbe9981159976c8be76a5e",
+                        "windowsProductName":  "Windows 10 Home",
+                        "windowsDisplayVersion":  "25H2",
+                        "windowsBuild":  "26200.9457",
+                        "calibriPath":  "C:\\windows\\Fonts\\calibri.ttf",
+                        "calibriSha256":  "57e93ff143572bcc092c1f56202d43ddc07bb119aa104c6d7af163470fb551f6",
+                        "calibriUnchanged":  null,
+                        "powerPointVersion":  "16.0",
+                        "powerPointExecutable":  "C:\\Program Files\\Microsoft Office\\root\\Office16\\POWERPNT.EXE",
+                        "powerPointBuild":  "16.0.20326.20158",
+                        "powerPointExecutableSha256":  "07cbe68cde7596058a6890c471389a7a70a090ee42f01975d72ea6d643f82021"
+                    },
+    "cleanupConfirmed":  false,
+    "officeOperationsStopped":  true,
+    "lastStage":  "worker.failure",
+    "lastStatus":  "error",
+    "error":  "Item tab-0 not found in the Shapes collection.",
+    "scope":  "One native-created 960 x 540 PowerPoint slide with nine tab/literal pairs. The control records native TextRange2 bounds and PNGs only; it creates no PDF or embedded-font output, never quits or kills Office, changes fonts or security, retries, or closes unrelated presentations."
+}

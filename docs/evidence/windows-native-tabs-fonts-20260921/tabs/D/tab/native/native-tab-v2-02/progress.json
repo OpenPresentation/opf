@@ -1,0 +1,10 @@
+﻿{
+    "sequence":  2752,
+    "timestamp":  "2026-09-21T18:44:37.3199945Z",
+    "stage":  "worker.failure",
+    "status":  "error",
+    "error":  "Cannot process argument because the value of argument \"Property\" is not valid. Change the value of the \"Property\" argument and run the operation again.",
+    "cleanupConfirmed":  true,
+    "officeOperationsStopped":  false,
+    "ownedPresentationPath":  null
+}

@@ -1,0 +1,8 @@
+Item tab-0 not found in the Shapes collection.
+At C:\Users\micha\.codex\worktrees\fd3f\opf\artifacts\windows-resume-20260921\sources\opf-pptx\test\native-tab-control-
+v2.ps1:249 char:59
++ ... e-ControlCom "$prefix.tab.get" { return ,$shapes.Item("tab-$index") }
++                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (:) [], COMException
+    + FullyQualifiedErrorId : System.Runtime.InteropServices.COMException
+ 

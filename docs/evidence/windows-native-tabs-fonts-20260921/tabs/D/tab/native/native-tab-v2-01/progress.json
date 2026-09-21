@@ -1,0 +1,10 @@
+﻿{
+    "sequence":  1116,
+    "timestamp":  "2026-09-21T18:37:37.2044516Z",
+    "stage":  "worker.failure",
+    "status":  "error",
+    "error":  "Item tab-0 not found in the Shapes collection.",
+    "cleanupConfirmed":  false,
+    "officeOperationsStopped":  true,
+    "ownedPresentationPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-tab-v2-01\\native-tab-control-v2.pptx"
+}
