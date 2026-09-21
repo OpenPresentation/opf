@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "reviewer": "root supervising agent",
+  "reviewDate": "2026-09-21",
+  "method": "Direct full-slide inspection of the native exported rasters during this task; recorded after review.",
+  "scope": "Finite visual observations only; no universal rendering, pixel-equivalence, mixed-size-table, or goal-D acceptance.",
+  "images": [
+    {
+      "path": "D/tab/native/native-tab-v2-02/original.png",
+      "sha256": "1a1dc6038e12f782cd1da8696fcf0f8a43612167649edf9d6f3bab3993c9a2fd",
+      "finding": "Complete original slide for native-tab-v2-02 reviewed against the bounded nine-pair plain-text control."
+    },
+    {
+      "path": "D/tab/native/native-tab-v2-02/reopened.png",
+      "sha256": "1a1dc6038e12f782cd1da8696fcf0f8a43612167649edf9d6f3bab3993c9a2fd",
+      "finding": "Complete reopened slide for native-tab-v2-02 reviewed against the bounded nine-pair plain-text control."
+    },
+    {
+      "path": "D/tab/native/native-tab-v2-03/original.png",
+      "sha256": "1a1dc6038e12f782cd1da8696fcf0f8a43612167649edf9d6f3bab3993c9a2fd",
+      "finding": "Complete original slide for native-tab-v2-03 reviewed against the bounded nine-pair plain-text control."
+    },
+    {
+      "path": "D/tab/native/native-tab-v2-03/reopened.png",
+      "sha256": "1a1dc6038e12f782cd1da8696fcf0f8a43612167649edf9d6f3bab3993c9a2fd",
+      "finding": "Complete reopened slide for native-tab-v2-03 reviewed against the bounded nine-pair plain-text control."
+    },
+    {
+      "path": "D/tab/native/native-tab-v2-04/original.png",
+      "sha256": "1a1dc6038e12f782cd1da8696fcf0f8a43612167649edf9d6f3bab3993c9a2fd",
+      "finding": "Complete original slide for native-tab-v2-04 reviewed against the bounded nine-pair plain-text control."
+    },
+    {
+      "path": "D/tab/native/native-tab-v2-04/reopened.png",
+      "sha256": "1a1dc6038e12f782cd1da8696fcf0f8a43612167649edf9d6f3bab3993c9a2fd",
+      "finding": "Complete reopened slide for native-tab-v2-04 reviewed against the bounded nine-pair plain-text control."
+    }
+  ]
+}

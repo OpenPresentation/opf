@@ -1,0 +1,155 @@
+﻿{
+    "timestamp":  "2026-09-21T19:23:04.6106637Z",
+    "timedOut":  false,
+    "exitCode":  0,
+    "officeLifecycleComplete":  true,
+    "metricsGatePassed":  true,
+    "officeCleanupConfirmed":  true,
+    "fontCleanupConfirmed":  true,
+    "inputsUnchanged":  true,
+    "lastDurableStage":  "worker.complete",
+    "lastDurableStatus":  "success",
+    "parentError":  null,
+    "inputChecks":  [
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\font-edit-fixture-01\\source.pptx",
+                            "expected":  "4dd235c923eb346ee19ac7ee89a93cce9a355eec7355692259d81c541bb3556d",
+                            "actual":  "4dd235c923eb346ee19ac7ee89a93cce9a355eec7355692259d81c541bb3556d",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-edit-01\\inputs\\source.pptx",
+                            "expected":  "4dd235c923eb346ee19ac7ee89a93cce9a355eec7355692259d81c541bb3556d",
+                            "actual":  "4dd235c923eb346ee19ac7ee89a93cce9a355eec7355692259d81c541bb3556d",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\font-edit-fixture-01\\generation.json",
+                            "expected":  "8ac9743832e6c63bab58a999802979dcdcb91139599f502e90bc697141cf5422",
+                            "actual":  "8ac9743832e6c63bab58a999802979dcdcb91139599f502e90bc697141cf5422",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-edit-01\\inputs\\generation.json",
+                            "expected":  "8ac9743832e6c63bab58a999802979dcdcb91139599f502e90bc697141cf5422",
+                            "actual":  "8ac9743832e6c63bab58a999802979dcdcb91139599f502e90bc697141cf5422",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\font-edit-fixture-01\\LICENSE_FONT",
+                            "expected":  "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00",
+                            "actual":  "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-edit-01\\inputs\\LICENSE_FONT",
+                            "expected":  "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00",
+                            "actual":  "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\font-edit-fixture-01\\fonts\\Carlito-400-normal.ttf",
+                            "expected":  "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89",
+                            "actual":  "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-edit-01\\inputs\\fonts\\Carlito-400-normal.ttf",
+                            "expected":  "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89",
+                            "actual":  "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\font-edit-fixture-01\\fonts\\Carlito-400-italic.ttf",
+                            "expected":  "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5",
+                            "actual":  "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-edit-01\\inputs\\fonts\\Carlito-400-italic.ttf",
+                            "expected":  "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5",
+                            "actual":  "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\font-edit-fixture-01\\fonts\\Carlito-700-normal.ttf",
+                            "expected":  "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0",
+                            "actual":  "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-edit-01\\inputs\\fonts\\Carlito-700-normal.ttf",
+                            "expected":  "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0",
+                            "actual":  "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\font-edit-fixture-01\\fonts\\Carlito-700-italic.ttf",
+                            "expected":  "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691",
+                            "actual":  "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-edit-01\\inputs\\fonts\\Carlito-700-italic.ttf",
+                            "expected":  "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691",
+                            "actual":  "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\sources\\opf-pptx\\test\\native-font-edit.ps1",
+                            "expected":  "b18f9e2ab822a42b9204a15314ed5ef6e74b1d933ba3e5e7e4efc3a542368960",
+                            "actual":  "b18f9e2ab822a42b9204a15314ed5ef6e74b1d933ba3e5e7e4efc3a542368960",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-edit-01\\inputs\\native-font-edit.ps1",
+                            "expected":  "b18f9e2ab822a42b9204a15314ed5ef6e74b1d933ba3e5e7e4efc3a542368960",
+                            "actual":  "b18f9e2ab822a42b9204a15314ed5ef6e74b1d933ba3e5e7e4efc3a542368960",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\sources\\opf-pptx\\test\\native-process.ps1",
+                            "expected":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+                            "actual":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-edit-01\\inputs\\native-process.ps1",
+                            "expected":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+                            "actual":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\sources\\opf-pptx\\test\\native-text-fonts.ps1",
+                            "expected":  "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+                            "actual":  "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+                            "matched":  true,
+                            "error":  null
+                        },
+                        {
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-edit-01\\inputs\\native-text-fonts.ps1",
+                            "expected":  "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+                            "actual":  "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+                            "matched":  true,
+                            "error":  null
+                        }
+                    ]
+}

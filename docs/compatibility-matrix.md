@@ -42,10 +42,16 @@ The separate [Windows native-picture checkpoint](evidence/windows-native-picture
 passes two minimal picture open/save/close/reopen controls on an owner-confirmed
 recovered host, including current image/alt-text reimport, expected geometry and
 reviewed byte-identical original/reopened native PNGs. Harness PR46 and evidence
-PR103 are merged; the published train is unchanged. The [later supervisor report](evidence/inspector-share-acceptance-20260921/native/supervisor-update.md)
-describes additional picture/furniture edits whose evidence publication is in
-progress. Native tabs still fail the unchanged 0.02pt gate, and physical-font
-acceptance remains open. The Windows supervisor retains sole Office control.
+PR103 are merged; the published train is unchanged. The [native edit evidence](evidence/windows-native-edits-20260921/README.md)
+records actual picture and furniture edits, current-content/provenance reimport,
+and production-versus-reordered notes controls. Semantic results do not certify
+crop, fit or reflow: longer edited furniture text clips and Change Picture changes
+geometry. The [tab and font checkpoint](evidence/windows-native-tabs-fonts-20260921/README.md)
+records a plain native tab error of 0.022655487060546875pt against the unchanged
+0.02pt gate, plus one Carlito edit/save/reopen control with zero observed bounds
+drift and confirmed owned font cleanup. Mixed-size tables, physical glyph-font
+identity and actual embedding remain open. The Windows supervisor retains sole
+Office control.
 
 ## Supported in this set
 

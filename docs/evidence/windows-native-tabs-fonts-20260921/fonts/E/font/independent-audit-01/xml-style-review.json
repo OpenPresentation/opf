@@ -1,0 +1,282 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-09-21T19:34:35.020971+00:00",
+  "scope": "Read-only standard-library PPTX XML check; no Office/COM or font operations.",
+  "scriptSha256": "d51a6cf3ab39437aa110f1dc95ce2437317639be91ce9abdee2600437ba863bb",
+  "workerReportSha256": "9a038b8009d87a23045996d905eaa08d09a6d16fe4cc582afa8006e688bd701f",
+  "checks": [
+    {
+      "name": "saved_pptx_crc_passed",
+      "passed": true,
+      "badMember": null
+    },
+    {
+      "name": "body_has_exact_expected_six_xml_runs",
+      "passed": true,
+      "runTexts": [
+        "Regular 18 | ",
+        "Bold 20",
+        " | ",
+        "Italic 22",
+        " | ",
+        "BoldItalic 24"
+      ]
+    },
+    {
+      "name": "three_separators_have_matching_regular_run_properties",
+      "passed": true,
+      "separatorRunIndexesZeroBased": [
+        0,
+        2,
+        4
+      ]
+    },
+    {
+      "name": "separator_runs_declare_carlito_latin_typeface",
+      "passed": true,
+      "latinTypefaces": [
+        "Carlito",
+        "Carlito",
+        "Carlito"
+      ]
+    },
+    {
+      "name": "separator_runs_do_not_override_size_bold_or_italic",
+      "passed": true,
+      "sz": [
+        null,
+        null,
+        null
+      ],
+      "b": [
+        null,
+        null,
+        null
+      ],
+      "i": [
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "name": "regular_first_span_is_directly_observed_18pt_nonbold_nonitalic",
+      "passed": true,
+      "observation": {
+        "text": "Regular 18",
+        "length": 10,
+        "family": "Carlito",
+        "size": 18,
+        "bold": 0,
+        "italic": 0
+      }
+    }
+  ],
+  "details": {
+    "pptx": {
+      "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-edit-01\\native-font-edit.pptx",
+      "sha256": "b3cbc884c15501b8481dc165d58909750c16fc6f41253119baa0985373951901",
+      "bytes": 17089,
+      "slidePart": "ppt/slides/slide1.xml"
+    },
+    "bodyShape": "OPF text slides.0.text line 0",
+    "xmlRunTexts": [
+      "Regular 18 | ",
+      "Bold 20",
+      " | ",
+      "Italic 22",
+      " | ",
+      "BoldItalic 24"
+    ],
+    "separatorArchiveProperties": [
+      {
+        "runIndexZeroBased": 0,
+        "text": "Regular 18 | ",
+        "rPr": {
+          "tag": "rPr",
+          "attributes": {
+            "lang": "en-US"
+          },
+          "children": [
+            {
+              "tag": "solidFill",
+              "attributes": {},
+              "children": [
+                {
+                  "tag": "srgbClr",
+                  "attributes": {
+                    "val": "FFFFFF"
+                  },
+                  "children": [],
+                  "text": null
+                }
+              ],
+              "text": null
+            },
+            {
+              "tag": "latin",
+              "attributes": {
+                "charset": "0",
+                "panose": "020F0502020204030204",
+                "pitchFamily": "34",
+                "typeface": "Carlito"
+              },
+              "children": [],
+              "text": null
+            },
+            {
+              "tag": "ea",
+              "attributes": {
+                "charset": "-122",
+                "pitchFamily": "34",
+                "typeface": "Aptos"
+              },
+              "children": [],
+              "text": null
+            },
+            {
+              "tag": "cs",
+              "attributes": {
+                "charset": "-120",
+                "pitchFamily": "34",
+                "typeface": "Aptos"
+              },
+              "children": [],
+              "text": null
+            }
+          ],
+          "text": null
+        }
+      },
+      {
+        "runIndexZeroBased": 2,
+        "text": " | ",
+        "rPr": {
+          "tag": "rPr",
+          "attributes": {
+            "lang": "en-US"
+          },
+          "children": [
+            {
+              "tag": "solidFill",
+              "attributes": {},
+              "children": [
+                {
+                  "tag": "srgbClr",
+                  "attributes": {
+                    "val": "FFFFFF"
+                  },
+                  "children": [],
+                  "text": null
+                }
+              ],
+              "text": null
+            },
+            {
+              "tag": "latin",
+              "attributes": {
+                "charset": "0",
+                "panose": "020F0502020204030204",
+                "pitchFamily": "34",
+                "typeface": "Carlito"
+              },
+              "children": [],
+              "text": null
+            },
+            {
+              "tag": "ea",
+              "attributes": {
+                "charset": "-122",
+                "pitchFamily": "34",
+                "typeface": "Aptos"
+              },
+              "children": [],
+              "text": null
+            },
+            {
+              "tag": "cs",
+              "attributes": {
+                "charset": "-120",
+                "pitchFamily": "34",
+                "typeface": "Aptos"
+              },
+              "children": [],
+              "text": null
+            }
+          ],
+          "text": null
+        }
+      },
+      {
+        "runIndexZeroBased": 4,
+        "text": " | ",
+        "rPr": {
+          "tag": "rPr",
+          "attributes": {
+            "lang": "en-US"
+          },
+          "children": [
+            {
+              "tag": "solidFill",
+              "attributes": {},
+              "children": [
+                {
+                  "tag": "srgbClr",
+                  "attributes": {
+                    "val": "FFFFFF"
+                  },
+                  "children": [],
+                  "text": null
+                }
+              ],
+              "text": null
+            },
+            {
+              "tag": "latin",
+              "attributes": {
+                "charset": "0",
+                "panose": "020F0502020204030204",
+                "pitchFamily": "34",
+                "typeface": "Carlito"
+              },
+              "children": [],
+              "text": null
+            },
+            {
+              "tag": "ea",
+              "attributes": {
+                "charset": "-122",
+                "pitchFamily": "34",
+                "typeface": "Aptos"
+              },
+              "children": [],
+              "text": null
+            },
+            {
+              "tag": "cs",
+              "attributes": {
+                "charset": "-120",
+                "pitchFamily": "34",
+                "typeface": "Aptos"
+              },
+              "children": [],
+              "text": null
+            }
+          ],
+          "text": null
+        }
+      }
+    ],
+    "paragraphDefRPr": null,
+    "directNativeTextRangeObservation": {
+      "text": "Regular 18",
+      "length": 10,
+      "family": "Carlito",
+      "size": 18,
+      "bold": 0,
+      "italic": 0
+    },
+    "interpretation": "Archive-declared style only: separator text shares the first regular run or has an identical rPr signature, including Carlito latin typeface and absent sz/b/i overrides. The saved XML has no local a:defRPr and the separators have no separately recorded TextRange2 observation; numeric 18pt regular is directly observed for the first regular span, not individually queried on each separator. This does not identify the physical glyph font."
+  },
+  "passed": true
+}
