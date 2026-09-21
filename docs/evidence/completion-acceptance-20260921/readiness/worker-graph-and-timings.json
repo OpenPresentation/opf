@@ -1,0 +1,1862 @@
+{
+  "diagnosticWorkers": [
+    {
+      "id": 1,
+      "kind": "json",
+      "createdAt": 2319,
+      "entrypoint": "/_next/static/immutable/chunks/turbopack-worker-2g80pj3ycf14_.js",
+      "dependencyGraph": [
+        "/_next/static/immutable/chunks/turbopack-3zuepcv-0ud_a.js",
+        "/_next/static/immutable/chunks/28nhevwq6-582.js",
+        "/_next/static/immutable/chunks/14xtrtee8fs0x.js",
+        "/_next/static/immutable/chunks/1__7ul3n2ffhd.js",
+        "/_next/static/immutable/chunks/3i1dij4r-3pfl.js"
+      ],
+      "deploymentId": "dpl_AGzL3mmPqZ5giiQWzh9EqyDPF8SX",
+      "resources": [
+        {
+          "name": "/_next/static/immutable/chunks/turbopack-3zuepcv-0ud_a.js",
+          "startTime": 3.799999952316284,
+          "duration": 21.5,
+          "responseStart": 24.799999952316284,
+          "responseEnd": 25.299999952316284,
+          "transferSize": 4803,
+          "encodedBodySize": 4503,
+          "decodedBodySize": 10987
+        },
+        {
+          "name": "/_next/static/immutable/chunks/28nhevwq6-582.js",
+          "startTime": 26,
+          "duration": 3.200000047683716,
+          "responseStart": 28,
+          "responseEnd": 29.200000047683716,
+          "transferSize": 0,
+          "encodedBodySize": 110570,
+          "decodedBodySize": 358311
+        },
+        {
+          "name": "/_next/static/immutable/chunks/14xtrtee8fs0x.js",
+          "startTime": 31.700000047683716,
+          "duration": 68.5,
+          "responseStart": 67.59999990463257,
+          "responseEnd": 100.20000004768372,
+          "transferSize": 24183,
+          "encodedBodySize": 23883,
+          "decodedBodySize": 84520
+        },
+        {
+          "name": "/_next/static/immutable/chunks/1__7ul3n2ffhd.js",
+          "startTime": 109.29999995231628,
+          "duration": 151.20000004768372,
+          "responseStart": 260.09999990463257,
+          "responseEnd": 260.5,
+          "transferSize": 14075,
+          "encodedBodySize": 13775,
+          "decodedBodySize": 43429
+        },
+        {
+          "name": "/_next/static/immutable/chunks/3i1dij4r-3pfl.js",
+          "startTime": 261.2000000476837,
+          "duration": 21.399999856948853,
+          "responseStart": 281.7999999523163,
+          "responseEnd": 282.59999990463257,
+          "transferSize": 10835,
+          "encodedBodySize": 10535,
+          "decodedBodySize": 27719
+        }
+      ],
+      "rpc": [
+        {
+          "method": "$initialize",
+          "start": 2320.100000143051,
+          "end": 2837,
+          "durationMs": 516.8999998569489
+        },
+        {
+          "method": "$ping",
+          "start": 2837,
+          "end": 2837.5,
+          "durationMs": 0.5
+        },
+        {
+          "method": "$ping",
+          "start": 2837.600000143051,
+          "end": 2837.7000000476837,
+          "durationMs": 0.09999990463256836
+        },
+        {
+          "method": "$ping",
+          "start": 2837.600000143051,
+          "end": 2837.7000000476837,
+          "durationMs": 0.09999990463256836
+        },
+        {
+          "method": "$ping",
+          "start": 2837.600000143051,
+          "end": 2837.7000000476837,
+          "durationMs": 0.09999990463256836
+        },
+        {
+          "method": "$ping",
+          "start": 2837.600000143051,
+          "end": 2837.7000000476837,
+          "durationMs": 0.09999990463256836
+        },
+        {
+          "method": "$acceptNewModel",
+          "start": 2837.7000000476837,
+          "end": 2838.4000000953674,
+          "durationMs": 0.7000000476837158
+        },
+        {
+          "method": "doValidation",
+          "start": 2837.7000000476837,
+          "end": 2843.600000143051,
+          "durationMs": 5.900000095367432
+        },
+        {
+          "method": "findDocumentColors",
+          "start": 2837.7000000476837,
+          "end": 2843.600000143051,
+          "durationMs": 5.900000095367432
+        },
+        {
+          "method": "getFoldingRanges",
+          "start": 2837.7000000476837,
+          "end": 2843.600000143051,
+          "durationMs": 5.900000095367432
+        },
+        {
+          "method": "findDocumentSymbols",
+          "start": 2837.7000000476837,
+          "end": 2845.2000000476837,
+          "durationMs": 7.5
+        },
+        {
+          "method": "$acceptModelChanged",
+          "start": 2961,
+          "end": 2965.600000143051,
+          "durationMs": 4.6000001430511475
+        },
+        {
+          "method": "$ping",
+          "start": 3261.4000000953674,
+          "end": 3261.800000190735,
+          "durationMs": 0.40000009536743164
+        },
+        {
+          "method": "getFoldingRanges",
+          "start": 3261.800000190735,
+          "end": 3262,
+          "durationMs": 0.19999980926513672
+        },
+        {
+          "method": "$ping",
+          "start": 3312.5,
+          "end": 3312.7000000476837,
+          "durationMs": 0.20000004768371582
+        },
+        {
+          "method": "findDocumentSymbols",
+          "start": 3312.7000000476837,
+          "end": 3312.9000000953674,
+          "durationMs": 0.20000004768371582
+        },
+        {
+          "method": "$ping",
+          "start": 3460.600000143051,
+          "end": 3460.9000000953674,
+          "durationMs": 0.2999999523162842
+        },
+        {
+          "method": "doValidation",
+          "start": 3460.9000000953674,
+          "end": 3461.9000000953674,
+          "durationMs": 1.0
+        },
+        {
+          "method": "$acceptModelChanged",
+          "start": 3552.5,
+          "end": 3561.4000000953674,
+          "durationMs": 8.900000095367432
+        },
+        {
+          "method": "$ping",
+          "start": 3853.600000143051,
+          "end": 3853.800000190735,
+          "durationMs": 0.20000004768371582
+        },
+        {
+          "method": "getFoldingRanges",
+          "start": 3853.9000000953674,
+          "end": 3854.100000143051,
+          "durationMs": 0.20000004768371582
+        },
+        {
+          "method": "$ping",
+          "start": 3907.300000190735,
+          "end": 3907.4000000953674,
+          "durationMs": 0.09999990463256836
+        },
+        {
+          "method": "findDocumentSymbols",
+          "start": 3907.5,
+          "end": 3907.800000190735,
+          "durationMs": 0.3000001907348633
+        },
+        {
+          "method": "$ping",
+          "start": 4052.5,
+          "end": 4052.7000000476837,
+          "durationMs": 0.20000004768371582
+        },
+        {
+          "method": "doValidation",
+          "start": 4052.800000190735,
+          "end": 4053.5,
+          "durationMs": 0.6999998092651367
+        },
+        {
+          "method": "$ping",
+          "start": 4158,
+          "end": 4159.400000095367,
+          "durationMs": 1.4000000953674316
+        },
+        {
+          "method": "format",
+          "start": 4159.400000095367,
+          "end": 4160,
+          "durationMs": 0.5999999046325684
+        },
+        {
+          "method": "$acceptModelChanged",
+          "start": 4164.5,
+          "end": 4168.100000143051,
+          "durationMs": 3.6000001430511475
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "kind": "editor",
+      "createdAt": 2364.7000000476837,
+      "entrypoint": "/_next/static/immutable/chunks/turbopack-worker-2g80pj3ycf14_.js",
+      "dependencyGraph": [
+        "/_next/static/immutable/chunks/turbopack-367f65wvpccl2.js",
+        "/_next/static/immutable/chunks/28nhevwq6-582.js",
+        "/_next/static/immutable/chunks/42p0shxuoyiya.js"
+      ],
+      "deploymentId": "dpl_AGzL3mmPqZ5giiQWzh9EqyDPF8SX",
+      "resources": [
+        {
+          "name": "/_next/static/immutable/chunks/turbopack-367f65wvpccl2.js",
+          "startTime": 1.7999999523162842,
+          "duration": 23,
+          "responseStart": 24.5,
+          "responseEnd": 24.799999952316284,
+          "transferSize": 4788,
+          "encodedBodySize": 4488,
+          "decodedBodySize": 10901
+        },
+        {
+          "name": "/_next/static/immutable/chunks/28nhevwq6-582.js",
+          "startTime": 25.5,
+          "duration": 1.5,
+          "responseStart": 25.799999952316284,
+          "responseEnd": 27,
+          "transferSize": 0,
+          "encodedBodySize": 110570,
+          "decodedBodySize": 358311
+        },
+        {
+          "name": "/_next/static/immutable/chunks/42p0shxuoyiya.js",
+          "startTime": 29.799999952316284,
+          "duration": 191.5,
+          "responseStart": 221,
+          "responseEnd": 221.29999995231628,
+          "transferSize": 8984,
+          "encodedBodySize": 8684,
+          "decodedBodySize": 25941
+        }
+      ],
+      "rpc": [
+        {
+          "method": "$initialize",
+          "start": 2364.7000000476837,
+          "end": 2604.800000190735,
+          "durationMs": 240.10000014305115
+        },
+        {
+          "method": "$ping",
+          "start": 2604.9000000953674,
+          "end": 2604.9000000953674,
+          "durationMs": 0.0
+        },
+        {
+          "method": "$ping",
+          "start": 2604.9000000953674,
+          "end": 2605.100000143051,
+          "durationMs": 0.20000004768371582
+        },
+        {
+          "method": "$acceptNewModel",
+          "start": 2605.100000143051,
+          "end": 2605.300000190735,
+          "durationMs": 0.20000004768371582
+        },
+        {
+          "method": "$computeLinks",
+          "start": 2605.100000143051,
+          "end": 2607.5,
+          "durationMs": 2.3999998569488525
+        },
+        {
+          "method": "$findSectionHeaders",
+          "start": 2605.100000143051,
+          "end": 2608.100000143051,
+          "durationMs": 3.0
+        },
+        {
+          "method": "$acceptModelChanged",
+          "start": 2961,
+          "end": 2965.600000143051,
+          "durationMs": 4.6000001430511475
+        },
+        {
+          "method": "$ping",
+          "start": 3212.300000190735,
+          "end": 3212.4000000953674,
+          "durationMs": 0.09999990463256836
+        },
+        {
+          "method": "$findSectionHeaders",
+          "start": 3212.5,
+          "end": 3212.600000143051,
+          "durationMs": 0.10000014305114746
+        },
+        {
+          "method": "$acceptModelChanged",
+          "start": 3552.5,
+          "end": 3561.4000000953674,
+          "durationMs": 8.900000095367432
+        },
+        {
+          "method": "$ping",
+          "start": 3804.600000143051,
+          "end": 3804.9000000953674,
+          "durationMs": 0.2999999523162842
+        },
+        {
+          "method": "$findSectionHeaders",
+          "start": 3804.9000000953674,
+          "end": 3805,
+          "durationMs": 0.09999990463256836
+        },
+        {
+          "method": "$ping",
+          "start": 4160.100000143051,
+          "end": 4160.100000143051,
+          "durationMs": 0.0
+        },
+        {
+          "method": "$computeMoreMinimalEdits",
+          "start": 4160.100000143051,
+          "end": 4162,
+          "durationMs": 1.8999998569488525
+        },
+        {
+          "method": "$acceptModelChanged",
+          "start": 4164.5,
+          "end": 4168.200000047684,
+          "durationMs": 3.700000047683716
+        }
+      ]
+    }
+  ],
+  "originalSlowOrPendingStaticAssets": [
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/trace.zip",
+      "traceSha256": "66fa48d1672ee574597d73999e346776390610355bbda7126176942fdb6e93f6",
+      "path": "/_next/static/immutable/chunks/2kur-qg8_84md.js",
+      "status": 200,
+      "start": 3066.772,
+      "durationMs": 1299.497,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 1292.632,
+        "receive": 6.865
+      },
+      "bytes": 1084,
+      "cacheHeaders": {
+        "age": "0",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:52:46 GMT",
+        "x-vercel-cache": "MISS"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/trace.zip",
+      "traceSha256": "66fa48d1672ee574597d73999e346776390610355bbda7126176942fdb6e93f6",
+      "path": "/_next/static/immutable/chunks/3i77nry_t2xa-.js",
+      "status": 200,
+      "start": 3066.693,
+      "durationMs": 1298.193,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 338.299,
+        "receive": 959.894
+      },
+      "bytes": 31710,
+      "cacheHeaders": {
+        "age": "7979",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:52:46 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/trace.zip",
+      "traceSha256": "66fa48d1672ee574597d73999e346776390610355bbda7126176942fdb6e93f6",
+      "path": "/_next/static/immutable/chunks/2s7ol1etw_j2i.js",
+      "status": 200,
+      "start": 3066.607,
+      "durationMs": 1300.655,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 1293.931,
+        "receive": 6.724
+      },
+      "bytes": 9203,
+      "cacheHeaders": {
+        "age": "7979",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:52:46 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/trace.zip",
+      "traceSha256": "66fa48d1672ee574597d73999e346776390610355bbda7126176942fdb6e93f6",
+      "path": "/_next/static/immutable/chunks/1rxepjw013zw3.css",
+      "status": 200,
+      "start": 3066.237,
+      "durationMs": 1554.656,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 1548.841,
+        "receive": 5.815
+      },
+      "bytes": 1452,
+      "cacheHeaders": {
+        "age": "7979",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:52:46 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/trace.zip",
+      "traceSha256": "66fa48d1672ee574597d73999e346776390610355bbda7126176942fdb6e93f6",
+      "path": "/_next/static/immutable/chunks/4339qb-c-skiy.js",
+      "status": 200,
+      "start": 3066.753,
+      "durationMs": 1554.821,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 1548.177,
+        "receive": 6.644
+      },
+      "bytes": 1080,
+      "cacheHeaders": {
+        "age": "7979",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:52:46 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/trace.zip",
+      "traceSha256": "66fa48d1672ee574597d73999e346776390610355bbda7126176942fdb6e93f6",
+      "path": "/_next/static/immutable/chunks/1f_c-8rh_vr5-.js",
+      "status": 200,
+      "start": 3066.569,
+      "durationMs": 1555.0629999999999,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 1548.963,
+        "receive": 6.1
+      },
+      "bytes": 9221,
+      "cacheHeaders": {
+        "age": "249817",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:52:46 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/trace.zip",
+      "traceSha256": "66fa48d1672ee574597d73999e346776390610355bbda7126176942fdb6e93f6",
+      "path": "/_next/static/immutable/chunks/1grsvk58p_1zt.css",
+      "status": 200,
+      "start": 3066.371,
+      "durationMs": 1557.5,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 1296.49,
+        "receive": 261.01
+      },
+      "bytes": 25682,
+      "cacheHeaders": {
+        "age": "249817",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:52:46 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/trace.zip",
+      "traceSha256": "66fa48d1672ee574597d73999e346776390610355bbda7126176942fdb6e93f6",
+      "path": "/_next/static/immutable/media/f141b5b7abe57afc-s.p.3bm7l-ln3bnu5.woff2",
+      "status": 200,
+      "start": 3065.752,
+      "durationMs": 1553.359,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 1550.86,
+        "receive": 2.499
+      },
+      "bytes": 31203,
+      "cacheHeaders": {
+        "age": "7979",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:52:46 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/trace.zip",
+      "traceSha256": "66fa48d1672ee574597d73999e346776390610355bbda7126176942fdb6e93f6",
+      "path": "/_next/static/immutable/chunks/14irmdsaqknrf.js",
+      "status": 200,
+      "start": 3066.667,
+      "durationMs": 1556.243,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 1549.586,
+        "receive": 6.657
+      },
+      "bytes": 13202,
+      "cacheHeaders": {
+        "age": "381327",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:52:46 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/trace.zip",
+      "traceSha256": "66fa48d1672ee574597d73999e346776390610355bbda7126176942fdb6e93f6",
+      "path": "/_next/static/immutable/chunks/28nhevwq6-582.js",
+      "status": 200,
+      "start": 4752.623,
+      "durationMs": 1815.454,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 145.547,
+        "receive": 1669.907
+      },
+      "bytes": 110826,
+      "cacheHeaders": {
+        "age": "7980",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:52:48 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/trace.zip",
+      "traceSha256": "66fa48d1672ee574597d73999e346776390610355bbda7126176942fdb6e93f6",
+      "path": "/_next/static/immutable/chunks/1npau-ixbd3sg.js",
+      "status": 200,
+      "start": 4752.6,
+      "durationMs": 1825.9230000000002,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 157.841,
+        "receive": 1668.082
+      },
+      "bytes": 165583,
+      "cacheHeaders": {
+        "age": "7980",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:52:48 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/trace.zip",
+      "traceSha256": "66fa48d1672ee574597d73999e346776390610355bbda7126176942fdb6e93f6",
+      "path": "/_next/static/immutable/chunks/0ek6bu685jflw.js",
+      "status": 200,
+      "start": 4752.664,
+      "durationMs": 1979.965,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 360.424,
+        "receive": 1619.541
+      },
+      "bytes": 146656,
+      "cacheHeaders": {
+        "age": "7812",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:52:48 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/trace.zip",
+      "traceSha256": "66fa48d1672ee574597d73999e346776390610355bbda7126176942fdb6e93f6",
+      "path": "/_next/static/immutable/chunks/3w4tcmg4-ew_k.js",
+      "status": 200,
+      "start": 4752.16,
+      "durationMs": 2338.0769999999998,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 2337.254,
+        "receive": 0.823
+      },
+      "bytes": 10207,
+      "cacheHeaders": {
+        "age": "7812",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:52:48 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/trace.zip",
+      "traceSha256": "66fa48d1672ee574597d73999e346776390610355bbda7126176942fdb6e93f6",
+      "path": "/_next/static/immutable/chunks/25uqm7b1c4992.js",
+      "status": 200,
+      "start": 4752.492,
+      "durationMs": 2355.244,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 145.9,
+        "receive": 2209.344
+      },
+      "bytes": 311334,
+      "cacheHeaders": {
+        "age": "7980",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:52:48 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/trace.zip",
+      "traceSha256": "66fa48d1672ee574597d73999e346776390610355bbda7126176942fdb6e93f6",
+      "path": "/_next/static/immutable/chunks/2y2ng8lfjhbsk.js",
+      "status": 200,
+      "start": 4752.536,
+      "durationMs": 2392.358,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 363.943,
+        "receive": 2028.415
+      },
+      "bytes": 526968,
+      "cacheHeaders": {
+        "age": "7812",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:52:48 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/trace.zip",
+      "traceSha256": "66fa48d1672ee574597d73999e346776390610355bbda7126176942fdb6e93f6",
+      "path": "/_next/static/immutable/chunks/0r264a-wjl9bb.js",
+      "status": 200,
+      "start": 4752.504,
+      "durationMs": 2554.126,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 2446.991,
+        "receive": 107.135
+      },
+      "bytes": 36513,
+      "cacheHeaders": {
+        "age": "7812",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:52:48 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/trace.zip",
+      "traceSha256": "66fa48d1672ee574597d73999e346776390610355bbda7126176942fdb6e93f6",
+      "path": "/_next/static/immutable/chunks/3651ftz2q62ba.css",
+      "status": 200,
+      "start": 4752.73,
+      "durationMs": 3214.698,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 3213.004,
+        "receive": 1.694
+      },
+      "bytes": 5839,
+      "cacheHeaders": {
+        "age": "7980",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:52:48 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/trace.zip",
+      "traceSha256": "66fa48d1672ee574597d73999e346776390610355bbda7126176942fdb6e93f6",
+      "path": "/_next/static/immutable/chunks/2fv8hig6prco8.js",
+      "status": 200,
+      "start": 4752.437,
+      "durationMs": 3218.515,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 3214.028,
+        "receive": 4.487
+      },
+      "bytes": 78555,
+      "cacheHeaders": {
+        "age": "0",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:52:48 GMT",
+        "x-vercel-cache": "MISS"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/trace.zip",
+      "traceSha256": "66fa48d1672ee574597d73999e346776390610355bbda7126176942fdb6e93f6",
+      "path": "/_next/static/immutable/chunks/3g5yp2sxazehx.js",
+      "status": 200,
+      "start": 4752.55,
+      "durationMs": 3217.779,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 146.036,
+        "receive": 3071.743
+      },
+      "bytes": 628917,
+      "cacheHeaders": {
+        "age": "7980",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:52:48 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/trace.zip",
+      "traceSha256": "66fa48d1672ee574597d73999e346776390610355bbda7126176942fdb6e93f6",
+      "path": "/_next/static/immutable/chunks/0esas7jlljorc.js",
+      "status": 200,
+      "start": 4752.523,
+      "durationMs": 3398.017,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 3215.394,
+        "receive": 182.623
+      },
+      "bytes": 284887,
+      "cacheHeaders": {
+        "age": "0",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:52:48 GMT",
+        "x-vercel-cache": "MISS"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/trace.zip",
+      "traceSha256": "66fa48d1672ee574597d73999e346776390610355bbda7126176942fdb6e93f6",
+      "path": "/_next/static/immutable/chunks/turbopack-worker-2g80pj3ycf14_.js",
+      "status": 200,
+      "start": 8491.637,
+      "durationMs": 1240.661,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": -1,
+        "receive": 1240.661
+      },
+      "bytes": 250,
+      "cacheHeaders": {
+        "age": "0",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:52:52 GMT",
+        "x-vercel-cache": "MISS"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/trace.zip",
+      "traceSha256": "66fa48d1672ee574597d73999e346776390610355bbda7126176942fdb6e93f6",
+      "path": "/_next/static/immutable/chunks/1__7ul3n2ffhd.js",
+      "status": 200,
+      "start": 9733.333,
+      "durationMs": 4814.933,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 4814.343,
+        "receive": 0.59
+      },
+      "bytes": 14033,
+      "cacheHeaders": {
+        "age": "7983",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:52:53 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/trace.zip",
+      "traceSha256": "66fa48d1672ee574597d73999e346776390610355bbda7126176942fdb6e93f6",
+      "path": "/_next/static/immutable/chunks/3i1dij4r-3pfl.js",
+      "status": -1,
+      "start": 14542.032,
+      "durationMs": -1,
+      "timings": {
+        "send": -1,
+        "wait": -1,
+        "receive": -1
+      },
+      "bytes": -1,
+      "cacheHeaders": {}
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/yaml-YAML-and-Markdown-edi-18ed4-from-malformed-YAML-offline/trace.zip",
+      "traceSha256": "225634bc81ba737a5fa440f6a8045eafb2ee987d7910eb16266f451cee3c359e",
+      "path": "/_next/static/immutable/chunks/1npau-ixbd3sg.js",
+      "status": 200,
+      "start": 176024.275,
+      "durationMs": 1125.713,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 389.528,
+        "receive": 736.185
+      },
+      "bytes": 165581,
+      "cacheHeaders": {
+        "age": "8151",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:55:39 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/yaml-YAML-and-Markdown-edi-18ed4-from-malformed-YAML-offline/trace.zip",
+      "traceSha256": "225634bc81ba737a5fa440f6a8045eafb2ee987d7910eb16266f451cee3c359e",
+      "path": "/_next/static/immutable/chunks/0esas7jlljorc.js",
+      "status": 200,
+      "start": 176024.19,
+      "durationMs": 1130.911,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 389.898,
+        "receive": 741.013
+      },
+      "bytes": 284916,
+      "cacheHeaders": {
+        "age": "170",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:55:39 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/yaml-YAML-and-Markdown-edi-18ed4-from-malformed-YAML-offline/trace.zip",
+      "traceSha256": "225634bc81ba737a5fa440f6a8045eafb2ee987d7910eb16266f451cee3c359e",
+      "path": "/_next/static/immutable/chunks/3g5yp2sxazehx.js",
+      "status": 200,
+      "start": 176024.047,
+      "durationMs": 1434.616,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 485.663,
+        "receive": 948.953
+      },
+      "bytes": 628909,
+      "cacheHeaders": {
+        "age": "8151",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:55:39 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/yaml-YAML-and-Markdown-edi-18ed4-from-malformed-YAML-offline/trace.zip",
+      "traceSha256": "225634bc81ba737a5fa440f6a8045eafb2ee987d7910eb16266f451cee3c359e",
+      "path": "/_next/static/immutable/chunks/25uqm7b1c4992.js",
+      "status": 200,
+      "start": 176024.113,
+      "durationMs": 1447.5539999999999,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 1429.917,
+        "receive": 17.637
+      },
+      "bytes": 311363,
+      "cacheHeaders": {
+        "age": "8152",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:55:39 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/yaml-YAML-and-Markdown-edi-18ed4-from-malformed-YAML-offline/trace.zip",
+      "traceSha256": "225634bc81ba737a5fa440f6a8045eafb2ee987d7910eb16266f451cee3c359e",
+      "path": "/_next/static/immutable/chunks/1ehoc4p33uawz.js",
+      "status": -1,
+      "start": 178285.74,
+      "durationMs": -1,
+      "timings": {
+        "send": -1,
+        "wait": -1,
+        "receive": -1
+      },
+      "bytes": -1,
+      "cacheHeaders": {}
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/yaml-YAML-and-Markdown-edi-18ed4-from-malformed-YAML-offline/trace.zip",
+      "traceSha256": "225634bc81ba737a5fa440f6a8045eafb2ee987d7910eb16266f451cee3c359e",
+      "path": "/_next/static/immutable/chunks/1__7ul3n2ffhd.js",
+      "status": -1,
+      "start": 178321.836,
+      "durationMs": -1,
+      "timings": {
+        "send": -1,
+        "wait": -1,
+        "receive": -1
+      },
+      "bytes": -1,
+      "cacheHeaders": {}
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/inspector-recovery-font-su-beb5b--Inspector-canvas-is-active/trace.zip",
+      "traceSha256": "621a46f4e35b8ea1ab0f0c11dbdd04fe46b26007c1608554854172353835633c",
+      "path": "/_next/static/immutable/chunks/42p0shxuoyiya.js",
+      "status": 200,
+      "start": 111074.037,
+      "durationMs": 1596.962,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 567.702,
+        "receive": 1029.26
+      },
+      "bytes": 8937,
+      "cacheHeaders": {
+        "age": "8085",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:54:34 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/inspector-recovery-font-su-beb5b--Inspector-canvas-is-active/trace.zip",
+      "traceSha256": "621a46f4e35b8ea1ab0f0c11dbdd04fe46b26007c1608554854172353835633c",
+      "path": "/_next/static/immutable/chunks/turbopack-worker-2g80pj3ycf14_.js",
+      "status": 200,
+      "start": 110739.358,
+      "durationMs": 1964.433,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": -1,
+        "receive": 1964.433
+      },
+      "bytes": 251,
+      "cacheHeaders": {
+        "age": "102",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:54:34 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/inspector-recovery-font-su-beb5b--Inspector-canvas-is-active/trace.zip",
+      "traceSha256": "621a46f4e35b8ea1ab0f0c11dbdd04fe46b26007c1608554854172353835633c",
+      "path": "/_next/static/immutable/chunks/14xtrtee8fs0x.js",
+      "status": 200,
+      "start": 111076.036,
+      "durationMs": 1845.268,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 1589.712,
+        "receive": 255.556
+      },
+      "bytes": 24155,
+      "cacheHeaders": {
+        "age": "381434",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:54:34 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/inspector-recovery-font-su-beb5b--Inspector-canvas-is-active/trace.zip",
+      "traceSha256": "621a46f4e35b8ea1ab0f0c11dbdd04fe46b26007c1608554854172353835633c",
+      "path": "/_next/static/immutable/chunks/0fdirzoxte_rd.js",
+      "status": 200,
+      "start": 111183.361,
+      "durationMs": 2964.614,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 2963.732,
+        "receive": 0.882
+      },
+      "bytes": 917,
+      "cacheHeaders": {
+        "age": "45",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:54:34 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/inspector-recovery-font-su-beb5b--Inspector-canvas-is-active/trace.zip",
+      "traceSha256": "621a46f4e35b8ea1ab0f0c11dbdd04fe46b26007c1608554854172353835633c",
+      "path": "/_next/static/immutable/chunks/0ls6h8og9zako.css",
+      "status": 200,
+      "start": 111183.44,
+      "durationMs": 2966.9880000000003,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 2964.786,
+        "receive": 2.202
+      },
+      "bytes": 27264,
+      "cacheHeaders": {
+        "age": "8085",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:54:34 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/inspector-recovery-font-su-beb5b--Inspector-canvas-is-active/trace.zip",
+      "traceSha256": "621a46f4e35b8ea1ab0f0c11dbdd04fe46b26007c1608554854172353835633c",
+      "path": "/_next/static/immutable/chunks/1__7ul3n2ffhd.js",
+      "status": 200,
+      "start": 112934.174,
+      "durationMs": 1325.992,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 1325.274,
+        "receive": 0.718
+      },
+      "bytes": 14048,
+      "cacheHeaders": {
+        "age": "8086",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:54:36 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/inspector-recovery-font-su-beb5b--Inspector-canvas-is-active/trace.zip",
+      "traceSha256": "621a46f4e35b8ea1ab0f0c11dbdd04fe46b26007c1608554854172353835633c",
+      "path": "/_next/static/immutable/chunks/3i1dij4r-3pfl.js",
+      "status": -1,
+      "start": 114257.742,
+      "durationMs": -1,
+      "timings": {
+        "send": -1,
+        "wait": -1,
+        "receive": -1
+      },
+      "bytes": -1,
+      "cacheHeaders": {}
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/inspector-recovery-font-su-beb5b--Inspector-canvas-is-active/trace.zip",
+      "traceSha256": "621a46f4e35b8ea1ab0f0c11dbdd04fe46b26007c1608554854172353835633c",
+      "path": "/_next/static/immutable/chunks/1ehoc4p33uawz.js",
+      "status": -1,
+      "start": 114272.934,
+      "durationMs": -1,
+      "timings": {
+        "send": -1,
+        "wait": -1,
+        "receive": -1
+      },
+      "bytes": -1,
+      "cacheHeaders": {}
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/author-anonymous-code-edit-3e561--export-reimport-at-540x960/trace.zip",
+      "traceSha256": "b934da71105c945a58401623c976327a48e31ceaf7989f72f5cc31d136856eb2",
+      "path": "/_next/static/immutable/chunks/0esas7jlljorc.js",
+      "status": 200,
+      "start": 40724.126,
+      "durationMs": 1528.9430000000002,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 431.813,
+        "receive": 1097.13
+      },
+      "bytes": 284948,
+      "cacheHeaders": {
+        "age": "35",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:53:24 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/author-anonymous-code-edit-3e561--export-reimport-at-540x960/trace.zip",
+      "traceSha256": "b934da71105c945a58401623c976327a48e31ceaf7989f72f5cc31d136856eb2",
+      "path": "/_next/static/immutable/chunks/0ek6bu685jflw.js",
+      "status": 200,
+      "start": 40724.789,
+      "durationMs": 1534.9089999999999,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 497.301,
+        "receive": 1037.608
+      },
+      "bytes": 146692,
+      "cacheHeaders": {
+        "age": "7848",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:53:24 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/author-anonymous-code-edit-3e561--export-reimport-at-540x960/trace.zip",
+      "traceSha256": "b934da71105c945a58401623c976327a48e31ceaf7989f72f5cc31d136856eb2",
+      "path": "/_next/static/immutable/chunks/25uqm7b1c4992.js",
+      "status": 200,
+      "start": 40724.068,
+      "durationMs": 2530.083,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 497.318,
+        "receive": 2032.765
+      },
+      "bytes": 311358,
+      "cacheHeaders": {
+        "age": "8016",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:53:24 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/author-anonymous-code-edit-3e561--export-reimport-at-540x960/trace.zip",
+      "traceSha256": "b934da71105c945a58401623c976327a48e31ceaf7989f72f5cc31d136856eb2",
+      "path": "/_next/static/immutable/chunks/1npau-ixbd3sg.js",
+      "status": 200,
+      "start": 40724.275,
+      "durationMs": 2621.993,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 2519.651,
+        "receive": 102.342
+      },
+      "bytes": 165579,
+      "cacheHeaders": {
+        "age": "8016",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:53:24 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/author-anonymous-code-edit-3e561--export-reimport-at-540x960/trace.zip",
+      "traceSha256": "b934da71105c945a58401623c976327a48e31ceaf7989f72f5cc31d136856eb2",
+      "path": "/_next/static/immutable/chunks/0pqs7mvm-34vq.js",
+      "status": 200,
+      "start": 40723.532,
+      "durationMs": 2632.456,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 2630.952,
+        "receive": 1.504
+      },
+      "bytes": 13516,
+      "cacheHeaders": {
+        "age": "381351",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:53:24 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/author-anonymous-code-edit-3e561--export-reimport-at-540x960/trace.zip",
+      "traceSha256": "b934da71105c945a58401623c976327a48e31ceaf7989f72f5cc31d136856eb2",
+      "path": "/_next/static/immutable/chunks/3g5yp2sxazehx.js",
+      "status": 200,
+      "start": 40724.186,
+      "durationMs": 2629.95,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 496.118,
+        "receive": 2133.832
+      },
+      "bytes": 628936,
+      "cacheHeaders": {
+        "age": "8016",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:53:24 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/author-anonymous-code-edit-3e561--export-reimport-at-540x960/trace.zip",
+      "traceSha256": "b934da71105c945a58401623c976327a48e31ceaf7989f72f5cc31d136856eb2",
+      "path": "/_next/static/immutable/chunks/3w4tcmg4-ew_k.js",
+      "status": 200,
+      "start": 40723.648,
+      "durationMs": 2735.183,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 2734.74,
+        "receive": 0.443
+      },
+      "bytes": 10180,
+      "cacheHeaders": {
+        "age": "7848",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:53:24 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/author-anonymous-code-edit-3e561--export-reimport-at-540x960/trace.zip",
+      "traceSha256": "b934da71105c945a58401623c976327a48e31ceaf7989f72f5cc31d136856eb2",
+      "path": "/_next/static/immutable/chunks/0_-kt8naw9vzn.js",
+      "status": 200,
+      "start": 40723.959,
+      "durationMs": 2734.224,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 2733.46,
+        "receive": 0.764
+      },
+      "bytes": 9015,
+      "cacheHeaders": {
+        "age": "8016",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:53:24 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/author-anonymous-code-edit-3e561--export-reimport-at-540x960/trace.zip",
+      "traceSha256": "b934da71105c945a58401623c976327a48e31ceaf7989f72f5cc31d136856eb2",
+      "path": "/_next/static/immutable/chunks/2y2ng8lfjhbsk.js",
+      "status": 200,
+      "start": 40724.156,
+      "durationMs": 2734.427,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 1336.114,
+        "receive": 1398.313
+      },
+      "bytes": 526995,
+      "cacheHeaders": {
+        "age": "7848",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:53:24 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/author-anonymous-code-edit-3e561--export-reimport-at-540x960/trace.zip",
+      "traceSha256": "b934da71105c945a58401623c976327a48e31ceaf7989f72f5cc31d136856eb2",
+      "path": "/_next/static/immutable/chunks/14xtrtee8fs0x.js",
+      "status": -1,
+      "start": 44767.521,
+      "durationMs": -1,
+      "timings": {
+        "send": -1,
+        "wait": -1,
+        "receive": -1
+      },
+      "bytes": -1,
+      "cacheHeaders": {}
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/inspector-editing-all-Insp-a78d3-ffline-undo-export-at-540px/trace.zip",
+      "traceSha256": "120515cf0cc8c6a1c2c79f9ba0a62b95be5370e8ab1aeab806bc6de627cd506f",
+      "path": "/_next/static/immutable/chunks/3g5yp2sxazehx.js",
+      "status": 200,
+      "start": 73193.325,
+      "durationMs": 1591.0059999999999,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 275.369,
+        "receive": 1315.637
+      },
+      "bytes": 628904,
+      "cacheHeaders": {
+        "age": "8048",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:53:56 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/inspector-editing-all-Insp-a78d3-ffline-undo-export-at-540px/trace.zip",
+      "traceSha256": "120515cf0cc8c6a1c2c79f9ba0a62b95be5370e8ab1aeab806bc6de627cd506f",
+      "path": "/_next/static/immutable/chunks/25uqm7b1c4992.js",
+      "status": 200,
+      "start": 73193.374,
+      "durationMs": 1988.566,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 1303.083,
+        "receive": 685.483
+      },
+      "bytes": 311331,
+      "cacheHeaders": {
+        "age": "8049",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:53:56 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/inspector-editing-all-Insp-a78d3-ffline-undo-export-at-540px/trace.zip",
+      "traceSha256": "120515cf0cc8c6a1c2c79f9ba0a62b95be5370e8ab1aeab806bc6de627cd506f",
+      "path": "/_next/static/immutable/chunks/0esas7jlljorc.js",
+      "status": 200,
+      "start": 73193.394,
+      "durationMs": 2444.684,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 1483.99,
+        "receive": 960.694
+      },
+      "bytes": 284936,
+      "cacheHeaders": {
+        "age": "68",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:53:57 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/inspector-editing-all-Insp-a78d3-ffline-undo-export-at-540px/trace.zip",
+      "traceSha256": "120515cf0cc8c6a1c2c79f9ba0a62b95be5370e8ab1aeab806bc6de627cd506f",
+      "path": "/_next/static/immutable/chunks/1npau-ixbd3sg.js",
+      "status": 200,
+      "start": 73193.413,
+      "durationMs": 2621.981,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 1831.689,
+        "receive": 790.292
+      },
+      "bytes": 165577,
+      "cacheHeaders": {
+        "age": "8049",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:53:57 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/inspector-editing-all-Insp-a78d3-ffline-undo-export-at-540px/trace.zip",
+      "traceSha256": "120515cf0cc8c6a1c2c79f9ba0a62b95be5370e8ab1aeab806bc6de627cd506f",
+      "path": "/_next/static/immutable/chunks/14xtrtee8fs0x.js",
+      "status": 200,
+      "start": 76544.595,
+      "durationMs": 4925.219999999999,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 4616.677,
+        "receive": 308.543
+      },
+      "bytes": 24155,
+      "cacheHeaders": {
+        "age": "381399",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:53:59 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/inspector-editing-all-Insp-a78d3-ffline-undo-export-at-540px/trace.zip",
+      "traceSha256": "120515cf0cc8c6a1c2c79f9ba0a62b95be5370e8ab1aeab806bc6de627cd506f",
+      "path": "/_next/static/immutable/chunks/42p0shxuoyiya.js",
+      "status": -1,
+      "start": 76545.267,
+      "durationMs": -1,
+      "timings": {
+        "send": -1,
+        "wait": -1,
+        "receive": -1
+      },
+      "bytes": -1,
+      "cacheHeaders": {}
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/inspector-editing-all-Insp-a78d3-ffline-undo-export-at-540px/trace.zip",
+      "traceSha256": "120515cf0cc8c6a1c2c79f9ba0a62b95be5370e8ab1aeab806bc6de627cd506f",
+      "path": "/_next/static/immutable/chunks/1__7ul3n2ffhd.js",
+      "status": -1,
+      "start": 81494.231,
+      "durationMs": -1,
+      "timings": {
+        "send": -1,
+        "wait": -1,
+        "receive": -1
+      },
+      "bytes": -1,
+      "cacheHeaders": {}
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/json-paste-formatting-warm-44312-t-Document-remains-undoable/trace.zip",
+      "traceSha256": "b8a8222c3c2ff888ad8db59ff39b0d0cc3a086b7c73d17a6e2a1a5702c9052ab",
+      "path": "/_next/static/immutable/chunks/0fdirzoxte_rd.js",
+      "status": 200,
+      "start": 149523.992,
+      "durationMs": 1674.077,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 1336.932,
+        "receive": 337.145
+      },
+      "bytes": 968,
+      "cacheHeaders": {
+        "age": "84",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:55:12 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/json-paste-formatting-warm-44312-t-Document-remains-undoable/trace.zip",
+      "traceSha256": "b8a8222c3c2ff888ad8db59ff39b0d0cc3a086b7c73d17a6e2a1a5702c9052ab",
+      "path": "/_next/static/immutable/chunks/1__7ul3n2ffhd.js",
+      "status": -1,
+      "start": 150451.942,
+      "durationMs": -1,
+      "timings": {
+        "send": -1,
+        "wait": -1,
+        "receive": -1
+      },
+      "bytes": -1,
+      "cacheHeaders": {}
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/author-anonymous-Author-ca-d560b-xport-and-undoable-reimport/trace.zip",
+      "traceSha256": "19412fc5a048829fe1aceaf7c37079b2d965b2483930e7f149b189ce5b54a3ff",
+      "path": "/_next/static/immutable/chunks/1npau-ixbd3sg.js",
+      "status": 200,
+      "start": 51955.12,
+      "durationMs": 1209.214,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 105.883,
+        "receive": 1103.331
+      },
+      "bytes": 165577,
+      "cacheHeaders": {
+        "age": "8027",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:53:35 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/author-anonymous-Author-ca-d560b-xport-and-undoable-reimport/trace.zip",
+      "traceSha256": "19412fc5a048829fe1aceaf7c37079b2d965b2483930e7f149b189ce5b54a3ff",
+      "path": "/_next/static/immutable/chunks/0esas7jlljorc.js",
+      "status": 200,
+      "start": 51954.981,
+      "durationMs": 2217.152,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 384.559,
+        "receive": 1832.593
+      },
+      "bytes": 284916,
+      "cacheHeaders": {
+        "age": "46",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:53:35 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/author-anonymous-Author-ca-d560b-xport-and-undoable-reimport/trace.zip",
+      "traceSha256": "19412fc5a048829fe1aceaf7c37079b2d965b2483930e7f149b189ce5b54a3ff",
+      "path": "/_next/static/immutable/chunks/0ek6bu685jflw.js",
+      "status": 200,
+      "start": 51955.33,
+      "durationMs": 2219.116,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 967.429,
+        "receive": 1251.687
+      },
+      "bytes": 146683,
+      "cacheHeaders": {
+        "age": "7859",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:53:35 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/author-anonymous-Author-ca-d560b-xport-and-undoable-reimport/trace.zip",
+      "traceSha256": "19412fc5a048829fe1aceaf7c37079b2d965b2483930e7f149b189ce5b54a3ff",
+      "path": "/_next/static/immutable/chunks/25uqm7b1c4992.js",
+      "status": 200,
+      "start": 51954.949,
+      "durationMs": 2223.824,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 92.818,
+        "receive": 2131.006
+      },
+      "bytes": 311381,
+      "cacheHeaders": {
+        "age": "8027",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:53:35 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/author-anonymous-Author-ca-d560b-xport-and-undoable-reimport/trace.zip",
+      "traceSha256": "19412fc5a048829fe1aceaf7c37079b2d965b2483930e7f149b189ce5b54a3ff",
+      "path": "/_next/static/immutable/chunks/2y2ng8lfjhbsk.js",
+      "status": 200,
+      "start": 51954.998,
+      "durationMs": 2675.94,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 93.159,
+        "receive": 2582.781
+      },
+      "bytes": 526995,
+      "cacheHeaders": {
+        "age": "7859",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:53:35 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/author-anonymous-Author-ca-d560b-xport-and-undoable-reimport/trace.zip",
+      "traceSha256": "19412fc5a048829fe1aceaf7c37079b2d965b2483930e7f149b189ce5b54a3ff",
+      "path": "/_next/static/immutable/chunks/3g5yp2sxazehx.js",
+      "status": 200,
+      "start": 51955.03,
+      "durationMs": 3242.052,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 377.11,
+        "receive": 2864.942
+      },
+      "bytes": 628894,
+      "cacheHeaders": {
+        "age": "8027",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:53:35 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/author-anonymous-Author-ca-d560b-xport-and-undoable-reimport/trace.zip",
+      "traceSha256": "19412fc5a048829fe1aceaf7c37079b2d965b2483930e7f149b189ce5b54a3ff",
+      "path": "/_next/static/immutable/chunks/3i1dij4r-3pfl.js",
+      "status": -1,
+      "start": 55958.636,
+      "durationMs": -1,
+      "timings": {
+        "send": -1,
+        "wait": -1,
+        "receive": -1
+      },
+      "bytes": -1,
+      "cacheHeaders": {}
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/inspector-recovery-schema--76507-ers-after-source-correction/trace.zip",
+      "traceSha256": "2612721b1c474ba7e55afa313760fddd7d998322e1467cdfcd9e07d22351cc7d",
+      "path": "/_next/static/immutable/chunks/28nhevwq6-582.js",
+      "status": 200,
+      "start": 101755.913,
+      "durationMs": 1276.188,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 717.69,
+        "receive": 558.498
+      },
+      "bytes": 110826,
+      "cacheHeaders": {
+        "age": "8077",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:54:25 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/inspector-recovery-schema--76507-ers-after-source-correction/trace.zip",
+      "traceSha256": "2612721b1c474ba7e55afa313760fddd7d998322e1467cdfcd9e07d22351cc7d",
+      "path": "/_next/static/immutable/chunks/1npau-ixbd3sg.js",
+      "status": 200,
+      "start": 101756.064,
+      "durationMs": 2422.859,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 896.46,
+        "receive": 1526.399
+      },
+      "bytes": 165653,
+      "cacheHeaders": {
+        "age": "8077",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:54:25 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/inspector-recovery-schema--76507-ers-after-source-correction/trace.zip",
+      "traceSha256": "2612721b1c474ba7e55afa313760fddd7d998322e1467cdfcd9e07d22351cc7d",
+      "path": "/_next/static/immutable/chunks/0esas7jlljorc.js",
+      "status": 200,
+      "start": 101756.048,
+      "durationMs": 3723.012,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 719.31,
+        "receive": 3003.702
+      },
+      "bytes": 284913,
+      "cacheHeaders": {
+        "age": "96",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:54:25 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/inspector-recovery-schema--76507-ers-after-source-correction/trace.zip",
+      "traceSha256": "2612721b1c474ba7e55afa313760fddd7d998322e1467cdfcd9e07d22351cc7d",
+      "path": "/_next/static/immutable/chunks/25uqm7b1c4992.js",
+      "status": 200,
+      "start": 101756.015,
+      "durationMs": 3921.214,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 78.988,
+        "receive": 3842.226
+      },
+      "bytes": 311331,
+      "cacheHeaders": {
+        "age": "8077",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:54:25 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    },
+    {
+      "trace": "/private/tmp/opf-issue88-app46-production-20260921/results/inspector-recovery-schema--76507-ers-after-source-correction/trace.zip",
+      "traceSha256": "2612721b1c474ba7e55afa313760fddd7d998322e1467cdfcd9e07d22351cc7d",
+      "path": "/_next/static/immutable/chunks/3g5yp2sxazehx.js",
+      "status": 200,
+      "start": 101755.897,
+      "durationMs": 4902.213,
+      "timings": {
+        "dns": -1,
+        "connect": -1,
+        "ssl": -1,
+        "send": 0,
+        "wait": 196.239,
+        "receive": 4705.974
+      },
+      "bytes": 628911,
+      "cacheHeaders": {
+        "age": "8077",
+        "cache-control": "public,max-age=31536000,immutable",
+        "date": "Mon, 21 Sep 2026 14:54:25 GMT",
+        "x-vercel-cache": "HIT"
+      }
+    }
+  ]
+}

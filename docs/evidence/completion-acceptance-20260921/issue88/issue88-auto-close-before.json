@@ -1,0 +1,1 @@
+{"data":{"repository":{"issue":{"state":"CLOSED","timelineItems":{"nodes":[{"__typename":"ClosedEvent","createdAt":"2026-09-21T14:50:21Z","actor":{"login":"michaeljgrimm"},"closer":{"__typename":"PullRequest","url":"https://github.com/Data-Advantage/pptx-dev/pull/46","number":46}}]}}}}}

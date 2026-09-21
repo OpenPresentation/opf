@@ -1,0 +1,11 @@
+{"name":"navigation-start","at":1790004155111}
+{"name":"load-event","at":1790004156928}
+{"name":"editor-visible","at":1790004157986}
+{"name":"invalid-source-pasted","at":1790004158083}
+{"name":"schema-markers-observed","at":1790004158629,"elapsedMs":546,"observed":true}
+{"name":"valid-source-pasted","at":1790004158675}
+{"name":"markers-cleared","at":1790004159202,"elapsedMs":527,"observed":true}
+{"name":"format-command-submitted","at":1790004159282}
+{"name":"format-rpc-replied","at":1790004159292,"elapsedMs":10,"observed":true}
+{"name":"canvas-ready","at":1790004159301,"elapsedMs":9,"observed":true}
+Diagnostic completed; this is observational evidence, not acceptance.

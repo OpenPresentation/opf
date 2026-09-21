@@ -1,0 +1,2 @@
+# Preserve exact receipt, CRLF and original platform-log bytes.
+* -text

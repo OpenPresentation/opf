@@ -1,0 +1,17 @@
+HTTP/2 200 
+accept-ranges: bytes
+access-control-allow-origin: *
+age: 1632
+cache-control: public,max-age=31536000,immutable
+content-disposition: inline; filename="turbopack-worker-2g80pj3ycf14_.js"
+content-type: application/javascript; charset=utf-8
+date: Mon, 21 Sep 2026 15:20:04 GMT
+etag: "_next/static/immutable/chunks/turbopack-worker-2g80pj3ycf14_.js"
+last-modified: Mon, 21 Sep 2026 14:52:52 GMT
+server: Vercel
+strict-transport-security: max-age=63072000
+x-matched-path: /_next/static/immutable/chunks/turbopack-worker-2g80pj3ycf14_.js
+x-vercel-cache: HIT
+x-vercel-id: pdx1::4h6fx-1790004004384-ea286583c5e0
+content-length: 849
+

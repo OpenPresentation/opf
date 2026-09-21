@@ -1,0 +1,118 @@
+{
+  "capturedAt": "2026-09-21T15:49:03.020959+00:00",
+  "root": "/private/tmp/opf-completion-fix-20260921/pptx-dev",
+  "head": "a5201c88a219262b21a6c7fd4ef49a01a5bbe0a3",
+  "tree": "203bdab509d05911f04f234d996f9c91f2b5e4f2",
+  "status": "",
+  "files": [
+    {
+      "path": "components/author/author-shell.tsx",
+      "bytes": 277900,
+      "sha256": "4de9b7508303c4f52eb0445866dfd97cfd19edf36789435417304e38bddba657"
+    },
+    {
+      "path": "components/author/workbench/opf-canvas-workbench.tsx",
+      "bytes": 8080,
+      "sha256": "218d30153cfc0762db08d07bcf8d2c9483f41f5588fd7dada139b1067428c85b"
+    },
+    {
+      "path": "components/author/workbench/author-preview-stack.tsx",
+      "bytes": 3373,
+      "sha256": "241bc6d6f621b72f06ceb0b181efe940c790255d4af03b37989bf9d2af5f1a8a"
+    },
+    {
+      "path": "components/playground/playground-shell.tsx",
+      "bytes": 64412,
+      "sha256": "7c9fb3d0d1d0fcc8291bf7b0d27f07dce4301fb14ceb23772e8282a435f70568"
+    },
+    {
+      "path": "lib/opf-toolkit/use-editor-session.ts",
+      "bytes": 2102,
+      "sha256": "feb46d06505882b47c280b9ce3e1895c79d484c79f05a85bf483a2d67517ddb8"
+    },
+    {
+      "path": "lib/playground/opf-codec.ts",
+      "bytes": 25164,
+      "sha256": "4955e0a4a5f74883c2ef585c7c29c04ba5fa3e84a9c0c0ba847ae3c0290bc0f3"
+    },
+    {
+      "path": "lib/playground/canvas-source.ts",
+      "bytes": 2587,
+      "sha256": "46e5757c619c2c12742b3773b31a55012e3bf2d5e593ff39b1c42409ca2cfbc8"
+    },
+    {
+      "path": "lib/playground/json-source-edit.ts",
+      "bytes": 5407,
+      "sha256": "981f2f1d0482a5cdc809601ed8af28217fc92059c4a5dcff2b97d64162f5e20b"
+    },
+    {
+      "path": "lib/playground/json-cursor-resolver.ts",
+      "bytes": 17152,
+      "sha256": "ebf4842f0747e85c688a73ade2ccd952dabbc6b4a6fe2408b6a5d37c4061681b"
+    },
+    {
+      "path": "lib/playground/__tests__/canvas-source.test.ts",
+      "bytes": 6417,
+      "sha256": "a167978ef00e2beebdcbb7e43f93ae807ccd015853bf77932ba5124b31ab3a5d"
+    },
+    {
+      "path": "tests/e2e/author.spec.ts",
+      "bytes": 12664,
+      "sha256": "8332c789d3ac0ad0179d460d6849be12816f35e00004921f2c24db838481d8ed"
+    },
+    {
+      "path": "tests/e2e/inspector.spec.ts",
+      "bytes": 9827,
+      "sha256": "ff5d1161bec4c07749c868b34547e34615250fb02f44957784f541308a288606"
+    },
+    {
+      "path": "tests/e2e/inspector-editing.spec.ts",
+      "bytes": 7576,
+      "sha256": "47cea959ac1d321a0544b10891e7a1ce818cdf537b2a5ed952c50d30e7c8036f"
+    },
+    {
+      "path": "tests/e2e/author-json-options.spec.ts",
+      "bytes": 6571,
+      "sha256": "3f09784b2dd0b2ec34d91933939ded4ccd521ec613a56468eac10215ebbdd3bd"
+    },
+    {
+      "path": "node_modules/@openpresentation/opf-editor/dist/index.js",
+      "bytes": 28412,
+      "sha256": "ffa2dd3043ff87f6da3e7d6acd818b8041d99979aa6707a1828c558f03afb753"
+    },
+    {
+      "path": "node_modules/@openpresentation/opf-editor/dist/index.d.ts",
+      "bytes": 6663,
+      "sha256": "9cf9acaf279fdd23527fa692cd3a06e648b6ebd8df966b63af5baddf9651cad5"
+    },
+    {
+      "path": "node_modules/@openpresentation/opf-editor/dist/canvas.js",
+      "bytes": 31755,
+      "sha256": "957d2c92808cf5d65027d8283be4fba6b2dcbb8026109e4adcab1fda10d7a3cd"
+    },
+    {
+      "path": "node_modules/@openpresentation/opf-editor/package.json",
+      "bytes": 5253,
+      "sha256": "c91341504f64b9100dcd12bddee35cf8eadb0e14acee72d9798f93ca0a549818"
+    },
+    {
+      "path": "node_modules/@openpresentation/opf/package.json",
+      "bytes": 3350,
+      "sha256": "86364f07f30f5106539a936b4eb84cf5a00c53524599b222f823b2460efb3a0f"
+    },
+    {
+      "path": "package.json",
+      "bytes": 2682,
+      "sha256": "e9ac58846cd1f59a2bdee422b0fc4e9d63e51e62e7e86205fc419bd7b0ec5540"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "bytes": 427824,
+      "sha256": "f362abf89c57fe9e93197a54520fa5fc712e85bf78b2e011285456f37283b76f"
+    }
+  ],
+  "durableScope": {
+    "/Users/michael/Source/opf/docs/handoff-2026-09-21.md": "bba48c748a8ca9caf90218e5474acfbea8996240397676b66fd72e6b50b56b3a",
+    "/Users/michael/Source/opf/docs/evidence/issue88-final-20260921/issue88-body.md": "0206b2583e84e77065b126f36794b199f991a6a86dc9820262db38c97b6c226c"
+  }
+}

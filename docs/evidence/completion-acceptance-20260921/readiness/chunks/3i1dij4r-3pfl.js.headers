@@ -1,0 +1,16 @@
+HTTP/2 200 
+access-control-allow-origin: *
+age: 9614
+cache-control: public,max-age=31536000,immutable
+content-disposition: inline; filename="3i1dij4r-3pfl.js"
+content-encoding: gzip
+content-type: application/javascript; charset=utf-8
+date: Mon, 21 Sep 2026 15:20:04 GMT
+etag: W/"_next/static/immutable/chunks/3i1dij4r-3pfl.js"
+last-modified: Mon, 21 Sep 2026 12:39:50 GMT
+server: Vercel
+strict-transport-security: max-age=63072000
+x-matched-path: /_next/static/immutable/chunks/3i1dij4r-3pfl.js
+x-vercel-cache: HIT
+x-vercel-id: pdx1::xvtgj-1790004004635-7fe76658412e
+

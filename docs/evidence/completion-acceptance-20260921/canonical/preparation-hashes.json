@@ -1,0 +1,99 @@
+{
+  "files": [
+    {
+      "file": "RUNBOOK.md",
+      "bytes": 2753,
+      "sha256": "2d94fbf7aad0c81a857243b12fa01b7270906a68fe341a3f0dab445aba696063"
+    },
+    {
+      "file": "prepared.json",
+      "bytes": 4075,
+      "sha256": "88606929bc230557d1654cd1ba4964fb7a4c38545cf535afe53745cd184329b3"
+    },
+    {
+      "file": "run-once.mjs",
+      "bytes": 7592,
+      "sha256": "1ed0835bc5c52e0b5f22eb7e73cb3042e2cc894b998b0ea1be4b09b62fffdaaf"
+    },
+    {
+      "file": "source/package.json",
+      "bytes": 2682,
+      "sha256": "e9ac58846cd1f59a2bdee422b0fc4e9d63e51e62e7e86205fc419bd7b0ec5540"
+    },
+    {
+      "file": "source/playwright.config.ts",
+      "bytes": 747,
+      "sha256": "c95c11d3cfb6fcbcbfaa0b5c353276a965d188a31f50778175a8ed8c7b895da2"
+    },
+    {
+      "file": "source/pnpm-lock.yaml",
+      "bytes": 427824,
+      "sha256": "f362abf89c57fe9e93197a54520fa5fc712e85bf78b2e011285456f37283b76f"
+    },
+    {
+      "file": "source/tests/e2e/author-json-options.spec.ts",
+      "bytes": 6571,
+      "sha256": "3f09784b2dd0b2ec34d91933939ded4ccd521ec613a56468eac10215ebbdd3bd"
+    },
+    {
+      "file": "source/tests/e2e/author.spec.ts",
+      "bytes": 12664,
+      "sha256": "8332c789d3ac0ad0179d460d6849be12816f35e00004921f2c24db838481d8ed"
+    },
+    {
+      "file": "source/tests/e2e/completion-preservation.spec.ts",
+      "bytes": 13431,
+      "sha256": "4a43174702bcfec4f7abb1937ad744c6d40a3eac250c097aa2f6e04a8e06b908"
+    },
+    {
+      "file": "source/tests/e2e/helpers/clipboard.ts",
+      "bytes": 1753,
+      "sha256": "46dc168dabaf05874eb086c8acecce43584052052abd050853267e60be79d8f7"
+    },
+    {
+      "file": "source/tests/e2e/inspector-editing.spec.ts",
+      "bytes": 7576,
+      "sha256": "47cea959ac1d321a0544b10891e7a1ce818cdf537b2a5ed952c50d30e7c8036f"
+    },
+    {
+      "file": "source/tests/e2e/inspector-recovery.spec.ts",
+      "bytes": 6482,
+      "sha256": "acae48d48657a7308499ff67315618b595a41f3c6ddaeaa8e8e56859406911bc"
+    },
+    {
+      "file": "source/tests/e2e/inspector.spec.ts",
+      "bytes": 9827,
+      "sha256": "ff5d1161bec4c07749c868b34547e34615250fb02f44957784f541308a288606"
+    },
+    {
+      "file": "source/tests/e2e/json-paste-formatting.spec.ts",
+      "bytes": 7742,
+      "sha256": "84b7d015613a10a8d51d0e1027b156ec38a9c6d8c912e51368dc4da77e65e065"
+    },
+    {
+      "file": "source/tests/e2e/monaco.spec.ts",
+      "bytes": 3564,
+      "sha256": "a0bd6e22363e9552b9482a67a8875d3e9b49f77460cc5431e4e2f382735b2a55"
+    },
+    {
+      "file": "source/tests/e2e/svg-security.spec.ts",
+      "bytes": 3765,
+      "sha256": "5a1455ecebfdcc26997e5f82d2707634a2dd3127b6dab9b81d9e8023dc8612f4"
+    },
+    {
+      "file": "source/tests/e2e/toolkit.spec.ts",
+      "bytes": 1475,
+      "sha256": "262603d599976178dc7ab6c60f6c5b202f5e34c0173576a12a83515aa3ea96b8"
+    },
+    {
+      "file": "source/tests/e2e/yaml.spec.ts",
+      "bytes": 3693,
+      "sha256": "b026cdf36c20be9967204cfb5482bf9d8a042c4ac44bb668b1683a16ce9f2eba"
+    },
+    {
+      "file": "test-list.txt",
+      "bytes": 3069,
+      "sha256": "a6ec2e2c474e70bf3618ec1b4282ab35f9d88ffcd7f31c5b3202e0b8d7851f06"
+    }
+  ]
+}

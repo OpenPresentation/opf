@@ -1,0 +1,43 @@
+{
+  "capturedAt": "2026-09-21T15:55:11.474Z",
+  "id": "dpl_5zdunyqiun7MgJNRJZ33CMHTrmmN",
+  "name": "pptx-dev",
+  "url": "pptx-puzw43pl9-dataadvantage.vercel.app",
+  "type": "LAMBDAS",
+  "state": "READY",
+  "createdAt": 1790005863746,
+  "creator": {
+    "uid": "ZQU4suDtrsvvtRutONCd3J0H",
+    "username": "grimmmichaelj"
+  },
+  "project": {
+    "id": "prj_v8NIINr5fgzK9yoAQRy0CNoDPqC8",
+    "name": "pptx-dev",
+    "framework": "nextjs"
+  },
+  "meta": {
+    "githubCommitRef": "master",
+    "githubCommitSha": "0f35352a1445f56ad4bb7c9f4c5609e01f2dd9ae",
+    "githubCommitMessage": "fix: preserve source and history in categorical completions (#47)",
+    "githubRepo": "pptx-dev",
+    "githubOrg": "Data-Advantage"
+  },
+  "alias": [
+    "api.pptx.dev",
+    "mcp.pptx.dev",
+    "www.pptx.dev",
+    "pptx-dev.vercel.app",
+    "pptx.dev",
+    "pptx-dev-dataadvantage.vercel.app",
+    "pptx-dev-git-master-dataadvantage.vercel.app"
+  ],
+  "target": "production",
+  "regions": [
+    "iad1"
+  ],
+  "buildingAt": 1790005864963,
+  "ready": 1790005922070,
+  "readyState": "READY",
+  "source": "git",
+  "aliasError": null
+}

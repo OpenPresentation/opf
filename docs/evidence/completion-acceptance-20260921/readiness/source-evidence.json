@@ -1,0 +1,36 @@
+{
+  "capturedAt": "2026-09-21T15:27:43.138332+00:00",
+  "sourceWorktree": "/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev",
+  "commit": "59e888580c38ca5cfbf5105b2ec09c2bfc956ca1",
+  "clean": true,
+  "files": [
+    {
+      "path": "components/playground/opf-editor.tsx",
+      "sha256": "d8c231d226cb24c2f278e09e26c0f286df0f4f9455076b87e2c791f569c84ec7"
+    },
+    {
+      "path": "lib/opf-toolkit/browser-runtime.ts",
+      "sha256": "61aaa8bb02823f201afaea43e6795940743ccdde9b945fef6bab7273aa8a6046"
+    },
+    {
+      "path": "components/playground/preview-canvas-slide.tsx",
+      "sha256": "e94682d5cc7d3f1689fbfacd8decdee01213814a579855a58e29b1c1940f618c"
+    },
+    {
+      "path": "components/playground/slide-canvas.tsx",
+      "sha256": "6140411d866e409a2a004d8a2457356f1ad638a841759aa4cf4f015f7bf5c0e9"
+    },
+    {
+      "path": "app/inspector/page.tsx",
+      "sha256": "cb25037fd8f59a74ca8d43a5046bbabb3a65965f8e61cba9a226d2afcdad1bb3"
+    },
+    {
+      "path": "scripts/prepare-opf-browser.mjs",
+      "sha256": "e84c23c72f6aafe2bf2e149b20f3e75af4b6afcf8a9aa1f59129801f93b42928"
+    },
+    {
+      "path": "node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/languages/features/json/workerManager.js",
+      "sha256": "e5331831fcbb0877d4aafc3d1e9e656b7ef4d6160fcd1dc658c68fedc8ab1378"
+    }
+  ]
+}
