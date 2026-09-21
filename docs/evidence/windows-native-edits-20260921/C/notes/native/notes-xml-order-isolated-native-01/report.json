@@ -1,0 +1,64 @@
+﻿{
+    "schemaVersion":  1,
+    "source":  {
+                   "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\notes-packaging-controls-02\\reordered-ascii.pptx",
+                   "sha256":  "f3110eaef1674c4055e337599c44db662f5c867246e136ed38ed97547f8ed2d1",
+                   "openedPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\notes-xml-order-isolated-native-01\\inputs\\input.pptx",
+                   "openedSha256":  "f3110eaef1674c4055e337599c44db662f5c867246e136ed38ed97547f8ed2d1"
+               },
+    "saved":  {
+                  "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\notes-xml-order-isolated-native-01\\native-furniture-control.pptx",
+                  "sha256":  null
+              },
+    "reopened":  {
+                     "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\notes-xml-order-isolated-native-01\\native-furniture-control.pptx",
+                     "sha256":  null
+                 },
+    "actionPlan":  {
+                       "path":  null,
+                       "sha256":  null,
+                       "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\notes-xml-order-isolated-native-01\\inputs\\action-plan.json",
+                       "snapshotSha256":  "84b1c14e68260082e3e79edff0a78f4ebf1942cfd6c593246044ec2149cbb87d",
+                       "actions":  [
+
+                                   ],
+                       "completed":  [
+
+                                     ]
+                   },
+    "phases":  {
+                   "original":  null,
+                   "edited":  null,
+                   "reopened":  null
+               },
+    "inputs":  {
+                   "verifier":  {
+                                    "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\sources\\opf-pptx\\test\\native-furniture-control.ps1",
+                                    "sha256":  "c85fe9f79b9c8e01feb6f0c4cfc8b84c90d7d93498f88b4cde2750630c9b2e9e",
+                                    "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\notes-xml-order-isolated-native-01\\inputs\\native-furniture-control.ps1",
+                                    "snapshotSha256":  "c85fe9f79b9c8e01feb6f0c4cfc8b84c90d7d93498f88b4cde2750630c9b2e9e"
+                                },
+                   "processHelper":  {
+                                         "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\sources\\opf-pptx\\test\\native-process.ps1",
+                                         "sha256":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+                                         "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\notes-xml-order-isolated-native-01\\inputs\\native-process.ps1",
+                                         "snapshotSha256":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+                                     }
+               },
+    "environment":  {
+                        "hostVersion":  "5.1.26100.9444",
+                        "windowsProductName":  "Windows 10 Home",
+                        "windowsDisplayVersion":  "25H2",
+                        "windowsBuild":  "26200.9457",
+                        "powerPointVersion":  "16.0",
+                        "powerPointExecutable":  "C:\\Program Files\\Microsoft Office\\root\\Office16\\POWERPNT.EXE",
+                        "powerPointBuild":  "16.0.20326.20158",
+                        "powerPointExecutableSha256":  "07cbe68cde7596058a6890c471389a7a70a090ee42f01975d72ea6d643f82021"
+                    },
+    "cleanupConfirmed":  false,
+    "officeOperationsStopped":  true,
+    "lastStage":  "worker.failure",
+    "lastStatus":  "error",
+    "error":  "The file or directory is corrupted and unreadable. (Exception from HRESULT: 0x80070570)",
+    "scope":  "One explicitly supplied presentation with at most three slides, thirty shapes per slide and twenty prevalidated actions. Original, edited and read-only reopened native states and PNGs are observations. The worker never quits or kills Office, changes security, retries, or closes unrelated presentations."
+}

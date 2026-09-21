@@ -1,0 +1,27 @@
+﻿{
+    "source":  {
+                   "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-registry-03\\decks\\baseline-inherited-local.pptx",
+                   "sha256":  "a655d692ba900027d6504458921f462dbec54de515ddec37c0f628d29c379e5f",
+                   "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-baseline-native-01\\inputs\\input.pptx",
+                   "snapshotSha256":  "a655d692ba900027d6504458921f462dbec54de515ddec37c0f628d29c379e5f"
+               },
+    "actionPlan":  {
+                       "path":  null,
+                       "sha256":  null,
+                       "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-baseline-native-01\\inputs\\action-plan.json",
+                       "snapshotSha256":  "84b1c14e68260082e3e79edff0a78f4ebf1942cfd6c593246044ec2149cbb87d",
+                       "count":  0
+                   },
+    "verifier":  {
+                     "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\sources\\opf-pptx\\test\\native-furniture-control.ps1",
+                     "sha256":  "c85fe9f79b9c8e01feb6f0c4cfc8b84c90d7d93498f88b4cde2750630c9b2e9e",
+                     "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-baseline-native-01\\inputs\\native-furniture-control.ps1",
+                     "snapshotSha256":  "c85fe9f79b9c8e01feb6f0c4cfc8b84c90d7d93498f88b4cde2750630c9b2e9e"
+                 },
+    "processHelper":  {
+                          "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\sources\\opf-pptx\\test\\native-process.ps1",
+                          "sha256":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+                          "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-baseline-native-01\\inputs\\native-process.ps1",
+                          "snapshotSha256":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+                      }
+}

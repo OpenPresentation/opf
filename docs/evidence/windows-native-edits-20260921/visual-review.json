@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "reviewer": "root supervising agent",
+  "reviewDate": "2026-09-21",
+  "method": "Direct inspection of the complete native exported slides during this task, recorded after inspection.",
+  "scope": "Finite visual observations only. No preview pixel-identity, general reflow, font-file identity, or universal layout acceptance.",
+  "images": [
+    {
+      "path": "B/picture/picture-alter-native-01/reopened.png",
+      "sha256": "9c913f592038d2b8c9a6ed16fde7c418e86ef7169c0dd22ef008f48a886ddd7e",
+      "finding": "Current crop and geometry change visible."
+    },
+    {
+      "path": "B/picture/picture-replace-native-01/reopened.png",
+      "sha256": "bcd1c922c08537a6cea876f22c370fccfa88f06e617bef48c7d91bb706e55aa7",
+      "finding": "Current replacement image visible."
+    },
+    {
+      "path": "B/picture/picture-delete-native-01/reopened.png",
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b",
+      "finding": "Target image absent."
+    },
+    {
+      "path": "B/furniture/native/furniture-baseline-native-01/reopened-slide-01.png",
+      "sha256": "6f7f137d021418e7ad52a758b909d9366164073369bdbf47f1dc280b52e4147c",
+      "finding": "Reviewed complete reopened slide against the intended control."
+    },
+    {
+      "path": "B/furniture/native/furniture-baseline-native-01/reopened-slide-02.png",
+      "sha256": "b1ef21699b348d7d708d8c9e816f9dbe41f2ea1afa741b6d6aa483b0728a57c3",
+      "finding": "Reviewed complete reopened slide against the intended control."
+    },
+    {
+      "path": "B/furniture/native/furniture-baseline-native-01/reopened-slide-03.png",
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7",
+      "finding": "Reviewed complete reopened slide against the intended control."
+    },
+    {
+      "path": "B/furniture/native/furniture-flags-native-01/reopened-slide-01.png",
+      "sha256": "41ce62f72d067732ae1557ce8d470e9959d8eb6efc61bf8c5224dd40eedc0015",
+      "finding": "Reviewed complete reopened slide against the intended control."
+    },
+    {
+      "path": "B/furniture/native/furniture-flags-native-01/reopened-slide-02.png",
+      "sha256": "28ebe7855d66914f01f4529092a743ae116ce73fed74d083dc95755d9181baac",
+      "finding": "Reviewed complete reopened slide against the intended control."
+    },
+    {
+      "path": "B/furniture/native/furniture-flags-native-01/reopened-slide-03.png",
+      "sha256": "5f15c06bc6338b6aa433848ddb66eb5aeba5a0c55c4ce3022d8f75e90b221628",
+      "finding": "Reviewed complete reopened slide against the intended control."
+    },
+    {
+      "path": "B/furniture/native/furniture-text-clear-native-01/reopened-slide-01.png",
+      "sha256": "7fe78a66cb005dd97f136e5a7a16b4160cf646d7ef7405cf2d9f2d407af1ea86",
+      "finding": "Longer current header clips trailing words in the fixed text box; semantic retention does not establish fit or reflow."
+    },
+    {
+      "path": "B/furniture/native/furniture-text-clear-native-01/reopened-slide-02.png",
+      "sha256": "dd711fa9d40eba17aa2bd3acfe9ec74ebd6155d02baea6e933eb7486868dbcaf",
+      "finding": "Reviewed complete reopened slide against the intended control."
+    },
+    {
+      "path": "B/furniture/native/furniture-text-clear-native-01/reopened-slide-03.png",
+      "sha256": "ef6e8e28d9e803648c5d4e06db82f4248f15526682f325960551001d35958677",
+      "finding": "Reviewed complete reopened slide against the intended control."
+    },
+    {
+      "path": "B/furniture/native/furniture-ui-reopen-native-01/reopened-slide-02.png",
+      "sha256": "dc95e37a6bc0e8b69126ba6257a66130db101a770a108dc2dd6d25f60cce703b",
+      "finding": "UI replacement visible; native geometry narrowed and repositioned separately from content correctness."
+    },
+    {
+      "path": "B/furniture/native/furniture-delete-image-native-01/reopened-slide-02.png",
+      "sha256": "b9966fde705beb1f0c87911010031dc6dcb9efb9bd46195267890c2fd9caf103",
+      "finding": "Target furniture image absent."
+    },
+    {
+      "path": "B/furniture/native/furniture-reorder-native-01/reopened-slide-01.png",
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7",
+      "finding": "Moved slide visible with current retained native text."
+    },
+    {
+      "path": "B/furniture/native/furniture-duplicate-tagged-shape-native-01/reopened-slide-01.png",
+      "sha256": "9edfbc8d0a7f23126044023951d3ac0a41fd060904da5a60c49e45c1f1dc7c64",
+      "finding": "Offset duplicated header overlaps nearby text; retained current copies do not establish layout fit."
+    },
+    {
+      "path": "B/furniture/native/furniture-missing-tag-native-01/reopened-slide-01.png",
+      "sha256": "6f7f137d021418e7ad52a758b909d9366164073369bdbf47f1dc280b52e4147c",
+      "finding": "Current slide appearance retained despite missing provenance."
+    },
+    {
+      "path": "B/furniture/native/furniture-changed-tag-native-01/reopened-slide-01.png",
+      "sha256": "6f7f137d021418e7ad52a758b909d9366164073369bdbf47f1dc280b52e4147c",
+      "finding": "Current slide appearance retained despite changed provenance."
+    },
+    {
+      "path": "B/furniture/native/furniture-metadata-disagreement-native-01/reopened-slide-01.png",
+      "sha256": "c7162af01b26e7d9230c1df0d19d7d374c4c4d92799481d89911c94d6e2a3304",
+      "finding": "Current native organization text visible; semantic conflict handled separately."
+    },
+    {
+      "path": "C/notes/native/notes-production-native-01/reopened-slide-01.png",
+      "sha256": "91207d33ac5accca8cf35ffe7687d52c3184fa9a942197616cbc8f6586786eb2",
+      "finding": "Production notes control full slide reviewed; notes semantics verified separately."
+    },
+    {
+      "path": "C/notes/native/notes-production-native-01/reopened-slide-02.png",
+      "sha256": "8774b1322b386b8be7c785fcaf287c0073510780123dd7e821e987dea1e2c050",
+      "finding": "Production notes control full slide reviewed; notes semantics verified separately."
+    }
+  ]
+}

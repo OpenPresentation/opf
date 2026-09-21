@@ -1,0 +1,342 @@
+{
+  "schemaVersion": 1,
+  "scope": "Offline reimport of a PowerPoint UI-edited deck after the native open/save/close/reopen lifecycle. This uses the current public registry @openpresentation/opf-pptx ESM entry and independently resolves the current saved slide-2 picture, tag payload, media bytes, and alt from OOXML. No Office/UI call is made by this script.",
+  "createdAt": "2026-09-21T18:41:14.297Z",
+  "scriptPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-ui-reopen-native-01\\registry-reimport-03.mjs",
+  "scriptSha256": "b9813859203c1799be6e0152492e144310b2ae04a102675af7277f6466492abb",
+  "runtime": {
+    "node": "v24.21.0",
+    "executable": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\toolchain\\node_modules\\node\\bin\\node.exe"
+  },
+  "registryBinding": {
+    "node": "v24.21.0",
+    "expectedNode": "v24.21.0",
+    "executable": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\toolchain\\node_modules\\node\\bin\\node.exe",
+    "expectedExecutable": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\toolchain\\node_modules\\node\\bin\\node.exe",
+    "consumer": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer",
+    "packageManifestPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-pptx\\package.json",
+    "packageEntryPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-pptx\\dist\\index.js",
+    "publicEntryPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-pptx\\dist\\index.js",
+    "packageWithinConsumer": true,
+    "packageVersion": "0.9.1",
+    "lockSha256": "4868f13254e3e681566164da8427d3716ceaa025435e4606e5e15fc8a87bc305",
+    "expectedLockSha256": "4868f13254e3e681566164da8427d3716ceaa025435e4606e5e15fc8a87bc305",
+    "entrypointSha256": "ba8fa87cebb32db9675f71bec91cc257e8d02a9d0977ca133666c6257eb07716",
+    "expectedEntrypointSha256": "ba8fa87cebb32db9675f71bec91cc257e8d02a9d0977ca133666c6257eb07716",
+    "locked": {
+      "version": "0.9.1",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.9.1.tgz",
+      "integrity": "sha512-krzDAKjDByP2zsoR4VeyyIwU7uhcVbxpeBYEIw7vlkoRWWiFq170rhQzQZx5lbMD7u2magYEkdUt3rUgByCKjw=="
+    },
+    "expectedLock": {
+      "version": "0.9.1",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.9.1.tgz",
+      "integrity": "sha512-krzDAKjDByP2zsoR4VeyyIwU7uhcVbxpeBYEIw7vlkoRWWiFq170rhQzQZx5lbMD7u2magYEkdUt3rUgByCKjw=="
+    }
+  },
+  "evidence": {
+    "inputs": {
+      "inputPptx": {
+        "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-ui-reopen-native-01\\inputs\\input.pptx",
+        "sha256": "a10ccca75d692de67ae12f321bfd93849b199f2a9f7e70d43d751f4540a2bc38"
+      },
+      "savedPptx": {
+        "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-ui-reopen-native-01\\native-furniture-control.pptx",
+        "sha256": "d761b6ab53af13ca3762ee641d5d2364ec303d1b0542d6f2de1054c305b8cd6d"
+      },
+      "previousImport": {
+        "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-ui-replace-01\\ui-import-corrected.opf.json",
+        "sha256": "c2d1f3f72659354b6271df48c8a18fb309653dc5d236707568f2e5fcd7517271"
+      },
+      "previousComparison": {
+        "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-ui-replace-01\\ui-comparison-corrected.json",
+        "sha256": "8440fbccf87ce7747dcf126166a490b9ed3011deabf05d150e119ab796d3bdaf"
+      }
+    },
+    "import": {
+      "moduleUrl": "file:///C:/Users/micha/.codex/worktrees/fd3f/opf/artifacts/windows-resume-20260921/registry-consumer/node_modules/@openpresentation/opf-pptx/dist/index.js",
+      "fromPptxExport": true,
+      "outputPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-ui-reopen-native-01\\registry-reimport-03.opf.json",
+      "outputSha256": "c2d1f3f72659354b6271df48c8a18fb309653dc5d236707568f2e5fcd7517271",
+      "diagnostics": [
+        {
+          "code": "furniture-import-reflow",
+          "path": "slides.0.design",
+          "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+        },
+        {
+          "code": "furniture-import-reflow",
+          "path": "slides.1.design",
+          "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+        },
+        {
+          "code": "furniture-import-reflow",
+          "path": "slides.2.design",
+          "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+        },
+        {
+          "code": "heading-import-reflow",
+          "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed.",
+          "path": "slides.0"
+        },
+        {
+          "code": "text-import-reflow",
+          "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.",
+          "path": "slides.0"
+        },
+        {
+          "code": "heading-import-reflow",
+          "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed.",
+          "path": "slides.1"
+        },
+        {
+          "code": "text-import-reflow",
+          "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.",
+          "path": "slides.1"
+        },
+        {
+          "code": "heading-import-reflow",
+          "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed.",
+          "path": "slides.2"
+        },
+        {
+          "code": "text-import-reflow",
+          "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.",
+          "path": "slides.2"
+        },
+        {
+          "code": "furniture-import-reflow",
+          "path": "slides.0.design",
+          "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+        },
+        {
+          "code": "furniture-import-reflow",
+          "path": "slides.1.design",
+          "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+        },
+        {
+          "code": "furniture-import-reflow",
+          "path": "slides.2.design",
+          "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+        },
+        {
+          "code": "heading-import-reflow",
+          "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed.",
+          "path": "slides.0"
+        },
+        {
+          "code": "text-import-reflow",
+          "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.",
+          "path": "slides.0"
+        },
+        {
+          "code": "heading-import-reflow",
+          "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed.",
+          "path": "slides.1"
+        },
+        {
+          "code": "text-import-reflow",
+          "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.",
+          "path": "slides.1"
+        },
+        {
+          "code": "heading-import-reflow",
+          "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed.",
+          "path": "slides.2"
+        },
+        {
+          "code": "text-import-reflow",
+          "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.",
+          "path": "slides.2"
+        }
+      ]
+    },
+    "nativePicture": {
+      "before": {
+        "shapeId": "2",
+        "shapeName": "OPF image 1",
+        "alt": "",
+        "tagHex": "7B2276223A312C22726F6C65223A22696D616765222C2267726F7570223A2231222C2270617274223A307D",
+        "tagJson": {
+          "v": 1,
+          "role": "image",
+          "group": "1",
+          "part": 0
+        },
+        "tagPart": "ppt/tags/tag12.xml",
+        "tagRelationshipId": "rId2",
+        "mediaPart": "ppt/media/image1.png",
+        "mediaSha256": "3614f3eb5c3e96b6a245eb8cfe1dc0eacdb61348a6f3338f28ed80665616a24b",
+        "mediaBytes": 544,
+        "mediaRelationshipId": "rId12"
+      },
+      "after": {
+        "shapeId": "2",
+        "shapeName": "OPF image 1",
+        "alt": "",
+        "tagHex": "7B2276223A312C22726F6C65223A22696D616765222C2267726F7570223A2231222C2270617274223A307D",
+        "tagJson": {
+          "v": 1,
+          "role": "image",
+          "group": "1",
+          "part": 0
+        },
+        "tagPart": "ppt/tags/tag12.xml",
+        "tagRelationshipId": "rId2",
+        "mediaPart": "ppt/media/image1.png",
+        "mediaSha256": "3614f3eb5c3e96b6a245eb8cfe1dc0eacdb61348a6f3338f28ed80665616a24b",
+        "mediaBytes": 544,
+        "mediaRelationshipId": "rId12"
+      }
+    },
+    "importComparison": {
+      "sameNonTarget": true,
+      "priorImageMatchesInput": true,
+      "importerImageMatchesNativeCurrent": true,
+      "altConsistent": true,
+      "previousImportPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-ui-replace-01\\ui-import-corrected.opf.json",
+      "previousImportSha256": "c2d1f3f72659354b6271df48c8a18fb309653dc5d236707568f2e5fcd7517271",
+      "currentImportPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-ui-reopen-native-01\\registry-reimport-03.opf.json",
+      "currentImportSha256": "c2d1f3f72659354b6271df48c8a18fb309653dc5d236707568f2e5fcd7517271",
+      "previousImageHash": "3614f3eb5c3e96b6a245eb8cfe1dc0eacdb61348a6f3338f28ed80665616a24b",
+      "currentImageHash": "3614f3eb5c3e96b6a245eb8cfe1dc0eacdb61348a6f3338f28ed80665616a24b",
+      "beforeMediaSha256": "3614f3eb5c3e96b6a245eb8cfe1dc0eacdb61348a6f3338f28ed80665616a24b",
+      "afterMediaSha256": "3614f3eb5c3e96b6a245eb8cfe1dc0eacdb61348a6f3338f28ed80665616a24b",
+      "currentNativeAlt": "",
+      "currentImportedAlt": ""
+    }
+  },
+  "checks": [
+    {
+      "name": "UI-reopened deck matches native saved/reopened observations",
+      "passed": true,
+      "observed": "d761b6ab53af13ca3762ee641d5d2364ec303d1b0542d6f2de1054c305b8cd6d",
+      "expected": {
+        "saved": "d761b6ab53af13ca3762ee641d5d2364ec303d1b0542d6f2de1054c305b8cd6d",
+        "reopened": "d761b6ab53af13ca3762ee641d5d2364ec303d1b0542d6f2de1054c305b8cd6d"
+      }
+    },
+    {
+      "name": "input copy matches the native source snapshot",
+      "passed": true,
+      "observed": "a10ccca75d692de67ae12f321bfd93849b199f2a9f7e70d43d751f4540a2bc38",
+      "expected": {
+        "requestSource": "a10ccca75d692de67ae12f321bfd93849b199f2a9f7e70d43d751f4540a2bc38",
+        "snapshot": "a10ccca75d692de67ae12f321bfd93849b199f2a9f7e70d43d751f4540a2bc38"
+      }
+    },
+    {
+      "name": "previous import evidence is a passed result for the original UI Change Picture deck",
+      "passed": true,
+      "observed": {
+        "passed": true,
+        "importedPptxSha256": "a10ccca75d692de67ae12f321bfd93849b199f2a9f7e70d43d751f4540a2bc38",
+        "inputSha256": "a10ccca75d692de67ae12f321bfd93849b199f2a9f7e70d43d751f4540a2bc38"
+      },
+      "expected": {
+        "passed": true,
+        "importedPptxSha256": "a10ccca75d692de67ae12f321bfd93849b199f2a9f7e70d43d751f4540a2bc38"
+      }
+    },
+    {
+      "name": "current registry public ESM consumer binding",
+      "passed": true,
+      "observed": {
+        "node": "v24.21.0",
+        "expectedNode": "v24.21.0",
+        "executable": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\toolchain\\node_modules\\node\\bin\\node.exe",
+        "expectedExecutable": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\toolchain\\node_modules\\node\\bin\\node.exe",
+        "consumer": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer",
+        "packageManifestPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-pptx\\package.json",
+        "packageEntryPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-pptx\\dist\\index.js",
+        "publicEntryPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-pptx\\dist\\index.js",
+        "packageWithinConsumer": true,
+        "packageVersion": "0.9.1",
+        "lockSha256": "4868f13254e3e681566164da8427d3716ceaa025435e4606e5e15fc8a87bc305",
+        "expectedLockSha256": "4868f13254e3e681566164da8427d3716ceaa025435e4606e5e15fc8a87bc305",
+        "entrypointSha256": "ba8fa87cebb32db9675f71bec91cc257e8d02a9d0977ca133666c6257eb07716",
+        "expectedEntrypointSha256": "ba8fa87cebb32db9675f71bec91cc257e8d02a9d0977ca133666c6257eb07716",
+        "locked": {
+          "version": "0.9.1",
+          "resolved": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.9.1.tgz",
+          "integrity": "sha512-krzDAKjDByP2zsoR4VeyyIwU7uhcVbxpeBYEIw7vlkoRWWiFq170rhQzQZx5lbMD7u2magYEkdUt3rUgByCKjw=="
+        },
+        "expectedLock": {
+          "version": "0.9.1",
+          "resolved": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.9.1.tgz",
+          "integrity": "sha512-krzDAKjDByP2zsoR4VeyyIwU7uhcVbxpeBYEIw7vlkoRWWiFq170rhQzQZx5lbMD7u2magYEkdUt3rUgByCKjw=="
+        }
+      },
+      "expected": "Node, lock, package manifest, installed entrypoint and public import resolve to the retained registry binding"
+    },
+    {
+      "name": "native UI picture media bytes survive open-save-close-reopen lifecycle",
+      "passed": true,
+      "observed": {
+        "beforeSha256": "3614f3eb5c3e96b6a245eb8cfe1dc0eacdb61348a6f3338f28ed80665616a24b",
+        "afterSha256": "3614f3eb5c3e96b6a245eb8cfe1dc0eacdb61348a6f3338f28ed80665616a24b",
+        "previousImportSha256": "3614f3eb5c3e96b6a245eb8cfe1dc0eacdb61348a6f3338f28ed80665616a24b"
+      },
+      "expected": "target media hash is unchanged through the PowerPoint lifecycle and matches the prior registry import"
+    },
+    {
+      "name": "furniture tag payload and picture shape identity survive lifecycle",
+      "passed": true,
+      "observed": {
+        "before": {
+          "shapeId": "2",
+          "shapeName": "OPF image 1",
+          "tagHex": "7B2276223A312C22726F6C65223A22696D616765222C2267726F7570223A2231222C2270617274223A307D"
+        },
+        "after": {
+          "shapeId": "2",
+          "shapeName": "OPF image 1",
+          "tagHex": "7B2276223A312C22726F6C65223A22696D616765222C2267726F7570223A2231222C2270617274223A307D"
+        }
+      },
+      "expected": "same tagged picture identity and exact OPF_FURNITURE_V1 hex payload; relationship ids/filenames may be renumbered"
+    },
+    {
+      "name": "public reimport returns current replacement image bytes and saved current alt",
+      "passed": true,
+      "observed": {
+        "currentImageHash": "3614f3eb5c3e96b6a245eb8cfe1dc0eacdb61348a6f3338f28ed80665616a24b",
+        "nativeMediaSha256": "3614f3eb5c3e96b6a245eb8cfe1dc0eacdb61348a6f3338f28ed80665616a24b",
+        "previousImportedAlt": "",
+        "currentImportedAlt": "",
+        "beforeReopenImportedAlt": "",
+        "nativeAlt": ""
+      },
+      "expected": "current image bytes resolve through the saved picture relationship and importer alt equals saved p:cNvPr descr"
+    },
+    {
+      "name": "reimported non-target OPF content is unchanged and current picture is not stale",
+      "passed": true,
+      "observed": {
+        "sameNonTarget": true,
+        "priorImageMatchesInput": true,
+        "importerImageMatchesNativeCurrent": true,
+        "altConsistent": true,
+        "previousImportPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-ui-replace-01\\ui-import-corrected.opf.json",
+        "previousImportSha256": "c2d1f3f72659354b6271df48c8a18fb309653dc5d236707568f2e5fcd7517271",
+        "currentImportPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-ui-reopen-native-01\\registry-reimport-03.opf.json",
+        "currentImportSha256": "c2d1f3f72659354b6271df48c8a18fb309653dc5d236707568f2e5fcd7517271",
+        "previousImageHash": "3614f3eb5c3e96b6a245eb8cfe1dc0eacdb61348a6f3338f28ed80665616a24b",
+        "currentImageHash": "3614f3eb5c3e96b6a245eb8cfe1dc0eacdb61348a6f3338f28ed80665616a24b",
+        "beforeMediaSha256": "3614f3eb5c3e96b6a245eb8cfe1dc0eacdb61348a6f3338f28ed80665616a24b",
+        "afterMediaSha256": "3614f3eb5c3e96b6a245eb8cfe1dc0eacdb61348a6f3338f28ed80665616a24b",
+        "currentNativeAlt": "",
+        "currentImportedAlt": ""
+      },
+      "expected": "all non-target imported content matches; prior target matches input media; current target still matches lifecycle-saved media and alt"
+    }
+  ],
+  "failures": [],
+  "error": null,
+  "passed": true,
+  "limitations": [
+    "This analysis did not perform the Office UI lifecycle; it consumes and hashes the retained native worker outputs.",
+    "Package-level preservation is established by resolved current relationships, exact media bytes and exact tag payload; relationship identifiers and part filenames may legitimately be rewritten.",
+    "The lock, package manifest and package entrypoint are bound to the retained registry manifest; this does not prove every transitive dependency byte or renderer fidelity."
+  ]
+}

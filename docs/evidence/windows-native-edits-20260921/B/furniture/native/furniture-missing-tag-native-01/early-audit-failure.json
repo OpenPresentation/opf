@@ -1,0 +1,6 @@
+{
+  "scope": "Offline audit launched before native parent completed",
+  "remedy": "Wait for exact running session completion, then perform offline audit",
+  "nativeFailure": false,
+  "error": "supervisor.json was not yet present"
+}

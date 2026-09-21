@@ -1,0 +1,47 @@
+﻿{
+    "editMode":  "alter",
+    "source":  {
+                   "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-picture-01\\image-only.pptx",
+                   "sha256":  "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937",
+                   "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\picture-alter-native-01\\inputs\\input.pptx",
+                   "snapshotSha256":  "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937"
+               },
+    "replacement":  null,
+    "verifier":  {
+                     "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\sources\\opf-pptx\\test\\native-picture-edit.ps1",
+                     "sha256":  "0163392cdc9e0b925d1594e32d575b97b7d7f3022a45cb09b0e9b76a3ddcd0df",
+                     "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\picture-alter-native-01\\inputs\\native-picture-edit.ps1",
+                     "snapshotSha256":  "0163392cdc9e0b925d1594e32d575b97b7d7f3022a45cb09b0e9b76a3ddcd0df"
+                 },
+    "processHelper":  {
+                          "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\sources\\opf-pptx\\test\\native-process.ps1",
+                          "sha256":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+                          "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\picture-alter-native-01\\inputs\\native-process.ps1",
+                          "snapshotSha256":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+                      },
+    "expectations":  {
+                         "alter":  {
+                                       "left":  216,
+                                       "top":  132,
+                                       "width":  504,
+                                       "height":  252,
+                                       "cropLeft":  18,
+                                       "cropTop":  12,
+                                       "cropRight":  0,
+                                       "cropBottom":  0,
+                                       "alternativeText":  ""
+                                   },
+                         "replace":  {
+                                         "left":  204,
+                                         "top":  126,
+                                         "width":  516,
+                                         "height":  288,
+                                         "name":  "native-picture-replacement",
+                                         "alternativeText":  "Replacement picture added by native-picture-edit"
+                                     },
+                         "delete":  {
+                                        "shapeCount":  0,
+                                        "pictureCount":  0
+                                    }
+                     }
+}

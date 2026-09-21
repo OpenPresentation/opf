@@ -1,0 +1,60 @@
+{
+  "design": {
+    "fontScheme": "roboto",
+    "dimensions": {
+      "widthInches": 13.333333,
+      "heightInches": 7.5
+    },
+    "header": {
+      "left": {
+        "text": "Global header must be suppressed."
+      }
+    },
+    "footer": {
+      "right": {
+        "text": "Global footer must be suppressed."
+      }
+    }
+  },
+  "slides": [
+    {
+      "title": "False and empty",
+      "text": "Scalar body false and empty.",
+      "design": {
+        "header": false,
+        "footer": {}
+      }
+    },
+    {
+      "title": "Empty and false",
+      "text": "Scalar body empty and false.",
+      "design": {
+        "header": {},
+        "footer": false
+      }
+    },
+    {
+      "title": "Inactive fields",
+      "text": "Scalar body inactive fields.",
+      "design": {
+        "header": {
+          "left": {
+            "text": ""
+          },
+          "center": {
+            "organization": false,
+            "section": false,
+            "slideNumber": false,
+            "date": false
+          }
+        },
+        "footer": {
+          "right": {
+            "text": "",
+            "slideNumber": false
+          }
+        }
+      }
+    }
+  ]
+}

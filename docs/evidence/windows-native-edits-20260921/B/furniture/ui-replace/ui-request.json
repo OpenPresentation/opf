@@ -1,0 +1,10 @@
+{
+  "scope": "Supervisor-controlled PowerPoint UI Change Picture on owned native-ui-edited.pptx; input.pptx retained byte-for-byte. This is an actual UI edit, not a synthetic XML transform. Registry02 deck is valid; registry02 manifest omits furniture image inventory and is superseded by03.",
+  "sourcePath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-registry-02\\decks\\baseline-inherited-local.pptx",
+  "sourceSha256": "a655d692ba900027d6504458921f462dbec54de515ddec37c0f628d29c379e5f",
+  "replacementSha256": "3614f3eb5c3e96b6a245eb8cfe1dc0eacdb61348a6f3338f28ed80665616a24b",
+  "ownedEditedPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-ui-replace-01\\native-ui-edited.pptx",
+  "cleanupConfirmed": false,
+  "noAutomaticRetry": true,
+  "startedAt": "2026-09-21T18:11:30.7498261Z"
+}

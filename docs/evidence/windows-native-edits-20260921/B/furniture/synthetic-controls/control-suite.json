@@ -1,0 +1,155 @@
+{
+  "schemaVersion": 1,
+  "scope": "Synthetic offline fault controls over copied native-run evidence. No Office/UI was called; these are auditor negative controls, not native executions.",
+  "createdAt": "2026-09-21T18:37:18.854628+00:00",
+  "pythonExecutable": "C:\\Users\\micha\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+  "pythonVersion": "Python 3.12.14",
+  "harnessSha256": "4d2bdbfd34478b436cc67d8298aad3b5cac13bf15f37891a341ddad4609694cd",
+  "auditorPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\audit-furniture-native.py",
+  "auditorSha256": "fcfd67ac80fa67996f43bb54cef26064f04c6575e270fb795575764c693ac27b",
+  "cases": [
+    {
+      "caseId": "missing-raster",
+      "synthetic": true,
+      "fixture": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-baseline-native-01",
+      "runDir": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-audit-controls-01\\cases\\missing-raster",
+      "expected": "auditor exits nonzero and writes a durable failed audit JSON",
+      "returnCode": 1,
+      "stdout": "{\"passed\": false, \"checks\": 25, \"failures\": [{\"name\": \"edited slide 2 raster\", \"passed\": false, \"error\": \"[Errno 2] No such file or directory: 'C:\\\\\\\\Users\\\\\\\\micha\\\\\\\\.codex\\\\\\\\worktrees\\\\\\\\fd3f\\\\\\\\opf\\\\\\\\artifacts\\\\\\\\windows-resume-20260921\\\\\\\\furniture-audit-controls-01\\\\\\\\cases\\\\\\\\missing-raster\\\\\\\\edited-slide-02.png'\"}]}\n",
+      "stdoutSha256": "60a168a27ea758c48875b3b9caf9155a9ae358c0ba994ed2a1bfe26335994321",
+      "stderr": "",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "durableAudit": true,
+      "auditSha256": "e724d0c3362d7a9eeb990e16f8f3c86ad1d7146486687ce985011dc435d16148",
+      "auditorSha256": "fcfd67ac80fa67996f43bb54cef26064f04c6575e270fb795575764c693ac27b",
+      "passedControl": true,
+      "failedChecks": [
+        {
+          "name": "edited slide 2 raster",
+          "passed": false,
+          "error": "[Errno 2] No such file or directory: 'C:\\\\Users\\\\micha\\\\.codex\\\\worktrees\\\\fd3f\\\\opf\\\\artifacts\\\\windows-resume-20260921\\\\furniture-audit-controls-01\\\\cases\\\\missing-raster\\\\edited-slide-02.png'"
+        }
+      ]
+    },
+    {
+      "caseId": "mismatched-action-snapshot",
+      "synthetic": true,
+      "fixture": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-baseline-native-01",
+      "runDir": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-audit-controls-01\\cases\\mismatched-action-snapshot",
+      "expected": "auditor exits nonzero and writes a durable failed audit JSON",
+      "returnCode": 1,
+      "stdout": "{\"passed\": false, \"checks\": 26, \"failures\": [{\"name\": \"external action plan and snapshot agree\", \"passed\": false, \"error\": \"(['16c5a40505a01b2c5eb80736de7687cd448abc0de41495fb221bc056a3209263', '84b1c14e68260082e3e79edff0a78f4ebf1942cfd6c593246044ec2149cbb87d'], ['16c5a40505a01b2c5eb80736de7687cd448abc0de41495fb221bc056a3209263', '16c5a40505a01b2c5eb80736de7687cd448abc0de41495fb221bc056a3209263'])\"}]}\n",
+      "stdoutSha256": "db0f09f8803d19eabcbdc60d55b8da32cddd8dd5f21411f4e0f9332aae3f05c8",
+      "stderr": "",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "durableAudit": true,
+      "auditSha256": "429bd0bb7c08f1cfdffc93c1e1339373c373c600bccc63aae10beac7e3476624",
+      "auditorSha256": "fcfd67ac80fa67996f43bb54cef26064f04c6575e270fb795575764c693ac27b",
+      "passedControl": true,
+      "failedChecks": [
+        {
+          "name": "external action plan and snapshot agree",
+          "passed": false,
+          "error": "(['16c5a40505a01b2c5eb80736de7687cd448abc0de41495fb221bc056a3209263', '84b1c14e68260082e3e79edff0a78f4ebf1942cfd6c593246044ec2149cbb87d'], ['16c5a40505a01b2c5eb80736de7687cd448abc0de41495fb221bc056a3209263', '16c5a40505a01b2c5eb80736de7687cd448abc0de41495fb221bc056a3209263'])"
+        }
+      ]
+    },
+    {
+      "caseId": "failed-worker",
+      "synthetic": true,
+      "fixture": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-baseline-native-01",
+      "runDir": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-audit-controls-01\\cases\\failed-worker",
+      "expected": "auditor exits nonzero and writes a durable failed audit JSON",
+      "returnCode": 1,
+      "stdout": "{\"passed\": false, \"checks\": 25, \"failures\": [{\"name\": \"worker and parent cleanup\", \"passed\": false, \"error\": \"([False, 17, True, True, False, None, 'worker.complete'], [False, 0, True, True, False, None, 'worker.complete'])\"}]}\n",
+      "stdoutSha256": "d035abf4827cd1b03aa4616758bf749f0edcd7b5bf346571056a2cf7b66f8f4f",
+      "stderr": "",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "durableAudit": true,
+      "auditSha256": "c54e104f0082724e405c648f33d716ae0b2c358ba8267ed70cea6d57c1890da0",
+      "auditorSha256": "fcfd67ac80fa67996f43bb54cef26064f04c6575e270fb795575764c693ac27b",
+      "passedControl": true,
+      "failedChecks": [
+        {
+          "name": "worker and parent cleanup",
+          "passed": false,
+          "error": "([False, 17, True, True, False, None, 'worker.complete'], [False, 0, True, True, False, None, 'worker.complete'])"
+        }
+      ]
+    },
+    {
+      "caseId": "geometry-over-tolerance",
+      "synthetic": true,
+      "fixture": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-baseline-native-01",
+      "runDir": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-audit-controls-01\\cases\\geometry-over-tolerance",
+      "expected": "auditor exits nonzero and writes a durable failed audit JSON",
+      "returnCode": 1,
+      "stdout": "{\"passed\": false, \"checks\": 25, \"failures\": [{\"name\": \"native state survives save/reopen at 0.02pt\", \"passed\": false, \"error\": \"('left', 67.2, 67.23)\"}]}\n",
+      "stdoutSha256": "2c75fb29bc5c67e86473aa8ea1a16bf98d9d21c7d72b6a80410bd9a86c3d0e09",
+      "stderr": "",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "durableAudit": true,
+      "auditSha256": "e7a8dfe0d935d9b0d43677d97471f88ae3d214ac4a3e4825467fb0880db059e6",
+      "auditorSha256": "fcfd67ac80fa67996f43bb54cef26064f04c6575e270fb795575764c693ac27b",
+      "passedControl": true,
+      "failedChecks": [
+        {
+          "name": "native state survives save/reopen at 0.02pt",
+          "passed": false,
+          "error": "('left', 67.2, 67.23)"
+        }
+      ]
+    },
+    {
+      "caseId": "current-text-mismatch",
+      "synthetic": true,
+      "fixture": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-text-clear-native-01",
+      "runDir": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-audit-controls-01\\cases\\current-text-mismatch",
+      "expected": "auditor exits nonzero and writes a durable failed audit JSON",
+      "returnCode": 1,
+      "stdout": "{\"passed\": false, \"checks\": 26, \"failures\": [{\"name\": \"native state survives save/reopen at 0.02pt\", \"passed\": false, \"error\": \"('  Native edited header\\\\twords', '  Native edited header\\\\twords [synthetic stale current text]')\"}]}\n",
+      "stdoutSha256": "46cd65585c2d70cd561df58c40dda5e6b57b7693a71e879d12139002784eea69",
+      "stderr": "",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "durableAudit": true,
+      "auditSha256": "4e92d208d190a4d435e5f775e045a08027a95d35b0bd3f2caa10c787b7cf48a6",
+      "auditorSha256": "fcfd67ac80fa67996f43bb54cef26064f04c6575e270fb795575764c693ac27b",
+      "passedControl": true,
+      "failedChecks": [
+        {
+          "name": "native state survives save/reopen at 0.02pt",
+          "passed": false,
+          "error": "('  Native edited header\\twords', '  Native edited header\\twords [synthetic stale current text]')"
+        }
+      ]
+    },
+    {
+      "caseId": "missing-close-stage",
+      "synthetic": true,
+      "fixture": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-baseline-native-01",
+      "runDir": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-audit-controls-01\\cases\\missing-close-stage",
+      "expected": "auditor exits nonzero and writes a durable failed audit JSON",
+      "returnCode": 1,
+      "stdout": "{\"passed\": false, \"checks\": 25, \"failures\": [{\"name\": \"complete ordered per-call stage log\", \"passed\": false, \"error\": \"(0, 1)\"}]}\n",
+      "stdoutSha256": "8b064994e3b5954e71cb14a9560f14ed561a898b0c8eb16c6280aafef5c08c48",
+      "stderr": "",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "durableAudit": true,
+      "auditSha256": "8200189c9bd7d75b13f1bd3442590d3ebc1886a8bd23c2890fe3ec782f8ecf0c",
+      "auditorSha256": "fcfd67ac80fa67996f43bb54cef26064f04c6575e270fb795575764c693ac27b",
+      "passedControl": true,
+      "failedChecks": [
+        {
+          "name": "complete ordered per-call stage log",
+          "passed": false,
+          "error": "(0, 1)"
+        }
+      ]
+    }
+  ],
+  "allControlsPassed": true,
+  "limitations": [
+    "A missing top-level report.json is not one of the six controls. Static inspection shows the auditor reads required top-level JSON before its per-check exception handling, so that condition may terminate without a durable audit JSON.",
+    "Mutated reports/stages/worker fields are explicitly synthetic; no result here represents PowerPoint behavior."
+  ]
+}

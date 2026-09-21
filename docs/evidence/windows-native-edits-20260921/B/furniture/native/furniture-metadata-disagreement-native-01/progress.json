@@ -1,0 +1,10 @@
+﻿{
+    "sequence":  3080,
+    "timestamp":  "2026-09-21T18:35:23.3952674Z",
+    "stage":  "worker.complete",
+    "status":  "success",
+    "error":  "",
+    "cleanupConfirmed":  true,
+    "officeOperationsStopped":  false,
+    "ownedPresentationPath":  null
+}

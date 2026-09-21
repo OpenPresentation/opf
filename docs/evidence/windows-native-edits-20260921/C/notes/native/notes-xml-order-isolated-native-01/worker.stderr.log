@@ -1,0 +1,8 @@
+The file or directory is corrupted and unreadable. (Exception from HRESULT: 0x80070570)
+At C:\Users\micha\.codex\worktrees\fd3f\opf\artifacts\windows-resume-20260921\sources\opf-pptx\test\native-furniture-co
+ntrol.ps1:256 char:167
++ ... ut.presentation.open' { $presentations.Open($sourceSnapshot,0,0,-1) }
++                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (:) [], BadImageFormatException
+    + FullyQualifiedErrorId : System.BadImageFormatException
+ 

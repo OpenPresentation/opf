@@ -1,0 +1,10 @@
+﻿{
+    "sequence":  20,
+    "timestamp":  "2026-09-21T18:36:07.2418657Z",
+    "stage":  "worker.failure",
+    "status":  "error",
+    "error":  "The file or directory is corrupted and unreadable. (Exception from HRESULT: 0x80070570)",
+    "cleanupConfirmed":  false,
+    "officeOperationsStopped":  true,
+    "ownedPresentationPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\notes-reordered-native-01\\inputs\\input.pptx"
+}

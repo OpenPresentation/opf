@@ -1,0 +1,3375 @@
+{
+  "schemaVersion": 1,
+  "scope": "Offline read-only inspection of an actual PowerPoint UI Change Picture saved file and public registry importer result. No Office/UI reopen was performed here; no native worker observation is claimed. Media/content, metadata/tags, and geometry are assessed separately; picture shape identity is inferred only from saved package fields.",
+  "createdAt": "2026-09-21T18:24:00.509Z",
+  "runtime": {
+    "node": "v24.21.0",
+    "executable": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\toolchain\\node_modules\\node\\bin\\node.exe"
+  },
+  "sourceFiles": {
+    "request": {
+      "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-ui-replace-01\\ui-request.json",
+      "sha256": "f4e15e077f4690a57ae8811dedb0b48fa7bc6f597986f8082e174d60e2e1c81e"
+    },
+    "uiResult": {
+      "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-ui-replace-01\\ui-result.json",
+      "sha256": "4615bf5c187213bd54897abd1b166dffcd6b6f6374b286040c91a33e195ecbd8"
+    },
+    "generationManifest": {
+      "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-ui-replace-01\\generation-manifest.json",
+      "sha256": "a67993e23e9db08fa3800541e53533a48c9edfb9ff5c0685bf3ed6a72d44b0a6"
+    },
+    "inputPptx": {
+      "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-ui-replace-01\\input.pptx",
+      "sha256": "a655d692ba900027d6504458921f462dbec54de515ddec37c0f628d29c379e5f"
+    },
+    "savedPptx": {
+      "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-ui-replace-01\\native-ui-edited.pptx",
+      "sha256": "a10ccca75d692de67ae12f321bfd93849b199f2a9f7e70d43d751f4540a2bc38"
+    },
+    "replacementPng": {
+      "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-ui-replace-01\\replacement.png",
+      "sha256": "3614f3eb5c3e96b6a245eb8cfe1dc0eacdb61348a6f3338f28ed80665616a24b"
+    }
+  },
+  "importedEvidence": {
+    "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-ui-replace-01\\ui-import.opf.json",
+    "sha256": "c2d1f3f72659354b6271df48c8a18fb309653dc5d236707568f2e5fcd7517271"
+  },
+  "evidence": {
+    "packageBindings": [
+      {
+        "name": "@openpresentation/opf",
+        "version": "0.11.0",
+        "manifestPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf\\package.json",
+        "manifestSha256": "86364f07f30f5106539a936b4eb84cf5a00c53524599b222f823b2460efb3a0f",
+        "expectedManifestSha256": "86364f07f30f5106539a936b4eb84cf5a00c53524599b222f823b2460efb3a0f",
+        "entrypoint": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf\\dist\\index.js",
+        "entrypointSha256": "568ca647007962a3046094bb3d8e6d2dcfed0c9f463c91e4a9839c86a81b381f",
+        "expectedEntrypointSha256": "568ca647007962a3046094bb3d8e6d2dcfed0c9f463c91e4a9839c86a81b381f",
+        "lock": {
+          "version": "0.11.0",
+          "resolved": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.11.0.tgz",
+          "integrity": "sha512-7Gm/FSyiGngHRkDG0SPL8V6FEC5nC8UpoffNWf8CqkyjXsqQ2BUIzVAEwHwKjEsEZ04FR2DT+Ohh8PJofNPFiw=="
+        },
+        "expectedLock": {
+          "version": "0.11.0",
+          "resolved": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.11.0.tgz",
+          "integrity": "sha512-7Gm/FSyiGngHRkDG0SPL8V6FEC5nC8UpoffNWf8CqkyjXsqQ2BUIzVAEwHwKjEsEZ04FR2DT+Ohh8PJofNPFiw=="
+        },
+        "passed": true
+      },
+      {
+        "name": "@openpresentation/opf-pptx",
+        "version": "0.9.1",
+        "manifestPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-pptx\\package.json",
+        "manifestSha256": "be4944ae7405ff4d92238118eafebb93af433c53519145785553eecc3a4ef8bd",
+        "expectedManifestSha256": "be4944ae7405ff4d92238118eafebb93af433c53519145785553eecc3a4ef8bd",
+        "entrypoint": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-pptx\\dist\\index.js",
+        "entrypointSha256": "ba8fa87cebb32db9675f71bec91cc257e8d02a9d0977ca133666c6257eb07716",
+        "expectedEntrypointSha256": "ba8fa87cebb32db9675f71bec91cc257e8d02a9d0977ca133666c6257eb07716",
+        "lock": {
+          "version": "0.9.1",
+          "resolved": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.9.1.tgz",
+          "integrity": "sha512-krzDAKjDByP2zsoR4VeyyIwU7uhcVbxpeBYEIw7vlkoRWWiFq170rhQzQZx5lbMD7u2magYEkdUt3rUgByCKjw=="
+        },
+        "expectedLock": {
+          "version": "0.9.1",
+          "resolved": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.9.1.tgz",
+          "integrity": "sha512-krzDAKjDByP2zsoR4VeyyIwU7uhcVbxpeBYEIw7vlkoRWWiFq170rhQzQZx5lbMD7u2magYEkdUt3rUgByCKjw=="
+        },
+        "passed": true
+      },
+      {
+        "name": "@openpresentation/opf-render",
+        "version": "0.9.0",
+        "manifestPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-render\\package.json",
+        "manifestSha256": "ab5cac6fc9588b3ba694fd17a0d1bde952ebabb60977a13089626b2ec146d84f",
+        "expectedManifestSha256": "ab5cac6fc9588b3ba694fd17a0d1bde952ebabb60977a13089626b2ec146d84f",
+        "entrypoint": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-render\\dist\\svg.js",
+        "entrypointSha256": "5f993b15608fc7e7444529ed0a1a7ebb530f5f5482d59bd025821a17c366dac1",
+        "expectedEntrypointSha256": "5f993b15608fc7e7444529ed0a1a7ebb530f5f5482d59bd025821a17c366dac1",
+        "lock": {
+          "version": "0.9.0",
+          "resolved": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.9.0.tgz",
+          "integrity": "sha512-uHWABof7cuLmTAglctvcjuV5dRyIa2qmeGdwONIuKCAnNQXjAOQKXido9OcyGtk6xFjzBFtLtvD3sZOwPEJIJA=="
+        },
+        "expectedLock": {
+          "version": "0.9.0",
+          "resolved": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.9.0.tgz",
+          "integrity": "sha512-uHWABof7cuLmTAglctvcjuV5dRyIa2qmeGdwONIuKCAnNQXjAOQKXido9OcyGtk6xFjzBFtLtvD3sZOwPEJIJA=="
+        },
+        "passed": true
+      },
+      {
+        "name": "fflate",
+        "version": "0.8.3",
+        "manifestPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\fflate\\package.json",
+        "manifestSha256": "5922d8150b307bc0e4e441491c779c45379e9913d348848fca8d5cf02db4d134",
+        "expectedManifestSha256": "5922d8150b307bc0e4e441491c779c45379e9913d348848fca8d5cf02db4d134",
+        "entrypoint": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\fflate\\lib\\node.cjs",
+        "entrypointSha256": "befa44cd80a1da830179db9e57930050a2e460ca3df13f0b05f83f52b1491818",
+        "expectedEntrypointSha256": "befa44cd80a1da830179db9e57930050a2e460ca3df13f0b05f83f52b1491818",
+        "lock": {
+          "version": "0.8.3",
+          "resolved": "https://registry.npmjs.org/fflate/-/fflate-0.8.3.tgz",
+          "integrity": "sha512-tbZNuJrLwGUp3zshBtdy4W+ORxZuIh8a5ilyIEQDC5rY1f3U20JMry0Ll3WBzU58EZKsEuJFXhb5gwv8CsPvgA=="
+        },
+        "expectedLock": {
+          "version": "0.8.3",
+          "resolved": "https://registry.npmjs.org/fflate/-/fflate-0.8.3.tgz",
+          "integrity": "sha512-tbZNuJrLwGUp3zshBtdy4W+ORxZuIh8a5ilyIEQDC5rY1f3U20JMry0Ll3WBzU58EZKsEuJFXhb5gwv8CsPvgA=="
+        },
+        "passed": true
+      },
+      {
+        "name": "fast-xml-parser",
+        "version": "5.11.1",
+        "manifestPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\fast-xml-parser\\package.json",
+        "manifestSha256": "41c5f7f2ed20d6ab2b54d3f42730246444685a838cf381d5bf3e1eb93e2fa4cb",
+        "expectedManifestSha256": "41c5f7f2ed20d6ab2b54d3f42730246444685a838cf381d5bf3e1eb93e2fa4cb",
+        "entrypoint": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\fast-xml-parser\\lib\\fxp.cjs",
+        "entrypointSha256": "c83b535419c52bb2868ea4c6a698720b9e0d56cdc6c1bbdec02b3080e5b0d2fb",
+        "expectedEntrypointSha256": "c83b535419c52bb2868ea4c6a698720b9e0d56cdc6c1bbdec02b3080e5b0d2fb",
+        "lock": {
+          "version": "5.11.1",
+          "resolved": "https://registry.npmjs.org/fast-xml-parser/-/fast-xml-parser-5.11.1.tgz",
+          "integrity": "sha512-TBw6K/fxoQGGjCmZDw9w/ZwP3uDcnTM4YH/g+PFRWr8sbe5idXtxNN6vITh4+1ruCZaho6uBFurElsA7F0zzgw=="
+        },
+        "expectedLock": {
+          "version": "5.11.1",
+          "resolved": "https://registry.npmjs.org/fast-xml-parser/-/fast-xml-parser-5.11.1.tgz",
+          "integrity": "sha512-TBw6K/fxoQGGjCmZDw9w/ZwP3uDcnTM4YH/g+PFRWr8sbe5idXtxNN6vITh4+1ruCZaho6uBFurElsA7F0zzgw=="
+        },
+        "passed": true
+      }
+    ],
+    "files": {
+      "inputPptx": "a655d692ba900027d6504458921f462dbec54de515ddec37c0f628d29c379e5f",
+      "editedPptx": "a10ccca75d692de67ae12f321bfd93849b199f2a9f7e70d43d751f4540a2bc38",
+      "replacementPng": "3614f3eb5c3e96b6a245eb8cfe1dc0eacdb61348a6f3338f28ed80665616a24b"
+    },
+    "archive": {
+      "input": {
+        "sha256": "a655d692ba900027d6504458921f462dbec54de515ddec37c0f628d29c379e5f",
+        "entryCount": 58,
+        "badCrc": []
+      },
+      "edited": {
+        "sha256": "a10ccca75d692de67ae12f321bfd93849b199f2a9f7e70d43d751f4540a2bc38",
+        "entryCount": 59,
+        "badCrc": []
+      },
+      "slideParts": {
+        "input": [
+          "ppt/slides/slide1.xml",
+          "ppt/slides/slide2.xml",
+          "ppt/slides/slide3.xml"
+        ],
+        "edited": [
+          "ppt/slides/slide1.xml",
+          "ppt/slides/slide2.xml",
+          "ppt/slides/slide3.xml"
+        ]
+      },
+      "targetPictureBefore": {
+        "type": "pic",
+        "id": "2",
+        "name": "OPF image 1",
+        "alt": "  Registry furniture picture alt  ",
+        "title": "",
+        "text": [],
+        "geometry": {
+          "emu": {
+            "left": 2095500,
+            "top": 171450,
+            "width": 685800,
+            "height": 342900,
+            "rotation": 0,
+            "cropLeft": 0,
+            "cropTop": 0,
+            "cropRight": 0,
+            "cropBottom": 0
+          },
+          "points": {
+            "left": 165,
+            "top": 13.5,
+            "width": 54,
+            "height": 27,
+            "rotationDegrees": 0,
+            "cropLeftPercent": 0,
+            "cropTopPercent": 0,
+            "cropRightPercent": 0,
+            "cropBottomPercent": 0
+          }
+        },
+        "tags": [
+          {
+            "name": "OPF_FURNITURE_V1",
+            "valueHex": "7B2276223A312C22726F6C65223A22696D616765222C2267726F7570223A2231222C2270617274223A307D",
+            "decodedText": "{\"v\":1,\"role\":\"image\",\"group\":\"1\",\"part\":0}",
+            "decodedJson": {
+              "v": 1,
+              "role": "image",
+              "group": "1",
+              "part": 0
+            },
+            "tagPart": "ppt/tags/opfFurniture8.xml"
+          }
+        ],
+        "tagRelationship": {
+          "id": "rIdOpfFurniture8",
+          "target": "ppt/tags/opfFurniture8.xml",
+          "type": "http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags"
+        },
+        "media": {
+          "relationshipId": "rId1",
+          "relationshipTarget": "ppt/media/image-2-1.png",
+          "relationshipType": "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
+          "sha256": "2608d745f3d1dddc963dafe9b517bc7af9e983e7318bf59bd520415589c36905",
+          "bytes": 469
+        }
+      },
+      "targetPictureAfter": {
+        "type": "pic",
+        "id": "2",
+        "name": "OPF image 1",
+        "alt": "",
+        "title": "",
+        "text": [],
+        "geometry": {
+          "emu": {
+            "left": 2352675,
+            "top": 171450,
+            "width": 171450,
+            "height": 342900,
+            "rotation": 0,
+            "cropLeft": 0,
+            "cropTop": 0,
+            "cropRight": 0,
+            "cropBottom": 0
+          },
+          "points": {
+            "left": 185.25,
+            "top": 13.5,
+            "width": 13.5,
+            "height": 27,
+            "rotationDegrees": 0,
+            "cropLeftPercent": 0,
+            "cropTopPercent": 0,
+            "cropRightPercent": 0,
+            "cropBottomPercent": 0
+          }
+        },
+        "tags": [
+          {
+            "name": "OPF_FURNITURE_V1",
+            "valueHex": "7B2276223A312C22726F6C65223A22696D616765222C2267726F7570223A2231222C2270617274223A307D",
+            "decodedText": "{\"v\":1,\"role\":\"image\",\"group\":\"1\",\"part\":0}",
+            "decodedJson": {
+              "v": 1,
+              "role": "image",
+              "group": "1",
+              "part": 0
+            },
+            "tagPart": "ppt/tags/tag12.xml"
+          }
+        ],
+        "tagRelationship": {
+          "id": "rId2",
+          "target": "ppt/tags/tag12.xml",
+          "type": "http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags"
+        },
+        "media": {
+          "relationshipId": "rId12",
+          "relationshipTarget": "ppt/media/image1.png",
+          "relationshipType": "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
+          "sha256": "3614f3eb5c3e96b6a245eb8cfe1dc0eacdb61348a6f3338f28ed80665616a24b",
+          "bytes": 544
+        }
+      }
+    },
+    "media": {
+      "changed": [
+        {
+          "part": "ppt/media/",
+          "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "afterSha256": null,
+          "beforeBytes": 0,
+          "afterBytes": null
+        },
+        {
+          "part": "ppt/media/image-2-1.png",
+          "beforeSha256": "2608d745f3d1dddc963dafe9b517bc7af9e983e7318bf59bd520415589c36905",
+          "afterSha256": null,
+          "beforeBytes": 469,
+          "afterBytes": null
+        },
+        {
+          "part": "ppt/media/image1.png",
+          "beforeSha256": null,
+          "afterSha256": "3614f3eb5c3e96b6a245eb8cfe1dc0eacdb61348a6f3338f28ed80665616a24b",
+          "beforeBytes": null,
+          "afterBytes": 544
+        }
+      ],
+      "originalTarget": {
+        "relationshipId": "rId1",
+        "relationshipTarget": "ppt/media/image-2-1.png",
+        "relationshipType": "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
+        "sha256": "2608d745f3d1dddc963dafe9b517bc7af9e983e7318bf59bd520415589c36905",
+        "bytes": 469
+      },
+      "editedTarget": {
+        "relationshipId": "rId12",
+        "relationshipTarget": "ppt/media/image1.png",
+        "relationshipType": "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
+        "sha256": "3614f3eb5c3e96b6a245eb8cfe1dc0eacdb61348a6f3338f28ed80665616a24b",
+        "bytes": 544
+      },
+      "replacementPngSha256": "3614f3eb5c3e96b6a245eb8cfe1dc0eacdb61348a6f3338f28ed80665616a24b",
+      "inputTargetMatchesManifestImage": true,
+      "editedTargetMatchesReplacementPng": true
+    },
+    "tag": {
+      "before": {
+        "relationship": {
+          "id": "rIdOpfFurniture8",
+          "target": "ppt/tags/opfFurniture8.xml",
+          "type": "http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags"
+        },
+        "tag": {
+          "name": "OPF_FURNITURE_V1",
+          "valueHex": "7B2276223A312C22726F6C65223A22696D616765222C2267726F7570223A2231222C2270617274223A307D",
+          "decodedText": "{\"v\":1,\"role\":\"image\",\"group\":\"1\",\"part\":0}",
+          "decodedJson": {
+            "v": 1,
+            "role": "image",
+            "group": "1",
+            "part": 0
+          },
+          "tagPart": "ppt/tags/opfFurniture8.xml"
+        }
+      },
+      "after": {
+        "relationship": {
+          "id": "rId2",
+          "target": "ppt/tags/tag12.xml",
+          "type": "http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags"
+        },
+        "tag": {
+          "name": "OPF_FURNITURE_V1",
+          "valueHex": "7B2276223A312C22726F6C65223A22696D616765222C2267726F7570223A2231222C2270617274223A307D",
+          "decodedText": "{\"v\":1,\"role\":\"image\",\"group\":\"1\",\"part\":0}",
+          "decodedJson": {
+            "v": 1,
+            "role": "image",
+            "group": "1",
+            "part": 0
+          },
+          "tagPart": "ppt/tags/tag12.xml"
+        }
+      },
+      "tagHexPreserved": true,
+      "tagRelationshipPreserved": false,
+      "tagRelationshipIdPreserved": false
+    },
+    "geometry": {
+      "before": {
+        "emu": {
+          "left": 2095500,
+          "top": 171450,
+          "width": 685800,
+          "height": 342900,
+          "rotation": 0,
+          "cropLeft": 0,
+          "cropTop": 0,
+          "cropRight": 0,
+          "cropBottom": 0
+        },
+        "points": {
+          "left": 165,
+          "top": 13.5,
+          "width": 54,
+          "height": 27,
+          "rotationDegrees": 0,
+          "cropLeftPercent": 0,
+          "cropTopPercent": 0,
+          "cropRightPercent": 0,
+          "cropBottomPercent": 0
+        }
+      },
+      "after": {
+        "emu": {
+          "left": 2352675,
+          "top": 171450,
+          "width": 171450,
+          "height": 342900,
+          "rotation": 0,
+          "cropLeft": 0,
+          "cropTop": 0,
+          "cropRight": 0,
+          "cropBottom": 0
+        },
+        "points": {
+          "left": 185.25,
+          "top": 13.5,
+          "width": 13.5,
+          "height": 27,
+          "rotationDegrees": 0,
+          "cropLeftPercent": 0,
+          "cropTopPercent": 0,
+          "cropRightPercent": 0,
+          "cropBottomPercent": 0
+        }
+      },
+      "drift": {
+        "left": {
+          "beforeEmu": 2095500,
+          "afterEmu": 2352675,
+          "deltaEmu": 257175,
+          "before": 165,
+          "after": 185.25,
+          "delta": 20.25
+        },
+        "top": {
+          "beforeEmu": 171450,
+          "afterEmu": 171450,
+          "deltaEmu": 0,
+          "before": 13.5,
+          "after": 13.5,
+          "delta": 0
+        },
+        "width": {
+          "beforeEmu": 685800,
+          "afterEmu": 171450,
+          "deltaEmu": -514350,
+          "before": 54,
+          "after": 13.5,
+          "delta": -40.5
+        },
+        "height": {
+          "beforeEmu": 342900,
+          "afterEmu": 342900,
+          "deltaEmu": 0,
+          "before": 27,
+          "after": 27,
+          "delta": 0
+        },
+        "rotation": {
+          "beforeEmu": 0,
+          "afterEmu": 0,
+          "deltaEmu": 0,
+          "before": 0,
+          "after": 0,
+          "delta": 0
+        },
+        "cropLeft": {
+          "beforeEmu": 0,
+          "afterEmu": 0,
+          "deltaEmu": 0,
+          "before": 0,
+          "after": 0,
+          "delta": 0
+        },
+        "cropTop": {
+          "beforeEmu": 0,
+          "afterEmu": 0,
+          "deltaEmu": 0,
+          "before": 0,
+          "after": 0,
+          "delta": 0
+        },
+        "cropRight": {
+          "beforeEmu": 0,
+          "afterEmu": 0,
+          "deltaEmu": 0,
+          "before": 0,
+          "after": 0,
+          "delta": 0
+        },
+        "cropBottom": {
+          "beforeEmu": 0,
+          "afterEmu": 0,
+          "deltaEmu": 0,
+          "before": 0,
+          "after": 0,
+          "delta": 0
+        }
+      },
+      "exactUnchanged": false,
+      "layoutWithinPointTolerance": false,
+      "metadataOrCropChanged": false
+    },
+    "otherShapes": {
+      "unchanged": true,
+      "before": {
+        "ppt/slides/slide1.xml": [
+          {
+            "type": "sp",
+            "id": "2",
+            "name": "OPF furniture 0 part 0 line 0",
+            "alt": "",
+            "title": "",
+            "text": [
+              "  Inherited header\twords"
+            ],
+            "geometry": {
+              "emu": {
+                "left": 853440,
+                "top": 171450,
+                "width": 3169920,
+                "height": 185928,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 67.2,
+                "top": 13.5,
+                "width": 249.6,
+                "height": 14.64,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "3",
+            "name": "OPF furniture 0 part 0 line 1",
+            "alt": "",
+            "title": "",
+            "text": [
+              "second line  "
+            ],
+            "geometry": {
+              "emu": {
+                "left": 853440,
+                "top": 357378,
+                "width": 3169920,
+                "height": 185928,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 67.2,
+                "top": 28.14,
+                "width": 249.6,
+                "height": 14.64,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "4",
+            "name": "OPF furniture 0 part 0 line 2",
+            "alt": "",
+            "title": "",
+            "text": [],
+            "geometry": {
+              "emu": {
+                "left": 853440,
+                "top": 543306,
+                "width": 3169920,
+                "height": 185928,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 67.2,
+                "top": 42.78,
+                "width": 249.6,
+                "height": 14.64,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "5",
+            "name": "OPF furniture 0 part 1 line 0",
+            "alt": "",
+            "title": "",
+            "text": [
+              "  Registry Organization  "
+            ],
+            "geometry": {
+              "emu": {
+                "left": 4511040,
+                "top": 171450,
+                "width": 3169920,
+                "height": 185928,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 355.2,
+                "top": 13.5,
+                "width": 249.6,
+                "height": 14.64,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "6",
+            "name": "OPF furniture 0 part 2 line 0",
+            "alt": "",
+            "title": "",
+            "text": [
+              "  Alpha section  "
+            ],
+            "geometry": {
+              "emu": {
+                "left": 8168640,
+                "top": 171450,
+                "width": 3169920,
+                "height": 185928,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 643.2,
+                "top": 13.5,
+                "width": 249.6,
+                "height": 14.64,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "7",
+            "name": "OPF furniture 0 part 3 line 0",
+            "alt": "",
+            "title": "",
+            "text": [
+              "  Inherited footer  "
+            ],
+            "geometry": {
+              "emu": {
+                "left": 853440,
+                "top": 6397752,
+                "width": 3169920,
+                "height": 185928,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 67.2,
+                "top": 503.76,
+                "width": 249.6,
+                "height": 14.64,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "8",
+            "name": "OPF furniture 0 part 4 line 0",
+            "alt": "",
+            "title": "",
+            "text": [
+              ""
+            ],
+            "geometry": {
+              "emu": {
+                "left": 8168640,
+                "top": 6397752,
+                "width": 3169920,
+                "height": 185928,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 643.2,
+                "top": 503.76,
+                "width": 249.6,
+                "height": 14.64,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "9",
+            "name": "OPF heading slides.0.title line 0",
+            "alt": "",
+            "title": "",
+            "text": [
+              "Inherited furniture"
+            ],
+            "geometry": {
+              "emu": {
+                "left": 548640,
+                "top": 843534,
+                "width": 11094720,
+                "height": 627507,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 43.2,
+                "top": 66.42,
+                "width": 873.6,
+                "height": 49.41,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "10",
+            "name": "OPF text slides.0.text line 0",
+            "alt": "",
+            "title": "",
+            "text": [
+              "Scalar body inherited — exact."
+            ],
+            "geometry": {
+              "emu": {
+                "left": 548640,
+                "top": 1699641,
+                "width": 11094720,
+                "height": 290513,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 43.2,
+                "top": 133.83,
+                "width": 873.6,
+                "height": 22.87503937007874,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          }
+        ],
+        "ppt/slides/slide2.xml": [
+          {
+            "type": "sp",
+            "id": "3",
+            "name": "OPF furniture 1 part 1 line 0",
+            "alt": "",
+            "title": "",
+            "text": [
+              "  Local image label  "
+            ],
+            "geometry": {
+              "emu": {
+                "left": 853440,
+                "top": 514350,
+                "width": 3169920,
+                "height": 185928,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 67.2,
+                "top": 40.5,
+                "width": 249.6,
+                "height": 14.64,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "4",
+            "name": "OPF furniture 1 part 2 line 0",
+            "alt": "",
+            "title": "",
+            "text": [
+              "  Registry Organization  "
+            ],
+            "geometry": {
+              "emu": {
+                "left": 4511040,
+                "top": 171450,
+                "width": 3169920,
+                "height": 185928,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 355.2,
+                "top": 13.5,
+                "width": 249.6,
+                "height": 14.64,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "5",
+            "name": "OPF furniture 1 part 3 line 0",
+            "alt": "",
+            "title": "",
+            "text": [
+              "  Beta section  "
+            ],
+            "geometry": {
+              "emu": {
+                "left": 8168640,
+                "top": 171450,
+                "width": 3169920,
+                "height": 185928,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 643.2,
+                "top": 13.5,
+                "width": 249.6,
+                "height": 14.64,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "6",
+            "name": "OPF furniture 1 part 4 line 0",
+            "alt": "",
+            "title": "",
+            "text": [
+              "  Local footer  "
+            ],
+            "geometry": {
+              "emu": {
+                "left": 853440,
+                "top": 6397752,
+                "width": 3169920,
+                "height": 185928,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 67.2,
+                "top": 503.76,
+                "width": 249.6,
+                "height": 14.64,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "7",
+            "name": "OPF furniture 1 part 5 line 0",
+            "alt": "",
+            "title": "",
+            "text": [
+              ""
+            ],
+            "geometry": {
+              "emu": {
+                "left": 8168640,
+                "top": 6397752,
+                "width": 3169920,
+                "height": 185928,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 643.2,
+                "top": 503.76,
+                "width": 249.6,
+                "height": 14.64,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "8",
+            "name": "OPF heading slides.1.title line 0",
+            "alt": "",
+            "title": "",
+            "text": [
+              "Local furniture"
+            ],
+            "geometry": {
+              "emu": {
+                "left": 548640,
+                "top": 814578,
+                "width": 11094720,
+                "height": 627507,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 43.2,
+                "top": 64.14,
+                "width": 873.6,
+                "height": 49.41,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "9",
+            "name": "OPF text slides.1.text line 0",
+            "alt": "",
+            "title": "",
+            "text": [
+              "Scalar body local — exact."
+            ],
+            "geometry": {
+              "emu": {
+                "left": 548640,
+                "top": 1670685,
+                "width": 11094720,
+                "height": 290513,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 43.2,
+                "top": 131.55,
+                "width": 873.6,
+                "height": 22.87503937007874,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          }
+        ],
+        "ppt/slides/slide3.xml": [
+          {
+            "type": "sp",
+            "id": "2",
+            "name": "OPF furniture 2 part 0 line 0",
+            "alt": "",
+            "title": "",
+            "text": [
+              "  Inherited header\twords"
+            ],
+            "geometry": {
+              "emu": {
+                "left": 853440,
+                "top": 171450,
+                "width": 3169920,
+                "height": 185928,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 67.2,
+                "top": 13.5,
+                "width": 249.6,
+                "height": 14.64,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "3",
+            "name": "OPF furniture 2 part 0 line 1",
+            "alt": "",
+            "title": "",
+            "text": [
+              "second line  "
+            ],
+            "geometry": {
+              "emu": {
+                "left": 853440,
+                "top": 357378,
+                "width": 3169920,
+                "height": 185928,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 67.2,
+                "top": 28.14,
+                "width": 249.6,
+                "height": 14.64,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "4",
+            "name": "OPF furniture 2 part 0 line 2",
+            "alt": "",
+            "title": "",
+            "text": [],
+            "geometry": {
+              "emu": {
+                "left": 853440,
+                "top": 543306,
+                "width": 3169920,
+                "height": 185928,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 67.2,
+                "top": 42.78,
+                "width": 249.6,
+                "height": 14.64,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "5",
+            "name": "OPF furniture 2 part 1 line 0",
+            "alt": "",
+            "title": "",
+            "text": [
+              "  Registry Organization  "
+            ],
+            "geometry": {
+              "emu": {
+                "left": 4511040,
+                "top": 171450,
+                "width": 3169920,
+                "height": 185928,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 355.2,
+                "top": 13.5,
+                "width": 249.6,
+                "height": 14.64,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "6",
+            "name": "OPF furniture 2 part 2 line 0",
+            "alt": "",
+            "title": "",
+            "text": [
+              "  Gamma section  "
+            ],
+            "geometry": {
+              "emu": {
+                "left": 8168640,
+                "top": 171450,
+                "width": 3169920,
+                "height": 185928,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 643.2,
+                "top": 13.5,
+                "width": 249.6,
+                "height": 14.64,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "7",
+            "name": "OPF furniture 2 part 3 line 0",
+            "alt": "",
+            "title": "",
+            "text": [
+              "  Inherited footer  "
+            ],
+            "geometry": {
+              "emu": {
+                "left": 853440,
+                "top": 6397752,
+                "width": 3169920,
+                "height": 185928,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 67.2,
+                "top": 503.76,
+                "width": 249.6,
+                "height": 14.64,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "8",
+            "name": "OPF furniture 2 part 4 line 0",
+            "alt": "",
+            "title": "",
+            "text": [
+              ""
+            ],
+            "geometry": {
+              "emu": {
+                "left": 8168640,
+                "top": 6397752,
+                "width": 3169920,
+                "height": 185928,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 643.2,
+                "top": 503.76,
+                "width": 249.6,
+                "height": 14.64,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "9",
+            "name": "OPF heading slides.2.title line 0",
+            "alt": "",
+            "title": "",
+            "text": [
+              "Inherited again"
+            ],
+            "geometry": {
+              "emu": {
+                "left": 548640,
+                "top": 843534,
+                "width": 11094720,
+                "height": 627507,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 43.2,
+                "top": 66.42,
+                "width": 873.6,
+                "height": 49.41,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "10",
+            "name": "OPF text slides.2.text line 0",
+            "alt": "",
+            "title": "",
+            "text": [
+              "Scalar body inherited again — exact."
+            ],
+            "geometry": {
+              "emu": {
+                "left": 548640,
+                "top": 1699641,
+                "width": 11094720,
+                "height": 290513,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 43.2,
+                "top": 133.83,
+                "width": 873.6,
+                "height": 22.87503937007874,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          }
+        ]
+      },
+      "after": {
+        "ppt/slides/slide1.xml": [
+          {
+            "type": "sp",
+            "id": "2",
+            "name": "OPF furniture 0 part 0 line 0",
+            "alt": "",
+            "title": "",
+            "text": [
+              "  Inherited header\twords"
+            ],
+            "geometry": {
+              "emu": {
+                "left": 853440,
+                "top": 171450,
+                "width": 3169920,
+                "height": 185928,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 67.2,
+                "top": 13.5,
+                "width": 249.6,
+                "height": 14.64,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "3",
+            "name": "OPF furniture 0 part 0 line 1",
+            "alt": "",
+            "title": "",
+            "text": [
+              "second line  "
+            ],
+            "geometry": {
+              "emu": {
+                "left": 853440,
+                "top": 357378,
+                "width": 3169920,
+                "height": 185928,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 67.2,
+                "top": 28.14,
+                "width": 249.6,
+                "height": 14.64,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "4",
+            "name": "OPF furniture 0 part 0 line 2",
+            "alt": "",
+            "title": "",
+            "text": [],
+            "geometry": {
+              "emu": {
+                "left": 853440,
+                "top": 543306,
+                "width": 3169920,
+                "height": 185928,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 67.2,
+                "top": 42.78,
+                "width": 249.6,
+                "height": 14.64,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "5",
+            "name": "OPF furniture 0 part 1 line 0",
+            "alt": "",
+            "title": "",
+            "text": [
+              "  Registry Organization  "
+            ],
+            "geometry": {
+              "emu": {
+                "left": 4511040,
+                "top": 171450,
+                "width": 3169920,
+                "height": 185928,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 355.2,
+                "top": 13.5,
+                "width": 249.6,
+                "height": 14.64,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "6",
+            "name": "OPF furniture 0 part 2 line 0",
+            "alt": "",
+            "title": "",
+            "text": [
+              "  Alpha section  "
+            ],
+            "geometry": {
+              "emu": {
+                "left": 8168640,
+                "top": 171450,
+                "width": 3169920,
+                "height": 185928,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 643.2,
+                "top": 13.5,
+                "width": 249.6,
+                "height": 14.64,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "7",
+            "name": "OPF furniture 0 part 3 line 0",
+            "alt": "",
+            "title": "",
+            "text": [
+              "  Inherited footer  "
+            ],
+            "geometry": {
+              "emu": {
+                "left": 853440,
+                "top": 6397752,
+                "width": 3169920,
+                "height": 185928,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 67.2,
+                "top": 503.76,
+                "width": 249.6,
+                "height": 14.64,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "8",
+            "name": "OPF furniture 0 part 4 line 0",
+            "alt": "",
+            "title": "",
+            "text": [
+              ""
+            ],
+            "geometry": {
+              "emu": {
+                "left": 8168640,
+                "top": 6397752,
+                "width": 3169920,
+                "height": 185928,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 643.2,
+                "top": 503.76,
+                "width": 249.6,
+                "height": 14.64,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "9",
+            "name": "OPF heading slides.0.title line 0",
+            "alt": "",
+            "title": "",
+            "text": [
+              "Inherited furniture"
+            ],
+            "geometry": {
+              "emu": {
+                "left": 548640,
+                "top": 843534,
+                "width": 11094720,
+                "height": 627507,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 43.2,
+                "top": 66.42,
+                "width": 873.6,
+                "height": 49.41,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "10",
+            "name": "OPF text slides.0.text line 0",
+            "alt": "",
+            "title": "",
+            "text": [
+              "Scalar body inherited — exact."
+            ],
+            "geometry": {
+              "emu": {
+                "left": 548640,
+                "top": 1699641,
+                "width": 11094720,
+                "height": 290513,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 43.2,
+                "top": 133.83,
+                "width": 873.6,
+                "height": 22.87503937007874,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          }
+        ],
+        "ppt/slides/slide2.xml": [
+          {
+            "type": "sp",
+            "id": "3",
+            "name": "OPF furniture 1 part 1 line 0",
+            "alt": "",
+            "title": "",
+            "text": [
+              "  Local image label  "
+            ],
+            "geometry": {
+              "emu": {
+                "left": 853440,
+                "top": 514350,
+                "width": 3169920,
+                "height": 185928,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 67.2,
+                "top": 40.5,
+                "width": 249.6,
+                "height": 14.64,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "4",
+            "name": "OPF furniture 1 part 2 line 0",
+            "alt": "",
+            "title": "",
+            "text": [
+              "  Registry Organization  "
+            ],
+            "geometry": {
+              "emu": {
+                "left": 4511040,
+                "top": 171450,
+                "width": 3169920,
+                "height": 185928,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 355.2,
+                "top": 13.5,
+                "width": 249.6,
+                "height": 14.64,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "5",
+            "name": "OPF furniture 1 part 3 line 0",
+            "alt": "",
+            "title": "",
+            "text": [
+              "  Beta section  "
+            ],
+            "geometry": {
+              "emu": {
+                "left": 8168640,
+                "top": 171450,
+                "width": 3169920,
+                "height": 185928,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 643.2,
+                "top": 13.5,
+                "width": 249.6,
+                "height": 14.64,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "6",
+            "name": "OPF furniture 1 part 4 line 0",
+            "alt": "",
+            "title": "",
+            "text": [
+              "  Local footer  "
+            ],
+            "geometry": {
+              "emu": {
+                "left": 853440,
+                "top": 6397752,
+                "width": 3169920,
+                "height": 185928,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 67.2,
+                "top": 503.76,
+                "width": 249.6,
+                "height": 14.64,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "7",
+            "name": "OPF furniture 1 part 5 line 0",
+            "alt": "",
+            "title": "",
+            "text": [
+              ""
+            ],
+            "geometry": {
+              "emu": {
+                "left": 8168640,
+                "top": 6397752,
+                "width": 3169920,
+                "height": 185928,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 643.2,
+                "top": 503.76,
+                "width": 249.6,
+                "height": 14.64,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "8",
+            "name": "OPF heading slides.1.title line 0",
+            "alt": "",
+            "title": "",
+            "text": [
+              "Local furniture"
+            ],
+            "geometry": {
+              "emu": {
+                "left": 548640,
+                "top": 814578,
+                "width": 11094720,
+                "height": 627507,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 43.2,
+                "top": 64.14,
+                "width": 873.6,
+                "height": 49.41,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "9",
+            "name": "OPF text slides.1.text line 0",
+            "alt": "",
+            "title": "",
+            "text": [
+              "Scalar body local — exact."
+            ],
+            "geometry": {
+              "emu": {
+                "left": 548640,
+                "top": 1670685,
+                "width": 11094720,
+                "height": 290513,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 43.2,
+                "top": 131.55,
+                "width": 873.6,
+                "height": 22.87503937007874,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          }
+        ],
+        "ppt/slides/slide3.xml": [
+          {
+            "type": "sp",
+            "id": "2",
+            "name": "OPF furniture 2 part 0 line 0",
+            "alt": "",
+            "title": "",
+            "text": [
+              "  Inherited header\twords"
+            ],
+            "geometry": {
+              "emu": {
+                "left": 853440,
+                "top": 171450,
+                "width": 3169920,
+                "height": 185928,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 67.2,
+                "top": 13.5,
+                "width": 249.6,
+                "height": 14.64,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "3",
+            "name": "OPF furniture 2 part 0 line 1",
+            "alt": "",
+            "title": "",
+            "text": [
+              "second line  "
+            ],
+            "geometry": {
+              "emu": {
+                "left": 853440,
+                "top": 357378,
+                "width": 3169920,
+                "height": 185928,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 67.2,
+                "top": 28.14,
+                "width": 249.6,
+                "height": 14.64,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "4",
+            "name": "OPF furniture 2 part 0 line 2",
+            "alt": "",
+            "title": "",
+            "text": [],
+            "geometry": {
+              "emu": {
+                "left": 853440,
+                "top": 543306,
+                "width": 3169920,
+                "height": 185928,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 67.2,
+                "top": 42.78,
+                "width": 249.6,
+                "height": 14.64,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "5",
+            "name": "OPF furniture 2 part 1 line 0",
+            "alt": "",
+            "title": "",
+            "text": [
+              "  Registry Organization  "
+            ],
+            "geometry": {
+              "emu": {
+                "left": 4511040,
+                "top": 171450,
+                "width": 3169920,
+                "height": 185928,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 355.2,
+                "top": 13.5,
+                "width": 249.6,
+                "height": 14.64,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "6",
+            "name": "OPF furniture 2 part 2 line 0",
+            "alt": "",
+            "title": "",
+            "text": [
+              "  Gamma section  "
+            ],
+            "geometry": {
+              "emu": {
+                "left": 8168640,
+                "top": 171450,
+                "width": 3169920,
+                "height": 185928,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 643.2,
+                "top": 13.5,
+                "width": 249.6,
+                "height": 14.64,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "7",
+            "name": "OPF furniture 2 part 3 line 0",
+            "alt": "",
+            "title": "",
+            "text": [
+              "  Inherited footer  "
+            ],
+            "geometry": {
+              "emu": {
+                "left": 853440,
+                "top": 6397752,
+                "width": 3169920,
+                "height": 185928,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 67.2,
+                "top": 503.76,
+                "width": 249.6,
+                "height": 14.64,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "8",
+            "name": "OPF furniture 2 part 4 line 0",
+            "alt": "",
+            "title": "",
+            "text": [
+              ""
+            ],
+            "geometry": {
+              "emu": {
+                "left": 8168640,
+                "top": 6397752,
+                "width": 3169920,
+                "height": 185928,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 643.2,
+                "top": 503.76,
+                "width": 249.6,
+                "height": 14.64,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "9",
+            "name": "OPF heading slides.2.title line 0",
+            "alt": "",
+            "title": "",
+            "text": [
+              "Inherited again"
+            ],
+            "geometry": {
+              "emu": {
+                "left": 548640,
+                "top": 843534,
+                "width": 11094720,
+                "height": 627507,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 43.2,
+                "top": 66.42,
+                "width": 873.6,
+                "height": 49.41,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          },
+          {
+            "type": "sp",
+            "id": "10",
+            "name": "OPF text slides.2.text line 0",
+            "alt": "",
+            "title": "",
+            "text": [
+              "Scalar body inherited again — exact."
+            ],
+            "geometry": {
+              "emu": {
+                "left": 548640,
+                "top": 1699641,
+                "width": 11094720,
+                "height": 290513,
+                "rotation": 0,
+                "cropLeft": 0,
+                "cropTop": 0,
+                "cropRight": 0,
+                "cropBottom": 0
+              },
+              "points": {
+                "left": 43.2,
+                "top": 133.83,
+                "width": 873.6,
+                "height": 22.87503937007874,
+                "rotationDegrees": 0,
+                "cropLeftPercent": 0,
+                "cropTopPercent": 0,
+                "cropRightPercent": 0,
+                "cropBottomPercent": 0
+              }
+            },
+            "tags": [],
+            "tagRelationship": {
+              "id": null,
+              "target": null,
+              "type": null
+            },
+            "media": null
+          }
+        ]
+      }
+    },
+    "manifestInventory": {
+      "baselineFixtureSha256": "a655d692ba900027d6504458921f462dbec54de515ddec37c0f628d29c379e5f",
+      "sourceInputMatchesManifest": true,
+      "targetShapeName": "OPF image 1",
+      "manifestHasTargetInAllShapeNames": true,
+      "manifestListsTargetInFurnitureShapes": false
+    },
+    "import": {
+      "currentImageLocation": "slides[1].localDesign.header.left.image",
+      "beforeImage": null,
+      "currentImage": null,
+      "beforeImageHash": null,
+      "currentImageHash": null,
+      "oldMediaSha": "2608d745f3d1dddc963dafe9b517bc7af9e983e7318bf59bd520415589c36905",
+      "replacementSha": "3614f3eb5c3e96b6a245eb8cfe1dc0eacdb61348a6f3338f28ed80665616a24b",
+      "expectedCurrentAltFromXml": "",
+      "importerDiagnosticsBefore": [
+        {
+          "code": "furniture-import-reflow",
+          "path": "slides.0.design",
+          "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+        },
+        {
+          "code": "furniture-import-reflow",
+          "path": "slides.1.design",
+          "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+        },
+        {
+          "code": "furniture-import-reflow",
+          "path": "slides.2.design",
+          "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+        },
+        {
+          "code": "heading-import-reflow",
+          "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed.",
+          "path": "slides.0"
+        },
+        {
+          "code": "text-import-reflow",
+          "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.",
+          "path": "slides.0"
+        },
+        {
+          "code": "heading-import-reflow",
+          "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed.",
+          "path": "slides.1"
+        },
+        {
+          "code": "text-import-reflow",
+          "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.",
+          "path": "slides.1"
+        },
+        {
+          "code": "heading-import-reflow",
+          "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed.",
+          "path": "slides.2"
+        },
+        {
+          "code": "text-import-reflow",
+          "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.",
+          "path": "slides.2"
+        }
+      ],
+      "importerDiagnosticsCurrent": [
+        {
+          "code": "furniture-import-reflow",
+          "path": "slides.0.design",
+          "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+        },
+        {
+          "code": "furniture-import-reflow",
+          "path": "slides.1.design",
+          "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+        },
+        {
+          "code": "furniture-import-reflow",
+          "path": "slides.2.design",
+          "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+        },
+        {
+          "code": "heading-import-reflow",
+          "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed.",
+          "path": "slides.0"
+        },
+        {
+          "code": "text-import-reflow",
+          "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.",
+          "path": "slides.0"
+        },
+        {
+          "code": "heading-import-reflow",
+          "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed.",
+          "path": "slides.1"
+        },
+        {
+          "code": "text-import-reflow",
+          "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.",
+          "path": "slides.1"
+        },
+        {
+          "code": "heading-import-reflow",
+          "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed.",
+          "path": "slides.2"
+        },
+        {
+          "code": "text-import-reflow",
+          "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.",
+          "path": "slides.2"
+        }
+      ]
+    },
+    "importedOtherContent": {
+      "sameNonTargetImport": false,
+      "originalSlideCount": 3,
+      "currentSlideCount": 3,
+      "beforeSlideSummaries": [
+        {
+          "title": "Inherited furniture",
+          "section": "  Alpha section  ",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "Scalar body inherited — exact."
+            }
+          ]
+        },
+        {
+          "title": "Local furniture",
+          "section": "  Beta section  ",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "Scalar body local — exact."
+            }
+          ]
+        },
+        {
+          "title": "Inherited again",
+          "section": "  Gamma section  ",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "Scalar body inherited again — exact."
+            }
+          ]
+        }
+      ],
+      "currentSlideSummaries": [
+        {
+          "title": "Inherited furniture",
+          "section": "  Alpha section  ",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "Scalar body inherited — exact."
+            }
+          ]
+        },
+        {
+          "title": "Local furniture",
+          "section": "  Beta section  ",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "Scalar body local — exact."
+            }
+          ]
+        },
+        {
+          "title": "Inherited again",
+          "section": "  Gamma section  ",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "Scalar body inherited again — exact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "checks": [
+    {
+      "name": "load request, UI result, and generation manifest",
+      "passed": true,
+      "observed": {
+        "requestSha256": "f4e15e077f4690a57ae8811dedb0b48fa7bc6f597986f8082e174d60e2e1c81e",
+        "uiResultSha256": "4615bf5c187213bd54897abd1b166dffcd6b6f6374b286040c91a33e195ecbd8",
+        "manifestSha256": "a67993e23e9db08fa3800541e53533a48c9edfb9ff5c0685bf3ed6a72d44b0a6"
+      },
+      "expected": "completed"
+    },
+    {
+      "name": "pinned Node version and executable",
+      "passed": true,
+      "observed": {
+        "node": "v24.21.0",
+        "executable": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\toolchain\\node_modules\\node\\bin\\node.exe"
+      },
+      "expected": {
+        "node": "v24.21.0",
+        "executable": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\toolchain\\node_modules\\node\\bin\\node.exe"
+      }
+    },
+    {
+      "name": "consumer lockfile hash matches generation manifest",
+      "passed": true,
+      "observed": "4868f13254e3e681566164da8427d3716ceaa025435e4606e5e15fc8a87bc305",
+      "expected": "4868f13254e3e681566164da8427d3716ceaa025435e4606e5e15fc8a87bc305"
+    },
+    {
+      "name": "registry package manifests, entrypoints, lock versions/resolved/integrity match",
+      "passed": true,
+      "observed": [
+        {
+          "name": "@openpresentation/opf",
+          "passed": true,
+          "version": "0.11.0"
+        },
+        {
+          "name": "@openpresentation/opf-pptx",
+          "passed": true,
+          "version": "0.9.1"
+        },
+        {
+          "name": "@openpresentation/opf-render",
+          "passed": true,
+          "version": "0.9.0"
+        },
+        {
+          "name": "fflate",
+          "passed": true,
+          "version": "0.8.3"
+        },
+        {
+          "name": "fast-xml-parser",
+          "passed": true,
+          "version": "5.11.1"
+        }
+      ],
+      "expected": "all listed package bindings match"
+    },
+    {
+      "name": "public PPTX ESM entrypoint matches package hash",
+      "passed": true,
+      "observed": {
+        "esmEntry": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-pptx\\dist\\index.js",
+        "sha256": "ba8fa87cebb32db9675f71bec91cc257e8d02a9d0977ca133666c6257eb07716"
+      },
+      "expected": {
+        "packageEntry": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-pptx\\dist\\index.js",
+        "sha256": "ba8fa87cebb32db9675f71bec91cc257e8d02a9d0977ca133666c6257eb07716"
+      }
+    },
+    {
+      "name": "UI request hashes agree with saved artifacts",
+      "passed": true,
+      "observed": {
+        "inputPptx": "a655d692ba900027d6504458921f462dbec54de515ddec37c0f628d29c379e5f",
+        "editedPptx": "a10ccca75d692de67ae12f321bfd93849b199f2a9f7e70d43d751f4540a2bc38",
+        "replacementPng": "3614f3eb5c3e96b6a245eb8cfe1dc0eacdb61348a6f3338f28ed80665616a24b"
+      },
+      "expected": {
+        "inputPptx": "a655d692ba900027d6504458921f462dbec54de515ddec37c0f628d29c379e5f",
+        "editedPptx": "a10ccca75d692de67ae12f321bfd93849b199f2a9f7e70d43d751f4540a2bc38",
+        "replacementPng": "3614f3eb5c3e96b6a245eb8cfe1dc0eacdb61348a6f3338f28ed80665616a24b"
+      }
+    },
+    {
+      "name": "request/result paths identify the owned saved copy",
+      "passed": true,
+      "observed": {
+        "request": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-ui-replace-01\\native-ui-edited.pptx",
+        "result": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-ui-replace-01\\native-ui-edited.pptx"
+      },
+      "expected": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-ui-replace-01\\native-ui-edited.pptx"
+    },
+    {
+      "name": "read source, edited deck, and replacement image",
+      "passed": true,
+      "observed": {
+        "inputPptx": "a655d692ba900027d6504458921f462dbec54de515ddec37c0f628d29c379e5f",
+        "editedPptx": "a10ccca75d692de67ae12f321bfd93849b199f2a9f7e70d43d751f4540a2bc38",
+        "replacementPng": "3614f3eb5c3e96b6a245eb8cfe1dc0eacdb61348a6f3338f28ed80665616a24b"
+      },
+      "expected": "completed"
+    },
+    {
+      "name": "registry archive/XML helpers available",
+      "passed": true,
+      "observed": {
+        "fflateVersion": "0.8.3",
+        "xmlParserVersion": "5.11.1"
+      },
+      "expected": "pinned installed helpers"
+    },
+    {
+      "name": "ZIP central-directory CRCs match every uncompressed member",
+      "passed": true,
+      "observed": {
+        "input": {
+          "members": 58,
+          "failures": []
+        },
+        "edited": {
+          "members": 59,
+          "failures": []
+        }
+      },
+      "expected": "zero CRC mismatches"
+    },
+    {
+      "name": "tagged slide-2 picture independently located",
+      "passed": true,
+      "observed": {
+        "before": {
+          "id": "2",
+          "name": "OPF image 1",
+          "tags": [
+            {
+              "name": "OPF_FURNITURE_V1",
+              "valueHex": "7B2276223A312C22726F6C65223A22696D616765222C2267726F7570223A2231222C2270617274223A307D",
+              "decodedText": "{\"v\":1,\"role\":\"image\",\"group\":\"1\",\"part\":0}",
+              "decodedJson": {
+                "v": 1,
+                "role": "image",
+                "group": "1",
+                "part": 0
+              },
+              "tagPart": "ppt/tags/opfFurniture8.xml"
+            }
+          ]
+        },
+        "after": {
+          "id": "2",
+          "name": "OPF image 1",
+          "tags": [
+            {
+              "name": "OPF_FURNITURE_V1",
+              "valueHex": "7B2276223A312C22726F6C65223A22696D616765222C2267726F7570223A2231222C2270617274223A307D",
+              "decodedText": "{\"v\":1,\"role\":\"image\",\"group\":\"1\",\"part\":0}",
+              "decodedJson": {
+                "v": 1,
+                "role": "image",
+                "group": "1",
+                "part": 0
+              },
+              "tagPart": "ppt/tags/tag12.xml"
+            }
+          ]
+        }
+      },
+      "expected": "one OPF_FURNITURE_V1 image tag on slide2"
+    },
+    {
+      "name": "current slide picture media bytes match the selected replacement",
+      "passed": true,
+      "observed": {
+        "before": {
+          "relationshipId": "rId1",
+          "relationshipTarget": "ppt/media/image-2-1.png",
+          "relationshipType": "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
+          "sha256": "2608d745f3d1dddc963dafe9b517bc7af9e983e7318bf59bd520415589c36905",
+          "bytes": 469
+        },
+        "after": {
+          "relationshipId": "rId12",
+          "relationshipTarget": "ppt/media/image1.png",
+          "relationshipType": "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
+          "sha256": "3614f3eb5c3e96b6a245eb8cfe1dc0eacdb61348a6f3338f28ed80665616a24b",
+          "bytes": 544
+        },
+        "replacementSha256": "3614f3eb5c3e96b6a245eb8cfe1dc0eacdb61348a6f3338f28ed80665616a24b"
+      },
+      "expected": "edited picture relationship content SHA equals replacement.png"
+    },
+    {
+      "name": "original media bytes match the fixture image and change is localized",
+      "passed": false,
+      "observed": {
+        "originalTargetSha256": "2608d745f3d1dddc963dafe9b517bc7af9e983e7318bf59bd520415589c36905",
+        "expectedOriginalSha256": "2608d745f3d1dddc963dafe9b517bc7af9e983e7318bf59bd520415589c36905",
+        "changedMediaParts": [
+          {
+            "part": "ppt/media/",
+            "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "afterSha256": null,
+            "beforeBytes": 0,
+            "afterBytes": null
+          },
+          {
+            "part": "ppt/media/image-2-1.png",
+            "beforeSha256": "2608d745f3d1dddc963dafe9b517bc7af9e983e7318bf59bd520415589c36905",
+            "afterSha256": null,
+            "beforeBytes": 469,
+            "afterBytes": null
+          },
+          {
+            "part": "ppt/media/image1.png",
+            "beforeSha256": null,
+            "afterSha256": "3614f3eb5c3e96b6a245eb8cfe1dc0eacdb61348a6f3338f28ed80665616a24b",
+            "beforeBytes": null,
+            "afterBytes": 544
+          }
+        ]
+      },
+      "expected": "one target media part changed from fixture image to replacement PNG"
+    },
+    {
+      "name": "OPF_FURNITURE_V1 relationship target and hex payload retained",
+      "passed": false,
+      "observed": {
+        "tagHexPreserved": true,
+        "tagRelationshipPreserved": false,
+        "tagRelationshipIdPreserved": false,
+        "before": {
+          "relationship": {
+            "id": "rIdOpfFurniture8",
+            "target": "ppt/tags/opfFurniture8.xml",
+            "type": "http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags"
+          },
+          "tag": {
+            "name": "OPF_FURNITURE_V1",
+            "valueHex": "7B2276223A312C22726F6C65223A22696D616765222C2267726F7570223A2231222C2270617274223A307D",
+            "decodedText": "{\"v\":1,\"role\":\"image\",\"group\":\"1\",\"part\":0}",
+            "decodedJson": {
+              "v": 1,
+              "role": "image",
+              "group": "1",
+              "part": 0
+            },
+            "tagPart": "ppt/tags/opfFurniture8.xml"
+          }
+        },
+        "after": {
+          "relationship": {
+            "id": "rId2",
+            "target": "ppt/tags/tag12.xml",
+            "type": "http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags"
+          },
+          "tag": {
+            "name": "OPF_FURNITURE_V1",
+            "valueHex": "7B2276223A312C22726F6C65223A22696D616765222C2267726F7570223A2231222C2270617274223A307D",
+            "decodedText": "{\"v\":1,\"role\":\"image\",\"group\":\"1\",\"part\":0}",
+            "decodedJson": {
+              "v": 1,
+              "role": "image",
+              "group": "1",
+              "part": 0
+            },
+            "tagPart": "ppt/tags/tag12.xml"
+          }
+        }
+      },
+      "expected": "same tag part target and exact OPF_FURNITURE_V1 hex value"
+    },
+    {
+      "name": "shape identity retained by Change Picture",
+      "passed": true,
+      "observed": {
+        "before": {
+          "id": "2",
+          "name": "OPF image 1"
+        },
+        "after": {
+          "id": "2",
+          "name": "OPF image 1"
+        }
+      },
+      "expected": "same PowerPoint shape id and name"
+    },
+    {
+      "name": "tagged picture geometry drift recorded separately from content",
+      "passed": true,
+      "observed": {
+        "before": {
+          "emu": {
+            "left": 2095500,
+            "top": 171450,
+            "width": 685800,
+            "height": 342900,
+            "rotation": 0,
+            "cropLeft": 0,
+            "cropTop": 0,
+            "cropRight": 0,
+            "cropBottom": 0
+          },
+          "points": {
+            "left": 165,
+            "top": 13.5,
+            "width": 54,
+            "height": 27,
+            "rotationDegrees": 0,
+            "cropLeftPercent": 0,
+            "cropTopPercent": 0,
+            "cropRightPercent": 0,
+            "cropBottomPercent": 0
+          }
+        },
+        "after": {
+          "emu": {
+            "left": 2352675,
+            "top": 171450,
+            "width": 171450,
+            "height": 342900,
+            "rotation": 0,
+            "cropLeft": 0,
+            "cropTop": 0,
+            "cropRight": 0,
+            "cropBottom": 0
+          },
+          "points": {
+            "left": 185.25,
+            "top": 13.5,
+            "width": 13.5,
+            "height": 27,
+            "rotationDegrees": 0,
+            "cropLeftPercent": 0,
+            "cropTopPercent": 0,
+            "cropRightPercent": 0,
+            "cropBottomPercent": 0
+          }
+        },
+        "drift": {
+          "left": {
+            "beforeEmu": 2095500,
+            "afterEmu": 2352675,
+            "deltaEmu": 257175,
+            "before": 165,
+            "after": 185.25,
+            "delta": 20.25
+          },
+          "top": {
+            "beforeEmu": 171450,
+            "afterEmu": 171450,
+            "deltaEmu": 0,
+            "before": 13.5,
+            "after": 13.5,
+            "delta": 0
+          },
+          "width": {
+            "beforeEmu": 685800,
+            "afterEmu": 171450,
+            "deltaEmu": -514350,
+            "before": 54,
+            "after": 13.5,
+            "delta": -40.5
+          },
+          "height": {
+            "beforeEmu": 342900,
+            "afterEmu": 342900,
+            "deltaEmu": 0,
+            "before": 27,
+            "after": 27,
+            "delta": 0
+          },
+          "rotation": {
+            "beforeEmu": 0,
+            "afterEmu": 0,
+            "deltaEmu": 0,
+            "before": 0,
+            "after": 0,
+            "delta": 0
+          },
+          "cropLeft": {
+            "beforeEmu": 0,
+            "afterEmu": 0,
+            "deltaEmu": 0,
+            "before": 0,
+            "after": 0,
+            "delta": 0
+          },
+          "cropTop": {
+            "beforeEmu": 0,
+            "afterEmu": 0,
+            "deltaEmu": 0,
+            "before": 0,
+            "after": 0,
+            "delta": 0
+          },
+          "cropRight": {
+            "beforeEmu": 0,
+            "afterEmu": 0,
+            "deltaEmu": 0,
+            "before": 0,
+            "after": 0,
+            "delta": 0
+          },
+          "cropBottom": {
+            "beforeEmu": 0,
+            "afterEmu": 0,
+            "deltaEmu": 0,
+            "before": 0,
+            "after": 0,
+            "delta": 0
+          }
+        },
+        "exactUnchanged": false,
+        "layoutWithinPointTolerance": false,
+        "metadataOrCropChanged": false
+      },
+      "expected": "raw EMU and point deltas recorded"
+    },
+    {
+      "name": "all non-target slide body, title, and furniture shapes unchanged",
+      "passed": true,
+      "observed": {
+        "beforeSha256": "8e331205ad10697564928e0a1b24ca8315728c26b6ad3a5f1e475004a8b861e4",
+        "afterSha256": "8e331205ad10697564928e0a1b24ca8315728c26b6ad3a5f1e475004a8b861e4",
+        "differingSlides": []
+      },
+      "expected": "same names, ids, text, geometry, and tags for every non-target p:sp/p:pic/graphicFrame/connector"
+    },
+    {
+      "name": "manifest inventory omission is not used to locate the target",
+      "passed": true,
+      "observed": {
+        "baselineFixtureSha256": "a655d692ba900027d6504458921f462dbec54de515ddec37c0f628d29c379e5f",
+        "sourceInputMatchesManifest": true,
+        "targetShapeName": "OPF image 1",
+        "manifestHasTargetInAllShapeNames": true,
+        "manifestListsTargetInFurnitureShapes": false
+      },
+      "expected": "target found from slide XML/tag relationship independently of furnitureShapes"
+    },
+    {
+      "name": "reimport source and saved current deck with public registry PPTX module",
+      "passed": true,
+      "observed": {
+        "moduleEntry": "file:///C:/Users/micha/.codex/worktrees/fd3f/opf/artifacts/windows-resume-20260921/registry-consumer/node_modules/@openpresentation/opf-pptx/dist/index.js",
+        "sourceSlides": 3,
+        "currentSlides": 3,
+        "currentImportPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-ui-replace-01\\ui-import.opf.json",
+        "currentImportSha256": "c2d1f3f72659354b6271df48c8a18fb309653dc5d236707568f2e5fcd7517271"
+      },
+      "expected": "completed"
+    },
+    {
+      "name": "reimported furniture image uses current replacement bytes",
+      "passed": false,
+      "observed": {
+        "beforeImageHash": null,
+        "currentImageHash": null,
+        "originalMediaSha": "2608d745f3d1dddc963dafe9b517bc7af9e983e7318bf59bd520415589c36905",
+        "replacementSha": "3614f3eb5c3e96b6a245eb8cfe1dc0eacdb61348a6f3338f28ed80665616a24b"
+      },
+      "expected": "current imported furniture image SHA equals replacement.png SHA"
+    },
+    {
+      "name": "reimported current alt matches saved slide-2 p:pic alt",
+      "passed": true,
+      "observed": {
+        "beforeAlt": null,
+        "currentAlt": null,
+        "savedNativeAlt": ""
+      },
+      "expected": "OPF current alt equals current native p:cNvPr descr (empty string when absent)"
+    },
+    {
+      "name": "reimported furniture image changed from input content",
+      "passed": false,
+      "observed": {
+        "beforeImageHash": null,
+        "currentImageHash": null,
+        "oldMediaSha": "2608d745f3d1dddc963dafe9b517bc7af9e983e7318bf59bd520415589c36905"
+      },
+      "expected": "original current import matches original media and edited import differs"
+    },
+    {
+      "name": "reimported title, body, and non-target furniture content unchanged",
+      "passed": false,
+      "observed": {
+        "beforeSha256": "7e930937ddffafd5ca6f3b99da04e538620f89e57e362a13b19e749b2f193ffa",
+        "afterSha256": "8e5128ce95eaa008beb8927e51fd3217b903265db68000e24fe888d8054eb4dc",
+        "originalSlideCount": 3,
+        "currentSlideCount": 3
+      },
+      "expected": "whole imported document matches after excluding only slide-2 target image object"
+    },
+    {
+      "name": "write current imported OPF evidence",
+      "passed": true,
+      "observed": {
+        "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-ui-replace-01\\ui-import.opf.json",
+        "sha256": "c2d1f3f72659354b6271df48c8a18fb309653dc5d236707568f2e5fcd7517271"
+      },
+      "expected": "completed"
+    }
+  ],
+  "failures": [
+    {
+      "name": "original media bytes match the fixture image and change is localized",
+      "observed": {
+        "originalTargetSha256": "2608d745f3d1dddc963dafe9b517bc7af9e983e7318bf59bd520415589c36905",
+        "expectedOriginalSha256": "2608d745f3d1dddc963dafe9b517bc7af9e983e7318bf59bd520415589c36905",
+        "changedMediaParts": [
+          {
+            "part": "ppt/media/",
+            "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "afterSha256": null,
+            "beforeBytes": 0,
+            "afterBytes": null
+          },
+          {
+            "part": "ppt/media/image-2-1.png",
+            "beforeSha256": "2608d745f3d1dddc963dafe9b517bc7af9e983e7318bf59bd520415589c36905",
+            "afterSha256": null,
+            "beforeBytes": 469,
+            "afterBytes": null
+          },
+          {
+            "part": "ppt/media/image1.png",
+            "beforeSha256": null,
+            "afterSha256": "3614f3eb5c3e96b6a245eb8cfe1dc0eacdb61348a6f3338f28ed80665616a24b",
+            "beforeBytes": null,
+            "afterBytes": 544
+          }
+        ]
+      },
+      "expected": "one target media part changed from fixture image to replacement PNG",
+      "detail": null
+    },
+    {
+      "name": "OPF_FURNITURE_V1 relationship target and hex payload retained",
+      "observed": {
+        "tagHexPreserved": true,
+        "tagRelationshipPreserved": false,
+        "tagRelationshipIdPreserved": false,
+        "before": {
+          "relationship": {
+            "id": "rIdOpfFurniture8",
+            "target": "ppt/tags/opfFurniture8.xml",
+            "type": "http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags"
+          },
+          "tag": {
+            "name": "OPF_FURNITURE_V1",
+            "valueHex": "7B2276223A312C22726F6C65223A22696D616765222C2267726F7570223A2231222C2270617274223A307D",
+            "decodedText": "{\"v\":1,\"role\":\"image\",\"group\":\"1\",\"part\":0}",
+            "decodedJson": {
+              "v": 1,
+              "role": "image",
+              "group": "1",
+              "part": 0
+            },
+            "tagPart": "ppt/tags/opfFurniture8.xml"
+          }
+        },
+        "after": {
+          "relationship": {
+            "id": "rId2",
+            "target": "ppt/tags/tag12.xml",
+            "type": "http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags"
+          },
+          "tag": {
+            "name": "OPF_FURNITURE_V1",
+            "valueHex": "7B2276223A312C22726F6C65223A22696D616765222C2267726F7570223A2231222C2270617274223A307D",
+            "decodedText": "{\"v\":1,\"role\":\"image\",\"group\":\"1\",\"part\":0}",
+            "decodedJson": {
+              "v": 1,
+              "role": "image",
+              "group": "1",
+              "part": 0
+            },
+            "tagPart": "ppt/tags/tag12.xml"
+          }
+        }
+      },
+      "expected": "same tag part target and exact OPF_FURNITURE_V1 hex value",
+      "detail": null
+    },
+    {
+      "name": "reimported furniture image uses current replacement bytes",
+      "observed": {
+        "beforeImageHash": null,
+        "currentImageHash": null,
+        "originalMediaSha": "2608d745f3d1dddc963dafe9b517bc7af9e983e7318bf59bd520415589c36905",
+        "replacementSha": "3614f3eb5c3e96b6a245eb8cfe1dc0eacdb61348a6f3338f28ed80665616a24b"
+      },
+      "expected": "current imported furniture image SHA equals replacement.png SHA",
+      "detail": null
+    },
+    {
+      "name": "reimported furniture image changed from input content",
+      "observed": {
+        "beforeImageHash": null,
+        "currentImageHash": null,
+        "oldMediaSha": "2608d745f3d1dddc963dafe9b517bc7af9e983e7318bf59bd520415589c36905"
+      },
+      "expected": "original current import matches original media and edited import differs",
+      "detail": null
+    },
+    {
+      "name": "reimported title, body, and non-target furniture content unchanged",
+      "observed": {
+        "beforeSha256": "7e930937ddffafd5ca6f3b99da04e538620f89e57e362a13b19e749b2f193ffa",
+        "afterSha256": "8e5128ce95eaa008beb8927e51fd3217b903265db68000e24fe888d8054eb4dc",
+        "originalSlideCount": 3,
+        "currentSlideCount": 3
+      },
+      "expected": "whole imported document matches after excluding only slide-2 target image object",
+      "detail": null
+    }
+  ],
+  "passed": false,
+  "limitations": [
+    "This is archive/XML/import analysis only; it does not prove PowerPoint reopen behavior after saving.",
+    "Imported layout, native geometry and crop/reflow fidelity are separate from image-byte retention and metadata retention.",
+    "The generation manifest records package lock, package manifest and entrypoint hashes; this report does not claim every transitive package byte is bound."
+  ],
+  "scriptSha256": "69676cc58d93748fefe9ca608dce7000ab26cb69389e07a3fb79a11161179044"
+}

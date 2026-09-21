@@ -1,0 +1,3113 @@
+{
+  "schemaVersion": 1,
+  "scope": "Portable, byte-preserving B/C Windows native-edit evidence. D/E are excluded; no Office was invoked by the builder.",
+  "builder": {
+    "source": "build-edit-evidence.py",
+    "sha256": "ebaf6238485a49ff1bbf852972fe441019f2f374a51c0103929a8b1e98ce6acc"
+  },
+  "files": 516,
+  "bytes": 25901405,
+  "artifacts": [
+    {
+      "path": ".gitattributes",
+      "source": "generated",
+      "bytes": 9,
+      "sha256": "48747480eddba024928d03be9bf83dc579e5515768647507a767e8187a85c9ab"
+    },
+    {
+      "path": "B/furniture/auditors/audit-furniture-native-v1.py",
+      "source": "audit-furniture-native-v1.py",
+      "bytes": 6924,
+      "sha256": "69104352f005e7080072b4b08a64bb04ae3ba5626eadd7b1fb6bdabb9f05c962"
+    },
+    {
+      "path": "B/furniture/auditors/audit-furniture-native.py",
+      "source": "audit-furniture-native.py",
+      "bytes": 7478,
+      "sha256": "fcfd67ac80fa67996f43bb54cef26064f04c6575e270fb795575764c693ac27b"
+    },
+    {
+      "path": "B/furniture/native/furniture-baseline-native-01/edited-slide-01.png",
+      "source": "furniture-baseline-native-01/edited-slide-01.png",
+      "bytes": 7091,
+      "sha256": "6f7f137d021418e7ad52a758b909d9366164073369bdbf47f1dc280b52e4147c"
+    },
+    {
+      "path": "B/furniture/native/furniture-baseline-native-01/edited-slide-02.png",
+      "source": "furniture-baseline-native-01/edited-slide-02.png",
+      "bytes": 14445,
+      "sha256": "b1ef21699b348d7d708d8c9e816f9dbe41f2ea1afa741b6d6aa483b0728a57c3"
+    },
+    {
+      "path": "B/furniture/native/furniture-baseline-native-01/edited-slide-03.png",
+      "source": "furniture-baseline-native-01/edited-slide-03.png",
+      "bytes": 7589,
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7"
+    },
+    {
+      "path": "B/furniture/native/furniture-baseline-native-01/independent-native-audit-v2.json",
+      "source": "furniture-baseline-native-01/independent-native-audit-v2.json",
+      "bytes": 2624,
+      "sha256": "04bc6ce3fd3c990c16531881532191d2800025f451ca34cbd312fe36d7a25615"
+    },
+    {
+      "path": "B/furniture/native/furniture-baseline-native-01/independent-native-audit.json",
+      "source": "furniture-baseline-native-01/independent-native-audit.json",
+      "bytes": 2326,
+      "sha256": "abc7f201d01c7bcd20b2dcfe9717aaa2555cdb9ef78072894c771cfde8c96ab3"
+    },
+    {
+      "path": "B/furniture/native/furniture-baseline-native-01/inputs/action-plan.json",
+      "source": "furniture-baseline-native-01/inputs/action-plan.json",
+      "bytes": 11,
+      "sha256": "84b1c14e68260082e3e79edff0a78f4ebf1942cfd6c593246044ec2149cbb87d"
+    },
+    {
+      "path": "B/furniture/native/furniture-baseline-native-01/inputs/input.pptx",
+      "source": "furniture-baseline-native-01/inputs/input.pptx",
+      "bytes": 33613,
+      "sha256": "a655d692ba900027d6504458921f462dbec54de515ddec37c0f628d29c379e5f"
+    },
+    {
+      "path": "B/furniture/native/furniture-baseline-native-01/inputs/native-furniture-control.ps1",
+      "source": "furniture-baseline-native-01/inputs/native-furniture-control.ps1",
+      "bytes": 27761,
+      "sha256": "c85fe9f79b9c8e01feb6f0c4cfc8b84c90d7d93498f88b4cde2750630c9b2e9e"
+    },
+    {
+      "path": "B/furniture/native/furniture-baseline-native-01/inputs/native-process.ps1",
+      "source": "furniture-baseline-native-01/inputs/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "path": "B/furniture/native/furniture-baseline-native-01/native-furniture-control.pptx",
+      "source": "furniture-baseline-native-01/native-furniture-control.pptx",
+      "bytes": 35708,
+      "sha256": "d719e02fa00d714d460d3e727308a0566003711552a35ad591c4813c8bce36a5"
+    },
+    {
+      "path": "B/furniture/native/furniture-baseline-native-01/original-slide-01.png",
+      "source": "furniture-baseline-native-01/original-slide-01.png",
+      "bytes": 7091,
+      "sha256": "6f7f137d021418e7ad52a758b909d9366164073369bdbf47f1dc280b52e4147c"
+    },
+    {
+      "path": "B/furniture/native/furniture-baseline-native-01/original-slide-02.png",
+      "source": "furniture-baseline-native-01/original-slide-02.png",
+      "bytes": 14445,
+      "sha256": "b1ef21699b348d7d708d8c9e816f9dbe41f2ea1afa741b6d6aa483b0728a57c3"
+    },
+    {
+      "path": "B/furniture/native/furniture-baseline-native-01/original-slide-03.png",
+      "source": "furniture-baseline-native-01/original-slide-03.png",
+      "bytes": 7589,
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7"
+    },
+    {
+      "path": "B/furniture/native/furniture-baseline-native-01/progress.json",
+      "source": "furniture-baseline-native-01/progress.json",
+      "bytes": 272,
+      "sha256": "99ae1e52ab1b39246e83201bfc1e55041a5f8a42cda3745a7a8192427c1121fb"
+    },
+    {
+      "path": "B/furniture/native/furniture-baseline-native-01/reopened-slide-01.png",
+      "source": "furniture-baseline-native-01/reopened-slide-01.png",
+      "bytes": 7091,
+      "sha256": "6f7f137d021418e7ad52a758b909d9366164073369bdbf47f1dc280b52e4147c"
+    },
+    {
+      "path": "B/furniture/native/furniture-baseline-native-01/reopened-slide-02.png",
+      "source": "furniture-baseline-native-01/reopened-slide-02.png",
+      "bytes": 14445,
+      "sha256": "b1ef21699b348d7d708d8c9e816f9dbe41f2ea1afa741b6d6aa483b0728a57c3"
+    },
+    {
+      "path": "B/furniture/native/furniture-baseline-native-01/reopened-slide-03.png",
+      "source": "furniture-baseline-native-01/reopened-slide-03.png",
+      "bytes": 7589,
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7"
+    },
+    {
+      "path": "B/furniture/native/furniture-baseline-native-01/report.json",
+      "source": "furniture-baseline-native-01/report.json",
+      "bytes": 198914,
+      "sha256": "cde113550e5da0ad0bfaeaab470d12e6bac60da0312963595f19cfb425b686b2"
+    },
+    {
+      "path": "B/furniture/native/furniture-baseline-native-01/request.json",
+      "source": "furniture-baseline-native-01/request.json",
+      "bytes": 2294,
+      "sha256": "a92e0c0a86d09fede61287f48a7847942c9757dfea9b6abec730302b4ed561b1"
+    },
+    {
+      "path": "B/furniture/native/furniture-baseline-native-01/stages.jsonl",
+      "source": "furniture-baseline-native-01/stages.jsonl",
+      "bytes": 1084448,
+      "sha256": "857e39a5560a953d77d3740c3543cdaaa631e2bcb200afa7d63f9b320a820112"
+    },
+    {
+      "path": "B/furniture/native/furniture-baseline-native-01/supervisor.json",
+      "source": "furniture-baseline-native-01/supervisor.json",
+      "bytes": 220,
+      "sha256": "1f9881913cdfdd9e54e865619bc528b6ee596b1f95164f403e1ecf56b4d52ed2"
+    },
+    {
+      "path": "B/furniture/native/furniture-baseline-native-01/worker.json",
+      "source": "furniture-baseline-native-01/worker.json",
+      "bytes": 341,
+      "sha256": "fe666675e144974ee7e11d6890e3a6c05d2580a190e63eaa39d5d70b0e25fc70"
+    },
+    {
+      "path": "B/furniture/native/furniture-baseline-native-01/worker.stderr.log",
+      "source": "furniture-baseline-native-01/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "B/furniture/native/furniture-baseline-native-01/worker.stdout.log",
+      "source": "furniture-baseline-native-01/worker.stdout.log",
+      "bytes": 54,
+      "sha256": "9193db23a5ef082ce70e61698e4c9a097be6b1108bd90fcca5fe40ec041f9f46"
+    },
+    {
+      "path": "B/furniture/native/furniture-changed-tag-native-01/edited-slide-01.png",
+      "source": "furniture-changed-tag-native-01/edited-slide-01.png",
+      "bytes": 7091,
+      "sha256": "6f7f137d021418e7ad52a758b909d9366164073369bdbf47f1dc280b52e4147c"
+    },
+    {
+      "path": "B/furniture/native/furniture-changed-tag-native-01/edited-slide-02.png",
+      "source": "furniture-changed-tag-native-01/edited-slide-02.png",
+      "bytes": 14445,
+      "sha256": "b1ef21699b348d7d708d8c9e816f9dbe41f2ea1afa741b6d6aa483b0728a57c3"
+    },
+    {
+      "path": "B/furniture/native/furniture-changed-tag-native-01/edited-slide-03.png",
+      "source": "furniture-changed-tag-native-01/edited-slide-03.png",
+      "bytes": 7589,
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7"
+    },
+    {
+      "path": "B/furniture/native/furniture-changed-tag-native-01/independent-native-audit.json",
+      "source": "furniture-changed-tag-native-01/independent-native-audit.json",
+      "bytes": 2719,
+      "sha256": "9a2cced87f22a129c339c3a7087a061099bcc3424e4a44f788b75c87d0f544d3"
+    },
+    {
+      "path": "B/furniture/native/furniture-changed-tag-native-01/inputs/action-plan.json",
+      "source": "furniture-changed-tag-native-01/inputs/action-plan.json",
+      "bytes": 391,
+      "sha256": "5252e6f1d5e03423a9a95655bb5c2560d856b7bd6c80a90c267f1721b457f68f"
+    },
+    {
+      "path": "B/furniture/native/furniture-changed-tag-native-01/inputs/input.pptx",
+      "source": "furniture-changed-tag-native-01/inputs/input.pptx",
+      "bytes": 33613,
+      "sha256": "a655d692ba900027d6504458921f462dbec54de515ddec37c0f628d29c379e5f"
+    },
+    {
+      "path": "B/furniture/native/furniture-changed-tag-native-01/inputs/native-furniture-control.ps1",
+      "source": "furniture-changed-tag-native-01/inputs/native-furniture-control.ps1",
+      "bytes": 27761,
+      "sha256": "c85fe9f79b9c8e01feb6f0c4cfc8b84c90d7d93498f88b4cde2750630c9b2e9e"
+    },
+    {
+      "path": "B/furniture/native/furniture-changed-tag-native-01/inputs/native-process.ps1",
+      "source": "furniture-changed-tag-native-01/inputs/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "path": "B/furniture/native/furniture-changed-tag-native-01/native-furniture-control.pptx",
+      "source": "furniture-changed-tag-native-01/native-furniture-control.pptx",
+      "bytes": 35709,
+      "sha256": "b9c3a39a490024b35271bc3975c675f66eebcc854f69a09ca8875424b2597b77"
+    },
+    {
+      "path": "B/furniture/native/furniture-changed-tag-native-01/original-slide-01.png",
+      "source": "furniture-changed-tag-native-01/original-slide-01.png",
+      "bytes": 7091,
+      "sha256": "6f7f137d021418e7ad52a758b909d9366164073369bdbf47f1dc280b52e4147c"
+    },
+    {
+      "path": "B/furniture/native/furniture-changed-tag-native-01/original-slide-02.png",
+      "source": "furniture-changed-tag-native-01/original-slide-02.png",
+      "bytes": 14445,
+      "sha256": "b1ef21699b348d7d708d8c9e816f9dbe41f2ea1afa741b6d6aa483b0728a57c3"
+    },
+    {
+      "path": "B/furniture/native/furniture-changed-tag-native-01/original-slide-03.png",
+      "source": "furniture-changed-tag-native-01/original-slide-03.png",
+      "bytes": 7589,
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7"
+    },
+    {
+      "path": "B/furniture/native/furniture-changed-tag-native-01/progress.json",
+      "source": "furniture-changed-tag-native-01/progress.json",
+      "bytes": 272,
+      "sha256": "25f9790c0adc510970cc709356554fe4c1b80fef1daa66c140902e1f322dc81a"
+    },
+    {
+      "path": "B/furniture/native/furniture-changed-tag-native-01/reopened-slide-01.png",
+      "source": "furniture-changed-tag-native-01/reopened-slide-01.png",
+      "bytes": 7091,
+      "sha256": "6f7f137d021418e7ad52a758b909d9366164073369bdbf47f1dc280b52e4147c"
+    },
+    {
+      "path": "B/furniture/native/furniture-changed-tag-native-01/reopened-slide-02.png",
+      "source": "furniture-changed-tag-native-01/reopened-slide-02.png",
+      "bytes": 14445,
+      "sha256": "b1ef21699b348d7d708d8c9e816f9dbe41f2ea1afa741b6d6aa483b0728a57c3"
+    },
+    {
+      "path": "B/furniture/native/furniture-changed-tag-native-01/reopened-slide-03.png",
+      "source": "furniture-changed-tag-native-01/reopened-slide-03.png",
+      "bytes": 7589,
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7"
+    },
+    {
+      "path": "B/furniture/native/furniture-changed-tag-native-01/report.json",
+      "source": "furniture-changed-tag-native-01/report.json",
+      "bytes": 200120,
+      "sha256": "80b6fa397fb47b6e2657552debf77f9241c1f2dc8bcd102d76ea87b460386563"
+    },
+    {
+      "path": "B/furniture/native/furniture-changed-tag-native-01/request.json",
+      "source": "furniture-changed-tag-native-01/request.json",
+      "bytes": 2486,
+      "sha256": "19cde320c7852b9c3d39c52ceb5ad727c2af3c09310d976ff9191b59b72369d9"
+    },
+    {
+      "path": "B/furniture/native/furniture-changed-tag-native-01/stages.jsonl",
+      "source": "furniture-changed-tag-native-01/stages.jsonl",
+      "bytes": 1113734,
+      "sha256": "ceb9560b027d6e0e2dafbabf7a74027c3e42e65ee20d90ee8f4f6b2b3db2f5a3"
+    },
+    {
+      "path": "B/furniture/native/furniture-changed-tag-native-01/supervisor.json",
+      "source": "furniture-changed-tag-native-01/supervisor.json",
+      "bytes": 220,
+      "sha256": "340790b6797d55dc5179d26d90508744634fbe70d54630735f8b0e0004d3bc42"
+    },
+    {
+      "path": "B/furniture/native/furniture-changed-tag-native-01/worker.json",
+      "source": "furniture-changed-tag-native-01/worker.json",
+      "bytes": 341,
+      "sha256": "8d4a98756053dc90bb86d3251c88a455cf2021f86dc8b2a9a6819884b8fc248a"
+    },
+    {
+      "path": "B/furniture/native/furniture-changed-tag-native-01/worker.stderr.log",
+      "source": "furniture-changed-tag-native-01/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "B/furniture/native/furniture-changed-tag-native-01/worker.stdout.log",
+      "source": "furniture-changed-tag-native-01/worker.stdout.log",
+      "bytes": 54,
+      "sha256": "bb79ee03f691de41e2637d776c18c0b3ff599a47844d7cf95e4508340a2ee087"
+    },
+    {
+      "path": "B/furniture/native/furniture-delete-image-native-01/edited-slide-01.png",
+      "source": "furniture-delete-image-native-01/edited-slide-01.png",
+      "bytes": 7091,
+      "sha256": "6f7f137d021418e7ad52a758b909d9366164073369bdbf47f1dc280b52e4147c"
+    },
+    {
+      "path": "B/furniture/native/furniture-delete-image-native-01/edited-slide-02.png",
+      "source": "furniture-delete-image-native-01/edited-slide-02.png",
+      "bytes": 6586,
+      "sha256": "b9966fde705beb1f0c87911010031dc6dcb9efb9bd46195267890c2fd9caf103"
+    },
+    {
+      "path": "B/furniture/native/furniture-delete-image-native-01/edited-slide-03.png",
+      "source": "furniture-delete-image-native-01/edited-slide-03.png",
+      "bytes": 7589,
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7"
+    },
+    {
+      "path": "B/furniture/native/furniture-delete-image-native-01/independent-native-audit-v2.json",
+      "source": "furniture-delete-image-native-01/independent-native-audit-v2.json",
+      "bytes": 2719,
+      "sha256": "aa4dfd18c5122a1172f737cfa1e0948745a3a93e5b8f9ab2bc4138c5aa97f824"
+    },
+    {
+      "path": "B/furniture/native/furniture-delete-image-native-01/independent-native-audit.json",
+      "source": "furniture-delete-image-native-01/independent-native-audit.json",
+      "bytes": 2402,
+      "sha256": "d55d94ab3069d0e2e0e7427d5e9da454f4ceaeb944772a1570c57c770b069ffe"
+    },
+    {
+      "path": "B/furniture/native/furniture-delete-image-native-01/inputs/action-plan.json",
+      "source": "furniture-delete-image-native-01/inputs/action-plan.json",
+      "bytes": 97,
+      "sha256": "534c032357539b0421167371cbc3a4a7ecc8b9dac4bc77b3a69f39bf224f0dc4"
+    },
+    {
+      "path": "B/furniture/native/furniture-delete-image-native-01/inputs/input.pptx",
+      "source": "furniture-delete-image-native-01/inputs/input.pptx",
+      "bytes": 33613,
+      "sha256": "a655d692ba900027d6504458921f462dbec54de515ddec37c0f628d29c379e5f"
+    },
+    {
+      "path": "B/furniture/native/furniture-delete-image-native-01/inputs/native-furniture-control.ps1",
+      "source": "furniture-delete-image-native-01/inputs/native-furniture-control.ps1",
+      "bytes": 27761,
+      "sha256": "c85fe9f79b9c8e01feb6f0c4cfc8b84c90d7d93498f88b4cde2750630c9b2e9e"
+    },
+    {
+      "path": "B/furniture/native/furniture-delete-image-native-01/inputs/native-process.ps1",
+      "source": "furniture-delete-image-native-01/inputs/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "path": "B/furniture/native/furniture-delete-image-native-01/native-furniture-control.pptx",
+      "source": "furniture-delete-image-native-01/native-furniture-control.pptx",
+      "bytes": 34561,
+      "sha256": "2929ed44db931388b65c218291f94200c8486e2ae393a8cc3fde03cf2eac7837"
+    },
+    {
+      "path": "B/furniture/native/furniture-delete-image-native-01/original-slide-01.png",
+      "source": "furniture-delete-image-native-01/original-slide-01.png",
+      "bytes": 7091,
+      "sha256": "6f7f137d021418e7ad52a758b909d9366164073369bdbf47f1dc280b52e4147c"
+    },
+    {
+      "path": "B/furniture/native/furniture-delete-image-native-01/original-slide-02.png",
+      "source": "furniture-delete-image-native-01/original-slide-02.png",
+      "bytes": 14445,
+      "sha256": "b1ef21699b348d7d708d8c9e816f9dbe41f2ea1afa741b6d6aa483b0728a57c3"
+    },
+    {
+      "path": "B/furniture/native/furniture-delete-image-native-01/original-slide-03.png",
+      "source": "furniture-delete-image-native-01/original-slide-03.png",
+      "bytes": 7589,
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7"
+    },
+    {
+      "path": "B/furniture/native/furniture-delete-image-native-01/progress.json",
+      "source": "furniture-delete-image-native-01/progress.json",
+      "bytes": 272,
+      "sha256": "24f5bdc3ccca0e0fefe31a2a16502f826f7a5ffa429c015d96519208d39aef97"
+    },
+    {
+      "path": "B/furniture/native/furniture-delete-image-native-01/reopened-slide-01.png",
+      "source": "furniture-delete-image-native-01/reopened-slide-01.png",
+      "bytes": 7091,
+      "sha256": "6f7f137d021418e7ad52a758b909d9366164073369bdbf47f1dc280b52e4147c"
+    },
+    {
+      "path": "B/furniture/native/furniture-delete-image-native-01/reopened-slide-02.png",
+      "source": "furniture-delete-image-native-01/reopened-slide-02.png",
+      "bytes": 6586,
+      "sha256": "b9966fde705beb1f0c87911010031dc6dcb9efb9bd46195267890c2fd9caf103"
+    },
+    {
+      "path": "B/furniture/native/furniture-delete-image-native-01/reopened-slide-03.png",
+      "source": "furniture-delete-image-native-01/reopened-slide-03.png",
+      "bytes": 7589,
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7"
+    },
+    {
+      "path": "B/furniture/native/furniture-delete-image-native-01/report.json",
+      "source": "furniture-delete-image-native-01/report.json",
+      "bytes": 195677,
+      "sha256": "62622a903bf41f8dbeb2b70c7b8ce88debb7b8e900a08a32639d11d53ade07b2"
+    },
+    {
+      "path": "B/furniture/native/furniture-delete-image-native-01/request.json",
+      "source": "furniture-delete-image-native-01/request.json",
+      "bytes": 2491,
+      "sha256": "e4a4dcdbf9ea95fb672f09fa9323def42193e979b75e7a127df250ac238dd708"
+    },
+    {
+      "path": "B/furniture/native/furniture-delete-image-native-01/stages.jsonl",
+      "source": "furniture-delete-image-native-01/stages.jsonl",
+      "bytes": 1090598,
+      "sha256": "0497eec4cafb5113aa758e7357fa0929d5f973df6bb35206a880c0c8578a7498"
+    },
+    {
+      "path": "B/furniture/native/furniture-delete-image-native-01/supervisor.json",
+      "source": "furniture-delete-image-native-01/supervisor.json",
+      "bytes": 220,
+      "sha256": "c63d7d6570bb64c118326b5c215cd3ef3aed55bd21afeb1e9f066552f8fb2779"
+    },
+    {
+      "path": "B/furniture/native/furniture-delete-image-native-01/worker.json",
+      "source": "furniture-delete-image-native-01/worker.json",
+      "bytes": 341,
+      "sha256": "a025f96472370cd132a2fecd8eb0283bb1605332f4d95e6ed3d743f549a33526"
+    },
+    {
+      "path": "B/furniture/native/furniture-delete-image-native-01/worker.stderr.log",
+      "source": "furniture-delete-image-native-01/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "B/furniture/native/furniture-delete-image-native-01/worker.stdout.log",
+      "source": "furniture-delete-image-native-01/worker.stdout.log",
+      "bytes": 54,
+      "sha256": "bb79ee03f691de41e2637d776c18c0b3ff599a47844d7cf95e4508340a2ee087"
+    },
+    {
+      "path": "B/furniture/native/furniture-duplicate-tagged-shape-native-01/edited-slide-01.png",
+      "source": "furniture-duplicate-tagged-shape-native-01/edited-slide-01.png",
+      "bytes": 7594,
+      "sha256": "9edfbc8d0a7f23126044023951d3ac0a41fd060904da5a60c49e45c1f1dc7c64"
+    },
+    {
+      "path": "B/furniture/native/furniture-duplicate-tagged-shape-native-01/edited-slide-02.png",
+      "source": "furniture-duplicate-tagged-shape-native-01/edited-slide-02.png",
+      "bytes": 14445,
+      "sha256": "b1ef21699b348d7d708d8c9e816f9dbe41f2ea1afa741b6d6aa483b0728a57c3"
+    },
+    {
+      "path": "B/furniture/native/furniture-duplicate-tagged-shape-native-01/edited-slide-03.png",
+      "source": "furniture-duplicate-tagged-shape-native-01/edited-slide-03.png",
+      "bytes": 7589,
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7"
+    },
+    {
+      "path": "B/furniture/native/furniture-duplicate-tagged-shape-native-01/independent-native-audit.json",
+      "source": "furniture-duplicate-tagged-shape-native-01/independent-native-audit.json",
+      "bytes": 2719,
+      "sha256": "e0051fb7d80237dbaec87ea922a31c964f8c53174197cce0e951f37c522d6a9c"
+    },
+    {
+      "path": "B/furniture/native/furniture-duplicate-tagged-shape-native-01/inputs/action-plan.json",
+      "source": "furniture-duplicate-tagged-shape-native-01/inputs/action-plan.json",
+      "bytes": 165,
+      "sha256": "690bf650e77f2f5371897619baf501eb94e483fed863e63991c437def2b51ddf"
+    },
+    {
+      "path": "B/furniture/native/furniture-duplicate-tagged-shape-native-01/inputs/input.pptx",
+      "source": "furniture-duplicate-tagged-shape-native-01/inputs/input.pptx",
+      "bytes": 33613,
+      "sha256": "a655d692ba900027d6504458921f462dbec54de515ddec37c0f628d29c379e5f"
+    },
+    {
+      "path": "B/furniture/native/furniture-duplicate-tagged-shape-native-01/inputs/native-furniture-control.ps1",
+      "source": "furniture-duplicate-tagged-shape-native-01/inputs/native-furniture-control.ps1",
+      "bytes": 27761,
+      "sha256": "c85fe9f79b9c8e01feb6f0c4cfc8b84c90d7d93498f88b4cde2750630c9b2e9e"
+    },
+    {
+      "path": "B/furniture/native/furniture-duplicate-tagged-shape-native-01/inputs/native-process.ps1",
+      "source": "furniture-duplicate-tagged-shape-native-01/inputs/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "path": "B/furniture/native/furniture-duplicate-tagged-shape-native-01/native-furniture-control.pptx",
+      "source": "furniture-duplicate-tagged-shape-native-01/native-furniture-control.pptx",
+      "bytes": 36312,
+      "sha256": "589f1f561b1993b271c7c6067e97363e1aa1f12176956dc2837f4e9036b9df80"
+    },
+    {
+      "path": "B/furniture/native/furniture-duplicate-tagged-shape-native-01/original-slide-01.png",
+      "source": "furniture-duplicate-tagged-shape-native-01/original-slide-01.png",
+      "bytes": 7091,
+      "sha256": "6f7f137d021418e7ad52a758b909d9366164073369bdbf47f1dc280b52e4147c"
+    },
+    {
+      "path": "B/furniture/native/furniture-duplicate-tagged-shape-native-01/original-slide-02.png",
+      "source": "furniture-duplicate-tagged-shape-native-01/original-slide-02.png",
+      "bytes": 14445,
+      "sha256": "b1ef21699b348d7d708d8c9e816f9dbe41f2ea1afa741b6d6aa483b0728a57c3"
+    },
+    {
+      "path": "B/furniture/native/furniture-duplicate-tagged-shape-native-01/original-slide-03.png",
+      "source": "furniture-duplicate-tagged-shape-native-01/original-slide-03.png",
+      "bytes": 7589,
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7"
+    },
+    {
+      "path": "B/furniture/native/furniture-duplicate-tagged-shape-native-01/progress.json",
+      "source": "furniture-duplicate-tagged-shape-native-01/progress.json",
+      "bytes": 272,
+      "sha256": "7e287e00efe25ed0924eed954b814038f5efd58b4563cad0ae4fc7996d51041a"
+    },
+    {
+      "path": "B/furniture/native/furniture-duplicate-tagged-shape-native-01/reopened-slide-01.png",
+      "source": "furniture-duplicate-tagged-shape-native-01/reopened-slide-01.png",
+      "bytes": 7594,
+      "sha256": "9edfbc8d0a7f23126044023951d3ac0a41fd060904da5a60c49e45c1f1dc7c64"
+    },
+    {
+      "path": "B/furniture/native/furniture-duplicate-tagged-shape-native-01/reopened-slide-02.png",
+      "source": "furniture-duplicate-tagged-shape-native-01/reopened-slide-02.png",
+      "bytes": 14445,
+      "sha256": "b1ef21699b348d7d708d8c9e816f9dbe41f2ea1afa741b6d6aa483b0728a57c3"
+    },
+    {
+      "path": "B/furniture/native/furniture-duplicate-tagged-shape-native-01/reopened-slide-03.png",
+      "source": "furniture-duplicate-tagged-shape-native-01/reopened-slide-03.png",
+      "bytes": 7589,
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7"
+    },
+    {
+      "path": "B/furniture/native/furniture-duplicate-tagged-shape-native-01/report.json",
+      "source": "furniture-duplicate-tagged-shape-native-01/report.json",
+      "bytes": 204282,
+      "sha256": "230aafd180fd9fe8a118a5fe6f613c4f4460c5129e128d8a1bf9d7d5b32c9ced"
+    },
+    {
+      "path": "B/furniture/native/furniture-duplicate-tagged-shape-native-01/request.json",
+      "source": "furniture-duplicate-tagged-shape-native-01/request.json",
+      "bytes": 2541,
+      "sha256": "d199f7c3e02ecb69c4081b38ea687ad690a15fc60109e3b82170a306de224d37"
+    },
+    {
+      "path": "B/furniture/native/furniture-duplicate-tagged-shape-native-01/stages.jsonl",
+      "source": "furniture-duplicate-tagged-shape-native-01/stages.jsonl",
+      "bytes": 1189666,
+      "sha256": "2113d15928138bd32e68c67d18f704861ef4171a01b7d97f98dc048dfa8e459b"
+    },
+    {
+      "path": "B/furniture/native/furniture-duplicate-tagged-shape-native-01/supervisor.json",
+      "source": "furniture-duplicate-tagged-shape-native-01/supervisor.json",
+      "bytes": 220,
+      "sha256": "715d95a82938b081c0dcf5cacf8fafb91648b2edcb1affb3e458759585b4aae5"
+    },
+    {
+      "path": "B/furniture/native/furniture-duplicate-tagged-shape-native-01/worker.json",
+      "source": "furniture-duplicate-tagged-shape-native-01/worker.json",
+      "bytes": 341,
+      "sha256": "90c4f186eef52db6b9e9741a9f1bea160500d90330053fae3183671ac59df8ba"
+    },
+    {
+      "path": "B/furniture/native/furniture-duplicate-tagged-shape-native-01/worker.stderr.log",
+      "source": "furniture-duplicate-tagged-shape-native-01/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "B/furniture/native/furniture-duplicate-tagged-shape-native-01/worker.stdout.log",
+      "source": "furniture-duplicate-tagged-shape-native-01/worker.stdout.log",
+      "bytes": 54,
+      "sha256": "bb79ee03f691de41e2637d776c18c0b3ff599a47844d7cf95e4508340a2ee087"
+    },
+    {
+      "path": "B/furniture/native/furniture-flags-native-01/edited-slide-01.png",
+      "source": "furniture-flags-native-01/edited-slide-01.png",
+      "bytes": 5223,
+      "sha256": "41ce62f72d067732ae1557ce8d470e9959d8eb6efc61bf8c5224dd40eedc0015"
+    },
+    {
+      "path": "B/furniture/native/furniture-flags-native-01/edited-slide-02.png",
+      "source": "furniture-flags-native-01/edited-slide-02.png",
+      "bytes": 5237,
+      "sha256": "28ebe7855d66914f01f4529092a743ae116ce73fed74d083dc95755d9181baac"
+    },
+    {
+      "path": "B/furniture/native/furniture-flags-native-01/edited-slide-03.png",
+      "source": "furniture-flags-native-01/edited-slide-03.png",
+      "bytes": 5048,
+      "sha256": "5f15c06bc6338b6aa433848ddb66eb5aeba5a0c55c4ce3022d8f75e90b221628"
+    },
+    {
+      "path": "B/furniture/native/furniture-flags-native-01/independent-native-audit-v2.json",
+      "source": "furniture-flags-native-01/independent-native-audit-v2.json",
+      "bytes": 2624,
+      "sha256": "e49c2576a2456800af9f8216cfac02293e865638e70c023e76f72338d944fda5"
+    },
+    {
+      "path": "B/furniture/native/furniture-flags-native-01/independent-native-audit.json",
+      "source": "furniture-flags-native-01/independent-native-audit.json",
+      "bytes": 2326,
+      "sha256": "1ccc0ef921822995a62bdedc283979e56aab7628d2629a8cf4b68eec7d473221"
+    },
+    {
+      "path": "B/furniture/native/furniture-flags-native-01/inputs/action-plan.json",
+      "source": "furniture-flags-native-01/inputs/action-plan.json",
+      "bytes": 11,
+      "sha256": "84b1c14e68260082e3e79edff0a78f4ebf1942cfd6c593246044ec2149cbb87d"
+    },
+    {
+      "path": "B/furniture/native/furniture-flags-native-01/inputs/input.pptx",
+      "source": "furniture-flags-native-01/inputs/input.pptx",
+      "bytes": 24548,
+      "sha256": "a994bbc2882cbb9a2b84bc8a4e5d2099d3597871828ad203a54a2c8c1ca013b4"
+    },
+    {
+      "path": "B/furniture/native/furniture-flags-native-01/inputs/native-furniture-control.ps1",
+      "source": "furniture-flags-native-01/inputs/native-furniture-control.ps1",
+      "bytes": 27761,
+      "sha256": "c85fe9f79b9c8e01feb6f0c4cfc8b84c90d7d93498f88b4cde2750630c9b2e9e"
+    },
+    {
+      "path": "B/furniture/native/furniture-flags-native-01/inputs/native-process.ps1",
+      "source": "furniture-flags-native-01/inputs/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "path": "B/furniture/native/furniture-flags-native-01/native-furniture-control.pptx",
+      "source": "furniture-flags-native-01/native-furniture-control.pptx",
+      "bytes": 26064,
+      "sha256": "a661cc22b6477e803515cdd96578dd32ca41e47f9f47b3039754dcda534c28bf"
+    },
+    {
+      "path": "B/furniture/native/furniture-flags-native-01/original-slide-01.png",
+      "source": "furniture-flags-native-01/original-slide-01.png",
+      "bytes": 5223,
+      "sha256": "41ce62f72d067732ae1557ce8d470e9959d8eb6efc61bf8c5224dd40eedc0015"
+    },
+    {
+      "path": "B/furniture/native/furniture-flags-native-01/original-slide-02.png",
+      "source": "furniture-flags-native-01/original-slide-02.png",
+      "bytes": 5237,
+      "sha256": "28ebe7855d66914f01f4529092a743ae116ce73fed74d083dc95755d9181baac"
+    },
+    {
+      "path": "B/furniture/native/furniture-flags-native-01/original-slide-03.png",
+      "source": "furniture-flags-native-01/original-slide-03.png",
+      "bytes": 5048,
+      "sha256": "5f15c06bc6338b6aa433848ddb66eb5aeba5a0c55c4ce3022d8f75e90b221628"
+    },
+    {
+      "path": "B/furniture/native/furniture-flags-native-01/progress.json",
+      "source": "furniture-flags-native-01/progress.json",
+      "bytes": 272,
+      "sha256": "4928ce5ea8823acc43664ed378ec945e18f34b97f3b297d1c806a9096397f7ab"
+    },
+    {
+      "path": "B/furniture/native/furniture-flags-native-01/reopened-slide-01.png",
+      "source": "furniture-flags-native-01/reopened-slide-01.png",
+      "bytes": 5223,
+      "sha256": "41ce62f72d067732ae1557ce8d470e9959d8eb6efc61bf8c5224dd40eedc0015"
+    },
+    {
+      "path": "B/furniture/native/furniture-flags-native-01/reopened-slide-02.png",
+      "source": "furniture-flags-native-01/reopened-slide-02.png",
+      "bytes": 5237,
+      "sha256": "28ebe7855d66914f01f4529092a743ae116ce73fed74d083dc95755d9181baac"
+    },
+    {
+      "path": "B/furniture/native/furniture-flags-native-01/reopened-slide-03.png",
+      "source": "furniture-flags-native-01/reopened-slide-03.png",
+      "bytes": 5048,
+      "sha256": "5f15c06bc6338b6aa433848ddb66eb5aeba5a0c55c4ce3022d8f75e90b221628"
+    },
+    {
+      "path": "B/furniture/native/furniture-flags-native-01/report.json",
+      "source": "furniture-flags-native-01/report.json",
+      "bytes": 75181,
+      "sha256": "8d120c9ad48389aafefb33da521a30e2cbf4d74d6c744d6c41c8f7a3d5723deb"
+    },
+    {
+      "path": "B/furniture/native/furniture-flags-native-01/request.json",
+      "source": "furniture-flags-native-01/request.json",
+      "bytes": 2281,
+      "sha256": "def242a0f5ce79b6d0f89da37ff318f069e70f2cd8aec7a1eb5189f6dc6c9c4f"
+    },
+    {
+      "path": "B/furniture/native/furniture-flags-native-01/stages.jsonl",
+      "source": "furniture-flags-native-01/stages.jsonl",
+      "bytes": 387116,
+      "sha256": "3885b2fc151068376ee8c395c90c5816afcedda5e766824a0b0aa262bd4befeb"
+    },
+    {
+      "path": "B/furniture/native/furniture-flags-native-01/supervisor.json",
+      "source": "furniture-flags-native-01/supervisor.json",
+      "bytes": 220,
+      "sha256": "143a0aa8a4e9bcdba7664c501ca25bfb1b0940d31829db9c162e3f583c3de4ca"
+    },
+    {
+      "path": "B/furniture/native/furniture-flags-native-01/worker.json",
+      "source": "furniture-flags-native-01/worker.json",
+      "bytes": 341,
+      "sha256": "c7ad69a8e50b08482b0fb44fcc66a8d03d6eb1280284b467b691909090d0b7b3"
+    },
+    {
+      "path": "B/furniture/native/furniture-flags-native-01/worker.stderr.log",
+      "source": "furniture-flags-native-01/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "B/furniture/native/furniture-flags-native-01/worker.stdout.log",
+      "source": "furniture-flags-native-01/worker.stdout.log",
+      "bytes": 54,
+      "sha256": "9193db23a5ef082ce70e61698e4c9a097be6b1108bd90fcca5fe40ec041f9f46"
+    },
+    {
+      "path": "B/furniture/native/furniture-metadata-disagreement-native-01/edited-slide-01.png",
+      "source": "furniture-metadata-disagreement-native-01/edited-slide-01.png",
+      "bytes": 7229,
+      "sha256": "c7162af01b26e7d9230c1df0d19d7d374c4c4d92799481d89911c94d6e2a3304"
+    },
+    {
+      "path": "B/furniture/native/furniture-metadata-disagreement-native-01/edited-slide-02.png",
+      "source": "furniture-metadata-disagreement-native-01/edited-slide-02.png",
+      "bytes": 14445,
+      "sha256": "b1ef21699b348d7d708d8c9e816f9dbe41f2ea1afa741b6d6aa483b0728a57c3"
+    },
+    {
+      "path": "B/furniture/native/furniture-metadata-disagreement-native-01/edited-slide-03.png",
+      "source": "furniture-metadata-disagreement-native-01/edited-slide-03.png",
+      "bytes": 7589,
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7"
+    },
+    {
+      "path": "B/furniture/native/furniture-metadata-disagreement-native-01/independent-native-audit.json",
+      "source": "furniture-metadata-disagreement-native-01/independent-native-audit.json",
+      "bytes": 2719,
+      "sha256": "d05d90a9cc465b1eea2b240264375662599a0dec4b6f34dca84d47889f299d69"
+    },
+    {
+      "path": "B/furniture/native/furniture-metadata-disagreement-native-01/inputs/action-plan.json",
+      "source": "furniture-metadata-disagreement-native-01/inputs/action-plan.json",
+      "bytes": 161,
+      "sha256": "bf503bf43f87987ea51c0375b69ea5e81d775fda99a2f11ea5a86f35e1993d4c"
+    },
+    {
+      "path": "B/furniture/native/furniture-metadata-disagreement-native-01/inputs/input.pptx",
+      "source": "furniture-metadata-disagreement-native-01/inputs/input.pptx",
+      "bytes": 33613,
+      "sha256": "a655d692ba900027d6504458921f462dbec54de515ddec37c0f628d29c379e5f"
+    },
+    {
+      "path": "B/furniture/native/furniture-metadata-disagreement-native-01/inputs/native-furniture-control.ps1",
+      "source": "furniture-metadata-disagreement-native-01/inputs/native-furniture-control.ps1",
+      "bytes": 27761,
+      "sha256": "c85fe9f79b9c8e01feb6f0c4cfc8b84c90d7d93498f88b4cde2750630c9b2e9e"
+    },
+    {
+      "path": "B/furniture/native/furniture-metadata-disagreement-native-01/inputs/native-process.ps1",
+      "source": "furniture-metadata-disagreement-native-01/inputs/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "path": "B/furniture/native/furniture-metadata-disagreement-native-01/native-furniture-control.pptx",
+      "source": "furniture-metadata-disagreement-native-01/native-furniture-control.pptx",
+      "bytes": 35718,
+      "sha256": "c984230adc7aa8ac5ddd1448fd352f7f0309a271c9d2b7533a79b1dd8ea15b13"
+    },
+    {
+      "path": "B/furniture/native/furniture-metadata-disagreement-native-01/original-slide-01.png",
+      "source": "furniture-metadata-disagreement-native-01/original-slide-01.png",
+      "bytes": 7091,
+      "sha256": "6f7f137d021418e7ad52a758b909d9366164073369bdbf47f1dc280b52e4147c"
+    },
+    {
+      "path": "B/furniture/native/furniture-metadata-disagreement-native-01/original-slide-02.png",
+      "source": "furniture-metadata-disagreement-native-01/original-slide-02.png",
+      "bytes": 14445,
+      "sha256": "b1ef21699b348d7d708d8c9e816f9dbe41f2ea1afa741b6d6aa483b0728a57c3"
+    },
+    {
+      "path": "B/furniture/native/furniture-metadata-disagreement-native-01/original-slide-03.png",
+      "source": "furniture-metadata-disagreement-native-01/original-slide-03.png",
+      "bytes": 7589,
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7"
+    },
+    {
+      "path": "B/furniture/native/furniture-metadata-disagreement-native-01/progress.json",
+      "source": "furniture-metadata-disagreement-native-01/progress.json",
+      "bytes": 272,
+      "sha256": "7ae943f55cca34476a9db38f640d0a603baef06d08b3f5c418816368c74543fa"
+    },
+    {
+      "path": "B/furniture/native/furniture-metadata-disagreement-native-01/reopened-slide-01.png",
+      "source": "furniture-metadata-disagreement-native-01/reopened-slide-01.png",
+      "bytes": 7229,
+      "sha256": "c7162af01b26e7d9230c1df0d19d7d374c4c4d92799481d89911c94d6e2a3304"
+    },
+    {
+      "path": "B/furniture/native/furniture-metadata-disagreement-native-01/reopened-slide-02.png",
+      "source": "furniture-metadata-disagreement-native-01/reopened-slide-02.png",
+      "bytes": 14445,
+      "sha256": "b1ef21699b348d7d708d8c9e816f9dbe41f2ea1afa741b6d6aa483b0728a57c3"
+    },
+    {
+      "path": "B/furniture/native/furniture-metadata-disagreement-native-01/reopened-slide-03.png",
+      "source": "furniture-metadata-disagreement-native-01/reopened-slide-03.png",
+      "bytes": 7589,
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7"
+    },
+    {
+      "path": "B/furniture/native/furniture-metadata-disagreement-native-01/report.json",
+      "source": "furniture-metadata-disagreement-native-01/report.json",
+      "bytes": 199979,
+      "sha256": "362cf6f24ebf60ee0152050746c8c5549fe50c9112b2b65a1b671e52a424cdd4"
+    },
+    {
+      "path": "B/furniture/native/furniture-metadata-disagreement-native-01/request.json",
+      "source": "furniture-metadata-disagreement-native-01/request.json",
+      "bytes": 2536,
+      "sha256": "03f94cc458d22a93baf9159b76203d002c973ae7d70aede392844e82059bb74c"
+    },
+    {
+      "path": "B/furniture/native/furniture-metadata-disagreement-native-01/stages.jsonl",
+      "source": "furniture-metadata-disagreement-native-01/stages.jsonl",
+      "bytes": 1143652,
+      "sha256": "20d3cade0e4acf5d3309f2f0eecc32e814caa1e7cb2e32298b0a35e6319ab02e"
+    },
+    {
+      "path": "B/furniture/native/furniture-metadata-disagreement-native-01/supervisor.json",
+      "source": "furniture-metadata-disagreement-native-01/supervisor.json",
+      "bytes": 220,
+      "sha256": "3f8b50234878d823f45286befbb955256f405ac2eb28ad3a65f7f0584af755ab"
+    },
+    {
+      "path": "B/furniture/native/furniture-metadata-disagreement-native-01/worker.json",
+      "source": "furniture-metadata-disagreement-native-01/worker.json",
+      "bytes": 340,
+      "sha256": "b9890f92dc5697216df72fb9347043195a0c670f8cda570f4d178fdc839f4d43"
+    },
+    {
+      "path": "B/furniture/native/furniture-metadata-disagreement-native-01/worker.stderr.log",
+      "source": "furniture-metadata-disagreement-native-01/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "B/furniture/native/furniture-metadata-disagreement-native-01/worker.stdout.log",
+      "source": "furniture-metadata-disagreement-native-01/worker.stdout.log",
+      "bytes": 54,
+      "sha256": "bb79ee03f691de41e2637d776c18c0b3ff599a47844d7cf95e4508340a2ee087"
+    },
+    {
+      "path": "B/furniture/native/furniture-missing-tag-native-01/early-audit-failure.json",
+      "source": "furniture-missing-tag-native-01/early-audit-failure.json",
+      "bytes": 238,
+      "sha256": "952e5cc876f7a75ff9b63d8979f621ba978c8676272f381cb618eef6fadf206b"
+    },
+    {
+      "path": "B/furniture/native/furniture-missing-tag-native-01/edited-slide-01.png",
+      "source": "furniture-missing-tag-native-01/edited-slide-01.png",
+      "bytes": 7091,
+      "sha256": "6f7f137d021418e7ad52a758b909d9366164073369bdbf47f1dc280b52e4147c"
+    },
+    {
+      "path": "B/furniture/native/furniture-missing-tag-native-01/edited-slide-02.png",
+      "source": "furniture-missing-tag-native-01/edited-slide-02.png",
+      "bytes": 14445,
+      "sha256": "b1ef21699b348d7d708d8c9e816f9dbe41f2ea1afa741b6d6aa483b0728a57c3"
+    },
+    {
+      "path": "B/furniture/native/furniture-missing-tag-native-01/edited-slide-03.png",
+      "source": "furniture-missing-tag-native-01/edited-slide-03.png",
+      "bytes": 7589,
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7"
+    },
+    {
+      "path": "B/furniture/native/furniture-missing-tag-native-01/independent-native-audit.json",
+      "source": "furniture-missing-tag-native-01/independent-native-audit.json",
+      "bytes": 2719,
+      "sha256": "097d873f5a2de405f8a73c39b3376400e738c9e7635d6d85eb233324d77e0db7"
+    },
+    {
+      "path": "B/furniture/native/furniture-missing-tag-native-01/inputs/action-plan.json",
+      "source": "furniture-missing-tag-native-01/inputs/action-plan.json",
+      "bytes": 173,
+      "sha256": "e269af66271b45a1a41aacbcf1f9c5259636aa91b21169e3ad9e94056775ef6e"
+    },
+    {
+      "path": "B/furniture/native/furniture-missing-tag-native-01/inputs/input.pptx",
+      "source": "furniture-missing-tag-native-01/inputs/input.pptx",
+      "bytes": 33613,
+      "sha256": "a655d692ba900027d6504458921f462dbec54de515ddec37c0f628d29c379e5f"
+    },
+    {
+      "path": "B/furniture/native/furniture-missing-tag-native-01/inputs/native-furniture-control.ps1",
+      "source": "furniture-missing-tag-native-01/inputs/native-furniture-control.ps1",
+      "bytes": 27761,
+      "sha256": "c85fe9f79b9c8e01feb6f0c4cfc8b84c90d7d93498f88b4cde2750630c9b2e9e"
+    },
+    {
+      "path": "B/furniture/native/furniture-missing-tag-native-01/inputs/native-process.ps1",
+      "source": "furniture-missing-tag-native-01/inputs/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "path": "B/furniture/native/furniture-missing-tag-native-01/native-furniture-control.pptx",
+      "source": "furniture-missing-tag-native-01/native-furniture-control.pptx",
+      "bytes": 35275,
+      "sha256": "62c9270435a8be3898f1ffaf4f8cd72f0680b1dc882463cfd53e9dd8598109a4"
+    },
+    {
+      "path": "B/furniture/native/furniture-missing-tag-native-01/original-slide-01.png",
+      "source": "furniture-missing-tag-native-01/original-slide-01.png",
+      "bytes": 7091,
+      "sha256": "6f7f137d021418e7ad52a758b909d9366164073369bdbf47f1dc280b52e4147c"
+    },
+    {
+      "path": "B/furniture/native/furniture-missing-tag-native-01/original-slide-02.png",
+      "source": "furniture-missing-tag-native-01/original-slide-02.png",
+      "bytes": 14445,
+      "sha256": "b1ef21699b348d7d708d8c9e816f9dbe41f2ea1afa741b6d6aa483b0728a57c3"
+    },
+    {
+      "path": "B/furniture/native/furniture-missing-tag-native-01/original-slide-03.png",
+      "source": "furniture-missing-tag-native-01/original-slide-03.png",
+      "bytes": 7589,
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7"
+    },
+    {
+      "path": "B/furniture/native/furniture-missing-tag-native-01/progress.json",
+      "source": "furniture-missing-tag-native-01/progress.json",
+      "bytes": 272,
+      "sha256": "08f3bbc0e6976805f5bae41829add159482128fb077be274d998b73728021a6f"
+    },
+    {
+      "path": "B/furniture/native/furniture-missing-tag-native-01/reopened-slide-01.png",
+      "source": "furniture-missing-tag-native-01/reopened-slide-01.png",
+      "bytes": 7091,
+      "sha256": "6f7f137d021418e7ad52a758b909d9366164073369bdbf47f1dc280b52e4147c"
+    },
+    {
+      "path": "B/furniture/native/furniture-missing-tag-native-01/reopened-slide-02.png",
+      "source": "furniture-missing-tag-native-01/reopened-slide-02.png",
+      "bytes": 14445,
+      "sha256": "b1ef21699b348d7d708d8c9e816f9dbe41f2ea1afa741b6d6aa483b0728a57c3"
+    },
+    {
+      "path": "B/furniture/native/furniture-missing-tag-native-01/reopened-slide-03.png",
+      "source": "furniture-missing-tag-native-01/reopened-slide-03.png",
+      "bytes": 7589,
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7"
+    },
+    {
+      "path": "B/furniture/native/furniture-missing-tag-native-01/report.json",
+      "source": "furniture-missing-tag-native-01/report.json",
+      "bytes": 198457,
+      "sha256": "c0dae5d23252ccf697bc055332dd5a296d9ad358ec412d55031b06a395acb9fa"
+    },
+    {
+      "path": "B/furniture/native/furniture-missing-tag-native-01/request.json",
+      "source": "furniture-missing-tag-native-01/request.json",
+      "bytes": 2486,
+      "sha256": "e1a78f24d79542300d011c1709a24d6ea9ebc46283ee672d26bef1b31966942c"
+    },
+    {
+      "path": "B/furniture/native/furniture-missing-tag-native-01/stages.jsonl",
+      "source": "furniture-missing-tag-native-01/stages.jsonl",
+      "bytes": 1113216,
+      "sha256": "9b082ae71f16d1588cd72bd4c992657053c8253f94585fa3e7fdcbd304e3cc0a"
+    },
+    {
+      "path": "B/furniture/native/furniture-missing-tag-native-01/supervisor.json",
+      "source": "furniture-missing-tag-native-01/supervisor.json",
+      "bytes": 220,
+      "sha256": "5a73bc6d04b4edc0a6365c709ee92ab24476ee4cea662e11cccd30d6b9fda194"
+    },
+    {
+      "path": "B/furniture/native/furniture-missing-tag-native-01/worker.json",
+      "source": "furniture-missing-tag-native-01/worker.json",
+      "bytes": 341,
+      "sha256": "b1fe542a9749afcecf35768ee9841bc2c0295ed3daaeaba9df2ed35e73c05396"
+    },
+    {
+      "path": "B/furniture/native/furniture-missing-tag-native-01/worker.stderr.log",
+      "source": "furniture-missing-tag-native-01/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "B/furniture/native/furniture-missing-tag-native-01/worker.stdout.log",
+      "source": "furniture-missing-tag-native-01/worker.stdout.log",
+      "bytes": 54,
+      "sha256": "bb79ee03f691de41e2637d776c18c0b3ff599a47844d7cf95e4508340a2ee087"
+    },
+    {
+      "path": "B/furniture/native/furniture-reorder-native-01/edited-slide-01.png",
+      "source": "furniture-reorder-native-01/edited-slide-01.png",
+      "bytes": 7589,
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7"
+    },
+    {
+      "path": "B/furniture/native/furniture-reorder-native-01/edited-slide-02.png",
+      "source": "furniture-reorder-native-01/edited-slide-02.png",
+      "bytes": 7091,
+      "sha256": "6f7f137d021418e7ad52a758b909d9366164073369bdbf47f1dc280b52e4147c"
+    },
+    {
+      "path": "B/furniture/native/furniture-reorder-native-01/edited-slide-03.png",
+      "source": "furniture-reorder-native-01/edited-slide-03.png",
+      "bytes": 14445,
+      "sha256": "b1ef21699b348d7d708d8c9e816f9dbe41f2ea1afa741b6d6aa483b0728a57c3"
+    },
+    {
+      "path": "B/furniture/native/furniture-reorder-native-01/independent-native-audit-v2.json",
+      "source": "furniture-reorder-native-01/independent-native-audit-v2.json",
+      "bytes": 2719,
+      "sha256": "343f8e370c09a1877138596e7cf189968a10f249c13e5e3ab432d82986bcd9f4"
+    },
+    {
+      "path": "B/furniture/native/furniture-reorder-native-01/independent-native-audit.json",
+      "source": "furniture-reorder-native-01/independent-native-audit.json",
+      "bytes": 2402,
+      "sha256": "cbf9247b002eaa5ef8fde46eab763896f4ed7cabbb6ed5d2e8e91551e650d76b"
+    },
+    {
+      "path": "B/furniture/native/furniture-reorder-native-01/inputs/action-plan.json",
+      "source": "furniture-reorder-native-01/inputs/action-plan.json",
+      "bytes": 81,
+      "sha256": "36ab68d09f4218df435aa20a5f358b38147afeae27dd5c1d1e83389f7f8d09b1"
+    },
+    {
+      "path": "B/furniture/native/furniture-reorder-native-01/inputs/input.pptx",
+      "source": "furniture-reorder-native-01/inputs/input.pptx",
+      "bytes": 33613,
+      "sha256": "a655d692ba900027d6504458921f462dbec54de515ddec37c0f628d29c379e5f"
+    },
+    {
+      "path": "B/furniture/native/furniture-reorder-native-01/inputs/native-furniture-control.ps1",
+      "source": "furniture-reorder-native-01/inputs/native-furniture-control.ps1",
+      "bytes": 27761,
+      "sha256": "c85fe9f79b9c8e01feb6f0c4cfc8b84c90d7d93498f88b4cde2750630c9b2e9e"
+    },
+    {
+      "path": "B/furniture/native/furniture-reorder-native-01/inputs/native-process.ps1",
+      "source": "furniture-reorder-native-01/inputs/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "path": "B/furniture/native/furniture-reorder-native-01/native-furniture-control.pptx",
+      "source": "furniture-reorder-native-01/native-furniture-control.pptx",
+      "bytes": 35703,
+      "sha256": "2e1568be5482abbd81908f505965917024873c75ee1ceb4031439172673efd84"
+    },
+    {
+      "path": "B/furniture/native/furniture-reorder-native-01/original-slide-01.png",
+      "source": "furniture-reorder-native-01/original-slide-01.png",
+      "bytes": 7091,
+      "sha256": "6f7f137d021418e7ad52a758b909d9366164073369bdbf47f1dc280b52e4147c"
+    },
+    {
+      "path": "B/furniture/native/furniture-reorder-native-01/original-slide-02.png",
+      "source": "furniture-reorder-native-01/original-slide-02.png",
+      "bytes": 14445,
+      "sha256": "b1ef21699b348d7d708d8c9e816f9dbe41f2ea1afa741b6d6aa483b0728a57c3"
+    },
+    {
+      "path": "B/furniture/native/furniture-reorder-native-01/original-slide-03.png",
+      "source": "furniture-reorder-native-01/original-slide-03.png",
+      "bytes": 7589,
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7"
+    },
+    {
+      "path": "B/furniture/native/furniture-reorder-native-01/progress.json",
+      "source": "furniture-reorder-native-01/progress.json",
+      "bytes": 272,
+      "sha256": "a49bbc7b776ae5f6b0702b883802065c4abebcfde3ccdff6512d7e94ed173977"
+    },
+    {
+      "path": "B/furniture/native/furniture-reorder-native-01/reopened-slide-01.png",
+      "source": "furniture-reorder-native-01/reopened-slide-01.png",
+      "bytes": 7589,
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7"
+    },
+    {
+      "path": "B/furniture/native/furniture-reorder-native-01/reopened-slide-02.png",
+      "source": "furniture-reorder-native-01/reopened-slide-02.png",
+      "bytes": 7091,
+      "sha256": "6f7f137d021418e7ad52a758b909d9366164073369bdbf47f1dc280b52e4147c"
+    },
+    {
+      "path": "B/furniture/native/furniture-reorder-native-01/reopened-slide-03.png",
+      "source": "furniture-reorder-native-01/reopened-slide-03.png",
+      "bytes": 14445,
+      "sha256": "b1ef21699b348d7d708d8c9e816f9dbe41f2ea1afa741b6d6aa483b0728a57c3"
+    },
+    {
+      "path": "B/furniture/native/furniture-reorder-native-01/report.json",
+      "source": "furniture-reorder-native-01/report.json",
+      "bytes": 199621,
+      "sha256": "25bb0e016e427f953c58dfcb46f0dbd969db09c79afe4c3af88aed67f994884f"
+    },
+    {
+      "path": "B/furniture/native/furniture-reorder-native-01/request.json",
+      "source": "furniture-reorder-native-01/request.json",
+      "bytes": 2466,
+      "sha256": "640e856a4d525f534efa811a88e4ca28ed4939d1e5ad3b1aed9fa2f729320f43"
+    },
+    {
+      "path": "B/furniture/native/furniture-reorder-native-01/stages.jsonl",
+      "source": "furniture-reorder-native-01/stages.jsonl",
+      "bytes": 1084314,
+      "sha256": "160eaeec216862dbab1fd18c64ea2952f6ded1a0611b8427a526f0b7635dcb4f"
+    },
+    {
+      "path": "B/furniture/native/furniture-reorder-native-01/supervisor.json",
+      "source": "furniture-reorder-native-01/supervisor.json",
+      "bytes": 220,
+      "sha256": "83d0c15f25b47e96ca72c835fa30c55dfad7cb65ade73b683bb777a995107e0e"
+    },
+    {
+      "path": "B/furniture/native/furniture-reorder-native-01/worker.json",
+      "source": "furniture-reorder-native-01/worker.json",
+      "bytes": 341,
+      "sha256": "63e168787c43ea399e82abcd950c06c8c037a6b5ea4e5bed242d594bfdfb68c4"
+    },
+    {
+      "path": "B/furniture/native/furniture-reorder-native-01/worker.stderr.log",
+      "source": "furniture-reorder-native-01/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "B/furniture/native/furniture-reorder-native-01/worker.stdout.log",
+      "source": "furniture-reorder-native-01/worker.stdout.log",
+      "bytes": 54,
+      "sha256": "bb79ee03f691de41e2637d776c18c0b3ff599a47844d7cf95e4508340a2ee087"
+    },
+    {
+      "path": "B/furniture/native/furniture-text-clear-native-01/edited-slide-01.png",
+      "source": "furniture-text-clear-native-01/edited-slide-01.png",
+      "bytes": 7028,
+      "sha256": "7fe78a66cb005dd97f136e5a7a16b4160cf646d7ef7405cf2d9f2d407af1ea86"
+    },
+    {
+      "path": "B/furniture/native/furniture-text-clear-native-01/edited-slide-02.png",
+      "source": "furniture-text-clear-native-01/edited-slide-02.png",
+      "bytes": 14522,
+      "sha256": "dd711fa9d40eba17aa2bd3acfe9ec74ebd6155d02baea6e933eb7486868dbcaf"
+    },
+    {
+      "path": "B/furniture/native/furniture-text-clear-native-01/edited-slide-03.png",
+      "source": "furniture-text-clear-native-01/edited-slide-03.png",
+      "bytes": 6831,
+      "sha256": "ef6e8e28d9e803648c5d4e06db82f4248f15526682f325960551001d35958677"
+    },
+    {
+      "path": "B/furniture/native/furniture-text-clear-native-01/independent-native-audit-v2.json",
+      "source": "furniture-text-clear-native-01/independent-native-audit-v2.json",
+      "bytes": 2719,
+      "sha256": "b5e1de6bafb85a21c43e559ff0ced1e76f441a55b99becf3e536174bc011c5a7"
+    },
+    {
+      "path": "B/furniture/native/furniture-text-clear-native-01/independent-native-audit.json",
+      "source": "furniture-text-clear-native-01/independent-native-audit.json",
+      "bytes": 2402,
+      "sha256": "b5ec6f74a53c11c2d82a40b4fa7966228476cc8e0df1f755f2bd09bb5bc9d762"
+    },
+    {
+      "path": "B/furniture/native/furniture-text-clear-native-01/inputs/action-plan.json",
+      "source": "furniture-text-clear-native-01/inputs/action-plan.json",
+      "bytes": 893,
+      "sha256": "16c5a40505a01b2c5eb80736de7687cd448abc0de41495fb221bc056a3209263"
+    },
+    {
+      "path": "B/furniture/native/furniture-text-clear-native-01/inputs/input.pptx",
+      "source": "furniture-text-clear-native-01/inputs/input.pptx",
+      "bytes": 33613,
+      "sha256": "a655d692ba900027d6504458921f462dbec54de515ddec37c0f628d29c379e5f"
+    },
+    {
+      "path": "B/furniture/native/furniture-text-clear-native-01/inputs/native-furniture-control.ps1",
+      "source": "furniture-text-clear-native-01/inputs/native-furniture-control.ps1",
+      "bytes": 27761,
+      "sha256": "c85fe9f79b9c8e01feb6f0c4cfc8b84c90d7d93498f88b4cde2750630c9b2e9e"
+    },
+    {
+      "path": "B/furniture/native/furniture-text-clear-native-01/inputs/native-process.ps1",
+      "source": "furniture-text-clear-native-01/inputs/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "path": "B/furniture/native/furniture-text-clear-native-01/native-furniture-control.pptx",
+      "source": "furniture-text-clear-native-01/native-furniture-control.pptx",
+      "bytes": 35681,
+      "sha256": "0cd4c4f846ce702e266e999ed4e46c93f740329b3dd3257b40ac0c74ac03471b"
+    },
+    {
+      "path": "B/furniture/native/furniture-text-clear-native-01/original-slide-01.png",
+      "source": "furniture-text-clear-native-01/original-slide-01.png",
+      "bytes": 7091,
+      "sha256": "6f7f137d021418e7ad52a758b909d9366164073369bdbf47f1dc280b52e4147c"
+    },
+    {
+      "path": "B/furniture/native/furniture-text-clear-native-01/original-slide-02.png",
+      "source": "furniture-text-clear-native-01/original-slide-02.png",
+      "bytes": 14445,
+      "sha256": "b1ef21699b348d7d708d8c9e816f9dbe41f2ea1afa741b6d6aa483b0728a57c3"
+    },
+    {
+      "path": "B/furniture/native/furniture-text-clear-native-01/original-slide-03.png",
+      "source": "furniture-text-clear-native-01/original-slide-03.png",
+      "bytes": 7589,
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7"
+    },
+    {
+      "path": "B/furniture/native/furniture-text-clear-native-01/progress.json",
+      "source": "furniture-text-clear-native-01/progress.json",
+      "bytes": 272,
+      "sha256": "f1ea42d59083ed0dfd8197ee13c3895229c927461450a24fad16c59fdf6eaaa3"
+    },
+    {
+      "path": "B/furniture/native/furniture-text-clear-native-01/reopened-slide-01.png",
+      "source": "furniture-text-clear-native-01/reopened-slide-01.png",
+      "bytes": 7028,
+      "sha256": "7fe78a66cb005dd97f136e5a7a16b4160cf646d7ef7405cf2d9f2d407af1ea86"
+    },
+    {
+      "path": "B/furniture/native/furniture-text-clear-native-01/reopened-slide-02.png",
+      "source": "furniture-text-clear-native-01/reopened-slide-02.png",
+      "bytes": 14522,
+      "sha256": "dd711fa9d40eba17aa2bd3acfe9ec74ebd6155d02baea6e933eb7486868dbcaf"
+    },
+    {
+      "path": "B/furniture/native/furniture-text-clear-native-01/reopened-slide-03.png",
+      "source": "furniture-text-clear-native-01/reopened-slide-03.png",
+      "bytes": 6831,
+      "sha256": "ef6e8e28d9e803648c5d4e06db82f4248f15526682f325960551001d35958677"
+    },
+    {
+      "path": "B/furniture/native/furniture-text-clear-native-01/report.json",
+      "source": "furniture-text-clear-native-01/report.json",
+      "bytes": 203434,
+      "sha256": "17d7b086206c1d446b10e01cd76bce8fbe1018192019bf0ae6401b759bf525d9"
+    },
+    {
+      "path": "B/furniture/native/furniture-text-clear-native-01/request.json",
+      "source": "furniture-text-clear-native-01/request.json",
+      "bytes": 2481,
+      "sha256": "170017b9ce92e646e1775d83a82ba44419e9ea21bb7ee9153928c41157cf4215"
+    },
+    {
+      "path": "B/furniture/native/furniture-text-clear-native-01/stages.jsonl",
+      "source": "furniture-text-clear-native-01/stages.jsonl",
+      "bytes": 1222262,
+      "sha256": "bdf0fa64b9d4adb40594d899b79ed6fbb50dfccc8d86fca0b60ea0d273f864dd"
+    },
+    {
+      "path": "B/furniture/native/furniture-text-clear-native-01/supervisor.json",
+      "source": "furniture-text-clear-native-01/supervisor.json",
+      "bytes": 220,
+      "sha256": "70573e8c834eaf7d6b6536121e6870f085be7e503ddbc06fc5aa70af47ae0714"
+    },
+    {
+      "path": "B/furniture/native/furniture-text-clear-native-01/worker.json",
+      "source": "furniture-text-clear-native-01/worker.json",
+      "bytes": 341,
+      "sha256": "ac808d0dd9b74d279b73f216ce46a19da3cfa316819090b6af6c77d8d37e6487"
+    },
+    {
+      "path": "B/furniture/native/furniture-text-clear-native-01/worker.stderr.log",
+      "source": "furniture-text-clear-native-01/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "B/furniture/native/furniture-text-clear-native-01/worker.stdout.log",
+      "source": "furniture-text-clear-native-01/worker.stdout.log",
+      "bytes": 54,
+      "sha256": "aa7c7403ff4fda27d817ed627eee045b80562fcab5e4f9cd7a4b7a94196844a1"
+    },
+    {
+      "path": "B/furniture/native/furniture-ui-reopen-native-01/edited-slide-01.png",
+      "source": "furniture-ui-reopen-native-01/edited-slide-01.png",
+      "bytes": 7091,
+      "sha256": "6f7f137d021418e7ad52a758b909d9366164073369bdbf47f1dc280b52e4147c"
+    },
+    {
+      "path": "B/furniture/native/furniture-ui-reopen-native-01/edited-slide-02.png",
+      "source": "furniture-ui-reopen-native-01/edited-slide-02.png",
+      "bytes": 7354,
+      "sha256": "dc95e37a6bc0e8b69126ba6257a66130db101a770a108dc2dd6d25f60cce703b"
+    },
+    {
+      "path": "B/furniture/native/furniture-ui-reopen-native-01/edited-slide-03.png",
+      "source": "furniture-ui-reopen-native-01/edited-slide-03.png",
+      "bytes": 7589,
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7"
+    },
+    {
+      "path": "B/furniture/native/furniture-ui-reopen-native-01/independent-native-audit-v2.json",
+      "source": "furniture-ui-reopen-native-01/independent-native-audit-v2.json",
+      "bytes": 2624,
+      "sha256": "9e41bf15d3617a7105159fff3ba4f00ca946bbbb4e14b6d2f1e4c708715add52"
+    },
+    {
+      "path": "B/furniture/native/furniture-ui-reopen-native-01/independent-native-audit.json",
+      "source": "furniture-ui-reopen-native-01/independent-native-audit.json",
+      "bytes": 2326,
+      "sha256": "ddf852e9158ff17576dd046c6099838553dd43a2cb5fc6001ffc631aa6446a30"
+    },
+    {
+      "path": "B/furniture/native/furniture-ui-reopen-native-01/inputs/action-plan.json",
+      "source": "furniture-ui-reopen-native-01/inputs/action-plan.json",
+      "bytes": 11,
+      "sha256": "84b1c14e68260082e3e79edff0a78f4ebf1942cfd6c593246044ec2149cbb87d"
+    },
+    {
+      "path": "B/furniture/native/furniture-ui-reopen-native-01/inputs/input.pptx",
+      "source": "furniture-ui-reopen-native-01/inputs/input.pptx",
+      "bytes": 35756,
+      "sha256": "a10ccca75d692de67ae12f321bfd93849b199f2a9f7e70d43d751f4540a2bc38"
+    },
+    {
+      "path": "B/furniture/native/furniture-ui-reopen-native-01/inputs/native-furniture-control.ps1",
+      "source": "furniture-ui-reopen-native-01/inputs/native-furniture-control.ps1",
+      "bytes": 27761,
+      "sha256": "c85fe9f79b9c8e01feb6f0c4cfc8b84c90d7d93498f88b4cde2750630c9b2e9e"
+    },
+    {
+      "path": "B/furniture/native/furniture-ui-reopen-native-01/inputs/native-process.ps1",
+      "source": "furniture-ui-reopen-native-01/inputs/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "path": "B/furniture/native/furniture-ui-reopen-native-01/native-furniture-control.pptx",
+      "source": "furniture-ui-reopen-native-01/native-furniture-control.pptx",
+      "bytes": 35759,
+      "sha256": "d761b6ab53af13ca3762ee641d5d2364ec303d1b0542d6f2de1054c305b8cd6d"
+    },
+    {
+      "path": "B/furniture/native/furniture-ui-reopen-native-01/original-slide-01.png",
+      "source": "furniture-ui-reopen-native-01/original-slide-01.png",
+      "bytes": 7091,
+      "sha256": "6f7f137d021418e7ad52a758b909d9366164073369bdbf47f1dc280b52e4147c"
+    },
+    {
+      "path": "B/furniture/native/furniture-ui-reopen-native-01/original-slide-02.png",
+      "source": "furniture-ui-reopen-native-01/original-slide-02.png",
+      "bytes": 7354,
+      "sha256": "dc95e37a6bc0e8b69126ba6257a66130db101a770a108dc2dd6d25f60cce703b"
+    },
+    {
+      "path": "B/furniture/native/furniture-ui-reopen-native-01/original-slide-03.png",
+      "source": "furniture-ui-reopen-native-01/original-slide-03.png",
+      "bytes": 7589,
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7"
+    },
+    {
+      "path": "B/furniture/native/furniture-ui-reopen-native-01/progress.json",
+      "source": "furniture-ui-reopen-native-01/progress.json",
+      "bytes": 272,
+      "sha256": "bc9be810a380302fa9b63b238f1d83c6a3fbba2baed1df7361c7dd6b00125dae"
+    },
+    {
+      "path": "B/furniture/native/furniture-ui-reopen-native-01/registry-reimport-01.analysis.json",
+      "source": "furniture-ui-reopen-native-01/registry-reimport-01.analysis.json",
+      "bytes": 3164,
+      "sha256": "dc3eda8c0b1ddf0be1b6359396618b34ade61b8eba34e78b813f46f1e4701510"
+    },
+    {
+      "path": "B/furniture/native/furniture-ui-reopen-native-01/registry-reimport-01.mjs",
+      "source": "furniture-ui-reopen-native-01/registry-reimport-01.mjs",
+      "bytes": 17264,
+      "sha256": "6aa64d5a4f3f682d646d2001a0aa7c5b4b0770466a57c506f620356409e0d86f"
+    },
+    {
+      "path": "B/furniture/native/furniture-ui-reopen-native-01/registry-reimport-02.analysis.json",
+      "source": "furniture-ui-reopen-native-01/registry-reimport-02.analysis.json",
+      "bytes": 22067,
+      "sha256": "e232b343ec687815b977b19d67d0fcd55116129843c4aed6ad73b198e7c85d40"
+    },
+    {
+      "path": "B/furniture/native/furniture-ui-reopen-native-01/registry-reimport-02.mjs",
+      "source": "furniture-ui-reopen-native-01/registry-reimport-02.mjs",
+      "bytes": 17274,
+      "sha256": "6aade3f63399518e90ebb91448caa5557ecf8585ed577a07e8728896ea351a0e"
+    },
+    {
+      "path": "B/furniture/native/furniture-ui-reopen-native-01/registry-reimport-02.opf.json",
+      "source": "furniture-ui-reopen-native-01/registry-reimport-02.opf.json",
+      "bytes": 2906,
+      "sha256": "c2d1f3f72659354b6271df48c8a18fb309653dc5d236707568f2e5fcd7517271"
+    },
+    {
+      "path": "B/furniture/native/furniture-ui-reopen-native-01/registry-reimport-03.analysis.json",
+      "source": "furniture-ui-reopen-native-01/registry-reimport-03.analysis.json",
+      "bytes": 20622,
+      "sha256": "f1c4b023c880e70bc7a54db15ff27376aad89dfe46dd08874c2937a2472a6723"
+    },
+    {
+      "path": "B/furniture/native/furniture-ui-reopen-native-01/registry-reimport-03.mjs",
+      "source": "furniture-ui-reopen-native-01/registry-reimport-03.mjs",
+      "bytes": 17274,
+      "sha256": "b9813859203c1799be6e0152492e144310b2ae04a102675af7277f6466492abb"
+    },
+    {
+      "path": "B/furniture/native/furniture-ui-reopen-native-01/registry-reimport-03.opf.json",
+      "source": "furniture-ui-reopen-native-01/registry-reimport-03.opf.json",
+      "bytes": 2906,
+      "sha256": "c2d1f3f72659354b6271df48c8a18fb309653dc5d236707568f2e5fcd7517271"
+    },
+    {
+      "path": "B/furniture/native/furniture-ui-reopen-native-01/reopened-slide-01.png",
+      "source": "furniture-ui-reopen-native-01/reopened-slide-01.png",
+      "bytes": 7091,
+      "sha256": "6f7f137d021418e7ad52a758b909d9366164073369bdbf47f1dc280b52e4147c"
+    },
+    {
+      "path": "B/furniture/native/furniture-ui-reopen-native-01/reopened-slide-02.png",
+      "source": "furniture-ui-reopen-native-01/reopened-slide-02.png",
+      "bytes": 7354,
+      "sha256": "dc95e37a6bc0e8b69126ba6257a66130db101a770a108dc2dd6d25f60cce703b"
+    },
+    {
+      "path": "B/furniture/native/furniture-ui-reopen-native-01/reopened-slide-03.png",
+      "source": "furniture-ui-reopen-native-01/reopened-slide-03.png",
+      "bytes": 7589,
+      "sha256": "fb7b44d2c0d1beeb50f5e0871e0985f114003ffd0bbc2c1eabed2c292169cce7"
+    },
+    {
+      "path": "B/furniture/native/furniture-ui-reopen-native-01/report.json",
+      "source": "furniture-ui-reopen-native-01/report.json",
+      "bytes": 198829,
+      "sha256": "02e36616bf32aa3c3568061796e61aa61913ce6bce28ea8fd7be3f80b661a3dd"
+    },
+    {
+      "path": "B/furniture/native/furniture-ui-reopen-native-01/request.json",
+      "source": "furniture-ui-reopen-native-01/request.json",
+      "bytes": 2285,
+      "sha256": "503b21000d18ed9ea751ad609e9dc934f2acc9b4217731507641db40c838370b"
+    },
+    {
+      "path": "B/furniture/native/furniture-ui-reopen-native-01/stages.jsonl",
+      "source": "furniture-ui-reopen-native-01/stages.jsonl",
+      "bytes": 1087452,
+      "sha256": "fa5c42e7ade10e2590d34c20054966a670158f214a207dc2abc67e949a0a5ff9"
+    },
+    {
+      "path": "B/furniture/native/furniture-ui-reopen-native-01/supervisor.json",
+      "source": "furniture-ui-reopen-native-01/supervisor.json",
+      "bytes": 220,
+      "sha256": "e2d09b3624783caa42b4441919b742b2ac4947a3d841b2402ac734a06c77207f"
+    },
+    {
+      "path": "B/furniture/native/furniture-ui-reopen-native-01/worker.json",
+      "source": "furniture-ui-reopen-native-01/worker.json",
+      "bytes": 341,
+      "sha256": "8b223295e373d0ced68ffe3913970a5541ab51632192c784d81856171e0a180e"
+    },
+    {
+      "path": "B/furniture/native/furniture-ui-reopen-native-01/worker.stderr.log",
+      "source": "furniture-ui-reopen-native-01/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "B/furniture/native/furniture-ui-reopen-native-01/worker.stdout.log",
+      "source": "furniture-ui-reopen-native-01/worker.stdout.log",
+      "bytes": 54,
+      "sha256": "9193db23a5ef082ce70e61698e4c9a097be6b1108bd90fcca5fe40ec041f9f46"
+    },
+    {
+      "path": "B/furniture/plans-01/changed-tag.json",
+      "source": "furniture-plans-01/changed-tag.json",
+      "bytes": 391,
+      "sha256": "5252e6f1d5e03423a9a95655bb5c2560d856b7bd6c80a90c267f1721b457f68f"
+    },
+    {
+      "path": "B/furniture/plans-01/delete-image.json",
+      "source": "furniture-plans-01/delete-image.json",
+      "bytes": 97,
+      "sha256": "534c032357539b0421167371cbc3a4a7ecc8b9dac4bc77b3a69f39bf224f0dc4"
+    },
+    {
+      "path": "B/furniture/plans-01/duplicate-tagged-shape.json",
+      "source": "furniture-plans-01/duplicate-tagged-shape.json",
+      "bytes": 165,
+      "sha256": "690bf650e77f2f5371897619baf501eb94e483fed863e63991c437def2b51ddf"
+    },
+    {
+      "path": "B/furniture/plans-01/metadata-disagreement.json",
+      "source": "furniture-plans-01/metadata-disagreement.json",
+      "bytes": 161,
+      "sha256": "bf503bf43f87987ea51c0375b69ea5e81d775fda99a2f11ea5a86f35e1993d4c"
+    },
+    {
+      "path": "B/furniture/plans-01/missing-tag.json",
+      "source": "furniture-plans-01/missing-tag.json",
+      "bytes": 173,
+      "sha256": "e269af66271b45a1a41aacbcf1f9c5259636aa91b21169e3ad9e94056775ef6e"
+    },
+    {
+      "path": "B/furniture/plans-01/reorder.json",
+      "source": "furniture-plans-01/reorder.json",
+      "bytes": 81,
+      "sha256": "36ab68d09f4218df435aa20a5f358b38147afeae27dd5c1d1e83389f7f8d09b1"
+    },
+    {
+      "path": "B/furniture/plans-01/text-clear.json",
+      "source": "furniture-plans-01/text-clear.json",
+      "bytes": 893,
+      "sha256": "16c5a40505a01b2c5eb80736de7687cd448abc0de41495fb221bc056a3209263"
+    },
+    {
+      "path": "B/furniture/registry-03/decks/baseline-explicit-flags.pptx",
+      "source": "furniture-registry-03/decks/baseline-explicit-flags.pptx",
+      "bytes": 24548,
+      "sha256": "a994bbc2882cbb9a2b84bc8a4e5d2099d3597871828ad203a54a2c8c1ca013b4"
+    },
+    {
+      "path": "B/furniture/registry-03/decks/baseline-inherited-local.pptx",
+      "source": "furniture-registry-03/decks/baseline-inherited-local.pptx",
+      "bytes": 33613,
+      "sha256": "a655d692ba900027d6504458921f462dbec54de515ddec37c0f628d29c379e5f"
+    },
+    {
+      "path": "B/furniture/registry-03/decks/variant-changed-shape-tag.pptx",
+      "source": "furniture-registry-03/decks/variant-changed-shape-tag.pptx",
+      "bytes": 33618,
+      "sha256": "2b592cfa5557a2be1009658c14af85c4d372409352d9a1c18311986f201991d7"
+    },
+    {
+      "path": "B/furniture/registry-03/decks/variant-duplicate-shape-tag.pptx",
+      "source": "furniture-registry-03/decks/variant-duplicate-shape-tag.pptx",
+      "bytes": 33620,
+      "sha256": "4bfd352fd0a034715e2c9594de0421c821b00527d6cfd509544da3ff9204f4d1"
+    },
+    {
+      "path": "B/furniture/registry-03/decks/variant-metadata-disagreement.pptx",
+      "source": "furniture-registry-03/decks/variant-metadata-disagreement.pptx",
+      "bytes": 33614,
+      "sha256": "911b89925f9d3bbd97d37a555c7dfca83f73b7be3d379b7b74f5458251459129"
+    },
+    {
+      "path": "B/furniture/registry-03/decks/variant-missing-shape-tag.pptx",
+      "source": "furniture-registry-03/decks/variant-missing-shape-tag.pptx",
+      "bytes": 33615,
+      "sha256": "4dc8368172e9baf57003f7f0c754834351ad9f2bf7c0ab8de2574196795220c6"
+    },
+    {
+      "path": "B/furniture/registry-03/inputs/wide.png",
+      "source": "furniture-registry-03/inputs/wide.png",
+      "bytes": 469,
+      "sha256": "2608d745f3d1dddc963dafe9b517bc7af9e983e7318bf59bd520415589c36905"
+    },
+    {
+      "path": "B/furniture/registry-03/manifest.json",
+      "source": "furniture-registry-03/manifest.json",
+      "bytes": 535393,
+      "sha256": "815e2a572e8ed283b08841fb807853bec5a17c047283ed81c5d59fb38d6e1544"
+    },
+    {
+      "path": "B/furniture/registry-03/sources/baseline-explicit-flags.json",
+      "source": "furniture-registry-03/sources/baseline-explicit-flags.json",
+      "bytes": 1166,
+      "sha256": "626d74866498db52234b0fab8e237a76bc179f8ec6b5641225aadb2fbb43ee25"
+    },
+    {
+      "path": "B/furniture/registry-03/sources/baseline-inherited-local.json",
+      "source": "furniture-registry-03/sources/baseline-inherited-local.json",
+      "bytes": 2210,
+      "sha256": "8861229b570c67e8f7b8fc69105b5c10a28c86edac2b1817c6e837071ddbe0b4"
+    },
+    {
+      "path": "B/furniture/semantic-audit-01/all-completed-01.json",
+      "source": "furniture-semantic-audit-01/all-completed-01.json",
+      "bytes": 87203,
+      "sha256": "fbab517268896b23e6e81f010019b64050dafa5bd9e0081af0b1fc014b26584a"
+    },
+    {
+      "path": "B/furniture/semantic-audit-01/audit.mjs",
+      "source": "furniture-semantic-audit-01/audit.mjs",
+      "bytes": 15406,
+      "sha256": "d60c22dd2a57ea9b2c298aaa99b021ba83da4b86ca7f6d4f6efc59d1dcb8e680"
+    },
+    {
+      "path": "B/furniture/semantic-audit-01/baseline-flags.json",
+      "source": "furniture-semantic-audit-01/baseline-flags.json",
+      "bytes": 21959,
+      "sha256": "035156f39a8e4954ea63553502c79de538b1daa6110f25c80c2da61ee2be4232"
+    },
+    {
+      "path": "B/furniture/semantic-audit-01/current-edits-01.json",
+      "source": "furniture-semantic-audit-01/current-edits-01.json",
+      "bytes": 72511,
+      "sha256": "4fce2d67f6a776cc7fbfab9ed56f4dd94af6fb06f8f14801dd9f2982637033c5"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/artifacts.json",
+      "source": "generated",
+      "bytes": 56844,
+      "sha256": "7c8e4bdeadd29c8e46ac3cfcd4fa3dd7ab41726484b0a0711fa7f3693b08170a"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/current-text-mismatch/auditor-stderr.txt",
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/auditor-stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/current-text-mismatch/auditor-stdout.txt",
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/auditor-stdout.txt",
+      "bytes": 233,
+      "sha256": "46cd65585c2d70cd561df58c40dda5e6b57b7693a71e879d12139002784eea69"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/current-text-mismatch/control-audit.json",
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/control-audit.json",
+      "bytes": 2840,
+      "sha256": "4e92d208d190a4d435e5f775e045a08027a95d35b0bd3f2caa10c787b7cf48a6"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/current-text-mismatch/independent-native-audit-v2.json",
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/independent-native-audit-v2.json",
+      "bytes": 2719,
+      "sha256": "b5e1de6bafb85a21c43e559ff0ced1e76f441a55b99becf3e536174bc011c5a7"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/current-text-mismatch/independent-native-audit.json",
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/independent-native-audit.json",
+      "bytes": 2402,
+      "sha256": "b5ec6f74a53c11c2d82a40b4fa7966228476cc8e0df1f755f2bd09bb5bc9d762"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/current-text-mismatch/inputs/action-plan.json",
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/inputs/action-plan.json",
+      "bytes": 893,
+      "sha256": "16c5a40505a01b2c5eb80736de7687cd448abc0de41495fb221bc056a3209263"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/current-text-mismatch/inputs/input.pptx",
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/inputs/input.pptx",
+      "bytes": 33613,
+      "sha256": "a655d692ba900027d6504458921f462dbec54de515ddec37c0f628d29c379e5f"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/current-text-mismatch/inputs/native-furniture-control.ps1",
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/inputs/native-furniture-control.ps1",
+      "bytes": 27761,
+      "sha256": "c85fe9f79b9c8e01feb6f0c4cfc8b84c90d7d93498f88b4cde2750630c9b2e9e"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/current-text-mismatch/inputs/native-process.ps1",
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/inputs/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/current-text-mismatch/native-furniture-control.pptx",
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/native-furniture-control.pptx",
+      "bytes": 35681,
+      "sha256": "0cd4c4f846ce702e266e999ed4e46c93f740329b3dd3257b40ac0c74ac03471b"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/current-text-mismatch/progress.json",
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/progress.json",
+      "bytes": 272,
+      "sha256": "f1ea42d59083ed0dfd8197ee13c3895229c927461450a24fad16c59fdf6eaaa3"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/current-text-mismatch/report.json",
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/report.json",
+      "bytes": 86993,
+      "sha256": "63cd816261413f83085fa25f873fa5f8c4d4b058ec042ccb2c7cb2c9de0ca4b5"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/current-text-mismatch/request.json",
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/request.json",
+      "bytes": 2181,
+      "sha256": "ee313820aecc45ae79b1a9f4796caef2f14263b1d3163a2a7e912cce7855cda3"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/current-text-mismatch/stages.jsonl",
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/stages.jsonl",
+      "bytes": 1222262,
+      "sha256": "bdf0fa64b9d4adb40594d899b79ed6fbb50dfccc8d86fca0b60ea0d273f864dd"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/current-text-mismatch/supervisor.json",
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/supervisor.json",
+      "bytes": 220,
+      "sha256": "70573e8c834eaf7d6b6536121e6870f085be7e503ddbc06fc5aa70af47ae0714"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/current-text-mismatch/worker.json",
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/worker.json",
+      "bytes": 341,
+      "sha256": "ac808d0dd9b74d279b73f216ce46a19da3cfa316819090b6af6c77d8d37e6487"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/current-text-mismatch/worker.stderr.log",
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/current-text-mismatch/worker.stdout.log",
+      "source": "furniture-audit-controls-01/cases/current-text-mismatch/worker.stdout.log",
+      "bytes": 54,
+      "sha256": "aa7c7403ff4fda27d817ed627eee045b80562fcab5e4f9cd7a4b7a94196844a1"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/failed-worker/auditor-stderr.txt",
+      "source": "furniture-audit-controls-01/cases/failed-worker/auditor-stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/failed-worker/auditor-stdout.txt",
+      "source": "furniture-audit-controls-01/cases/failed-worker/auditor-stdout.txt",
+      "bytes": 229,
+      "sha256": "d035abf4827cd1b03aa4616758bf749f0edcd7b5bf346571056a2cf7b66f8f4f"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/failed-worker/control-audit.json",
+      "source": "furniture-audit-controls-01/cases/failed-worker/control-audit.json",
+      "bytes": 2759,
+      "sha256": "c54e104f0082724e405c648f33d716ae0b2c358ba8267ed70cea6d57c1890da0"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/failed-worker/independent-native-audit-v2.json",
+      "source": "furniture-audit-controls-01/cases/failed-worker/independent-native-audit-v2.json",
+      "bytes": 2624,
+      "sha256": "04bc6ce3fd3c990c16531881532191d2800025f451ca34cbd312fe36d7a25615"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/failed-worker/independent-native-audit.json",
+      "source": "furniture-audit-controls-01/cases/failed-worker/independent-native-audit.json",
+      "bytes": 2326,
+      "sha256": "abc7f201d01c7bcd20b2dcfe9717aaa2555cdb9ef78072894c771cfde8c96ab3"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/failed-worker/inputs/action-plan.json",
+      "source": "furniture-audit-controls-01/cases/failed-worker/inputs/action-plan.json",
+      "bytes": 11,
+      "sha256": "84b1c14e68260082e3e79edff0a78f4ebf1942cfd6c593246044ec2149cbb87d"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/failed-worker/inputs/input.pptx",
+      "source": "furniture-audit-controls-01/cases/failed-worker/inputs/input.pptx",
+      "bytes": 33613,
+      "sha256": "a655d692ba900027d6504458921f462dbec54de515ddec37c0f628d29c379e5f"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/failed-worker/inputs/native-furniture-control.ps1",
+      "source": "furniture-audit-controls-01/cases/failed-worker/inputs/native-furniture-control.ps1",
+      "bytes": 27761,
+      "sha256": "c85fe9f79b9c8e01feb6f0c4cfc8b84c90d7d93498f88b4cde2750630c9b2e9e"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/failed-worker/inputs/native-process.ps1",
+      "source": "furniture-audit-controls-01/cases/failed-worker/inputs/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/failed-worker/native-furniture-control.pptx",
+      "source": "furniture-audit-controls-01/cases/failed-worker/native-furniture-control.pptx",
+      "bytes": 35708,
+      "sha256": "d719e02fa00d714d460d3e727308a0566003711552a35ad591c4813c8bce36a5"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/failed-worker/progress.json",
+      "source": "furniture-audit-controls-01/cases/failed-worker/progress.json",
+      "bytes": 272,
+      "sha256": "99ae1e52ab1b39246e83201bfc1e55041a5f8a42cda3745a7a8192427c1121fb"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/failed-worker/report.json",
+      "source": "furniture-audit-controls-01/cases/failed-worker/report.json",
+      "bytes": 85118,
+      "sha256": "def55398057394d86c43919c968479946bd91dbece1dabe30d410dff871eecfe"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/failed-worker/request.json",
+      "source": "furniture-audit-controls-01/cases/failed-worker/request.json",
+      "bytes": 1970,
+      "sha256": "76db4508e53114e9144fa3fafc86059ede63c6b6695d1f81d715e155425df1a2"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/failed-worker/stages.jsonl",
+      "source": "furniture-audit-controls-01/cases/failed-worker/stages.jsonl",
+      "bytes": 1084448,
+      "sha256": "857e39a5560a953d77d3740c3543cdaaa631e2bcb200afa7d63f9b320a820112"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/failed-worker/supervisor.json",
+      "source": "furniture-audit-controls-01/cases/failed-worker/supervisor.json",
+      "bytes": 220,
+      "sha256": "1f9881913cdfdd9e54e865619bc528b6ee596b1f95164f403e1ecf56b4d52ed2"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/failed-worker/worker.json",
+      "source": "furniture-audit-controls-01/cases/failed-worker/worker.json",
+      "bytes": 318,
+      "sha256": "bf4f118d1c597b492a431614d4ee3d08d365439c425b80972d7fc4e3e55e4060"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/failed-worker/worker.stderr.log",
+      "source": "furniture-audit-controls-01/cases/failed-worker/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/failed-worker/worker.stdout.log",
+      "source": "furniture-audit-controls-01/cases/failed-worker/worker.stdout.log",
+      "bytes": 54,
+      "sha256": "9193db23a5ef082ce70e61698e4c9a097be6b1108bd90fcca5fe40ec041f9f46"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/geometry-over-tolerance/auditor-stderr.txt",
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/auditor-stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/geometry-over-tolerance/auditor-stdout.txt",
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/auditor-stdout.txt",
+      "bytes": 155,
+      "sha256": "2c75fb29bc5c67e86473aa8ea1a16bf98d9d21c7d72b6a80410bd9a86c3d0e09"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/geometry-over-tolerance/control-audit.json",
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/control-audit.json",
+      "bytes": 2667,
+      "sha256": "e7a8dfe0d935d9b0d43677d97471f88ae3d214ac4a3e4825467fb0880db059e6"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/geometry-over-tolerance/independent-native-audit-v2.json",
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/independent-native-audit-v2.json",
+      "bytes": 2624,
+      "sha256": "04bc6ce3fd3c990c16531881532191d2800025f451ca34cbd312fe36d7a25615"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/geometry-over-tolerance/independent-native-audit.json",
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/independent-native-audit.json",
+      "bytes": 2326,
+      "sha256": "abc7f201d01c7bcd20b2dcfe9717aaa2555cdb9ef78072894c771cfde8c96ab3"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/geometry-over-tolerance/inputs/action-plan.json",
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/inputs/action-plan.json",
+      "bytes": 11,
+      "sha256": "84b1c14e68260082e3e79edff0a78f4ebf1942cfd6c593246044ec2149cbb87d"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/geometry-over-tolerance/inputs/input.pptx",
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/inputs/input.pptx",
+      "bytes": 33613,
+      "sha256": "a655d692ba900027d6504458921f462dbec54de515ddec37c0f628d29c379e5f"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/geometry-over-tolerance/inputs/native-furniture-control.ps1",
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/inputs/native-furniture-control.ps1",
+      "bytes": 27761,
+      "sha256": "c85fe9f79b9c8e01feb6f0c4cfc8b84c90d7d93498f88b4cde2750630c9b2e9e"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/geometry-over-tolerance/inputs/native-process.ps1",
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/inputs/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/geometry-over-tolerance/native-furniture-control.pptx",
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/native-furniture-control.pptx",
+      "bytes": 35708,
+      "sha256": "d719e02fa00d714d460d3e727308a0566003711552a35ad591c4813c8bce36a5"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/geometry-over-tolerance/progress.json",
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/progress.json",
+      "bytes": 272,
+      "sha256": "99ae1e52ab1b39246e83201bfc1e55041a5f8a42cda3745a7a8192427c1121fb"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/geometry-over-tolerance/report.json",
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/report.json",
+      "bytes": 85229,
+      "sha256": "7e2986e2795ae340dd416e7624d6460e696fe51cd25465fb4d40dbfc5c2af3cc"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/geometry-over-tolerance/request.json",
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/request.json",
+      "bytes": 2010,
+      "sha256": "c9c147129e5c87a4bf1c904e77c63e8519cc21d700a1ecf8061cddbfca7e3b0e"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/geometry-over-tolerance/stages.jsonl",
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/stages.jsonl",
+      "bytes": 1084448,
+      "sha256": "857e39a5560a953d77d3740c3543cdaaa631e2bcb200afa7d63f9b320a820112"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/geometry-over-tolerance/supervisor.json",
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/supervisor.json",
+      "bytes": 220,
+      "sha256": "1f9881913cdfdd9e54e865619bc528b6ee596b1f95164f403e1ecf56b4d52ed2"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/geometry-over-tolerance/worker.json",
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/worker.json",
+      "bytes": 341,
+      "sha256": "fe666675e144974ee7e11d6890e3a6c05d2580a190e63eaa39d5d70b0e25fc70"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/geometry-over-tolerance/worker.stderr.log",
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/geometry-over-tolerance/worker.stdout.log",
+      "source": "furniture-audit-controls-01/cases/geometry-over-tolerance/worker.stdout.log",
+      "bytes": 54,
+      "sha256": "9193db23a5ef082ce70e61698e4c9a097be6b1108bd90fcca5fe40ec041f9f46"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/mismatched-action-snapshot/auditor-stderr.txt",
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/auditor-stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/mismatched-action-snapshot/auditor-stdout.txt",
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/auditor-stdout.txt",
+      "bytes": 406,
+      "sha256": "db0f09f8803d19eabcbdc60d55b8da32cddd8dd5f21411f4e0f9332aae3f05c8"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/mismatched-action-snapshot/control-audit.json",
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/control-audit.json",
+      "bytes": 3017,
+      "sha256": "429bd0bb7c08f1cfdffc93c1e1339373c373c600bccc63aae10beac7e3476624"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/mismatched-action-snapshot/independent-native-audit-v2.json",
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/independent-native-audit-v2.json",
+      "bytes": 2624,
+      "sha256": "04bc6ce3fd3c990c16531881532191d2800025f451ca34cbd312fe36d7a25615"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/mismatched-action-snapshot/independent-native-audit.json",
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/independent-native-audit.json",
+      "bytes": 2326,
+      "sha256": "abc7f201d01c7bcd20b2dcfe9717aaa2555cdb9ef78072894c771cfde8c96ab3"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/mismatched-action-snapshot/inputs/action-plan.json",
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/inputs/action-plan.json",
+      "bytes": 11,
+      "sha256": "84b1c14e68260082e3e79edff0a78f4ebf1942cfd6c593246044ec2149cbb87d"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/mismatched-action-snapshot/inputs/input.pptx",
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/inputs/input.pptx",
+      "bytes": 33613,
+      "sha256": "a655d692ba900027d6504458921f462dbec54de515ddec37c0f628d29c379e5f"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/mismatched-action-snapshot/inputs/native-furniture-control.ps1",
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/inputs/native-furniture-control.ps1",
+      "bytes": 27761,
+      "sha256": "c85fe9f79b9c8e01feb6f0c4cfc8b84c90d7d93498f88b4cde2750630c9b2e9e"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/mismatched-action-snapshot/inputs/native-process.ps1",
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/inputs/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/mismatched-action-snapshot/native-furniture-control.pptx",
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/native-furniture-control.pptx",
+      "bytes": 35708,
+      "sha256": "d719e02fa00d714d460d3e727308a0566003711552a35ad591c4813c8bce36a5"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/mismatched-action-snapshot/progress.json",
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/progress.json",
+      "bytes": 272,
+      "sha256": "99ae1e52ab1b39246e83201bfc1e55041a5f8a42cda3745a7a8192427c1121fb"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/mismatched-action-snapshot/report.json",
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/report.json",
+      "bytes": 85261,
+      "sha256": "7454c1105c5d011710403784e0b96a7d2be0c4db7fd8e8e0ebefd1dbd358dc0a"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/mismatched-action-snapshot/request.json",
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/request.json",
+      "bytes": 2201,
+      "sha256": "91f6526c3aaadc456410926c8a1d441eea857f1e4f3afcf8f1c9e464c9091ace"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/mismatched-action-snapshot/stages.jsonl",
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/stages.jsonl",
+      "bytes": 1084448,
+      "sha256": "857e39a5560a953d77d3740c3543cdaaa631e2bcb200afa7d63f9b320a820112"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/mismatched-action-snapshot/supervisor.json",
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/supervisor.json",
+      "bytes": 220,
+      "sha256": "1f9881913cdfdd9e54e865619bc528b6ee596b1f95164f403e1ecf56b4d52ed2"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/mismatched-action-snapshot/worker.json",
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/worker.json",
+      "bytes": 341,
+      "sha256": "fe666675e144974ee7e11d6890e3a6c05d2580a190e63eaa39d5d70b0e25fc70"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/mismatched-action-snapshot/worker.stderr.log",
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/mismatched-action-snapshot/worker.stdout.log",
+      "source": "furniture-audit-controls-01/cases/mismatched-action-snapshot/worker.stdout.log",
+      "bytes": 54,
+      "sha256": "9193db23a5ef082ce70e61698e4c9a097be6b1108bd90fcca5fe40ec041f9f46"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/missing-close-stage/auditor-stderr.txt",
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/auditor-stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/missing-close-stage/auditor-stdout.txt",
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/auditor-stdout.txt",
+      "bytes": 132,
+      "sha256": "8b064994e3b5954e71cb14a9560f14ed561a898b0c8eb16c6280aafef5c08c48"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/missing-close-stage/control-audit.json",
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/control-audit.json",
+      "bytes": 2652,
+      "sha256": "8200189c9bd7d75b13f1bd3442590d3ebc1886a8bd23c2890fe3ec782f8ecf0c"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/missing-close-stage/independent-native-audit-v2.json",
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/independent-native-audit-v2.json",
+      "bytes": 2624,
+      "sha256": "04bc6ce3fd3c990c16531881532191d2800025f451ca34cbd312fe36d7a25615"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/missing-close-stage/independent-native-audit.json",
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/independent-native-audit.json",
+      "bytes": 2326,
+      "sha256": "abc7f201d01c7bcd20b2dcfe9717aaa2555cdb9ef78072894c771cfde8c96ab3"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/missing-close-stage/inputs/action-plan.json",
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/inputs/action-plan.json",
+      "bytes": 11,
+      "sha256": "84b1c14e68260082e3e79edff0a78f4ebf1942cfd6c593246044ec2149cbb87d"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/missing-close-stage/inputs/input.pptx",
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/inputs/input.pptx",
+      "bytes": 33613,
+      "sha256": "a655d692ba900027d6504458921f462dbec54de515ddec37c0f628d29c379e5f"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/missing-close-stage/inputs/native-furniture-control.ps1",
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/inputs/native-furniture-control.ps1",
+      "bytes": 27761,
+      "sha256": "c85fe9f79b9c8e01feb6f0c4cfc8b84c90d7d93498f88b4cde2750630c9b2e9e"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/missing-close-stage/inputs/native-process.ps1",
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/inputs/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/missing-close-stage/native-furniture-control.pptx",
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/native-furniture-control.pptx",
+      "bytes": 35708,
+      "sha256": "d719e02fa00d714d460d3e727308a0566003711552a35ad591c4813c8bce36a5"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/missing-close-stage/progress.json",
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/progress.json",
+      "bytes": 272,
+      "sha256": "99ae1e52ab1b39246e83201bfc1e55041a5f8a42cda3745a7a8192427c1121fb"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/missing-close-stage/report.json",
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/report.json",
+      "bytes": 85184,
+      "sha256": "1aaaa873c89e1227b6c6069e19eac7f2ce47576bd18b32ffed3052803761c095"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/missing-close-stage/request.json",
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/request.json",
+      "bytes": 1994,
+      "sha256": "9c11edc32ddc3d5d303db23de547944e724aa07166d1671f86b0481d1a0df563"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/missing-close-stage/stages.jsonl",
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/stages.jsonl",
+      "bytes": 1129093,
+      "sha256": "06e03ff3104005e02880f215847bac6f74adc7e53ffe2dcc4250f9e397527918"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/missing-close-stage/supervisor.json",
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/supervisor.json",
+      "bytes": 220,
+      "sha256": "1f9881913cdfdd9e54e865619bc528b6ee596b1f95164f403e1ecf56b4d52ed2"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/missing-close-stage/worker.json",
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/worker.json",
+      "bytes": 341,
+      "sha256": "fe666675e144974ee7e11d6890e3a6c05d2580a190e63eaa39d5d70b0e25fc70"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/missing-close-stage/worker.stderr.log",
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/missing-close-stage/worker.stdout.log",
+      "source": "furniture-audit-controls-01/cases/missing-close-stage/worker.stdout.log",
+      "bytes": 54,
+      "sha256": "9193db23a5ef082ce70e61698e4c9a097be6b1108bd90fcca5fe40ec041f9f46"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/missing-raster/auditor-stderr.txt",
+      "source": "furniture-audit-controls-01/cases/missing-raster/auditor-stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/missing-raster/auditor-stdout.txt",
+      "source": "furniture-audit-controls-01/cases/missing-raster/auditor-stdout.txt",
+      "bytes": 330,
+      "sha256": "60a168a27ea758c48875b3b9caf9155a9ae358c0ba994ed2a1bfe26335994321"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/missing-raster/control-audit.json",
+      "source": "furniture-audit-controls-01/cases/missing-raster/control-audit.json",
+      "bytes": 2864,
+      "sha256": "e724d0c3362d7a9eeb990e16f8f3c86ad1d7146486687ce985011dc435d16148"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/missing-raster/independent-native-audit-v2.json",
+      "source": "furniture-audit-controls-01/cases/missing-raster/independent-native-audit-v2.json",
+      "bytes": 2624,
+      "sha256": "04bc6ce3fd3c990c16531881532191d2800025f451ca34cbd312fe36d7a25615"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/missing-raster/independent-native-audit.json",
+      "source": "furniture-audit-controls-01/cases/missing-raster/independent-native-audit.json",
+      "bytes": 2326,
+      "sha256": "abc7f201d01c7bcd20b2dcfe9717aaa2555cdb9ef78072894c771cfde8c96ab3"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/missing-raster/inputs/action-plan.json",
+      "source": "furniture-audit-controls-01/cases/missing-raster/inputs/action-plan.json",
+      "bytes": 11,
+      "sha256": "84b1c14e68260082e3e79edff0a78f4ebf1942cfd6c593246044ec2149cbb87d"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/missing-raster/inputs/input.pptx",
+      "source": "furniture-audit-controls-01/cases/missing-raster/inputs/input.pptx",
+      "bytes": 33613,
+      "sha256": "a655d692ba900027d6504458921f462dbec54de515ddec37c0f628d29c379e5f"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/missing-raster/inputs/native-furniture-control.ps1",
+      "source": "furniture-audit-controls-01/cases/missing-raster/inputs/native-furniture-control.ps1",
+      "bytes": 27761,
+      "sha256": "c85fe9f79b9c8e01feb6f0c4cfc8b84c90d7d93498f88b4cde2750630c9b2e9e"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/missing-raster/inputs/native-process.ps1",
+      "source": "furniture-audit-controls-01/cases/missing-raster/inputs/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/missing-raster/native-furniture-control.pptx",
+      "source": "furniture-audit-controls-01/cases/missing-raster/native-furniture-control.pptx",
+      "bytes": 35708,
+      "sha256": "d719e02fa00d714d460d3e727308a0566003711552a35ad591c4813c8bce36a5"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/missing-raster/progress.json",
+      "source": "furniture-audit-controls-01/cases/missing-raster/progress.json",
+      "bytes": 272,
+      "sha256": "99ae1e52ab1b39246e83201bfc1e55041a5f8a42cda3745a7a8192427c1121fb"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/missing-raster/report.json",
+      "source": "furniture-audit-controls-01/cases/missing-raster/report.json",
+      "bytes": 85129,
+      "sha256": "ef8cf5de4022e1d4463ae719d2d46e35e425186163931969562b62cb6ad929a5"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/missing-raster/request.json",
+      "source": "furniture-audit-controls-01/cases/missing-raster/request.json",
+      "bytes": 1974,
+      "sha256": "cade4e871863551e24ac12230e9cc6b6606f222a560282ef58ab8ce6ac5c46da"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/missing-raster/stages.jsonl",
+      "source": "furniture-audit-controls-01/cases/missing-raster/stages.jsonl",
+      "bytes": 1084448,
+      "sha256": "857e39a5560a953d77d3740c3543cdaaa631e2bcb200afa7d63f9b320a820112"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/missing-raster/supervisor.json",
+      "source": "furniture-audit-controls-01/cases/missing-raster/supervisor.json",
+      "bytes": 220,
+      "sha256": "1f9881913cdfdd9e54e865619bc528b6ee596b1f95164f403e1ecf56b4d52ed2"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/missing-raster/worker.json",
+      "source": "furniture-audit-controls-01/cases/missing-raster/worker.json",
+      "bytes": 341,
+      "sha256": "fe666675e144974ee7e11d6890e3a6c05d2580a190e63eaa39d5d70b0e25fc70"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/missing-raster/worker.stderr.log",
+      "source": "furniture-audit-controls-01/cases/missing-raster/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/cases/missing-raster/worker.stdout.log",
+      "source": "furniture-audit-controls-01/cases/missing-raster/worker.stdout.log",
+      "bytes": 54,
+      "sha256": "9193db23a5ef082ce70e61698e4c9a097be6b1108bd90fcca5fe40ec041f9f46"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/control-suite.json",
+      "source": "furniture-audit-controls-01/control-suite.json",
+      "bytes": 10188,
+      "sha256": "db5e09550e953f39ed05a67c0fb1fee1c684eb1bac9f162c80d232f572f7348e"
+    },
+    {
+      "path": "B/furniture/synthetic-controls/run-controls.py",
+      "source": "furniture-audit-controls-01/run-controls.py",
+      "bytes": 8031,
+      "sha256": "4d2bdbfd34478b436cc67d8298aad3b5cac13bf15f37891a341ddad4609694cd"
+    },
+    {
+      "path": "B/furniture/ui-replace/generation-manifest.json",
+      "source": "furniture-ui-replace-01/generation-manifest.json",
+      "bytes": 374844,
+      "sha256": "a67993e23e9db08fa3800541e53533a48c9edfb9ff5c0685bf3ed6a72d44b0a6"
+    },
+    {
+      "path": "B/furniture/ui-replace/input.pptx",
+      "source": "furniture-ui-replace-01/input.pptx",
+      "bytes": 33613,
+      "sha256": "a655d692ba900027d6504458921f462dbec54de515ddec37c0f628d29c379e5f"
+    },
+    {
+      "path": "B/furniture/ui-replace/native-ui-edited.pptx",
+      "source": "furniture-ui-replace-01/native-ui-edited.pptx",
+      "bytes": 35756,
+      "sha256": "a10ccca75d692de67ae12f321bfd93849b199f2a9f7e70d43d751f4540a2bc38"
+    },
+    {
+      "path": "B/furniture/ui-replace/replacement.png",
+      "source": "furniture-ui-replace-01/replacement.png",
+      "bytes": 544,
+      "sha256": "3614f3eb5c3e96b6a245eb8cfe1dc0eacdb61348a6f3338f28ed80665616a24b"
+    },
+    {
+      "path": "B/furniture/ui-replace/ui-comparison-corrected.json",
+      "source": "furniture-ui-replace-01/ui-comparison-corrected.json",
+      "bytes": 143515,
+      "sha256": "8440fbccf87ce7747dcf126166a490b9ed3011deabf05d150e119ab796d3bdaf"
+    },
+    {
+      "path": "B/furniture/ui-replace/ui-comparison-failed-01.json",
+      "source": "furniture-ui-replace-01/ui-comparison-failed-01.json",
+      "bytes": 109803,
+      "sha256": "bf961bbd7c78abad38f2e2ff9d5ef0fd44d0550f191262e2032197d1e63927c1"
+    },
+    {
+      "path": "B/furniture/ui-replace/ui-comparison.json",
+      "source": "furniture-ui-replace-01/ui-comparison.json",
+      "bytes": 109803,
+      "sha256": "bf961bbd7c78abad38f2e2ff9d5ef0fd44d0550f191262e2032197d1e63927c1"
+    },
+    {
+      "path": "B/furniture/ui-replace/ui-import-corrected.opf.json",
+      "source": "furniture-ui-replace-01/ui-import-corrected.opf.json",
+      "bytes": 2906,
+      "sha256": "c2d1f3f72659354b6271df48c8a18fb309653dc5d236707568f2e5fcd7517271"
+    },
+    {
+      "path": "B/furniture/ui-replace/ui-import-failed-01.opf.json",
+      "source": "furniture-ui-replace-01/ui-import-failed-01.opf.json",
+      "bytes": 2906,
+      "sha256": "c2d1f3f72659354b6271df48c8a18fb309653dc5d236707568f2e5fcd7517271"
+    },
+    {
+      "path": "B/furniture/ui-replace/ui-import.opf.json",
+      "source": "furniture-ui-replace-01/ui-import.opf.json",
+      "bytes": 2906,
+      "sha256": "c2d1f3f72659354b6271df48c8a18fb309653dc5d236707568f2e5fcd7517271"
+    },
+    {
+      "path": "B/furniture/ui-replace/ui-inspect-corrected.mjs",
+      "source": "furniture-ui-replace-01/ui-inspect-corrected.mjs",
+      "bytes": 34146,
+      "sha256": "e27994af52d4f271b9a9e03b3c2c3a7ee00ce8d0f03cab92ed7c50f9f0343ce4"
+    },
+    {
+      "path": "B/furniture/ui-replace/ui-inspect-failed-01.mjs",
+      "source": "furniture-ui-replace-01/ui-inspect-failed-01.mjs",
+      "bytes": 32390,
+      "sha256": "69676cc58d93748fefe9ca608dce7000ab26cb69389e07a3fb79a11161179044"
+    },
+    {
+      "path": "B/furniture/ui-replace/ui-inspect.mjs",
+      "source": "furniture-ui-replace-01/ui-inspect.mjs",
+      "bytes": 32390,
+      "sha256": "69676cc58d93748fefe9ca608dce7000ab26cb69389e07a3fb79a11161179044"
+    },
+    {
+      "path": "B/furniture/ui-replace/ui-request.json",
+      "source": "furniture-ui-replace-01/ui-request.json",
+      "bytes": 904,
+      "sha256": "f4e15e077f4690a57ae8811dedb0b48fa7bc6f597986f8082e174d60e2e1c81e"
+    },
+    {
+      "path": "B/furniture/ui-replace/ui-result.json",
+      "source": "furniture-ui-replace-01/ui-result.json",
+      "bytes": 1133,
+      "sha256": "4615bf5c187213bd54897abd1b166dffcd6b6f6374b286040c91a33e195ecbd8"
+    },
+    {
+      "path": "B/picture/picture-alter-native-01/comparator.mjs",
+      "source": "picture-alter-native-01/comparator.mjs",
+      "bytes": 12945,
+      "sha256": "de3f01bb8d812c533adcee8ef729f5989b4c868203a65d57bc0fd5e355d85bd7"
+    },
+    {
+      "path": "B/picture/picture-alter-native-01/edit-comparison.json",
+      "source": "picture-alter-native-01/edit-comparison.json",
+      "bytes": 3270,
+      "sha256": "1a97755cddc5b23eccccd02736312f91ef094bd6a2d0f6f27eb295c27301d864"
+    },
+    {
+      "path": "B/picture/picture-alter-native-01/edited.png",
+      "source": "picture-alter-native-01/edited.png",
+      "bytes": 51897,
+      "sha256": "9c913f592038d2b8c9a6ed16fde7c418e86ef7169c0dd22ef008f48a886ddd7e"
+    },
+    {
+      "path": "B/picture/picture-alter-native-01/inputs/input.pptx",
+      "source": "picture-alter-native-01/inputs/input.pptx",
+      "bytes": 15176,
+      "sha256": "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937"
+    },
+    {
+      "path": "B/picture/picture-alter-native-01/inputs/native-picture-edit.ps1",
+      "source": "picture-alter-native-01/inputs/native-picture-edit.ps1",
+      "bytes": 26856,
+      "sha256": "0163392cdc9e0b925d1594e32d575b97b7d7f3022a45cb09b0e9b76a3ddcd0df"
+    },
+    {
+      "path": "B/picture/picture-alter-native-01/inputs/native-process.ps1",
+      "source": "picture-alter-native-01/inputs/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "path": "B/picture/picture-alter-native-01/native-picture-edit.pptx",
+      "source": "picture-alter-native-01/native-picture-edit.pptx",
+      "bytes": 16440,
+      "sha256": "5b0bbd8efb6070eca9ec89331195805fec5e2f2d4d7e3450152b4dd56bc130a6"
+    },
+    {
+      "path": "B/picture/picture-alter-native-01/original.png",
+      "source": "picture-alter-native-01/original.png",
+      "bytes": 85199,
+      "sha256": "f773035c4cfc0e2203e1ecc66de2a348ee328fd2cc58f79389593aa3f11b4455"
+    },
+    {
+      "path": "B/picture/picture-alter-native-01/progress.json",
+      "source": "picture-alter-native-01/progress.json",
+      "bytes": 271,
+      "sha256": "e49617f1b25946e36fa97c3f1e745501c438d8bca4f00c94f85765bbc8fedce0"
+    },
+    {
+      "path": "B/picture/picture-alter-native-01/reopened.png",
+      "source": "picture-alter-native-01/reopened.png",
+      "bytes": 51897,
+      "sha256": "9c913f592038d2b8c9a6ed16fde7c418e86ef7169c0dd22ef008f48a886ddd7e"
+    },
+    {
+      "path": "B/picture/picture-alter-native-01/report.json",
+      "source": "picture-alter-native-01/report.json",
+      "bytes": 11913,
+      "sha256": "1e0f61dac2341b63e8c6c97ef589c0450bf5cb763604081c286fedd1aca83ff2"
+    },
+    {
+      "path": "B/picture/picture-alter-native-01/request.json",
+      "source": "picture-alter-native-01/request.json",
+      "bytes": 3178,
+      "sha256": "c5dfe977176905bd1903a7beecb589604ef284978c31a7b1a54ca8eec3a06281"
+    },
+    {
+      "path": "B/picture/picture-alter-native-01/saved-import.opf.json",
+      "source": "picture-alter-native-01/saved-import.opf.json",
+      "bytes": 1162,
+      "sha256": "fcd5570555a1ceb381e3e7025363ec0525968402bd98a41f4106e36945103c50"
+    },
+    {
+      "path": "B/picture/picture-alter-native-01/stages.jsonl",
+      "source": "picture-alter-native-01/stages.jsonl",
+      "bytes": 75743,
+      "sha256": "0461b38b99117f48d23975255d52eed73493ac8529d5cc7904bb7c998f9196c7"
+    },
+    {
+      "path": "B/picture/picture-alter-native-01/supervisor.json",
+      "source": "picture-alter-native-01/supervisor.json",
+      "bytes": 220,
+      "sha256": "2b4b16f8956073ddd62ce377a0ac36bc28b9dc02529ddc23f55260efc8593e81"
+    },
+    {
+      "path": "B/picture/picture-alter-native-01/worker.json",
+      "source": "picture-alter-native-01/worker.json",
+      "bytes": 341,
+      "sha256": "60a8290a6d3c9b01505ebd0508e0526813f66355ce7a73de62abe4627f41999a"
+    },
+    {
+      "path": "B/picture/picture-alter-native-01/worker.stderr.log",
+      "source": "picture-alter-native-01/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "B/picture/picture-alter-native-01/worker.stdout.log",
+      "source": "picture-alter-native-01/worker.stdout.log",
+      "bytes": 38,
+      "sha256": "6161df9501683a7f825d0844e4d6359928be46906efbb8785f453bc6c19e79db"
+    },
+    {
+      "path": "B/picture/picture-delete-native-01/comparator.mjs",
+      "source": "picture-delete-native-01/comparator.mjs",
+      "bytes": 12945,
+      "sha256": "de3f01bb8d812c533adcee8ef729f5989b4c868203a65d57bc0fd5e355d85bd7"
+    },
+    {
+      "path": "B/picture/picture-delete-native-01/edit-comparison.json",
+      "source": "picture-delete-native-01/edit-comparison.json",
+      "bytes": 2878,
+      "sha256": "b73ff3dcf86548682b9b673917d3cab497e345fa46c5c95d6409ea1870b7830c"
+    },
+    {
+      "path": "B/picture/picture-delete-native-01/edited.png",
+      "source": "picture-delete-native-01/edited.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "path": "B/picture/picture-delete-native-01/inputs/input.pptx",
+      "source": "picture-delete-native-01/inputs/input.pptx",
+      "bytes": 15176,
+      "sha256": "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937"
+    },
+    {
+      "path": "B/picture/picture-delete-native-01/inputs/native-picture-edit.ps1",
+      "source": "picture-delete-native-01/inputs/native-picture-edit.ps1",
+      "bytes": 26856,
+      "sha256": "0163392cdc9e0b925d1594e32d575b97b7d7f3022a45cb09b0e9b76a3ddcd0df"
+    },
+    {
+      "path": "B/picture/picture-delete-native-01/inputs/native-process.ps1",
+      "source": "picture-delete-native-01/inputs/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "path": "B/picture/picture-delete-native-01/native-picture-edit.pptx",
+      "source": "picture-delete-native-01/native-picture-edit.pptx",
+      "bytes": 15668,
+      "sha256": "910d0896aeab8560f0a3b13284c223469d59e55cc256b87a649786dcae7931c5"
+    },
+    {
+      "path": "B/picture/picture-delete-native-01/original.png",
+      "source": "picture-delete-native-01/original.png",
+      "bytes": 85199,
+      "sha256": "f773035c4cfc0e2203e1ecc66de2a348ee328fd2cc58f79389593aa3f11b4455"
+    },
+    {
+      "path": "B/picture/picture-delete-native-01/progress.json",
+      "source": "picture-delete-native-01/progress.json",
+      "bytes": 271,
+      "sha256": "aaf23f062a97eefcd295d1dacd0cc126c4a60887832f2d8b12fdc9be8c3570fa"
+    },
+    {
+      "path": "B/picture/picture-delete-native-01/reopened.png",
+      "source": "picture-delete-native-01/reopened.png",
+      "bytes": 257,
+      "sha256": "cc93482d6983fba3ddbb985d15e8243673d678439a499d0a7f2b4c102f0ba55b"
+    },
+    {
+      "path": "B/picture/picture-delete-native-01/report.json",
+      "source": "picture-delete-native-01/report.json",
+      "bytes": 9071,
+      "sha256": "c946e62342b734be64084cb8ecf6c61398d8ebdeeb131b65fec3357c120a80cb"
+    },
+    {
+      "path": "B/picture/picture-delete-native-01/request.json",
+      "source": "picture-delete-native-01/request.json",
+      "bytes": 3182,
+      "sha256": "634b9c8356830de0e7cb3340ed48666c29c24d8abc7465b9838807bad0e85f3b"
+    },
+    {
+      "path": "B/picture/picture-delete-native-01/saved-import.opf.json",
+      "source": "picture-delete-native-01/saved-import.opf.json",
+      "bytes": 383,
+      "sha256": "1d0bc9ebb8b2e671dbf195259eea976cd66111a165c5de9dfc5ee7507126fefa"
+    },
+    {
+      "path": "B/picture/picture-delete-native-01/stages.jsonl",
+      "source": "picture-delete-native-01/stages.jsonl",
+      "bytes": 48143,
+      "sha256": "a46250c572d0598694b8dccb361092a96e5352dbb9e8b0813b5d3abf8757b73f"
+    },
+    {
+      "path": "B/picture/picture-delete-native-01/supervisor.json",
+      "source": "picture-delete-native-01/supervisor.json",
+      "bytes": 220,
+      "sha256": "6ac1c8b3d2f2bf046bfe560bcffeea1cb548e9cca534cec87baddbfeaa298d23"
+    },
+    {
+      "path": "B/picture/picture-delete-native-01/worker.json",
+      "source": "picture-delete-native-01/worker.json",
+      "bytes": 341,
+      "sha256": "3a7dcf7bc32f908a15d386ff3e7dbedb7da637eb2f3d0394da21af35eb232729"
+    },
+    {
+      "path": "B/picture/picture-delete-native-01/worker.stderr.log",
+      "source": "picture-delete-native-01/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "B/picture/picture-delete-native-01/worker.stdout.log",
+      "source": "picture-delete-native-01/worker.stdout.log",
+      "bytes": 39,
+      "sha256": "7c04edecde281cb1400e0bce356cee3d797011611226057466c457226a9e913a"
+    },
+    {
+      "path": "B/picture/picture-replace-native-01/comparator.mjs",
+      "source": "picture-replace-native-01/comparator.mjs",
+      "bytes": 12945,
+      "sha256": "de3f01bb8d812c533adcee8ef729f5989b4c868203a65d57bc0fd5e355d85bd7"
+    },
+    {
+      "path": "B/picture/picture-replace-native-01/edit-comparison.json",
+      "source": "picture-replace-native-01/edit-comparison.json",
+      "bytes": 3069,
+      "sha256": "006390aeee9539c5c4d8879d5999cbbb1f89481b9f62e58a17e6ff6f5b8492a2"
+    },
+    {
+      "path": "B/picture/picture-replace-native-01/edited.png",
+      "source": "picture-replace-native-01/edited.png",
+      "bytes": 40244,
+      "sha256": "bcd1c922c08537a6cea876f22c370fccfa88f06e617bef48c7d91bb706e55aa7"
+    },
+    {
+      "path": "B/picture/picture-replace-native-01/inputs/input.pptx",
+      "source": "picture-replace-native-01/inputs/input.pptx",
+      "bytes": 15176,
+      "sha256": "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937"
+    },
+    {
+      "path": "B/picture/picture-replace-native-01/inputs/native-picture-edit.ps1",
+      "source": "picture-replace-native-01/inputs/native-picture-edit.ps1",
+      "bytes": 26856,
+      "sha256": "0163392cdc9e0b925d1594e32d575b97b7d7f3022a45cb09b0e9b76a3ddcd0df"
+    },
+    {
+      "path": "B/picture/picture-replace-native-01/inputs/native-process.ps1",
+      "source": "picture-replace-native-01/inputs/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "path": "B/picture/picture-replace-native-01/inputs/replacement.png",
+      "source": "picture-replace-native-01/inputs/replacement.png",
+      "bytes": 544,
+      "sha256": "3614f3eb5c3e96b6a245eb8cfe1dc0eacdb61348a6f3338f28ed80665616a24b"
+    },
+    {
+      "path": "B/picture/picture-replace-native-01/native-picture-edit.pptx",
+      "source": "picture-replace-native-01/native-picture-edit.pptx",
+      "bytes": 16660,
+      "sha256": "54abd2efddb3a053466f0acdea00de1be7787b10e806612e0fd698f855e11add"
+    },
+    {
+      "path": "B/picture/picture-replace-native-01/original.png",
+      "source": "picture-replace-native-01/original.png",
+      "bytes": 85199,
+      "sha256": "f773035c4cfc0e2203e1ecc66de2a348ee328fd2cc58f79389593aa3f11b4455"
+    },
+    {
+      "path": "B/picture/picture-replace-native-01/progress.json",
+      "source": "picture-replace-native-01/progress.json",
+      "bytes": 271,
+      "sha256": "d8d22d3a00386e1e20245faca9cb98e4fc7368f8af74955f36a7ed1fa123fc95"
+    },
+    {
+      "path": "B/picture/picture-replace-native-01/reopened.png",
+      "source": "picture-replace-native-01/reopened.png",
+      "bytes": 40244,
+      "sha256": "bcd1c922c08537a6cea876f22c370fccfa88f06e617bef48c7d91bb706e55aa7"
+    },
+    {
+      "path": "B/picture/picture-replace-native-01/report.json",
+      "source": "picture-replace-native-01/report.json",
+      "bytes": 12768,
+      "sha256": "8e73166092af6dca022cbcf479e20200fcbc434860e8549ae3d3a30ea4a0ba88"
+    },
+    {
+      "path": "B/picture/picture-replace-native-01/request.json",
+      "source": "picture-replace-native-01/request.json",
+      "bytes": 3774,
+      "sha256": "96ed0ae76a8a9b84a1cc0b24be90f323ba98d35ec08493a97d602392dba0c2a9"
+    },
+    {
+      "path": "B/picture/picture-replace-native-01/saved-import.opf.json",
+      "source": "picture-replace-native-01/saved-import.opf.json",
+      "bytes": 1333,
+      "sha256": "1050becab698154fddab12f556b884227800b76fa1ca65315dc123632ae744f9"
+    },
+    {
+      "path": "B/picture/picture-replace-native-01/stages.jsonl",
+      "source": "picture-replace-native-01/stages.jsonl",
+      "bytes": 71481,
+      "sha256": "139702e4bb9ac0be8c6e729b55605b68f28255c6fc7a9e4b966296022522f262"
+    },
+    {
+      "path": "B/picture/picture-replace-native-01/supervisor.json",
+      "source": "picture-replace-native-01/supervisor.json",
+      "bytes": 220,
+      "sha256": "ea5de4577077d8ab8427f442fa6e034d01777d7a0100fda06830e8987b4cf43a"
+    },
+    {
+      "path": "B/picture/picture-replace-native-01/worker.json",
+      "source": "picture-replace-native-01/worker.json",
+      "bytes": 341,
+      "sha256": "e77274b12febe0794ffb59c9547985b4e8e08a0f2a783cc2585e571ab5309f77"
+    },
+    {
+      "path": "B/picture/picture-replace-native-01/worker.stderr.log",
+      "source": "picture-replace-native-01/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "B/picture/picture-replace-native-01/worker.stdout.log",
+      "source": "picture-replace-native-01/worker.stdout.log",
+      "bytes": 40,
+      "sha256": "08a582e1b3abe16b54718641e986796835d937645f17ae58d61d4f25c0c4b59c"
+    },
+    {
+      "path": "C/notes/analysis/audit-notes-order.mjs",
+      "source": "audit-notes-order.mjs",
+      "bytes": 4261,
+      "sha256": "c55458daf1cd2611cc962dd09868df0f12d006911d8de1a5427879209ff1b778"
+    },
+    {
+      "path": "C/notes/analysis/notes-host-inspection.json",
+      "source": "notes-host-inspection.json",
+      "bytes": 972,
+      "sha256": "d38c9373f357ab3e7c33a6592446e0fb29b2c4714b0697b5b6e8d407ffec2d0e"
+    },
+    {
+      "path": "C/notes/analysis/notes-isolated-host-inspection.json",
+      "source": "notes-isolated-host-inspection.json",
+      "bytes": 1056,
+      "sha256": "8e61abdb11ccce0f72aa2e7ea095f10e4423e4a64af67ea3ef68838fb202b21c"
+    },
+    {
+      "path": "C/notes/analysis/notes-order-comparison.json",
+      "source": "notes-order-comparison.json",
+      "bytes": 1764,
+      "sha256": "a7fe1253fdf02b4551ce43dfccad3e18c11e7f5f3fe30ca6fbd73e5724b91254"
+    },
+    {
+      "path": "C/notes/analysis/notes-order-generation.log",
+      "source": "notes-order-generation.log",
+      "bytes": 128,
+      "sha256": "dc03fb4de850ba2149acc5cafc065f3479f1426921f389f3ebca96ae3e18055b"
+    },
+    {
+      "path": "C/notes/analysis/prepare-notes-packaging-controls.mjs",
+      "source": "prepare-notes-packaging-controls.mjs",
+      "bytes": 2284,
+      "sha256": "5fbe7b4e4b8d95bbcf89aef690d3d690d2eee33c65f581a3d59931655efae191"
+    },
+    {
+      "path": "C/notes/native/notes-production-native-01/edited-slide-01.png",
+      "source": "notes-production-native-01/edited-slide-01.png",
+      "bytes": 4155,
+      "sha256": "91207d33ac5accca8cf35ffe7687d52c3184fa9a942197616cbc8f6586786eb2"
+    },
+    {
+      "path": "C/notes/native/notes-production-native-01/edited-slide-02.png",
+      "source": "notes-production-native-01/edited-slide-02.png",
+      "bytes": 76090,
+      "sha256": "8774b1322b386b8be7c785fcaf287c0073510780123dd7e821e987dea1e2c050"
+    },
+    {
+      "path": "C/notes/native/notes-production-native-01/independent-native-audit.json",
+      "source": "notes-production-native-01/independent-native-audit.json",
+      "bytes": 2389,
+      "sha256": "ac12a7d2c92cddbbc40dd99593784be29e930563f47ab3e2d5650b16d104c13a"
+    },
+    {
+      "path": "C/notes/native/notes-production-native-01/inputs/action-plan.json",
+      "source": "notes-production-native-01/inputs/action-plan.json",
+      "bytes": 11,
+      "sha256": "84b1c14e68260082e3e79edff0a78f4ebf1942cfd6c593246044ec2149cbb87d"
+    },
+    {
+      "path": "C/notes/native/notes-production-native-01/inputs/input.pptx",
+      "source": "notes-production-native-01/inputs/input.pptx",
+      "bytes": 19285,
+      "sha256": "31cbae629b3d49ba0d6313bff95c59f645f5cafa0f0585e556fd9ebe66d4512c"
+    },
+    {
+      "path": "C/notes/native/notes-production-native-01/inputs/native-furniture-control.ps1",
+      "source": "notes-production-native-01/inputs/native-furniture-control.ps1",
+      "bytes": 27761,
+      "sha256": "c85fe9f79b9c8e01feb6f0c4cfc8b84c90d7d93498f88b4cde2750630c9b2e9e"
+    },
+    {
+      "path": "C/notes/native/notes-production-native-01/inputs/native-process.ps1",
+      "source": "notes-production-native-01/inputs/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "path": "C/notes/native/notes-production-native-01/native-furniture-control.pptx",
+      "source": "notes-production-native-01/native-furniture-control.pptx",
+      "bytes": 20647,
+      "sha256": "5701d60430e227104fa81cf703077bfc6ae411067f0519cdf9d9c72c2975f8a2"
+    },
+    {
+      "path": "C/notes/native/notes-production-native-01/original-slide-01.png",
+      "source": "notes-production-native-01/original-slide-01.png",
+      "bytes": 4155,
+      "sha256": "91207d33ac5accca8cf35ffe7687d52c3184fa9a942197616cbc8f6586786eb2"
+    },
+    {
+      "path": "C/notes/native/notes-production-native-01/original-slide-02.png",
+      "source": "notes-production-native-01/original-slide-02.png",
+      "bytes": 76090,
+      "sha256": "8774b1322b386b8be7c785fcaf287c0073510780123dd7e821e987dea1e2c050"
+    },
+    {
+      "path": "C/notes/native/notes-production-native-01/progress.json",
+      "source": "notes-production-native-01/progress.json",
+      "bytes": 271,
+      "sha256": "9da8c4c8ff904324d1d9d161902ce0e8e4d40d8fa241ad89f797adb55c63c961"
+    },
+    {
+      "path": "C/notes/native/notes-production-native-01/reopened-slide-01.png",
+      "source": "notes-production-native-01/reopened-slide-01.png",
+      "bytes": 4155,
+      "sha256": "91207d33ac5accca8cf35ffe7687d52c3184fa9a942197616cbc8f6586786eb2"
+    },
+    {
+      "path": "C/notes/native/notes-production-native-01/reopened-slide-02.png",
+      "source": "notes-production-native-01/reopened-slide-02.png",
+      "bytes": 76090,
+      "sha256": "8774b1322b386b8be7c785fcaf287c0073510780123dd7e821e987dea1e2c050"
+    },
+    {
+      "path": "C/notes/native/notes-production-native-01/report.json",
+      "source": "notes-production-native-01/report.json",
+      "bytes": 36020,
+      "sha256": "ac5e73fcd7340fec0e6f878487f2a5c1ede3c129612cb38afee6d0904d58fad7"
+    },
+    {
+      "path": "C/notes/native/notes-production-native-01/request.json",
+      "source": "notes-production-native-01/request.json",
+      "bytes": 2280,
+      "sha256": "81042b94b3f46800d14651b9049e1cfc409f4c588cd9de264db9b613067a131f"
+    },
+    {
+      "path": "C/notes/native/notes-production-native-01/saved-import.opf.json",
+      "source": "notes-production-native-01/saved-import.opf.json",
+      "bytes": 1608,
+      "sha256": "49a73880cfcdfb9d1ee6bf550b2a4ff08ca58de7bc9693d892ec052f3ddc6792"
+    },
+    {
+      "path": "C/notes/native/notes-production-native-01/stages.jsonl",
+      "source": "notes-production-native-01/stages.jsonl",
+      "bytes": 193455,
+      "sha256": "50124dd5e9575c837c243ee5e518f85487a7e99356c26880caa54e408caff269"
+    },
+    {
+      "path": "C/notes/native/notes-production-native-01/supervisor.json",
+      "source": "notes-production-native-01/supervisor.json",
+      "bytes": 220,
+      "sha256": "af6d5c29c6e46cd32f3e032913ad30f688e097d3d77bb3cf87875ea10ae215af"
+    },
+    {
+      "path": "C/notes/native/notes-production-native-01/worker.json",
+      "source": "notes-production-native-01/worker.json",
+      "bytes": 341,
+      "sha256": "40440e2935c65023d35a69b334365ad900f7cf120adc2cd7d5d66e6f6f70d064"
+    },
+    {
+      "path": "C/notes/native/notes-production-native-01/worker.stderr.log",
+      "source": "notes-production-native-01/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C/notes/native/notes-production-native-01/worker.stdout.log",
+      "source": "notes-production-native-01/worker.stdout.log",
+      "bytes": 54,
+      "sha256": "9193db23a5ef082ce70e61698e4c9a097be6b1108bd90fcca5fe40ec041f9f46"
+    },
+    {
+      "path": "C/notes/native/notes-reordered-native-01/inputs/action-plan.json",
+      "source": "notes-reordered-native-01/inputs/action-plan.json",
+      "bytes": 11,
+      "sha256": "84b1c14e68260082e3e79edff0a78f4ebf1942cfd6c593246044ec2149cbb87d"
+    },
+    {
+      "path": "C/notes/native/notes-reordered-native-01/inputs/input.pptx",
+      "source": "notes-reordered-native-01/inputs/input.pptx",
+      "bytes": 19284,
+      "sha256": "1b263edfc81ce6489179498925acf4e0ad7546288a84a33efec16900811fe6f4"
+    },
+    {
+      "path": "C/notes/native/notes-reordered-native-01/inputs/native-furniture-control.ps1",
+      "source": "notes-reordered-native-01/inputs/native-furniture-control.ps1",
+      "bytes": 27761,
+      "sha256": "c85fe9f79b9c8e01feb6f0c4cfc8b84c90d7d93498f88b4cde2750630c9b2e9e"
+    },
+    {
+      "path": "C/notes/native/notes-reordered-native-01/inputs/native-process.ps1",
+      "source": "notes-reordered-native-01/inputs/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "path": "C/notes/native/notes-reordered-native-01/progress.json",
+      "source": "notes-reordered-native-01/progress.json",
+      "bytes": 481,
+      "sha256": "dfd19b1833329b8bcf6674fad78c5f113eb00739b6848b890a89196ae2d263ee"
+    },
+    {
+      "path": "C/notes/native/notes-reordered-native-01/report.json",
+      "source": "notes-reordered-native-01/report.json",
+      "bytes": 4503,
+      "sha256": "6513c821dc294a41f8b45f863a10660e9129097d905538701c3fa0bbb3659e9a"
+    },
+    {
+      "path": "C/notes/native/notes-reordered-native-01/request.json",
+      "source": "notes-reordered-native-01/request.json",
+      "bytes": 2277,
+      "sha256": "fdba75767e1acd923922ecb1a0a6f2b2af4ecdb5c859dd523958d24668fdd89e"
+    },
+    {
+      "path": "C/notes/native/notes-reordered-native-01/stages.jsonl",
+      "source": "notes-reordered-native-01/stages.jsonl",
+      "bytes": 5041,
+      "sha256": "9c059eff167048930b940328f5cd5d3a62d4fd8ec52ff5db11762a97eebe10d6"
+    },
+    {
+      "path": "C/notes/native/notes-reordered-native-01/supervisor.json",
+      "source": "notes-reordered-native-01/supervisor.json",
+      "bytes": 218,
+      "sha256": "8bbb0b2bbf61c88568354cfe352fddb7dc142b967ce28d57c2e2086729708e55"
+    },
+    {
+      "path": "C/notes/native/notes-reordered-native-01/worker.json",
+      "source": "notes-reordered-native-01/worker.json",
+      "bytes": 341,
+      "sha256": "085aa5c94a5d3bc3d3e42d56e802d8379837eddb9a4780c6f998bec79af4ce4a"
+    },
+    {
+      "path": "C/notes/native/notes-reordered-native-01/worker.stderr.log",
+      "source": "notes-reordered-native-01/worker.stderr.log",
+      "bytes": 532,
+      "sha256": "ecadf0155aba6121fcc7edb4fd531454179fa09dba9f77ee8b7cc22e9cfac30c"
+    },
+    {
+      "path": "C/notes/native/notes-reordered-native-01/worker.stdout.log",
+      "source": "notes-reordered-native-01/worker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C/notes/native/notes-xml-order-isolated-native-01/inputs/action-plan.json",
+      "source": "notes-xml-order-isolated-native-01/inputs/action-plan.json",
+      "bytes": 11,
+      "sha256": "84b1c14e68260082e3e79edff0a78f4ebf1942cfd6c593246044ec2149cbb87d"
+    },
+    {
+      "path": "C/notes/native/notes-xml-order-isolated-native-01/inputs/input.pptx",
+      "source": "notes-xml-order-isolated-native-01/inputs/input.pptx",
+      "bytes": 19284,
+      "sha256": "f3110eaef1674c4055e337599c44db662f5c867246e136ed38ed97547f8ed2d1"
+    },
+    {
+      "path": "C/notes/native/notes-xml-order-isolated-native-01/inputs/native-furniture-control.ps1",
+      "source": "notes-xml-order-isolated-native-01/inputs/native-furniture-control.ps1",
+      "bytes": 27761,
+      "sha256": "c85fe9f79b9c8e01feb6f0c4cfc8b84c90d7d93498f88b4cde2750630c9b2e9e"
+    },
+    {
+      "path": "C/notes/native/notes-xml-order-isolated-native-01/inputs/native-process.ps1",
+      "source": "notes-xml-order-isolated-native-01/inputs/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "path": "C/notes/native/notes-xml-order-isolated-native-01/progress.json",
+      "source": "notes-xml-order-isolated-native-01/progress.json",
+      "bytes": 490,
+      "sha256": "81da36c5586aa07b325bd9841e86197b28c34b7df95affba694b506624b6210f"
+    },
+    {
+      "path": "C/notes/native/notes-xml-order-isolated-native-01/report.json",
+      "source": "notes-xml-order-isolated-native-01/report.json",
+      "bytes": 4552,
+      "sha256": "e4ab07a94c1706d6a1702bb378a31a0ed34201040940886f95b2ad76da8bb273"
+    },
+    {
+      "path": "C/notes/native/notes-xml-order-isolated-native-01/request.json",
+      "source": "notes-xml-order-isolated-native-01/request.json",
+      "bytes": 2308,
+      "sha256": "9efb44e09a534c5fde46f21388ccfd70536c1b391be0ea06e416894fa1aad2ec"
+    },
+    {
+      "path": "C/notes/native/notes-xml-order-isolated-native-01/stages.jsonl",
+      "source": "notes-xml-order-isolated-native-01/stages.jsonl",
+      "bytes": 5086,
+      "sha256": "87366bb5c9e4e2c304de85846e3ff9f866a1d3e01e48e0e76667f791bb76ee15"
+    },
+    {
+      "path": "C/notes/native/notes-xml-order-isolated-native-01/supervisor.json",
+      "source": "notes-xml-order-isolated-native-01/supervisor.json",
+      "bytes": 218,
+      "sha256": "d616df2dc6e242afc3a415030e2c546c714d7e9eff9879fee023cd93558371a9"
+    },
+    {
+      "path": "C/notes/native/notes-xml-order-isolated-native-01/worker.json",
+      "source": "notes-xml-order-isolated-native-01/worker.json",
+      "bytes": 341,
+      "sha256": "14364fb15719676b5ed80aebcdc4a7a6644614faaec3098a2895414e1a84520a"
+    },
+    {
+      "path": "C/notes/native/notes-xml-order-isolated-native-01/worker.stderr.log",
+      "source": "notes-xml-order-isolated-native-01/worker.stderr.log",
+      "bytes": 532,
+      "sha256": "ecadf0155aba6121fcc7edb4fd531454179fa09dba9f77ee8b7cc22e9cfac30c"
+    },
+    {
+      "path": "C/notes/native/notes-xml-order-isolated-native-01/worker.stdout.log",
+      "source": "notes-xml-order-isolated-native-01/worker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C/notes/packaging-controls-01/failed-generator.mjs",
+      "source": "notes-packaging-controls-01/failed-generator.mjs",
+      "bytes": 2271,
+      "sha256": "f7299e1301d23d199f8011aa6e3cb9d0bf24ed28439ece484292525b77fb3930"
+    },
+    {
+      "path": "C/notes/packaging-controls-01/failure.json",
+      "source": "notes-packaging-controls-01/failure.json",
+      "bytes": 168,
+      "sha256": "ffe51e705bfad862039a0d0d0a29fffa30f61d38017e90714038764af13fb8cb"
+    },
+    {
+      "path": "C/notes/packaging-controls-01/unchanged-ascii.pptx",
+      "source": "notes-packaging-controls-01/unchanged-ascii.pptx",
+      "bytes": 19285,
+      "sha256": "31cbae629b3d49ba0d6313bff95c59f645f5cafa0f0585e556fd9ebe66d4512c"
+    },
+    {
+      "path": "C/notes/packaging-controls-02/manifest.json",
+      "source": "notes-packaging-controls-02/manifest.json",
+      "bytes": 6370,
+      "sha256": "3174fc4c16076b1253afa657631cdcffa925de9bfc7e8585a692241ce79a598c"
+    },
+    {
+      "path": "C/notes/packaging-controls-02/reordered-ascii.pptx",
+      "source": "notes-packaging-controls-02/reordered-ascii.pptx",
+      "bytes": 19284,
+      "sha256": "f3110eaef1674c4055e337599c44db662f5c867246e136ed38ed97547f8ed2d1"
+    },
+    {
+      "path": "C/notes/packaging-controls-02/unchanged-ascii.pptx",
+      "source": "notes-packaging-controls-02/unchanged-ascii.pptx",
+      "bytes": 19285,
+      "sha256": "31cbae629b3d49ba0d6313bff95c59f645f5cafa0f0585e556fd9ebe66d4512c"
+    },
+    {
+      "path": "C/notes/packaging-controls-02/unchanged-locale.pptx",
+      "source": "notes-packaging-controls-02/unchanged-locale.pptx",
+      "bytes": 19285,
+      "sha256": "af667bba0cdadf17d931b1c533a9cc2d1210f7a220b077befb486929dfab2765"
+    },
+    {
+      "path": "C/notes/registry-01/generate.mjs",
+      "source": "notes-order-registry-01/generate.mjs",
+      "bytes": 5633,
+      "sha256": "a9241917a22a6981e70ac162d299f67531e774c5328617e34e8cebff9d2100a7"
+    },
+    {
+      "path": "C/notes/registry-01/manifest.json",
+      "source": "notes-order-registry-01/manifest.json",
+      "bytes": 9004,
+      "sha256": "e5144f10c06ea5a1b3473299a1150d78ce9da17c63220fa4c4311c87bb4281a5"
+    },
+    {
+      "path": "C/notes/registry-01/notes-control.opf.json",
+      "source": "notes-order-registry-01/notes-control.opf.json",
+      "bytes": 976,
+      "sha256": "13f35bc5a6daa9651ebf3cd338ff27b2494d82db49fc64458fd5565038a569c9"
+    },
+    {
+      "path": "C/notes/registry-01/original/notes-control.pptx",
+      "source": "notes-order-registry-01/original/notes-control.pptx",
+      "bytes": 19285,
+      "sha256": "31cbae629b3d49ba0d6313bff95c59f645f5cafa0f0585e556fd9ebe66d4512c"
+    },
+    {
+      "path": "C/notes/registry-01/reordered/notes-control.pptx",
+      "source": "notes-order-registry-01/reordered/notes-control.pptx",
+      "bytes": 19284,
+      "sha256": "1b263edfc81ce6489179498925acf4e0ad7546288a84a33efec16900811fe6f4"
+    },
+    {
+      "path": "README.md",
+      "source": "generated",
+      "bytes": 6884,
+      "sha256": "ec0a75908ac962bd95fd182a24565a59d6fb4c6c438042165ce7ae7e044d4d51"
+    },
+    {
+      "path": "verify.py",
+      "source": "supervisor metadata or portable verifier",
+      "bytes": 1778,
+      "sha256": "6248edcea6d05fd429a2308338d727b261a54ba9703a9e1deb88e7ce45bd0745"
+    },
+    {
+      "path": "visual-review.json",
+      "source": "supervisor metadata or portable verifier",
+      "bytes": 6085,
+      "sha256": "9f00ff4e127d8f8ca6e02cae8cbe594d4368ac7c0f9c5d63516c099bac2c33c2"
+    }
+  ],
+  "finalizer": {
+    "source": "finalize-edit-evidence.py",
+    "sha256": "6c4981afa3c70b999084ab211dfb997571a6040fbf05ca15826d35f932120ade",
+    "initialManifestSha256": "5aa70be6f61cd991c6992de65eadc1506cb4272a5a19c8de90972cef1e60051c"
+  }
+}
