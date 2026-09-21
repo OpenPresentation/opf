@@ -1,0 +1,51 @@
+{
+  "capturedAt": "2026-09-21T13:33:10.739Z",
+  "browser": "153.0.8010.12",
+  "pages": [
+    {
+      "name": "gallery-docs-before",
+      "url": "https://www.pptx.gallery/docs",
+      "status": 200,
+      "sha256": "9b5ff30444cff2ae09951f98649c06c538c795884f92d7ee3dd827b28b8597dd",
+      "match": "You don’t edit slides here",
+      "matchPresent": true,
+      "pageErrors": []
+    },
+    {
+      "name": "site-data-import-before",
+      "url": "https://www.openpresentation.org/docs/data-import",
+      "status": 200,
+      "sha256": "4e20fd7c8919d044a9fd6a83640886ffd5cb61be9f7765e20d2b7b592c022e17",
+      "match": "local coordinated preview packages",
+      "matchPresent": true,
+      "pageErrors": []
+    },
+    {
+      "name": "site-rich-text-before",
+      "url": "https://www.openpresentation.org/docs/rich-text",
+      "status": 200,
+      "sha256": "ea381bb882e1a4c424a46d0039a65fdfa510ece47bd5ea4f0ce056d67c4fd5af",
+      "match": "coordinated local preview packages",
+      "matchPresent": true,
+      "pageErrors": []
+    },
+    {
+      "name": "site-dynamic-composition-before",
+      "url": "https://www.openpresentation.org/docs/dynamic-composition",
+      "status": 200,
+      "sha256": "57c027e2f659a7f826b891339271812a1e5beb17992d14f794d6876d838bcb50",
+      "match": "Metric internals (unreleased integration)",
+      "matchPresent": true,
+      "pageErrors": []
+    },
+    {
+      "name": "site-docs-index",
+      "url": "https://www.openpresentation.org/docs",
+      "status": 200,
+      "sha256": "a2a804a716b96b45468d5796a5da07e49a7e32825dc17a2198a8f5746ee4d44d",
+      "match": "Install @openpresentation/opf",
+      "matchPresent": true,
+      "pageErrors": []
+    }
+  ]
+}

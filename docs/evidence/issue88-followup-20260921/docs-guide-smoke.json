@@ -1,0 +1,32 @@
+{
+  "status": "passed",
+  "checkedAt": "2026-09-21T13:41:26.576Z",
+  "node": "v24.21.0",
+  "platform": "darwin",
+  "consumer": "/private/tmp/opf-registry-20260921/consumer",
+  "packages": {
+    "@openpresentation/opf": "0.11.0",
+    "@openpresentation/cli": "0.9.0",
+    "@openpresentation/opf-render": "0.9.0",
+    "@openpresentation/opf-pptx": "0.9.1",
+    "@openpresentation/opf-editor": "0.8.0"
+  },
+  "verifierSha256": "17bdf6bbf2ab65c983cd97ecb061a4e8b2d6e66bbc80e616d311839b2eb9973b",
+  "lockSha256": "eca567d00057fc3bc605802d2616565a9debf22d8862799e9ea50c4ce10c66b1",
+  "checks": {
+    "csvIdentifierPreserved": true,
+    "editorDataReexport": true,
+    "richRangeHelpers": true,
+    "explanation": "grid-score-v9",
+    "furniture": "furniture-flow-v2",
+    "metric": "metric-flow-v1",
+    "contentCardInset": 12,
+    "minFontSize": 32,
+    "unmeasuredMetricPayloads": [],
+    "cliImportData": true,
+    "cliPaginate": true,
+    "cliExplainRepairAbsent": true
+  },
+  "cliHelp": "OPF — local presentation files for agents (Node 24)\n  opf create [output.opf.json|-] [--title <text>] [--from <file|->] [--force]\n  opf validate <file|-> [--strict]\n  opf lint <file|-> [--config <local-json-file>] [--strict]\n  opf edit <file|-> --patch <patch.json|-> [--output <file|-> | --in-place]\n           [--dry-run] [--expect-sha256 <hash>] [--force] [--strict]\n  opf import-data <data.csv|data.json|-> --as <table|chart> [--format <csv|tsv|json>]\n           [--into <deck>] [--path </slides/0/table>] [--output <file|-> | --in-place]\n           [--category <column>] [--series <JSON-array>] [--columns <JSON-array>]\n           [--chart-type <id>] [--no-header] [--delimiter <character>] [--title <text>]\n           [--force] [--strict]\n  opf paginate <input|-> <output|-> [--force] [--strict]\n  opf bundle <input|-> <output|-> [--force] [--strict]\n  opf schemas\n  opf schema [name] [JSON-Pointer]\n  opf catalogs\n  opf catalog <kind> [id]\n  opf skills <install|update|status> [--agent <universal|codex|claude-code|cursor>]\n             [--global | --directory <skills-directory>]\n  opf --version\n\nJSON reports; '-' reads stdin or writes a document to stdout. Diagnostics for\nstdout documents go to stderr. Existing files require --force or --in-place.\nEdits apply JSON Patch (add/remove/replace/move/copy/test), validate the whole\nresult, and save atomically. --dry-run emits the result without saving.\nExit codes: 0 success, 1 invalid document/patch/conflict, 2 usage/JSON/I/O error.\nValidation checks structure and references, not visual fidelity.\nBundle inlines the bundled catalog records a document references (kinds with a\ncustom source are left untouched) so the file resolves every catalog reference\noffline. Remote media and data assets are not inlined.\nLint adds source locations, contextual suggestions and explicit host contracts.\nLint syntax/schema/policy errors exit 1; --strict also rejects warnings.\n\nInstall all six bundled OPF agent skills in this project:\n  npx @openpresentation/cli@latest skills install\nSkills copy locally without symlinks, paid services or telemetry. Updates refuse\nlocally modified/unmanaged skill folders and keep previous managed versions.\n",
+  "scope": "Focused installed-package API/documentation smoke. No browser, native Office, font parity, general repair or release gate claim. The inset tolerance handles JavaScript decimal arithmetic, not a renderer/native visual tolerance."
+}

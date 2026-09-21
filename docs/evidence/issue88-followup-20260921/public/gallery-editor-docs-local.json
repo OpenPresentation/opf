@@ -1,0 +1,27 @@
+{
+  "capturedAt": "2026-09-21T13:32:07.852Z",
+  "browser": "153.0.8010.12",
+  "docsStatus": 200,
+  "correctedCopy": "Catalog and local editing\nCatalog references. Gallery items describe named design choices. Open an item in the editor to use it in a deck.\nLocal slide editing. The visual OPF editor supports OPF import, content and property edits, live preview, undo/redo, and editable PowerPoint export in your browser. Save OPF to keep your changes; review exported slides in PowerPoint with the chosen fonts installed.\nFree access. No ads, no accounts, no paywalls. PPTX.gallery is a free public good. Revenue in the ecosystem lives in PPTX.dev’s paid API.\n",
+  "editorUrl": "http://127.0.0.1:3122/editor",
+  "editorLoaded": true,
+  "buttons": [
+    "Add slide",
+    "Browse galleries",
+    "Import",
+    "Copy OPF",
+    "All properties",
+    "Source",
+    "Save OPF",
+    "PowerPoint",
+    "Add content",
+    "Arrange",
+    "",
+    "",
+    "",
+    "Copy selected content",
+    "Apply edit",
+    "Save notes"
+  ],
+  "pageErrors": []
+}

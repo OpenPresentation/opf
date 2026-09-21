@@ -1,0 +1,11 @@
+
+> openpresentation-workspace@ check:spec /private/tmp/opf-issue88-handoff-20260921/opf
+> node scripts/check-spec-integrity.mjs
+
+[b] chart-types: skipped (no matching root $def; chart-type is referenced as a bare string, not an inline object)
+[b] layouts: skipped (no matching root $def; layout is referenced as a bare string, not an inline object)
+[b] social-platforms: skipped (no matching root $def; social-platform is referenced as a bare string, not an inline object)
+{
+  "valid": true,
+  "catalogKinds": 11
+}

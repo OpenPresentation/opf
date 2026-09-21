@@ -1,0 +1,24 @@
+
+> openpresentation-workspace@ check:text /private/tmp/opf-issue88-handoff-20260921/opf
+> node --test scripts/check-text-integrity.test.mjs && node scripts/check-text-integrity.mjs
+
+✔ compressed reports retain the same text checks and original line/column (0.9145ms)
+✔ real compressed evidence is scanned as its text, preserving input bytes (5.760208ms)
+✔ names alone cannot bypass checks and broken/oversized compressed text fails (0.885167ms)
+✔ existing recognized binary evidence remains distinct from text (0.057583ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 39.626375
+{
+  "valid": true,
+  "files": 3697,
+  "binaryImages": 6664,
+  "binaryDocuments": 514,
+  "binaryFonts": 43,
+  "compressedText": 81
+}

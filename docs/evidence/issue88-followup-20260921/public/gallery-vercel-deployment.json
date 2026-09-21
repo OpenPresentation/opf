@@ -1,0 +1,41 @@
+{
+  "capturedAt": "2026-09-21T13:25:44.741Z",
+  "id": "dpl_AJdvHXvwdP2KnshRJBMu36Z9EZF4",
+  "name": "pptx-gallery",
+  "url": "pptx-gallery-pb6hyj5se-dataadvantage.vercel.app",
+  "type": "LAMBDAS",
+  "state": "READY",
+  "createdAt": 1789996781676,
+  "creator": {
+    "uid": "ZQU4suDtrsvvtRutONCd3J0H",
+    "username": "grimmmichaelj"
+  },
+  "project": {
+    "id": "prj_jaAjOxlbGlBOfbKs6h4usu3mRR5G",
+    "name": "pptx-gallery",
+    "framework": "nextjs"
+  },
+  "meta": {
+    "githubCommitRef": "main",
+    "githubCommitSha": "78d2ac10d1795cc273c10cacc712f60dfcf61d37",
+    "githubCommitMessage": "fix(docs): describe the published ColorRef and bundle workflow (#35)\n\nReplace future-publication claims in llms.txt and color-scheme pages with\ncurrent behavior. Read the displayed core version from the installed\npackage and distinguish catalog bundling from remote media/data loading.\n\nRelated to...",
+    "githubRepo": "pptx-gallery",
+    "githubOrg": "Data-Advantage"
+  },
+  "alias": [
+    "www.pptx.gallery",
+    "pptxgallery.vercel.app",
+    "pptx.gallery",
+    "pptx-gallery-dataadvantage.vercel.app",
+    "pptx-gallery-git-main-dataadvantage.vercel.app"
+  ],
+  "target": "production",
+  "regions": [
+    "iad1"
+  ],
+  "buildingAt": 1789996782834,
+  "ready": 1789996839326,
+  "readyState": "READY",
+  "source": "git",
+  "aliasError": null
+}
