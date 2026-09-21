@@ -1,0 +1,38 @@
+{
+  "test": "tests/e2e/svg-security.spec.ts:51",
+  "assertionLine": 60,
+  "tracePath": "/private/tmp/opf-author-source-release-20260921/keyboard-postmerge-ci/linux-failure/svg-security-published-SVG-25408-rted-document-strings-inert/trace.zip",
+  "traceSha256": "723ab2961fb86a75bbc323dbf392e7477861987060bc9bcbf4904a6c3e940bb4",
+  "traceCrcPass": true,
+  "errorContextPath": "/private/tmp/opf-author-source-release-20260921/keyboard-postmerge-ci/linux-failure/svg-security-published-SVG-25408-rted-document-strings-inert/error-context.md",
+  "errorContextSha256": "d1f651ce07ec80744d59a9ec79313bf7928df88dcb56d84e5b9bcdf559bb4032",
+  "events": [
+    {
+      "callId": "expect@35",
+      "locator": "getByText('Loaded shared deck from URL.', { exact: true })",
+      "startTimeMs": 189763.748,
+      "endTimeMs": 191862.21,
+      "durationMs": 2098.4619999999995,
+      "passed": true,
+      "errorMessage": ""
+    },
+    {
+      "callId": "expect@36",
+      "locator": "getByTestId('inspector-canvas-overlay')",
+      "startTimeMs": 191864.331,
+      "endTimeMs": 192360.46,
+      "durationMs": 496.12899999998626,
+      "passed": false,
+      "errorMessage": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByTestId('inspector-canvas-overlay')\nExpected: visible\nError: strict mode violation: getByTestId('inspector-canvas-overlay') resolved to 5 elements:\n    1) <div role=\"group\" data-opf-slide-index=\"0\" data-opf-slide-id=\"cover\" data-testid=\"inspector-canvas-overlay\" class=\"[&>svg]:block [&>svg]:h-auto [&>svg]:w-full\" aria-label=\"Slide 1: Presentations should be programmable, not handcrafted bottlenecks.\"></div> aka getByLabel('Slide 1: Presentations should')\n    2) <div role=\"group\" data-opf-slide-index=\"1\" data-opf-slide-id=\"problem\" data-testid=\"inspector-canvas-overlay\" class=\"[&>svg]:block [&>svg]:h-auto [&>svg]:w-full\" aria-label=\"Slide 2: Deck production still breaks at the exact moment teams need speed.\"></div> aka getByLabel('Slide 2: Deck production')\n    3) <div role=\"group\" data-opf-slide-index=\"2\" data-opf-slide-id=\"solution\" data-testid=\"inspector-canvas-overlay\" class=\"[&>svg]:block [&>svg]:h-auto [&>svg]:w-full\" aria-label=\"Slide 3: OPF makes every deck step speak the same contract.\"></div> aka getByLabel('Slide 3: OPF makes every deck')\n    4) <div role=\"group\" data-opf-slide-index=\"3\" data-opf-slide-id=\"traction\" data-testid=\"inspector-canvas-overlay\" class=\"[&>svg]:block [&>svg]:h-auto [&>svg]:w-full\" aria-label=\"Slide 4: Developer demand is moving from exports to full deck systems.\"></div> aka getByLabel('Slide 4: Developer demand is')\n    5) <div role=\"group\" data-opf-slide-id=\"ask\" data-opf-slide-index=\"4\" data-testid=\"inspector-canvas-overlay\" class=\"[&>svg]:block [&>svg]:h-auto [&>svg]:w-full\" aria-label=\"Slide 5: We are raising to make OPF the default contract for AI-generated presentations.\"></div> aka getByLabel('Slide 5: We are raising to')\n\nCall log:\n  - Expect \"toBeVisible\" getByTestId('inspector-canvas-overlay') with timeout 5000ms\n  - waiting for getByTestId('inspector-canvas-overlay')\n"
+    }
+  ],
+  "observedSlideIds": [
+    "cover",
+    "problem",
+    "solution",
+    "traction",
+    "ask"
+  ],
+  "interpretation": "Shared-load toast passed, but a unique canvas expectation found five default-deck overlays. The test stopped before hostile-renderer checks. This is distinct from the prior Windows toast timeout and LF categorical popup failure; no security exploit or exact underlying cause is established.",
+  "windowsDiagnosticInactiveOnLinux": true
+}

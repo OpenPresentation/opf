@@ -1,0 +1,24 @@
+{
+  "checkedAt": "2026-09-21T18:00:30.676471+00:00",
+  "status": "UNCOMMITTED_REVIEWED_CHECKPOINT_APP53_CANONICAL_PASS_POSTMERGE_LINUX_FAILED",
+  "base": "c3e35b92e53d12764f9b1b7487ccfb7325d5c1aa",
+  "relativeLinksChecked": 122,
+  "copiedReceiptsVerifiedUnchanged": 144,
+  "historicalReportsUnchanged": [
+    "docs/evidence/completion-acceptance-20260921/README.md",
+    "docs/evidence/issue88-final-20260921/README.md",
+    "docs/evidence/completion-acceptance-20260921/canonical/REPORT.md"
+  ],
+  "originalSourcePathsLaterUpdated": [
+    "app53/keyboard-commit-receipt.json"
+  ],
+  "diffCheck": {
+    "ordinaryDocumentation": true,
+    "initialStagedCheck": "Reported retained CRLF fixture lines and original log trailing spaces. Captured bytes were not edited.",
+    "scopedEvidenceAttributes": "JSON allows CR-at-EOL; logs retain trailing spaces/blank final lines; literal canonical downloads and observations retain authored trailing spaces. Ordinary Markdown/source whitespace checks remain enabled."
+  },
+  "retainedHashesAllValid": true,
+  "independentReview": "Canonical copies, selected postmerge copies, issue receipts, links and current claims reviewed. Historical App47 wording corrected. Later diagnosis kept distinct from original run receipt.",
+  "integrityCommand": "Node24 scripts/check-text-integrity.mjs; final result in adjacent integrity-result.json",
+  "releaseScope": "Evidence/docs only; no package, product, baseline or deployment mutation."
+}

@@ -1,0 +1,403 @@
+{
+  "sourceReport": "/private/tmp/opf-author-source-browser-20260921/final-report.json",
+  "sourceReportBytes": 81209,
+  "sourceReportSHA256": "dafa4c04ce96ae178a4ab58e818cd00545636395afa16ebe00a1d10908ff7b7b",
+  "scope": "Derived compact local result, not a canonical production or release acceptance receipt. Raw trace/body/attachment data retained by app evidence owner.",
+  "stats": {
+    "startTime": "2026-09-21T16:29:47.027Z",
+    "duration": 75497.202,
+    "expected": 26,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  },
+  "cases": [
+    {
+      "title": "Author categorical choices include built-in, document and loaded catalogs with exact LF source undo/redo",
+      "file": "author-json-options.spec.ts",
+      "line": 72,
+      "status": "unexpected",
+      "results": [
+        {
+          "status": "failed",
+          "retry": 0,
+          "duration": 8144,
+          "errors": [
+            {
+              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.suggest-widget.visible')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('.suggest-widget.visible') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.suggest-widget.visible')\u001b[22m\n\n\n  54 |   await input.press('Control+Space');\n  55 |   const choices = page.locator('.suggest-widget.visible');\n> 56 |   await expect(choices).toBeVisible();\n     |                         ^\n  57 |   return choices;\n  58 | }\n  59 |\n    at openChoices (/private/tmp/opf-author-source-fix-20260921/pptx-dev/tests/e2e/author-json-options.spec.ts:56:25)\n    at /private/tmp/opf-author-source-fix-20260921/pptx-dev/tests/e2e/author-json-options.spec.ts:118:25",
+              "location": {
+                "file": "/private/tmp/opf-author-source-fix-20260921/pptx-dev/tests/e2e/author-json-options.spec.ts",
+                "column": 25,
+                "line": 56
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Author categorical choices include built-in, document and loaded catalogs with exact CRLF source undo/redo",
+      "file": "author-json-options.spec.ts",
+      "line": 72,
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 3672,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "anonymous code editing preserves source and visible selection through offline export/reimport at 1280x720",
+      "file": "author.spec.ts",
+      "line": 26,
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 3082,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "anonymous code editing preserves source and visible selection through offline export/reimport at 540x960",
+      "file": "author.spec.ts",
+      "line": 26,
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 2697,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "anonymous Author canvas edits survive tab changes, offline PowerPoint export and undoable reimport",
+      "file": "author.spec.ts",
+      "line": 55,
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 3576,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "Author Title Subtitle completion preserves LF compact source in one undo step",
+      "file": "completion-preservation.spec.ts",
+      "line": 113,
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 2165,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "Author Text 2x completion preserves CRLF compact source in one undo step",
+      "file": "completion-preservation.spec.ts",
+      "line": 113,
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 2190,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "Author escaped current value is not offered as an edit and leaves prior undo history intact",
+      "file": "completion-preservation.spec.ts",
+      "line": 149,
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 2644,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "Author newer and invalid source dismiss stale choices and refresh inline catalogs",
+      "file": "completion-preservation.spec.ts",
+      "line": 178,
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 3523,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "Author format and document changes cancel the open completion without applying it",
+      "file": "completion-preservation.spec.ts",
+      "line": 219,
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 2414,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 1440px",
+      "file": "inspector-editing.spec.ts",
+      "line": 40,
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 3810,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 540px",
+      "file": "inspector-editing.spec.ts",
+      "line": 40,
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 3789,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "invalid source keeps a renderer fallback and source recovery uses the current slide order",
+      "file": "inspector-editing.spec.ts",
+      "line": 99,
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 1298,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "shared navigation discards an ID-less draft even when the replacement title is identical",
+      "file": "inspector-editing.spec.ts",
+      "line": 116,
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 1559,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "schema-valid strict overflow cancels an active draft and the same slide recovers after source correction",
+      "file": "inspector-recovery.spec.ts",
+      "line": 18,
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 1644,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "font substitution notes remain accessible and operable while the Inspector canvas is active",
+      "file": "inspector-recovery.spec.ts",
+      "line": 85,
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 1577,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "published long quotes retain their footer in actual wide/portrait previews and PowerPoint downloads",
+      "file": "inspector.spec.ts",
+      "line": 20,
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 1654,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "shared navigation clears format errors and proposals from the previous deck",
+      "file": "inspector.spec.ts",
+      "line": 76,
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 1034,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "anonymous JSON authoring, preview, undo/redo, download and shared reimport",
+      "file": "inspector.spec.ts",
+      "line": 118,
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 1317,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "warm JSON worker leaves pasted source untouched while explicit Format Document remains undoable",
+      "file": "json-paste-formatting.spec.ts",
+      "line": 53,
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 3828,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "bundled JSON worker provides schema diagnostics, completion and recovery offline",
+      "file": "monaco.spec.ts",
+      "line": 3,
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 1839,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "Author preserves exact LF source through preview copy, JSON download and canvas history",
+      "file": "source-download-preservation.spec.ts",
+      "line": 90,
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 5438,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "Author preserves exact CRLF source through preview copy, JSON download and canvas history",
+      "file": "source-download-preservation.spec.ts",
+      "line": 90,
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 3893,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "Inspector JSON files preserve exact authored LF bytes before edits and through canvas undo/redo",
+      "file": "source-download-preservation.spec.ts",
+      "line": 218,
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 2700,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "published SVG renderer keeps hostile shared and imported document strings inert",
+      "file": "svg-security.spec.ts",
+      "line": 41,
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 1686,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "public toolkit shows the deployed package set with working render, edit and export proofs",
+      "file": "toolkit.spec.ts",
+      "line": 4,
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 101,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "YAML and Markdown editing preserve OPF values and recover from malformed YAML offline",
+      "file": "yaml.spec.ts",
+      "line": 4,
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 3225,
+          "errors": []
+        }
+      ]
+    }
+  ]
+}

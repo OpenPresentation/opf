@@ -1,0 +1,902 @@
+[
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/.last-run.json",
+    "originalRelativePath": ".last-run.json",
+    "case": null,
+    "bytes": 45,
+    "sha256": "91d1c43004802cd49950d78eb11c8fa7d05da8ffffe219a8b13b2f561bc00903",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/author-anonymous-Author-ca-d560b-xport-and-undoable-reimport/author-export.pptx",
+    "originalRelativePath": "author-anonymous-Author-ca-d560b-xport-and-undoable-reimport/author-export.pptx",
+    "case": "05",
+    "bytes": 16330,
+    "sha256": "070cddbcb5a3aa9d6916531f212fd067d9ebe8033f715e98ade5b78229530696",
+    "copiedTo": "downloads/05/author-export.pptx",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/author-anonymous-Author-ca-d560b-xport-and-undoable-reimport/author.png",
+    "originalRelativePath": "author-anonymous-Author-ca-d560b-xport-and-undoable-reimport/author.png",
+    "case": "05",
+    "bytes": 110640,
+    "sha256": "46a4a60877b492c030f6579f4f2022d04b6571a111dd976f47706ad5750054ea",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/author-anonymous-Author-ca-d560b-xport-and-undoable-reimport/trace.zip",
+    "originalRelativePath": "author-anonymous-Author-ca-d560b-xport-and-undoable-reimport/trace.zip",
+    "case": "05",
+    "bytes": 9871525,
+    "sha256": "9b3ed2b33d99ce72a1ebb8f2a3e59f20bf119688078316236bc9b29dd466b668",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/author-anonymous-code-edit-12484-export-reimport-at-1280x720/trace.zip",
+    "originalRelativePath": "author-anonymous-code-edit-12484-export-reimport-at-1280x720/trace.zip",
+    "case": "03",
+    "bytes": 7952593,
+    "sha256": "f1e7e06920e3091d3b9686be37b02e1ead5d0ad082497b619b411771a4568a2c",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/author-anonymous-code-edit-3e561--export-reimport-at-540x960/trace.zip",
+    "originalRelativePath": "author-anonymous-code-edit-3e561--export-reimport-at-540x960/trace.zip",
+    "case": "04",
+    "bytes": 6618411,
+    "sha256": "4afaba0d5754ad24984dff06520a5313d5839ffe8c02f360b0c416014399d052",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/author-json-options.png",
+    "originalRelativePath": "author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/author-json-options.png",
+    "case": "01",
+    "bytes": 175776,
+    "sha256": "3e602f80e811b7d232c9ca9073799b1990109c4387aee8aa4d5334fa1d23f52f",
+    "copiedTo": "screenshots/author-lf-categorical-complete.png",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/author-layout-options.png",
+    "originalRelativePath": "author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/author-layout-options.png",
+    "case": "01",
+    "bytes": 188683,
+    "sha256": "1f3530a77ad5bd91191a0c3a5cc7c0c26cbd4c23d86be3eed2b9577a16665b0f",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/author-theme-options.png",
+    "originalRelativePath": "author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/author-theme-options.png",
+    "case": "01",
+    "bytes": 184121,
+    "sha256": "1b5b6207eb90f811577ebf4a308b1a73c7182d3c1ae14704c7af40bcd2ded297",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/trace.zip",
+    "originalRelativePath": "author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/trace.zip",
+    "case": "01",
+    "bytes": 10356211,
+    "sha256": "18842201c0ecbafe97489286ba6abc758c3b990a0163e2071c4fa02acef49566",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/author-json-options-Author-cda0b-exact-CRLF-source-undo-redo/author-json-options.png",
+    "originalRelativePath": "author-json-options-Author-cda0b-exact-CRLF-source-undo-redo/author-json-options.png",
+    "case": "02",
+    "bytes": 175776,
+    "sha256": "3e602f80e811b7d232c9ca9073799b1990109c4387aee8aa4d5334fa1d23f52f",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/author-json-options-Author-cda0b-exact-CRLF-source-undo-redo/author-layout-options.png",
+    "originalRelativePath": "author-json-options-Author-cda0b-exact-CRLF-source-undo-redo/author-layout-options.png",
+    "case": "02",
+    "bytes": 188683,
+    "sha256": "1f3530a77ad5bd91191a0c3a5cc7c0c26cbd4c23d86be3eed2b9577a16665b0f",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/author-json-options-Author-cda0b-exact-CRLF-source-undo-redo/author-theme-options.png",
+    "originalRelativePath": "author-json-options-Author-cda0b-exact-CRLF-source-undo-redo/author-theme-options.png",
+    "case": "02",
+    "bytes": 184121,
+    "sha256": "1b5b6207eb90f811577ebf4a308b1a73c7182d3c1ae14704c7af40bcd2ded297",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/author-json-options-Author-cda0b-exact-CRLF-source-undo-redo/trace.zip",
+    "originalRelativePath": "author-json-options-Author-cda0b-exact-CRLF-source-undo-redo/trace.zip",
+    "case": "02",
+    "bytes": 10405499,
+    "sha256": "ea32bedaec72c8a266146cda8bfe404d696bf7255b758995cc6ebc0f50cbd0ef",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/completion-keyboard-Author-66da5-and-editor-remount-behavior/edited-source.json",
+    "originalRelativePath": "completion-keyboard-Author-66da5-and-editor-remount-behavior/edited-source.json",
+    "case": "06",
+    "bytes": 202,
+    "sha256": "f09f49ed355f8a3503d13e4268153e970f9c06ee986065a89d6e8be6665f4671",
+    "copiedTo": "observations/06/edited-source.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/completion-keyboard-Author-66da5-and-editor-remount-behavior/original-source.json",
+    "originalRelativePath": "completion-keyboard-Author-66da5-and-editor-remount-behavior/original-source.json",
+    "case": "06",
+    "bytes": 205,
+    "sha256": "61d515fd443a657eb4f6c2fed93e3734182aab2f84b2fb250c1fd1aa3b8e1af6",
+    "copiedTo": "observations/06/original-source.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/completion-keyboard-Author-66da5-and-editor-remount-behavior/suggestion-details.png",
+    "originalRelativePath": "completion-keyboard-Author-66da5-and-editor-remount-behavior/suggestion-details.png",
+    "case": "06",
+    "bytes": 143474,
+    "sha256": "46d1df1f3706cc240b2c59d8352bac1372a9a5092cbe5d3b03f5b5fdcc78eb32",
+    "copiedTo": "screenshots/suggestion-details-clipped.png",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/completion-keyboard-Author-66da5-and-editor-remount-behavior/trace.zip",
+    "originalRelativePath": "completion-keyboard-Author-66da5-and-editor-remount-behavior/trace.zip",
+    "case": "06",
+    "bytes": 8075666,
+    "sha256": "afd2805ba4c5d6435fbf03eb42f6c7f99ae4374e504a8b44ef28dde3c4dfd8db",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/completion-keyboard-Author-93788-ir-original-keyboard-owners/keyboard-bubbles.json",
+    "originalRelativePath": "completion-keyboard-Author-93788-ir-original-keyboard-owners/keyboard-bubbles.json",
+    "case": "07",
+    "bytes": 1652,
+    "sha256": "a1bdb25e35eda58a487c4ace86108da82c499940f90e45f754d93c9fd17484cb",
+    "copiedTo": "observations/07/keyboard-bubbles.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/completion-keyboard-Author-93788-ir-original-keyboard-owners/quick-input-keeps-focus.png",
+    "originalRelativePath": "completion-keyboard-Author-93788-ir-original-keyboard-owners/quick-input-keeps-focus.png",
+    "case": "07",
+    "bytes": 97372,
+    "sha256": "6bfa877d775c827eee6dd2b9722c4d4659db0ecd6ecd5460342c6bf899e37730",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/completion-keyboard-Author-93788-ir-original-keyboard-owners/trace.zip",
+    "originalRelativePath": "completion-keyboard-Author-93788-ir-original-keyboard-owners/trace.zip",
+    "case": "07",
+    "bytes": 6347301,
+    "sha256": "9c98eb28493e9b124feeecf908b1461c0ebe6e93763735a802c856cb1d25f7e5",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/completion-preservation-Au-807ee-act-source-in-one-undo-step/actual-source.json",
+    "originalRelativePath": "completion-preservation-Au-807ee-act-source-in-one-undo-step/actual-source.json",
+    "case": "08",
+    "bytes": 767,
+    "sha256": "3590b76552f6afaf7c9af8095eae05feb702333fc1a0fd10b2fad491bd285651",
+    "copiedTo": "observations/08/actual-source.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/completion-preservation-Au-807ee-act-source-in-one-undo-step/desired-source.json",
+    "originalRelativePath": "completion-preservation-Au-807ee-act-source-in-one-undo-step/desired-source.json",
+    "case": "08",
+    "bytes": 767,
+    "sha256": "3590b76552f6afaf7c9af8095eae05feb702333fc1a0fd10b2fad491bd285651",
+    "copiedTo": "observations/08/desired-source.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/completion-preservation-Au-807ee-act-source-in-one-undo-step/original-source.json",
+    "originalRelativePath": "completion-preservation-Au-807ee-act-source-in-one-undo-step/original-source.json",
+    "case": "08",
+    "bytes": 738,
+    "sha256": "1525be094f6dab2c58d5cdd69fc5acb86423764305f05e9515110af8f67a2636",
+    "copiedTo": "observations/08/original-source.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/completion-preservation-Au-807ee-act-source-in-one-undo-step/structural-choice.png",
+    "originalRelativePath": "completion-preservation-Au-807ee-act-source-in-one-undo-step/structural-choice.png",
+    "case": "08",
+    "bytes": 171590,
+    "sha256": "a6becbf6c8ce044f494d96cf95ad6426317905a830b83f6013cacf1368890915",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/completion-preservation-Au-807ee-act-source-in-one-undo-step/trace.zip",
+    "originalRelativePath": "completion-preservation-Au-807ee-act-source-in-one-undo-step/trace.zip",
+    "case": "08",
+    "bytes": 7670097,
+    "sha256": "acbde57d79e8f26fd1b68386cdf9f918d45b18c467276a6247b95227770040b8",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/completion-preservation-Au-96e4e-act-source-in-one-undo-step/actual-source.json",
+    "originalRelativePath": "completion-preservation-Au-96e4e-act-source-in-one-undo-step/actual-source.json",
+    "case": "09",
+    "bytes": 804,
+    "sha256": "302a28aff91ab1669ecfad7cbd2e2a08fa65f451efbdb81e508dc7021e15100f",
+    "copiedTo": "observations/09/actual-source.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/completion-preservation-Au-96e4e-act-source-in-one-undo-step/desired-source.json",
+    "originalRelativePath": "completion-preservation-Au-96e4e-act-source-in-one-undo-step/desired-source.json",
+    "case": "09",
+    "bytes": 804,
+    "sha256": "302a28aff91ab1669ecfad7cbd2e2a08fa65f451efbdb81e508dc7021e15100f",
+    "copiedTo": "observations/09/desired-source.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/completion-preservation-Au-96e4e-act-source-in-one-undo-step/original-source.json",
+    "originalRelativePath": "completion-preservation-Au-96e4e-act-source-in-one-undo-step/original-source.json",
+    "case": "09",
+    "bytes": 772,
+    "sha256": "a90c0c8927c1bd6d92c4732c94fda179f1b7ff151d61a91230f2097d55537de9",
+    "copiedTo": "observations/09/original-source.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/completion-preservation-Au-96e4e-act-source-in-one-undo-step/structural-choice.png",
+    "originalRelativePath": "completion-preservation-Au-96e4e-act-source-in-one-undo-step/structural-choice.png",
+    "case": "09",
+    "bytes": 167074,
+    "sha256": "bd8cceb3d4d7e888d5ebbd26106400e6c3a8cee310b46a9c789d49ed1cb78159",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/completion-preservation-Au-96e4e-act-source-in-one-undo-step/trace.zip",
+    "originalRelativePath": "completion-preservation-Au-96e4e-act-source-in-one-undo-step/trace.zip",
+    "case": "09",
+    "bytes": 7863645,
+    "sha256": "cd6931ef168192d2c8ac2513cd73ca6990120f1a345c6cfd9c0718cca0d54266",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/completion-preservation-Au-aab6b-and-refresh-inline-catalogs/trace.zip",
+    "originalRelativePath": "completion-preservation-Au-aab6b-and-refresh-inline-catalogs/trace.zip",
+    "case": "11",
+    "bytes": 8522629,
+    "sha256": "ecb35cb34bf3c71cd478c896c6124a5d0153bc0e70327bdb95cbe20df59f4528",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/completion-preservation-Au-b9e03-s-prior-undo-history-intact/escaped-current-alternatives.png",
+    "originalRelativePath": "completion-preservation-Au-b9e03-s-prior-undo-history-intact/escaped-current-alternatives.png",
+    "case": "10",
+    "bytes": 178510,
+    "sha256": "2dc874d6d89cc6b0a4e6e31a05be7eefe926f93992356929fb8613645d4f6e06",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/completion-preservation-Au-b9e03-s-prior-undo-history-intact/trace.zip",
+    "originalRelativePath": "completion-preservation-Au-b9e03-s-prior-undo-history-intact/trace.zip",
+    "case": "10",
+    "bytes": 8558714,
+    "sha256": "cc6a63632372a2371aedd0516e48fe90062e9caf00a32fa1ae8fdd3878702949",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/completion-preservation-Au-e6715-pletion-without-applying-it/trace.zip",
+    "originalRelativePath": "completion-preservation-Au-e6715-pletion-without-applying-it/trace.zip",
+    "case": "12",
+    "bytes": 8604230,
+    "sha256": "d21e88b2026592ab319764424c85686d9eeac1052706e4117c95887f7c11911d",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/inspector-anonymous-JSON-a-151ab-ownload-and-shared-reimport/inspector.png",
+    "originalRelativePath": "inspector-anonymous-JSON-a-151ab-ownload-and-shared-reimport/inspector.png",
+    "case": "21",
+    "bytes": 178107,
+    "sha256": "ea0b19fcec97c59d83c5a7991205a98370203e2fc9021269623e1b7ac594e1bc",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/inspector-anonymous-JSON-a-151ab-ownload-and-shared-reimport/trace.zip",
+    "originalRelativePath": "inspector-anonymous-JSON-a-151ab-ownload-and-shared-reimport/trace.zip",
+    "case": "21",
+    "bytes": 7550701,
+    "sha256": "d21ee5008284860ab3a967d6e1c2220674f1fe9259d8b66fe8bb7a8fad8792a2",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/inspector-editing-all-Insp-15273-fline-undo-export-at-1440px/inspector-later-slide.png",
+    "originalRelativePath": "inspector-editing-all-Insp-15273-fline-undo-export-at-1440px/inspector-later-slide.png",
+    "case": "13",
+    "bytes": 208255,
+    "sha256": "dc1f1b1826528aa93c205c9e83627b65f6fc60c18cc80d15b0b2367c8e224499",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/inspector-editing-all-Insp-15273-fline-undo-export-at-1440px/trace.zip",
+    "originalRelativePath": "inspector-editing-all-Insp-15273-fline-undo-export-at-1440px/trace.zip",
+    "case": "13",
+    "bytes": 13158815,
+    "sha256": "4b4e4ebdcaf3d811aaf96d1b133c8d51bb9ac12034a1a7ca5755a1da4c58de59",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/inspector-editing-all-Insp-a78d3-ffline-undo-export-at-540px/inspector-later-slide.png",
+    "originalRelativePath": "inspector-editing-all-Insp-a78d3-ffline-undo-export-at-540px/inspector-later-slide.png",
+    "case": "14",
+    "bytes": 64077,
+    "sha256": "29c7937741b56ac461151a0bd81765e068294f2361a73b07895f562a55f970af",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/inspector-editing-all-Insp-a78d3-ffline-undo-export-at-540px/trace.zip",
+    "originalRelativePath": "inspector-editing-all-Insp-a78d3-ffline-undo-export-at-540px/trace.zip",
+    "case": "14",
+    "bytes": 8411698,
+    "sha256": "a9a2d61d3a968442dbfd5ab5271c615c2dcbf4bb06b5e1e8f51ce3c1c3bd827f",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/inspector-editing-invalid--4da31-ses-the-current-slide-order/trace.zip",
+    "originalRelativePath": "inspector-editing-invalid--4da31-ses-the-current-slide-order/trace.zip",
+    "case": "15",
+    "bytes": 7753498,
+    "sha256": "c842af0853f90a9900fff636bcc6e92d67b73b546f7264936297b8ed633cbc91",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/inspector-editing-shared-n-98a03-lacement-title-is-identical/trace.zip",
+    "originalRelativePath": "inspector-editing-shared-n-98a03-lacement-title-is-identical/trace.zip",
+    "case": "16",
+    "bytes": 7237647,
+    "sha256": "5735746a8aae927bd41b83ff4a5ac5ffd974762d6a4856f5383c10f21a6af0ac",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/inspector-published-long-q-fcc06-ws-and-PowerPoint-downloads/trace.zip",
+    "originalRelativePath": "inspector-published-long-q-fcc06-ws-and-PowerPoint-downloads/trace.zip",
+    "case": "19",
+    "bytes": 6685680,
+    "sha256": "711dc655b47117ae7b4f3ea02c428d052f2ad4ab702a8bd4742e2ba85dd5b028",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/inspector-recovery-font-su-beb5b--Inspector-canvas-is-active/inspector-font-notes.png",
+    "originalRelativePath": "inspector-recovery-font-su-beb5b--Inspector-canvas-is-active/inspector-font-notes.png",
+    "case": "18",
+    "bytes": 179405,
+    "sha256": "5d50975036517fa55b4c8daaf1ea6586c5d73db692608b307d5963db1447e89c",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/inspector-recovery-font-su-beb5b--Inspector-canvas-is-active/trace.zip",
+    "originalRelativePath": "inspector-recovery-font-su-beb5b--Inspector-canvas-is-active/trace.zip",
+    "case": "18",
+    "bytes": 6309358,
+    "sha256": "77420705874be2dbfbb42859c186226a52a2675218152dfe9fecb4672a1b36db",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/inspector-recovery-schema--76507-ers-after-source-correction/inspector-render-recovered.png",
+    "originalRelativePath": "inspector-recovery-schema--76507-ers-after-source-correction/inspector-render-recovered.png",
+    "case": "17",
+    "bytes": 185110,
+    "sha256": "1b7c4c8382517df43b26c87688315122e18e6ce7fdfb2aa6c90dd2049c38251d",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/inspector-recovery-schema--76507-ers-after-source-correction/inspector-strict-overflow.png",
+    "originalRelativePath": "inspector-recovery-schema--76507-ers-after-source-correction/inspector-strict-overflow.png",
+    "case": "17",
+    "bytes": 293738,
+    "sha256": "c5488fc5da3c29ab3d9507addb36c033de8b3f9330dc0c7d5dc3c856e82cf62f",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/inspector-recovery-schema--76507-ers-after-source-correction/trace.zip",
+    "originalRelativePath": "inspector-recovery-schema--76507-ers-after-source-correction/trace.zip",
+    "case": "17",
+    "bytes": 7862860,
+    "sha256": "803611471c6e862694d3e31562b8000bc869e3d351a88751557a2cbce7147b72",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/inspector-shared-navigatio-46dd3-sals-from-the-previous-deck/trace.zip",
+    "originalRelativePath": "inspector-shared-navigatio-46dd3-sals-from-the-previous-deck/trace.zip",
+    "case": "20",
+    "bytes": 6884249,
+    "sha256": "11a50e26b4f22fe88dc108a913ab6c141c10f4e37baf935ada1464042c466452",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/json-paste-formatting-warm-44312-t-Document-remains-undoable/attachments/authored-source-json-7238070ba18ca52a3e526a3f1efaa565a353d9f1.json",
+    "originalRelativePath": "json-paste-formatting-warm-44312-t-Document-remains-undoable/attachments/authored-source-json-7238070ba18ca52a3e526a3f1efaa565a353d9f1.json",
+    "case": "22",
+    "bytes": 302,
+    "sha256": "f4177cbb0fc6a9ad471fc3ab52f39cb14c7dc62b497ded9d840c9e0dbea21e62",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/json-paste-formatting-warm-44312-t-Document-remains-undoable/attachments/copied-source-json-a89f8aaba6269a8ec563ee3b32edfe578d14bac5.json",
+    "originalRelativePath": "json-paste-formatting-warm-44312-t-Document-remains-undoable/attachments/copied-source-json-a89f8aaba6269a8ec563ee3b32edfe578d14bac5.json",
+    "case": "22",
+    "bytes": 302,
+    "sha256": "f4177cbb0fc6a9ad471fc3ab52f39cb14c7dc62b497ded9d840c9e0dbea21e62",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/json-paste-formatting-warm-44312-t-Document-remains-undoable/attachments/paste-worker-requests-json-6364634c53c1692afd25565e5a6c456851164819.json",
+    "originalRelativePath": "json-paste-formatting-warm-44312-t-Document-remains-undoable/attachments/paste-worker-requests-json-6364634c53c1692afd25565e5a6c456851164819.json",
+    "case": "22",
+    "bytes": 83,
+    "sha256": "54051725e2e06fd8e83369628086d875dcd7b48b1e02b5e5435e00e6021bdfa4",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/json-paste-formatting-warm-44312-t-Document-remains-undoable/authored-source.json",
+    "originalRelativePath": "json-paste-formatting-warm-44312-t-Document-remains-undoable/authored-source.json",
+    "case": "22",
+    "bytes": 302,
+    "sha256": "f4177cbb0fc6a9ad471fc3ab52f39cb14c7dc62b497ded9d840c9e0dbea21e62",
+    "copiedTo": "observations/22/authored-source.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/json-paste-formatting-warm-44312-t-Document-remains-undoable/copied-source.json",
+    "originalRelativePath": "json-paste-formatting-warm-44312-t-Document-remains-undoable/copied-source.json",
+    "case": "22",
+    "bytes": 302,
+    "sha256": "f4177cbb0fc6a9ad471fc3ab52f39cb14c7dc62b497ded9d840c9e0dbea21e62",
+    "copiedTo": "observations/22/copied-source.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/json-paste-formatting-warm-44312-t-Document-remains-undoable/paste-worker-requests.json",
+    "originalRelativePath": "json-paste-formatting-warm-44312-t-Document-remains-undoable/paste-worker-requests.json",
+    "case": "22",
+    "bytes": 83,
+    "sha256": "54051725e2e06fd8e83369628086d875dcd7b48b1e02b5e5435e00e6021bdfa4",
+    "copiedTo": "observations/22/paste-worker-requests.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/json-paste-formatting-warm-44312-t-Document-remains-undoable/trace.zip",
+    "originalRelativePath": "json-paste-formatting-warm-44312-t-Document-remains-undoable/trace.zip",
+    "case": "22",
+    "bytes": 10851811,
+    "sha256": "a58a4cad1417c7a4b72d03aca7fd08ae4ecf137c6f2af8b40f5adc0950e8ee59",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/monaco-bundled-JSON-worker-5b20e-letion-and-recovery-offline/trace.zip",
+    "originalRelativePath": "monaco-bundled-JSON-worker-5b20e-letion-and-recovery-offline/trace.zip",
+    "case": "23",
+    "bytes": 7672826,
+    "sha256": "c8512e43288e50efe48730c6ceb2ff53b47c0e1c06779616f46c0380f171d698",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-2c728-nd-through-canvas-undo-redo/edited.opf.json",
+    "originalRelativePath": "source-download-preservati-2c728-nd-through-canvas-undo-redo/edited.opf.json",
+    "case": "26",
+    "bytes": 326,
+    "sha256": "277350fc50382bead15896aef5fa53a33cd099792df57153d0b9b1b12f1fd08d",
+    "copiedTo": "downloads/26/edited.opf.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-2c728-nd-through-canvas-undo-redo/inspector-source-preserved.png",
+    "originalRelativePath": "source-download-preservati-2c728-nd-through-canvas-undo-redo/inspector-source-preserved.png",
+    "case": "26",
+    "bytes": 188321,
+    "sha256": "e7bc1d9c5a2d917b28c3c73195c4dfd9b7c02f67f73f1159f1138489bf62d97e",
+    "copiedTo": "screenshots/inspector-lf-source.png",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-2c728-nd-through-canvas-undo-redo/original-source.json",
+    "originalRelativePath": "source-download-preservati-2c728-nd-through-canvas-undo-redo/original-source.json",
+    "case": "26",
+    "bytes": 325,
+    "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec",
+    "copiedTo": "observations/26/original-source.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-2c728-nd-through-canvas-undo-redo/redo.opf.json",
+    "originalRelativePath": "source-download-preservati-2c728-nd-through-canvas-undo-redo/redo.opf.json",
+    "case": "26",
+    "bytes": 326,
+    "sha256": "277350fc50382bead15896aef5fa53a33cd099792df57153d0b9b1b12f1fd08d",
+    "copiedTo": "downloads/26/redo.opf.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-2c728-nd-through-canvas-undo-redo/trace.zip",
+    "originalRelativePath": "source-download-preservati-2c728-nd-through-canvas-undo-redo/trace.zip",
+    "case": "26",
+    "bytes": 10003428,
+    "sha256": "aff3564e4e041d41c39a3a3a487e9eb89d2356d3e6f9a155756f2c232badcab5",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-2c728-nd-through-canvas-undo-redo/undo.opf.json",
+    "originalRelativePath": "source-download-preservati-2c728-nd-through-canvas-undo-redo/undo.opf.json",
+    "case": "26",
+    "bytes": 325,
+    "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec",
+    "copiedTo": "downloads/26/undo.opf.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-2c728-nd-through-canvas-undo-redo/untouched.opf.json",
+    "originalRelativePath": "source-download-preservati-2c728-nd-through-canvas-undo-redo/untouched.opf.json",
+    "case": "26",
+    "bytes": 325,
+    "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec",
+    "copiedTo": "downloads/26/untouched.opf.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-5105f-download-and-canvas-history/author-source-preserved.png",
+    "originalRelativePath": "source-download-preservati-5105f-download-and-canvas-history/author-source-preserved.png",
+    "case": "24",
+    "bytes": 129951,
+    "sha256": "0a0808bb4419e6940e83692e053d4e28a0bbced2a7e9ed4b120756dbd4d02aa9",
+    "copiedTo": "screenshots/author-lf-rejection-source.png",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-5105f-download-and-canvas-history/canceled-and-unchanged.opf.json",
+    "originalRelativePath": "source-download-preservati-5105f-download-and-canvas-history/canceled-and-unchanged.opf.json",
+    "case": "24",
+    "bytes": 325,
+    "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec",
+    "copiedTo": "downloads/24/canceled-and-unchanged.opf.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-5105f-download-and-canvas-history/code-after-edit.opf.json",
+    "originalRelativePath": "source-download-preservati-5105f-download-and-canvas-history/code-after-edit.opf.json",
+    "case": "24",
+    "bytes": 326,
+    "sha256": "277350fc50382bead15896aef5fa53a33cd099792df57153d0b9b1b12f1fd08d",
+    "copiedTo": "downloads/24/code-after-edit.opf.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-5105f-download-and-canvas-history/code-untouched.opf.json",
+    "originalRelativePath": "source-download-preservati-5105f-download-and-canvas-history/code-untouched.opf.json",
+    "case": "24",
+    "bytes": 325,
+    "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec",
+    "copiedTo": "downloads/24/code-untouched.opf.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-5105f-download-and-canvas-history/edited.opf.json",
+    "originalRelativePath": "source-download-preservati-5105f-download-and-canvas-history/edited.opf.json",
+    "case": "24",
+    "bytes": 326,
+    "sha256": "277350fc50382bead15896aef5fa53a33cd099792df57153d0b9b1b12f1fd08d",
+    "copiedTo": "downloads/24/edited.opf.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-5105f-download-and-canvas-history/original-source.json",
+    "originalRelativePath": "source-download-preservati-5105f-download-and-canvas-history/original-source.json",
+    "case": "24",
+    "bytes": 325,
+    "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec",
+    "copiedTo": "observations/24/original-source.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-5105f-download-and-canvas-history/pending-export.opf.json",
+    "originalRelativePath": "source-download-preservati-5105f-download-and-canvas-history/pending-export.opf.json",
+    "case": "24",
+    "bytes": 333,
+    "sha256": "fef6e27eb0502229556af2721299c078060b2a552a41c4c76e014c98e0c07209",
+    "copiedTo": "downloads/24/pending-export.opf.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-5105f-download-and-canvas-history/pending-redo.opf.json",
+    "originalRelativePath": "source-download-preservati-5105f-download-and-canvas-history/pending-redo.opf.json",
+    "case": "24",
+    "bytes": 333,
+    "sha256": "fef6e27eb0502229556af2721299c078060b2a552a41c4c76e014c98e0c07209",
+    "copiedTo": "downloads/24/pending-redo.opf.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-5105f-download-and-canvas-history/pending-undo.opf.json",
+    "originalRelativePath": "source-download-preservati-5105f-download-and-canvas-history/pending-undo.opf.json",
+    "case": "24",
+    "bytes": 326,
+    "sha256": "277350fc50382bead15896aef5fa53a33cd099792df57153d0b9b1b12f1fd08d",
+    "copiedTo": "downloads/24/pending-undo.opf.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-5105f-download-and-canvas-history/pending-without-blur.opf.json",
+    "originalRelativePath": "source-download-preservati-5105f-download-and-canvas-history/pending-without-blur.opf.json",
+    "case": "24",
+    "bytes": 339,
+    "sha256": "10d30faeb9f230b1e9ebe0f8bf20a91e65bc428051de62b6063c56fcada1c0cd",
+    "copiedTo": "downloads/24/pending-without-blur.opf.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-5105f-download-and-canvas-history/preview-untouched.opf.json",
+    "originalRelativePath": "source-download-preservati-5105f-download-and-canvas-history/preview-untouched.opf.json",
+    "case": "24",
+    "bytes": 325,
+    "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec",
+    "copiedTo": "downloads/24/preview-untouched.opf.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-5105f-download-and-canvas-history/redo.opf.json",
+    "originalRelativePath": "source-download-preservati-5105f-download-and-canvas-history/redo.opf.json",
+    "case": "24",
+    "bytes": 326,
+    "sha256": "277350fc50382bead15896aef5fa53a33cd099792df57153d0b9b1b12f1fd08d",
+    "copiedTo": "downloads/24/redo.opf.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-5105f-download-and-canvas-history/rejected-code-source.opf.json",
+    "originalRelativePath": "source-download-preservati-5105f-download-and-canvas-history/rejected-code-source.opf.json",
+    "case": "24",
+    "bytes": 362,
+    "sha256": "6998a9087f9827297ccedc02c7f065e94f1bb38925e8046f2ec3da146083e1ad",
+    "copiedTo": "downloads/24/rejected-code-source.opf.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-5105f-download-and-canvas-history/rejected-duplicate-key.opf.json",
+    "originalRelativePath": "source-download-preservati-5105f-download-and-canvas-history/rejected-duplicate-key.opf.json",
+    "case": "24",
+    "bytes": 362,
+    "sha256": "6998a9087f9827297ccedc02c7f065e94f1bb38925e8046f2ec3da146083e1ad",
+    "copiedTo": "downloads/24/rejected-duplicate-key.opf.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-5105f-download-and-canvas-history/reordered-import-redo.opf.json",
+    "originalRelativePath": "source-download-preservati-5105f-download-and-canvas-history/reordered-import-redo.opf.json",
+    "case": "24",
+    "bytes": 147,
+    "sha256": "73adbc340500a894e4366bc080e49fe1bdeaacc6792cb0487e7442d6ecea652d",
+    "copiedTo": "downloads/24/reordered-import-redo.opf.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-5105f-download-and-canvas-history/reordered-import-undo.opf.json",
+    "originalRelativePath": "source-download-preservati-5105f-download-and-canvas-history/reordered-import-undo.opf.json",
+    "case": "24",
+    "bytes": 339,
+    "sha256": "10d30faeb9f230b1e9ebe0f8bf20a91e65bc428051de62b6063c56fcada1c0cd",
+    "copiedTo": "downloads/24/reordered-import-undo.opf.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-5105f-download-and-canvas-history/reordered-import.opf.json",
+    "originalRelativePath": "source-download-preservati-5105f-download-and-canvas-history/reordered-import.opf.json",
+    "case": "24",
+    "bytes": 147,
+    "sha256": "73adbc340500a894e4366bc080e49fe1bdeaacc6792cb0487e7442d6ecea652d",
+    "copiedTo": "downloads/24/reordered-import.opf.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-5105f-download-and-canvas-history/trace.zip",
+    "originalRelativePath": "source-download-preservati-5105f-download-and-canvas-history/trace.zip",
+    "case": "24",
+    "bytes": 12980921,
+    "sha256": "9e351eb3848c433966950ff6ddb08a5c691d405ce3f59edebb8e522b0d226f7d",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-5105f-download-and-canvas-history/undo.opf.json",
+    "originalRelativePath": "source-download-preservati-5105f-download-and-canvas-history/undo.opf.json",
+    "case": "24",
+    "bytes": 325,
+    "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec",
+    "copiedTo": "downloads/24/undo.opf.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-f4120-download-and-canvas-history/author-source-preserved.png",
+    "originalRelativePath": "source-download-preservati-f4120-download-and-canvas-history/author-source-preserved.png",
+    "case": "25",
+    "bytes": 102039,
+    "sha256": "15aa009e3144712a1808ce4cea995f3d388fbb0cd751907e442196549cae7ea6",
+    "copiedTo": "screenshots/author-crlf-preview.png",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-f4120-download-and-canvas-history/canceled-and-unchanged.opf.json",
+    "originalRelativePath": "source-download-preservati-f4120-download-and-canvas-history/canceled-and-unchanged.opf.json",
+    "case": "25",
+    "bytes": 332,
+    "sha256": "c40c5080ca23fb28e12398e7a35d3dac7859e7cc659b32a24133559119722608",
+    "copiedTo": "downloads/25/canceled-and-unchanged.opf.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-f4120-download-and-canvas-history/code-after-edit.opf.json",
+    "originalRelativePath": "source-download-preservati-f4120-download-and-canvas-history/code-after-edit.opf.json",
+    "case": "25",
+    "bytes": 333,
+    "sha256": "2a1735f628ea3b06436d3baadbf85ec648280994690033c35c28cbe0a5ddd9f0",
+    "copiedTo": "downloads/25/code-after-edit.opf.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-f4120-download-and-canvas-history/code-untouched.opf.json",
+    "originalRelativePath": "source-download-preservati-f4120-download-and-canvas-history/code-untouched.opf.json",
+    "case": "25",
+    "bytes": 332,
+    "sha256": "c40c5080ca23fb28e12398e7a35d3dac7859e7cc659b32a24133559119722608",
+    "copiedTo": "downloads/25/code-untouched.opf.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-f4120-download-and-canvas-history/edited.opf.json",
+    "originalRelativePath": "source-download-preservati-f4120-download-and-canvas-history/edited.opf.json",
+    "case": "25",
+    "bytes": 333,
+    "sha256": "2a1735f628ea3b06436d3baadbf85ec648280994690033c35c28cbe0a5ddd9f0",
+    "copiedTo": "downloads/25/edited.opf.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-f4120-download-and-canvas-history/original-source.json",
+    "originalRelativePath": "source-download-preservati-f4120-download-and-canvas-history/original-source.json",
+    "case": "25",
+    "bytes": 332,
+    "sha256": "c40c5080ca23fb28e12398e7a35d3dac7859e7cc659b32a24133559119722608",
+    "copiedTo": "observations/25/original-source.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-f4120-download-and-canvas-history/pending-export.opf.json",
+    "originalRelativePath": "source-download-preservati-f4120-download-and-canvas-history/pending-export.opf.json",
+    "case": "25",
+    "bytes": 340,
+    "sha256": "539230d507f00c2818b0eeba38fd1cb05b4d72e05d6407d36f7657ef600a002d",
+    "copiedTo": "downloads/25/pending-export.opf.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-f4120-download-and-canvas-history/pending-redo.opf.json",
+    "originalRelativePath": "source-download-preservati-f4120-download-and-canvas-history/pending-redo.opf.json",
+    "case": "25",
+    "bytes": 340,
+    "sha256": "539230d507f00c2818b0eeba38fd1cb05b4d72e05d6407d36f7657ef600a002d",
+    "copiedTo": "downloads/25/pending-redo.opf.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-f4120-download-and-canvas-history/pending-undo.opf.json",
+    "originalRelativePath": "source-download-preservati-f4120-download-and-canvas-history/pending-undo.opf.json",
+    "case": "25",
+    "bytes": 333,
+    "sha256": "2a1735f628ea3b06436d3baadbf85ec648280994690033c35c28cbe0a5ddd9f0",
+    "copiedTo": "downloads/25/pending-undo.opf.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-f4120-download-and-canvas-history/preview-untouched.opf.json",
+    "originalRelativePath": "source-download-preservati-f4120-download-and-canvas-history/preview-untouched.opf.json",
+    "case": "25",
+    "bytes": 332,
+    "sha256": "c40c5080ca23fb28e12398e7a35d3dac7859e7cc659b32a24133559119722608",
+    "copiedTo": "downloads/25/preview-untouched.opf.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-f4120-download-and-canvas-history/redo.opf.json",
+    "originalRelativePath": "source-download-preservati-f4120-download-and-canvas-history/redo.opf.json",
+    "case": "25",
+    "bytes": 333,
+    "sha256": "2a1735f628ea3b06436d3baadbf85ec648280994690033c35c28cbe0a5ddd9f0",
+    "copiedTo": "downloads/25/redo.opf.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-f4120-download-and-canvas-history/trace.zip",
+    "originalRelativePath": "source-download-preservati-f4120-download-and-canvas-history/trace.zip",
+    "case": "25",
+    "bytes": 9686972,
+    "sha256": "30907c1bf640494c50f3a62822091a627818d08b88b28b4e5fac135f1952396a",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-f4120-download-and-canvas-history/undo.opf.json",
+    "originalRelativePath": "source-download-preservati-f4120-download-and-canvas-history/undo.opf.json",
+    "case": "25",
+    "bytes": 332,
+    "sha256": "c40c5080ca23fb28e12398e7a35d3dac7859e7cc659b32a24133559119722608",
+    "copiedTo": "downloads/25/undo.opf.json",
+    "retention": "byte-identical copy"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/svg-security-published-SVG-25408-rted-document-strings-inert/trace.zip",
+    "originalRelativePath": "svg-security-published-SVG-25408-rted-document-strings-inert/trace.zip",
+    "case": "27",
+    "bytes": 7731603,
+    "sha256": "e51ae35b04752e3f291c4306e26ca1f184ea692bfe017eac48764fb326bc8650",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/toolkit-public-toolkit-sho-6cd46-nder-edit-and-export-proofs/trace.zip",
+    "originalRelativePath": "toolkit-public-toolkit-sho-6cd46-nder-edit-and-export-proofs/trace.zip",
+    "case": "28",
+    "bytes": 139471,
+    "sha256": "dcee918899e601975b14ab15c9bfa4b4dde283d0e7594be39fd903782f87a9ca",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/yaml-YAML-and-Markdown-edi-18ed4-from-malformed-YAML-offline/trace.zip",
+    "originalRelativePath": "yaml-YAML-and-Markdown-edi-18ed4-from-malformed-YAML-offline/trace.zip",
+    "case": "29",
+    "bytes": 8994486,
+    "sha256": "f77e65b92dbe65c652f6211b62bb31cb8740de9361dbad6a7edf3ffc5257f878",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  }
+]

@@ -1,0 +1,17 @@
+{
+  "base": "0f35352a1445f56ad4bb7c9f4c5609e01f2dd9ae",
+  "productFiles": [
+    {
+      "path": "lib/opf-toolkit/use-editor-session.ts",
+      "sha256": "8771039fb1f844442198e47547773faa30c91c2e9428d1ebd4c689d32069dfcc"
+    },
+    {
+      "path": "components/author/author-shell.tsx",
+      "sha256": "e91e874496ce69706391f438ceedd0c8285f6466194ead9a1ea4316f859ff9a9"
+    },
+    {
+      "path": "components/playground/playground-shell.tsx",
+      "sha256": "f0625e149945fbab390bf94026cf4000f9cb21b2d51db0eacbca975eb61971d8"
+    }
+  ]
+}

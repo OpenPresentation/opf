@@ -1,0 +1,192 @@
+{
+  "preparedAt": "2026-09-21T17:56:08.742057+00:00",
+  "status": "APP53_CANONICAL_PASS_POSTMERGE_LINUX_FAILED",
+  "coreAccepted": "c3e35b92e53d12764f9b1b7487ccfb7325d5c1aa",
+  "appDeployed": "e40c287b64fcbcfb85fb4a8a50641aea8e3e54a8",
+  "appFollowup": {
+    "pr": "https://github.com/Data-Advantage/pptx-dev/pull/53",
+    "acceptedCommit": "e40c287b64fcbcfb85fb4a8a50641aea8e3e54a8",
+    "canonicalDeployment": {
+      "id": "dpl_hAEEDrxu746MBtDCHUh7z4bYaaLk",
+      "url": "pptx-3htkfb6n6-dataadvantage.vercel.app",
+      "readyState": "READY",
+      "target": "production",
+      "sha": "e40c287b64fcbcfb85fb4a8a50641aea8e3e54a8",
+      "alias": [
+        "api.pptx.dev",
+        "mcp.pptx.dev",
+        "www.pptx.dev",
+        "pptx-dev.vercel.app",
+        "pptx.dev",
+        "pptx-dev-dataadvantage.vercel.app",
+        "pptx-dev-git-master-dataadvantage.vercel.app"
+      ],
+      "checkedAt": "2026-09-21 17:45:25 UTC",
+      "canonicalResult": {
+        "passed": 29,
+        "total": 29,
+        "retries": 0
+      },
+      "scope": "Fresh canonical browser acceptance for this bounded source/keyboard change; native/font and separate preset undo work remain unresolved."
+    },
+    "canonicalAcceptance": {
+      "passed": 29,
+      "total": 29,
+      "retries": 0,
+      "durationMs": 113497.555,
+      "receipt": "canonical/REPORT.md"
+    },
+    "initialLocal": {
+      "passed": 24,
+      "total": 27,
+      "retries": 0,
+      "regression": "Three unchanged Author PPTX reimport one-Undo checks fail."
+    },
+    "remaining": "Failed postmerge Linux readiness/security gate; destructive preset Undo all; remaining source writers; clipped details; separate native/font gates.",
+    "isDraft": false,
+    "reviewedHead": "b33dc18e8c35803386feb80e7822f240a9671243",
+    "reviewedTree": "64a0dbd702f43c87206c8a9fe16d06fe3ac68800",
+    "evidence": "https://github.com/Data-Advantage/pptx-dev/tree/b33dc18e8c35803386feb80e7822f240a9671243/docs/evidence/completion-keyboard-20260921",
+    "diagnostic": "Observed stale Quick Input context while editor has text focus; higher-priority command choice inferred from installed source. Guarded public Suggest shortcut implemented. Phase4 ten healthy cases/30 keys/30 providers captured zero stale-context overlaps; causal stress remains inconclusive.",
+    "committedEvidence": {
+      "artifactsVerified": 117,
+      "outerManifest": 1,
+      "pass": true
+    },
+    "historicalSourcePreservationHead": "8c0dae19b339ef3fe6a06c1d2df9f96b31d4f575",
+    "historicalLocal26of27": {
+      "passed": 26,
+      "total": 27,
+      "retries": 0,
+      "scope": "All three source-preservation cases and three existing reimport cases pass; existing LF categorical popup fails."
+    },
+    "finalLocal": {
+      "passed": 29,
+      "total": 29,
+      "durationMs": 88778.599,
+      "retries": 0,
+      "platform": "darwin",
+      "unitTests": 627,
+      "scope": "Full macOS run predates final Windows-only diagnostic retention correction; product and active macOS test assertions unchanged. Final Node24 type/lint and six Node persistence controls passed. Subsequent Linux/Windows application CI passed on the final head."
+    },
+    "historicalCi": {
+      "run": 35627445953,
+      "status": "completed",
+      "conclusion": "failure",
+      "linux": "success",
+      "windows": "failure",
+      "windowsBrowserPassed": 26,
+      "windowsBrowserTotal": 27,
+      "failedAt": "svg-security.spec.ts:48 shared-deck load confirmation",
+      "completedAt": "2026-09-21T16:53:26Z"
+    },
+    "ci": {
+      "run": 35631886222,
+      "status": "completed",
+      "head": "b33dc18e8c35803386feb80e7822f240a9671243",
+      "artifactCompatibility": {
+        "run": 35631886213,
+        "linux": "success",
+        "windows": "success",
+        "scope": "Separate from application/browser CI.",
+        "runAttempt": 1
+      },
+      "conclusion": "success",
+      "runAttempt": 1,
+      "linux": {
+        "browser": 29,
+        "unit": 627,
+        "conclusion": "success"
+      },
+      "windows": {
+        "browser": 29,
+        "unit": 627,
+        "conclusion": "success"
+      },
+      "receipt": "app53/premerge-ci/release-audit.json"
+    },
+    "historicalPreview": {
+      "deployment": "dpl_SzQEqavWHkZHCa5LBGxztwKaV2SJ",
+      "state": "READY",
+      "target": null,
+      "head": "8c0dae19b339ef3fe6a06c1d2df9f96b31d4f575",
+      "browserAccepted": false,
+      "productionRelease": false
+    },
+    "preview": {
+      "id": "dpl_2ej95E2WDNmbGskPyBeabQ2u5gGa",
+      "url": "pptx-qpnjb7z7t-dataadvantage.vercel.app",
+      "readyState": "READY",
+      "target": null,
+      "sha": "b33dc18e8c35803386feb80e7822f240a9671243",
+      "gitSource": null,
+      "alias": [
+        "pptx-dev-git-codex-author-source-preservat-0802a6-dataadvantage.vercel.app"
+      ],
+      "browserAccepted": false
+    },
+    "visualLimitation": "Existing suggestion-details panel is clipped; visibility is not legibility or visual acceptance.",
+    "windowsDiagnostic": "Success-path disk attachment and Windows artifact upload verified; only Author after-test timings retained, Inspector pagehide snapshot missing. Does not explain or fix the historical readiness delay.",
+    "mergeReceipt": "app53/merge-tree-receipt.json",
+    "postmergeCi": {
+      "run": 35633321018,
+      "head": "e40c287b64fcbcfb85fb4a8a50641aea8e3e54a8",
+      "runAttempt": 1,
+      "conclusion": "failure",
+      "linux": {
+        "passed": 28,
+        "total": 29,
+        "unit": 627,
+        "conclusion": "failure"
+      },
+      "windows": {
+        "passed": 29,
+        "total": 29,
+        "unit": 627,
+        "conclusion": "success"
+      },
+      "artifactRun": 35633321013,
+      "artifactConclusion": "success",
+      "receipt": "app53/postmerge-ci/README.md"
+    },
+    "windowsDiagnosticReceipt": "app53/premerge-ci/windows-timing-summary.json"
+  },
+  "issue88": "OPEN",
+  "native": "Blocked pending owner host-recovery reply; no COM retries.",
+  "rendererTolerancePx": 0.1,
+  "geometry": "Five drafts remain coordinated and unmerged.",
+  "remainingLocalWriters": {
+    "audit": "remaining-writers/REPORT.md",
+    "sourceOnly": true,
+    "priority": "Guard preset Undo all against intervening source/deck changes.",
+    "serialization": [
+      "author",
+      "filename",
+      "local gallery",
+      "preset"
+    ],
+    "schemaWriter": "dormant",
+    "negativeControls": {
+      "report": "preset-negative-controls/REPORT.md",
+      "source": "b33dc18e8c35803386feb80e7822f240a9671243",
+      "localOnly": true,
+      "confirmed": [
+        "New run replacement lost to stale Undo all",
+        "Imported replacement lost to stale Undo all"
+      ],
+      "ordinaryEdit": "Stopped at exact LF/CRLF precondition; Undo all not attempted.",
+      "productFix": "not implemented or accepted"
+    }
+  },
+  "issue88Receipt": "issue88-app53-diagnosis-updated.json",
+  "appDeploymentStatus": "Exact READY e40 deployment bound before/after fresh29/29 canonical run; postmerge Linux CI failed independently.",
+  "inspectorShareDefect": {
+    "report": "inspector-share-diagnosis/REPORT.md",
+    "proven": "Automatic URL hash published the starter while source held the imported one-slide fixture.",
+    "wrongHashObservedMs": 511.236,
+    "permanentPersistence": "not observed",
+    "refresh": "Consequence of decoded retained payload and public source path; no browser refresh executed.",
+    "schedulerCause": "inferred, not instrumented",
+    "fixStatus": "separate implementation being prepared; not accepted or released"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "passed": 10,
+  "failed": 0,
+  "physicalControlSpaceEvents": 30,
+  "providerInvocations": 30,
+  "staleContextEvents": 0,
+  "postfailureProbes": 0,
+  "originalSourceUndoRedoAssertions": "passed in all 10 original LF scenarios",
+  "causalStressConclusion": "inconclusive: no stale-context overlap captured",
+  "providerStartDelayMs": {
+    "min": 0.2,
+    "max": 0.9
+  }
+}

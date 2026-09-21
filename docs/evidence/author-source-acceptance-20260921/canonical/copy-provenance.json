@@ -1,0 +1,338 @@
+[
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/browser.log",
+    "to": "browser.log",
+    "bytes": 4643,
+    "sha256": "a3c19681568725710e0b5f3900e1d70c9b6ab976adf0e9d9362c5b211222e988"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/source-before.json",
+    "to": "source-before.json",
+    "bytes": 2139,
+    "sha256": "2ac16ecdb1b5f7ab03da011e14d4451ab52431635ee91b20bb7951c8844c5b04"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/author-anonymous-Author-ca-d560b-xport-and-undoable-reimport/author-export.pptx",
+    "to": "downloads/05/author-export.pptx",
+    "bytes": 16330,
+    "sha256": "070cddbcb5a3aa9d6916531f212fd067d9ebe8033f715e98ade5b78229530696"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/author-json-options.png",
+    "to": "screenshots/author-lf-categorical-complete.png",
+    "bytes": 175776,
+    "sha256": "3e602f80e811b7d232c9ca9073799b1990109c4387aee8aa4d5334fa1d23f52f"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/completion-keyboard-Author-66da5-and-editor-remount-behavior/edited-source.json",
+    "to": "observations/06/edited-source.json",
+    "bytes": 202,
+    "sha256": "f09f49ed355f8a3503d13e4268153e970f9c06ee986065a89d6e8be6665f4671"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/completion-keyboard-Author-66da5-and-editor-remount-behavior/original-source.json",
+    "to": "observations/06/original-source.json",
+    "bytes": 205,
+    "sha256": "61d515fd443a657eb4f6c2fed93e3734182aab2f84b2fb250c1fd1aa3b8e1af6"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/completion-keyboard-Author-66da5-and-editor-remount-behavior/suggestion-details.png",
+    "to": "screenshots/suggestion-details-clipped.png",
+    "bytes": 143474,
+    "sha256": "46d1df1f3706cc240b2c59d8352bac1372a9a5092cbe5d3b03f5b5fdcc78eb32"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/completion-keyboard-Author-93788-ir-original-keyboard-owners/keyboard-bubbles.json",
+    "to": "observations/07/keyboard-bubbles.json",
+    "bytes": 1652,
+    "sha256": "a1bdb25e35eda58a487c4ace86108da82c499940f90e45f754d93c9fd17484cb"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/completion-preservation-Au-807ee-act-source-in-one-undo-step/actual-source.json",
+    "to": "observations/08/actual-source.json",
+    "bytes": 767,
+    "sha256": "3590b76552f6afaf7c9af8095eae05feb702333fc1a0fd10b2fad491bd285651"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/completion-preservation-Au-807ee-act-source-in-one-undo-step/desired-source.json",
+    "to": "observations/08/desired-source.json",
+    "bytes": 767,
+    "sha256": "3590b76552f6afaf7c9af8095eae05feb702333fc1a0fd10b2fad491bd285651"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/completion-preservation-Au-807ee-act-source-in-one-undo-step/original-source.json",
+    "to": "observations/08/original-source.json",
+    "bytes": 738,
+    "sha256": "1525be094f6dab2c58d5cdd69fc5acb86423764305f05e9515110af8f67a2636"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/completion-preservation-Au-96e4e-act-source-in-one-undo-step/actual-source.json",
+    "to": "observations/09/actual-source.json",
+    "bytes": 804,
+    "sha256": "302a28aff91ab1669ecfad7cbd2e2a08fa65f451efbdb81e508dc7021e15100f"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/completion-preservation-Au-96e4e-act-source-in-one-undo-step/desired-source.json",
+    "to": "observations/09/desired-source.json",
+    "bytes": 804,
+    "sha256": "302a28aff91ab1669ecfad7cbd2e2a08fa65f451efbdb81e508dc7021e15100f"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/completion-preservation-Au-96e4e-act-source-in-one-undo-step/original-source.json",
+    "to": "observations/09/original-source.json",
+    "bytes": 772,
+    "sha256": "a90c0c8927c1bd6d92c4732c94fda179f1b7ff151d61a91230f2097d55537de9"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/json-paste-formatting-warm-44312-t-Document-remains-undoable/authored-source.json",
+    "to": "observations/22/authored-source.json",
+    "bytes": 302,
+    "sha256": "f4177cbb0fc6a9ad471fc3ab52f39cb14c7dc62b497ded9d840c9e0dbea21e62"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/json-paste-formatting-warm-44312-t-Document-remains-undoable/copied-source.json",
+    "to": "observations/22/copied-source.json",
+    "bytes": 302,
+    "sha256": "f4177cbb0fc6a9ad471fc3ab52f39cb14c7dc62b497ded9d840c9e0dbea21e62"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/json-paste-formatting-warm-44312-t-Document-remains-undoable/paste-worker-requests.json",
+    "to": "observations/22/paste-worker-requests.json",
+    "bytes": 83,
+    "sha256": "54051725e2e06fd8e83369628086d875dcd7b48b1e02b5e5435e00e6021bdfa4"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-2c728-nd-through-canvas-undo-redo/edited.opf.json",
+    "to": "downloads/26/edited.opf.json",
+    "bytes": 326,
+    "sha256": "277350fc50382bead15896aef5fa53a33cd099792df57153d0b9b1b12f1fd08d"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-2c728-nd-through-canvas-undo-redo/inspector-source-preserved.png",
+    "to": "screenshots/inspector-lf-source.png",
+    "bytes": 188321,
+    "sha256": "e7bc1d9c5a2d917b28c3c73195c4dfd9b7c02f67f73f1159f1138489bf62d97e"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-2c728-nd-through-canvas-undo-redo/original-source.json",
+    "to": "observations/26/original-source.json",
+    "bytes": 325,
+    "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-2c728-nd-through-canvas-undo-redo/redo.opf.json",
+    "to": "downloads/26/redo.opf.json",
+    "bytes": 326,
+    "sha256": "277350fc50382bead15896aef5fa53a33cd099792df57153d0b9b1b12f1fd08d"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-2c728-nd-through-canvas-undo-redo/undo.opf.json",
+    "to": "downloads/26/undo.opf.json",
+    "bytes": 325,
+    "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-2c728-nd-through-canvas-undo-redo/untouched.opf.json",
+    "to": "downloads/26/untouched.opf.json",
+    "bytes": 325,
+    "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-5105f-download-and-canvas-history/author-source-preserved.png",
+    "to": "screenshots/author-lf-rejection-source.png",
+    "bytes": 129951,
+    "sha256": "0a0808bb4419e6940e83692e053d4e28a0bbced2a7e9ed4b120756dbd4d02aa9"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-5105f-download-and-canvas-history/canceled-and-unchanged.opf.json",
+    "to": "downloads/24/canceled-and-unchanged.opf.json",
+    "bytes": 325,
+    "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-5105f-download-and-canvas-history/code-after-edit.opf.json",
+    "to": "downloads/24/code-after-edit.opf.json",
+    "bytes": 326,
+    "sha256": "277350fc50382bead15896aef5fa53a33cd099792df57153d0b9b1b12f1fd08d"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-5105f-download-and-canvas-history/code-untouched.opf.json",
+    "to": "downloads/24/code-untouched.opf.json",
+    "bytes": 325,
+    "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-5105f-download-and-canvas-history/edited.opf.json",
+    "to": "downloads/24/edited.opf.json",
+    "bytes": 326,
+    "sha256": "277350fc50382bead15896aef5fa53a33cd099792df57153d0b9b1b12f1fd08d"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-5105f-download-and-canvas-history/original-source.json",
+    "to": "observations/24/original-source.json",
+    "bytes": 325,
+    "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-5105f-download-and-canvas-history/pending-export.opf.json",
+    "to": "downloads/24/pending-export.opf.json",
+    "bytes": 333,
+    "sha256": "fef6e27eb0502229556af2721299c078060b2a552a41c4c76e014c98e0c07209"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-5105f-download-and-canvas-history/pending-redo.opf.json",
+    "to": "downloads/24/pending-redo.opf.json",
+    "bytes": 333,
+    "sha256": "fef6e27eb0502229556af2721299c078060b2a552a41c4c76e014c98e0c07209"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-5105f-download-and-canvas-history/pending-undo.opf.json",
+    "to": "downloads/24/pending-undo.opf.json",
+    "bytes": 326,
+    "sha256": "277350fc50382bead15896aef5fa53a33cd099792df57153d0b9b1b12f1fd08d"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-5105f-download-and-canvas-history/pending-without-blur.opf.json",
+    "to": "downloads/24/pending-without-blur.opf.json",
+    "bytes": 339,
+    "sha256": "10d30faeb9f230b1e9ebe0f8bf20a91e65bc428051de62b6063c56fcada1c0cd"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-5105f-download-and-canvas-history/preview-untouched.opf.json",
+    "to": "downloads/24/preview-untouched.opf.json",
+    "bytes": 325,
+    "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-5105f-download-and-canvas-history/redo.opf.json",
+    "to": "downloads/24/redo.opf.json",
+    "bytes": 326,
+    "sha256": "277350fc50382bead15896aef5fa53a33cd099792df57153d0b9b1b12f1fd08d"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-5105f-download-and-canvas-history/rejected-code-source.opf.json",
+    "to": "downloads/24/rejected-code-source.opf.json",
+    "bytes": 362,
+    "sha256": "6998a9087f9827297ccedc02c7f065e94f1bb38925e8046f2ec3da146083e1ad"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-5105f-download-and-canvas-history/rejected-duplicate-key.opf.json",
+    "to": "downloads/24/rejected-duplicate-key.opf.json",
+    "bytes": 362,
+    "sha256": "6998a9087f9827297ccedc02c7f065e94f1bb38925e8046f2ec3da146083e1ad"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-5105f-download-and-canvas-history/reordered-import-redo.opf.json",
+    "to": "downloads/24/reordered-import-redo.opf.json",
+    "bytes": 147,
+    "sha256": "73adbc340500a894e4366bc080e49fe1bdeaacc6792cb0487e7442d6ecea652d"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-5105f-download-and-canvas-history/reordered-import-undo.opf.json",
+    "to": "downloads/24/reordered-import-undo.opf.json",
+    "bytes": 339,
+    "sha256": "10d30faeb9f230b1e9ebe0f8bf20a91e65bc428051de62b6063c56fcada1c0cd"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-5105f-download-and-canvas-history/reordered-import.opf.json",
+    "to": "downloads/24/reordered-import.opf.json",
+    "bytes": 147,
+    "sha256": "73adbc340500a894e4366bc080e49fe1bdeaacc6792cb0487e7442d6ecea652d"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-5105f-download-and-canvas-history/undo.opf.json",
+    "to": "downloads/24/undo.opf.json",
+    "bytes": 325,
+    "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-f4120-download-and-canvas-history/author-source-preserved.png",
+    "to": "screenshots/author-crlf-preview.png",
+    "bytes": 102039,
+    "sha256": "15aa009e3144712a1808ce4cea995f3d388fbb0cd751907e442196549cae7ea6"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-f4120-download-and-canvas-history/canceled-and-unchanged.opf.json",
+    "to": "downloads/25/canceled-and-unchanged.opf.json",
+    "bytes": 332,
+    "sha256": "c40c5080ca23fb28e12398e7a35d3dac7859e7cc659b32a24133559119722608"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-f4120-download-and-canvas-history/code-after-edit.opf.json",
+    "to": "downloads/25/code-after-edit.opf.json",
+    "bytes": 333,
+    "sha256": "2a1735f628ea3b06436d3baadbf85ec648280994690033c35c28cbe0a5ddd9f0"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-f4120-download-and-canvas-history/code-untouched.opf.json",
+    "to": "downloads/25/code-untouched.opf.json",
+    "bytes": 332,
+    "sha256": "c40c5080ca23fb28e12398e7a35d3dac7859e7cc659b32a24133559119722608"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-f4120-download-and-canvas-history/edited.opf.json",
+    "to": "downloads/25/edited.opf.json",
+    "bytes": 333,
+    "sha256": "2a1735f628ea3b06436d3baadbf85ec648280994690033c35c28cbe0a5ddd9f0"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-f4120-download-and-canvas-history/original-source.json",
+    "to": "observations/25/original-source.json",
+    "bytes": 332,
+    "sha256": "c40c5080ca23fb28e12398e7a35d3dac7859e7cc659b32a24133559119722608"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-f4120-download-and-canvas-history/pending-export.opf.json",
+    "to": "downloads/25/pending-export.opf.json",
+    "bytes": 340,
+    "sha256": "539230d507f00c2818b0eeba38fd1cb05b4d72e05d6407d36f7657ef600a002d"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-f4120-download-and-canvas-history/pending-redo.opf.json",
+    "to": "downloads/25/pending-redo.opf.json",
+    "bytes": 340,
+    "sha256": "539230d507f00c2818b0eeba38fd1cb05b4d72e05d6407d36f7657ef600a002d"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-f4120-download-and-canvas-history/pending-undo.opf.json",
+    "to": "downloads/25/pending-undo.opf.json",
+    "bytes": 333,
+    "sha256": "2a1735f628ea3b06436d3baadbf85ec648280994690033c35c28cbe0a5ddd9f0"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-f4120-download-and-canvas-history/preview-untouched.opf.json",
+    "to": "downloads/25/preview-untouched.opf.json",
+    "bytes": 332,
+    "sha256": "c40c5080ca23fb28e12398e7a35d3dac7859e7cc659b32a24133559119722608"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-f4120-download-and-canvas-history/redo.opf.json",
+    "to": "downloads/25/redo.opf.json",
+    "bytes": 333,
+    "sha256": "2a1735f628ea3b06436d3baadbf85ec648280994690033c35c28cbe0a5ddd9f0"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-f4120-download-and-canvas-history/undo.opf.json",
+    "to": "downloads/25/undo.opf.json",
+    "bytes": 332,
+    "sha256": "c40c5080ca23fb28e12398e7a35d3dac7859e7cc659b32a24133559119722608"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/source-after.json",
+    "to": "source-after.json",
+    "bytes": 1004,
+    "sha256": "63be823d71d8cd61a91eec27c8e55fd4b0cc1b8ab71d8e5e4b859712149ee86d"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/production-before.json",
+    "to": "production-before.json",
+    "bytes": 610,
+    "sha256": "c36fc6ad132aaa1b3da6251dae410b1391c9fc4a29bb472d629af53506957c91"
+  },
+  {
+    "from": "/private/tmp/opf-author-source-canonical-20260921/production-after.json",
+    "to": "production-after.json",
+    "bytes": 689,
+    "sha256": "64d1bf1ae1fd18226ef2755c1c6d3c37456ab03866030629cd1829c47f4872ba"
+  }
+]

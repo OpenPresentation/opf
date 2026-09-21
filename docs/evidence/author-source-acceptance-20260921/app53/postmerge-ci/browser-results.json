@@ -1,0 +1,310 @@
+{
+  "linux": {
+    "browserPassed": 28,
+    "browserFailed": 1,
+    "unitPassed": 627,
+    "node": "v24.20.0",
+    "cases": [
+      {
+        "number": 1,
+        "description": "tests/e2e/author-json-options.spec.ts:72:5 \u203a Author categorical choices include built-in, document and loaded catalogs with exact LF source undo/redo (8.3s)",
+        "passed": true
+      },
+      {
+        "number": 2,
+        "description": "tests/e2e/author-json-options.spec.ts:72:5 \u203a Author categorical choices include built-in, document and loaded catalogs with exact CRLF source undo/redo (7.5s)",
+        "passed": true
+      },
+      {
+        "number": 3,
+        "description": "tests/e2e/author.spec.ts:26:80 \u203a anonymous code editing preserves source and visible selection through offline export/reimport at 1280x720 (9.4s)",
+        "passed": true
+      },
+      {
+        "number": 4,
+        "description": "tests/e2e/author.spec.ts:26:80 \u203a anonymous code editing preserves source and visible selection through offline export/reimport at 540x960 (8.0s)",
+        "passed": true
+      },
+      {
+        "number": 5,
+        "description": "tests/e2e/author.spec.ts:55:5 \u203a anonymous Author canvas edits survive tab changes, offline PowerPoint export and undoable reimport (9.9s)",
+        "passed": true
+      },
+      {
+        "number": 6,
+        "description": "tests/e2e/completion-keyboard.spec.ts:64:5 \u203a Author Ctrl+Space retains popup details, exact source history and editor remount behavior (7.2s)",
+        "passed": true
+      },
+      {
+        "number": 7,
+        "description": "tests/e2e/completion-keyboard.spec.ts:126:5 \u203a Author leaves Quick Input and modified Space keys with their original keyboard owners (5.0s)",
+        "passed": true
+      },
+      {
+        "number": 8,
+        "description": "tests/e2e/completion-preservation.spec.ts:113:7 \u203a Author Title Subtitle completion preserves LF compact source in one undo step (5.7s)",
+        "passed": true
+      },
+      {
+        "number": 9,
+        "description": "tests/e2e/completion-preservation.spec.ts:113:7 \u203a Author Text 2x completion preserves CRLF compact source in one undo step (5.7s)",
+        "passed": true
+      },
+      {
+        "number": 10,
+        "description": "tests/e2e/completion-preservation.spec.ts:149:5 \u203a Author escaped current value is not offered as an edit and leaves prior undo history intact (7.1s)",
+        "passed": true
+      },
+      {
+        "number": 11,
+        "description": "tests/e2e/completion-preservation.spec.ts:178:5 \u203a Author newer and invalid source dismiss stale choices and refresh inline catalogs (7.5s)",
+        "passed": true
+      },
+      {
+        "number": 12,
+        "description": "tests/e2e/completion-preservation.spec.ts:219:5 \u203a Author format and document changes cancel the open completion without applying it (6.1s)",
+        "passed": true
+      },
+      {
+        "number": 13,
+        "description": "tests/e2e/inspector-editing.spec.ts:40:7 \u203a all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 1440px (9.7s)",
+        "passed": true
+      },
+      {
+        "number": 14,
+        "description": "tests/e2e/inspector-editing.spec.ts:40:7 \u203a all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 540px (8.9s)",
+        "passed": true
+      },
+      {
+        "number": 15,
+        "description": "tests/e2e/inspector-editing.spec.ts:99:5 \u203a invalid source keeps a renderer fallback and source recovery uses the current slide order (5.5s)",
+        "passed": true
+      },
+      {
+        "number": 16,
+        "description": "tests/e2e/inspector-editing.spec.ts:116:5 \u203a shared navigation discards an ID-less draft even when the replacement title is identical (4.3s)",
+        "passed": true
+      },
+      {
+        "number": 17,
+        "description": "tests/e2e/inspector-recovery.spec.ts:18:5 \u203a schema-valid strict overflow cancels an active draft and the same slide recovers after source correction (6.6s)",
+        "passed": true
+      },
+      {
+        "number": 18,
+        "description": "tests/e2e/inspector-recovery.spec.ts:85:5 \u203a font substitution notes remain accessible and operable while the Inspector canvas is active (4.5s)",
+        "passed": true
+      },
+      {
+        "number": 19,
+        "description": "tests/e2e/inspector.spec.ts:20:5 \u203a published long quotes retain their footer in actual wide/portrait previews and PowerPoint downloads (6.3s)",
+        "passed": true
+      },
+      {
+        "number": 20,
+        "description": "tests/e2e/inspector.spec.ts:76:5 \u203a shared navigation clears format errors and proposals from the previous deck (4.4s)",
+        "passed": true
+      },
+      {
+        "number": 21,
+        "description": "tests/e2e/inspector.spec.ts:118:5 \u203a anonymous JSON authoring, preview, undo/redo, download and shared reimport (5.6s)",
+        "passed": true
+      },
+      {
+        "number": 22,
+        "description": "tests/e2e/json-paste-formatting.spec.ts:53:5 \u203a warm JSON worker leaves pasted source untouched while explicit Format Document remains undoable (8.9s)",
+        "passed": true
+      },
+      {
+        "number": 23,
+        "description": "tests/e2e/monaco.spec.ts:3:5 \u203a bundled JSON worker provides schema diagnostics, completion and recovery offline (6.4s)",
+        "passed": true
+      },
+      {
+        "number": 24,
+        "description": "tests/e2e/source-download-preservation.spec.ts:90:7 \u203a Author preserves exact LF source through preview copy, JSON download and canvas history (11.3s)",
+        "passed": true
+      },
+      {
+        "number": 25,
+        "description": "tests/e2e/source-download-preservation.spec.ts:90:7 \u203a Author preserves exact CRLF source through preview copy, JSON download and canvas history (8.3s)",
+        "passed": true
+      },
+      {
+        "number": 26,
+        "description": "tests/e2e/source-download-preservation.spec.ts:218:5 \u203a Inspector JSON files preserve exact authored LF bytes before edits and through canvas undo/redo (7.1s)",
+        "passed": true
+      },
+      {
+        "number": 27,
+        "description": "tests/e2e/svg-security.spec.ts:51:5 \u203a published SVG renderer keeps hostile shared and imported document strings inert (3.7s)",
+        "passed": false
+      },
+      {
+        "number": 28,
+        "description": "tests/e2e/toolkit.spec.ts:4:5 \u203a public toolkit shows the deployed package set with working render, edit and export proofs (622ms)",
+        "passed": true
+      },
+      {
+        "number": 29,
+        "description": "tests/e2e/yaml.spec.ts:4:5 \u203a YAML and Markdown editing preserve OPF values and recover from malformed YAML offline (9.0s)",
+        "passed": true
+      }
+    ],
+    "rawLogSha256": "b7c7c5df776cd755c4789bef135859df69ce68f17763cd90731a1313d19e04f7"
+  },
+  "windows": {
+    "browserPassed": 29,
+    "browserFailed": 0,
+    "unitPassed": 627,
+    "node": "v24.20.0",
+    "cases": [
+      {
+        "number": 1,
+        "description": "tests\\e2e\\author-json-options.spec.ts:72:5 \u203a Author categorical choices include built-in, document and loaded catalogs with exact LF source undo/redo (12.6s)",
+        "passed": true
+      },
+      {
+        "number": 2,
+        "description": "tests\\e2e\\author-json-options.spec.ts:72:5 \u203a Author categorical choices include built-in, document and loaded catalogs with exact CRLF source undo/redo (10.0s)",
+        "passed": true
+      },
+      {
+        "number": 3,
+        "description": "tests\\e2e\\author.spec.ts:26:80 \u203a anonymous code editing preserves source and visible selection through offline export/reimport at 1280x720 (9.6s)",
+        "passed": true
+      },
+      {
+        "number": 4,
+        "description": "tests\\e2e\\author.spec.ts:26:80 \u203a anonymous code editing preserves source and visible selection through offline export/reimport at 540x960 (8.6s)",
+        "passed": true
+      },
+      {
+        "number": 5,
+        "description": "tests\\e2e\\author.spec.ts:55:5 \u203a anonymous Author canvas edits survive tab changes, offline PowerPoint export and undoable reimport (13.6s)",
+        "passed": true
+      },
+      {
+        "number": 6,
+        "description": "tests\\e2e\\completion-keyboard.spec.ts:64:5 \u203a Author Ctrl+Space retains popup details, exact source history and editor remount behavior (8.3s)",
+        "passed": true
+      },
+      {
+        "number": 7,
+        "description": "tests\\e2e\\completion-keyboard.spec.ts:126:5 \u203a Author leaves Quick Input and modified Space keys with their original keyboard owners (5.9s)",
+        "passed": true
+      },
+      {
+        "number": 8,
+        "description": "tests\\e2e\\completion-preservation.spec.ts:113:7 \u203a Author Title Subtitle completion preserves LF compact source in one undo step (6.4s)",
+        "passed": true
+      },
+      {
+        "number": 9,
+        "description": "tests\\e2e\\completion-preservation.spec.ts:113:7 \u203a Author Text 2x completion preserves CRLF compact source in one undo step (6.5s)",
+        "passed": true
+      },
+      {
+        "number": 10,
+        "description": "tests\\e2e\\completion-preservation.spec.ts:149:5 \u203a Author escaped current value is not offered as an edit and leaves prior undo history intact (8.4s)",
+        "passed": true
+      },
+      {
+        "number": 11,
+        "description": "tests\\e2e\\completion-preservation.spec.ts:178:5 \u203a Author newer and invalid source dismiss stale choices and refresh inline catalogs (8.5s)",
+        "passed": true
+      },
+      {
+        "number": 12,
+        "description": "tests\\e2e\\completion-preservation.spec.ts:219:5 \u203a Author format and document changes cancel the open completion without applying it (7.3s)",
+        "passed": true
+      },
+      {
+        "number": 13,
+        "description": "tests\\e2e\\inspector-editing.spec.ts:40:7 \u203a all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 1440px (12.5s)",
+        "passed": true
+      },
+      {
+        "number": 14,
+        "description": "tests\\e2e\\inspector-editing.spec.ts:40:7 \u203a all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 540px (10.0s)",
+        "passed": true
+      },
+      {
+        "number": 15,
+        "description": "tests\\e2e\\inspector-editing.spec.ts:99:5 \u203a invalid source keeps a renderer fallback and source recovery uses the current slide order (7.4s)",
+        "passed": true
+      },
+      {
+        "number": 16,
+        "description": "tests\\e2e\\inspector-editing.spec.ts:116:5 \u203a shared navigation discards an ID-less draft even when the replacement title is identical (5.4s)",
+        "passed": true
+      },
+      {
+        "number": 17,
+        "description": "tests\\e2e\\inspector-recovery.spec.ts:18:5 \u203a schema-valid strict overflow cancels an active draft and the same slide recovers after source correction (8.5s)",
+        "passed": true
+      },
+      {
+        "number": 18,
+        "description": "tests\\e2e\\inspector-recovery.spec.ts:85:5 \u203a font substitution notes remain accessible and operable while the Inspector canvas is active (6.0s)",
+        "passed": true
+      },
+      {
+        "number": 19,
+        "description": "tests\\e2e\\inspector.spec.ts:20:5 \u203a published long quotes retain their footer in actual wide/portrait previews and PowerPoint downloads (8.4s)",
+        "passed": true
+      },
+      {
+        "number": 20,
+        "description": "tests\\e2e\\inspector.spec.ts:76:5 \u203a shared navigation clears format errors and proposals from the previous deck (5.7s)",
+        "passed": true
+      },
+      {
+        "number": 21,
+        "description": "tests\\e2e\\inspector.spec.ts:118:5 \u203a anonymous JSON authoring, preview, undo/redo, download and shared reimport (10.8s)",
+        "passed": true
+      },
+      {
+        "number": 22,
+        "description": "tests\\e2e\\json-paste-formatting.spec.ts:53:5 \u203a warm JSON worker leaves pasted source untouched while explicit Format Document remains undoable (17.7s)",
+        "passed": true
+      },
+      {
+        "number": 23,
+        "description": "tests\\e2e\\monaco.spec.ts:3:5 \u203a bundled JSON worker provides schema diagnostics, completion and recovery offline (10.5s)",
+        "passed": true
+      },
+      {
+        "number": 24,
+        "description": "tests\\e2e\\source-download-preservation.spec.ts:90:7 \u203a Author preserves exact LF source through preview copy, JSON download and canvas history (41.9s)",
+        "passed": true
+      },
+      {
+        "number": 25,
+        "description": "tests\\e2e\\source-download-preservation.spec.ts:90:7 \u203a Author preserves exact CRLF source through preview copy, JSON download and canvas history (12.4s)",
+        "passed": true
+      },
+      {
+        "number": 26,
+        "description": "tests\\e2e\\source-download-preservation.spec.ts:218:5 \u203a Inspector JSON files preserve exact authored LF bytes before edits and through canvas undo/redo (9.0s)",
+        "passed": true
+      },
+      {
+        "number": 27,
+        "description": "tests\\e2e\\svg-security.spec.ts:51:5 \u203a published SVG renderer keeps hostile shared and imported document strings inert (10.4s)",
+        "passed": true
+      },
+      {
+        "number": 28,
+        "description": "tests\\e2e\\toolkit.spec.ts:4:5 \u203a public toolkit shows the deployed package set with working render, edit and export proofs (1.3s)",
+        "passed": true
+      },
+      {
+        "number": 29,
+        "description": "tests\\e2e\\yaml.spec.ts:4:5 \u203a YAML and Markdown editing preserve OPF values and recover from malformed YAML offline (11.5s)",
+        "passed": true
+      }
+    ],
+    "rawLogSha256": "3b5ace6640689eeffb78c769f9226b789e251f002dc4648717ac47f95200259c"
+  }
+}

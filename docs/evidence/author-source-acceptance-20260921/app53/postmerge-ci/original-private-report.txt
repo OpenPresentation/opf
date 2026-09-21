@@ -1,0 +1,36 @@
+# App53 postmerge CI — failed Linux gate
+
+The accepted commit is `e40c287b64fcbcfb85fb4a8a50641aea8e3e54a8`, tree `64a0dbd702f43c87206c8a9fe16d06fe3ac68800`, equal to the reviewed b33 tree. [Remote identity](remote-commit.json) and [release audit](release-audit.json) bind these fresh push workflows to that exact commit. Both workflows ran attempt **1**; no rerun, source edit, merge, push or browser visit was performed by this audit.
+
+| Fresh postmerge workflow | Linux | Windows |
+| --- | --- | --- |
+| [Application compatibility 35633321018](https://github.com/Data-Advantage/pptx-dev/actions/runs/35633321018) | **Failed: 28/29 browser**, 627 unit passed | Passed: 29/29 browser, 627 unit passed |
+| [Artifact compatibility 35633321013](https://github.com/Data-Advantage/pptx-dev/actions/runs/35633321013) | Passed | Passed |
+
+Application jobs used Node **v24.20.0**. [All browser cases](browser-results.json), [compact log excerpt](ci-excerpt.log), [application job results](application-jobs-final.json), [artifact job results](artifact-jobs-final.json), and original Linux/Windows logs retain the facts. Browser durations were Linux 3.4 minutes and Windows 5.0 minutes. Premerge CI and a separate canonical production run passed, but neither overwrites this failed postmerge gate.
+
+## Linux failure facts
+
+The sole failure was `tests/e2e/svg-security.spec.ts:60`: `expect(page.getByTestId('inspector-canvas-overlay')).toBeVisible()` failed strict-mode resolution because it found **five default-deck overlays**, with IDs `cover`, `problem`, `solution`, `traction`, and `ask`. The preceding “Loaded shared deck from URL.” toast assertion had passed. The test's intended hostile fixture has one slide.
+
+The [original trace facts](linux-failure-facts.json) record the toast expectation succeeding after 2,098.462 ms, followed by the unique-canvas expectation failing after 496.129 ms. This is a strict-mode error, not expiry of the five-second visibility budget. The observed source/preview transition warrants investigation; the precise underlying cause is not established here. The test stopped before its hostile-renderer and canvas security assertions, so no claim that unsafe markup executed follows from this failure. The passive Windows diagnostic is inactive on Linux.
+
+This differs from the earlier Windows toast-readiness timeout and the earlier LF third-completion-popup failure. All 28 other browser cases passed, including both LF/CRLF categorical flows, the new source/download and keyboard cases, and prior PPTX export/reimport controls.
+
+The original failure artifact [10654574356](https://github.com/Data-Advantage/pptx-dev/actions/runs/35633321018/artifacts/10654574356) was downloaded as `linux-failure-artifact.zip` (8,574,928 bytes). SHA-256 `a809313a1b92719b362ba60adeb3cd849ba2c2f7f98747ad43ba9089567c6343` matches GitHub and ZIP CRC passes. The original [error context](linux-failure/svg-security-published-SVG-25408-rted-document-strings-inert/error-context.md) and trace remain in the private extracted artifact. Trace SHA-256 is `723ab2961fb86a75bbc323dbf392e7477861987060bc9bcbf4904a6c3e940bb4`. Raw trace contents should remain private; use the compact facts and recorded path/hash for a durable repository checkpoint.
+
+## Windows success-path upload, still missing Inspector timing
+
+Windows artifact [10655457941](https://github.com/Data-Advantage/pptx-dev/actions/runs/35633321018/artifacts/10655457941), `windows-readiness-windows-latest`, downloaded as a 7,068-byte ZIP. SHA-256 `55872852dafe72c3207eb18c8c21738624d3e34f71d94d35978e16524a4cf36d` matches the GitHub digest; CRC passes. [Download checks](artifact-download-checks.json) and [artifact API receipt](artifacts-final.json) retain both downloaded artifacts' identity.
+
+The [actual timing file](windows-readiness/svg-security-published-SVG-25408-rted-document-strings-inert/windows-readiness-timings.json), SHA-256 `2b86d3e14e58ea9c2b07df1e1dbe88040ec23b2ec15bef5b4cc0ae6e2776ab91`, records a passed assertion outcome, no diagnostic errors, and no dropped documents/entries. Its success-path upload worked. However, `inspectorSnapshotRetained` and `inspectorPagehideFlushObserved` remain false; `missingInspectorPagehideFlush` is true.
+
+Only the Author after-test document is retained, at 5,105.5 ms after its time origin: 89 completed resources, two navigation snapshots, two paint entries and eight long tasks totaling 1,681 ms. All four observer types report support without observer failures. The two navigation records are snapshots of the same navigation, not independent page loads. [Timing summary](windows-timing-summary.json) retains the completed/incomplete navigation fields, resource extent, task durations and verification of all 92 URL fields without query/fragment/credentials.
+
+This does not explain the preceding Inspector readiness problem or provide complete cross-navigation capture. Completed-resource entries cannot expose pending/failed requests; long tasks do not name responsible functions; observers and hooks can affect scheduling. No private APIs, request bodies or DOM-content snapshots were collected by that diagnostic.
+
+## Handoff boundary
+
+The postmerge Linux gate is unresolved. The separate canonical 29/29 production receipt belongs to `/private/tmp/opf-author-source-canonical-20260921/durable`; it remains valid for its exact run, independently of this failure. Native/font compatibility, clipped suggestion details and separate preset/source-writer risks remain outside this CI result. No overall-goal completion is claimed.
+
+All API reads, original logs, downloaded ZIPs and extracted files are covered by `SHA256SUMS.json`. The directory is private and contains raw failure artifacts; curate selected receipts before copying into a repository. Candidate repository files were untouched.

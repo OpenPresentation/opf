@@ -63,6 +63,7 @@ master). Native Header/Footer work remains [issue 87](https://github.com/OpenPre
 ## Public sites
 
 The current source, CI and canonical production results are recorded in the
+[source-preservation checkpoint](evidence/author-source-acceptance-20260921/README.md),
 [completion checkpoint](evidence/completion-acceptance-20260921/README.md),
 [earlier acceptance ledger](evidence/issue88-final-20260921/README.md) and
 [handoff](handoff-2026-09-21.md). [Issue88](https://github.com/OpenPresentation/opf/issues/88)
@@ -72,12 +73,13 @@ acceptance are separate claims.
 | Surface | Deployed scope and acceptance | Source commit |
 | --- | --- | --- |
 | [openpresentation.org](https://www.openpresentation.org) | Current published guides, agent skills, JSON/preview workflow and downloads. Exact canonical deployment passes 321 checks across 11 pages and 18 raw resources, plus two browser flows for agent installation/navigation and JSON/SVG/PPTX downloads. Reviewed screenshots and output hashes match the accepted build. | `a85bcc77d899ce9ba1df659548be564142c16120` |
-| [pptx.dev](https://www.pptx.dev) `/inspector` and `/author` | App47 is merged and deployed READY with green Linux/Windows pre/post-merge CI. Fresh canonical acceptance is **23/24**: all five new completion cases pass; existing LF Author third popup fails, while CRLF passes. | Accepted and deployed app47: `0f35352a1445f56ad4bb7c9f4c5609e01f2dd9ae` |
+| [pptx.dev](https://www.pptx.dev) `/inspector` and `/author` | App53 exact READY canonical deployment passes **29/29**, zero retries. Premerge application/artifact CI passed both platforms. Postmerge application CI remains failed: Linux **28/29**, Windows **29/29**; artifact CI passes both. Destructive preset Undo all and broader source writers remain unresolved. | `e40c287b64fcbcfb85fb4a8a50641aea8e3e54a8` |
 | [pptx.gallery](https://www.pptx.gallery) `/docs`, `/editor` and gallery pages | Published ColorRef/bundle guidance, Playground and Editor actions, and the canonical docs-to-editor flow are verified. | `f17e9ae5869669d5fbac3720f285652d0c37551c` |
 
 The site uses documentation source `120a770`, whose tree matches accepted core
-PR98 commit `b1ff81db6f8714b0db1a98bde482ed8a64d0ccc9`. Core PR93/97/98/99 passed
-pre-merge and post-merge CI. The site's complete guides and raw resources match
+PR98 commit `b1ff81db6f8714b0db1a98bde482ed8a64d0ccc9`. Core PR93/97/98/99/100 passed
+pre-merge and post-merge CI; the [core100 receipt](evidence/author-source-acceptance-20260921/core100/release-receipt.json)
+pins the accepted documentation checkpoint. The site's complete guides and raw resources match
 the reviewed source; binary evidence remains linked and downloadable without
 being decoded into the AI-facing guide.
 
@@ -85,20 +87,39 @@ being decoded into the AI-facing guide.
 completion adapter's rejected layout choices while preserving unchanged source
 tokens and undo history. Accepted commit `0f35352a1445f56ad4bb7c9f4c5609e01f2dd9ae`
 has reviewed tree `203bdab509d05911f04f234d996f9c91f2b5e4f2`, green Linux/Windows
-pre/post-merge CI and the exact READY canonical deployment. The fresh **23/24**
-production run passes all five new completion cases but still fails the existing
+pre/post-merge CI and its exact READY canonical deployment. The historical App47 **23/24** production run passes all five new completion cases but still fails the existing
 LF Author third-popup assertion. This does not establish complete public-surface
-acceptance; the [current report](evidence/completion-acceptance-20260921/canonical/REPORT.md)
+acceptance; the [historical App47 report](evidence/completion-acceptance-20260921/canonical/REPORT.md)
 and [earlier failed app45/app46 results](evidence/issue88-final-20260921/README.md)
 retain their evidence and unresolved causes.
 
-A [source-only audit](evidence/completion-acceptance-20260921/source-preservation-audit/REPORT.md)
-confirms remaining raw-source normalization in Author canvas edits/undo,
-preview Copy/JSON export and Inspector JSON download. Author code-tab same-format
-JSON export already preserves the raw buffer. These remaining paths are not
-corrected or browser-accepted by that audit. Native/font compatibility remains
-a separate gate; the unimplemented worker candidate is tracked in the
-[handoff](handoff-2026-09-21.md).
+The [source audit](evidence/completion-acceptance-20260921/source-preservation-audit/REPORT.md)
+identified Author canvas/Copy/export and Inspector JSON-download normalization.
+Merged [App53](https://github.com/Data-Advantage/pptx-dev/pull/53) at
+`e40c287b64fcbcfb85fb4a8a50641aea8e3e54a8` has the identical reviewed b33dc18
+tree and preserves those bounded raw-source
+paths and corrects order-only reimport history. A public Suggest-action guard
+addresses the observed stale Quick Input context competing with focused-editor
+Ctrl+Space. Current local checks pass **627 unit tests and 29/29 browser cases
+in 88.78 seconds**, zero retries. First-attempt Linux/Windows application CI
+passed 627 unit tests and 29 browser cases per platform; artifact CI also passed.
+The [exact READY canonical run](evidence/author-source-acceptance-20260921/canonical/REPORT.md) passes **29/29**, zero retries, with matching deployment receipts before and after. Postmerge application CI fails Linux **28/29** while Windows passes **29/29**; both pass 627 unit tests and separate artifact CI passes. The [Linux failure](evidence/author-source-acceptance-20260921/app53/postmerge-ci/README.md) stops before security assertions because five default-deck canvases remain after the shared-load toast. No rerun or canonical pass replaces that failed gate. The retained draft preview was READY but not browser-accepted.
+
+The earlier **24/27** import-undo regression, **26/27** local popup failure and
+old-head Windows **26/27** shared-load failure remain historical evidence.
+The fresh successful Windows job retained its sanitized timing artifact, but
+only Author timings survived; the Inspector pagehide snapshot is missing. This
+does not explain or fix the old readiness delay. Phase4
+captured no post-fix stale-context overlap, so causal stress is inconclusive.
+The existing suggestion-details pane remains clipped; visibility is not legibility.
+The [postmerge trace diagnosis](evidence/author-source-acceptance-20260921/inspector-share-diagnosis/REPORT.md) also proves wrong-document automatic share-hash publication during import; a separate source-bound guard is not yet released. Separate local negative controls confirm that preset Undo all discards New run
+and imported replacement documents; ordinary-edit Undo remains untested after a
+raw-buffer precondition failure. Local author/filename/gallery/preset writers
+still serialize source. These unresolved local findings and raw imported-file/account/agent/metadata boundaries remain outside
+App53. See the [current ledger](evidence/author-source-acceptance-20260921/README.md)
+and its immutable application evidence links. Issue88 remains OPEN. Native/font
+compatibility, required repair, geometry and release gates remain separate; the
+unimplemented worker candidate remains in the [handoff](handoff-2026-09-21.md).
 
 The five coordinated geometry drafts (core94, renderer27, editor25, PPTX42,
 site40) remain unmerged. In particular, site40 is not independently shipped.

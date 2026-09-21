@@ -1,0 +1,114 @@
+[
+  {
+    "key": "Control",
+    "ctrl": true,
+    "meta": false,
+    "alt": false,
+    "shift": false
+  },
+  {
+    "key": "Escape",
+    "ctrl": false,
+    "meta": false,
+    "alt": false,
+    "shift": false
+  },
+  {
+    "key": "Control",
+    "ctrl": true,
+    "meta": false,
+    "alt": false,
+    "shift": false
+  },
+  {
+    "key": "Shift",
+    "ctrl": true,
+    "meta": false,
+    "alt": false,
+    "shift": true
+  },
+  {
+    "key": " ",
+    "ctrl": true,
+    "meta": false,
+    "alt": false,
+    "shift": true
+  },
+  {
+    "key": "Control",
+    "ctrl": true,
+    "meta": false,
+    "alt": false,
+    "shift": false
+  },
+  {
+    "key": "Meta",
+    "ctrl": true,
+    "meta": true,
+    "alt": false,
+    "shift": false
+  },
+  {
+    "key": " ",
+    "ctrl": true,
+    "meta": true,
+    "alt": false,
+    "shift": false
+  },
+  {
+    "key": "Control",
+    "ctrl": true,
+    "meta": false,
+    "alt": false,
+    "shift": false
+  },
+  {
+    "key": "Alt",
+    "ctrl": true,
+    "meta": false,
+    "alt": true,
+    "shift": false
+  },
+  {
+    "key": "Shift",
+    "ctrl": true,
+    "meta": false,
+    "alt": true,
+    "shift": true
+  },
+  {
+    "key": " ",
+    "ctrl": true,
+    "meta": false,
+    "alt": true,
+    "shift": true
+  },
+  {
+    "key": "ArrowRight",
+    "ctrl": false,
+    "meta": false,
+    "alt": false,
+    "shift": false
+  },
+  {
+    "key": "ArrowLeft",
+    "ctrl": false,
+    "meta": false,
+    "alt": false,
+    "shift": false
+  },
+  {
+    "key": "Control",
+    "ctrl": true,
+    "meta": false,
+    "alt": false,
+    "shift": false
+  },
+  {
+    "key": "Escape",
+    "ctrl": false,
+    "meta": false,
+    "alt": false,
+    "shift": false
+  }
+]
